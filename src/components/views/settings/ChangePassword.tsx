@@ -213,7 +213,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         const modal = Modal.createDialog(SetEmailDialog, {
             title: _t("Do you want to set an email address?"),
         });
-        return modal.finished.then(([confirmed]) => confirmed);
+        return modal.finished.then(([confirmed]) => !!confirmed);
     }
 
     private onExportE2eKeysClicked = (): void => {

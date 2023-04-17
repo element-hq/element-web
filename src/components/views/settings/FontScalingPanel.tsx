@@ -83,7 +83,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
     };
 
     private onValidateFontSize = async ({ value }: Pick<IFieldState, "value">): Promise<IValidationResult> => {
-        const parsedSize = parseFloat(value);
+        const parsedSize = parseFloat(value!);
         const min = FontWatcher.MIN_SIZE + FontWatcher.SIZE_DIFF;
         const max = FontWatcher.MAX_SIZE + FontWatcher.SIZE_DIFF;
 
@@ -98,7 +98,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
             };
         }
 
-        SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, parseInt(value, 10) - FontWatcher.SIZE_DIFF);
+        SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, parseInt(value!, 10) - FontWatcher.SIZE_DIFF);
 
         return { valid: true, feedback: _t("Use between %(min)s pt and %(max)s pt", { min, max }) };
     };

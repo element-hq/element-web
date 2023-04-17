@@ -331,9 +331,9 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
 
 const SpacePanel: React.FC = () => {
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
-    const ref = useRef<HTMLDivElement>();
+    const ref = useRef<HTMLDivElement>(null);
     useLayoutEffect(() => {
-        UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
+        if (ref.current) UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
         return () => UIStore.instance.stopTrackingElementDimensions("SpacePanel");
     }, []);
 

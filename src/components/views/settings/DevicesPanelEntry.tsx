@@ -51,7 +51,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
         super(props);
         this.state = {
             renaming: false,
-            displayName: props.device.display_name,
+            displayName: props.device.display_name ?? "",
         };
     }
 
@@ -103,11 +103,11 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
             });
         } else {
             const cli = MatrixClientPeg.get();
-            const userId = cli.getUserId()!;
+            const userId = cli.getSafeUserId();
             const verificationRequestPromise = cli.requestVerification(userId, [this.props.device.device_id]);
             Modal.createDialog(VerificationRequestDialog, {
                 verificationRequestPromise,
-                member: cli.getUser(userId),
+                member: cli.getUser(userId) ?? undefined,
                 onFinished: async (): Promise<void> => {
                     const request = await verificationRequestPromise;
                     request.cancel();

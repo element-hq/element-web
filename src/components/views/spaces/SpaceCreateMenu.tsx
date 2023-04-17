@@ -212,9 +212,9 @@ const SpaceCreateMenu: React.FC<{
     const [busy, setBusy] = useState<boolean>(false);
 
     const [name, setName] = useState("");
-    const spaceNameField = useRef<Field>();
+    const spaceNameField = useRef<Field>(null);
     const [alias, setAlias] = useState("");
-    const spaceAliasField = useRef<RoomAliasField>();
+    const spaceAliasField = useRef<RoomAliasField>(null);
     const [avatar, setAvatar] = useState<File | undefined>(undefined);
     const [topic, setTopic] = useState<string>("");
 

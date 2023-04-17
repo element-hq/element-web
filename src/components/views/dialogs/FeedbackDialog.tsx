@@ -38,7 +38,7 @@ interface IProps {
 }
 
 const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
-    const feedbackRef = useRef<Field>();
+    const feedbackRef = useRef<Field>(null);
     const [comment, setComment] = useState<string>("");
     const [canContact, toggleCanContact] = useStateToggle(false);
 

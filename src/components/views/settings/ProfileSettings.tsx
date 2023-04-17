@@ -31,7 +31,6 @@ import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import PosthogTrackers from "../../../PosthogTrackers";
 
 interface IState {
-    userId?: string;
     originalDisplayName: string;
     displayName: string;
     originalAvatarUrl: string | null;
@@ -41,16 +40,16 @@ interface IState {
 }
 
 export default class ProfileSettings extends React.Component<{}, IState> {
+    private readonly userId: string;
     private avatarUpload: React.RefObject<HTMLInputElement> = createRef();
 
     public constructor(props: {}) {
         super(props);
 
-        const client = MatrixClientPeg.get();
+        this.userId = MatrixClientPeg.get().getSafeUserId();
         let avatarUrl = OwnProfileStore.instance.avatarMxc;
         if (avatarUrl) avatarUrl = mediaFromMxc(avatarUrl).getSquareThumbnailHttp(96);
         this.state = {
-            userId: client.getUserId()!,
             originalDisplayName: OwnProfileStore.instance.displayName ?? "",
             displayName: OwnProfileStore.instance.displayName ?? "",
             originalAvatarUrl: avatarUrl,
@@ -150,7 +149,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
         const reader = new FileReader();
         reader.onload = (ev) => {
             this.setState({
-                avatarUrl: ev.target?.result,
+                avatarUrl: ev.target?.result ?? undefined,
                 avatarFile: file,
                 enableProfileSave: true,
             });
@@ -159,7 +158,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
     };
 
     public render(): React.ReactNode {
-        const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(this.state.userId, {
+        const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(this.userId, {
             withDisplayName: true,
         });
 
@@ -198,7 +197,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                     </div>
                     <AvatarSetting
                         avatarUrl={avatarUrl}
-                        avatarName={this.state.displayName || this.state.userId}
+                        avatarName={this.state.displayName || this.userId}
                         avatarAltText={_t("Profile picture")}
                         uploadAvatar={this.uploadAvatar}
                         removeAvatar={this.removeAvatar}

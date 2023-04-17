@@ -133,7 +133,7 @@ describe("ThreadPanel", () => {
             jest.spyOn(mockClient, "getRoom").mockReturnValue(room);
             await room.createThreadsTimelineSets();
             const [allThreads, myThreads] = room.threadsTimelineSets;
-            jest.spyOn(room, "createThreadsTimelineSets").mockReturnValue(Promise.resolve([allThreads, myThreads]));
+            jest.spyOn(room, "createThreadsTimelineSets").mockReturnValue(Promise.resolve([allThreads!, myThreads!]));
         });
 
         function toggleThreadFilter(container: HTMLElement, newFilter: ThreadFilterType) {
@@ -195,11 +195,11 @@ describe("ThreadPanel", () => {
                 return event ? Promise.resolve(event) : Promise.reject();
             });
             const [allThreads, myThreads] = room.threadsTimelineSets;
-            allThreads.addLiveEvent(otherThread.rootEvent);
-            allThreads.addLiveEvent(mixedThread.rootEvent);
-            allThreads.addLiveEvent(ownThread.rootEvent);
-            myThreads.addLiveEvent(mixedThread.rootEvent);
-            myThreads.addLiveEvent(ownThread.rootEvent);
+            allThreads!.addLiveEvent(otherThread.rootEvent);
+            allThreads!.addLiveEvent(mixedThread.rootEvent);
+            allThreads!.addLiveEvent(ownThread.rootEvent);
+            myThreads!.addLiveEvent(mixedThread.rootEvent);
+            myThreads!.addLiveEvent(ownThread.rootEvent);
 
             let events: EventData[] = [];
             const renderResult = render(<TestThreadPanel />);
@@ -245,7 +245,7 @@ describe("ThreadPanel", () => {
                 return event ? Promise.resolve(event) : Promise.reject();
             });
             const [allThreads] = room.threadsTimelineSets;
-            allThreads.addLiveEvent(otherThread.rootEvent);
+            allThreads!.addLiveEvent(otherThread.rootEvent);
 
             let events: EventData[] = [];
             const renderResult = render(<TestThreadPanel />);

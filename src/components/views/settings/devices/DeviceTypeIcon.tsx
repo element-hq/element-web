@@ -47,8 +47,8 @@ const deviceTypeLabel: Record<DeviceType, string> = {
 };
 
 export const DeviceTypeIcon: React.FC<Props> = ({ isVerified, isSelected, deviceType }) => {
-    const Icon = deviceTypeIcon[deviceType] || deviceTypeIcon[DeviceType.Unknown];
-    const label = deviceTypeLabel[deviceType] || deviceTypeLabel[DeviceType.Unknown];
+    const Icon = deviceTypeIcon[deviceType!] || deviceTypeIcon[DeviceType.Unknown];
+    const label = deviceTypeLabel[deviceType!] || deviceTypeLabel[DeviceType.Unknown];
     return (
         <div
             className={classNames("mx_DeviceTypeIcon", {

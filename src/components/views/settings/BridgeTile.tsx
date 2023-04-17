@@ -97,7 +97,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
                                 <Pill
                                     type={PillType.UserMention}
                                     room={this.props.room}
-                                    url={makeUserPermalink(content.creator)}
+                                    url={makeUserPermalink(content.creator!)}
                                     shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
                                 />
                             ),

@@ -22,7 +22,7 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 
 interface IProps {
     // Current room
-    roomId: string;
+    roomId: string | null;
     minWidth: number;
     maxWidth: number;
 }

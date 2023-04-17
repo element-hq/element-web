@@ -379,12 +379,12 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
 
                 return <div key={i}>{sigStatus}</div>;
             });
-            if (backupSigStatus.sigs.length === 0) {
+            if (!backupSigStatus?.sigs?.length) {
                 backupSigStatuses = _t("Backup is not signed by any of your sessions");
             }
 
-            let trustedLocally;
-            if (backupSigStatus.trusted_locally) {
+            let trustedLocally: string | undefined;
+            if (backupSigStatus?.trusted_locally) {
                 trustedLocally = _t("This backup is trusted because it has been restored on this session");
             }
 

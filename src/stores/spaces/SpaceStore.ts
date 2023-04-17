@@ -553,6 +553,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     };
 
     private rebuildSpaceHierarchy = (): void => {
+        if (!this.matrixClient) return;
         const visibleSpaces = this.matrixClient
             .getVisibleRooms(this._msc3946ProcessDynamicPredecessor)
             .filter((r) => r.isSpaceRoom());
@@ -589,6 +590,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     };
 
     private rebuildParentMap = (): void => {
+        if (!this.matrixClient) return;
         const joinedSpaces = this.matrixClient.getVisibleRooms(this._msc3946ProcessDynamicPredecessor).filter((r) => {
             return r.isSpaceRoom() && r.getMyMembership() === "join";
         });
@@ -624,6 +626,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     };
 
     private rebuildMetaSpaces = (): void => {
+        if (!this.matrixClient) return;
         const enabledMetaSpaces = new Set(this.enabledMetaSpaces);
         const visibleRooms = this.matrixClient.getVisibleRooms(this._msc3946ProcessDynamicPredecessor);
 
@@ -658,6 +661,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     };
 
     private updateNotificationStates = (spaces?: SpaceKey[]): void => {
+        if (!this.matrixClient) return;
         const enabledMetaSpaces = new Set(this.enabledMetaSpaces);
         const visibleRooms = this.matrixClient.getVisibleRooms(this._msc3946ProcessDynamicPredecessor);
 
@@ -745,6 +749,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     };
 
     private onRoomsUpdate = (): void => {
+        if (!this.matrixClient) return;
         const visibleRooms = this.matrixClient.getVisibleRooms(this._msc3946ProcessDynamicPredecessor);
 
         const prevRoomsBySpace = this.roomIdsBySpace;

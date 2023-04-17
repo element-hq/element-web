@@ -26,7 +26,6 @@ import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import SeshatResetDialog from "../dialogs/SeshatResetDialog";
 import InlineSpinner from "../elements/InlineSpinner";
-import { IIndexStats } from "../../../indexing/BaseEventIndexManager";
 
 interface IState {
     enabling: boolean;
@@ -49,15 +48,9 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
 
     public updateCurrentRoom = async (): Promise<void> => {
         const eventIndex = EventIndexPeg.get();
-        let stats: IIndexStats | undefined;
-
-        try {
-            stats = await eventIndex?.getStats();
-        } catch {
-            // This call may fail if sporadically, not a huge issue as we will
-            // try later again and probably succeed.
-            return;
-        }
+        const stats = await eventIndex?.getStats().catch(() => {});
+        // This call may fail if sporadically, not a huge issue as we will try later again and probably succeed.
+        if (!stats) return;
 
         this.setState({
             eventIndexSize: stats.size,
@@ -88,14 +81,13 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         if (eventIndex !== null) {
             eventIndex.on("changedCheckpoint", this.updateCurrentRoom);
 
-            try {
-                const stats = await eventIndex.getStats();
+            const stats = await eventIndex.getStats().catch(() => {});
+            // This call may fail if sporadically, not a huge issue as we
+            // will try later again in the updateCurrentRoom call and
+            // probably succeed.
+            if (stats) {
                 eventIndexSize = stats.size;
                 roomCount = stats.roomCount;
-            } catch {
-                // This call may fail if sporadically, not a huge issue as we
-                // will try later again in the updateCurrentRoom call and
-                // probably succeed.
             }
         }
 

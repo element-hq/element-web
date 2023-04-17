@@ -105,13 +105,13 @@ const DeviceDetails: React.FC<Props> = ({
 
     const showPushNotificationSection = !!pusher || !!localNotificationSettings;
 
-    function isPushNotificationsEnabled(pusher: IPusher, notificationSettings: LocalNotificationSettings): boolean {
-        if (pusher) return pusher[PUSHER_ENABLED.name];
+    function isPushNotificationsEnabled(pusher?: IPusher, notificationSettings?: LocalNotificationSettings): boolean {
+        if (pusher) return !!pusher[PUSHER_ENABLED.name];
         if (localNotificationSettings) return !localNotificationSettings.is_silenced;
         return true;
     }
 
-    function isCheckboxDisabled(pusher: IPusher, notificationSettings: LocalNotificationSettings): boolean {
+    function isCheckboxDisabled(pusher?: IPusher, notificationSettings?: LocalNotificationSettings): boolean {
         if (localNotificationSettings) return false;
         if (pusher && !supportsMSC3881) return true;
         return false;

@@ -327,7 +327,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     private shouldHideSender(): boolean {
-        return this.props.room?.getInvitedAndJoinedMemberCount() <= 2 && this.props.layout === Layout.Bubble;
+        return (
+            !!this.props.room &&
+            this.props.room.getInvitedAndJoinedMemberCount() <= 2 &&
+            this.props.layout === Layout.Bubble
+        );
     }
 
     private calculateRoomMembersCount = (): void => {
@@ -465,7 +469,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             }
         }
 
-        if (MatrixClientPeg.get().isUserIgnored(mxEv.getSender())) {
+        if (MatrixClientPeg.get().isUserIgnored(mxEv.getSender()!)) {
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
 
@@ -647,7 +651,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         for (let i = 0; i < events.length; i++) {
             const eventAndShouldShow = events[i];
             const { event, shouldShow } = eventAndShouldShow;
-            const eventId = event.getId();
+            const eventId = event.getId()!;
             const last = event === lastShownEvent;
             const { nextEventAndShouldShow, nextTile } = this.getNextEventInfo(events, i);
 
@@ -745,7 +749,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             !wantsDateSeparator &&
             shouldFormContinuation(prevEvent, mxEv, this.showHiddenEvents, this.context.timelineRenderingType);
 
-        const eventId = mxEv.getId();
+        const eventId = mxEv.getId()!;
         const highlight = eventId === this.props.highlightedEventId;
 
         const readReceipts = this.readReceiptsByEvent.get(eventId);
@@ -1075,7 +1079,7 @@ abstract class BaseGrouper {
         public readonly nextEventTile?: MatrixEvent | null,
     ) {
         this.readMarker = panel.readMarkerForEvent(
-            firstEventAndShouldShow.event.getId(),
+            firstEventAndShouldShow.event.getId()!,
             firstEventAndShouldShow.event === lastShownEvent,
         );
     }
@@ -1143,7 +1147,7 @@ class CreationGrouper extends BaseGrouper {
 
     public add({ event: ev, shouldShow }: EventAndShouldShow): void {
         const panel = this.panel;
-        this.readMarker = this.readMarker || panel.readMarkerForEvent(ev.getId(), ev === this.lastShownEvent);
+        this.readMarker = this.readMarker || panel.readMarkerForEvent(ev.getId()!, ev === this.lastShownEvent);
         if (!shouldShow) {
             return;
         }
@@ -1295,7 +1299,7 @@ class MainGrouper extends BaseGrouper {
             // We can ignore any events that don't actually have a message to display
             if (!hasText(ev, this.panel.showHiddenEvents)) return;
         }
-        this.readMarker = this.readMarker || this.panel.readMarkerForEvent(ev.getId(), ev === this.lastShownEvent);
+        this.readMarker = this.readMarker || this.panel.readMarkerForEvent(ev.getId()!, ev === this.lastShownEvent);
         if (!this.panel.showHiddenEvents && !shouldShow) {
             // absorb hidden events to not split the summary
             return;
@@ -1331,7 +1335,10 @@ class MainGrouper extends BaseGrouper {
         // This will prevent it from being re-created unnecessarily, and instead will allow new props to be provided.
         // In turn, the shouldComponentUpdate method on ELS can be used to prevent unnecessary renderings.
         const keyEvent = this.events.find((e) => this.panel.grouperKeyMap.get(e));
-        const key = keyEvent ? this.panel.grouperKeyMap.get(keyEvent) : this.generateKey();
+        const key =
+            keyEvent && this.panel.grouperKeyMap.has(keyEvent)
+                ? this.panel.grouperKeyMap.get(keyEvent)!
+                : this.generateKey();
         if (!keyEvent) {
             // Populate the weak map with the key.
             // Note that we only set the key on the specific event it refers to, since this group might get
