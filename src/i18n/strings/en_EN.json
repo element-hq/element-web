@@ -786,6 +786,7 @@
     "No media permissions": "No media permissions",
     "You may need to manually permit %(brand)s to access your microphone/webcam": "You may need to manually permit %(brand)s to access your microphone/webcam",
     "This homeserver is not configured to display maps.": "This homeserver is not configured to display maps.",
+    "WebGL is required to display maps, please enable it in your browser settings.": "WebGL is required to display maps, please enable it in your browser settings.",
     "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.": "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.",
     "Toggle attribution": "Toggle attribution",
     "Map feedback": "Map feedback",

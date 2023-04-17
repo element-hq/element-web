@@ -57,6 +57,8 @@ export const createMap = (interactive: boolean, bodyId: string, onError?: (error
         return map;
     } catch (e) {
         logger.error("Failed to render map", e);
+        const errorMessage = (e as Error)?.message;
+        if (errorMessage.includes("Failed to initialize WebGL")) throw new Error(LocationShareError.WebGLNotEnabled);
         throw e;
     }
 };

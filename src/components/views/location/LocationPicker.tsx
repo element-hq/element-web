@@ -119,10 +119,13 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
             }
         } catch (e) {
             logger.error("Failed to render map", e);
-            const errorType =
-                (e as Error)?.message === LocationShareError.MapStyleUrlNotConfigured
-                    ? LocationShareError.MapStyleUrlNotConfigured
-                    : LocationShareError.Default;
+            const errorMessage = (e as Error)?.message;
+            let errorType;
+            if (errorMessage === LocationShareError.MapStyleUrlNotConfigured)
+                errorType = LocationShareError.MapStyleUrlNotConfigured;
+            else if (errorMessage.includes("Failed to initialize WebGL"))
+                errorType = LocationShareError.WebGLNotEnabled;
+            else errorType = LocationShareError.Default;
             this.setState({ error: errorType });
         }
     }
