@@ -75,9 +75,9 @@ describe("Poll history", () => {
     };
 
     function openPollHistory(): void {
-        cy.get('.mx_HeaderButtons [aria-label="Room info"]').click();
+        cy.findByRole("tab", { name: "Room info" }).click();
         cy.get(".mx_RoomSummaryCard").within(() => {
-            cy.contains("Poll history").click();
+            cy.findByRole("button", { name: "Poll history" }).click();
         });
     }
 
@@ -124,7 +124,7 @@ describe("Poll history", () => {
             cy.inviteUser(roomId, bot.getUserId());
             cy.visit("/#/room/" + roomId);
             // wait until Bob joined
-            cy.contains(".mx_TextualEvent", "BotBob joined the room").should("exist");
+            cy.findByText("BotBob joined the room").should("exist");
         });
 
         // active poll
@@ -153,19 +153,23 @@ describe("Poll history", () => {
         cy.get(".mx_Dialog").within(() => {
             // active poll is in active polls list
             // open poll detail
-            cy.contains(pollParams1.title).click();
+            cy.findByText(pollParams1.title).click();
 
             // vote in the poll
-            cy.contains("Yes").click();
-            cy.get('[data-testid="totalVotes"]').should("have.text", "Based on 2 votes");
+            cy.findByText("Yes").click();
+            cy.findByTestId("totalVotes").within(() => {
+                cy.findByText("Based on 2 votes");
+            });
 
             // navigate back to list
-            cy.contains("Active polls").click();
+            cy.get(".mx_PollHistory_header").within(() => {
+                cy.findByRole("button", { name: "Active polls" }).click();
+            });
 
             // go to past polls list
-            cy.contains("Past polls").click();
+            cy.findByText("Past polls").click();
 
-            cy.contains(pollParams2.title).should("exist");
+            cy.findByText(pollParams2.title).should("exist");
         });
 
         // end poll1 while dialog is open
@@ -175,13 +179,13 @@ describe("Poll history", () => {
 
         cy.get(".mx_Dialog").within(() => {
             // both ended polls are in past polls list
-            cy.contains(pollParams2.title).should("exist");
-            cy.contains(pollParams1.title).should("exist");
+            cy.findByText(pollParams2.title).should("exist");
+            cy.findByText(pollParams1.title).should("exist");
 
-            cy.contains("Active polls").click();
+            cy.findByText("Active polls").click();
 
             // no more active polls
-            cy.contains("There are no active polls in this room").should("exist");
+            cy.findByText("There are no active polls in this room").should("exist");
         });
     });
 });
