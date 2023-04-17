@@ -116,9 +116,12 @@ describe("Lazy Loading", () => {
     }
 
     function openMemberlist(): void {
-        cy.get('.mx_HeaderButtons [aria-label="Room info"]').click();
+        cy.get(".mx_HeaderButtons").within(() => {
+            cy.findByRole("tab", { name: "Room info" }).click();
+        });
+
         cy.get(".mx_RoomSummaryCard").within(() => {
-            cy.get(".mx_RoomSummaryCard_icon_people").click();
+            cy.findByRole("button", { name: /People \d/ }).click(); // \d represents the number of the room members
         });
     }
 
