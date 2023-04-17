@@ -344,7 +344,7 @@ export default class HTMLExporter extends Exporter {
 
     protected createModifiedEvent(text: string, mxEv: MatrixEvent, italic = true): MatrixEvent {
         const modifiedContent = {
-            msgtype: "m.text",
+            msgtype: MsgType.Text,
             body: `${text}`,
             format: "org.matrix.custom.html",
             formatted_body: `${text}`,

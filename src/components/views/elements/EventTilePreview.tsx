@@ -18,6 +18,7 @@ import React from "react";
 import classnames from "classnames";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MsgType } from "matrix-js-sdk/src/@types/event";
 
 import * as Avatar from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
@@ -78,12 +79,12 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             sender: this.props.userId,
             content: {
                 "m.new_content": {
-                    msgtype: "m.text",
+                    msgtype: MsgType.Text,
                     body: message,
                     displayname: this.props.displayName,
                     avatar_url: this.props.avatarUrl,
                 },
-                "msgtype": "m.text",
+                "msgtype": MsgType.Text,
                 "body": message,
                 "displayname": this.props.displayName,
                 "avatar_url": this.props.avatarUrl,

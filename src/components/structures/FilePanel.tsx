@@ -154,11 +154,8 @@ class FilePanel extends React.Component<IProps, IState> {
             },
         });
 
-        const filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter);
-        filter.filterId = filterId;
-        const timelineSet = room.getOrCreateFilteredTimelineSet(filter);
-
-        return timelineSet;
+        filter.filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter);
+        return room.getOrCreateFilteredTimelineSet(filter);
     }
 
     private onPaginationRequest = (
