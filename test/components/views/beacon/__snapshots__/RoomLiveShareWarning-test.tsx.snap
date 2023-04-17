@@ -15,7 +15,7 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
     </span>
     <span
       class="mx_LiveTimeRemaining"
-      data-test-id="room-live-share-expiry"
+      data-testid="room-live-share-expiry"
     >
       1h left
     </span>
@@ -46,7 +46,7 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
     </span>
     <span
       class="mx_LiveTimeRemaining"
-      data-test-id="room-live-share-expiry"
+      data-testid="room-live-share-expiry"
     >
       12h left
     </span>

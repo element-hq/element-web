@@ -71,7 +71,7 @@ const LiveDurationDropdown: React.FC<Props> = ({ timeout, onChange }) => {
         >
             {
                 options.map(({ key, label }) => (
-                    <div data-test-id={`live-duration-option-${key}`} key={key}>
+                    <div data-testid={`live-duration-option-${key}`} key={key}>
                         {label}
                     </div>
                 )) as NonEmptyArray<ReactElement & { key: string }>

@@ -65,14 +65,14 @@ exports[`<BeaconViewDialog /> renders own beacon status when user is live sharin
       </span>
       <span
         class="mx_LiveTimeRemaining"
-        data-test-id="room-live-share-expiry"
+        data-testid="room-live-share-expiry"
       >
         1h left
       </span>
     </div>
     <div
       class="mx_AccessibleButton mx_OwnBeaconStatus_button mx_OwnBeaconStatus_destructiveButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-      data-test-id="beacon-status-stop-beacon"
+      data-testid="beacon-status-stop-beacon"
       role="button"
       tabindex="0"
     >

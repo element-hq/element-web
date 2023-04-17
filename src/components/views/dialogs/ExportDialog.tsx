@@ -398,7 +398,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     )}
                 </div>
                 {isExporting ? (
-                    <div data-test-id="export-progress" className="mx_ExportDialog_progress">
+                    <div data-testid="export-progress" className="mx_ExportDialog_progress">
                         <Spinner w={24} h={24} />
                         <p>{exportProgressText}</p>
                         <DialogButtons

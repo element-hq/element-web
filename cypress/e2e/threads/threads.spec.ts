@@ -392,7 +392,7 @@ describe("Threads", () => {
     it("should send location and reply to the location on ThreadView", () => {
         // See: location.spec.ts
         const selectLocationShareTypeOption = (shareType: string): Chainable<JQuery> => {
-            return cy.get(`[data-test-id="share-location-option-${shareType}"]`);
+            return cy.get(`[data-testid="share-location-option-${shareType}"]`);
         };
         const submitShareLocation = (): void => {
             cy.get('[data-testid="location-picker-submit-button"]').click();

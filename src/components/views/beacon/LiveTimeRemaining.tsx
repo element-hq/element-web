@@ -69,7 +69,7 @@ const LiveTimeRemaining: React.FC<{ beacon: Beacon }> = ({ beacon }) => {
     const liveTimeRemaining = _t(`%(timeRemaining)s left`, { timeRemaining });
 
     return (
-        <span data-test-id="room-live-share-expiry" className="mx_LiveTimeRemaining">
+        <span data-testid="room-live-share-expiry" className="mx_LiveTimeRemaining">
             {liveTimeRemaining}
         </span>
     );

@@ -91,7 +91,7 @@ const ShareType: React.FC<Props> = ({ setShareType, enabledShareTypes }) => {
                         onClick={() => setShareType(type)}
                         label={labels[type]}
                         shareType={type}
-                        data-test-id={`share-location-option-${type}`}
+                        data-testid={`share-location-option-${type}`}
                     />
                 ))}
             </div>

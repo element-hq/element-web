@@ -23,7 +23,7 @@ describe("Location sharing", () => {
     let homeserver: HomeserverInstance;
 
     const selectLocationShareTypeOption = (shareType: string): Chainable<JQuery> => {
-        return cy.get(`[data-test-id="share-location-option-${shareType}"]`);
+        return cy.get(`[data-testid="share-location-option-${shareType}"]`);
     };
 
     const submitShareLocation = (): void => {

@@ -2,7 +2,7 @@
 
 exports[`LocationPicker <LocationPicker /> for Live location share type updates selected duration 1`] = `
 <div
-  data-test-id="live-duration-option-3600000"
+  data-testid="live-duration-option-3600000"
 >
   Share for 1h
 </div>
