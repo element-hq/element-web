@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
+import React from "react";
 
 import { ICompletion } from "../../../../../../src/autocomplete/Autocompleter";
 import {
@@ -34,6 +35,7 @@ const createMockCompletion = (props: Partial<ICompletion>): ICompletion => {
     return {
         completion: "mock",
         range: { beginning: true, start: 0, end: 0 },
+        component: React.createElement("div"),
         ...props,
     };
 };

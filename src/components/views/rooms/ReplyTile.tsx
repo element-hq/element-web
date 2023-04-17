@@ -134,7 +134,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
 
         let permalink = "#";
         if (this.props.permalinkCreator) {
-            permalink = this.props.permalinkCreator.forEvent(mxEvent.getId());
+            permalink = this.props.permalinkCreator.forEvent(mxEvent.getId()!);
         }
 
         let sender;

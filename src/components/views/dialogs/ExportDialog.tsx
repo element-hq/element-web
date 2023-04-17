@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useRef, useState, Dispatch, SetStateAction, RefObject } from "react";
+import React, { useRef, useState, Dispatch, SetStateAction } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -104,8 +104,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     } = useExportFormState();
 
     const [isExporting, setExporting] = useState(false);
-    const sizeLimitRef = useRef() as RefObject<Field>;
-    const messageCountRef = useRef() as RefObject<Field>;
+    const sizeLimitRef = useRef<Field>(null);
+    const messageCountRef = useRef<Field>(null);
     const [exportProgressText, setExportProgressText] = useState(_t("Processing…"));
     const [displayCancel, setCancelWarning] = useState(false);
     const [exportCancelled, setExportCancelled] = useState(false);

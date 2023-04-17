@@ -43,10 +43,12 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
         if (ev.button != 0 || ev.metaKey) return;
         ev.preventDefault();
 
-        let src = p["og:image"];
+        let src: string | null | undefined = p["og:image"];
         if (src?.startsWith("mxc://")) {
             src = mediaFromMxc(src).srcHttp;
         }
+
+        if (!src) return;
 
         const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
             src: src,

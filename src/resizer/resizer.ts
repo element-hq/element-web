@@ -44,7 +44,7 @@ export default class Resizer<C extends IConfig = IConfig> {
     // TODO move vertical/horizontal to config option/container class
     // as it doesn't make sense to mix them within one container/Resizer
     public constructor(
-        public container: HTMLElement,
+        public container: HTMLElement | null,
         private readonly distributorCtor: {
             new (item: ResizeItem): FixedDistributor<C, any>;
             createItem(
@@ -53,7 +53,7 @@ export default class Resizer<C extends IConfig = IConfig> {
                 sizer: Sizer,
                 container?: HTMLElement,
             ): ResizeItem;
-            createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): Sizer;
+            createSizer(containerElement: HTMLElement | null, vertical: boolean, reverse: boolean): Sizer;
         },
         public readonly config?: C,
     ) {
@@ -71,13 +71,13 @@ export default class Resizer<C extends IConfig = IConfig> {
 
     public attach(): void {
         const attachment = this?.config?.handler?.parentElement ?? this.container;
-        attachment.addEventListener("mousedown", this.onMouseDown, false);
+        attachment?.addEventListener("mousedown", this.onMouseDown, false);
         window.addEventListener("resize", this.onResize);
     }
 
     public detach(): void {
         const attachment = this?.config?.handler?.parentElement ?? this.container;
-        attachment.removeEventListener("mousedown", this.onMouseDown, false);
+        attachment?.removeEventListener("mousedown", this.onMouseDown, false);
         window.removeEventListener("resize", this.onResize);
     }
 
@@ -194,7 +194,7 @@ export default class Resizer<C extends IConfig = IConfig> {
         const Distributor = this.distributorCtor;
         const useItemContainer = this.config?.handler ? this.container : undefined;
         const sizer = Distributor.createSizer(this.container, vertical, reverse);
-        const item = Distributor.createItem(resizeHandle, this, sizer, useItemContainer);
+        const item = Distributor.createItem(resizeHandle, this, sizer, useItemContainer ?? undefined);
         const distributor = new Distributor(item);
         return { sizer, distributor };
     }

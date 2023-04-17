@@ -229,11 +229,11 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     }
 
     private get editorRoomKey(): string {
-        return editorRoomKey(this.props.editState.getEvent().getRoomId(), this.context.timelineRenderingType);
+        return editorRoomKey(this.props.editState.getEvent().getRoomId()!, this.context.timelineRenderingType);
     }
 
     private get editorStateKey(): string {
-        return editorStateKey(this.props.editState.getEvent().getId());
+        return editorStateKey(this.props.editState.getEvent().getId()!);
     }
 
     private get events(): MatrixEvent[] {
@@ -275,7 +275,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     private saveStoredEditorState = (): void => {
         const item = SendHistoryManager.createItem(this.model);
         this.clearPreviousEdit();
-        localStorage.setItem(this.editorRoomKey, this.props.editState.getEvent().getId());
+        localStorage.setItem(this.editorRoomKey, this.props.editState.getEvent().getId()!);
         localStorage.setItem(this.editorStateKey, JSON.stringify(item));
     };
 
@@ -329,7 +329,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
 
         // If content is modified then send an updated event into the room
         if (this.isContentModified(newContent)) {
-            const roomId = editedEvent.getRoomId();
+            const roomId = editedEvent.getRoomId()!;
             if (!containsEmote(this.model) && isSlashCommand(this.model)) {
                 const [cmd, args, commandText] = getSlashCommand(this.model);
                 if (cmd) {

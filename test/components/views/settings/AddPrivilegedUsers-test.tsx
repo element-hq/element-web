@@ -32,9 +32,21 @@ import { ICompletion } from "../../../../src/autocomplete/Autocompleter";
 jest.mock("../../../../src/autocomplete/UserProvider");
 
 const completions: ICompletion[] = [
-    { type: "user", completion: "user_1", completionId: "@user_1:host.local", range: { start: 1, end: 1 } },
-    { type: "user", completion: "user_2", completionId: "@user_2:host.local", range: { start: 1, end: 1 } },
-    { type: "user", completion: "user_without_completion_id", range: { start: 1, end: 1 } },
+    {
+        component: <div />,
+        type: "user",
+        completion: "user_1",
+        completionId: "@user_1:host.local",
+        range: { start: 1, end: 1 },
+    },
+    {
+        component: <div />,
+        type: "user",
+        completion: "user_2",
+        completionId: "@user_2:host.local",
+        range: { start: 1, end: 1 },
+    },
+    { component: <div />, type: "user", completion: "user_without_completion_id", range: { start: 1, end: 1 } },
 ];
 
 describe("<AddPrivilegedUsers />", () => {

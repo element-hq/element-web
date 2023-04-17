@@ -24,8 +24,20 @@ import { AutocompleteInput } from "../../../src/components/structures/Autocomple
 
 describe("AutocompleteInput", () => {
     const mockCompletion: ICompletion[] = [
-        { type: "user", completion: "user_1", completionId: "@user_1:host.local", range: { start: 1, end: 1 } },
-        { type: "user", completion: "user_2", completionId: "@user_2:host.local", range: { start: 1, end: 1 } },
+        {
+            type: "user",
+            completion: "user_1",
+            completionId: "@user_1:host.local",
+            range: { start: 1, end: 1 },
+            component: <div />,
+        },
+        {
+            type: "user",
+            completion: "user_2",
+            completionId: "@user_2:host.local",
+            range: { start: 1, end: 1 },
+            component: <div />,
+        },
     ];
 
     const constructMockProvider = (data: ICompletion[]) =>

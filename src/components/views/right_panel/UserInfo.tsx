@@ -1504,9 +1504,10 @@ export const UserInfoHeader: React.FC<{
         const avatarUrl = (member as RoomMember).getMxcAvatarUrl
             ? (member as RoomMember).getMxcAvatarUrl()
             : (member as User).avatarUrl;
-        if (!avatarUrl) return;
 
         const httpUrl = mediaFromMxc(avatarUrl).srcHttp;
+        if (!httpUrl) return;
+
         const params = {
             src: httpUrl,
             name: (member as RoomMember).name || (member as User).displayName,

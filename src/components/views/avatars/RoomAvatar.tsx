@@ -110,6 +110,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
 
     private onRoomAvatarClick = (): void => {
         const avatarUrl = Avatar.avatarUrlForRoom(this.props.room ?? null, undefined, undefined, undefined);
+        if (!avatarUrl) return;
         const params = {
             src: avatarUrl,
             name: this.props.room?.name,

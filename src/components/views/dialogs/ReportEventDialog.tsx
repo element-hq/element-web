@@ -255,7 +255,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                 });
             } else {
                 // Report to homeserver admin through the dedicated Matrix API.
-                await client.reportEvent(ev.getRoomId(), ev.getId(), -100, this.state.reason.trim());
+                await client.reportEvent(ev.getRoomId()!, ev.getId()!, -100, this.state.reason.trim());
             }
 
             // if the user should also be ignored, do that
@@ -340,7 +340,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                     );
                     break;
                 case NonStandardValue.Admin:
-                    if (client.isRoomEncrypted(this.props.mxEvent.getRoomId())) {
+                    if (client.isRoomEncrypted(this.props.mxEvent.getRoomId()!)) {
                         subtitle = _t(
                             "This room is dedicated to illegal or toxic content " +
                                 "or the moderators fail to moderate illegal or toxic content.\n" +

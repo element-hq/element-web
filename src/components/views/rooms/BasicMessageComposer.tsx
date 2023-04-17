@@ -765,7 +765,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     public render(): React.ReactNode {
         let autoComplete: JSX.Element | undefined;
-        if (this.state.autoComplete) {
+        if (this.state.autoComplete && this.state.query) {
             const query = this.state.query;
             const queryLen = query.length;
             autoComplete = (
@@ -800,8 +800,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const { completionIndex } = this.state;
         const hasAutocomplete = Boolean(this.state.autoComplete);
         let activeDescendant: string | undefined;
-        if (hasAutocomplete && completionIndex >= 0) {
-            activeDescendant = generateCompletionDomId(completionIndex);
+        if (hasAutocomplete && completionIndex! >= 0) {
+            activeDescendant = generateCompletionDomId(completionIndex!);
         }
 
         return (

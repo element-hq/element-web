@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { RefObject, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -41,9 +41,9 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
 
     const [busy, setBusy] = useState<boolean>(false);
     const [name, setName] = useState("");
-    const spaceNameField = useRef() as RefObject<Field>;
+    const spaceNameField = useRef<Field>(null);
     const [alias, setAlias] = useState("");
-    const spaceAliasField = useRef() as RefObject<RoomAliasField>;
+    const spaceAliasField = useRef<RoomAliasField>(null);
     const [avatar, setAvatar] = useState<File | undefined>();
     const [topic, setTopic] = useState<string>("");
 

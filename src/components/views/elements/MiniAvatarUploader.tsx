@@ -16,7 +16,7 @@ limitations under the License.
 
 import classNames from "classnames";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import React, { useContext, useRef, useState, MouseEvent, ReactNode, RefObject } from "react";
+import React, { useContext, useRef, useState, MouseEvent, ReactNode } from "react";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
@@ -59,7 +59,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({
         setShow(false);
     }, 13000); // hide after being shown for 10 seconds
 
-    const uploadRef = useRef() as RefObject<HTMLInputElement>;
+    const uploadRef = useRef<HTMLInputElement>(null);
 
     const label = hasAvatar || busy ? hasAvatarLabel : noAvatarLabel;
 

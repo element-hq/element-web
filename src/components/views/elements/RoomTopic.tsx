@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { RefObject, useCallback, useContext, useRef } from "react";
+import React, { useCallback, useContext, useRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { EventType } from "matrix-js-sdk/src/@types/event";
@@ -38,7 +38,7 @@ interface IProps extends React.HTMLProps<HTMLDivElement> {
 
 export default function RoomTopic({ room, ...props }: IProps): JSX.Element {
     const client = useContext(MatrixClientContext);
-    const ref = useRef() as RefObject<HTMLDivElement>;
+    const ref = useRef<HTMLDivElement>(null);
 
     const topic = useTopic(room);
     const body = topicToHtml(topic?.text, topic?.html, ref);
