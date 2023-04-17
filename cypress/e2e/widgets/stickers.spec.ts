@@ -67,8 +67,7 @@ const WIDGET_HTML = `
 `;
 
 function openStickerPicker() {
-    cy.get(".mx_MessageComposer_buttonMenu").click();
-    cy.get("#stickersButton").click();
+    cy.openMessageComposerOptions().findByRole("menuitem", { name: "Sticker" }).click();
 }
 
 function sendStickerFromPicker() {
