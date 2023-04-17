@@ -103,7 +103,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
 
     public get isVoice(): boolean | undefined {
         const invite = this.invite;
-        if (!invite) return;
+        if (!invite) return undefined;
 
         // FIXME: Find a better way to determine this from the event?
         if (invite.getContent()?.offer?.sdp?.indexOf("m=video") !== -1) return false;

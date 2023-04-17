@@ -1228,6 +1228,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         switch (this.props.kind) {
             case InviteKind.Dm:
                 return "StartChat";
+            default:
+                return undefined;
         }
     }
 

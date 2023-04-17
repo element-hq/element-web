@@ -158,7 +158,7 @@ interface MapProps {
     children?: (renderProps: { map: maplibregl.Map }) => ReactNode;
 }
 
-const Map: React.FC<MapProps> = ({
+const MapComponent: React.FC<MapProps> = ({
     bounds,
     centerGeoUri,
     children,
@@ -188,4 +188,4 @@ const Map: React.FC<MapProps> = ({
     );
 };
 
-export default Map;
+export default MapComponent;
