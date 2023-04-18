@@ -5,12 +5,12 @@
 
 const fs = require("fs");
 const path = require("path");
-const mkdirp = require("mkdirp");
+const { mkdirpSync } = require("mkdirp");
 const fetch = require("node-fetch");
 const ProxyAgent = require("simple-proxy-agent");
 
 console.log("Making webapp directory");
-mkdirp.sync("webapp");
+mkdirpSync("webapp");
 
 // curl -s https://meet.element.io/libs/external_api.min.js > ./webapp/jitsi_external_api.min.js
 console.log("Downloading Jitsi script");
