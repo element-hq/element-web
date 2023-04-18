@@ -16,10 +16,9 @@ limitations under the License.
 
 .mx_ToastContainer {
     position: absolute;
-    top: 0;
+    top: $spacing-4;
     left: 70px;
     z-index: 101;
-    padding: 4px;
     display: grid;
     grid-template-rows: 1fr 14px 6px;
 
@@ -34,25 +33,29 @@ limitations under the License.
     }
 
     .mx_Toast_toast {
-        grid-row: 1 / 3;
-        grid-column: 1;
         background-color: $system;
-        color: $primary-content;
-        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
         border-radius: 8px;
-        overflow: hidden;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+        color: $primary-content;
+        column-gap: $spacing-8;
         display: grid;
-        grid-template-columns: 22px 1fr;
-        column-gap: 8px;
-        row-gap: 4px;
-        padding: 8px;
+        grid-column: 1;
+        grid-row: 1 / 3;
+        grid-template-columns: 24px 1fr;
+        overflow: hidden;
+        padding: $spacing-16;
 
         &.mx_Toast_hasIcon {
+            .mx_Toast_icon {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
             &::before,
             &::after {
                 content: "";
-                width: 22px;
-                height: 22px;
+                width: 24px;
+                height: 24px;
                 grid-column: 1;
                 grid-row: 1;
                 mask-size: 100%;
@@ -60,11 +63,6 @@ limitations under the License.
                 mask-repeat: no-repeat;
                 background-size: 100%;
                 background-repeat: no-repeat;
-            }
-
-            &.mx_Toast_icon_verification::after {
-                mask-image: url("$(res)/img/e2e/normal.svg");
-                background-color: $primary-content;
             }
 
             &.mx_Toast_icon_verification_warning {
@@ -96,6 +94,7 @@ limitations under the License.
                 grid-column: 2;
             }
         }
+
         &:not(.mx_Toast_hasIcon) {
             padding-left: 12px;
 
@@ -104,24 +103,19 @@ limitations under the License.
             }
         }
 
-        .mx_Toast_title,
-        .mx_Toast_description {
-            padding-right: 8px;
-        }
-
         .mx_Toast_title {
-            display: flex;
             align-items: center;
-            column-gap: 8px;
-            width: 100%;
             box-sizing: border-box;
+            column-gap: 8px;
+            display: flex;
+            margin-bottom: $spacing-16;
+            width: 100%;
 
             h2 {
+                color: $primary-content;
                 margin: 0;
-                font-size: $font-15px;
-                font-weight: 600;
-                display: inline;
-                width: auto;
+                font-size: $font-18px;
+                font-weight: $font-semi-bold;
             }
 
             .mx_Toast_title_countIndicator {
@@ -135,25 +129,21 @@ limitations under the License.
         .mx_Toast_body {
             grid-column: 1 / 3;
             grid-row: 2;
+            position: relative;
         }
 
         .mx_Toast_buttons {
+            column-gap: $spacing-8;
             display: flex;
             justify-content: flex-end;
-            column-gap: 5px;
-
-            .mx_AccessibleButton {
-                min-width: 96px;
-                box-sizing: border-box;
-            }
+            margin-top: $spacing-32;
         }
 
         .mx_Toast_description {
-            max-width: 272px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin: 4px 0 11px 0;
-            font-size: $font-12px;
+            color: $primary-content;
+            font-size: $font-15px;
+            font-weight: $font-semi-bold;
+            max-width: 300px;
 
             a {
                 text-decoration: none;
@@ -161,7 +151,10 @@ limitations under the License.
         }
 
         .mx_Toast_detail {
-            color: $secondary-content;
+            display: block;
+            font-weight: $font-normal;
+            margin-top: $spacing-4;
+            max-width: 300px;
         }
 
         .mx_Toast_deviceID {

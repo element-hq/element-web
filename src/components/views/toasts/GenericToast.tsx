@@ -18,6 +18,7 @@ import React, { ReactNode } from "react";
 
 import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
+import { Caption } from "../typography/Caption";
 
 export interface IProps {
     description: ReactNode;
@@ -40,7 +41,7 @@ const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
     onAccept,
     onReject,
 }) => {
-    const detailContent = detail ? <div className="mx_Toast_detail">{detail}</div> : null;
+    const detailContent = detail ? <Caption className="mx_Toast_detail">{detail}</Caption> : null;
 
     return (
         <div>

@@ -27,8 +27,8 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
             <div
               class="mx_Toast_description"
             >
-              <div
-                class="mx_Toast_detail"
+              <span
+                class="mx_Caption mx_Toast_detail"
               >
                 <span
                   data-testid="device-metadata-isVerified"
@@ -41,7 +41,7 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
                 >
                   ABC123
                 </span>
-              </div>
+              </span>
             </div>
             <div
               aria-live="off"

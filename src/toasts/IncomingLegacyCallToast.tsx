@@ -119,7 +119,7 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
                         <div className="mx_LegacyCallEvent_type_icon" />
                         {isVoice ? _t("Voice call") : _t("Video call")}
                     </div>
-                    <div className="mx_IncomingLegacyCallToast_buttons">
+                    <div className="mx_Toast_buttons mx_IncomingLegacyCallToast_buttons">
                         <AccessibleButton
                             className="mx_IncomingLegacyCallToast_button mx_IncomingLegacyCallToast_button_decline"
                             onClick={this.onRejectClick}
