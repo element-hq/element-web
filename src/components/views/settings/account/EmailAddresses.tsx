@@ -276,7 +276,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         return (
             <div className="mx_EmailAddresses">
                 {existingEmailElements}
-                <form onSubmit={this.onAddClick} autoComplete="off" noValidate={true} className="mx_EmailAddresses_new">
+                <form onSubmit={this.onAddClick} autoComplete="off" noValidate={true}>
                     <Field
                         type="text"
                         label={_t("Email Address")}
