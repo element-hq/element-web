@@ -57,16 +57,30 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
 
-        let defaultCountry: PhoneNumberCountryDefinition = COUNTRIES[0];
+        let defaultCountry: PhoneNumberCountryDefinition | undefined;
         const defaultCountryCode = SdkConfig.get("default_country_code");
         if (defaultCountryCode) {
             const country = COUNTRIES.find((c) => c.iso2 === defaultCountryCode.toUpperCase());
             if (country) defaultCountry = country;
         }
 
+        if (!defaultCountry) {
+            try {
+                const locale = new Intl.Locale(navigator.language ?? navigator.languages[0]);
+                const code = locale.region ?? locale.language ?? locale.baseName;
+                const displayNames = new Intl.DisplayNames(["en"], { type: "region" });
+                const displayName = displayNames.of(code).toUpperCase();
+                defaultCountry = COUNTRIES.find(
+                    (c) => c.iso2 === code.toUpperCase() || c.name.toUpperCase() === displayName,
+                );
+            } catch (e) {
+                console.warn("Failed to detect default locale", e);
+            }
+        }
+
         this.state = {
             searchQuery: "",
-            defaultCountry,
+            defaultCountry: defaultCountry ?? COUNTRIES[0],
         };
     }
 
