@@ -31,7 +31,6 @@ describe("Threads", () => {
         });
         cy.startHomeserver("default").then((data) => {
             homeserver = data;
-
             cy.initTestUser(homeserver, "Tom");
         });
     });
@@ -50,12 +49,15 @@ describe("Threads", () => {
         });
 
         let roomId: string;
-        cy.createRoom({}).then((_roomId) => {
-            roomId = _roomId;
-            cy.inviteUser(roomId, bot.getUserId());
-            bot.joinRoom(roomId);
-            cy.visit("/#/room/" + roomId);
-        });
+        cy.createRoom({})
+            .then((_roomId) => {
+                roomId = _roomId;
+                return cy.inviteUser(roomId, bot.getUserId());
+            })
+            .then(async () => {
+                await bot.joinRoom(roomId);
+                cy.visit("/#/room/" + roomId);
+            });
 
         // Around 200 characters
         const MessageLong =
@@ -407,12 +409,15 @@ describe("Threads", () => {
         });
 
         let roomId: string;
-        cy.createRoom({}).then((_roomId) => {
-            roomId = _roomId;
-            cy.inviteUser(roomId, bot.getUserId());
-            bot.joinRoom(roomId);
-            cy.visit("/#/room/" + roomId);
-        });
+        cy.createRoom({})
+            .then((_roomId) => {
+                roomId = _roomId;
+                return cy.inviteUser(roomId, bot.getUserId());
+            })
+            .then(async () => {
+                await bot.joinRoom(roomId);
+                cy.visit("/#/room/" + roomId);
+            });
 
         // Exclude timestamp, read marker, and mapboxgl-map from snapshots
         const percyCSS =

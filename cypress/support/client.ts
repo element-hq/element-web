@@ -174,7 +174,9 @@ Cypress.Commands.add("createSpace", (options: ICreateRoomOpts): Chainable<string
 
 Cypress.Commands.add("inviteUser", (roomId: string, userId: string): Chainable<{}> => {
     return cy.getClient().then(async (cli: MatrixClient) => {
-        return cli.invite(roomId, userId);
+        const res = await cli.invite(roomId, userId);
+        Cypress.log({ name: "inviteUser", message: `sent invite in ${roomId} for ${userId}` });
+        return res;
     });
 });
 

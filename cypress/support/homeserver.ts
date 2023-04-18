@@ -58,7 +58,9 @@ declare global {
 
 function startHomeserver(template: string): Chainable<HomeserverInstance> {
     const homeserverName = Cypress.env("HOMESERVER");
-    return cy.task<HomeserverInstance>(homeserverName + "Start", template);
+    return cy.task<HomeserverInstance>(homeserverName + "Start", template, { log: false }).then((x) => {
+        Cypress.log({ name: "startHomeserver", message: `Started homeserver instance ${x.serverId}` });
+    });
 }
 
 function stopHomeserver(homeserver?: HomeserverInstance): Chainable<AUTWindow> {
