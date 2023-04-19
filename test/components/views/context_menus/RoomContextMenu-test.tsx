@@ -1,6 +1,7 @@
 /*
 Copyright 2023 Mikhail Aheichyk
 Copyright 2023 Nordeck IT + Consulting GmbH.
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import { shouldShowComponent } from "../../../../src/customisations/helpers/UICo
 import { stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -58,8 +60,8 @@ describe("RoomContextMenu", () => {
         onFinished = jest.fn();
     });
 
-    function getComponent(props: Partial<ComponentProps<typeof RoomContextMenu>> = {}) {
-        return render(
+    function renderComponent(props: Partial<ComponentProps<typeof RoomContextMenu>> = {}) {
+        render(
             <MatrixClientContext.Provider value={mockClient}>
                 <RoomContextMenu room={room} onFinished={onFinished} {...props} />
             </MatrixClientContext.Provider>,
@@ -70,7 +72,7 @@ describe("RoomContextMenu", () => {
         jest.spyOn(room, "canInvite").mockReturnValue(true);
         mocked(shouldShowComponent).mockReturnValue(false);
 
-        getComponent();
+        renderComponent();
 
         expect(screen.queryByRole("menuitem", { name: "Invite" })).not.toBeInTheDocument();
     });
@@ -79,8 +81,24 @@ describe("RoomContextMenu", () => {
         jest.spyOn(room, "canInvite").mockReturnValue(true);
         mocked(shouldShowComponent).mockReturnValue(true);
 
-        getComponent();
+        renderComponent();
 
         expect(screen.getByRole("menuitem", { name: "Invite" })).toBeInTheDocument();
+    });
+
+    it("when developer mode is disabled, it should not render the developer tools option", () => {
+        renderComponent();
+        expect(screen.queryByText("Developer tools")).not.toBeInTheDocument();
+    });
+
+    describe("when developer mode is enabled", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "developerMode");
+        });
+
+        it("should render the developer tools option", () => {
+            renderComponent();
+            expect(screen.getByText("Developer tools")).toBeInTheDocument();
+        });
     });
 });

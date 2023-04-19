@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -178,6 +178,10 @@ limitations under the License.
     .mx_IconizedContextMenu_unchecked {
         margin-left: 16px;
         margin-right: -5px;
+    }
+
+    .mx_IconizedContextMenu_developerTools::before {
+        mask-image: url("$(res)/img/element-icons/settings/flask.svg");
     }
 
     .mx_IconizedContextMenu_checked::before {
