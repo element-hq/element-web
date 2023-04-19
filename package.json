@@ -208,7 +208,7 @@
         "postcss-scss": "^4.0.4",
         "prettier": "2.8.7",
         "raw-loader": "^4.0.2",
-        "rimraf": "^4.0.0",
+        "rimraf": "^5.0.0",
         "stylelint": "^15.0.0",
         "stylelint-config-standard": "^32.0.0",
         "stylelint-scss": "^4.2.0",
