@@ -47,7 +47,7 @@ jobs:
 
             - name: Detecting files changed
               id: files
-              uses: futuratrepadeira/changed-files@96d5fd702a6479d573287ef07381ad59acc390ed # v4.0.0
+              uses: futuratrepadeira/changed-files@0239328a3a6268aad16af7c3e4efc78e32d6c0f0 # v4.0.1
               with:
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   pattern: '^.*\.tsx?$'
