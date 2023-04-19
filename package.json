@@ -103,7 +103,7 @@
         "pako": "^2.0.3",
         "parse5": "^6.0.1",
         "png-chunks-extract": "^1.0.0",
-        "posthog-js": "1.51.5",
+        "posthog-js": "1.53.2",
         "qrcode": "1.5.1",
         "re-resizable": "^6.9.0",
         "react": "17.0.2",
@@ -183,7 +183,7 @@
         "cypress-axe": "^1.0.0",
         "cypress-multi-reporters": "^1.6.1",
         "cypress-real-events": "^1.7.1",
-        "eslint": "8.37.0",
+        "eslint": "8.38.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-deprecate": "^0.7.0",
@@ -213,7 +213,7 @@
         "stylelint-config-standard": "^32.0.0",
         "stylelint-scss": "^4.2.0",
         "ts-node": "^10.9.1",
-        "typescript": "5.0.3",
+        "typescript": "5.0.4",
         "walk": "^2.3.14"
     },
     "@casualbot/jest-sonar-reporter": {
