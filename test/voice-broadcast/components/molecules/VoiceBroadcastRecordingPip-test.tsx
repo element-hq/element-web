@@ -28,7 +28,7 @@ import {
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingPip,
 } from "../../../../src/voice-broadcast";
-import { filterConsole, flushPromises, stubClient } from "../../../test-utils";
+import { flushPromises, stubClient } from "../../../test-utils";
 import { mkVoiceBroadcastInfoStateEvent } from "../../utils/test-utils";
 import { requestMediaPermissions } from "../../../../src/utils/media/requestMediaPermissions";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler";
@@ -84,8 +84,6 @@ describe("VoiceBroadcastRecordingPip", () => {
             });
         });
     };
-
-    filterConsole("Starting load of AsyncWrapper for modal");
 
     beforeAll(() => {
         client = stubClient();

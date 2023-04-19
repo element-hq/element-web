@@ -37,7 +37,7 @@ describe("UnverifiedSessionToast", () => {
     let client: Mocked<MatrixClient>;
     let renderResult: RenderResult;
 
-    filterConsole("Starting load of AsyncWrapper for modal", "Dismissing unverified sessions: ABC123");
+    filterConsole("Dismissing unverified sessions: ABC123");
 
     beforeAll(() => {
         client = mocked(stubClient());

@@ -104,7 +104,6 @@ describe("InviteDialog", () => {
         "Error retrieving profile for userId @carol:example.com",
         "Error retrieving profile for userId @localpart:server.tld",
         "Error retrieving profile for userId @localpart:server:tld",
-        "Starting load of AsyncWrapper for modal",
         "[Invite:Recents] Excluding @alice:example.org from recents",
     );
 

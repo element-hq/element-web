@@ -220,7 +220,6 @@ describe("VoiceBroadcastPlayback", () => {
     };
 
     filterConsole(
-        "Starting load of AsyncWrapper for modal",
         // expected for some tests
         "Unable to load broadcast playback",
     );

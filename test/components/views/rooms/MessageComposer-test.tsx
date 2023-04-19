@@ -23,7 +23,6 @@ import userEvent from "@testing-library/user-event";
 import {
     clearAllModals,
     createTestClient,
-    filterConsole,
     flushPromises,
     mkEvent,
     mkStubRoom,
@@ -93,8 +92,6 @@ const expectVoiceMessageRecordingTriggered = (): void => {
 describe("MessageComposer", () => {
     stubClient();
     const cli = createTestClient();
-
-    filterConsole("Starting load of AsyncWrapper for modal");
 
     beforeEach(() => {
         mockPlatformPeg();
