@@ -116,6 +116,7 @@
         "allchange": "^1.0.6",
         "babel-jest": "^29.0.0",
         "babel-loader": "^8.2.2",
+        "babel-plugin-jsx-remove-data-test-id": "^3.0.0",
         "chokidar": "^3.5.1",
         "concurrently": "^8.0.0",
         "cpx": "^1.5.0",
