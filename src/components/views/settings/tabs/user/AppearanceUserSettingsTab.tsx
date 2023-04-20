@@ -88,7 +88,11 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
         const brand = SdkConfig.get().brand;
         const toggle = (
-            <AccessibleButton kind="link" onClick={() => this.setState({ showAdvanced: !this.state.showAdvanced })}>
+            <AccessibleButton
+                kind="link"
+                onClick={() => this.setState({ showAdvanced: !this.state.showAdvanced })}
+                aria-expanded={this.state.showAdvanced}
+            >
                 {this.state.showAdvanced ? _t("Hide advanced") : _t("Show advanced")}
             </AccessibleButton>
         );

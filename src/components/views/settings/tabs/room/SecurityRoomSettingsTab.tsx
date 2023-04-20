@@ -443,6 +443,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         onClick={this.toggleAdvancedSection}
                         kind="link"
                         className="mx_SettingsTab_showAdvanced"
+                        aria-expanded={this.state.showAdvancedSection}
                     >
                         {this.state.showAdvancedSection ? _t("Hide advanced") : _t("Show advanced")}
                     </AccessibleButton>

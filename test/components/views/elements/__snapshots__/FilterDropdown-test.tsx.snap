@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<FilterDropdown /> renders dropdown options in menu 1`] = `
-<div
+<ul
   class="mx_Dropdown_menu"
   id="test_listbox"
   role="listbox"
 >
-  <div
+  <li
     aria-selected="true"
     class="mx_Dropdown_option mx_Dropdown_option_highlight"
     id="test__one"
@@ -25,8 +25,8 @@ exports[`<FilterDropdown /> renders dropdown options in menu 1`] = `
         Option one
       </span>
     </div>
-  </div>
-  <div
+  </li>
+  <li
     aria-selected="false"
     class="mx_Dropdown_option"
     id="test__two"
@@ -47,8 +47,8 @@ exports[`<FilterDropdown /> renders dropdown options in menu 1`] = `
         with description
       </span>
     </div>
-  </div>
-</div>
+  </li>
+</ul>
 `;
 
 exports[`<FilterDropdown /> renders selected option 1`] = `

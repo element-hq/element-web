@@ -121,6 +121,9 @@ export default class SearchBar extends React.Component<IProps, IState> {
                             type="text"
                             autoFocus={true}
                             placeholder={_t("Search…")}
+                            aria-label={
+                                this.state.scope === SearchScope.Room ? _t("Search this room") : _t("Search all rooms")
+                            }
                             onKeyDown={this.onSearchChange}
                         />
                         <AccessibleButton

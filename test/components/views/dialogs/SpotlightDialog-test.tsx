@@ -174,7 +174,7 @@ describe("Spotlight Dialog", () => {
             expect(filterChip.innerHTML).toContain("Public rooms");
 
             const content = document.querySelector("#mx_SpotlightDialog_content")!;
-            const options = content.querySelectorAll("div.mx_SpotlightDialog_option");
+            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
             expect(options.length).toBe(1);
             expect(options[0].innerHTML).toContain(testPublicRoom.name);
         });
@@ -196,7 +196,7 @@ describe("Spotlight Dialog", () => {
             expect(filterChip.innerHTML).toContain("People");
 
             const content = document.querySelector("#mx_SpotlightDialog_content")!;
-            const options = content.querySelectorAll("div.mx_SpotlightDialog_option");
+            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
             expect(options.length).toBeGreaterThanOrEqual(1);
             expect(options[0]!.innerHTML).toContain(testPerson.display_name);
         });
@@ -242,7 +242,7 @@ describe("Spotlight Dialog", () => {
             expect(filterChip.innerHTML).toContain("Public rooms");
 
             const content = document.querySelector("#mx_SpotlightDialog_content")!;
-            const options = content.querySelectorAll("div.mx_SpotlightDialog_option");
+            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
             expect(options.length).toBe(1);
             expect(options[0]!.innerHTML).toContain(testPublicRoom.name);
 
@@ -265,7 +265,7 @@ describe("Spotlight Dialog", () => {
             expect(filterChip.innerHTML).toContain("People");
 
             const content = document.querySelector("#mx_SpotlightDialog_content")!;
-            const options = content.querySelectorAll("div.mx_SpotlightDialog_option");
+            const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
             expect(options.length).toBeGreaterThanOrEqual(1);
             expect(options[0]!.innerHTML).toContain(testPerson.display_name);
         });
@@ -324,7 +324,7 @@ describe("Spotlight Dialog", () => {
             await flushPromisesWithFakeTimers();
 
             const content = document.querySelector("#mx_SpotlightDialog_content")!;
-            options = content.querySelectorAll("div.mx_SpotlightDialog_option");
+            options = content.querySelectorAll("li.mx_SpotlightDialog_option");
         });
 
         it("should find Rooms", () => {
@@ -350,7 +350,7 @@ describe("Spotlight Dialog", () => {
         jest.advanceTimersByTime(200);
         await flushPromisesWithFakeTimers();
 
-        const options = document.querySelectorAll("div.mx_SpotlightDialog_option");
+        const options = document.querySelectorAll("li.mx_SpotlightDialog_option");
         expect(options.length).toBeGreaterThanOrEqual(1);
         expect(options[0]!.innerHTML).toContain(testPerson.display_name);
 
@@ -372,7 +372,7 @@ describe("Spotlight Dialog", () => {
         await flushPromisesWithFakeTimers();
 
         const content = document.querySelector("#mx_SpotlightDialog_content")!;
-        const options = content.querySelectorAll("div.mx_SpotlightDialog_option");
+        const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
         expect(options.length).toBe(1);
         expect(options[0].innerHTML).toContain(testPublicRoom.name);
 

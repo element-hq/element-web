@@ -280,7 +280,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
                     <Field
                         type="text"
                         label={_t("Email Address")}
-                        autoComplete="off"
+                        autoComplete="email"
                         disabled={this.state.verifying}
                         value={this.state.newEmailAddress}
                         onChange={this.onChangeNewEmailAddress}

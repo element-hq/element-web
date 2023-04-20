@@ -318,7 +318,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) 
                 />
             </div>
 
-            <RoomName room={room}>{(name) => <h2 title={name}>{name}</h2>}</RoomName>
+            <RoomName room={room}>{(name) => <h1 title={name}>{name}</h1>}</RoomName>
             <div className="mx_RoomSummaryCard_alias" title={alias}>
                 {alias}
             </div>

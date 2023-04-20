@@ -44,11 +44,11 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           tabindex="0"
         />
       </div>
-      <h2
+      <h1
         title="!room:domain.org"
       >
         !room:domain.org
-      </h2>
+      </h1>
       <div
         class="mx_RoomSummaryCard_alias"
         title=""
@@ -61,9 +61,9 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
       <div
         class="mx_BaseCard_Group mx_RoomSummaryCard_aboutGroup"
       >
-        <h1>
+        <h2>
           About
-        </h1>
+        </h2>
         <div
           class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_people"
           role="button"
@@ -116,9 +116,9 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
       <div
         class="mx_BaseCard_Group mx_RoomSummaryCard_appsGroup"
       >
-        <h1>
+        <h2>
           Widgets
-        </h1>
+        </h2>
         <div
           class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
           role="button"

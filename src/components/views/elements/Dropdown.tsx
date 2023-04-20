@@ -30,7 +30,7 @@ interface IMenuOptionProps {
     highlighted?: boolean;
     dropdownKey: string;
     id?: string;
-    inputRef?: Ref<HTMLDivElement>;
+    inputRef?: Ref<HTMLLIElement>;
     onClick(dropdownKey: string): void;
     onMouseEnter(dropdownKey: string): void;
 }
@@ -57,7 +57,7 @@ class MenuOption extends React.Component<IMenuOptionProps> {
         });
 
         return (
-            <div
+            <li
                 id={this.props.id}
                 className={optClasses}
                 onClick={this.onClick}
@@ -67,7 +67,7 @@ class MenuOption extends React.Component<IMenuOptionProps> {
                 ref={this.props.inputRef}
             >
                 {this.props.children}
-            </div>
+            </li>
         );
     }
 }
@@ -78,6 +78,7 @@ export interface DropdownProps {
     label: string;
     value?: string;
     className?: string;
+    autoComplete?: string;
     children: NonEmptyArray<ReactElement & { key: string }>;
     // negative for consistency with HTML
     disabled?: boolean;
@@ -318,21 +319,21 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         });
         if (!options?.length) {
             return [
-                <div key="0" className="mx_Dropdown_option" role="option" aria-selected={false}>
+                <li key="0" className="mx_Dropdown_option" role="option" aria-selected={false}>
                     {_t("No results")}
-                </div>,
+                </li>,
             ];
         }
         return options;
     }
 
     public render(): React.ReactNode {
-        let currentValue;
+        let currentValue: JSX.Element | undefined;
 
         const menuStyle: CSSProperties = {};
         if (this.props.menuWidth) menuStyle.width = this.props.menuWidth;
 
-        let menu;
+        let menu: JSX.Element | undefined;
         if (this.state.expanded) {
             if (this.props.searchEnabled) {
                 currentValue = (
@@ -340,6 +341,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
                         id={`${this.props.id}_input`}
                         type="text"
                         autoFocus={true}
+                        autoComplete={this.props.autoComplete}
                         className="mx_Dropdown_option"
                         onChange={this.onInputChange}
                         value={this.state.searchQuery}
@@ -355,9 +357,9 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
                 );
             }
             menu = (
-                <div className="mx_Dropdown_menu" style={menuStyle} role="listbox" id={`${this.props.id}_listbox`}>
+                <ul className="mx_Dropdown_menu" style={menuStyle} role="listbox" id={`${this.props.id}_listbox`}>
                     {this.getMenuOptions()}
-                </div>
+                </ul>
             );
         }
 

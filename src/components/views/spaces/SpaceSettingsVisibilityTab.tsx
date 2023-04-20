@@ -97,6 +97,7 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
                     onClick={toggleAdvancedSection}
                     kind="link"
                     className="mx_SettingsTab_showAdvanced"
+                    aria-expanded={showAdvancedSection}
                 >
                     {showAdvancedSection ? _t("Hide advanced") : _t("Show advanced")}
                 </AccessibleButton>

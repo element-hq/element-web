@@ -310,7 +310,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
                         <Field
                             type="text"
                             label={_t("Phone Number")}
-                            autoComplete="off"
+                            autoComplete="tel-national"
                             disabled={this.state.verifying}
                             prefixComponent={phoneCountry}
                             value={this.state.newPhoneNumber}

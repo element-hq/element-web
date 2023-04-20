@@ -134,6 +134,7 @@ const QuickSettingsButton: React.FC<{
                 title={_t("Quick settings")}
                 inputRef={handle}
                 forceHide={!isPanelCollapsed}
+                aria-expanded={!isPanelCollapsed}
             >
                 {!isPanelCollapsed ? _t("Settings") : null}
             </AccessibleTooltipButton>

@@ -41,10 +41,10 @@ const KeyboardShortcutRow: React.FC<IKeyboardShortcutRowProps> = ({ name }) => {
     if (!displayName || !value) return null;
 
     return (
-        <div className="mx_KeyboardShortcut_shortcutRow">
+        <li className="mx_KeyboardShortcut_shortcutRow">
             {displayName}
             <KeyboardShortcut value={value} />
-        </div>
+        </li>
     );
 };
 
@@ -59,12 +59,12 @@ const KeyboardShortcutSection: React.FC<IKeyboardShortcutSectionProps> = ({ cate
     return (
         <div className="mx_SettingsTab_section" key={categoryName}>
             <div className="mx_SettingsTab_subheading">{_t(category.categoryLabel)}</div>
-            <div>
+            <ul>
                 {" "}
                 {category.settingNames.map((shortcutName) => {
                     return <KeyboardShortcutRow key={shortcutName} name={shortcutName} />;
                 })}{" "}
-            </div>
+            </ul>
         </div>
     );
 };

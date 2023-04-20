@@ -18,9 +18,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
       >
         Composer
       </div>
-      <div>
+      <ul>
          
-        <div
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Send message
@@ -33,8 +33,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           New line
@@ -53,8 +53,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Toggle Bold
@@ -73,8 +73,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Toggle Italics
@@ -93,8 +93,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Toggle Quote
@@ -119,8 +119,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Toggle Link
@@ -145,8 +145,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Toggle Code Block
@@ -165,8 +165,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Undo edit
@@ -185,8 +185,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Redo edit
@@ -205,8 +205,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Jump to start of the composer
@@ -225,8 +225,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Jump to end of the composer
@@ -245,8 +245,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Cancel replying to a message
@@ -259,8 +259,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Navigate to next message to edit
@@ -273,8 +273,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Navigate to previous message to edit
@@ -287,8 +287,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Navigate to next message in composer history
@@ -313,8 +313,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Navigate to previous message in composer history
@@ -339,8 +339,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Send a sticker
@@ -359,9 +359,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
+        </li>
          
-      </div>
+      </ul>
     </div>
     <div
       class="mx_SettingsTab_section"
@@ -371,9 +371,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
       >
         Calls
       </div>
-      <div>
+      <ul>
          
-        <div
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Toggle microphone mute
@@ -392,8 +392,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Toggle webcam on/off
@@ -412,9 +412,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
+        </li>
          
-      </div>
+      </ul>
     </div>
     <div
       class="mx_SettingsTab_section"
@@ -424,9 +424,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
       >
         Room
       </div>
-      <div>
+      <ul>
          
-        <div
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Search (must be enabled)
@@ -445,8 +445,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Upload a file
@@ -471,8 +471,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Dismiss read marker and jump to bottom
@@ -485,8 +485,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Jump to oldest unread message
@@ -505,8 +505,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Scroll up in the timeline
@@ -519,8 +519,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Scroll down in the timeline
@@ -533,8 +533,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Jump to first message
@@ -553,8 +553,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Jump to last message
@@ -573,9 +573,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
+        </li>
          
-      </div>
+      </ul>
     </div>
     <div
       class="mx_SettingsTab_section"
@@ -585,9 +585,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
       >
         Room List
       </div>
-      <div>
+      <ul>
          
-        <div
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Select room from the room list
@@ -600,8 +600,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Collapse room list section
@@ -614,8 +614,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Expand room list section
@@ -628,8 +628,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Navigate down in the room list
@@ -642,8 +642,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Navigate up in the room list
@@ -656,9 +656,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
+        </li>
          
-      </div>
+      </ul>
     </div>
     <div
       class="mx_SettingsTab_section"
@@ -668,9 +668,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
       >
         Accessibility
       </div>
-      <div>
+      <ul>
          
-        <div
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Close dialog or context menu
@@ -683,8 +683,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Activate selected button
@@ -697,9 +697,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
+        </li>
          
-      </div>
+      </ul>
     </div>
     <div
       class="mx_SettingsTab_section"
@@ -709,9 +709,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
       >
         Navigation
       </div>
-      <div>
+      <ul>
          
-        <div
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Toggle the top left menu
@@ -730,8 +730,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Toggle right panel
@@ -750,8 +750,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Toggle space panel
@@ -776,8 +776,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Open this settings tab
@@ -796,8 +796,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Go to Home View
@@ -822,8 +822,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Jump to room search
@@ -842,8 +842,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Next unread room or DM
@@ -868,8 +868,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Previous unread room or DM
@@ -894,8 +894,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Next room or DM
@@ -914,8 +914,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Previous room or DM
@@ -934,9 +934,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
+        </li>
          
-      </div>
+      </ul>
     </div>
     <div
       class="mx_SettingsTab_section"
@@ -946,9 +946,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
       >
         Autocomplete
       </div>
-      <div>
+      <ul>
          
-        <div
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Cancel autocomplete
@@ -961,8 +961,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Next autocomplete suggestion
@@ -975,8 +975,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Previous autocomplete suggestion
@@ -989,8 +989,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Complete
@@ -1003,8 +1003,8 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           class="mx_KeyboardShortcut_shortcutRow"
         >
           Force complete
@@ -1017,9 +1017,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                
             </kbd>
           </div>
-        </div>
+        </li>
          
-      </div>
+      </ul>
     </div>
   </div>
 </div>

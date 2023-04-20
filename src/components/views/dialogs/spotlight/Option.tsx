@@ -15,18 +15,21 @@ limitations under the License.
 */
 
 import classNames from "classnames";
-import React, { ComponentProps, ReactNode } from "react";
+import React, { ReactNode, RefObject } from "react";
 
-import { RovingAccessibleButton } from "../../../../accessibility/roving/RovingAccessibleButton";
 import { useRovingTabIndex } from "../../../../accessibility/RovingTabIndex";
-import AccessibleButton from "../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 
-interface OptionProps extends ComponentProps<typeof RovingAccessibleButton> {
+interface OptionProps {
+    inputRef?: RefObject<HTMLLIElement>;
     endAdornment?: ReactNode;
+    id?: string;
+    className?: string;
+    onClick: ((ev: ButtonEvent) => void) | null;
 }
 
 export const Option: React.FC<OptionProps> = ({ inputRef, children, endAdornment, className, ...props }) => {
-    const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
+    const [onFocus, isActive, ref] = useRovingTabIndex<HTMLLIElement>(inputRef);
     return (
         <AccessibleButton
             {...props}
@@ -36,6 +39,7 @@ export const Option: React.FC<OptionProps> = ({ inputRef, children, endAdornment
             tabIndex={-1}
             aria-selected={isActive}
             role="option"
+            element="li"
         >
             {children}
             <div className="mx_SpotlightDialog_option--endAdornment">
