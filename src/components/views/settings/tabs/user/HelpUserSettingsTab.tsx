@@ -137,57 +137,97 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                 <span className="mx_SettingsTab_subheading">{_t("Credits")}</span>
                 <ul className="mx_SettingsTab_subsectionText">
                     <li>
-                        The{" "}
-                        <a href="themes/element/img/backgrounds/lake.jpg" rel="noreferrer noopener" target="_blank">
-                            default cover photo
-                        </a>{" "}
-                        is ©&nbsp;
-                        <a href="https://www.flickr.com/golan" rel="noreferrer noopener" target="_blank">
-                            Jesús Roncero
-                        </a>{" "}
-                        used under the terms of&nbsp;
-                        <a
-                            href="https://creativecommons.org/licenses/by-sa/4.0/"
-                            rel="noreferrer noopener"
-                            target="_blank"
-                        >
-                            CC-BY-SA 4.0
-                        </a>
-                        .
+                        {_t(
+                            "The <photo>default cover photo</photo> is © " +
+                                "<author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.",
+                            {},
+                            {
+                                photo: (sub) => (
+                                    <a
+                                        href="themes/element/img/backgrounds/lake.jpg"
+                                        rel="noreferrer noopener"
+                                        target="_blank"
+                                    >
+                                        {sub}
+                                    </a>
+                                ),
+                                author: (sub) => (
+                                    <a href="https://www.flickr.com/golan" rel="noreferrer noopener" target="_blank">
+                                        {sub}
+                                    </a>
+                                ),
+                                terms: (sub) => (
+                                    <a
+                                        href="https://creativecommons.org/licenses/by-sa/4.0/"
+                                        rel="noreferrer noopener"
+                                        target="_blank"
+                                    >
+                                        {sub}
+                                    </a>
+                                ),
+                            },
+                        )}
                     </li>
                     <li>
-                        The{" "}
-                        <a href="https://github.com/matrix-org/twemoji-colr" rel="noreferrer noopener" target="_blank">
-                            twemoji-colr
-                        </a>{" "}
-                        font is ©&nbsp;
-                        <a href="https://mozilla.org" rel="noreferrer noopener" target="_blank">
-                            Mozilla Foundation
-                        </a>{" "}
-                        used under the terms of&nbsp;
-                        <a href="https://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer noopener" target="_blank">
-                            Apache 2.0
-                        </a>
-                        .
+                        {_t(
+                            "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> " +
+                                "used under the terms of <terms>Apache 2.0</terms>.",
+                            {},
+                            {
+                                colr: (sub) => (
+                                    <a
+                                        href="https://github.com/matrix-org/twemoji-colr"
+                                        rel="noreferrer noopener"
+                                        target="_blank"
+                                    >
+                                        {sub}
+                                    </a>
+                                ),
+                                author: (sub) => (
+                                    <a href="https://mozilla.org" rel="noreferrer noopener" target="_blank">
+                                        {sub}
+                                    </a>
+                                ),
+                                terms: (sub) => (
+                                    <a
+                                        href="https://www.apache.org/licenses/LICENSE-2.0"
+                                        rel="noreferrer noopener"
+                                        target="_blank"
+                                    >
+                                        {sub}
+                                    </a>
+                                ),
+                            },
+                        )}
                     </li>
                     <li>
-                        The{" "}
-                        <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
-                            Twemoji
-                        </a>{" "}
-                        emoji art is ©&nbsp;
-                        <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
-                            Twitter, Inc and other contributors
-                        </a>{" "}
-                        used under the terms of&nbsp;
-                        <a
-                            href="https://creativecommons.org/licenses/by/4.0/"
-                            rel="noreferrer noopener"
-                            target="_blank"
-                        >
-                            CC-BY 4.0
-                        </a>
-                        .
+                        {_t(
+                            "The <twemoji>Twemoji</twemoji> emoji art is © " +
+                                "<author>Twitter, Inc and other contributors</author> used under the terms of " +
+                                "<terms>CC-BY 4.0</terms>.",
+                            {},
+                            {
+                                twemoji: (sub) => (
+                                    <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
+                                        {sub}
+                                    </a>
+                                ),
+                                author: (sub) => (
+                                    <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
+                                        {sub}
+                                    </a>
+                                ),
+                                terms: (sub) => (
+                                    <a
+                                        href="https://creativecommons.org/licenses/by/4.0/"
+                                        rel="noreferrer noopener"
+                                        target="_blank"
+                                    >
+                                        {sub}
+                                    </a>
+                                ),
+                            },
+                        )}
                     </li>
                 </ul>
             </div>
