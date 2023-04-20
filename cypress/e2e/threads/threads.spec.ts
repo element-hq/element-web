@@ -174,7 +174,7 @@ describe("Threads", () => {
             .click({ force: true }); // Cypress has no ability to hover
         cy.get(".mx_EmojiPicker").within(() => {
             cy.get('input[type="text"]').type("wave");
-            cy.contains('[role="menuitem"]', "👋").click();
+            cy.contains('[role="gridcell"]', "👋").click();
         });
 
         cy.get(".mx_ThreadView").within(() => {

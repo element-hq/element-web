@@ -148,7 +148,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
 
         const first =
             element.querySelector<HTMLElement>('[role^="menuitem"]') ||
-            element.querySelector<HTMLElement>("[tab-index]");
+            element.querySelector<HTMLElement>("[tabindex]");
 
         if (first) {
             first.focus();

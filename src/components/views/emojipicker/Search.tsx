@@ -20,14 +20,19 @@ import React from "react";
 import { _t } from "../../../languageHandler";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { RovingTabIndexContext } from "../../../accessibility/RovingTabIndex";
 
 interface IProps {
     query: string;
     onChange(value: string): void;
     onEnter(): void;
+    onKeyDown(event: React.KeyboardEvent): void;
 }
 
 class Search extends React.PureComponent<IProps> {
+    public static contextType = RovingTabIndexContext;
+    public context!: React.ContextType<typeof RovingTabIndexContext>;
+
     private inputRef = React.createRef<HTMLInputElement>();
 
     public componentDidMount(): void {
@@ -43,11 +48,14 @@ class Search extends React.PureComponent<IProps> {
                 ev.stopPropagation();
                 ev.preventDefault();
                 break;
+
+            default:
+                this.props.onKeyDown(ev);
         }
     };
 
     public render(): React.ReactNode {
-        let rightButton;
+        let rightButton: JSX.Element;
         if (this.props.query) {
             rightButton = (
                 <button
@@ -70,6 +78,10 @@ class Search extends React.PureComponent<IProps> {
                     onChange={(ev) => this.props.onChange(ev.target.value)}
                     onKeyDown={this.onKeyDown}
                     ref={this.inputRef}
+                    aria-activedescendant={this.context.state.activeRef?.current?.id}
+                    aria-controls="mx_EmojiPicker_body"
+                    aria-haspopup="grid"
+                    aria-autocomplete="list"
                 />
                 {rightButton}
             </div>

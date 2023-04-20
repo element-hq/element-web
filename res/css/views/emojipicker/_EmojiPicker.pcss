@@ -179,6 +179,14 @@ limitations under the License.
     list-style: none;
     width: 38px;
     cursor: pointer;
+
+    &:focus-within {
+        background-color: $focus-bg-color;
+    }
+}
+
+.mx_EmojiPicker_body .mx_EmojiPicker_item_wrapper[tabindex="0"] .mx_EmojiPicker_item {
+    background-color: $focus-bg-color;
 }
 
 .mx_EmojiPicker_item {

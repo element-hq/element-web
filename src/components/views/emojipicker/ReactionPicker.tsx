@@ -135,6 +135,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
             <EmojiPicker
                 onChoose={this.onChoose}
                 isEmojiDisabled={this.isEmojiDisabled}
+                onFinished={this.props.onFinished}
                 selectedEmojis={this.state.selectedEmojis}
             />
         );

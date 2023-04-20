@@ -73,6 +73,7 @@ interface IProps<T> {
 
     element?: string;
     className?: string;
+    role?: string;
 }
 
 interface IState {
@@ -128,6 +129,7 @@ export default class LazyRenderList<T = any> extends React.Component<IProps<T>, 
         const elementProps = {
             style: { paddingTop: `${paddingTop}px`, paddingBottom: `${paddingBottom}px` },
             className: this.props.className,
+            role: this.props.role,
         };
         return React.createElement(element, elementProps, renderedItems.map(renderItem));
     }

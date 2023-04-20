@@ -61,7 +61,7 @@ export interface IState {
     refs: Ref[];
 }
 
-interface IContext {
+export interface IContext {
     state: IState;
     dispatch: Dispatch<IAction>;
 }
@@ -80,7 +80,7 @@ export enum Type {
     SetFocus = "SET_FOCUS",
 }
 
-interface IAction {
+export interface IAction {
     type: Type;
     payload: {
         ref: Ref;
@@ -160,7 +160,7 @@ interface IProps {
     handleUpDown?: boolean;
     handleLeftRight?: boolean;
     children(renderProps: { onKeyDownHandler(ev: React.KeyboardEvent): void }): ReactNode;
-    onKeyDown?(ev: React.KeyboardEvent, state: IState): void;
+    onKeyDown?(ev: React.KeyboardEvent, state: IState, dispatch: Dispatch<IAction>): void;
 }
 
 export const findSiblingElement = (
@@ -199,7 +199,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
     const onKeyDownHandler = useCallback(
         (ev: React.KeyboardEvent) => {
             if (onKeyDown) {
-                onKeyDown(ev, context.state);
+                onKeyDown(ev, context.state, context.dispatch);
                 if (ev.defaultPrevented) {
                     return;
                 }
