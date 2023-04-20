@@ -269,7 +269,6 @@ module.exports = (env, argv) => {
                     },
                     loader: "babel-loader",
                     options: {
-                        envName: nodeEnv,
                         cacheDirectory: true,
                     },
                 },
@@ -435,9 +434,6 @@ module.exports = (env, argv) => {
                         {
                             // TS -> JS because the worklet-loader won't do this for us.
                             loader: "babel-loader",
-                            options: {
-                                envName: nodeEnv,
-                            },
                         },
                     ],
                 },
