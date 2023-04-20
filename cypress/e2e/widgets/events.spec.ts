@@ -159,7 +159,9 @@ describe("Widget Events", () => {
             cy.viewRoomByName(ROOM_NAME);
 
             // approve capabilities
-            cy.contains(".mx_WidgetCapabilitiesPromptDialog button", "Approve").click();
+            cy.get(".mx_WidgetCapabilitiesPromptDialog").within(() => {
+                cy.findByRole("button", { name: "Approve" }).click();
+            });
 
             cy.all([cy.get<string>("@widgetEventSent"), cy.get<string>("@layoutEventSent")]).then(async () => {
                 // bot creates a new room with 'm.room.topic'
