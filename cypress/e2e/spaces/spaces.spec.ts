@@ -24,7 +24,7 @@ import Chainable = Cypress.Chainable;
 import { UserCredentials } from "../../support/login";
 
 function openSpaceCreateMenu(): Chainable<JQuery> {
-    cy.get(".mx_SpaceButton_new").click();
+    cy.findByRole("button", { name: "Create a space" }).click();
     return cy.get(".mx_SpaceCreateMenu_wrapper .mx_ContextualMenu");
 }
 
@@ -83,64 +83,72 @@ describe("Spaces", () => {
         openSpaceCreateMenu();
         cy.get("#mx_ContextualMenu_Container").percySnapshotElement("Space create menu");
         cy.get(".mx_SpaceCreateMenu_wrapper .mx_ContextualMenu").within(() => {
-            cy.get(".mx_SpaceCreateMenuType_public").click();
+            // Regex pattern due to strings of "mx_SpaceCreateMenuType_public"
+            cy.findByRole("button", { name: /Public/ }).click();
+
             cy.get('.mx_SpaceBasicSettings_avatarContainer input[type="file"]').selectFile(
                 "cypress/fixtures/riot.png",
                 { force: true },
             );
-            cy.get('input[label="Name"]').type("Let's have a Riot");
-            cy.get('input[label="Address"]').should("have.value", "lets-have-a-riot");
-            cy.get('textarea[label="Description"]').type("This is a space to reminisce Riot.im!");
-            cy.contains(".mx_AccessibleButton", "Create").click();
+            cy.findByRole("textbox", { name: "Name" }).type("Let's have a Riot");
+            cy.findByRole("textbox", { name: "Address" }).should("have.value", "lets-have-a-riot");
+            cy.findByRole("textbox", { name: "Description" }).type("This is a space to reminisce Riot.im!");
+            cy.findByRole("button", { name: "Create" }).click();
         });
 
         // Create the default General & Random rooms, as well as a custom "Jokes" room
-        cy.get('input[label="Room name"][value="General"]').should("exist");
-        cy.get('input[label="Room name"][value="Random"]').should("exist");
-        cy.get('input[placeholder="Support"]').type("Jokes");
-        cy.contains(".mx_AccessibleButton", "Continue").click();
+        cy.findByPlaceholderText("General").should("exist");
+        cy.findByPlaceholderText("Random").should("exist");
+        cy.findByPlaceholderText("Support").type("Jokes");
+        cy.findByRole("button", { name: "Continue" }).click();
 
         // Copy matrix.to link
-        cy.get(".mx_SpacePublicShare_shareButton").focus().realClick();
+        // Regex pattern due to strings of "mx_SpacePublicShare_shareButton"
+        cy.findByRole("button", { name: /Share invite link/ }).realClick();
         cy.getClipboardText().should("eq", "https://matrix.to/#/#lets-have-a-riot:localhost");
 
         // Go to space home
-        cy.contains(".mx_AccessibleButton", "Go to my first room").click();
+        cy.findByRole("button", { name: "Go to my first room" }).click();
 
         // Assert rooms exist in the room list
-        cy.contains(".mx_RoomList .mx_RoomTile", "General").should("exist");
-        cy.contains(".mx_RoomList .mx_RoomTile", "Random").should("exist");
-        cy.contains(".mx_RoomList .mx_RoomTile", "Jokes").should("exist");
+        cy.findByRole("treeitem", { name: "General" }).should("exist");
+        cy.findByRole("treeitem", { name: "Random" }).should("exist");
+        cy.findByRole("treeitem", { name: "Jokes" }).should("exist");
     });
 
     it("should allow user to create private space", () => {
         openSpaceCreateMenu().within(() => {
-            cy.get(".mx_SpaceCreateMenuType_private").click();
+            // Regex pattern due to strings of "mx_SpaceCreateMenuType_private"
+            cy.findByRole("button", { name: /Private/ }).click();
+
             cy.get('.mx_SpaceBasicSettings_avatarContainer input[type="file"]').selectFile(
                 "cypress/fixtures/riot.png",
                 { force: true },
             );
-            cy.get('input[label="Name"]').type("This is not a Riot");
-            cy.get('input[label="Address"]').should("not.exist");
-            cy.get('textarea[label="Description"]').type("This is a private space of mourning Riot.im...");
-            cy.contains(".mx_AccessibleButton", "Create").click();
+            cy.findByRole("textbox", { name: "Name" }).type("This is not a Riot");
+            cy.findByRole("textbox", { name: "Address" }).should("not.exist");
+            cy.findByRole("textbox", { name: "Description" }).type("This is a private space of mourning Riot.im...");
+            cy.findByRole("button", { name: "Create" }).click();
         });
 
-        cy.get(".mx_SpaceRoomView_privateScope_meAndMyTeammatesButton").click();
+        // Regex pattern due to strings of "mx_SpaceRoomView_privateScope_meAndMyTeammatesButton"
+        cy.findByRole("button", { name: /Me and my teammates/ }).click();
 
         // Create the default General & Random rooms, as well as a custom "Projects" room
-        cy.get('input[label="Room name"][value="General"]').should("exist");
-        cy.get('input[label="Room name"][value="Random"]').should("exist");
-        cy.get('input[placeholder="Support"]').type("Projects");
-        cy.contains(".mx_AccessibleButton", "Continue").click();
+        cy.findByPlaceholderText("General").should("exist");
+        cy.findByPlaceholderText("Random").should("exist");
+        cy.findByPlaceholderText("Support").type("Projects");
+        cy.findByRole("button", { name: "Continue" }).click();
 
-        cy.get(".mx_SpaceRoomView").should("contain", "Invite your teammates");
-        cy.contains(".mx_AccessibleButton", "Skip for now").click();
+        cy.get(".mx_SpaceRoomView").within(() => {
+            cy.get("h1").findByText("Invite your teammates");
+            cy.findByRole("button", { name: "Skip for now" }).click();
+        });
 
         // Assert rooms exist in the room list
-        cy.contains(".mx_RoomList .mx_RoomTile", "General").should("exist");
-        cy.contains(".mx_RoomList .mx_RoomTile", "Random").should("exist");
-        cy.contains(".mx_RoomList .mx_RoomTile", "Projects").should("exist");
+        cy.findByRole("treeitem", { name: "General" }).should("exist");
+        cy.findByRole("treeitem", { name: "Random" }).should("exist");
+        cy.findByRole("treeitem", { name: "Projects" }).should("exist");
 
         // Assert rooms exist in the space explorer
         cy.contains(".mx_SpaceHierarchy_list .mx_SpaceHierarchy_roomTile", "General").should("exist");
@@ -154,23 +162,32 @@ describe("Spaces", () => {
         });
 
         openSpaceCreateMenu().within(() => {
-            cy.get(".mx_SpaceCreateMenuType_private").click();
+            // Regex pattern due to strings of "mx_SpaceCreateMenuType_private"
+            cy.findByRole("button", { name: /Private/ }).click();
+
             cy.get('.mx_SpaceBasicSettings_avatarContainer input[type="file"]').selectFile(
                 "cypress/fixtures/riot.png",
                 { force: true },
             );
-            cy.get('input[label="Address"]').should("not.exist");
-            cy.get('textarea[label="Description"]').type("This is a personal space to mourn Riot.im...");
-            cy.get('input[label="Name"]').type("This is my Riot{enter}");
+            cy.findByRole("textbox", { name: "Address" }).should("not.exist");
+            cy.findByRole("textbox", { name: "Description" }).type("This is a personal space to mourn Riot.im...");
+            cy.findByRole("textbox", { name: "Name" }).type("This is my Riot{enter}");
         });
 
-        cy.get(".mx_SpaceRoomView_privateScope_justMeButton").click();
+        // Regex pattern due to of strings of "mx_SpaceRoomView_privateScope_justMeButton"
+        cy.findByRole("button", { name: /Just me/ }).click();
 
-        cy.get(".mx_AddExistingToSpace_entry").click();
-        cy.contains(".mx_AccessibleButton", "Add").click();
+        cy.findByText("Sample Room").click({ force: true }); // force click as checkbox size is zero
 
-        cy.contains(".mx_RoomList .mx_RoomTile", "Sample Room").should("exist");
-        cy.contains(".mx_SpaceHierarchy_list .mx_SpaceHierarchy_roomTile", "Sample Room").should("exist");
+        // Temporal implementation as multiple elements with the role "button" and name "Add" are found
+        cy.get(".mx_AddExistingToSpace_footer").within(() => {
+            cy.findByRole("button", { name: "Add" }).click();
+        });
+
+        cy.get(".mx_SpaceHierarchy_list").within(() => {
+            // Regex pattern due to the strings of "mx_SpaceHierarchy_roomTile_joined"
+            cy.findByRole("treeitem", { name: /Sample Room/ }).should("exist");
+        });
     });
 
     it("should allow user to invite another to a space", () => {
@@ -185,20 +202,24 @@ describe("Spaces", () => {
         }).as("spaceId");
 
         openSpaceContextMenu("#space:localhost").within(() => {
-            cy.get('.mx_SpacePanel_contextMenu_inviteButton[aria-label="Invite"]').click();
+            cy.findByRole("menuitem", { name: "Invite" }).click();
         });
 
         cy.get(".mx_SpacePublicShare").within(() => {
             // Copy link first
-            cy.get(".mx_SpacePublicShare_shareButton").focus().realClick();
+            // Regex pattern due to strings of "mx_SpacePublicShare_shareButton"
+            cy.findByRole("button", { name: /Share invite link/ })
+                .focus()
+                .realClick();
             cy.getClipboardText().should("eq", "https://matrix.to/#/#space:localhost");
             // Start Matrix invite flow
-            cy.get(".mx_SpacePublicShare_inviteButton").click();
+            // Regex pattern due to strings of "mx_SpacePublicShare_inviteButton"
+            cy.findByRole("button", { name: /Invite people/ }).click();
         });
 
         cy.get(".mx_InviteDialog_other").within(() => {
-            cy.get('input[type="text"]').type(bot.getUserId());
-            cy.contains(".mx_AccessibleButton", "Invite").click();
+            cy.findByRole("textbox").type(bot.getUserId());
+            cy.findByRole("button", { name: "Invite" }).click();
         });
 
         cy.get(".mx_InviteDialog_other").should("not.exist");
@@ -219,7 +240,7 @@ describe("Spaces", () => {
             .should("exist")
             .parent()
             .next()
-            .find('.mx_SpaceButton[aria-label="My Space"]')
+            .findByRole("button", { name: "My Space" })
             .should("exist");
     });
 
@@ -243,8 +264,11 @@ describe("Spaces", () => {
             cy.viewSpaceHomeByName(spaceName);
         });
         cy.get(".mx_SpaceRoomView .mx_SpaceHierarchy_list").within(() => {
-            cy.contains(".mx_SpaceHierarchy_roomTile", "Music").should("exist");
-            cy.contains(".mx_SpaceHierarchy_roomTile", "Gaming").should("exist");
+            // Regex pattern due to strings in "mx_SpaceHierarchy_roomTile_name"
+            cy.findByRole("treeitem", { name: /Music/ }).findByRole("button").should("exist");
+            cy.findByRole("treeitem", { name: /Gaming/ })
+                .findByRole("button")
+                .should("exist");
         });
     });
 
@@ -260,8 +284,12 @@ describe("Spaces", () => {
                 initial_state: [spaceChildInitialState(spaceId)],
             }).as("spaceId");
         });
-        cy.get('.mx_SpacePanel .mx_SpaceButton[aria-label="Root Space"]').should("exist");
-        cy.get('.mx_SpacePanel .mx_SpaceButton[aria-label="Child Space"]').should("not.exist");
+
+        // Find collapsed Space panel
+        cy.findByRole("tree", { name: "Spaces" }).within(() => {
+            cy.findByRole("button", { name: "Root Space" }).should("exist");
+            cy.findByRole("button", { name: "Child Space" }).should("not.exist");
+        });
 
         const axeOptions = {
             rules: {
@@ -274,8 +302,12 @@ describe("Spaces", () => {
         cy.checkA11y(undefined, axeOptions);
         cy.get(".mx_SpacePanel").percySnapshotElement("Space panel collapsed", { widths: [68] });
 
-        cy.get(".mx_SpaceButton_toggleCollapse").click({ force: true });
-        cy.get(".mx_SpacePanel:not(.collapsed)").should("exist");
+        cy.findByRole("tree", { name: "Spaces" }).within(() => {
+            // This finds the expand button with the class name "mx_SpaceButton_toggleCollapse". Note there is another
+            // button with the same name with different class name "mx_SpacePanel_toggleCollapse".
+            cy.findByRole("button", { name: "Expand" }).realHover().click();
+        });
+        cy.get(".mx_SpacePanel:not(.collapsed)").should("exist"); // TODO: replace :not() selector
 
         cy.contains(".mx_SpaceItem", "Root Space")
             .should("exist")
@@ -300,12 +332,12 @@ describe("Spaces", () => {
         cy.getSpacePanelButton("Test Space").should("exist");
         cy.wait(500); // without this we can end up clicking too quickly and it ends up having no effect
         cy.viewSpaceByName("Test Space");
-        cy.contains(".mx_AccessibleButton", "Accept").click();
+        cy.findByRole("button", { name: "Accept" }).click();
 
-        cy.contains(".mx_SpaceHierarchy_roomTile.mx_AccessibleButton", "Test Room").within(() => {
-            cy.contains("Join").should("exist").realHover().click();
-            cy.contains("View", { timeout: 5000 }).should("exist").click();
-        });
+        // Regex pattern due to strings in "mx_SpaceHierarchy_roomTile_item"
+        cy.findByRole("button", { name: /Test Room/ }).realHover();
+        cy.findByRole("button", { name: "Join" }).should("exist").realHover().click();
+        cy.findByRole("button", { name: "View", timeout: 5000 }).should("exist").realHover().click();
 
         // Assert we get shown the new room intro, and thus not the soft crash screen
         cy.get(".mx_NewRoomIntro").should("exist");
