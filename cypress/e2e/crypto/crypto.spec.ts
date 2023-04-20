@@ -16,29 +16,15 @@ limitations under the License.
 
 import type { ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
 import type { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
-import Chainable = Cypress.Chainable;
 import { UserCredentials } from "../../support/login";
+import { EmojiMapping, handleVerificationRequest, waitForVerificationRequest } from "./utils";
 
-type EmojiMapping = [emoji: string, name: string];
 interface CryptoTestContext extends Mocha.Context {
     homeserver: HomeserverInstance;
     bob: CypressBot;
 }
-
-const waitForVerificationRequest = (cli: MatrixClient): Promise<VerificationRequest> => {
-    return new Promise<VerificationRequest>((resolve) => {
-        const onVerificationRequestEvent = (request: VerificationRequest) => {
-            // @ts-ignore CryptoEvent is not exported to window.matrixcs; using the string value here
-            cli.off("crypto.verification.request", onVerificationRequestEvent);
-            resolve(request);
-        };
-        // @ts-ignore
-        cli.on("crypto.verification.request", onVerificationRequestEvent);
-    });
-};
 
 const openRoomInfo = () => {
     cy.get(".mx_RightPanel_roomSummaryButton").click();
@@ -117,23 +103,6 @@ function autoJoin(client: MatrixClient) {
     });
 }
 
-const handleVerificationRequest = (request: VerificationRequest): Chainable<EmojiMapping[]> => {
-    return cy.wrap(
-        new Promise<EmojiMapping[]>((resolve) => {
-            const onShowSas = (event: ISasEvent) => {
-                verifier.off("show_sas", onShowSas);
-                event.confirm();
-                verifier.done();
-                resolve(event.sas.emoji);
-            };
-
-            const verifier = request.beginKeyVerification("m.sas.v1");
-            verifier.on("show_sas", onShowSas);
-            verifier.verify();
-        }),
-    );
-};
-
 const verify = function (this: CryptoTestContext) {
     const bobsVerificationRequestPromise = waitForVerificationRequest(this.bob);
 
@@ -150,7 +119,7 @@ const verify = function (this: CryptoTestContext) {
             .as("bobsVerificationRequest");
         cy.findByRole("button", { name: "Verify by emoji" }).click();
         cy.get<VerificationRequest>("@bobsVerificationRequest").then((request: VerificationRequest) => {
-            return handleVerificationRequest(request).then((emojis: EmojiMapping[]) => {
+            return cy.wrap(handleVerificationRequest(request)).then((emojis: EmojiMapping[]) => {
                 cy.get(".mx_VerificationShowSas_emojiSas_block").then((emojiBlocks) => {
                     emojis.forEach((emoji: EmojiMapping, index: number) => {
                         expect(emojiBlocks[index].textContent.toLowerCase()).to.eq(emoji[0] + emoji[1]);
