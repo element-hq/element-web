@@ -200,7 +200,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const usersTyping = this.state.usersTyping;
+        const usersTyping = [...this.state.usersTyping];
         // append the users that have been reported not typing anymore
         // but have a timeout timer running so they can disappear
         // when a message comes in
