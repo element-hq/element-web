@@ -216,7 +216,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             return {};
         }
         const kickerMember = this.props.room?.currentState.getMember(myMember.events.member.getSender());
-        const memberName = kickerMember ? kickerMember.name : myMember.events.member.getSender();
+        const memberName = kickerMember?.name ?? myMember.events.member?.getSender();
         const reason = myMember.events.member?.getContent().reason;
         return { memberName, reason };
     }

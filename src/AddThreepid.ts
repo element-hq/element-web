@@ -293,7 +293,7 @@ export default class AddThreepid {
         const authClient = new IdentityAuthClient();
         const supportsSeparateAddAndBind = await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind();
 
-        let result;
+        let result: { success: boolean } | MatrixError;
         if (this.submitUrl) {
             result = await MatrixClientPeg.get().submitMsisdnTokenOtherUrl(
                 this.submitUrl,
@@ -311,7 +311,7 @@ export default class AddThreepid {
         } else {
             throw new UserFriendlyError("The add / bind with MSISDN flow is misconfigured");
         }
-        if (result.errcode) {
+        if (result instanceof Error) {
             throw result;
         }
 

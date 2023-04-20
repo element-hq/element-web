@@ -123,8 +123,8 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     }
 
     public get duration(): number | null {
-        if (!this.hangup || !this.selectAnswer) return null;
-        return this.hangup.getDate().getTime() - this.selectAnswer.getDate().getTime();
+        if (!this.hangup?.getDate() || !this.selectAnswer?.getDate()) return null;
+        return this.hangup.getDate()!.getTime() - this.selectAnswer.getDate()!.getTime();
     }
 
     /**

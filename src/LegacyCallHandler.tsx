@@ -288,8 +288,8 @@ export default class LegacyCallHandler extends EventEmitter {
         this.play(AudioID.Ring);
     }
 
-    public isCallSilenced(callId: string): boolean {
-        return this.isForcedSilent() || this.silencedCalls.has(callId);
+    public isCallSilenced(callId?: string): boolean {
+        return this.isForcedSilent() || (!!callId && this.silencedCalls.has(callId));
     }
 
     /**
@@ -395,6 +395,7 @@ export default class LegacyCallHandler extends EventEmitter {
         }
 
         const mappedRoomId = LegacyCallHandler.instance.roomIdForCall(call);
+        if (!mappedRoomId) return;
         if (this.getCallForRoom(mappedRoomId)) {
             logger.log(
                 "Got incoming call for room " + mappedRoomId + " but there's already a call for this room: ignoring",
@@ -411,7 +412,8 @@ export default class LegacyCallHandler extends EventEmitter {
         // the call, we'll be ready to send. NB. This is the protocol-level room ID not
         // the mapped one: that's where we'll send the events.
         const cli = MatrixClientPeg.get();
-        cli.prepareToEncrypt(cli.getRoom(call.roomId));
+        const room = cli.getRoom(call.roomId);
+        if (room) cli.prepareToEncrypt(room);
     };
 
     public getCallById(callId: string): MatrixCall | null {
@@ -505,7 +507,7 @@ export default class LegacyCallHandler extends EventEmitter {
             if (this.audioPromises.has(audioId)) {
                 this.audioPromises.set(
                     audioId,
-                    this.audioPromises.get(audioId).then(() => {
+                    this.audioPromises.get(audioId)!.then(() => {
                         audio.load();
                         return playAudio();
                     }),
@@ -531,7 +533,7 @@ export default class LegacyCallHandler extends EventEmitter {
         };
         if (audio) {
             if (this.audioPromises.has(audioId)) {
-                this.audioPromises.set(audioId, this.audioPromises.get(audioId).then(pauseAudio));
+                this.audioPromises.set(audioId, this.audioPromises.get(audioId)!.then(pauseAudio));
             } else {
                 pauseAudio();
             }
@@ -546,7 +548,7 @@ export default class LegacyCallHandler extends EventEmitter {
         // is the call we consider 'the' call for its room.
         const mappedRoomId = this.roomIdForCall(call);
 
-        const callForThisRoom = this.getCallForRoom(mappedRoomId);
+        const callForThisRoom = mappedRoomId ? this.getCallForRoom(mappedRoomId) : null;
         return !!callForThisRoom && call.callId === callForThisRoom.callId;
     }
 
@@ -840,7 +842,7 @@ export default class LegacyCallHandler extends EventEmitter {
                 cancelButton: _t("OK"),
                 onFinished: (allow) => {
                     SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
-                    cli.setFallbackICEServerAllowed(allow);
+                    cli.setFallbackICEServerAllowed(!!allow);
                 },
             },
             undefined,
@@ -898,7 +900,7 @@ export default class LegacyCallHandler extends EventEmitter {
         // previous calls that are probably stale by now, so just cancel them.
         if (mappedRoomId !== roomId) {
             const mappedRoom = MatrixClientPeg.get().getRoom(mappedRoomId);
-            if (mappedRoom.getPendingEvents().length > 0) {
+            if (mappedRoom?.getPendingEvents().length) {
                 Resend.cancelUnsentEvents(mappedRoom);
             }
         }
@@ -933,7 +935,7 @@ export default class LegacyCallHandler extends EventEmitter {
         }
     }
 
-    public async placeCall(roomId: string, type?: CallType, transferee?: MatrixCall): Promise<void> {
+    public async placeCall(roomId: string, type: CallType, transferee?: MatrixCall): Promise<void> {
         // Pause current broadcast, if any
         SdkContextClass.instance.voiceBroadcastPlaybacksStore.getCurrent()?.pause();
 

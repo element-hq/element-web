@@ -777,7 +777,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
     };
 
-    public canResetTimeline = (): boolean => this.messagePanel?.current?.isAtBottom();
+    public canResetTimeline = (): boolean => this.messagePanel?.current?.isAtBottom() === true;
 
     private onRoomRedaction = (ev: MatrixEvent, room: Room): void => {
         if (this.unmounted) return;
@@ -1044,7 +1044,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             const sendRRs = SettingsStore.getValue("sendReadReceipts", roomId);
 
             debuglog(
-                `Sending Read Markers for ${this.props.timelineSet.room.roomId}: `,
+                `Sending Read Markers for ${roomId}: `,
                 `rm=${this.state.readMarkerEventId} `,
                 `rr=${sendRRs ? lastReadEvent?.getId() : null} `,
                 `prr=${lastReadEvent?.getId()}`,
@@ -1092,7 +1092,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 // we only do this if we're right at the end, because we're just assuming
                 // that sending an RR for the latest message will set our notif counter
                 // to zero: it may not do this if we send an RR for somewhere before the end.
-                if (this.isAtEndOfLiveTimeline()) {
+                if (this.isAtEndOfLiveTimeline() && this.props.timelineSet.room) {
                     this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Total, 0);
                     this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Highlight, 0);
                     dis.dispatch({

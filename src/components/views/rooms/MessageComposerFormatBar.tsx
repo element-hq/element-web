@@ -99,7 +99,7 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
     }
 
     public showAt(selectionRect: DOMRect): void {
-        if (!this.formatBarRef.current) return;
+        if (!this.formatBarRef.current?.parentElement) return;
 
         this.setState({ visible: true });
         const parentRect = this.formatBarRef.current.parentElement.getBoundingClientRect();

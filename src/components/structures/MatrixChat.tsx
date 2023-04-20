@@ -169,7 +169,7 @@ interface IProps {
     // the initial queryParams extracted from the hash-fragment of the URI
     startingFragmentQueryParams?: QueryDict;
     // called when we have completed a token login
-    onTokenLoginCompleted?: () => void;
+    onTokenLoginCompleted: () => void;
     // Represents the screen to display as a result of parsing the initial window.location
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
@@ -1200,7 +1200,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // We have to manually update the room list because the forgotten room will not
                 // be notified to us, therefore the room list will have no other way of knowing
                 // the room is forgotten.
-                RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                if (room) RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
             })
             .catch((err) => {
                 const errCode = err.errcode || _td("unknown error code");
@@ -2124,7 +2124,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onForgotPasswordClick={showPasswordReset ? this.onForgotPasswordClick : undefined}
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
-                    defaultUsername={this.props.startingFragmentQueryParams.defaultUsername as string}
+                    defaultUsername={this.props.startingFragmentQueryParams?.defaultUsername as string | undefined}
                     {...this.getServerProperties()}
                 />
             );

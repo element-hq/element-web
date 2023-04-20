@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Optional } from "matrix-events-sdk";
+
 import { _t } from "./languageHandler";
 
 function getDaysArray(): string[] {
@@ -194,10 +196,7 @@ function withinCurrentYear(prevDate: Date, nextDate: Date): boolean {
     return prevDate.getFullYear() === nextDate.getFullYear();
 }
 
-export function wantsDateSeparator(
-    prevEventDate: Date | null | undefined,
-    nextEventDate: Date | null | undefined,
-): boolean {
+export function wantsDateSeparator(prevEventDate: Optional<Date>, nextEventDate: Optional<Date>): boolean {
     if (!nextEventDate || !prevEventDate) {
         return false;
     }

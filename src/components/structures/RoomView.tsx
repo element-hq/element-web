@@ -654,7 +654,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             // and the root event.
             // The rest will be lost for now, until the aggregation API on the server
             // becomes available to fetch a whole thread
-            if (!initialEvent && this.context.client) {
+            if (!initialEvent && this.context.client && roomId) {
                 initialEvent = (await fetchInitialEvent(this.context.client, roomId, initialEventId)) ?? undefined;
             }
 
@@ -741,7 +741,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
             // If an event ID wasn't specified, default to the one saved for this room
             // in the scroll state store. Assume initialEventPixelOffset should be set.
-            if (!newState.initialEventId) {
+            if (!newState.initialEventId && newState.roomId) {
                 const roomScrollState = RoomScrollStateStore.getScrollState(newState.roomId);
                 if (roomScrollState) {
                     newState.initialEventId = roomScrollState.focussedEvent;
@@ -770,7 +770,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // callback because this would prevent the setStates from being batched,
         // ie. cause it to render RoomView twice rather than the once that is necessary.
         if (initial) {
-            this.setupRoom(newState.room, newState.roomId, newState.joining, newState.shouldPeek);
+            this.setupRoom(newState.room, newState.roomId, !!newState.joining, !!newState.shouldPeek);
         }
     };
 
@@ -794,13 +794,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.setState({ activeCall });
     };
 
-    private getRoomId = (): string => {
+    private getRoomId = (): string | undefined => {
         // According to `onRoomViewStoreUpdate`, `state.roomId` can be null
         // if we have a room alias we haven't resolved yet. To work around this,
         // first we'll try the room object if it's there, and then fallback to
         // the bare room ID. (We may want to update `state.roomId` after
         // resolving aliases, so we could always trust it.)
-        return this.state.room ? this.state.room.roomId : this.state.roomId;
+        return this.state.room?.roomId ?? this.state.roomId;
     };
 
     private getPermalinkCreatorForRoom(room: Room): RoomPermalinkCreator {
@@ -1008,7 +1008,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             SettingsStore.unwatchSetting(watcher);
         }
 
-        if (this.viewsLocalRoom) {
+        if (this.viewsLocalRoom && this.state.room) {
             // clean up if this was a local room
             this.context.client?.store.removeRoom(this.state.room.roomId);
         }
@@ -1188,16 +1188,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onLocalRoomEvent(roomId: string): void {
-        if (roomId !== this.state.room.roomId) return;
+        if (!this.context.client || !this.state.room || roomId !== this.state.room.roomId) return;
         createRoomFromLocalRoom(this.context.client, this.state.room as LocalRoom);
     }
 
     private onRoomTimeline = (
         ev: MatrixEvent,
         room: Room | undefined,
-        toStartOfTimeline: boolean,
+        toStartOfTimeline: boolean | undefined,
         removed: boolean,
-        data?: IRoomTimelineData,
+        data: IRoomTimelineData,
     ): void => {
         if (this.unmounted) return;
 
@@ -1249,6 +1249,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private handleEffects = (ev: MatrixEvent): void => {
+        if (!this.state.room) return;
         const notifState = this.context.roomNotificationStateStore.getRoomState(this.state.room);
         if (!notifState.isUnread) return;
 
@@ -1362,7 +1363,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private updatePreviewUrlVisibility({ roomId }: Room): void {
         // URL Previews in E2EE rooms can be a privacy leak so use a different setting which is per-room explicit
-        const key = this.context.client.isRoomEncrypted(roomId) ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled";
+        const key = this.context.client?.isRoomEncrypted(roomId) ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled";
         this.setState({
             showUrlPreview: SettingsStore.getValue(key, roomId),
         });
@@ -1661,7 +1662,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.setState({
             rejecting: true,
         });
-        this.context.client.leave(this.state.roomId).then(
+        this.context.client?.leave(this.state.roomId).then(
             () => {
                 dis.dispatch({ action: Action.ViewHomePage });
                 this.setState({
@@ -1691,13 +1692,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
 
         try {
-            const myMember = this.state.room.getMember(this.context.client.getUserId());
-            const inviteEvent = myMember.events.member;
-            const ignoredUsers = this.context.client.getIgnoredUsers();
-            ignoredUsers.push(inviteEvent.getSender()); // de-duped internally in the js-sdk
-            await this.context.client.setIgnoredUsers(ignoredUsers);
+            const myMember = this.state.room!.getMember(this.context.client!.getSafeUserId());
+            const inviteEvent = myMember!.events.member;
+            const ignoredUsers = this.context.client!.getIgnoredUsers();
+            ignoredUsers.push(inviteEvent!.getSender()!); // de-duped internally in the js-sdk
+            await this.context.client!.setIgnoredUsers(ignoredUsers);
 
-            await this.context.client.leave(this.state.roomId);
+            await this.context.client!.leave(this.state.roomId!);
             dis.dispatch({ action: Action.ViewHomePage });
             this.setState({
                 rejecting: false,

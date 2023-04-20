@@ -273,7 +273,9 @@ class FilePanel extends React.Component<IProps, IState> {
                         withoutScrollContainer
                         ref={this.card}
                     >
-                        <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
+                        {this.card.current && (
+                            <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
+                        )}
                         <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
                         <TimelinePanel
                             manageReadReceipts={false}

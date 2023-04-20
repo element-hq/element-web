@@ -153,6 +153,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     private doStickyHeaders(list: HTMLDivElement): void {
+        if (!list.parentElement) return;
         const topEdge = list.scrollTop;
         const bottomEdge = list.offsetHeight + list.scrollTop;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist:not(.mx_RoomSublist_hidden)");
