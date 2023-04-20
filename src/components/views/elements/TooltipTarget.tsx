@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { HTMLAttributes } from "react";
+import React, { forwardRef, HTMLAttributes } from "react";
 
 import useFocus from "../../../hooks/useFocus";
 import useHover from "../../../hooks/useHover";
@@ -29,49 +29,55 @@ interface IProps extends HTMLAttributes<HTMLSpanElement>, Omit<ITooltipProps, "v
  * Generic tooltip target element that handles tooltip visibility state
  * and displays children
  */
-const TooltipTarget: React.FC<IProps> = ({
-    children,
-    tooltipTargetClassName,
-    // tooltip pass through props
-    className,
-    id,
-    label,
-    alignment,
-    tooltipClassName,
-    maxParentWidth,
-    ignoreHover,
-    ...rest
-}) => {
-    const [isFocused, focusProps] = useFocus();
-    const [isHovering, hoverProps] = useHover(ignoreHover || (() => false));
+const TooltipTarget = forwardRef<HTMLDivElement, IProps>(
+    (
+        {
+            children,
+            tooltipTargetClassName,
+            // tooltip pass through props
+            className,
+            id,
+            label,
+            alignment,
+            tooltipClassName,
+            maxParentWidth,
+            ignoreHover,
+            ...rest
+        },
+        ref,
+    ) => {
+        const [isFocused, focusProps] = useFocus();
+        const [isHovering, hoverProps] = useHover(ignoreHover || (() => false));
 
-    // No need to fill up the DOM with hidden tooltip elements. Only add the
-    // tooltip when we're hovering over the item (performance)
-    const tooltip = (isFocused || isHovering) && (
-        <Tooltip
-            id={id}
-            className={className}
-            tooltipClassName={tooltipClassName}
-            label={label}
-            alignment={alignment}
-            visible={isFocused || isHovering}
-            maxParentWidth={maxParentWidth}
-        />
-    );
+        // No need to fill up the DOM with hidden tooltip elements. Only add the
+        // tooltip when we're hovering over the item (performance)
+        const tooltip = (isFocused || isHovering) && (
+            <Tooltip
+                id={id}
+                className={className}
+                tooltipClassName={tooltipClassName}
+                label={label}
+                alignment={alignment}
+                visible={isFocused || isHovering}
+                maxParentWidth={maxParentWidth}
+            />
+        );
 
-    return (
-        <div
-            {...hoverProps}
-            {...focusProps}
-            tabIndex={0}
-            aria-describedby={id}
-            className={tooltipTargetClassName}
-            {...rest}
-        >
-            {children}
-            {tooltip}
-        </div>
-    );
-};
+        return (
+            <div
+                {...hoverProps}
+                {...focusProps}
+                tabIndex={0}
+                aria-describedby={id}
+                className={tooltipTargetClassName}
+                {...rest}
+                ref={ref}
+            >
+                {children}
+                {tooltip}
+            </div>
+        );
+    },
+);
 
 export default TooltipTarget;

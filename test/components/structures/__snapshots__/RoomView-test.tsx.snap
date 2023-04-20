@@ -55,14 +55,11 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         <div
           class="mx_RoomHeader_topic mx_RoomTopic"
           dir="auto"
+          tabindex="0"
         >
-          <div
-            tabindex="0"
-          >
-            <span
-              dir="auto"
-            />
-          </div>
+          <span
+            dir="auto"
+          />
         </div>
       </div>
     </header>
@@ -149,14 +146,11 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         <div
           class="mx_RoomHeader_topic mx_RoomTopic"
           dir="auto"
+          tabindex="0"
         >
-          <div
-            tabindex="0"
-          >
-            <span
-              dir="auto"
-            />
-          </div>
+          <span
+            dir="auto"
+          />
         </div>
       </div>
     </header>
@@ -339,14 +333,11 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         <div
           class="mx_RoomHeader_topic mx_RoomTopic"
           dir="auto"
+          tabindex="0"
         >
-          <div
-            tabindex="0"
-          >
-            <span
-              dir="auto"
-            />
-          </div>
+          <span
+            dir="auto"
+          />
         </div>
       </div>
     </header>
@@ -606,14 +597,11 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         <div
           class="mx_RoomHeader_topic mx_RoomTopic"
           dir="auto"
+          tabindex="0"
         >
-          <div
-            tabindex="0"
-          >
-            <span
-              dir="auto"
-            />
-          </div>
+          <span
+            dir="auto"
+          />
         </div>
       </div>
     </header>

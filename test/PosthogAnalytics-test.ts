@@ -52,24 +52,27 @@ describe("PosthogAnalytics", () => {
     beforeEach(() => {
         fakePosthog = getFakePosthog();
 
-        window.crypto = {
-            subtle: {
-                digest: async (_: AlgorithmIdentifier, encodedMessage: BufferSource) => {
-                    const message = new TextDecoder().decode(encodedMessage);
-                    const hexHash = shaHashes[message];
-                    const bytes: number[] = [];
-                    for (let c = 0; c < hexHash.length; c += 2) {
-                        bytes.push(parseInt(hexHash.slice(c, c + 2), 16));
-                    }
-                    return bytes as unknown as ArrayBuffer;
+        Object.defineProperty(window, "crypto", {
+            value: {
+                subtle: {
+                    digest: async (_: AlgorithmIdentifier, encodedMessage: BufferSource) => {
+                        const message = new TextDecoder().decode(encodedMessage);
+                        const hexHash = shaHashes[message];
+                        const bytes: number[] = [];
+                        for (let c = 0; c < hexHash.length; c += 2) {
+                            bytes.push(parseInt(hexHash.slice(c, c + 2), 16));
+                        }
+                        return bytes;
+                    },
                 },
-            } as unknown as SubtleCrypto,
-        } as unknown as Crypto;
+            },
+        });
     });
 
     afterEach(() => {
-        // @ts-ignore
-        window.crypto = null;
+        Object.defineProperty(window, "crypto", {
+            value: null,
+        });
         SdkConfig.unset(); // we touch the config, so clean up
     });
 

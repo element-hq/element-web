@@ -103,10 +103,17 @@ export default function RoomTopic({ room, ...props }: IProps): JSX.Element {
     const className = classNames(props.className, "mx_RoomTopic");
 
     return (
-        <div {...props} ref={ref} onClick={onClick} dir="auto" className={className}>
-            <TooltipTarget label={_t("Click to read topic")} alignment={Alignment.Bottom} ignoreHover={ignoreHover}>
-                <Linkify>{body}</Linkify>
-            </TooltipTarget>
-        </div>
+        <TooltipTarget
+            {...props}
+            ref={ref}
+            onClick={onClick}
+            dir="auto"
+            tooltipTargetClassName={className}
+            label={_t("Click to read topic")}
+            alignment={Alignment.Bottom}
+            ignoreHover={ignoreHover}
+        >
+            <Linkify>{body}</Linkify>
+        </TooltipTarget>
     );
 }
