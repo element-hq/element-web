@@ -468,7 +468,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     private renderManagementSection(): JSX.Element {
         // TODO: Improve warning text for account deactivation
         return (
-            <div className="mx_SettingsTab_section">
+            <div className="mx_SettingsTab_section" data-testid="account-management-section">
                 <span className="mx_SettingsTab_subheading">{_t("Account management")}</span>
                 <span className="mx_SettingsTab_subsectionText">
                     {_t("Deactivating your account is a permanent action — be careful!")}
@@ -528,8 +528,10 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         }
 
         return (
-            <div className="mx_SettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("General")}</div>
+            <div className="mx_SettingsTab mx_GeneralUserSettingsTab">
+                <div className="mx_SettingsTab_heading" data-testid="general">
+                    {_t("General")}
+                </div>
                 {this.renderProfileSection()}
                 {this.renderAccountSection()}
                 {this.renderLanguageSection()}
