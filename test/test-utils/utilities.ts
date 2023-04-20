@@ -211,6 +211,17 @@ export const clearAllModals = async (): Promise<void> => {
         // of removing the same modal because the promises don't flush otherwise.
         //
         // XXX: Maybe in the future with Jest 29.5.0+, we could use `runAllTimersAsync` instead.
-        await flushPromisesWithFakeTimers();
+
+        // this is called in some places where timers are not faked
+        // which causes a lot of noise in the console
+        // to make a hack even hackier check if timers are faked using a weird trick from github
+        // then call the appropriate promise flusher
+        // https://github.com/facebook/jest/issues/10555#issuecomment-1136466942
+        const jestTimersFaked = setTimeout.name === "setTimeout";
+        if (jestTimersFaked) {
+            await flushPromisesWithFakeTimers();
+        } else {
+            await flushPromises();
+        }
     }
 };
