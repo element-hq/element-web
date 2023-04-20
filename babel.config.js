@@ -32,16 +32,4 @@ module.exports = {
         "@babel/plugin-syntax-dynamic-import",
         "@babel/plugin-transform-runtime",
     ],
-    env: {
-        production: {
-            plugins: [
-                [
-                    "babel-plugin-jsx-remove-data-test-id",
-                    {
-                        attributes: "data-testid",
-                    },
-                ],
-            ],
-        },
-    },
 };

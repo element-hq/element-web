@@ -3005,11 +3005,6 @@ babel-plugin-jest-hoist@^29.5.0:
     "@types/babel__core" "^7.1.14"
     "@types/babel__traverse" "^7.0.6"
 
-babel-plugin-jsx-remove-data-test-id@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-jsx-remove-data-test-id/-/babel-plugin-jsx-remove-data-test-id-3.0.0.tgz#15c95f97ce0ff60d72b29e403bde245f86393288"
-  integrity sha512-E4uM/LIUizjy2Z5tVAfa8pSXsYgoKWJ97kzuEMfsIxSLSNDWsAhgFVPkgNuakViX5dkNjw1DKIi0VpWP6djqbw==
-
 babel-plugin-polyfill-corejs2@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/babel-plugin-polyfill-corejs2/-/babel-plugin-polyfill-corejs2-0.3.3.tgz#5d1bd3836d0a19e1b84bbf2d9640ccb6f951c122"
