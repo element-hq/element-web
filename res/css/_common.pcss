@@ -132,7 +132,7 @@ input[type="password"] {
     font-family: inherit;
     padding: 9px;
     font-size: $font-14px;
-    font-weight: 600;
+    font-weight: var(--font-semi-bold);
     min-width: 0;
 }
 
@@ -575,7 +575,7 @@ legend {
     margin-bottom: 5px;
 
     /* flip colours for the secondary ones */
-    font-weight: 600;
+    font-weight: var(--font-semi-bold);
     border: 1px solid $accent;
     color: $accent;
     background-color: $button-secondary-bg-color;
@@ -794,7 +794,7 @@ legend {
 
 @define-mixin LegacyCallButton {
     box-sizing: border-box;
-    font-weight: 600;
+    font-weight: var(--font-semi-bold);
     height: $font-24px;
     line-height: $font-24px;
     margin-right: 0;
@@ -816,7 +816,7 @@ legend {
 
 @define-mixin ThreadRepliesAmount {
     color: $secondary-content;
-    font-weight: $font-semi-bold;
+    font-weight: var(--font-semi-bold);
     white-space: nowrap;
     position: relative;
     padding: 0 $spacing-12 0 $spacing-8;
