@@ -476,7 +476,7 @@ const SpaceSetupPrivateScope: React.FC<{
                     onFinished(false);
                 }}
             >
-                <h3>{_t("Just me")}</h3>
+                {_t("Just me")}
                 <div>{_t("A private space to organise your rooms")}</div>
             </AccessibleButton>
             <AccessibleButton
@@ -485,7 +485,7 @@ const SpaceSetupPrivateScope: React.FC<{
                     onFinished(true);
                 }}
             >
-                <h3>{_t("Me and my teammates")}</h3>
+                {_t("Me and my teammates")}
                 <div>{_t("A private space for you and your teammates")}</div>
             </AccessibleButton>
         </div>

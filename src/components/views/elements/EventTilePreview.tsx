@@ -128,8 +128,8 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const event = this.fakeEvent(this.state);
 
         return (
-            <div className={className}>
-                <EventTile mxEvent={event} layout={this.props.layout} as="div" />
+            <div className={className} role="presentation">
+                <EventTile mxEvent={event} layout={this.props.layout} as="div" hideTimestamp inhibitInteraction />
             </div>
         );
     }

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
@@ -231,9 +231,9 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             sessionsRemaining,
         } = this.state;
 
-        let statusDescription;
-        let extraDetailsTableRows;
-        let extraDetails;
+        let statusDescription: JSX.Element;
+        let extraDetailsTableRows: JSX.Element | undefined;
+        let extraDetails: JSX.Element | undefined;
         const actions: JSX.Element[] = [];
         if (error) {
             statusDescription = <div className="error">{_t("Unable to load key backup status")}</div>;
@@ -267,7 +267,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 restoreButtonCaption = _t("Connect this session to Key Backup");
             }
 
-            let uploadStatus;
+            let uploadStatus: ReactNode;
             if (!MatrixClientPeg.get().getKeyBackupEnabled()) {
                 // No upload status to show when backup disabled.
                 uploadStatus = "";
@@ -391,11 +391,11 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             extraDetailsTableRows = (
                 <>
                     <tr>
-                        <td>{_t("Backup version:")}</td>
+                        <th scope="row">{_t("Backup version:")}</th>
                         <td>{backupInfo.version}</td>
                     </tr>
                     <tr>
-                        <td>{_t("Algorithm:")}</td>
+                        <th scope="row">{_t("Algorithm:")}</th>
                         <td>{backupInfo.algorithm}</td>
                     </tr>
                 </>
@@ -460,7 +460,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             }
         }
 
-        let actionRow;
+        let actionRow: JSX.Element | undefined;
         if (actions.length) {
             actionRow = <div className="mx_SecureBackupPanel_buttonRow">{actions}</div>;
         }
@@ -478,28 +478,26 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 <details>
                     <summary>{_t("Advanced")}</summary>
                     <table className="mx_SecureBackupPanel_statusList">
-                        <tbody>
-                            <tr>
-                                <td>{_t("Backup key stored:")}</td>
-                                <td>{backupKeyStored === true ? _t("in secret storage") : _t("not stored")}</td>
-                            </tr>
-                            <tr>
-                                <td>{_t("Backup key cached:")}</td>
-                                <td>
-                                    {backupKeyCached ? _t("cached locally") : _t("not found locally")}
-                                    {backupKeyWellFormedText}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{_t("Secret storage public key:")}</td>
-                                <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
-                            </tr>
-                            <tr>
-                                <td>{_t("Secret storage:")}</td>
-                                <td>{secretStorageReady ? _t("ready") : _t("not ready")}</td>
-                            </tr>
-                            {extraDetailsTableRows}
-                        </tbody>
+                        <tr>
+                            <th scope="row">{_t("Backup key stored:")}</th>
+                            <td>{backupKeyStored === true ? _t("in secret storage") : _t("not stored")}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">{_t("Backup key cached:")}</th>
+                            <td>
+                                {backupKeyCached ? _t("cached locally") : _t("not found locally")}
+                                {backupKeyWellFormedText}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">{_t("Secret storage public key:")}</th>
+                            <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">{_t("Secret storage:")}</th>
+                            <td>{secretStorageReady ? _t("ready") : _t("not ready")}</td>
+                        </tr>
+                        {extraDetailsTableRows}
                     </table>
                     {extraDetails}
                 </details>

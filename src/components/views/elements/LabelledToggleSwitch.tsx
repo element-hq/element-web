@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
+import { randomString } from "matrix-js-sdk/src/randomstring";
 
 import ToggleSwitch from "./ToggleSwitch";
 import { Caption } from "../typography/Caption";
@@ -43,18 +44,15 @@ interface IProps {
 }
 
 export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
+    private readonly id = `mx_LabelledToggleSwitch_${randomString(12)}`;
+
     public render(): React.ReactNode {
         // This is a minimal version of a SettingsFlag
         const { label, caption } = this.props;
         let firstPart = (
             <span className="mx_SettingsFlag_label">
-                {label}
-                {caption && (
-                    <>
-                        <br />
-                        <Caption>{caption}</Caption>
-                    </>
-                )}
+                <div id={this.id}>{label}</div>
+                {caption && <Caption id={`${this.id}_caption`}>{caption}</Caption>}
             </span>
         );
         let secondPart = (
@@ -62,15 +60,14 @@ export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
                 checked={this.props.value}
                 disabled={this.props.disabled}
                 onChange={this.props.onChange}
-                title={this.props.label}
                 tooltip={this.props.tooltip}
+                aria-labelledby={this.id}
+                aria-describedby={caption ? `${this.id}_caption` : undefined}
             />
         );
 
         if (this.props.toggleInFront) {
-            const temp = firstPart;
-            firstPart = secondPart;
-            secondPart = temp;
+            [firstPart, secondPart] = [secondPart, firstPart];
         }
 
         const classes = classNames("mx_SettingsFlag", this.props.className, {

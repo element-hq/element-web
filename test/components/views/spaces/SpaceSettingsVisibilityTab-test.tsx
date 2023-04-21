@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { mocked } from "jest-mock";
+import { randomString } from "matrix-js-sdk/src/randomstring";
 import { act, fireEvent, render, RenderResult } from "@testing-library/react";
 import { EventType, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
@@ -26,6 +27,11 @@ import { mkSpace, mockStateEventImplementation } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
 const SpaceSettingsVisibilityTab = wrapInMatrixClientContext(_SpaceSettingsVisibilityTab);
+
+// Fake random strings to give a predictable snapshot for IDs
+jest.mock("matrix-js-sdk/src/randomstring", () => ({
+    randomString: jest.fn(),
+}));
 
 jest.useFakeTimers();
 
@@ -89,13 +95,16 @@ describe("<SpaceSettingsVisibilityTab />", () => {
         const toggleButton = getByTestId("toggle-guest-access-btn")!;
         fireEvent.click(toggleButton);
     };
-    const getGuestAccessToggle = ({ container }: RenderResult) =>
-        container.querySelector('[aria-label="Enable guest access"]');
-    const getHistoryVisibilityToggle = ({ container }: RenderResult) =>
-        container.querySelector('[aria-label="Preview Space"]');
+    const getGuestAccessToggle = ({ getByLabelText }: RenderResult) => getByLabelText("Enable guest access");
+    const getHistoryVisibilityToggle = ({ getByLabelText }: RenderResult) => getByLabelText("Preview Space");
     const getErrorMessage = ({ getByTestId }: RenderResult) => getByTestId("space-settings-error")?.textContent;
 
     beforeEach(() => {
+        let i = 0;
+        mocked(randomString).mockImplementation(() => {
+            return "testid_" + i++;
+        });
+
         (mockMatrixClient.sendStateEvent as jest.Mock).mockClear().mockResolvedValue({});
         MatrixClientPeg.get = jest.fn().mockReturnValue(mockMatrixClient);
     });

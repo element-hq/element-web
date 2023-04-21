@@ -218,6 +218,10 @@ export interface EventTileProps {
     // displayed to the current user either because they're
     // the author or they are a moderator
     isSeeingThroughMessageHiddenForModeration?: boolean;
+
+    // The following properties are used by EventTilePreview to disable tab indexes within the event tile
+    hideTimestamp?: boolean;
+    inhibitInteraction?: boolean;
 }
 
 interface IState {
@@ -1006,7 +1010,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
 
         if (this.props.mxEvent.sender && avatarSize) {
-            let member;
+            let member: RoomMember | null = null;
             // set member to receiver (target) if it is a 3PID invite
             // so that the correct avatar is shown as the text is
             // `$target accepted the invitation for $email`
@@ -1016,9 +1020,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 member = this.props.mxEvent.sender;
             }
             // In the ThreadsList view we use the entire EventTile as a click target to open the thread instead
-            const viewUserOnClick = ![TimelineRenderingType.ThreadsList, TimelineRenderingType.Notification].includes(
-                this.context.timelineRenderingType,
-            );
+            const viewUserOnClick =
+                !this.props.inhibitInteraction &&
+                ![TimelineRenderingType.ThreadsList, TimelineRenderingType.Notification].includes(
+                    this.context.timelineRenderingType,
+                );
             avatar = (
                 <div className="mx_EventTile_avatar">
                     <MemberAvatar
@@ -1064,6 +1070,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const showTimestamp =
             this.props.mxEvent.getTs() &&
+            !this.props.hideTimestamp &&
             (this.props.alwaysShowTimestamps ||
                 this.props.last ||
                 this.state.hover ||
@@ -1101,7 +1108,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        const linkedTimestamp = (
+        const linkedTimestamp = !this.props.hideTimestamp ? (
             <a
                 href={permalink}
                 onClick={this.onPermalinkClicked}
@@ -1110,7 +1117,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             >
                 {timestamp}
             </a>
-        );
+        ) : null;
 
         const useIRCLayout = this.props.layout === Layout.IRC;
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;

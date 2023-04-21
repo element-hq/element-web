@@ -32,11 +32,9 @@ import DMRoomMap from "../../../src/utils/DMRoomMap";
 import SettingsStore from "../../../src/settings/SettingsStore";
 
 // Fake random strings to give a predictable snapshot for checkbox IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => {
-    return {
-        randomString: () => "abdefghi",
-    };
-});
+jest.mock("matrix-js-sdk/src/randomstring", () => ({
+    randomString: () => "abdefghi",
+}));
 
 describe("SpaceHierarchy", () => {
     describe("showRoom", () => {

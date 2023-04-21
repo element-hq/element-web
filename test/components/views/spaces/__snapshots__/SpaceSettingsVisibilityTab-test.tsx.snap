@@ -4,7 +4,7 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space Access renders guest 
 <div
   aria-checked="true"
   aria-disabled="false"
-  aria-label="Enable guest access"
+  aria-labelledby="mx_LabelledToggleSwitch_testid_1"
   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
   role="switch"
   tabindex="0"
@@ -105,12 +105,16 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
           <span
             class="mx_SettingsFlag_label"
           >
-            Preview Space
+            <div
+              id="mx_LabelledToggleSwitch_testid_0"
+            >
+              Preview Space
+            </div>
           </span>
           <div
             aria-checked="true"
             aria-disabled="false"
-            aria-label="Preview Space"
+            aria-labelledby="mx_LabelledToggleSwitch_testid_0"
             class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
             role="switch"
             tabindex="0"

@@ -89,8 +89,8 @@ const SpaceCreateMenuType: React.FC<{
 }> = ({ title, description, className, onClick }) => {
     return (
         <AccessibleButton className={classNames("mx_SpaceCreateMenuType", className)} onClick={onClick}>
-            <h3>{title}</h3>
-            <span>{description}</span>
+            {title}
+            <div>{description}</div>
         </AccessibleButton>
     );
 };

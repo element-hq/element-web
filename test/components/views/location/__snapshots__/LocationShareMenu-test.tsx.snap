@@ -25,12 +25,16 @@ exports[`<LocationShareMenu /> with live location disabled goes to labs flag scr
     <span
       class="mx_SettingsFlag_label"
     >
-      Enable live location sharing
+      <div
+        id="mx_LabelledToggleSwitch_abdefghi"
+      >
+        Enable live location sharing
+      </div>
     </span>
     <div
       aria-checked="false"
       aria-disabled="false"
-      aria-label="Enable live location sharing"
+      aria-labelledby="mx_LabelledToggleSwitch_abdefghi"
       class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
       role="switch"
       tabindex="0"
