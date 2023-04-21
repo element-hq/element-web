@@ -127,7 +127,7 @@ export function untilEmission(
     });
 }
 
-export const flushPromises = async () => await new Promise((resolve) => window.setTimeout(resolve));
+export const flushPromises = async () => await new Promise<void>((resolve) => window.setTimeout(resolve));
 
 // with jest's modern fake timers process.nextTick is also mocked,
 // flushing promises in the normal way then waits for some advancement
