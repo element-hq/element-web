@@ -130,7 +130,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
         // also clear the file upload control so that the user can upload the same file
         // the did before (otherwise the onchange wouldn't fire)
-        if (this.fileUpload.current) this.fileUpload.current.value = null;
+        if (this.fileUpload.current) this.fileUpload.current.value = "";
 
         // We don't use Field's validation here because a) we want it in a separate place rather
         // than in a tooltip and b) we want it to display feedback based on the uploaded file

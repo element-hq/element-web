@@ -363,7 +363,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     }
 
     public getContainerWidgets(room: Optional<Room>, container: Container): IApp[] {
-        return this.byRoom.get(room?.roomId)?.get(container)?.ordered || [];
+        return (room && this.byRoom.get(room.roomId)?.get(container)?.ordered) || [];
     }
 
     public isInContainer(room: Room, widget: IApp, container: Container): boolean {

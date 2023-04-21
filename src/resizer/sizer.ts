@@ -86,9 +86,9 @@ export default class Sizer {
 
     public clearItemSize(item: HTMLElement): void {
         if (this.vertical) {
-            item.style.height = null!;
+            item.style.removeProperty("height");
         } else {
-            item.style.width = null!;
+            item.style.removeProperty("width");
         }
     }
 

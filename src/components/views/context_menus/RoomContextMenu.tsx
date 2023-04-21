@@ -169,8 +169,8 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
         );
 
         const echoChamber = EchoChamber.forRoom(room);
-        let notificationLabel: string;
-        let iconClassName: string;
+        let notificationLabel: string | undefined;
+        let iconClassName: string | undefined;
         switch (echoChamber.notificationVolume) {
             case RoomNotifState.AllMessages:
                 notificationLabel = _t("Default");
@@ -337,7 +337,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
             const isApplied = RoomListStore.instance.getTagsForRoom(room).includes(tagId);
             const removeTag = isApplied ? tagId : inverseTag;
             const addTag = isApplied ? null : tagId;
-            dis.dispatch(RoomListActions.tagRoom(cli, room, removeTag, addTag, undefined, 0));
+            dis.dispatch(RoomListActions.tagRoom(cli, room, removeTag, addTag, 0));
         } else {
             logger.warn(`Unexpected tag ${tagId} applied to ${room.roomId}`);
         }

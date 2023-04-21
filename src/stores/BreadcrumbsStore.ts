@@ -87,7 +87,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
                 await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
             }
         } else if (payload.action === Action.ViewRoom) {
-            if (payload.auto_join && !this.matrixClient.getRoom(payload.room_id)) {
+            if (payload.auto_join && payload.room_id && !this.matrixClient.getRoom(payload.room_id)) {
                 // Queue the room instead of pushing it immediately. We're probably just
                 // waiting for a room join to complete.
                 this.waitingRooms.push({ roomId: payload.room_id, addedTs: Date.now() });

@@ -43,7 +43,7 @@ describe("<MessageEditHistory />", () => {
         return result;
     }
 
-    function mockEdits(...edits: { msg: string; ts: number | undefined }[]) {
+    function mockEdits(...edits: { msg: string; ts?: number }[]) {
         client.relations.mockImplementation(() =>
             Promise.resolve({
                 events: edits.map(

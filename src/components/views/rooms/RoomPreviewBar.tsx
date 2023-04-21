@@ -151,7 +151,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 const result = await MatrixClientPeg.get().lookupThreePid(
                     "email",
                     this.props.invitedEmail,
-                    identityAccessToken,
+                    identityAccessToken!,
                 );
                 this.setState({ invitedEmailMxid: result.mxid });
             } catch (err) {
@@ -243,8 +243,8 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         if (!inviteEvent) {
             return null;
         }
-        const inviterUserId = inviteEvent.events.member.getSender();
-        return room.currentState.getMember(inviterUserId);
+        const inviterUserId = inviteEvent.events.member?.getSender();
+        return inviterUserId ? room.currentState.getMember(inviterUserId) : null;
     }
 
     private isDMInvite(): boolean {
@@ -252,8 +252,8 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         if (!myMember) {
             return false;
         }
-        const memberContent = myMember.events.member.getContent();
-        return memberContent.membership === "invite" && memberContent.is_direct;
+        const memberContent = myMember.events.member?.getContent();
+        return memberContent?.membership === "invite" && memberContent.is_direct;
     }
 
     private makeScreenAfterLogin(): { screen: string; params: Record<string, any> } {

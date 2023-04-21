@@ -86,7 +86,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
 
     private upgradeRoom = (): void => {
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
-        Modal.createDialog(RoomUpgradeDialog, { room });
+        if (room) Modal.createDialog(RoomUpgradeDialog, { room });
     };
 
     private onOldRoomClicked = (e: ButtonEvent): void => {

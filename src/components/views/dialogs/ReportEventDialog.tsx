@@ -260,7 +260,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
 
             // if the user should also be ignored, do that
             if (this.state.ignoreUserToo) {
-                await client.setIgnoredUsers([...client.getIgnoredUsers(), ev.getSender()]);
+                await client.setIgnoredUsers([...client.getIgnoredUsers(), ev.getSender()!]);
             }
 
             this.props.onFinished(true);
@@ -309,8 +309,8 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             // Display report-to-moderator dialog.
             // We let the user pick a nature.
             const client = MatrixClientPeg.get();
-            const homeServerName = SdkConfig.get("validated_server_config").hsName;
-            let subtitle;
+            const homeServerName = SdkConfig.get("validated_server_config")!.hsName;
+            let subtitle: string;
             switch (this.state.nature) {
                 case Nature.Disagreement:
                     subtitle = _t(

@@ -79,7 +79,8 @@ export default class UserView extends React.Component<IProps, IState> {
             return;
         }
         const fakeEvent = new MatrixEvent({ type: "m.room.member", content: profileInfo });
-        const member = new RoomMember(null, this.props.userId);
+        // We pass an empty string room ID here, this is slight abuse of the class to simplify code
+        const member = new RoomMember("", this.props.userId);
         member.setMembershipEvent(fakeEvent);
         this.setState({ member, loading: false });
     }

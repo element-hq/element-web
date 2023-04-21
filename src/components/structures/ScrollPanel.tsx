@@ -786,7 +786,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         const scrollState = this.scrollState;
         const trackedNode = scrollState.trackedNode;
 
-        if (!trackedNode?.parentElement) {
+        if (!trackedNode?.parentElement && this.itemlist.current) {
             let node: HTMLElement | undefined = undefined;
             const messages = this.itemlist.current.children;
             const scrollToken = scrollState.trackedScrollToken;
@@ -890,7 +890,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     public clearPreventShrinking = (): void => {
         const messageList = this.itemlist.current;
         const balanceElement = messageList && messageList.parentElement;
-        if (balanceElement) balanceElement.style.paddingBottom = null;
+        if (balanceElement) balanceElement.style.removeProperty("paddingBottom");
         this.preventShrinkingState = null;
         debuglog("prevent shrinking cleared");
     };
@@ -904,7 +904,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     what it was when marking.
     */
     public updatePreventShrinking = (): void => {
-        if (this.preventShrinkingState) {
+        if (this.preventShrinkingState && this.itemlist.current) {
             const sn = this.getScrollNode();
             const scrollState = this.scrollState;
             const messageList = this.itemlist.current;
@@ -922,7 +922,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             if (!shouldClear) {
                 const currentOffset = messageList.clientHeight - (offsetNode.offsetTop + offsetNode.clientHeight);
                 const offsetDiff = offsetFromBottom - currentOffset;
-                if (offsetDiff > 0) {
+                if (offsetDiff > 0 && balanceElement) {
                     balanceElement.style.paddingBottom = `${offsetDiff}px`;
                     debuglog("update prevent shrinking ", offsetDiff, "px from bottom");
                 } else if (offsetDiff < 0) {

@@ -26,7 +26,7 @@ import { isLocalRoom } from "./utils/localRoom/isLocalRoom";
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(
-    member: RoomMember,
+    member: RoomMember | undefined,
     width: number,
     height: number,
     resizeMethod: ResizeMethod,

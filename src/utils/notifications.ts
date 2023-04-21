@@ -28,7 +28,7 @@ export const deviceNotificationSettingsKeys = [
     "audioNotificationsEnabled",
 ];
 
-export function getLocalNotificationAccountDataEventType(deviceId: string): string {
+export function getLocalNotificationAccountDataEventType(deviceId: string | null): string {
     return `${LOCAL_NOTIFICATION_SETTINGS_PREFIX.name}.${deviceId}`;
 }
 

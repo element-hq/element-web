@@ -176,7 +176,10 @@ async function localSearch(
         searchArgs.room_id = roomId;
     }
 
-    const localResult = await eventIndex.search(searchArgs);
+    const localResult = await eventIndex!.search(searchArgs);
+    if (!localResult) {
+        throw new Error("Local search failed");
+    }
 
     searchArgs.next_batch = localResult.next_batch;
 
@@ -225,7 +228,11 @@ async function localPagination(searchResult: ISeshatSearchResults): Promise<ISes
 
     const searchArgs = searchResult.seshatQuery;
 
-    const localResult = await eventIndex.search(searchArgs);
+    const localResult = await eventIndex!.search(searchArgs);
+    if (!localResult) {
+        throw new Error("Local search pagination failed");
+    }
+
     searchResult.seshatQuery.next_batch = localResult.next_batch;
 
     // We only need to restore the encryption state for the new results, so
@@ -477,7 +484,7 @@ function combineResponses(
     // Set the response next batch token to one of the tokens from the sources,
     // this makes sure that if we exhaust one of the sources we continue with
     // the other one.
-    if (previousSearchResult.seshatQuery.next_batch) {
+    if (previousSearchResult.seshatQuery?.next_batch) {
         response.next_batch = previousSearchResult.seshatQuery.next_batch;
     } else if (previousSearchResult.serverSideNextBatch) {
         response.next_batch = previousSearchResult.serverSideNextBatch;
@@ -535,13 +542,13 @@ async function combinedPagination(searchResult: ISeshatSearchResults): Promise<I
     const searchArgs = searchResult.seshatQuery;
     const oldestEventFrom = searchResult.oldestEventFrom;
 
-    let localResult: IResultRoomEvents;
-    let serverSideResult: ISearchResponse;
+    let localResult: IResultRoomEvents | undefined;
+    let serverSideResult: ISearchResponse | undefined;
 
     // Fetch events from the local index if we have a token for it and if it's
     // the local indexes turn or the server has exhausted its results.
-    if (searchArgs.next_batch && (!searchResult.serverSideNextBatch || oldestEventFrom === "server")) {
-        localResult = await eventIndex.search(searchArgs);
+    if (searchArgs?.next_batch && (!searchResult.serverSideNextBatch || oldestEventFrom === "server")) {
+        localResult = await eventIndex!.search(searchArgs);
     }
 
     // Fetch events from the server if we have a token for it and if it's the
@@ -551,7 +558,7 @@ async function combinedPagination(searchResult: ISeshatSearchResults): Promise<I
         serverSideResult = await client.search(body);
     }
 
-    let serverEvents: IResultRoomEvents;
+    let serverEvents: IResultRoomEvents | undefined;
 
     if (serverSideResult) {
         serverEvents = serverSideResult.search_categories.room_events;

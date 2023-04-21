@@ -150,7 +150,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         if (!element) return;
 
         element.pause();
-        element.src = null;
+        element.removeAttribute("src");
 
         // As per comment in componentDidMount, setting the sink ID back to the
         // default once the call is over makes setSinkId work reliably. - Dave

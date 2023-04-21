@@ -339,16 +339,17 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
 
     private onCallResumeClick = (): void => {
         const userFacingRoomId = LegacyCallHandler.instance.roomIdForCall(this.props.call);
-        LegacyCallHandler.instance.setActiveCallRoomId(userFacingRoomId);
+        if (userFacingRoomId) LegacyCallHandler.instance.setActiveCallRoomId(userFacingRoomId);
     };
 
     private onTransferClick = (): void => {
         const transfereeCall = LegacyCallHandler.instance.getTransfereeForCallId(this.props.call.callId);
-        this.props.call.transferToCall(transfereeCall);
+        if (transfereeCall) this.props.call.transferToCall(transfereeCall);
     };
 
     private onHangupClick = (): void => {
-        LegacyCallHandler.instance.hangupOrReject(LegacyCallHandler.instance.roomIdForCall(this.props.call));
+        const roomId = LegacyCallHandler.instance.roomIdForCall(this.props.call);
+        if (roomId) LegacyCallHandler.instance.hangupOrReject(roomId);
     };
 
     private onToggleSidebar = (): void => {
@@ -451,13 +452,12 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
 
             let holdTransferContent: React.ReactNode;
             if (transfereeCall) {
-                const transferTargetRoom = MatrixClientPeg.get().getRoom(
-                    LegacyCallHandler.instance.roomIdForCall(call),
-                );
+                const cli = MatrixClientPeg.get();
+                const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
+                const transferTargetRoom = callRoomId ? cli.getRoom(callRoomId) : null;
                 const transferTargetName = transferTargetRoom ? transferTargetRoom.name : _t("unknown person");
-                const transfereeRoom = MatrixClientPeg.get().getRoom(
-                    LegacyCallHandler.instance.roomIdForCall(transfereeCall),
-                );
+                const transfereeCallRoomId = LegacyCallHandler.instance.roomIdForCall(transfereeCall);
+                const transfereeRoom = transfereeCallRoomId ? cli.getRoom(transfereeCallRoomId) : null;
                 const transfereeName = transfereeRoom ? transfereeRoom.name : _t("unknown person");
 
                 holdTransferContent = (
@@ -579,6 +579,8 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
         const secondaryCallRoomId = LegacyCallHandler.instance.roomIdForCall(secondaryCall);
         const callRoom = callRoomId ? client.getRoom(callRoomId) : null;
+        if (!callRoom) return null;
+
         const secCallRoom = secondaryCallRoomId ? client.getRoom(secondaryCallRoomId) : null;
 
         const callViewClasses = classNames({

@@ -235,8 +235,11 @@ export default class EventIndex extends EventEmitter {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
 
+        const associatedId = ev.getAssociatedId();
+        if (!associatedId) return;
+
         try {
-            await indexManager.deleteEvent(ev.getAssociatedId());
+            await indexManager.deleteEvent(associatedId);
         } catch (e) {
             logger.log("EventIndex: Error deleting event from index", e);
         }
@@ -519,10 +522,10 @@ export default class EventIndex extends EventEmitter {
             const profiles: Record<string, IMatrixProfile> = {};
 
             stateEvents.forEach((ev) => {
-                if (ev.event.content && ev.event.content.membership === "join") {
-                    profiles[ev.event.sender] = {
-                        displayname: ev.event.content.displayname,
-                        avatar_url: ev.event.content.avatar_url,
+                if (ev.getContent().membership === "join") {
+                    profiles[ev.getSender()!] = {
+                        displayname: ev.getContent().displayname,
+                        avatar_url: ev.getContent().avatar_url,
                     };
                 }
             });
@@ -733,7 +736,7 @@ export default class EventIndex extends EventEmitter {
         const matrixEvents = events.map((e) => {
             const matrixEvent = eventMapper(e.event);
 
-            const member = new RoomMember(room.roomId, matrixEvent.getSender());
+            const member = new RoomMember(room.roomId, matrixEvent.getSender()!);
 
             // We can't really reconstruct the whole room state from our
             // EventIndex to calculate the correct display name. Use the

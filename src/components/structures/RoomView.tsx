@@ -627,7 +627,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             mainSplitContentType: room ? this.getMainSplitContentType(room) : undefined,
             initialEventId: undefined, // default to clearing this, will get set later in the method if needed
             showRightPanel: this.context.rightPanelStore.isOpenForRoom(roomId),
-            activeCall: CallStore.instance.getActiveCall(roomId),
+            activeCall: roomId ? CallStore.instance.getActiveCall(roomId) : null,
         };
 
         if (
@@ -1071,6 +1071,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onAction = async (payload: ActionPayload): Promise<void> => {
+        if (!this.context.client) return;
         switch (payload.action) {
             case "message_sent":
                 this.checkDesktopNotifications();
@@ -1228,7 +1229,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             this.handleEffects(ev);
         }
 
-        if (ev.getSender() !== this.context.client.getSafeUserId()) {
+        if (this.context.client && ev.getSender() !== this.context.client.getSafeUserId()) {
             // update unread count when scrolled up
             if (!this.state.search && this.state.atEndOfLiveTimeline) {
                 // no change
@@ -1469,7 +1470,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private updatePermissions(room: Room): void {
-        if (room) {
+        if (room && this.context.client) {
             const me = this.context.client.getSafeUserId();
             const canReact =
                 room.getMyMembership() === "join" && room.currentState.maySendEvent(EventType.Reaction, me);
@@ -1956,6 +1957,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     public render(): React.ReactNode {
+        if (!this.context.client) return null;
+
         if (this.state.room instanceof LocalRoom) {
             if (this.state.room.state === LocalRoomState.CREATING) {
                 return this.renderLocalRoomCreateLoader(this.state.room);
@@ -2064,7 +2067,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 const inviteEvent = myMember ? myMember.events.member : null;
                 let inviterName = _t("Unknown");
                 if (inviteEvent) {
-                    inviterName = inviteEvent.sender?.name ?? inviteEvent.getSender();
+                    inviterName = inviteEvent.sender?.name ?? inviteEvent.getSender()!;
                 }
 
                 // We deliberately don't try to peek into invites, even if we have permission to peek

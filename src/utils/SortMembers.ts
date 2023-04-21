@@ -67,7 +67,7 @@ interface IActivityScore {
 // We do this by checking every room to see who has sent a message in the last few hours, and giving them
 // a score which correlates to the freshness of their message. In theory, this results in suggestions
 // which are closer to "continue this conversation" rather than "this person exists".
-export function buildActivityScores(cli: MatrixClient): { [key: string]: IActivityScore | undefined } {
+export function buildActivityScores(cli: MatrixClient): { [userId: string]: IActivityScore } {
     const now = new Date().getTime();
     const earliestAgeConsidered = now - 60 * 60 * 1000; // 1 hour ago
     const maxMessagesConsidered = 50; // so we don't iterate over a huge amount of traffic
@@ -75,6 +75,7 @@ export function buildActivityScores(cli: MatrixClient): { [key: string]: IActivi
         .flatMap((room) => takeRight(room.getLiveTimeline().getEvents(), maxMessagesConsidered))
         .filter((ev) => ev.getTs() > earliestAgeConsidered);
     const senderEvents = groupBy(events, (ev) => ev.getSender());
+    // If the iteratee in mapValues returns undefined that key will be removed from the resultant object
     return mapValues(senderEvents, (events) => {
         if (!events.length) return;
         const lastEvent = maxBy(events, (ev) => ev.getTs())!;
@@ -87,7 +88,7 @@ export function buildActivityScores(cli: MatrixClient): { [key: string]: IActivi
             // an approximate maximum for being selected.
             score: Math.max(1, inverseTime / (15 * 60 * 1000)), // 15min segments to keep scores sane
         };
-    });
+    }) as { [key: string]: IActivityScore };
 }
 
 interface IMemberScore {
@@ -96,13 +97,14 @@ interface IMemberScore {
     numRooms: number;
 }
 
-export function buildMemberScores(cli: MatrixClient): { [key: string]: IMemberScore | undefined } {
+export function buildMemberScores(cli: MatrixClient): { [userId: string]: IMemberScore } {
     const maxConsideredMembers = 200;
     const consideredRooms = joinedRooms(cli).filter((room) => room.getJoinedMemberCount() < maxConsideredMembers);
     const memberPeerEntries = consideredRooms.flatMap((room) =>
         room.getJoinedMembers().map((member) => ({ member, roomSize: room.getJoinedMemberCount() })),
     );
     const userMeta = groupBy(memberPeerEntries, ({ member }) => member.userId);
+    // If the iteratee in mapValues returns undefined that key will be removed from the resultant object
     return mapValues(userMeta, (roomMemberships) => {
         if (!roomMemberships.length) return;
         const maximumPeers = maxConsideredMembers * roomMemberships.length;
@@ -112,5 +114,5 @@ export function buildMemberScores(cli: MatrixClient): { [key: string]: IMemberSc
             numRooms: roomMemberships.length,
             score: Math.max(0, Math.pow(1 - totalPeers / maximumPeers, 5)),
         };
-    });
+    }) as { [userId: string]: IMemberScore };
 }

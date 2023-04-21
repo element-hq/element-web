@@ -307,7 +307,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
     public fetchSuggestedRooms = async (space: Room, limit = MAX_SUGGESTED_ROOMS): Promise<ISuggestedRoom[]> => {
         try {
-            const { rooms } = await this.matrixClient.getRoomHierarchy(space.roomId, limit, 1, true);
+            const { rooms } = await this.matrixClient!.getRoomHierarchy(space.roomId, limit, 1, true);
 
             const viaMap = new EnhancedMap<string, Set<string>>();
             rooms.forEach((room) => {
@@ -979,7 +979,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private onRoomState = (ev: MatrixEvent): void => {
         const room = this.matrixClient?.getRoom(ev.getRoomId());
 
-        if (!room) return;
+        if (!this.matrixClient || !room) return;
 
         switch (ev.getType()) {
             case EventType.SpaceChild: {

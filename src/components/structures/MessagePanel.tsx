@@ -883,6 +883,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
             const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
             const newReceipts = this.getReadReceiptsForEvent(event);
+            if (!newReceipts) continue;
             receiptsByEvent.set(lastShownEventId, existingReceipts.concat(newReceipts));
 
             // Record these receipts along with their last shown event ID for
@@ -1218,7 +1219,7 @@ class CreationGrouper extends BaseGrouper {
                 key="roomcreationsummary"
                 events={this.events}
                 onToggle={panel.onHeightChanged} // Update scroll state
-                summaryMembers={[ev.sender]}
+                summaryMembers={ev.sender ? [ev.sender] : undefined}
                 summaryText={summaryText}
                 layout={this.panel.props.layout}
             >
