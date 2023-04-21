@@ -47,7 +47,7 @@ describe("ElectronPlatform", () => {
     beforeEach(() => {
         window.electron = mockElectron;
         jest.clearAllMocks();
-        window.navigator = { userAgent: defaultUserAgent } as unknown as Navigator;
+        Object.defineProperty(window, "navigator", { value: { userAgent: defaultUserAgent }, writable: true });
     });
 
     const getElectronEventHandlerCall = (eventType: string): [type: string, handler: Function] | undefined =>
@@ -137,7 +137,7 @@ describe("ElectronPlatform", () => {
             ["Mozilla/5.0 (X11; SunOS i686; rv:21.0) Gecko/20100101 Firefox/21.0", "Element Desktop: SunOS"],
             ["custom user agent", "Element Desktop: Unknown"],
         ])("%s = %s", (userAgent, result) => {
-            window.navigator = { userAgent } as unknown as Navigator;
+            Object.defineProperty(window, "navigator", { value: { userAgent }, writable: true });
             const platform = new ElectronPlatform();
             expect(platform.getDefaultDeviceDisplayName()).toEqual(result);
         });

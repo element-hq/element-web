@@ -31,9 +31,10 @@ describe("getVectorConfig()", () => {
     };
 
     beforeEach(() => {
-        window.location = {
-            hostname: elementDomain,
-        } as unknown as Location;
+        Object.defineProperty(window, "location", {
+            value: { href: `https://${elementDomain}`, hostname: elementDomain },
+            writable: true,
+        });
 
         // stable value for cachebuster
         jest.spyOn(Date, "now").mockReturnValue(now);
@@ -107,6 +108,6 @@ describe("getVectorConfig()", () => {
 
         // We can't assert it'll be a SyntaxError as node-fetch behaves differently
         // https://github.com/wheresrhys/fetch-mock/issues/270
-        await expect(getVectorConfig()).rejects.toThrow("Unexpected token } in JSON at position 19");
+        await expect(getVectorConfig()).rejects.toThrow("in JSON at position 19");
     });
 });

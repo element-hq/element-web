@@ -30,8 +30,6 @@ import { parseQs } from "../url_utils";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
-const VERSION = process.env.VERSION!; // baked in by Webpack
-
 function getNormalizedAppVersion(version: string): string {
     // if version looks like semver with leading v, strip it (matches scripts/normalize-version.sh)
     const semVerRegex = /^v\d+.\d+.\d+(-.+)?$/;
@@ -42,6 +40,8 @@ function getNormalizedAppVersion(version: string): string {
 }
 
 export default class WebPlatform extends VectorBasePlatform {
+    private static readonly VERSION = process.env.VERSION!; // baked in by Webpack
+
     public constructor() {
         super();
         // Register service worker if available on this platform
@@ -103,7 +103,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     public getAppVersion(): Promise<string> {
-        return Promise.resolve(getNormalizedAppVersion(VERSION));
+        return Promise.resolve(getNormalizedAppVersion(WebPlatform.VERSION));
     }
 
     public startUpdater(): void {
@@ -115,7 +115,7 @@ export default class WebPlatform extends VectorBasePlatform {
         //
         // Ideally, loading an old copy would be impossible with the
         // cache-control: nocache HTTP header set, but Firefox doesn't always obey it :/
-        console.log("startUpdater, current version is " + getNormalizedAppVersion(VERSION));
+        console.log("startUpdater, current version is " + getNormalizedAppVersion(WebPlatform.VERSION));
         this.pollForUpdate((version: string, newVersion: string) => {
             const query = parseQs(location);
             if (query.updated) {
@@ -146,7 +146,7 @@ export default class WebPlatform extends VectorBasePlatform {
     ): Promise<UpdateStatus> => {
         return this.getMostRecentVersion().then(
             (mostRecentVersion) => {
-                const currentVersion = getNormalizedAppVersion(VERSION);
+                const currentVersion = getNormalizedAppVersion(WebPlatform.VERSION);
 
                 if (currentVersion !== mostRecentVersion) {
                     if (this.shouldShowUpdate(mostRecentVersion)) {
