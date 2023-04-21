@@ -773,6 +773,7 @@ export class ElementCall extends Call {
     }
 
     public destroy(): void {
+        ActiveWidgetStore.instance.destroyPersistentWidget(this.widget.id, this.groupCall.room.roomId);
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.groupCall.room.roomId);
         this.off(CallEvent.Participants, this.onParticipants);
         this.groupCall.off(GroupCallEvent.ParticipantsChanged, this.onGroupCallParticipants);

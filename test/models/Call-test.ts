@@ -1050,6 +1050,12 @@ describe("ElementCall", () => {
 
             call.off(CallEvent.Destroy, onDestroy);
         });
+
+        it("clears widget persistence when destroyed", async () => {
+            const destroyPersistentWidgetSpy = jest.spyOn(ActiveWidgetStore.instance, "destroyPersistentWidget");
+            call.destroy();
+            expect(destroyPersistentWidgetSpy).toHaveBeenCalled();
+        });
     });
 
     describe("instance in a video room", () => {
