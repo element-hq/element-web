@@ -289,7 +289,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
     2. `mx_MyFoo_avatar`
     3. `mx_MyFoo_avatarUser`
     4. `mx_MyFoo_avatar--user`
-3. Use the `$font` and `$spacing` variables instead of manual values.
+3. Use the `$font` variables instead of manual values.
 4. Keep indentation/nesting to a minimum. Maximum suggested nesting is 5 layers.
 5. Use the whole class name instead of shortcuts:
 
