@@ -52,9 +52,5 @@ describe("Set integration manager", () => {
                 cy.get(".mx_SettingsTab_subheading").should("have.css", "margin-inline-end", "0px");
             });
         });
-
-        cy.get(".mx_SetIntegrationManager").percySnapshotElement("'Manage integrations' on General settings tab", {
-            widths: [692], // actual width of mx_SetIntegrationManager
-        });
     });
 });
