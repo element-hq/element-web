@@ -14,6 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/*
+ * SCSS variables defining a range of font sizes.
+ *
+ * These are defined in `rem` so that they scale with the `font-size` of the root element (which is adjustable via the
+ * "Font size" setting). They exist to make the job of converting designs (which tend to be based in pixels) into CSS
+ * easier.
+ *
+ * That means that, slightly confusingly, `$font-10px` is only *actually* 10px at the default font size: at a base
+ * `font-size` of 15, it is actually 15px.
+ */
 $font-1px: 0.1rem;
 $font-1-5px: 0.15rem;
 $font-2px: 0.2rem;
