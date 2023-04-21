@@ -62,7 +62,7 @@ describe("Sliding Sync", () => {
 
     // assert order
     const checkOrder = (wantOrder: string[]) => {
-        cy.contains(".mx_RoomSublist", "Rooms")
+        cy.findByRole("group", { name: "Rooms" })
             .find(".mx_RoomTile_title")
             .should((elements) => {
                 expect(
@@ -102,16 +102,31 @@ describe("Sliding Sync", () => {
 
     it("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", () => {
         // create rooms and check room names are correct
-        cy.createRoom({ name: "Apple" }).then(() => cy.contains(".mx_RoomSublist", "Apple"));
-        cy.createRoom({ name: "Pineapple" }).then(() => cy.contains(".mx_RoomSublist", "Pineapple"));
-        cy.createRoom({ name: "Orange" }).then(() => cy.contains(".mx_RoomSublist", "Orange"));
-        // check the rooms are in the right order
-        cy.get(".mx_RoomTile").should("have.length", 4); // due to the Test Room in beforeEach
+        cy.createRoom({ name: "Apple" }).then(() => cy.findByRole("treeitem", { name: "Apple" }));
+        cy.createRoom({ name: "Pineapple" }).then(() => cy.findByRole("treeitem", { name: "Pineapple" }));
+        cy.createRoom({ name: "Orange" }).then(() => cy.findByRole("treeitem", { name: "Orange" }));
+
+        cy.get(".mx_RoomSublist_tiles").within(() => {
+            cy.findAllByRole("treeitem").should("have.length", 4); // due to the Test Room in beforeEach
+        });
+
         checkOrder(["Orange", "Pineapple", "Apple", "Test Room"]);
 
-        cy.contains(".mx_RoomSublist", "Rooms").find(".mx_RoomSublist_menuButton").click({ force: true });
-        cy.contains("A-Z").click();
-        cy.get(".mx_StyledRadioButton_checked").should("contain.text", "A-Z");
+        cy.findByRole("group", { name: "Rooms" }).within(() => {
+            cy.get(".mx_RoomSublist_headerContainer")
+                .realHover()
+                .findByRole("button", { name: "List options" })
+                .click();
+        });
+
+        // force click as the radio button's size is zero
+        cy.findByRole("menuitemradio", { name: "A-Z" }).click({ force: true });
+
+        // Assert that the radio button is checked
+        cy.get(".mx_StyledRadioButton_checked").within(() => {
+            cy.findByText("A-Z").should("exist");
+        });
+
         checkOrder(["Apple", "Orange", "Pineapple", "Test Room"]);
     });
 
@@ -119,16 +134,16 @@ describe("Sliding Sync", () => {
         // create rooms and check room names are correct
         cy.createRoom({ name: "Apple" })
             .as("roomA")
-            .then(() => cy.contains(".mx_RoomSublist", "Apple"));
+            .then(() => cy.findByRole("treeitem", { name: "Apple" }));
         cy.createRoom({ name: "Pineapple" })
             .as("roomP")
-            .then(() => cy.contains(".mx_RoomSublist", "Pineapple"));
+            .then(() => cy.findByRole("treeitem", { name: "Pineapple" }));
         cy.createRoom({ name: "Orange" })
             .as("roomO")
-            .then(() => cy.contains(".mx_RoomSublist", "Orange"));
+            .then(() => cy.findByRole("treeitem", { name: "Orange" }));
 
         // Select the Test Room
-        cy.contains(".mx_RoomTile", "Test Room").click();
+        cy.findByRole("treeitem", { name: "Test Room" }).click();
 
         checkOrder(["Orange", "Pineapple", "Apple", "Test Room"]);
         bumpRoom("@roomA");
@@ -145,20 +160,20 @@ describe("Sliding Sync", () => {
         // create rooms and check room names are correct
         cy.createRoom({ name: "Apple" })
             .as("roomA")
-            .then(() => cy.contains(".mx_RoomSublist", "Apple"));
+            .then(() => cy.findByRole("treeitem", { name: "Apple" }));
         cy.createRoom({ name: "Pineapple" })
             .as("roomP")
-            .then(() => cy.contains(".mx_RoomSublist", "Pineapple"));
+            .then(() => cy.findByRole("treeitem", { name: "Pineapple" }));
         cy.createRoom({ name: "Orange" })
             .as("roomO")
-            .then(() => cy.contains(".mx_RoomSublist", "Orange"));
+            .then(() => cy.findByRole("treeitem", { name: "Orange" }));
 
         // Given a list of Orange, Pineapple, Apple - if Pineapple is active and a message is sent in Apple, the list should
         // turn into Apple, Pineapple, Orange - the index position of Pineapple never changes even though the list should technically
         // be Apple, Orange Pineapple - only when you click on a different room do things reshuffle.
 
         // Select the Pineapple room
-        cy.contains(".mx_RoomTile", "Pineapple").click();
+        cy.findByRole("treeitem", { name: "Pineapple" }).click();
         checkOrder(["Orange", "Pineapple", "Apple", "Test Room"]);
 
         // Move Apple
@@ -166,7 +181,7 @@ describe("Sliding Sync", () => {
         checkOrder(["Apple", "Pineapple", "Orange", "Test Room"]);
 
         // Select the Test Room
-        cy.contains(".mx_RoomTile", "Test Room").click();
+        cy.findByRole("treeitem", { name: "Test Room" }).click();
 
         // the rooms reshuffle to match reality
         checkOrder(["Apple", "Orange", "Pineapple", "Test Room"]);
@@ -181,19 +196,22 @@ describe("Sliding Sync", () => {
         });
 
         // check that there is an unread notification (grey) as 1
-        cy.contains(".mx_RoomTile", "Test Room").contains(".mx_NotificationBadge_count", "1");
+        cy.findByRole("treeitem", { name: "Test Room 1 unread message." }).contains(".mx_NotificationBadge_count", "1");
         cy.get(".mx_NotificationBadge").should("not.have.class", "mx_NotificationBadge_highlighted");
 
         // send an @mention: highlight count (red) should be 2.
         cy.all([cy.get<string>("@roomId"), cy.get<MatrixClient>("@bob")]).then(([roomId, bob]) => {
             return bob.sendTextMessage(roomId, "Hello Sloth");
         });
-        cy.contains(".mx_RoomTile", "Test Room").contains(".mx_NotificationBadge_count", "2");
+        cy.findByRole("treeitem", { name: "Test Room 2 unread messages including mentions." }).contains(
+            ".mx_NotificationBadge_count",
+            "2",
+        );
         cy.get(".mx_NotificationBadge").should("have.class", "mx_NotificationBadge_highlighted");
 
         // click on the room, the notif counts should disappear
-        cy.contains(".mx_RoomTile", "Test Room").click();
-        cy.contains(".mx_RoomTile", "Test Room").should("not.have.class", "mx_NotificationBadge_count");
+        cy.findByRole("treeitem", { name: "Test Room 2 unread messages including mentions." }).click();
+        cy.findByRole("treeitem", { name: "Test Room" }).should("not.have.class", "mx_NotificationBadge_count");
     });
 
     it("should not show unread indicators", () => {
@@ -201,8 +219,11 @@ describe("Sliding Sync", () => {
         createAndJoinBob();
 
         // disable notifs in this room (TODO: CS API call?)
-        cy.contains(".mx_RoomTile", "Test Room").find(".mx_RoomTile_notificationsButton").click({ force: true });
-        cy.contains("Mute room").click();
+        cy.findByRole("treeitem", { name: "Test Room" })
+            .realHover()
+            .findByRole("button", { name: "Notification options" })
+            .click();
+        cy.findByRole("menuitemradio", { name: "Mute room" }).click();
 
         // create a new room so we know when the message has been received as it'll re-shuffle the room list
         cy.createRoom({
@@ -216,13 +237,13 @@ describe("Sliding Sync", () => {
         // wait for this message to arrive, tell by the room list resorting
         checkOrder(["Test Room", "Dummy"]);
 
-        cy.contains(".mx_RoomTile", "Test Room").get(".mx_NotificationBadge").should("not.exist");
+        cy.findByRole("treeitem", { name: "Test Room" }).get(".mx_NotificationBadge").should("not.exist");
     });
 
     it("should update user settings promptly", () => {
-        cy.get(".mx_UserMenu_userAvatar").click();
-        cy.contains("All settings").click();
-        cy.contains("Preferences").click();
+        cy.findByRole("button", { name: "User menu" }).click();
+        cy.findByRole("menuitem", { name: "All settings" }).click();
+        cy.findByRole("button", { name: "Preferences" }).click();
         cy.contains(".mx_SettingsFlag", "Show timestamps in 12 hour format")
             .should("exist")
             .find(".mx_ToggleSwitch_on")
@@ -257,9 +278,9 @@ describe("Sliding Sync", () => {
             .then((bob) => {
                 bobClient = bob;
                 return Promise.all([
-                    bob.createRoom({ name: "Join" }),
-                    bob.createRoom({ name: "Reject" }),
-                    bob.createRoom({ name: "Rescind" }),
+                    bob.createRoom({ name: "Room to Join" }),
+                    bob.createRoom({ name: "Room to Reject" }),
+                    bob.createRoom({ name: "Room to Rescind" }),
                 ]);
             })
             .then(([join, reject, rescind]) => {
@@ -273,23 +294,44 @@ describe("Sliding Sync", () => {
                 ]);
             });
 
-        // wait for them all to be on the UI
-        cy.get(".mx_RoomTile").should("have.length", 4); // due to the Test Room in beforeEach
+        cy.findByRole("group", { name: "Invites" }).within(() => {
+            // Exclude headerText
+            cy.get(".mx_RoomSublist_tiles").within(() => {
+                // Wait for them all to be on the UI
+                cy.findAllByRole("treeitem").should("have.length", 3);
+            });
+        });
 
-        cy.contains(".mx_RoomTile", "Join").click();
-        cy.contains(".mx_AccessibleButton", "Accept").click();
+        // Select the room to join
+        cy.findByRole("treeitem", { name: "Room to Join" }).click();
 
-        checkOrder(["Join", "Test Room"]);
+        cy.get(".mx_RoomView").within(() => {
+            // Accept the invite
+            cy.findByRole("button", { name: "Accept" }).click();
+        });
 
-        cy.contains(".mx_RoomTile", "Reject").click();
-        cy.contains(".mx_RoomView .mx_AccessibleButton", "Reject").click();
+        checkOrder(["Room to Join", "Test Room"]);
 
-        // wait for the rejected room to disappear
-        cy.get(".mx_RoomTile").should("have.length", 3);
+        // Select the room to reject
+        cy.findByRole("treeitem", { name: "Room to Reject" }).click();
+
+        cy.get(".mx_RoomView").within(() => {
+            // Reject the invite
+            cy.findByRole("button", { name: "Reject" }).click();
+        });
+
+        cy.findByRole("group", { name: "Invites" }).within(() => {
+            // Exclude headerText
+            cy.get(".mx_RoomSublist_tiles").within(() => {
+                // Wait for the rejected room to disappear
+                cy.findAllByRole("treeitem").should("have.length", 2);
+            });
+        });
 
         // check the lists are correct
-        checkOrder(["Join", "Test Room"]);
-        cy.contains(".mx_RoomSublist", "Invites")
+        checkOrder(["Room to Join", "Test Room"]);
+
+        cy.findByRole("group", { name: "Invites" })
             .find(".mx_RoomTile_title")
             .should((elements) => {
                 expect(
@@ -297,7 +339,7 @@ describe("Sliding Sync", () => {
                         return e.textContent;
                     }),
                     "rooms are sorted",
-                ).to.deep.equal(["Rescind"]);
+                ).to.deep.equal(["Room to Rescind"]);
             });
 
         // now rescind the invite
@@ -305,9 +347,15 @@ describe("Sliding Sync", () => {
             return bob.kick(roomRescind, clientUserId);
         });
 
-        // wait for the rescind to take effect and check the joined list once more
-        cy.get(".mx_RoomTile").should("have.length", 2);
-        checkOrder(["Join", "Test Room"]);
+        cy.findByRole("group", { name: "Rooms" }).within(() => {
+            // Exclude headerText
+            cy.get(".mx_RoomSublist_tiles").within(() => {
+                // Wait for the rescind to take effect and check the joined list once more
+                cy.findAllByRole("treeitem").should("have.length", 2);
+            });
+        });
+
+        checkOrder(["Room to Join", "Test Room"]);
     });
 
     it("should show a favourite DM only in the favourite sublist", () => {
@@ -320,8 +368,8 @@ describe("Sliding Sync", () => {
                 cy.getClient().then((cli) => cli.setRoomTag(roomId, "m.favourite", { order: 0.5 }));
             });
 
-        cy.contains('.mx_RoomSublist[aria-label="Favourites"] .mx_RoomTile', "Favourite DM").should("exist");
-        cy.contains('.mx_RoomSublist[aria-label="People"] .mx_RoomTile', "Favourite DM").should("not.exist");
+        cy.findByRole("group", { name: "Favourites" }).findByText("Favourite DM").should("exist");
+        cy.findByRole("group", { name: "People" }).findByText("Favourite DM").should("not.exist");
     });
 
     // Regression test for a bug in SS mode, but would be useful to have in non-SS mode too.
@@ -329,7 +377,7 @@ describe("Sliding Sync", () => {
     it("should clear the reply to field when swapping rooms", () => {
         cy.createRoom({ name: "Other Room" })
             .as("roomA")
-            .then(() => cy.contains(".mx_RoomSublist", "Other Room"));
+            .then(() => cy.findByRole("treeitem", { name: "Other Room" }));
         cy.get<string>("@roomId").then((roomId) => {
             return cy.sendEvent(roomId, null, "m.room.message", {
                 body: "Hello world",
@@ -337,20 +385,24 @@ describe("Sliding Sync", () => {
             });
         });
         // select the room
-        cy.contains(".mx_RoomTile", "Test Room").click();
+        cy.findByRole("treeitem", { name: "Test Room" }).click();
         cy.get(".mx_ReplyPreview").should("not.exist");
         // click reply-to on the Hello World message
-        cy.contains(".mx_EventTile", "Hello world")
-            .find('.mx_AccessibleButton[aria-label="Reply"]')
-            .click({ force: true });
+        cy.get(".mx_EventTile_last")
+            .within(() => {
+                cy.findByText("Hello world", { timeout: 1000 });
+            })
+            .realHover()
+            .findByRole("button", { name: "Reply" })
+            .click();
         // check it's visible
         cy.get(".mx_ReplyPreview").should("exist");
         // now click Other Room
-        cy.contains(".mx_RoomTile", "Other Room").click();
+        cy.findByRole("treeitem", { name: "Other Room" }).click();
         // ensure the reply-to disappears
         cy.get(".mx_ReplyPreview").should("not.exist");
         // click back
-        cy.contains(".mx_RoomTile", "Test Room").click();
+        cy.findByRole("treeitem", { name: "Test Room" }).click();
         // ensure the reply-to reappears
         cy.get(".mx_ReplyPreview").should("exist");
     });
@@ -378,12 +430,17 @@ describe("Sliding Sync", () => {
                 });
         });
         // select the room
-        cy.contains(".mx_RoomTile", "Test Room").click();
+        cy.findByRole("treeitem", { name: "Test Room" }).click();
         cy.get(".mx_ReplyPreview").should("not.exist");
         // click reply-to on the Reply to me message
-        cy.contains(".mx_EventTile", "Reply to me")
-            .find('.mx_AccessibleButton[aria-label="Reply"]')
-            .click({ force: true });
+        cy.get(".mx_EventTile")
+            .last()
+            .within(() => {
+                cy.findByText("Reply to me");
+            })
+            .realHover()
+            .findByRole("button", { name: "Reply" })
+            .click();
         // check it's visible
         cy.get(".mx_ReplyPreview").should("exist");
         // now click on the permalink for Permalink me
@@ -401,15 +458,15 @@ describe("Sliding Sync", () => {
         cy.createRoom({ name: "Apple" })
             .as("roomA")
             .then((roomId) => (roomAId = roomId))
-            .then(() => cy.contains(".mx_RoomSublist", "Apple"));
+            .then(() => cy.findByRole("treeitem", { name: "Apple" }));
 
         cy.createRoom({ name: "Pineapple" })
             .as("roomP")
             .then((roomId) => (roomPId = roomId))
-            .then(() => cy.contains(".mx_RoomSublist", "Pineapple"));
+            .then(() => cy.findByRole("treeitem", { name: "Pineapple" }));
         cy.createRoom({ name: "Orange" })
             .as("roomO")
-            .then(() => cy.contains(".mx_RoomSublist", "Orange"));
+            .then(() => cy.findByRole("treeitem", { name: "Orange" }));
 
         // Intercept all calls to /sync
         cy.intercept({ method: "POST", url: "**/sync*" }).as("syncRequest");
@@ -426,7 +483,7 @@ describe("Sliding Sync", () => {
         };
 
         // Select the Test Room
-        cy.contains(".mx_RoomTile", "Apple").click();
+        cy.findByRole("treeitem", { name: "Apple" }).click();
 
         // and wait for cypress to get the result as alias
         cy.wait("@syncRequest").then((interception) => {
@@ -435,11 +492,11 @@ describe("Sliding Sync", () => {
         });
 
         // Switch to another room
-        cy.contains(".mx_RoomTile", "Pineapple").click();
+        cy.findByRole("treeitem", { name: "Pineapple" }).click();
         cy.wait("@syncRequest").then((interception) => assertUnsubExists(interception, roomPId, roomAId));
 
         // And switch to even another room
-        cy.contains(".mx_RoomTile", "Apple").click();
+        cy.findByRole("treeitem", { name: "Apple" }).click();
         cy.wait("@syncRequest").then((interception) => assertUnsubExists(interception, roomPId, roomAId));
 
         // TODO: Add tests for encrypted rooms
