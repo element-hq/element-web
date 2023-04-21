@@ -21,7 +21,6 @@ import { getVectorConfig } from "../../../src/vector/getconfig";
 fetchMock.config.overwriteRoutes = true;
 
 describe("getVectorConfig()", () => {
-    const prevDocumentDomain = document.domain;
     const elementDomain = "app.element.io";
     const now = 1234567890;
     const specificConfig = {
@@ -32,7 +31,9 @@ describe("getVectorConfig()", () => {
     };
 
     beforeEach(() => {
-        document.domain = elementDomain;
+        window.location = {
+            hostname: elementDomain,
+        } as unknown as Location;
 
         // stable value for cachebuster
         jest.spyOn(Date, "now").mockReturnValue(now);
@@ -41,7 +42,6 @@ describe("getVectorConfig()", () => {
     });
 
     afterAll(() => {
-        document.domain = prevDocumentDomain;
         jest.spyOn(Date, "now").mockRestore();
     });
 

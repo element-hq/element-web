@@ -71,7 +71,7 @@ function checkBrowserFeatures(): boolean {
     // ES2019: http://262.ecma-international.org/10.0/#sec-object.fromentries
     window.Modernizr.addTest("objectfromentries", () => typeof window.Object?.fromEntries === "function");
 
-    const featureList = Object.keys(window.Modernizr);
+    const featureList = Object.keys(window.Modernizr) as Array<keyof ModernizrStatic>;
 
     let featureComplete = true;
     for (const feature of featureList) {
@@ -240,7 +240,7 @@ start().catch((err) => {
     logger.error(err);
     // show the static error in an iframe to not lose any context / console data
     // with some basic styling to make the iframe full page
-    delete document.body.style.height;
+    document.body.style.removeProperty("height");
     const iframe = document.createElement("iframe");
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - typescript seems to only like the IE syntax for iframe sandboxing
@@ -254,5 +254,5 @@ start().catch((err) => {
     iframe.style.right = "0";
     iframe.style.bottom = "0";
     iframe.style.border = "0";
-    document.getElementById("matrixchat").appendChild(iframe);
+    document.getElementById("matrixchat")?.appendChild(iframe);
 });

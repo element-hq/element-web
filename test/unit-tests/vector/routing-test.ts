@@ -18,7 +18,6 @@ import { onNewScreen } from "../../../src/vector/routing";
 
 describe("onNewScreen", () => {
     it("should replace history if stripping via fields", () => {
-        delete window.location;
         window.location = {
             hash: "#/room/!room:server?via=abc",
             replace: jest.fn(),
@@ -30,7 +29,6 @@ describe("onNewScreen", () => {
     });
 
     it("should not replace history if changing rooms", () => {
-        delete window.location;
         window.location = {
             hash: "#/room/!room1:server?via=abc",
             replace: jest.fn(),

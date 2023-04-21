@@ -20,7 +20,7 @@ import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import VectorAuthFooter from "./VectorAuthFooter";
 
 export default class VectorAuthPage extends React.PureComponent {
-    private static welcomeBackgroundUrl;
+    private static welcomeBackgroundUrl?: string;
 
     // cache the url as a static to prevent it changing without refreshing
     private static getWelcomeBackgroundUrl(): string {

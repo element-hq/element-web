@@ -41,7 +41,6 @@ describe("WebPlatform", () => {
     });
 
     it("should call reload on window location object", () => {
-        delete window.location;
         window.location = {
             reload: jest.fn(),
         } as unknown as Location;
@@ -53,7 +52,6 @@ describe("WebPlatform", () => {
     });
 
     it("should call reload to install update", () => {
-        delete window.location;
         window.location = {
             reload: jest.fn(),
         } as unknown as Location;
@@ -73,9 +71,7 @@ describe("WebPlatform", () => {
                 "develop.element.io: Chrome on macOS",
             ],
         ])("%s & %s = %s", (url, userAgent, result) => {
-            delete window.navigator;
             window.navigator = { userAgent } as unknown as Navigator;
-            delete window.location;
             window.location = { href: url } as unknown as Location;
             const platform = new WebPlatform();
             expect(platform.getDefaultDeviceDisplayName()).toEqual(result);

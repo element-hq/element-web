@@ -33,6 +33,9 @@ export class IPCManager {
         private readonly sendChannel: ElectronChannel = "ipcCall",
         private readonly recvChannel: ElectronChannel = "ipcReply",
     ) {
+        if (!window.electron) {
+            throw new Error("Cannot instantiate ElectronPlatform, window.electron is not set");
+        }
         window.electron.on(this.recvChannel, this.onIpcReply);
     }
 
@@ -42,7 +45,7 @@ export class IPCManager {
         const deferred = defer<any>();
         this.pendingIpcCalls[ipcCallId] = deferred;
         // Maybe add a timeout to these? Probably not necessary.
-        window.electron.send(this.sendChannel, { id: ipcCallId, name, args });
+        window.electron!.send(this.sendChannel, { id: ipcCallId, name, args });
         return deferred.promise;
     }
 

@@ -19,6 +19,7 @@ import BaseEventIndexManager, {
     IEventAndProfile,
     IIndexStats,
     ISearchArgs,
+    ILoadArgs,
 } from "matrix-react-sdk/src/indexing/BaseEventIndexManager";
 import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 
@@ -75,7 +76,7 @@ export class SeshatIndexManager extends BaseEventIndexManager {
         return this.ipc.call("removeCrawlerCheckpoint", checkpoint);
     }
 
-    public async loadFileEvents(args): Promise<IEventAndProfile[]> {
+    public async loadFileEvents(args: ILoadArgs): Promise<IEventAndProfile[]> {
         return this.ipc.call("loadFileEvents", args);
     }
 
