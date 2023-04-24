@@ -136,8 +136,8 @@ jobs:
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@a29a621b736c9a8547ba0236cc9cee1e49725bd5
-              working-directory: matrix-react-sdk
               with:
+                  working-directory: matrix-react-sdk
                   # The built-in Electron runner seems to grind to a halt trying
                   # to run the tests, so use chrome.
                   browser: "${{ env.BROWSER_PATH }}"
