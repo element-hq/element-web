@@ -310,7 +310,11 @@ export default class DeviceListener {
         const newUnverifiedDeviceIds = new Set<string>();
 
         const isCurrentDeviceTrusted =
-            crossSigningReady && (await cli.checkDeviceTrust(cli.getUserId()!, cli.deviceId!).isCrossSigningVerified());
+            crossSigningReady &&
+            Boolean(
+                (await cli.getCrypto()?.getDeviceVerificationStatus(cli.getUserId()!, cli.deviceId!))
+                    ?.crossSigningVerified,
+            );
 
         // as long as cross-signing isn't ready,
         // you can't see or dismiss any device toasts
@@ -319,8 +323,10 @@ export default class DeviceListener {
             for (const device of devices) {
                 if (device.deviceId === cli.deviceId) continue;
 
-                const deviceTrust = await cli.checkDeviceTrust(cli.getUserId()!, device.deviceId!);
-                if (!deviceTrust.isCrossSigningVerified() && !this.dismissed.has(device.deviceId)) {
+                const deviceTrust = await cli
+                    .getCrypto()!
+                    .getDeviceVerificationStatus(cli.getUserId()!, device.deviceId!);
+                if (!deviceTrust?.crossSigningVerified && !this.dismissed.has(device.deviceId)) {
                     if (this.ourDeviceIdsAtStart?.has(device.deviceId)) {
                         oldUnverifiedDeviceIds.add(device.deviceId);
                     } else {

@@ -26,14 +26,15 @@ import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
 import { deleteDevicesWithInteractiveAuth } from "./devices/deleteDevices";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { isDeviceVerified } from "../../../utils/device/isDeviceVerified";
+import { fetchExtendedDeviceInformation } from "./devices/useOwnDevices";
+import { DevicesDictionary, ExtendedDevice } from "./devices/types";
 
 interface IProps {
     className?: string;
 }
 
 interface IState {
-    devices: IMyDevice[];
+    devices?: DevicesDictionary;
     deviceLoadError?: string;
     selectedDevices: string[];
     deleting?: boolean;
@@ -47,7 +48,6 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         this.state = {
-            devices: [],
             selectedDevices: [],
         };
         this.loadDevices = this.loadDevices.bind(this);
@@ -70,18 +70,16 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
 
     private loadDevices(): void {
         const cli = this.context;
-        cli.getDevices().then(
-            (resp) => {
+        fetchExtendedDeviceInformation(cli).then(
+            (devices) => {
                 if (this.unmounted) {
                     return;
                 }
 
                 this.setState((state, props) => {
-                    const deviceIds = resp.devices.map((device) => device.device_id);
-                    const selectedDevices = state.selectedDevices.filter((deviceId) => deviceIds.includes(deviceId));
                     return {
-                        devices: resp.devices || [],
-                        selectedDevices,
+                        devices: devices,
+                        selectedDevices: state.selectedDevices.filter((deviceId) => devices.hasOwnProperty(deviceId)),
                     };
                 });
             },
@@ -117,10 +115,6 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
         const idA = a.device_id;
         const idB = b.device_id;
         return idA < idB ? -1 : idA > idB ? 1 : 0;
-    }
-
-    private isDeviceVerified(device: IMyDevice): boolean | null {
-        return isDeviceVerified(this.context, device.device_id);
     }
 
     private onDeviceSelectionToggled = (device: IMyDevice): void => {
@@ -205,15 +199,15 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
         }
     };
 
-    private renderDevice = (device: IMyDevice): JSX.Element => {
-        const myDeviceId = this.context.getDeviceId();
-        const myDevice = this.state.devices.find((device) => device.device_id === myDeviceId);
+    private renderDevice = (device: ExtendedDevice): JSX.Element => {
+        const myDeviceId = this.context.getDeviceId()!;
+        const myDevice = this.state.devices?.[myDeviceId];
 
         const isOwnDevice = device.device_id === myDeviceId;
 
         // If our own device is unverified, it can't verify other
         // devices, it can only request verification for itself
-        const canBeVerified = (myDevice && this.isDeviceVerified(myDevice)) || isOwnDevice;
+        const canBeVerified = (myDevice && myDevice.isVerified) || isOwnDevice;
 
         return (
             <DevicesPanelEntry
@@ -221,7 +215,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
                 device={device}
                 selected={this.state.selectedDevices.includes(device.device_id)}
                 isOwnDevice={isOwnDevice}
-                verified={this.isDeviceVerified(device)}
+                verified={device.isVerified}
                 canBeVerified={canBeVerified}
                 onDeviceChange={this.loadDevices}
                 onDeviceToggled={this.onDeviceSelectionToggled}
@@ -242,21 +236,21 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
             return <Spinner />;
         }
 
-        const myDeviceId = this.context.getDeviceId();
-        const myDevice = devices.find((device) => device.device_id === myDeviceId);
+        const myDeviceId = this.context.getDeviceId()!;
+        const myDevice = devices[myDeviceId];
 
         if (!myDevice) {
             return loadError;
         }
 
-        const otherDevices = devices.filter((device) => device.device_id !== myDeviceId);
+        const otherDevices = Object.values(devices).filter((device) => device.device_id !== myDeviceId);
         otherDevices.sort(this.deviceCompare);
 
-        const verifiedDevices: IMyDevice[] = [];
-        const unverifiedDevices: IMyDevice[] = [];
-        const nonCryptoDevices: IMyDevice[] = [];
+        const verifiedDevices: ExtendedDevice[] = [];
+        const unverifiedDevices: ExtendedDevice[] = [];
+        const nonCryptoDevices: ExtendedDevice[] = [];
         for (const device of otherDevices) {
-            const verified = this.isDeviceVerified(device);
+            const verified = device.isVerified;
             if (verified === true) {
                 verifiedDevices.push(device);
             } else if (verified === false) {
@@ -266,7 +260,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
             }
         }
 
-        const section = (trustIcon: JSX.Element, title: string, deviceList: IMyDevice[]): JSX.Element => {
+        const section = (trustIcon: JSX.Element, title: string, deviceList: ExtendedDevice[]): JSX.Element => {
             if (deviceList.length === 0) {
                 return <React.Fragment />;
             }

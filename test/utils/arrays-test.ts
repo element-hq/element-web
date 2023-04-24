@@ -30,6 +30,7 @@ import {
     GroupedArray,
     concat,
     asyncEvery,
+    asyncSome,
 } from "../../src/utils/arrays";
 
 type TestParams = { input: number[]; output: number[] };
@@ -439,6 +440,29 @@ describe("arrays", () => {
         it("when called with some items and the predicate resolves to false for one of them, it should return false", async () => {
             const predicate = jest.fn().mockResolvedValueOnce(true).mockResolvedValueOnce(false);
             expect(await asyncEvery([1, 2, 3], predicate)).toBe(false);
+            expect(predicate).toHaveBeenCalledTimes(2);
+            expect(predicate).toHaveBeenCalledWith(1);
+            expect(predicate).toHaveBeenCalledWith(2);
+        });
+    });
+
+    describe("asyncSome", () => {
+        it("when called with an empty array, it should return false", async () => {
+            expect(await asyncSome([], jest.fn().mockResolvedValue(true))).toBe(false);
+        });
+
+        it("when called with some items and the predicate resolves to false for all of them, it should return false", async () => {
+            const predicate = jest.fn().mockResolvedValue(false);
+            expect(await asyncSome([1, 2, 3], predicate)).toBe(false);
+            expect(predicate).toHaveBeenCalledTimes(3);
+            expect(predicate).toHaveBeenCalledWith(1);
+            expect(predicate).toHaveBeenCalledWith(2);
+            expect(predicate).toHaveBeenCalledWith(3);
+        });
+
+        it("when called with some items and the predicate resolves to true, it should short-circuit and return true", async () => {
+            const predicate = jest.fn().mockResolvedValueOnce(false).mockResolvedValueOnce(true);
+            expect(await asyncSome([1, 2, 3], predicate)).toBe(true);
             expect(predicate).toHaveBeenCalledTimes(2);
             expect(predicate).toHaveBeenCalledWith(1);
             expect(predicate).toHaveBeenCalledWith(2);

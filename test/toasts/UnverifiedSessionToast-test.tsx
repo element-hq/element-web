@@ -18,9 +18,8 @@ import React from "react";
 import { render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked, Mocked } from "jest-mock";
-import { IMyDevice, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { CryptoApi, DeviceVerificationStatus, IMyDevice, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
-import { DeviceTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 
 import dis from "../../src/dispatcher/dispatcher";
 import { showToast } from "../../src/toasts/UnverifiedSessionToast";
@@ -55,7 +54,11 @@ describe("UnverifiedSessionToast", () => {
 
             return null;
         });
-        client.checkDeviceTrust.mockReturnValue(new DeviceTrustLevel(true, false, false, false));
+        client.getCrypto.mockReturnValue({
+            getDeviceVerificationStatus: jest
+                .fn()
+                .mockResolvedValue(new DeviceVerificationStatus({ crossSigningVerified: true })),
+        } as unknown as CryptoApi);
         jest.spyOn(dis, "dispatch");
         jest.spyOn(DeviceListener.sharedInstance(), "dismissUnverifiedSessions");
     });

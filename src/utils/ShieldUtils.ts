@@ -18,6 +18,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import DMRoomMap from "./DMRoomMap";
+import { asyncSome } from "./arrays";
 
 export enum E2EStatus {
     Warning = "warning",
@@ -54,8 +55,9 @@ export async function shieldStatusForRoom(client: MatrixClient, room: Room): Pro
     const targets = includeUser ? [...verified, client.getUserId()!] : verified;
     for (const userId of targets) {
         const devices = client.getStoredDevicesForUser(userId);
-        const anyDeviceNotVerified = devices.some(({ deviceId }) => {
-            return !client.checkDeviceTrust(userId, deviceId).isVerified();
+        const anyDeviceNotVerified = await asyncSome(devices, async ({ deviceId }) => {
+            const verificationStatus = await client.getCrypto()?.getDeviceVerificationStatus(userId, deviceId);
+            return !verificationStatus?.isVerified();
         });
         if (anyDeviceNotVerified) {
             return E2EStatus.Warning;

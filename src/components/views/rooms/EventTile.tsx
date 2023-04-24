@@ -265,6 +265,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
+    private unmounted = false;
+
     public constructor(props: EventTileProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
@@ -420,6 +422,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             this.props.mxEvent.removeListener(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
         }
         this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
+        this.unmounted = false;
     }
 
     public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
@@ -561,7 +564,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.verifyEvent();
     };
 
-    private verifyEvent(): void {
+    private async verifyEvent(): Promise<void> {
         // if the event was edited, show the verification info for the edit, not
         // the original
         const mxEvent = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
@@ -590,7 +593,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
 
         const eventSenderTrust =
-            encryptionInfo.sender && MatrixClientPeg.get().checkDeviceTrust(senderId, encryptionInfo.sender.deviceId);
+            senderId &&
+            encryptionInfo.sender &&
+            (await MatrixClientPeg.get()
+                .getCrypto()
+                ?.getDeviceVerificationStatus(senderId, encryptionInfo.sender.deviceId));
+
+        if (this.unmounted) return;
+
         if (!eventSenderTrust) {
             this.setState({ verified: E2EState.Unknown });
             return;

@@ -2256,7 +2256,6 @@
     "Room settings": "Room settings",
     "Trusted": "Trusted",
     "Not trusted": "Not trusted",
-    "Unable to load session list": "Unable to load session list",
     "%(count)s verified sessions|other": "%(count)s verified sessions",
     "%(count)s verified sessions|one": "1 verified session",
     "Hide verified sessions": "Hide verified sessions",

@@ -22,21 +22,25 @@ import DMRoomMap from "../../src/utils/DMRoomMap";
 function mkClient(selfTrust = false) {
     return {
         getUserId: () => "@self:localhost",
+        getCrypto: () => ({
+            getDeviceVerificationStatus: (userId: string, deviceId: string) =>
+                Promise.resolve({
+                    isVerified: () => (userId === "@self:localhost" ? selfTrust : userId[2] == "T"),
+                }),
+        }),
         checkUserTrust: (userId: string) => ({
             isCrossSigningVerified: () => userId[1] == "T",
             wasCrossSigningVerified: () => userId[1] == "T" || userId[1] == "W",
-        }),
-        checkDeviceTrust: (userId: string, deviceId: string) => ({
-            isVerified: () => (userId === "@self:localhost" ? selfTrust : userId[2] == "T"),
         }),
         getStoredDevicesForUser: (userId: string) => ["DEVICE"],
     } as unknown as MatrixClient;
 }
 
 describe("mkClient self-test", function () {
-    test.each([true, false])("behaves well for self-trust=%s", (v) => {
+    test.each([true, false])("behaves well for self-trust=%s", async (v) => {
         const client = mkClient(v);
-        expect(client.checkDeviceTrust("@self:localhost", "DEVICE").isVerified()).toBe(v);
+        const status = await client.getCrypto()!.getDeviceVerificationStatus("@self:localhost", "DEVICE");
+        expect(status?.isVerified()).toBe(v);
     });
 
     test.each([
@@ -53,8 +57,9 @@ describe("mkClient self-test", function () {
         ["@TF:h", false],
         ["@FT:h", true],
         ["@FF:h", false],
-    ])("behaves well for device trust %s", (userId, trust) => {
-        expect(mkClient().checkDeviceTrust(userId, "device").isVerified()).toBe(trust);
+    ])("behaves well for device trust %s", async (userId, trust) => {
+        const status = await mkClient().getCrypto()!.getDeviceVerificationStatus(userId, "device");
+        expect(status?.isVerified()).toBe(trust);
     });
 });
 

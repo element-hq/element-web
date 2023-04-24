@@ -79,6 +79,7 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-messages";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import { asyncSome } from "../../../utils/arrays";
 
 export interface IDevice extends DeviceInfo {
     ambiguous?: boolean;
@@ -101,22 +102,22 @@ export const disambiguateDevices = (devices: IDevice[]): void => {
     }
 };
 
-export const getE2EStatus = (cli: MatrixClient, userId: string, devices: IDevice[]): E2EStatus => {
+export const getE2EStatus = async (cli: MatrixClient, userId: string, devices: IDevice[]): Promise<E2EStatus> => {
     const isMe = userId === cli.getUserId();
     const userTrust = cli.checkUserTrust(userId);
     if (!userTrust.isCrossSigningVerified()) {
         return userTrust.wasCrossSigningVerified() ? E2EStatus.Warning : E2EStatus.Normal;
     }
 
-    const anyDeviceUnverified = devices.some((device) => {
+    const anyDeviceUnverified = await asyncSome(devices, async (device) => {
         const { deviceId } = device;
         // For your own devices, we use the stricter check of cross-signing
         // verification to encourage everyone to trust their own devices via
         // cross-signing so that other users can then safely trust you.
         // For other people's devices, the more general verified check that
         // includes locally verified devices can be used.
-        const deviceTrust = cli.checkDeviceTrust(userId, deviceId);
-        return isMe ? !deviceTrust.isCrossSigningVerified() : !deviceTrust.isVerified();
+        const deviceTrust = await cli.getCrypto()?.getDeviceVerificationStatus(userId, deviceId);
+        return isMe ? !deviceTrust?.crossSigningVerified : !deviceTrust?.isVerified();
     });
     return anyDeviceUnverified ? E2EStatus.Warning : E2EStatus.Verified;
 };
@@ -161,14 +162,20 @@ function useHasCrossSigningKeys(
 export function DeviceItem({ userId, device }: { userId: string; device: IDevice }): JSX.Element {
     const cli = useContext(MatrixClientContext);
     const isMe = userId === cli.getUserId();
-    const deviceTrust = cli.checkDeviceTrust(userId, device.deviceId);
     const userTrust = cli.checkUserTrust(userId);
-    // For your own devices, we use the stricter check of cross-signing
-    // verification to encourage everyone to trust their own devices via
-    // cross-signing so that other users can then safely trust you.
-    // For other people's devices, the more general verified check that
-    // includes locally verified devices can be used.
-    const isVerified = isMe ? deviceTrust.isCrossSigningVerified() : deviceTrust.isVerified();
+
+    /** is the device verified? */
+    const isVerified = useAsyncMemo(async () => {
+        const deviceTrust = await cli.getCrypto()?.getDeviceVerificationStatus(userId, device.deviceId);
+        if (!deviceTrust) return false;
+
+        // For your own devices, we use the stricter check of cross-signing
+        // verification to encourage everyone to trust their own devices via
+        // cross-signing so that other users can then safely trust you.
+        // For other people's devices, the more general verified check that
+        // includes locally verified devices can be used.
+        return isMe ? deviceTrust.crossSigningVerified : deviceTrust.isVerified();
+    }, [cli, userId, device]);
 
     const classes = classNames("mx_UserInfo_device", {
         mx_UserInfo_device_verified: isVerified,
@@ -199,7 +206,10 @@ export function DeviceItem({ userId, device }: { userId: string; device: IDevice
     let trustedLabel: string | undefined;
     if (userTrust.isVerified()) trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
 
-    if (isVerified) {
+    if (isVerified === undefined) {
+        // we're still deciding if the device is verified
+        return <div className={classes} title={device.deviceId} />;
+    } else if (isVerified) {
         return (
             <div className={classes} title={device.deviceId}>
                 <div className={iconClasses} />
@@ -232,15 +242,17 @@ function DevicesSection({
 
     const [isExpanded, setExpanded] = useState(false);
 
-    if (loading) {
+    const deviceTrusts = useAsyncMemo(() => {
+        const cryptoApi = cli.getCrypto();
+        if (!cryptoApi) return Promise.resolve(undefined);
+        return Promise.all(devices.map((d) => cryptoApi.getDeviceVerificationStatus(userId, d.deviceId)));
+    }, [cli, userId, devices]);
+
+    if (loading || deviceTrusts === undefined) {
         // still loading
         return <Spinner />;
     }
-    if (devices === null) {
-        return <p>{_t("Unable to load session list")}</p>;
-    }
     const isMe = userId === cli.getUserId();
-    const deviceTrusts = devices.map((d) => cli.checkDeviceTrust(userId, d.deviceId));
 
     let expandSectionDevices: IDevice[] = [];
     const unverifiedDevices: IDevice[] = [];
@@ -258,7 +270,7 @@ function DevicesSection({
             // cross-signing so that other users can then safely trust you.
             // For other people's devices, the more general verified check that
             // includes locally verified devices can be used.
-            const isVerified = isMe ? deviceTrust.isCrossSigningVerified() : deviceTrust.isVerified();
+            const isVerified = deviceTrust && (isMe ? deviceTrust.crossSigningVerified : deviceTrust.isVerified());
 
             if (isVerified) {
                 expandSectionDevices.push(device);
@@ -1611,10 +1623,12 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     const isRoomEncrypted = useIsEncrypted(cli, room);
     const devices = useDevices(user.userId) ?? [];
 
-    let e2eStatus: E2EStatus | undefined;
-    if (isRoomEncrypted && devices) {
-        e2eStatus = getE2EStatus(cli, user.userId, devices);
-    }
+    const e2eStatus = useAsyncMemo(async () => {
+        if (!isRoomEncrypted || !devices) {
+            return undefined;
+        }
+        return await getE2EStatus(cli, user.userId, devices);
+    }, [cli, isRoomEncrypted, user.userId, devices]);
 
     const classes = ["mx_UserInfo"];
 

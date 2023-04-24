@@ -324,6 +324,16 @@ export async function asyncEvery<T>(values: T[], predicate: (value: T) => Promis
     return true;
 }
 
+/**
+ * Async version of Array.some.
+ */
+export async function asyncSome<T>(values: T[], predicate: (value: T) => Promise<boolean>): Promise<boolean> {
+    for (const value of values) {
+        if (await predicate(value)) return true;
+    }
+    return false;
+}
+
 export function filterBoolean<T>(values: Array<T | null | undefined>): T[] {
     return values.filter(Boolean) as T[];
 }

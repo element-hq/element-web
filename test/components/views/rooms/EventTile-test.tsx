@@ -19,7 +19,7 @@ import { render, waitFor, screen, act, fireEvent } from "@testing-library/react"
 import { mocked } from "jest-mock";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { TweakName } from "matrix-js-sdk/src/matrix";
+import { CryptoApi, TweakName } from "matrix-js-sdk/src/matrix";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { DeviceTrustLevel, UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
@@ -30,7 +30,7 @@ import EventTile, { EventTileProps } from "../../../../src/components/views/room
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { getRoomContext, mkEncryptedEvent, mkEvent, mkMessage, stubClient } from "../../../test-utils";
+import { flushPromises, getRoomContext, mkEncryptedEvent, mkEvent, mkMessage, stubClient } from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import dis from "../../../../src/dispatcher/dispatcher";
@@ -221,13 +221,16 @@ describe("EventTile", () => {
             // a version of checkDeviceTrust which says that TRUSTED_DEVICE is trusted, and others are not.
             const trustedDeviceTrustLevel = DeviceTrustLevel.fromUserTrustLevel(trustedUserTrustLevel, true, false);
             const untrustedDeviceTrustLevel = DeviceTrustLevel.fromUserTrustLevel(trustedUserTrustLevel, false, false);
-            client.checkDeviceTrust = (userId, deviceId) => {
-                if (deviceId === TRUSTED_DEVICE.deviceId) {
-                    return trustedDeviceTrustLevel;
-                } else {
-                    return untrustedDeviceTrustLevel;
-                }
-            };
+            const mockCrypto = {
+                getDeviceVerificationStatus: async (userId: string, deviceId: string) => {
+                    if (deviceId === TRUSTED_DEVICE.deviceId) {
+                        return trustedDeviceTrustLevel;
+                    } else {
+                        return untrustedDeviceTrustLevel;
+                    }
+                },
+            } as unknown as CryptoApi;
+            client.getCrypto = () => mockCrypto;
         });
 
         it("shows a warning for an event from an unverified device", async () => {
@@ -243,6 +246,7 @@ describe("EventTile", () => {
             } as IEncryptedEventInfo);
 
             const { container } = getComponent();
+            await act(flushPromises);
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -270,6 +274,7 @@ describe("EventTile", () => {
             } as IEncryptedEventInfo);
 
             const { container } = getComponent();
+            await act(flushPromises);
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -295,6 +300,7 @@ describe("EventTile", () => {
             } as IEncryptedEventInfo);
 
             const { container } = getComponent();
+            await act(flushPromises);
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -317,8 +323,9 @@ describe("EventTile", () => {
                 sender: UNTRUSTED_DEVICE,
             } as IEncryptedEventInfo);
 
-            act(() => {
+            await act(async () => {
                 mxEvent.makeReplaced(replacementEvent);
+                flushPromises();
             });
 
             // check it was updated
@@ -345,6 +352,7 @@ describe("EventTile", () => {
             } as IEncryptedEventInfo);
 
             const { container } = getComponent();
+            await act(flushPromises);
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -363,8 +371,9 @@ describe("EventTile", () => {
                 event: true,
             });
 
-            act(() => {
+            await act(async () => {
                 mxEvent.makeReplaced(replacementEvent);
+                await flushPromises();
             });
 
             // check it was updated

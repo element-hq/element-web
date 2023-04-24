@@ -1073,9 +1073,9 @@ export const Commands = [
                                     },
                                 );
                             }
-                            const deviceTrust = await cli.checkDeviceTrust(userId, deviceId);
+                            const deviceTrust = await cli.getCrypto()?.getDeviceVerificationStatus(userId, deviceId);
 
-                            if (deviceTrust.isVerified()) {
+                            if (deviceTrust?.isVerified()) {
                                 if (device.getFingerprint() === fingerprint) {
                                     throw new UserFriendlyError("Session already verified!");
                                 } else {

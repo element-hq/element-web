@@ -109,14 +109,20 @@ export class SetupEncryptionStore extends EventEmitter {
         const dehydratedDevice = await cli.getDehydratedDevice();
         const ownUserId = cli.getUserId()!;
         const crossSigningInfo = cli.getStoredCrossSigningForUser(ownUserId);
-        this.hasDevicesToVerifyAgainst = cli
-            .getStoredDevicesForUser(ownUserId)
-            .some(
-                (device) =>
-                    device.getIdentityKey() &&
-                    (!dehydratedDevice || device.deviceId != dehydratedDevice.device_id) &&
-                    crossSigningInfo?.checkDeviceTrust(crossSigningInfo, device, false, true).isCrossSigningVerified(),
-            );
+        this.hasDevicesToVerifyAgainst = cli.getStoredDevicesForUser(ownUserId).some((device) => {
+            if (!device.getIdentityKey() || (dehydratedDevice && device.deviceId == dehydratedDevice?.device_id)) {
+                return false;
+            }
+            // check if the device is signed by the cross-signing key stored for our user. Note that this is
+            // *different* to calling `cryptoApi.getDeviceVerificationStatus`, because even if we have stored
+            // a cross-signing key for our user, we don't necessarily trust it yet (In legacy Crypto, we have not
+            // yet imported it into `Crypto.crossSigningInfo`, which for maximal confusion is a different object to
+            // `Crypto.getStoredCrossSigningForUser(ownUserId)`).
+            //
+            // TODO: figure out wtf to to here for rust-crypto
+            const verificationStatus = crossSigningInfo?.checkDeviceTrust(crossSigningInfo, device, false, true);
+            return !!verificationStatus?.isCrossSigningVerified();
+        });
 
         this.phase = Phase.Intro;
         this.emit("update");
