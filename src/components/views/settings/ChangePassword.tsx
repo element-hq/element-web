@@ -24,7 +24,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AccessibleButton from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
-import { _t, _td } from "../../../languageHandler";
+import { UserFriendlyError, _t, _td } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
 import { PASSWORD_MIN_SCORE } from "../auth/RegistrationForm";
@@ -48,7 +48,7 @@ interface IProps {
         /** Was one or more other devices logged out whilst changing the password */
         didLogoutOutOtherDevices: boolean;
     }) => void;
-    onError: (error: { error: string }) => void;
+    onError: (error: Error) => void;
     rowClassName?: string;
     buttonClassName?: string;
     buttonKind?: string;
@@ -183,7 +183,16 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                     }
                 },
                 (err) => {
-                    this.props.onError(err);
+                    if (err instanceof Error) {
+                        this.props.onError(err);
+                    } else {
+                        this.props.onError(
+                            new UserFriendlyError("Error while changing password: %(error)s", {
+                                error: String(err),
+                                cause: undefined,
+                            }),
+                        );
+                    }
                 },
             )
             .finally(() => {
@@ -196,15 +205,19 @@ export default class ChangePassword extends React.Component<IProps, IState> {
             });
     }
 
-    private checkPassword(oldPass: string, newPass: string, confirmPass: string): { error: string } | undefined {
+    /**
+     * Checks the `newPass` and throws an error if it is unacceptable.
+     * @param oldPass The old password
+     * @param newPass The new password that the user is trying to be set
+     * @param confirmPass The confirmation password where the user types the `newPass`
+     * again for confirmation and should match the `newPass` before we accept their new
+     * password.
+     */
+    private checkPassword(oldPass: string, newPass: string, confirmPass: string): void {
         if (newPass !== confirmPass) {
-            return {
-                error: _t("New passwords don't match"),
-            };
+            throw new UserFriendlyError("New passwords don't match");
         } else if (!newPass || newPass.length === 0) {
-            return {
-                error: _t("Passwords can't be empty"),
-            };
+            throw new UserFriendlyError("Passwords can't be empty");
         }
     }
 
@@ -307,11 +320,24 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         const oldPassword = this.state.oldPassword;
         const newPassword = this.state.newPassword;
         const confirmPassword = this.state.newPasswordConfirm;
-        const err = this.checkPassword(oldPassword, newPassword, confirmPassword);
-        if (err) {
-            this.props.onError(err);
-        } else {
+        try {
+            // TODO: We can remove this check (but should add some Cypress tests to
+            // sanity check this flow). This logic is redundant with the input field
+            // validation we do and `verifyFieldsBeforeSubmit()` above. See
+            // https://github.com/matrix-org/matrix-react-sdk/pull/10615#discussion_r1167364214
+            this.checkPassword(oldPassword, newPassword, confirmPassword);
             return this.onChangePassword(oldPassword, newPassword);
+        } catch (err) {
+            if (err instanceof Error) {
+                this.props.onError(err);
+            } else {
+                this.props.onError(
+                    new UserFriendlyError("Error while changing password: %(error)s", {
+                        error: String(err),
+                        cause: undefined,
+                    }),
+                );
+            }
         }
     };
 

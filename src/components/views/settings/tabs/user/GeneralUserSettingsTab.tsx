@@ -21,9 +21,9 @@ import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IDelegatedAuthConfig, M_AUTHENTICATION } from "matrix-js-sdk/src/matrix";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { HTTPError } from "matrix-js-sdk/src/matrix";
 
-import { _t } from "../../../../../languageHandler";
+import { UserFriendlyError, _t } from "../../../../../languageHandler";
 import ProfileSettings from "../../ProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -43,7 +43,7 @@ import Spinner from "../../../elements/Spinner";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
-import ErrorDialog from "../../../dialogs/ErrorDialog";
+import ErrorDialog, { extractErrorMessageFromError } from "../../../dialogs/ErrorDialog";
 import AccountPhoneNumbers from "../../account/PhoneNumbers";
 import AccountEmailAddresses from "../../account/EmailAddresses";
 import DiscoveryEmailAddresses from "../../discovery/EmailAddresses";
@@ -260,18 +260,35 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         PlatformPeg.get()?.setSpellCheckEnabled(spellCheckEnabled);
     };
 
-    private onPasswordChangeError = (err: { error: string } & MatrixError): void => {
-        // TODO: Figure out a design that doesn't involve replacing the current dialog
-        let errMsg = err.error || err.message || "";
-        if (err.httpStatus === 403) {
-            errMsg = _t("Failed to change password. Is your password correct?");
-        } else if (!errMsg) {
-            errMsg += ` (HTTP status ${err.httpStatus})`;
+    private onPasswordChangeError = (err: Error): void => {
+        logger.error("Failed to change password: " + err);
+
+        let underlyingError = err;
+        if (err instanceof UserFriendlyError && err.cause instanceof Error) {
+            underlyingError = err.cause;
         }
-        logger.error("Failed to change password: " + errMsg);
+
+        const errorMessage = extractErrorMessageFromError(
+            err,
+            _t("Unknown password change error (%(stringifiedError)s)", {
+                stringifiedError: String(err),
+            }),
+        );
+
+        let errorMessageToDisplay = errorMessage;
+        if (underlyingError instanceof HTTPError && underlyingError.httpStatus === 403) {
+            errorMessageToDisplay = _t("Failed to change password. Is your password correct?");
+        } else if (underlyingError instanceof HTTPError) {
+            errorMessageToDisplay = _t("%(errorMessage)s (HTTP status %(httpStatus)s)", {
+                errorMessage,
+                httpStatus: underlyingError.httpStatus,
+            });
+        }
+
+        // TODO: Figure out a design that doesn't involve replacing the current dialog
         Modal.createDialog(ErrorDialog, {
-            title: _t("Error"),
-            description: errMsg,
+            title: _t("Error changing password"),
+            description: errorMessageToDisplay,
         });
     };
 
