@@ -136,18 +136,18 @@ jobs:
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@a29a621b736c9a8547ba0236cc9cee1e49725bd5
+              working-directory: matrix-react-sdk
               with:
                   # The built-in Electron runner seems to grind to a halt trying
                   # to run the tests, so use chrome.
                   browser: "${{ env.BROWSER_PATH }}"
-                  start: npx serve -p 8080 webapp
+                  start: npx serve -p 8080 ../webapp
                   wait-on: "http://localhost:8080"
                   record: true
                   parallel: true
                   command-prefix: "yarn percy exec --parallel --"
                   config: '{"reporter":"cypress-multi-reporters", "reporterOptions": { "configFile": "cypress-ci-reporter-config.json" } }'
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}
-                  project: matrix-react-sdk
               env:
                   # pass the Dashboard record key as an environment variable
                   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
