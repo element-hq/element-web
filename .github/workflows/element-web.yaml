@@ -43,6 +43,7 @@ jobs:
               run: cp element.io/develop/config.json config.json
               working-directory: ./element-web
 
+            # After building we write the version file and the react-sdk sha so our cypress tests are from the same sha
             - name: Build
               env:
                   CI_PACKAGE: true
@@ -50,6 +51,7 @@ jobs:
               run: |
                   yarn build
                   echo $VERSION > webapp/version
+                  echo $GITHUB_SHA > webapp/sha
               working-directory: ./element-web
 
             - name: Upload Artifact

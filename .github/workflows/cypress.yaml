@@ -106,15 +106,6 @@ jobs:
                   # supposed to be covered by STIXGeneral.
                   tools: fonts-stix
 
-            - uses: actions/checkout@v3
-              with:
-                  # XXX: We're checking out untrusted code in a secure context
-                  # We need to be careful to not trust anything this code outputs/may do
-                  # We need to check this out to access the cypress tests which are on the head branch
-                  repository: ${{ github.event.workflow_run.head_repository.full_name }}
-                  ref: ${{ github.event.workflow_run.head_sha }}
-                  persist-credentials: false
-
             # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
             # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
             - name: 📥 Download artifact
@@ -123,6 +114,25 @@ jobs:
                   run_id: ${{ github.event.workflow_run.id }}
                   name: previewbuild
                   path: webapp
+
+            # The workflow_run.head_sha is the sha of the head commit but the element-web was built using a simulated
+            # merge commit - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
+            # so use the sha from the tarball for the checkout of the cypress tests
+            # to make sure we get a matching set of code and tests.
+            - name: Grab sha from webapp
+              id: sha
+              run: |
+                  echo "sha=$(cat webapp/sha)" >> $GITHUB_OUTPUT
+
+            - uses: actions/checkout@v3
+              with:
+                  # XXX: We're checking out untrusted code in a secure context
+                  # We need to be careful to not trust anything this code outputs/may do
+                  # We need to check this out to access the cypress tests which are on the head branch
+                  repository: ${{ github.event.workflow_run.head_repository.full_name }}
+                  ref: ${{ steps.sha.outputs.sha }}
+                  persist-credentials: false
+                  path: matrix-react-sdk
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@a29a621b736c9a8547ba0236cc9cee1e49725bd5
@@ -137,6 +147,7 @@ jobs:
                   command-prefix: "yarn percy exec --parallel --"
                   config: '{"reporter":"cypress-multi-reporters", "reporterOptions": { "configFile": "cypress-ci-reporter-config.json" } }'
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}
+                  project: matrix-react-sdk
               env:
                   # pass the Dashboard record key as an environment variable
                   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
