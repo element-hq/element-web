@@ -1,0 +1,11 @@
+Package: element-web
+License: Apache-2.0
+Vendor: support@element.io
+Architecture: all
+Maintainer: support@element.io
+Section: web
+Priority: optional
+Homepage: https://element.io/
+Version: ${Version}
+Description:
+  A feature-rich client for Matrix.org
