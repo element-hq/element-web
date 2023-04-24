@@ -189,12 +189,12 @@ export default class AutoDiscoveryUtils {
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
     public static buildValidatedConfigFromDiscovery(
-        serverName: string,
-        discoveryResult: ClientConfig,
+        serverName?: string,
+        discoveryResult?: ClientConfig,
         syntaxOnly = false,
         isSynthetic = false,
     ): ValidatedServerConfig {
-        if (!discoveryResult || !discoveryResult["m.homeserver"]) {
+        if (!discoveryResult?.["m.homeserver"]) {
             // This shouldn't happen without major misconfiguration, so we'll log a bit of information
             // in the log so we can find this bit of code but otherwise tell the user "it broke".
             logger.error("Ended up in a state of not knowing which homeserver to connect to.");
@@ -249,7 +249,7 @@ export default class AutoDiscoveryUtils {
             throw new UserFriendlyError("Unexpected error resolving homeserver configuration");
         }
 
-        let preferredHomeserverName = serverName ? serverName : hsResult["server_name"];
+        let preferredHomeserverName = serverName ?? hsResult["server_name"];
 
         const url = new URL(preferredHomeserverUrl);
         if (!preferredHomeserverName) preferredHomeserverName = url.hostname;
