@@ -182,7 +182,7 @@ export const TimelineEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack })
         return cli.sendEvent(context.room.roomId, eventType, content || {});
     };
 
-    let defaultContent = "";
+    let defaultContent: string | undefined;
 
     if (mxEvent) {
         const originalContent = mxEvent.getContent();
