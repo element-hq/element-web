@@ -151,6 +151,17 @@ describe("General user settings tab", () => {
 
                     // Make sure integration manager's toggle switch is enabled
                     cy.get(".mx_ToggleSwitch_enabled").should("be.visible");
+
+                    // Assert space between "Manage integrations" and the integration server address is set to 4px;
+                    cy.get(".mx_SetIntegrationManager_heading_manager").should("have.css", "column-gap", "4px");
+
+                    cy.get(".mx_SetIntegrationManager_heading_manager").within(() => {
+                        cy.get(".mx_SettingsTab_heading").should("have.text", "Manage integrations");
+
+                        // Assert the headings' inline end margin values are set to zero in favor of the column-gap declaration
+                        cy.get(".mx_SettingsTab_heading").should("have.css", "margin-inline-end", "0px");
+                        cy.get(".mx_SettingsTab_subheading").should("have.css", "margin-inline-end", "0px");
+                    });
                 });
 
             // Assert the account deactivation button is displayed
