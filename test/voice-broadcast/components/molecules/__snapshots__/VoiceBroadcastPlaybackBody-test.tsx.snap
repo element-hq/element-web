@@ -112,16 +112,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <span
+      <time
         class="mx_Clock"
+        datetime="PT0S"
       >
         00:00
-      </span>
-      <span
+      </time>
+      <time
         class="mx_Clock"
+        datetime="-PT23M42S"
       >
         -23:42
-      </span>
+      </time>
     </div>
   </div>
 </div>
@@ -223,16 +225,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a pause/not-live broadcast sh
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <span
+      <time
         class="mx_Clock"
+        datetime="PT0S"
       >
         00:00
-      </span>
-      <span
+      </time>
+      <time
         class="mx_Clock"
+        datetime="-PT23M42S"
       >
         -23:42
-      </span>
+      </time>
     </div>
   </div>
 </div>
@@ -346,16 +350,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast in pip mo
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <span
+      <time
         class="mx_Clock"
+        datetime="PT0S"
       >
         00:00
-      </span>
-      <span
+      </time>
+      <time
         class="mx_Clock"
+        datetime="-PT23M42S"
       >
         -23:42
-      </span>
+      </time>
     </div>
   </div>
 </div>
@@ -457,16 +463,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast should re
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <span
+      <time
         class="mx_Clock"
+        datetime="PT0S"
       >
         00:00
-      </span>
-      <span
+      </time>
+      <time
         class="mx_Clock"
+        datetime="-PT23M42S"
       >
         -23:42
-      </span>
+      </time>
     </div>
   </div>
 </div>
@@ -576,16 +584,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing/live broadcast shou
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <span
+      <time
         class="mx_Clock"
+        datetime="PT0S"
       >
         00:00
-      </span>
-      <span
+      </time>
+      <time
         class="mx_Clock"
+        datetime="-PT23M42S"
       >
         -23:42
-      </span>
+      </time>
     </div>
   </div>
 </div>
@@ -667,16 +677,18 @@ exports[`VoiceBroadcastPlaybackBody when rendering a stopped broadcast should re
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <span
+      <time
         class="mx_Clock"
+        datetime="PT0S"
       >
         00:00
-      </span>
-      <span
+      </time>
+      <time
         class="mx_Clock"
+        datetime="-PT23M42S"
       >
         -23:42
-      </span>
+      </time>
     </div>
   </div>
 </div>

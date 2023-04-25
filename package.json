@@ -104,6 +104,7 @@
         "parse5": "^6.0.1",
         "png-chunks-extract": "^1.0.0",
         "posthog-js": "1.53.2",
+        "proposal-temporal": "^0.9.0",
         "qrcode": "1.5.1",
         "re-resizable": "^6.9.0",
         "react": "17.0.2",
