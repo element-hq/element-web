@@ -1534,11 +1534,6 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.5.0.tgz#38b69c4e29d243944c5712cca7b674a3432056e6"
   integrity sha512-uL5kf7MqC+GxsGJtimPVbFliyaFinohTHSzohz31JTysktHsjRR2SC+vV7sy2/dstTWVdG9EGOnohyPsB+oi3A==
 
-"@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.6":
-  version "0.1.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.6.tgz#c0bdb9ab0d30179b8ef744d1b4010b0ad0ab9c3a"
-  integrity sha512-7hMffzw7KijxDyyH/eUyTfrLeCQHuyU3kaPOKGhcl3DZ3vx7bCncqjGMGTnxNPoP23I6gosvKSbO+3wYOT24Xg==
-
 "@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.7":
   version "0.1.0-alpha.7"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.7.tgz#136375b84fd8a7e698f70fc969f668e541a61313"
@@ -8203,24 +8198,6 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@25.0.0:
-  version "25.0.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-25.0.0.tgz#a46ecb62eb96d5e93e36bf3f318ba4b4a08d56bf"
-  integrity sha512-eI9v0JkIYrSfsjUVk6PeZrsR7c7Qh0tirsK2biMZ4jPQo9sx/iuBjlfAEPoVlwzQKTfakGryhit15FfPhucMnw==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.6"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.3.1"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "9"
-
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "25.0.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e3498f0668e30cd545cf0614e6e6e9203a9e359d"
@@ -8245,10 +8222,9 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.71.1:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.71.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.71.1.tgz#136bfbeb04b1e8d0f52eacbd083a723ac5d3980b"
-  integrity sha512-PddQ0f5XW2oWi6wBnoKMi1H+HOSa1bARW2VlyvynUyjyRPCbCuFoaHj6/lPvo5hV0jKpe1QWOSPM9QPeTLovww==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/621fdf13138edc8613b7afb9d44429dc9c72cd53"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.5.0"
@@ -8287,14 +8263,14 @@ matrix-react-sdk@3.71.1:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "25.0.0"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^1.3.1"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
     pako "^2.0.3"
     parse5 "^6.0.1"
     png-chunks-extract "^1.0.0"
-    posthog-js "1.51.5"
+    posthog-js "1.53.2"
     qrcode "1.5.1"
     re-resizable "^6.9.0"
     react "17.0.2"
@@ -10150,10 +10126,10 @@ postcss@^8.2.1, postcss@^8.3.11, postcss@^8.4.16, postcss@^8.4.21:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-posthog-js@1.51.5:
-  version "1.51.5"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.51.5.tgz#23f11f5e75690312301d596b6f1f795e5b423eb9"
-  integrity sha512-hhOreF51vvg97iKFZ4GFF4lwQVq1WWJXOJ59NbQVsXj+bVxDcX4vog0Yx40rfp4uWNnE/xRWQQEOwlKM2WkcjQ==
+posthog-js@1.53.2:
+  version "1.53.2"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.53.2.tgz#ea185f23d36e5fa0543b6e43a2df12cca4b9131e"
+  integrity sha512-/vSGeDEWNX8ZVvXu4DA+tdZXcc8gHjZl8Tb5cU97KXngQCOumsSimJTBeG/PI8X8R/mRWBbOmnllo72YWTrl1g==
   dependencies:
     fflate "^0.4.1"
     rrweb-snapshot "^1.1.14"
