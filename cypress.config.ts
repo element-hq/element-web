@@ -27,7 +27,7 @@ export default defineConfig({
             return require("./cypress/plugins/index.ts").default(on, config);
         },
         baseUrl: "http://localhost:8080",
-        specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
+        specPattern: "cypress/e2e/**/*.spec.{js,jsx,ts,tsx}",
     },
     env: {
         // Docker tag to use for `ghcr.io/matrix-org/sliding-sync` image.
