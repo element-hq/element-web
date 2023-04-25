@@ -22,9 +22,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../languageHandler";
 import AutoHideScrollbar from "./AutoHideScrollbar";
-import AccessibleButton from "../views/elements/AccessibleButton";
 import { PosthogScreenTracker, ScreenName } from "../../PosthogTrackers";
 import { NonEmptyArray } from "../../@types/common";
+import { RovingAccessibleButton, RovingTabIndexProvider } from "../../accessibility/RovingTabIndex";
 
 /**
  * Represents a tab for the TabbedView.
@@ -98,9 +98,10 @@ export default class TabbedView extends React.Component<IProps, IState> {
     }
 
     private renderTabLabel(tab: Tab): JSX.Element {
-        let classes = "mx_TabbedView_tabLabel ";
-
-        if (this.state.activeTabId === tab.id) classes += "mx_TabbedView_tabLabel_active";
+        const isActive = this.state.activeTabId === tab.id;
+        const classes = classNames("mx_TabbedView_tabLabel", {
+            mx_TabbedView_tabLabel_active: isActive,
+        });
 
         let tabIcon: JSX.Element | undefined;
         if (tab.icon) {
@@ -108,24 +109,35 @@ export default class TabbedView extends React.Component<IProps, IState> {
         }
 
         const onClickHandler = (): void => this.setActiveTab(tab);
+        const id = this.getTabId(tab);
 
         const label = _t(tab.label);
         return (
-            <AccessibleButton
+            <RovingAccessibleButton
                 className={classes}
                 key={"tab_label_" + tab.label}
                 onClick={onClickHandler}
                 data-testid={`settings-tab-${tab.id}`}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={id}
             >
                 {tabIcon}
-                <span className="mx_TabbedView_tabLabel_text">{label}</span>
-            </AccessibleButton>
+                <span className="mx_TabbedView_tabLabel_text" id={`${id}_label`}>
+                    {label}
+                </span>
+            </RovingAccessibleButton>
         );
     }
 
+    private getTabId(tab: Tab): string {
+        return `mx_tabpanel_${tab.id}`;
+    }
+
     private renderTabPanel(tab: Tab): React.ReactNode {
+        const id = this.getTabId(tab);
         return (
-            <div className="mx_TabbedView_tabPanel" key={"mx_tabpanel_" + tab.label}>
+            <div className="mx_TabbedView_tabPanel" key={id} id={id} aria-labelledby={`${id}_label`}>
                 <AutoHideScrollbar className="mx_TabbedView_tabPanelContent">{tab.body}</AutoHideScrollbar>
             </div>
         );
@@ -147,7 +159,23 @@ export default class TabbedView extends React.Component<IProps, IState> {
         return (
             <div className={tabbedViewClasses}>
                 {screenName && <PosthogScreenTracker screenName={screenName} />}
-                <div className="mx_TabbedView_tabLabels">{labels}</div>
+                <RovingTabIndexProvider
+                    handleLoop
+                    handleHomeEnd
+                    handleLeftRight={this.props.tabLocation == TabLocation.TOP}
+                    handleUpDown={this.props.tabLocation == TabLocation.LEFT}
+                >
+                    {({ onKeyDownHandler }) => (
+                        <div
+                            className="mx_TabbedView_tabLabels"
+                            role="tablist"
+                            aria-orientation={this.props.tabLocation == TabLocation.LEFT ? "vertical" : "horizontal"}
+                            onKeyDown={onKeyDownHandler}
+                        >
+                            {labels}
+                        </div>
+                    )}
+                </RovingTabIndexProvider>
                 {panel}
             </div>
         );

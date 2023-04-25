@@ -3,9 +3,11 @@
 exports[`<RoomSettingsDialog /> Settings tabs renders default tabs correctly 1`] = `
 NodeList [
   <div
+    aria-controls="mx_tabpanel_ROOM_GENERAL_TAB"
+    aria-selected="true"
     class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
     data-testid="settings-tab-ROOM_GENERAL_TAB"
-    role="button"
+    role="tab"
     tabindex="0"
   >
     <span
@@ -13,66 +15,79 @@ NodeList [
     />
     <span
       class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_GENERAL_TAB_label"
     >
       General
     </span>
   </div>,
   <div
-    class="mx_AccessibleButton mx_TabbedView_tabLabel "
+    aria-controls="mx_tabpanel_ROOM_SECURITY_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_SECURITY_TAB"
-    role="button"
-    tabindex="0"
+    role="tab"
+    tabindex="-1"
   >
     <span
       class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_securityIcon"
     />
     <span
       class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_SECURITY_TAB_label"
     >
       Security & Privacy
     </span>
   </div>,
   <div
-    class="mx_AccessibleButton mx_TabbedView_tabLabel "
+    aria-controls="mx_tabpanel_ROOM_ROLES_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_ROLES_TAB"
-    role="button"
-    tabindex="0"
+    role="tab"
+    tabindex="-1"
   >
     <span
       class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_rolesIcon"
     />
     <span
       class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_ROLES_TAB_label"
     >
       Roles & Permissions
     </span>
   </div>,
   <div
-    class="mx_AccessibleButton mx_TabbedView_tabLabel "
+    aria-controls="mx_tabpanel_ROOM_NOTIFICATIONS_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_NOTIFICATIONS_TAB"
-    role="button"
-    tabindex="0"
+    role="tab"
+    tabindex="-1"
   >
     <span
       class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_notificationsIcon"
     />
     <span
       class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_NOTIFICATIONS_TAB_label"
     >
       Notifications
     </span>
   </div>,
   <div
-    class="mx_AccessibleButton mx_TabbedView_tabLabel "
+    aria-controls="mx_tabpanel_ROOM_POLL_HISTORY_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
     data-testid="settings-tab-ROOM_POLL_HISTORY_TAB"
-    role="button"
-    tabindex="0"
+    role="tab"
+    tabindex="-1"
   >
     <span
       class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_pollsIcon"
     />
     <span
       class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_ROOM_POLL_HISTORY_TAB_label"
     >
       Poll history
     </span>

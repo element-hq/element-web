@@ -156,6 +156,7 @@ export const reducer: Reducer<IState, IAction> = (state: IState, action: IAction
 };
 
 interface IProps {
+    handleLoop?: boolean;
     handleHomeEnd?: boolean;
     handleUpDown?: boolean;
     handleLeftRight?: boolean;
@@ -167,6 +168,7 @@ export const findSiblingElement = (
     refs: RefObject<HTMLElement>[],
     startIndex: number,
     backwards = false,
+    loop = false,
 ): RefObject<HTMLElement> | undefined => {
     if (backwards) {
         for (let i = startIndex; i < refs.length && i >= 0; i--) {
@@ -174,11 +176,17 @@ export const findSiblingElement = (
                 return refs[i];
             }
         }
+        if (loop) {
+            return findSiblingElement(refs.slice(startIndex + 1), refs.length - 1, true, false);
+        }
     } else {
         for (let i = startIndex; i < refs.length && i >= 0; i++) {
             if (refs[i].current?.offsetParent !== null) {
                 return refs[i];
             }
+        }
+        if (loop) {
+            return findSiblingElement(refs.slice(0, startIndex), 0, false, false);
         }
     }
 };
@@ -188,6 +196,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
     handleHomeEnd,
     handleUpDown,
     handleLeftRight,
+    handleLoop,
     onKeyDown,
 }) => {
     const [state, dispatch] = useReducer<Reducer<IState, IAction>>(reducer, {
@@ -252,7 +261,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
                             handled = true;
                             if (context.state.refs.length > 0) {
                                 const idx = context.state.refs.indexOf(context.state.activeRef!);
-                                focusRef = findSiblingElement(context.state.refs, idx + 1);
+                                focusRef = findSiblingElement(context.state.refs, idx + 1, false, handleLoop);
                             }
                         }
                         break;
@@ -266,7 +275,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
                             handled = true;
                             if (context.state.refs.length > 0) {
                                 const idx = context.state.refs.indexOf(context.state.activeRef!);
-                                focusRef = findSiblingElement(context.state.refs, idx - 1, true);
+                                focusRef = findSiblingElement(context.state.refs, idx - 1, true, handleLoop);
                             }
                         }
                         break;
@@ -289,7 +298,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
                 });
             }
         },
-        [context, onKeyDown, handleHomeEnd, handleUpDown, handleLeftRight],
+        [context, onKeyDown, handleHomeEnd, handleUpDown, handleLeftRight, handleLoop],
     );
 
     return (

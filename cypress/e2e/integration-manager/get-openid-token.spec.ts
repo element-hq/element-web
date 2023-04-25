@@ -59,7 +59,7 @@ const INTEGRATION_MANAGER_HTML = `
 `;
 
 function openIntegrationManager() {
-    cy.findByRole("tab", { name: "Room info" }).click();
+    cy.findByRole("button", { name: "Room info" }).click();
     cy.findByRole("button", { name: "Add widgets, bridges & bots" }).click();
 }
 

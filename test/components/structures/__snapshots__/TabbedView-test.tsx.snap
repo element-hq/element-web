@@ -6,12 +6,16 @@ exports[`<TabbedView /> renders tabs 1`] = `
     class="mx_TabbedView mx_TabbedView_tabsOnLeft"
   >
     <div
+      aria-orientation="vertical"
       class="mx_TabbedView_tabLabels"
+      role="tablist"
     >
       <div
+        aria-controls="mx_tabpanel_GENERAL"
+        aria-selected="true"
         class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
         data-testid="settings-tab-GENERAL"
-        role="button"
+        role="tab"
         tabindex="0"
       >
         <span
@@ -19,43 +23,52 @@ exports[`<TabbedView /> renders tabs 1`] = `
         />
         <span
           class="mx_TabbedView_tabLabel_text"
+          id="mx_tabpanel_GENERAL_label"
         >
           General
         </span>
       </div>
       <div
-        class="mx_AccessibleButton mx_TabbedView_tabLabel "
+        aria-controls="mx_tabpanel_LABS"
+        aria-selected="false"
+        class="mx_AccessibleButton mx_TabbedView_tabLabel"
         data-testid="settings-tab-LABS"
-        role="button"
-        tabindex="0"
+        role="tab"
+        tabindex="-1"
       >
         <span
           class="mx_TabbedView_maskedIcon labs"
         />
         <span
           class="mx_TabbedView_tabLabel_text"
+          id="mx_tabpanel_LABS_label"
         >
           Labs
         </span>
       </div>
       <div
-        class="mx_AccessibleButton mx_TabbedView_tabLabel "
+        aria-controls="mx_tabpanel_SECURITY"
+        aria-selected="false"
+        class="mx_AccessibleButton mx_TabbedView_tabLabel"
         data-testid="settings-tab-SECURITY"
-        role="button"
-        tabindex="0"
+        role="tab"
+        tabindex="-1"
       >
         <span
           class="mx_TabbedView_maskedIcon security"
         />
         <span
           class="mx_TabbedView_tabLabel_text"
+          id="mx_tabpanel_SECURITY_label"
         >
           Security
         </span>
       </div>
     </div>
     <div
+      aria-labelledby="mx_tabpanel_GENERAL_label"
       class="mx_TabbedView_tabPanel"
+      id="mx_tabpanel_GENERAL"
     >
       <div
         class="mx_AutoHideScrollbar mx_TabbedView_tabPanelContent"
