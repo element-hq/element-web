@@ -1539,6 +1539,11 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.6.tgz#c0bdb9ab0d30179b8ef744d1b4010b0ad0ab9c3a"
   integrity sha512-7hMffzw7KijxDyyH/eUyTfrLeCQHuyU3kaPOKGhcl3DZ3vx7bCncqjGMGTnxNPoP23I6gosvKSbO+3wYOT24Xg==
 
+"@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.7":
+  version "0.1.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.7.tgz#136375b84fd8a7e698f70fc969f668e541a61313"
+  integrity sha512-sQEG9cSfNji5NYBf5h7j5IxYVO0dwtAKoetaVyR+LhIXz/Su7zyEE3EwlAWAeJOFdAV/vZ5LTNyh39xADuNlTg==
+
 "@matrix-org/matrix-wysiwyg@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.0.0.tgz#913eb5faa5d43c7a4ee9bda68de1aa1dcc49a11d"
@@ -8205,6 +8210,23 @@ matrix-js-sdk@25.0.0:
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.6"
+    another-json "^0.2.0"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.3.1"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "9"
+
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
+  version "25.0.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e3498f0668e30cd545cf0614e6e6e9203a9e359d"
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.7"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
