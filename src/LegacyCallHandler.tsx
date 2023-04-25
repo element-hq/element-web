@@ -579,7 +579,7 @@ export default class LegacyCallHandler extends EventEmitter {
             });
         });
         call.on(CallEvent.Hangup, () => {
-            if (!this.matchesCallForThisRoom(call)) return;
+            if (!mappedRoomId || !this.matchesCallForThisRoom(call)) return;
 
             this.removeCallForRoom(mappedRoomId);
         });
@@ -587,7 +587,7 @@ export default class LegacyCallHandler extends EventEmitter {
             this.onCallStateChanged(newState, oldState, call);
         });
         call.on(CallEvent.Replaced, (newCall: MatrixCall) => {
-            if (!this.matchesCallForThisRoom(call)) return;
+            if (!mappedRoomId || !this.matchesCallForThisRoom(call)) return;
 
             logger.log(`Call ID ${call.callId} is being replaced by call ID ${newCall.callId}`);
 
@@ -603,7 +603,7 @@ export default class LegacyCallHandler extends EventEmitter {
             this.setCallState(newCall, newCall.state);
         });
         call.on(CallEvent.AssertedIdentityChanged, async (): Promise<void> => {
-            if (!this.matchesCallForThisRoom(call)) return;
+            if (!mappedRoomId || !this.matchesCallForThisRoom(call)) return;
 
             logger.log(`Call ID ${call.callId} got new asserted identity:`, call.getRemoteAssertedIdentity());
 
@@ -634,7 +634,7 @@ export default class LegacyCallHandler extends EventEmitter {
 
                 const newMappedRoomId = this.roomIdForCall(call);
                 logger.log(`Old room ID: ${mappedRoomId}, new room ID: ${newMappedRoomId}`);
-                if (newMappedRoomId !== mappedRoomId) {
+                if (newMappedRoomId && newMappedRoomId !== mappedRoomId) {
                     this.removeCallForRoom(mappedRoomId);
                     mappedRoomId = newMappedRoomId;
                     logger.log("Moving call to room " + mappedRoomId);
@@ -1116,6 +1116,14 @@ export default class LegacyCallHandler extends EventEmitter {
     public async startTransferToMatrixID(call: MatrixCall, destination: string, consultFirst: boolean): Promise<void> {
         if (consultFirst) {
             const dmRoomId = await ensureDMExists(MatrixClientPeg.get(), destination);
+            if (!dmRoomId) {
+                logger.log("Failed to transfer call, could not ensure dm exists");
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("Transfer Failed"),
+                    description: _t("Failed to transfer call"),
+                });
+                return;
+            }
 
             this.placeCall(dmRoomId, call.type, call);
             dis.dispatch<ViewRoomPayload>({

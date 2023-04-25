@@ -16,7 +16,7 @@ limitations under the License.
 
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/models/room";
-import React, { ComponentType, createRef, ReactComponentElement, RefObject, SyntheticEvent } from "react";
+import React, { ComponentType, createRef, ReactComponentElement, SyntheticEvent } from "react";
 
 import { IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -106,8 +106,8 @@ type TagAestheticsMap = Partial<{
     [tagId in TagID]: ITagAesthetics;
 }>;
 
-const auxButtonContextMenuPosition = (handle: RefObject<HTMLDivElement>): MenuProps => {
-    const rect = handle.current.getBoundingClientRect();
+const auxButtonContextMenuPosition = (handle: HTMLDivElement): MenuProps => {
+    const rect = handle.getBoundingClientRect();
     return {
         chevronFace: ChevronFace.None,
         left: rect.left - 7,
@@ -126,11 +126,11 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
 
     if (activeSpace && (showCreateRooms || showInviteUsers)) {
         let contextMenu: JSX.Element | undefined;
-        if (menuDisplayed) {
+        if (menuDisplayed && handle.current) {
             const canInvite = shouldShowSpaceInvite(activeSpace);
 
             contextMenu = (
-                <IconizedContextMenu {...auxButtonContextMenuPosition(handle)} onFinished={closeMenu} compact>
+                <IconizedContextMenu {...auxButtonContextMenuPosition(handle.current)} onFinished={closeMenu} compact>
                     <IconizedContextMenuOptionList first>
                         {showCreateRooms && (
                             <IconizedContextMenuOption
@@ -357,9 +357,9 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
     }
 
     let contextMenu: JSX.Element | null = null;
-    if (menuDisplayed) {
+    if (menuDisplayed && handle.current) {
         contextMenu = (
-            <IconizedContextMenu {...auxButtonContextMenuPosition(handle)} onFinished={closeMenu} compact>
+            <IconizedContextMenu {...auxButtonContextMenuPosition(handle.current)} onFinished={closeMenu} compact>
                 {contextMenuContent}
             </IconizedContextMenu>
         );
@@ -491,6 +491,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         if (payload.action === Action.ViewRoomDelta) {
             const viewRoomDeltaPayload = payload as ViewRoomDeltaPayload;
             const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            if (!currentRoomId) return;
             const room = this.getRoomDelta(currentRoomId, viewRoomDeltaPayload.delta, viewRoomDeltaPayload.unread);
             if (room) {
                 defaultDispatcher.dispatch<ViewRoomPayload>({

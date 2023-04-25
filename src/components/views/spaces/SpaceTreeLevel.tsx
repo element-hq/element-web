@@ -122,7 +122,7 @@ export const SpaceButton = forwardRef<HTMLElement, IButtonProps>(
         }
 
         let contextMenu: JSX.Element | undefined;
-        if (menuDisplayed && handle.current && ContextMenuComponent) {
+        if (space && menuDisplayed && handle.current && ContextMenuComponent) {
             contextMenu = (
                 <ContextMenuComponent
                     {...toRightOf(handle.current.getBoundingClientRect(), 0)}

@@ -83,7 +83,11 @@ export default class ThreepidInviteStore extends EventEmitter {
         for (let i = 0; i < localStorage.length; i++) {
             const keyName = localStorage.key(i);
             if (!keyName?.startsWith(STORAGE_PREFIX)) continue;
-            results.push(JSON.parse(localStorage.getItem(keyName)) as IPersistedThreepidInvite);
+            try {
+                results.push(JSON.parse(localStorage.getItem(keyName)!) as IPersistedThreepidInvite);
+            } catch (e) {
+                console.warn("Failed to parse 3pid invite", e);
+            }
         }
         return results;
     }

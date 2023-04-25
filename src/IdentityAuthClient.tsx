@@ -118,7 +118,7 @@ export default class IdentityAuthClient {
     }
 
     private async checkToken(token: string): Promise<void> {
-        const identityServerUrl = this.matrixClient.getIdentityServerUrl();
+        const identityServerUrl = this.matrixClient.getIdentityServerUrl()!;
 
         try {
             await this.matrixClient.getIdentityAccount(token);

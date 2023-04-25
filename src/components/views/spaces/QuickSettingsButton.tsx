@@ -68,14 +68,14 @@ const QuickSettingsButton: React.FC<{
                     {_t("All settings")}
                 </AccessibleButton>
 
-                {SettingsStore.getValue("developerMode") && (
+                {SettingsStore.getValue("developerMode") && SdkContextClass.instance.roomViewStore.getRoomId() && (
                     <AccessibleButton
                         onClick={() => {
                             closeMenu();
                             Modal.createDialog(
                                 DevtoolsDialog,
                                 {
-                                    roomId: SdkContextClass.instance.roomViewStore.getRoomId(),
+                                    roomId: SdkContextClass.instance.roomViewStore.getRoomId()!,
                                 },
                                 "mx_DevtoolsDialog_wrapper",
                             );

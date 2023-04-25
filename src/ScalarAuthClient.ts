@@ -50,7 +50,7 @@ export default class ScalarAuthClient {
     }
 
     private writeTokenToStore(): void {
-        window.localStorage.setItem("mx_scalar_token_at_" + this.apiUrl, this.scalarToken);
+        window.localStorage.setItem("mx_scalar_token_at_" + this.apiUrl, this.scalarToken ?? "");
         if (this.isDefaultManager) {
             // We remove the old token from storage to migrate upwards. This is safe
             // to do because even if the user switches to /app when this is on /develop
@@ -260,7 +260,7 @@ export default class ScalarAuthClient {
         const roomId = room.roomId;
         const roomName = room.name;
         let url = this.uiUrl;
-        url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
+        if (this.scalarToken) url += "?scalar_token=" + encodeURIComponent(this.scalarToken);
         url += "&room_id=" + encodeURIComponent(roomId);
         url += "&room_name=" + encodeURIComponent(roomName);
         url += "&theme=" + encodeURIComponent(SettingsStore.getValue("theme"));
@@ -274,6 +274,7 @@ export default class ScalarAuthClient {
     }
 
     public getStarterLink(starterLinkUrl: string): string {
+        if (!this.scalarToken) return starterLinkUrl;
         return starterLinkUrl + "?scalar_token=" + encodeURIComponent(this.scalarToken);
     }
 }

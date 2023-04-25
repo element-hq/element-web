@@ -67,7 +67,7 @@ export default class LabsUserSettingsTab extends React.Component<{}> {
             const groups = new EnhancedMap<LabGroup, JSX.Element[]>();
             this.labs.forEach((f) => {
                 groups
-                    .getOrCreate(SettingsStore.getLabGroup(f), [])
+                    .getOrCreate(SettingsStore.getLabGroup(f)!, [])
                     .push(<SettingsFlag level={SettingLevel.DEVICE} name={f} key={f} />);
             });
 

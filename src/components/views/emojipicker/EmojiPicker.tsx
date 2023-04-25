@@ -162,9 +162,9 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private keyboardNavigation(ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void {
-        const node = state.activeRef.current;
-        const parent = node.parentElement;
-        if (!parent) return;
+        const node = state.activeRef?.current;
+        const parent = node?.parentElement;
+        if (!parent || !state.activeRef) return;
         const rowIndex = Array.from(parent.children).indexOf(node);
         const refIndex = state.refs.indexOf(state.activeRef);
 
@@ -173,12 +173,12 @@ class EmojiPicker extends React.Component<IProps, IState> {
         switch (ev.key) {
             case Key.ARROW_LEFT:
                 focusRef = state.refs[refIndex - 1];
-                newParent = focusRef?.current?.parentElement;
+                newParent = focusRef?.current?.parentElement ?? undefined;
                 break;
 
             case Key.ARROW_RIGHT:
                 focusRef = state.refs[refIndex + 1];
-                newParent = focusRef?.current?.parentElement;
+                newParent = focusRef?.current?.parentElement ?? undefined;
                 break;
 
             case Key.ARROW_UP:
@@ -188,7 +188,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                     ev.key === Key.ARROW_UP
                         ? state.refs[refIndex - rowIndex - 1]
                         : state.refs[refIndex - rowIndex + EMOJIS_PER_ROW];
-                newParent = ref?.current?.parentElement;
+                newParent = ref?.current?.parentElement ?? undefined;
                 const newTarget = newParent?.children[clamp(rowIndex, 0, newParent.children.length - 1)];
                 focusRef = state.refs.find((r) => r.current === newTarget);
                 break;

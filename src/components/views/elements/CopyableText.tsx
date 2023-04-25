@@ -25,7 +25,7 @@ import AccessibleTooltipButton from "./AccessibleTooltipButton";
 
 interface IProps {
     children?: React.ReactNode;
-    getTextToCopy: () => string;
+    getTextToCopy: () => string | null;
     border?: boolean;
     className?: string;
 }
@@ -35,7 +35,8 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true
 
     const onCopyClickInternal = async (e: ButtonEvent): Promise<void> => {
         e.preventDefault();
-        const successful = await copyPlaintext(getTextToCopy());
+        const text = getTextToCopy();
+        const successful = !!text && (await copyPlaintext(text));
         setTooltip(successful ? _t("Copied!") : _t("Failed to copy"));
     };
 

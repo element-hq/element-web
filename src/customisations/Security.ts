@@ -42,7 +42,10 @@ function getSecretStorageKey(): Uint8Array | null {
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-function getDehydrationKey(keyInfo: ISecretStorageKeyInfo): Promise<Uint8Array | null> {
+function getDehydrationKey(
+    keyInfo: ISecretStorageKeyInfo,
+    checkFunc: (key: Uint8Array) => void,
+): Promise<Uint8Array | null> {
     return Promise.resolve(null);
 }
 

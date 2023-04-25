@@ -228,6 +228,7 @@ export class RoomViewStore extends EventEmitter {
     }
 
     private doMaybeSetCurrentVoiceBroadcastPlayback(room: Room): void {
+        if (!this.stores.client) return;
         doMaybeSetCurrentVoiceBroadcastPlayback(
             room,
             this.stores.client,
@@ -532,8 +533,8 @@ export class RoomViewStore extends EventEmitter {
 
         const cli = MatrixClientPeg.get();
         // take a copy of roomAlias & roomId as they may change by the time the join is complete
-        const { roomAlias, roomId } = this.state;
-        const address = roomAlias || roomId;
+        const { roomAlias, roomId = payload.roomId } = this.state;
+        const address = roomAlias || roomId!;
         const viaServers = this.state.viaServers || [];
         try {
             await retry<Room, MatrixError>(
@@ -554,7 +555,7 @@ export class RoomViewStore extends EventEmitter {
             // room.
             this.dis.dispatch<JoinRoomReadyPayload>({
                 action: Action.JoinRoomReady,
-                roomId,
+                roomId: roomId!,
                 metricsTrigger: payload.metricsTrigger,
             });
         } catch (err) {

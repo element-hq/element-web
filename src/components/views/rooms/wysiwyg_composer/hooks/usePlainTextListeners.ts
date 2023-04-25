@@ -38,7 +38,7 @@ export function usePlainTextListeners(
     onChange?: (content: string) => void,
     onSend?: () => void,
 ): {
-    ref: RefObject<HTMLDivElement | null>;
+    ref: RefObject<HTMLDivElement>;
     content?: string;
     onInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onPaste(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
