@@ -1,5 +1,8 @@
-Changes in [1.11.30-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.30-rc.1) (2023-04-18)
-===========================================================================================================
+Changes in [1.11.30](https://github.com/vector-im/element-web/releases/tag/v1.11.30) (2023-04-25)
+=================================================================================================
+
+## 🔒 Security
+ * Fixes for [CVE-2023-30609](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE-2023-30609) / GHSA-xv83-x443-7rmw
 
 ## ✨ Features
  * Pick sensible default option for phone country dropdown ([\#10627](https://github.com/matrix-org/matrix-react-sdk/pull/10627)). Fixes #3528.
@@ -20,6 +23,7 @@ Changes in [1.11.30-rc.1](https://github.com/vector-im/element-web/releases/tag/
  * Update rte autocomplete styling ([\#10503](https://github.com/matrix-org/matrix-react-sdk/pull/10503)). Contributed by @alunturner.
 
 ## 🐛 Bug Fixes
+ * Fix create subspace dialog not working ([\#10652](https://github.com/matrix-org/matrix-react-sdk/pull/10652)). Fixes vector-im/element-web#24882
  * Fix multiple accessibility defects identified by AXE ([\#10606](https://github.com/matrix-org/matrix-react-sdk/pull/10606)).
  * Fix view source from edit history dialog always showing latest event ([\#10626](https://github.com/matrix-org/matrix-react-sdk/pull/10626)). Fixes #21859.
  * #21451 Fix WebGL disabled error message ([\#10589](https://github.com/matrix-org/matrix-react-sdk/pull/10589)). Contributed by @rashmitpankhania.
