@@ -1,3 +1,9 @@
+Changes in [3.71.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.71.1) (2023-04-25)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Pick up matrix-js-sdk v25.0.0 (missed because of npmjs partial outage)
+
 Changes in [3.71.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.71.0) (2023-04-25)
 =====================================================================================================
 
