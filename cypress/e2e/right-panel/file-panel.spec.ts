@@ -24,7 +24,7 @@ const NAME = "Alice";
 
 const viewRoomSummaryByName = (name: string): Chainable<JQuery<HTMLElement>> => {
     cy.viewRoomByName(name);
-    cy.findByRole("tab", { name: "Room info" }).click();
+    cy.findByRole("button", { name: "Room info" }).click();
     return checkRoomSummaryCard(name);
 };
 

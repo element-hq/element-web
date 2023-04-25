@@ -295,7 +295,7 @@ describe("Threads", () => {
             cy.get(".mx_ThreadSummary_content").findByText("How are things?").should("exist");
         });
 
-        cy.findByRole("tab", { name: "Threads" })
+        cy.findByRole("button", { name: "Threads" })
             .should("have.class", "mx_RightPanel_headerButton_unread") // User asserts thread list unread indicator
             .click(); // User opens thread list
 

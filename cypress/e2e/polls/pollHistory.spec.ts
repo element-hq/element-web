@@ -75,7 +75,7 @@ describe("Poll history", () => {
     };
 
     function openPollHistory(): void {
-        cy.findByRole("tab", { name: "Room info" }).click();
+        cy.findByRole("button", { name: "Room info" }).click();
         cy.get(".mx_RoomSummaryCard").within(() => {
             cy.findByRole("button", { name: "Poll history" }).click();
         });

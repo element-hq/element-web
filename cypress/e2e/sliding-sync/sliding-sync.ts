@@ -241,9 +241,7 @@ describe("Sliding Sync", () => {
     });
 
     it("should update user settings promptly", () => {
-        cy.findByRole("button", { name: "User menu" }).click();
-        cy.findByRole("menuitem", { name: "All settings" }).click();
-        cy.findByRole("button", { name: "Preferences" }).click();
+        cy.openUserSettings("Preferences");
         cy.contains(".mx_SettingsFlag", "Show timestamps in 12 hour format")
             .should("exist")
             .find(".mx_ToggleSwitch_on")
