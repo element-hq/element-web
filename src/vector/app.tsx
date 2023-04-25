@@ -122,7 +122,7 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
         // We return here because startSingleSignOn() will asynchronously redirect us. We don't
         // care to wait for it, and don't want to show any UI while we wait (not even half a welcome
         // page). As such, just don't even bother loading the MatrixChat component.
-        return <></>;
+        return <React.Fragment />;
     }
 
     const defaultDeviceName =
