@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactElement } from "react";
 import { mocked } from "jest-mock";
 import { render, screen } from "@testing-library/react";
+import { IContent } from "matrix-js-sdk/src/models/event";
 
-import { topicToHtml } from "../src/HtmlUtils";
+import { bodyToHtml, topicToHtml } from "../src/HtmlUtils";
 import SettingsStore from "../src/settings/SettingsStore";
 
 jest.mock("../src/settings/SettingsStore");
@@ -29,7 +30,7 @@ const enableHtmlTopicFeature = () => {
     });
 };
 
-describe("HtmlUtils", () => {
+describe("topicToHtml", () => {
     function getContent() {
         return screen.getByRole("contentinfo").children[0].innerHTML;
     }
@@ -60,5 +61,49 @@ describe("HtmlUtils", () => {
         enableHtmlTopicFeature();
         render(<div role="contentinfo">{topicToHtml("**pizza** 🍕", "<b>pizza</b> 🍕", null, false)}</div>);
         expect(getContent()).toEqual('<b>pizza</b> <span class="mx_Emoji" title=":pizza:">🍕</span>');
+    });
+});
+
+describe("bodyToHtml", () => {
+    function getHtml(content: IContent, highlights?: string[]): string {
+        return (bodyToHtml(content, highlights, {}) as ReactElement).props.dangerouslySetInnerHTML.__html;
+    }
+
+    it("should apply highlights to HTML messages", () => {
+        const html = getHtml(
+            {
+                body: "test **foo** bar",
+                msgtype: "m.text",
+                formatted_body: "test <b>foo</b> bar",
+                format: "org.matrix.custom.html",
+            },
+            ["test"],
+        );
+
+        expect(html).toMatchInlineSnapshot(`"<span class="mx_EventTile_searchHighlight">test</span> <b>foo</b> bar"`);
+    });
+
+    it("should apply highlights to plaintext messages", () => {
+        const html = getHtml(
+            {
+                body: "test foo bar",
+                msgtype: "m.text",
+            },
+            ["test"],
+        );
+
+        expect(html).toMatchInlineSnapshot(`"<span class="mx_EventTile_searchHighlight">test</span> foo bar"`);
+    });
+
+    it("should not respect HTML tags in plaintext message highlighting", () => {
+        const html = getHtml(
+            {
+                body: "test foo <b>bar",
+                msgtype: "m.text",
+            },
+            ["test"],
+        );
+
+        expect(html).toMatchInlineSnapshot(`"<span class="mx_EventTile_searchHighlight">test</span> foo &lt;b&gt;bar"`);
     });
 });

@@ -28,6 +28,7 @@ import { decode } from "html-entities";
 import { IContent } from "matrix-js-sdk/src/models/event";
 import { Optional } from "matrix-events-sdk";
 import _Linkify from "linkify-react";
+import escapeHtml from "escape-html";
 
 import {
     _linkifyElement,
@@ -355,10 +356,10 @@ abstract class BaseHighlighter<T extends React.ReactNode> {
     public constructor(public highlightClass: string, public highlightLink?: string) {}
 
     /**
-     * apply the highlights to a section of text
+     * Apply the highlights to a section of text
      *
      * @param {string} safeSnippet The snippet of text to apply the highlights
-     *     to.
+     *     to. This input must be sanitised as it will be treated as HTML.
      * @param {string[]} safeHighlights A list of substrings to highlight,
      *     sorted by descending length.
      *
@@ -367,7 +368,7 @@ abstract class BaseHighlighter<T extends React.ReactNode> {
      */
     public applyHighlights(safeSnippet: string, safeHighlights: string[]): T[] {
         let lastOffset = 0;
-        let offset;
+        let offset: number;
         let nodes: T[] = [];
 
         const safeHighlight = safeHighlights[0];
@@ -440,7 +441,7 @@ interface IOpts {
 }
 
 export interface IOptsReturnNode extends IOpts {
-    returnString: false | undefined;
+    returnString?: false | undefined;
 }
 
 export interface IOptsReturnString extends IOpts {
@@ -574,7 +575,7 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
                 safeBody = formatEmojis(safeBody, true).join("");
             }
         } else if (highlighter) {
-            safeBody = highlighter.applyHighlights(plainBody, safeHighlights!).join("");
+            safeBody = highlighter.applyHighlights(escapeHtml(plainBody), safeHighlights!).join("");
         }
     } finally {
         delete sanitizeParams.textFilter;

@@ -71,7 +71,7 @@ export default class SearchResultTile extends React.Component<IProps> {
 
         for (let j = 0; j < timeline.length; j++) {
             const mxEv = timeline[j];
-            let highlights;
+            let highlights: string[] | undefined;
             const contextual = !this.props.ourEventsIndexes.includes(j);
             if (!contextual) {
                 highlights = this.props.searchHighlights;
