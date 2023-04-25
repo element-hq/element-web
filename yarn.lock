@@ -1544,9 +1544,9 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-2.0.0.tgz#913eb5faa5d43c7a4ee9bda68de1aa1dcc49a11d"
   integrity sha512-xRYFwsf6Jx7KTCpwU91mVhPA8q/c+oOVyK98NnexyK/IcQS7BMFAns5GZX9b6ZEy38u30KoxeN6mxvxi+ysQgg==
 
-"@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz":
-  version "3.2.12"
-  resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz#0bce3c86f9d36a4984d3c3e07df1c3fb4c679bd9"
+"@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz":
+  version "3.2.14"
+  resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz#acd96c00a881d0f462e1f97a56c73742c8dbc984"
 
 "@matrix-org/react-sdk-module-api@^0.0.4":
   version "0.0.4"
@@ -2103,6 +2103,11 @@
   dependencies:
     expect "^29.0.0"
     pretty-format "^29.0.0"
+
+"@types/jitsi-meet@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@types/jitsi-meet/-/jitsi-meet-2.0.2.tgz#4670e6dd47f2762cda5af53b73ab0a6e39ec0205"
+  integrity sha512-rnb5znCdZs7T2VgA16wyu5UHIbq+WR2HH233GPkS6HQ9m7Sh5jiXChZ41jo0tCTtNuSCziPIb5sI+6OPKK8h+Q==
 
 "@types/jsdom@^20.0.0":
   version "20.0.1"

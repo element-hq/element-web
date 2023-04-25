@@ -33,7 +33,6 @@ describe("WebPlatform", () => {
     });
 
     it("registers service worker", () => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - mocking readonly object
         navigator.serviceWorker = { register: jest.fn() };
         new WebPlatform();
@@ -41,10 +40,7 @@ describe("WebPlatform", () => {
     });
 
     it("should call reload on window location object", () => {
-        delete window.location;
-        window.location = {
-            reload: jest.fn(),
-        } as unknown as Location;
+        Object.defineProperty(window, "location", { value: { reload: jest.fn() }, writable: true });
 
         const platform = new WebPlatform();
         expect(window.location.reload).not.toHaveBeenCalled();
@@ -53,10 +49,7 @@ describe("WebPlatform", () => {
     });
 
     it("should call reload to install update", () => {
-        delete window.location;
-        window.location = {
-            reload: jest.fn(),
-        } as unknown as Location;
+        Object.defineProperty(window, "location", { value: { reload: jest.fn() }, writable: true });
 
         const platform = new WebPlatform();
         expect(window.location.reload).not.toHaveBeenCalled();
@@ -73,10 +66,8 @@ describe("WebPlatform", () => {
                 "develop.element.io: Chrome on macOS",
             ],
         ])("%s & %s = %s", (url, userAgent, result) => {
-            delete window.navigator;
-            window.navigator = { userAgent } as unknown as Navigator;
-            delete window.location;
-            window.location = { href: url } as unknown as Location;
+            Object.defineProperty(window, "navigator", { value: { userAgent }, writable: true });
+            Object.defineProperty(window, "location", { value: { href: url }, writable: true });
             const platform = new WebPlatform();
             expect(platform.getDefaultDeviceDisplayName()).toEqual(result);
         });
@@ -88,14 +79,12 @@ describe("WebPlatform", () => {
             permission: "notGranted",
         };
         beforeEach(() => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             window.Notification = mockNotification;
             mockNotification.permission = "notGranted";
         });
 
         it("supportsNotifications returns false when platform does not support notifications", () => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             window.Notification = undefined;
             expect(new WebPlatform().supportsNotifications()).toBe(false);
@@ -132,7 +121,8 @@ describe("WebPlatform", () => {
         });
 
         afterAll(() => {
-            process.env.VERSION = envVersion;
+            // @ts-ignore
+            WebPlatform.VERSION = envVersion;
         });
 
         it("should return true from canSelfUpdate()", async () => {
@@ -142,18 +132,21 @@ describe("WebPlatform", () => {
         });
 
         it("getAppVersion returns normalized app version", async () => {
-            process.env.VERSION = prodVersion;
+            // @ts-ignore
+            WebPlatform.VERSION = prodVersion;
             const platform = new WebPlatform();
 
             const version = await platform.getAppVersion();
             expect(version).toEqual(prodVersion);
 
-            process.env.VERSION = `v${prodVersion}`;
+            // @ts-ignore
+            WebPlatform.VERSION = `v${prodVersion}`;
             const version2 = await platform.getAppVersion();
             // v prefix removed
             expect(version2).toEqual(prodVersion);
 
-            process.env.VERSION = `version not like semver`;
+            // @ts-ignore
+            WebPlatform.VERSION = `version not like semver`;
             const notSemverVersion = await platform.getAppVersion();
             expect(notSemverVersion).toEqual(`version not like semver`);
         });
@@ -163,7 +156,8 @@ describe("WebPlatform", () => {
                 "should return not available and call showNoUpdate when current version " +
                     "matches most recent version",
                 async () => {
-                    process.env.VERSION = prodVersion;
+                    // @ts-ignore
+                    WebPlatform.VERSION = prodVersion;
                     fetchMock.getOnce("/version", prodVersion);
                     const platform = new WebPlatform();
 
@@ -178,7 +172,8 @@ describe("WebPlatform", () => {
             );
 
             it("should strip v prefix from versions before comparing", async () => {
-                process.env.VERSION = prodVersion;
+                // @ts-ignore
+                WebPlatform.VERSION = prodVersion;
                 fetchMock.getOnce("/version", `v${prodVersion}`);
                 const platform = new WebPlatform();
 
@@ -195,7 +190,8 @@ describe("WebPlatform", () => {
             it(
                 "should return ready and call showUpdate when current version " + "differs from most recent version",
                 async () => {
-                    process.env.VERSION = "0.0.0"; // old version
+                    // @ts-ignore
+                    WebPlatform.VERSION = "0.0.0"; // old version
                     fetchMock.getOnce("/version", prodVersion);
                     const platform = new WebPlatform();
 
@@ -210,7 +206,8 @@ describe("WebPlatform", () => {
             );
 
             it("should return ready without showing update when user registered in last 24", async () => {
-                process.env.VERSION = "0.0.0"; // old version
+                // @ts-ignore
+                WebPlatform.VERSION = "0.0.0"; // old version
                 jest.spyOn(MatrixClientPeg, "userRegisteredWithinLastHours").mockReturnValue(true);
                 fetchMock.getOnce("/version", prodVersion);
                 const platform = new WebPlatform();

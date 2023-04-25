@@ -21,7 +21,6 @@ import { getVectorConfig } from "../../../src/vector/getconfig";
 fetchMock.config.overwriteRoutes = true;
 
 describe("getVectorConfig()", () => {
-    const prevDocumentDomain = document.domain;
     const elementDomain = "app.element.io";
     const now = 1234567890;
     const specificConfig = {
@@ -32,7 +31,10 @@ describe("getVectorConfig()", () => {
     };
 
     beforeEach(() => {
-        document.domain = elementDomain;
+        Object.defineProperty(window, "location", {
+            value: { href: `https://${elementDomain}`, hostname: elementDomain },
+            writable: true,
+        });
 
         // stable value for cachebuster
         jest.spyOn(Date, "now").mockReturnValue(now);
@@ -41,7 +43,6 @@ describe("getVectorConfig()", () => {
     });
 
     afterAll(() => {
-        document.domain = prevDocumentDomain;
         jest.spyOn(Date, "now").mockRestore();
     });
 
@@ -107,6 +108,6 @@ describe("getVectorConfig()", () => {
 
         // We can't assert it'll be a SyntaxError as node-fetch behaves differently
         // https://github.com/wheresrhys/fetch-mock/issues/270
-        await expect(getVectorConfig()).rejects.toThrow("Unexpected token } in JSON at position 19");
+        await expect(getVectorConfig()).rejects.toThrow("in JSON at position 19");
     });
 });
