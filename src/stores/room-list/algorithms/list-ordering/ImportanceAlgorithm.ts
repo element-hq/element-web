@@ -287,7 +287,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         }
 
         // Do a quick check to see if we've completely broken the index
-        for (let i = 1; i <= CATEGORY_ORDER.length; i++) {
+        for (let i = 1; i < CATEGORY_ORDER.length; i++) {
             const lastCat = CATEGORY_ORDER[i - 1];
             const lastCatIndex = indices[lastCat];
             const thisCat = CATEGORY_ORDER[i];
