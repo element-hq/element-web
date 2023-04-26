@@ -138,7 +138,6 @@ describe("loading:", function () {
                 <MatrixChat
                     onNewScreen={onNewScreen}
                     config={config!}
-                    serverConfig={config.validated_server_config}
                     realQueryParams={params}
                     startingFragmentQueryParams={fragParts.params}
                     enableGuest={true}
