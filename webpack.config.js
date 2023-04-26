@@ -99,8 +99,8 @@ module.exports = (env, argv) => {
 
     const development = {};
     if (devMode) {
-        // High quality, embedded source maps for dev builds
-        development["devtool"] = "eval-source-map";
+        // Embedded source maps for dev builds, can't use eval-source-map due to CSP
+        development["devtool"] = "inline-source-map";
     } else {
         if (process.env.CI_PACKAGE) {
             // High quality source maps in separate .map files which include the source. This doesn't bulk up the .js
