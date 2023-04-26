@@ -312,6 +312,14 @@ export class PosthogAnalytics {
                         Object.assign({ id: analyticsID }, accountData),
                     );
                 }
+                if (this.posthog.get_distinct_id() === analyticsID) {
+                    // No point identifying again
+                    return;
+                }
+                if (this.posthog.persistence.get_user_state() === "identified") {
+                    // Analytics ID has changed, reset as Posthog will refuse to merge in this case
+                    this.posthog.reset();
+                }
                 this.posthog.identify(analyticsID);
             } catch (e) {
                 // The above could fail due to network requests, but not essential to starting the application,

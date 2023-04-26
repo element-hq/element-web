@@ -33,6 +33,10 @@ const getFakePosthog = (): PostHog =>
         identify: jest.fn(),
         reset: jest.fn(),
         register: jest.fn(),
+        get_distinct_id: jest.fn(),
+        persistence: {
+            get_user_state: jest.fn(),
+        },
     } as unknown as PostHog);
 
 interface ITestEvent extends IPosthogEvent {
