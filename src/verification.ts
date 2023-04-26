@@ -26,7 +26,7 @@ import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import { accessSecretStorage } from "./SecurityManager";
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
 import { IDevice } from "./components/views/right_panel/UserInfo";
-import ManualDeviceKeyVerificationDialog from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
+import { ManualDeviceKeyVerificationDialog } from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
 import { findDMForUser } from "./utils/dm/findDMForUser";

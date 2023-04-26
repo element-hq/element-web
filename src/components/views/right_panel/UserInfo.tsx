@@ -30,7 +30,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
+import { Device } from "matrix-js-sdk/src/models/device";
 
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
@@ -81,14 +81,14 @@ import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-me
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { asyncSome } from "../../../utils/arrays";
 
-export interface IDevice extends DeviceInfo {
+export interface IDevice extends Device {
     ambiguous?: boolean;
 }
 
 export const disambiguateDevices = (devices: IDevice[]): void => {
     const names = Object.create(null);
     for (let i = 0; i < devices.length; i++) {
-        const name = devices[i].getDisplayName() ?? "";
+        const name = devices[i].displayName ?? "";
         const indexList = names[name] || [];
         indexList.push(i);
         names[name] = indexList;
@@ -149,7 +149,8 @@ function useHasCrossSigningKeys(
         }
         setUpdating(true);
         try {
-            await cli.downloadKeys([member.userId]);
+            // We call it to populate the user keys and devices
+            await cli.getCrypto()?.getUserDeviceInfo([member.userId], true);
             const xsi = cli.getStoredCrossSigningForUser(member.userId);
             const key = xsi && xsi.getId();
             return !!key;
@@ -195,12 +196,10 @@ export function DeviceItem({ userId, device }: { userId: string; device: IDevice
     };
 
     let deviceName;
-    if (!device.getDisplayName()?.trim()) {
+    if (!device.displayName?.trim()) {
         deviceName = device.deviceId;
     } else {
-        deviceName = device.ambiguous
-            ? device.getDisplayName() + " (" + device.deviceId + ")"
-            : device.getDisplayName();
+        deviceName = device.ambiguous ? device.displayName + " (" + device.deviceId + ")" : device.displayName;
     }
 
     let trustedLabel: string | undefined;
@@ -1190,6 +1189,19 @@ export const PowerLevelEditor: React.FC<{
     );
 };
 
+async function getUserDeviceInfo(
+    userId: string,
+    cli: MatrixClient,
+    downloadUncached = false,
+): Promise<Device[] | undefined> {
+    const userDeviceMap = await cli.getCrypto()?.getUserDeviceInfo([userId], downloadUncached);
+    const devicesMap = userDeviceMap?.get(userId);
+
+    if (!devicesMap) return;
+
+    return Array.from(devicesMap.values());
+}
+
 export const useDevices = (userId: string): IDevice[] | undefined | null => {
     const cli = useContext(MatrixClientContext);
 
@@ -1203,10 +1215,9 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
 
         async function downloadDeviceList(): Promise<void> {
             try {
-                await cli.downloadKeys([userId], true);
-                const devices = cli.getStoredDevicesForUser(userId);
+                const devices = await getUserDeviceInfo(userId, cli, true);
 
-                if (cancelled) {
+                if (cancelled || !devices) {
                     // we got cancelled - presumably a different user now
                     return;
                 }
@@ -1229,8 +1240,8 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
     useEffect(() => {
         let cancel = false;
         const updateDevices = async (): Promise<void> => {
-            const newDevices = cli.getStoredDevicesForUser(userId);
-            if (cancel) return;
+            const newDevices = await getUserDeviceInfo(userId, cli);
+            if (cancel || !newDevices) return;
             setDevices(newDevices);
         };
         const onDevicesUpdated = (users: string[]): void => {

@@ -59,7 +59,7 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
             <div className="mx_Dialog_content" id="mx_Dialog_content">
                 <p>{newSessionText}</p>
                 <p>
-                    {device.getDisplayName()} ({device.deviceId})
+                    {device.displayName} ({device.deviceId})
                 </p>
                 <p>{askToVerifyText}</p>
             </div>

@@ -234,6 +234,7 @@ export function createTestClient(): MatrixClient {
         }),
 
         searchUserDirectory: jest.fn().mockResolvedValue({ limited: false, results: [] }),
+        setDeviceVerified: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

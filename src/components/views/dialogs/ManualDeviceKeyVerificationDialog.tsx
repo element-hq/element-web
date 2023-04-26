@@ -18,72 +18,80 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
+import React, { useCallback } from "react";
+import { Device } from "matrix-js-sdk/src/models/device";
 
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../utils/FormattingUtils";
 import { _t } from "../../../languageHandler";
 import QuestionDialog from "./QuestionDialog";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
-interface IProps {
+interface IManualDeviceKeyVerificationDialogProps {
     userId: string;
-    device: DeviceInfo;
-    onFinished(confirm?: boolean): void;
+    device: Device;
+    onFinished?(confirm?: boolean): void;
 }
 
-export default class ManualDeviceKeyVerificationDialog extends React.Component<IProps> {
-    private onLegacyFinished = (confirm: boolean): void => {
-        if (confirm) {
-            MatrixClientPeg.get().setDeviceVerified(this.props.userId, this.props.device.deviceId, true);
-        }
-        this.props.onFinished(confirm);
-    };
+export function ManualDeviceKeyVerificationDialog({
+    userId,
+    device,
+    onFinished,
+}: IManualDeviceKeyVerificationDialogProps): JSX.Element {
+    const mxClient = useMatrixClientContext();
 
-    public render(): React.ReactNode {
-        let text;
-        if (MatrixClientPeg.get().getUserId() === this.props.userId) {
-            text = _t("Confirm by comparing the following with the User Settings in your other session:");
-        } else {
-            text = _t("Confirm this user's session by comparing the following with their User Settings:");
-        }
+    const onLegacyFinished = useCallback(
+        (confirm: boolean) => {
+            if (confirm && mxClient) {
+                mxClient.setDeviceVerified(userId, device.deviceId, true);
+            }
+            onFinished?.(confirm);
+        },
+        [mxClient, userId, device, onFinished],
+    );
 
-        const key = FormattingUtils.formatCryptoKey(this.props.device.getFingerprint());
-        const body = (
-            <div>
-                <p>{text}</p>
-                <div className="mx_DeviceVerifyDialog_cryptoSection">
-                    <ul>
-                        <li>
-                            <label>{_t("Session name")}:</label> <span>{this.props.device.getDisplayName()}</span>
-                        </li>
-                        <li>
-                            <label>{_t("Session ID")}:</label>{" "}
-                            <span>
-                                <code>{this.props.device.deviceId}</code>
-                            </span>
-                        </li>
-                        <li>
-                            <label>{_t("Session key")}:</label>{" "}
-                            <span>
-                                <code>
-                                    <b>{key}</b>
-                                </code>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-                <p>{_t("If they don't match, the security of your communication may be compromised.")}</p>
-            </div>
-        );
-
-        return (
-            <QuestionDialog
-                title={_t("Verify session")}
-                description={body}
-                button={_t("Verify session")}
-                onFinished={this.onLegacyFinished}
-            />
-        );
+    let text;
+    if (mxClient?.getUserId() === userId) {
+        text = _t("Confirm by comparing the following with the User Settings in your other session:");
+    } else {
+        text = _t("Confirm this user's session by comparing the following with their User Settings:");
     }
+
+    const fingerprint = device.getFingerprint();
+    const key = fingerprint && FormattingUtils.formatCryptoKey(fingerprint);
+    const body = (
+        <div>
+            <p>{text}</p>
+            <div className="mx_DeviceVerifyDialog_cryptoSection">
+                <ul>
+                    <li>
+                        <label>{_t("Session name")}:</label> <span>{device.displayName}</span>
+                    </li>
+                    <li>
+                        <label>{_t("Session ID")}:</label>{" "}
+                        <span>
+                            <code>{device.deviceId}</code>
+                        </span>
+                    </li>
+                    <li>
+                        <label>{_t("Session key")}:</label>{" "}
+                        <span>
+                            <code>
+                                <b>{key}</b>
+                            </code>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <p>{_t("If they don't match, the security of your communication may be compromised.")}</p>
+        </div>
+    );
+
+    return (
+        <QuestionDialog
+            title={_t("Verify session")}
+            description={body}
+            button={_t("Verify session")}
+            onFinished={onLegacyFinished}
+        />
+    );
 }
