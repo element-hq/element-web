@@ -135,7 +135,7 @@ jobs:
                   path: matrix-react-sdk
 
             - name: Run Cypress tests
-              uses: cypress-io/github-action@a29a621b736c9a8547ba0236cc9cee1e49725bd5
+              uses: cypress-io/github-action@59c3b9b4a1a6e623c29806797d849845443487d1
               with:
                   working-directory: matrix-react-sdk
                   # The built-in Electron runner seems to grind to a halt trying
