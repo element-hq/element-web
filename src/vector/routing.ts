@@ -22,7 +22,7 @@ import MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixCha
 
 import { parseQsFromFragment } from "./url_utils";
 
-let lastLocationHashSet: string = null;
+let lastLocationHashSet: string | null = null;
 
 export function getScreenFromLocation(location: Location): { screen: string; params: QueryDict } {
     const fragparts = parseQsFromFragment(location);

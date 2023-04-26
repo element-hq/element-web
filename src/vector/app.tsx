@@ -25,7 +25,7 @@ import React, { ReactElement } from "react";
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import { UserFriendlyError } from "matrix-react-sdk/src/languageHandler";
 import AutoDiscoveryUtils from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
-import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
+import { AutoDiscovery, ClientConfig } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import SdkConfig, { parseSsoRedirectOptions } from "matrix-react-sdk/src/SdkConfig";
 import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
@@ -33,6 +33,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { createClient } from "matrix-js-sdk/src/matrix";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
+import { ValidatedServerConfig } from "matrix-react-sdk/src/utils/ValidatedServerConfig";
+import { QueryDict, encodeParams } from "matrix-js-sdk/src/utils";
 
 import { parseQs } from "./url_utils";
 import VectorBasePlatform from "./platform/VectorBasePlatform";
@@ -55,24 +57,19 @@ window.matrixLogger = logger;
 // If we're in electron, we should never pass through a file:// URL otherwise
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use app.element.io for now instead.
-function makeRegistrationUrl(params: object): string {
-    let url;
+function makeRegistrationUrl(params: QueryDict): string {
+    let url: string;
     if (window.location.protocol === "vector:") {
         url = "https://app.element.io/#/register";
     } else {
         url = window.location.protocol + "//" + window.location.host + window.location.pathname + "#/register";
     }
 
-    const keys = Object.keys(params);
-    for (let i = 0; i < keys.length; ++i) {
-        if (i === 0) {
-            url += "?";
-        } else {
-            url += "&";
-        }
-        const k = keys[i];
-        url += k + "=" + encodeURIComponent(params[k]);
+    const encodedParams = encodeParams(params);
+    if (encodedParams) {
+        url += "?" + encodedParams;
     }
+
     return url;
 }
 
@@ -117,18 +114,19 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
     if (!hasPossibleToken && !isReturningFromSso && autoRedirect) {
         logger.log("Bypassing app load to redirect to SSO");
         const tempCli = createClient({
-            baseUrl: config.validated_server_config.hsUrl,
-            idBaseUrl: config.validated_server_config.isUrl,
+            baseUrl: config.validated_server_config!.hsUrl,
+            idBaseUrl: config.validated_server_config!.isUrl,
         });
-        PlatformPeg.get().startSingleSignOn(tempCli, "sso", `/${getScreenFromLocation(window.location).screen}`);
+        PlatformPeg.get()!.startSingleSignOn(tempCli, "sso", `/${getScreenFromLocation(window.location).screen}`);
 
         // We return here because startSingleSignOn() will asynchronously redirect us. We don't
         // care to wait for it, and don't want to show any UI while we wait (not even half a welcome
         // page). As such, just don't even bother loading the MatrixChat component.
-        return;
+        return <React.Fragment />;
     }
 
-    const defaultDeviceName = snakedConfig.get("default_device_display_name") ?? platform.getDefaultDeviceDisplayName();
+    const defaultDeviceName =
+        snakedConfig.get("default_device_display_name") ?? platform?.getDefaultDeviceDisplayName();
 
     return (
         <MatrixChat
@@ -146,7 +144,7 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
 }
 
 async function verifyServerConfig(): Promise<IConfigOptions> {
-    let validatedConfig;
+    let validatedConfig: ValidatedServerConfig;
     try {
         logger.log("Verifying homeserver configuration");
 
@@ -197,7 +195,7 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
             }
         }
 
-        let discoveryResult = null;
+        let discoveryResult: ClientConfig | undefined;
         if (wkConfig) {
             logger.log("Config uses a default_server_config - validating object");
             discoveryResult = await AutoDiscovery.fromDiscoveryConfig(wkConfig);

@@ -1,3 +1,47 @@
+Changes in [1.11.30](https://github.com/vector-im/element-web/releases/tag/v1.11.30) (2023-04-25)
+=================================================================================================
+
+## 🔒 Security
+ * Fixes for [CVE-2023-30609](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE-2023-30609) / GHSA-xv83-x443-7rmw
+
+## ✨ Features
+ * Pick sensible default option for phone country dropdown ([\#10627](https://github.com/matrix-org/matrix-react-sdk/pull/10627)). Fixes #3528.
+ * Relate field validation tooltip via aria-describedby ([\#10522](https://github.com/matrix-org/matrix-react-sdk/pull/10522)). Fixes #24963.
+ * Handle more completion types in rte autocomplete ([\#10560](https://github.com/matrix-org/matrix-react-sdk/pull/10560)). Contributed by @alunturner.
+ * Show a tile for an unloaded predecessor room if it has via_servers ([\#10483](https://github.com/matrix-org/matrix-react-sdk/pull/10483)). Contributed by @andybalaam.
+ * Exclude message timestamps from aria live region ([\#10584](https://github.com/matrix-org/matrix-react-sdk/pull/10584)). Fixes #5696.
+ * Make composer format bar an aria toolbar ([\#10583](https://github.com/matrix-org/matrix-react-sdk/pull/10583)). Fixes #11283.
+ * Improve accessibility of font slider ([\#10473](https://github.com/matrix-org/matrix-react-sdk/pull/10473)). Fixes #20168 and #24962.
+ * fix file size display from kB to KB ([\#10561](https://github.com/matrix-org/matrix-react-sdk/pull/10561)). Fixes #24866. Contributed by @NSV1991.
+ * Handle /me in rte ([\#10558](https://github.com/matrix-org/matrix-react-sdk/pull/10558)). Contributed by @alunturner.
+ * bind html with switch for manage extension setting option ([\#10553](https://github.com/matrix-org/matrix-react-sdk/pull/10553)). Contributed by @NSV1991.
+ * Handle command completions in RTE ([\#10521](https://github.com/matrix-org/matrix-react-sdk/pull/10521)). Contributed by @alunturner.
+ * Add room and user avatars to rte ([\#10497](https://github.com/matrix-org/matrix-react-sdk/pull/10497)). Contributed by @alunturner.
+ * Support for MSC3882 revision 1 ([\#10443](https://github.com/matrix-org/matrix-react-sdk/pull/10443)). Contributed by @hughns.
+ * Check profiles before starting a DM ([\#10472](https://github.com/matrix-org/matrix-react-sdk/pull/10472)). Fixes #24830.
+ * Quick settings: Change the copy / labels on the options ([\#10427](https://github.com/matrix-org/matrix-react-sdk/pull/10427)). Fixes #24522. Contributed by @justjanne.
+ * Update rte autocomplete styling ([\#10503](https://github.com/matrix-org/matrix-react-sdk/pull/10503)). Contributed by @alunturner.
+
+## 🐛 Bug Fixes
+ * Fix create subspace dialog not working ([\#10652](https://github.com/matrix-org/matrix-react-sdk/pull/10652)). Fixes vector-im/element-web#24882
+ * Fix multiple accessibility defects identified by AXE ([\#10606](https://github.com/matrix-org/matrix-react-sdk/pull/10606)).
+ * Fix view source from edit history dialog always showing latest event ([\#10626](https://github.com/matrix-org/matrix-react-sdk/pull/10626)). Fixes #21859.
+ * #21451 Fix WebGL disabled error message ([\#10589](https://github.com/matrix-org/matrix-react-sdk/pull/10589)). Contributed by @rashmitpankhania.
+ * Properly translate errors in `AddThreepid.ts` so they show up translated to the user but not in our logs ([\#10432](https://github.com/matrix-org/matrix-react-sdk/pull/10432)). Contributed by @MadLittleMods.
+ * Fix overflow on auth pages ([\#10605](https://github.com/matrix-org/matrix-react-sdk/pull/10605)). Fixes #19548.
+ * Fix incorrect avatar background colour when using a custom theme ([\#10598](https://github.com/matrix-org/matrix-react-sdk/pull/10598)). Contributed by @jdauphant.
+ * Remove dependency on `org.matrix.e2e_cross_signing` unstable feature ([\#10593](https://github.com/matrix-org/matrix-react-sdk/pull/10593)).
+ * Update setting description to match reality ([\#10600](https://github.com/matrix-org/matrix-react-sdk/pull/10600)). Fixes #25106.
+ * Fix no identity server in help & about settings ([\#10563](https://github.com/matrix-org/matrix-react-sdk/pull/10563)). Fixes #25077.
+ * Fix: Images no longer reserve their space in the timeline correctly ([\#10571](https://github.com/matrix-org/matrix-react-sdk/pull/10571)). Fixes #25082. Contributed by @kerryarchibald.
+ * Fix issues with inhibited accessible focus outlines ([\#10579](https://github.com/matrix-org/matrix-react-sdk/pull/10579)). Fixes #19742.
+ * Fix read receipts falling from sky ([\#10576](https://github.com/matrix-org/matrix-react-sdk/pull/10576)). Fixes #25081.
+ * Fix avatar text issue in rte ([\#10559](https://github.com/matrix-org/matrix-react-sdk/pull/10559)). Contributed by @alunturner.
+ * fix resizer only work with left mouse click ([\#10546](https://github.com/matrix-org/matrix-react-sdk/pull/10546)). Contributed by @NSV1991.
+ * Fix send two join requests when joining a room from spotlight search ([\#10534](https://github.com/matrix-org/matrix-react-sdk/pull/10534)). Fixes #25054.
+ * Highlight event when any version triggered a highlight ([\#10502](https://github.com/matrix-org/matrix-react-sdk/pull/10502)). Fixes #24923 and #24970. Contributed by @kerryarchibald.
+ * Fix spacing of headings of integration manager on General settings tab ([\#10232](https://github.com/matrix-org/matrix-react-sdk/pull/10232)). Fixes #24085. Contributed by @luixxiul.
+
 Changes in [1.11.29](https://github.com/vector-im/element-web/releases/tag/v1.11.29) (2023-04-11)
 =================================================================================================
 
