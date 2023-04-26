@@ -71,7 +71,7 @@ export async function loadConfig(): Promise<void> {
     if (platformConfig) {
         SdkConfig.put(platformConfig);
     } else {
-        SdkConfig.unset(); // clears the config (sets to empty object)
+        SdkConfig.reset();
     }
 }
 
