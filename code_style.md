@@ -281,11 +281,15 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, but actually it is not.
 
 1. Class names must be prefixed with "mx\_".
-2. Class names should denote the component which defines them, followed by any context:
-    1. mx_MyFoo
-    2. mx_MyFoo_avatar
-    3. mx_MyFoo_avatar--user
-3. Use the `$font` and `$spacing` variables instead of manual values.
+2. Class names must denote the component which defines them, followed by any context.
+   The context is not further specified here in terms of meaning or syntax.
+   Use whatever is appropriate for your implementation use case.
+   Some examples:
+    1. `mx_MyFoo`
+    2. `mx_MyFoo_avatar`
+    3. `mx_MyFoo_avatarUser`
+    4. `mx_MyFoo_avatar--user`
+3. Use the `$font` variables instead of manual values.
 4. Keep indentation/nesting to a minimum. Maximum suggested nesting is 5 layers.
 5. Use the whole class name instead of shortcuts:
 

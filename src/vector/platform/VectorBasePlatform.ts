@@ -30,7 +30,7 @@ import Favicon from "../../favicon";
 export default abstract class VectorBasePlatform extends BasePlatform {
     protected _favicon: Favicon;
 
-    public async getConfig(): Promise<IConfigOptions> {
+    public async getConfig(): Promise<IConfigOptions | undefined> {
         return getVectorConfig();
     }
 
