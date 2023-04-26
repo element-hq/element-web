@@ -26,7 +26,7 @@
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'none';
         style-src 'self' 'unsafe-inline' <%= csp_extra_source %>;
-        script-src 'self' 'unsafe-eval' https://www.recaptcha.net https://www.gstatic.com <%= csp_extra_source %>;
+        script-src 'self' 'wasm-unsafe-eval' https://www.recaptcha.net/recaptcha/ https://www.gstatic.com/recaptcha/ <%= csp_extra_source %>;
         img-src * blob: data:;
         connect-src *;
         font-src 'self' data: <%= csp_extra_source %>;

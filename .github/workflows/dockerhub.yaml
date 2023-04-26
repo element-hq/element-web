@@ -33,7 +33,7 @@ jobs:
 
             - name: Docker meta
               id: meta
-              uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96 # v4
+              uses: docker/metadata-action@c4ee3adeed93b1fa6a762f209fb01608c1a22f1e # v4
               with:
                   images: |
                       vectorim/element-web
