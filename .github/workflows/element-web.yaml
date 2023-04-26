@@ -51,19 +51,13 @@ jobs:
               run: |
                   yarn build
                   echo $VERSION > webapp/version
-                  mv webapp ..
+                  echo $GITHUB_SHA > webapp/sha
               working-directory: ./element-web
 
             - name: Upload Artifact
               uses: actions/upload-artifact@v3
               with:
                   name: previewbuild
-                  path: |
-                      webapp
-                      cypress
-                      cypress.config.ts
-                      package.json
-                      yarn.lock
-                      .percy.yml
+                  path: element-web/webapp
                   # We'll only use this in a triggered job, then we're done with it
                   retention-days: 1

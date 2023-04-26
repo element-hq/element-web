@@ -113,6 +113,26 @@ jobs:
               with:
                   run_id: ${{ github.event.workflow_run.id }}
                   name: previewbuild
+                  path: webapp
+
+            # The workflow_run.head_sha is the sha of the head commit but the element-web was built using a simulated
+            # merge commit - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
+            # so use the sha from the tarball for the checkout of the cypress tests
+            # to make sure we get a matching set of code and tests.
+            - name: Grab sha from webapp
+              id: sha
+              run: |
+                  echo "sha=$(cat webapp/sha)" >> $GITHUB_OUTPUT
+
+            - uses: actions/checkout@v3
+              with:
+                  # XXX: We're checking out untrusted code in a secure context
+                  # We need to be careful to not trust anything this code outputs/may do
+                  # We need to check this out to access the cypress tests which are on the head branch
+                  repository: ${{ github.event.workflow_run.head_repository.full_name }}
+                  ref: ${{ steps.sha.outputs.sha }}
+                  persist-credentials: false
+                  path: matrix-react-sdk
 
             # This is necessary as Cypress relies on eval for passing functions between processes
             - name: Allow CSP script-src unsafe-eval
@@ -121,10 +141,11 @@ jobs:
             - name: Run Cypress tests
               uses: cypress-io/github-action@59c3b9b4a1a6e623c29806797d849845443487d1
               with:
+                  working-directory: matrix-react-sdk
                   # The built-in Electron runner seems to grind to a halt trying
                   # to run the tests, so use chrome.
                   browser: "${{ env.BROWSER_PATH }}"
-                  start: npx serve -p 8080 webapp
+                  start: npx serve -p 8080 ../webapp
                   wait-on: "http://localhost:8080"
                   record: true
                   parallel: true
@@ -172,16 +193,16 @@ jobs:
               with:
                   name: cypress-results
                   path: |
-                      cypress/screenshots
-                      cypress/videos
-                      cypress/synapselogs
+                      matrix-react-sdk/cypress/screenshots
+                      matrix-react-sdk/cypress/videos
+                      matrix-react-sdk/cypress/synapselogs
 
             - name: Upload reports
               if: always()
               uses: actions/upload-artifact@v3
               with:
                   name: cypress-junit
-                  path: cypress/results
+                  path: matrix-react-sdk/cypress/results
 
     report:
         name: Report results
