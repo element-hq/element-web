@@ -23,7 +23,7 @@ import SdkConfig from "../../../../src/SdkConfig";
 describe("CountryDropdown", () => {
     describe("default_country_code", () => {
         afterEach(() => {
-            SdkConfig.unset();
+            SdkConfig.reset();
         });
 
         it.each([

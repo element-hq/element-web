@@ -23,6 +23,7 @@ import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter"
 
 import dis from "./dispatcher/dispatcher";
 import AsyncWrapper from "./AsyncWrapper";
+import { Defaultize } from "./@types/common";
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
@@ -31,14 +32,6 @@ const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
 export type ComponentType = React.ComponentType<{
     onFinished?(...args: any): void;
 }>;
-
-type Defaultize<P, D> = P extends any
-    ? string extends keyof P
-        ? P
-        : Pick<P, Exclude<keyof P, keyof D>> &
-              Partial<Pick<P, Extract<keyof P, keyof D>>> &
-              Partial<Pick<D, Exclude<keyof D, keyof P>>>
-    : never;
 
 // Generic type which returns the props of the Modal component with the onFinished being optional.
 export type ComponentProps<C extends ComponentType> = Defaultize<

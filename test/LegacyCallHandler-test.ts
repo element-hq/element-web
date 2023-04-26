@@ -305,7 +305,7 @@ describe("LegacyCallHandler", () => {
         MatrixClientPeg.unset();
 
         document.body.removeChild(audioElement);
-        SdkConfig.unset();
+        SdkConfig.reset();
     });
 
     it("should look up the correct user and start a call in the room when a phone number is dialled", async () => {
@@ -516,7 +516,7 @@ describe("LegacyCallHandler without third party protocols", () => {
         MatrixClientPeg.unset();
 
         document.body.removeChild(audioElement);
-        SdkConfig.unset();
+        SdkConfig.reset();
     });
 
     it("should still start a native call", async () => {

@@ -53,7 +53,7 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler";
 import { useFeatureEnabled, useSettingValue } from "../../../hooks/useSettings";
-import SdkConfig, { DEFAULTS } from "../../../SdkConfig";
+import SdkConfig from "../../../SdkConfig";
 import { useEventEmitterState, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useWidgets } from "../right_panel/RoomSummaryCard";
 import { WidgetType } from "../../../widgets/WidgetType";
@@ -207,7 +207,7 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
     let menu: JSX.Element | null = null;
     if (menuOpen) {
         const buttonRect = buttonRef.current!.getBoundingClientRect();
-        const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;
+        const brand = SdkConfig.get("element_call").brand;
         menu = (
             <IconizedContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
                 <IconizedContextMenuOptionList>
@@ -250,7 +250,7 @@ const CallButtons: FC<CallButtonsProps> = ({ room }) => {
     const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
     const isVideoRoom = useMemo(() => videoRoomsEnabled && calcIsVideoRoom(room), [videoRoomsEnabled, room]);
     const useElementCallExclusively = useMemo(() => {
-        return SdkConfig.get("element_call").use_exclusively ?? DEFAULTS.element_call.use_exclusively;
+        return SdkConfig.get("element_call").use_exclusively;
     }, []);
 
     const hasLegacyCall = useEventEmitterState(

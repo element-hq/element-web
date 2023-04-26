@@ -16,12 +16,15 @@ limitations under the License.
 */
 
 import { Optional } from "matrix-events-sdk";
+import { mergeWith } from "lodash";
 
 import { SnakedObject } from "./utils/SnakedObject";
 import { IConfigOptions, ISsoRedirectOptions } from "./IConfigOptions";
+import { isObject, objectClone } from "./utils/objects";
+import { DeepReadonly, Defaultize } from "./@types/common";
 
 // see element-web config.md for docs, or the IConfigOptions interface for dev docs
-export const DEFAULTS: IConfigOptions = {
+export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     brand: "Element",
     integrations_ui_url: "https://scalar.vector.im/",
     integrations_rest_url: "https://scalar.vector.im/api",
@@ -50,13 +53,43 @@ export const DEFAULTS: IConfigOptions = {
         chunk_length: 2 * 60, // two minutes
         max_length: 4 * 60 * 60, // four hours
     },
+
+    feedback: {
+        existing_issues_url:
+            "https://github.com/vector-im/element-web/issues?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc",
+        new_issue_url: "https://github.com/vector-im/element-web/issues/new/choose",
+    },
 };
 
-export default class SdkConfig {
-    private static instance: IConfigOptions;
-    private static fallback: SnakedObject<IConfigOptions>;
+export type ConfigOptions = Defaultize<IConfigOptions, typeof DEFAULTS>;
 
-    private static setInstance(i: IConfigOptions): void {
+function mergeConfig(
+    config: DeepReadonly<IConfigOptions>,
+    changes: DeepReadonly<Partial<IConfigOptions>>,
+): DeepReadonly<IConfigOptions> {
+    // return { ...config, ...changes };
+    return mergeWith(objectClone(config), changes, (objValue, srcValue) => {
+        // Don't merge arrays, prefer values from newer object
+        if (Array.isArray(objValue)) {
+            return srcValue;
+        }
+
+        // Don't allow objects to get nulled out, this will break our types
+        if (isObject(objValue) && !isObject(srcValue)) {
+            return objValue;
+        }
+    });
+}
+
+type ObjectType<K extends keyof IConfigOptions> = IConfigOptions[K] extends object
+    ? SnakedObject<NonNullable<IConfigOptions[K]>>
+    : Optional<SnakedObject<NonNullable<IConfigOptions[K]>>>;
+
+export default class SdkConfig {
+    private static instance: DeepReadonly<IConfigOptions>;
+    private static fallback: SnakedObject<DeepReadonly<IConfigOptions>>;
+
+    private static setInstance(i: DeepReadonly<IConfigOptions>): void {
         SdkConfig.instance = i;
         SdkConfig.fallback = new SnakedObject(i);
 
@@ -69,7 +102,7 @@ export default class SdkConfig {
     public static get<K extends keyof IConfigOptions = never>(
         key?: K,
         altCaseName?: string,
-    ): IConfigOptions | IConfigOptions[K] {
+    ): DeepReadonly<IConfigOptions> | DeepReadonly<IConfigOptions>[K] {
         if (key === undefined) {
             // safe to cast as a fallback - we want to break the runtime contract in this case
             return SdkConfig.instance || <IConfigOptions>{};
@@ -77,32 +110,29 @@ export default class SdkConfig {
         return SdkConfig.fallback.get(key, altCaseName);
     }
 
-    public static getObject<K extends keyof IConfigOptions>(
-        key: K,
-        altCaseName?: string,
-    ): Optional<SnakedObject<NonNullable<IConfigOptions[K]>>> {
+    public static getObject<K extends keyof IConfigOptions>(key: K, altCaseName?: string): ObjectType<K> {
         const val = SdkConfig.get(key, altCaseName);
-        if (val !== null && val !== undefined) {
+        if (isObject(val)) {
             return new SnakedObject(val);
         }
 
         // return the same type for sensitive callers (some want `undefined` specifically)
-        return val === undefined ? undefined : null;
+        return (val === undefined ? undefined : null) as ObjectType<K>;
     }
 
-    public static put(cfg: Partial<IConfigOptions>): void {
-        SdkConfig.setInstance({ ...DEFAULTS, ...cfg });
+    public static put(cfg: DeepReadonly<ConfigOptions>): void {
+        SdkConfig.setInstance(mergeConfig(DEFAULTS, cfg));
     }
 
     /**
-     * Resets the config to be completely empty.
+     * Resets the config.
      */
-    public static unset(): void {
-        SdkConfig.setInstance(<IConfigOptions>{}); // safe to cast - defaults will be applied
+    public static reset(): void {
+        SdkConfig.setInstance(mergeConfig(DEFAULTS, {})); // safe to cast - defaults will be applied
     }
 
-    public static add(cfg: Partial<IConfigOptions>): void {
-        SdkConfig.put({ ...SdkConfig.get(), ...cfg });
+    public static add(cfg: Partial<ConfigOptions>): void {
+        SdkConfig.put(mergeConfig(SdkConfig.get(), cfg));
     }
 }
 

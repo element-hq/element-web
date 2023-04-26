@@ -120,7 +120,7 @@ describe("RoomHeader", () => {
         await Promise.all([CallStore.instance, WidgetStore.instance].map(resetAsyncStoreWithClient));
         client.reEmitter.stopReEmitting(room, [RoomStateEvent.Events]);
         jest.restoreAllMocks();
-        SdkConfig.put({});
+        SdkConfig.reset();
     });
 
     const mockRoomType = (type: string) => {

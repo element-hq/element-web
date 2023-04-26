@@ -18,6 +18,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import BasePlatform from "../../BasePlatform";
 import { IConfigOptions } from "../../IConfigOptions";
+import { DeepReadonly } from "../../@types/common";
 
 export type DeviceClientInformation = {
     name?: string;
@@ -49,7 +50,7 @@ export const getClientInformationEventType = (deviceId: string): string => `${cl
  */
 export const recordClientInformation = async (
     matrixClient: MatrixClient,
-    sdkConfig: IConfigOptions,
+    sdkConfig: DeepReadonly<IConfigOptions>,
     platform?: BasePlatform,
 ): Promise<void> => {
     const deviceId = matrixClient.getDeviceId()!;

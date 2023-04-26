@@ -61,7 +61,7 @@ describe("Login", function () {
 
     afterEach(function () {
         fetchMock.restore();
-        SdkConfig.unset(); // we touch the config, so clean up
+        SdkConfig.reset(); // we touch the config, so clean up
         unmockPlatformPeg();
     });
 

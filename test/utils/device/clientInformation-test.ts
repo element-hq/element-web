@@ -20,6 +20,8 @@ import BasePlatform from "../../../src/BasePlatform";
 import { IConfigOptions } from "../../../src/IConfigOptions";
 import { getDeviceClientInformation, recordClientInformation } from "../../../src/utils/device/clientInformation";
 import { getMockClientWithEventEmitter } from "../../test-utils";
+import { DEFAULTS } from "../../../src/SdkConfig";
+import { DeepReadonly } from "../../../src/@types/common";
 
 describe("recordClientInformation()", () => {
     const deviceId = "my-device-id";
@@ -31,7 +33,8 @@ describe("recordClientInformation()", () => {
         setAccountData: jest.fn(),
     });
 
-    const sdkConfig: IConfigOptions = {
+    const sdkConfig: DeepReadonly<IConfigOptions> = {
+        ...DEFAULTS,
         brand: "Test Brand",
         element_call: { url: "", use_exclusively: false, brand: "Element Call" },
     };

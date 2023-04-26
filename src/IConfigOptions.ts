@@ -186,6 +186,11 @@ export interface IConfigOptions {
         description: string;
         show_once?: boolean;
     };
+
+    feedback: {
+        existing_issues_url: string;
+        new_issue_url: string;
+    };
 }
 
 export interface ISsoRedirectOptions {

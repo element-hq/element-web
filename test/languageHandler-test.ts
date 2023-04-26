@@ -42,7 +42,7 @@ async function setupTranslationOverridesForTests(overrides: ICustomTranslations)
 
 describe("languageHandler", () => {
     afterEach(() => {
-        SdkConfig.unset();
+        SdkConfig.reset();
         CustomTranslationOptions.lookupFn = undefined;
     });
 

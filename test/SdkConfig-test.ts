@@ -30,6 +30,9 @@ describe("SdkConfig", () => {
                     chunk_length: 42,
                     max_length: 1337,
                 },
+                feedback: {
+                    existing_issues_url: "https://existing",
+                } as any,
             });
         });
 
@@ -37,7 +40,16 @@ describe("SdkConfig", () => {
             const customConfig = JSON.parse(JSON.stringify(DEFAULTS));
             customConfig.voice_broadcast.chunk_length = 42;
             customConfig.voice_broadcast.max_length = 1337;
+            customConfig.feedback.existing_issues_url = "https://existing";
             expect(SdkConfig.get()).toEqual(customConfig);
+        });
+
+        it("should allow overriding individual fields of sub-objects", () => {
+            const feedback = SdkConfig.getObject("feedback");
+            expect(feedback.get("existing_issues_url")).toMatchInlineSnapshot(`"https://existing"`);
+            expect(feedback.get("new_issue_url")).toMatchInlineSnapshot(
+                `"https://github.com/vector-im/element-web/issues/new/choose"`,
+            );
         });
     });
 });

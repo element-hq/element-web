@@ -66,11 +66,11 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
-import { IConfigOptions } from "../../IConfigOptions";
 import LeftPanelLiveShareWarning from "../views/beacon/LeftPanelLiveShareWarning";
 import { UserOnboardingPage } from "../views/user-onboarding/UserOnboardingPage";
 import { PipContainer } from "./PipContainer";
 import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushRules";
+import { ConfigOptions } from "../../SdkConfig";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -98,7 +98,7 @@ interface IProps {
     roomOobData?: IOOBData;
     currentRoomId: string;
     collapseLhs: boolean;
-    config: IConfigOptions;
+    config: ConfigOptions;
     currentUserId?: string;
     justRegistered?: boolean;
     roomJustCreatedOpts?: IOpts;

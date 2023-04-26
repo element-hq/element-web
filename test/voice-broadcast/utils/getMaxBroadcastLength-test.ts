@@ -14,21 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { mocked } from "jest-mock";
-
 import SdkConfig, { DEFAULTS } from "../../../src/SdkConfig";
 import { getMaxBroadcastLength } from "../../../src/voice-broadcast";
 
-jest.mock("../../../src/SdkConfig");
-
 describe("getMaxBroadcastLength", () => {
     afterEach(() => {
-        jest.resetAllMocks();
+        SdkConfig.reset();
     });
 
     describe("when there is a value provided by Sdk config", () => {
         beforeEach(() => {
-            mocked(SdkConfig.get).mockReturnValue({ max_length: 42 });
+            SdkConfig.put({
+                voice_broadcast: {
+                    max_length: 42,
+                },
+            });
         });
 
         it("should return this value", () => {
@@ -37,23 +37,14 @@ describe("getMaxBroadcastLength", () => {
     });
 
     describe("when Sdk config does not provide a value", () => {
-        beforeEach(() => {
-            DEFAULTS.voice_broadcast = {
-                max_length: 23,
-            };
-        });
-
         it("should return this value", () => {
-            expect(getMaxBroadcastLength()).toBe(23);
+            expect(getMaxBroadcastLength()).toBe(DEFAULTS.voice_broadcast!.max_length);
         });
     });
 
     describe("if there are no defaults", () => {
-        beforeEach(() => {
-            DEFAULTS.voice_broadcast = undefined;
-        });
-
         it("should return the fallback value", () => {
+            expect(DEFAULTS.voice_broadcast!.max_length).toBe(4 * 60 * 60);
             expect(getMaxBroadcastLength()).toBe(4 * 60 * 60);
         });
     });
