@@ -44,6 +44,6 @@ describe("User Onboarding (old user)", () => {
         cy.get(".mx_UserOnboardingPage").should("not.exist");
         cy.get(".mx_UserOnboardingButton").should("not.exist");
         cy.openUserSettings("Preferences");
-        cy.contains("Show shortcut to welcome page above the room list").should("not.exist");
+        cy.findByText(/Show shortcut to welcome page above the room list/).should("not.exist");
     });
 });

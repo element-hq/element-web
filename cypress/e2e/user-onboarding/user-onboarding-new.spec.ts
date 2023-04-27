@@ -40,7 +40,7 @@ describe("User Onboarding (new user)", () => {
                 bot1 = _bot1;
             });
             cy.get(".mx_UserOnboardingPage").should("exist");
-            cy.get(".mx_UserOnboardingButton").should("exist");
+            cy.findByRole("button", { name: "Welcome" }).should("exist");
             cy.get(".mx_UserOnboardingList")
                 .should("exist")
                 .should(($list) => {
@@ -57,12 +57,12 @@ describe("User Onboarding (new user)", () => {
     it("page is shown and preference exists", () => {
         cy.get(".mx_UserOnboardingPage").percySnapshotElement("User onboarding page");
         cy.openUserSettings("Preferences");
-        cy.contains("Show shortcut to welcome checklist above the room list").should("exist");
+        cy.findByText("Show shortcut to welcome checklist above the room list").should("exist");
     });
 
     it("app download dialog", () => {
-        cy.contains(".mx_UserOnboardingTask_action", "Download apps").click();
-        cy.get("[role=dialog]").contains("#mx_BaseDialog_title", "Download Element").should("exist");
+        cy.findByRole("button", { name: "Download apps" }).click();
+        cy.get("[role=dialog]").get("#mx_BaseDialog_title").findByText("Download Element").should("exist");
         cy.get("[role=dialog]").percySnapshotElement("App download dialog", {
             widths: [640],
         });
@@ -72,18 +72,18 @@ describe("User Onboarding (new user)", () => {
         cy.get(".mx_ProgressBar")
             .invoke("val")
             .then((oldProgress) => {
-                const findPeopleAction = cy.contains(".mx_UserOnboardingTask_action", "Find friends");
+                const findPeopleAction = cy.findByRole("button", { name: "Find friends" });
                 expect(findPeopleAction).to.exist;
                 findPeopleAction.click();
-                cy.get(".mx_InviteDialog_editor input").type(bot1.getUserId());
-                cy.get(".mx_InviteDialog_buttonAndSpinner").click();
+                cy.get(".mx_InviteDialog_editor").findByRole("textbox").type(bot1.getUserId());
+                cy.findByRole("button", { name: "Go" }).click();
                 cy.get(".mx_InviteDialog_buttonAndSpinner").should("not.exist");
                 const message = "Hi!";
-                cy.get(".mx_SendMessageComposer").type(`${message}!{enter}`);
-                cy.contains(".mx_MTextBody.mx_EventTile_content", message);
+                cy.findByRole("textbox", { name: "Send a message…" }).type(`${message}{enter}`);
+                cy.get(".mx_MTextBody.mx_EventTile_content").findByText(message);
                 cy.visit("/#/home");
                 cy.get(".mx_UserOnboardingPage").should("exist");
-                cy.get(".mx_UserOnboardingButton").should("exist");
+                cy.findByRole("button", { name: "Welcome" }).should("exist");
                 cy.get(".mx_UserOnboardingList")
                     .should("exist")
                     .should(($list) => {
