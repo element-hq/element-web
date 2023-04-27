@@ -144,7 +144,9 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
         return (
             <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Preferences")}</div>
+                <div className="mx_SettingsTab_heading" data-testid="preferences">
+                    {_t("Preferences")}
+                </div>
 
                 {roomListSettings.length > 0 && (
                     <div className="mx_SettingsTab_section">

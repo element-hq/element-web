@@ -33,6 +33,11 @@ describe("PreferencesUserSettingsTab", () => {
         return render(<PreferencesUserSettingsTab closeSettingsFn={() => {}} />);
     };
 
+    it("should render", () => {
+        const { asFragment } = renderTab();
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     describe("send read receipts", () => {
         beforeEach(() => {
             stubClient();
