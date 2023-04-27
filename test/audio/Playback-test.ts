@@ -20,6 +20,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { createAudioContext, decodeOgg } from "../../src/audio/compat";
 import { Playback, PlaybackState } from "../../src/audio/Playback";
 
+jest.mock("../../src/WorkerManager", () => ({
+    WorkerManager: jest.fn(() => ({
+        call: jest.fn().mockResolvedValue({ waveform: [0, 0, 1, 1] }),
+    })),
+}));
+
 jest.mock("../../src/audio/compat", () => ({
     createAudioContext: jest.fn(),
     decodeOgg: jest.fn(),

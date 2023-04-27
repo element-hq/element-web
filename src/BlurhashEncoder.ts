@@ -14,15 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { defer, IDeferred } from "matrix-js-sdk/src/utils";
-
 // @ts-ignore - `.ts` is needed here to make TS happy
-import BlurhashWorker from "./workers/blurhash.worker.ts";
-
-interface IBlurhashWorkerResponse {
-    seq: number;
-    blurhash: string;
-}
+import BlurhashWorker, { Request, Response } from "./workers/blurhash.worker.ts";
+import { WorkerManager } from "./WorkerManager";
 
 export class BlurhashEncoder {
     private static internalInstance = new BlurhashEncoder();
@@ -31,29 +25,9 @@ export class BlurhashEncoder {
         return BlurhashEncoder.internalInstance;
     }
 
-    private readonly worker: Worker;
-    private seq = 0;
-    private pendingDeferredMap = new Map<number, IDeferred<string>>();
-
-    public constructor() {
-        this.worker = new BlurhashWorker();
-        this.worker.onmessage = this.onMessage;
-    }
-
-    private onMessage = (ev: MessageEvent<IBlurhashWorkerResponse>): void => {
-        const { seq, blurhash } = ev.data;
-        const deferred = this.pendingDeferredMap.get(seq);
-        if (deferred) {
-            this.pendingDeferredMap.delete(seq);
-            deferred.resolve(blurhash);
-        }
-    };
+    private readonly worker = new WorkerManager<Request, Response>(BlurhashWorker);
 
     public getBlurhash(imageData: ImageData): Promise<string> {
-        const seq = this.seq++;
-        const deferred = defer<string>();
-        this.pendingDeferredMap.set(seq, deferred);
-        this.worker.postMessage({ seq, imageData });
-        return deferred.promise;
+        return this.worker.call({ imageData }).then((resp) => resp.blurhash);
     }
 }

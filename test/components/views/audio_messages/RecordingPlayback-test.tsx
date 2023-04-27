@@ -26,6 +26,12 @@ import { createAudioContext } from "../../../../src/audio/compat";
 import { flushPromises } from "../../../test-utils";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
 
+jest.mock("../../../../src/WorkerManager", () => ({
+    WorkerManager: jest.fn(() => ({
+        call: jest.fn().mockResolvedValue({ waveform: [0, 0, 1, 1] }),
+    })),
+}));
+
 jest.mock("../../../../src/audio/compat", () => ({
     createAudioContext: jest.fn(),
     decodeOgg: jest.fn().mockResolvedValue({}),

@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DEFAULT_WAVEFORM, Playback, PlaybackState } from "./Playback";
+import { Playback, PlaybackState } from "./Playback";
 import { ManagedPlayback } from "./ManagedPlayback";
+import { DEFAULT_WAVEFORM } from "./consts";
 
 /**
  * Handles management of playback instances to ensure certain functionality, like

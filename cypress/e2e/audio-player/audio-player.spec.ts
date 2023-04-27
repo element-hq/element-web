@@ -204,8 +204,9 @@ describe("Audio player", () => {
             // Assert that the counter is zero before clicking the play button
             cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
-            // Find and click "Play" button
-            cy.findByRole("button", { name: "Play" }).click();
+            // Find and click "Play" button, the wait is to make the test less flaky
+            cy.findByRole("button", { name: "Play" }).should("exist");
+            cy.wait(500).findByRole("button", { name: "Play" }).click();
 
             // Assert that "Pause" button can be found
             cy.findByRole("button", { name: "Pause" }).should("exist");
@@ -339,8 +340,9 @@ describe("Audio player", () => {
                         // Assert that the counter is zero before clicking the play button
                         cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
-                        // Find and click "Play" button
-                        cy.findByRole("button", { name: "Play" }).click();
+                        // Find and click "Play" button, the wait is to make the test less flaky
+                        cy.findByRole("button", { name: "Play" }).should("exist");
+                        cy.wait(500).findByRole("button", { name: "Play" }).click();
 
                         // Assert that "Pause" button can be found
                         cy.findByRole("button", { name: "Pause" }).should("exist");
@@ -349,7 +351,7 @@ describe("Audio player", () => {
                         cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
                         // Assert that "Play" button can be found
-                        cy.findByRole("button", { name: "Play" }).should("exist");
+                        cy.findByRole("button", { name: "Play" }).should("exist").should("not.have.attr", "disabled");
                     });
                 })
                 .realHover()

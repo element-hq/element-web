@@ -16,14 +16,19 @@ limitations under the License.
 
 import { encode } from "blurhash";
 
+import { WorkerPayload } from "./worker";
+
 const ctx: Worker = self as any;
 
-interface IBlurhashWorkerRequest {
-    seq: number;
+export interface Request {
     imageData: ImageData;
 }
 
-ctx.addEventListener("message", (event: MessageEvent<IBlurhashWorkerRequest>): void => {
+export interface Response {
+    blurhash: string;
+}
+
+ctx.addEventListener("message", (event: MessageEvent<Request & WorkerPayload>): void => {
     const { seq, imageData } = event.data;
     const blurhash = encode(
         imageData.data,

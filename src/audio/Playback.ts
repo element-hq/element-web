@@ -17,13 +17,18 @@ limitations under the License.
 import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { defer } from "matrix-js-sdk/src/utils";
 
+// @ts-ignore - `.ts` is needed here to make TS happy
+import PlaybackWorker, { Request, Response } from "../workers/playback.worker.ts";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
-import { arrayFastResample, arrayRescale, arraySeed, arraySmoothingResample } from "../utils/arrays";
+import { arrayFastResample } from "../utils/arrays";
 import { IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
 import { clamp } from "../utils/numbers";
+import { WorkerManager } from "../WorkerManager";
+import { DEFAULT_WAVEFORM, PLAYBACK_WAVEFORM_SAMPLES } from "./consts";
 
 export enum PlaybackState {
     Decoding = "decoding",
@@ -32,25 +37,7 @@ export enum PlaybackState {
     Playing = "playing", // active progress through timeline
 }
 
-export interface PlaybackInterface {
-    readonly liveData: SimpleObservable<number[]>;
-    readonly timeSeconds: number;
-    readonly durationSeconds: number;
-    skipTo(timeSeconds: number): Promise<void>;
-}
-
-export const PLAYBACK_WAVEFORM_SAMPLES = 39;
 const THUMBNAIL_WAVEFORM_SAMPLES = 100; // arbitrary: [30,120]
-export const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
-
-function makePlaybackWaveform(input: number[]): number[] {
-    // First, convert negative amplitudes to positive so we don't detect zero as "noisy".
-    const noiseWaveform = input.map((v) => Math.abs(v));
-
-    // Then, we'll resample the waveform using a smoothing approach so we can keep the same rough shape.
-    // We also rescale the waveform to be 0-1 so we end up with a clamped waveform to rely upon.
-    return arrayRescale(arraySmoothingResample(noiseWaveform, PLAYBACK_WAVEFORM_SAMPLES), 0, 1);
-}
 
 export interface PlaybackInterface {
     readonly currentState: PlaybackState;
@@ -68,14 +55,15 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
     public readonly thumbnailWaveform: number[];
 
     private readonly context: AudioContext;
-    private source: AudioBufferSourceNode | MediaElementAudioSourceNode;
+    private source?: AudioBufferSourceNode | MediaElementAudioSourceNode;
     private state = PlaybackState.Decoding;
-    private audioBuf: AudioBuffer;
-    private element: HTMLAudioElement;
+    private audioBuf?: AudioBuffer;
+    private element?: HTMLAudioElement;
     private resampledWaveform: number[];
     private waveformObservable = new SimpleObservable<number[]>();
     private readonly clock: PlaybackClock;
     private readonly fileSize: number;
+    private readonly worker = new WorkerManager<Request, Response>(PlaybackWorker);
 
     /**
      * Creates a new playback instance from a buffer.
@@ -178,12 +166,11 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
             // 5mb
             logger.log("Audio file too large: processing through <audio /> element");
             this.element = document.createElement("AUDIO") as HTMLAudioElement;
-            const prom = new Promise((resolve, reject) => {
-                this.element.onloadeddata = () => resolve(null);
-                this.element.onerror = (e) => reject(e);
-            });
+            const deferred = defer<unknown>();
+            this.element.onloadeddata = deferred.resolve;
+            this.element.onerror = deferred.reject;
             this.element.src = URL.createObjectURL(new Blob([this.buf]));
-            await prom; // make sure the audio element is ready for us
+            await deferred.promise; // make sure the audio element is ready for us
         } else {
             // Safari compat: promise API not supported on this function
             this.audioBuf = await new Promise((resolve, reject) => {
@@ -218,18 +205,21 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
 
             // Update the waveform to the real waveform once we have channel data to use. We don't
             // exactly trust the user-provided waveform to be accurate...
-            const waveform = Array.from(this.audioBuf.getChannelData(0));
-            this.resampledWaveform = makePlaybackWaveform(waveform);
+            this.resampledWaveform = await this.makePlaybackWaveform(this.audioBuf.getChannelData(0));
         }
 
         this.waveformObservable.update(this.resampledWaveform);
 
         this.clock.flagLoadTime(); // must happen first because setting the duration fires a clock update
-        this.clock.durationSeconds = this.element ? this.element.duration : this.audioBuf.duration;
+        this.clock.durationSeconds = this.element?.duration ?? this.audioBuf!.duration;
 
         // Signal that we're not decoding anymore. This is done last to ensure the clock is updated for
         // when the downstream callers try to use it.
         this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
+    }
+
+    private makePlaybackWaveform(input: Float32Array): Promise<number[]> {
+        return this.worker.call({ data: Array.from(input) }).then((resp) => resp.waveform);
     }
 
     private onPlaybackEnd = async (): Promise<void> => {
@@ -269,7 +259,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
             this.source = this.context.createMediaElementSource(this.element);
         } else {
             this.source = this.context.createBufferSource();
-            this.source.buffer = this.audioBuf;
+            this.source.buffer = this.audioBuf ?? null;
         }
 
         this.source.addEventListener("ended", this.onPlaybackEnd);
