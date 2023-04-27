@@ -63,6 +63,7 @@ import { Action } from "./dispatcher/actions";
 import AbstractLocalStorageSettingsHandler from "./settings/handlers/AbstractLocalStorageSettingsHandler";
 import { OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
 import { SdkContextClass } from "./contexts/SDKContext";
+import { messageForLoginError } from "./utils/ErrorUtils";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -230,17 +231,10 @@ export function attemptTokenLogin(
         .catch((err) => {
             Modal.createDialog(ErrorDialog, {
                 title: _t("We couldn't log you in"),
-                description:
-                    err.name === "ConnectionError"
-                        ? _t(
-                              "Your homeserver was unreachable and was not able to log you in. Please try again. " +
-                                  "If this continues, please contact your homeserver administrator.",
-                          )
-                        : _t(
-                              "Your homeserver rejected your log in attempt. " +
-                                  "This could be due to things just taking too long. Please try again. " +
-                                  "If this continues, please contact your homeserver administrator.",
-                          ),
+                description: messageForLoginError(err, {
+                    hsUrl: homeserver,
+                    hsName: homeserver,
+                }),
                 button: _t("Try again"),
                 onFinished: (tryAgain) => {
                     if (tryAgain) {
