@@ -33,6 +33,7 @@ import { isCaretAtEnd, isCaretAtStart } from "../utils/selection";
 import { getEventsFromEditorStateTransfer, getEventsFromRoom } from "../utils/event";
 import { endEditing } from "../utils/editing";
 import Autocomplete from "../../Autocomplete";
+import { handleEventWithAutocomplete } from "./utils";
 
 export function useInputEventProcessor(
     onSend: () => void,
@@ -91,7 +92,7 @@ function handleKeyboardEvent(
     editor: HTMLElement,
     roomContext: IRoomState,
     composerContext: ComposerContextState,
-    mxClient: MatrixClient,
+    mxClient: MatrixClient | undefined,
     autocompleteRef: React.RefObject<Autocomplete>,
 ): KeyboardEvent | null {
     const { editorStateTransfer } = composerContext;
@@ -99,42 +100,15 @@ function handleKeyboardEvent(
     const isEditorModified = isEditing ? initialContent !== composer.content() : composer.content().length !== 0;
     const action = getKeyBindingsManager().getMessageComposerAction(event);
 
-    const autocompleteIsOpen = autocompleteRef?.current && !autocompleteRef.current.state.hide;
-
     // we need autocomplete to take priority when it is open for using enter to select
-    if (autocompleteIsOpen) {
-        let handled = false;
-        const autocompleteAction = getKeyBindingsManager().getAutocompleteAction(event);
-        const component = autocompleteRef.current;
-        if (component && component.countCompletions() > 0) {
-            switch (autocompleteAction) {
-                case KeyBindingAction.ForceCompleteAutocomplete:
-                case KeyBindingAction.CompleteAutocomplete:
-                    autocompleteRef.current.onConfirmCompletion();
-                    handled = true;
-                    break;
-                case KeyBindingAction.PrevSelectionInAutocomplete:
-                    autocompleteRef.current.moveSelection(-1);
-                    handled = true;
-                    break;
-                case KeyBindingAction.NextSelectionInAutocomplete:
-                    autocompleteRef.current.moveSelection(1);
-                    handled = true;
-                    break;
-                case KeyBindingAction.CancelAutocomplete:
-                    autocompleteRef.current.onEscape(event as {} as React.KeyboardEvent);
-                    handled = true;
-                    break;
-                default:
-                    break; // don't return anything, allow event to pass through
-            }
-        }
+    const isHandledByAutocomplete = handleEventWithAutocomplete(autocompleteRef, event);
+    if (isHandledByAutocomplete) {
+        return event;
+    }
 
-        if (handled) {
-            event.preventDefault();
-            event.stopPropagation();
-            return event;
-        }
+    // taking the client from context gives us an client | undefined type, narrow it down
+    if (mxClient === undefined) {
+        return null;
     }
 
     switch (action) {

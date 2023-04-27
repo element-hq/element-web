@@ -117,6 +117,70 @@ describe("Composer", () => {
             cy.viewRoomByName("Composing Room");
         });
 
+        describe("Commands", () => {
+            // TODO add tests for rich text mode
+
+            describe("Plain text mode", () => {
+                it("autocomplete behaviour tests", () => {
+                    // Select plain text mode after composer is ready
+                    cy.get("div[contenteditable=true]").should("exist");
+                    cy.findByRole("button", { name: "Hide formatting" }).click();
+
+                    // Typing a single / displays the autocomplete menu and contents
+                    cy.findByRole("textbox").type("/");
+
+                    // Check that the autocomplete options are visible and there are more than 0 items
+                    cy.findByTestId("autocomplete-wrapper").should("not.be.empty");
+
+                    // Entering `//` or `/ ` hides the autocomplete contents
+                    // Add an extra slash for `//`
+                    cy.findByRole("textbox").type("/");
+                    cy.findByTestId("autocomplete-wrapper").should("be.empty");
+                    // Remove the extra slash to go back to `/`
+                    cy.findByRole("textbox").type("{Backspace}");
+                    cy.findByTestId("autocomplete-wrapper").should("not.be.empty");
+                    // Add a trailing space for `/ `
+                    cy.findByRole("textbox").type(" ");
+                    cy.findByTestId("autocomplete-wrapper").should("be.empty");
+
+                    // Typing a command that takes no arguments (/devtools) and selecting by click works
+                    cy.findByRole("textbox").type("{Backspace}dev");
+                    cy.findByTestId("autocomplete-wrapper").within(() => {
+                        cy.findByText("/devtools").click();
+                    });
+                    // Check it has closed the autocomplete and put the text into the composer
+                    cy.findByTestId("autocomplete-wrapper").should("not.be.visible");
+                    cy.findByRole("textbox").within(() => {
+                        cy.findByText("/devtools").should("exist");
+                    });
+                    // Send the message and check the devtools dialog appeared, then close it
+                    cy.findByRole("button", { name: "Send message" }).click();
+                    cy.findByRole("dialog").within(() => {
+                        cy.findByText("Developer Tools").should("exist");
+                    });
+                    cy.findByRole("button", { name: "Close dialog" }).click();
+
+                    // Typing a command that takes arguments (/spoiler) and selecting with enter works
+                    cy.findByRole("textbox").type("/spoil");
+                    cy.findByTestId("autocomplete-wrapper").within(() => {
+                        cy.findByText("/spoiler").should("exist");
+                    });
+                    cy.findByRole("textbox").type("{Enter}");
+                    // Check it has closed the autocomplete and put the text into the composer
+                    cy.findByTestId("autocomplete-wrapper").should("not.be.visible");
+                    cy.findByRole("textbox").within(() => {
+                        cy.findByText("/spoiler").should("exist");
+                    });
+                    // Enter some more text, then send the message
+                    cy.findByRole("textbox").type("this is the spoiler text ");
+                    cy.findByRole("button", { name: "Send message" }).click();
+                    // Check that a spoiler item has appeared in the timeline and contains the spoiler command text
+                    cy.get("span.mx_EventTile_spoiler").should("exist");
+                    cy.findByText("this is the spoiler text").should("exist");
+                });
+            });
+        });
+
         it("sends a message when you click send or press Enter", () => {
             // Type a message
             cy.get("div[contenteditable=true]").type("my message 0");

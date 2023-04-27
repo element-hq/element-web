@@ -21,6 +21,8 @@ import userEvent from "@testing-library/user-event";
 import { PlainTextComposer } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/PlainTextComposer";
 import * as mockUseSettingsHook from "../../../../../../src/hooks/useSettings";
 import * as mockKeyboard from "../../../../../../src/Keyboard";
+import { createMocks } from "../utils";
+import RoomContext from "../../../../../../src/contexts/RoomContext";
 
 describe("PlainTextComposer", () => {
     const customRender = (
@@ -270,5 +272,22 @@ describe("PlainTextComposer", () => {
 
         jest.useRealTimers();
         (global.ResizeObserver as jest.Mock).mockRestore();
+    });
+
+    it("Should not render <Autocomplete /> if not wrapped in room context", () => {
+        customRender();
+        expect(screen.queryByTestId("autocomplete-wrapper")).not.toBeInTheDocument();
+    });
+
+    it("Should render <Autocomplete /> if wrapped in room context", () => {
+        const { defaultRoomContext } = createMocks();
+
+        render(
+            <RoomContext.Provider value={defaultRoomContext}>
+                <PlainTextComposer onChange={jest.fn()} onSend={jest.fn()} disabled={false} initialContent="" />
+            </RoomContext.Provider>,
+        );
+
+        expect(screen.getByTestId("autocomplete-wrapper")).toBeInTheDocument();
     });
 });

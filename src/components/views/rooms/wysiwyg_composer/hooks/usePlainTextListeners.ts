@@ -15,9 +15,13 @@ limitations under the License.
 */
 
 import { KeyboardEvent, RefObject, SyntheticEvent, useCallback, useRef, useState } from "react";
+import { Attributes, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { IS_MAC, Key } from "../../../../../Keyboard";
+import Autocomplete from "../../Autocomplete";
+import { handleEventWithAutocomplete } from "./utils";
+import { useSuggestion } from "./useSuggestion";
 
 function isDivElement(target: EventTarget): target is HTMLDivElement {
     return target instanceof HTMLDivElement;
@@ -33,20 +37,44 @@ function amendInnerHtml(text: string): string {
         .replace(/<\/div>/g, "");
 }
 
+/**
+ * React hook which generates all of the listeners and the ref to be attached to the editor.
+ *
+ * Also returns pieces of state and utility functions that are required for use in other hooks
+ * and by the autocomplete component.
+ *
+ * @param initialContent - the content of the editor when it is first mounted
+ * @param onChange - called whenever there is change in the editor content
+ * @param onSend - called whenever the user sends the message
+ * @returns
+ * - `ref`: a ref object which the caller must attach to the HTML `div` node for the editor
+ * * `autocompleteRef`: a ref object which the caller must attach to the autocomplete component
+ * - `content`: state representing the editor's current text content
+ * - `setContent`: the setter function for `content`
+ * - `onInput`, `onPaste`, `onKeyDown`: handlers for input, paste and keyDown events
+ * - the output from the {@link useSuggestion} hook
+ */
 export function usePlainTextListeners(
     initialContent?: string,
     onChange?: (content: string) => void,
     onSend?: () => void,
 ): {
     ref: RefObject<HTMLDivElement>;
+    autocompleteRef: React.RefObject<Autocomplete>;
     content?: string;
     onInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onPaste(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onKeyDown(event: KeyboardEvent<HTMLDivElement>): void;
     setContent(text: string): void;
+    handleMention: (link: string, text: string, attributes: Attributes) => void;
+    handleCommand: (text: string) => void;
+    onSelect: (event: SyntheticEvent<HTMLDivElement>) => void;
+    suggestion: MappedSuggestion | null;
 } {
     const ref = useRef<HTMLDivElement | null>(null);
+    const autocompleteRef = useRef<Autocomplete | null>(null);
     const [content, setContent] = useState<string | undefined>(initialContent);
+
     const send = useCallback(() => {
         if (ref.current) {
             ref.current.innerHTML = "";
@@ -62,6 +90,11 @@ export function usePlainTextListeners(
         [onChange],
     );
 
+    // For separation of concerns, the suggestion handling is kept in a separate hook but is
+    // nested here because we do need to be able to update the `content` state in this hook
+    // when a user selects a suggestion from the autocomplete menu
+    const { suggestion, onSelect, handleCommand, handleMention } = useSuggestion(ref, setText);
+
     const enterShouldSend = !useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
     const onInput = useCallback(
         (event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>) => {
@@ -76,6 +109,13 @@ export function usePlainTextListeners(
 
     const onKeyDown = useCallback(
         (event: KeyboardEvent<HTMLDivElement>) => {
+            // we need autocomplete to take priority when it is open for using enter to select
+            const isHandledByAutocomplete = handleEventWithAutocomplete(autocompleteRef, event);
+            if (isHandledByAutocomplete) {
+                return;
+            }
+
+            // resume regular flow
             if (event.key === Key.ENTER) {
                 // TODO use getKeyBindingsManager().getMessageComposerAction(event) like in useInputEventProcessor
                 const sendModifierIsPressed = IS_MAC ? event.metaKey : event.ctrlKey;
@@ -95,8 +135,20 @@ export function usePlainTextListeners(
                 }
             }
         },
-        [enterShouldSend, send],
+        [autocompleteRef, enterShouldSend, send],
     );
 
-    return { ref, onInput, onPaste: onInput, onKeyDown, content, setContent: setText };
+    return {
+        ref,
+        autocompleteRef,
+        onInput,
+        onPaste: onInput,
+        onKeyDown,
+        content,
+        setContent: setText,
+        suggestion,
+        onSelect,
+        handleCommand,
+        handleMention,
+    };
 }
