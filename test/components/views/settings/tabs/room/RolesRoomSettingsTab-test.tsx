@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult } from "@testing-library/react";
+import { fireEvent, render, RenderResult, screen } from "@testing-library/react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { mocked } from "jest-mock";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 
 import RolesRoomSettingsTab from "../../../../../../src/components/views/settings/tabs/room/RolesRoomSettingsTab";
 import { mkStubRoom, stubClient } from "../../../../../test-utils";
@@ -30,12 +31,13 @@ import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import { ElementCall } from "../../../../../../src/models/Call";
 
 describe("RolesRoomSettingsTab", () => {
+    const userId = "@alice:server.org";
     const roomId = "!room:example.com";
     let cli: MatrixClient;
     let room: Room;
 
-    const renderTab = (): RenderResult => {
-        return render(<RolesRoomSettingsTab roomId={roomId} />);
+    const renderTab = (propRoom: Room = room): RenderResult => {
+        return render(<RolesRoomSettingsTab room={propRoom} />);
     };
 
     const getVoiceBroadcastsSelect = (): HTMLElement => {
@@ -181,6 +183,56 @@ describe("RolesRoomSettingsTab", () => {
 
             expect(getJoinCallSelect(tab)).toBeFalsy();
             expect(getJoinCallSelectedOption(tab)).toBeFalsy();
+        });
+    });
+
+    describe("Banned users", () => {
+        it("should not render banned section when no banned users", () => {
+            const room = new Room(roomId, cli, userId);
+            renderTab(room);
+
+            expect(screen.queryByText("Banned users")).not.toBeInTheDocument();
+        });
+
+        it("renders banned users", () => {
+            const bannedMember = new RoomMember(roomId, "@bob:server.org");
+            bannedMember.setMembershipEvent(
+                new MatrixEvent({
+                    type: EventType.RoomMember,
+                    content: {
+                        membership: "ban",
+                        reason: "just testing",
+                    },
+                    sender: userId,
+                }),
+            );
+            const room = new Room(roomId, cli, userId);
+            jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bannedMember]);
+            renderTab(room);
+
+            expect(screen.getByText("Banned users").parentElement).toMatchSnapshot();
+        });
+
+        it("uses banners display name when available", () => {
+            const bannedMember = new RoomMember(roomId, "@bob:server.org");
+            const senderMember = new RoomMember(roomId, "@alice:server.org");
+            senderMember.name = "Alice";
+            bannedMember.setMembershipEvent(
+                new MatrixEvent({
+                    type: EventType.RoomMember,
+                    content: {
+                        membership: "ban",
+                        reason: "just testing",
+                    },
+                    sender: userId,
+                }),
+            );
+            const room = new Room(roomId, cli, userId);
+            jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bannedMember]);
+            jest.spyOn(room, "getMember").mockReturnValue(senderMember);
+            renderTab(room);
+
+            expect(screen.getByTitle("Banned by Alice")).toBeInTheDocument();
         });
     });
 });

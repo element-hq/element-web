@@ -27,13 +27,13 @@ import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { VoipRoomSettingsTab } from "../../../../../../src/components/views/settings/tabs/room/VoipRoomSettingsTab";
 import { ElementCall } from "../../../../../../src/models/Call";
 
-describe("RolesRoomSettingsTab", () => {
+describe("VoipRoomSettingsTab", () => {
     const roomId = "!room:example.com";
     let cli: MatrixClient;
     let room: Room;
 
     const renderTab = (): RenderResult => {
-        return render(<VoipRoomSettingsTab roomId={roomId} />);
+        return render(<VoipRoomSettingsTab room={room} />);
     };
 
     beforeEach(() => {

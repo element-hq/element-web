@@ -53,7 +53,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
-        this.roomProps = EchoChamber.forRoom(context.getRoom(this.props.roomId));
+        this.roomProps = EchoChamber.forRoom(context.getRoom(this.props.roomId)!);
 
         let currentSound = "default";
         const soundData = Notifier.getSoundForRoom(this.props.roomId);

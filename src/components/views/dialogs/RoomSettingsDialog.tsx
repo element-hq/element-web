@@ -1,6 +1,8 @@
 /*
 Copyright 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +18,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { RoomEvent } from "matrix-js-sdk/src/models/room";
+import { RoomEvent, Room } from "matrix-js-sdk/src/models/room";
 
 import TabbedView, { Tab } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -36,6 +38,7 @@ import { VoipRoomSettingsTab } from "../settings/tabs/room/VoipRoomSettingsTab";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { NonEmptyArray } from "../../../@types/common";
 import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
+import ErrorBoundary from "../elements/ErrorBoundary";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_VOIP_TAB = "ROOM_VOIP_TAB";
@@ -53,15 +56,17 @@ interface IProps {
 }
 
 interface IState {
-    roomName: string;
+    room: Room;
 }
 
-export default class RoomSettingsDialog extends React.Component<IProps, IState> {
+class RoomSettingsDialog extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 
     public constructor(props: IProps) {
         super(props);
-        this.state = { roomName: "" };
+
+        const room = this.getRoom();
+        this.state = { room };
     }
 
     public componentDidMount(): void {
@@ -70,12 +75,34 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
         this.onRoomName();
     }
 
+    public componentDidUpdate(): void {
+        if (this.props.roomId !== this.state.room.roomId) {
+            const room = this.getRoom();
+            this.setState({ room });
+        }
+    }
+
     public componentWillUnmount(): void {
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
         }
 
         MatrixClientPeg.get().removeListener(RoomEvent.Name, this.onRoomName);
+    }
+
+    /**
+     * Get room from client
+     * @returns Room
+     * @throws when room is not found
+     */
+    private getRoom(): Room {
+        const room = MatrixClientPeg.get().getRoom(this.props.roomId)!;
+
+        // something is really wrong if we encounter this
+        if (!room) {
+            throw new Error(`Cannot find room ${this.props.roomId}`);
+        }
+        return room;
     }
 
     private onAction = (payload: ActionPayload): void => {
@@ -87,9 +114,8 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
     };
 
     private onRoomName = (): void => {
-        this.setState({
-            roomName: MatrixClientPeg.get().getRoom(this.props.roomId)?.name ?? "",
-        });
+        // rerender when the room name changes
+        this.forceUpdate();
     };
 
     private getTabs(): NonEmptyArray<Tab> {
@@ -100,7 +126,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
                 ROOM_GENERAL_TAB,
                 _td("General"),
                 "mx_RoomSettingsDialog_settingsIcon",
-                <GeneralRoomSettingsTab roomId={this.props.roomId} />,
+                <GeneralRoomSettingsTab room={this.state.room} />,
                 "RoomSettingsGeneral",
             ),
         );
@@ -110,7 +136,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
                     ROOM_VOIP_TAB,
                     _td("Voice & Video"),
                     "mx_RoomSettingsDialog_voiceIcon",
-                    <VoipRoomSettingsTab roomId={this.props.roomId} />,
+                    <VoipRoomSettingsTab room={this.state.room} />,
                 ),
             );
         }
@@ -119,12 +145,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
                 ROOM_SECURITY_TAB,
                 _td("Security & Privacy"),
                 "mx_RoomSettingsDialog_securityIcon",
-                (
-                    <SecurityRoomSettingsTab
-                        roomId={this.props.roomId}
-                        closeSettingsFn={() => this.props.onFinished(true)}
-                    />
-                ),
+                <SecurityRoomSettingsTab room={this.state.room} closeSettingsFn={() => this.props.onFinished(true)} />,
                 "RoomSettingsSecurityPrivacy",
             ),
         );
@@ -133,7 +154,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
                 ROOM_ROLES_TAB,
                 _td("Roles & Permissions"),
                 "mx_RoomSettingsDialog_rolesIcon",
-                <RolesRoomSettingsTab roomId={this.props.roomId} />,
+                <RolesRoomSettingsTab room={this.state.room} />,
                 "RoomSettingsRolesPermissions",
             ),
         );
@@ -144,7 +165,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
                 "mx_RoomSettingsDialog_notificationsIcon",
                 (
                     <NotificationSettingsTab
-                        roomId={this.props.roomId}
+                        roomId={this.state.room.roomId}
                         closeSettingsFn={() => this.props.onFinished(true)}
                     />
                 ),
@@ -158,7 +179,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
                     ROOM_BRIDGES_TAB,
                     _td("Bridges"),
                     "mx_RoomSettingsDialog_bridgesIcon",
-                    <BridgeSettingsTab roomId={this.props.roomId} />,
+                    <BridgeSettingsTab room={this.state.room} />,
                     "RoomSettingsBridges",
                 ),
             );
@@ -169,7 +190,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
                 ROOM_POLL_HISTORY_TAB,
                 _td("Poll history"),
                 "mx_RoomSettingsDialog_pollsIcon",
-                <PollHistoryTab roomId={this.props.roomId} onFinished={() => this.props.onFinished(true)} />,
+                <PollHistoryTab room={this.state.room} onFinished={() => this.props.onFinished(true)} />,
             ),
         );
 
@@ -181,7 +202,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
                     "mx_RoomSettingsDialog_warningIcon",
                     (
                         <AdvancedRoomSettingsTab
-                            roomId={this.props.roomId}
+                            room={this.state.room}
                             closeSettingsFn={() => this.props.onFinished(true)}
                         />
                     ),
@@ -194,7 +215,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
     }
 
     public render(): React.ReactNode {
-        const roomName = this.state.roomName;
+        const roomName = this.state.room.name;
         return (
             <BaseDialog
                 className="mx_RoomSettingsDialog"
@@ -213,3 +234,11 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
         );
     }
 }
+
+const WrappedRoomSettingsDialog: React.FC<IProps> = (props) => (
+    <ErrorBoundary>
+        <RoomSettingsDialog {...props} />
+    </ErrorBoundary>
+);
+
+export default WrappedRoomSettingsDialog;

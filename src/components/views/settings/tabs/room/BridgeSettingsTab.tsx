@@ -30,7 +30,7 @@ const BRIDGE_EVENT_TYPES = [
 const BRIDGES_LINK = "https://matrix.org/bridges/";
 
 interface IProps {
-    roomId: string;
+    room: Room;
 }
 
 export default class BridgeSettingsTab extends React.Component<IProps> {
@@ -51,9 +51,8 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
     public render(): React.ReactNode {
         // This settings tab will only be invoked if the following function returns more
         // than 0 events, so no validation is needed at this stage.
-        const bridgeEvents = BridgeSettingsTab.getBridgeStateEvents(this.props.roomId);
-        const client = MatrixClientPeg.get();
-        const room = client.getRoom(this.props.roomId);
+        const bridgeEvents = BridgeSettingsTab.getBridgeStateEvents(this.props.room.roomId);
+        const room = this.props.room;
 
         let content: JSX.Element;
         if (bridgeEvents.length > 0) {

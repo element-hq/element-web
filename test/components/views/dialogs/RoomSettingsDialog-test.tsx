@@ -38,23 +38,45 @@ describe("<RoomSettingsDialog />", () => {
 
     const roomId = "!room:server.org";
     const room = new Room(roomId, mockClient, userId);
+    room.name = "Test Room";
+    const room2 = new Room("!room2:server.org", mockClient, userId);
+    room2.name = "Another Room";
 
     jest.spyOn(SettingsStore, "getValue");
 
     beforeEach(() => {
         jest.clearAllMocks();
 
-        mockClient.getRoom.mockReturnValue(room);
+        mockClient.getRoom.mockImplementation((roomId) => {
+            if (roomId === room.roomId) return room;
+            if (roomId === room2.roomId) return room2;
+            return null;
+        });
 
         jest.spyOn(SettingsStore, "getValue").mockReset().mockReturnValue(false);
     });
 
-    const getComponent = (onFinished = jest.fn()) =>
-        render(<RoomSettingsDialog roomId={roomId} onFinished={onFinished} />, {
+    const getComponent = (onFinished = jest.fn(), propRoomId = roomId) =>
+        render(<RoomSettingsDialog roomId={propRoomId} onFinished={onFinished} />, {
             wrapper: ({ children }) => (
                 <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
             ),
         });
+
+    it("catches errors when room is not found", () => {
+        getComponent(undefined, "!room-that-does-not-exist");
+        expect(screen.getByText("Something went wrong!")).toBeInTheDocument();
+    });
+
+    it("updates when roomId prop changes", () => {
+        const { rerender, getByText } = getComponent(undefined, roomId);
+
+        expect(getByText(`Room Settings - ${room.name}`)).toBeInTheDocument();
+
+        rerender(<RoomSettingsDialog roomId={room2.roomId} onFinished={jest.fn()} />);
+
+        expect(getByText(`Room Settings - ${room2.name}`)).toBeInTheDocument();
+    });
 
     describe("Settings tabs", () => {
         it("renders default tabs correctly", () => {

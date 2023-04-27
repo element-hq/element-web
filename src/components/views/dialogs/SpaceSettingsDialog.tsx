@@ -70,14 +70,14 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
                 SpaceSettingsTab.Roles,
                 _td("Roles & Permissions"),
                 "mx_RoomSettingsDialog_rolesIcon",
-                <RolesRoomSettingsTab roomId={space.roomId} />,
+                <RolesRoomSettingsTab room={space} />,
             ),
             SettingsStore.getValue(UIFeature.AdvancedSettings)
                 ? new Tab(
                       SpaceSettingsTab.Advanced,
                       _td("Advanced"),
                       "mx_RoomSettingsDialog_warningIcon",
-                      <AdvancedRoomSettingsTab roomId={space.roomId} closeSettingsFn={onFinished} />,
+                      <AdvancedRoomSettingsTab room={space} closeSettingsFn={onFinished} />,
                   )
                 : null,
         ].filter(Boolean) as NonEmptyArray<Tab>;

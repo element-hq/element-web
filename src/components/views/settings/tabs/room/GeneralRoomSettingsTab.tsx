@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { ContextType } from "react";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
@@ -28,7 +29,7 @@ import AliasSettings from "../../../room_settings/AliasSettings";
 import PosthogTrackers from "../../../../../PosthogTrackers";
 
 interface IProps {
-    roomId: string;
+    room: Room;
 }
 
 interface IState {
@@ -50,7 +51,7 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
     private onLeaveClick = (ev: ButtonEvent): void => {
         dis.dispatch({
             action: "leave_room",
-            room_id: this.props.roomId,
+            room_id: this.props.room.roomId,
         });
 
         PosthogTrackers.trackInteraction("WebRoomSettingsLeaveButton", ev);
@@ -58,17 +59,18 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
     public render(): React.ReactNode {
         const client = this.context;
-        const room = client.getRoom(this.props.roomId);
+        const room = this.props.room;
 
         const canSetAliases = true; // Previously, we arbitrarily only allowed admins to do this
-        const canSetCanonical = room?.currentState.mayClientSendStateEvent("m.room.canonical_alias", client);
-        const canonicalAliasEv = room?.currentState.getStateEvents("m.room.canonical_alias", "") ?? undefined;
+        const canSetCanonical = room.currentState.mayClientSendStateEvent("m.room.canonical_alias", client);
+        const canonicalAliasEv = room.currentState.getStateEvents("m.room.canonical_alias", "") ?? undefined;
 
-        const urlPreviewSettings =
-            room && SettingsStore.getValue(UIFeature.URLPreviews) ? <UrlPreviewSettings room={room} /> : null;
+        const urlPreviewSettings = SettingsStore.getValue(UIFeature.URLPreviews) ? (
+            <UrlPreviewSettings room={room} />
+        ) : null;
 
         let leaveSection;
-        if (room?.getMyMembership() === "join") {
+        if (room.getMyMembership() === "join") {
             leaveSection = (
                 <>
                     <span className="mx_SettingsTab_subheading">{_t("Leave room")}</span>
@@ -85,12 +87,12 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
             <div className="mx_SettingsTab mx_GeneralRoomSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("General")}</div>
                 <div className="mx_SettingsTab_section mx_GeneralRoomSettingsTab_profileSection">
-                    <RoomProfileSettings roomId={this.props.roomId} />
+                    <RoomProfileSettings roomId={room.roomId} />
                 </div>
 
                 <div className="mx_SettingsTab_heading">{_t("Room Addresses")}</div>
                 <AliasSettings
-                    roomId={this.props.roomId}
+                    roomId={room.roomId}
                     canSetCanonicalAlias={canSetCanonical}
                     canSetAliases={canSetAliases}
                     canonicalAliasEvent={canonicalAliasEv}

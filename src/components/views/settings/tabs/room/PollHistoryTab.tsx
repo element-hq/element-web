@@ -15,23 +15,20 @@ limitations under the License.
 */
 
 import React, { useContext } from "react";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import { PollHistory } from "../../../polls/pollHistory/PollHistory";
 import { RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
 
 interface IProps {
-    roomId: string;
+    room: Room;
     onFinished: () => void;
 }
 
-export const PollHistoryTab: React.FC<IProps> = ({ roomId, onFinished }) => {
+export const PollHistoryTab: React.FC<IProps> = ({ room, onFinished }) => {
     const matrixClient = useContext(MatrixClientContext);
-    const room = matrixClient.getRoom(roomId);
-    if (!room) {
-        return null;
-    }
-    const permalinkCreator = new RoomPermalinkCreator(room, roomId);
+    const permalinkCreator = new RoomPermalinkCreator(room, room.roomId);
 
     return (
         <div className="mx_SettingsTab">
