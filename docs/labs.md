@@ -100,12 +100,6 @@ theme definition.
 
 For some sample themes, check out [aaronraimist/element-themes](https://github.com/aaronraimist/element-themes).
 
-## Message preview tweaks
-
-To enable message previews in the left panel for reactions in all rooms, enable `feature_roomlist_preview_reactions_all`.
-
-To enable message previews for reactions in DMs only, enable `feature_roomlist_preview_reactions_dms`. This is ignored when it is enabled for all rooms.
-
 ## Dehydrated devices (`feature_dehydration`)
 
 Allows users to receive encrypted messages by creating a device that is stored
