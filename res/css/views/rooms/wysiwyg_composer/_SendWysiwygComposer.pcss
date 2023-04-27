@@ -71,8 +71,8 @@ limitations under the License.
                 /* while keeping the autocomplete at the top */
                 /* of the composer. The parent needs to be a flex container for this to work. */
                 margin: auto 0;
-                /* max-height at this level so autocomplete doesn't get scrolled too */
-                max-height: 140px;
+                /* the line height is $font-22px (set in _Editor.pcss) and we want to display 16 lines */
+                max-height: calc(16 * $font-22px);
                 overflow-y: auto;
             }
         }
