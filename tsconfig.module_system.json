@@ -4,7 +4,7 @@
         "jsx": "preserve",
         "declaration": false,
         "outDir": "./lib/module_system",
-        "lib": ["es2019"],
+        "lib": ["es2020"],
         "types": ["node"]
     },
     "include": ["./module_system/**/*.ts"]
