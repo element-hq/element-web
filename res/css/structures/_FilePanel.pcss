@@ -42,24 +42,22 @@ limitations under the License.
         display: none;
     }
 
+    /* Overrides for the attachment body tiles */
     .mx_EventTile {
-        /* Overrides for the attachment body tiles */
-        &:not([data-layout="bubble"]) {
-            word-break: break-word;
-            margin-top: 10px;
-            padding-top: 0;
+        word-break: break-word;
+        margin-top: 10px;
+        padding-top: 0;
 
-            .mx_EventTile_line {
-                padding-inline-start: 0;
-            }
+        .mx_EventTile_line {
+            padding-inline-start: 0;
+        }
 
-            &:hover {
-                &.mx_EventTile_verified,
-                &.mx_EventTile_unverified,
-                &.mx_EventTile_unknown {
-                    .mx_EventTile_line {
-                        box-shadow: none;
-                    }
+        &:hover {
+            &.mx_EventTile_verified,
+            &.mx_EventTile_unverified,
+            &.mx_EventTile_unknown {
+                .mx_EventTile_line {
+                    box-shadow: none;
                 }
             }
         }
