@@ -32,7 +32,7 @@ import { WIDGET_LAYOUT_EVENT_TYPE } from "./stores/widgets/WidgetLayoutStore";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import defaultDispatcher from "./dispatcher/dispatcher";
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import { ROOM_SECURITY_TAB } from "./components/views/dialogs/RoomSettingsDialog";
+import { RoomSettingsTab } from "./components/views/dialogs/RoomSettingsDialog";
 import AccessibleButton, { ButtonEvent } from "./components/views/elements/AccessibleButton";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
@@ -236,7 +236,7 @@ function textForTombstoneEvent(ev: MatrixEvent): (() => string) | null {
 const onViewJoinRuleSettingsClick = (): void => {
     defaultDispatcher.dispatch({
         action: "open_room_settings",
-        initial_tab_id: ROOM_SECURITY_TAB,
+        initial_tab_id: RoomSettingsTab.Security,
     });
 };
 

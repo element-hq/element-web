@@ -26,11 +26,11 @@ describe("<TabbedView />", () => {
     const securityTab = new Tab("SECURITY", "Security", "security", <div>security</div>);
     const defaultProps = {
         tabLocation: TabLocation.LEFT,
-        tabs: [generalTab, labsTab, securityTab] as NonEmptyArray<Tab>,
+        tabs: [generalTab, labsTab, securityTab] as NonEmptyArray<Tab<any>>,
     };
     const getComponent = (props = {}): React.ReactElement => <TabbedView {...defaultProps} {...props} />;
 
-    const getTabTestId = (tab: Tab): string => `settings-tab-${tab.id}`;
+    const getTabTestId = (tab: Tab<string>): string => `settings-tab-${tab.id}`;
     const getActiveTab = (container: HTMLElement): Element | undefined =>
         container.getElementsByClassName("mx_TabbedView_tabLabel_active")[0];
     const getActiveTabBody = (container: HTMLElement): Element | undefined =>

@@ -38,7 +38,7 @@ import ExportDialog from "../dialogs/ExportDialog";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { usePinnedEvents } from "../right_panel/PinnedMessagesCard";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import { ROOM_NOTIFICATIONS_TAB } from "../dialogs/RoomSettingsDialog";
+import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
@@ -199,7 +199,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
                     dis.dispatch({
                         action: "open_room_settings",
                         room_id: room.roomId,
-                        initial_tab_id: ROOM_NOTIFICATIONS_TAB,
+                        initial_tab_id: RoomSettingsTab.Notifications,
                     });
                     onFinished();
 

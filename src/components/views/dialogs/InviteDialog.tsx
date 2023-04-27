@@ -1494,7 +1494,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         let dialogContent;
         if (this.props.kind === InviteKind.CallTransfer) {
-            const tabs: NonEmptyArray<Tab> = [
+            const tabs: NonEmptyArray<Tab<TabId>> = [
                 new Tab(TabId.UserDirectory, _td("User Directory"), "mx_InviteDialog_userDirectoryIcon", usersSection),
             ];
 

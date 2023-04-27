@@ -80,7 +80,7 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
                       <AdvancedRoomSettingsTab room={space} closeSettingsFn={onFinished} />,
                   )
                 : null,
-        ].filter(Boolean) as NonEmptyArray<Tab>;
+        ].filter(Boolean) as NonEmptyArray<Tab<SpaceSettingsTab>>;
     }, [cli, space, onFinished]);
 
     return (

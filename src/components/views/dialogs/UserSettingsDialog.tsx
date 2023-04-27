@@ -81,8 +81,8 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         this.setState({ newSessionManagerEnabled: newValue });
     };
 
-    private getTabs(): NonEmptyArray<Tab> {
-        const tabs: Tab[] = [];
+    private getTabs(): NonEmptyArray<Tab<UserTab>> {
+        const tabs: Tab<UserTab>[] = [];
 
         tabs.push(
             new Tab(
@@ -208,7 +208,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             ),
         );
 
-        return tabs as NonEmptyArray<Tab>;
+        return tabs as NonEmptyArray<Tab<UserTab>>;
     }
 
     public render(): React.ReactNode {

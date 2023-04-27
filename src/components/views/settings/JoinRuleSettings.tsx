@@ -31,7 +31,7 @@ import { upgradeRoom } from "../../../utils/RoomUpgrade";
 import { arrayHasDiff } from "../../../utils/arrays";
 import { useLocalEcho } from "../../../hooks/useLocalEcho";
 import dis from "../../../dispatcher/dispatcher";
-import { ROOM_SECURITY_TAB } from "../dialogs/RoomSettingsDialog";
+import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { doesRoomVersionSupport, PreferredRoomVersions } from "../../../utils/PreferredRoomVersions";
@@ -320,7 +320,7 @@ const JoinRuleSettings: React.FC<IProps> = ({
                         // open new settings on this tab
                         dis.dispatch({
                             action: "open_room_settings",
-                            initial_tab_id: ROOM_SECURITY_TAB,
+                            initial_tab_id: RoomSettingsTab.Security,
                         });
                     },
                 });

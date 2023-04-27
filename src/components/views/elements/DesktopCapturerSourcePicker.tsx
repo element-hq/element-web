@@ -85,6 +85,8 @@ export interface PickerIProps {
     onFinished(sourceId?: string): void;
 }
 
+type TabId = "screen" | "window";
+
 export default class DesktopCapturerSourcePicker extends React.Component<PickerIProps, PickerIState> {
     public interval: number;
 
@@ -134,7 +136,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
         this.props.onFinished();
     };
 
-    private getTab(type: "screen" | "window", label: string): Tab {
+    private getTab(type: TabId, label: string): Tab<TabId> {
         const sources = this.state.sources
             .filter((source) => source.id.startsWith(type))
             .map((source) => {
@@ -152,7 +154,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
     }
 
     public render(): React.ReactNode {
-        const tabs: NonEmptyArray<Tab> = [
+        const tabs: NonEmptyArray<Tab<TabId>> = [
             this.getTab("screen", _t("Share entire screen")),
             this.getTab("window", _t("Application window")),
         ];

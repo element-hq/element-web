@@ -70,7 +70,7 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
 };
 
 const SpacePreferencesDialog: React.FC<IProps> = ({ space, initialTabId, onFinished }) => {
-    const tabs: NonEmptyArray<Tab> = [
+    const tabs: NonEmptyArray<Tab<SpacePreferenceTab>> = [
         new Tab(
             SpacePreferenceTab.Appearance,
             _td("Appearance"),
