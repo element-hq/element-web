@@ -92,6 +92,7 @@ class PassphraseField extends PureComponent<IProps> {
                 },
             },
         ],
+        memoize: true,
     });
 
     public onValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {

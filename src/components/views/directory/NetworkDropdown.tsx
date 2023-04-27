@@ -68,6 +68,7 @@ const validServer = withValidation<undefined, { error?: MatrixError }>({
                     : _t("Can't find this server or its room list"),
         },
     ],
+    memoize: true,
 });
 
 function useSettingsValueWithSetter<T>(

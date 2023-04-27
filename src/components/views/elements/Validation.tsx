@@ -15,8 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React, { ReactChild, ReactNode } from "react";
 import classNames from "classnames";
+import memoizeOne from "memoize-one";
 
 type Data = Pick<IFieldState, "value" | "allowEmpty">;
 
@@ -40,6 +41,7 @@ interface IArgs<T, D = void> {
     description?(this: T, derivedData: D, results: IResult[]): ReactNode;
     hideDescriptionIfValid?: boolean;
     deriveData?(data: Data): Promise<D>;
+    memoize?: boolean;
 }
 
 export interface IFieldState {
@@ -60,7 +62,7 @@ export interface IValidationResult {
  * @param {Function} description
  *     Function that returns a string summary of the kind of value that will
  *     meet the validation rules. Shown at the top of the validation feedback.
- * @param {Boolean} hideDescriptionIfValid
+ * @param {boolean} hideDescriptionIfValid
  *     If true, don't show the description if the validation passes validation.
  * @param {Function} deriveData
  *     Optional function that returns a Promise to an object of generic type D.
@@ -75,6 +77,9 @@ export interface IValidationResult {
  *     - `valid`: Function returning text to show when the rule is valid. Only shown if set.
  *     - `invalid`: Function returning text to show when the rule is invalid. Only shown if set.
  *     - `final`: A Boolean if true states that this rule will only be considered if all rules before it returned valid.
+ * @param {boolean?} memoize
+ *     If true, will use memoization to avoid calling deriveData & rules unless the value or allowEmpty change.
+ *     Be careful to not use this if your validation is not pure and depends on other fields, such as "repeat password".
  * @returns {Function}
  *     A validation function that takes in the current input value and returns
  *     the overall validity and a feedback UI that can be rendered for more detail.
@@ -84,7 +89,68 @@ export default function withValidation<T = void, D = void>({
     hideDescriptionIfValid,
     deriveData,
     rules,
-}: IArgs<T, D>) {
+    memoize,
+}: IArgs<T, D>): (fieldState: IFieldState) => Promise<IValidationResult> {
+    let checkRules = async function (
+        this: T,
+        data: Data,
+        derivedData: D,
+    ): Promise<[valid: boolean, results: IResult[]]> {
+        const results: IResult[] = [];
+        let valid = true;
+        for (const rule of rules) {
+            if (!rule.key || !rule.test) {
+                continue;
+            }
+
+            if (!valid && rule.final) {
+                continue;
+            }
+
+            if (rule.skip?.call(this, data, derivedData)) {
+                continue;
+            }
+
+            // We're setting `this` to whichever component holds the validation
+            // function. That allows rules to access the state of the component.
+            const ruleValid: boolean = await rule.test.call(this, data, derivedData);
+            valid = valid && ruleValid;
+            if (ruleValid && rule.valid) {
+                // If the rule's result is valid and has text to show for
+                // the valid state, show it.
+                const text = rule.valid.call(this, derivedData);
+                if (!text) {
+                    continue;
+                }
+                results.push({
+                    key: rule.key,
+                    valid: true,
+                    text,
+                });
+            } else if (!ruleValid && rule.invalid) {
+                // If the rule's result is invalid and has text to show for
+                // the invalid state, show it.
+                const text = rule.invalid.call(this, derivedData);
+                if (!text) {
+                    continue;
+                }
+                results.push({
+                    key: rule.key,
+                    valid: false,
+                    text,
+                });
+            }
+        }
+
+        return [valid, results];
+    };
+
+    // We have to memoize it in chunks as `focused` can change frequently, but it isn't passed to these methods
+    if (memoize) {
+        if (deriveData) deriveData = memoizeOne(deriveData, isDataEqual);
+        checkRules = memoizeOne(checkRules, isDerivedDataEqual);
+    }
+
     return async function onValidate(
         this: T,
         { value, focused, allowEmpty = true }: IFieldState,
@@ -95,62 +161,15 @@ export default function withValidation<T = void, D = void>({
 
         const data = { value, allowEmpty };
         // We know that if deriveData is set then D will not be undefined
-        const derivedData: D = (await deriveData?.call(this, data)) as D;
-
-        const results: IResult[] = [];
-        let valid = true;
-        if (rules?.length) {
-            for (const rule of rules) {
-                if (!rule.key || !rule.test) {
-                    continue;
-                }
-
-                if (!valid && rule.final) {
-                    continue;
-                }
-
-                if (rule.skip?.call(this, data, derivedData)) {
-                    continue;
-                }
-
-                // We're setting `this` to whichever component holds the validation
-                // function. That allows rules to access the state of the component.
-                const ruleValid: boolean = await rule.test.call(this, data, derivedData);
-                valid = valid && ruleValid;
-                if (ruleValid && rule.valid) {
-                    // If the rule's result is valid and has text to show for
-                    // the valid state, show it.
-                    const text = rule.valid.call(this, derivedData);
-                    if (!text) {
-                        continue;
-                    }
-                    results.push({
-                        key: rule.key,
-                        valid: true,
-                        text,
-                    });
-                } else if (!ruleValid && rule.invalid) {
-                    // If the rule's result is invalid and has text to show for
-                    // the invalid state, show it.
-                    const text = rule.invalid.call(this, derivedData);
-                    if (!text) {
-                        continue;
-                    }
-                    results.push({
-                        key: rule.key,
-                        valid: false,
-                        text,
-                    });
-                }
-            }
-        }
+        const derivedData = (await deriveData?.call(this, data)) as D;
+        const [valid, results] = await checkRules.call(this, data, derivedData);
 
         // Hide feedback when not focused
         if (!focused) {
             return { valid };
         }
 
-        let details;
+        let details: ReactNode | undefined;
         if (results && results.length) {
             details = (
                 <ul className="mx_Validation_details">
@@ -170,7 +189,7 @@ export default function withValidation<T = void, D = void>({
             );
         }
 
-        let summary;
+        let summary: ReactNode | undefined;
         if (description && (details || !hideDescriptionIfValid)) {
             // We're setting `this` to whichever component holds the validation
             // function. That allows rules to access the state of the component.
@@ -178,7 +197,7 @@ export default function withValidation<T = void, D = void>({
             summary = content ? <div className="mx_Validation_description">{content}</div> : undefined;
         }
 
-        let feedback;
+        let feedback: ReactChild | undefined;
         if (summary || details) {
             feedback = (
                 <div className="mx_Validation">
@@ -193,4 +212,12 @@ export default function withValidation<T = void, D = void>({
             feedback,
         };
     };
+}
+
+function isDataEqual([a]: [Data], [b]: [Data]): boolean {
+    return a.value === b.value && a.allowEmpty === b.allowEmpty;
+}
+
+function isDerivedDataEqual([a1, a2]: [Data, any], [b1, b2]: [Data, any]): boolean {
+    return a2 === b2 && isDataEqual([a1], [b1]);
 }
