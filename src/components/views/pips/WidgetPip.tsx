@@ -123,7 +123,7 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
                 pointerEvents="none"
                 movePersistedElement={movePersistedElement}
             />
-            {(call !== null || WidgetType.JITSI.matches(widget.type)) && (
+            {(call !== null || WidgetType.JITSI.matches(widget?.type)) && (
                 <Toolbar className="mx_WidgetPip_footer">
                     <RovingAccessibleTooltipButton
                         onClick={onLeaveClick}
