@@ -508,6 +508,7 @@ Currently, the following UI feature flags are supported:
     timeline for recent messages. When false day dates will be used.
 -   `UIFeature.BulkUnverifiedSessionsReminder` - Display popup reminders to verify or remove unverified sessions. Defaults
     to true.
+-   `UIFeature.locationSharing` - Whether or not location sharing menus will be shown.
 
 ## Undocumented / developer options
 
