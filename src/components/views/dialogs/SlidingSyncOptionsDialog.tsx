@@ -87,7 +87,7 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
     const validProxy = withValidation<undefined, { error?: Error }>({
         async deriveData({ value }): Promise<{ error?: Error }> {
             try {
-                await proxyHealthCheck(value, MatrixClientPeg.get().baseUrl);
+                await proxyHealthCheck(value!, MatrixClientPeg.get().baseUrl);
                 return {};
             } catch (error) {
                 return { error };

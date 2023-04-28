@@ -29,7 +29,7 @@ import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 interface IManualDeviceKeyVerificationDialogProps {
     userId: string;
     device: Device;
-    onFinished?(confirm?: boolean): void;
+    onFinished(confirm?: boolean): void;
 }
 
 export function ManualDeviceKeyVerificationDialog({
@@ -44,7 +44,7 @@ export function ManualDeviceKeyVerificationDialog({
             if (confirm && mxClient) {
                 mxClient.setDeviceVerified(userId, device.deviceId, true);
             }
-            onFinished?.(confirm);
+            onFinished(confirm);
         },
         [mxClient, userId, device, onFinished],
     );

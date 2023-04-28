@@ -60,12 +60,12 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         const sender = this.room?.getMember(this.props.event.getSender());
 
         this.state = {
-            stateKey: this.props.event.getStateKey(),
-            roomId: this.props.event.getRoomId(),
+            stateKey: this.props.event.getStateKey()!,
+            roomId: this.props.event.getRoomId()!,
             displayName: this.props.event.getContent().display_name,
             invited: true,
             canKick: me ? me.powerLevel > kickLevel : false,
-            senderName: sender ? sender.name : this.props.event.getSender(),
+            senderName: sender?.name ?? this.props.event.getSender(),
         };
     }
 

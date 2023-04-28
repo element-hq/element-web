@@ -76,3 +76,5 @@ interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
 type DeepReadonlyObject<T> = {
     readonly [P in keyof T]: DeepReadonly<T[P]>;
 };
+
+export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];

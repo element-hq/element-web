@@ -146,7 +146,7 @@ export const options: Opts = {
                         return {
                             // @ts-ignore see https://linkify.js.org/docs/options.html
                             click: function (e: MouseEvent) {
-                                onUserClick(e, permalink.userId);
+                                onUserClick(e, permalink.userId!);
                             },
                         };
                     } else {

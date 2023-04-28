@@ -38,7 +38,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
     return (
         <GenericFeatureFeedbackDialog
             title={_t("%(featureName)s Beta feedback", { featureName: info.title })}
-            subheading={_t(info.feedbackSubheading)}
+            subheading={info.feedbackSubheading ? _t(info.feedbackSubheading) : undefined}
             onFinished={onFinished}
             rageshakeLabel={info.feedbackLabel}
             rageshakeData={Object.fromEntries(

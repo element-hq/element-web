@@ -215,7 +215,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
                 ),
             feedbackLabel: "video-room-feedback",
             feedbackSubheading: _td(
-                "Thank you for trying the beta, " + "please go into as much detail as you can so we can improve it.",
+                "Thank you for trying the beta, please go into as much detail as you can so we can improve it.",
             ),
             image: require("../../res/img/betas/video_rooms.png"),
             requiresRefresh: true,

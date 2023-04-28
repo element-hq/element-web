@@ -30,6 +30,7 @@ describe("AccessSecretStorageDialog", () => {
     let mockClient: Mocked<MatrixClient>;
 
     const defaultProps: ComponentProps<typeof AccessSecretStorageDialog> = {
+        keyInfo: {} as any,
         onFinished: jest.fn(),
         checkPrivateKey: jest.fn(),
     };

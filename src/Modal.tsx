@@ -30,7 +30,7 @@ const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
 
 // Type which accepts a React Component which looks like a Modal (accepts an onFinished prop)
 export type ComponentType = React.ComponentType<{
-    onFinished?(...args: any): void;
+    onFinished(...args: any): void;
 }>;
 
 // Generic type which returns the props of the Modal component with the onFinished being optional.
@@ -135,7 +135,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     }
 
     public appendDialog<C extends ComponentType>(
-        Element: React.ComponentType,
+        Element: C,
         props?: ComponentProps<C>,
         className?: string,
     ): IHandle<C> {
@@ -157,7 +157,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     }
 
     private buildModal<C extends ComponentType>(
-        prom: Promise<React.ComponentType>,
+        prom: Promise<C>,
         props?: ComponentProps<C>,
         className?: string,
         options?: IOptions<C>,
@@ -301,7 +301,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     }
 
     private appendDialogAsync<C extends ComponentType>(
-        prom: Promise<React.ComponentType>,
+        prom: Promise<C>,
         props?: ComponentProps<C>,
         className?: string,
     ): IHandle<C> {

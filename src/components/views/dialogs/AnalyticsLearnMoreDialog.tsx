@@ -19,7 +19,7 @@ import React from "react";
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
-import Modal from "../../../Modal";
+import Modal, { ComponentProps } from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import { getPolicyUrl } from "../../../toasts/AnalyticsToast";
 
@@ -29,7 +29,7 @@ export enum ButtonClicked {
 }
 
 interface IProps {
-    onFinished?(buttonClicked?: ButtonClicked): void;
+    onFinished(buttonClicked?: ButtonClicked): void;
     analyticsOwner: string;
     privacyPolicyUrl?: string;
     primaryButton?: string;
@@ -45,8 +45,8 @@ export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
     cancelButton,
     hasCancel,
 }) => {
-    const onPrimaryButtonClick = (): void => onFinished?.(ButtonClicked.Primary);
-    const onCancelButtonClick = (): void => onFinished?.(ButtonClicked.Cancel);
+    const onPrimaryButtonClick = (): void => onFinished(ButtonClicked.Primary);
+    const onCancelButtonClick = (): void => onFinished(ButtonClicked.Cancel);
     const privacyPolicyLink = privacyPolicyUrl ? (
         <span>
             {_t(
@@ -114,7 +114,9 @@ export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
     );
 };
 
-export const showDialog = (props: Omit<IProps, "cookiePolicyUrl" | "analyticsOwner">): void => {
+export const showDialog = (
+    props: Omit<ComponentProps<typeof AnalyticsLearnMoreDialog>, "cookiePolicyUrl" | "analyticsOwner">,
+): void => {
     const privacyPolicyUrl = getPolicyUrl();
     const analyticsOwner = SdkConfig.get("analytics_owner") ?? SdkConfig.get("brand");
     Modal.createDialog(

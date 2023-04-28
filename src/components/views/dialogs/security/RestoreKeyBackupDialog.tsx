@@ -136,6 +136,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
     };
 
     private onPassPhraseNext = async (): Promise<void> => {
+        if (!this.state.backupInfo) return;
         this.setState({
             loading: true,
             restoreError: null,
@@ -177,7 +178,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
     };
 
     private onRecoveryKeyNext = async (): Promise<void> => {
-        if (!this.state.recoveryKeyValid) return;
+        if (!this.state.recoveryKeyValid || !this.state.backupInfo) return;
 
         this.setState({
             loading: true,
@@ -228,6 +229,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         try {
             // `accessSecretStorage` may prompt for storage access as needed.
             await accessSecretStorage(async (): Promise<void> => {
+                if (!this.state.backupInfo) return;
                 await MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
                     this.state.backupInfo,
                     undefined,

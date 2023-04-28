@@ -422,7 +422,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         if (this.shouldTrackPageChange(prevState, this.state)) {
             const durationMs = this.stopPageChangeTimer();
-            PosthogTrackers.instance.trackPageChange(this.state.view, this.state.page_type, durationMs);
+            if (durationMs != null) {
+                PosthogTrackers.instance.trackPageChange(this.state.view, this.state.page_type, durationMs);
+            }
         }
         if (this.focusComposer) {
             dis.fire(Action.FocusSendMessageComposer);
@@ -935,7 +937,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             await this.firstSyncPromise.promise;
         }
 
-        let presentedId = roomInfo.room_alias || roomInfo.room_id;
+        let presentedId = roomInfo.room_alias || roomInfo.room_id!;
         const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
         if (room) {
             // Not all timeline events are decrypted ahead of time anymore

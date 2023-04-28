@@ -308,7 +308,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (card.phase === RightPanelPhases.RoomMemberInfo && card.state) {
             // RightPanelPhases.RoomMemberInfo -> needs to be changed to RightPanelPhases.EncryptionPanel if there is a pending verification request
             const { member } = card.state;
-            const pendingRequest = pendingVerificationRequestForUser(member);
+            const pendingRequest = member ? pendingVerificationRequestForUser(member) : undefined;
             if (pendingRequest) {
                 return {
                     phase: RightPanelPhases.EncryptionPanel,

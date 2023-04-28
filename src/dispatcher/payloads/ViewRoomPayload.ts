@@ -22,16 +22,11 @@ import { Action } from "../actions";
 import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import { IOpts } from "../../createRoom";
 import { JoinRoomPayload } from "./JoinRoomPayload";
+import { AtLeastOne } from "../../@types/common";
 
 /* eslint-disable camelcase */
-export interface ViewRoomPayload extends Pick<ActionPayload, "action"> {
+interface BaseViewRoomPayload extends Pick<ActionPayload, "action"> {
     action: Action.ViewRoom;
-
-    // either or both of room_id or room_alias must be specified
-    // where possible, a room_id should be provided with a room_alias as it reduces
-    // the number of API calls required.
-    room_id?: string;
-    room_alias?: string;
 
     event_id?: string; // the event to ensure is in view if any
     highlighted?: boolean; // whether to highlight `event_id`
@@ -57,4 +52,13 @@ export interface ViewRoomPayload extends Pick<ActionPayload, "action"> {
     metricsTrigger: ViewRoomEvent["trigger"];
     metricsViaKeyboard?: ViewRoomEvent["viaKeyboard"];
 }
+
+export type ViewRoomPayload = BaseViewRoomPayload &
+    AtLeastOne<{
+        // either or both of room_id or room_alias must be specified
+        // where possible, a room_id should be provided with a room_alias as it reduces
+        // the number of API calls required.
+        room_id?: string;
+        room_alias?: string;
+    }>;
 /* eslint-enable camelcase */

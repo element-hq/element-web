@@ -748,7 +748,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
         }
 
-        if (MatrixClientPeg.get().isRoomEncrypted(ev.getRoomId())) {
+        if (MatrixClientPeg.get().isRoomEncrypted(ev.getRoomId()!)) {
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
             if (ev.status === EventStatus.ENCRYPTING) {
@@ -783,7 +783,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (!this.props.showReactions || !this.props.getRelationsForEvent) {
             return null;
         }
-        const eventId = this.props.mxEvent.getId();
+        const eventId = this.props.mxEvent.getId()!;
         return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction") ?? null;
     };
 
@@ -801,7 +801,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     };
 
     private onTimestampContextMenu = (ev: React.MouseEvent): void => {
-        this.showContextMenu(ev, this.props.permalinkCreator?.forEvent(this.props.mxEvent.getId()));
+        this.showContextMenu(ev, this.props.permalinkCreator?.forEvent(this.props.mxEvent.getId()!));
     };
 
     private showContextMenu(ev: React.MouseEvent, permalink?: string): void {
@@ -974,7 +974,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let permalink = "#";
         if (this.props.permalinkCreator) {
-            permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
+            permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId()!);
         }
 
         // we can't use local echoes as scroll tokens, because their event IDs change.

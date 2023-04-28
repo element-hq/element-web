@@ -47,7 +47,7 @@ export class ModuleUiDialog extends ScrollableBaseModal<IProps, IState> {
 
     protected async submit(): Promise<void> {
         try {
-            const model = await this.contentRef.current.trySubmit();
+            const model = await this.contentRef.current!.trySubmit();
             this.props.onFinished(true, model);
         } catch (e) {
             logger.error("Error during submission of module dialog:", e);

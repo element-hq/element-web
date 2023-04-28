@@ -123,7 +123,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         this.getUpdatedDiagnostics();
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
-            const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
+            const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo!);
             if (this.unmounted) return;
             this.setState({
                 loading: false,
@@ -285,7 +285,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 );
             }
 
-            let backupSigStatuses: React.ReactNode = backupSigStatus.sigs.map((sig, i) => {
+            let backupSigStatuses: React.ReactNode = backupSigStatus?.sigs.map((sig, i) => {
                 const deviceName = sig.device ? sig.device.getDisplayName() || sig.device.deviceId : null;
                 const validity = (sub: string): JSX.Element => (
                     <span className={sig.valid ? "mx_SecureBackupPanel_sigValid" : "mx_SecureBackupPanel_sigInvalid"}>

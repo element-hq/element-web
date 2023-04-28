@@ -18,7 +18,7 @@ import { Room } from "matrix-js-sdk/src/matrix";
 
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../models/LocalRoom";
 
-export function isLocalRoom(roomOrID?: Room | string): boolean {
+export function isLocalRoom(roomOrID?: Room | string | null): boolean {
     if (typeof roomOrID === "string") {
         return roomOrID.startsWith(LOCAL_ROOM_ID_PREFIX);
     }

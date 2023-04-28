@@ -62,7 +62,7 @@ export default class SearchBox extends React.Component<IProps, IState> {
 
     private onSearch = throttle(
         (): void => {
-            this.props.onSearch(this.search.current?.value);
+            this.props.onSearch(this.search.current?.value ?? "");
         },
         200,
         { trailing: true, leading: true },
@@ -94,11 +94,9 @@ export default class SearchBox extends React.Component<IProps, IState> {
     };
 
     private clearSearch(source?: string): void {
-        this.search.current.value = "";
+        if (this.search.current) this.search.current.value = "";
         this.onChange();
-        if (this.props.onCleared) {
-            this.props.onCleared(source);
-        }
+        this.props.onCleared?.(source);
     }
 
     public render(): React.ReactNode {

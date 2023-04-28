@@ -62,7 +62,7 @@ export interface InteractiveAuthProps<T> {
     continueText?: string;
     continueKind?: string;
     // callback
-    makeRequest(auth?: IAuthData): Promise<UIAResponse<T>>;
+    makeRequest(auth: IAuthDict | null): Promise<UIAResponse<T>>;
     // callback called when the auth process has finished,
     // successfully or unsuccessfully.
     // @param {boolean} status True if the operation requiring
@@ -200,7 +200,7 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
         );
     };
 
-    private requestCallback = (auth: IAuthData | null, background: boolean): Promise<IAuthData> => {
+    private requestCallback = (auth: IAuthDict | null, background: boolean): Promise<UIAResponse<T>> => {
         // This wrapper just exists because the js-sdk passes a second
         // 'busy' param for backwards compat. This throws the tests off
         // so discard it here.

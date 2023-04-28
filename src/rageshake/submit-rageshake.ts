@@ -280,8 +280,7 @@ function uint8ToString(buf: Uint8Array): string {
 }
 
 export async function submitFeedback(
-    endpoint: string,
-    label: string,
+    label: string | undefined,
     comment: string,
     canContact = false,
     extraData: Record<string, any> = {},
@@ -292,7 +291,7 @@ export async function submitFeedback(
     } catch (err) {} // PlatformPeg already logs this.
 
     const body = new FormData();
-    body.append("label", label);
+    if (label) body.append("label", label);
     body.append("text", comment);
     body.append("can_contact", canContact ? "yes" : "no");
 

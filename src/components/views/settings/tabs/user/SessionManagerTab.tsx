@@ -161,7 +161,7 @@ const SessionManagerTab: React.FC = () => {
     const shouldShowOtherSessions = otherSessionsCount > 0;
 
     const onVerifyCurrentDevice = (): void => {
-        Modal.createDialog(SetupEncryptionDialog as unknown as React.ComponentType, { onFinished: refreshDevices });
+        Modal.createDialog(SetupEncryptionDialog, { onFinished: refreshDevices });
     };
 
     const onTriggerDeviceVerification = useCallback(

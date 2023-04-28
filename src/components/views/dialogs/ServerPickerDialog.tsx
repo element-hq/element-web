@@ -120,7 +120,11 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
 
                 // try to carry on anyway
                 try {
-                    this.validatedConf = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, null, true);
+                    this.validatedConf = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
+                        hsUrl,
+                        undefined,
+                        true,
+                    );
                     return {};
                 } catch (e) {
                     logger.error(e);

@@ -152,15 +152,21 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     };
 
     public answerCall = (): void => {
-        LegacyCallHandler.instance.answerCall(this.roomId);
+        const roomId = this.roomId;
+        if (!roomId) return;
+        LegacyCallHandler.instance.answerCall(roomId);
     };
 
     public rejectCall = (): void => {
-        LegacyCallHandler.instance.hangupOrReject(this.roomId, true);
+        const roomId = this.roomId;
+        if (!roomId) return;
+        LegacyCallHandler.instance.hangupOrReject(roomId, true);
     };
 
     public callBack = (): void => {
-        LegacyCallHandler.instance.placeCall(this.roomId, this.isVoice ? CallType.Voice : CallType.Video);
+        const roomId = this.roomId;
+        if (!roomId) return;
+        LegacyCallHandler.instance.placeCall(roomId, this.isVoice ? CallType.Voice : CallType.Video);
     };
 
     public toggleSilenced = (): void => {
@@ -191,9 +197,10 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     };
 
     private setCall = (): void => {
-        if (this.call) return;
+        const callId = this.callId;
+        if (!callId || this.call) return;
 
-        this.call = LegacyCallHandler.instance.getCallById(this.callId);
+        this.call = LegacyCallHandler.instance.getCallById(callId);
         this.setCallListeners();
         this.setState();
     };

@@ -207,7 +207,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 break;
 
             case RightPanelPhases.PinnedMessages:
-                if (SettingsStore.getValue("feature_pinning")) {
+                if (this.props.room && SettingsStore.getValue("feature_pinning")) {
                     card = (
                         <PinnedMessagesCard
                             room={this.props.room}

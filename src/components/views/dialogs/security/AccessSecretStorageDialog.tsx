@@ -42,7 +42,7 @@ const VALIDATION_THROTTLE_MS = 200;
 export type KeyParams = { passphrase?: string; recoveryKey?: string };
 
 interface IProps {
-    keyInfo?: ISecretStorageKeyInfo;
+    keyInfo: ISecretStorageKeyInfo;
     checkPrivateKey: (k: KeyParams) => Promise<boolean>;
     onFinished(result?: false | KeyParams): void;
 }

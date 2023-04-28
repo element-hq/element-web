@@ -239,7 +239,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         let notDocked = false;
         // Sanity check the room - the widget may have been destroyed between render cycles, and
         // thus no room is associated anymore.
-        if (persistentWidgetId && MatrixClientPeg.get().getRoom(persistentRoomId)) {
+        if (persistentWidgetId && persistentRoomId && MatrixClientPeg.get().getRoom(persistentRoomId)) {
             notDocked = !ActiveWidgetStore.instance.isDocked(persistentWidgetId, persistentRoomId);
             fromAnotherRoom = this.state.viewedRoomId !== persistentRoomId;
         }
@@ -314,10 +314,10 @@ class PipContainerInner extends React.Component<IProps, IState> {
             ));
         }
 
-        if (this.state.showWidgetInPip) {
+        if (this.state.showWidgetInPip && this.state.persistentWidgetId) {
             pipContent.push(({ onStartMoving }) => (
                 <WidgetPip
-                    widgetId={this.state.persistentWidgetId}
+                    widgetId={this.state.persistentWidgetId!}
                     room={MatrixClientPeg.get().getRoom(this.state.persistentRoomId ?? undefined)!}
                     viewingRoom={this.state.viewedRoomId === this.state.persistentRoomId}
                     onStartMoving={onStartMoving}

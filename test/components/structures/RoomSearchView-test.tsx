@@ -529,25 +529,25 @@ describe("<RoomSearchView/>", () => {
         );
 
         const event1 = await screen.findByText("Room 1");
-        expect(event1.closest(".mx_EventTile_line").querySelector("a")).toHaveAttribute(
+        expect(event1.closest(".mx_EventTile_line")!.querySelector("a")).toHaveAttribute(
             "href",
             `https://matrix.to/#/${room.roomId}/$2`,
         );
 
         const event2 = await screen.findByText("Room 2");
-        expect(event2.closest(".mx_EventTile_line").querySelector("a")).toHaveAttribute(
+        expect(event2.closest(".mx_EventTile_line")!.querySelector("a")).toHaveAttribute(
             "href",
             `https://matrix.to/#/${room2.roomId}/$22`,
         );
 
         const event2Message2 = await screen.findByText("Room 2 message 2");
-        expect(event2Message2.closest(".mx_EventTile_line").querySelector("a")).toHaveAttribute(
+        expect(event2Message2.closest(".mx_EventTile_line")!.querySelector("a")).toHaveAttribute(
             "href",
             `https://matrix.to/#/${room2.roomId}/$23`,
         );
 
         const event3 = await screen.findByText("Room 3");
-        expect(event3.closest(".mx_EventTile_line").querySelector("a")).toHaveAttribute(
+        expect(event3.closest(".mx_EventTile_line")!.querySelector("a")).toHaveAttribute(
             "href",
             `https://matrix.to/#/${room3.roomId}/$32`,
         );
