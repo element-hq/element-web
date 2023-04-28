@@ -1089,6 +1089,10 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
+    [UIFeature.LocationSharing]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
     [UIFeature.Voip]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,

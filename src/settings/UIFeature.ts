@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 // see settings.md for documentation on conventions
-export enum UIFeature {
+export const enum UIFeature {
     AdvancedEncryption = "UIFeature.advancedEncryption",
     URLPreviews = "UIFeature.urlPreviews",
     Widgets = "UIFeature.widgets",
+    LocationSharing = "UIFeature.locationSharing",
     Voip = "UIFeature.voip",
     Feedback = "UIFeature.feedback",
     Registration = "UIFeature.registration",
