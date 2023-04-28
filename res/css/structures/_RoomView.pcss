@@ -44,25 +44,11 @@ limitations under the License.
     overflow: auto;
 }
 
-.mx_RoomView_auxPanel_fullHeight {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 3000;
-    background-color: $background;
-}
-
 .mx_RoomView_auxPanel_hiddenHighlights {
     border-bottom: 1px solid $primary-hairline-color;
     padding: 10px 26px;
     color: $alert;
     cursor: pointer;
-}
-
-.mx_RoomView_auxPanel_apps {
-    max-width: 1920px !important;
 }
 
 .mx_RoomView .mx_MainSplit {
@@ -220,15 +206,6 @@ hr.mx_RoomView_myReadMarker {
     border: unset;
 }
 
-.mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
-    background-color: $background;
-}
-
-.mx_RoomView_callStatusBar .mx_UploadBar_uploadFilename {
-    color: $accent-fg-color;
-    opacity: 1;
-}
-
 .mx_RoomView_inCall .mx_RoomView_statusAreaBox_line {
     margin-top: 2px;
     border: none;
@@ -240,41 +217,10 @@ hr.mx_RoomView_myReadMarker {
     padding-top: 1px;
 }
 
-.mx_RoomView_voipChevron {
-    position: absolute;
-    bottom: -11px;
-    right: 11px;
-}
-
-.mx_RoomView_voipButton {
-    float: right;
-    margin-right: 13px;
-    margin-top: 13px;
-    cursor: pointer;
-}
-
-.mx_RoomView_voipButton object {
-    pointer-events: none;
-}
-
 .mx_RoomView .mx_MessageComposer {
     width: 100%;
     flex: 0 0 auto;
     margin-right: 2px;
-}
-
-.mx_RoomView_ongoingConfCallNotification {
-    width: 100%;
-    text-align: center;
-    background-color: $alert;
-    color: $accent-fg-color;
-    font-weight: bold;
-    padding: 6px 0;
-    cursor: pointer;
-}
-
-.mx_RoomView_ongoingConfCallNotification a {
-    color: $accent-fg-color !important;
 }
 
 .mx_MatrixChat_useCompactLayout {
