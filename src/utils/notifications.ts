@@ -66,14 +66,7 @@ export function localNotificationsAreSilenced(cli: MatrixClient): boolean {
  * @returns a promise that resolves when the room has been marked as read
  */
 export async function clearRoomNotification(room: Room, client: MatrixClient): Promise<{} | undefined> {
-    const roomEvents = room.getLiveTimeline().getEvents();
-    const lastThreadEvents = room.lastThread?.events;
-
-    const lastRoomEvent = roomEvents?.[roomEvents?.length - 1];
-    const lastThreadLastEvent = lastThreadEvents?.[lastThreadEvents?.length - 1];
-
-    const lastEvent =
-        (lastRoomEvent?.getTs() ?? 0) > (lastThreadLastEvent?.getTs() ?? 0) ? lastRoomEvent : lastThreadLastEvent;
+    const lastEvent = room.getLastLiveEvent();
 
     try {
         if (lastEvent) {
