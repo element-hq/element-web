@@ -99,10 +99,10 @@ export default class EditorModel {
 
     private insertPart(index: number, part: Part): void {
         this._parts.splice(index, 0, part);
-        if (this.activePartIdx && this.activePartIdx >= index) {
+        if (this.activePartIdx !== null && this.activePartIdx >= index) {
             ++this.activePartIdx;
         }
-        if (this.autoCompletePartIdx && this.autoCompletePartIdx >= index) {
+        if (this.autoCompletePartIdx !== null && this.autoCompletePartIdx >= index) {
             ++this.autoCompletePartIdx;
         }
     }
@@ -111,12 +111,12 @@ export default class EditorModel {
         this._parts.splice(index, 1);
         if (index === this.activePartIdx) {
             this.activePartIdx = null;
-        } else if (this.activePartIdx && this.activePartIdx > index) {
+        } else if (this.activePartIdx !== null && this.activePartIdx > index) {
             --this.activePartIdx;
         }
         if (index === this.autoCompletePartIdx) {
             this.autoCompletePartIdx = null;
-        } else if (this.autoCompletePartIdx && this.autoCompletePartIdx > index) {
+        } else if (this.autoCompletePartIdx !== null && this.autoCompletePartIdx > index) {
             --this.autoCompletePartIdx;
         }
     }

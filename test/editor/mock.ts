@@ -21,7 +21,7 @@ import { Caret } from "../../src/editor/caret";
 import { PillPart, Part, PartCreator } from "../../src/editor/parts";
 import DocumentPosition from "../../src/editor/position";
 
-class MockAutoComplete {
+export class MockAutoComplete {
     public _updateCallback;
     public _partCreator;
     public _completions;
@@ -44,7 +44,7 @@ class MockAutoComplete {
         });
         if (matches.length === 1 && this._part && this._part.text.length > 1) {
             const match = matches[0];
-            let pill;
+            let pill: PillPart;
             if (match.resourceId[0] === "@") {
                 pill = this._partCreator.userPill(match.text, match.resourceId);
             } else {

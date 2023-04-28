@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EditorModel from "../../src/editor/model";
-import { createPartCreator, createRenderer } from "./mock";
+import { createPartCreator, createRenderer, MockAutoComplete } from "./mock";
 import DocumentOffset from "../../src/editor/offset";
 import { PillPart } from "../../src/editor/parts";
 import DocumentPosition from "../../src/editor/position";
@@ -186,8 +186,7 @@ describe("editor/model", function () {
             expect(model.parts[1].text).toBe("@a");
 
             // this is a hacky mock function
-            // @ts-ignore
-            model.autoComplete.tryComplete(); // see MockAutoComplete
+            (model.autoComplete as unknown as MockAutoComplete).tryComplete();
 
             expect(renderer.count).toBe(2);
             expect((renderer.caret as DocumentPosition).index).toBe(1);
@@ -216,8 +215,7 @@ describe("editor/model", function () {
             expect(model.parts[1].text).toBe("#r");
 
             // this is a hacky mock function
-            // @ts-ignore
-            model.autoComplete.tryComplete(); // see MockAutoComplete
+            (model.autoComplete as unknown as MockAutoComplete).tryComplete();
 
             expect(renderer.count).toBe(2);
             expect((renderer.caret as DocumentPosition).index).toBe(1);
@@ -236,8 +234,7 @@ describe("editor/model", function () {
 
             model.update("hello #r", "insertText", new DocumentOffset(8, true));
             // this is a hacky mock function
-            // @ts-ignore
-            model.autoComplete.tryComplete(); // see MockAutoComplete
+            (model.autoComplete as unknown as MockAutoComplete).tryComplete();
             model.update("hello #riot-dev!!", "insertText", new DocumentOffset(17, true));
 
             expect(renderer.count).toBe(3);
@@ -313,6 +310,45 @@ describe("editor/model", function () {
             expect(model.parts.length).toBe(1);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("foo@a");
+        });
+
+        it("should allow auto-completing multiple times with resets between them", () => {
+            const renderer = createRenderer();
+            const pc = createPartCreator([{ resourceId: "#riot-dev" } as PillPart]);
+            const model = new EditorModel([pc.plain("")], pc, renderer);
+
+            model.update("#r", "insertText", new DocumentOffset(8, true));
+
+            expect(renderer.count).toBe(1);
+            expect((renderer.caret as DocumentPosition).index).toBe(0);
+            expect((renderer.caret as DocumentPosition).offset).toBe(2);
+            expect(model.parts.length).toBe(1);
+            expect(model.parts[0].type).toBe("pill-candidate");
+            expect(model.parts[0].text).toBe("#r");
+
+            // this is a hacky mock function
+            (model.autoComplete as unknown as MockAutoComplete).tryComplete();
+
+            expect(renderer.count).toBe(2);
+            expect((renderer.caret as DocumentPosition).index).toBe(0);
+            expect((renderer.caret as DocumentPosition).offset).toBe(9);
+            expect(model.parts.length).toBe(1);
+            expect(model.parts[0].type).toBe("room-pill");
+            expect(model.parts[0].text).toBe("#riot-dev");
+
+            model.reset([]);
+            model.update("#r", "insertText", new DocumentOffset(8, true));
+
+            expect(model.parts.length).toBe(1);
+            expect(model.parts[0].type).toBe("pill-candidate");
+            expect(model.parts[0].text).toBe("#r");
+
+            // this is a hacky mock function
+            (model.autoComplete as unknown as MockAutoComplete).tryComplete();
+
+            expect(model.parts.length).toBe(1);
+            expect(model.parts[0].type).toBe("room-pill");
+            expect(model.parts[0].text).toBe("#riot-dev");
         });
     });
     describe("emojis", function () {
