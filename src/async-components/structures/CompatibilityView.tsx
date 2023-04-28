@@ -30,7 +30,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
     const brand = SdkConfig.get("brand");
     const mobileBuilds = SdkConfig.get("mobile_builds");
 
-    let ios = null;
+    let ios: JSX.Element | undefined;
     const iosCustomUrl = mobileBuilds?.ios;
     if (iosCustomUrl !== null) {
         // could be undefined or a string

@@ -27,7 +27,7 @@ const VectorAuthFooter = (): ReactElement => {
         { text: "GitHub", url: "https://github.com/vector-im/element-web" },
     ];
 
-    const authFooterLinks = [];
+    const authFooterLinks: JSX.Element[] = [];
     for (const linkEntry of links) {
         authFooterLinks.push(
             <a href={linkEntry.url} key={linkEntry.text} target="_blank" rel="noreferrer noopener">

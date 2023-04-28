@@ -19,6 +19,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { extractErrorMessageFromError } from "matrix-react-sdk/src/components/views/dialogs/ErrorDialog";
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseQsFromFragment } from "./url_utils";
@@ -231,7 +232,7 @@ async function start(): Promise<void> {
         // Like the compatibility page, AWOOOOOGA at the user
         // This uses the default brand since the app config is unavailable.
         await showError(_t("Your Element is misconfigured"), [
-            err.translatedMessage || _t("Unexpected error preparing the app. See console for details."),
+            extractErrorMessageFromError(err, _t("Unexpected error preparing the app. See console for details.")),
         ]);
     }
 }
