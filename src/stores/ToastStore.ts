@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
-import React, { ReactElement } from "react";
+import React from "react";
 
 import { ComponentClass } from "../@types/common";
 
@@ -24,14 +24,7 @@ export interface IToast<C extends ComponentClass> {
     // higher priority number will be shown on top of lower priority
     priority: number;
     title?: string;
-    /**
-     * Icon class.
-     *
-     * @deprecated Use iconElement instead.
-     */
     icon?: string;
-    /** Icon element. Displayed left of the title. */
-    iconElement?: ReactElement;
     component: C;
     className?: string;
     bodyClassName?: string;

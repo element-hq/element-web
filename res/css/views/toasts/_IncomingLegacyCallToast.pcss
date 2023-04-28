@@ -84,19 +84,20 @@ limitations under the License.
         }
 
         .mx_IncomingLegacyCallToast_buttons {
-            .mx_IncomingLegacyCallToast_button {
-                span {
-                    align-items: center;
-                    display: flex;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
 
-                    &::before {
-                        background-color: $button-fg-color;
-                        content: "";
-                        display: inline-block;
-                        margin-right: 8px;
-                        mask-position: center;
-                        mask-repeat: no-repeat;
-                    }
+            .mx_IncomingLegacyCallToast_button {
+                @mixin LegacyCallButton;
+                padding: 0px 8px;
+                flex-shrink: 0;
+                flex-grow: 1;
+                font-size: $font-15px;
+
+                span {
+                    padding: 8px 0;
                 }
 
                 &.mx_IncomingLegacyCallToast_button_accept span::before {
@@ -130,13 +131,6 @@ limitations under the License.
             mask-size: contain;
             mask-position: center;
         }
-    }
-
-    .mx_IncomingLegacyCallToast_silence,
-    .mx_IncomingLegacyCallToast_unSilence {
-        position: absolute;
-        right: 0;
-        top: 0;
     }
 
     .mx_IncomingLegacyCallToast_silence::before {

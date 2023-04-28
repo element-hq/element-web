@@ -57,10 +57,10 @@ export default class ToastContainer extends React.Component<{}, IState> {
         let containerClasses;
         if (totalCount !== 0) {
             const topToast = this.state.toasts[0];
-            const { title, icon, iconElement, key, component, className, bodyClassName, props } = topToast;
+            const { title, icon, key, component, className, bodyClassName, props } = topToast;
             const bodyClasses = classNames("mx_Toast_body", bodyClassName);
             const toastClasses = classNames("mx_Toast_toast", className, {
-                mx_Toast_hasIcon: icon || iconElement,
+                mx_Toast_hasIcon: icon,
                 [`mx_Toast_icon_${icon}`]: icon,
             });
             const toastProps = Object.assign({}, props, {
@@ -86,7 +86,6 @@ export default class ToastContainer extends React.Component<{}, IState> {
 
             toast = (
                 <div className={toastClasses}>
-                    {iconElement}
                     {titleElement}
                     <div className={bodyClasses}>{content}</div>
                 </div>

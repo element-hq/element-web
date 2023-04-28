@@ -19,14 +19,13 @@ import React, { HTMLAttributes } from "react";
 
 interface Props extends Omit<HTMLAttributes<HTMLSpanElement>, "className"> {
     children: React.ReactNode;
-    className?: string;
     isError?: boolean;
 }
 
-export const Caption: React.FC<Props> = ({ children, className, isError, ...rest }) => {
+export const Caption: React.FC<Props> = ({ children, isError, ...rest }) => {
     return (
         <span
-            className={classNames("mx_Caption", className, {
+            className={classNames("mx_Caption", {
                 mx_Caption_error: isError,
             })}
             {...rest}

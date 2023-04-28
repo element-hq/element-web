@@ -143,7 +143,7 @@ import { findDMForUser } from "../../utils/dm/findDMForUser";
 import { Linkify } from "../../HtmlUtils";
 import { NotificationColor } from "../../stores/notifications/NotificationColor";
 import { UserTab } from "../views/dialogs/UserTab";
-import { Icon as EncryptionIcon } from "../../../res/img/compound/encryption-24px.svg";
+
 // legacy export
 export { default as Views } from "../../Views";
 
@@ -1668,9 +1668,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: "verifreq_" + request.channel.transactionId,
                     title: _t("Verification requested"),
-                    iconElement: (
-                        <EncryptionIcon className="mx_Icon mx_Icon_24 mx_Icon_secondary-content mx_Toast_icon" />
-                    ),
+                    icon: "verification",
                     props: { request },
                     component: VerificationRequestToast,
                     priority: 90,

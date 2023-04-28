@@ -42,11 +42,11 @@ exports[`GenericToast should render as expected without detail content 1`] = `
       <div>
         Description
       </div>
-      <span
-        class="mx_Caption mx_Toast_detail"
+      <div
+        class="mx_Toast_detail"
       >
         Detail
-      </span>
+      </div>
     </div>
     <div
       aria-live="off"
