@@ -195,7 +195,7 @@ async function start(): Promise<void> {
             await loadConfigPromise;
         } catch (error) {
             // Now that we've loaded the theme (CSS), display the config syntax error if needed.
-            if (error.err && error.err instanceof SyntaxError) {
+            if (error instanceof SyntaxError) {
                 // This uses the default brand since the app config is unavailable.
                 return showError(_t("Your Element is misconfigured"), [
                     _t(
@@ -203,7 +203,7 @@ async function start(): Promise<void> {
                             "Please correct the problem and reload the page.",
                     ),
                     _t("The message from the parser is: %(message)s", {
-                        message: error.err.message || _t("Invalid JSON"),
+                        message: error.message || _t("Invalid JSON"),
                     }),
                 ]);
             }
