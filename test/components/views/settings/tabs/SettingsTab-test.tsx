@@ -22,7 +22,7 @@ import SettingsTab, { SettingsTabProps } from "../../../../../src/components/vie
 describe("<SettingsTab />", () => {
     const getComponent = (props: SettingsTabProps): ReactElement => <SettingsTab {...props} />;
     it("renders tab", () => {
-        const { container } = render(getComponent({ heading: "Test Tab", children: <div>test</div> }));
+        const { container } = render(getComponent({ children: <div>test</div> }));
 
         expect(container).toMatchSnapshot();
     });

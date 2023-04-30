@@ -28,6 +28,7 @@ import SettingsTab from "../SettingsTab";
 import { ElementCall } from "../../../../../models/Call";
 import { useRoomState } from "../../../../../hooks/useRoomState";
 import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
+import { SettingsSection } from "../../shared/SettingsSection";
 
 interface ElementCallSwitchProps {
     room: Room;
@@ -100,10 +101,12 @@ interface Props {
 
 export const VoipRoomSettingsTab: React.FC<Props> = ({ room }) => {
     return (
-        <SettingsTab heading={_t("Voice & Video")}>
-            <SettingsSubsection heading={_t("Call type")}>
-                <ElementCallSwitch room={room} />
-            </SettingsSubsection>
+        <SettingsTab>
+            <SettingsSection heading={_t("Voice & Video")}>
+                <SettingsSubsection heading={_t("Call type")}>
+                    <ElementCallSwitch room={room} />
+                </SettingsSubsection>
+            </SettingsSection>
         </SettingsTab>
     );
 };
