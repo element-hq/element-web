@@ -29,7 +29,7 @@ const getMemberTileByName = (name: string): Chainable<JQuery<HTMLElement>> => {
 
 const viewRoomSummaryByName = (name: string): Chainable<JQuery<HTMLElement>> => {
     cy.viewRoomByName(name);
-    cy.get(".mx_RightPanel_roomSummaryButton").click();
+    cy.findByRole("button", { name: "Room info" }).click();
     return checkRoomSummaryCard(name);
 };
 

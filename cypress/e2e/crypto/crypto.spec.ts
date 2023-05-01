@@ -27,7 +27,7 @@ interface CryptoTestContext extends Mocha.Context {
 }
 
 const openRoomInfo = () => {
-    cy.get(".mx_RightPanel_roomSummaryButton").click();
+    cy.findByRole("button", { name: "Room info" }).click();
     return cy.get(".mx_RightPanel");
 };
 

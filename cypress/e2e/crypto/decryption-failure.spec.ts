@@ -60,7 +60,7 @@ const handleVerificationRequest = (request: VerificationRequest): Chainable<Emoj
 const checkTimelineNarrow = (button = true) => {
     cy.viewport(800, 600); // SVGA
     cy.get(".mx_LeftPanel_minimized").should("exist"); // Wait until the left panel is minimized
-    cy.get(".mx_RightPanel_roomSummaryButton").click(); // Open the right panel to make the timeline narrow
+    cy.findByRole("button", { name: "Room info" }).click(); // Open the right panel to make the timeline narrow
     cy.get(".mx_BaseCard").should("exist");
 
     // Ensure the failure bar does not cover the timeline
@@ -74,7 +74,7 @@ const checkTimelineNarrow = (button = true) => {
         cy.get("[data-testid='decryption-failure-bar-button']:last-of-type").should("be.visible");
     }
 
-    cy.get(".mx_RightPanel_roomSummaryButton").click(); // Close the right panel
+    cy.findByRole("button", { name: "Room info" }).click(); // Close the right panel
     cy.get(".mx_BaseCard").should("not.exist");
     cy.viewport(1000, 660); // Reset to the default size
 };
