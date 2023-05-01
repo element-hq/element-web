@@ -325,6 +325,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
     ```
 
 9. Avoid the use of `!important`. If `!important` is necessary, add a [comment](#comments) explaining why.
+10. Avoid the use of `@mixin`.
 
 ## Tests
 
