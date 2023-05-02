@@ -22,7 +22,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import SecurityRoomSettingsTab from "../../../../../../src/components/views/settings/tabs/room/SecurityRoomSettingsTab";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
-import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../../test-utils";
+import {
+    clearAllModals,
+    flushPromises,
+    getMockClientWithEventEmitter,
+    mockClientMethodsUser,
+} from "../../../../../test-utils";
 import { filterBoolean } from "../../../../../../src/utils/arrays";
 
 describe("<SecurityRoomSettingsTab />", () => {
@@ -86,10 +91,12 @@ describe("<SecurityRoomSettingsTab />", () => {
         room.currentState.setStateEvents(events);
     };
 
-    beforeEach(() => {
+    beforeEach(async () => {
         client.sendStateEvent.mockReset().mockResolvedValue({ event_id: "test" });
         client.isRoomEncrypted.mockReturnValue(false);
         jest.spyOn(SettingsStore, "getValue").mockRestore();
+
+        await clearAllModals();
     });
 
     describe("join rule", () => {
@@ -343,6 +350,7 @@ describe("<SecurityRoomSettingsTab />", () => {
 
             const dialog = await screen.findByRole("dialog");
 
+            expect(within(dialog).getByText("Enable encryption?")).toBeInTheDocument();
             fireEvent.click(within(dialog).getByText("OK"));
 
             expect(client.sendStateEvent).toHaveBeenCalledWith(room.roomId, EventType.RoomEncryption, {
