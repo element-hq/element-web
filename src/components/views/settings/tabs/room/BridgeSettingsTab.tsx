@@ -21,6 +21,8 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import BridgeTile from "../../BridgeTile";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
 
 const BRIDGE_EVENT_TYPES = [
     "uk.half-shot.bridge",
@@ -99,10 +101,9 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
         }
 
         return (
-            <div className="mx_SettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Bridges")}</div>
-                <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">{content}</div>
-            </div>
+            <SettingsTab>
+                <SettingsSection heading={_t("Bridges")}>{content}</SettingsSection>
+            </SettingsTab>
         );
     }
 }

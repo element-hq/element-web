@@ -27,6 +27,9 @@ import { Action } from "../../../../../dispatcher/actions";
 import CopyableText from "../../../elements/CopyableText";
 import { ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
 import SettingsStore from "../../../../../settings/SettingsStore";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
+import SettingsSubsection from "../../shared/SettingsSubsection";
 
 interface IProps {
     room: Room;
@@ -154,30 +157,27 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         }
 
         return (
-            <div className="mx_SettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
-                <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
-                    <span className="mx_SettingsTab_subheading">
-                        {room.isSpaceRoom() ? _t("Space information") : _t("Room information")}
-                    </span>
-                    <div>
-                        <span>{_t("Internal room ID")}</span>
-                        <CopyableText getTextToCopy={() => this.props.room.roomId}>
-                            {this.props.room.roomId}
-                        </CopyableText>
-                    </div>
-                    {unfederatableSection}
-                </div>
-                <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
-                    <span className="mx_SettingsTab_subheading">{_t("Room version")}</span>
-                    <div>
-                        <span>{_t("Room version:")}</span>&nbsp;
-                        {room.getVersion()}
-                    </div>
-                    {oldRoomLink}
-                    {roomUpgradeButton}
-                </div>
-            </div>
+            <SettingsTab>
+                <SettingsSection heading={_t("Advanced")}>
+                    <SettingsSubsection heading={room.isSpaceRoom() ? _t("Space information") : _t("Room information")}>
+                        <div>
+                            <span>{_t("Internal room ID")}</span>
+                            <CopyableText getTextToCopy={() => this.props.room.roomId}>
+                                {this.props.room.roomId}
+                            </CopyableText>
+                        </div>
+                        {unfederatableSection}
+                    </SettingsSubsection>
+                    <SettingsSubsection heading={_t("Room version")}>
+                        <div>
+                            <span>{_t("Room version:")}</span>&nbsp;
+                            {room.getVersion()}
+                        </div>
+                        {oldRoomLink}
+                        {roomUpgradeButton}
+                    </SettingsSubsection>
+                </SettingsSection>
+            </SettingsTab>
         );
     }
 }

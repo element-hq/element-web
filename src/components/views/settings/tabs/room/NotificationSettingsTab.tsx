@@ -32,6 +32,9 @@ import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import { UserTab } from "../../../dialogs/UserTab";
 import { chromeFileInputFix } from "../../../../../utils/BrowserWorkarounds";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
+import SettingsSubsection from "../../shared/SettingsSubsection";
 
 interface IProps {
     roomId: string;
@@ -168,149 +171,148 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
         }
 
         return (
-            <div className="mx_SettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Notifications")}</div>
-
-                <div className="mx_SettingsTab_section mx_NotificationSettingsTab_notificationsSection">
-                    <StyledRadioGroup
-                        name="roomNotificationSetting"
-                        definitions={[
-                            {
-                                value: RoomNotifState.AllMessages,
-                                className: "mx_NotificationSettingsTab_defaultEntry",
-                                label: (
-                                    <>
-                                        {_t("Default")}
-                                        <div className="mx_NotificationSettingsTab_microCopy">
-                                            {_t(
-                                                "Get notifications as set up in your <a>settings</a>",
-                                                {},
-                                                {
-                                                    a: (sub) => (
-                                                        <AccessibleButton
-                                                            kind="link_inline"
-                                                            onClick={this.onOpenSettingsClick}
-                                                        >
-                                                            {sub}
-                                                        </AccessibleButton>
-                                                    ),
-                                                },
-                                            )}
-                                        </div>
-                                    </>
-                                ),
-                            },
-                            {
-                                value: RoomNotifState.AllMessagesLoud,
-                                className: "mx_NotificationSettingsTab_allMessagesEntry",
-                                label: (
-                                    <>
-                                        {_t("All messages")}
-                                        <div className="mx_NotificationSettingsTab_microCopy">
-                                            {_t("Get notified for every message")}
-                                        </div>
-                                    </>
-                                ),
-                            },
-                            {
-                                value: RoomNotifState.MentionsOnly,
-                                className: "mx_NotificationSettingsTab_mentionsKeywordsEntry",
-                                label: (
-                                    <>
-                                        {_t("@mentions & keywords")}
-                                        <div className="mx_NotificationSettingsTab_microCopy">
-                                            {_t(
-                                                "Get notified only with mentions and keywords " +
-                                                    "as set up in your <a>settings</a>",
-                                                {},
-                                                {
-                                                    a: (sub) => (
-                                                        <AccessibleButton
-                                                            kind="link_inline"
-                                                            onClick={this.onOpenSettingsClick}
-                                                        >
-                                                            {sub}
-                                                        </AccessibleButton>
-                                                    ),
-                                                },
-                                            )}
-                                        </div>
-                                    </>
-                                ),
-                            },
-                            {
-                                value: RoomNotifState.Mute,
-                                className: "mx_NotificationSettingsTab_noneEntry",
-                                label: (
-                                    <>
-                                        {_t("Off")}
-                                        <div className="mx_NotificationSettingsTab_microCopy">
-                                            {_t("You won't get any notifications")}
-                                        </div>
-                                    </>
-                                ),
-                            },
-                        ]}
-                        onChange={this.onRoomNotificationChange}
-                        value={this.roomProps.notificationVolume}
-                    />
-                </div>
-
-                <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
-                    <span className="mx_SettingsTab_subheading">{_t("Sounds")}</span>
-                    <div>
-                        <div className="mx_SettingsTab_subsectionText">
-                            <span>
-                                {_t("Notification sound")}: <code>{this.state.currentSound}</code>
-                            </span>
-                        </div>
-                        <AccessibleButton
-                            className="mx_NotificationSound_resetSound"
-                            disabled={this.state.currentSound == "default"}
-                            onClick={this.clearSound}
-                            kind="primary"
-                        >
-                            {_t("Reset")}
-                        </AccessibleButton>
+            <SettingsTab>
+                <SettingsSection heading={_t("Notifications")}>
+                    <div className="mx_NotificationSettingsTab_notificationsSection">
+                        <StyledRadioGroup
+                            name="roomNotificationSetting"
+                            definitions={[
+                                {
+                                    value: RoomNotifState.AllMessages,
+                                    className: "mx_NotificationSettingsTab_defaultEntry",
+                                    label: (
+                                        <>
+                                            {_t("Default")}
+                                            <div className="mx_NotificationSettingsTab_microCopy">
+                                                {_t(
+                                                    "Get notifications as set up in your <a>settings</a>",
+                                                    {},
+                                                    {
+                                                        a: (sub) => (
+                                                            <AccessibleButton
+                                                                kind="link_inline"
+                                                                onClick={this.onOpenSettingsClick}
+                                                            >
+                                                                {sub}
+                                                            </AccessibleButton>
+                                                        ),
+                                                    },
+                                                )}
+                                            </div>
+                                        </>
+                                    ),
+                                },
+                                {
+                                    value: RoomNotifState.AllMessagesLoud,
+                                    className: "mx_NotificationSettingsTab_allMessagesEntry",
+                                    label: (
+                                        <>
+                                            {_t("All messages")}
+                                            <div className="mx_NotificationSettingsTab_microCopy">
+                                                {_t("Get notified for every message")}
+                                            </div>
+                                        </>
+                                    ),
+                                },
+                                {
+                                    value: RoomNotifState.MentionsOnly,
+                                    className: "mx_NotificationSettingsTab_mentionsKeywordsEntry",
+                                    label: (
+                                        <>
+                                            {_t("@mentions & keywords")}
+                                            <div className="mx_NotificationSettingsTab_microCopy">
+                                                {_t(
+                                                    "Get notified only with mentions and keywords " +
+                                                        "as set up in your <a>settings</a>",
+                                                    {},
+                                                    {
+                                                        a: (sub) => (
+                                                            <AccessibleButton
+                                                                kind="link_inline"
+                                                                onClick={this.onOpenSettingsClick}
+                                                            >
+                                                                {sub}
+                                                            </AccessibleButton>
+                                                        ),
+                                                    },
+                                                )}
+                                            </div>
+                                        </>
+                                    ),
+                                },
+                                {
+                                    value: RoomNotifState.Mute,
+                                    className: "mx_NotificationSettingsTab_noneEntry",
+                                    label: (
+                                        <>
+                                            {_t("Off")}
+                                            <div className="mx_NotificationSettingsTab_microCopy">
+                                                {_t("You won't get any notifications")}
+                                            </div>
+                                        </>
+                                    ),
+                                },
+                            ]}
+                            onChange={this.onRoomNotificationChange}
+                            value={this.roomProps.notificationVolume}
+                        />
                     </div>
-                    <div>
-                        <h3>{_t("Set a new custom sound")}</h3>
-                        <div className="mx_SettingsFlag">
-                            <form autoComplete="off" noValidate={true}>
-                                <input
-                                    ref={this.soundUpload}
-                                    className="mx_NotificationSound_soundUpload"
-                                    type="file"
-                                    onClick={chromeFileInputFix}
-                                    onChange={this.onSoundUploadChanged}
-                                    accept="audio/*"
-                                    aria-label={_t("Upload custom sound")}
-                                />
-                            </form>
 
-                            {currentUploadedFile}
+                    <SettingsSubsection heading={_t("Sounds")}>
+                        <div>
+                            <div className="mx_SettingsTab_subsectionText">
+                                <span>
+                                    {_t("Notification sound")}: <code>{this.state.currentSound}</code>
+                                </span>
+                            </div>
+                            <AccessibleButton
+                                className="mx_NotificationSound_resetSound"
+                                disabled={this.state.currentSound == "default"}
+                                onClick={this.clearSound}
+                                kind="primary"
+                            >
+                                {_t("Reset")}
+                            </AccessibleButton>
                         </div>
+                        <div>
+                            <h4>{_t("Set a new custom sound")}</h4>
+                            <div className="mx_SettingsFlag">
+                                <form autoComplete="off" noValidate={true}>
+                                    <input
+                                        ref={this.soundUpload}
+                                        className="mx_NotificationSound_soundUpload"
+                                        type="file"
+                                        onClick={chromeFileInputFix}
+                                        onChange={this.onSoundUploadChanged}
+                                        accept="audio/*"
+                                        aria-label={_t("Upload custom sound")}
+                                    />
+                                </form>
 
-                        <AccessibleButton
-                            className="mx_NotificationSound_browse"
-                            onClick={this.triggerUploader}
-                            kind="primary"
-                        >
-                            {_t("Browse")}
-                        </AccessibleButton>
+                                {currentUploadedFile}
+                            </div>
 
-                        <AccessibleButton
-                            className="mx_NotificationSound_save"
-                            disabled={this.state.uploadedFile == null}
-                            onClick={this.onClickSaveSound}
-                            kind="primary"
-                        >
-                            {_t("Save")}
-                        </AccessibleButton>
-                        <br />
-                    </div>
-                </div>
-            </div>
+                            <AccessibleButton
+                                className="mx_NotificationSound_browse"
+                                onClick={this.triggerUploader}
+                                kind="primary"
+                            >
+                                {_t("Browse")}
+                            </AccessibleButton>
+
+                            <AccessibleButton
+                                className="mx_NotificationSound_save"
+                                disabled={this.state.uploadedFile == null}
+                                onClick={this.onClickSaveSound}
+                                kind="primary"
+                            >
+                                {_t("Save")}
+                            </AccessibleButton>
+                            <br />
+                        </div>
+                    </SettingsSubsection>
+                </SettingsSection>
+            </SettingsTab>
         );
     }
 }

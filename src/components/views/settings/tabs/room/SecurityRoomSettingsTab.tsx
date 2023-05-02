@@ -41,6 +41,8 @@ import SettingsFieldset from "../../SettingsFieldset";
 import ExternalLink from "../../../elements/ExternalLink";
 import PosthogTrackers from "../../../../../PosthogTrackers";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
+import { SettingsSection } from "../../shared/SettingsSection";
+import SettingsTab from "../SettingsTab";
 
 interface IProps {
     room: Room;
@@ -265,6 +267,23 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             roomName: room.name,
         });
 
+        let advanced: JSX.Element | undefined;
+        if (room.getJoinRule() === JoinRule.Public) {
+            advanced = (
+                <div>
+                    <AccessibleButton
+                        onClick={this.toggleAdvancedSection}
+                        kind="link"
+                        className="mx_SettingsTab_showAdvanced"
+                        aria-expanded={this.state.showAdvancedSection}
+                    >
+                        {this.state.showAdvancedSection ? _t("Hide advanced") : _t("Show advanced")}
+                    </AccessibleButton>
+                    {this.state.showAdvancedSection && this.renderAdvanced()}
+                </div>
+            );
+        }
+
         return (
             <SettingsFieldset legend={_t("Access")} description={description}>
                 <JoinRuleSettings
@@ -275,6 +294,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     promptUpgrade={true}
                     aliasWarning={aliasWarning}
                 />
+                {advanced}
             </SettingsFieldset>
         );
     }
@@ -399,7 +419,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const canSetGuestAccess = state?.mayClientSendStateEvent(EventType.RoomGuestAccess, client);
 
         return (
-            <>
+            <div className="mx_SecurityRoomSettingsTab_advancedSection">
                 <LabelledToggleSwitch
                     value={guestAccess === GuestAccess.CanJoin}
                     onChange={this.onGuestAccessChange}
@@ -412,7 +432,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                             "the room without having a registered account.",
                     )}
                 </p>
-            </>
+            </div>
         );
     }
 
@@ -437,45 +457,30 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         const historySection = this.renderHistory();
 
-        let advanced: JSX.Element | undefined;
-        if (room.getJoinRule() === JoinRule.Public) {
-            advanced = (
-                <div className="mx_SettingsTab_section">
-                    <AccessibleButton
-                        onClick={this.toggleAdvancedSection}
-                        kind="link"
-                        className="mx_SettingsTab_showAdvanced"
-                        aria-expanded={this.state.showAdvancedSection}
-                    >
-                        {this.state.showAdvancedSection ? _t("Hide advanced") : _t("Show advanced")}
-                    </AccessibleButton>
-                    {this.state.showAdvancedSection && this.renderAdvanced()}
-                </div>
-            );
-        }
-
         return (
-            <div className="mx_SettingsTab mx_SecurityRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
+            <SettingsTab>
+                <SettingsSection heading={_t("Security & Privacy")}>
+                    <SettingsFieldset
+                        legend={_t("Encryption")}
+                        description={_t("Once enabled, encryption cannot be disabled.")}
+                    >
+                        <LabelledToggleSwitch
+                            value={isEncrypted}
+                            onChange={this.onEncryptionChange}
+                            label={_t("Encrypted")}
+                            disabled={!canEnableEncryption}
+                        />
+                        {encryptionSettings}
+                    </SettingsFieldset>
 
-                <SettingsFieldset
-                    legend={_t("Encryption")}
-                    description={_t("Once enabled, encryption cannot be disabled.")}
-                >
-                    <LabelledToggleSwitch
-                        value={isEncrypted}
-                        onChange={this.onEncryptionChange}
-                        label={_t("Encrypted")}
-                        disabled={!canEnableEncryption}
-                    />
-                    {encryptionSettings}
-                </SettingsFieldset>
+                    {this.renderJoinRule()}
+                    {historySection}
+                </SettingsSection>
+            </SettingsTab>
+            // <div className="mx_SettingsTab mx_SecurityRoomSettingsTab">
+            //     <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
 
-                {this.renderJoinRule()}
-
-                {advanced}
-                {historySection}
-            </div>
+            // </div>
         );
     }
 }

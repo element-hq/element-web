@@ -27,6 +27,9 @@ import { UIFeature } from "../../../../../settings/UIFeature";
 import UrlPreviewSettings from "../../../room_settings/UrlPreviewSettings";
 import AliasSettings from "../../../room_settings/AliasSettings";
 import PosthogTrackers from "../../../../../PosthogTrackers";
+import SettingsSubsection from "../../shared/SettingsSubsection";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
 
 interface IProps {
     room: Room;
@@ -72,35 +75,36 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
         let leaveSection;
         if (room.getMyMembership() === "join") {
             leaveSection = (
-                <>
-                    <span className="mx_SettingsTab_subheading">{_t("Leave room")}</span>
-                    <div className="mx_SettingsTab_section">
-                        <AccessibleButton kind="danger" onClick={this.onLeaveClick}>
-                            {_t("Leave room")}
-                        </AccessibleButton>
-                    </div>
-                </>
+                <SettingsSubsection heading={_t("Leave room")}>
+                    <AccessibleButton kind="danger" onClick={this.onLeaveClick}>
+                        {_t("Leave room")}
+                    </AccessibleButton>
+                </SettingsSubsection>
             );
         }
 
         return (
-            <div className="mx_SettingsTab mx_GeneralRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("General")}</div>
-                <div className="mx_SettingsTab_section mx_GeneralRoomSettingsTab_profileSection">
-                    <RoomProfileSettings roomId={room.roomId} />
-                </div>
+            <SettingsTab>
+                <SettingsSection heading={_t("General")}>
+                    <div className="mx_SettingsTab_section mx_GeneralRoomSettingsTab_profileSection">
+                        <RoomProfileSettings roomId={room.roomId} />
+                    </div>
+                </SettingsSection>
 
-                <div className="mx_SettingsTab_heading">{_t("Room Addresses")}</div>
-                <AliasSettings
-                    roomId={room.roomId}
-                    canSetCanonicalAlias={canSetCanonical}
-                    canSetAliases={canSetAliases}
-                    canonicalAliasEvent={canonicalAliasEv}
-                />
-                <div className="mx_SettingsTab_heading">{_t("Other")}</div>
-                {urlPreviewSettings}
-                {leaveSection}
-            </div>
+                <SettingsSection heading={_t("Room Addresses")}>
+                    <AliasSettings
+                        roomId={room.roomId}
+                        canSetCanonicalAlias={canSetCanonical}
+                        canSetAliases={canSetAliases}
+                        canonicalAliasEvent={canonicalAliasEv}
+                    />
+                </SettingsSection>
+
+                <SettingsSection heading={_t("Other")}>
+                    {urlPreviewSettings}
+                    {leaveSection}
+                </SettingsSection>
+            </SettingsTab>
         );
     }
 }

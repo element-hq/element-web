@@ -36,6 +36,8 @@ import { VoiceBroadcastInfoEventType } from "../../../../../voice-broadcast";
 import { ElementCall } from "../../../../../models/Call";
 import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 import { AddPrivilegedUsers } from "../../AddPrivilegedUsers";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
 
 interface IEventShowOpts {
     isState?: boolean;
@@ -399,7 +401,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             const canBanUsers = currentUserLevel >= banLevel;
             bannedUsersSection = (
                 <SettingsFieldset legend={_t("Banned users")}>
-                    <ul>
+                    <ul className="mx_RolesRoomSettingsTab_bannedList">
                         {banned.map((member) => {
                             const banEvent = member.events.member?.getContent();
                             const bannedById = member.events.member?.getSender();
@@ -479,24 +481,25 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             .filter(Boolean);
 
         return (
-            <div className="mx_SettingsTab mx_RolesRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Roles & Permissions")}</div>
-                {privilegedUsersSection}
-                {canChangeLevels && <AddPrivilegedUsers room={room} defaultUserLevel={defaultUserLevel} />}
-                {mutedUsersSection}
-                {bannedUsersSection}
-                <SettingsFieldset
-                    legend={_t("Permissions")}
-                    description={
-                        isSpaceRoom
-                            ? _t("Select the roles required to change various parts of the space")
-                            : _t("Select the roles required to change various parts of the room")
-                    }
-                >
-                    {powerSelectors}
-                    {eventPowerSelectors}
-                </SettingsFieldset>
-            </div>
+            <SettingsTab>
+                <SettingsSection heading={_t("Roles & Permissions")}>
+                    {privilegedUsersSection}
+                    {canChangeLevels && <AddPrivilegedUsers room={room} defaultUserLevel={defaultUserLevel} />}
+                    {mutedUsersSection}
+                    {bannedUsersSection}
+                    <SettingsFieldset
+                        legend={_t("Permissions")}
+                        description={
+                            isSpaceRoom
+                                ? _t("Select the roles required to change various parts of the space")
+                                : _t("Select the roles required to change various parts of the room")
+                        }
+                    >
+                        {powerSelectors}
+                        {eventPowerSelectors}
+                    </SettingsFieldset>
+                </SettingsSection>
+            </SettingsTab>
         );
     }
 }
