@@ -213,7 +213,7 @@
         "rimraf": "^5.0.0",
         "stylelint": "^15.0.0",
         "stylelint-config-standard": "^32.0.0",
-        "stylelint-scss": "^4.2.0",
+        "stylelint-scss": "^5.0.0",
         "ts-node": "^10.9.1",
         "typescript": "5.0.4",
         "walk": "^2.3.14"
