@@ -171,7 +171,7 @@
         "style-loader": "2",
         "stylelint": "^15.3.0",
         "stylelint-config-standard": "^32.0.0",
-        "stylelint-scss": "^4.2.0",
+        "stylelint-scss": "^5.0.0",
         "terser-webpack-plugin": "^4.0.0",
         "ts-node": "^10.9.1",
         "ts-prune": "^0.10.3",
