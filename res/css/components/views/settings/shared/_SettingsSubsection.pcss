@@ -20,13 +20,30 @@ limitations under the License.
 }
 
 .mx_SettingsSubsection_description {
+    margin-top: $spacing-8;
+}
+
+.mx_SettingsSubsection_text {
     width: 100%;
     box-sizing: inherit;
-    line-height: $font-24px;
-    margin-bottom: $spacing-24;
+    font-size: $font-15px;
     color: $secondary-content;
 }
 
 .mx_SettingsSubsection_content {
     width: 100%;
+    display: grid;
+    grid-gap: $spacing-8;
+    grid-template-columns: 1fr;
+    justify-items: flex-start;
+    margin-top: $spacing-24;
+
+    summary {
+        color: $accent;
+    }
+    details[open] {
+        summary {
+            margin-bottom: $spacing-8;
+        }
+    }
 }

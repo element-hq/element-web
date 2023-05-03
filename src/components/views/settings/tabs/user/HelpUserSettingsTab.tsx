@@ -31,6 +31,9 @@ import { Action } from "../../../../../dispatcher/actions";
 import { UserTab } from "../../../dialogs/UserTab";
 import dis from "../../../../../dispatcher/dispatcher";
 import CopyableText from "../../../elements/CopyableText";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
+import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import ExternalLink from "../../../elements/ExternalLink";
 
 interface IProps {
@@ -115,18 +118,15 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         for (const tocEntry of tocLinks) {
             legalLinks.push(
                 <div key={tocEntry.url}>
-                    <ExternalLink href={tocEntry.url} rel="noreferrer noopener" target="_blank">
-                        {tocEntry.text}
-                    </ExternalLink>
+                    <ExternalLink href={tocEntry.url}>{tocEntry.text}</ExternalLink>
                 </div>,
             );
         }
 
         return (
-            <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{_t("Legal")}</span>
-                <div className="mx_SettingsTab_subsectionText">{legalLinks}</div>
-            </div>
+            <SettingsSubsection heading={_t("Legal")}>
+                <SettingsSubsectionText>{legalLinks}</SettingsSubsectionText>
+            </SettingsSubsection>
         );
     }
 
@@ -134,116 +134,95 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         // Note: This is not translated because it is legal text.
         // Also, &nbsp; is ugly but necessary.
         return (
-            <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{_t("Credits")}</span>
-                <ul className="mx_SettingsTab_subsectionText">
-                    <li>
-                        {_t(
-                            "The <photo>default cover photo</photo> is © " +
-                                "<author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.",
-                            {},
-                            {
-                                photo: (sub) => (
-                                    <ExternalLink
-                                        href="themes/element/img/backgrounds/lake.jpg"
-                                        rel="noreferrer noopener"
-                                        target="_blank"
-                                    >
-                                        {sub}
-                                    </ExternalLink>
-                                ),
-                                author: (sub) => (
-                                    <ExternalLink
-                                        href="https://www.flickr.com/golan"
-                                        rel="noreferrer noopener"
-                                        target="_blank"
-                                    >
-                                        {sub}
-                                    </ExternalLink>
-                                ),
-                                terms: (sub) => (
-                                    <ExternalLink
-                                        href="https://creativecommons.org/licenses/by-sa/4.0/"
-                                        rel="noreferrer noopener"
-                                        target="_blank"
-                                    >
-                                        {sub}
-                                    </ExternalLink>
-                                ),
-                            },
-                        )}
-                    </li>
-                    <li>
-                        {_t(
-                            "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> " +
-                                "used under the terms of <terms>Apache 2.0</terms>.",
-                            {},
-                            {
-                                colr: (sub) => (
-                                    <ExternalLink
-                                        href="https://github.com/matrix-org/twemoji-colr"
-                                        rel="noreferrer noopener"
-                                        target="_blank"
-                                    >
-                                        {sub}
-                                    </ExternalLink>
-                                ),
-                                author: (sub) => (
-                                    <ExternalLink href="https://mozilla.org" rel="noreferrer noopener" target="_blank">
-                                        {sub}
-                                    </ExternalLink>
-                                ),
-                                terms: (sub) => (
-                                    <ExternalLink
-                                        href="https://www.apache.org/licenses/LICENSE-2.0"
-                                        rel="noreferrer noopener"
-                                        target="_blank"
-                                    >
-                                        {sub}
-                                    </ExternalLink>
-                                ),
-                            },
-                        )}
-                    </li>
-                    <li>
-                        {_t(
-                            "The <twemoji>Twemoji</twemoji> emoji art is © " +
-                                "<author>Twitter, Inc and other contributors</author> used under the terms of " +
-                                "<terms>CC-BY 4.0</terms>.",
-                            {},
-                            {
-                                twemoji: (sub) => (
-                                    <ExternalLink
-                                        href="https://twemoji.twitter.com/"
-                                        rel="noreferrer noopener"
-                                        target="_blank"
-                                    >
-                                        {sub}
-                                    </ExternalLink>
-                                ),
-                                author: (sub) => (
-                                    <ExternalLink
-                                        href="https://twemoji.twitter.com/"
-                                        rel="noreferrer noopener"
-                                        target="_blank"
-                                    >
-                                        {sub}
-                                    </ExternalLink>
-                                ),
-                                terms: (sub) => (
-                                    <ExternalLink
-                                        href="https://creativecommons.org/licenses/by/4.0/"
-                                        rel="noreferrer noopener"
-                                        target="_blank"
-                                    >
-                                        {sub}
-                                    </ExternalLink>
-                                ),
-                            },
-                        )}
-                    </li>
-                </ul>
-            </div>
+            <SettingsSubsection heading={_t("Credits")}>
+                <SettingsSubsectionText>
+                    <ul>
+                        <li>
+                            {_t(
+                                "The <photo>default cover photo</photo> is © " +
+                                    "<author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.",
+                                {},
+                                {
+                                    photo: (sub) => (
+                                        <ExternalLink
+                                            href="themes/element/img/backgrounds/lake.jpg"
+                                            rel="noreferrer noopener"
+                                            target="_blank"
+                                        >
+                                            {sub}
+                                        </ExternalLink>
+                                    ),
+                                    author: (sub) => (
+                                        <ExternalLink href="https://www.flickr.com/golan">{sub}</ExternalLink>
+                                    ),
+                                    terms: (sub) => (
+                                        <ExternalLink
+                                            href="https://creativecommons.org/licenses/by-sa/4.0/"
+                                            rel="noreferrer noopener"
+                                            target="_blank"
+                                        >
+                                            {sub}
+                                        </ExternalLink>
+                                    ),
+                                },
+                            )}
+                        </li>
+                        <li>
+                            {_t(
+                                "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> " +
+                                    "used under the terms of <terms>Apache 2.0</terms>.",
+                                {},
+                                {
+                                    colr: (sub) => (
+                                        <ExternalLink
+                                            href="https://github.com/matrix-org/twemoji-colr"
+                                            rel="noreferrer noopener"
+                                            target="_blank"
+                                        >
+                                            {sub}
+                                        </ExternalLink>
+                                    ),
+                                    author: (sub) => <ExternalLink href="https://mozilla.org">{sub}</ExternalLink>,
+                                    terms: (sub) => (
+                                        <ExternalLink
+                                            href="https://www.apache.org/licenses/LICENSE-2.0"
+                                            rel="noreferrer noopener"
+                                            target="_blank"
+                                        >
+                                            {sub}
+                                        </ExternalLink>
+                                    ),
+                                },
+                            )}
+                        </li>
+                        <li>
+                            {_t(
+                                "The <twemoji>Twemoji</twemoji> emoji art is © " +
+                                    "<author>Twitter, Inc and other contributors</author> used under the terms of " +
+                                    "<terms>CC-BY 4.0</terms>.",
+                                {},
+                                {
+                                    twemoji: (sub) => (
+                                        <ExternalLink href="https://twemoji.twitter.com/">{sub}</ExternalLink>
+                                    ),
+                                    author: (sub) => (
+                                        <ExternalLink href="https://twemoji.twitter.com/">{sub}</ExternalLink>
+                                    ),
+                                    terms: (sub) => (
+                                        <ExternalLink
+                                            href="https://creativecommons.org/licenses/by/4.0/"
+                                            rel="noreferrer noopener"
+                                            target="_blank"
+                                        >
+                                            {sub}
+                                        </ExternalLink>
+                                    ),
+                                },
+                            )}
+                        </li>
+                    </ul>
+                </SettingsSubsectionText>
+            </SettingsSubsection>
         );
     }
 
@@ -268,11 +247,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                 brand,
             },
             {
-                a: (sub) => (
-                    <ExternalLink href="https://element.io/help" rel="noreferrer noopener" target="_blank">
-                        {sub}
-                    </ExternalLink>
-                ),
+                a: (sub) => <ExternalLink href="https://element.io/help">{sub}</ExternalLink>,
             },
         );
         if (SdkConfig.get("welcome_user_id") && getCurrentLanguage().startsWith("en")) {
@@ -309,77 +284,73 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         let bugReportingSection;
         if (SdkConfig.get().bug_report_endpoint_url) {
             bugReportingSection = (
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Bug reporting")}</span>
-                    <div className="mx_SettingsTab_subsectionText">
-                        {_t(
-                            "If you've submitted a bug via GitHub, debug logs can help " +
-                                "us track down the problem. ",
-                        )}
-                        {_t(
-                            "Debug logs contain application " +
-                                "usage data including your username, the IDs or aliases of " +
-                                "the rooms you have visited, which UI elements you " +
-                                "last interacted with, and the usernames of other users. " +
-                                "They do not contain messages.",
-                        )}
-                    </div>
+                <SettingsSubsection
+                    heading={_t("Bug reporting")}
+                    description={
+                        <>
+                            <SettingsSubsectionText>
+                                {_t(
+                                    "If you've submitted a bug via GitHub, debug logs can help " +
+                                        "us track down the problem. ",
+                                )}
+                            </SettingsSubsectionText>
+                            {_t(
+                                "Debug logs contain application " +
+                                    "usage data including your username, the IDs or aliases of " +
+                                    "the rooms you have visited, which UI elements you " +
+                                    "last interacted with, and the usernames of other users. " +
+                                    "They do not contain messages.",
+                            )}
+                        </>
+                    }
+                >
                     <AccessibleButton onClick={this.onBugReport} kind="primary">
                         {_t("Submit debug logs")}
                     </AccessibleButton>
-                    <div className="mx_SettingsTab_subsectionText">
+                    <SettingsSubsectionText>
                         {_t(
                             "To report a Matrix-related security issue, please read the Matrix.org " +
                                 "<a>Security Disclosure Policy</a>.",
                             {},
                             {
                                 a: (sub) => (
-                                    <ExternalLink
-                                        href="https://matrix.org/security-disclosure-policy/"
-                                        rel="noreferrer noopener"
-                                        target="_blank"
-                                    >
+                                    <ExternalLink href="https://matrix.org/security-disclosure-policy/">
                                         {sub}
                                     </ExternalLink>
                                 ),
                             },
                         )}
-                    </div>
-                </div>
+                    </SettingsSubsectionText>
+                </SettingsSubsection>
             );
         }
 
         const { appVersion, olmVersion } = this.getVersionInfo();
 
         return (
-            <div className="mx_SettingsTab mx_HelpUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Help & About")}</div>
-                {bugReportingSection}
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("FAQ")}</span>
-                    <div className="mx_SettingsTab_subsectionText">{faqText}</div>
-                    <AccessibleButton kind="primary" onClick={this.onKeyboardShortcutsClicked}>
-                        {_t("Keyboard Shortcuts")}
-                    </AccessibleButton>
-                </div>
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Versions")}</span>
-                    <div className="mx_SettingsTab_subsectionText">
-                        <CopyableText getTextToCopy={this.getVersionTextToCopy}>
-                            {appVersion}
-                            <br />
-                            {olmVersion}
-                            <br />
-                        </CopyableText>
-                        {updateButton}
-                    </div>
-                </div>
-                {this.renderLegal()}
-                {this.renderCredits()}
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
-                    <div className="mx_SettingsTab_subsectionText">
-                        <div>
+            <SettingsTab>
+                <SettingsSection heading={_t("Help & About")}>
+                    {bugReportingSection}
+                    <SettingsSubsection heading={_t("FAQ")} description={faqText}>
+                        <AccessibleButton kind="primary" onClick={this.onKeyboardShortcutsClicked}>
+                            {_t("Keyboard Shortcuts")}
+                        </AccessibleButton>
+                    </SettingsSubsection>
+                    <SettingsSubsection heading={_t("Versions")}>
+                        <SettingsSubsectionText>
+                            <CopyableText getTextToCopy={this.getVersionTextToCopy}>
+                                {appVersion}
+                                <br />
+                                {olmVersion}
+                                <br />
+                            </CopyableText>
+                            {updateButton}
+                        </SettingsSubsectionText>
+                    </SettingsSubsection>
+                    {this.renderLegal()}
+                    {this.renderCredits()}
+                    <SettingsSubsection heading={_t("Advanced")}>
+                        <SettingsSubsectionText>
                             {_t(
                                 "Homeserver is <code>%(homeserverUrl)s</code>",
                                 {
@@ -389,10 +360,10 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                     code: (sub) => <code>{sub}</code>,
                                 },
                             )}
-                        </div>
-                        <div>
-                            {MatrixClientPeg.get().getIdentityServerUrl() &&
-                                _t(
+                        </SettingsSubsectionText>
+                        {MatrixClientPeg.get().getIdentityServerUrl() && (
+                            <SettingsSubsectionText>
+                                {_t(
                                     "Identity server is <code>%(identityServerUrl)s</code>",
                                     {
                                         identityServerUrl: MatrixClientPeg.get().getIdentityServerUrl(),
@@ -401,25 +372,28 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                         code: (sub) => <code>{sub}</code>,
                                     },
                                 )}
-                        </div>
-                        <details>
-                            <summary>{_t("Access Token")}</summary>
-                            <b>
-                                {_t(
-                                    "Your access token gives full access to your account." +
-                                        " Do not share it with anyone.",
-                                )}
-                            </b>
-                            <CopyableText getTextToCopy={() => MatrixClientPeg.get().getAccessToken()}>
-                                {MatrixClientPeg.get().getAccessToken()}
-                            </CopyableText>
-                        </details>
+                            </SettingsSubsectionText>
+                        )}
+                        <SettingsSubsectionText>
+                            <details>
+                                <summary>{_t("Access Token")}</summary>
+                                <b>
+                                    {_t(
+                                        "Your access token gives full access to your account." +
+                                            " Do not share it with anyone.",
+                                    )}
+                                </b>
+                                <CopyableText getTextToCopy={() => MatrixClientPeg.get().getAccessToken()}>
+                                    {MatrixClientPeg.get().getAccessToken()}
+                                </CopyableText>
+                            </details>
+                        </SettingsSubsectionText>
                         <AccessibleButton onClick={this.onClearCacheAndReload} kind="danger">
                             {_t("Clear cache and reload")}
                         </AccessibleButton>
-                    </div>
-                </div>
-            </div>
+                    </SettingsSubsection>
+                </SettingsSection>
+            </SettingsTab>
         );
     }
 }

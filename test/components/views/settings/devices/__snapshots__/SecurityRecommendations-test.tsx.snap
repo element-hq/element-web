@@ -18,7 +18,11 @@ exports[`<SecurityRecommendations /> renders both cards when user has both unver
     <div
       class="mx_SettingsSubsection_description"
     >
-      Improve your account security by following these recommendations.
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
     </div>
     <div
       class="mx_SettingsSubsection_content"
@@ -139,7 +143,11 @@ exports[`<SecurityRecommendations /> renders inactive devices section when user 
     <div
       class="mx_SettingsSubsection_description"
     >
-      Improve your account security by following these recommendations.
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
     </div>
     <div
       class="mx_SettingsSubsection_content"
@@ -260,7 +268,11 @@ exports[`<SecurityRecommendations /> renders unverified devices section when use
     <div
       class="mx_SettingsSubsection_description"
     >
-      Improve your account security by following these recommendations.
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
     </div>
     <div
       class="mx_SettingsSubsection_content"

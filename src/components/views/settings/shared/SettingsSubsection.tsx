@@ -24,10 +24,20 @@ export interface SettingsSubsectionProps extends HTMLAttributes<HTMLDivElement> 
     children?: React.ReactNode;
 }
 
-const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({ heading, description, children, ...rest }) => (
+export const SettingsSubsectionText: React.FC<HTMLAttributes<HTMLDivElement>> = ({ children, ...rest }) => (
+    <div {...rest} className="mx_SettingsSubsection_text">
+        {children}
+    </div>
+);
+
+export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({ heading, description, children, ...rest }) => (
     <div {...rest} className="mx_SettingsSubsection">
         {typeof heading === "string" ? <SettingsSubsectionHeading heading={heading} /> : <>{heading}</>}
-        {!!description && <div className="mx_SettingsSubsection_description">{description}</div>}
+        {!!description && (
+            <div className="mx_SettingsSubsection_description">
+                <SettingsSubsectionText>{description}</SettingsSubsectionText>
+            </div>
+        )}
         <div className="mx_SettingsSubsection_content">{children}</div>
     </div>
 );
