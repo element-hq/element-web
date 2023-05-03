@@ -28,6 +28,7 @@ import StyledRadioButton from "../elements/StyledRadioButton";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
+import ExternalLink from "../elements/ExternalLink";
 
 interface IProps {
     title?: string;
@@ -236,9 +237,13 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                     </AccessibleButton>
 
                     <h2>{_t("Learn more")}</h2>
-                    <a href="https://matrix.org/faq/#what-is-a-homeserver%3F" target="_blank" rel="noreferrer noopener">
+                    <ExternalLink
+                        href="https://matrix.org/faq/#what-is-a-homeserver%3F"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                    >
                         {_t("About homeservers")}
-                    </a>
+                    </ExternalLink>
                 </form>
             </BaseDialog>
         );

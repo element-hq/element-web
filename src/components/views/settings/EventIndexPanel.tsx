@@ -26,6 +26,7 @@ import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import SeshatResetDialog from "../dialogs/SeshatResetDialog";
 import InlineSpinner from "../elements/InlineSpinner";
+import ExternalLink from "../elements/ExternalLink";
 
 interface IState {
     enabling: boolean;
@@ -197,9 +198,9 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                         },
                         {
                             nativeLink: (sub) => (
-                                <a href={nativeLink} target="_blank" rel="noreferrer noopener">
+                                <ExternalLink href={nativeLink} target="_blank" rel="noreferrer noopener">
                                     {sub}
-                                </a>
+                                </ExternalLink>
                             ),
                         },
                     )}
@@ -217,9 +218,13 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                         },
                         {
                             desktopLink: (sub) => (
-                                <a href="https://element.io/get-started" target="_blank" rel="noreferrer noopener">
+                                <ExternalLink
+                                    href="https://element.io/get-started"
+                                    target="_blank"
+                                    rel="noreferrer noopener"
+                                >
                                     {sub}
-                                </a>
+                                </ExternalLink>
                             ),
                         },
                     )}

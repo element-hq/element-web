@@ -27,6 +27,7 @@ import InfoDialog from "./InfoDialog";
 import { submitFeedback } from "../../../rageshake/submit-rageshake";
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import StyledCheckbox from "../elements/StyledCheckbox";
+import ExternalLink from "../elements/ExternalLink";
 
 interface IProps {
     feature?: string;
@@ -130,16 +131,20 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
                                 {
                                     existingIssuesLink: (sub) => {
                                         return (
-                                            <a target="_blank" rel="noreferrer noopener" href={existingIssuesUrl}>
+                                            <ExternalLink
+                                                target="_blank"
+                                                rel="noreferrer noopener"
+                                                href={existingIssuesUrl}
+                                            >
                                                 {sub}
-                                            </a>
+                                            </ExternalLink>
                                         );
                                     },
                                     newIssueLink: (sub) => {
                                         return (
-                                            <a target="_blank" rel="noreferrer noopener" href={newIssueUrl}>
+                                            <ExternalLink target="_blank" rel="noreferrer noopener" href={newIssueUrl}>
                                                 {sub}
-                                            </a>
+                                            </ExternalLink>
                                         );
                                     },
                                 },

@@ -22,6 +22,7 @@ import { _t, pickBestLanguage } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "./BaseDialog";
 import { ServicePolicyPair } from "../../../Terms";
+import ExternalLink from "../elements/ExternalLink";
 
 interface ITermsCheckboxProps {
     onChange: (url: string, checked: boolean) => void;
@@ -148,9 +149,9 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
                         <td className="mx_TermsDialog_summary">{summary}</td>
                         <td>
                             {termDoc[termsLang].name}
-                            <a rel="noreferrer noopener" target="_blank" href={termDoc[termsLang].url}>
+                            <ExternalLink rel="noreferrer noopener" target="_blank" href={termDoc[termsLang].url}>
                                 <span className="mx_TermsDialog_link" />
-                            </a>
+                            </ExternalLink>
                         </td>
                         <td>
                             <TermsCheckbox

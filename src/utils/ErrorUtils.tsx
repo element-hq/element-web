@@ -20,6 +20,7 @@ import { MatrixError, ConnectionError } from "matrix-js-sdk/src/http-api";
 import { _t, _td, Tags, TranslatedString } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 import { ValidatedServerConfig } from "./ValidatedServerConfig";
+import ExternalLink from "../components/views/elements/ExternalLink";
 
 export const resourceLimitStrings = {
     "monthly_active_user": _td("This homeserver has hit its Monthly Active User limit."),
@@ -183,9 +184,9 @@ export function messageForConnectionError(
                     {},
                     {
                         a: (sub) => (
-                            <a target="_blank" rel="noreferrer noopener" href={serverConfig.hsUrl}>
+                            <ExternalLink target="_blank" rel="noreferrer noopener" href={serverConfig.hsUrl}>
                                 {sub}
-                            </a>
+                            </ExternalLink>
                         ),
                     },
                 )}

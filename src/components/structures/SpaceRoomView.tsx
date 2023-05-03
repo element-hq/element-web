@@ -77,6 +77,7 @@ import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import ExternalLink from "../views/elements/ExternalLink";
 
 interface IProps {
     space: Room;
@@ -593,9 +594,9 @@ const SpaceSetupPrivateInvite: React.FC<{
                     {
                         b: (sub) => <b>{sub}</b>,
                         link: () => (
-                            <a href="https://app.element.io/" rel="noreferrer noopener" target="_blank">
+                            <ExternalLink href="https://app.element.io/" rel="noreferrer noopener" target="_blank">
                                 app.element.io
-                            </a>
+                            </ExternalLink>
                         ),
                     },
                 )}

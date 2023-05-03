@@ -31,6 +31,7 @@ import { Action } from "../../../../../dispatcher/actions";
 import { UserTab } from "../../../dialogs/UserTab";
 import dis from "../../../../../dispatcher/dispatcher";
 import CopyableText from "../../../elements/CopyableText";
+import ExternalLink from "../../../elements/ExternalLink";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -114,9 +115,9 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         for (const tocEntry of tocLinks) {
             legalLinks.push(
                 <div key={tocEntry.url}>
-                    <a href={tocEntry.url} rel="noreferrer noopener" target="_blank">
+                    <ExternalLink href={tocEntry.url} rel="noreferrer noopener" target="_blank">
                         {tocEntry.text}
-                    </a>
+                    </ExternalLink>
                 </div>,
             );
         }
@@ -143,27 +144,31 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             {},
                             {
                                 photo: (sub) => (
-                                    <a
+                                    <ExternalLink
                                         href="themes/element/img/backgrounds/lake.jpg"
                                         rel="noreferrer noopener"
                                         target="_blank"
                                     >
                                         {sub}
-                                    </a>
+                                    </ExternalLink>
                                 ),
                                 author: (sub) => (
-                                    <a href="https://www.flickr.com/golan" rel="noreferrer noopener" target="_blank">
+                                    <ExternalLink
+                                        href="https://www.flickr.com/golan"
+                                        rel="noreferrer noopener"
+                                        target="_blank"
+                                    >
                                         {sub}
-                                    </a>
+                                    </ExternalLink>
                                 ),
                                 terms: (sub) => (
-                                    <a
+                                    <ExternalLink
                                         href="https://creativecommons.org/licenses/by-sa/4.0/"
                                         rel="noreferrer noopener"
                                         target="_blank"
                                     >
                                         {sub}
-                                    </a>
+                                    </ExternalLink>
                                 ),
                             },
                         )}
@@ -175,27 +180,27 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             {},
                             {
                                 colr: (sub) => (
-                                    <a
+                                    <ExternalLink
                                         href="https://github.com/matrix-org/twemoji-colr"
                                         rel="noreferrer noopener"
                                         target="_blank"
                                     >
                                         {sub}
-                                    </a>
+                                    </ExternalLink>
                                 ),
                                 author: (sub) => (
-                                    <a href="https://mozilla.org" rel="noreferrer noopener" target="_blank">
+                                    <ExternalLink href="https://mozilla.org" rel="noreferrer noopener" target="_blank">
                                         {sub}
-                                    </a>
+                                    </ExternalLink>
                                 ),
                                 terms: (sub) => (
-                                    <a
+                                    <ExternalLink
                                         href="https://www.apache.org/licenses/LICENSE-2.0"
                                         rel="noreferrer noopener"
                                         target="_blank"
                                     >
                                         {sub}
-                                    </a>
+                                    </ExternalLink>
                                 ),
                             },
                         )}
@@ -208,23 +213,31 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             {},
                             {
                                 twemoji: (sub) => (
-                                    <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
+                                    <ExternalLink
+                                        href="https://twemoji.twitter.com/"
+                                        rel="noreferrer noopener"
+                                        target="_blank"
+                                    >
                                         {sub}
-                                    </a>
+                                    </ExternalLink>
                                 ),
                                 author: (sub) => (
-                                    <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
+                                    <ExternalLink
+                                        href="https://twemoji.twitter.com/"
+                                        rel="noreferrer noopener"
+                                        target="_blank"
+                                    >
                                         {sub}
-                                    </a>
+                                    </ExternalLink>
                                 ),
                                 terms: (sub) => (
-                                    <a
+                                    <ExternalLink
                                         href="https://creativecommons.org/licenses/by/4.0/"
                                         rel="noreferrer noopener"
                                         target="_blank"
                                     >
                                         {sub}
-                                    </a>
+                                    </ExternalLink>
                                 ),
                             },
                         )}
@@ -256,9 +269,9 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             },
             {
                 a: (sub) => (
-                    <a href="https://element.io/help" rel="noreferrer noopener" target="_blank">
+                    <ExternalLink href="https://element.io/help" rel="noreferrer noopener" target="_blank">
                         {sub}
-                    </a>
+                    </ExternalLink>
                 ),
             },
         );
@@ -273,9 +286,9 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         },
                         {
                             a: (sub) => (
-                                <a href="https://element.io/help" rel="noreferrer noopener" target="_blank">
+                                <ExternalLink href="https://element.io/help" rel="noreferrer noopener" target="_blank">
                                     {sub}
-                                </a>
+                                </ExternalLink>
                             ),
                         },
                     )}
@@ -321,13 +334,13 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             {},
                             {
                                 a: (sub) => (
-                                    <a
+                                    <ExternalLink
                                         href="https://matrix.org/security-disclosure-policy/"
                                         rel="noreferrer noopener"
                                         target="_blank"
                                     >
                                         {sub}
-                                    </a>
+                                    </ExternalLink>
                                 ),
                             },
                         )}

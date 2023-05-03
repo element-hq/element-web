@@ -30,6 +30,7 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import InlineSpinner from "../views/elements/InlineSpinner";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { RoomStatusBarUnsentMessages } from "./RoomStatusBarUnsentMessages";
+import ExternalLink from "../views/elements/ExternalLink";
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -213,9 +214,9 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                 {},
                 {
                     consentLink: (sub) => (
-                        <a href={consentError!.data?.consent_uri} target="_blank" rel="noreferrer noopener">
+                        <ExternalLink href={consentError!.data?.consent_uri} target="_blank" rel="noreferrer noopener">
                             {sub}
-                        </a>
+                        </ExternalLink>
                     ),
                 },
             );

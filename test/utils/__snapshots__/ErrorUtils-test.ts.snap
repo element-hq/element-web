@@ -6,11 +6,15 @@ exports[`messageForConnectionError should match snapshot for ConnectionError 1`]
     <span>
       Can't connect to homeserver - please check your connectivity, ensure your 
       <a
+        class="mx_ExternalLink"
         href="hsUrl"
         rel="noreferrer noopener"
         target="_blank"
       >
         homeserver's SSL certificate
+        <i
+          class="mx_ExternalLink_icon"
+        />
       </a>
        is trusted, and that a browser extension is not blocking requests.
     </span>

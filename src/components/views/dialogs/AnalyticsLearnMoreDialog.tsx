@@ -22,6 +22,7 @@ import DialogButtons from "../elements/DialogButtons";
 import Modal, { ComponentProps } from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import { getPolicyUrl } from "../../../toasts/AnalyticsToast";
+import ExternalLink from "../elements/ExternalLink";
 
 export enum ButtonClicked {
     Primary,
@@ -55,10 +56,10 @@ export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
                 {
                     PrivacyPolicyUrl: (sub) => {
                         return (
-                            <a href={privacyPolicyUrl} rel="norefferer noopener" target="_blank">
+                            <ExternalLink href={privacyPolicyUrl} rel="norefferer noopener" target="_blank">
                                 {sub}
                                 <span className="mx_AnalyticsPolicyLink" />
-                            </a>
+                            </ExternalLink>
                         );
                     },
                 },

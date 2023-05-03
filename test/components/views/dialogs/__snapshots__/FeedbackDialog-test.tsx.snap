@@ -38,19 +38,27 @@ exports[`FeedbackDialog should respect feedback config 1`] = `
           <span>
             Please view 
             <a
+              class="mx_ExternalLink"
               href="http://existing?foo=bar"
               rel="noreferrer noopener"
               target="_blank"
             >
               existing bugs on Github
+              <i
+                class="mx_ExternalLink_icon"
+              />
             </a>
              first. No match? 
             <a
+              class="mx_ExternalLink"
               href="https://new.issue.url?foo=bar"
               rel="noreferrer noopener"
               target="_blank"
             >
               Start a new one
+              <i
+                class="mx_ExternalLink_icon"
+              />
             </a>
             .
           </span>
