@@ -65,13 +65,15 @@ limitations under the License.
     gap: 6px;
 }
 
-.mx_MessageComposer .mx_MessageComposer_avatar {
-    position: absolute;
-    left: 26px;
-}
+.mx_MessageComposer {
+    .mx_MessageComposer_avatar {
+        position: absolute;
+        left: 26px;
 
-.mx_MessageComposer .mx_MessageComposer_avatar .mx_BaseAvatar {
-    display: block;
+        .mx_BaseAvatar {
+            display: block;
+        }
+    }
 }
 
 .mx_MessageComposer_composecontrols {
@@ -114,6 +116,40 @@ limitations under the License.
     align-items: flex-start;
     font-size: $font-14px;
     margin-right: 6px;
+
+    pre {
+        background-color: $rte-code-bg-color;
+        border-radius: 3px;
+        padding: 10px;
+    }
+
+    textarea {
+        display: block;
+        width: 100%;
+        padding: 0px;
+        margin-top: 6px;
+        margin-bottom: 6px;
+        border: 0px;
+        resize: none;
+        outline: none;
+        box-shadow: none;
+        color: $primary-content;
+        background-color: $background;
+        font-size: $font-14px;
+        max-height: 120px;
+        overflow: auto;
+
+        /* hack for FF as vertical alignment of custom placeholder text is broken */
+        &::-moz-placeholder {
+            line-height: 100%;
+            color: $accent;
+            opacity: 1;
+        }
+
+        &::-webkit-input-placeholder {
+            color: $accent;
+        }
+    }
 }
 
 .mx_MessageComposer_editor {
@@ -123,15 +159,16 @@ limitations under the License.
     overflow-y: auto;
     overflow-x: hidden;
     word-break: break-word;
-}
 
-/* FIXME: rather unpleasant hack to get rid of <p/> margins. */
-/* really we should be mixing in markdown-body from gfm.css instead */
-.mx_MessageComposer_editor > :first-child {
-    margin-top: 0 !important;
-}
-.mx_MessageComposer_editor > :last-child {
-    margin-bottom: 0 !important;
+    /* FIXME: rather unpleasant hack to get rid of <p/> margins. */
+    /* really we should be mixing in markdown-body from gfm.css instead */
+    > :first-child {
+        margin-top: 0 !important;
+    }
+
+    > :last-child {
+        margin-bottom: 0 !important;
+    }
 }
 
 @keyframes visualbell {
@@ -145,39 +182,6 @@ limitations under the License.
 
 .mx_MessageComposer_input_error {
     animation: 0.2s visualbell;
-}
-
-.mx_MessageComposer_input pre {
-    background-color: $rte-code-bg-color;
-    border-radius: 3px;
-    padding: 10px;
-}
-
-.mx_MessageComposer_input textarea {
-    display: block;
-    width: 100%;
-    padding: 0px;
-    margin-top: 6px;
-    margin-bottom: 6px;
-    border: 0px;
-    resize: none;
-    outline: none;
-    box-shadow: none;
-    color: $primary-content;
-    background-color: $background;
-    font-size: $font-14px;
-    max-height: 120px;
-    overflow: auto;
-}
-
-/* hack for FF as vertical alignment of custom placeholder text is broken */
-.mx_MessageComposer_input textarea::-moz-placeholder {
-    line-height: 100%;
-    color: $accent;
-    opacity: 1;
-}
-.mx_MessageComposer_input textarea::-webkit-input-placeholder {
-    color: $accent;
 }
 
 .mx_MessageComposer_button_highlight {
@@ -332,10 +336,10 @@ limitations under the License.
     align-items: center;
     font-size: $font-10px;
     color: $info-plinth-fg-color;
-}
 
-.mx_MessageComposer_formatbar * {
-    margin-right: 4px;
+    * {
+        margin-right: 4px;
+    }
 }
 
 .mx_MessageComposer_format_button,
