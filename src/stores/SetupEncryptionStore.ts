@@ -31,6 +31,7 @@ import Modal from "../Modal";
 import InteractiveAuthDialog from "../components/views/dialogs/InteractiveAuthDialog";
 import { _t } from "../languageHandler";
 import { SdkContextClass } from "../contexts/SDKContext";
+import { asyncSome } from "../utils/arrays";
 
 export enum Phase {
     Loading = 0,
@@ -108,20 +109,12 @@ export class SetupEncryptionStore extends EventEmitter {
         // do we have any other verified devices which are E2EE which we can verify against?
         const dehydratedDevice = await cli.getDehydratedDevice();
         const ownUserId = cli.getUserId()!;
-        const crossSigningInfo = cli.getStoredCrossSigningForUser(ownUserId);
-        this.hasDevicesToVerifyAgainst = cli.getStoredDevicesForUser(ownUserId).some((device) => {
+        this.hasDevicesToVerifyAgainst = await asyncSome(cli.getStoredDevicesForUser(ownUserId), async (device) => {
             if (!device.getIdentityKey() || (dehydratedDevice && device.deviceId == dehydratedDevice?.device_id)) {
                 return false;
             }
-            // check if the device is signed by the cross-signing key stored for our user. Note that this is
-            // *different* to calling `cryptoApi.getDeviceVerificationStatus`, because even if we have stored
-            // a cross-signing key for our user, we don't necessarily trust it yet (In legacy Crypto, we have not
-            // yet imported it into `Crypto.crossSigningInfo`, which for maximal confusion is a different object to
-            // `Crypto.getStoredCrossSigningForUser(ownUserId)`).
-            //
-            // TODO: figure out wtf to to here for rust-crypto
-            const verificationStatus = crossSigningInfo?.checkDeviceTrust(crossSigningInfo, device, false, true);
-            return !!verificationStatus?.isCrossSigningVerified();
+            const verificationStatus = await cli.getCrypto()?.getDeviceVerificationStatus(ownUserId, device.deviceId);
+            return !!verificationStatus?.signedByOwner;
         });
 
         this.phase = Phase.Intro;
