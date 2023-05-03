@@ -265,7 +265,6 @@ class LoggedInView extends React.Component<IProps, IState> {
         resizer.setClassNames({
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle_vertical",
-            reverse: "mx_ResizeHandle_reverse",
         });
         return resizer;
     }
