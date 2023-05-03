@@ -27,6 +27,9 @@ import { avatarUrlForRoom } from "../../../Avatar";
 import { htmlSerializeFromMdIfNeeded } from "../../../editor/serialize";
 import { leaveSpace } from "../../../utils/leave-behaviour";
 import { getTopic } from "../../../hooks/room/useTopic";
+import SettingsTab from "../settings/tabs/SettingsTab";
+import { SettingsSection } from "../settings/shared/SettingsSection";
+import SettingsSubsection from "../settings/shared/SettingsSubsection";
 
 interface IProps {
     matrixClient: MatrixClient;
@@ -94,50 +97,49 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space })
     };
 
     return (
-        <div className="mx_SettingsTab">
-            <div className="mx_SettingsTab_heading">{_t("General")}</div>
+        <SettingsTab>
+            <SettingsSection heading={_t("General")}>
+                <div>
+                    <div>{_t("Edit settings relating to your space.")}</div>
 
-            <div>{_t("Edit settings relating to your space.")}</div>
+                    {error && <div className="mx_SpaceRoomView_errorText">{error}</div>}
 
-            {error && <div className="mx_SpaceRoomView_errorText">{error}</div>}
+                    <SpaceBasicSettings
+                        avatarUrl={avatarUrlForRoom(space, 80, 80, "crop") ?? undefined}
+                        avatarDisabled={busy || !canSetAvatar}
+                        setAvatar={setNewAvatar}
+                        name={name}
+                        nameDisabled={busy || !canSetName}
+                        setName={setName}
+                        topic={topic}
+                        topicDisabled={busy || !canSetTopic}
+                        setTopic={setTopic}
+                    />
 
-            <div className="mx_SettingsTab_section">
-                <SpaceBasicSettings
-                    avatarUrl={avatarUrlForRoom(space, 80, 80, "crop") ?? undefined}
-                    avatarDisabled={busy || !canSetAvatar}
-                    setAvatar={setNewAvatar}
-                    name={name}
-                    nameDisabled={busy || !canSetName}
-                    setName={setName}
-                    topic={topic}
-                    topicDisabled={busy || !canSetTopic}
-                    setTopic={setTopic}
-                />
+                    <AccessibleButton
+                        onClick={onCancel}
+                        disabled={busy || !(avatarChanged || nameChanged || topicChanged)}
+                        kind="link"
+                    >
+                        {_t("Cancel")}
+                    </AccessibleButton>
+                    <AccessibleButton onClick={onSave} disabled={busy} kind="primary">
+                        {busy ? _t("Saving…") : _t("Save Changes")}
+                    </AccessibleButton>
+                </div>
 
-                <AccessibleButton
-                    onClick={onCancel}
-                    disabled={busy || !(avatarChanged || nameChanged || topicChanged)}
-                    kind="link"
-                >
-                    {_t("Cancel")}
-                </AccessibleButton>
-                <AccessibleButton onClick={onSave} disabled={busy} kind="primary">
-                    {busy ? _t("Saving…") : _t("Save Changes")}
-                </AccessibleButton>
-            </div>
-
-            <span className="mx_SettingsTab_subheading">{_t("Leave Space")}</span>
-            <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
-                <AccessibleButton
-                    kind="danger"
-                    onClick={() => {
-                        leaveSpace(space);
-                    }}
-                >
-                    {_t("Leave Space")}
-                </AccessibleButton>
-            </div>
-        </div>
+                <SettingsSubsection heading={_t("Leave Space")}>
+                    <AccessibleButton
+                        kind="danger"
+                        onClick={() => {
+                            leaveSpace(space);
+                        }}
+                    >
+                        {_t("Leave Space")}
+                    </AccessibleButton>
+                </SettingsSubsection>
+            </SettingsSection>
+        </SettingsTab>
     );
 };
 

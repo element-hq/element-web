@@ -1,5 +1,5 @@
 /*
-Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -402,7 +402,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className="mx_AliasSettings">
+            <>
                 <SettingsFieldset
                     data-testid="published-address-fieldset"
                     legend={_t("Published Addresses")}
@@ -416,15 +416,6 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                         </>
                     }
                 >
-                    {/*
-                <span className='mx_SettingsTab_subheading'>{ _t("Published Addresses") }</span>
-                <p>
-                    { isSpaceRoom
-                        ? _t("Published addresses can be used by anyone on any server to join your space.")
-                        : _t("Published addresses can be used by anyone on any server to join your room.") }
-                    &nbsp;
-                    { _t("To publish an address, it needs to be set as a local address first.") }
-                </p> */}
                     {canonicalAliasSection}
                     {this.props.hidePublishSetting ? null : (
                         <RoomPublishSetting
@@ -472,11 +463,13 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                     }
                 >
                     <details onToggle={this.onLocalAliasesToggled} open={this.state.detailsOpen}>
-                        <summary>{this.state.detailsOpen ? _t("Show less") : _t("Show more")}</summary>
+                        <summary className="mx_AliasSettings_localAddresses">
+                            {this.state.detailsOpen ? _t("Show less") : _t("Show more")}
+                        </summary>
                         {localAliasesList}
                     </details>
                 </SettingsFieldset>
-            </div>
+            </>
         );
     }
 }
