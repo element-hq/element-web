@@ -37,10 +37,25 @@ limitations under the License.
 
 .mx_GeneralUserSettingsTab_accountSection .mx_EmailAddresses,
 .mx_GeneralUserSettingsTab_accountSection .mx_PhoneNumbers,
-.mx_GeneralUserSettingsTab_discovery .mx_ExistingEmailAddress,
-.mx_GeneralUserSettingsTab_discovery .mx_ExistingPhoneNumber,
+.mx_GeneralUserSettingsTab_discovery .mx_GeneralUserSettingsTab_discovery_existing,
 .mx_GeneralUserSettingsTab_languageInput {
     margin-inline-end: var(--SettingsTab_fullWidthField-margin-inline-end);
+}
+
+.mx_GeneralUserSettingsTab_discovery_existing {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.mx_GeneralUserSettingsTab_discovery_existing_address,
+.mx_GeneralUserSettingsTab_discovery_existing_promptText {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.mx_GeneralUserSettingsTab_discovery_existing_button {
+    margin-left: 5px;
 }
 
 .mx_GeneralUserSettingsTab_warningIcon {

@@ -94,21 +94,21 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
     public render(): React.ReactNode {
         if (this.state.verifyRemove) {
             return (
-                <div className="mx_ExistingEmailAddress">
-                    <span className="mx_ExistingEmailAddress_promptText">
+                <div className="mx_GeneralUserSettingsTab_discovery_existing">
+                    <span className="mx_GeneralUserSettingsTab_discovery_existing_promptText">
                         {_t("Remove %(email)s?", { email: this.props.email.address })}
                     </span>
                     <AccessibleButton
                         onClick={this.onActuallyRemove}
                         kind="danger_sm"
-                        className="mx_ExistingEmailAddress_confirmBtn"
+                        className="mx_GeneralUserSettingsTab_discovery_existing_button"
                     >
                         {_t("Remove")}
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.onDontRemove}
                         kind="link_sm"
-                        className="mx_ExistingEmailAddress_confirmBtn"
+                        className="mx_GeneralUserSettingsTab_discovery_existing_button"
                     >
                         {_t("Cancel")}
                     </AccessibleButton>
@@ -117,8 +117,8 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
         }
 
         return (
-            <div className="mx_ExistingEmailAddress">
-                <span className="mx_ExistingEmailAddress_email">{this.props.email.address}</span>
+            <div className="mx_GeneralUserSettingsTab_discovery_existing">
+                <span className="mx_GeneralUserSettingsTab_discovery_existing_address">{this.props.email.address}</span>
                 <AccessibleButton onClick={this.onRemove} kind="danger_sm">
                     {_t("Remove")}
                 </AccessibleButton>

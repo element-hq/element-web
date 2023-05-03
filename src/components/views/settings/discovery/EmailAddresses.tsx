@@ -217,7 +217,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                 <span>
                     {_t("Verify the link in your inbox")}
                     <AccessibleButton
-                        className="mx_ExistingEmailAddress_confirmBtn"
+                        className="mx_GeneralUserSettingsTab_discovery_existing_button"
                         kind="primary_sm"
                         onClick={this.onContinueClick}
                         disabled={this.state.continueDisabled}
@@ -229,7 +229,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         } else if (bound) {
             status = (
                 <AccessibleButton
-                    className="mx_ExistingEmailAddress_confirmBtn"
+                    className="mx_GeneralUserSettingsTab_discovery_existing_button"
                     kind="danger_sm"
                     onClick={this.onRevokeClick}
                 >
@@ -239,7 +239,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         } else {
             status = (
                 <AccessibleButton
-                    className="mx_ExistingEmailAddress_confirmBtn"
+                    className="mx_GeneralUserSettingsTab_discovery_existing_button"
                     kind="primary_sm"
                     onClick={this.onShareClick}
                 >
@@ -249,8 +249,8 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         }
 
         return (
-            <div className="mx_ExistingEmailAddress">
-                <span className="mx_ExistingEmailAddress_email">{address}</span>
+            <div className="mx_GeneralUserSettingsTab_discovery_existing">
+                <span className="mx_GeneralUserSettingsTab_discovery_existing_address">{address}</span>
                 {status}
             </div>
         );
