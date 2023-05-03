@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$irc-line-height: $font-18px;
+:root {
+    --irc-line-height: $font-18px;
+}
 
 .mx_IRCLayout {
     --name-width: 80px; /* cf. ircDisplayNameWidth on Settings.tsx */
     --icon-width: 14px;
-    --line-height: $irc-line-height;
+    --line-height: var(--irc-line-height);
     --right-padding: 5px; /* TODO: Use a spacing variable */
 
     line-height: var(--line-height) !important;
@@ -30,155 +32,7 @@ $irc-line-height: $font-18px;
 
     .mx_NewRoomIntro {
         > h2 {
-            line-height: initial; /* Cancel $irc-line-height */
-        }
-    }
-
-    .mx_EventTile[data-layout="irc"] {
-        --EventTile_irc_line-padding-block: 1px;
-
-        display: flex;
-        align-items: flex-start;
-        padding-top: 0;
-
-        > a {
-            text-decoration: none; /* timestamps are links which shouldn't be underlined */
-            min-width: $MessageTimestamp_width; /* ensure space for EventTile without timestamp */
-        }
-
-        > * {
-            margin-right: var(--right-padding);
-        }
-
-        .mx_EventTile_avatar,
-        .mx_EventTile_e2eIcon {
-            height: $irc-line-height;
-        }
-
-        .mx_EventTile_avatar,
-        .mx_DisambiguatedProfile,
-        .mx_EventTile_e2eIcon,
-        .mx_EventTile_msgOption {
-            flex-shrink: 0;
-        }
-
-        .mx_EventTile_avatar {
-            order: 1;
-            position: relative;
-            display: flex;
-            align-items: center;
-
-            /* Need to use important to override the js provided height and width values. */
-            > .mx_BaseAvatar,
-            > .mx_BaseAvatar > * {
-                height: $font-14px !important;
-                width: $font-14px !important;
-                font-size: $font-10px !important;
-                line-height: $font-15px !important;
-            }
-        }
-
-        .mx_DisambiguatedProfile {
-            order: 2;
-            width: var(--name-width);
-            margin-inline-end: 0; /* override mx_EventTile > * */
-
-            > .mx_DisambiguatedProfile_displayName {
-                width: 100%;
-                text-align: end;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            > .mx_DisambiguatedProfile_mxid {
-                visibility: collapse;
-                margin-left: 0; /* Override the inherited margin. */
-                padding: 0 5px; /* TODO: Use a spacing variable */
-            }
-
-            &:hover {
-                overflow: visible;
-                z-index: 10;
-
-                > .mx_DisambiguatedProfile_displayName {
-                    overflow: visible;
-                    display: inline;
-                    background-color: $event-selected-color;
-                    border-radius: 8px 0 0 8px;
-                    padding-right: $spacing-8;
-                }
-
-                > .mx_DisambiguatedProfile_mxid {
-                    visibility: visible;
-                    opacity: 1;
-                    background-color: $event-selected-color;
-                }
-            }
-        }
-
-        .mx_EventTile_e2eIcon {
-            padding: 0;
-            flex-grow: 0;
-            background-position: center;
-        }
-
-        .mx_EventTile_line {
-            .mx_EventTile_e2eIcon,
-            .mx_TextualEvent,
-            .mx_ViewSourceEvent,
-            .mx_MTextBody {
-                /* add a 1px padding top and bottom because our larger
-                emoji font otherwise gets cropped by anti-zalgo */
-                padding: var(--EventTile_irc_line-padding-block) 0;
-            }
-
-            .mx_EventTile_e2eIcon,
-            .mx_TextualEvent,
-            .mx_MTextBody {
-                display: inline-block;
-            }
-
-            .mx_ReplyTile {
-                .mx_MTextBody {
-                    display: -webkit-box; /* Enable -webkit-line-clamp */
-                }
-            }
-        }
-
-        .mx_EventTile_line,
-        .mx_EventTile_reply {
-            order: 3;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            flex-shrink: 1;
-            min-width: 0;
-        }
-
-        .mx_EventTile_reply {
-            order: 4;
-        }
-
-        .mx_EventTile_msgOption {
-            order: 5;
-        }
-
-        .mx_EditMessageComposer_buttons {
-            position: relative;
-        }
-
-        &.mx_EventTile_info {
-            .mx_ViewSourceEvent, /* For hidden events */
-            .mx_TextualEvent {
-                line-height: $irc-line-height;
-            }
-        }
-    }
-
-    .mx_EventTile_emote {
-        .mx_EventTile_avatar {
-            /* add --right-padding value of MessageTimestamp only */
-            margin-left: calc(var(--name-width) + var(--icon-width) + 1 * var(--right-padding));
+            line-height: initial; /* Cancel var(--irc-line-height) */
         }
     }
 

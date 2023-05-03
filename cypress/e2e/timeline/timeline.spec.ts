@@ -207,7 +207,7 @@ describe("Timeline", () => {
             cy.get(".mx_GenericEventListSummary[data-layout=irc] .mx_GenericEventListSummary_spacer").should(
                 "have.css",
                 "line-height",
-                "18px", // $irc-line-height: $font-18px (See: _IRCLayout.pcss)
+                "18px", // var(--irc-line-height): $font-18px (See: _IRCLayout.pcss)
             );
 
             cy.get(".mx_MainSplit").percySnapshotElement("Expanded GELS on IRC layout", { percyCSS });
