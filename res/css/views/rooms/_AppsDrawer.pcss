@@ -20,9 +20,9 @@ $MiniAppTileHeight: 220px;
 $MinWidth: 240px;
 
 .mx_AppsDrawer {
-    margin: $container-gap-width;
+    margin: var(--container-gap-width);
     /* The left side gap is fully handled by this margin. To prohibit bleeding on webkit browser. */
-    margin-right: calc($container-gap-width / 2);
+    margin-right: calc(var(--container-gap-width) / 2);
     margin-bottom: 0; /* No bottom margin for the correct gap to the CallView below. */
     position: relative;
     display: flex;
@@ -31,7 +31,7 @@ $MinWidth: 240px;
     flex-grow: 1;
 
     &.mx_AppsDrawer_maximise {
-        margin-bottom: $container-gap-width;
+        margin-bottom: var(--container-gap-width);
     }
 
     .mx_AppsContainer_resizerHandleContainer {
@@ -118,7 +118,7 @@ $MinWidth: 240px;
 }
 
 .mx_AppsContainer_resizer {
-    margin-bottom: $container-gap-width;
+    margin-bottom: var(--container-gap-width);
 }
 
 .mx_AppsContainer {
@@ -132,11 +132,11 @@ $MinWidth: 240px;
     min-height: 0;
 
     .mx_AppTile:first-of-type {
-        border-left-width: $container-border-width;
+        border-left-width: var(--container-border-width);
         border-radius: 10px 0 0 10px;
     }
     .mx_AppTile:last-of-type {
-        border-right-width: $container-border-width;
+        border-right-width: var(--container-border-width);
         border-radius: 0 10px 10px 0;
     }
 
@@ -150,7 +150,7 @@ $MinWidth: 240px;
 }
 
 .mx_AppTile {
-    border: $container-border-width solid $widget-menu-bar-bg-color;
+    border: var(--container-border-width) solid $widget-menu-bar-bg-color;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -161,7 +161,7 @@ $MinWidth: 240px;
     width: 100% !important; /* to override the inline style set by the resizer */
     margin: 0;
     padding: 0;
-    border: $container-border-width solid $widget-menu-bar-bg-color;
+    border: var(--container-border-width) solid $widget-menu-bar-bg-color;
     border-radius: 8px;
     display: flex;
     flex-direction: column;

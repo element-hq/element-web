@@ -33,13 +33,12 @@ $MessageTimestamp_width_hover: calc($MessageTimestamp_width - 2 * $selected-mess
 $slider-dot-size: 1em;
 $slider-selection-dot-size: 2.4em;
 
-$container-border-width: 8px;
-$container-gap-width: 8px; /* only even numbers should be used because otherwise we get 0.5px margin values. */
-
 $timeline-image-border-radius: 8px;
 :root {
     font-size: 10px;
 
+    --container-border-width: 8px;
+    --container-gap-width: 8px; /* only even numbers should be used because otherwise we get 0.5px margin values. */
     --transition-short: 0.1s;
     --transition-standard: 0.3s;
     --MessageTimestamp-width: $MessageTimestamp_width;

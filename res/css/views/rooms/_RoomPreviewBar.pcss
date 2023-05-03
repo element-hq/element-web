@@ -100,8 +100,8 @@ limitations under the License.
 
 /* With maximised widgets, the panel fits in better when rounded */
 .mx_MainSplit_maximisedWidget .mx_RoomPreviewBar_panel {
-    margin: $container-gap-width;
-    margin-right: calc($container-gap-width / 2); /* Shared with right panel */
+    margin: var(--container-gap-width);
+    margin-right: calc(var(--container-gap-width) / 2); /* Shared with right panel */
     margin-top: 0; /* Already covered by apps drawer */
     border-radius: 8px;
 }

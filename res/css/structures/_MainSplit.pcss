@@ -23,10 +23,10 @@ limitations under the License.
 }
 
 .mx_MainSplit > .mx_RightPanel_ResizeWrapper {
-    padding: $container-gap-width;
+    padding: var(--container-gap-width);
     /* The resizer should be centered: only half of the gap-width is handled by the right panel. */
     /* The other half by the RoomView. */
-    padding-left: calc($container-gap-width / 2);
+    padding-left: calc(var(--container-gap-width) / 2);
     height: calc(100vh - 51px); /* height of .mx_RoomHeader.light-panel */
 
     &:hover .mx_ResizeHandle_horizontal::before {

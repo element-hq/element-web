@@ -134,7 +134,7 @@ limitations under the License.
 
             &.mx_EventTile_info .mx_MessageActionBar {
                 /* 1px: border width */
-                inset-inline-end: calc($container-gap-width + var(--BaseCard_padding-inline) + 1px);
+                inset-inline-end: calc(var(--container-gap-width) + var(--BaseCard_padding-inline) + 1px);
             }
 
             .mx_ReactionsRow {
@@ -178,7 +178,7 @@ limitations under the License.
                 /* 6px: scroll bar width (magic number) */
                 /* stylelint-disable-next-line declaration-colon-space-after */
                 inset-inline-end: calc(
-                    -1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + $container-gap-width + 6px
+                    -1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + var(--container-gap-width) + 6px
                 );
             }
 

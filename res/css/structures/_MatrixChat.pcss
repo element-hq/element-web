@@ -81,7 +81,7 @@ limitations under the License.
 /* or less, Safari and other WebKit based browsers get confused about overflows somehow and */
 /* https://github.com/vector-im/element-web/issues/19863 happens. */
 .mx_MatrixChat > .mx_ResizeHandle.mx_ResizeHandle_horizontal {
-    margin: 0 calc(-5.5px - $container-gap-width / 2) 0 calc(-6.5px + $container-gap-width / 2);
+    margin: 0 calc(-5.5px - var(--container-gap-width) / 2) 0 calc(-6.5px + var(--container-gap-width) / 2);
     /* The condition to prevent bleeding is: (margin-left + margin-right < -11px) */
     /* (IF there is NO margin on the leftPanel_wrapper) */
     /* The resizeHandle does not change the gap between the left panel and the room view: */
@@ -91,7 +91,7 @@ limitations under the License.
     /*      the handle requires no space */
     /* right: -6px left: -6px positions the element exactly on the edge of leftPanel. */
     /* left+=1 and right-=1 => resizeHandle moves 1px to the right closer to the center of the gap. */
-    /* We want the handle to be in the middle of the gap so it is shifted by ($container-gap-width / 2) */
+    /* We want the handle to be in the middle of the gap so it is shifted by (var(--container-gap-width) / 2) */
 }
 
 .mx_MatrixChat > .mx_ResizeHandle_horizontal:hover {
