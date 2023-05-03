@@ -693,9 +693,9 @@ export default class AppTile extends React.Component<IProps, IState> {
                 this.props.room &&
                 WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, Container.Center);
             const maximisedClasses = classNames({
-                mx_AppTileMenuBar_iconButton: true,
-                mx_AppTileMenuBar_iconButton_collapse: isMaximised,
-                mx_AppTileMenuBar_iconButton_maximise: !isMaximised,
+                "mx_AppTileMenuBar_iconButton": true,
+                "mx_AppTileMenuBar_iconButton--collapse": isMaximised,
+                "mx_AppTileMenuBar_iconButton--maximise": !isMaximised,
             });
             layoutButtons.push(
                 <AccessibleButton
@@ -709,7 +709,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             layoutButtons.push(
                 <AccessibleButton
                     key="minimise"
-                    className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_minimise"
+                    className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--minimise"
                     title={_t("Minimise")}
                     onClick={this.onMinimiseClicked}
                 />,
@@ -731,13 +731,13 @@ export default class AppTile extends React.Component<IProps, IState> {
                                 {layoutButtons}
                                 {this.props.showPopout && !this.state.requiresClient && (
                                     <AccessibleButton
-                                        className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_popout"
+                                        className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--popout"
                                         title={_t("Popout widget")}
                                         onClick={this.onPopoutWidgetClick}
                                     />
                                 )}
                                 <ContextMenuButton
-                                    className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_menu"
+                                    className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--menu"
                                     label={_t("Options")}
                                     isExpanded={this.state.menuDisplayed}
                                     inputRef={this.contextMenuButton}
