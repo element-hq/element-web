@@ -55,7 +55,7 @@ limitations under the License.
             &.mx_EventTile_info .mx_EventTile_line,
             .mx_EventTile_line {
                 padding: var(--BaseCard_EventTile_line-padding-block) var(--BaseCard_EventTile-spacing-inline);
-                padding-inline-end: $MessageTimestamp_width; /* ensure timestamp is not hidden */
+                padding-inline-end: var(--MessageTimestamp-width); /* ensure timestamp is not hidden */
 
                 .mx_EventTile_e2eIcon {
                     inset-inline-start: $spacing-8;
@@ -157,7 +157,7 @@ limitations under the License.
             .mx_EventTile_line,
             .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
                 padding-inline-start: var(--BaseCard_EventTile-spacing-inline);
-                padding-inline-end: $MessageTimestamp_width; /* ensure timestamp is not hidden */
+                padding-inline-end: var(--MessageTimestamp-width); /* ensure timestamp is not hidden */
             }
         }
     }

@@ -295,7 +295,7 @@ $left-gutter: 64px;
 
         > a {
             text-decoration: none; /* timestamps are links which shouldn't be underlined */
-            min-width: $MessageTimestamp_width; /* ensure space for EventTile without timestamp */
+            min-width: var(--MessageTimestamp-width); /* ensure space for EventTile without timestamp */
         }
 
         > * {
@@ -650,7 +650,7 @@ $left-gutter: 64px;
             /* add --right-padding value of MessageTimestamp and avatar only */
             /* stylelint-disable-next-line declaration-colon-space-after */
             padding-left: calc(
-                var(--name-width) + var(--icon-width) + $MessageTimestamp_width + 2 * var(--right-padding)
+                var(--name-width) + var(--icon-width) + var(--MessageTimestamp-width) + 2 * var(--right-padding)
             );
         }
     }
@@ -1218,7 +1218,8 @@ $left-gutter: 64px;
                 padding-top: 0;
 
                 .mx_EventTile_avatar {
-                    left: calc($MessageTimestamp_width + 14px - 4px); /* 14px: avatar width, 4px: align with text */
+                    /* 14px: avatar width, 4px: align with text */
+                    left: calc(var(--MessageTimestamp-width) + 14px - 4px);
                     z-index: 9; /* position above the hover styling */
                 }
 

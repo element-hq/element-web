@@ -171,7 +171,7 @@ describe("Timeline", () => {
                 // Check the profile resizer's place
                 // See: _IRCLayout
                 // --RoomView_MessageList-padding = 18px (See: _RoomView.pcss)
-                // --MessageTimestamp-width = $MessageTimestamp_width = 46px (See: _common.pcss)
+                // --MessageTimestamp-width = 46px (See: _MessageTimestamp.pcss)
                 // --icon-width = 14px
                 // --right-padding = 5px
                 // --name-width = 80px
@@ -371,7 +371,7 @@ describe("Timeline", () => {
             // Check inline start spacing of collapsed GELS
             // See: _EventTile.pcss
             // .mx_GenericEventListSummary[data-layout="irc"] > .mx_EventTile_line
-            //  = var(--name-width) + var(--icon-width) + $MessageTimestamp_width + 2 * var(--right-padding)
+            //  = var(--name-width) + var(--icon-width) + var(--MessageTimestamp-width) + 2 * var(--right-padding)
             //  = 80 + 14 + 46 + 2 * 5
             //  = 150px
             cy.get(".mx_GenericEventListSummary[data-layout=irc] > .mx_EventTile_line").should(
@@ -388,7 +388,7 @@ describe("Timeline", () => {
                 .should("have.css", "margin-inline-end", "0px");
             // --icon-width should be applied
             cy.get(".mx_EventTile .mx_EventTile_avatar > .mx_BaseAvatar").should("have.css", "width", "14px");
-            // $MessageTimestamp_width should be applied
+            // var(--MessageTimestamp-width) should be applied
             cy.get(".mx_EventTile > a").should("have.css", "min-width", "46px");
             // Record alignment of collapsed GELS and messages on messagePanel
             cy.get(".mx_MainSplit").percySnapshotElement("Collapsed GELS and messages on IRC layout", { percyCSS });
