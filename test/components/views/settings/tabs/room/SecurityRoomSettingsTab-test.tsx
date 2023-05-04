@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { EventType, GuestAccess, HistoryVisibility, JoinRule, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -353,9 +353,11 @@ describe("<SecurityRoomSettingsTab />", () => {
             expect(within(dialog).getByText("Enable encryption?")).toBeInTheDocument();
             fireEvent.click(within(dialog).getByText("OK"));
 
-            expect(client.sendStateEvent).toHaveBeenCalledWith(room.roomId, EventType.RoomEncryption, {
-                algorithm: "m.megolm.v1.aes-sha2",
-            });
+            await waitFor(() =>
+                expect(client.sendStateEvent).toHaveBeenCalledWith(room.roomId, EventType.RoomEncryption, {
+                    algorithm: "m.megolm.v1.aes-sha2",
+                }),
+            );
         });
 
         it("renders world readable option when room is encrypted and history is already set to world readable", () => {
