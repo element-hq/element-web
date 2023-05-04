@@ -18,25 +18,24 @@ limitations under the License.
     cursor: row-resize;
     flex: 0 0 auto;
     z-index: 100;
-}
 
-.mx_ResizeHandle.mx_ResizeHandle_horizontal {
-    margin: 0 -5px;
-    padding: 0 5px;
-    cursor: col-resize;
-}
+    &.mx_ResizeHandle--horizontal {
+        margin: 0 -5px;
+        padding: 0 5px;
+        cursor: col-resize;
 
-.mx_ResizeHandle.mx_ResizeHandle_vertical {
-    margin: -5px 0;
-    padding: 5px 0;
-    cursor: row-resize;
-}
+        > div {
+            width: 1px;
+            height: 100%;
+        }
+    }
 
-.mx_ResizeHandle.mx_ResizeHandle_horizontal > div {
-    width: 1px;
-    height: 100%;
-}
+    &.mx_ResizeHandle--vertical {
+        margin: -5px 0;
+        padding: 5px 0;
 
-.mx_ResizeHandle.mx_ResizeHandle_vertical > div {
-    height: 1px;
+        > div {
+            height: 1px;
+        }
+    }
 }

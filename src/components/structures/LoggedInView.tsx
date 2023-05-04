@@ -264,7 +264,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         const resizer = new Resizer(this._resizeContainer.current, CollapseDistributor, collapseConfig);
         resizer.setClassNames({
             handle: "mx_ResizeHandle",
-            vertical: "mx_ResizeHandle_vertical",
+            vertical: "mx_ResizeHandle--vertical",
         });
         return resizer;
     }

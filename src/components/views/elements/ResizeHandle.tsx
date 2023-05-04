@@ -26,9 +26,9 @@ interface IResizeHandleProps {
 const ResizeHandle: React.FC<IResizeHandleProps> = ({ vertical, id, passRef }) => {
     const classNames = ["mx_ResizeHandle"];
     if (vertical) {
-        classNames.push("mx_ResizeHandle_vertical");
+        classNames.push("mx_ResizeHandle--vertical");
     } else {
-        classNames.push("mx_ResizeHandle_horizontal");
+        classNames.push("mx_ResizeHandle--horizontal");
     }
     return (
         <div ref={passRef} className={classNames.join(" ")} data-id={id}>
