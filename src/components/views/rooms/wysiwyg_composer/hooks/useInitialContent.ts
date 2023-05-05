@@ -40,11 +40,14 @@ export function parseEditorStateTransfer(
 ): string {
     const partCreator = new CommandPartCreator(room, mxClient);
 
-    let parts: Part[];
+    let parts: (Part | undefined)[] = [];
     if (editorStateTransfer.hasEditorState()) {
         // if restoring state from a previous editor,
         // restore serialized parts from the state
-        parts = editorStateTransfer.getSerializedParts().map((p) => partCreator.deserializePart(p));
+        const serializedParts = editorStateTransfer.getSerializedParts();
+        if (serializedParts !== null) {
+            parts = serializedParts.map((p) => partCreator.deserializePart(p));
+        }
     } else {
         // otherwise, either restore serialized parts from localStorage or parse the body of the event
         // TODO local storage
@@ -59,7 +62,7 @@ export function parseEditorStateTransfer(
         });
     }
 
-    return parts.reduce((content, part) => content + part.text, "");
+    return parts.reduce((content, part) => content + part?.text, "");
     // Todo local storage
     // this.saveStoredEditorState();
 }
