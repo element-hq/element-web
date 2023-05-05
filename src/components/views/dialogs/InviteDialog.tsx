@@ -1278,7 +1278,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         let title;
         let helpText;
         let buttonText;
-        let goButtonFn;
+        let goButtonFn: (() => Promise<void>) | null = null;
         let consultConnectSection;
         let extraSection;
         let footer;

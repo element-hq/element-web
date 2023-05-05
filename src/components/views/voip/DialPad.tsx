@@ -20,24 +20,36 @@ import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
 import { XOR } from "../../../@types/common";
 
-const BUTTONS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"];
-const BUTTON_LETTERS = ["", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ", "", "+", ""];
+export const BUTTONS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"];
+export const BUTTON_LETTERS = ["", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ", "", "+", ""];
 
 enum DialPadButtonKind {
     Digit,
     Dial,
 }
 
-interface IButtonProps {
-    kind: DialPadButtonKind;
-    digit?: string;
-    digitSubtext?: string;
-    onButtonPress: (digit: string | undefined, ev: ButtonEvent) => void;
-}
+type DigitButtonProps = {
+    kind: DialPadButtonKind.Digit;
+    digit: string;
+    digitSubtext: string;
+    onButtonPress: (digit: string, ev: ButtonEvent) => void;
+};
 
-class DialPadButton extends React.PureComponent<IButtonProps> {
+type DialButtonProps = {
+    kind: DialPadButtonKind.Dial;
+    onButtonPress: () => void;
+};
+
+class DialPadButton extends React.PureComponent<DigitButtonProps | DialButtonProps> {
     public onClick = (ev: ButtonEvent): void => {
-        this.props.onButtonPress(this.props.digit, ev);
+        switch (this.props.kind) {
+            case DialPadButtonKind.Digit:
+                this.props.onButtonPress(this.props.digit, ev);
+                break;
+            case DialPadButtonKind.Dial:
+                this.props.onButtonPress();
+                break;
+        }
     };
 
     public render(): React.ReactNode {
@@ -76,7 +88,7 @@ interface IDialProps extends IBaseProps {
     onDialPress: () => void;
 }
 
-export default class Dialpad extends React.PureComponent<XOR<IProps, IDialProps>> {
+export default class DialPad extends React.PureComponent<XOR<IProps, IDialProps>> {
     public render(): React.ReactNode {
         const buttonNodes: JSX.Element[] = [];
 
