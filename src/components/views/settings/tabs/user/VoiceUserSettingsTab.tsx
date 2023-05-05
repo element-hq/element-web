@@ -83,7 +83,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
 
     private setDevice = (deviceId: string, kind: MediaDeviceKindEnum): void => {
         MediaDeviceHandler.instance.setDevice(deviceId, kind);
-        this.setState<null>({ [kind]: deviceId });
+        this.setState<any>({ [kind]: deviceId });
     };
 
     private changeWebRtcMethod = (p2p: boolean): void => {

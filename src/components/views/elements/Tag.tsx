@@ -32,7 +32,12 @@ export const Tag: React.FC<IProps> = ({ icon, label, onDeleteClick, disabled = f
             {icon?.()}
             {label}
             {onDeleteClick && (
-                <AccessibleButton className="mx_Tag_delete" onClick={onDeleteClick} disabled={disabled}>
+                <AccessibleButton
+                    aria-label="Remove"
+                    className="mx_Tag_delete"
+                    onClick={onDeleteClick}
+                    disabled={disabled}
+                >
                     <CancelRounded />
                 </AccessibleButton>
             )}

@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,16 +26,18 @@ import {
     TweakName,
     ConditionKind,
     IPushRuleCondition,
+    PushRuleKind,
 } from "matrix-js-sdk/src/matrix";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import { act, fireEvent, getByTestId, render, screen, waitFor, within } from "@testing-library/react";
 import { mocked } from "jest-mock";
+import userEvent from "@testing-library/user-event";
 
 import Notifications from "../../../../src/components/views/settings/Notifications";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { StandardActions } from "../../../../src/notifications/StandardActions";
-import { getMockClientWithEventEmitter, mkMessage, mockClientMethodsUser } from "../../../test-utils";
+import { clearAllModals, getMockClientWithEventEmitter, mkMessage, mockClientMethodsUser } from "../../../test-utils";
 
 // don't pollute test output with error logs from mock rejections
 jest.mock("matrix-js-sdk/src/logger");
@@ -257,6 +259,7 @@ describe("<Notifications />", () => {
         getPushers: jest.fn(),
         getThreePids: jest.fn(),
         setPusher: jest.fn(),
+        removePusher: jest.fn(),
         setPushRuleEnabled: jest.fn(),
         setPushRuleActions: jest.fn(),
         getRooms: jest.fn().mockReturnValue([]),
@@ -274,10 +277,12 @@ describe("<Notifications />", () => {
         sendReadReceipt: jest.fn(),
         supportsThreads: jest.fn().mockReturnValue(true),
         isInitialSyncComplete: jest.fn().mockReturnValue(false),
+        addPushRule: jest.fn().mockResolvedValue({}),
+        deletePushRule: jest.fn().mockResolvedValue({}),
     });
     mockClient.getPushRules.mockResolvedValue(pushRules);
 
-    beforeEach(() => {
+    beforeEach(async () => {
         let i = 0;
         mocked(randomString).mockImplementation(() => {
             return "testid_" + i++;
@@ -286,9 +291,17 @@ describe("<Notifications />", () => {
         mockClient.getPushRules.mockClear().mockResolvedValue(pushRules);
         mockClient.getPushers.mockClear().mockResolvedValue({ pushers: [] });
         mockClient.getThreePids.mockClear().mockResolvedValue({ threepids: [] });
-        mockClient.setPusher.mockClear().mockResolvedValue({});
+        mockClient.setPusher.mockReset().mockResolvedValue({});
+        mockClient.removePusher.mockClear().mockResolvedValue({});
         mockClient.setPushRuleActions.mockReset().mockResolvedValue({});
         mockClient.pushRules = pushRules;
+        mockClient.getPushRules.mockClear().mockResolvedValue(pushRules);
+        mockClient.addPushRule.mockClear();
+        mockClient.deletePushRule.mockClear();
+
+        userEvent.setup();
+
+        await clearAllModals();
     });
 
     it("renders spinner while loading", async () => {
@@ -392,21 +405,30 @@ describe("<Notifications />", () => {
                 // force render
                 await flushPromises();
 
+                const dialog = await screen.findByRole("dialog");
+
+                expect(
+                    within(dialog).getByText("An error occurred whilst saving your notification preferences."),
+                ).toBeInTheDocument();
+
+                // dismiss the dialog
+                fireEvent.click(within(dialog).getByText("OK"));
                 expect(screen.getByTestId("error-message")).toBeInTheDocument();
             });
 
             it("enables email notification when toggling off", async () => {
-                const testPusher = { kind: "email", pushkey: "tester@test.com" } as unknown as IPusher;
+                const testPusher = {
+                    kind: "email",
+                    pushkey: "tester@test.com",
+                    app_id: "testtest",
+                } as unknown as IPusher;
                 mockClient.getPushers.mockResolvedValue({ pushers: [testPusher] });
                 await getComponentAndWait();
 
                 const emailToggle = screen.getByTestId("notif-email-switch").querySelector('div[role="switch"]')!;
                 fireEvent.click(emailToggle);
 
-                expect(mockClient.setPusher).toHaveBeenCalledWith({
-                    ...testPusher,
-                    kind: null,
-                });
+                expect(mockClient.removePusher).toHaveBeenCalledWith(testPusher.pushkey, testPusher.app_id);
             });
         });
 
@@ -808,6 +830,66 @@ describe("<Notifications />", () => {
                     "An error occurred when updating your notification preferences. Please try to toggle your option again.",
                 ),
             ).toBeInTheDocument();
+        });
+
+        it("adds a new keyword", async () => {
+            await getComponentAndWait();
+
+            await userEvent.type(screen.getByLabelText("Keyword"), "jest");
+            expect(screen.getByLabelText("Keyword")).toHaveValue("jest");
+
+            fireEvent.click(screen.getByText("Add"));
+
+            expect(mockClient.addPushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "jest", {
+                actions: [PushRuleActionName.Notify, { set_tweak: "highlight", value: false }],
+                pattern: "jest",
+            });
+        });
+
+        it("adds a new keyword with same actions as existing rules when keywords rule is off", async () => {
+            const offContentRule = {
+                ...bananaRule,
+                enabled: false,
+                actions: [PushRuleActionName.Notify],
+            };
+            const pushRulesWithContentOff = {
+                global: {
+                    ...pushRules.global,
+                    content: [offContentRule],
+                },
+            };
+            mockClient.pushRules = pushRulesWithContentOff;
+            mockClient.getPushRules.mockClear().mockResolvedValue(pushRulesWithContentOff);
+
+            await getComponentAndWait();
+
+            const keywords = screen.getByTestId("vector_mentions_keywords");
+
+            expect(within(keywords).getByLabelText("Off")).toBeChecked();
+
+            await userEvent.type(screen.getByLabelText("Keyword"), "jest");
+            expect(screen.getByLabelText("Keyword")).toHaveValue("jest");
+
+            fireEvent.click(screen.getByText("Add"));
+
+            expect(mockClient.addPushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "jest", {
+                actions: [PushRuleActionName.Notify, { set_tweak: TweakName.Highlight, value: false }],
+                pattern: "jest",
+            });
+        });
+
+        it("removes keyword", async () => {
+            await getComponentAndWait();
+
+            await userEvent.type(screen.getByLabelText("Keyword"), "jest");
+
+            const keyword = screen.getByText("banana");
+
+            fireEvent.click(within(keyword.parentElement!).getByLabelText("Remove"));
+
+            expect(mockClient.deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "banana");
+
+            await flushPromises();
         });
     });
 

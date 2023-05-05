@@ -65,7 +65,9 @@ export default class ProfileSettings extends React.Component<{}, IState> {
 
     private removeAvatar = (): void => {
         // clear file upload field so same file can be selected
-        this.avatarUpload.current.value = "";
+        if (this.avatarUpload.current) {
+            this.avatarUpload.current.value = "";
+        }
         this.setState({
             avatarUrl: undefined,
             avatarFile: null,

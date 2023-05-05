@@ -167,7 +167,7 @@ const maximumVectorState = (
     if (!definition.syncedRuleIds?.length) {
         return undefined;
     }
-    const vectorState = definition.syncedRuleIds.reduce<VectorState | undefined>((maxVectorState, ruleId) => {
+    const vectorState = definition.syncedRuleIds.reduce<VectorState>((maxVectorState, ruleId) => {
         // already set to maximum
         if (maxVectorState === VectorState.Loud) {
             return maxVectorState;
@@ -177,12 +177,15 @@ const maximumVectorState = (
             const syncedRuleVectorState = definition.ruleToVectorState(syncedRule);
             // if syncedRule is 'louder' than current maximum
             // set maximum to louder vectorState
-            if (OrderedVectorStates.indexOf(syncedRuleVectorState) > OrderedVectorStates.indexOf(maxVectorState)) {
+            if (
+                syncedRuleVectorState &&
+                OrderedVectorStates.indexOf(syncedRuleVectorState) > OrderedVectorStates.indexOf(maxVectorState)
+            ) {
                 return syncedRuleVectorState;
             }
         }
         return maxVectorState;
-    }, definition.ruleToVectorState(rule));
+    }, definition.ruleToVectorState(rule)!);
 
     return vectorState;
 };
@@ -281,7 +284,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
     }
 
     private async refreshRules(): Promise<Partial<IState>> {
-        const ruleSets = await MatrixClientPeg.get().getPushRules();
+        const ruleSets = await MatrixClientPeg.get().getPushRules()!;
         const categories: Record<string, RuleClass> = {
             [RuleId.Master]: RuleClass.Master,
 
@@ -316,7 +319,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             // noinspection JSUnfilteredForInLoop
             const kind = k as PushRuleKind;
 
-            for (const r of ruleSets.global[kind]) {
+            for (const r of ruleSets.global[kind]!) {
                 const rule: IAnnotatedPushRule = Object.assign(r, { kind });
                 const category = categories[rule.rule_id] ?? RuleClass.Other;
 
@@ -344,7 +347,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             preparedNewState.vectorPushRules[category] = [];
             for (const rule of defaultRules[category]) {
                 const definition: VectorPushRuleDefinition = VectorPushRulesDefinitions[rule.rule_id];
-                const vectorState = definition.ruleToVectorState(rule);
+                const vectorState = definition.ruleToVectorState(rule)!;
                 preparedNewState.vectorPushRules[category]!.push({
                     ruleId: rule.rule_id,
                     rule,
@@ -441,8 +444,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             } else {
                 const pusher = this.state.pushers?.find((p) => p.kind === "email" && p.pushkey === email);
                 if (pusher) {
-                    pusher.kind = null; // flag for delete
-                    await MatrixClientPeg.get().setPusher(pusher);
+                    await MatrixClientPeg.get().removePusher(pusher.pushkey, pusher.app_id);
                 }
             }
 
@@ -539,17 +541,20 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         }
     };
 
-    private async setKeywords(keywords: string[], originalRules: IAnnotatedPushRule[]): Promise<void> {
+    private async setKeywords(
+        unsafeKeywords: (string | undefined)[],
+        originalRules: IAnnotatedPushRule[],
+    ): Promise<void> {
         try {
             // De-duplicate and remove empties
-            keywords = filterBoolean(Array.from(new Set(keywords)));
-            const oldKeywords = filterBoolean(Array.from(new Set(originalRules.map((r) => r.pattern))));
+            const keywords = filterBoolean<string>(Array.from(new Set(unsafeKeywords)));
+            const oldKeywords = filterBoolean<string>(Array.from(new Set(originalRules.map((r) => r.pattern))));
 
             // Note: Technically because of the UI interaction (at the time of writing), the diff
             // will only ever be +/-1 so we don't really have to worry about efficiently handling
             // tons of keyword changes.
 
-            const diff = arrayDiff(oldKeywords, keywords);
+            const diff = arrayDiff<string>(oldKeywords, keywords);
 
             for (const word of diff.removed) {
                 for (const rule of originalRules.filter((r) => r.pattern === word)) {
@@ -557,16 +562,16 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                 }
             }
 
-            let ruleVectorState = this.state.vectorKeywordRuleInfo?.vectorState;
+            let ruleVectorState = this.state.vectorKeywordRuleInfo!.vectorState;
             if (ruleVectorState === VectorState.Off) {
                 // When the current global keywords rule is OFF, we need to look at
                 // the flavor of existing rules to apply the same actions
                 // when creating the new rule.
-                if (originalRules.length) {
-                    ruleVectorState = PushRuleVectorState.contentRuleVectorStateKind(originalRules[0]) ?? undefined;
-                } else {
-                    ruleVectorState = VectorState.On; // default
-                }
+                const existingRuleVectorState = originalRules.length
+                    ? PushRuleVectorState.contentRuleVectorStateKind(originalRules[0])
+                    : undefined;
+                // set to same state as existing rule, or default to On
+                ruleVectorState = existingRuleVectorState ?? VectorState.On; //default
             }
             const kind = PushRuleKind.ContentSpecific;
             for (const word of diff.added) {
@@ -588,6 +593,10 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
     }
 
     private onKeywordAdd = (keyword: string): void => {
+        // should not encounter this
+        if (!this.state.vectorKeywordRuleInfo) {
+            throw new Error("Notification data is incomplete.");
+        }
         const originalRules = objectClone(this.state.vectorKeywordRuleInfo.rules);
 
         // We add the keyword immediately as a sort of local echo effect
@@ -606,7 +615,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             },
             async (): Promise<void> => {
                 await this.setKeywords(
-                    this.state.vectorKeywordRuleInfo.rules.map((r) => r.pattern),
+                    this.state.vectorKeywordRuleInfo!.rules.map((r) => r.pattern),
                     originalRules,
                 );
             },
@@ -614,6 +623,10 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
     };
 
     private onKeywordRemove = (keyword: string): void => {
+        // should not encounter this
+        if (!this.state.vectorKeywordRuleInfo) {
+            throw new Error("Notification data is incomplete.");
+        }
         const originalRules = objectClone(this.state.vectorKeywordRuleInfo.rules);
 
         // We remove the keyword immediately as a sort of local echo effect
@@ -627,7 +640,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             },
             async (): Promise<void> => {
                 await this.setKeywords(
-                    this.state.vectorKeywordRuleInfo.rules.map((r) => r.pattern),
+                    this.state.vectorKeywordRuleInfo!.rules.map((r) => r.pattern),
                     originalRules,
                 );
             },
@@ -749,9 +762,10 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
 
         let keywordComposer: JSX.Element | undefined;
         if (category === RuleClass.VectorMentions) {
+            const tags = filterBoolean<string>(this.state.vectorKeywordRuleInfo?.rules.map((r) => r.pattern) || []);
             keywordComposer = (
                 <TagComposer
-                    tags={this.state.vectorKeywordRuleInfo?.rules.map((r) => r.pattern)}
+                    tags={tags}
                     onAdd={this.onKeywordAdd}
                     onRemove={this.onKeywordRemove}
                     disabled={this.state.phase === Phase.Persisting}
