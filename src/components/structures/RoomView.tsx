@@ -842,7 +842,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // making it impossible to indicate a newly joined room.
         if (!joining && roomId) {
             if (!room && shouldPeek) {
-                logger.info("Attempting to peek into room %s", roomId);
+                logger.info(`Attempting to peek into room ${roomId}`);
                 this.setState({
                     peekLoading: true,
                     isPeeking: true, // this will change to false if peeking fails
@@ -1671,7 +1671,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 });
             },
             (error) => {
-                logger.error("Failed to reject invite: %s", error);
+                logger.error(`Failed to reject invite: ${error}`);
 
                 const msg = error.message ? error.message : JSON.stringify(error);
                 Modal.createDialog(ErrorDialog, {
@@ -1705,7 +1705,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 rejecting: false,
             });
         } catch (error) {
-            logger.error("Failed to reject invite: %s", error);
+            logger.error(`Failed to reject invite: ${error}`);
 
             const msg = error.message ? error.message : JSON.stringify(error);
             Modal.createDialog(ErrorDialog, {

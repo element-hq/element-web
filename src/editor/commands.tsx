@@ -78,7 +78,7 @@ export async function runSlashCommand(
         }
     }
     if (error) {
-        logger.error("Command failure: %s", error);
+        logger.error(`Command failure: ${error}`);
         // assume the error is a server error when the command is async
         const isServerError = !!result.promise;
         const title = isServerError ? _td("Server error") : _td("Command error");
