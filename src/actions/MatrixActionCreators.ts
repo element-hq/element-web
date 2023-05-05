@@ -48,6 +48,7 @@ function createSyncAction(matrixClient: MatrixClient, state: string, prevState: 
  * @property {MatrixEvent} event the MatrixEvent that triggered the dispatch.
  * @property {string} event_type the type of the MatrixEvent, e.g. "m.direct".
  * @property {Object} event_content the content of the MatrixEvent.
+ * @property {MatrixEvent} previousEvent the previous account data event of the same type, if present
  */
 
 /**
@@ -56,14 +57,20 @@ function createSyncAction(matrixClient: MatrixClient, state: string, prevState: 
  *
  * @param {MatrixClient} matrixClient the matrix client.
  * @param {MatrixEvent} accountDataEvent the account data event.
+ * @param {MatrixEvent | undefined} previousAccountDataEvent the previous account data event of the same type, if present
  * @returns {AccountDataAction} an action of type MatrixActions.accountData.
  */
-function createAccountDataAction(matrixClient: MatrixClient, accountDataEvent: MatrixEvent): ActionPayload {
+function createAccountDataAction(
+    matrixClient: MatrixClient,
+    accountDataEvent: MatrixEvent,
+    previousAccountDataEvent?: MatrixEvent,
+): ActionPayload {
     return {
         action: "MatrixActions.accountData",
         event: accountDataEvent,
         event_type: accountDataEvent.getType(),
         event_content: accountDataEvent.getContent(),
+        previousEvent: previousAccountDataEvent,
     };
 }
 

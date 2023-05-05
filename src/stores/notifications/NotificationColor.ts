@@ -17,6 +17,7 @@ limitations under the License.
 import { _t } from "../../languageHandler";
 
 export enum NotificationColor {
+    Muted,
     // Inverted (None -> Red) because we do integer comparisons on this
     None, // nothing special
     // TODO: Remove bold with notifications: https://github.com/vector-im/element-web/issues/14227

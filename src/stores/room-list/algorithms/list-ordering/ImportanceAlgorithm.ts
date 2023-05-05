@@ -42,6 +42,7 @@ const CATEGORY_ORDER = [
     NotificationColor.Grey,
     NotificationColor.Bold,
     NotificationColor.None, // idle
+    NotificationColor.Muted,
 ];
 
 /**
@@ -81,6 +82,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             [NotificationColor.Grey]: [],
             [NotificationColor.Bold]: [],
             [NotificationColor.None]: [],
+            [NotificationColor.Muted]: [],
         };
         for (const room of rooms) {
             const category = this.getRoomCategory(room);
@@ -94,7 +96,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         // It's fine for us to call this a lot because it's cached, and we shouldn't be
         // wasting anything by doing so as the store holds single references
         const state = RoomNotificationStateStore.instance.getRoomState(room);
-        return state.color;
+        return this.isMutedToBottom && state.muted ? NotificationColor.Muted : state.color;
     }
 
     public setRooms(rooms: Room[]): void {
@@ -164,14 +166,24 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             return this.handleSplice(room, cause);
         }
 
-        if (cause !== RoomUpdateCause.Timeline && cause !== RoomUpdateCause.ReadReceipt) {
+        if (
+            cause !== RoomUpdateCause.Timeline &&
+            cause !== RoomUpdateCause.ReadReceipt &&
+            cause !== RoomUpdateCause.PossibleMuteChange
+        ) {
             throw new Error(`Unsupported update cause: ${cause}`);
         }
 
-        const category = this.getRoomCategory(room);
+        // don't react to mute changes when we are not sorting by mute
+        if (cause === RoomUpdateCause.PossibleMuteChange && !this.isMutedToBottom) {
+            return false;
+        }
+
         if (this.sortingAlgorithm === SortAlgorithm.Manual) {
             return false; // Nothing to do here.
         }
+
+        const category = this.getRoomCategory(room);
 
         const roomIdx = this.getRoomIndex(room);
         if (roomIdx === -1) {

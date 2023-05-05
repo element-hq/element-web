@@ -182,19 +182,44 @@ function findOverrideMuteRule(roomId: string): IPushRule | null {
         return null;
     }
     for (const rule of cli.pushRules.global.override) {
-        if (rule.enabled && isRuleForRoom(roomId, rule) && isMuteRule(rule)) {
+        if (rule.enabled && isRuleRoomMuteRuleForRoomId(roomId, rule)) {
             return rule;
         }
     }
     return null;
 }
 
-function isRuleForRoom(roomId: string, rule: IPushRule): boolean {
-    if (rule.conditions?.length !== 1) {
+/**
+ * Checks if a given rule is a room mute rule as implemented by EW
+ * - matches every event in one room (one condition that is an event match on roomId)
+ * - silences notifications (one action that is `DontNotify`)
+ * @param rule - push rule
+ * @returns {boolean} - true when rule mutes a room
+ */
+export function isRuleMaybeRoomMuteRule(rule: IPushRule): boolean {
+    return (
+        // matches every event in one room
+        rule.conditions?.length === 1 &&
+        rule.conditions[0].kind === ConditionKind.EventMatch &&
+        rule.conditions[0].key === "room_id" &&
+        // silences notifications
+        isMuteRule(rule)
+    );
+}
+
+/**
+ * Checks if a given rule is a room mute rule as implemented by EW
+ * @param roomId - id of room to match
+ * @param rule - push rule
+ * @returns {boolean} true when rule mutes the given room
+ */
+function isRuleRoomMuteRuleForRoomId(roomId: string, rule: IPushRule): boolean {
+    if (!isRuleMaybeRoomMuteRule(rule)) {
         return false;
     }
-    const cond = rule.conditions[0];
-    return cond.kind === ConditionKind.EventMatch && cond.key === "room_id" && cond.pattern === roomId;
+    // isRuleMaybeRoomMuteRule checks this condition exists
+    const cond = rule.conditions![0]!;
+    return cond.pattern === roomId;
 }
 
 function isMuteRule(rule: IPushRule): boolean {

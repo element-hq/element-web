@@ -42,6 +42,10 @@ export abstract class OrderingAlgorithm {
         return this.cachedOrderedRooms;
     }
 
+    public get isMutedToBottom(): boolean {
+        return this.sortingAlgorithm === SortAlgorithm.Recent;
+    }
+
     /**
      * Sets the sorting algorithm to use within the list.
      * @param newAlgorithm The new algorithm. Must be defined.

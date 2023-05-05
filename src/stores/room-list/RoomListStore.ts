@@ -40,6 +40,7 @@ import { RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
 import { SlidingRoomListStoreClass } from "./SlidingRoomListStore";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
+import { getChangedOverrideRoomMutePushRules } from "./utils/roomMute";
 
 interface IState {
     // state is tracked in underlying classes
@@ -288,6 +289,17 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         } else if (payload.action === "MatrixActions.Room.myMembership") {
             this.onDispatchMyMembership(<any>payload);
             return;
+        }
+
+        const possibleMuteChangeRoomIds = getChangedOverrideRoomMutePushRules(payload);
+        if (possibleMuteChangeRoomIds) {
+            for (const roomId of possibleMuteChangeRoomIds) {
+                const room = roomId && this.matrixClient.getRoom(roomId);
+                if (room) {
+                    await this.handleRoomUpdate(room, RoomUpdateCause.PossibleMuteChange);
+                }
+            }
+            this.updateFn.trigger();
         }
     }
 

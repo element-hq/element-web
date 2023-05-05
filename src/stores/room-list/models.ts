@@ -43,6 +43,7 @@ export type TagID = string | DefaultTagID;
 export enum RoomUpdateCause {
     Timeline = "TIMELINE",
     PossibleTagChange = "POSSIBLE_TAG_CHANGE",
+    PossibleMuteChange = "POSSIBLE_MUTE_CHANGE",
     ReadReceipt = "READ_RECEIPT",
     NewRoom = "NEW_ROOM",
     RoomRemoved = "ROOM_REMOVED",

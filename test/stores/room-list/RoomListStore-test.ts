@@ -14,16 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import {
+    ConditionKind,
+    EventType,
+    IPushRule,
+    MatrixEvent,
+    PendingEventOrdering,
+    PushRuleActionName,
+    Room,
+} from "matrix-js-sdk/src/matrix";
 
-import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
+import defaultDispatcher, { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore, { CallbackFn } from "../../../src/settings/SettingsStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../src/stores/room-list/algorithms/models";
 import { OrderedDefaultTagIDs, RoomUpdateCause } from "../../../src/stores/room-list/models";
 import RoomListStore, { RoomListStoreClass } from "../../../src/stores/room-list/RoomListStore";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { stubClient, upsertRoomStateEvents } from "../../test-utils";
+import { flushPromises, stubClient, upsertRoomStateEvents } from "../../test-utils";
+import { DEFAULT_PUSH_RULES, makePushRule } from "../../test-utils/pushRules";
 
 describe("RoomListStore", () => {
     const client = stubClient();
@@ -69,12 +78,15 @@ describe("RoomListStore", () => {
     });
     upsertRoomStateEvents(roomNoPredecessor, [createNoPredecessor]);
     const oldRoom = new Room(oldRoomId, client, userId, {});
+    const normalRoom = new Room("!normal:server.org", client, userId);
     client.getRoom = jest.fn().mockImplementation((roomId) => {
         switch (roomId) {
             case newRoomId:
                 return roomWithCreatePredecessor;
             case oldRoomId:
                 return oldRoom;
+            case normalRoom.roomId:
+                return normalRoom;
             default:
                 return null;
         }
@@ -272,6 +284,72 @@ describe("RoomListStore", () => {
             // We asked to use MSC3946 when we asked the client for the visible rooms
             expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
             expect(client.getVisibleRooms).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("room updates", () => {
+        const makeStore = async () => {
+            const store = new RoomListStoreClass(defaultDispatcher);
+            await store.start();
+            return store;
+        };
+
+        describe("push rules updates", () => {
+            const makePushRulesEvent = (overrideRules: IPushRule[] = []): MatrixEvent => {
+                return new MatrixEvent({
+                    type: EventType.PushRules,
+                    content: {
+                        global: {
+                            ...DEFAULT_PUSH_RULES.global,
+                            override: overrideRules,
+                        },
+                    },
+                });
+            };
+
+            it("triggers a room update when room mutes have changed", async () => {
+                const rule = makePushRule(normalRoom.roomId, {
+                    actions: [PushRuleActionName.DontNotify],
+                    conditions: [{ kind: ConditionKind.EventMatch, key: "room_id", pattern: normalRoom.roomId }],
+                });
+                const event = makePushRulesEvent([rule]);
+                const previousEvent = makePushRulesEvent();
+
+                const store = await makeStore();
+                // @ts-ignore private property alg
+                const algorithmSpy = jest.spyOn(store.algorithm, "handleRoomUpdate").mockReturnValue(undefined);
+                // @ts-ignore cheat and call protected fn
+                store.onAction({ action: "MatrixActions.accountData", event, previousEvent });
+                // flush setImmediate
+                await flushPromises();
+
+                expect(algorithmSpy).toHaveBeenCalledWith(normalRoom, RoomUpdateCause.PossibleMuteChange);
+            });
+
+            it("handles when a muted room is unknown by the room list", async () => {
+                const rule = makePushRule(normalRoom.roomId, {
+                    actions: [PushRuleActionName.DontNotify],
+                    conditions: [{ kind: ConditionKind.EventMatch, key: "room_id", pattern: normalRoom.roomId }],
+                });
+                const unknownRoomRule = makePushRule("!unknown:server.org", {
+                    conditions: [{ kind: ConditionKind.EventMatch, key: "room_id", pattern: "!unknown:server.org" }],
+                });
+                const event = makePushRulesEvent([unknownRoomRule, rule]);
+                const previousEvent = makePushRulesEvent();
+
+                const store = await makeStore();
+                // @ts-ignore private property alg
+                const algorithmSpy = jest.spyOn(store.algorithm, "handleRoomUpdate").mockReturnValue(undefined);
+
+                // @ts-ignore cheat and call protected fn
+                store.onAction({ action: "MatrixActions.accountData", event, previousEvent });
+                // flush setImmediate
+                await flushPromises();
+
+                // only one call to update made for normalRoom
+                expect(algorithmSpy).toHaveBeenCalledTimes(1);
+                expect(algorithmSpy).toHaveBeenCalledWith(normalRoom, RoomUpdateCause.PossibleMuteChange);
+            });
         });
     });
 });

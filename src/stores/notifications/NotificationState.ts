@@ -24,6 +24,7 @@ export interface INotificationStateSnapshotParams {
     symbol: string | null;
     count: number;
     color: NotificationColor;
+    muted: boolean;
 }
 
 export enum NotificationStateEvents {
@@ -42,6 +43,7 @@ export abstract class NotificationState
     protected _symbol: string | null = null;
     protected _count = 0;
     protected _color: NotificationColor = NotificationColor.None;
+    protected _muted = false;
 
     private watcherReferences: string[] = [];
 
@@ -64,6 +66,10 @@ export abstract class NotificationState
 
     public get color(): NotificationColor {
         return this._color;
+    }
+
+    public get muted(): boolean {
+        return this._muted;
     }
 
     public get isIdle(): boolean {
@@ -110,16 +116,18 @@ export class NotificationStateSnapshot {
     private readonly symbol: string | null;
     private readonly count: number;
     private readonly color: NotificationColor;
+    private readonly muted: boolean;
 
     public constructor(state: INotificationStateSnapshotParams) {
         this.symbol = state.symbol;
         this.count = state.count;
         this.color = state.color;
+        this.muted = state.muted;
     }
 
     public isDifferentFrom(other: INotificationStateSnapshotParams): boolean {
-        const before = { count: this.count, symbol: this.symbol, color: this.color };
-        const after = { count: other.count, symbol: other.symbol, color: other.color };
+        const before = { count: this.count, symbol: this.symbol, color: this.color, muted: this.muted };
+        const after = { count: other.count, symbol: other.symbol, color: other.color, muted: other.muted };
         return JSON.stringify(before) !== JSON.stringify(after);
     }
 }
