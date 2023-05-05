@@ -128,8 +128,9 @@ jobs:
               with:
                   # XXX: We're checking out untrusted code in a secure context
                   # We need to be careful to not trust anything this code outputs/may do
-                  # We need to check this out to access the cypress tests which are on the head branch
-                  repository: ${{ github.event.workflow_run.head_repository.full_name }}
+                  #
+                  # Note that we check out from the default repository, which is (for this workflow) the
+                  # *target* repository for the pull request.
                   ref: ${{ steps.sha.outputs.sha }}
                   persist-credentials: false
                   path: matrix-react-sdk
