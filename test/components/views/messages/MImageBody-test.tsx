@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import encrypt from "matrix-encrypt-attachment";
@@ -31,6 +31,7 @@ import {
     mockClientMethodsUser,
 } from "../../../test-utils";
 import { MediaEventHelper } from "../../../../src/utils/MediaEventHelper";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
@@ -61,6 +62,7 @@ describe("<MImageBody/>", () => {
         sender: userId,
         type: EventType.RoomMessage,
         content: {
+            body: "alt for a test image",
             info: {
                 w: 40,
                 h: 50,
@@ -70,11 +72,17 @@ describe("<MImageBody/>", () => {
             },
         },
     });
+
     const props = {
         onHeightChanged: jest.fn(),
         onMessageAllowed: jest.fn(),
         permalinkCreator: new RoomPermalinkCreator(new Room(encryptedMediaEvent.getRoomId()!, cli, cli.getUserId()!)),
     };
+
+    beforeEach(() => {
+        jest.spyOn(SettingsStore, "getValue").mockRestore();
+        fetchMock.mockReset();
+    });
 
     it("should show a thumbnail while image is being downloaded", async () => {
         fetchMock.getOnce(url, { status: 200 });
@@ -102,6 +110,8 @@ describe("<MImageBody/>", () => {
             />,
         );
 
+        expect(fetchMock).toHaveBeenCalledWith(url);
+
         await screen.findByText("Error downloading image");
     });
 
@@ -118,5 +128,47 @@ describe("<MImageBody/>", () => {
         );
 
         await screen.findByText("Error decrypting image");
+    });
+
+    describe("with image previews/thumbnails disabled", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+        });
+
+        it("should not download image", async () => {
+            fetchMock.getOnce(url, { status: 200 });
+
+            render(
+                <MImageBody
+                    {...props}
+                    mxEvent={encryptedMediaEvent}
+                    mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
+                />,
+            );
+
+            expect(fetchMock).not.toHaveFetched(url);
+        });
+
+        it("should render hidden image placeholder", async () => {
+            fetchMock.getOnce(url, { status: 200 });
+
+            render(
+                <MImageBody
+                    {...props}
+                    mxEvent={encryptedMediaEvent}
+                    mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
+                />,
+            );
+
+            expect(screen.getByText("Show image")).toBeInTheDocument();
+
+            fireEvent.click(screen.getByRole("button"));
+
+            // image fetched after clicking show image
+            expect(fetchMock).toHaveFetched(url);
+
+            // spinner while downloading image
+            expect(screen.getByRole("progressbar")).toBeInTheDocument();
+        });
     });
 });

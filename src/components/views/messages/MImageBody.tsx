@@ -389,7 +389,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         thumbUrl: string | null,
         content: IMediaEventContent,
         forcedHeight?: number,
-    ): JSX.Element {
+    ): ReactNode {
         if (!thumbUrl) thumbUrl = contentUrl; // fallback
 
         // magic number
@@ -524,16 +524,25 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             </div>
         );
 
-        return contentUrl ? this.wrapImage(contentUrl, thumbnail) : thumbnail;
+        return this.wrapImage(contentUrl, thumbnail);
     }
 
     // Overridden by MStickerBody
-    protected wrapImage(contentUrl: string, children: JSX.Element): JSX.Element {
-        return (
-            <a href={contentUrl} target={this.props.forExport ? "_blank" : undefined} onClick={this.onClick}>
-                {children}
-            </a>
-        );
+    protected wrapImage(contentUrl: string | null | undefined, children: JSX.Element): ReactNode {
+        if (contentUrl) {
+            return (
+                <a href={contentUrl} target={this.props.forExport ? "_blank" : undefined} onClick={this.onClick}>
+                    {children}
+                </a>
+            );
+        } else if (!this.state.showImage) {
+            return (
+                <div role="button" onClick={this.onClick}>
+                    {children}
+                </div>
+            );
+        }
+        return children;
     }
 
     // Overridden by MStickerBody
