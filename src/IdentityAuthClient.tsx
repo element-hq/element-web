@@ -34,8 +34,8 @@ import { abbreviateUrl } from "./utils/UrlUtils";
 export class AbortedIdentityActionError extends Error {}
 
 export default class IdentityAuthClient {
-    private accessToken: string;
-    private tempClient: MatrixClient;
+    private accessToken: string | null = null;
+    private tempClient?: MatrixClient;
     private authEnabled = true;
 
     /**

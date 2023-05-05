@@ -18,8 +18,8 @@ limitations under the License.
  * Utility class for lazily getting a variable.
  */
 export class LazyValue<T> {
-    private val: T;
-    private prom: Promise<T>;
+    private val?: T;
+    private prom?: Promise<T>;
     private done = false;
 
     public constructor(private getFn: () => Promise<T>) {}
@@ -36,7 +36,7 @@ export class LazyValue<T> {
      * Gets the value without invoking a get. May be undefined until the
      * value is fetched properly.
      */
-    public get cachedValue(): T {
+    public get cachedValue(): T | undefined {
         return this.val;
     }
 

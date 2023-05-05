@@ -64,9 +64,9 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
 
     public static currentWidget?: IWidgetEvent;
 
-    private dispatcherRef: string;
+    private dispatcherRef?: string;
 
-    private prevSentVisibility: boolean;
+    private prevSentVisibility?: boolean;
 
     private popoverWidth = 300;
     private popoverHeight = 300;

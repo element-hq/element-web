@@ -32,7 +32,7 @@ export type GetAutocompleterComponent = () => Autocomplete | null;
 export type UpdateQuery = (test: string) => Promise<void>;
 
 export default class AutocompleteWrapperModel {
-    private partIndex: number;
+    private partIndex?: number;
 
     public constructor(
         private updateCallback: UpdateCallback,

@@ -36,8 +36,8 @@ export interface IAutocompleteOptions {
 }
 
 export default abstract class AutocompleteProvider {
-    public commandRegex: RegExp;
-    public forcedCommandRegex: RegExp;
+    public commandRegex?: RegExp;
+    public forcedCommandRegex?: RegExp;
 
     protected renderingType: TimelineRenderingType = TimelineRenderingType.Room;
 

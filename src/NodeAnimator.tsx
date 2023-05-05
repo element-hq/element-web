@@ -42,7 +42,7 @@ interface IProps {
  */
 export default class NodeAnimator extends React.Component<IProps> {
     private nodes: Record<string, ReactInstance> = {};
-    private children: { [key: string]: ReactElement };
+    private children: { [key: string]: ReactElement } = {};
     public static defaultProps: Partial<IProps> = {
         startStyles: [],
     };

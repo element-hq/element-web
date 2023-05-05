@@ -76,8 +76,7 @@ describe("<ForgotPassword>", () => {
         client = stubClient();
         mocked(createClient).mockReturnValue(client);
 
-        serverConfig = new ValidatedServerConfig();
-        serverConfig.hsName = "example.com";
+        serverConfig = { hsName: "example.com" } as ValidatedServerConfig;
 
         onComplete = jest.fn();
         onLoginClick = jest.fn();

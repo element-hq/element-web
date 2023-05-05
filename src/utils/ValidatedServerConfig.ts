@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export class ValidatedServerConfig {
-    public hsUrl: string;
-    public hsName: string;
-    public hsNameIsDifferent: boolean;
+export interface ValidatedServerConfig {
+    hsUrl: string;
+    hsName: string;
+    hsNameIsDifferent: boolean;
 
-    public isUrl: string;
+    isUrl: string;
 
-    public isDefault: boolean;
+    isDefault: boolean;
     // when the server config is based on static URLs the hsName is not resolvable and things may wish to use hsUrl
-    public isNameResolvable: boolean;
+    isNameResolvable: boolean;
 
-    public warning: string | Error;
+    warning: string | Error;
 }

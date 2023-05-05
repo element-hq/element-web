@@ -47,7 +47,7 @@ interface IOptions<T extends {}> {
  */
 export default class QueryMatcher<T extends {}> {
     private _options: IOptions<T>;
-    private _items: Map<string, { object: T; keyWeight: number }[]>;
+    private _items = new Map<string, { object: T; keyWeight: number }[]>();
 
     public constructor(objects: T[], options: IOptions<T> = { keys: [] }) {
         this._options = options;

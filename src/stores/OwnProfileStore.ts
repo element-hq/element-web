@@ -43,7 +43,7 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         return instance;
     })();
 
-    private monitoredUser: User | null;
+    private monitoredUser: User | null = null;
 
     private constructor() {
         // seed from localstorage because otherwise we won't get these values until a whole network

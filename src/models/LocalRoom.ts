@@ -35,7 +35,7 @@ export class LocalRoom extends Room {
     /** Whether the actual room should be encrypted. */
     public encrypted = false;
     /** If the actual room has been created, this holds its ID. */
-    public actualRoomId: string;
+    public actualRoomId?: string;
     /** DM chat partner */
     public targets: Member[] = [];
     /** Callbacks that should be invoked after the actual room has been created. */

@@ -49,7 +49,7 @@ interface IState extends IThemeState {
 }
 
 export default class ThemeChoicePanel extends React.Component<IProps, IState> {
-    private themeTimer: number;
+    private themeTimer?: number;
 
     public constructor(props: IProps) {
         super(props);

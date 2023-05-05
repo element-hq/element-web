@@ -139,7 +139,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
     // the credentials used to init the current client object.
     // used if we tear it down & recreate it with a different store
-    private currentClientCreds: IMatrixClientCreds;
+    private currentClientCreds: IMatrixClientCreds | null = null;
 
     public get(): MatrixClient {
         return this.matrixClient;

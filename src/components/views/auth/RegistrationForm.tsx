@@ -95,11 +95,11 @@ interface IState {
  * A pure UI component which displays a registration form.
  */
 export default class RegistrationForm extends React.PureComponent<IProps, IState> {
-    private [RegistrationField.Email]: Field | null;
-    private [RegistrationField.Password]: Field | null;
-    private [RegistrationField.PasswordConfirm]: Field | null;
-    private [RegistrationField.Username]: Field | null;
-    private [RegistrationField.PhoneNumber]: Field | null;
+    private [RegistrationField.Email]: Field | null = null;
+    private [RegistrationField.Password]: Field | null = null;
+    private [RegistrationField.PasswordConfirm]: Field | null = null;
+    private [RegistrationField.Username]: Field | null = null;
+    private [RegistrationField.PhoneNumber]: Field | null = null;
 
     public static defaultProps = {
         onValidationChange: logger.error,

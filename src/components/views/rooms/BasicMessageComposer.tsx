@@ -132,7 +132,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private _isCaretAtEnd: boolean;
     private lastCaret: DocumentOffset;
-    private lastSelection: ReturnType<typeof cloneSelection> | null;
+    private lastSelection: ReturnType<typeof cloneSelection> | null = null;
 
     private readonly useMarkdownHandle: string;
     private readonly emoticonSettingHandle: string;

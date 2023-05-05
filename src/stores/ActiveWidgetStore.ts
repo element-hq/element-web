@@ -39,8 +39,8 @@ export enum ActiveWidgetStoreEvent {
  */
 export default class ActiveWidgetStore extends EventEmitter {
     private static internalInstance: ActiveWidgetStore;
-    private persistentWidgetId: string | null;
-    private persistentRoomId: string | null;
+    private persistentWidgetId: string | null = null;
+    private persistentRoomId: string | null = null;
     private dockedWidgetsByUid = new Map<string, number>();
 
     public static get instance(): ActiveWidgetStore {

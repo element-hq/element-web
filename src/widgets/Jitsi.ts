@@ -31,7 +31,7 @@ export interface JitsiWidgetData {
 export class Jitsi {
     private static instance: Jitsi;
 
-    private domain: string;
+    private domain?: string;
 
     public get preferredDomain(): string {
         return this.domain || "meet.element.io";

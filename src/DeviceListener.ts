@@ -51,7 +51,7 @@ import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulk
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
 export default class DeviceListener {
-    private dispatcherRef: string | null;
+    private dispatcherRef?: string;
     // device IDs for which the user has dismissed the verify toast ('Later')
     private dismissed = new Set<string>();
     // has the user dismissed any of the various nag toasts to setup encryption on this device?
@@ -119,7 +119,7 @@ export default class DeviceListener {
         }
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
-            this.dispatcherRef = null;
+            this.dispatcherRef = undefined;
         }
         this.dismissed.clear();
         this.dismissedThisDeviceToast = false;

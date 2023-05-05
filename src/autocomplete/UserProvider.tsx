@@ -44,7 +44,7 @@ const FORCED_USER_REGEX = /[^/,:; \t\n]\S*/g;
 
 export default class UserProvider extends AutocompleteProvider {
     public matcher: QueryMatcher<RoomMember>;
-    public users: RoomMember[] | null;
+    public users?: RoomMember[];
     public room: Room;
 
     public constructor(room: Room, renderingType?: TimelineRenderingType) {
@@ -98,7 +98,7 @@ export default class UserProvider extends AutocompleteProvider {
         if (state.roomId !== this.room.roomId) return;
 
         // blow away the users cache
-        this.users = null;
+        this.users = undefined;
     };
 
     public async getCompletions(

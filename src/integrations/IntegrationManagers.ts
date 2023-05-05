@@ -39,8 +39,8 @@ export class IntegrationManagers {
     private static instance?: IntegrationManagers;
 
     private managers: IntegrationManagerInstance[] = [];
-    private client: MatrixClient;
-    private primaryManager: IntegrationManagerInstance | null;
+    private client?: MatrixClient;
+    private primaryManager: IntegrationManagerInstance | null = null;
 
     public static sharedInstance(): IntegrationManagers {
         if (!IntegrationManagers.instance) {

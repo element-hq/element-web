@@ -67,9 +67,9 @@ const enum LoginField {
  * The email/username/phone fields are fully-controlled, the password field is not.
  */
 export default class PasswordLogin extends React.PureComponent<IProps, IState> {
-    private [LoginField.Email]: Field | null;
-    private [LoginField.Phone]: Field | null;
-    private [LoginField.MatrixId]: Field | null;
+    private [LoginField.Email]: Field | null = null;
+    private [LoginField.Phone]: Field | null = null;
+    private [LoginField.MatrixId]: Field | null = null;
 
     public static defaultProps = {
         onUsernameChanged: function () {},

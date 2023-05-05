@@ -50,9 +50,9 @@ interface IState {
 }
 
 export default class Autocomplete extends React.PureComponent<IProps, IState> {
-    public autocompleter: Autocompleter;
-    public queryRequested: string;
-    public debounceCompletionsRequest: number;
+    public autocompleter?: Autocompleter;
+    public queryRequested?: string;
+    public debounceCompletionsRequest?: number;
     private containerRef = createRef<HTMLDivElement>();
 
     public static contextType = RoomContext;
@@ -86,7 +86,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
 
     private applyNewProps(oldQuery?: string, oldRoom?: Room): void {
         if (oldRoom && this.props.room.roomId !== oldRoom.roomId) {
-            this.autocompleter.destroy();
+            this.autocompleter?.destroy();
             this.autocompleter = new Autocompleter(this.props.room);
         }
 
@@ -99,7 +99,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        this.autocompleter.destroy();
+        this.autocompleter?.destroy();
     }
 
     private complete(query: string, selection: ISelectionRange): Promise<void> {

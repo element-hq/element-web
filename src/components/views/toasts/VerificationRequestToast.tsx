@@ -47,7 +47,7 @@ interface IState {
 }
 
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
-    private intervalHandle: number;
+    private intervalHandle?: number;
 
     public constructor(props: IProps) {
         super(props);
