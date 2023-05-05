@@ -32,21 +32,7 @@ limitations under the License.
     }
 }
 
-.mx_RightPanel_header {
-    order: 1;
-    border-bottom: 1px solid $primary-hairline-color;
-    flex: 0 0 52px;
-}
-
 /** Fixme - factor this out with the main header **/
-
-.mx_RightPanel_headerButtonGroup {
-    height: 100%;
-    display: flex;
-    background-color: $background;
-    padding: 0 9px;
-    align-items: center;
-}
 
 /* See: mx_RoomHeader_button, of which this is a copy.
  * TODO: factor out a common component to avoid this duplication.
@@ -149,35 +135,6 @@ $pulse-color: $alert;
     }
 }
 
-@keyframes mx_RightPanel_indicator_pulse {
-    0% {
-        transform: scale(0.95);
-    }
-
-    70% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(0.95);
-    }
-}
-
-@keyframes mx_RightPanel_indicator_pulse_shadow {
-    0% {
-        opacity: 0.7;
-    }
-
-    70% {
-        transform: scale(2.2);
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
 .mx_RightPanel_headerButton_unread {
     &::before {
         background-color: $room-icon-unread-color !important;
@@ -189,25 +146,6 @@ $pulse-color: $alert;
     &::before {
         background-color: $accent !important;
     }
-}
-
-.mx_RightPanel_headerButton_badge {
-    font-size: $font-8px;
-    border-radius: 8px;
-    color: $accent-fg-color;
-    background-color: $accent;
-    font-weight: bold;
-    position: absolute;
-    top: -4px;
-    left: 20px;
-    padding: 2px 4px;
-}
-
-.mx_RightPanel_collapsebutton {
-    flex: 1;
-    text-align: right;
-    height: 16px;
-    border: none;
 }
 
 .mx_RightPanel .mx_MemberList,
