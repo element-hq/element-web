@@ -75,7 +75,7 @@ jobs:
                   {
                       echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301"
                       RESULTS=$(aws s3api --region auto --endpoint-url $R2_URL list-objects-v2 --bucket $R2_BUCKET \
-                          --query "sort_by(Contents[?ends_with(Key, 'bundle.css')], &LastModified)[-100:].Key"
+                          --query "sort_by(Contents[?ends_with(Key, '/bundle.css')], &LastModified)[-100:].Key"
                           --prefix "bundles/" | jq -r '.[]' | grep -oE '[^\"].*\/\s*')
                       for bundle in "$RESULTS"; do
                           echo "/${path}* $R2_PUBLIC_URL/${path}:splat 301"
