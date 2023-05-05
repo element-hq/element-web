@@ -626,7 +626,7 @@ describe("loading:", function () {
             });
 
         // Give the component some time to finish processing the login flows before continuing.
-        await waitFor(() => matrixChat?.container.querySelector("#mx_LoginForm_username"));
+        await waitFor(() => expect(matrixChat?.container.querySelector("#mx_LoginForm_username")).toBeTruthy());
 
         // Enter login details
         fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_username")!, { target: { value: "user" } });
