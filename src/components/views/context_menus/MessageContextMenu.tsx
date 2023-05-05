@@ -114,7 +114,7 @@ interface IProps extends MenuProps {
     // True if the menu is being used as a right click menu
     rightClick?: boolean;
     // The Relations model from the JS SDK for reactions to `mxEvent`
-    reactions?: Relations | null | undefined;
+    reactions?: Relations | null;
     // A permalink to this event or an href of an anchor element the user has clicked
     link?: string;
 
@@ -556,7 +556,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let jumpToRelatedEventButton: JSX.Element | undefined;
-        const relatedEventId = mxEvent.getWireContent()?.["m.relates_to"]?.event_id;
+        const relatedEventId = mxEvent.relationEventId;
         if (relatedEventId && SettingsStore.getValue("developerMode")) {
             jumpToRelatedEventButton = (
                 <IconizedContextMenuOption

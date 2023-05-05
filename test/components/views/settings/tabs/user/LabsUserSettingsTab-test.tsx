@@ -70,7 +70,7 @@ describe("<LabsUserSettingsTab />", () => {
         const { container } = render(getComponent());
 
         const labsSections = container.getElementsByClassName("mx_SettingsTab_section");
-        expect(labsSections).toHaveLength(12);
+        expect(labsSections).toHaveLength(11);
     });
 
     it("allow setting a labs flag which requires unstable support once support is confirmed", async () => {

@@ -22,6 +22,7 @@ import { makePollStartEvent } from "../../../test-utils";
 
 jest.spyOn(MatrixClientPeg, "get").mockReturnValue({
     getUserId: () => "@me:example.com",
+    getSafeUserId: () => "@me:example.com",
 } as unknown as MatrixClient);
 
 describe("PollStartEventPreview", () => {

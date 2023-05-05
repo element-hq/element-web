@@ -20,7 +20,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { DefaultTagID, TagID } from "../models";
 
 export function isSelf(event: MatrixEvent): boolean {
-    const selfUserId = MatrixClientPeg.get().getUserId();
+    const selfUserId = MatrixClientPeg.get().getSafeUserId();
     if (event.getType() === "m.room.member") {
         return event.getStateKey() === selfUserId;
     }
@@ -37,5 +37,5 @@ export function shouldPrefixMessagesIn(roomId: string, tagId?: TagID): boolean {
 }
 
 export function getSenderName(event: MatrixEvent): string {
-    return event.sender ? event.sender.name : event.getSender() || "";
+    return event.sender?.name ?? event.getSender() ?? "";
 }
