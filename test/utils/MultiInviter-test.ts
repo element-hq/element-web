@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import Modal, { ComponentType, ComponentProps } from "../../src/Modal";
@@ -141,6 +141,18 @@ describe("MultiInviter", () => {
                     expectAllInvitedResult(result);
                 });
             });
+        });
+
+        it("should show sensible error when attempting 3pid invite with no identity server", async () => {
+            client.inviteByEmail = jest.fn().mockRejectedValueOnce(
+                new MatrixError({
+                    errcode: "ORG.MATRIX.JSSDK_MISSING_PARAM",
+                }),
+            );
+            await inviter.invite(["foo@bar.com"]);
+            expect(inviter.getErrorText("foo@bar.com")).toMatchInlineSnapshot(
+                `"Cannot invite user by email without an identity server. You can connect to one under "Settings"."`,
+            );
         });
     });
 });

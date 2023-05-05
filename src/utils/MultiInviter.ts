@@ -277,6 +277,13 @@ export default class MultiInviter {
                                 errorText = _t("The user's homeserver does not support the version of the room.");
                             }
                             break;
+                        case "ORG.MATRIX.JSSDK_MISSING_PARAM":
+                            if (getAddressType(address) === AddressType.Email) {
+                                errorText = _t(
+                                    "Cannot invite user by email without an identity server. " +
+                                        'You can connect to one under "Settings".',
+                                );
+                            }
                     }
 
                     if (!errorText) {

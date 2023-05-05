@@ -754,6 +754,7 @@
     "The user must be unbanned before they can be invited.": "The user must be unbanned before they can be invited.",
     "The user's homeserver does not support the version of the space.": "The user's homeserver does not support the version of the space.",
     "The user's homeserver does not support the version of the room.": "The user's homeserver does not support the version of the room.",
+    "Cannot invite user by email without an identity server. You can connect to one under \"Settings\".": "Cannot invite user by email without an identity server. You can connect to one under \"Settings\".",
     "Unknown server error": "Unknown server error",
     "Use a few words, avoid common phrases": "Use a few words, avoid common phrases",
     "No need for symbols, digits, or uppercase letters": "No need for symbols, digits, or uppercase letters",
