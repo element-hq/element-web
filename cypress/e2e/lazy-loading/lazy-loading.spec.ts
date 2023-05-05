@@ -116,7 +116,7 @@ describe("Lazy Loading", () => {
     }
 
     function openMemberlist(): void {
-        cy.get(".mx_HeaderButtons").within(() => {
+        cy.get(".mx_RoomHeader").within(() => {
             cy.findByRole("button", { name: "Room info" }).click();
         });
 
