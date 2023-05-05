@@ -49,12 +49,6 @@ jobs:
         permissions:
             pull-requests: read
             checks: write
-        strategy:
-            fail-fast: false
-            matrix:
-                args:
-                    - "--strict --noImplicitAny"
-                    - "--noImplicitAny"
         steps:
             - uses: actions/checkout@v3
               with:
@@ -82,7 +76,7 @@ jobs:
                   use-check: false
                   check-fail-mode: added
                   output-behaviour: annotate
-                  ts-extra-args: ${{ matrix.args }}
+                  ts-extra-args: "--strict --noImplicitAny"
                   files-changed: ${{ steps.files.outputs.files_updated }}
                   files-added: ${{ steps.files.outputs.files_created }}
                   files-deleted: ${{ steps.files.outputs.files_deleted }}
