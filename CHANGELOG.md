@@ -1,3 +1,9 @@
+Changes in [3.72.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.72.0-rc.2) (2023-05-05)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix: reveal images when image previews are disabled ([\#10781](https://github.com/matrix-org/matrix-react-sdk/pull/10781)). Fixes vector-im/element-web#25271. Contributed by @kerryarchibald.
+
 Changes in [3.72.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.72.0-rc.1) (2023-05-02)
 ===============================================================================================================
 
