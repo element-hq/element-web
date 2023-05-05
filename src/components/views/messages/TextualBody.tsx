@@ -294,6 +294,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         this.unmounted = true;
         unmountPills(this.pills);
         unmountTooltips(this.tooltips);
+
+        this.pills = [];
+        this.tooltips = [];
     }
 
     public shouldComponentUpdate(nextProps: Readonly<IBodyProps>, nextState: Readonly<IState>): boolean {

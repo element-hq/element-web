@@ -116,22 +116,12 @@ export default class ThreadView extends React.Component<IProps, IState> {
         this.setupThread(this.props.mxEvent);
         this.dispatcherRef = dis.register(this.onAction);
 
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-
-        if (!room) {
-            throw new Error(
-                `Unable to find room ${this.props.mxEvent.getRoomId()} for thread ${this.props.mxEvent.getId()}`,
-            );
-        }
-
-        room.on(ThreadEvent.New, this.onNewThread);
+        this.props.room.on(ThreadEvent.New, this.onNewThread);
     }
 
     public componentWillUnmount(): void {
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
         const roomId = this.props.mxEvent.getRoomId();
-        const room = MatrixClientPeg.get().getRoom(roomId);
-        room?.removeListener(ThreadEvent.New, this.onNewThread);
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
 
         const hasRoomChanged = SdkContextClass.instance.roomViewStore.getRoomId() !== roomId;
@@ -147,6 +137,10 @@ export default class ThreadView extends React.Component<IProps, IState> {
             action: Action.ViewThread,
             thread_id: null,
         });
+
+        this.state.thread?.off(ThreadEvent.NewReply, this.updateThreadRelation);
+        this.props.room.off(RoomEvent.LocalEchoUpdated, this.updateThreadRelation);
+        this.props.room.removeListener(ThreadEvent.New, this.onNewThread);
     }
 
     public componentDidUpdate(prevProps: IProps): void {
