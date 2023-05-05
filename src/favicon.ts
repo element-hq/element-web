@@ -49,7 +49,7 @@ export default class Favicon {
     private readonly params: IParams;
     private readonly canvas: HTMLCanvasElement;
     private readonly baseImage: HTMLImageElement;
-    private context: CanvasRenderingContext2D;
+    private context!: CanvasRenderingContext2D;
     private icons: HTMLLinkElement[];
 
     private isReady = false;
