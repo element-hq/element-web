@@ -85,6 +85,10 @@ interface IProps {
     onListCollapse?: (isExpanded: boolean) => void;
 }
 
+function getLabelId(tagId: TagID): string {
+    return `mx_RoomSublist_label_${tagId}`;
+}
+
 // TODO: Use re-resizer's NumberSize when it is exposed as the type
 interface ResizeDelta {
     width: number;
@@ -712,7 +716,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                         title={this.props.isMinimized ? this.props.label : undefined}
                                     >
                                         <span className={collapseClasses} />
-                                        <span>{this.props.label}</span>
+                                        <span id={getLabelId(this.props.tagId)}>{this.props.label}</span>
                                     </Button>
                                     {this.renderMenu()}
                                     {this.props.isMinimized ? null : badgeContainer}
@@ -880,7 +884,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 className={classes}
                 role="group"
                 aria-hidden={hidden}
-                aria-label={this.props.label}
+                aria-labelledby={getLabelId(this.props.tagId)}
                 onKeyDown={this.onKeyDown}
             >
                 {this.renderHeader()}

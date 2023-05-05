@@ -44,7 +44,7 @@ interface IClickableProps extends IProps, React.InputHTMLAttributes<Element> {
     /**
      * If specified will return an AccessibleButton instead of a div.
      */
-    onClick?(ev: React.MouseEvent): void;
+    onClick(ev: React.MouseEvent): void;
 }
 
 interface IState {
@@ -112,7 +112,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
     public render(): ReactNode {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const { notification, showUnsentTooltip, forceCount, onClick } = this.props;
+        const { notification, showUnsentTooltip, forceCount, onClick, tabIndex } = this.props;
 
         if (notification.isIdle) return null;
         if (forceCount) {
@@ -135,6 +135,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
                 onClick={onClick}
                 onMouseOver={this.onMouseOver}
                 onMouseLeave={this.onMouseLeave}
+                tabIndex={tabIndex}
             >
                 {tooltip}
             </StatelessNotificationBadge>
