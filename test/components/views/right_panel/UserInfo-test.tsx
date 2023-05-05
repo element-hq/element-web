@@ -322,7 +322,7 @@ describe("<UserInfo />", () => {
             renderComponent({ room: mockRoom });
             await act(flushPromises);
 
-            const userHeading = screen.getByRole("heading", { name: defaultUserId });
+            const userHeading = screen.getByRole("heading", { name: /@user:example.com/ });
 
             // there should be a "normal" E2E padlock
             expect(userHeading.getElementsByClassName("mx_E2EIcon_normal")).toHaveLength(1);
@@ -333,7 +333,7 @@ describe("<UserInfo />", () => {
             renderComponent({ room: mockRoom });
             await act(flushPromises);
 
-            const userHeading = screen.getByRole("heading", { name: defaultUserId });
+            const userHeading = screen.getByRole("heading", { name: /@user:example.com/ });
 
             // there should be a "verified" E2E padlock
             expect(userHeading.getElementsByClassName("mx_E2EIcon_verified")).toHaveLength(1);
@@ -368,7 +368,7 @@ describe("<UserInfoHeader />", () => {
 
     it("renders an e2e icon in the header if e2eStatus prop is defined", () => {
         renderComponent({ e2eStatus: E2EStatus.Normal });
-        const header = screen.getByRole("heading", { name: defaultUserId });
+        const header = screen.getByRole("heading");
 
         expect(header.getElementsByClassName("mx_E2EIcon")).toHaveLength(1);
     });

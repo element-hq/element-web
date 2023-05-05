@@ -50,6 +50,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
   <span>
     <bdi>
       <a
+        aria-describedby="mx_Pill_0.123456"
         class="mx_Pill mx_UserPill"
         href="https://matrix.to/#/@user:example.com"
       >
@@ -85,6 +86,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
       <span>
         <bdi>
           <a
+            aria-describedby="mx_Pill_0.123456"
             class="mx_Pill mx_EventPill"
             href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com"
           >
@@ -122,6 +124,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
       <span>
         <bdi>
           <a
+            aria-describedby="mx_Pill_0.123456"
             class="mx_Pill mx_RoomPill"
             href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com?via=example.com&via=bob.com"
           >
@@ -218,6 +221,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
   <span>
     <bdi>
       <a
+        aria-describedby="mx_Pill_0.123456"
         class="mx_Pill mx_UserPill"
         href="https://matrix.to/#/@user:server"
       >
@@ -247,6 +251,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
     ><a
       class="mx_Pill mx_EventPill"
       href="https://matrix.to/#/!room1:example.com/%event_id%"
+      aria-describedby="mx_Pill_0.123456"
       ><img
         class="mx_BaseAvatar mx_BaseAvatar_image"
         src="mxc://avatar.url/image.png"
@@ -268,6 +273,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
     ><a
       class="mx_Pill mx_EventPill"
       href="https://matrix.to/#/!room2:example.com/%event_id%"
+      aria-describedby="mx_Pill_0.123456"
       ><img
         class="mx_BaseAvatar mx_BaseAvatar_image"
         src="mxc://avatar.url/room.png"
@@ -291,6 +297,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
   <span>
     <bdi>
       <a
+        aria-describedby="mx_Pill_0.123456"
         class="mx_Pill mx_EventPill"
         href="https://matrix.to/#/!room1:example.com/!abc123"
       >

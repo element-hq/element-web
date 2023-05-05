@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useRef, useState } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
@@ -89,6 +89,7 @@ export interface PillProps {
 }
 
 export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room, shouldShowPillAvatar = true }) => {
+    const tooltipId = useRef(`mx_Pill_${Math.random()}`).current;
     const [hover, setHover] = useState(false);
     const { event, member, onClick, resourceId, targetRoom, text, type } = usePermalink({
         room,
@@ -117,7 +118,7 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
         setHover(false);
     };
 
-    const tip = hover && resourceId ? <Tooltip label={resourceId} alignment={Alignment.Right} /> : null;
+    const tip = hover && resourceId ? <Tooltip id={tooltipId} label={resourceId} alignment={Alignment.Right} /> : null;
     let avatar: ReactElement | null = null;
     let pillText: string | null = text;
 
@@ -165,13 +166,19 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
                         onClick={onClick}
                         onMouseOver={onMouseOver}
                         onMouseLeave={onMouseLeave}
+                        aria-describedby={tooltipId}
                     >
                         {avatar}
                         <span className="mx_Pill_text">{pillText}</span>
                         {tip}
                     </a>
                 ) : (
-                    <span className={classes} onMouseOver={onMouseOver} onMouseLeave={onMouseLeave}>
+                    <span
+                        className={classes}
+                        onMouseOver={onMouseOver}
+                        onMouseLeave={onMouseLeave}
+                        aria-describedby={tooltipId}
+                    >
                         {avatar}
                         <span className="mx_Pill_text">{pillText}</span>
                         {tip}

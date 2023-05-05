@@ -31,8 +31,8 @@ interface IProps {
 }
 
 const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) => {
-    let askToVerifyText;
-    let newSessionText;
+    let askToVerifyText: string;
+    let newSessionText: string;
 
     if (MatrixClientPeg.get().getUserId() === user.userId) {
         newSessionText = _t("You signed in to a new session without verifying it:");
@@ -51,7 +51,7 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
             className="mx_UntrustedDeviceDialog"
             title={
                 <>
-                    <E2EIcon status={E2EState.Warning} size={24} hideTooltip={true} />
+                    <E2EIcon status={E2EState.Warning} isUser size={24} hideTooltip={true} />
                     {_t("Not Trusted")}
                 </>
             }

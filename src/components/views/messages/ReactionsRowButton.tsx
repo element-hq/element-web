@@ -92,7 +92,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
             mx_ReactionsRowButton_selected: !!myReactionEvent,
         });
 
-        let tooltip;
+        let tooltip: JSX.Element | undefined;
         if (this.state.tooltipRendered) {
             tooltip = (
                 <ReactionsRowButtonTooltip

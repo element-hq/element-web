@@ -107,6 +107,7 @@ interface IState {
 }
 
 export class MessageComposer extends React.Component<IProps, IState> {
+    private tooltipId = `mx_MessageComposer_${Math.random()}`;
     private dispatcherRef?: string;
     private messageComposerInput = createRef<SendMessageComposerClass>();
     private voiceRecordingButton = createRef<VoiceRecordComposerTile>();
@@ -470,7 +471,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const hasE2EIcon = Boolean(!this.state.isWysiwygLabEnabled && this.props.e2eStatus);
         const e2eIcon = hasE2EIcon && (
-            <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" />
+            <E2EIcon key="e2eIcon" status={this.props.e2eStatus!} className="mx_MessageComposer_e2eIcon" />
         );
 
         const controls: ReactNode[] = [];
@@ -561,11 +562,15 @@ export class MessageComposer extends React.Component<IProps, IState> {
             );
         }
 
-        let recordingTooltip;
+        let recordingTooltip: JSX.Element | undefined;
         if (this.state.recordingTimeLeftSeconds) {
             const secondsLeft = Math.round(this.state.recordingTimeLeftSeconds);
             recordingTooltip = (
-                <Tooltip label={_t("%(seconds)ss left", { seconds: secondsLeft })} alignment={Alignment.Top} />
+                <Tooltip
+                    id={this.tooltipId}
+                    label={_t("%(seconds)ss left", { seconds: secondsLeft })}
+                    alignment={Alignment.Top}
+                />
             );
         }
 
@@ -593,7 +598,11 @@ export class MessageComposer extends React.Component<IProps, IState> {
         });
 
         return (
-            <div className={classes} ref={this.ref}>
+            <div
+                className={classes}
+                ref={this.ref}
+                aria-describedby={this.state.recordingTimeLeftSeconds ? this.tooltipId : undefined}
+            >
                 {recordingTooltip}
                 <div className="mx_MessageComposer_wrapper">
                     <ReplyPreview

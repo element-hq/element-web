@@ -117,6 +117,12 @@ describe("<Pill>", () => {
 
         jest.spyOn(dis, "dispatch");
         pillParentClickHandler = jest.fn();
+
+        jest.spyOn(global.Math, "random").mockReturnValue(0.123456);
+    });
+
+    afterEach(() => {
+        jest.spyOn(global.Math, "random").mockRestore();
     });
 
     describe("when rendering a pill for a room", () => {

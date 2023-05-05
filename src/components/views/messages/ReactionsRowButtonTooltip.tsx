@@ -40,7 +40,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
         const { content, reactionEvents, mxEvent, visible } = this.props;
 
         const room = this.context.getRoom(mxEvent.getRoomId());
-        let tooltipLabel;
+        let tooltipLabel: JSX.Element | undefined;
         if (room) {
             const senders: string[] = [];
             for (const reactionEvent of reactionEvents) {
@@ -72,7 +72,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
             );
         }
 
-        let tooltip;
+        let tooltip: JSX.Element | undefined;
         if (tooltipLabel) {
             tooltip = <Tooltip visible={visible} label={tooltipLabel} />;
         }

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, useRef } from "react";
 
 import AccessibleButton from "../../../views/elements/AccessibleButton";
 import { Icon as EMailPromptIcon } from "../../../../../res/img/element-icons/email-prompt.svg";
@@ -42,6 +42,7 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
     onSubmitForm,
     onResendClick,
 }) => {
+    const tooltipId = useRef(`mx_CheckEmail_${Math.random()}`).current;
     const { toggle: toggleTooltipVisible, value: tooltipVisible } = useTimeoutToggle(false, 2500);
 
     const onResendClickFn = async (): Promise<void> => {
@@ -68,10 +69,16 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
             <input onClick={onSubmitForm} type="button" className="mx_Login_submit" value={_t("Next")} />
             <div className="mx_AuthBody_did-not-receive">
                 <span className="mx_VerifyEMailDialog_text-light">{_t("Did not receive it?")}</span>
-                <AccessibleButton className="mx_AuthBody_resend-button" kind="link" onClick={onResendClickFn}>
+                <AccessibleButton
+                    className="mx_AuthBody_resend-button"
+                    kind="link"
+                    onClick={onResendClickFn}
+                    aria-describedby={tooltipVisible ? tooltipId : undefined}
+                >
                     <RetryIcon className="mx_Icon mx_Icon_16" />
                     {_t("Resend")}
                     <Tooltip
+                        id={tooltipId}
                         label={_t("Verification link email resent!")}
                         alignment={Alignment.Top}
                         visible={tooltipVisible}
