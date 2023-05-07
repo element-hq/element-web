@@ -861,6 +861,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
 
     public render(): React.ReactNode {
         let continueButton: JSX.Element;
+
         const cancelButton = (
             <AccessibleButton
                 onClick={this.props.onCancel ?? null}
@@ -902,8 +903,14 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
             <Fragment>
                 {errorSection}
                 <div className="mx_InteractiveAuthEntryComponents_sso_buttons">
-                    {cancelButton}
-                    {continueButton}
+                    {this.props.busy ? (
+                        <Spinner w={24} h={24} />
+                    ) : (
+                        <>
+                            {cancelButton}
+                            {continueButton}
+                        </>
+                    )}
                 </div>
             </Fragment>
         );

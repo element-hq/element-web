@@ -209,6 +209,12 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
 
     private onBusyChanged = (busy: boolean): void => {
         // if we've started doing stuff, reset the error messages
+        // The JS SDK eagerly reports itself as "not busy" right after any
+        // immediate work has completed, but that's not really what we want at
+        // the UI layer, so we ignore this signal and show a spinner until
+        // there's a new screen to show the user. This is implemented by setting
+        // `busy: false` in `authStateUpdated`.
+        // See also https://github.com/vector-im/element-web/issues/12546
         if (busy) {
             this.setState({
                 busy: true,
@@ -216,12 +222,11 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
                 errorCode: undefined,
             });
         }
-        // The JS SDK eagerly reports itself as "not busy" right after any
-        // immediate work has completed, but that's not really what we want at
-        // the UI layer, so we ignore this signal and show a spinner until
-        // there's a new screen to show the user. This is implemented by setting
-        // `busy: false` in `authStateUpdated`.
-        // See also https://github.com/vector-im/element-web/issues/12546
+
+        // authStateUpdated is not called during sso flows
+        if (!busy && (this.state.authStage === AuthType.Sso || this.state.authStage === AuthType.SsoUnstable)) {
+            this.setState({ busy });
+        }
     };
 
     private setFocus(): void {
