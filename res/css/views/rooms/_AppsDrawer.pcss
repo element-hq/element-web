@@ -379,7 +379,7 @@ $MinWidth: 240px;
     }
 }
 
-.mx_AppLoading {
+.mx_AppTile_loading {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -391,34 +391,32 @@ $MinWidth: 240px;
     /* match bg of border so that the cut corners have the right fill */
     background-color: $widget-body-bg-color !important;
     border-radius: 8px;
+
+    iframe {
+        display: none;
+    }
+
+    /* const loadingElement */
+    .mx_AppTile_loading_fadeInSpinner {
+        animation-fill-mode: backwards;
+        animation-duration: 200ms;
+        animation-delay: 500ms;
+        animation-name: mx_AppTile_loading_fadeInSpinnerAnimation;
+
+        .mx_Spinner {
+            position: absolute;
+            inset: 0;
+        }
+    }
 }
 
-.mx_AppLoading .mx_Spinner {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-.mx_AppLoading_spinner_fadeIn {
-    animation-fill-mode: backwards;
-    animation-duration: 200ms;
-    animation-delay: 500ms;
-    animation-name: mx_AppLoading_spinner_fadeIn_animation;
-}
-
-@keyframes mx_AppLoading_spinner_fadeIn_animation {
+@keyframes mx_AppTile_loading_fadeInSpinnerAnimation {
     from {
         opacity: 0;
     }
     to {
         opacity: 1;
     }
-}
-
-.mx_AppLoading iframe {
-    display: none;
 }
 
 .mx_AppsDrawer_resizing .mx_AppTile_persistedWrapper {
