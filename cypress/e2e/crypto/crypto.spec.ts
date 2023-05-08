@@ -183,6 +183,16 @@ describe("Cryptography", function () {
         bobJoin.call(this);
         testMessages.call(this);
         verify.call(this);
+
+        // Assert that verified icon is rendered
+        cy.findByRole("button", { name: "Room members" }).click();
+        cy.findByRole("button", { name: "Room information" }).click();
+        cy.get(".mx_RoomSummaryCard_e2ee_verified").should("exist");
+
+        // Take a snapshot of RoomSummaryCard with a verified E2EE icon
+        cy.get(".mx_RightPanel").percySnapshotElement("RoomSummaryCard - with a verified E2EE icon", {
+            widths: [264], // Emulate the UI. The value is based on minWidth specified on MainSplit.tsx
+        });
     });
 
     it("should allow verification when there is no existing DM", function (this: CryptoTestContext) {
