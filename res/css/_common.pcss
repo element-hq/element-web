@@ -695,22 +695,6 @@ legend {
     color: $username-variant8-color;
 }
 
-@define-mixin mx_Tooltip_dark {
-    box-shadow: none;
-    background-color: $tooltip-timeline-bg-color;
-    color: $tooltip-timeline-fg-color;
-    border: none;
-    border-radius: 3px;
-    padding: 6px 8px;
-}
-
-/* This is a workaround for our mixins not supporting child selectors */
-.mx_Tooltip_dark {
-    .mx_Tooltip_chevron::after {
-        border-right-color: $tooltip-timeline-bg-color;
-    }
-}
-
 @define-mixin ProgressBarColour $colour {
     color: $colour;
     &::-moz-progress-bar {

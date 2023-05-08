@@ -359,7 +359,18 @@ $MinWidth: 240px;
 }
 
 .mx_AppPermissionWarning_tooltip {
-    @mixin mx_Tooltip_dark;
+    box-shadow: none;
+    background-color: $tooltip-timeline-bg-color;
+    color: $tooltip-timeline-fg-color;
+    border: none;
+    border-radius: 3px;
+    padding: 6px 8px;
+
+    &.mx_AppPermissionWarning_tooltip--dark {
+        .mx_Tooltip_chevron::after {
+            border-right-color: $tooltip-timeline-bg-color;
+        }
+    }
 
     ul {
         list-style-position: inside;

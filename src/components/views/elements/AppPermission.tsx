@@ -115,7 +115,7 @@ export default class AppPermission extends React.Component<IProps, IState> {
         const warningTooltip = (
             <TextWithTooltip
                 tooltip={warningTooltipText}
-                tooltipClass="mx_AppPermissionWarning_tooltip mx_Tooltip_dark"
+                tooltipClass="mx_AppPermissionWarning_tooltip mx_AppPermissionWarning_tooltip--dark"
             >
                 <span className="mx_AppPermissionWarning_helpIcon" />
             </TextWithTooltip>
