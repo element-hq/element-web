@@ -469,7 +469,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
 
     // logic must match calculateTagSorting
     private calculateListOrder(tagId: TagID): ListAlgorithm {
-        const defaultOrder = ListAlgorithm.Importance;
+        const defaultOrder = ListAlgorithm.Natural;
         const definedOrder = this.getListOrder(tagId);
         const storedOrder = this.getStoredListOrder(tagId);
 

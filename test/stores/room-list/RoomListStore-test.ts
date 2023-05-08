@@ -101,7 +101,7 @@ describe("RoomListStore", () => {
     });
 
     it.each(OrderedDefaultTagIDs)("defaults to activity ordering for %s=", (tagId) => {
-        expect(RoomListStore.instance.getListOrder(tagId)).toBe(ListAlgorithm.Importance);
+        expect(RoomListStore.instance.getListOrder(tagId)).toBe(ListAlgorithm.Natural);
     });
 
     function createStore(): { store: RoomListStoreClass; handleRoomUpdate: jest.Mock<any, any> } {
