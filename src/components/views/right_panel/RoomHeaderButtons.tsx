@@ -301,7 +301,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                 title={_t("Threads")}
                 onClick={this.onThreadsPanelClicked}
                 isHighlighted={this.isPhase(RoomHeaderButtons.THREAD_PHASES)}
-                isUnread={this.state.threadNotificationColor > 0}
+                isUnread={this.state.threadNotificationColor > NotificationColor.None}
             >
                 <UnreadIndicator color={this.state.threadNotificationColor} />
             </HeaderButton>,
