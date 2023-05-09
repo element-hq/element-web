@@ -181,10 +181,20 @@ limitations under the License.
     li {
         clear: both;
     }
-}
 
-.mx_RoomView--local .mx_ScrollPanel .mx_RoomView_MessageList {
-    justify-content: center;
+    .mx_ScrollPanel & {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        content-visibility: auto;
+        contain-intrinsic-size: 50px;
+    }
+
+    .mx_RoomView--local .mx_ScrollPanel & {
+        justify-content: center;
+    }
 }
 
 li.mx_RoomView_myReadMarker_container {
