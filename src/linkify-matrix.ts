@@ -58,6 +58,8 @@ function matrixOpaqueIdLinkifyParser({
         TLD,
         COLON,
         SYM,
+        SLASH,
+        EQUALS,
         HYPHEN,
         UNDERSCORE,
         // because 'localhost' is tokenised to the localhost token,
@@ -69,7 +71,7 @@ function matrixOpaqueIdLinkifyParser({
     const S_START = parser.start;
     const matrixSymbol = utils.createTokenClass(name, { isLink: true });
 
-    const localpartTokens = [domain, TLD, LOCALHOST, SYM, UNDERSCORE, HYPHEN];
+    const localpartTokens = [domain, TLD, DOT, LOCALHOST, SYM, SLASH, EQUALS, UNDERSCORE, HYPHEN];
     const domainpartTokens = [domain, TLD, LOCALHOST, HYPHEN];
 
     const INITIAL_STATE = S_START.tt(token);

@@ -303,6 +303,22 @@ describe("linkify-matrix", () => {
 
     describe("userid plugin", () => {
         genTests("@");
+
+        it("allows dots in localparts", () => {
+            const test = "@test.:matrix.org";
+            const found = linkify.find(test);
+            expect(found).toEqual([
+                {
+                    href: test,
+                    type: "userid",
+                    value: test,
+                    start: 0,
+                    end: test.length,
+
+                    isLink: true,
+                },
+            ]);
+        });
     });
 
     describe("matrix uri", () => {
