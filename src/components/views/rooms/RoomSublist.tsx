@@ -577,8 +577,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 otherSections = (
                     <React.Fragment>
                         <hr />
-                        <div>
-                            <div className="mx_RoomSublist_contextMenu_title">{_t("Appearance")}</div>
+                        <fieldset>
+                            <legend className="mx_RoomSublist_contextMenu_title">{_t("Appearance")}</legend>
                             <StyledMenuItemCheckbox
                                 onClose={this.onCloseMenu}
                                 onChange={this.onUnreadFirstChanged}
@@ -593,7 +593,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                             >
                                 {_t("Show previews of messages")}
                             </StyledMenuItemCheckbox>
-                        </div>
+                        </fieldset>
                     </React.Fragment>
                 );
             }
@@ -606,8 +606,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     onFinished={this.onCloseMenu}
                 >
                     <div className="mx_RoomSublist_contextMenu">
-                        <div>
-                            <div className="mx_RoomSublist_contextMenu_title">{_t("Sort by")}</div>
+                        <fieldset>
+                            <legend className="mx_RoomSublist_contextMenu_title">{_t("Sort by")}</legend>
                             <StyledMenuItemRadio
                                 onClose={this.onCloseMenu}
                                 onChange={() => this.onTagSortChanged(SortAlgorithm.Recent)}
@@ -624,7 +624,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                             >
                                 {_t("A-Z")}
                             </StyledMenuItemRadio>
-                        </div>
+                        </fieldset>
                         {otherSections}
                     </div>
                 </ContextMenu>
