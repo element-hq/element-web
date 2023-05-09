@@ -89,6 +89,7 @@ import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
 import RoomAvatar from "../../avatars/RoomAvatar";
 import { useFeatureEnabled } from "../../../../hooks/useSettings";
 import { filterBoolean } from "../../../../utils/arrays";
+import { transformSearchTerm } from "../../../../utils/SearchInput";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -466,7 +467,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     const [spaceResults, spaceResultsLoading] = useSpaceResults(activeSpace ?? undefined, query);
 
     const setQuery = (e: ChangeEvent<HTMLInputElement>): void => {
-        const newQuery = e.currentTarget.value;
+        const newQuery = transformSearchTerm(e.currentTarget.value);
         _setQuery(newQuery);
     };
     useEffect(() => {
