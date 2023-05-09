@@ -18,6 +18,7 @@ import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { IContent, MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
+import userEvent from "@testing-library/user-event";
 
 import SendMessageComposer, {
     attachMentions,
@@ -28,7 +29,7 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import EditorModel from "../../../../src/editor/model";
 import { createPartCreator } from "../../../editor/mock";
-import { createTestClient, mkEvent, mkStubRoom } from "../../../test-utils";
+import { createTestClient, mkEvent, mkStubRoom, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import DocumentOffset from "../../../../src/editor/offset";
@@ -573,5 +574,30 @@ describe("<SendMessageComposer/>", () => {
             expect(isQuickReaction(model3)).toBeFalsy();
             expect(isQuickReaction(model4)).toBeFalsy();
         });
+    });
+
+    it("should call prepareToEncrypt when the user is typing", async () => {
+        const cli = stubClient();
+        cli.isCryptoEnabled = jest.fn().mockReturnValue(true);
+        cli.isRoomEncrypted = jest.fn().mockReturnValue(true);
+        cli.prepareToEncrypt = jest.fn();
+        const room = mkStubRoom("!roomId:server", "Room", cli);
+
+        expect(cli.prepareToEncrypt).not.toHaveBeenCalled();
+
+        const { container } = render(
+            <MatrixClientContext.Provider value={cli}>
+                <SendMessageComposer room={room} toggleStickerPickerOpen={jest.fn()} />
+            </MatrixClientContext.Provider>,
+        );
+
+        const composer = container.querySelector<HTMLDivElement>(".mx_BasicMessageComposer_input")!;
+
+        // Does not trigger on keydown as that'll cause false negatives for global shortcuts
+        await userEvent.type(composer, "[ControlLeft>][KeyK][/ControlLeft]");
+        expect(cli.prepareToEncrypt).not.toHaveBeenCalled();
+
+        await userEvent.type(composer, "Hello");
+        expect(cli.prepareToEncrypt).toHaveBeenCalled();
     });
 });
