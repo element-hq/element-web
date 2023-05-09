@@ -26,10 +26,7 @@ limitations under the License.
 
         /* position to place the hover bg over the entire thing */
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        inset: 0;
 
         pointer-events: none; /* let the pointer fall through the underlying thing */
 
@@ -45,10 +42,7 @@ limitations under the License.
         .mx_AvatarSetting_hoverBg {
             /* absolute position to lazily fill the entire container */
             position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            inset: 0;
 
             opacity: 0.5;
             background-color: $quinary-content;
@@ -98,10 +92,7 @@ limitations under the License.
         mask-position: center;
         content: "";
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        inset: 0;
     }
 
     .mx_AvatarSetting_uploadButton {
