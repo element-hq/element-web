@@ -27,6 +27,7 @@ limitations under the License.
         font-size: 1em; // set base multiplier for em units applied later
 
         --active-color: $accent;
+        --selection-dot-size: 2.4em;
 
         &:disabled {
             cursor: not-allowed;
@@ -47,12 +48,12 @@ limitations under the License.
         }
         &::-webkit-slider-thumb {
             border: 0 solid #000000;
-            width: $slider-selection-dot-size;
-            height: $slider-selection-dot-size;
+            width: var(--selection-dot-size);
+            height: var(--selection-dot-size);
             background: var(--active-color);
             border-radius: 50%;
             -webkit-appearance: none;
-            margin-top: calc(2px + 1.2em - $slider-selection-dot-size);
+            margin-top: calc(2px + 1.2em - var(--selection-dot-size));
         }
         &:focus::-webkit-slider-runnable-track {
             background: $slider-background-color;
@@ -73,8 +74,8 @@ limitations under the License.
         }
         &::-moz-range-thumb {
             border: 0 solid #000000;
-            width: $slider-selection-dot-size;
-            height: $slider-selection-dot-size;
+            width: var(--selection-dot-size);
+            height: var(--selection-dot-size);
             background: var(--active-color);
             border-radius: 50%;
         }
@@ -94,8 +95,8 @@ limitations under the License.
         }
         &::-ms-thumb {
             margin-top: 1px;
-            width: $slider-selection-dot-size;
-            height: $slider-selection-dot-size;
+            width: var(--selection-dot-size);
+            height: var(--selection-dot-size);
             background: var(--active-color);
             border-radius: 50%;
         }
