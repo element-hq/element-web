@@ -65,7 +65,7 @@ jobs:
               if: |
                   github.event.workflow_run.event == 'schedule' ||
                   (
-                    github.event.workflow_run.event == 'merge_queue' &&
+                    github.event.workflow_run.event == 'merge_group' &&
                     contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
                   )
               run: echo "value=1" >> $GITHUB_OUTPUT
