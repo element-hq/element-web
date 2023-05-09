@@ -142,9 +142,9 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
         }
     }
 
-    private async onSyncStateChange(_state: SyncState, _prevState: SyncState, data: ISyncStateData): Promise<void> {
+    private async onSyncStateChange(_state: SyncState, _prevState: SyncState, data?: ISyncStateData): Promise<void> {
         if (!this.state.initialSyncCompleted) {
-            await this.updateState({ initialSyncCompleted: !!data.nextSyncToken });
+            await this.updateState({ initialSyncCompleted: !!data?.nextSyncToken });
         }
     }
 
