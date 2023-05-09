@@ -54,6 +54,8 @@ export default class AutoHideScrollbar<T extends keyof JSX.IntrinsicElements> ex
         if (this.containerRef.current && this.props.onScroll) {
             this.containerRef.current.removeEventListener("scroll", this.props.onScroll);
         }
+
+        this.props.wrappedRef?.(null);
     }
 
     public render(): React.ReactNode {

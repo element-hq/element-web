@@ -250,8 +250,8 @@ interface IState {
 export class UnwrappedEventTile extends React.Component<EventTileProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
-    private tile = React.createRef<IEventTileType>();
-    private replyChain = React.createRef<ReplyChain>();
+    private tile = createRef<IEventTileType>();
+    private replyChain = createRef<ReplyChain>();
 
     public readonly ref = createRef<HTMLElement>();
 

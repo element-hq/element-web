@@ -220,7 +220,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // opaque readreceipt info for each userId; used by ReadReceiptMarker
     // to manage its animations
-    private readonly readReceiptMap: { [userId: string]: IReadReceiptInfo } = {};
+    private readReceiptMap: { [userId: string]: IReadReceiptInfo } = {};
 
     // Track read receipts by event ID. For each _shown_ event ID, we store
     // the list of read receipts to display:
@@ -301,6 +301,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         this.isMounted = false;
         this.props.room?.currentState.off(RoomStateEvent.Update, this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
+        this.readReceiptMap = {};
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {

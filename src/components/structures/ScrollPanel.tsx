@@ -194,7 +194,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     private bottomGrowth: number;
     private minListHeight: number;
     private heightUpdateInProgress: boolean;
-    private divScroll: HTMLDivElement;
+    private divScroll: HTMLDivElement | null = null;
 
     public constructor(props: IProps) {
         super(props);
@@ -226,6 +226,8 @@ export default class ScrollPanel extends React.Component<IProps> {
         this.unmounted = true;
 
         this.props.resizeNotifier?.removeListener("middlePanelResizedNoisy", this.onResize);
+
+        this.divScroll = null;
     }
 
     private onScroll = (ev: Event): void => {
