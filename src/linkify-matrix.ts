@@ -191,12 +191,12 @@ export const options: Opts = {
         return {};
     },
 
-    formatHref: function (href: string, type: Type | string): string | null {
+    formatHref: function (href: string, type: Type | string): string {
         switch (type) {
             case Type.RoomAlias:
             case Type.UserId:
             default: {
-                return tryTransformEntityToPermalink(href);
+                return tryTransformEntityToPermalink(href) ?? "";
             }
         }
     },
@@ -209,7 +209,7 @@ export const options: Opts = {
 
     className: "linkified",
 
-    target: function (href: string, type: Type | string): string | null {
+    target: function (href: string, type: Type | string): string {
         if (type === Type.URL) {
             try {
                 const transformed = tryTransformPermalinkToLocalHref(href);
@@ -217,7 +217,7 @@ export const options: Opts = {
                     transformed !== href || // if it could be converted to handle locally for matrix symbols e.g. @user:server.tdl and matrix.to
                     decodeURIComponent(href).match(ELEMENT_URL_PATTERN) // for https links to Element domains
                 ) {
-                    return null;
+                    return "";
                 } else {
                     return "_blank";
                 }
@@ -225,7 +225,7 @@ export const options: Opts = {
                 // malformed URI
             }
         }
-        return null;
+        return "";
     },
 };
 

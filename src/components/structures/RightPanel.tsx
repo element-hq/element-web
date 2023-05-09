@@ -97,7 +97,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
 
         return {
             cardState: currentCard?.state,
-            phase: currentCard?.phase,
+            phase: currentCard?.phase ?? undefined,
         };
     }
 
@@ -111,7 +111,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
             this.delayedUpdate();
         } else if (
             this.state.phase === RightPanelPhases.RoomMemberInfo &&
-            member.userId === this.state.cardState.member?.userId
+            member.userId === this.state.cardState?.member?.userId
         ) {
             // refresh the member info (e.g. new power level)
             this.delayedUpdate();
@@ -156,7 +156,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         const cardState = this.props.overwriteCard?.state ?? this.state.cardState;
         switch (phase) {
             case RightPanelPhases.RoomMemberList:
-                if (roomId) {
+                if (!!roomId) {
                     card = (
                         <MemberList
                             roomId={roomId}
@@ -199,7 +199,9 @@ export default class RightPanel extends React.Component<IProps, IState> {
             }
             case RightPanelPhases.Room3pidMemberInfo:
             case RightPanelPhases.Space3pidMemberInfo:
-                card = <ThirdPartyMemberInfo event={cardState?.memberInfoEvent} key={roomId} />;
+                if (!!cardState?.memberInfoEvent) {
+                    card = <ThirdPartyMemberInfo event={cardState.memberInfoEvent} key={roomId} />;
+                }
                 break;
 
             case RightPanelPhases.NotificationPanel:
@@ -207,7 +209,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 break;
 
             case RightPanelPhases.PinnedMessages:
-                if (this.props.room && SettingsStore.getValue("feature_pinning")) {
+                if (!!this.props.room && SettingsStore.getValue("feature_pinning")) {
                     card = (
                         <PinnedMessagesCard
                             room={this.props.room}
@@ -218,7 +220,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 }
                 break;
             case RightPanelPhases.Timeline:
-                if (this.props.room) {
+                if (!!this.props.room) {
                     card = (
                         <TimelineCard
                             classNames="mx_ThreadPanel mx_TimelineCard"
@@ -233,20 +235,24 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 }
                 break;
             case RightPanelPhases.FilePanel:
-                card = <FilePanel roomId={roomId} resizeNotifier={this.props.resizeNotifier} onClose={this.onClose} />;
+                if (!!roomId) {
+                    card = (
+                        <FilePanel roomId={roomId} resizeNotifier={this.props.resizeNotifier} onClose={this.onClose} />
+                    );
+                }
                 break;
 
             case RightPanelPhases.ThreadView:
-                if (this.props.room) {
+                if (!!this.props.room && !!cardState?.threadHeadEvent) {
                     card = (
                         <ThreadView
                             room={this.props.room}
                             resizeNotifier={this.props.resizeNotifier}
                             onClose={this.onClose}
-                            mxEvent={cardState?.threadHeadEvent}
-                            initialEvent={cardState?.initialEvent}
-                            isInitialEventHighlighted={cardState?.isInitialEventHighlighted}
-                            initialEventScrollIntoView={cardState?.initialEventScrollIntoView}
+                            mxEvent={cardState.threadHeadEvent}
+                            initialEvent={cardState.initialEvent}
+                            isInitialEventHighlighted={cardState.isInitialEventHighlighted}
+                            initialEventScrollIntoView={cardState.initialEventScrollIntoView}
                             permalinkCreator={this.props.permalinkCreator}
                             e2eStatus={this.props.e2eStatus}
                         />
@@ -255,18 +261,20 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 break;
 
             case RightPanelPhases.ThreadPanel:
-                card = (
-                    <ThreadPanel
-                        roomId={roomId}
-                        resizeNotifier={this.props.resizeNotifier}
-                        onClose={this.onClose}
-                        permalinkCreator={this.props.permalinkCreator}
-                    />
-                );
+                if (!!roomId) {
+                    card = (
+                        <ThreadPanel
+                            roomId={roomId}
+                            resizeNotifier={this.props.resizeNotifier}
+                            onClose={this.onClose}
+                            permalinkCreator={this.props.permalinkCreator}
+                        />
+                    );
+                }
                 break;
 
             case RightPanelPhases.RoomSummary:
-                if (this.props.room) {
+                if (!!this.props.room) {
                     card = (
                         <RoomSummaryCard
                             room={this.props.room}
@@ -279,8 +287,8 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 break;
 
             case RightPanelPhases.Widget:
-                if (this.props.room) {
-                    card = <WidgetCard room={this.props.room} widgetId={cardState?.widgetId} onClose={this.onClose} />;
+                if (!!this.props.room && !!cardState?.widgetId) {
+                    card = <WidgetCard room={this.props.room} widgetId={cardState.widgetId} onClose={this.onClose} />;
                 }
                 break;
         }

@@ -626,7 +626,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             wasContextSwitch: this.context.roomViewStore.getWasContextSwitch(),
             mainSplitContentType: room ? this.getMainSplitContentType(room) : undefined,
             initialEventId: undefined, // default to clearing this, will get set later in the method if needed
-            showRightPanel: this.context.rightPanelStore.isOpenForRoom(roomId),
+            showRightPanel: roomId ? this.context.rightPanelStore.isOpenForRoom(roomId) : false,
             activeCall: roomId ? CallStore.instance.getActiveCall(roomId) : null,
         };
 
@@ -662,7 +662,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             newState.initialEventPixelOffset = undefined;
 
             const thread = initialEvent?.getThread();
-            if (thread && !initialEvent?.isThreadRoot) {
+            if (thread?.rootEvent && !initialEvent?.isThreadRoot) {
                 dis.dispatch<ShowThreadPayload>({
                     action: Action.ShowThread,
                     rootEvent: thread.rootEvent,
@@ -675,7 +675,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 newState.isInitialEventHighlighted = this.context.roomViewStore.isInitialEventHighlighted();
                 newState.initialEventScrollIntoView = this.context.roomViewStore.initialEventScrollIntoView();
 
-                if (thread && initialEvent?.isThreadRoot) {
+                if (thread?.rootEvent && initialEvent?.isThreadRoot) {
                     dis.dispatch<ShowThreadPayload>({
                         action: Action.ShowThread,
                         rootEvent: thread.rootEvent,
@@ -1016,7 +1016,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onRightPanelStoreUpdate = (): void => {
         this.setState({
-            showRightPanel: this.context.rightPanelStore.isOpenForRoom(this.state.roomId),
+            showRightPanel: this.state.roomId ? this.context.rightPanelStore.isOpenForRoom(this.state.roomId) : false,
         });
     };
 
@@ -1087,7 +1087,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case "picture_snapshot":
                 ContentMessages.sharedInstance().sendContentListToRoom(
                     [payload.file],
-                    this.state.room.roomId,
+                    this.getRoomId(),
                     undefined,
                     this.context.client,
                 );
@@ -1496,6 +1496,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     );
 
     private checkDesktopNotifications(): void {
+        if (!this.state.room) return;
         const memberCount = this.state.room.getJoinedMemberCount() + this.state.room.getInvitedMemberCount();
         // if they are not alone prompt the user about notifications so they don't miss replies
         if (memberCount > 1 && Notifier.shouldShowPrompt()) {
@@ -1518,7 +1519,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // open the room inviter
         dis.dispatch({
             action: "view_invite",
-            roomId: this.state.room.roomId,
+            roomId: this.getRoomId(),
         });
     };
 
@@ -1588,7 +1589,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             debuglog("Removing scroll_into_view flag from initial event");
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: this.state.room.roomId,
+                room_id: this.getRoomId(),
                 event_id: this.state.initialEventId,
                 highlighted: this.state.isInitialEventHighlighted,
                 scroll_into_view: false,
@@ -1606,7 +1607,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         ContentMessages.sharedInstance()
-            .sendStickerContentToRoom(url, this.state.room.roomId, threadId, info, text, this.context.client)
+            .sendStickerContentToRoom(url, this.getRoomId(), threadId, info, text, this.context.client)
             .then(undefined, (error) => {
                 if (error.name === "UnknownDeviceError") {
                     // Let the staus bar handle this
@@ -1616,7 +1617,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     private onSearch = (term: string, scope: SearchScope): void => {
-        const roomId = scope === SearchScope.Room ? this.state.room.roomId : undefined;
+        const roomId = scope === SearchScope.Room ? this.getRoomId() : undefined;
         debuglog("sending search request");
         const abortController = new AbortController();
         const promise = eventSearch(term, roomId, abortController.signal);
@@ -1655,7 +1656,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private onForgetClick = (): void => {
         dis.dispatch({
             action: "forget_room",
-            room_id: this.state.room.roomId,
+            room_id: this.getRoomId(),
         });
     };
 
@@ -1663,7 +1664,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.setState({
             rejecting: true,
         });
-        this.context.client?.leave(this.state.roomId).then(
+        this.context.client?.leave(this.getRoomId()).then(
             () => {
                 dis.dispatch({ action: Action.ViewHomePage });
                 this.setState({
@@ -1757,7 +1758,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             // jumping to the bottom
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: this.state.room.roomId,
+                room_id: this.getRoomId(),
                 metricsTrigger: undefined, // room doesn't change
             });
         } else {
@@ -1903,7 +1904,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private onFileDrop = (dataTransfer: DataTransfer): Promise<void> =>
         ContentMessages.sharedInstance().sendContentListToRoom(
             Array.from(dataTransfer.files),
-            this.state.room?.roomId ?? this.state.roomId,
+            this.getRoomId(),
             null,
             this.context.client,
             TimelineRenderingType.Room,
@@ -1921,7 +1922,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return this.getPermalinkCreatorForRoom(this.state.room);
     }
 
-    private renderLocalRoomCreateLoader(localRoom: LocalRoom): ReactElement {
+    private renderLocalRoomCreateLoader(localRoom: LocalRoom): ReactNode {
+        if (!this.state.room || !this.context?.client) return null;
         const names = this.state.room.getDefaultRoomName(this.context.client.getSafeUserId());
         return (
             <RoomContext.Provider value={this.state}>
@@ -1930,7 +1932,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         );
     }
 
-    private renderLocalRoomView(localRoom: LocalRoom): ReactElement {
+    private renderLocalRoomView(localRoom: LocalRoom): ReactNode {
         return (
             <RoomContext.Provider value={this.state}>
                 <LocalRoomView
@@ -1944,7 +1946,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         );
     }
 
-    private renderWaitingForThirdPartyRoomView(inviteEvent: MatrixEvent): ReactElement {
+    private renderWaitingForThirdPartyRoomView(inviteEvent: MatrixEvent): ReactNode {
         return (
             <RoomContext.Provider value={this.state}>
                 <WaitingForThirdPartyRoomView
@@ -1956,7 +1958,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         );
     }
 
-    public render(): React.ReactNode {
+    public render(): ReactNode {
         if (!this.context.client) return null;
 
         if (this.state.room instanceof LocalRoom) {

@@ -64,7 +64,7 @@ interface IOptionsButtonProps {
     // TODO: Types
     getTile: () => any | null;
     getReplyChain: () => ReplyChain | null;
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
     onFocusChange: (menuDisplayed: boolean) => void;
     getRelationsForEvent?: GetRelationsForEvent;
 }
@@ -208,10 +208,11 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
         e.preventDefault();
         e.stopPropagation();
 
-        if (mxEvent.getThread() && !mxEvent.isThreadRoot) {
+        const thread = mxEvent.getThread();
+        if (thread?.rootEvent && !mxEvent.isThreadRoot) {
             defaultDispatcher.dispatch<ShowThreadPayload>({
                 action: Action.ShowThread,
-                rootEvent: mxEvent.getThread()!.rootEvent,
+                rootEvent: thread.rootEvent,
                 initialEvent: mxEvent,
                 scroll_into_view: true,
                 highlighted: true,

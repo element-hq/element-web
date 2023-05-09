@@ -71,7 +71,7 @@ class FilePanel extends React.Component<IProps, IState> {
         removed: boolean,
         data: IRoomTimelineData,
     ): void => {
-        if (room?.roomId !== this.props?.roomId) return;
+        if (room?.roomId !== this.props.roomId) return;
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
         const client = MatrixClientPeg.get();

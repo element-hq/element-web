@@ -576,6 +576,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const encryptionInfo = MatrixClientPeg.get().getEventEncryptionInfo(mxEvent);
         const senderId = mxEvent.getSender();
+        if (!senderId) {
+            // something definitely wrong is going on here
+            this.setState({ verified: E2EState.Warning });
+            return;
+        }
+
         const userTrust = MatrixClientPeg.get().checkUserTrust(senderId);
 
         if (encryptionInfo.mismatchedSender) {

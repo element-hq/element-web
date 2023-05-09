@@ -711,8 +711,8 @@ export default class LegacyCallHandler extends EventEmitter {
                     // Don't show a modal when we got rejected/the call was hung up
                     if (!hangupReason || [CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) break;
 
-                    let title;
-                    let description;
+                    let title: string;
+                    let description: string;
                     // TODO: We should either do away with these or figure out a copy for each code (expect user_hangup...)
                     if (call.hangupReason === CallErrorCode.UserBusy) {
                         title = _t("User Busy");
@@ -1094,16 +1094,17 @@ export default class LegacyCallHandler extends EventEmitter {
         }
 
         const roomId = await ensureDMExists(MatrixClientPeg.get(), nativeUserId);
-
-        if (isNotNull(roomId)) {
-            dis.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                room_id: roomId,
-                metricsTrigger: "WebDialPad",
-            });
-
-            await this.placeMatrixCall(roomId, CallType.Voice, transferee);
+        if (!roomId) {
+            throw new Error("Failed to ensure DM exists for dialing number");
         }
+
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: roomId,
+            metricsTrigger: "WebDialPad",
+        });
+
+        await this.placeMatrixCall(roomId, CallType.Voice, transferee);
     }
 
     public async startTransferToPhoneNumber(

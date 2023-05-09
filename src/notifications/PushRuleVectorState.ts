@@ -47,7 +47,7 @@ export class PushRuleVectorState {
      *
      * @return [object] list of push-rule actions
      */
-    public static actionsFor(pushRuleVectorState: VectorState): PushRuleAction[] {
+    public static actionsFor(pushRuleVectorState?: VectorState): PushRuleAction[] {
         if (pushRuleVectorState === VectorState.On) {
             return StandardActions.ACTION_NOTIFY;
         } else if (pushRuleVectorState === VectorState.Loud) {

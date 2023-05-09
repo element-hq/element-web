@@ -53,7 +53,7 @@ export default class RoomListActions {
         newTag: TagID | null,
         newIndex: number,
     ): AsyncActionPayload {
-        let metaData: Parameters<MatrixClient["setRoomTag"]>[2] | null = null;
+        let metaData: Parameters<MatrixClient["setRoomTag"]>[2] | undefined;
 
         // Is the tag ordered manually?
         const store = RoomListStore.instance;
@@ -113,10 +113,6 @@ export default class RoomListActions {
 
                 // if we moved lists or the ordering changed, add the new tag
                 if (newTag && newTag !== DefaultTagID.DM && (hasChangedSubLists || metaData)) {
-                    // metaData is the body of the PUT to set the tag, so it must
-                    // at least be an empty object.
-                    metaData = metaData || ({} as typeof metaData);
-
                     const promiseToAdd = matrixClient.setRoomTag(roomId, newTag, metaData).catch(function (err) {
                         logger.error("Failed to add tag " + newTag + " to room: " + err);
                         Modal.createDialog(ErrorDialog, {
