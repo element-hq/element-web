@@ -68,13 +68,18 @@ jobs:
               run: cp .github/cfp_headers _deploy/_headers
 
             # Redirect requests for the develop tarball and the historical bundles to R2
+            # We find the latest 100 bundle.css files and add their bundles to the redirects file
+            # S3 has no sane way to get the age of a directory as they don't really exist
             - name: Populate _redirects
               run: |
                   {
-                    echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301"
-                    for bundle in $(aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto | awk '{print $2}'); do
-                      echo "/bundles/${bundle}* $R2_PUBLIC_URL/bundles/${bundle}:splat 301"
-                    done
+                      echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301"
+                      RESULTS=$(aws s3api --region auto --endpoint-url $R2_URL list-objects-v2 --bucket $R2_BUCKET \
+                          --query "sort_by(Contents[?ends_with(Key, '/bundle.css')], &LastModified)[-100:].Key"
+                          --prefix "bundles/" | jq -r '.[]' | grep -oE '[^\"].*\/\s*')
+                      for bundle in "$RESULTS"; do
+                          echo "/${path}* $R2_PUBLIC_URL/${path}:splat 301"
+                      done
                   } | tee _deploy/_redirects
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
