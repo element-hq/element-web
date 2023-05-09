@@ -40,10 +40,20 @@ import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
+import { UPDATE_EVENT } from "matrix-react-sdk/src/stores/AsyncStore";
+import { avatarUrlForRoom, getInitialLetter } from "matrix-react-sdk/src/Avatar";
 
 import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
+
+interface SquirrelUpdate {
+    releaseNotes: string;
+    releaseName: string;
+    releaseDate: Date;
+    updateURL: string;
+}
 
 const isMac = navigator.platform.toUpperCase().includes("MAC");
 
@@ -69,7 +79,7 @@ function platformFriendlyName(): string {
 function onAction(payload: ActionPayload): void {
     // Whitelist payload actions, no point sending most across
     if (["call_state"].includes(payload.action)) {
-        window.electron.send("app_onAction", payload);
+        window.electron!.send("app_onAction", payload);
     }
 }
 
@@ -94,6 +104,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public constructor() {
         super();
+
+        if (!window.electron) {
+            throw new Error("Cannot instantiate ElectronPlatform, window.electron is not set");
+        }
 
         dis.register(onAction);
         /*
@@ -125,12 +139,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
             const key = `DOWNLOAD_TOAST_${id}`;
 
             const onAccept = (): void => {
-                window.electron.send("userDownloadAction", { id, open: true });
+                window.electron!.send("userDownloadAction", { id, open: true });
                 ToastStore.sharedInstance().dismissToast(key);
             };
 
             const onDismiss = (): void => {
-                window.electron.send("userDownloadAction", { id });
+                window.electron!.send("userDownloadAction", { id });
             };
 
             ToastStore.sharedInstance().addOrReplaceToast({
@@ -150,13 +164,29 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
 
         this.ipc.call("startSSOFlow", this.ssoID);
+
+        BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
-    public async getConfig(): Promise<IConfigOptions> {
+    public async getConfig(): Promise<IConfigOptions | undefined> {
         return this.ipc.call("getConfig");
     }
 
-    private onUpdateDownloaded = async (ev, { releaseNotes, releaseName }): Promise<void> => {
+    private onBreadcrumbsUpdate = (): void => {
+        const rooms = BreadcrumbsStore.instance.rooms.slice(0, 7).map((r) => ({
+            roomId: r.roomId,
+            avatarUrl: avatarUrlForRoom(
+                r,
+                Math.floor(60 * window.devicePixelRatio),
+                Math.floor(60 * window.devicePixelRatio),
+                "crop",
+            ),
+            initial: getInitialLetter(r.name),
+        }));
+        this.ipc.call("breadcrumbs", rooms);
+    };
+
+    private onUpdateDownloaded = async (ev: Event, { releaseNotes, releaseName }: SquirrelUpdate): Promise<void> => {
         dis.dispatch<CheckUpdatesPayload>({
             action: Action.CheckUpdates,
             status: UpdateCheckStatus.Ready,
@@ -186,7 +216,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
 
-        window.electron.send("setBadgeCount", count);
+        window.electron!.send("setBadgeCount", count);
     }
 
     public supportsNotifications(): boolean {
@@ -226,7 +256,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public loudNotification(ev: MatrixEvent, room: Room): void {
-        window.electron.send("loudNotification");
+        window.electron!.send("loudNotification");
     }
 
     public needsUrlTooltips(): boolean {
@@ -262,14 +292,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public startUpdateCheck(): void {
         super.startUpdateCheck();
-        window.electron.send("check_updates");
+        window.electron!.send("check_updates");
     }
 
     public installUpdate(): void {
         // IPC to the main process to install the update, since quitAndInstall
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
-        window.electron.send("install_update");
+        window.electron!.send("install_update");
     }
 
     public getDefaultDeviceDisplayName(): string {
@@ -387,6 +417,13 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
             await this.ipc.call("destroyPickleKey", userId, deviceId);
+        } catch (e) {}
+    }
+
+    public async clearStorage(): Promise<void> {
+        try {
+            await super.clearStorage();
+            await this.ipc.call("clearStorage");
         } catch (e) {}
     }
 }

@@ -18,24 +18,28 @@ import { onNewScreen } from "../../../src/vector/routing";
 
 describe("onNewScreen", () => {
     it("should replace history if stripping via fields", () => {
-        delete window.location;
-        window.location = {
-            hash: "#/room/!room:server?via=abc",
-            replace: jest.fn(),
-            assign: jest.fn(),
-        } as unknown as Location;
+        Object.defineProperty(window, "location", {
+            value: {
+                hash: "#/room/!room:server?via=abc",
+                replace: jest.fn(),
+                assign: jest.fn(),
+            },
+            writable: true,
+        });
         onNewScreen("room/!room:server");
         expect(window.location.assign).not.toHaveBeenCalled();
         expect(window.location.replace).toHaveBeenCalled();
     });
 
     it("should not replace history if changing rooms", () => {
-        delete window.location;
-        window.location = {
-            hash: "#/room/!room1:server?via=abc",
-            replace: jest.fn(),
-            assign: jest.fn(),
-        } as unknown as Location;
+        Object.defineProperty(window, "location", {
+            value: {
+                hash: "#/room/!room1:server?via=abc",
+                replace: jest.fn(),
+                assign: jest.fn(),
+            },
+            writable: true,
+        });
         onNewScreen("room/!room2:server");
         expect(window.location.assign).toHaveBeenCalled();
         expect(window.location.replace).not.toHaveBeenCalled();

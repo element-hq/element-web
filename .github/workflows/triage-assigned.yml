@@ -12,20 +12,7 @@ jobs:
             contains(github.event.issue.assignees.*.login, 'andybalaam') ||
             contains(github.event.issue.assignees.*.login, 'justjanne')
         steps:
-            - uses: octokit/graphql-action@v2.x
-              id: add_to_project
+            - uses: actions/add-to-project@main
               with:
-                  headers: '{"GraphQL-Features": "projects_next_graphql"}'
-                  query: |
-                      mutation add_to_project($projectid:ID!,$contentid:ID!) {
-                        addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                          item {
-                            id
-                            }
-                          }
-                        }
-                  projectid: ${{ env.PROJECT_ID }}
-                  contentid: ${{ github.event.issue.node_id }}
-              env:
-                  PROJECT_ID: "PVT_kwDOAM0swc4AKjJS"
-                  GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  project-url: https://github.com/orgs/vector-im/projects/67
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

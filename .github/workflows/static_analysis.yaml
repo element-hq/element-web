@@ -41,13 +41,13 @@ jobs:
 
             - name: Get diff lines
               id: diff
-              uses: Equip-Collaboration/diff-line-numbers@v1.0.0
+              uses: Equip-Collaboration/diff-line-numbers@df70b4b83e05105c15f20dc6cc61f1463411b2a6 # v1.0.0
               with:
                   include: '["\\.tsx?$"]'
 
             - name: Detecting files changed
               id: files
-              uses: futuratrepadeira/changed-files@v4.0.0
+              uses: futuratrepadeira/changed-files@0239328a3a6268aad16af7c3e4efc78e32d6c0f0 # v4.0.1
               with:
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   pattern: '^.*\.tsx?$'
@@ -80,7 +80,7 @@ jobs:
 
             # Does not need branch matching as only analyses this layer
             - name: Install Deps
-              run: "yarn install --pure-lockfile"
+              run: "yarn install --frozen-lockfile"
 
             - name: Run Linter
               run: "yarn run lint:js"

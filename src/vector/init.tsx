@@ -67,11 +67,11 @@ export async function loadConfig(): Promise<void> {
     // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     //
     // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
-    const platformConfig = await PlatformPeg.get().getConfig();
+    const platformConfig = await PlatformPeg.get()?.getConfig();
     if (platformConfig) {
         SdkConfig.put(platformConfig);
     } else {
-        SdkConfig.unset(); // clears the config (sets to empty object)
+        SdkConfig.reset();
     }
 }
 
@@ -119,7 +119,7 @@ export function loadOlm(): Promise<void> {
 
 export async function loadLanguage(): Promise<void> {
     const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/ true);
-    let langs = [];
+    let langs: string[] = [];
 
     if (!prefLang) {
         languageHandler.getLanguagesFromBrowser().forEach((l) => {
@@ -163,7 +163,7 @@ export async function showError(title: string, messages?: string[]): Promise<voi
     );
 }
 
-export async function showIncompatibleBrowser(onAccept): Promise<void> {
+export async function showIncompatibleBrowser(onAccept: () => void): Promise<void> {
     const CompatibilityView = (
         await import(
             /* webpackChunkName: "compatibility-view" */

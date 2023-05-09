@@ -14,7 +14,7 @@ set -ex
 # for the primary repo (element-web in this case).
 
 # Install dependencies, as we'll be using fetchdep.sh from matrix-react-sdk
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 
 # Pass appropriate repo to fetchdep.sh
 export PR_ORG=vector-im
@@ -24,7 +24,7 @@ export PR_REPO=element-web
 node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-js-sdk
 pushd matrix-js-sdk
 yarn link
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 popd
 
 # Also set up matrix-analytics-events so we get the latest from
@@ -32,7 +32,7 @@ popd
 node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-analytics-events main
 pushd matrix-analytics-events
 yarn link
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 yarn build:ts
 popd
 
@@ -42,7 +42,7 @@ pushd matrix-react-sdk
 yarn link
 yarn link matrix-js-sdk
 yarn link @matrix-org/analytics-events
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 popd
 
 # Link the layers into element-web

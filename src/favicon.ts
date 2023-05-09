@@ -49,7 +49,7 @@ export default class Favicon {
     private readonly params: IParams;
     private readonly canvas: HTMLCanvasElement;
     private readonly baseImage: HTMLImageElement;
-    private context: CanvasRenderingContext2D;
+    private context!: CanvasRenderingContext2D;
     private icons: HTMLLinkElement[];
 
     private isReady = false;
@@ -72,14 +72,14 @@ export default class Favicon {
                 // get height and width of the favicon
                 this.canvas.height = this.baseImage.height > 0 ? this.baseImage.height : 32;
                 this.canvas.width = this.baseImage.width > 0 ? this.baseImage.width : 32;
-                this.context = this.canvas.getContext("2d");
+                this.context = this.canvas.getContext("2d")!;
                 this.ready();
             };
-            this.baseImage.setAttribute("src", lastIcon.getAttribute("href"));
+            this.baseImage.setAttribute("src", lastIcon.getAttribute("href")!);
         } else {
             this.canvas.height = this.baseImage.height = 32;
             this.canvas.width = this.baseImage.width = 32;
-            this.context = this.canvas.getContext("2d");
+            this.context = this.canvas.getContext("2d")!;
             this.ready();
         }
     }
@@ -152,7 +152,7 @@ export default class Favicon {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
         this.context.beginPath();
-        const fontSize = Math.floor(opt.h * (opt.n > 99 ? 0.85 : 1)) + "px";
+        const fontSize = Math.floor(opt.h * (typeof opt.n === "number" && opt.n > 99 ? 0.85 : 1)) + "px";
         this.context.font = `${params.fontWeight} ${fontSize} ${params.fontFamily}`;
         this.context.textAlign = "center";
 
@@ -239,7 +239,7 @@ export default class Favicon {
         const icons: HTMLLinkElement[] = [];
         const links = window.document.getElementsByTagName("head")[0].getElementsByTagName("link");
         for (const link of links) {
-            if (/(^|\s)icon(\s|$)/i.test(link.getAttribute("rel"))) {
+            if (link.hasAttribute("rel") && /(^|\s)icon(\s|$)/i.test(link.getAttribute("rel")!)) {
                 icons.push(link);
             }
         }

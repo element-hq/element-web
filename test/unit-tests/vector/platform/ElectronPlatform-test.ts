@@ -20,6 +20,7 @@ import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import dispatcher from "matrix-react-sdk/src/dispatcher/dispatcher";
 import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
+import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
 
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 
@@ -43,12 +44,10 @@ describe("ElectronPlatform", () => {
     const userId = "@alice:server.org";
     const deviceId = "device-id";
 
-    window.electron = mockElectron;
     beforeEach(() => {
         window.electron = mockElectron;
         jest.clearAllMocks();
-        delete window.navigator;
-        window.navigator = { userAgent: defaultUserAgent } as unknown as Navigator;
+        Object.defineProperty(window, "navigator", { value: { userAgent: defaultUserAgent }, writable: true });
     });
 
     const getElectronEventHandlerCall = (eventType: string): [type: string, handler: Function] | undefined =>
@@ -56,7 +55,7 @@ describe("ElectronPlatform", () => {
 
     it("flushes rageshake before quitting", () => {
         new ElectronPlatform();
-        const [event, handler] = getElectronEventHandlerCall("before-quit");
+        const [event, handler] = getElectronEventHandlerCall("before-quit")!;
         // correct event bound
         expect(event).toBeTruthy();
 
@@ -68,7 +67,7 @@ describe("ElectronPlatform", () => {
 
     it("dispatches view settings action on preferences event", () => {
         new ElectronPlatform();
-        const [event, handler] = getElectronEventHandlerCall("preferences");
+        const [event, handler] = getElectronEventHandlerCall("preferences")!;
         // correct event bound
         expect(event).toBeTruthy();
 
@@ -80,7 +79,7 @@ describe("ElectronPlatform", () => {
     describe("updates", () => {
         it("dispatches on check updates action", () => {
             new ElectronPlatform();
-            const [event, handler] = getElectronEventHandlerCall("check_updates");
+            const [event, handler] = getElectronEventHandlerCall("check_updates")!;
             // correct event bound
             expect(event).toBeTruthy();
 
@@ -93,7 +92,7 @@ describe("ElectronPlatform", () => {
 
         it("dispatches on check updates action when update not available", () => {
             new ElectronPlatform();
-            const [, handler] = getElectronEventHandlerCall("check_updates");
+            const [, handler] = getElectronEventHandlerCall("check_updates")!;
 
             handler({}, false);
             expect(dispatchSpy).toHaveBeenCalledWith({
@@ -138,8 +137,7 @@ describe("ElectronPlatform", () => {
             ["Mozilla/5.0 (X11; SunOS i686; rv:21.0) Gecko/20100101 Firefox/21.0", "Element Desktop: SunOS"],
             ["custom user agent", "Element Desktop: Unknown"],
         ])("%s = %s", (userAgent, result) => {
-            delete window.navigator;
-            window.navigator = { userAgent } as unknown as Navigator;
+            Object.defineProperty(window, "navigator", { value: { userAgent }, writable: true });
             const platform = new ElectronPlatform();
             expect(platform.getDefaultDeviceDisplayName()).toEqual(result);
         });
@@ -258,6 +256,22 @@ describe("ElectronPlatform", () => {
             platform.installUpdate();
 
             expect(mockElectron.send).toHaveBeenCalledWith("install_update");
+        });
+    });
+
+    describe("breacrumbs", () => {
+        it("should send breadcrumb updates over the IPC", () => {
+            const spy = jest.spyOn(BreadcrumbsStore.instance, "on");
+            new ElectronPlatform();
+            const cb = spy.mock.calls[0][1];
+            cb();
+
+            expect(mockElectron.send).toHaveBeenCalledWith(
+                "ipcCall",
+                expect.objectContaining({
+                    name: "breadcrumbs",
+                }),
+            );
         });
     });
 });

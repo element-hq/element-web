@@ -29,7 +29,7 @@ describe("Favicon", () => {
     it("should create a link element if one doesn't yet exist", () => {
         const favicon = new Favicon();
         expect(favicon).toBeTruthy();
-        const link = window.document.querySelector("link");
+        const link = window.document.querySelector("link")!;
         expect(link.rel).toContain("icon");
     });
 

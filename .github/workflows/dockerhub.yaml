@@ -6,7 +6,7 @@ on:
     schedule:
         # This job can take a while, and we have usage limits, so just publish develop only twice a day
         - cron: "0 7/12 * * *"
-concurrency: ${{ github.ref_name }}
+concurrency: ${{ github.workflow }}-${{ github.ref_name }}
 jobs:
     buildx:
         name: Docker Buildx
@@ -18,22 +18,22 @@ jobs:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
 
             - name: Set up QEMU
-              uses: docker/setup-qemu-action@v2
+              uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18 # v2
 
             - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v2
+              uses: docker/setup-buildx-action@4b4e9c3e2d4531116a6f8ba8e71fc6e2cb6e6c8c # v2
               with:
                   install: true
 
             - name: Login to Docker Hub
-              uses: docker/login-action@v2
+              uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # v2
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Docker meta
               id: meta
-              uses: docker/metadata-action@v4
+              uses: docker/metadata-action@c4ee3adeed93b1fa6a762f209fb01608c1a22f1e # v4
               with:
                   images: |
                       vectorim/element-web
@@ -44,7 +44,7 @@ jobs:
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
 
             - name: Build and push
-              uses: docker/build-push-action@v4
+              uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671 # v4
               with:
                   context: .
                   push: true
@@ -53,7 +53,7 @@ jobs:
                   labels: ${{ steps.meta.outputs.labels }}
 
             - name: Update repo description
-              uses: peter-evans/dockerhub-description@v3
+              uses: peter-evans/dockerhub-description@202973a37c8a723405c0c5f0a71b6d99db470dae # v3
               continue-on-error: true
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}

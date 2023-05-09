@@ -27,10 +27,10 @@ jobs:
 
             - name: Get number of CPU cores
               id: cpu-cores
-              uses: SimenB/github-actions-cpu-cores@v1
+              uses: SimenB/github-actions-cpu-cores@410541432439795d30db6501fb1d8178eb41e502 # v1
 
             - name: Run tests with coverage
-              run: "yarn coverage --ci --reporters github-actions --max-workers ${{ steps.cpu-cores.outputs.count }}"
+              run: "yarn coverage --ci --max-workers ${{ steps.cpu-cores.outputs.count }}"
 
             - name: Upload Artifact
               uses: actions/upload-artifact@v3

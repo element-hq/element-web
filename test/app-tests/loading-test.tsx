@@ -25,10 +25,11 @@ import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
 import MockHttpBackend from "matrix-mock-request";
-import { makeType } from "matrix-react-sdk/src/utils/TypeUtils";
 import { ValidatedServerConfig } from "matrix-react-sdk/src/utils/ValidatedServerConfig";
 import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
 import { QueryDict, sleep } from "matrix-js-sdk/src/utils";
+import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
+import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
 
 import "../jest-mocks";
 import WebPlatform from "../../src/vector/platform/WebPlatform";
@@ -39,29 +40,24 @@ const DEFAULT_HS_URL = "http://my_server";
 const DEFAULT_IS_URL = "http://my_is";
 
 describe("loading:", function () {
-    let parentDiv;
-    let httpBackend;
+    let httpBackend: MockHttpBackend;
 
     // an Object simulating the window.location
-    let windowLocation;
+    let windowLocation: Location | undefined;
 
     // the mounted MatrixChat
-    let matrixChat: RenderResult;
+    let matrixChat: RenderResult | undefined;
 
     // a promise which resolves when the MatrixChat calls onTokenLoginCompleted
-    let tokenLoginCompletePromise;
+    let tokenLoginCompletePromise: Promise<void> | undefined;
 
     beforeEach(function () {
         httpBackend = new MockHttpBackend();
+        // @ts-ignore
         window.fetch = httpBackend.fetchFn;
-        parentDiv = document.createElement("div");
 
-        // uncomment this to actually add the div to the UI, to help with
-        // debugging (but slow things down)
-        // document.body.appendChild(parentDiv);
-
-        windowLocation = null;
-        matrixChat = null;
+        windowLocation = undefined;
+        matrixChat = undefined;
     });
 
     afterEach(async function () {
@@ -81,8 +77,13 @@ describe("loading:", function () {
      * TODO: it would be nice to factor some of this stuff out of index.js so
      * that we can test it rather than our own implementation of it.
      */
-    function loadApp(opts?): void {
-        opts = opts || {};
+    function loadApp(
+        opts: {
+            queryString?: string;
+            uriFragment?: string;
+            config?: IConfigOptions;
+        } = {},
+    ): void {
         const queryString = opts.queryString || "";
         const uriFragment = opts.uriFragment || "";
 
@@ -92,18 +93,18 @@ describe("loading:", function () {
             toString: function (): string {
                 return this.search + this.hash;
             },
-        };
+        } as Location;
 
-        function onNewScreen(screen): void {
+        function onNewScreen(screen: string): void {
             console.log(Date.now() + " newscreen " + screen);
             const hash = "#/" + screen;
-            windowLocation.hash = hash;
+            windowLocation!.hash = hash;
             console.log(Date.now() + " browser URI now " + windowLocation);
         }
 
         // Parse the given window.location and return parameters that can be used when calling
         // MatrixChat.showScreen(screen, params)
-        function getScreenFromLocation(location): { screen: string; params: QueryDict } {
+        function getScreenFromLocation(location: Location): { screen: string; params: QueryDict } {
             const fragparts = parseQsFromFragment(location);
             return {
                 screen: fragparts.location.substring(1),
@@ -113,22 +114,20 @@ describe("loading:", function () {
 
         const fragParts = parseQsFromFragment(windowLocation);
 
-        const config = Object.assign(
-            {
-                default_hs_url: DEFAULT_HS_URL,
-                default_is_url: DEFAULT_IS_URL,
-                validated_server_config: makeType(ValidatedServerConfig, {
-                    hsUrl: DEFAULT_HS_URL,
-                    hsName: "TEST_ENVIRONMENT",
-                    hsNameIsDifferent: false, // yes, we lie
-                    isUrl: DEFAULT_IS_URL,
-                }),
-                embeddedPages: {
-                    homeUrl: "data:text/html;charset=utf-8;base64,PGh0bWw+PC9odG1sPg==",
-                },
+        const config = {
+            default_hs_url: DEFAULT_HS_URL,
+            default_is_url: DEFAULT_IS_URL,
+            validated_server_config: {
+                hsUrl: DEFAULT_HS_URL,
+                hsName: "TEST_ENVIRONMENT",
+                hsNameIsDifferent: false, // yes, we lie
+                isUrl: DEFAULT_IS_URL,
+            } as ValidatedServerConfig,
+            embedded_pages: {
+                home_url: "data:text/html;charset=utf-8;base64,PGh0bWw+PC9odG1sPg==",
             },
-            opts.config || {},
-        );
+            ...(opts.config ?? {}),
+        } as IConfigOptions;
 
         PlatformPeg.set(new WebPlatform());
 
@@ -138,18 +137,16 @@ describe("loading:", function () {
             matrixChat = render(
                 <MatrixChat
                     onNewScreen={onNewScreen}
-                    config={config}
-                    serverConfig={config.validated_server_config}
+                    config={config!}
                     realQueryParams={params}
                     startingFragmentQueryParams={fragParts.params}
                     enableGuest={true}
                     onTokenLoginCompleted={resolve}
-                    initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
+                    initialScreenAfterLogin={getScreenFromLocation(windowLocation!)}
                     makeRegistrationUrl={(): string => {
                         throw new Error("Not implemented");
                     }}
                 />,
-                parentDiv,
             );
         });
     }
@@ -158,15 +155,15 @@ describe("loading:", function () {
     // http requests until we do.
     //
     // returns a promise resolving to the received request
-    async function expectAndAwaitSync(opts?): Promise<any> {
-        let syncRequest = null;
+    async function expectAndAwaitSync(opts?: { isGuest?: boolean }): Promise<any> {
+        let syncRequest: (typeof MockHttpBackend.prototype.requests)[number] | null = null;
         httpBackend.when("GET", "/_matrix/client/versions").respond(200, {
             versions: ["r0.3.0"],
             unstable_features: {
                 "m.lazy_load_members": true,
             },
         });
-        const isGuest = opts && opts.isGuest;
+        const isGuest = opts?.isGuest;
         if (!isGuest) {
             // the call to create the LL filter
             httpBackend.when("POST", "/filter").respond(200, { filter_id: "llfid" });
@@ -184,7 +181,7 @@ describe("loading:", function () {
             if (syncRequest) {
                 return syncRequest;
             }
-            await httpBackend.flush();
+            await httpBackend.flush(undefined);
         }
         throw new Error("Gave up waiting for /sync");
     }
@@ -202,18 +199,18 @@ describe("loading:", function () {
                     httpBackend
                         .when("POST", "/register")
                         .check(function (req) {
-                            expect(req.queryParams.kind).toEqual("guest");
+                            expect(req.queryParams?.kind).toEqual("guest");
                         })
                         .respond(403, "Guest access is disabled");
 
-                    return httpBackend.flush();
+                    return httpBackend.flush(undefined);
                 })
                 .then(() => {
                     // Wait for another trip around the event loop for the UI to update
                     return awaitWelcomeComponent(matrixChat);
                 })
                 .then(() => {
-                    return waitFor(() => expect(windowLocation.hash).toEqual("#/welcome"));
+                    return waitFor(() => expect(windowLocation?.hash).toEqual("#/welcome"));
                 });
         });
 
@@ -235,11 +232,11 @@ describe("loading:", function () {
                     httpBackend
                         .when("POST", "/register")
                         .check(function (req) {
-                            expect(req.queryParams.kind).toEqual("guest");
+                            expect(req.queryParams?.kind).toEqual("guest");
                         })
                         .respond(403, "Guest access is disabled");
 
-                    return httpBackend.flush();
+                    return httpBackend.flush(undefined);
                 })
                 .then(() => {
                     // Wait for another trip around the event loop for the UI to update
@@ -249,7 +246,7 @@ describe("loading:", function () {
                     return moveFromWelcomeToLogin(matrixChat);
                 })
                 .then(() => {
-                    return completeLogin(matrixChat);
+                    return completeLogin(matrixChat!);
                 })
                 .then(() => {
                     // once the sync completes, we should have a room view
@@ -257,7 +254,7 @@ describe("loading:", function () {
                 })
                 .then(() => {
                     httpBackend.verifyNoOutstandingExpectation();
-                    expect(windowLocation.hash).toEqual("#/room/!room:id");
+                    expect(windowLocation?.hash).toEqual("#/room/!room:id");
 
                     // and the localstorage should have been updated
                     expect(localStorage.getItem("mx_user_id")).toEqual("@user:id");
@@ -294,11 +291,11 @@ describe("loading:", function () {
 
                         throw new Error(`Unexpected HTTP request to ${req}`);
                     }
-                    return completeLogin(matrixChat);
+                    return completeLogin(matrixChat!);
                 })
                 .then(() => {
-                    expect(matrixChat.container.querySelector(".mx_HomePage")).toBeTruthy();
-                    expect(windowLocation.hash).toEqual("#/home");
+                    expect(matrixChat?.container.querySelector(".mx_HomePage")).toBeTruthy();
+                    expect(windowLocation?.hash).toEqual("#/home");
                 });
         });
     });
@@ -319,7 +316,7 @@ describe("loading:", function () {
         it("shows the last known room by default", function () {
             loadApp();
 
-            return awaitLoggedIn(matrixChat)
+            return awaitLoggedIn(matrixChat!)
                 .then(() => {
                     // we are logged in - let the sync complete
                     return expectAndAwaitSync();
@@ -330,7 +327,7 @@ describe("loading:", function () {
                 })
                 .then(() => {
                     httpBackend.verifyNoOutstandingExpectation();
-                    expect(windowLocation.hash).toEqual("#/room/!last_room:id");
+                    expect(windowLocation?.hash).toEqual("#/room/!last_room:id");
                 });
         });
 
@@ -339,7 +336,7 @@ describe("loading:", function () {
 
             loadApp();
 
-            return awaitLoggedIn(matrixChat)
+            return awaitLoggedIn(matrixChat!)
                 .then(() => {
                     // we are logged in - let the sync complete
                     return expectAndAwaitSync();
@@ -347,8 +344,8 @@ describe("loading:", function () {
                 .then(() => {
                     // once the sync completes, we should have a home page
                     httpBackend.verifyNoOutstandingExpectation();
-                    expect(matrixChat.container.querySelector(".mx_HomePage")).toBeTruthy();
-                    expect(windowLocation.hash).toEqual("#/home");
+                    expect(matrixChat?.container.querySelector(".mx_HomePage")).toBeTruthy();
+                    expect(windowLocation?.hash).toEqual("#/home");
                 });
         });
 
@@ -357,7 +354,7 @@ describe("loading:", function () {
                 uriFragment: "#/room/!room:id",
             });
 
-            return awaitLoggedIn(matrixChat)
+            return awaitLoggedIn(matrixChat!)
                 .then(() => {
                     // we are logged in - let the sync complete
                     return expectAndAwaitSync();
@@ -368,7 +365,7 @@ describe("loading:", function () {
                 })
                 .then(() => {
                     httpBackend.verifyNoOutstandingExpectation();
-                    expect(windowLocation.hash).toEqual("#/room/!room:id");
+                    expect(windowLocation?.hash).toEqual("#/room/!room:id");
                 });
         });
 
@@ -404,17 +401,17 @@ describe("loading:", function () {
                     httpBackend
                         .when("POST", "/register")
                         .check(function (req) {
-                            expect(req.queryParams.kind).toEqual("guest");
+                            expect(req.queryParams?.kind).toEqual("guest");
                         })
                         .respond(200, {
                             user_id: "@guest:localhost",
                             access_token: "secret_token",
                         });
 
-                    return httpBackend.flush();
+                    return httpBackend.flush(undefined);
                 })
                 .then(() => {
-                    return awaitLoggedIn(matrixChat);
+                    return awaitLoggedIn(matrixChat!);
                 })
                 .then(() => {
                     // we are logged in - let the sync complete
@@ -423,8 +420,8 @@ describe("loading:", function () {
                 .then(() => {
                     // once the sync completes, we should have a welcome page
                     httpBackend.verifyNoOutstandingExpectation();
-                    expect(matrixChat.container.querySelector(".mx_Welcome")).toBeTruthy();
-                    expect(windowLocation.hash).toEqual("#/welcome");
+                    expect(matrixChat?.container.querySelector(".mx_Welcome")).toBeTruthy();
+                    expect(windowLocation?.hash).toEqual("#/welcome");
                 });
         });
 
@@ -441,17 +438,17 @@ describe("loading:", function () {
                         .when("POST", "/register")
                         .check(function (req) {
                             expect(req.path.startsWith(DEFAULT_HS_URL)).toBe(true);
-                            expect(req.queryParams.kind).toEqual("guest");
+                            expect(req.queryParams?.kind).toEqual("guest");
                         })
                         .respond(200, {
                             user_id: "@guest:localhost",
                             access_token: "secret_token",
                         });
 
-                    return httpBackend.flush();
+                    return httpBackend.flush(undefined);
                 })
                 .then(() => {
-                    return awaitLoggedIn(matrixChat);
+                    return awaitLoggedIn(matrixChat!);
                 })
                 .then(() => {
                     return expectAndAwaitSync({ isGuest: true });
@@ -461,8 +458,8 @@ describe("loading:", function () {
 
                     // once the sync completes, we should have a welcome page
                     httpBackend.verifyNoOutstandingExpectation();
-                    expect(matrixChat.container.querySelector(".mx_Welcome")).toBeTruthy();
-                    expect(windowLocation.hash).toEqual("#/welcome");
+                    expect(matrixChat?.container.querySelector(".mx_Welcome")).toBeTruthy();
+                    expect(windowLocation?.hash).toEqual("#/welcome");
                     expect(MatrixClientPeg.get().baseUrl).toEqual(DEFAULT_HS_URL);
                     expect(MatrixClientPeg.get().idBaseUrl).toEqual(DEFAULT_IS_URL);
                 });
@@ -481,17 +478,17 @@ describe("loading:", function () {
                     httpBackend
                         .when("POST", "/register")
                         .check(function (req) {
-                            expect(req.queryParams.kind).toEqual("guest");
+                            expect(req.queryParams?.kind).toEqual("guest");
                         })
                         .respond(200, {
                             user_id: "@guest:localhost",
                             access_token: "secret_token",
                         });
 
-                    return httpBackend.flush();
+                    return httpBackend.flush(undefined);
                 })
                 .then(() => {
-                    return awaitLoggedIn(matrixChat);
+                    return awaitLoggedIn(matrixChat!);
                 })
                 .then(() => {
                     return expectAndAwaitSync({ isGuest: true });
@@ -502,7 +499,7 @@ describe("loading:", function () {
                 })
                 .then(() => {
                     httpBackend.verifyNoOutstandingExpectation();
-                    expect(windowLocation.hash).toEqual("#/room/!room:id");
+                    expect(windowLocation?.hash).toEqual("#/room/!room:id");
                 });
         });
 
@@ -514,7 +511,7 @@ describe("loading:", function () {
                 httpBackend
                     .when("POST", "/register")
                     .check(function (req) {
-                        expect(req.queryParams.kind).toEqual("guest");
+                        expect(req.queryParams?.kind).toEqual("guest");
                     })
                     .respond(200, {
                         user_id: "@guest:localhost",
@@ -522,9 +519,9 @@ describe("loading:", function () {
                     });
 
                 return httpBackend
-                    .flush()
+                    .flush(undefined)
                     .then(() => {
-                        return awaitLoggedIn(matrixChat);
+                        return awaitLoggedIn(matrixChat!);
                     })
                     .then(() => {
                         // we got a sync spinner - let the sync complete
@@ -532,7 +529,7 @@ describe("loading:", function () {
                     })
                     .then(async () => {
                         // once the sync completes, we should have a home page
-                        await waitFor(() => matrixChat.container.querySelector(".mx_HomePage"));
+                        await waitFor(() => matrixChat?.container.querySelector(".mx_HomePage"));
 
                         // we simulate a click on the 'login' button by firing off
                         // the relevant dispatch.
@@ -554,7 +551,7 @@ describe("loading:", function () {
                 await screen.findByRole("main");
                 screen.getAllByText("Sign in");
 
-                expect(windowLocation.hash).toEqual("#/login");
+                expect(windowLocation?.hash).toEqual("#/login");
             });
         });
     });
@@ -585,7 +582,7 @@ describe("loading:", function () {
                             access_token: "access_token",
                         });
 
-                    return httpBackend.flush();
+                    return httpBackend.flush(undefined);
                 })
                 .then(() => {
                     // at this point, MatrixChat should fire onTokenLoginCompleted, which
@@ -612,11 +609,7 @@ describe("loading:", function () {
         // When we switch to the login component, it'll hit the login endpoint
         // for proof of life and to get flows. We'll only give it one option.
         httpBackend.when("GET", "/login").respond(200, { flows: [{ type: "m.login.password" }] });
-        httpBackend.flush(); // We already would have tried the GET /login request
-
-        // Give the component some time to finish processing the login flows before
-        // continuing.
-        await sleep(100);
+        httpBackend.flush(undefined); // We already would have tried the GET /login request
 
         httpBackend
             .when("POST", "/login")
@@ -631,12 +624,17 @@ describe("loading:", function () {
                 device_id: "DEVICE_ID",
                 access_token: "access_token",
             });
-        fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_username"), { target: { value: "user" } });
-        fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_password"), { target: { value: "pass" } });
+
+        // Give the component some time to finish processing the login flows before continuing.
+        await waitFor(() => expect(matrixChat?.container.querySelector("#mx_LoginForm_username")).toBeTruthy());
+
+        // Enter login details
+        fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_username")!, { target: { value: "user" } });
+        fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_password")!, { target: { value: "pass" } });
         fireEvent.click(screen.getByText("Sign in", { selector: ".mx_Login_submit" }));
 
         return httpBackend
-            .flush()
+            .flush(undefined)
             .then(() => {
                 // Wait for another trip around the event loop for the UI to update
                 return sleep(1);
@@ -661,7 +659,7 @@ async function awaitLoggedIn(matrixChat: RenderResult): Promise<void> {
     if (matrixChat.container.querySelector(".mx_MatrixChat_wrapper")) return; // already logged in
 
     return new Promise((resolve) => {
-        const onAction = ({ action }): void => {
+        const onAction = ({ action }: ActionPayload): void => {
             if (action !== "on_logged_in") {
                 return;
             }
@@ -674,19 +672,19 @@ async function awaitLoggedIn(matrixChat: RenderResult): Promise<void> {
     });
 }
 
-async function awaitRoomView(matrixChat: RenderResult): Promise<void> {
-    await waitFor(() => matrixChat.container.querySelector(".mx_RoomView"));
+async function awaitRoomView(matrixChat?: RenderResult): Promise<void> {
+    await waitFor(() => matrixChat?.container.querySelector(".mx_RoomView"));
 }
 
-async function awaitLoginComponent(matrixChat: RenderResult): Promise<void> {
-    await waitFor(() => matrixChat.container.querySelector(".mx_AuthPage"));
+async function awaitLoginComponent(matrixChat?: RenderResult): Promise<void> {
+    await waitFor(() => matrixChat?.container.querySelector(".mx_AuthPage"));
 }
 
-async function awaitWelcomeComponent(matrixChat: RenderResult): Promise<void> {
-    await waitFor(() => matrixChat.container.querySelector(".mx_Welcome"));
+async function awaitWelcomeComponent(matrixChat?: RenderResult): Promise<void> {
+    await waitFor(() => matrixChat?.container.querySelector(".mx_Welcome"));
 }
 
-function moveFromWelcomeToLogin(matrixChat: RenderResult): Promise<void> {
+function moveFromWelcomeToLogin(matrixChat?: RenderResult): Promise<void> {
     dis.dispatch({ action: "start_login" });
     return awaitLoginComponent(matrixChat);
 }

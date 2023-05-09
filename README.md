@@ -18,7 +18,8 @@ Element has several tiers of support for different environments:
 
 -   Supported
     -   Definition: Issues **actively triaged**, regressions **block** the release
-    -   Last 2 major versions of Chrome, Firefox, Safari, and Edge on desktop OSes
+    -   Last 2 major versions of Chrome, Firefox, and Edge on desktop OSes
+    -   Last 2 versions of Safari
     -   Latest release of official Element Desktop app on desktop OSes
     -   Desktop OSes means macOS, Windows, and Linux versions for desktop devices
         that are actively supported by the OS vendor and receive security updates
@@ -85,7 +86,7 @@ your web server configuration when hosting Element Web:
 
 -   The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
     framed and protect from [clickjacking][owasp-clickjacking].
--   The `frame-ancestors 'none'` directive to your `Content-Security-Policy`
+-   The `frame-ancestors 'self'` directive to your `Content-Security-Policy`
     header, as the modern replacement for `X-Frame-Options` (though both should be
     included since not all browsers support it yet, see
     [this][owasp-clickjacking-csp]).
@@ -113,7 +114,7 @@ For Apache, the configuration looks like:
 Header set X-Frame-Options SAMEORIGIN
 Header set X-Content-Type-Options nosniff
 Header set X-XSS-Protection "1; mode=block"
-Header set Content-Security-Policy "frame-ancestors 'none'"
+Header set Content-Security-Policy "frame-ancestors 'self'"
 ```
 
 Note: In case you are already setting a `Content-Security-Policy` header
