@@ -168,7 +168,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
             (findHighContrastTheme(this.state.theme) || isHighContrastTheme(this.state.theme))
         ) {
             return (
-                <div data-testid="theme-choice-panel-highcontrast">
+                <div>
                     <StyledCheckbox
                         checked={isHighContrastTheme(this.state.theme)}
                         onChange={(e) => this.highContrastThemeChanged(e.target.checked)}
@@ -197,7 +197,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
         let systemThemeSection: JSX.Element | undefined;
         if (themeWatcher.isSystemThemeSupported()) {
             systemThemeSection = (
-                <div>
+                <div data-testid="checkbox-use-system-theme">
                     <StyledCheckbox
                         checked={this.state.useSystemTheme}
                         onChange={(e) => this.onUseSystemThemeChanged(e.target.checked)}
@@ -248,7 +248,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
             <div className="mx_SettingsTab_section mx_ThemeChoicePanel">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 {systemThemeSection}
-                <div className="mx_ThemeSelectors" data-testid="theme-choice-panel-selectors">
+                <div className="mx_ThemeSelectors">
                     <StyledRadioGroup
                         name="theme"
                         definitions={orderedThemes.map((t) => ({

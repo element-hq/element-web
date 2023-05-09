@@ -12,7 +12,6 @@ exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
     </span>
     <div
       class="mx_ThemeSelectors"
-      data-testid="theme-choice-panel-selectors"
     >
       <label
         class="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
