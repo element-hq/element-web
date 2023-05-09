@@ -19,7 +19,16 @@ limitations under the License.
         text-align: center;
         margin-top: $spacing-20;
 
-        h1 {
+        .mx_RoomSummaryCard_roomName,
+        .mx_RoomSummaryCard_alias {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            white-space: pre-wrap;
+            overflow: hidden;
+        }
+
+        .mx_RoomSummaryCard_roomName {
             margin: $spacing-12 0 $spacing-4;
             font-weight: var(--font-semi-bold);
         }
@@ -27,16 +36,7 @@ limitations under the License.
         .mx_RoomSummaryCard_alias {
             font-size: $font-13px;
             color: $secondary-content;
-            overflow: hidden;
             text-overflow: ellipsis;
-        }
-
-        h1,
-        .mx_RoomSummaryCard_alias {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            white-space: pre-wrap;
         }
 
         .mx_RoomSummaryCard_avatar {

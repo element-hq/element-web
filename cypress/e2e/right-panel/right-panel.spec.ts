@@ -20,8 +20,16 @@ import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
 
 const ROOM_NAME = "Test room";
+const ROOM_NAME_LONG =
+    "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore " +
+    "et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut " +
+    "aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum " +
+    "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui " +
+    "officia deserunt mollit anim id est laborum.";
 const SPACE_NAME = "Test space";
 const NAME = "Alice";
+const ROOM_ADDRESS_LONG =
+    "loremIpsumDolorSitAmetConsecteturAdipisicingElitSedDoEiusmodTemporIncididuntUtLaboreEtDoloreMagnaAliqua";
 
 const getMemberTileByName = (name: string): Chainable<JQuery<HTMLElement>> => {
     return cy.get(`.mx_EntityTile, [title="${name}"]`);
@@ -58,6 +66,31 @@ describe("RightPanel", () => {
     });
 
     describe("in rooms", () => {
+        it("should handle long room address and long room name", () => {
+            cy.createRoom({ name: ROOM_NAME_LONG });
+            viewRoomSummaryByName(ROOM_NAME_LONG);
+
+            cy.openRoomSettings();
+
+            // Set a local room address
+            cy.findByTestId("local-address-fieldset").within(() => {
+                cy.get(".mx_AliasSettings_localAddresses").click();
+                cy.findByLabelText("Room address").type(ROOM_ADDRESS_LONG);
+                cy.findByRole("button", { name: "Add" }).click();
+            });
+
+            cy.closeDialog();
+
+            // Close and reopen the right panel to render the room address
+            cy.findByRole("button", { name: "Room info" }).click();
+            cy.get(".mx_RightPanel").should("not.exist");
+            cy.findByRole("button", { name: "Room info" }).click();
+
+            cy.get(".mx_RightPanel").percySnapshotElement("RoomSummaryCard - with a room name and a local address", {
+                widths: [264], // Emulate the UI. The value is based on minWidth specified on MainSplit.tsx
+            });
+        });
+
         it("should handle clicking add widgets", () => {
             viewRoomSummaryByName(ROOM_NAME);
 
