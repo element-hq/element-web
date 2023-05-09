@@ -23,11 +23,11 @@ interface IProps {
 const AppWarning: React.FC<IProps> = (props) => {
     return (
         <div className="mx_AppPermissionWarning">
-            <div className="mx_AppPermissionWarningImage">
+            <div>
                 <img src={require("../../../../res/img/warning.svg").default} alt="" />
             </div>
-            <div className="mx_AppPermissionWarningText">
-                <span className="mx_AppPermissionWarningTextLabel">{props.errorMsg || "Error"}</span>
+            <div>
+                <span>{props.errorMsg || "Error"}</span>
             </div>
         </div>
     );
