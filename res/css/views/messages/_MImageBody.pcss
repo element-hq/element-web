@@ -15,14 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$timeline-image-border-radius: 8px;
-
 .mx_MImageBody_banner {
     position: absolute;
     bottom: $spacing-4;
     left: $spacing-4;
     padding: $spacing-4;
-    border-radius: $timeline-image-border-radius;
+    border-radius: var(--MBody-border-radius);
     font-size: $font-15px;
     user-select: none; /* prevent banner text from being selected */
     pointer-events: none; /* let the cursor go through to the media underneath */
@@ -55,7 +53,7 @@ $timeline-image-border-radius: 8px;
 }
 
 .mx_MImageBody_thumbnail_container {
-    border-radius: $timeline-image-border-radius;
+    border-radius: var(--MBody-border-radius);
 
     /* Necessary for the border radius to apply correctly to the placeholder */
     overflow: hidden;
