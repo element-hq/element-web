@@ -722,12 +722,12 @@ export default class AppTile extends React.Component<IProps, IState> {
                     {this.props.showMenubar && (
                         <div className="mx_AppTileMenuBar">
                             <span
-                                className="mx_AppTileMenuBarTitle"
+                                className="mx_AppTileMenuBar_title"
                                 style={{ pointerEvents: this.props.handleMinimisePointerEvents ? "all" : "none" }}
                             >
                                 {this.props.showTitle && this.getTileTitle()}
                             </span>
-                            <span className="mx_AppTileMenuBarWidgets">
+                            <span className="mx_AppTileMenuBar_widgets">
                                 {layoutButtons}
                                 {this.props.showPopout && !this.state.requiresClient && (
                                     <AccessibleButton
