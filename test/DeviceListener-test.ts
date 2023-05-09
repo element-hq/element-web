@@ -17,10 +17,10 @@ limitations under the License.
 import { Mocked, mocked } from "jest-mock";
 import { MatrixEvent, Room, MatrixClient, DeviceVerificationStatus, CryptoApi } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { CrossSigningInfo } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
+import { Device } from "matrix-js-sdk/src/models/device";
 
 import DeviceListener from "../src/DeviceListener";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
@@ -80,10 +80,12 @@ describe("DeviceListener", () => {
             getDeviceVerificationStatus: jest.fn().mockResolvedValue({
                 crossSigningVerified: false,
             }),
+            getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
         } as unknown as Mocked<CryptoApi>;
         mockClient = getMockClientWithEventEmitter({
             isGuest: jest.fn(),
             getUserId: jest.fn().mockReturnValue(userId),
+            getSafeUserId: jest.fn().mockReturnValue(userId),
             getKeyBackupVersion: jest.fn().mockResolvedValue(undefined),
             getRooms: jest.fn().mockReturnValue([]),
             isVersionSupported: jest.fn().mockResolvedValue(true),
@@ -92,7 +94,6 @@ describe("DeviceListener", () => {
             isCryptoEnabled: jest.fn().mockReturnValue(true),
             isInitialSyncComplete: jest.fn().mockReturnValue(true),
             getKeyBackupEnabled: jest.fn(),
-            getStoredDevicesForUser: jest.fn().mockReturnValue([]),
             getCrossSigningId: jest.fn(),
             getStoredCrossSigningForUser: jest.fn(),
             waitForClientWellKnown: jest.fn(),
@@ -393,16 +394,18 @@ describe("DeviceListener", () => {
         });
 
         describe("unverified sessions toasts", () => {
-            const currentDevice = new DeviceInfo(deviceId);
-            const device2 = new DeviceInfo("d2");
-            const device3 = new DeviceInfo("d3");
+            const currentDevice = new Device({ deviceId, userId: userId, algorithms: [], keys: new Map() });
+            const device2 = new Device({ deviceId: "d2", userId: userId, algorithms: [], keys: new Map() });
+            const device3 = new Device({ deviceId: "d3", userId: userId, algorithms: [], keys: new Map() });
 
             const deviceTrustVerified = new DeviceVerificationStatus({ crossSigningVerified: true });
             const deviceTrustUnverified = new DeviceVerificationStatus({});
 
             beforeEach(() => {
                 mockClient!.isCrossSigningReady.mockResolvedValue(true);
-                mockClient!.getStoredDevicesForUser.mockReturnValue([currentDevice, device2, device3]);
+                mockCrypto!.getUserDeviceInfo.mockResolvedValue(
+                    new Map([[userId, new Map([currentDevice, device2, device3].map((d) => [d.deviceId, d]))]]),
+                );
                 // all devices verified by default
                 mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(deviceTrustVerified);
                 mockClient!.deviceId = currentDevice.deviceId;
@@ -525,13 +528,17 @@ describe("DeviceListener", () => {
                                 return deviceTrustUnverified;
                         }
                     });
-                    mockClient!.getStoredDevicesForUser.mockReturnValue([currentDevice, device2]);
+                    mockCrypto!.getUserDeviceInfo.mockResolvedValue(
+                        new Map([[userId, new Map([currentDevice, device2].map((d) => [d.deviceId, d]))]]),
+                    );
                     await createAndStart();
 
                     expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
 
                     // add an unverified device
-                    mockClient!.getStoredDevicesForUser.mockReturnValue([currentDevice, device2, device3]);
+                    mockCrypto!.getUserDeviceInfo.mockResolvedValue(
+                        new Map([[userId, new Map([currentDevice, device2, device3].map((d) => [d.deviceId, d]))]]),
+                    );
                     // trigger a recheck
                     mockClient!.emit(CryptoEvent.DevicesUpdated, [userId], false);
                     await flushPromises();
