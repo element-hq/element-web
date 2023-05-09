@@ -1,8 +1,5 @@
 module.exports = {
     sourceMaps: true,
-    assumptions: {
-        setPublicClassFields: true,
-    },
     presets: [
         [
             "@babel/preset-env",
