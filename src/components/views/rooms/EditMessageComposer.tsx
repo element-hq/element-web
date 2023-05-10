@@ -129,7 +129,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     private readonly editorRef = createRef<BasicMessageComposer>();
     private readonly dispatcherRef: string;
     private readonly replyToEvent?: MatrixEvent;
-    private model: EditorModel;
+    private model!: EditorModel;
 
     public constructor(props: IEditMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props);

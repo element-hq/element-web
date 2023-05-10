@@ -44,7 +44,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
     IState
 > {
     private autoHideScrollbar = createRef<AutoHideScrollbar<any>>();
-    private scrollElement: HTMLDivElement;
+    private scrollElement?: HTMLDivElement;
     private likelyTrackpadUser: boolean | null = null;
     private checkAgainForTrackpad = 0; // ts in milliseconds to recheck this._likelyTrackpadUser
 
@@ -85,6 +85,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
     }
 
     private checkOverflow = (): void => {
+        if (!this.scrollElement) return;
         const hasTopOverflow = this.scrollElement.scrollTop > 0;
         const hasBottomOverflow =
             this.scrollElement.scrollHeight > this.scrollElement.scrollTop + this.scrollElement.clientHeight;

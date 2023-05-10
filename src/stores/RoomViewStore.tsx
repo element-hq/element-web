@@ -150,8 +150,8 @@ export class RoomViewStore extends EventEmitter {
     // another RVS via INITIAL_STATE as they share the same underlying object. Mostly relevant for tests.
     private state = utils.deepCopy(INITIAL_STATE);
 
-    private dis: MatrixDispatcher;
-    private dispatchToken: string;
+    private dis?: MatrixDispatcher;
+    private dispatchToken?: string;
 
     public constructor(dis: MatrixDispatcher, private readonly stores: SdkContextClass) {
         super();
@@ -217,7 +217,7 @@ export class RoomViewStore extends EventEmitter {
 
             // Fired so we can reduce dependency on event emitters to this store, which is relatively
             // central to the application and can easily cause import cycles.
-            this.dis.dispatch<ActiveRoomChangedPayload>({
+            this.dis?.dispatch<ActiveRoomChangedPayload>({
                 action: Action.ActiveRoomChanged,
                 oldRoomId: lastRoomId,
                 newRoomId: this.state.roomId,
@@ -343,7 +343,7 @@ export class RoomViewStore extends EventEmitter {
                     // can happen when performing a search across all rooms. Persist the data from this event for both
                     // room and search timeline rendering types, search will get auto-closed by RoomView at this time.
                     if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
-                        this.dis.dispatch<ViewRoomPayload>({
+                        this.dis?.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
                             room_id: payload.event.getRoomId(),
                             replyingToEvent: payload.event,
@@ -414,7 +414,7 @@ export class RoomViewStore extends EventEmitter {
                     return;
                 }
                 // Re-fire the payload: we won't re-process it because the prev room ID == payload room ID now
-                this.dis.dispatch({
+                this.dis?.dispatch({
                     ...payload,
                 });
                 return;
@@ -455,7 +455,7 @@ export class RoomViewStore extends EventEmitter {
             this.setState(newState);
 
             if (payload.auto_join) {
-                this.dis.dispatch<JoinRoomPayload>({
+                this.dis?.dispatch<JoinRoomPayload>({
                     ...payload,
                     action: Action.JoinRoom,
                     roomId: payload.room_id,
@@ -493,7 +493,7 @@ export class RoomViewStore extends EventEmitter {
                     roomId = result.room_id;
                 } catch (err) {
                     logger.error("RVS failed to get room id for alias: ", err);
-                    this.dis.dispatch<ViewRoomErrorPayload>({
+                    this.dis?.dispatch<ViewRoomErrorPayload>({
                         action: Action.ViewRoomError,
                         room_id: null,
                         room_alias: payload.room_alias,
@@ -504,7 +504,7 @@ export class RoomViewStore extends EventEmitter {
             }
 
             // Re-fire the payload with the newly found room_id
-            this.dis.dispatch({
+            this.dis?.dispatch({
                 ...payload,
                 room_id: roomId,
             });
@@ -553,13 +553,13 @@ export class RoomViewStore extends EventEmitter {
             // We do *not* clear the 'joining' flag because the Room object and/or our 'joined' member event may not
             // have come down the sync stream yet, and that's the point at which we'd consider the user joined to the
             // room.
-            this.dis.dispatch<JoinRoomReadyPayload>({
+            this.dis?.dispatch<JoinRoomReadyPayload>({
                 action: Action.JoinRoomReady,
                 roomId: roomId!,
                 metricsTrigger: payload.metricsTrigger,
             });
         } catch (err) {
-            this.dis.dispatch({
+            this.dis?.dispatch({
                 action: Action.JoinRoomError,
                 roomId,
                 err,
@@ -648,7 +648,7 @@ export class RoomViewStore extends EventEmitter {
      */
     public resetDispatcher(dis: MatrixDispatcher): void {
         if (this.dispatchToken) {
-            this.dis.unregister(this.dispatchToken);
+            this.dis?.unregister(this.dispatchToken);
         }
         this.dis = dis;
         if (dis) {

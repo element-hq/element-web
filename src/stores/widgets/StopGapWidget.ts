@@ -157,9 +157,9 @@ export class ElementWidget extends Widget {
 
 export class StopGapWidget extends EventEmitter {
     private client: MatrixClient;
-    private messaging: ClientWidgetApi | null;
+    private messaging: ClientWidgetApi | null = null;
     private mockWidget: ElementWidget;
-    private scalarToken: string;
+    private scalarToken?: string;
     private roomId?: string;
     private kind: WidgetKind;
     private readonly virtual: boolean;

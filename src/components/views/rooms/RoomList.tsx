@@ -443,7 +443,7 @@ const TAG_AESTHETICS: TagAestheticsMap = {
 export default class RoomList extends React.PureComponent<IProps, IState> {
     private dispatcherRef?: string;
     private treeRef = createRef<HTMLDivElement>();
-    private favouriteMessageWatcher: string;
+    private favouriteMessageWatcher?: string;
 
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
@@ -476,7 +476,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     public componentWillUnmount(): void {
         SpaceStore.instance.off(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
-        SettingsStore.unwatchSetting(this.favouriteMessageWatcher);
+        if (this.favouriteMessageWatcher) SettingsStore.unwatchSetting(this.favouriteMessageWatcher);
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
         SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
     }

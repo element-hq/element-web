@@ -32,7 +32,7 @@ export default class TypingStore {
             userTimer: Timer;
             serverTimer: Timer;
         };
-    };
+    } = {};
 
     public constructor(private readonly context: SdkContextClass) {
         this.reset();
@@ -68,7 +68,7 @@ export default class TypingStore {
         if (threadId) return;
 
         let currentTyping = this.typingStates[roomId];
-        if ((!isTyping && !currentTyping) || (currentTyping && currentTyping.isTyping === isTyping)) {
+        if ((!isTyping && !currentTyping) || currentTyping?.isTyping === isTyping) {
             // No change in state, so don't do anything. We'll let the timer run its course.
             return;
         }

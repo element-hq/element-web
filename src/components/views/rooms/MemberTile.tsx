@@ -46,8 +46,8 @@ interface IState {
 }
 
 export default class MemberTile extends React.Component<IProps, IState> {
-    private userLastModifiedTime: number;
-    private memberLastModifiedTime: number;
+    private userLastModifiedTime?: number;
+    private memberLastModifiedTime?: number;
 
     public static defaultProps = {
         showPresence: true,

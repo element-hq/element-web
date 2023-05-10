@@ -33,9 +33,9 @@ export interface IUpload {
  * This class can be used to record a single voice message.
  */
 export class VoiceMessageRecording implements IDestroyable {
-    private lastUpload: IUpload;
+    private lastUpload?: IUpload;
     private buffer = new Uint8Array(0); // use this.audioBuffer to access
-    private playback: Playback;
+    private playback?: Playback;
 
     public constructor(private matrixClient: MatrixClient, private voiceRecording: VoiceRecording) {
         this.voiceRecording.onDataAvailable = this.onDataAvailable;

@@ -215,8 +215,10 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         if (!myMember) {
             return {};
         }
-        const kickerMember = this.props.room?.currentState.getMember(myMember.events.member.getSender());
-        const memberName = kickerMember?.name ?? myMember.events.member?.getSender();
+
+        const kickerUserId = myMember.events.member?.getSender();
+        const kickerMember = kickerUserId ? this.props.room?.currentState.getMember(kickerUserId) : undefined;
+        const memberName = kickerMember?.name ?? kickerUserId;
         const reason = myMember.events.member?.getContent().reason;
         return { memberName, reason };
     }
@@ -559,7 +561,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                         "%(errcode)s was returned while trying to access the room or space. " +
                             "If you think you're seeing this message in error, please " +
                             "<issueLink>submit a bug report</issueLink>.",
-                        { errcode: this.props.error.errcode },
+                        { errcode: String(this.props.error?.errcode) },
                         {
                             issueLink: (label) => (
                                 <a

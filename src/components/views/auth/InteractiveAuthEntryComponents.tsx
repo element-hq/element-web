@@ -556,8 +556,8 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
     public static LOGIN_TYPE = AuthType.Msisdn;
 
     private submitUrl?: string;
-    private sid: string;
-    private msisdn: string;
+    private sid?: string;
+    private msisdn?: string;
 
     public constructor(props: IMsisdnAuthEntryProps) {
         super(props);
@@ -615,8 +615,8 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
         });
 
         try {
-            let result;
-            if (this.submitUrl) {
+            let result: { success: boolean };
+            if (this.submitUrl && this.sid) {
                 result = await this.props.matrixClient.submitMsisdnTokenOtherUrl(
                     this.submitUrl,
                     this.sid,

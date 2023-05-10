@@ -243,7 +243,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             return;
         }
 
-        const secondsLeft = TARGET_MAX_LENGTH - this.recorderSeconds;
+        const secondsLeft = TARGET_MAX_LENGTH - this.recorderSeconds!;
         if (secondsLeft < 0) {
             // go over to make sure we definitely capture that last frame
             // noinspection JSIgnoredPromiseFromCall - we aren't concerned with it overlapping
@@ -259,7 +259,8 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     /**
      * {@link https://github.com/chris-rudmin/opus-recorder#instance-fields ref for recorderSeconds}
      */
-    public get recorderSeconds(): number {
+    public get recorderSeconds(): number | undefined {
+        if (!this.recorder) return undefined;
         return this.recorder.encodedSamplePosition / 48000;
     }
 

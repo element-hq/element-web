@@ -39,7 +39,7 @@ export default class DMRoomMap {
     private roomToUser: { [key: string]: string } | null = null;
     private userToRooms: { [key: string]: string[] } | null = null;
     private hasSentOutPatchDirectAccountDataPatch: boolean;
-    private mDirectEvent: { [key: string]: string[] };
+    private mDirectEvent!: { [key: string]: string[] };
 
     public constructor(private readonly matrixClient: MatrixClient) {
         // see onAccountData

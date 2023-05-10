@@ -62,7 +62,7 @@ interface IState {
 }
 
 class RoomSettingsDialog extends React.Component<IProps, IState> {
-    private dispatcherRef: string;
+    private dispatcherRef?: string;
 
     public constructor(props: IProps) {
         super(props);

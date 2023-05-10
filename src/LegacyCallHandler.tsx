@@ -652,9 +652,9 @@ export default class LegacyCallHandler extends EventEmitter {
     }
 
     private onCallStateChanged = (newState: CallState, oldState: CallState | null, call: MatrixCall): void => {
-        if (!this.matchesCallForThisRoom(call)) return;
-
         const mappedRoomId = this.roomIdForCall(call);
+        if (!mappedRoomId || !this.matchesCallForThisRoom(call)) return;
+
         this.setCallState(call, newState);
         dis.dispatch({
             action: "call_state",

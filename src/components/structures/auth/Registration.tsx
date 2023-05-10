@@ -125,7 +125,7 @@ interface IState {
 export default class Registration extends React.Component<IProps, IState> {
     private readonly loginLogic: Login;
     // `replaceClient` tracks latest serverConfig to spot when it changes under the async method which fetches flows
-    private latestServerConfig: ValidatedServerConfig;
+    private latestServerConfig?: ValidatedServerConfig;
 
     public constructor(props: IProps) {
         super(props);

@@ -121,11 +121,11 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private contextMenuButton = createRef<any>();
-    private iframe: HTMLIFrameElement; // ref to the iframe (callback style)
-    private allowedWidgetsWatchRef: string;
+    private iframe?: HTMLIFrameElement; // ref to the iframe (callback style)
+    private allowedWidgetsWatchRef?: string;
     private persistKey: string;
     private sgWidget: StopGapWidget | null;
-    private dispatcherRef: string;
+    private dispatcherRef?: string;
     private unmounted: boolean;
 
     public constructor(props: IProps) {
@@ -305,7 +305,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.context.off(RoomEvent.MyMembership, this.onMyMembership);
         }
 
-        SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
+        if (this.allowedWidgetsWatchRef) SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
     }
 
@@ -344,7 +344,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private startMessaging(): void {
         try {
-            this.sgWidget?.startMessaging(this.iframe);
+            this.sgWidget?.startMessaging(this.iframe!);
         } catch (e) {
             logger.error("Failed to start widget", e);
         }

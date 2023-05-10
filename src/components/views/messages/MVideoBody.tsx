@@ -45,7 +45,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
     public context!: React.ContextType<typeof RoomContext>;
 
     private videoRef = React.createRef<HTMLVideoElement>();
-    private sizeWatcher: string;
+    private sizeWatcher?: string;
 
     public constructor(props: IBodyProps) {
         super(props);
@@ -187,7 +187,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
     }
 
     public componentWillUnmount(): void {
-        SettingsStore.unwatchSetting(this.sizeWatcher);
+        if (this.sizeWatcher) SettingsStore.unwatchSetting(this.sizeWatcher);
     }
 
     private videoOnPlay = async (): Promise<void> => {

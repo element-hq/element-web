@@ -23,7 +23,7 @@ import AppTile from "../elements/AppTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
-import WidgetUtils, { IWidgetEvent } from "../../../utils/WidgetUtils";
+import WidgetUtils, { UserWidget } from "../../../utils/WidgetUtils";
 import PersistedElement from "../elements/PersistedElement";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
@@ -53,7 +53,7 @@ interface IProps {
 
 interface IState {
     imError: string | null;
-    stickerpickerWidget: IWidgetEvent | null;
+    stickerpickerWidget: UserWidget | null;
     widgetId: string | null;
 }
 
@@ -62,7 +62,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         threadId: null,
     };
 
-    public static currentWidget?: IWidgetEvent;
+    public static currentWidget?: UserWidget;
 
     private dispatcherRef?: string;
 
@@ -252,14 +252,14 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         // Render content from multiple stickerpack sources, each within their
         // own iframe, within the stickerpicker UI element.
         const stickerpickerWidget = this.state.stickerpickerWidget;
-        let stickersContent;
+        let stickersContent: JSX.Element | undefined;
 
         // Use a separate ReactDOM tree to render the AppTile separately so that it persists and does
         // not unmount when we (a) close the sticker picker (b) switch rooms. It's properties are still
         // updated.
 
         // Load stickerpack content
-        if (stickerpickerWidget && stickerpickerWidget.content && stickerpickerWidget.content.url) {
+        if (!!stickerpickerWidget?.content?.url) {
             // Set default name
             stickerpickerWidget.content.name = stickerpickerWidget.content.name || _t("Stickerpack");
 

@@ -43,7 +43,7 @@ interface IState {
 }
 
 export default class IntegrationManager extends React.Component<IProps, IState> {
-    private dispatcherRef: string;
+    private dispatcherRef?: string;
 
     public static defaultProps: Partial<IProps> = {
         connected: true,
@@ -60,7 +60,7 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
     }
 
     public componentWillUnmount(): void {
-        dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
         document.removeEventListener("keydown", this.onKeyDown);
     }
 

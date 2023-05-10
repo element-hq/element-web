@@ -60,7 +60,7 @@ export class PlaybackClock implements IDestroyable {
     private stopped = true;
     private lastCheck = 0;
     private observable = new SimpleObservable<number[]>();
-    private timerId: number;
+    private timerId?: number;
     private clipDuration = 0;
     private placeholderDuration = 0;
 

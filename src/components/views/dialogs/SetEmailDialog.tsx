@@ -45,7 +45,7 @@ interface IState {
  * On success, `onFinished(true)` is called.
  */
 export default class SetEmailDialog extends React.Component<IProps, IState> {
-    private addThreepid: AddThreepid;
+    private addThreepid?: AddThreepid;
 
     public constructor(props: IProps) {
         super(props);
@@ -109,7 +109,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
     };
 
     private verifyEmailAddress(): void {
-        this.addThreepid.checkEmailLinkClicked().then(
+        this.addThreepid?.checkEmailLinkClicked().then(
             () => {
                 this.props.onFinished(true);
             },

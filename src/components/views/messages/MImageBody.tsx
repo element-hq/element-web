@@ -69,7 +69,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private unmounted = true;
     private image = createRef<HTMLImageElement>();
     private timeout?: number;
-    private sizeWatcher: string;
+    private sizeWatcher?: string;
     private reconnectedListener: ClientEventHandlerMap[ClientEvent.Sync];
 
     public constructor(props: IBodyProps) {
@@ -367,7 +367,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         this.unmounted = true;
         MatrixClientPeg.get().off(ClientEvent.Sync, this.reconnectedListener);
         this.clearBlurhashTimeout();
-        SettingsStore.unwatchSetting(this.sizeWatcher);
+        if (this.sizeWatcher) SettingsStore.unwatchSetting(this.sizeWatcher);
         if (this.state.isAnimated && this.state.thumbUrl) {
             URL.revokeObjectURL(this.state.thumbUrl);
         }

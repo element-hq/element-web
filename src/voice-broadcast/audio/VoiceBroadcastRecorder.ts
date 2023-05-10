@@ -126,7 +126,7 @@ export class VoiceBroadcastRecorder
             return;
         }
 
-        this.setCurrentChunkLength(this.voiceRecording.recorderSeconds - this.previousChunkEndTimePosition);
+        this.setCurrentChunkLength(this.voiceRecording.recorderSeconds! - this.previousChunkEndTimePosition);
         this.handleData(dataArray);
     };
 
@@ -154,7 +154,7 @@ export class VoiceBroadcastRecorder
             return null;
         }
 
-        const currentRecorderTime = this.voiceRecording.recorderSeconds;
+        const currentRecorderTime = this.voiceRecording.recorderSeconds!;
         const payload: ChunkRecordedPayload = {
             buffer: concat(this.opusHead!, this.opusTags!, this.chunkBuffer),
             length: this.getCurrentChunkLength(),

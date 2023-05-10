@@ -35,7 +35,7 @@ interface IState {
 }
 
 export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
-    private targetVersion: string;
+    private targetVersion?: string;
 
     public state = {
         busy: true,
@@ -53,7 +53,7 @@ export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
 
     private onUpgradeClick = (): void => {
         this.setState({ busy: true });
-        upgradeRoom(this.props.room, this.targetVersion, false, false)
+        upgradeRoom(this.props.room, this.targetVersion!, false, false)
             .then(() => {
                 this.props.onFinished(true);
             })
@@ -69,7 +69,7 @@ export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        let buttons;
+        let buttons: JSX.Element;
         if (this.state.busy) {
             buttons = <Spinner />;
         } else {

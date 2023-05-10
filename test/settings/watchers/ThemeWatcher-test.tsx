@@ -21,8 +21,8 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 function makeMatchMedia(values: any) {
     class FakeMediaQueryList {
         matches: false;
-        media: null;
-        onchange: null;
+        media?: null;
+        onchange?: null;
         addListener() {}
         removeListener() {}
         addEventListener() {}

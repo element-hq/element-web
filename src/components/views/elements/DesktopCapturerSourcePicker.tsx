@@ -88,7 +88,7 @@ export interface PickerIProps {
 type TabId = "screen" | "window";
 
 export default class DesktopCapturerSourcePicker extends React.Component<PickerIProps, PickerIState> {
-    public interval: number;
+    public interval?: number;
 
     public constructor(props: PickerIProps) {
         super(props);

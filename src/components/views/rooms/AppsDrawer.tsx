@@ -57,9 +57,9 @@ interface IState {
 
 export default class AppsDrawer extends React.Component<IProps, IState> {
     private unmounted = false;
-    private resizeContainer: HTMLDivElement;
+    private resizeContainer?: HTMLDivElement;
     private resizer: Resizer;
-    private dispatcherRef: string;
+    private dispatcherRef?: string;
     public static defaultProps: Partial<IProps> = {
         showApps: true,
     };
@@ -113,11 +113,11 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         };
         const collapseConfig = {
             onResizeStart: () => {
-                this.resizeContainer.classList.add("mx_AppsDrawer_resizing");
+                this.resizeContainer?.classList.add("mx_AppsDrawer_resizing");
                 this.setState({ resizingHorizontal: true });
             },
             onResizeStop: () => {
-                this.resizeContainer.classList.remove("mx_AppsDrawer_resizing");
+                this.resizeContainer?.classList.remove("mx_AppsDrawer_resizing");
                 WidgetLayoutStore.instance.setResizerDistributions(
                     this.props.room,
                     Container.Top,

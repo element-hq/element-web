@@ -69,9 +69,9 @@ interface IState {
 }
 
 export default class ChangePassword extends React.Component<IProps, IState> {
-    private [FIELD_OLD_PASSWORD]: Field | null;
-    private [FIELD_NEW_PASSWORD]: Field | null;
-    private [FIELD_NEW_PASSWORD_CONFIRM]: Field | null;
+    private [FIELD_OLD_PASSWORD]: Field | null = null;
+    private [FIELD_NEW_PASSWORD]: Field | null = null;
+    private [FIELD_NEW_PASSWORD_CONFIRM]: Field | null = null;
 
     public static defaultProps: Partial<IProps> = {
         onFinished() {},

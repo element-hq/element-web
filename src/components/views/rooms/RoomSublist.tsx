@@ -110,7 +110,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private headerButton = createRef<HTMLDivElement>();
     private sublistRef = createRef<HTMLDivElement>();
     private tilesRef = createRef<HTMLDivElement>();
-    private dispatcherRef: string;
+    private dispatcherRef?: string;
     private layout: ListLayout;
     private heightAtStart: number;
     private notificationState: ListNotificationState;
@@ -257,7 +257,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        defaultDispatcher.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onListsUpdated);
         RoomListStore.instance.off(LISTS_LOADING_EVENT, this.onListsLoading);
         this.tilesRef.current?.removeEventListener("scroll", this.onScrollPrevent);

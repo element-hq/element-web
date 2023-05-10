@@ -75,8 +75,8 @@ interface IProps {
 export default class PersistedElement extends React.Component<IProps> {
     private resizeObserver: ResizeObserver;
     private dispatcherRef: string;
-    private childContainer: HTMLDivElement;
-    private child: HTMLDivElement;
+    private childContainer?: HTMLDivElement;
+    private child?: HTMLDivElement;
 
     public constructor(props: IProps) {
         super(props);
@@ -172,12 +172,12 @@ export default class PersistedElement extends React.Component<IProps> {
         ReactDOM.render(content, getOrCreateContainer("mx_persistedElement_" + this.props.persistKey));
     }
 
-    private updateChildVisibility(child: HTMLDivElement, visible: boolean): void {
+    private updateChildVisibility(child?: HTMLDivElement, visible = false): void {
         if (!child) return;
         child.style.display = visible ? "block" : "none";
     }
 
-    private updateChildPosition(child: HTMLDivElement, parent: HTMLDivElement): void {
+    private updateChildPosition(child?: HTMLDivElement, parent?: HTMLDivElement): void {
         if (!child || !parent) return;
 
         const parentRect = parent.getBoundingClientRect();

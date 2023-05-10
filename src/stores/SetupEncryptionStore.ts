@@ -44,7 +44,7 @@ export enum Phase {
 }
 
 export class SetupEncryptionStore extends EventEmitter {
-    private started: boolean;
+    private started?: boolean;
     public phase: Phase;
     public verificationRequest: VerificationRequest | null = null;
     public backupInfo: IKeyBackupInfo | null = null;
@@ -52,7 +52,7 @@ export class SetupEncryptionStore extends EventEmitter {
     public keyId: string | null = null;
     // Descriptor of the key that the secrets we want are encrypted with
     public keyInfo: ISecretStorageKeyInfo | null = null;
-    public hasDevicesToVerifyAgainst: boolean;
+    public hasDevicesToVerifyAgainst?: boolean;
 
     public static sharedInstance(): SetupEncryptionStore {
         if (!window.mxSetupEncryptionStore) window.mxSetupEncryptionStore = new SetupEncryptionStore();
