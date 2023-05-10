@@ -53,7 +53,7 @@ jobs:
                   labels: ${{ steps.meta.outputs.labels }}
 
             - name: Update repo description
-              uses: peter-evans/dockerhub-description@202973a37c8a723405c0c5f0a71b6d99db470dae # v3
+              uses: peter-evans/dockerhub-description@579f64ca0abced29dbbc44ab4c6a0b9e33ab3588 # v3
               continue-on-error: true
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
