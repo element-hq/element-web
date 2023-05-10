@@ -1,11 +1,5 @@
-Changes in [3.72.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.72.0-rc.2) (2023-05-05)
-===============================================================================================================
-
-## 🐛 Bug Fixes
- * Fix: reveal images when image previews are disabled ([\#10781](https://github.com/matrix-org/matrix-react-sdk/pull/10781)). Fixes vector-im/element-web#25271. Contributed by @kerryarchibald.
-
-Changes in [3.72.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.72.0-rc.1) (2023-05-02)
-===============================================================================================================
+Changes in [3.72.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.72.0) (2023-05-10)
+=====================================================================================================
 
 ## ✨ Features
  * Add UIFeature.locationSharing to hide location sharing ([\#10727](https://github.com/matrix-org/matrix-react-sdk/pull/10727)).
@@ -23,6 +17,7 @@ Changes in [3.72.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Translate credits in help about section ([\#10676](https://github.com/matrix-org/matrix-react-sdk/pull/10676)).
 
 ## 🐛 Bug Fixes
+ * Fix: reveal images when image previews are disabled ([\#10781](https://github.com/matrix-org/matrix-react-sdk/pull/10781)). Fixes vector-im/element-web#25271. Contributed by @kerryarchibald.
  * Fix autocomplete not resetting properly on message send ([\#10741](https://github.com/matrix-org/matrix-react-sdk/pull/10741)). Fixes vector-im/element-web#25170.
  * Fix start_sso not working with guests disabled ([\#10720](https://github.com/matrix-org/matrix-react-sdk/pull/10720)). Fixes vector-im/element-web#16624.
  * Fix soft crash with Element call widgets ([\#10684](https://github.com/matrix-org/matrix-react-sdk/pull/10684)).
