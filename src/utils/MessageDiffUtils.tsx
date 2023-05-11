@@ -104,8 +104,10 @@ function diffTreeToDOM(desc: Text | HTMLElement): Node {
         for (const [key, value] of Object.entries(desc.attributes)) {
             node.setAttribute(key, value.value);
         }
-        for (const childDesc of desc.childNodes) {
-            node.appendChild(diffTreeToDOM(childDesc as Text | HTMLElement));
+        if (desc.childNodes) {
+            for (const childDesc of desc.childNodes) {
+                node.appendChild(diffTreeToDOM(childDesc as Text | HTMLElement));
+            }
         }
         return node;
     }

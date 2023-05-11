@@ -49,6 +49,7 @@ describe("editBodyDiffToHtml", () => {
         ["attribute modifications", `<a href="#hi">hi</a>`, `<a href="#bye">hi</a>`],
         ["attribute deletions", `<a href="#hi">hi</a>`, `<a>hi</a>`],
         ["attribute additions", `<a>hi</a>`, `<a href="#/room/!123">hi</a>`],
+        ["handles empty tags", `<a>hi</a>`, `<a><h1></h1></a> hi`],
     ])("renders %s", (_label, before, after) => {
         const { container } = renderDiff(before, after);
         expect(container).toMatchSnapshot();
