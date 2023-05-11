@@ -135,10 +135,6 @@ jobs:
                   persist-credentials: false
                   path: matrix-react-sdk
 
-            # This is necessary as Cypress relies on eval for passing functions between processes
-            - name: Allow CSP script-src unsafe-eval
-              run: sed -i "s/script-src /script-src 'unsafe-eval' /" webapp/index.html
-
             - name: Run Cypress tests
               uses: cypress-io/github-action@59c3b9b4a1a6e623c29806797d849845443487d1
               with:
