@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import encrypt from "matrix-encrypt-attachment";
 import { mocked } from "jest-mock";
@@ -170,5 +170,40 @@ describe("<MImageBody/>", () => {
             // spinner while downloading image
             expect(screen.getByRole("progressbar")).toBeInTheDocument();
         });
+    });
+
+    it("should fall back to /download/ if /thumbnail/ fails", async () => {
+        const thumbUrl = "https://server/_matrix/media/r0/thumbnail/server/image?width=800&height=600&method=scale";
+        const downloadUrl = "https://server/_matrix/media/r0/download/server/image";
+        // eslint-disable-next-line no-restricted-properties
+        cli.mxcUrlToHttp.mockImplementation(
+            (mxcUrl: string, width?: number, height?: number, resizeMethod?: string, allowDirectLinks?: boolean) => {
+                return getHttpUriForMxc("https://server", mxcUrl, width, height, resizeMethod, allowDirectLinks);
+            },
+        );
+
+        const event = new MatrixEvent({
+            room_id: "!room:server",
+            sender: userId,
+            type: EventType.RoomMessage,
+            content: {
+                body: "alt for a test image",
+                info: {
+                    w: 40,
+                    h: 50,
+                },
+                url: "mxc://server/image",
+            },
+        });
+
+        const { container } = render(
+            <MImageBody {...props} mxEvent={event} mediaEventHelper={new MediaEventHelper(event)} />,
+        );
+
+        const img = container.querySelector(".mx_MImageBody_thumbnail")!;
+        expect(img).toHaveProperty("src", thumbUrl);
+
+        fireEvent.error(img);
+        expect(img).toHaveProperty("src", downloadUrl);
     });
 });
