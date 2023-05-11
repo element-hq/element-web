@@ -255,7 +255,6 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         const classes = classNames({
             mx_AppsDrawer: true,
             mx_AppsDrawer_maximise: widgetIsMaxmised,
-            mx_AppsDrawer_fullWidth: apps.length < 2,
             mx_AppsDrawer_resizing: this.state.resizing,
             mx_AppsDrawer_2apps: apps.length === 2,
             mx_AppsDrawer_3apps: apps.length === 3,
