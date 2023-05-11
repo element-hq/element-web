@@ -83,12 +83,45 @@ describe("Registration", () => {
 
         cy.url().should("contain", "/#/home");
 
+        /*
+         * Cross-signing checks
+         */
+
+        // check that the device considers itself verified
         cy.findByRole("button", { name: "User menu" }).click();
         cy.findByRole("menuitem", { name: "Security & Privacy" }).click();
         cy.get(".mx_DevicesPanel_myDevice .mx_DevicesPanel_deviceTrust .mx_E2EIcon").should(
             "have.class",
             "mx_E2EIcon_verified",
         );
+
+        // check that cross-signing keys have been uploaded.
+        const myUserId = "@alice:localhost";
+        let myDeviceId: string;
+        cy.window({ log: false })
+            .then((win) => {
+                const cli = win.mxMatrixClientPeg.get();
+                const accessToken = cli.getAccessToken()!;
+                myDeviceId = cli.getDeviceId();
+                return cy.request({
+                    method: "POST",
+                    url: `${homeserver.baseUrl}/_matrix/client/v3/keys/query`,
+                    headers: { Authorization: `Bearer ${accessToken}` },
+                    body: { device_keys: { [myUserId]: [] } },
+                });
+            })
+            .then((res) => {
+                // there should be three cross-signing keys
+                expect(res.body.master_keys[myUserId]).to.have.property("keys");
+                expect(res.body.self_signing_keys[myUserId]).to.have.property("keys");
+                expect(res.body.user_signing_keys[myUserId]).to.have.property("keys");
+
+                // and the device should be signed by the self-signing key
+                const selfSigningKeyId = Object.keys(res.body.self_signing_keys[myUserId].keys)[0];
+                expect(res.body.device_keys[myUserId][myDeviceId]).to.exist;
+                const myDeviceSignatures = res.body.device_keys[myUserId][myDeviceId].signatures[myUserId];
+                expect(myDeviceSignatures[selfSigningKeyId]).to.exist;
+            });
     });
 
     it("should require username to fulfil requirements and be available", () => {
