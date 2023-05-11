@@ -73,10 +73,12 @@ describe("RightPanel", () => {
             cy.openRoomSettings();
 
             // Set a local room address
-            cy.findByTestId("local-address-fieldset").within(() => {
-                cy.get(".mx_AliasSettings_localAddresses").click();
-                cy.findByLabelText("Room address").type(ROOM_ADDRESS_LONG);
+            cy.contains(".mx_SettingsFieldset", "Local Addresses").within(() => {
+                cy.findByRole("textbox").type(ROOM_ADDRESS_LONG);
                 cy.findByRole("button", { name: "Add" }).click();
+                cy.findByText(`#${ROOM_ADDRESS_LONG}:localhost`)
+                    .should("have.class", "mx_EditableItem_item")
+                    .should("exist");
             });
 
             cy.closeDialog();
