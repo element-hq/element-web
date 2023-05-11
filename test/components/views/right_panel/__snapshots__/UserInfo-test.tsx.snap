@@ -112,6 +112,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
                 aria-hidden="true"
                 class="mx_BaseAvatar_image"
                 data-testid="avatar-img"
+                loading="lazy"
                 src="data:image/png;base64,00"
                 style="width: 460.79999999999995px; height: 460.79999999999995px;"
               />

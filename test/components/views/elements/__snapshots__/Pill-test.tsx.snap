@@ -50,6 +50,7 @@ exports[`<Pill> should render the expected pill for @room 1`] = `
             aria-hidden="true"
             class="mx_BaseAvatar_image"
             data-testid="avatar-img"
+            loading="lazy"
             src="data:image/png;base64,00"
             style="width: 16px; height: 16px;"
           />
@@ -91,6 +92,7 @@ exports[`<Pill> should render the expected pill for a known user not in the room
             aria-hidden="true"
             class="mx_BaseAvatar_image"
             data-testid="avatar-img"
+            loading="lazy"
             src="data:image/png;base64,00"
             style="width: 16px; height: 16px;"
           />
@@ -132,6 +134,7 @@ exports[`<Pill> should render the expected pill for a message in another room 1`
             aria-hidden="true"
             class="mx_BaseAvatar_image"
             data-testid="avatar-img"
+            loading="lazy"
             src="data:image/png;base64,00"
             style="width: 16px; height: 16px;"
           />
@@ -173,6 +176,7 @@ exports[`<Pill> should render the expected pill for a message in the same room 1
             aria-hidden="true"
             class="mx_BaseAvatar_image"
             data-testid="avatar-img"
+            loading="lazy"
             src="data:image/png;base64,00"
             style="width: 16px; height: 16px;"
           />
@@ -214,6 +218,7 @@ exports[`<Pill> should render the expected pill for a room alias 1`] = `
             aria-hidden="true"
             class="mx_BaseAvatar_image"
             data-testid="avatar-img"
+            loading="lazy"
             src="data:image/png;base64,00"
             style="width: 16px; height: 16px;"
           />
@@ -255,6 +260,7 @@ exports[`<Pill> should render the expected pill for a space 1`] = `
             aria-hidden="true"
             class="mx_BaseAvatar_image"
             data-testid="avatar-img"
+            loading="lazy"
             src="data:image/png;base64,00"
             style="width: 16px; height: 16px;"
           />
@@ -319,6 +325,7 @@ exports[`<Pill> when rendering a pill for a room should render the expected pill
             aria-hidden="true"
             class="mx_BaseAvatar_image"
             data-testid="avatar-img"
+            loading="lazy"
             src="data:image/png;base64,00"
             style="width: 16px; height: 16px;"
           />
@@ -360,6 +367,7 @@ exports[`<Pill> when rendering a pill for a user in the room should render as ex
             aria-hidden="true"
             class="mx_BaseAvatar_image"
             data-testid="avatar-img"
+            loading="lazy"
             src="data:image/png;base64,00"
             style="width: 16px; height: 16px;"
           />

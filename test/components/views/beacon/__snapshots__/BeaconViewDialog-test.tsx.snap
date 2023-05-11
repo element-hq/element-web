@@ -47,6 +47,7 @@ exports[`<BeaconViewDialog /> renders own beacon status when user is live sharin
       aria-hidden="true"
       class="mx_BaseAvatar_image"
       data-testid="avatar-img"
+      loading="lazy"
       src="data:image/png;base64,00"
       style="width: 32px; height: 32px;"
       title="@alice:server"

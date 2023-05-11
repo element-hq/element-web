@@ -35,6 +35,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             aria-hidden="true"
             class="mx_BaseAvatar_image"
             data-testid="avatar-img"
+            loading="lazy"
             src="data:image/png;base64,00"
             style="width: 54px; height: 54px;"
           />

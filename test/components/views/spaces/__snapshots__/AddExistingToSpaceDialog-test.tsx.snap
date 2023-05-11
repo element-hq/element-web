@@ -28,6 +28,7 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
             alt=""
             class="mx_BaseAvatar mx_BaseAvatar_image mx_RoomAvatar_isSpaceRoom"
             data-testid="avatar-img"
+            loading="lazy"
             src="http://this.is.a.url/avatar.url/room.png"
             style="width: 40px; height: 40px;"
           />

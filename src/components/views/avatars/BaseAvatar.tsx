@@ -135,6 +135,7 @@ const BaseAvatar: React.FC<IProps> = (props) => {
         );
         const imgNode = (
             <img
+                loading="lazy"
                 className="mx_BaseAvatar_image"
                 src={AvatarLogic.defaultAvatarUrlForString(idName || name)}
                 alt=""
@@ -201,6 +202,7 @@ const BaseAvatar: React.FC<IProps> = (props) => {
     } else {
         return (
             <img
+                loading="lazy"
                 className={classNames("mx_BaseAvatar mx_BaseAvatar_image", className)}
                 src={imageUrl}
                 onError={onError}

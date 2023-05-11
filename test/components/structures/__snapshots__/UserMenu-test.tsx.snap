@@ -33,6 +33,7 @@ exports[`<UserMenu> when rendered should render as expected 1`] = `
             aria-hidden="true"
             class="mx_BaseAvatar_image"
             data-testid="avatar-img"
+            loading="lazy"
             src="data:image/png;base64,00"
             style="width: 32px; height: 32px;"
           />

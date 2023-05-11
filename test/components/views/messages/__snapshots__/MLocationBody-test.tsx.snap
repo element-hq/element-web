@@ -96,6 +96,7 @@ exports[`MLocationBody <MLocationBody> without error renders marker correctly fo
                   aria-hidden="true"
                   class="mx_BaseAvatar_image"
                   data-testid="avatar-img"
+                  loading="lazy"
                   src="data:image/png;base64,00"
                   style="width: 36px; height: 36px;"
                   title="@user:server"

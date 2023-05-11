@@ -59,6 +59,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
           aria-hidden="true"
           class="mx_BaseAvatar mx_BaseAvatar_image"
           data-testid="avatar-img"
+          loading="lazy"
           src="mxc://avatar.url/image.png"
           style="width: 16px; height: 16px;"
         />
@@ -95,6 +96,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
               aria-hidden="true"
               class="mx_BaseAvatar mx_BaseAvatar_image"
               data-testid="avatar-img"
+              loading="lazy"
               src="mxc://avatar.url/room.png"
               style="width: 16px; height: 16px;"
             />
@@ -133,6 +135,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
               aria-hidden="true"
               class="mx_BaseAvatar mx_BaseAvatar_image"
               data-testid="avatar-img"
+              loading="lazy"
               src="mxc://avatar.url/room.png"
               style="width: 16px; height: 16px;"
             />
@@ -230,6 +233,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
           aria-hidden="true"
           class="mx_BaseAvatar mx_BaseAvatar_image"
           data-testid="avatar-img"
+          loading="lazy"
           src="mxc://avatar.url/image.png"
           style="width: 16px; height: 16px;"
         />
@@ -253,6 +257,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
       href="https://matrix.to/#/!room1:example.com/%event_id%"
       aria-describedby="mx_Pill_0.123456"
       ><img
+        loading="lazy"
         class="mx_BaseAvatar mx_BaseAvatar_image"
         src="mxc://avatar.url/image.png"
         style="width: 16px; height: 16px"
@@ -275,6 +280,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
       href="https://matrix.to/#/!room2:example.com/%event_id%"
       aria-describedby="mx_Pill_0.123456"
       ><img
+        loading="lazy"
         class="mx_BaseAvatar mx_BaseAvatar_image"
         src="mxc://avatar.url/room.png"
         style="width: 16px; height: 16px"

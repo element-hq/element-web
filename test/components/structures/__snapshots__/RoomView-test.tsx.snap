@@ -33,6 +33,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
                 aria-hidden="true"
                 class="mx_BaseAvatar_image"
                 data-testid="avatar-img"
+                loading="lazy"
                 src="data:image/png;base64,00"
                 style="width: 24px; height: 24px;"
               />
@@ -124,6 +125,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                 aria-hidden="true"
                 class="mx_BaseAvatar_image"
                 data-testid="avatar-img"
+                loading="lazy"
                 src="data:image/png;base64,00"
                 style="width: 24px; height: 24px;"
               />
@@ -213,6 +215,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                     aria-hidden="true"
                     class="mx_BaseAvatar_image"
                     data-testid="avatar-img"
+                    loading="lazy"
                     src="data:image/png;base64,00"
                     style="width: 52px; height: 52px;"
                   />
@@ -311,6 +314,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 aria-hidden="true"
                 class="mx_BaseAvatar_image"
                 data-testid="avatar-img"
+                loading="lazy"
                 src="data:image/png;base64,00"
                 style="width: 24px; height: 24px;"
               />
@@ -400,6 +404,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                     aria-hidden="true"
                     class="mx_BaseAvatar_image"
                     data-testid="avatar-img"
+                    loading="lazy"
                     src="data:image/png;base64,00"
                     style="width: 52px; height: 52px;"
                   />
@@ -572,6 +577,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                 aria-hidden="true"
                 class="mx_BaseAvatar_image"
                 data-testid="avatar-img"
+                loading="lazy"
                 src="data:image/png;base64,00"
                 style="width: 24px; height: 24px;"
               />
@@ -660,6 +666,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                     aria-hidden="true"
                     class="mx_BaseAvatar_image"
                     data-testid="avatar-img"
+                    loading="lazy"
                     src="data:image/png;base64,00"
                     style="width: 52px; height: 52px;"
                   />

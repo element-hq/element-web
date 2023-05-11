@@ -35,6 +35,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
           alt=""
           class="mx_BaseAvatar mx_BaseAvatar_image mx_BeaconListItem_avatar"
           data-testid="avatar-img"
+          loading="lazy"
           style="width: 32px; height: 32px;"
         />
         <div
