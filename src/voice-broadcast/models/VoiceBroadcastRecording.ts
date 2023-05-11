@@ -46,6 +46,7 @@ import { ActionPayload } from "../../dispatcher/payloads";
 import { VoiceBroadcastChunkEvents } from "../utils/VoiceBroadcastChunkEvents";
 import { RelationsHelper, RelationsHelperEvent } from "../../events/RelationsHelper";
 import { createReconnectedListener } from "../../utils/connection";
+import { localNotificationsAreSilenced } from "../../utils/notifications";
 
 export enum VoiceBroadcastRecordingEvent {
     StateChanged = "liveness_changed",
@@ -333,8 +334,27 @@ export class VoiceBroadcastRecording
      * It sets the connection error state and stops the recorder.
      */
     private async onConnectionError(): Promise<void> {
+        this.playConnectionErrorAudioNotification().catch(() => {
+            // Error logged in playConnectionErrorAudioNotification().
+        });
         await this.stopRecorder(false);
         this.setState("connection_error");
+    }
+
+    private async playConnectionErrorAudioNotification(): Promise<void> {
+        if (localNotificationsAreSilenced(this.client)) {
+            return;
+        }
+
+        // Audio files are added to the document in Element Web.
+        // See <audio> elements in https://github.com/vector-im/element-web/blob/develop/src/vector/index.html
+        const audioElement = document.querySelector<HTMLAudioElement>("audio#errorAudio");
+
+        try {
+            await audioElement?.play();
+        } catch (e) {
+            logger.warn("error playing 'errorAudio'", e);
+        }
     }
 
     private async uploadFile(chunk: ChunkRecordedPayload): ReturnType<typeof uploadFile> {
