@@ -20,6 +20,7 @@ import type { ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/m
 import { HomeserverInstance } from "../plugins/utils/homeserver";
 import { Credentials } from "./homeserver";
 import Chainable = Cypress.Chainable;
+import { collapseLastLogGroup } from "./log";
 
 interface CreateBotOpts {
     /**
@@ -65,6 +66,7 @@ declare global {
              * @param opts create bot options
              */
             getBot(homeserver: HomeserverInstance, opts: CreateBotOpts): Chainable<CypressBot>;
+
             /**
              * Returns a new Bot instance logged in as an existing user
              * @param homeserver the instance on which to register the bot user
@@ -78,18 +80,21 @@ declare global {
                 password: string,
                 opts: CreateBotOpts,
             ): Chainable<MatrixClient>;
+
             /**
              * Let a bot join a room
              * @param cli The bot's MatrixClient
              * @param roomId ID of the room to join
              */
             botJoinRoom(cli: MatrixClient, roomId: string): Chainable<Room>;
+
             /**
              * Let a bot join a room by name
              * @param cli The bot's MatrixClient
              * @param roomName Name of the room to join
              */
             botJoinRoomByName(cli: MatrixClient, roomName: string): Chainable<Room>;
+
             /**
              * Send a message as a bot into a room
              * @param cli The bot's MatrixClient
@@ -173,15 +178,21 @@ Cypress.Commands.add("getBot", (homeserver: HomeserverInstance, opts: CreateBotO
     opts = Object.assign({}, defaultCreateBotOptions, opts);
     const username = Cypress._.uniqueId(opts.userIdPrefix);
     const password = Cypress._.uniqueId("password_");
+    Cypress.log({
+        name: "getBot",
+        message: `Create bot user ${username} with opts ${JSON.stringify(opts)}`,
+        groupStart: true,
+    });
     return cy
         .registerUser(homeserver, username, password, opts.displayName)
         .then((credentials) => {
-            cy.log(`Registered bot user ${username} with displayname ${opts.displayName}`);
             return setupBotClient(homeserver, credentials, opts);
         })
         .then((client): Chainable<CypressBot> => {
             Object.assign(client, { __cypress_password: password });
-            return cy.wrap(client as CypressBot);
+            Cypress.log({ groupEnd: true, emitOnly: true });
+            collapseLastLogGroup();
+            return cy.wrap(client as CypressBot, { log: false });
         });
 });
 
@@ -194,9 +205,21 @@ Cypress.Commands.add(
         opts: CreateBotOpts,
     ): Chainable<MatrixClient> => {
         opts = Object.assign({}, defaultCreateBotOptions, { bootstrapCrossSigning: false }, opts);
-        return cy.loginUser(homeserver, username, password).then((credentials) => {
-            return setupBotClient(homeserver, credentials, opts);
+        Cypress.log({
+            name: "loginBot",
+            message: `log in as ${username} with opts ${JSON.stringify(opts)}`,
+            groupStart: true,
         });
+        return cy
+            .loginUser(homeserver, username, password)
+            .then((credentials) => {
+                return setupBotClient(homeserver, credentials, opts);
+            })
+            .then((res) => {
+                Cypress.log({ groupEnd: true, emitOnly: true });
+                collapseLastLogGroup();
+                cy.wrap(res, { log: false });
+            });
     },
 );
 

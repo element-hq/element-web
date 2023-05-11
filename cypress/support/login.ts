@@ -18,6 +18,7 @@ limitations under the License.
 
 import Chainable = Cypress.Chainable;
 import { HomeserverInstance } from "../plugins/utils/homeserver";
+import { collapseLastLogGroup } from "./log";
 
 export interface UserCredentials {
     accessToken: string;
@@ -100,6 +101,7 @@ Cypress.Commands.add(
         prelaunchFn?: () => void,
         userIdPrefix = "user_",
     ): Chainable<UserCredentials> => {
+        Cypress.log({ name: "initTestUser", groupStart: true });
         // XXX: work around Cypress not clearing IDB between tests
         cy.window({ log: false }).then((win) => {
             win.indexedDB.databases()?.then((databases) => {
@@ -139,6 +141,13 @@ Cypress.Commands.add(
                     .then(() => {
                         // wait for the app to load
                         return cy.get(".mx_MatrixChat", { timeout: 30000 });
+                    })
+                    .then(() => {
+                        Cypress.log({
+                            groupEnd: true,
+                            emitOnly: true,
+                        });
+                        collapseLastLogGroup();
                     })
                     .then(() => ({
                         password,
