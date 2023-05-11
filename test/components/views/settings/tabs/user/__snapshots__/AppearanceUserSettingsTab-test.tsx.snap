@@ -7,6 +7,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
   >
     <div
       class="mx_SettingsTab_heading"
+      data-testid="appearance"
     >
       Customise your appearance
     </div>
