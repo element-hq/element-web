@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { createRef } from "react";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -23,6 +23,26 @@ import { stubClient } from "../../../test-utils";
 
 describe("EmojiPicker", function () {
     stubClient();
+
+    it("should not mangle default order after filtering", () => {
+        const ref = createRef<EmojiPicker>();
+        const { container } = render(
+            <EmojiPicker ref={ref} onChoose={(str: string) => false} onFinished={jest.fn()} />,
+        );
+
+        // Record the HTML before filtering
+        const beforeHtml = container.innerHTML;
+
+        // Apply a filter and assert that the HTML has changed
+        //@ts-ignore private access
+        ref.current!.onChangeFilter("test");
+        expect(beforeHtml).not.toEqual(container.innerHTML);
+
+        // Clear the filter and assert that the HTML matches what it was before filtering
+        //@ts-ignore private access
+        ref.current!.onChangeFilter("");
+        expect(beforeHtml).toEqual(container.innerHTML);
+    });
 
     it("sort emojis by shortcode and size", function () {
         const ep = new EmojiPicker({ onChoose: (str: string) => false, onFinished: jest.fn() });
