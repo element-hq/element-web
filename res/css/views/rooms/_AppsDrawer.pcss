@@ -15,11 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$MiniAppTileHeight: 220px;
-/* TODO this should be 300px but that's too large */
-$MinWidth: 240px;
-
 .mx_AppsDrawer {
+    --AppTile_mini-height: 220px;
+    --minWidth: 240px; /* TODO this should be 300px but that's too large */
+
     margin: var(--container-gap-width);
     /* The left side gap is fully handled by this margin. To prohibit bleeding on webkit browser. */
     margin-right: calc(var(--container-gap-width) / 2);
@@ -94,7 +93,7 @@ $MinWidth: 240px;
 
     .mx_AppTile {
         width: 50%;
-        min-width: $MinWidth;
+        min-width: var(--minWidth);
     }
 
     &.mx_AppsDrawer_2apps .mx_AppTile {
@@ -103,7 +102,7 @@ $MinWidth: 240px;
         &:nth-child(3) {
             flex-grow: 1;
             width: 0 !important;
-            min-width: $MinWidth !important;
+            min-width: var(--minWidth) !important;
         }
     }
     &.mx_AppsDrawer_3apps .mx_AppTile {
@@ -112,7 +111,7 @@ $MinWidth: 240px;
         &:nth-child(3) {
             flex-grow: 1;
             width: 0 !important;
-            min-width: $MinWidth !important;
+            min-width: var(--minWidth) !important;
         }
     }
 }
@@ -174,7 +173,7 @@ $MinWidth: 240px;
     padding: 0;
     display: flex;
     flex-direction: column;
-    height: $MiniAppTileHeight;
+    height: var(--AppTile_mini-height);
 }
 
 .mx_AppTile .mx_AppTile_persistedWrapper,
@@ -224,31 +223,33 @@ $MinWidth: 240px;
 }
 
 .mx_AppTileMenuBar_iconButton {
-    height: 24px;
+    --size: 24px; /* Size of the button. Its height and width values should be same */
+
     margin: 0 4px;
     position: relative;
-    width: 24px;
+    height: var(--size);
+    width: var(--size);
+
+    &::before,
+    &:hover::after {
+        content: "";
+        position: absolute;
+        height: var(--size);
+        width: var(--size);
+    }
 
     &::before {
         background-color: $muted-fg-color;
-        content: "";
-        height: 24px;
         mask-position: center;
         mask-repeat: no-repeat;
         mask-size: 12px;
-        position: absolute;
-        width: 24px;
     }
 
     &:hover::after {
         background-color: $panel-actions;
         border-radius: 50%;
-        content: "";
-        height: 24px;
         left: 0;
-        position: absolute;
         top: 0;
-        width: 24px;
     }
 
     &.mx_AppTileMenuBar_iconButton--collapse::before {
@@ -272,19 +273,35 @@ $MinWidth: 240px;
     }
 }
 
-.mx_AppTileBody {
-    height: 100%;
+.mx_AppTileBody,
+.mx_AppTileBody_mini {
     width: 100%;
     overflow: hidden;
     border-radius: 8px;
+    height: var(--AppTileBody-height);
+
+    iframe {
+        border: none;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.mx_AppTileBody {
+    --AppTileBody-height: 100%;
+
     background-color: $widget-body-bg-color;
+
+    iframe {
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        display: block;
+    }
 }
 
 .mx_AppTileBody_mini {
-    height: $MiniAppTileHeight;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 8px;
+    --AppTileBody-height: var(--AppTile_mini-height);
 }
 
 .mx_AppTile .mx_AppTileBody,
@@ -292,22 +309,6 @@ $MinWidth: 240px;
 .mx_AppTile_mini .mx_AppTileBody_mini {
     height: inherit;
     flex: 1;
-}
-
-.mx_AppTileBody_mini iframe {
-    border: none;
-    width: 100%;
-    height: 100%;
-}
-
-.mx_AppTileBody iframe {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border: none;
-    padding: 0;
-    margin: 0;
-    display: block;
 }
 
 .mx_AppPermissionWarning {
@@ -318,6 +319,11 @@ $MinWidth: 240px;
     justify-content: center;
     align-items: center;
     font-size: $font-16px;
+
+    h4 {
+        margin: 0;
+        padding: 0;
+    }
 }
 
 .mx_AppPermissionWarning_row {
@@ -332,30 +338,25 @@ $MinWidth: 240px;
     font-weight: var(--font-semi-bold);
 }
 
-.mx_AppPermissionWarning h4 {
-    margin: 0;
-    padding: 0;
-}
-
 .mx_AppPermissionWarning_helpIcon {
     margin-top: 1px;
     margin-right: 2px;
     width: 10px;
     height: 10px;
     display: inline-block;
-}
 
-.mx_AppPermissionWarning_helpIcon::before {
-    display: inline-block;
-    background-color: $accent;
-    mask-repeat: no-repeat;
-    mask-size: 12px;
-    width: 12px;
-    height: 12px;
-    mask-position: center;
-    content: "";
-    vertical-align: middle;
-    mask-image: url("$(res)/img/feather-customised/help-circle.svg");
+    &::before {
+        display: inline-block;
+        background-color: $accent;
+        mask-repeat: no-repeat;
+        mask-size: 12px;
+        width: 12px;
+        height: 12px;
+        mask-position: center;
+        content: "";
+        vertical-align: middle;
+        mask-image: url("$(res)/img/feather-customised/help-circle.svg");
+    }
 }
 
 .mx_AppPermissionWarning_tooltip {
