@@ -55,7 +55,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { ElementWidgetActions, IHangupCallApiRequest, IViewRoomApiRequest } from "./ElementWidgetActions";
 import { ModalWidgetStore } from "../ModalWidgetStore";
-import { IApp } from "../WidgetStore";
+import { IApp, isAppWidget } from "../WidgetStore";
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
@@ -72,7 +72,7 @@ import { SdkContextClass } from "../../contexts/SDKContext";
 
 interface IAppTileProps {
     // Note: these are only the props we care about
-    app: IApp;
+    app: IApp | IWidget;
     room?: Room; // without a room it is a user widget
     userId: string;
     creatorUserId: string;
@@ -179,7 +179,7 @@ export class StopGapWidget extends EventEmitter {
         this.mockWidget = new ElementWidget(app);
         this.roomId = appTileProps.room?.roomId;
         this.kind = appTileProps.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
-        this.virtual = app.eventId === undefined;
+        this.virtual = isAppWidget(app) && app.eventId === undefined;
     }
 
     private get eventListenerRoomId(): Optional<string> {

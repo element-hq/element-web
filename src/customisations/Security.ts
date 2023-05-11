@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
+import { ICryptoCallbacks } from "matrix-js-sdk/src/crypto";
 
 import { IMatrixClientCreds } from "../MatrixClientPeg";
 import { Kind as SetupEncryptionKind } from "../toasts/SetupEncryptionToast";
@@ -42,14 +42,6 @@ function getSecretStorageKey(): Uint8Array | null {
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-function getDehydrationKey(
-    keyInfo: ISecretStorageKeyInfo,
-    checkFunc: (key: Uint8Array) => void,
-): Promise<Uint8Array | null> {
-    return Promise.resolve(null);
-}
-
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 function catchAccessSecretStorageError(e: Error): void {
     // E.g. notify the user in some way
 }
@@ -70,7 +62,7 @@ export interface ISecurityCustomisations {
     getSecretStorageKey?: typeof getSecretStorageKey;
     catchAccessSecretStorageError?: typeof catchAccessSecretStorageError;
     setupEncryptionNeeded?: typeof setupEncryptionNeeded;
-    getDehydrationKey?: typeof getDehydrationKey;
+    getDehydrationKey?: ICryptoCallbacks["getDehydrationKey"];
 
     /**
      * When false, disables the post-login UI from showing. If there's

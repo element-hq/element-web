@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 import React, { ComponentProps, useContext } from "react";
-import { MatrixCapabilities } from "matrix-widget-api";
+import { IWidget, MatrixCapabilities } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
 import { ChevronFace } from "../../structures/ContextMenu";
 import { _t } from "../../../languageHandler";
-import { IApp } from "../../../stores/WidgetStore";
+import { isAppWidget } from "../../../stores/WidgetStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import RoomContext from "../../../contexts/RoomContext";
@@ -39,7 +39,7 @@ import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
 
 interface IProps extends Omit<ComponentProps<typeof IconizedContextMenu>, "children"> {
-    app: IApp;
+    app: IWidget;
     userWidget?: boolean;
     showUnpin?: boolean;
     // override delete handler
@@ -155,7 +155,9 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     }
 
     const isAllowedWidget =
-        (app.eventId !== undefined && (SettingsStore.getValue("allowedWidgets", roomId)[app.eventId] ?? false)) ||
+        (isAppWidget(app) &&
+            app.eventId !== undefined &&
+            (SettingsStore.getValue("allowedWidgets", roomId)[app.eventId] ?? false)) ||
         app.creatorUserId === cli.getUserId();
 
     const isLocalWidget = WidgetType.JITSI.matches(app.type);
@@ -166,9 +168,10 @@ export const WidgetContextMenu: React.FC<IProps> = ({
 
         if (!opts.approved) {
             const onRevokeClick = (): void => {
-                logger.info("Revoking permission for widget to load: " + app.eventId);
+                const eventId = isAppWidget(app) ? app.eventId : undefined;
+                logger.info("Revoking permission for widget to load: " + eventId);
                 const current = SettingsStore.getValue("allowedWidgets", roomId);
-                if (app.eventId !== undefined) current[app.eventId] = false;
+                if (eventId !== undefined) current[eventId] = false;
                 const level = SettingsStore.firstSupportedLevel("allowedWidgets");
                 if (!level) throw new Error("level must be defined");
                 SettingsStore.setValue("allowedWidgets", roomId ?? null, level, current).catch((err) => {

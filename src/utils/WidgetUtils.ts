@@ -35,7 +35,7 @@ import { WidgetType } from "../widgets/WidgetType";
 import { Jitsi } from "../widgets/Jitsi";
 import { objectClone } from "./objects";
 import { _t } from "../languageHandler";
-import { IApp } from "../stores/WidgetStore";
+import { IApp, isAppWidget } from "../stores/WidgetStore";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
@@ -545,30 +545,30 @@ export default class WidgetUtils {
         return url.href;
     }
 
-    public static getWidgetName(app?: IApp): string {
+    public static getWidgetName(app?: IWidget): string {
         return app?.name?.trim() || _t("Unknown App");
     }
 
-    public static getWidgetDataTitle(app?: IApp): string {
+    public static getWidgetDataTitle(app?: IWidget): string {
         return app?.data?.title?.trim() || "";
     }
 
-    public static getWidgetUid(app?: IApp): string {
-        return app ? WidgetUtils.calcWidgetUid(app.id, app.roomId) : "";
+    public static getWidgetUid(app?: IApp | IWidget): string {
+        return app ? WidgetUtils.calcWidgetUid(app.id, isAppWidget(app) ? app.roomId : undefined) : "";
     }
 
     public static calcWidgetUid(widgetId: string, roomId?: string): string {
         return roomId ? `room_${roomId}_${widgetId}` : `user_${widgetId}`;
     }
 
-    public static editWidget(room: Room, app: IApp): void {
+    public static editWidget(room: Room, app: IWidget): void {
         // noinspection JSIgnoredPromiseFromCall
         IntegrationManagers.sharedInstance()
             .getPrimaryManager()
             ?.open(room, "type_" + app.type, app.id);
     }
 
-    public static isManagedByManager(app: IApp): boolean {
+    public static isManagedByManager(app: IWidget): boolean {
         if (WidgetUtils.isScalarUrl(app.url)) {
             const managers = IntegrationManagers.sharedInstance();
             if (managers.hasManager()) {

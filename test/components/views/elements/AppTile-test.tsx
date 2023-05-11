@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { jest } from "@jest/globals";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { ClientWidgetApi, MatrixWidgetType } from "matrix-widget-api";
+import { ClientWidgetApi, IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { Optional } from "matrix-events-sdk";
 import { act, render, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -366,7 +366,7 @@ describe("AppTile", () => {
         describe("for a maximised (centered) widget", () => {
             beforeEach(() => {
                 jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockImplementation(
-                    (room: Optional<Room>, widget: IApp, container: Container) => {
+                    (room: Optional<Room>, widget: IWidget, container: Container) => {
                         return room === r1 && widget === app1 && container === Container.Center;
                     },
                 );

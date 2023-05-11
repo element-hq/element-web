@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
+import { IWidget } from "matrix-widget-api";
 
 import { _t, _td } from "../../../languageHandler";
 import AppTile from "../elements/AppTile";
@@ -32,7 +33,6 @@ import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingSto
 import { ActionPayload } from "../../../dispatcher/payloads";
 import ScalarAuthClient from "../../../ScalarAuthClient";
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
-import { IApp } from "../../../stores/WidgetStore";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 
@@ -264,15 +264,12 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             stickerpickerWidget.content.name = stickerpickerWidget.content.name || _t("Stickerpack");
 
             // FIXME: could this use the same code as other apps?
-            const stickerApp: IApp = {
+            const stickerApp: IWidget = {
                 id: stickerpickerWidget.id,
                 url: stickerpickerWidget.content.url,
                 name: stickerpickerWidget.content.name,
                 type: stickerpickerWidget.content.type,
                 data: stickerpickerWidget.content.data,
-                roomId: stickerpickerWidget.content.roomId,
-                eventId: stickerpickerWidget.content.eventId,
-                avatar_url: stickerpickerWidget.content.avatar_url,
                 creatorUserId: stickerpickerWidget.content.creatorUserId || stickerpickerWidget.sender,
             };
 

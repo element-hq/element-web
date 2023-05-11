@@ -38,6 +38,10 @@ export interface IApp extends IWidget {
     avatar_url?: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
 }
 
+export function isAppWidget(widget: IWidget | IApp): widget is IApp {
+    return "roomId" in widget && typeof widget.roomId === "string";
+}
+
 interface IRoomWidgets {
     widgets: IApp[];
 }

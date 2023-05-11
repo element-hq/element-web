@@ -32,7 +32,7 @@ export interface IBodyProps {
     highlightLink?: string;
 
     /* callback called when dynamic content in events are loaded */
-    onHeightChanged: () => void;
+    onHeightChanged?: () => void;
 
     showUrlPreview?: boolean;
     forExport?: boolean;
@@ -40,7 +40,7 @@ export interface IBodyProps {
     replacingEventId?: string;
     editState?: EditorStateTransfer;
     onMessageAllowed: () => void; // TODO: Docs
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
     mediaEventHelper: MediaEventHelper;
 
     /*

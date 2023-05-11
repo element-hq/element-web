@@ -62,12 +62,12 @@ export interface EventTileTypeProps {
     highlights?: string[];
     highlightLink?: string;
     showUrlPreview?: boolean;
-    onHeightChanged: () => void;
+    onHeightChanged?: () => void;
     forExport?: boolean;
     getRelationsForEvent?: GetRelationsForEvent;
     editState?: EditorStateTransfer;
     replacingEventId?: string;
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
     callEventGrouper?: LegacyCallEventGrouper;
     isSeeingThroughMessageHiddenForModeration?: boolean;
     timestamp?: JSX.Element;

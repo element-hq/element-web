@@ -154,7 +154,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
                     });
-                    this.props.onHeightChanged();
+                    this.props.onHeightChanged?.();
                 } else {
                     logger.log("NOT preloading video");
                     const content = this.props.mxEvent.getContent<IMediaEventContent>();
@@ -216,7 +216,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                 this.videoRef.current.play();
             },
         );
-        this.props.onHeightChanged();
+        this.props.onHeightChanged?.();
     };
 
     protected get showFileBody(): boolean {

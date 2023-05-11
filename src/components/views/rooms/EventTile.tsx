@@ -513,6 +513,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         evt.preventDefault();
         evt.stopPropagation();
         const { permalinkCreator, mxEvent } = this.props;
+        if (!permalinkCreator) return;
         const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId()!);
         await copyPlaintext(matrixToUrl);
     };
@@ -1439,7 +1440,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 const SafeEventTile = forwardRef((props: EventTileProps, ref: RefObject<UnwrappedEventTile>) => {
     return (
         <>
-            <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout}>
+            <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
                 <UnwrappedEventTile ref={ref} {...props} />
             </TileErrorBoundary>
         </>

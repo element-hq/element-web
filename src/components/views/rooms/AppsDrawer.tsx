@@ -19,6 +19,7 @@ import React from "react";
 import classNames from "classnames";
 import { Resizable } from "re-resizable";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { IWidget } from "matrix-widget-api";
 
 import AppTile from "../elements/AppTile";
 import dis from "../../../dispatcher/dispatcher";
@@ -32,7 +33,6 @@ import PercentageDistributor from "../../../resizer/distributors/percentage";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { clamp, percentageOf, percentageWithin } from "../../../utils/numbers";
 import UIStore from "../../../stores/UIStore";
-import { IApp } from "../../../stores/WidgetStore";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";
 
@@ -46,9 +46,9 @@ interface IProps {
 
 interface IState {
     apps: {
-        [Container.Top]: IApp[];
-        [Container.Center]: IApp[];
-        [Container.Right]?: IApp[];
+        [Container.Top]: IWidget[];
+        [Container.Center]: IWidget[];
+        [Container.Right]?: IWidget[];
     };
     resizingVertical: boolean; // true when changing the height of the apps drawer
     resizingHorizontal: boolean; // true when changing the distribution of the width between widgets
@@ -147,7 +147,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         this.loadResizerPreferences();
     };
 
-    private getAppsHash = (apps: IApp[]): string => apps.map((app) => app.id).join("~");
+    private getAppsHash = (apps: IWidget[]): string => apps.map((app) => app.id).join("~");
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         if (prevProps.userId !== this.props.userId || prevProps.room !== this.props.room) {
@@ -210,8 +210,8 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         [Container.Top]: WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Top),
         [Container.Center]: WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Center),
     });
-    private topApps = (): IApp[] => this.state.apps[Container.Top];
-    private centerApps = (): IApp[] => this.state.apps[Container.Center];
+    private topApps = (): IWidget[] => this.state.apps[Container.Top];
+    private centerApps = (): IWidget[] => this.state.apps[Container.Center];
 
     private updateApps = (): void => {
         if (this.unmounted) return;

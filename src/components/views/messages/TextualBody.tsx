@@ -173,7 +173,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
             // By expanding/collapsing we changed
             // the height, therefore we call this
-            this.props.onHeightChanged();
+            this.props.onHeightChanged?.();
         };
 
         div.appendChild(button);

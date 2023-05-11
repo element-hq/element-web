@@ -19,6 +19,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { Optional } from "matrix-events-sdk";
 import { compare, MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
+import { IWidget } from "matrix-widget-api";
 
 import SettingsStore from "../../settings/SettingsStore";
 import WidgetStore, { IApp } from "../WidgetStore";
@@ -362,11 +363,11 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         }
     }
 
-    public getContainerWidgets(room: Optional<Room>, container: Container): IApp[] {
+    public getContainerWidgets(room: Optional<Room>, container: Container): IWidget[] {
         return (room && this.byRoom.get(room.roomId)?.get(container)?.ordered) || [];
     }
 
-    public isInContainer(room: Room, widget: IApp, container: Container): boolean {
+    public isInContainer(room: Room, widget: IWidget, container: Container): boolean {
         return this.getContainerWidgets(room, container).some((w) => w.id === widget.id);
     }
 
@@ -437,7 +438,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, localLayout);
     }
 
-    public moveWithinContainer(room: Room, container: Container, widget: IApp, delta: number): void {
+    public moveWithinContainer(room: Room, container: Container, widget: IWidget, delta: number): void {
         const widgets = arrayFastClone(this.getContainerWidgets(room, container));
         const currentIdx = widgets.findIndex((w) => w.id === widget.id);
         if (currentIdx < 0) return; // no change needed
@@ -460,7 +461,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, localLayout);
     }
 
-    public moveToContainer(room: Room, widget: IApp, toContainer: Container): void {
+    public moveToContainer(room: Room, widget: IWidget, toContainer: Container): void {
         const allWidgets = this.getAllWidgets(room);
         if (!allWidgets.some(([w]) => w.id === widget.id)) return; // invalid
         // Prepare other containers (potentially move widgets to obey the following rules)
