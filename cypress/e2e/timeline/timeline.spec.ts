@@ -583,7 +583,7 @@ describe("Timeline", () => {
             cy.get(".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp").click();
 
             // Exclude timestamp and read marker from snapshot
-            const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+            //const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
 
             // should not add inline start padding to a hidden event line on IRC layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -604,9 +604,10 @@ describe("Timeline", () => {
                 // calc(var(--EventTile_group_line-spacing-inline-start) + 20px) = 64 + 20 = 84px
                 .should("have.css", "padding-inline-start", "84px");
 
-            cy.get(".mx_MainSplit").percySnapshotElement("Hidden event line with padding on modern layout", {
-                percyCSS,
-            });
+            // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
+            //cy.get(".mx_MainSplit").percySnapshotElement("Hidden event line with padding on modern layout", {
+            //    percyCSS,
+            //});
         });
 
         it("should click view source event toggle", () => {
