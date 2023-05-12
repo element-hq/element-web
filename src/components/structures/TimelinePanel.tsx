@@ -24,7 +24,7 @@ import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { SyncState } from "matrix-js-sdk/src/sync";
 import { RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
-import { debounce, throttle } from "lodash";
+import { debounce, findLastIndex, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent } from "matrix-js-sdk/src/client";
 import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
@@ -73,6 +73,12 @@ const debuglog = (...args: any[]): void => {
     }
 };
 
+const overlaysBefore = (overlayEvent: MatrixEvent, mainEvent: MatrixEvent): boolean =>
+    overlayEvent.localTimestamp < mainEvent.localTimestamp;
+
+const overlaysAfter = (overlayEvent: MatrixEvent, mainEvent: MatrixEvent): boolean =>
+    overlayEvent.localTimestamp >= mainEvent.localTimestamp;
+
 interface IProps {
     // The js-sdk EventTimelineSet object for the timeline sequence we are
     // representing.  This may or may not have a room, depending on what it's
@@ -83,7 +89,6 @@ interface IProps {
     // added to support virtual rooms
     // events from the overlay timeline set will be added by localTimestamp
     // into the main timeline
-    // back paging not yet supported
     overlayTimelineSet?: EventTimelineSet;
     // filter events from overlay timeline
     overlayTimelineSetFilter?: (event: MatrixEvent) => boolean;
@@ -506,30 +511,64 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // this particular event should be the first or last to be unpaginated.
         const eventId = scrollToken;
 
-        const marker = this.state.events.findIndex((ev) => {
-            return ev.getId() === eventId;
-        });
+        // The event in question could belong to either the main timeline or
+        // overlay timeline; let's check both
+        const mainEvents = this.timelineWindow!.getEvents();
+        const overlayEvents = this.overlayTimelineWindow?.getEvents() ?? [];
 
-        const count = backwards ? marker + 1 : this.state.events.length - marker;
+        let marker = mainEvents.findIndex((ev) => ev.getId() === eventId);
+        let overlayMarker: number;
+        if (marker === -1) {
+            // The event must be from the overlay timeline instead
+            overlayMarker = overlayEvents.findIndex((ev) => ev.getId() === eventId);
+            marker = backwards
+                ? findLastIndex(mainEvents, (ev) => overlaysAfter(overlayEvents[overlayMarker], ev))
+                : mainEvents.findIndex((ev) => overlaysBefore(overlayEvents[overlayMarker], ev));
+        } else {
+            overlayMarker = backwards
+                ? findLastIndex(overlayEvents, (ev) => overlaysBefore(ev, mainEvents[marker]))
+                : overlayEvents.findIndex((ev) => overlaysAfter(ev, mainEvents[marker]));
+        }
+
+        // The number of events to unpaginate from the main timeline
+        let count: number;
+        if (marker === -1) {
+            count = 0;
+        } else {
+            count = backwards ? marker + 1 : mainEvents.length - marker;
+        }
+
+        // The number of events to unpaginate from the overlay timeline
+        let overlayCount: number;
+        if (overlayMarker === -1) {
+            overlayCount = 0;
+        } else {
+            overlayCount = backwards ? overlayMarker + 1 : overlayEvents.length - overlayMarker;
+        }
 
         if (count > 0) {
             debuglog("Unpaginating", count, "in direction", dir);
-            this.timelineWindow?.unpaginate(count, backwards);
+            this.timelineWindow!.unpaginate(count, backwards);
+        }
 
-            const { events, liveEvents, firstVisibleEventIndex } = this.getEvents();
-            this.buildLegacyCallEventGroupers(events);
-            this.setState({
-                events,
-                liveEvents,
-                firstVisibleEventIndex,
-            });
+        if (overlayCount > 0) {
+            debuglog("Unpaginating", count, "from overlay timeline in direction", dir);
+            this.overlayTimelineWindow!.unpaginate(overlayCount, backwards);
+        }
 
-            // We can now paginate in the unpaginated direction
-            if (backwards) {
-                this.setState({ canBackPaginate: true });
-            } else {
-                this.setState({ canForwardPaginate: true });
-            }
+        const { events, liveEvents, firstVisibleEventIndex } = this.getEvents();
+        this.buildLegacyCallEventGroupers(events);
+        this.setState({
+            events,
+            liveEvents,
+            firstVisibleEventIndex,
+        });
+
+        // We can now paginate in the unpaginated direction
+        if (backwards) {
+            this.setState({ canBackPaginate: true });
+        } else {
+            this.setState({ canForwardPaginate: true });
         }
     };
 
@@ -572,9 +611,13 @@ class TimelinePanel extends React.Component<IProps, IState> {
         debuglog("Initiating paginate; backwards:" + backwards);
         this.setState<null>({ [paginatingKey]: true });
 
-        return this.onPaginationRequest(this.timelineWindow, dir, PAGINATE_SIZE).then((r) => {
+        return this.onPaginationRequest(this.timelineWindow, dir, PAGINATE_SIZE).then(async (r) => {
             if (this.unmounted) {
                 return false;
+            }
+
+            if (this.overlayTimelineWindow) {
+                await this.extendOverlayWindowToCoverMainWindow();
             }
 
             debuglog("paginate complete backwards:" + backwards + "; success:" + r);
@@ -769,8 +812,15 @@ class TimelinePanel extends React.Component<IProps, IState> {
             });
     };
 
+    private hasTimelineSetFor(roomId: string | undefined): boolean {
+        return (
+            (roomId !== undefined && roomId === this.props.timelineSet.room?.roomId) ||
+            roomId === this.props.overlayTimelineSet?.room?.roomId
+        );
+    }
+
     private onRoomTimelineReset = (room: Room | undefined, timelineSet: EventTimelineSet): void => {
-        if (timelineSet !== this.props.timelineSet) return;
+        if (timelineSet !== this.props.timelineSet && timelineSet !== this.props.overlayTimelineSet) return;
 
         if (this.canResetTimeline()) {
             this.loadTimeline();
@@ -783,7 +833,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         // ignore events for other rooms
-        if (room !== this.props.timelineSet.room) return;
+        if (!this.hasTimelineSetFor(room.roomId)) return;
 
         // we could skip an update if the event isn't in our timeline,
         // but that's probably an early optimisation.
@@ -796,10 +846,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         // ignore events for other rooms
-        const roomId = thread.roomId;
-        if (roomId !== this.props.timelineSet.room?.roomId) {
-            return;
-        }
+        if (!this.hasTimelineSetFor(thread.roomId)) return;
 
         // we could skip an update if the event isn't in our timeline,
         // but that's probably an early optimisation.
@@ -817,10 +864,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         // ignore events for other rooms
-        const roomId = ev.getRoomId();
-        if (roomId !== this.props.timelineSet.room?.roomId) {
-            return;
-        }
+        if (!this.hasTimelineSetFor(ev.getRoomId())) return;
 
         // we could skip an update if the event isn't in our timeline,
         // but that's probably an early optimisation.
@@ -834,7 +878,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         // ignore events for other rooms
-        if (member.roomId !== this.props.timelineSet.room?.roomId) return;
+        if (!this.hasTimelineSetFor(member.roomId)) return;
 
         // ignore events for other users
         if (member.userId != MatrixClientPeg.get().credentials?.userId) return;
@@ -857,7 +901,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         // ignore events for other rooms
-        if (replacedEvent.getRoomId() !== this.props.timelineSet.room?.roomId) return;
+        if (!this.hasTimelineSetFor(replacedEvent.getRoomId())) return;
 
         // we could skip an update if the event isn't in our timeline,
         // but that's probably an early optimisation.
@@ -877,7 +921,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         // ignore events for other rooms
-        if (room !== this.props.timelineSet.room) return;
+        if (!this.hasTimelineSetFor(room.roomId)) return;
 
         this.reloadEvents();
     };
@@ -905,7 +949,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // Can be null for the notification timeline, etc.
         if (!this.props.timelineSet.room) return;
 
-        if (ev.getRoomId() !== this.props.timelineSet.room.roomId) return;
+        if (!this.hasTimelineSetFor(ev.getRoomId())) return;
 
         if (!this.state.events.includes(ev)) return;
 
@@ -1380,6 +1424,48 @@ class TimelinePanel extends React.Component<IProps, IState> {
         });
     }
 
+    private async extendOverlayWindowToCoverMainWindow(): Promise<void> {
+        const mainWindow = this.timelineWindow!;
+        const overlayWindow = this.overlayTimelineWindow!;
+        const mainEvents = mainWindow.getEvents();
+
+        if (mainEvents.length > 0) {
+            let paginationRequests: Promise<unknown>[];
+
+            // Keep paginating until the main window is covered
+            do {
+                paginationRequests = [];
+                const overlayEvents = overlayWindow.getEvents();
+
+                if (
+                    overlayWindow.canPaginate(EventTimeline.BACKWARDS) &&
+                    (overlayEvents.length === 0 ||
+                        overlaysAfter(overlayEvents[0], mainEvents[0]) ||
+                        !mainWindow.canPaginate(EventTimeline.BACKWARDS))
+                ) {
+                    // Paginating backwards could reveal more events to be overlaid in the main window
+                    paginationRequests.push(
+                        this.onPaginationRequest(overlayWindow, EventTimeline.BACKWARDS, PAGINATE_SIZE),
+                    );
+                }
+
+                if (
+                    overlayWindow.canPaginate(EventTimeline.FORWARDS) &&
+                    (overlayEvents.length === 0 ||
+                        overlaysBefore(overlayEvents.at(-1)!, mainEvents.at(-1)!) ||
+                        !mainWindow.canPaginate(EventTimeline.FORWARDS))
+                ) {
+                    // Paginating forwards could reveal more events to be overlaid in the main window
+                    paginationRequests.push(
+                        this.onPaginationRequest(overlayWindow, EventTimeline.FORWARDS, PAGINATE_SIZE),
+                    );
+                }
+
+                await Promise.all(paginationRequests);
+            } while (paginationRequests.length > 0);
+        }
+    }
+
     /**
      * (re)-load the event timeline, and initialise the scroll state, centered
      * around the given event.
@@ -1417,8 +1503,14 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
             this.setState(
                 {
-                    canBackPaginate: !!this.timelineWindow?.canPaginate(EventTimeline.BACKWARDS),
-                    canForwardPaginate: !!this.timelineWindow?.canPaginate(EventTimeline.FORWARDS),
+                    canBackPaginate:
+                        (this.timelineWindow?.canPaginate(EventTimeline.BACKWARDS) ||
+                            this.overlayTimelineWindow?.canPaginate(EventTimeline.BACKWARDS)) ??
+                        false,
+                    canForwardPaginate:
+                        (this.timelineWindow?.canPaginate(EventTimeline.FORWARDS) ||
+                            this.overlayTimelineWindow?.canPaginate(EventTimeline.FORWARDS)) ??
+                        false,
                     timelineLoading: false,
                 },
                 () => {
@@ -1494,11 +1586,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // This is a hot-path optimization by skipping a promise tick
         // by repeating a no-op sync branch in
         // TimelineSet.getTimelineForEvent & MatrixClient.getEventTimeline
-        if (this.props.timelineSet.getTimelineForEvent(eventId)) {
+        if (this.props.timelineSet.getTimelineForEvent(eventId) && !this.overlayTimelineWindow) {
             // if we've got an eventId, and the timeline exists, we can skip
             // the promise tick.
             this.timelineWindow.load(eventId, INITIAL_SIZE);
-            this.overlayTimelineWindow?.load(undefined, INITIAL_SIZE);
             // in this branch this method will happen in sync time
             onLoaded();
             return;
@@ -1506,9 +1597,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         const prom = this.timelineWindow.load(eventId, INITIAL_SIZE).then(async (): Promise<void> => {
             if (this.overlayTimelineWindow) {
-                // @TODO(kerrya) use timestampToEvent to load the overlay timeline
+                // TODO: use timestampToEvent to load the overlay timeline
                 // with more correct position when main TL eventId is truthy
                 await this.overlayTimelineWindow.load(undefined, INITIAL_SIZE);
+                await this.extendOverlayWindowToCoverMainWindow();
             }
         });
         this.buildLegacyCallEventGroupers();
@@ -1541,23 +1633,33 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.reloadEvents();
     }
 
-    // get the list of events from the timeline window and the pending event list
+    // get the list of events from the timeline windows and the pending event list
     private getEvents(): Pick<IState, "events" | "liveEvents" | "firstVisibleEventIndex"> {
-        const mainEvents: MatrixEvent[] = this.timelineWindow?.getEvents() || [];
-        const eventFilter = this.props.overlayTimelineSetFilter || Boolean;
-        const overlayEvents = this.overlayTimelineWindow?.getEvents().filter(eventFilter) || [];
+        const mainEvents = this.timelineWindow!.getEvents();
+        let overlayEvents = this.overlayTimelineWindow?.getEvents() ?? [];
+        if (this.props.overlayTimelineSetFilter !== undefined) {
+            overlayEvents = overlayEvents.filter(this.props.overlayTimelineSetFilter);
+        }
 
         // maintain the main timeline event order as returned from the HS
         // merge overlay events at approximately the right position based on local timestamp
         const events = overlayEvents.reduce(
             (acc: MatrixEvent[], overlayEvent: MatrixEvent) => {
                 // find the first main tl event with a later timestamp
-                const index = acc.findIndex((event) => event.localTimestamp > overlayEvent.localTimestamp);
+                const index = acc.findIndex((event) => overlaysBefore(overlayEvent, event));
                 // insert overlay event into timeline at approximately the right place
-                if (index > -1) {
-                    acc.splice(index, 0, overlayEvent);
+                // if it's beyond the edge of the main window, hide it so that expanding
+                // the main window doesn't cause new events to pop in and change its position
+                if (index === -1) {
+                    if (!this.timelineWindow!.canPaginate(EventTimeline.FORWARDS)) {
+                        acc.push(overlayEvent);
+                    }
+                } else if (index === 0) {
+                    if (!this.timelineWindow!.canPaginate(EventTimeline.BACKWARDS)) {
+                        acc.unshift(overlayEvent);
+                    }
                 } else {
-                    acc.push(overlayEvent);
+                    acc.splice(index, 0, overlayEvent);
                 }
                 return acc;
             },
@@ -1574,14 +1676,14 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 client.decryptEventIfNeeded(event);
             });
 
-        const firstVisibleEventIndex = this.checkForPreJoinUISI(mainEvents);
+        const firstVisibleEventIndex = this.checkForPreJoinUISI(events);
 
         // Hold onto the live events separately. The read receipt and read marker
         // should use this list, so that they don't advance into pending events.
         const liveEvents = [...events];
 
         // if we're at the end of the live timeline, append the pending events
-        if (!this.timelineWindow?.canPaginate(EventTimeline.FORWARDS)) {
+        if (!this.timelineWindow!.canPaginate(EventTimeline.FORWARDS)) {
             const pendingEvents = this.props.timelineSet.getPendingEvents();
             events.push(
                 ...pendingEvents.filter((event) => {

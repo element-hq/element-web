@@ -537,7 +537,7 @@ export function mkStubRoom(
             on: jest.fn(),
             off: jest.fn(),
         } as unknown as RoomState,
-        eventShouldLiveIn: jest.fn().mockReturnValue({}),
+        eventShouldLiveIn: jest.fn().mockReturnValue({ shouldLiveInRoom: true, shouldLiveInThread: false }),
         fetchRoomThreads: jest.fn().mockReturnValue(Promise.resolve()),
         findEventById: jest.fn().mockReturnValue(undefined),
         findPredecessor: jest.fn().mockReturnValue({ roomId: "", eventId: null }),

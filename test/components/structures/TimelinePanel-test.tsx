@@ -37,6 +37,8 @@ import {
     ThreadFilterType,
 } from "matrix-js-sdk/src/models/thread";
 import React, { createRef } from "react";
+import { mocked } from "jest-mock";
+import { forEachRight } from "lodash";
 
 import TimelinePanel from "../../../src/components/structures/TimelinePanel";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
@@ -45,6 +47,10 @@ import { isCallEvent } from "../../../src/components/structures/LegacyCallEventG
 import { flushPromises, mkMembership, mkRoom, stubClient } from "../../test-utils";
 import { mkThread } from "../../test-utils/threads";
 import { createMessageEventContent } from "../../test-utils/events";
+import ScrollPanel from "../../../src/components/structures/ScrollPanel";
+
+// ScrollPanel calls this, but jsdom doesn't mock it for us
+HTMLDivElement.prototype.scrollBy = () => {};
 
 const newReceipt = (eventId: string, userId: string, readTs: number, fullyReadTs: number): MatrixEvent => {
     const receiptContent = {
@@ -57,14 +63,21 @@ const newReceipt = (eventId: string, userId: string, readTs: number, fullyReadTs
     return new MatrixEvent({ content: receiptContent, type: EventType.Receipt });
 };
 
-const getProps = (room: Room, events: MatrixEvent[]): TimelinePanel["props"] => {
-    const timelineSet = { room: room as Room } as EventTimelineSet;
+const mkTimeline = (room: Room, events: MatrixEvent[]): [EventTimeline, EventTimelineSet] => {
+    const timelineSet = {
+        room: room as Room,
+        getLiveTimeline: () => timeline,
+        getTimelineForEvent: () => timeline,
+        getPendingEvents: () => [],
+    } as unknown as EventTimelineSet;
     const timeline = new EventTimeline(timelineSet);
-    events.forEach((event) => timeline.addEvent(event, { toStartOfTimeline: true }));
-    timelineSet.getLiveTimeline = () => timeline;
-    timelineSet.getTimelineForEvent = () => timeline;
-    timelineSet.getPendingEvents = () => events;
-    timelineSet.room!.getEventReadUpTo = () => events[1].getId() ?? null;
+    events.forEach((event) => timeline.addEvent(event, { toStartOfTimeline: false }));
+
+    return [timeline, timelineSet];
+};
+
+const getProps = (room: Room, events: MatrixEvent[]): TimelinePanel["props"] => {
+    const [, timelineSet] = mkTimeline(room, events);
 
     return {
         timelineSet,
@@ -95,6 +108,63 @@ const setupTestData = (): [MatrixClient, Room, MatrixEvent[]] => {
     const room = mkRoom(client, "roomId");
     const events = mockEvents(room);
     return [client, room, events];
+};
+
+const setupOverlayTestData = (client: MatrixClient, mainEvents: MatrixEvent[]): [Room, MatrixEvent[]] => {
+    const virtualRoom = mkRoom(client, "virtualRoomId");
+    const overlayEvents = mockEvents(virtualRoom, 5);
+
+    // Set the event order that we'll be looking for in the timeline
+    overlayEvents[0].localTimestamp = 1000;
+    mainEvents[0].localTimestamp = 2000;
+    overlayEvents[1].localTimestamp = 3000;
+    overlayEvents[2].localTimestamp = 4000;
+    overlayEvents[3].localTimestamp = 5000;
+    mainEvents[1].localTimestamp = 6000;
+    overlayEvents[4].localTimestamp = 7000;
+
+    return [virtualRoom, overlayEvents];
+};
+
+const expectEvents = (container: HTMLElement, events: MatrixEvent[]): void => {
+    const eventTiles = container.querySelectorAll(".mx_EventTile");
+    const eventTileIds = [...eventTiles].map((tileElement) => tileElement.getAttribute("data-event-id"));
+    expect(eventTileIds).toEqual(events.map((ev) => ev.getId()));
+};
+
+const withScrollPanelMountSpy = async (
+    continuation: (mountSpy: jest.SpyInstance<void, []>) => Promise<void>,
+): Promise<void> => {
+    const mountSpy = jest.spyOn(ScrollPanel.prototype, "componentDidMount");
+    try {
+        await continuation(mountSpy);
+    } finally {
+        mountSpy.mockRestore();
+    }
+};
+
+const setupPagination = (
+    client: MatrixClient,
+    timeline: EventTimeline,
+    previousPage: MatrixEvent[] | null,
+    nextPage: MatrixEvent[] | null,
+): void => {
+    timeline.setPaginationToken(previousPage === null ? null : "start", EventTimeline.BACKWARDS);
+    timeline.setPaginationToken(nextPage === null ? null : "end", EventTimeline.FORWARDS);
+    mocked(client).paginateEventTimeline.mockImplementation(async (tl, { backwards }) => {
+        if (tl === timeline) {
+            if (backwards) {
+                forEachRight(previousPage ?? [], (event) => tl.addEvent(event, { toStartOfTimeline: true }));
+            } else {
+                (nextPage ?? []).forEach((event) => tl.addEvent(event, { toStartOfTimeline: false }));
+            }
+            // Prevent any further pagination attempts in this direction
+            tl.setPaginationToken(null, backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS);
+            return true;
+        } else {
+            return false;
+        }
+    });
 };
 
 describe("TimelinePanel", () => {
@@ -178,6 +248,46 @@ describe("TimelinePanel", () => {
         props.eventId = events[1].getId();
         rerender(<TimelinePanel {...props} />);
         expect(props.onEventScrolledIntoView).toHaveBeenCalledWith(events[1].getId());
+    });
+
+    it("paginates", async () => {
+        const [client, room, events] = setupTestData();
+        const eventsPage1 = events.slice(0, 1);
+        const eventsPage2 = events.slice(1, 2);
+
+        // Start with only page 2 of the main events in the window
+        const [timeline, timelineSet] = mkTimeline(room, eventsPage2);
+        setupPagination(client, timeline, eventsPage1, null);
+
+        await withScrollPanelMountSpy(async (mountSpy) => {
+            const { container } = render(<TimelinePanel {...getProps(room, events)} timelineSet={timelineSet} />);
+
+            await waitFor(() => expectEvents(container, [events[1]]));
+
+            // ScrollPanel has no chance of working in jsdom, so we've no choice
+            // but to do some shady stuff to trigger the fill callback by hand
+            const scrollPanel = mountSpy.mock.contexts[0] as ScrollPanel;
+            scrollPanel.props.onFillRequest!(true);
+
+            await waitFor(() => expectEvents(container, [events[0], events[1]]));
+        });
+    });
+
+    it("unpaginates", async () => {
+        const [, room, events] = setupTestData();
+
+        await withScrollPanelMountSpy(async (mountSpy) => {
+            const { container } = render(<TimelinePanel {...getProps(room, events)} />);
+
+            await waitFor(() => expectEvents(container, [events[0], events[1]]));
+
+            // ScrollPanel has no chance of working in jsdom, so we've no choice
+            // but to do some shady stuff to trigger the unfill callback by hand
+            const scrollPanel = mountSpy.mock.contexts[0] as ScrollPanel;
+            scrollPanel.props.onUnfillRequest!(true, events[0].getId()!);
+
+            await waitFor(() => expectEvents(container, [events[1]]));
+        });
     });
 
     describe("onRoomTimeline", () => {
@@ -268,6 +378,8 @@ describe("TimelinePanel", () => {
 
             render(<TimelinePanel {...props} />);
 
+            await flushPromises();
+
             const event = new MatrixEvent({ type: RoomEvent.Timeline });
             const data = { timeline: props.timelineSet.getLiveTimeline(), liveEvent: true };
             client.emit(RoomEvent.Timeline, event, room, false, false, data);
@@ -279,8 +391,7 @@ describe("TimelinePanel", () => {
     });
 
     describe("with overlayTimeline", () => {
-        // Trying to understand why this is not passing anymore
-        it.skip("renders merged timeline", () => {
+        it("renders merged timeline", async () => {
             const [client, room, events] = setupTestData();
             const virtualRoom = mkRoom(client, "virtualRoomId");
             const virtualCallInvite = new MatrixEvent({
@@ -296,24 +407,242 @@ describe("TimelinePanel", () => {
             const virtualEvents = [virtualCallInvite, ...mockEvents(virtualRoom), virtualCallMetaEvent];
             const { timelineSet: overlayTimelineSet } = getProps(virtualRoom, virtualEvents);
 
-            const props = {
-                ...getProps(room, events),
-                overlayTimelineSet,
-                overlayTimelineSetFilter: isCallEvent,
-            };
+            const { container } = render(
+                <TimelinePanel
+                    {...getProps(room, events)}
+                    overlayTimelineSet={overlayTimelineSet}
+                    overlayTimelineSetFilter={isCallEvent}
+                />,
+            );
 
-            const { container } = render(<TimelinePanel {...props} />);
+            await waitFor(() =>
+                expectEvents(container, [
+                    // main timeline events are included
+                    events[0],
+                    events[1],
+                    // virtual timeline call event is included
+                    virtualCallInvite,
+                    // virtual call event has no tile renderer => not rendered
+                ]),
+            );
+        });
 
-            const eventTiles = container.querySelectorAll(".mx_EventTile");
-            const eventTileIds = [...eventTiles].map((tileElement) => tileElement.getAttribute("data-event-id"));
-            expect(eventTileIds).toEqual([
-                // main timeline events are included
-                events[1].getId(),
-                events[0].getId(),
-                // virtual timeline call event is included
-                virtualCallInvite.getId(),
-                // virtual call event has no tile renderer => not rendered
-            ]);
+        it.each([
+            ["when it starts with no overlay events", true],
+            ["to get enough overlay events", false],
+        ])("expands the initial window %s", async (_s, startWithEmptyOverlayWindow) => {
+            const [client, room, events] = setupTestData();
+            const [virtualRoom, overlayEvents] = setupOverlayTestData(client, events);
+
+            let overlayEventsPage1: MatrixEvent[];
+            let overlayEventsPage2: MatrixEvent[];
+            let overlayEventsPage3: MatrixEvent[];
+            if (startWithEmptyOverlayWindow) {
+                overlayEventsPage1 = overlayEvents.slice(0, 3);
+                overlayEventsPage2 = [];
+                overlayEventsPage3 = overlayEvents.slice(3, 5);
+            } else {
+                overlayEventsPage1 = overlayEvents.slice(0, 2);
+                overlayEventsPage2 = overlayEvents.slice(2, 3);
+                overlayEventsPage3 = overlayEvents.slice(3, 5);
+            }
+
+            // Start with only page 2 of the overlay events in the window
+            const [overlayTimeline, overlayTimelineSet] = mkTimeline(virtualRoom, overlayEventsPage2);
+            setupPagination(client, overlayTimeline, overlayEventsPage1, overlayEventsPage3);
+
+            const { container } = render(
+                <TimelinePanel {...getProps(room, events)} overlayTimelineSet={overlayTimelineSet} />,
+            );
+
+            await waitFor(() =>
+                expectEvents(container, [
+                    overlayEvents[0],
+                    events[0],
+                    overlayEvents[1],
+                    overlayEvents[2],
+                    overlayEvents[3],
+                    events[1],
+                    overlayEvents[4],
+                ]),
+            );
+        });
+
+        it("extends overlay window beyond main window at the start of the timeline", async () => {
+            const [client, room, events] = setupTestData();
+            const [virtualRoom, overlayEvents] = setupOverlayTestData(client, events);
+            // Delete event 0 so the TimelinePanel will still leave some stuff
+            // unloaded for us to test with
+            events.shift();
+
+            const overlayEventsPage1 = overlayEvents.slice(0, 2);
+            const overlayEventsPage2 = overlayEvents.slice(2, 5);
+
+            // Start with only page 2 of the overlay events in the window
+            const [overlayTimeline, overlayTimelineSet] = mkTimeline(virtualRoom, overlayEventsPage2);
+            setupPagination(client, overlayTimeline, overlayEventsPage1, null);
+
+            const { container } = render(
+                <TimelinePanel {...getProps(room, events)} overlayTimelineSet={overlayTimelineSet} />,
+            );
+
+            await waitFor(() =>
+                expectEvents(container, [
+                    // These first two are the newly loaded events
+                    overlayEvents[0],
+                    overlayEvents[1],
+                    overlayEvents[2],
+                    overlayEvents[3],
+                    events[0],
+                    overlayEvents[4],
+                ]),
+            );
+        });
+
+        it("extends overlay window beyond main window at the end of the timeline", async () => {
+            const [client, room, events] = setupTestData();
+            const [virtualRoom, overlayEvents] = setupOverlayTestData(client, events);
+            // Delete event 1 so the TimelinePanel will still leave some stuff
+            // unloaded for us to test with
+            events.pop();
+
+            const overlayEventsPage1 = overlayEvents.slice(0, 2);
+            const overlayEventsPage2 = overlayEvents.slice(2, 5);
+
+            // Start with only page 1 of the overlay events in the window
+            const [overlayTimeline, overlayTimelineSet] = mkTimeline(virtualRoom, overlayEventsPage1);
+            setupPagination(client, overlayTimeline, null, overlayEventsPage2);
+
+            const { container } = render(
+                <TimelinePanel {...getProps(room, events)} overlayTimelineSet={overlayTimelineSet} />,
+            );
+
+            await waitFor(() =>
+                expectEvents(container, [
+                    overlayEvents[0],
+                    events[0],
+                    overlayEvents[1],
+                    // These are the newly loaded events
+                    overlayEvents[2],
+                    overlayEvents[3],
+                    overlayEvents[4],
+                ]),
+            );
+        });
+
+        it("paginates", async () => {
+            const [client, room, events] = setupTestData();
+            const [virtualRoom, overlayEvents] = setupOverlayTestData(client, events);
+
+            const eventsPage1 = events.slice(0, 1);
+            const eventsPage2 = events.slice(1, 2);
+
+            // Start with only page 1 of the main events in the window
+            const [timeline, timelineSet] = mkTimeline(room, eventsPage1);
+            const [, overlayTimelineSet] = mkTimeline(virtualRoom, overlayEvents);
+            setupPagination(client, timeline, null, eventsPage2);
+
+            await withScrollPanelMountSpy(async (mountSpy) => {
+                const { container } = render(
+                    <TimelinePanel
+                        {...getProps(room, events)}
+                        timelineSet={timelineSet}
+                        overlayTimelineSet={overlayTimelineSet}
+                    />,
+                );
+
+                await waitFor(() => expectEvents(container, [overlayEvents[0], events[0]]));
+
+                // ScrollPanel has no chance of working in jsdom, so we've no choice
+                // but to do some shady stuff to trigger the fill callback by hand
+                const scrollPanel = mountSpy.mock.contexts[0] as ScrollPanel;
+                scrollPanel.props.onFillRequest!(false);
+
+                await waitFor(() =>
+                    expectEvents(container, [
+                        overlayEvents[0],
+                        events[0],
+                        overlayEvents[1],
+                        overlayEvents[2],
+                        overlayEvents[3],
+                        events[1],
+                        overlayEvents[4],
+                    ]),
+                );
+            });
+        });
+
+        it.each([
+            ["down", "main", true, false],
+            ["down", "overlay", true, true],
+            ["up", "main", false, false],
+            ["up", "overlay", false, true],
+        ])("unpaginates %s to an event from the %s timeline", async (_s1, _s2, backwards, fromOverlay) => {
+            const [client, room, events] = setupTestData();
+            const [virtualRoom, overlayEvents] = setupOverlayTestData(client, events);
+
+            let marker: MatrixEvent;
+            let expectedEvents: MatrixEvent[];
+            if (backwards) {
+                if (fromOverlay) {
+                    marker = overlayEvents[1];
+                    // Overlay events 0−1 and event 0 should be unpaginated
+                    // Overlay events 2−3 should be hidden since they're at the edge of the window
+                    expectedEvents = [events[1], overlayEvents[4]];
+                } else {
+                    marker = events[0];
+                    // Overlay event 0 and event 0 should be unpaginated
+                    // Overlay events 1−3 should be hidden since they're at the edge of the window
+                    expectedEvents = [events[1], overlayEvents[4]];
+                }
+            } else {
+                if (fromOverlay) {
+                    marker = overlayEvents[4];
+                    // Only the last overlay event should be unpaginated
+                    expectedEvents = [
+                        overlayEvents[0],
+                        events[0],
+                        overlayEvents[1],
+                        overlayEvents[2],
+                        overlayEvents[3],
+                        events[1],
+                    ];
+                } else {
+                    // Get rid of overlay event 4 so we can test the case where no overlay events get unpaginated
+                    overlayEvents.pop();
+                    marker = events[1];
+                    // Only event 1 should be unpaginated
+                    // Overlay events 1−2 should be hidden since they're at the edge of the window
+                    expectedEvents = [overlayEvents[0], events[0]];
+                }
+            }
+
+            const [, overlayTimelineSet] = mkTimeline(virtualRoom, overlayEvents);
+
+            await withScrollPanelMountSpy(async (mountSpy) => {
+                const { container } = render(
+                    <TimelinePanel {...getProps(room, events)} overlayTimelineSet={overlayTimelineSet} />,
+                );
+
+                await waitFor(() =>
+                    expectEvents(container, [
+                        overlayEvents[0],
+                        events[0],
+                        overlayEvents[1],
+                        overlayEvents[2],
+                        overlayEvents[3],
+                        events[1],
+                        ...(!backwards && !fromOverlay ? [] : [overlayEvents[4]]),
+                    ]),
+                );
+
+                // ScrollPanel has no chance of working in jsdom, so we've no choice
+                // but to do some shady stuff to trigger the unfill callback by hand
+                const scrollPanel = mountSpy.mock.contexts[0] as ScrollPanel;
+                scrollPanel.props.onUnfillRequest!(backwards, marker.getId()!);
+
+                await waitFor(() => expectEvents(container, expectedEvents));
+            });
         });
     });
 
