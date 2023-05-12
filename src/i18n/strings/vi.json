@@ -6,7 +6,7 @@
     "The message from the parser is: %(message)s": "Thông báo của trình xử lý là: %(message)s",
     "Invalid JSON": "JSON không hợp lệ",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Thiết lập không hợp lệ: chỉ có thể điền một trong số sau default_server_config, default_server_name, hoặc default_hs_url.",
-    "Invalid configuration: no default server specified.": "Cấu hình không hợp lệ: chưa chỉ định máy chủ mặc định.",
+    "Invalid configuration: no default server specified.": "Thiết lập không hợp lệ: chưa chỉ định máy chủ mặc định.",
     "Sign In": "Đăng nhập",
     "Create Account": "Tạo tài khoản",
     "Explore rooms": "Khám phá phòng chat",
@@ -26,5 +26,7 @@
     "Powered by Matrix": "Được chạy trên giao thức Matrix",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Thiết lập Element của bạn chứa JSON không hợp lệ. Vui lòng sửa vấn đề và tải lại trang.",
     "Your Element is misconfigured": "Element của bạn bị thiết lập sai",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dịch vụ chat &amp; liên lạc đã được mã hóa, phi tập trung. Được cung cấp bởi $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dịch vụ chat &amp; liên lạc đã được mã hóa, phi tập trung. Được cung cấp bởi $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s trên %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s máy tính: %(platformName)s"
 }
