@@ -42,6 +42,12 @@ describe("Appearance user settings tab", () => {
 
         cy.get(".mx_SettingsTab.mx_AppearanceUserSettingsTab").percySnapshotElement(
             "User settings tab - Appearance (advanced options collapsed)",
+            {
+                // Emulate TabbedView's actual min and max widths
+                // 580: '.mx_UserSettingsDialog .mx_TabbedView' min-width
+                // 796: 1036 (mx_TabbedView_tabsOnLeft actual width) - 240 (mx_TabbedView_tabPanel margin-right)
+                widths: [580, 796],
+            },
         );
 
         // Click "Show advanced" link button
@@ -52,6 +58,12 @@ describe("Appearance user settings tab", () => {
 
         cy.get(".mx_SettingsTab.mx_AppearanceUserSettingsTab").percySnapshotElement(
             "User settings tab - Appearance (advanced options expanded)",
+            {
+                // Emulate TabbedView's actual min and max widths
+                // 580: '.mx_UserSettingsDialog .mx_TabbedView' min-width
+                // 796: 1036 (mx_TabbedView_tabsOnLeft actual width) - 240 (mx_TabbedView_tabPanel margin-right)
+                widths: [580, 796],
+            },
         );
     });
 
