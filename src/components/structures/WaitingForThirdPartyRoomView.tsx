@@ -28,6 +28,7 @@ import EventTileBubble from "../views/messages/EventTileBubble";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import { UnwrappedEventTile } from "../views/rooms/EventTile";
 import { _t } from "../../languageHandler";
+import SdkConfig from "../../SdkConfig";
 
 interface Props {
     roomView: RefObject<HTMLElement>;
@@ -42,6 +43,7 @@ interface Props {
  */
 export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resizeNotifier, inviteEvent }) => {
     const context = useRoomContext();
+    const brand = SdkConfig.get().brand;
 
     return (
         <div className="mx_RoomView mx_RoomView--local">
@@ -66,9 +68,11 @@ export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resize
                         <ScrollPanel className="mx_RoomView_messagePanel" resizeNotifier={resizeNotifier}>
                             <EventTileBubble
                                 className="mx_cryptoEvent mx_cryptoEvent_icon"
-                                title={_t("Waiting for users to join Element")}
+                                title={_t("Waiting for users to join %(brand)s", { brand })}
                                 subtitle={_t(
-                                    "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted",
+                                    "Once invited users have joined %(brand)s, " +
+                                        "you will be able to chat and the room will be end-to-end encrypted",
+                                    { brand },
                                 )}
                             />
                             <NewRoomIntro />
