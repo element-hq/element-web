@@ -36,13 +36,37 @@ describe("Read receipts", () => {
         return cy.botSendMessage(bot, otherRoomId, "Message");
     };
 
-    const fakeEventFromSent = (eventResponse: ISendEventResponse): MatrixEvent => {
+    const botSendThreadMessage = (threadId: string): Cypress.Chainable<ISendEventResponse> => {
+        return cy.botSendThreadMessage(bot, otherRoomId, threadId, "Message");
+    };
+
+    const fakeEventFromSent = (eventResponse: ISendEventResponse, threadRootId: string | undefined): MatrixEvent => {
         return {
             getRoomId: () => otherRoomId,
             getId: () => eventResponse.event_id,
-            threadRootId: undefined,
+            threadRootId,
             getTs: () => 1,
         } as any as MatrixEvent;
+    };
+
+    /**
+     * Send a threaded receipt marking the message referred to in
+     * eventResponse as read. If threadRootEventResponse is supplied, the
+     * receipt will have its event_id as the thread root ID for the receipt.
+     */
+    const sendThreadedReadReceipt = (
+        eventResponse: ISendEventResponse,
+        threadRootEventResponse: ISendEventResponse = undefined,
+    ) => {
+        cy.sendReadReceipt(fakeEventFromSent(eventResponse, threadRootEventResponse?.event_id));
+    };
+
+    /**
+     * Send an unthreaded receipt marking the message referred to in
+     * eventResponse as read.
+     */
+    const sendUnthreadedReadReceipt = (eventResponse: ISendEventResponse) => {
+        cy.sendReadReceipt(fakeEventFromSent(eventResponse, undefined), "m.read" as any as ReceiptType, true);
     };
 
     beforeEach(() => {
@@ -88,7 +112,7 @@ describe("Read receipts", () => {
     });
 
     it(
-        "Considers room read if there's a receipt for main even if an earlier unthreaded receipt exists #24629",
+        "With sync accumulator, considers main thread and unthreaded receipts #24629",
         {
             // When #24629 exists, the test fails the first time but passes later, so we disable retries
             // to be sure we are going to fail if the bug comes back.
@@ -108,8 +132,8 @@ describe("Read receipts", () => {
 
                     // When we send a threaded receipt for the last event in main
                     // And an unthreaded receipt for an earlier event
-                    cy.sendReadReceipt(fakeEventFromSent(main3));
-                    cy.sendReadReceipt(fakeEventFromSent(main2), "m.read" as any as ReceiptType, true);
+                    sendThreadedReadReceipt(main3);
+                    sendUnthreadedReadReceipt(main2);
 
                     // (So the room has no unreads)
                     cy.findByLabelText(`${otherRoomName}`).should("exist");
@@ -130,4 +154,118 @@ describe("Read receipts", () => {
             });
         },
     );
+
+    it("Recognises unread messages on main thread after receiving a receipt for earlier ones", () => {
+        // Given we sent 3 events on the main thread
+        botSendMessage();
+        botSendMessage().then((main2) => {
+            botSendMessage().then(() => {
+                // (The room starts off unread)
+                cy.findByLabelText(`${otherRoomName} 3 unread messages.`).should("exist");
+
+                // When we send a threaded receipt for the second-last event in main
+                sendThreadedReadReceipt(main2);
+
+                // Then the room has only one unread
+                cy.findByLabelText(`${otherRoomName} 1 unread message.`).should("exist");
+            });
+        });
+    });
+
+    it("Considers room read if there is only a main thread and we have a main receipt", () => {
+        // Given we sent 3 events on the main thread
+        botSendMessage();
+        botSendMessage().then(() => {
+            botSendMessage().then((main3) => {
+                // (The room starts off unread)
+                cy.findByLabelText(`${otherRoomName} 3 unread messages.`).should("exist");
+
+                // When we send a threaded receipt for the last event in main
+                sendThreadedReadReceipt(main3);
+
+                // Then the room has no unreads
+                cy.findByLabelText(`${otherRoomName}`).should("exist");
+            });
+        });
+    });
+
+    it("Recognises unread messages on other thread after receiving a receipt for earlier ones", () => {
+        // Given we sent 3 events on the main thread
+        botSendMessage().then((main1) => {
+            botSendThreadMessage(main1.event_id).then((thread1a) => {
+                botSendThreadMessage(main1.event_id).then((thread1b) => {
+                    // 1 unread on the main thread, 2 in the new thread
+                    cy.findByLabelText(`${otherRoomName} 3 unread messages.`).should("exist");
+
+                    // When we send receipts for main, and the second-last in the thread
+                    sendThreadedReadReceipt(main1);
+                    sendThreadedReadReceipt(thread1a, main1);
+
+                    // Then the room has only one unread - the one in the thread
+                    cy.findByLabelText(`${otherRoomName} 1 unread message.`).should("exist");
+                });
+            });
+        });
+    });
+
+    it("Considers room read if there are receipts for main and other thread", () => {
+        // Given we sent 3 events on the main thread
+        botSendMessage().then((main1) => {
+            botSendThreadMessage(main1.event_id).then((thread1a) => {
+                botSendThreadMessage(main1.event_id).then((thread1b) => {
+                    // 1 unread on the main thread, 2 in the new thread
+                    cy.findByLabelText(`${otherRoomName} 3 unread messages.`).should("exist");
+
+                    // When we send receipts for main, and the last in the thread
+                    sendThreadedReadReceipt(main1);
+                    sendThreadedReadReceipt(thread1b, main1);
+
+                    // Then the room has no unreads
+                    cy.findByLabelText(`${otherRoomName}`).should("exist");
+                });
+            });
+        });
+    });
+
+    it("Recognises unread messages on a thread after receiving a unthreaded receipt for earlier ones", () => {
+        // Given we sent 3 events on the main thread
+        botSendMessage().then((main1) => {
+            botSendThreadMessage(main1.event_id).then((thread1a) => {
+                botSendThreadMessage(main1.event_id).then(() => {
+                    // 1 unread on the main thread, 2 in the new thread
+                    cy.findByLabelText(`${otherRoomName} 3 unread messages.`).should("exist");
+
+                    // When we send an unthreaded receipt for the second-last in the thread
+                    sendUnthreadedReadReceipt(thread1a);
+
+                    // Then the room has only one unread - the one in the
+                    // thread. The one in main is read because the unthreaded
+                    // receipt is for a later event.
+                    cy.findByLabelText(`${otherRoomName} 1 unread message.`).should("exist");
+                });
+            });
+        });
+    });
+
+    it("Recognises unread messages on main after receiving a unthreaded receipt for a thread message", () => {
+        // Given we sent 3 events on the main thread
+        botSendMessage().then((main1) => {
+            botSendThreadMessage(main1.event_id).then(() => {
+                botSendThreadMessage(main1.event_id).then((thread1b) => {
+                    botSendMessage().then(() => {
+                        // 2 unreads on the main thread, 2 in the new thread
+                        cy.findByLabelText(`${otherRoomName} 4 unread messages.`).should("exist");
+
+                        // When we send an unthreaded receipt for the last in the thread
+                        sendUnthreadedReadReceipt(thread1b);
+
+                        // Then the room has only one unread - the one in the
+                        // main thread, because it is later than the unthreaded
+                        // receipt.
+                        cy.findByLabelText(`${otherRoomName} 1 unread message.`).should("exist");
+                    });
+                });
+            });
+        });
+    });
 });

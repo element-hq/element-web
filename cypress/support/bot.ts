@@ -102,6 +102,19 @@ declare global {
              * @param message the message body to send
              */
             botSendMessage(cli: MatrixClient, roomId: string, message: string): Chainable<ISendEventResponse>;
+            /**
+             * Send a message as a bot into a room in a specific thread
+             * @param cli The bot's MatrixClient
+             * @param threadId the thread within which this message should go
+             * @param roomId ID of the room to join
+             * @param message the message body to send
+             */
+            botSendThreadMessage(
+                cli: MatrixClient,
+                roomId: string,
+                threadId: string,
+                message: string,
+            ): Chainable<ISendEventResponse>;
         }
     }
 }
@@ -242,6 +255,19 @@ Cypress.Commands.add(
     (cli: MatrixClient, roomId: string, message: string): Chainable<ISendEventResponse> => {
         return cy.wrap(
             cli.sendMessage(roomId, {
+                msgtype: "m.text",
+                body: message,
+            }),
+            { log: false },
+        );
+    },
+);
+
+Cypress.Commands.add(
+    "botSendThreadMessage",
+    (cli: MatrixClient, roomId: string, threadId: string, message: string): Chainable<ISendEventResponse> => {
+        return cy.wrap(
+            cli.sendMessage(roomId, threadId, {
                 msgtype: "m.text",
                 body: message,
             }),
