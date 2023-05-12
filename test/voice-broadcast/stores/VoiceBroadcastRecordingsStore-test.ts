@@ -35,7 +35,7 @@ describe("VoiceBroadcastRecordingsStore", () => {
     let recording: VoiceBroadcastRecording;
     let otherRecording: VoiceBroadcastRecording;
     let recordings: VoiceBroadcastRecordingsStore;
-    let onCurrentChanged: (recording: VoiceBroadcastRecording) => void;
+    let onCurrentChanged: (recording: VoiceBroadcastRecording | null) => void;
 
     beforeEach(() => {
         client = stubClient();

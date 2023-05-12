@@ -22,7 +22,7 @@ import { SyncState } from "matrix-js-sdk/src/sync";
  * @param callback The callback to be called on reconnect
  */
 export const createReconnectedListener = (callback: () => void): ClientEventHandlerMap[ClientEvent.Sync] => {
-    return (syncState: SyncState, prevState: SyncState) => {
+    return (syncState: SyncState, prevState: SyncState | null) => {
         if (syncState !== SyncState.Error && prevState !== syncState) {
             // Consider the client reconnected if there is no error with syncing.
             // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.

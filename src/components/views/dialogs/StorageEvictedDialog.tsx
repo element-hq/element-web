@@ -22,14 +22,14 @@ import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import BugReportDialog from "./BugReportDialog";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {
     onFinished(signOut?: boolean): void;
 }
 
 export default class StorageEvictedDialog extends React.Component<IProps> {
-    private sendBugReport = (ev: React.MouseEvent): void => {
+    private sendBugReport = (ev: ButtonEvent): void => {
         ev.preventDefault();
         Modal.createDialog(BugReportDialog, {});
     };

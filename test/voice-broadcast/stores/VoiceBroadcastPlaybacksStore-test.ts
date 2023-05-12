@@ -40,7 +40,7 @@ describe("VoiceBroadcastPlaybacksStore", () => {
     let playback1: VoiceBroadcastPlayback;
     let playback2: VoiceBroadcastPlayback;
     let playbacks: VoiceBroadcastPlaybacksStore;
-    let onCurrentChanged: (playback: VoiceBroadcastPlayback) => void;
+    let onCurrentChanged: (playback: VoiceBroadcastPlayback | null) => void;
 
     beforeEach(() => {
         client = stubClient();

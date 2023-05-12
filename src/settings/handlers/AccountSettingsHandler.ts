@@ -50,7 +50,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         newClient.on(ClientEvent.AccountData, this.onAccountData);
     }
 
-    private onAccountData = (event: MatrixEvent, prevEvent: MatrixEvent): void => {
+    private onAccountData = (event: MatrixEvent, prevEvent?: MatrixEvent): void => {
         if (event.getType() === "org.matrix.preview_urls") {
             let val = event.getContent()["disable"];
             if (typeof val !== "boolean") {

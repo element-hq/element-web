@@ -26,7 +26,7 @@ import Modal from "../../../../Modal";
 import AddThreepid, { Binding } from "../../../../AddThreepid";
 import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
 import Field from "../../elements/Field";
-import AccessibleButton from "../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -154,7 +154,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         }
     }
 
-    private onRevokeClick = (e: React.MouseEvent): void => {
+    private onRevokeClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.changeBinding({
@@ -164,7 +164,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         });
     };
 
-    private onShareClick = (e: React.MouseEvent): void => {
+    private onShareClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.changeBinding({
@@ -180,7 +180,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         });
     };
 
-    private onContinueClick = async (e: React.MouseEvent | React.FormEvent): Promise<void> => {
+    private onContinueClick = async (e: ButtonEvent | React.FormEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 

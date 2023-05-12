@@ -70,7 +70,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
         };
     }
 
-    private triggerUploader = async (e: React.MouseEvent): Promise<void> => {
+    private triggerUploader = async (e: ButtonEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -91,7 +91,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
         });
     };
 
-    private onClickSaveSound = async (e: React.MouseEvent): Promise<void> => {
+    private onClickSaveSound = async (e: ButtonEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -133,7 +133,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
         });
     }
 
-    private clearSound = (e: React.MouseEvent): void => {
+    private clearSound = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         SettingsStore.setValue("notificationSound", this.props.roomId, SettingLevel.ROOM_ACCOUNT, null);

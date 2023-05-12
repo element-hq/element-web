@@ -58,6 +58,7 @@ import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayloa
 import useFavouriteMessages from "../../../hooks/useFavouriteMessages";
 import { GetRelationsForEvent } from "../rooms/EventTile";
 import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast/types";
+import { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -84,7 +85,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
     }, [onFocusChange, menuDisplayed]);
 
     const onOptionsClick = useCallback(
-        (e: React.MouseEvent): void => {
+        (e: ButtonEvent): void => {
             // Don't open the regular browser or our context menu on right-click
             e.preventDefault();
             e.stopPropagation();
@@ -159,7 +160,7 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
     }
 
     const onClick = useCallback(
-        (e: React.MouseEvent) => {
+        (e: ButtonEvent) => {
             // Don't open the regular browser or our context menu on right-click
             e.preventDefault();
             e.stopPropagation();
@@ -203,7 +204,7 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
     const relationType = mxEvent?.getRelation()?.rel_type;
     const hasARelation = !!relationType && relationType !== RelationType.Thread;
 
-    const onClick = (e: React.MouseEvent): void => {
+    const onClick = (e: ButtonEvent): void => {
         // Don't open the regular browser or our context menu on right-click
         e.preventDefault();
         e.stopPropagation();
@@ -266,7 +267,7 @@ const FavouriteButton: React.FC<IFavouriteButtonProp> = ({ mxEvent }) => {
     });
 
     const onClick = useCallback(
-        (e: React.MouseEvent) => {
+        (e: ButtonEvent) => {
             // Don't open the regular browser or our context menu on right-click
             e.preventDefault();
             e.stopPropagation();
@@ -345,7 +346,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         this.props.onFocusChange?.(focused);
     };
 
-    private onReplyClick = (e: React.MouseEvent): void => {
+    private onReplyClick = (e: ButtonEvent): void => {
         // Don't open the regular browser or our context menu on right-click
         e.preventDefault();
         e.stopPropagation();
@@ -357,7 +358,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         });
     };
 
-    private onEditClick = (e: React.MouseEvent): void => {
+    private onEditClick = (e: ButtonEvent): void => {
         // Don't open the regular browser or our context menu on right-click
         e.preventDefault();
         e.stopPropagation();
@@ -406,7 +407,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         }
     }
 
-    private onResendClick = (ev: React.MouseEvent): void => {
+    private onResendClick = (ev: ButtonEvent): void => {
         // Don't open the regular browser or our context menu on right-click
         ev.preventDefault();
         ev.stopPropagation();
@@ -414,7 +415,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         this.runActionOnFailedEv((tarEv) => Resend.resend(tarEv));
     };
 
-    private onCancelClick = (ev: React.MouseEvent): void => {
+    private onCancelClick = (ev: ButtonEvent): void => {
         this.runActionOnFailedEv(
             (tarEv) => Resend.removeFromQueue(tarEv),
             (testEv) => canCancel(testEv.status),

@@ -220,11 +220,11 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
         });
     };
 
-    private onTileClick = async (ev: React.KeyboardEvent): Promise<void> => {
+    private onTileClick = async (ev: ButtonEvent): Promise<void> => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+        const action = getKeyBindingsManager().getAccessibilityAction(ev as React.KeyboardEvent);
         const clearSearch = ([KeyBindingAction.Enter, KeyBindingAction.Space] as Array<string | undefined>).includes(
             action,
         );

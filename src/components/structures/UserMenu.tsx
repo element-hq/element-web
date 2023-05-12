@@ -113,7 +113,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         return !!getHomePageUrl(SdkConfig.get());
     }
 
-    private onCurrentVoiceBroadcastRecordingChanged = (recording: VoiceBroadcastRecording): void => {
+    private onCurrentVoiceBroadcastRecordingChanged = (recording: VoiceBroadcastRecording | null): void => {
         this.setState({
             showLiveAvatarAddon: recording !== null,
         });
@@ -195,7 +195,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         }
     };
 
-    private onOpenMenuClick = (ev: React.MouseEvent): void => {
+    private onOpenMenuClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({ contextMenuPosition: ev.currentTarget.getBoundingClientRect() });
@@ -218,7 +218,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.setState({ contextMenuPosition: null });
     };
 
-    private onSwitchThemeClick = (ev: React.MouseEvent): void => {
+    private onSwitchThemeClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
 

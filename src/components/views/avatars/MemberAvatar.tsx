@@ -33,8 +33,6 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     width: number;
     height: number;
     resizeMethod?: ResizeMethod;
-    // The onClick to give the avatar
-    onClick?: React.MouseEventHandler;
     // Whether the onClick of the avatar should be overridden to dispatch `Action.ViewUser`
     viewUserOnClick?: boolean;
     pushUserOnClick?: boolean;

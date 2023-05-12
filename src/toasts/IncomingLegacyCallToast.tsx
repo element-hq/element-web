@@ -26,7 +26,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import AccessibleTooltipButton from "../components/views/elements/AccessibleTooltipButton";
-import AccessibleButton from "../components/views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../components/views/elements/AccessibleButton";
 
 export const getIncomingLegacyCallToastKey = (callId: string): string => `call_${callId}`;
 
@@ -73,17 +73,17 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
         this.setState({ silenced: LegacyCallHandler.instance.isCallSilenced(this.props.call.callId) });
     };
 
-    private onAnswerClick = (e: React.MouseEvent): void => {
+    private onAnswerClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         LegacyCallHandler.instance.answerCall(this.roomId);
     };
 
-    private onRejectClick = (e: React.MouseEvent): void => {
+    private onRejectClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         LegacyCallHandler.instance.hangupOrReject(this.roomId, true);
     };
 
-    private onSilenceClick = (e: React.MouseEvent): void => {
+    private onSilenceClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         const callId = this.props.call.callId;
         this.state.silenced

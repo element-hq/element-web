@@ -22,7 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t, UserFriendlyError } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
-import AccessibleButton from "../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 import AddThreepid from "../../../../AddThreepid";
 import CountryDropdown from "../../auth/CountryDropdown";
 import Modal from "../../../../Modal";
@@ -54,21 +54,21 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
         };
     }
 
-    private onRemove = (e: React.MouseEvent): void => {
+    private onRemove = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ verifyRemove: true });
     };
 
-    private onDontRemove = (e: React.MouseEvent): void => {
+    private onDontRemove = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ verifyRemove: false });
     };
 
-    private onActuallyRemove = (e: React.MouseEvent): void => {
+    private onActuallyRemove = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -173,7 +173,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         });
     };
 
-    private onAddClick = (e: React.MouseEvent | React.FormEvent): void => {
+    private onAddClick = (e: ButtonEvent | React.FormEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -199,7 +199,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
             });
     };
 
-    private onContinueClick = (e: React.MouseEvent | React.FormEvent): void => {
+    private onContinueClick = (e: ButtonEvent | React.FormEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 

@@ -17,7 +17,7 @@ limitations under the License.
 import classNames from "classnames";
 import { IEventRelation } from "matrix-js-sdk/src/models/event";
 import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
-import React, { createContext, MouseEventHandler, ReactElement, ReactNode, useContext, useRef } from "react";
+import React, { createContext, ReactElement, ReactNode, useContext, useRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
@@ -40,6 +40,7 @@ import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import IconizedContextMenu, { IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import { EmojiButton } from "./EmojiButton";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -362,7 +363,7 @@ function showLocationButton(props: IProps, room: Room, matrixClient: MatrixClien
 
 interface WysiwygToggleButtonProps {
     isRichTextEnabled: boolean;
-    onClick: MouseEventHandler<HTMLDivElement>;
+    onClick: (ev: ButtonEvent) => void;
 }
 
 function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonProps): JSX.Element {

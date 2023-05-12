@@ -193,7 +193,7 @@ export default class EventIndex extends EventEmitter {
     private onRoomTimeline = async (
         ev: MatrixEvent,
         room: Room | undefined,
-        toStartOfTimeline: boolean,
+        toStartOfTimeline: boolean | undefined,
         removed: boolean,
         data: IRoomTimelineData,
     ): Promise<void> => {

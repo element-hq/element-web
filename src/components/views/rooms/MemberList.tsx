@@ -142,7 +142,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         };
     }
 
-    private onUserPresenceChange = (event: MatrixEvent, user: User): void => {
+    private onUserPresenceChange = (event: MatrixEvent | undefined, user: User): void => {
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
         // ever attaching their own listener.
@@ -162,7 +162,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         this.updateListNow(true);
     };
 
-    private onMyMembership = (room: Room, membership: string, oldMembership: string): void => {
+    private onMyMembership = (room: Room, membership: string, oldMembership?: string): void => {
         if (room.roomId === this.props.roomId && membership === "join" && oldMembership !== "join") {
             // we just joined the room, load the member list
             this.updateListNow(true);

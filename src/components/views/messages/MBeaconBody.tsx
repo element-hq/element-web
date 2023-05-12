@@ -131,7 +131,7 @@ const useHandleBeaconRedaction = (
     }, [event, onBeforeBeaconInfoRedaction]);
 };
 
-const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent, getRelationsForEvent }, ref) => {
+const MBeaconBody = React.forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent, getRelationsForEvent }, ref) => {
     const { beacon, isLive, latestLocationState, waitingToStart } = useBeaconState(mxEvent);
     const mapId = useUniqueId(mxEvent.getId()!);
 

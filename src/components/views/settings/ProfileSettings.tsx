@@ -24,7 +24,7 @@ import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { mediaFromMxc } from "../../../customisations/Media";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import AvatarSetting from "./AvatarSetting";
 import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
@@ -75,7 +75,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
         });
     };
 
-    private cancelProfileChanges = async (e: React.MouseEvent): Promise<void> => {
+    private cancelProfileChanges = async (e: ButtonEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -88,7 +88,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
         });
     };
 
-    private saveProfile = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    private saveProfile = async (e: ButtonEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 

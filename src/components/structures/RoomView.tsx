@@ -1461,7 +1461,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.updateRoomMembers();
     };
 
-    private onMyMembership = (room: Room, membership: string, oldMembership: string): void => {
+    private onMyMembership = (room: Room): void => {
         if (room.roomId === this.state.roomId) {
             this.forceUpdate();
             this.loadMembersIfJoined(room);

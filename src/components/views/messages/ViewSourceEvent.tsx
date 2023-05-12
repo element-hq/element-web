@@ -20,7 +20,7 @@ import classNames from "classnames";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -50,7 +50,7 @@ export default class ViewSourceEvent extends React.PureComponent<IProps, IState>
         }
     }
 
-    private onToggle = (ev: React.MouseEvent): void => {
+    private onToggle = (ev: ButtonEvent): void => {
         ev.preventDefault();
         const { expanded } = this.state;
         this.setState({

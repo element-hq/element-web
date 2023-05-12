@@ -23,7 +23,7 @@ import { MatrixError } from "matrix-js-sdk/src/matrix";
 import { _t, UserFriendlyError } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
-import AccessibleButton from "../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 import * as Email from "../../../../email";
 import AddThreepid from "../../../../AddThreepid";
 import Modal from "../../../../Modal";
@@ -59,21 +59,21 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
         };
     }
 
-    private onRemove = (e: React.MouseEvent): void => {
+    private onRemove = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ verifyRemove: true });
     };
 
-    private onDontRemove = (e: React.MouseEvent): void => {
+    private onDontRemove = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ verifyRemove: false });
     };
 
-    private onActuallyRemove = (e: React.MouseEvent): void => {
+    private onActuallyRemove = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -196,7 +196,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
             });
     };
 
-    private onContinueClick = (e: React.MouseEvent): void => {
+    private onContinueClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 

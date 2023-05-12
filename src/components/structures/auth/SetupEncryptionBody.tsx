@@ -26,7 +26,7 @@ import Modal from "../../../Modal";
 import VerificationRequestDialog from "../../views/dialogs/VerificationRequestDialog";
 import { SetupEncryptionStore, Phase } from "../../../stores/SetupEncryptionStore";
 import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
-import AccessibleButton from "../../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
 
 function keyHasPassphrase(keyInfo: ISecretStorageKeyInfo): boolean {
@@ -115,7 +115,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         store.returnAfterSkip();
     };
 
-    private onResetClick = (ev: React.MouseEvent<HTMLButtonElement>): void => {
+    private onResetClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         const store = SetupEncryptionStore.sharedInstance();
         store.reset();

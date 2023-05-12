@@ -25,7 +25,7 @@ import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Modal from "../../../../Modal";
 import AddThreepid, { Binding } from "../../../../AddThreepid";
 import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
-import AccessibleButton from "../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 
 /*
 TODO: Improve the UX for everything in here.
@@ -147,7 +147,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         }
     }
 
-    private onRevokeClick = (e: React.MouseEvent): void => {
+    private onRevokeClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.changeBinding({
@@ -157,7 +157,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         });
     };
 
-    private onShareClick = (e: React.MouseEvent): void => {
+    private onShareClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.changeBinding({
@@ -167,7 +167,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         });
     };
 
-    private onContinueClick = async (e: React.MouseEvent): Promise<void> => {
+    private onContinueClick = async (e: ButtonEvent): Promise<void> => {
         e.stopPropagation();
         e.preventDefault();
 

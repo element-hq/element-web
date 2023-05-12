@@ -268,9 +268,11 @@ describe("MessageComposer", () => {
             let resizeCallback: Function;
 
             beforeEach(() => {
-                jest.spyOn(UIStore.instance, "on").mockImplementation((_event: string, listener: Function): any => {
-                    resizeCallback = listener;
-                });
+                jest.spyOn(UIStore.instance, "on").mockImplementation(
+                    (_event: string | symbol, listener: Function): any => {
+                        resizeCallback = listener;
+                    },
+                );
             });
 
             describe("when a non-resize event occurred in UIStore", () => {
