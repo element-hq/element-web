@@ -480,4 +480,32 @@ describe("TextForEvent", () => {
             });
         });
     });
+
+    describe("textForMemberEvent()", () => {
+        beforeEach(() => {
+            stubClient();
+        });
+
+        it("should handle both displayname and avatar changing in one event", () => {
+            expect(
+                textForEvent(
+                    new MatrixEvent({
+                        type: "m.room.member",
+                        sender: "@a:foo",
+                        content: {
+                            membership: "join",
+                            avatar_url: "b",
+                            displayname: "Bob",
+                        },
+                        prev_content: {
+                            membership: "join",
+                            avatar_url: "a",
+                            displayname: "Andy",
+                        },
+                        state_key: "@a:foo",
+                    }),
+                ),
+            ).toMatchInlineSnapshot(`"Andy changed their display name and profile picture"`);
+        });
+    });
 });
