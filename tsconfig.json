@@ -18,5 +18,15 @@
         "strictBindCallApply": true,
         "noImplicitThis": true
     },
-    "include": ["./src/**/*.ts", "./src/**/*.tsx", "./test/**/*.ts", "./test/**/*.tsx"]
+    "include": [
+        "./node_modules/matrix-js-sdk/src/@types/*.d.ts",
+        "./node_modules/matrix-react-sdk/src/@types/diff-dom.d.ts",
+        "./node_modules/matrix-react-sdk/src/@types/opus-recorder.d.ts",
+        "./node_modules/matrix-react-sdk/src/@types/png-chunks-extract.d.ts",
+        "./node_modules/matrix-react-sdk/src/@types/sanitize-html.d.ts",
+        "./src/**/*.ts",
+        "./src/**/*.tsx",
+        "./test/**/*.ts",
+        "./test/**/*.tsx"
+    ]
 }

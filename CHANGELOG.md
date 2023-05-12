@@ -1,3 +1,42 @@
+Changes in [1.11.31](https://github.com/vector-im/element-web/releases/tag/v1.11.31) (2023-05-10)
+=================================================================================================
+
+## ✨ Features
+ * Improve Content-Security-Policy ([\#25210](https://github.com/vector-im/element-web/pull/25210)).
+ * Add UIFeature.locationSharing to hide location sharing ([\#10727](https://github.com/matrix-org/matrix-react-sdk/pull/10727)).
+ * Memoize field validation results ([\#10714](https://github.com/matrix-org/matrix-react-sdk/pull/10714)).
+ * Commands for plain text editor ([\#10567](https://github.com/matrix-org/matrix-react-sdk/pull/10567)). Contributed by @alunturner.
+ * Allow 16 lines of text in the rich text editors ([\#10670](https://github.com/matrix-org/matrix-react-sdk/pull/10670)). Contributed by @alunturner.
+ * Bail out of `RoomSettingsDialog` when room is not found ([\#10662](https://github.com/matrix-org/matrix-react-sdk/pull/10662)). Contributed by @kerryarchibald.
+ * Element-R: Populate device list for right-panel ([\#10671](https://github.com/matrix-org/matrix-react-sdk/pull/10671)). Contributed by @florianduros.
+ * Make existing and new issue URLs configurable ([\#10710](https://github.com/matrix-org/matrix-react-sdk/pull/10710)). Fixes #24424.
+ * Fix usages of ARIA tabpanel ([\#10628](https://github.com/matrix-org/matrix-react-sdk/pull/10628)). Fixes #25016.
+ * Element-R: Starting a DMs with a user ([\#10673](https://github.com/matrix-org/matrix-react-sdk/pull/10673)). Contributed by @florianduros.
+ * ARIA Accessibility improvements ([\#10675](https://github.com/matrix-org/matrix-react-sdk/pull/10675)).
+ * ARIA Accessibility improvements ([\#10674](https://github.com/matrix-org/matrix-react-sdk/pull/10674)).
+ * Add arrow key controls to emoji and reaction pickers ([\#10637](https://github.com/matrix-org/matrix-react-sdk/pull/10637)). Fixes #17189.
+ * Translate credits in help about section ([\#10676](https://github.com/matrix-org/matrix-react-sdk/pull/10676)).
+
+## 🐛 Bug Fixes
+ * Fix: reveal images when image previews are disabled ([\#10781](https://github.com/matrix-org/matrix-react-sdk/pull/10781)). Fixes #25271. Contributed by @kerryarchibald.
+ * Fix autocomplete not resetting properly on message send ([\#10741](https://github.com/matrix-org/matrix-react-sdk/pull/10741)). Fixes #25170.
+ * Fix start_sso not working with guests disabled ([\#10720](https://github.com/matrix-org/matrix-react-sdk/pull/10720)). Fixes #16624.
+ * Fix soft crash with Element call widgets ([\#10684](https://github.com/matrix-org/matrix-react-sdk/pull/10684)).
+ * Send correct receipt when marking a room as read ([\#10730](https://github.com/matrix-org/matrix-react-sdk/pull/10730)). Fixes #25207.
+ * Offload some more waveform processing onto a worker ([\#9223](https://github.com/matrix-org/matrix-react-sdk/pull/9223)). Fixes #19756.
+ * Consolidate login errors ([\#10722](https://github.com/matrix-org/matrix-react-sdk/pull/10722)). Fixes #17520.
+ * Fix all rooms search generating permalinks to wrong room id ([\#10625](https://github.com/matrix-org/matrix-react-sdk/pull/10625)). Fixes #25115.
+ * Posthog properly handle Analytics ID changing from under us ([\#10702](https://github.com/matrix-org/matrix-react-sdk/pull/10702)). Fixes #25187.
+ * Fix Clock being read as an absolute time rather than duration ([\#10706](https://github.com/matrix-org/matrix-react-sdk/pull/10706)). Fixes #22582.
+ * Properly translate errors in `ChangePassword.tsx` so they show up translated to the user but not in our logs ([\#10615](https://github.com/matrix-org/matrix-react-sdk/pull/10615)). Fixes #9597. Contributed by @MadLittleMods.
+ * Honour feature toggles in guest mode ([\#10651](https://github.com/matrix-org/matrix-react-sdk/pull/10651)). Fixes #24513. Contributed by @andybalaam.
+ * Fix default content in devtools event sender ([\#10699](https://github.com/matrix-org/matrix-react-sdk/pull/10699)). Contributed by @tulir.
+ * Fix a crash when a call ends while you're in it ([\#10681](https://github.com/matrix-org/matrix-react-sdk/pull/10681)). Fixes #25153.
+ * Fix lack of screen reader indication when triggering auto complete ([\#10664](https://github.com/matrix-org/matrix-react-sdk/pull/10664)). Fixes #11011.
+ * Fix typing tile duplicating users ([\#10678](https://github.com/matrix-org/matrix-react-sdk/pull/10678)). Fixes #25165.
+ * Fix wrong room topic tooltip position ([\#10667](https://github.com/matrix-org/matrix-react-sdk/pull/10667)). Fixes #25158.
+ * Fix create subspace dialog not working ([\#10652](https://github.com/matrix-org/matrix-react-sdk/pull/10652)). Fixes #24882.
+
 Changes in [1.11.30](https://github.com/vector-im/element-web/releases/tag/v1.11.30) (2023-04-25)
 =================================================================================================
 

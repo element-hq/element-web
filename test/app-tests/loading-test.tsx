@@ -611,10 +611,6 @@ describe("loading:", function () {
         httpBackend.when("GET", "/login").respond(200, { flows: [{ type: "m.login.password" }] });
         httpBackend.flush(undefined); // We already would have tried the GET /login request
 
-        // Give the component some time to finish processing the login flows before
-        // continuing.
-        await sleep(100);
-
         httpBackend
             .when("POST", "/login")
             .check(function (req) {
@@ -628,6 +624,11 @@ describe("loading:", function () {
                 device_id: "DEVICE_ID",
                 access_token: "access_token",
             });
+
+        // Give the component some time to finish processing the login flows before continuing.
+        await waitFor(() => expect(matrixChat?.container.querySelector("#mx_LoginForm_username")).toBeTruthy());
+
+        // Enter login details
         fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_username")!, { target: { value: "user" } });
         fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_password")!, { target: { value: "pass" } });
         fireEvent.click(screen.getByText("Sign in", { selector: ".mx_Login_submit" }));
