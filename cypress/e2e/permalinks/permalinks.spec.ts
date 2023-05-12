@@ -131,6 +131,7 @@ describe("permalinks", () => {
         cy.get(".mx_NewRoomIntro").invoke("remove");
         cy.get(".mx_GenericEventListSummary").invoke("remove");
 
-        cy.get(".mx_RoomView_timeline").percySnapshotElement("Permalink rendering");
+        const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+        cy.get(".mx_RoomView_timeline").percySnapshotElement("Permalink rendering", { percyCSS });
     });
 });
