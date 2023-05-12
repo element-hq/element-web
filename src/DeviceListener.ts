@@ -267,14 +267,16 @@ export default class DeviceListener {
         // cross-signing support was added to Matrix in MSC1756, which landed in spec v1.1
         if (!(await cli.isVersionSupported("v1.1"))) return;
 
-        if (!cli.isCryptoEnabled()) return;
+        const crypto = cli.getCrypto();
+        if (!crypto) return;
+
         // don't recheck until the initial sync is complete: lots of account data events will fire
         // while the initial sync is processing and we don't need to recheck on each one of them
         // (we add a listener on sync to do once check after the initial sync is done)
         if (!cli.isInitialSyncComplete()) return;
 
-        const crossSigningReady = await cli.isCrossSigningReady();
-        const secretStorageReady = await cli.isSecretStorageReady();
+        const crossSigningReady = await crypto.isCrossSigningReady();
+        const secretStorageReady = await crypto.isSecretStorageReady();
         const allSystemsReady = crossSigningReady && secretStorageReady;
 
         if (this.dismissedThisDeviceToast || allSystemsReady) {
@@ -283,7 +285,8 @@ export default class DeviceListener {
             this.checkKeyBackupStatus();
         } else if (this.shouldShowSetupEncryptionToast()) {
             // make sure our keys are finished downloading
-            await cli.downloadKeys([cli.getUserId()!]);
+            await crypto.getUserDeviceInfo([cli.getUserId()!]);
+
             // cross signing isn't enabled - nag to enable it
             // There are 3 different toasts for:
             if (!cli.getCrossSigningId() && cli.getStoredCrossSigningForUser(cli.getUserId()!)) {
@@ -310,7 +313,7 @@ export default class DeviceListener {
             }
         }
 
-        // This needs to be done after awaiting on downloadKeys() above, so
+        // This needs to be done after awaiting on getUserDeviceInfo() above, so
         // we make sure we get the devices after the fetch is done.
         await this.ensureDeviceIdsAtStartPopulated();
 
@@ -324,10 +327,7 @@ export default class DeviceListener {
 
         const isCurrentDeviceTrusted =
             crossSigningReady &&
-            Boolean(
-                (await cli.getCrypto()?.getDeviceVerificationStatus(cli.getUserId()!, cli.deviceId!))
-                    ?.crossSigningVerified,
-            );
+            Boolean((await crypto.getDeviceVerificationStatus(cli.getUserId()!, cli.deviceId!))?.crossSigningVerified);
 
         // as long as cross-signing isn't ready,
         // you can't see or dismiss any device toasts
@@ -336,7 +336,7 @@ export default class DeviceListener {
             for (const deviceId of devices) {
                 if (deviceId === cli.deviceId) continue;
 
-                const deviceTrust = await cli.getCrypto()!.getDeviceVerificationStatus(cli.getUserId()!, deviceId);
+                const deviceTrust = await crypto.getDeviceVerificationStatus(cli.getUserId()!, deviceId);
                 if (!deviceTrust?.crossSigningVerified && !this.dismissed.has(deviceId)) {
                     if (this.ourDeviceIdsAtStart?.has(deviceId)) {
                         oldUnverifiedDeviceIds.add(deviceId);
