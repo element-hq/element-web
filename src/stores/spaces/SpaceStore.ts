@@ -765,7 +765,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         const hiddenChildren = new EnhancedMap<string, Set<string>>();
         visibleRooms.forEach((room) => {
-            if (room.getMyMembership() !== "join") return;
+            if (!["join", "invite"].includes(room.getMyMembership())) return;
             this.getParents(room.roomId).forEach((parent) => {
                 hiddenChildren.getOrCreate(parent.roomId, new Set()).add(room.roomId);
             });
@@ -872,10 +872,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         const notificationStatesToUpdate = [...changeSet];
-        if (
-            this.enabledMetaSpaces.includes(MetaSpace.People) &&
-            userDiff.added.length + userDiff.removed.length + usersChanged.length > 0
-        ) {
+        // We update the People metaspace even if we didn't detect any changes
+        // as roomIdsBySpace does not pre-calculate it so we have to assume it could have changed
+        if (this.enabledMetaSpaces.includes(MetaSpace.People)) {
             notificationStatesToUpdate.push(MetaSpace.People);
         }
         this.updateNotificationStates(notificationStatesToUpdate);
