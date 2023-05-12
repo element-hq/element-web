@@ -16,10 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import pako from "pako";
-import Tar from "tar-js";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import type * as Pako from "pako";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import PlatformPeg from "../PlatformPeg";
 import { _t } from "../languageHandler";
@@ -177,6 +176,11 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
     body.append("mx_local_settings", localStorage.getItem("mx_local_settings")!);
 
     if (opts.sendLogs) {
+        let pako: typeof Pako | undefined;
+        if (gzipLogs) {
+            pako = await import("pako");
+        }
+
         progressCallback(_t("Collecting logs"));
         const logs = await rageshake.getLogsForReport();
         for (const entry of logs) {
@@ -237,6 +241,7 @@ export default async function sendBugReport(bugReportEndpoint?: string, opts: IO
  * @return {Promise} Resolved when the bug report is downloaded (or started).
  */
 export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
+    const Tar = (await import("tar-js")).default;
     const progressCallback = opts.progressCallback || ((): void => {});
     const body = await collectBugReport(opts, false);
 

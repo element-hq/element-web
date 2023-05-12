@@ -22,7 +22,6 @@ import { User } from "matrix-js-sdk/src/models/user";
 import { Direction } from "matrix-js-sdk/src/models/event-timeline";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import * as ContentHelpers from "matrix-js-sdk/src/content-helpers";
-import { Element as ChildElement, parseFragment as parseHtml } from "parse5";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IContent } from "matrix-js-sdk/src/models/event";
 import { MRoomTopicEventContent } from "matrix-js-sdk/src/@types/topic";
@@ -1003,16 +1002,15 @@ export const Commands = [
 
             // Try and parse out a widget URL from iframes
             if (widgetUrl.toLowerCase().startsWith("<iframe ")) {
-                // We use parse5, which doesn't render/create a DOM node. It instead runs
-                // some superfast regex over the text so we don't have to.
-                const embed = parseHtml(widgetUrl);
+                const embed = new DOMParser().parseFromString(widgetUrl, "text/html").body;
                 if (embed?.childNodes?.length === 1) {
-                    const iframe = embed.childNodes[0] as ChildElement;
-                    if (iframe.tagName.toLowerCase() === "iframe" && iframe.attrs) {
-                        const srcAttr = iframe.attrs.find((a) => a.name === "src");
+                    const iframe = embed.firstElementChild;
+                    if (iframe.tagName.toLowerCase() === "iframe") {
                         logger.log("Pulling URL out of iframe (embed code)");
-                        if (!srcAttr) return reject(new UserFriendlyError("iframe has no src attribute"));
-                        widgetUrl = srcAttr.value;
+                        if (!iframe.hasAttribute("src")) {
+                            return reject(new UserFriendlyError("iframe has no src attribute"));
+                        }
+                        widgetUrl = iframe.getAttribute("src");
                     }
                 }
             }

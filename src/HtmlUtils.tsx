@@ -19,7 +19,7 @@ limitations under the License.
 
 import React, { LegacyRef, ReactElement, ReactNode } from "react";
 import sanitizeHtml from "sanitize-html";
-import cheerio from "cheerio";
+import { load as cheerio } from "cheerio";
 import classNames from "classnames";
 import EMOJIBASE_REGEX from "emojibase-regex";
 import { merge, split } from "lodash";
@@ -549,7 +549,7 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
             }
 
             safeBody = sanitizeHtml(formattedBody!, sanitizeParams);
-            const phtml = cheerio.load(safeBody, {
+            const phtml = cheerio(safeBody, {
                 // @ts-ignore: The `_useHtmlParser2` internal option is the
                 // simplest way to both parse and render using `htmlparser2`.
                 _useHtmlParser2: true,
