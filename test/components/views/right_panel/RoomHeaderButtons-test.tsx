@@ -54,6 +54,11 @@ describe("RoomHeaderButtons-test.tsx", function () {
         return container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")!.className.includes(type);
     }
 
+    it("should render", () => {
+        const { asFragment } = getComponent(room);
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     it("shows the thread button", () => {
         const { container } = getComponent(room);
         expect(getThreadButton(container)).not.toBeNull();
