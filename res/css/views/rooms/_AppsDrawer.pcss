@@ -198,78 +198,78 @@ limitations under the License.
     width: 100%;
     padding-top: 3px;
     padding-bottom: 6px;
-}
 
-.mx_AppTileMenuBar_title {
-    line-height: 20px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    .mx_AppTileMenuBar_title {
+        line-height: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
-    .mx_WidgetAvatar {
-        margin-right: 12px;
+        .mx_WidgetAvatar {
+            margin-right: 12px;
+        }
+
+        > :last-child {
+            margin-left: 9px;
+        }
     }
 
-    > :last-child {
-        margin-left: 9px;
+    .mx_AppTileMenuBar_widgets {
+        float: right;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
-}
 
-.mx_AppTileMenuBar_widgets {
-    float: right;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
+    .mx_AppTileMenuBar_iconButton {
+        --size: 24px; /* Size of the button. Its height and width values should be same */
 
-.mx_AppTileMenuBar_iconButton {
-    --size: 24px; /* Size of the button. Its height and width values should be same */
-
-    margin: 0 4px;
-    position: relative;
-    height: var(--size);
-    width: var(--size);
-
-    &::before,
-    &:hover::after {
-        content: "";
-        position: absolute;
+        margin: 0 4px;
+        position: relative;
         height: var(--size);
         width: var(--size);
-    }
 
-    &::before {
-        background-color: $muted-fg-color;
-        mask-position: center;
-        mask-repeat: no-repeat;
-        mask-size: 12px;
-    }
+        &::before,
+        &:hover::after {
+            content: "";
+            position: absolute;
+            height: var(--size);
+            width: var(--size);
+        }
 
-    &:hover::after {
-        background-color: $panel-actions;
-        border-radius: 50%;
-        left: 0;
-        top: 0;
-    }
+        &::before {
+            background-color: $muted-fg-color;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: 12px;
+        }
 
-    &.mx_AppTileMenuBar_iconButton--collapse::before {
-        mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
-    }
+        &:hover::after {
+            background-color: $panel-actions;
+            border-radius: 50%;
+            left: 0;
+            top: 0;
+        }
 
-    &.mx_AppTileMenuBar_iconButton--maximise::before {
-        mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
-    }
+        &.mx_AppTileMenuBar_iconButton--collapse::before {
+            mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
+        }
 
-    &.mx_AppTileMenuBar_iconButton--minimise::before {
-        mask-image: url("$(res)/img/element-icons/minus-button.svg");
-    }
+        &.mx_AppTileMenuBar_iconButton--maximise::before {
+            mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
+        }
 
-    &.mx_AppTileMenuBar_iconButton--popout::before {
-        mask-image: url("$(res)/img/feather-customised/widget/external-link.svg");
-    }
+        &.mx_AppTileMenuBar_iconButton--minimise::before {
+            mask-image: url("$(res)/img/element-icons/minus-button.svg");
+        }
 
-    &.mx_AppTileMenuBar_iconButton--menu::before {
-        mask-image: url("$(res)/img/element-icons/room/ellipsis.svg");
+        &.mx_AppTileMenuBar_iconButton--popout::before {
+            mask-image: url("$(res)/img/feather-customised/widget/external-link.svg");
+        }
+
+        &.mx_AppTileMenuBar_iconButton--menu::before {
+            mask-image: url("$(res)/img/element-icons/room/ellipsis.svg");
+        }
     }
 }
 
