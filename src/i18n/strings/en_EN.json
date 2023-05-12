@@ -1947,6 +1947,7 @@
     "and %(count)s others...|one": "and one other...",
     "Invite to this room": "Invite to this room",
     "Invite to this space": "Invite to this space",
+    "You do not have permission to invite users": "You do not have permission to invite users",
     "Invited": "Invited",
     "Filter room members": "Filter room members",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
