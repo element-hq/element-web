@@ -61,7 +61,8 @@
         "lint:style": "stylelint \"res/css/**/*.pcss\"",
         "test": "jest",
         "coverage": "yarn test --coverage",
-        "analyse:unused-exports": "node ./scripts/analyse_unused_exports.js"
+        "analyse:unused-exports": "node ./scripts/analyse_unused_exports.js",
+        "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json"
     },
     "resolutions": {
         "@types/react-dom": "17.0.19",
@@ -177,6 +178,7 @@
         "ts-prune": "^0.10.3",
         "typescript": "5.0.4",
         "webpack": "^4.46.0",
+        "webpack-bundle-analyzer": "^4.8.0",
         "webpack-cli": "^3.3.12",
         "webpack-dev-server": "^3.11.2",
         "worker-loader": "^3.0.0",
