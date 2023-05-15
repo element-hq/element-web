@@ -700,6 +700,10 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                             onKeyDown={this.onHeaderKeyDown}
                             onFocus={onFocus}
                             aria-label={this.props.label}
+                            role="treeitem"
+                            aria-expanded={this.state.isExpanded}
+                            aria-level={1}
+                            aria-selected="false"
                         >
                             <div className="mx_RoomSublist_stickableContainer">
                                 <div className="mx_RoomSublist_stickable">
@@ -708,9 +712,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                         inputRef={ref}
                                         tabIndex={tabIndex}
                                         className="mx_RoomSublist_headerText"
-                                        role="treeitem"
                                         aria-expanded={this.state.isExpanded}
-                                        aria-level={1}
                                         onClick={this.onHeaderClick}
                                         onContextMenu={this.onContextMenu}
                                         title={this.props.isMinimized ? this.props.label : undefined}
