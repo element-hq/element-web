@@ -289,7 +289,7 @@ export default class DeviceListener {
 
             // cross signing isn't enabled - nag to enable it
             // There are 3 different toasts for:
-            if (!cli.getCrossSigningId() && cli.getStoredCrossSigningForUser(cli.getUserId()!)) {
+            if (!(await crypto.getCrossSigningKeyId()) && cli.getStoredCrossSigningForUser(cli.getUserId()!)) {
                 // Cross-signing on account but this device doesn't trust the master key (verify this session)
                 showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
                 this.checkKeyBackupStatus();

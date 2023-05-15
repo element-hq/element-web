@@ -80,6 +80,7 @@ describe("DeviceListener", () => {
             getDeviceVerificationStatus: jest.fn().mockResolvedValue({
                 crossSigningVerified: false,
             }),
+            getCrossSigningKeyId: jest.fn(),
             getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
             isCrossSigningReady: jest.fn().mockResolvedValue(true),
             isSecretStorageReady: jest.fn().mockResolvedValue(true),
@@ -93,7 +94,6 @@ describe("DeviceListener", () => {
             isVersionSupported: jest.fn().mockResolvedValue(true),
             isInitialSyncComplete: jest.fn().mockReturnValue(true),
             getKeyBackupEnabled: jest.fn(),
-            getCrossSigningId: jest.fn(),
             getStoredCrossSigningForUser: jest.fn(),
             waitForClientWellKnown: jest.fn(),
             isRoomEncrypted: jest.fn(),
@@ -298,7 +298,7 @@ describe("DeviceListener", () => {
 
             describe("when user does not have a cross signing id on this device", () => {
                 beforeEach(() => {
-                    mockClient!.getCrossSigningId.mockReturnValue(null);
+                    mockCrypto!.getCrossSigningKeyId.mockResolvedValue(null);
                 });
 
                 it("shows verify session toast when account has cross signing", async () => {
@@ -312,7 +312,7 @@ describe("DeviceListener", () => {
                 });
 
                 it("checks key backup status when when account has cross signing", async () => {
-                    mockClient!.getCrossSigningId.mockReturnValue(null);
+                    mockCrypto!.getCrossSigningKeyId.mockResolvedValue(null);
                     mockClient!.getStoredCrossSigningForUser.mockReturnValue(new CrossSigningInfo(userId));
                     await createAndStart();
 
@@ -322,7 +322,7 @@ describe("DeviceListener", () => {
 
             describe("when user does have a cross signing id on this device", () => {
                 beforeEach(() => {
-                    mockClient!.getCrossSigningId.mockReturnValue("abc");
+                    mockCrypto!.getCrossSigningKeyId.mockResolvedValue("abc");
                 });
 
                 it("shows upgrade encryption toast when user has a key backup available", async () => {
