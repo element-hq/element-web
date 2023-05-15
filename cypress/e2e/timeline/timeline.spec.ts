@@ -714,6 +714,12 @@ describe("Timeline", () => {
             cy.visit("/#/room/" + roomId);
 
             cy.get(".mx_RoomHeader").findByRole("button", { name: "Search" }).click();
+
+            cy.get(".mx_SearchBar").percySnapshotElement("Search bar on the timeline", {
+                // Emulate narrow timeline
+                widths: [320, 640],
+            });
+
             cy.get(".mx_SearchBar_input input").type("Message{enter}");
 
             cy.get(".mx_EventTile:not(.mx_EventTile_contextual) .mx_EventTile_searchHighlight").should("exist");
