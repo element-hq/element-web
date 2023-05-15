@@ -16,8 +16,9 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
         [33mclass[39m=[32m"mx_ContextualMenu"[39m
         [33mrole[39m=[32m"menu"[39m
       [36m>[39m
-        [36m<div[39m
+        [36m<ul[39m
           [33mclass[39m=[32m"mx_IconizedContextMenu mx_SpacePanel_contextMenu mx_IconizedContextMenu_compact"[39m
+          [33mrole[39m=[32m"none"[39m
         [36m>[39m
           [36m<div[39m
             [33mclass[39m=[32m"mx_SpacePanel_contextMenu_header"[39m
@@ -27,7 +28,7 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
           [36m<div[39m
             [33mclass[39m=[32m"mx_IconizedContextMenu_optionList"[39m
           [36m>[39m
-            [36m<div[39m
+            [36m<li[39m
               [33maria-label[39m=[32m"Space home"[39m
               [33mclass[39m=[32m"mx_AccessibleButton mx_IconizedContextMenu_item focus-visible"[39m
               [33mdata-focus-visible-added[39m=[32m""[39m
@@ -42,8 +43,8 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
               [36m>[39m
                 [0mSpace home[0m
               [36m</span>[39m
-            [36m</div>[39m
-            [36m<div[39m
+            [36m</li>[39m
+            [36m<li[39m
               [33maria-label[39m=[32m"Explore rooms"[39m
               [33mclass[39m=[32m"mx_AccessibleButton mx_IconizedContextMenu_item"[39m
               [33mrole[39m=[32m"menuitem"[39m
@@ -57,8 +58,8 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
               [36m>[39m
                 [0mExplore rooms[0m
               [36m</span>[39m
-            [36m</div>[39m
-            [36m<div[39m
+            [36m</li>[39m
+            [36m<li[39m
               [33maria-label[39m=[32m"Preferences"[39m
               [33mclass[39m=[32m"mx_AccessibleButton mx_IconizedContextMenu_item"[39m
               [33mrole[39m=[32m"menuitem"[39m
@@ -72,8 +73,8 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
               [36m>[39m
                 [0mPreferences[0m
               [36m</span>[39m
-            [36m</div>[39m
-            [36m<div[39m
+            [36m</li>[39m
+            [36m<li[39m
               [33maria-label[39m=[32m"Leave space"[39m
               [33mclass[39m=[32m"mx_AccessibleButton mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"[39m
               [33mdata-testid[39m=[32m"leave-option"[39m
@@ -88,9 +89,9 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
               [36m>[39m
                 [0mLeave space[0m
               [36m</span>[39m
-            [36m</div>[39m
+            [36m</li>[39m
           [36m</div>[39m
-        [36m</div>[39m
+        [36m</ul>[39m
       [36m</div>[39m
     [36m</div>[39m
   [36m</div>[39m

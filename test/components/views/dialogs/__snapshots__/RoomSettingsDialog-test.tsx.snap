@@ -2,7 +2,7 @@
 
 exports[`<RoomSettingsDialog /> Settings tabs renders default tabs correctly 1`] = `
 NodeList [
-  <div
+  <li
     aria-controls="mx_tabpanel_ROOM_GENERAL_TAB"
     aria-selected="true"
     class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
@@ -19,8 +19,8 @@ NodeList [
     >
       General
     </span>
-  </div>,
-  <div
+  </li>,
+  <li
     aria-controls="mx_tabpanel_ROOM_SECURITY_TAB"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
@@ -37,8 +37,8 @@ NodeList [
     >
       Security & Privacy
     </span>
-  </div>,
-  <div
+  </li>,
+  <li
     aria-controls="mx_tabpanel_ROOM_ROLES_TAB"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
@@ -55,8 +55,8 @@ NodeList [
     >
       Roles & Permissions
     </span>
-  </div>,
-  <div
+  </li>,
+  <li
     aria-controls="mx_tabpanel_ROOM_NOTIFICATIONS_TAB"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
@@ -73,8 +73,8 @@ NodeList [
     >
       Notifications
     </span>
-  </div>,
-  <div
+  </li>,
+  <li
     aria-controls="mx_tabpanel_ROOM_POLL_HISTORY_TAB"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"
@@ -91,7 +91,7 @@ NodeList [
     >
       Poll history
     </span>
-  </div>,
+  </li>,
 ]
 `;
 

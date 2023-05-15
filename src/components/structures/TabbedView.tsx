@@ -121,6 +121,7 @@ export default class TabbedView<T extends string> extends React.Component<IProps
                 role="tab"
                 aria-selected={isActive}
                 aria-controls={id}
+                element="li"
             >
                 {tabIcon}
                 <span className="mx_TabbedView_tabLabel_text" id={`${id}_label`}>
@@ -166,14 +167,14 @@ export default class TabbedView<T extends string> extends React.Component<IProps
                     handleUpDown={this.props.tabLocation == TabLocation.LEFT}
                 >
                     {({ onKeyDownHandler }) => (
-                        <div
+                        <ul
                             className="mx_TabbedView_tabLabels"
                             role="tablist"
                             aria-orientation={this.props.tabLocation == TabLocation.LEFT ? "vertical" : "horizontal"}
                             onKeyDown={onKeyDownHandler}
                         >
                             {labels}
-                        </div>
+                        </ul>
                     )}
                 </RovingTabIndexProvider>
                 {panel}

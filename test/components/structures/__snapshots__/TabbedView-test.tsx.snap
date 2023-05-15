@@ -5,12 +5,12 @@ exports[`<TabbedView /> renders tabs 1`] = `
   <div
     class="mx_TabbedView mx_TabbedView_tabsOnLeft"
   >
-    <div
+    <ul
       aria-orientation="vertical"
       class="mx_TabbedView_tabLabels"
       role="tablist"
     >
-      <div
+      <li
         aria-controls="mx_tabpanel_GENERAL"
         aria-selected="true"
         class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
@@ -27,8 +27,8 @@ exports[`<TabbedView /> renders tabs 1`] = `
         >
           General
         </span>
-      </div>
-      <div
+      </li>
+      <li
         aria-controls="mx_tabpanel_LABS"
         aria-selected="false"
         class="mx_AccessibleButton mx_TabbedView_tabLabel"
@@ -45,8 +45,8 @@ exports[`<TabbedView /> renders tabs 1`] = `
         >
           Labs
         </span>
-      </div>
-      <div
+      </li>
+      <li
         aria-controls="mx_tabpanel_SECURITY"
         aria-selected="false"
         class="mx_AccessibleButton mx_TabbedView_tabLabel"
@@ -63,8 +63,8 @@ exports[`<TabbedView /> renders tabs 1`] = `
         >
           Security
         </span>
-      </div>
-    </div>
+      </li>
+    </ul>
     <div
       aria-labelledby="mx_tabpanel_GENERAL_label"
       class="mx_TabbedView_tabPanel"

@@ -16,8 +16,9 @@ exports[`RoomGeneralContextMenu renders an empty context menu for archived rooms
       <div
         class="mx_ContextualMenu_chevron_left"
       />
-      <div
+      <ul
         class="mx_IconizedContextMenu mx_RoomGeneralContextMenu mx_IconizedContextMenu_compact"
+        role="none"
       >
         <div
           class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst"
@@ -25,7 +26,7 @@ exports[`RoomGeneralContextMenu renders an empty context menu for archived rooms
         <div
           class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst mx_IconizedContextMenu_optionList_red"
         >
-          <div
+          <li
             aria-label="Forget Room"
             class="mx_AccessibleButton mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"
             role="menuitem"
@@ -39,9 +40,9 @@ exports[`RoomGeneralContextMenu renders an empty context menu for archived rooms
             >
               Forget Room
             </span>
-          </div>
+          </li>
         </div>
-      </div>
+      </ul>
     </div>
   </div>
 </div>
@@ -63,8 +64,9 @@ exports[`RoomGeneralContextMenu renders the default context menu 1`] = `
       <div
         class="mx_ContextualMenu_chevron_left"
       />
-      <div
+      <ul
         class="mx_IconizedContextMenu mx_RoomGeneralContextMenu mx_IconizedContextMenu_compact"
+        role="none"
       >
         <div
           class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst"
@@ -72,7 +74,7 @@ exports[`RoomGeneralContextMenu renders the default context menu 1`] = `
         <div
           class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst mx_IconizedContextMenu_optionList_red"
         >
-          <div
+          <li
             aria-label="Forget Room"
             class="mx_AccessibleButton mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"
             role="menuitem"
@@ -86,9 +88,9 @@ exports[`RoomGeneralContextMenu renders the default context menu 1`] = `
             >
               Forget Room
             </span>
-          </div>
+          </li>
         </div>
-      </div>
+      </ul>
     </div>
   </div>
 </div>

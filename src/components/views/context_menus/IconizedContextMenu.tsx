@@ -126,6 +126,7 @@ export const IconizedContextMenuOption: React.FC<IOptionProps> = ({
 }) => {
     return (
         <MenuItem
+            element="li"
             {...props}
             className={classNames(className, {
                 mx_IconizedContextMenu_item: true,
@@ -171,7 +172,9 @@ const IconizedContextMenu: React.FC<React.PropsWithChildren<IProps>> = ({ classN
 
     return (
         <ContextMenu chevronFace={ChevronFace.None} {...props}>
-            <div className={classes}>{children}</div>
+            <ul role="none" className={classes}>
+                {children}
+            </ul>
         </ContextMenu>
     );
 };

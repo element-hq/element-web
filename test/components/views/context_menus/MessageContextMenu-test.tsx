@@ -99,7 +99,7 @@ describe("MessageContextMenu", () => {
 
             createMenu(event, {}, {}, undefined, room);
 
-            expect(document.querySelector('div[aria-label="Pin"]')).toBeFalsy();
+            expect(document.querySelector('li[aria-label="Pin"]')).toBeFalsy();
         });
 
         it("does not show pin option for beacon_info event", () => {
@@ -111,7 +111,7 @@ describe("MessageContextMenu", () => {
 
             createMenu(deadBeaconEvent, {}, {}, undefined, room);
 
-            expect(document.querySelector('div[aria-label="Pin"]')).toBeFalsy();
+            expect(document.querySelector('li[aria-label="Pin"]')).toBeFalsy();
         });
 
         it("does not show pin option when pinning feature is disabled", () => {
@@ -130,7 +130,7 @@ describe("MessageContextMenu", () => {
 
             createMenu(pinnableEvent, {}, {}, undefined, room);
 
-            expect(document.querySelector('div[aria-label="Pin"]')).toBeFalsy();
+            expect(document.querySelector('li[aria-label="Pin"]')).toBeFalsy();
         });
 
         it("shows pin option when pinning feature is enabled", () => {
@@ -147,7 +147,7 @@ describe("MessageContextMenu", () => {
 
             createMenu(pinnableEvent, {}, {}, undefined, room);
 
-            expect(document.querySelector('div[aria-label="Pin"]')).toBeTruthy();
+            expect(document.querySelector('li[aria-label="Pin"]')).toBeTruthy();
         });
 
         it("pins event on pin option click", () => {
@@ -171,7 +171,7 @@ describe("MessageContextMenu", () => {
 
             createMenu(pinnableEvent, { onFinished }, {}, undefined, room);
 
-            fireEvent.click(document.querySelector('div[aria-label="Pin"]')!);
+            fireEvent.click(document.querySelector('li[aria-label="Pin"]')!);
 
             // added to account data
             expect(client.setRoomAccountData).toHaveBeenCalledWith(roomId, ReadPinsEventId, {
@@ -225,7 +225,7 @@ describe("MessageContextMenu", () => {
 
             createMenu(pinnableEvent, {}, {}, undefined, room);
 
-            fireEvent.click(document.querySelector('div[aria-label="Unpin"]')!);
+            fireEvent.click(document.querySelector('li[aria-label="Unpin"]')!);
 
             expect(client.setRoomAccountData).not.toHaveBeenCalled();
 
@@ -244,13 +244,13 @@ describe("MessageContextMenu", () => {
         it("allows forwarding a room message", () => {
             const eventContent = createMessageEventContent("hello");
             createMenuWithContent(eventContent);
-            expect(document.querySelector('div[aria-label="Forward"]')).toBeTruthy();
+            expect(document.querySelector('li[aria-label="Forward"]')).toBeTruthy();
         });
 
         it("does not allow forwarding a poll", () => {
             const eventContent = PollStartEvent.from("why?", ["42"], M_POLL_KIND_DISCLOSED);
             createMenuWithContent(eventContent);
-            expect(document.querySelector('div[aria-label="Forward"]')).toBeFalsy();
+            expect(document.querySelector('li[aria-label="Forward"]')).toBeFalsy();
         });
 
         it("should not allow forwarding a voice broadcast", () => {
@@ -261,7 +261,7 @@ describe("MessageContextMenu", () => {
                 "ABC123",
             );
             createMenu(broadcastStartEvent);
-            expect(document.querySelector('div[aria-label="Forward"]')).toBeFalsy();
+            expect(document.querySelector('li[aria-label="Forward"]')).toBeFalsy();
         });
 
         describe("forwarding beacons", () => {
@@ -273,7 +273,7 @@ describe("MessageContextMenu", () => {
                 const beacons = new Map<BeaconIdentifier, Beacon>();
                 beacons.set(getBeaconInfoIdentifier(deadBeaconEvent), beacon);
                 createMenu(deadBeaconEvent, {}, {}, beacons);
-                expect(document.querySelector('div[aria-label="Forward"]')).toBeFalsy();
+                expect(document.querySelector('li[aria-label="Forward"]')).toBeFalsy();
             });
 
             it("does not allow forwarding a beacon that is not live but has a latestLocation", () => {
@@ -288,7 +288,7 @@ describe("MessageContextMenu", () => {
                 const beacons = new Map<BeaconIdentifier, Beacon>();
                 beacons.set(getBeaconInfoIdentifier(deadBeaconEvent), beacon);
                 createMenu(deadBeaconEvent, {}, {}, beacons);
-                expect(document.querySelector('div[aria-label="Forward"]')).toBeFalsy();
+                expect(document.querySelector('li[aria-label="Forward"]')).toBeFalsy();
             });
 
             it("does not allow forwarding a live beacon that does not have a latestLocation", () => {
@@ -298,7 +298,7 @@ describe("MessageContextMenu", () => {
                 const beacons = new Map<BeaconIdentifier, Beacon>();
                 beacons.set(getBeaconInfoIdentifier(beaconEvent), beacon);
                 createMenu(beaconEvent, {}, {}, beacons);
-                expect(document.querySelector('div[aria-label="Forward"]')).toBeFalsy();
+                expect(document.querySelector('li[aria-label="Forward"]')).toBeFalsy();
             });
 
             it("allows forwarding a live beacon that has a location", () => {
@@ -313,7 +313,7 @@ describe("MessageContextMenu", () => {
                 const beacons = new Map<BeaconIdentifier, Beacon>();
                 beacons.set(getBeaconInfoIdentifier(liveBeaconEvent), beacon);
                 createMenu(liveBeaconEvent, {}, {}, beacons);
-                expect(document.querySelector('div[aria-label="Forward"]')).toBeTruthy();
+                expect(document.querySelector('li[aria-label="Forward"]')).toBeTruthy();
             });
 
             it("opens forward dialog with correct event", () => {
@@ -330,7 +330,7 @@ describe("MessageContextMenu", () => {
                 beacons.set(getBeaconInfoIdentifier(liveBeaconEvent), beacon);
                 createMenu(liveBeaconEvent, {}, {}, beacons);
 
-                fireEvent.click(document.querySelector('div[aria-label="Forward"]')!);
+                fireEvent.click(document.querySelector('li[aria-label="Forward"]')!);
 
                 // called with forwardableEvent, not beaconInfo event
                 expect(dispatchSpy).toHaveBeenCalledWith(
@@ -395,7 +395,7 @@ describe("MessageContextMenu", () => {
             mocked(getSelectedText).mockReturnValue(text);
 
             createRightClickMenuWithContent(eventContent);
-            const copyButton = document.querySelector('div[aria-label="Copy"]')!;
+            const copyButton = document.querySelector('li[aria-label="Copy"]')!;
             fireEvent.mouseDown(copyButton);
             expect(copyPlaintext).toHaveBeenCalledWith(text);
         });
@@ -406,7 +406,7 @@ describe("MessageContextMenu", () => {
             mocked(getSelectedText).mockReturnValue("");
 
             createRightClickMenuWithContent(eventContent);
-            const copyButton = document.querySelector('div[aria-label="Copy"]');
+            const copyButton = document.querySelector('li[aria-label="Copy"]');
             expect(copyButton).toBeFalsy();
         });
 
@@ -415,7 +415,7 @@ describe("MessageContextMenu", () => {
             mocked(canEditContent).mockReturnValue(true);
 
             createRightClickMenuWithContent(eventContent);
-            const editButton = document.querySelector('div[aria-label="Edit"]');
+            const editButton = document.querySelector('li[aria-label="Edit"]');
             expect(editButton).toBeTruthy();
         });
 
@@ -424,7 +424,7 @@ describe("MessageContextMenu", () => {
             mocked(canEditContent).mockReturnValue(false);
 
             createRightClickMenuWithContent(eventContent);
-            const editButton = document.querySelector('div[aria-label="Edit"]');
+            const editButton = document.querySelector('li[aria-label="Edit"]');
             expect(editButton).toBeFalsy();
         });
 
@@ -435,7 +435,7 @@ describe("MessageContextMenu", () => {
             };
 
             createRightClickMenuWithContent(eventContent, context);
-            const replyButton = document.querySelector('div[aria-label="Reply"]');
+            const replyButton = document.querySelector('li[aria-label="Reply"]');
             expect(replyButton).toBeTruthy();
         });
 
@@ -449,7 +449,7 @@ describe("MessageContextMenu", () => {
             unsentMessage.setStatus(EventStatus.QUEUED);
 
             createMenu(unsentMessage, {}, context);
-            const replyButton = document.querySelector('div[aria-label="Reply"]');
+            const replyButton = document.querySelector('li[aria-label="Reply"]');
             expect(replyButton).toBeFalsy();
         });
 
@@ -460,7 +460,7 @@ describe("MessageContextMenu", () => {
             };
 
             createRightClickMenuWithContent(eventContent, context);
-            const reactButton = document.querySelector('div[aria-label="React"]');
+            const reactButton = document.querySelector('li[aria-label="React"]');
             expect(reactButton).toBeTruthy();
         });
 
@@ -471,7 +471,7 @@ describe("MessageContextMenu", () => {
             };
 
             createRightClickMenuWithContent(eventContent, context);
-            const reactButton = document.querySelector('div[aria-label="React"]');
+            const reactButton = document.querySelector('li[aria-label="React"]');
             expect(reactButton).toBeFalsy();
         });
 
@@ -487,7 +487,7 @@ describe("MessageContextMenu", () => {
             };
 
             createMenu(mxEvent, props, context);
-            const reactButton = document.querySelector('div[aria-label="View in room"]');
+            const reactButton = document.querySelector('li[aria-label="View in room"]');
             expect(reactButton).toBeTruthy();
         });
 
@@ -495,7 +495,7 @@ describe("MessageContextMenu", () => {
             const eventContent = createMessageEventContent("hello");
 
             createRightClickMenuWithContent(eventContent);
-            const reactButton = document.querySelector('div[aria-label="View in room"]');
+            const reactButton = document.querySelector('li[aria-label="View in room"]');
             expect(reactButton).toBeFalsy();
         });
 
@@ -511,7 +511,7 @@ describe("MessageContextMenu", () => {
 
             createRightClickMenu(mxEvent, context);
 
-            const replyInThreadButton = document.querySelector('div[aria-label="Reply in thread"]')!;
+            const replyInThreadButton = document.querySelector('li[aria-label="Reply in thread"]')!;
             fireEvent.click(replyInThreadButton);
 
             expect(dispatcher.dispatch).toHaveBeenCalledWith({
