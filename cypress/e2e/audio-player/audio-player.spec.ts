@@ -29,7 +29,7 @@ describe("Audio player", () => {
         ".mx_SeekBar, " +
         // Exclude various components from the snapshot, for consistency
         ".mx_JumpToBottomButton, " +
-        ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+        ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
 
     const uploadFile = (file: string) => {
         // Upload a file from the message composer

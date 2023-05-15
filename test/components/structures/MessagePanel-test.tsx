@@ -353,7 +353,7 @@ describe("MessagePanel", function () {
         const tiles = container.getElementsByClassName("mx_EventTile");
 
         // find the <li> which wraps the read marker
-        const [rm] = container.getElementsByClassName("mx_RoomView_myReadMarker_container");
+        const [rm] = container.getElementsByClassName("mx_MessagePanel_myReadMarker");
 
         // it should follow the <li> which wraps the event tile for event 4
         const eventContainer = tiles[4];
@@ -373,7 +373,7 @@ describe("MessagePanel", function () {
         const [summary] = container.getElementsByClassName("mx_GenericEventListSummary");
 
         // find the <li> which wraps the read marker
-        const [rm] = container.getElementsByClassName("mx_RoomView_myReadMarker_container");
+        const [rm] = container.getElementsByClassName("mx_MessagePanel_myReadMarker");
 
         expect(rm.previousSibling).toEqual(summary);
 
@@ -395,7 +395,7 @@ describe("MessagePanel", function () {
         const [summary] = container.getElementsByClassName("mx_GenericEventListSummary");
 
         // find the <li> which wraps the read marker
-        const [rm] = container.getElementsByClassName("mx_RoomView_myReadMarker_container");
+        const [rm] = container.getElementsByClassName("mx_MessagePanel_myReadMarker");
 
         expect(rm.previousSibling).toEqual(summary);
 
@@ -420,7 +420,7 @@ describe("MessagePanel", function () {
         const tiles = container.getElementsByClassName("mx_EventTile");
 
         // find the <li> which wraps the read marker
-        const [rm] = container.getElementsByClassName("mx_RoomView_myReadMarker_container");
+        const [rm] = container.getElementsByClassName("mx_MessagePanel_myReadMarker");
         expect(rm.previousSibling).toEqual(tiles[4]);
 
         rerender(
@@ -434,7 +434,7 @@ describe("MessagePanel", function () {
         );
 
         // now there should be two RM containers
-        const readMarkers = container.getElementsByClassName("mx_RoomView_myReadMarker_container");
+        const readMarkers = container.getElementsByClassName("mx_MessagePanel_myReadMarker");
 
         expect(readMarkers.length).toEqual(2);
 
@@ -510,7 +510,7 @@ describe("MessagePanel", function () {
         );
 
         // find the <li> which wraps the read marker
-        const [rm] = container.getElementsByClassName("mx_RoomView_myReadMarker_container");
+        const [rm] = container.getElementsByClassName("mx_MessagePanel_myReadMarker");
 
         const [messageList] = container.getElementsByClassName("mx_RoomView_MessageList");
         const rows = messageList.children;

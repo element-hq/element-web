@@ -22,7 +22,7 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
 import Chainable = Cypress.Chainable;
 
-const hidePercyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+const hidePercyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
 
 describe("Polls", () => {
     let homeserver: HomeserverInstance;

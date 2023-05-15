@@ -149,7 +149,7 @@ describe("Timeline", () => {
 
     describe("configure room", () => {
         // Exclude timestamp and read marker from snapshots
-        const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+        const percyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
 
         beforeEach(() => {
             cy.injectAxe();
@@ -319,7 +319,7 @@ describe("Timeline", () => {
                 .should("have.css", "inset-inline-start", "0px");
 
             // Exclude timestamp and read marker from snapshot
-            const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+            const percyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
             cy.get(".mx_MainSplit").percySnapshotElement("Event line with inline start margin on IRC layout", {
                 percyCSS,
             });
@@ -452,7 +452,7 @@ describe("Timeline", () => {
                 // Hide because flaky - See https://github.com/vector-im/element-web/issues/24957
                 ".mx_TopUnreadMessagesBar, " +
                 // Exclude timestamp and read marker from snapshots
-                ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+                ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
 
             sendEvent(roomId);
             sendEvent(roomId); // check continuation
@@ -583,7 +583,7 @@ describe("Timeline", () => {
             cy.get(".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp").click();
 
             // Exclude timestamp and read marker from snapshot
-            //const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+            //const percyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
 
             // should not add inline start padding to a hidden event line on IRC layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -758,7 +758,7 @@ describe("Timeline", () => {
             cy.checkA11y();
 
             // Exclude timestamp and read marker from snapshot
-            const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+            const percyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
             cy.get(".mx_EventTile_last").percySnapshotElement("URL Preview", {
                 percyCSS,
                 widths: [800, 400],
@@ -904,7 +904,7 @@ describe("Timeline", () => {
             cy.get(".mx_EventTile_last .mx_EventTile_receiptSent").should("be.visible");
 
             // Exclude timestamp and read marker from snapshot
-            const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+            const percyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
 
             // Check the margin value of ReplyChains of EventTile at the bottom on IRC layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -1015,7 +1015,7 @@ describe("Timeline", () => {
             cy.viewport(1600, 1200);
 
             // Exclude timestamp and read marker from snapshots
-            //const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+            //const percyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
 
             // Make sure the strings do not overflow on IRC layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);

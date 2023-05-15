@@ -69,7 +69,7 @@ describe("Threads", () => {
         const MessageTimestampColor = "rgb(172, 172, 172)";
         const ThreadViewGroupSpacingStart = "56px"; // --ThreadView_group_spacing-start
         // Exclude timestamp and read marker from snapshots
-        const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+        const percyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
 
         cy.get(".mx_RoomView_body").within(() => {
             // User sends message
@@ -445,7 +445,7 @@ describe("Threads", () => {
 
         // Exclude timestamp, read marker, and mapboxgl-map from snapshots
         const percyCSS =
-            ".mx_MessageTimestamp, .mx_RoomView_myReadMarker, .mapboxgl-map { visibility: hidden !important; }";
+            ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker, .mapboxgl-map { visibility: hidden !important; }";
 
         cy.get(".mx_RoomView_body").within(() => {
             // User sends message

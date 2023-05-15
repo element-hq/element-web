@@ -132,7 +132,7 @@ describe("permalinks", () => {
         cy.get(".mx_GenericEventListSummary").invoke("remove");
 
         // Disabled because flaky - see https://github.com/vector-im/element-web/issues/25283
-        //const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+        //const percyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
         //cy.get(".mx_RoomView_timeline").percySnapshotElement("Permalink rendering", { percyCSS });
     });
 });
