@@ -62,7 +62,7 @@
         "test": "jest",
         "coverage": "yarn test --coverage",
         "analyse:unused-exports": "node ./scripts/analyse_unused_exports.js",
-        "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json"
+        "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp"
     },
     "resolutions": {
         "@types/react-dom": "17.0.19",
