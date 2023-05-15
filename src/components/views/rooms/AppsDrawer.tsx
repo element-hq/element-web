@@ -114,11 +114,11 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         };
         const collapseConfig = {
             onResizeStart: () => {
-                this.resizeContainer?.classList.add("mx_AppsDrawer_resizing");
+                this.resizeContainer?.classList.add("mx_AppsDrawer--resizing");
                 this.setState({ resizingHorizontal: true });
             },
             onResizeStop: () => {
-                this.resizeContainer?.classList.remove("mx_AppsDrawer_resizing");
+                this.resizeContainer?.classList.remove("mx_AppsDrawer--resizing");
                 WidgetLayoutStore.instance.setResizerDistributions(
                     this.props.room,
                     Container.Top,
@@ -254,11 +254,11 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         }
 
         const classes = classNames({
-            mx_AppsDrawer: true,
-            mx_AppsDrawer_maximise: widgetIsMaxmised,
-            mx_AppsDrawer_resizing: this.state.resizing,
-            mx_AppsDrawer_2apps: apps.length === 2,
-            mx_AppsDrawer_3apps: apps.length === 3,
+            "mx_AppsDrawer": true,
+            "mx_AppsDrawer--maximised": widgetIsMaxmised,
+            "mx_AppsDrawer--resizing": this.state.resizing,
+            "mx_AppsDrawer--2apps": apps.length === 2,
+            "mx_AppsDrawer--3apps": apps.length === 3,
         });
         const appContainers = (
             <div className="mx_AppsContainer" ref={this.collectResizer}>
