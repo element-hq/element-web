@@ -110,6 +110,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         const classNames = {
             handle: "mx_ResizeHandle",
             vertical: "mx_ResizeHandle--vertical",
+            reverse: "mx_ResizeHandle_reverse",
         };
         const collapseConfig = {
             onResizeStart: () => {
@@ -265,7 +266,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
                     if (i < 1) return app;
                     return (
                         <React.Fragment key={app.key}>
-                            <ResizeHandle />
+                            <ResizeHandle reverse={i > apps.length / 2} />
                             {app}
                         </React.Fragment>
                     );
