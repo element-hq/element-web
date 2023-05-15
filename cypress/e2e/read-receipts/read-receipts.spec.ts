@@ -32,8 +32,8 @@ describe("Read receipts", () => {
     let selectedRoomId: string;
     let bot: MatrixClient | undefined;
 
-    const botSendMessage = (): Cypress.Chainable<ISendEventResponse> => {
-        return cy.botSendMessage(bot, otherRoomId, "Message");
+    const botSendMessage = (no = 1): Cypress.Chainable<ISendEventResponse> => {
+        return cy.botSendMessage(bot, otherRoomId, `Message ${no}`);
     };
 
     const botSendThreadMessage = (threadId: string): Cypress.Chainable<ISendEventResponse> => {
@@ -264,6 +264,89 @@ describe("Read receipts", () => {
                         // receipt.
                         cy.findByLabelText(`${otherRoomName} 1 unread message.`).should("exist");
                     });
+                });
+            });
+        });
+    });
+
+    /**
+     * The idea of this test is to intercept the receipt / read read_markers requests and
+     * assert that the correct ones are sent.
+     * Prose playbook:
+     * - Another user sends enough messages that the timeline becomes scrollable
+     * - The current user looks at the room and jumps directly to the first unread message
+     * - At this point, a receipt for the last message in the room and
+     *   a fully read marker for the last visible message are expected to be sent
+     * - Then the user jumps to the end of the timeline
+     * - A fully read marker for the last message in the room is expected to be sent
+     */
+    it("Should send the correct receipts", () => {
+        const uriEncodedOtherRoomId = encodeURIComponent(otherRoomId);
+
+        cy.intercept({
+            method: "POST",
+            url: new RegExp(
+                `http://localhost:\\d+/_matrix/client/r0/rooms/${uriEncodedOtherRoomId}/receipt/m\\.read/.+`,
+            ),
+        }).as("receiptRequest");
+
+        const numberOfMessages = 20;
+        const sendMessagePromises = [];
+
+        for (let i = 1; i <= numberOfMessages; i++) {
+            sendMessagePromises.push(botSendMessage(i));
+        }
+
+        cy.all(sendMessagePromises).then((sendMessageResponses) => {
+            const lastMessageId = sendMessageResponses.at(-1).event_id;
+            const uriEncodedLastMessageId = encodeURIComponent(lastMessageId);
+
+            // wait until all messages have been received
+            cy.findByLabelText(`${otherRoomName} ${sendMessagePromises.length} unread messages.`).should("exist");
+
+            // switch to the room with the messages
+            cy.visit("/#/room/" + otherRoomId);
+
+            cy.wait("@receiptRequest").should((req) => {
+                // assert the read receipt for the last message in the room
+                expect(req.request.url).to.contain(uriEncodedLastMessageId);
+                expect(req.request.body).to.deep.equal({
+                    thread_id: "main",
+                });
+            });
+
+            // the following code tests the fully read marker somewhere in the middle of the room
+
+            cy.intercept({
+                method: "POST",
+                url: new RegExp(`http://localhost:\\d+/_matrix/client/r0/rooms/${uriEncodedOtherRoomId}/read_markers`),
+            }).as("readMarkersRequest");
+
+            cy.findByRole("button", { name: "Jump to first unread message." }).click();
+
+            cy.wait("@readMarkersRequest").should((req) => {
+                // since this is not pixel perfect,
+                // the fully read marker should be +/- 1 around the last visible message
+                expect(Array.from(Object.keys(req.request.body))).to.deep.equal(["m.fully_read"]);
+                expect(req.request.body["m.fully_read"]).to.be.oneOf([
+                    sendMessageResponses[11].event_id,
+                    sendMessageResponses[12].event_id,
+                    sendMessageResponses[13].event_id,
+                ]);
+            });
+
+            // the following code tests the fully read marker at the bottom of the room
+
+            cy.intercept({
+                method: "POST",
+                url: new RegExp(`http://localhost:\\d+/_matrix/client/r0/rooms/${uriEncodedOtherRoomId}/read_markers`),
+            }).as("readMarkersRequest");
+
+            cy.findByRole("button", { name: "Scroll to most recent messages" }).click();
+
+            cy.wait("@readMarkersRequest").should((req) => {
+                expect(req.request.body).to.deep.equal({
+                    ["m.fully_read"]: sendMessageResponses.at(-1).event_id,
                 });
             });
         });

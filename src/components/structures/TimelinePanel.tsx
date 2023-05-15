@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { createRef, ReactNode } from "react";
 import ReactDOM from "react-dom";
-import { NotificationCountType, Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { EventTimelineSet, IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
@@ -26,7 +26,7 @@ import { SyncState } from "matrix-js-sdk/src/sync";
 import { RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
 import { debounce, findLastIndex, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent } from "matrix-js-sdk/src/client";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
@@ -261,6 +261,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     // A map of <callId, LegacyCallEventGrouper>
     private callEventGroupers = new Map<string, LegacyCallEventGrouper>();
+    private initialReadMarkerId: string | null = null;
 
     public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -270,13 +271,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         // XXX: we could track RM per TimelineSet rather than per Room.
         // but for now we just do it per room for simplicity.
-        let initialReadMarker: string | null = null;
         if (this.props.manageReadMarkers) {
             const readmarker = this.props.timelineSet.room?.getAccountData("m.fully_read");
             if (readmarker) {
-                initialReadMarker = readmarker.getContent().event_id;
+                this.initialReadMarkerId = readmarker.getContent().event_id;
             } else {
-                initialReadMarker = this.getCurrentReadReceipt();
+                this.initialReadMarkerId = this.getCurrentReadReceipt();
             }
         }
 
@@ -288,7 +288,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             canBackPaginate: false,
             canForwardPaginate: false,
             readMarkerVisible: true,
-            readMarkerEventId: initialReadMarker,
+            readMarkerEventId: this.initialReadMarkerId,
             backPaginating: false,
             forwardPaginating: false,
             clientSyncState: MatrixClientPeg.get().getSyncState(),
@@ -1000,7 +1000,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 continue; /* aborted */
             }
             // outside of try/catch to not swallow errors
-            this.updateReadMarker();
+            await this.updateReadMarker();
         }
     }
 
@@ -1015,26 +1015,74 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 continue; /* aborted */
             }
             // outside of try/catch to not swallow errors
-            this.sendReadReceipt();
+            await this.sendReadReceipts();
         }
     }
 
-    private sendReadReceipt = (): void => {
-        if (SettingsStore.getValue("lowBandwidth")) return;
+    /**
+     * Whether to send public or private receipts.
+     */
+    private async determineReceiptType(client: MatrixClient): Promise<ReceiptType> {
+        const roomId = this.props.timelineSet.room?.roomId ?? null;
+        const shouldSendPublicReadReceipts = SettingsStore.getValue("sendReadReceipts", roomId);
 
-        if (!this.messagePanel.current) return;
-        if (!this.props.manageReadReceipts) return;
-        // This happens on user_activity_end which is delayed, and it's
-        // very possible have logged out within that timeframe, so check
-        // we still have a client.
-        const cli = MatrixClientPeg.get();
-        // if no client or client is guest don't send RR or RM
-        if (!cli || cli.isGuest()) return;
+        if (shouldSendPublicReadReceipts) {
+            return ReceiptType.Read;
+        }
 
-        let shouldSendRR = true;
+        if (
+            !(await client.doesServerSupportUnstableFeature("org.matrix.msc2285.stable")) ||
+            !(await client.isVersionSupported("v1.4"))
+        ) {
+            logger.warn(
+                "Falling back to public instead of private receipts because the homeserver does not support them",
+            );
 
-        const currentRREventId = this.getCurrentReadReceipt(true);
-        const currentRREventIndex = this.indexForEventId(currentRREventId);
+            // The server does not support private read receipt. Fall back to public ones.
+            return ReceiptType.Read;
+        }
+
+        return ReceiptType.ReadPrivate;
+    }
+
+    /**
+     * Whether a fully_read marker should be send.
+     */
+    private shouldSendFullyReadMarker(fullyReadMarkerEventId: string | null): fullyReadMarkerEventId is string {
+        if (!this.state.readMarkerEventId) {
+            // Nothing that can be send.
+            return false;
+        }
+
+        if (this.lastRMSentEventId && this.lastRMSentEventId === this.state.readMarkerEventId) {
+            // Prevent sending the same receipt twice.
+            return false;
+        }
+
+        if (this.state.readMarkerEventId && this.state.readMarkerEventId === this.initialReadMarkerId) {
+            // The initial read marker is the one stored in the room account data.
+            // It makes no sense to send a read marker for it,
+            // because if it is in the room account data, a read marker must have been sent before.
+            return false;
+        }
+
+        if (this.props.timelineSet.thread) {
+            // Read marker for threads are not supported per spec.
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Whether a read receipt should be send.
+     */
+    private shouldSendReadReceipt(
+        currentReadReceiptEventId: string | null,
+        currentReadReceiptEventIndex: number | null,
+        lastReadEvent: MatrixEvent | null,
+        lastReadEventIndex: number | null,
+    ): boolean {
         // We want to avoid sending out read receipts when we are looking at
         // events in the past which are before the latest RR.
         //
@@ -1047,110 +1095,133 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // timeline which is *after* the latest RR (so we should actually send
         // RRs) - but that is a bit of a niche case. It will sort itself out when
         // the user eventually hits the live timeline.
-        //
+
         if (
-            currentRREventId &&
-            currentRREventIndex === null &&
+            currentReadReceiptEventId &&
+            currentReadReceiptEventIndex === null &&
             this.timelineWindow?.canPaginate(EventTimeline.FORWARDS)
         ) {
-            shouldSendRR = false;
+            return false;
         }
+        // Only send a RR if the last read event is ahead in the timeline relative to the current RR event.
+        // Only send a RR if the last RR set != the one we would send
+        return (
+            (lastReadEventIndex === null ||
+                currentReadReceiptEventIndex === null ||
+                lastReadEventIndex > currentReadReceiptEventIndex) &&
+            (!this.lastRRSentEventId || this.lastRRSentEventId !== lastReadEvent?.getId())
+        );
+    }
 
+    private sendReadReceipts = async (): Promise<void> => {
+        if (SettingsStore.getValue("lowBandwidth")) return;
+        if (!this.messagePanel.current) return;
+        if (!this.props.manageReadReceipts) return;
+
+        // This happens on user_activity_end which is delayed, and it's
+        // very possible have logged out within that timeframe, so check
+        // we still have a client.
+        const client = MatrixClientPeg.get();
+        // if no client or client is guest don't send RR or RM
+        if (!client || client.isGuest()) return;
+
+        // "current" here means the receipts that have already been sent
+        const currentReadReceiptEventId = this.getCurrentReadReceipt(true);
+        const currentReadReceiptEventIndex = this.indexForEventId(currentReadReceiptEventId);
+
+        // "last" here means the last displayed event
         const lastReadEventIndex = this.getLastDisplayedEventIndex({
             ignoreOwn: true,
         });
-        if (lastReadEventIndex === null) {
-            shouldSendRR = false;
+        const lastReadEvent: MatrixEvent | null = this.state.events[lastReadEventIndex ?? 0];
+
+        const shouldSendReadReceipt = this.shouldSendReadReceipt(
+            currentReadReceiptEventId,
+            currentReadReceiptEventIndex,
+            lastReadEvent,
+            lastReadEventIndex,
+        );
+        const fullyReadMarkerEventId = this.state.readMarkerEventId;
+        const shouldSendFullyReadMarker = this.shouldSendFullyReadMarker(fullyReadMarkerEventId);
+        const roomId = this.props.timelineSet.room?.roomId;
+
+        debuglog(`Sending Read Markers for ${roomId}: `, {
+            shouldSendReadReceipt,
+            shouldSendFullyReadMarker,
+            currentReadReceiptEventId,
+            currentReadReceiptEventIndex,
+            lastReadEventId: lastReadEvent?.getId(),
+            lastReadEventIndex,
+            readMarkerEventId: this.state.readMarkerEventId,
+        });
+
+        const proms: Array<Promise<void>> = [];
+
+        if (shouldSendReadReceipt) {
+            proms.push(this.sendReadReceipt(client, lastReadEvent));
         }
-        let lastReadEvent: MatrixEvent | null = this.state.events[lastReadEventIndex ?? 0];
-        shouldSendRR =
-            shouldSendRR &&
-            // Only send a RR if the last read event is ahead in the timeline relative to
-            // the current RR event.
-            lastReadEventIndex! > currentRREventIndex! &&
-            // Only send a RR if the last RR set != the one we would send
-            this.lastRRSentEventId !== lastReadEvent?.getId();
 
-        // Only send a RM if the last RM sent != the one we would send
-        const shouldSendRM = this.lastRMSentEventId != this.state.readMarkerEventId;
+        if (shouldSendFullyReadMarker) {
+            const readMarkerEvent = this.props.timelineSet.findEventById(fullyReadMarkerEventId);
 
-        // we also remember the last read receipt we sent to avoid spamming the
-        // same one at the server repeatedly
-        if (shouldSendRR || shouldSendRM) {
-            if (shouldSendRR) {
-                this.lastRRSentEventId = lastReadEvent?.getId();
-            } else {
-                lastReadEvent = null;
-            }
-            this.lastRMSentEventId = this.state.readMarkerEventId;
-
-            const roomId = this.props.timelineSet.room.roomId;
-            const sendRRs = SettingsStore.getValue("sendReadReceipts", roomId);
-
-            debuglog(
-                `Sending Read Markers for ${roomId}: `,
-                `rm=${this.state.readMarkerEventId} `,
-                `rr=${sendRRs ? lastReadEvent?.getId() : null} `,
-                `prr=${lastReadEvent?.getId()}`,
-            );
-
-            if (this.props.timelineSet.thread && sendRRs && lastReadEvent) {
-                // There's no support for fully read markers on threads
-                // as defined by MSC3771
-                cli.sendReadReceipt(lastReadEvent, sendRRs ? ReceiptType.Read : ReceiptType.ReadPrivate);
-            } else {
-                cli.setRoomReadMarkers(
-                    roomId,
-                    this.state.readMarkerEventId ?? "",
-                    sendRRs ? lastReadEvent ?? undefined : undefined, // Public read receipt (could be null)
-                    lastReadEvent ?? undefined, // Private read receipt (could be null)
-                ).catch(async (e): Promise<void> => {
-                    // /read_markers API is not implemented on this HS, fallback to just RR
-                    if (e.errcode === "M_UNRECOGNIZED" && lastReadEvent) {
-                        if (
-                            !sendRRs &&
-                            !(await cli.doesServerSupportUnstableFeature("org.matrix.msc2285.stable")) &&
-                            !(await cli.isVersionSupported("v1.4"))
-                        )
-                            return;
-                        try {
-                            await cli.sendReadReceipt(
-                                lastReadEvent,
-                                sendRRs ? ReceiptType.Read : ReceiptType.ReadPrivate,
-                            );
-                            return;
-                        } catch (error) {
-                            logger.error(e);
-                            this.lastRRSentEventId = undefined;
-                        }
-                    } else {
-                        logger.error(e);
-                    }
-                    // it failed, so allow retries next time the user is active
-                    this.lastRRSentEventId = undefined;
-                    this.lastRMSentEventId = undefined;
-                });
-
-                // do a quick-reset of our unreadNotificationCount to avoid having
-                // to wait from the remote echo from the homeserver.
-                // we only do this if we're right at the end, because we're just assuming
-                // that sending an RR for the latest message will set our notif counter
-                // to zero: it may not do this if we send an RR for somewhere before the end.
-                if (this.isAtEndOfLiveTimeline() && this.props.timelineSet.room) {
-                    this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Total, 0);
-                    this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Highlight, 0);
-                    dis.dispatch({
-                        action: "on_room_read",
-                        roomId: this.props.timelineSet.room.roomId,
-                    });
-                }
+            if (readMarkerEvent) {
+                // Empty room Id should not happen here.
+                // Either way fall back to empty string and let further functions handle it.
+                proms.push(this.sendFullyReadMarker(client, roomId ?? "", fullyReadMarkerEventId));
             }
         }
+
+        await Promise.all(proms);
     };
+
+    /**
+     * Sends a read receipt for event.
+     * Resets the last sent event Id in case of an error, so that it will be retried next time.
+     */
+    private async sendReadReceipt(client: MatrixClient, event: MatrixEvent): Promise<void> {
+        this.lastRRSentEventId = event.getId();
+        const receiptType = await this.determineReceiptType(client);
+
+        try {
+            await client.sendReadReceipt(event, receiptType);
+        } catch (err) {
+            // it failed, so allow retries next time the user is active
+            this.lastRRSentEventId = undefined;
+
+            logger.error("Error sending receipt", {
+                room: this.props.timelineSet.room?.roomId,
+                error: err,
+            });
+        }
+    }
+
+    /**
+     * Sends a fully_read marker for readMarkerEvent.
+     * Resets the last sent event Id in case of an error, so that it will be retried next time.
+     */
+    private async sendFullyReadMarker(
+        client: MatrixClient,
+        roomId: string,
+        fullyReadMarkerEventId: string,
+    ): Promise<void> {
+        this.lastRMSentEventId = this.state.readMarkerEventId;
+
+        try {
+            await client.setRoomReadMarkers(roomId, fullyReadMarkerEventId);
+        } catch (error) {
+            // it failed, so allow retries next time the user is active
+            this.lastRMSentEventId = undefined;
+
+            logger.error("Error sending fully_read", {
+                roomId,
+                error,
+            });
+        }
+    }
 
     // if the read marker is on the screen, we can now assume we've caught up to the end
     // of the screen, so move the marker down to the bottom of the screen.
-    private updateReadMarker = (): void => {
+    private updateReadMarker = async (): Promise<void> => {
         if (!this.props.manageReadMarkers) return;
         if (this.getReadMarkerPosition() === 1) {
             // the read marker is at an event below the viewport,
@@ -1179,7 +1250,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         // Send the updated read marker (along with read receipt) to the server
-        this.sendReadReceipt();
+        await this.sendReadReceipts();
     };
 
     // advance the read marker past any events we sent ourselves.
@@ -1264,9 +1335,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.loadTimeline(this.state.readMarkerEventId, 0, 1 / 3);
     };
 
-    /* update the read-up-to marker to match the read receipt
+    /**
+     * update the read-up-to marker to match the read receipt
      */
-    public forgetReadMarker = (): void => {
+    public forgetReadMarker = async (): Promise<void> => {
         if (!this.props.manageReadMarkers) return;
 
         // Find the read receipt - we will set the read marker to this
@@ -1288,7 +1360,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.setReadMarker(rmId, rmTs);
 
         // Send the receipts to the server immediately (don't wait for activity)
-        this.sendReadReceipt();
+        await this.sendReadReceipts();
     };
 
     /* return true if the content is fully scrolled down and we are
@@ -1529,7 +1601,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
                     }
 
                     if (this.props.sendReadReceiptOnLoad) {
-                        this.sendReadReceipt();
+                        this.sendReadReceipts().catch((err) => {
+                            logger.warn("Error sending receipts on load", err);
+                        });
                     }
                 },
             );
