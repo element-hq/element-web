@@ -170,10 +170,9 @@ describe("Spotlight", () => {
                 )
                 .then(() =>
                     cy.window({ log: false }).then(({ matrixcs: { Visibility } }) => {
-                        cy.createRoom({ name: room1Name, visibility: Visibility.Public }).then((_room1Id) => {
+                        cy.createRoom({ name: room1Name, visibility: Visibility.Public }).then(async (_room1Id) => {
                             room1Id = _room1Id;
-                            bot1.joinRoom(room1Id);
-                            cy.visit("/#/room/" + room1Id);
+                            await bot1.joinRoom(room1Id);
                         });
                         bot2.createRoom({ name: room2Name, visibility: Visibility.Public }).then(
                             ({ room_id: _room2Id }) => {
@@ -199,7 +198,10 @@ describe("Spotlight", () => {
                         });
                     }),
                 )
-                .then(() => cy.get(".mx_RoomSublist_skeletonUI").should("not.exist"));
+                .then(() => {
+                    cy.visit("/#/room/" + room1Id);
+                    cy.get(".mx_RoomSublist_skeletonUI").should("not.exist");
+                });
         });
     });
 
