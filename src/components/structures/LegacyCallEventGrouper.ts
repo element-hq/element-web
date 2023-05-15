@@ -37,10 +37,6 @@ const CONNECTING_STATES = [
 
 const SUPPORTED_STATES = [CallState.Connected, CallState.Ringing, CallState.Ended];
 
-export enum CustomCallState {
-    Missed = "missed",
-}
-
 const isCallEventType = (eventType: string): boolean =>
     eventType.startsWith("m.call.") || eventType.startsWith("org.matrix.call.");
 
@@ -73,7 +69,7 @@ export function buildLegacyCallEventGroupers(
 export default class LegacyCallEventGrouper extends EventEmitter {
     private events: Set<MatrixEvent> = new Set<MatrixEvent>();
     private call: MatrixCall | null = null;
-    public state?: CallState | CustomCallState;
+    public state?: CallState;
 
     public constructor() {
         super();
@@ -130,8 +126,11 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     /**
      * Returns true if there are only events from the other side - we missed the call
      */
-    private get callWasMissed(): boolean {
-        return ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId());
+    public get callWasMissed(): boolean {
+        return (
+            this.state === CallState.Ended &&
+            ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId())
+        );
     }
 
     private get callId(): string | undefined {
@@ -188,10 +187,13 @@ export default class LegacyCallEventGrouper extends EventEmitter {
         } else if (this.call && SUPPORTED_STATES.includes(this.call.state)) {
             this.state = this.call.state;
         } else {
-            if (this.callWasMissed) this.state = CustomCallState.Missed;
-            else if (this.reject) this.state = CallState.Ended;
-            else if (this.hangup) this.state = CallState.Ended;
-            else if (this.invite && this.call) this.state = CallState.Connecting;
+            if (this.reject) {
+                this.state = CallState.Ended;
+            } else if (this.hangup) {
+                this.state = CallState.Ended;
+            } else if (this.invite && this.call) {
+                this.state = CallState.Connecting;
+            }
         }
         this.emit(LegacyCallEventGrouperEvent.StateChanged, this.state);
     };
