@@ -403,8 +403,6 @@
     "%(user)s and %(count)s others|other": "%(user)s และ %(count)s คนอื่นๆ",
     "%(user1)s and %(user2)s": "%(user1)s และ %(user2)s",
     "Empty room": "ห้องว่าง",
-    "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "โฮมเซิร์ฟเวอร์ของคุณปฏิเสธความพยายามในการเข้าสู่ระบบของคุณ อาจเป็นเพราะใช้เวลานานเกินไป กรุณาลองอีกครั้ง. หากยังคงเป็นเช่นนี้ โปรดติดต่อผู้ดูแลระบบโฮมเซิร์ฟเวอร์ของคุณ",
-    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "ไม่สามารถเข้าถึงโฮมเซิร์ฟเวอร์ของคุณและไม่สามารถเข้าสู่ระบบได้. โปรดลองอีกครั้ง. หากยังคงเป็นเช่นนี้, โปรดติดต่อผู้ดูแลระบบโฮมเซิร์ฟเวอร์ของคุณ.",
     "Try again": "ลองอีกครั้ง",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "เราส่งคำขอให้เบราว์เซอร์จดจำโฮมเซิร์ฟเวอร์ที่คุณใช้เพื่ออนุญาตให้คุณลงชื่อเข้าใช้, แต่น่าเสียดายที่เบราว์เซอร์ของคุณไม่จดจำ. ไปที่หน้าลงชื่อเข้าใช้แล้วลองอีกครั้ง.",
     "Main address": "ที่อยู่หลัก",

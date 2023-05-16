@@ -1071,7 +1071,6 @@
     "Åland Islands": "Åland",
     "Afghanistan": "Afghanistan",
     "United Kingdom": "Storbritannia",
-    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Din hjemmeserver kunne ikke nås, og kan derfor ikke logge deg inn. Vennligst prøv igjen. Hvis dette fortsetter, kontakt administratoren til din hjemmeserver.",
     "Only continue if you trust the owner of the server.": "Fortsett kun om du stoler på eieren av serveren.",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Denne handlingen krever tilgang til standard identitetsserver <server /> for å kunne validere en epostaddresse eller telefonnummer, men serveren har ikke bruksvilkår.",
     "Too Many Calls": "For mange samtaler",
@@ -1527,5 +1526,12 @@
     "St. Pierre & Miquelon": "Saint-Pierre og Miquelon",
     "St. Martin": "Saint Martin",
     "St. Barthélemy": "Saint Barthélemy",
-    "%(date)s at %(time)s": "%(date)s klokken %(time)s"
+    "%(date)s at %(time)s": "%(date)s klokken %(time)s",
+    "You cannot place calls without a connection to the server.": "Du kan ikke ringe uten tilkobling til serveren.",
+    "Connectivity to the server has been lost": "Mistet forbindelsen til serveren",
+    "You cannot place calls in this browser.": "Du kan ikke ringe i denne nettleseren.",
+    "Calls are unsupported": "Samtaler støttes ikke",
+    "No other application is using the webcam": "Ingen andre applikasjoner bruker webkameraet",
+    "A microphone and webcam are plugged in and set up correctly": "En mikrofon og webkamera er koblet til og satt opp riktig",
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Samtalen mislyktes fordi mikrofonen ikke var tilgjengelig. Sjekk at en mikrofon er koblet til og satt opp riktig."
 }

@@ -477,7 +477,6 @@
     "Guest": "Visitant",
     "This homeserver has hit its Monthly Active User limit.": "Aquest homeserver ha assolit el seu límit d'usuaris actius mensuals.",
     "This homeserver has exceeded one of its resource limits.": "Aquest homeserver ha sobrepassat on dels seus límits de recursos.",
-    "Please <a>contact your service administrator</a> to continue using the service.": "Si us plau <a>poseu-vos en contacte amb l'administrador</a> per poder continuar usant el servei.",
     "Unrecognised address": "Adreça no reconeguda",
     "Unknown server error": "Error de servidor desconegut",
     "Avoid years that are associated with you": "Eviteu anys que es puguin relacionar amb vós",

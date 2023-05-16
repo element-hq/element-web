@@ -495,7 +495,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Dette tillèt deg å importere krypteringsnøklar som du tidlegare har eksportert frå ein annan Matrix-klient. Du har deretter moglegheit for å dekryptere alle meldingane som den andre klienten kunne dekryptere.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Den eksporterte fila vil bli verna med ein passfrase. Du bør skriva passfrasen her, for å dekryptere fila.",
     "Only room administrators will see this warning": "Berre rom-administratorar vil sjå denne åtvaringa",
-    "Please <a>contact your service administrator</a> to continue using the service.": "Ver venleg og <a>tak kontakt med tenesteadministratoren</a> for å halda fram med å bruka tenesten.",
     "This homeserver has hit its Monthly Active User limit.": "Heimtenaren har truffe den Månadlege Grensa si for Aktive Brukarar.",
     "This homeserver has exceeded one of its resource limits.": "Heimtenaren har gått over ei av ressursgrensene sine.",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Fila %(fileName)s er større enn heimetenaren si grense for opplastningar",

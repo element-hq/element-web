@@ -87,8 +87,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s nema dopuštenje slati Vam notifikacije - molimo pokušajte ponovo",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s nema dopuštenje slati Vam notifikacije - molimo provjerite postavke pretraživača",
     "%(name)s is requesting verification": "%(name)s traži potvrdu",
-    "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Vaš je kućni poslužitelj odbio vaš pokušaj prijave. Razlog je možda da je jednostavno sve predugo trajalo. Molimo pokušajte ponovno. Ako se ovo nastavi, obratite se administratoru kućnog poslužitelja.",
-    "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "Vaš kućni poslužitelj nije bio dostupan i nije vas mogao prijaviti. Pokušajte ponovo. Ako se ovo nastavi, obratite se administratoru kućnog poslužitelja.",
     "Try again": "Pokušaj ponovo",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Tražili smo od preglednika da zapamti koji kućni poslužitelj koristite za prijavu, ali ga je Vaš preglednik nažalost zaboravio. Idite na stranicu za prijavu i pokušajte ponovo.",
     "We couldn't log you in": "Nismo Vas mogli ulogirati",

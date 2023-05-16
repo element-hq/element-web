@@ -133,7 +133,6 @@
     "Unexpected error resolving homeserver configuration": "Ounverwachte foute by ’t controleern van de thuusserverconfiguroasje",
     "This homeserver has hit its Monthly Active User limit.": "Dezen thuusserver èt z’n limiet vo moandeliks actieve gebruukers bereikt.",
     "This homeserver has exceeded one of its resource limits.": "Dezen thuusserver èt één van z’n systeembronlimietn overschreedn.",
-    "Please <a>contact your service administrator</a> to continue using the service.": "Gelieve <a>contact ip te neemn me je systeembeheerder</a> vo deze dienst te bluuvn gebruukn.",
     "%(items)s and %(count)s others|other": "%(items)s en %(count)s andere",
     "%(items)s and %(count)s others|one": "%(items)s en één ander",
     "%(items)s and %(lastItem)s": "%(items)s en %(lastItem)s",
