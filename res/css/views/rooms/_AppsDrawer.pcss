@@ -318,7 +318,8 @@ limitations under the License.
     flex: 1;
 }
 
-.mx_AppPermissionWarning {
+.mx_AppWarning,
+.mx_AppPermission {
     text-align: center;
     display: flex;
     height: 100%;
@@ -330,60 +331,6 @@ limitations under the License.
     h4 {
         margin: 0;
         padding: 0;
-    }
-}
-
-.mx_AppPermissionWarning_row {
-    margin-bottom: 12px;
-}
-
-.mx_AppPermissionWarning_smallText {
-    font-size: $font-12px;
-}
-
-.mx_AppPermissionWarning_bolder {
-    font-weight: var(--font-semi-bold);
-}
-
-.mx_AppPermissionWarning_helpIcon {
-    margin-top: 1px;
-    margin-right: 2px;
-    width: 10px;
-    height: 10px;
-    display: inline-block;
-
-    &::before {
-        display: inline-block;
-        background-color: $accent;
-        mask-repeat: no-repeat;
-        mask-size: 12px;
-        width: 12px;
-        height: 12px;
-        mask-position: center;
-        content: "";
-        vertical-align: middle;
-        mask-image: url("$(res)/img/feather-customised/help-circle.svg");
-    }
-}
-
-.mx_AppPermissionWarning_tooltip {
-    box-shadow: none;
-    background-color: $tooltip-timeline-bg-color;
-    color: $tooltip-timeline-fg-color;
-    border: none;
-    border-radius: 3px;
-    padding: 6px 8px;
-
-    &.mx_AppPermissionWarning_tooltip--dark {
-        .mx_Tooltip_chevron::after {
-            border-right-color: $tooltip-timeline-bg-color;
-        }
-    }
-
-    ul {
-        list-style-position: inside;
-        padding-left: 2px;
-        margin-left: 0;
     }
 }
 
