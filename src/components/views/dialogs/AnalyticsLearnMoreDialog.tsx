@@ -58,7 +58,6 @@ export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
                         return (
                             <ExternalLink href={privacyPolicyUrl} rel="norefferer noopener" target="_blank">
                                 {sub}
-                                <span className="mx_AnalyticsPolicyLink" />
                             </ExternalLink>
                         );
                     },
