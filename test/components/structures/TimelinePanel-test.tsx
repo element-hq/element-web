@@ -242,6 +242,18 @@ describe("TimelinePanel", () => {
             TimelinePanel.roomReadMarkerTsMap = {};
         });
 
+        it("when there is no event, it should not send any receipt", async () => {
+            setUpTimelineSet();
+            await renderTimelinePanel();
+            await flushPromises();
+
+            // @ts-ignore
+            await timelinePanel.sendReadReceipts();
+
+            expect(client.setRoomReadMarkers).not.toHaveBeenCalled();
+            expect(client.sendReadReceipt).not.toHaveBeenCalled();
+        });
+
         describe("when there is a non-threaded timeline", () => {
             beforeEach(() => {
                 setUpTimelineSet();

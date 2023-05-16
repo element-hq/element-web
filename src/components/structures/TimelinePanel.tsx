@@ -1082,7 +1082,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
         currentReadReceiptEventIndex: number | null,
         lastReadEvent: MatrixEvent | null,
         lastReadEventIndex: number | null,
-    ): boolean {
+    ): lastReadEvent is MatrixEvent {
+        if (!lastReadEvent) return false;
+
         // We want to avoid sending out read receipts when we are looking at
         // events in the past which are before the latest RR.
         //
@@ -1133,7 +1135,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const lastReadEventIndex = this.getLastDisplayedEventIndex({
             ignoreOwn: true,
         });
-        const lastReadEvent: MatrixEvent | null = this.state.events[lastReadEventIndex ?? 0];
+        const lastReadEvent: MatrixEvent | null = this.state.events[lastReadEventIndex ?? 0] ?? null;
 
         const shouldSendReadReceipt = this.shouldSendReadReceipt(
             currentReadReceiptEventId,
