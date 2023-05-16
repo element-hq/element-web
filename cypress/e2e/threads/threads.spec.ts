@@ -296,7 +296,7 @@ describe("Threads", () => {
         });
 
         cy.findByRole("button", { name: "Threads" })
-            .should("have.class", "mx_RightPanel_headerButton_unread") // User asserts thread list unread indicator
+            .should("have.class", "mx_RoomHeader_button--unread") // User asserts thread list unread indicator
             .click(); // User opens thread list
 
         // User asserts thread with correct root & latest events & unread dot
