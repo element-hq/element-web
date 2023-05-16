@@ -20,6 +20,7 @@ import "@percy/cypress";
 import "cypress-real-events";
 import "@testing-library/cypress/add-commands";
 
+import "./config.json";
 import "./homeserver";
 import "./login";
 import "./labs";

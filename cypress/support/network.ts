@@ -68,29 +68,5 @@ Cypress.Commands.add("goOnline", (): void => {
     });
 });
 
-Cypress.Commands.add("stubDefaultServer", (): void => {
-    cy.log("Stubbing vector.im and matrix.org network calls");
-    // We intercept vector.im & matrix.org calls so that tests don't fail when it has issues
-    cy.intercept("GET", "https://vector.im/_matrix/identity/v2", {
-        fixture: "vector-im-identity-v2.json",
-    });
-    cy.intercept("GET", "https://matrix.org/.well-known/matrix/client", {
-        fixture: "matrix-org-client-well-known.json",
-    });
-    cy.intercept("GET", "https://matrix-client.matrix.org/_matrix/client/versions", {
-        fixture: "matrix-org-client-versions.json",
-    });
-    cy.intercept("GET", "https://matrix-client.matrix.org/_matrix/client/r0/login", {
-        fixture: "matrix-org-client-login.json",
-    });
-    cy.intercept("POST", "https://matrix-client.matrix.org/_matrix/client/r0/register?kind=guest", {
-        statusCode: 403,
-        body: {
-            errcode: "M_FORBIDDEN",
-            error: "Registration is not enabled on this homeserver.",
-        },
-    });
-});
-
 // Needed to make this file a module
 export {};

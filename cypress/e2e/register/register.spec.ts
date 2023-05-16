@@ -22,7 +22,6 @@ describe("Registration", () => {
     let homeserver: HomeserverInstance;
 
     beforeEach(() => {
-        cy.stubDefaultServer();
         cy.visit("/#/register");
         cy.startHomeserver("consent").then((data) => {
             homeserver = data;
