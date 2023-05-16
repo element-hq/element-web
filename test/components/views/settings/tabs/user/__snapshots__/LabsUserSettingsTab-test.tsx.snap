@@ -2,121 +2,134 @@
 
 exports[`<LabsUserSettingsTab /> renders settings marked as beta as beta cards 1`] = `
 <div
-  class="mx_SettingsTab_section"
-  data-testid="labs-beta-section"
+  class="mx_SettingsSection"
 >
+  <h2
+    class="mx_Heading_h2"
+  >
+    Upcoming features
+  </h2>
   <div
-    class="mx_BetaCard"
+    class="mx_SettingsSection_subSections"
   >
     <div
-      class="mx_BetaCard_columns"
+      class="mx_SettingsSubsection_text"
+    >
+      What's next for false? Labs are the best way to get things early, test out new features and help shape them before they actually launch.
+    </div>
+    <div
+      class="mx_BetaCard"
     >
       <div
-        class="mx_BetaCard_columns_description"
+        class="mx_BetaCard_columns"
       >
-        <h3
-          class="mx_BetaCard_title"
+        <div
+          class="mx_BetaCard_columns_description"
         >
-          <span>
-            Video rooms
-          </span>
-          <span
-            class="mx_BetaCard_betaPill"
+          <h3
+            class="mx_BetaCard_title"
           >
-            Beta
-          </span>
-        </h3>
-        <div
-          class="mx_BetaCard_caption"
-        >
-          <p>
-            A new way to chat over voice and video in .
-          </p>
-          <p>
-            Video rooms are always-on VoIP channels embedded within a room in .
-          </p>
-        </div>
-        <div
-          class="mx_BetaCard_buttons"
-        >
+            <span>
+              Video rooms
+            </span>
+            <span
+              class="mx_BetaCard_betaPill"
+            >
+              Beta
+            </span>
+          </h3>
           <div
-            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-            role="button"
-            tabindex="0"
+            class="mx_BetaCard_caption"
           >
-            Join the beta
+            <p>
+              A new way to chat over voice and video in .
+            </p>
+            <p>
+              Video rooms are always-on VoIP channels embedded within a room in .
+            </p>
           </div>
+          <div
+            class="mx_BetaCard_buttons"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+              role="button"
+              tabindex="0"
+            >
+              Join the beta
+            </div>
+          </div>
+          <div
+            class="mx_BetaCard_refreshWarning"
+          >
+            Joining the beta will reload .
+          </div>
+          <div
+            class="mx_BetaCard_faq"
+          />
         </div>
         <div
-          class="mx_BetaCard_refreshWarning"
+          class="mx_BetaCard_columns_image_wrapper"
         >
-          Joining the beta will reload .
+          <img
+            alt=""
+            class="mx_BetaCard_columns_image"
+            src="image-file-stub"
+          />
         </div>
-        <div
-          class="mx_BetaCard_faq"
-        />
-      </div>
-      <div
-        class="mx_BetaCard_columns_image_wrapper"
-      >
-        <img
-          alt=""
-          class="mx_BetaCard_columns_image"
-          src="image-file-stub"
-        />
       </div>
     </div>
-  </div>
-  <div
-    class="mx_BetaCard"
-  >
     <div
-      class="mx_BetaCard_columns"
+      class="mx_BetaCard"
     >
       <div
-        class="mx_BetaCard_columns_description"
+        class="mx_BetaCard_columns"
       >
-        <h3
-          class="mx_BetaCard_title"
+        <div
+          class="mx_BetaCard_columns_description"
         >
-          <span>
-            New session manager
-          </span>
-          <span
-            class="mx_BetaCard_betaPill"
+          <h3
+            class="mx_BetaCard_title"
           >
-            Beta
-          </span>
-        </h3>
-        <div
-          class="mx_BetaCard_caption"
-        >
-          <p>
-            Have greater visibility and control over all your sessions.
-          </p>
-          <p>
-            Our new sessions manager provides better visibility of all your sessions, and greater control over them including the ability to remotely toggle push notifications.
-          </p>
-        </div>
-        <div
-          class="mx_BetaCard_buttons"
-        >
+            <span>
+              New session manager
+            </span>
+            <span
+              class="mx_BetaCard_betaPill"
+            >
+              Beta
+            </span>
+          </h3>
           <div
-            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-            role="button"
-            tabindex="0"
+            class="mx_BetaCard_caption"
           >
-            Join the beta
+            <p>
+              Have greater visibility and control over all your sessions.
+            </p>
+            <p>
+              Our new sessions manager provides better visibility of all your sessions, and greater control over them including the ability to remotely toggle push notifications.
+            </p>
+          </div>
+          <div
+            class="mx_BetaCard_buttons"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+              role="button"
+              tabindex="0"
+            >
+              Join the beta
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        class="mx_BetaCard_columns_image_wrapper"
-      >
-        <img
-          alt=""
-          class="mx_BetaCard_columns_image"
-        />
+        <div
+          class="mx_BetaCard_columns_image_wrapper"
+        >
+          <img
+            alt=""
+            class="mx_BetaCard_columns_image"
+          />
+        </div>
       </div>
     </div>
   </div>

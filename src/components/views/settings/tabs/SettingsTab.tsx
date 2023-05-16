@@ -13,9 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from "react";
+import React, { HTMLAttributes } from "react";
 
-export interface SettingsTabProps {
+export interface SettingsTabProps extends Omit<HTMLAttributes<HTMLDivElement>, "className"> {
     children?: React.ReactNode;
 }
 
@@ -37,8 +37,8 @@ export interface SettingsTabProps {
  * </SettingsTab>
  * ```
  */
-const SettingsTab: React.FC<SettingsTabProps> = ({ children }) => (
-    <div className="mx_SettingsTab">
+const SettingsTab: React.FC<SettingsTabProps> = ({ children, ...rest }) => (
+    <div {...rest} className="mx_SettingsTab">
         <div className="mx_SettingsTab_sections">{children}</div>
     </div>
 );

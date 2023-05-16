@@ -25,6 +25,9 @@ import BetaCard from "../../../beta/BetaCard";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import { LabGroup, labGroupNames } from "../../../../../settings/Settings";
 import { EnhancedMap } from "../../../../../utils/maps";
+import { SettingsSection } from "../../shared/SettingsSection";
+import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import SettingsTab from "../SettingsTab";
 
 export default class LabsUserSettingsTab extends React.Component<{}> {
     private readonly labs: string[];
@@ -54,11 +57,11 @@ export default class LabsUserSettingsTab extends React.Component<{}> {
         let betaSection: JSX.Element | undefined;
         if (this.betas.length) {
             betaSection = (
-                <div data-testid="labs-beta-section" className="mx_SettingsTab_section">
+                <>
                     {this.betas.map((f) => (
                         <BetaCard key={f} featureId={f} />
                     ))}
-                </div>
+                </>
             );
         }
 
@@ -93,31 +96,35 @@ export default class LabsUserSettingsTab extends React.Component<{}> {
             labsSections = (
                 <>
                     {sortBy(Array.from(groups.entries()), "0").map(([group, flags]) => (
-                        <div className="mx_SettingsTab_section" key={group} data-testid={`labs-group-${group}`}>
-                            <span className="mx_SettingsTab_subheading">{_t(labGroupNames[group])}</span>
+                        <SettingsSubsection
+                            key={group}
+                            data-testid={`labs-group-${group}`}
+                            heading={_t(labGroupNames[group])}
+                        >
                             {flags}
-                        </div>
+                        </SettingsSubsection>
                     ))}
                 </>
             );
         }
 
         return (
-            <div className="mx_SettingsTab mx_LabsUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Upcoming features")}</div>
-                <div className="mx_SettingsTab_subsectionText">
-                    {_t(
-                        "What's next for %(brand)s? " +
-                            "Labs are the best way to get things early, " +
-                            "test out new features and help shape them before they actually launch.",
-                        { brand: SdkConfig.get("brand") },
-                    )}
-                </div>
-                {betaSection}
+            <SettingsTab>
+                <SettingsSection heading={_t("Upcoming features")}>
+                    <SettingsSubsectionText>
+                        {_t(
+                            "What's next for %(brand)s? " +
+                                "Labs are the best way to get things early, " +
+                                "test out new features and help shape them before they actually launch.",
+                            { brand: SdkConfig.get("brand") },
+                        )}
+                    </SettingsSubsectionText>
+                    {betaSection}
+                </SettingsSection>
+
                 {labsSections && (
-                    <>
-                        <div className="mx_SettingsTab_heading">{_t("Early previews")}</div>
-                        <div className="mx_SettingsTab_subsectionText">
+                    <SettingsSection heading={_t("Early previews")}>
+                        <SettingsSubsectionText>
                             {_t(
                                 "Feeling experimental? " +
                                     "Try out our latest ideas in development. " +
@@ -139,11 +146,11 @@ export default class LabsUserSettingsTab extends React.Component<{}> {
                                     },
                                 },
                             )}
-                        </div>
+                        </SettingsSubsectionText>
                         {labsSections}
-                    </>
+                    </SettingsSection>
                 )}
-            </div>
+            </SettingsTab>
         );
     }
 }

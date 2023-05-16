@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import LabsUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/LabsUserSettingsTab";
@@ -51,17 +51,16 @@ describe("<LabsUserSettingsTab />", () => {
     });
 
     it("renders settings marked as beta as beta cards", () => {
-        const { getByTestId } = render(getComponent());
-        expect(getByTestId("labs-beta-section")).toMatchSnapshot();
+        render(getComponent());
+        expect(screen.getByText("Upcoming features").parentElement!).toMatchSnapshot();
     });
 
     it("does not render non-beta labs settings when disabled in config", () => {
-        const { container } = render(getComponent());
+        render(getComponent());
         expect(sdkConfigSpy).toHaveBeenCalledWith("show_labs_settings");
 
-        const labsSections = container.getElementsByClassName("mx_SettingsTab_section");
         // only section is beta section
-        expect(labsSections.length).toEqual(1);
+        expect(screen.queryByText("Early previews")).not.toBeInTheDocument();
     });
 
     it("renders non-beta labs settings when enabled in config", () => {
@@ -69,8 +68,10 @@ describe("<LabsUserSettingsTab />", () => {
         sdkConfigSpy.mockImplementation((configName) => configName === "show_labs_settings");
         const { container } = render(getComponent());
 
-        const labsSections = container.getElementsByClassName("mx_SettingsTab_section");
-        expect(labsSections).toHaveLength(11);
+        // non-beta labs section
+        expect(screen.getByText("Early previews")).toBeInTheDocument();
+        const labsSections = container.getElementsByClassName("mx_SettingsSubsection");
+        expect(labsSections).toHaveLength(10);
     });
 
     it("allow setting a labs flag which requires unstable support once support is confirmed", async () => {
