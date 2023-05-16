@@ -17,6 +17,8 @@ limitations under the License.
 import { Attributes, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
 import { SyntheticEvent, useState } from "react";
 
+import { isNotNull, isNotUndefined } from "../../../../../Typeguards";
+
 /**
  * Information about the current state of the `useSuggestion` hook.
  */
@@ -49,7 +51,7 @@ type SuggestionState = Suggestion | null;
  */
 export function useSuggestion(
     editorRef: React.RefObject<HTMLDivElement>,
-    setText: (text: string) => void,
+    setText: (text?: string) => void,
 ): {
     handleMention: (href: string, displayName: string, attributes: Attributes) => void;
     handleCommand: (text: string) => void;
@@ -144,7 +146,7 @@ export function processMention(
     attributes: Attributes, // these will be used when formatting the link as a pill
     suggestionData: SuggestionState,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
-    setText: (text: string) => void,
+    setText: (text?: string) => void,
 ): void {
     // if we do not have a suggestion, return early
     if (suggestionData === null) {
@@ -153,18 +155,34 @@ export function processMention(
 
     const { node } = suggestionData;
 
-    const textBeforeReplacement = node.textContent?.slice(0, suggestionData.startOffset) ?? "";
-    const textAfterReplacement = node.textContent?.slice(suggestionData.endOffset) ?? "";
+    // create an <a> element with the required attributes to allow us to interpret the mention as being a pill
+    const linkElement = document.createElement("a");
+    const linkTextNode = document.createTextNode(displayName);
+    linkElement.setAttribute("href", href);
+    linkElement.setAttribute("contenteditable", "false");
+    Object.entries(attributes).forEach(
+        ([attr, value]) => isNotUndefined(value) && linkElement.setAttribute(attr, value),
+    );
+    linkElement.appendChild(linkTextNode);
 
-    // TODO replace this markdown style text insertion with a pill representation
-    const newText = `[${displayName}](<${href}>) `;
-    const newCursorOffset = textBeforeReplacement.length + newText.length;
-    const newContent = textBeforeReplacement + newText + textAfterReplacement;
+    // create text nodes to go before and after the link
+    const leadingTextNode = document.createTextNode(node.textContent?.slice(0, suggestionData.startOffset) || "\u200b");
+    const trailingTextNode = document.createTextNode(` ${node.textContent?.slice(suggestionData.endOffset) ?? ""}`);
 
-    // insert the new text, move the cursor, set the text state, clear the suggestion state
-    node.textContent = newContent;
-    document.getSelection()?.setBaseAndExtent(node, newCursorOffset, node, newCursorOffset);
-    setText(newContent);
+    // now add the leading text node, link element and trailing text node before removing the node we are replacing
+    const parentNode = node.parentNode;
+    if (isNotNull(parentNode)) {
+        parentNode.insertBefore(leadingTextNode, node);
+        parentNode.insertBefore(linkElement, node);
+        parentNode.insertBefore(trailingTextNode, node);
+        parentNode.removeChild(node);
+    }
+
+    // move the selection to the trailing text node
+    document.getSelection()?.setBaseAndExtent(trailingTextNode, 1, trailingTextNode, 1);
+
+    // set the text content to be the innerHTML of the current editor ref and clear the suggestion state
+    setText();
     setSuggestionData(null);
 }
 
@@ -181,7 +199,7 @@ export function processCommand(
     replacementText: string,
     suggestionData: SuggestionState,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
-    setText: (text: string) => void,
+    setText: (text?: string) => void,
 ): void {
     // if we do not have a suggestion, return early
     if (suggestionData === null) {

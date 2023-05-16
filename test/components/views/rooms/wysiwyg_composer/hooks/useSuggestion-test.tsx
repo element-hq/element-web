@@ -78,34 +78,42 @@ describe("processMention", () => {
         expect(mockSetText).not.toHaveBeenCalled();
     });
 
-    it("can insert a mention into an empty text node", () => {
-        // make an empty text node, set the cursor inside it and then append to the document
-        const textNode = document.createTextNode("");
-        document.body.appendChild(textNode);
-        document.getSelection()?.setBaseAndExtent(textNode, 0, textNode, 0);
+    it("can insert a mention into a text node", () => {
+        // make a text node and an editor div, set the cursor inside the text node and then
+        // append node to editor, then editor to document
+        const textNode = document.createTextNode("@a");
+        const mockEditor = document.createElement("div");
+        mockEditor.appendChild(textNode);
+        document.body.appendChild(mockEditor);
+        document.getSelection()?.setBaseAndExtent(textNode, 1, textNode, 1);
 
         // call the util function
         const href = "href";
         const displayName = "displayName";
-        const mockSetSuggestion = jest.fn();
+        const mockSetSuggestionData = jest.fn();
         const mockSetText = jest.fn();
         processMention(
             href,
             displayName,
-            {},
-            { node: textNode, startOffset: 0, endOffset: 0 } as unknown as Suggestion,
-            mockSetSuggestion,
+            { "data-test-attribute": "test" },
+            { node: textNode, startOffset: 0, endOffset: 2 } as unknown as Suggestion,
+            mockSetSuggestionData,
             mockSetText,
         );
 
-        // placeholder testing for the changed content - these tests will all be changed
-        // when the mention is inserted as an <a> tagfs
-        const { textContent } = textNode;
-        expect(textContent!.includes(href)).toBe(true);
-        expect(textContent!.includes(displayName)).toBe(true);
+        // check that the editor has a single child
+        expect(mockEditor.children).toHaveLength(1);
+        const linkElement = mockEditor.firstElementChild as HTMLElement;
 
-        expect(mockSetText).toHaveBeenCalledWith(expect.stringContaining(displayName));
-        expect(mockSetSuggestion).toHaveBeenCalledWith(null);
+        // and that the child is an <a> tag with the expected attributes and content
+        expect(linkElement).toBeInstanceOf(HTMLAnchorElement);
+        expect(linkElement).toHaveAttribute(href, href);
+        expect(linkElement).toHaveAttribute("contenteditable", "false");
+        expect(linkElement).toHaveAttribute("data-test-attribute", "test");
+        expect(linkElement.textContent).toBe(displayName);
+
+        expect(mockSetText).toHaveBeenCalledWith();
+        expect(mockSetSuggestionData).toHaveBeenCalledWith(null);
     });
 });
 

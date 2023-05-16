@@ -22,6 +22,7 @@ import { IS_MAC, Key } from "../../../../../Keyboard";
 import Autocomplete from "../../Autocomplete";
 import { handleEventWithAutocomplete } from "./utils";
 import { useSuggestion } from "./useSuggestion";
+import { isNotNull, isNotUndefined } from "../../../../../Typeguards";
 
 function isDivElement(target: EventTarget): target is HTMLDivElement {
     return target instanceof HTMLDivElement;
@@ -65,7 +66,7 @@ export function usePlainTextListeners(
     onInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onPaste(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onKeyDown(event: KeyboardEvent<HTMLDivElement>): void;
-    setContent(text: string): void;
+    setContent(text?: string): void;
     handleMention: (link: string, text: string, attributes: Attributes) => void;
     handleCommand: (text: string) => void;
     onSelect: (event: SyntheticEvent<HTMLDivElement>) => void;
@@ -83,11 +84,18 @@ export function usePlainTextListeners(
     }, [ref, onSend]);
 
     const setText = useCallback(
-        (text: string) => {
-            setContent(text);
-            onChange?.(text);
+        (text?: string) => {
+            if (isNotUndefined(text)) {
+                setContent(text);
+                onChange?.(text);
+            } else if (isNotNull(ref) && isNotNull(ref.current)) {
+                // if called with no argument, read the current innerHTML from the ref
+                const currentRefContent = ref.current.innerHTML;
+                setContent(currentRefContent);
+                onChange?.(currentRefContent);
+            }
         },
-        [onChange],
+        [onChange, ref],
     );
 
     // For separation of concerns, the suggestion handling is kept in a separate hook but is

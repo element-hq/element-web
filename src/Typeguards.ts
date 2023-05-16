@@ -17,3 +17,7 @@ limitations under the License.
 export function isNotNull<T>(arg: T): arg is Exclude<T, null> {
     return arg !== null;
 }
+
+export function isNotUndefined<T>(arg: T): arg is Exclude<T, undefined> {
+    return arg !== undefined;
+}
