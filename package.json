@@ -193,7 +193,7 @@
         "eslint-plugin-matrix-org": "1.1.0",
         "eslint-plugin-react": "^7.28.0",
         "eslint-plugin-react-hooks": "^4.3.0",
-        "eslint-plugin-unicorn": "^46.0.0",
+        "eslint-plugin-unicorn": "^47.0.0",
         "fetch-mock-jest": "^1.5.1",
         "fs-extra": "^11.0.0",
         "jest": "29.3.1",
