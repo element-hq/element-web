@@ -27,7 +27,7 @@ import SearchWarning, { WarningKind } from "../elements/SearchWarning";
 
 interface IProps {
     onCancelClick: () => void;
-    onSearch: (query: string, scope: string) => void;
+    onSearch: (query: string, scope: SearchScope) => void;
     searchInProgress?: boolean;
     isRoomEncrypted?: boolean;
 }

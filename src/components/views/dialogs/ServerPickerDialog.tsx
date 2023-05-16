@@ -20,7 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import BaseDialog from "./BaseDialog";
-import { _t } from "../../../languageHandler";
+import { _t, UserFriendlyError } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import SdkConfig from "../../../SdkConfig";
 import Field from "../elements/Field";
@@ -113,7 +113,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                 const stateForError = AutoDiscoveryUtils.authComponentStateForError(e);
                 if (stateForError.serverErrorIsFatal) {
                     let error = _t("Unable to validate homeserver");
-                    if (e.translatedMessage) {
+                    if (e instanceof UserFriendlyError && e.translatedMessage) {
                         error = e.translatedMessage;
                     }
                     return { error };

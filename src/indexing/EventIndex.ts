@@ -28,6 +28,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
+import { HTTPError } from "matrix-js-sdk/src/http-api";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -471,7 +472,7 @@ export default class EventIndex extends EventEmitter {
                     checkpoint.direction,
                 );
             } catch (e) {
-                if (e.httpStatus === 403) {
+                if (e instanceof HTTPError && e.httpStatus === 403) {
                     logger.log(
                         "EventIndex: Removing checkpoint as we don't have ",
                         "permissions to fetch messages from this room.",
@@ -564,7 +565,7 @@ export default class EventIndex extends EventEmitter {
                 return object;
             });
 
-            let newCheckpoint;
+            let newCheckpoint: ICrawlerCheckpoint | null = null;
 
             // The token can be null for some reason. Don't create a checkpoint
             // in that case since adding it to the db will fail.

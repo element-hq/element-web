@@ -126,7 +126,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private persistKey: string;
     private sgWidget: StopGapWidget | null;
     private dispatcherRef?: string;
-    private unmounted: boolean;
+    private unmounted = false;
 
     public constructor(props: IProps) {
         super(props);

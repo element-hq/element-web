@@ -48,8 +48,8 @@ describe("SetupEncryptionStore", () => {
         client.bootstrapCrossSigning.mockImplementation(async (opts: IBootstrapCrossSigningOpts) => {
             await opts?.authUploadDeviceSigningKeys?.(makeRequest);
         });
-        mocked(accessSecretStorage).mockImplementation(async (func: () => Promise<void>) => {
-            await func();
+        mocked(accessSecretStorage).mockImplementation(async (func?: () => Promise<void>) => {
+            await func!();
         });
 
         await setupEncryptionStore.resetConfirm();

@@ -20,7 +20,7 @@ import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
-import { CrossSigningKeys, UIAFlow } from "matrix-js-sdk/src/matrix";
+import { CrossSigningKeys, MatrixError, UIAFlow } from "matrix-js-sdk/src/matrix";
 import { IRecoveryKey } from "matrix-js-sdk/src/crypto/api";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import classNames from "classnames";
@@ -103,7 +103,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         forceReset: false,
     };
     private recoveryKey: IRecoveryKey;
-    private backupKey: Uint8Array;
+    private backupKey?: Uint8Array;
     private recoveryKeyNode = createRef<HTMLElement>();
     private passphraseField = createRef<Field>();
 
@@ -208,7 +208,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             // no keys which would be a no-op.
             logger.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
         } catch (error) {
-            if (!error.data || !error.data.flows) {
+            if (!(error instanceof MatrixError) || !error.data || !error.data.flows) {
                 logger.log("uploadDeviceSigningKeys advertised no flows!");
                 return;
             }
@@ -372,7 +372,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 phase: Phase.Stored,
             });
         } catch (e) {
-            if (this.state.canUploadKeysWithPasswordOnly && e.httpStatus === 401 && e.data.flows) {
+            if (
+                this.state.canUploadKeysWithPasswordOnly &&
+                e instanceof MatrixError &&
+                e.httpStatus === 401 &&
+                e.data.flows
+            ) {
                 this.setState({
                     accountPassword: "",
                     accountPasswordCorrect: false,

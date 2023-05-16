@@ -147,7 +147,7 @@ function getTextAndOffsetToNode(
     let foundNode = false;
     let text = "";
 
-    function enterNodeCallback(node: HTMLElement): boolean {
+    function enterNodeCallback(node: Node): boolean {
         if (!foundNode) {
             if (node === selectionNode) {
                 foundNode = true;
@@ -157,7 +157,7 @@ function getTextAndOffsetToNode(
         // but for example while pasting in some browsers, they are still
         // converted to BRs, so also take these into account when they
         // are not the last element in the DIV.
-        if (node.tagName === "BR" && node.nextSibling) {
+        if (node instanceof HTMLElement && node.tagName === "BR" && node.nextSibling) {
             if (!foundNode) {
                 offsetToNode += 1;
             }
@@ -173,12 +173,16 @@ function getTextAndOffsetToNode(
         return true;
     }
 
-    function leaveNodeCallback(node: HTMLElement): void {
+    function leaveNodeCallback(node: Node): void {
         // if this is not the last DIV (which are only used as line containers atm)
         // we don't just check if there is a nextSibling because sometimes the caret ends up
         // after the last DIV and it creates a newline if you type then,
         // whereas you just want it to be appended to the current line
-        if (node.tagName === "DIV" && (<HTMLElement>node.nextSibling)?.tagName === "DIV") {
+        if (
+            node instanceof HTMLElement &&
+            node.tagName === "DIV" &&
+            (<HTMLElement>node.nextSibling)?.tagName === "DIV"
+        ) {
             text += "\n";
             if (!foundNode) {
                 offsetToNode += 1;

@@ -38,7 +38,7 @@ interface IProps {
 }
 
 interface IState {
-    roomMember: RoomMember;
+    roomMember: RoomMember | null;
     isWrapped: boolean;
     widgetDomain: string | null;
 }
@@ -56,7 +56,7 @@ export default class AppPermission extends React.Component<IProps, IState> {
 
         // The second step is to find the user's profile so we can show it on the prompt
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
-        let roomMember;
+        let roomMember: RoomMember | null = null;
         if (room) roomMember = room.getMember(this.props.creatorUserId);
 
         // Set all this into the initial state

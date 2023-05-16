@@ -19,7 +19,7 @@ import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ISSOFlow, LoginFlow, SSOAction } from "matrix-js-sdk/src/@types/auth";
 
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, UserFriendlyError } from "../../../languageHandler";
 import Login from "../../../Login";
 import { messageForConnectionError, messageForLoginError } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
@@ -110,7 +110,7 @@ type OnPasswordLogin = {
  */
 export default class LoginComponent extends React.PureComponent<IProps, IState> {
     private unmounted = false;
-    private loginLogic: Login;
+    private loginLogic!: Login;
 
     private readonly stepRendererMap: Record<string, () => ReactNode>;
 
@@ -265,7 +265,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 logger.error("Problem parsing URL or unhandled error doing .well-known discovery:", e);
 
                 let message = _t("Failed to perform homeserver discovery");
-                if (e.translatedMessage) {
+                if (e instanceof UserFriendlyError && e.translatedMessage) {
                     message = e.translatedMessage;
                 }
 

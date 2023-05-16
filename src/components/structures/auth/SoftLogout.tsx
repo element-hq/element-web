@@ -18,6 +18,7 @@ import React, { ChangeEvent, SyntheticEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
 import { ISSOFlow, LoginFlow, SSOAction } from "matrix-js-sdk/src/@types/auth";
+import { MatrixError } from "matrix-js-sdk/src/http-api";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -164,7 +165,11 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             credentials = await sendLoginRequest(hsUrl, isUrl, loginType, loginParams);
         } catch (e) {
             let errorText = _t("Failed to re-authenticate due to a homeserver problem");
-            if (e.errcode === "M_FORBIDDEN" && (e.httpStatus === 401 || e.httpStatus === 403)) {
+            if (
+                e instanceof MatrixError &&
+                e.errcode === "M_FORBIDDEN" &&
+                (e.httpStatus === 401 || e.httpStatus === 403)
+            ) {
                 errorText = _t("Incorrect password");
             }
 

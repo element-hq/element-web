@@ -76,7 +76,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
             result = await client.relations(roomId, eventId, RelationType.Replace, EventType.RoomMessage, opts);
         } catch (error) {
             // log if the server returned an error
-            if (error.errcode) {
+            if (error instanceof MatrixError && error.errcode) {
                 logger.error("fetching /relations failed with error", error);
             }
             this.setState({ error: error as MatrixError }, () => reject(error));

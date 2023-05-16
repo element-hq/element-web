@@ -15,18 +15,7 @@ limitations under the License.
 */
 
 import EditorModel from "../../src/editor/model";
-import { createPartCreator } from "./mock";
-import { Caret } from "../../src/editor/caret";
-
-function createRenderer() {
-    const render = (c: Caret) => {
-        render.caret = c;
-        render.count += 1;
-    };
-    render.count = 0;
-    render.caret = null;
-    return render;
-}
+import { createPartCreator, createRenderer } from "./mock";
 
 describe("editor/position", function () {
     it("move first position backward in empty model", function () {

@@ -56,7 +56,7 @@ export default class AddThreepid {
     private sessionId: string;
     private submitUrl?: string;
     private clientSecret: string;
-    private bind: boolean;
+    private bind = false;
 
     public constructor() {
         this.clientSecret = MatrixClientPeg.get().generateClientSecret();

@@ -95,8 +95,8 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
 export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
     const overrideBrowserShortcuts = PlatformPeg.get()?.overrideBrowserShortcuts();
 
-    return Object.keys(KEYBOARD_SHORTCUTS)
-        .filter((k: KeyBindingAction) => {
+    return (Object.keys(KEYBOARD_SHORTCUTS) as KeyBindingAction[])
+        .filter((k) => {
             if (KEYBOARD_SHORTCUTS[k]?.controller?.settingDisabled) return false;
             if (MAC_ONLY_SHORTCUTS.includes(k) && !IS_MAC) return false;
             if (DESKTOP_SHORTCUTS.includes(k) && !overrideBrowserShortcuts) return false;

@@ -686,7 +686,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         return false;
     };
 
-    private onChange = (selection: Caret, inputType?: string, diff?: IDiff): void => {
+    private onChange = (selection?: Caret, inputType?: string, diff?: IDiff): void => {
         // We call this in here rather than onKeyDown as that would trip it on global shortcuts e.g. Ctrl-k also
         if (!!diff) {
             this.prepareToEncrypt?.();
