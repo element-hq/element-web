@@ -82,10 +82,6 @@ limitations under the License.
     mask-position: center;
 }
 
-$dot-size: 8px;
-$dot-offset: -3px;
-$pulse-color: $alert;
-
 .mx_RightPanel_pinnedMessagesButton {
     &::before {
         mask-image: url("$(res)/img/element-icons/room/pin.svg");
@@ -95,11 +91,11 @@ $pulse-color: $alert;
 
 .mx_RightPanel_headerButton_unreadIndicator_bg {
     position: absolute;
-    right: $dot-offset;
-    top: $dot-offset;
+    right: var(--RoomHeader-indicator-dot-offset);
+    top: var(--RoomHeader-indicator-dot-offset);
     margin: 4px;
-    width: $dot-size;
-    height: $dot-size;
+    width: var(--RoomHeader-indicator-dot-size);
+    height: var(--RoomHeader-indicator-dot-size);
     border-radius: 50%;
     transform: scale(1.6);
     transform-origin: center center;
@@ -108,8 +104,8 @@ $pulse-color: $alert;
 
 .mx_RightPanel_headerButton_unreadIndicator {
     position: absolute;
-    right: $dot-offset;
-    top: $dot-offset;
+    right: var(--RoomHeader-indicator-dot-offset);
+    top: var(--RoomHeader-indicator-dot-offset);
     margin: 4px;
 
     &.mx_Indicator_red {
