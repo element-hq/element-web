@@ -1574,11 +1574,6 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.5.0.tgz#38b69c4e29d243944c5712cca7b674a3432056e6"
   integrity sha512-uL5kf7MqC+GxsGJtimPVbFliyaFinohTHSzohz31JTysktHsjRR2SC+vV7sy2/dstTWVdG9EGOnohyPsB+oi3A==
 
-"@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.8":
-  version "0.1.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.8.tgz#18dd8e7fb56602d2999d8a502b49e902a2bb3782"
-  integrity sha512-hdmbbGXKrN6JNo3wdBaR5Zs3lXlzllT3U43ViNTlabB3nKkOZQnEAN/Isv+4EQSgz1+8897veI9Q8sqlQX22oA==
-
 "@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.9":
   version "0.1.0-alpha.9"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.9.tgz#00bc266781502641a661858a5a521dd4d95275fc"
@@ -8278,12 +8273,13 @@ matrix-js-sdk@25.2.0-rc.2:
     unhomoglyph "^1.0.6"
     uuid "9"
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "25.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/73ca9c9ed28847454e13da358c581769e695ff42"
+matrix-js-sdk@25.2.0-rc.4:
+  version "25.2.0-rc.4"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-25.2.0-rc.4.tgz#8817b34de895b8ab3c8b0420626c0eccbcc26dd7"
+  integrity sha512-xnO6tMfsrakMEsqBuhm4lgB21fijyEuDWxrBhe9kM9o71SPTtfxoyGcifxlZVZDiuLWYBQkNRRDF+uXLB3tyMA==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.8"
+    "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.9"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
