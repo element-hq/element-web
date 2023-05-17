@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2021 The Matrix.org Foundation C.I.C.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,9 @@ import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPa
 import { Action } from "../../../../../dispatcher/actions";
 import SdkConfig from "../../../../../SdkConfig";
 import { showUserOnboardingPage } from "../../../user-onboarding/UserOnboardingPage";
+import SettingsSubsection from "../../shared/SettingsSubsection";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -143,27 +146,21 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             .filter((it) => it !== "FTUE.userOnboardingButton" || showUserOnboardingPage(useCase));
 
         return (
-            <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
-                <div className="mx_SettingsTab_heading" data-testid="preferences">
-                    {_t("Preferences")}
-                </div>
+            <SettingsTab data-testid="mx_PreferencesUserSettingsTab">
+                <SettingsSection heading={_t("Preferences")}>
+                    {roomListSettings.length > 0 && (
+                        <SettingsSubsection heading={_t("Room list")}>
+                            {this.renderGroup(roomListSettings)}
+                        </SettingsSubsection>
+                    )}
 
-                {roomListSettings.length > 0 && (
-                    <div className="mx_SettingsTab_section">
-                        <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
-                        {this.renderGroup(roomListSettings)}
-                    </div>
-                )}
+                    <SettingsSubsection heading={_t("Spaces")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT)}
+                    </SettingsSubsection>
 
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Spaces")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT)}
-                </div>
-
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Keyboard shortcuts")}</span>
-                    <div className="mx_SettingsFlag">
-                        {_t(
+                    <SettingsSubsection
+                        heading={_t("Keyboard shortcuts")}
+                        description={_t(
                             "To view all keyboard shortcuts, <a>click here</a>.",
                             {},
                             {
@@ -174,85 +171,78 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                                 ),
                             },
                         )}
-                    </div>
-                    {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
-                </div>
+                    >
+                        {this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS)}
+                    </SettingsSubsection>
 
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Displaying time")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS)}
-                </div>
+                    <SettingsSubsection heading={_t("Displaying time")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS)}
+                    </SettingsSubsection>
 
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Presence")}</span>
-                    <span className="mx_SettingsTab_subsectionText">
-                        {_t("Share your activity and status with others.")}
-                    </span>
-                    {this.renderGroup(PreferencesUserSettingsTab.PRESENCE_SETTINGS)}
-                </div>
+                    <SettingsSubsection
+                        heading={_t("Presence")}
+                        description={_t("Share your activity and status with others.")}
+                    >
+                        {this.renderGroup(PreferencesUserSettingsTab.PRESENCE_SETTINGS)}
+                    </SettingsSubsection>
 
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
-                </div>
+                    <SettingsSubsection heading={_t("Composer")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
+                    </SettingsSubsection>
 
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Code blocks")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
-                </div>
+                    <SettingsSubsection heading={_t("Code blocks")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
+                    </SettingsSubsection>
 
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Images, GIFs and videos")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
-                </div>
+                    <SettingsSubsection heading={_t("Images, GIFs and videos")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
+                    </SettingsSubsection>
 
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
-                </div>
+                    <SettingsSubsection heading={_t("Timeline")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
+                    </SettingsSubsection>
 
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Room directory")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.ROOM_DIRECTORY_SETTINGS)}
-                </div>
+                    <SettingsSubsection heading={_t("Room directory")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.ROOM_DIRECTORY_SETTINGS)}
+                    </SettingsSubsection>
 
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("General")}</span>
-                    {this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
+                    <SettingsSubsection heading={_t("General")} stretchContent>
+                        {this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
 
-                    <SettingsFlag name="Electron.showTrayIcon" level={SettingLevel.PLATFORM} hideIfCannotSet />
-                    <SettingsFlag
-                        name="Electron.enableHardwareAcceleration"
-                        level={SettingLevel.PLATFORM}
-                        hideIfCannotSet
-                        label={_t("Enable hardware acceleration (restart %(appName)s to take effect)", {
-                            appName: SdkConfig.get().brand,
-                        })}
-                    />
-                    <SettingsFlag name="Electron.alwaysShowMenuBar" level={SettingLevel.PLATFORM} hideIfCannotSet />
-                    <SettingsFlag name="Electron.autoLaunch" level={SettingLevel.PLATFORM} hideIfCannotSet />
-                    <SettingsFlag name="Electron.warnBeforeExit" level={SettingLevel.PLATFORM} hideIfCannotSet />
+                        <SettingsFlag name="Electron.showTrayIcon" level={SettingLevel.PLATFORM} hideIfCannotSet />
+                        <SettingsFlag
+                            name="Electron.enableHardwareAcceleration"
+                            level={SettingLevel.PLATFORM}
+                            hideIfCannotSet
+                            label={_t("Enable hardware acceleration (restart %(appName)s to take effect)", {
+                                appName: SdkConfig.get().brand,
+                            })}
+                        />
+                        <SettingsFlag name="Electron.alwaysShowMenuBar" level={SettingLevel.PLATFORM} hideIfCannotSet />
+                        <SettingsFlag name="Electron.autoLaunch" level={SettingLevel.PLATFORM} hideIfCannotSet />
+                        <SettingsFlag name="Electron.warnBeforeExit" level={SettingLevel.PLATFORM} hideIfCannotSet />
 
-                    <Field
-                        label={_t("Autocomplete delay (ms)")}
-                        type="number"
-                        value={this.state.autocompleteDelay}
-                        onChange={this.onAutocompleteDelayChange}
-                    />
-                    <Field
-                        label={_t("Read Marker lifetime (ms)")}
-                        type="number"
-                        value={this.state.readMarkerInViewThresholdMs}
-                        onChange={this.onReadMarkerInViewThresholdMs}
-                    />
-                    <Field
-                        label={_t("Read Marker off-screen lifetime (ms)")}
-                        type="number"
-                        value={this.state.readMarkerOutOfViewThresholdMs}
-                        onChange={this.onReadMarkerOutOfViewThresholdMs}
-                    />
-                </div>
-            </div>
+                        <Field
+                            label={_t("Autocomplete delay (ms)")}
+                            type="number"
+                            value={this.state.autocompleteDelay}
+                            onChange={this.onAutocompleteDelayChange}
+                        />
+                        <Field
+                            label={_t("Read Marker lifetime (ms)")}
+                            type="number"
+                            value={this.state.readMarkerInViewThresholdMs}
+                            onChange={this.onReadMarkerInViewThresholdMs}
+                        />
+                        <Field
+                            label={_t("Read Marker off-screen lifetime (ms)")}
+                            type="number"
+                            value={this.state.readMarkerOutOfViewThresholdMs}
+                            onChange={this.onReadMarkerOutOfViewThresholdMs}
+                        />
+                    </SettingsSubsection>
+                </SettingsSection>
+            </SettingsTab>
         );
     }
 }
