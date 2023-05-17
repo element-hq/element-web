@@ -61,7 +61,8 @@
         "lint:style": "stylelint \"res/css/**/*.pcss\"",
         "test": "jest",
         "coverage": "yarn test --coverage",
-        "analyse:unused-exports": "node ./scripts/analyse_unused_exports.js"
+        "analyse:unused-exports": "node ./scripts/analyse_unused_exports.js",
+        "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp"
     },
     "resolutions": {
         "@types/react-dom": "17.0.19",
@@ -122,7 +123,7 @@
         "cpx": "^1.5.0",
         "css-loader": "^4",
         "dotenv": "^16.0.2",
-        "eslint": "8.39.0",
+        "eslint": "8.40.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-deprecate": "^0.7.0",
@@ -130,7 +131,7 @@
         "eslint-plugin-matrix-org": "^1.0.0",
         "eslint-plugin-react": "^7.28.0",
         "eslint-plugin-react-hooks": "^4.3.0",
-        "eslint-plugin-unicorn": "^46.0.0",
+        "eslint-plugin-unicorn": "^47.0.0",
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
         "fake-indexeddb": "^4.0.0",
         "fetch-mock-jest": "^1.5.1",
@@ -177,6 +178,7 @@
         "ts-prune": "^0.10.3",
         "typescript": "5.0.4",
         "webpack": "^4.46.0",
+        "webpack-bundle-analyzer": "^4.8.0",
         "webpack-cli": "^3.3.12",
         "webpack-dev-server": "^3.11.2",
         "worker-loader": "^3.0.0",
