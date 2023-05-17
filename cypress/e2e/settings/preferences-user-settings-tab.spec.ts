@@ -35,19 +35,16 @@ describe("Preferences user settings tab", () => {
     it("should be rendered properly", () => {
         cy.openUserSettings("Preferences");
 
-        cy.get(".mx_SettingsTab.mx_PreferencesUserSettingsTab").within(() => {
+        cy.findByTestId("mx_PreferencesUserSettingsTab").within(() => {
             // Assert that the top heading is rendered
-            cy.findByTestId("preferences").should("have.text", "Preferences").should("be.visible");
+            cy.contains("Preferences").should("be.visible");
         });
 
-        cy.get(".mx_SettingsTab.mx_PreferencesUserSettingsTab").percySnapshotElement(
-            "User settings tab - Preferences",
-            {
-                // Emulate TabbedView's actual min and max widths
-                // 580: '.mx_UserSettingsDialog .mx_TabbedView' min-width
-                // 796: 1036 (mx_TabbedView_tabsOnLeft actual width) - 240 (mx_TabbedView_tabPanel margin-right)
-                widths: [580, 796],
-            },
-        );
+        cy.findByTestId("mx_PreferencesUserSettingsTab").percySnapshotElement("User settings tab - Preferences", {
+            // Emulate TabbedView's actual min and max widths
+            // 580: '.mx_UserSettingsDialog .mx_TabbedView' min-width
+            // 796: 1036 (mx_TabbedView_tabsOnLeft actual width) - 240 (mx_TabbedView_tabPanel margin-right)
+            widths: [580, 796],
+        });
     });
 });
