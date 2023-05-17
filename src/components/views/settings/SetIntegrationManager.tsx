@@ -23,6 +23,8 @@ import { IntegrationManagerInstance } from "../../../integrations/IntegrationMan
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import ToggleSwitch from "../elements/ToggleSwitch";
+import Heading from "../typography/Heading";
+import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 
 interface IProps {}
 
@@ -70,11 +72,15 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
         }
 
         return (
-            <label className="mx_SetIntegrationManager" htmlFor="toggle_integration">
+            <label
+                className="mx_SetIntegrationManager"
+                data-testid="mx_SetIntegrationManager"
+                htmlFor="toggle_integration"
+            >
                 <div className="mx_SettingsFlag">
                     <div className="mx_SetIntegrationManager_heading_manager">
-                        <span className="mx_SettingsTab_heading">{_t("Manage integrations")}</span>
-                        <span className="mx_SettingsTab_subheading">{managerName}</span>
+                        <Heading size="h2">{_t("Manage integrations")}</Heading>
+                        <Heading size="h3">{managerName}</Heading>
                     </div>
                     <ToggleSwitch
                         id="toggle_integration"
@@ -83,13 +89,13 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
                         onChange={this.onProvisioningToggled}
                     />
                 </div>
-                <div className="mx_SettingsTab_subsectionText">{bodyText}</div>
-                <div className="mx_SettingsTab_subsectionText">
+                <SettingsSubsectionText>{bodyText}</SettingsSubsectionText>
+                <SettingsSubsectionText>
                     {_t(
                         "Integration managers receive configuration data, and can modify widgets, " +
                             "send room invites, and set power levels on your behalf.",
                     )}
-                </div>
+                </SettingsSubsectionText>
             </label>
         );
     }
