@@ -59,7 +59,7 @@ jobs:
 
             - name: Get diff lines
               id: diff
-              uses: Equip-Collaboration/diff-line-numbers@df70b4b83e05105c15f20dc6cc61f1463411b2a6 # v1.0.0
+              uses: Equip-Collaboration/diff-line-numbers@e752977e2cb4207d671bb9e4dad18c07c1b73d52 # v1.1.0
               with:
                   include: '["\\.tsx?$"]'
 
