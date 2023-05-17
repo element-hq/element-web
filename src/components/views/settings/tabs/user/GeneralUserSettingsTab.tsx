@@ -54,6 +54,9 @@ import SetIdServer from "../../SetIdServer";
 import SetIntegrationManager from "../../SetIntegrationManager";
 import ToggleSwitch from "../../../elements/ToggleSwitch";
 import { IS_MAC } from "../../../../../Keyboard";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
+import SettingsSubsection from "../../shared/SettingsSubsection";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -492,27 +495,24 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     private renderManagementSection(): JSX.Element {
         // TODO: Improve warning text for account deactivation
         return (
-            <div className="mx_SettingsTab_section" data-testid="account-management-section">
-                <span className="mx_SettingsTab_subheading">{_t("Account management")}</span>
-                <span className="mx_SettingsTab_subsectionText">
-                    {_t("Deactivating your account is a permanent action — be careful!")}
-                </span>
-                <AccessibleButton onClick={this.onDeactivateClicked} kind="danger">
-                    {_t("Deactivate Account")}
-                </AccessibleButton>
-            </div>
+            <SettingsSection heading={_t("Deactivate account")}>
+                <SettingsSubsection
+                    heading={_t("Account management")}
+                    data-testid="account-management-section"
+                    description={_t("Deactivating your account is a permanent action — be careful!")}
+                >
+                    <AccessibleButton onClick={this.onDeactivateClicked} kind="danger">
+                        {_t("Deactivate Account")}
+                    </AccessibleButton>
+                </SettingsSubsection>
+            </SettingsSection>
         );
     }
 
     private renderIntegrationManagerSection(): ReactNode {
         if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
 
-        return (
-            <div className="mx_SettingsTab_section">
-                {/* has its own heading as it includes the current integration manager */}
-                <SetIntegrationManager />
-            </div>
-        );
+        return <SetIntegrationManager />;
     }
 
     public render(): React.ReactNode {
@@ -531,12 +531,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
         let accountManagementSection: JSX.Element | undefined;
         if (SettingsStore.getValue(UIFeature.Deactivate)) {
-            accountManagementSection = (
-                <>
-                    <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>
-                    {this.renderManagementSection()}
-                </>
-            );
+            accountManagementSection = this.renderManagementSection();
         }
 
         let discoverySection;
@@ -552,7 +547,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         }
 
         return (
-            <div className="mx_SettingsTab mx_GeneralUserSettingsTab">
+            <SettingsTab data-testid="mx_GeneralUserSettingsTab">
                 <div className="mx_SettingsTab_heading" data-testid="general">
                     {_t("General")}
                 </div>
@@ -561,9 +556,9 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                 {this.renderLanguageSection()}
                 {supportsMultiLanguageSpellCheck ? this.renderSpellCheckSection() : null}
                 {discoverySection}
-                {this.renderIntegrationManagerSection() /* Has its own title */}
+                {this.renderIntegrationManagerSection()}
                 {accountManagementSection}
-            </div>
+            </SettingsTab>
         );
     }
 }
