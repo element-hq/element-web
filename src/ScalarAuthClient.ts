@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from "url";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -25,6 +24,7 @@ import { Service, startTermsFlow, TermsInteractionCallback, TermsNotSignedError 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SdkConfig from "./SdkConfig";
 import { WidgetType } from "./widgets/WidgetType";
+import { parseUrl } from "./utils/UrlUtils";
 
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
@@ -154,11 +154,10 @@ export default class ScalarAuthClient {
                     // Once we've fully transitioned to _matrix URLs, we can give people
                     // a grace period to update their configs, then use the rest url as
                     // a regular base url.
-                    const parsedImRestUrl = url.parse(this.apiUrl);
-                    parsedImRestUrl.path = "";
+                    const parsedImRestUrl = parseUrl(this.apiUrl);
                     parsedImRestUrl.pathname = "";
                     return startTermsFlow(
-                        [new Service(SERVICE_TYPES.IM, url.format(parsedImRestUrl), token)],
+                        [new Service(SERVICE_TYPES.IM, parsedImRestUrl.toString(), token)],
                         this.termsInteractionCallback,
                     ).then(() => {
                         return token;

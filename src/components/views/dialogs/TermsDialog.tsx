@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from "url";
 import React from "react";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 
@@ -23,6 +22,7 @@ import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "./BaseDialog";
 import { ServicePolicyPair } from "../../../Terms";
 import ExternalLink from "../elements/ExternalLink";
+import { parseUrl } from "../../../utils/UrlUtils";
 
 interface ITermsCheckboxProps {
     onChange: (url: string, checked: boolean) => void;
@@ -130,7 +130,7 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
     public render(): React.ReactNode {
         const rows: JSX.Element[] = [];
         for (const policiesAndService of this.props.policiesAndServicePairs) {
-            const parsedBaseUrl = url.parse(policiesAndService.service.baseUrl);
+            const parsedBaseUrl = parseUrl(policiesAndService.service.baseUrl);
 
             const policyValues = Object.values(policiesAndService.policies);
             for (let i = 0; i < policyValues.length; ++i) {

@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as url from "url";
 import { base32 } from "rfc4648";
 import { IWidget, IWidgetData } from "matrix-widget-api";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -36,6 +35,7 @@ import { Jitsi } from "../widgets/Jitsi";
 import { objectClone } from "./objects";
 import { _t } from "../languageHandler";
 import { IApp, isAppWidget } from "../stores/WidgetStore";
+import { parseUrl } from "./UrlUtils";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
@@ -106,7 +106,7 @@ export default class WidgetUtils {
             return false;
         }
 
-        const testUrl = url.parse(testUrlString);
+        const testUrl = parseUrl(testUrlString);
         let scalarUrls = SdkConfig.get().integrations_widgets_urls;
         if (!scalarUrls || scalarUrls.length === 0) {
             const defaultManager = IntegrationManagers.sharedInstance().getPrimaryManager();
@@ -118,7 +118,7 @@ export default class WidgetUtils {
         }
 
         for (let i = 0; i < scalarUrls.length; i++) {
-            const scalarUrl = url.parse(scalarUrls[i]);
+            const scalarUrl = parseUrl(scalarUrls[i]);
             if (testUrl && scalarUrl) {
                 if (
                     testUrl.protocol === scalarUrl.protocol &&

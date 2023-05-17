@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from "url";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/client";
 import { compare } from "matrix-js-sdk/src/utils";
@@ -27,6 +26,7 @@ import IntegrationsImpossibleDialog from "../components/views/dialogs/Integratio
 import IntegrationsDisabledDialog from "../components/views/dialogs/IntegrationsDisabledDialog";
 import WidgetUtils from "../utils/WidgetUtils";
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import { parseUrl } from "../utils/UrlUtils";
 
 const KIND_PREFERENCE = [
     // Ordered: first is most preferred, last is least preferred.
@@ -199,7 +199,7 @@ export class IntegrationManagers {
         logger.log("Looking up integration manager via .well-known");
         if (domainName.startsWith("http:") || domainName.startsWith("https:")) {
             // trim off the scheme and just use the domain
-            domainName = url.parse(domainName).host!;
+            domainName = parseUrl(domainName).host;
         }
 
         let wkConfig: IClientWellKnown;

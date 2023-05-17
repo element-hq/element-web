@@ -17,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from "url";
 import React, { ContextType, createRef, CSSProperties, MutableRefObject, ReactNode } from "react";
 import classNames from "classnames";
 import { IWidget, MatrixCapabilities } from "matrix-widget-api";
@@ -52,6 +51,7 @@ import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidget
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
+import { parseUrl } from "../../../utils/UrlUtils";
 
 interface IProps {
     app: IWidget | IApp;
@@ -265,7 +265,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private isMixedContent(): boolean {
         const parentContentProtocol = window.location.protocol;
-        const u = url.parse(this.props.app.url);
+        const u = parseUrl(this.props.app.url);
         const childContentProtocol = u.protocol;
         if (parentContentProtocol === "https:" && childContentProtocol !== "https:") {
             logger.warn(

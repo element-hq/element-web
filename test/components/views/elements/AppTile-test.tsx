@@ -52,6 +52,16 @@ import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessa
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
+jest.mock("../../../../src/stores/OwnProfileStore", () => ({
+    OwnProfileStore: {
+        instance: {
+            isProfileInfoFetched: true,
+            removeListener: jest.fn(),
+            getHttpAvatarUrl: jest.fn().mockReturnValue("http://avatar_url"),
+        },
+    },
+}));
+
 describe("AppTile", () => {
     let cli: MatrixClient;
     let r1: Room;
