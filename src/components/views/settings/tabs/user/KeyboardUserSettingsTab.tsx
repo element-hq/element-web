@@ -25,6 +25,9 @@ import {
     getKeyboardShortcutValue,
 } from "../../../../../accessibility/KeyboardShortcutUtils";
 import { KeyboardShortcut } from "../../KeyboardShortcut";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
+import SettingsSubsection from "../../shared/SettingsSubsection";
 
 interface IKeyboardShortcutRowProps {
     name: KeyBindingAction;
@@ -57,26 +60,27 @@ const KeyboardShortcutSection: React.FC<IKeyboardShortcutSectionProps> = ({ cate
     if (!category.categoryLabel) return null;
 
     return (
-        <div className="mx_SettingsTab_section" key={categoryName}>
-            <div className="mx_SettingsTab_subheading">{_t(category.categoryLabel)}</div>
-            <ul>
-                {" "}
+        <SettingsSubsection heading={_t(category.categoryLabel)} key={categoryName}>
+            <ul className="mx_KeyboardShortcut_shortcutList">
                 {category.settingNames.map((shortcutName) => {
                     return <KeyboardShortcutRow key={shortcutName} name={shortcutName} />;
-                })}{" "}
+                })}
             </ul>
-        </div>
+        </SettingsSubsection>
     );
 };
 
 const KeyboardUserSettingsTab: React.FC = () => {
     return (
-        <div className="mx_SettingsTab mx_KeyboardUserSettingsTab">
-            <div className="mx_SettingsTab_heading">{_t("Keyboard")}</div>
-            {visibleCategories.map(([categoryName, category]) => {
-                return <KeyboardShortcutSection key={categoryName} categoryName={categoryName} category={category} />;
-            })}
-        </div>
+        <SettingsTab>
+            <SettingsSection heading={_t("Keyboard")}>
+                {visibleCategories.map(([categoryName, category]: [CategoryName, ICategory]) => {
+                    return (
+                        <KeyboardShortcutSection key={categoryName} categoryName={categoryName} category={category} />
+                    );
+                })}
+            </SettingsSection>
+        </SettingsTab>
     );
 };
 
