@@ -229,7 +229,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
             "feature_exploring_public_spaces",
             defaultWatchManager,
             [["org.matrix.msc3827.stable"]],
-            undefined,
+            "v1.4",
             _td("Requires your server to support the stable version of MSC3827"),
         ),
     },
