@@ -359,6 +359,13 @@ describe("AppTile", () => {
             moveToContainerSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
         });
 
+        it("should render", () => {
+            const { container, asFragment } = renderResult;
+
+            expect(container.querySelector(".mx_Spinner")).toBeFalsy(); // Assert that the spinner is gone
+            expect(asFragment()).toMatchSnapshot(); // Take a snapshot of the pinned widget
+        });
+
         it("should not display the »Popout widget« button", () => {
             expect(renderResult.queryByLabelText("Popout widget")).not.toBeInTheDocument();
         });

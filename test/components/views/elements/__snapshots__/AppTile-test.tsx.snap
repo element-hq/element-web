@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppTile for a pinned widget should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppTile"
+    id="1"
+  >
+    <div
+      class="mx_AppTileMenuBar"
+    >
+      <span
+        class="mx_AppTileMenuBar_title"
+        style="pointer-events: none;"
+      >
+        <span>
+          <img
+            alt=""
+            class="mx_BaseAvatar mx_BaseAvatar_image mx_WidgetAvatar"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="image-file-stub"
+            style="width: 20px; height: 20px;"
+          />
+          <b>
+            Example 1
+          </b>
+          <span />
+        </span>
+      </span>
+      <span
+        class="mx_AppTileMenuBar_widgets"
+      >
+        <div
+          class="mx_AccessibleButton mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--collapse"
+          role="button"
+          tabindex="0"
+          title="Un-maximise"
+        />
+        <div
+          class="mx_AccessibleButton mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--minimise"
+          role="button"
+          tabindex="0"
+          title="Minimise"
+        />
+        <div
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Options"
+          class="mx_AccessibleButton mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--menu"
+          role="button"
+          tabindex="0"
+          title="Options"
+        />
+      </span>
+    </div>
+    <div
+      class="mx_AppTile_persistedWrapper"
+    >
+      <div />
+    </div>
+  </div>
+</DocumentFragment>
+`;
