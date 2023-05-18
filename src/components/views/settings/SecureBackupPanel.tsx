@@ -31,6 +31,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import RestoreKeyBackupDialog from "../dialogs/security/RestoreKeyBackupDialog";
 import { accessSecretStorage } from "../../../SecurityManager";
+import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 
 interface IState {
     loading: boolean;
@@ -247,7 +248,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             } else {
                 statusDescription = (
                     <>
-                        <p>
+                        <SettingsSubsectionText>
                             {_t(
                                 "This session is <b>not backing up your keys</b>, " +
                                     "but you do have an existing backup you can restore from " +
@@ -255,13 +256,13 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                                 {},
                                 { b: (sub) => <b>{sub}</b> },
                             )}
-                        </p>
-                        <p>
+                        </SettingsSubsectionText>
+                        <SettingsSubsectionText>
                             {_t(
                                 "Connect this session to key backup before signing out to avoid " +
                                     "losing any keys that may only be on this session.",
                             )}
-                        </p>
+                        </SettingsSubsectionText>
                     </>
                 );
                 restoreButtonCaption = _t("Connect this session to Key Backup");
@@ -425,14 +426,16 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         } else {
             statusDescription = (
                 <>
-                    <p>
+                    <SettingsSubsectionText>
                         {_t(
                             "Your keys are <b>not being backed up from this session</b>.",
                             {},
                             { b: (sub) => <b>{sub}</b> },
                         )}
-                    </p>
-                    <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+                    </SettingsSubsectionText>
+                    <SettingsSubsectionText>
+                        {_t("Back up your keys before signing out to avoid losing them.")}
+                    </SettingsSubsectionText>
                 </>
             );
             actions.push(
@@ -466,14 +469,14 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         }
 
         return (
-            <div>
-                <p>
+            <>
+                <SettingsSubsectionText>
                     {_t(
                         "Back up your encryption keys with your account data in case you " +
                             "lose access to your sessions. Your keys will be secured with a " +
                             "unique Security Key.",
                     )}
-                </p>
+                </SettingsSubsectionText>
                 {statusDescription}
                 <details>
                     <summary>{_t("Advanced")}</summary>
@@ -502,7 +505,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                     {extraDetails}
                 </details>
                 {actionRow}
-            </div>
+            </>
         );
     }
 }

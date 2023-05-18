@@ -477,10 +477,6 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     {historySection}
                 </SettingsSection>
             </SettingsTab>
-            // <div className="mx_SettingsTab mx_SecurityRoomSettingsTab">
-            //     <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
-
-            // </div>
         );
     }
 }

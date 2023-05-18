@@ -26,6 +26,7 @@ import * as FormattingUtils from "../../../utils/FormattingUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import SettingsFlag from "../elements/SettingsFlag";
 import { SettingLevel } from "../../../settings/SettingLevel";
+import SettingsSubsection, { SettingsSubsectionText } from "./shared/SettingsSubsection";
 
 interface IProps {}
 
@@ -72,27 +73,28 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className="mx_SettingsTab_section mx_CryptographyPanel">
-                <span className="mx_SettingsTab_subheading">{_t("Cryptography")}</span>
-                <table className="mx_SettingsTab_subsectionText mx_CryptographyPanel_sessionInfo">
-                    <tr>
-                        <th scope="row">{_t("Session ID:")}</th>
-                        <td>
-                            <code>{deviceId}</code>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">{_t("Session key:")}</th>
-                        <td>
-                            <code>
-                                <b>{identityKey}</b>
-                            </code>
-                        </td>
-                    </tr>
-                </table>
+            <SettingsSubsection heading={_t("Cryptography")}>
+                <SettingsSubsectionText>
+                    <table className="mx_CryptographyPanel_sessionInfo">
+                        <tr>
+                            <th scope="row">{_t("Session ID:")}</th>
+                            <td>
+                                <code>{deviceId}</code>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">{_t("Session key:")}</th>
+                            <td>
+                                <code>
+                                    <b>{identityKey}</b>
+                                </code>
+                            </td>
+                        </tr>
+                    </table>
+                </SettingsSubsectionText>
                 {importExportButtons}
                 {noSendUnverifiedSetting}
-            </div>
+            </SettingsSubsection>
         );
     }
 
