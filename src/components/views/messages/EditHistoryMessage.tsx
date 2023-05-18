@@ -129,7 +129,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         this.tooltipifyLinks();
     }
 
-    private renderActionBar(): JSX.Element {
+    private renderActionBar(): React.ReactNode {
         // hide the button when already redacted
         let redactButton: JSX.Element | undefined;
         if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact) {
@@ -143,13 +143,18 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             );
         }
 
-        // disabled remove button when not allowed
-        return (
-            <div className="mx_MessageActionBar">
-                {redactButton}
-                {viewSourceButton}
-            </div>
-        );
+        if (!redactButton && !viewSourceButton) {
+            // Hide the empty MessageActionBar
+            return null;
+        } else {
+            // disabled remove button when not allowed
+            return (
+                <div className="mx_MessageActionBar">
+                    {redactButton}
+                    {viewSourceButton}
+                </div>
+            );
+        }
     }
 
     public render(): React.ReactNode {
