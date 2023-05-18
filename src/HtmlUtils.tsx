@@ -571,9 +571,6 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
                 });
                 safeBody = phtml.html();
             }
-            if (bodyHasEmoji) {
-                safeBody = formatEmojis(safeBody, true).join("");
-            }
         } else if (highlighter) {
             safeBody = highlighter.applyHighlights(escapeHtml(plainBody), safeHighlights!).join("");
         }
@@ -581,13 +578,9 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
         delete sanitizeParams.textFilter;
     }
 
-    const contentBody = safeBody ?? strippedBody;
-    if (opts.returnString) {
-        return contentBody;
-    }
-
     let emojiBody = false;
     if (!opts.disableBigEmoji && bodyHasEmoji) {
+        const contentBody = safeBody ?? strippedBody;
         let contentBodyTrimmed = contentBody !== undefined ? contentBody.trim() : "";
 
         // Remove zero width joiner, zero width spaces and other spaces in body
@@ -605,6 +598,15 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
             (strippedBody === safeBody || // replies have the html fallbacks, account for that here
                 content.formatted_body === undefined ||
                 (!content.formatted_body.includes("http:") && !content.formatted_body.includes("https:")));
+    }
+
+    if (isFormattedBody && bodyHasEmoji && safeBody) {
+        // This has to be done after the emojiBody check above as to not break big emoji on replies
+        safeBody = formatEmojis(safeBody, true).join("");
+    }
+
+    if (opts.returnString) {
+        return safeBody ?? strippedBody;
     }
 
     const className = classNames({
