@@ -170,8 +170,10 @@ $left-gutter: 64px;
 
     &[data-layout="irc"],
     &[data-layout="group"] {
+        --selected-message-border-width: 4px;
+
         /* TODO: adjust the values for IRC layout */
-        --EventTile-box-shadow-offset-x: calc(50px + $selected-message-border-width);
+        --EventTile-box-shadow-offset-x: calc(50px + var(--selected-message-border-width));
         --EventTile-box-shadow-spread-radius: -50px;
         .mx_EventTile_e2eIcon {
             position: absolute;
@@ -447,7 +449,9 @@ $left-gutter: 64px;
         &.mx_EventTile_isEditing > .mx_EventTile_line {
             .mx_EditMessageComposer {
                 /* add space for the stroke on box-shadow */
-                padding-inline-start: calc($selected-message-border-width + var(--EditMessageComposer-padding-inline));
+                padding-inline-start: calc(
+                    var(--selected-message-border-width) + var(--EditMessageComposer-padding-inline)
+                );
             }
         }
 
@@ -592,7 +596,7 @@ $left-gutter: 64px;
             &.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
             &.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
             &.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-                padding-inline-start: calc($left-gutter + 18px + $selected-message-border-width);
+                padding-inline-start: calc($left-gutter + 18px + var(--selected-message-border-width));
             }
         }
     }
