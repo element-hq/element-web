@@ -15,11 +15,10 @@ limitations under the License.
 */
 
 import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { UserCredentials } from "../../support/login";
-import Chainable = Cypress.Chainable;
+import { handleVerificationRequest } from "./utils";
 
 const ROOM_NAME = "Test room";
 const TEST_USER = "Alia";
@@ -37,24 +36,6 @@ const waitForVerificationRequest = (cli: MatrixClient): Promise<VerificationRequ
         // @ts-ignore
         cli.on("crypto.verification.request", onVerificationRequestEvent);
     });
-};
-
-const handleVerificationRequest = (request: VerificationRequest): Chainable<EmojiMapping[]> => {
-    return cy.wrap(
-        new Promise<EmojiMapping[]>((resolve) => {
-            const onShowSas = (event: ISasEvent) => {
-                verifier.off("show_sas", onShowSas);
-                event.confirm();
-                resolve(event.sas.emoji);
-            };
-
-            const verifier = request.beginKeyVerification("m.sas.v1");
-            verifier.on("show_sas", onShowSas);
-            verifier.verify();
-        }),
-        // extra timeout, as this sometimes takes a while
-        { timeout: 30_000 },
-    );
 };
 
 const checkTimelineNarrow = (button = true) => {
@@ -161,7 +142,11 @@ describe("Decryption Failure Bar", () => {
                     );
                     cy.wrap(verificationRequestPromise).then((verificationRequest: VerificationRequest) => {
                         cy.wrap(verificationRequest.accept());
-                        handleVerificationRequest(verificationRequest).then((emojis) => {
+                        cy.wrap(
+                            handleVerificationRequest(verificationRequest),
+                            // extra timeout, as this sometimes takes a while
+                            { timeout: 30_000 },
+                        ).then((emojis: EmojiMapping[]) => {
                             cy.get(".mx_VerificationShowSas_emojiSas_block").then((emojiBlocks) => {
                                 emojis.forEach((emoji: EmojiMapping, index: number) => {
                                     expect(emojiBlocks[index].textContent.toLowerCase()).to.eq(emoji[0] + emoji[1]);

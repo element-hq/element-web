@@ -38,21 +38,19 @@ export function waitForVerificationRequest(cli: MatrixClient): Promise<Verificat
 }
 
 /**
- * Handle an incoming verification request
+ * Automatically handle an incoming verification request
  *
  * Starts the key verification process, and, once it is accepted on the other side, confirms that the
  * emojis match.
  *
- * Returns a promise that resolves, with the emoji list, once we confirm the emojis
- *
  * @param request - incoming verification request
+ * @returns A promise that resolves, with the emoji list, once we confirm the emojis
  */
-export function handleVerificationRequest(request: VerificationRequest) {
+export function handleVerificationRequest(request: VerificationRequest): Promise<EmojiMapping[]> {
     return new Promise<EmojiMapping[]>((resolve) => {
         const onShowSas = (event: ISasEvent) => {
             verifier.off("show_sas", onShowSas);
             event.confirm();
-            verifier.done();
             resolve(event.sas.emoji);
         };
 
