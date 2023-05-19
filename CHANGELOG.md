@@ -1,3 +1,10 @@
+Changes in [1.11.32-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.32-rc.2) (2023-05-19)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * Make `Privacy Notice` external link on integration manager ToS clickable ([\#10914](https://github.com/matrix-org/matrix-react-sdk/pull/10914)). Fixes #25384. Contributed by @luixxiul.
+ * Attempt a potential workaround for stuck notifs ([\#3384](https://github.com/matrix-org/matrix-js-sdk/pull/3384)). Fixes vector-im/element-web#25406. Contributed by @andybalaam.
+
 Changes in [1.11.32-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.32-rc.1) (2023-05-16)
 ===========================================================================================================
 
