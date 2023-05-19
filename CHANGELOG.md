@@ -1,3 +1,9 @@
+Changes in [3.73.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.73.0-rc.2) (2023-05-19)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Make `Privacy Notice` external link on integration manager ToS clickable ([\#10914](https://github.com/matrix-org/matrix-react-sdk/pull/10914)). Fixes vector-im/element-web#25384. Contributed by @luixxiul.
+
 Changes in [3.73.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.73.0-rc.1) (2023-05-16)
 ===============================================================================================================
 
