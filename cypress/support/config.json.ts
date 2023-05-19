@@ -37,5 +37,13 @@ const CONFIG_JSON = {
 };
 
 beforeEach(() => {
-    cy.intercept({ method: "GET", pathname: "/config.json" }, { body: CONFIG_JSON });
+    const configJson = CONFIG_JSON;
+
+    // configure element to use rust crypto if the env var tells us so
+    if (Cypress.env("RUST_CRYPTO")) {
+        configJson["features"] = {
+            feature_rust_crypto: true,
+        };
+    }
+    cy.intercept({ method: "GET", pathname: "/config.json" }, { body: configJson });
 });
