@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import React, { createRef, useContext } from "react";
-import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventStatus, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
@@ -145,6 +145,11 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     public componentDidMount(): void {
         MatrixClientPeg.get().on(RoomMemberEvent.PowerLevel, this.checkPermissions);
+
+        // re-check the permissions on send progress (`maySendRedactionForEvent` only returns true for events that have
+        // been fully sent and echoed back, and we want to ensure the "Remove" option is added once that happens.)
+        this.props.mxEvent.on(MatrixEventEvent.Status, this.checkPermissions);
+
         this.checkPermissions();
     }
 
@@ -153,6 +158,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         if (cli) {
             cli.removeListener(RoomMemberEvent.PowerLevel, this.checkPermissions);
         }
+        this.props.mxEvent.removeListener(MatrixEventEvent.Status, this.checkPermissions);
     }
 
     private checkPermissions = (): void => {
