@@ -27,12 +27,14 @@ function mkClient(selfTrust = false) {
                 Promise.resolve({
                     isVerified: () => (userId === "@self:localhost" ? selfTrust : userId[2] == "T"),
                 }),
+            getUserDeviceInfo: async (userIds: string[]) => {
+                return new Map(userIds.map((u) => [u, new Map([["DEVICE", {}]])]));
+            },
         }),
         checkUserTrust: (userId: string) => ({
             isCrossSigningVerified: () => userId[1] == "T",
             wasCrossSigningVerified: () => userId[1] == "T" || userId[1] == "W",
         }),
-        getStoredDevicesForUser: (userId: string) => ["DEVICE"],
     } as unknown as MatrixClient;
 }
 
