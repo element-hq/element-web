@@ -590,7 +590,11 @@ export default class AppTile extends React.Component<IProps, IState> {
         const iframeFeatures =
             "microphone; camera; encrypted-media; autoplay; display-capture; clipboard-write; " + "clipboard-read;";
 
-        const appTileBodyClass = "mx_AppTileBody" + (this.props.miniMode ? "_mini  " : " ");
+        const appTileBodyClass = classNames({
+            mx_AppTileBody: !this.props.miniMode,
+            mx_AppTileBody_mini: this.props.miniMode,
+            mx_AppTile_loading: this.state.loading,
+        });
         const appTileBodyStyles: CSSProperties = {};
         if (this.props.pointerEvents) {
             appTileBodyStyles.pointerEvents = this.props.pointerEvents;
@@ -626,10 +630,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             );
         } else if (this.state.initialising || !this.state.isUserProfileReady) {
             appTileBody = (
-                <div
-                    className={appTileBodyClass + (this.state.loading ? "mx_AppTile_loading" : "")}
-                    style={appTileBodyStyles}
-                >
+                <div className={appTileBodyClass} style={appTileBodyStyles}>
                     {loadingElement}
                 </div>
             );
@@ -642,10 +643,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 );
             } else {
                 appTileBody = (
-                    <div
-                        className={appTileBodyClass + (this.state.loading ? "mx_AppTile_loading" : "")}
-                        style={appTileBodyStyles}
-                    >
+                    <div className={appTileBodyClass} style={appTileBodyStyles}>
                         {this.state.loading && loadingElement}
                         <iframe
                             title={widgetTitle}
