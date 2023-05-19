@@ -182,6 +182,10 @@ describe("AppTile", () => {
         expect(renderResult.getByText("Example 1")).toBeInTheDocument();
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
 
+        const { container, asFragment } = renderResult;
+        expect(container.getElementsByClassName("mx_Spinner").length).toBeTruthy();
+        expect(asFragment()).toMatchSnapshot();
+
         // We want to verify that as we change to room 2, we should close the
         // right panel and destroy the widget.
 
@@ -418,6 +422,25 @@ describe("AppTile", () => {
             it("should display the »Popout widget« button", () => {
                 expect(renderResult.getByTitle("Popout widget")).toBeInTheDocument();
             });
+        });
+    });
+
+    describe("for a persistent app", () => {
+        let renderResult: RenderResult;
+
+        beforeEach(() => {
+            renderResult = render(
+                <MatrixClientContext.Provider value={cli}>
+                    <AppTile key={app1.id} app={app1} fullWidth={true} room={r1} miniMode={true} showMenubar={false} />
+                </MatrixClientContext.Provider>,
+            );
+        });
+
+        it("should render", () => {
+            const { container, asFragment } = renderResult;
+
+            expect(container.querySelector(".mx_Spinner")).toBeFalsy();
+            expect(asFragment()).toMatchSnapshot();
         });
     });
 
