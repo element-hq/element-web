@@ -26,6 +26,9 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { requestMediaPermissions } from "../../../../../utils/media/requestMediaPermissions";
+import SettingsTab from "../SettingsTab";
+import { SettingsSection } from "../../shared/SettingsSection";
+import SettingsSubsection from "../../shared/SettingsSubsection";
 
 interface IState {
     mediaDevices: IMediaDevices | null;
@@ -128,7 +131,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         let webcamDropdown: ReactNode | undefined;
         if (!this.state.mediaDevices) {
             requestButton = (
-                <div className="mx_VoiceUserSettingsTab_missingMediaPermissions">
+                <div>
                     <p>{_t("Missing media permissions, click the button below to request.")}</p>
                     <AccessibleButton onClick={this.requestMediaPermissions} kind="primary">
                         {_t("Request media permissions")}
@@ -148,33 +151,30 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         }
 
         return (
-            <div className="mx_SettingsTab mx_VoiceUserSettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Voice & Video")}</div>
-                {requestButton}
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Voice settings")}</span>
-                    {speakerDropdown}
-                    {microphoneDropdown}
-                    <LabelledToggleSwitch
-                        value={this.state.audioAutoGainControl}
-                        onChange={async (v): Promise<void> => {
-                            await MediaDeviceHandler.setAudioAutoGainControl(v);
-                            this.setState({ audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl() });
-                        }}
-                        label={_t("Automatically adjust the microphone volume")}
-                        data-testid="voice-auto-gain"
-                    />
-                </div>
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Video settings")}</span>
-                    {webcamDropdown}
-                    <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
-                </div>
+            <SettingsTab>
+                <SettingsSection heading={_t("Voice & Video")}>
+                    {requestButton}
+                    <SettingsSubsection heading={_t("Voice settings")} stretchContent>
+                        {speakerDropdown}
+                        {microphoneDropdown}
+                        <LabelledToggleSwitch
+                            value={this.state.audioAutoGainControl}
+                            onChange={async (v): Promise<void> => {
+                                await MediaDeviceHandler.setAudioAutoGainControl(v);
+                                this.setState({ audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl() });
+                            }}
+                            label={_t("Automatically adjust the microphone volume")}
+                            data-testid="voice-auto-gain"
+                        />
+                    </SettingsSubsection>
+                    <SettingsSubsection heading={_t("Video settings")} stretchContent>
+                        {webcamDropdown}
+                        <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
+                    </SettingsSubsection>
+                </SettingsSection>
 
-                <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Voice processing")}</span>
-                    <div className="mx_SettingsTab_section">
+                <SettingsSection heading={_t("Advanced")}>
+                    <SettingsSubsection heading={_t("Voice processing")}>
                         <LabelledToggleSwitch
                             value={this.state.audioNoiseSuppression}
                             onChange={async (v): Promise<void> => {
@@ -193,9 +193,8 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                             label={_t("Echo cancellation")}
                             data-testid="voice-echo-cancellation"
                         />
-                    </div>
-                    <div className="mx_SettingsTab_section">
-                        <span className="mx_SettingsTab_subheading">{_t("Connection")}</span>
+                    </SettingsSubsection>
+                    <SettingsSubsection heading={_t("Connection")}>
                         <SettingsFlag
                             name="webRtcAllowPeerToPeer"
                             level={SettingLevel.DEVICE}
@@ -206,9 +205,9 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                             level={SettingLevel.DEVICE}
                             onChange={this.changeFallbackICEServerAllowed}
                         />
-                    </div>
-                </div>
-            </div>
+                    </SettingsSubsection>
+                </SettingsSection>
+            </SettingsTab>
         );
     }
 }
