@@ -14,63 +14,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_FontScalingPanel {
-    color: $primary-content;
+.mx_FontScalingPanel_preview {
+    --FontScalingPanel_preview-padding-block: 9px;
 
-    .mx_FontScalingPanel_preview,
-    .mx_FontScalingPanel_fontSlider {
-        margin-inline-end: var(--SettingsTab_fullWidthField-margin-inline-end);
+    border: 1px solid $quinary-content;
+    border-radius: 10px;
+    padding: 0 $spacing-16 var(--FontScalingPanel_preview-padding-block) $spacing-16;
+    pointer-events: none;
+    display: flow-root;
+
+    &.mx_IRCLayout {
+        padding-top: 9px; /* TODO: Use a spacing variable */
     }
 
-    .mx_FontScalingPanel_preview {
-        --FontScalingPanel_preview-padding-block: 9px;
-
-        border: 1px solid $quinary-content;
-        border-radius: 10px;
-        padding: 0 $spacing-16 var(--FontScalingPanel_preview-padding-block) $spacing-16;
-        pointer-events: none;
-        display: flow-root;
-
-        &.mx_IRCLayout {
-            padding-top: 9px; /* TODO: Use a spacing variable */
-        }
-
-        .mx_EventTile[data-layout="bubble"] {
-            margin-top: 30px; /* TODO: Use a spacing variable */
-        }
-
-        .mx_EventTile_msgOption {
-            display: none;
-        }
+    .mx_EventTile[data-layout="bubble"] {
+        margin-top: 30px; /* TODO: Use a spacing variable */
     }
 
-    .mx_FontScalingPanel_fontSlider {
-        display: flex;
-        align-items: center;
-        padding: 15px $spacing-20 35px; /* TODO: Use spacing variables */
-        background: rgba($quinary-content, 0.2);
-        border-radius: 10px;
-        font-size: $font-10px;
-        margin-top: $spacing-24;
-        margin-bottom: $spacing-24;
+    .mx_EventTile_msgOption {
+        display: none;
+    }
+}
 
-        .mx_FontScalingPanel_fontSlider_smallText,
-        .mx_FontScalingPanel_fontSlider_largeText {
-            font-weight: 500;
-        }
+.mx_FontScalingPanel_fontSlider {
+    display: flex;
+    align-items: center;
+    padding: 15px $spacing-20 35px; /* TODO: Use spacing variables */
+    background: rgba($quinary-content, 0.2);
+    border-radius: 10px;
+    font-size: $font-10px;
 
-        .mx_FontScalingPanel_fontSlider_smallText {
-            font-size: $font-15px;
-            padding-inline-end: $spacing-20;
-        }
-
-        .mx_FontScalingPanel_fontSlider_largeText {
-            font-size: $font-18px;
-            padding-inline-start: $spacing-20;
-        }
+    .mx_FontScalingPanel_fontSlider_smallText,
+    .mx_FontScalingPanel_fontSlider_largeText {
+        font-weight: 500;
     }
 
-    .mx_FontScalingPanel_customFontSizeField {
-        margin-inline-start: var(--AppearanceUserSettingsTab_Field-margin-inline-start);
+    .mx_FontScalingPanel_fontSlider_smallText {
+        font-size: $font-15px;
+        padding-inline-end: $spacing-20;
+    }
+
+    .mx_FontScalingPanel_fontSlider_largeText {
+        font-size: $font-18px;
+        padding-inline-start: $spacing-20;
     }
 }

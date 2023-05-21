@@ -176,7 +176,7 @@ describe("Audio player", () => {
 
         // Enable high contrast manually
         cy.openUserSettings("Appearance")
-            .get(".mx_ThemeChoicePanel")
+            .findByTestId("mx_ThemeChoicePanel")
             .findByLabelText("Use high contrast")
             .click({ force: true }); // force click because the size of the checkbox is zero
 

@@ -28,6 +28,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { _t } from "../../../languageHandler";
 import { clamp } from "../../../utils/numbers";
+import SettingsSubsection from "./shared/SettingsSubsection";
 
 interface IProps {}
 
@@ -108,8 +109,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         const max = 18;
 
         return (
-            <div className="mx_SettingsTab_section mx_FontScalingPanel">
-                <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
+            <SettingsSubsection heading={_t("Font size")} stretchContent data-testid="mx_FontScalingPanel">
                 <EventTilePreview
                     className="mx_FontScalingPanel_preview"
                     message={this.MESSAGE_PREVIEW_TEXT}
@@ -159,9 +159,9 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
                     onValidate={this.onValidateFontSize}
                     onChange={(value: ChangeEvent<HTMLInputElement>) => this.setState({ fontSize: value.target.value })}
                     disabled={!this.state.useCustomFontSize}
-                    className="mx_FontScalingPanel_customFontSizeField"
+                    className="mx_AppearanceUserSettingsTab_checkboxControlledField"
                 />
-            </div>
+            </SettingsSubsection>
         );
     }
 }
