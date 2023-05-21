@@ -150,12 +150,12 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when invitedEma
 </div>
 `;
 
-exports[`<RoomPreviewBar /> with an invite without an invited email for a dm room renders invite message to a non-dm room 1`] = `
+exports[`<RoomPreviewBar /> with an invite without an invited email for a dm room renders invite message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"
 >
   <h3>
-    Do you want to join RoomPreviewBar-test-room?
+    Do you want to chat with @inviter:test.com?
   </h3>
   <p>
     <span
@@ -192,7 +192,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
         @inviter:test.com
         )
       </span>
-       invited you
+       wants to chat
     </span>
   </p>
 </div>
@@ -207,7 +207,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
     role="button"
     tabindex="0"
   >
-    Accept
+    Start chatting
   </div>
   <div
     class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"

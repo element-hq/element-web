@@ -49,6 +49,7 @@ import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { editorRoomKey, editorStateKey } from "../../../Editing";
 import DocumentOffset from "../../../editor/offset";
 import { attachMentions, attachRelation } from "./SendMessageComposer";
+import { filterBoolean } from "../../../utils/arrays";
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -149,8 +150,14 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         this.dispatcherRef = dis.register(this.onAction);
     }
 
-    private getRoom(): Room | null {
-        return this.props.mxClient.getRoom(this.props.editState.getEvent().getRoomId());
+    private getRoom(): Room {
+        const roomId = this.props.editState.getEvent().getRoomId();
+        const room = this.props.mxClient.getRoom(roomId);
+        // Something is very wrong if we encounter this
+        if (!room) {
+            throw new Error(`Cannot find room for event ${roomId}`);
+        }
+        return room;
     }
 
     private onKeyDown = (event: KeyboardEvent): void => {
@@ -411,7 +418,8 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         if (editState.hasEditorState()) {
             // if restoring state from a previous editor,
             // restore serialized parts from the state
-            parts = editState.getSerializedParts().map((p) => partCreator.deserializePart(p));
+            // (editState.hasEditorState() checks getSerializedParts is not null)
+            parts = filterBoolean<Part>(editState.getSerializedParts()!.map((p) => partCreator.deserializePart(p)));
         } else {
             // otherwise, either restore serialized parts from localStorage or parse the body of the event
             const restoredParts = this.restoreStoredEditorState(partCreator);

@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -212,7 +212,7 @@ describe("<RoomPreviewBar />", () => {
         const userMemberWithDmInvite = makeMockRoomMember({
             userId,
             membership: "invite",
-            memberContent: { is_direct: true },
+            memberContent: { is_direct: true, membership: "invite" },
         });
         const inviterMember = makeMockRoomMember({
             userId: inviterUserId,
@@ -299,7 +299,7 @@ describe("<RoomPreviewBar />", () => {
                     onRejectClick.mockClear();
                 });
 
-                it("renders invite message to a non-dm room", () => {
+                it("renders invite message", () => {
                     const component = getComponent({ inviterName, room });
                     expect(getMessage(component)).toMatchSnapshot();
                 });

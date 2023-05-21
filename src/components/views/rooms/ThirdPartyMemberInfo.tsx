@@ -53,11 +53,12 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         this.room = MatrixClientPeg.get().getRoom(this.props.event.getRoomId());
         const me = this.room?.getMember(MatrixClientPeg.get().getUserId()!);
         const powerLevels = this.room?.currentState.getStateEvents("m.room.power_levels", "");
+        const senderId = this.props.event.getSender()!;
 
         let kickLevel = powerLevels ? powerLevels.getContent().kick : 50;
         if (typeof kickLevel !== "number") kickLevel = 50;
 
-        const sender = this.room?.getMember(this.props.event.getSender());
+        const sender = this.room?.getMember(senderId);
 
         this.state = {
             stateKey: this.props.event.getStateKey()!,
@@ -65,7 +66,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
             displayName: this.props.event.getContent().display_name,
             invited: true,
             canKick: me ? me.powerLevel > kickLevel : false,
-            senderName: sender?.name ?? this.props.event.getSender(),
+            senderName: sender?.name ?? senderId,
         };
     }
 

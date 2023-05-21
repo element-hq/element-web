@@ -148,6 +148,12 @@ describe("<EditMessageComposer/>", () => {
         expect(mockClient.sendMessage).toHaveBeenCalledWith(editedEvent.getRoomId()!, null, expectedBody);
     });
 
+    it("should throw when room for message is not found", () => {
+        mockClient.getRoom.mockReturnValue(null);
+        const editState = new EditorStateTransfer(editedEvent);
+        expect(() => getComponent(editState)).toThrow("Cannot find room for event !abc:test");
+    });
+
     describe("createEditContent", () => {
         it("sends plaintext messages correctly", () => {
             const model = new EditorModel([], createPartCreator());
