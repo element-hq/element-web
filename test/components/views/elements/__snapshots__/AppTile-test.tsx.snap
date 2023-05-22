@@ -120,26 +120,38 @@ exports[`AppTile for a pinned widget should render 1`] = `
         class="mx_AppTileMenuBar_widgets"
       >
         <div
-          class="mx_AccessibleButton mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--collapse"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           role="button"
           tabindex="0"
           title="Un-maximise"
-        />
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
         <div
-          class="mx_AccessibleButton mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--minimise"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           role="button"
           tabindex="0"
           title="Minimise"
-        />
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
         <div
           aria-expanded="false"
           aria-haspopup="true"
           aria-label="Options"
-          class="mx_AccessibleButton mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--menu"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           role="button"
           tabindex="0"
           title="Options"
-        />
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
       </span>
     </div>
     <div

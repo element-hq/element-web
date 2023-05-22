@@ -222,60 +222,34 @@ limitations under the License.
     }
 
     .mx_AppTileMenuBar_widgets {
-        float: right;
         display: flex;
-        flex-direction: row;
         align-items: center;
-    }
 
-    .mx_AppTileMenuBar_iconButton {
-        --size: 24px; /* Size of the button. Its height and width values should be same */
+        .mx_AppTileMenuBar_widgets_button {
+            --size: 24px; /* Size of the button. Its height and width values should be same */
 
-        margin: 0 4px;
-        position: relative;
-        height: var(--size);
-        width: var(--size);
-
-        &::before,
-        &:hover::after {
-            content: "";
-            position: absolute;
+            margin: 0 4px;
+            position: relative;
             height: var(--size);
             width: var(--size);
-        }
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-        &::before {
-            background-color: $muted-fg-color;
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-size: 12px;
-        }
+            &:hover::after {
+                content: "";
+                position: absolute;
+                height: var(--size);
+                width: var(--size);
+                background-color: $panel-actions;
+                border-radius: 50%;
+                left: 0;
+                top: 0;
+            }
 
-        &:hover::after {
-            background-color: $panel-actions;
-            border-radius: 50%;
-            left: 0;
-            top: 0;
-        }
-
-        &.mx_AppTileMenuBar_iconButton--collapse::before {
-            mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
-        }
-
-        &.mx_AppTileMenuBar_iconButton--maximise::before {
-            mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
-        }
-
-        &.mx_AppTileMenuBar_iconButton--minimise::before {
-            mask-image: url("$(res)/img/element-icons/minus-button.svg");
-        }
-
-        &.mx_AppTileMenuBar_iconButton--popout::before {
-            mask-image: url("$(res)/img/feather-customised/widget/external-link.svg");
-        }
-
-        &.mx_AppTileMenuBar_iconButton--menu::before {
-            mask-image: url("$(res)/img/element-icons/room/ellipsis.svg");
+            .mx_Icon {
+                color: $muted-fg-color;
+            }
         }
     }
 }
