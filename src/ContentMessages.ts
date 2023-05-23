@@ -436,15 +436,18 @@ export default class ContentMessages {
                 }
             }
 
-            promBefore = doMaybeLocalRoomAction(roomId, (actualRoomId) =>
-                this.sendContentToRoom(
-                    file,
-                    actualRoomId,
-                    relation,
-                    matrixClient,
-                    replyToEvent ?? undefined,
-                    loopPromiseBefore,
-                ),
+            promBefore = doMaybeLocalRoomAction(
+                roomId,
+                (actualRoomId) =>
+                    this.sendContentToRoom(
+                        file,
+                        actualRoomId,
+                        relation,
+                        matrixClient,
+                        replyToEvent ?? undefined,
+                        loopPromiseBefore,
+                    ),
+                matrixClient,
             );
         }
 

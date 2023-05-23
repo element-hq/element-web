@@ -33,7 +33,7 @@ describe("shouldEncryptRoomWithSingle3rdPartyInvite", () => {
 
     beforeAll(() => {
         client = stubClient();
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(client);
     });
 
     beforeEach(() => {

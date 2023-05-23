@@ -143,7 +143,7 @@ describe("InviteDialog", () => {
             getClientWellKnown: jest.fn().mockResolvedValue({}),
         });
         SdkConfig.put({ validated_server_config: {} as ValidatedServerConfig } as IConfigOptions);
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(mockClient);
         jest.clearAllMocks();
 
         room = new Room(roomId, mockClient, mockClient.getSafeUserId());

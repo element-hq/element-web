@@ -57,7 +57,7 @@ function matcherObject(
 export default class RoomProvider extends AutocompleteProvider {
     protected matcher: QueryMatcher<ReturnType<typeof matcherObject>>;
 
-    public constructor(room: Room, renderingType?: TimelineRenderingType) {
+    public constructor(private readonly room: Room, renderingType?: TimelineRenderingType) {
         super({ commandRegex: ROOM_REGEX, renderingType });
         this.matcher = new QueryMatcher<ReturnType<typeof matcherObject>>([], {
             keys: ["displayedAlias", "matchName"],
@@ -119,7 +119,7 @@ export default class RoomProvider extends AutocompleteProvider {
                         completionId: room.room.roomId,
                         type: "room",
                         suffix: " ",
-                        href: makeRoomPermalink(room.displayedAlias),
+                        href: makeRoomPermalink(this.room.client, room.displayedAlias),
                         component: (
                             <PillCompletion title={room.room.name} description={room.displayedAlias}>
                                 <RoomAvatar width={24} height={24} room={room.room} />

@@ -86,7 +86,7 @@ describe("AppTile", () => {
         cli.hasLazyLoadMembersEnabled = () => false;
 
         // Init misc. startup deps
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(cli);
 
         r1 = new Room("r1", cli, "@name:example.com");
         r2 = new Room("r2", cli, "@name:example.com");

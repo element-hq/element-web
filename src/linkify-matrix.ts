@@ -30,6 +30,7 @@ import dis from "./dispatcher/dispatcher";
 import { Action } from "./dispatcher/actions";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 
 export enum Type {
     URL = "url",
@@ -196,7 +197,7 @@ export const options: Opts = {
             case Type.RoomAlias:
             case Type.UserId:
             default: {
-                return tryTransformEntityToPermalink(href) ?? "";
+                return tryTransformEntityToPermalink(MatrixClientPeg.get(), href) ?? "";
             }
         }
     },

@@ -47,7 +47,7 @@ describe("NewRoomIntro", () => {
 
     beforeAll(() => {
         client = stubClient();
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(client);
     });
 
     describe("for a DM Room", () => {

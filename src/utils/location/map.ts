@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import * as maplibregl from "maplibre-gl";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -24,9 +24,14 @@ import { parseGeoUri } from "./parseGeoUri";
 import { findMapStyleUrl } from "./findMapStyleUrl";
 import { LocationShareError } from "./LocationShareErrors";
 
-export const createMap = (interactive: boolean, bodyId: string, onError?: (error: Error) => void): maplibregl.Map => {
+export const createMap = (
+    client: MatrixClient,
+    interactive: boolean,
+    bodyId: string,
+    onError?: (error: Error) => void,
+): maplibregl.Map => {
     try {
-        const styleUrl = findMapStyleUrl();
+        const styleUrl = findMapStyleUrl(client);
 
         const map = new maplibregl.Map({
             container: bodyId,

@@ -301,7 +301,7 @@ export default class DeviceListener {
                 } else {
                     // No cross-signing or key backup on account (set up encryption)
                     await cli.waitForClientWellKnown();
-                    if (isSecureBackupRequired() && isLoggedIn()) {
+                    if (isSecureBackupRequired(cli) && isLoggedIn()) {
                         // If we're meant to set up, and Secure Backup is required,
                         // trigger the flow directly without a toast once logged in.
                         hideSetupEncryptionToast();

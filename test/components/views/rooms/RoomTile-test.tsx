@@ -90,7 +90,7 @@ describe("RoomTile", () => {
 
         client = mocked(stubClient());
         sdkContext.client = client;
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(client);
 
         room = new Room("!1:example.org", client, "@alice:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,

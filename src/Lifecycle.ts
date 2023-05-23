@@ -636,7 +636,7 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
     }
 
     dis.fire(Action.OnLoggedIn);
-    await startMatrixClient(/*startSyncing=*/ !softLogout);
+    await startMatrixClient(client, /*startSyncing=*/ !softLogout);
 
     return client;
 }
@@ -780,10 +780,11 @@ export function isLoggingOut(): boolean {
 /**
  * Starts the matrix client and all other react-sdk services that
  * listen for events while a session is logged in.
+ * @param client the matrix client to start
  * @param {boolean} startSyncing True (default) to actually start
  * syncing the client.
  */
-async function startMatrixClient(startSyncing = true): Promise<void> {
+async function startMatrixClient(client: MatrixClient, startSyncing = true): Promise<void> {
     logger.log(`Lifecycle: Starting MatrixClient`);
 
     // dispatch this before starting the matrix client: it's used
@@ -796,10 +797,10 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     SdkContextClass.instance.typingStore.reset();
     ToastStore.sharedInstance().reset();
 
-    DialogOpener.instance.prepare();
+    DialogOpener.instance.prepare(client);
     Notifier.start();
     UserActivity.sharedInstance().start();
-    DMRoomMap.makeShared().start();
+    DMRoomMap.makeShared(client).start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.instance.start();
     LegacyCallHandler.instance.start();

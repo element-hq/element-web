@@ -342,13 +342,13 @@ describe("Permalinks", function () {
                 makeMemberWithPL(roomId, "@bob:second", 0),
             ]);
         });
-        const result = makeRoomPermalink("!somewhere:example.org");
+        const result = makeRoomPermalink(mockClient, "!somewhere:example.org");
         expect(result).toBe("https://matrix.to/#/!somewhere:example.org?via=first&via=second");
     });
 
     it("should generate a room permalink for room aliases with no candidate servers", function () {
         mockClient.getRoom.mockReturnValue(null);
-        const result = makeRoomPermalink("#somewhere:example.org");
+        const result = makeRoomPermalink(mockClient, "#somewhere:example.org");
         expect(result).toBe("https://matrix.to/#/#somewhere:example.org");
     });
 
@@ -359,7 +359,7 @@ describe("Permalinks", function () {
                 makeMemberWithPL(roomId, "@bob:second", 0),
             ]);
         });
-        const result = makeRoomPermalink("#somewhere:example.org");
+        const result = makeRoomPermalink(mockClient, "#somewhere:example.org");
         expect(result).toBe("https://matrix.to/#/#somewhere:example.org");
     });
 

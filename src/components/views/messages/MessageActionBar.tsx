@@ -363,7 +363,12 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         e.preventDefault();
         e.stopPropagation();
 
-        editEvent(this.props.mxEvent, this.context.timelineRenderingType, this.props.getRelationsForEvent);
+        editEvent(
+            MatrixClientPeg.get(),
+            this.props.mxEvent,
+            this.context.timelineRenderingType,
+            this.props.getRelationsForEvent,
+        );
     };
 
     private readonly forbiddenThreadHeadMsgType = [MsgType.KeyVerificationRequest];
@@ -424,7 +429,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
 
     public render(): React.ReactNode {
         const toolbarOpts: JSX.Element[] = [];
-        if (canEditContent(this.props.mxEvent)) {
+        if (canEditContent(MatrixClientPeg.get(), this.props.mxEvent)) {
             toolbarOpts.push(
                 <RovingAccessibleTooltipButton
                     className="mx_MessageActionBar_iconButton"

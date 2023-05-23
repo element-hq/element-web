@@ -48,7 +48,7 @@ describe("RightPanel", () => {
     beforeEach(() => {
         stubClient();
         cli = mocked(MatrixClientPeg.get());
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(cli);
         context = new SdkContextClass();
         context.client = cli;
         RightPanel = wrapInSdkContext(RightPanelBase, context);

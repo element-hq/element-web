@@ -33,8 +33,9 @@ jest.mock("../../../../src/IdentityAuthClient", () => {
 jest.useRealTimers();
 
 const createRoom = (roomId: string, userId: string): Room => {
-    const newRoom = new Room(roomId, MatrixClientPeg.get(), userId, {});
-    DMRoomMap.makeShared().start();
+    const cli = MatrixClientPeg.get();
+    const newRoom = new Room(roomId, cli, userId, {});
+    DMRoomMap.makeShared(cli).start();
     return newRoom;
 };
 

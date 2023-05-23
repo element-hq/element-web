@@ -179,7 +179,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 let save = true;
 
                 // Double check that the identity server even has terms of service.
-                const hasTerms = await doesIdentityServerHaveTerms(fullUrl);
+                const hasTerms = await doesIdentityServerHaveTerms(MatrixClientPeg.get(), fullUrl);
                 if (!hasTerms) {
                     const [confirmed] = await this.showNoTermsWarning(fullUrl);
                     save = !!confirmed;

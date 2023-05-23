@@ -48,6 +48,7 @@ import { options as linkifyOpts } from "../../../linkify-matrix";
 import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { IEventTileOps } from "../rooms/EventTile";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 const MAX_HIGHLIGHT_LENGTH = 4096;
 
@@ -92,7 +93,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         this.activateSpoilers([content]);
 
         HtmlUtils.linkifyElement(content);
-        pillifyLinks([content], this.props.mxEvent, this.pills);
+        pillifyLinks(MatrixClientPeg.get(), [content], this.props.mxEvent, this.pills);
 
         this.calculateUrlPreview();
 

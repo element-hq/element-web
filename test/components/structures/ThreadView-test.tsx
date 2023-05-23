@@ -131,7 +131,7 @@ describe("ThreadView", () => {
 
         rootEvent = res.rootEvent;
 
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(mockClient);
         jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(SENDER);
     });
 

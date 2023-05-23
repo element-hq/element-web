@@ -37,7 +37,7 @@ describe("RightPanelStore", () => {
     beforeEach(() => {
         stubClient();
         cli = mocked(MatrixClientPeg.get());
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(cli);
 
         // Make sure we start with a clean store
         store.reset();

@@ -1154,7 +1154,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private leaveRoom(roomId: string): void {
-        const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
+        const cli = MatrixClientPeg.get();
+        const roomToLeave = cli.getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
 
         const isSpace = roomToLeave?.isSpaceRoom();
@@ -1173,9 +1174,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 </span>
             ),
             button: _t("Leave"),
-            onFinished: (shouldLeave) => {
+            onFinished: async (shouldLeave) => {
                 if (shouldLeave) {
-                    leaveRoomBehaviour(roomId);
+                    await leaveRoomBehaviour(cli, roomId);
 
                     dis.dispatch<AfterLeaveRoomPayload>({
                         action: Action.AfterLeaveRoom,
@@ -1211,7 +1212,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private async copyRoom(roomId: string): Promise<void> {
-        const roomLink = makeRoomPermalink(roomId);
+        const roomLink = makeRoomPermalink(MatrixClientPeg.get(), roomId);
         const success = await copyPlaintext(roomLink);
         if (!success) {
             Modal.createDialog(ErrorDialog, {

@@ -94,7 +94,7 @@ describe("HTMLExport", () => {
         jest.setSystemTime(REPEATABLE_DATE);
 
         client = stubClient() as jest.Mocked<MatrixClient>;
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(client);
 
         room = new Room("!myroom:example.org", client, "@me:example.org");
         client.getRoom.mockReturnValue(room);

@@ -76,7 +76,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         try {
             this.map = new maplibregl.Map({
                 container: "mx_LocationPicker_map",
-                style: findMapStyleUrl(),
+                style: findMapStyleUrl(this.context),
                 center: [0, 0],
                 zoom: 1,
             });

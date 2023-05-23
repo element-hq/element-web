@@ -527,7 +527,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
             const continuesLink = replacementRoomId ? (
                 <a
-                    href={makeRoomPermalink(replacementRoomId)}
+                    href={makeRoomPermalink(MatrixClientPeg.get(), replacementRoomId)}
                     className="mx_MessageComposer_roomReplaced_link"
                     onClick={this.onTombstoneClick}
                 >

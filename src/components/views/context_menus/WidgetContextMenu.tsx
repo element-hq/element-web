@@ -61,7 +61,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     const { room, roomId } = useContext(RoomContext);
 
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(app));
-    const canModify = userWidget || WidgetUtils.canUserModifyWidgets(roomId);
+    const canModify = userWidget || WidgetUtils.canUserModifyWidgets(cli, roomId);
 
     let streamAudioStreamButton: JSX.Element | undefined;
     if (roomId && getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type)) {
@@ -138,7 +138,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
                     button: _t("Delete widget"),
                     onFinished: (confirmed) => {
                         if (!confirmed) return;
-                        WidgetUtils.setRoomWidget(roomId, app.id);
+                        WidgetUtils.setRoomWidget(cli, roomId, app.id);
                     },
                 });
             }

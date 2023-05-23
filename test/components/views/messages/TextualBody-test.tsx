@@ -120,7 +120,7 @@ describe("<TextualBody />", () => {
         );
 
     it("renders m.emote correctly", () => {
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(defaultMatrixClient);
 
         const ev = mkEvent({
             type: "m.room.message",
@@ -140,7 +140,7 @@ describe("<TextualBody />", () => {
     });
 
     it("renders m.notice correctly", () => {
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(defaultMatrixClient);
 
         const ev = mkEvent({
             type: "m.room.message",
@@ -161,7 +161,7 @@ describe("<TextualBody />", () => {
 
     describe("renders plain-text m.text correctly", () => {
         beforeEach(() => {
-            DMRoomMap.makeShared();
+            DMRoomMap.makeShared(defaultMatrixClient);
         });
 
         it("simple message renders as expected", () => {
@@ -264,7 +264,7 @@ describe("<TextualBody />", () => {
                 isGuest: () => false,
                 mxcUrlToHttp: (s: string) => s,
             });
-            DMRoomMap.makeShared();
+            DMRoomMap.makeShared(defaultMatrixClient);
         });
 
         it("italics, bold, underline and strikethrough render as expected", () => {
@@ -408,7 +408,7 @@ describe("<TextualBody />", () => {
             isGuest: () => false,
             mxcUrlToHttp: (s: string) => s,
         });
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(defaultMatrixClient);
 
         const ev = mkRoomTextMessage("Visit https://matrix.org/");
         const { container, rerender } = getComponent(

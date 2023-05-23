@@ -75,7 +75,7 @@ describe("<Pill>", () => {
     beforeEach(() => {
         client = mocked(stubClient());
         SdkContextClass.instance.client = client;
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(client);
         room1 = new Room(room1Id, client, user1Id);
         room1.name = "Room 1";
         const user1JoinRoom1Event = mkRoomMemberJoinEvent(user1Id, room1Id, {

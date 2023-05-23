@@ -419,7 +419,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 </AccessibleButton>,
             );
 
-            if (!isSecureBackupRequired()) {
+            if (!isSecureBackupRequired(MatrixClientPeg.get())) {
                 actions.push(
                     <AccessibleButton key="delete" kind="danger" onClick={this.deleteBackup}>
                         {_t("Delete Backup")}

@@ -112,7 +112,7 @@ describe("MessagePanel", function () {
             return arg === "showDisplaynameChanges";
         });
 
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(client);
     });
 
     afterEach(function () {

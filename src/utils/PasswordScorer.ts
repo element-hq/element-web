@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import zxcvbn, { ZXCVBNFeedbackWarning } from "zxcvbn";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t, _td } from "../languageHandler";
 
 const ZXCVBN_USER_INPUTS = ["riot", "matrix"];
@@ -58,14 +58,15 @@ _td("Short keyboard patterns are easy to guess");
  * (obviously) which is large.
  *
  * @param {string} password Password to score
+ * @param matrixClient the client of the logged in user, if any
  * @returns {object} Score result with `score` and `feedback` properties
  */
-export function scorePassword(password: string): zxcvbn.ZXCVBNResult | null {
+export function scorePassword(matrixClient: MatrixClient | undefined, password: string): zxcvbn.ZXCVBNResult | null {
     if (password.length === 0) return null;
 
     const userInputs = ZXCVBN_USER_INPUTS.slice();
-    if (MatrixClientPeg.get()) {
-        userInputs.push(MatrixClientPeg.get().getUserIdLocalpart()!);
+    if (matrixClient) {
+        userInputs.push(matrixClient.getUserIdLocalpart()!);
     }
 
     let zxcvbnResult = zxcvbn(password, userInputs);

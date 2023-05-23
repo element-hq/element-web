@@ -94,7 +94,7 @@ export default class HTMLExporter extends Exporter {
         const exportDate = formatFullDateNoDayNoTime(new Date());
         const creator = this.room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
         const creatorName = (creator ? this.room.getMember(creator)?.rawDisplayName : creator) || creator;
-        const exporter = this.client.getUserId()!;
+        const exporter = this.room.client.getSafeUserId();
         const exporterName = this.room.getMember(exporter)?.rawDisplayName;
         const topic = this.room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || "";
         const createdText = _t("%(creatorName)s created this room.", {
@@ -282,7 +282,7 @@ export default class HTMLExporter extends Exporter {
     public getEventTile(mxEv: MatrixEvent, continuation: boolean): JSX.Element {
         return (
             <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
-                <MatrixClientContext.Provider value={this.client}>
+                <MatrixClientContext.Provider value={this.room.client}>
                     <EventTile
                         mxEvent={mxEv}
                         continuation={continuation}

@@ -41,7 +41,7 @@ describe("leaveRoomBehaviour", () => {
     beforeEach(async () => {
         stubClient();
         client = mocked(MatrixClientPeg.get());
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(client);
 
         room = mkRoom(client, "!1:example.org");
         space = mkRoom(client, "!2:example.org");
@@ -87,7 +87,7 @@ describe("leaveRoomBehaviour", () => {
     it("returns to the home page after leaving a room outside of a space that was being viewed", async () => {
         viewRoom(room);
 
-        await leaveRoomBehaviour(room.roomId);
+        await leaveRoomBehaviour(client, room.roomId);
         await expectDispatch({ action: Action.ViewHomePage });
     });
 
@@ -98,7 +98,7 @@ describe("leaveRoomBehaviour", () => {
         viewRoom(room);
         SpaceStore.instance.setActiveSpace(space.roomId, false);
 
-        await leaveRoomBehaviour(room.roomId);
+        await leaveRoomBehaviour(client, room.roomId);
         await expectDispatch({
             action: Action.ViewRoom,
             room_id: space.roomId,
@@ -110,7 +110,7 @@ describe("leaveRoomBehaviour", () => {
         viewRoom(space);
         SpaceStore.instance.setActiveSpace(space.roomId, false);
 
-        await leaveRoomBehaviour(space.roomId);
+        await leaveRoomBehaviour(client, space.roomId);
         await expectDispatch({ action: Action.ViewHomePage });
     });
 
@@ -122,7 +122,7 @@ describe("leaveRoomBehaviour", () => {
         viewRoom(room);
         SpaceStore.instance.setActiveSpace(room.roomId, false);
 
-        await leaveRoomBehaviour(room.roomId);
+        await leaveRoomBehaviour(client, room.roomId);
         await expectDispatch({
             action: Action.ViewRoom,
             room_id: space.roomId,
@@ -136,7 +136,7 @@ describe("leaveRoomBehaviour", () => {
         });
 
         it("Passes through the dynamic predecessor setting", async () => {
-            await leaveRoomBehaviour(room.roomId);
+            await leaveRoomBehaviour(client, room.roomId);
             expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, false, false);
         });
     });
@@ -150,7 +150,7 @@ describe("leaveRoomBehaviour", () => {
         });
 
         it("Passes through the dynamic predecessor setting", async () => {
-            await leaveRoomBehaviour(room.roomId);
+            await leaveRoomBehaviour(client, room.roomId);
             expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, false, true);
         });
     });

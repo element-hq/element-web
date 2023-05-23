@@ -34,7 +34,6 @@ import dis from "../../../dispatcher/dispatcher";
 import { Layout } from "../../../settings/enums/Layout";
 import { formatTime } from "../../../DateUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { DecryptionFailureBody } from "../messages/DecryptionFailureBody";
 import { E2EState } from "./E2EIcon";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -267,7 +266,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private unmounted = false;
 
-    public constructor(props: EventTileProps, context: React.ContextType<typeof MatrixClientContext>) {
+    public constructor(props: EventTileProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
 
         const thread = this.thread;
@@ -904,7 +903,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             isLeftAlignedBubbleMessage,
             noBubbleEvent,
             isSeeingThroughMessageHiddenForModeration,
-        } = getEventDisplayInfo(this.props.mxEvent, this.context.showHiddenEvents, this.shouldHideEvent());
+        } = getEventDisplayInfo(
+            MatrixClientPeg.get(),
+            this.props.mxEvent,
+            this.context.showHiddenEvents,
+            this.shouldHideEvent(),
+        );
         const { isQuoteExpanded } = this.state;
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us

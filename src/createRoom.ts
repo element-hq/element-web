@@ -462,7 +462,7 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
         roomId = existingDMRoom.roomId;
     } else {
         let encryption: boolean | undefined;
-        if (privateShouldBeEncrypted()) {
+        if (privateShouldBeEncrypted(client)) {
             encryption = await canEncryptToAllUsers(client, [userId]);
         }
 

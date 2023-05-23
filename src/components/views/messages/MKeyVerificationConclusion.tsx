@@ -114,16 +114,18 @@ export default class MKeyVerificationConclusion extends React.Component<IProps> 
 
         if (request.done) {
             title = _t("You verified %(name)s", {
-                name: getNameForEventRoom(request.otherUserId, mxEvent.getRoomId()!),
+                name: getNameForEventRoom(client, request.otherUserId, mxEvent.getRoomId()!),
             });
         } else if (request.cancelled) {
             const userId = request.cancellingUserId;
             if (userId === myUserId) {
                 title = _t("You cancelled verifying %(name)s", {
-                    name: getNameForEventRoom(request.otherUserId, mxEvent.getRoomId()!),
+                    name: getNameForEventRoom(client, request.otherUserId, mxEvent.getRoomId()!),
                 });
             } else if (userId) {
-                title = _t("%(name)s cancelled verifying", { name: getNameForEventRoom(userId, mxEvent.getRoomId()!) });
+                title = _t("%(name)s cancelled verifying", {
+                    name: getNameForEventRoom(client, userId, mxEvent.getRoomId()!),
+                });
             }
         }
 
@@ -135,7 +137,7 @@ export default class MKeyVerificationConclusion extends React.Component<IProps> 
                 <EventTileBubble
                     className={classes}
                     title={title}
-                    subtitle={userLabelForEventRoom(request.otherUserId, mxEvent.getRoomId()!)}
+                    subtitle={userLabelForEventRoom(client, request.otherUserId, mxEvent.getRoomId()!)}
                     timestamp={this.props.timestamp}
                 />
             );

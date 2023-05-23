@@ -110,8 +110,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     public constructor(props: IProps) {
         super(props);
 
-        let passPhraseKeySelected;
-        const setupMethods = getSecureBackupSetupMethods();
+        const cli = MatrixClientPeg.get();
+
+        let passPhraseKeySelected: SecureBackupSetupMethod;
+        const setupMethods = getSecureBackupSetupMethods(cli);
         if (setupMethods.includes(SecureBackupSetupMethod.Key)) {
             passPhraseKeySelected = SecureBackupSetupMethod.Key;
         } else {
@@ -143,13 +145,13 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             // does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
             accountPasswordCorrect: null,
-            canSkip: !isSecureBackupRequired(),
+            canSkip: !isSecureBackupRequired(cli),
             canUploadKeysWithPasswordOnly,
             passPhraseKeySelected,
             accountPassword,
         };
 
-        MatrixClientPeg.get().on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChange);
+        cli.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChange);
 
         this.getInitialPhase();
     }
@@ -542,7 +544,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     }
 
     private renderPhaseChooseKeyPassphrase(): JSX.Element {
-        const setupMethods = getSecureBackupSetupMethods();
+        const setupMethods = getSecureBackupSetupMethods(MatrixClientPeg.get());
         const optionKey = setupMethods.includes(SecureBackupSetupMethod.Key) ? this.renderOptionKey() : null;
         const optionPassphrase = setupMethods.includes(SecureBackupSetupMethod.Passphrase)
             ? this.renderOptionPassphrase()

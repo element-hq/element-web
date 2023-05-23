@@ -90,7 +90,7 @@ describe("ForwardDialog", () => {
     };
 
     beforeEach(() => {
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(mockClient);
         jest.clearAllMocks();
         mockClient.getUserId.mockReturnValue("@bob:example.org");
         mockClient.getSafeUserId.mockReturnValue("@bob:example.org");

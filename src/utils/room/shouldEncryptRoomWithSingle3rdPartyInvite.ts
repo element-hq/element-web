@@ -27,7 +27,7 @@ export const shouldEncryptRoomWithSingle3rdPartyInvite = (
     room: Room,
 ): { shouldEncrypt: true; inviteEvent: MatrixEvent } | { shouldEncrypt: false; inviteEvent?: undefined } => {
     // encryption not promoted via .well-known
-    if (!privateShouldBeEncrypted()) return { shouldEncrypt: false };
+    if (!privateShouldBeEncrypted(room.client)) return { shouldEncrypt: false };
 
     // not a DM room
     if (!DMRoomMap.shared().getRoomIds().has(room.roomId)) return { shouldEncrypt: false };

@@ -21,7 +21,6 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { HistoryVisibility } from "matrix-js-sdk/src/@types/partials";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { AddressType, getAddressType } from "../UserAddress";
 import { _t } from "../languageHandler";
 import Modal from "../Modal";
@@ -54,8 +53,6 @@ const USER_ALREADY_INVITED = "IO.ELEMENT.ALREADY_INVITED";
  * Invites multiple addresses to a room, handling rate limiting from the server
  */
 export default class MultiInviter {
-    private readonly matrixClient: MatrixClient;
-
     private canceled = false;
     private addresses: string[] = [];
     private busy = false;
@@ -66,12 +63,15 @@ export default class MultiInviter {
     private reason: string | undefined;
 
     /**
+     * @param matrixClient the client of the logged in user
      * @param {string} roomId The ID of the room to invite to
      * @param {function} progressCallback optional callback, fired after each invite.
      */
-    public constructor(private roomId: string, private readonly progressCallback?: () => void) {
-        this.matrixClient = MatrixClientPeg.get();
-    }
+    public constructor(
+        private readonly matrixClient: MatrixClient,
+        private roomId: string,
+        private readonly progressCallback?: () => void,
+    ) {}
 
     public get fatal(): boolean {
         return this._fatal;

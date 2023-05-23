@@ -159,7 +159,7 @@ describe("<SpacePanel />", () => {
             mkStubRoom("!room2:server", "Room 2", mockClient),
             mkStubRoom("!room3:server", "Room 3", mockClient),
         ];
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(mockClient);
         jest.useFakeTimers();
 
         const { getByLabelText } = render(<SpacePanel />);

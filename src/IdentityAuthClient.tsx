@@ -133,8 +133,8 @@ export default class IdentityAuthClient {
 
         if (
             !this.tempClient &&
-            !doesAccountDataHaveIdentityServer() &&
-            !(await doesIdentityServerHaveTerms(identityServerUrl))
+            !doesAccountDataHaveIdentityServer(this.matrixClient) &&
+            !(await doesIdentityServerHaveTerms(this.matrixClient, identityServerUrl))
         ) {
             const { finished } = Modal.createDialog(QuestionDialog, {
                 title: _t("Identity server has no terms of service"),
@@ -158,7 +158,7 @@ export default class IdentityAuthClient {
             });
             const [confirmed] = await finished;
             if (confirmed) {
-                setToDefaultIdentityServer();
+                setToDefaultIdentityServer(this.matrixClient);
             } else {
                 throw new AbortedIdentityActionError("User aborted identity server action without terms");
             }

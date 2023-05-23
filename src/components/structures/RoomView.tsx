@@ -561,7 +561,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             createdByCurrentUserTs - lastCreatedByOtherTs < PREVENT_MULTIPLE_JITSI_WITHIN
         ) {
             // more than one Jitsi widget with the last one from the current user → remove it
-            WidgetUtils.setRoomWidget(this.state.roomId, createdByCurrentUser.id);
+            WidgetUtils.setRoomWidget(this.context.client, this.state.roomId, createdByCurrentUser.id);
         }
     }
 

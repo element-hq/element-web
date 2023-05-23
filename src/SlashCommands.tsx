@@ -576,7 +576,7 @@ export const Commands = [
 
                             prom = finished.then(([useDefault]) => {
                                 if (useDefault) {
-                                    setToDefaultIdentityServer();
+                                    setToDefaultIdentityServer(MatrixClientPeg.get());
                                     return;
                                 }
                                 throw new UserFriendlyError(
@@ -589,7 +589,7 @@ export const Commands = [
                             );
                         }
                     }
-                    const inviter = new MultiInviter(roomId);
+                    const inviter = new MultiInviter(MatrixClientPeg.get(), roomId);
                     return success(
                         prom
                             .then(() => {
@@ -765,7 +765,7 @@ export const Commands = [
             }
 
             if (!targetRoomId) targetRoomId = roomId;
-            return success(leaveRoomBehaviour(targetRoomId));
+            return success(leaveRoomBehaviour(cli, targetRoomId));
         },
         category: CommandCategories.actions,
         renderingTypes: [TimelineRenderingType.Room],
@@ -1018,7 +1018,7 @@ export const Commands = [
             if (!widgetUrl.startsWith("https://") && !widgetUrl.startsWith("http://")) {
                 return reject(new UserFriendlyError("Please supply a https:// or http:// widget URL"));
             }
-            if (WidgetUtils.canUserModifyWidgets(roomId)) {
+            if (WidgetUtils.canUserModifyWidgets(MatrixClientPeg.get(), roomId)) {
                 const userId = MatrixClientPeg.get().getUserId();
                 const nowMs = new Date().getTime();
                 const widgetId = encodeURIComponent(`${roomId}_${userId}_${nowMs}`);
@@ -1036,7 +1036,9 @@ export const Commands = [
                     widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
                 }
 
-                return success(WidgetUtils.setRoomWidget(roomId, widgetId, type, widgetUrl, name, data));
+                return success(
+                    WidgetUtils.setRoomWidget(MatrixClientPeg.get(), roomId, widgetId, type, widgetUrl, name, data),
+                );
             } else {
                 return reject(new UserFriendlyError("You cannot modify widgets in this room."));
             }

@@ -101,7 +101,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     private pillifyLinks(): void {
         // not present for redacted events
         if (this.content.current) {
-            pillifyLinks(this.content.current.children, this.props.mxEvent, this.pills);
+            pillifyLinks(MatrixClientPeg.get(), this.content.current.children, this.props.mxEvent, this.pills);
         }
     }
 

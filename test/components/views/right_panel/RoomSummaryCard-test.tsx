@@ -71,7 +71,7 @@ describe("<RoomSummaryCard />", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(mockClient);
 
         mockClient.getRoom.mockReturnValue(room);
         jest.spyOn(room, "isElementVideoRoom").mockRestore();

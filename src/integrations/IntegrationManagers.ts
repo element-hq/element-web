@@ -115,7 +115,7 @@ export class IntegrationManagers {
 
     private setupAccountManagers(): void {
         if (!this.client || !this.client.getUserId()) return; // not logged in
-        const widgets = WidgetUtils.getIntegrationManagerWidgets();
+        const widgets = WidgetUtils.getIntegrationManagerWidgets(this.client);
         widgets.forEach((w) => {
             const data = w.content["data"];
             if (!data) return;
@@ -178,14 +178,6 @@ export class IntegrationManagers {
 
     public showDisabledDialog(): void {
         Modal.createDialog(IntegrationsDisabledDialog);
-    }
-
-    public async overwriteManagerOnAccount(manager: IntegrationManagerInstance): Promise<void> {
-        // TODO: TravisR - We should be logging out of scalar clients.
-        await WidgetUtils.removeIntegrationManagerWidgets();
-
-        // TODO: TravisR - We should actually be carrying over the discovery response verbatim.
-        await WidgetUtils.addIntegrationManagerWidget(manager.name, manager.uiUrl, manager.apiUrl);
     }
 
     /**

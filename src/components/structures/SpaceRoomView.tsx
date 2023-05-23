@@ -549,7 +549,7 @@ const SpaceSetupPrivateInvite: React.FC<{
         setBusy(true);
         const targetIds = emailAddresses.map((name) => name.trim()).filter(Boolean);
         try {
-            const result = await inviteMultipleToRoom(space.roomId, targetIds);
+            const result = await inviteMultipleToRoom(space.client, space.roomId, targetIds);
 
             const failedUsers = Object.keys(result.states).filter((a) => result.states[a] === "error");
             if (failedUsers.length > 0) {

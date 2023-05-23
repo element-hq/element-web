@@ -123,7 +123,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         }
 
         this.props.setStickerPickerOpen(false);
-        WidgetUtils.removeStickerpickerWidgets()
+        WidgetUtils.removeStickerpickerWidgets(this.props.room.client)
             .then(() => {
                 this.forceUpdate();
             })
@@ -169,7 +169,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     }
 
     private updateWidget = (): void => {
-        const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets()[0];
+        const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets(this.props.room.client)[0];
         if (!stickerpickerWidget) {
             Stickerpicker.currentWidget = undefined;
             this.setState({ stickerpickerWidget: null, widgetId: null });

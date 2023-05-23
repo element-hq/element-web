@@ -97,7 +97,7 @@ describe("<EditMessageComposer/>", () => {
 
         userEvent.setup();
 
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(mockClient);
 
         jest.spyOn(Autocompleter.prototype, "getCompletions").mockResolvedValue([
             {
