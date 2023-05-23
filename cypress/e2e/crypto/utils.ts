@@ -49,12 +49,15 @@ export function waitForVerificationRequest(cli: MatrixClient): Promise<Verificat
 export function handleVerificationRequest(request: VerificationRequest): Promise<EmojiMapping[]> {
     return new Promise<EmojiMapping[]>((resolve) => {
         const onShowSas = (event: ISasEvent) => {
+            // @ts-ignore VerifierEvent is a pain to get at here as we don't have a reference to matrixcs;
+            // using the string value here
             verifier.off("show_sas", onShowSas);
             event.confirm();
             resolve(event.sas.emoji);
         };
 
         const verifier = request.beginKeyVerification("m.sas.v1");
+        // @ts-ignore as above, avoiding reference to VerifierEvent
         verifier.on("show_sas", onShowSas);
         verifier.verify();
     });
