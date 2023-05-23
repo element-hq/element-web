@@ -79,7 +79,7 @@ describe("<CrossSigningPanel />", () => {
             expect(screen.getByTestId("summarised-status").innerHTML).toEqual("✅ Cross-signing is ready for use.");
             expect(screen.getByText("Cross-signing private keys:").parentElement!).toMatchSnapshot();
             expect(mockClient.crypto!.crossSigningInfo.isStoredInSecretStorage).toHaveBeenCalledWith(
-                mockClient.crypto!.secretStorage,
+                mockClient.secretStorage,
             );
         });
     });
@@ -106,7 +106,7 @@ describe("<CrossSigningPanel />", () => {
             );
             expect(screen.getByText("Cross-signing private keys:").parentElement!).toMatchSnapshot();
             expect(mockClient.crypto!.crossSigningInfo.isStoredInSecretStorage).toHaveBeenCalledWith(
-                mockClient.crypto!.secretStorage,
+                mockClient.secretStorage,
             );
         });
     });

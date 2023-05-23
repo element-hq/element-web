@@ -90,9 +90,12 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
 
     private async getUpdatedStatus(): Promise<void> {
         const cli = MatrixClientPeg.get();
+        const crypto = cli.crypto;
+        if (!crypto) return;
+
         const pkCache = cli.getCrossSigningCacheCallbacks();
-        const crossSigning = cli.crypto!.crossSigningInfo;
-        const secretStorage = cli.crypto!.secretStorage;
+        const crossSigning = crypto.crossSigningInfo;
+        const secretStorage = cli.secretStorage;
         const crossSigningPublicKeysOnDevice = Boolean(crossSigning.getId());
         const crossSigningPrivateKeysInStorage = Boolean(await crossSigning.isStoredInSecretStorage(secretStorage));
         const masterPrivateKeyCached = !!(await pkCache?.getCrossSigningKeyCache?.("master"));
