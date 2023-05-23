@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import { encode } from "html-entities";
-import { load as cheerio } from "cheerio";
 import escapeHtml from "escape-html";
 
 import Markdown from "../Markdown";
@@ -133,8 +132,7 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
             });
         });
 
-        // make sure div tags always start on a new line, otherwise it will confuse
-        // the markdown parser
+        // make sure div tags always start on a new line, otherwise it will confuse the markdown parser
         md = md.replace(/(.)<div/g, function (m, p1) {
             return `${p1}\n<div`;
         });
@@ -143,39 +141,29 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
     const parser = new Markdown(md);
     if (!parser.isPlainText() || forceHTML) {
         // feed Markdown output to HTML parser
-        const phtml = cheerio(parser.toHTML(), {
-            // @ts-ignore: The `_useHtmlParser2` internal option is the
-            // simplest way to both parse and render using `htmlparser2`.
-            _useHtmlParser2: true,
-            decodeEntities: false,
-        });
+        const phtml = new DOMParser().parseFromString(parser.toHTML(), "text/html");
 
         if (SettingsStore.getValue("feature_latex_maths")) {
             // original Markdown without LaTeX replacements
             const parserOrig = new Markdown(orig);
-            const phtmlOrig = cheerio(parserOrig.toHTML(), {
-                // @ts-ignore: The `_useHtmlParser2` internal option is the
-                // simplest way to both parse and render using `htmlparser2`.
-                _useHtmlParser2: true,
-                decodeEntities: false,
-            });
+            const phtmlOrig = new DOMParser().parseFromString(parserOrig.toHTML(), "text/html");
 
             // since maths delimiters are handled before Markdown,
             // code blocks could contain mangled content.
             // replace code blocks with original content
-            phtmlOrig("code").each(function (i) {
-                phtml("code").eq(i).text(phtmlOrig("code").eq(i).text());
+            [...phtmlOrig.getElementsByTagName("code")].forEach((e, i) => {
+                phtml.getElementsByTagName("code").item(i)!.textContent = e.textContent;
             });
 
             // add fallback output for latex math, which should not be interpreted as markdown
-            phtml("div, span").each(function (i, e) {
-                const tex = phtml(e).attr("data-mx-maths");
+            [...phtml.querySelectorAll("div, span")].forEach((e, i) => {
+                const tex = e.getAttribute("data-mx-maths");
                 if (tex) {
-                    phtml(e).html(`<code>${tex}</code>`);
+                    e.innerHTML = `<code>${tex}</code>`;
                 }
             });
         }
-        return phtml.html();
+        return phtml.body.innerHTML;
     }
     // ensure removal of escape backslashes in non-Markdown messages
     if (md.indexOf("\\") > -1) {

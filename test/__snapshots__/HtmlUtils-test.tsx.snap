@@ -15,3 +15,9 @@ exports[`bodyToHtml should generate big emoji for an emoji-only reply to a messa
   </span>
 </DocumentFragment>
 `;
+
+exports[`bodyToHtml feature_latex_maths should not mangle code blocks 1`] = `"<p>hello</p><pre><code>$\\xi$</code></pre><p>world</p>"`;
+
+exports[`bodyToHtml feature_latex_maths should render block katex 1`] = `"<p>hello</p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>ξ</mi></mrow><annotation encoding="application/x-tex">\\xi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.04601em;">ξ</span></span></span></span></span><p>world</p>"`;
+
+exports[`bodyToHtml feature_latex_maths should render inline katex 1`] = `"hello <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ξ</mi></mrow><annotation encoding="application/x-tex">\\xi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.04601em;">ξ</span></span></span></span> world"`;
