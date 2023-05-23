@@ -98,7 +98,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
         );
 
         return (
-            <div className="mx_SpellCheckLanguages">
+            <>
                 {existingSpellCheckLanguages}
                 <form onSubmit={this.onAddClick} noValidate={true}>
                     <SpellCheckLanguagesDropdown
@@ -108,7 +108,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
                     />
                     {addButton}
                 </form>
-            </div>
+            </>
         );
     }
 }

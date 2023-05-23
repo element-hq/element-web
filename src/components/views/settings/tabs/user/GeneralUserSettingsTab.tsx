@@ -57,6 +57,7 @@ import { IS_MAC } from "../../../../../Keyboard";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsectionHeading } from "../../shared/SettingsSubsectionHeading";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -417,31 +418,31 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     private renderLanguageSection(): JSX.Element {
         // TODO: Convert to new-styled Field
         return (
-            <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{_t("Language and region")}</span>
+            <SettingsSubsection heading={_t("Language and region")} stretchContent>
                 <LanguageDropdown
                     className="mx_GeneralUserSettingsTab_section_languageInput"
                     onOptionChange={this.onLanguageChange}
                     value={this.state.language}
                 />
-            </div>
+            </SettingsSubsection>
         );
     }
 
     private renderSpellCheckSection(): JSX.Element {
+        const heading = (
+            <SettingsSubsectionHeading heading={_t("Spell check")}>
+                <ToggleSwitch checked={!!this.state.spellCheckEnabled} onChange={this.onSpellCheckEnabledChange} />
+            </SettingsSubsectionHeading>
+        );
         return (
-            <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_section--spellcheck">
-                <span className="mx_SettingsTab_subheading">
-                    {_t("Spell check")}
-                    <ToggleSwitch checked={!!this.state.spellCheckEnabled} onChange={this.onSpellCheckEnabledChange} />
-                </span>
+            <SettingsSubsection heading={heading} stretchContent>
                 {this.state.spellCheckEnabled && !IS_MAC && (
                     <SpellCheckSettings
                         languages={this.state.spellCheckLanguages}
                         onLanguagesChange={this.onSpellCheckLanguagesChange}
                     />
                 )}
-            </div>
+            </SettingsSubsection>
         );
     }
 
