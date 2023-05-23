@@ -104,7 +104,9 @@ export default class AppPermission extends React.Component<IProps, IState> {
                     <li>{_t("Your display name")}</li>
                     <li>{_t("Your avatar URL")}</li>
                     <li>{_t("Your user ID")}</li>
+                    <li>{_t("Your device ID")}</li>
                     <li>{_t("Your theme")}</li>
+                    <li>{_t("Your language")}</li>
                     <li>{_t("%(brand)s URL", { brand })}</li>
                     <li>{_t("Room ID")}</li>
                     <li>{_t("Widget ID")}</li>
