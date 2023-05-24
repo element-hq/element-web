@@ -20,17 +20,9 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
       </h2>
     </div>
     <div
-      class="mx_MemberInfo_container"
+      class="mx_MemberInfo_container mx_MemberInfo_container--profile"
     >
-      <div
-        class="mx_MemberInfo_profile"
-      >
-        <div
-          class="mx_MemberInfo_profileField"
-        >
-          Invited by Alice DisplayName
-        </div>
-      </div>
+      Invited by Alice DisplayName
     </div>
   </div>
 </div>
@@ -56,17 +48,9 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
       </h2>
     </div>
     <div
-      class="mx_MemberInfo_container"
+      class="mx_MemberInfo_container mx_MemberInfo_container--profile"
     >
-      <div
-        class="mx_MemberInfo_profile"
-      >
-        <div
-          class="mx_MemberInfo_profileField"
-        >
-          Invited by Alice DisplayName
-        </div>
-      </div>
+      Invited by Alice DisplayName
     </div>
   </div>
 </div>
