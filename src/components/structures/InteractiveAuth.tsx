@@ -119,6 +119,17 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
             clientSecret: this.props.clientSecret,
             emailSid: this.props.emailSid,
             requestEmailToken: this.requestEmailToken,
+            supportedStages: [
+                AuthType.Password,
+                AuthType.Recaptcha,
+                AuthType.Email,
+                AuthType.Msisdn,
+                AuthType.Terms,
+                AuthType.RegistrationToken,
+                AuthType.UnstableRegistrationToken,
+                AuthType.Sso,
+                AuthType.SsoUnstable,
+            ],
         });
 
         if (this.props.poll) {
