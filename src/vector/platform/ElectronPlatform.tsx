@@ -217,6 +217,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         super.setNotificationCount(count);
 
         window.electron!.send("setBadgeCount", count);
+        // Windows doesn't support app badgeCount so we have to call this too
+        navigator.setAppBadge?.(count).catch((e) => {
+            logger.error("Failed to update app badge", e);
+        });
     }
 
     public supportsNotifications(): boolean {
