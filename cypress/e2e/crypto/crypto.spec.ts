@@ -20,6 +20,7 @@ import type { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { UserCredentials } from "../../support/login";
 import { EmojiMapping, handleVerificationRequest, waitForVerificationRequest } from "./utils";
+import { skipIfRustCrypto } from "../../support/util";
 
 interface CryptoTestContext extends Mocha.Context {
     homeserver: HomeserverInstance;
@@ -152,6 +153,7 @@ describe("Cryptography", function () {
     });
 
     it("setting up secure key backup should work", () => {
+        skipIfRustCrypto();
         cy.openUserSettings("Security & Privacy");
         cy.findByRole("button", { name: "Set up Secure Backup" }).click();
         cy.get(".mx_Dialog").within(() => {
@@ -175,6 +177,7 @@ describe("Cryptography", function () {
     });
 
     it("creating a DM should work, being e2e-encrypted / user verification", function (this: CryptoTestContext) {
+        skipIfRustCrypto();
         cy.bootstrapCrossSigning(aliceCredentials);
         startDMWithBob.call(this);
         // send first message
@@ -196,6 +199,7 @@ describe("Cryptography", function () {
     });
 
     it("should allow verification when there is no existing DM", function (this: CryptoTestContext) {
+        skipIfRustCrypto();
         cy.bootstrapCrossSigning(aliceCredentials);
         autoJoin(this.bob);
 
@@ -214,6 +218,7 @@ describe("Cryptography", function () {
     });
 
     it("should show the correct shield on edited e2e events", function (this: CryptoTestContext) {
+        skipIfRustCrypto();
         cy.bootstrapCrossSigning(aliceCredentials);
 
         // bob has a second, not cross-signed, device

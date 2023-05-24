@@ -18,6 +18,7 @@ import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { handleVerificationRequest, waitForVerificationRequest } from "./utils";
 import { CypressBot } from "../../support/bot";
+import { skipIfRustCrypto } from "../../support/util";
 
 describe("Complete security", () => {
     let homeserver: HomeserverInstance;
@@ -46,6 +47,8 @@ describe("Complete security", () => {
     });
 
     it("should walk through device verification if we have a signed device", () => {
+        skipIfRustCrypto();
+
         // create a new user, and have it bootstrap cross-signing
         let botClient: CypressBot;
         cy.getBot(homeserver, { displayName: "Jeff" })

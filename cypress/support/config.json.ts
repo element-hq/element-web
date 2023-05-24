@@ -20,6 +20,8 @@ limitations under the License.
  * we make requests to the live `matrix.org`, which makes our tests dependent on matrix.org being up and responsive.
  */
 
+import { isRustCryptoEnabled } from "./util";
+
 const CONFIG_JSON = {
     // This is deliberately quite a minimal config.json, so that we can test that the default settings
     // actually work.
@@ -40,7 +42,7 @@ beforeEach(() => {
     const configJson = CONFIG_JSON;
 
     // configure element to use rust crypto if the env var tells us so
-    if (Cypress.env("RUST_CRYPTO")) {
+    if (isRustCryptoEnabled()) {
         configJson["features"] = {
             feature_rust_crypto: true,
         };

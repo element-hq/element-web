@@ -56,5 +56,20 @@ cy.all = function all(commands): Cypress.Chainable {
     return cy.wrap(resultArray, { log: false });
 };
 
-// Needed to make this file a module
-export {};
+/**
+ * Check if Cypress has been configured to enable rust crypto, and bail out if so.
+ */
+export function skipIfRustCrypto() {
+    if (isRustCryptoEnabled()) {
+        cy.log("Skipping due to rust crypto");
+        //@ts-ignore: 'state' is a secret internal command
+        cy.state("runnable").skip();
+    }
+}
+
+/**
+ * Determine if Cypress has been configured to enable rust crypto (by checking the environment variable)
+ */
+export function isRustCryptoEnabled(): boolean {
+    return !!Cypress.env("RUST_CRYPTO");
+}
