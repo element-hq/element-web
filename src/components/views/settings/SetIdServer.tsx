@@ -32,6 +32,8 @@ import InlineSpinner from "../elements/InlineSpinner";
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import SettingsFieldset from "./SettingsFieldset";
+import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 
 // We'll wait up to this long when checking for 3PID bindings on the IS.
 const REACHABILITY_TIMEOUT = 10000; // ms
@@ -428,41 +430,41 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 discoButtonContent = <InlineSpinner />;
             }
             discoSection = (
-                <div>
-                    <span className="mx_SettingsTab_subsectionText">{discoBodyText}</span>
+                <>
+                    <SettingsSubsectionText>{discoBodyText}</SettingsSubsectionText>
                     <AccessibleButton onClick={this.onDisconnectClicked} kind="danger_sm">
                         {discoButtonContent}
                     </AccessibleButton>
-                </div>
+                </>
             );
         }
 
         return (
-            <form className="mx_SetIdServer" onSubmit={this.checkIdServer}>
-                <span className="mx_SettingsTab_subheading">{sectionTitle}</span>
-                <span className="mx_SettingsTab_subsectionText">{bodyText}</span>
-                <Field
-                    label={_t("Enter a new identity server")}
-                    type="text"
-                    autoComplete="off"
-                    placeholder={this.state.defaultIdServer}
-                    value={this.state.idServer}
-                    onChange={this.onIdentityServerChanged}
-                    tooltipContent={this.getTooltip()}
-                    tooltipClassName="mx_SetIdServer_tooltip"
-                    disabled={this.state.busy}
-                    forceValidity={this.state.error ? false : undefined}
-                />
-                <AccessibleButton
-                    type="submit"
-                    kind="primary_sm"
-                    onClick={this.checkIdServer}
-                    disabled={!this.idServerChangeEnabled()}
-                >
-                    {_t("Change")}
-                </AccessibleButton>
-                {discoSection}
-            </form>
+            <SettingsFieldset legend={sectionTitle} description={bodyText}>
+                <form className="mx_SetIdServer" onSubmit={this.checkIdServer}>
+                    <Field
+                        label={_t("Enter a new identity server")}
+                        type="text"
+                        autoComplete="off"
+                        placeholder={this.state.defaultIdServer}
+                        value={this.state.idServer}
+                        onChange={this.onIdentityServerChanged}
+                        tooltipContent={this.getTooltip()}
+                        tooltipClassName="mx_SetIdServer_tooltip"
+                        disabled={this.state.busy}
+                        forceValidity={this.state.error ? false : undefined}
+                    />
+                    <AccessibleButton
+                        type="submit"
+                        kind="primary_sm"
+                        onClick={this.checkIdServer}
+                        disabled={!this.idServerChangeEnabled()}
+                    >
+                        {_t("Change")}
+                    </AccessibleButton>
+                    {discoSection}
+                </form>
+            </SettingsFieldset>
         );
     }
 }

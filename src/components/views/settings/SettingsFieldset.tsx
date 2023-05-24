@@ -15,6 +15,8 @@ limitations under the License.
 import React, { ReactNode, HTMLAttributes } from "react";
 import classNames from "classnames";
 
+import { SettingsSubsectionText } from "./shared/SettingsSubsection";
+
 interface Props extends HTMLAttributes<HTMLFieldSetElement> {
     // section title
     legend: string | ReactNode;
@@ -24,7 +26,11 @@ interface Props extends HTMLAttributes<HTMLFieldSetElement> {
 const SettingsFieldset: React.FC<Props> = ({ legend, className, children, description, ...rest }) => (
     <fieldset {...rest} className={classNames("mx_SettingsFieldset", className)}>
         <legend className="mx_SettingsFieldset_legend">{legend}</legend>
-        {description && <div className="mx_SettingsFieldset_description">{description}</div>}
+        {description && (
+            <div className="mx_SettingsFieldset_description">
+                <SettingsSubsectionText>{description}</SettingsSubsectionText>
+            </div>
+        )}
         {children}
     </fieldset>
 );

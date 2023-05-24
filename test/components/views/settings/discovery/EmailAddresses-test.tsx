@@ -21,7 +21,7 @@ import { IRequestTokenResponse } from "matrix-js-sdk/src/client";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 
 import { UserFriendlyError } from "../../../../../src/languageHandler";
-import { EmailAddress } from "../../../../../src/components/views/settings/discovery/EmailAddresses";
+import EmailAddresses, { EmailAddress } from "../../../../../src/components/views/settings/discovery/EmailAddresses";
 import { clearAllModals, getMockClientWithEventEmitter } from "../../../../test-utils";
 
 const mockGetAccessToken = jest.fn().mockResolvedValue("getAccessToken");
@@ -145,5 +145,25 @@ describe("<EmailAddress/>", () => {
             // Check the description
             expect(await screen.findByText(fakeErrorText)).toBeInTheDocument();
         });
+    });
+});
+
+describe("<EmailAddresses />", () => {
+    it("should render a loader while loading", async () => {
+        const { container } = render(<EmailAddresses emails={[emailThreepidFixture]} isLoading={true} />);
+
+        expect(container).toMatchSnapshot();
+    });
+
+    it("should render email addresses", async () => {
+        const { container } = render(<EmailAddresses emails={[emailThreepidFixture]} isLoading={false} />);
+
+        expect(container).toMatchSnapshot();
+    });
+
+    it("should handle no email addresses", async () => {
+        const { container } = render(<EmailAddresses emails={[]} isLoading={false} />);
+
+        expect(container).toMatchSnapshot();
     });
 });

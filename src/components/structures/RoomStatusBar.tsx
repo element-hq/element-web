@@ -20,6 +20,7 @@ import { SyncState, ISyncStateData } from "matrix-js-sdk/src/sync";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
 
+import { Icon as WarningIcon } from "../../../res/img/feather-customised/warning-triangle.svg";
 import { _t, _td } from "../../languageHandler";
 import Resend from "../../Resend";
 import dis from "../../dispatcher/dispatcher";
@@ -279,12 +280,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                 <div className="mx_RoomStatusBar">
                     <div role="alert">
                         <div className="mx_RoomStatusBar_connectionLostBar">
-                            <img
-                                src={require("../../../res/img/feather-customised/warning-triangle.svg").default}
-                                width="24"
-                                height="24"
-                                alt=""
-                            />
+                            <WarningIcon width="24" height="24" />
                             <div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_title">
                                     {_t("Connectivity to the server has been lost.")}

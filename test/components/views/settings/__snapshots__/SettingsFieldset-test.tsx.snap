@@ -14,7 +14,11 @@ exports[`<SettingsFieldset /> renders fieldset with plain text description 1`] =
     <div
       class="mx_SettingsFieldset_description"
     >
-      Changes to who can read history.
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Changes to who can read history.
+      </div>
     </div>
     <div>
       test
@@ -37,14 +41,18 @@ exports[`<SettingsFieldset /> renders fieldset with react description 1`] = `
     <div
       class="mx_SettingsFieldset_description"
     >
-      <p>
-        Test
-      </p>
-      <a
-        href="#test"
+      <div
+        class="mx_SettingsSubsection_text"
       >
-        a link
-      </a>
+        <p>
+          Test
+        </p>
+        <a
+          href="#test"
+        >
+          a link
+        </a>
+      </div>
     </div>
     <div>
       test

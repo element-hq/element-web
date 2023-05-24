@@ -46,7 +46,11 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
             <div
               class="mx_SettingsFieldset_description"
             >
-              Decide who can view and join mock-space.
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Decide who can view and join mock-space.
+              </div>
             </div>
             <label
               class="mx_StyledRadioButton mx_JoinRuleSettings_radioButton mx_StyledRadioButton_disabled mx_StyledRadioButton_checked"
