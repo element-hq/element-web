@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MatrixChat /> should render spinner while app is loading 1`] = `
+<div>
+  <div
+    class="mx_MatrixChat_splash"
+  >
+    <div
+      class="mx_Spinner"
+    >
+      <div
+        aria-label="Loading…"
+        class="mx_Spinner_icon"
+        data-testid="spinner"
+        role="progressbar"
+        style="width: 32px; height: 32px;"
+      />
+    </div>
+  </div>
+</div>
+`;
