@@ -74,7 +74,7 @@ const KeyboardUserSettingsTab: React.FC = () => {
     return (
         <SettingsTab>
             <SettingsSection heading={_t("Keyboard")}>
-                {visibleCategories.map(([categoryName, category]: [CategoryName, ICategory]) => {
+                {visibleCategories.map(([categoryName, category]) => {
                     return (
                         <KeyboardShortcutSection key={categoryName} categoryName={categoryName} category={category} />
                     );

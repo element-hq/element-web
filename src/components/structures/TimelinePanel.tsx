@@ -740,7 +740,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         if (!this.messagePanel.current?.getScrollState()) return;
 
-        if (!this.messagePanel.current.getScrollState().stuckAtBottom) {
+        if (!this.messagePanel.current.getScrollState()?.stuckAtBottom) {
             // we won't load this event now, because we don't want to push any
             // events off the other end of the timeline. But we need to note
             // that we can now paginate.
@@ -981,7 +981,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         { leading: true, trailing: true },
     );
 
-    private readMarkerTimeout(readMarkerPosition: number): number {
+    private readMarkerTimeout(readMarkerPosition: number | null): number {
         return readMarkerPosition === 0
             ? this.context?.readMarkerInViewThresholdMs ?? this.state.readMarkerInViewThresholdMs
             : this.context?.readMarkerOutOfViewThresholdMs ?? this.state.readMarkerOutOfViewThresholdMs;

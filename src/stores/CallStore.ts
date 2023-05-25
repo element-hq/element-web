@@ -146,7 +146,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
                 this.calls.set(room.roomId, call);
                 this.callListeners.set(
                     call,
-                    new Map<CallEvent, (...args: unknown[]) => unknown>([
+                    new Map<CallEvent, (...args: any[]) => unknown>([
                         [CallEvent.ConnectionState, onConnectionState],
                         [CallEvent.Destroy, onDestroy],
                     ]),

@@ -1488,6 +1488,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     // rate limited because a power level change will emit an event for every member in the room.
     private updateRoomMembers = throttle(
         () => {
+            if (!this.state.room) return;
             this.updateDMState();
             this.updateE2EStatus(this.state.room);
         },

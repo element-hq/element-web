@@ -64,7 +64,11 @@ export default class IdentityAuthClient {
 
     private writeToken(): void {
         if (this.tempClient) return; // temporary client: ignore
-        window.localStorage.setItem("mx_is_access_token", this.accessToken);
+        if (this.accessToken) {
+            window.localStorage.setItem("mx_is_access_token", this.accessToken);
+        } else {
+            window.localStorage.removeItem("mx_is_access_token");
+        }
     }
 
     private readToken(): string | null {

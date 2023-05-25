@@ -126,19 +126,23 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
             tooltip = <Tooltip className="mx_NotificationBadge_tooltip" label={label} />;
         }
 
-        return (
-            <StatelessNotificationBadge
-                label={label}
-                symbol={notification.symbol}
-                count={notification.count}
-                color={notification.color}
-                onClick={onClick}
-                onMouseOver={this.onMouseOver}
-                onMouseLeave={this.onMouseLeave}
-                tabIndex={tabIndex}
-            >
-                {tooltip}
-            </StatelessNotificationBadge>
-        );
+        const commonProps: React.ComponentProps<typeof StatelessNotificationBadge> = {
+            label,
+            symbol: notification.symbol,
+            count: notification.count,
+            color: notification.color,
+            onMouseOver: this.onMouseOver,
+            onMouseLeave: this.onMouseLeave,
+        };
+
+        if (onClick) {
+            return (
+                <StatelessNotificationBadge {...commonProps} onClick={onClick} tabIndex={tabIndex}>
+                    {tooltip}
+                </StatelessNotificationBadge>
+            );
+        }
+
+        return <StatelessNotificationBadge {...commonProps}>{tooltip}</StatelessNotificationBadge>;
     }
 }
