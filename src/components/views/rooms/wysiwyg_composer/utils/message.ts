@@ -85,7 +85,7 @@ export async function sendMessage(
         if (cmd) {
             const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation?.event_id : null;
             let commandSuccessful: boolean;
-            [content, commandSuccessful] = await runSlashCommand(cmd, args, roomId, threadId ?? null);
+            [content, commandSuccessful] = await runSlashCommand(mxClient, cmd, args, roomId, threadId ?? null);
 
             if (!commandSuccessful) {
                 return; // errored

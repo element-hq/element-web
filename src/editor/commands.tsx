@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IContent } from "matrix-js-sdk/src/models/event";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import EditorModel from "./model";
 import { Type } from "./parts";
@@ -58,12 +59,13 @@ export function getSlashCommand(model: EditorModel): [Command | undefined, strin
 }
 
 export async function runSlashCommand(
+    matrixClient: MatrixClient,
     cmd: Command,
     args: string | undefined,
     roomId: string,
     threadId: string | null,
 ): Promise<[content: IContent | null, success: boolean]> {
-    const result = cmd.run(roomId, threadId, args);
+    const result = cmd.run(matrixClient, roomId, threadId, args);
     let messageContent: IContent | null = null;
     let error: any = result.error;
     if (result.promise) {

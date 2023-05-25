@@ -474,6 +474,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
                 let commandSuccessful: boolean;
                 [content, commandSuccessful] = await runSlashCommand(
+                    MatrixClientPeg.get(),
                     cmd,
                     args,
                     this.props.room.roomId,
