@@ -19,7 +19,7 @@ import { mocked } from "jest-mock";
 import { render, screen } from "@testing-library/react";
 import { IContent } from "matrix-js-sdk/src/models/event";
 
-import { bodyToHtml, topicToHtml } from "../src/HtmlUtils";
+import { bodyToHtml, formatEmojis, topicToHtml } from "../src/HtmlUtils";
 import SettingsStore from "../src/settings/SettingsStore";
 
 jest.mock("../src/settings/SettingsStore");
@@ -166,5 +166,21 @@ describe("bodyToHtml", () => {
             });
             expect(html).toMatchSnapshot();
         });
+    });
+});
+
+describe("formatEmojis", () => {
+    it.each([
+        ["🏴󠁧󠁢󠁥󠁮󠁧󠁿", [["🏴󠁧󠁢󠁥󠁮󠁧󠁿", "flag-england"]]],
+        ["🏴󠁧󠁢󠁳󠁣󠁴󠁿", [["🏴󠁧󠁢󠁳󠁣󠁴󠁿", "flag-scotland"]]],
+        ["🏴󠁧󠁢󠁷󠁬󠁳󠁿", [["🏴󠁧󠁢󠁷󠁬󠁳󠁿", "flag-wales"]]],
+    ])("%s emoji", (emoji, expectations) => {
+        const res = formatEmojis(emoji, false);
+        expect(res).toHaveLength(expectations.length);
+        for (let i = 0; i < res.length; i++) {
+            const [emoji, title] = expectations[i];
+            expect(res[i].props.children).toEqual(emoji);
+            expect(res[i].props.title).toEqual(`:${title}:`);
+        }
     });
 });
