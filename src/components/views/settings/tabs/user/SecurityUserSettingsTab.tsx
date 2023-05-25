@@ -331,7 +331,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         if (PosthogAnalytics.instance.isEnabled()) {
             const onClickAnalyticsLearnMore = (): void => {
                 showAnalyticsLearnMoreDialog({
-                    primaryButton: _t("Okay"),
+                    primaryButton: _t("OK"),
                     hasCancel: false,
                 });
             };
