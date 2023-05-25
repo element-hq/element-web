@@ -17,6 +17,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
+import { checkDeviceIsCrossSigned } from "../crypto/utils";
 
 describe("Registration", () => {
     let homeserver: HomeserverInstance;
@@ -95,32 +96,7 @@ describe("Registration", () => {
         );
 
         // check that cross-signing keys have been uploaded.
-        const myUserId = "@alice:localhost";
-        let myDeviceId: string;
-        cy.window({ log: false })
-            .then((win) => {
-                const cli = win.mxMatrixClientPeg.get();
-                const accessToken = cli.getAccessToken()!;
-                myDeviceId = cli.getDeviceId();
-                return cy.request({
-                    method: "POST",
-                    url: `${homeserver.baseUrl}/_matrix/client/v3/keys/query`,
-                    headers: { Authorization: `Bearer ${accessToken}` },
-                    body: { device_keys: { [myUserId]: [] } },
-                });
-            })
-            .then((res) => {
-                // there should be three cross-signing keys
-                expect(res.body.master_keys[myUserId]).to.have.property("keys");
-                expect(res.body.self_signing_keys[myUserId]).to.have.property("keys");
-                expect(res.body.user_signing_keys[myUserId]).to.have.property("keys");
-
-                // and the device should be signed by the self-signing key
-                const selfSigningKeyId = Object.keys(res.body.self_signing_keys[myUserId].keys)[0];
-                expect(res.body.device_keys[myUserId][myDeviceId]).to.exist;
-                const myDeviceSignatures = res.body.device_keys[myUserId][myDeviceId].signatures[myUserId];
-                expect(myDeviceSignatures[selfSigningKeyId]).to.exist;
-            });
+        checkDeviceIsCrossSigned();
     });
 
     it("should require username to fulfil requirements and be available", () => {
