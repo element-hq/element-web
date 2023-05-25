@@ -14,13 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, HTMLAttributes } from "react";
+import React, { forwardRef, HTMLAttributes, useRef } from "react";
+import { randomString } from "matrix-js-sdk/src/randomstring";
 
 import useFocus from "../../../hooks/useFocus";
 import useHover from "../../../hooks/useHover";
 import Tooltip, { ITooltipProps } from "./Tooltip";
 
-interface IProps extends HTMLAttributes<HTMLSpanElement>, Omit<ITooltipProps, "visible"> {
+interface IProps
+    extends HTMLAttributes<HTMLSpanElement>,
+        Omit<ITooltipProps, "visible" | "tabIndex" | "aria-describedby"> {
     tooltipTargetClassName?: string;
     ignoreHover?: (ev: React.MouseEvent) => boolean;
 }
@@ -46,6 +49,12 @@ const TooltipTarget = forwardRef<HTMLDivElement, IProps>(
         },
         ref,
     ) => {
+        const idRef = useRef("mx_TooltipTarget_" + randomString(8));
+        // Use generated ID if one is not passed
+        if (id === undefined) {
+            id = idRef.current;
+        }
+
         const [isFocused, focusProps] = useFocus();
         const [isHovering, hoverProps] = useHover(ignoreHover || (() => false));
 

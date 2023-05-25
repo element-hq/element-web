@@ -32,6 +32,7 @@ exports[`<BeaconListItem /> when a beacon is live and has locations renders beac
           class="mx_BeaconListItem_interactions"
         >
           <div
+            aria-describedby="mx_TooltipTarget_abdefghi"
             tabindex="0"
           >
             <a

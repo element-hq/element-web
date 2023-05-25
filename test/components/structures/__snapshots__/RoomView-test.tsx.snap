@@ -54,6 +54,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
           </div>
         </div>
         <div
+          aria-describedby="mx_TooltipTarget_abdefghi"
           class="mx_RoomHeader_topic mx_RoomTopic"
           dir="auto"
           tabindex="0"
@@ -146,6 +147,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           </div>
         </div>
         <div
+          aria-describedby="mx_TooltipTarget_abdefghi"
           class="mx_RoomHeader_topic mx_RoomTopic"
           dir="auto"
           tabindex="0"
@@ -335,6 +337,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
           </div>
         </div>
         <div
+          aria-describedby="mx_TooltipTarget_abdefghi"
           class="mx_RoomHeader_topic mx_RoomTopic"
           dir="auto"
           tabindex="0"
@@ -602,6 +605,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
           </div>
         </div>
         <div
+          aria-describedby="mx_TooltipTarget_abdefghi"
           class="mx_RoomHeader_topic mx_RoomTopic"
           dir="auto"
           tabindex="0"

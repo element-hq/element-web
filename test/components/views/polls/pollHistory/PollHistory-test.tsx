@@ -36,6 +36,11 @@ import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
+// Fake random strings to give a predictable snapshot for IDs
+jest.mock("matrix-js-sdk/src/randomstring", () => ({
+    randomString: () => "abdefghi",
+}));
+
 describe("<PollHistory />", () => {
     // 14.03.2022 16:15
     const now = 1647270879403;

@@ -53,6 +53,11 @@ import { getClientInformationEventType } from "../../../../../../src/utils/devic
 
 mockPlatformPeg();
 
+// Fake random strings to give a predictable snapshot for IDs
+jest.mock("matrix-js-sdk/src/randomstring", () => ({
+    randomString: () => "abdefghi",
+}));
+
 describe("<SessionManagerTab />", () => {
     const aliceId = "@alice:server.org";
     const deviceId = "alices_device";
