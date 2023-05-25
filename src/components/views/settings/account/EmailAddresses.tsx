@@ -276,7 +276,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className="mx_EmailAddresses">
+            <>
                 {existingEmailElements}
                 <form onSubmit={this.onAddClick} autoComplete="off" noValidate={true}>
                     <Field
@@ -289,7 +289,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
                     />
                     {addButton}
                 </form>
-            </div>
+            </>
         );
     }
 }

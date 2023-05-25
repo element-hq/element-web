@@ -4,7 +4,7 @@ exports[`<PhoneNumbers /> should handle no numbers 1`] = `
 <div>
   <div
     class="mx_SettingsSubsection"
-    data-testid="mx_PhoneNumbers"
+    data-testid="mx_DiscoveryPhoneNumbers"
   >
     <div
       class="mx_SettingsSubsectionHeading"
@@ -32,7 +32,7 @@ exports[`<PhoneNumbers /> should render a loader while loading 1`] = `
 <div>
   <div
     class="mx_SettingsSubsection"
-    data-testid="mx_PhoneNumbers"
+    data-testid="mx_DiscoveryPhoneNumbers"
   >
     <div
       class="mx_SettingsSubsectionHeading"
@@ -64,7 +64,7 @@ exports[`<PhoneNumbers /> should render phone numbers 1`] = `
 <div>
   <div
     class="mx_SettingsSubsection"
-    data-testid="mx_PhoneNumbers"
+    data-testid="mx_DiscoveryPhoneNumbers"
   >
     <div
       class="mx_SettingsSubsectionHeading"

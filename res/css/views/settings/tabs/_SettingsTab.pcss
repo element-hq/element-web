@@ -24,6 +24,24 @@ limitations under the License.
     a {
         color: $links;
     }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-8;
+        flex-grow: 1;
+    }
+    // never want full width buttons
+    // event when other content is 100% width
+    .mx_AccessibleButton {
+        align-self: flex-start;
+        justify-self: flex-start;
+    }
+
+    .mx_Field {
+        margin: 0;
+        flex: 1;
+    }
 }
 
 .mx_SettingsTab_warningText {

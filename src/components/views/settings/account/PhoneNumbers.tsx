@@ -305,7 +305,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         );
 
         return (
-            <div className="mx_PhoneNumbers">
+            <>
                 {existingPhoneElements}
                 <form onSubmit={this.onAddClick} autoComplete="off" noValidate={true} className="mx_PhoneNumbers_new">
                     <div className="mx_PhoneNumbers_input">
@@ -321,7 +321,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
                     </div>
                 </form>
                 {addVerifySection}
-            </div>
+            </>
         );
     }
 }

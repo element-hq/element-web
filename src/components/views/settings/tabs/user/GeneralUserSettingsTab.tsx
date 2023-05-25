@@ -60,6 +60,7 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import { SettingsSubsectionHeading } from "../../shared/SettingsSubsectionHeading";
 import Heading from "../../../typography/Heading";
+import InlineSpinner from "../../../elements/InlineSpinner";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -196,7 +197,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             );
             logger.warn(e);
         }
-
         this.setState({
             emails: threepids.filter((a) => a.medium === ThreepidMedium.Email),
             msisdns: threepids.filter((a) => a.medium === ThreepidMedium.Phone),
@@ -329,16 +329,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     }
 
     private renderAccountSection(): JSX.Element {
-        let passwordChangeForm: ReactNode = (
-            <ChangePassword
-                className="mx_GeneralUserSettingsTab_section--account_changePassword"
-                rowClassName=""
-                buttonKind="primary"
-                onError={this.onPasswordChangeError}
-                onFinished={this.onPasswordChanged}
-            />
-        );
-
         let threepidSection: ReactNode = null;
 
         // For older homeservers without separate 3PID add and bind methods (MSC2290),
@@ -351,33 +341,52 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true)
         ) {
             const emails = this.state.loading3pids ? (
-                <Spinner />
+                <InlineSpinner />
             ) : (
                 <AccountEmailAddresses emails={this.state.emails} onEmailsChange={this.onEmailsChange} />
             );
             const msisdns = this.state.loading3pids ? (
-                <Spinner />
+                <InlineSpinner />
             ) : (
                 <AccountPhoneNumbers msisdns={this.state.msisdns} onMsisdnsChange={this.onMsisdnsChange} />
             );
             threepidSection = (
-                <div>
-                    <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                    {emails}
+                <>
+                    <SettingsSubsection
+                        heading={_t("Email addresses")}
+                        stretchContent
+                        data-testid="mx_AccountEmailAddresses"
+                    >
+                        {emails}
+                    </SettingsSubsection>
 
-                    <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                    {msisdns}
-                </div>
+                    <SettingsSubsection
+                        heading={_t("Phone numbers")}
+                        stretchContent
+                        data-testid="mx_AccountPhoneNumbers"
+                    >
+                        {msisdns}
+                    </SettingsSubsection>
+                </>
             );
         } else if (this.state.serverSupportsSeparateAddAndBind === null) {
             threepidSection = <Spinner />;
         }
 
-        let passwordChangeText: ReactNode = _t("Set a new account password…");
-        if (!this.state.canChangePassword) {
-            // Just don't show anything if you can't do anything.
-            passwordChangeText = null;
-            passwordChangeForm = null;
+        let passwordChangeSection: ReactNode = null;
+        if (this.state.canChangePassword) {
+            passwordChangeSection = (
+                <>
+                    <SettingsSubsectionText>{_t("Set a new account password…")}</SettingsSubsectionText>
+                    <ChangePassword
+                        className="mx_GeneralUserSettingsTab_section--account_changePassword"
+                        rowClassName=""
+                        buttonKind="primary"
+                        onError={this.onPasswordChangeError}
+                        onFinished={this.onPasswordChanged}
+                    />
+                </>
+            );
         }
 
         let externalAccountManagement: JSX.Element | undefined;
@@ -386,13 +395,13 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
             externalAccountManagement = (
                 <>
-                    <p className="mx_SettingsTab_subsectionText" data-testid="external-account-management-outer">
+                    <SettingsSubsectionText data-testid="external-account-management-outer">
                         {_t(
                             "Your account details are managed separately at <code>%(hostname)s</code>.",
                             { hostname },
                             { code: (sub) => <code>{sub}</code> },
                         )}
-                    </p>
+                    </SettingsSubsectionText>
                     <AccessibleButton
                         onClick={null}
                         element="a"
@@ -408,13 +417,13 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             );
         }
         return (
-            <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_section--account">
-                <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
-                {externalAccountManagement}
-                <p className="mx_SettingsTab_subsectionText">{passwordChangeText}</p>
-                {passwordChangeForm}
+            <>
+                <SettingsSubsection heading={_t("Account")} stretchContent data-testid="accountSection">
+                    {externalAccountManagement}
+                    {passwordChangeSection}
+                </SettingsSubsection>
                 {threepidSection}
-            </div>
+            </>
         );
     }
 
@@ -540,7 +549,11 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                     {_t("Discovery")}
                 </Heading>
             );
-            discoverySection = <SettingsSection heading={heading}>{this.renderDiscoverySection()}</SettingsSection>;
+            discoverySection = (
+                <SettingsSection heading={heading} data-testid="discoverySection">
+                    {this.renderDiscoverySection()}
+                </SettingsSection>
+            );
         }
 
         return (
