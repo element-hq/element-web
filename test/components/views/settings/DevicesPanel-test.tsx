@@ -25,18 +25,40 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 
 describe("<DevicesPanel />", () => {
     const userId = "@alice:server.org";
-    const device1 = { device_id: "device_1" };
-    const device2 = { device_id: "device_2" };
-    const device3 = { device_id: "device_3" };
+
+    // the local device
+    const ownDevice = { device_id: "device_1" };
+
+    // a device which we have verified via cross-signing
+    const verifiedDevice = { device_id: "device_2" };
+
+    // a device which we have *not* verified via cross-signing
+    const unverifiedDevice = { device_id: "device_3" };
+
+    // a device which is returned by `getDevices` but getDeviceVerificationStatus returns `null` for
+    // (as it would for a device with no E2E keys).
+    const nonCryptoDevice = { device_id: "non_crypto" };
+
     const mockCrypto = {
-        getDeviceVerificationStatus: jest.fn().mockResolvedValue({
-            crossSigningVerified: false,
+        getDeviceVerificationStatus: jest.fn().mockImplementation((_userId, deviceId) => {
+            if (_userId !== userId) {
+                throw new Error(`bad user id ${_userId}`);
+            }
+            if (deviceId === ownDevice.device_id || deviceId === verifiedDevice.device_id) {
+                return { crossSigningVerified: true };
+            } else if (deviceId === unverifiedDevice.device_id) {
+                return {
+                    crossSigningVerified: false,
+                };
+            } else {
+                return null;
+            }
         }),
     };
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         getDevices: jest.fn(),
-        getDeviceId: jest.fn().mockReturnValue(device1.device_id),
+        getDeviceId: jest.fn().mockReturnValue(ownDevice.device_id),
         deleteMultipleDevices: jest.fn(),
         getStoredDevice: jest.fn().mockReturnValue(new DeviceInfo("id")),
         generateClientSecret: jest.fn(),
@@ -54,12 +76,14 @@ describe("<DevicesPanel />", () => {
     beforeEach(() => {
         jest.clearAllMocks();
 
-        mockClient.getDevices.mockReset().mockResolvedValue({ devices: [device1, device2, device3] });
+        mockClient.getDevices
+            .mockReset()
+            .mockResolvedValue({ devices: [ownDevice, verifiedDevice, unverifiedDevice, nonCryptoDevice] });
 
         mockClient.getPushers.mockReset().mockResolvedValue({
             pushers: [
                 mkPusher({
-                    [PUSHER_DEVICE_ID.name]: device1.device_id,
+                    [PUSHER_DEVICE_ID.name]: ownDevice.device_id,
                     [PUSHER_ENABLED.name]: true,
                 }),
             ],
@@ -88,16 +112,16 @@ describe("<DevicesPanel />", () => {
         it("deletes selected devices when interactive auth is not required", async () => {
             mockClient.deleteMultipleDevices.mockResolvedValue({});
             mockClient.getDevices
-                .mockResolvedValueOnce({ devices: [device1, device2, device3] })
+                .mockResolvedValueOnce({ devices: [ownDevice, verifiedDevice, unverifiedDevice] })
                 // pretend it was really deleted on refresh
-                .mockResolvedValueOnce({ devices: [device1, device3] });
+                .mockResolvedValueOnce({ devices: [ownDevice, unverifiedDevice] });
 
             const { container, getByTestId } = render(getComponent());
             await flushPromises();
 
             expect(container.getElementsByClassName("mx_DevicesPanel_device").length).toEqual(3);
 
-            toggleDeviceSelection(container, device2.device_id);
+            toggleDeviceSelection(container, verifiedDevice.device_id);
 
             mockClient.getDevices.mockClear();
 
@@ -106,7 +130,7 @@ describe("<DevicesPanel />", () => {
             });
 
             expect(container.getElementsByClassName("mx_Spinner").length).toBeTruthy();
-            expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([device2.device_id], undefined);
+            expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([verifiedDevice.device_id], undefined);
 
             await flushPromises();
 
@@ -124,9 +148,9 @@ describe("<DevicesPanel />", () => {
                 .mockResolvedValueOnce({});
 
             mockClient.getDevices
-                .mockResolvedValueOnce({ devices: [device1, device2, device3] })
+                .mockResolvedValueOnce({ devices: [ownDevice, verifiedDevice, unverifiedDevice] })
                 // pretend it was really deleted on refresh
-                .mockResolvedValueOnce({ devices: [device1, device3] });
+                .mockResolvedValueOnce({ devices: [ownDevice, unverifiedDevice] });
 
             const { container, getByTestId, getByLabelText } = render(getComponent());
 
@@ -135,7 +159,7 @@ describe("<DevicesPanel />", () => {
             // reset mock count after initial load
             mockClient.getDevices.mockClear();
 
-            toggleDeviceSelection(container, device2.device_id);
+            toggleDeviceSelection(container, verifiedDevice.device_id);
 
             act(() => {
                 fireEvent.click(getByTestId("sign-out-devices-btn"));
@@ -145,7 +169,7 @@ describe("<DevicesPanel />", () => {
             // modal rendering has some weird sleeps
             await sleep(100);
 
-            expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([device2.device_id], undefined);
+            expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([verifiedDevice.device_id], undefined);
 
             const modal = document.getElementsByClassName("mx_Dialog");
             expect(modal).toMatchSnapshot();
@@ -159,7 +183,7 @@ describe("<DevicesPanel />", () => {
             await flushPromises();
 
             // called again with auth
-            expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([device2.device_id], {
+            expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([verifiedDevice.device_id], {
                 identifier: {
                     type: "m.id.user",
                     user: userId,
@@ -182,9 +206,9 @@ describe("<DevicesPanel />", () => {
                 .mockResolvedValueOnce({});
 
             mockClient.getDevices
-                .mockResolvedValueOnce({ devices: [device1, device2, device3] })
+                .mockResolvedValueOnce({ devices: [ownDevice, verifiedDevice, unverifiedDevice] })
                 // pretend it was really deleted on refresh
-                .mockResolvedValueOnce({ devices: [device1, device3] });
+                .mockResolvedValueOnce({ devices: [ownDevice, unverifiedDevice] });
 
             const { container, getByTestId } = render(getComponent());
 
@@ -193,7 +217,7 @@ describe("<DevicesPanel />", () => {
             // reset mock count after initial load
             mockClient.getDevices.mockClear();
 
-            toggleDeviceSelection(container, device2.device_id);
+            toggleDeviceSelection(container, verifiedDevice.device_id);
 
             act(() => {
                 fireEvent.click(getByTestId("sign-out-devices-btn"));

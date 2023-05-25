@@ -104,7 +104,7 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
         class="mx_DevicesPanel_deviceTrust"
       >
         <span
-          class="mx_DevicesPanel_icon mx_E2EIcon mx_E2EIcon_warning"
+          class="mx_DevicesPanel_icon mx_E2EIcon mx_E2EIcon_verified"
         />
       </div>
       <div
@@ -124,8 +124,8 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
             />
           </div>
           <div
-            aria-label="Unverified"
-            class="mx_DeviceTypeIcon_verificationIcon unverified"
+            aria-label="Verified"
+            class="mx_DeviceTypeIcon_verificationIcon verified"
             role="img"
           />
         </div>
@@ -143,7 +143,7 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
             <span
               data-testid="device-metadata-isVerified"
             >
-              Unverified
+              Verified
             </span>
              · 
             <span
@@ -164,13 +164,6 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
             Sign Out
           </div>
           <div
-            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-            role="button"
-            tabindex="0"
-          >
-            Verify
-          </div>
-          <div
             class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
             role="button"
             tabindex="0"
@@ -188,24 +181,13 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
         class="mx_DevicesPanel_header_trust"
       >
         <span
-          class="mx_DevicesPanel_header_icon mx_E2EIcon mx_E2EIcon_warning"
+          class="mx_DevicesPanel_header_icon mx_E2EIcon mx_E2EIcon_verified"
         />
       </div>
       <div
         class="mx_DevicesPanel_header_title"
       >
-        Unverified devices
-      </div>
-      <div
-        class="mx_DevicesPanel_header_button"
-      >
-        <div
-          class="mx_AccessibleButton mx_DevicesPanel_selectButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
-          role="button"
-          tabindex="0"
-        >
-          Select all
-        </div>
+        Verified devices
       </div>
     </div>
     <div
@@ -250,8 +232,8 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
                     />
                   </div>
                   <div
-                    aria-label="Unverified"
-                    class="mx_DeviceTypeIcon_verificationIcon unverified"
+                    aria-label="Verified"
+                    class="mx_DeviceTypeIcon_verificationIcon verified"
                     role="img"
                   />
                 </div>
@@ -269,7 +251,7 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
                     <span
                       data-testid="device-metadata-isVerified"
                     >
-                      Unverified
+                      Verified
                     </span>
                      · 
                     <span
@@ -294,6 +276,23 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
             </div>
           </label>
         </span>
+      </div>
+    </div>
+    <hr />
+    <div
+      class="mx_DevicesPanel_header"
+    >
+      <div
+        class="mx_DevicesPanel_header_trust"
+      >
+        <span
+          class="mx_DevicesPanel_header_icon mx_E2EIcon mx_E2EIcon_warning"
+        />
+      </div>
+      <div
+        class="mx_DevicesPanel_header_title"
+      >
+        Unverified devices
       </div>
     </div>
     <div
@@ -364,6 +363,114 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
                       data-testid="device-metadata-deviceId"
                     >
                       device_3
+                    </span>
+                  </div>
+                </div>
+                <div
+                  class="mx_DeviceTile_actions"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                    role="button"
+                    tabindex="0"
+                  >
+                    Verify
+                  </div>
+                  <div
+                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+                    role="button"
+                    tabindex="0"
+                  >
+                    Rename
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+        </span>
+      </div>
+    </div>
+    <hr />
+    <div
+      class="mx_DevicesPanel_header"
+    >
+      <div
+        class="mx_DevicesPanel_header_trust"
+      />
+      <div
+        class="mx_DevicesPanel_header_title"
+      >
+        Devices without encryption support
+      </div>
+    </div>
+    <div
+      class="mx_DevicesPanel_device"
+    >
+      <div
+        class="mx_SelectableDeviceTile"
+      >
+        <span
+          class="mx_Checkbox mx_SelectableDeviceTile_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+        >
+          <input
+            data-testid="device-tile-checkbox-non_crypto"
+            id="device-tile-checkbox-non_crypto"
+            type="checkbox"
+          />
+          <label
+            for="device-tile-checkbox-non_crypto"
+          >
+            <div
+              class="mx_Checkbox_background"
+            >
+              <div
+                class="mx_Checkbox_checkmark"
+              />
+            </div>
+            <div>
+              <div
+                class="mx_DeviceTile"
+                data-testid="device-tile-non_crypto"
+              >
+                <div
+                  class="mx_DeviceTypeIcon"
+                >
+                  <div
+                    class="mx_DeviceTypeIcon_deviceIconWrapper"
+                  >
+                    <div
+                      aria-label="Unknown session type"
+                      class="mx_DeviceTypeIcon_deviceIcon"
+                      role="img"
+                    />
+                  </div>
+                  <div
+                    aria-label="Unverified"
+                    class="mx_DeviceTypeIcon_verificationIcon unverified"
+                    role="img"
+                  />
+                </div>
+                <div
+                  class="mx_DeviceTile_info"
+                >
+                  <h4
+                    class="mx_Heading_h4"
+                  >
+                    non_crypto
+                  </h4>
+                  <div
+                    class="mx_DeviceTile_metadata"
+                  >
+                    <span
+                      data-testid="device-metadata-isVerified"
+                    >
+                      Unverified
+                    </span>
+                     · 
+                    <span
+                      data-testid="device-metadata-deviceId"
+                    >
+                      non_crypto
                     </span>
                   </div>
                 </div>
