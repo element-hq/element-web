@@ -24,7 +24,6 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import AccessibleButton from "../elements/AccessibleButton";
 import { OpenToTabPayload } from "../../../dispatcher/payloads/OpenToTabPayload";
-import { UserTab } from "../dialogs/UserTab";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import SetupEncryptionDialog from "../dialogs/security/SetupEncryptionDialog";
 import { SetupEncryptionStore } from "../../../stores/SetupEncryptionStore";
@@ -136,7 +135,7 @@ export const DecryptionFailureBar: React.FC<IProps> = ({ failures }) => {
     };
 
     const onDeviceListClick = (): void => {
-        const payload: OpenToTabPayload = { action: Action.ViewUserSettings, initialTabId: UserTab.Security };
+        const payload: OpenToTabPayload = { action: Action.ViewUserDeviceSettings };
         defaultDispatcher.dispatch(payload);
     };
 
