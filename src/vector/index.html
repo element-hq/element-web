@@ -28,7 +28,7 @@
         style-src 'self' 'unsafe-inline' <%= csp_extra_source %>;
         script-src 'self' 'wasm-unsafe-eval' https://www.recaptcha.net/recaptcha/ https://www.gstatic.com/recaptcha/ <%= csp_extra_source %>;
         img-src * blob: data:;
-        connect-src *;
+        connect-src * blob:;
         font-src 'self' data: <%= csp_extra_source %>;
         media-src * blob: data:;
         child-src * blob: data:;
