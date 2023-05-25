@@ -10,10 +10,11 @@ on:
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
     cancel-in-progress: true
+
 env:
-    # These must be set for fetchdep.sh to get the right branch
-    REPOSITORY: ${{ github.repository }}
+    # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
+
 jobs:
     ts_lint:
         name: "Typescript Syntax Check"
