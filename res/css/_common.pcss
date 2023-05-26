@@ -33,6 +33,22 @@ limitations under the License.
     --buttons-dialog-gap-row: $spacing-8;
     --buttons-dialog-gap-column: $spacing-8;
     --MBody-border-radius: 8px;
+
+    /* Expected z-indexes for dialogs:
+        4000 - Default wrapper index
+        4009 - Static dialog background
+        4010 - Static dialog itself
+        4011 - Standard dialog background
+        4012 - Standard dialog itself
+
+       These are set up such that the static dialog always appears
+       underneath the standard dialogs.
+     */
+    --dialog-zIndex-wrapper-default: 4000;
+    --dialog-zIndex-static-background: 4009;
+    --dialog-zIndex-static: calc(var(--dialog-zIndex-static-background) + 1); /* 4010 */
+    --dialog-zIndex-standard-background: calc(var(--dialog-zIndex-static) + 1); /* 4011 */
+    --dialog-zIndex-standard: calc(var(--dialog-zIndex-standard-background) + 1); /* 4012 */
 }
 
 @media only percy {
@@ -277,20 +293,9 @@ legend {
     color: $secondary-accent-color;
 }
 
-/* Expected z-indexes for dialogs:
-    4000 - Default wrapper index
-    4009 - Static dialog background
-    4010 - Static dialog itself
-    4011 - Standard dialog background
-    4012 - Standard dialog itself
-
-   These are set up such that the static dialog always appears
-   underneath the standard dialogs.
- */
-
 .mx_Dialog_wrapper {
     position: fixed;
-    z-index: 4000;
+    z-index: var(--dialog-zIndex-wrapper-default);
     top: 0;
     left: 0;
     width: 100%;
@@ -304,7 +309,7 @@ legend {
 .mx_Dialog {
     background-color: $background;
     color: $light-fg-color;
-    z-index: 4012;
+    z-index: var(--dialog-zIndex-standard);
     font-size: $font-15px;
     position: relative;
     padding: 24px;
@@ -312,83 +317,94 @@ legend {
     box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
     border-radius: 8px;
     overflow-y: auto;
-}
 
-/* Styles copied/inspired by GroupLayout, ReplyTile, and EventTile variants. */
-.mx_Dialog .markdown-body {
-    font-family: inherit !important;
-    white-space: normal !important;
-    line-height: inherit !important;
-    color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
-    font-size: $font-14px;
-
-    pre,
-    code {
-        font-family: $monospace-font-family !important;
-        background-color: $codeblock-background-color;
+    .mx_Dialog_staticWrapper & {
+        z-index: var(--dialog-zIndex-static);
+        contain: content;
     }
 
-    /* this selector wrongly applies to code blocks too but we will unset it in the next one */
-    code {
-        white-space: pre-wrap; /* don't collapse spaces in inline code blocks */
+    .mx_Dialog_lightbox & {
+        border-radius: 0px;
+        background-color: transparent;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        pointer-events: none;
+        padding: 0;
     }
 
-    pre code {
-        white-space: pre; /* we want code blocks to be scrollable and not wrap */
+    /* Styles copied/inspired by GroupLayout, ReplyTile, and EventTile variants. */
+    .markdown-body {
+        font-family: inherit !important;
+        white-space: normal !important;
+        line-height: inherit !important;
+        color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
+        font-size: $font-14px;
 
-        > * {
-            display: inline;
+        pre,
+        code {
+            font-family: $monospace-font-family !important;
+            background-color: $codeblock-background-color;
+        }
+
+        /* this selector wrongly applies to code blocks too but we will unset it in the next one */
+        code {
+            white-space: pre-wrap; /* don't collapse spaces in inline code blocks */
+        }
+
+        pre {
+            /* have to use overlay rather than auto otherwise Linux and Windows */
+            /* Chrome gets very confused about vertical spacing: */
+            /* https://github.com/vector-im/vector-web/issues/754 */
+            overflow-x: overlay;
+            overflow-y: visible;
+
+            &::-webkit-scrollbar-corner {
+                background: transparent;
+            }
+
+            code {
+                white-space: pre; /* we want code blocks to be scrollable and not wrap */
+
+                > * {
+                    display: inline;
+                }
+            }
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: inherit !important;
+            color: inherit;
+        }
+
+        /* Make h1 and h2 the same size as h3. */
+        h1,
+        h2 {
+            font-size: 1.5em;
+            border-bottom: none !important; /* override GFM */
+        }
+
+        a {
+            color: $accent-alt;
+        }
+
+        blockquote {
+            border-left: 2px solid $blockquote-bar-color;
+            border-radius: 2px;
+            padding: 0 10px;
         }
     }
-
-    pre {
-        /* have to use overlay rather than auto otherwise Linux and Windows */
-        /* Chrome gets very confused about vertical spacing: */
-        /* https://github.com/vector-im/vector-web/issues/754 */
-        overflow-x: overlay;
-        overflow-y: visible;
-
-        &::-webkit-scrollbar-corner {
-            background: transparent;
-        }
-    }
-}
-
-.mx_Dialog .markdown-body h1,
-.mx_Dialog .markdown-body h2,
-.mx_Dialog .markdown-body h3,
-.mx_Dialog .markdown-body h4,
-.mx_Dialog .markdown-body h5,
-.mx_Dialog .markdown-body h6 {
-    font-family: inherit !important;
-    color: inherit;
-}
-
-/* Make h1 and h2 the same size as h3. */
-.mx_Dialog .markdown-body h1,
-.mx_Dialog .markdown-body h2 {
-    font-size: 1.5em;
-    border-bottom: none !important; /* override GFM */
-}
-
-.mx_Dialog .markdown-body a {
-    color: $accent-alt;
-}
-
-.mx_Dialog .markdown-body blockquote {
-    border-left: 2px solid $blockquote-bar-color;
-    border-radius: 2px;
-    padding: 0 10px;
 }
 
 .mx_Dialog_fixedWidth {
     width: 60vw;
     max-width: 704px;
-}
-
-.mx_Dialog_staticWrapper .mx_Dialog {
-    z-index: 4010;
-    contain: content;
 }
 
 .mx_Dialog_background {
@@ -399,41 +415,24 @@ legend {
     height: 100%;
     background-color: $dialog-backdrop-color;
     opacity: 0.8;
-    z-index: 4011;
-}
+    z-index: var(--dialog-zIndex-standard-background);
 
-.mx_Dialog_background.mx_Dialog_staticBackground {
-    z-index: 4009;
-}
+    &.mx_Dialog_staticBackground {
+        z-index: var(--dialog-zIndex-static-background);
+    }
 
-.mx_Dialog_wrapperWithStaticUnder .mx_Dialog_background {
-    /* Roughly half of what it would normally be - we don't want to black out */
-    /* the app, just make it clear that the dialogs are stacked. */
-    opacity: 0.4;
-}
+    .mx_Dialog_wrapperWithStaticUnder & {
+        /* Roughly half of what it would normally be - we don't want to black out */
+        /* the app, just make it clear that the dialogs are stacked. */
+        opacity: 0.4;
+    }
 
-.mx_Dialog_lightbox .mx_Dialog_background {
-    opacity: $lightbox-background-bg-opacity;
-    background-color: $lightbox-background-bg-color;
-    animation-name: mx_Dialog_lightbox_background_keyframes;
-    animation-duration: 300ms;
-}
-
-.mx_Dialog_lightbox .mx_Dialog {
-    border-radius: 0px;
-    background-color: transparent;
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    pointer-events: none;
-    padding: 0;
-}
-
-.mx_Dialog_header {
-    position: relative;
-    padding: 3px 0;
-    margin-bottom: 10px;
+    .mx_Dialog_lightbox & {
+        opacity: $lightbox-background-bg-opacity;
+        background-color: $lightbox-background-bg-color;
+        animation-name: mx_Dialog_lightbox_background_keyframes;
+        animation-duration: 300ms;
+    }
 }
 
 .mx_Dialog_titleImage {
@@ -450,22 +449,29 @@ legend {
     display: inline-block;
     width: 100%;
     box-sizing: border-box;
+
+    &.danger {
+        color: $alert;
+    }
 }
 
-.mx_Dialog_header.mx_Dialog_headerWithButton > .mx_Dialog_title {
-    text-align: center;
-}
-.mx_Dialog_header.mx_Dialog_headerWithCancel {
-    padding-right: 20px; /* leave space for the 'X' cancel button */
-}
+.mx_Dialog_header {
+    position: relative;
+    padding: 3px 0;
+    margin-bottom: 10px;
 
-.mx_Dialog_header.mx_Dialog_headerWithCancelOnly {
-    padding: 0 20px 0 0;
-    margin: 0;
-}
+    &.mx_Dialog_headerWithButton > .mx_Dialog_title {
+        text-align: center;
+    }
 
-.mx_Dialog_title.danger {
-    color: $alert;
+    &.mx_Dialog_headerWithCancel {
+        padding-right: 20px; /* leave space for the 'X' cancel button */
+    }
+
+    &.mx_Dialog_headerWithCancelOnly {
+        padding: 0 20px 0 0;
+        margin: 0;
+    }
 }
 
 @define-mixin customisedCancelButton {
@@ -505,21 +511,21 @@ legend {
         /* The consumer is responsible for positioning their elements. */
         float: left;
     }
-}
 
-.mx_Dialog_buttons_row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    text-align: initial;
-    margin-inline-start: auto;
+    .mx_Dialog_buttons_row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        text-align: initial;
+        margin-inline-start: auto;
 
-    /* default gap among elements */
-    column-gap: var(--buttons-dialog-gap-column);
-    row-gap: var(--buttons-dialog-gap-row);
+        /* default gap among elements */
+        column-gap: var(--buttons-dialog-gap-column);
+        row-gap: var(--buttons-dialog-gap-row);
 
-    button {
-        margin: 0 !important; /* override the margin settings */
+        button {
+            margin: 0 !important; /* override the margin settings */
+        }
     }
 }
 
