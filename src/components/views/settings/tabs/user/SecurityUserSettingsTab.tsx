@@ -30,7 +30,6 @@ import { UIFeature } from "../../../../../settings/UIFeature";
 import E2eAdvancedPanel, { isE2eAdvancedPanelPossible } from "../../E2eAdvancedPanel";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
 import CryptographyPanel from "../../CryptographyPanel";
-import DevicesPanel from "../../DevicesPanel";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import CrossSigningPanel from "../../CrossSigningPanel";
 import EventIndexPanel from "../../EventIndexPanel";
@@ -38,8 +37,6 @@ import InlineSpinner from "../../../elements/InlineSpinner";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import { showDialog as showAnalyticsLearnMoreDialog } from "../../../dialogs/AnalyticsLearnMoreDialog";
 import { privateShouldBeEncrypted } from "../../../../../utils/rooms";
-import LoginWithQR, { Mode } from "../../../auth/LoginWithQR";
-import LoginWithQRSection from "../../devices/LoginWithQRSection";
 import type { IServerVersions } from "matrix-js-sdk/src/matrix";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
@@ -83,10 +80,7 @@ interface IState {
     waitingUnignored: string[];
     managingInvites: boolean;
     invitedRoomIds: Set<string>;
-    showLoginWithQR: Mode | null;
     versions?: IServerVersions;
-    // we can't use the capabilities type from the js-sdk because it isn't exported
-    capabilities?: Record<string, any>;
 }
 
 export default class SecurityUserSettingsTab extends React.Component<IProps, IState> {
@@ -103,7 +97,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             waitingUnignored: [],
             managingInvites: false,
             invitedRoomIds,
-            showLoginWithQR: null,
         };
     }
 
@@ -121,9 +114,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         MatrixClientPeg.get()
             .getVersions()
             .then((versions) => this.setState({ versions }));
-        MatrixClientPeg.get()
-            .getCapabilities()
-            .then((capabilities) => this.setState({ capabilities }));
     }
 
     public componentWillUnmount(): void {
@@ -284,14 +274,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         );
     }
 
-    private onShowQRClicked = (): void => {
-        this.setState({ showLoginWithQR: Mode.Show });
-    };
-
-    private onLoginWithQRFinished = (): void => {
-        this.setState({ showLoginWithQR: null });
-    };
-
     public render(): React.ReactNode {
         const secureBackup = (
             <SettingsSubsection heading={_t("Secure Backup")}>
@@ -374,42 +356,9 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             }
         }
 
-        const useNewSessionManager = SettingsStore.getValue("feature_new_device_manager");
-        const devicesSection = useNewSessionManager ? null : (
-            <SettingsSection heading={_t("Where you're signed in")} data-testid="devices-section">
-                <SettingsSubsectionText>
-                    {_t(
-                        "Manage your signed-in devices below. " +
-                            "A device's name is visible to people you communicate with.",
-                    )}
-                </SettingsSubsectionText>
-                <DevicesPanel />
-                <LoginWithQRSection
-                    onShowQr={this.onShowQRClicked}
-                    versions={this.state.versions}
-                    capabilities={this.state.capabilities}
-                />
-            </SettingsSection>
-        );
-
-        const client = MatrixClientPeg.get();
-
-        if (this.state.showLoginWithQR) {
-            return (
-                <SettingsTab>
-                    <LoginWithQR
-                        onFinished={this.onLoginWithQRFinished}
-                        mode={this.state.showLoginWithQR}
-                        client={client}
-                    />
-                </SettingsTab>
-            );
-        }
-
         return (
             <SettingsTab>
                 {warning}
-                {devicesSection}
                 <SettingsSection heading={_t("Encryption")}>
                     {secureBackup}
                     {eventIndex}

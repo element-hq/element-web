@@ -24,7 +24,6 @@ describe("Device manager", () => {
     let user: UserCredentials | undefined;
 
     beforeEach(() => {
-        cy.enableLabsFeature("feature_new_device_manager");
         cy.startHomeserver("default").then((data) => {
             homeserver = data;
 

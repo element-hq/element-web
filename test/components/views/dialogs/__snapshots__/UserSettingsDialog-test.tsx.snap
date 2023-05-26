@@ -129,6 +129,24 @@ NodeList [
     </span>
   </li>,
   <li
+    aria-controls="mx_tabpanel_USER_SESSION_MANAGER_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_SESSION_MANAGER_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_sessionsIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_SESSION_MANAGER_TAB_label"
+    >
+      Sessions
+    </span>
+  </li>,
+  <li
     aria-controls="mx_tabpanel_USER_LABS_TAB"
     aria-selected="false"
     class="mx_AccessibleButton mx_TabbedView_tabLabel"

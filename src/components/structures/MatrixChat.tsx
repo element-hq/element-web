@@ -700,7 +700,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case Action.ViewUserDeviceSettings: {
-                viewUserDeviceSettings(SettingsStore.getValue("feature_new_device_manager"));
+                viewUserDeviceSettings();
                 break;
             }
             case Action.ViewUserSettings: {
