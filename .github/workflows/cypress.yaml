@@ -1,13 +1,33 @@
 # Triggers after the layered build has finished, taking the artifact and running cypress on it
+#
+# Also called by a workflow in matrix-js-sdk.
+#
 name: Cypress End to End Tests
 on:
     workflow_run:
         workflows: ["Element Web - Build"]
         types:
             - completed
+
+    # support calls from other workflows
+    workflow_call:
+        inputs:
+            react-sdk-repository:
+                type: string
+                required: true
+                description: "The name of the github repository to check out and build."
+            rust-crypto:
+                type: boolean
+                required: false
+                description: "Enable Rust cryptography for the cypress run."
+        secrets:
+            CYPRESS_RECORD_KEY:
+                required: true
+
 concurrency:
     group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
     cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
+
 jobs:
     prepare:
         name: Prepare
@@ -129,11 +149,20 @@ jobs:
                   # XXX: We're checking out untrusted code in a secure context
                   # We need to be careful to not trust anything this code outputs/may do
                   #
-                  # Note that we check out from the default repository, which is (for this workflow) the
+                  # Note that (in the absence of a `react-sdk-repository` input),
+                  # we check out from the default repository, which is (for this workflow) the
                   # *target* repository for the pull request.
+                  #
                   ref: ${{ steps.sha.outputs.sha }}
                   persist-credentials: false
                   path: matrix-react-sdk
+                  repository: ${{ inputs.react-sdk-repository || github.repository }}
+
+            # Enable rust crypto if the calling workflow requests it
+            - name: Enable rust crypto
+              if: inputs.rust-crypto
+              run: |
+                  echo "CYPRESS_RUST_CRYPTO=1" >> "$GITHUB_ENV"
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@40a1a26c08d0e549e8516612ecebbd1ab5eeec8f
