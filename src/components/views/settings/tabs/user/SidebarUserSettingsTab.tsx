@@ -34,9 +34,9 @@ import SettingsSubsection, { SettingsSubsectionText } from "../../shared/Setting
 type InteractionName = "WebSettingsSidebarTabSpacesCheckbox" | "WebQuickSettingsPinToSidebarCheckbox";
 
 export const onMetaSpaceChangeFactory =
-    (metaSpace: MetaSpace, interactionName: InteractionName) => (e: ChangeEvent<HTMLInputElement>) => {
+    (metaSpace: MetaSpace, interactionName: InteractionName) => async (e: ChangeEvent<HTMLInputElement>) => {
         const currentValue = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-        SettingsStore.setValue("Spaces.enabledMetaSpaces", null, SettingLevel.ACCOUNT, {
+        await SettingsStore.setValue("Spaces.enabledMetaSpaces", null, SettingLevel.ACCOUNT, {
             ...currentValue,
             [metaSpace]: e.target.checked,
         });

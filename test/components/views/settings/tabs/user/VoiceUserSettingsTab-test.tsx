@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import VoiceUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/VoiceUserSettingsTab";
 import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../../../../../src/MediaDeviceHandler";
@@ -56,9 +57,10 @@ describe("<VoiceUserSettingsTab />", () => {
         jest.clearAllMocks();
         MediaDeviceHandlerMock.hasAnyLabeledDevices.mockResolvedValue(true);
         MediaDeviceHandlerMock.getDevices.mockResolvedValue(defaultMediaDevices);
+        MediaDeviceHandlerMock.getVideoInput.mockReturnValue(videoIn1.deviceId);
 
         // @ts-ignore bad mocking
-        MediaDeviceHandlerMock.instance = { setDevice: jest.fn() };
+        MediaDeviceHandlerMock.instance = { setDevice: jest.fn().mockResolvedValue(undefined) };
     });
 
     describe("devices", () => {
@@ -82,6 +84,29 @@ describe("<VoiceUserSettingsTab />", () => {
             );
 
             expect(screen.getByLabelText("Camera")).toHaveDisplayValue(videoIn2.label);
+        });
+
+        it("logs and resets device when update fails", async () => {
+            // stub to avoid littering console with expected error
+            jest.spyOn(logger, "error").mockImplementation(() => {});
+            MediaDeviceHandlerMock.instance.setDevice.mockRejectedValue("oups!");
+            render(getComponent());
+            await flushPromises();
+
+            fireEvent.change(screen.getByLabelText("Camera"), { target: { value: videoIn2.deviceId } });
+
+            expect(MediaDeviceHandlerMock.instance.setDevice).toHaveBeenCalledWith(
+                videoIn2.deviceId,
+                MediaDeviceKindEnum.VideoInput,
+            );
+
+            expect(screen.getByLabelText("Camera")).toHaveDisplayValue(videoIn2.label);
+
+            await flushPromises();
+
+            expect(logger.error).toHaveBeenCalledWith("Failed to set device videoinput: 3");
+            // reset to original
+            expect(screen.getByLabelText("Camera")).toHaveDisplayValue(videoIn1.label);
         });
 
         it("does not render dropdown when no devices exist for type", async () => {
