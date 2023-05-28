@@ -31,7 +31,7 @@ const SettingsFieldset: React.FC<Props> = ({ legend, className, children, descri
                 <SettingsSubsectionText>{description}</SettingsSubsectionText>
             </div>
         )}
-        {children}
+        <div className="mx_SettingsFieldset_content">{children}</div>
     </fieldset>
 );
 

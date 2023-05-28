@@ -9,20 +9,24 @@ exports[`RolesRoomSettingsTab Banned users renders banned users 1`] = `
   >
     Banned users
   </legend>
-  <ul
-    class="mx_RolesRoomSettingsTab_bannedList"
+  <div
+    class="mx_SettingsFieldset_content"
   >
-    <li>
-      <span
-        title="Banned by @alice:server.org"
-      >
-        <strong>
-          @bob:server.org
-        </strong>
-         
-         Reason: just testing
-      </span>
-    </li>
-  </ul>
+    <ul
+      class="mx_RolesRoomSettingsTab_bannedList"
+    >
+      <li>
+        <span
+          title="Banned by @alice:server.org"
+        >
+          <strong>
+            @bob:server.org
+          </strong>
+           
+           Reason: just testing
+        </span>
+      </li>
+    </ul>
+  </div>
 </fieldset>
 `;

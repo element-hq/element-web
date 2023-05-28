@@ -466,7 +466,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                     label = _t("Send %(eventType)s events", { eventType });
                 }
                 return (
-                    <div className="" key={eventType}>
+                    <div key={eventType}>
                         <PowerSelector
                             label={label}
                             value={eventsLevels[eventType]}

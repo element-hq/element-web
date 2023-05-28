@@ -20,8 +20,12 @@ exports[`<SettingsFieldset /> renders fieldset with plain text description 1`] =
         Changes to who can read history.
       </div>
     </div>
-    <div>
-      test
+    <div
+      class="mx_SettingsFieldset_content"
+    >
+      <div>
+        test
+      </div>
     </div>
   </fieldset>
 </DocumentFragment>
@@ -54,8 +58,12 @@ exports[`<SettingsFieldset /> renders fieldset with react description 1`] = `
         </a>
       </div>
     </div>
-    <div>
-      test
+    <div
+      class="mx_SettingsFieldset_content"
+    >
+      <div>
+        test
+      </div>
     </div>
   </fieldset>
 </DocumentFragment>
@@ -72,8 +80,12 @@ exports[`<SettingsFieldset /> renders fieldset without description 1`] = `
     >
       Who can read history?
     </legend>
-    <div>
-      test
+    <div
+      class="mx_SettingsFieldset_content"
+    >
+      <div>
+        test
+      </div>
     </div>
   </fieldset>
 </DocumentFragment>
