@@ -77,7 +77,6 @@ import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
-import ExternalLink from "../views/elements/ExternalLink";
 
 interface IProps {
     space: Room;
@@ -584,22 +583,6 @@ const SpaceSetupPrivateInvite: React.FC<{
             <h1>{_t("Invite your teammates")}</h1>
             <div className="mx_SpaceRoomView_description">
                 {_t("Make sure the right people have access. You can invite more later.")}
-            </div>
-
-            <div className="mx_SpaceRoomView_inviteTeammates_betaDisclaimer">
-                {_t(
-                    "<b>This is an experimental feature.</b> For now, " +
-                        "new users receiving an invite will have to open the invite on <link/> to actually join.",
-                    {},
-                    {
-                        b: (sub) => <b>{sub}</b>,
-                        link: () => (
-                            <ExternalLink href="https://app.element.io/" rel="noreferrer noopener" target="_blank">
-                                app.element.io
-                            </ExternalLink>
-                        ),
-                    },
-                )}
             </div>
 
             {error && <div className="mx_SpaceRoomView_errorText">{error}</div>}
