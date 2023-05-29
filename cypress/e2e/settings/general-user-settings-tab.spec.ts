@@ -53,7 +53,7 @@ describe("General user settings tab", () => {
 
         cy.findByTestId("mx_GeneralUserSettingsTab").within(() => {
             // Assert that the top heading is rendered
-            cy.findByTestId("general").should("have.text", "General").should("be.visible");
+            cy.findByText("General").should("be.visible");
 
             cy.get(".mx_ProfileSettings_profile")
                 .scrollIntoView()

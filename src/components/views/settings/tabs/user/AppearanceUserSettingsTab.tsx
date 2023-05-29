@@ -136,7 +136,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             );
         }
         return (
-            <SettingsSubsection heading={<></>}>
+            <SettingsSubsection>
                 {toggle}
                 {advanced}
             </SettingsSubsection>

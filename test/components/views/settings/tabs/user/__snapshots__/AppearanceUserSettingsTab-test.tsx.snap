@@ -345,7 +345,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
             class="mx_SettingsSubsection"
           >
             <div
-              class="mx_SettingsSubsection_content"
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_noHeading"
             >
               <div
                 aria-expanded="false"
