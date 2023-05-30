@@ -15,18 +15,20 @@ limitations under the License.
 */
 
 import React, { ComponentProps } from "react";
-import { render, RenderResult, screen } from "@testing-library/react";
+import { fireEvent, render, RenderResult, screen, within } from "@testing-library/react";
 import fetchMockJest from "fetch-mock-jest";
 import { ClientEvent } from "matrix-js-sdk/src/client";
 import { SyncState } from "matrix-js-sdk/src/sync";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
+import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import MatrixChat from "../../../src/components/structures/MatrixChat";
 import * as StorageManager from "../../../src/utils/StorageManager";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import { UserTab } from "../../../src/components/views/dialogs/UserTab";
-import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../test-utils";
+import { clearAllModals, flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../test-utils";
+import * as leaveRoomUtils from "../../../src/utils/leave-behaviour";
 
 describe("<MatrixChat />", () => {
     const userId = "@alice:server.org";
@@ -174,6 +176,130 @@ describe("<MatrixChat />", () => {
                 expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
                     action: Action.ViewUserSettings,
                     initialTabId: UserTab.SessionManager,
+                });
+            });
+
+            describe("room actions", () => {
+                const roomId = "!room:server.org";
+                const spaceId = "!spaceRoom:server.org";
+                const room = new Room(roomId, mockClient, userId);
+                const spaceRoom = new Room(spaceId, mockClient, userId);
+                jest.spyOn(spaceRoom, "isSpaceRoom").mockReturnValue(true);
+
+                beforeEach(() => {
+                    mockClient.getRoom.mockImplementation(
+                        (id) => [room, spaceRoom].find((room) => room.roomId === id) || null,
+                    );
+                    jest.spyOn(defaultDispatcher, "dispatch").mockClear();
+                });
+
+                describe("leave_room", () => {
+                    beforeEach(async () => {
+                        await clearAllModals();
+                        await getComponentAndWaitForReady();
+                        // this is thoroughly unit tested elsewhere
+                        jest.spyOn(leaveRoomUtils, "leaveRoomBehaviour").mockClear().mockResolvedValue(undefined);
+                    });
+                    const dispatchAction = () =>
+                        defaultDispatcher.dispatch({
+                            action: "leave_room",
+                            room_id: roomId,
+                        });
+                    const publicJoinRule = new MatrixEvent({
+                        type: "m.room.join_rules",
+                        content: {
+                            join_rule: "public",
+                        },
+                    });
+                    const inviteJoinRule = new MatrixEvent({
+                        type: "m.room.join_rules",
+                        content: {
+                            join_rule: "invite",
+                        },
+                    });
+                    describe("for a room", () => {
+                        beforeEach(() => {
+                            jest.spyOn(room.currentState, "getJoinedMemberCount").mockReturnValue(2);
+                            jest.spyOn(room.currentState, "getStateEvents").mockReturnValue(publicJoinRule);
+                        });
+                        it("should launch a confirmation modal", async () => {
+                            dispatchAction();
+                            const dialog = await screen.findByRole("dialog");
+                            expect(dialog).toMatchSnapshot();
+                        });
+                        it("should warn when room has only one joined member", async () => {
+                            jest.spyOn(room.currentState, "getJoinedMemberCount").mockReturnValue(1);
+                            dispatchAction();
+                            await screen.findByRole("dialog");
+                            expect(
+                                screen.getByText(
+                                    "You are the only person here. If you leave, no one will be able to join in the future, including you.",
+                                ),
+                            ).toBeInTheDocument();
+                        });
+                        it("should warn when room is not public", async () => {
+                            jest.spyOn(room.currentState, "getStateEvents").mockReturnValue(inviteJoinRule);
+                            dispatchAction();
+                            await screen.findByRole("dialog");
+                            expect(
+                                screen.getByText(
+                                    "This room is not public. You will not be able to rejoin without an invite.",
+                                ),
+                            ).toBeInTheDocument();
+                        });
+                        it("should do nothing on cancel", async () => {
+                            dispatchAction();
+                            const dialog = await screen.findByRole("dialog");
+                            fireEvent.click(within(dialog).getByText("Cancel"));
+
+                            await flushPromises();
+
+                            expect(leaveRoomUtils.leaveRoomBehaviour).not.toHaveBeenCalled();
+                            expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({
+                                action: Action.AfterLeaveRoom,
+                                room_id: roomId,
+                            });
+                        });
+                        it("should leave room and dispatch after leave action", async () => {
+                            dispatchAction();
+                            const dialog = await screen.findByRole("dialog");
+                            fireEvent.click(within(dialog).getByText("Leave"));
+
+                            await flushPromises();
+
+                            expect(leaveRoomUtils.leaveRoomBehaviour).toHaveBeenCalled();
+                            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                                action: Action.AfterLeaveRoom,
+                                room_id: roomId,
+                            });
+                        });
+                    });
+
+                    describe("for a space", () => {
+                        const dispatchAction = () =>
+                            defaultDispatcher.dispatch({
+                                action: "leave_room",
+                                room_id: spaceId,
+                            });
+                        beforeEach(() => {
+                            jest.spyOn(spaceRoom.currentState, "getStateEvents").mockReturnValue(publicJoinRule);
+                        });
+                        it("should launch a confirmation modal", async () => {
+                            dispatchAction();
+                            const dialog = await screen.findByRole("dialog");
+                            expect(dialog).toMatchSnapshot();
+                        });
+                        it("should warn when space is not public", async () => {
+                            jest.spyOn(spaceRoom.currentState, "getStateEvents").mockReturnValue(inviteJoinRule);
+                            dispatchAction();
+                            await screen.findByRole("dialog");
+                            expect(
+                                screen.getByText(
+                                    "This space is not public. You will not be able to rejoin without an invite.",
+                                ),
+                            ).toBeInTheDocument();
+                        });
+                    });
                 });
             });
         });
