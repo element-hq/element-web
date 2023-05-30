@@ -313,6 +313,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 this.loginLogic.createTemporaryClient(),
                 ssoKind,
                 this.props.fragmentAfterLogin,
+                undefined,
                 SSOAction.REGISTER,
             );
         } else {
