@@ -84,7 +84,7 @@ jobs:
                       await updateCounter("gh_reviews", URL, "warning", "Pending reviews", issueCount);
 
                       const { data } = await github.rest.search.issuesAndPullRequests({
-                          q: `is:open ${repo.map(r => `repo:${r}`).join(" ")}`,
+                          q: `is:open ${repos.map(repo => `repo:${repo}`).join(" ")}`,
                       });
                       const blockerCount = data.total_count;
                       await updateCounter("release_blockers", "error", RELEASE_BLOCKERS_URL, "Release Blockers", blockerCount, true);
