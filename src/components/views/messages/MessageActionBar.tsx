@@ -417,12 +417,12 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         ev.preventDefault();
         ev.stopPropagation();
 
-        this.runActionOnFailedEv((tarEv) => Resend.resend(tarEv));
+        this.runActionOnFailedEv((tarEv) => Resend.resend(MatrixClientPeg.get(), tarEv));
     };
 
     private onCancelClick = (ev: ButtonEvent): void => {
         this.runActionOnFailedEv(
-            (tarEv) => Resend.removeFromQueue(tarEv),
+            (tarEv) => Resend.removeFromQueue(MatrixClientPeg.get(), tarEv),
             (testEv) => canCancel(testEv.status),
         );
     };

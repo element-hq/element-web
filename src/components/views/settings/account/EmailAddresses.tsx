@@ -181,7 +181,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
             return;
         }
 
-        const task = new AddThreepid();
+        const task = new AddThreepid(MatrixClientPeg.get());
         this.setState({ verifying: true, continueDisabled: true, addTask: task });
 
         task.addEmailAddress(email)

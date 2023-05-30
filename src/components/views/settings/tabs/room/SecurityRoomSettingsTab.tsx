@@ -215,7 +215,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
-            await createRoom(opts);
+            await createRoom(this.context, opts);
         }
         return shouldCreate;
     };

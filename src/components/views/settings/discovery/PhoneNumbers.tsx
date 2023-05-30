@@ -82,7 +82,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
 
         try {
             if (bind) {
-                const task = new AddThreepid();
+                const task = new AddThreepid(MatrixClientPeg.get());
                 this.setState({
                     verifying: true,
                     continueDisabled: true,
@@ -118,7 +118,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
     private async changeBindingTangledAddBind({ bind, label, errorTitle }: Binding): Promise<void> {
         const { medium, address } = this.props.msisdn;
 
-        const task = new AddThreepid();
+        const task = new AddThreepid(MatrixClientPeg.get());
         this.setState({
             verifying: true,
             continueDisabled: true,

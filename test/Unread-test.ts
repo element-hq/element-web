@@ -67,32 +67,32 @@ describe("Unread", () => {
         });
 
         it("returns false when the event was sent by the current user", () => {
-            expect(eventTriggersUnreadCount(ourMessage)).toBe(false);
+            expect(eventTriggersUnreadCount(client, ourMessage)).toBe(false);
             // returned early before checking renderer
             expect(haveRendererForEvent).not.toHaveBeenCalled();
         });
 
         it("returns false for a redacted event", () => {
-            expect(eventTriggersUnreadCount(redactedEvent)).toBe(false);
+            expect(eventTriggersUnreadCount(client, redactedEvent)).toBe(false);
             // returned early before checking renderer
             expect(haveRendererForEvent).not.toHaveBeenCalled();
         });
 
         it("returns false for an event without a renderer", () => {
             mocked(haveRendererForEvent).mockReturnValue(false);
-            expect(eventTriggersUnreadCount(alicesMessage)).toBe(false);
+            expect(eventTriggersUnreadCount(client, alicesMessage)).toBe(false);
             expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
         });
 
         it("returns true for an event with a renderer", () => {
             mocked(haveRendererForEvent).mockReturnValue(true);
-            expect(eventTriggersUnreadCount(alicesMessage)).toBe(true);
+            expect(eventTriggersUnreadCount(client, alicesMessage)).toBe(true);
             expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
         });
 
         it("returns false for beacon locations", () => {
             const beaconLocationEvent = makeBeaconEvent(aliceId);
-            expect(eventTriggersUnreadCount(beaconLocationEvent)).toBe(false);
+            expect(eventTriggersUnreadCount(client, beaconLocationEvent)).toBe(false);
             expect(haveRendererForEvent).not.toHaveBeenCalled();
         });
 
@@ -112,7 +112,7 @@ describe("Unread", () => {
                     type: eventType,
                     sender: aliceId,
                 });
-                expect(eventTriggersUnreadCount(event)).toBe(false);
+                expect(eventTriggersUnreadCount(client, event)).toBe(false);
                 expect(haveRendererForEvent).not.toHaveBeenCalled();
             },
         );

@@ -90,5 +90,5 @@ export async function startDm(client: MatrixClient, targets: Member[], showSpinn
     }
 
     createRoomOptions.spinner = showSpinner;
-    return createRoom(createRoomOptions);
+    return createRoom(client, createRoomOptions);
 }

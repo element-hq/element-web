@@ -20,8 +20,8 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "./MatrixClientPeg";
 import shouldHideEvent from "./shouldHideEvent";
 import { haveRendererForEvent } from "./events/EventTileFactory";
 import SettingsStore from "./settings/SettingsStore";
@@ -30,11 +30,12 @@ import SettingsStore from "./settings/SettingsStore";
  * Returns true if this event arriving in a room should affect the room's
  * count of unread messages
  *
+ * @param client The Matrix Client instance of the logged-in user
  * @param {Object} ev The event
  * @returns {boolean} True if the given event should affect the unread message count
  */
-export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
-    if (ev.getSender() === MatrixClientPeg.get().credentials.userId) {
+export function eventTriggersUnreadCount(client: MatrixClient, ev: MatrixEvent): boolean {
+    if (ev.getSender() === client.getSafeUserId()) {
         return false;
     }
 
@@ -83,7 +84,7 @@ export function doesRoomOrThreadHaveUnreadMessages(roomOrThread: Room | Thread):
         return false;
     }
 
-    const myUserId = MatrixClientPeg.get().getUserId()!;
+    const myUserId = roomOrThread.client.getSafeUserId();
 
     // as we don't send RRs for our own messages, make sure we special case that
     // if *we* sent the last message into the room, we consider it not unread!
@@ -107,7 +108,7 @@ export function doesRoomOrThreadHaveUnreadMessages(roomOrThread: Room | Thread):
             // that counts and we can stop looking because the user's read
             // this and everything before.
             return false;
-        } else if (isImportantEvent(ev)) {
+        } else if (isImportantEvent(roomOrThread.client, ev)) {
             // We've found a message that counts before we hit
             // the user's read receipt, so this room is definitely unread.
             return true;
@@ -129,8 +130,8 @@ export function doesRoomOrThreadHaveUnreadMessages(roomOrThread: Room | Thread):
  * Given this event does not have a receipt, is it important enough to make
  * this room unread?
  */
-function isImportantEvent(event: MatrixEvent): boolean {
-    return !shouldHideEvent(event) && eventTriggersUnreadCount(event);
+function isImportantEvent(client: MatrixClient, event: MatrixEvent): boolean {
+    return !shouldHideEvent(event) && eventTriggersUnreadCount(client, event);
 }
 
 /**

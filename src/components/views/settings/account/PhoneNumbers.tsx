@@ -182,7 +182,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         const phoneNumber = this.state.newPhoneNumber;
         const phoneCountry = this.state.phoneCountry;
 
-        const task = new AddThreepid();
+        const task = new AddThreepid(MatrixClientPeg.get());
         this.setState({ verifying: true, continueDisabled: true, addTask: task });
 
         task.addMsisdn(phoneCountry, phoneNumber)

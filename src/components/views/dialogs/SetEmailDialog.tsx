@@ -28,6 +28,7 @@ import ErrorDialog, { extractErrorMessageFromError } from "./ErrorDialog";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import EditableText from "../elements/EditableText";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     title: string;
@@ -71,7 +72,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
             });
             return;
         }
-        this.addThreepid = new AddThreepid();
+        this.addThreepid = new AddThreepid(MatrixClientPeg.get());
         this.addThreepid.addEmailAddress(emailAddress).then(
             () => {
                 Modal.createDialog(QuestionDialog, {

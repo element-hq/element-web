@@ -201,7 +201,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private onResendReactionsClick = (): void => {
         for (const reaction of this.getUnsentReactions()) {
-            Resend.resend(reaction);
+            Resend.resend(MatrixClientPeg.get(), reaction);
         }
         this.closeMenu();
     };

@@ -35,6 +35,7 @@ import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import ExternalLink from "../../../elements/ExternalLink";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -46,6 +47,9 @@ interface IState {
 }
 
 export default class HelpUserSettingsTab extends React.Component<IProps, IState> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     public constructor(props: IProps) {
         super(props);
 
@@ -104,7 +108,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
 
     private onStartBotChat = (): void => {
         this.props.closeSettingsFn();
-        createRoom({
+        createRoom(this.context, {
             dmUserId: SdkConfig.get("welcome_user_id"),
             andView: true,
         });

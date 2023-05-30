@@ -336,7 +336,7 @@ const SpaceSetupFirstRooms: React.FC<{
             const filteredRoomNames = roomNames.map((name) => name.trim()).filter(Boolean);
             const roomIds = await Promise.all(
                 filteredRoomNames.map((name) => {
-                    return createRoom({
+                    return createRoom(space.client, {
                         createOpts: {
                             preset: isPublic ? Preset.PublicChat : Preset.PrivateChat,
                             name,

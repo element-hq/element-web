@@ -95,7 +95,10 @@ const getLastTs = (r: Room, userId: string): number => {
             const ev = r.timeline[i];
             if (!ev.getTs()) continue; // skip events that don't have timestamps (tests only?)
 
-            if ((ev.getSender() === userId && shouldCauseReorder(ev)) || Unread.eventTriggersUnreadCount(ev)) {
+            if (
+                (ev.getSender() === userId && shouldCauseReorder(ev)) ||
+                Unread.eventTriggersUnreadCount(r.client, ev)
+            ) {
                 return ev.getTs();
             }
         }

@@ -28,7 +28,6 @@ import {
 } from "matrix-js-sdk/src/@types/partials";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { MatrixClientPeg } from "./MatrixClientPeg";
 import Modal, { IHandle } from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
 import dis from "./dispatcher/dispatcher";
@@ -82,6 +81,7 @@ const DEFAULT_EVENT_POWER_LEVELS = {
 /**
  * Create a new room, and switch to it.
  *
+ * @param client The Matrix Client instance to create the room with
  * @param {object=} opts parameters for creating the room
  * @param {string=} opts.dmUserId If specified, make this a DM room for this user and invite them
  * @param {object=} opts.createOpts set of options to pass to createRoom call.
@@ -98,13 +98,12 @@ const DEFAULT_EVENT_POWER_LEVELS = {
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
  */
-export default async function createRoom(opts: IOpts): Promise<string | null> {
+export default async function createRoom(client: MatrixClient, opts: IOpts): Promise<string | null> {
     opts = opts || {};
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
     if (opts.encryption === undefined) opts.encryption = false;
 
-    const client = MatrixClientPeg.get();
     if (client.isGuest()) {
         dis.dispatch({ action: "require_registration" });
         return null;
@@ -122,7 +121,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                 createOpts.invite = [opts.dmUserId];
                 break;
             case "email": {
-                const isUrl = MatrixClientPeg.get().getIdentityServerUrl(true);
+                const isUrl = client.getIdentityServerUrl(true);
                 if (!isUrl) {
                     throw new UserFriendlyError(
                         "Cannot invite user by email without an identity server. " +
@@ -162,7 +161,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                 },
                 users: {
                     // Temporarily give ourselves the power to set up a widget
-                    [client.getUserId()!]: 200,
+                    [client.getSafeUserId()]: 200,
                 },
             };
         } else if (opts.roomType === RoomType.UnstableCall) {
@@ -176,7 +175,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                 },
                 users: {
                     // Temporarily give ourselves the power to set up a call
-                    [client.getUserId()!]: 200,
+                    [client.getSafeUserId()]: 200,
                 },
             };
         }
@@ -438,7 +437,7 @@ export async function ensureVirtualRoomExists(
     if (existingDMRoom) {
         roomId = existingDMRoom.roomId;
     } else {
-        roomId = await createRoom({
+        roomId = await createRoom(client, {
             dmUserId: userId,
             spinner: false,
             andView: false,
@@ -466,7 +465,7 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
             encryption = await canEncryptToAllUsers(client, [userId]);
         }
 
-        roomId = await createRoom({ encryption, dmUserId: userId, spinner: false, andView: false });
+        roomId = await createRoom(client, { encryption, dmUserId: userId, spinner: false, andView: false });
         if (!roomId) return null;
         await waitForMember(client, roomId, userId);
     }

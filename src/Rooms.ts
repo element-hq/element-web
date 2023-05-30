@@ -46,7 +46,7 @@ export function getDisplayAliasForAliasSet(canonicalAlias: string | null, altAli
 export function guessAndSetDMRoom(room: Room, isDirect: boolean): Promise<void> {
     let newTarget;
     if (isDirect) {
-        const guessedUserId = guessDMRoomTargetId(room, MatrixClientPeg.get().getUserId()!);
+        const guessedUserId = guessDMRoomTargetId(room, room.client.getSafeUserId());
         newTarget = guessedUserId;
     } else {
         newTarget = null;
