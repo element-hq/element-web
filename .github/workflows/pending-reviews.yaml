@@ -87,4 +87,4 @@ jobs:
                           q: `is:open ${repos.map(repo => `repo:${repo}`).join(" ")} label:X-Release-Blocker`,
                       });
                       const blockerCount = data.total_count;
-                      await updateCounter("release_blockers", RELEASE_BLOCKERS_URL, "error", "Release Blockers", blockerCount, true);
+                      await updateCounter("release_blockers", RELEASE_BLOCKERS_URL, "alert", "Release Blockers", blockerCount, true);
