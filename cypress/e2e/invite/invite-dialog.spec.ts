@@ -169,7 +169,6 @@ describe("Invite dialog", function () {
         cy.get(".mx_RoomHeader").within(() => {
             cy.get(".mx_RoomHeader_name--textonly")
                 .realHover()
-                .get(".mx_RoomHeader_name--textonly:hover")
                 .should("have.css", "background-color", "rgba(0, 0, 0, 0)");
         });
 
