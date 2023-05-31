@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_SettingsTab {
-    --SettingsTab_heading_nth_child-margin-top: 30px; /* TODO: Use a spacing variable */
     --SettingsTab_tooltip-max-width: 120px; /* So it fits in the space provided by the page */
 
     color: $primary-content;
@@ -45,29 +44,6 @@ limitations under the License.
 
 .mx_SettingsTab_warningText {
     color: $alert;
-}
-
-.mx_SettingsTab_heading {
-    font-size: $font-20px;
-    font-weight: var(--font-semi-bold);
-    color: $primary-content;
-    margin-top: 10px; /* TODO: Use a spacing variable */
-    margin-bottom: 10px; /* TODO: Use a spacing variable */
-    margin-right: 100px; /* TODO: Use a spacing variable */
-
-    &:nth-child(n + 2) {
-        margin-top: var(--SettingsTab_heading_nth_child-margin-top);
-    }
-}
-
-.mx_SettingsTab_subheading {
-    font-size: $font-16px;
-    display: block;
-    font-weight: var(--font-semi-bold);
-    color: $primary-content;
-    margin-top: $spacing-12;
-    margin-bottom: 10px; /* TODO: Use a spacing variable */
-    margin-right: 100px; /* TODO: Use a spacing variable */
 }
 
 .mx_SettingsTab_subsectionText {
