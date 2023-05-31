@@ -1453,12 +1453,14 @@ $left-gutter: 64px;
                 margin-bottom: $spacing-4; /* 1/4 of the non-compact margin-bottom */
             }
         }
-    }
 
-    &[data-shape="ThreadsList"][data-notification]::before,
-    .mx_NotificationBadge {
-        /* stylelint-disable-next-line declaration-colon-space-after */
-        inset-block-start: calc($notification-inset-block-start - var(--MatrixChat_useCompactLayout_group-padding-top));
+        &[data-shape="ThreadsList"][data-notification]::before,
+        .mx_NotificationBadge {
+            /* stylelint-disable-next-line declaration-colon-space-after */
+            inset-block-start: calc(
+                $notification-inset-block-start - var(--MatrixChat_useCompactLayout_group-padding-top)
+            );
+        }
     }
 }
 
