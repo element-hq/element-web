@@ -216,8 +216,7 @@ export class RoomPermalinkCreator {
         if (this.room?.currentState) {
             const aclEvent = this.room?.currentState.getStateEvents(EventType.RoomServerAcl, "");
             if (aclEvent && aclEvent.getContent()) {
-                const getRegex = (hostname: string): RegExp =>
-                    new RegExp("^" + utils.globToRegexp(hostname) + "$");
+                const getRegex = (hostname: string): RegExp => new RegExp("^" + utils.globToRegexp(hostname) + "$");
 
                 const denied = aclEvent.getContent<{ deny: string[] }>().deny;
                 if (Array.isArray(denied)) {
