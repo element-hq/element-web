@@ -36,7 +36,7 @@ export interface MatrixClientProps {
     mxClient: MatrixClient;
 }
 
-export function useMatrixClientContext(): MatrixClient | undefined {
+export function useMatrixClientContext(): MatrixClient {
     return useContext(MatrixClientContext);
 }
 

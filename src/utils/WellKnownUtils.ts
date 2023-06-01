@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IClientWellKnown } from "matrix-js-sdk/src/client";
+import { IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/client";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
-
-import { MatrixClientPeg } from "../MatrixClientPeg";
 
 const CALL_BEHAVIOUR_WK_KEY = "io.element.call_behaviour";
 const E2EE_WK_KEY = "io.element.e2ee";
@@ -45,13 +43,13 @@ export interface IEmbeddedPagesWellKnown {
 }
 /* eslint-enable camelcase */
 
-export function getCallBehaviourWellKnown(): ICallBehaviourWellKnown {
-    const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
+export function getCallBehaviourWellKnown(matrixClient: MatrixClient): ICallBehaviourWellKnown {
+    const clientWellKnown = matrixClient.getClientWellKnown();
     return clientWellKnown?.[CALL_BEHAVIOUR_WK_KEY];
 }
 
-export function getE2EEWellKnown(): IE2EEWellKnown | null {
-    const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
+export function getE2EEWellKnown(matrixClient: MatrixClient): IE2EEWellKnown | null {
+    const clientWellKnown = matrixClient.getClientWellKnown();
     if (clientWellKnown?.[E2EE_WK_KEY]) {
         return clientWellKnown[E2EE_WK_KEY];
     }
@@ -61,24 +59,24 @@ export function getE2EEWellKnown(): IE2EEWellKnown | null {
     return null;
 }
 
-export function getTileServerWellKnown(): ITileServerWellKnown | undefined {
-    return tileServerFromWellKnown(MatrixClientPeg.get().getClientWellKnown());
+export function getTileServerWellKnown(matrixClient: MatrixClient): ITileServerWellKnown | undefined {
+    return tileServerFromWellKnown(matrixClient.getClientWellKnown());
 }
 
 export function tileServerFromWellKnown(clientWellKnown?: IClientWellKnown | undefined): ITileServerWellKnown {
     return clientWellKnown?.[TILE_SERVER_WK_KEY.name] ?? clientWellKnown?.[TILE_SERVER_WK_KEY.altName];
 }
 
-export function getEmbeddedPagesWellKnown(): IEmbeddedPagesWellKnown | undefined {
-    return embeddedPagesFromWellKnown(MatrixClientPeg.get()?.getClientWellKnown());
+export function getEmbeddedPagesWellKnown(matrixClient: MatrixClient | undefined): IEmbeddedPagesWellKnown | undefined {
+    return embeddedPagesFromWellKnown(matrixClient?.getClientWellKnown());
 }
 
 export function embeddedPagesFromWellKnown(clientWellKnown?: IClientWellKnown): IEmbeddedPagesWellKnown {
     return clientWellKnown?.[EMBEDDED_PAGES_WK_PROPERTY];
 }
 
-export function isSecureBackupRequired(): boolean {
-    return getE2EEWellKnown()?.["secure_backup_required"] === true;
+export function isSecureBackupRequired(matrixClient: MatrixClient): boolean {
+    return getE2EEWellKnown(matrixClient)?.["secure_backup_required"] === true;
 }
 
 export enum SecureBackupSetupMethod {
@@ -86,8 +84,8 @@ export enum SecureBackupSetupMethod {
     Passphrase = "passphrase",
 }
 
-export function getSecureBackupSetupMethods(): SecureBackupSetupMethod[] {
-    const wellKnown = getE2EEWellKnown();
+export function getSecureBackupSetupMethods(matrixClient: MatrixClient): SecureBackupSetupMethod[] {
+    const wellKnown = getE2EEWellKnown(matrixClient);
     if (
         !wellKnown ||
         !wellKnown["secure_backup_setup_methods"] ||

@@ -22,7 +22,6 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Optional } from "matrix-events-sdk";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { filterValidMDirect } from "./dm/filterValidMDirect";
 
 /**
@@ -53,8 +52,8 @@ export default class DMRoomMap {
      * Makes and returns a new shared instance that can then be accessed
      * with shared(). This returned instance is not automatically started.
      */
-    public static makeShared(): DMRoomMap {
-        DMRoomMap.sharedInstance = new DMRoomMap(MatrixClientPeg.get());
+    public static makeShared(matrixClient: MatrixClient): DMRoomMap {
+        DMRoomMap.sharedInstance = new DMRoomMap(matrixClient);
         return DMRoomMap.sharedInstance;
     }
 
@@ -175,7 +174,7 @@ export default class DMRoomMap {
         }
 
         const joinedRooms = commonRooms
-            .map((r) => MatrixClientPeg.get().getRoom(r))
+            .map((r) => this.matrixClient.getRoom(r))
             .filter((r) => r && r.getMyMembership() === "join");
 
         return joinedRooms[0];

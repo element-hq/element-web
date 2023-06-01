@@ -23,7 +23,6 @@ import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import shouldHideEvent from "../shouldHideEvent";
 import { GetRelationsForEvent } from "../components/views/rooms/EventTile";
 import SettingsStore from "../settings/SettingsStore";
@@ -69,7 +68,7 @@ export function isContentActionable(mxEvent: MatrixEvent): boolean {
     return false;
 }
 
-export function canEditContent(mxEvent: MatrixEvent): boolean {
+export function canEditContent(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
     const isCancellable = mxEvent.getType() === EventType.RoomMessage || M_POLL_START.matches(mxEvent.getType());
 
     if (
@@ -77,7 +76,7 @@ export function canEditContent(mxEvent: MatrixEvent): boolean {
         mxEvent.status === EventStatus.CANCELLED ||
         mxEvent.isRedacted() ||
         mxEvent.isRelation(RelationType.Replace) ||
-        mxEvent.getSender() !== MatrixClientPeg.get().getUserId()
+        mxEvent.getSender() !== matrixClient.getUserId()
     ) {
         return false;
     }
@@ -89,22 +88,24 @@ export function canEditContent(mxEvent: MatrixEvent): boolean {
     );
 }
 
-export function canEditOwnEvent(mxEvent: MatrixEvent): boolean {
+export function canEditOwnEvent(matrixClient: MatrixClient, mxEvent: MatrixEvent): boolean {
     // for now we only allow editing
     // your own events. So this just call through
     // In the future though, moderators will be able to
     // edit other people's messages as well but we don't
     // want findEditableEvent to return other people's events
     // hence this method.
-    return canEditContent(mxEvent);
+    return canEditContent(matrixClient, mxEvent);
 }
 
 const MAX_JUMP_DISTANCE = 100;
 export function findEditableEvent({
+    matrixClient,
     events,
     isForward,
     fromEventId,
 }: {
+    matrixClient: MatrixClient;
     events: MatrixEvent[];
     isForward: boolean;
     fromEventId?: string;
@@ -126,7 +127,7 @@ export function findEditableEvent({
             // don't look further than MAX_JUMP_DISTANCE events from `fromEventId`
             // to not iterate potentially 1000nds of events on key up/down
             endIdx = Math.min(Math.max(0, i + inc * MAX_JUMP_DISTANCE), maxIdx);
-        } else if (foundFromEventId && !shouldHideEvent(e) && canEditOwnEvent(e)) {
+        } else if (foundFromEventId && !shouldHideEvent(e) && canEditOwnEvent(matrixClient, e)) {
             // otherwise look for editable event
             return e;
         }
@@ -170,9 +171,7 @@ const getMsc3531Enabled = (): boolean => {
  * If MSC3531 is deactivated in settings, all messages are considered visible
  * to all.
  */
-export function getMessageModerationState(mxEvent: MatrixEvent, client?: MatrixClient): MessageModerationState {
-    client = client ?? MatrixClientPeg.get(); // because param defaults don't do the correct thing
-
+export function getMessageModerationState(mxEvent: MatrixEvent, client: MatrixClient): MessageModerationState {
     if (!getMsc3531Enabled()) {
         return MessageModerationState.VISIBLE_FOR_ALL;
     }
@@ -246,11 +245,12 @@ export async function fetchInitialEvent(
 }
 
 export function editEvent(
+    matrixClient: MatrixClient,
     mxEvent: MatrixEvent,
     timelineRenderingType: TimelineRenderingType,
     getRelationsForEvent?: GetRelationsForEvent,
 ): void {
-    if (!canEditContent(mxEvent)) return;
+    if (!canEditContent(matrixClient, mxEvent)) return;
 
     if (M_POLL_START.matches(mxEvent.getType())) {
         launchPollEditor(mxEvent, getRelationsForEvent);

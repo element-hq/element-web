@@ -18,11 +18,12 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
-import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
+import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IDelegatedAuthConfig, M_AUTHENTICATION } from "matrix-js-sdk/src/matrix";
 import { HTTPError } from "matrix-js-sdk/src/matrix";
 
+import { Icon as WarningIcon } from "../../../../../../res/img/feather-customised/warning-triangle.svg";
 import { UserFriendlyError, _t } from "../../../../../languageHandler";
 import ProfileSettings from "../../ProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
@@ -56,7 +57,11 @@ import ToggleSwitch from "../../../elements/ToggleSwitch";
 import { IS_MAC } from "../../../../../Keyboard";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import { SettingsSubsectionHeading } from "../../shared/SettingsSubsectionHeading";
+import Heading from "../../../typography/Heading";
+import InlineSpinner from "../../../elements/InlineSpinner";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -92,6 +97,9 @@ interface IState {
 }
 
 export default class GeneralUserSettingsTab extends React.Component<IProps, IState> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     private readonly dispatcherRef: string;
 
     public constructor(props: IProps) {
@@ -194,8 +202,8 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             logger.warn(e);
         }
         this.setState({
-            emails: threepids.filter((a) => a.medium === "email"),
-            msisdns: threepids.filter((a) => a.medium === "msisdn"),
+            emails: threepids.filter((a) => a.medium === ThreepidMedium.Email),
+            msisdns: threepids.filter((a) => a.medium === ThreepidMedium.Phone),
             loading3pids: false,
         });
     }
@@ -213,6 +221,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         try {
             const idAccessToken = await authClient.getAccessToken({ check: false });
             await startTermsFlow(
+                this.context,
                 [new Service(SERVICE_TYPES.IS, idServerUrl, idAccessToken!)],
                 (policiesAndServices, agreedUrls, extraClassNames) => {
                     return new Promise((resolve, reject) => {
@@ -316,25 +325,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         });
     };
 
-    private renderProfileSection(): JSX.Element {
-        return (
-            <div className="mx_SettingsTab_section">
-                <ProfileSettings />
-            </div>
-        );
-    }
-
     private renderAccountSection(): JSX.Element {
-        let passwordChangeForm: ReactNode = (
-            <ChangePassword
-                className="mx_GeneralUserSettingsTab_section--account_changePassword"
-                rowClassName=""
-                buttonKind="primary"
-                onError={this.onPasswordChangeError}
-                onFinished={this.onPasswordChanged}
-            />
-        );
-
         let threepidSection: ReactNode = null;
 
         // For older homeservers without separate 3PID add and bind methods (MSC2290),
@@ -347,33 +338,52 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true)
         ) {
             const emails = this.state.loading3pids ? (
-                <Spinner />
+                <InlineSpinner />
             ) : (
                 <AccountEmailAddresses emails={this.state.emails} onEmailsChange={this.onEmailsChange} />
             );
             const msisdns = this.state.loading3pids ? (
-                <Spinner />
+                <InlineSpinner />
             ) : (
                 <AccountPhoneNumbers msisdns={this.state.msisdns} onMsisdnsChange={this.onMsisdnsChange} />
             );
             threepidSection = (
-                <div>
-                    <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                    {emails}
+                <>
+                    <SettingsSubsection
+                        heading={_t("Email addresses")}
+                        stretchContent
+                        data-testid="mx_AccountEmailAddresses"
+                    >
+                        {emails}
+                    </SettingsSubsection>
 
-                    <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                    {msisdns}
-                </div>
+                    <SettingsSubsection
+                        heading={_t("Phone numbers")}
+                        stretchContent
+                        data-testid="mx_AccountPhoneNumbers"
+                    >
+                        {msisdns}
+                    </SettingsSubsection>
+                </>
             );
         } else if (this.state.serverSupportsSeparateAddAndBind === null) {
             threepidSection = <Spinner />;
         }
 
-        let passwordChangeText: ReactNode = _t("Set a new account password…");
-        if (!this.state.canChangePassword) {
-            // Just don't show anything if you can't do anything.
-            passwordChangeText = null;
-            passwordChangeForm = null;
+        let passwordChangeSection: ReactNode = null;
+        if (this.state.canChangePassword) {
+            passwordChangeSection = (
+                <>
+                    <SettingsSubsectionText>{_t("Set a new account password…")}</SettingsSubsectionText>
+                    <ChangePassword
+                        className="mx_GeneralUserSettingsTab_section--account_changePassword"
+                        rowClassName=""
+                        buttonKind="primary"
+                        onError={this.onPasswordChangeError}
+                        onFinished={this.onPasswordChanged}
+                    />
+                </>
+            );
         }
 
         let externalAccountManagement: JSX.Element | undefined;
@@ -382,13 +392,13 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
             externalAccountManagement = (
                 <>
-                    <p className="mx_SettingsTab_subsectionText" data-testid="external-account-management-outer">
+                    <SettingsSubsectionText data-testid="external-account-management-outer">
                         {_t(
                             "Your account details are managed separately at <code>%(hostname)s</code>.",
                             { hostname },
                             { code: (sub) => <code>{sub}</code> },
                         )}
-                    </p>
+                    </SettingsSubsectionText>
                     <AccessibleButton
                         onClick={null}
                         element="a"
@@ -404,60 +414,60 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             );
         }
         return (
-            <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_section--account">
-                <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
-                {externalAccountManagement}
-                <p className="mx_SettingsTab_subsectionText">{passwordChangeText}</p>
-                {passwordChangeForm}
+            <>
+                <SettingsSubsection heading={_t("Account")} stretchContent data-testid="accountSection">
+                    {externalAccountManagement}
+                    {passwordChangeSection}
+                </SettingsSubsection>
                 {threepidSection}
-            </div>
+            </>
         );
     }
 
     private renderLanguageSection(): JSX.Element {
         // TODO: Convert to new-styled Field
         return (
-            <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{_t("Language and region")}</span>
+            <SettingsSubsection heading={_t("Language and region")} stretchContent>
                 <LanguageDropdown
                     className="mx_GeneralUserSettingsTab_section_languageInput"
                     onOptionChange={this.onLanguageChange}
                     value={this.state.language}
                 />
-            </div>
+            </SettingsSubsection>
         );
     }
 
     private renderSpellCheckSection(): JSX.Element {
+        const heading = (
+            <SettingsSubsectionHeading heading={_t("Spell check")}>
+                <ToggleSwitch checked={!!this.state.spellCheckEnabled} onChange={this.onSpellCheckEnabledChange} />
+            </SettingsSubsectionHeading>
+        );
         return (
-            <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_section--spellcheck">
-                <span className="mx_SettingsTab_subheading">
-                    {_t("Spell check")}
-                    <ToggleSwitch checked={!!this.state.spellCheckEnabled} onChange={this.onSpellCheckEnabledChange} />
-                </span>
+            <SettingsSubsection heading={heading} stretchContent>
                 {this.state.spellCheckEnabled && !IS_MAC && (
                     <SpellCheckSettings
                         languages={this.state.spellCheckLanguages}
                         onLanguagesChange={this.onSpellCheckLanguagesChange}
                     />
                 )}
-            </div>
+            </SettingsSubsection>
         );
     }
 
     private renderDiscoverySection(): JSX.Element {
         if (this.state.requiredPolicyInfo.hasTerms) {
             const intro = (
-                <span className="mx_SettingsTab_subsectionText">
+                <SettingsSubsectionText>
                     {_t(
                         "Agree to the identity server (%(serverName)s) Terms of Service to " +
                             "allow yourself to be discoverable by email address or phone number.",
                         { serverName: this.state.idServerName },
                     )}
-                </span>
+                </SettingsSubsectionText>
             );
             return (
-                <div>
+                <>
                     <InlineTermsAgreement
                         policiesAndServicePairs={this.state.requiredPolicyInfo.policiesAndServices}
                         agreedUrls={this.state.requiredPolicyInfo.agreedUrls}
@@ -466,29 +476,23 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                     />
                     {/* has its own heading as it includes the current identity server */}
                     <SetIdServer missingTerms={true} />
-                </div>
+                </>
             );
         }
 
-        const emails = this.state.loading3pids ? <Spinner /> : <DiscoveryEmailAddresses emails={this.state.emails} />;
-        const msisdns = this.state.loading3pids ? <Spinner /> : <DiscoveryPhoneNumbers msisdns={this.state.msisdns} />;
-
         const threepidSection = this.state.haveIdServer ? (
             <>
-                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                {emails}
-
-                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                {msisdns}
+                <DiscoveryEmailAddresses emails={this.state.emails} isLoading={this.state.loading3pids} />
+                <DiscoveryPhoneNumbers msisdns={this.state.msisdns} isLoading={this.state.loading3pids} />
             </>
         ) : null;
 
         return (
-            <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_section--discovery">
+            <>
                 {threepidSection}
                 {/* has its own heading as it includes the current identity server */}
                 <SetIdServer missingTerms={false} />
-            </div>
+            </>
         );
     }
 
@@ -519,16 +523,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         const plaf = PlatformPeg.get();
         const supportsMultiLanguageSpellCheck = plaf?.supportsSpellCheckSettings();
 
-        const discoWarning = this.state.requiredPolicyInfo.hasTerms ? (
-            <img
-                className="mx_GeneralUserSettingsTab_heading_warningIcon"
-                src={require("../../../../../../res/img/feather-customised/warning-triangle.svg").default}
-                width="18"
-                height="18"
-                alt={_t("Warning")}
-            />
-        ) : null;
-
         let accountManagementSection: JSX.Element | undefined;
         if (SettingsStore.getValue(UIFeature.Deactivate)) {
             accountManagementSection = this.renderManagementSection();
@@ -536,25 +530,37 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
         let discoverySection;
         if (SettingsStore.getValue(UIFeature.IdentityServer)) {
+            const discoWarning = this.state.requiredPolicyInfo.hasTerms ? (
+                <WarningIcon
+                    className="mx_GeneralUserSettingsTab_warningIcon"
+                    width="18"
+                    height="18"
+                    // override icon default values
+                    aria-hidden={false}
+                    aria-label={_t("Warning")}
+                />
+            ) : null;
+            const heading = (
+                <Heading size="h2">
+                    {discoWarning}
+                    {_t("Discovery")}
+                </Heading>
+            );
             discoverySection = (
-                <>
-                    <div className="mx_SettingsTab_heading">
-                        {discoWarning} {_t("Discovery")}
-                    </div>
+                <SettingsSection heading={heading} data-testid="discoverySection">
                     {this.renderDiscoverySection()}
-                </>
+                </SettingsSection>
             );
         }
 
         return (
             <SettingsTab data-testid="mx_GeneralUserSettingsTab">
-                <div className="mx_SettingsTab_heading" data-testid="general">
-                    {_t("General")}
-                </div>
-                {this.renderProfileSection()}
-                {this.renderAccountSection()}
-                {this.renderLanguageSection()}
-                {supportsMultiLanguageSpellCheck ? this.renderSpellCheckSection() : null}
+                <SettingsSection heading={_t("General")}>
+                    <ProfileSettings />
+                    {this.renderAccountSection()}
+                    {this.renderLanguageSection()}
+                    {supportsMultiLanguageSpellCheck ? this.renderSpellCheckSection() : null}
+                </SettingsSection>
                 {discoverySection}
                 {this.renderIntegrationManagerSection()}
                 {accountManagementSection}

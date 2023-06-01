@@ -25,6 +25,8 @@ import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Modal from "../../../../Modal";
 import AddThreepid, { Binding } from "../../../../AddThreepid";
 import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
+import SettingsSubsection from "../shared/SettingsSubsection";
+import InlineSpinner from "../../elements/InlineSpinner";
 import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 
 /*
@@ -84,7 +86,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
 
         try {
             if (bind) {
-                const task = new AddThreepid();
+                const task = new AddThreepid(MatrixClientPeg.get());
                 this.setState({
                     verifying: true,
                     continueDisabled: true,
@@ -115,7 +117,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
     private async changeBindingTangledAddBind({ bind, label, errorTitle }: Binding): Promise<void> {
         const { medium, address } = this.props.email;
 
-        const task = new AddThreepid();
+        const task = new AddThreepid(MatrixClientPeg.get());
         this.setState({
             verifying: true,
             continueDisabled: true,
@@ -258,23 +260,32 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
 }
 interface IProps {
     emails: IThreepid[];
+    isLoading?: boolean;
 }
 
 export default class EmailAddresses extends React.Component<IProps> {
     public render(): React.ReactNode {
         let content;
-        if (this.props.emails.length > 0) {
+        if (this.props.isLoading) {
+            content = <InlineSpinner />;
+        } else if (this.props.emails.length > 0) {
             content = this.props.emails.map((e) => {
                 return <EmailAddress email={e} key={e.address} />;
             });
-        } else {
-            content = (
-                <span className="mx_SettingsTab_subsectionText">
-                    {_t("Discovery options will appear once you have added an email above.")}
-                </span>
-            );
         }
 
-        return <div className="mx_EmailAddresses">{content}</div>;
+        const hasEmails = !!this.props.emails.length;
+
+        return (
+            <SettingsSubsection
+                heading={_t("Email addresses")}
+                description={
+                    (!hasEmails && _t("Discovery options will appear once you have added an email above.")) || undefined
+                }
+                stretchContent
+            >
+                {content}
+            </SettingsSubsection>
+        );
     }
 }

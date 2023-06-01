@@ -110,7 +110,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     }
 
     private get hasHomePage(): boolean {
-        return !!getHomePageUrl(SdkConfig.get());
+        return !!getHomePageUrl(SdkConfig.get(), this.context.client!);
     }
 
     private onCurrentVoiceBroadcastRecordingChanged = (recording: VoiceBroadcastRecording | null): void => {

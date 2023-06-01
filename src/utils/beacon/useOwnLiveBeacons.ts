@@ -65,7 +65,7 @@ export const useOwnLiveBeacons = (liveBeaconIds: BeaconIdentifier[]): LiveBeacon
 
     // select the beacon with latest expiry to display expiry time
     const beacon = liveBeaconIds
-        .map((beaconId) => OwnBeaconStore.instance.getBeaconById(beaconId))
+        .map((beaconId) => OwnBeaconStore.instance.getBeaconById(beaconId)!)
         .sort(sortBeaconsByLatestExpiry)
         .shift();
 

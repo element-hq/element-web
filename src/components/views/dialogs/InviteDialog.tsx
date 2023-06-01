@@ -407,7 +407,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     public componentDidMount(): void {
-        this.encryptionByDefault = privateShouldBeEncrypted();
+        this.encryptionByDefault = privateShouldBeEncrypted(MatrixClientPeg.get());
 
         if (this.props.initialText) {
             this.updateSuggestions(this.props.initialText);
@@ -613,7 +613,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
 
         try {
-            const result = await inviteMultipleToRoom(this.props.roomId, targetIds, true);
+            const result = await inviteMultipleToRoom(cli, this.props.roomId, targetIds, true);
             if (!this.shouldAbortAfterInviteError(result, room)) {
                 // handles setting error message too
                 this.props.onFinished(true);
@@ -986,7 +986,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         // Update the IS in account data. Actually using it may trigger terms.
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        setToDefaultIdentityServer();
+        setToDefaultIdentityServer(MatrixClientPeg.get());
         this.setState({ canUseIdentityServer: true, tryingIdentityServer: false });
     };
 
@@ -1395,7 +1395,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                         </a>
                     ),
                     a: (sub) => (
-                        <a href={makeRoomPermalink(roomId)} rel="noreferrer noopener" target="_blank">
+                        <a href={makeRoomPermalink(cli, roomId)} rel="noreferrer noopener" target="_blank">
                             {sub}
                         </a>
                     ),

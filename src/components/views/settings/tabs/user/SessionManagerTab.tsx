@@ -259,6 +259,7 @@ const SessionManagerTab: React.FC = () => {
                                 `from any session that you don't recognize or use anymore.`,
                         )}
                         data-testid="other-sessions-section"
+                        stretchContent
                     >
                         <FilteredDeviceList
                             devices={otherDevices}

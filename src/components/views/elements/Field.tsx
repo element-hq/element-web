@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, RefObject } from "react";
+import React, { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, RefObject, createRef } from "react";
 import classNames from "classnames";
 import { debounce } from "lodash";
 
@@ -118,7 +118,7 @@ interface IState {
 
 export default class Field extends React.PureComponent<PropShapes, IState> {
     private readonly id: string;
-    private inputRef: RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
+    private readonly _inputRef = createRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>();
 
     public static readonly defaultProps = {
         element: "input",
@@ -228,6 +228,10 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         return valid;
     }
 
+    private get inputRef(): RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
+        return this.props.inputRef ?? this._inputRef;
+    }
+
     public render(): React.ReactNode {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const {
@@ -248,8 +252,6 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
             forceTooltipVisible,
             ...inputProps
         } = this.props;
-
-        this.inputRef = inputRef || React.createRef();
 
         // Handle displaying feedback on validity
         let fieldTooltip: JSX.Element | undefined;

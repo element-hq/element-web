@@ -44,7 +44,7 @@ import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../utils/room/s
 function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
     const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
     const isPublic: boolean = room.getJoinRule() === "public";
-    return isPublic || !privateShouldBeEncrypted() || isEncrypted;
+    return isPublic || !privateShouldBeEncrypted(matrixClient) || isEncrypted;
 }
 
 const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolean): string => {

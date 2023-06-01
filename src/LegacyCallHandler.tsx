@@ -1209,7 +1209,7 @@ export default class LegacyCallHandler extends EventEmitter {
         }
 
         try {
-            await WidgetUtils.addJitsiWidget(roomId, type, "Jitsi", false);
+            await WidgetUtils.addJitsiWidget(client, roomId, type, "Jitsi", false);
             logger.log("Jitsi widget added");
         } catch (e) {
             if (e instanceof MatrixError && e.errcode === "M_FORBIDDEN") {

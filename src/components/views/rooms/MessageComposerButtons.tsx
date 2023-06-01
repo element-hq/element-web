@@ -39,6 +39,7 @@ import { useDispatcher } from "../../../hooks/useDispatcher";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import IconizedContextMenu, { IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import { EmojiButton } from "./EmojiButton";
+import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { ButtonEvent } from "../elements/AccessibleButton";
 
@@ -118,8 +119,8 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
         ];
     }
 
-    mainButtons = mainButtons.filter((x: ReactElement) => x);
-    moreButtons = moreButtons.filter((x: ReactElement) => x);
+    mainButtons = filterBoolean(mainButtons);
+    moreButtons = filterBoolean(moreButtons);
 
     const moreOptionsClasses = classNames({
         mx_MessageComposer_button: true,

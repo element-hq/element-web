@@ -93,7 +93,9 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
         if (userId === myUserId) {
             return _t("You accepted");
         } else {
-            return _t("%(name)s accepted", { name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId()!) });
+            return _t("%(name)s accepted", {
+                name: getNameForEventRoom(client, userId, this.props.mxEvent.getRoomId()!),
+            });
         }
     }
 
@@ -110,14 +112,19 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             }
         } else {
             if (declined) {
-                return _t("%(name)s declined", { name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId()!) });
+                return _t("%(name)s declined", {
+                    name: getNameForEventRoom(client, userId, this.props.mxEvent.getRoomId()!),
+                });
             } else {
-                return _t("%(name)s cancelled", { name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId()!) });
+                return _t("%(name)s cancelled", {
+                    name: getNameForEventRoom(client, userId, this.props.mxEvent.getRoomId()!),
+                });
             }
         }
     }
 
     public render(): React.ReactNode {
+        const client = MatrixClientPeg.get();
         const { mxEvent } = this.props;
         const request = mxEvent.verificationRequest;
 
@@ -149,9 +156,9 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
         }
 
         if (!request.initiatedByMe) {
-            const name = getNameForEventRoom(request.requestingUserId, mxEvent.getRoomId()!);
+            const name = getNameForEventRoom(client, request.requestingUserId, mxEvent.getRoomId()!);
             title = _t("%(name)s wants to verify", { name });
-            subtitle = userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId()!);
+            subtitle = userLabelForEventRoom(client, request.requestingUserId, mxEvent.getRoomId()!);
             if (request.canAccept) {
                 stateNode = (
                     <div className="mx_cryptoEvent_buttons">
@@ -167,7 +174,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
         } else {
             // request sent by us
             title = _t("You sent a verification request");
-            subtitle = userLabelForEventRoom(request.receivingUserId, mxEvent.getRoomId()!);
+            subtitle = userLabelForEventRoom(client, request.receivingUserId, mxEvent.getRoomId()!);
         }
 
         if (title) {

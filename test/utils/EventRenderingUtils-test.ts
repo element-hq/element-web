@@ -17,6 +17,7 @@ limitations under the License.
 import { getEventDisplayInfo } from "../../src/utils/EventRenderingUtils";
 import { VoiceBroadcastInfoState } from "../../src/voice-broadcast";
 import { mkVoiceBroadcastInfoStateEvent } from "../voice-broadcast/utils/test-utils";
+import { createTestClient } from "../test-utils";
 
 describe("getEventDisplayInfo", () => {
     const mkBroadcastInfoEvent = (state: VoiceBroadcastInfoState) => {
@@ -24,7 +25,7 @@ describe("getEventDisplayInfo", () => {
     };
 
     it("should return the expected value for a broadcast started event", () => {
-        expect(getEventDisplayInfo(mkBroadcastInfoEvent(VoiceBroadcastInfoState.Started), false))
+        expect(getEventDisplayInfo(createTestClient(), mkBroadcastInfoEvent(VoiceBroadcastInfoState.Started), false))
             .toMatchInlineSnapshot(`
             {
               "hasRenderer": true,
@@ -38,7 +39,7 @@ describe("getEventDisplayInfo", () => {
     });
 
     it("should return the expected value for a broadcast stopped event", () => {
-        expect(getEventDisplayInfo(mkBroadcastInfoEvent(VoiceBroadcastInfoState.Stopped), false))
+        expect(getEventDisplayInfo(createTestClient(), mkBroadcastInfoEvent(VoiceBroadcastInfoState.Stopped), false))
             .toMatchInlineSnapshot(`
             {
               "hasRenderer": true,

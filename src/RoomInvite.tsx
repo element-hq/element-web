@@ -20,8 +20,8 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { User } from "matrix-js-sdk/src/models/user";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "./MatrixClientPeg";
 import MultiInviter, { CompletionStates } from "./utils/MultiInviter";
 import Modal from "./Modal";
 import { _t } from "./languageHandler";
@@ -49,12 +49,13 @@ export interface IInviteResult {
  * @returns {Promise} Promise
  */
 export function inviteMultipleToRoom(
+    client: MatrixClient,
     roomId: string,
     addresses: string[],
     sendSharedHistoryKeys = false,
     progressCallback?: () => void,
 ): Promise<IInviteResult> {
-    const inviter = new MultiInviter(roomId, progressCallback);
+    const inviter = new MultiInviter(client, roomId, progressCallback);
     return inviter
         .invite(addresses, undefined, sendSharedHistoryKeys)
         .then((states) => Promise.resolve({ states, inviter }));
@@ -105,14 +106,15 @@ export function isValid3pidInvite(event: MatrixEvent): boolean {
 }
 
 export function inviteUsersToRoom(
+    client: MatrixClient,
     roomId: string,
     userIds: string[],
     sendSharedHistoryKeys = false,
     progressCallback?: () => void,
 ): Promise<void> {
-    return inviteMultipleToRoom(roomId, userIds, sendSharedHistoryKeys, progressCallback)
+    return inviteMultipleToRoom(client, roomId, userIds, sendSharedHistoryKeys, progressCallback)
         .then((result) => {
-            const room = MatrixClientPeg.get().getRoom(roomId)!;
+            const room = client.getRoom(roomId)!;
             showAnyInviteErrors(result.states, room, result.inviter);
         })
         .catch((err) => {
@@ -150,7 +152,7 @@ export function showAnyInviteErrors(
             }
         }
 
-        const cli = MatrixClientPeg.get();
+        const cli = room.client;
         if (errorList.length > 0) {
             // React 16 doesn't let us use `errorList.join(<br />)` anymore, so this is our solution
             const description = (

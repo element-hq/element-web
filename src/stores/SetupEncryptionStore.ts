@@ -45,7 +45,7 @@ export enum Phase {
 
 export class SetupEncryptionStore extends EventEmitter {
     private started?: boolean;
-    public phase: Phase;
+    public phase?: Phase;
     public verificationRequest: VerificationRequest | null = null;
     public backupInfo: IKeyBackupInfo | null = null;
     // ID of the key that the secrets we want are encrypted with

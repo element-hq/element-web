@@ -82,12 +82,12 @@ export function createPartCreator(completions: PillPart[] = []) {
 }
 
 export function createRenderer() {
-    const render = (c: Caret) => {
+    const render = (c?: Caret) => {
         render.caret = c;
         render.count += 1;
     };
     render.count = 0;
-    render.caret = null as unknown as Caret;
+    render.caret = null as unknown as Caret | undefined;
     return render;
 }
 

@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { split } from "lodash";
 import EMOJIBASE_REGEX from "emojibase-regex";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Room } from "matrix-js-sdk/src/models/room";
+import GraphemeSplitter from "grapheme-splitter";
 
 import AutocompleteWrapperModel, { GetAutocompleterComponent, UpdateCallback, UpdateQuery } from "./autocomplete";
 import { unicodeToShortcode } from "../HtmlUtils";
@@ -27,6 +27,7 @@ import * as Avatar from "../Avatar";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import SettingsStore from "../settings/SettingsStore";
+import { getFirstGrapheme } from "../utils/strings";
 
 const REGIONAL_EMOJI_SEPARATOR = String.fromCodePoint(0x200b);
 
@@ -133,8 +134,7 @@ abstract class BasePart {
         // To only need to grapheme split the bits of the string we're working on.
         let buffer = str;
         while (buffer) {
-            // We use lodash's grapheme splitter to avoid breaking apart compound emojis
-            const [char] = split(buffer, "", 2);
+            const char = getFirstGrapheme(buffer);
             if (!this.acceptsInsertion(char, offset + str.length - buffer.length, inputType)) {
                 break;
             }
@@ -562,8 +562,7 @@ export class PartCreator {
             case "\n":
                 return new NewlinePart();
             default:
-                // We use lodash's grapheme splitter to avoid breaking apart compound emojis
-                if (EMOJIBASE_REGEX.test(split(input, "", 2)[0])) {
+                if (EMOJIBASE_REGEX.test(getFirstGrapheme(input))) {
                     return new EmojiPart();
                 }
                 return new PlainPart();
@@ -639,8 +638,8 @@ export class PartCreator {
         const parts: (PlainPart | EmojiPart)[] = [];
         let plainText = "";
 
-        // We use lodash's grapheme splitter to avoid breaking apart compound emojis
-        for (const char of split(text, "")) {
+        const splitter = new GraphemeSplitter();
+        for (const char of splitter.iterateGraphemes(text)) {
             if (EMOJIBASE_REGEX.test(char)) {
                 if (plainText) {
                     parts.push(this.plain(plainText));

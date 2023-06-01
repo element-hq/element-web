@@ -344,7 +344,7 @@ export async function accessSecretStorage(func = async (): Promise<void> => {}, 
                     onBeforeClose: async (reason): Promise<boolean> => {
                         // If Secure Backup is required, you cannot leave the modal.
                         if (reason === "backgroundClick") {
-                            return !isSecureBackupRequired();
+                            return !isSecureBackupRequired(cli);
                         }
                         return true;
                     },

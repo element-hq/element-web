@@ -17,12 +17,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
+import { checkDeviceIsCrossSigned } from "../crypto/utils";
 
 describe("Registration", () => {
     let homeserver: HomeserverInstance;
 
     beforeEach(() => {
-        cy.stubDefaultServer();
         cy.visit("/#/register");
         cy.startHomeserver("consent").then((data) => {
             homeserver = data;
@@ -89,39 +89,14 @@ describe("Registration", () => {
 
         // check that the device considers itself verified
         cy.findByRole("button", { name: "User menu" }).click();
-        cy.findByRole("menuitem", { name: "Security & Privacy" }).click();
-        cy.get(".mx_DevicesPanel_myDevice .mx_DevicesPanel_deviceTrust .mx_E2EIcon").should(
-            "have.class",
-            "mx_E2EIcon_verified",
-        );
+        cy.findByRole("menuitem", { name: "All settings" }).click();
+        cy.findByRole("tab", { name: "Sessions" }).click();
+        cy.findByTestId("current-session-section").within(() => {
+            cy.findByTestId("device-metadata-isVerified").should("have.text", "Verified");
+        });
 
         // check that cross-signing keys have been uploaded.
-        const myUserId = "@alice:localhost";
-        let myDeviceId: string;
-        cy.window({ log: false })
-            .then((win) => {
-                const cli = win.mxMatrixClientPeg.get();
-                const accessToken = cli.getAccessToken()!;
-                myDeviceId = cli.getDeviceId();
-                return cy.request({
-                    method: "POST",
-                    url: `${homeserver.baseUrl}/_matrix/client/v3/keys/query`,
-                    headers: { Authorization: `Bearer ${accessToken}` },
-                    body: { device_keys: { [myUserId]: [] } },
-                });
-            })
-            .then((res) => {
-                // there should be three cross-signing keys
-                expect(res.body.master_keys[myUserId]).to.have.property("keys");
-                expect(res.body.self_signing_keys[myUserId]).to.have.property("keys");
-                expect(res.body.user_signing_keys[myUserId]).to.have.property("keys");
-
-                // and the device should be signed by the self-signing key
-                const selfSigningKeyId = Object.keys(res.body.self_signing_keys[myUserId].keys)[0];
-                expect(res.body.device_keys[myUserId][myDeviceId]).to.exist;
-                const myDeviceSignatures = res.body.device_keys[myUserId][myDeviceId].signatures[myUserId];
-                expect(myDeviceSignatures[selfSigningKeyId]).to.exist;
-            });
+        checkDeviceIsCrossSigned();
     });
 
     it("should require username to fulfil requirements and be available", () => {

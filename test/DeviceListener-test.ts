@@ -59,8 +59,8 @@ const mockDispatcher = mocked(dis);
 const flushPromises = async () => await new Promise(process.nextTick);
 
 describe("DeviceListener", () => {
-    let mockClient: Mocked<MatrixClient> | undefined;
-    let mockCrypto: Mocked<CryptoApi> | undefined;
+    let mockClient: Mocked<MatrixClient>;
+    let mockCrypto: Mocked<CryptoApi>;
 
     // spy on various toasts' hide and show functions
     // easier than mocking
@@ -111,7 +111,7 @@ describe("DeviceListener", () => {
 
     const createAndStart = async (): Promise<DeviceListener> => {
         const instance = new DeviceListener();
-        instance.start();
+        instance.start(mockClient);
         await flushPromises();
         return instance;
     };

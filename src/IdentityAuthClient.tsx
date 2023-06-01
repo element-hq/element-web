@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
-import { createClient, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { createClient, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -64,7 +64,11 @@ export default class IdentityAuthClient {
 
     private writeToken(): void {
         if (this.tempClient) return; // temporary client: ignore
-        window.localStorage.setItem("mx_is_access_token", this.accessToken);
+        if (this.accessToken) {
+            window.localStorage.setItem("mx_is_access_token", this.accessToken);
+        } else {
+            window.localStorage.removeItem("mx_is_access_token");
+        }
     }
 
     private readToken(): string | null {
@@ -123,9 +127,9 @@ export default class IdentityAuthClient {
         try {
             await this.matrixClient.getIdentityAccount(token);
         } catch (e) {
-            if (e.errcode === "M_TERMS_NOT_SIGNED") {
+            if (e instanceof MatrixError && e.errcode === "M_TERMS_NOT_SIGNED") {
                 logger.log("Identity server requires new terms to be agreed to");
-                await startTermsFlow([new Service(SERVICE_TYPES.IS, identityServerUrl, token)]);
+                await startTermsFlow(this.matrixClient, [new Service(SERVICE_TYPES.IS, identityServerUrl, token)]);
                 return;
             }
             throw e;
@@ -133,8 +137,8 @@ export default class IdentityAuthClient {
 
         if (
             !this.tempClient &&
-            !doesAccountDataHaveIdentityServer() &&
-            !(await doesIdentityServerHaveTerms(identityServerUrl))
+            !doesAccountDataHaveIdentityServer(this.matrixClient) &&
+            !(await doesIdentityServerHaveTerms(this.matrixClient, identityServerUrl))
         ) {
             const { finished } = Modal.createDialog(QuestionDialog, {
                 title: _t("Identity server has no terms of service"),
@@ -158,7 +162,7 @@ export default class IdentityAuthClient {
             });
             const [confirmed] = await finished;
             if (confirmed) {
-                setToDefaultIdentityServer();
+                setToDefaultIdentityServer(this.matrixClient);
             } else {
                 throw new AbortedIdentityActionError("User aborted identity server action without terms");
             }

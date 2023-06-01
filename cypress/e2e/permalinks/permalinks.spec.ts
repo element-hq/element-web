@@ -126,13 +126,14 @@ describe("permalinks", () => {
             getPill(danielle.getSafeUserId());
         });
 
-        // clean up before taking the snapshot
-        cy.get(".mx_cryptoEvent").invoke("remove");
-        cy.get(".mx_NewRoomIntro").invoke("remove");
-        cy.get(".mx_GenericEventListSummary").invoke("remove");
+        // Exclude various components from the snapshot, for consistency
+        const percyCSS =
+            ".mx_cryptoEvent, " +
+            ".mx_NewRoomIntro, " +
+            ".mx_MessageTimestamp, " +
+            ".mx_RoomView_myReadMarker, " +
+            ".mx_GenericEventListSummary { visibility: hidden !important; }";
 
-        // Disabled because flaky - see https://github.com/vector-im/element-web/issues/25283
-        //const percyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
-        //cy.get(".mx_RoomView_timeline").percySnapshotElement("Permalink rendering", { percyCSS });
+        cy.get(".mx_RoomView_timeline").percySnapshotElement("Permalink rendering", { percyCSS });
     });
 });

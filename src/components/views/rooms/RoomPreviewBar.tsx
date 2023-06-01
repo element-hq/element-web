@@ -493,7 +493,9 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
 
                 const isDM = this.isDMInvite();
                 if (isDM) {
-                    title = _t("Do you want to chat with %(user)s?", { user: inviteMember.name });
+                    title = _t("Do you want to chat with %(user)s?", {
+                        user: inviteMember?.name ?? this.props.inviterName,
+                    });
                     subTitle = [avatar, _t("<userName/> wants to chat", {}, { userName: () => inviterElement })];
                     primaryActionLabel = _t("Start chatting");
                 } else {

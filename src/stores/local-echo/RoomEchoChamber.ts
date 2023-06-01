@@ -78,7 +78,7 @@ export class RoomEchoChamber extends GenericEchoChamber<RoomEchoContext, CachedR
             CachedRoomKey.NotificationVolume,
             v,
             async (): Promise<void> => {
-                return setRoomNotifsState(this.context.room.roomId, v);
+                return setRoomNotifsState(this.context.room.client, this.context.room.roomId, v);
             },
             implicitlyReverted,
         );

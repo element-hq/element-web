@@ -302,7 +302,7 @@ interface IState {
  * tooltip along one edge of the target.
  */
 export default class InteractiveTooltip extends React.Component<IProps, IState> {
-    private target: HTMLElement;
+    private target?: HTMLElement;
 
     public static defaultProps = {
         side: Direction.Top,
@@ -345,6 +345,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
 
     private onLeftOfTarget(): boolean {
         const { contentRect } = this.state;
+        if (!this.target) return false;
         const targetRect = this.target.getBoundingClientRect();
 
         if (this.props.direction === Direction.Left) {
@@ -359,6 +360,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
 
     private aboveTarget(): boolean {
         const { contentRect } = this.state;
+        if (!this.target) return false;
         const targetRect = this.target.getBoundingClientRect();
 
         if (this.props.direction === Direction.Top) {
@@ -378,7 +380,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
     private onMouseMove = (ev: MouseEvent): void => {
         const { clientX: x, clientY: y } = ev;
         const { contentRect } = this.state;
-        if (!contentRect) return;
+        if (!contentRect || !this.target) return;
         const targetRect = this.target.getBoundingClientRect();
 
         let direction: Direction;
@@ -422,6 +424,8 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
             ReactDOM.unmountComponentAtNode(getOrCreateContainer());
             return null;
         }
+
+        if (!this.target) return null;
 
         const targetRect = this.target.getBoundingClientRect();
 

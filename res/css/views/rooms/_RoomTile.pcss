@@ -55,13 +55,18 @@ limitations under the License.
         flex-direction: column;
         justify-content: center;
 
-        .mx_RoomTile_title,
         .mx_RoomTile_subtitle {
-            width: 100%;
+            align-items: center;
+            color: $secondary-content;
+            display: flex;
+            gap: $spacing-4;
+            line-height: $font-18px;
+        }
 
-            /* Ellipsize any text overflow */
-            text-overflow: ellipsis;
+        .mx_RoomTile_title,
+        .mx_RoomTile_subtitle_text {
             overflow: hidden;
+            text-overflow: ellipsis;
             white-space: nowrap;
         }
 
@@ -72,11 +77,6 @@ limitations under the License.
             &.mx_RoomTile_titleHasUnreadEvents {
                 font-weight: var(--font-semi-bold);
             }
-        }
-
-        .mx_RoomTile_subtitle {
-            line-height: $font-18px;
-            color: $secondary-content;
         }
 
         .mx_RoomTile_titleWithSubtitle {

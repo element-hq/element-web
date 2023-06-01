@@ -176,7 +176,7 @@ describe("Audio player", () => {
 
         // Enable high contrast manually
         cy.openUserSettings("Appearance")
-            .get(".mx_ThemeChoicePanel")
+            .findByTestId("mx_ThemeChoicePanel")
             .findByLabelText("Use high contrast")
             .click({ force: true }); // force click because the size of the checkbox is zero
 
@@ -333,30 +333,33 @@ describe("Audio player", () => {
 
         // On a thread
         cy.get(".mx_ThreadView").within(() => {
-            cy.get(".mx_EventTile_last")
-                .within(() => {
-                    // Assert that the player is correctly rendered on a thread
-                    cy.get(".mx_EventTile_mediaLine .mx_MAudioBody .mx_AudioPlayer_container").within(() => {
-                        // Assert that the counter is zero before clicking the play button
-                        cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
+            cy.get(".mx_EventTile_last").within(() => {
+                // Assert that the player is correctly rendered on a thread
+                cy.get(".mx_EventTile_mediaLine .mx_MAudioBody .mx_AudioPlayer_container").within(() => {
+                    // Assert that the counter is zero before clicking the play button
+                    cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
-                        // Find and click "Play" button, the wait is to make the test less flaky
-                        cy.findByRole("button", { name: "Play" }).should("exist");
-                        cy.wait(500).findByRole("button", { name: "Play" }).click();
+                    // Find and click "Play" button, the wait is to make the test less flaky
+                    cy.findByRole("button", { name: "Play" }).should("exist");
+                    cy.wait(500).findByRole("button", { name: "Play" }).click();
 
-                        // Assert that "Pause" button can be found
-                        cy.findByRole("button", { name: "Pause" }).should("exist");
+                    // Assert that "Pause" button can be found
+                    cy.findByRole("button", { name: "Pause" }).should("exist");
 
-                        // Assert that the timer is reset when the audio file finished playing
-                        cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
+                    // Assert that the timer is reset when the audio file finished playing
+                    cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
-                        // Assert that "Play" button can be found
-                        cy.findByRole("button", { name: "Play" }).should("exist").should("not.have.attr", "disabled");
-                    });
-                })
-                .realHover()
-                .findByRole("button", { name: "Reply" })
-                .click(); // Find and click "Reply" button
+                    // Assert that "Play" button can be found
+                    cy.findByRole("button", { name: "Play" }).should("exist").should("not.have.attr", "disabled");
+                });
+            });
+
+            // Find and click "Reply" button
+            //
+            // Calling cy.get(".mx_EventTile_last") again here is a workaround for
+            // https://github.com/matrix-org/matrix-js-sdk/issues/3394: the event tile may have been re-mounted while
+            // the audio was playing.
+            cy.get(".mx_EventTile_last").realHover().findByRole("button", { name: "Reply" }).click();
 
             cy.get(".mx_MessageComposer--compact").within(() => {
                 // Assert that the reply preview is rendered on the message composer

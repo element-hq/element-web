@@ -61,13 +61,13 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     const { room, roomId } = useContext(RoomContext);
 
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(app));
-    const canModify = userWidget || WidgetUtils.canUserModifyWidgets(roomId);
+    const canModify = userWidget || WidgetUtils.canUserModifyWidgets(cli, roomId);
 
     let streamAudioStreamButton: JSX.Element | undefined;
     if (roomId && getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type)) {
         const onStreamAudioClick = async (): Promise<void> => {
             try {
-                await startJitsiAudioLivestream(widgetMessaging!, roomId);
+                await startJitsiAudioLivestream(cli, widgetMessaging!, roomId);
             } catch (err) {
                 logger.error("Failed to start livestream", err);
                 // XXX: won't i18n well, but looks like widget api only support 'message'?
@@ -138,7 +138,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
                     button: _t("Delete widget"),
                     onFinished: (confirmed) => {
                         if (!confirmed) return;
-                        WidgetUtils.setRoomWidget(roomId, app.id);
+                        WidgetUtils.setRoomWidget(cli, roomId, app.id);
                     },
                 });
             }

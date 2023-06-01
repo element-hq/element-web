@@ -16,30 +16,31 @@ limitations under the License.
 
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { logger } from "matrix-js-sdk/src/logger";
+import { HTTPError } from "matrix-js-sdk/src/http-api";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SdkConfig from "../SdkConfig";
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { Policies } from "../Terms";
 
 export function getDefaultIdentityServerUrl(): string | undefined {
     return SdkConfig.get("validated_server_config")?.isUrl;
 }
 
-export function setToDefaultIdentityServer(): void {
+export function setToDefaultIdentityServer(matrixClient: MatrixClient): void {
     const url = getDefaultIdentityServerUrl();
     // Account data change will update localstorage, client, etc through dispatcher
-    MatrixClientPeg.get().setAccountData("m.identity_server", {
+    matrixClient.setAccountData("m.identity_server", {
         base_url: url,
     });
 }
 
-export async function doesIdentityServerHaveTerms(fullUrl: string): Promise<boolean> {
+export async function doesIdentityServerHaveTerms(matrixClient: MatrixClient, fullUrl: string): Promise<boolean> {
     let terms: { policies?: Policies } | null;
     try {
-        terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
+        terms = await matrixClient.getTerms(SERVICE_TYPES.IS, fullUrl);
     } catch (e) {
         logger.error(e);
-        if (e.cors === "rejected" || e.httpStatus === 404) {
+        if (e.cors === "rejected" || (e instanceof HTTPError && e.httpStatus === 404)) {
             terms = null;
         } else {
             throw e;
@@ -49,7 +50,7 @@ export async function doesIdentityServerHaveTerms(fullUrl: string): Promise<bool
     return !!terms?.["policies"] && Object.keys(terms["policies"]).length > 0;
 }
 
-export function doesAccountDataHaveIdentityServer(): boolean {
-    const event = MatrixClientPeg.get().getAccountData("m.identity_server");
-    return event && event.getContent() && event.getContent()["base_url"];
+export function doesAccountDataHaveIdentityServer(matrixClient: MatrixClient): boolean {
+    const event = matrixClient.getAccountData("m.identity_server");
+    return event?.getContent()["base_url"];
 }

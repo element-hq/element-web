@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from "url";
-
 /**
  * If a url has no path component, etc. abbreviate it to just the hostname
  *
@@ -25,11 +23,16 @@ import url from "url";
 export function abbreviateUrl(u?: string): string {
     if (!u) return "";
 
-    const parsedUrl = url.parse(u);
-    // if it's something we can't parse as a url then just return it
-    if (!parsedUrl) return u;
+    let parsedUrl: URL;
+    try {
+        parsedUrl = parseUrl(u);
+    } catch (e) {
+        console.error(e);
+        // if it's something we can't parse as a url then just return it
+        return u;
+    }
 
-    if (parsedUrl.path === "/") {
+    if (parsedUrl.pathname === "/") {
         // we ignore query / hash parts: these aren't relevant for IS server URLs
         return parsedUrl.host || "";
     }
@@ -42,8 +45,15 @@ export function unabbreviateUrl(u?: string): string {
 
     let longUrl = u;
     if (!u.startsWith("https://")) longUrl = "https://" + u;
-    const parsed = url.parse(longUrl);
-    if (parsed.hostname === null) return u;
+    const parsed = parseUrl(longUrl);
+    if (!parsed.hostname) return u;
 
     return longUrl;
+}
+
+export function parseUrl(u: string): URL {
+    if (!u.includes(":")) {
+        u = window.location.protocol + u;
+    }
+    return new URL(u);
 }

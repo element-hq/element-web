@@ -52,6 +52,16 @@ import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessa
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
+jest.mock("../../../../src/stores/OwnProfileStore", () => ({
+    OwnProfileStore: {
+        instance: {
+            isProfileInfoFetched: true,
+            removeListener: jest.fn(),
+            getHttpAvatarUrl: jest.fn().mockReturnValue("http://avatar_url"),
+        },
+    },
+}));
+
 describe("AppTile", () => {
     let cli: MatrixClient;
     let r1: Room;
@@ -76,7 +86,7 @@ describe("AppTile", () => {
         cli.hasLazyLoadMembersEnabled = () => false;
 
         // Init misc. startup deps
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(cli);
 
         r1 = new Room("r1", cli, "@name:example.com");
         r2 = new Room("r2", cli, "@name:example.com");
@@ -171,6 +181,10 @@ describe("AppTile", () => {
 
         expect(renderResult.getByText("Example 1")).toBeInTheDocument();
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
+
+        const { container, asFragment } = renderResult;
+        expect(container.getElementsByClassName("mx_Spinner").length).toBeTruthy();
+        expect(asFragment()).toMatchSnapshot();
 
         // We want to verify that as we change to room 2, we should close the
         // right panel and destroy the widget.
@@ -349,6 +363,13 @@ describe("AppTile", () => {
             moveToContainerSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
         });
 
+        it("should render", () => {
+            const { container, asFragment } = renderResult;
+
+            expect(container.querySelector(".mx_Spinner")).toBeFalsy(); // Assert that the spinner is gone
+            expect(asFragment()).toMatchSnapshot(); // Take a snapshot of the pinned widget
+        });
+
         it("should not display the »Popout widget« button", () => {
             expect(renderResult.queryByLabelText("Popout widget")).not.toBeInTheDocument();
         });
@@ -401,6 +422,25 @@ describe("AppTile", () => {
             it("should display the »Popout widget« button", () => {
                 expect(renderResult.getByTitle("Popout widget")).toBeInTheDocument();
             });
+        });
+    });
+
+    describe("for a persistent app", () => {
+        let renderResult: RenderResult;
+
+        beforeEach(() => {
+            renderResult = render(
+                <MatrixClientContext.Provider value={cli}>
+                    <AppTile key={app1.id} app={app1} fullWidth={true} room={r1} miniMode={true} showMenubar={false} />
+                </MatrixClientContext.Provider>,
+            );
+        });
+
+        it("should render", () => {
+            const { container, asFragment } = renderResult;
+
+            expect(container.querySelector(".mx_Spinner")).toBeFalsy();
+            expect(asFragment()).toMatchSnapshot();
         });
     });
 

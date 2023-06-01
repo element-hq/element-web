@@ -591,6 +591,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     })}
                     onClick={this.props.onAppsClick}
                     title={this.props.appsShown ? _t("Hide Widgets") : _t("Show Widgets")}
+                    aria-checked={this.props.appsShown}
                     alignment={Alignment.Bottom}
                     key="apps"
                 />,

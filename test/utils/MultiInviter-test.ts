@@ -90,7 +90,7 @@ describe("MultiInviter", () => {
             return MXID_PROFILE_STATES[userId] || Promise.reject();
         });
 
-        inviter = new MultiInviter(ROOMID);
+        inviter = new MultiInviter(client, ROOMID);
     });
 
     describe("invite", () => {

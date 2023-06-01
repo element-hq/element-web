@@ -561,7 +561,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             createdByCurrentUserTs - lastCreatedByOtherTs < PREVENT_MULTIPLE_JITSI_WITHIN
         ) {
             // more than one Jitsi widget with the last one from the current user → remove it
-            WidgetUtils.setRoomWidget(this.state.roomId, createdByCurrentUser.id);
+            WidgetUtils.setRoomWidget(this.context.client, this.state.roomId, createdByCurrentUser.id);
         }
     }
 
@@ -1488,6 +1488,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     // rate limited because a power level change will emit an event for every member in the room.
     private updateRoomMembers = throttle(
         () => {
+            if (!this.state.room) return;
             this.updateDMState();
             this.updateE2EStatus(this.state.room);
         },
@@ -1511,7 +1512,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
         const dmInviter = room.getDMInviter();
         if (dmInviter) {
-            Rooms.setDMRoom(room.roomId, dmInviter);
+            Rooms.setDMRoom(room.client, room.roomId, dmInviter);
         }
     }
 
@@ -1620,7 +1621,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const roomId = scope === SearchScope.Room ? this.getRoomId() : undefined;
         debuglog("sending search request");
         const abortController = new AbortController();
-        const promise = eventSearch(term, roomId, abortController.signal);
+        const promise = eventSearch(this.context.client!, term, roomId, abortController.signal);
 
         this.setState({
             search: {

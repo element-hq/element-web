@@ -214,7 +214,7 @@ export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps
 
         let errorText = this.props.errorText;
 
-        let sitePublicKey;
+        let sitePublicKey: string | undefined;
         if (!this.props.stageParams || !this.props.stageParams.public_key) {
             errorText = _t(
                 "Missing captcha public key in homeserver configuration. Please report " +
@@ -224,7 +224,7 @@ export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps
             sitePublicKey = this.props.stageParams.public_key;
         }
 
-        let errorSection;
+        let errorSection: JSX.Element | undefined;
         if (errorText) {
             errorSection = (
                 <div className="error" role="alert">
@@ -235,7 +235,9 @@ export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps
 
         return (
             <div>
-                <CaptchaForm sitePublicKey={sitePublicKey} onCaptchaResponse={this.onCaptchaResponse} />
+                {sitePublicKey && (
+                    <CaptchaForm sitePublicKey={sitePublicKey} onCaptchaResponse={this.onCaptchaResponse} />
+                )}
                 {errorSection}
             </div>
         );

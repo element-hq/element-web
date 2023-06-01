@@ -48,6 +48,8 @@ import {
     updatePushRuleActions,
 } from "../../../utils/pushRules/updatePushRuleActions";
 import { Caption } from "../typography/Caption";
+import { SettingsSubsectionHeading } from "./shared/SettingsSubsectionHeading";
+import SettingsSubsection from "./shared/SettingsSubsection";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -649,16 +651,14 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
 
     private renderTopSection(): JSX.Element {
         const masterSwitch = (
-            <>
-                <LabelledToggleSwitch
-                    data-testid="notif-master-switch"
-                    value={!this.isInhibited}
-                    label={_t("Enable notifications for this account")}
-                    caption={_t("Turn off to disable notifications on all your devices and sessions")}
-                    onChange={this.onMasterRuleChanged}
-                    disabled={this.state.phase === Phase.Persisting}
-                />
-            </>
+            <LabelledToggleSwitch
+                data-testid="notif-master-switch"
+                value={!this.isInhibited}
+                label={_t("Enable notifications for this account")}
+                caption={_t("Turn off to disable notifications on all your devices and sessions")}
+                onChange={this.onMasterRuleChanged}
+                disabled={this.state.phase === Phase.Persisting}
+            />
         );
 
         // If all the rules are inhibited, don't show anything.
@@ -680,7 +680,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             ));
 
         return (
-            <>
+            <SettingsSubsection>
                 {masterSwitch}
 
                 <LabelledToggleSwitch
@@ -718,7 +718,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                 )}
 
                 {emailSwitches}
-            </>
+            </SettingsSubsection>
         );
     }
 
@@ -814,7 +814,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             </fieldset>
         ));
 
-        let sectionName: TranslatedString;
+        let sectionName: string;
         switch (category) {
             case RuleClass.VectorGlobal:
                 sectionName = _t("Global");
@@ -830,11 +830,9 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         }
 
         return (
-            <>
+            <div>
                 <div data-testid={`notif-section-${category}`} className="mx_UserNotifSettings_grid">
-                    <span className="mx_UserNotifSettings_gridRowLabel mx_UserNotifSettings_gridRowHeading">
-                        {sectionName}
-                    </span>
+                    <SettingsSubsectionHeading heading={sectionName} />
                     <span className="mx_UserNotifSettings_gridColumnLabel">{VectorStateToLabel[VectorState.Off]}</span>
                     <span className="mx_UserNotifSettings_gridColumnLabel">{VectorStateToLabel[VectorState.On]}</span>
                     <span className="mx_UserNotifSettings_gridColumnLabel">{VectorStateToLabel[VectorState.Loud]}</span>
@@ -842,7 +840,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                 </div>
                 {clearNotifsButton}
                 {keywordComposer}
-            </>
+            </div>
         );
     }
 
@@ -877,13 +875,13 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         }
 
         return (
-            <div className="mx_UserNotifSettings">
+            <>
                 {this.renderTopSection()}
                 {this.renderCategory(RuleClass.VectorGlobal)}
                 {this.renderCategory(RuleClass.VectorMentions)}
                 {this.renderCategory(RuleClass.VectorOther)}
                 {this.renderTargets()}
-            </div>
+            </>
         );
     }
 }

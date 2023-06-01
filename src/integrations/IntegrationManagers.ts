@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from "url";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/client";
 import { compare } from "matrix-js-sdk/src/utils";
@@ -27,6 +26,7 @@ import IntegrationsImpossibleDialog from "../components/views/dialogs/Integratio
 import IntegrationsDisabledDialog from "../components/views/dialogs/IntegrationsDisabledDialog";
 import WidgetUtils from "../utils/WidgetUtils";
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import { parseUrl } from "../utils/UrlUtils";
 
 const KIND_PREFERENCE = [
     // Ordered: first is most preferred, last is least preferred.
@@ -115,7 +115,7 @@ export class IntegrationManagers {
 
     private setupAccountManagers(): void {
         if (!this.client || !this.client.getUserId()) return; // not logged in
-        const widgets = WidgetUtils.getIntegrationManagerWidgets();
+        const widgets = WidgetUtils.getIntegrationManagerWidgets(this.client);
         widgets.forEach((w) => {
             const data = w.content["data"];
             if (!data) return;
@@ -180,14 +180,6 @@ export class IntegrationManagers {
         Modal.createDialog(IntegrationsDisabledDialog);
     }
 
-    public async overwriteManagerOnAccount(manager: IntegrationManagerInstance): Promise<void> {
-        // TODO: TravisR - We should be logging out of scalar clients.
-        await WidgetUtils.removeIntegrationManagerWidgets();
-
-        // TODO: TravisR - We should actually be carrying over the discovery response verbatim.
-        await WidgetUtils.addIntegrationManagerWidget(manager.name, manager.uiUrl, manager.apiUrl);
-    }
-
     /**
      * Attempts to discover an integration manager using only its name. This will not validate that
      * the integration manager is functional - that is the caller's responsibility.
@@ -199,7 +191,7 @@ export class IntegrationManagers {
         logger.log("Looking up integration manager via .well-known");
         if (domainName.startsWith("http:") || domainName.startsWith("https:")) {
             // trim off the scheme and just use the domain
-            domainName = url.parse(domainName).host!;
+            domainName = parseUrl(domainName).host;
         }
 
         let wkConfig: IClientWellKnown;

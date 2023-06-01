@@ -342,7 +342,7 @@ export class JitsiCall extends Call {
     }
 
     public static async create(room: Room): Promise<void> {
-        await WidgetUtils.addJitsiWidget(room.roomId, CallType.Video, "Group call", true, room.name);
+        await WidgetUtils.addJitsiWidget(room.client, room.roomId, CallType.Video, "Group call", true, room.name);
     }
 
     private updateParticipants(): void {

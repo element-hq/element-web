@@ -319,7 +319,7 @@ export const concat = (...arrays: Uint8Array[]): Uint8Array => {
 /**
  * Async version of Array.every.
  */
-export async function asyncEvery<T>(values: T[], predicate: (value: T) => Promise<boolean>): Promise<boolean> {
+export async function asyncEvery<T>(values: Iterable<T>, predicate: (value: T) => Promise<boolean>): Promise<boolean> {
     for (const value of values) {
         if (!(await predicate(value))) return false;
     }
@@ -329,7 +329,7 @@ export async function asyncEvery<T>(values: T[], predicate: (value: T) => Promis
 /**
  * Async version of Array.some.
  */
-export async function asyncSome<T>(values: T[], predicate: (value: T) => Promise<boolean>): Promise<boolean> {
+export async function asyncSome<T>(values: Iterable<T>, predicate: (value: T) => Promise<boolean>): Promise<boolean> {
     for (const value of values) {
         if (await predicate(value)) return true;
     }

@@ -25,6 +25,7 @@ import StyledRadioButton from "../elements/StyledRadioButton";
 import { _t } from "../../../languageHandler";
 import { Layout } from "../../../settings/enums/Layout";
 import { SettingLevel } from "../../../settings/SettingLevel";
+import SettingsSubsection from "./shared/SettingsSubsection";
 
 interface IProps {
     userId?: string;
@@ -67,9 +68,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
         });
 
         return (
-            <div className="mx_SettingsTab_section mx_LayoutSwitcher">
-                <span className="mx_SettingsTab_subheading">{_t("Message layout")}</span>
-
+            <SettingsSubsection heading={_t("Message layout")}>
                 <div className="mx_LayoutSwitcher_RadioButtons">
                     <label className={ircClasses}>
                         <EventTilePreview
@@ -126,7 +125,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
                         </StyledRadioButton>
                     </label>
                 </div>
-            </div>
+            </SettingsSubsection>
         );
     }
 }

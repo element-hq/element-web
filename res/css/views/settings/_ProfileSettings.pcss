@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_ProfileSettings {
-    margin-inline-end: var(--SettingsTab_fullWidthField-margin-inline-end);
     border-bottom: 1px solid $quinary-content;
 
     .mx_ProfileSettings_avatarUpload {
@@ -29,11 +28,13 @@ limitations under the License.
             flex-grow: 1;
             margin-inline-end: 54px;
 
-            .mx_Field:first-child {
-                margin-top: 0;
+            .mx_Field {
+                margin-top: $spacing-8;
             }
 
             .mx_ProfileSettings_profile_controls_topic {
+                margin-top: $spacing-8;
+
                 & > textarea {
                     font-family: inherit;
                     resize: vertical;

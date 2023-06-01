@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { IGeneratedSas, ISasEvent, SasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
-import { VerificationBase, VerificationEvent } from "matrix-js-sdk/src/crypto/verification/Base";
+import { VerificationBase } from "matrix-js-sdk/src/crypto/verification/Base";
+import { GeneratedSas, ShowSasCallbacks, VerifierEvent } from "matrix-js-sdk/src/crypto-api/verification";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -37,7 +37,7 @@ const PHASE_VERIFIED = 3;
 const PHASE_CANCELLED = 4;
 
 interface IProps {
-    verifier: VerificationBase<SasEvent, any>;
+    verifier: VerificationBase<VerifierEvent, any>;
     onFinished(verified?: boolean): void;
 }
 
@@ -50,11 +50,11 @@ interface IState {
         displayname?: string;
     } | null;
     opponentProfileError: Error | null;
-    sas: IGeneratedSas | null;
+    sas: GeneratedSas | null;
 }
 
 export default class IncomingSasDialog extends React.Component<IProps, IState> {
-    private showSasEvent: ISasEvent | null;
+    private showSasEvent: ShowSasCallbacks | null;
 
     public constructor(props: IProps) {
         super(props);
@@ -73,8 +73,8 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
             opponentProfileError: null,
             sas: null,
         };
-        this.props.verifier.on(SasEvent.ShowSas, this.onVerifierShowSas);
-        this.props.verifier.on(VerificationEvent.Cancel, this.onVerifierCancel);
+        this.props.verifier.on(VerifierEvent.ShowSas, this.onVerifierShowSas);
+        this.props.verifier.on(VerifierEvent.Cancel, this.onVerifierCancel);
         this.fetchOpponentProfile();
     }
 
@@ -82,7 +82,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         if (this.state.phase !== PHASE_CANCELLED && this.state.phase !== PHASE_VERIFIED) {
             this.props.verifier.cancel(new Error("User cancel"));
         }
-        this.props.verifier.removeListener(SasEvent.ShowSas, this.onVerifierShowSas);
+        this.props.verifier.removeListener(VerifierEvent.ShowSas, this.onVerifierShowSas);
     }
 
     private async fetchOpponentProfile(): Promise<void> {
@@ -118,7 +118,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
             });
     };
 
-    private onVerifierShowSas = (e: ISasEvent): void => {
+    private onVerifierShowSas = (e: ShowSasCallbacks): void => {
         this.showSasEvent = e;
         this.setState({
             phase: PHASE_SHOW_SAS,

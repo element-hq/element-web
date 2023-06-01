@@ -363,7 +363,12 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         e.preventDefault();
         e.stopPropagation();
 
-        editEvent(this.props.mxEvent, this.context.timelineRenderingType, this.props.getRelationsForEvent);
+        editEvent(
+            MatrixClientPeg.get(),
+            this.props.mxEvent,
+            this.context.timelineRenderingType,
+            this.props.getRelationsForEvent,
+        );
     };
 
     private readonly forbiddenThreadHeadMsgType = [MsgType.KeyVerificationRequest];
@@ -412,19 +417,19 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         ev.preventDefault();
         ev.stopPropagation();
 
-        this.runActionOnFailedEv((tarEv) => Resend.resend(tarEv));
+        this.runActionOnFailedEv((tarEv) => Resend.resend(MatrixClientPeg.get(), tarEv));
     };
 
     private onCancelClick = (ev: ButtonEvent): void => {
         this.runActionOnFailedEv(
-            (tarEv) => Resend.removeFromQueue(tarEv),
+            (tarEv) => Resend.removeFromQueue(MatrixClientPeg.get(), tarEv),
             (testEv) => canCancel(testEv.status),
         );
     };
 
     public render(): React.ReactNode {
         const toolbarOpts: JSX.Element[] = [];
-        if (canEditContent(this.props.mxEvent)) {
+        if (canEditContent(MatrixClientPeg.get(), this.props.mxEvent)) {
             toolbarOpts.push(
                 <RovingAccessibleTooltipButton
                     className="mx_MessageActionBar_iconButton"

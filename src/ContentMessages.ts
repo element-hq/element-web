@@ -436,15 +436,18 @@ export default class ContentMessages {
                 }
             }
 
-            promBefore = doMaybeLocalRoomAction(roomId, (actualRoomId) =>
-                this.sendContentToRoom(
-                    file,
-                    actualRoomId,
-                    relation,
-                    matrixClient,
-                    replyToEvent ?? undefined,
-                    loopPromiseBefore,
-                ),
+            promBefore = doMaybeLocalRoomAction(
+                roomId,
+                (actualRoomId) =>
+                    this.sendContentToRoom(
+                        file,
+                        actualRoomId,
+                        relation,
+                        matrixClient,
+                        replyToEvent ?? undefined,
+                        loopPromiseBefore,
+                    ),
+                matrixClient,
             );
         }
 
@@ -580,13 +583,13 @@ export default class ContentMessages {
         } catch (error) {
             // 413: File was too big or upset the server in some way:
             // clear the media size limit so we fetch it again next time we try to upload
-            if (error?.httpStatus === 413) {
+            if (error instanceof HTTPError && error.httpStatus === 413) {
                 this.mediaConfig = null;
             }
 
             if (!upload.cancelled) {
                 let desc = _t("The file '%(fileName)s' failed to upload.", { fileName: upload.fileName });
-                if (error.httpStatus === 413) {
+                if (error instanceof HTTPError && error.httpStatus === 413) {
                     desc = _t("The file '%(fileName)s' exceeds this homeserver's size limit for uploads", {
                         fileName: upload.fileName,
                     });

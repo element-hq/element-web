@@ -53,11 +53,12 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         this.room = MatrixClientPeg.get().getRoom(this.props.event.getRoomId());
         const me = this.room?.getMember(MatrixClientPeg.get().getUserId()!);
         const powerLevels = this.room?.currentState.getStateEvents("m.room.power_levels", "");
+        const senderId = this.props.event.getSender()!;
 
         let kickLevel = powerLevels ? powerLevels.getContent().kick : 50;
         if (typeof kickLevel !== "number") kickLevel = 50;
 
-        const sender = this.room?.getMember(this.props.event.getSender());
+        const sender = this.room?.getMember(senderId);
 
         this.state = {
             stateKey: this.props.event.getStateKey()!,
@@ -65,7 +66,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
             displayName: this.props.event.getContent().display_name,
             invited: true,
             canKick: me ? me.powerLevel > kickLevel : false,
-            senderName: sender?.name ?? this.props.event.getSender(),
+            senderName: sender?.name ?? senderId,
         };
     }
 
@@ -126,11 +127,9 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
             adminTools = (
                 <div className="mx_MemberInfo_container">
                     <h3>{_t("Admin Tools")}</h3>
-                    <div className="mx_MemberInfo_buttons">
-                        <AccessibleButton className="mx_MemberInfo_field" onClick={this.onKickClick}>
-                            {_t("Revoke invite")}
-                        </AccessibleButton>
-                    </div>
+                    <AccessibleButton className="mx_MemberInfo_field" onClick={this.onKickClick}>
+                        {_t("Revoke invite")}
+                    </AccessibleButton>
                 </div>
             );
         }
@@ -153,12 +152,8 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel} title={_t("Close")} />
                     <h2>{this.state.displayName}</h2>
                 </div>
-                <div className="mx_MemberInfo_container">
-                    <div className="mx_MemberInfo_profile">
-                        <div className="mx_MemberInfo_profileField">
-                            {_t("Invited by %(sender)s", { sender: this.state.senderName })}
-                        </div>
-                    </div>
+                <div className="mx_MemberInfo_container mx_MemberInfo_container--profile">
+                    {_t("Invited by %(sender)s", { sender: this.state.senderName })}
                 </div>
                 {adminTools}
             </div>

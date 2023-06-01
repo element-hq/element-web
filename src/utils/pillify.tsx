@@ -18,8 +18,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import { Pill, PillType, pillRoomNotifLen, pillRoomNotifPos } from "../components/views/elements/Pill";
 import { parsePermalink } from "./permalinks/Permalinks";
@@ -51,6 +51,7 @@ const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | 
  * into pills based on the context of a given room.  Returns a list of
  * the resulting React nodes so they can be unmounted rather than leaking.
  *
+ * @param matrixClient the client of the logged-in user
  * @param {Element[]} nodes - a list of sibling DOM nodes to traverse to try
  *   to turn into pills.
  * @param {MatrixEvent} mxEvent - the matrix event which the DOM nodes are
@@ -59,8 +60,13 @@ const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | 
  *   React components which have been mounted as part of this.
  *   The initial caller should pass in an empty array to seed the accumulator.
  */
-export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pills: Element[]): void {
-    const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId()) ?? undefined;
+export function pillifyLinks(
+    matrixClient: MatrixClient,
+    nodes: ArrayLike<Element>,
+    mxEvent: MatrixEvent,
+    pills: Element[],
+): void {
+    const room = matrixClient.getRoom(mxEvent.getRoomId()) ?? undefined;
     const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
     let node = nodes[0];
     while (node) {
@@ -118,7 +124,7 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
             }
 
             if (roomNotifTextNodes.length > 0) {
-                const pushProcessor = new PushProcessor(MatrixClientPeg.get());
+                const pushProcessor = new PushProcessor(matrixClient);
                 const atRoomRule = pushProcessor.getPushRuleById(".m.rule.roomnotif");
                 if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, mxEvent)) {
                     // Now replace all those nodes with Pills
@@ -151,7 +157,7 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
         }
 
         if (node.childNodes && node.childNodes.length && !pillified) {
-            pillifyLinks(node.childNodes as NodeListOf<Element>, mxEvent, pills);
+            pillifyLinks(matrixClient, node.childNodes as NodeListOf<Element>, mxEvent, pills);
         }
 
         node = node.nextSibling as Element;

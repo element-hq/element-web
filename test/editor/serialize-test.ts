@@ -17,6 +17,7 @@ limitations under the License.
 import EditorModel from "../../src/editor/model";
 import { htmlSerializeIfNeeded } from "../../src/editor/serialize";
 import { createPartCreator } from "./mock";
+import SettingsStore from "../../src/settings/SettingsStore";
 
 describe("editor/serialize", function () {
     describe("with markdown", function () {
@@ -75,6 +76,7 @@ describe("editor/serialize", function () {
             expect(html).toBe("*hello* world &lt; hey world!");
         });
     });
+
     describe("with plaintext", function () {
         it("markdown remains plaintext", function () {
             const pc = createPartCreator();
@@ -100,6 +102,44 @@ describe("editor/serialize", function () {
             const model = new EditorModel([pc.plain("hello world")], pc);
             const html = htmlSerializeIfNeeded(model, { forceHTML: true, useMarkdown: false });
             expect(html).toBe("hello world");
+        });
+    });
+
+    describe("feature_latex_maths", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => feature === "feature_latex_maths");
+        });
+
+        it("should support inline katex", () => {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.plain("hello $\\xi$ world")], pc);
+            const html = htmlSerializeIfNeeded(model, {});
+            expect(html).toMatchInlineSnapshot(`"hello <span data-mx-maths="\\xi"><code>\\xi</code></span> world"`);
+        });
+
+        it("should support block katex", () => {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.plain("hello \n$$\\xi$$\n world")], pc);
+            const html = htmlSerializeIfNeeded(model, {});
+            expect(html).toMatchInlineSnapshot(`
+                "<p>hello</p>
+                <div data-mx-maths="\\xi"><code>\\xi</code></div>
+                <p>world</p>
+                "
+            `);
+        });
+
+        it("should not mangle code blocks", () => {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.plain("hello\n```\n$\\xi$\n```\nworld")], pc);
+            const html = htmlSerializeIfNeeded(model, {});
+            expect(html).toMatchInlineSnapshot(`
+                "<p>hello</p>
+                <pre><code>$\\xi$
+                </code></pre>
+                <p>world</p>
+                "
+            `);
         });
     });
 });

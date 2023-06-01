@@ -58,8 +58,8 @@ limitations under the License.
 .mx_Dropdown_option {
     height: 35px;
     line-height: $font-35px;
-    padding-left: 8px;
-    padding-right: 8px;
+    // Overwrites the default padding for any li elements
+    padding: 0 8px;
 }
 
 .mx_Dropdown_input > .mx_Dropdown_option {
@@ -119,6 +119,10 @@ input.mx_Dropdown_option:focus {
 .mx_Dropdown_menu .mx_Dropdown_option {
     height: auto;
     min-height: 35px;
+}
+
+ul.mx_Dropdown_menu li.mx_Dropdown_option {
+    list-style: none;
 }
 
 .mx_Dropdown_menu .mx_Dropdown_option_highlight {

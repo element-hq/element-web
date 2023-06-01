@@ -118,7 +118,7 @@ export class SlidingSyncManager {
     private static readonly internalInstance = new SlidingSyncManager();
 
     public slidingSync: SlidingSync;
-    private client: MatrixClient;
+    private client?: MatrixClient;
 
     private configureDefer: IDeferred<void>;
 
@@ -242,8 +242,8 @@ export class SlidingSyncManager {
         } else {
             subscriptions.delete(roomId);
         }
-        const room = this.client.getRoom(roomId);
-        let shouldLazyLoad = !this.client.isRoomEncrypted(roomId);
+        const room = this.client?.getRoom(roomId);
+        let shouldLazyLoad = !this.client?.isRoomEncrypted(roomId);
         if (!room) {
             // default to safety: request all state if we can't work it out. This can happen if you
             // refresh the app whilst viewing a room: we call setRoomVisible before we know anything

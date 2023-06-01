@@ -17,8 +17,8 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "./MatrixClientPeg";
 import AliasCustomisations from "./customisations/Alias";
 
 /**
@@ -46,26 +46,27 @@ export function getDisplayAliasForAliasSet(canonicalAlias: string | null, altAli
 export function guessAndSetDMRoom(room: Room, isDirect: boolean): Promise<void> {
     let newTarget;
     if (isDirect) {
-        const guessedUserId = guessDMRoomTargetId(room, MatrixClientPeg.get().getUserId()!);
+        const guessedUserId = guessDMRoomTargetId(room, room.client.getSafeUserId());
         newTarget = guessedUserId;
     } else {
         newTarget = null;
     }
 
-    return setDMRoom(room.roomId, newTarget);
+    return setDMRoom(room.client, room.roomId, newTarget);
 }
 
 /**
  * Marks or unmarks the given room as being as a DM room.
+ * @param client the Matrix Client instance of the logged-in user
  * @param {string} roomId The ID of the room to modify
  * @param {string | null} userId The user ID of the desired DM room target user or
  *                        null to un-mark this room as a DM room
  * @returns {object} A promise
  */
-export async function setDMRoom(roomId: string, userId: string | null): Promise<void> {
-    if (MatrixClientPeg.get().isGuest()) return;
+export async function setDMRoom(client: MatrixClient, roomId: string, userId: string | null): Promise<void> {
+    if (client.isGuest()) return;
 
-    const mDirectEvent = MatrixClientPeg.get().getAccountData(EventType.Direct);
+    const mDirectEvent = client.getAccountData(EventType.Direct);
     const currentContent = mDirectEvent?.getContent() || {};
 
     const dmRoomMap = new Map(Object.entries(currentContent));
@@ -98,7 +99,7 @@ export async function setDMRoom(roomId: string, userId: string | null): Promise<
     // prevent unnecessary calls to setAccountData
     if (!modified) return;
 
-    await MatrixClientPeg.get().setAccountData(EventType.Direct, Object.fromEntries(dmRoomMap));
+    await client.setAccountData(EventType.Direct, Object.fromEntries(dmRoomMap));
 }
 
 /**

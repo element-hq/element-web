@@ -16,6 +16,8 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
+import { IWidget } from "matrix-widget-api";
+
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 
@@ -94,14 +96,8 @@ describe("Room Header", () => {
 
             // Assert the size of buttons on RoomHeader are specified and the buttons are not compressed
             // Note these assertions do not check the size of mx_RoomHeader_name button
-            // TODO: merge the assertions by using the same class name
             cy.get(".mx_RoomHeader_button")
-                .should("have.length", 3)
-                .should("be.visible")
-                .should("have.css", "height", "32px")
-                .should("have.css", "width", "32px");
-            cy.get(".mx_RightPanel_headerButton")
-                .should("have.length", 3)
+                .should("have.length", 6)
                 .should("be.visible")
                 .should("have.css", "height", "32px")
                 .should("have.css", "width", "32px");
@@ -194,6 +190,103 @@ describe("Room Header", () => {
                     // Assert that GELS is visible
                     cy.findByText("Sakura created and configured the room.").should("exist");
                 });
+        });
+    });
+
+    describe("with a widget", () => {
+        const ROOM_NAME = "Test Room with a widget";
+        const WIDGET_ID = "fake-widget";
+        const WIDGET_HTML = `
+            <html lang="en">
+                <head>
+                    <title>Fake Widget</title>
+                </head>
+                <body>
+                    Hello World
+                </body>
+            </html>
+        `;
+
+        let widgetUrl: string;
+        let roomId: string;
+
+        beforeEach(() => {
+            cy.serveHtmlFile(WIDGET_HTML).then((url) => {
+                widgetUrl = url;
+            });
+
+            cy.createRoom({ name: ROOM_NAME }).then((id) => {
+                roomId = id;
+
+                // setup widget via state event
+                cy.getClient()
+                    .then(async (matrixClient) => {
+                        const content: IWidget = {
+                            id: WIDGET_ID,
+                            creatorUserId: "somebody",
+                            type: "widget",
+                            name: "widget",
+                            url: widgetUrl,
+                        };
+                        await matrixClient.sendStateEvent(roomId, "im.vector.modular.widgets", content, WIDGET_ID);
+                    })
+                    .as("widgetEventSent");
+
+                // set initial layout
+                cy.getClient()
+                    .then(async (matrixClient) => {
+                        const content = {
+                            widgets: {
+                                [WIDGET_ID]: {
+                                    container: "top",
+                                    index: 1,
+                                    width: 100,
+                                    height: 0,
+                                },
+                            },
+                        };
+                        await matrixClient.sendStateEvent(roomId, "io.element.widgets.layout", content, "");
+                    })
+                    .as("layoutEventSent");
+            });
+
+            cy.all([cy.get<string>("@widgetEventSent"), cy.get<string>("@layoutEventSent")]).then(() => {
+                // open the room
+                cy.viewRoomByName(ROOM_NAME);
+            });
+        });
+
+        it("should highlight the apps button", () => {
+            // Assert that AppsDrawer is rendered
+            cy.get(".mx_AppsDrawer").should("exist");
+
+            cy.get(".mx_RoomHeader").within(() => {
+                // Assert that "Hide Widgets" button is rendered and aria-checked is set to true
+                cy.findByRole("button", { name: "Hide Widgets" })
+                    .should("exist")
+                    .should("have.attr", "aria-checked", "true");
+            });
+
+            cy.get(".mx_RoomHeader").percySnapshotElement("Room header - with apps button (highlighted)");
+        });
+
+        it("should support hiding a widget", () => {
+            cy.get(".mx_AppsDrawer").should("exist");
+
+            cy.get(".mx_RoomHeader").within(() => {
+                // Click the apps button to hide AppsDrawer
+                cy.findByRole("button", { name: "Hide Widgets" }).should("exist").click();
+
+                // Assert that "Show widgets" button is rendered and aria-checked is set to false
+                cy.findByRole("button", { name: "Show Widgets" })
+                    .should("exist")
+                    .should("have.attr", "aria-checked", "false");
+            });
+
+            // Assert that AppsDrawer is not rendered
+            cy.get(".mx_AppsDrawer").should("not.exist");
+
+            cy.get(".mx_RoomHeader").percySnapshotElement("Room header - with apps button (not highlighted)");
         });
     });
 });

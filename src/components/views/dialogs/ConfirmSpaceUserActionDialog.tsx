@@ -28,7 +28,7 @@ interface IProps extends Omit<BaseProps, "matrixClient" | "children" | "onFinish
     specificLabel: string;
     noneLabel?: string;
     warningMessage?: string;
-    onFinished(success: boolean, reason?: string, rooms?: Room[]): void;
+    onFinished(success?: boolean, reason?: string, rooms?: Room[]): void;
     spaceChildFilter?(child: Room): boolean;
 }
 
@@ -61,7 +61,7 @@ const ConfirmSpaceUserActionDialog: React.FC<IProps> = ({
     return (
         <ConfirmUserActionDialog
             {...props}
-            onFinished={(success: boolean, reason?: string) => {
+            onFinished={(success?: boolean, reason?: string) => {
                 onFinished(success, reason, roomsToLeave);
             }}
             className="mx_ConfirmSpaceUserActionDialog"

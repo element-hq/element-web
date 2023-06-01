@@ -3,6 +3,7 @@
 exports[`<ShareLatestLocation /> renders share buttons when there is a location 1`] = `
 <DocumentFragment>
   <div
+    aria-describedby="mx_TooltipTarget_abdefghi"
     tabindex="0"
   >
     <a

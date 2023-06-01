@@ -16,8 +16,9 @@ limitations under the License.
 
 import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
-import { handleVerificationRequest, waitForVerificationRequest } from "./utils";
+import { handleVerificationRequest, logIntoElement, waitForVerificationRequest } from "./utils";
 import { CypressBot } from "../../support/bot";
+import { skipIfRustCrypto } from "../../support/util";
 
 describe("Complete security", () => {
     let homeserver: HomeserverInstance;
@@ -46,6 +47,8 @@ describe("Complete security", () => {
     });
 
     it("should walk through device verification if we have a signed device", () => {
+        skipIfRustCrypto();
+
         // create a new user, and have it bootstrap cross-signing
         let botClient: CypressBot;
         cy.getBot(homeserver, { displayName: "Jeff" })
@@ -66,7 +69,6 @@ describe("Complete security", () => {
 
                 // accept the verification request on the "bot" side
                 cy.wrap(botVerificationRequestPromise).then(async (verificationRequest: VerificationRequest) => {
-                    await verificationRequest.accept();
                     await handleVerificationRequest(verificationRequest);
                 });
 
@@ -80,22 +82,3 @@ describe("Complete security", () => {
             });
     });
 });
-
-/**
- * Fill in the login form in element with the given creds
- */
-function logIntoElement(homeserverUrl: string, username: string, password: string) {
-    cy.visit("/#/login");
-
-    // select homeserver
-    cy.findByRole("button", { name: "Edit" }).click();
-    cy.findByRole("textbox", { name: "Other homeserver" }).type(homeserverUrl);
-    cy.findByRole("button", { name: "Continue" }).click();
-
-    // wait for the dialog to go away
-    cy.get(".mx_ServerPickerDialog").should("not.exist");
-
-    cy.findByRole("textbox", { name: "Username" }).type(username);
-    cy.findByPlaceholderText("Password").type(password);
-    cy.findByRole("button", { name: "Sign in" }).click();
-}

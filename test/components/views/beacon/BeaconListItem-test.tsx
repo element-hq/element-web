@@ -28,6 +28,11 @@ import {
     makeRoomWithBeacons,
 } from "../../../test-utils";
 
+// Fake random strings to give a predictable snapshot for IDs
+jest.mock("matrix-js-sdk/src/randomstring", () => ({
+    randomString: () => "abdefghi",
+}));
+
 describe("<BeaconListItem />", () => {
     // 14.03.2022 16:15
     const now = 1647270879403;

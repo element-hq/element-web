@@ -45,7 +45,6 @@ interface IProps {
 
 interface IState {
     mjolnirEnabled: boolean;
-    newSessionManagerEnabled: boolean;
 }
 
 export default class UserSettingsDialog extends React.Component<IProps, IState> {
@@ -56,15 +55,11 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
 
         this.state = {
             mjolnirEnabled: SettingsStore.getValue("feature_mjolnir"),
-            newSessionManagerEnabled: SettingsStore.getValue("feature_new_device_manager"),
         };
     }
 
     public componentDidMount(): void {
-        this.settingsWatchers = [
-            SettingsStore.watchSetting("feature_mjolnir", null, this.mjolnirChanged),
-            SettingsStore.watchSetting("feature_new_device_manager", null, this.sessionManagerChanged),
-        ];
+        this.settingsWatchers = [SettingsStore.watchSetting("feature_mjolnir", null, this.mjolnirChanged)];
     }
 
     public componentWillUnmount(): void {
@@ -74,11 +69,6 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
     private mjolnirChanged: CallbackFn = (settingName, roomId, atLevel, newValue) => {
         // We can cheat because we know what levels a feature is tracked at, and how it is tracked
         this.setState({ mjolnirEnabled: newValue });
-    };
-
-    private sessionManagerChanged: CallbackFn = (settingName, roomId, atLevel, newValue) => {
-        // We can cheat because we know what levels a feature is tracked at, and how it is tracked
-        this.setState({ newSessionManagerEnabled: newValue });
     };
 
     private getTabs(): NonEmptyArray<Tab<UserTab>> {
@@ -160,18 +150,16 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 "UserSettingsSecurityPrivacy",
             ),
         );
-        if (this.state.newSessionManagerEnabled) {
-            tabs.push(
-                new Tab(
-                    UserTab.SessionManager,
-                    _td("Sessions"),
-                    "mx_UserSettingsDialog_sessionsIcon",
-                    <SessionManagerTab />,
-                    // don't track with posthog while under construction
-                    undefined,
-                ),
-            );
-        }
+        tabs.push(
+            new Tab(
+                UserTab.SessionManager,
+                _td("Sessions"),
+                "mx_UserSettingsDialog_sessionsIcon",
+                <SessionManagerTab />,
+                // don't track with posthog while under construction
+                undefined,
+            ),
+        );
         // Show the Labs tab if enabled or if there are any active betas
         if (
             SdkConfig.get("show_labs_settings") ||

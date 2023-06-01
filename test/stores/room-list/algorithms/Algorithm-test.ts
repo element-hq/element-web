@@ -41,7 +41,7 @@ describe("Algorithm", () => {
     beforeEach(() => {
         stubClient();
         client = mocked(MatrixClientPeg.get());
-        DMRoomMap.makeShared();
+        DMRoomMap.makeShared(client);
 
         algorithm = new Algorithm();
         algorithm.start();

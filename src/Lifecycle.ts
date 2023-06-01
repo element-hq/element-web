@@ -553,7 +553,7 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
         logger.warn("Clearing all data: Old session belongs to a different user/session");
     }
 
-    if (!credentials.pickleKey) {
+    if (!credentials.pickleKey && credentials.deviceId !== undefined) {
         logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
         credentials.pickleKey =
             (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
@@ -603,14 +603,14 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
     }
 
     MatrixClientPeg.replaceUsingCreds(credentials);
+    const client = MatrixClientPeg.get();
 
     setSentryUser(credentials.userId);
 
     if (PosthogAnalytics.instance.isEnabled()) {
-        PosthogAnalytics.instance.startListeningToSettingsChanges();
+        PosthogAnalytics.instance.startListeningToSettingsChanges(client);
     }
 
-    const client = MatrixClientPeg.get();
     if (credentials.freshLogin && SettingsStore.getValue("feature_dehydration")) {
         // If we just logged in, try to rehydrate a device instead of using a
         // new device.  If it succeeds, we'll get a new device ID, so make sure
@@ -636,7 +636,7 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
     }
 
     dis.fire(Action.OnLoggedIn);
-    await startMatrixClient(/*startSyncing=*/ !softLogout);
+    await startMatrixClient(client, /*startSyncing=*/ !softLogout);
 
     return client;
 }
@@ -780,10 +780,11 @@ export function isLoggingOut(): boolean {
 /**
  * Starts the matrix client and all other react-sdk services that
  * listen for events while a session is logged in.
+ * @param client the matrix client to start
  * @param {boolean} startSyncing True (default) to actually start
  * syncing the client.
  */
-async function startMatrixClient(startSyncing = true): Promise<void> {
+async function startMatrixClient(client: MatrixClient, startSyncing = true): Promise<void> {
     logger.log(`Lifecycle: Starting MatrixClient`);
 
     // dispatch this before starting the matrix client: it's used
@@ -796,10 +797,10 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     SdkContextClass.instance.typingStore.reset();
     ToastStore.sharedInstance().reset();
 
-    DialogOpener.instance.prepare();
+    DialogOpener.instance.prepare(client);
     Notifier.start();
     UserActivity.sharedInstance().start();
-    DMRoomMap.makeShared().start();
+    DMRoomMap.makeShared(client).start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.instance.start();
     LegacyCallHandler.instance.start();
@@ -824,7 +825,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     SettingsStore.runMigrations();
 
     // This needs to be started after crypto is set up
-    DeviceListener.sharedInstance().start();
+    DeviceListener.sharedInstance().start(client);
     // Similarly, don't start sending presence updates until we've started
     // the client
     if (!SettingsStore.getValue("lowBandwidth")) {
@@ -940,6 +941,7 @@ export function stopMatrixClient(unsetClient = true): void {
         if (unsetClient) {
             MatrixClientPeg.unset();
             EventIndexPeg.unset();
+            cli.store.destroy();
         }
     }
 }

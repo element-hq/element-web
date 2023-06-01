@@ -79,7 +79,16 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
         }
 
         try {
-            await createSpace(name, joinRule === JoinRule.Public, alias, topic, avatar, {}, { parentSpace, joinRule });
+            await createSpace(
+                space.client,
+                name,
+                joinRule === JoinRule.Public,
+                alias,
+                topic,
+                avatar,
+                {},
+                { parentSpace, joinRule },
+            );
 
             onFinished(true);
         } catch (e) {

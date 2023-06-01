@@ -28,7 +28,7 @@ interface IProps {
 }
 
 interface IState {
-    phase: Phase;
+    phase?: Phase;
     lostKeys: boolean;
 }
 

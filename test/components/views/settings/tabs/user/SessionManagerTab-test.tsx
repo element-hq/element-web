@@ -53,6 +53,11 @@ import { getClientInformationEventType } from "../../../../../../src/utils/devic
 
 mockPlatformPeg();
 
+// Fake random strings to give a predictable snapshot for IDs
+jest.mock("matrix-js-sdk/src/randomstring", () => ({
+    randomString: () => "abdefghi",
+}));
+
 describe("<SessionManagerTab />", () => {
     const aliceId = "@alice:server.org";
     const deviceId = "alices_device";
@@ -227,27 +232,6 @@ describe("<SessionManagerTab />", () => {
         expect(container.getElementsByClassName("mx_Spinner").length).toBeFalsy();
     });
 
-    it("does not fail when checking device verification fails", async () => {
-        const logSpy = jest.spyOn(console, "error").mockImplementation((e) => {});
-        mockClient.getDevices.mockResolvedValue({
-            devices: [alicesDevice, alicesMobileDevice],
-        });
-        const failError = new Error("non-specific failure");
-        mockCrypto.getDeviceVerificationStatus.mockImplementation(() => {
-            throw failError;
-        });
-        render(getComponent());
-
-        await act(async () => {
-            await flushPromises();
-        });
-
-        // called for each device despite error
-        expect(mockCrypto.getDeviceVerificationStatus).toHaveBeenCalledWith(aliceId, alicesDevice.device_id);
-        expect(mockCrypto.getDeviceVerificationStatus).toHaveBeenCalledWith(aliceId, alicesMobileDevice.device_id);
-        expect(logSpy).toHaveBeenCalledWith("Error getting device cross-signing info", failError);
-    });
-
     it("sets device verification status correctly", async () => {
         mockClient.getDevices.mockResolvedValue({
             devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
@@ -263,7 +247,7 @@ describe("<SessionManagerTab />", () => {
                 return new DeviceVerificationStatus({});
             }
             // alicesOlderMobileDevice does not support encryption
-            throw new Error("encryption not supported");
+            return null;
         });
 
         const { getByTestId } = render(getComponent());
@@ -562,8 +546,7 @@ describe("<SessionManagerTab />", () => {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
                 }
                 // but alicesMobileDevice doesn't support encryption
-                // XXX this is not what happens if a device doesn't support encryption.
-                throw new Error("encryption not supported");
+                return null;
             });
 
             const { getByTestId, queryByTestId } = render(getComponent());

@@ -38,7 +38,7 @@ interface IProps {
 }
 
 interface IState {
-    phase: Phase;
+    phase?: Phase;
     verificationRequest: VerificationRequest | null;
     backupInfo: IKeyBackupInfo | null;
     lostKeys: boolean;

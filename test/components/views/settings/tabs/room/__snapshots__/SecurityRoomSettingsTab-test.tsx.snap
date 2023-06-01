@@ -12,93 +12,101 @@ exports[`<SecurityRoomSettingsTab /> history visibility uses shared as default h
   <div
     class="mx_SettingsFieldset_description"
   >
-    Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.
+    <div
+      class="mx_SettingsSubsection_text"
+    >
+      Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.
+    </div>
   </div>
-  <label
-    class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+  <div
+    class="mx_SettingsFieldset_content"
   >
-    <input
-      id="historyVis-world_readable"
-      name="historyVis"
-      type="radio"
-      value="world_readable"
-    />
-    <div>
-      <div />
-    </div>
-    <div
-      class="mx_StyledRadioButton_content"
+    <label
+      class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
     >
-      Anyone
-    </div>
-    <div
-      class="mx_StyledRadioButton_spacer"
-    />
-  </label>
-  <label
-    class="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
-  >
-    <input
-      checked=""
-      id="historyVis-shared"
-      name="historyVis"
-      type="radio"
-      value="shared"
-    />
-    <div>
-      <div />
-    </div>
-    <div
-      class="mx_StyledRadioButton_content"
+      <input
+        id="historyVis-world_readable"
+        name="historyVis"
+        type="radio"
+        value="world_readable"
+      />
+      <div>
+        <div />
+      </div>
+      <div
+        class="mx_StyledRadioButton_content"
+      >
+        Anyone
+      </div>
+      <div
+        class="mx_StyledRadioButton_spacer"
+      />
+    </label>
+    <label
+      class="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
     >
-      Members only (since the point in time of selecting this option)
-    </div>
-    <div
-      class="mx_StyledRadioButton_spacer"
-    />
-  </label>
-  <label
-    class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
-  >
-    <input
-      id="historyVis-invited"
-      name="historyVis"
-      type="radio"
-      value="invited"
-    />
-    <div>
-      <div />
-    </div>
-    <div
-      class="mx_StyledRadioButton_content"
+      <input
+        checked=""
+        id="historyVis-shared"
+        name="historyVis"
+        type="radio"
+        value="shared"
+      />
+      <div>
+        <div />
+      </div>
+      <div
+        class="mx_StyledRadioButton_content"
+      >
+        Members only (since the point in time of selecting this option)
+      </div>
+      <div
+        class="mx_StyledRadioButton_spacer"
+      />
+    </label>
+    <label
+      class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
     >
-      Members only (since they were invited)
-    </div>
-    <div
-      class="mx_StyledRadioButton_spacer"
-    />
-  </label>
-  <label
-    class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
-  >
-    <input
-      id="historyVis-joined"
-      name="historyVis"
-      type="radio"
-      value="joined"
-    />
-    <div>
-      <div />
-    </div>
-    <div
-      class="mx_StyledRadioButton_content"
+      <input
+        id="historyVis-invited"
+        name="historyVis"
+        type="radio"
+        value="invited"
+      />
+      <div>
+        <div />
+      </div>
+      <div
+        class="mx_StyledRadioButton_content"
+      >
+        Members only (since they were invited)
+      </div>
+      <div
+        class="mx_StyledRadioButton_spacer"
+      />
+    </label>
+    <label
+      class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
     >
-      Members only (since they joined)
-    </div>
-    <div
-      class="mx_StyledRadioButton_spacer"
-    />
-  </label>
+      <input
+        id="historyVis-joined"
+        name="historyVis"
+        type="radio"
+        value="joined"
+      />
+      <div>
+        <div />
+      </div>
+      <div
+        class="mx_StyledRadioButton_content"
+      >
+        Members only (since they joined)
+      </div>
+      <div
+        class="mx_StyledRadioButton_spacer"
+      />
+    </label>
+  </div>
 </fieldset>
 `;
 

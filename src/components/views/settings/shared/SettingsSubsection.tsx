@@ -20,7 +20,7 @@ import React, { HTMLAttributes } from "react";
 import { SettingsSubsectionHeading } from "./SettingsSubsectionHeading";
 
 export interface SettingsSubsectionProps extends HTMLAttributes<HTMLDivElement> {
-    heading: string | React.ReactNode;
+    heading?: string | React.ReactNode;
     description?: string | React.ReactNode;
     children?: React.ReactNode;
     // when true content will be justify-items: stretch, which will make items within the section stretch to full width.
@@ -47,13 +47,16 @@ export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({
                 <SettingsSubsectionText>{description}</SettingsSubsectionText>
             </div>
         )}
-        <div
-            className={classNames("mx_SettingsSubsection_content", {
-                mx_SettingsSubsection_contentStretch: !!stretchContent,
-            })}
-        >
-            {children}
-        </div>
+        {!!children && (
+            <div
+                className={classNames("mx_SettingsSubsection_content", {
+                    mx_SettingsSubsection_contentStretch: !!stretchContent,
+                    mx_SettingsSubsection_noHeading: !heading && !description,
+                })}
+            >
+                {children}
+            </div>
+        )}
     </div>
 );
 

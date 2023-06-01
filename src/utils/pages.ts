@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { IConfigOptions } from "../IConfigOptions";
 import { getEmbeddedPagesWellKnown } from "../utils/WellKnownUtils";
 import { SnakedObject } from "./SnakedObject";
 
-export function getHomePageUrl(appConfig: IConfigOptions): string | undefined {
+export function getHomePageUrl(appConfig: IConfigOptions, matrixClient: MatrixClient): string | undefined {
     const config = new SnakedObject(appConfig);
 
     const pagesConfig = config.get("embedded_pages");
@@ -40,7 +41,7 @@ export function getHomePageUrl(appConfig: IConfigOptions): string | undefined {
     }
 
     if (!pageUrl) {
-        pageUrl = getEmbeddedPagesWellKnown()?.home_url;
+        pageUrl = getEmbeddedPagesWellKnown(matrixClient)?.home_url;
     }
 
     return pageUrl;

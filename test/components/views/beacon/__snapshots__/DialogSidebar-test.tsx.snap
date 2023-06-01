@@ -62,6 +62,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
               class="mx_BeaconListItem_interactions"
             >
               <div
+                aria-describedby="mx_TooltipTarget_abdefghi"
                 tabindex="0"
               >
                 <a

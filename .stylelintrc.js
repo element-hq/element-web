@@ -33,6 +33,11 @@ module.exports = {
         "import-notation": null,
         "value-keyword-case": null,
         "declaration-block-no-redundant-longhand-properties": null,
+        "declaration-block-no-duplicate-properties": [
+            true,
+            // useful for fallbacks
+            { ignore: ["consecutive-duplicates-with-different-values"] },
+        ],
         "shorthand-property-no-redundant-values": null,
         "property-no-vendor-prefix": null,
         "value-no-vendor-prefix": null,

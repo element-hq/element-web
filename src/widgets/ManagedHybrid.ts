@@ -38,7 +38,7 @@ function getWidgetBuildUrl(): string | undefined {
         return SdkConfig.get().widget_build_url;
     }
     /* eslint-disable-next-line camelcase */
-    return getCallBehaviourWellKnown()?.widget_build_url;
+    return getCallBehaviourWellKnown(MatrixClientPeg.get())?.widget_build_url;
 }
 
 export function isManagedHybridWidgetEnabled(): boolean {
@@ -53,7 +53,7 @@ export async function addManagedHybridWidget(roomId: string): Promise<void> {
     }
 
     // Check for permission
-    if (!WidgetUtils.canUserModifyWidgets(roomId)) {
+    if (!WidgetUtils.canUserModifyWidgets(cli, roomId)) {
         logger.error(`User not allowed to modify widgets in ${roomId}`);
         return;
     }
@@ -87,7 +87,7 @@ export async function addManagedHybridWidget(roomId: string): Promise<void> {
 
     // Add the widget
     try {
-        await WidgetUtils.setRoomWidgetContent(roomId, widgetId, widgetContent);
+        await WidgetUtils.setRoomWidgetContent(cli, roomId, widgetId, widgetContent);
     } catch (e) {
         logger.error(`Unable to add managed hybrid widget in room ${roomId}`, e);
         return;

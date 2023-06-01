@@ -1,23 +1,17 @@
 /* Nunito and Inter lacks combining diacritics, so these will fall through
    to the next font. Helevetica's diacritics sometimes do not combine
    nicely (on OSX, at least) and result in a huge horizontal mess.
-   Arial empirically gets it right, hence prioritising Arial here.
-   We also include STIXGeneral explicitly to support a wider range
-   of combining diacritics (Chrome fails without it, as per
-   https://bugs.chromium.org/p/chromium/issues/detail?id=1328898).
-   We should never actively *prefer* STIXGeneral over the default font though,
-   since it looks pretty rough and implements some non-LGC scripts only
-   partially, making, for example, Japanese text look patchy and sad. */
+   Arial empirically gets it right, hence prioritising Arial here. */
 /* We fall through to Twemoji for emoji rather than falling through
    to native Emoji fonts (if any) to ensure cross-browser consistency */
 /* Noto Color Emoji contains digits, in fixed-width, therefore causing
    digits in flowed text to stand out.
    TODO: Consider putting all emoji fonts to the end rather than the front. */
-$font-family: "Inter", "Twemoji", "Apple Color Emoji", "Segoe UI Emoji", "Arial", "Helvetica", sans-serif, "STIXGeneral",
+$font-family: "Inter", "Twemoji", "Apple Color Emoji", "Segoe UI Emoji", "Arial", "Helvetica", sans-serif,
     "Noto Color Emoji";
 
 $monospace-font-family: "Inconsolata", "Twemoji", "Apple Color Emoji", "Segoe UI Emoji", "Courier", monospace,
-    "STIXGeneral", "Noto Color Emoji";
+    "Noto Color Emoji";
 
 /* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A120 */
 /* ******************** */

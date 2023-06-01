@@ -170,8 +170,10 @@ $left-gutter: 64px;
 
     &[data-layout="irc"],
     &[data-layout="group"] {
+        --selected-message-border-width: 4px;
+
         /* TODO: adjust the values for IRC layout */
-        --EventTile-box-shadow-offset-x: calc(50px + $selected-message-border-width);
+        --EventTile-box-shadow-offset-x: calc(50px + var(--selected-message-border-width));
         --EventTile-box-shadow-spread-radius: -50px;
         .mx_EventTile_e2eIcon {
             position: absolute;
@@ -447,7 +449,9 @@ $left-gutter: 64px;
         &.mx_EventTile_isEditing > .mx_EventTile_line {
             .mx_EditMessageComposer {
                 /* add space for the stroke on box-shadow */
-                padding-inline-start: calc($selected-message-border-width + var(--EditMessageComposer-padding-inline));
+                padding-inline-start: calc(
+                    var(--selected-message-border-width) + var(--EditMessageComposer-padding-inline)
+                );
             }
         }
 
@@ -592,7 +596,7 @@ $left-gutter: 64px;
             &.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
             &.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
             &.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-                padding-inline-start: calc($left-gutter + 18px + $selected-message-border-width);
+                padding-inline-start: calc($left-gutter + 18px + var(--selected-message-border-width));
             }
         }
     }
@@ -1120,29 +1124,6 @@ $left-gutter: 64px;
         box-sizing: border-box;
         padding-bottom: 0;
         padding-inline-start: var(--leftOffset);
-
-        .mx_ThreadPanel_replies {
-            margin-top: $spacing-8;
-            display: flex;
-            align-items: center;
-            position: relative;
-
-            &::before {
-                @mixin ThreadSummaryIcon;
-            }
-
-            .mx_ThreadPanel_replies_amount {
-                @mixin ThreadRepliesAmount;
-                line-height: var(--EventTile_ThreadSummary-line-height);
-                font-size: $font-12px; /* Same font size as the counter on the main panel */
-            }
-
-            .mx_ThreadSummary_content {
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-            }
-        }
     }
 
     .mx_MessageTimestamp {
@@ -1163,6 +1144,31 @@ $left-gutter: 64px;
         .mx_EventTile_line {
             background-color: $system; /* override $event-selected-color */
             box-shadow: none; /* don't show the verification left stroke in the thread list */
+        }
+    }
+}
+
+.mx_EventTile[data-shape="ThreadsList"] {
+    .mx_ThreadPanel_replies {
+        margin-top: $spacing-8;
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        &::before {
+            @mixin ThreadSummaryIcon;
+        }
+
+        .mx_ThreadPanel_replies_amount {
+            @mixin ThreadRepliesAmount;
+            line-height: var(--EventTile_ThreadSummary-line-height);
+            font-size: $font-12px; /* Same font size as the counter on the main panel */
+        }
+
+        .mx_ThreadSummary_content {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
     }
 }
@@ -1449,12 +1455,14 @@ $left-gutter: 64px;
                 margin-bottom: $spacing-4; /* 1/4 of the non-compact margin-bottom */
             }
         }
-    }
 
-    &[data-shape="ThreadsList"][data-notification]::before,
-    .mx_NotificationBadge {
-        /* stylelint-disable-next-line declaration-colon-space-after */
-        inset-block-start: calc($notification-inset-block-start - var(--MatrixChat_useCompactLayout_group-padding-top));
+        &[data-shape="ThreadsList"][data-notification]::before,
+        .mx_NotificationBadge {
+            /* stylelint-disable-next-line declaration-colon-space-after */
+            inset-block-start: calc(
+                $notification-inset-block-start - var(--MatrixChat_useCompactLayout_group-padding-top)
+            );
+        }
     }
 }
 

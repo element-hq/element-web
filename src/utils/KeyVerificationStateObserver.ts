@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
+
 import { _t } from "../languageHandler";
 
-export function getNameForEventRoom(userId: string, roomId: string): string {
-    const client = MatrixClientPeg.get();
-    const room = client.getRoom(roomId);
+export function getNameForEventRoom(matrixClient: MatrixClient, userId: string, roomId: string): string {
+    const room = matrixClient.getRoom(roomId);
     const member = room && room.getMember(userId);
     return member ? member.name : userId;
 }
 
-export function userLabelForEventRoom(userId: string, roomId: string): string {
-    const name = getNameForEventRoom(userId, roomId);
+export function userLabelForEventRoom(matrixClient: MatrixClient, userId: string, roomId: string): string {
+    const name = getNameForEventRoom(matrixClient, userId, roomId);
     if (name !== userId) {
         return _t("%(name)s (%(userId)s)", { name, userId });
     } else {

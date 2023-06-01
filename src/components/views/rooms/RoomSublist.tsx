@@ -313,7 +313,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private onResize = (
         e: MouseEvent | TouchEvent,
         travelDirection: Direction,
-        refToElement: HTMLDivElement,
+        refToElement: HTMLElement,
         delta: ResizeDelta,
     ): void => {
         const newHeight = this.heightAtStart + delta.height;
@@ -329,7 +329,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private onResizeStop = (
         e: MouseEvent | TouchEvent,
         travelDirection: Direction,
-        refToElement: HTMLDivElement,
+        refToElement: HTMLElement,
         delta: ResizeDelta,
     ): void => {
         const newHeight = this.heightAtStart + delta.height;

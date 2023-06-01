@@ -225,9 +225,10 @@ describe("Composer", () => {
                         });
                     // ...inserts the username into the composer
                     cy.findByRole("textbox").within(() => {
-                        // TODO update this test when the mentions are inserted as pills, instead
-                        // of as text
-                        cy.findByText(otherUserName, { exact: false }).should("exist");
+                        cy.findByText(otherUserName, { exact: false })
+                            .should("exist")
+                            .should("have.attr", "contenteditable", "false")
+                            .should("have.attr", "data-mention-type", "user");
                     });
 
                     // Send the message to clear the composer
@@ -250,9 +251,10 @@ describe("Composer", () => {
                     // Selecting the autocomplete option using Enter inserts it into the composer
                     cy.findByRole("textbox").type(`{Enter}`);
                     cy.findByRole("textbox").within(() => {
-                        // TODO update this test when the mentions are inserted as pills, instead
-                        // of as text
-                        cy.findByText(otherUserName, { exact: false }).should("exist");
+                        cy.findByText(otherUserName, { exact: false })
+                            .should("exist")
+                            .should("have.attr", "contenteditable", "false")
+                            .should("have.attr", "data-mention-type", "user");
                     });
                 });
             });

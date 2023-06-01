@@ -54,12 +54,13 @@ export const stateKeyField = (defaultValue?: string): IFieldDef => ({
 });
 
 const validateEventContent = withValidation<any, Error | undefined>({
-    deriveData({ value }) {
+    async deriveData({ value }) {
         try {
             JSON.parse(value!);
         } catch (e) {
-            return e;
+            return e as Error;
         }
+        return undefined;
     },
     rules: [
         {

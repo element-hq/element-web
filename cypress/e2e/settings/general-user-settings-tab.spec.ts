@@ -53,7 +53,7 @@ describe("General user settings tab", () => {
 
         cy.findByTestId("mx_GeneralUserSettingsTab").within(() => {
             // Assert that the top heading is rendered
-            cy.findByTestId("general").should("have.text", "General").should("be.visible");
+            cy.findByText("General").should("be.visible");
 
             cy.get(".mx_ProfileSettings_profile")
                 .scrollIntoView()
@@ -83,10 +83,14 @@ describe("General user settings tab", () => {
                 });
 
             // Wait until spinners disappear
-            cy.get(".mx_GeneralUserSettingsTab_section--account .mx_Spinner").should("not.exist");
-            cy.get(".mx_GeneralUserSettingsTab_section--discovery .mx_Spinner").should("not.exist");
+            cy.findByTestId("accountSection").within(() => {
+                cy.get(".mx_Spinner").should("not.exist");
+            });
+            cy.findByTestId("discoverySection").within(() => {
+                cy.get(".mx_Spinner").should("not.exist");
+            });
 
-            cy.get(".mx_GeneralUserSettingsTab_section--account").within(() => {
+            cy.findByTestId("accountSection").within(() => {
                 // Assert that input areas for changing a password exists
                 cy.get("form.mx_GeneralUserSettingsTab_section--account_changePassword")
                     .scrollIntoView()
@@ -95,29 +99,28 @@ describe("General user settings tab", () => {
                         cy.findByLabelText("New Password").should("be.visible");
                         cy.findByLabelText("Confirm password").should("be.visible");
                     });
-
-                // Check email addresses area
-                cy.get(".mx_EmailAddresses")
-                    .scrollIntoView()
-                    .within(() => {
-                        // Assert that an input area for a new email address is rendered
-                        cy.findByRole("textbox", { name: "Email Address" }).should("be.visible");
-
-                        // Assert the add button is visible
-                        cy.findByRole("button", { name: "Add" }).should("be.visible");
-                    });
-
-                // Check phone numbers area
-                cy.get(".mx_PhoneNumbers")
-                    .scrollIntoView()
-                    .within(() => {
-                        // Assert that an input area for a new phone number is rendered
-                        cy.findByRole("textbox", { name: "Phone Number" }).should("be.visible");
-
-                        // Assert that the add button is rendered
-                        cy.findByRole("button", { name: "Add" }).should("be.visible");
-                    });
             });
+            // Check email addresses area
+            cy.findByTestId("mx_AccountEmailAddresses")
+                .scrollIntoView()
+                .within(() => {
+                    // Assert that an input area for a new email address is rendered
+                    cy.findByRole("textbox", { name: "Email Address" }).should("be.visible");
+
+                    // Assert the add button is visible
+                    cy.findByRole("button", { name: "Add" }).should("be.visible");
+                });
+
+            // Check phone numbers area
+            cy.findByTestId("mx_AccountPhoneNumbers")
+                .scrollIntoView()
+                .within(() => {
+                    // Assert that an input area for a new phone number is rendered
+                    cy.findByRole("textbox", { name: "Phone Number" }).should("be.visible");
+
+                    // Assert that the add button is rendered
+                    cy.findByRole("button", { name: "Add" }).should("be.visible");
+                });
 
             // Check language and region setting dropdown
             cy.get(".mx_GeneralUserSettingsTab_section_languageInput")
@@ -188,7 +191,7 @@ describe("General user settings tab", () => {
 
     it("should set a country calling code based on default_country_code", () => {
         // Check phone numbers area
-        cy.get(".mx_PhoneNumbers")
+        cy.findByTestId("mx_AccountPhoneNumbers")
             .scrollIntoView()
             .within(() => {
                 // Assert that an input area for a new phone number is rendered

@@ -20,7 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import BaseDialog from "./BaseDialog";
-import { _t } from "../../../languageHandler";
+import { _t, UserFriendlyError } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import SdkConfig from "../../../SdkConfig";
 import Field from "../elements/Field";
@@ -113,7 +113,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                 const stateForError = AutoDiscoveryUtils.authComponentStateForError(e);
                 if (stateForError.serverErrorIsFatal) {
                     let error = _t("Unable to validate homeserver");
-                    if (e.translatedMessage) {
+                    if (e instanceof UserFriendlyError && e.translatedMessage) {
                         error = e.translatedMessage;
                     }
                     return { error };
@@ -157,15 +157,19 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
     private onSubmit = async (ev: SyntheticEvent): Promise<void> => {
         ev.preventDefault();
 
+        if (this.state.defaultChosen) {
+            this.props.onFinished(this.defaultServer);
+        }
+
         const valid = await this.fieldRef.current?.validate({ allowEmpty: false });
 
-        if (!valid && !this.state.defaultChosen) {
+        if (!valid) {
             this.fieldRef.current?.focus();
             this.fieldRef.current?.validate({ allowEmpty: false, focused: true });
             return;
         }
 
-        this.props.onFinished(this.state.defaultChosen ? this.defaultServer : this.validatedConf);
+        this.props.onFinished(this.validatedConf);
     };
 
     public render(): React.ReactNode {
@@ -202,6 +206,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                         value="true"
                         checked={this.state.defaultChosen}
                         onChange={this.onDefaultChosen}
+                        data-testid="defaultHomeserver"
                     >
                         {defaultServerName}
                     </StyledRadioButton>

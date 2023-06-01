@@ -145,8 +145,8 @@ function generateCustomFontFaceCSS(faces: IFontFaces[]): string {
                     return "";
                 })
                 .join(", ");
-            const props = Object.keys(face).filter((prop: (typeof allowedFontFaceProps)[number]) =>
-                allowedFontFaceProps.includes(prop),
+            const props = Object.keys(face).filter((prop) =>
+                allowedFontFaceProps.includes(prop as (typeof allowedFontFaceProps)[number]),
             ) as Array<(typeof allowedFontFaceProps)[number]>;
             const body = props
                 .map((prop) => {

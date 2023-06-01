@@ -66,7 +66,7 @@ describe("Terms", function () {
             },
         });
         const interactionCallback = jest.fn().mockResolvedValue([]);
-        await startTermsFlow([IM_SERVICE_ONE], interactionCallback);
+        await startTermsFlow(mockClient, [IM_SERVICE_ONE], interactionCallback);
 
         expect(interactionCallback).toHaveBeenCalledWith(
             [
@@ -97,7 +97,7 @@ describe("Terms", function () {
         mockClient.agreeToTerms;
 
         const interactionCallback = jest.fn();
-        await startTermsFlow([IM_SERVICE_ONE], interactionCallback);
+        await startTermsFlow(mockClient, [IM_SERVICE_ONE], interactionCallback);
 
         expect(interactionCallback).not.toHaveBeenCalled();
         expect(mockClient.agreeToTerms).toHaveBeenCalledWith(SERVICE_TYPES.IM, "https://imone.test", "a token token", [
@@ -122,7 +122,7 @@ describe("Terms", function () {
         });
 
         const interactionCallback = jest.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
-        await startTermsFlow([IM_SERVICE_ONE], interactionCallback);
+        await startTermsFlow(mockClient, [IM_SERVICE_ONE], interactionCallback);
 
         expect(interactionCallback).toHaveBeenCalledWith(
             [
@@ -168,7 +168,7 @@ describe("Terms", function () {
         });
 
         const interactionCallback = jest.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
-        await startTermsFlow([IM_SERVICE_ONE, IM_SERVICE_TWO], interactionCallback);
+        await startTermsFlow(mockClient, [IM_SERVICE_ONE, IM_SERVICE_TWO], interactionCallback);
 
         expect(interactionCallback).toHaveBeenCalledWith(
             [

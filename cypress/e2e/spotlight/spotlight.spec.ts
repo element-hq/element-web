@@ -203,6 +203,10 @@ describe("Spotlight", () => {
                     cy.get(".mx_RoomSublist_skeletonUI").should("not.exist");
                 });
         });
+        // wait for the room to have the right name
+        cy.get(".mx_RoomHeader").within(() => {
+            cy.findByText(room1Name);
+        });
     });
 
     afterEach(() => {
@@ -212,8 +216,12 @@ describe("Spotlight", () => {
 
     it("should be able to add and remove filters via keyboard", () => {
         cy.openSpotlightDialog().within(() => {
-            cy.spotlightSearch().type("{downArrow}");
+            cy.wait(1000); // wait for the dialog to settle, otherwise our keypresses might race with an update
+
+            // initially, publicrooms should be highlighted (because there are no other suggestions)
             cy.get("#mx_SpotlightDialog_button_explorePublicRooms").should("have.attr", "aria-selected", "true");
+
+            // hitting enter should enable the publicrooms filter
             cy.spotlightSearch().type("{enter}");
             cy.get(".mx_SpotlightDialog_filter").should("contain", "Public rooms");
             cy.spotlightSearch().type("{backspace}");
@@ -233,7 +241,6 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog()
             .within(() => {
                 cy.spotlightSearch().clear().type(room1Name);
-                cy.wait(3000); // wait for the dialog code to settle
                 cy.spotlightResults().should("have.length", 1);
                 cy.spotlightResults().eq(0).should("contain", room1Name);
                 cy.spotlightResults().eq(0).click();
@@ -249,7 +256,6 @@ describe("Spotlight", () => {
             .within(() => {
                 cy.spotlightFilter(Filter.PublicRooms);
                 cy.spotlightSearch().clear().type(room1Name);
-                cy.wait(3000); // wait for the dialog code to settle
                 cy.spotlightResults().should("have.length", 1);
                 cy.spotlightResults().eq(0).should("contain", room1Name);
                 cy.spotlightResults().eq(0).should("contain", "View");
@@ -266,7 +272,6 @@ describe("Spotlight", () => {
             .within(() => {
                 cy.spotlightFilter(Filter.PublicRooms);
                 cy.spotlightSearch().clear().type(room2Name);
-                cy.wait(3000); // wait for the dialog code to settle
                 cy.spotlightResults().should("have.length", 1);
                 cy.spotlightResults().eq(0).should("contain", room2Name);
                 cy.spotlightResults().eq(0).should("contain", "Join");
@@ -284,7 +289,6 @@ describe("Spotlight", () => {
             .within(() => {
                 cy.spotlightFilter(Filter.PublicRooms);
                 cy.spotlightSearch().clear().type(room3Name);
-                cy.wait(3000); // wait for the dialog code to settle
                 cy.spotlightResults().should("have.length", 1);
                 cy.spotlightResults().eq(0).should("contain", room3Name);
                 cy.spotlightResults().eq(0).should("contain", "View");
@@ -326,7 +330,6 @@ describe("Spotlight", () => {
             .within(() => {
                 cy.spotlightFilter(Filter.People);
                 cy.spotlightSearch().clear().type(bot1Name);
-                cy.wait(3000); // wait for the dialog code to settle
                 cy.spotlightResults().should("have.length", 1);
                 cy.spotlightResults().eq(0).should("contain", bot1Name);
                 cy.spotlightResults().eq(0).click();
@@ -341,7 +344,6 @@ describe("Spotlight", () => {
             .within(() => {
                 cy.spotlightFilter(Filter.People);
                 cy.spotlightSearch().clear().type(bot2Name);
-                cy.wait(3000); // wait for the dialog code to settle
                 cy.spotlightResults().should("have.length", 1);
                 cy.spotlightResults().eq(0).should("contain", bot2Name);
                 cy.spotlightResults().eq(0).click();
@@ -359,7 +361,6 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.People);
             cy.spotlightSearch().clear().type(bot2Name);
-            cy.wait(3000); // wait for the dialog code to settle
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", bot2Name);
             cy.spotlightResults().eq(0).click();

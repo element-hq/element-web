@@ -185,6 +185,7 @@ function dispatchEditEvent(
         events: foundEvents,
         isForward,
         fromEventId: editorStateTransfer?.getEvent().getId(),
+        matrixClient: mxClient,
     });
     if (newEvent) {
         dis.dispatch({

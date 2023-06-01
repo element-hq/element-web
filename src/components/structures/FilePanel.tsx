@@ -56,7 +56,7 @@ class FilePanel extends React.Component<IProps, IState> {
     // This is used to track if a decrypted event was a live event and should be
     // added to the timeline.
     private decryptingEvents = new Set<string>();
-    public noRoom: boolean;
+    public noRoom = false;
     private card = createRef<HTMLDivElement>();
 
     public state: IState = {

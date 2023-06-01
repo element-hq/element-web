@@ -20,6 +20,8 @@ import "@testing-library/jest-dom";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { DecryptionFailureBar } from "../../../../src/components/views/rooms/DecryptionFailureBar";
+import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../src/dispatcher/actions";
 
 type MockDevice = { deviceId: string };
 
@@ -71,6 +73,7 @@ function getBar(wrapper: RenderResult) {
 describe("<DecryptionFailureBar />", () => {
     beforeEach(() => {
         jest.useFakeTimers();
+        jest.spyOn(defaultDispatcher, "dispatch").mockRestore();
     });
 
     afterEach(() => {
@@ -282,6 +285,41 @@ describe("<DecryptionFailureBar />", () => {
         expect(mockClient.cancelAndResendEventRoomKeyRequest).toHaveBeenCalledWith(mockEvent2);
 
         expect(getBar(bar)).toMatchSnapshot();
+
+        bar.unmount();
+    });
+    it("Displays button to review device list if we are verified", async () => {
+        // stub so we dont have to deal with launching modals
+        jest.spyOn(defaultDispatcher, "dispatch").mockImplementation(() => {});
+        ourDevice = verifiedDevice1;
+        allDevices = [verifiedDevice1, verifiedDevice2];
+
+        const bar = render(
+            // @ts-ignore
+            <MatrixClientContext.Provider value={mockClient}>
+                <DecryptionFailureBar
+                    failures={[
+                        // @ts-ignore
+                        mockEvent1,
+                        // @ts-ignore
+                        mockEvent2,
+                        // @ts-ignore
+                        mockEvent3,
+                    ]}
+                />
+                ,
+            </MatrixClientContext.Provider>,
+        );
+
+        await waitFor(() => expect(mockClient.isSecretStored).toHaveBeenCalled());
+
+        act(() => {
+            jest.advanceTimersByTime(5000);
+        });
+
+        fireEvent.click(screen.getByText("View your device list"));
+
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.ViewUserDeviceSettings });
 
         bar.unmount();
     });

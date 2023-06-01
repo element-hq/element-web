@@ -181,19 +181,19 @@ export default class ScrollPanel extends React.Component<IProps> {
     private unmounted = false;
     private scrollTimeout?: Timer;
     // Are we currently trying to backfill?
-    private isFilling: boolean;
+    private isFilling = false;
     // Is the current fill request caused by a props update?
     private isFillingDueToPropsUpdate = false;
     // Did another request to check the fill state arrive while we were trying to backfill?
-    private fillRequestWhileRunning: boolean;
+    private fillRequestWhileRunning = false;
     // Is that next fill request scheduled because of a props update?
-    private pendingFillDueToPropsUpdate: boolean;
-    private scrollState: IScrollState;
+    private pendingFillDueToPropsUpdate = false;
+    private scrollState!: IScrollState;
     private preventShrinkingState: IPreventShrinkingState | null = null;
     private unfillDebouncer: number | null = null;
-    private bottomGrowth: number;
-    private minListHeight: number;
-    private heightUpdateInProgress: boolean;
+    private bottomGrowth!: number;
+    private minListHeight!: number;
+    private heightUpdateInProgress = false;
     private divScroll: HTMLDivElement | null = null;
 
     public constructor(props: IProps) {

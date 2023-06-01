@@ -51,7 +51,7 @@ export async function startDmOnFirstMessage(client: MatrixClient, targets: Membe
         return existingRoom.roomId;
     }
 
-    if (targets.length === 1 && targets[0] instanceof ThreepidMember && privateShouldBeEncrypted()) {
+    if (targets.length === 1 && targets[0] instanceof ThreepidMember && privateShouldBeEncrypted(client)) {
         // Single 3rd-party invite and well-known promotes encryption:
         // Directly create a room and invite the other.
         return await startDm(client, targets);
@@ -89,7 +89,7 @@ export async function createRoomFromLocalRoom(client: MatrixClient, localRoom: L
             if (!roomId) throw new Error(`startDm for local room ${localRoom.roomId} didn't return a room Id`);
 
             localRoom.actualRoomId = roomId;
-            return waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom);
+            return waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom, roomId);
         },
         () => {
             logger.warn(`Error creating DM for local room ${localRoom.roomId}`);
@@ -192,7 +192,7 @@ export interface IDMUserTileProps {
  * @returns {Promise<boolean>}
  */
 export async function determineCreateRoomEncryptionOption(client: MatrixClient, targets: Member[]): Promise<boolean> {
-    if (privateShouldBeEncrypted()) {
+    if (privateShouldBeEncrypted(client)) {
         // Enable encryption for a single 3rd party invite.
         if (targets.length === 1 && targets[0] instanceof ThreepidMember) return true;
 

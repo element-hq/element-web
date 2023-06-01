@@ -32,17 +32,17 @@ describe("<SecureBackupPanel />", () => {
         ...mockClientMethodsUser(userId),
         checkKeyBackup: jest.fn(),
         isKeyBackupKeyStored: jest.fn(),
-        isSecretStorageReady: jest.fn(),
         getKeyBackupEnabled: jest.fn(),
         getKeyBackupVersion: jest.fn().mockReturnValue("1"),
         isKeyBackupTrusted: jest.fn().mockResolvedValue(true),
         getClientWellKnown: jest.fn(),
         deleteKeyBackupVersion: jest.fn(),
+        secretStorage: { hasKey: jest.fn() },
     });
     // @ts-ignore allow it
     client.crypto = {
-        secretStorage: { hasKey: jest.fn() },
         getSessionBackupPrivateKey: jest.fn(),
+        isSecretStorageReady: jest.fn(),
     } as unknown as Crypto;
 
     const getComponent = () => render(<SecureBackupPanel />);
@@ -62,7 +62,7 @@ describe("<SecureBackupPanel />", () => {
             },
         });
 
-        mocked(client.crypto!.secretStorage.hasKey).mockClear().mockResolvedValue(false);
+        mocked(client.secretStorage.hasKey).mockClear().mockResolvedValue(false);
         client.deleteKeyBackupVersion.mockClear().mockResolvedValue();
         client.getKeyBackupVersion.mockClear();
         client.isKeyBackupTrusted.mockClear();
@@ -166,7 +166,7 @@ describe("<SecureBackupPanel />", () => {
     });
 
     it("resets secret storage", async () => {
-        mocked(client.crypto!.secretStorage.hasKey).mockClear().mockResolvedValue(true);
+        mocked(client.secretStorage.hasKey).mockClear().mockResolvedValue(true);
         getComponent();
         // flush checkKeyBackup promise
         await flushPromises();

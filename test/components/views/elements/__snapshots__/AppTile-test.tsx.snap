@@ -1,0 +1,164 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppTile destroys non-persisted right panel widget on room change 1`] = `
+<DocumentFragment>
+  <aside
+    class="mx_RightPanel dark-panel"
+    id="mx_RightPanel"
+  >
+    <div
+      class="mx_BaseCard mx_WidgetCard"
+    >
+      <div
+        class="mx_BaseCard_header"
+      >
+        <div
+          class="mx_AccessibleButton mx_BaseCard_close"
+          data-testid="base-card-close-button"
+          role="button"
+          tabindex="0"
+          title="Close"
+        />
+        <div
+          class="mx_BaseCard_header_title"
+        >
+          <h4
+            class="mx_Heading_h4 mx_BaseCard_header_title_heading"
+          >
+            Example 1
+          </h4>
+          <div
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-label="Options"
+            class="mx_AccessibleButton mx_BaseCard_header_title_button--option"
+            role="button"
+            tabindex="0"
+            title="Options"
+          />
+        </div>
+      </div>
+      <div
+        class="mx_AppTileFullWidth"
+        id="1"
+      >
+        <div
+          class="mx_AppTileBody mx_AppTile_loading"
+        >
+          <div
+            class="mx_AppTile_loading_fadeInSpinner"
+          >
+            <div
+              class="mx_Spinner"
+            >
+              <div
+                class="mx_Spinner_Msg"
+              >
+                Loading…
+              </div>
+               
+              <div
+                aria-label="Loading…"
+                class="mx_Spinner_icon"
+                data-testid="spinner"
+                role="progressbar"
+                style="width: 32px; height: 32px;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+</DocumentFragment>
+`;
+
+exports[`AppTile for a persistent app should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppTile_mini"
+    id="1"
+  >
+    <div
+      class="mx_AppTile_persistedWrapper"
+    >
+      <div />
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AppTile for a pinned widget should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppTile"
+    id="1"
+  >
+    <div
+      class="mx_AppTileMenuBar"
+    >
+      <span
+        class="mx_AppTileMenuBar_title"
+        style="pointer-events: none;"
+      >
+        <span>
+          <img
+            alt=""
+            class="mx_BaseAvatar mx_BaseAvatar_image mx_WidgetAvatar"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="image-file-stub"
+            style="width: 20px; height: 20px;"
+          />
+          <b>
+            Example 1
+          </b>
+          <span />
+        </span>
+      </span>
+      <span
+        class="mx_AppTileMenuBar_widgets"
+      >
+        <div
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Un-maximise"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+        <div
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Minimise"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+        <div
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Options"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Options"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+      </span>
+    </div>
+    <div
+      class="mx_AppTile_persistedWrapper"
+    >
+      <div />
+    </div>
+  </div>
+</DocumentFragment>
+`;

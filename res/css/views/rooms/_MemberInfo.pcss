@@ -76,6 +76,12 @@ limitations under the License.
 
 .mx_MemberInfo_container {
     margin: 0 16px 16px 16px;
+
+    &.mx_MemberInfo_container--profile {
+        margin-bottom: 16px;
+        font-size: $font-15px;
+        position: relative;
+    }
 }
 
 .mx_MemberInfo_avatar {
@@ -95,23 +101,11 @@ limitations under the License.
     }
 }
 
-.mx_MemberInfo_profile {
-    margin-bottom: 16px;
-}
-
-.mx_MemberInfo_profileField {
-    font-size: $font-15px;
-    position: relative;
-}
-
-.mx_MemberInfo_buttons {
-    margin-bottom: 16px;
-}
-
 .mx_MemberInfo_field {
     cursor: pointer;
     font-size: $font-15px;
     color: $primary-content;
     margin-left: 8px;
+    margin-bottom: 16px;
     line-height: $font-23px;
 }

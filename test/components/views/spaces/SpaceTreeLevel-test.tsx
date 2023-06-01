@@ -40,7 +40,7 @@ jest.mock("../../../../src/stores/spaces/SpaceStore", () => {
 describe("SpaceButton", () => {
     stubClient();
     const space = mkRoom(MatrixClientPeg.get(), "!1:example.org");
-    DMRoomMap.makeShared();
+    DMRoomMap.makeShared(MatrixClientPeg.get());
 
     const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
 

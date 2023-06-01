@@ -43,7 +43,7 @@ describe("createRoom", () => {
         const createCallSpy = jest.spyOn(JitsiCall, "create");
 
         const userId = client.getUserId()!;
-        const roomId = await createRoom({ roomType: RoomType.ElementVideo });
+        const roomId = await createRoom(client, { roomType: RoomType.ElementVideo });
 
         const [
             [
@@ -75,7 +75,7 @@ describe("createRoom", () => {
     it("sets up Element video rooms correctly", async () => {
         const userId = client.getUserId()!;
         const createCallSpy = jest.spyOn(ElementCall, "create");
-        const roomId = await createRoom({ roomType: RoomType.UnstableCall });
+        const roomId = await createRoom(client, { roomType: RoomType.UnstableCall });
 
         const userPower = client.createRoom.mock.calls[0][0].power_level_content_override?.users?.[userId];
         const callPower =
@@ -102,7 +102,7 @@ describe("createRoom", () => {
         const createJitsiCallSpy = jest.spyOn(JitsiCall, "create");
         const createElementCallSpy = jest.spyOn(ElementCall, "create");
 
-        await createRoom({});
+        await createRoom(client, {});
 
         expect(createJitsiCallSpy).not.toHaveBeenCalled();
         expect(createElementCallSpy).not.toHaveBeenCalled();
@@ -113,7 +113,7 @@ describe("createRoom", () => {
             if (name === "feature_group_calls") return true;
         });
 
-        await createRoom({});
+        await createRoom(client, {});
 
         const callPower =
             client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCall.CALL_EVENT_TYPE.name];
@@ -129,7 +129,7 @@ describe("createRoom", () => {
     it("should upload avatar if one is passed", async () => {
         client.uploadContent.mockResolvedValue({ content_uri: "mxc://foobar" });
         const avatar = new File([], "avatar.png");
-        await createRoom({ avatar });
+        await createRoom(client, { avatar });
         expect(client.createRoom).toHaveBeenCalledWith(
             expect.objectContaining({
                 initial_state: expect.arrayContaining([

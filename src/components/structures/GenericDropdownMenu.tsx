@@ -125,7 +125,7 @@ export function GenericDropdownMenu<T>({
 }: IProps<T>): JSX.Element {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu<HTMLElement>();
 
-    const selected: GenericDropdownMenuItem<T> | null = options
+    const selected: GenericDropdownMenuItem<T> | undefined = options
         .flatMap((it) => (isGenericDropdownMenuGroup(it) ? [it, ...it.options] : [it]))
         .find((option) => (toKey ? toKey(option.key) === toKey(value) : option.key === value));
     let contextMenuOptions: JSX.Element;

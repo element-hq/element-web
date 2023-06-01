@@ -42,8 +42,12 @@ export class RoomScrollStateStore {
         return this.scrollStateMap.get(roomId);
     }
 
-    public setScrollState(roomId: string, scrollState: ScrollState): void {
-        this.scrollStateMap.set(roomId, scrollState);
+    public setScrollState(roomId: string, scrollState: ScrollState | null): void {
+        if (scrollState === null) {
+            this.scrollStateMap.delete(roomId);
+        } else {
+            this.scrollStateMap.set(roomId, scrollState);
+        }
     }
 }
 

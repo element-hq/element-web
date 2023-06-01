@@ -229,7 +229,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
             "feature_exploring_public_spaces",
             defaultWatchManager,
             [["org.matrix.msc3827.stable"]],
-            undefined,
+            "v1.4",
             _td("Requires your server to support the stable version of MSC3827"),
         ),
     },
@@ -444,27 +444,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("Force 15s voice broadcast chunk length"),
         default: false,
-    },
-    "feature_new_device_manager": {
-        isFeature: true,
-        labsGroup: LabGroup.Experimental,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Use new session manager"),
-        default: false,
-        betaInfo: {
-            title: _td("New session manager"),
-            caption: () => (
-                <>
-                    <p>{_t("Have greater visibility and control over all your sessions.")}</p>
-                    <p>
-                        {_t(
-                            "Our new sessions manager provides better visibility of all your sessions, " +
-                                "and greater control over them including the ability to remotely toggle push notifications.",
-                        )}
-                    </p>
-                </>
-            ),
-        },
     },
     "feature_rust_crypto": {
         // use the rust matrix-sdk-crypto-js for crypto.

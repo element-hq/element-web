@@ -19,7 +19,14 @@ import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/
 import type { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { UserCredentials } from "../../support/login";
-import { EmojiMapping, handleVerificationRequest, waitForVerificationRequest } from "./utils";
+import {
+    checkDeviceIsCrossSigned,
+    EmojiMapping,
+    handleVerificationRequest,
+    logIntoElement,
+    waitForVerificationRequest,
+} from "./utils";
+import { skipIfRustCrypto } from "../../support/util";
 
 interface CryptoTestContext extends Mocha.Context {
     homeserver: HomeserverInstance;
@@ -103,6 +110,27 @@ function autoJoin(client: MatrixClient) {
     });
 }
 
+/**
+ * Given a VerificationRequest in a bot client, add cypress commands to:
+ *   - wait for the bot to receive a 'verify by emoji' notification
+ *   - check that the bot sees the same emoji as the application
+ *
+ * @param botVerificationRequest - a verification request in a bot client
+ */
+function doTwoWaySasVerification(botVerificationRequest: VerificationRequest): void {
+    // on the bot side, wait for the emojis, confirm they match, and return them
+    const emojiPromise = handleVerificationRequest(botVerificationRequest);
+
+    // then, check that our application shows an emoji panel with the same emojis.
+    cy.wrap(emojiPromise).then((emojis: EmojiMapping[]) => {
+        cy.get(".mx_VerificationShowSas_emojiSas_block").then((emojiBlocks) => {
+            emojis.forEach((emoji: EmojiMapping, index: number) => {
+                expect(emojiBlocks[index].textContent.toLowerCase()).to.eq(emoji[0] + emoji[1]);
+            });
+        });
+    });
+}
+
 const verify = function (this: CryptoTestContext) {
     const bobsVerificationRequestPromise = waitForVerificationRequest(this.bob);
 
@@ -111,21 +139,9 @@ const verify = function (this: CryptoTestContext) {
         cy.findByText("Bob").click();
         cy.findByRole("button", { name: "Verify" }).click();
         cy.findByRole("button", { name: "Start Verification" }).click();
-        cy.wrap(bobsVerificationRequestPromise)
-            .then((verificationRequest: VerificationRequest) => {
-                verificationRequest.accept();
-                return verificationRequest;
-            })
-            .as("bobsVerificationRequest");
         cy.findByRole("button", { name: "Verify by emoji" }).click();
-        cy.get<VerificationRequest>("@bobsVerificationRequest").then((request: VerificationRequest) => {
-            return cy.wrap(handleVerificationRequest(request)).then((emojis: EmojiMapping[]) => {
-                cy.get(".mx_VerificationShowSas_emojiSas_block").then((emojiBlocks) => {
-                    emojis.forEach((emoji: EmojiMapping, index: number) => {
-                        expect(emojiBlocks[index].textContent.toLowerCase()).to.eq(emoji[0] + emoji[1]);
-                    });
-                });
-            });
+        cy.wrap(bobsVerificationRequestPromise).then((request: VerificationRequest) => {
+            doTwoWaySasVerification(request);
         });
         cy.findByRole("button", { name: "They match" }).click();
         cy.findByText("You've successfully verified Bob!").should("exist");
@@ -143,7 +159,11 @@ describe("Cryptography", function () {
                 cy.initTestUser(homeserver, "Alice", undefined, "alice_").then((credentials) => {
                     aliceCredentials = credentials;
                 });
-                cy.getBot(homeserver, { displayName: "Bob", autoAcceptInvites: false, userIdPrefix: "bob_" }).as("bob");
+                cy.getBot(homeserver, {
+                    displayName: "Bob",
+                    autoAcceptInvites: false,
+                    userIdPrefix: "bob_",
+                }).as("bob");
             });
     });
 
@@ -152,6 +172,7 @@ describe("Cryptography", function () {
     });
 
     it("setting up secure key backup should work", () => {
+        skipIfRustCrypto();
         cy.openUserSettings("Security & Privacy");
         cy.findByRole("button", { name: "Set up Secure Backup" }).click();
         cy.get(".mx_Dialog").within(() => {
@@ -175,6 +196,7 @@ describe("Cryptography", function () {
     });
 
     it("creating a DM should work, being e2e-encrypted / user verification", function (this: CryptoTestContext) {
+        skipIfRustCrypto();
         cy.bootstrapCrossSigning(aliceCredentials);
         startDMWithBob.call(this);
         // send first message
@@ -196,6 +218,7 @@ describe("Cryptography", function () {
     });
 
     it("should allow verification when there is no existing DM", function (this: CryptoTestContext) {
+        skipIfRustCrypto();
         cy.bootstrapCrossSigning(aliceCredentials);
         autoJoin(this.bob);
 
@@ -214,6 +237,7 @@ describe("Cryptography", function () {
     });
 
     it("should show the correct shield on edited e2e events", function (this: CryptoTestContext) {
+        skipIfRustCrypto();
         cy.bootstrapCrossSigning(aliceCredentials);
 
         // bob has a second, not cross-signed, device
@@ -298,5 +322,69 @@ describe("Cryptography", function () {
                 .should("have.class", "mx_EventTile_verified")
                 .should("not.have.descendants", ".mx_EventTile_e2eIcon_warning");
         });
+    });
+});
+
+describe("Verify own device", () => {
+    let aliceBotClient: CypressBot;
+    let homeserver: HomeserverInstance;
+
+    beforeEach(() => {
+        cy.startHomeserver("default").then((data: HomeserverInstance) => {
+            homeserver = data;
+
+            // Visit the login page of the app, to load the matrix sdk
+            cy.visit("/#/login");
+
+            // wait for the page to load
+            cy.window({ log: false }).should("have.property", "matrixcs");
+
+            // Create a new device for alice
+            cy.getBot(homeserver, { bootstrapCrossSigning: true }).then((bot) => {
+                aliceBotClient = bot;
+            });
+        });
+    });
+
+    afterEach(() => {
+        cy.stopHomeserver(homeserver);
+    });
+
+    /* Click the "Verify with another device" button, and have the bot client auto-accept it.
+     *
+     * Stores the incoming `VerificationRequest` on the bot client as `@verificationRequest`.
+     */
+    function initiateAliceVerificationRequest() {
+        // alice bot waits for verification request
+        const promiseVerificationRequest = waitForVerificationRequest(aliceBotClient);
+
+        // Click on "Verify with another device"
+        cy.get(".mx_AuthPage").within(() => {
+            cy.findByRole("button", { name: "Verify with another device" }).click();
+        });
+
+        // alice bot responds yes to verification request from alice
+        cy.wrap(promiseVerificationRequest).as("verificationRequest");
+    }
+
+    it("with SAS", function (this: CryptoTestContext) {
+        logIntoElement(homeserver.baseUrl, aliceBotClient.getUserId(), aliceBotClient.__cypress_password);
+
+        // Launch the verification request between alice and the bot
+        initiateAliceVerificationRequest();
+
+        // Handle emoji SAS verification
+        cy.get(".mx_InfoDialog").within(() => {
+            cy.get<VerificationRequest>("@verificationRequest").then((request: VerificationRequest) => {
+                // Handle emoji request and check that emojis are matching
+                doTwoWaySasVerification(request);
+            });
+
+            cy.findByRole("button", { name: "They match" }).click();
+            cy.findByRole("button", { name: "Got it" }).click();
+        });
+
+        // Check that our device is now cross-signed
+        checkDeviceIsCrossSigned();
     });
 });

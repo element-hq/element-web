@@ -30,6 +30,7 @@ import EmbeddedPage from "../../structures/EmbeddedPage";
 import HomePage from "../../structures/HomePage";
 import { UserOnboardingHeader } from "./UserOnboardingHeader";
 import { UserOnboardingList } from "./UserOnboardingList";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
 interface Props {
     justRegistered?: boolean;
@@ -44,8 +45,9 @@ export function showUserOnboardingPage(useCase: UseCase | null): boolean {
 
 const ANIMATION_DURATION = 2800;
 export function UserOnboardingPage({ justRegistered = false }: Props): JSX.Element {
+    const cli = useMatrixClientContext();
     const config = SdkConfig.get();
-    const pageUrl = getHomePageUrl(config);
+    const pageUrl = getHomePageUrl(config, cli);
 
     const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection");
     const context = useUserOnboardingContext();

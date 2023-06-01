@@ -253,20 +253,20 @@ describe("EventUtils", () => {
 
         describe("canEditContent()", () => {
             it.each<TestCase>(uneditableCases)("returns false for %s", (_description, event) => {
-                expect(canEditContent(event)).toBe(false);
+                expect(canEditContent(mockClient, event)).toBe(false);
             });
 
             it.each<TestCase>(editableCases)("returns true for %s", (_description, event) => {
-                expect(canEditContent(event)).toBe(true);
+                expect(canEditContent(mockClient, event)).toBe(true);
             });
         });
         describe("canEditOwnContent()", () => {
             it.each<TestCase>(uneditableCases)("returns false for %s", (_description, event) => {
-                expect(canEditOwnEvent(event)).toBe(false);
+                expect(canEditOwnEvent(mockClient, event)).toBe(false);
             });
 
             it.each<TestCase>(editableCases)("returns true for %s", (_description, event) => {
-                expect(canEditOwnEvent(event)).toBe(true);
+                expect(canEditOwnEvent(mockClient, event)).toBe(true);
             });
         });
     });
@@ -460,6 +460,7 @@ describe("EventUtils", () => {
                 findEditableEvent({
                     events: [],
                     isForward: true,
+                    matrixClient: mockClient,
                 }),
             ).toBeUndefined();
         });

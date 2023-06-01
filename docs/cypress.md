@@ -45,6 +45,16 @@ To launch it:
 yarn run test:cypress:open
 ```
 
+### Running with Rust cryptography
+
+`matrix-js-sdk` is currently in the
+[process](https://github.com/vector-im/element-web/issues/21972) of being
+updated to replace its end-to-end encryption implementation to use the [Matrix
+Rust SDK](https://github.com/matrix-org/matrix-rust-sdk). This is not currently
+enabled by default, but it is possible to have Cypress configure Element to use
+the Rust crypto implementation by setting the environment variable
+`CYPRESS_RUST_CRYPTO=1`.
+
 ## How the Tests Work
 
 Everything Cypress-related lives in the `cypress/` subdirectory of react-sdk

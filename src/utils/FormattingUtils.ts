@@ -75,10 +75,10 @@ export function formatCryptoKey(key: string): string {
  *
  * @return {number}
  */
-export function hashCode(str: string): number {
+export function hashCode(str?: string): number {
     let hash = 0;
     let chr: number;
-    if (str.length === 0) {
+    if (!str?.length) {
         return hash;
     }
     for (let i = 0; i < str.length; i++) {
@@ -89,7 +89,7 @@ export function hashCode(str: string): number {
     return Math.abs(hash);
 }
 
-export function getUserNameColorClass(userId: string): string {
+export function getUserNameColorClass(userId?: string): string {
     const colorNumber = (hashCode(userId) % 8) + 1;
     return `mx_Username_color${colorNumber}`;
 }

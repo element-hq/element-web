@@ -328,6 +328,7 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
   class="mx_FilteredDeviceListHeader"
 >
   <div
+    aria-describedby="mx_TooltipTarget_abdefghi"
     tabindex="0"
   >
     <span

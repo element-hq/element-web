@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PinnedEventTile /> should render pinned event 1`] = `
+<div>
+  <div
+    class="mx_PinnedEventTile"
+  >
+    <span
+      class="mx_BaseAvatar mx_PinnedEventTile_senderAvatar"
+      role="presentation"
+    >
+      <span
+        aria-hidden="true"
+        class="mx_BaseAvatar_initial"
+        style="font-size: 15.600000000000001px; width: 24px; line-height: 24px;"
+      >
+        A
+      </span>
+      <img
+        alt=""
+        aria-hidden="true"
+        class="mx_BaseAvatar_image"
+        data-testid="avatar-img"
+        loading="lazy"
+        src="data:image/png;base64,00"
+        style="width: 24px; height: 24px;"
+      />
+    </span>
+    <span
+      class="mx_PinnedEventTile_sender mx_Username_color6"
+    >
+      @alice:server.org
+    </span>
+    <div
+      class="mx_PinnedEventTile_message"
+    >
+      <div
+        class="mx_MTextBody mx_EventTile_content"
+      >
+        <span
+          class="mx_EventTile_body"
+          dir="auto"
+        >
+          First pinned message
+        </span>
+      </div>
+    </div>
+    <div
+      class="mx_PinnedEventTile_footer"
+    >
+      <span
+        class="mx_MessageTimestamp mx_PinnedEventTile_timestamp"
+      >
+        Thu, Jan 1 1970 00:00:00
+      </span>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+        role="button"
+        tabindex="0"
+      >
+        View message
+      </div>
+    </div>
+  </div>
+</div>
+`;

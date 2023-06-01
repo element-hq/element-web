@@ -165,7 +165,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
             return 0;
         }
 
-        return info.top + info.parent.getBoundingClientRect().top;
+        return (info.top ?? 0) + info.parent.getBoundingClientRect().top;
     }
 
     private animateMarker(): void {

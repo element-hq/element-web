@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, KeyboardEvent } from "react";
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
@@ -30,7 +30,7 @@ interface IProps {
     button?: boolean | string;
     hasCloseButton?: boolean;
     fixedWidth?: boolean;
-    onKeyDown?(event: KeyboardEvent): void;
+    onKeyDown?(event: KeyboardEvent | React.KeyboardEvent): void;
     onFinished(): void;
 }
 

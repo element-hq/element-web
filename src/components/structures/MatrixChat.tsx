@@ -625,7 +625,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.notifyNewScreen("forgot_password");
                 break;
             case "start_chat":
-                createRoom({
+                createRoom(MatrixClientPeg.get(), {
                     dmUserId: payload.user_id,
                 });
                 break;
@@ -700,7 +700,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case Action.ViewUserDeviceSettings: {
-                viewUserDeviceSettings(SettingsStore.getValue("feature_new_device_manager"));
+                viewUserDeviceSettings();
                 break;
             }
             case Action.ViewUserSettings: {
@@ -1062,7 +1062,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
-            createRoom(opts!);
+            createRoom(MatrixClientPeg.get(), opts!);
         }
     }
 
@@ -1154,7 +1154,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private leaveRoom(roomId: string): void {
-        const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
+        const cli = MatrixClientPeg.get();
+        const roomToLeave = cli.getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
 
         const isSpace = roomToLeave?.isSpaceRoom();
@@ -1173,9 +1174,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 </span>
             ),
             button: _t("Leave"),
-            onFinished: (shouldLeave) => {
+            onFinished: async (shouldLeave) => {
                 if (shouldLeave) {
-                    leaveRoomBehaviour(roomId);
+                    await leaveRoomBehaviour(cli, roomId);
 
                     dis.dispatch<AfterLeaveRoomPayload>({
                         action: Action.AfterLeaveRoom,
@@ -1211,7 +1212,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private async copyRoom(roomId: string): Promise<void> {
-        const roomLink = makeRoomPermalink(roomId);
+        const roomLink = makeRoomPermalink(MatrixClientPeg.get(), roomId);
         const success = await copyPlaintext(roomLink);
         if (!success) {
             Modal.createDialog(ErrorDialog, {
@@ -1245,7 +1246,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const welcomeUserRooms = DMRoomMap.shared().getDMRoomsForUserId(welcomeUserId);
         if (welcomeUserRooms.length === 0) {
-            const roomId = await createRoom({
+            const roomId = await createRoom(MatrixClientPeg.get(), {
                 dmUserId: snakedConfig.get("welcome_user_id"),
                 // Only view the welcome user if we're NOT looking at a room
                 andView: !this.state.currentRoomId,

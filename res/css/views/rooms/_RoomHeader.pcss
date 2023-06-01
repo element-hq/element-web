@@ -80,6 +80,7 @@ limitations under the License.
     padding: 1px 4px;
     display: flex;
     user-select: none;
+    cursor: pointer;
 
     &:hover {
         background-color: $quinary-content;
@@ -102,6 +103,14 @@ limitations under the License.
         background-color: $tertiary-content;
     }
 
+    &.mx_RoomHeader_name--textonly {
+        cursor: unset;
+
+        &:hover {
+            background-color: unset;
+        }
+    }
+
     &[aria-expanded="true"] {
         background-color: $quinary-content;
 
@@ -118,11 +127,6 @@ limitations under the License.
 .mx_RoomHeader_searchStatus {
     font-weight: normal;
     opacity: 0.6;
-}
-
-.mx_RoomHeader_name:not(.mx_RoomHeader_name--textonly),
-.mx_RoomHeader_avatar {
-    cursor: pointer;
 }
 
 .mx_RoomTopic {
@@ -157,6 +161,7 @@ limitations under the License.
     flex: 0;
     margin: 0 7px;
     position: relative;
+    cursor: pointer;
 }
 
 .mx_RoomHeader_avatar .mx_BaseAvatar_image {
@@ -191,6 +196,54 @@ limitations under the License.
         &::before {
             background-color: $accent;
         }
+    }
+}
+
+.mx_RoomHeader_button_unreadIndicator_bg {
+    position: absolute;
+    right: var(--RoomHeader-indicator-dot-offset);
+    top: var(--RoomHeader-indicator-dot-offset);
+    margin: 4px;
+    width: var(--RoomHeader-indicator-dot-size);
+    height: var(--RoomHeader-indicator-dot-size);
+    border-radius: 50%;
+    transform: scale(1.6);
+    transform-origin: center center;
+    background: rgba($background, 1);
+}
+
+.mx_RoomHeader_button_unreadIndicator {
+    position: absolute;
+    right: var(--RoomHeader-indicator-dot-offset);
+    top: var(--RoomHeader-indicator-dot-offset);
+    margin: 4px;
+
+    &.mx_Indicator_red {
+        background: rgba($alert, 1);
+        box-shadow: rgba($alert, 1);
+    }
+
+    &.mx_Indicator_gray {
+        background: rgba($room-icon-unread-color, 1);
+        box-shadow: rgba($room-icon-unread-color, 1);
+    }
+
+    &.mx_Indicator_bold {
+        background: rgba($primary-content, 1);
+        box-shadow: rgba($primary-content, 1);
+    }
+}
+
+.mx_RoomHeader_button--unread {
+    &::before {
+        background-color: $room-icon-unread-color !important;
+    }
+}
+
+.mx_RoomHeader_button--highlight,
+.mx_RoomHeader_button:hover {
+    &::before {
+        background-color: $accent !important;
     }
 }
 

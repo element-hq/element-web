@@ -28,7 +28,7 @@ import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { useEventEmitter } from "../../hooks/useEventEmitter";
-import MatrixClientContext from "../../contexts/MatrixClientContext";
+import MatrixClientContext, { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../views/elements/MiniAvatarUploader";
 import PosthogTrackers from "../../PosthogTrackers";
 import EmbeddedPage from "./EmbeddedPage";
@@ -97,8 +97,9 @@ const UserWelcomeTop: React.FC = () => {
 };
 
 const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
+    const cli = useMatrixClientContext();
     const config = SdkConfig.get();
-    const pageUrl = getHomePageUrl(config);
+    const pageUrl = getHomePageUrl(config, cli);
 
     if (pageUrl) {
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;

@@ -181,7 +181,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
             return;
         }
 
-        const task = new AddThreepid();
+        const task = new AddThreepid(MatrixClientPeg.get());
         this.setState({ verifying: true, continueDisabled: true, addTask: task });
 
         task.addEmailAddress(email)
@@ -276,7 +276,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className="mx_EmailAddresses">
+            <>
                 {existingEmailElements}
                 <form onSubmit={this.onAddClick} autoComplete="off" noValidate={true}>
                     <Field
@@ -289,7 +289,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
                     />
                     {addButton}
                 </form>
-            </div>
+            </>
         );
     }
 }

@@ -146,8 +146,10 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 });
             }
 
-            doMaybeLocalRoomAction(this.props.room.roomId, (actualRoomId: string) =>
-                MatrixClientPeg.get().sendMessage(actualRoomId, content),
+            doMaybeLocalRoomAction(
+                this.props.room.roomId,
+                (actualRoomId: string) => MatrixClientPeg.get().sendMessage(actualRoomId, content),
+                this.props.room.client,
             );
         } catch (e) {
             logger.error("Error sending voice message:", e);

@@ -21,6 +21,7 @@ import StyledRadioButton from "../elements/StyledRadioButton";
 import { _t } from "../../../languageHandler";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { ImageSize } from "../../../settings/enums/ImageSize";
+import SettingsSubsection from "./shared/SettingsSubsection";
 
 interface IProps {
     // none
@@ -49,9 +50,7 @@ export default class ImageSizePanel extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         return (
-            <div className="mx_SettingsTab_section mx_ImageSizePanel">
-                <span className="mx_SettingsTab_subheading">{_t("Image size in the timeline")}</span>
-
+            <SettingsSubsection heading={_t("Image size in the timeline")}>
                 <div className="mx_ImageSizePanel_radios">
                     <label>
                         <div className="mx_ImageSizePanel_size mx_ImageSizePanel_sizeDefault" />
@@ -76,7 +75,7 @@ export default class ImageSizePanel extends React.Component<IProps, IState> {
                         </StyledRadioButton>
                     </label>
                 </div>
-            </div>
+            </SettingsSubsection>
         );
     }
 }

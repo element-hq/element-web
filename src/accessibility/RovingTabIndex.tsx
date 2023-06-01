@@ -78,16 +78,40 @@ export enum Type {
     Register = "REGISTER",
     Unregister = "UNREGISTER",
     SetFocus = "SET_FOCUS",
+    Update = "UPDATE",
 }
 
 export interface IAction {
-    type: Type;
+    type: Exclude<Type, Type.Update>;
     payload: {
         ref: Ref;
     };
 }
 
-export const reducer: Reducer<IState, IAction> = (state: IState, action: IAction) => {
+interface UpdateAction {
+    type: Type.Update;
+    payload?: undefined;
+}
+
+type Action = IAction | UpdateAction;
+
+const refSorter = (a: Ref, b: Ref): number => {
+    if (a === b) {
+        return 0;
+    }
+
+    const position = a.current!.compareDocumentPosition(b.current!);
+
+    if (position & Node.DOCUMENT_POSITION_FOLLOWING || position & Node.DOCUMENT_POSITION_CONTAINED_BY) {
+        return -1;
+    } else if (position & Node.DOCUMENT_POSITION_PRECEDING || position & Node.DOCUMENT_POSITION_CONTAINS) {
+        return 1;
+    } else {
+        return 0;
+    }
+};
+
+export const reducer: Reducer<IState, Action> = (state: IState, action: Action) => {
     switch (action.type) {
         case Type.Register: {
             if (!state.activeRef) {
@@ -97,21 +121,7 @@ export const reducer: Reducer<IState, IAction> = (state: IState, action: IAction
 
             // Sadly due to the potential of DOM elements swapping order we can't do anything fancy like a binary insert
             state.refs.push(action.payload.ref);
-            state.refs.sort((a, b) => {
-                if (a === b) {
-                    return 0;
-                }
-
-                const position = a.current!.compareDocumentPosition(b.current!);
-
-                if (position & Node.DOCUMENT_POSITION_FOLLOWING || position & Node.DOCUMENT_POSITION_CONTAINED_BY) {
-                    return -1;
-                } else if (position & Node.DOCUMENT_POSITION_PRECEDING || position & Node.DOCUMENT_POSITION_CONTAINS) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
+            state.refs.sort(refSorter);
 
             return { ...state };
         }
@@ -150,6 +160,11 @@ export const reducer: Reducer<IState, IAction> = (state: IState, action: IAction
             return { ...state };
         }
 
+        case Type.Update: {
+            state.refs.sort(refSorter);
+            return { ...state };
+        }
+
         default:
             return state;
     }
@@ -160,7 +175,7 @@ interface IProps {
     handleHomeEnd?: boolean;
     handleUpDown?: boolean;
     handleLeftRight?: boolean;
-    children(renderProps: { onKeyDownHandler(ev: React.KeyboardEvent): void }): ReactNode;
+    children(renderProps: { onKeyDownHandler(ev: React.KeyboardEvent): void; onDragEndHandler(): void }): ReactNode;
     onKeyDown?(ev: React.KeyboardEvent, state: IState, dispatch: Dispatch<IAction>): void;
 }
 
@@ -199,7 +214,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
     handleLoop,
     onKeyDown,
 }) => {
-    const [state, dispatch] = useReducer<Reducer<IState, IAction>>(reducer, {
+    const [state, dispatch] = useReducer<Reducer<IState, Action>>(reducer, {
         refs: [],
     });
 
@@ -301,9 +316,15 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
         [context, onKeyDown, handleHomeEnd, handleUpDown, handleLeftRight, handleLoop],
     );
 
+    const onDragEndHandler = useCallback(() => {
+        dispatch({
+            type: Type.Update,
+        });
+    }, []);
+
     return (
         <RovingTabIndexContext.Provider value={context}>
-            {children({ onKeyDownHandler })}
+            {children({ onKeyDownHandler, onDragEndHandler })}
         </RovingTabIndexContext.Provider>
     );
 };

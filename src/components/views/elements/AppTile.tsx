@@ -17,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from "url";
 import React, { ContextType, createRef, CSSProperties, MutableRefObject, ReactNode } from "react";
 import classNames from "classnames";
 import { IWidget, MatrixCapabilities } from "matrix-widget-api";
@@ -41,6 +40,11 @@ import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { IApp, isAppWidget } from "../../../stores/WidgetStore";
+import { Icon as CollapseIcon } from "../../../../res/img/element-icons/minimise-collapse.svg";
+import { Icon as MaximiseIcon } from "../../../../res/img/element-icons/maximise-expand.svg";
+import { Icon as MinimiseIcon } from "../../../../res/img/element-icons/minus-button.svg";
+import { Icon as PopoutIcon } from "../../../../res/img/feather-customised/widget/external-link.svg";
+import { Icon as MenuIcon } from "../../../../res/img/element-icons/room/ellipsis.svg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -52,6 +56,7 @@ import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidget
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
+import { parseUrl } from "../../../utils/UrlUtils";
 
 interface IProps {
     app: IWidget | IApp;
@@ -126,7 +131,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private persistKey: string;
     private sgWidget: StopGapWidget | null;
     private dispatcherRef?: string;
-    private unmounted: boolean;
+    private unmounted = false;
 
     public constructor(props: IProps) {
         super(props);
@@ -265,7 +270,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private isMixedContent(): boolean {
         const parentContentProtocol = window.location.protocol;
-        const u = url.parse(this.props.app.url);
+        const u = parseUrl(this.props.app.url);
         const childContentProtocol = u.protocol;
         if (parentContentProtocol === "https:" && childContentProtocol !== "https:") {
             logger.warn(
@@ -590,7 +595,11 @@ export default class AppTile extends React.Component<IProps, IState> {
         const iframeFeatures =
             "microphone; camera; encrypted-media; autoplay; display-capture; clipboard-write; " + "clipboard-read;";
 
-        const appTileBodyClass = "mx_AppTileBody" + (this.props.miniMode ? "_mini  " : " ");
+        const appTileBodyClass = classNames({
+            mx_AppTileBody: !this.props.miniMode,
+            mx_AppTileBody_mini: this.props.miniMode,
+            mx_AppTile_loading: this.state.loading,
+        });
         const appTileBodyStyles: CSSProperties = {};
         if (this.props.pointerEvents) {
             appTileBodyStyles.pointerEvents = this.props.pointerEvents;
@@ -626,10 +635,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             );
         } else if (this.state.initialising || !this.state.isUserProfileReady) {
             appTileBody = (
-                <div
-                    className={appTileBodyClass + (this.state.loading ? "mx_AppTile_loading" : "")}
-                    style={appTileBodyStyles}
-                >
+                <div className={appTileBodyClass} style={appTileBodyStyles}>
                     {loadingElement}
                 </div>
             );
@@ -642,10 +648,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 );
             } else {
                 appTileBody = (
-                    <div
-                        className={appTileBodyClass + (this.state.loading ? "mx_AppTile_loading" : "")}
-                        style={appTileBodyStyles}
-                    >
+                    <div className={appTileBodyClass} style={appTileBodyStyles}>
                         {this.state.loading && loadingElement}
                         <iframe
                             title={widgetTitle}
@@ -716,27 +719,31 @@ export default class AppTile extends React.Component<IProps, IState> {
             const isMaximised =
                 this.props.room &&
                 WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, Container.Center);
-            const maximisedClasses = classNames({
-                "mx_AppTileMenuBar_iconButton": true,
-                "mx_AppTileMenuBar_iconButton--collapse": isMaximised,
-                "mx_AppTileMenuBar_iconButton--maximise": !isMaximised,
-            });
+
             layoutButtons.push(
                 <AccessibleButton
                     key="toggleMaximised"
-                    className={maximisedClasses}
+                    className="mx_AppTileMenuBar_widgets_button"
                     title={isMaximised ? _t("Un-maximise") : _t("Maximise")}
                     onClick={this.onToggleMaximisedClick}
-                />,
+                >
+                    {isMaximised ? (
+                        <CollapseIcon className="mx_Icon mx_Icon_12" />
+                    ) : (
+                        <MaximiseIcon className="mx_Icon mx_Icon_12" />
+                    )}
+                </AccessibleButton>,
             );
 
             layoutButtons.push(
                 <AccessibleButton
                     key="minimise"
-                    className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--minimise"
+                    className="mx_AppTileMenuBar_widgets_button"
                     title={_t("Minimise")}
                     onClick={this.onMinimiseClicked}
-                />,
+                >
+                    <MinimiseIcon className="mx_Icon mx_Icon_12" />
+                </AccessibleButton>,
             );
         }
 
@@ -755,18 +762,22 @@ export default class AppTile extends React.Component<IProps, IState> {
                                 {layoutButtons}
                                 {this.props.showPopout && !this.state.requiresClient && (
                                     <AccessibleButton
-                                        className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--popout"
+                                        className="mx_AppTileMenuBar_widgets_button"
                                         title={_t("Popout widget")}
                                         onClick={this.onPopoutWidgetClick}
-                                    />
+                                    >
+                                        <PopoutIcon className="mx_Icon mx_Icon_12 mx_Icon--stroke" />
+                                    </AccessibleButton>
                                 )}
                                 <ContextMenuButton
-                                    className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton--menu"
+                                    className="mx_AppTileMenuBar_widgets_button"
                                     label={_t("Options")}
                                     isExpanded={this.state.menuDisplayed}
                                     inputRef={this.contextMenuButton}
                                     onClick={this.onContextMenuClick}
-                                />
+                                >
+                                    <MenuIcon className="mx_Icon mx_Icon_12" />
+                                </ContextMenuButton>
                             </span>
                         </div>
                     )}

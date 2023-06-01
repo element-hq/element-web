@@ -22,6 +22,7 @@ import SdkConfig from "../../../SdkConfig";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import { _t, _td } from "../../../languageHandler";
 import Field, { IInputProps } from "../elements/Field";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     autoFocus?: boolean;
@@ -56,7 +57,7 @@ class PassphraseField extends PureComponent<IProps> {
         deriveData: async ({ value }): Promise<zxcvbn.ZXCVBNResult | null> => {
             if (!value) return null;
             const { scorePassword } = await import("../../../utils/PasswordScorer");
-            return scorePassword(value);
+            return scorePassword(MatrixClientPeg.get(), value);
         },
         rules: [
             {

@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { render } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
@@ -25,7 +25,7 @@ import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { mkStubRoom, stubClient } from "../../test-utils";
 import dispatcher from "../../../src/dispatcher/dispatcher";
-import { HierarchyLevel, showRoom, toLocalRoom } from "../../../src/components/structures/SpaceHierarchy";
+import SpaceHierarchy, { showRoom, toLocalRoom } from "../../../src/components/structures/SpaceHierarchy";
 import { Action } from "../../../src/dispatcher/actions";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
@@ -158,7 +158,18 @@ describe("SpaceHierarchy", () => {
         });
     });
 
-    describe("<HierarchyLevel />", () => {
+    describe("<SpaceHierarchy />", () => {
+        beforeEach(() => {
+            // IntersectionObserver isn't available in test environment
+            const mockIntersectionObserver = jest.fn();
+            mockIntersectionObserver.mockReturnValue({
+                observe: () => null,
+                unobserve: () => null,
+                disconnect: () => null,
+            });
+            window.IntersectionObserver = mockIntersectionObserver;
+        });
+
         stubClient();
         const client = MatrixClientPeg.get();
 
@@ -167,55 +178,123 @@ describe("SpaceHierarchy", () => {
         } as unknown as DMRoomMap;
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
 
-        const root = mkStubRoom("room-id-1", "Room 1", client);
-        const room1 = mkStubRoom("room-id-2", "Room 2", client);
-        const room2 = mkStubRoom("room-id-3", "Room 3", client);
+        const root = mkStubRoom("space-id-1", "Space 1", client);
+        const room1 = mkStubRoom("room-id-2", "Room 1", client);
+        const room2 = mkStubRoom("room-id-3", "Room 2", client);
+        const space1 = mkStubRoom("space-id-4", "Space 2", client);
+        const room3 = mkStubRoom("room-id-5", "Room 3", client);
+        mocked(client.getRooms).mockReturnValue([root]);
+        mocked(client.getRoom).mockImplementation(
+            (roomId) => client.getRooms().find((room) => room.roomId === roomId) ?? null,
+        );
+        [room1, room2, space1, room3].forEach((r) => mocked(r.getMyMembership).mockReturnValue("leave"));
 
-        const hierarchyRoot = {
+        const hierarchyRoot: IHierarchyRoom = {
             room_id: root.roomId,
             num_joined_members: 1,
+            room_type: "m.space",
             children_state: [
                 {
                     state_key: room1.roomId,
                     content: { order: "1" },
+                    origin_server_ts: 111,
+                    type: "m.space.child",
+                    sender: "@other:server",
                 },
                 {
                     state_key: room2.roomId,
                     content: { order: "2" },
+                    origin_server_ts: 111,
+                    type: "m.space.child",
+                    sender: "@other:server",
+                },
+                {
+                    state_key: space1.roomId,
+                    content: { order: "3" },
+                    origin_server_ts: 111,
+                    type: "m.space.child",
+                    sender: "@other:server",
                 },
             ],
-        } as IHierarchyRoom;
-        const hierarchyRoom1 = { room_id: room1.roomId, num_joined_members: 2 } as IHierarchyRoom;
-        const hierarchyRoom2 = { room_id: root.roomId, num_joined_members: 3 } as IHierarchyRoom;
+            world_readable: true,
+            guest_can_join: true,
+        };
+        const hierarchyRoom1: IHierarchyRoom = {
+            room_id: room1.roomId,
+            num_joined_members: 2,
+            children_state: [],
+            world_readable: true,
+            guest_can_join: true,
+        };
+        const hierarchyRoom2: IHierarchyRoom = {
+            room_id: room2.roomId,
+            num_joined_members: 3,
+            children_state: [],
+            world_readable: true,
+            guest_can_join: true,
+        };
+        const hierarchyRoom3: IHierarchyRoom = {
+            name: "Nested room",
+            room_id: room3.roomId,
+            num_joined_members: 3,
+            children_state: [],
+            world_readable: true,
+            guest_can_join: true,
+        };
+        const hierarchySpace1: IHierarchyRoom = {
+            room_id: space1.roomId,
+            name: "Nested space",
+            num_joined_members: 1,
+            room_type: "m.space",
+            children_state: [
+                {
+                    state_key: room3.roomId,
+                    content: { order: "1" },
+                    origin_server_ts: 111,
+                    type: "m.space.child",
+                    sender: "@other:server",
+                },
+            ],
+            world_readable: true,
+            guest_can_join: true,
+        };
 
-        const roomHierarchy = {
-            roomMap: new Map([
-                [root.roomId, hierarchyRoot],
-                [room1.roomId, hierarchyRoom1],
-                [room2.roomId, hierarchyRoom2],
-            ]),
-            isSuggested: jest.fn(),
-        } as unknown as RoomHierarchy;
+        mocked(client.getRoomHierarchy).mockResolvedValue({
+            rooms: [hierarchyRoot, hierarchyRoom1, hierarchyRoom2, hierarchySpace1, hierarchyRoom3],
+        });
 
-        it("renders", () => {
-            const defaultProps = {
-                root: hierarchyRoot,
-                roomSet: new Set([hierarchyRoom1, hierarchyRoom2]),
-                hierarchy: roomHierarchy,
-                parents: new Set<string>(),
-                selectedMap: new Map<string, Set<string>>(),
-                onViewRoomClick: jest.fn(),
-                onJoinRoomClick: jest.fn(),
-                onToggleClick: jest.fn(),
-            };
-            const getComponent = (props = {}): React.ReactElement => (
-                <MatrixClientContext.Provider value={client}>
-                    <HierarchyLevel {...defaultProps} {...props} />;
-                </MatrixClientContext.Provider>
-            );
+        const defaultProps = {
+            space: root,
+            showRoom: jest.fn(),
+        };
+        const getComponent = (props = {}): React.ReactElement => (
+            <MatrixClientContext.Provider value={client}>
+                <SpaceHierarchy {...defaultProps} {...props} />;
+            </MatrixClientContext.Provider>
+        );
 
-            const { container } = render(getComponent());
-            expect(container).toMatchSnapshot();
+        it("renders", async () => {
+            const { asFragment } = render(getComponent());
+            // Wait for spinners to go away
+            await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
+            expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("should join subspace when joining nested room", async () => {
+            mocked(client.joinRoom).mockResolvedValue({} as Room);
+
+            const { getByText } = render(getComponent());
+            // Wait for spinners to go away
+            await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
+            const button = getByText("Nested room")!.closest("li")!.querySelector(".mx_AccessibleButton_kind_primary")!;
+            fireEvent.click(button);
+
+            await waitFor(() => {
+                expect(client.joinRoom).toHaveBeenCalledTimes(2);
+            });
+            // Joins subspace
+            expect(client.joinRoom).toHaveBeenCalledWith(space1.roomId, expect.any(Object));
+            expect(client.joinRoom).toHaveBeenCalledWith(room3.roomId, expect.any(Object));
         });
     });
 });

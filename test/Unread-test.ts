@@ -67,32 +67,32 @@ describe("Unread", () => {
         });
 
         it("returns false when the event was sent by the current user", () => {
-            expect(eventTriggersUnreadCount(ourMessage)).toBe(false);
+            expect(eventTriggersUnreadCount(client, ourMessage)).toBe(false);
             // returned early before checking renderer
             expect(haveRendererForEvent).not.toHaveBeenCalled();
         });
 
         it("returns false for a redacted event", () => {
-            expect(eventTriggersUnreadCount(redactedEvent)).toBe(false);
+            expect(eventTriggersUnreadCount(client, redactedEvent)).toBe(false);
             // returned early before checking renderer
             expect(haveRendererForEvent).not.toHaveBeenCalled();
         });
 
         it("returns false for an event without a renderer", () => {
             mocked(haveRendererForEvent).mockReturnValue(false);
-            expect(eventTriggersUnreadCount(alicesMessage)).toBe(false);
+            expect(eventTriggersUnreadCount(client, alicesMessage)).toBe(false);
             expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
         });
 
         it("returns true for an event with a renderer", () => {
             mocked(haveRendererForEvent).mockReturnValue(true);
-            expect(eventTriggersUnreadCount(alicesMessage)).toBe(true);
+            expect(eventTriggersUnreadCount(client, alicesMessage)).toBe(true);
             expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
         });
 
         it("returns false for beacon locations", () => {
             const beaconLocationEvent = makeBeaconEvent(aliceId);
-            expect(eventTriggersUnreadCount(beaconLocationEvent)).toBe(false);
+            expect(eventTriggersUnreadCount(client, beaconLocationEvent)).toBe(false);
             expect(haveRendererForEvent).not.toHaveBeenCalled();
         });
 
@@ -112,7 +112,7 @@ describe("Unread", () => {
                     type: eventType,
                     sender: aliceId,
                 });
-                expect(eventTriggersUnreadCount(event)).toBe(false);
+                expect(eventTriggersUnreadCount(client, event)).toBe(false);
                 expect(haveRendererForEvent).not.toHaveBeenCalled();
             },
         );
@@ -313,6 +313,88 @@ describe("Unread", () => {
                         [events[0].getId()!]: {
                             [ReceiptType.Read]: {
                                 [myId]: { ts: 1, threadId: rootEvent.getId()! },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+            });
+
+            it("returns false when the event for a thread receipt can't be found, but the receipt ts is late", () => {
+                // Given a room that is read
+                let receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        [event.getId()!]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: 1 },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                // And a thread
+                const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+
+                // When we provide a receipt that points at an unknown event,
+                // but its timestamp is after all events in the thread
+                //
+                // (This could happen if we mis-filed a reaction into the main
+                // thread when it should actually have gone into this thread, or
+                // maybe the event is just not loaded for some reason.)
+                const receiptTs = Math.max(...events.map((e) => e.getTs())) + 100;
+                receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        ["UNKNOWN_EVENT_ID"]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: receiptTs, threadId: rootEvent.getId()! },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                expect(doesRoomHaveUnreadMessages(room)).toBe(false);
+            });
+
+            it("returns true when the event for a thread receipt can't be found, and the receipt ts is early", () => {
+                // Given a room that is read
+                let receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        [event.getId()!]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: 1 },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                // And a thread
+                const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+
+                // When we provide a receipt that points at an unknown event,
+                // but its timestamp is before some of the events in the thread
+                //
+                // (This could happen if we mis-filed a reaction into the main
+                // thread when it should actually have gone into this thread, or
+                // maybe the event is just not loaded for some reason.)
+                const receiptTs = (events.at(-1)?.getTs() ?? 0) - 100;
+                receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        ["UNKNOWN_EVENT_ID"]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: receiptTs, threadId: rootEvent.getId()! },
                             },
                         },
                     },

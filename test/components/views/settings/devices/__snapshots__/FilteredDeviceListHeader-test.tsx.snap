@@ -7,6 +7,7 @@ exports[`<FilteredDeviceListHeader /> renders correctly when all devices are sel
     data-testid="test123"
   >
     <div
+      aria-describedby="mx_TooltipTarget_abdefghi"
       tabindex="0"
     >
       <span
@@ -51,6 +52,7 @@ exports[`<FilteredDeviceListHeader /> renders correctly when no devices are sele
     data-testid="test123"
   >
     <div
+      aria-describedby="mx_TooltipTarget_abdefghi"
       tabindex="0"
     >
       <span
