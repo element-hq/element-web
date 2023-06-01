@@ -106,7 +106,7 @@ jobs:
 
             - name: Deploy to Cloudflare Pages
               id: cfp
-              uses: cloudflare/pages-action@61eafe73baad0195ab582cb447b2c6e15a0df9ce # v1
+              uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
