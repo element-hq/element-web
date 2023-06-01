@@ -89,7 +89,7 @@ export async function createRoomFromLocalRoom(client: MatrixClient, localRoom: L
             if (!roomId) throw new Error(`startDm for local room ${localRoom.roomId} didn't return a room Id`);
 
             localRoom.actualRoomId = roomId;
-            return waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom);
+            return waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom, roomId);
         },
         () => {
             logger.warn(`Error creating DM for local room ${localRoom.roomId}`);

@@ -196,7 +196,11 @@ describe("direct-messages", () => {
                 const result = await dmModule.createRoomFromLocalRoom(mockClient, localRoom);
                 expect(result).toBe(room1.roomId);
                 expect(localRoom.state).toBe(LocalRoomState.CREATING);
-                expect(waitForRoomReadyAndApplyAfterCreateCallbacks).toHaveBeenCalledWith(mockClient, localRoom);
+                expect(waitForRoomReadyAndApplyAfterCreateCallbacks).toHaveBeenCalledWith(
+                    mockClient,
+                    localRoom,
+                    room1.roomId,
+                );
             });
         });
     });

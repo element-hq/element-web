@@ -108,7 +108,11 @@ describe("local-room", () => {
             });
 
             it("should invoke the callbacks, set the room state to created and return the actual room id", async () => {
-                const result = await localRoomModule.waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom);
+                const result = await localRoomModule.waitForRoomReadyAndApplyAfterCreateCallbacks(
+                    client,
+                    localRoom,
+                    room1.roomId,
+                );
                 expect(localRoom.state).toBe(LocalRoomState.CREATED);
                 expect(localRoomCallbackRoomId).toBe(room1.roomId);
                 expect(result).toBe(room1.roomId);
@@ -121,7 +125,11 @@ describe("local-room", () => {
             });
 
             it("should invoke the callbacks, set the room state to created and return the actual room id", async () => {
-                const prom = localRoomModule.waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom);
+                const prom = localRoomModule.waitForRoomReadyAndApplyAfterCreateCallbacks(
+                    client,
+                    localRoom,
+                    room1.roomId,
+                );
                 jest.advanceTimersByTime(5000);
                 const roomId = await prom;
                 expect(localRoom.state).toBe(LocalRoomState.CREATED);
@@ -137,7 +145,11 @@ describe("local-room", () => {
             });
 
             it("should invoke the callbacks, set the room state to created and return the actual room id", async () => {
-                const prom = localRoomModule.waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom);
+                const prom = localRoomModule.waitForRoomReadyAndApplyAfterCreateCallbacks(
+                    client,
+                    localRoom,
+                    room1.roomId,
+                );
                 mocked(isRoomReady).mockReturnValue(true);
                 jest.advanceTimersByTime(500);
                 const roomId = await prom;
