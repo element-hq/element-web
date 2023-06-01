@@ -1124,29 +1124,6 @@ $left-gutter: 64px;
         box-sizing: border-box;
         padding-bottom: 0;
         padding-inline-start: var(--leftOffset);
-
-        .mx_ThreadPanel_replies {
-            margin-top: $spacing-8;
-            display: flex;
-            align-items: center;
-            position: relative;
-
-            &::before {
-                @mixin ThreadSummaryIcon;
-            }
-
-            .mx_ThreadPanel_replies_amount {
-                @mixin ThreadRepliesAmount;
-                line-height: var(--EventTile_ThreadSummary-line-height);
-                font-size: $font-12px; /* Same font size as the counter on the main panel */
-            }
-
-            .mx_ThreadSummary_content {
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-            }
-        }
     }
 
     .mx_MessageTimestamp {
@@ -1167,6 +1144,31 @@ $left-gutter: 64px;
         .mx_EventTile_line {
             background-color: $system; /* override $event-selected-color */
             box-shadow: none; /* don't show the verification left stroke in the thread list */
+        }
+    }
+}
+
+.mx_EventTile[data-shape="ThreadsList"] {
+    .mx_ThreadPanel_replies {
+        margin-top: $spacing-8;
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        &::before {
+            @mixin ThreadSummaryIcon;
+        }
+
+        .mx_ThreadPanel_replies_amount {
+            @mixin ThreadRepliesAmount;
+            line-height: var(--EventTile_ThreadSummary-line-height);
+            font-size: $font-12px; /* Same font size as the counter on the main panel */
+        }
+
+        .mx_ThreadSummary_content {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
     }
 }
