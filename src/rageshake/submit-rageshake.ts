@@ -189,7 +189,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
 
             // compress
             if (gzipLogs) {
-                buf = pako.gzip(buf);
+                buf = pako!.gzip(buf);
             }
 
             body.append("compressed-log", new Blob([buf]), entry.id);

@@ -129,7 +129,7 @@ export default class IdentityAuthClient {
         } catch (e) {
             if (e instanceof MatrixError && e.errcode === "M_TERMS_NOT_SIGNED") {
                 logger.log("Identity server requires new terms to be agreed to");
-                await startTermsFlow([new Service(SERVICE_TYPES.IS, identityServerUrl, token)]);
+                await startTermsFlow(this.matrixClient, [new Service(SERVICE_TYPES.IS, identityServerUrl, token)]);
                 return;
             }
             throw e;

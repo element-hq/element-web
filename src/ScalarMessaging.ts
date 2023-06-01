@@ -876,7 +876,7 @@ const onMessage = function (event: MessageEvent<any>): void {
         // No integrations UI URL, ignore silently.
         return;
     }
-    let eventOriginUrl;
+    let eventOriginUrl: URL;
     try {
         eventOriginUrl = new URL(event.origin);
     } catch (e) {

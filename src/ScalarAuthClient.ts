@@ -157,6 +157,7 @@ export default class ScalarAuthClient {
                     const parsedImRestUrl = parseUrl(this.apiUrl);
                     parsedImRestUrl.pathname = "";
                     return startTermsFlow(
+                        MatrixClientPeg.get(),
                         [new Service(SERVICE_TYPES.IM, parsedImRestUrl.toString(), token)],
                         this.termsInteractionCallback,
                     ).then(() => {

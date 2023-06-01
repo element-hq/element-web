@@ -321,7 +321,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 }
             });
 
-            if (opts.dmUserId) await Rooms.setDMRoom(roomId, opts.dmUserId);
+            if (opts.dmUserId) await Rooms.setDMRoom(client, roomId, opts.dmUserId);
         })
         .then(() => {
             if (opts.parentSpace) {

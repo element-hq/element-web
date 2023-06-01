@@ -52,7 +52,7 @@ describe("setDMRoom", () => {
     describe("when logged in as a guest and marking a room as DM", () => {
         beforeEach(() => {
             mocked(client.isGuest).mockReturnValue(true);
-            setDMRoom(roomId1, userId1);
+            setDMRoom(client, roomId1, userId1);
         });
 
         it("should not update the account data", () => {
@@ -62,7 +62,7 @@ describe("setDMRoom", () => {
 
     describe("when adding a new room to an existing DM relation", () => {
         beforeEach(() => {
-            setDMRoom(roomId4, userId1);
+            setDMRoom(client, roomId4, userId1);
         });
 
         it("should update the account data accordingly", () => {
@@ -75,7 +75,7 @@ describe("setDMRoom", () => {
 
     describe("when adding a new DM room", () => {
         beforeEach(() => {
-            setDMRoom(roomId4, userId3);
+            setDMRoom(client, roomId4, userId3);
         });
 
         it("should update the account data accordingly", () => {
@@ -89,7 +89,7 @@ describe("setDMRoom", () => {
 
     describe("when trying to add a DM, that already exists", () => {
         beforeEach(() => {
-            setDMRoom(roomId1, userId1);
+            setDMRoom(client, roomId1, userId1);
         });
 
         it("should not update the account data", () => {
@@ -99,7 +99,7 @@ describe("setDMRoom", () => {
 
     describe("when removing an existing DM", () => {
         beforeEach(() => {
-            setDMRoom(roomId1, null);
+            setDMRoom(client, roomId1, null);
         });
 
         it("should update the account data accordingly", () => {
@@ -112,7 +112,7 @@ describe("setDMRoom", () => {
 
     describe("when removing an unknown room", () => {
         beforeEach(() => {
-            setDMRoom(roomId4, null);
+            setDMRoom(client, roomId4, null);
         });
 
         it("should not update the account data", () => {
@@ -123,7 +123,7 @@ describe("setDMRoom", () => {
     describe("when the direct event is undefined", () => {
         beforeEach(() => {
             mocked(client.getAccountData).mockReturnValue(undefined);
-            setDMRoom(roomId1, userId1);
+            setDMRoom(client, roomId1, userId1);
         });
 
         it("should update the account data accordingly", () => {
@@ -139,7 +139,7 @@ describe("setDMRoom", () => {
             mocked(client.getAccountData).mockReturnValue({
                 getContent: jest.fn(),
             });
-            setDMRoom(roomId1, userId1);
+            setDMRoom(client, roomId1, userId1);
         });
 
         it("should update the account data accordingly", () => {

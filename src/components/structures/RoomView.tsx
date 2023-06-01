@@ -1512,7 +1512,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
         const dmInviter = room.getDMInviter();
         if (dmInviter) {
-            Rooms.setDMRoom(room.roomId, dmInviter);
+            Rooms.setDMRoom(room.client, room.roomId, dmInviter);
         }
     }
 

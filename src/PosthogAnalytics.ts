@@ -254,7 +254,7 @@ export class PosthogAnalytics {
         };
     }
 
-    // eslint-disable-nextline no-unused-varsx
+    // eslint-disable-nextline no-unused-vars
     private capture(eventName: string, properties: Properties, options?: IPostHogEventOptions): void {
         if (!this.enabled) {
             return;
@@ -375,12 +375,12 @@ export class PosthogAnalytics {
         this.registerSuperProperties(this.platformSuperProperties);
     }
 
-    public async updateAnonymityFromSettings(pseudonymousOptIn: boolean): Promise<void> {
+    public async updateAnonymityFromSettings(client: MatrixClient, pseudonymousOptIn: boolean): Promise<void> {
         // Update this.anonymity based on the user's analytics opt-in settings
         const anonymity = pseudonymousOptIn ? Anonymity.Pseudonymous : Anonymity.Disabled;
         this.setAnonymity(anonymity);
         if (anonymity === Anonymity.Pseudonymous) {
-            await this.identifyUser(MatrixClientPeg.get(), PosthogAnalytics.getRandomAnalyticsId);
+            await this.identifyUser(client, PosthogAnalytics.getRandomAnalyticsId);
             if (MatrixClientPeg.currentUserIsJustRegistered()) {
                 this.trackNewUserEvent();
             }
@@ -391,7 +391,7 @@ export class PosthogAnalytics {
         }
     }
 
-    public startListeningToSettingsChanges(): void {
+    public startListeningToSettingsChanges(client: MatrixClient): void {
         // Listen to account data changes from sync so we can observe changes to relevant flags and update.
         // This is called -
         //  * On page load, when the account data is first received by sync
@@ -404,7 +404,7 @@ export class PosthogAnalytics {
             "pseudonymousAnalyticsOptIn",
             null,
             (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
-                this.updateAnonymityFromSettings(!!newValue);
+                this.updateAnonymityFromSettings(client, !!newValue);
             },
         );
     }

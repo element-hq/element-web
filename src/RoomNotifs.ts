@@ -21,7 +21,6 @@ import { ConditionKind, PushRuleActionName, PushRuleKind, TweakName } from "matr
 import type { IPushRule } from "matrix-js-sdk/src/@types/PushRules";
 import type { Room } from "matrix-js-sdk/src/models/room";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { MatrixClientPeg } from "./MatrixClientPeg";
 import { NotificationColor } from "./stores/notifications/NotificationColor";
 import { getUnsentMessages } from "./components/structures/RoomStatusBar";
 import { doesRoomHaveUnreadMessages, doesRoomOrThreadHaveUnreadMessages } from "./Unread";
@@ -40,7 +39,7 @@ export function getRoomNotifsState(client: MatrixClient, roomId: string): RoomNo
 
     // look through the override rules for a rule affecting this room:
     // if one exists, it will take precedence.
-    const muteRule = findOverrideMuteRule(roomId);
+    const muteRule = findOverrideMuteRule(client, roomId);
     if (muteRule) {
         return RoomNotifState.Mute;
     }
@@ -70,11 +69,11 @@ export function getRoomNotifsState(client: MatrixClient, roomId: string): RoomNo
     return null;
 }
 
-export function setRoomNotifsState(roomId: string, newState: RoomNotifState): Promise<void> {
+export function setRoomNotifsState(client: MatrixClient, roomId: string, newState: RoomNotifState): Promise<void> {
     if (newState === RoomNotifState.Mute) {
-        return setRoomNotifsStateMuted(roomId);
+        return setRoomNotifsStateMuted(client, roomId);
     } else {
-        return setRoomNotifsStateUnmuted(roomId, newState);
+        return setRoomNotifsStateUnmuted(client, roomId, newState);
     }
 }
 
@@ -91,7 +90,7 @@ export function getUnreadNotificationCount(room: Room, type: NotificationCountTy
     // Exclude threadId, as the same thread can't continue over a room upgrade
     if (!threadId && predecessor?.roomId) {
         const oldRoomId = predecessor.roomId;
-        const oldRoom = MatrixClientPeg.get().getRoom(oldRoomId);
+        const oldRoom = room.client.getRoom(oldRoomId);
         if (oldRoom) {
             // We only ever care if there's highlights in the old room. No point in
             // notifying the user for unread messages because they would have extreme
@@ -104,8 +103,7 @@ export function getUnreadNotificationCount(room: Room, type: NotificationCountTy
     return notificationCount;
 }
 
-function setRoomNotifsStateMuted(roomId: string): Promise<any> {
-    const cli = MatrixClientPeg.get();
+function setRoomNotifsStateMuted(cli: MatrixClient, roomId: string): Promise<any> {
     const promises: Promise<unknown>[] = [];
 
     // delete the room rule
@@ -135,11 +133,10 @@ function setRoomNotifsStateMuted(roomId: string): Promise<any> {
     return Promise.all(promises);
 }
 
-function setRoomNotifsStateUnmuted(roomId: string, newState: RoomNotifState): Promise<any> {
-    const cli = MatrixClientPeg.get();
+function setRoomNotifsStateUnmuted(cli: MatrixClient, roomId: string, newState: RoomNotifState): Promise<any> {
     const promises: Promise<unknown>[] = [];
 
-    const overrideMuteRule = findOverrideMuteRule(roomId);
+    const overrideMuteRule = findOverrideMuteRule(cli, roomId);
     if (overrideMuteRule) {
         promises.push(cli.deletePushRule("global", PushRuleKind.Override, overrideMuteRule.rule_id));
     }
@@ -176,8 +173,7 @@ function setRoomNotifsStateUnmuted(roomId: string, newState: RoomNotifState): Pr
     return Promise.all(promises);
 }
 
-function findOverrideMuteRule(roomId: string): IPushRule | null {
-    const cli = MatrixClientPeg.get();
+function findOverrideMuteRule(cli: MatrixClient | undefined, roomId: string): IPushRule | null {
     if (!cli?.pushRules?.global?.override) {
         return null;
     }

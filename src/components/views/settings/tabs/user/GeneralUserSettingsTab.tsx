@@ -61,6 +61,7 @@ import SettingsSubsection, { SettingsSubsectionText } from "../../shared/Setting
 import { SettingsSubsectionHeading } from "../../shared/SettingsSubsectionHeading";
 import Heading from "../../../typography/Heading";
 import InlineSpinner from "../../../elements/InlineSpinner";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -96,6 +97,9 @@ interface IState {
 }
 
 export default class GeneralUserSettingsTab extends React.Component<IProps, IState> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     private readonly dispatcherRef: string;
 
     public constructor(props: IProps) {
@@ -217,6 +221,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         try {
             const idAccessToken = await authClient.getAccessToken({ check: false });
             await startTermsFlow(
+                this.context,
                 [new Service(SERVICE_TYPES.IS, idServerUrl, idAccessToken!)],
                 (policiesAndServices, agreedUrls, extraClassNames) => {
                     return new Promise((resolve, reject) => {

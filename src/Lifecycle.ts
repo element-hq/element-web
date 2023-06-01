@@ -553,7 +553,7 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
         logger.warn("Clearing all data: Old session belongs to a different user/session");
     }
 
-    if (!credentials.pickleKey) {
+    if (!credentials.pickleKey && credentials.deviceId !== undefined) {
         logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
         credentials.pickleKey =
             (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
@@ -603,14 +603,14 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
     }
 
     MatrixClientPeg.replaceUsingCreds(credentials);
+    const client = MatrixClientPeg.get();
 
     setSentryUser(credentials.userId);
 
     if (PosthogAnalytics.instance.isEnabled()) {
-        PosthogAnalytics.instance.startListeningToSettingsChanges();
+        PosthogAnalytics.instance.startListeningToSettingsChanges(client);
     }
 
-    const client = MatrixClientPeg.get();
     if (credentials.freshLogin && SettingsStore.getValue("feature_dehydration")) {
         // If we just logged in, try to rehydrate a device instead of using a
         // new device.  If it succeeds, we'll get a new device ID, so make sure
@@ -825,7 +825,7 @@ async function startMatrixClient(client: MatrixClient, startSyncing = true): Pro
     SettingsStore.runMigrations();
 
     // This needs to be started after crypto is set up
-    DeviceListener.sharedInstance().start();
+    DeviceListener.sharedInstance().start(client);
     // Similarly, don't start sending presence updates until we've started
     // the client
     if (!SettingsStore.getValue("lowBandwidth")) {

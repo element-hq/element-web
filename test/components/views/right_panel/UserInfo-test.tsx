@@ -500,7 +500,7 @@ describe("<DeviceItem />", () => {
         await userEvent.click(button);
 
         expect(mockVerifyDevice).toHaveBeenCalledTimes(1);
-        expect(mockVerifyDevice).toHaveBeenCalledWith(defaultUser, device);
+        expect(mockVerifyDevice).toHaveBeenCalledWith(mockClient, defaultUser, device);
     });
 
     it("with display name", async () => {

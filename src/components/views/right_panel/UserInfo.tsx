@@ -191,7 +191,7 @@ export function DeviceItem({ userId, device }: { userId: string; device: IDevice
     const onDeviceClick = (): void => {
         const user = cli.getUser(userId);
         if (user) {
-            verifyDevice(user, device);
+            verifyDevice(cli, user, device);
         }
     };
 
@@ -1446,9 +1446,9 @@ const BasicUserInfo: React.FC<{
                         className="mx_UserInfo_field mx_UserInfo_verifyButton"
                         onClick={() => {
                             if (hasCrossSigningKeys) {
-                                verifyUser(member as User);
+                                verifyUser(cli, member as User);
                             } else {
-                                legacyVerifyUser(member as User);
+                                legacyVerifyUser(cli, member as User);
                             }
                         }}
                     >
