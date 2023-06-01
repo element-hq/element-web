@@ -1,14 +1,28 @@
-Changes in [1.11.32-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.32-rc.2) (2023-05-19)
-===========================================================================================================
-
-## 🐛 Bug Fixes
- * Make `Privacy Notice` external link on integration manager ToS clickable ([\#10914](https://github.com/matrix-org/matrix-react-sdk/pull/10914)). Fixes #25384. Contributed by @luixxiul.
- * Attempt a potential workaround for stuck notifs ([\#3384](https://github.com/matrix-org/matrix-js-sdk/pull/3384)). Fixes vector-im/element-web#25406. Contributed by @andybalaam.
-
-Changes in [1.11.32-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.32-rc.1) (2023-05-16)
+Changes in [1.11.32-rc.3](https://github.com/vector-im/element-web/releases/tag/v1.11.32-rc.3) (2023-06-01)
 ===========================================================================================================
 
 ## ✨ Features
+ * Redirect to the SSO page if `sso_redirect_options.on_welcome_page` is enabled and the URL hash is empty ([\#25495](https://github.com/vector-im/element-web/pull/25495)). Contributed by @dhenneke.
+ * vector/index.html: Allow fetching blob urls ([\#25336](https://github.com/vector-im/element-web/pull/25336)). Contributed by @SuperKenVery.
+ * When joining room in sub-space join the parents too ([\#11011](https://github.com/matrix-org/matrix-react-sdk/pull/11011)).
+ * Include thread replies in message previews ([\#10631](https://github.com/matrix-org/matrix-react-sdk/pull/10631)). Fixes #23920.
+ * Use semantic headings in space preferences ([\#11021](https://github.com/matrix-org/matrix-react-sdk/pull/11021)). Contributed by @kerryarchibald.
+ * Use semantic headings in user settings - Ignored users ([\#11006](https://github.com/matrix-org/matrix-react-sdk/pull/11006)). Contributed by @kerryarchibald.
+ * Use semantic headings in user settings - profile ([\#10973](https://github.com/matrix-org/matrix-react-sdk/pull/10973)). Fixes #25461. Contributed by @kerryarchibald.
+ * Use semantic headings in user settings - account ([\#10972](https://github.com/matrix-org/matrix-react-sdk/pull/10972)). Contributed by @kerryarchibald.
+ * Support `Insert from iPhone or iPad` in Safari ([\#10851](https://github.com/matrix-org/matrix-react-sdk/pull/10851)). Fixes #25327. Contributed by @SuperKenVery.
+ * Specify supportedStages for User Interactive Auth ([\#10975](https://github.com/matrix-org/matrix-react-sdk/pull/10975)). Fixes #19605.
+ * Pass device id to widgets ([\#10209](https://github.com/matrix-org/matrix-react-sdk/pull/10209)). Contributed by @Fox32.
+ * Use semantic headings in user settings - discovery ([\#10838](https://github.com/matrix-org/matrix-react-sdk/pull/10838)). Contributed by @kerryarchibald.
+ * Use semantic headings in user settings -  Notifications ([\#10948](https://github.com/matrix-org/matrix-react-sdk/pull/10948)). Contributed by @kerryarchibald.
+ * Use semantic headings in user settings - spellcheck and language ([\#10959](https://github.com/matrix-org/matrix-react-sdk/pull/10959)). Contributed by @kerryarchibald.
+ * Use semantic headings in user settings Appearance ([\#10827](https://github.com/matrix-org/matrix-react-sdk/pull/10827)). Contributed by @kerryarchibald.
+ * Use semantic heading in user settings Sidebar & Voip ([\#10782](https://github.com/matrix-org/matrix-react-sdk/pull/10782)). Contributed by @kerryarchibald.
+ * Use semantic headings in user settings Security ([\#10774](https://github.com/matrix-org/matrix-react-sdk/pull/10774)). Contributed by @kerryarchibald.
+ * Use semantic headings in user settings - integrations and account deletion ([\#10837](https://github.com/matrix-org/matrix-react-sdk/pull/10837)). Fixes #25378. Contributed by @kerryarchibald.
+ * Use semantic headings in user settings Preferences ([\#10794](https://github.com/matrix-org/matrix-react-sdk/pull/10794)). Contributed by @kerryarchibald.
+ * Use semantic headings in user settings Keyboard ([\#10793](https://github.com/matrix-org/matrix-react-sdk/pull/10793)). Contributed by @kerryarchibald.
+ * RTE plain text mentions as pills ([\#10852](https://github.com/matrix-org/matrix-react-sdk/pull/10852)). Contributed by @alunturner.
  * Allow welcome.html logo to be replaced by config ([\#25339](https://github.com/vector-im/element-web/pull/25339)). Fixes #8636.
  * Use semantic headings in user settings Labs ([\#10773](https://github.com/matrix-org/matrix-react-sdk/pull/10773)). Contributed by @kerryarchibald.
  * Use semantic list elements for menu lists and tab lists ([\#10902](https://github.com/matrix-org/matrix-react-sdk/pull/10902)). Fixes #24928.
@@ -34,6 +48,27 @@ Changes in [1.11.32-rc.1](https://github.com/vector-im/element-web/releases/tag/
  * Use semantic headings for room settings content ([\#10734](https://github.com/matrix-org/matrix-react-sdk/pull/10734)). Contributed by @kerryarchibald.
 
 ## 🐛 Bug Fixes
+ * Use consistent fonts for Japanese text ([\#10980](https://github.com/matrix-org/matrix-react-sdk/pull/10980)). Fixes #22333 and #23899.
+ * Fix: server picker validates unselected option ([\#11020](https://github.com/matrix-org/matrix-react-sdk/pull/11020)). Fixes #25488. Contributed by @kerryarchibald.
+ * Fix room list notification badges going missing in compact layout ([\#11022](https://github.com/matrix-org/matrix-react-sdk/pull/11022)). Fixes #25372.
+ * Fix call to `startSingleSignOn` passing enum in place of idpId ([\#10998](https://github.com/matrix-org/matrix-react-sdk/pull/10998)). Fixes #24953.
+ * Remove hover effect from user name on a DM creation UI ([\#10887](https://github.com/matrix-org/matrix-react-sdk/pull/10887)). Fixes #25305. Contributed by @luixxiul.
+ * Fix layout regression in public space invite dialog ([\#11009](https://github.com/matrix-org/matrix-react-sdk/pull/11009)). Fixes #25458.
+ * Fix layout regression in session dropdown ([\#10999](https://github.com/matrix-org/matrix-react-sdk/pull/10999)). Fixes #25448.
+ * Fix spacing regression in user settings - roles & permissions ([\#10993](https://github.com/matrix-org/matrix-react-sdk/pull/10993)). Fixes #25447 and #25451. Contributed by @kerryarchibald.
+ * Fall back to receipt timestamp if we have no event (react-sdk part) ([\#10974](https://github.com/matrix-org/matrix-react-sdk/pull/10974)). Fixes #10954. Contributed by @andybalaam.
+ * Fix: Room header 'view your device list' does not link to new session manager ([\#10979](https://github.com/matrix-org/matrix-react-sdk/pull/10979)). Fixes #25440. Contributed by @kerryarchibald.
+ * Fix display of devices without encryption support in Settings dialog ([\#10977](https://github.com/matrix-org/matrix-react-sdk/pull/10977)). Fixes #25413.
+ * Use aria descriptions instead of labels for TextWithTooltip ([\#10952](https://github.com/matrix-org/matrix-react-sdk/pull/10952)). Fixes #25398.
+ * Use grapheme-splitter instead of lodash for saving emoji from being ripped apart ([\#10976](https://github.com/matrix-org/matrix-react-sdk/pull/10976)). Fixes #22196.
+ * Fix: content overflow in settings subsection ([\#10960](https://github.com/matrix-org/matrix-react-sdk/pull/10960)). Fixes #25416. Contributed by @kerryarchibald.
+ * Make `Privacy Notice` external link on integration manager ToS clickable ([\#10914](https://github.com/matrix-org/matrix-react-sdk/pull/10914)). Fixes #25384. Contributed by @luixxiul.
+ * Ensure that open message context menus are updated when the event is sent ([\#10950](https://github.com/matrix-org/matrix-react-sdk/pull/10950)).
+ * Ensure that open sticker picker dialogs are updated when the widget configuration is updated. ([\#10945](https://github.com/matrix-org/matrix-react-sdk/pull/10945)).
+ * Fix big emoji in replies ([\#10932](https://github.com/matrix-org/matrix-react-sdk/pull/10932)). Fixes #24798.
+ * Hide empty `MessageActionBar` on message edit history dialog ([\#10447](https://github.com/matrix-org/matrix-react-sdk/pull/10447)). Fixes #24903. Contributed by @luixxiul.
+ * Fix roving tab index getting confused after dragging space order ([\#10901](https://github.com/matrix-org/matrix-react-sdk/pull/10901)).
+ * Attempt a potential workaround for stuck notifs ([\#3384](https://github.com/matrix-org/matrix-js-sdk/pull/3384)). Fixes vector-im/element-web#25406. Contributed by @andybalaam.
  * Handle trailing dot FQDNs for domain-specific config.json files ([\#25351](https://github.com/vector-im/element-web/pull/25351)). Fixes #8858.
  * Ignore edits in message previews when they concern messages other than latest ([\#10868](https://github.com/matrix-org/matrix-react-sdk/pull/10868)). Fixes #14872.
  * Send correct receipts when viewing a room ([\#10864](https://github.com/matrix-org/matrix-react-sdk/pull/10864)). Fixes #25196.
