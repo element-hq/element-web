@@ -120,12 +120,6 @@ jobs:
             - uses: browser-actions/setup-chrome@c485fa3bab6be59dce18dbc18ef6ab7cbc8ff5f1
             - run: echo "BROWSER_PATH=$(which chrome)" >> $GITHUB_ENV
 
-            - uses: tecolicom/actions-use-apt-tools@ceaf289fdbc6169fd2406a0f0365a584ffba003b # v1
-              with:
-                  # Our test suite includes some screenshot tests with unusual diacritics, which are
-                  # supposed to be covered by STIXGeneral.
-                  tools: fonts-stix
-
             # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
             # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
             - name: 📥 Download artifact
