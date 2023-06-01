@@ -110,12 +110,6 @@ describe("<ServerPickerDialog />", () => {
 
             fireEvent.click(screen.getByText("Continue"));
 
-            // serverpicker still validates the 'other homeserver' field on submit
-            // when default is chosen
-            // so this throws a lot of errors into the console
-            // and is asynchronous while waiting for validation
-            await flushPromises();
-
             // closed dialog with default server
             expect(onFinished).toHaveBeenCalledWith(defaultServerConfig);
         });
