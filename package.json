@@ -102,7 +102,7 @@
         "@casualbot/jest-sonar-reporter": "^2.2.5",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
         "@sentry/webpack-plugin": "^1.18.1",
-        "@svgr/webpack": "^5.5.0",
+        "@svgr/webpack": "^8.0.0",
         "@testing-library/react": "^12.1.5",
         "@types/jest": "^29.0.0",
         "@types/jitsi-meet": "^2.0.2",
