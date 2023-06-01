@@ -1593,7 +1593,6 @@
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz":
   version "3.2.14"
-  uid acd96c00a881d0f462e1f97a56c73742c8dbc984
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz#acd96c00a881d0f462e1f97a56c73742c8dbc984"
 
 "@matrix-org/react-sdk-module-api@^0.0.5":
@@ -6439,10 +6438,10 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@25.2.0-rc.5:
-  version "25.2.0-rc.5"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-25.2.0-rc.5.tgz#2ce42e9baa82b2758462fd2b1d0a184481223da1"
-  integrity sha512-uOpSlKC0gY0jCNnfG1Z/L78qFVP1vxOhum4Acp/HGak6HH7kPDeYI2IQ4AXJdVhs5g661/zd6LVIBoqa7WwIUA==
+matrix-js-sdk@26.0.0-rc.1:
+  version "26.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-26.0.0-rc.1.tgz#28f7b44f05059d62bcb8098431e0a090480734bc"
+  integrity sha512-Trjx6HVaZQf1YTPKgMsfPI3PgWxub4sMxIXgbRd4lxzemRl+HyBe6qfNfzH7NLjUfptqgHltT0FVE6LR3ieWZw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.9"
