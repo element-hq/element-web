@@ -18,6 +18,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
+import { Thread } from "matrix-js-sdk/src/models/thread";
 import { RelationType } from "matrix-js-sdk/src/matrix";
 
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -96,6 +97,43 @@ interface IState {
     // Empty because we don't actually use the state
 }
 
+export interface MessagePreview {
+    event: MatrixEvent;
+    isThreadReply: boolean;
+    text: string;
+}
+
+const isThreadReply = (event: MatrixEvent): boolean => {
+    // a thread root event cannot be a thread reply
+    if (event.isThreadRoot) return false;
+
+    const thread = event.getThread();
+
+    // it cannot be a thread reply if there is no thread
+    if (!thread) return false;
+
+    const relation = event.getRelation();
+
+    if (
+        !!relation &&
+        relation.rel_type === RelationType.Annotation &&
+        relation.event_id === thread.rootEvent?.getId()
+    ) {
+        // annotations on the thread root are not a thread reply
+        return false;
+    }
+
+    return true;
+};
+
+const mkMessagePreview = (text: string, event: MatrixEvent): MessagePreview => {
+    return {
+        event,
+        text,
+        isThreadReply: isThreadReply(event),
+    };
+};
+
 export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     private static readonly internalInstance = (() => {
         const instance = new MessagePreviewStore();
@@ -111,7 +149,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     }
 
     // null indicates the preview is empty / irrelevant
-    private previews = new Map<string, Map<TagID | TAG_ANY, [MatrixEvent, string] | null>>();
+    private previews = new Map<string, Map<TagID | TAG_ANY, MessagePreview | null>>();
 
     private constructor() {
         super(defaultDispatcher, {});
@@ -131,7 +169,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
      * @param inTagId The tag ID in which the room resides
      * @returns The preview, or null if none present.
      */
-    public async getPreviewForRoom(room: Room, inTagId: TagID): Promise<string | null> {
+    public async getPreviewForRoom(room: Room, inTagId: TagID): Promise<MessagePreview | null> {
         if (!room) return null; // invalid room, just return nothing
 
         if (!this.previews.has(room.roomId)) await this.generatePreview(room, inTagId);
@@ -140,9 +178,9 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         if (!previews) return null;
 
         if (previews.has(inTagId)) {
-            return previews.get(inTagId)![1];
+            return previews.get(inTagId)!;
         }
-        return previews.get(TAG_ANY)?.[1] ?? null;
+        return previews.get(TAG_ANY) ?? null;
     }
 
     public generatePreviewForEvent(event: MatrixEvent): string {
@@ -166,16 +204,28 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     }
 
     private async generatePreview(room: Room, tagId?: TagID): Promise<void> {
-        const events = room.timeline;
+        const events = [...room.getLiveTimeline().getEvents()];
+
+        // add last reply from each thread
+        room.getThreads().forEach((thread: Thread): void => {
+            const lastReply = thread.lastReply();
+            if (lastReply) events.push(lastReply);
+        });
+
+        // sort events from oldest to newest
+        events.sort((a: MatrixEvent, b: MatrixEvent) => {
+            return a.getTs() - b.getTs();
+        });
+
         if (!events) return; // should only happen in tests
 
         let map = this.previews.get(room.roomId);
         if (!map) {
-            map = new Map<TagID | TAG_ANY, [MatrixEvent, string] | null>();
+            map = new Map<TagID | TAG_ANY, MessagePreview | null>();
             this.previews.set(room.roomId, map);
         }
 
-        const previousEventInAny = map.get(TAG_ANY)?.[0];
+        const previousEventInAny = map.get(TAG_ANY)?.event;
 
         // Set the tags so we know what to generate
         if (!map.has(TAG_ANY)) map.set(TAG_ANY, null);
@@ -196,27 +246,28 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
             if (!previewDef) continue;
             if (previewDef.isState && isNullOrUndefined(event.getStateKey())) continue;
 
-            const anyPreview = previewDef.previewer.getTextFor(event);
-            if (!anyPreview) continue; // not previewable for some reason
+            const anyPreviewText = previewDef.previewer.getTextFor(event);
+            if (!anyPreviewText) continue; // not previewable for some reason
 
             if (!this.shouldSkipPreview(event, previousEventInAny)) {
-                changed = changed || anyPreview !== map.get(TAG_ANY)?.[1];
-                map.set(TAG_ANY, [event, anyPreview]);
+                changed = changed || anyPreviewText !== map.get(TAG_ANY)?.text;
+                map.set(TAG_ANY, mkMessagePreview(anyPreviewText, event));
             }
 
             const tagsToGenerate = Array.from(map.keys()).filter((t) => t !== TAG_ANY); // we did the any tag above
             for (const genTagId of tagsToGenerate) {
-                const previousEventInTag = map.get(genTagId)?.[0];
+                const previousEventInTag = map.get(genTagId)?.event;
                 if (this.shouldSkipPreview(event, previousEventInTag)) continue;
 
                 const realTagId = genTagId === TAG_ANY ? undefined : genTagId;
                 const preview = previewDef.previewer.getTextFor(event, realTagId);
-                if (preview === anyPreview) {
-                    changed = changed || anyPreview !== map.get(genTagId)?.[1];
+
+                if (preview === anyPreviewText) {
+                    changed = changed || anyPreviewText !== map.get(genTagId)?.text;
                     map.delete(genTagId);
                 } else {
-                    changed = changed || preview !== map.get(genTagId)?.[1];
-                    map.set(genTagId, preview ? [event, preview] : null);
+                    changed = changed || preview !== map.get(genTagId)?.text;
+                    map.set(genTagId, preview ? mkMessagePreview(anyPreviewText, event) : null);
                 }
             }
 
@@ -230,7 +281,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         }
 
         // At this point, we didn't generate a preview so clear it
-        this.previews.set(room.roomId, new Map<TagID | TAG_ANY, [MatrixEvent, string] | null>());
+        this.previews.set(room.roomId, new Map<TagID | TAG_ANY, MessagePreview | null>());
         this.emit(UPDATE_EVENT, this);
         this.emit(MessagePreviewStore.getPreviewChangedEventName(room), room);
     }

@@ -131,16 +131,6 @@ describe("EventTile", () => {
     });
 
     describe("EventTile renderingType: ThreadsList", () => {
-        beforeEach(() => {
-            const { rootEvent } = mkThread({
-                room,
-                client,
-                authorId: "@alice:example.org",
-                participantUserIds: ["@alice:example.org"],
-            });
-            mxEvent = rootEvent;
-        });
-
         it("shows an unread notification badge", () => {
             const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
 

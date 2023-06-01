@@ -14,22 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { mocked } from "jest-mock";
-import { EventType, MatrixEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
+import { Mocked, mocked } from "jest-mock";
+import { EventTimeline, EventType, MatrixClient, MatrixEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
 
 import { MessagePreviewStore } from "../../../src/stores/room-list/MessagePreviewStore";
-import { mkEvent, mkMessage, mkStubRoom, setupAsyncStoreWithClient, stubClient } from "../../test-utils";
+import { mkEvent, mkMessage, mkReaction, setupAsyncStoreWithClient, stubClient } from "../../test-utils";
 import { DefaultTagID } from "../../../src/stores/room-list/models";
+import { mkThread } from "../../test-utils/threads";
 
 describe("MessagePreviewStore", () => {
+    let client: Mocked<MatrixClient>;
+    let room: Room;
+    let store: MessagePreviewStore;
+
     async function addEvent(
         store: MessagePreviewStore,
         room: Room,
         event: MatrixEvent,
         fireAction = true,
     ): Promise<void> {
-        room.timeline.push(event);
-        mocked(room.findEventById).mockImplementation((eventId) => room.timeline.find((e) => e.getId() === eventId));
+        room.addLiveEvents([event]);
         if (fireAction) {
             // @ts-ignore private access
             await store.onAction({
@@ -42,15 +46,17 @@ describe("MessagePreviewStore", () => {
         }
     }
 
-    it("should ignore edits for events other than the latest one", async () => {
-        const client = stubClient();
-        const room = mkStubRoom("!roomId:server", "Room", client);
+    beforeEach(async () => {
+        client = mocked(stubClient());
+        room = new Room("!roomId:server", client, client.getSafeUserId());
         mocked(client.getRoom).mockReturnValue(room);
 
-        const store = MessagePreviewStore.testInstance();
+        store = MessagePreviewStore.testInstance();
         await store.start();
         await setupAsyncStoreWithClient(store, client);
+    });
 
+    it("should ignore edits for events other than the latest one", async () => {
         const firstMessage = mkMessage({
             user: "@sender:server",
             event: true,
@@ -59,7 +65,7 @@ describe("MessagePreviewStore", () => {
         });
         await addEvent(store, room, firstMessage, false);
 
-        await expect(store.getPreviewForRoom(room, DefaultTagID.Untagged)).resolves.toMatchInlineSnapshot(
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toMatchInlineSnapshot(
             `"@sender:server: First message"`,
         );
 
@@ -71,7 +77,7 @@ describe("MessagePreviewStore", () => {
         });
         await addEvent(store, room, secondMessage);
 
-        await expect(store.getPreviewForRoom(room, DefaultTagID.Untagged)).resolves.toMatchInlineSnapshot(
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toMatchInlineSnapshot(
             `"@sender:server: Second message"`,
         );
 
@@ -93,7 +99,7 @@ describe("MessagePreviewStore", () => {
         });
         await addEvent(store, room, firstMessageEdit);
 
-        await expect(store.getPreviewForRoom(room, DefaultTagID.Untagged)).resolves.toMatchInlineSnapshot(
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toMatchInlineSnapshot(
             `"@sender:server: Second message"`,
         );
 
@@ -115,21 +121,13 @@ describe("MessagePreviewStore", () => {
         });
         await addEvent(store, room, secondMessageEdit);
 
-        await expect(store.getPreviewForRoom(room, DefaultTagID.Untagged)).resolves.toMatchInlineSnapshot(
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toMatchInlineSnapshot(
             `"@sender:server: Second Message Edit"`,
         );
     });
 
     it("should ignore edits to unknown events", async () => {
-        const client = stubClient();
-        const room = mkStubRoom("!roomId:server", "Room", client);
-        mocked(client.getRoom).mockReturnValue(room);
-
-        const store = MessagePreviewStore.testInstance();
-        await store.start();
-        await setupAsyncStoreWithClient(store, client);
-
-        await expect(store.getPreviewForRoom(room, DefaultTagID.DM)).resolves.toMatchInlineSnapshot(`null`);
+        await expect(store.getPreviewForRoom(room, DefaultTagID.DM)).resolves.toBeNull();
 
         const firstMessage = mkMessage({
             user: "@sender:server",
@@ -139,7 +137,7 @@ describe("MessagePreviewStore", () => {
         });
         await addEvent(store, room, firstMessage, true);
 
-        await expect(store.getPreviewForRoom(room, DefaultTagID.DM)).resolves.toMatchInlineSnapshot(
+        expect((await store.getPreviewForRoom(room, DefaultTagID.DM))?.text).toMatchInlineSnapshot(
             `"@sender:server: First message"`,
         );
 
@@ -161,22 +159,15 @@ describe("MessagePreviewStore", () => {
         });
         await addEvent(store, room, randomEdit);
 
-        await expect(store.getPreviewForRoom(room, DefaultTagID.Untagged)).resolves.toMatchInlineSnapshot(
+        expect((await store.getPreviewForRoom(room, DefaultTagID.Untagged))?.text).toMatchInlineSnapshot(
             `"@sender:server: First message"`,
         );
     });
 
     it("should generate correct preview for message events in DMs", async () => {
-        const client = stubClient();
-        const room = mkStubRoom("!roomId:server", "Room", client);
-        mocked(client.getRoom).mockReturnValue(room);
-        room.currentState.getJoinedMemberCount = jest.fn().mockReturnValue(2);
+        room.getLiveTimeline().getState(EventTimeline.FORWARDS)!.getJoinedMemberCount = jest.fn().mockReturnValue(2);
 
-        const store = MessagePreviewStore.testInstance();
-        await store.start();
-        await setupAsyncStoreWithClient(store, client);
-
-        await expect(store.getPreviewForRoom(room, DefaultTagID.DM)).resolves.toMatchInlineSnapshot(`null`);
+        await expect(store.getPreviewForRoom(room, DefaultTagID.DM)).resolves.toBeNull();
 
         const firstMessage = mkMessage({
             user: "@sender:server",
@@ -186,7 +177,7 @@ describe("MessagePreviewStore", () => {
         });
         await addEvent(store, room, firstMessage);
 
-        await expect(store.getPreviewForRoom(room, DefaultTagID.DM)).resolves.toMatchInlineSnapshot(
+        expect((await store.getPreviewForRoom(room, DefaultTagID.DM))?.text).toMatchInlineSnapshot(
             `"@sender:server: First message"`,
         );
 
@@ -198,8 +189,45 @@ describe("MessagePreviewStore", () => {
         });
         await addEvent(store, room, secondMessage);
 
-        await expect(store.getPreviewForRoom(room, DefaultTagID.DM)).resolves.toMatchInlineSnapshot(
+        expect((await store.getPreviewForRoom(room, DefaultTagID.DM))?.text).toMatchInlineSnapshot(
             `"@sender:server: Second message"`,
         );
+    });
+
+    it("should generate the correct preview for a reaction", async () => {
+        const firstMessage = mkMessage({
+            user: "@sender:server",
+            event: true,
+            room: room.roomId,
+            msg: "First message",
+        });
+        await addEvent(store, room, firstMessage);
+
+        const reaction = mkReaction(firstMessage);
+        await addEvent(store, room, reaction);
+
+        const preview = await store.getPreviewForRoom(room, DefaultTagID.Untagged);
+        expect(preview).toBeDefined();
+        expect(preview.isThreadReply).toBe(false);
+        expect(preview.text).toMatchInlineSnapshot(`"@sender:server reacted 🙃 to First message"`);
+    });
+
+    it("should generate the correct preview for a reaction on a thread root", async () => {
+        const { rootEvent, thread } = mkThread({
+            room,
+            client,
+            authorId: client.getSafeUserId(),
+            participantUserIds: [client.getSafeUserId()],
+        });
+        await addEvent(store, room, rootEvent);
+
+        const reaction = mkReaction(rootEvent, { ts: 42 });
+        reaction.setThread(thread);
+        await addEvent(store, room, reaction);
+
+        const preview = await store.getPreviewForRoom(room, DefaultTagID.Untagged);
+        expect(preview).toBeDefined();
+        expect(preview.isThreadReply).toBe(false);
+        expect(preview.text).toContain("You reacted 🙃 to root event message");
     });
 });

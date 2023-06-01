@@ -36,6 +36,7 @@ import {
     ConditionKind,
     PushRuleActionName,
     IPushRules,
+    RelationType,
 } from "matrix-js-sdk/src/matrix";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
@@ -469,6 +470,29 @@ export type MessageEventProps = MakeEventPassThruProps & {
     room: Room["roomId"];
     relatesTo?: IEventRelation;
     msg?: string;
+};
+
+/**
+ * Creates a "🙃" reaction for the given event.
+ * Uses the same room and user as for the event.
+ *
+ * @returns The reaction event
+ */
+export const mkReaction = (event: MatrixEvent, opts: Partial<MakeEventProps> = {}): MatrixEvent => {
+    return mkEvent({
+        event: true,
+        room: event.getRoomId(),
+        type: EventType.Reaction,
+        user: event.getSender()!,
+        content: {
+            "m.relates_to": {
+                rel_type: RelationType.Annotation,
+                event_id: event.getId(),
+                key: "🙃",
+            },
+        },
+        ...opts,
+    });
 };
 
 /**

@@ -135,6 +135,11 @@ export const mkThread = ({
     }
 
     const thread = room.createThread(rootEvent.getId()!, rootEvent, events, true);
+
+    events.forEach((event) => {
+        thread.timeline.push(event);
+    });
+
     // So that we do not have to mock the thread loading
     thread.initialEventsFetched = true;
 
