@@ -107,7 +107,8 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
     const ssoRedirects = parseSsoRedirectOptions(config);
     let autoRedirect = ssoRedirects.immediate === true;
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
-    const isWelcomeOrLanding = window.location.hash === "#/welcome" || window.location.hash === "#";
+    const isWelcomeOrLanding =
+        window.location.hash === "#/welcome" || window.location.hash === "#" || window.location.hash === "";
     if (!autoRedirect && ssoRedirects.on_welcome_page && isWelcomeOrLanding) {
         autoRedirect = true;
     }
