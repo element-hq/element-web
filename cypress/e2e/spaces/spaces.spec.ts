@@ -140,12 +140,9 @@ describe("Spaces", () => {
         cy.findByPlaceholderText("Support").type("Projects");
         cy.findByRole("button", { name: "Continue" }).click();
 
+        cy.get(".mx_SpaceRoomView h1").findByText("Invite your teammates");
         cy.get(".mx_SpaceRoomView").percySnapshotElement("Space - 'Invite your teammates' dialog");
-
-        cy.get(".mx_SpaceRoomView").within(() => {
-            cy.get("h1").findByText("Invite your teammates");
-            cy.findByRole("button", { name: "Skip for now" }).click();
-        });
+        cy.findByRole("button", { name: "Skip for now" }).click();
 
         // Assert rooms exist in the room list
         cy.findByRole("treeitem", { name: "General" }).should("exist");
