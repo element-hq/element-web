@@ -69,7 +69,7 @@ describe("RoomHeader", () => {
         mockPlatformPeg({ supportsJitsiScreensharing: () => true });
 
         stubClient();
-        client = mocked(MatrixClientPeg.get());
+        client = mocked(MatrixClientPeg.safeGet());
         client.getUserId.mockReturnValue("@alice:example.org");
 
         room = new Room("!1:example.org", client, "@alice:example.org", {
@@ -750,7 +750,7 @@ interface IRoomCreationInfo {
 
 function createRoom(info: IRoomCreationInfo) {
     stubClient();
-    const client: MatrixClient = MatrixClientPeg.get();
+    const client: MatrixClient = MatrixClientPeg.safeGet();
 
     const roomId = "!1234567890:domain";
     const userId = client.getUserId()!;

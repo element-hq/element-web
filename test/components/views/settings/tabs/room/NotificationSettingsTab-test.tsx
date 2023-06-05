@@ -38,7 +38,7 @@ describe("NotificatinSettingsTab", () => {
 
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.safeGet();
         const room = mkStubRoom(roomId, "test room", cli);
         roomProps = EchoChamber.forRoom(room);
 

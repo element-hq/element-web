@@ -104,6 +104,7 @@
     "We couldn't log you in": "We couldn't log you in",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
     "Try again": "Try again",
+    "User is not logged in": "User is not logged in",
     "Database unexpectedly closed": "Database unexpectedly closed",
     "This may be caused by having the app open in multiple tabs or due to clearing browser data.": "This may be caused by having the app open in multiple tabs or due to clearing browser data.",
     "Reload": "Reload",

@@ -107,6 +107,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
 
         (mockMatrixClient.sendStateEvent as jest.Mock).mockClear().mockResolvedValue({});
         MatrixClientPeg.get = jest.fn().mockReturnValue(mockMatrixClient);
+        MatrixClientPeg.safeGet = jest.fn().mockReturnValue(mockMatrixClient);
     });
 
     afterEach(() => {

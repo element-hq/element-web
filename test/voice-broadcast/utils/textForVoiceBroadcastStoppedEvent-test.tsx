@@ -48,7 +48,7 @@ describe("textForVoiceBroadcastStoppedEvent", () => {
             };
         }
 
-        return render(<div>{textForVoiceBroadcastStoppedEvent(event)()}</div>);
+        return render(<div>{textForVoiceBroadcastStoppedEvent(event, client)()}</div>);
     };
 
     beforeEach(() => {

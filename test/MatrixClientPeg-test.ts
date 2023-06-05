@@ -44,7 +44,7 @@ describe("MatrixClientPeg", () => {
         stubClient();
         (peg as any).matrixClient = peg.get();
         peg.setJustRegisteredUserId("@userId:matrix.org");
-        expect(peg.get().credentials.userId).toBe("@userId:matrix.org");
+        expect(peg.safeGet().credentials.userId).toBe("@userId:matrix.org");
         expect(peg.currentUserIsJustRegistered()).toBe(true);
         expect(peg.userRegisteredWithinLastHours(0)).toBe(false);
         expect(peg.userRegisteredWithinLastHours(1)).toBe(true);
@@ -89,11 +89,11 @@ describe("MatrixClientPeg", () => {
         });
 
         it("should initialise client crypto", async () => {
-            const mockInitCrypto = jest.spyOn(testPeg.get(), "initCrypto").mockResolvedValue(undefined);
+            const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockResolvedValue(undefined);
             const mockSetTrustCrossSignedDevices = jest
-                .spyOn(testPeg.get(), "setCryptoTrustCrossSignedDevices")
+                .spyOn(testPeg.safeGet(), "setCryptoTrustCrossSignedDevices")
                 .mockImplementation(() => {});
-            const mockStartClient = jest.spyOn(testPeg.get(), "startClient").mockResolvedValue(undefined);
+            const mockStartClient = jest.spyOn(testPeg.safeGet(), "startClient").mockResolvedValue(undefined);
 
             await testPeg.start();
             expect(mockInitCrypto).toHaveBeenCalledTimes(1);
@@ -103,11 +103,11 @@ describe("MatrixClientPeg", () => {
 
         it("should carry on regardless if there is an error initialising crypto", async () => {
             const e2eError = new Error("nope nope nope");
-            const mockInitCrypto = jest.spyOn(testPeg.get(), "initCrypto").mockRejectedValue(e2eError);
+            const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockRejectedValue(e2eError);
             const mockSetTrustCrossSignedDevices = jest
-                .spyOn(testPeg.get(), "setCryptoTrustCrossSignedDevices")
+                .spyOn(testPeg.safeGet(), "setCryptoTrustCrossSignedDevices")
                 .mockImplementation(() => {});
-            const mockStartClient = jest.spyOn(testPeg.get(), "startClient").mockResolvedValue(undefined);
+            const mockStartClient = jest.spyOn(testPeg.safeGet(), "startClient").mockResolvedValue(undefined);
             const mockWarning = jest.spyOn(logger, "warn").mockReturnValue(undefined);
 
             await testPeg.start();
@@ -130,8 +130,8 @@ describe("MatrixClientPeg", () => {
 
             const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
-            const mockInitCrypto = jest.spyOn(testPeg.get(), "initCrypto").mockResolvedValue(undefined);
-            const mockInitRustCrypto = jest.spyOn(testPeg.get(), "initRustCrypto").mockResolvedValue(undefined);
+            const mockInitCrypto = jest.spyOn(testPeg.safeGet(), "initCrypto").mockResolvedValue(undefined);
+            const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
             await testPeg.start();
             expect(mockInitCrypto).not.toHaveBeenCalled();
@@ -142,9 +142,9 @@ describe("MatrixClientPeg", () => {
         });
 
         it("should reload when store database closes for a guest user", async () => {
-            testPeg.get().isGuest = () => true;
+            testPeg.safeGet().isGuest = () => true;
             const emitter = new EventEmitter();
-            testPeg.get().store.on = emitter.on.bind(emitter);
+            testPeg.safeGet().store.on = emitter.on.bind(emitter);
             const platform: any = { reload: jest.fn() };
             PlatformPeg.set(platform);
             await testPeg.assign();
@@ -153,9 +153,9 @@ describe("MatrixClientPeg", () => {
         });
 
         it("should show error modal when store database closes", async () => {
-            testPeg.get().isGuest = () => false;
+            testPeg.safeGet().isGuest = () => false;
             const emitter = new EventEmitter();
-            testPeg.get().store.on = emitter.on.bind(emitter);
+            testPeg.safeGet().store.on = emitter.on.bind(emitter);
             const spy = jest.spyOn(Modal, "createDialog");
             await testPeg.assign();
             emitter.emit("closed" as any);

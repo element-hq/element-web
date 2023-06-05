@@ -49,7 +49,7 @@ const space2 = "!space2:server";
 describe("SpaceWatcher", () => {
     stubClient();
     const store = SpaceStore.instance;
-    const client = mocked(MatrixClientPeg.get());
+    const client = mocked(MatrixClientPeg.safeGet());
 
     let rooms: Room[] = [];
     const mkSpaceForRooms = (spaceId: string, children: string[] = []) => mkSpace(client, spaceId, rooms, children);

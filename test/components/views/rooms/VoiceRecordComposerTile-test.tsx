@@ -56,6 +56,7 @@ describe("<VoiceRecordComposerTile/>", () => {
             sendMessage: jest.fn(),
         } as unknown as MatrixClient;
         MatrixClientPeg.get = () => mockClient;
+        MatrixClientPeg.safeGet = () => mockClient;
 
         const room = {
             roomId,

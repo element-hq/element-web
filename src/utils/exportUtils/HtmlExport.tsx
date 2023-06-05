@@ -402,7 +402,7 @@ export default class HTMLExporter extends Exporter {
             // TODO: Handle callEvent errors
             logger.error(e);
             eventTile = await this.getEventTileMarkup(
-                this.createModifiedEvent(textForEvent(mxEv), mxEv, false),
+                this.createModifiedEvent(textForEvent(mxEv, this.room.client), mxEv, false),
                 joined,
             );
         }

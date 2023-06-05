@@ -38,7 +38,7 @@ describe("<RoomPredecessorTile />", () => {
     const userId = "@alice:server.org";
     const roomId = "!room:server.org";
     stubClient();
-    const client = mocked(MatrixClientPeg.get());
+    const client = mocked(MatrixClientPeg.safeGet());
 
     function makeRoom({
         createEventHasPredecessor = false,
@@ -165,7 +165,7 @@ describe("<RoomPredecessorTile />", () => {
         filterConsole("Failed to find predecessor room with id old_room_id");
 
         beforeEach(() => {
-            mocked(MatrixClientPeg.get().getRoom).mockReturnValue(null);
+            mocked(MatrixClientPeg.safeGet().getRoom).mockReturnValue(null);
         });
 
         it("Shows an error if there are no via servers", () => {
@@ -219,7 +219,7 @@ describe("<RoomPredecessorTile />", () => {
             filterConsole("Failed to find predecessor room with id old_room_id");
 
             beforeEach(() => {
-                mocked(MatrixClientPeg.get().getRoom).mockReturnValue(null);
+                mocked(MatrixClientPeg.safeGet().getRoom).mockReturnValue(null);
             });
 
             it("Shows an error if there are no via servers", () => {

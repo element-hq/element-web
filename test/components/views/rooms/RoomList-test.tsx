@@ -47,7 +47,7 @@ DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 
 describe("RoomList", () => {
     stubClient();
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
     const store = SpaceStore.instance;
 
     function getComponent(props: Partial<ComponentProps<typeof RoomList>> = {}): JSX.Element {

@@ -31,7 +31,7 @@ describe("RecentAlgorithm", () => {
 
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.safeGet();
         algorithm = new RecentAlgorithm();
     });
 

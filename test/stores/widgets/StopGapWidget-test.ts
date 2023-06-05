@@ -36,7 +36,7 @@ describe("StopGapWidget", () => {
 
     beforeEach(() => {
         stubClient();
-        client = mocked(MatrixClientPeg.get());
+        client = mocked(MatrixClientPeg.safeGet());
 
         widget = new StopGapWidget({
             app: {

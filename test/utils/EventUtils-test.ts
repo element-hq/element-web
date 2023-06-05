@@ -430,7 +430,7 @@ describe("EventUtils", () => {
             jest.clearAllMocks();
 
             stubClient();
-            client = MatrixClientPeg.get();
+            client = MatrixClientPeg.safeGet();
 
             room = new Room(ROOM_ID, client, client.getUserId()!, {
                 pendingEventOrdering: PendingEventOrdering.Detached,

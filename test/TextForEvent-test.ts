@@ -47,6 +47,8 @@ function mockPinnedEvent(pinnedMessageIds?: string[], prevPinnedMessageIds?: str
 }
 
 describe("TextForEvent", () => {
+    const mockClient = createTestClient();
+
     describe("getSenderName()", () => {
         it("Prefers sender.name", () => {
             expect(getSenderName({ sender: { name: "Alice" } } as MatrixEvent)).toBe("Alice");
@@ -67,8 +69,8 @@ describe("TextForEvent", () => {
 
         it("mentions message when a single message was pinned, with no previously pinned messages", () => {
             const event = mockPinnedEvent(["message-1"]);
-            const plainText = textForEvent(event);
-            const component = render(textForEvent(event, true) as ReactElement);
+            const plainText = textForEvent(event, mockClient);
+            const component = render(textForEvent(event, mockClient, true) as ReactElement);
 
             const expectedText = "@foo:example.com pinned a message to this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
@@ -77,8 +79,8 @@ describe("TextForEvent", () => {
 
         it("mentions message when a single message was pinned, with multiple previously pinned messages", () => {
             const event = mockPinnedEvent(["message-1", "message-2", "message-3"], ["message-1", "message-2"]);
-            const plainText = textForEvent(event);
-            const component = render(textForEvent(event, true) as ReactElement);
+            const plainText = textForEvent(event, mockClient);
+            const component = render(textForEvent(event, mockClient, true) as ReactElement);
 
             const expectedText = "@foo:example.com pinned a message to this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
@@ -87,8 +89,8 @@ describe("TextForEvent", () => {
 
         it("mentions message when a single message was unpinned, with a single message previously pinned", () => {
             const event = mockPinnedEvent([], ["message-1"]);
-            const plainText = textForEvent(event);
-            const component = render(textForEvent(event, true) as ReactElement);
+            const plainText = textForEvent(event, mockClient);
+            const component = render(textForEvent(event, mockClient, true) as ReactElement);
 
             const expectedText = "@foo:example.com unpinned a message from this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
@@ -97,8 +99,8 @@ describe("TextForEvent", () => {
 
         it("mentions message when a single message was unpinned, with multiple previously pinned messages", () => {
             const event = mockPinnedEvent(["message-2"], ["message-1", "message-2"]);
-            const plainText = textForEvent(event);
-            const component = render(textForEvent(event, true) as ReactElement);
+            const plainText = textForEvent(event, mockClient);
+            const component = render(textForEvent(event, mockClient, true) as ReactElement);
 
             const expectedText = "@foo:example.com unpinned a message from this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
@@ -107,8 +109,8 @@ describe("TextForEvent", () => {
 
         it("shows generic text when multiple messages were pinned", () => {
             const event = mockPinnedEvent(["message-1", "message-2", "message-3"], ["message-1"]);
-            const plainText = textForEvent(event);
-            const component = render(textForEvent(event, true) as ReactElement);
+            const plainText = textForEvent(event, mockClient);
+            const component = render(textForEvent(event, mockClient, true) as ReactElement);
 
             const expectedText = "@foo:example.com changed the pinned messages for the room.";
             expect(plainText).toBe(expectedText);
@@ -117,8 +119,8 @@ describe("TextForEvent", () => {
 
         it("shows generic text when multiple messages were unpinned", () => {
             const event = mockPinnedEvent(["message-3"], ["message-1", "message-2", "message-3"]);
-            const plainText = textForEvent(event);
-            const component = render(textForEvent(event, true) as ReactElement);
+            const plainText = textForEvent(event, mockClient);
+            const component = render(textForEvent(event, mockClient, true) as ReactElement);
 
             const expectedText = "@foo:example.com changed the pinned messages for the room.";
             expect(plainText).toBe(expectedText);
@@ -127,8 +129,8 @@ describe("TextForEvent", () => {
 
         it("shows generic text when one message was pinned, and another unpinned", () => {
             const event = mockPinnedEvent(["message-2"], ["message-1"]);
-            const plainText = textForEvent(event);
-            const component = render(textForEvent(event, true) as ReactElement);
+            const plainText = textForEvent(event, mockClient);
+            const component = render(textForEvent(event, mockClient, true) as ReactElement);
 
             const expectedText = "@foo:example.com changed the pinned messages for the room.";
             expect(plainText).toBe(expectedText);
@@ -184,6 +186,7 @@ describe("TextForEvent", () => {
         beforeAll(() => {
             mockClient = createTestClient() as Mocked<MatrixClient>;
             MatrixClientPeg.get = () => mockClient;
+            MatrixClientPeg.safeGet = () => mockClient;
             mockClient.getRoom.mockClear().mockReturnValue(mockRoom);
             mockRoom.getMember
                 .mockClear()
@@ -206,7 +209,7 @@ describe("TextForEvent", () => {
                     [userA.userId]: 100,
                 },
             });
-            expect(textForEvent(event)).toBeFalsy();
+            expect(textForEvent(event, mockClient)).toBeFalsy();
         });
 
         it("returns false when users power levels have been changed by default settings", () => {
@@ -220,7 +223,7 @@ describe("TextForEvent", () => {
                     [userA.userId]: 50,
                 },
             });
-            expect(textForEvent(event)).toBeFalsy();
+            expect(textForEvent(event, mockClient)).toBeFalsy();
         });
 
         it("returns correct message for a single user with changed power level", () => {
@@ -233,7 +236,7 @@ describe("TextForEvent", () => {
                 },
             });
             const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Admin.";
-            expect(textForEvent(event)).toEqual(expectedText);
+            expect(textForEvent(event, mockClient)).toEqual(expectedText);
         });
 
         it("returns correct message for a single user with power level changed to the default", () => {
@@ -248,7 +251,7 @@ describe("TextForEvent", () => {
                 },
             });
             const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Default.";
-            expect(textForEvent(event)).toEqual(expectedText);
+            expect(textForEvent(event, mockClient)).toEqual(expectedText);
         });
 
         it("returns correct message for a single user with power level changed to a custom level", () => {
@@ -261,7 +264,7 @@ describe("TextForEvent", () => {
                 },
             });
             const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Custom (-1).";
-            expect(textForEvent(event)).toEqual(expectedText);
+            expect(textForEvent(event, mockClient)).toEqual(expectedText);
         });
 
         it("returns correct message for a multiple power level changes", () => {
@@ -278,7 +281,7 @@ describe("TextForEvent", () => {
             const expectedText =
                 "Alice changed the power level of Bob (@b) from Moderator to Admin," +
                 " Bob (@c) from Custom (101) to Moderator.";
-            expect(textForEvent(event)).toEqual(expectedText);
+            expect(textForEvent(event, mockClient)).toEqual(expectedText);
         });
     });
 
@@ -382,7 +385,7 @@ describe("TextForEvent", () => {
 
         it.each(testCases)("returns correct message when %s", (_d, { result, ...eventProps }) => {
             const event = mockEvent(eventProps);
-            expect(textForEvent(event)).toEqual(result);
+            expect(textForEvent(event, mockClient)).toEqual(result);
         });
     });
 
@@ -409,11 +412,11 @@ describe("TextForEvent", () => {
         it("returns correct message for redacted poll start", () => {
             pollEvent.makeRedacted(pollEvent);
 
-            expect(textForEvent(pollEvent)).toEqual("@a: Message deleted");
+            expect(textForEvent(pollEvent, mockClient)).toEqual("@a: Message deleted");
         });
 
         it("returns correct message for normal poll start", () => {
-            expect(textForEvent(pollEvent)).toEqual("@a has started a poll - ");
+            expect(textForEvent(pollEvent, mockClient)).toEqual("@a has started a poll - ");
         });
     });
 
@@ -435,11 +438,11 @@ describe("TextForEvent", () => {
         it("returns correct message for redacted message", () => {
             messageEvent.makeRedacted(messageEvent);
 
-            expect(textForEvent(messageEvent)).toEqual("@a: Message deleted");
+            expect(textForEvent(messageEvent, mockClient)).toEqual("@a: Message deleted");
         });
 
         it("returns correct message for normal message", () => {
-            expect(textForEvent(messageEvent)).toEqual("@a: test message");
+            expect(textForEvent(messageEvent, mockClient)).toEqual("@a: test message");
         });
     });
 
@@ -449,7 +452,7 @@ describe("TextForEvent", () => {
 
         beforeEach(() => {
             stubClient();
-            mockClient = MatrixClientPeg.get();
+            mockClient = MatrixClientPeg.safeGet();
 
             mocked(mockClient.getRoom).mockReturnValue({
                 name: "Test room",
@@ -468,13 +471,13 @@ describe("TextForEvent", () => {
             });
 
             it("returns correct message for call event when supported", () => {
-                expect(textForEvent(callEvent)).toEqual("Video call started in Test room.");
+                expect(textForEvent(callEvent, mockClient)).toEqual("Video call started in Test room.");
             });
 
             it("returns correct message for call event when not supported", () => {
                 mocked(mockClient).supportsVoip.mockReturnValue(false);
 
-                expect(textForEvent(callEvent)).toEqual(
+                expect(textForEvent(callEvent, mockClient)).toEqual(
                     "Video call started in Test room. (not supported by this browser)",
                 );
             });
@@ -504,6 +507,7 @@ describe("TextForEvent", () => {
                         },
                         state_key: "@a:foo",
                     }),
+                    mockClient,
                 ),
             ).toMatchInlineSnapshot(`"Andy changed their display name and profile picture"`);
         });

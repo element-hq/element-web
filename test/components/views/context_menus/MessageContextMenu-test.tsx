@@ -159,7 +159,7 @@ describe("MessageContextMenu", () => {
                 room_id: roomId,
             });
             pinnableEvent.event.event_id = "!3";
-            const client = MatrixClientPeg.get();
+            const client = MatrixClientPeg.safeGet();
             const room = makeDefaultRoom();
 
             // mock permission to allow adding pinned messages to room
@@ -204,7 +204,7 @@ describe("MessageContextMenu", () => {
                 room_id: roomId,
             });
             pinnableEvent.event.event_id = "!3";
-            const client = MatrixClientPeg.get();
+            const client = MatrixClientPeg.safeGet();
             const room = makeDefaultRoom();
 
             // make the event already pinned in the room
@@ -543,7 +543,7 @@ function createMenuWithContent(
 }
 
 function makeDefaultRoom(): Room {
-    return new Room(roomId, MatrixClientPeg.get(), "@user:example.com", {
+    return new Room(roomId, MatrixClientPeg.safeGet(), "@user:example.com", {
         pendingEventOrdering: PendingEventOrdering.Detached,
     });
 }
@@ -555,7 +555,7 @@ function createMenu(
     beacons: Map<BeaconIdentifier, Beacon> = new Map(),
     room: Room = makeDefaultRoom(),
 ): RenderResult {
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
 
     // @ts-ignore illegally set private prop
     room.currentState.beacons = beacons;

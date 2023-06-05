@@ -76,7 +76,7 @@ describe("RoomView", () => {
     beforeEach(() => {
         mockPlatformPeg({ reload: () => {} });
         stubClient();
-        cli = mocked(MatrixClientPeg.get());
+        cli = mocked(MatrixClientPeg.safeGet());
 
         room = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
         jest.spyOn(room, "findPredecessor");

@@ -82,7 +82,7 @@ describe("AppTile", () => {
 
     beforeAll(async () => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.safeGet();
         cli.hasLazyLoadMembersEnabled = () => false;
 
         // Init misc. startup deps

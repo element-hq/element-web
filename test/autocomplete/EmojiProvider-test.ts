@@ -44,7 +44,7 @@ const TOO_SHORT_EMOJI_SHORTCODE = [{ emojiShortcode: ":o", expectedEmoji: "â­•ï¸
 describe("EmojiProvider", function () {
     const testRoom = mkStubRoom(undefined, undefined, undefined);
     stubClient();
-    MatrixClientPeg.get();
+    MatrixClientPeg.safeGet();
 
     it.each(EMOJI_SHORTCODES)("Returns consistent results after final colon %s", async function (emojiShortcode) {
         const ep = new EmojiProvider(testRoom);

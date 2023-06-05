@@ -31,7 +31,7 @@ type Props = React.ComponentPropsWithoutRef<typeof SearchResultTile>;
 describe("SearchResultTile", () => {
     beforeAll(() => {
         stubClient();
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
 
         const room = new Room(ROOM_ID, cli, "@bob:example.org");
         jest.spyOn(cli, "getRoom").mockReturnValue(room);

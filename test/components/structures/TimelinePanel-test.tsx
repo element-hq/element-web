@@ -106,7 +106,7 @@ const mockEvents = (room: Room, count = 2): MatrixEvent[] => {
 };
 
 const setupTestData = (): [MatrixClient, Room, MatrixEvent[]] => {
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
     const room = mkRoom(client, "roomId");
     const events = mockEvents(room);
     return [client, room, events];
@@ -377,7 +377,7 @@ describe("TimelinePanel", () => {
     });
 
     it("should scroll event into view when props.eventId changes", () => {
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const room = mkRoom(client, "roomId");
         const events = mockEvents(room);
 
@@ -798,7 +798,7 @@ describe("TimelinePanel", () => {
         let reply2: MatrixEvent;
 
         beforeEach(() => {
-            client = MatrixClientPeg.get();
+            client = MatrixClientPeg.safeGet();
 
             Thread.hasServerSideSupport = FeatureSupport.Stable;
             room = new Room("roomId", client, "userId");
@@ -952,7 +952,7 @@ describe("TimelinePanel", () => {
     });
 
     it("renders when the last message is an undecryptable thread root", async () => {
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         client.isRoomEncrypted = () => true;
         client.supportsThreads = () => true;
         client.decryptEventIfNeeded = () => Promise.resolve();

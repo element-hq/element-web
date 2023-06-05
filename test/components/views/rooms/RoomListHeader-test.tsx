@@ -112,7 +112,7 @@ describe("RoomListHeader", () => {
         } as unknown as DMRoomMap;
         DMRoomMap.setShared(dmRoomMap);
         stubClient();
-        client = MatrixClientPeg.get();
+        client = MatrixClientPeg.safeGet();
         mocked(shouldShowComponent).mockReturnValue(true); // show all UIComponents
     });
 

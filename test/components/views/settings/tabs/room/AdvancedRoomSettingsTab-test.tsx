@@ -41,7 +41,7 @@ describe("AdvancedRoomSettingsTab", () => {
 
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.safeGet();
         room = mkStubRoom(roomId, "test room", cli);
         mocked(cli.getRoom).mockReturnValue(room);
         mocked(dis.dispatch).mockReset();

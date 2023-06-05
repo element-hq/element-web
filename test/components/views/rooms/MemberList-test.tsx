@@ -143,7 +143,7 @@ describe("MemberList", () => {
     describe.each([false, true])("does order members correctly (presence %s)", (enablePresence) => {
         beforeEach(function () {
             TestUtils.stubClient();
-            client = MatrixClientPeg.get();
+            client = MatrixClientPeg.safeGet();
             client.hasLazyLoadMembersEnabled = () => false;
 
             // Make room

@@ -71,6 +71,7 @@ export const getMockClientWithEventEmitter = (
     const mock = mocked(new MockClientWithEventEmitter(mockProperties) as unknown as MatrixClient);
 
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mock);
+    jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mock);
 
     // @ts-ignore simplified test stub
     mock.canSupport = new Map();
@@ -80,7 +81,10 @@ export const getMockClientWithEventEmitter = (
     return mock;
 };
 
-export const unmockClientPeg = () => jest.spyOn(MatrixClientPeg, "get").mockRestore();
+export const unmockClientPeg = () => {
+    jest.spyOn(MatrixClientPeg, "get").mockRestore();
+    jest.spyOn(MatrixClientPeg, "safeGet").mockRestore();
+};
 
 /**
  * Returns basic mocked client methods related to the current user

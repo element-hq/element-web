@@ -68,7 +68,7 @@ const setUpClientRoomAndStores = (): {
     carol: RoomMember;
 } => {
     stubClient();
-    const client = mocked<MatrixClient>(MatrixClientPeg.get());
+    const client = mocked<MatrixClient>(MatrixClientPeg.safeGet());
 
     const room = new Room("!1:example.org", client, "@alice:example.org", {
         pendingEventOrdering: PendingEventOrdering.Detached,

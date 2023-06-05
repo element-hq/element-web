@@ -31,7 +31,7 @@ describe("<RoomNotifications />", () => {
     });
 
     it("should render", () => {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const { asFragment } = render(
             <MatrixClientContext.Provider value={cli}>
                 <DevtoolsContext.Provider

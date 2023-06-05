@@ -115,7 +115,7 @@ describe("ThreadView", () => {
 
         stubClient();
         mockPlatformPeg();
-        mockClient = mocked(MatrixClientPeg.get());
+        mockClient = mocked(MatrixClientPeg.safeGet());
         jest.spyOn(mockClient, "supportsThreads").mockReturnValue(true);
 
         room = new Room(ROOM_ID, mockClient, mockClient.getUserId() ?? "", {

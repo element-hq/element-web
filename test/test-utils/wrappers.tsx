@@ -29,7 +29,7 @@ export function wrapInMatrixClientContext<T>(WrappedComponent: ComponentType<T>)
         constructor(props: WrapperProps<T>) {
             super(props);
 
-            this._matrixClient = peg.get();
+            this._matrixClient = peg.safeGet();
         }
 
         render() {

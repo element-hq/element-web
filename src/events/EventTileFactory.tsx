@@ -255,7 +255,7 @@ export function pickFactory(
             return noEventFactoryFactory(); // improper event type to render
         }
 
-        if (STATE_EVENT_TILE_TYPES.get(evType) === TextualEventFactory && !hasText(mxEvent, showHiddenEvents)) {
+        if (STATE_EVENT_TILE_TYPES.get(evType) === TextualEventFactory && !hasText(mxEvent, cli, showHiddenEvents)) {
             return noEventFactoryFactory();
         }
 
@@ -435,7 +435,7 @@ export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boo
     const handler = pickFactory(mxEvent, cli, showHiddenEvents);
     if (!handler) return false;
     if (handler === TextualEventFactory) {
-        return hasText(mxEvent, showHiddenEvents);
+        return hasText(mxEvent, cli, showHiddenEvents);
     } else if (handler === STATE_EVENT_TILE_TYPES.get(EventType.RoomCreate)) {
         const dynamicPredecessorsEnabled = SettingsStore.getValue("feature_dynamic_room_predecessors");
         const predecessor = cli.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);

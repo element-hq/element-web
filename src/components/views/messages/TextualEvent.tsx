@@ -19,6 +19,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import RoomContext from "../../../contexts/RoomContext";
 import * as TextForEvent from "../../../TextForEvent";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -28,7 +29,12 @@ export default class TextualEvent extends React.Component<IProps> {
     public static contextType = RoomContext;
 
     public render(): React.ReactNode {
-        const text = TextForEvent.textForEvent(this.props.mxEvent, true, this.context?.showHiddenEvents);
+        const text = TextForEvent.textForEvent(
+            this.props.mxEvent,
+            MatrixClientPeg.get(),
+            true,
+            this.context?.showHiddenEvents,
+        );
         if (!text) return null;
         return <div className="mx_TextualEvent">{text}</div>;
     }

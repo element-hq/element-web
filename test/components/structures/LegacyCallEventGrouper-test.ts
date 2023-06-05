@@ -30,7 +30,7 @@ let client: MatrixClient;
 describe("LegacyCallEventGrouper", () => {
     beforeEach(() => {
         stubClient();
-        client = MatrixClientPeg.get();
+        client = MatrixClientPeg.safeGet();
         client.getUserId = () => {
             return MY_USER_ID;
         };

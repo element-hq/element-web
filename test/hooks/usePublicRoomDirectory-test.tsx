@@ -31,7 +31,7 @@ describe("usePublicRoomDirectory", () => {
 
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.safeGet();
 
         MatrixClientPeg.getHomeserverName = () => "matrix.org";
         cli.getThirdpartyProtocols = () => Promise.resolve({});

@@ -66,6 +66,7 @@ describe("DeviceSettingsHandler", () => {
 
         afterEach(() => {
             MatrixClientPeg.get = () => null;
+            MatrixClientPeg.safeGet = () => null;
         });
 
         it("Returns the value for a disabled feature", () => {

@@ -69,13 +69,13 @@ export function stubClient(): MatrixClient {
     // 'sandbox.restore()' doesn't work correctly on inherited methods,
     // so we do this for each method
     jest.spyOn(peg, "get");
+    jest.spyOn(peg, "safeGet");
     jest.spyOn(peg, "unset");
     jest.spyOn(peg, "replaceUsingCreds");
-    // MatrixClientPeg.get() is called a /lot/, so implement it with our own
+    // MatrixClientPeg.safeGet() is called a /lot/, so implement it with our own
     // fast stub function rather than a sinon stub
-    peg.get = function () {
-        return client;
-    };
+    peg.get = () => client;
+    peg.safeGet = () => client;
     MatrixClientBackedSettingsHandler.matrixClient = client;
     return client;
 }

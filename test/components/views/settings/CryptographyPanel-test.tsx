@@ -29,7 +29,7 @@ describe("CryptographyPanel", () => {
         const sessionKeyFormatted = "<b>AbCD eFgh IJK7 L/m4 nOPq RSTU VW4x yzaB CDef 6gHI Jkl</b>";
 
         TestUtils.stubClient();
-        const client: MatrixClient = MatrixClientPeg.get();
+        const client: MatrixClient = MatrixClientPeg.safeGet();
         client.deviceId = sessionId;
         client.getDeviceEd25519Key = () => sessionKey;
 

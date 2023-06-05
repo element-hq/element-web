@@ -53,7 +53,7 @@ describe("export", function () {
     let events: MatrixEvent[];
     beforeEach(() => {
         stubClient();
-        client = MatrixClientPeg.get();
+        client = MatrixClientPeg.safeGet();
         client.getUserId = () => {
             return MY_USER_ID;
         };

@@ -32,7 +32,7 @@ describe("BasicMessageComposer", () => {
 
     TestUtils.stubClient();
 
-    const client: MatrixClient = MatrixClientPeg.get();
+    const client: MatrixClient = MatrixClientPeg.safeGet();
 
     const roomId = "!1234567890:domain";
     const userId = client.getSafeUserId();

@@ -60,7 +60,7 @@ describe("ReactionEventPreview", () => {
         });
 
         it("should use 'You' for your own reactions", () => {
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
             const room = new Room(roomId, cli, userId);
             mocked(cli.getRoom).mockReturnValue(room);
 
@@ -97,7 +97,7 @@ describe("ReactionEventPreview", () => {
         });
 
         it("should use display name for your others' reactions", () => {
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
             const room = new Room(roomId, cli, userId);
             mocked(cli.getRoom).mockReturnValue(room);
 

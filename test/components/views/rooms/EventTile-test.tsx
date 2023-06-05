@@ -73,7 +73,7 @@ describe("EventTile", () => {
         jest.clearAllMocks();
 
         stubClient();
-        client = MatrixClientPeg.get();
+        client = MatrixClientPeg.safeGet();
 
         room = new Room(ROOM_ID, client, client.getSafeUserId(), {
             pendingEventOrdering: PendingEventOrdering.Detached,

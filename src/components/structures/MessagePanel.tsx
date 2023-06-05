@@ -1301,7 +1301,7 @@ class MainGrouper extends BaseGrouper {
     public add({ event: ev, shouldShow }: EventAndShouldShow): void {
         if (ev.getType() === EventType.RoomMember) {
             // We can ignore any events that don't actually have a message to display
-            if (!hasText(ev, this.panel.showHiddenEvents)) return;
+            if (!hasText(ev, MatrixClientPeg.get(), this.panel.showHiddenEvents)) return;
         }
         this.readMarker = this.readMarker || this.panel.readMarkerForEvent(ev.getId()!, ev === this.lastShownEvent);
         if (!this.panel.showHiddenEvents && !shouldShow) {

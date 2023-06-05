@@ -120,7 +120,7 @@ describe("ThreadPanel", () => {
 
             stubClient();
             mockPlatformPeg();
-            mockClient = mocked(MatrixClientPeg.get());
+            mockClient = mocked(MatrixClientPeg.safeGet());
             Thread.setServerSideSupport(FeatureSupport.Stable);
             Thread.setServerSideListSupport(FeatureSupport.Stable);
             Thread.setServerSideFwdPaginationSupport(FeatureSupport.Stable);

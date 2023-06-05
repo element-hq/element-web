@@ -53,7 +53,7 @@ describe("PreferencesUserSettingsTab", () => {
         const getToggle = () => renderTab().getByRole("switch", { name: "Send read receipts" });
 
         const mockIsVersionSupported = (val: boolean) => {
-            const client = MatrixClientPeg.get();
+            const client = MatrixClientPeg.safeGet();
             jest.spyOn(client, "doesServerSupportUnstableFeature").mockResolvedValue(false);
             jest.spyOn(client, "isVersionSupported").mockImplementation(async (version: string) => {
                 if (version === "v1.4") return val;

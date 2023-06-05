@@ -40,7 +40,7 @@ describe("Algorithm", () => {
 
     beforeEach(() => {
         stubClient();
-        client = mocked(MatrixClientPeg.get());
+        client = mocked(MatrixClientPeg.safeGet());
         DMRoomMap.makeShared(client);
 
         algorithm = new Algorithm();

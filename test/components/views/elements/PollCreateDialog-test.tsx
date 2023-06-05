@@ -274,7 +274,7 @@ describe("PollCreateDialog", () => {
 });
 
 function createRoom(): Room {
-    return new Room("roomid", MatrixClientPeg.get(), "@name:example.com", {});
+    return new Room("roomid", MatrixClientPeg.safeGet(), "@name:example.com", {});
 }
 
 function changeValue(wrapper: RenderResult, labelText: string, value: string) {

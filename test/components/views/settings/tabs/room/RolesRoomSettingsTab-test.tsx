@@ -50,7 +50,7 @@ describe("RolesRoomSettingsTab", () => {
 
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.safeGet();
         room = mkStubRoom(roomId, "test room", cli);
     });
 

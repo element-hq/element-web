@@ -93,7 +93,7 @@ DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 describe("SpaceStore", () => {
     stubClient();
     const store = SpaceStore.instance;
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
 
     const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
 

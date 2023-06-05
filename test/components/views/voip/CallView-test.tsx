@@ -54,7 +54,7 @@ describe("CallLobby", () => {
         mocked(navigator.mediaDevices.enumerateDevices).mockResolvedValue([]);
 
         stubClient();
-        client = mocked(MatrixClientPeg.get());
+        client = mocked(MatrixClientPeg.safeGet());
 
         room = new Room("!1:example.org", client, "@alice:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,

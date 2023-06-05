@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import AccessibleButton from "../../components/views/elements/AccessibleButton";
@@ -23,7 +23,7 @@ import { highlightEvent } from "../../utils/EventUtils";
 import { _t } from "../../languageHandler";
 import { getSenderName } from "../../utils/event/getSenderName";
 
-export const textForVoiceBroadcastStoppedEvent = (event: MatrixEvent): (() => ReactNode) => {
+export const textForVoiceBroadcastStoppedEvent = (event: MatrixEvent, client: MatrixClient): (() => ReactNode) => {
     return (): ReactNode => {
         const ownUserId = MatrixClientPeg.get()?.getUserId();
         const startEventId = event.getRelation()?.event_id;

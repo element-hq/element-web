@@ -54,7 +54,7 @@ describe("MediaDeviceHandler", () => {
             expect(SettingsStoreMock.setValue).toHaveBeenCalledWith(key, null, SettingLevel.DEVICE, value);
         });
 
-        expect(MatrixClientPeg.get().getMediaHandler().setAudioSettings).toHaveBeenCalledWith({
+        expect(MatrixClientPeg.safeGet().getMediaHandler().setAudioSettings).toHaveBeenCalledWith({
             autoGainControl: false,
             echoCancellation: true,
             noiseSuppression: false,

@@ -34,7 +34,7 @@ import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalink
 
 describe("<PinnedMessagesCard />", () => {
     stubClient();
-    const cli = mocked(MatrixClientPeg.get());
+    const cli = mocked(MatrixClientPeg.safeGet());
     cli.getUserId.mockReturnValue("@alice:example.org");
     cli.setRoomAccountData.mockResolvedValue({});
     cli.relations.mockResolvedValue({ originalEvent: {} as unknown as MatrixEvent, events: [] });

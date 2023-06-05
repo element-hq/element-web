@@ -70,7 +70,7 @@ function mockClient({
     users = [],
 }: MockClientOptions = {}): MatrixClient {
     stubClient();
-    const cli = MatrixClientPeg.get();
+    const cli = MatrixClientPeg.safeGet();
     MatrixClientPeg.getHomeserverName = jest.fn(() => homeserver);
     cli.getUserId = jest.fn(() => userId);
     cli.getHomeserverUrl = jest.fn(() => homeserver);

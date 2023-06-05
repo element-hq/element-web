@@ -43,7 +43,7 @@ describe("SpaceHierarchy", () => {
         let room: Room;
         beforeEach(() => {
             stubClient();
-            client = MatrixClientPeg.get();
+            client = MatrixClientPeg.safeGet();
             room = new Room("room-id", client, "@alice:example.com");
             hierarchy = new RoomHierarchy(room);
 
@@ -82,7 +82,7 @@ describe("SpaceHierarchy", () => {
 
     describe("toLocalRoom", () => {
         stubClient();
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const roomV1 = mkStubRoom("room-id-1", "Room V1", client);
         const roomV2 = mkStubRoom("room-id-2", "Room V2", client);
         const roomV3 = mkStubRoom("room-id-3", "Room V3", client);
@@ -171,7 +171,7 @@ describe("SpaceHierarchy", () => {
         });
 
         stubClient();
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
 
         const dmRoomMap = {
             getUserIdForRoomId: jest.fn(),

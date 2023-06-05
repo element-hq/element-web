@@ -95,7 +95,7 @@ const VIRTUAL_ROOM_BOB = "$virtual_bob_room:example.org";
 const BOB_PHONE_NUMBER = "01818118181";
 
 function mkStubDM(roomId: string, userId: string) {
-    const room = mkStubRoom(roomId, "room", MatrixClientPeg.get());
+    const room = mkStubRoom(roomId, "room", MatrixClientPeg.safeGet());
     room.getJoinedMembers = jest.fn().mockReturnValue([
         {
             userId: "@me:example.org",
@@ -169,16 +169,16 @@ describe("LegacyCallHandler", () => {
     beforeEach(async () => {
         stubClient();
         fakeCall = null;
-        MatrixClientPeg.get().createCall = (roomId: string): MatrixCall | null => {
+        MatrixClientPeg.safeGet().createCall = (roomId: string): MatrixCall | null => {
             if (fakeCall && fakeCall.roomId !== roomId) {
                 throw new Error("Only one call is supported!");
             }
             fakeCall = new FakeCall(roomId) as unknown as MatrixCall;
             return fakeCall as unknown as MatrixCall;
         };
-        MatrixClientPeg.get().deviceId = deviceId;
+        MatrixClientPeg.safeGet().deviceId = deviceId;
 
-        MatrixClientPeg.get().getThirdpartyProtocols = () => {
+        MatrixClientPeg.safeGet().getThirdpartyProtocols = () => {
             return Promise.resolve({
                 "m.id.phone": {} as IProtocol,
                 "im.vector.protocol.sip_native": {} as IProtocol,
@@ -196,7 +196,7 @@ describe("LegacyCallHandler", () => {
         const nativeRoomCharie = mkStubDM(NATIVE_ROOM_CHARLIE, NATIVE_CHARLIE);
         const virtualBobRoom = mkStubDM(VIRTUAL_ROOM_BOB, VIRTUAL_BOB);
 
-        MatrixClientPeg.get().getRoom = (roomId: string): Room | null => {
+        MatrixClientPeg.safeGet().getRoom = (roomId: string): Room | null => {
             switch (roomId) {
                 case NATIVE_ROOM_ALICE:
                     return nativeRoomAlice;
@@ -244,7 +244,7 @@ describe("LegacyCallHandler", () => {
         pstnLookup = null;
         nativeLookup = null;
 
-        MatrixClientPeg.get().getThirdpartyUser = (proto: string, params: any) => {
+        MatrixClientPeg.safeGet().getThirdpartyUser = (proto: string, params: any) => {
             if ([PROTOCOL_PSTN, PROTOCOL_PSTN_PREFIXED].includes(proto)) {
                 pstnLookup = params["m.id.phone"];
                 return Promise.resolve([
@@ -402,10 +402,10 @@ describe("LegacyCallHandler", () => {
                 mkVoiceBroadcastInfoStateEvent(
                     "!room:example.com",
                     VoiceBroadcastInfoState.Started,
-                    MatrixClientPeg.get().getSafeUserId(),
+                    MatrixClientPeg.safeGet().getSafeUserId(),
                     "d42",
                 ),
-                MatrixClientPeg.get(),
+                MatrixClientPeg.safeGet(),
                 SdkContextClass.instance.voiceBroadcastRecordingsStore,
             );
             SdkContextClass.instance.voiceBroadcastPlaybacksStore.setCurrent(voiceBroadcastPlayback);
@@ -427,10 +427,10 @@ describe("LegacyCallHandler", () => {
                     mkVoiceBroadcastInfoStateEvent(
                         "!room:example.com",
                         VoiceBroadcastInfoState.Started,
-                        MatrixClientPeg.get().getSafeUserId(),
+                        MatrixClientPeg.safeGet().getSafeUserId(),
                         "d42",
                     ),
-                    MatrixClientPeg.get(),
+                    MatrixClientPeg.safeGet(),
                 ),
             );
         });
@@ -451,7 +451,7 @@ describe("LegacyCallHandler without third party protocols", () => {
     beforeEach(() => {
         stubClient();
         fakeCall = null;
-        MatrixClientPeg.get().createCall = (roomId) => {
+        MatrixClientPeg.safeGet().createCall = (roomId) => {
             if (fakeCall && fakeCall.roomId !== roomId) {
                 throw new Error("Only one call is supported!");
             }
@@ -459,7 +459,7 @@ describe("LegacyCallHandler without third party protocols", () => {
             return fakeCall;
         };
 
-        MatrixClientPeg.get().getThirdpartyProtocols = () => {
+        MatrixClientPeg.safeGet().getThirdpartyProtocols = () => {
             throw new Error("Endpoint unsupported.");
         };
 
@@ -468,7 +468,7 @@ describe("LegacyCallHandler without third party protocols", () => {
 
         const nativeRoomAlice = mkStubDM(NATIVE_ROOM_ALICE, NATIVE_ALICE);
 
-        MatrixClientPeg.get().getRoom = (roomId: string): Room | null => {
+        MatrixClientPeg.safeGet().getRoom = (roomId: string): Room | null => {
             switch (roomId) {
                 case NATIVE_ROOM_ALICE:
                     return nativeRoomAlice;
@@ -495,7 +495,7 @@ describe("LegacyCallHandler without third party protocols", () => {
         } as DMRoomMap;
         DMRoomMap.setShared(dmRoomMap);
 
-        MatrixClientPeg.get().getThirdpartyUser = (_proto, _params) => {
+        MatrixClientPeg.safeGet().getThirdpartyUser = (_proto, _params) => {
             throw new Error("Endpoint unsupported.");
         };
 
@@ -547,12 +547,12 @@ describe("LegacyCallHandler without third party protocols", () => {
             jest.clearAllMocks();
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === UIFeature.Voip);
 
-            jest.spyOn(MatrixClientPeg.get(), "supportsVoip").mockReturnValue(true);
+            jest.spyOn(MatrixClientPeg.safeGet(), "supportsVoip").mockReturnValue(true);
 
-            MatrixClientPeg.get().isFallbackICEServerAllowed = jest.fn();
-            MatrixClientPeg.get().prepareToEncrypt = jest.fn();
+            MatrixClientPeg.safeGet().isFallbackICEServerAllowed = jest.fn();
+            MatrixClientPeg.safeGet().prepareToEncrypt = jest.fn();
 
-            MatrixClientPeg.get().pushRules = {
+            MatrixClientPeg.safeGet().pushRules = {
                 global: {
                     [PushRuleKind.Override]: [
                         {
@@ -573,7 +573,7 @@ describe("LegacyCallHandler without third party protocols", () => {
             jest.spyOn(document, "getElementById").mockReturnValue(mockAudioElement);
 
             // silence local notifications by default
-            jest.spyOn(MatrixClientPeg.get(), "getAccountData").mockImplementation((eventType) => {
+            jest.spyOn(MatrixClientPeg.safeGet(), "getAccountData").mockImplementation((eventType) => {
                 if (eventType.includes(LOCAL_NOTIFICATION_SETTINGS_PREFIX.name)) {
                     return new MatrixEvent({
                         type: eventType,
@@ -600,10 +600,10 @@ describe("LegacyCallHandler without third party protocols", () => {
 
         it("listens for incoming call events when voip is enabled", () => {
             const call = new MatrixCall({
-                client: MatrixClientPeg.get(),
+                client: MatrixClientPeg.safeGet(),
                 roomId,
             });
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
 
             cli.emit(CallEventHandlerEvent.Incoming, call);
 
@@ -613,12 +613,12 @@ describe("LegacyCallHandler without third party protocols", () => {
 
         it("rings when incoming call state is ringing and notifications set to ring", () => {
             // remove local notification silencing mock for this test
-            jest.spyOn(MatrixClientPeg.get(), "getAccountData").mockReturnValue(undefined);
+            jest.spyOn(MatrixClientPeg.safeGet(), "getAccountData").mockReturnValue(undefined);
             const call = new MatrixCall({
-                client: MatrixClientPeg.get(),
+                client: MatrixClientPeg.safeGet(),
                 roomId,
             });
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
 
             cli.emit(CallEventHandlerEvent.Incoming, call);
 
@@ -632,10 +632,10 @@ describe("LegacyCallHandler without third party protocols", () => {
 
         it("does not ring when incoming call state is ringing but local notifications are silenced", () => {
             const call = new MatrixCall({
-                client: MatrixClientPeg.get(),
+                client: MatrixClientPeg.safeGet(),
                 roomId,
             });
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
 
             cli.emit(CallEventHandlerEvent.Incoming, call);
 
@@ -650,10 +650,10 @@ describe("LegacyCallHandler without third party protocols", () => {
 
         it("should force calls to silent when local notifications are silenced", async () => {
             const call = new MatrixCall({
-                client: MatrixClientPeg.get(),
+                client: MatrixClientPeg.safeGet(),
                 roomId,
             });
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
 
             cli.emit(CallEventHandlerEvent.Incoming, call);
 
@@ -663,10 +663,10 @@ describe("LegacyCallHandler without third party protocols", () => {
 
         it("does not unsilence calls when local notifications are silenced", async () => {
             const call = new MatrixCall({
-                client: MatrixClientPeg.get(),
+                client: MatrixClientPeg.safeGet(),
                 roomId,
             });
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
             const callHandlerEmitSpy = jest.spyOn(callHandler, "emit");
 
             cli.emit(CallEventHandlerEvent.Incoming, call);

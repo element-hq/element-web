@@ -32,7 +32,7 @@ describe("createRoom", () => {
     let client: Mocked<MatrixClient>;
     beforeEach(() => {
         stubClient();
-        client = mocked(MatrixClientPeg.get());
+        client = mocked(MatrixClientPeg.safeGet());
     });
 
     afterEach(() => jest.clearAllMocks());

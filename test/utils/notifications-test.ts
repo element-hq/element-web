@@ -119,7 +119,7 @@ describe("notifications", () => {
 
         beforeEach(() => {
             stubClient();
-            client = mocked(MatrixClientPeg.get());
+            client = mocked(MatrixClientPeg.safeGet());
             room = new Room(ROOM_ID, client, USER_ID);
             message = mkMessage({
                 event: true,
@@ -172,7 +172,7 @@ describe("notifications", () => {
 
         beforeEach(() => {
             stubClient();
-            client = mocked(MatrixClientPeg.get());
+            client = mocked(MatrixClientPeg.safeGet());
             room = new Room(ROOM_ID, client, USER_ID);
             sendReadReceiptSpy = jest.spyOn(client, "sendReadReceipt").mockResolvedValue({});
             jest.spyOn(client, "getRooms").mockReturnValue([room]);

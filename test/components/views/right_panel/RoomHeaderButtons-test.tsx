@@ -35,7 +35,7 @@ describe("RoomHeaderButtons-test.tsx", function () {
         jest.clearAllMocks();
 
         stubClient();
-        client = MatrixClientPeg.get();
+        client = MatrixClientPeg.safeGet();
         client.supportsThreads = () => true;
         room = new Room(ROOM_ID, client, client.getUserId() ?? "", {
             pendingEventOrdering: PendingEventOrdering.Detached,

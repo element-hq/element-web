@@ -33,7 +33,7 @@ describe("Unread", () => {
     // A different user.
     const aliceId = "@alice:server.org";
     stubClient();
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
 
     describe("eventTriggersUnreadCount()", () => {
         // setup events

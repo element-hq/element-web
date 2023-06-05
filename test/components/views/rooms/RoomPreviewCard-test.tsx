@@ -40,7 +40,7 @@ describe("RoomPreviewCard", () => {
 
     beforeEach(() => {
         stubClient();
-        client = mocked(MatrixClientPeg.get());
+        client = mocked(MatrixClientPeg.safeGet());
         client.getUserId.mockReturnValue("@alice:example.org");
         DMRoomMap.makeShared(client);
 

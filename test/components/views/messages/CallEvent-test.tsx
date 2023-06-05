@@ -58,7 +58,7 @@ describe("CallEvent", () => {
         jest.setSystemTime(0);
 
         stubClient();
-        client = mocked(MatrixClientPeg.get());
+        client = mocked(MatrixClientPeg.safeGet());
         client.getUserId.mockReturnValue("@alice:example.org");
 
         room = new Room("!1:example.org", client, "@alice:example.org", {

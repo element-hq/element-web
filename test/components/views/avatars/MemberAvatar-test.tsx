@@ -47,7 +47,7 @@ describe("MemberAvatar", () => {
         jest.clearAllMocks();
 
         stubClient();
-        mockClient = mocked(MatrixClientPeg.get());
+        mockClient = mocked(MatrixClientPeg.safeGet());
 
         room = new Room(ROOM_ID, mockClient, mockClient.getUserId() ?? "", {
             pendingEventOrdering: PendingEventOrdering.Detached,

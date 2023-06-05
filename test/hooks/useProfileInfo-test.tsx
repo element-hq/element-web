@@ -31,7 +31,7 @@ describe("useProfileInfo", () => {
 
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.safeGet();
         cli.getProfileInfo = (query) => {
             return Promise.resolve({
                 avatar_url: undefined,

@@ -45,7 +45,7 @@ describe("<RoomSearchView/>", () => {
 
     beforeEach(async () => {
         stubClient();
-        client = MatrixClientPeg.get();
+        client = MatrixClientPeg.safeGet();
         client.supportsThreads = jest.fn().mockReturnValue(true);
         room = new Room("!room:server", client, client.getSafeUserId());
         mocked(client.getRoom).mockReturnValue(room);
