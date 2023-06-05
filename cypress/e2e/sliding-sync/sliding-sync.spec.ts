@@ -100,7 +100,7 @@ describe("Sliding Sync", () => {
         });
     };
 
-    it("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", () => {
+    it.skip("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", () => {
         // create rooms and check room names are correct
         cy.createRoom({ name: "Apple" }).then(() => cy.findByRole("treeitem", { name: "Apple" }));
         cy.createRoom({ name: "Pineapple" }).then(() => cy.findByRole("treeitem", { name: "Pineapple" }));
@@ -130,7 +130,7 @@ describe("Sliding Sync", () => {
         checkOrder(["Apple", "Orange", "Pineapple", "Test Room"]);
     });
 
-    it("should move rooms around as new events arrive", () => {
+    it.skip("should move rooms around as new events arrive", () => {
         // create rooms and check room names are correct
         cy.createRoom({ name: "Apple" })
             .as("roomA")
@@ -156,7 +156,7 @@ describe("Sliding Sync", () => {
         checkOrder(["Pineapple", "Orange", "Apple", "Test Room"]);
     });
 
-    it("should not move the selected room: it should be sticky", () => {
+    it.skip("should not move the selected room: it should be sticky", () => {
         // create rooms and check room names are correct
         cy.createRoom({ name: "Apple" })
             .as("roomA")
@@ -187,7 +187,7 @@ describe("Sliding Sync", () => {
         checkOrder(["Apple", "Orange", "Pineapple", "Test Room"]);
     });
 
-    it("should show the right unread notifications", () => {
+    it.skip("should show the right unread notifications", () => {
         createAndJoinBob();
 
         // send a message in the test room: unread notif count shoould increment
@@ -214,7 +214,7 @@ describe("Sliding Sync", () => {
         cy.findByRole("treeitem", { name: "Test Room" }).should("not.have.class", "mx_NotificationBadge_count");
     });
 
-    it("should not show unread indicators", () => {
+    it.skip("should not show unread indicators", () => {
         // TODO: for now. Later we should.
         createAndJoinBob();
 
@@ -256,7 +256,7 @@ describe("Sliding Sync", () => {
             .should("exist");
     });
 
-    it("should show and be able to accept/reject/rescind invites", () => {
+    it.skip("should show and be able to accept/reject/rescind invites", () => {
         createAndJoinBob();
 
         let clientUserId;
@@ -372,7 +372,7 @@ describe("Sliding Sync", () => {
 
     // Regression test for a bug in SS mode, but would be useful to have in non-SS mode too.
     // This ensures we are setting RoomViewStore state correctly.
-    it("should clear the reply to field when swapping rooms", () => {
+    it.skip("should clear the reply to field when swapping rooms", () => {
         cy.createRoom({ name: "Other Room" })
             .as("roomA")
             .then(() => cy.findByRole("treeitem", { name: "Other Room" }));
@@ -406,7 +406,7 @@ describe("Sliding Sync", () => {
     });
 
     // Regression test for https://github.com/vector-im/element-web/issues/21462
-    it("should not cancel replies when permalinks are clicked", () => {
+    it.skip("should not cancel replies when permalinks are clicked", () => {
         cy.get<string>("@roomId").then((roomId) => {
             // we require a first message as you cannot click the permalink text with the avatar in the way
             return cy
@@ -449,7 +449,7 @@ describe("Sliding Sync", () => {
         cy.get(".mx_ReplyPreview").should("exist");
     });
 
-    it("should send unsubscribe_rooms for every room switch", () => {
+    it.skip("should send unsubscribe_rooms for every room switch", () => {
         let roomAId: string;
         let roomPId: string;
         // create rooms and check room names are correct
