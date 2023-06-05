@@ -26,6 +26,7 @@ import {
     CallParty,
     CallState,
     CallType,
+    FALLBACK_ICE_SERVER,
     MatrixCall,
 } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -825,7 +826,6 @@ export default class LegacyCallHandler extends EventEmitter {
 
     private showICEFallbackPrompt(): void {
         const cli = MatrixClientPeg.get();
-        const code = (sub: string): JSX.Element => <code>{sub}</code>;
         Modal.createDialog(
             QuestionDialog,
             {
@@ -838,22 +838,24 @@ export default class LegacyCallHandler extends EventEmitter {
                                     "(<code>%(homeserverDomain)s</code>) to configure a TURN server in " +
                                     "order for calls to work reliably.",
                                 { homeserverDomain: cli.getDomain() },
-                                { code },
+                                { code: (sub: string) => <code>{sub}</code> },
                             )}
                         </p>
                         <p>
                             {_t(
                                 "Alternatively, you can try to use the public server at " +
-                                    "<code>turn.matrix.org</code>, but this will not be as reliable, and " +
+                                    "<server/>, but this will not be as reliable, and " +
                                     "it will share your IP address with that server. You can also manage " +
                                     "this in Settings.",
                                 undefined,
-                                { code },
+                                { server: () => <code>{new URL(FALLBACK_ICE_SERVER).pathname}</code> },
                             )}
                         </p>
                     </div>
                 ),
-                button: _t("Try using turn.matrix.org"),
+                button: _t("Try using %(server)s", {
+                    server: new URL(FALLBACK_ICE_SERVER).pathname,
+                }),
                 cancelButton: _t("OK"),
                 onFinished: (allow) => {
                     SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);

@@ -17,6 +17,7 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { FALLBACK_ICE_SERVER } from "matrix-js-sdk/src/webrtc/call";
 
 import { _t } from "../../../../../languageHandler";
 import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
@@ -225,6 +226,9 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                         />
                         <SettingsFlag
                             name="fallbackICEServerAllowed"
+                            label={_t("Allow fallback call assist server (%(server)s)", {
+                                server: new URL(FALLBACK_ICE_SERVER).pathname,
+                            })}
                             level={SettingLevel.DEVICE}
                             onChange={this.changeFallbackICEServerAllowed}
                         />

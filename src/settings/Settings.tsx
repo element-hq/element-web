@@ -880,9 +880,8 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "fallbackICEServerAllowed": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("Allow fallback call assist server (turn.matrix.org)"),
         description: _td(
-            "Only applies if your homeserver does not offer one. " + "Your IP address would be shared during a call.",
+            "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.",
         ),
         // This is a tri-state value, where `null` means "prompt the user".
         default: null,
