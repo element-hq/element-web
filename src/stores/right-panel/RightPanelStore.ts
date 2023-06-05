@@ -369,6 +369,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
                 );
             }
         }
+        // when we're switching to a room, clear out thread permalinks to not get you stuck in the middle of the thread
+        // in order to fix https://github.com/matrix-org/matrix-react-sdk/pull/11011
+        if (this.currentCard?.phase === RightPanelPhases.ThreadView) {
+            this.currentCard.state.initialEvent = undefined;
+            this.currentCard.state.isInitialEventHighlighted = undefined;
+            this.currentCard.state.initialEventScrollIntoView = undefined;
+        }
 
         // If the right panel stays open mode is used, and the panel was either
         // closed or never shown for that room, then force it open and display
