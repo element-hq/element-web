@@ -84,7 +84,7 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
         }
 
         return (
-            <SettingsTab>
+            <SettingsTab data-testid="General">
                 <SettingsSection heading={_t("General")}>
                     <RoomProfileSettings roomId={room.roomId} />
                 </SettingsSection>
