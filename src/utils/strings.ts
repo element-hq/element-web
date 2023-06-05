@@ -21,7 +21,7 @@ limitations under the License.
  * @param text the plaintext to put in the user's clipboard
  */
 import { logger } from "matrix-js-sdk/src/logger";
-import GraphemeSplitter from "grapheme-splitter";
+import GraphemeSplitter from "graphemer";
 
 export async function copyPlaintext(text: string): Promise<boolean> {
     try {

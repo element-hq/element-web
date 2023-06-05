@@ -28,7 +28,7 @@ import { IContent } from "matrix-js-sdk/src/models/event";
 import { Optional } from "matrix-events-sdk";
 import _Linkify from "linkify-react";
 import escapeHtml from "escape-html";
-import GraphemeSplitter from "grapheme-splitter";
+import GraphemeSplitter from "graphemer";
 
 import {
     _linkifyElement,
