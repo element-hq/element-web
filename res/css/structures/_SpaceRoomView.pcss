@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$SpaceRoomViewInnerWidth: 428px;
-
 @define-mixin SpacePillButton {
     position: relative;
     padding: 16px 32px 16px 72px;
@@ -61,6 +59,8 @@ $SpaceRoomViewInnerWidth: 428px;
 }
 
 .mx_SpaceRoomView {
+    --innerWidth: 428px;
+
     overflow-y: auto;
     flex: 1;
 
@@ -83,11 +83,11 @@ $SpaceRoomViewInnerWidth: 428px;
             color: $secondary-content;
             margin-top: 12px;
             margin-bottom: 24px;
-            max-width: $SpaceRoomViewInnerWidth;
+            max-width: var(--innerWidth);
         }
 
         .mx_AddExistingToSpace {
-            max-width: $SpaceRoomViewInnerWidth;
+            max-width: var(--innerWidth);
 
             .mx_AddExistingToSpace_content {
                 height: calc(100vh - 360px);
@@ -98,7 +98,7 @@ $SpaceRoomViewInnerWidth: 428px;
         .mx_SpaceRoomView_buttons {
             display: block;
             margin-top: 44px;
-            width: $SpaceRoomViewInnerWidth;
+            width: var(--innerWidth);
             text-align: right; /* button alignment right */
 
             .mx_AccessibleButton_hasKind {
@@ -112,7 +112,7 @@ $SpaceRoomViewInnerWidth: 428px;
         }
 
         .mx_Field {
-            max-width: $SpaceRoomViewInnerWidth;
+            max-width: var(--innerWidth);
 
             & + .mx_Field {
                 margin-top: 28px;

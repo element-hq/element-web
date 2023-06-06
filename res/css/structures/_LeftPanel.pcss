@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$roomListCollapsedWidth: 68px;
-
 .mx_MatrixChat--with-avatar {
     .mx_LeftPanel,
     .mx_LeftPanel .mx_LeftPanel_roomListContainer {
@@ -33,6 +31,11 @@ $roomListCollapsedWidth: 68px;
     contain: layout paint;
 }
 
+.mx_LeftPanel_wrapper,
+.mx_LeftPanel {
+    --collapsedWidth: 68px;
+}
+
 .mx_LeftPanel_wrapper {
     display: flex;
     flex-direction: row;
@@ -46,7 +49,7 @@ $roomListCollapsedWidth: 68px;
         position: relative;
 
         &[data-collapsed] {
-            max-width: $roomListCollapsedWidth;
+            max-width: var(--collapsedWidth);
         }
     }
 }
@@ -218,7 +221,7 @@ $roomListCollapsedWidth: 68px;
         width: unset !important;
 
         .mx_LeftPanel_roomListContainer {
-            width: $roomListCollapsedWidth;
+            width: var(--collapsedWidth);
 
             .mx_LeftPanel_userHeader {
                 flex-direction: row;
