@@ -1,5 +1,5 @@
-Changes in [3.73.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.73.0-rc.3) (2023-06-01)
-===============================================================================================================
+Changes in [3.73.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.73.0) (2023-06-06)
+=====================================================================================================
 
 ## ✨ Features
  * When joining room in sub-space join the parents too ([\#11011](https://github.com/matrix-org/matrix-react-sdk/pull/11011)).
