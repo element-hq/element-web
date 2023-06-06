@@ -23,10 +23,10 @@
     "Unable to load config file: please refresh the page to try again.": "Không thể tải tệp cấu hình: hãy tải lại trang để thử lại.",
     "Failed to start": "Không khởi động được",
     "Use %(brand)s on mobile": "Sử dụng %(brand)s trên di động",
-    "Powered by Matrix": "Được chạy trên giao thức Matrix",
+    "Powered by Matrix": "Chạy trên giao thức Matrix",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Thiết lập Element của bạn đang chứa mã JSON không hợp lệ. Vui lòng sửa lại và tải lại trang.",
     "Your Element is misconfigured": "Element đang bị thiết lập sai",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dịch vụ nhắn tin &amp; liên lạc được mã hóa, phi tập trung. Được cung cấp bởi $matrixLogo",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dịch vụ nhắn tin &amp; liên lạc được mã hóa, phi tập trung. Được vận hành trên $matrixLogo",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s trên %(osName)s",
     "%(brand)s Desktop: %(platformName)s": "%(brand)s máy tính: %(platformName)s"
 }
