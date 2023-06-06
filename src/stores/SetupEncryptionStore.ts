@@ -17,6 +17,7 @@ limitations under the License.
 import EventEmitter from "events";
 import {
     PHASE_DONE as VERIF_PHASE_DONE,
+    Phase as VerificationPhase,
     VerificationRequest,
     VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
@@ -178,7 +179,7 @@ export class SetupEncryptionStore extends EventEmitter {
     };
 
     public onVerificationRequestChange = async (): Promise<void> => {
-        if (this.verificationRequest?.cancelled) {
+        if (this.verificationRequest?.phase === VerificationPhase.Cancelled) {
             this.verificationRequest.off(VerificationRequestEvent.Change, this.onVerificationRequestChange);
             this.verificationRequest = null;
             this.emit("update");

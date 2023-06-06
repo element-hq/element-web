@@ -28,10 +28,15 @@ import {
     CryptoApi,
     DeviceVerificationStatus,
 } from "matrix-js-sdk/src/matrix";
-import { Phase, VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import {
+    Phase,
+    VerificationRequest,
+    VerificationRequestEvent,
+} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { Device } from "matrix-js-sdk/src/models/device";
 import { defer } from "matrix-js-sdk/src/utils";
+import { EventEmitter } from "events";
 
 import UserInfo, {
     BanToggleButton,
@@ -55,6 +60,7 @@ import Modal from "../../../../src/Modal";
 import { E2EStatus } from "../../../../src/utils/ShieldUtils";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
 import { clearAllModals, flushPromises } from "../../../test-utils";
+import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog";
 
 jest.mock("../../../../src/utils/direct-messages", () => ({
     ...jest.requireActual("../../../../src/utils/direct-messages"),
@@ -163,14 +169,21 @@ beforeEach(() => {
 });
 
 describe("<UserInfo />", () => {
-    const verificationRequest = {
-        pending: true,
-        on: jest.fn(),
-        phase: Phase.Ready,
-        channel: { transactionId: 1 },
-        otherPartySupportsMethod: jest.fn(),
-        off: jest.fn(),
-    } as unknown as VerificationRequest;
+    class MockVerificationRequest extends EventEmitter {
+        pending = true;
+        phase: Phase = Phase.Ready;
+        cancellationCode: string | null = null;
+
+        constructor(opts: Partial<VerificationRequest>) {
+            super();
+            Object.assign(this, {
+                channel: { transactionId: 1 },
+                otherPartySupportsMethod: jest.fn(),
+                ...opts,
+            });
+        }
+    }
+    let verificationRequest: MockVerificationRequest;
 
     const defaultProps = {
         user: defaultUser,
@@ -188,6 +201,15 @@ describe("<UserInfo />", () => {
             wrapper: Wrapper,
         });
     };
+
+    beforeEach(() => {
+        verificationRequest = new MockVerificationRequest({});
+    });
+
+    afterEach(async () => {
+        await clearAllModals();
+        jest.clearAllMocks();
+    });
 
     it("closes on close button click", async () => {
         renderComponent();
@@ -220,6 +242,42 @@ describe("<UserInfo />", () => {
             // the verificationRequest has phase of Phase.Ready but .otherPartySupportsMethod
             // will not return true, so we expect to see the noCommonMethod error from VerificationPanel
             expect(screen.getByText(/try with a different client/i)).toBeInTheDocument();
+        });
+
+        it("should show error modal when the verification request is cancelled with a mismatch", () => {
+            renderComponent({ phase: RightPanelPhases.EncryptionPanel, verificationRequest });
+
+            const spy = jest.spyOn(Modal, "createDialog");
+            act(() => {
+                verificationRequest.phase = Phase.Cancelled;
+                verificationRequest.cancellationCode = "m.key_mismatch";
+                verificationRequest.emit(VerificationRequestEvent.Change);
+            });
+            expect(spy).toHaveBeenCalledWith(
+                ErrorDialog,
+                expect.objectContaining({ title: "Your messages are not secure" }),
+            );
+        });
+
+        it("should not show error modal when the verification request is changed for some other reason", () => {
+            renderComponent({ phase: RightPanelPhases.EncryptionPanel, verificationRequest });
+
+            const spy = jest.spyOn(Modal, "createDialog");
+
+            // change to "started"
+            act(() => {
+                verificationRequest.phase = Phase.Started;
+                verificationRequest.emit(VerificationRequestEvent.Change);
+            });
+
+            // cancelled for some other reason
+            act(() => {
+                verificationRequest.phase = Phase.Cancelled;
+                verificationRequest.cancellationCode = "changed my mind";
+                verificationRequest.emit(VerificationRequestEvent.Change);
+            });
+
+            expect(spy).not.toHaveBeenCalled();
         });
 
         it("renders close button correctly when encryption panel with a pending verification request", () => {
