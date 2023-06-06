@@ -284,7 +284,13 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                     mx_IRCLayout: previewLayout == Layout.IRC,
                 })}
             >
-                <EventTile mxEvent={mockEvent} layout={previewLayout} permalinkCreator={permalinkCreator} as="div" />
+                <EventTile
+                    mxEvent={mockEvent}
+                    layout={previewLayout}
+                    permalinkCreator={permalinkCreator}
+                    as="div"
+                    inhibitInteraction
+                />
             </div>
             <hr />
             <div className="mx_ForwardList" id="mx_ForwardList">

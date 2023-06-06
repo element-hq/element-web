@@ -23,10 +23,8 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { GroupCallIntent } from "matrix-js-sdk/src/webrtc/groupCall";
 
 import SettingsStore from "../settings/SettingsStore";
-import EditorStateTransfer from "../utils/EditorStateTransfer";
-import { RoomPermalinkCreator } from "../utils/permalinks/Permalinks";
 import LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
-import { GetRelationsForEvent } from "../components/views/rooms/EventTile";
+import { EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import MKeyVerificationConclusion from "../components/views/messages/MKeyVerificationConclusion";
@@ -56,20 +54,24 @@ import {
 } from "../voice-broadcast";
 
 // Subset of EventTile's IProps plus some mixins
-export interface EventTileTypeProps {
+export interface EventTileTypeProps
+    extends Pick<
+        EventTileProps,
+        | "mxEvent"
+        | "highlights"
+        | "highlightLink"
+        | "showUrlPreview"
+        | "onHeightChanged"
+        | "forExport"
+        | "getRelationsForEvent"
+        | "editState"
+        | "replacingEventId"
+        | "permalinkCreator"
+        | "callEventGrouper"
+        | "isSeeingThroughMessageHiddenForModeration"
+        | "inhibitInteraction"
+    > {
     ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
-    mxEvent: MatrixEvent;
-    highlights?: string[];
-    highlightLink?: string;
-    showUrlPreview?: boolean;
-    onHeightChanged?: () => void;
-    forExport?: boolean;
-    getRelationsForEvent?: GetRelationsForEvent;
-    editState?: EditorStateTransfer;
-    replacingEventId?: string;
-    permalinkCreator?: RoomPermalinkCreator;
-    callEventGrouper?: LegacyCallEventGrouper;
-    isSeeingThroughMessageHiddenForModeration?: boolean;
     timestamp?: JSX.Element;
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, typeof React.Component>;
@@ -322,6 +324,7 @@ export function renderTile(
         getRelationsForEvent,
         isSeeingThroughMessageHiddenForModeration,
         timestamp,
+        inhibitInteraction,
     } = props;
 
     switch (renderType) {
@@ -340,6 +343,7 @@ export function renderTile(
                 getRelationsForEvent,
                 isSeeingThroughMessageHiddenForModeration,
                 permalinkCreator,
+                inhibitInteraction,
             });
         default:
             // NEARLY ALL THE OPTIONS!
@@ -357,6 +361,7 @@ export function renderTile(
                 getRelationsForEvent,
                 isSeeingThroughMessageHiddenForModeration,
                 timestamp,
+                inhibitInteraction,
             });
     }
 }

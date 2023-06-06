@@ -213,6 +213,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
                 mediaEventHelper={this.mediaHelper}
                 getRelationsForEvent={this.props.getRelationsForEvent}
                 isSeeingThroughMessageHiddenForModeration={this.props.isSeeingThroughMessageHiddenForModeration}
+                inhibitInteraction={this.props.inhibitInteraction}
             />
         ) : null;
     }
