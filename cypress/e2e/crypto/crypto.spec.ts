@@ -330,6 +330,7 @@ describe("Verify own device", () => {
     let homeserver: HomeserverInstance;
 
     beforeEach(() => {
+        skipIfRustCrypto();
         cy.startHomeserver("default").then((data: HomeserverInstance) => {
             homeserver = data;
 
