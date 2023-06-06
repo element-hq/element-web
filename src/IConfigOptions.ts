@@ -106,6 +106,7 @@ export interface IConfigOptions {
     };
 
     widget_build_url?: string; // url called to replace jitsi/call widget creation
+    widget_build_url_ignore_dm?: boolean;
     audio_stream_url?: string;
     jitsi?: {
         preferred_domain: string;

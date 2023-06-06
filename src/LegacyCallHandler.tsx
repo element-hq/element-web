@@ -963,7 +963,7 @@ export default class LegacyCallHandler extends EventEmitter {
         }
 
         // We might be using managed hybrid widgets
-        if (isManagedHybridWidgetEnabled()) {
+        if (isManagedHybridWidgetEnabled(roomId)) {
             await addManagedHybridWidget(roomId);
             return;
         }

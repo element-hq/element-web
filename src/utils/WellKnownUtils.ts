@@ -26,6 +26,7 @@ const EMBEDDED_PAGES_WK_PROPERTY = "io.element.embedded_pages";
 /* eslint-disable camelcase */
 export interface ICallBehaviourWellKnown {
     widget_build_url?: string;
+    ignore_dm?: boolean;
 }
 
 export interface IE2EEWellKnown {
