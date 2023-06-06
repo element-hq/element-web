@@ -1,5 +1,5 @@
-Changes in [1.11.32-rc.3](https://github.com/vector-im/element-web/releases/tag/v1.11.32-rc.3) (2023-06-01)
-===========================================================================================================
+Changes in [1.11.32](https://github.com/vector-im/element-web/releases/tag/v1.11.32) (2023-06-06)
+=================================================================================================
 
 ## ✨ Features
  * Redirect to the SSO page if `sso_redirect_options.on_welcome_page` is enabled and the URL hash is empty ([\#25495](https://github.com/vector-im/element-web/pull/25495)). Contributed by @dhenneke.
