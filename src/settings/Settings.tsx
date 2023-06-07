@@ -93,6 +93,7 @@ export enum LabGroup {
 export enum Features {
     VoiceBroadcast = "feature_voice_broadcast",
     VoiceBroadcastForceSmallChunks = "feature_voice_broadcast_force_small_chunks",
+    OidcNativeFlow = "feature_oidc_native_flow",
 }
 
 export const labGroupNames: Record<LabGroup, string> = {
@@ -443,6 +444,11 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     [Features.VoiceBroadcastForceSmallChunks]: {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("Force 15s voice broadcast chunk length"),
+        default: false,
+    },
+    [Features.OidcNativeFlow]: {
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Enable new native OIDC flows (Under active development)"),
         default: false,
     },
     "feature_rust_crypto": {

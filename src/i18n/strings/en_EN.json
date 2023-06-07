@@ -988,6 +988,7 @@
     "Favourite Messages": "Favourite Messages",
     "Under active development.": "Under active development.",
     "Force 15s voice broadcast chunk length": "Force 15s voice broadcast chunk length",
+    "Enable new native OIDC flows (Under active development)": "Enable new native OIDC flows (Under active development)",
     "Rust cryptography implementation": "Rust cryptography implementation",
     "Font size": "Font size",
     "Use custom size": "Use custom size",
