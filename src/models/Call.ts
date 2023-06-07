@@ -659,6 +659,8 @@ export class ElementCall extends Call {
             analyticsID,
         });
 
+        if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "");
+
         // Set custom fonts
         if (SettingsStore.getValue("useSystemFont")) {
             SettingsStore.getValue<string>("systemFont")
