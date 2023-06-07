@@ -94,7 +94,7 @@ describe("ConfirmRedactDialog", () => {
                     await confirmDeleteVoiceBroadcastStartedEvent();
                 });
 
-                it("should call redact without `with_relations`", () => {
+                it("should call redact without `with_rel_types`", () => {
                     expect(client.redactEvent).toHaveBeenCalledWith(roomId, mxEvent.getId(), undefined, {});
                 });
             });
@@ -110,9 +110,9 @@ describe("ConfirmRedactDialog", () => {
                     await confirmDeleteVoiceBroadcastStartedEvent();
                 });
 
-                it("should call redact with `with_relations`", () => {
+                it("should call redact with `with_rel_types`", () => {
                     expect(client.redactEvent).toHaveBeenCalledWith(roomId, mxEvent.getId(), undefined, {
-                        with_relations: [RelationType.Reference],
+                        with_rel_types: [RelationType.Reference],
                     });
                 });
             });

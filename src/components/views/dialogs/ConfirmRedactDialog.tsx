@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
-import { MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
+import { IRedactOpts, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import { _t } from "../../../languageHandler";
@@ -72,7 +72,7 @@ export function createRedactEventDialog({
                 if (!proceed) return;
 
                 const cli = MatrixClientPeg.get();
-                const withRelations: { with_relations?: RelationType[] } = {};
+                const withRelTypes: Pick<IRedactOpts, "with_rel_types"> = {};
 
                 // redact related events if this is a voice broadcast started event and
                 // server has support for relation based redactions
@@ -82,7 +82,7 @@ export function createRedactEventDialog({
                         relationBasedRedactionsSupport &&
                         relationBasedRedactionsSupport !== ServerSupport.Unsupported
                     ) {
-                        withRelations.with_relations = [RelationType.Reference];
+                        withRelTypes.with_rel_types = [RelationType.Reference];
                     }
                 }
 
@@ -90,7 +90,7 @@ export function createRedactEventDialog({
                     onCloseDialog?.();
                     await cli.redactEvent(roomId, eventId, undefined, {
                         ...(reason ? { reason } : {}),
-                        ...withRelations,
+                        ...withRelTypes,
                     });
                 } catch (e: any) {
                     const code = e.errcode || e.statusCode;
