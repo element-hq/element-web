@@ -273,8 +273,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             SlidingSyncManager.instance.startSpidering(100, 50); // 100 rooms at a time, 50ms apart
         }
 
-        opts.intentionalMentions = SettingsStore.getValue("feature_intentional_mentions");
-
         // Connect the matrix client to the dispatcher and setting handlers
         MatrixActionCreators.start(this.matrixClient);
         MatrixClientBackedSettingsHandler.matrixClient = this.matrixClient;
