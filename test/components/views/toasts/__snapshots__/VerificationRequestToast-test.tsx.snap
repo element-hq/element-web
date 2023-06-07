@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VerificationRequestToast should render a cross-user verification 1`] = `
+<div>
+  <div>
+    <div
+      class="mx_Toast_description"
+    >
+      @alice:domain (@other:user)
+    </div>
+    <div
+      aria-live="off"
+      class="mx_Toast_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline"
+        role="button"
+        tabindex="0"
+      >
+        Ignore (NaN)
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        role="button"
+        tabindex="0"
+      >
+        Verify Session
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VerificationRequestToast should render a self-verification 1`] = `
+<div>
+  <div>
+    <div
+      class="mx_Toast_description"
+    >
+      my other device
+      <div
+        class="mx_Toast_detail"
+      >
+        other_device from 1.1.1.1
+      </div>
+    </div>
+    <div
+      aria-live="off"
+      class="mx_Toast_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline"
+        role="button"
+        tabindex="0"
+      >
+        Ignore (NaN)
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        role="button"
+        tabindex="0"
+      >
+        Verify Session
+      </div>
+    </div>
+  </div>
+</div>
+`;

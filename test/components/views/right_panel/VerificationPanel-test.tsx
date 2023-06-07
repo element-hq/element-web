@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { act, render } from "@testing-library/react";
-import React from "react";
+import { act, render, waitFor } from "@testing-library/react";
+import React, { ComponentProps } from "react";
 import {
     Phase,
     VerificationRequest,
@@ -31,7 +31,6 @@ import {
     VerifierEvent,
     VerifierEventHandlerMap,
 } from "matrix-js-sdk/src/crypto-api/verification";
-import { IVerificationChannel } from "matrix-js-sdk/src/crypto/verification/request/Channel";
 
 import VerificationPanel from "../../../../src/components/views/right_panel/VerificationPanel";
 import { stubClient } from "../../../test-utils";
@@ -41,12 +40,57 @@ describe("<VerificationPanel />", () => {
         stubClient();
     });
 
-    it("should show a 'Verify by emoji' button", () => {
-        const container = renderComponent({
-            request: makeMockVerificationRequest(),
-            phase: Phase.Ready,
+    describe("'Ready' phase (dialog mode)", () => {
+        it("should show a 'Start' button", () => {
+            const container = renderComponent({
+                request: makeMockVerificationRequest({
+                    phase: Phase.Ready,
+                }),
+                layout: "dialog",
+            });
+            container.getByRole("button", { name: "Start" });
         });
-        container.getByRole("button", { name: "Verify by emoji" });
+
+        it("should show a QR code if the other side can scan and QR bytes are calculated", async () => {
+            const request = makeMockVerificationRequest({
+                phase: Phase.Ready,
+            });
+            request.getQRCodeBytes.mockReturnValue(Buffer.from("test", "utf-8"));
+            const container = renderComponent({
+                request: request,
+                layout: "dialog",
+            });
+            container.getByText("Scan this unique code");
+            // it shows a spinner at first; wait for the update which makes it show the QR code
+            await waitFor(() => {
+                container.getByAltText("QR Code");
+            });
+        });
+    });
+
+    describe("'Ready' phase (regular mode)", () => {
+        it("should show a 'Verify by emoji' button", () => {
+            const container = renderComponent({
+                request: makeMockVerificationRequest({ phase: Phase.Ready }),
+            });
+            container.getByRole("button", { name: "Verify by emoji" });
+        });
+
+        it("should show a QR code if the other side can scan and QR bytes are calculated", async () => {
+            const request = makeMockVerificationRequest({
+                phase: Phase.Ready,
+            });
+            request.getQRCodeBytes.mockReturnValue(Buffer.from("test", "utf-8"));
+            const container = renderComponent({
+                request: request,
+                member: new User("@other:user"),
+            });
+            container.getByText("Ask @other:user to scan your code:");
+            // it shows a spinner at first; wait for the update which makes it show the QR code
+            await waitFor(() => {
+                container.getByAltText("QR Code");
+            });
+        });
     });
 
     describe("'Verify by emoji' flow", () => {
@@ -91,13 +135,14 @@ describe("<VerificationPanel />", () => {
     });
 });
 
-function renderComponent(props: { request: VerificationRequest; phase: Phase }) {
+function renderComponent(props: Partial<ComponentProps<typeof VerificationPanel>> & { request: VerificationRequest }) {
     const defaultProps = {
         layout: "",
         member: {} as User,
         onClose: () => undefined,
         isRoomEncrypted: false,
         inDialog: false,
+        phase: props.request.phase,
     };
     return render(<VerificationPanel {...defaultProps} {...props} />);
 }
@@ -105,9 +150,9 @@ function renderComponent(props: { request: VerificationRequest; phase: Phase }) 
 function makeMockVerificationRequest(props: Partial<VerificationRequest> = {}): Mocked<VerificationRequest> {
     const request = new TypedEventEmitter<VerificationRequestEvent, any>();
     Object.assign(request, {
-        channel: {} as IVerificationChannel,
         cancel: jest.fn(),
         otherPartySupportsMethod: jest.fn().mockReturnValue(true),
+        getQRCodeBytes: jest.fn(),
         ...props,
     });
     return request as unknown as Mocked<VerificationRequest>;

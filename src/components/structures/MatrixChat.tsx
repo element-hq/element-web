@@ -1667,7 +1667,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 );
             } else if (request.pending) {
                 ToastStore.sharedInstance().addOrReplaceToast({
-                    key: "verifreq_" + request.channel.transactionId,
+                    key: "verifreq_" + request.transactionId,
                     title: _t("Verification requested"),
                     icon: "verification",
                     props: { request },

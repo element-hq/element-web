@@ -148,7 +148,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             if (accepted) {
                 stateLabel = (
                     <AccessibleButton onClick={this.openRequest}>
-                        {this.acceptedLabel(request.receivingUserId)}
+                        {this.acceptedLabel(request.initiatedByMe ? request.otherUserId : client.getSafeUserId())}
                     </AccessibleButton>
                 );
             } else if (request.phase === VerificationPhase.Cancelled) {
@@ -162,9 +162,9 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
         }
 
         if (!request.initiatedByMe) {
-            const name = getNameForEventRoom(client, request.requestingUserId, mxEvent.getRoomId()!);
+            const name = getNameForEventRoom(client, request.otherUserId, mxEvent.getRoomId()!);
             title = _t("%(name)s wants to verify", { name });
-            subtitle = userLabelForEventRoom(client, request.requestingUserId, mxEvent.getRoomId()!);
+            subtitle = userLabelForEventRoom(client, request.otherUserId, mxEvent.getRoomId()!);
             if (request.canAccept) {
                 stateNode = (
                     <div className="mx_cryptoEvent_buttons">
@@ -180,7 +180,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
         } else {
             // request sent by us
             title = _t("You sent a verification request");
-            subtitle = userLabelForEventRoom(client, request.receivingUserId, mxEvent.getRoomId()!);
+            subtitle = userLabelForEventRoom(client, request.otherUserId, mxEvent.getRoomId()!);
         }
 
         if (title) {

@@ -165,7 +165,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
                 onClose={onClose}
                 member={member}
                 request={request}
-                key={request.channel.transactionId}
+                key={request.transactionId}
                 inDialog={layout === "dialog"}
                 phase={phase}
             />
