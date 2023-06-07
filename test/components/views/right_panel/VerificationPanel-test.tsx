@@ -31,7 +31,6 @@ import {
     VerifierEvent,
     VerifierEventHandlerMap,
 } from "matrix-js-sdk/src/crypto-api/verification";
-import { SAS } from "matrix-js-sdk/src/crypto/verification/SAS";
 import { IVerificationChannel } from "matrix-js-sdk/src/crypto/verification/request/Channel";
 
 import VerificationPanel from "../../../../src/components/views/right_panel/VerificationPanel";
@@ -78,7 +77,7 @@ describe("<VerificationPanel />", () => {
 
             // fire the ShowSas event
             const sasEvent = makeMockSasCallbacks();
-            (mockVerifier as unknown as SAS).sasEvent = sasEvent;
+            mockVerifier.getShowSasCallbacks.mockReturnValue(sasEvent);
             act(() => {
                 mockVerifier.emit(VerifierEvent.ShowSas, sasEvent);
             });
@@ -119,6 +118,8 @@ function makeMockVerifier(): Mocked<VerificationBase> {
     Object.assign(verifier, {
         cancel: jest.fn(),
         verify: jest.fn(),
+        getShowSasCallbacks: jest.fn(),
+        getReciprocateQrCodeCallbacks: jest.fn(),
     });
     return verifier as unknown as Mocked<VerificationBase>;
 }

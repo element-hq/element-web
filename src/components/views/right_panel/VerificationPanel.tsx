@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { verificationMethods } from "matrix-js-sdk/src/crypto";
-import { ReciprocateQRCode, SCAN_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
+import { SCAN_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import {
     Phase,
     VerificationRequest,
@@ -24,7 +24,6 @@ import {
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
-import { SAS } from "matrix-js-sdk/src/crypto/verification/SAS";
 import { logger } from "matrix-js-sdk/src/logger";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { ShowQrCodeCallbacks, ShowSasCallbacks, VerifierEvent } from "matrix-js-sdk/src/crypto-api/verification";
@@ -49,10 +48,10 @@ interface IProps {
 }
 
 interface IState {
-    sasEvent?: ShowSasCallbacks;
+    sasEvent: ShowSasCallbacks | null;
     emojiButtonClicked?: boolean;
     reciprocateButtonClicked?: boolean;
-    reciprocateQREvent?: ShowQrCodeCallbacks;
+    reciprocateQREvent: ShowQrCodeCallbacks | null;
 }
 
 export default class VerificationPanel extends React.PureComponent<IProps, IState> {
@@ -60,7 +59,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
     public constructor(props: IProps) {
         super(props);
-        this.state = {};
+        this.state = { sasEvent: null, reciprocateQREvent: null };
         this.hasVerifier = false;
     }
 
@@ -399,11 +398,12 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     };
 
     private updateVerifierState = (): void => {
-        const { request } = this.props;
-        const sasEvent = (request.verifier as SAS).sasEvent;
-        const reciprocateQREvent = (request.verifier as ReciprocateQRCode).reciprocateQREvent;
-        request.verifier?.off(VerifierEvent.ShowSas, this.updateVerifierState);
-        request.verifier?.off(VerifierEvent.ShowReciprocateQr, this.updateVerifierState);
+        // this method is only called once we know there is a verifier.
+        const verifier = this.props.request.verifier!;
+        const sasEvent = verifier.getShowSasCallbacks();
+        const reciprocateQREvent = verifier.getReciprocateQrCodeCallbacks();
+        verifier.off(VerifierEvent.ShowSas, this.updateVerifierState);
+        verifier.off(VerifierEvent.ShowReciprocateQr, this.updateVerifierState);
         this.setState({ sasEvent, reciprocateQREvent });
     };
 
@@ -428,8 +428,8 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const { request } = this.props;
         request.on(VerificationRequestEvent.Change, this.onRequestChange);
         if (request.verifier) {
-            const sasEvent = (request.verifier as SAS).sasEvent;
-            const reciprocateQREvent = (request.verifier as ReciprocateQRCode).reciprocateQREvent;
+            const sasEvent = request.verifier.getShowSasCallbacks();
+            const reciprocateQREvent = request.verifier.getReciprocateQrCodeCallbacks();
             this.setState({ sasEvent, reciprocateQREvent });
         }
         this.onRequestChange();
