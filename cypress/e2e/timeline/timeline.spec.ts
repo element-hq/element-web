@@ -718,24 +718,6 @@ describe("Timeline", () => {
             });
         });
 
-        it("should highlight search result words regardless of formatting", () => {
-            sendEvent(roomId);
-            sendEvent(roomId, true);
-            cy.visit("/#/room/" + roomId);
-
-            cy.get(".mx_RoomHeader").findByRole("button", { name: "Search" }).click();
-
-            cy.get(".mx_SearchBar").percySnapshotElement("Search bar on the timeline", {
-                // Emulate narrow timeline
-                widths: [320, 640],
-            });
-
-            cy.get(".mx_SearchBar_input").findByRole("textbox").type("Message{enter}");
-
-            cy.get(".mx_EventTile:not(.mx_EventTile_contextual) .mx_EventTile_searchHighlight").should("exist");
-            cy.get(".mx_RoomView_searchResultsPanel").percySnapshotElement("Highlighted search results");
-        });
-
         it("should render url previews", () => {
             cy.intercept("**/_matrix/media/r0/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*", {
                 statusCode: 200,
@@ -778,6 +760,68 @@ describe("Timeline", () => {
             cy.get(".mx_EventTile_last").percySnapshotElement("URL Preview", {
                 percyCSS,
                 widths: [800, 400],
+            });
+        });
+
+        describe("on search results panel", () => {
+            it("should highlight search result words regardless of formatting", () => {
+                sendEvent(roomId);
+                sendEvent(roomId, true);
+                cy.visit("/#/room/" + roomId);
+
+                cy.get(".mx_RoomHeader").findByRole("button", { name: "Search" }).click();
+
+                cy.get(".mx_SearchBar").percySnapshotElement("Search bar on the timeline", {
+                    // Emulate narrow timeline
+                    widths: [320, 640],
+                });
+
+                cy.get(".mx_SearchBar_input").findByRole("textbox").type("Message{enter}");
+
+                cy.get(".mx_EventTile:not(.mx_EventTile_contextual) .mx_EventTile_searchHighlight").should("exist");
+                cy.get(".mx_RoomView_searchResultsPanel").percySnapshotElement("Highlighted search results");
+            });
+
+            it("should render a fully opaque textual event", () => {
+                const stringToSearch = "Message"; // Same with string sent with sendEvent()
+
+                sendEvent(roomId);
+
+                cy.visit("/#/room/" + roomId);
+
+                // Open a room setting dialog
+                cy.findByRole("button", { name: "Room options" }).click();
+                cy.findByRole("menuitem", { name: "Settings" }).click();
+
+                // Set a room topic to render a TextualEvent
+                cy.findByRole("textbox", { name: "Room Topic" }).type(`This is a room for ${stringToSearch}.`);
+                cy.findByRole("button", { name: "Save" }).click();
+
+                cy.closeDialog();
+
+                // Assert that the TextualEvent is rendered
+                cy.findByText(`${OLD_NAME} changed the topic to "This is a room for ${stringToSearch}.".`)
+                    .should("exist")
+                    .should("have.class", "mx_TextualEvent");
+
+                // Display the room search bar
+                cy.get(".mx_RoomHeader").findByRole("button", { name: "Search" }).click();
+
+                // Search the string to display both the message and TextualEvent on search results panel
+                cy.get(".mx_SearchBar").within(() => {
+                    cy.findByRole("textbox").type(`${stringToSearch}{enter}`);
+                });
+
+                // On search results panel
+                cy.get(".mx_RoomView_searchResultsPanel").within(() => {
+                    // Assert that contextual event tiles are translucent
+                    cy.get(".mx_EventTile.mx_EventTile_contextual").should("have.css", "opacity", "0.4");
+
+                    // Assert that the TextualEvent is fully opaque (visually solid).
+                    cy.get(".mx_EventTile .mx_TextualEvent").should("have.css", "opacity", "1");
+                });
+
+                cy.get(".mx_RoomView_searchResultsPanel").percySnapshotElement("Search results - with TextualEvent");
             });
         });
     });
