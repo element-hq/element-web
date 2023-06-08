@@ -24,7 +24,7 @@ import { Device } from "matrix-js-sdk/src/models/device";
 import * as FormattingUtils from "../../../utils/FormattingUtils";
 import { _t } from "../../../languageHandler";
 import QuestionDialog from "./QuestionDialog";
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IManualDeviceKeyVerificationDialogProps {
     userId: string;
@@ -37,11 +37,11 @@ export function ManualDeviceKeyVerificationDialog({
     device,
     onFinished,
 }: IManualDeviceKeyVerificationDialogProps): JSX.Element {
-    const mxClient = useMatrixClientContext();
+    const mxClient = MatrixClientPeg.get();
 
     const onLegacyFinished = useCallback(
         (confirm: boolean) => {
-            if (confirm && mxClient) {
+            if (confirm) {
                 mxClient.setDeviceVerified(userId, device.deviceId, true);
             }
             onFinished(confirm);
