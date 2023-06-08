@@ -35,6 +35,8 @@ import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 import { ValidatedServerConfig } from "matrix-react-sdk/src/utils/ValidatedServerConfig";
 import { QueryDict, encodeParams } from "matrix-js-sdk/src/utils";
+import { BannerLifecycle, BannerOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/BannerLifecycle";
+import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 
 import { parseQs } from "./url_utils";
 import VectorBasePlatform from "./platform/VectorBasePlatform";
@@ -129,18 +131,24 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
     const defaultDeviceName =
         snakedConfig.get("default_device_display_name") ?? platform?.getDefaultDeviceDisplayName();
 
+    const opts: BannerOpts = { banner: undefined };
+    ModuleRunner.instance.invoke(BannerLifecycle.Banner, opts);
+
     return (
-        <MatrixChat
-            onNewScreen={onNewScreen}
-            makeRegistrationUrl={makeRegistrationUrl}
-            config={config}
-            realQueryParams={params}
-            startingFragmentQueryParams={fragParams}
-            enableGuest={!config.disable_guests}
-            onTokenLoginCompleted={onTokenLoginCompleted}
-            initialScreenAfterLogin={getScreenFromLocation(window.location)}
-            defaultDeviceDisplayName={defaultDeviceName}
-        />
+        <>
+            {opts.banner}
+            <MatrixChat
+                onNewScreen={onNewScreen}
+                makeRegistrationUrl={makeRegistrationUrl}
+                config={config}
+                realQueryParams={params}
+                startingFragmentQueryParams={fragParams}
+                enableGuest={!config.disable_guests}
+                onTokenLoginCompleted={onTokenLoginCompleted}
+                initialScreenAfterLogin={getScreenFromLocation(window.location)}
+                defaultDeviceDisplayName={defaultDeviceName}
+            />
+        </>
     );
 }
 
