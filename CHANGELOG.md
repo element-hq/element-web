@@ -1,3 +1,9 @@
+Changes in [3.73.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.73.1) (2023-06-09)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Bump matrix-js-sdk to v26.0.1. Fixes vector-im/element-web#25526
+
 Changes in [3.73.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.73.0) (2023-06-06)
 =====================================================================================================
 
