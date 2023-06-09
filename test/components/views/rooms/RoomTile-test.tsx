@@ -47,7 +47,13 @@ import { VoiceBroadcastInfoState } from "../../../../src/voice-broadcast";
 import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
 import { TestSdkContext } from "../../../TestSdkContext";
 import { SDKContext } from "../../../../src/contexts/SDKContext";
+import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../src/settings/UIFeature";
 import { MessagePreviewStore } from "../../../../src/stores/room-list/MessagePreviewStore";
+
+jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
+    shouldShowComponent: jest.fn(),
+}));
 
 describe("RoomTile", () => {
     jest.spyOn(PlatformPeg, "get").mockReturnValue({
@@ -69,8 +75,8 @@ describe("RoomTile", () => {
         });
     };
 
-    const renderRoomTile = (): void => {
-        renderResult = render(
+    const renderRoomTile = (): RenderResult => {
+        return render(
             <SDKContext.Provider value={sdkContext}>
                 <RoomTile
                     room={room}
@@ -85,7 +91,6 @@ describe("RoomTile", () => {
     let client: Mocked<MatrixClient>;
     let voiceBroadcastInfoEvent: MatrixEvent;
     let room: Room;
-    let renderResult: RenderResult;
     let sdkContext: TestSdkContext;
     let showMessagePreview = false;
 
@@ -148,12 +153,24 @@ describe("RoomTile", () => {
     });
 
     describe("when message previews are not enabled", () => {
-        beforeEach(() => {
-            renderRoomTile();
+        it("should render the room", () => {
+            mocked(shouldShowComponent).mockReturnValue(true);
+            const renderResult = renderRoomTile();
+            expect(renderResult.container).toMatchSnapshot();
         });
 
-        it("should render the room", () => {
-            expect(renderResult.container).toMatchSnapshot();
+        it("does not render the room options context menu when UIComponent customisations disable room options", () => {
+            mocked(shouldShowComponent).mockReturnValue(false);
+            renderRoomTile();
+            expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.RoomOptionsMenu);
+            expect(screen.queryByRole("button", { name: "Room options" })).not.toBeInTheDocument();
+        });
+
+        it("renders the room options context menu when UIComponent customisations enable room options", () => {
+            mocked(shouldShowComponent).mockReturnValue(true);
+            renderRoomTile();
+            expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.RoomOptionsMenu);
+            expect(screen.queryByRole("button", { name: "Room options" })).toBeInTheDocument();
         });
 
         describe("when a call starts", () => {
@@ -176,13 +193,13 @@ describe("RoomTile", () => {
             });
 
             afterEach(() => {
-                renderResult.unmount();
                 call.destroy();
                 client.reEmitter.stopReEmitting(room, [RoomStateEvent.Events]);
                 WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
             });
 
             it("tracks connection state", async () => {
+                renderRoomTile();
                 screen.getByText("Video");
 
                 // Insert an await point in the connection method so we can inspect
@@ -205,6 +222,7 @@ describe("RoomTile", () => {
             });
 
             it("tracks participants", () => {
+                renderRoomTile();
                 const alice: [RoomMember, Set<string>] = [
                     mkRoomMember(room.roomId, "@alice:example.org"),
                     new Set(["a"]),
@@ -238,6 +256,7 @@ describe("RoomTile", () => {
 
             describe("and a live broadcast starts", () => {
                 beforeEach(async () => {
+                    renderRoomTile();
                     await setUpVoiceBroadcast(VoiceBroadcastInfoState.Started);
                 });
 
@@ -250,6 +269,7 @@ describe("RoomTile", () => {
 
         describe("when a live voice broadcast starts", () => {
             beforeEach(async () => {
+                renderRoomTile();
                 await setUpVoiceBroadcast(VoiceBroadcastInfoState.Started);
             });
 
@@ -285,7 +305,7 @@ describe("RoomTile", () => {
         });
 
         it("should render a room without a message as expected", async () => {
-            renderRoomTile();
+            const renderResult = renderRoomTile();
             // flush promises here because the preview is created asynchronously
             await flushPromises();
             expect(renderResult.asFragment()).toMatchSnapshot();
@@ -297,7 +317,7 @@ describe("RoomTile", () => {
             });
 
             it("should render as expected", async () => {
-                renderRoomTile();
+                const renderResult = renderRoomTile();
                 expect(await screen.findByText("test message")).toBeInTheDocument();
                 expect(renderResult.asFragment()).toMatchSnapshot();
             });
@@ -309,7 +329,7 @@ describe("RoomTile", () => {
             });
 
             it("should render as expected", async () => {
-                renderRoomTile();
+                const renderResult = renderRoomTile();
                 expect(await screen.findByText("test thread reply")).toBeInTheDocument();
                 expect(renderResult.asFragment()).toMatchSnapshot();
             });

@@ -69,6 +69,8 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { GroupCallDuration } from "../voip/CallDuration";
 import { Alignment } from "../elements/Tooltip";
 import RoomCallBanner from "../beacon/RoomCallBanner";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 
 class DisabledWithReason {
     public constructor(public readonly reason: string) {}
@@ -697,7 +699,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             </RoomName>
         );
 
-        if (this.props.enableRoomOptionsMenu) {
+        if (this.props.enableRoomOptionsMenu && shouldShowComponent(UIComponent.RoomOptionsMenu)) {
             return (
                 <ContextMenuTooltipButton
                     className="mx_RoomHeader_name"

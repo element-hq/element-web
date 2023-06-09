@@ -57,6 +57,12 @@ import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessa
 import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { ElementWidgetActions } from "../../../../src/stores/widgets/ElementWidgetActions";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler";
+import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../src/settings/UIFeature";
+
+jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
+    shouldShowComponent: jest.fn(),
+}));
 
 describe("RoomHeader", () => {
     let client: Mocked<MatrixClient>;
@@ -729,17 +735,26 @@ describe("RoomHeader", () => {
         expect(wrapper.container.querySelector(".mx_RoomHeader_button")).toBeFalsy();
     });
 
-    it("should render the room options context menu if not passing enableRoomOptionsMenu (default true)", () => {
+    it("should render the room options context menu if not passing enableRoomOptionsMenu (default true) and UIComponent customisations room options enabled", () => {
+        mocked(shouldShowComponent).mockReturnValue(true);
         const room = createRoom({ name: "Room", isDm: false, userIds: [] });
         const wrapper = mountHeader(room);
+        expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.RoomOptionsMenu);
         expect(wrapper.container.querySelector(".mx_RoomHeader_name.mx_AccessibleButton")).toBeDefined();
     });
 
-    it("should not render the room options context menu if passing enableRoomOptionsMenu = false", () => {
-        const room = createRoom({ name: "Room", isDm: false, userIds: [] });
-        const wrapper = mountHeader(room, { enableRoomOptionsMenu: false });
-        expect(wrapper.container.querySelector(".mx_RoomHeader_name.mx_AccessibleButton")).toBeFalsy();
-    });
+    it.each([
+        [false, true],
+        [true, false],
+    ])(
+        "should not render the room options context menu if passing enableRoomOptionsMenu = %s and UIComponent customisations room options enable = %s",
+        (enableRoomOptionsMenu, showRoomOptionsMenu) => {
+            mocked(shouldShowComponent).mockReturnValue(showRoomOptionsMenu);
+            const room = createRoom({ name: "Room", isDm: false, userIds: [] });
+            const wrapper = mountHeader(room, { enableRoomOptionsMenu });
+            expect(wrapper.container.querySelector(".mx_RoomHeader_name.mx_AccessibleButton")).toBeFalsy();
+        },
+    );
 });
 
 interface IRoomCreationInfo {

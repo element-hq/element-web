@@ -27,6 +27,8 @@ import { RoomNotificationContextMenu } from "../../context_menus/RoomNotificatio
 import SpaceContextMenu from "../../context_menus/SpaceContextMenu";
 import { ButtonEvent } from "../../elements/AccessibleButton";
 import { contextMenuBelow } from "../../rooms/RoomTile";
+import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../settings/UIFeature";
 
 interface Props {
     room: Room;
@@ -80,18 +82,20 @@ export function RoomResultContextMenus({ room }: Props): JSX.Element {
 
     return (
         <Fragment>
-            <ContextMenuTooltipButton
-                className="mx_SpotlightDialog_option--menu"
-                onClick={(ev: ButtonEvent) => {
-                    ev.preventDefault();
-                    ev.stopPropagation();
+            {shouldShowComponent(UIComponent.RoomOptionsMenu) && (
+                <ContextMenuTooltipButton
+                    className="mx_SpotlightDialog_option--menu"
+                    onClick={(ev: ButtonEvent) => {
+                        ev.preventDefault();
+                        ev.stopPropagation();
 
-                    const target = ev.target as HTMLElement;
-                    setGeneralMenuPosition(target.getBoundingClientRect());
-                }}
-                title={room.isSpaceRoom() ? _t("Space options") : _t("Room options")}
-                isExpanded={generalMenuPosition !== null}
-            />
+                        const target = ev.target as HTMLElement;
+                        setGeneralMenuPosition(target.getBoundingClientRect());
+                    }}
+                    title={room.isSpaceRoom() ? _t("Space options") : _t("Room options")}
+                    isExpanded={generalMenuPosition !== null}
+                />
+            )}
             {!room.isSpaceRoom() && (
                 <ContextMenuTooltipButton
                     className={notificationMenuClasses}
