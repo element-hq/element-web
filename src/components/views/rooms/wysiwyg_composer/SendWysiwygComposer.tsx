@@ -57,11 +57,10 @@ export default function SendWysiwygComposer({
     isRichTextEnabled,
     e2eStatus,
     menuPosition,
-    eventRelation,
     ...props
 }: SendWysiwygComposerProps): JSX.Element {
     const Composer = isRichTextEnabled ? WysiwygComposer : PlainTextComposer;
-    const defaultContextValue = useRef(getDefaultContextValue({ eventRelation }));
+    const defaultContextValue = useRef(getDefaultContextValue({ eventRelation: props.eventRelation }));
 
     return (
         <ComposerContext.Provider value={defaultContextValue.current}>

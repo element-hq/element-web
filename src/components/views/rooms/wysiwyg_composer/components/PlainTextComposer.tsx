@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import classNames from "classnames";
+import { IEventRelation } from "matrix-js-sdk/src/matrix";
 import React, { MutableRefObject, ReactNode } from "react";
 
 import { useComposerFunctions } from "../hooks/useComposerFunctions";
@@ -36,6 +37,7 @@ interface PlainTextComposerProps {
     leftComponent?: ReactNode;
     rightComponent?: ReactNode;
     children?: (ref: MutableRefObject<HTMLDivElement | null>, composerFunctions: ComposerFunctions) => ReactNode;
+    eventRelation?: IEventRelation;
 }
 
 export function PlainTextComposer({

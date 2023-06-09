@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { memo, MutableRefObject, ReactNode, useEffect, useRef } from "react";
+import { IEventRelation } from "matrix-js-sdk/src/matrix";
 import { useWysiwyg, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
 import classNames from "classnames";
 
@@ -40,6 +41,7 @@ interface WysiwygComposerProps {
     leftComponent?: ReactNode;
     rightComponent?: ReactNode;
     children?: (ref: MutableRefObject<HTMLDivElement | null>, wysiwyg: FormattingFunctions) => ReactNode;
+    eventRelation?: IEventRelation;
 }
 
 export const WysiwygComposer = memo(function WysiwygComposer({
@@ -52,11 +54,12 @@ export const WysiwygComposer = memo(function WysiwygComposer({
     leftComponent,
     rightComponent,
     children,
+    eventRelation,
 }: WysiwygComposerProps) {
     const { room } = useRoomContext();
     const autocompleteRef = useRef<Autocomplete | null>(null);
 
-    const inputEventProcessor = useInputEventProcessor(onSend, autocompleteRef, initialContent);
+    const inputEventProcessor = useInputEventProcessor(onSend, autocompleteRef, initialContent, eventRelation);
     const { ref, isWysiwygReady, content, actionStates, wysiwyg, suggestion } = useWysiwyg({
         initialContent,
         inputEventProcessor,
