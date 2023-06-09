@@ -72,7 +72,8 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
             throw new Error("Does not appear to be a permalink");
         }
 
-        const parts = fullUrl.substring("matrix:".length).split("/");
+        const url = new URL(fullUrl);
+        const parts = url.pathname.split("/");
 
         const identifier = parts[0];
         const entityNoSigil = parts[1];
