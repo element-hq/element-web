@@ -17,10 +17,10 @@ limitations under the License.
 import { act, render } from "@testing-library/react";
 import React from "react";
 import { Mocked } from "jest-mock";
-import { VerificationBase } from "matrix-js-sdk/src/crypto/verification/Base";
 import {
     EmojiMapping,
     ShowSasCallbacks,
+    Verifier,
     VerifierEvent,
     VerifierEventHandlerMap,
 } from "matrix-js-sdk/src/crypto-api/verification";
@@ -58,16 +58,16 @@ describe("IncomingSasDialog", () => {
     });
 });
 
-function renderComponent(verifier: VerificationBase, onFinished = () => true) {
+function renderComponent(verifier: Verifier, onFinished = () => true) {
     return render(<IncomingSasDialog verifier={verifier} onFinished={onFinished} />);
 }
 
-function makeMockVerifier(): Mocked<VerificationBase> {
+function makeMockVerifier(): Mocked<Verifier> {
     const verifier = new TypedEventEmitter<VerifierEvent, VerifierEventHandlerMap>();
     Object.assign(verifier, {
         cancel: jest.fn(),
     });
-    return verifier as unknown as Mocked<VerificationBase>;
+    return verifier as unknown as Mocked<Verifier>;
 }
 
 function makeMockSasCallbacks(): ShowSasCallbacks {

@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { VerificationBase } from "matrix-js-sdk/src/crypto/verification/Base";
-import { GeneratedSas, ShowSasCallbacks, VerifierEvent } from "matrix-js-sdk/src/crypto-api/verification";
+import { GeneratedSas, ShowSasCallbacks, Verifier, VerifierEvent } from "matrix-js-sdk/src/crypto-api/verification";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -37,7 +36,7 @@ const PHASE_VERIFIED = 3;
 const PHASE_CANCELLED = 4;
 
 interface IProps {
-    verifier: VerificationBase<VerifierEvent, any>;
+    verifier: Verifier;
     onFinished(verified?: boolean): void;
 }
 
