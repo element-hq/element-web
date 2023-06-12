@@ -156,9 +156,16 @@ export const mockClientMethodsCrypto = (): Partial<
     crypto: {
         isSecretStorageReady: jest.fn(),
         getSessionBackupPrivateKey: jest.fn(),
-        crossSigningInfo: {
-            getId: jest.fn(),
-            isStoredInSecretStorage: jest.fn(),
-        },
     },
+    getCrypto: jest.fn().mockReturnValue({
+        getCrossSigningStatus: jest.fn().mockResolvedValue({
+            publicKeysOnDevice: true,
+            privateKeysInSecretStorage: false,
+            privateKeysCachedLocally: {
+                masterKey: true,
+                selfSigningKey: true,
+                userSigningKey: true,
+            },
+        }),
+    }),
 });

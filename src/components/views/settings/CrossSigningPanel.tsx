@@ -90,17 +90,15 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
 
     private async getUpdatedStatus(): Promise<void> {
         const cli = MatrixClientPeg.get();
-        const crypto = cli.crypto;
+        const crypto = cli.getCrypto();
         if (!crypto) return;
 
-        const pkCache = cli.getCrossSigningCacheCallbacks();
-        const crossSigning = crypto.crossSigningInfo;
-        const secretStorage = cli.secretStorage;
-        const crossSigningPublicKeysOnDevice = Boolean(crossSigning.getId());
-        const crossSigningPrivateKeysInStorage = Boolean(await crossSigning.isStoredInSecretStorage(secretStorage));
-        const masterPrivateKeyCached = !!(await pkCache?.getCrossSigningKeyCache?.("master"));
-        const selfSigningPrivateKeyCached = !!(await pkCache?.getCrossSigningKeyCache?.("self_signing"));
-        const userSigningPrivateKeyCached = !!(await pkCache?.getCrossSigningKeyCache?.("user_signing"));
+        const crossSigningStatus = await crypto.getCrossSigningStatus();
+        const crossSigningPublicKeysOnDevice = crossSigningStatus.publicKeysOnDevice;
+        const crossSigningPrivateKeysInStorage = crossSigningStatus.privateKeysInSecretStorage;
+        const masterPrivateKeyCached = crossSigningStatus.privateKeysCachedLocally.masterKey;
+        const selfSigningPrivateKeyCached = crossSigningStatus.privateKeysCachedLocally.selfSigningKey;
+        const userSigningPrivateKeyCached = crossSigningStatus.privateKeysCachedLocally.userSigningKey;
         const homeserverSupportsCrossSigning = await cli.doesServerSupportUnstableFeature(
             "org.matrix.e2e_cross_signing",
         );
