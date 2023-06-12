@@ -16,13 +16,16 @@ limitations under the License.
 
 import { KeyboardEvent, RefObject, SyntheticEvent, useCallback, useRef, useState } from "react";
 import { Attributes, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
+import { IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { IS_MAC, Key } from "../../../../../Keyboard";
 import Autocomplete from "../../Autocomplete";
-import { handleEventWithAutocomplete } from "./utils";
+import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useSuggestion } from "./useSuggestion";
 import { isNotNull, isNotUndefined } from "../../../../../Typeguards";
+import { useRoomContext } from "../../../../../contexts/RoomContext";
+import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 
 function isDivElement(target: EventTarget): target is HTMLDivElement {
     return target instanceof HTMLDivElement;
@@ -59,10 +62,12 @@ export function usePlainTextListeners(
     initialContent?: string,
     onChange?: (content: string) => void,
     onSend?: () => void,
+    eventRelation?: IEventRelation,
 ): {
     ref: RefObject<HTMLDivElement>;
     autocompleteRef: React.RefObject<Autocomplete>;
     content?: string;
+    onBeforeInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onPaste(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onKeyDown(event: KeyboardEvent<HTMLDivElement>): void;
@@ -72,6 +77,9 @@ export function usePlainTextListeners(
     onSelect: (event: SyntheticEvent<HTMLDivElement>) => void;
     suggestion: MappedSuggestion | null;
 } {
+    const roomContext = useRoomContext();
+    const mxClient = useMatrixClientContext();
+
     const ref = useRef<HTMLDivElement | null>(null);
     const autocompleteRef = useRef<Autocomplete | null>(null);
     const [content, setContent] = useState<string | undefined>(initialContent);
@@ -115,6 +123,27 @@ export function usePlainTextListeners(
         [setText, enterShouldSend],
     );
 
+    const onPaste = useCallback(
+        (event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>) => {
+            const { nativeEvent } = event;
+            let imagePasteWasHandled = false;
+
+            if (isEventToHandleAsClipboardEvent(nativeEvent)) {
+                const data =
+                    nativeEvent instanceof ClipboardEvent ? nativeEvent.clipboardData : nativeEvent.dataTransfer;
+                imagePasteWasHandled = handleClipboardEvent(nativeEvent, data, roomContext, mxClient, eventRelation);
+            }
+
+            // prevent default behaviour and skip call to onInput if the image paste event was handled
+            if (imagePasteWasHandled) {
+                event.preventDefault();
+            } else {
+                onInput(event);
+            }
+        },
+        [eventRelation, mxClient, onInput, roomContext],
+    );
+
     const onKeyDown = useCallback(
         (event: KeyboardEvent<HTMLDivElement>) => {
             // we need autocomplete to take priority when it is open for using enter to select
@@ -149,8 +178,9 @@ export function usePlainTextListeners(
     return {
         ref,
         autocompleteRef,
+        onBeforeInput: onPaste,
         onInput,
-        onPaste: onInput,
+        onPaste,
         onKeyDown,
         content,
         setContent: setText,

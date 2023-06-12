@@ -290,4 +290,16 @@ describe("PlainTextComposer", () => {
 
         expect(screen.getByTestId("autocomplete-wrapper")).toBeInTheDocument();
     });
+
+    it("Should allow pasting of text values", async () => {
+        customRender();
+
+        const textBox = screen.getByRole("textbox");
+
+        await userEvent.click(textBox);
+        await userEvent.type(textBox, "hello");
+        await userEvent.paste(" world");
+
+        expect(textBox).toHaveTextContent("hello world");
+    });
 });

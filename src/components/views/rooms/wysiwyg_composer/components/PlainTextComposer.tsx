@@ -50,10 +50,12 @@ export function PlainTextComposer({
     initialContent,
     leftComponent,
     rightComponent,
+    eventRelation,
 }: PlainTextComposerProps): JSX.Element {
     const {
         ref: editorRef,
         autocompleteRef,
+        onBeforeInput,
         onInput,
         onPaste,
         onKeyDown,
@@ -63,7 +65,7 @@ export function PlainTextComposer({
         onSelect,
         handleCommand,
         handleMention,
-    } = usePlainTextListeners(initialContent, onChange, onSend);
+    } = usePlainTextListeners(initialContent, onChange, onSend, eventRelation);
 
     const composerFunctions = useComposerFunctions(editorRef, setContent);
     usePlainTextInitialization(initialContent, editorRef);
@@ -77,6 +79,7 @@ export function PlainTextComposer({
             className={classNames(className, { [`${className}-focused`]: isFocused })}
             onFocus={onFocus}
             onBlur={onFocus}
+            onBeforeInput={onBeforeInput}
             onInput={onInput}
             onPaste={onPaste}
             onKeyDown={onKeyDown}

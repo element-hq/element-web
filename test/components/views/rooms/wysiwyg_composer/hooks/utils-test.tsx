@@ -16,11 +16,14 @@ limitations under the License.
 import { IEventRelation, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/react";
 
-import { handleClipboardEvent } from "../../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useInputEventProcessor";
 import { TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { mkStubRoom, stubClient } from "../../../../../test-utils";
 import ContentMessages from "../../../../../../src/ContentMessages";
 import { IRoomState } from "../../../../../../src/components/structures/RoomView";
+import {
+    handleClipboardEvent,
+    isEventToHandleAsClipboardEvent,
+} from "../../../../../../src/components/views/rooms/wysiwyg_composer/hooks/utils";
 
 const mockClient = stubClient();
 const mockRoom = mkStubRoom("mock room", "mock room", mockClient);
@@ -283,5 +286,28 @@ describe("handleClipboardEvent", () => {
             expect(logSpy).toHaveBeenCalledWith(mockErrorMessage);
         });
         expect(output).toBe(true);
+    });
+});
+
+describe("isEventToHandleAsClipboardEvent", () => {
+    it("returns true for ClipboardEvent", () => {
+        const input = new ClipboardEvent("clipboard");
+        expect(isEventToHandleAsClipboardEvent(input)).toBe(true);
+    });
+
+    it("returns true for special case input", () => {
+        const input = new InputEvent("insertFromPaste", { inputType: "insertFromPaste" });
+        Object.assign(input, { dataTransfer: "not null" });
+        expect(isEventToHandleAsClipboardEvent(input)).toBe(true);
+    });
+
+    it("returns false for regular InputEvent", () => {
+        const input = new InputEvent("input");
+        expect(isEventToHandleAsClipboardEvent(input)).toBe(false);
+    });
+
+    it("returns false for other input", () => {
+        const input = new KeyboardEvent("keyboard");
+        expect(isEventToHandleAsClipboardEvent(input)).toBe(false);
     });
 });

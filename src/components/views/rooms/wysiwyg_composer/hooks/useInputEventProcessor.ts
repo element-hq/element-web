@@ -33,10 +33,7 @@ import { isCaretAtEnd, isCaretAtStart } from "../utils/selection";
 import { getEventsFromEditorStateTransfer, getEventsFromRoom } from "../utils/event";
 import { endEditing } from "../utils/editing";
 import Autocomplete from "../../Autocomplete";
-import { handleEventWithAutocomplete } from "./utils";
-import ContentMessages from "../../../../../ContentMessages";
-import { getBlobSafeMimeType } from "../../../../../utils/blobs";
-import { isNotNull } from "../../../../../Typeguards";
+import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 
 export function useInputEventProcessor(
     onSend: () => void,
@@ -61,17 +58,8 @@ export function useInputEventProcessor(
                 onSend();
             };
 
-            // this is required to handle edge case image pasting in Safari, see
-            // https://github.com/vector-im/element-web/issues/25327 and it is caught by the
-            // `beforeinput` listener attached to the composer
-            const isInputEventForClipboard =
-                event instanceof InputEvent && event.inputType === "insertFromPaste" && isNotNull(event.dataTransfer);
-            const isClipboardEvent = event instanceof ClipboardEvent;
-
-            const shouldHandleAsClipboardEvent = isClipboardEvent || isInputEventForClipboard;
-
-            if (shouldHandleAsClipboardEvent) {
-                const data = isClipboardEvent ? event.clipboardData : event.dataTransfer;
+            if (isEventToHandleAsClipboardEvent(event)) {
+                const data = event instanceof ClipboardEvent ? event.clipboardData : event.dataTransfer;
                 const handled = handleClipboardEvent(event, data, roomContext, mxClient, eventRelation);
                 return handled ? null : event;
             }
@@ -243,89 +231,4 @@ function handleInputEvent(event: InputEvent, send: Send, isCtrlEnterToSend: bool
     }
 
     return event;
-}
-
-/**
- * Takes an event and handles image pasting. Returns a boolean to indicate if it has handled
- * the event or not. Must accept either clipboard or input events in order to prevent issue:
- * https://github.com/vector-im/element-web/issues/25327
- *
- * @param event - event to process
- * @param roomContext - room in which the event occurs
- * @param mxClient - current matrix client
- * @param eventRelation - used to send the event to the correct place eg timeline vs thread
- * @returns - boolean to show if the event was handled or not
- */
-export function handleClipboardEvent(
-    event: ClipboardEvent | InputEvent,
-    data: DataTransfer | null,
-    roomContext: IRoomState,
-    mxClient: MatrixClient,
-    eventRelation?: IEventRelation,
-): boolean {
-    // Logic in this function follows that of `SendMessageComposer.onPaste`
-    const { room, timelineRenderingType, replyToEvent } = roomContext;
-
-    function handleError(error: unknown): void {
-        if (error instanceof Error) {
-            console.log(error.message);
-        } else if (typeof error === "string") {
-            console.log(error);
-        }
-    }
-
-    if (event.type !== "paste" || data === null || room === undefined) {
-        return false;
-    }
-
-    // Prioritize text on the clipboard over files if RTF is present as Office on macOS puts a bitmap
-    // in the clipboard as well as the content being copied. Modern versions of Office seem to not do this anymore.
-    // We check text/rtf instead of text/plain as when copy+pasting a file from Finder or Gnome Image Viewer
-    // it puts the filename in as text/plain which we want to ignore.
-    if (data.files.length && !data.types.includes("text/rtf")) {
-        ContentMessages.sharedInstance()
-            .sendContentListToRoom(Array.from(data.files), room.roomId, eventRelation, mxClient, timelineRenderingType)
-            .catch(handleError);
-        return true;
-    }
-
-    // Safari `Insert from iPhone or iPad`
-    // data.getData("text/html") returns a string like: <img src="blob:https://...">
-    if (data.types.includes("text/html")) {
-        const imgElementStr = data.getData("text/html");
-        const parser = new DOMParser();
-        const imgDoc = parser.parseFromString(imgElementStr, "text/html");
-
-        if (
-            imgDoc.getElementsByTagName("img").length !== 1 ||
-            !imgDoc.querySelector("img")?.src.startsWith("blob:") ||
-            imgDoc.childNodes.length !== 1
-        ) {
-            handleError("Failed to handle pasted content as Safari inserted content");
-            return false;
-        }
-        const imgSrc = imgDoc.querySelector("img")!.src;
-
-        fetch(imgSrc)
-            .then((response) => {
-                response
-                    .blob()
-                    .then((imgBlob) => {
-                        const type = imgBlob.type;
-                        const safetype = getBlobSafeMimeType(type);
-                        const ext = type.split("/")[1];
-                        const parts = response.url.split("/");
-                        const filename = parts[parts.length - 1];
-                        const file = new File([imgBlob], filename + "." + ext, { type: safetype });
-                        ContentMessages.sharedInstance()
-                            .sendContentToRoom(file, room.roomId, eventRelation, mxClient, replyToEvent)
-                            .catch(handleError);
-                    })
-                    .catch(handleError);
-            })
-            .catch(handleError);
-        return true;
-    }
-
-    return false;
 }
