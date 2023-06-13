@@ -503,8 +503,6 @@
     "Please <a>contact your service administrator</a> to continue using this service.": "이 서비스를 계속 사용하려면 <a>서비스 관리자에게 연락</a>하세요.",
     "Call failed due to misconfigured server": "잘못 구성된 서버로 전화에 실패함",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "전화가 안정적으로 작동하도록 TURN 서버를 설정하려면 당신의 홈서버 (<code>%(homeserverDomain)s</code>) 관리자에게 물어보세요 .",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "대신, <code>turn.matrix.org</code>에서 공개 서버를 사용할 수 있습니다, 하지만 신뢰를 가질 수 없고 IP 주소를 서버와 공유하게 됩니다. 설정에서 이를 관리할 수도 있습니다.",
-    "Try using turn.matrix.org": "turn.matrix.org를 사용해보세요",
     "The file '%(fileName)s' failed to upload.": "'%(fileName)s' 파일 업로드에 실패했습니다.",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "'%(fileName)s' 파일이 홈서버의 업로드 크기 제한을 초과합니다",
     "The server does not support the room version specified.": "서버가 지정된 방 버전을 지원하지 않습니다.",

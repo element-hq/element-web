@@ -126,8 +126,6 @@
     "Unable to access webcam / microphone": "புகைப்படக்கருவி / ஒலிவாங்கியை அணுக முடியவில்லை",
     "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "ஒலிவாங்கியை அணுக முடியாததால் அழைப்பு தோல்வியடைந்தது. ஒலிவாங்கி செருகப்பட்டுள்ளதா, சரியாக அமைக்கவும் என சரிபார்க்கவும்.",
     "Unable to access microphone": "ஒலிவாங்கியை அணுக முடியவில்லை",
-    "Try using turn.matrix.org": "turn.matrix.org ஐப் பயன்படுத்த முயற்சிக்கவும்",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "மாற்றாக, நீங்கள் பொது சேவையகத்தை <code>turn.matrix.org</code> பயன்படுத்தி முயற்சி செய்யலாம், ஆனால் இது அவ்வளவு நம்பகமானதாக இருக்காது, மேலும் அது உங்கள் ஐபி முகவரியை அந்த சேவையகத்துடன் பகிர்ந்து கொள்ளும். இதை அமைப்புகளிலும் நிர்வகிக்கலாம்.",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "அழைப்புகள் நம்பத்தகுந்த வகையில் இயங்குவதற்காக, TURN சேவையகத்தை உள்ளமைக்க உங்கள் வீட்டுசேவையகத்தின் (<code>%(homeserverDomain)s</code>) நிர்வாகியிடம் கேளுங்கள்.",
     "Call failed due to misconfigured server": "தவறாக உள்ளமைக்கப்பட்ட சேவையகம் காரணமாக அழைப்பு தோல்வியடைந்தது",
     "The call was answered on another device.": "அழைப்பு மற்றொரு சாதனத்தில் பதிலளிக்கப்பட்டது.",

@@ -48,8 +48,6 @@
     "Unable to load! Check your network connectivity and try again.": "تعذر التحميل! افحص اتصالك بالشبكة وأعِد المحاولة.",
     "Call failed due to misconfigured server": "فشل الاتصال بسبب سوء ضبط الخادوم",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "من فضلك اطلب من مسؤول الخادوم المنزل الذي تستعمله (<code>%(homeserverDomain)s</code>) أن يضبط خادوم TURN كي تعمل الاتصالات بنحوٍ يكون محط ثقة.",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "أو يمكنك محاولة الخادوم العمومي <code>turn.matrix.org</code> إلا أنه لن يكون محطّ ثقة إذ سيُشارك عنوان IP لديك بذاك الخادوم. يمكنك أيضًا إدارة هذا من الإعدادات.",
-    "Try using turn.matrix.org": "جرّب استعمال turn.matrix.org",
     "OK": "حسنًا",
     "Call Failed": "فشل الاتصال",
     "Permission Required": "التصريح مطلوب",

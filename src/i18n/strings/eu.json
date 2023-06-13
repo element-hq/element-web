@@ -933,8 +933,6 @@
     "Summary": "Laburpena",
     "Call failed due to misconfigured server": "Deiak huts egin du zerbitzaria gaizki konfiguratuta dagoelako",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Eskatu zure hasiera-zerbitzariaren administratzaileari (<code>%(homeserverDomain)s</code>) TURN zerbitzari bat konfiguratu dezala deiek ondo funtzionatzeko.",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Bestela, <code>turn.matrix.org</code> zerbitzari publikoa erabili dezakezu, baina hau ez da hain fidagarria izango, eta zure IP-a partekatuko du zerbitzari horrekin. Hau ezarpenetan ere kudeatu dezakezu.",
-    "Try using turn.matrix.org": "Saiatu turn.matrix.org erabiltzen",
     "Messages": "Mezuak",
     "Actions": "Ekintzak",
     "Displays list of commands with usages and descriptions": "Aginduen zerrenda bistaratzen du, erabilera eta deskripzioekin",

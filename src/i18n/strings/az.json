@@ -218,8 +218,6 @@
     "Add Phone Number": "Telefon nömrəsi əlavə etmək",
     "Call failed due to misconfigured server": "Düzgün qurulmamış server səbəbindən zəng alınmadı",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Xahiş edirik, baş serverin administratoruna müraciət edin (<code>%(homeserverDomain)s</code>) ki zənglərin etibarlı işləməsi üçün dönüş serverini konfiqurasiya etsin.",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternativ olaraq, ümumi serveri <code> turn.matrix.org </code> istifadə etməyə cəhd edə bilərsiniz, lakin bu qədər etibarlı olmayacaq və IP ünvanınızı bu serverlə bölüşəcəkdir. Bunu Ayarlarda da idarə edə bilərsiniz.",
-    "Try using turn.matrix.org": "Turn.matrix.org istifadə edin",
     "The file '%(fileName)s' failed to upload.": "'%(fileName)s' faylı yüklənə bilmədi.",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "'%(fileName)s' faylı yükləmə üçün bu server ölçü həddini aşmışdır",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",

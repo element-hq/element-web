@@ -609,8 +609,6 @@
     "Unable to access webcam / microphone": "वेबकैम / माइक्रोफ़ोन तक पहुँचने में असमर्थ",
     "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "कॉल विफल हुआ क्योंकि माइक्रोफ़ोन तक नहीं पहुँचा जा सका। जांचें कि एक माइक्रोफ़ोन प्लग इन है और सही तरीके से सेट है।",
     "Unable to access microphone": "माइक्रोफ़ोन एक्सेस करने में असमर्थ",
-    "Try using turn.matrix.org": "Turn.matrix.org का उपयोग करके देखें",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "वैकल्पिक रूप से, आप <code>turn.matrix.org</code> पर सार्वजनिक सर्वर का उपयोग करने का प्रयास कर सकते हैं, लेकिन यह उतना विश्वसनीय नहीं होगा, और यह आपके आईपी पते को उस सर्वर के साथ साझा करेगा। आप इसे सेटिंग में जाकर भी मैनेज कर सकते हैं।",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "कृपया अपने होमसर्वर (<code>%(homeserverDomain)s</code>) के व्यवस्थापक से एक TURN सर्वर कॉन्फ़िगर करने के लिए कहें ताकि कॉल विश्वसनीय रूप से काम करें।",
     "Call failed due to misconfigured server": "गलत कॉन्फ़िगर किए गए सर्वर के कारण कॉल विफल रहा",
     "The call was answered on another device.": "किसी अन्य डिवाइस पर कॉल का उत्तर दिया गया था।",

@@ -936,8 +936,6 @@
     "This account has been deactivated.": "Този акаунт е деактивиран.",
     "Call failed due to misconfigured server": "Неуспешен разговор поради неправилно конфигуриран сървър",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Попитайте администратора на сървъра ви (<code>%(homeserverDomain)s</code>) да конфигурира TURN сървър, за да може разговорите да работят надеждно.",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Като алтернатива, може да използвате публичния сървър <code>turn.matrix.org</code>, но той не е толкова надежден, а и IP адресът ви ще бъде споделен с него. Може да управлявате това в Настройки.",
-    "Try using turn.matrix.org": "Опитай turn.matrix.org",
     "Messages": "Съобщения",
     "Actions": "Действия",
     "Displays list of commands with usages and descriptions": "Показва списък с команди, начин на използване и описания",

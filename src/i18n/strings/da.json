@@ -177,8 +177,6 @@
     "Call Failed": "Opkald mislykkedes",
     "Call failed due to misconfigured server": "Opkaldet mislykkedes pga. fejlkonfigureret server",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Bed administratoren af din homeserver (<code>%(homeserverDomain)s</code>) om at konfigurere en TURN server for at opkald virker pålideligt.",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternativt kan du prøve at bruge den offentlige server <code>turn.matrix.org</code>, men det er ikke lige så pålideligt, og din IP-adresse deles med den server. Du kan også administrere dette under Indstillinger.",
-    "Try using turn.matrix.org": "Prøv at bruge turn.matrix.org",
     "Permission Required": "Tilladelse påkrævet",
     "You do not have permission to start a conference call in this room": "Du har ikke rettighed til at starte et gruppekald i dette rum",
     "The file '%(fileName)s' failed to upload.": "Filen '%(fileName)s' kunne ikke uploades.",

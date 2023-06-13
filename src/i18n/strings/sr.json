@@ -509,8 +509,6 @@
     "Are you sure you want to sign out?": "Заиста желите да се одјавите?",
     "Call failed due to misconfigured server": "Позив неуспешан због лоше подешеног сервера",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Замолите администратора вашег сервера (<code>%(homeserverDomain)s</code>) да подеси „TURN“ сервер како би позиви радили поуздано.",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Можете покушати и да користите јавни сервер на <code>turn.matrix.org</code>, али ово неће бити толико поуздано и откриће вашу ИП адресу серверу. Овим можете управљати у Поставкама.",
-    "Try using turn.matrix.org": "Пробајте turn.matrix.org",
     "Use Single Sign On to continue": "Користи јединствену пријаву за наставак",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Потврдите додавање ове е-адресе коришћењем јединствене пријаве за доказивање вашег идентитета.",
     "Single Sign On": "Јединствена пријава",

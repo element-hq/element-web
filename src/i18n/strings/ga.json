@@ -36,8 +36,6 @@
     "You ended the call": "Chríochnaigh tú an glao",
     "Call in progress": "Glaoch ar siúl",
     "Unable to access microphone": "Ní féidir rochtain a fháil ar mhicreafón",
-    "Try using turn.matrix.org": "Déan iarracht turn.matrix.org a úsáid",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "De rogha air sin, is féidir leat iarracht a dhéanamh an freastalaí poiblí ag <code>turn.matrix.org</code> a úsáid, ach ní bheidh sé seo chomh iontaofa, agus roinnfidh sé do sheoladh ip leis an freastalaí sin. Is féidir leat é seo a bhainistiú sa socruithe freisin.",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Iarr ar an riarthóir do fhreastalaí baile (<code>%(homeserverDomain)s</code>) freastalaí TURN a chumrú go bhfeidhmeoidh glaonna go hiontaofa.",
     "Call failed due to misconfigured server": "Theip an glaoch de bharr freastalaí mícumraithe",
     "Answered Elsewhere": "Tógtha in áit eile",

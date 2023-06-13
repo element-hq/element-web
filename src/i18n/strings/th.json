@@ -265,8 +265,6 @@
     "Unable to access webcam / microphone": "ไม่สามารถเข้าถึง กล้อง/ไมโครโฟน",
     "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "การโทรล้มเหลวเนื่องจากไม่สามารถเข้าถึงไมโครโฟนได้ ตรวจสอบว่าเสียบไมโครโฟนและตั้งค่าถูกต้อง.",
     "Unable to access microphone": "ไม่สามารถเข้าถึงไมโครโฟน",
-    "Try using turn.matrix.org": "ลองใช้ turn.matrix.org",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "อีกวิธีหนึ่ง คุณสามารถลองใช้เซิร์ฟเวอร์สาธารณะที่ <code>turn.matrix.org</code>, แต่วิธีนี้จะไม่น่าเชื่อถือ และจะแบ่งปันที่อยู่ IP ของคุณกับเซิร์ฟเวอร์นั้น คุณสามารถจัดการสิ่งนี้ได้ในการตั้งค่า.",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "โปรดสอบถามผู้ดูแลระบบของโฮมเซิร์ฟเวอร์ของคุณ (<code>%(homeserverDomain)s</code>) เพื่อกำหนดคอนฟิกเซิร์ฟเวอร์ TURN เพื่อให้การเรียกทำงานได้อย่างน่าเชื่อถือ.",
     "Call failed due to misconfigured server": "การโทรล้มเหลวเนื่องจากเซิร์ฟเวอร์กำหนดค่าไม่ถูกต้อง",
     "The call was answered on another device.": "คุณรับสายบนอุปกรณ์อื่นแล้ว.",

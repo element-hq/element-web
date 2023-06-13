@@ -142,8 +142,6 @@
     "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Poziv nije uspio jer nije bilo moguće pristupiti mikrofonu. Provjerite je li mikrofon priključen i ispravno postavljen.",
     "Unable to access microphone": "Nije moguće pristupiti mikrofonu",
     "OK": "OK",
-    "Try using turn.matrix.org": "Pokušajte koristiti turn.matrix.org",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternativno, možete pokušati koristiti javni poslužitelj na <code>turn.matrix.org</code>, no to bi moglo biti manje pouzdano i Vaša IP adresa će biti podijeljena s tim poslužiteljem. Time također možete upravljati u Postavkama.",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Zamolite administratora Vašeg kućnog poslužitelja (<code>%(homeserverDomain)s</code>) da konfigurira TURN poslužitelj kako bi pozivi mogli pouzdano funkcionirati.",
     "Call failed due to misconfigured server": "Poziv neuspješan radi pogrešno konfiguriranog poslužitelja",
     "The call was answered on another device.": "Na poziv je odgovoreno sa drugog uređaja.",

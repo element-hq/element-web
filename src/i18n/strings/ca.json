@@ -581,8 +581,6 @@
     "Share this email in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, comparteix aquest correu electrònic a Configuració.",
     "Go to Settings": "Ves a Configuració",
     "All settings": "Totes les configuracions",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Com a alternativa, pots provar d'utilitzar el servidor públic a <code>turn.matrix.org</code>, però no serà tant fiable i compartirà la teva IP amb el servidor. També pots gestionar-ho a Configuració.",
-    "Try using turn.matrix.org": "Prova d'utilitzar turn.matrix.org",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Demana a l'administrador del servidor local (<code>%(homeserverDomain)s</code>) que configuri un servidor TURN perquè les trucades funcionin de manera fiable.",
     "Call failed due to misconfigured server": "La trucada ha fallat a causa d'una configuració errònia al servidor",
     "The call was answered on another device.": "La trucada s'ha respost des d'un altre dispositiu.",
