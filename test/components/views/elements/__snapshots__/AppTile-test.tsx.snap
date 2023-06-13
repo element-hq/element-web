@@ -162,3 +162,119 @@ exports[`AppTile for a pinned widget should render 1`] = `
   </div>
 </DocumentFragment>
 `;
+
+exports[`AppTile preserves non-persisted widget on container move 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppsDrawer"
+  >
+    <div
+      class="mx_AppsDrawer_resizer"
+      style="position: relative; user-select: auto; width: auto; height: 280px; max-height: 576px; min-height: 100px; box-sizing: border-box; flex-shrink: 0;"
+    >
+      <div
+        class="mx_AppsContainer"
+      >
+        <div
+          class="mx_AppTileFullWidth"
+          id="1"
+        >
+          <div
+            class="mx_AppTileMenuBar"
+          >
+            <span
+              class="mx_AppTileMenuBar_title"
+              style="pointer-events: none;"
+            >
+              <span>
+                <img
+                  alt=""
+                  class="mx_BaseAvatar mx_BaseAvatar_image mx_WidgetAvatar"
+                  data-testid="avatar-img"
+                  loading="lazy"
+                  src="image-file-stub"
+                  style="width: 20px; height: 20px;"
+                />
+                <b>
+                  Example 1
+                </b>
+                <span />
+              </span>
+            </span>
+            <span
+              class="mx_AppTileMenuBar_widgets"
+            >
+              <div
+                class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                role="button"
+                tabindex="0"
+                title="Maximise"
+              >
+                <div
+                  class="mx_Icon mx_Icon_12"
+                />
+              </div>
+              <div
+                class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                role="button"
+                tabindex="0"
+                title="Minimise"
+              >
+                <div
+                  class="mx_Icon mx_Icon_12"
+                />
+              </div>
+              <div
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-label="Options"
+                class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                role="button"
+                tabindex="0"
+                title="Options"
+              >
+                <div
+                  class="mx_Icon mx_Icon_12"
+                />
+              </div>
+            </span>
+          </div>
+          <div
+            class="mx_AppTileBody mx_AppTile_loading"
+          >
+            <div
+              class="mx_AppTileBody_fadeInSpinner"
+            >
+              <div
+                class="mx_Spinner"
+              >
+                <div
+                  class="mx_Spinner_Msg"
+                >
+                  Loading…
+                </div>
+                 
+                <div
+                  aria-label="Loading…"
+                  class="mx_Spinner_icon"
+                  data-testid="spinner"
+                  role="progressbar"
+                  style="width: 32px; height: 32px;"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_AppsDrawer_resizer_container"
+      >
+        <div
+          class="mx_AppsDrawer_resizer_container_handle"
+          style="position: absolute; user-select: none; width: 100%; height: 10px; left: 0px; cursor: row-resize; bottom: -5px;"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

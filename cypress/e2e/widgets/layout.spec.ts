@@ -102,7 +102,7 @@ describe("Widget Layout", () => {
     it("manually resize the height of the top container layout", () => {
         cy.get('iframe[title="widget"]').invoke("height").should("be.lessThan", 250);
 
-        cy.get(".mx_AppsContainer_resizerHandle")
+        cy.get(".mx_AppsDrawer_resizer_container_handle")
             .trigger("mousedown")
             .trigger("mousemove", { clientX: 0, clientY: 550, force: true })
             .trigger("mouseup", { clientX: 0, clientY: 550, force: true });

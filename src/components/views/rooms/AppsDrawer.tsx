@@ -283,9 +283,9 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
                     room={this.props.room}
                     minHeight={100}
                     maxHeight={this.props.maxHeight - 50}
-                    handleClass="mx_AppsContainer_resizerHandle"
-                    handleWrapperClass="mx_AppsContainer_resizerHandleContainer"
-                    className="mx_AppsContainer_resizer"
+                    className="mx_AppsDrawer_resizer"
+                    handleWrapperClass="mx_AppsDrawer_resizer_container"
+                    handleClass="mx_AppsDrawer_resizer_container_handle"
                     resizeNotifier={this.props.resizeNotifier}
                 >
                     {appContainers}
@@ -358,9 +358,9 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
 
                 resizeNotifier.stopResizing();
             }}
+            className={className}
             handleWrapperClass={handleWrapperClass}
             handleClasses={{ bottom: handleClass }}
-            className={className}
             enable={{ bottom: true }}
         >
             {children}
