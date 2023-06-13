@@ -23,6 +23,10 @@ on:
         secrets:
             CYPRESS_RECORD_KEY:
                 required: true
+            TCMS_USERNAME:
+                required: true
+            TCMS_PASSWORD:
+                required: true
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
