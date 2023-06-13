@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2023 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ describe("Login", function () {
             mockClient.baseUrl = opts.baseUrl;
             return mockClient;
         });
+        fetchMock.resetBehavior();
         fetchMock.get("https://matrix.org/_matrix/client/versions", {
             unstable_features: {},
             versions: [],
@@ -252,5 +253,70 @@ describe("Login", function () {
 
         const ssoButtons = container.querySelectorAll(".mx_SSOButton");
         expect(ssoButtons.length).toBe(idpsWithIcons.length + 1);
+    });
+
+    it("should display an error when homeserver doesn't offer any supported login flows", async () => {
+        mockClient.loginFlows.mockResolvedValue({
+            flows: [
+                {
+                    type: "just something weird",
+                },
+            ],
+        });
+
+        getComponent();
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
+
+        expect(
+            screen.getByText("This homeserver doesn't offer any login flows which are supported by this client."),
+        ).toBeInTheDocument();
+    });
+
+    it("should display a connection error when getting login flows fails", async () => {
+        mockClient.loginFlows.mockRejectedValue("oups");
+
+        getComponent();
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
+
+        expect(
+            screen.getByText("There was a problem communicating with the homeserver, please try again later."),
+        ).toBeInTheDocument();
+    });
+
+    it("should display an error when homeserver fails liveliness check", async () => {
+        fetchMock.resetBehavior();
+        fetchMock.get("https://matrix.org/_matrix/client/versions", {
+            status: 400,
+        });
+        getComponent();
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
+
+        // error displayed
+        expect(screen.getByText("Your test-brand is misconfigured")).toBeInTheDocument();
+    });
+
+    it("should reset liveliness error when server config changes", async () => {
+        fetchMock.resetBehavior();
+        // matrix.org is not alive
+        fetchMock.get("https://matrix.org/_matrix/client/versions", {
+            status: 400,
+        });
+        // but server2 is
+        fetchMock.get("https://server2/_matrix/client/versions", {
+            unstable_features: {},
+            versions: [],
+        });
+        const { rerender } = render(getRawComponent());
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
+
+        // error displayed
+        expect(screen.getByText("Your test-brand is misconfigured")).toBeInTheDocument();
+
+        rerender(getRawComponent("https://server2"));
+
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
+
+        // error cleared
+        expect(screen.queryByText("Your test-brand is misconfigured")).not.toBeInTheDocument();
     });
 });
