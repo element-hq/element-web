@@ -25,9 +25,11 @@ import WidgetUtils from "../../../utils/WidgetUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MemberAvatar from "../avatars/MemberAvatar";
 import BaseAvatar from "../avatars/BaseAvatar";
+import Heading from "../typography/Heading";
 import AccessibleButton from "./AccessibleButton";
 import TextWithTooltip from "./TextWithTooltip";
 import { parseUrl } from "../../../utils/UrlUtils";
+import { Icon as HelpIcon } from "../../../../res/img/feather-customised/help-circle.svg";
 
 interface IProps {
     url: string;
@@ -117,8 +119,9 @@ export default class AppPermission extends React.Component<IProps, IState> {
             <TextWithTooltip
                 tooltip={warningTooltipText}
                 tooltipClass="mx_Tooltip--appPermission mx_Tooltip--appPermission--dark"
+                class="mx_TextWithTooltip_target--helpIcon"
             >
-                <span className="mx_AppPermission_helpIcon" />
+                <HelpIcon className="mx_Icon mx_Icon_12" />
             </TextWithTooltip>
         );
 
@@ -139,20 +142,22 @@ export default class AppPermission extends React.Component<IProps, IState> {
 
         return (
             <div className="mx_AppPermission">
-                <div className="mx_AppPermission_bolder mx_AppPermission_smallText">{_t("Widget added by")}</div>
-                <div>
-                    {avatar}
-                    <h4 className="mx_AppPermission_bolder">{displayName}</h4>
-                    <div className="mx_AppPermission_smallText">{userId}</div>
-                </div>
-                <div className="mx_AppPermission_smallText">{warning}</div>
-                <div className="mx_AppPermission_smallText">
-                    {_t("This widget may use cookies.")}&nbsp;{encryptionWarning}
-                </div>
-                <div>
-                    <AccessibleButton kind="primary_sm" onClick={this.props.onPermissionGranted}>
-                        {_t("Continue")}
-                    </AccessibleButton>
+                <div className="mx_AppPermission_content">
+                    <div className="mx_AppPermission_content_bolder">{_t("Widget added by")}</div>
+                    <div>
+                        {avatar}
+                        <Heading size="h4">{displayName}</Heading>
+                        <div>{userId}</div>
+                    </div>
+                    <div>{warning}</div>
+                    <div>
+                        {_t("This widget may use cookies.")}&nbsp;{encryptionWarning}
+                    </div>
+                    <div>
+                        <AccessibleButton kind="primary_sm" onClick={this.props.onPermissionGranted}>
+                            {_t("Continue")}
+                        </AccessibleButton>
+                    </div>
                 </div>
             </div>
         );

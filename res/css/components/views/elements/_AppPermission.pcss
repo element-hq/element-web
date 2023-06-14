@@ -16,41 +16,29 @@ limitations under the License.
 */
 
 .mx_AppPermission {
-    > div {
-        margin-bottom: 12px;
-    }
+    font-size: $font-12px;
+    width: 100%; /* make mx_AppPermission fill width of mx_AppTileBody so that scroll bar appears on the edge */
+    overflow-y: scroll;
 
-    h4 {
-        margin: 0;
-        padding: 0;
-    }
+    .mx_AppPermission_content {
+        margin-block: auto; /* place at the center */
 
-    .mx_AppPermission_smallText {
-        font-size: $font-12px;
-    }
+        > div {
+            margin-block: 12px;
+        }
 
-    .mx_AppPermission_bolder {
-        font-weight: var(--font-semi-bold);
-    }
+        .mx_AppPermission_content_bolder {
+            font-weight: var(--font-semi-bold);
+        }
 
-    .mx_AppPermission_helpIcon {
-        margin-top: 1px;
-        margin-right: 2px;
-        width: 10px;
-        height: 10px;
-        display: inline-block;
-
-        &::before {
+        .mx_TextWithTooltip_target--helpIcon {
             display: inline-block;
-            background-color: $accent;
-            mask-repeat: no-repeat;
-            mask-size: 12px;
-            width: 12px;
-            height: 12px;
-            mask-position: center;
-            content: "";
+            height: $font-14px; /* align with characters on the same line */
             vertical-align: middle;
-            mask-image: url("$(res)/img/feather-customised/help-circle.svg");
+
+            .mx_Icon {
+                color: $accent;
+            }
         }
     }
 }

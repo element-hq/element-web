@@ -163,6 +163,149 @@ exports[`AppTile for a pinned widget should render 1`] = `
 </DocumentFragment>
 `;
 
+exports[`AppTile for a pinned widget should render permission request 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppTile"
+    id="1"
+  >
+    <div
+      class="mx_AppTileMenuBar"
+    >
+      <span
+        class="mx_AppTileMenuBar_title"
+        style="pointer-events: none;"
+      >
+        <span>
+          <img
+            alt=""
+            class="mx_BaseAvatar mx_BaseAvatar_image mx_WidgetAvatar"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="image-file-stub"
+            style="width: 20px; height: 20px;"
+          />
+          <b>
+            Example 1
+          </b>
+          <span />
+        </span>
+      </span>
+      <span
+        class="mx_AppTileMenuBar_widgets"
+      >
+        <div
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Un-maximise"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+        <div
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Minimise"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+        <div
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Options"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Options"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+      </span>
+    </div>
+    <div
+      class="mx_AppTileBody"
+    >
+      <div
+        class="mx_AppPermission"
+      >
+        <div
+          class="mx_AppPermission_content"
+        >
+          <div
+            class="mx_AppPermission_content_bolder"
+          >
+            Widget added by
+          </div>
+          <div>
+            <span
+              class="mx_BaseAvatar"
+              role="presentation"
+            >
+              <span
+                aria-hidden="true"
+                class="mx_BaseAvatar_initial"
+                style="font-size: 24.7px; width: 38px; line-height: 38px;"
+              >
+                U
+              </span>
+              <img
+                alt=""
+                aria-hidden="true"
+                class="mx_BaseAvatar_image"
+                data-testid="avatar-img"
+                loading="lazy"
+                src="data:image/png;base64,00"
+                style="width: 38px; height: 38px;"
+              />
+            </span>
+            <h4
+              class="mx_Heading_h4"
+            >
+              @userAnother
+            </h4>
+            <div />
+          </div>
+          <div>
+            <span>
+              Using this widget may share data 
+              <div
+                aria-describedby="mx_TooltipTarget_abdefghi"
+                class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
+                tabindex="0"
+              >
+                <div
+                  class="mx_Icon mx_Icon_12"
+                />
+              </div>
+               with example.com.
+            </span>
+          </div>
+          <div>
+            This widget may use cookies. 
+          </div>
+          <div>
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm"
+              role="button"
+              tabindex="0"
+            >
+              Continue
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`AppTile preserves non-persisted widget on container move 1`] = `
 <DocumentFragment>
   <div
