@@ -1,0 +1,56 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ToggleSwitch {
+    --ToggleSwitch-min-width: $font-44px;
+
+    transition: background-color 0.2s ease-out 0.1s;
+
+    width: $font-44px;
+    height: $font-20px;
+    border-radius: 1.5rem;
+    padding: 2px;
+
+    background-color: $togglesw-off-color;
+    opacity: 0.5;
+
+    &[aria-disabled="true"] {
+        cursor: not-allowed;
+    }
+}
+
+.mx_ToggleSwitch_enabled {
+    cursor: pointer;
+    opacity: 1;
+}
+
+.mx_ToggleSwitch.mx_ToggleSwitch_on {
+    background-color: $accent;
+
+    > .mx_ToggleSwitch_ball {
+        left: calc(100% - $font-20px);
+    }
+}
+
+.mx_ToggleSwitch_ball {
+    position: relative;
+    width: $font-20px;
+    height: $font-20px;
+    border-radius: $font-20px;
+    background-color: $togglesw-ball-color;
+    transition: left 0.15s ease-out 0.1s;
+    left: 0;
+}

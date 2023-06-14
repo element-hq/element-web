@@ -1,0 +1,92 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SpaceSettingsDialog {
+    color: $primary-content;
+
+    .mx_SpaceSettings_errorText {
+        font-weight: var(--font-semi-bold);
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $alert;
+        margin-bottom: 28px;
+    }
+
+    .mx_ToggleSwitch {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 16px;
+    }
+
+    .mx_SettingsTab_section {
+        .mx_SettingsTab_section_caption {
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+
+        .mx_StyledRadioButton {
+            margin-top: 8px;
+            margin-bottom: 4px;
+
+            .mx_StyledRadioButton_content {
+                font-weight: var(--font-semi-bold);
+                line-height: $font-18px;
+                color: $primary-content;
+            }
+
+            & + span {
+                font-size: $font-15px;
+                line-height: $font-18px;
+                color: $secondary-content;
+                margin-left: 26px;
+            }
+        }
+    }
+
+    .mx_SpaceSettingsDialog_buttons {
+        display: flex;
+        margin-top: 64px;
+
+        .mx_AccessibleButton {
+            display: inline-block;
+        }
+
+        .mx_AccessibleButton_kind_link {
+            margin-left: auto;
+        }
+    }
+
+    .mx_AccessibleButton_hasKind {
+        &.mx_AccessibleButton_kind_link {
+            font-size: $font-14px;
+            margin: 7px 18px;
+
+            &.mx_SettingsTab_showAdvanced {
+                margin: 18px 0;
+            }
+        }
+    }
+
+    .mx_TabbedView_tabLabel {
+        .mx_SpaceSettingsDialog_generalIcon::before {
+            mask-image: url("$(res)/img/element-icons/settings.svg");
+        }
+
+        .mx_SpaceSettingsDialog_visibilityIcon::before {
+            mask-image: url("$(res)/img/element-icons/eye.svg");
+        }
+    }
+}

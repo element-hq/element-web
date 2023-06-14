@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SettingsSubsectionHeading /> renders with children 1`] = `
+{
+  "container": <div>
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        test
+      </h3>
+      <a
+        href="/#"
+      >
+        test
+      </a>
+    </div>
+  </div>,
+}
+`;
+
+exports[`<SettingsSubsectionHeading /> renders without children 1`] = `
+{
+  "container": <div>
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        test
+      </h3>
+    </div>
+  </div>,
+}
+`;

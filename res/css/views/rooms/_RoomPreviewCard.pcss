@@ -1,0 +1,137 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomPreviewCard {
+    padding: $spacing-32 $spacing-24 !important; /* Override SpaceRoomView's default padding */
+    margin: auto;
+    flex-grow: 1;
+    max-width: 480px;
+    box-sizing: border-box;
+    background-color: $system;
+    border-radius: 8px;
+    position: relative;
+    font-size: $font-14px;
+
+    .mx_RoomPreviewCard_notice {
+        font-weight: var(--font-semi-bold);
+        line-height: $font-24px;
+        color: $primary-content;
+        margin-top: $spacing-24;
+        position: relative;
+        padding-left: calc(20px + $spacing-8);
+
+        &::before {
+            content: "";
+            position: absolute;
+            height: $font-24px;
+            width: 20px;
+            left: 0;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: contain;
+            mask-image: url("$(res)/img/element-icons/room/room-summary.svg");
+            background-color: $secondary-content;
+        }
+    }
+
+    .mx_RoomPreviewCard_inviter {
+        display: flex;
+        align-items: center;
+        margin-bottom: $spacing-20;
+        font-size: $font-15px;
+
+        > div {
+            margin-left: $spacing-8;
+
+            .mx_RoomPreviewCard_inviter_name {
+                line-height: $font-18px;
+            }
+
+            .mx_RoomPreviewCard_inviter_mxid {
+                color: $secondary-content;
+            }
+        }
+    }
+
+    .mx_RoomPreviewCard_avatar {
+        display: flex;
+        align-items: center;
+
+        .mx_RoomAvatar_isSpaceRoom {
+            &.mx_BaseAvatar_image,
+            .mx_BaseAvatar_image {
+                border-radius: 12px;
+            }
+        }
+
+        .mx_RoomPreviewCard_video {
+            width: 50px;
+            height: 50px;
+            border-radius: calc((50px + 2 * 3px) / 2);
+            background-color: $accent;
+            border: 3px solid $system;
+
+            position: relative;
+            left: calc(-50px / 4 - 3px);
+
+            &::before {
+                content: "";
+                background-color: $button-primary-fg-color;
+                position: absolute;
+                width: 50px;
+                height: 50px;
+                mask-size: 22px;
+                mask-position: center;
+                mask-repeat: no-repeat;
+                mask-image: url("$(res)/img/element-icons/call/video-call.svg");
+            }
+        }
+
+        /* XXX Remove this when video rooms leave beta */
+        .mx_BetaCard_betaPill {
+            position: absolute;
+            inset-block-start: $spacing-32;
+            inset-inline-end: $spacing-24;
+        }
+    }
+
+    h1.mx_RoomPreviewCard_name {
+        margin: $spacing-16 0 !important; /* Override SpaceRoomView's default margins */
+    }
+
+    .mx_RoomPreviewCard_topic {
+        line-height: $font-22px;
+        margin-top: $spacing-16;
+        max-height: 160px;
+        overflow-y: auto;
+    }
+
+    .mx_FacePile {
+        margin-top: $spacing-20;
+    }
+
+    .mx_RoomPreviewCard_joinButtons {
+        margin-top: $spacing-20;
+        display: flex;
+        gap: $spacing-20;
+
+        .mx_AccessibleButton {
+            max-width: 200px;
+            padding: 14px 0;
+            flex-grow: 1;
+        }
+    }
+}

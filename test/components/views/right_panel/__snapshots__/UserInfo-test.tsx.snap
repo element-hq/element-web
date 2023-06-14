@@ -1,0 +1,234 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeviceItem /> ambiguous display name 1`] = `
+<div>
+  <div
+    class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
+    role="button"
+    tabindex="0"
+    title="deviceId"
+  >
+    <div
+      class="mx_E2EIcon mx_E2EIcon_normal"
+    />
+    <div
+      class="mx_UserInfo_device_name"
+    >
+      my display name (deviceId)
+    </div>
+    <div
+      class="mx_UserInfo_device_trusted"
+    />
+  </div>
+</div>
+`;
+
+exports[`<DeviceItem /> with display name 1`] = `
+<div>
+  <div
+    class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
+    role="button"
+    tabindex="0"
+    title="deviceId"
+  >
+    <div
+      class="mx_E2EIcon mx_E2EIcon_normal"
+    />
+    <div
+      class="mx_UserInfo_device_name"
+    >
+      deviceName
+    </div>
+    <div
+      class="mx_UserInfo_device_trusted"
+    />
+  </div>
+</div>
+`;
+
+exports[`<DeviceItem /> without display name 1`] = `
+<div>
+  <div
+    class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
+    role="button"
+    tabindex="0"
+    title="deviceId"
+  >
+    <div
+      class="mx_E2EIcon mx_E2EIcon_normal"
+    />
+    <div
+      class="mx_UserInfo_device_name"
+    >
+      deviceId
+    </div>
+    <div
+      class="mx_UserInfo_device_trusted"
+    />
+  </div>
+</div>
+`;
+
+exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
+<div>
+  <div
+    class="mx_BaseCard mx_UserInfo"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_AccessibleButton mx_BaseCard_close"
+        data-testid="base-card-close-button"
+        role="button"
+        tabindex="0"
+        title="Close"
+      />
+      <div
+        class="mx_UserInfo_avatar"
+      >
+        <div
+          class="mx_UserInfo_avatar_transition"
+        >
+          <div
+            class="mx_UserInfo_avatar_transition_child"
+          >
+            <span
+              aria-label="Avatar"
+              aria-live="off"
+              class="mx_AccessibleButton mx_BaseAvatar"
+              role="button"
+              tabindex="0"
+            >
+              <span
+                aria-hidden="true"
+                class="mx_BaseAvatar_initial"
+                style="font-size: 299.52px; width: 460.79999999999995px; line-height: 460.79999999999995px;"
+              >
+                U
+              </span>
+              <img
+                alt=""
+                aria-hidden="true"
+                class="mx_BaseAvatar_image"
+                data-testid="avatar-img"
+                loading="lazy"
+                src="data:image/png;base64,00"
+                style="width: 460.79999999999995px; height: 460.79999999999995px;"
+              />
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container mx_UserInfo_separator"
+      >
+        <div
+          class="mx_UserInfo_profile"
+        >
+          <div>
+            <h2>
+              <span
+                aria-label="@user:example.com"
+                dir="auto"
+                title="@user:example.com"
+              >
+                @user:example.com
+              </span>
+            </h2>
+          </div>
+          <div
+            class="mx_UserInfo_profile_mxid"
+          >
+            customUserIdentifier
+          </div>
+          <div
+            class="mx_UserInfo_profileStatus"
+          >
+            <div
+              class="mx_PresenceLabel"
+            >
+              Unknown
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <div
+        class="mx_UserInfo_container"
+      >
+        <h3>
+          Security
+        </h3>
+        <p>
+          Messages in this room are not end-to-end encrypted.
+        </p>
+        <div
+          class="mx_UserInfo_container_verifyButton"
+        >
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_UserInfo_verifyButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Verify
+          </div>
+        </div>
+        <div
+          class="mx_UserInfo_devices"
+        >
+          <div />
+          <div>
+            <div
+              class="mx_AccessibleButton mx_UserInfo_expand mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_E2EIcon mx_E2EIcon_normal"
+              />
+              <div>
+                1 session
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <h3>
+          Options
+        </h3>
+        <div>
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Message
+          </div>
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Share Link to User
+          </div>
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_UserInfo_destructive mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Ignore
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,108 @@
+/*
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_PollOption {
+    border: 1px solid $quinary-content;
+    border-radius: 8px;
+    padding: 6px 12px;
+    background-color: $background;
+
+    .mx_StyledRadioButton_content,
+    .mx_PollOption_endedOption {
+        padding-top: 2px;
+        margin-right: 0px;
+    }
+
+    .mx_StyledRadioButton_spacer {
+        display: none;
+    }
+}
+
+.mx_PollOption,
+/* label has cursor: default in user-agent stylesheet */
+/* override */
+.mx_PollOption_live-option {
+    cursor: pointer;
+}
+
+.mx_PollOption_content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mx_PollOption_optionVoteCount {
+    color: $secondary-content;
+    font-size: $font-12px;
+    white-space: nowrap;
+}
+
+.mx_PollOption_winnerIcon {
+    height: 12px;
+    width: 12px;
+    color: $accent;
+    margin-right: $spacing-4;
+    vertical-align: middle;
+}
+
+.mx_PollOption_checked {
+    border-color: $accent;
+
+    .mx_PollOption_popularityBackground {
+        .mx_PollOption_popularityAmount {
+            background-color: $accent;
+        }
+    }
+
+    // override checked radio button styling
+    // to show checkmark instead
+    .mx_StyledRadioButton_checked {
+        input[type="radio"] + div {
+            border-width: 2px;
+            border-color: $accent;
+            background-color: $accent;
+            background-image: url("$(res)/img/element-icons/check-white.svg");
+            background-size: 12px;
+            background-repeat: no-repeat;
+            background-position: center;
+
+            div {
+                visibility: hidden;
+            }
+        }
+    }
+}
+
+/* options not actionable in these states */
+.mx_PollOption_checked,
+.mx_PollOption_ended {
+    pointer-events: none;
+}
+
+.mx_PollOption_popularityBackground {
+    width: 100%;
+    height: 8px;
+    margin-right: 12px;
+    border-radius: 8px;
+    background-color: $system;
+    margin-top: $spacing-8;
+
+    .mx_PollOption_popularityAmount {
+        width: 0%;
+        height: 8px;
+        border-radius: 8px;
+        background-color: $quaternary-content;
+    }
+}

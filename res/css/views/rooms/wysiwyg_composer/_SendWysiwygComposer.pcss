@@ -1,0 +1,86 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SendWysiwygComposer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-size: $font-14px;
+    /* fixed line height to prevent emoji from being taller than text */
+    line-height: $font-18px;
+    justify-content: center;
+    margin-right: 13px;
+    gap: 8px;
+
+    .mx_FormattingButtons {
+        margin-left: 12px;
+    }
+
+    .mx_WysiwygComposer_Editor {
+        border: 1px solid;
+        border-color: $quinary-content;
+        padding: 6px 11px 6px 12px;
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+
+        .mx_E2EIcon {
+            margin: 0 0 7px 0;
+            width: 12px;
+            height: 12px;
+        }
+
+        &[data-is-expanded="true"] {
+            border-radius: 14px;
+
+            .mx_WysiwygComposer_Editor_container {
+                margin-top: 3px;
+                margin-bottom: 3px;
+            }
+        }
+
+        &[data-is-expanded="false"] {
+            border-radius: 40px;
+        }
+
+        .mx_WysiwygComposer_Editor_container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 22px;
+            margin-bottom: 2px;
+            /* don't grow wider than available space */
+            width: 0;
+
+            .mx_WysiwygComposer_Editor_content {
+                /* this will center the contenteditable */
+                /* in it's parent vertically */
+                /* while keeping the autocomplete at the top */
+                /* of the composer. The parent needs to be a flex container for this to work. */
+                margin: auto 0;
+                /* the line height is $font-22px (set in _Editor.pcss) and we want to display 16 lines */
+                max-height: calc(16 * $font-22px);
+                overflow-y: auto;
+            }
+        }
+    }
+}
+
+.mx_SendWysiwygComposer-focused {
+    .mx_WysiwygComposer_Editor {
+        border-color: $quaternary-content;
+    }
+}

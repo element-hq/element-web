@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UnverifiedSessionToast when rendering the toast should render as expected 1`] = `
+<body>
+  <div>
+    <div
+      class="mx_ToastContainer"
+      role="alert"
+    >
+      <div
+        class="mx_Toast_toast mx_Toast_hasIcon mx_Toast_icon_verification_warning"
+      >
+        <div
+          class="mx_Toast_title"
+        >
+          <h2>
+            New login. Was this you?
+          </h2>
+          <span
+            class="mx_Toast_title_countIndicator"
+          />
+        </div>
+        <div
+          class="mx_Toast_body"
+        >
+          <div>
+            <div
+              class="mx_Toast_description"
+            >
+              <div
+                class="mx_Toast_detail"
+              >
+                <span
+                  data-testid="device-metadata-isVerified"
+                >
+                  Verified
+                </span>
+                 · 
+                <span
+                  data-testid="device-metadata-deviceId"
+                >
+                  ABC123
+                </span>
+              </div>
+            </div>
+            <div
+              aria-live="off"
+              class="mx_Toast_buttons"
+            >
+              <div
+                class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline"
+                role="button"
+                tabindex="0"
+              >
+                No
+              </div>
+              <div
+                class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                role="button"
+                tabindex="0"
+              >
+                Yes, it was me
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

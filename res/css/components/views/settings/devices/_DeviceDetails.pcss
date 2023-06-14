@@ -1,0 +1,96 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_DeviceDetails {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    margin-top: $spacing-16;
+    padding: $spacing-24;
+    border-radius: 8px;
+    border: 1px solid $quinary-content;
+}
+
+.mx_DeviceDetails_section {
+    padding-bottom: $spacing-20;
+    margin-bottom: $spacing-20;
+    border-bottom: 1px solid $quinary-content;
+
+    display: grid;
+    grid-gap: $spacing-24;
+    justify-content: left;
+    grid-template-columns: 100%;
+
+    &:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+        margin-bottom: 0;
+    }
+}
+
+.mx_DeviceDetails_sectionHeading {
+    margin: 0;
+
+    .mx_DeviceDetails_sectionSubheading {
+        display: block;
+        font-size: $font-12px;
+        color: $secondary-content;
+        line-height: $font-14px;
+        margin-top: $spacing-4;
+    }
+}
+
+.mx_DeviceDetails_metadataTable {
+    font-size: $font-12px;
+    color: $secondary-content;
+
+    width: 100%;
+
+    border-spacing: 0;
+
+    th {
+        text-transform: uppercase;
+        font-weight: normal;
+        text-align: left;
+    }
+
+    td {
+        padding-top: $spacing-8;
+    }
+
+    .mxDeviceDetails_metadataLabel {
+        width: 160px;
+    }
+
+    .mxDeviceDetails_metadataValue {
+        color: $primary-content;
+    }
+}
+
+.mx_DeviceDetails_signOutButtonContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $spacing-4;
+}
+
+.mx_DeviceDetails_pushNotifications {
+    display: block;
+    .mx_ToggleSwitch {
+        float: right;
+    }
+}

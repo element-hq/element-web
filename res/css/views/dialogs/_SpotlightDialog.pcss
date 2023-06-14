@@ -1,0 +1,519 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SpotlightDialog_wrapper .mx_Dialog {
+    border-radius: 8px;
+    overflow-y: initial;
+    position: relative;
+    height: 60%;
+    padding: 0;
+    contain: unset; /* needed for #mx_SpotlightDialog_keyboardPrompt to not be culled */
+
+    #mx_SpotlightDialog_keyboardPrompt {
+        position: absolute;
+        padding: $spacing-8;
+        border-radius: 8px;
+        background-color: $background;
+        top: -60px; /* relative to the top of the modal */
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $secondary-content;
+
+        kbd {
+            display: inline-block;
+            padding: 2px $spacing-4;
+            margin: 0 $spacing-4;
+            border-radius: 6px;
+            background-color: $quinary-content;
+            vertical-align: middle;
+            color: $tertiary-content;
+            /* To avoid any styling inherent with <kbd> elements */
+            font-family: inherit;
+            font-weight: inherit;
+            font-size: inherit;
+        }
+    }
+}
+
+.mx_SpotlightDialog {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .mx_Dialog_header {
+        display: none;
+    }
+
+    .mx_SpotlightDialog_searchBox {
+        margin: 0;
+        border: none;
+        border-radius: 8px 8px 0 0;
+        padding: $spacing-12 $spacing-16;
+        border-bottom: 1px solid $system;
+
+        > .mx_SpotlightDialog_filter {
+            display: flex;
+            align-content: center;
+            align-items: center;
+            border-radius: 8px;
+            margin-right: $spacing-8;
+            background-color: $quinary-content;
+            vertical-align: middle;
+            color: $primary-content;
+            position: relative;
+            padding: $spacing-4 $spacing-8 $spacing-4 37px;
+
+            &::before {
+                background-color: $secondary-content;
+                content: "";
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                width: 18px;
+                height: 18px;
+                position: absolute;
+                left: $spacing-8;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            &.mx_SpotlightDialog_filterPeople::before {
+                mask-image: url("$(res)/img/element-icons/room/members.svg");
+            }
+
+            &.mx_SpotlightDialog_filterPublicRooms::before {
+                mask-image: url("$(res)/img/element-icons/roomlist/explore.svg");
+            }
+
+            .mx_SpotlightDialog_filter--close {
+                position: relative;
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                background: $system;
+                border-radius: 8px;
+                margin-left: $spacing-8;
+                text-align: center;
+                line-height: 16px;
+                color: $secondary-content;
+
+                &::before {
+                    background-color: $secondary-content;
+                    content: "";
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-size: contain;
+                    width: 8px;
+                    height: 8px;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    mask-image: url("$(res)/img/cancel-small.svg");
+                }
+            }
+        }
+
+        > input {
+            display: block;
+            box-sizing: border-box;
+            background-color: transparent;
+            width: 100%;
+            height: 32px;
+            padding: 0;
+            color: $tertiary-content;
+            font-weight: normal;
+            font-size: $font-15px;
+            line-height: $font-24px;
+        }
+
+        > .mx_Spinner {
+            flex-grow: 0;
+            width: unset;
+            height: unset;
+            margin-left: $spacing-16;
+        }
+    }
+
+    #mx_SpotlightDialog_content {
+        height: 100%;
+        overflow-y: auto;
+        padding: $spacing-16;
+
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        .mx_SpotlightDialog_section {
+            > h4,
+            > .mx_SpotlightDialog_sectionHeader > h4 {
+                font-weight: var(--font-semi-bold);
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $secondary-content;
+                margin: 0;
+            }
+
+            > h4 {
+                margin-bottom: $spacing-8;
+            }
+
+            .mx_SpotlightDialog_sectionHeader {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: $spacing-8;
+
+                .mx_SpotlightDialog_options {
+                    display: flex;
+                    gap: $spacing-4;
+                }
+            }
+
+            & + .mx_SpotlightDialog_section {
+                margin-top: $spacing-24;
+            }
+        }
+
+        .mx_SpotlightDialog_recentlyViewed {
+            > div {
+                display: flex;
+                white-space: nowrap;
+                overflow-x: hidden;
+                margin-right: 1px; /* occlude the 1px visible of the very next tile to prevent it looking broken */
+            }
+
+            .mx_SpotlightDialog_option {
+                border-radius: 8px;
+                padding: $spacing-4;
+                color: $primary-content;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                display: inline-block;
+                width: 58px;
+                height: 58px;
+                min-width: 58px;
+                box-sizing: border-box;
+                text-align: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                .mx_DecoratedRoomAvatar {
+                    margin: 0 9px $spacing-4; /* maintain centering */
+                }
+
+                & + .mx_SpotlightDialog_option {
+                    margin-left: $spacing-16;
+                }
+
+                &:hover,
+                &[aria-selected="true"] {
+                    background-color: $quinary-content;
+                }
+            }
+        }
+
+        .mx_SpotlightDialog_results,
+        .mx_SpotlightDialog_recentSearches,
+        .mx_SpotlightDialog_otherSearches,
+        .mx_SpotlightDialog_hiddenResults {
+            .mx_SpotlightDialog_option {
+                padding: 6px $spacing-4;
+                border-radius: 8px;
+                font-size: $font-15px;
+                line-height: $font-24px;
+                color: $primary-content;
+                position: relative;
+                display: flex;
+                align-items: center;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+
+                .mx_SpotlightDialog_option--endAdornment {
+                    display: inline-flex;
+                    flex-direction: row;
+                    margin-left: auto;
+                    align-items: flex-start;
+                }
+
+                &.mx_SpotlightDialog_result_multiline {
+                    align-items: flex-start;
+
+                    .mx_AccessibleButton {
+                        padding: $spacing-4 $spacing-20;
+                        margin: 2px $spacing-4;
+                    }
+
+                    .mx_SpotlightDialog_enterPrompt {
+                        margin-top: 9px;
+                        margin-right: $spacing-8;
+                    }
+                }
+
+                > .mx_SpotlightDialog_metaspaceResult,
+                > .mx_DecoratedRoomAvatar,
+                > .mx_BaseAvatar {
+                    margin-right: $spacing-8;
+                    width: 24px;
+                    height: 24px;
+
+                    .mx_BaseAvatar {
+                        width: inherit;
+                        height: inherit;
+                    }
+                }
+
+                .mx_SpotlightDialog_result_publicRoomDetails {
+                    display: flex;
+                    flex-direction: column;
+                    flex-grow: 1;
+                    min-width: 0;
+
+                    .mx_SpotlightDialog_result_publicRoomHeader {
+                        display: flex;
+                        flex-direction: row;
+                        line-height: $font-24px;
+                        margin-right: $spacing-8;
+
+                        .mx_SpotlightDialog_result_publicRoomName {
+                            color: $primary-content;
+                            font-size: $font-15px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                        .mx_SpotlightDialog_result_publicRoomAlias {
+                            color: $tertiary-content;
+                            font-size: $font-12px;
+                            margin-left: $spacing-8;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                    }
+                    .mx_SpotlightDialog_result_publicRoomDescription {
+                        color: $secondary-content;
+                        font-size: $font-12px;
+                        white-space: normal;
+                        word-wrap: break-word;
+                        line-height: $font-20px;
+                        display: -webkit-box;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 3;
+                        overflow: hidden;
+                    }
+                }
+
+                .mx_NotificationBadge {
+                    margin-left: $spacing-8;
+                }
+
+                .mx_SpotlightDialog_option--menu,
+                .mx_SpotlightDialog_option--notifications {
+                    width: 20px;
+                    min-width: 20px;
+                    height: 20px;
+                    margin-top: auto;
+                    margin-bottom: auto;
+                    position: relative;
+                    display: none;
+
+                    &::before {
+                        top: 2px;
+                        left: 2px;
+                        content: "";
+                        width: 16px;
+                        height: 16px;
+                        position: absolute;
+                        mask-position: center;
+                        mask-size: contain;
+                        mask-repeat: no-repeat;
+                        background: $tertiary-content;
+                    }
+
+                    &:hover::before,
+                    &[aria-selected="true"]::before {
+                        background-color: $secondary-content;
+                    }
+                }
+
+                .mx_SpotlightDialog_option--menu::before {
+                    mask-image: url("$(res)/img/element-icons/context-menu.svg");
+                }
+
+                &:hover,
+                &[aria-selected="true"] {
+                    background-color: $system;
+
+                    .mx_SpotlightDialog_option--menu,
+                    .mx_SpotlightDialog_option--notifications {
+                        display: block;
+                    }
+                }
+
+                &[aria-selected="true"] .mx_SpotlightDialog_enterPrompt {
+                    display: inline-block;
+                }
+            }
+        }
+
+        .mx_SpotlightDialog_inviteLink,
+        .mx_SpotlightDialog_createRoom {
+            margin-top: $spacing-8;
+
+            .mx_AccessibleButton {
+                position: relative;
+                margin: 0;
+                padding: 3px $spacing-8 3px $spacing-28;
+
+                &::before {
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-size: contain;
+                    left: $spacing-8;
+                    width: 16px;
+                    height: 16px;
+                    background: $accent;
+                }
+            }
+        }
+
+        .mx_SpotlightDialog_inviteLink .mx_AccessibleButton::before {
+            mask-image: url("$(res)/img/element-icons/link.svg");
+        }
+
+        .mx_SpotlightDialog_createRoom .mx_AccessibleButton::before {
+            mask-image: url("$(res)/img/element-icons/roomlist/hash.svg");
+        }
+
+        .mx_SpotlightDialog_otherSearches {
+            .mx_SpotlightDialog_startChat,
+            .mx_SpotlightDialog_joinRoomAlias,
+            .mx_SpotlightDialog_explorePublicRooms,
+            .mx_SpotlightDialog_startGroupChat {
+                padding-left: $spacing-32;
+                position: relative;
+
+                &::before {
+                    background-color: $secondary-content;
+                    content: "";
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-size: contain;
+                    width: 24px;
+                    height: 24px;
+                    position: absolute;
+                    left: $spacing-4;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+            }
+
+            .mx_SpotlightDialog_startChat::before {
+                mask-image: url("$(res)/img/element-icons/room/members.svg");
+            }
+
+            .mx_SpotlightDialog_joinRoomAlias::before {
+                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+            }
+
+            .mx_SpotlightDialog_explorePublicRooms::before {
+                mask-image: url("$(res)/img/element-icons/roomlist/explore.svg");
+            }
+
+            .mx_SpotlightDialog_startGroupChat::before {
+                mask-image: url("$(res)/img/element-icons/group-members.svg");
+            }
+
+            .mx_SpotlightDialog_otherSearches_messageSearchText {
+                font-size: $font-15px;
+                line-height: $font-24px;
+            }
+
+            .mx_SpotlightDialog_otherSearches_messageSearchIcon {
+                display: inline-block;
+                width: 24px;
+                height: 24px;
+                background-color: $secondary-content;
+                vertical-align: text-bottom;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url("$(res)/img/element-icons/room/search-inset.svg");
+            }
+        }
+
+        .mx_SpotlightDialog_result_details {
+            margin-left: $spacing-8;
+            margin-right: $spacing-8;
+            color: $tertiary-content;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mx_SpotlightDialog_recentSearches > h4 > .mx_AccessibleButton_kind_link {
+            float: right;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $secondary-content;
+        }
+
+        .mx_SpotlightDialog_enterPrompt {
+            padding: 2px $spacing-4;
+            /* To avoid any styling inherent with <kbd> elements */
+            font-family: inherit;
+            font-weight: inherit;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $tertiary-content;
+            border-radius: 6px;
+            background-color: $quinary-content;
+            margin-right: $spacing-4;
+            display: none;
+        }
+
+        .mx_SpotlightDialog_metaspaceResult {
+            background-color: $secondary-content;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+
+            &.mx_SpotlightDialog_metaspaceResult_home-space {
+                mask-image: url("$(res)/img/element-icons/home.svg");
+            }
+
+            &.mx_SpotlightDialog_metaspaceResult_favourites-space {
+                mask-image: url("$(res)/img/element-icons/roomlist/favorite.svg");
+            }
+
+            &.mx_SpotlightDialog_metaspaceResult_people-space {
+                mask-image: url("$(res)/img/element-icons/room/members.svg");
+            }
+
+            &.mx_SpotlightDialog_metaspaceResult_orphans-space {
+                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+            }
+        }
+    }
+}

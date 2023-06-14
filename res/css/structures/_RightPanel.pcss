@@ -1,0 +1,118 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RightPanel {
+    overflow-x: hidden;
+    flex: 0 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    padding: var(--container-border-width) 0;
+    box-sizing: border-box;
+    height: 100%;
+    contain: strict;
+
+    .mx_RoomView_MessageList {
+        padding: 14px 18px; /* top and bottom is 4px smaller to balance with the padding set above */
+    }
+}
+
+/** Fixme - factor this out with the main header **/
+
+.mx_RightPanel_threadsButton::before {
+    mask-image: url("$(res)/img/element-icons/room/thread.svg");
+}
+
+.mx_RightPanel_notifsButton::before {
+    mask-image: url("$(res)/img/element-icons/notifications.svg");
+    mask-position: center;
+}
+
+.mx_RightPanel_roomSummaryButton::before {
+    mask-image: url("$(res)/img/element-icons/room/room-summary.svg");
+    mask-position: center;
+}
+
+.mx_RightPanel_pinnedMessagesButton {
+    &::before {
+        mask-image: url("$(res)/img/element-icons/room/pin.svg");
+        mask-position: center;
+    }
+}
+
+.mx_RightPanel_timelineCardButton {
+    &::before {
+        mask-image: url("$(res)/img/element-icons/feedback.svg");
+        mask-position: center;
+    }
+}
+
+.mx_RightPanel .mx_MemberList,
+.mx_RightPanel .mx_MemberInfo {
+    order: 2;
+    flex: 1 1 0;
+}
+
+.mx_RightPanel .mx_RoomView_messagePanelSpinner {
+    order: 2;
+    margin: auto;
+}
+
+.mx_RightPanel_empty {
+    margin-right: -28px;
+
+    h2 {
+        font-weight: 700;
+        margin: 16px 0;
+    }
+
+    h2,
+    p {
+        font-size: $font-14px;
+    }
+
+    &::before {
+        content: "";
+        display: block;
+        margin: 11px auto 29px auto;
+        height: 42px;
+        width: 42px;
+        background-color: $header-panel-text-primary-color;
+        mask-image: var(--maskImage);
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+    }
+}
+
+.mx_RightPanel_scopeHeader {
+    margin: 24px;
+    text-align: center;
+    font-weight: var(--font-semi-bold);
+    font-size: $font-18px;
+    line-height: $font-22px;
+
+    .mx_BaseAvatar {
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    .mx_BaseAvatar_image {
+        border-radius: 8px;
+    }
+}

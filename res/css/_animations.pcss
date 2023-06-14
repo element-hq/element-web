@@ -1,0 +1,90 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/**
+ * React Transition Group animations are prefixed with 'mx_rtg--' so that we
+ * know they should not be used anywhere outside of React Transition Groups.
+*/
+
+.mx_rtg--fade-enter {
+    opacity: 0;
+}
+.mx_rtg--fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms ease;
+}
+.mx_rtg--fade-exit {
+    opacity: 1;
+}
+.mx_rtg--fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms ease;
+}
+
+:root {
+    --hover-transition: 0.08s cubic-bezier(0.46, 0.03, 0.52, 0.96); /* quadratic */
+}
+
+@keyframes mx--anim-pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes mx_Dialog_lightbox_background_keyframes {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: $lightbox-background-bg-opacity;
+    }
+}
+
+@keyframes mx_ImageView_panel_keyframes {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion) {
+    @keyframes mx--anim-pulse {
+        /* Override all keyframes in reduced-motion */
+    }
+
+    @keyframes mx_Dialog_lightbox_background_keyframes {
+        /* Override all keyframes in reduced-motion */
+    }
+
+    @keyframes mx_ImageView_panel_keyframes {
+        /* Override all keyframes in reduced-motion */
+    }
+
+    .mx_rtg--fade-enter-active {
+        transition: none;
+    }
+    .mx_rtg--fade-exit-active {
+        transition: none;
+    }
+}

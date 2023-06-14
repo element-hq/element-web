@@ -1,0 +1,285 @@
+/*
+Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_AuthBody {
+    width: 500px;
+    font-size: $font-12px;
+    color: $authpage-secondary-color;
+    background-color: $background;
+    border-radius: 0 4px 4px 0;
+    padding: 25px 60px;
+    box-sizing: border-box;
+
+    b {
+        font-weight: var(--font-semi-bold);
+    }
+
+    &.mx_AuthBody_flex {
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1 {
+        font-size: $font-24px;
+        font-weight: var(--font-semi-bold);
+        margin-top: $spacing-8;
+        color: $authpage-primary-color;
+    }
+
+    h2 {
+        font-size: $font-14px;
+        font-weight: var(--font-semi-bold);
+        color: $authpage-secondary-color;
+    }
+
+    h2.mx_AuthBody_centered {
+        text-align: center;
+    }
+
+    a:link,
+    a:hover,
+    a:visited {
+        color: $accent;
+        text-decoration: none;
+    }
+
+    fieldset {
+        display: block;
+    }
+
+    .mx_AuthBody_icon {
+        width: 40px;
+    }
+
+    .mx_AuthBody_lockIcon {
+        color: $secondary-content;
+        height: 32px;
+        margin-bottom: -3px; // tweak to align all icons on different forgot password steps
+    }
+
+    .mx_AuthBody_text {
+        margin-bottom: $spacing-48;
+        margin-top: 0;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        color: $authpage-primary-color;
+    }
+
+    .mx_Field label {
+        color: $authpage-secondary-color;
+    }
+
+    .mx_Field input,
+    .mx_Field select {
+        color: $authpage-primary-color;
+        background-color: $background;
+    }
+
+    .mx_Field_labelAlwaysTopLeft label,
+    .mx_Field select + label /* Always show a select's label on top to not collide with the value */,
+    .mx_Field input:focus + label,
+    .mx_Field input:not(:placeholder-shown) + label,
+    .mx_Field textarea:focus + label,
+    .mx_Field textarea:not(:placeholder-shown) + label {
+        background-color: $background;
+    }
+
+    input.error {
+        color: $alert;
+    }
+
+    .mx_Login_submit {
+        height: 32px;
+        margin-top: $spacing-16;
+    }
+
+    .mx_ErrorMessage {
+        margin-bottom: 12px;
+        margin-top: 2px;
+    }
+
+    .mx_Field input {
+        box-sizing: border-box;
+    }
+
+    .mx_Field_select::before {
+        background-color: $authpage-primary-color;
+    }
+
+    .mx_Dropdown {
+        color: $authpage-primary-color;
+    }
+
+    .mx_Dropdown_arrow {
+        background: $authpage-primary-color;
+    }
+
+    .mx_Dropdown_menu {
+        background-color: $background;
+
+        .mx_Dropdown_option_highlight {
+            background-color: $authpage-focus-bg-color;
+        }
+    }
+}
+
+/* specialisation for password reset views */
+.mx_AuthBody.mx_AuthBody_forgot-password {
+    font-size: $font-14px;
+    color: $primary-content;
+    padding: 50px 32px;
+    min-height: 600px;
+
+    h1 {
+        margin: $spacing-24 0;
+    }
+
+    .mx_AuthBody_button-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .mx_Login_submit {
+        font-weight: var(--font-semi-bold);
+        margin: 0 0 $spacing-16;
+    }
+
+    .mx_AuthBody_text {
+        margin-bottom: $spacing-32;
+
+        p {
+            margin: 0 0 $spacing-8;
+        }
+    }
+
+    .mx_AuthBody_sign-in-instead-button {
+        font-weight: var(--font-semi-bold);
+        padding: $spacing-4;
+    }
+
+    .mx_AuthBody_fieldRow {
+        margin-bottom: $spacing-24;
+    }
+
+    .mx_AccessibleButton.mx_AccessibleButton_hasKind {
+        background: none;
+
+        &:disabled {
+            cursor: default;
+            opacity: 0.4;
+        }
+    }
+}
+
+.mx_AuthBody_did-not-receive {
+    align-items: center;
+    color: $secondary-content;
+    display: flex;
+    gap: $spacing-8;
+}
+
+.mx_AuthBody_resend-button {
+    align-items: center;
+    border-radius: 8px;
+    color: $accent;
+    display: flex;
+    gap: $spacing-4;
+    padding: $spacing-4;
+
+    &:hover {
+        background-color: $system;
+    }
+}
+
+.mx_AuthBody_emailPromptIcon {
+    width: 57px;
+}
+
+.mx_AuthBody_emailPromptIcon--shifted {
+    margin-bottom: -17px; // Prevent layout jump by relative positioning.
+    position: relative;
+    top: -17px; // This icon is higher than the other icons. Shift up to prevent icon jumping.
+    width: 57px;
+}
+
+.mx_AuthBody_fieldRow {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.mx_AuthBody_fieldRow > .mx_Field {
+    margin: 0 5px;
+}
+
+.mx_AuthBody_fieldRow > .mx_Field:first-child {
+    margin-left: 0;
+}
+
+.mx_AuthBody_fieldRow > .mx_Field:last-child {
+    margin-right: 0;
+}
+
+.mx_AuthBody_paddedFooter {
+    height: 80px; /* height of the submit button + register link */
+    padding-top: 28px;
+    text-align: center;
+
+    .mx_AuthBody_paddedFooter_title {
+        margin-top: $spacing-16;
+        font-size: $font-15px;
+        line-height: $font-24px;
+
+        .mx_InlineSpinner img {
+            vertical-align: sub;
+            margin-right: 5px;
+        }
+    }
+
+    .mx_AuthBody_paddedFooter_subtitle {
+        margin-top: $spacing-8;
+        font-size: $font-10px;
+        line-height: $font-14px;
+    }
+}
+
+.mx_AuthBody_changeFlow {
+    display: block;
+    text-align: center;
+
+    > a {
+        font-weight: var(--font-semi-bold);
+    }
+}
+
+.mx_SSOButtons + .mx_AuthBody_changeFlow {
+    margin-top: $spacing-24;
+}
+
+.mx_AuthBody_spinner {
+    margin: 1em 0;
+}
+
+@media only screen and (max-width: 480px) {
+    .mx_AuthBody {
+        border-radius: 4px;
+        width: auto;
+        max-width: 500px;
+        padding: 10px;
+    }
+}

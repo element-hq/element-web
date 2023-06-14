@@ -1,0 +1,115 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MatrixChat_splash {
+    position: relative;
+    height: 100%;
+}
+
+.mx_MatrixChat_splashButtons {
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    bottom: 30px;
+}
+
+.mx_MatrixChat_wrapper {
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+}
+
+.mx_MatrixToolbar {
+    order: 1;
+
+    height: 40px;
+}
+
+.mx_MatrixChat {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex: 1;
+    min-height: 0;
+}
+
+.mx_MatrixChat_syncError {
+    color: $accent-fg-color;
+    background-color: #df2a8b; /* Only used here */
+    border-radius: 5px;
+    display: table;
+    padding: 30px;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* not the left panel, and not the resize handle, so the roomview and friends */
+.mx_MatrixChat > :not(.mx_LeftPanel):not(.mx_SpacePanel):not(.mx_ResizeHandle):not(.mx_LeftPanel_outerWrapper) {
+    background-color: $background;
+
+    flex: 1 1 0;
+    min-width: 0;
+
+    /* To fix https://github.com/vector-im/element-web/issues/3298 where Safari
+       needed height 100% all the way down to the HomePage. Height does not
+       have to be auto, empirically.
+    */
+    height: 100%;
+}
+
+/* We'd like to remove this, but this makes matrixchat's resizehandle's */
+/* negative margin greater than its positive padding. If it's the same */
+/* or less, Safari and other WebKit based browsers get confused about overflows somehow and */
+/* https://github.com/vector-im/element-web/issues/19863 happens. */
+.mx_MatrixChat > .mx_ResizeHandle.mx_ResizeHandle--horizontal {
+    margin: 0 calc(-5.5px - var(--container-gap-width) / 2) 0 calc(-6.5px + var(--container-gap-width) / 2);
+    /* The condition to prevent bleeding is: (margin-left + margin-right < -11px) */
+    /* (IF there is NO margin on the leftPanel_wrapper) */
+    /* The resizeHandle does not change the gap between the left panel and the room view: */
+    /*  the resizeHandle width is: */
+    /*      11px =  10px (padding) + 1px (width) */
+    /*      and the total negative margin is -12px -> */
+    /*      the handle requires no space */
+    /* right: -6px left: -6px positions the element exactly on the edge of leftPanel. */
+    /* left+=1 and right-=1 => resizeHandle moves 1px to the right closer to the center of the gap. */
+    /* We want the handle to be in the middle of the gap so it is shifted by (var(--container-gap-width) / 2) */
+}
+
+.mx_MatrixChat > .mx_ResizeHandle--horizontal:hover {
+    position: relative;
+
+    &::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        height: 64px; /* to match width of the ones on roomlist */
+        width: 4px;
+        border-radius: 4px;
+
+        content: " ";
+
+        background-color: $primary-content;
+        opacity: 0.8;
+    }
+}

@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`KeyboardShortcut doesn't render + if last 1`] = `
+<div>
+  <kbd>
+     
+    a
+     
+  </kbd>
+</div>
+`;
+
+exports[`KeyboardShortcut doesn't render same modifier twice 1`] = `
+<div>
+  <div
+    class="mx_KeyboardShortcut"
+  >
+    <kbd>
+       
+      Ctrl
+       
+    </kbd>
+    +
+    <kbd>
+       
+      a
+       
+    </kbd>
+  </div>
+</div>
+`;
+
+exports[`KeyboardShortcut doesn't render same modifier twice 2`] = `
+<div>
+  <div
+    class="mx_KeyboardShortcut"
+  >
+    <kbd>
+       
+      Ctrl
+       
+    </kbd>
+    +
+    <kbd>
+       
+      a
+       
+    </kbd>
+  </div>
+</div>
+`;
+
+exports[`KeyboardShortcut renders alternative key name 1`] = `
+<div>
+  <kbd>
+     
+    Page Down
+     
+  </kbd>
+  +
+</div>
+`;
+
+exports[`KeyboardShortcut renders key icon 1`] = `
+<div>
+  <kbd>
+     
+    ↓
+     
+  </kbd>
+  +
+</div>
+`;

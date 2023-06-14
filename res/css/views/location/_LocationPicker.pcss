@@ -1,0 +1,100 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_LocationPicker {
+    border-radius: 8px;
+
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    /* when there are errors loading the map */
+    /* the canvas is still inserted */
+    /* and can overlap error message/close buttons */
+    /* hide it */
+    &.mx_LocationPicker_hasError {
+        .maplibregl-canvas-container,
+        .maplibregl-control-container {
+            display: none;
+        }
+    }
+
+    #mx_LocationPicker_map {
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+        flex: 1;
+
+        .maplibregl-ctrl.maplibregl-ctrl-group,
+        .maplibregl-ctrl.maplibregl-ctrl-attrib {
+            margin-right: $spacing-16;
+        }
+
+        .maplibregl-ctrl.maplibregl-ctrl-group {
+            /* place below the close button */
+            /* padding-16 + 24px close button + padding-10 */
+            margin-top: 50px;
+        }
+
+        .maplibregl-user-location-accuracy-circle {
+            display: none;
+        }
+
+        .maplibregl-user-location-dot {
+            display: none;
+        }
+    }
+
+    .mx_LocationPicker_footer {
+        flex: 0;
+        width: 100%;
+        box-sizing: border-box;
+        padding: $spacing-16;
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+
+        background-color: $header-panel-bg-color;
+    }
+}
+
+.mx_LocationPicker_pinText {
+    position: absolute;
+    top: $spacing-16;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    height: 0;
+    pointer-events: none;
+
+    span {
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        padding: $spacing-8;
+        background-color: $background;
+        color: $primary-content;
+
+        font-size: $font-12px;
+    }
+}
+
+.mx_LocationPicker_submitButton {
+    width: 100%;
+    height: 48px;
+}

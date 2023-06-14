@@ -1,0 +1,150 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ManageRestrictedJoinRuleDialog_wrapper {
+    .mx_Dialog {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.mx_ManageRestrictedJoinRuleDialog {
+    width: 480px;
+    color: $primary-content;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: 0;
+    height: 60vh;
+
+    .mx_SearchBox {
+        /* To match the space around the title */
+        margin: 0 0 15px 0;
+        flex-grow: 0;
+    }
+
+    .mx_ManageRestrictedJoinRuleDialog_content {
+        flex-grow: 1;
+    }
+
+    .mx_ManageRestrictedJoinRuleDialog_noResults {
+        display: block;
+        margin-top: 24px;
+    }
+
+    .mx_ManageRestrictedJoinRuleDialog_section {
+        &:not(:first-child) {
+            margin-top: 24px;
+        }
+
+        > h3 {
+            margin: 0;
+            color: $secondary-content;
+            font-size: $font-12px;
+            font-weight: var(--font-semi-bold);
+            line-height: $font-15px;
+        }
+
+        .mx_ManageRestrictedJoinRuleDialog_entry {
+            display: flex;
+            margin-top: 12px;
+
+            > div {
+                flex-grow: 1;
+            }
+
+            img.mx_RoomAvatar_isSpaceRoom,
+            .mx_RoomAvatar_isSpaceRoom img {
+                border-radius: 4px;
+            }
+
+            .mx_ManageRestrictedJoinRuleDialog_entry_name {
+                margin: 0 8px;
+                font-size: $font-15px;
+                line-height: 30px;
+                flex-grow: 1;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .mx_ManageRestrictedJoinRuleDialog_entry_description {
+                margin-top: 8px;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $tertiary-content;
+            }
+
+            .mx_Checkbox {
+                align-items: center;
+            }
+        }
+    }
+
+    .mx_ManageRestrictedJoinRuleDialog_section_spaces {
+        .mx_BaseAvatar {
+            margin-right: 12px;
+        }
+
+        .mx_BaseAvatar_image {
+            border-radius: 8px;
+        }
+    }
+
+    .mx_ManageRestrictedJoinRuleDialog_section_info {
+        position: relative;
+        border-radius: 8px;
+        margin: 12px 0;
+        padding: 8px 8px 8px 42px;
+        background-color: $header-panel-bg-color;
+
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $secondary-content;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 10px;
+            top: calc(50% - 8px); /* vertical centering */
+            height: 16px;
+            width: 16px;
+            background-color: $secondary-content;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            mask-image: url("$(res)/img/element-icons/room/room-summary.svg");
+            mask-position: center;
+        }
+    }
+
+    .mx_ManageRestrictedJoinRuleDialog_footer {
+        margin-top: 20px;
+
+        .mx_ManageRestrictedJoinRuleDialog_footer_buttons {
+            display: flex;
+            width: max-content;
+            margin-left: auto;
+
+            .mx_AccessibleButton {
+                display: inline-block;
+
+                & + .mx_AccessibleButton {
+                    margin-left: 24px;
+                }
+            }
+        }
+    }
+}

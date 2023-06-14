@@ -1,0 +1,140 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_FeedbackDialog {
+    hr {
+        margin: 24px 0;
+        border-color: $input-border-color;
+    }
+
+    .mx_Dialog_content {
+        margin-bottom: 24px;
+
+        > h2 {
+            margin-bottom: 32px;
+        }
+    }
+
+    .mx_FeedbackDialog_section {
+        position: relative;
+        padding: 12px 52px 12px 68px;
+        border-radius: 8px;
+        border: 1px solid $quinary-content;
+
+        & + .mx_FeedbackDialog_section {
+            margin-top: 16px;
+        }
+
+        > h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-weight: var(--font-semi-bold);
+            font-size: $font-18px;
+            line-height: $font-22px;
+        }
+
+        > p {
+            color: $secondary-content;
+            font-size: $font-15px;
+            line-height: $font-24px;
+            margin: 8px 0 0;
+        }
+
+        .mx_FeedbackDialog_section_microcopy {
+            font-size: $font-12px;
+            line-height: $font-15px;
+        }
+
+        a,
+        .mx_AccessibleButton_kind_link {
+            color: $accent;
+            text-decoration: underline;
+        }
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            left: 16px;
+            top: 12px;
+        }
+
+        &::before {
+            background-color: $icon-button-color;
+            border-radius: 8px;
+        }
+
+        &::after {
+            background: $avatar-initial-color; /* TODO */
+            mask-position: center;
+            mask-size: 24px;
+            mask-repeat: no-repeat;
+        }
+    }
+
+    .mx_FeedbackDialog_reportBug {
+        &::after {
+            mask-image: url("$(res)/img/feather-customised/bug.svg");
+        }
+    }
+
+    .mx_FeedbackDialog_rateApp {
+        .mx_StyledRadioButton {
+            display: inline-flex;
+            font-size: 20px;
+            transition: font-size 1s, border 0.5s;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            margin-top: 12px;
+            margin-bottom: 24px;
+            vertical-align: top;
+            cursor: pointer;
+
+            input[type="radio"] + div {
+                display: none;
+            }
+
+            .mx_StyledRadioButton_content {
+                background: $icon-button-color;
+                width: 40px;
+                height: 40px;
+                text-align: center;
+                line-height: 40px;
+                border-radius: 20px;
+                margin: 5px;
+            }
+
+            .mx_StyledRadioButton_spacer {
+                display: none;
+            }
+
+            & + .mx_StyledRadioButton {
+                margin-left: 16px;
+            }
+        }
+
+        .mx_StyledRadioButton_checked {
+            font-size: 24px;
+            border-color: $accent;
+        }
+
+        &::after {
+            mask-image: url("$(res)/img/element-icons/feedback.svg");
+        }
+    }
+}

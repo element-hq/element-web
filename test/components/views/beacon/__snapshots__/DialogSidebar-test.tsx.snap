@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
+<div>
+  <div
+    class="mx_DialogSidebar"
+  >
+    <div
+      class="mx_DialogSidebar_header"
+    >
+      <h4
+        class="mx_Heading_h4"
+      >
+        View List
+      </h4>
+      <div
+        class="mx_AccessibleButton mx_DialogSidebar_closeButton"
+        data-testid="dialog-sidebar-close"
+        role="button"
+        tabindex="0"
+        title="Close sidebar"
+      >
+        <div
+          class="mx_DialogSidebar_closeButtonIcon"
+        />
+      </div>
+    </div>
+    <ol
+      class="mx_DialogSidebar_list"
+    >
+      <li
+        class="mx_BeaconListItem"
+      >
+        <img
+          alt=""
+          class="mx_BaseAvatar mx_BaseAvatar_image mx_BeaconListItem_avatar"
+          data-testid="avatar-img"
+          loading="lazy"
+          style="width: 32px; height: 32px;"
+        />
+        <div
+          class="mx_BeaconListItem_info"
+        >
+          <div
+            class="mx_BeaconStatus mx_BeaconStatus_Active mx_BeaconListItem_status"
+          >
+            <div
+              class="mx_BeaconStatus_description"
+            >
+              <span
+                class="mx_BeaconStatus_label"
+              >
+                @alice:server.org
+              </span>
+              <span
+                class="mx_BeaconStatus_expiryTime"
+              >
+                Live until 16:14
+              </span>
+            </div>
+            <div
+              class="mx_BeaconListItem_interactions"
+            >
+              <div
+                aria-describedby="mx_TooltipTarget_abdefghi"
+                tabindex="0"
+              >
+                <a
+                  data-testid="open-location-in-osm"
+                  href="https://www.openstreetmap.org/?mlat=51&mlon=41#map=16/51/41"
+                  rel="noreferrer noopener"
+                  target="_blank"
+                >
+                  <div
+                    class="mx_ShareLatestLocation_icon"
+                  />
+                </a>
+              </div>
+              <div
+                class="mx_CopyableText mx_ShareLatestLocation_copy"
+              >
+                <div
+                  aria-label="Copy"
+                  class="mx_AccessibleButton mx_CopyableText_copyButton"
+                  role="button"
+                  tabindex="0"
+                />
+              </div>
+            </div>
+          </div>
+          <span
+            class="mx_BeaconListItem_lastUpdated"
+          >
+            Updated a few seconds ago
+          </span>
+        </div>
+      </li>
+    </ol>
+  </div>
+  );
+</div>
+`;
+
+exports[`<DialogSidebar /> renders sidebar correctly without beacons 1`] = `
+<div>
+  <div
+    class="mx_DialogSidebar"
+  >
+    <div
+      class="mx_DialogSidebar_header"
+    >
+      <h4
+        class="mx_Heading_h4"
+      >
+        View List
+      </h4>
+      <div
+        class="mx_AccessibleButton mx_DialogSidebar_closeButton"
+        data-testid="dialog-sidebar-close"
+        role="button"
+        tabindex="0"
+        title="Close sidebar"
+      >
+        <div
+          class="mx_DialogSidebar_closeButtonIcon"
+        />
+      </div>
+    </div>
+    <div
+      class="mx_DialogSidebar_noResults"
+    >
+      No live locations
+    </div>
+  </div>
+  );
+</div>
+`;

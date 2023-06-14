@@ -1,0 +1,62 @@
+/*
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_EventTile_content.mx_ViewSourceEvent {
+    display: flex;
+    opacity: 0.6;
+    font-size: $font-12px;
+    width: 100%;
+    overflow-x: auto; /* Cancel overflow setting of .mx_EventTile_content */
+    line-height: normal; /* Align with avatar and E2E icon */
+
+    pre,
+    code {
+        flex: 1;
+    }
+
+    pre {
+        line-height: 1.2;
+        margin: 3.5px 0;
+    }
+
+    .mx_ViewSourceEvent_toggle {
+        --ViewSourceEvent_toggle-size: 12px;
+
+        visibility: hidden;
+        /* override styles from AccessibleButton */
+        border-radius: 0;
+        /* icon */
+        mask-repeat: no-repeat;
+        mask-position: 0 center;
+        mask-size: auto var(--ViewSourceEvent_toggle-size);
+        width: var(--ViewSourceEvent_toggle-size);
+        min-width: var(--ViewSourceEvent_toggle-size);
+        background-color: $accent;
+        mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
+
+        .mx_EventTile:hover & {
+            visibility: visible;
+        }
+    }
+
+    &.mx_ViewSourceEvent_expanded .mx_ViewSourceEvent_toggle {
+        align-self: flex-end;
+        height: var(--ViewSourceEvent_toggle-size);
+        mask-position: 0 bottom;
+        margin-bottom: 5px;
+        mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
+    }
+}

@@ -1,0 +1,19 @@
+name: Notify element-web
+on:
+    push:
+        branches: [develop]
+    repository_dispatch:
+        types: [upstream-sdk-notify]
+jobs:
+    notify-element-web:
+        name: "Notify Element Web"
+        runs-on: ubuntu-latest
+        # Only respect triggers from our develop branch, ignore that of forks
+        if: github.repository == 'matrix-org/matrix-react-sdk'
+        steps:
+            - name: Notify element-web repo that a new SDK build is on develop
+              uses: peter-evans/repository-dispatch@26b39ed245ab8f31526069329e112ab2fb224588 # v2
+              with:
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  repository: vector-im/element-web
+                  event-type: element-web-notify

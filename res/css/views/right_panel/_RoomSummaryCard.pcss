@@ -1,0 +1,274 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomSummaryCard {
+    .mx_BaseCard_header {
+        text-align: center;
+        margin-top: $spacing-20;
+
+        .mx_RoomSummaryCard_roomName,
+        .mx_RoomSummaryCard_alias {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            white-space: pre-wrap;
+            overflow: hidden;
+        }
+
+        .mx_RoomSummaryCard_roomName {
+            margin: $spacing-12 0 $spacing-4;
+            font-weight: var(--font-semi-bold);
+        }
+
+        .mx_RoomSummaryCard_alias {
+            font-size: $font-13px;
+            color: $secondary-content;
+            text-overflow: ellipsis;
+        }
+
+        .mx_RoomSummaryCard_avatar {
+            display: inline-flex;
+
+            .mx_RoomSummaryCard_e2ee {
+                display: inline-block;
+                position: relative;
+                width: 54px;
+                height: 54px;
+                border-radius: 50%;
+                background-color: #737d8c;
+                margin-top: -3px; /* alignment */
+                margin-left: -10px; /* overlap */
+                border: 3px solid $dark-panel-bg-color;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 13px;
+                    left: 13px;
+                    height: 28px;
+                    width: 28px;
+                    mask-size: cover;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-image: url("$(res)/img/e2e/disabled.svg");
+                    background-color: #ffffff;
+                }
+            }
+
+            .mx_RoomSummaryCard_e2ee_normal {
+                background-color: #424446;
+                &::before {
+                    mask-image: url("$(res)/img/e2e/normal.svg");
+                }
+            }
+
+            .mx_RoomSummaryCard_e2ee_verified {
+                background-color: $e2e-verified-color;
+                &::before {
+                    mask-image: url("$(res)/img/e2e/verified.svg");
+                }
+            }
+
+            .mx_RoomSummaryCard_e2ee_warning {
+                background-color: $e2e-warning-color;
+                &::before {
+                    mask-image: url("$(res)/img/e2e/warning.svg");
+                }
+            }
+        }
+    }
+
+    .mx_RoomSummaryCard_aboutGroup {
+        .mx_RoomSummaryCard_Button {
+            padding-left: 44px;
+
+            &::before {
+                content: "";
+                position: absolute;
+                top: 8px;
+                left: 10px;
+                height: 24px;
+                width: 24px;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background-color: $icon-button-color;
+            }
+        }
+    }
+
+    .mx_RoomSummaryCard_appsGroup {
+        .mx_RoomSummaryCard_Button {
+            /* this button is special so we have to override some of the original styling */
+            /* as we will be applying it in its children */
+            padding: 0;
+            height: auto;
+            color: $tertiary-content;
+
+            .mx_RoomSummaryCard_icon_app {
+                padding: 10px 48px 10px 12px; /* based on typical mx_RoomSummaryCard_Button padding */
+                text-overflow: ellipsis;
+                overflow: hidden;
+
+                .mx_BaseAvatar_image {
+                    vertical-align: top;
+                    margin-right: 12px;
+                }
+
+                span {
+                    color: $primary-content;
+                }
+            }
+
+            .mx_RoomSummaryCard_app_pinToggle,
+            .mx_RoomSummaryCard_app_maximiseToggle,
+            .mx_RoomSummaryCard_app_options {
+                position: absolute;
+                top: 0;
+                height: 100%; /* to give bigger interactive zone */
+                width: 24px;
+                padding: 12px 4px;
+                box-sizing: border-box;
+                min-width: 24px; /* prevent flexbox crushing */
+
+                &:hover {
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        height: 24px;
+                        width: 24px;
+                        top: 8px; /* equal to padding-top of parent */
+                        left: 0;
+                        border-radius: 12px;
+                        background-color: rgba(141, 151, 165, 0.1);
+                    }
+                }
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    height: 16px;
+                    width: 16px;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-size: 16px;
+                    background-color: $icon-button-color;
+                }
+            }
+
+            .mx_RoomSummaryCard_app_pinToggle {
+                right: 8px;
+
+                &::before {
+                    mask-image: url("$(res)/img/element-icons/room/pin-upright.svg");
+                }
+            }
+            .mx_RoomSummaryCard_app_maximiseToggle {
+                right: 32px; /* 24 + 8 */
+
+                &::before {
+                    mask-size: 14px;
+                    mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
+                }
+            }
+
+            .mx_RoomSummaryCard_app_options {
+                right: 56px; /* 2*24 + 8 */
+                display: none;
+                &::before {
+                    mask-image: url("$(res)/img/element-icons/room/ellipsis.svg");
+                }
+            }
+
+            &.mx_RoomSummaryCard_Button_pinned {
+                &::after {
+                    opacity: 0.2;
+                }
+
+                .mx_RoomSummaryCard_app_pinToggle::before {
+                    background-color: $accent;
+                }
+            }
+
+            &.mx_RoomSummaryCard_Button_maximised {
+                &::after {
+                    opacity: 0.2;
+                }
+
+                .mx_RoomSummaryCard_app_maximiseToggle::before {
+                    background-color: $accent;
+                }
+            }
+
+            &:hover {
+                .mx_RoomSummaryCard_icon_app {
+                    padding-right: 72px;
+                }
+
+                .mx_RoomSummaryCard_app_options {
+                    display: unset;
+                }
+            }
+
+            &::before {
+                content: unset;
+            }
+
+            &::after {
+                top: 8px; /* re-align based on the height change */
+                pointer-events: none; /* pass through to the real button */
+            }
+        }
+    }
+
+    .mx_AccessibleButton_kind_link {
+        margin-top: 12px;
+        margin-bottom: 12px;
+        font-size: $font-13px;
+        font-weight: var(--font-semi-bold);
+    }
+}
+
+.mx_RoomSummaryCard_icon_people::before {
+    mask-image: url("$(res)/img/element-icons/room/members.svg");
+}
+
+.mx_RoomSummaryCard_icon_files::before {
+    mask-image: url("$(res)/img/element-icons/room/files.svg");
+}
+
+.mx_RoomSummaryCard_icon_pins::before {
+    mask-image: url("$(res)/img/element-icons/room/pin-upright.svg");
+}
+
+.mx_RoomSummaryCard_icon_threads::before {
+    mask-image: url("$(res)/img/element-icons/message/thread.svg");
+}
+
+.mx_RoomSummaryCard_icon_share::before {
+    mask-image: url("$(res)/img/element-icons/room/share.svg");
+}
+
+.mx_RoomSummaryCard_icon_settings::before {
+    mask-image: url("$(res)/img/element-icons/settings.svg");
+}
+
+.mx_RoomSummaryCard_icon_export::before {
+    mask-image: url("$(res)/img/element-icons/export.svg");
+}
+
+.mx_RoomSummaryCard_icon_poll::before {
+    mask-image: url("$(res)/img/element-icons/room/composer/poll.svg");
+}

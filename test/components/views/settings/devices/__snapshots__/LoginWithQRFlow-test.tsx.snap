@@ -1,0 +1,948 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LoginWithQRFlow /> errors renders data_mismatch 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        The request was cancelled.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders expired 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        The linking wasn't completed in the required time.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders homeserver_lacks_support 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        The homeserver doesn't support signing in another device.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders invalid_code 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        The scanned code is invalid.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders other_device_already_signed_in 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        The other device is already signed in.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders other_device_not_signed_in 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        The other device isn't signed in.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders unknown 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        An unexpected error occurred.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders unsupported_algorithm 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        Linking with this device is not supported.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders unsupported_transport 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        The request was cancelled.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders user_cancelled 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        The request was cancelled.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders user_declined 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <h1>
+        <div
+          class="error"
+        />
+        Connection failed
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p
+        data-testid="cancellation-message"
+      >
+        The request was declined on the other device.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="try-again-button"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders QR code 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class=""
+    >
+      <div
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+        title="Back"
+      >
+        <div />
+      </div>
+      <h1>
+        Sign in with QR code
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p>
+        Scan the QR code below with your device that's signed out.
+      </p>
+      <ol>
+        <li>
+          Start at the sign in screen
+        </li>
+        <li>
+          Select 'Scan QR code'
+        </li>
+        <li>
+          Review and approve the sign in
+        </li>
+      </ol>
+      <div
+        class="mx_LoginWithQR_qrWrapper"
+      >
+        <div
+          class="mx_QRCode mx_QRCode"
+        >
+          <img
+            alt="QR Code"
+            class="mx_VerificationQRCode"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHQAAAB0CAYAAABUmhYnAAAAAklEQVR4AewaftIAAAKxSURBVO3BQW7kQAwEwSxC//9yro88NSBI4/UQjIg/WGMUa5RijVKsUYo1SrFGKdYoxRqlWKMUa5RijVKsUYo1SrFGKdYoxRrl4qEk/CaVkyR0Kl0STlS6JPwmlSeKNUqxRinWKBcvU3lTEp5IwonKHSpvSsKbijVKsUYp1igXH5aEO1TuSMKJSpeELgmdyh1JuEPlk4o1SrFGKdYoF19OpUvCHSqTFGuUYo1SrFEuhlHpktCpdEnoVL5ZsUYp1ijFGuXiw1T+J5VPUvlLijVKsUYp1igXL0vCb0pCp9IloVN5Igl/WbFGKdYoxRrl4iGVvyQJnUqXhDtUvkmxRinWKMUa5eKhJNyh0iXhk5JwotIl4UTljiR0Kp9UrFGKNUqxRok/eFESOpUuCZ3KN0nCiUqXhDtUnijWKMUapVijxB88kIQ3qXRJeELlJAmdSpeEJ1S6JJyoPFGsUYo1SrFGuXiZSpeETqVLwonKSRKeUDlROUlCp3Ki8knFGqVYoxRrlPiDB5LwhMpJEjqVO5LQqXRJ6FROktCp3JGETuVNxRqlWKMUa5T4gy+WhE7lJAmdyh1JuEOlS8KJyhPFGqVYoxRrlIuHkvCbVO5Iwh1J+GbFGqVYoxRrlIuXqbwpCXckoVPpktAl4UTlJAmdyonKJxVrlGKNUqxRLj4sCXeovCkJJyonSehU/rJijVKsUYo1ysWXUzlJQqfyRBJOknCHypuKNUqxRinWKBdfLgmdSqdykoROpVPpknCHykkSOpUnijVKsUYp1igXH6byPyWhU+lUTpLQqZwk4SQJncqbijVKsUYp1igXL0vC/5SEO5LQqZwkoVPpVO5IQqfyRLFGKdYoxRol/mCNUaxRijVKsUYp1ijFGqVYoxRrlGKNUqxRijVKsUYp1ijFGqVYoxRrlH+MbAvtLaAtKAAAAABJRU5ErkJggg=="
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders code when connected 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class=""
+    >
+      <h1>
+        <div
+          class="normal"
+        />
+        Devices connected
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <p>
+        Check that the code below matches with your other device:
+      </p>
+      <div
+        class="mx_LoginWithQR_confirmationDigits"
+      >
+        mock-digits
+      </div>
+      <div
+        class="mx_LoginWithQR_confirmationAlert"
+      >
+        <div>
+          <div />
+        </div>
+        <div>
+          By approving access for this device, it will have full access to your account.
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="decline-login-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="approve-login-button"
+        role="button"
+        tabindex="0"
+      >
+        Approve
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders spinner while connecting 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class=""
+    >
+      <div
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+        title="Back"
+      >
+        <div />
+      </div>
+      <h1>
+        
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_spinner"
+      >
+        <div>
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+          <p>
+            Connecting…
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders spinner while loading 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class=""
+    >
+      <div
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+        title="Back"
+      >
+        <div />
+      </div>
+      <h1>
+        
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_spinner"
+      >
+        <div>
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders spinner while signing in 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class=""
+    >
+      <div
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+        title="Back"
+      >
+        <div />
+      </div>
+      <h1>
+        
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_spinner"
+      >
+        <div>
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+          <p>
+            Waiting for device to sign in
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders spinner while verifying 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_centreTitle"
+    >
+      <div
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+        title="Back"
+      >
+        <div />
+      </div>
+      <h1>
+        Success
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_spinner"
+      >
+        <div>
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+          <p>
+            Completing set up of your new device
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders spinner whilst QR generating 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class=""
+    >
+      <div
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+        title="Back"
+      >
+        <div />
+      </div>
+      <h1>
+        Sign in with QR code
+      </h1>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_spinner"
+      >
+        <div>
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;

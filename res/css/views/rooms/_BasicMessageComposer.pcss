@@ -1,0 +1,104 @@
+/*
+Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_BasicMessageComposer {
+    position: relative;
+
+    .mx_BasicMessageComposer_inputEmpty > :first-child::before {
+        content: var(--placeholder);
+        opacity: 0.333;
+        width: 0;
+        height: 0;
+        overflow: visible;
+        display: inline-block;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    @keyframes visualbell {
+        from {
+            background-color: $visual-bell-bg-color;
+        }
+        to {
+            background-color: $background;
+        }
+    }
+
+    &.mx_BasicMessageComposer_input_error {
+        animation: 0.2s visualbell;
+    }
+
+    .mx_BasicMessageComposer_input {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        outline: none;
+        overflow-x: hidden;
+
+        /* Force caret nodes to be selected in full so that they can be */
+        /* navigated through in a single keypress */
+        .caretNode {
+            user-select: all;
+        }
+
+        &.mx_BasicMessageComposer_input_shouldShowPillAvatar {
+            span.mx_UserPill,
+            span.mx_RoomPill,
+            span.mx_SpacePill {
+                user-select: all;
+                position: relative;
+                cursor: unset; /* We don't want indicate clickability */
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+
+                &:hover {
+                    /* We don't want indicate clickability | To override the overriding of .markdown-body */
+                    background-color: $pill-bg-color !important;
+                }
+
+                /* avatar psuedo element */
+                &::before {
+                    display: inline-block;
+                    content: var(--avatar-letter);
+                    width: $font-16px;
+                    min-width: $font-16px; /* ensure the avatar is not compressed */
+                    height: $font-16px;
+                    margin-inline-end: 0.24rem;
+                    background: var(--avatar-background), $background;
+                    color: $avatar-initial-color;
+                    background-repeat: no-repeat;
+                    background-size: $font-16px;
+                    border-radius: $font-16px;
+                    text-align: center;
+                    font-weight: normal;
+                    line-height: $font-16px;
+                    font-size: $font-10-4px;
+                }
+            }
+        }
+
+        &.mx_BasicMessageComposer_input_disabled {
+            /* Ignore all user input to avoid accidentally triggering the composer */
+            pointer-events: none;
+        }
+    }
+
+    .mx_BasicMessageComposer_AutoCompleteWrapper {
+        position: relative;
+        height: 0;
+    }
+}

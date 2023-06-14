@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
+<div>
+  <div
+    class="mx_MemberInfo"
+    role="tabpanel"
+  >
+    <div
+      class="mx_MemberInfo_name"
+    >
+      <div
+        class="mx_AccessibleButton mx_MemberInfo_cancel"
+        role="button"
+        tabindex="0"
+        title="Close"
+      />
+      <h2>
+        bob@bob.com
+      </h2>
+    </div>
+    <div
+      class="mx_MemberInfo_container mx_MemberInfo_container--profile"
+    >
+      Invited by Alice DisplayName
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<ThirdPartyMemberInfo /> should render invite when room in not available 1`] = `
+<div>
+  <div
+    class="mx_MemberInfo"
+    role="tabpanel"
+  >
+    <div
+      class="mx_MemberInfo_name"
+    >
+      <div
+        class="mx_AccessibleButton mx_MemberInfo_cancel"
+        role="button"
+        tabindex="0"
+        title="Close"
+      />
+      <h2>
+        bob@bob.com
+      </h2>
+    </div>
+    <div
+      class="mx_MemberInfo_container mx_MemberInfo_container--profile"
+    >
+      Invited by Alice DisplayName
+    </div>
+  </div>
+</div>
+`;

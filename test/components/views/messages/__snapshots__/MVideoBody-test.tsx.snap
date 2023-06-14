@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MVideoBody does not crash when given a portrait image 1`] = `
+<DocumentFragment>
+  <span
+    class="mx_MVideoBody"
+  >
+    <div
+      class="mx_MVideoBody_container"
+      style="max-width: 182px; max-height: 324px;"
+    >
+      <video
+        class="mx_MVideoBody"
+        controls=""
+        controlslist="nodownload"
+        poster="data:image/png;base64,00"
+        preload="none"
+      />
+      <div
+        style="width: 182px; height: 324px;"
+      />
+    </div>
+  </span>
+</DocumentFragment>
+`;

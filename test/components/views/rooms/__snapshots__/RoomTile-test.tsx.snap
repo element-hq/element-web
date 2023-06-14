@@ -1,0 +1,318 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoomTile when message previews are enabled and there is a message in a thread should render as expected 1`] = `
+<DocumentFragment>
+  <div
+    aria-describedby="mx_RoomTile_messagePreview_!1:example.org"
+    aria-label="!1:​example.org"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_RoomTile"
+    role="treeitem"
+    tabindex="-1"
+  >
+    <div
+      class="mx_DecoratedRoomAvatar"
+    >
+      <span
+        class="mx_BaseAvatar"
+        role="presentation"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar_initial"
+          style="font-size: 20.8px; width: 32px; line-height: 32px;"
+        >
+          !
+        </span>
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar_image"
+          data-testid="avatar-img"
+          loading="lazy"
+          src="data:image/png;base64,00"
+          style="width: 32px; height: 32px;"
+        />
+      </span>
+    </div>
+    <div
+      class="mx_RoomTile_titleContainer"
+    >
+      <div
+        class="mx_RoomTile_title mx_RoomTile_titleWithSubtitle"
+        tabindex="-1"
+        title="!1:​example.org"
+      >
+        <span
+          dir="auto"
+        >
+          !1:​example.org
+        </span>
+      </div>
+      <div
+        class="mx_RoomTile_subtitle"
+        id="mx_RoomTile_messagePreview_!1:example.org"
+        title="test thread reply"
+      >
+        <span
+          class="mx_RoomTile_subtitle_text"
+        >
+          test thread reply
+        </span>
+      </div>
+    </div>
+    <div
+      aria-hidden="true"
+      class="mx_RoomTile_badgeContainer"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Room options"
+      class="mx_AccessibleButton mx_RoomTile_menuButton"
+      role="button"
+      tabindex="0"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Notification options"
+      class="mx_AccessibleButton mx_RoomTile_notificationsButton"
+      role="button"
+      tabindex="-1"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`RoomTile when message previews are enabled and there is a message in the room should render as expected 1`] = `
+<DocumentFragment>
+  <div
+    aria-describedby="mx_RoomTile_messagePreview_!1:example.org"
+    aria-label="!1:​example.org"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_RoomTile"
+    role="treeitem"
+    tabindex="-1"
+  >
+    <div
+      class="mx_DecoratedRoomAvatar"
+    >
+      <span
+        class="mx_BaseAvatar"
+        role="presentation"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar_initial"
+          style="font-size: 20.8px; width: 32px; line-height: 32px;"
+        >
+          !
+        </span>
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar_image"
+          data-testid="avatar-img"
+          loading="lazy"
+          src="data:image/png;base64,00"
+          style="width: 32px; height: 32px;"
+        />
+      </span>
+    </div>
+    <div
+      class="mx_RoomTile_titleContainer"
+    >
+      <div
+        class="mx_RoomTile_title mx_RoomTile_titleWithSubtitle"
+        tabindex="-1"
+        title="!1:​example.org"
+      >
+        <span
+          dir="auto"
+        >
+          !1:​example.org
+        </span>
+      </div>
+      <div
+        class="mx_RoomTile_subtitle"
+        id="mx_RoomTile_messagePreview_!1:example.org"
+        title="test message"
+      >
+        <span
+          class="mx_RoomTile_subtitle_text"
+        >
+          test message
+        </span>
+      </div>
+    </div>
+    <div
+      aria-hidden="true"
+      class="mx_RoomTile_badgeContainer"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Room options"
+      class="mx_AccessibleButton mx_RoomTile_menuButton"
+      role="button"
+      tabindex="0"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Notification options"
+      class="mx_AccessibleButton mx_RoomTile_notificationsButton"
+      role="button"
+      tabindex="-1"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`RoomTile when message previews are enabled should render a room without a message as expected 1`] = `
+<DocumentFragment>
+  <div
+    aria-describedby="mx_RoomTile_messagePreview_!1:example.org"
+    aria-label="!1:​example.org"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_RoomTile"
+    role="treeitem"
+    tabindex="-1"
+  >
+    <div
+      class="mx_DecoratedRoomAvatar"
+    >
+      <span
+        class="mx_BaseAvatar"
+        role="presentation"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar_initial"
+          style="font-size: 20.8px; width: 32px; line-height: 32px;"
+        >
+          !
+        </span>
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar_image"
+          data-testid="avatar-img"
+          loading="lazy"
+          src="data:image/png;base64,00"
+          style="width: 32px; height: 32px;"
+        />
+      </span>
+    </div>
+    <div
+      class="mx_RoomTile_titleContainer"
+    >
+      <div
+        class="mx_RoomTile_title"
+        tabindex="-1"
+        title="!1:​example.org"
+      >
+        <span
+          dir="auto"
+        >
+          !1:​example.org
+        </span>
+      </div>
+    </div>
+    <div
+      aria-hidden="true"
+      class="mx_RoomTile_badgeContainer"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Room options"
+      class="mx_AccessibleButton mx_RoomTile_menuButton"
+      role="button"
+      tabindex="0"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Notification options"
+      class="mx_AccessibleButton mx_RoomTile_notificationsButton"
+      role="button"
+      tabindex="-1"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`RoomTile when message previews are not enabled should render the room 1`] = `
+<div>
+  <div
+    aria-label="!1:​example.org"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_RoomTile"
+    role="treeitem"
+    tabindex="-1"
+  >
+    <div
+      class="mx_DecoratedRoomAvatar"
+    >
+      <span
+        class="mx_BaseAvatar"
+        role="presentation"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar_initial"
+          style="font-size: 20.8px; width: 32px; line-height: 32px;"
+        >
+          !
+        </span>
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar_image"
+          data-testid="avatar-img"
+          loading="lazy"
+          src="data:image/png;base64,00"
+          style="width: 32px; height: 32px;"
+        />
+      </span>
+    </div>
+    <div
+      class="mx_RoomTile_titleContainer"
+    >
+      <div
+        class="mx_RoomTile_title"
+        tabindex="-1"
+        title="!1:​example.org"
+      >
+        <span
+          dir="auto"
+        >
+          !1:​example.org
+        </span>
+      </div>
+    </div>
+    <div
+      aria-hidden="true"
+      class="mx_RoomTile_badgeContainer"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Room options"
+      class="mx_AccessibleButton mx_RoomTile_menuButton"
+      role="button"
+      tabindex="0"
+    />
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Notification options"
+      class="mx_AccessibleButton mx_RoomTile_notificationsButton"
+      role="button"
+      tabindex="-1"
+    />
+  </div>
+</div>
+`;

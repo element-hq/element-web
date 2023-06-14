@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="10px" height="16px" viewBox="-1 -1 10 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: sketchtool 3.5.1 (25234) - http://www.bohemiancoding.com/sketch -->
+    <title>minimise</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="02-Chat" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="02_1-Chat-collapsed-w-topic" sketch:type="MSArtboardGroup" transform="translate(-176.000000, -27.000000)" stroke-width="2" stroke="#9FA9BA">
+            <g id="Room-list" sketch:type="MSLayerGroup">
+                <g id="Room-list/Header" sketch:type="MSShapeGroup">
+                    <g id="minimise" transform="translate(172.000000, 25.000000)">
+                        <path d="M7,5 L15,5 L15,13" id="Path-53-Copy" transform="translate(11.000000, 9.000000) scale(-1, -1) rotate(-315.000000) translate(-11.000000, -9.000000) "></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

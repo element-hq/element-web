@@ -1,0 +1,124 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2021 Michael Weimann <mail@michael-weimann.eu>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MessageContextMenu {
+    .mx_IconizedContextMenu_icon {
+        width: 16px;
+        height: 16px;
+        display: block;
+
+        &::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            display: block;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-content;
+        }
+    }
+
+    .mx_MessageContextMenu_iconCollapse::before {
+        mask-image: url("$(res)/img/element-icons/message/chevron-up.svg");
+    }
+
+    .mx_MessageContextMenu_iconReport::before {
+        mask-image: url("$(res)/img/element-icons/warning-badge.svg");
+    }
+
+    .mx_MessageContextMenu_iconLink::before {
+        mask-image: url("$(res)/img/element-icons/link.svg");
+    }
+
+    .mx_MessageContextMenu_iconPermalink::before {
+        mask-image: url("$(res)/img/element-icons/room/share.svg");
+    }
+
+    .mx_MessageContextMenu_iconUnhidePreview::before {
+        mask-image: url("$(res)/img/element-icons/settings/appearance.svg");
+    }
+
+    .mx_MessageContextMenu_iconOpenInMapSite::before {
+        mask-image: url("$(res)/img/external-link.svg");
+    }
+
+    .mx_MessageContextMenu_iconEndPoll::before {
+        mask-image: url("$(res)/img/element-icons/check-white.svg");
+    }
+
+    .mx_MessageContextMenu_iconForward::before {
+        mask-image: url("$(res)/img/element-icons/message/fwd.svg");
+    }
+
+    .mx_MessageContextMenu_iconRedact::before {
+        mask-image: url("$(res)/img/element-icons/trashcan.svg");
+    }
+
+    .mx_MessageContextMenu_iconResend::before {
+        mask-image: url("$(res)/img/element-icons/retry.svg");
+    }
+
+    .mx_MessageContextMenu_iconSource::before {
+        mask-image: url("$(res)/img/element-icons/room/format-bar/code.svg");
+    }
+
+    .mx_MessageContextMenu_iconQuote::before {
+        mask-image: url("$(res)/img/element-icons/room/format-bar/quote.svg");
+    }
+
+    .mx_MessageContextMenu_iconPin::before {
+        mask-image: url("$(res)/img/element-icons/room/pin-upright.svg");
+    }
+
+    .mx_MessageContextMenu_iconUnpin::before {
+        mask-image: url("$(res)/img/element-icons/room/pin.svg");
+    }
+
+    .mx_MessageContextMenu_iconCopy::before {
+        height: 12px;
+        left: 2px;
+        mask-image: url($copy-button-url);
+        position: relative;
+        width: 12px;
+        top: 3px;
+    }
+
+    .mx_MessageContextMenu_iconEdit::before {
+        mask-image: url("$(res)/img/element-icons/room/message-bar/edit.svg");
+    }
+
+    .mx_MessageContextMenu_iconReply::before {
+        mask-image: url("$(res)/img/element-icons/room/message-bar/reply.svg");
+    }
+
+    .mx_MessageContextMenu_iconReplyInThread::before {
+        mask-image: url("$(res)/img/element-icons/message/thread.svg");
+    }
+
+    .mx_MessageContextMenu_iconReact::before {
+        mask-image: url("$(res)/img/element-icons/room/message-bar/emoji.svg");
+    }
+
+    .mx_MessageContextMenu_iconViewInRoom::before {
+        mask-image: url("$(res)/img/element-icons/view-in-room.svg");
+    }
+
+    .mx_MessageContextMenu_jumpToEvent::before {
+        mask-image: url("$(res)/img/element-icons/child-relationship.svg");
+    }
+}

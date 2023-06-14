@@ -1,0 +1,96 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ExportDialog {
+    .mx_ExportDialog_subheading {
+        font-size: $font-16px;
+        display: block;
+        font-family: $font-family;
+        font-weight: var(--font-semi-bold);
+        color: $primary-content;
+        margin-top: 18px;
+        margin-bottom: 12px;
+    }
+
+    &.mx_ExportDialog_Exporting {
+        .mx_ExportDialog_options {
+            pointer-events: none;
+        }
+
+        .mx_Field_select::before {
+            display: none;
+        }
+
+        .mx_StyledRadioButton input[type="radio"]:checked + div > div {
+            background: $info-plinth-fg-color;
+        }
+
+        .mx_StyledRadioButton input[type="radio"]:checked + div {
+            border-color: unset;
+        }
+
+        .mx_Field_valid.mx_Field label,
+        .mx_Field_valid.mx_Field:focus-within label {
+            color: unset;
+        }
+
+        .mx_Field_valid.mx_Field,
+        .mx_Field_valid.mx_Field:focus-within {
+            border-color: $input-border-color;
+        }
+
+        .mx_Checkbox input[type="checkbox"]:checked + label > .mx_Checkbox_background {
+            background: $info-plinth-fg-color;
+            border-color: $info-plinth-fg-color;
+        }
+    }
+
+    .mx_ExportDialog_progress {
+        .mx_Dialog_buttons {
+            margin-top: unset;
+            margin-left: 18px;
+        }
+
+        .mx_Spinner {
+            width: unset;
+            height: unset;
+            flex: unset;
+            margin-right: 10px;
+        }
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .mx_StyledRadioButton > .mx_StyledRadioButton_content {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .mx_Field {
+        width: 256px;
+    }
+
+    .mx_Field_postfix {
+        padding: 9px 10px;
+    }
+}
+
+.mx_ExportDialog_attachments-checkbox {
+    margin-top: $spacing-16;
+}

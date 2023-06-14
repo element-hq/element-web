@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JSONExport should have a Matrix-branded destination file name 1`] = `"matrix - My  Test  Room Welcome - Chat Export - 2022-11-17T16-58-32.517Z.json"`;

@@ -1,0 +1,160 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PollHistory /> Poll detail displays poll detail on active poll list item click 1`] = `
+<h2
+  data-testid="pollQuestion"
+>
+  Question?
+</h2>
+`;
+
+exports[`<PollHistory /> Poll detail displays poll detail on past poll list item click 1`] = `
+<h2
+  data-testid="pollQuestion"
+>
+  What?
+</h2>
+`;
+
+exports[`<PollHistory /> Poll detail navigates back to poll list from detail view on header click 1`] = `
+<div
+  class="mx_AccessibleButton mx_PollDetailHeader mx_AccessibleButton_hasKind mx_AccessibleButton_kind_content_inline"
+  role="button"
+  tabindex="0"
+>
+  <div
+    class="mx_PollDetailHeader_icon"
+  />
+  Active polls
+</div>
+`;
+
+exports[`<PollHistory /> renders a list of active polls when there are polls in the room 1`] = `
+<div>
+  <div
+    class="mx_PollHistory_content"
+  >
+    <h2
+      class="mx_Heading_h2 mx_PollHistory_header"
+    >
+      Poll history
+    </h2>
+    <div
+      class="mx_PollHistoryList"
+    >
+      <fieldset
+        class="mx_FilterTabGroup"
+      >
+        <label
+          data-testid="filter-tab-PollHistory_filter-ACTIVE"
+        >
+          <input
+            checked=""
+            name="PollHistory_filter"
+            type="radio"
+            value="ACTIVE"
+          />
+          <span>
+            Active polls
+          </span>
+        </label>
+        <label
+          data-testid="filter-tab-PollHistory_filter-ENDED"
+        >
+          <input
+            name="PollHistory_filter"
+            type="radio"
+            value="ENDED"
+          />
+          <span>
+            Past polls
+          </span>
+        </label>
+      </fieldset>
+      <ol
+        class="mx_PollHistoryList_list mx_PollHistoryList_list_ACTIVE"
+      >
+        <li
+          class="mx_PollListItem"
+          data-testid="pollListItem-$2"
+        >
+          <div
+            aria-describedby="mx_TooltipTarget_abdefghi"
+            tabindex="0"
+          >
+            <div
+              class="mx_PollListItem_content"
+            >
+              <span>
+                02/02/23
+              </span>
+              <div
+                class="mx_PollListItem_icon"
+              />
+              <span
+                class="mx_PollListItem_question"
+              >
+                Where?
+              </span>
+            </div>
+          </div>
+        </li>
+        <li
+          class="mx_PollListItem"
+          data-testid="pollListItem-$1"
+        >
+          <div
+            aria-describedby="mx_TooltipTarget_abdefghi"
+            tabindex="0"
+          >
+            <div
+              class="mx_PollListItem_content"
+            >
+              <span>
+                02/02/23
+              </span>
+              <div
+                class="mx_PollListItem_icon"
+              />
+              <span
+                class="mx_PollListItem_question"
+              >
+                Question?
+              </span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<PollHistory /> renders a no polls message and a load more button when not at end of timeline 1`] = `
+<div
+  class="mx_AccessibleButton mx_PollHistoryList_loadMorePolls mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+  role="button"
+  tabindex="0"
+>
+  Load more polls
+  <div
+    class="mx_InlineSpinner"
+  >
+    <div
+      aria-label="Loading…"
+      class="mx_InlineSpinner_icon mx_Spinner_icon"
+      style="width: 16px; height: 16px;"
+    />
+  </div>
+</div>
+`;
+
+exports[`<PollHistory /> renders a no polls message and a load more button when not at end of timeline 2`] = `
+<div
+  class="mx_AccessibleButton mx_PollHistoryList_loadMorePolls mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+  role="button"
+  tabindex="0"
+>
+  Load more polls
+</div>
+`;

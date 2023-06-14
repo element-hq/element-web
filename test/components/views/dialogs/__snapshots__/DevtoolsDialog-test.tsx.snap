@@ -1,0 +1,234 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DevtoolsDialog renders the devtools dialog 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_QuestionDialog mx_Dialog_fixedWidth"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header mx_Dialog_headerWithCancel"
+    >
+      <h2
+        class="mx_Heading_h2 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Developer Tools
+      </h2>
+      <div
+        aria-label="Close dialog"
+        class="mx_AccessibleButton mx_Dialog_cancelButton"
+        role="button"
+        tabindex="0"
+      />
+    </div>
+    <div
+      class="mx_DevTools_label_left"
+    >
+      Toolbox
+    </div>
+    <div
+      class="mx_CopyableText mx_DevTools_label_right"
+    >
+      Room ID: !id
+      <div
+        aria-label="Copy"
+        class="mx_AccessibleButton mx_CopyableText_copyButton"
+        role="button"
+        tabindex="0"
+      />
+    </div>
+    <div
+      class="mx_DevTools_label_bottom"
+    />
+    <div
+      class="mx_DevTools_content"
+    >
+      <div>
+        <h3>
+          Room
+        </h3>
+        <button
+          class="mx_DevTools_button"
+        >
+          Send custom timeline event
+        </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          Explore room state
+        </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          Explore room account data
+        </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          View servers in room
+        </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          Notifications debug
+        </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          Verification explorer
+        </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          Active Widgets
+        </button>
+      </div>
+      <div>
+        <h3>
+          Other
+        </h3>
+        <button
+          class="mx_DevTools_button"
+        >
+          Explore account data
+        </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          Settings explorer
+        </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          Server info
+        </button>
+      </div>
+      <div>
+        <h3>
+          Options
+        </h3>
+        <div
+          class="mx_SettingsFlag"
+        >
+          <label
+            class="mx_SettingsFlag_label"
+          >
+            <span
+              class="mx_SettingsFlag_labelText"
+            >
+              Developer mode
+            </span>
+          </label>
+          <div
+            aria-checked="false"
+            aria-disabled="false"
+            aria-label="Developer mode"
+            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            role="switch"
+            tabindex="0"
+          >
+            <div
+              class="mx_ToggleSwitch_ball"
+            />
+          </div>
+        </div>
+        <div
+          class="mx_SettingsFlag"
+        >
+          <label
+            class="mx_SettingsFlag_label"
+          >
+            <span
+              class="mx_SettingsFlag_labelText"
+            >
+              Show hidden events in timeline
+            </span>
+          </label>
+          <div
+            aria-checked="false"
+            aria-disabled="false"
+            aria-label="Show hidden events in timeline"
+            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            role="switch"
+            tabindex="0"
+          >
+            <div
+              class="mx_ToggleSwitch_ball"
+            />
+          </div>
+        </div>
+        <div
+          class="mx_SettingsFlag"
+        >
+          <label
+            class="mx_SettingsFlag_label"
+          >
+            <span
+              class="mx_SettingsFlag_labelText"
+            >
+              Enable widget screenshots on supported widgets
+            </span>
+          </label>
+          <div
+            aria-checked="false"
+            aria-disabled="false"
+            aria-label="Enable widget screenshots on supported widgets"
+            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            role="switch"
+            tabindex="0"
+          >
+            <div
+              class="mx_ToggleSwitch_ball"
+            />
+          </div>
+        </div>
+        <div
+          class="mx_SettingsFlag"
+        >
+          <label
+            class="mx_SettingsFlag_label"
+          >
+            <span
+              class="mx_SettingsFlag_labelText"
+            >
+              Force 15s voice broadcast chunk length
+            </span>
+          </label>
+          <div
+            aria-checked="false"
+            aria-disabled="false"
+            aria-label="Force 15s voice broadcast chunk length"
+            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            role="switch"
+            tabindex="0"
+          >
+            <div
+              class="mx_ToggleSwitch_ball"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_Dialog_buttons"
+    >
+      <button>
+        Back
+      </button>
+    </div>
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

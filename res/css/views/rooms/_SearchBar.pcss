@@ -1,0 +1,83 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SearchBar {
+    /* use `min-height` rather than height, to allow room for the text to wrap if the window is narrow */
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid $primary-hairline-color;
+
+    .mx_SearchBar_input {
+        --size-button-search: 37px; /* size of the search button inside `input` element */
+
+        /* border: 1px solid $input-border-color; */
+        /* font-size: $font-15px; */
+        flex: 1 1 0;
+        margin-left: 22px;
+
+        /* do not allow the input element to shrink below the width needed for the placeholder 'Search…'
+           and the search button */
+        min-width: calc(7em + var(--size-button-search));
+
+        input {
+            box-sizing: border-box; /* include padding value into width calculation */
+        }
+    }
+
+    .mx_SearchBar_searchButton {
+        cursor: pointer;
+        width: var(--size-button-search);
+        height: var(--size-button-search);
+        background-color: $accent;
+        mask: url("$(res)/img/feather-customised/search-input.svg");
+        mask-repeat: no-repeat;
+        mask-position: center;
+    }
+
+    .mx_SearchBar_buttons {
+        display: inherit; /* flex */
+        min-width: 0; /* have the close button displayed even on a very narrow timeline */
+    }
+
+    .mx_SearchBar_button {
+        border: 0;
+        margin: 0 0 0 22px;
+        padding: 5px;
+        font-size: $font-15px;
+        cursor: pointer;
+        color: $primary-content;
+        border-bottom: 2px solid $accent;
+        font-weight: var(--font-semi-bold);
+        word-break: break-all; /* prevent the input area and cancel button from being overlapped by BaseCard */
+    }
+
+    .mx_SearchBar_unselected {
+        color: $input-darker-fg-color;
+        border-color: transparent;
+    }
+
+    .mx_SearchBar_cancel {
+        background-color: $alert;
+        mask: url("$(res)/img/cancel.svg");
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 14px;
+        padding: 9px;
+        margin: 0 12px 0 3px;
+        cursor: pointer;
+    }
+}

@@ -1,0 +1,1094 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h2"
+        >
+          Keyboard
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Composer
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <ul
+                class="mx_KeyboardShortcut_shortcutList"
+              >
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Send message
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Enter
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  New line
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Shift
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Enter
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Toggle Bold
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      b
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Toggle Italics
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      i
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Toggle Quote
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Shift
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      &gt;
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Toggle Link
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Shift
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      l
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Toggle Code Block
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      e
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Undo edit
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      z
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Redo edit
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      y
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Jump to start of the composer
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Home
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Jump to end of the composer
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      End
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Cancel replying to a message
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Esc
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Navigate to next message to edit
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      ↓
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Navigate to previous message to edit
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      ↑
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Navigate to next message in composer history
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Alt
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      ↓
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Navigate to previous message in composer history
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Alt
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      ↑
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Send a sticker
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      ;
+                       
+                    </kbd>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Calls
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <ul
+                class="mx_KeyboardShortcut_shortcutList"
+              >
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Toggle microphone mute
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      d
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Toggle webcam on/off
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      e
+                       
+                    </kbd>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Room
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <ul
+                class="mx_KeyboardShortcut_shortcutList"
+              >
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Search (must be enabled)
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      f
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Upload a file
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Shift
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      u
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Dismiss read marker and jump to bottom
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Esc
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Jump to oldest unread message
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Shift
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Page Up
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Scroll up in the timeline
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Page Up
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Scroll down in the timeline
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Page Down
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Jump to first message
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Home
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Jump to last message
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      End
+                       
+                    </kbd>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Room List
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <ul
+                class="mx_KeyboardShortcut_shortcutList"
+              >
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Select room from the room list
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Enter
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Collapse room list section
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      ←
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Expand room list section
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      →
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Navigate down in the room list
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      ↓
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Navigate up in the room list
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      ↑
+                       
+                    </kbd>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Accessibility
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <ul
+                class="mx_KeyboardShortcut_shortcutList"
+              >
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Close dialog or context menu
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Esc
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Activate selected button
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Enter
+                       
+                    </kbd>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Navigation
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <ul
+                class="mx_KeyboardShortcut_shortcutList"
+              >
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Toggle the top left menu
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      \`
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Toggle right panel
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      .
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Toggle space panel
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Shift
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      d
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Open this settings tab
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      /
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Go to Home View
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Alt
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      h
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Jump to room search
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Ctrl
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      k
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Next unread room or DM
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Alt
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Shift
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      ↓
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Previous unread room or DM
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Alt
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      Shift
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      ↑
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Next room or DM
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Alt
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      ↓
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Previous room or DM
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Alt
+                       
+                    </kbd>
+                    +
+                    <kbd>
+                       
+                      ↑
+                       
+                    </kbd>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Autocomplete
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <ul
+                class="mx_KeyboardShortcut_shortcutList"
+              >
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Cancel autocomplete
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Esc
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Next autocomplete suggestion
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      ↓
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Previous autocomplete suggestion
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      ↑
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Complete
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Enter
+                       
+                    </kbd>
+                  </div>
+                </li>
+                <li
+                  class="mx_KeyboardShortcut_shortcutRow"
+                >
+                  Force complete
+                  <div
+                    class="mx_KeyboardShortcut"
+                  >
+                    <kbd>
+                       
+                      Tab
+                       
+                    </kbd>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

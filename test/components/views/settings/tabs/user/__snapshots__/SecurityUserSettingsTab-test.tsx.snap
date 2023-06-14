@@ -1,0 +1,399 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h2"
+        >
+          Encryption
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Secure Backup
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.
+              </div>
+              <div
+                class="mx_Spinner"
+              >
+                <div
+                  aria-label="Loading…"
+                  class="mx_Spinner_icon"
+                  data-testid="spinner"
+                  role="progressbar"
+                  style="width: 32px; height: 32px;"
+                />
+              </div>
+              <details>
+                <summary>
+                  Advanced
+                </summary>
+                <table
+                  class="mx_SecureBackupPanel_statusList"
+                >
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Backup key stored:
+                    </th>
+                    <td>
+                      not stored
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Backup key cached:
+                    </th>
+                    <td>
+                      not found locally
+                      
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Secret storage public key:
+                    </th>
+                    <td>
+                      not found
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Secret storage:
+                    </th>
+                    <td>
+                      not ready
+                    </td>
+                  </tr>
+                </table>
+              </details>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Message search
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                <span>
+                  Element can't securely cache encrypted messages locally while running in a web browser. Use 
+                  <a
+                    class="mx_ExternalLink"
+                    href="https://element.io/get-started"
+                    rel="noreferrer noopener"
+                    target="_blank"
+                  >
+                    Element Desktop
+                    <i
+                      class="mx_ExternalLink_icon"
+                    />
+                  </a>
+                   for encrypted messages to appear in search results.
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Cross-signing
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_Spinner"
+              >
+                <div
+                  aria-label="Loading…"
+                  class="mx_Spinner_icon"
+                  data-testid="spinner"
+                  role="progressbar"
+                  style="width: 32px; height: 32px;"
+                />
+              </div>
+              <details>
+                <summary>
+                  Advanced
+                </summary>
+                <table
+                  class="mx_CrossSigningPanel_statusList"
+                >
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Cross-signing public keys:
+                    </th>
+                    <td>
+                      not found
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Cross-signing private keys:
+                    </th>
+                    <td>
+                      not found in storage
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Master private key:
+                    </th>
+                    <td>
+                      not found locally
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Self signing private key:
+                    </th>
+                    <td>
+                      not found locally
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      User signing private key:
+                    </th>
+                    <td>
+                      not found locally
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Homeserver feature support:
+                    </th>
+                    <td>
+                      not found
+                    </td>
+                  </tr>
+                </table>
+              </details>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Cryptography
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                <table
+                  class="mx_CryptographyPanel_sessionInfo"
+                >
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Session ID:
+                    </th>
+                    <td>
+                      <code />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th
+                      scope="row"
+                    >
+                      Session key:
+                    </th>
+                    <td>
+                      <code>
+                        <b>
+                          &lt;not supported&gt;
+                        </b>
+                      </code>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Never send encrypted messages to unverified sessions from this session
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="false"
+                  aria-label="Never send encrypted messages to unverified sessions from this session"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h2"
+        >
+          Advanced
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Ignored users
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                You have no ignored users.
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Encryption
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Manually verify all remote sessions
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="false"
+                  aria-label="Manually verify all remote sessions"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

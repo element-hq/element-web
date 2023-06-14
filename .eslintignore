@@ -1,0 +1,6 @@
+test/end-to-end-tests/node_modules/
+test/end-to-end-tests/element/
+test/end-to-end-tests/synapse/
+test/end-to-end-tests/lib/
+# Legacy skinning file that some people might still have
+src/component-index.js

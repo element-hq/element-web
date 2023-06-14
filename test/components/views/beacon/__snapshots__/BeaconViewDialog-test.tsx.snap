@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BeaconViewDialog /> renders a fallback when there are no locations 1`] = `
+<div
+  class="mx_MapFallback mx_BeaconViewDialog_map"
+  data-testid="beacon-view-dialog-map-fallback"
+>
+  <div
+    class="mx_MapFallback_bg"
+  />
+  <div
+    class="mx_MapFallback_icon"
+  />
+  <span
+    class="mx_BeaconViewDialog_mapFallbackMessage"
+  >
+    No live locations
+  </span>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    data-testid="beacon-view-dialog-fallback-close"
+    role="button"
+    tabindex="0"
+  >
+    Close
+  </div>
+</div>
+`;
+
+exports[`<BeaconViewDialog /> renders own beacon status when user is live sharing 1`] = `
+<div
+  class="mx_DialogOwnBeaconStatus"
+>
+  <span
+    class="mx_BaseAvatar mx_DialogOwnBeaconStatus_avatar"
+    role="presentation"
+  >
+    <span
+      aria-hidden="true"
+      class="mx_BaseAvatar_initial"
+      style="font-size: 20.8px; width: 32px; line-height: 32px;"
+    >
+      A
+    </span>
+    <img
+      alt=""
+      aria-hidden="true"
+      class="mx_BaseAvatar_image"
+      data-testid="avatar-img"
+      loading="lazy"
+      src="data:image/png;base64,00"
+      style="width: 32px; height: 32px;"
+      title="@alice:server"
+    />
+  </span>
+  <div
+    class="mx_BeaconStatus mx_BeaconStatus_Active mx_DialogOwnBeaconStatus_status"
+  >
+    <div
+      class="mx_BeaconStatus_description"
+    >
+      <span
+        class="mx_BeaconStatus_label"
+      >
+        Live location enabled
+      </span>
+      <span
+        class="mx_LiveTimeRemaining"
+        data-testid="room-live-share-expiry"
+      >
+        1h left
+      </span>
+    </div>
+    <div
+      class="mx_AccessibleButton mx_OwnBeaconStatus_button mx_OwnBeaconStatus_destructiveButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+      data-testid="beacon-status-stop-beacon"
+      role="button"
+      tabindex="0"
+    >
+      Stop
+    </div>
+  </div>
+</div>
+`;

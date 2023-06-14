@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeviceDetailHeading /> displays name edit form on rename button click 1`] = `
+{
+  "container": <div>
+    <form
+      aria-disabled="false"
+      class="mx_DeviceDetailHeading_renameForm"
+      method="post"
+    >
+      <p
+        class="mx_DeviceDetailHeading_renameFormHeading"
+        id="device-rename-123"
+      >
+        Rename session
+      </p>
+      <div>
+        <div
+          class="mx_Field mx_Field_input mx_DeviceDetailHeading_renameFormInput"
+        >
+          <input
+            aria-describedby="device-rename-description-123"
+            aria-labelledby="device-rename-123"
+            autocomplete="off"
+            data-testid="device-rename-input"
+            id="mx_Field_1"
+            maxlength="100"
+            type="text"
+            value="My device"
+          />
+          <label
+            for="mx_Field_1"
+          />
+        </div>
+        <span
+          class="mx_Caption"
+          id="device-rename-description-123"
+        >
+          Please be aware that session names are also visible to people you communicate with.
+          <div
+            class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+            role="button"
+            tabindex="0"
+          >
+            Learn more
+          </div>
+        </span>
+      </div>
+      <div
+        class="mx_DeviceDetailHeading_renameFormButtons"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+          data-testid="device-rename-submit-cta"
+          role="button"
+          tabindex="0"
+        >
+          Save
+        </div>
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+          data-testid="device-rename-cancel-cta"
+          role="button"
+          tabindex="0"
+        >
+          Cancel
+        </div>
+      </div>
+    </form>
+  </div>,
+}
+`;
+
+exports[`<DeviceDetailHeading /> renders device name 1`] = `
+{
+  "container": <div>
+    <div
+      class="mx_DeviceDetailHeading"
+      data-testid="device-detail-heading"
+    >
+      <h4
+        class="mx_Heading_h4"
+      >
+        My device
+      </h4>
+      <div
+        class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+        data-testid="device-heading-rename-cta"
+        role="button"
+        tabindex="0"
+      >
+        Rename
+      </div>
+    </div>
+  </div>,
+}
+`;

@@ -1,0 +1,47 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MainSplit {
+    display: flex;
+    flex-direction: row;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+}
+
+.mx_MainSplit > .mx_RightPanel_ResizeWrapper {
+    padding: var(--container-gap-width);
+    /* The resizer should be centered: only half of the gap-width is handled by the right panel. */
+    /* The other half by the RoomView. */
+    padding-left: calc(var(--container-gap-width) / 2);
+    height: calc(100vh - 51px); /* height of .mx_RoomHeader.light-panel */
+
+    &:hover .mx_ResizeHandle--horizontal::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        height: 64px; /* to match width of the ones on roomlist */
+        width: 4px;
+        border-radius: 4px;
+
+        content: "";
+
+        background-color: $primary-content;
+        opacity: 0.8;
+    }
+}

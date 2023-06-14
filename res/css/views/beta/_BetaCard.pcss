@@ -1,0 +1,134 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_BetaCard {
+    padding: $spacing-24;
+    background-color: $system;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: $secondary-content;
+
+    .mx_BetaCard_columns {
+        display: flex;
+        flex-flow: wrap;
+        gap: $spacing-20;
+        justify-content: center;
+
+        .mx_BetaCard_columns_description {
+            flex: 1;
+
+            .mx_BetaCard_title {
+                font-weight: var(--font-semi-bold);
+                font-size: $font-18px;
+                line-height: $font-22px;
+                color: $primary-content;
+                margin: $spacing-4 0 14px;
+
+                display: flex;
+                align-items: center;
+                column-gap: $spacing-12;
+            }
+
+            .mx_BetaCard_caption {
+                font-size: $font-15px;
+                line-height: $font-20px;
+            }
+
+            .mx_BetaCard_buttons {
+                display: flex;
+                flex-wrap: wrap-reverse;
+                gap: $spacing-12;
+                margin: $spacing-20 auto 0;
+
+                .mx_AccessibleButton {
+                    padding: 7px 40px;
+                    width: auto;
+                    flex: 1;
+                    white-space: nowrap; /* text might overflow */
+
+                    &:nth-child(1) {
+                        order: 2; /* Place feedback button top and right */
+                    }
+                }
+            }
+
+            .mx_BetaCard_refreshWarning {
+                margin-top: $spacing-8;
+                font-size: $font-10px;
+                text-align: center;
+            }
+
+            .mx_BetaCard_faq {
+                margin-top: $spacing-20;
+                font-size: $font-12px;
+                line-height: $font-15px;
+
+                > h4 {
+                    margin: $spacing-12 0 0;
+                }
+
+                > p {
+                    margin: 0;
+                }
+            }
+        }
+
+        .mx_BetaCard_columns_image_wrapper {
+            margin: auto 0;
+
+            .mx_BetaCard_columns_image {
+                width: 100%;
+                max-width: 300px;
+                object-fit: contain;
+                height: 100%;
+                border-radius: 4px;
+            }
+        }
+    }
+
+    .mx_BetaCard_relatedSettings {
+        .mx_SettingsFlag {
+            margin: $spacing-16 0 0;
+            font-size: $font-15px;
+            line-height: $font-24px;
+            color: $primary-content;
+
+            .mx_SettingsFlag_microcopy {
+                margin-top: $spacing-4;
+                font-size: $font-12px;
+                line-height: $font-15px;
+            }
+        }
+    }
+}
+
+.mx_BetaCard_betaPill {
+    background-color: $accent-alt;
+    padding: $spacing-4 10px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    font-size: $font-12px;
+    font-weight: var(--font-semi-bold);
+    line-height: 15px;
+    color: $button-primary-fg-color;
+    display: inline-block;
+    vertical-align: text-bottom;
+    word-break: keep-all; /* avoid multiple lines on CJK language */
+
+    &.mx_AccessibleButton {
+        cursor: pointer;
+    }
+}

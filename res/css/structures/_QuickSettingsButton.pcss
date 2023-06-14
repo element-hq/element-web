@@ -1,0 +1,127 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_QuickSettingsButton {
+    flex: 0 0 auto;
+    border-radius: 8px;
+    position: relative;
+    margin: 12px auto;
+    color: $secondary-content;
+    min-width: 32px;
+    min-height: 32px;
+    line-height: 32px;
+
+    &.expanded {
+        margin-left: 20px;
+        padding-left: 44px; /* align with toggle collapse button text */
+        padding-right: 8px;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        left: 0;
+        mask-image: url("$(res)/img/element-icons/settings.svg");
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 16px;
+        background: $secondary-content;
+    }
+
+    &:not(.expanded):hover {
+        background-color: $quaternary-content;
+
+        &::before {
+            background-color: $primary-content;
+        }
+    }
+}
+
+.mx_QuickSettingsButton_ContextMenuWrapper .mx_ContextualMenu {
+    padding: 16px;
+    width: max-content;
+    min-width: 200px;
+    contain: unset; /* let the dropdown paint beyond the context menu */
+
+    > div > h2 {
+        font-weight: var(--font-semi-bold);
+        font-size: $font-15px;
+        line-height: $font-24px;
+        color: $primary-content;
+        margin: 0 0 16px;
+    }
+
+    .mx_AccessibleButton_hasKind {
+        display: block;
+        margin-top: 4px;
+    }
+
+    > div > h4 {
+        font-weight: var(--font-semi-bold);
+        font-size: $font-12px;
+        line-height: $font-15px;
+        text-transform: uppercase;
+        color: $tertiary-content;
+        margin: 20px 0 12px;
+    }
+
+    .mx_QuickSettingsButton_pinToSidebarHeading {
+        padding-left: 24px;
+        position: relative;
+    }
+
+    .mx_Checkbox {
+        margin-bottom: 8px;
+    }
+
+    .mx_QuickSettingsButton_favouritesCheckbox,
+    .mx_QuickSettingsButton_peopleCheckbox {
+        .mx_Checkbox_background + div {
+            padding-left: 22px;
+            position: relative;
+            margin-left: 6px;
+            font-size: $font-15px;
+            line-height: $font-24px;
+            color: $secondary-content;
+        }
+    }
+
+    .mx_QuickSettingsButton_moreOptionsButton {
+        padding-left: 22px;
+        margin-left: 22px;
+        font-size: $font-15px;
+        line-height: $font-24px;
+        color: $secondary-content;
+        position: relative;
+        margin-bottom: 16px;
+    }
+}
+
+.mx_QuickSettingsButton_icon {
+    // TODO remove when all icons have fill=currentColor
+    * {
+        fill: $secondary-content;
+    }
+    color: $secondary-content;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}

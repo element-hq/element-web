@@ -1,0 +1,142 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ReadReceiptGroup {
+    --ReadReceiptGroup_EventBubbleTile-spacing-end: 78px;
+
+    position: relative;
+    display: inline-block;
+    user-select: none;
+    z-index: 1;
+
+    .mx_ReadReceiptGroup_button {
+        display: inline-flex;
+        flex-direction: row;
+        height: 16px;
+        padding: 4px;
+        border-radius: 6px;
+
+        &.mx_AccessibleButton {
+            &:hover {
+                background: $event-selected-color;
+            }
+        }
+    }
+
+    .mx_ReadReceiptGroup_remainder {
+        color: $secondary-content;
+        font-size: $font-11px;
+        line-height: $font-16px;
+        margin-right: 4px;
+    }
+
+    .mx_ReadReceiptGroup_container {
+        position: relative;
+        display: block;
+        height: 100%;
+
+        .mx_BaseAvatar {
+            position: absolute;
+            display: inline-block;
+            height: 14px;
+            width: 14px;
+            border: 1px solid $background;
+            border-radius: 100%;
+
+            will-change: left, top;
+            transition: left var(--transition-short) ease-out, top var(--transition-standard) ease-out;
+        }
+    }
+}
+
+.mx_ReadReceiptGroup_popup {
+    max-height: 300px;
+    width: 220px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    font-size: 12px;
+    line-height: 15px;
+
+    right: 0;
+
+    &.mx_ContextualMenu_top {
+        top: 8px;
+    }
+
+    &.mx_ContextualMenu_bottom {
+        bottom: 8px;
+    }
+
+    .mx_ReadReceiptGroup_title {
+        font-size: 12px;
+        line-height: 15px;
+        margin: 16px 16px 8px;
+        font-weight: var(--font-semi-bold);
+        /* shouldn’t be actually focusable */
+        outline: none;
+    }
+
+    .mx_AutoHideScrollbar {
+        .mx_ReadReceiptGroup_person {
+            display: flex;
+            flex-direction: row;
+            padding: 4px;
+            margin: 0 12px;
+            border-radius: 8px;
+
+            &:hover {
+                background: $menu-selected-color;
+            }
+
+            &:last-child {
+                margin-bottom: 8px;
+            }
+
+            .mx_BaseAvatar {
+                margin: 6px 8px;
+                align-self: center;
+                justify-self: center;
+            }
+
+            .mx_ReadReceiptGroup_name {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                flex-shrink: 1;
+                overflow: hidden;
+
+                p {
+                    margin: 2px 0;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                }
+
+                .mx_ReadReceiptGroup_secondary {
+                    color: $secondary-content;
+                }
+            }
+        }
+    }
+}
+
+.mx_ReadReceiptGroup_person--tooltip {
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

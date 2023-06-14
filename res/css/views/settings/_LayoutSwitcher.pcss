@@ -1,0 +1,92 @@
+/*
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_LayoutSwitcher_RadioButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    width: 100%;
+
+    color: $primary-content;
+
+    > .mx_LayoutSwitcher_RadioButton {
+        flex-grow: 0;
+        flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+
+        flex-basis: 33%;
+        min-width: 0;
+
+        border: 1px solid $quinary-content;
+        border-radius: 10px;
+
+        .mx_EventTile_msgOption,
+        .mx_MessageActionBar {
+            display: none;
+        }
+
+        .mx_LayoutSwitcher_RadioButton_preview {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            pointer-events: none;
+
+            .mx_EventTile[data-layout="bubble"] .mx_EventTile_line {
+                padding-right: 11px;
+            }
+        }
+
+        .mx_StyledRadioButton {
+            flex-grow: 0;
+            padding: 10px;
+        }
+
+        .mx_EventTile_content {
+            margin-right: 0;
+        }
+
+        &.mx_LayoutSwitcher_RadioButton_selected {
+            border-color: $accent;
+        }
+    }
+
+    .mx_StyledRadioButton {
+        border-top: 1px solid $quinary-content;
+    }
+
+    .mx_StyledRadioButton_checked {
+        background-color: rgba($accent, 0.08);
+    }
+
+    .mx_EventTile {
+        margin: 0;
+        &[data-layout="bubble"] {
+            margin-right: 40px;
+            flex-shrink: 1;
+        }
+        &[data-layout="irc"] {
+            > a {
+                display: none;
+            }
+        }
+        .mx_EventTile_line {
+            max-width: 90%;
+        }
+    }
+}

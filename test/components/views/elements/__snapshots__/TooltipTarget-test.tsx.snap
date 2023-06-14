@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TooltipTarget /> displays Bottom aligned tooltip on mouseover 1`] = `
+<div
+  class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
+  id="test id"
+  role="tooltip"
+  style="display: block; top: 6px; transform: translate(max(10px, min(calc(0px - 50%), calc(100vw - 100% - 10px))));"
+>
+  <div
+    class="mx_Tooltip_chevron"
+  />
+  test label
+</div>
+`;
+
+exports[`<TooltipTarget /> displays InnerBottom aligned tooltip on mouseover 1`] = `
+<div
+  class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
+  id="test id"
+  role="tooltip"
+  style="display: block; top: -50px; transform: translate(max(10px, min(calc(0px - 50%), calc(100vw - 100% - 10px))));"
+>
+  <div
+    class="mx_Tooltip_chevron"
+  />
+  test label
+</div>
+`;
+
+exports[`<TooltipTarget /> displays Left aligned tooltip on mouseover 1`] = `
+<div
+  class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
+  id="test id"
+  role="tooltip"
+  style="display: block; right: 1030px; top: 0px; transform: translateY(-50%);"
+>
+  <div
+    class="mx_Tooltip_chevron"
+  />
+  test label
+</div>
+`;
+
+exports[`<TooltipTarget /> displays Natural aligned tooltip on mouseover 1`] = `
+<div
+  class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
+  id="test id"
+  role="tooltip"
+  style="display: block; left: 6px; top: 0px; transform: translateY(-50%);"
+>
+  <div
+    class="mx_Tooltip_chevron"
+  />
+  test label
+</div>
+`;
+
+exports[`<TooltipTarget /> displays Right aligned tooltip on mouseover 1`] = `
+<div
+  class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
+  id="test id"
+  role="tooltip"
+  style="display: block; left: 6px; top: 0px; transform: translateY(-50%);"
+>
+  <div
+    class="mx_Tooltip_chevron"
+  />
+  test label
+</div>
+`;
+
+exports[`<TooltipTarget /> displays Top aligned tooltip on mouseover 1`] = `
+<div
+  class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
+  id="test id"
+  role="tooltip"
+  style="display: block; top: -6px; transform: translate(max(10px, min(calc(0px - 50%), calc(100vw - 100% - 10px))), -100%);"
+>
+  <div
+    class="mx_Tooltip_chevron"
+  />
+  test label
+</div>
+`;
+
+exports[`<TooltipTarget /> displays TopRight aligned tooltip on mouseover 1`] = `
+<div
+  class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
+  id="test id"
+  role="tooltip"
+  style="display: block; top: -6px; right: 1024px; transform: translateY(-100%);"
+>
+  <div
+    class="mx_Tooltip_chevron"
+  />
+  test label
+</div>
+`;
+
+exports[`<TooltipTarget /> renders container 1`] = `
+<div
+  aria-describedby="test id"
+  class="test tooltipTargetClassName"
+  data-testid="test"
+  tabindex="0"
+>
+  <span>
+    child
+  </span>
+</div>
+`;

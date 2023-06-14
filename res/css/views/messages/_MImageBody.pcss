@@ -1,0 +1,125 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MImageBody_banner {
+    position: absolute;
+    bottom: $spacing-4;
+    left: $spacing-4;
+    padding: $spacing-4;
+    border-radius: var(--MBody-border-radius);
+    font-size: $font-15px;
+    user-select: none; /* prevent banner text from being selected */
+    pointer-events: none; /* let the cursor go through to the media underneath */
+
+    /* Trying to match the width of the image is surprisingly difficult, so arbitrarily break it off early. */
+    max-width: min(100%, 350px);
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    /* Hardcoded colours because it's the same on all themes */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+}
+
+.mx_MImageBody_placeholder {
+    /* Position the placeholder on top of the thumbnail, so that the reveal animation can work */
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+
+    background-color: $background;
+
+    .mx_Blurhash > canvas {
+        animation: mx--anim-pulse 1.75s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    }
+}
+
+.mx_MImageBody_thumbnail_container {
+    border-radius: var(--MBody-border-radius);
+
+    /* Necessary for the border radius to apply correctly to the placeholder */
+    overflow: hidden;
+    contain: paint;
+}
+
+.mx_MImageBody_thumbnail {
+    display: block;
+
+    /* Force the image to be the full size of the container, even if the */
+    /* pixel size is smaller. The problem here is that we don't know what */
+    /* thumbnail size the HS is going to give us, but we have to commit to */
+    /* a container size immediately and not change it when the image loads */
+    /* or we'll get a scroll jump (or have to leave blank space). */
+    /* This will obviously result in an upscaled image which will be a bit */
+    /* blurry. The best fix would be for the HS to advertise what size thumbnails */
+    /* it guarantees to produce. */
+    height: 100%;
+    width: 100%;
+}
+
+.mx_MImageBody_gifLabel {
+    position: absolute;
+    display: block;
+    top: 0px;
+    left: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    background: $imagebody-giflabel;
+    border: 2px solid $imagebody-giflabel-border;
+    color: $imagebody-giflabel-color;
+    pointer-events: none;
+}
+
+.mx_HiddenImagePlaceholder {
+    position: absolute;
+    inset: 0;
+
+    /* To center the text in the middle of the frame */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    cursor: pointer;
+    background-color: $header-panel-bg-color;
+
+    .mx_HiddenImagePlaceholder_button {
+        color: $accent;
+
+        span.mx_HiddenImagePlaceholder_eye {
+            margin-right: 8px;
+
+            background-color: $accent;
+            mask-image: url("$(res)/img/feather-customised/eye.svg");
+            display: inline-block;
+            width: 18px;
+            height: 14px;
+        }
+
+        span:not(.mx_HiddenImagePlaceholder_eye) {
+            vertical-align: text-bottom;
+        }
+    }
+}
+
+.mx_EventTile:hover .mx_HiddenImagePlaceholder {
+    background-color: $background;
+}

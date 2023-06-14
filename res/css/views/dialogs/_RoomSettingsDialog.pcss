@@ -1,0 +1,68 @@
+/*
+Copyright 2019 New Vector Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* ICONS */
+/* ========================================================== */
+
+.mx_RoomSettingsDialog_settingsIcon::before {
+    mask-image: url("$(res)/img/element-icons/settings.svg");
+}
+
+.mx_RoomSettingsDialog_voiceIcon::before {
+    mask-image: url("$(res)/img/element-icons/call/voice-call.svg");
+}
+
+.mx_RoomSettingsDialog_securityIcon::before {
+    mask-image: url("$(res)/img/element-icons/security.svg");
+}
+
+.mx_RoomSettingsDialog_rolesIcon::before {
+    mask-image: url("$(res)/img/element-icons/room/settings/roles.svg");
+}
+
+.mx_RoomSettingsDialog_notificationsIcon::before {
+    mask-image: url("$(res)/img/element-icons/notifications.svg");
+}
+
+.mx_RoomSettingsDialog_bridgesIcon::before {
+    /* This icon is pants, please improve :) */
+    mask-image: url("$(res)/img/feather-customised/bridge.svg");
+}
+
+.mx_RoomSettingsDialog_pollsIcon::before {
+    mask-image: url("$(res)/img/element-icons/room/composer/poll.svg");
+}
+
+.mx_RoomSettingsDialog_warningIcon::before {
+    mask-image: url("$(res)/img/element-icons/room/settings/advanced.svg");
+}
+
+.mx_RoomSettingsDialog .mx_Dialog_title {
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin: 0 auto;
+    padding-right: 80px;
+}
+
+/* show a different AvatarSetting placeholder for RoomProfileSettings which is basically a clone of ProfileSettings */
+.mx_RoomSettingsDialog .mx_AvatarSetting_avatar .mx_AvatarSetting_avatarPlaceholder::before {
+    mask: url("$(res)/img/feather-customised/image.svg");
+    mask-repeat: no-repeat;
+    mask-size: 36px;
+    mask-position: center;
+}

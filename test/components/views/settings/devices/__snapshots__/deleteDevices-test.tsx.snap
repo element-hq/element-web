@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`deleteDevices() opens interactive auth dialog when delete fails with 401 1`] = `
+{
+  "m.login.sso": {
+    "1": {
+      "body": "Confirm logging out these devices by using Single Sign On to prove your identity.",
+      "continueKind": "primary",
+      "continueText": "Single Sign On",
+      "title": "Use Single Sign On to continue",
+    },
+    "2": {
+      "body": "Click the button below to confirm signing out these devices.",
+      "continueKind": "danger",
+      "continueText": "Sign out devices",
+      "title": "Confirm signing out these devices",
+    },
+  },
+  "org.matrix.login.sso": {
+    "1": {
+      "body": "Confirm logging out these devices by using Single Sign On to prove your identity.",
+      "continueKind": "primary",
+      "continueText": "Single Sign On",
+      "title": "Use Single Sign On to continue",
+    },
+    "2": {
+      "body": "Click the button below to confirm signing out these devices.",
+      "continueKind": "danger",
+      "continueText": "Sign out devices",
+      "title": "Confirm signing out these devices",
+    },
+  },
+}
+`;

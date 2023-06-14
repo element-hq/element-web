@@ -1,0 +1,62 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_DialogSidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 265px;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+    padding: $spacing-16;
+
+    background-color: $background;
+    box-shadow: 0px 4px 4px $menu-box-shadow-color;
+
+    .mx_DialogSidebar_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        flex: 0 0;
+        margin-bottom: $spacing-16;
+
+        color: $primary-content;
+
+        .mx_DialogSidebar_closeButtonIcon {
+            color: $tertiary-content;
+            height: 12px;
+        }
+    }
+
+    .mx_DialogSidebar_list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        flex: 1 1 0;
+        width: 100%;
+        overflow: auto;
+    }
+}
+
+.mx_DialogSidebar_noResults {
+    font-size: $font-14px;
+    color: $secondary-content;
+}

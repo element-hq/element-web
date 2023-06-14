@@ -1,0 +1,115 @@
+/*
+Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_CreateRoomDialog_details {
+    margin-top: 15px;
+
+    .mx_CreateRoomDialog_details_summary {
+        list-style: none;
+        font-weight: var(--font-semi-bold);
+        cursor: pointer;
+        color: $accent;
+
+        /* list-style doesn't do it for webkit */
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &:not(.focus-visible) {
+            outline: none;
+        }
+    }
+
+    > div {
+        display: flex;
+        align-items: flex-start;
+        margin: 5px 0;
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    }
+}
+
+.mx_CreateRoomDialog_label {
+    text-align: left;
+    padding-bottom: 12px;
+}
+
+.mx_CreateRoomDialog_input_container {
+    padding-right: 20px;
+}
+
+.mx_CreateRoomDialog_input {
+    font-size: $font-15px;
+    border-radius: 3px;
+    border: 1px solid $input-border-color;
+    padding: 9px;
+    color: $primary-content;
+    background-color: $background;
+    width: 100%;
+}
+
+/* needed to make the alias field only grow as wide as needed */
+/* as opposed to full width */
+.mx_CreateRoomDialog_aliasContainer {
+    display: flex;
+    /* put margin on container so it can collapse with siblings */
+    margin: 24px 0 10px;
+
+    .mx_RoomAliasField {
+        margin: 0;
+    }
+}
+
+.mx_CreateRoomDialog {
+    &.mx_Dialog_fixedWidth {
+        width: 450px;
+    }
+
+    .mx_Dialog_content {
+        margin-bottom: 40px;
+    }
+
+    p,
+    .mx_Field_input label {
+        color: $muted-fg-color;
+    }
+
+    .mx_SettingsFlag {
+        display: flex;
+    }
+
+    .mx_SettingsFlag_label {
+        flex: 1 1 0;
+        min-width: 0;
+        font-weight: var(--font-semi-bold);
+    }
+
+    .mx_ToggleSwitch {
+        flex: 0 0 auto;
+        margin-left: 30px;
+    }
+
+    .mx_Dialog_content > .mx_SettingsFlag {
+        margin-top: 24px;
+    }
+
+    p {
+        margin: 0 85px 0 0;
+        font-size: $font-12px;
+    }
+}

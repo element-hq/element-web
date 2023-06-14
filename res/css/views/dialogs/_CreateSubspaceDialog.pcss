@@ -1,0 +1,77 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_CreateSubspaceDialog_wrapper {
+    .mx_Dialog {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.mx_CreateSubspaceDialog {
+    width: 480px;
+    color: $primary-content;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: 0;
+
+    .mx_CreateSubspaceDialog_content {
+        flex-grow: 1;
+
+        .mx_CreateSubspaceDialog_betaNotice {
+            padding: 12px 16px;
+            border-radius: 8px;
+            background-color: $header-panel-bg-color;
+
+            .mx_BetaCard_betaPill {
+                margin-right: 8px;
+                vertical-align: middle;
+            }
+        }
+
+        .mx_JoinRuleDropdown + p {
+            color: $muted-fg-color;
+            font-size: $font-12px;
+        }
+    }
+
+    .mx_CreateSubspaceDialog_footer {
+        display: flex;
+        margin-top: 20px;
+
+        .mx_CreateSubspaceDialog_footer_prompt {
+            flex-grow: 1;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $secondary-content;
+
+            > * {
+                vertical-align: middle;
+            }
+        }
+
+        .mx_AccessibleButton {
+            display: inline-block;
+            align-self: center;
+        }
+
+        .mx_AccessibleButton_kind_primary {
+            margin-left: 16px;
+            padding: 8px 36px;
+        }
+    }
+}

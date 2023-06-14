@@ -1,0 +1,281 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+:root {
+    --RoomView_MessageList-padding: 18px;
+}
+
+.mx_RoomView_wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+    justify-content: center;
+    /* Contain the amount of layers rendered by constraining what actually needs re-layering via css */
+    contain: strict;
+}
+
+.mx_RoomView {
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+
+    .mx_MainSplit {
+        flex: 1 1 0;
+    }
+
+    .mx_MessageComposer {
+        width: 100%;
+        flex: 0 0 auto;
+        margin-right: 2px;
+    }
+}
+
+.mx_RoomView_auxPanel_hiddenHighlights {
+    border-bottom: 1px solid $primary-hairline-color;
+    padding: 10px 26px;
+    color: $alert;
+    cursor: pointer;
+}
+
+.mx_RoomView_messagePanel {
+    width: 100%;
+    overflow-y: auto;
+    flex: 1 1 0;
+    overflow-anchor: none;
+}
+
+.mx_RoomView_messagePanelSearchSpinner {
+    flex: 1;
+    background-image: url("$(res)/img/typing-indicator-2x.gif");
+    background-position: center 367px;
+    background-size: 25px;
+    background-repeat: no-repeat;
+    position: relative;
+
+    &::before {
+        background-color: $info-plinth-fg-color;
+        mask: url("$(res)/img/feather-customised/search-input.svg");
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 50px;
+        content: "";
+        position: absolute;
+        top: 286px;
+        left: 0;
+        right: 0;
+        height: 50px;
+    }
+}
+
+.mx_RoomView_body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+
+    .mx_RoomView_messagePanel,
+    .mx_RoomView_messagePanelSpinner,
+    .mx_RoomView_messagePanelSearchSpinner {
+        order: 2;
+    }
+
+    .mx_RoomView_timeline {
+        /* offset parent for mx_RoomView_topUnreadMessagesBar  */
+        position: relative;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin-right: calc(var(--container-gap-width) / 2);
+    }
+}
+
+.mx_RoomView_statusArea {
+    width: 100%;
+    flex: 0 0 auto;
+
+    max-height: 0px;
+    background-color: $background;
+    z-index: 1000;
+    overflow: hidden;
+
+    transition: all 0.2s ease-out;
+}
+
+.mx_RoomView_statusArea_expanded {
+    max-height: 100px;
+}
+
+.mx_RoomView_statusAreaBox {
+    margin: auto;
+    min-height: 50px;
+}
+
+.mx_RoomView_statusAreaBox_line {
+    margin-left: 65px;
+    border-top: 1px solid $primary-hairline-color;
+    height: 1px;
+}
+
+.mx_RoomView_messageListWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.mx_RoomView_searchResultsPanel {
+    .mx_RoomView_messageListWrapper {
+        justify-content: flex-start;
+
+        > .mx_RoomView_MessageList > li > ol {
+            list-style-type: none;
+        }
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+}
+
+.mx_RoomView_empty {
+    font-size: $font-13px;
+    padding: 0 24px;
+    margin-right: 30px;
+    text-align: center;
+    margin-bottom: 80px; /* visually center the content (intentional offset) */
+}
+
+.mx_RoomView_MessageList {
+    list-style-type: none;
+    padding: var(--RoomView_MessageList-padding); /* mx_ProfileResizer depends on this value */
+    margin: 0;
+    /* needed as min-height is set to clientHeight in ScrollPanel
+    to prevent shrinking when WhoIsTypingTile is hidden */
+    box-sizing: border-box;
+
+    li {
+        clear: both;
+    }
+
+    .mx_ScrollPanel & {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        content-visibility: auto;
+        contain-intrinsic-size: 50px;
+    }
+
+    .mx_RoomView--local .mx_ScrollPanel & {
+        justify-content: center;
+    }
+}
+
+/* Rooms with immersive content */
+.mx_RoomView_immersive .mx_RoomHeader_wrapper {
+    border: unset;
+}
+
+.mx_RoomView_inCall {
+    .mx_RoomView_statusAreaBox_line {
+        margin-top: 2px;
+        border: none;
+        height: 0px;
+    }
+
+    .mx_MessageComposer_wrapper {
+        border-top: 2px hidden;
+        padding-top: 1px;
+    }
+}
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_RoomView_MessageList {
+        margin-bottom: 4px;
+
+        h2 {
+            margin-top: 6px;
+        }
+    }
+
+    .mx_RoomView_statusAreaBox {
+        min-height: 42px;
+    }
+}
+
+@keyframes mx_Indicator_pulse {
+    0% {
+        transform: scale(0.95);
+    }
+
+    70% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0.95);
+    }
+}
+
+@keyframes mx_Indicator_pulse_shadow {
+    0% {
+        opacity: 0.7;
+    }
+
+    70% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.mx_Indicator {
+    position: absolute;
+    right: -3px;
+    top: -3px;
+    width: var(--RoomHeader-indicator-dot-size);
+    height: var(--RoomHeader-indicator-dot-size);
+    border-radius: 50%;
+    transform: scale(1);
+    background: rgba(var(--RoomHeader-indicator-pulseColor), 1);
+    box-shadow: 0 0 0 0 rgba(var(--RoomHeader-indicator-pulseColor), 1);
+    animation: mx_Indicator_pulse 2s infinite;
+    animation-iteration-count: 1;
+
+    &::after {
+        content: "";
+        position: absolute;
+        width: inherit;
+        height: inherit;
+        top: 0;
+        left: 0;
+        transform: scale(1);
+        transform-origin: center center;
+        animation-name: mx_Indicator_pulse_shadow;
+        animation-duration: inherit;
+        animation-iteration-count: inherit;
+        border-radius: 50%;
+        background: inherit;
+    }
+}

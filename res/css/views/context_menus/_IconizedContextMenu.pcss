@@ -1,0 +1,206 @@
+/*
+Copyright 2020 - 2023 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* A context menu that largely fits the | [icon]    [label] | format. */
+.mx_IconizedContextMenu {
+    min-width: 146px;
+    width: max-content;
+    // override default ul styles
+    margin: 0;
+    padding: 0;
+
+    .mx_IconizedContextMenu_optionList {
+        & > * {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .mx_IconizedContextMenu_optionList_label {
+            font-size: $font-15px;
+            font-weight: var(--font-semi-bold);
+        }
+
+        /* the notFirst class is for cases where the optionList might be under a header of sorts. */
+        &:nth-child(n + 2),
+        .mx_IconizedContextMenu_optionList_notFirst {
+            /* This is a bit of a hack when we could just use a simple border-top property, */
+            /* however we have a (kinda) good reason for doing it this way: we need opacity. */
+            /* To get the right color, we need an opacity modifier which means we have to work */
+            /* around the problem. PostCSS doesn't support the opacity() function, and if we */
+            /* use something like postcss-functions we quickly run into an issue where the */
+            /* function we would define gets passed a CSS variable for custom themes, which */
+            /* can't be converted easily even when considering https://stackoverflow.com/a/41265350/7037379 */
+            //
+            /* Therefore, we just hack in a line and border the thing ourselves */
+            &::before {
+                border-top: 1px solid $primary-content;
+                opacity: 0.1;
+                content: "";
+
+                /* Counteract the padding problems (width: 100% ignores the 40px padding, */
+                /* unless we position it absolutely then it does the right thing). */
+                width: 100%;
+                position: absolute;
+                left: 0;
+            }
+        }
+
+        /* round the top corners of the top button for the hover effect to be bounded */
+        &:first-child .mx_IconizedContextMenu_item:first-child {
+            border-radius: 8px 8px 0 0; /* radius matches .mx_ContextualMenu */
+        }
+
+        /* round the bottom corners of the bottom button for the hover effect to be bounded */
+        &:last-child .mx_IconizedContextMenu_item:last-child {
+            border-radius: 0 0 8px 8px; /* radius matches .mx_ContextualMenu */
+        }
+
+        /* round all corners of the only button for the hover effect to be bounded */
+        &:first-child:last-child .mx_IconizedContextMenu_item:first-child:last-child {
+            border-radius: 8px; /* radius matches .mx_ContextualMenu */
+        }
+
+        .mx_IconizedContextMenu_item {
+            /* pad the inside of the button so that the hover background is padded too */
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-decoration: none;
+            color: $primary-content;
+            font-size: $font-15px;
+            line-height: $font-24px;
+
+            /* Create a flexbox to more easily define the list items */
+            display: flex;
+            align-items: center;
+
+            &:hover,
+            &:focus-visible {
+                background-color: $menu-selected-color;
+            }
+
+            &.mx_AccessibleButton_disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            img,
+            .mx_IconizedContextMenu_icon {
+                /* icons */
+                width: 16px;
+                min-width: 16px;
+                max-width: 16px;
+            }
+
+            span.mx_IconizedContextMenu_label {
+                /* labels */
+                width: 100%;
+                flex: 1;
+
+                /* Ellipsize any text overflow */
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .mx_IconizedContextMenu_icon + .mx_IconizedContextMenu_label {
+                padding-left: 14px;
+            }
+
+            .mx_BetaCard_betaPill {
+                margin-left: 16px;
+            }
+        }
+    }
+
+    .mx_IconizedContextMenu_icon {
+        position: relative;
+        width: 16px;
+        height: 16px;
+
+        &::before {
+            content: "";
+            width: inherit;
+            height: inherit;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: $secondary-content;
+        }
+    }
+
+    .mx_IconizedContextMenu_optionList_red {
+        .mx_IconizedContextMenu_item {
+            color: $alert !important;
+        }
+
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $alert;
+        }
+    }
+
+    .mx_IconizedContextMenu_option_red {
+        color: $alert !important;
+
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $alert;
+        }
+    }
+
+    .mx_IconizedContextMenu_active {
+        &.mx_IconizedContextMenu_item,
+        .mx_IconizedContextMenu_item {
+            color: $accent !important;
+        }
+
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $accent;
+        }
+    }
+
+    &.mx_IconizedContextMenu_compact {
+        .mx_IconizedContextMenu_optionList > * {
+            padding: 8px 16px 8px 11px;
+        }
+    }
+
+    .mx_IconizedContextMenu_checked,
+    .mx_IconizedContextMenu_unchecked {
+        margin-left: 16px;
+        margin-right: -5px;
+    }
+
+    .mx_IconizedContextMenu_developerTools::before {
+        mask-image: url("$(res)/img/element-icons/settings/flask.svg");
+    }
+
+    .mx_IconizedContextMenu_checked::before {
+        mask-image: url("$(res)/img/element-icons/roomlist/checkmark.svg");
+    }
+
+    .mx_IconizedContextMenu_unchecked::before {
+        content: unset;
+    }
+
+    .mx_IconizedContextMenu_sublabel {
+        margin-left: 20px;
+        color: $tertiary-content;
+    }
+}
+
+.mx_IconizedContextMenu_item.mx_IconizedContextMenu_itemDestructive {
+    color: $alert !important;
+}

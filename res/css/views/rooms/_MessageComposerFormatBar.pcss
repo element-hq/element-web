@@ -1,0 +1,110 @@
+/*
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MessageComposerFormatBar {
+    display: none;
+    width: calc(32px * 6);
+    height: 32px;
+    position: absolute;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: $background;
+    border: 1px solid $input-border-color;
+    user-select: none;
+    /* equal to z-index of mx_ReplyPreview and mx_RoomView_statusArea (1000) */
+    /* but as it appears after them in the DOM, will appear on top. */
+    z-index: 1000;
+
+    &.mx_MessageComposerFormatBar_shown {
+        display: block;
+    }
+
+    > * {
+        white-space: nowrap;
+        display: inline-block;
+        position: relative;
+        margin: 2px;
+    }
+
+    .mx_MessageComposerFormatBar_button {
+        width: 28px;
+        height: 28px;
+        box-sizing: border-box;
+        vertical-align: middle;
+        background: none;
+        border: none;
+
+        &:hover {
+            background: $panel-actions;
+            border-radius: 6px;
+            z-index: 1;
+        }
+    }
+
+    .mx_MessageComposerFormatBar_button::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        background-color: $secondary-content;
+    }
+
+    .mx_MessageComposerFormatBar_button:hover::after {
+        background-color: $primary-content;
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconBold::after {
+        mask-image: url("$(res)/img/element-icons/room/format-bar/bold.svg");
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconItalic::after {
+        mask-image: url("$(res)/img/element-icons/room/format-bar/italic.svg");
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconStrikethrough::after {
+        mask-image: url("$(res)/img/element-icons/room/format-bar/strikethrough.svg");
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconQuote::after {
+        mask-image: url("$(res)/img/element-icons/room/format-bar/quote.svg");
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconCode::after {
+        mask-image: url("$(res)/img/element-icons/room/format-bar/code.svg");
+    }
+
+    .mx_MessageComposerFormatBar_buttonIconInsertLink::after {
+        mask-image: url("$(res)/img/element-icons/link.svg");
+        mask-size: 18px;
+    }
+}
+
+.mx_MessageComposerFormatBar_buttonTooltip {
+    white-space: nowrap;
+    font-size: $font-13px;
+    font-weight: var(--font-semi-bold);
+    min-width: 54px;
+    text-align: center;
+
+    .mx_MessageComposerFormatBar_tooltipShortcut {
+        font-size: $font-9px;
+        opacity: 0.7;
+    }
+}

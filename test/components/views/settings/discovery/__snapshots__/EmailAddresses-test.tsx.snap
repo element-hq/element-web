@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EmailAddresses /> should handle no email addresses 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Email addresses
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Discovery options will appear once you have added an email above.
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<EmailAddresses /> should render a loader while loading 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Email addresses
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+    >
+      <div
+        class="mx_InlineSpinner"
+      >
+        <div
+          aria-label="Loading…"
+          class="mx_InlineSpinner_icon mx_Spinner_icon"
+          style="width: 16px; height: 16px;"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<EmailAddresses /> should render email addresses 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Email addresses
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+    >
+      <div
+        class="mx_GeneralUserSettingsTab_section--discovery_existing"
+      >
+        <span
+          class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+        >
+          foo@bar.com
+        </span>
+        <div
+          class="mx_AccessibleButton mx_GeneralUserSettingsTab_section--discovery_existing_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm"
+          role="button"
+          tabindex="0"
+        >
+          Share
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

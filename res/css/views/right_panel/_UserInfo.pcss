@@ -1,0 +1,298 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserInfo.mx_BaseCard {
+    /* UserInfo has a circular image at the top so it fits between the back & close buttons */
+    padding-top: 0;
+    overflow-y: auto;
+    font-size: $font-12px;
+
+    .mx_UserInfo_cancel {
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        border-radius: 4px;
+        background-color: $dark-panel-bg-color;
+        margin: 9px;
+        z-index: 1; /* render on top of the right panel */
+
+        div {
+            height: 16px;
+            width: 16px;
+            padding: 4px;
+            mask-image: url("$(res)/img/minimise.svg");
+            mask-repeat: no-repeat;
+            mask-position: 7px center;
+            background-color: $header-panel-text-primary-color;
+        }
+    }
+
+    h2 {
+        font-size: $font-18px;
+        font-weight: var(--font-semi-bold);
+        margin: 18px 0 0 0;
+    }
+
+    .mx_UserInfo_container {
+        padding: $spacing-8 $spacing-16;
+
+        &:not(.mx_UserInfo_separator) {
+            padding-top: $spacing-16;
+            padding-bottom: 0;
+
+            > :not(h3) {
+                margin-inline-start: $spacing-8;
+                display: flex;
+                flex-flow: column;
+                align-items: flex-start;
+                row-gap: $spacing-8;
+            }
+        }
+
+        .mx_UserInfo_container_verifyButton {
+            margin-top: $spacing-8;
+        }
+    }
+
+    .mx_UserInfo_separator {
+        border-bottom: 1px solid rgba($primary-content, 0.1);
+    }
+
+    .mx_UserInfo_memberDetailsContainer {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: $spacing-8;
+    }
+
+    .mx_RoomTile_titleContainer {
+        width: 154px;
+    }
+
+    .mx_RoomTile_badge {
+        display: none;
+    }
+
+    .mx_RoomTile_title {
+        width: 160px;
+    }
+
+    .mx_UserInfo_avatar {
+        margin: $spacing-24 $spacing-32 0 $spacing-32;
+
+        .mx_UserInfo_avatar_transition {
+            max-width: 30vh;
+            margin: 0 auto;
+            transition: 0.5s;
+
+            .mx_UserInfo_avatar_transition_child {
+                /* use padding-top instead of height to make this element square,
+                as the % in padding is a % of the width (including margin,
+                that's why we had to put the margin to center on a parent div),
+                and not a % of the parent height. */
+                padding-top: 100%;
+                position: relative;
+
+                .mx_BaseAvatar,
+                .mx_BaseAvatar_initial,
+                .mx_BaseAvatar_image {
+                    border-radius: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100% !important;
+                    height: 100% !important;
+                }
+
+                .mx_BaseAvatar {
+                    &.mx_BaseAvatar_image {
+                        cursor: zoom-in;
+                    }
+
+                    .mx_BaseAvatar_initial {
+                        z-index: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        /* override the calculated sizes so that the letter isn't HUGE */
+                        font-size: 6rem !important;
+                        width: 100% !important;
+                        transition: font-size 0.5s;
+
+                        & + .mx_BaseAvatar_image {
+                            cursor: default;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    h3 {
+        text-transform: uppercase;
+        color: $tertiary-content;
+        font-weight: var(--font-semi-bold);
+        font-size: $font-12px;
+        margin: $spacing-4 0;
+    }
+
+    p {
+        margin: 5px 0;
+    }
+
+    .mx_UserInfo_profile {
+        text-align: center;
+
+        h2 {
+            display: flex;
+            font-size: $font-18px;
+            line-height: $font-25px;
+            flex: 1;
+            justify-content: center;
+            // We reverse things here so for accessible technologies the name comes before the e2e shield
+            flex-direction: row-reverse;
+
+            span {
+                /* limit to 2 lines, show an ellipsis if it overflows */
+                /* this looks webkit specific but is supported by Firefox 68+ */
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+
+                overflow: hidden;
+                word-break: break-all;
+                text-overflow: ellipsis;
+            }
+
+            .mx_E2EIcon {
+                margin-top: 3px; /* visual vertical centering to the top line of text. */
+                margin-inline-end: $spacing-4; /* margin from displayName */
+                min-width: 18px; /* convince flexbox to not collapse it */
+            }
+        }
+
+        .mx_UserInfo_profileStatus {
+            margin-top: $spacing-12;
+        }
+    }
+
+    .mx_UserInfo_memberDetails {
+        .mx_UserInfo_profileField {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            margin: 6px 0;
+
+            .mx_UserInfo_roleDescription {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                /* try to make it the same height as the dropdown */
+                margin: 11px 0 12px 0;
+            }
+
+            .mx_Field {
+                margin: 0;
+            }
+        }
+    }
+
+    .mx_UserInfo_field {
+        line-height: $font-16px;
+
+        &.mx_UserInfo_destructive {
+            color: $alert;
+        }
+    }
+
+    .mx_UserInfo_statusMessage {
+        $statusLineHeight: 16px;
+        $statusNumberOfLines: 3;
+
+        font-size: $font-11px;
+        line-height: $statusLineHeight;
+        opacity: 0.5;
+        overflow: hidden;
+        word-break: break-word;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        max-height: calc($statusLineHeight * $statusNumberOfLines);
+        -webkit-line-clamp: $statusNumberOfLines;
+        -webkit-box-orient: vertical;
+    }
+
+    .mx_AutoHideScrollbar {
+        flex: 1 1 0;
+    }
+
+    .mx_UserInfo_devices {
+        .mx_UserInfo_device {
+            display: flex;
+            margin: $spacing-8 0;
+
+            &.mx_UserInfo_device_verified {
+                .mx_UserInfo_device_trusted {
+                    color: $accent;
+                }
+            }
+            &.mx_UserInfo_device_unverified {
+                .mx_UserInfo_device_trusted {
+                    color: $alert;
+                }
+            }
+
+            .mx_UserInfo_device_name {
+                flex: 1;
+                margin: 0 5px;
+                word-break: break-word;
+            }
+        }
+
+        /* both for icon in expand button and device item */
+        .mx_E2EIcon {
+            /* don't squeeze */
+            flex: 0 0 auto;
+            margin: 0;
+            width: 12px;
+            height: 12px;
+        }
+
+        .mx_UserInfo_expand {
+            column-gap: 5px; /* cf: mx_UserInfo_device_name */
+            margin-bottom: 11px;
+            align-items: initial; /* Cancel the default property */
+        }
+    }
+
+    &.mx_UserInfo_smallAvatar {
+        .mx_UserInfo_avatar {
+            .mx_UserInfo_avatar_transition {
+                max-width: 72px;
+                margin: 0 auto;
+            }
+
+            .mx_UserInfo_avatar_transition_child {
+                .mx_BaseAvatar {
+                    .mx_BaseAvatar_initial {
+                        font-size: 40px !important; /* override the other override because here the avatar is smaller */
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeviceExpandDetailsButton /> renders when expanded 1`] = `
+{
+  "container": <div>
+    <div
+      aria-label="Hide details"
+      class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_DeviceExpandDetailsButton_expanded mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_DeviceExpandDetailsButton_icon"
+      />
+    </div>
+  </div>,
+}
+`;
+
+exports[`<DeviceExpandDetailsButton /> renders when not expanded 1`] = `
+{
+  "container": <div>
+    <div
+      aria-label="Show details"
+      class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_DeviceExpandDetailsButton_icon"
+      />
+    </div>
+  </div>,
+}
+`;

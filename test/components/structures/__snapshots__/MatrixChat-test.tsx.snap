@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MatrixChat /> should render spinner while app is loading 1`] = `
+<div>
+  <div
+    class="mx_MatrixChat_splash"
+  >
+    <div
+      class="mx_Spinner"
+    >
+      <div
+        aria-label="Loading…"
+        class="mx_Spinner_icon"
+        data-testid="spinner"
+        role="progressbar"
+        style="width: 32px; height: 32px;"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<MatrixChat /> with an existing session onAction() room actions leave_room for a room should launch a confirmation modal 1`] = `
+<div
+  aria-describedby="mx_Dialog_content"
+  aria-labelledby="mx_BaseDialog_title"
+  class="mx_QuestionDialog mx_Dialog_fixedWidth"
+  data-focus-lock-disabled="false"
+  role="dialog"
+>
+  <div
+    class="mx_Dialog_header mx_Dialog_headerWithCancel"
+  >
+    <h2
+      class="mx_Heading_h2 mx_Dialog_title"
+      id="mx_BaseDialog_title"
+    >
+      Leave room
+    </h2>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    class="mx_Dialog_content"
+    id="mx_Dialog_content"
+  >
+    <span>
+      Are you sure you want to leave the room '!room:server.org'?
+    </span>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <span
+      class="mx_Dialog_buttons_row"
+    >
+      <button
+        data-testid="dialog-cancel-button"
+        type="button"
+      >
+        Cancel
+      </button>
+      <button
+        class="mx_Dialog_primary focus-visible"
+        data-focus-visible-added=""
+        data-testid="dialog-primary-button"
+        type="button"
+      >
+        Leave
+      </button>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`<MatrixChat /> with an existing session onAction() room actions leave_room for a space should launch a confirmation modal 1`] = `
+<div
+  aria-describedby="mx_Dialog_content"
+  aria-labelledby="mx_BaseDialog_title"
+  class="mx_QuestionDialog mx_Dialog_fixedWidth"
+  data-focus-lock-disabled="false"
+  role="dialog"
+>
+  <div
+    class="mx_Dialog_header mx_Dialog_headerWithCancel"
+  >
+    <h2
+      class="mx_Heading_h2 mx_Dialog_title"
+      id="mx_BaseDialog_title"
+    >
+      Leave space
+    </h2>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    class="mx_Dialog_content"
+    id="mx_Dialog_content"
+  >
+    <span>
+      Are you sure you want to leave the space '!spaceRoom:server.org'?
+    </span>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <span
+      class="mx_Dialog_buttons_row"
+    >
+      <button
+        data-testid="dialog-cancel-button"
+        type="button"
+      >
+        Cancel
+      </button>
+      <button
+        class="mx_Dialog_primary focus-visible"
+        data-focus-visible-added=""
+        data-testid="dialog-primary-button"
+        type="button"
+      >
+        Leave
+      </button>
+    </span>
+  </div>
+</div>
+`;

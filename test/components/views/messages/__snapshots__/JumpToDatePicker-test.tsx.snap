@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JumpToDatePicker renders the date picker correctly 1`] = `
+<DocumentFragment>
+  <form
+    class="mx_JumpToDatePicker_form"
+  >
+    <span
+      class="mx_JumpToDatePicker_label"
+    >
+      Jump to date
+    </span>
+    <div
+      class="mx_Field mx_Field_input mx_JumpToDatePicker_datePicker"
+    >
+      <input
+        id="mx_Field_1"
+        label="Pick a date to jump to"
+        max="2021-12-17"
+        placeholder="Pick a date to jump to"
+        tabindex="-1"
+        type="date"
+        value="2020-07-04"
+      />
+      <label
+        for="mx_Field_1"
+      >
+        Pick a date to jump to
+      </label>
+    </div>
+    <button
+      class="mx_AccessibleButton mx_JumpToDatePicker_submitButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="-1"
+      type="submit"
+    >
+      Go
+    </button>
+  </form>
+</DocumentFragment>
+`;

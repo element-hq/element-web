@@ -1,0 +1,54 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_InviteReason {
+    position: relative;
+    margin-bottom: 1em;
+
+    .mx_InviteReason_reason {
+        visibility: visible;
+    }
+
+    .mx_InviteReason_view {
+        display: none;
+        position: absolute;
+        inset: 0;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        color: $secondary-content;
+
+        &::before {
+            content: "";
+            margin-right: 8px;
+            background-color: $secondary-content;
+            mask-image: url("$(res)/img/feather-customised/eye.svg");
+            display: inline-block;
+            width: 18px;
+            height: 14px;
+        }
+    }
+}
+
+.mx_InviteReason_hidden {
+    .mx_InviteReason_reason {
+        visibility: hidden;
+    }
+
+    .mx_InviteReason_view {
+        display: flex;
+    }
+}

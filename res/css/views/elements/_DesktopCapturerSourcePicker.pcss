@@ -1,0 +1,56 @@
+/*
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_desktopCapturerSourcePicker {
+    overflow: hidden;
+
+    .mx_desktopCapturerSourcePicker_tab {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        height: 500px;
+        overflow: overlay;
+
+        .mx_desktopCapturerSourcePicker_source {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+
+            .mx_desktopCapturerSourcePicker_source_thumbnail {
+                margin: 4px;
+                padding: 4px;
+                border-width: 2px;
+                border-radius: 8px;
+                border-style: solid;
+                border-color: transparent;
+
+                &.mx_desktopCapturerSourcePicker_source_thumbnail_selected,
+                &:hover,
+                &:focus {
+                    border-color: $accent;
+                }
+            }
+
+            .mx_desktopCapturerSourcePicker_source_name {
+                margin: 0 4px;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+    }
+}

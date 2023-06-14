@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Marker /> renders with location icon when no room member 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Marker mx_Marker_defaultColor"
+    id="abc123"
+  >
+    <div
+      class="mx_Marker_border"
+    >
+      <div
+        class="mx_Marker_icon"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

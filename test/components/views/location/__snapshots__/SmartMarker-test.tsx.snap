@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SmartMarker /> creates a marker on mount 1`] = `
+<div>
+  <span>
+    <div
+      class="mx_Marker mx_Marker_defaultColor"
+    >
+      <div
+        class="mx_Marker_border"
+      >
+        <div
+          class="mx_Marker_icon"
+        />
+      </div>
+    </div>
+  </span>
+</div>
+`;
+
+exports[`<SmartMarker /> removes marker on unmount 1`] = `
+<div>
+  <span>
+    <div
+      class="mx_Marker mx_Marker_defaultColor"
+    >
+      <div
+        class="mx_Marker_border"
+      >
+        <div
+          class="mx_Marker_icon"
+        />
+      </div>
+    </div>
+  </span>
+</div>
+`;

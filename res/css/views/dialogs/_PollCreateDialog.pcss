@@ -1,0 +1,85 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_PollCreateDialog {
+    .mx_PollCreateDialog_busy {
+        position: absolute;
+        inset: 0;
+        background-color: rgba($background, 0.6);
+        z-index: 1;
+    }
+
+    h2 {
+        font-weight: var(--font-semi-bold);
+        font-size: $font-15px;
+        line-height: $font-24px;
+        margin-top: 0;
+        margin-bottom: 8px;
+
+        &:nth-child(n + 2) {
+            margin-top: 20px;
+        }
+    }
+
+    p {
+        color: $secondary-content;
+    }
+
+    .mx_PollCreateDialog_option {
+        display: flex;
+        align-items: center;
+        margin-top: 11px;
+        margin-bottom: 16px; /* 11px from the top will collapse, so this creates a 16px gap between options */
+
+        .mx_Field {
+            flex: 1;
+            margin: 0;
+        }
+
+        .mx_PollCreateDialog_removeOption {
+            margin-left: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: $quinary-content;
+            cursor: pointer;
+            position: relative;
+
+            &::before {
+                content: "";
+                mask: url("$(res)/img/element-icons/x-8px.svg");
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: cover;
+                width: 8px;
+                height: 8px;
+                position: absolute;
+                top: 6px;
+                left: 6px;
+                background-color: $secondary-content;
+            }
+        }
+    }
+
+    .mx_PollCreateDialog_addOption {
+        padding: 0;
+        margin-bottom: 40px; /* arbitrary to create scrollable area under the poll */
+    }
+
+    .mx_AccessibleButton_disabled {
+        opacity: 0.4;
+    }
+}

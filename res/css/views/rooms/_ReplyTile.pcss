@@ -1,0 +1,154 @@
+/*
+Copyright 2020 Tulir Asokan <tulir@maunium.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ReplyTile {
+    position: relative;
+    padding: 2px 0;
+    font-size: $font-14px;
+
+    &.mx_ReplyTile_audio .mx_MFileBody_info_icon::before {
+        mask-image: url("$(res)/img/element-icons/speaker.svg");
+    }
+
+    &.mx_ReplyTile_video .mx_MFileBody_info_icon::before {
+        mask-image: url("$(res)/img/element-icons/call/video-call.svg");
+    }
+
+    > a {
+        display: grid;
+        grid-template:
+            "sender" auto
+            "message" auto
+            / 100%;
+        text-decoration: none;
+        color: $secondary-content;
+        transition: color ease 0.15s;
+        gap: 2px;
+        max-width: 100%; // avoid overflow with wide content
+
+        &:hover {
+            color: $primary-content;
+        }
+    }
+
+    .mx_RedactedBody {
+        line-height: $font-18px;
+    }
+
+    .mx_RedactedBody,
+    .mx_HiddenBody {
+        padding: 4px 0 2px 20px;
+
+        &::before {
+            height: 13px;
+            width: 13px;
+            top: 3px;
+        }
+    }
+
+    /* We do reply size limiting with CSS to avoid duplicating the TextualBody component. */
+    .mx_EventTile_content {
+        grid-area: message;
+        $reply-lines: 2;
+        $line-height: $font-18px;
+
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: $reply-lines;
+
+        .mx_EventTile_body.mx_EventTile_bigEmoji {
+            line-height: $font-22px !important; /* Same as var(--EventTile_group_line-line-height) */
+            font-size: $font-14px !important; /* Override the big emoji override */
+        }
+
+        // Hide line numbers and edited indicator
+        .mx_EventTile_lineNumbers,
+        .mx_EventTile_edited {
+            display: none;
+        }
+
+        /* Hack to cut content in <pre> tags too */
+        .mx_EventTile_pre_container > pre {
+            overflow-x: scroll;
+            overflow-y: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: $reply-lines;
+            padding: 4px;
+        }
+
+        .markdown-body blockquote,
+        .markdown-body dl,
+        .markdown-body ol,
+        .markdown-body p,
+        .markdown-body pre,
+        .markdown-body table,
+        .markdown-body ul {
+            margin-bottom: 4px;
+        }
+    }
+
+    &.mx_ReplyTile_info {
+        padding-top: 0;
+    }
+
+    &.mx_ReplyTile_inline > a {
+        /* Render replies to emotes inline with the sender avatar */
+        grid-template:
+            "sender        message" auto
+            / max-content auto;
+        gap: 4px; // increase spacing
+    }
+
+    .mx_ReplyTile_sender {
+        grid-area: sender;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        .mx_DisambiguatedProfile {
+            font-size: $font-14px;
+
+            display: inline-block; // anti-zalgo, with overflow hidden
+            padding: 0;
+            margin: 0;
+
+            // truncate long display names
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .mx_BaseAvatar {
+            line-height: 14px; // To match size
+        }
+    }
+}
+
+@media only Percy {
+    /* Remove the list style in percy tests for screenshot consistency */
+    :is(ul, ol) {
+        padding: 0 !important;
+        margin: 0 !important;
+        list-style: none !important;
+
+        .mx_EventTile_last {
+            padding: 0 !important;
+        }
+    }
+}

@@ -1,0 +1,11 @@
+name: Release Process
+on:
+    release:
+        types: [published]
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+jobs:
+    npm:
+        name: Publish
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-npm.yml@develop
+        secrets:
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

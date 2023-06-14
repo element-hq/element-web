@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<GeneralUserSettingsTab /> Manage integrations should render manage integrations sections 1`] = `
+<label
+  class="mx_SetIntegrationManager"
+  data-testid="mx_SetIntegrationManager"
+  for="toggle_integration"
+>
+  <div
+    class="mx_SettingsFlag"
+  >
+    <div
+      class="mx_SetIntegrationManager_heading_manager"
+    >
+      <h2
+        class="mx_Heading_h2"
+      >
+        Manage integrations
+      </h2>
+      <h3
+        class="mx_Heading_h3"
+      >
+        (scalar.vector.im)
+      </h3>
+    </div>
+    <div
+      aria-checked="false"
+      aria-disabled="false"
+      class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+      id="toggle_integration"
+      role="switch"
+      tabindex="0"
+    >
+      <div
+        class="mx_ToggleSwitch_ball"
+      />
+    </div>
+  </div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    <span>
+      Use an integration manager 
+      <b>
+        (scalar.vector.im)
+      </b>
+       to manage bots, widgets, and sticker packs.
+    </span>
+  </div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
+  </div>
+</label>
+`;
+
+exports[`<GeneralUserSettingsTab /> deactive account should render section when account deactivation feature is enabled 1`] = `
+<div
+  class="mx_SettingsSection"
+>
+  <h2
+    class="mx_Heading_h2"
+  >
+    Deactivate account
+  </h2>
+  <div
+    class="mx_SettingsSection_subSections"
+  >
+    <div
+      class="mx_SettingsSubsection"
+      data-testid="account-management-section"
+    >
+      <div
+        class="mx_SettingsSubsectionHeading"
+      >
+        <h3
+          class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        >
+          Account management
+        </h3>
+      </div>
+      <div
+        class="mx_SettingsSubsection_description"
+      >
+        <div
+          class="mx_SettingsSubsection_text"
+        >
+          Deactivating your account is a permanent action — be careful!
+        </div>
+      </div>
+      <div
+        class="mx_SettingsSubsection_content"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+          role="button"
+          tabindex="0"
+        >
+          Deactivate Account
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

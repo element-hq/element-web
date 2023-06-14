@@ -1,0 +1,126 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_Slider {
+    position: relative;
+    margin: 0;
+    flex-grow: 1;
+
+    input[type="range"] {
+        height: 2.4em;
+        appearance: none;
+        width: 100%;
+        background: none;
+        font-size: 1em; // set base multiplier for em units applied later
+
+        --active-color: $accent;
+        --selection-dot-size: 2.4em;
+
+        &:disabled {
+            cursor: not-allowed;
+
+            --active-color: $slider-background-color;
+        }
+
+        &:focus:not(.focus-visible) {
+            outline: none;
+        }
+
+        &::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 0.4em;
+            background: $slider-background-color;
+            border-radius: 5px;
+            border: 0 solid #000000;
+        }
+        &::-webkit-slider-thumb {
+            border: 0 solid #000000;
+            width: var(--selection-dot-size);
+            height: var(--selection-dot-size);
+            background: var(--active-color);
+            border-radius: 50%;
+            -webkit-appearance: none;
+            margin-top: calc(2px + 1.2em - var(--selection-dot-size));
+        }
+        &:focus::-webkit-slider-runnable-track {
+            background: $slider-background-color;
+        }
+
+        &::-moz-range-track {
+            width: 100%;
+            height: 0.4em;
+            background: $slider-background-color;
+            border-radius: 5px;
+            border: 0 solid #000000;
+        }
+        &::-moz-range-progress {
+            height: 0.4em;
+            background: var(--active-color);
+            border-radius: 5px;
+            border: 0 solid #000000;
+        }
+        &::-moz-range-thumb {
+            border: 0 solid #000000;
+            width: var(--selection-dot-size);
+            height: var(--selection-dot-size);
+            background: var(--active-color);
+            border-radius: 50%;
+        }
+
+        &::-ms-track {
+            width: 100%;
+            height: 0.4em;
+            background: transparent;
+            border-color: transparent;
+            color: transparent;
+        }
+        &::-ms-fill-lower,
+        &::-ms-fill-upper {
+            background: $slider-background-color;
+            border: 0 solid #000000;
+            border-radius: 10px;
+        }
+        &::-ms-thumb {
+            margin-top: 1px;
+            width: var(--selection-dot-size);
+            height: var(--selection-dot-size);
+            background: var(--active-color);
+            border-radius: 50%;
+        }
+        &:focus::-ms-fill-upper {
+            background: $slider-background-color;
+        }
+        &::-ms-fill-lower,
+        &:focus::-ms-fill-lower {
+            background: var(--active-color);
+        }
+    }
+
+    output {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+
+        font-size: 1em; // set base multiplier for em units applied later
+        text-align: center;
+        top: 3em;
+
+        .mx_Slider_selection_label {
+            color: $muted-fg-color;
+            font-size: $font-14px;
+        }
+    }
+}

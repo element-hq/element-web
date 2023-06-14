@@ -1,0 +1,271 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserMenu {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+
+    .mx_AccessibleButton {
+        display: flex;
+        align-items: center;
+
+        .mx_UserMenu_userAvatar {
+            position: relative;
+
+            .mx_BaseAvatar {
+                pointer-events: none; /* makes the avatar non-draggable */
+            }
+        }
+
+        .mx_UserMenu_userAvatarLive {
+            align-items: center;
+            background-color: $alert;
+            border-radius: 6px;
+            color: $live-badge-color;
+            display: flex;
+            height: 12px;
+            justify-content: center;
+            left: 25px;
+            position: absolute;
+            top: 20px;
+            width: 12px;
+        }
+    }
+
+    .mx_UserMenu_name {
+        font-weight: var(--font-semi-bold);
+        font-size: $font-15px;
+        line-height: $font-24px;
+        margin-left: 10px;
+    }
+
+    .mx_UserMenu_dndBadge {
+        position: absolute;
+        bottom: -2px;
+        right: -7px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+
+        &::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: $alert;
+            mask-image: url("$(res)/img/element-icons/roomlist/dnd.svg");
+        }
+    }
+}
+
+.mx_IconizedContextMenu {
+    &.mx_UserMenu_contextMenu {
+        width: 258px;
+    }
+}
+
+.mx_UserMenu_contextMenu {
+    &.mx_IconizedContextMenu .mx_IconizedContextMenu_optionList_red {
+        .mx_AccessibleButton {
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+    }
+
+    .mx_UserMenu_contextMenu_header {
+        padding: 20px;
+
+        /* Create a flexbox to organize the header a bit easier */
+        display: flex;
+        align-items: center;
+
+        .mx_UserMenu_contextMenu_name {
+            /* Create another flexbox of columns to handle large user IDs */
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 40px); /* 40px = 32px theme button + 8px margin to theme button */
+
+            .mx_UserMenu_contextMenu_displayName,
+            .mx_UserMenu_contextMenu_userId {
+                font-size: $font-15px;
+
+                /* Automatically grow subelements to fit the container */
+                flex: 1;
+                width: 100%;
+
+                /* Ellipsize text overflow */
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .mx_UserMenu_contextMenu_displayName {
+                font-weight: bold;
+                line-height: $font-20px;
+            }
+
+            .mx_UserMenu_contextMenu_userId {
+                line-height: $font-24px;
+            }
+        }
+
+        .mx_UserMenu_contextMenu_themeButton {
+            min-width: 32px;
+            max-width: 32px;
+            width: 32px;
+            height: 32px;
+            margin-left: 8px;
+            border-radius: 32px;
+            background-color: $theme-button-bg-color;
+            cursor: pointer;
+
+            /* to make alignment easier, create flexbox for the image */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        &.mx_UserMenu_contextMenu_guestPrompts {
+            padding-top: 0;
+            display: inline-block;
+
+            > span {
+                font-weight: var(--font-semi-bold);
+                display: block;
+
+                & + span {
+                    margin-top: 8px;
+                }
+            }
+        }
+    }
+
+    .mx_IconizedContextMenu_icon {
+        width: 16px;
+        height: 16px;
+        display: block;
+
+        &::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            display: block;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-content;
+        }
+    }
+
+    .mx_UserMenu_iconHome::before {
+        mask-image: url("$(res)/img/element-icons/home.svg");
+    }
+
+    .mx_UserMenu_iconDnd::before {
+        mask-image: url("$(res)/img/element-icons/roomlist/dnd.svg");
+    }
+
+    .mx_UserMenu_iconDndOff::before {
+        mask-image: url("$(res)/img/element-icons/roomlist/dnd-cross.svg");
+    }
+
+    .mx_UserMenu_iconBell::before {
+        mask-image: url("$(res)/img/element-icons/notifications.svg");
+    }
+
+    .mx_UserMenu_iconLock::before {
+        mask-image: url("$(res)/img/element-icons/security.svg");
+    }
+
+    .mx_UserMenu_iconSettings::before {
+        mask-image: url("$(res)/img/element-icons/settings.svg");
+    }
+
+    .mx_UserMenu_iconMessage::before {
+        mask-image: url("$(res)/img/element-icons/feedback.svg");
+    }
+
+    .mx_UserMenu_iconSignOut::before {
+        mask-image: url("$(res)/img/element-icons/leave.svg");
+    }
+}
+
+.mx_UserMenu_CustomStatusSection {
+    margin: 0 12px 8px;
+
+    .mx_UserMenu_CustomStatusSection_field {
+        position: relative;
+        display: flex;
+
+        &.mx_UserMenu_CustomStatusSection_field_hasQuery {
+            .mx_UserMenu_CustomStatusSection_clear {
+                display: block;
+            }
+        }
+
+        > .mx_UserMenu_CustomStatusSection_input {
+            border: 1px solid $accent;
+            border-radius: 8px;
+            width: 100%;
+
+            &:focus + .mx_UserMenu_CustomStatusSection_clear {
+                display: block;
+            }
+        }
+
+        > .mx_UserMenu_CustomStatusSection_clear {
+            display: none;
+
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            background-color: $quinary-content;
+            border-radius: 50%;
+
+            &::before {
+                content: "";
+                position: absolute;
+                width: inherit;
+                height: inherit;
+                mask-image: url("$(res)/img/feather-customised/x.svg");
+                mask-position: center;
+                mask-size: 12px;
+                mask-repeat: no-repeat;
+                background-color: $secondary-content;
+            }
+        }
+    }
+
+    > p {
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $secondary-content;
+        margin: 4px 0;
+    }
+
+    .mx_AccessibleButton_kind_primary_outline {
+        display: block;
+    }
+}

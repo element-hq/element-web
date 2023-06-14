@@ -1,0 +1,294 @@
+/* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741 */
+/* ******************** */
+$primary-content: #ffffff;
+$secondary-content: #a9b2bc;
+$tertiary-content: #8e99a4;
+$quaternary-content: #6f7882;
+$quinary-content: #394049;
+
+$system: #21262c;
+$system-transparent: rgba($system, 0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
+$background: #15191e;
+$overlay-background: rgba($background, 0.85);
+
+$panel-base: #8d97a5; /* This color is not intended for use in the app */
+$panels: rgba($system, 0.9);
+$panel-selected: rgba($panel-base, 0.3);
+$panel-hover: rgba($panel-base, 0.1);
+$panel-actions: rgba($panel-base, 0.2);
+$space-nav: rgba($panel-base, 0.1);
+/* ******************** */
+
+/* Reused Figma non-compound colors */
+/* ******************** */
+$inverted-bg-color: $background;
+$header-panel-bg-color: #20252b;
+/* ******************** */
+
+/* Theme specific colors */
+/* ******************** */
+$icon-button-color: $tertiary-content;
+/* ******************** */
+
+/* Colors that aren't in Figma and are theme specific - we need to get rid of these */
+/* ******************** */
+$header-panel-text-secondary-color: #c8c8cd;
+$room-highlight-color: #343a46;
+$text-secondary-color: #b9bec6;
+/* ******************** */
+
+/* Colors that aren't in Figma - we need to get rid of these */
+/* ******************** */
+$dark-panel-bg-color: $header-panel-bg-color;
+$muted-fg-color: $header-panel-text-primary-color;
+$light-fg-color: $header-panel-text-secondary-color;
+$focus-bg-color: $room-highlight-color;
+$info-plinth-bg-color: $header-panel-bg-color;
+$event-selected-color: $system;
+$topleftmenu-color: $primary-content;
+$roomtopic-color: $text-secondary-color;
+$spacePanel-bg-color: rgba(38, 39, 43, 0.82);
+$panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
+$h3-color: $primary-content;
+$event-highlight-bg-color: #25271f;
+$header-panel-text-primary-color: $text-secondary-color;
+/* ******************** */
+
+/* Tooltip */
+/* ******************** */
+$tooltip-timeline-bg-color: $spacePanel-bg-color;
+$tooltip-timeline-fg-color: $primary-content;
+/* ******************** */
+
+/* Widget */
+/* ******************** */
+$widget-menu-bar-bg-color: $header-panel-bg-color;
+$widget-body-bg-color: $panel-actions;
+/* ******************** */
+
+/* Menu */
+/* ******************** */
+$menu-border-color: #000000;
+$menu-bg-color: $header-panel-bg-color;
+$menu-box-shadow-color: $background;
+$menu-selected-color: $room-highlight-color;
+/* ******************** */
+
+/* Settings */
+/* ******************** */
+$settings-profile-button-bg-color: #e7e7e7;
+$settings-subsection-fg-color: $text-secondary-color;
+/* ******************** */
+
+/* Room */
+/* ******************** */
+$room-icon-unread-color: #fff;
+/* ******************** */
+
+/* RoomHeader */
+/* ******************** */
+$roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
+$roomheader-addroom-fg-color: $primary-content;
+/* ******************** */
+
+/* Rich-text-editor */
+/* ******************** */
+$pill-bg-color: $room-highlight-color;
+$pill-hover-bg-color: #545a66;
+/* ******************** */
+
+/* Inputs */
+/* ******************** */
+$input-border-color: rgba(231, 231, 231, 0.2);
+$input-darker-bg-color: #181b21;
+$input-darker-fg-color: #61708b;
+$input-lighter-bg-color: #f2f5f8;
+/* ******************** */
+
+/* Dialog */
+/* ******************** */
+$dialog-title-fg-color: $primary-content;
+$dialog-backdrop-color: $menu-border-color;
+$dialog-close-fg-color: #9fa9ba;
+$dialog-close-external-color: $primary-content;
+/* ******************** */
+
+/* RoomList */
+/* ******************** */
+$roomlist-bg-color: rgba($system, 0.9);
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
+$roomtile-default-badge-bg-color: $input-darker-fg-color;
+/* ******************** */
+
+/* Tabbed views */
+/* ******************** */
+$tab-label-fg-color: $primary-content;
+$tab-label-active-fg-color: $primary-content;
+/* ******************** */
+
+/* Buttons */
+/* ******************** */
+$button-primary-fg-color: $primary-content;
+$button-secondary-bg-color: transparent;
+$button-danger-fg-color: $primary-content;
+$button-danger-disabled-fg-color: $primary-content;
+/* ******************** */
+
+/* Toggle switch */
+/* ******************** */
+$togglesw-off-color: $room-highlight-color;
+/* ******************** */
+
+/* Authpage */
+/* ******************** */
+$authpage-primary-color: $primary-content;
+/* ******************** */
+
+/* Message action bar */
+/* ******************** */
+$message-action-bar-bg-color: $header-panel-bg-color;
+$message-action-bar-fg-color: $header-panel-text-primary-color;
+$message-action-bar-border-color: #616b7f;
+$message-action-bar-hover-border-color: $header-panel-text-primary-color;
+/* ******************** */
+
+/* Reaction row */
+/* ******************** */
+$reaction-row-button-hover-border-color: $header-panel-text-primary-color;
+$reaction-row-button-selected-bg-color: #1f6954;
+/* ******************** */
+
+/* Voice messages */
+/* ******************** */
+$voice-record-stop-border-color: $quaternary-content;
+$voice-record-icon-color: $quaternary-content;
+/* ******************** */
+
+/* Bubble tiles */
+/* ******************** */
+$eventbubble-self-bg: #133a34;
+$eventbubble-others-bg: #21262c;
+$eventbubble-bg-hover: #1c2026;
+$eventbubble-reply-color: #c1c6cd;
+/* ******************** */
+
+/* Lightbox */
+/* ******************** */
+$lightbox-background-bg-color: $menu-border-color;
+$lightbox-background-bg-opacity: 0.85;
+/* ******************** */
+
+/* VoIP */
+/* ******************** */
+$call-view-button-on-foreground: $primary-content;
+$call-view-button-on-background: $system;
+$call-view-button-off-foreground: $system;
+$call-view-button-off-background: $primary-content;
+$call-view-content-background: $quinary-content;
+
+$video-feed-secondary-background: $system;
+
+$call-system: $system;
+$call-background: $background;
+$call-primary-content: $primary-content;
+$call-light-quaternary-content: #c1c6cd;
+/* ******************** */
+
+/* Location sharing */
+/* ******************** */
+$location-live-color: #5c56f5;
+$location-live-secondary-color: #deddfd;
+/* ******************** */
+
+/* Location sharing */
+/* ******************** */
+.maplibregl-ctrl-attrib-button {
+    color: $background;
+}
+/* ******************** */
+
+/* Voice Broadcast */
+/* ******************** */
+$live-badge-color: #ffffff;
+/* ******************** */
+
+/* One-off colors */
+/* ******************** */
+$progressbar-bg-color: $system;
+$kbd-border-color: $menu-border-color;
+$visual-bell-bg-color: #800;
+$event-timestamp-color: $text-secondary-color;
+$slider-background-color: $quinary-content;
+$appearance-tab-border-color: $room-highlight-color;
+$composer-shadow-color: rgba(0, 0, 0, 0.28);
+$breadcrumb-placeholder-bg-color: #272c35;
+$theme-button-bg-color: #e3e8f0;
+$resend-button-divider-color: rgba($header-panel-text-primary-color, 0.74);
+$inlinecode-border-color: $quinary-content;
+$inlinecode-background-color: $system;
+$codeblock-background-color: #2a3039;
+$scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
+$selected-color: $room-highlight-color;
+/* ******************** */
+
+/* blur amounts for left left panel (only for element theme) */
+/* ******************** */
+:root {
+    --lp-background-blur: 45px;
+}
+/* ******************** */
+
+body {
+    color-scheme: dark;
+}
+
+/* Nasty hacks to apply a filter to arbitrary monochrome artwork to make it */
+/* better match the theme.  Typically applied to dark grey 'off' buttons or */
+/* light grey 'on' buttons. */
+/* ******************** */
+.mx_filterFlipColor {
+    filter: invert(1);
+}
+/* ******************** */
+
+/* markdown overrides */
+/* ******************** */
+.mx_EventTile_content .markdown-body {
+    table {
+        tr {
+            background-color: $menu-border-color;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #080808;
+        }
+    }
+}
+/* ******************** */
+
+/* diff highlight colors */
+/* ******************** */
+.hljs-tag {
+    color: inherit; /* Without this they'd be weirdly blue which doesn't match the theme */
+}
+
+.hljs-addition {
+    background: #1a4b59;
+}
+
+.hljs-deletion {
+    background: #53232a;
+}
+/* ******************** */
+
+/* Splash Page Gradient */
+.mx_SplashPage::before {
+    background-image: radial-gradient(
+            53.85% 66.75% at 87.55% 0%,
+            hsla(0, 0%, 11%, 0.15) 0%,
+            hsla(250, 100%, 88%, 0) 100%
+        ),
+        radial-gradient(41.93% 41.93% at 0% 0%, hsla(0, 0%, 38%, 0.28) 0%, hsla(250, 100%, 88%, 0) 100%),
+        radial-gradient(100% 100% at 0% 0%, hsla(250, 100%, 88%, 0.3) 0%, hsla(0, 100%, 86%, 0) 100%),
+        radial-gradient(106.35% 96.26% at 100% 0%, hsla(25, 100%, 88%, 0.4) 0%, hsla(167, 76%, 82%, 0) 100%) !important;
+}

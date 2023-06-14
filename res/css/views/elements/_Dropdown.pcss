@@ -1,0 +1,136 @@
+/*
+Copyright 2017 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_Dropdown {
+    position: relative;
+    color: $primary-content;
+}
+
+.mx_Dropdown_disabled {
+    opacity: 0.3;
+}
+
+.mx_Dropdown_input {
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-radius: 4px;
+    border: 1px solid $strong-input-border-color;
+    font-size: $font-12px;
+    user-select: none;
+}
+
+.mx_Dropdown_input.mx_AccessibleButton_disabled {
+    cursor: not-allowed;
+}
+
+.mx_Dropdown_input:focus {
+    border-color: $accent-alt;
+}
+
+/* Disable dropdown highlight on focus */
+.mx_Dropdown_input.mx_AccessibleButton:focus {
+    filter: none;
+}
+
+.mx_Dropdown_arrow {
+    width: 10px;
+    height: 6px;
+    padding-right: 9px;
+    mask: url("$(res)/img/feather-customised/dropdown-arrow.svg");
+    mask-repeat: no-repeat;
+    background: $primary-content;
+}
+
+.mx_Dropdown_option {
+    height: 35px;
+    line-height: $font-35px;
+    // Overwrites the default padding for any li elements
+    padding: 0 8px;
+}
+
+.mx_Dropdown_input > .mx_Dropdown_option {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+}
+
+.mx_Dropdown_option div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mx_Dropdown_option img,
+.mx_Dropdown_option .mx_Dropdown_option_emoji {
+    margin: 5px;
+    width: 16px;
+    vertical-align: middle;
+}
+
+.mx_Dropdown_option_emoji {
+    font-size: $font-16px;
+    line-height: $font-16px;
+}
+
+input.mx_Dropdown_option,
+input.mx_Dropdown_option:focus {
+    font-weight: normal;
+    border: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    /* XXX: hack to prevent text box being too big and pushing */
+    /* its parent out / overlapping the dropdown arrow. Only really */
+    /* works in the Country dropdown. */
+    width: 60%;
+}
+
+.mx_Dropdown_menu {
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: 100%;
+    z-index: 2;
+    margin: 0;
+    padding: 0px;
+    border-radius: 4px;
+    border: 1px solid $accent-alt;
+    background-color: $background;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.mx_Dropdown_menu .mx_Dropdown_option {
+    height: auto;
+    min-height: 35px;
+}
+
+ul.mx_Dropdown_menu li.mx_Dropdown_option {
+    list-style: none;
+}
+
+.mx_Dropdown_menu .mx_Dropdown_option_highlight {
+    background-color: $focus-bg-color;
+}
+
+.mx_Dropdown_searchPrompt {
+    font-weight: normal;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}

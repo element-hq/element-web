@@ -1,0 +1,41 @@
+/*
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+ * To avoid visual glitching of two modals stacking briefly, we customise the
+ * terms dialog sizing when it will appear for the integration manager so that
+ * it gets the same basic size as the IM's own modal.
+ */
+.mx_TermsDialog_forIntegrationManager .mx_Dialog {
+    width: 60%;
+    height: 70%;
+    box-sizing: border-box;
+}
+
+.mx_TermsDialog_termsTableHeader {
+    font-weight: bold;
+    text-align: left;
+}
+
+.mx_TermsDialog_termsTable {
+    font-size: $font-12px;
+    width: 100%;
+}
+
+.mx_TermsDialog_service,
+.mx_TermsDialog_summary {
+    padding-right: 10px;
+}

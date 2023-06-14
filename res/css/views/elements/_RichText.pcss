@@ -1,0 +1,44 @@
+/* XXX: bleurgh, what is this? These classes totally break the component */
+/* naming scheme; it's completely unclear where or how they're being used */
+/* --Matthew */
+
+.mx_Markdown_BOLD {
+    font-weight: bold;
+}
+
+.mx_Markdown_ITALIC {
+    font-style: italic;
+    /*
+    // interestingly, *not* using the explicit italic font
+    // variant seems yield better results.
+
+    // compensate for Nunito italics being terrible
+    // https://github.com/google/fonts/issues/172
+    transform: skewX(-14deg);
+    display: inline-block;
+    */
+}
+
+.mx_Markdown_CODE {
+    padding: 0.2em 0;
+    margin: 0;
+    font-size: 85%;
+    background-color: $rte-code-bg-color;
+    border-radius: 3px;
+}
+
+.mx_Markdown_HR {
+    display: block;
+    background: $rte-bg-color;
+}
+
+.mx_Markdown_STRIKETHROUGH {
+    text-decoration: line-through;
+}
+
+.mx_Emoji {
+    /* Should be 1.8rem for our default message bodies, and scale with the */
+    /* surrounding text */
+    font-size: max($font-18px, 1em);
+    vertical-align: bottom;
+}

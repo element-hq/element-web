@@ -1,0 +1,415 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MessageComposer_wrapper {
+    vertical-align: middle;
+    margin: auto;
+    border-top: 1px solid $primary-hairline-color;
+    position: relative;
+    padding-left: 42px;
+    padding-right: 16px;
+}
+
+.mx_MessageComposer_replaced_wrapper {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mx_MessageComposer_replaced_valign {
+    height: 60px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.mx_MessageComposer_roomReplaced_icon {
+    float: left;
+    margin-right: 20px;
+    margin-top: 5px;
+    width: 31px;
+    height: 31px;
+}
+
+.mx_MessageComposer_roomReplaced_header {
+    font-weight: bold;
+}
+
+.mx_MessageComposer_autocomplete_wrapper {
+    position: relative;
+    height: 0;
+}
+
+.mx_MessageComposer_row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.mx_MessageComposer_actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mx_MessageComposer {
+    .mx_MessageComposer_avatar {
+        position: absolute;
+        left: 26px;
+
+        .mx_BaseAvatar {
+            display: block;
+        }
+    }
+}
+
+.mx_MessageComposer_composecontrols {
+    width: 100%;
+}
+
+.mx_MessageComposer_e2eIcon.mx_E2EIcon {
+    position: absolute;
+    left: 20px;
+    margin-right: 0; /* Counteract the E2EIcon class */
+    margin-left: 3px; /* Counteract the E2EIcon class */
+    width: 12px;
+    height: 12px;
+}
+
+.mx_MessageComposer_noperm_error {
+    width: 100%;
+    height: 60px;
+    font-style: italic;
+    color: $info-plinth-fg-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mx_MessageComposer_input_wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    cursor: text;
+}
+
+.mx_MessageComposer_input {
+    flex: 1;
+    vertical-align: middle;
+    display: flex;
+    flex-direction: column;
+    min-height: 60px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    font-size: $font-14px;
+    margin-right: 6px;
+
+    pre {
+        background-color: $rte-code-bg-color;
+        border-radius: 3px;
+        padding: 10px;
+    }
+
+    textarea {
+        display: block;
+        width: 100%;
+        padding: 0px;
+        margin-top: 6px;
+        margin-bottom: 6px;
+        border: 0px;
+        resize: none;
+        outline: none;
+        box-shadow: none;
+        color: $primary-content;
+        background-color: $background;
+        font-size: $font-14px;
+        max-height: 120px;
+        overflow: auto;
+
+        /* hack for FF as vertical alignment of custom placeholder text is broken */
+        &::-moz-placeholder {
+            line-height: 100%;
+            color: $accent;
+            opacity: 1;
+        }
+
+        &::-webkit-input-placeholder {
+            color: $accent;
+        }
+    }
+}
+
+.mx_MessageComposer_editor {
+    width: 100%;
+    max-height: 120px;
+    min-height: 19px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    word-break: break-word;
+
+    /* FIXME: rather unpleasant hack to get rid of <p/> margins. */
+    /* really we should be mixing in markdown-body from gfm.css instead */
+    > :first-child {
+        margin-top: 0 !important;
+    }
+
+    > :last-child {
+        margin-bottom: 0 !important;
+    }
+}
+
+@keyframes visualbell {
+    from {
+        background-color: $visual-bell-bg-color;
+    }
+    to {
+        background-color: $background;
+    }
+}
+
+.mx_MessageComposer_input_error {
+    animation: 0.2s visualbell;
+}
+
+.mx_MessageComposer_button_highlight {
+    @mixin composerButtonHighLight;
+}
+
+.mx_MessageComposer_button {
+    @mixin composerButton 50%, $accent;
+
+    &:last-child {
+        margin-right: auto;
+    }
+
+    &.mx_MessageComposer_closeButtonMenu {
+        &::after {
+            background: rgba($accent, 0.1);
+        }
+
+        &::before {
+            background-color: $accent;
+        }
+    }
+
+    &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
+        background-color: $alert;
+    }
+}
+.mx_MessageComposer_wysiwyg {
+    .mx_MessageComposer_wrapper {
+        padding-left: 16px;
+        margin-top: 6px;
+        margin-bottom: 12px;
+    }
+
+    .mx_MessageComposer_row {
+        align-items: flex-end;
+    }
+
+    .mx_MessageComposer_actions {
+        /* Height of the composer editor */
+        height: 40px;
+    }
+
+    .mx_MediaBody {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    .mx_MessageComposer_button {
+        @mixin composerButton 5px, $tertiary-content;
+
+        &.mx_MessageComposer_closeButtonMenu {
+            &::after {
+                background: rgba($accent, 0.1);
+            }
+
+            &::before {
+                background-color: $accent;
+            }
+        }
+
+        &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
+            background-color: $alert;
+        }
+    }
+}
+
+.mx_MessageComposer_upload::before {
+    mask-image: url("$(res)/img/element-icons/room/composer/attach.svg");
+}
+
+.mx_MessageComposer_poll::before {
+    mask-image: url("$(res)/img/element-icons/room/composer/poll.svg");
+}
+
+.mx_MessageComposer_voiceMessage::before {
+    mask-image: url("$(res)/img/element-icons/mic.svg");
+}
+
+.mx_MessageComposer_voiceBroadcast::before {
+    mask-image: url("$(res)/img/element-icons/live.svg");
+}
+
+.mx_MessageComposer_plain_text::before {
+    mask-image: url("$(res)/img/element-icons/room/composer/plain_text.svg");
+}
+
+.mx_MessageComposer_rich_text::before {
+    mask-image: url("$(res)/img/element-icons/room/composer/rich_text.svg");
+}
+
+.mx_MessageComposer_location::before {
+    mask-image: url("$(res)/img/element-icons/room/composer/location.svg");
+}
+
+.mx_MessageComposer_stickers::before {
+    mask-image: url("$(res)/img/element-icons/room/composer/sticker.svg");
+}
+
+.mx_MessageComposer_buttonMenu::before {
+    mask-image: url("$(res)/img/image-view/more.svg");
+}
+
+.mx_MessageComposer_sendMessage {
+    cursor: pointer;
+    position: relative;
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+    background-color: $accent;
+
+    &::before {
+        position: absolute;
+        height: 16px;
+        width: 16px;
+        top: 8px;
+        left: 9px;
+
+        mask-image: url("$(res)/img/element-icons/send-message.svg");
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+
+        background-color: $button-fg-color;
+        content: "";
+    }
+}
+
+.mx_MessageComposer_formatting {
+    cursor: pointer;
+    margin: 0 11px;
+    width: 24px;
+    height: 18px;
+}
+
+.mx_MessageComposer_formatbar_wrapper {
+    width: 100%;
+    background-color: $menu-bg-color;
+    box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.08);
+}
+
+.mx_MessageComposer_formatbar {
+    margin: auto;
+    display: flex;
+
+    height: 30px;
+
+    box-sizing: border-box;
+    padding-left: 62px;
+
+    flex-direction: row;
+    align-items: center;
+    font-size: $font-10px;
+    color: $info-plinth-fg-color;
+
+    * {
+        margin-right: 4px;
+    }
+}
+
+.mx_MessageComposer_format_button,
+.mx_MessageComposer_formatbar_cancel,
+.mx_MessageComposer_formatbar_markdown {
+    cursor: pointer;
+}
+
+.mx_MessageComposer_formatbar_cancel {
+    margin-right: 22px;
+}
+
+.mx_MessageComposer_formatbar_markdown {
+    height: 17px;
+    width: 30px;
+    margin-right: 64px;
+}
+
+.mx_MessageComposer_input_markdownIndicator {
+    height: 10px;
+    width: 12px;
+    padding: 4px 4px 4px 0;
+}
+
+.mx_MessageComposer_formatbar_markdown,
+.mx_MessageComposer_input_markdownIndicator {
+    cursor: pointer;
+    mask-image: url("$(res)/img/markdown.svg");
+    mask-size: contain;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    background-color: $icon-button-color;
+
+    &.mx_MessageComposer_markdownDisabled {
+        opacity: 0.2;
+    }
+}
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_MessageComposer_input {
+        min-height: 50px;
+    }
+
+    .mx_MessageComposer_noperm_error {
+        height: 50px;
+    }
+}
+
+/**
+ * Unstable compact mode
+ */
+
+.mx_MessageComposer.mx_MessageComposer--compact {
+    margin-right: 0;
+
+    .mx_MessageComposer_wrapper {
+        padding: 0 0 0 25px;
+    }
+
+    &:not(.mx_MessageComposer_e2eStatus) {
+        .mx_MessageComposer_wrapper {
+            padding: 0;
+        }
+    }
+
+    .mx_MessageComposer_button:last-child {
+        margin-right: 0;
+    }
+
+    .mx_MessageComposer_e2eIcon {
+        left: 0;
+    }
+}

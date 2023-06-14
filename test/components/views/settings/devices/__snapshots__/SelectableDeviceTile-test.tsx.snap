@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SelectableDeviceTile /> renders selected tile 1`] = `
+<input
+  checked=""
+  data-testid="device-tile-checkbox-my-device"
+  id="device-tile-checkbox-my-device"
+  type="checkbox"
+/>
+`;
+
+exports[`<SelectableDeviceTile /> renders unselected device tile with checkbox 1`] = `
+<div>
+  <div
+    class="mx_SelectableDeviceTile"
+  >
+    <span
+      class="mx_Checkbox mx_SelectableDeviceTile_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+    >
+      <input
+        data-testid="device-tile-checkbox-my-device"
+        id="device-tile-checkbox-my-device"
+        type="checkbox"
+      />
+      <label
+        for="device-tile-checkbox-my-device"
+      >
+        <div
+          class="mx_Checkbox_background"
+        >
+          <div
+            class="mx_Checkbox_checkmark"
+          />
+        </div>
+        <div>
+          <div
+            class="mx_DeviceTile mx_DeviceTile_interactive"
+            data-testid="device-tile-my-device"
+          >
+            <div
+              class="mx_DeviceTypeIcon"
+            >
+              <div
+                class="mx_DeviceTypeIcon_deviceIconWrapper"
+              >
+                <div
+                  aria-label="Unknown session type"
+                  class="mx_DeviceTypeIcon_deviceIcon"
+                  role="img"
+                />
+              </div>
+              <div
+                aria-label="Unverified"
+                class="mx_DeviceTypeIcon_verificationIcon unverified"
+                role="img"
+              />
+            </div>
+            <div
+              class="mx_DeviceTile_info"
+            >
+              <h4
+                class="mx_Heading_h4"
+              >
+                My Device
+              </h4>
+              <div
+                class="mx_DeviceTile_metadata"
+              >
+                <span
+                  data-testid="device-metadata-isVerified"
+                >
+                  Unverified
+                </span>
+                 · 
+                <span
+                  data-testid="device-metadata-lastSeenIp"
+                >
+                  123.456.789
+                </span>
+                 · 
+                <span
+                  data-testid="device-metadata-deviceId"
+                >
+                  my-device
+                </span>
+              </div>
+            </div>
+            <div
+              class="mx_DeviceTile_actions"
+            >
+              <div>
+                test
+              </div>
+            </div>
+          </div>
+        </div>
+      </label>
+    </span>
+  </div>
+</div>
+`;

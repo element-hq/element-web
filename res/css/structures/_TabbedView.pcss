@@ -1,0 +1,155 @@
+/*
+Copyright 2017 Travis Ralston
+Copyright 2019 New Vector Ltd
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_TabbedView {
+    margin: 0;
+    padding: 0 0 0 16px;
+    display: flex;
+    flex-direction: column;
+    inset: 0;
+    margin-top: 8px;
+}
+
+.mx_TabbedView_tabsOnLeft {
+    flex-direction: column;
+    position: absolute;
+
+    .mx_TabbedView_tabLabels {
+        width: 170px;
+        max-width: 170px;
+        position: fixed;
+        margin: 0; /* Remove the default value */
+        padding: 0; /* Remove the default value */
+    }
+
+    .mx_TabbedView_tabPanel {
+        margin-left: 240px; /* 170px sidebar + 70px padding */
+        flex-direction: column;
+    }
+
+    .mx_TabbedView_tabLabel_active {
+        background-color: $accent;
+        color: $tab-label-active-fg-color;
+    }
+
+    .mx_TabbedView_tabLabel_active .mx_TabbedView_maskedIcon::before {
+        background-color: $tab-label-active-fg-color;
+    }
+
+    .mx_TabbedView_maskedIcon {
+        width: 16px;
+        height: 16px;
+        margin-right: 16px;
+    }
+
+    .mx_TabbedView_maskedIcon::before {
+        mask-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.mx_TabbedView_tabsOnTop {
+    flex-direction: column;
+
+    .mx_TabbedView_tabLabels {
+        display: flex;
+        margin-bottom: 8px;
+    }
+
+    .mx_TabbedView_tabLabel {
+        padding-left: 0px;
+        padding-right: 52px;
+
+        .mx_TabbedView_tabLabel_text {
+            font-size: 15px;
+            color: $tertiary-content;
+        }
+    }
+
+    .mx_TabbedView_tabPanel {
+        flex-direction: row;
+    }
+
+    .mx_TabbedView_tabLabel_active {
+        color: $accent;
+        .mx_TabbedView_tabLabel_text {
+            color: $accent;
+        }
+    }
+
+    .mx_TabbedView_tabLabel_active .mx_TabbedView_maskedIcon::before {
+        background-color: $accent;
+    }
+
+    .mx_TabbedView_maskedIcon {
+        width: 22px;
+        height: 22px;
+        margin-left: 0px;
+        margin-right: 8px;
+    }
+
+    .mx_TabbedView_maskedIcon::before {
+        mask-size: 22px;
+        width: inherit;
+        height: inherit;
+    }
+}
+
+.mx_TabbedView_tabLabels {
+    color: $tab-label-fg-color;
+}
+
+.mx_TabbedView_tabLabel {
+    display: flex;
+    align-items: center;
+    vertical-align: text-top;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: $font-13px;
+    position: relative;
+}
+
+.mx_TabbedView_maskedIcon {
+    display: inline-block;
+}
+
+.mx_TabbedView_maskedIcon::before {
+    display: inline-block;
+    background-color: $icon-button-color;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    content: "";
+}
+
+.mx_TabbedView_tabLabel_text {
+    vertical-align: middle;
+}
+
+.mx_TabbedView_tabPanel {
+    flex-grow: 1;
+    display: flex;
+    min-height: 0; /* firefox */
+}
+
+.mx_TabbedView_tabPanelContent {
+    flex-grow: 1;
+    overflow: auto;
+    min-height: 0; /* firefox */
+}

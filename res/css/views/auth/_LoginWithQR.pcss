@@ -1,0 +1,172 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_LoginWithQRSection .mx_AccessibleButton {
+    margin-right: $spacing-12;
+}
+
+.mx_AuthPage .mx_LoginWithQR {
+    .mx_AccessibleButton {
+        display: block !important;
+    }
+
+    .mx_AccessibleButton + .mx_AccessibleButton {
+        margin-top: $spacing-8;
+    }
+
+    .mx_LoginWithQR_separator {
+        display: flex;
+        align-items: center;
+        text-align: center;
+
+        &::before,
+        &::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid $quinary-content;
+        }
+
+        &:not(:empty) {
+            &::before {
+                margin-right: 1em;
+            }
+            &::after {
+                margin-left: 1em;
+            }
+        }
+    }
+
+    font-size: $font-15px;
+}
+
+.mx_UserSettingsDialog .mx_LoginWithQR {
+    .mx_AccessibleButton + .mx_AccessibleButton {
+        margin-left: $spacing-12;
+    }
+
+    font-size: $font-14px;
+
+    h1 {
+        font-size: $font-24px;
+        margin-bottom: 0;
+    }
+
+    li {
+        line-height: 1.8;
+    }
+
+    .mx_QRCode {
+        padding: $spacing-12 $spacing-40;
+        margin: $spacing-28 0;
+    }
+
+    .mx_LoginWithQR_buttons {
+        text-align: center;
+    }
+
+    .mx_LoginWithQR_qrWrapper {
+        display: flex;
+    }
+}
+
+.mx_LoginWithQR {
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+
+    .mx_LoginWithQR_centreTitle {
+        h1 {
+            text-align: centre;
+        }
+    }
+
+    h1 > svg {
+        &.normal {
+            color: $secondary-content;
+        }
+        &.error {
+            color: $alert;
+        }
+        &.success {
+            color: $accent;
+        }
+        height: 1.3em;
+        margin-right: $spacing-8;
+        vertical-align: middle;
+    }
+
+    .mx_LoginWithQR_confirmationDigits {
+        text-align: center;
+        margin: $spacing-48 auto;
+        font-weight: var(--font-semi-bold);
+        font-size: $font-24px;
+        color: $primary-content;
+    }
+
+    .mx_LoginWithQR_confirmationAlert {
+        border: 1px solid $quaternary-content;
+        border-radius: $spacing-8;
+        padding: $spacing-8;
+        line-height: 1.5em;
+        display: flex;
+
+        svg {
+            height: 30px;
+        }
+    }
+
+    .mx_LoginWithQR_separator {
+        margin: 1em 0;
+    }
+
+    ol {
+        list-style-position: inside;
+        padding-inline-start: 0;
+
+        li::marker {
+            color: $accent;
+        }
+    }
+
+    .mx_LoginWithQR_BackButton {
+        height: $spacing-12;
+        margin-bottom: $spacing-24;
+        svg {
+            height: 100%;
+        }
+    }
+
+    .mx_LoginWithQR_main {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .mx_QRCode {
+        border: 1px solid $quinary-content;
+        border-radius: $spacing-8;
+        display: flex;
+        justify-content: center;
+    }
+
+    .mx_LoginWithQR_spinner {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+}

@@ -1,0 +1,322 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TextualBody /> renders formatted m.text correctly linkification is not applied to code blocks 1`] = `
+<span
+  class="mx_EventTile_body markdown-body"
+  dir="auto"
+>
+  <p>
+    Visit 
+    <code>
+      https://matrix.org/
+    </code>
+  </p>
+  
+
+  <div
+    class="mx_EventTile_pre_container"
+  >
+    <pre
+      class="mx_EventTile_collapsedCodeBlock"
+    >
+      <span
+        class="mx_EventTile_lineNumbers"
+      >
+        <span>
+          1
+        </span>
+      </span>
+      <code>
+        https://matrix.org/
+
+      </code>
+      <span />
+    </pre>
+    <span
+      class="mx_EventTile_button mx_EventTile_copyButton "
+    />
+  </div>
+  
+
+</span>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills appear for an MXID permalink 1`] = `
+<span
+  class="mx_EventTile_body markdown-body"
+  dir="auto"
+>
+  Chat with 
+  <span>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_UserPill"
+        href="https://matrix.to/#/@user:example.com"
+      >
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar mx_BaseAvatar_image"
+          data-testid="avatar-img"
+          loading="lazy"
+          src="mxc://avatar.url/image.png"
+          style="width: 16px; height: 16px;"
+        />
+        <span
+          class="mx_Pill_text"
+        >
+          Member
+        </span>
+      </a>
+    </bdi>
+  </span>
+</span>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills appear for event permalinks without a custom label 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_MTextBody mx_EventTile_content"
+  >
+    <span
+      class="mx_EventTile_body markdown-body"
+      dir="auto"
+    >
+      See this message 
+      <span>
+        <bdi>
+          <a
+            aria-describedby="mx_Pill_0.123456"
+            class="mx_Pill mx_EventPill"
+            href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com"
+          >
+            <img
+              alt=""
+              aria-hidden="true"
+              class="mx_BaseAvatar mx_BaseAvatar_image"
+              data-testid="avatar-img"
+              loading="lazy"
+              src="mxc://avatar.url/room.png"
+              style="width: 16px; height: 16px;"
+            />
+            <span
+              class="mx_Pill_text"
+            >
+              Message in room name
+            </span>
+          </a>
+        </bdi>
+      </span>
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills appear for room links with vias 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_MTextBody mx_EventTile_content"
+  >
+    <span
+      class="mx_EventTile_body markdown-body"
+      dir="auto"
+    >
+      A 
+      <span>
+        <bdi>
+          <a
+            aria-describedby="mx_Pill_0.123456"
+            class="mx_Pill mx_RoomPill"
+            href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com?via=example.com&via=bob.com"
+          >
+            <img
+              alt=""
+              aria-hidden="true"
+              class="mx_BaseAvatar mx_BaseAvatar_image"
+              data-testid="avatar-img"
+              loading="lazy"
+              src="mxc://avatar.url/room.png"
+              style="width: 16px; height: 16px;"
+            />
+            <span
+              class="mx_Pill_text"
+            >
+              room name
+            </span>
+          </a>
+        </bdi>
+      </span>
+       with vias
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills do not appear for event permalinks with a custom label 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_MTextBody mx_EventTile_content"
+  >
+    <span
+      class="mx_EventTile_body markdown-body"
+      dir="auto"
+    >
+      An 
+      <a
+        href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com"
+        rel="noreferrer noopener"
+      >
+        event link
+      </a>
+       with text
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills do not appear in code blocks 1`] = `
+<span
+  class="mx_EventTile_body markdown-body"
+  dir="auto"
+>
+  <p>
+    <code>
+      @room
+    </code>
+  </p>
+  
+
+  <div
+    class="mx_EventTile_pre_container"
+  >
+    <pre
+      class="mx_EventTile_collapsedCodeBlock"
+    >
+      <span
+        class="mx_EventTile_lineNumbers"
+      >
+        <span>
+          1
+        </span>
+      </span>
+      <code>
+        @room
+
+      </code>
+      <span />
+    </pre>
+    <span
+      class="mx_EventTile_button mx_EventTile_copyButton "
+    />
+  </div>
+  
+
+</span>
+`;
+
+exports[`<TextualBody /> renders formatted m.text correctly pills get injected correctly into the DOM 1`] = `
+<span
+  class="mx_EventTile_body markdown-body"
+  dir="auto"
+>
+  Hey 
+  <span>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_UserPill"
+        href="https://matrix.to/#/@user:server"
+      >
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar mx_BaseAvatar_image"
+          data-testid="avatar-img"
+          loading="lazy"
+          src="mxc://avatar.url/image.png"
+          style="width: 16px; height: 16px;"
+        />
+        <span
+          class="mx_Pill_text"
+        >
+          Member
+        </span>
+      </a>
+    </bdi>
+  </span>
+</span>
+`;
+
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to a message in the same room with the label »Message from Member« 1`] = `
+"Visit
+<span
+  ><bdi
+    ><a
+      class="mx_Pill mx_EventPill"
+      href="https://matrix.to/#/!room1:example.com/%event_id%"
+      aria-describedby="mx_Pill_0.123456"
+      ><img
+        loading="lazy"
+        class="mx_BaseAvatar mx_BaseAvatar_image"
+        src="mxc://avatar.url/image.png"
+        style="width: 16px; height: 16px"
+        alt=""
+        data-testid="avatar-img"
+        aria-hidden="true"
+      /><span class="mx_Pill_text">Message from Member</span></a
+    ></bdi
+  ></span
+>
+"
+`;
+
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an event in another room with the label »Message in Room 2« 1`] = `
+"Visit
+<span
+  ><bdi
+    ><a
+      class="mx_Pill mx_EventPill"
+      href="https://matrix.to/#/!room2:example.com/%event_id%"
+      aria-describedby="mx_Pill_0.123456"
+      ><img
+        loading="lazy"
+        class="mx_BaseAvatar mx_BaseAvatar_image"
+        src="mxc://avatar.url/room.png"
+        style="width: 16px; height: 16px"
+        alt=""
+        data-testid="avatar-img"
+        aria-hidden="true"
+      /><span class="mx_Pill_text">Message in Room 2</span></a
+    ></bdi
+  ></span
+>
+"
+`;
+
+exports[`<TextualBody /> renders plain-text m.text correctly should pillify a permalink to an unknown message in the same room with the label »Message« 1`] = `
+<span
+  class="mx_EventTile_body"
+  dir="auto"
+>
+  Visit 
+  <span>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_EventPill"
+        href="https://matrix.to/#/!room1:example.com/!abc123"
+      >
+        <div
+          class="mx_Pill_LinkIcon mx_BaseAvatar mx_BaseAvatar_image"
+        />
+        <span
+          class="mx_Pill_text"
+        >
+          Message
+        </span>
+      </a>
+    </bdi>
+  </span>
+</span>
+`;

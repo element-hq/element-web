@@ -1,0 +1,138 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+    This file is raw-imported (imported as plain text) for the export bundle, which is the reason for the .css format and the colours being hard-coded hard-coded.
+*/
+
+#snackbar {
+    display: flex;
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+    padding: 6px 16px;
+    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu,
+        roboto, noto, arial, sans-serif;
+    font-weight: 400;
+    line-height: 1.43;
+    border-radius: 4px;
+    letter-spacing: 0.01071em;
+}
+
+#snackbar.mx_show {
+    visibility: visible;
+    -webkit-animation: mx_snackbar_fadein 0.5s, mx_snackbar_fadeout 0.5s 2.5s;
+    animation: mx_snackbar_fadein 0.5s, mx_snackbar_fadeout 0.5s 2.5s;
+}
+
+a.mx_reply_anchor {
+    cursor: pointer;
+    color: #238cf5;
+}
+
+a.mx_reply_anchor:hover {
+    text-decoration: underline;
+}
+
+@-webkit-keyframes mx_snackbar_fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes mx_snackbar_fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes mx_snackbar_fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes mx_snackbar_fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+* {
+    scroll-behavior: smooth !important;
+}
+
+.mx_Export_EventWrapper:target {
+    background: white;
+    animation: mx_event_highlight_animation 2s linear;
+}
+
+@keyframes mx_event_highlight_animation {
+    0%,
+    100% {
+        background: white;
+    }
+    50% {
+        background: #e3e2df;
+    }
+}
+
+.mx_ReplyChain_Export {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.mx_RedactedBody,
+.mx_HiddenBody {
+    padding-left: unset;
+}
+
+img {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.mx_MatrixChat {
+    max-width: 100%;
+}

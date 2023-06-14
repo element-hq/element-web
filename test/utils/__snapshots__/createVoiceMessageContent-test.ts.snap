@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createVoiceMessageContent should create a voice message content 1`] = `
+{
+  "body": "Voice message",
+  "file": {},
+  "info": {
+    "duration": 23000,
+    "mimetype": "ogg/opus",
+    "size": 42000,
+  },
+  "msgtype": "m.audio",
+  "org.matrix.msc1767.audio": {
+    "duration": 23000,
+    "waveform": [
+      1,
+      2,
+      3,
+    ],
+  },
+  "org.matrix.msc1767.file": {
+    "file": {},
+    "mimetype": "ogg/opus",
+    "name": "Voice message.ogg",
+    "size": 42000,
+    "url": "mxc://example.com/file",
+  },
+  "org.matrix.msc1767.text": "Voice message",
+  "org.matrix.msc3245.voice": {},
+  "url": "mxc://example.com/file",
+}
+`;

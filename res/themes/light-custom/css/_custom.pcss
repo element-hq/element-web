@@ -1,0 +1,147 @@
+/*
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+$font-family: var(--font-family, $font-family);
+$monospace-font-family: var(--font-family-monospace, $monospace-font-family);
+
+/* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741 */
+$accent: var(--accent, $accent);
+$alert: var(--alert, $alert);
+$links: var(--links, $links);
+$primary-content: var(--primary-content, $primary-content);
+$secondary-content: var(--secondary-content, $secondary-content);
+$tertiary-content: var(--tertiary-content, $tertiary-content);
+$quaternary-content: var(--quaternary-content, $quaternary-content);
+$quinary-content: var(--quinary-content, $quinary-content);
+/* XXX: workaround for Safari 15.3 linear-gradient bug https://github.com/vector-im/element-web/issues/21670 */
+$system-transparent: var(--system-transparent, rgba($system, 0));
+$system: var(--system, $system);
+$background: var(--background, $background);
+$panels: rgba($system, 0.9);
+$panel-base: var(--panel-base, $tertiary-content); /* This color is not intended for use in the app */
+$panel-selected: rgba($panel-base, 0.3);
+$panel-hover: rgba($panel-base, 0.1);
+$panel-actions: rgba($panel-base, 0.2);
+$space-nav: rgba($panel-base, 0.1);
+
+/* --accent-color */
+$username-variant3-color: var(--accent-color);
+
+/* --timeline-background-color */
+$button-secondary-bg-color: var(--timeline-background-color);
+$lightbox-border-color: var(--timeline-background-color);
+$menu-bg-color: var(--timeline-background-color);
+$message-action-bar-bg-color: var(--timeline-background-color);
+$background: var(--timeline-background-color);
+$togglesw-ball-color: var(--timeline-background-color);
+$togglesw-off-color: var(--togglesw-off-color);
+$droptarget-bg-color: var(--timeline-background-color-50pct); /* still needs alpha at .5 */
+$authpage-modal-bg-color: var(--timeline-background-color-50pct); /* still needs alpha at .59 */
+$roomheader-bg-color: var(--timeline-background-color);
+
+/* --roomlist-highlights-color */
+$panel-actions: var(--roomlist-highlights-color);
+
+/* --sidebar-color */
+$spacePanel-bg-color: var(--sidebar-color);
+$tooltip-timeline-bg-color: var(--sidebar-color);
+$dialog-backdrop-color: var(--sidebar-color-50pct);
+
+/* --roomlist-background-color */
+$header-panel-bg-color: var(--roomlist-background-color);
+$panel-gradient: var(--roomlist-background-color-0pct), var(--roomlist-background-color);
+/* these were #f2f5f8 instead of #f3f8fd, but close enough */
+$dark-panel-bg-color: var(--roomlist-background-color);
+$input-lighter-bg-color: var(--roomlist-background-color);
+$secondary-accent-color: var(--roomlist-background-color);
+$selected-color: var(--roomlist-background-color);
+$widget-menu-bar-bg-color: var(--roomlist-background-color);
+$roomlist-bg-color: var(--roomlist-background-color);
+
+/* --timeline-text-color */
+$message-action-bar-fg-color: var(--timeline-text-color);
+$primary-content: var(--timeline-text-color);
+$roomtopic-color: var(--timeline-text-color-50pct);
+$tab-label-fg-color: var(--timeline-text-color);
+/* was #212121 */
+$topleftmenu-color: var(--timeline-text-color);
+/* was #45474a */
+$dialog-title-fg-color: var(--timeline-text-color);
+$tab-label-fg-color: var(--timeline-text-color);
+/* was #4e5054 */
+$authpage-lang-color: var(--timeline-text-color);
+/* was #232f32 */
+$authpage-primary-color: var(--timeline-text-color);
+/* --roomlist-text-secondary-color */
+$roomtile-default-badge-bg-color: var(--roomlist-text-secondary-color);
+
+/* --roomlist-separator-color */
+$input-darker-bg-color: var(--roomlist-separator-color);
+$primary-hairline-color: var(--roomlist-separator-color); /* originally #e5e5e5, but close enough */
+
+/* --timeline-text-secondary-color */
+$authpage-secondary-color: var(--timeline-text-secondary-color);
+$pinned-color: var(--timeline-text-secondary-color);
+$settings-subsection-fg-color: var(--timeline-text-secondary-color);
+$roomheader-addroom-bg-color: var(--timeline-text-secondary-color);
+/* was #747474 */
+$light-fg-color: var(--timeline-text-secondary-color);
+$focus-bg-color: var(--focus-bg-color, $focus-bg-color);
+$room-highlight-color: var(--room-highlight-color);
+
+$rte-room-pill-color: $room-highlight-color;
+
+/* was #888888 */
+$info-plinth-fg-color: var(--timeline-text-secondary-color);
+
+/* --primary-color */
+$accent-alt: var(--primary-color);
+
+/* --warning-color */
+$button-danger-disabled-bg-color: var(--warning-color-50pct); /* still needs alpha at 0.5 */
+
+/* --username colors (which use a 0-based index) */
+$username-variant1-color: var(--username-colors_0, $username-variant1-color);
+$username-variant2-color: var(--username-colors_1, $username-variant2-color);
+$username-variant3-color: var(--username-colors_2, $username-variant3-color);
+$username-variant4-color: var(--username-colors_3, $username-variant4-color);
+$username-variant5-color: var(--username-colors_4, $username-variant5-color);
+$username-variant6-color: var(--username-colors_5, $username-variant6-color);
+$username-variant7-color: var(--username-colors_6, $username-variant7-color);
+$username-variant8-color: var(--username-colors_7, $username-variant8-color);
+
+/* --timeline-highlights-color */
+$event-selected-color: var(--timeline-highlights-color);
+$event-highlight-bg-color: var(--timeline-highlights-color);
+
+/* redirect some variables away from their hardcoded values in the light theme */
+$settings-grey-fg-color: $primary-content;
+
+/* --eventbubble colors */
+$eventbubble-self-bg: var(--eventbubble-self-bg, $eventbubble-self-bg);
+$eventbubble-others-bg: var(--eventbubble-others-bg, $eventbubble-others-bg);
+$eventbubble-bg-hover: var(--eventbubble-bg-hover, $eventbubble-bg-hover);
+$eventbubble-reply-color: var(--eventbubble-reply-color, $eventbubble-reply-color);
+
+$reaction-row-button-selected-bg-color: var(
+    --reaction-row-button-selected-bg-color,
+    $reaction-row-button-selected-bg-color
+);
+
+$menu-selected-color: var(--menu-selected-color, $menu-selected-color);
+$pill-bg-color: var(--other-user-pill-bg-color, $pill-bg-color);
+$pill-hover-bg-color: var(--other-user-pill-bg-color, $pill-hover-bg-color);
+$icon-button-color: var(--icon-button-color, $icon-button-color);

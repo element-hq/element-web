@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MPollEndBody /> when poll start event does not exist in current timeline fetches the related poll start event and displays a poll tile 1`] = `
+<div>
+  <div
+    class="mx_MPollEndBody_icon"
+  />
+</div>
+`;
+
+exports[`<MPollEndBody /> when poll start event exists in current timeline renders an ended poll 1`] = `
+<div>
+  <div>
+    <span
+      class="mx_Caption"
+    >
+      Ended a poll
+    </span>
+    <div
+      class="mx_MPollBody"
+    >
+      <h2
+        data-testid="pollQuestion"
+      >
+        Question?
+      </h2>
+      <div
+        class="mx_MPollBody_allOptions"
+      >
+        <div
+          class="mx_PollOption mx_PollOption_ended"
+          data-testid="pollOption-socks"
+        >
+          <div
+            class="mx_PollOption_endedOption"
+            data-value="socks"
+          >
+            <div
+              class="mx_PollOption_content"
+            >
+              <div
+                class="mx_PollOption_optionText"
+              >
+                Socks
+              </div>
+              <div
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_PollOption_popularityBackground"
+          >
+            <div
+              class="mx_PollOption_popularityAmount"
+              style="width: 0%;"
+            />
+          </div>
+        </div>
+        <div
+          class="mx_PollOption mx_PollOption_ended"
+          data-testid="pollOption-shoes"
+        >
+          <div
+            class="mx_PollOption_endedOption"
+            data-value="shoes"
+          >
+            <div
+              class="mx_PollOption_content"
+            >
+              <div
+                class="mx_PollOption_optionText"
+              >
+                Shoes
+              </div>
+              <div
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_PollOption_popularityBackground"
+          >
+            <div
+              class="mx_PollOption_popularityAmount"
+              style="width: 0%;"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_MPollBody_totalVotes"
+        data-testid="totalVotes"
+      >
+        Final result based on 0 votes
+        <div
+          class="mx_Spinner"
+        >
+          <div
+            aria-label="Loading…"
+            class="mx_Spinner_icon"
+            data-testid="spinner"
+            role="progressbar"
+            style="width: 16px; height: 16px;"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

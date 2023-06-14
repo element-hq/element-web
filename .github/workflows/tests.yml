@@ -1,0 +1,107 @@
+name: Tests
+on:
+    pull_request: {}
+    merge_group:
+        types: [checks_requested]
+    push:
+        branches: [develop, master]
+    repository_dispatch:
+        types: [upstream-sdk-notify]
+    workflow_call:
+        inputs:
+            disable_coverage:
+                type: boolean
+                required: false
+                description: "Specify true to skip generating and uploading coverage for tests"
+            matrix-js-sdk-sha:
+                type: string
+                required: false
+                description: "The matrix-js-sdk SHA to use"
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
+env:
+    ENABLE_COVERAGE: ${{ github.event_name != 'merge_group' && inputs.disable_coverage != 'true' }}
+    # fetchdep.sh needs to know our PR number
+    PR_NUMBER: ${{ github.event.pull_request.number }}
+
+jobs:
+    jest:
+        name: Jest
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'matrix-org/matrix-react-sdk' || github.repository }}
+
+            - name: Yarn cache
+              uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Install Deps
+              run: "./scripts/ci/install-deps.sh --ignore-scripts"
+              env:
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+
+            - name: Jest Cache
+              uses: actions/cache@v3
+              with:
+                  path: /tmp/jest_cache
+                  key: ${{ hashFiles('**/yarn.lock') }}
+
+            - name: Get number of CPU cores
+              id: cpu-cores
+              uses: SimenB/github-actions-cpu-cores@410541432439795d30db6501fb1d8178eb41e502 # v1
+
+            - name: Run tests
+              run: |
+                  yarn test \
+                      --coverage=${{ env.ENABLE_COVERAGE }} \
+                      --ci \
+                      --max-workers ${{ steps.cpu-cores.outputs.count }} \
+                      --cacheDirectory /tmp/jest_cache
+
+            - name: Upload Artifact
+              if: env.ENABLE_COVERAGE == 'true'
+              uses: actions/upload-artifact@v3
+              with:
+                  name: coverage
+                  path: |
+                      coverage
+                      !coverage/lcov-report
+
+    skip_sonar:
+        name: Skip SonarCloud in merge queue
+        if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
+        runs-on: ubuntu-latest
+        needs: jest
+        steps:
+            - name: Skip SonarCloud
+              uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: success
+                  description: SonarCloud skipped
+                  context: SonarCloud Code Analysis
+                  sha: ${{ github.sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+    app-tests:
+        name: Element Web Integration Tests
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'matrix-org/matrix-react-sdk' || github.repository }}
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Run tests
+              run: "./scripts/ci/app-tests.sh"
+              env:
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}

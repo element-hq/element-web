@@ -1,0 +1,150 @@
+name: Static Analysis
+on:
+    pull_request: {}
+    merge_group:
+        types: [checks_requested]
+    push:
+        branches: [develop, master]
+    repository_dispatch:
+        types: [upstream-sdk-notify]
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
+env:
+    # fetchdep.sh needs to know our PR number
+    PR_NUMBER: ${{ github.event.pull_request.number }}
+
+jobs:
+    ts_lint:
+        name: "Typescript Syntax Check"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Install Deps
+              run: "./scripts/ci/install-deps.sh --ignore-scripts"
+
+            - name: Typecheck
+              run: "yarn run lint:types"
+
+            - name: Switch js-sdk to release mode
+              working-directory: node_modules/matrix-js-sdk
+              run: |
+                  scripts/switch_package_to_release.js
+                  yarn install
+                  yarn run build:compile
+                  yarn run build:types
+
+            - name: Typecheck (release mode)
+              run: "yarn run lint:types"
+
+    tsc-strict:
+        name: Typescript Strict Error Checker
+        if: github.event_name == 'pull_request'
+        runs-on: ubuntu-latest
+        permissions:
+            pull-requests: read
+            checks: write
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+
+            - name: Install Deps
+              run: "scripts/ci/layered.sh"
+
+            - name: Get diff lines
+              id: diff
+              uses: Equip-Collaboration/diff-line-numbers@e752977e2cb4207d671bb9e4dad18c07c1b73d52 # v1.1.0
+              with:
+                  include: '["\\.tsx?$"]'
+
+            - name: Detecting files changed
+              id: files
+              uses: futuratrepadeira/changed-files@0239328a3a6268aad16af7c3e4efc78e32d6c0f0 # v4.0.1
+              with:
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  pattern: '^.*\.tsx?$'
+
+            - uses: t3chguy/typescript-check-action@main
+              with:
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  use-check: false
+                  check-fail-mode: added
+                  output-behaviour: annotate
+                  ts-extra-args: "--strict --noImplicitAny"
+                  files-changed: ${{ steps.files.outputs.files_updated }}
+                  files-added: ${{ steps.files.outputs.files_created }}
+                  files-deleted: ${{ steps.files.outputs.files_deleted }}
+                  line-numbers: ${{ steps.diff.outputs.lineNumbers }}
+
+    i18n_lint:
+        name: "i18n Check"
+        uses: matrix-org/matrix-react-sdk/.github/workflows/i18n_check.yml@develop
+
+    rethemendex_lint:
+        name: "Rethemendex Check"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - run: ./res/css/rethemendex.sh
+
+            - run: git diff --exit-code
+
+    js_lint:
+        name: "ESLint"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            # Does not need branch matching as only analyses this layer
+            - name: Install Deps
+              run: "yarn install"
+
+            - name: Run Linter
+              run: "yarn run lint:js"
+
+    style_lint:
+        name: "Style Lint"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            # Does not need branch matching as only analyses this layer
+            - name: Install Deps
+              run: "yarn install"
+
+            - name: Run Linter
+              run: "yarn run lint:style"
+
+    analyse_dead_code:
+        name: "Analyse Dead Code"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Install Deps
+              run: "scripts/ci/layered.sh"
+
+            - name: Dead Code Analysis
+              run: |
+                  cd element-web
+                  yarn run analyse:unused-exports

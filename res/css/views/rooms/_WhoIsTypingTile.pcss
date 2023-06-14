@@ -1,0 +1,78 @@
+/*
+Copyright 2018 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_WhoIsTypingTile {
+    margin-left: -18px; /* offset padding from mx_RoomView_MessageList to center avatars */
+    padding-top: 18px;
+    display: flex;
+    align-items: center;
+}
+
+/* position the indicator in the same place horizontally as .mx_EventTile_avatar. */
+.mx_WhoIsTypingTile_avatars {
+    flex: 0 0 82px; /* 18 (padding on message list) + 64 (padding on event lines) */
+    text-align: center;
+}
+
+.mx_WhoIsTypingTile_avatars > :not(:first-child) {
+    margin-left: -12px;
+}
+
+.mx_WhoIsTypingTile_avatars .mx_BaseAvatar_initial {
+    padding-top: 1px;
+}
+
+.mx_WhoIsTypingTile_avatars .mx_BaseAvatar {
+    border: 1px solid $background;
+    border-radius: 40px;
+}
+
+.mx_WhoIsTypingTile_remainingAvatarPlaceholder {
+    position: relative;
+    display: inline-block;
+    color: $primary-content;
+    background-color: $quinary-content;
+    border: 1px solid $background;
+    border-radius: 40px;
+    width: 24px;
+    height: 24px;
+    line-height: $font-24px;
+    font-size: 0.8em;
+    vertical-align: top;
+    text-align: center;
+}
+
+.mx_WhoIsTypingTile_label {
+    flex: 1;
+    font-size: $font-14px;
+    font-weight: var(--font-semi-bold);
+    color: $roomtopic-color;
+}
+
+.mx_WhoIsTypingTile_label > span {
+    background-image: url("$(res)/img/typing-indicator-2x.gif");
+    background-size: 25px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    padding-bottom: 15px;
+    display: block;
+}
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_WhoIsTypingTile {
+        padding-top: 4px;
+    }
+}

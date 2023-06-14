@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RolesRoomSettingsTab Banned users renders banned users 1`] = `
+<fieldset
+  class="mx_SettingsFieldset"
+>
+  <legend
+    class="mx_SettingsFieldset_legend"
+  >
+    Banned users
+  </legend>
+  <div
+    class="mx_SettingsFieldset_content"
+  >
+    <ul
+      class="mx_RolesRoomSettingsTab_bannedList"
+    >
+      <li>
+        <span
+          title="Banned by @alice:server.org"
+        >
+          <strong>
+            @bob:server.org
+          </strong>
+           
+           Reason: just testing
+        </span>
+      </li>
+    </ul>
+  </div>
+</fieldset>
+`;

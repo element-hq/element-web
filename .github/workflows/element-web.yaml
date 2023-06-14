@@ -1,0 +1,87 @@
+# Produce a build of element-web with this version of react-sdk
+# and any matching branches of element-web and js-sdk, output it
+# as an artifact and run integration tests.
+name: Element Web - Build
+on:
+    schedule:
+        - cron: "17 4 * * 1-5" # every weekday at 04:17 UTC
+    pull_request: {}
+    merge_group:
+        types: [checks_requested]
+    push:
+        branches: [develop, master]
+    repository_dispatch:
+        types: [upstream-sdk-notify]
+
+    # support triggering from other workflows
+    workflow_call:
+        inputs:
+            react-sdk-repository:
+                type: string
+                required: true
+                description: "The name of the github repository to check out and build."
+
+            matrix-js-sdk-sha:
+                type: string
+                required: false
+                description: "The Git SHA of matrix-js-sdk to build against. By default, will use a matching branch name if it exists, or develop."
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
+env:
+    # fetchdep.sh needs to know our PR number
+    PR_NUMBER: ${{ github.event.pull_request.number }}
+
+jobs:
+    build:
+        name: "Build Element-Web"
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                  repository: ${{ inputs.react-sdk-repository || github.repository }}
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Fetch layered build
+              id: layered_build
+              env:
+                  # tell layered.sh to check out the right sha of the JS-SDK, if we were given one
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+              run: |
+                  scripts/ci/layered.sh
+                  JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
+                  REACT_SHA=$(git rev-parse --short=12 HEAD)
+                  VECTOR_SHA=$(git -C element-web rev-parse --short=12 HEAD)
+                  echo "VERSION=$VECTOR_SHA-react-$REACT_SHA-js-$JSSDK_SHA" >> $GITHUB_OUTPUT
+
+            - name: Copy config
+              run: cp element.io/develop/config.json config.json
+              working-directory: ./element-web
+
+            - name: Build
+              env:
+                  CI_PACKAGE: true
+                  VERSION: "${{ steps.layered_build.outputs.VERSION }}"
+              run: |
+                  yarn build
+                  echo $VERSION > webapp/version
+              working-directory: ./element-web
+
+            # Record the react-sdk sha so our cypress tests are from the same sha
+            - name: Record react-sdk SHA
+              run: |
+                  git rev-parse HEAD > element-web/webapp/sha
+
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v3
+              with:
+                  name: previewbuild
+                  path: element-web/webapp
+                  # We'll only use this in a triggered job, then we're done with it
+                  retention-days: 1

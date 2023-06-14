@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FilteredDeviceListHeader /> renders correctly when all devices are selected 1`] = `
+<div>
+  <div
+    class="mx_FilteredDeviceListHeader"
+    data-testid="test123"
+  >
+    <div
+      aria-describedby="mx_TooltipTarget_abdefghi"
+      tabindex="0"
+    >
+      <span
+        class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+      >
+        <input
+          aria-label="Deselect all"
+          checked=""
+          data-testid="device-select-all-checkbox"
+          id="device-select-all-checkbox"
+          type="checkbox"
+        />
+        <label
+          for="device-select-all-checkbox"
+        >
+          <div
+            class="mx_Checkbox_background"
+          >
+            <div
+              class="mx_Checkbox_checkmark"
+            />
+          </div>
+        </label>
+      </span>
+    </div>
+    <span
+      class="mx_FilteredDeviceListHeader_label"
+    >
+      Sessions
+    </span>
+    <div>
+      test
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<FilteredDeviceListHeader /> renders correctly when no devices are selected 1`] = `
+<div>
+  <div
+    class="mx_FilteredDeviceListHeader"
+    data-testid="test123"
+  >
+    <div
+      aria-describedby="mx_TooltipTarget_abdefghi"
+      tabindex="0"
+    >
+      <span
+        class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+      >
+        <input
+          aria-label="Select all"
+          data-testid="device-select-all-checkbox"
+          id="device-select-all-checkbox"
+          type="checkbox"
+        />
+        <label
+          for="device-select-all-checkbox"
+        >
+          <div
+            class="mx_Checkbox_background"
+          >
+            <div
+              class="mx_Checkbox_checkmark"
+            />
+          </div>
+        </label>
+      </span>
+    </div>
+    <span
+      class="mx_FilteredDeviceListHeader_label"
+    >
+      Sessions
+    </span>
+    <div>
+      test
+    </div>
+  </div>
+</div>
+`;

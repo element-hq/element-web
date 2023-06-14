@@ -1,0 +1,61 @@
+/*
+Copyright 2017, 2019 New Vector Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_EditableItemList {
+    margin-top: 12px;
+    margin-bottom: 10px;
+}
+
+.mx_EditableItem {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.mx_EditableItem_delete {
+    @mixin customisedCancelButton;
+    order: 3;
+    margin-right: 5px;
+    vertical-align: middle;
+    width: 14px;
+    height: 14px;
+    background-color: $alert;
+    mask-size: 100%;
+}
+
+.mx_EditableItem_email {
+    vertical-align: middle;
+}
+
+.mx_EditableItem_promptText {
+    margin-right: 10px;
+    order: 2;
+}
+
+.mx_EditableItem_confirmBtn {
+    margin-right: 5px;
+}
+
+.mx_EditableItem_item {
+    flex: auto 1 0;
+    order: 1;
+    width: calc(100% - 14px); /* leave space for the remove button */
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.mx_EditableItemList_label {
+    margin-bottom: 5px;
+}

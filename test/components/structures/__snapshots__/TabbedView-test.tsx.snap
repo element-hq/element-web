@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TabbedView /> renders tabs 1`] = `
+<div>
+  <div
+    class="mx_TabbedView mx_TabbedView_tabsOnLeft"
+  >
+    <ul
+      aria-orientation="vertical"
+      class="mx_TabbedView_tabLabels"
+      role="tablist"
+    >
+      <li
+        aria-controls="mx_tabpanel_GENERAL"
+        aria-selected="true"
+        class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
+        data-testid="settings-tab-GENERAL"
+        role="tab"
+        tabindex="0"
+      >
+        <span
+          class="mx_TabbedView_maskedIcon general"
+        />
+        <span
+          class="mx_TabbedView_tabLabel_text"
+          id="mx_tabpanel_GENERAL_label"
+        >
+          General
+        </span>
+      </li>
+      <li
+        aria-controls="mx_tabpanel_LABS"
+        aria-selected="false"
+        class="mx_AccessibleButton mx_TabbedView_tabLabel"
+        data-testid="settings-tab-LABS"
+        role="tab"
+        tabindex="-1"
+      >
+        <span
+          class="mx_TabbedView_maskedIcon labs"
+        />
+        <span
+          class="mx_TabbedView_tabLabel_text"
+          id="mx_tabpanel_LABS_label"
+        >
+          Labs
+        </span>
+      </li>
+      <li
+        aria-controls="mx_tabpanel_SECURITY"
+        aria-selected="false"
+        class="mx_AccessibleButton mx_TabbedView_tabLabel"
+        data-testid="settings-tab-SECURITY"
+        role="tab"
+        tabindex="-1"
+      >
+        <span
+          class="mx_TabbedView_maskedIcon security"
+        />
+        <span
+          class="mx_TabbedView_tabLabel_text"
+          id="mx_tabpanel_SECURITY_label"
+        >
+          Security
+        </span>
+      </li>
+    </ul>
+    <div
+      aria-labelledby="mx_tabpanel_GENERAL_label"
+      class="mx_TabbedView_tabPanel"
+      id="mx_tabpanel_GENERAL"
+    >
+      <div
+        class="mx_AutoHideScrollbar mx_TabbedView_tabPanelContent"
+        tabindex="-1"
+      >
+        <div>
+          general
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

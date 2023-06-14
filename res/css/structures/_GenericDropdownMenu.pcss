@@ -1,0 +1,123 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_GenericDropdownMenu_button {
+    padding: 3px 4px 3px 8px;
+    border-radius: 4px;
+    line-height: 1.5;
+    user-select: none;
+    font-size: $font-12px;
+    color: $secondary-content;
+}
+
+.mx_GenericDropdownMenu_button:hover,
+.mx_GenericDropdownMenu_button[aria-expanded="true"] {
+    background: $quinary-content;
+}
+
+.mx_GenericDropdownMenu_button::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    background: currentColor;
+    mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+    mask-size: 100%;
+    mask-repeat: no-repeat;
+    float: right;
+}
+
+.mx_ContextualMenu_wrapper.mx_GenericDropdownMenu_wrapper {
+    .mx_ContextualMenu {
+        position: initial;
+
+        font-size: $font-12px;
+        color: $secondary-content;
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        border: 1px solid $quinary-content;
+        box-shadow: 0 1px 3px rgba(23, 25, 28, 0.05);
+    }
+
+    .mx_ContextualMenu_chevron_top {
+        left: auto;
+        right: 22px;
+        border-bottom-color: $quinary-content;
+
+        &::after {
+            content: "";
+            border: inherit;
+            border-bottom-color: $menu-bg-color;
+            position: absolute;
+            top: 1px;
+            left: -8px;
+        }
+    }
+
+    .mx_GenericDropdownMenu_divider {
+        display: block;
+        height: 0;
+        margin-left: 4px;
+        margin-right: 19px;
+        border-top: 1px solid $quinary-content;
+    }
+
+    .mx_GenericDropdownMenu_Option {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: row;
+        align-items: center;
+        padding: 10px 20px 10px 30px;
+        position: relative;
+
+        > .mx_GenericDropdownMenu_Option--label {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+
+            margin: 0;
+
+            span:first-child {
+                color: $primary-content;
+                font-weight: var(--font-semi-bold);
+            }
+        }
+
+        &.mx_GenericDropdownMenu_Option--header > .mx_GenericDropdownMenu_Option--label span:first-child {
+            font-size: $font-15px;
+        }
+
+        &.mx_GenericDropdownMenu_Option--item {
+            &:hover {
+                background-color: $menu-selected-color;
+            }
+
+            &[aria-checked="true"]::before {
+                content: "";
+                width: 12px;
+                height: 12px;
+                margin-left: -20px;
+                margin-right: 8px;
+                mask-image: url("$(res)/img/feather-customised/check.svg");
+                mask-size: 100%;
+                mask-repeat: no-repeat;
+                background-color: $primary-content;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+    }
+}

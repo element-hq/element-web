@@ -1,0 +1,10 @@
+{
+    "Dismiss read marker and jump to bottom": "გააუქმეთ წაკითხული მარკერი და გადადით ქვემოთ",
+    "Explore rooms": "ოთახების დათავლიერება",
+    "Create Account": "ანგარიშის შექმნა",
+    "Sign In": "შესვლა",
+    "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "ფაილი '%(fileName)s' აჭარბებს ამ ჰომსერვერის ზომის ლიმიტს ატვირთვისთვის",
+    "The file '%(fileName)s' failed to upload.": "ფაილი '%(fileName)s' ვერ აიტვირთა.",
+    "Attachment": "Მიმაგრებული ფაილი",
+    "Dismiss": "დახურვა"
+}
