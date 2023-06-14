@@ -1,0 +1,38 @@
+name: Upgrade Dependencies
+on:
+    workflow_dispatch: {}
+    workflow_call:
+        secrets:
+            ELEMENT_BOT_TOKEN:
+                required: true
+jobs:
+    upgrade:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Upgrade
+              run: yarn upgrade && yarn install
+
+            - name: Create Pull Request
+              id: cpr
+              uses: peter-evans/create-pull-request@284f54f989303d2699d373481a0cfa13ad5a6666 # v5
+              with:
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  branch: actions/upgrade-deps
+                  delete-branch: true
+                  title: Upgrade dependencies
+                  labels: |
+                      Dependencies
+                      T-Task
+
+            - name: Enable automerge
+              run: gh pr merge --merge --auto "$PR_NUMBER"
+              if: steps.cpr.outputs.pull-request-operation == 'created'
+              env:
+                  GH_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  PR_NUMBER: ${{ steps.cpr.outputs.pull-request-number }}

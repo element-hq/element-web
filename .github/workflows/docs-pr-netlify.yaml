@@ -1,0 +1,34 @@
+name: Deploy documentation PR preview
+
+on:
+    workflow_run:
+        workflows: ["Static Analysis"]
+        types:
+            - completed
+
+jobs:
+    netlify:
+        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
+        runs-on: ubuntu-latest
+        steps:
+            # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
+            # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
+            - name: 📥 Download artifact
+              uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615 # v2
+              with:
+                  workflow: static_analysis.yml
+                  run_id: ${{ github.event.workflow_run.id }}
+                  name: docs
+                  path: docs
+
+            - name: 📤 Deploy to Netlify
+              uses: matrix-org/netlify-pr-preview@v2
+              with:
+                  path: docs
+                  owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+                  branch: ${{ github.event.workflow_run.head_branch }}
+                  revision: ${{ github.event.workflow_run.head_sha }}
+                  token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+                  site_id: ${{ secrets.NETLIFY_SITE_ID }}
+                  desc: Documentation preview
+                  deployment_env: PR Documentation Preview

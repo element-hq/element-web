@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# pre-commit: script to run checks on a working copy before commit
+#
+# To use, symlink it into .git/hooks:
+#    ln -s ../../git-hooks/pre-commit .git/hooks
+#
+
+set -e
+
+# create a temp dir
+tmpdir=`mktemp -d`
+trap 'rm -rf "$tmpdir"' EXIT
+
+# get a copy of the index
+git checkout-index --prefix="$tmpdir/" -a
+
+# keep node_modules/.bin on the path
+rootdir=`git rev-parse --show-toplevel`
+export PATH="$rootdir/node_modules/.bin:$PATH"
+
+# now run our checks
+cd "$tmpdir"
+yarn lint

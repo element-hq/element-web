@@ -1,0 +1,22 @@
+/_docs
+.DS_Store
+
+node_modules
+/.npmrc
+/*.log
+package-lock.json
+.lock-wscript
+build/Release
+coverage
+lib-cov
+out
+/dist
+/lib
+
+# version file and tarball created by `npm pack` / `yarn pack`
+/git-revision.txt
+/matrix-js-sdk-*.tgz
+
+.vscode
+.vscode/
+.idea/

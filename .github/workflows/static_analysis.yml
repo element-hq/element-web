@@ -1,0 +1,83 @@
+name: Static Analysis
+on:
+    pull_request: {}
+    merge_group:
+        types: [checks_requested]
+    push:
+        branches: [develop, master]
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+jobs:
+    ts_lint:
+        name: "Typescript Syntax Check"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Install Deps
+              run: "yarn install"
+
+            - name: Typecheck
+              run: "yarn run lint:types"
+
+            - name: Switch js-sdk to release mode
+              run: |
+                  scripts/switch_package_to_release.js
+                  yarn install
+                  yarn run build:compile
+                  yarn run build:types
+
+            - name: Typecheck (release mode)
+              run: "yarn run lint:types"
+
+    js_lint:
+        name: "ESLint"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Install Deps
+              run: "yarn install"
+
+            - name: Run Linter
+              run: "yarn run lint:js"
+
+    docs:
+        name: "JSDoc Checker"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: Install Deps
+              run: "yarn install"
+
+            - name: Generate Docs
+              run: "yarn run gendoc --treatWarningsAsErrors"
+
+            # Upload artifact duplicates symlink contents so we do this to save 75% space
+            - name: Flatten symlink and write _redirects
+              run: |
+                  find _docs -mindepth 1 -maxdepth 1 ! -type f ! -name stable -printf '/%f/* /stable/:splat\n' > _docs/_redirects
+                  find _docs -mindepth 1 -maxdepth 1 -type l -delete
+                  find _docs -mindepth 1 -maxdepth 1 -type d -execdir mv {} stable \; -quit
+
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v3
+              with:
+                  name: docs
+                  path: _docs
+                  # We'll only use this in a workflow_run, then we're done with it
+                  retention-days: 1

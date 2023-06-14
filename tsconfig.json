@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "es2016",
+        "experimentalDecorators": true,
+        "esModuleInterop": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noUnusedLocals": true,
+        "noEmit": true,
+        "declaration": true,
+        "strict": true
+    },
+    "include": ["./src/**/*.ts", "./spec/**/*.ts"],
+    "typedocOptions": {
+        "entryPoints": ["src/matrix.ts"],
+        "excludeExternals": true,
+        "out": "_docs"
+    }
+}
