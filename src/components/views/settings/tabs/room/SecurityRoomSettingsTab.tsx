@@ -43,6 +43,7 @@ import PosthogTrackers from "../../../../../PosthogTrackers";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsTab from "../SettingsTab";
+import SdkConfig from "../../../../../SdkConfig";
 
 interface IProps {
     room: Room;
@@ -163,7 +164,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                     "may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>",
                 {},
                 {
-                    a: (sub) => <ExternalLink href="https://element.io/help#encryption">{sub}</ExternalLink>,
+                    a: (sub) => <ExternalLink href={SdkConfig.get("help_encryption_url")}>{sub}</ExternalLink>,
                 },
             ),
             onFinished: (confirm) => {

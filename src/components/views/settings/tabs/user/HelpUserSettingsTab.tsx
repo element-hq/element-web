@@ -251,7 +251,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                 brand,
             },
             {
-                a: (sub) => <ExternalLink href="https://element.io/help">{sub}</ExternalLink>,
+                a: (sub) => <ExternalLink href={SdkConfig.get("help_url")}>{sub}</ExternalLink>,
             },
         );
         if (SdkConfig.get("welcome_user_id") && getCurrentLanguage().startsWith("en")) {
@@ -265,7 +265,11 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         },
                         {
                             a: (sub) => (
-                                <ExternalLink href="https://element.io/help" rel="noreferrer noopener" target="_blank">
+                                <ExternalLink
+                                    href={SdkConfig.get("help_url")}
+                                    rel="noreferrer noopener"
+                                    target="_blank"
+                                >
                                     {sub}
                                 </ExternalLink>
                             ),

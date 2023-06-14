@@ -70,6 +70,8 @@ describe("<MatrixChat />", () => {
     const defaultProps: ComponentProps<typeof MatrixChat> = {
         config: {
             brand: "Test",
+            help_url: "help_url",
+            help_encryption_url: "help_encryption_url",
             element_call: {},
             feedback: {
                 existing_issues_url: "https://feedback.org/existing",
