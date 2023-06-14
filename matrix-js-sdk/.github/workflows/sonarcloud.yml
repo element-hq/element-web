@@ -1,0 +1,52 @@
+# Must only be called from a workflow_run in the context of the upstream repo
+name: SonarCloud
+on:
+    workflow_call:
+        secrets:
+            SONAR_TOKEN:
+                required: true
+        inputs:
+            extra_args:
+                type: string
+                required: false
+                description: "Extra args to pass to SonarCloud"
+jobs:
+    sonarqube:
+        runs-on: ubuntu-latest
+        if: github.event.workflow_run.conclusion == 'success'
+        steps:
+            # We create the status here and then update it to success/failure in the `report` stage
+            # This provides an easy link to this workflow_run from the PR before Cypress is done.
+            - uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: pending
+                  context: ${{ github.workflow }} / SonarCloud (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
+                  sha: ${{ github.event.workflow_run.head_sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            - name: "🩻 SonarCloud Scan"
+              id: sonarcloud
+              uses: matrix-org/sonarcloud-workflow-action@v2.5
+              # workflow_run fails report against the develop commit always, we don't want that for PRs
+              continue-on-error: ${{ github.event.workflow_run.head_branch != 'develop' }}
+              with:
+                  repository: ${{ github.event.workflow_run.head_repository.full_name }}
+                  is_pr: ${{ github.event.workflow_run.event == 'pull_request' }}
+                  version_cmd: "cat package.json | jq -r .version"
+                  branch: ${{ github.event.workflow_run.head_branch }}
+                  revision: ${{ github.event.workflow_run.head_sha }}
+                  token: ${{ secrets.SONAR_TOKEN }}
+                  coverage_run_id: ${{ github.event.workflow_run.id }}
+                  coverage_workflow_name: tests.yml
+                  coverage_extract_path: coverage
+                  extra_args: ${{ inputs.extra_args }}
+
+            - uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
+              if: always()
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: ${{ steps.sonarcloud.outcome == 'success' && 'success' || 'failure' }}
+                  context: ${{ github.workflow }} / SonarCloud (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
+                  sha: ${{ github.event.workflow_run.head_sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

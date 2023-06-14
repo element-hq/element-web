@@ -1,0 +1,42 @@
+# Minor white-space adjustments
+1d1d59c75744e1f6a2be1cb3e0d1bd9ded5f8025
+# Import ordering and spacing: eslint-plugin-import
+80aaa6c32b50601f82e0c991c24e5a4590f39463
+# Minor white-space adjustment
+8fb036ba2d01fab66dc4373802ccf19b5cac8541
+# Minor white-space adjustment
+b63de6a902a9e1f8ffd7697dea33820fc04f028e
+3ca84cfc491b0987eec1f13f13cae58d2032bf54
+# Conform to new typescript eslint rules
+a87858840b57514603f63e2abbbda4f107f05a77
+5cf6684129a921295f5593173f16f192336fe0a2
+# Comply with new member-delimiter-style rule
+b2ad957d298720d3e026b6bd91be0c403338361a
+# Fix semicolons in TS files
+e2ec8952e38b8fea3f0ccaa09ecb42feeba0d923
+# Migrate to `eslint-plugin-matrix-org`
+# and `babel/...` to `@babel/...` migration
+09fac77ce0d9bcf6637088c29afab84084f0e739
+102704e91a70643bcc09721e14b0d909f0ef55c6
+# Eslint formatting
+cec00cd303787fa9008b6c48826e75ed438036fa
+# Minor eslint changes
+68bb8182e4e62d8f450f80c408c4b231b8725f1b
+c979ff6696e30ab8983ac416a3590996d84d3560
+f4a7395e3a3751a1a8e92dd302c49175a3296ad2
+# eslint --fix for dangley commas on function calls
+423175f5397910b0afe3112d6fb18283fc7d27d4
+# eslint ---fix for prefer-const
+7bca05af644e8b997dae81e568a3913d8f18d7ca
+# Fix linting on tests
+cee7f7a280a8c20bafc21c0a2911f60851f7a7ca
+# eslint --fix
+0fa9f7c6098822db1ae214f352fd1fe5c248b02c
+# eslint --fix for lots of white-space
+5abf6b9f208801c5022a47023150b5846cb0b309
+# eslint --fix
+7ed65407e6cdf292ce3cf659310c68d19dcd52b2
+# Switch to ESLint from JSHint (Google eslint rules as a base)
+e057956ede9ad1a931ff8050c411aca7907e0394
+# prettier
+349c2c2587c2885bb69eda4aa078b5383724cf5e

@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CallFeedStatsReporter should builds CallFeedReport 1`] = `
+{
+  "callFeeds": [],
+  "callId": "CALL_ID",
+  "opponentMemberId": "USER_ID",
+  "transceiver": [
+    {
+      "currentDirection": "sendonly",
+      "direction": "sendrecv",
+      "mid": "0",
+      "receiver": {
+        "constrainDeviceId": "constrainDeviceId-receiver_audio_0",
+        "enabled": true,
+        "id": "receiver_audio_0",
+        "kind": "audio",
+        "label": "receiver",
+        "muted": false,
+        "readyState": "live",
+        "settingDeviceId": "settingDeviceId-receiver_audio_0",
+      },
+      "sender": {
+        "constrainDeviceId": "constrainDeviceId-sender_audio_0",
+        "enabled": true,
+        "id": "sender_audio_0",
+        "kind": "audio",
+        "label": "sender",
+        "muted": false,
+        "readyState": "live",
+        "settingDeviceId": "settingDeviceId-sender_audio_0",
+      },
+    },
+    {
+      "currentDirection": "sendrecv",
+      "direction": "recvonly",
+      "mid": "1",
+      "receiver": {
+        "constrainDeviceId": "constrainDeviceId-receiver_video_1",
+        "enabled": true,
+        "id": "receiver_video_1",
+        "kind": "video",
+        "label": "receiver",
+        "muted": false,
+        "readyState": "live",
+        "settingDeviceId": "settingDeviceId-receiver_video_1",
+      },
+      "sender": {
+        "constrainDeviceId": "constrainDeviceId-sender_video_1",
+        "enabled": true,
+        "id": "sender_video_1",
+        "kind": "video",
+        "label": "sender",
+        "muted": false,
+        "readyState": "live",
+        "settingDeviceId": "settingDeviceId-sender_video_1",
+      },
+    },
+    {
+      "currentDirection": "recvonly",
+      "direction": "recvonly",
+      "mid": "2",
+      "receiver": {
+        "constrainDeviceId": "constrainDeviceId-receiver_video_2",
+        "enabled": true,
+        "id": "receiver_video_2",
+        "kind": "video",
+        "label": "receiver",
+        "muted": false,
+        "readyState": "live",
+        "settingDeviceId": "settingDeviceId-receiver_video_2",
+      },
+      "sender": null,
+    },
+  ],
+}
+`;
+
+exports[`CallFeedStatsReporter should extends CallFeedReport with call feeds 1`] = `
+[
+  {
+    "audio": {
+      "constrainDeviceId": "constrainDeviceId-video-1",
+      "enabled": true,
+      "id": "video-1",
+      "kind": "video",
+      "label": "--",
+      "muted": false,
+      "readyState": "live",
+      "settingDeviceId": "settingDeviceId-video-1",
+    },
+    "isAudioMuted": true,
+    "isVideoMuted": false,
+    "prefix": "unknown",
+    "purpose": undefined,
+    "stream": "stream-1",
+    "type": "local",
+    "video": {
+      "constrainDeviceId": "constrainDeviceId-audio-1",
+      "enabled": true,
+      "id": "audio-1",
+      "kind": "audio",
+      "label": "--",
+      "muted": false,
+      "readyState": "live",
+      "settingDeviceId": "settingDeviceId-audio-1",
+    },
+  },
+]
+`;

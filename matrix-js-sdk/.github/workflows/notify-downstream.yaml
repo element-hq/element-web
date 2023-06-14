@@ -1,0 +1,27 @@
+name: Notify Downstream Projects
+on:
+    push:
+        branches: [develop]
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+jobs:
+    notify-downstream:
+        # Only respect triggers from our develop branch, ignore that of forks
+        if: github.repository == 'matrix-org/matrix-js-sdk'
+        continue-on-error: true
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - repo: vector-im/element-web
+                      event: element-web-notify
+                    - repo: matrix-org/matrix-react-sdk
+                      event: upstream-sdk-notify
+
+        runs-on: ubuntu-latest
+        steps:
+            - name: Notify matrix-react-sdk repo that a new SDK build is on develop so it can CI against it
+              uses: peter-evans/repository-dispatch@26b39ed245ab8f31526069329e112ab2fb224588 # v2
+              with:
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  repository: ${{ matrix.repo }}
+                  event-type: ${{ matrix.event }}

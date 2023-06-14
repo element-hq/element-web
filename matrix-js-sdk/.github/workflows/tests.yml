@@ -1,0 +1,95 @@
+name: Tests
+on:
+    pull_request: {}
+    merge_group:
+        types: [checks_requested]
+    push:
+        branches: [develop, master]
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+env:
+    ENABLE_COVERAGE: ${{ github.event_name != 'merge_group' }}
+jobs:
+    jest:
+        name: "Jest [${{ matrix.specs }}] (Node ${{ matrix.node }})"
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        strategy:
+            matrix:
+                specs: [browserify, integ, unit]
+                node: [16, 18, latest]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+                  node-version: ${{ matrix.node }}
+
+            - name: Install dependencies
+              run: "yarn install"
+
+            - name: Build
+              if: matrix.specs == 'browserify'
+              run: "yarn build"
+
+            - name: Get number of CPU cores
+              id: cpu-cores
+              uses: SimenB/github-actions-cpu-cores@410541432439795d30db6501fb1d8178eb41e502 # v1
+
+            - name: Run tests
+              run: |
+                  yarn test \
+                      --coverage=${{ env.ENABLE_COVERAGE }} \
+                      --ci \
+                      --max-workers ${{ steps.cpu-cores.outputs.count }} \
+                      ./spec/${{ matrix.specs }}
+              env:
+                  JEST_SONAR_UNIQUE_OUTPUT_NAME: true
+
+            - name: Move coverage files into place
+              if: env.ENABLE_COVERAGE == 'true'
+              run: mv coverage/lcov.info coverage/${{ matrix.node }}-${{ matrix.specs }}.lcov.info
+
+            - name: Upload Artifact
+              if: env.ENABLE_COVERAGE == 'true'
+              uses: actions/upload-artifact@v3
+              with:
+                  name: coverage
+                  path: |
+                      coverage
+                      !coverage/lcov-report
+
+    matrix-react-sdk:
+        name: Downstream test matrix-react-sdk
+        if: github.event_name == 'merge_group'
+        uses: matrix-org/matrix-react-sdk/.github/workflows/tests.yml@develop
+        with:
+            disable_coverage: true
+            matrix-js-sdk-sha: ${{ github.sha }}
+
+    # Hook for branch protection to skip downstream testing outside of merge queues
+    # and skip sonarcloud coverage within merge queues
+    downstream:
+        name: Downstream tests
+        runs-on: ubuntu-latest
+        if: always()
+        needs:
+            - matrix-react-sdk
+        steps:
+            - name: Skip SonarCloud on merge queues
+              if: env.ENABLE_COVERAGE == 'false'
+              uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: success
+                  description: SonarCloud skipped
+                  context: SonarCloud Code Analysis
+                  sha: ${{ github.sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            - if: needs.matrix-react-sdk.result != 'skipped' && needs.matrix-react-sdk.result != 'success'
+              run: exit 1

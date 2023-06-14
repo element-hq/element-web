@@ -1,0 +1,52 @@
+name: Release Process
+on:
+    release:
+        types: [published]
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+jobs:
+    jsdoc:
+        name: Publish Documentation
+        runs-on: ubuntu-latest
+        steps:
+            - name: 🧮 Checkout code
+              uses: actions/checkout@v3
+
+            - name: 🧮 Checkout gh-pages
+              uses: actions/checkout@v3
+              with:
+                  ref: gh-pages
+                  path: _docs
+
+            - name: 🔧 Yarn cache
+              uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            - name: 🔨 Install dependencies
+              run: "yarn install --frozen-lockfile"
+
+            - name: 🔨 Install symlinks
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y symlinks
+
+            - name: 📖 Generate docs
+              run: |
+                  yarn tpv purge --yes --out _docs --stale --major 10
+                  yarn gendoc
+                  symlinks -rc _docs
+
+            - name: 🚀 Deploy
+              run: |
+                  git config --global user.email "releases@riot.im"
+                  git config --global user.name "RiotRobot"
+                  git add . --all
+                  git commit -m "Update docs"
+                  git push
+              working-directory: _docs
+
+    npm:
+        name: Publish
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-npm.yml@develop
+        secrets:
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,31 @@
+# Triggers after the "Downstream artifacts" build has finished, to run the
+# cypress tests (with access to repo secrets)
+
+name: matrix-react-sdk Cypress End to End Tests
+on:
+    workflow_run:
+        workflows: ["Build downstream artifacts"]
+        types:
+            - completed
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
+    cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
+
+jobs:
+    cypress:
+        name: Cypress
+        uses: matrix-org/matrix-react-sdk/.github/workflows/cypress.yaml@develop
+        permissions:
+            actions: read
+            issues: read
+            statuses: write
+            pull-requests: read
+        secrets:
+            # secrets are not automatically shared with called workflows, so share the cypress dashboard key, and the Kiwi login details
+            CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+            TCMS_USERNAME: ${{ secrets.TCMS_USERNAME }}
+            TCMS_PASSWORD: ${{ secrets.TCMS_PASSWORD }}
+        with:
+            react-sdk-repository: matrix-org/matrix-react-sdk
+            rust-crypto: true

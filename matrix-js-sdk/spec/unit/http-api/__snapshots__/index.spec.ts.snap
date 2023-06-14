@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MatrixHttpApi should return expected object from \`getContentUri\` 1`] = `
+{
+  "base": "http://baseUrl",
+  "params": {
+    "access_token": "token",
+  },
+  "path": "/_matrix/media/r0/upload",
+}
+`;

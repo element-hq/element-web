@@ -1,0 +1,6 @@
+*                         @matrix-org/element-web
+/.github/workflows/**     @matrix-org/element-web-app-team
+/package.json             @matrix-org/element-web-app-team
+/yarn.lock                @matrix-org/element-web-app-team
+/src/webrtc               @matrix-org/element-call-reviewers
+/spec/*/webrtc            @matrix-org/element-call-reviewers
