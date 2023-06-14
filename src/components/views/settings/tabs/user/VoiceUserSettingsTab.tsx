@@ -23,7 +23,6 @@ import { _t } from "../../../../../languageHandler";
 import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
-import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
@@ -31,6 +30,7 @@ import { requestMediaPermissions } from "../../../../../utils/media/requestMedia
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection from "../../shared/SettingsSubsection";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 interface IState {
     mediaDevices: IMediaDevices | null;
@@ -58,6 +58,9 @@ const mapDeviceKindToHandlerValue = (deviceKind: MediaDeviceKindEnum): string | 
 };
 
 export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     public constructor(props: {}) {
         super(props);
 
@@ -114,11 +117,11 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
     };
 
     private changeWebRtcMethod = (p2p: boolean): void => {
-        MatrixClientPeg.get().setForceTURN(!p2p);
+        this.context.setForceTURN(!p2p);
     };
 
     private changeFallbackICEServerAllowed = (allow: boolean): void => {
-        MatrixClientPeg.get().setFallbackICEServerAllowed(allow);
+        this.context.setFallbackICEServerAllowed(allow);
     };
 
     private renderDeviceOptions(devices: Array<MediaDeviceInfo>, category: MediaDeviceKindEnum): Array<JSX.Element> {

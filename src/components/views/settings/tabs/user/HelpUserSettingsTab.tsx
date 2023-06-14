@@ -19,7 +19,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import AccessibleButton from "../../../elements/AccessibleButton";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
-import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import SdkConfig from "../../../../../SdkConfig";
 import createRoom from "../../../../../createRoom";
 import Modal from "../../../../../Modal";
@@ -77,7 +76,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
     private getVersionInfo(): { appVersion: string; olmVersion: string } {
         const brand = SdkConfig.get().brand;
         const appVersion = this.state.appVersion || "unknown";
-        const olmVersionTuple = MatrixClientPeg.get().olmVersion;
+        const olmVersionTuple = this.context.olmVersion;
         const olmVersion = olmVersionTuple
             ? `${olmVersionTuple[0]}.${olmVersionTuple[1]}.${olmVersionTuple[2]}`
             : "<not-enabled>";
@@ -94,12 +93,10 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         // Dev note: please keep this log line, it's useful when troubleshooting a MatrixClient suddenly
         // stopping in the middle of the logs.
         logger.log("Clear cache & reload clicked");
-        MatrixClientPeg.get().stopClient();
-        MatrixClientPeg.get()
-            .store.deleteAllData()
-            .then(() => {
-                PlatformPeg.get()?.reload();
-            });
+        this.context.stopClient();
+        this.context.store.deleteAllData().then(() => {
+            PlatformPeg.get()?.reload();
+        });
     };
 
     private onBugReport = (): void => {
@@ -362,19 +359,19 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             {_t(
                                 "Homeserver is <code>%(homeserverUrl)s</code>",
                                 {
-                                    homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
+                                    homeserverUrl: this.context.getHomeserverUrl(),
                                 },
                                 {
                                     code: (sub) => <code>{sub}</code>,
                                 },
                             )}
                         </SettingsSubsectionText>
-                        {MatrixClientPeg.get().getIdentityServerUrl() && (
+                        {this.context.getIdentityServerUrl() && (
                             <SettingsSubsectionText>
                                 {_t(
                                     "Identity server is <code>%(identityServerUrl)s</code>",
                                     {
-                                        identityServerUrl: MatrixClientPeg.get().getIdentityServerUrl(),
+                                        identityServerUrl: this.context.getIdentityServerUrl(),
                                     },
                                     {
                                         code: (sub) => <code>{sub}</code>,
@@ -391,8 +388,8 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                             " Do not share it with anyone.",
                                     )}
                                 </b>
-                                <CopyableText getTextToCopy={() => MatrixClientPeg.get().getAccessToken()}>
-                                    {MatrixClientPeg.get().getAccessToken()}
+                                <CopyableText getTextToCopy={() => this.context.getAccessToken()}>
+                                    {this.context.getAccessToken()}
                                 </CopyableText>
                             </details>
                         </SettingsSubsectionText>

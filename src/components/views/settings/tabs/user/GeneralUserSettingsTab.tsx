@@ -33,7 +33,6 @@ import SpellCheckSettings from "../../SpellCheckSettings";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PlatformPeg from "../../../../../PlatformPeg";
-import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Service, ServicePolicyPair, startTermsFlow } from "../../../../../Terms";
@@ -102,14 +101,15 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
     private readonly dispatcherRef: string;
 
-    public constructor(props: IProps) {
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props);
+        this.context = context;
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
             spellCheckEnabled: false,
             spellCheckLanguages: [],
-            haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
+            haveIdServer: Boolean(this.context.getIdentityServerUrl()),
             idServerHasUnsignedTerms: false,
             requiredPolicyInfo: {
                 // This object is passed along to a component for handling
@@ -151,7 +151,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
     private onAction = (payload: ActionPayload): void => {
         if (payload.action === "id_server_changed") {
-            this.setState({ haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()) });
+            this.setState({ haveIdServer: Boolean(this.context.getIdentityServerUrl()) });
             this.getThreepidState();
         }
     };
@@ -165,7 +165,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     };
 
     private async getCapabilities(): Promise<void> {
-        const cli = MatrixClientPeg.get();
+        const cli = this.context;
 
         const serverSupportsSeparateAddAndBind = await cli.doesServerSupportSeparateAddAndBind();
 
@@ -184,7 +184,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     }
 
     private async getThreepidState(): Promise<void> {
-        const cli = MatrixClientPeg.get();
+        const cli = this.context;
 
         // Check to see if terms need accepting
         this.checkTerms();
@@ -195,7 +195,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         try {
             threepids = await getThreepidsWithBindStatus(cli);
         } catch (e) {
-            const idServerUrl = MatrixClientPeg.get().getIdentityServerUrl();
+            const idServerUrl = this.context.getIdentityServerUrl();
             logger.warn(
                 `Unable to reach identity server at ${idServerUrl} to check ` + `for 3PIDs bindings in Settings`,
             );
@@ -211,7 +211,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     private async checkTerms(): Promise<void> {
         // By starting the terms flow we get the logic for checking which terms the user has signed
         // for free. So we might as well use that for our own purposes.
-        const idServerUrl = MatrixClientPeg.get().getIdentityServerUrl();
+        const idServerUrl = this.context.getIdentityServerUrl();
         if (!this.state.haveIdServer || !idServerUrl) {
             this.setState({ idServerHasUnsignedTerms: false });
             return;

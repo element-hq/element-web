@@ -16,9 +16,10 @@ limitations under the License.
 
 import { render } from "@testing-library/react";
 import React from "react";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import AppearanceUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/AppearanceUserSettingsTab";
-import { stubClient } from "../../../../../test-utils";
+import { withClientContextRenderOptions, stubClient } from "../../../../../test-utils";
 
 // Fake random strings to give a predictable snapshot
 jest.mock("matrix-js-sdk/src/randomstring", () => ({
@@ -26,12 +27,14 @@ jest.mock("matrix-js-sdk/src/randomstring", () => ({
 }));
 
 describe("AppearanceUserSettingsTab", () => {
+    let client: MatrixClient;
+
     beforeEach(() => {
-        stubClient();
+        client = stubClient();
     });
 
     it("should render", () => {
-        const { asFragment } = render(<AppearanceUserSettingsTab />);
+        const { asFragment } = render(<AppearanceUserSettingsTab />, withClientContextRenderOptions(client));
         expect(asFragment()).toMatchSnapshot();
     });
 });

@@ -20,7 +20,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from "../../Modal";
 import { _t } from "../../languageHandler";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
@@ -30,6 +29,7 @@ import Spinner from "../views/elements/Spinner";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import { UserOnboardingPage } from "../views/user-onboarding/UserOnboardingPage";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 interface IProps {
     userId: string;
@@ -42,6 +42,9 @@ interface IState {
 }
 
 export default class UserView extends React.Component<IProps, IState> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     public constructor(props: IProps) {
         super(props);
         this.state = {
@@ -65,11 +68,10 @@ export default class UserView extends React.Component<IProps, IState> {
     }
 
     private async loadProfileInfo(): Promise<void> {
-        const cli = MatrixClientPeg.get();
         this.setState({ loading: true });
         let profileInfo: Awaited<ReturnType<MatrixClient["getProfileInfo"]>>;
         try {
-            profileInfo = await cli.getProfileInfo(this.props.userId);
+            profileInfo = await this.context.getProfileInfo(this.props.userId);
         } catch (err) {
             Modal.createDialog(ErrorDialog, {
                 title: _t("Could not load user profile"),

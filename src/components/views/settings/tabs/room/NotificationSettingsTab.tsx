@@ -18,7 +18,6 @@ import React, { createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
-import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -116,7 +115,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
             type = "audio/ogg";
         }
 
-        const { content_uri: url } = await MatrixClientPeg.get().uploadContent(this.state.uploadedFile, {
+        const { content_uri: url } = await this.context.uploadContent(this.state.uploadedFile, {
             type,
         });
 

@@ -25,13 +25,13 @@ import { formatTime } from "../../../DateUtils";
 import { pillifyLinks, unmountPills } from "../../../utils/pillify";
 import { tooltipifyLinks, unmountTooltips } from "../../../utils/tooltipify";
 import { _t } from "../../../languageHandler";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import RedactedBody from "./RedactedBody";
 import AccessibleButton from "../elements/AccessibleButton";
 import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -52,14 +52,18 @@ interface IState {
 }
 
 export default class EditHistoryMessage extends React.PureComponent<IProps, IState> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     private content = createRef<HTMLDivElement>();
     private pills: Element[] = [];
     private tooltips: Element[] = [];
 
-    public constructor(props: IProps) {
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props);
+        this.context = context;
 
-        const cli = MatrixClientPeg.get();
+        const cli = this.context;
         const userId = cli.getSafeUserId();
         const event = this.props.mxEvent;
         const room = cli.getRoom(event.getRoomId());
@@ -74,7 +78,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
 
     private onRedactClick = async (): Promise<void> => {
         const event = this.props.mxEvent;
-        const cli = MatrixClientPeg.get();
+        const cli = this.context;
 
         Modal.createDialog(
             ConfirmAndWaitRedactDialog,
@@ -102,7 +106,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     private pillifyLinks(): void {
         // not present for redacted events
         if (this.content.current) {
-            pillifyLinks(MatrixClientPeg.get(), this.content.current.children, this.props.mxEvent, this.pills);
+            pillifyLinks(this.context, this.content.current.children, this.props.mxEvent, this.pills);
         }
     }
 

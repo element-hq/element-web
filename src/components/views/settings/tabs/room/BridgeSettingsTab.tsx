@@ -17,12 +17,13 @@ limitations under the License.
 import React, { ReactNode } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
-import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import BridgeTile from "../../BridgeTile";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 const BRIDGE_EVENT_TYPES = [
     "uk.half-shot.bridge",
@@ -36,14 +37,16 @@ interface IProps {
 }
 
 export default class BridgeSettingsTab extends React.Component<IProps> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     private renderBridgeCard(event: MatrixEvent, room: Room | null): ReactNode {
         const content = event.getContent();
         if (!room || !content?.channel || !content.protocol) return null;
         return <BridgeTile key={event.getId()} room={room} ev={event} />;
     }
 
-    public static getBridgeStateEvents(roomId: string): MatrixEvent[] {
-        const client = MatrixClientPeg.get();
+    public static getBridgeStateEvents(client: MatrixClient, roomId: string): MatrixEvent[] {
         const roomState = client.getRoom(roomId)?.currentState;
         if (!roomState) return [];
 
@@ -53,7 +56,7 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
     public render(): React.ReactNode {
         // This settings tab will only be invoked if the following function returns more
         // than 0 events, so no validation is needed at this stage.
-        const bridgeEvents = BridgeSettingsTab.getBridgeStateEvents(this.props.room.roomId);
+        const bridgeEvents = BridgeSettingsTab.getBridgeStateEvents(this.context, this.props.room.roomId);
         const room = this.props.room;
 
         let content: JSX.Element;

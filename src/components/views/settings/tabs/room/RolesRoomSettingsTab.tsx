@@ -25,7 +25,6 @@ import { IContent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td } from "../../../../../languageHandler";
-import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
@@ -38,6 +37,7 @@ import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 import { AddPrivilegedUsers } from "../../AddPrivilegedUsers";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 interface IEventShowOpts {
     isState?: boolean;
@@ -91,16 +91,17 @@ interface IBannedUserProps {
 }
 
 export class BannedUser extends React.Component<IBannedUserProps> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     private onUnbanClick = (): void => {
-        MatrixClientPeg.get()
-            .unban(this.props.member.roomId, this.props.member.userId)
-            .catch((err) => {
-                logger.error("Failed to unban: " + err);
-                Modal.createDialog(ErrorDialog, {
-                    title: _t("Error"),
-                    description: _t("Failed to unban"),
-                });
+        this.context.unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
+            logger.error("Failed to unban: " + err);
+            Modal.createDialog(ErrorDialog, {
+                title: _t("Error"),
+                description: _t("Failed to unban"),
             });
+        });
     };
 
     public render(): React.ReactNode {
@@ -136,12 +137,15 @@ interface IProps {
 }
 
 export default class RolesRoomSettingsTab extends React.Component<IProps> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     public componentDidMount(): void {
-        MatrixClientPeg.get().on(RoomStateEvent.Update, this.onRoomStateUpdate);
+        this.context.on(RoomStateEvent.Update, this.onRoomStateUpdate);
     }
 
     public componentWillUnmount(): void {
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         if (client) {
             client.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
         }
@@ -173,7 +177,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
     }
 
     private onPowerLevelsChanged = (value: number, powerLevelKey: string): void => {
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         const room = this.props.room;
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
         let plContent = plEvent?.getContent() ?? {};
@@ -215,7 +219,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
     };
 
     private onUserPowerLevelChanged = (value: number, powerLevelKey: string): void => {
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         const room = this.props.room;
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
         let plContent = plEvent?.getContent() ?? {};
@@ -241,7 +245,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
     };
 
     public render(): React.ReactNode {
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         const room = this.props.room;
         const isSpaceRoom = room.isSpaceRoom();
 

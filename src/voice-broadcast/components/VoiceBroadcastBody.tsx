@@ -25,13 +25,13 @@ import {
     VoiceBroadcastInfoState,
 } from "..";
 import { IBodyProps } from "../../components/views/messages/IBodyProps";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { RelationsHelper, RelationsHelperEvent } from "../../events/RelationsHelper";
 import { SDKContext } from "../../contexts/SDKContext";
+import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 
 export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
     const sdkContext = useContext(SDKContext);
-    const client = MatrixClientPeg.get();
+    const client = useMatrixClientContext();
     const [infoState, setInfoState] = useState(mxEvent.getContent()?.state || VoiceBroadcastInfoState.Stopped);
 
     useEffect(() => {

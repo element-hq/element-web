@@ -19,7 +19,6 @@ import React, { ChangeEvent, ReactNode } from "react";
 
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import Field from "../../../elements/Field";
@@ -34,6 +33,7 @@ import ImageSizePanel from "../../ImageSizePanel";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 interface IProps {}
 
@@ -49,6 +49,9 @@ interface IState {
 }
 
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 
     private unmounted = false;
@@ -66,7 +69,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     public async componentDidMount(): Promise<void> {
         // Fetch the current user profile for the message preview
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         const userId = client.getUserId()!;
         const profileInfo = await client.getProfileInfo(userId);
         if (this.unmounted) return;

@@ -24,7 +24,7 @@ import { mocked } from "jest-mock";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 
 import RolesRoomSettingsTab from "../../../../../../src/components/views/settings/tabs/room/RolesRoomSettingsTab";
-import { mkStubRoom, stubClient } from "../../../../../test-utils";
+import { mkStubRoom, withClientContextRenderOptions, stubClient } from "../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { VoiceBroadcastInfoEventType } from "../../../../../../src/voice-broadcast";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
@@ -37,7 +37,7 @@ describe("RolesRoomSettingsTab", () => {
     let room: Room;
 
     const renderTab = (propRoom: Room = room): RenderResult => {
-        return render(<RolesRoomSettingsTab room={propRoom} />);
+        return render(<RolesRoomSettingsTab room={propRoom} />, withClientContextRenderOptions(cli));
     };
 
     const getVoiceBroadcastsSelect = (): HTMLElement => {

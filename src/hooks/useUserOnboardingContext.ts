@@ -18,9 +18,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
 import { Notifier } from "../Notifier";
 import DMRoomMap from "../utils/DMRoomMap";
+import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 
 export interface UserOnboardingContext {
     hasAvatar: boolean;
@@ -47,7 +47,7 @@ function useRefOf<T extends any[], R>(value: (...values: T) => R): (...values: T
 
 function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: MatrixClient) => Promise<T>): T {
     const [value, setValue] = useState<T>(defaultValue);
-    const cli = MatrixClientPeg.get();
+    const cli = useMatrixClientContext();
 
     const handler = useRefOf(callback);
 
