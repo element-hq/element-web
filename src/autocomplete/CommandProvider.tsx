@@ -27,6 +27,7 @@ import { TextualCompletion } from "./Components";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
 import { Command, Commands, CommandMap } from "../SlashCommands";
 import { TimelineRenderingType } from "../contexts/RoomContext";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 
@@ -51,12 +52,14 @@ export default class CommandProvider extends AutocompleteProvider {
         const { command, range } = this.getCurrentCommand(query, selection);
         if (!command) return [];
 
+        const cli = MatrixClientPeg.get();
+
         let matches: Command[] = [];
         // check if the full match differs from the first word (i.e. returns false if the command has args)
         if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
             const name = command[1].slice(1); // strip leading `/`
-            if (CommandMap.has(name) && CommandMap.get(name)!.isEnabled()) {
+            if (CommandMap.has(name) && CommandMap.get(name)!.isEnabled(cli)) {
                 // some commands, namely `me` don't suit having the usage shown whilst typing their arguments
                 if (CommandMap.get(name)!.hideCompletionAfterSpace) return [];
                 matches = [CommandMap.get(name)!];
@@ -75,7 +78,7 @@ export default class CommandProvider extends AutocompleteProvider {
         return matches
             .filter((cmd) => {
                 const display = !cmd.renderingTypes || cmd.renderingTypes.includes(this.renderingType);
-                return cmd.isEnabled() && display;
+                return cmd.isEnabled(cli) && display;
             })
             .map((result) => {
                 let completion = result.getCommand() + " ";

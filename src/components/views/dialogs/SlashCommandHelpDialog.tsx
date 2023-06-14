@@ -19,6 +19,7 @@ import React from "react";
 import { _t } from "../../../languageHandler";
 import { Command, CommandCategories, Commands } from "../../../SlashCommands";
 import InfoDialog from "./InfoDialog";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     onFinished(): void;
@@ -27,7 +28,7 @@ interface IProps {
 const SlashCommandHelpDialog: React.FC<IProps> = ({ onFinished }) => {
     const categories: Record<string, Command[]> = {};
     Commands.forEach((cmd) => {
-        if (!cmd.isEnabled()) return;
+        if (!cmd.isEnabled(MatrixClientPeg.get())) return;
         if (!categories[cmd.category]) {
             categories[cmd.category] = [];
         }
