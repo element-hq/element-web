@@ -356,6 +356,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     event: null,
                     context: this.context.timelineRenderingType,
                 });
+                event.preventDefault();
+                event.stopPropagation();
                 break;
         }
     };
