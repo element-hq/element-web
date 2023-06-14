@@ -26,7 +26,7 @@ import {
     PUSHER_ENABLED,
     UNSTABLE_MSC3852_LAST_SEEN_UA,
 } from "matrix-js-sdk/src/matrix";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";

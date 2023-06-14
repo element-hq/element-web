@@ -17,7 +17,7 @@ exports[`VerificationRequestToast should render a cross-user verification 1`] = 
         role="button"
         tabindex="0"
       >
-        Ignore (NaN)
+        Ignore
       </div>
       <div
         class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
@@ -53,7 +53,7 @@ exports[`VerificationRequestToast should render a self-verification 1`] = `
         role="button"
         tabindex="0"
       >
-        Ignore (NaN)
+        Ignore
       </div>
       <div
         class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"

@@ -16,7 +16,7 @@ limitations under the License.
 
 import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import type { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 export type EmojiMapping = [emoji: string, name: string];
 

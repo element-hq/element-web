@@ -17,11 +17,7 @@ limitations under the License.
 import React from "react";
 import classNames from "classnames";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import {
-    Phase as VerificationPhase,
-    VerificationRequest,
-    VerificationRequestEvent,
-} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { VerificationPhase, VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 

@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";

@@ -17,8 +17,7 @@ limitations under the License.
 import { User } from "matrix-js-sdk/src/models/user";
 import { verificationMethods as VerificationMethods } from "matrix-js-sdk/src/crypto";
 import { MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import { CrossSigningKey } from "matrix-js-sdk/src/crypto-api";
+import { CrossSigningKey, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "./dispatcher/dispatcher";
 import Modal from "./Modal";

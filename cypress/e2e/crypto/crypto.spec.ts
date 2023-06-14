@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import type { ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
-import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import type { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import type { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { UserCredentials } from "../../support/login";

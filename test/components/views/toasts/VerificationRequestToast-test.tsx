@@ -27,6 +27,7 @@ import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter"
 
 import VerificationRequestToast from "../../../../src/components/views/toasts/VerificationRequestToast";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
+import ToastStore from "../../../../src/stores/ToastStore";
 
 function renderComponent(
     props: Partial<ComponentProps<typeof VerificationRequestToast>> & { request: VerificationRequest },
@@ -81,6 +82,23 @@ describe("VerificationRequestToast", () => {
             await flushPromises();
         });
         expect(result.container).toMatchSnapshot();
+    });
+
+    it("dismisses itself once the request can no longer be accepted", async () => {
+        const otherUserId = "@other:user";
+        const request = makeMockVerificationRequest({
+            isSelfVerification: false,
+            otherUserId,
+        });
+        renderComponent({ request, toastKey: "testKey" });
+        await act(async () => {
+            await flushPromises();
+        });
+
+        const dismiss = jest.spyOn(ToastStore.sharedInstance(), "dismissToast");
+        Object.defineProperty(request, "accepting", { value: true });
+        request.emit(VerificationRequestEvent.Change);
+        expect(dismiss).toHaveBeenCalledWith("testKey");
     });
 });
 

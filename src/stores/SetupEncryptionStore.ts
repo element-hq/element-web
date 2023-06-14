@@ -15,12 +15,7 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
-import {
-    PHASE_DONE as VERIF_PHASE_DONE,
-    Phase as VerificationPhase,
-    VerificationRequest,
-    VerificationRequestEvent,
-} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { VerificationPhase, VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -183,7 +178,7 @@ export class SetupEncryptionStore extends EventEmitter {
             this.verificationRequest.off(VerificationRequestEvent.Change, this.onVerificationRequestChange);
             this.verificationRequest = null;
             this.emit("update");
-        } else if (this.verificationRequest?.phase === VERIF_PHASE_DONE) {
+        } else if (this.verificationRequest?.phase === VerificationPhase.Done) {
             this.verificationRequest.off(VerificationRequestEvent.Change, this.onVerificationRequestChange);
             this.verificationRequest = null;
             // At this point, the verification has finished, we just need to wait for

@@ -16,11 +16,8 @@ limitations under the License.
 */
 
 import React, { useContext, useEffect, useState } from "react";
-import {
-    Phase,
-    VerificationRequest,
-    VerificationRequestEvent,
-} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { VerificationPhase as Phase, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
 import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../../hooks/useEventEmitter";

@@ -16,9 +16,10 @@ limitations under the License.
 
 import React from "react";
 import {
+    canAcceptVerificationRequest,
     VerificationRequest,
     VerificationRequestEvent,
-} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+} from "matrix-js-sdk/src/crypto-api";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -41,6 +42,7 @@ interface IProps {
 }
 
 interface IState {
+    /** number of seconds left in the timeout counter. Zero if there is no timeout. */
     counter: number;
     device?: DeviceInfo;
     ip?: string;
@@ -51,7 +53,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
 
     public constructor(props: IProps) {
         super(props);
-        this.state = { counter: Math.ceil(props.request.timeout / 1000) };
+        this.state = { counter: Math.ceil((props.request.timeout ?? 0) / 1000) };
     }
 
     public async componentDidMount(): Promise<void> {
@@ -93,7 +95,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
 
     private checkRequestIsPending = (): void => {
         const { request } = this.props;
-        if (!request.canAccept) {
+        if (!canAcceptVerificationRequest(request)) {
             ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         }
     };

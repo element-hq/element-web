@@ -15,13 +15,7 @@ limitations under the License.
 */
 
 import React, { useCallback, useEffect, useState } from "react";
-import {
-    PHASE_REQUESTED,
-    PHASE_UNSENT,
-    Phase as VerificationPhase,
-    VerificationRequest,
-    VerificationRequestEvent,
-} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { VerificationPhase, VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
 
@@ -78,7 +72,11 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     }, [verificationRequestPromise]);
     const changeHandler = useCallback(() => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
-        if (request && request.phase === VerificationPhase.Cancelled && MISMATCHES.includes(request.cancellationCode)) {
+        if (
+            request &&
+            request.phase === VerificationPhase.Cancelled &&
+            MISMATCHES.includes(request.cancellationCode ?? "")
+        ) {
             Modal.createDialog(ErrorDialog, {
                 headerImage: require("../../../../res/img/e2e/warning-deprecated.svg").default,
                 title: _t("Your messages are not secure"),
@@ -139,7 +137,8 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
 
     const requested: boolean =
         (!request && isRequesting) ||
-        (!!request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined));
+        (!!request &&
+            (phase === VerificationPhase.Requested || phase === VerificationPhase.Unsent || phase === undefined));
     const isSelfVerification = request ? request.isSelfVerification : member.userId === cli.getUserId();
 
     if (!request || requested) {

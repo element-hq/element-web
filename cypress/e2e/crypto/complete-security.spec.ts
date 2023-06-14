@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import type { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { handleVerificationRequest, logIntoElement, waitForVerificationRequest } from "./utils";
 import { CypressBot } from "../../support/bot";
