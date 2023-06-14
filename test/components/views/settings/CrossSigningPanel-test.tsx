@@ -59,10 +59,6 @@ describe("<CrossSigningPanel />", () => {
     });
 
     describe("when cross signing is ready", () => {
-        beforeEach(() => {
-            mockClient.isCrossSigningReady.mockResolvedValue(true);
-        });
-
         it("should render when keys are not backed up", async () => {
             getComponent();
             await flushPromises();
@@ -93,7 +89,7 @@ describe("<CrossSigningPanel />", () => {
 
     describe("when cross signing is not ready", () => {
         beforeEach(() => {
-            mockClient.isCrossSigningReady.mockResolvedValue(false);
+            mocked(mockClient.getCrypto()!.isCrossSigningReady).mockResolvedValue(false);
         });
 
         it("should render when keys are not backed up", async () => {

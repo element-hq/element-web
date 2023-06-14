@@ -167,5 +167,6 @@ export const mockClientMethodsCrypto = (): Partial<
                 userSigningKey: true,
             },
         }),
+        isCrossSigningReady: jest.fn().mockResolvedValue(true),
     }),
 });

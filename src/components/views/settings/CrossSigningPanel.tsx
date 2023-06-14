@@ -102,7 +102,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         const homeserverSupportsCrossSigning = await cli.doesServerSupportUnstableFeature(
             "org.matrix.e2e_cross_signing",
         );
-        const crossSigningReady = await cli.isCrossSigningReady();
+        const crossSigningReady = await crypto.isCrossSigningReady();
 
         this.setState({
             crossSigningPublicKeysOnDevice,
