@@ -22,6 +22,7 @@ describe("theme", () => {
         let darkTheme: HTMLStyleElement;
 
         let spyQuerySelectorAll: jest.MockInstance<NodeListOf<Element>, [selectors: string]>;
+        let spyClassList: jest.SpyInstance<void, string[], any>;
 
         beforeEach(() => {
             const styles = [
@@ -47,6 +48,7 @@ describe("theme", () => {
 
             jest.spyOn(document.body, "style", "get").mockReturnValue([] as any);
             spyQuerySelectorAll = jest.spyOn(document, "querySelectorAll").mockReturnValue(styles as any);
+            spyClassList = jest.spyOn(document.body.classList, "add");
         });
 
         afterEach(() => {
@@ -66,6 +68,18 @@ describe("theme", () => {
             expect(spyQuerySelectorAll).toHaveBeenCalledTimes(1);
             expect(lightTheme.disabled).toBe(false);
             expect(darkTheme.disabled).toBe(true);
+            expect(spyClassList).toHaveBeenCalledWith("cpd-theme-light");
+        });
+
+        it("should switch to dark", async () => {
+            // When
+            await new Promise((resolve) => {
+                setTheme("dark").then(resolve);
+                darkTheme.onload!({} as Event);
+            });
+
+            // Then
+            expect(spyClassList).toHaveBeenCalledWith("cpd-theme-dark");
         });
 
         it("should reject promise on onerror call", () => {
