@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`messageForConnectionError should match snapshot for ConnectionError 1`] = `
+<DocumentFragment>
+  <span>
+    <span>
+      Can't connect to homeserver - please check your connectivity, ensure your 
+      <a
+        class="mx_ExternalLink"
+        href="hsUrl"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        homeserver's SSL certificate
+        <i
+          class="mx_ExternalLink_icon"
+        />
+      </a>
+       is trusted, and that a browser extension is not blocking requests.
+    </span>
+  </span>
+</DocumentFragment>
+`;
+
+exports[`messageForConnectionError should match snapshot for MatrixError M_NOT_FOUND 1`] = `
+<DocumentFragment>
+  There was a problem communicating with the homeserver, please try again later.(M_NOT_FOUND)
+</DocumentFragment>
+`;
+
+exports[`messageForConnectionError should match snapshot for mixed content error 1`] = `
+<DocumentFragment>
+  <span>
+    <span>
+      Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or 
+      <a
+        href="https://www.google.com/search?&q=enable%20unsafe%20scripts"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        enable unsafe scripts
+      </a>
+      .
+    </span>
+  </span>
+</DocumentFragment>
+`;
+
+exports[`messageForConnectionError should match snapshot for unknown error 1`] = `
+<DocumentFragment>
+  There was a problem communicating with the homeserver, please try again later.
+</DocumentFragment>
+`;
+
+exports[`messageForLoginError should match snapshot for 401 1`] = `
+<DocumentFragment>
+  Incorrect username and/or password.
+</DocumentFragment>
+`;
+
+exports[`messageForLoginError should match snapshot for M_RESOURCE_LIMIT_EXCEEDED 1`] = `
+<DocumentFragment>
+  <div>
+    <div>
+      This homeserver has exceeded one of its resource limits.
+    </div>
+    <div
+      class="mx_Login_smallError"
+    >
+      Please contact your service administrator to continue using this service.
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`messageForLoginError should match snapshot for M_USER_DEACTIVATED 1`] = `
+<DocumentFragment>
+  This account has been deactivated.
+</DocumentFragment>
+`;
+
+exports[`messageForLoginError should match snapshot for unknown error 1`] = `
+<DocumentFragment>
+  There was a problem communicating with the homeserver, please try again later. (HTTP 400)
+</DocumentFragment>
+`;
+
+exports[`messageForResourceLimitError should match snapshot for admin contact links 1`] = `
+<DocumentFragment>
+  <span>
+    Please 
+    <a
+      href="some@email"
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      contact your service administrator
+    </a>
+     to continue using this service.
+  </span>
+</DocumentFragment>
+`;
+
+exports[`messageForResourceLimitError should match snapshot for monthly_active_user 1`] = `
+<DocumentFragment>
+  This homeserver has hit its Monthly Active User limit.
+</DocumentFragment>
+`;
+
+exports[`messageForSyncError should match snapshot for M_RESOURCE_LIMIT_EXCEEDED 1`] = `
+<DocumentFragment>
+  <div>
+    <div>
+      This homeserver has exceeded one of its resource limits.
+    </div>
+    <div>
+      Please contact your service administrator to continue using this service.
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`messageForSyncError should match snapshot for other errors 1`] = `
+<DocumentFragment>
+  <div>
+    Unable to connect to Homeserver. Retrying…
+  </div>
+</DocumentFragment>
+`;

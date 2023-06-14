@@ -1,0 +1,62 @@
+/*
+Copyright 2018 Vector Creations Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ReplyPreview {
+    border: 1px solid $primary-hairline-color;
+    border-bottom: none;
+    background: $background;
+    max-height: 50vh;
+    overflow: auto;
+
+    .mx_ReplyPreview_section {
+        border-bottom: 1px solid $primary-hairline-color;
+        display: flex;
+        flex-flow: column;
+        row-gap: $spacing-8;
+        padding: $spacing-8 $spacing-8 0 0;
+
+        .mx_ReplyPreview_header {
+            display: flex;
+            justify-content: space-between;
+            column-gap: 8px;
+
+            color: $primary-content;
+            font-weight: 400;
+            opacity: 0.4;
+
+            .mx_ReplyPreview_header_cancel {
+                background-color: $primary-content;
+                mask: url("$(res)/img/cancel.svg");
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: 18px;
+                width: 18px;
+                height: 18px;
+                min-width: 18px;
+                min-height: 18px;
+            }
+        }
+    }
+}
+
+.mx_RoomView_body {
+    .mx_ReplyPreview {
+        /* Add box-shadow to the reply preview on the main (left) panel only. */
+        /* It is not added to the preview on the (right) panel for threads and a chat with a maximized widget. */
+        box-shadow: 0px -16px 32px $composer-shadow-color;
+        border-radius: 8px 8px 0 0;
+    }
+}

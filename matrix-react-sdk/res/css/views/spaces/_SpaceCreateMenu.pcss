@@ -1,0 +1,93 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SpaceCreateMenu_wrapper {
+    /* background blur everything except SpacePanel */
+    .mx_ContextualMenu_background {
+        background-color: $dialog-backdrop-color;
+        opacity: 0.6;
+        left: 68px;
+    }
+
+    .mx_ContextualMenu {
+        padding: 24px;
+        width: 480px;
+        box-sizing: border-box;
+        background-color: $background;
+        position: relative;
+
+        > div {
+            > h2 {
+                font-weight: var(--font-semi-bold);
+                font-size: $font-18px;
+                margin-top: 4px;
+            }
+
+            > p {
+                font-size: $font-15px;
+                color: $secondary-content;
+            }
+        }
+
+        .mx_SpaceCreateMenuType {
+            @mixin SpacePillButton;
+        }
+
+        .mx_SpaceCreateMenuType_public::before {
+            mask-image: url("$(res)/img/globe.svg");
+        }
+
+        .mx_SpaceCreateMenuType_private::before {
+            mask-image: url("$(res)/img/element-icons/lock.svg");
+            mask-size: 18px;
+        }
+
+        .mx_SpaceCreateMenu_back {
+            width: 28px;
+            height: 28px;
+            position: relative;
+            background-color: $panel-actions;
+            border-radius: 14px;
+            margin-bottom: 12px;
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: 28px;
+                width: 28px;
+                top: 0;
+                left: 0;
+                background-color: $tertiary-content;
+                transform: rotate(90deg);
+                mask-repeat: no-repeat;
+                mask-position: 2px 3px;
+                mask-size: 24px;
+                mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+            }
+        }
+
+        .mx_AccessibleButton_kind_primary {
+            padding: 8px 22px;
+            margin-left: auto;
+            display: block;
+            width: min-content;
+        }
+
+        .mx_AccessibleButton_disabled {
+            cursor: not-allowed;
+        }
+    }
+}

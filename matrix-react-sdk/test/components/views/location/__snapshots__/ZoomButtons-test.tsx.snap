@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ZoomButtons /> renders buttons 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_ZoomButtons"
+  >
+    <div
+      class="mx_AccessibleButton mx_ZoomButtons_button"
+      data-testid="map-zoom-in-button"
+      role="button"
+      tabindex="0"
+      title="Zoom in"
+    >
+      <div
+        class="mx_ZoomButtons_icon"
+      />
+    </div>
+    <div
+      class="mx_AccessibleButton mx_ZoomButtons_button"
+      data-testid="map-zoom-out-button"
+      role="button"
+      tabindex="0"
+      title="Zoom out"
+    >
+      <div
+        class="mx_ZoomButtons_icon"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

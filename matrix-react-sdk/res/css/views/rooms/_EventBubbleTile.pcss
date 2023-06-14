@@ -1,0 +1,639 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomView_body[data-layout="bubble"] {
+    .mx_RoomView_timeline,
+    .mx_RoomView_statusArea,
+    .mx_MessageComposer {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}
+
+.mx_EventTile[data-layout="bubble"],
+.mx_GenericEventListSummary[data-layout="bubble"] {
+    --avatarSize: 32px;
+    --gutterSize: 11px;
+    --cornerRadius: 12px;
+    --maxWidth: 70%;
+
+    /* For both event tile and event list summary */
+    --EventTile_bubble-margin-inline-start: 49px;
+    --EventTile_bubble-margin-inline-end: 60px;
+
+    margin-inline-start: var(--EventTile_bubble-margin-inline-start);
+    margin-inline-end: var(--EventTile_bubble-margin-inline-end);
+}
+
+.mx_EventTile[data-layout="bubble"] {
+    --EventTile_bubble_line-margin-inline-start: -9px;
+    --EventTile_bubble_line-margin-inline-end: -12px;
+    --EventTile_bubble_gap-inline: 5px;
+
+    .mx_MessageTimestamp {
+        width: unset; /* Cancel the default width */
+        max-width: var(--MessageTimestamp-max-width);
+    }
+
+    .mx_ThreadSummary {
+        clear: both;
+        width: fit-content;
+    }
+
+    .mx_EventTile_content {
+        margin-right: 0;
+    }
+
+    &.mx_EventTile_highlight {
+        &::before {
+            background-color: $event-highlight-bg-color;
+        }
+    }
+
+    /* For replies */
+    .mx_EventTile {
+        padding-top: 0;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        bottom: -1px;
+        left: calc(-1 * var(--EventTile_bubble-margin-inline-start));
+        right: calc(-1 * var(--EventTile_bubble-margin-inline-end));
+        z-index: -1;
+        border-radius: 4px;
+    }
+
+    &:hover,
+    &.mx_EventTile_selected {
+        &::before {
+            background: $eventbubble-bg-hover;
+        }
+
+        .mx_EventTile_avatar {
+            img {
+                box-shadow: 0 0 0 3px $eventbubble-bg-hover;
+            }
+        }
+    }
+
+    .mx_DisambiguatedProfile,
+    .mx_EventTile_line {
+        --EventBubbleTile_line-max-width: 70%;
+
+        width: fit-content;
+        max-width: var(--EventBubbleTile_line-max-width); /* Align message bubble and displayName */
+        line-height: $font-18px; /* fixed line height to prevent emoji from being taller than text */
+    }
+
+    /* other users profile on bubble layout */
+    > .mx_DisambiguatedProfile {
+        white-space: normal; /* display mxid */
+
+        .mx_DisambiguatedProfile_displayName {
+            white-space: nowrap; /* truncate long display names */
+            margin-inline-end: 5px;
+
+            /* For RTL displayName */
+            unicode-bidi: embed;
+            direction: ltr;
+        }
+
+        .mx_DisambiguatedProfile_mxid {
+            margin-inline-start: 0; /* Align mxid with truncated displayName
+                inside mx_EventTile[data-layout="bubble"] */
+        }
+    }
+
+    /* inside mx_RoomView_MessageList, outside of mx_ReplyTile */
+    /* (on the main panel and the chat panel with a maximized widget) */
+    > .mx_DisambiguatedProfile,
+    /* inside a thread, outside of mx_ReplyTile */
+    .mx_EventTile_senderDetails > .mx_DisambiguatedProfile {
+        position: relative;
+        top: -2px;
+        left: 2px;
+        font-size: $font-15px;
+    }
+
+    .mx_MessageActionBar {
+        top: -28px;
+        z-index: 9; /* above the avatar */
+    }
+
+    .mx_MediaBody {
+        /* leave space for the timestamp */
+        padding-right: 48px;
+    }
+
+    .mx_MImageBody {
+        .mx_MImageBody_thumbnail_container {
+            justify-content: center;
+            min-height: calc(1.8rem + var(--gutterSize) + var(--gutterSize));
+            min-width: calc(1.8rem + var(--gutterSize) + var(--gutterSize));
+        }
+    }
+
+    .mx_LegacyCallEvent {
+        background-color: unset;
+
+        border-style: solid;
+        border-width: 1px;
+        border-color: $quinary-content;
+    }
+
+    .mx_ReactionsRow {
+        margin-inline: var(--EventTile_bubble_line-margin-inline-start) var(--EventTile_bubble_line-margin-inline-end);
+    }
+
+    &[data-self="false"] {
+        .mx_EventTile_line {
+            border-bottom-right-radius: var(--cornerRadius);
+
+            .mx_MImageBody .mx_MImageBody_thumbnail_container,
+            .mx_MImageBody::before,
+            .mx_MVideoBody .mx_MVideoBody_container,
+            .mx_MediaBody,
+            .mx_MLocationBody_map,
+            .mx_MBeaconBody {
+                border-bottom-right-radius: var(--cornerRadius) !important;
+            }
+        }
+
+        .mx_EventTile_avatar {
+            left: -34px;
+        }
+
+        .mx_MessageActionBar {
+            inset-inline-start: calc(100% - var(--MessageActionBar-size-box));
+            right: initial; /* Reset the default value */
+        }
+
+        .mx_ThreadSummary {
+            margin-inline-start: calc(-1 * var(--gutterSize));
+            margin-inline-end: auto;
+        }
+
+        .mx_ReactionsRow {
+            justify-content: flex-start;
+        }
+
+        --backgroundColor: $eventbubble-others-bg;
+    }
+
+    &[data-self="true"] {
+        .mx_EventTile_line {
+            margin-inline-start: auto;
+            border-bottom-left-radius: var(--cornerRadius);
+
+            .mx_MImageBody .mx_MImageBody_thumbnail_container,
+            .mx_MImageBody::before,
+            .mx_MVideoBody .mx_MVideoBody_container,
+            .mx_MediaBody,
+            .mx_MLocationBody_map,
+            .mx_MBeaconBody {
+                border-bottom-left-radius: var(--cornerRadius) !important;
+            }
+        }
+
+        .mx_EventTile_sticker {
+            /* align timestamp with those inside bubbles */
+            margin-right: 32px;
+        }
+
+        .mx_ThreadSummary {
+            margin-inline-start: auto;
+            margin-inline-end: calc(-1 * var(--gutterSize));
+        }
+
+        .mx_DisambiguatedProfile {
+            display: none;
+        }
+
+        .mx_ReplyTile .mx_DisambiguatedProfile {
+            display: block;
+            max-width: 100%;
+        }
+
+        .mx_ReactionsRow {
+            justify-content: flex-end;
+
+            > :last-child {
+                order: -1; /* Moving the "add reaction button" before the reactions */
+            }
+        }
+
+        .mx_EventTile_avatar {
+            top: -19px; /* height of the sender block */
+            right: -35px;
+        }
+
+        .mx_MediaBody {
+            background: $eventbubble-self-bg;
+        }
+
+        .mx_MessageActionBar {
+            inset-inline-end: 0;
+        }
+
+        --backgroundColor: $eventbubble-self-bg;
+    }
+
+    .mx_EventTile_line {
+        position: relative;
+        display: flex;
+        gap: 5px var(--EventTile_bubble_gap-inline);
+        margin-block: 0;
+        margin-inline: var(--EventTile_bubble_line-margin-inline-start) var(--EventTile_bubble_line-margin-inline-end);
+        border-top-left-radius: var(--cornerRadius);
+        border-top-right-radius: var(--cornerRadius);
+
+        /* the selector here is quite weird because timestamps can appear linked & unlinked and in different places */
+        /* in the DOM depending on the specific rendering context */
+        > a, /* timestamp wrapper anchor */
+        .mx_MessageActionBar + .mx_MessageTimestamp {
+            position: absolute;
+            padding: 4px 8px;
+            bottom: 0;
+            right: 0;
+            z-index: 3; /* above media and location share maps */
+        }
+
+        &.mx_EventTile_mediaLine {
+            /* TODO: Use a common class name instead */
+            .mx_MFileBody,
+            .mx_MAudioBody {
+                max-width: 100%; /* avoid overflow */
+            }
+
+            .mx_MVoiceMessageBody {
+                /* allow the event to be collapsed, this causes the waveform to get cropped */
+                min-width: 0;
+            }
+
+            /* we put the timestamps for media (other than stickers) atop the media */
+            &.mx_EventTile_image {
+                .mx_MessageTimestamp {
+                    border-radius: var(--MBody-border-radius);
+                    /* Hardcoded colours because it's the same on all themes */
+                    background-color: rgba(0, 0, 0, 0.6);
+                    color: #ffffff;
+                    padding: 0px 4px 0px 4px;
+                }
+            }
+        }
+
+        &.mx_EventTile_sticker {
+            > a, /* timestamp wrapper anchor */
+            .mx_MessageActionBar + .mx_MessageTimestamp {
+                /* position timestamps for stickers to the right of the un-bubbled sticker */
+                right: unset;
+                left: 100%;
+            }
+
+            .mx_MStickerBody_wrapper {
+                padding: 0;
+            }
+        }
+
+        .mx_MImageBody {
+            width: 100%;
+            height: 100%;
+
+            .mx_MImageBody_thumbnail.mx_MImageBody_thumbnail--blurhash {
+                position: unset;
+            }
+        }
+
+        /* noinspection CssReplaceWithShorthandSafely */
+        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_MVideoBody .mx_MVideoBody_container,
+        .mx_MediaBody {
+            border-radius: unset;
+            border-top-left-radius: var(--cornerRadius);
+            border-top-right-radius: var(--cornerRadius);
+        }
+
+        .mx_EventTile_e2eIcon {
+            flex-shrink: 0; /* keep it at full size */
+        }
+    }
+
+    &:not(.mx_EventTile_noBubble) .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
+        /* make the top and bottom padding 1px smaller so that we can pad
+            .mx_EventTile_content by 1px */
+        /* to avoid anti-zalgo cutting off our larger than text emojis. */
+        padding: calc(var(--gutterSize) - 1px);
+        padding-right: 60px; /* space for the timestamp */
+        background: var(--backgroundColor);
+
+        .mx_EventTile_content {
+            padding: 1px;
+        }
+    }
+
+    &.mx_EventTile_continuation[data-self="false"] .mx_EventTile_line {
+        border-top-left-radius: 0;
+
+        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_MVideoBody .mx_MVideoBody_container,
+        .mx_MImageBody::before,
+        .mx_MediaBody,
+        .mx_MLocationBody_map,
+        .mx_MBeaconBody {
+            border-top-left-radius: 0;
+        }
+    }
+    &.mx_EventTile_lastInSection[data-self="false"] .mx_EventTile_line {
+        border-bottom-left-radius: var(--cornerRadius);
+
+        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_MVideoBody .mx_MVideoBody_container,
+        .mx_MImageBody::before,
+        .mx_MediaBody,
+        .mx_MLocationBody_map,
+        .mx_MBeaconBody {
+            border-bottom-left-radius: var(--cornerRadius);
+        }
+    }
+
+    &.mx_EventTile_continuation[data-self="true"] .mx_EventTile_line {
+        border-top-right-radius: 0;
+
+        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_MVideoBody .mx_MVideoBody_container,
+        .mx_MImageBody::before,
+        .mx_MediaBody,
+        .mx_MLocationBody_map,
+        .mx_MBeaconBody {
+            border-top-right-radius: 0;
+        }
+    }
+    &.mx_EventTile_lastInSection[data-self="true"] .mx_EventTile_line {
+        border-bottom-right-radius: var(--cornerRadius);
+
+        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_MVideoBody .mx_MVideoBody_container,
+        .mx_MImageBody::before,
+        .mx_MediaBody,
+        .mx_MLocationBody_map,
+        .mx_MBeaconBody {
+            border-bottom-right-radius: var(--cornerRadius);
+        }
+    }
+
+    .mx_EventTile_avatar {
+        position: absolute;
+        top: 0;
+        line-height: 1;
+        z-index: 9;
+        img {
+            box-shadow: 0 0 0 3px $background;
+            border-radius: 50%;
+        }
+    }
+
+    &.mx_EventTile_noSender {
+        .mx_EventTile_avatar {
+            top: -19px;
+        }
+    }
+
+    .mx_BaseAvatar,
+    .mx_EventTile_avatar {
+        line-height: 1;
+    }
+
+    &[data-has-reply="true"] {
+        > .mx_EventTile_line {
+            flex-direction: column;
+        }
+
+        .mx_ReplyChain {
+            .mx_EventTile_reply {
+                max-width: 90%;
+                padding: 0;
+                > a, /* timestamp wrapper anchor */
+                .mx_MessageActionBar + .mx_MessageTimestamp {
+                    display: none !important;
+                }
+            }
+
+            .mx_EventTile {
+                display: flex;
+                gap: var(--gutterSize);
+                .mx_EventTile_avatar {
+                    position: static;
+                }
+                .mx_DisambiguatedProfile {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .mx_MPollBody {
+        width: 550px; /* to prevent timestamp overlapping summary text */
+        max-width: 100%; /* prevent overflowing a reply tile */
+
+        .mx_MPollBody_totalVotes {
+            /* align summary text with corner timestamp */
+            padding: 4px 0;
+        }
+    }
+
+    &.mx_EventTile_bad {
+        &:hover {
+            &::before {
+                background: transparent;
+            }
+        }
+
+        /* Special layout scenario for "Unable To Decrypt (UTD)" events */
+        .mx_EventTile_line {
+            display: grid;
+            grid-template:
+                "reply reply" auto
+                "shield body" auto
+                / auto 1fr;
+
+            .mx_UnknownBody,
+            .mx_ReplyChain_wrapper,
+            .mx_ViewSourceEvent {
+                min-width: 0; /* Prevent a grid blowout */
+            }
+
+            .mx_EventTile_e2eIcon {
+                grid-area: shield;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+
+            .mx_UnknownBody,
+            .mx_DecryptionFailureBody {
+                grid-area: body;
+            }
+
+            .mx_ReplyChain_wrapper {
+                grid-area: reply;
+            }
+        }
+
+        &.mx_EventTile_info {
+            /* "Unable To Decrypt" layout for hidden events */
+            .mx_EventTile_line {
+                gap: 0 9px; /* 9px: margin value of E2E icon */
+                align-items: center;
+                grid-template:
+                    "shield source" auto
+                    / auto 1fr;
+
+                .mx_ViewSourceEvent {
+                    grid-area: source;
+                }
+            }
+        }
+    }
+
+    .mx_MTextBody {
+        max-width: 100%;
+    }
+
+    .mx_LegacyCallEvent_wrapper,
+    .mx_CallEvent_wrapper {
+        justify-content: center;
+    }
+}
+
+.mx_EventTile.mx_EventTile_noBubble[data-layout="bubble"] {
+    --backgroundColor: transparent;
+
+    .mx_EventTile_line.mx_EventTile_emote {
+        padding-right: 60px; /* align with bubbles text */
+        font-style: italic;
+
+        > a {
+            /* timestamp anchor wrapper */
+            align-self: center;
+            bottom: unset;
+            top: unset;
+            font-style: normal; /* undo italic above */
+        }
+
+        .mx_MEmoteBody {
+            padding: 4px 0;
+        }
+    }
+}
+
+.mx_EventTile.mx_EventTile_bubbleContainer[data-layout="bubble"],
+.mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout="bubble"] {
+    .mx_EventTile_line > a {
+        /* hide this timestamp as the tile will render its own */
+        display: none;
+    }
+}
+
+.mx_EventTile.mx_EventTile_bubbleContainer[data-layout="bubble"],
+.mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout="bubble"],
+.mx_EventTile.mx_EventTile_info[data-layout="bubble"] {
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .mx_EventTile_line,
+    .mx_EventTile_info {
+        min-width: 100%;
+        /* Preserve alignment with left edge of text in bubbles */
+        margin: 0;
+    }
+}
+
+.mx_EventTile.mx_EventTile_bubbleContainer[data-layout="bubble"],
+.mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout="bubble"],
+.mx_EventTile.mx_EventTile_info[data-layout="bubble"],
+.mx_GenericEventListSummary[data-layout="bubble"][data-expanded="false"] {
+    --backgroundColor: transparent;
+    --gutterSize: 0;
+
+    .mx_EventTile_avatar {
+        position: static;
+        order: -1;
+        margin-inline-end: var(--EventTile_bubble_gap-inline); /* Same spacing between E2E icon and a hidden event */
+    }
+
+    .mx_EventTile_e2eIcon {
+        margin-inline-start: 0; /* mx_EventTile_avatar has margin-inline-end, so margin is not needed here */
+        align-self: center;
+    }
+
+    .mx_EventTile_line {
+        > a, /* timestamp wrapper anchor */
+        .mx_MessageActionBar + .mx_MessageTimestamp {
+            right: auto;
+            left: -77px;
+            bottom: unset;
+            align-self: center;
+
+            .mx_MessageTimestamp,
+            &.mx_MessageTimestamp {
+                vertical-align: middle;
+            }
+        }
+    }
+}
+
+.mx_GenericEventListSummary[data-layout="bubble"] {
+    .mx_EventTile.mx_EventTile_info .mx_EventTile_line {
+        /* Avoid overflow of event info by cancelling width settings */
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* increase margin between ELS and the next Event to not have our user avatar overlap the expand/collapse button */
+    &[data-expanded="false"] + .mx_EventTile[data-layout="bubble"][data-self="true"] {
+        margin-top: 20px;
+    }
+
+    &[data-expanded="true"] .mx_EventTile_info {
+        padding: 2px 0;
+        margin-right: 0;
+
+        .mx_MessageActionBar {
+            /* Reset .mx_EventTile[data-layout="bubble"][data-self="false"] .mx_MessageActionBar */
+            inset-inline-start: initial;
+            inset-inline-end: 48px; /* align with that of right-column bubbles */
+        }
+
+        .mx_ReadReceiptGroup {
+            /* match alignment to RRs of chat bubbles */
+            inset-inline-end: calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + 60px);
+        }
+
+        &::before {
+            inset-inline-end: 0; /* match alignment of the hover background to that of chat bubbles */
+        }
+    }
+}
+
+.mx_EventTile_tileError[data-layout="bubble"] .mx_EventTile_line {
+    flex-direction: column; /* restore the centering */
+}

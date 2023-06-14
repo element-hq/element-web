@@ -1,0 +1,66 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ConfirmSpaceUserActionDialog_wrapper {
+    .mx_Dialog {
+        display: flex;
+        flex-direction: column;
+        padding: 24px 32px;
+    }
+}
+
+.mx_ConfirmSpaceUserActionDialog {
+    width: 440px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: 520px;
+
+    .mx_Dialog_content {
+        margin: 12px 0;
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+
+    .mx_ConfirmUserActionDialog_reasonField {
+        margin-bottom: 12px;
+    }
+
+    .mx_ConfirmSpaceUserActionDialog_warning {
+        position: relative;
+        border-radius: 8px;
+        padding: 12px 8px 12px 42px;
+        background-color: $header-panel-bg-color;
+
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $secondary-content;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 10px;
+            top: calc(50% - 8px); /* vertical centering */
+            height: 16px;
+            width: 16px;
+            background-color: $secondary-content;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            mask-image: url("$(res)/img/element-icons/room/room-summary.svg");
+            mask-position: center;
+        }
+    }
+}

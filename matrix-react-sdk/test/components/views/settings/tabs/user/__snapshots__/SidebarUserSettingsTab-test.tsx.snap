@@ -1,0 +1,215 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SidebarUserSettingsTab /> renders sidebar settings 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h2"
+        >
+          Sidebar
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Spaces to show
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.
+              </div>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_abcd"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_abcd"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <div />
+                      Home
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Home is useful for getting an overview of everything.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
+                  id="checkbox_abcd"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_abcd"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Show all rooms
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Show all your rooms in Home, even if they're in a space.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_abcd"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_abcd"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <div />
+                      Favourites
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all your favourite rooms and people in one place.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_abcd"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_abcd"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <div />
+                      People
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all your people in one place.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_abcd"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_abcd"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <div />
+                      Rooms outside of a space
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all your rooms that aren't part of a space in one place.
+                    </div>
+                  </div>
+                </label>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

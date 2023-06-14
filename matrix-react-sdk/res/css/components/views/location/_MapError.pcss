@@ -1,0 +1,68 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MapError {
+    padding: 100px $spacing-32 0;
+    text-align: center;
+
+    --mx-map-error-icon-color: $secondary-content;
+    --mx-map-error-icon-size: 58px;
+}
+
+.mx_MapError.mx_MapError_isMinimised {
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: $spacing-24;
+    background-color: $panels;
+    font-size: $font-12px;
+    line-height: $font-16px;
+
+    --mx-map-error-icon-color: $alert;
+    --mx-map-error-icon-size: 26px;
+
+    .mx_MapError_message {
+        margin: 0;
+        max-width: 275px;
+    }
+
+    .mx_MapError_heading {
+        padding-top: $spacing-8;
+        /* override h3 heading size */
+        font-size: inherit !important;
+        font-weight: normal !important;
+    }
+}
+
+.mx_MapError_message {
+    margin: $spacing-16 0 $spacing-32;
+}
+
+.mx_MapError_heading {
+    padding-top: $spacing-24;
+}
+
+.mx_MapError_icon {
+    height: var(--mx-map-error-icon-size);
+
+    path {
+        fill: var(--mx-map-error-icon-color);
+    }
+}

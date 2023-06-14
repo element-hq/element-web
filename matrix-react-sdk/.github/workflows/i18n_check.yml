@@ -1,0 +1,40 @@
+name: i18n Check
+on:
+    workflow_call: {}
+jobs:
+    check:
+        runs-on: ubuntu-latest
+        permissions:
+            pull-requests: read
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: "Get modified files"
+              id: changed_files
+              if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'RiotTranslateBot'
+              uses: tj-actions/changed-files@b13786805affca18e536ed489687d3d8d1f05d21 # v36
+              with:
+                  files: |
+                      src/i18n/strings/*
+                  files_ignore: |
+                      src/i18n/strings/en_EN.json
+
+            - name: "Assert only en_EN was modified"
+              if: |
+                  github.event_name == 'pull_request' &&
+                  github.event.pull_request.user.login != 'RiotTranslateBot' &&
+                  steps.changed_files.outputs.any_modified == 'true'
+              run: |
+                  echo "Only translation files modified by `yarn i18n` can be committed - other translation files will confuse weblate in unrecoverable ways."
+                  exit 1
+
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
+
+            # Does not need branch matching as only analyses this layer
+            - name: Install Deps
+              run: "yarn install --frozen-lockfile"
+
+            - name: i18n Check
+              run: "yarn run diff-i18n"

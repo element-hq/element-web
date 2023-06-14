@@ -1,0 +1,81 @@
+/*
+Copyright 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+@charset "utf-8";
+
+.mx_TopUnreadMessagesBar {
+    z-index: 1000;
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 38px;
+}
+
+.mx_TopUnreadMessagesBar::after {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 10.5px;
+    width: 4px;
+    height: 4px;
+    border-radius: 16px;
+    background-color: $secondary-accent-color;
+    border: 6px solid $accent;
+    pointer-events: none;
+}
+
+.mx_TopUnreadMessagesBar_scrollUp {
+    height: 38px;
+    border-radius: 19px;
+    box-sizing: border-box;
+    background: $background;
+    border: 1.3px solid $muted-fg-color;
+    cursor: pointer;
+}
+
+.mx_TopUnreadMessagesBar_scrollUp::before {
+    content: "";
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    mask-image: url("$(res)/img/element-icons/message/chevron-up.svg");
+    mask-repeat: no-repeat;
+    mask-size: 20px;
+    mask-position: center;
+    background: $muted-fg-color;
+}
+
+.mx_TopUnreadMessagesBar_markAsRead {
+    display: block;
+    width: 18px;
+    height: 18px;
+    background: $background;
+    border: 1.3px solid $muted-fg-color;
+    border-radius: 10px;
+    margin: 5px auto;
+}
+
+.mx_TopUnreadMessagesBar_markAsRead::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    mask-image: url("$(res)/img/cancel.svg");
+    mask-repeat: no-repeat;
+    mask-size: 10px;
+    mask-position: 4px 4px;
+    background: $muted-fg-color;
+}

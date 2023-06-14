@@ -1,0 +1,83 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_VoiceBroadcastBody {
+    background-color: $quinary-content;
+    border-radius: 8px;
+    color: $secondary-content;
+    display: inline-block;
+    font-size: $font-12px;
+    padding: $spacing-12;
+    width: 271px;
+
+    .mx_Clock {
+        line-height: 1;
+    }
+}
+
+.mx_VoiceBroadcastBody--pip {
+    background-color: $system;
+    box-shadow: 0 2px 8px 0 #0000004a;
+}
+
+.mx_VoiceBroadcastBody--small {
+    display: flex;
+    gap: $spacing-8;
+    width: 192px;
+
+    .mx_VoiceBroadcastHeader {
+        margin-bottom: 0;
+    }
+
+    .mx_VoiceBroadcastControl {
+        align-self: center;
+    }
+
+    .mx_LiveBadge {
+        margin-top: 4px;
+    }
+}
+
+.mx_VoiceBroadcastBody_divider {
+    background-color: $quinary-content;
+    border: 0;
+    height: 1px;
+    margin: $spacing-12 0;
+}
+
+.mx_VoiceBroadcastBody_controls {
+    align-items: center;
+    display: flex;
+    gap: $spacing-32;
+    justify-content: center;
+    margin-bottom: $spacing-8;
+}
+
+.mx_VoiceBroadcastBody_timerow {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mx_AccessibleButton.mx_VoiceBroadcastBody_blockButton {
+    display: flex;
+    gap: $spacing-8;
+}
+
+.mx_VoiceBroadcastBody__small-close {
+    right: 8px;
+    position: absolute;
+    top: 8px;
+}

@@ -1,0 +1,258 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_BaseCard {
+    --BaseCard_padding-inline: $spacing-8;
+    --BaseCard_EventTile_line-padding-block: 2px;
+    --BaseCard_EventTile-spacing-inline: 36px;
+    --BaseCard_header-button-size: 24px;
+
+    padding: 0 var(--BaseCard_padding-inline);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .mx_BaseCard_header {
+        --BaseCard_header_button-margin: $spacing-12;
+
+        margin: $spacing-4 0 $spacing-12;
+
+        > h2 {
+            margin: 0 44px;
+            font-size: $font-18px;
+            font-weight: var(--font-semi-bold);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .mx_BaseCard_back,
+        .mx_BaseCard_close {
+            position: absolute;
+            background-color: rgba(141, 151, 165, 0.2);
+            width: var(--BaseCard_header-button-size);
+            height: var(--BaseCard_header-button-size);
+            margin: var(--BaseCard_header_button-margin);
+            top: 0;
+            border-radius: 50%;
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: inherit;
+                width: inherit;
+                top: 0;
+                left: 0;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background-color: $header-panel-text-primary-color;
+            }
+        }
+
+        .mx_BaseCard_back {
+            left: 0;
+            margin-inline-start: calc(var(--BaseCard_header_button-margin) - $spacing-4);
+
+            &::before {
+                transform: rotate(90deg);
+                mask-size: 22px;
+                mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+            }
+
+            /* Header title with the back button */
+            ~ .mx_BaseCard_header_title {
+                width: calc(100% - 60px);
+                margin-inline-start: var(--BaseCard_header-button-size);
+
+                .mx_BaseCard_header_title_heading {
+                    margin-inline-start: 6px;
+                }
+            }
+        }
+
+        .mx_BaseCard_close {
+            right: 0;
+            margin-inline-end: calc(var(--BaseCard_header_button-margin) - $spacing-4);
+
+            &::before {
+                mask-image: url("$(res)/img/icons-close.svg");
+                mask-size: 8px;
+            }
+        }
+
+        .mx_BaseCard_header_title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: calc(100% - 38px);
+            height: 24px;
+            flex: 1;
+
+            .mx_BaseCard_header_title_heading {
+                color: $secondary-content;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .mx_BaseCard_header_title_button--option {
+                position: relative;
+                width: var(--BaseCard_header-button-size);
+                height: var(--BaseCard_header-button-size);
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    inset-block-start: 0;
+                    inset-inline-start: 0;
+                    height: 100%;
+                    width: 100%;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-image: url("$(res)/img/element-icons/message/overflow-large.svg");
+                    background-color: $secondary-content;
+                }
+
+                &:hover::after {
+                    background-color: $primary-content;
+                }
+            }
+        }
+    }
+
+    .mx_AutoHideScrollbar {
+        /* collapse the margin into a padding to move the scrollbar into the right gutter */
+        margin-right: -8px;
+        padding-right: 8px;
+        min-height: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .mx_BaseCard_Group {
+        margin: $spacing-20 0 $spacing-16;
+
+        & > * {
+            margin-left: $spacing-12;
+            margin-right: $spacing-12;
+        }
+
+        > h2 {
+            color: $tertiary-content;
+            font-size: $font-12px;
+            font-weight: 500;
+            margin: $spacing-12;
+        }
+
+        .mx_BaseCard_Button {
+            padding: 10px;
+            padding-inline-start: $spacing-12;
+            margin: 0;
+            position: relative;
+            font-size: $font-13px;
+            height: 20px;
+            line-height: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            display: flex;
+
+            .mx_BaseCard_Button_sublabel {
+                color: $tertiary-content;
+                margin-left: auto;
+            }
+
+            &:hover {
+                background-color: rgba(141, 151, 165, 0.1);
+            }
+
+            &.mx_AccessibleButton_disabled {
+                padding-right: $spacing-12;
+                &::after {
+                    content: unset;
+                }
+            }
+        }
+    }
+
+    .mx_BaseCard_footer {
+        padding-top: $spacing-4;
+        text-align: center;
+        display: flex;
+        justify-content: space-around;
+
+        .mx_AccessibleButton_kind_secondary {
+            color: $secondary-content;
+            background-color: rgba(141, 151, 165, 0.2);
+            font-weight: var(--font-semi-bold);
+            font-size: $font-14px;
+        }
+
+        .mx_AccessibleButton_disabled {
+            cursor: not-allowed;
+        }
+    }
+}
+
+.mx_FilePanel,
+.mx_UserInfo,
+.mx_MemberList {
+    &.mx_BaseCard {
+        padding: $spacing-32 0 0;
+
+        .mx_AutoHideScrollbar {
+            margin-right: unset;
+            padding-right: unset;
+        }
+    }
+}
+
+.mx_ContextualMenu_wrapper.mx_BaseCard_header_title {
+    .mx_ContextualMenu {
+        position: initial;
+
+        span:first-of-type {
+            font-weight: var(--font-semi-bold);
+            font-size: inherit;
+            color: $primary-content;
+        }
+
+        font-size: $font-12px;
+        color: $secondary-content;
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        border: 1px solid $quinary-content;
+        box-shadow: 0px 1px 3px rgba(23, 25, 28, 0.05);
+    }
+
+    .mx_ContextualMenu_chevron_top {
+        left: auto;
+        right: 22px;
+        border-bottom-color: $quinary-content;
+
+        &::after {
+            content: "";
+            border: inherit;
+            border-bottom-color: $menu-bg-color;
+            position: absolute;
+            top: 1px;
+            left: -8px;
+        }
+    }
+}

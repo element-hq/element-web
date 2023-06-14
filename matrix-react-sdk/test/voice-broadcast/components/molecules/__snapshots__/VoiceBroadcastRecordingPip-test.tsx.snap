@@ -1,0 +1,205 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoiceBroadcastRecordingPip when rendering a paused recording should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          data-testid="room-avatar"
+        >
+          room avatar: 
+          My room
+        </div>
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_AccessibleButton"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room_wrapper"
+          >
+            <div
+              class="mx_VoiceBroadcastHeader_room"
+            >
+              My room
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <time
+            class="mx_Clock"
+            datetime="PT4H"
+          >
+            4h 0m 0s left
+          </time>
+        </div>
+      </div>
+      <div
+        class="mx_LiveBadge mx_LiveBadge--grey"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        Live
+      </div>
+    </div>
+    <hr
+      class="mx_VoiceBroadcastBody_divider"
+    />
+    <div
+      class="mx_VoiceBroadcastBody_controls"
+    >
+      <div
+        aria-label="resume voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl mx_VoiceBroadcastControl-recording"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_12"
+        />
+      </div>
+      <div
+        aria-label="Change input device"
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_16 mx_Icon_alert"
+        />
+      </div>
+      <div
+        aria-label="Stop Recording"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastRecordingPip when rendering a started recording should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          data-testid="room-avatar"
+        >
+          room avatar: 
+          My room
+        </div>
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_AccessibleButton"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room_wrapper"
+          >
+            <div
+              class="mx_VoiceBroadcastHeader_room"
+            >
+              My room
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <time
+            class="mx_Clock"
+            datetime="PT4H"
+          >
+            4h 0m 0s left
+          </time>
+        </div>
+      </div>
+      <div
+        class="mx_LiveBadge"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        Live
+      </div>
+    </div>
+    <hr
+      class="mx_VoiceBroadcastBody_divider"
+    />
+    <div
+      class="mx_VoiceBroadcastBody_controls"
+    >
+      <div
+        aria-label="pause voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_12"
+        />
+      </div>
+      <div
+        aria-label="Change input device"
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_16 mx_Icon_alert"
+        />
+      </div>
+      <div
+        aria-label="Stop Recording"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

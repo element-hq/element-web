@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="mx_ThemeChoicePanel"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Theme
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_ThemeChoicePanel_themeSelectors"
+        data-testid="theme-choice-panel-selectors"
+      >
+        <label
+          class="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+        >
+          <input
+            disabled=""
+            id="theme-light"
+            name="theme"
+            type="radio"
+            value="light"
+          />
+          <div>
+            <div />
+          </div>
+          <div
+            class="mx_StyledRadioButton_content"
+          >
+            Light
+          </div>
+          <div
+            class="mx_StyledRadioButton_spacer"
+          />
+        </label>
+        <label
+          class="mx_StyledRadioButton mx_ThemeSelector_dark mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+        >
+          <input
+            disabled=""
+            id="theme-dark"
+            name="theme"
+            type="radio"
+            value="dark"
+          />
+          <div>
+            <div />
+          </div>
+          <div
+            class="mx_StyledRadioButton_content"
+          >
+            Dark
+          </div>
+          <div
+            class="mx_StyledRadioButton_spacer"
+          />
+        </label>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

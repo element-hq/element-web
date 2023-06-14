@@ -1,0 +1,349 @@
+/* Nunito and Inter lacks combining diacritics, so these will fall through
+   to the next font. Helevetica's diacritics sometimes do not combine
+   nicely (on OSX, at least) and result in a huge horizontal mess.
+   Arial empirically gets it right, hence prioritising Arial here. */
+/* We fall through to Twemoji for emoji rather than falling through
+   to native Emoji fonts (if any) to ensure cross-browser consistency */
+/* Noto Color Emoji contains digits, in fixed-width, therefore causing
+   digits in flowed text to stand out.
+   TODO: Consider putting all emoji fonts to the end rather than the front. */
+$font-family: "Inter", "Twemoji", "Apple Color Emoji", "Segoe UI Emoji", "Arial", "Helvetica", sans-serif,
+    "Noto Color Emoji";
+
+$monospace-font-family: "Inconsolata", "Twemoji", "Apple Color Emoji", "Segoe UI Emoji", "Courier", monospace,
+    "Noto Color Emoji";
+
+/* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A120 */
+/* ******************** */
+$primary-content: #17191c;
+$secondary-content: #737d8c;
+$tertiary-content: #8d97a5;
+$quaternary-content: #c1c6cd;
+$quinary-content: #e3e8f0;
+
+$system: #f4f6fa;
+$system-transparent: rgba($system, 0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
+$background: #ffffff;
+$overlay-background: rgba($background, 0.85);
+
+$panels: rgba($system, 0.9);
+$panel-selected: rgba($tertiary-content, 0.3);
+$panel-hover: rgba($tertiary-content, 0.1);
+$panel-actions: rgba($tertiary-content, 0.2);
+$space-nav: rgba($tertiary-content, 0.15);
+
+$accent: #0dbd8b;
+$alert: #ff5b55;
+$links: #0086e6;
+$link-external: #0467dd;
+
+$username-variant1-color: #368bd6;
+$username-variant2-color: #ac3ba8;
+$username-variant3-color: #0dbd8b;
+$username-variant4-color: #e64f7a;
+$username-variant5-color: #ff812d;
+$username-variant6-color: #2dc2c5;
+$username-variant7-color: #5c56f5;
+$username-variant8-color: #74d12c;
+/* ******************** */
+
+/* Reused Figma non-compound colors */
+/* ******************** */
+$inverted-bg-color: #27303a;
+$header-panel-bg-color: #f3f8fd;
+/* ******************** */
+
+/* Theme specific colors */
+/* ******************** */
+$icon-button-color: $quaternary-content;
+/* ******************** */
+
+/* Colors that aren't in Figma and are theme specific - we need to get rid of these */
+/* ******************** */
+$selection-fg-color: $background;
+$yellow-background: #fff8e3;
+$secondary-accent-color: #f2f5f8;
+$button-fg-color: $background;
+$neutral-badge-color: #dbdbdb;
+$strong-input-border-color: #c7c7c7;
+$preview-widget-bar-color: #dddddd;
+$accent-fg-color: $background;
+$accent-alt: #238cf5;
+$info-plinth-fg-color: #888;
+/* ******************** */
+
+/* Colors that aren't in Figma - we need to get rid of these */
+/* ******************** */
+$dark-panel-bg-color: $secondary-accent-color;
+$muted-fg-color: #61708b;
+$light-fg-color: #747474;
+$focus-bg-color: $preview-widget-bar-color;
+$info-plinth-bg-color: #f7f7f7;
+$event-selected-color: #f6f7f8;
+$topleftmenu-color: #212121;
+$roomtopic-color: #9e9e9e;
+$spacePanel-bg-color: rgba(232, 232, 232, 0.77);
+$panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
+$h3-color: #3d3b39;
+$event-highlight-bg-color: $yellow-background;
+$header-panel-text-primary-color: #91a1c0;
+/* ******************** */
+
+/* Blockquote */
+/* ******************** */
+$blockquote-bar-color: $focus-bg-color;
+/* ******************** */
+
+/* Tooltip */
+/* ******************** */
+$tooltip-timeline-bg-color: $inverted-bg-color;
+$tooltip-timeline-fg-color: $background;
+/* ******************** */
+
+/* Widget */
+/* ******************** */
+$widget-menu-bar-bg-color: $secondary-accent-color;
+$widget-body-bg-color: $background;
+/* ******************** */
+
+/* Menu */
+/* ******************** */
+$menu-border-color: #e7e7e7;
+$menu-bg-color: $background;
+$menu-box-shadow-color: rgba(118, 131, 156, 0.6);
+$menu-selected-color: #f5f8fa;
+/* ******************** */
+
+/* Settings */
+/* ******************** */
+$settings-grey-fg-color: #a2a2a2;
+$settings-subsection-fg-color: $muted-fg-color;
+/* ******************** */
+
+/* Room */
+/* ******************** */
+$room-icon-unread-color: $secondary-content;
+/* ******************** */
+
+/* RoomHeader */
+/* ******************** */
+$roomheader-addroom-bg-color: rgba(92, 100, 112, 0.2);
+$roomheader-addroom-fg-color: #5c6470;
+/* ******************** */
+
+/* Rich-text-editor */
+/* ******************** */
+$pill-bg-color: #aaa;
+$pill-hover-bg-color: #ccc;
+$rte-bg-color: #e9e9e9;
+$rte-code-bg-color: rgba(0, 0, 0, 0.04);
+/* ******************** */
+
+/* Presence */
+/* ******************** */
+$presence-away: #d9b072;
+$presence-offline: $quinary-content;
+$presence-busy: $alert;
+/* ******************** */
+
+/* Inputs */
+/* ******************** */
+$input-border-color: $menu-border-color;
+$input-darker-bg-color: $quinary-content;
+$input-darker-fg-color: #9fa9ba;
+$input-lighter-bg-color: $secondary-accent-color;
+$input-underline-color: rgba(151, 151, 151, 0.5);
+$input-fg-color: rgba(74, 74, 74, 0.9);
+/* ******************** */
+
+/* Dialog */
+/* ******************** */
+$dialog-title-fg-color: #45474a;
+$dialog-backdrop-color: rgba(46, 48, 51, 0.38);
+$dialog-close-fg-color: #c1c1c1;
+$dialog-close-external-color: $background;
+$dialog-shadow-color: rgba(0, 0, 0, 0.48);
+/* ******************** */
+
+/* ImageBody */
+/* ******************** */
+$imagebody-giflabel: rgba(0, 0, 0, 0.7);
+$imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
+$imagebody-giflabel-color: $background;
+/* ******************** */
+
+/* RoomList */
+/* ******************** */
+$roomlist-bg-color: rgba(245, 245, 245, 0.9);
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, $background 0%, #ffffff00 100%);
+$roomtile-default-badge-bg-color: $muted-fg-color;
+/* ******************** */
+
+/* e2e */
+/* ******************** */
+$e2e-verified-color: #0dbd8b;
+$e2e-unknown-color: #e8bf37;
+$e2e-unverified-color: #e8bf37;
+$e2e-warning-color: #ff5b55;
+$e2e-verified-color-light: rgba($e2e-verified-color, 0.06);
+$e2e-warning-color-light: rgba($e2e-warning-color, 0.06);
+/* ******************** */
+
+/* Tabbed views */
+/* ******************** */
+$tab-label-fg-color: $dialog-title-fg-color;
+$tab-label-active-fg-color: $background;
+/* ******************** */
+
+/* Buttons */
+/* ******************** */
+$button-primary-fg-color: $background;
+$button-secondary-bg-color: $accent-fg-color;
+$button-danger-fg-color: $background;
+$button-danger-disabled-fg-color: $background;
+$button-danger-disabled-bg-color: #f5b6bb; /* TODO: Verify color */
+/* ******************** */
+
+/* Toggle switch */
+/* ******************** */
+$togglesw-off-color: #c1c9d6;
+$togglesw-ball-color: $background;
+/* ******************** */
+
+/* Authpage */
+/* ******************** */
+$authpage-primary-color: #232f32;
+$authpage-bg-color: #2e3649;
+$authpage-modal-bg-color: $roomlist-bg-color;
+$authpage-focus-bg-color: $focus-bg-color;
+$authpage-lang-color: #4e5054;
+$authpage-secondary-color: $muted-fg-color;
+/* ******************** */
+
+/* Message action bar */
+/* ******************** */
+$message-action-bar-bg-color: $background;
+$message-action-bar-fg-color: $primary-content;
+$message-action-bar-border-color: #e9edf1;
+$message-action-bar-hover-border-color: $focus-bg-color;
+/* ******************** */
+
+/* Reaction row */
+/* ******************** */
+$reaction-row-button-hover-border-color: $focus-bg-color;
+$reaction-row-button-selected-bg-color: #e9fff9;
+/* ******************** */
+
+/* Voice messages */
+/* ******************** */
+/* These two don't change between themes. They are the $alert, but we don't want */
+/* custom themes to affect them by accident. */
+$voice-record-stop-symbol-color: #ff5b55;
+$voice-record-live-circle-color: #ff5b55;
+$voice-record-stop-border-color: $quinary-content;
+$voice-record-icon-color: $tertiary-content;
+/* ******************** */
+
+/* Bubble tiles */
+/* ******************** */
+$eventbubble-self-bg: #e7f8f3;
+$eventbubble-others-bg: #e8edf4;
+$eventbubble-bg-hover: #f6f7f8;
+$eventbubble-reply-color: $quaternary-content;
+/* ******************** */
+
+/* Lightbox */
+/* ******************** */
+$lightbox-fg-color: $background;
+$lightbox-background-bg-color: #000;
+$lightbox-background-bg-opacity: 0.95;
+/* ******************** */
+
+/* VoIP */
+/* ******************** */
+$call-view-button-on-foreground: $secondary-content;
+$call-view-button-on-background: $background;
+$call-view-button-off-foreground: $background;
+$call-view-button-off-background: $secondary-content;
+$call-view-content-background: #21262c;
+
+$video-feed-secondary-background: #394049; /* XXX: Color from dark theme */
+$voipcall-plinth-color: $system;
+
+/* All of these are from dark theme */
+$call-system: #21262c;
+$call-background: #15191e;
+$call-primary-content: #ffffff;
+/* This one is from light theme */
+$call-light-quaternary-content: #c1c6cd;
+/* ******************** */
+
+/* One-off colors */
+/* ******************** */
+$progressbar-bg-color: $panel-actions;
+$kbd-border-color: $message-action-bar-border-color;
+$visual-bell-bg-color: #faa;
+$event-timestamp-color: #acacac;
+$slider-background-color: $togglesw-off-color;
+$appearance-tab-border-color: $input-darker-bg-color;
+$composer-shadow-color: rgba(0, 0, 0, 0.04);
+$breadcrumb-placeholder-bg-color: #e8eef5;
+$theme-button-bg-color: $quinary-content;
+$resend-button-divider-color: $input-darker-bg-color;
+$inlinecode-border-color: $quinary-content;
+$inlinecode-background-color: $system;
+$codeblock-background-color: $header-panel-bg-color;
+$scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+$selected-color: $secondary-accent-color;
+/* ******************** */
+
+/* One-off global colors - these apply to both themes */
+/* ******************** */
+$pinned-color: $tertiary-content;
+$avatar-initial-color: $background;
+$primary-hairline-color: transparent;
+$focus-brightness: 105%;
+/* ******************** */
+
+/* blur amounts for left left panel (only for element theme) */
+/* ******************** */
+:root {
+    --lp-background-blur: 40px;
+}
+
+/* ******************** */
+
+/* Icon URLs */
+/* ******************** */
+$copy-button-url: "$(res)/img/element-icons/copy.svg";
+/* ******************** */
+
+/* Location sharing */
+/* ******************** */
+$location-marker-color: #ffffff;
+$location-live-color: #5c56f5;
+$location-live-secondary-color: #deddfd;
+/* ******************** */
+
+/* Voice Broadcast */
+/* ******************** */
+$live-badge-color: #ffffff;
+/* ******************** */
+
+body {
+    color-scheme: light;
+}
+
+/* ******************** */
+
+/* diff highlight colors */
+/* ******************** */
+.hljs-addition {
+    background: #dfd;
+}
+
+.hljs-deletion {
+    background: #fdd;
+}
+
+/* ******************** */

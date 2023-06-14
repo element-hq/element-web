@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeviceSecurityCard /> renders basic card 1`] = `
+<div>
+  <div
+    class="mx_DeviceSecurityCard"
+  >
+    <div
+      class="mx_DeviceSecurityCard_icon Verified"
+    >
+      <div
+        height="16"
+        width="16"
+      />
+    </div>
+    <div
+      class="mx_DeviceSecurityCard_content"
+    >
+      <p
+        class="mx_DeviceSecurityCard_heading"
+      >
+        Verified session
+      </p>
+      <p
+        class="mx_DeviceSecurityCard_description"
+      >
+        nice
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DeviceSecurityCard /> renders with children 1`] = `
+<div>
+  <div
+    class="mx_DeviceSecurityCard"
+  >
+    <div
+      class="mx_DeviceSecurityCard_icon Unverified"
+    >
+      <div
+        height="16"
+        width="16"
+      />
+    </div>
+    <div
+      class="mx_DeviceSecurityCard_content"
+    >
+      <p
+        class="mx_DeviceSecurityCard_heading"
+      >
+        Verified session
+      </p>
+      <p
+        class="mx_DeviceSecurityCard_description"
+      >
+        nice
+      </p>
+      <div
+        class="mx_DeviceSecurityCard_actions"
+      >
+        <div>
+          hey
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

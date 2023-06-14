@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SettingsTab /> renders tab 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div>
+        test
+      </div>
+    </div>
+  </div>
+</div>
+`;

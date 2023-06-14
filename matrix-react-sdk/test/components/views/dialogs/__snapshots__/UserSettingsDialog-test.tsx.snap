@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserSettingsDialog /> renders tabs correctly 1`] = `
+NodeList [
+  <li
+    aria-controls="mx_tabpanel_USER_GENERAL_TAB"
+    aria-selected="true"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
+    data-testid="settings-tab-USER_GENERAL_TAB"
+    role="tab"
+    tabindex="0"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_settingsIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_GENERAL_TAB_label"
+    >
+      General
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_USER_APPEARANCE_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_APPEARANCE_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_appearanceIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_APPEARANCE_TAB_label"
+    >
+      Appearance
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_USER_NOTIFICATIONS_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_NOTIFICATIONS_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_bellIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_NOTIFICATIONS_TAB_label"
+    >
+      Notifications
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_USER_PREFERENCES_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_PREFERENCES_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_preferencesIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_PREFERENCES_TAB_label"
+    >
+      Preferences
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_USER_KEYBOARD_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_KEYBOARD_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_keyboardIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_KEYBOARD_TAB_label"
+    >
+      Keyboard
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_USER_SIDEBAR_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_SIDEBAR_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_sidebarIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_SIDEBAR_TAB_label"
+    >
+      Sidebar
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_USER_SECURITY_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_SECURITY_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_securityIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_SECURITY_TAB_label"
+    >
+      Security & Privacy
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_USER_SESSION_MANAGER_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_SESSION_MANAGER_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_sessionsIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_SESSION_MANAGER_TAB_label"
+    >
+      Sessions
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_USER_LABS_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_LABS_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_labsIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_LABS_TAB_label"
+    >
+      Labs
+    </span>
+  </li>,
+  <li
+    aria-controls="mx_tabpanel_USER_HELP_TAB"
+    aria-selected="false"
+    class="mx_AccessibleButton mx_TabbedView_tabLabel"
+    data-testid="settings-tab-USER_HELP_TAB"
+    role="tab"
+    tabindex="-1"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_UserSettingsDialog_helpIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+      id="mx_tabpanel_USER_HELP_TAB_label"
+    >
+      Help & About
+    </span>
+  </li>,
+]
+`;

@@ -1,0 +1,187 @@
+/*
+Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_DevtoolsDialog_wrapper {
+    .mx_Dialog {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mx_Dialog_fixedWidth {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        max-height: 100%;
+
+        .mx_Dialog_buttons button {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.mx_DevTools_content {
+    overflow-y: auto;
+}
+
+.mx_DevTools_RoomStateExplorer_query {
+    margin-bottom: 10px;
+}
+
+.mx_DevTools_button {
+    font-family: monospace !important;
+    margin-bottom: 8px !important;
+}
+
+.mx_DevTools_RoomStateExplorer_button_hasSpaces {
+    text-decoration: underline;
+}
+
+.mx_DevTools_button.mx_DevTools_RoomStateExplorer_button_emptyString {
+    font-style: italic;
+}
+
+.mx_DevTools_label_left {
+    float: left;
+}
+
+.mx_DevTools_label_right {
+    float: right;
+}
+
+.mx_DevTools_label_bottom {
+    clear: both;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.mx_DevTools_inputRow {
+    display: table-row;
+}
+
+.mx_DevTools_inputLabelCell {
+    display: table-cell;
+    font-weight: bold;
+    padding-right: 24px;
+}
+
+.mx_DevTools_textarea {
+    font-size: $font-12px;
+    max-width: 684px;
+    min-height: 250px;
+    padding: 10px;
+}
+
+.mx_DevTools_eventTypeStateKeyGroup {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.mx_DevTools_content .mx_Field_input:first-of-type {
+    margin-right: 42px;
+}
+
+.mx_DevTools_VerificationRequest {
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-bottom: 6px;
+    font-family: $monospace-font-family;
+
+    dl {
+        display: grid;
+        grid-template-columns: max-content auto;
+        margin: 0;
+    }
+
+    dd {
+        grid-column-start: 2;
+    }
+
+    dd:empty {
+        color: #666666;
+        &::after {
+            content: "(empty)";
+        }
+    }
+
+    dt {
+        font-weight: bold;
+        grid-column-start: 1;
+    }
+
+    dt::after {
+        content: ":";
+    }
+}
+
+.mx_DevTools_SettingsExplorer {
+    table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+
+        th {
+            /* Colour choice: first one autocomplete gave me. */
+            border-bottom: 1px solid $accent;
+            text-align: left;
+        }
+
+        td,
+        th {
+            width: 360px; /* "feels right" number */
+
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        td + td,
+        th + th {
+            width: auto;
+        }
+
+        tr:hover {
+            /* Colour choice: first one autocomplete gave me. */
+            background-color: $accent;
+        }
+    }
+
+    .mx_DevTools_SettingsExplorer_mutable {
+        background-color: $accent;
+    }
+
+    .mx_DevTools_SettingsExplorer_immutable {
+        background-color: $alert;
+    }
+
+    .mx_DevTools_SettingsExplorer_edit {
+        float: right;
+        margin-right: 16px;
+    }
+
+    .mx_DevTools_SettingsExplorer_warning {
+        border: 2px solid $alert;
+        border-radius: 4px;
+        padding: 4px;
+        margin-bottom: 8px;
+    }
+}
+
+.mx_DevTools_SettingsExplorer_setting {
+    /* override default link button color */
+    /* as it is the same as the background highlight */
+    /* used on focus */
+    color: $links !important;
+}

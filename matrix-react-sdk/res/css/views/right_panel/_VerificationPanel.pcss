@@ -1,0 +1,164 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_VerificationPanel_verified_section,
+.mx_VerificationPanel_reciprocate_section {
+    /* center the big shield icon */
+    .mx_E2EIcon {
+        /* Override general user info margin */
+        margin: 20px auto !important;
+    }
+}
+
+.mx_UserInfo.mx_BaseCard {
+    .mx_UserInfo_container:not(.mx_UserInfo_separator) {
+        > div > p {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .mx_VerificationPanel_verifyByEmojiButton,
+        .mx_UserInfo_wideButton {
+            width: fit-content;
+        }
+
+        .mx_EncryptionInfo_spinner,
+        .mx_VerificationShowSas {
+            margin-inline-start: auto;
+            margin-inline-end: auto;
+        }
+
+        .mx_Spinner,
+        .mx_VerificationShowSas {
+            align-items: center;
+        }
+    }
+
+    .mx_EncryptionPanel_cancel {
+        @mixin customisedCancelButton;
+        width: 14px;
+        height: 14px;
+        background-color: $settings-subsection-fg-color;
+        position: absolute;
+        z-index: 100;
+        top: 14px;
+        right: 14px;
+    }
+
+    .mx_VerificationPanel_qrCode {
+        padding: 4px 4px 0 4px;
+        background: white;
+        border-radius: 4px;
+        width: max-content;
+        max-width: 100%;
+        /* Override general user info margin */
+        margin: 0 auto !important;
+
+        canvas {
+            /* override height and width which are set on the element directly */
+            height: auto !important;
+            width: 100% !important;
+            max-width: 240px;
+        }
+    }
+
+    .mx_VerificationPanel_reciprocate_section {
+        .mx_AccessibleButton {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            display: block;
+            margin: 10px 0;
+        }
+    }
+}
+
+/* Special case styling for EncryptionPanel in a Modal dialog */
+.mx_Dialog,
+.mx_CompleteSecurity_body {
+    .mx_VerificationPanel_QRPhase_startOptions {
+        display: flex;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        align-items: stretch;
+        justify-content: center;
+
+        > .mx_VerificationPanel_QRPhase_betweenText {
+            width: 50px;
+            vertical-align: middle;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mx_VerificationPanel_QRPhase_startOption {
+            background-color: $header-panel-bg-color;
+            border-radius: 10px;
+            flex: 1;
+            display: flex;
+            padding: 20px;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+            max-width: 310px;
+            justify-content: space-between;
+
+            canvas,
+            .mx_VerificationPanel_QRPhase_noQR {
+                width: 220px !important;
+                height: 220px !important;
+                background-color: #fff;
+                border-radius: 4px;
+                vertical-align: middle;
+                text-align: center;
+                padding: 10px;
+            }
+
+            > p {
+                margin-top: 0;
+                font-weight: 700;
+            }
+
+            .mx_VerificationPanel_QRPhase_helpText {
+                font-size: $font-14px;
+                margin: 30px 0;
+                text-align: center;
+            }
+        }
+    }
+
+    /* EncryptionPanel when verification is done */
+    .mx_VerificationPanel_verified_section {
+        /* right align the "Got it" button */
+        .mx_AccessibleButton {
+            float: right;
+        }
+    }
+
+    .mx_VerificationPanel_reciprocate_section {
+        .mx_AccessibleButton {
+            margin-left: 10px;
+            padding: 7px 40px;
+        }
+
+        .mx_VerificationPanel_reciprocateButtons {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+    }
+}

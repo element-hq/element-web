@@ -1,0 +1,147 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ThreadSummary,
+.mx_ThreadSummary_content,
+.mx_ThreadSummary_icon {
+    font-size: $font-12px;
+}
+
+.mx_ThreadSummary,
+.mx_ThreadSummary_content {
+    color: $secondary-content;
+}
+
+.mx_ThreadSummary,
+.mx_ThreadSummary_icon {
+    margin-top: $spacing-8;
+}
+
+.mx_ThreadSummary {
+    min-width: 267px;
+    /* leave space on both left & right gutters */
+    max-width: min(calc(100% - var(--EventTile_group_line-spacing-inline-start)), 600px);
+    width: fit-content;
+    height: 40px;
+    position: relative;
+    background-color: $system;
+    padding-inline: $spacing-12 $spacing-16;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 8px;
+    box-sizing: border-box;
+    clear: both;
+    overflow: hidden;
+    border: 1px solid $system; /* always render a border so the hover effect doesn't require a re-layout */
+
+    .mx_ThreadSummary_chevron {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 60px;
+        box-sizing: border-box;
+        /* XXX: We use `$system-transparent` instead of `transparent` to work around a Safari <15.4 bug */
+        background: linear-gradient(270deg, $system 50%, $system-transparent 100%);
+
+        opacity: 0;
+        transform: translateX(60px);
+        transition: all 0.1s ease-in-out;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: $spacing-12;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            mask-image: url("$(res)/img/compound/chevron-right-12px.svg");
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: $secondary-content;
+        }
+    }
+
+    &:hover,
+    &:focus {
+        border-color: $quinary-content;
+
+        .mx_ThreadSummary_chevron {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    &::before {
+        @mixin ThreadSummaryIcon;
+        align-self: center; /* v-align the threads icon */
+    }
+
+    .mx_ThreadSummary_sender,
+    .mx_ThreadSummary_content,
+    .mx_ThreadSummary_replies_amount {
+        line-height: var(--EventTile_ThreadSummary-line-height);
+    }
+
+    .mx_ThreadSummary_sender,
+    .mx_ThreadSummary_content {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .mx_ThreadSummary_sender {
+        font-weight: var(--font-semi-bold);
+    }
+
+    .mx_ThreadSummary_content {
+        margin-left: $spacing-4;
+        flex: 1;
+    }
+
+    .mx_ThreadSummary_replies_amount {
+        @mixin ThreadRepliesAmount;
+    }
+
+    .mx_MessagePanel_narrow & {
+        min-width: initial;
+        max-width: 100%; /* prevent overflow */
+        width: initial;
+    }
+}
+
+.mx_ThreadSummary_avatar {
+    margin-inline-end: $spacing-8;
+}
+
+.mx_ThreadSummary_icon {
+    display: inline-block;
+    margin-bottom: $spacing-8;
+
+    &::before {
+        @mixin ThreadSummaryIcon;
+        vertical-align: middle;
+        margin-inline-end: $spacing-8;
+        margin-top: -2px;
+    }
+
+    a& {
+        color: $secondary-content;
+    }
+}

@@ -1,0 +1,192 @@
+/*
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_TimelineCard {
+    .mx_TimelineCard_timeline {
+        overflow: hidden;
+        position: relative; /* offset parent for jump to bottom button */
+        flex: 1;
+        border-radius: 8px;
+    }
+
+    .mx_NewRoomIntro {
+        margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
+        margin-inline-end: var(--BaseCard_EventTile-spacing-inline);
+    }
+
+    .mx_EventTile_content {
+        margin-right: 0;
+    }
+
+    .mx_EventTile {
+        .mx_ThreadSummary {
+            position: relative;
+            padding-right: 11px;
+
+            &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                left: 0;
+                bottom: -16px;
+                height: 1px;
+                width: 100%;
+                border-bottom: 1px solid $message-action-bar-border-color;
+            }
+        }
+
+        &[data-layout="irc"],
+        &[data-layout="group"] {
+            --TimelineCard_ReadReceiptGroup-inset-block-start: -6px;
+
+            &.mx_EventTile_info .mx_EventTile_line,
+            .mx_EventTile_line {
+                padding: var(--BaseCard_EventTile_line-padding-block) var(--BaseCard_EventTile-spacing-inline);
+                padding-inline-end: var(--MessageTimestamp-width); /* ensure timestamp is not hidden */
+
+                .mx_EventTile_e2eIcon {
+                    inset-inline-start: $spacing-8;
+                }
+            }
+
+            &.mx_EventTile_info {
+                .mx_EventTile_avatar {
+                    inset-inline-start: 18px;
+                }
+            }
+
+            .mx_EventTile_avatar {
+                inset-inline-start: -3px;
+            }
+
+            .mx_EventTile_msgOption {
+                margin-inline-end: 0;
+
+                .mx_ReadReceiptGroup {
+                    top: var(--TimelineCard_ReadReceiptGroup-inset-block-start);
+                }
+            }
+
+            .mx_DisambiguatedProfile,
+            .mx_ReactionsRow,
+            .mx_ThreadSummary {
+                margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
+            }
+
+            .mx_DisambiguatedProfile {
+                max-width: calc(100% - var(--BaseCard_EventTile-spacing-inline)); /* instead of $left-gutter */
+            }
+
+            .mx_ReplyTile .mx_DisambiguatedProfile {
+                margin-inline-start: 0;
+                max-width: unset;
+            }
+
+            .mx_MessageTimestamp {
+                inset-inline: auto 0;
+                font-size: $font-12px;
+            }
+
+            .mx_ReactionsRow {
+                /* See: var(--ThreadView_group_spacing-end) for ReactionsRow on _EventTile.pcss */
+                margin-inline-end: $spacing-8;
+            }
+
+            .mx_ThreadSummary {
+                margin-inline-end: 0;
+                max-width: min(calc(100% - 36px), 600px);
+            }
+        }
+
+        &[data-layout="irc"] {
+            .mx_EventTile_avatar,
+            .mx_MessageTimestamp {
+                position: absolute;
+            }
+        }
+
+        &[data-layout="group"] {
+            /* Read receipt group on compact modern layout */
+            /* This is required because mx_TimelineCard is a child element wrapped by mx_MatrixChat_useCompactLayout, */
+            /* which specifies the default position of mx_ReadReceiptGroup on compact modern layout. */
+            .mx_MatrixChat_useCompactLayout & .mx_ReadReceiptGroup {
+                top: var(--TimelineCard_ReadReceiptGroup-inset-block-start);
+            }
+        }
+
+        &[data-layout="bubble"] {
+            &::before {
+                z-index: auto; /* enable background color on hover */
+            }
+
+            &.mx_EventTile_info .mx_MessageActionBar {
+                /* 1px: border width */
+                inset-inline-end: calc(var(--container-gap-width) + var(--BaseCard_padding-inline) + 1px);
+            }
+
+            .mx_ReactionsRow {
+                position: relative; /* display on hover */
+            }
+        }
+    }
+
+    .mx_LegacyCallEvent_wrapper {
+        justify-content: center;
+        margin: auto 5px;
+        .mx_LegacyCallEvent {
+            margin: 4px;
+        }
+    }
+
+    .mx_GenericEventListSummary {
+        &[data-layout="irc"],
+        &[data-layout="group"] {
+            .mx_EventTile_line,
+            .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
+                padding-inline-start: var(--BaseCard_EventTile-spacing-inline);
+                padding-inline-end: var(--MessageTimestamp-width); /* ensure timestamp is not hidden */
+            }
+        }
+    }
+
+    .mx_WhoIsTypingTile {
+        margin-left: -12px; /* undo padding on the message list */
+    }
+
+    .mx_WhoIsTypingTile_avatars {
+        flex-basis: 48px; /* 12 (padding on message list) + 36 (padding on event lines) */
+    }
+
+    .mx_GenericEventListSummary_unstyledList, /* RR next to a message on the event list summary */
+    .mx_RoomView_MessageList {
+        /* RR next to a message on the messsge list */
+        .mx_EventTile[data-layout="bubble"] {
+            .mx_ReadReceiptGroup {
+                /* 6px: scroll bar width (magic number) */
+                /* stylelint-disable-next-line declaration-colon-space-after */
+                inset-inline-end: calc(
+                    -1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + var(--container-gap-width) + 6px
+                );
+            }
+
+            &.mx_EventTile_info {
+                .mx_ReadReceiptGroup {
+                    inset-inline-end: -4px; /* align with RR outside of info tile */
+                }
+            }
+        }
+    }
+}

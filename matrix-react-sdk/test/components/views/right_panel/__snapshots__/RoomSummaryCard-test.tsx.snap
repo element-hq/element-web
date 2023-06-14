@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomSummaryCard /> renders the room summary 1`] = `
+<div>
+  <div
+    class="mx_BaseCard mx_RoomSummaryCard"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_AccessibleButton mx_BaseCard_close"
+        data-testid="base-card-close-button"
+        role="button"
+        tabindex="0"
+        title="Close"
+      />
+      <div
+        class="mx_RoomSummaryCard_avatar"
+        role="presentation"
+      >
+        <span
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 35.1px; width: 54px; line-height: 54px;"
+          >
+            !
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="data:image/png;base64,00"
+            style="width: 54px; height: 54px;"
+          />
+        </span>
+        <div
+          aria-describedby="mx_TooltipTarget_abdefghi"
+          class="mx_TextWithTooltip_target mx_RoomSummaryCard_e2ee"
+          tabindex="0"
+        />
+      </div>
+      <h1
+        class="mx_RoomSummaryCard_roomName"
+        title="!room:domain.org"
+      >
+        !room:domain.org
+      </h1>
+      <div
+        class="mx_RoomSummaryCard_alias"
+        title=""
+      />
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <div
+        class="mx_BaseCard_Group mx_RoomSummaryCard_aboutGroup"
+      >
+        <h2>
+          About
+        </h2>
+        <div
+          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_people"
+          role="button"
+          tabindex="0"
+        >
+          People
+          <span
+            class="mx_BaseCard_Button_sublabel"
+          >
+            0
+          </span>
+        </div>
+        <div
+          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_files"
+          role="button"
+          tabindex="0"
+        >
+          Files
+        </div>
+        <div
+          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_poll"
+          role="button"
+          tabindex="0"
+        >
+          Poll history
+        </div>
+        <div
+          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_export"
+          role="button"
+          tabindex="0"
+        >
+          Export chat
+        </div>
+        <div
+          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_share"
+          data-testid="shareRoomButton"
+          role="button"
+          tabindex="0"
+        >
+          Share room
+        </div>
+        <div
+          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_settings"
+          role="button"
+          tabindex="0"
+        >
+          Room settings
+        </div>
+      </div>
+      <div
+        class="mx_BaseCard_Group mx_RoomSummaryCard_appsGroup"
+      >
+        <h2>
+          Widgets
+        </h2>
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+          role="button"
+          tabindex="0"
+        >
+          Add widgets, bridges & bots
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,71 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_NotificationSettingsTab_notificationsSection {
+    width: 360px;
+
+    .mx_StyledRadioButton {
+        flex-direction: row-reverse;
+        color: $primary-content;
+        font-size: $font-15px;
+        line-height: $font-18px;
+        font-weight: var(--font-semi-bold);
+        margin-top: 16px;
+        position: relative;
+        padding-left: 8px;
+        align-items: center;
+
+        &::before {
+            content: "";
+            position: absolute;
+            height: 24px;
+            width: 24px;
+            left: 0;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: contain;
+            background-color: $secondary-content;
+        }
+
+        input + div {
+            margin-top: 8px;
+        }
+
+        .mx_NotificationSettingsTab_microCopy {
+            color: $secondary-content;
+            font-weight: normal;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            margin-right: 32px;
+        }
+    }
+
+    .mx_NotificationSettingsTab_defaultEntry::before {
+        mask-image: url("$(res)/img/element-icons/notifications.svg");
+    }
+
+    .mx_NotificationSettingsTab_allMessagesEntry::before {
+        mask-image: url("$(res)/img/element-icons/roomlist/notifications-default.svg");
+    }
+
+    .mx_NotificationSettingsTab_mentionsKeywordsEntry::before {
+        mask-image: url("$(res)/img/element-icons/roomlist/notifications-dm.svg");
+    }
+
+    .mx_NotificationSettingsTab_noneEntry::before {
+        mask-image: url("$(res)/img/element-icons/roomlist/notifications-off.svg");
+    }
+}

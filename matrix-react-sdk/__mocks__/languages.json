@@ -1,0 +1,10 @@
+{
+    "en": {
+        "fileName": "en_EN.json",
+        "label": "English"
+    },
+    "en-us": {
+        "fileName": "en_US.json",
+        "label": "English (US)"
+    }
+}

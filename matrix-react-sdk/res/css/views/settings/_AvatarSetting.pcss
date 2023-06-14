@@ -1,0 +1,124 @@
+/*
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_AvatarSetting_avatar {
+    width: 90px;
+    min-width: 90px; /* so it doesn't get crushed by the flexbox in languages with longer words */
+    height: 90px;
+    margin-top: 8px;
+    position: relative;
+
+    .mx_AvatarSetting_hover {
+        transition: opacity var(--hover-transition);
+
+        /* position to place the hover bg over the entire thing */
+        position: absolute;
+        inset: 0;
+
+        pointer-events: none; /* let the pointer fall through the underlying thing */
+
+        line-height: 90px;
+        text-align: center;
+
+        > span {
+            color: $primary-content;
+            position: relative; /* tricks the layout engine into putting this on top of the bg */
+            font-weight: 500;
+        }
+
+        .mx_AvatarSetting_hoverBg {
+            /* absolute position to lazily fill the entire container */
+            position: absolute;
+            inset: 0;
+
+            opacity: 0.5;
+            background-color: $quinary-content;
+            border-radius: 90px;
+        }
+    }
+
+    &.mx_AvatarSetting_avatar_hovering .mx_AvatarSetting_hover {
+        opacity: 1;
+    }
+
+    &:not(.mx_AvatarSetting_avatar_hovering) .mx_AvatarSetting_hover {
+        opacity: 0;
+    }
+
+    & > * {
+        box-sizing: border-box;
+    }
+
+    .mx_AccessibleButton.mx_AccessibleButton_kind_primary {
+        margin-top: 8px;
+    }
+
+    .mx_AccessibleButton.mx_AccessibleButton_kind_link_sm {
+        width: 100%;
+    }
+
+    & > img {
+        cursor: pointer;
+        object-fit: cover;
+    }
+
+    & > img,
+    .mx_AvatarSetting_avatarPlaceholder {
+        display: block;
+        height: 90px;
+        width: inherit;
+        border-radius: 90px;
+        cursor: pointer;
+    }
+
+    .mx_AvatarSetting_avatarPlaceholder::before {
+        background-color: $quinary-content;
+        mask: url("$(res)/img/feather-customised/user.svg");
+        mask-repeat: no-repeat;
+        mask-size: 36px;
+        mask-position: center;
+        content: "";
+        position: absolute;
+        inset: 0;
+    }
+
+    .mx_AvatarSetting_uploadButton {
+        width: 32px;
+        height: 32px;
+        border-radius: 32px;
+        background-color: $secondary-content;
+
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+
+    .mx_AvatarSetting_uploadButton::before {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 55%;
+        background-color: $quinary-content;
+        mask-image: url("$(res)/img/feather-customised/edit.svg");
+    }
+}
+
+.mx_AvatarSetting_avatar .mx_AvatarSetting_avatarPlaceholder {
+    background-color: $system;
+}

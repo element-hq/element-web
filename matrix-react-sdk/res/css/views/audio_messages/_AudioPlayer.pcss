@@ -1,0 +1,67 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MediaBody.mx_AudioPlayer_container {
+    padding: 16px 12px 12px 12px;
+
+    .mx_AudioPlayer_primaryContainer {
+        display: flex;
+
+        .mx_PlayPauseButton {
+            margin-right: 8px;
+        }
+
+        .mx_AudioPlayer_mediaInfo {
+            flex: 1;
+            overflow: hidden; /* makes the ellipsis on the file name work */
+
+            & > * {
+                display: block;
+            }
+
+            .mx_AudioPlayer_mediaName {
+                color: $primary-content;
+                font-size: $font-15px;
+                line-height: $font-15px;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                padding-bottom: 4px; /* mimics the line-height differences in the Figma */
+            }
+
+            .mx_AudioPlayer_byline {
+                font-size: $font-12px;
+                line-height: $font-12px;
+            }
+        }
+    }
+
+    .mx_AudioPlayer_seek {
+        display: flex;
+        align-items: center;
+
+        .mx_SeekBar {
+            flex: 1;
+        }
+
+        .mx_Clock {
+            min-width: $font-42px; /* for flexbox */
+            padding-left: $spacing-4; /* isolate from seek bar */
+            text-align: justify;
+            white-space: nowrap;
+        }
+    }
+}

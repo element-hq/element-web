@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Module Components should override the factory for a ModuleSpinner 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Spinner"
+  >
+    <div
+      aria-label="Loading…"
+      class="mx_Spinner_icon"
+      data-testid="spinner"
+      role="progressbar"
+      style="width: 32px; height: 32px;"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Module Components should override the factory for a TextInputField 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Field mx_Field_input"
+  >
+    <input
+      autocomplete="off"
+      id="mx_Field_1"
+      label="My Label"
+      placeholder="My Label"
+      type="text"
+      value="My Value"
+    />
+    <label
+      for="mx_Field_1"
+    >
+      My Label
+    </label>
+  </div>
+</DocumentFragment>
+`;

@@ -1,0 +1,264 @@
+/*
+Copyright 2019 Tulir Asokan <tulir@maunium.net>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_EmojiPicker {
+    width: 340px;
+    height: 450px;
+
+    border-radius: 4px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_EmojiPicker_body {
+    flex: 1;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.mx_EmojiPicker_header {
+    padding: 4px 8px 0;
+    border-bottom: 1px solid $message-action-bar-border-color;
+}
+
+.mx_EmojiPicker_anchor {
+    border: none;
+    padding: 8px 8px 6px;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
+    border-radius: 4px 4px 0 0;
+
+    width: 36px;
+    height: 38px;
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+
+    &:not(:disabled):hover {
+        background-color: $focus-bg-color;
+        border-bottom: 2px solid $accent;
+    }
+}
+
+.mx_EmojiPicker_anchor::before {
+    background-color: $primary-content;
+    content: "";
+    display: inline-block;
+    mask-size: 100%;
+    mask-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+.mx_EmojiPicker_anchor:disabled::before {
+    background-color: $focus-bg-color;
+}
+
+.mx_EmojiPicker_anchor_activity::before {
+    mask-image: url("$(res)/img/emojipicker/activity.svg");
+}
+.mx_EmojiPicker_anchor_custom::before {
+    mask-image: url("$(res)/img/emojipicker/custom.svg");
+}
+.mx_EmojiPicker_anchor_flags::before {
+    mask-image: url("$(res)/img/emojipicker/flags.svg");
+}
+.mx_EmojiPicker_anchor_foods::before {
+    mask-image: url("$(res)/img/emojipicker/foods.svg");
+}
+.mx_EmojiPicker_anchor_nature::before {
+    mask-image: url("$(res)/img/emojipicker/nature.svg");
+}
+.mx_EmojiPicker_anchor_objects::before {
+    mask-image: url("$(res)/img/emojipicker/objects.svg");
+}
+.mx_EmojiPicker_anchor_people::before {
+    mask-image: url("$(res)/img/emojipicker/people.svg");
+}
+.mx_EmojiPicker_anchor_places::before {
+    mask-image: url("$(res)/img/emojipicker/places.svg");
+}
+.mx_EmojiPicker_anchor_recent::before {
+    mask-image: url("$(res)/img/emojipicker/recent.svg");
+}
+.mx_EmojiPicker_anchor_symbols::before {
+    mask-image: url("$(res)/img/emojipicker/symbols.svg");
+}
+
+.mx_EmojiPicker_anchor_visible {
+    border-bottom: 2px solid $accent;
+}
+
+.mx_EmojiPicker_search {
+    margin: 8px;
+    border-radius: 4px;
+    border: 1px solid $input-border-color;
+    background-color: $background;
+    display: flex;
+
+    input {
+        flex: 1;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px 0;
+    }
+
+    button {
+        border: none;
+        background-color: inherit;
+        margin: 0;
+        padding: 8px;
+        align-self: center;
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.mx_EmojiPicker_search_clear {
+    cursor: pointer;
+}
+
+.mx_EmojiPicker_search_icon {
+    width: 16px;
+    margin: 8px;
+}
+
+.mx_EmojiPicker_search_icon:not(.mx_EmojiPicker_search_clear) {
+    pointer-events: none;
+}
+
+.mx_EmojiPicker_search_icon::after {
+    mask: url("$(res)/img/emojipicker/search.svg") no-repeat;
+    mask-size: 100%;
+    background-color: $primary-content;
+    content: "";
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+.mx_EmojiPicker_search_clear::after {
+    mask-image: url("$(res)/img/emojipicker/delete.svg");
+}
+
+.mx_EmojiPicker_category {
+    padding: 0 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mx_EmojiPicker_category_label {
+    width: 304px;
+}
+
+.mx_EmojiPicker_list {
+    width: 304px;
+    padding: 0;
+    margin: 0;
+}
+
+.mx_EmojiPicker_item_wrapper {
+    display: inline-block;
+    list-style: none;
+    width: 38px;
+    cursor: pointer;
+
+    &:focus-within {
+        background-color: $focus-bg-color;
+    }
+}
+
+.mx_EmojiPicker_body .mx_EmojiPicker_item_wrapper[tabindex="0"] .mx_EmojiPicker_item {
+    background-color: $focus-bg-color;
+}
+
+.mx_EmojiPicker_item {
+    display: inline-block;
+    font-size: $font-20px;
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 4px;
+
+    &:hover {
+        background-color: $focus-bg-color;
+    }
+}
+
+.mx_EmojiPicker_item_selected {
+    color: rgba(0, 0, 0, 0.5);
+    border: 1px solid $accent;
+    padding: 4px;
+}
+
+.mx_EmojiPicker_category_label,
+.mx_EmojiPicker_preview_name {
+    font-size: $font-16px;
+    font-weight: var(--font-semi-bold);
+    margin: 0;
+}
+
+.mx_EmojiPicker_footer {
+    border-top: 1px solid $message-action-bar-border-color;
+    min-height: 72px;
+
+    display: flex;
+    align-items: center;
+}
+
+.mx_EmojiPicker_preview_emoji {
+    font-size: $font-32px;
+    padding: 8px 16px;
+}
+
+.mx_EmojiPicker_preview_text {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    flex-direction: column;
+}
+
+.mx_EmojiPicker_name {
+    text-transform: capitalize;
+}
+
+.mx_EmojiPicker_shortcode {
+    color: $light-fg-color;
+    overflow-wrap: break-word;
+    font-size: $font-14px;
+
+    &::before,
+    &::after {
+        content: ":";
+    }
+}
+
+.mx_EmojiPicker_quick {
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.mx_EmojiPicker_quick_header .mx_EmojiPicker_name {
+    margin-right: 4px;
+}

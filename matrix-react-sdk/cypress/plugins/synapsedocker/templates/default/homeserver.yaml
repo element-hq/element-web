@@ -1,0 +1,76 @@
+server_name: "localhost"
+pid_file: /data/homeserver.pid
+public_baseurl: "{{PUBLIC_BASEURL}}"
+listeners:
+    - port: 8008
+      tls: false
+      bind_addresses: ["::"]
+      type: http
+      x_forwarded: true
+
+      resources:
+          - names: [client]
+            compress: false
+
+database:
+    name: "sqlite3"
+    args:
+        database: ":memory:"
+
+log_config: "/data/log.config"
+
+rc_messages_per_second: 10000
+rc_message_burst_count: 10000
+rc_registration:
+    per_second: 10000
+    burst_count: 10000
+rc_joins:
+    local:
+        per_second: 9999
+        burst_count: 9999
+    remote:
+        per_second: 9999
+        burst_count: 9999
+rc_joins_per_room:
+    per_second: 9999
+    burst_count: 9999
+rc_3pid_validation:
+    per_second: 1000
+    burst_count: 1000
+
+rc_invites:
+    per_room:
+        per_second: 1000
+        burst_count: 1000
+    per_user:
+        per_second: 1000
+        burst_count: 1000
+
+rc_login:
+    address:
+        per_second: 10000
+        burst_count: 10000
+    account:
+        per_second: 10000
+        burst_count: 10000
+    failed_attempts:
+        per_second: 10000
+        burst_count: 10000
+
+media_store_path: "/data/media_store"
+uploads_path: "/data/uploads"
+enable_registration: true
+enable_registration_without_verification: true
+disable_msisdn_registration: false
+registration_shared_secret: "{{REGISTRATION_SECRET}}"
+report_stats: false
+macaroon_secret_key: "{{MACAROON_SECRET_KEY}}"
+form_secret: "{{FORM_SECRET}}"
+signing_key_path: "/data/localhost.signing.key"
+
+trusted_key_servers:
+    - server_name: "matrix.org"
+suppress_key_server_warning: true
+
+ui_auth:
+    session_timeout: "300s"

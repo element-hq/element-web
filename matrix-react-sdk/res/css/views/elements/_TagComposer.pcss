@@ -1,0 +1,83 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_TagComposer {
+    .mx_TagComposer_input {
+        display: flex;
+        flex-direction: row;
+
+        .mx_AccessibleButton {
+            min-width: 70px;
+            padding: 0 8px; /* override from button styles */
+            align-self: stretch; /* override default settingstab style */
+        }
+
+        .mx_Field,
+        .mx_Field input,
+        .mx_AccessibleButton {
+            /* So they look related to each other by feeling the same */
+            border-radius: 8px;
+        }
+    }
+
+    .mx_TagComposer_tags {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 12px; /* this plus 12px from the tags makes 24px from the input */
+    }
+
+    .mx_Tag {
+        margin-right: 12px;
+        margin-top: 12px;
+    }
+}
+
+.mx_Tag {
+    font-size: $font-15px;
+
+    display: inline-flex;
+    align-items: center;
+
+    gap: 8px;
+    padding: 8px;
+    border-radius: 8px;
+
+    color: $primary-content;
+    background: $quinary-content;
+
+    > svg:first-child {
+        width: 1em;
+        color: $secondary-content;
+        transform: scale(1.25);
+        transform-origin: center;
+    }
+
+    .mx_Tag_delete {
+        border-radius: 50%;
+        text-align: center;
+        width: 1.066666em; /* 16px; */
+        height: 1.066666em;
+        line-height: 1em;
+        color: $secondary-content;
+        background: $system;
+        position: relative;
+
+        svg {
+            width: 0.5em;
+            vertical-align: middle;
+        }
+    }
+}

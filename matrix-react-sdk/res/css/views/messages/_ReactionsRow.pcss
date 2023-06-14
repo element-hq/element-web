@@ -1,0 +1,73 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ReactionsRow {
+    margin: 6px 0;
+    color: $primary-content;
+
+    .mx_ReactionsRow_addReactionButton {
+        position: relative;
+        display: inline-block;
+        visibility: hidden; /* show on hover of the .mx_EventTile */
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+        margin-left: 4px;
+        margin-right: 4px;
+
+        &::before {
+            content: "";
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            mask-size: 16px;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            background-color: $tertiary-content;
+            mask-image: url("$(res)/img/element-icons/room/message-bar/emoji.svg");
+        }
+
+        &.mx_ReactionsRow_addReactionButton_active {
+            visibility: visible; /* keep showing whilst the context menu is shown */
+        }
+
+        &:hover,
+        &.mx_ReactionsRow_addReactionButton_active {
+            &::before {
+                background-color: $primary-content;
+            }
+        }
+    }
+}
+
+.mx_EventTile:hover .mx_ReactionsRow_addReactionButton {
+    visibility: visible;
+}
+
+.mx_ReactionsRow_showAll {
+    color: $tertiary-content;
+
+    &.mx_AccessibleButton_kind_link_inline {
+        font-size: $font-12px;
+        line-height: $font-20px;
+        margin-inline-start: $spacing-4;
+        vertical-align: middle;
+
+        &:hover {
+            color: $primary-content;
+        }
+    }
+}

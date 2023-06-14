@@ -1,0 +1,384 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Pill> should not render a non-permalink 1`] = `
+<DocumentFragment>
+  <div />
+</DocumentFragment>
+`;
+
+exports[`<Pill> should not render an avatar or link when called with inMessage = false and shouldShowPillAvatar = false 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <span
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_RoomPill"
+      >
+        <span
+          class="mx_Pill_text"
+        >
+          Room 1
+        </span>
+      </span>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> should render the expected pill for @room 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <span
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_AtRoomPill"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 10.4px; width: 16px; line-height: 16px;"
+          >
+            R
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="data:image/png;base64,00"
+            style="width: 16px; height: 16px;"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          @room
+        </span>
+      </span>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> should render the expected pill for a known user not in the room 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_UserPill"
+        href="https://matrix.to/#/@user2:example.com"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 10.4px; width: 16px; line-height: 16px;"
+          >
+            U
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="data:image/png;base64,00"
+            style="width: 16px; height: 16px;"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          User 2
+        </span>
+      </a>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> should render the expected pill for a message in another room 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_EventPill"
+        href="https://matrix.to/#/!room1:example.com/$123-456"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 10.4px; width: 16px; line-height: 16px;"
+          >
+            R
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="data:image/png;base64,00"
+            style="width: 16px; height: 16px;"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          Message in Room 1
+        </span>
+      </a>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> should render the expected pill for a message in the same room 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_EventPill"
+        href="https://matrix.to/#/!room1:example.com/$123-456"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 10.4px; width: 16px; line-height: 16px;"
+          >
+            U
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="data:image/png;base64,00"
+            style="width: 16px; height: 16px;"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          Message from User 1
+        </span>
+      </a>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> should render the expected pill for a room alias 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_RoomPill"
+        href="https://matrix.to/#/#room1:example.com"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 10.4px; width: 16px; line-height: 16px;"
+          >
+            R
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="data:image/png;base64,00"
+            style="width: 16px; height: 16px;"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          Room 1
+        </span>
+      </a>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> should render the expected pill for a space 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_RoomPill"
+        href="https://matrix.to/#/!space1:example.com"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 10.4px; width: 16px; line-height: 16px;"
+          >
+            S
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="data:image/png;base64,00"
+            style="width: 16px; height: 16px;"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          Space 1
+        </span>
+      </a>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> should render the expected pill for an uknown user not in the room 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_UserPill"
+        href="https://matrix.to/#/@user3:example.com"
+      >
+        <div
+          class="mx_Pill_UserIcon mx_BaseAvatar mx_BaseAvatar_image"
+        />
+        <span
+          class="mx_Pill_text"
+        >
+          @user3:example.com
+        </span>
+      </a>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> when rendering a pill for a room should render the expected pill 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_RoomPill"
+        href="https://matrix.to/#/!room1:example.com"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 10.4px; width: 16px; line-height: 16px;"
+          >
+            R
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="data:image/png;base64,00"
+            style="width: 16px; height: 16px;"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          Room 1
+        </span>
+      </a>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> when rendering a pill for a user in the room should render as expected 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <a
+        aria-describedby="mx_Pill_0.123456"
+        class="mx_Pill mx_UserPill"
+        href="https://matrix.to/#/@user1:example.com"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 10.4px; width: 16px; line-height: 16px;"
+          >
+            U
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="data:image/png;base64,00"
+            style="width: 16px; height: 16px;"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          User 1
+        </span>
+      </a>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;

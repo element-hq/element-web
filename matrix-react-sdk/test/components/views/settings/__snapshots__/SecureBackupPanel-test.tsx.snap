@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SecureBackupPanel /> suggests connecting session to key backup when backup exists 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.
+  </div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    <span>
+      This session is 
+      <b>
+        not backing up your keys
+      </b>
+      , but you do have an existing backup you can restore from and add to going forward.
+    </span>
+  </div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.
+  </div>
+  <details>
+    <summary>
+      Advanced
+    </summary>
+    <table
+      class="mx_SecureBackupPanel_statusList"
+    >
+      <tr>
+        <th
+          scope="row"
+        >
+          Backup key stored:
+        </th>
+        <td>
+          not stored
+        </td>
+      </tr>
+      <tr>
+        <th
+          scope="row"
+        >
+          Backup key cached:
+        </th>
+        <td>
+          not found locally
+          
+        </td>
+      </tr>
+      <tr>
+        <th
+          scope="row"
+        >
+          Secret storage public key:
+        </th>
+        <td>
+          not found
+        </td>
+      </tr>
+      <tr>
+        <th
+          scope="row"
+        >
+          Secret storage:
+        </th>
+        <td>
+          not ready
+        </td>
+      </tr>
+      <tr>
+        <th
+          scope="row"
+        >
+          Backup version:
+        </th>
+        <td>
+          1
+        </td>
+      </tr>
+      <tr>
+        <th
+          scope="row"
+        >
+          Algorithm:
+        </th>
+        <td>
+          test
+        </td>
+      </tr>
+    </table>
+    
+    <div>
+      Backup is not signed by any of your sessions
+    </div>
+    <div />
+  </details>
+  <div
+    class="mx_SecureBackupPanel_buttonRow"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Connect this session to Key Backup
+    </div>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+      role="button"
+      tabindex="0"
+    >
+      Delete Backup
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,53 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_PlayPauseButton {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    min-width: 32px; /* for when the button is used in a flexbox */
+    min-height: 32px; /* for when the button is used in a flexbox */
+    border-radius: 32px;
+    background-color: $system;
+
+    &::before {
+        content: "";
+        position: absolute; /* sizing varies by icon */
+        background-color: $secondary-content;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+    }
+
+    &.mx_PlayPauseButton_disabled::before {
+        opacity: 0.5;
+    }
+
+    &.mx_PlayPauseButton_play::before {
+        width: 13px;
+        height: 16px;
+        top: 8px; /* center */
+        left: 12px; /* center */
+        mask-image: url("$(res)/img/element-icons/play.svg");
+    }
+
+    &.mx_PlayPauseButton_pause::before {
+        width: 10px;
+        height: 12px;
+        top: 10px; /* center */
+        left: 11px; /* center */
+        mask-image: url("$(res)/img/element-icons/pause.svg");
+    }
+}

@@ -1,0 +1,250 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MatrixChat--with-avatar {
+    .mx_LeftPanel,
+    .mx_LeftPanel .mx_LeftPanel_roomListContainer {
+        background-color: transparent;
+    }
+}
+
+.mx_LeftPanel_outerWrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+    position: relative;
+
+    /* Contain the amount of layers rendered by constraining what actually needs re-layering via css */
+    contain: layout paint;
+}
+
+.mx_LeftPanel_wrapper,
+.mx_LeftPanel {
+    --collapsedWidth: 68px;
+}
+
+.mx_LeftPanel_wrapper {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    height: 100%; /* ensure space panel is still scrollable with an outer wrapper */
+
+    .mx_LeftPanel_wrapper--user {
+        background-color: $roomlist-bg-color;
+        display: flex;
+        overflow: hidden;
+        position: relative;
+
+        &[data-collapsed] {
+            max-width: var(--collapsedWidth);
+        }
+    }
+}
+
+.mx_LeftPanel {
+    background-color: $roomlist-bg-color;
+
+    /* Create a row-based flexbox for the space panel and the room list */
+    display: flex;
+    contain: content;
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
+
+    /* Note: The 'room list' in this context is actually everything that isn't the tag */
+    /* panel, such as the menu options, breadcrumbs, filtering, etc */
+    .mx_LeftPanel_roomListContainer {
+        background-color: $roomlist-bg-color;
+        flex: 1 0 0;
+        min-width: 0;
+        /* Create another flexbox (this time a column) for the room list components */
+        display: flex;
+        flex-direction: column;
+
+        .mx_LeftPanel_userHeader {
+            /* 12px top, 12px sides, 20px bottom (using 13px bottom to account
+             * for internal whitespace in the breadcrumbs)
+             */
+            padding: 12px;
+            flex-shrink: 0; /* to convince safari's layout engine the flexbox is fine */
+
+            /* Create another flexbox column for the rows to stack within */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mx_LeftPanel_breadcrumbsContainer {
+            overflow-y: hidden;
+            overflow-x: scroll;
+            margin: 12px 12px 0 12px;
+            flex: 0 0 auto;
+            /* Create yet another flexbox, this time within the row, to ensure items stay */
+            /* aligned correctly. This is also a row-based flexbox. */
+            display: flex;
+            align-items: center;
+            contain: content;
+
+            &.mx_IndicatorScrollbar_leftOverflow {
+                mask-image: linear-gradient(90deg, transparent, black 5%);
+            }
+
+            &.mx_IndicatorScrollbar_rightOverflow {
+                mask-image: linear-gradient(90deg, black, black 95%, transparent);
+            }
+
+            &.mx_IndicatorScrollbar_rightOverflow.mx_IndicatorScrollbar_leftOverflow {
+                mask-image: linear-gradient(90deg, transparent, black 5%, black 95%, transparent);
+            }
+        }
+
+        .mx_LeftPanel_filterContainer {
+            margin: 0 12px;
+            padding: 12px 0 8px;
+            border-bottom: 1px solid $quinary-content;
+
+            flex-shrink: 0; /* to convince safari's layout engine the flexbox is fine */
+
+            /* Create a flexbox to organize the inputs */
+            display: flex;
+            align-items: center;
+
+            & + .mx_RoomListHeader {
+                margin-top: 12px;
+            }
+
+            .mx_LeftPanel_dialPadButton {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                background-color: $panel-actions;
+                position: relative;
+                margin-left: 8px;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 8px;
+                    left: 8px;
+                    width: 16px;
+                    height: 16px;
+                    mask-image: url("$(res)/img/element-icons/call/dialpad.svg");
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background-color: $secondary-content;
+                }
+            }
+
+            .mx_LeftPanel_exploreButton,
+            .mx_LeftPanel_recentsButton {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                background-color: $panel-actions;
+                position: relative;
+                margin-left: 8px;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 8px;
+                    left: 8px;
+                    width: 16px;
+                    height: 16px;
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background-color: $secondary-content;
+                }
+
+                &:hover {
+                    background-color: $tertiary-content;
+
+                    &::before {
+                        background-color: $background;
+                    }
+                }
+            }
+
+            .mx_LeftPanel_exploreButton::before {
+                mask-image: url("$(res)/img/element-icons/roomlist/explore.svg");
+            }
+
+            .mx_LeftPanel_recentsButton::before {
+                mask-image: url("$(res)/img/element-icons/clock.svg");
+            }
+        }
+
+        .mx_RoomListHeader:first-child {
+            margin-top: 12px;
+        }
+
+        .mx_LeftPanel_roomListWrapper {
+            /* Make the y-scrollbar more responsive */
+            padding-right: 2px;
+            overflow: hidden;
+            margin-top: 10px; /* so we're not up against the search/filter */
+            flex: 1 0 0; /* needed in Safari to properly set flex-basis */
+
+            &.mx_LeftPanel_roomListWrapper_stickyBottom {
+                padding-bottom: 32px;
+            }
+
+            &.mx_LeftPanel_roomListWrapper_stickyTop {
+                padding-top: 32px;
+            }
+        }
+
+        .mx_LeftPanel_actualRoomListContainer {
+            position: relative; /* for sticky headers */
+            height: 100%; /* ensure scrolling still works */
+        }
+    }
+
+    /* These styles override the defaults for the minimized (66px) layout */
+    &.mx_LeftPanel_minimized {
+        flex-grow: 0;
+        min-width: unset;
+        width: unset !important;
+
+        .mx_LeftPanel_roomListContainer {
+            width: var(--collapsedWidth);
+
+            .mx_LeftPanel_userHeader {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .mx_LeftPanel_filterContainer {
+                /* Organize the flexbox into a centered column layout */
+                flex-direction: column;
+                justify-content: center;
+
+                .mx_LeftPanel_dialPadButton {
+                    margin-left: 0;
+                    margin-top: 8px;
+                    background-color: transparent;
+                }
+
+                .mx_LeftPanel_exploreButton,
+                .mx_LeftPanel_recentsButton {
+                    margin-left: 0;
+                    margin-top: 8px;
+                }
+            }
+        }
+    }
+}

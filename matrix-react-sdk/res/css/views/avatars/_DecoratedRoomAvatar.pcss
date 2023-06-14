@@ -1,0 +1,81 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_DecoratedRoomAvatar,
+.mx_ExtraTile {
+    position: relative;
+    contain: content;
+
+    &.mx_DecoratedRoomAvatar_cutout .mx_BaseAvatar {
+        mask-image: url("$(res)/img/element-icons/roomlist/decorated-avatar-mask.svg");
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+    }
+
+    .mx_DecoratedRoomAvatar_icon {
+        position: absolute;
+        /* the following percentage based sizings are to match the scalable svg mask for the cutout */
+        bottom: -6.25%;
+        right: -6.25%;
+        margin: 12.5%;
+        width: 25%;
+        height: 25%;
+        border-radius: 50%;
+    }
+
+    .mx_DecoratedRoomAvatar_icon::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        right: 0;
+        position: absolute;
+        border-radius: 8px;
+    }
+
+    .mx_DecoratedRoomAvatar_icon_globe::before {
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        background: $secondary-content;
+        mask-image: url("$(res)/img/globe.svg");
+    }
+
+    .mx_DecoratedRoomAvatar_icon_offline::before {
+        background-color: $presence-offline;
+    }
+
+    .mx_DecoratedRoomAvatar_icon_online::before {
+        background-color: $accent;
+    }
+
+    .mx_DecoratedRoomAvatar_icon_away::before {
+        background-color: $presence-away;
+    }
+
+    .mx_DecoratedRoomAvatar_icon_busy::before {
+        background-color: $presence-busy;
+    }
+
+    .mx_NotificationBadge,
+    .mx_RoomTile_badgeContainer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 18px;
+        width: 18px;
+    }
+}

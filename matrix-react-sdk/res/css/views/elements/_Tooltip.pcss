@@ -1,0 +1,116 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+@keyframes mx_fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes mx_fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.mx_Tooltip_chevron {
+    position: absolute;
+    left: -7px;
+    top: calc(50% - 6px);
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-right: 7px solid $menu-border-color;
+    border-bottom: 7px solid transparent;
+}
+
+.mx_Tooltip_chevron::after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-right: 6px solid $menu-bg-color;
+    border-bottom: 6px solid transparent;
+    position: absolute;
+    top: -6px;
+    left: 1px;
+}
+
+.mx_Tooltip {
+    display: none;
+    position: fixed;
+    border-radius: 8px;
+    z-index: 6000; /* Higher than context menu so tooltips can be used everywhere */
+    padding: 10px;
+    pointer-events: none;
+    line-height: $font-14px;
+    font-size: $font-12px;
+    font-weight: 500;
+    max-width: 300px;
+    word-break: break-word;
+
+    background-color: #21262c; /* Same on both themes */
+    color: $accent-fg-color;
+    border: 0;
+    text-align: center;
+
+    .mx_Tooltip_chevron {
+        display: none;
+    }
+
+    &.mx_Tooltip_visible {
+        animation: mx_fadein 0.2s forwards;
+    }
+
+    &.mx_Tooltip_invisible {
+        animation: mx_fadeout 0.1s forwards;
+    }
+
+    ul,
+    ol {
+        text-align: start; /* for list items */
+    }
+}
+
+/* These tooltips use an older style with a chevron */
+.mx_Field_tooltip {
+    background-color: $menu-bg-color;
+    color: $primary-content;
+    border: 1px solid $menu-border-color;
+    text-align: unset;
+
+    .mx_Tooltip_chevron {
+        display: unset;
+    }
+}
+
+.mx_Tooltip_title {
+    font-weight: var(--font-semi-bold);
+}
+
+.mx_Tooltip_sub {
+    opacity: 0.7;
+    margin-top: 4px;
+}

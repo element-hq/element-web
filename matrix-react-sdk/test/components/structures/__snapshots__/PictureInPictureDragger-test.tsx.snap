@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PictureInPictureDragger when rendering the dragger with PiP content 1 and 2 should render both contents 1`] = `
+<div>
+  <aside
+    style="transform: translateX(680px) translateY(478px);"
+  >
+    <div>
+      content 1
+    </div>
+    <div>
+      content 2
+      <br />
+      content 2.2
+    </div>
+  </aside>
+</div>
+`;
+
+exports[`PictureInPictureDragger when rendering the dragger with PiP content 1 and rendering PiP content 2 should update the PiP content 1`] = `
+<div>
+  <aside
+    style="transform: translateX(680px) translateY(478px);"
+  >
+    <div>
+      content 2
+      <br />
+      content 2.2
+    </div>
+  </aside>
+</div>
+`;
+
+exports[`PictureInPictureDragger when rendering the dragger with PiP content 1 and rerendering PiP content 1 should not change the PiP content: pip-content-1 1`] = `
+<div>
+  <aside
+    style="transform: translateX(680px) translateY(478px);"
+  >
+    <div>
+      content 1
+    </div>
+  </aside>
+</div>
+`;
+
+exports[`PictureInPictureDragger when rendering the dragger with PiP content 1 should render the PiP content: pip-content-1 1`] = `
+<div>
+  <aside
+    style="transform: translateX(680px) translateY(478px);"
+  >
+    <div>
+      content 1
+    </div>
+  </aside>
+</div>
+`;

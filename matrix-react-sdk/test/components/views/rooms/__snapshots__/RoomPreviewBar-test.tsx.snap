@@ -1,0 +1,345 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomPreviewBar /> renders banned message 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    You were banned from RoomPreviewBar-test-room by @kicker:test.com
+  </h3>
+  <p>
+    Reason: test reason
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> renders kicked message 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    You were removed from RoomPreviewBar-test-room by @kicker:test.com
+  </h3>
+  <p>
+    Reason: test reason
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> renders viewing room message when room an be previewed 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    You're previewing RoomPreviewBar-test-room. Want to join it?
+  </h3>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> renders viewing room message when room can not be previewed 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    RoomPreviewBar-test-room can't be previewed. Do you want to join it?
+  </h3>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an error renders other errors 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    RoomPreviewBar-test-room is not accessible at this time.
+  </h3>
+  <p>
+    Try again later, or ask a room or space admin to check if you have access.
+  </p>
+  <p>
+    <span>
+      Something_else was returned while trying to access the room or space. If you think you're seeing this message in error, please 
+      <a
+        href="https://github.com/vector-im/element-web/issues/new/choose"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        submit a bug report
+      </a>
+      .
+    </span>
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an error renders room not found error 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    RoomPreviewBar-test-room does not exist.
+  </h3>
+  <p>
+    Are you sure you're at the right place?
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite with an invited email when client fails to get 3PIDs renders error message 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    Something went wrong with your invite to RoomPreviewBar-test-room
+  </h3>
+  <p>
+    An error (unknown error code) was returned while trying to validate your invite. You could try to pass this information on to the person who invited you.
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite with an invited email when client has an identity server connected renders email mismatch message when invite email mxid doesnt match 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    This invite to RoomPreviewBar-test-room was sent to test@test.com
+  </h3>
+  <p>
+    Share this email in Settings to receive invites directly in Element.
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite with an invited email when client has an identity server connected renders invite message when invite email mxid match 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    This invite to RoomPreviewBar-test-room was sent to test@test.com
+  </h3>
+  <p>
+    Share this email in Settings to receive invites directly in Element.
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite with an invited email when client has no identity server connected renders invite message with invited email 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    This invite to RoomPreviewBar-test-room was sent to test@test.com
+  </h3>
+  <p>
+    Use an identity server in Settings to receive invites directly in Element.
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite with an invited email when invitedEmail is not associated with current account renders invite message with invited email 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    This invite to RoomPreviewBar-test-room was sent to test@test.com which is not associated with your account
+  </h3>
+  <p>
+    Link this email with your account in Settings to receive invites directly in Element.
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite without an invited email for a dm room renders invite message 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    Do you want to chat with @inviter:test.com?
+  </h3>
+  <p>
+    <span
+      class="mx_BaseAvatar"
+      role="presentation"
+    >
+      <span
+        aria-hidden="true"
+        class="mx_BaseAvatar_initial"
+        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
+      >
+        R
+      </span>
+      <img
+        alt=""
+        aria-hidden="true"
+        class="mx_BaseAvatar_image"
+        data-testid="avatar-img"
+        loading="lazy"
+        src="data:image/png;base64,00"
+        style="width: 36px; height: 36px;"
+      />
+    </span>
+  </p>
+  <p>
+    <span>
+      <span>
+        <span
+          class="mx_RoomPreviewBar_inviter"
+        >
+          @inviter:test.com name
+        </span>
+         (
+        @inviter:test.com
+        )
+      </span>
+       wants to chat
+    </span>
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite without an invited email for a dm room renders join and reject action buttons with correct labels 1`] = `
+<div
+  class="mx_RoomPreviewBar_actions"
+>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    role="button"
+    tabindex="0"
+  >
+    Start chatting
+  </div>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+    role="button"
+    tabindex="0"
+  >
+    Reject & Ignore user
+  </div>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+    role="button"
+    tabindex="0"
+  >
+    Reject
+  </div>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm room renders invite message 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    Do you want to join RoomPreviewBar-test-room?
+  </h3>
+  <p>
+    <span
+      class="mx_BaseAvatar"
+      role="presentation"
+    >
+      <span
+        aria-hidden="true"
+        class="mx_BaseAvatar_initial"
+        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
+      >
+        R
+      </span>
+      <img
+        alt=""
+        aria-hidden="true"
+        class="mx_BaseAvatar_image"
+        data-testid="avatar-img"
+        loading="lazy"
+        src="data:image/png;base64,00"
+        style="width: 36px; height: 36px;"
+      />
+    </span>
+  </p>
+  <p>
+    <span>
+      <span>
+        <span
+          class="mx_RoomPreviewBar_inviter"
+        >
+          @inviter:test.com name
+        </span>
+         (
+        @inviter:test.com
+        )
+      </span>
+       invited you
+    </span>
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm room renders join and reject action buttons correctly 1`] = `
+<div
+  class="mx_RoomPreviewBar_actions"
+>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    role="button"
+    tabindex="0"
+  >
+    Accept
+  </div>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+    role="button"
+    tabindex="0"
+  >
+    Reject
+  </div>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm room renders join and reject action buttons in reverse order when room can previewed 1`] = `
+<div
+  class="mx_RoomPreviewBar_actions"
+>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+    role="button"
+    tabindex="0"
+  >
+    Reject
+  </div>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    role="button"
+    tabindex="0"
+  >
+    Accept
+  </div>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm room renders reject and ignore action buttons when handler is provided 1`] = `
+<div
+  class="mx_RoomPreviewBar_actions"
+>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    role="button"
+    tabindex="0"
+  >
+    Accept
+  </div>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+    role="button"
+    tabindex="0"
+  >
+    Reject & Ignore user
+  </div>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+    role="button"
+    tabindex="0"
+  >
+    Reject
+  </div>
+</div>
+`;

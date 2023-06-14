@@ -1,0 +1,30 @@
+/.npmrc
+/*.log
+package-lock.json
+
+/coverage
+/node_modules
+/lib
+
+# version file and tarball created by `npm pack` / `yarn pack`
+/git-revision.txt
+/matrix-react-sdk-*.tgz
+
+/.idea
+# Legacy skinning file that some people might still have
+/src/component-index.js
+
+.DS_Store
+*.tmp
+
+.vscode
+.vscode/
+
+/cypress/videos
+/cypress/downloads
+/cypress/screenshots
+/cypress/synapselogs
+/cypress/dendritelogs
+# These could have files in them but don't currently
+# Cypress will still auto-create them though...
+/cypress/performance

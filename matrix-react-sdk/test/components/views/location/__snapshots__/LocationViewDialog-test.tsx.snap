@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LocationViewDialog /> renders map correctly 1`] = `
+<div
+  class="mx_Map mx_LocationViewDialog_map"
+  id="mx_Map_mx_LocationViewDialog_$2"
+>
+  <span>
+    <div
+      class="mx_Marker mx_Marker_defaultColor"
+      id="mx_LocationViewDialog_$2-marker"
+    >
+      <div
+        class="mx_Marker_border"
+      >
+        <div
+          class="mx_Marker_icon"
+        />
+      </div>
+    </div>
+  </span>
+  <div
+    class="mx_ZoomButtons"
+  >
+    <div
+      class="mx_AccessibleButton mx_ZoomButtons_button"
+      data-testid="map-zoom-in-button"
+      role="button"
+      tabindex="0"
+      title="Zoom in"
+    >
+      <div
+        class="mx_ZoomButtons_icon"
+      />
+    </div>
+    <div
+      class="mx_AccessibleButton mx_ZoomButtons_button"
+      data-testid="map-zoom-out-button"
+      role="button"
+      tabindex="0"
+      title="Zoom out"
+    >
+      <div
+        class="mx_ZoomButtons_icon"
+      />
+    </div>
+  </div>
+</div>
+`;

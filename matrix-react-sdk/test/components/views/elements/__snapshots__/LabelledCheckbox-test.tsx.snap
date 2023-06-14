@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`] = `
+<DocumentFragment>
+  <label
+    class="mx_LabelledCheckbox"
+  >
+    <span
+      class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+    >
+      <input
+        checked=""
+        id="checkbox_abdefghi"
+        type="checkbox"
+      />
+      <label
+        for="checkbox_abdefghi"
+      >
+        <div
+          class="mx_Checkbox_background"
+        >
+          <div
+            class="mx_Checkbox_checkmark"
+          />
+        </div>
+      </label>
+    </span>
+    <div
+      class="mx_LabelledCheckbox_labels"
+    >
+      <span
+        class="mx_LabelledCheckbox_label"
+      >
+        Hello world
+      </span>
+      <span
+        class="mx_LabelledCheckbox_byline"
+      >
+        this is a byline
+      </span>
+    </div>
+  </label>
+</DocumentFragment>
+`;
+
+exports[`<LabelledCheckbox /> should render with byline of undefined 1`] = `
+<DocumentFragment>
+  <label
+    class="mx_LabelledCheckbox"
+  >
+    <span
+      class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+    >
+      <input
+        checked=""
+        id="checkbox_abdefghi"
+        type="checkbox"
+      />
+      <label
+        for="checkbox_abdefghi"
+      >
+        <div
+          class="mx_Checkbox_background"
+        >
+          <div
+            class="mx_Checkbox_checkmark"
+          />
+        </div>
+      </label>
+    </span>
+    <div
+      class="mx_LabelledCheckbox_labels"
+    >
+      <span
+        class="mx_LabelledCheckbox_label"
+      >
+        Hello world
+      </span>
+    </div>
+  </label>
+</DocumentFragment>
+`;

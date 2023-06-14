@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
+"[36m<body>[39m
+  [36m<div />[39m
+  [36m<div[39m
+    [33mid[39m=[32m"mx_ContextualMenu_Container"[39m
+  [36m>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"mx_ContextualMenu_wrapper"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"mx_ContextualMenu_background"[39m
+      [36m/>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"mx_ContextualMenu"[39m
+        [33mrole[39m=[32m"menu"[39m
+      [36m>[39m
+        [36m<ul[39m
+          [33mclass[39m=[32m"mx_IconizedContextMenu mx_SpacePanel_contextMenu mx_IconizedContextMenu_compact"[39m
+          [33mrole[39m=[32m"none"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mx_SpacePanel_contextMenu_header"[39m
+          [36m>[39m
+            [0mtest space[0m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mx_IconizedContextMenu_optionList"[39m
+          [36m>[39m
+            [36m<li[39m
+              [33maria-label[39m=[32m"Space home"[39m
+              [33mclass[39m=[32m"mx_AccessibleButton mx_IconizedContextMenu_item focus-visible"[39m
+              [33mdata-focus-visible-added[39m=[32m""[39m
+              [33mrole[39m=[32m"menuitem"[39m
+              [33mtabindex[39m=[32m"0"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"mx_IconizedContextMenu_icon mx_SpacePanel_iconHome"[39m
+              [36m/>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"mx_IconizedContextMenu_label"[39m
+              [36m>[39m
+                [0mSpace home[0m
+              [36m</span>[39m
+            [36m</li>[39m
+            [36m<li[39m
+              [33maria-label[39m=[32m"Explore rooms"[39m
+              [33mclass[39m=[32m"mx_AccessibleButton mx_IconizedContextMenu_item"[39m
+              [33mrole[39m=[32m"menuitem"[39m
+              [33mtabindex[39m=[32m"-1"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"mx_IconizedContextMenu_icon mx_SpacePanel_iconExplore"[39m
+              [36m/>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"mx_IconizedContextMenu_label"[39m
+              [36m>[39m
+                [0mExplore rooms[0m
+              [36m</span>[39m
+            [36m</li>[39m
+            [36m<li[39m
+              [33maria-label[39m=[32m"Preferences"[39m
+              [33mclass[39m=[32m"mx_AccessibleButton mx_IconizedContextMenu_item"[39m
+              [33mrole[39m=[32m"menuitem"[39m
+              [33mtabindex[39m=[32m"-1"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"mx_IconizedContextMenu_icon mx_SpacePanel_iconPreferences"[39m
+              [36m/>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"mx_IconizedContextMenu_label"[39m
+              [36m>[39m
+                [0mPreferences[0m
+              [36m</span>[39m
+            [36m</li>[39m
+            [36m<li[39m
+              [33maria-label[39m=[32m"Leave space"[39m
+              [33mclass[39m=[32m"mx_AccessibleButton mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"[39m
+              [33mdata-testid[39m=[32m"leave-option"[39m
+              [33mrole[39m=[32m"menuitem"[39m
+              [33mtabindex[39m=[32m"-1"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"mx_IconizedContextMenu_icon mx_SpacePanel_iconLeave"[39m
+              [36m/>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"mx_IconizedContextMenu_label"[39m
+              [36m>[39m
+                [0mLeave space[0m
+              [36m</span>[39m
+            [36m</li>[39m
+          [36m</div>[39m
+        [36m</ul>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m"
+`;

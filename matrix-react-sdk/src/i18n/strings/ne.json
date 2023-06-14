@@ -1,0 +1,16 @@
+{
+    "Add Phone Number": "फोन नम्बर थप्नुहोस्",
+    "Click the button below to confirm adding this phone number.": "यो फोन नम्बर थपेको पुष्टि गर्न तलको बटनमा क्लिक गर्नुहोस्।",
+    "Confirm adding phone number": "फोन नम्बर थप्ने पुष्टि गर्नुहोस्",
+    "Confirm adding this phone number by using Single Sign On to prove your identity.": "आफ्नो पहिचान प्रमाणित गर्न एकल साइन अन प्रयोग गरेर यो फोन नम्बर थपेको पुष्टि गर्नुहोस्।",
+    "Failed to verify email address: make sure you clicked the link in the email": "इमेल ठेगाना प्रमाणित गर्न असफल: तपाईंले इमेलमा रहेको लिङ्कमा क्लिक गर्नुभएको छ भनी सुनिश्चित गर्नुहोस्",
+    "Add Email Address": "इमेल ठेगाना थप्नुहोस्",
+    "Confirm": "पुष्टि गर्नुहोस्",
+    "Click the button below to confirm adding this email address.": "यो इमेल ठेगाना थपिएको पुष्टि गर्न तलको बटनमा क्लिक गर्नुहोस्।",
+    "Confirm adding email": "इमेल थपेको पुष्टि गर्नुहोस्",
+    "Single Sign On": "एकल साइन अन",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "आफ्नो पहिचान प्रमाणित गर्न एकल साइन अन प्रयोग गरेर यो इमेल ठेगाना थपेको पुष्टि गर्नुहोस्।",
+    "Use Single Sign On to continue": "जारी राख्न एकल साइन अन प्रयोग गर्नुहोस्",
+    "This phone number is already in use": "यो फोन नम्बर पहिले नै प्रयोगमा छ",
+    "This email address is already in use": "यो इमेल ठेगाना पहिले नै प्रयोगमा छ"
+}

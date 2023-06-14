@@ -1,0 +1,71 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_DeviceTypeIcon {
+    flex: 0 0 auto;
+    position: relative;
+    margin-right: $spacing-8;
+    /* creates space for verification icon to overlap */
+    padding: 0 $spacing-8 $spacing-8 0;
+}
+
+.mx_DeviceTypeIcon_deviceIconWrapper {
+    --background-color: $system;
+    --icon-color: $secondary-content;
+
+    height: 40px;
+    width: 40px;
+    box-sizing: border-box;
+
+    border: $spacing-8 solid var(--background-color);
+    border-radius: 50%;
+    color: var(--icon-color);
+    background-color: var(--background-color);
+}
+
+.mx_DeviceTypeIcon_selected .mx_DeviceTypeIcon_deviceIconWrapper {
+    --background-color: $primary-content;
+    --icon-color: $background;
+}
+
+.mx_DeviceTypeIcon_deviceIcon {
+    height: 24px;
+    width: 24px;
+}
+
+.mx_DeviceTypeIcon_verificationIcon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 24px;
+    width: 24px;
+    box-sizing: border-box;
+    padding: $spacing-4;
+
+    border: 1px solid $quinary-content;
+    border-radius: 50%;
+    background-color: $background;
+
+    color: var(--v-icon-color);
+
+    &.verified {
+        --v-icon-color: $e2e-verified-color;
+    }
+
+    &.unverified {
+        --v-icon-color: $e2e-warning-color;
+    }
+}

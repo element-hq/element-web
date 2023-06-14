@@ -1,0 +1,78 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_NotificationBadge {
+    &:not(.mx_NotificationBadge_visible) {
+        display: none;
+    }
+
+    /* Badges are structured a bit weirdly to work around issues with non-monospace */
+    /* font styles. The badge pill is actually a background div and the count floats */
+    /* within that. For example: */
+    /*  ( 99+ ) <-- Rounded pill is a _bg class. */
+    /*     ^- The count is an element floating within that. */
+
+    &.mx_NotificationBadge_visible {
+        background-color: $roomtile-default-badge-bg-color;
+
+        /* Create a flexbox to order the count a bit easier */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.mx_NotificationBadge_highlighted {
+            /* TODO: Use a more specific variable */
+            background-color: $alert;
+        }
+
+        /* These are the 3 background types */
+
+        &.mx_NotificationBadge_dot {
+            background-color: $primary-content; /* increased visibility */
+
+            width: 6px;
+            height: 6px;
+            border-radius: 6px;
+        }
+
+        &.mx_NotificationBadge_2char {
+            width: $font-16px;
+            height: $font-16px;
+            border-radius: $font-16px;
+        }
+
+        &.mx_NotificationBadge_3char {
+            width: $font-26px;
+            height: $font-16px;
+            border-radius: $font-16px;
+        }
+
+        /* The following is the floating badge */
+
+        .mx_NotificationBadge_count {
+            font-size: $font-10px;
+            line-height: $font-14px;
+            color: #fff; /* TODO: Variable */
+        }
+    }
+}
+
+.mx_NotificationBadge_tooltip {
+    display: inline-block;
+    position: relative;
+    top: -25px;
+    left: 6px;
+}

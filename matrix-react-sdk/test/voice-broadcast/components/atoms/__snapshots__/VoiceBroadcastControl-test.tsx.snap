@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoiceBroadcastControl when rendering it should render as expected 1`] = `
+<div>
+  <div
+    aria-label="test label"
+    class="mx_AccessibleButton mx_VoiceBroadcastControl"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="mx_Icon mx_Icon_16"
+    />
+  </div>
+</div>
+`;

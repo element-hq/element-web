@@ -1,0 +1,77 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_LinkPreviewWidget {
+    margin: $spacing-16 0 $spacing-16 auto;
+    display: flex;
+    column-gap: $spacing-4;
+    border-inline-start: 2px solid $preview-widget-bar-color;
+    border-radius: 2px;
+    color: $info-plinth-fg-color;
+
+    .mx_MatrixChat_useCompactLayout & {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    /* Exclude mx_LinkPreviewGroup_hide from wrapping */
+    .mx_LinkPreviewWidget_wrapImageCaption {
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: $spacing-8;
+        flex: 1;
+
+        .mx_LinkPreviewWidget_image,
+        .mx_LinkPreviewWidget_caption {
+            margin-inline-start: $spacing-16;
+            min-width: 0; /* Prevent blowout */
+        }
+
+        .mx_LinkPreviewWidget_image {
+            flex: 0 0 100px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .mx_LinkPreviewWidget_caption {
+            flex: 1;
+            overflow: hidden; /* cause it to wrap rather than clip */
+        }
+
+        .mx_LinkPreviewWidget_title,
+        .mx_LinkPreviewWidget_description {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            white-space: normal;
+        }
+
+        .mx_LinkPreviewWidget_title {
+            font-weight: bold;
+            -webkit-line-clamp: 2;
+
+            .mx_LinkPreviewWidget_siteName {
+                font-weight: normal;
+            }
+        }
+
+        .mx_LinkPreviewWidget_description {
+            margin-top: $spacing-8;
+            word-wrap: break-word;
+            -webkit-line-clamp: 3;
+        }
+    }
+}

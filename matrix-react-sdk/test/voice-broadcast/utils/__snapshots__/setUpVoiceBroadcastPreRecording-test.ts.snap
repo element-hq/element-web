@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`setUpVoiceBroadcastPreRecording when trying to start a broadcast if there is no connection should show an info dialog and not set up a pre-recording 1`] = `
+[MockFunction] {
+  "calls": [
+    [
+      [Function],
+      {
+        "description": <p>
+          Unfortunately we're unable to start a recording right now. Please try again later.
+        </p>,
+        "hasCloseButton": true,
+        "title": "Connection error",
+      },
+    ],
+  ],
+  "results": [
+    {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;

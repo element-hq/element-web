@@ -1,0 +1,128 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BridgeSettingsTab /> renders when room is bridging messages 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h2"
+        >
+          Bridges
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div>
+            <p>
+              <span>
+                This room is bridging messages to the following platforms. 
+                <a
+                  href="https://matrix.org/bridges/"
+                  rel="noreferrer noopener"
+                  target="_blank"
+                >
+                  Learn more.
+                </a>
+              </span>
+            </p>
+            <ul
+              class="mx_RoomSettingsDialog_BridgeList"
+            >
+              <li
+                class="mx_RoomSettingsDialog_BridgeList_listItem"
+              >
+                <div
+                  class="mx_RoomSettingsDialog_column_icon"
+                >
+                  <div
+                    class="mx_RoomSettingsDialog_noProtocolIcon"
+                  />
+                </div>
+                <div
+                  class="mx_RoomSettingsDialog_column_data"
+                >
+                  <h3
+                    class="mx_RoomSettingsDialog_column_data_protocolName"
+                  >
+                    protocol-test
+                  </h3>
+                  <p
+                    class="mx_RoomSettingsDialog_column_data_details mx_RoomSettingsDialog_workspace_channel_details"
+                  >
+                    <span
+                      class="mx_RoomSettingsDialog_channel"
+                    >
+                      <span>
+                        Channel: 
+                        <span>
+                          channel-test
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+                  <ul
+                    class="mx_RoomSettingsDialog_column_data_metadata mx_RoomSettingsDialog_metadata"
+                  >
+                     
+                    <li>
+                      <span>
+                        This bridge is managed by 
+                        .
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<BridgeSettingsTab /> renders when room is not bridging messages to any platform 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h2"
+        >
+          Bridges
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <p>
+            <span>
+              This room isn't bridging messages to any platforms. 
+              <a
+                href="https://matrix.org/bridges/"
+                rel="noreferrer noopener"
+                target="_blank"
+              >
+                Learn more.
+              </a>
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

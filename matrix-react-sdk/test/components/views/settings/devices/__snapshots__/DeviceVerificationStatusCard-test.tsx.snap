@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeviceVerificationStatusCard /> renders a verified device 1`] = `
+<div>
+  <div
+    class="mx_DeviceSecurityCard"
+  >
+    <div
+      class="mx_DeviceSecurityCard_icon Verified"
+    >
+      <div
+        height="16"
+        width="16"
+      />
+    </div>
+    <div
+      class="mx_DeviceSecurityCard_content"
+    >
+      <p
+        class="mx_DeviceSecurityCard_heading"
+      >
+        Verified session
+      </p>
+      <p
+        class="mx_DeviceSecurityCard_description"
+      >
+        This session is ready for secure messaging.
+        <div
+          class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          role="button"
+          tabindex="0"
+        >
+          Learn more
+        </div>
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DeviceVerificationStatusCard /> renders an unverifiable device 1`] = `
+<div>
+  <div
+    class="mx_DeviceSecurityCard"
+  >
+    <div
+      class="mx_DeviceSecurityCard_icon Unverified"
+    >
+      <div
+        height="16"
+        width="16"
+      />
+    </div>
+    <div
+      class="mx_DeviceSecurityCard_content"
+    >
+      <p
+        class="mx_DeviceSecurityCard_heading"
+      >
+        Unverified session
+      </p>
+      <p
+        class="mx_DeviceSecurityCard_description"
+      >
+        This session doesn't support encryption and thus can't be verified.
+        <div
+          class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          role="button"
+          tabindex="0"
+        >
+          Learn more
+        </div>
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DeviceVerificationStatusCard /> renders an unverified device 1`] = `
+<div>
+  <div
+    class="mx_DeviceSecurityCard"
+  >
+    <div
+      class="mx_DeviceSecurityCard_icon Unverified"
+    >
+      <div
+        height="16"
+        width="16"
+      />
+    </div>
+    <div
+      class="mx_DeviceSecurityCard_content"
+    >
+      <p
+        class="mx_DeviceSecurityCard_heading"
+      >
+        Unverified session
+      </p>
+      <p
+        class="mx_DeviceSecurityCard_description"
+      >
+        Verify or sign out from this session for best security and reliability.
+        <div
+          class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          role="button"
+          tabindex="0"
+        >
+          Learn more
+        </div>
+      </p>
+      <div
+        class="mx_DeviceSecurityCard_actions"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+          data-testid="verification-status-button-test-device"
+          role="button"
+          tabindex="0"
+        >
+          Verify session
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

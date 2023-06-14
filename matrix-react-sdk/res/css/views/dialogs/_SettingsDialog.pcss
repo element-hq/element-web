@@ -1,0 +1,42 @@
+/*
+Copyright 2019 New Vector Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* Not actually a component but things shared by settings components */
+.mx_UserSettingsDialog,
+.mx_RoomSettingsDialog,
+.mx_SpaceSettingsDialog,
+.mx_SpacePreferencesDialog {
+    width: 90vw;
+    max-width: 1000px;
+    /* set the height too since tabbed view scrolls itself. */
+    height: 80vh;
+
+    .mx_TabbedView {
+        top: 65px;
+    }
+
+    .mx_TabbedView .mx_SettingsTab {
+        box-sizing: border-box;
+        min-width: 580px;
+        padding-right: 100px;
+        display: flex;
+        flex-direction: column;
+
+        /* Put some padding on the bottom to avoid the settings tab from */
+        /* colliding harshly with the dialog when scrolled down. */
+        padding-bottom: 100px;
+    }
+}

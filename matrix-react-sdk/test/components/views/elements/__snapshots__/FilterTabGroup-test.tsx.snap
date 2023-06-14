@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FilterTabGroup /> renders options 1`] = `
+<div>
+  <fieldset
+    class="mx_FilterTabGroup"
+    data-testid="test"
+  >
+    <label
+      data-testid="filter-tab-test-Apple"
+    >
+      <input
+        checked=""
+        name="test"
+        type="radio"
+        value="Apple"
+      />
+      <span>
+        Label for Apple
+      </span>
+    </label>
+    <label
+      data-testid="filter-tab-test-Banana"
+    >
+      <input
+        name="test"
+        type="radio"
+        value="Banana"
+      />
+      <span>
+        Label for Banana
+      </span>
+    </label>
+    <label
+      data-testid="filter-tab-test-Orange"
+    >
+      <input
+        name="test"
+        type="radio"
+        value="Orange"
+      />
+      <span>
+        Label for Orange
+      </span>
+    </label>
+  </fieldset>
+</div>
+`;

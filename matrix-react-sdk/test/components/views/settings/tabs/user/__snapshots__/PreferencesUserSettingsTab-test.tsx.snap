@@ -1,0 +1,1157 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PreferencesUserSettingsTab should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab"
+    data-testid="mx_PreferencesUserSettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h2"
+        >
+          Preferences
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Room list
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show shortcuts to recently viewed rooms above the room list
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show shortcuts to recently viewed rooms above the room list"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Spaces
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show all rooms in Home
+                  </span>
+                  <div
+                    class="mx_SettingsFlag_microcopy"
+                  >
+                    All rooms you're in will appear in Home.
+                  </div>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Show all rooms in Home"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Keyboard shortcuts
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                <span>
+                  To view all keyboard shortcuts, 
+                  <div
+                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+                    role="button"
+                    tabindex="0"
+                  >
+                    click here
+                  </div>
+                  .
+                </span>
+              </div>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Use Ctrl + F to search timeline
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Use Ctrl + F to search timeline"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Displaying time
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show timestamps in 12 hour format (e.g. 2:30pm)
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Show timestamps in 12 hour format (e.g. 2:30pm)"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Always show message timestamps
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Always show message timestamps"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Presence
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Share your activity and status with others.
+              </div>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Send read receipts
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Send read receipts"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Send typing notifications
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Send typing notifications"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Composer
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Automatically replace plain text Emoji
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Automatically replace plain text Emoji"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Enable Markdown
+                  </span>
+                  <div
+                    class="mx_SettingsFlag_microcopy"
+                  >
+                    <span>
+                      Start messages with 
+                      <code>
+                        /plain
+                      </code>
+                       to send without markdown.
+                    </span>
+                  </div>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Enable Markdown"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Enable Emoji suggestions while typing
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Enable Emoji suggestions while typing"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Use Ctrl + Enter to send a message
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Use Ctrl + Enter to send a message"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Surround selected text when typing special characters
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Surround selected text when typing special characters"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show stickers button
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show stickers button"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Insert a trailing colon after user mentions at the start of a message
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Insert a trailing colon after user mentions at the start of a message"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Code blocks
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Enable automatic language detection for syntax highlighting
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Enable automatic language detection for syntax highlighting"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Expand code blocks by default
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Expand code blocks by default"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show line numbers in code blocks
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show line numbers in code blocks"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Images, GIFs and videos
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Enable inline URL previews by default
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Enable inline URL previews by default"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Autoplay GIFs
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Autoplay GIFs"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Autoplay videos
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Autoplay videos"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show previews/thumbnails for images
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show previews/thumbnails for images"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Timeline
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show typing notifications
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show typing notifications"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show a placeholder for removed messages
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show a placeholder for removed messages"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show read receipts sent by other users
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show read receipts sent by other users"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show join/leave messages (invites/removes/bans unaffected)
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show join/leave messages (invites/removes/bans unaffected)"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show display name changes
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show display name changes"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show chat effects (animations when receiving e.g. confetti)
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show chat effects (animations when receiving e.g. confetti)"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show avatar changes
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show avatar changes"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show avatars in user, room and event mentions
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Show avatars in user, room and event mentions"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Enable big emoji in chat
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Enable big emoji in chat"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Jump to the bottom of the timeline when you send a message
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Jump to the bottom of the timeline when you send a message"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show current avatar and name for users in message history
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Show current avatar and name for users in message history"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                Room directory
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Show NSFW content
+                  </span>
+                </label>
+                <div
+                  aria-checked="false"
+                  aria-disabled="true"
+                  aria-label="Show NSFW content"
+                  class="mx_AccessibleButton mx_ToggleSwitch"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+              >
+                General
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+            >
+              <div
+                class="mx_SettingsFlag"
+              >
+                <label
+                  class="mx_SettingsFlag_label"
+                >
+                  <span
+                    class="mx_SettingsFlag_labelText"
+                  >
+                    Prompt before sending invites to potentially invalid matrix IDs
+                  </span>
+                </label>
+                <div
+                  aria-checked="true"
+                  aria-disabled="true"
+                  aria-label="Prompt before sending invites to potentially invalid matrix IDs"
+                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+                  role="switch"
+                  tabindex="0"
+                >
+                  <div
+                    class="mx_ToggleSwitch_ball"
+                  />
+                </div>
+              </div>
+              <div
+                class="mx_Field mx_Field_input"
+              >
+                <input
+                  id="mx_Field_1"
+                  label="Autocomplete delay (ms)"
+                  placeholder="Autocomplete delay (ms)"
+                  type="number"
+                  value="200"
+                />
+                <label
+                  for="mx_Field_1"
+                >
+                  Autocomplete delay (ms)
+                </label>
+              </div>
+              <div
+                class="mx_Field mx_Field_input"
+              >
+                <input
+                  id="mx_Field_2"
+                  label="Read Marker lifetime (ms)"
+                  placeholder="Read Marker lifetime (ms)"
+                  type="number"
+                  value="3000"
+                />
+                <label
+                  for="mx_Field_2"
+                >
+                  Read Marker lifetime (ms)
+                </label>
+              </div>
+              <div
+                class="mx_Field mx_Field_input"
+              >
+                <input
+                  id="mx_Field_3"
+                  label="Read Marker off-screen lifetime (ms)"
+                  placeholder="Read Marker off-screen lifetime (ms)"
+                  type="number"
+                  value="30000"
+                />
+                <label
+                  for="mx_Field_3"
+                >
+                  Read Marker off-screen lifetime (ms)
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

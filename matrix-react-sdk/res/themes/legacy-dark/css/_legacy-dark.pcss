@@ -1,0 +1,242 @@
+/* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741 */
+$system: #21262c;
+$system-transparent: rgba($system, 0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
+
+/* unified palette */
+/* try to use these colors when possible */
+$bg-color: #181b21;
+$base-color: #15171b;
+$base-text-color: #edf3ff;
+$header-panel-bg-color: #22262e;
+$header-panel-text-primary-color: #a1b2d1;
+$header-panel-text-secondary-color: #c8c8cd;
+$text-primary-color: #edf3ff;
+$text-secondary-color: #a1b2d1;
+$room-highlight-color: #343a46;
+
+/* typical text (dark-on-white in light skin) */
+$primary-fg-color: $text-primary-color;
+$secondary-fg-color: $primary-fg-color;
+$tertiary-fg-color: $primary-fg-color;
+$primary-bg-color: $bg-color;
+$muted-fg-color: $header-panel-text-primary-color;
+
+/* used for dialog box text */
+$light-fg-color: $header-panel-text-secondary-color;
+
+/* used for focusing form controls */
+$focus-bg-color: $room-highlight-color;
+
+$pill-bg-color: $room-highlight-color;
+$pill-hover-bg-color: #545a66;
+
+/* informational plinth */
+$info-plinth-bg-color: $header-panel-bg-color;
+$info-plinth-fg-color: #888;
+
+$spacePanel-bg-color: $base-color;
+$inverted-bg-color: $spacePanel-bg-color;
+
+/* used by Autocomplete */
+$selected-color: $room-highlight-color;
+
+/* selected for hoverover & selected event tiles */
+$event-selected-color: $header-panel-bg-color;
+
+/* used for the hairline dividers in RoomView */
+$primary-hairline-color: #000000;
+
+/* used for the border of input text fields */
+$input-border-color: #e7e7e7;
+$input-darker-bg-color: #181b21;
+$input-darker-fg-color: #61708b;
+$input-lighter-bg-color: #f2f5f8;
+
+$resend-button-divider-color: $muted-fg-color;
+
+/* scrollbars */
+$scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
+
+/* context menus */
+$menu-border-color: #000000;
+$menu-bg-color: $header-panel-bg-color;
+$menu-box-shadow-color: $bg-color;
+$menu-selected-color: $room-highlight-color;
+
+$avatar-initial-color: #ffffff;
+
+$h3-color: $primary-fg-color;
+
+$dialog-title-fg-color: $base-text-color;
+$dialog-backdrop-color: #000;
+$dialog-shadow-color: rgba(0, 0, 0, 0.48);
+$dialog-close-fg-color: #9fa9ba;
+$dialog-close-external-color: $text-primary-color;
+
+$lightbox-background-bg-color: #000;
+$lightbox-background-bg-opacity: 0.85;
+
+$settings-grey-fg-color: #a2a2a2;
+$settings-subsection-fg-color: $text-secondary-color;
+
+$topleftmenu-color: $text-primary-color;
+$roomheader-addroom-bg-color: #3c4556;
+$roomheader-addroom-fg-color: $text-primary-color;
+$icon-button-color: $header-panel-text-primary-color;
+$roomtopic-color: $text-secondary-color;
+$room-icon-unread-color: #fff;
+
+/* Legacy theme backports */
+$accent: #0dbd8b;
+$alert: #ff5b55;
+$links: #0086e6;
+$link-external: #0467dd;
+$primary-content: $primary-fg-color;
+$secondary-content: $secondary-fg-color;
+$tertiary-content: $tertiary-fg-color;
+$quaternary-content: #6f7882;
+$quinary-content: $quaternary-content;
+$system: #21262c;
+$system-transparent: rgba($system, 0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
+$background: $primary-bg-color;
+$overlay-background: rgba($background, 0.85);
+
+$panels: rgba($system, 0.9);
+$panel-base: #8d97a5; /* This color is not intended for use in the app */
+$panel-selected: rgba($panel-base, 0.3);
+$panel-hover: rgba($panel-base, 0.1);
+$panel-actions: $roomtile-selected-bg-color;
+$space-nav: rgba($panel-base, 0.1);
+
+/* Legacy theme backports */
+
+/* ******************** */
+
+$call-view-button-on-foreground: $primary-content;
+$call-view-button-on-background: $system;
+$call-view-button-off-foreground: $system;
+$call-view-button-off-background: $primary-content;
+$call-view-content-background: $quinary-content;
+
+$video-feed-secondary-background: $system;
+
+$call-system: $system;
+$call-background: $background;
+$call-primary-content: $primary-content;
+$call-light-quaternary-content: #c1c6cd;
+
+$roomlist-filter-active-bg-color: $panel-actions;
+$roomlist-bg-color: $header-panel-bg-color;
+
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
+
+$spacePanel-divider-color: $tertiary-content;
+
+$roomtile-default-badge-bg-color: #61708b;
+$roomtile-selected-bg-color: #1a1d23;
+
+/* ******************** */
+
+$widget-menu-bar-bg-color: $header-panel-bg-color;
+$widget-body-bg-color: #1a1d23;
+
+$event-highlight-bg-color: #25271f;
+
+/* event timestamp */
+$event-timestamp-color: $text-secondary-color;
+
+/* Tabbed views */
+$tab-label-fg-color: $text-primary-color;
+$tab-label-active-fg-color: $text-primary-color;
+
+/* Buttons */
+$button-primary-fg-color: #ffffff;
+$button-secondary-bg-color: transparent;
+$button-danger-fg-color: #ffffff;
+$button-danger-disabled-fg-color: #ffffff;
+$button-danger-disabled-bg-color: #f5b6bb; /* TODO: Verify color */
+
+/* Toggle switch */
+$togglesw-off-color: $room-highlight-color;
+
+$progressbar-bg-color: #21262c;
+
+$visual-bell-bg-color: #800;
+
+$dark-panel-bg-color: $header-panel-bg-color;
+$panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
+
+$message-action-bar-bg-color: $header-panel-bg-color;
+$message-action-bar-fg-color: $header-panel-text-primary-color;
+$message-action-bar-border-color: #616b7f;
+$message-action-bar-hover-border-color: $header-panel-text-primary-color;
+
+$reaction-row-button-hover-border-color: $header-panel-text-primary-color;
+$reaction-row-button-selected-bg-color: #1f6954;
+
+$kbd-border-color: #000000;
+
+$tooltip-timeline-bg-color: $spacePanel-bg-color;
+$tooltip-timeline-fg-color: #ffffff;
+
+$breadcrumb-placeholder-bg-color: #272c35;
+
+/* See non-legacy dark for variable information */
+$voice-record-stop-border-color: #6f7882;
+$voice-record-icon-color: #6f7882;
+
+/* Appearance tab colors */
+$appearance-tab-border-color: $room-highlight-color;
+
+$composer-shadow-color: tranparent;
+
+$codeblock-background-color: #2a3039;
+$inlinecode-border-color: #2a3039;
+$inlinecode-background-color: #2a3039;
+
+/* Bubble tiles */
+$eventbubble-self-bg: #14322e;
+$eventbubble-others-bg: $event-selected-color;
+$eventbubble-bg-hover: #1c2026;
+$eventbubble-reply-color: #c1c6cd;
+
+/* Location sharing */
+/* ******************** */
+$location-marker-color: #ffffff;
+$location-live-color: #5c56f5;
+$location-live-secondary-color: #deddfd;
+/* ******************** */
+
+/* Voice Broadcast */
+/* ******************** */
+$live-badge-color: #ffffff;
+/* ******************** */
+
+body {
+    color-scheme: dark;
+}
+
+/* Nasty hacks to apply a filter to arbitrary monochrome artwork to make it */
+/* better match the theme.  Typically applied to dark grey 'off' buttons or */
+/* light grey 'on' buttons. */
+.mx_filterFlipColor {
+    filter: invert(1);
+}
+
+/* markdown overrides: */
+.mx_EventTile_content .markdown-body {
+    table {
+        tr {
+            background-color: #000000;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #080808;
+        }
+    }
+}
+
+/* highlight.js overrides: */
+.hljs-tag {
+    color: inherit; /* Without this they'd be weirdly blue which doesn't match the theme */
+}

@@ -1,0 +1,811 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoomView for a local room in state CREATING should match the snapshot 1`] = `
+<div>
+  <div
+    class="mx_RoomView mx_RoomView--local"
+  >
+    <header
+      class="mx_RoomHeader light-panel"
+    >
+      <div
+        class="mx_RoomHeader_wrapper"
+      >
+        <div
+          class="mx_RoomHeader_avatar"
+        >
+          <div
+            class="mx_DecoratedRoomAvatar"
+          >
+            <span
+              class="mx_BaseAvatar"
+              role="presentation"
+            >
+              <span
+                aria-hidden="true"
+                class="mx_BaseAvatar_initial"
+                style="font-size: 15.600000000000001px; width: 24px; line-height: 24px;"
+              >
+                U
+              </span>
+              <img
+                alt=""
+                aria-hidden="true"
+                class="mx_BaseAvatar_image"
+                data-testid="avatar-img"
+                loading="lazy"
+                src="data:image/png;base64,00"
+                style="width: 24px; height: 24px;"
+              />
+            </span>
+          </div>
+        </div>
+        <div
+          class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
+        >
+          <div
+            aria-level="1"
+            class="mx_RoomHeader_nametext"
+            dir="auto"
+            role="heading"
+            title="@user:example.com"
+          >
+            @user:example.com
+          </div>
+        </div>
+        <div
+          aria-describedby="mx_TooltipTarget_abdefghi"
+          class="mx_RoomHeader_topic mx_RoomTopic"
+          dir="auto"
+          tabindex="0"
+        >
+          <span
+            dir="auto"
+          />
+        </div>
+      </div>
+    </header>
+    <div
+      class="mx_RoomView_body"
+    >
+      <div
+        class="mx_LargeLoader"
+      >
+        <div
+          class="mx_Spinner"
+        >
+          <div
+            aria-label="Loading…"
+            class="mx_Spinner_icon"
+            data-testid="spinner"
+            role="progressbar"
+            style="width: 45px; height: 45px;"
+          />
+        </div>
+        <div
+          class="mx_LargeLoader_text"
+        >
+          We're creating a room with @user:example.com
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RoomView for a local room in state ERROR should match the snapshot 1`] = `
+<div>
+  <div
+    class="mx_RoomView mx_RoomView--local"
+  >
+    <header
+      class="mx_RoomHeader light-panel"
+    >
+      <div
+        class="mx_RoomHeader_wrapper"
+      >
+        <div
+          class="mx_RoomHeader_avatar"
+        >
+          <div
+            class="mx_DecoratedRoomAvatar"
+          >
+            <span
+              class="mx_BaseAvatar"
+              role="presentation"
+            >
+              <span
+                aria-hidden="true"
+                class="mx_BaseAvatar_initial"
+                style="font-size: 15.600000000000001px; width: 24px; line-height: 24px;"
+              >
+                U
+              </span>
+              <img
+                alt=""
+                aria-hidden="true"
+                class="mx_BaseAvatar_image"
+                data-testid="avatar-img"
+                loading="lazy"
+                src="data:image/png;base64,00"
+                style="width: 24px; height: 24px;"
+              />
+            </span>
+          </div>
+        </div>
+        <div
+          class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
+        >
+          <div
+            aria-level="1"
+            class="mx_RoomHeader_nametext"
+            dir="auto"
+            role="heading"
+            title="@user:example.com"
+          >
+            @user:example.com
+          </div>
+        </div>
+        <div
+          aria-describedby="mx_TooltipTarget_abdefghi"
+          class="mx_RoomHeader_topic mx_RoomTopic"
+          dir="auto"
+          tabindex="0"
+        >
+          <span
+            dir="auto"
+          />
+        </div>
+      </div>
+    </header>
+    <main
+      class="mx_RoomView_body"
+    >
+      <div
+        class="mx_RoomView_timeline"
+      >
+        <div
+          class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          tabindex="-1"
+        >
+          <div
+            class="mx_RoomView_messageListWrapper"
+          >
+            <ol
+              aria-live="polite"
+              class="mx_RoomView_MessageList"
+              style="height: 400px;"
+            >
+              <li
+                class="mx_NewRoomIntro"
+              >
+                <div
+                  class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                >
+                  <div
+                    class="mx_EventTileBubble_title"
+                  >
+                    End-to-end encryption isn't enabled
+                  </div>
+                  <div
+                    class="mx_EventTileBubble_subtitle"
+                  >
+                    <span>
+                       
+                      Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.
+                       
+                       
+                    </span>
+                  </div>
+                </div>
+                <span
+                  aria-label="Avatar"
+                  aria-live="off"
+                  class="mx_AccessibleButton mx_BaseAvatar"
+                  role="button"
+                  tabindex="0"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="mx_BaseAvatar_initial"
+                    style="font-size: 33.800000000000004px; width: 52px; line-height: 52px;"
+                  >
+                    U
+                  </span>
+                  <img
+                    alt=""
+                    aria-hidden="true"
+                    class="mx_BaseAvatar_image"
+                    data-testid="avatar-img"
+                    loading="lazy"
+                    src="data:image/png;base64,00"
+                    style="width: 52px; height: 52px;"
+                  />
+                </span>
+                <h2>
+                  @user:example.com
+                </h2>
+                <p>
+                  <span>
+                    Send your first message to invite 
+                    <b>
+                      @user:example.com
+                    </b>
+                     to chat
+                  </span>
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_RoomStatusBar mx_RoomStatusBar_unsentMessages"
+      >
+        <div
+          role="alert"
+        >
+          <div
+            class="mx_RoomStatusBar_unsentBadge"
+          >
+            <div
+              class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_highlighted mx_NotificationBadge_2char"
+            >
+              <span
+                class="mx_NotificationBadge_count"
+              >
+                !
+              </span>
+            </div>
+          </div>
+          <div>
+            <div
+              class="mx_RoomStatusBar_unsentTitle"
+            >
+              Some of your messages have not been sent
+            </div>
+          </div>
+          <div
+            class="mx_RoomStatusBar_unsentButtonBar"
+          >
+            <div
+              class="mx_AccessibleButton mx_RoomStatusBar_unsentRetry"
+              role="button"
+              tabindex="0"
+            >
+              Retry
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;
+
+exports[`RoomView for a local room in state NEW should match the snapshot 1`] = `
+<div>
+  <div
+    class="mx_RoomView mx_RoomView--local"
+  >
+    <header
+      class="mx_RoomHeader light-panel"
+    >
+      <div
+        class="mx_RoomHeader_wrapper"
+      >
+        <div
+          class="mx_RoomHeader_avatar"
+        >
+          <div
+            class="mx_DecoratedRoomAvatar"
+          >
+            <span
+              class="mx_BaseAvatar"
+              role="presentation"
+            >
+              <span
+                aria-hidden="true"
+                class="mx_BaseAvatar_initial"
+                style="font-size: 15.600000000000001px; width: 24px; line-height: 24px;"
+              >
+                U
+              </span>
+              <img
+                alt=""
+                aria-hidden="true"
+                class="mx_BaseAvatar_image"
+                data-testid="avatar-img"
+                loading="lazy"
+                src="data:image/png;base64,00"
+                style="width: 24px; height: 24px;"
+              />
+            </span>
+          </div>
+        </div>
+        <div
+          class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
+        >
+          <div
+            aria-level="1"
+            class="mx_RoomHeader_nametext"
+            dir="auto"
+            role="heading"
+            title="@user:example.com"
+          >
+            @user:example.com
+          </div>
+        </div>
+        <div
+          aria-describedby="mx_TooltipTarget_abdefghi"
+          class="mx_RoomHeader_topic mx_RoomTopic"
+          dir="auto"
+          tabindex="0"
+        >
+          <span
+            dir="auto"
+          />
+        </div>
+      </div>
+    </header>
+    <main
+      class="mx_RoomView_body"
+    >
+      <div
+        class="mx_RoomView_timeline"
+      >
+        <div
+          class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          tabindex="-1"
+        >
+          <div
+            class="mx_RoomView_messageListWrapper"
+          >
+            <ol
+              aria-live="polite"
+              class="mx_RoomView_MessageList"
+              style="height: 400px;"
+            >
+              <li
+                class="mx_NewRoomIntro"
+              >
+                <div
+                  class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon_warning"
+                >
+                  <div
+                    class="mx_EventTileBubble_title"
+                  >
+                    End-to-end encryption isn't enabled
+                  </div>
+                  <div
+                    class="mx_EventTileBubble_subtitle"
+                  >
+                    <span>
+                       
+                      Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.
+                       
+                       
+                    </span>
+                  </div>
+                </div>
+                <span
+                  aria-label="Avatar"
+                  aria-live="off"
+                  class="mx_AccessibleButton mx_BaseAvatar"
+                  role="button"
+                  tabindex="0"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="mx_BaseAvatar_initial"
+                    style="font-size: 33.800000000000004px; width: 52px; line-height: 52px;"
+                  >
+                    U
+                  </span>
+                  <img
+                    alt=""
+                    aria-hidden="true"
+                    class="mx_BaseAvatar_image"
+                    data-testid="avatar-img"
+                    loading="lazy"
+                    src="data:image/png;base64,00"
+                    style="width: 52px; height: 52px;"
+                  />
+                </span>
+                <h2>
+                  @user:example.com
+                </h2>
+                <p>
+                  <span>
+                    Send your first message to invite 
+                    <b>
+                      @user:example.com
+                    </b>
+                     to chat
+                  </span>
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_MessageComposer"
+      >
+        <div
+          class="mx_MessageComposer_wrapper"
+        >
+          <div
+            class="mx_MessageComposer_row"
+          >
+            <div
+              class="mx_SendMessageComposer"
+            >
+              <div
+                class="mx_BasicMessageComposer"
+              >
+                <div
+                  aria-label="Formatting"
+                  class="mx_MessageComposerFormatBar"
+                  role="toolbar"
+                >
+                  <button
+                    aria-label="Bold"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconBold"
+                    role="button"
+                    tabindex="0"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Italics"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Strikethrough"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Code block"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Quote"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Insert link"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                </div>
+                <div
+                  aria-autocomplete="list"
+                  aria-disabled="false"
+                  aria-haspopup="listbox"
+                  aria-label="Send a message…"
+                  aria-multiline="true"
+                  class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
+                  contenteditable="true"
+                  data-testid="basicmessagecomposer"
+                  dir="auto"
+                  role="textbox"
+                  style="--placeholder: 'Send a message…';"
+                  tabindex="0"
+                >
+                  <div>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="mx_MessageComposer_actions"
+            >
+              <div
+                aria-label="Emoji"
+                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                role="button"
+                tabindex="0"
+              />
+              <div
+                aria-label="Attachment"
+                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                role="button"
+                tabindex="0"
+              />
+              <div
+                aria-label="More options"
+                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
+                role="button"
+                tabindex="0"
+              />
+              <input
+                multiple=""
+                style="display: none;"
+                type="file"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;
+
+exports[`RoomView for a local room in state NEW that is encrypted should match the snapshot 1`] = `
+<div>
+  <div
+    class="mx_RoomView mx_RoomView--local"
+  >
+    <header
+      class="mx_RoomHeader light-panel"
+    >
+      <div
+        class="mx_RoomHeader_wrapper"
+      >
+        <div
+          class="mx_RoomHeader_avatar"
+        >
+          <div
+            class="mx_DecoratedRoomAvatar"
+          >
+            <span
+              class="mx_BaseAvatar"
+              role="presentation"
+            >
+              <span
+                aria-hidden="true"
+                class="mx_BaseAvatar_initial"
+                style="font-size: 15.600000000000001px; width: 24px; line-height: 24px;"
+              >
+                U
+              </span>
+              <img
+                alt=""
+                aria-hidden="true"
+                class="mx_BaseAvatar_image"
+                data-testid="avatar-img"
+                loading="lazy"
+                src="data:image/png;base64,00"
+                style="width: 24px; height: 24px;"
+              />
+            </span>
+          </div>
+        </div>
+        <div
+          aria-label="This room is end-to-end encrypted"
+          class="mx_E2EIcon mx_E2EIcon_normal mx_RoomHeader_icon"
+        />
+        <div
+          class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
+        >
+          <div
+            aria-level="1"
+            class="mx_RoomHeader_nametext"
+            dir="auto"
+            role="heading"
+            title="@user:example.com"
+          >
+            @user:example.com
+          </div>
+        </div>
+        <div
+          aria-describedby="mx_TooltipTarget_abdefghi"
+          class="mx_RoomHeader_topic mx_RoomTopic"
+          dir="auto"
+          tabindex="0"
+        >
+          <span
+            dir="auto"
+          />
+        </div>
+      </div>
+    </header>
+    <main
+      class="mx_RoomView_body"
+    >
+      <div
+        class="mx_RoomView_timeline"
+      >
+        <div
+          class="mx_AutoHideScrollbar mx_ScrollPanel mx_RoomView_messagePanel"
+          tabindex="-1"
+        >
+          <div
+            class="mx_RoomView_messageListWrapper"
+          >
+            <ol
+              aria-live="polite"
+              class="mx_RoomView_MessageList"
+              style="height: 400px;"
+            >
+              <div
+                class="mx_EventTileBubble mx_cryptoEvent mx_cryptoEvent_icon"
+              >
+                <div
+                  class="mx_EventTileBubble_title"
+                >
+                  Encryption enabled
+                </div>
+                <div
+                  class="mx_EventTileBubble_subtitle"
+                >
+                  Messages in this chat will be end-to-end encrypted.
+                </div>
+              </div>
+              <li
+                class="mx_NewRoomIntro"
+              >
+                <span
+                  aria-label="Avatar"
+                  aria-live="off"
+                  class="mx_AccessibleButton mx_BaseAvatar"
+                  role="button"
+                  tabindex="0"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="mx_BaseAvatar_initial"
+                    style="font-size: 33.800000000000004px; width: 52px; line-height: 52px;"
+                  >
+                    U
+                  </span>
+                  <img
+                    alt=""
+                    aria-hidden="true"
+                    class="mx_BaseAvatar_image"
+                    data-testid="avatar-img"
+                    loading="lazy"
+                    src="data:image/png;base64,00"
+                    style="width: 52px; height: 52px;"
+                  />
+                </span>
+                <h2>
+                  @user:example.com
+                </h2>
+                <p>
+                  <span>
+                    Send your first message to invite 
+                    <b>
+                      @user:example.com
+                    </b>
+                     to chat
+                  </span>
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_MessageComposer"
+      >
+        <div
+          class="mx_MessageComposer_wrapper"
+        >
+          <div
+            class="mx_MessageComposer_row"
+          >
+            <div
+              class="mx_SendMessageComposer"
+            >
+              <div
+                class="mx_BasicMessageComposer"
+              >
+                <div
+                  aria-label="Formatting"
+                  class="mx_MessageComposerFormatBar"
+                  role="toolbar"
+                >
+                  <button
+                    aria-label="Bold"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconBold"
+                    role="button"
+                    tabindex="0"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Italics"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Strikethrough"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Code block"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Quote"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                  <button
+                    aria-label="Insert link"
+                    class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
+                    role="button"
+                    tabindex="-1"
+                    type="button"
+                  />
+                </div>
+                <div
+                  aria-autocomplete="list"
+                  aria-disabled="false"
+                  aria-haspopup="listbox"
+                  aria-label="Send a message…"
+                  aria-multiline="true"
+                  class="mx_BasicMessageComposer_input mx_BasicMessageComposer_input_shouldShowPillAvatar mx_BasicMessageComposer_inputEmpty"
+                  contenteditable="true"
+                  data-testid="basicmessagecomposer"
+                  dir="auto"
+                  role="textbox"
+                  style="--placeholder: 'Send a message…';"
+                  tabindex="0"
+                >
+                  <div>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="mx_MessageComposer_actions"
+            >
+              <div
+                aria-label="Emoji"
+                class="mx_AccessibleButton mx_EmojiButton mx_MessageComposer_button mx_EmojiButton_icon"
+                role="button"
+                tabindex="0"
+              />
+              <div
+                aria-label="Attachment"
+                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_upload"
+                role="button"
+                tabindex="0"
+              />
+              <div
+                aria-label="More options"
+                class="mx_AccessibleButton mx_MessageComposer_button mx_MessageComposer_buttonMenu"
+                role="button"
+                tabindex="0"
+              />
+              <input
+                multiple=""
+                style="display: none;"
+                type="file"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;

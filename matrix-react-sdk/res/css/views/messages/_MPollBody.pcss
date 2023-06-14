@@ -1,0 +1,74 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MPollBody {
+    margin-top: 8px;
+
+    h2 {
+        font-weight: var(--font-semi-bold);
+        font-size: $font-15px;
+        line-height: $font-24px;
+        margin-top: 0;
+        margin-bottom: 8px;
+
+        .mx_MPollBody_edited {
+            color: $roomtopic-color;
+            font-size: $font-12px;
+            opacity: 0.6;
+        }
+    }
+
+    h2::before {
+        content: "";
+        position: relative;
+        display: inline-block;
+        margin-right: 12px;
+        top: 3px;
+        left: 3px;
+        height: 20px;
+        width: 20px;
+        background-color: $secondary-content;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        mask-image: url("$(res)/img/element-icons/room/composer/poll.svg");
+    }
+
+    .mx_MPollBody_totalVotes {
+        display: flex;
+        flex-direction: inline;
+        justify-content: start;
+        color: $secondary-content;
+        font-size: $font-12px;
+
+        .mx_Spinner {
+            flex: 0;
+            margin-left: $spacing-8;
+        }
+    }
+}
+
+/* Prevent clicking a poll within a reply */
+.mx_ReplyTile .mx_MPollBody {
+    pointer-events: none;
+}
+
+.mx_MPollBody_allOptions {
+    display: grid;
+    grid-gap: $spacing-16;
+    margin-bottom: $spacing-8;
+    max-width: 550px;
+}

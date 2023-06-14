@@ -1,0 +1,117 @@
+/*
+Copyright 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_FilePanel {
+    order: 2;
+    flex: 1 1 0;
+    overflow-y: auto;
+    display: flex;
+
+    .mx_RoomView_messageListWrapper {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mx_RoomView_MessageList {
+        width: 100%;
+
+        h2 {
+            display: none;
+        }
+    }
+
+    /* FIXME: rather than having EventTile's default CSS be for MessagePanel,
+   we should make EventTile a base CSS class and customise it specifically
+   for usage in {Message,File,Notification}Panel. */
+
+    .mx_EventTile_avatar {
+        display: none;
+    }
+
+    /* Overrides for the attachment body tiles */
+    .mx_EventTile {
+        word-break: break-word;
+        margin-top: 10px;
+        padding-top: 0;
+
+        .mx_EventTile_line {
+            padding-inline-start: 0;
+        }
+
+        &:hover {
+            &.mx_EventTile_verified,
+            &.mx_EventTile_unverified,
+            &.mx_EventTile_unknown {
+                .mx_EventTile_line {
+                    box-shadow: none;
+                }
+            }
+        }
+
+        .mx_MFileBody {
+            line-height: 2.4rem;
+        }
+
+        .mx_MFileBody_download {
+            padding-top: $spacing-8;
+            display: flex;
+            justify-content: space-between;
+            font-size: $font-14px;
+            color: $event-timestamp-color;
+
+            .mx_MImageBody_size {
+                font-size: $font-14px;
+                text-align: right;
+                white-space: nowrap;
+            }
+        }
+
+        .mx_MFileBody_downloadLink {
+            flex: 1 1 auto;
+            color: $light-fg-color;
+        }
+
+        /* anchor link as wrapper */
+        .mx_EventTile_senderDetailsLink {
+            text-decoration: none;
+
+            .mx_EventTile_senderDetails {
+                display: flex;
+                justify-content: space-between;
+                margin-top: -2px;
+
+                .mx_DisambiguatedProfile {
+                    color: $event-timestamp-color; /* for ellipsis. Color of displayName and mxid is inherited */
+                }
+
+                .mx_MessageTimestamp {
+                    text-align: right;
+                    font-size: $font-14px;
+                }
+            }
+        }
+    }
+
+    .mx_EventTile_line {
+        margin-inline-end: 0;
+        padding-inline-start: 0;
+    }
+}
+
+.mx_FilePanel_empty::before {
+    --maskImage: url("$(res)/img/element-icons/room/files.svg"); /* See: _RightPanel.pcss */
+}

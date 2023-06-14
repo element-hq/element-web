@@ -1,0 +1,88 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_NetworkDropdown_wrapper .mx_ContextualMenu {
+    .mx_GenericDropdownMenu_Option {
+        &.mx_GenericDropdownMenu_Option--header {
+            padding-top: $spacing-12;
+            padding-bottom: $spacing-4;
+            min-width: 160px;
+        }
+
+        &.mx_GenericDropdownMenu_Option--item {
+            padding-top: $spacing-4;
+            padding-bottom: $spacing-4;
+
+            > .mx_GenericDropdownMenu_Option--label span:first-child {
+                font-weight: normal;
+            }
+        }
+
+        > .mx_GenericDropdownMenu_Option--label {
+            flex-direction: row;
+            align-items: baseline;
+            align-content: baseline;
+            color: $primary-content;
+
+            span:not(:first-child) {
+                margin-left: $spacing-4;
+                color: $secondary-content;
+            }
+        }
+    }
+
+    .mx_GenericDropdownMenu_divider {
+        margin-top: $spacing-4;
+        margin-bottom: $spacing-4;
+    }
+}
+
+.mx_NetworkDropdown_addServer {
+    font-weight: normal;
+    font-size: $font-15px;
+}
+
+.mx_NetworkDropdown_removeServer {
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: $quinary-content;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 16px;
+    color: $secondary-content;
+    margin-left: auto;
+
+    &::before {
+        background-color: $secondary-content;
+        content: "";
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        mask-image: url("$(res)/img/cancel-small.svg");
+    }
+}
+
+.mx_NetworkDropdown_dialog .mx_Dialog {
+    width: 45vw;
+}

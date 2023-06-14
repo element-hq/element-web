@@ -1,0 +1,110 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_IncomingCallToast {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    pointer-events: initial; /* restore pointer events so the user can accept/decline */
+    width: 250px;
+
+    $closeButtonSize: 16px;
+
+    .mx_IncomingCallToast_content {
+        display: flex;
+        flex-direction: column;
+        margin-left: 8px;
+        width: 100%;
+        overflow: hidden;
+
+        .mx_IncomingCallToast_info {
+            margin-bottom: $spacing-16;
+
+            .mx_IncomingCallToast_room {
+                display: inline-block;
+
+                font-weight: var(--font-semi-bold);
+                font-size: $font-15px;
+                line-height: $font-24px;
+
+                /* Prevent overlap with the close button */
+                width: calc(100% - $closeButtonSize - 2 * $spacing-4);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+
+                margin-bottom: $spacing-4;
+            }
+
+            .mx_IncomingCallToast_message {
+                font-size: $font-12px;
+                line-height: $font-15px;
+
+                margin-bottom: $spacing-4;
+            }
+
+            .mx_LiveContentSummary {
+                font-size: $font-12px;
+                line-height: $font-15px;
+
+                .mx_LiveContentSummary_participants::before {
+                    width: 15px;
+                    height: 15px;
+                }
+            }
+        }
+
+        .mx_IncomingCallToast_joinButton {
+            position: relative;
+
+            bottom: $spacing-4;
+            right: $spacing-4;
+
+            align-self: flex-end;
+
+            box-sizing: border-box;
+            min-width: 120px;
+
+            padding: $spacing-4 0;
+
+            line-height: $font-24px;
+        }
+    }
+
+    .mx_IncomingCallToast_closeButton {
+        position: absolute;
+
+        top: $spacing-4;
+        right: $spacing-4;
+
+        display: flex;
+        height: $closeButtonSize;
+        width: $closeButtonSize;
+
+        &::before {
+            content: "";
+
+            mask-image: url("$(res)/img/cancel.svg");
+
+            height: inherit;
+            width: inherit;
+            background-color: $secondary-content;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            mask-position: center;
+        }
+    }
+}

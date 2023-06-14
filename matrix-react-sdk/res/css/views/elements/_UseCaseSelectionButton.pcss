@@ -1,0 +1,105 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UseCaseSelectionButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $spacing-24 $spacing-16;
+    background: $background;
+    border: 1px solid $quinary-content;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+    transition-property: box-shadow, transform;
+    transition-duration: 300ms;
+
+    .mx_UseCaseSelectionButton_icon {
+        /* workaround: design expects a layering of two colors */
+        background: linear-gradient(0deg, rgba(172, 59, 168, 0.15), rgba(172, 59, 168, 0.15)), #ffffff;
+        border-radius: 14px;
+        padding: $spacing-8;
+        margin-bottom: $spacing-16;
+
+        &::before {
+            content: "";
+            display: block;
+            /* this has to remain the same color across all themes,
+               as its background has a fixed color as well */
+            background: #1e1e1e;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            width: 22px;
+            height: 22px;
+        }
+
+        &.mx_UseCaseSelectionButton_messaging::before {
+            mask-image: url("$(res)/img/element-icons/chat-bubble.svg");
+        }
+
+        &.mx_UseCaseSelectionButton_work::before {
+            mask-image: url("$(res)/img/element-icons/view-community.svg");
+        }
+
+        &.mx_UseCaseSelectionButton_community::before {
+            mask-image: url("$(res)/img/globe.svg");
+        }
+    }
+
+    &:hover,
+    &:focus {
+        box-shadow: 0 $spacing-4 $spacing-8 rgba(0, 0, 0, 0.08);
+        transform: translate(0, -$spacing-8);
+    }
+
+    .mx_UseCaseSelectionButton_selectedIcon {
+        right: -12px;
+        top: -12px;
+        position: absolute;
+        border-radius: 24px;
+        background: $accent;
+        padding: 6px;
+        transition-property: opacity, transform;
+        transition-duration: 150ms;
+        opacity: 0;
+        transform: scale(0.6);
+
+        &::before {
+            content: "";
+            display: block;
+            background: $background;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            width: 12px;
+            height: 12px;
+
+            mask-image: url("$(res)/img/element-icons/check-white.svg");
+        }
+    }
+
+    &.mx_UseCaseSelectionButton_selected {
+        border: 2px solid $accent;
+        padding: calc($spacing-24 - 1px) calc($spacing-16 - 1px);
+        box-shadow: 0 $spacing-4 $spacing-8 rgba(0, 0, 0, 0.08);
+
+        .mx_UseCaseSelectionButton_selectedIcon {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+}

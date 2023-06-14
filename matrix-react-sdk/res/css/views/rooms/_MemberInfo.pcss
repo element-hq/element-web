@@ -1,0 +1,111 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MemberInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 8px;
+
+    h2 {
+        font-size: $font-18px;
+        font-weight: var(--font-semi-bold);
+        margin: 16px 0 16px 15px;
+    }
+
+    .mx_RoomTile_titleContainer {
+        width: 154px;
+    }
+
+    .mx_RoomTile_badge {
+        display: none;
+    }
+
+    .mx_RoomTile_title {
+        width: 160px;
+    }
+
+    h3 {
+        text-transform: uppercase;
+        color: $input-darker-fg-color;
+        font-weight: bold;
+        font-size: $font-12px;
+        margin: 4px 0;
+    }
+}
+
+.mx_MemberInfo_name {
+    align-items: center;
+    display: flex;
+
+    > .mx_E2EIcon {
+        margin-right: 0;
+    }
+
+    h2 {
+        flex: 1;
+        overflow-x: auto;
+        max-height: 50px;
+    }
+}
+
+.mx_MemberInfo_cancel {
+    height: 16px;
+    width: 16px;
+    padding: 10px 0 10px 10px;
+    cursor: pointer;
+    mask-image: url("$(res)/img/minimise.svg");
+    mask-repeat: no-repeat;
+    mask-position: 16px center;
+    background-color: $header-panel-text-primary-color;
+}
+
+.mx_MemberInfo_container {
+    margin: 0 16px 16px 16px;
+
+    &.mx_MemberInfo_container--profile {
+        margin-bottom: 16px;
+        font-size: $font-15px;
+        position: relative;
+    }
+}
+
+.mx_MemberInfo_avatar {
+    background: $spacePanel-bg-color;
+    margin-bottom: 16px;
+
+    > img {
+        height: auto;
+        width: 100%;
+        max-height: 30vh;
+        object-fit: contain;
+        display: block;
+    }
+
+    .mx_BaseAvatar.mx_BaseAvatar_image {
+        cursor: zoom-in;
+    }
+}
+
+.mx_MemberInfo_field {
+    cursor: pointer;
+    font-size: $font-15px;
+    color: $primary-content;
+    margin-left: 8px;
+    margin-bottom: 16px;
+    line-height: $font-23px;
+}

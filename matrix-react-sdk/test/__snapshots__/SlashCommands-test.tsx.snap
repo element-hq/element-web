@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SlashCommands /lenny should match snapshot with args 1`] = `
+{
+  "body": "( ͡° ͜ʖ ͡°) this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /lenny should match snapshot with no args 1`] = `
+{
+  "body": "( ͡° ͜ʖ ͡°)",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /rainbow should make things rainbowy 1`] = `
+{
+  "body": "this is a test message",
+  "format": "org.matrix.custom.html",
+  "formatted_body": "<font color="#ff00be">t</font><font color="#ff0080">h</font><font color="#ff0041">i</font><font color="#ff5f00">s</font> <font color="#faa900">i</font><font color="#c3bf00">s</font> <font color="#00d800">a</font> <font color="#00e371">t</font><font color="#00e6b6">e</font><font color="#00e7f8">s</font><font color="#00e7ff">t</font> <font color="#00deff">m</font><font color="#00d2ff">e</font><font color="#00c0ff">s</font><font color="#44a4ff">s</font><font color="#e87dff">a</font><font color="#ff42ff">g</font><font color="#ff00fe">e</font>",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /rainbowme should make things rainbowy 1`] = `
+{
+  "body": "this is a test message",
+  "format": "org.matrix.custom.html",
+  "formatted_body": "<font color="#ff00be">t</font><font color="#ff0080">h</font><font color="#ff0041">i</font><font color="#ff5f00">s</font> <font color="#faa900">i</font><font color="#c3bf00">s</font> <font color="#00d800">a</font> <font color="#00e371">t</font><font color="#00e6b6">e</font><font color="#00e7f8">s</font><font color="#00e7ff">t</font> <font color="#00deff">m</font><font color="#00d2ff">e</font><font color="#00c0ff">s</font><font color="#44a4ff">s</font><font color="#e87dff">a</font><font color="#ff42ff">g</font><font color="#ff00fe">e</font>",
+  "msgtype": "m.emote",
+}
+`;
+
+exports[`SlashCommands /shrug should match snapshot with args 1`] = `
+{
+  "body": "¯\\_(ツ)_/¯ this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /shrug should match snapshot with no args 1`] = `
+{
+  "body": "¯\\_(ツ)_/¯",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /tableflip should match snapshot with args 1`] = `
+{
+  "body": "(╯°□°）╯︵ ┻━┻ this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /tableflip should match snapshot with no args 1`] = `
+{
+  "body": "(╯°□°）╯︵ ┻━┻",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /unflip should match snapshot with args 1`] = `
+{
+  "body": "┬──┬ ノ( ゜-゜ノ) this is a test message",
+  "msgtype": "m.text",
+}
+`;
+
+exports[`SlashCommands /unflip should match snapshot with no args 1`] = `
+{
+  "body": "┬──┬ ノ( ゜-゜ノ)",
+  "msgtype": "m.text",
+}
+`;

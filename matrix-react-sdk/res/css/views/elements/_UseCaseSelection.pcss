@@ -1,0 +1,130 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UseCaseSelection {
+    display: grid;
+    grid-template-rows: 1fr 1fr max-content 2fr;
+    height: 100%;
+    grid-gap: $spacing-40;
+
+    .mx_UseCaseSelection_title {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        h1 {
+            font-weight: var(--font-semi-bold);
+            font-size: $font-32px;
+            text-align: center;
+        }
+    }
+
+    .mx_UseCaseSelection_info {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-8;
+        align-self: flex-end;
+
+        h2 {
+            margin: 0;
+            font-weight: 500;
+            font-size: $font-24px;
+            text-align: center;
+        }
+
+        h3 {
+            margin: 0;
+            font-weight: 400;
+            font-size: $font-16px;
+            color: $secondary-content;
+            text-align: center;
+        }
+    }
+
+    .mx_UseCaseSelection_options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 232px);
+        gap: $spacing-32;
+        align-self: stretch;
+        justify-content: center;
+    }
+
+    .mx_UseCaseSelection_skip {
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+    }
+}
+
+.mx_UseCaseSelection_slideIn {
+    animation-delay: 800ms;
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(0, 0, 0.58, 1);
+    animation-name: mx_UseCaseSelection_slideInLong;
+    animation-fill-mode: backwards;
+    will-change: opacity;
+}
+
+.mx_UseCaseSelection_slideInDelayed {
+    animation-delay: 1500ms;
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(0, 0, 0.58, 1);
+    animation-name: mx_UseCaseSelection_slideInShort;
+    animation-fill-mode: backwards;
+    will-change: transform, opacity;
+}
+
+.mx_UseCaseSelection_selected {
+    .mx_UseCaseSelection_slideIn,
+    .mx_UseCaseSelection_slideInDelayed {
+        animation-delay: 800ms;
+        animation-duration: 300ms;
+        animation-fill-mode: forwards;
+        animation-name: mx_UseCaseSelection_fadeOut;
+        will-change: opacity;
+    }
+}
+
+@keyframes mx_UseCaseSelection_slideInLong {
+    0% {
+        transform: translate(0, 20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes mx_UseCaseSelection_slideInShort {
+    0% {
+        transform: translate(0, 8px);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes mx_UseCaseSelection_fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

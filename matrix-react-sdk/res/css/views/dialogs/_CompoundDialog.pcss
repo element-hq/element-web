@@ -1,0 +1,93 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* -------------------------------------------------------------------------------- */
+/* DEV NOTE: This stylesheet covers dialogs listed by the compound, including */
+/* over multiple React components. The actual inner contents of the dialog should */
+/* be in their respective stylesheets. */
+/* -------------------------------------------------------------------------------- */
+
+/* Override legacy/default styles for dialogs */
+.mx_Dialog_wrapper.mx_CompoundDialog > .mx_Dialog {
+    padding: 0; /* we'll manage it ourselves */
+    color: $primary-content;
+}
+
+.mx_CompoundDialog {
+    .mx_Dialog {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mx_CompoundDialog_header {
+        padding: 32px 32px 16px 32px;
+
+        h1 {
+            display: inline-block;
+            font-weight: var(--font-semi-bold);
+            font-size: $font-24px;
+            margin: 0; /* managed by header class */
+        }
+
+        .mx_CompoundDialog_cancelButton {
+            @mixin customisedCancelButton;
+            width: 20px;
+            height: 20px;
+
+            /* Align with middle of title, 34px from right edge */
+            position: absolute;
+            top: 34px;
+            right: 34px;
+        }
+    }
+
+    .mx_CompoundDialog_form {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        max-height: 100%;
+    }
+
+    .mx_CompoundDialog_content {
+        overflow: auto;
+        padding: 8px 32px;
+    }
+
+    .mx_CompoundDialog_footer {
+        padding: 20px 32px;
+        text-align: right;
+
+        .mx_AccessibleButton {
+            margin-left: 24px;
+        }
+    }
+}
+
+.mx_ScrollableBaseDialog {
+    display: flex;
+    flex-direction: column;
+
+    width: 544px; /* fixed */
+    height: 516px; /* fixed */
+    max-width: 100%;
+    min-height: 0;
+    max-height: 80%;
+
+    .mx_CompoundDialog_footer {
+        box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.05); /* hardcoded colour for both themes */
+        z-index: 1; /* needed to make footer & shadow appear above dialog content */
+    }
+}

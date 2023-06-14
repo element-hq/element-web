@@ -1,0 +1,75 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserOnboardingList {
+    display: flex;
+    flex-direction: column;
+    margin: 0 $spacing-32;
+
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(0, 0, 0.58, 1);
+    animation-name: mx_UserOnboardingList_slideIn;
+    animation-fill-mode: backwards;
+    will-change: opacity;
+
+    .mx_UserOnboardingList_header {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        align-items: center;
+
+        .mx_UserOnboardingList_hint {
+            color: $secondary-content;
+        }
+    }
+
+    .mx_UserOnboardingList_progress {
+        display: flex;
+        flex-direction: column;
+        counter-reset: user-onboarding;
+
+        .mx_ProgressBar {
+            width: auto;
+            margin-top: $spacing-16;
+            height: 16px;
+
+            @mixin ProgressBarBorderRadius 16px;
+        }
+    }
+
+    .mx_UserOnboardingList_list {
+        display: grid;
+        grid-template-columns: max-content 1fr max-content;
+
+        appearance: none;
+        list-style: none;
+        margin: $spacing-32 0 0;
+        padding: 0;
+
+        grid-gap: $spacing-24;
+    }
+}
+
+@keyframes mx_UserOnboardingList_slideIn {
+    0% {
+        transform: translate(0, 8px);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+}

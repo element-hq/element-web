@@ -1,0 +1,227 @@
+/* Reference: https://www.figma.com/file/RnLKnv09glhxGIZtn8zfmh/UI-Themes-%26-Accessibility?node-id=321%3A65847 */
+$accent: #268075;
+$alert: #d62c25;
+$links: #0a6eca;
+$primary-content: #17191c;
+$secondary-content: #5e6266;
+$tertiary-content: $secondary-content;
+$quaternary-content: $secondary-content;
+$quinary-content: $secondary-content;
+
+$username-variant1-color: #0a6eca;
+$username-variant2-color: #ac3ba8;
+$username-variant3-color: #078662;
+$username-variant4-color: #cc1449;
+$username-variant5-color: #be4c00;
+$username-variant6-color: #1c7274;
+$username-variant7-color: #5c56f5;
+$username-variant8-color: #3e810a;
+
+$accent-alt: $links;
+$input-border-color: $secondary-content;
+$input-darker-bg-color: $quinary-content;
+$input-darker-fg-color: $secondary-content;
+$resend-button-divider-color: $input-darker-bg-color;
+$icon-button-color: $quaternary-content;
+$theme-button-bg-color: $quinary-content;
+$presence-offline: $quinary-content;
+$pinned-color: $tertiary-content;
+$button-secondary-bg-color: $accent-fg-color;
+$message-action-bar-fg-color: $primary-content;
+$voice-record-stop-border-color: $quinary-content;
+$voice-record-icon-color: $tertiary-content;
+$appearance-tab-border-color: $input-darker-bg-color;
+$eventbubble-reply-color: $quaternary-content;
+$roomtopic-color: $secondary-content;
+
+/* Draw an outline on buttons with focus */
+.mx_AccessibleButton:focus {
+    outline: 2px solid $accent;
+    outline-offset: 2px;
+}
+
+/* Add padding (and remove margin to compensate), so the outline is not */
+/* chopped off on the left */
+.mx_TabbedView_tabPanel {
+    margin-left: 236px !important; /* Remove 4 to allow 4 in mx_SettingsTab */
+}
+.mx_SettingsTab {
+    padding-left: 4px !important;
+}
+.mx_BaseCard {
+    padding-left: 4px !important; /* Remove 4 to allow 4 in mx_BaseCard_Group */
+}
+.mx_BaseCard_Group {
+    padding-left: 4px !important;
+}
+
+.mx_BasicMessageComposer .mx_BasicMessageComposer_inputEmpty > :first-child::before {
+    color: $secondary-content;
+    opacity: 1 !important;
+}
+
+.mx_TextualEvent {
+    color: $secondary-content;
+    opacity: 1 !important;
+}
+
+.mx_Dialog,
+.mx_MatrixChat_wrapper {
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"]::placeholder,
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"]::placeholder,
+    .mx_textinput input::placeholder {
+        color: $input-darker-fg-color !important;
+    }
+}
+
+.mx_UserMenu_contextMenu .mx_UserMenu_contextMenu_header .mx_UserMenu_contextMenu_themeButton {
+    background-color: $panel-actions !important;
+}
+
+.mx_FontScalingPanel_fontSlider {
+    background-color: $panel-actions !important;
+}
+
+.mx_ThemeChoicePanel_themeSelectors > .mx_StyledRadioButton input[type="radio"]:disabled + div {
+    border-color: $primary-content;
+}
+
+.mx_ThemeChoicePanel_themeSelectors > .mx_StyledRadioButton.mx_StyledRadioButton_disabled {
+    color: $primary-content;
+}
+
+.mx_RoomSearch {
+    &.mx_RoomSearch_focused,
+    &.mx_RoomSearch_hasQuery {
+        .mx_RoomSearch_clearButton {
+            &::before {
+                background-color: $background !important;
+            }
+        }
+    }
+}
+
+.mx_PollCreateDialog {
+    .mx_PollCreateDialog_option {
+        .mx_PollCreateDialog_removeOption {
+            &::before {
+                background-color: $background !important;
+            }
+        }
+    }
+}
+
+.mx_Dialog_buttons button.mx_LocationPicker_cancelButton::before {
+    background-color: $background !important;
+}
+
+.mx_SpotlightDialog_wrapper .mx_Dialog {
+    #mx_SpotlightDialog_keyboardPrompt {
+        kbd {
+            color: $background !important;
+        }
+    }
+}
+
+.mx_SpotlightDialog {
+    .mx_SpotlightDialog_searchBox {
+        > .mx_SpotlightDialog_filter {
+            color: $background !important;
+            &::before {
+                background-color: $background !important;
+            }
+        }
+    }
+    #mx_SpotlightDialog_content {
+        .mx_SpotlightDialog_recentlyViewed {
+            .mx_SpotlightDialog_option {
+                &:hover,
+                &[aria-selected="true"] {
+                    color: $background !important;
+
+                    .mx_DecoratedRoomAvatar_icon::before {
+                        background-color: $background !important;
+                    }
+                }
+            }
+        }
+        .mx_SpotlightDialog_results,
+        .mx_SpotlightDialog_recentSearches,
+        .mx_SpotlightDialog_otherSearches,
+        .mx_SpotlightDialog_hiddenResults {
+            .mx_SpotlightDialog_option {
+                &:hover,
+                &[aria-selected="true"] {
+                    background-color: $quinary-content !important;
+                    color: $background !important;
+
+                    &.mx_SpotlightDialog_startChat::before,
+                    &.mx_SpotlightDialog_joinRoomAlias::before,
+                    &.mx_SpotlightDialog_explorePublicRooms::before,
+                    &.mx_SpotlightDialog_startGroupChat::before {
+                        background-color: $background !important;
+                    }
+
+                    .mx_DecoratedRoomAvatar_icon::before {
+                        background-color: $background !important;
+                    }
+
+                    .mx_SpotlightDialog_result_publicRoomDetails {
+                        .mx_SpotlightDialog_result_publicRoomHeader {
+                            .mx_SpotlightDialog_result_publicRoomName {
+                                color: $background;
+                            }
+                            .mx_SpotlightDialog_result_publicRoomAlias {
+                                color: $background;
+                            }
+                        }
+                        .mx_SpotlightDialog_result_publicRoomDescription {
+                            color: $background;
+                        }
+                    }
+
+                    .mx_NotificationBadge {
+                        background-color: $background !important;
+                    }
+
+                    .mx_SpotlightDialog_result_details {
+                        color: $background !important;
+                    }
+                }
+            }
+        }
+        .mx_SpotlightDialog_enterPrompt {
+            background-color: $background !important;
+        }
+    }
+}
+
+.mx_GenericDropdownMenu_button:hover,
+.mx_GenericDropdownMenu_button[aria-expanded="true"] {
+    color: $background !important;
+}
+
+.mx_ContextualMenu_wrapper.mx_GenericDropdownMenu_wrapper {
+    .mx_GenericDropdownMenu_Option {
+        &.mx_GenericDropdownMenu_Option--item {
+            &:hover {
+                background-color: $quinary-content !important;
+                color: $background !important;
+
+                &[aria-checked="true"]::before {
+                    background-color: $background !important;
+                }
+
+                > .mx_GenericDropdownMenu_Option--label {
+                    span:first-child {
+                        color: $background !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mx_NetworkDropdown_removeServer::before {
+    background-color: $background !important;
+}

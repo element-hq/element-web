@@ -1,0 +1,45 @@
+/*
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_PollListItem {
+    width: 100%;
+}
+
+.mx_PollListItem_content {
+    width: 100%;
+    display: grid;
+    justify-content: left;
+    align-items: center;
+    grid-gap: $spacing-8;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto;
+    cursor: pointer;
+
+    color: $primary-content;
+}
+
+.mx_PollListItem_icon {
+    height: 14px;
+    width: 14px;
+    color: $quaternary-content;
+    padding-left: $spacing-8;
+}
+
+.mx_PollListItem_question {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

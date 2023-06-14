@@ -1,0 +1,223 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PublicRoomResultDetails Public room results 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SpotlightDialog_result_publicRoomDetails"
+  >
+    <div
+      class="mx_SpotlightDialog_result_publicRoomHeader"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomName"
+        id="label-id"
+      >
+        canonical-alias
+      </span>
+      <span
+        class="mx_SpotlightDialog_result_publicRoomAlias"
+        id="description-id"
+      >
+        canonical-alias
+      </span>
+    </div>
+    <div
+      class="mx_SpotlightDialog_result_publicRoomDescription"
+      id="details-id"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomMemberCount"
+      >
+        666 Members
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`PublicRoomResultDetails Public room results 2`] = `
+<DocumentFragment>
+  <div
+    class="mx_SpotlightDialog_result_publicRoomDetails"
+  >
+    <div
+      class="mx_SpotlightDialog_result_publicRoomHeader"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomName"
+        id="label-id"
+      >
+        alias-from-aliases
+      </span>
+      <span
+        class="mx_SpotlightDialog_result_publicRoomAlias"
+        id="description-id"
+      >
+        room-id
+      </span>
+    </div>
+    <div
+      class="mx_SpotlightDialog_result_publicRoomDescription"
+      id="details-id"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomMemberCount"
+      >
+        666 Members
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`PublicRoomResultDetails Public room results 3`] = `
+<DocumentFragment>
+  <div
+    class="mx_SpotlightDialog_result_publicRoomDetails"
+  >
+    <div
+      class="mx_SpotlightDialog_result_publicRoomHeader"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomName"
+        id="label-id"
+      >
+        name over alias
+      </span>
+      <span
+        class="mx_SpotlightDialog_result_publicRoomAlias"
+        id="description-id"
+      >
+        canonical-alias
+      </span>
+    </div>
+    <div
+      class="mx_SpotlightDialog_result_publicRoomDescription"
+      id="details-id"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomMemberCount"
+      >
+        666 Members
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`PublicRoomResultDetails Public room results 4`] = `
+<DocumentFragment>
+  <div
+    class="mx_SpotlightDialog_result_publicRoomDetails"
+  >
+    <div
+      class="mx_SpotlightDialog_result_publicRoomHeader"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomName"
+        id="label-id"
+      >
+        with an overly long name that will be truncated for sure, you can't say anything...
+      </span>
+      <span
+        class="mx_SpotlightDialog_result_publicRoomAlias"
+        id="description-id"
+      >
+        room-id
+      </span>
+    </div>
+    <div
+      class="mx_SpotlightDialog_result_publicRoomDescription"
+      id="details-id"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomMemberCount"
+      >
+        666 Members
+      </span>
+       · 
+      <span
+        class="mx_SpotlightDialog_result_publicRoomTopic"
+      >
+        with a topic!
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`PublicRoomResultDetails Public room results 5`] = `
+<DocumentFragment>
+  <div
+    class="mx_SpotlightDialog_result_publicRoomDetails"
+  >
+    <div
+      class="mx_SpotlightDialog_result_publicRoomHeader"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomName"
+        id="label-id"
+      >
+        Unnamed room
+      </span>
+      <span
+        class="mx_SpotlightDialog_result_publicRoomAlias"
+        id="description-id"
+      >
+        room-id
+      </span>
+    </div>
+    <div
+      class="mx_SpotlightDialog_result_publicRoomDescription"
+      id="details-id"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomMemberCount"
+      >
+        666 Members
+      </span>
+       · 
+      <span
+        class="mx_SpotlightDialog_result_publicRoomTopic"
+      >
+        Very long topic aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`PublicRoomResultDetails renders 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SpotlightDialog_result_publicRoomDetails"
+  >
+    <div
+      class="mx_SpotlightDialog_result_publicRoomHeader"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomName"
+        id="label-id"
+      >
+        hello?
+      </span>
+      <span
+        class="mx_SpotlightDialog_result_publicRoomAlias"
+        id="description-id"
+      >
+        canonical-alias
+      </span>
+    </div>
+    <div
+      class="mx_SpotlightDialog_result_publicRoomDescription"
+      id="details-id"
+    >
+      <span
+        class="mx_SpotlightDialog_result_publicRoomMemberCount"
+      >
+        666 Members
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;

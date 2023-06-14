@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserMenu> when rendered should render as expected 1`] = `
+<div>
+  <div
+    class="mx_UserMenu"
+  >
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="User menu"
+      class="mx_AccessibleButton"
+      role="button"
+      tabindex="0"
+      title="User menu"
+    >
+      <div
+        class="mx_UserMenu_userAvatar"
+      >
+        <span
+          class="mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 20.8px; width: 32px; line-height: 32px;"
+          >
+            U
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            loading="lazy"
+            src="data:image/png;base64,00"
+            style="width: 32px; height: 32px;"
+          />
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`editor/deserialize html messages escapes angle brackets 1`] = `
+[
+  {
+    "text": "\\> \\\\<del>no formatting here\\\\</del>",
+    "type": "plain",
+  },
+]
+`;
+
+exports[`editor/deserialize html messages escapes asterisks 1`] = `
+[
+  {
+    "text": "\\*hello\\*",
+    "type": "plain",
+  },
+]
+`;
+
+exports[`editor/deserialize html messages escapes backslashes 1`] = `
+[
+  {
+    "text": "C:\\\\My Documents",
+    "type": "plain",
+  },
+]
+`;
+
+exports[`editor/deserialize html messages escapes backticks in code blocks 1`] = `
+[
+  {
+    "text": "\`\`this → \` is a backtick\`\`",
+    "type": "plain",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "\`\`\`\`",
+    "type": "plain",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "and here are 3 of them:",
+    "type": "plain",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "\`\`\`",
+    "type": "plain",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "\`\`\`\`",
+    "type": "plain",
+  },
+]
+`;
+
+exports[`editor/deserialize html messages escapes backticks outside of code blocks 1`] = `
+[
+  {
+    "text": "some \\\`backticks\\\`",
+    "type": "plain",
+  },
+]
+`;
+
+exports[`editor/deserialize html messages escapes square brackets 1`] = `
+[
+  {
+    "text": "\\[not an actual link\\](https://example.org)",
+    "type": "plain",
+  },
+]
+`;
+
+exports[`editor/deserialize html messages escapes underscores 1`] = `
+[
+  {
+    "text": "\\_\\_emphasis\\_\\_",
+    "type": "plain",
+  },
+]
+`;
+
+exports[`editor/deserialize html messages preserves nested formatting 1`] = `
+[
+  {
+    "text": "a<sub>b_c**d<u>e</u>**_</sub>",
+    "type": "plain",
+  },
+]
+`;
+
+exports[`editor/deserialize html messages preserves nested quotes 1`] = `
+[
+  {
+    "text": "> foo",
+    "type": "plain",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "> ",
+    "type": "plain",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "> > bar",
+    "type": "plain",
+  },
+]
+`;
+
+exports[`editor/deserialize html messages surrounds lists with newlines 1`] = `
+[
+  {
+    "text": "foo",
+    "type": "plain",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "- bar",
+    "type": "plain",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "
+",
+    "type": "newline",
+  },
+  {
+    "text": "baz",
+    "type": "plain",
+  },
+]
+`;

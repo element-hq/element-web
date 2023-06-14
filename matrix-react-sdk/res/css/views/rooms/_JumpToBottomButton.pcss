@@ -1,0 +1,74 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+@charset "utf-8";
+
+.mx_JumpToBottomButton {
+    z-index: 1000;
+    position: absolute;
+    /* 12 because height is 50 but button is only 38 = 12+(50-38) = 24 */
+    bottom: 12px;
+    right: 24px;
+    width: 38px;
+    /* give it a fixed height so the badge doesn't make */
+    /* it taller and pop upwards when visible */
+    height: 50px;
+    text-align: center;
+}
+
+.mx_JumpToBottomButton_badge {
+    position: relative;
+    top: -12px;
+    border-radius: 16px;
+    font-weight: bold;
+    font-size: $font-12px;
+    line-height: $font-14px;
+    text-align: center;
+    /* to be able to get it centered */
+    /* with text-align in parent */
+    display: inline-block;
+    padding: 0 4px;
+    color: $accent-fg-color;
+    background-color: $muted-fg-color;
+}
+
+.mx_JumpToBottomButton_highlight .mx_JumpToBottomButton_badge {
+    color: $secondary-accent-color;
+    background-color: $alert;
+}
+
+.mx_JumpToBottomButton_scrollDown {
+    position: relative;
+    display: block;
+    height: 38px;
+    border-radius: 19px;
+    box-sizing: border-box;
+    background: $background;
+    border: 1.3px solid $muted-fg-color;
+    cursor: pointer;
+}
+
+.mx_JumpToBottomButton_scrollDown::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    mask-image: url("$(res)/img/element-icons/message/chevron-up.svg");
+    mask-repeat: no-repeat;
+    mask-size: 20px;
+    mask-position: center 6px;
+    transform: rotate(180deg);
+    background: $muted-fg-color;
+}

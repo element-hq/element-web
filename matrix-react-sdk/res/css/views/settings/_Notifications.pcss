@@ -1,0 +1,104 @@
+/*
+Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserNotifSettings_grid {
+    width: calc(100% + 12px); /* +12px to line up center of 'Noisy' column with toggle switches */
+    display: grid;
+    grid-template-columns: auto repeat(3, 62px);
+    place-items: center center;
+    grid-gap: 8px;
+
+    /* Override StyledRadioButton default styles */
+    .mx_StyledRadioButton {
+        justify-content: center;
+
+        .mx_StyledRadioButton_content {
+            display: none;
+        }
+
+        .mx_StyledRadioButton_spacer {
+            display: none;
+        }
+    }
+
+    // left align section heading
+    .mx_SettingsSubsectionHeading {
+        justify-self: start;
+    }
+}
+
+.mx_UserNotifSettings_gridRowContainer {
+    display: contents;
+}
+
+.mx_UserNotifSettings_gridRow {
+    display: contents;
+}
+
+.mx_UserNotifSettings_gridRowLabel {
+    justify-self: start;
+    /* <legend> does not accept */
+    /* display: inline | inline-block */
+    /* force it inline using float */
+    float: left;
+}
+
+.mx_UserNotifSettings_gridColumnLabel {
+    color: $secondary-content;
+    font-size: $font-12px;
+    font-weight: var(--font-semi-bold);
+}
+.mx_UserNotifSettings_gridRowError {
+    // occupy full row
+    grid-column: 1/-1;
+    justify-self: start;
+    padding-right: 30%;
+    // collapse half of the grid-gap
+    margin-top: -$spacing-4;
+}
+
+.mx_UserNotifSettings_floatingSection {
+    margin-top: 40px;
+
+    & > div:first-child {
+        /* section header */
+        font-size: $font-18px;
+        font-weight: var(--font-semi-bold);
+    }
+
+    > table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-top: 8px;
+
+        tr > td:first-child {
+            /* Just for a bit of spacing */
+            padding-right: 8px;
+        }
+    }
+}
+
+.mx_UserNotifSettings_clearNotifsButton {
+    margin-top: 8px;
+}
+
+.mx_TagComposer {
+    margin-top: 35px; /* lots of distance from the last line of the table */
+}
+
+.mx_AccessibleButton.mx_NotificationSound_browse {
+    margin-right: 10px;
+}

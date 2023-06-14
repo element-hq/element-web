@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Caption /> renders an error message 1`] = `
+{
+  "container": <div>
+    <span
+      class="mx_Caption mx_Caption_error"
+      data-testid="test test id"
+    >
+      test
+    </span>
+  </div>,
+}
+`;
+
+exports[`<Caption /> renders plain text children 1`] = `
+{
+  "container": <div>
+    <span
+      class="mx_Caption"
+      data-testid="test test id"
+    >
+      test
+    </span>
+  </div>,
+}
+`;
+
+exports[`<Caption /> renders react children 1`] = `
+{
+  "container": <div>
+    <span
+      class="mx_Caption"
+      data-testid="test test id"
+    >
+      Test 
+      <b>
+        test but bold
+      </b>
+    </span>
+  </div>,
+}
+`;

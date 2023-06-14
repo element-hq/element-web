@@ -1,0 +1,187 @@
+/*
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* TODO: Consider unifying with general input styles in _light.pcss */
+
+.mx_Field {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    margin: 1em 0;
+    border-radius: 4px;
+    transition: border-color 0.25s;
+    border: 1px solid $input-border-color;
+}
+
+.mx_Field_prefix {
+    border-right: 1px solid $input-border-color;
+}
+
+.mx_Field_postfix {
+    border-left: 1px solid $input-border-color;
+}
+
+.mx_Field input,
+.mx_Field select,
+.mx_Field textarea {
+    font-family: inherit;
+    font-weight: normal;
+    font-size: $font-14px;
+    border: none;
+    /* Even without a border here, we still need this avoid overlapping the rounded */
+    /* corners on the field above. */
+    border-radius: 4px;
+    padding: 8px 9px;
+    color: $primary-content;
+    background-color: $background;
+    flex: 1;
+    min-width: 0;
+}
+
+.mx_Field select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+/* Can't add pseudo-elements to a select directly, so we use its parent. */
+.mx_Field_select::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    width: 10px;
+    height: 6px;
+    mask: url("$(res)/img/feather-customised/dropdown-arrow.svg");
+    mask-repeat: no-repeat;
+    background-color: $primary-content;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.mx_Field:focus-within {
+    border-color: $accent-alt;
+}
+
+.mx_Field input:focus,
+.mx_Field select:focus,
+.mx_Field textarea:focus {
+    outline: 0;
+}
+
+.mx_Field input::placeholder,
+.mx_Field textarea::placeholder {
+    transition: color 0.25s ease-in 0s;
+    color: transparent;
+}
+
+.mx_Field input:placeholder-shown:focus::placeholder,
+.mx_Field textarea:placeholder-shown:focus::placeholder,
+.mx_Field.mx_Field_placeholderIsHint input::placeholder {
+    transition: color 0.25s ease-in 0.1s;
+    color: $info-plinth-fg-color;
+}
+
+.mx_Field label {
+    transition: font-size 0.25s ease-out 0.1s, color 0.25s ease-out 0.1s, transform 0.25s ease-out 0.1s,
+        background-color 0.25s ease-out 0.1s;
+    background-color: transparent;
+    font-size: $font-14px;
+    transform: translateY(0);
+    position: absolute;
+    left: 0px;
+    margin: 7px 8px;
+    padding: 2px;
+    pointer-events: none; /* Allow clicks to fall through to the input */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 20px); /* 100% of parent minus margin and padding */
+}
+
+.mx_Field_labelAlwaysTopLeft label,
+.mx_Field select + label /* Always show a select's label on top to not collide with the value */,
+.mx_Field input:focus + label,
+.mx_Field input:not(:placeholder-shown) + label,
+.mx_Field textarea:focus + label,
+.mx_Field textarea:not(:placeholder-shown) + label {
+    transition: font-size 0.25s ease-out 0s, color 0.25s ease-out 0s, transform 0.25s ease-out 0s,
+        background-color 0.25s ease-out 0s;
+    font-size: $font-10px;
+    transform: translateY(-13px);
+    padding: 0 2px;
+    background-color: $background;
+    pointer-events: initial;
+}
+
+.mx_Field input:focus + label,
+.mx_Field select:focus + label,
+.mx_Field textarea:focus + label {
+    color: $accent-alt;
+}
+
+.mx_Field select:disabled,
+.mx_Field select:disabled + label,
+.mx_Field input:disabled,
+.mx_Field input:disabled + label,
+.mx_Field textarea:disabled,
+.mx_Field textarea:disabled + label {
+    background-color: $background;
+    color: $info-plinth-fg-color;
+}
+
+.mx_Field_valid {
+    &.mx_Field,
+    &.mx_Field:focus-within {
+        border-color: $accent;
+    }
+
+    &.mx_Field label,
+    &.mx_Field:focus-within label {
+        color: $accent;
+    }
+}
+
+.mx_Field_invalid {
+    &.mx_Field,
+    &.mx_Field:focus-within {
+        border-color: $alert;
+    }
+
+    &.mx_Field label,
+    &.mx_Field:focus-within label {
+        color: $alert;
+    }
+}
+
+.mx_Field_tooltip {
+    width: 200px;
+}
+
+.mx_Field_tooltip.mx_Field_valid {
+    animation: mx_fadeout 1s 2s forwards;
+}
+
+/* Customise other components when placed inside a Field */
+
+.mx_Field .mx_Dropdown_input {
+    border: initial;
+    border-radius: initial;
+}
+
+.mx_Field .mx_CountryDropdown {
+    width: $font-78px;
+}

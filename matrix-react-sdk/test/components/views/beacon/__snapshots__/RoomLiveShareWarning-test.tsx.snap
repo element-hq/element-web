@@ -1,0 +1,124 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available renders correctly with one live beacon in room 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomLiveShareWarning"
+  >
+    <div
+      class="mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon"
+    />
+    <span
+      class="mx_RoomLiveShareWarning_label"
+    >
+      You are sharing your live location
+    </span>
+    <span
+      class="mx_LiveTimeRemaining"
+      data-testid="room-live-share-expiry"
+    >
+      1h left
+    </span>
+    <button
+      class="mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+      data-testid="room-live-share-primary-button"
+      role="button"
+      tabindex="0"
+    >
+      Stop
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available renders correctly with two live beacons in room 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomLiveShareWarning"
+  >
+    <div
+      class="mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon"
+    />
+    <span
+      class="mx_RoomLiveShareWarning_label"
+    >
+      You are sharing your live location
+    </span>
+    <span
+      class="mx_LiveTimeRemaining"
+      data-testid="room-live-share-expiry"
+    >
+      12h left
+    </span>
+    <button
+      class="mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+      data-testid="room-live-share-primary-button"
+      role="button"
+      tabindex="0"
+    >
+      Stop
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available stopping beacons displays error when stop sharing fails 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomLiveShareWarning"
+  >
+    <div
+      class="mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon mx_StyledLiveBeaconIcon_error"
+    />
+    <span
+      class="mx_RoomLiveShareWarning_label"
+    >
+      An error occurred while stopping your live location, please try again
+    </span>
+    <button
+      class="mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+      data-testid="room-live-share-primary-button"
+      role="button"
+      tabindex="0"
+    >
+      Retry
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available with location publish errors displays location publish error when mounted with location publish errors 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomLiveShareWarning"
+  >
+    <div
+      class="mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon mx_StyledLiveBeaconIcon_error"
+    />
+    <span
+      class="mx_RoomLiveShareWarning_label"
+    >
+      An error occurred whilst sharing your live location, please try again
+    </span>
+    <button
+      class="mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+      data-testid="room-live-share-primary-button"
+      role="button"
+      tabindex="0"
+    >
+      Retry
+    </button>
+    <button
+      class="mx_AccessibleButton mx_RoomLiveShareWarning_closeButton"
+      data-testid="room-live-share-wire-error-close-button"
+      role="button"
+      tabindex="0"
+      title="Stop and close"
+    >
+      <div
+        class="mx_RoomLiveShareWarning_closeButtonIcon"
+      />
+    </button>
+  </div>
+</DocumentFragment>
+`;

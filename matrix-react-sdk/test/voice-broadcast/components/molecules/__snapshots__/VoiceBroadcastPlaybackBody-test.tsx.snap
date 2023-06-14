@@ -1,0 +1,756 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        data-testid="room-avatar"
+      >
+        room avatar: 
+        My room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room_wrapper"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
+        </div>
+        <div
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span>
+            @user:example.com
+          </span>
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 14px; height: 14px;"
+            />
+          </div>
+          Buffering…
+        </div>
+      </div>
+      <div
+        class="mx_LiveBadge"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        Live
+      </div>
+    </div>
+    <div
+      class="mx_VoiceBroadcastBody_controls"
+    >
+      <div
+        aria-label="30s backward"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary_content"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_24"
+        />
+      </div>
+      <div
+        aria-label="pause voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_12"
+        />
+      </div>
+      <div
+        aria-label="30s forward"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary_content"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_24"
+        />
+      </div>
+    </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
+    <div
+      class="mx_VoiceBroadcastBody_timerow"
+    >
+      <time
+        class="mx_Clock"
+        datetime="PT0S"
+      >
+        00:00
+      </time>
+      <time
+        class="mx_Clock"
+        datetime="-PT23M42S"
+      >
+        -23:42
+      </time>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastPlaybackBody when rendering a pause/not-live broadcast should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        data-testid="room-avatar"
+      >
+        room avatar: 
+        My room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room_wrapper"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
+        </div>
+        <div
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span>
+            @user:example.com
+          </span>
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          Voice broadcast
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_VoiceBroadcastBody_controls"
+    >
+      <div
+        aria-label="30s backward"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary_content"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_24"
+        />
+      </div>
+      <div
+        aria-label="resume voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl mx_VoiceBroadcastControl-play"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+      </div>
+      <div
+        aria-label="30s forward"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary_content"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_24"
+        />
+      </div>
+    </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
+    <div
+      class="mx_VoiceBroadcastBody_timerow"
+    >
+      <time
+        class="mx_Clock"
+        datetime="PT0S"
+      >
+        00:00
+      </time>
+      <time
+        class="mx_Clock"
+        datetime="-PT23M42S"
+      >
+        -23:42
+      </time>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast in pip mode should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          data-testid="room-avatar"
+        >
+          room avatar: 
+          My room
+        </div>
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_AccessibleButton"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room_wrapper"
+          >
+            <div
+              class="mx_VoiceBroadcastHeader_room"
+            >
+              My room
+            </div>
+          </div>
+        </div>
+        <div
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span>
+            @user:example.com
+          </span>
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          Voice broadcast
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_VoiceBroadcastBody_controls"
+    >
+      <div
+        aria-label="30s backward"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary_content"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_24"
+        />
+      </div>
+      <div
+        aria-label="pause voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_12"
+        />
+      </div>
+      <div
+        aria-label="30s forward"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary_content"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_24"
+        />
+      </div>
+    </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
+    <div
+      class="mx_VoiceBroadcastBody_timerow"
+    >
+      <time
+        class="mx_Clock"
+        datetime="PT0S"
+      >
+        00:00
+      </time>
+      <time
+        class="mx_Clock"
+        datetime="-PT23M42S"
+      >
+        -23:42
+      </time>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        data-testid="room-avatar"
+      >
+        room avatar: 
+        My room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room_wrapper"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
+        </div>
+        <div
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span>
+            @user:example.com
+          </span>
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          Voice broadcast
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_VoiceBroadcastBody_controls"
+    >
+      <div
+        aria-label="30s backward"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary_content"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_24"
+        />
+      </div>
+      <div
+        aria-label="pause voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_12"
+        />
+      </div>
+      <div
+        aria-label="30s forward"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary_content"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_24"
+        />
+      </div>
+    </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
+    <div
+      class="mx_VoiceBroadcastBody_timerow"
+    >
+      <time
+        class="mx_Clock"
+        datetime="PT0S"
+      >
+        00:00
+      </time>
+      <time
+        class="mx_Clock"
+        datetime="-PT23M42S"
+      >
+        -23:42
+      </time>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastPlaybackBody when rendering a playing/live broadcast should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        data-testid="room-avatar"
+      >
+        room avatar: 
+        My room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room_wrapper"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
+        </div>
+        <div
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span>
+            @user:example.com
+          </span>
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          Voice broadcast
+        </div>
+      </div>
+      <div
+        class="mx_LiveBadge"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        Live
+      </div>
+    </div>
+    <div
+      class="mx_VoiceBroadcastBody_controls"
+    >
+      <div
+        aria-label="30s backward"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary_content"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_24"
+        />
+      </div>
+      <div
+        aria-label="pause voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_12"
+        />
+      </div>
+      <div
+        aria-label="30s forward"
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary_content"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_24"
+        />
+      </div>
+    </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
+    <div
+      class="mx_VoiceBroadcastBody_timerow"
+    >
+      <time
+        class="mx_Clock"
+        datetime="PT0S"
+      >
+        00:00
+      </time>
+      <time
+        class="mx_Clock"
+        datetime="-PT23M42S"
+      >
+        -23:42
+      </time>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastPlaybackBody when rendering a stopped broadcast should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        data-testid="room-avatar"
+      >
+        room avatar: 
+        My room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room_wrapper"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
+        </div>
+        <div
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span>
+            @user:example.com
+          </span>
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          Voice broadcast
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_VoiceBroadcastBody_controls"
+    >
+      <div
+        aria-label="play voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl mx_VoiceBroadcastControl-play"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+      </div>
+    </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
+    <div
+      class="mx_VoiceBroadcastBody_timerow"
+    >
+      <time
+        class="mx_Clock"
+        datetime="PT0S"
+      >
+        00:00
+      </time>
+      <time
+        class="mx_Clock"
+        datetime="-PT23M42S"
+      >
+        -23:42
+      </time>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastPlaybackBody when rendering an error broadcast should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        data-testid="room-avatar"
+      >
+        room avatar: 
+        My room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room_wrapper"
+        >
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
+        </div>
+        <div
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span>
+            @user:example.com
+          </span>
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          Voice broadcast
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_VoiceBroadcastRecordingConnectionError"
+    >
+      <div
+        class="mx_Icon mx_Icon_16"
+      />
+      Unable to play this voice broadcast
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,74 @@
+/*
+Copyright 2018 Vector Creations Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ReplyChain {
+    margin: 0; // Reset default blockquote margin
+    padding-left: 10px;
+    border-left: 2px solid var(--username-color);
+    border-radius: 2px;
+
+    .mx_ReplyChain_show {
+        &.mx_AccessibleButton_kind_link_inline {
+            white-space: nowrap; /* Enforce 'In reply to' to be a single line */
+            color: $secondary-content;
+            transition: color ease 0.15s;
+
+            &:hover {
+                color: $primary-content;
+            }
+        }
+    }
+
+    &.mx_ReplyChain_color1 {
+        --username-color: $username-variant1-color;
+    }
+
+    &.mx_ReplyChain_color2 {
+        --username-color: $username-variant2-color;
+    }
+
+    &.mx_ReplyChain_color3 {
+        --username-color: $username-variant3-color;
+    }
+
+    &.mx_ReplyChain_color4 {
+        --username-color: $username-variant4-color;
+    }
+
+    &.mx_ReplyChain_color5 {
+        --username-color: $username-variant5-color;
+    }
+
+    &.mx_ReplyChain_color6 {
+        --username-color: $username-variant6-color;
+    }
+
+    &.mx_ReplyChain_color7 {
+        --username-color: $username-variant7-color;
+    }
+
+    &.mx_ReplyChain_color8 {
+        --username-color: $username-variant8-color;
+    }
+}
+
+/* Percy screenshot test specific CSS */
+@media only percy {
+    .mx_ReplyChain {
+        /* Override the colour in percy tests for screenshot consistency */
+        border-left-color: var(--percy-color-replyChain-border) !important;
+    }
+}

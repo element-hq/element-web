@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LoginWithQRSection /> should not render MSC3886 + MSC3882 r1 disabled 1`] = `<div />`;
+
+exports[`<LoginWithQRSection /> should not render no support at all 1`] = `<div />`;
+
+exports[`<LoginWithQRSection /> should not render only MSC3882 enabled 1`] = `<div />`;
+
+exports[`<LoginWithQRSection /> should not render only MSC3882 r1 enabled 1`] = `<div />`;
+
+exports[`<LoginWithQRSection /> should render panel MSC3882 + MSC3886 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Sign in with QR code
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_LoginWithQRSection"
+      >
+        <p
+          class="mx_SettingsTab_subsectionText"
+        >
+          You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.
+        </p>
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+          role="button"
+          tabindex="0"
+        >
+          Show QR code
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRSection /> should render panel MSC3882 r1 + MSC3886 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Sign in with QR code
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_LoginWithQRSection"
+      >
+        <p
+          class="mx_SettingsTab_subsectionText"
+        >
+          You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.
+        </p>
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+          role="button"
+          tabindex="0"
+        >
+          Show QR code
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

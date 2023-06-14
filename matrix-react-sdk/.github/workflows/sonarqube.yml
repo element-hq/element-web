@@ -1,0 +1,16 @@
+name: SonarQube
+on:
+    workflow_run:
+        workflows: ["Tests"]
+        types:
+            - completed
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch }}
+    cancel-in-progress: true
+jobs:
+    sonarqube:
+        name: 🩻 SonarQube
+        if: github.event.workflow_run.event != 'merge_group'
+        uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
+        secrets:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -1,0 +1,196 @@
+/*
+Copyright 2017 Vector Creations Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_AccessibleButton {
+    cursor: pointer;
+
+    &.mx_AccessibleButton_disabled {
+        cursor: not-allowed;
+
+        &.mx_AccessibleButton_kind_primary,
+        &.mx_AccessibleButton_kind_primary_outline,
+        &.mx_AccessibleButton_kind_primary_sm,
+        &.mx_AccessibleButton_kind_link,
+        &.mx_AccessibleButton_kind_link_accent,
+        &.mx_AccessibleButton_kind_link_inline,
+        &.mx_AccessibleButton_kind_danger_inline,
+        &.mx_AccessibleButton_kind_content_inline,
+        &.mx_AccessibleButton_kind_link_sm {
+            opacity: 0.4;
+        }
+    }
+
+    &.mx_AccessibleButton_hasKind {
+        padding: 7px 18px;
+        text-align: center;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: $font-14px;
+        border: none; /* override default <button /> styles */
+        word-break: keep-all; /* prevent button text in Chinese/Japanese/Korean (CJK) from being collapsed */
+
+        &.mx_AccessibleButton_kind_primary_sm,
+        &.mx_AccessibleButton_kind_danger_sm,
+        &.mx_AccessibleButton_kind_link_sm {
+            padding: 5px 12px;
+        }
+
+        &.mx_AccessibleButton_kind_primary_sm {
+            color: $button-primary-fg-color;
+            background-color: $accent;
+        }
+
+        &.mx_AccessibleButton_kind_danger_sm {
+            color: $button-danger-fg-color;
+            background-color: $alert;
+        }
+
+        &.mx_AccessibleButton_kind_link_sm {
+            color: $accent;
+        }
+
+        &.mx_AccessibleButton_kind_confirm_sm {
+            background-color: $accent;
+
+            &::before {
+                mask-image: url("$(res)/img/feather-customised/check.svg");
+            }
+        }
+
+        &.mx_AccessibleButton_kind_cancel_sm {
+            background-color: $alert;
+
+            &::before {
+                mask-image: url("$(res)/img/feather-customised/x.svg");
+            }
+        }
+
+        &.mx_AccessibleButton_kind_icon {
+            padding: 0;
+            height: 32px;
+            width: 32px;
+        }
+    }
+
+    &.mx_AccessibleButton_kind_primary,
+    &.mx_AccessibleButton_kind_primary_outline,
+    &.mx_AccessibleButton_kind_secondary {
+        font-weight: var(--font-semi-bold);
+    }
+
+    &.mx_AccessibleButton_kind_primary,
+    &.mx_AccessibleButton_kind_primary_outline {
+        border: 1px solid $accent;
+    }
+
+    &.mx_AccessibleButton_kind_primary {
+        color: $button-primary-fg-color;
+        background-color: $accent;
+    }
+
+    &.mx_AccessibleButton_kind_primary_outline {
+        color: $accent;
+        background-color: $button-secondary-bg-color;
+    }
+
+    &.mx_AccessibleButton_kind_secondary {
+        color: $accent;
+    }
+
+    &.mx_AccessibleButton_kind_secondary_content {
+        color: $secondary-content;
+    }
+
+    &.mx_AccessibleButton_kind_danger {
+        color: $button-danger-fg-color;
+        background-color: $alert;
+
+        &.mx_AccessibleButton_disabled {
+            color: $button-danger-disabled-fg-color;
+            background-color: $button-danger-disabled-bg-color;
+        }
+    }
+
+    &.mx_AccessibleButton_kind_danger_outline {
+        color: $alert;
+        background-color: transparent;
+        border: 1px solid $alert;
+
+        &.mx_AccessibleButton_disabled {
+            color: $button-danger-disabled-bg-color;
+            border-color: $button-danger-disabled-bg-color;
+        }
+    }
+
+    &.mx_AccessibleButton_kind_danger_sm {
+        &.mx_AccessibleButton_disabled {
+            color: $button-danger-disabled-fg-color;
+            background-color: $button-danger-disabled-bg-color;
+        }
+    }
+
+    &.mx_AccessibleButton_kind_link,
+    &.mx_AccessibleButton_kind_link_inline,
+    &.mx_AccessibleButton_kind_danger_inline,
+    &.mx_AccessibleButton_kind_content_inline {
+        font-size: inherit;
+        font-weight: normal;
+        line-height: inherit;
+        padding: 0;
+    }
+
+    &.mx_AccessibleButton_kind_link,
+    &.mx_AccessibleButton_kind_link_inline {
+        color: $accent;
+    }
+
+    &.mx_AccessibleButton_kind_danger_inline {
+        color: $alert;
+    }
+
+    &.mx_AccessibleButton_kind_content_inline {
+        color: $primary-content;
+    }
+
+    &.mx_AccessibleButton_kind_link_inline,
+    &.mx_AccessibleButton_kind_danger_inline,
+    &.mx_AccessibleButton_kind_content_inline {
+        display: inline;
+    }
+
+    &.mx_AccessibleButton_kind_confirm_sm,
+    &.mx_AccessibleButton_kind_cancel_sm {
+        padding: 0px;
+        width: 16px;
+        height: 16px;
+        border-radius: 100%;
+        position: relative;
+        display: block;
+
+        &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            inset: 0;
+            background-color: #ffffff;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: 80%;
+        }
+    }
+}

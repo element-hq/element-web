@@ -1,0 +1,441 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SpacePanel {
+    --activeBackground-color: $panel-actions;
+    --activeBorder-color: $primary-content;
+    --activeBorder-transparent-gap: 1px;
+    --gutterSize: 16px;
+    --height-nested: 24px;
+    --height-topLevel: 32px;
+
+    background-color: $spacePanel-bg-color;
+    flex: 0 0 auto;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    /* Fix for the blurred avatar-background */
+    z-index: 1;
+
+    /* Create another flexbox so the Panel fills the container */
+    display: flex;
+    flex-direction: column;
+
+    .mx_SpacePanel_toggleCollapse {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background-color: $tertiary-content;
+        top: 19px; /* v-align with avatar */
+        right: -8px;
+
+        &::before {
+            content: "";
+            position: absolute;
+            width: inherit;
+            height: inherit;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: $background;
+            mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+            transform: rotate(270deg);
+        }
+
+        &:not(.expanded) {
+            opacity: 0;
+
+            &::before {
+                mask-position: center 1px;
+            }
+        }
+
+        &.expanded::before {
+            transform: rotate(90deg);
+        }
+    }
+
+    &:hover .mx_SpacePanel_toggleCollapse {
+        opacity: 1;
+    }
+
+    ul {
+        margin: 0;
+        list-style: none;
+        padding: 0;
+    }
+
+    .mx_SpaceButton_toggleCollapse {
+        cursor: pointer;
+    }
+
+    .mx_SpaceItem_dragging {
+        .mx_SpaceButton_toggleCollapse {
+            visibility: hidden;
+        }
+    }
+
+    .mx_SpaceItem {
+        display: inline-flex;
+        flex-flow: wrap;
+
+        &.mx_SpaceItem_narrow {
+            align-self: baseline;
+        }
+    }
+
+    .mx_SpaceItem.collapsed {
+        & > .mx_SpaceButton > .mx_SpaceButton_toggleCollapse {
+            padding: 0 10px;
+            margin: 0 -10px;
+            transform: rotate(-90deg);
+        }
+
+        & > .mx_SpaceTreeLevel {
+            display: none;
+        }
+    }
+
+    .mx_SpaceItem_new {
+        position: relative;
+    }
+
+    .mx_SpaceItem:not(.hasSubSpaces) > .mx_SpaceButton {
+        margin-left: var(--gutterSize);
+        min-width: 40px;
+    }
+
+    .mx_SpaceButton {
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        padding: 4px 4px 4px 0;
+        width: 100%;
+        cursor: pointer;
+
+        &.mx_SpaceButton_active {
+            &:not(.mx_SpaceButton_narrow) .mx_SpaceButton_selectionWrapper {
+                background-color: var(--activeBackground-color);
+            }
+
+            &.mx_SpaceButton_narrow .mx_SpaceButton_selectionWrapper {
+                padding: var(--activeBorder-transparent-gap);
+                border: 3px var(--activeBorder-color) solid;
+            }
+        }
+
+        .mx_SpaceButton_selectionWrapper {
+            position: relative;
+            display: flex;
+            flex: 1;
+            align-items: center;
+            border-radius: 12px;
+            padding: 4px;
+            width: calc(100% - 32px);
+            min-width: 0;
+        }
+
+        .mx_SpaceButton_name {
+            flex: 1;
+            margin-left: 8px;
+            white-space: nowrap;
+            display: block;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-size: $font-14px;
+            line-height: $font-18px;
+        }
+
+        .mx_SpaceButton_toggleCollapse {
+            width: var(--gutterSize);
+            padding: 10px 0;
+            min-width: var(--gutterSize);
+            height: 20px;
+            mask-position: center;
+            mask-size: 20px;
+            mask-repeat: no-repeat;
+            background-color: $tertiary-content;
+            mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+        }
+
+        .mx_SpaceButton_icon {
+            width: var(--height-topLevel);
+            min-width: var(--height-topLevel);
+            height: var(--height-topLevel);
+            border-radius: 8px;
+            position: relative;
+
+            &::before {
+                position: absolute;
+                content: "";
+                width: var(--height-topLevel);
+                height: var(--height-topLevel);
+                top: 0;
+                left: 0;
+                mask-position: center;
+                mask-repeat: no-repeat;
+                mask-size: 18px;
+            }
+        }
+
+        &.mx_SpaceButton_home,
+        &.mx_SpaceButton_favourites,
+        &.mx_SpaceButton_people,
+        &.mx_SpaceButton_orphans {
+            .mx_SpaceButton_icon {
+                background-color: $panel-actions;
+
+                &::before {
+                    background-color: $secondary-content;
+                }
+            }
+        }
+
+        &.mx_SpaceButton_home .mx_SpaceButton_icon::before {
+            mask-image: url("$(res)/img/element-icons/home.svg");
+        }
+
+        &.mx_SpaceButton_favourites .mx_SpaceButton_icon::before {
+            mask-image: url("$(res)/img/element-icons/roomlist/favorite.svg");
+        }
+
+        &.mx_SpaceButton_people .mx_SpaceButton_icon::before {
+            mask-image: url("$(res)/img/element-icons/room/members.svg");
+        }
+
+        &.mx_SpaceButton_orphans .mx_SpaceButton_icon::before {
+            mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+        }
+
+        &.mx_SpaceButton_new .mx_SpaceButton_icon {
+            &::before {
+                background-color: $primary-content;
+                mask-image: url("$(res)/img/element-icons/plus.svg");
+                transition: all 0.2s ease-in-out; /* TODO transition */
+            }
+        }
+
+        &.mx_SpaceButton_newCancel .mx_SpaceButton_icon::before {
+            transform: rotate(45deg);
+        }
+
+        .mx_BaseAvatar_image {
+            border-radius: 8px;
+        }
+
+        .mx_SpaceButton_menuButton {
+            width: 20px;
+            min-width: 20px; /* yay flex */
+            height: 20px;
+            margin-top: auto;
+            margin-bottom: auto;
+            display: none;
+            position: absolute;
+            right: 4px;
+
+            &::before {
+                top: 3px;
+                left: 2px;
+                content: "";
+                width: 16px;
+                height: 16px;
+                position: absolute;
+                mask-position: center;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                mask-image: url("$(res)/img/element-icons/context-menu.svg");
+                background: $primary-content;
+            }
+        }
+    }
+
+    .mx_SpaceTreeLevel {
+        display: flex;
+        flex-direction: column;
+        max-width: 250px;
+        min-width: 0;
+        flex-grow: 1;
+
+        .mx_BaseAvatar:not(.mx_UserMenu_userAvatar_BaseAvatar) .mx_BaseAvatar_initial {
+            color: $secondary-content;
+            border-radius: 8px;
+            background-color: $panel-actions;
+            font-size: $font-15px !important; /* override inline style */
+            font-weight: var(--font-semi-bold);
+            line-height: $font-18px;
+
+            & + .mx_BaseAvatar_image {
+                visibility: hidden;
+            }
+        }
+
+        .mx_SpaceTreeLevel {
+            // Indent subspaces
+            padding-left: 16px;
+        }
+    }
+
+    .mx_SpaceButton_avatarWrapper {
+        position: relative;
+    }
+
+    .mx_SpacePanel_badgeContainer {
+        /* Create a flexbox to make aligning dot badges easier */
+        display: flex;
+        align-items: center;
+        position: absolute;
+        right: -3px;
+        top: -3px;
+
+        .mx_NotificationBadge {
+            margin: 0 2px; /* centering */
+            background-clip: padding-box;
+        }
+
+        .mx_NotificationBadge_dot {
+            /* make the smaller dot occupy the same width for centering */
+            margin: 0 -1px 0 0;
+            border: 3px solid $spacePanel-bg-color;
+        }
+
+        .mx_NotificationBadge_2char,
+        .mx_NotificationBadge_3char {
+            margin: -5px -5px 0 0;
+            border: 2px solid $spacePanel-bg-color;
+        }
+    }
+
+    .mx_SpaceButton:hover,
+    .mx_SpaceButton:focus-within,
+    .mx_SpaceButton_hasMenuOpen {
+        &:not(.mx_SpaceButton_narrow):not(.mx_SpaceButton_invite) .mx_SpaceButton_menuButton {
+            display: block;
+        }
+    }
+
+    .mx_SpaceItem:not(.mx_SpaceItem_new) {
+        .mx_SpaceButton:hover,
+        .mx_SpaceButton:focus-within,
+        .mx_SpaceButton_hasMenuOpen {
+            &:not(.mx_SpaceButton_narrow):not(.mx_SpaceButton_invite) .mx_SpaceButton_name {
+                max-width: calc(100% - 56px);
+            }
+        }
+    }
+
+    /* root space buttons are bigger and not indented */
+    & > .mx_AutoHideScrollbar {
+        flex: 1;
+        padding: 0 8px 16px 0;
+
+        & > .mx_SpaceButton {
+            height: var(--height-topLevel);
+
+            &.mx_SpaceButton_active::before {
+                height: var(--height-topLevel);
+            }
+        }
+
+        & > ul {
+            padding-left: 0;
+        }
+
+        &.mx_IndicatorScrollbar_topOverflow {
+            mask-image: linear-gradient(180deg, transparent, black 5%);
+        }
+
+        &.mx_IndicatorScrollbar_bottomOverflow {
+            mask-image: linear-gradient(180deg, black, black 95%, transparent);
+        }
+
+        &.mx_IndicatorScrollbar_topOverflow.mx_IndicatorScrollbar_bottomOverflow {
+            mask-image: linear-gradient(180deg, transparent, black 5%, black 95%, transparent);
+        }
+    }
+
+    .mx_UserMenu {
+        padding: 0 2px 8px;
+        border-bottom: 1px solid $quinary-content;
+        margin: 12px 14px 4px 18px;
+    }
+}
+
+.mx_SpacePanel_contextMenu {
+    max-width: 360px;
+
+    .mx_SpacePanel_contextMenu_header {
+        margin: 12px 16px 12px;
+        font-weight: var(--font-semi-bold);
+        font-size: $font-15px;
+        line-height: $font-18px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .mx_SpacePanel_iconHome::before {
+        mask-image: url("$(res)/img/element-icons/home.svg");
+    }
+
+    .mx_SpacePanel_iconInvite::before {
+        mask-image: url("$(res)/img/element-icons/room/invite.svg");
+    }
+
+    .mx_SpacePanel_iconSettings::before {
+        mask-image: url("$(res)/img/element-icons/settings.svg");
+    }
+
+    .mx_SpacePanel_iconLeave::before {
+        mask-image: url("$(res)/img/element-icons/leave.svg");
+    }
+
+    .mx_SpacePanel_iconMembers::before {
+        mask-image: url("$(res)/img/element-icons/room/members.svg");
+    }
+
+    .mx_SpacePanel_iconPlus::before {
+        mask-image: url("$(res)/img/element-icons/plus.svg");
+    }
+
+    .mx_SpacePanel_iconExplore::before {
+        mask-image: url("$(res)/img/element-icons/roomlist/hash-search.svg");
+    }
+
+    .mx_SpacePanel_iconPreferences::before {
+        mask-image: url("$(res)/img/element-icons/settings/preference.svg");
+    }
+
+    .mx_SpacePanel_noIcon {
+        display: none;
+
+        & + .mx_IconizedContextMenu_label {
+            padding-left: 5px !important; /* override default iconized label style to align with header */
+        }
+    }
+
+    .mx_SpacePanel_contextMenu_separatorLabel {
+        color: $tertiary-content;
+        font-size: $font-10px;
+        line-height: $font-12px;
+        font-weight: var(--font-semi-bold);
+        //margin-left: 8px;
+    }
+}
+
+.mx_SpacePanel_sharePublicSpace {
+    margin: 0;
+}

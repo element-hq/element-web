@@ -1,0 +1,560 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PollCreateDialog renders a blank poll 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_CompoundDialog_content"
+    aria-labelledby="mx_CompoundDialog_title"
+    class="mx_CompoundDialog mx_ScrollableBaseDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_CompoundDialog_header"
+    >
+      <h1>
+        Create poll
+      </h1>
+      <div
+        aria-label="Close dialog"
+        class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+        role="button"
+        tabindex="0"
+      />
+    </div>
+    <form
+      class="mx_CompoundDialog_form"
+    >
+      <div
+        class="mx_CompoundDialog_content"
+      >
+        <div
+          class="mx_PollCreateDialog"
+        >
+          <h2>
+            Poll type
+          </h2>
+          <div
+            class="mx_Field mx_Field_select"
+          >
+            <select
+              id="mx_Field_1"
+              type="text"
+            >
+              <option
+                value="org.matrix.msc3381.poll.disclosed"
+              >
+                Open poll
+              </option>
+              <option
+                value="org.matrix.msc3381.poll.undisclosed"
+              >
+                Closed poll
+              </option>
+            </select>
+            <label
+              for="mx_Field_1"
+            />
+          </div>
+          <p>
+            Voters see results as soon as they have voted
+          </p>
+          <h2>
+            What is your poll question or topic?
+          </h2>
+          <div
+            class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+          >
+            <input
+              id="poll-topic-input"
+              label="Question or topic"
+              maxlength="340"
+              placeholder="Write something…"
+              type="text"
+              value=""
+            />
+            <label
+              for="poll-topic-input"
+            >
+              Question or topic
+            </label>
+          </div>
+          <h2>
+            Create options
+          </h2>
+          <div
+            class="mx_PollCreateDialog_option"
+          >
+            <div
+              class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+            >
+              <input
+                id="pollcreate_option_0"
+                label="Option 1"
+                maxlength="340"
+                placeholder="Write an option"
+                type="text"
+                value=""
+              />
+              <label
+                for="pollcreate_option_0"
+              >
+                Option 1
+              </label>
+            </div>
+            <div
+              class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+              role="button"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="mx_PollCreateDialog_option"
+          >
+            <div
+              class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+            >
+              <input
+                id="pollcreate_option_1"
+                label="Option 2"
+                maxlength="340"
+                placeholder="Write an option"
+                type="text"
+                value=""
+              />
+              <label
+                for="pollcreate_option_1"
+              >
+                Option 2
+              </label>
+            </div>
+            <div
+              class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+              role="button"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+            role="button"
+            tabindex="0"
+          >
+            Add option
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_CompoundDialog_footer"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+          role="button"
+          tabindex="0"
+        >
+          Cancel
+        </div>
+        <button
+          aria-disabled="true"
+          class="mx_AccessibleButton mx_Dialog_nonDialogButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+          disabled=""
+          role="button"
+          tabindex="0"
+          type="submit"
+        >
+          Create Poll
+        </button>
+      </div>
+    </form>
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`PollCreateDialog renders a question and some options 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_CompoundDialog_content"
+    aria-labelledby="mx_CompoundDialog_title"
+    class="mx_CompoundDialog mx_ScrollableBaseDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_CompoundDialog_header"
+    >
+      <h1>
+        Create poll
+      </h1>
+      <div
+        aria-label="Close dialog"
+        class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+        role="button"
+        tabindex="0"
+      />
+    </div>
+    <form
+      class="mx_CompoundDialog_form"
+    >
+      <div
+        class="mx_CompoundDialog_content"
+      >
+        <div
+          class="mx_PollCreateDialog"
+        >
+          <h2>
+            Poll type
+          </h2>
+          <div
+            class="mx_Field mx_Field_select"
+          >
+            <select
+              id="mx_Field_4"
+              type="text"
+            >
+              <option
+                value="org.matrix.msc3381.poll.disclosed"
+              >
+                Open poll
+              </option>
+              <option
+                value="org.matrix.msc3381.poll.undisclosed"
+              >
+                Closed poll
+              </option>
+            </select>
+            <label
+              for="mx_Field_4"
+            />
+          </div>
+          <p>
+            Voters see results as soon as they have voted
+          </p>
+          <h2>
+            What is your poll question or topic?
+          </h2>
+          <div
+            class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+          >
+            <input
+              id="poll-topic-input"
+              label="Question or topic"
+              maxlength="340"
+              placeholder="Write something…"
+              type="text"
+              value="How many turnips is the optimal number?"
+            />
+            <label
+              for="poll-topic-input"
+            >
+              Question or topic
+            </label>
+          </div>
+          <h2>
+            Create options
+          </h2>
+          <div
+            class="mx_PollCreateDialog_option"
+          >
+            <div
+              class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+            >
+              <input
+                id="pollcreate_option_0"
+                label="Option 1"
+                maxlength="340"
+                placeholder="Write an option"
+                type="text"
+                value="As many as my neighbour"
+              />
+              <label
+                for="pollcreate_option_0"
+              >
+                Option 1
+              </label>
+            </div>
+            <div
+              class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+              role="button"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="mx_PollCreateDialog_option"
+          >
+            <div
+              class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+            >
+              <input
+                id="pollcreate_option_1"
+                label="Option 2"
+                maxlength="340"
+                placeholder="Write an option"
+                type="text"
+                value="The question is meaningless"
+              />
+              <label
+                for="pollcreate_option_1"
+              >
+                Option 2
+              </label>
+            </div>
+            <div
+              class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+              role="button"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="mx_PollCreateDialog_option"
+          >
+            <div
+              class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+            >
+              <input
+                id="pollcreate_option_2"
+                label="Option 3"
+                maxlength="340"
+                placeholder="Write an option"
+                type="text"
+                value="Mu"
+              />
+              <label
+                for="pollcreate_option_2"
+              >
+                Option 3
+              </label>
+            </div>
+            <div
+              class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+              role="button"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+            role="button"
+            tabindex="0"
+          >
+            Add option
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_CompoundDialog_footer"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+          role="button"
+          tabindex="0"
+        >
+          Cancel
+        </div>
+        <button
+          class="mx_AccessibleButton mx_Dialog_nonDialogButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+          role="button"
+          tabindex="0"
+          type="submit"
+        >
+          Create Poll
+        </button>
+      </div>
+    </form>
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`PollCreateDialog renders info from a previous event 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_CompoundDialog_content"
+    aria-labelledby="mx_CompoundDialog_title"
+    class="mx_CompoundDialog mx_ScrollableBaseDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_CompoundDialog_header"
+    >
+      <h1>
+        Edit poll
+      </h1>
+      <div
+        aria-label="Close dialog"
+        class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+        role="button"
+        tabindex="0"
+      />
+    </div>
+    <form
+      class="mx_CompoundDialog_form"
+    >
+      <div
+        class="mx_CompoundDialog_content"
+      >
+        <div
+          class="mx_PollCreateDialog"
+        >
+          <h2>
+            Poll type
+          </h2>
+          <div
+            class="mx_Field mx_Field_select"
+          >
+            <select
+              id="mx_Field_5"
+              type="text"
+            >
+              <option
+                value="org.matrix.msc3381.poll.disclosed"
+              >
+                Open poll
+              </option>
+              <option
+                value="org.matrix.msc3381.poll.undisclosed"
+              >
+                Closed poll
+              </option>
+            </select>
+            <label
+              for="mx_Field_5"
+            />
+          </div>
+          <p>
+            Voters see results as soon as they have voted
+          </p>
+          <h2>
+            What is your poll question or topic?
+          </h2>
+          <div
+            class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+          >
+            <input
+              id="poll-topic-input"
+              label="Question or topic"
+              maxlength="340"
+              placeholder="Write something…"
+              type="text"
+              value="Poll Q"
+            />
+            <label
+              for="poll-topic-input"
+            >
+              Question or topic
+            </label>
+          </div>
+          <h2>
+            Create options
+          </h2>
+          <div
+            class="mx_PollCreateDialog_option"
+          >
+            <div
+              class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+            >
+              <input
+                id="pollcreate_option_0"
+                label="Option 1"
+                maxlength="340"
+                placeholder="Write an option"
+                type="text"
+                value="Answer 1"
+              />
+              <label
+                for="pollcreate_option_0"
+              >
+                Option 1
+              </label>
+            </div>
+            <div
+              class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+              role="button"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="mx_PollCreateDialog_option"
+          >
+            <div
+              class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+            >
+              <input
+                id="pollcreate_option_1"
+                label="Option 2"
+                maxlength="340"
+                placeholder="Write an option"
+                type="text"
+                value="Answer 2"
+              />
+              <label
+                for="pollcreate_option_1"
+              >
+                Option 2
+              </label>
+            </div>
+            <div
+              class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+              role="button"
+              tabindex="0"
+            />
+          </div>
+          <div
+            class="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+            role="button"
+            tabindex="0"
+          >
+            Add option
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_CompoundDialog_footer"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+          role="button"
+          tabindex="0"
+        >
+          Cancel
+        </div>
+        <button
+          class="mx_AccessibleButton mx_Dialog_nonDialogButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+          role="button"
+          tabindex="0"
+          type="submit"
+        >
+          Done
+        </button>
+      </div>
+    </form>
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

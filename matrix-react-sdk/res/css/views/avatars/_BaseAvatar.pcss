@@ -1,0 +1,70 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_BaseAvatar {
+    position: relative;
+    /* In at least Firefox, the case of relative positioned inline elements */
+    /* (such as mx_BaseAvatar) with absolute positioned children (such as */
+    /* mx_BaseAvatar_initial) is a dark corner full of spider webs. It will give */
+    /* different results during full reflow of the page vs. incremental reflow */
+    /* of small portions. While that's surely a browser bug, we can avoid it by */
+    /* using `inline-block` instead of the default `inline`. */
+    /* https://github.com/vector-im/element-web/issues/5594 */
+    /* https://bugzilla.mozilla.org/show_bug.cgi?id=1535053 */
+    /* https://bugzilla.mozilla.org/show_bug.cgi?id=255139 */
+    display: inline-block;
+    user-select: none;
+
+    &.mx_RoomAvatar_isSpaceRoom {
+        &.mx_BaseAvatar_image,
+        .mx_BaseAvatar_image {
+            border-radius: 8px;
+        }
+    }
+}
+
+.mx_BaseAvatar_initial {
+    position: absolute;
+    left: 0;
+    color: $avatar-initial-color;
+    text-align: center;
+    speak: none;
+    pointer-events: none;
+    font-weight: normal;
+}
+
+.mx_BaseAvatar_image {
+    object-fit: cover;
+    aspect-ratio: 1;
+    border-radius: 125px;
+    vertical-align: top;
+    background-color: $background;
+}
+
+/* Percy screenshot test specific CSS */
+@media only percy {
+    /* Stick the default room avatar colour, so it doesn't cause a false diff on the screenshot */
+    .mx_BaseAvatar_initial {
+        background-color: var(--percy-color-avatar) !important;
+        border-radius: 125px;
+    }
+    .mx_RoomAvatar_isSpaceRoom .mx_BaseAvatar_initial {
+        border-radius: 8px;
+    }
+    .mx_BaseAvatar_initial + .mx_BaseAvatar_image {
+        visibility: hidden;
+    }
+}

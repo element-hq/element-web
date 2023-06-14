@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "es2016",
+        "jsx": "react",
+        "lib": ["es2020", "dom", "dom.iterable"],
+        "types": ["cypress", "cypress-axe", "@percy/cypress", "@testing-library/cypress"],
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "module": "commonjs"
+    },
+    "include": ["**/*.ts"]
+}

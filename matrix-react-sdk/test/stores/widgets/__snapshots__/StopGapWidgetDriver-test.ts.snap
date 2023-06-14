@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StopGapWidgetDriver sendToDevice sends encrypted messages 1`] = `
+[
+  [
+    [
+      {
+        "deviceInfo": DeviceInfo {
+          "algorithms": [],
+          "deviceId": "aliceWeb",
+          "keys": {},
+          "known": false,
+          "signatures": {},
+          "unsigned": {},
+          "verified": 0,
+        },
+        "userId": "@alice:example.org",
+      },
+      {
+        "deviceInfo": DeviceInfo {
+          "algorithms": [],
+          "deviceId": "aliceMobile",
+          "keys": {},
+          "known": false,
+          "signatures": {},
+          "unsigned": {},
+          "verified": 0,
+        },
+        "userId": "@alice:example.org",
+      },
+    ],
+    {
+      "hello": "alice",
+    },
+  ],
+  [
+    [
+      {
+        "deviceInfo": DeviceInfo {
+          "algorithms": [],
+          "deviceId": "bobDesktop",
+          "keys": {},
+          "known": false,
+          "signatures": {},
+          "unsigned": {},
+          "verified": 0,
+        },
+        "userId": "@bob:example.org",
+      },
+    ],
+    {
+      "hello": "bob",
+    },
+  ],
+]
+`;
+
+exports[`StopGapWidgetDriver sendToDevice sends unencrypted messages 1`] = `
+[
+  [
+    {
+      "batch": [
+        {
+          "deviceId": "*",
+          "payload": {
+            "hello": "alice",
+          },
+          "userId": "@alice:example.org",
+        },
+        {
+          "deviceId": "bobDesktop",
+          "payload": {
+            "hello": "bob",
+          },
+          "userId": "@bob:example.org",
+        },
+      ],
+      "eventType": "org.example.foo",
+    },
+  ],
+]
+`;

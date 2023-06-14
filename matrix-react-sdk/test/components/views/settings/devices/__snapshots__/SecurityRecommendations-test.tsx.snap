@@ -1,0 +1,376 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SecurityRecommendations /> renders both cards when user has both unverified and inactive devices 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="security-recommendations-section"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Security recommendations
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.
+            <div
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </div>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="unverified-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_SecurityRecommendations_spacing"
+      />
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Inactive"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Inactive sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Consider signing out from old sessions (90 days or older) you don't use anymore.
+            <div
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </div>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="inactive-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SecurityRecommendations /> renders inactive devices section when user has inactive devices 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="security-recommendations-section"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Security recommendations
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.
+            <div
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </div>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="unverified-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_SecurityRecommendations_spacing"
+      />
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Inactive"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Inactive sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Consider signing out from old sessions (90 days or older) you don't use anymore.
+            <div
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </div>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="inactive-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SecurityRecommendations /> renders unverified devices section when user has unverified devices 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="security-recommendations-section"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Security recommendations
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Improve your account security by following these recommendations.
+      </div>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.
+            <div
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </div>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="unverified-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (2)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_SecurityRecommendations_spacing"
+      />
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Inactive"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Inactive sessions
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Consider signing out from old sessions (90 days or older) you don't use anymore.
+            <div
+              class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              Learn more
+            </div>
+          </p>
+          <div
+            class="mx_DeviceSecurityCard_actions"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              data-testid="inactive-devices-cta"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

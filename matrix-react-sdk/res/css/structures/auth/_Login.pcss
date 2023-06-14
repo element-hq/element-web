@@ -1,0 +1,101 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_Login_submit {
+    @mixin mx_DialogButton;
+    font-size: 15px;
+    font-weight: var(--font-semi-bold);
+    width: 100%;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.mx_Login_submit:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.mx_Login_loader {
+    display: inline;
+    position: relative;
+    top: 2px;
+    left: 8px;
+}
+
+.mx_Login_loader .mx_Spinner {
+    display: inline;
+}
+
+.mx_Login_loader .mx_Spinner img {
+    width: 16px;
+    height: 16px;
+}
+
+.mx_Login_error {
+    color: $alert;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.mx_Login_error.mx_Login_serverError {
+    text-align: left;
+    font-weight: normal;
+}
+
+.mx_Login_error.mx_Login_serverError.mx_Login_serverErrorNonFatal {
+    color: #ff8d13; /* Only used here */
+}
+
+.mx_Login_type_container {
+    display: flex;
+    align-items: center;
+    color: $authpage-primary-color;
+
+    .mx_Field {
+        margin: 0;
+    }
+}
+
+.mx_Login_type_label {
+    flex: 1;
+}
+
+.mx_Login_underlinedServerName {
+    width: max-content;
+    border-bottom: 1px dashed $accent;
+}
+
+div.mx_AccessibleButton_kind_link.mx_Login_forgot {
+    display: block;
+    margin-top: 24px;
+
+    &.mx_AccessibleButton_disabled {
+        cursor: not-allowed;
+    }
+}
+
+.mx_Login_spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding: 14px;
+}

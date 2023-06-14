@@ -1,0 +1,199 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 Šimon Brandner <simon.bra.ag@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_LegacyCallView {
+    border-radius: 8px;
+    background-color: $dark-panel-bg-color;
+    padding-left: 8px;
+    padding-right: 8px;
+    /* XXX: PiPContainer sets pointer-events: none - should probably be set back in a better place */
+    pointer-events: initial;
+
+    .mx_LegacyCallView_toast {
+        position: absolute;
+        top: 74px;
+
+        padding: 4px 8px;
+
+        border-radius: 4px;
+        z-index: 50;
+
+        /* Same on both themes */
+        color: white;
+        background-color: #17191c;
+    }
+
+    .mx_LegacyCallView_content_wrapper {
+        display: flex;
+        justify-content: center;
+
+        width: 100%;
+        height: 100%;
+
+        overflow: hidden;
+
+        .mx_LegacyCallView_content {
+            position: relative;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            flex: 1;
+            overflow: hidden;
+
+            border-radius: 10px;
+
+            padding: 10px;
+            padding-right: calc(20% + 20px); /* Space for the sidebar */
+
+            background-color: $call-view-content-background;
+
+            .mx_LegacyCallView_status {
+                z-index: 50;
+                color: $accent-fg-color;
+            }
+
+            .mx_LegacyCallView_avatarsContainer {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+
+                div {
+                    margin-left: 12px;
+                    margin-right: 12px;
+                }
+            }
+
+            .mx_LegacyCallView_holdBackground {
+                position: absolute;
+                left: 0;
+                right: 0;
+
+                width: 100%;
+                height: 100%;
+
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+                filter: blur(20px);
+
+                &::after {
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    left: 0;
+                    right: 0;
+                    background-color: rgba(0, 0, 0, 0.6);
+                }
+            }
+
+            &.mx_LegacyCallView_content_hold .mx_LegacyCallView_status {
+                font-weight: bold;
+                text-align: center;
+
+                &::before {
+                    display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                    content: "";
+                    width: 40px;
+                    height: 40px;
+                    background-image: url("$(res)/img/voip/paused.svg");
+                    background-position: center;
+                    background-size: cover;
+                }
+
+                .mx_LegacyCallView_pip &::before {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+        }
+    }
+
+    &:not(.mx_LegacyCallView_sidebar) .mx_LegacyCallView_content {
+        padding: 0;
+        width: 100%;
+        height: 100%;
+
+        .mx_VideoFeed_primary {
+            aspect-ratio: unset;
+            border: 0;
+
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &.mx_LegacyCallView_pip {
+        width: 320px;
+        padding-bottom: 8px;
+
+        border-radius: 8px;
+
+        background-color: $system;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+
+        .mx_LegacyCallViewButtons {
+            bottom: 13px;
+
+            .mx_LegacyCallViewButtons_button {
+                width: 34px;
+                height: 34px;
+
+                &.mx_LegacyCallViewButtons_dropdownButton {
+                    width: var(--LegacyCallViewButtons_dropdownButton-size);
+                    height: var(--LegacyCallViewButtons_dropdownButton-size);
+                }
+
+                &::before {
+                    width: 22px;
+                    height: 22px;
+                }
+            }
+        }
+
+        .mx_LegacyCallView_content {
+            min-height: 180px;
+        }
+    }
+
+    &.mx_LegacyCallView_large {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        flex: 1;
+
+        padding-bottom: 10px;
+
+        margin: var(--container-gap-width);
+        /* The left side gap is fully handled by this margin. To prohibit bleeding on webkit browser. */
+        margin-right: calc(var(--container-gap-width) / 2);
+        margin-bottom: 10px;
+    }
+
+    &.mx_LegacyCallView_belowWidget {
+        margin-top: 0;
+    }
+}

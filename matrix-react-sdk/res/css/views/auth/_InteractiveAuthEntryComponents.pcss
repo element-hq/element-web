@@ -1,0 +1,92 @@
+/*
+Copyright 2017 Vector Creations Ltd
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_InteractiveAuthEntryComponents {
+    .mx_InteractiveAuthEntryComponents_termsSubmit {
+        margin-top: 20px;
+        margin-bottom: 5px;
+        width: 100%;
+        box-sizing: border-box; /* prevent overflowing */
+    }
+}
+
+.mx_InteractiveAuthEntryComponents_msisdnWrapper {
+    text-align: center;
+}
+
+.mx_InteractiveAuthEntryComponents_msisdnEntry {
+    font-size: 200%;
+    font-weight: bold;
+    border: 1px solid $strong-input-border-color;
+    border-radius: 3px;
+    width: 6em;
+}
+
+.mx_InteractiveAuthEntryComponents_msisdnEntry:focus {
+    border: 1px solid $accent;
+}
+
+.mx_InteractiveAuthEntryComponents_msisdnSubmit {
+    margin-top: 4px;
+    margin-bottom: 5px;
+}
+
+/* XXX: This should be a common button class */
+.mx_InteractiveAuthEntryComponents_msisdnSubmit:disabled {
+    background-color: $light-fg-color;
+    cursor: default;
+}
+
+.mx_InteractiveAuthEntryComponents_termsPolicy {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.mx_InteractiveAuthEntryComponents_passwordSection {
+    width: 300px;
+}
+
+.mx_InteractiveAuthEntryComponents_sso_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 20px;
+
+    .mx_AccessibleButton {
+        margin-left: 5px;
+    }
+}
+
+.mx_InteractiveAuthEntryComponents_emailWrapper {
+    /* "Resend" button/link */
+    .mx_AccessibleButton_kind_link_inline {
+        /* We need this to be an inline-block so positioning works correctly */
+        display: inline-block !important;
+
+        /* Spinner as end adornment of the "resend" button/link */
+        .mx_Spinner {
+            /* Spinners are usually block elements, but we need it as inline element */
+            display: inline-flex !important;
+            /* Spinners by default fill all available width, but we don't want that */
+            width: auto !important;
+            /* We need to center the spinner relative to the button/link */
+            vertical-align: middle !important;
+        }
+    }
+}

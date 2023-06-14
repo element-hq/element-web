@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PhoneNumbers /> should handle no numbers 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="mx_DiscoveryPhoneNumbers"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Phone numbers
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        Discovery options will appear once you have added a phone number above.
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<PhoneNumbers /> should render a loader while loading 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="mx_DiscoveryPhoneNumbers"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Phone numbers
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+    >
+      <div
+        class="mx_InlineSpinner"
+      >
+        <div
+          aria-label="Loading…"
+          class="mx_InlineSpinner_icon mx_Spinner_icon"
+          style="width: 16px; height: 16px;"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<PhoneNumbers /> should render phone numbers 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="mx_DiscoveryPhoneNumbers"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Phone numbers
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+    >
+      <div
+        class="mx_GeneralUserSettingsTab_section--discovery_existing"
+      >
+        <span
+          class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+        >
+          +
+          +441111111111
+        </span>
+        <div
+          class="mx_AccessibleButton mx_GeneralUserSettingsTab_section--discovery_existing_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_sm"
+          role="button"
+          tabindex="0"
+        >
+          Revoke
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
