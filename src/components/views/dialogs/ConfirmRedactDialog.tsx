@@ -26,6 +26,7 @@ import ErrorDialog from "./ErrorDialog";
 import TextInputDialog from "./TextInputDialog";
 
 interface IProps {
+    event: MatrixEvent;
     onFinished(success?: false, reason?: void): void;
     onFinished(success: true, reason?: string): void;
 }
@@ -35,14 +36,16 @@ interface IProps {
  */
 export default class ConfirmRedactDialog extends React.Component<IProps> {
     public render(): React.ReactNode {
+        let description = _t("Are you sure you wish to remove (delete) this event?");
+        if (this.props.event.isState()) {
+            description += " " + _t("Note that removing room changes like this could undo the change.");
+        }
+
         return (
             <TextInputDialog
                 onFinished={this.props.onFinished}
                 title={_t("Confirm Removal")}
-                description={_t(
-                    "Are you sure you wish to remove (delete) this event? " +
-                        "Note that if you delete a room name or topic change, it could undo the change.",
-                )}
+                description={description}
                 placeholder={_t("Reason (optional)")}
                 focus
                 button={_t("Remove")}
@@ -68,6 +71,7 @@ export function createRedactEventDialog({
     Modal.createDialog(
         ConfirmRedactDialog,
         {
+            event: mxEvent,
             onFinished: async (proceed, reason): Promise<void> => {
                 if (!proceed) return;
 

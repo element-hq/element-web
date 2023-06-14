@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from "../../../languageHandler";
 import ConfirmRedactDialog from "./ConfirmRedactDialog";
@@ -23,6 +24,7 @@ import BaseDialog from "./BaseDialog";
 import Spinner from "../elements/Spinner";
 
 interface IProps {
+    event: MatrixEvent;
     redact: () => Promise<void>;
     onFinished: (success?: boolean) => void;
 }
@@ -91,7 +93,7 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IPro
                 );
             }
         } else {
-            return <ConfirmRedactDialog onFinished={this.onParentFinished} />;
+            return <ConfirmRedactDialog event={this.props.event} onFinished={this.onParentFinished} />;
         }
     }
 }
