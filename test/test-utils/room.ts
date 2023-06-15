@@ -61,6 +61,7 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         showApps: false,
         isPeeking: false,
         showRightPanel: true,
+        threadRightPanel: false,
         joining: false,
         atEndOfLiveTimeline: true,
         showTopUnreadMessagesBar: false,

@@ -225,6 +225,7 @@ describe("RoomView", () => {
     });
 
     it("updates url preview visibility on encryption state change", async () => {
+        room.getMyMembership = jest.fn().mockReturnValue("join");
         // we should be starting unencrypted
         expect(cli.isCryptoEnabled()).toEqual(false);
         expect(cli.isRoomEncrypted(room.roomId)).toEqual(false);

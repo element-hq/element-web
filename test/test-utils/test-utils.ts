@@ -237,6 +237,7 @@ export function createTestClient(): MatrixClient {
         searchUserDirectory: jest.fn().mockResolvedValue({ limited: false, results: [] }),
         setDeviceVerified: jest.fn(),
         joinRoom: jest.fn(),
+        getSyncStateData: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
