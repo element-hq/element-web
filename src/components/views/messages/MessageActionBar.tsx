@@ -28,7 +28,6 @@ import { Icon as EmojiIcon } from "../../../../res/img/element-icons/room/messag
 import { Icon as ResendIcon } from "../../../../res/img/element-icons/retry.svg";
 import { Icon as ThreadIcon } from "../../../../res/img/element-icons/message/thread.svg";
 import { Icon as TrashcanIcon } from "../../../../res/img/element-icons/trashcan.svg";
-import { Icon as StarIcon } from "../../../../res/img/element-icons/room/message-bar/star.svg";
 import { Icon as ReplyIcon } from "../../../../res/img/element-icons/room/message-bar/reply.svg";
 import { Icon as ExpandMessageIcon } from "../../../../res/img/element-icons/expand-message.svg";
 import { Icon as CollapseMessageIcon } from "../../../../res/img/element-icons/collapse-message.svg";
@@ -45,7 +44,6 @@ import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import DownloadActionButton from "./DownloadActionButton";
-import SettingsStore from "../../../settings/SettingsStore";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import ReplyChain from "../elements/ReplyChain";
 import ReactionPicker from "../emojipicker/ReactionPicker";
@@ -55,7 +53,6 @@ import { Key } from "../../../Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { Action } from "../../../dispatcher/actions";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
-import useFavouriteMessages from "../../../hooks/useFavouriteMessages";
 import { GetRelationsForEvent } from "../rooms/EventTile";
 import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast/types";
 import { ButtonEvent } from "../elements/AccessibleButton";
@@ -250,42 +247,6 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
             onContextMenu={onClick}
         >
             <ThreadIcon />
-        </RovingAccessibleTooltipButton>
-    );
-};
-
-interface IFavouriteButtonProp {
-    mxEvent: MatrixEvent;
-}
-
-const FavouriteButton: React.FC<IFavouriteButtonProp> = ({ mxEvent }) => {
-    const { isFavourite, toggleFavourite } = useFavouriteMessages();
-
-    const eventId = mxEvent.getId()!;
-    const classes = classNames("mx_MessageActionBar_iconButton mx_MessageActionBar_favouriteButton", {
-        mx_MessageActionBar_favouriteButton_fillstar: isFavourite(eventId),
-    });
-
-    const onClick = useCallback(
-        (e: ButtonEvent) => {
-            // Don't open the regular browser or our context menu on right-click
-            e.preventDefault();
-            e.stopPropagation();
-
-            toggleFavourite(eventId);
-        },
-        [toggleFavourite, eventId],
-    );
-
-    return (
-        <RovingAccessibleTooltipButton
-            className={classes}
-            title={_t("Favourite")}
-            onClick={onClick}
-            onContextMenu={onClick}
-            data-testid={eventId}
-        >
-            <StarIcon />
         </RovingAccessibleTooltipButton>
     );
 };
@@ -517,9 +478,6 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                             key="react"
                         />,
                     );
-                }
-                if (SettingsStore.getValue("feature_favourite_messages")) {
-                    toolbarOpts.splice(-1, 0, <FavouriteButton key="favourite" mxEvent={this.props.mxEvent} />);
                 }
 
                 // XXX: Assuming that the underlying tile will be a media event if it is eligible media.
