@@ -26,12 +26,7 @@ import { Icon as InfoIcon } from "../../../../res/img/element-icons/info.svg";
 import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
 import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import {
-    getHostnameFromMatrixServerName,
-    getServerName,
-    makeRoomPermalink,
-    makeUserPermalink,
-} from "../../../utils/permalinks/Permalinks";
+import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import SdkConfig from "../../../SdkConfig";
 import * as Email from "../../../email";
@@ -724,18 +719,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                         }
                     } catch (e) {
                         logger.warn("Non-fatal error trying to make an invite for a user ID", e);
-
-                        // Reuse logic from Permalinks as a basic MXID validity check
-                        const serverName = getServerName(term);
-                        const domain = getHostnameFromMatrixServerName(serverName);
-                        if (domain) {
-                            // Add a result anyways, just without a profile. We stick it at the
-                            // top so it is most obviously presented to the user.
-                            r.results.splice(0, 0, {
-                                user_id: term,
-                                display_name: term,
-                            });
-                        }
                     }
                 }
 

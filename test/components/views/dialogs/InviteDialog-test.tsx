@@ -26,6 +26,7 @@ import InviteDialog from "../../../../src/components/views/dialogs/InviteDialog"
 import { InviteKind } from "../../../../src/components/views/dialogs/InviteDialogTypes";
 import {
     filterConsole,
+    flushPromises,
     getMockClientWithEventEmitter,
     mkMembership,
     mkMessage,
@@ -200,7 +201,7 @@ describe("InviteDialog", () => {
         expect(screen.getByText(`Invite to ${roomId}`)).toBeInTheDocument();
     });
 
-    it("should suggest valid MXIDs even if unknown", async () => {
+    it("should not suggest valid unknown MXIDs", async () => {
         render(
             <InviteDialog
                 kind={InviteKind.Invite}
@@ -209,8 +210,8 @@ describe("InviteDialog", () => {
                 initialText="@localpart:server.tld"
             />,
         );
-
-        await screen.findAllByText("@localpart:server.tld"); // Using findAllByText as the MXID is used for name too
+        await flushPromises();
+        expect(screen.queryByText("@localpart:server.tld")).not.toBeInTheDocument();
     });
 
     it("should not suggest invalid MXIDs", () => {
