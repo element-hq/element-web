@@ -167,7 +167,7 @@ export class StopGapWidget extends EventEmitter {
 
     public constructor(private appTileProps: IAppTileProps) {
         super();
-        this.client = MatrixClientPeg.get();
+        this.client = MatrixClientPeg.safeGet();
 
         let app = appTileProps.app;
         // Backwards compatibility: not all old widgets have a creatorUserId

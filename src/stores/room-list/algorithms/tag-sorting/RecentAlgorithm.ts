@@ -56,7 +56,7 @@ export const sortRooms = (rooms: Room[]): Room[] => {
     // See https://github.com/vector-im/element-web/issues/14458
     let myUserId = "";
     if (MatrixClientPeg.get()) {
-        myUserId = MatrixClientPeg.get().getUserId()!;
+        myUserId = MatrixClientPeg.get()!.getSafeUserId();
     }
 
     const tsCache: { [roomId: string]: number } = {};

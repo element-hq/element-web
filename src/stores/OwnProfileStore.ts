@@ -159,7 +159,7 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
     );
 
     private onStateEvents = async (ev: MatrixEvent): Promise<void> => {
-        const myUserId = MatrixClientPeg.get().getUserId();
+        const myUserId = MatrixClientPeg.safeGet().getUserId();
         if (ev.getType() === EventType.RoomMember && ev.getSender() === myUserId && ev.getStateKey() === myUserId) {
             await this.onProfileUpdate();
         }

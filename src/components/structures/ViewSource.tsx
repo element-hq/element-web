@@ -142,7 +142,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
     }
 
     private canSendStateEvent(mxEvent: MatrixEvent): boolean {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(mxEvent.getRoomId());
         return !!room?.currentState.mayClientSendStateEvent(mxEvent.getType(), cli);
     }
@@ -155,7 +155,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
         const eventId = mxEvent.getId()!;
         const canEdit = mxEvent.isState()
             ? this.canSendStateEvent(mxEvent)
-            : canEditContent(MatrixClientPeg.get(), this.props.mxEvent);
+            : canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent);
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("View Source")}>
                 <div className="mx_ViewSource_header">

@@ -54,7 +54,7 @@ export const useSpaceResults = (space: Room | undefined, query: string): [IHiera
         const lcQuery = trimmedQuery.toLowerCase();
         const normalizedQuery = normalize(trimmedQuery);
 
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         return rooms?.filter((r) => {
             return (
                 r.room_type !== RoomType.Space &&

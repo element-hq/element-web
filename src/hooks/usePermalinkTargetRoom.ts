@@ -59,7 +59,7 @@ const determineInitialRoom = (
  * @returns Room if found, else null.
  */
 const findRoom = (roomIdOrAlias: string): Room | null => {
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
 
     return roomIdOrAlias[0] === "#"
         ? client.getRooms().find((r) => {

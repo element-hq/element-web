@@ -329,7 +329,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 Array.from(dataTransfer.files),
                 roomId,
                 this.threadRelation,
-                MatrixClientPeg.get(),
+                MatrixClientPeg.safeGet(),
                 TimelineRenderingType.Thread,
             );
         } else {

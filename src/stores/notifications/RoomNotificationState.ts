@@ -59,7 +59,7 @@ export class RoomNotificationState extends NotificationState implements IDestroy
     };
 
     private handleReadReceipt = (event: MatrixEvent, room: Room): void => {
-        if (!readReceiptChangeIsFor(event, MatrixClientPeg.get())) return; // not our own - ignore
+        if (!readReceiptChangeIsFor(event, MatrixClientPeg.safeGet())) return; // not our own - ignore
         if (room.roomId !== this.room.roomId) return; // not for us - ignore
         this.updateNotificationState();
     };

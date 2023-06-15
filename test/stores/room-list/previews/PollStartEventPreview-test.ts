@@ -24,6 +24,10 @@ jest.spyOn(MatrixClientPeg, "get").mockReturnValue({
     getUserId: () => "@me:example.com",
     getSafeUserId: () => "@me:example.com",
 } as unknown as MatrixClient);
+jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue({
+    getUserId: () => "@me:example.com",
+    getSafeUserId: () => "@me:example.com",
+} as unknown as MatrixClient);
 
 describe("PollStartEventPreview", () => {
     it("shows the question for a poll I created", async () => {

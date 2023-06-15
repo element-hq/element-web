@@ -420,7 +420,7 @@ export default class Registration extends React.Component<IProps, IState> {
         if (!this.props.brand) {
             return Promise.resolve();
         }
-        const matrixClient = MatrixClientPeg.get();
+        const matrixClient = MatrixClientPeg.safeGet();
         return matrixClient.getPushers().then(
             (resp) => {
                 const pushers = resp.pushers;

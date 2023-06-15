@@ -87,7 +87,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
     };
 
     private onVerifyClick = (): void => {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const userId = cli.getSafeUserId();
         const requestPromise = cli.requestVerification(userId);
 
@@ -142,7 +142,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
     };
 
     public render(): React.ReactNode {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const { phase, lostKeys } = this.state;
 
         if (this.state.verificationRequest && cli.getUser(this.state.verificationRequest.otherUserId)) {

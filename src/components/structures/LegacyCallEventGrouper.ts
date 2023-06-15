@@ -129,7 +129,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     public get callWasMissed(): boolean {
         return (
             this.state === CallState.Ended &&
-            ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.get().getUserId())
+            ![...this.events].some((event) => event.sender?.userId === MatrixClientPeg.safeGet().getUserId())
         );
     }
 

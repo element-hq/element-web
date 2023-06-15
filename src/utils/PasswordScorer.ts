@@ -61,7 +61,7 @@ _td("Short keyboard patterns are easy to guess");
  * @param matrixClient the client of the logged in user, if any
  * @returns {object} Score result with `score` and `feedback` properties
  */
-export function scorePassword(matrixClient: MatrixClient | undefined, password: string): zxcvbn.ZXCVBNResult | null {
+export function scorePassword(matrixClient: MatrixClient | null, password: string): zxcvbn.ZXCVBNResult | null {
     if (password.length === 0) return null;
 
     const userInputs = ZXCVBN_USER_INPUTS.slice();

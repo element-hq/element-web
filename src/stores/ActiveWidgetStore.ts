@@ -51,7 +51,7 @@ export default class ActiveWidgetStore extends EventEmitter {
     }
 
     public start(): void {
-        MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
+        MatrixClientPeg.safeGet().on(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
     public stop(): void {

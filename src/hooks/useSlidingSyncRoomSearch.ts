@@ -62,7 +62,7 @@ export const useSlidingSyncRoomSearch = (): {
                 let i = 0;
                 while (roomIndexToRoomId[i]) {
                     const roomId = roomIndexToRoomId[i];
-                    const room = MatrixClientPeg.get().getRoom(roomId);
+                    const room = MatrixClientPeg.safeGet().getRoom(roomId);
                     if (room) {
                         rooms.push(room);
                     }

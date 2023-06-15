@@ -51,7 +51,7 @@ export const useProfileInfo = (): {
 
             setLoading(true);
             try {
-                const result = await MatrixClientPeg.get().getProfileInfo(term);
+                const result = await MatrixClientPeg.safeGet().getProfileInfo(term);
                 updateResult(term, {
                     user_id: term,
                     avatar_url: result.avatar_url,

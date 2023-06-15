@@ -72,7 +72,7 @@ export const usePublicRoomDirectory = (): {
         } else if (thirdParty) {
             setProtocols(thirdParty);
         } else {
-            const response = await MatrixClientPeg.get().getThirdpartyProtocols();
+            const response = await MatrixClientPeg.safeGet().getThirdpartyProtocols();
             thirdParty = response;
             setProtocols(response);
         }
@@ -105,7 +105,7 @@ export const usePublicRoomDirectory = (): {
                     generic_search_term: query,
                     room_types:
                         roomTypes &&
-                        (await MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc3827.stable"))
+                        (await MatrixClientPeg.safeGet().doesServerSupportUnstableFeature("org.matrix.msc3827.stable"))
                             ? Array.from<RoomType | null>(roomTypes)
                             : undefined,
                 };
@@ -114,7 +114,7 @@ export const usePublicRoomDirectory = (): {
             updateQuery(opts);
             try {
                 setLoading(true);
-                const { chunk } = await MatrixClientPeg.get().publicRooms(opts);
+                const { chunk } = await MatrixClientPeg.safeGet().publicRooms(opts);
                 updateResult(opts, showNsfwPublicRooms ? chunk : chunk.filter(cheapNsfwFilter));
                 return true;
             } catch (e) {

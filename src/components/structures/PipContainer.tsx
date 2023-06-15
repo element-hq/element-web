@@ -139,8 +139,8 @@ class PipContainerInner extends React.Component<IProps, IState> {
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCalls);
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
         SdkContextClass.instance.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
-        MatrixClientPeg.get().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
-        const room = MatrixClientPeg.get()?.getRoom(this.state.viewedRoomId);
+        MatrixClientPeg.safeGet().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
+        const room = MatrixClientPeg.safeGet().getRoom(this.state.viewedRoomId);
         if (room) {
             WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(room), this.updateCalls);
         }
@@ -239,7 +239,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         let notDocked = false;
         // Sanity check the room - the widget may have been destroyed between render cycles, and
         // thus no room is associated anymore.
-        if (persistentWidgetId && persistentRoomId && MatrixClientPeg.get().getRoom(persistentRoomId)) {
+        if (persistentWidgetId && persistentRoomId && MatrixClientPeg.safeGet().getRoom(persistentRoomId)) {
             notDocked = !ActiveWidgetStore.instance.isDocked(persistentWidgetId, persistentRoomId);
             fromAnotherRoom = this.state.viewedRoomId !== persistentRoomId;
         }
@@ -318,7 +318,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
             pipContent.push(({ onStartMoving }) => (
                 <WidgetPip
                     widgetId={this.state.persistentWidgetId!}
-                    room={MatrixClientPeg.get().getRoom(this.state.persistentRoomId ?? undefined)!}
+                    room={MatrixClientPeg.safeGet().getRoom(this.state.persistentRoomId ?? undefined)!}
                     viewingRoom={this.state.viewedRoomId === this.state.persistentRoomId}
                     onStartMoving={onStartMoving}
                     movePersistedElement={this.props.movePersistedElement}

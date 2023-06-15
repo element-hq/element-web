@@ -49,7 +49,7 @@ export const useUserDirectory = (): {
 
             try {
                 setLoading(true);
-                const { results } = await MatrixClientPeg.get().searchUserDirectory(opts);
+                const { results } = await MatrixClientPeg.safeGet().searchUserDirectory(opts);
                 updateResult(
                     opts,
                     results.map((user) => new DirectoryMember(user)),
