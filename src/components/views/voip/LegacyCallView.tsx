@@ -432,7 +432,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         const { isLocalOnHold, isRemoteOnHold, sidebarShown, primaryFeed, secondaryFeed, sidebarFeeds } = this.state;
 
         const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
-        const callRoom = (callRoomId ? MatrixClientPeg.get().getRoom(callRoomId) : undefined) ?? undefined;
+        const callRoom = (callRoomId ? MatrixClientPeg.safeGet().getRoom(callRoomId) : undefined) ?? undefined;
         const avatarSize = pipMode ? 76 : 160;
         const transfereeCall = LegacyCallHandler.instance.getTransfereeForCallId(call.callId);
         const isOnHold = isLocalOnHold || isRemoteOnHold;
@@ -452,7 +452,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
 
             let holdTransferContent: React.ReactNode;
             if (transfereeCall) {
-                const cli = MatrixClientPeg.get();
+                const cli = MatrixClientPeg.safeGet();
                 const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
                 const transferTargetRoom = callRoomId ? cli.getRoom(callRoomId) : null;
                 const transferTargetName = transferTargetRoom ? transferTargetRoom.name : _t("unknown person");
@@ -575,7 +575,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         const { call, secondaryCall, pipMode, showApps, onMouseDownOnHeader } = this.props;
         const { sidebarShown, sidebarFeeds } = this.state;
 
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
         const secondaryCallRoomId = LegacyCallHandler.instance.roomIdForCall(secondaryCall);
         const callRoom = callRoomId ? client.getRoom(callRoomId) : null;

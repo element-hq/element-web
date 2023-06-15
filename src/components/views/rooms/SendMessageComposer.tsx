@@ -336,7 +336,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                         ? findEditableEvent({
                               events,
                               isForward: false,
-                              matrixClient: MatrixClientPeg.get(),
+                              matrixClient: MatrixClientPeg.safeGet(),
                           })
                         : undefined;
                     if (editEvent) {
@@ -404,7 +404,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             if (events[i].getType() === EventType.RoomMessage) {
                 let shouldReact = true;
                 const lastMessage = events[i];
-                const userId = MatrixClientPeg.get().getSafeUserId();
+                const userId = MatrixClientPeg.safeGet().getSafeUserId();
                 const messageReactions = this.props.room.relations.getChildEventsForEvent(
                     lastMessage.getId()!,
                     RelationType.Annotation,
@@ -421,7 +421,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     shouldReact = !myReactionKeys.includes(reaction);
                 }
                 if (shouldReact) {
-                    MatrixClientPeg.get().sendEvent(lastMessage.getRoomId()!, EventType.Reaction, {
+                    MatrixClientPeg.safeGet().sendEvent(lastMessage.getRoomId()!, EventType.Reaction, {
                         "m.relates_to": {
                             rel_type: RelationType.Annotation,
                             event_id: lastMessage.getId(),
@@ -476,7 +476,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
                 let commandSuccessful: boolean;
                 [content, commandSuccessful] = await runSlashCommand(
-                    MatrixClientPeg.get(),
+                    MatrixClientPeg.safeGet(),
                     cmd,
                     args,
                     this.props.room.roomId,

@@ -131,7 +131,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
     private onRecoveryKeyChange = (e: ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             recoveryKey: e.target.value,
-            recoveryKeyValid: MatrixClientPeg.get().isValidRecoveryKey(e.target.value),
+            recoveryKeyValid: MatrixClientPeg.safeGet().isValidRecoveryKey(e.target.value),
         });
     };
 
@@ -145,7 +145,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         try {
             // We do still restore the key backup: we must ensure that the key backup key
             // is the right one and restoring it is currently the only way we can do this.
-            const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithPassword(
+            const recoverInfo = await MatrixClientPeg.safeGet().restoreKeyBackupWithPassword(
                 this.state.passPhrase,
                 undefined,
                 undefined,
@@ -153,7 +153,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 { progressCallback: this.progressCallback },
             );
             if (this.props.keyCallback) {
-                const key = await MatrixClientPeg.get().keyBackupKeyFromPassword(
+                const key = await MatrixClientPeg.safeGet().keyBackupKeyFromPassword(
                     this.state.passPhrase,
                     this.state.backupInfo,
                 );
@@ -186,7 +186,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             restoreType: RestoreType.RecoveryKey,
         });
         try {
-            const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithRecoveryKey(
+            const recoverInfo = await MatrixClientPeg.safeGet().restoreKeyBackupWithRecoveryKey(
                 this.state.recoveryKey,
                 undefined,
                 undefined,
@@ -194,7 +194,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 { progressCallback: this.progressCallback },
             );
             if (this.props.keyCallback) {
-                const key = MatrixClientPeg.get().keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
+                const key = MatrixClientPeg.safeGet().keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
                 this.props.keyCallback(key);
             }
             if (!this.props.showSummary) {
@@ -230,7 +230,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             // `accessSecretStorage` may prompt for storage access as needed.
             await accessSecretStorage(async (): Promise<void> => {
                 if (!this.state.backupInfo) return;
-                await MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
+                await MatrixClientPeg.safeGet().restoreKeyBackupWithSecretStorage(
                     this.state.backupInfo,
                     undefined,
                     undefined,
@@ -252,7 +252,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
     private async restoreWithCachedKey(backupInfo: IKeyBackupInfo | null): Promise<boolean> {
         if (!backupInfo) return false;
         try {
-            const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithCache(
+            const recoverInfo = await MatrixClientPeg.safeGet().restoreKeyBackupWithCache(
                 undefined /* targetRoomId */,
                 undefined /* targetSessionId */,
                 backupInfo,
@@ -274,7 +274,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             loadError: null,
         });
         try {
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
             const backupInfo = await cli.getKeyBackupVersion();
             const has4S = await cli.hasSecretStorageKey();
             const backupKeyStored = has4S ? await cli.isKeyBackupKeyStored() : null;

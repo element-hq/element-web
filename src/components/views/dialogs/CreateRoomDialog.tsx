@@ -75,7 +75,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             joinRule = JoinRule.Restricted;
         }
 
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         this.state = {
             isPublic: this.props.defaultPublic || false,
             isEncrypted: this.props.defaultEncrypted ?? privateShouldBeEncrypted(cli),
@@ -222,7 +222,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
         let aliasField: JSX.Element | undefined;
         if (this.state.joinRule === JoinRule.Public) {
-            const domain = MatrixClientPeg.get().getDomain()!;
+            const domain = MatrixClientPeg.safeGet().getDomain()!;
             aliasField = (
                 <div className="mx_CreateRoomDialog_aliasContainer">
                     <RoomAliasField
@@ -285,7 +285,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         let e2eeSection: JSX.Element | undefined;
         if (this.state.joinRule !== JoinRule.Public) {
             let microcopy: string;
-            if (privateShouldBeEncrypted(MatrixClientPeg.get())) {
+            if (privateShouldBeEncrypted(MatrixClientPeg.safeGet())) {
                 if (this.state.canChangeEncryption) {
                     microcopy = isVideoRoom
                         ? _t("You can't disable this later. The room will be encrypted but the embedded call will not.")

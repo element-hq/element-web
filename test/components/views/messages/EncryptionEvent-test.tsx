@@ -49,6 +49,7 @@ describe("EncryptionEvent", () => {
         jest.clearAllMocks();
         client = createTestClient();
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
+        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
         event = mkMessage({
             event: true,
             room: roomId,

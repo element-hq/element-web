@@ -55,7 +55,8 @@ const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
                 {_t("Share invite link")}
                 <div>{copiedText}</div>
             </AccessibleButton>
-            {space.canInvite(MatrixClientPeg.get()?.getSafeUserId()) && shouldShowComponent(UIComponent.InviteUsers) ? (
+            {space.canInvite(MatrixClientPeg.safeGet().getSafeUserId()) &&
+            shouldShowComponent(UIComponent.InviteUsers) ? (
                 <AccessibleButton
                     className="mx_SpacePublicShare_inviteButton"
                     onClick={() => {

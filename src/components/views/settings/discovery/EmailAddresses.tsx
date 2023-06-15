@@ -78,7 +78,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
     }
 
     private async changeBinding({ bind, label, errorTitle }: Binding): Promise<void> {
-        if (!(await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind())) {
+        if (!(await MatrixClientPeg.safeGet().doesServerSupportSeparateAddAndBind())) {
             return this.changeBindingTangledAddBind({ bind, label, errorTitle });
         }
 
@@ -86,7 +86,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
 
         try {
             if (bind) {
-                const task = new AddThreepid(MatrixClientPeg.get());
+                const task = new AddThreepid(MatrixClientPeg.safeGet());
                 this.setState({
                     verifying: true,
                     continueDisabled: true,
@@ -97,7 +97,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                     continueDisabled: false,
                 });
             } else {
-                await MatrixClientPeg.get().unbindThreePid(medium, address);
+                await MatrixClientPeg.safeGet().unbindThreePid(medium, address);
             }
             this.setState({ bound: bind });
         } catch (err) {
@@ -117,7 +117,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
     private async changeBindingTangledAddBind({ bind, label, errorTitle }: Binding): Promise<void> {
         const { medium, address } = this.props.email;
 
-        const task = new AddThreepid(MatrixClientPeg.get());
+        const task = new AddThreepid(MatrixClientPeg.safeGet());
         this.setState({
             verifying: true,
             continueDisabled: true,
@@ -125,7 +125,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         });
 
         try {
-            await MatrixClientPeg.get().deleteThreePid(medium, address);
+            await MatrixClientPeg.safeGet().deleteThreePid(medium, address);
             if (bind) {
                 await task.bindEmailAddress(address);
             } else {

@@ -33,7 +33,7 @@ interface IProps {
 
 export default class RoomAvatarEvent extends React.Component<IProps> {
     private onAvatarClick = (): void => {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const ev = this.props.mxEvent;
         const httpUrl = mediaFromMxc(ev.getContent().url).srcHttp;
         if (!httpUrl) return;
@@ -63,7 +63,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
             );
         }
 
-        const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+        const room = MatrixClientPeg.safeGet().getRoom(ev.getRoomId());
         // Provide all arguments to RoomAvatar via oobData because the avatar is historic
         const oobData = {
             avatarUrl: ev.getContent().url,

@@ -50,8 +50,8 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
     public constructor(props: IProps) {
         super(props);
 
-        this.room = MatrixClientPeg.get().getRoom(this.props.event.getRoomId());
-        const me = this.room?.getMember(MatrixClientPeg.get().getUserId()!);
+        this.room = MatrixClientPeg.safeGet().getRoom(this.props.event.getRoomId());
+        const me = this.room?.getMember(MatrixClientPeg.safeGet().getSafeUserId());
         const powerLevels = this.room?.currentState.getStateEvents("m.room.power_levels", "");
         const senderId = this.props.event.getSender()!;
 
@@ -71,7 +71,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
     }
 
     public componentDidMount(): void {
-        MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
+        MatrixClientPeg.safeGet().on(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
     public componentWillUnmount(): void {
@@ -100,7 +100,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
     };
 
     public onKickClick = (): void => {
-        MatrixClientPeg.get()
+        MatrixClientPeg.safeGet()
             .sendStateEvent(this.state.roomId, "m.room.third_party_invite", {}, this.state.stateKey)
             .catch((err) => {
                 logger.error(err);

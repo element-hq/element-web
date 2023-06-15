@@ -84,7 +84,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
         onMenuToggle?.(menuDisplayed);
     }, [menuDisplayed, onMenuToggle]);
 
-    const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
+    const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
     const isMainSplitTimelineShown = !!room && !WidgetLayoutStore.instance.hasMaximisedWidget(room);
     return (
         <React.Fragment>

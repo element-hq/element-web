@@ -42,7 +42,7 @@ const validServer = withValidation<undefined, { error?: MatrixError }>({
     deriveData: async ({ value }): Promise<{ error?: MatrixError }> => {
         try {
             // check if we can successfully load this server's room directory
-            await MatrixClientPeg.get().publicRooms({
+            await MatrixClientPeg.safeGet().publicRooms({
                 limit: 1,
                 server: value ?? undefined,
             });

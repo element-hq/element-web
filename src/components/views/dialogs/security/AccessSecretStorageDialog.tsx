@@ -107,7 +107,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
 
         try {
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
             const decodedKey = cli.keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
             const correct = await cli.checkSecretStorageKey(decodedKey, this.props.keyInfo);
             this.setState({
@@ -235,7 +235,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             // Force reset secret storage (which resets the key backup)
             await accessSecretStorage(async (): Promise<void> => {
                 // Now reset cross-signing so everything Just Works™ again.
-                const cli = MatrixClientPeg.get();
+                const cli = MatrixClientPeg.safeGet();
                 await cli.bootstrapCrossSigning({
                     authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
                         const { finished } = Modal.createDialog(InteractiveAuthDialog, {

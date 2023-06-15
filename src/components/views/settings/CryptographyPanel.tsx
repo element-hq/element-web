@@ -38,7 +38,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const deviceId = client.deviceId;
         let identityKey = client.getDeviceEd25519Key();
         if (!identityKey) {
@@ -103,7 +103,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
             import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog") as unknown as Promise<
                 typeof ExportE2eKeysDialog
             >,
-            { matrixClient: MatrixClientPeg.get() },
+            { matrixClient: MatrixClientPeg.safeGet() },
         );
     };
 
@@ -112,11 +112,11 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
             import("../../../async-components/views/dialogs/security/ImportE2eKeysDialog") as unknown as Promise<
                 typeof ImportE2eKeysDialog
             >,
-            { matrixClient: MatrixClientPeg.get() },
+            { matrixClient: MatrixClientPeg.safeGet() },
         );
     };
 
     private updateBlacklistDevicesFlag = (checked: boolean): void => {
-        MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
+        MatrixClientPeg.safeGet().setGlobalBlacklistUnverifiedDevices(checked);
     };
 }

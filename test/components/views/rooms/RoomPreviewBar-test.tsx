@@ -18,7 +18,7 @@ import React, { ComponentProps } from "react";
 import { render, fireEvent, RenderResult, waitFor } from "@testing-library/react";
 import { Room, RoomMember, MatrixError, IContent } from "matrix-js-sdk/src/matrix";
 
-import { stubClient } from "../../../test-utils";
+import { withClientContextRenderOptions, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import RoomPreviewBar from "../../../../src/components/views/rooms/RoomPreviewBar";
@@ -77,7 +77,10 @@ describe("<RoomPreviewBar />", () => {
             roomId,
             room: createRoom(roomId, userId),
         };
-        return render(<RoomPreviewBar {...defaultProps} {...props} />);
+        return render(
+            <RoomPreviewBar {...defaultProps} {...props} />,
+            withClientContextRenderOptions(MatrixClientPeg.safeGet()),
+        );
     };
 
     const isSpinnerRendered = (wrapper: RenderResult) => !!wrapper.container.querySelector(".mx_Spinner");
@@ -92,7 +95,10 @@ describe("<RoomPreviewBar />", () => {
 
     beforeEach(() => {
         stubClient();
+        MatrixClientPeg.get().getUserId = jest.fn().mockReturnValue(userId);
+        MatrixClientPeg.get().getSafeUserId = jest.fn().mockReturnValue(userId);
         MatrixClientPeg.safeGet().getUserId = jest.fn().mockReturnValue(userId);
+        MatrixClientPeg.safeGet().getSafeUserId = jest.fn().mockReturnValue(userId);
     });
 
     afterEach(() => {

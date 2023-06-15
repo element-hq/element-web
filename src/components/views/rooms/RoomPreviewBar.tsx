@@ -136,19 +136,19 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             this.setState({ busy: true });
             try {
                 // Gather the account 3PIDs
-                const account3pids = await MatrixClientPeg.get().getThreePids();
+                const account3pids = await MatrixClientPeg.safeGet().getThreePids();
                 this.setState({
                     accountEmails: account3pids.threepids.filter((b) => b.medium === "email").map((b) => b.address),
                 });
                 // If we have an IS connected, use that to lookup the email and
                 // check the bound MXID.
-                if (!MatrixClientPeg.get().getIdentityServerUrl()) {
+                if (!MatrixClientPeg.safeGet().getIdentityServerUrl()) {
                     this.setState({ busy: false });
                     return;
                 }
                 const authClient = new IdentityAuthClient();
                 const identityAccessToken = await authClient.getAccessToken();
-                const result = await MatrixClientPeg.get().lookupThreePid(
+                const result = await MatrixClientPeg.safeGet().lookupThreePid(
                     "email",
                     this.props.invitedEmail,
                     identityAccessToken!,
@@ -162,7 +162,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
     }
 
     private getMessageCase(): MessageCase {
-        const isGuest = MatrixClientPeg.get().isGuest();
+        const isGuest = MatrixClientPeg.safeGet().isGuest();
 
         if (isGuest) {
             return MessageCase.NotLoggedIn;
@@ -192,9 +192,9 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                     return MessageCase.OtherThreePIDError;
                 } else if (this.state.accountEmails && !this.state.accountEmails.includes(this.props.invitedEmail)) {
                     return MessageCase.InvitedEmailNotFoundInAccount;
-                } else if (!MatrixClientPeg.get().getIdentityServerUrl()) {
+                } else if (!MatrixClientPeg.safeGet().getIdentityServerUrl()) {
                     return MessageCase.InvitedEmailNoIdentityServer;
-                } else if (this.state.invitedEmailMxid != MatrixClientPeg.get().getUserId()) {
+                } else if (this.state.invitedEmailMxid != MatrixClientPeg.safeGet().getUserId()) {
                     return MessageCase.InvitedEmailMismatch;
                 }
             }
@@ -232,7 +232,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
     }
 
     private getMyMember(): RoomMember | null {
-        return this.props.room?.getMember(MatrixClientPeg.get().getUserId()!) ?? null;
+        return this.props.room?.getMember(MatrixClientPeg.safeGet().getSafeUserId()) ?? null;
     }
 
     private getInviteMember(): RoomMember | null {
@@ -240,7 +240,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         if (!room) {
             return null;
         }
-        const myUserId = MatrixClientPeg.get().getUserId()!;
+        const myUserId = MatrixClientPeg.safeGet().getSafeUserId();
         const inviteEvent = room.currentState.getMember(myUserId);
         if (!inviteEvent) {
             return null;
@@ -504,7 +504,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                     primaryActionLabel = _t("Accept");
                 }
 
-                const myUserId = MatrixClientPeg.get().getUserId()!;
+                const myUserId = MatrixClientPeg.safeGet().getSafeUserId();
                 const member = this.props.room?.currentState.getMember(myUserId);
                 const memberEventContent = member?.events.member?.getContent();
 

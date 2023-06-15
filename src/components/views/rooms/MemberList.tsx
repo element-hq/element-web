@@ -84,7 +84,7 @@ export default class MemberList extends React.Component<IProps, IState> {
     }
 
     private listenForMembersChanges(): void {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         cli.on(RoomStateEvent.Update, this.onRoomStateUpdate);
         cli.on(RoomMemberEvent.Name, this.onRoomMemberName);
         cli.on(RoomStateEvent.Events, this.onRoomStateEvent);
@@ -121,7 +121,7 @@ export default class MemberList extends React.Component<IProps, IState> {
     }
 
     private get canInvite(): boolean {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(this.props.roomId);
 
         return (
@@ -284,7 +284,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         // The HS may have already converted these into m.room.member invites so
         // we shouldn't add them if the 3pid invite state key (token) is in the
         // member invite (content.third_party_invite.signed.token)
-        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        const room = MatrixClientPeg.safeGet().getRoom(this.props.roomId);
 
         if (room) {
             return room.currentState.getStateEvents("m.room.third_party_invite").filter(function (e) {
@@ -348,7 +348,7 @@ export default class MemberList extends React.Component<IProps, IState> {
             );
         }
 
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(this.props.roomId);
         let inviteButton: JSX.Element | undefined;
 
@@ -442,7 +442,7 @@ export default class MemberList extends React.Component<IProps, IState> {
     private onInviteButtonClick = (ev: ButtonEvent): void => {
         PosthogTrackers.trackInteraction("WebRightPanelMemberListInviteButton", ev);
 
-        if (MatrixClientPeg.get().isGuest()) {
+        if (MatrixClientPeg.safeGet().isGuest()) {
             dis.dispatch({ action: "require_registration" });
             return;
         }

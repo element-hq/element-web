@@ -87,7 +87,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
         return <div />;
     }
 
-    const prevRoom = MatrixClientPeg.get().getRoom(predecessor.roomId);
+    const prevRoom = MatrixClientPeg.safeGet().getRoom(predecessor.roomId);
 
     // We need either the previous room, or some servers to find it with.
     // Otherwise, we must bail out here

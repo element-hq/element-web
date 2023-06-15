@@ -311,7 +311,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
             this.props.mxEvent.on(MatrixEventEvent.Status, this.onSent);
         }
 
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         client.decryptEventIfNeeded(this.props.mxEvent);
 
         if (this.props.mxEvent.isBeingDecrypted()) {
@@ -364,7 +364,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         e.stopPropagation();
 
         editEvent(
-            MatrixClientPeg.get(),
+            MatrixClientPeg.safeGet(),
             this.props.mxEvent,
             this.context.timelineRenderingType,
             this.props.getRelationsForEvent,
@@ -417,19 +417,19 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         ev.preventDefault();
         ev.stopPropagation();
 
-        this.runActionOnFailedEv((tarEv) => Resend.resend(MatrixClientPeg.get(), tarEv));
+        this.runActionOnFailedEv((tarEv) => Resend.resend(MatrixClientPeg.safeGet(), tarEv));
     };
 
     private onCancelClick = (ev: ButtonEvent): void => {
         this.runActionOnFailedEv(
-            (tarEv) => Resend.removeFromQueue(MatrixClientPeg.get(), tarEv),
+            (tarEv) => Resend.removeFromQueue(MatrixClientPeg.safeGet(), tarEv),
             (testEv) => canCancel(testEv.status),
         );
     };
 
     public render(): React.ReactNode {
         const toolbarOpts: JSX.Element[] = [];
-        if (canEditContent(MatrixClientPeg.get(), this.props.mxEvent)) {
+        if (canEditContent(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
             toolbarOpts.push(
                 <RovingAccessibleTooltipButton
                     className="mx_MessageActionBar_iconButton"

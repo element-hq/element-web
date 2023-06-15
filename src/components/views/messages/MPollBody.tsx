@@ -118,7 +118,7 @@ export function pollAlreadyHasVotes(mxEvent: MatrixEvent, getRelationsForEvent?:
 }
 
 export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: GetRelationsForEvent): void {
-    const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
+    const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
     if (pollAlreadyHasVotes(mxEvent, getRelationsForEvent)) {
         Modal.createDialog(ErrorDialog, {
             title: _t("Can't edit poll"),

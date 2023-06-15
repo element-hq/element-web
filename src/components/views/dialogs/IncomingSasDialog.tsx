@@ -86,7 +86,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
 
     private async fetchOpponentProfile(): Promise<void> {
         try {
-            const prof = await MatrixClientPeg.get().getProfileInfo(this.props.verifier.userId);
+            const prof = await MatrixClientPeg.safeGet().getProfileInfo(this.props.verifier.userId);
             this.setState({
                 opponentProfile: prof,
             });
@@ -143,7 +143,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
     };
 
     private renderPhaseStart(): ReactNode {
-        const isSelf = this.props.verifier.userId === MatrixClientPeg.get().getUserId();
+        const isSelf = this.props.verifier.userId === MatrixClientPeg.safeGet().getUserId();
 
         let profile;
         const oppProfile = this.state.opponentProfile;
@@ -233,7 +233,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
                 sas={this.showSasEvent.sas}
                 onCancel={this.onCancelClick}
                 onDone={this.onSasMatchesClick}
-                isSelf={this.props.verifier.userId === MatrixClientPeg.get().getUserId()}
+                isSelf={this.props.verifier.userId === MatrixClientPeg.safeGet().getUserId()}
                 inDialog={true}
             />
         );

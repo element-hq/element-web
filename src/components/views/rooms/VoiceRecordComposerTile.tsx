@@ -130,7 +130,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             );
 
             // Attach mentions, which really only applies if there's a replyToEvent.
-            attachMentions(MatrixClientPeg.get().getSafeUserId(), content, null, replyToEvent);
+            attachMentions(MatrixClientPeg.safeGet().getSafeUserId(), content, null, replyToEvent);
             attachRelation(content, relation);
             if (replyToEvent) {
                 addReplyToMessageContent(content, replyToEvent, {
@@ -148,7 +148,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
             doMaybeLocalRoomAction(
                 this.props.room.roomId,
-                (actualRoomId: string) => MatrixClientPeg.get().sendMessage(actualRoomId, content),
+                (actualRoomId: string) => MatrixClientPeg.safeGet().sendMessage(actualRoomId, content),
                 this.props.room.client,
             );
         } catch (e) {

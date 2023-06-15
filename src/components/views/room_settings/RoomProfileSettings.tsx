@@ -52,7 +52,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
     public constructor(props: IProps) {
         super(props);
 
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const room = client.getRoom(props.roomId);
         if (!room) throw new Error(`Expected a room for ID: ${props.roomId}`);
 
@@ -124,7 +124,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         if (!this.isSaveEnabled()) return;
         this.setState({ profileFieldsTouched: {} });
 
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const newState: Partial<IState> = {};
 
         // TODO: What do we do about errors?

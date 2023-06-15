@@ -63,7 +63,7 @@ async function proxyHealthCheck(endpoint: string, hsUrl?: string): Promise<void>
 }
 
 export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): void }> = ({ onFinished }) => {
-    const cli = MatrixClientPeg.get();
+    const cli = MatrixClientPeg.safeGet();
     const currentProxy = SettingsStore.getValue("feature_sliding_sync_proxy_url");
     const hasNativeSupport = useAsyncMemo(
         () =>
@@ -87,7 +87,7 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
     const validProxy = withValidation<undefined, { error?: Error }>({
         async deriveData({ value }): Promise<{ error?: Error }> {
             try {
-                await proxyHealthCheck(value!, MatrixClientPeg.get().baseUrl);
+                await proxyHealthCheck(value!, MatrixClientPeg.safeGet().baseUrl);
                 return {};
             } catch (error) {
                 return { error };

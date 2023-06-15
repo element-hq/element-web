@@ -93,7 +93,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         this.activateSpoilers([content]);
 
         HtmlUtils.linkifyElement(content);
-        pillifyLinks(MatrixClientPeg.get(), [content], this.props.mxEvent, this.pills);
+        pillifyLinks(MatrixClientPeg.safeGet(), [content], this.props.mxEvent, this.pills);
 
         this.calculateUrlPreview();
 

@@ -57,7 +57,7 @@ export default class AppPermission extends React.Component<IProps, IState> {
         const urlInfo = this.parseWidgetUrl();
 
         // The second step is to find the user's profile so we can show it on the prompt
-        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        const room = MatrixClientPeg.safeGet().getRoom(this.props.roomId);
         let roomMember: RoomMember | null = null;
         if (room) roomMember = room.getMember(this.props.creatorUserId);
 

@@ -45,7 +45,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         const valueBefore = this.state.isRoomPublished;
         const newValue = !valueBefore;
         this.setState({ isRoomPublished: newValue });
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
 
         client
             .setRoomDirectoryVisibility(this.props.roomId, newValue ? Visibility.Public : Visibility.Private)
@@ -56,14 +56,14 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
     };
 
     public componentDidMount(): void {
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         client.getRoomDirectoryVisibility(this.props.roomId).then((result) => {
             this.setState({ isRoomPublished: result.visibility === "public" });
         });
     }
 
     public render(): React.ReactNode {
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
 
         const room = client.getRoom(this.props.roomId);
         const isRoomPublishable = room && room.getJoinRule() !== JoinRule.Invite;

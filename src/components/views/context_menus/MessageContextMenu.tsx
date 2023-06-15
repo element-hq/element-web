@@ -144,7 +144,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     }
 
     public componentDidMount(): void {
-        MatrixClientPeg.get().on(RoomMemberEvent.PowerLevel, this.checkPermissions);
+        MatrixClientPeg.safeGet().on(RoomMemberEvent.PowerLevel, this.checkPermissions);
 
         // re-check the permissions on send progress (`maySendRedactionForEvent` only returns true for events that have
         // been fully sent and echoed back, and we want to ensure the "Remove" option is added once that happens.)
@@ -162,7 +162,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     }
 
     private checkPermissions = (): void => {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
 
         // We explicitly decline to show the redact option on ACL events as it has a potential
@@ -184,7 +184,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private isPinned(): boolean {
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
         const pinnedEvent = room?.currentState.getStateEvents(EventType.RoomPinnedEvents, "");
         if (!pinnedEvent) return false;
         const content = pinnedEvent.getContent();
@@ -195,13 +195,13 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         return (
             M_POLL_START.matches(mxEvent.getType()) &&
             this.state.canRedact &&
-            !isPollEnded(mxEvent, MatrixClientPeg.get())
+            !isPollEnded(mxEvent, MatrixClientPeg.safeGet())
         );
     }
 
     private onResendReactionsClick = (): void => {
         for (const reaction of this.getUnsentReactions()) {
-            Resend.resend(MatrixClientPeg.get(), reaction);
+            Resend.resend(MatrixClientPeg.safeGet(), reaction);
         }
         this.closeMenu();
     };
@@ -253,7 +253,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onPinClick = (): void => {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         if (!room) return;
         const eventId = this.props.mxEvent.getId();
@@ -318,7 +318,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private onEditClick = (): void => {
         editEvent(
-            MatrixClientPeg.get(),
+            MatrixClientPeg.safeGet(),
             this.props.mxEvent,
             this.context.timelineRenderingType,
             this.props.getRelationsForEvent,
@@ -345,7 +345,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onEndPollClick = (): void => {
-        const matrixClient = MatrixClientPeg.get();
+        const matrixClient = MatrixClientPeg.safeGet();
         Modal.createDialog(
             EndPollDialog,
             {
@@ -359,7 +359,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private getReactions(filter: (e: MatrixEvent) => boolean): MatrixEvent[] {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         const eventId = this.props.mxEvent.getId();
         return (
@@ -386,7 +386,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     public render(): React.ReactNode {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const me = cli.getUserId();
         const { mxEvent, rightClick, link, eventTileOps, reactions, collapseReplyChain, ...other } = this.props;
         delete other.getRelationsForEvent;

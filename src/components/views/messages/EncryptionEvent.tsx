@@ -36,7 +36,7 @@ const ALGORITHM = "m.megolm.v1.aes-sha2";
 const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp }, ref) => {
     const cli = useContext(MatrixClientContext);
     const roomId = mxEvent.getRoomId()!;
-    const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
+    const isRoomEncrypted = MatrixClientPeg.safeGet().isRoomEncrypted(roomId);
 
     const prevContent = mxEvent.getPrevContent() as IRoomEncryption;
     const content = mxEvent.getContent<IRoomEncryption>();

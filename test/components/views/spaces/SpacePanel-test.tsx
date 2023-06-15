@@ -127,6 +127,7 @@ describe("<SpacePanel />", () => {
 
     beforeAll(() => {
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
     });
 
     beforeEach(() => {

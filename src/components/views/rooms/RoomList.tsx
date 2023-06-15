@@ -222,7 +222,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
     if (menuDisplayed && activeSpace) {
         const canAddRooms = activeSpace.currentState.maySendStateEvent(
             EventType.SpaceChild,
-            MatrixClientPeg.get().getUserId()!,
+            MatrixClientPeg.safeGet().getSafeUserId(),
         );
 
         contextMenuContent = (

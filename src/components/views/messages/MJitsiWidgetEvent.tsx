@@ -37,7 +37,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
         const url = this.props.mxEvent.getContent()["url"];
         const prevUrl = this.props.mxEvent.getPrevContent()["url"];
         const senderName = this.props.mxEvent.sender?.name || this.props.mxEvent.getSender();
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
         if (!room) return null;
         const widgetId = this.props.mxEvent.getStateKey();
         const widget = WidgetStore.instance.getRoom(room.roomId, true).widgets.find((w) => w.id === widgetId);

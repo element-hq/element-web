@@ -62,7 +62,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
 
         const { roomId } = this.props.member;
         if (roomId) {
@@ -97,7 +97,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         if (ev.getRoomId() !== roomId) return;
 
         // The room is encrypted now.
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         cli.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         this.setState({
             isRoomEncrypted: true,
@@ -116,7 +116,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
     };
 
     private async updateE2EStatus(): Promise<void> {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const { userId } = this.props.member;
         const isMe = userId === cli.getUserId();
         const userTrust = cli.checkUserTrust(userId);

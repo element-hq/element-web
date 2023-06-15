@@ -60,8 +60,8 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
     private onClearCacheAndReload = (): void => {
         if (!PlatformPeg.get()) return;
 
-        MatrixClientPeg.get().stopClient();
-        MatrixClientPeg.get()
+        MatrixClientPeg.safeGet().stopClient();
+        MatrixClientPeg.safeGet()
             .store.deleteAllData()
             .then(() => {
                 PlatformPeg.get()?.reload();

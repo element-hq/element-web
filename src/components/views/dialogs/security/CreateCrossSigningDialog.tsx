@@ -73,7 +73,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
 
     private async queryKeyUploadAuth(): Promise<void> {
         try {
-            await MatrixClientPeg.get().uploadDeviceSigningKeys(undefined, {} as CrossSigningKeys);
+            await MatrixClientPeg.safeGet().uploadDeviceSigningKeys(undefined, {} as CrossSigningKeys);
             // We should never get here: the server should always require
             // UI auth to upload device signing keys. If we do, we upload
             // no keys which would be a no-op.
@@ -98,11 +98,11 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
                 type: "m.login.password",
                 identifier: {
                     type: "m.id.user",
-                    user: MatrixClientPeg.get().getUserId(),
+                    user: MatrixClientPeg.safeGet().getUserId(),
                 },
                 // TODO: Remove `user` once servers support proper UIA
                 // See https://github.com/matrix-org/synapse/issues/5665
-                user: MatrixClientPeg.get().getUserId(),
+                user: MatrixClientPeg.safeGet().getUserId(),
                 password: this.state.accountPassword,
             });
         } else if (this.props.tokenLogin) {
@@ -126,7 +126,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
 
             const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                 title: _t("Setting up keys"),
-                matrixClient: MatrixClientPeg.get(),
+                matrixClient: MatrixClientPeg.safeGet(),
                 makeRequest,
                 aestheticsForStagePhases: {
                     [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
@@ -145,9 +145,8 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
             error: null,
         });
 
-        const cli = MatrixClientPeg.get();
-
         try {
+            const cli = MatrixClientPeg.safeGet();
             await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: this.doBootstrapUIAuth,
             });

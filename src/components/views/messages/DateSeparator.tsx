@@ -125,7 +125,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         const roomIdForJumpRequest = this.props.roomId;
 
         try {
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
             const { event_id: eventId, origin_server_ts: originServerTs } = await cli.timestampToEvent(
                 roomIdForJumpRequest,
                 unixTimestamp,

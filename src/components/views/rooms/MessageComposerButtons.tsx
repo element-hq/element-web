@@ -309,7 +309,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
         this.context?.(); // close overflow menu
         const canSend = this.props.room.currentState.maySendEvent(
             M_POLL_START.name,
-            MatrixClientPeg.get().getUserId()!,
+            MatrixClientPeg.safeGet().getSafeUserId(),
         );
         if (!canSend) {
             Modal.createDialog(ErrorDialog, {

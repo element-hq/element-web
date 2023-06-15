@@ -171,7 +171,7 @@ const toPublicRoomResult = (publicRoom: IPublicRoomsChunkRoom): IPublicRoomResul
 });
 
 const toRoomResult = (room: Room): IRoomResult => {
-    const myUserId = MatrixClientPeg.get().getUserId();
+    const myUserId = MatrixClientPeg.safeGet().getUserId();
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
 
     if (otherUserId) {
@@ -281,7 +281,7 @@ interface IDirectoryOpts {
 const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = null, onFinished }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const cli = MatrixClientPeg.get();
+    const cli = MatrixClientPeg.safeGet();
     const rovingContext = useContext(RovingTabIndexContext);
     const [query, _setQuery] = useState(initialText);
     const [recentSearches, clearRecentSearches] = useRecentSearches();

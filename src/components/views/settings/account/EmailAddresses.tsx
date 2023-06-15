@@ -77,7 +77,7 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
         e.stopPropagation();
         e.preventDefault();
 
-        MatrixClientPeg.get()
+        MatrixClientPeg.safeGet()
             .deleteThreePid(this.props.email.medium, this.props.email.address)
             .then(() => {
                 return this.props.onRemoved(this.props.email);
@@ -181,7 +181,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
             return;
         }
 
-        const task = new AddThreepid(MatrixClientPeg.get());
+        const task = new AddThreepid(MatrixClientPeg.safeGet());
         this.setState({ verifying: true, continueDisabled: true, addTask: task });
 
         task.addEmailAddress(email)

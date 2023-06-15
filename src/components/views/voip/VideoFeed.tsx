@@ -200,7 +200,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         let content;
         if (this.state.videoMuted) {
             const callRoomId = LegacyCallHandler.instance.roomIdForCall(this.props.call);
-            const callRoom = (callRoomId ? MatrixClientPeg.get().getRoom(callRoomId) : undefined) ?? undefined;
+            const callRoom = (callRoomId ? MatrixClientPeg.safeGet().getRoom(callRoomId) : undefined) ?? undefined;
 
             let avatarSize;
             if (pipMode && primary) avatarSize = 76;

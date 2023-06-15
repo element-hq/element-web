@@ -72,7 +72,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
             });
             return;
         }
-        this.addThreepid = new AddThreepid(MatrixClientPeg.get());
+        this.addThreepid = new AddThreepid(MatrixClientPeg.safeGet());
         this.addThreepid.addEmailAddress(emailAddress).then(
             () => {
                 Modal.createDialog(QuestionDialog, {

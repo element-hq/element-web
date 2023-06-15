@@ -162,7 +162,7 @@ export default class PersistedElement extends React.Component<IProps> {
 
     private renderApp(): void {
         const content = (
-            <MatrixClientContext.Provider value={MatrixClientPeg.get()}>
+            <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
                 <div ref={this.collectChild} style={this.props.style}>
                     {this.props.children}
                 </div>

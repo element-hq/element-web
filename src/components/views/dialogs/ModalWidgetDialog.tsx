@@ -71,7 +71,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
 
         this.widget = new ElementWidget({
             ...this.props.widgetDefinition,
-            creatorUserId: MatrixClientPeg.get().getSafeUserId(),
+            creatorUserId: MatrixClientPeg.safeGet().getSafeUserId(),
             id: `modal_${this.props.sourceWidgetId}`,
         });
         this.possibleButtons = (this.props.widgetDefinition.buttons || []).map((b) => b.id);
@@ -130,7 +130,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     public render(): React.ReactNode {
         const templated = this.widget.getCompleteUrl({
             widgetRoomId: this.props.widgetRoomId,
-            currentUserId: MatrixClientPeg.get().getSafeUserId(),
+            currentUserId: MatrixClientPeg.safeGet().getSafeUserId(),
             userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,

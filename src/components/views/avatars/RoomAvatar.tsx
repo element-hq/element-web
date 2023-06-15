@@ -65,7 +65,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
+        MatrixClientPeg.safeGet().on(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
     public componentWillUnmount(): void {

@@ -34,7 +34,7 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
     let askToVerifyText: string;
     let newSessionText: string;
 
-    if (MatrixClientPeg.get().getUserId() === user.userId) {
+    if (MatrixClientPeg.safeGet().getUserId() === user.userId) {
         newSessionText = _t("You signed in to a new session without verifying it:");
         askToVerifyText = _t("Verify your other session using one of the options below.");
     } else {

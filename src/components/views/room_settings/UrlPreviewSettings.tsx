@@ -43,7 +43,7 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
 
     public render(): ReactNode {
         const roomId = this.props.room.roomId;
-        const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
+        const isEncrypted = MatrixClientPeg.safeGet().isRoomEncrypted(roomId);
 
         let previewsForAccount: ReactNode | undefined;
         let previewsForRoom: ReactNode | undefined;

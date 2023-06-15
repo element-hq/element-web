@@ -48,7 +48,7 @@ export default class VerificationRequestDialog extends React.Component<IProps, I
     public render(): React.ReactNode {
         const request = this.state.verificationRequest;
         const otherUserId = request?.otherUserId;
-        const member = this.props.member || (otherUserId ? MatrixClientPeg.get().getUser(otherUserId) : null);
+        const member = this.props.member || (otherUserId ? MatrixClientPeg.safeGet().getUser(otherUserId) : null);
         const title = request?.isSelfVerification ? _t("Verify other device") : _t("Verification Request");
 
         if (!member) return null;

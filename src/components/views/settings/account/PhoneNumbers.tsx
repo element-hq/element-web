@@ -72,7 +72,7 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
         e.stopPropagation();
         e.preventDefault();
 
-        MatrixClientPeg.get()
+        MatrixClientPeg.safeGet()
             .deleteThreePid(this.props.msisdn.medium, this.props.msisdn.address)
             .then(() => {
                 return this.props.onRemoved(this.props.msisdn);
@@ -182,7 +182,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         const phoneNumber = this.state.newPhoneNumber;
         const phoneCountry = this.state.phoneCountry;
 
-        const task = new AddThreepid(MatrixClientPeg.get());
+        const task = new AddThreepid(MatrixClientPeg.safeGet());
         this.setState({ verifying: true, continueDisabled: true, addTask: task });
 
         task.addMsisdn(phoneCountry, phoneNumber)

@@ -22,7 +22,7 @@ import EditableTextContainer from "../elements/EditableTextContainer";
 
 export default class ChangeDisplayName extends React.Component {
     private getDisplayName = async (): Promise<string> => {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         try {
             const res = await cli.getProfileInfo(cli.getUserId()!);
             return res.displayname ?? "";
@@ -32,7 +32,7 @@ export default class ChangeDisplayName extends React.Component {
     };
 
     private changeDisplayName = (newDisplayname: string): Promise<{}> => {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         return cli.setDisplayName(newDisplayname).catch(function () {
             throw new Error("Failed to set display name");
         });

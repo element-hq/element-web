@@ -166,6 +166,7 @@ beforeEach(() => {
     } as unknown as MatrixClient);
 
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+    jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
 });
 
 describe("<UserInfo />", () => {

@@ -166,7 +166,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         if (otherUserId && this.props.room.getJoinedMemberCount() === 2) {
             // Track presence, if available
             if (isPresenceEnabled(this.props.room.client)) {
-                this.dmUser = MatrixClientPeg.get().getUser(otherUserId);
+                this.dmUser = MatrixClientPeg.safeGet().getUser(otherUserId);
                 icon = this.getPresenceIcon();
             }
         } else {

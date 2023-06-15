@@ -278,8 +278,11 @@ const NewRoomIntro: React.FC = () => {
             "like email invites.",
     );
 
-    let subButton;
-    if (room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, MatrixClientPeg.get()) && !isLocalRoom) {
+    let subButton: JSX.Element | undefined;
+    if (
+        room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, MatrixClientPeg.safeGet()) &&
+        !isLocalRoom
+    ) {
         subButton = (
             <AccessibleButton kind="link_inline" onClick={openRoomSettings}>
                 {_t("Enable encryption in settings.")}

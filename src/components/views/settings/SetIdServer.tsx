@@ -88,7 +88,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         super(props);
 
         let defaultIdServer = "";
-        if (!MatrixClientPeg.get().getIdentityServerUrl() && getDefaultIdentityServerUrl()) {
+        if (!MatrixClientPeg.safeGet().getIdentityServerUrl() && getDefaultIdentityServerUrl()) {
             // If no identity server is configured but there's one in the config, prepopulate
             // the field to help the user.
             defaultIdServer = abbreviateUrl(getDefaultIdentityServerUrl());
@@ -96,7 +96,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
         this.state = {
             defaultIdServer,
-            currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
+            currentClientIdServer: MatrixClientPeg.safeGet().getIdentityServerUrl(),
             idServer: "",
             busy: false,
             disconnectBusy: false,
@@ -118,7 +118,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         if (payload.action !== "id_server_changed") return;
 
         this.setState({
-            currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
+            currentClientIdServer: MatrixClientPeg.safeGet().getIdentityServerUrl(),
         });
     };
 
@@ -149,7 +149,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
     private saveIdServer = (fullUrl: string): void => {
         // Account data change will update localstorage, client, etc through dispatcher
-        MatrixClientPeg.get().setAccountData("m.identity_server", {
+        MatrixClientPeg.safeGet().setAccountData("m.identity_server", {
             base_url: fullUrl,
         });
         this.setState({
@@ -181,7 +181,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 let save = true;
 
                 // Double check that the identity server even has terms of service.
-                const hasTerms = await doesIdentityServerHaveTerms(MatrixClientPeg.get(), fullUrl);
+                const hasTerms = await doesIdentityServerHaveTerms(MatrixClientPeg.safeGet(), fullUrl);
                 if (!hasTerms) {
                     const [confirmed] = await this.showNoTermsWarning(fullUrl);
                     save = !!confirmed;
@@ -217,7 +217,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             busy: false,
             checking: false,
             error: errStr ?? undefined,
-            currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
+            currentClientIdServer: MatrixClientPeg.safeGet().getIdentityServerUrl(),
         });
     };
 
@@ -272,7 +272,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         let currentServerReachable = true;
         try {
             threepids = await timeout(
-                getThreepidsWithBindStatus(MatrixClientPeg.get()),
+                getThreepidsWithBindStatus(MatrixClientPeg.safeGet()),
                 Promise.reject(new Error("Timeout attempting to reach identity server")),
                 REACHABILITY_TIMEOUT,
             );
@@ -362,7 +362,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
     private disconnectIdServer = (): void => {
         // Account data change will update localstorage, client, etc through dispatcher
-        MatrixClientPeg.get().setAccountData("m.identity_server", {
+        MatrixClientPeg.safeGet().setAccountData("m.identity_server", {
             base_url: null, // clear
         });
 
@@ -376,7 +376,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         this.setState({
             busy: false,
             error: undefined,
-            currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
+            currentClientIdServer: MatrixClientPeg.safeGet().getIdentityServerUrl(),
             idServer: newFieldVal,
         });
     };

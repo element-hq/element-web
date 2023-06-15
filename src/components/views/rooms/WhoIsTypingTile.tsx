@@ -57,8 +57,8 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
     };
 
     public componentDidMount(): void {
-        MatrixClientPeg.get().on(RoomMemberEvent.Typing, this.onRoomMemberTyping);
-        MatrixClientPeg.get().on(RoomEvent.Timeline, this.onRoomTimeline);
+        MatrixClientPeg.safeGet().on(RoomMemberEvent.Typing, this.onRoomMemberTyping);
+        MatrixClientPeg.safeGet().on(RoomEvent.Timeline, this.onRoomTimeline);
     }
 
     public componentDidUpdate(prevProps: IProps, prevState: IState): void {

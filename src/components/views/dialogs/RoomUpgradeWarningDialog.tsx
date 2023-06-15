@@ -60,7 +60,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
     public constructor(props: IProps) {
         super(props);
 
-        const room = MatrixClientPeg.get().getRoom(this.props.roomId);
+        const room = MatrixClientPeg.safeGet().getRoom(this.props.roomId);
         const joinRules = room?.currentState.getStateEvents(EventType.RoomJoinRules, "");
         this.isPrivate = joinRules?.getContent()["join_rule"] !== JoinRule.Public ?? true;
         this.currentVersion = room?.getVersion();

@@ -31,7 +31,7 @@ export default class TextualEvent extends React.Component<IProps> {
     public render(): React.ReactNode {
         const text = TextForEvent.textForEvent(
             this.props.mxEvent,
-            MatrixClientPeg.get(),
+            MatrixClientPeg.safeGet(),
             true,
             this.context?.showHiddenEvents,
         );
