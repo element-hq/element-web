@@ -19,11 +19,11 @@
         "noImplicitThis": true
     },
     "include": [
-        "./node_modules/matrix-js-sdk/src/@types/*.d.ts",
-        "./node_modules/matrix-react-sdk/src/@types/diff-dom.d.ts",
-        "./node_modules/matrix-react-sdk/src/@types/opus-recorder.d.ts",
-        "./node_modules/matrix-react-sdk/src/@types/png-chunks-extract.d.ts",
-        "./node_modules/matrix-react-sdk/src/@types/sanitize-html.d.ts",
+        "./matrix-js-sdk/src/@types/*.d.ts",
+        "./matrix-react-sdk/src/@types/diff-dom.d.ts",
+        "./matrix-react-sdk/src/@types/opus-recorder.d.ts",
+        "./matrix-react-sdk/src/@types/png-chunks-extract.d.ts",
+        "./matrix-react-sdk/src/@types/sanitize-html.d.ts",
         "./src/**/*.ts",
         "./src/**/*.tsx",
         "./test/**/*.ts",

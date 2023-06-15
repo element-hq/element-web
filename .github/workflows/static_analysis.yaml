@@ -21,7 +21,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install Dependencies
-              run: "./scripts/layered.sh"
+              run: "yarn --frozen-lockfile"
 
             - name: Typecheck
               run: "yarn run lint:types"
@@ -37,7 +37,7 @@ jobs:
             - uses: actions/checkout@v3
 
             - name: Install Deps
-              run: "scripts/layered.sh"
+              run: "yarn --frozen-lockfile"
 
             - name: Get diff lines
               id: diff
@@ -80,7 +80,7 @@ jobs:
 
             # Does not need branch matching as only analyses this layer
             - name: Install Deps
-              run: "yarn install --frozen-lockfile"
+              run: "yarn --frozen-lockfile"
 
             - name: Run Linter
               run: "yarn run lint:js"
@@ -97,7 +97,7 @@ jobs:
 
             # Needs branch matching as it inherits .stylelintrc.js from matrix-react-sdk
             - name: Install Dependencies
-              run: "./scripts/layered.sh"
+              run: "yarn --frozen-lockfile"
 
             - name: Run Linter
               run: "yarn run lint:style"
@@ -113,7 +113,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install Deps
-              run: "scripts/layered.sh"
+              run: "yarn --frozen-lockfile"
 
             - name: Dead Code Analysis
               run: "yarn run analyse:unused-exports"

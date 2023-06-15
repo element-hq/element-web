@@ -28,7 +28,7 @@ jobs:
                   cache: "yarn"
 
             - name: Install Dependencies
-              run: "./scripts/layered.sh"
+              run: "yarn --frozen-lockfile"
 
             - name: Build, Package & Upload sourcemaps
               run: "./scripts/ci_package.sh"

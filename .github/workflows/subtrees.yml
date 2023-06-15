@@ -1,0 +1,28 @@
+name: Subtree Autoupdate
+
+on:
+  workflow_dispatch
+
+jobs:
+  autoupdate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        subtrees: [ matrix-js-sdk, matrix-react-sdk ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+          fetch-depth: '0'
+
+      - name: Update subtree (${{ matrix.subtrees }})
+        run: git subtree pull --prefix=${{ matrix.subtrees }} https://github.com/matrix-org/${{ matrix.subtrees }}.git develop --squash
+
+      - name: Commit and push changes
+        continue-on-error: true
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@users.noreply.github.com"
+          git commit -a -m "Auto-update subtree: "
+          git push

@@ -12,7 +12,7 @@ DIR=$(dirname "$0")
 # a few SHAs rather than a version.
 if [[ $BRANCH != HEAD && ! $BRANCH =~ heads/v.+ ]]
 then
-    DIST_VERSION=$("$DIR"/get-version-from-git.sh)
+    DIST_VERSION="react-$(git rev-parse --short=12 HEAD)"
 fi
 
 DIST_VERSION=$("$DIR"/normalize-version.sh "$DIST_VERSION")
