@@ -254,20 +254,13 @@ limitations under the License.
     }
 }
 
-.mx_AppTileBody,
-.mx_AppTileBody_mini {
-    width: 100%;
-    overflow: hidden;
+/* Rules added to this selector style appTileBody generally */
+.mx_AppTileBody {
+    /* Apply to every variant of appTileBody */
     border-radius: 8px;
-    height: var(--AppTileBody-height);
-
-    iframe {
-        border: none;
-        width: 100%;
-        height: 100%;
-    }
 
     /* const loadingElement */
+    /* Note the loading spinner and the message next to it are not always included in mx_AppTileBody--loading */
     .mx_AppTileBody_fadeInSpinner {
         /* place spinner and the message at the center of mx_AppTileBody */
         height: 100%;
@@ -279,47 +272,61 @@ limitations under the License.
         animation-delay: 500ms;
         animation-name: mx_AppTileBody_fadeInSpinnerAnimation;
     }
-}
 
-.mx_AppTileBody {
-    --AppTileBody-height: 100%;
-
-    background-color: $widget-body-bg-color;
-
-    iframe {
+    &.mx_AppTileBody--large,
+    &.mx_AppTileBody--mini {
+        width: 100%;
         overflow: hidden;
-        padding: 0;
-        margin: 0;
-        display: block;
+        height: var(--AppTileBody-height);
+
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &.mx_AppTileBody--large {
+        --AppTileBody-height: 100%;
+
+        background-color: $widget-body-bg-color;
+
+        iframe {
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            display: block;
+        }
+    }
+
+    &.mx_AppTileBody--mini {
+        --AppTileBody-height: var(--AppTile_mini-height);
+    }
+
+    &.mx_AppTileBody--loading {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        height: 100%;
+
+        /* match bg of border so that the cut corners have the right fill */
+        background-color: $widget-body-bg-color !important;
+
+        iframe {
+            display: none;
+        }
     }
 }
 
-.mx_AppTileBody_mini {
-    --AppTileBody-height: var(--AppTile_mini-height);
-}
-
-.mx_AppTile .mx_AppTileBody,
-.mx_AppTileFullWidth .mx_AppTileBody,
-.mx_AppTile_mini .mx_AppTileBody_mini {
+/* appTileBody is embedded to PersistedElement outside of mx_AppTile,
+   so rules to style appTileBody generally should not be included here. */
+.mx_AppTile .mx_AppTileBody--large,
+.mx_AppTileFullWidth .mx_AppTileBody--large,
+.mx_AppTile_mini .mx_AppTileBody--mini {
     height: inherit;
     flex: 1;
-}
-
-.mx_AppTile_loading {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    height: 100%;
-
-    /* match bg of border so that the cut corners have the right fill */
-    background-color: $widget-body-bg-color !important;
-    border-radius: 8px;
-
-    iframe {
-        display: none;
-    }
 }
 
 @keyframes mx_AppTileBody_fadeInSpinnerAnimation {
