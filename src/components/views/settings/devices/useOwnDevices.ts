@@ -177,7 +177,7 @@ export const useOwnDevices = (): DevicesState => {
     const requestDeviceVerification =
         isCurrentDeviceVerified && userId
             ? async (deviceId: ExtendedDevice["device_id"]): Promise<VerificationRequest> => {
-                  return await matrixClient.requestVerification(userId, [deviceId]);
+                  return await matrixClient.getCrypto()!.requestDeviceVerification(userId, deviceId);
               }
             : undefined;
 

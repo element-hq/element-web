@@ -66,7 +66,7 @@ export class SetupEncryptionStore extends EventEmitter {
         cli.on(CryptoEvent.VerificationRequest, this.onVerificationRequest);
         cli.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
 
-        const requestsInProgress = cli.getVerificationRequestsToDeviceInProgress(cli.getUserId()!);
+        const requestsInProgress = cli.getCrypto()!.getVerificationRequestsToDeviceInProgress(cli.getUserId()!);
         if (requestsInProgress.length) {
             // If there are multiple, we take the most recent. Equally if the user sends another request from
             // another device after this screen has been shown, we'll switch to the new one, so this

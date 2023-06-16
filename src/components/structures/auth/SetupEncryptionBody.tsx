@@ -89,7 +89,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
     private onVerifyClick = (): void => {
         const cli = MatrixClientPeg.safeGet();
         const userId = cli.getSafeUserId();
-        const requestPromise = cli.requestVerification(userId);
+        const requestPromise = cli.getCrypto()!.requestOwnUserVerification();
 
         // We need to call onFinished now to close this dialog, and
         // again later to signal that the verification is complete.
