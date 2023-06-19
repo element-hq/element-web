@@ -29,48 +29,6 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               <h3
                 class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
               >
-                Room list
-              </h3>
-            </div>
-            <div
-              class="mx_SettingsSubsection_content"
-            >
-              <div
-                class="mx_SettingsFlag"
-              >
-                <label
-                  class="mx_SettingsFlag_label"
-                >
-                  <span
-                    class="mx_SettingsFlag_labelText"
-                  >
-                    Show shortcuts to recently viewed rooms above the room list
-                  </span>
-                </label>
-                <div
-                  aria-checked="true"
-                  aria-disabled="true"
-                  aria-label="Show shortcuts to recently viewed rooms above the room list"
-                  class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  role="switch"
-                  tabindex="0"
-                >
-                  <div
-                    class="mx_ToggleSwitch_ball"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="mx_SettingsSubsection"
-          >
-            <div
-              class="mx_SettingsSubsectionHeading"
-            >
-              <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
-              >
                 Spaces
               </h3>
             </div>

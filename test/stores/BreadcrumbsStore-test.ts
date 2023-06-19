@@ -32,65 +32,41 @@ describe("BreadcrumbsStore", () => {
         store = BreadcrumbsStore.instance;
         setupAsyncStoreWithClient(store, client);
         jest.spyOn(SettingsStore, "setValue").mockImplementation(() => Promise.resolve());
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
     });
 
-    describe("If the feature_breadcrumbs_v2 feature is not enabled", () => {
-        beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
-        it("does not meet room requirements if there are not enough rooms", () => {
-            // We don't have enough rooms, so we don't meet requirements
-            mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(2));
-            expect(store.meetsRoomRequirement).toBe(false);
-        });
-
-        it("meets room requirements if there are enough rooms", () => {
-            // We do have enough rooms to show breadcrumbs
-            mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
-            expect(store.meetsRoomRequirement).toBe(true);
-        });
-
-        describe("And the feature_dynamic_room_predecessors is enabled", () => {
-            beforeEach(() => {
-                // Turn on feature_dynamic_room_predecessors setting
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (settingName) => settingName === "feature_dynamic_room_predecessors",
-                );
-            });
-
-            it("passes through the dynamic room precessors flag", () => {
-                mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
-                store.meetsRoomRequirement;
-                expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
-            });
-        });
-
-        describe("And the feature_dynamic_room_predecessors is not enabled", () => {
-            it("passes through the dynamic room precessors flag", () => {
-                mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
-                store.meetsRoomRequirement;
-                expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
-            });
-        });
+    it("does not meet room requirements if there are not enough rooms", () => {
+        // We don't have enough rooms, so we don't meet requirements
+        mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(2));
+        expect(store.meetsRoomRequirement).toBe(false);
     });
 
-    describe("If the feature_breadcrumbs_v2 feature is enabled", () => {
+    it("meets room requirements if there are enough rooms", () => {
+        // We do have enough rooms to show breadcrumbs
+        mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
+        expect(store.meetsRoomRequirement).toBe(true);
+    });
+
+    describe("And the feature_dynamic_room_predecessors is enabled", () => {
         beforeEach(() => {
-            // Turn on feature_breadcrumbs_v2 setting
+            // Turn on feature_dynamic_room_predecessors setting
             jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_breadcrumbs_v2",
+                (settingName) => settingName === "feature_dynamic_room_predecessors",
             );
         });
 
-        it("always meets room requirements", () => {
-            // With enough rooms, we meet requirements
+        it("passes through the dynamic room precessors flag", () => {
             mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
-            expect(store.meetsRoomRequirement).toBe(true);
+            store.meetsRoomRequirement;
+            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
+        });
+    });
 
-            // And even with not enough we do, because the feature is enabled.
-            mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(2));
-            expect(store.meetsRoomRequirement).toBe(true);
+    describe("And the feature_dynamic_room_predecessors is not enabled", () => {
+        it("passes through the dynamic room precessors flag", () => {
+            mocked(client.getVisibleRooms).mockReturnValue(fakeRooms(25));
+            store.meetsRoomRequirement;
+            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
         });
     });
 

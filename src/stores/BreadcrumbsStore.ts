@@ -50,7 +50,6 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
         SettingsStore.monitorSetting("breadcrumb_rooms", null);
         SettingsStore.monitorSetting("breadcrumbs", null);
-        SettingsStore.monitorSetting("feature_breadcrumbs_v2", null);
     }
 
     public static get instance(): BreadcrumbsStore {
@@ -69,11 +68,9 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
      * Do we have enough rooms to justify showing the breadcrumbs?
      * (Or is the labs feature enabled?)
      *
-     * @returns true if there are at least 20 visible rooms or
-     *          feature_breadcrumbs_v2 is enabled.
+     * @returns true if there are at least 20 visible rooms.
      */
     public get meetsRoomRequirement(): boolean {
-        if (SettingsStore.getValue("feature_breadcrumbs_v2")) return true;
         const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
         return !!this.matrixClient && this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor).length >= 20;
     }
@@ -83,7 +80,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         if (payload.action === Action.SettingUpdated) {
             if (payload.settingName === "breadcrumb_rooms") {
                 await this.updateRooms();
-            } else if (payload.settingName === "breadcrumbs" || payload.settingName === "feature_breadcrumbs_v2") {
+            } else if (payload.settingName === "breadcrumbs") {
                 await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
             }
         } else if (payload.action === Action.ViewRoom) {

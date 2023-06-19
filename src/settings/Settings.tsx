@@ -331,13 +331,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("Show info about bridges in room settings"),
         default: false,
     },
-    "feature_breadcrumbs_v2": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Use new room breadcrumbs"),
-        default: false,
-    },
     "feature_right_panel_default_open": {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
@@ -856,7 +849,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show shortcuts to recently viewed rooms above the room list"),
         default: true,
-        controller: new IncompatibleController("feature_breadcrumbs_v2", true),
     },
     "FTUE.userOnboardingButton": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
