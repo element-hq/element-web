@@ -809,3 +809,32 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
   </div>
 </div>
 `;
+
+exports[`RoomView should show error view if failed to look up room alias 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_RoomView"
+  >
+    <div
+      class="mx_RoomPreviewBar dark-panel mx_RoomPreviewBar_RoomNotFound mx_RoomPreviewBar_dialog"
+    >
+      <div
+        class="mx_RoomPreviewBar_message"
+      >
+        <h3>
+          #addy:server does not exist.
+        </h3>
+        <p>
+          Are you sure you're at the right place?
+        </p>
+      </div>
+      <div
+        class="mx_RoomPreviewBar_actions"
+      />
+      <div
+        class="mx_RoomPreviewBar_footer"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;
