@@ -80,9 +80,7 @@ export function isJoinedOrNearlyJoined(membership: string): boolean {
 }
 
 /**
- * Try to ensure the user is already in the megolm session before continuing
- * NOTE: this assumes you've just created the room and there's not been an opportunity
- * for other code to run, so we shouldn't miss RoomState.newMember when it comes by.
+ * Try to ensure the user is in the room (invited or joined) before continuing
  */
 export async function waitForMember(
     client: MatrixClient,
@@ -92,6 +90,12 @@ export async function waitForMember(
 ): Promise<boolean> {
     const { timeout } = opts;
     let handler: (event: MatrixEvent, state: RoomState, member: RoomMember) => void;
+
+    // check if the user is in the room before we start -- in which case, no need to wait.
+    if ((client.getRoom(roomId)?.getMember(userId) ?? null) !== null) {
+        return true;
+    }
+
     return new Promise<boolean>((resolve) => {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         handler = function (_, __, member: RoomMember) {
@@ -102,7 +106,7 @@ export async function waitForMember(
         client.on(RoomStateEvent.NewMember, handler);
 
         /* We don't want to hang if this goes wrong, so we proceed and hope the other
-           user is already in the megolm session */
+           user is already in the room */
         window.setTimeout(resolve, timeout, false);
     }).finally(() => {
         client.removeListener(RoomStateEvent.NewMember, handler);

@@ -14,19 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventEmitter } from "events";
-import { MatrixClient, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room, RoomMember, RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { mocked } from "jest-mock";
 
 import { waitForMember } from "../../src/utils/membership";
+import { createTestClient } from "../test-utils";
 
 /* Shorter timeout, we've got tests to run */
 const timeout = 30;
 
 describe("waitForMember", () => {
-    let client: EventEmitter;
+    const STUB_ROOM_ID = "!stub_room:domain";
+    const STUB_MEMBER_ID = "!stub_member:domain";
+
+    let client: MatrixClient;
 
     beforeEach(() => {
-        client = new EventEmitter();
+        client = createTestClient();
+
+        // getRoom() only knows about !stub_room, which has only one member
+        const stubRoom = {
+            getMember: jest.fn().mockImplementation((userId) => {
+                return userId === STUB_MEMBER_ID ? ({} as RoomMember) : null;
+            }),
+        };
+        mocked(client.getRoom).mockImplementation((roomId) => {
+            return roomId === STUB_ROOM_ID ? (stubRoom as unknown as Room) : null;
+        });
     });
 
     afterEach(() => {
@@ -34,7 +48,7 @@ describe("waitForMember", () => {
     });
 
     it("resolves with false if the timeout is reached", async () => {
-        const result = await waitForMember(<MatrixClient>client, "", "", { timeout: 0 });
+        const result = await waitForMember(client, "", "", { timeout: 0 });
         expect(result).toBe(false);
     });
 
@@ -42,19 +56,42 @@ describe("waitForMember", () => {
         jest.useFakeTimers();
         const roomId = "!roomId:domain";
         const userId = "@clientId:domain";
-        const resultProm = waitForMember(<MatrixClient>client, roomId, userId, { timeout });
+        const resultProm = waitForMember(client, roomId, userId, { timeout });
         jest.advanceTimersByTime(50);
         expect(await resultProm).toBe(false);
-        client.emit("RoomState.newMember", undefined, undefined, { roomId, userId: "@anotherClient:domain" });
+        client.emit(
+            RoomStateEvent.NewMember,
+            undefined as unknown as MatrixEvent,
+            undefined as unknown as RoomState,
+            {
+                roomId,
+                userId: "@anotherClient:domain",
+            } as RoomMember,
+        );
         jest.useRealTimers();
     });
 
     it("resolves with true if RoomState.newMember fires", async () => {
         const roomId = "!roomId:domain";
         const userId = "@clientId:domain";
-        expect((<MatrixClient>client).listeners(RoomStateEvent.NewMember).length).toBe(0);
-        const resultProm = waitForMember(<MatrixClient>client, roomId, userId, { timeout });
-        client.emit("RoomState.newMember", undefined, undefined, { roomId, userId });
+        const resultProm = waitForMember(client, roomId, userId, { timeout });
+        client.emit(
+            RoomStateEvent.NewMember,
+            undefined as unknown as MatrixEvent,
+            undefined as unknown as RoomState,
+            { roomId, userId } as RoomMember,
+        );
         expect(await resultProm).toBe(true);
+    });
+
+    it("resolves immediately if the user is already a member", async () => {
+        jest.useFakeTimers();
+        const resultProm = waitForMember(client, STUB_ROOM_ID, STUB_MEMBER_ID, { timeout });
+        expect(await resultProm).toBe(true);
+    });
+
+    it("waits for the timeout if the room is known but the user is not", async () => {
+        const result = await waitForMember(client, STUB_ROOM_ID, "@other_user", { timeout: 0 });
+        expect(result).toBe(false);
     });
 });
