@@ -240,14 +240,20 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         let extraDetails: JSX.Element | undefined;
         const actions: JSX.Element[] = [];
         if (error) {
-            statusDescription = <div className="error">{_t("Unable to load key backup status")}</div>;
+            statusDescription = (
+                <SettingsSubsectionText className="error">
+                    {_t("Unable to load key backup status")}
+                </SettingsSubsectionText>
+            );
         } else if (loading) {
             statusDescription = <Spinner />;
         } else if (backupInfo) {
             let restoreButtonCaption = _t("Restore from Backup");
 
             if (MatrixClientPeg.safeGet().getKeyBackupEnabled()) {
-                statusDescription = <p>✅ {_t("This session is backing up your keys.")}</p>;
+                statusDescription = (
+                    <SettingsSubsectionText>✅ {_t("This session is backing up your keys.")}</SettingsSubsectionText>
+                );
             } else {
                 statusDescription = (
                     <>
