@@ -16,12 +16,15 @@ limitations under the License.
 
 import { mocked, Mocked } from "jest-mock";
 import { IBootstrapCrossSigningOpts } from "matrix-js-sdk/src/crypto";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { CryptoApi, DeviceVerificationStatus, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { SecretStorageKeyDescriptionAesV1, ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
+import { Device } from "matrix-js-sdk/src/models/device";
+import { IDehydratedDevice } from "matrix-js-sdk/src/crypto/dehydration";
 
 import { SdkContextClass } from "../../src/contexts/SDKContext";
 import { accessSecretStorage } from "../../src/SecurityManager";
 import { SetupEncryptionStore } from "../../src/stores/SetupEncryptionStore";
-import { stubClient } from "../test-utils";
+import { emitPromise, stubClient } from "../test-utils";
 
 jest.mock("../../src/SecurityManager", () => ({
     accessSecretStorage: jest.fn(),
@@ -30,10 +33,25 @@ jest.mock("../../src/SecurityManager", () => ({
 describe("SetupEncryptionStore", () => {
     const cachedPassword = "p4assword";
     let client: Mocked<MatrixClient>;
+    let mockCrypto: Mocked<CryptoApi>;
+    let mockSecretStorage: Mocked<ServerSideSecretStorage>;
     let setupEncryptionStore: SetupEncryptionStore;
 
     beforeEach(() => {
         client = mocked(stubClient());
+        mockCrypto = {
+            bootstrapCrossSigning: jest.fn(),
+            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
+            getUserDeviceInfo: jest.fn(),
+            getDeviceVerificationStatus: jest.fn(),
+        } as unknown as Mocked<CryptoApi>;
+        client.getCrypto.mockReturnValue(mockCrypto);
+
+        mockSecretStorage = {
+            isStored: jest.fn(),
+        } as unknown as Mocked<ServerSideSecretStorage>;
+        Object.defineProperty(client, "secretStorage", { value: mockSecretStorage });
+
         setupEncryptionStore = new SetupEncryptionStore();
         SdkContextClass.instance.accountPasswordStore.setPassword(cachedPassword);
     });
@@ -42,10 +60,83 @@ describe("SetupEncryptionStore", () => {
         SdkContextClass.instance.accountPasswordStore.clearPassword();
     });
 
+    describe("start", () => {
+        it("should fetch cross-signing and device info", async () => {
+            const fakeKey = {} as SecretStorageKeyDescriptionAesV1;
+            mockSecretStorage.isStored.mockResolvedValue({ sskeyid: fakeKey });
+
+            const fakeDevice = new Device({ deviceId: "deviceId", userId: "", algorithms: [], keys: new Map() });
+            mockCrypto.getUserDeviceInfo.mockResolvedValue(
+                new Map([[client.getSafeUserId(), new Map([[fakeDevice.deviceId, fakeDevice]])]]),
+            );
+
+            setupEncryptionStore.start();
+            await emitPromise(setupEncryptionStore, "update");
+
+            // our fake device is not signed, so we can't verify against it
+            expect(setupEncryptionStore.hasDevicesToVerifyAgainst).toBe(false);
+
+            expect(setupEncryptionStore.keyId).toEqual("sskeyid");
+            expect(setupEncryptionStore.keyInfo).toBe(fakeKey);
+        });
+
+        it("should spot a signed device", async () => {
+            mockSecretStorage.isStored.mockResolvedValue({ sskeyid: {} as SecretStorageKeyDescriptionAesV1 });
+
+            const fakeDevice = new Device({
+                deviceId: "deviceId",
+                userId: "",
+                algorithms: [],
+                keys: new Map([["curve25519:deviceId", "identityKey"]]),
+            });
+            mockCrypto.getUserDeviceInfo.mockResolvedValue(
+                new Map([[client.getSafeUserId(), new Map([[fakeDevice.deviceId, fakeDevice]])]]),
+            );
+            mockCrypto.getDeviceVerificationStatus.mockResolvedValue(
+                new DeviceVerificationStatus({ signedByOwner: true }),
+            );
+
+            setupEncryptionStore.start();
+            await emitPromise(setupEncryptionStore, "update");
+
+            expect(setupEncryptionStore.hasDevicesToVerifyAgainst).toBe(true);
+        });
+
+        it("should ignore the dehydrated device", async () => {
+            mockSecretStorage.isStored.mockResolvedValue({ sskeyid: {} as SecretStorageKeyDescriptionAesV1 });
+
+            client.getDehydratedDevice.mockResolvedValue({ device_id: "dehydrated" } as IDehydratedDevice);
+
+            const fakeDevice = new Device({
+                deviceId: "dehydrated",
+                userId: "",
+                algorithms: [],
+                keys: new Map([["curve25519:dehydrated", "identityKey"]]),
+            });
+            mockCrypto.getUserDeviceInfo.mockResolvedValue(
+                new Map([[client.getSafeUserId(), new Map([[fakeDevice.deviceId, fakeDevice]])]]),
+            );
+
+            setupEncryptionStore.start();
+            await emitPromise(setupEncryptionStore, "update");
+
+            expect(setupEncryptionStore.hasDevicesToVerifyAgainst).toBe(false);
+            expect(mockCrypto.getDeviceVerificationStatus).not.toHaveBeenCalled();
+        });
+
+        it("should correctly handle getUserDeviceInfo() returning an empty map", async () => {
+            mockSecretStorage.isStored.mockResolvedValue({ sskeyid: {} as SecretStorageKeyDescriptionAesV1 });
+            mockCrypto.getUserDeviceInfo.mockResolvedValue(new Map());
+
+            setupEncryptionStore.start();
+            await emitPromise(setupEncryptionStore, "update");
+            expect(setupEncryptionStore.hasDevicesToVerifyAgainst).toBe(false);
+        });
+    });
+
     it("resetConfirm should work with a cached account password", async () => {
         const makeRequest = jest.fn();
-        client.hasSecretStorageKey.mockResolvedValue(true);
-        client.bootstrapCrossSigning.mockImplementation(async (opts: IBootstrapCrossSigningOpts) => {
+        mockCrypto.bootstrapCrossSigning.mockImplementation(async (opts: IBootstrapCrossSigningOpts) => {
             await opts?.authUploadDeviceSigningKeys?.(makeRequest);
         });
         mocked(accessSecretStorage).mockImplementation(async (func?: () => Promise<void>) => {
