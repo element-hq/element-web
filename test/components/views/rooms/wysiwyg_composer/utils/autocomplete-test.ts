@@ -143,12 +143,12 @@ describe("getMentionDisplayText", () => {
 });
 
 describe("getMentionAttributes", () => {
-    it("returns an empty object for completion types other than room, user or at-room", () => {
+    it("returns an empty map for completion types other than room, user or at-room", () => {
         const nonHandledCompletionTypes = ["community", "command"] as const;
         const nonHandledCompletions = nonHandledCompletionTypes.map((type) => createMockCompletion({ type }));
 
         nonHandledCompletions.forEach((completion) => {
-            expect(getMentionAttributes(completion, mockClient, mockRoom)).toEqual({});
+            expect(getMentionAttributes(completion, mockClient, mockRoom)).toEqual(new Map());
         });
     });
 
@@ -164,14 +164,14 @@ describe("getMentionAttributes", () => {
     mockAvatar.getInitialLetter.mockReturnValue(testInitialLetter);
 
     describe("user mentions", () => {
-        it("returns an empty object when no member can be found", () => {
+        it("returns an empty map when no member can be found", () => {
             const userCompletion = createMockCompletion({ type: "user" });
 
             // mock not being able to find a member
             mockRoom.getMember.mockImplementationOnce(() => null);
 
             const result = getMentionAttributes(userCompletion, mockClient, mockRoom);
-            expect(result).toEqual({});
+            expect(result).toEqual(new Map());
         });
 
         it("returns expected attributes when avatar url is not default", () => {
@@ -179,10 +179,12 @@ describe("getMentionAttributes", () => {
 
             const result = getMentionAttributes(userCompletion, mockClient, mockRoom);
 
-            expect(result).toEqual({
-                "data-mention-type": "user",
-                "style": `--avatar-background: url(${testAvatarUrlForMember}); --avatar-letter: '\u200b'`,
-            });
+            expect(result).toEqual(
+                new Map([
+                    ["data-mention-type", "user"],
+                    ["style", `--avatar-background: url(${testAvatarUrlForMember}); --avatar-letter: '\u200b'`],
+                ]),
+            );
         });
 
         it("returns expected style attributes when avatar url matches default", () => {
@@ -193,10 +195,15 @@ describe("getMentionAttributes", () => {
 
             const result = getMentionAttributes(userCompletion, mockClient, mockRoom);
 
-            expect(result).toEqual({
-                "data-mention-type": "user",
-                "style": `--avatar-background: url(${testAvatarUrlForString}); --avatar-letter: '${testInitialLetter}'`,
-            });
+            expect(result).toEqual(
+                new Map([
+                    ["data-mention-type", "user"],
+                    [
+                        "style",
+                        `--avatar-background: url(${testAvatarUrlForString}); --avatar-letter: '${testInitialLetter}'`,
+                    ],
+                ]),
+            );
         });
     });
 
@@ -206,10 +213,12 @@ describe("getMentionAttributes", () => {
 
             const result = getMentionAttributes(userCompletion, mockClient, mockRoom);
 
-            expect(result).toEqual({
-                "data-mention-type": "room",
-                "style": `--avatar-background: url(${testAvatarUrlForRoom}); --avatar-letter: '\u200b'`,
-            });
+            expect(result).toEqual(
+                new Map([
+                    ["data-mention-type", "room"],
+                    ["style", `--avatar-background: url(${testAvatarUrlForRoom}); --avatar-letter: '\u200b'`],
+                ]),
+            );
         });
 
         it("returns expected style attributes when avatar url for room is falsy", () => {
@@ -220,10 +229,15 @@ describe("getMentionAttributes", () => {
 
             const result = getMentionAttributes(userCompletion, mockClient, mockRoom);
 
-            expect(result).toEqual({
-                "data-mention-type": "room",
-                "style": `--avatar-background: url(${testAvatarUrlForString}); --avatar-letter: '${testInitialLetter}'`,
-            });
+            expect(result).toEqual(
+                new Map([
+                    ["data-mention-type", "room"],
+                    [
+                        "style",
+                        `--avatar-background: url(${testAvatarUrlForString}); --avatar-letter: '${testInitialLetter}'`,
+                    ],
+                ]),
+            );
         });
     });
 
@@ -233,7 +247,7 @@ describe("getMentionAttributes", () => {
 
             const result = getMentionAttributes(atRoomCompletion, mockClient, mockRoom);
 
-            expect(result).toEqual({ "data-mention-type": "at-room" });
+            expect(result).toEqual(new Map([["data-mention-type", "at-room"]]));
         });
     });
 });

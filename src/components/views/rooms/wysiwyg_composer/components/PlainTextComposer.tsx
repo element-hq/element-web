@@ -65,6 +65,7 @@ export function PlainTextComposer({
         onSelect,
         handleCommand,
         handleMention,
+        handleAtRoomMention,
     } = usePlainTextListeners(initialContent, onChange, onSend, eventRelation);
 
     const composerFunctions = useComposerFunctions(editorRef, setContent);
@@ -90,6 +91,7 @@ export function PlainTextComposer({
                 suggestion={suggestion}
                 handleMention={handleMention}
                 handleCommand={handleCommand}
+                handleAtRoomMention={handleAtRoomMention}
             />
             <Editor
                 ref={editorRef}

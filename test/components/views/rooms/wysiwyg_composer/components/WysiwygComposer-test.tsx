@@ -164,7 +164,7 @@ describe("WysiwygComposer", () => {
         const mockCompletions: ICompletion[] = [
             {
                 type: "user",
-                href: "www.user1.com",
+                href: "https://matrix.to/#/@user_1:element.io",
                 completion: "user_1",
                 completionId: "@user_1:host.local",
                 range: { start: 1, end: 1 },
@@ -172,7 +172,7 @@ describe("WysiwygComposer", () => {
             },
             {
                 type: "user",
-                href: "www.user2.com",
+                href: "https://matrix.to/#/@user_2:element.io",
                 completion: "user_2",
                 completionId: "@user_2:host.local",
                 range: { start: 1, end: 1 },
@@ -189,7 +189,7 @@ describe("WysiwygComposer", () => {
             },
             {
                 type: "room",
-                href: "www.room1.com",
+                href: "https://matrix.to/#/#room_1:element.io",
                 completion: "#room_with_completion_id",
                 completionId: "@room_1:host.local",
                 range: { start: 1, end: 1 },
@@ -197,7 +197,7 @@ describe("WysiwygComposer", () => {
             },
             {
                 type: "room",
-                href: "www.room2.com",
+                href: "https://matrix.to/#/#room_2:element.io",
                 completion: "#room_without_completion_id",
                 range: { start: 1, end: 1 },
                 component: <div>room_without_completion_id</div>,
@@ -285,9 +285,9 @@ describe("WysiwygComposer", () => {
 
         it("pressing enter selects the mention and inserts it into the composer as a link", async () => {
             await insertMentionInput();
-
             // press enter
             await userEvent.keyboard("{Enter}");
+            screen.debug();
 
             // check that it closes the autocomplete
             await waitFor(() => {

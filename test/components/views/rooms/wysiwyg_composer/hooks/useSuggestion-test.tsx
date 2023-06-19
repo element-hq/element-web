@@ -72,7 +72,7 @@ describe("processMention", () => {
     it("returns early when suggestion is null", () => {
         const mockSetSuggestion = jest.fn();
         const mockSetText = jest.fn();
-        processMention("href", "displayName", {}, null, mockSetSuggestion, mockSetText);
+        processMention("href", "displayName", new Map(), null, mockSetSuggestion, mockSetText);
 
         expect(mockSetSuggestion).not.toHaveBeenCalled();
         expect(mockSetText).not.toHaveBeenCalled();
@@ -95,7 +95,7 @@ describe("processMention", () => {
         processMention(
             href,
             displayName,
-            { "data-test-attribute": "test" },
+            new Map([["style", "test"]]),
             { node: textNode, startOffset: 0, endOffset: 2 } as unknown as Suggestion,
             mockSetSuggestionData,
             mockSetText,
@@ -109,7 +109,7 @@ describe("processMention", () => {
         expect(linkElement).toBeInstanceOf(HTMLAnchorElement);
         expect(linkElement).toHaveAttribute(href, href);
         expect(linkElement).toHaveAttribute("contenteditable", "false");
-        expect(linkElement).toHaveAttribute("data-test-attribute", "test");
+        expect(linkElement).toHaveAttribute("style", "test");
         expect(linkElement.textContent).toBe(displayName);
 
         expect(mockSetText).toHaveBeenCalledWith();

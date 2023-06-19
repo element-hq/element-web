@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { KeyboardEvent, RefObject, SyntheticEvent, useCallback, useRef, useState } from "react";
-import { Attributes, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
+import { AllowedMentionAttributes, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
 import { IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
@@ -72,7 +72,8 @@ export function usePlainTextListeners(
     onPaste(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onKeyDown(event: KeyboardEvent<HTMLDivElement>): void;
     setContent(text?: string): void;
-    handleMention: (link: string, text: string, attributes: Attributes) => void;
+    handleMention: (link: string, text: string, attributes: AllowedMentionAttributes) => void;
+    handleAtRoomMention: (attributes: AllowedMentionAttributes) => void;
     handleCommand: (text: string) => void;
     onSelect: (event: SyntheticEvent<HTMLDivElement>) => void;
     suggestion: MappedSuggestion | null;
@@ -97,10 +98,11 @@ export function usePlainTextListeners(
                 setContent(text);
                 onChange?.(text);
             } else if (isNotNull(ref) && isNotNull(ref.current)) {
-                // if called with no argument, read the current innerHTML from the ref
+                // if called with no argument, read the current innerHTML from the ref and amend it as per `onInput`
                 const currentRefContent = ref.current.innerHTML;
-                setContent(currentRefContent);
-                onChange?.(currentRefContent);
+                const amendedContent = amendInnerHtml(currentRefContent);
+                setContent(amendedContent);
+                onChange?.(amendedContent);
             }
         },
         [onChange, ref],
@@ -109,7 +111,7 @@ export function usePlainTextListeners(
     // For separation of concerns, the suggestion handling is kept in a separate hook but is
     // nested here because we do need to be able to update the `content` state in this hook
     // when a user selects a suggestion from the autocomplete menu
-    const { suggestion, onSelect, handleCommand, handleMention } = useSuggestion(ref, setText);
+    const { suggestion, onSelect, handleCommand, handleMention, handleAtRoomMention } = useSuggestion(ref, setText);
 
     const enterShouldSend = !useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
     const onInput = useCallback(
@@ -188,5 +190,6 @@ export function usePlainTextListeners(
         onSelect,
         handleCommand,
         handleMention,
+        handleAtRoomMention,
     };
 }

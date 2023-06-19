@@ -30,10 +30,11 @@ import { useRoomContext } from "../../../../../contexts/RoomContext";
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import { parsePermalink } from "../../../../../utils/permalinks/Permalinks";
+import { isNotNull } from "../../../../../Typeguards";
 
 interface WysiwygComposerProps {
     disabled?: boolean;
-    onChange?: (content: string) => void;
+    onChange: (content: string) => void;
     onSend: () => void;
     placeholder?: string;
     initialContent?: string;
@@ -60,10 +61,11 @@ export const WysiwygComposer = memo(function WysiwygComposer({
     const autocompleteRef = useRef<Autocomplete | null>(null);
 
     const inputEventProcessor = useInputEventProcessor(onSend, autocompleteRef, initialContent, eventRelation);
-    const { ref, isWysiwygReady, content, actionStates, wysiwyg, suggestion } = useWysiwyg({
+    const { ref, isWysiwygReady, content, actionStates, wysiwyg, suggestion, messageContent } = useWysiwyg({
         initialContent,
         inputEventProcessor,
     });
+
     const { isFocused, onFocus } = useIsFocused();
 
     const isReady = isWysiwygReady && !disabled;
@@ -72,10 +74,10 @@ export const WysiwygComposer = memo(function WysiwygComposer({
     useSetCursorPosition(!isReady, ref);
 
     useEffect(() => {
-        if (!disabled && content !== null) {
-            onChange?.(content);
+        if (!disabled && isNotNull(messageContent)) {
+            onChange(messageContent);
         }
-    }, [onChange, content, disabled]);
+    }, [onChange, messageContent, disabled]);
 
     useEffect(() => {
         function handleClick(e: Event): void {
@@ -115,6 +117,7 @@ export const WysiwygComposer = memo(function WysiwygComposer({
                 ref={autocompleteRef}
                 suggestion={suggestion}
                 handleMention={wysiwyg.mention}
+                handleAtRoomMention={wysiwyg.mentionAtRoom}
                 handleCommand={wysiwyg.command}
             />
             <FormattingButtons composer={wysiwyg} actionStates={actionStates} />
