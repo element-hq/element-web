@@ -139,7 +139,10 @@ const verify = function (this: CryptoTestContext) {
         cy.findByText("Bob").click();
         cy.findByRole("button", { name: "Verify" }).click();
         cy.findByRole("button", { name: "Start Verification" }).click();
-        cy.findByRole("button", { name: "Verify by emoji" }).click();
+
+        // this requires creating a DM, so can take a while. Give it a longer timeout.
+        cy.findByRole("button", { name: "Verify by emoji", timeout: 30000 }).click();
+
         cy.wrap(bobsVerificationRequestPromise).then((request: VerificationRequest) => {
             doTwoWaySasVerification(request);
         });
