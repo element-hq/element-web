@@ -49,7 +49,14 @@ const FLUSH_RATE_MS = 30 * 1000;
 const MAX_LOG_SIZE = 1024 * 1024 * 5; // 5 MB
 
 type LogFunction = (...args: (Error | DOMException | object | string)[]) => void;
-type LogFunctionName = "log" | "info" | "warn" | "error";
+const consoleFunctionsToLevels = {
+    log: "I",
+    info: "I",
+    warn: "W",
+    error: "E",
+    debug: "D",
+} as const;
+type LogFunctionName = keyof typeof consoleFunctionsToLevels;
 
 // A class which monkey-patches the global console and stores log lines.
 export class ConsoleLogger {
@@ -58,23 +65,15 @@ export class ConsoleLogger {
 
     public monkeyPatch(consoleObj: Console): void {
         // Monkey-patch console logging
-        const consoleFunctionsToLevels = {
-            log: "I",
-            info: "I",
-            warn: "W",
-            error: "E",
-        } as const;
-        (Object.keys(consoleFunctionsToLevels) as [keyof typeof consoleFunctionsToLevels]).forEach(
-            (fnName: keyof typeof consoleFunctionsToLevels) => {
-                const level = consoleFunctionsToLevels[fnName];
-                const originalFn = consoleObj[fnName].bind(consoleObj);
-                this.originalFunctions[fnName] = originalFn;
-                consoleObj[fnName] = (...args) => {
-                    this.log(level, ...args);
-                    originalFn(...args);
-                };
-            },
-        );
+        (Object.keys(consoleFunctionsToLevels) as LogFunctionName[]).forEach((fnName: LogFunctionName) => {
+            const level = consoleFunctionsToLevels[fnName];
+            const originalFn = consoleObj[fnName].bind(consoleObj);
+            this.originalFunctions[fnName] = originalFn;
+            consoleObj[fnName] = (...args) => {
+                this.log(level, ...args);
+                originalFn(...args);
+            };
+        });
     }
 
     public bypassRageshake(fnName: LogFunctionName, ...args: (Error | DOMException | object | string)[]): void {
