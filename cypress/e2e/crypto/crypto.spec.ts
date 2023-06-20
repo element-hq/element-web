@@ -174,92 +174,110 @@ describe("Cryptography", function () {
         cy.stopHomeserver(this.homeserver);
     });
 
-    describe("setting up secure key backup should work", () => {
-        /**
-         * Verify that the `m.cross_signing.${keyType}` key is available on the account data on the server
-         * @param keyType
-         */
-        function verifyKey(keyType: string) {
-            return cy
-                .getClient()
-                .then((cli) => cy.wrap(cli.getAccountDataFromServer(`m.cross_signing.${keyType}`)))
-                .then((accountData: { encrypted: Record<string, Record<string, string>> }) => {
-                    expect(accountData.encrypted).to.exist;
-                    const keys = Object.keys(accountData.encrypted);
-                    const key = accountData.encrypted[keys[0]];
-                    expect(key.ciphertext).to.exist;
-                    expect(key.iv).to.exist;
-                    expect(key.mac).to.exist;
-                });
-        }
-
-        /**
-         * Click on download button and continue
-         */
-        function downloadKey() {
-            // Clicking download instead of Copy because of https://github.com/cypress-io/cypress/issues/2851
-            cy.findByRole("button", { name: "Download" }).click();
-            cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
-        }
-
-        it("by recovery code", () => {
-            skipIfRustCrypto();
-            cy.openUserSettings("Security & Privacy");
-            cy.findByRole("button", { name: "Set up Secure Backup" }).click();
-            cy.get(".mx_Dialog").within(() => {
-                // Recovery key is selected by default
-                cy.findByRole("button", { name: "Continue" }).click();
-                cy.get(".mx_CreateSecretStorageDialog_recoveryKey code").invoke("text").as("securityKey");
-
-                downloadKey();
-
-                cy.get(".mx_InteractiveAuthDialog").within(() => {
-                    cy.get(".mx_Dialog_title").within(() => {
-                        cy.findByText("Setting up keys").should("exist");
-                        cy.findByText("Setting up keys").should("not.exist");
+    describe.each([{ isDeviceVerified: true }, { isDeviceVerified: false }])(
+        "setting up secure key backup should work %j",
+        ({ isDeviceVerified }) => {
+            /**
+             * Verify that the `m.cross_signing.${keyType}` key is available on the account data on the server
+             * @param keyType
+             */
+            function verifyKey(keyType: string) {
+                return cy
+                    .getClient()
+                    .then((cli) => cy.wrap(cli.getAccountDataFromServer(`m.cross_signing.${keyType}`)))
+                    .then((accountData: { encrypted: Record<string, Record<string, string>> }) => {
+                        expect(accountData.encrypted).to.exist;
+                        const keys = Object.keys(accountData.encrypted);
+                        const key = accountData.encrypted[keys[0]];
+                        expect(key.ciphertext).to.exist;
+                        expect(key.iv).to.exist;
+                        expect(key.mac).to.exist;
                     });
+            }
+
+            /**
+             * Click on download button and continue
+             */
+            function downloadKey() {
+                // Clicking download instead of Copy because of https://github.com/cypress-io/cypress/issues/2851
+                cy.findByRole("button", { name: "Download" }).click();
+                cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
+            }
+
+            it("by recovery code", () => {
+                skipIfRustCrypto();
+
+                // Verified the device
+                if (isDeviceVerified) {
+                    cy.bootstrapCrossSigning(aliceCredentials);
+                }
+
+                cy.openUserSettings("Security & Privacy");
+                cy.findByRole("button", { name: "Set up Secure Backup" }).click();
+                cy.get(".mx_Dialog").within(() => {
+                    // Recovery key is selected by default
+                    cy.findByRole("button", { name: "Continue" }).click();
+                    cy.get(".mx_CreateSecretStorageDialog_recoveryKey code").invoke("text").as("securityKey");
+
+                    downloadKey();
+
+                    // When the device is verified, the `Setting up keys` step is skipped
+                    if (!isDeviceVerified) {
+                        cy.get(".mx_InteractiveAuthDialog").within(() => {
+                            cy.get(".mx_Dialog_title").within(() => {
+                                cy.findByText("Setting up keys").should("exist");
+                                cy.findByText("Setting up keys").should("not.exist");
+                            });
+                        });
+                    }
+
+                    cy.findByText("Secure Backup successful").should("exist");
+                    cy.findByRole("button", { name: "Done" }).click();
+                    cy.findByText("Secure Backup successful").should("not.exist");
                 });
 
-                cy.findByText("Secure Backup successful").should("exist");
-                cy.findByRole("button", { name: "Done" }).click();
-                cy.findByText("Secure Backup successful").should("not.exist");
+                // Verify that the SSSS keys are in the account data stored in the server
+                verifyKey("master");
+                verifyKey("self_signing");
+                verifyKey("user_signing");
             });
 
-            // Verify that the SSSS keys are in the account data stored in the server
-            verifyKey("master");
-            verifyKey("self_signing");
-            verifyKey("user_signing");
-        });
+            it("by passphrase", () => {
+                skipIfRustCrypto();
 
-        it("by passphrase", () => {
-            skipIfRustCrypto();
-            cy.openUserSettings("Security & Privacy");
-            cy.findByRole("button", { name: "Set up Secure Backup" }).click();
-            cy.get(".mx_Dialog").within(() => {
-                // Select passphrase option
-                cy.findByText("Enter a Security Phrase").click();
-                cy.findByRole("button", { name: "Continue" }).click();
+                // Verified the device
+                if (isDeviceVerified) {
+                    cy.bootstrapCrossSigning(aliceCredentials);
+                }
 
-                // Fill passphrase input
-                cy.get("input").type("new passphrase for setting up a secure key backup");
-                cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
-                // Confirm passphrase
-                cy.get("input").type("new passphrase for setting up a secure key backup");
-                cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
+                cy.openUserSettings("Security & Privacy");
+                cy.findByRole("button", { name: "Set up Secure Backup" }).click();
+                cy.get(".mx_Dialog").within(() => {
+                    // Select passphrase option
+                    cy.findByText("Enter a Security Phrase").click();
+                    cy.findByRole("button", { name: "Continue" }).click();
 
-                downloadKey();
+                    // Fill passphrase input
+                    cy.get("input").type("new passphrase for setting up a secure key backup");
+                    cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
+                    // Confirm passphrase
+                    cy.get("input").type("new passphrase for setting up a secure key backup");
+                    cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
 
-                cy.findByText("Secure Backup successful").should("exist");
-                cy.findByRole("button", { name: "Done" }).click();
-                cy.findByText("Secure Backup successful").should("not.exist");
+                    downloadKey();
+
+                    cy.findByText("Secure Backup successful").should("exist");
+                    cy.findByRole("button", { name: "Done" }).click();
+                    cy.findByText("Secure Backup successful").should("not.exist");
+                });
+
+                // Verify that the SSSS keys are in the account data stored in the server
+                verifyKey("master");
+                verifyKey("self_signing");
+                verifyKey("user_signing");
             });
-
-            // Verify that the SSSS keys are in the account data stored in the server
-            verifyKey("master");
-            verifyKey("self_signing");
-            verifyKey("user_signing");
-        });
-    });
+        },
+    );
 
     it("creating a DM should work, being e2e-encrypted / user verification", function (this: CryptoTestContext) {
         skipIfRustCrypto();

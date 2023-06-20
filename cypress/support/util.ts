@@ -16,6 +16,8 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
+import "cypress-each";
+
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace Cypress {

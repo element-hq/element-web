@@ -3638,6 +3638,11 @@ cypress-axe@^1.0.0:
   resolved "https://registry.yarnpkg.com/cypress-axe/-/cypress-axe-1.4.0.tgz#e67482bfe9e740796bf77c7823f19781a8a2faff"
   integrity sha512-Ut7NKfzjyKm0BEbt2WxuKtLkIXmx6FD2j0RwdvO/Ykl7GmB/qRQkwbKLk3VP35+83hiIr8GKD04PDdrTK5BnyA==
 
+cypress-each@^1.13.3:
+  version "1.13.3"
+  resolved "https://registry.yarnpkg.com/cypress-each/-/cypress-each-1.13.3.tgz#c0f59628975164e23a3fd10090b587a66ed9438e"
+  integrity sha512-aNFoDuybFAQ7OObbeO5yxBGmXkGKVAcT1wLHLiL3+HQi+g+q3vECbn4J9cYOXJ7yYfbcBLh8dgQd/IG3Ls2z7A==
+
 cypress-multi-reporters@^1.6.1:
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/cypress-multi-reporters/-/cypress-multi-reporters-1.6.3.tgz#0f0da8db4caf8d7a21f94e5209148348416d7c71"
