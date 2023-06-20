@@ -1,5 +1,5 @@
-Changes in [3.74.0-rc1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.74.0-rc1) (2023-06-13)
-=============================================================================================================
+Changes in [3.74.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.74.0) (2023-06-20)
+=====================================================================================================
 
 ## ✨ Features
  * OIDC: add delegatedauthentication to validated server config ([\#11053](https://github.com/matrix-org/matrix-react-sdk/pull/11053)). Contributed by @kerryarchibald.
