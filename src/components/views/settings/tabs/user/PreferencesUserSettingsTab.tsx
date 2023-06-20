@@ -140,8 +140,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     public render(): React.ReactNode {
         const useCase = SettingsStore.getValue<UseCase | null>("FTUE.useCaseSelection");
         const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS
-            // Only show the breadcrumbs setting if breadcrumbs v2 is disabled
-            .filter((it) => it !== "breadcrumbs")
             // Only show the user onboarding setting if the user should see the user onboarding page
             .filter((it) => it !== "FTUE.userOnboardingButton" || showUserOnboardingPage(useCase));
 
