@@ -22,7 +22,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s brukar avanserte nettlesarfunksjonar som ikkje er støtta av den gjeldande nettlesaren din.",
     "Use %(brand)s on mobile": "Bruk %(brand)s på mobil",
     "Powered by Matrix": "Driven av Matrix",
-    "Your Element is misconfigured": "Element er feilkonfigurert",
+    "Your Element is misconfigured": "Din Element-klient er sett opp feil",
     "Failed to start": "Klarte ikkje å starta",
     "Open": "Opna",
     "Download Completed": "Nedlasting Fullført",
