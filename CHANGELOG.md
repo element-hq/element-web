@@ -1,5 +1,5 @@
-Changes in [1.11.34-rc1](https://github.com/vector-im/element-web/releases/tag/v1.11.34-rc1) (2023-06-13)
-=========================================================================================================
+Changes in [1.11.34](https://github.com/vector-im/element-web/releases/tag/v1.11.34) (2023-06-20)
+=================================================================================================
 
 ## ✨ Features
  * OIDC: add delegatedauthentication to validated server config ([\#11053](https://github.com/matrix-org/matrix-react-sdk/pull/11053)). Contributed by @kerryarchibald.
