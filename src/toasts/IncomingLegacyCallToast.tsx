@@ -92,7 +92,7 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
     };
 
     public render(): React.ReactNode {
-        const room = MatrixClientPeg.get().getRoom(this.roomId);
+        const room = MatrixClientPeg.safeGet().getRoom(this.roomId);
         const isVoice = this.props.call.type === CallType.Voice;
         const callForcedSilent = LegacyCallHandler.instance.isForcedSilent();
 

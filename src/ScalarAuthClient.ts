@@ -131,7 +131,7 @@ export default class ScalarAuthClient {
     private checkToken(token: string): Promise<string> {
         return this.getAccountName(token)
             .then((userId) => {
-                const me = MatrixClientPeg.get().getUserId();
+                const me = MatrixClientPeg.safeGet().getUserId();
                 if (userId !== me) {
                     throw new Error("Scalar token is owned by someone else: " + me);
                 }
@@ -157,7 +157,7 @@ export default class ScalarAuthClient {
                     const parsedImRestUrl = parseUrl(this.apiUrl);
                     parsedImRestUrl.pathname = "";
                     return startTermsFlow(
-                        MatrixClientPeg.get(),
+                        MatrixClientPeg.safeGet(),
                         [new Service(SERVICE_TYPES.IM, parsedImRestUrl.toString(), token)],
                         this.termsInteractionCallback,
                     ).then(() => {
@@ -171,7 +171,7 @@ export default class ScalarAuthClient {
 
     public registerForToken(): Promise<string> {
         // Get openid bearer token from the HS as the first part of our dance
-        return MatrixClientPeg.get()
+        return MatrixClientPeg.safeGet()
             .getOpenIdToken()
             .then((tokenObject) => {
                 // Now we can send that to scalar and exchange it for a scalar token

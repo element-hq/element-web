@@ -300,7 +300,7 @@ export function renderTile(
     showHiddenEvents: boolean,
     cli?: MatrixClient,
 ): Optional<JSX.Element> {
-    cli = cli ?? MatrixClientPeg.get(); // because param defaults don't do the correct thing
+    cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
     if (!factory) return undefined;
@@ -378,7 +378,7 @@ export function renderReplyTile(
     showHiddenEvents: boolean,
     cli?: MatrixClient,
 ): Optional<JSX.Element> {
-    cli = cli ?? MatrixClientPeg.get(); // because param defaults don't do the correct thing
+    cli = cli ?? MatrixClientPeg.safeGet(); // because param defaults don't do the correct thing
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
     if (!factory) return undefined;
@@ -426,7 +426,11 @@ export function isMessageEvent(ev: MatrixEvent): boolean {
     );
 }
 
-export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boolean): boolean {
+export function haveRendererForEvent(
+    mxEvent: MatrixEvent,
+    matrixClient: MatrixClient,
+    showHiddenEvents: boolean,
+): boolean {
     // Only show "Message deleted" tile for plain message events, encrypted events,
     // and state events as they'll likely still contain enough keys to be relevant.
     if (mxEvent.isRedacted() && !mxEvent.isEncrypted() && !isMessageEvent(mxEvent) && !mxEvent.isState()) {
@@ -436,14 +440,13 @@ export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boo
     // No tile for replacement events since they update the original tile
     if (mxEvent.isRelation(RelationType.Replace)) return false;
 
-    const cli = MatrixClientPeg.get();
-    const handler = pickFactory(mxEvent, cli, showHiddenEvents);
+    const handler = pickFactory(mxEvent, matrixClient, showHiddenEvents);
     if (!handler) return false;
     if (handler === TextualEventFactory) {
-        return hasText(mxEvent, cli, showHiddenEvents);
+        return hasText(mxEvent, matrixClient, showHiddenEvents);
     } else if (handler === STATE_EVENT_TILE_TYPES.get(EventType.RoomCreate)) {
         const dynamicPredecessorsEnabled = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        const predecessor = cli.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);
+        const predecessor = matrixClient.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);
         return Boolean(predecessor);
     } else if (
         ElementCall.CALL_EVENT_TYPE.names.some((eventType) => handler === STATE_EVENT_TILE_TYPES.get(eventType))

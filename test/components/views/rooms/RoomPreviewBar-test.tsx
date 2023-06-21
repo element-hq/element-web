@@ -95,8 +95,8 @@ describe("<RoomPreviewBar />", () => {
 
     beforeEach(() => {
         stubClient();
-        MatrixClientPeg.get().getUserId = jest.fn().mockReturnValue(userId);
-        MatrixClientPeg.get().getSafeUserId = jest.fn().mockReturnValue(userId);
+        MatrixClientPeg.get()!.getUserId = jest.fn().mockReturnValue(userId);
+        MatrixClientPeg.get()!.getSafeUserId = jest.fn().mockReturnValue(userId);
         MatrixClientPeg.safeGet().getUserId = jest.fn().mockReturnValue(userId);
         MatrixClientPeg.safeGet().getSafeUserId = jest.fn().mockReturnValue(userId);
     });

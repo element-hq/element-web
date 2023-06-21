@@ -72,14 +72,15 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
             error: undefined,
         });
         let info: IKeyBackupInfo | undefined;
+        const cli = MatrixClientPeg.safeGet();
         try {
             await accessSecretStorage(async (): Promise<void> => {
-                info = await MatrixClientPeg.get().prepareKeyBackupVersion(null /* random key */, {
+                info = await cli.prepareKeyBackupVersion(null /* random key */, {
                     secureSecretStorage: true,
                 });
-                info = await MatrixClientPeg.get().createKeyBackupVersion(info);
+                info = await cli.createKeyBackupVersion(info);
             });
-            await MatrixClientPeg.get().scheduleAllGroupSessionsForBackup();
+            await cli.scheduleAllGroupSessionsForBackup();
             this.setState({
                 phase: Phase.Done,
             });
@@ -90,7 +91,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
             // disable without deleting, we'll enable on next app reload since
             // it is trusted.
             if (info?.version) {
-                MatrixClientPeg.get().deleteKeyBackupVersion(info.version);
+                cli.deleteKeyBackupVersion(info.version);
             }
             this.setState({
                 error: e,

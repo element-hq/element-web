@@ -1166,7 +1166,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let replyChain: JSX.Element | undefined;
         if (
-            haveRendererForEvent(this.props.mxEvent, this.context.showHiddenEvents) &&
+            haveRendererForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), this.context.showHiddenEvents) &&
             shouldDisplayReply(this.props.mxEvent)
         ) {
             replyChain = (

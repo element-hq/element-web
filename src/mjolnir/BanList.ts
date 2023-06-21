@@ -70,7 +70,7 @@ export class BanList {
     public async banEntity(kind: string, entity: string, reason: string): Promise<any> {
         const type = ruleTypeToStable(kind);
         if (!type) return; // unknown rule type
-        await MatrixClientPeg.get().sendStateEvent(
+        await MatrixClientPeg.safeGet().sendStateEvent(
             this._roomId,
             type,
             {
@@ -87,7 +87,7 @@ export class BanList {
         const type = ruleTypeToStable(kind);
         if (!type) return; // unknown rule type
         // Empty state event is effectively deleting it.
-        await MatrixClientPeg.get().sendStateEvent(this._roomId, type, {}, "rule:" + entity);
+        await MatrixClientPeg.safeGet().sendStateEvent(this._roomId, type, {}, "rule:" + entity);
         this._rules = this._rules.filter((r) => {
             if (r.kind !== ruleTypeToStable(kind)) return true;
             if (r.entity !== entity) return true;
@@ -98,7 +98,7 @@ export class BanList {
     public updateList(): void {
         this._rules = [];
 
-        const room = MatrixClientPeg.get().getRoom(this._roomId);
+        const room = MatrixClientPeg.safeGet().getRoom(this._roomId);
         if (!room) return;
 
         for (const eventType of ALL_RULE_TYPES) {

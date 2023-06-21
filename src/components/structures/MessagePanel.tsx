@@ -25,6 +25,7 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 import { Optional } from "matrix-events-sdk";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { wantsDateSeparator } from "../../DateUtils";
@@ -73,6 +74,7 @@ const groupedStateEvents = [
 export function shouldFormContinuation(
     prevEvent: MatrixEvent | null,
     mxEvent: MatrixEvent,
+    matrixClient: MatrixClient,
     showHiddenEvents: boolean,
     timelineRenderingType?: TimelineRenderingType,
 ): boolean {
@@ -110,7 +112,7 @@ export function shouldFormContinuation(
     }
 
     // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
-    if (!haveRendererForEvent(prevEvent, showHiddenEvents)) return false;
+    if (!haveRendererForEvent(prevEvent, matrixClient, showHiddenEvents)) return false;
 
     return true;
 }
@@ -481,7 +483,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             return true;
         }
 
-        if (!haveRendererForEvent(mxEv, this.showHiddenEvents)) {
+        if (!haveRendererForEvent(mxEv, MatrixClientPeg.safeGet(), this.showHiddenEvents)) {
             return false; // no tile = no show
         }
 
@@ -736,6 +738,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             ret.push(dateSeparator);
         }
 
+        const cli = MatrixClientPeg.safeGet();
         let lastInSection = true;
         if (nextEventWithTile) {
             const nextEv = nextEventWithTile;
@@ -743,14 +746,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             lastInSection =
                 willWantDateSeparator ||
                 mxEv.getSender() !== nextEv.getSender() ||
-                getEventDisplayInfo(MatrixClientPeg.safeGet(), nextEv, this.showHiddenEvents).isInfoMessage ||
-                !shouldFormContinuation(mxEv, nextEv, this.showHiddenEvents, this.context.timelineRenderingType);
+                getEventDisplayInfo(cli, nextEv, this.showHiddenEvents).isInfoMessage ||
+                !shouldFormContinuation(mxEv, nextEv, cli, this.showHiddenEvents, this.context.timelineRenderingType);
         }
 
         // is this a continuation of the previous message?
         const continuation =
             !wantsDateSeparator &&
-            shouldFormContinuation(prevEvent, mxEv, this.showHiddenEvents, this.context.timelineRenderingType);
+            shouldFormContinuation(prevEvent, mxEv, cli, this.showHiddenEvents, this.context.timelineRenderingType);
 
         const eventId = mxEv.getId()!;
         const highlight = eventId === this.props.highlightedEventId;

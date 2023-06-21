@@ -97,12 +97,12 @@ class Presence {
         const oldState = this.state;
         this.state = newState;
 
-        if (MatrixClientPeg.get().isGuest()) {
+        if (MatrixClientPeg.safeGet().isGuest()) {
             return; // don't try to set presence when a guest; it won't work.
         }
 
         try {
-            await MatrixClientPeg.get().setPresence({ presence: this.state });
+            await MatrixClientPeg.safeGet().setPresence({ presence: this.state });
             logger.info("Presence:", newState);
         } catch (err) {
             logger.error("Failed to set presence:", err);

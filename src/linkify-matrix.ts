@@ -197,7 +197,7 @@ export const options: Opts = {
             case Type.RoomAlias:
             case Type.UserId:
             default: {
-                return tryTransformEntityToPermalink(MatrixClientPeg.get(), href) ?? "";
+                return tryTransformEntityToPermalink(MatrixClientPeg.safeGet(), href) ?? "";
             }
         }
     },

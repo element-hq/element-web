@@ -75,7 +75,7 @@ export function createRedactEventDialog({
             onFinished: async (proceed, reason): Promise<void> => {
                 if (!proceed) return;
 
-                const cli = MatrixClientPeg.get();
+                const cli = MatrixClientPeg.safeGet();
                 const withRelTypes: Pick<IRedactOpts, "with_rel_types"> = {};
 
                 // redact related events if this is a voice broadcast started event and

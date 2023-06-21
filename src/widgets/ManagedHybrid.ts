@@ -43,7 +43,7 @@ function getWidgetBuildUrl(roomId: string): string | undefined {
         return SdkConfig.get().widget_build_url;
     }
 
-    const wellKnown = getCallBehaviourWellKnown(MatrixClientPeg.get());
+    const wellKnown = getCallBehaviourWellKnown(MatrixClientPeg.safeGet());
     if (isDm && wellKnown?.ignore_dm) {
         return undefined;
     }
@@ -56,7 +56,7 @@ export function isManagedHybridWidgetEnabled(roomId: string): boolean {
 }
 
 export async function addManagedHybridWidget(roomId: string): Promise<void> {
-    const cli = MatrixClientPeg.get();
+    const cli = MatrixClientPeg.safeGet();
     const room = cli.getRoom(roomId);
     if (!room) {
         return;

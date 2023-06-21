@@ -58,7 +58,7 @@ export const useVoiceBroadcastRecording = (
     stopRecording(): void;
     toggleRecording(): void;
 } => {
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
     const roomId = recording.infoEvent.getRoomId();
     const room = client.getRoom(roomId);
 

@@ -89,7 +89,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
 
         this.setState({ busy: true });
         try {
-            const room = await MatrixClientPeg.get().joinRoom(this.state.newList);
+            const room = await MatrixClientPeg.safeGet().joinRoom(this.state.newList);
             await Mjolnir.sharedInstance().subscribeToList(room.roomId);
             this.setState({ newList: "" }); // this will also cause the new rule to be rendered
         } catch (e) {
@@ -125,7 +125,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         this.setState({ busy: true });
         try {
             await Mjolnir.sharedInstance().unsubscribeFromList(list.roomId);
-            await MatrixClientPeg.get().leave(list.roomId);
+            await MatrixClientPeg.safeGet().leave(list.roomId);
         } catch (e) {
             logger.error(e);
 
@@ -139,7 +139,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
     }
 
     private viewListRules(list: BanList): void {
-        const room = MatrixClientPeg.get().getRoom(list.roomId);
+        const room = MatrixClientPeg.safeGet().getRoom(list.roomId);
         const name = room ? room.name : list.roomId;
 
         const renderRules = (rules: ListRule[]): JSX.Element => {
@@ -210,7 +210,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
 
         const tiles: JSX.Element[] = [];
         for (const list of lists) {
-            const room = MatrixClientPeg.get().getRoom(list.roomId);
+            const room = MatrixClientPeg.safeGet().getRoom(list.roomId);
             const name = room ? (
                 <span>
                     {room.name} (<code>{list.roomId}</code>)

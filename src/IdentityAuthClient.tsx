@@ -59,7 +59,7 @@ export default class IdentityAuthClient {
     }
 
     private get matrixClient(): MatrixClient {
-        return this.tempClient ? this.tempClient : MatrixClientPeg.get();
+        return this.tempClient ? this.tempClient : MatrixClientPeg.safeGet();
     }
 
     private writeToken(): void {
@@ -176,7 +176,7 @@ export default class IdentityAuthClient {
     }
 
     public async registerForToken(check = true): Promise<string> {
-        const hsOpenIdToken = await MatrixClientPeg.get().getOpenIdToken();
+        const hsOpenIdToken = await MatrixClientPeg.safeGet().getOpenIdToken();
         // XXX: The spec is `token`, but we used `access_token` for a Sydent release.
         const { access_token: accessToken, token } = await this.matrixClient.registerWithIdentityServer(hsOpenIdToken);
         const identityAccessToken = token ? token : accessToken;

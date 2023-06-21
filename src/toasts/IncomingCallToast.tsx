@@ -67,7 +67,7 @@ interface Props {
 
 export function IncomingCallToast({ callEvent }: Props): JSX.Element {
     const roomId = callEvent.getRoomId()!;
-    const room = MatrixClientPeg.get().getRoom(roomId) ?? undefined;
+    const room = MatrixClientPeg.safeGet().getRoom(roomId) ?? undefined;
     const call = useCall(roomId);
 
     const dismissToast = useCallback((): void => {

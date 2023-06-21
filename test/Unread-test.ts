@@ -81,13 +81,13 @@ describe("Unread", () => {
         it("returns false for an event without a renderer", () => {
             mocked(haveRendererForEvent).mockReturnValue(false);
             expect(eventTriggersUnreadCount(client, alicesMessage)).toBe(false);
-            expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
+            expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, client, false);
         });
 
         it("returns true for an event with a renderer", () => {
             mocked(haveRendererForEvent).mockReturnValue(true);
             expect(eventTriggersUnreadCount(client, alicesMessage)).toBe(true);
-            expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
+            expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, client, false);
         });
 
         it("returns false for beacon locations", () => {

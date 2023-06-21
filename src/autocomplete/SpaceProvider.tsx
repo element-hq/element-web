@@ -24,7 +24,7 @@ import RoomProvider from "./RoomProvider";
 
 export default class SpaceProvider extends RoomProvider {
     protected getRooms(): Room[] {
-        return MatrixClientPeg.get()
+        return MatrixClientPeg.safeGet()
             .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
             .filter((r) => r.isSpaceRoom());
     }

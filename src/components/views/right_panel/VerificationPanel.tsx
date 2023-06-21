@@ -203,9 +203,9 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
     private getDevice(): DeviceInfo | null {
         const deviceId = this.props.request?.otherDeviceId;
-        const userId = MatrixClientPeg.get().getUserId();
+        const userId = MatrixClientPeg.safeGet().getUserId();
         if (deviceId && userId) {
-            return MatrixClientPeg.get().getStoredDevice(userId, deviceId);
+            return MatrixClientPeg.safeGet().getStoredDevice(userId, deviceId);
         } else {
             return null;
         }

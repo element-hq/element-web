@@ -99,7 +99,7 @@ async function getSecretStorageKey({
 }: {
     keys: Record<string, ISecretStorageKeyInfo>;
 }): Promise<[string, Uint8Array]> {
-    const cli = MatrixClientPeg.get();
+    const cli = MatrixClientPeg.safeGet();
     let keyId = await cli.getDefaultSecretStorageKeyId();
     let keyInfo!: ISecretStorageKeyInfo;
     if (keyId) {
@@ -127,7 +127,7 @@ async function getSecretStorageKey({
     }
 
     if (dehydrationCache.key) {
-        if (await MatrixClientPeg.get().checkSecretStorageKey(dehydrationCache.key, keyInfo)) {
+        if (await MatrixClientPeg.safeGet().checkSecretStorageKey(dehydrationCache.key, keyInfo)) {
             cacheSecretStorageKey(keyId, keyInfo, dehydrationCache.key);
             return [keyId, dehydrationCache.key];
         }
@@ -152,7 +152,7 @@ async function getSecretStorageKey({
             keyInfo,
             checkPrivateKey: async (input: KeyParams): Promise<boolean> => {
                 const key = await inputToKey(input);
-                return MatrixClientPeg.get().checkSecretStorageKey(key, keyInfo);
+                return MatrixClientPeg.safeGet().checkSecretStorageKey(key, keyInfo);
             },
         },
         /* className= */ undefined,
@@ -244,7 +244,7 @@ async function onSecretRequested(
     deviceTrust: DeviceTrustLevel,
 ): Promise<string | undefined> {
     logger.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
     if (userId !== client.getUserId()) {
         return;
     }
@@ -324,9 +324,9 @@ export async function promptForBackupPassphrase(): Promise<Uint8Array> {
  * @param {bool} [forceReset] Reset secret storage even if it's already set up
  */
 export async function accessSecretStorage(func = async (): Promise<void> => {}, forceReset = false): Promise<void> {
-    const cli = MatrixClientPeg.get();
     secretStorageBeingAccessed = true;
     try {
+        const cli = MatrixClientPeg.safeGet();
         if (!(await cli.hasSecretStorageKey()) || forceReset) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.

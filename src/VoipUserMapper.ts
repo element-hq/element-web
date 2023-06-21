@@ -58,8 +58,9 @@ export default class VoipUserMapper {
         const virtualUser = await this.getVirtualUserForRoom(roomId);
         if (!virtualUser) return null;
 
-        const virtualRoomId = await ensureVirtualRoomExists(MatrixClientPeg.get(), virtualUser, roomId);
-        MatrixClientPeg.get().setRoomAccountData(virtualRoomId!, VIRTUAL_ROOM_EVENT_TYPE, {
+        const cli = MatrixClientPeg.safeGet();
+        const virtualRoomId = await ensureVirtualRoomExists(cli, virtualUser, roomId);
+        cli.setRoomAccountData(virtualRoomId!, VIRTUAL_ROOM_EVENT_TYPE, {
             native_room: roomId,
         });
 
@@ -76,7 +77,7 @@ export default class VoipUserMapper {
         const virtualUser = await this.getVirtualUserForRoom(roomId);
         if (!virtualUser) return undefined;
 
-        return findDMForUser(MatrixClientPeg.get(), virtualUser);
+        return findDMForUser(MatrixClientPeg.safeGet(), virtualUser);
     }
 
     public nativeRoomForVirtualRoom(roomId: string): string | null {
@@ -88,12 +89,13 @@ export default class VoipUserMapper {
             return cachedNativeRoomId;
         }
 
-        const virtualRoom = MatrixClientPeg.get().getRoom(roomId);
+        const cli = MatrixClientPeg.safeGet();
+        const virtualRoom = cli.getRoom(roomId);
         if (!virtualRoom) return null;
         const virtualRoomEvent = virtualRoom.getAccountData(VIRTUAL_ROOM_EVENT_TYPE);
         if (!virtualRoomEvent || !virtualRoomEvent.getContent()) return null;
         const nativeRoomID = virtualRoomEvent.getContent()["native_room"];
-        const nativeRoom = MatrixClientPeg.get().getRoom(nativeRoomID);
+        const nativeRoom = cli.getRoom(nativeRoomID);
         if (!nativeRoom || nativeRoom.getMyMembership() !== "join") return null;
 
         return nativeRoomID;
@@ -112,7 +114,7 @@ export default class VoipUserMapper {
         if (!roomCreateEvent || !roomCreateEvent.getContent()) return false;
         // we only look at this for rooms we created (so inviters can't just cause rooms
         // to be invisible)
-        if (roomCreateEvent.getSender() !== MatrixClientPeg.get().getUserId()) return false;
+        if (roomCreateEvent.getSender() !== MatrixClientPeg.safeGet().getUserId()) return false;
         const claimedNativeRoomId = roomCreateEvent.getContent()[VIRTUAL_ROOM_EVENT_TYPE];
         return Boolean(claimedNativeRoomId);
     }
@@ -132,19 +134,20 @@ export default class VoipUserMapper {
         }
 
         if (result[0].fields.is_virtual) {
+            const cli = MatrixClientPeg.safeGet();
             const nativeUser = result[0].userid;
-            const nativeRoom = findDMForUser(MatrixClientPeg.get(), nativeUser);
+            const nativeRoom = findDMForUser(cli, nativeUser);
             if (nativeRoom) {
                 // It's a virtual room with a matching native room, so set the room account data. This
                 // will make sure we know where how to map calls and also allow us know not to display
                 // it in the future.
-                MatrixClientPeg.get().setRoomAccountData(invitedRoom.roomId, VIRTUAL_ROOM_EVENT_TYPE, {
+                cli.setRoomAccountData(invitedRoom.roomId, VIRTUAL_ROOM_EVENT_TYPE, {
                     native_room: nativeRoom.roomId,
                 });
                 // also auto-join the virtual room if we have a matching native room
                 // (possibly we should only join if we've also joined the native room, then we'd also have
                 // to make sure we joined virtual rooms on joining a native one)
-                MatrixClientPeg.get().joinRoom(invitedRoom.roomId);
+                cli.joinRoom(invitedRoom.roomId);
 
                 // also put this room in the virtual room ID cache so isVirtualRoom return the right answer
                 // in however long it takes for the echo of setAccountData to come down the sync

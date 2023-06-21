@@ -70,8 +70,8 @@ export default class NewRecoveryMethodDialog extends React.PureComponent<IProps>
             </p>
         );
 
-        let content;
-        if (MatrixClientPeg.get().getKeyBackupEnabled()) {
+        let content: JSX.Element | undefined;
+        if (MatrixClientPeg.safeGet().getKeyBackupEnabled()) {
             content = (
                 <div>
                     {newMethodDetected}

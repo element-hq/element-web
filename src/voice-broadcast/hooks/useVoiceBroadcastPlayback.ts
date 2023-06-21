@@ -41,7 +41,7 @@ export const useVoiceBroadcastPlayback = (
     toggle(): void;
     room: Room;
 } => {
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
     const room = client.getRoom(playback.infoEvent.getRoomId());
 
     if (!room) {

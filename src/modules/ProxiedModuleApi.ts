@@ -189,7 +189,7 @@ export class ProxiedModuleApi implements ModuleApi {
                 roomId = getCachedRoomIDForAlias(parts.roomIdOrAlias);
                 if (!roomId) {
                     // alias resolution failed
-                    const result = await MatrixClientPeg.get().getRoomIdForAlias(parts.roomIdOrAlias);
+                    const result = await MatrixClientPeg.safeGet().getRoomIdForAlias(parts.roomIdOrAlias);
                     roomId = result.room_id;
                     if (!servers) servers = result.servers; // use provided servers first, if available
                 }

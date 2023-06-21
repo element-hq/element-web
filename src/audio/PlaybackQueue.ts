@@ -64,7 +64,7 @@ export class PlaybackQueue {
     }
 
     public static forRoom(roomId: string): PlaybackQueue {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const room = cli.getRoom(roomId);
         if (!room) throw new Error("Unknown room");
         if (PlaybackQueue.queues.has(room.roomId)) {

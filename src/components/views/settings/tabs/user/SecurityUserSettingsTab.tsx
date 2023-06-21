@@ -93,7 +93,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         const invitedRoomIds = new Set(this.getInvitedRooms().map((room) => room.roomId));
 
         this.state = {
-            ignoredUserIds: MatrixClientPeg.get().getIgnoredUsers(),
+            ignoredUserIds: MatrixClientPeg.safeGet().getIgnoredUsers(),
             waitingUnignored: [],
             managingInvites: false,
             invitedRoomIds,
@@ -102,7 +102,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
 
     private onAction = ({ action }: ActionPayload): void => {
         if (action === "ignore_state_changed") {
-            const ignoredUserIds = MatrixClientPeg.get().getIgnoredUsers();
+            const ignoredUserIds = MatrixClientPeg.safeGet().getIgnoredUsers();
             const newWaitingUnignored = this.state.waitingUnignored.filter((e) => ignoredUserIds.includes(e));
             this.setState({ ignoredUserIds, waitingUnignored: newWaitingUnignored });
         }
@@ -110,15 +110,15 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
 
     public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
-        MatrixClientPeg.get().on(RoomEvent.MyMembership, this.onMyMembership);
-        MatrixClientPeg.get()
+        MatrixClientPeg.safeGet().on(RoomEvent.MyMembership, this.onMyMembership);
+        MatrixClientPeg.safeGet()
             .getVersions()
             .then((versions) => this.setState({ versions }));
     }
 
     public componentWillUnmount(): void {
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
-        MatrixClientPeg.get().removeListener(RoomEvent.MyMembership, this.onMyMembership);
+        MatrixClientPeg.safeGet().removeListener(RoomEvent.MyMembership, this.onMyMembership);
     }
 
     private onMyMembership = (room: Room, membership: string): void => {
@@ -159,15 +159,15 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         if (index !== -1) {
             currentlyIgnoredUserIds.splice(index, 1);
             this.setState(({ waitingUnignored }) => ({ waitingUnignored: [...waitingUnignored, userId] }));
-            MatrixClientPeg.get().setIgnoredUsers(currentlyIgnoredUserIds);
+            MatrixClientPeg.safeGet().setIgnoredUsers(currentlyIgnoredUserIds);
         }
     };
 
     private getInvitedRooms = (): Room[] => {
-        return MatrixClientPeg.get()
+        return MatrixClientPeg.safeGet()
             .getRooms()
             .filter((r) => {
-                return r.hasMembershipState(MatrixClientPeg.get().getUserId()!, "invite");
+                return r.hasMembershipState(MatrixClientPeg.safeGet().getUserId()!, "invite");
             });
     };
 
@@ -180,7 +180,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         const invitedRoomIdsValues = Array.from(this.state.invitedRoomIds);
 
         // Execute all acceptances/rejections sequentially
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         const action = accept ? cli.joinRoom.bind(cli) : cli.leave.bind(cli);
         for (let i = 0; i < invitedRoomIdsValues.length; i++) {
             const roomId = invitedRoomIdsValues[i];
@@ -298,7 +298,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         );
 
         let warning;
-        if (!privateShouldBeEncrypted(MatrixClientPeg.get())) {
+        if (!privateShouldBeEncrypted(MatrixClientPeg.safeGet())) {
             warning = (
                 <div className="mx_SecurityUserSettingsTab_warning">
                     {_t(

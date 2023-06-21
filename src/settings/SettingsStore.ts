@@ -611,7 +611,7 @@ export default class SettingsStore {
     }
 
     private static migrateHiddenReadReceipts(): void {
-        if (MatrixClientPeg.get().isGuest()) return; // not worth it
+        if (MatrixClientPeg.safeGet().isGuest()) return; // not worth it
 
         // We wait for the first sync to ensure that the user's existing account data has loaded, as otherwise
         // getValue() for an account-level setting like sendReadReceipts will return `null`.

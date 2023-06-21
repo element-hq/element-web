@@ -65,7 +65,7 @@ export default class RoomProvider extends AutocompleteProvider {
     }
 
     protected getRooms(): Room[] {
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
 
         // filter out spaces here as they get their own autocomplete provider
         return cli

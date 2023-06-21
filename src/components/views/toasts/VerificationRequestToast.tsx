@@ -75,7 +75,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         this.checkRequestIsPending();
 
         if (request.isSelfVerification) {
-            const cli = MatrixClientPeg.get();
+            const cli = MatrixClientPeg.safeGet();
             const device = request.otherDeviceId ? await cli.getDevice(request.otherDeviceId) : null;
             const ip = device?.last_seen_ip;
             this.setState({
@@ -113,7 +113,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const { request } = this.props;
         // no room id for to_device requests
-        const cli = MatrixClientPeg.get();
+        const cli = MatrixClientPeg.safeGet();
         try {
             if (request.roomId) {
                 dis.dispatch<ViewRoomPayload>({
@@ -165,12 +165,12 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                 });
             }
         } else {
+            const client = MatrixClientPeg.safeGet();
             const userId = request.otherUserId;
             const roomId = request.roomId;
-            description = roomId ? userLabelForEventRoom(MatrixClientPeg.get(), userId, roomId) : userId;
+            description = roomId ? userLabelForEventRoom(client, userId, roomId) : userId;
             // for legacy to_device verification requests
             if (description === userId) {
-                const client = MatrixClientPeg.get();
                 const user = client.getUser(userId);
                 if (user && user.displayName) {
                     description = _t("%(name)s (%(userId)s)", { name: user.displayName, userId });

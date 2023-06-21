@@ -28,7 +28,7 @@ jest.mock("../../../../../src/SecurityManager", () => ({
 
 describe("CreateKeyBackupDialog", () => {
     beforeEach(() => {
-        MatrixClientPeg.get = () => createTestClient();
+        MatrixClientPeg.safeGet = MatrixClientPeg.get = () => createTestClient();
     });
 
     it("should display the spinner when creating backup", () => {
@@ -42,7 +42,7 @@ describe("CreateKeyBackupDialog", () => {
     it("should display the error message when backup creation failed", async () => {
         const matrixClient = createTestClient();
         mocked(matrixClient.scheduleAllGroupSessionsForBackup).mockRejectedValue("my error");
-        MatrixClientPeg.get = () => matrixClient;
+        MatrixClientPeg.safeGet = MatrixClientPeg.get = () => matrixClient;
 
         const { asFragment } = render(<CreateKeyBackupDialog onFinished={jest.fn()} />);
 

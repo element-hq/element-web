@@ -165,7 +165,7 @@ function getDeviceContext(client: MatrixClient): DeviceContext {
 }
 
 async function getContexts(): Promise<Contexts> {
-    const client = MatrixClientPeg.get();
+    const client = MatrixClientPeg.safeGet();
     return {
         user: getUserContext(client),
         crypto: await getCryptoContext(client),

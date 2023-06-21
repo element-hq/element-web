@@ -149,7 +149,7 @@ export class CapabilityText {
                 return { primary: _t("The above, but in any room you are joined or invited to as well") };
             } else {
                 const roomId = getTimelineRoomIDFromCapability(capability);
-                const room = MatrixClientPeg.get().getRoom(roomId);
+                const room = MatrixClientPeg.safeGet().getRoom(roomId);
                 return {
                     primary: _t(
                         "The above, but in <Room /> as well",

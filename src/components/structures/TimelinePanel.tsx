@@ -1965,7 +1965,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 !!ev.status || // local echo
                 (ignoreOwn && ev.getSender() === myUserId); // own message
             const isWithoutTile =
-                !haveRendererForEvent(ev, this.context?.showHiddenEvents) || shouldHideEvent(ev, this.context);
+                !haveRendererForEvent(ev, MatrixClientPeg.safeGet(), this.context?.showHiddenEvents) ||
+                shouldHideEvent(ev, this.context);
 
             if (isWithoutTile || !node) {
                 // don't start counting if the event should be ignored,

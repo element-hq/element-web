@@ -23,7 +23,7 @@ import { getLocalNotificationAccountDataEventType } from "../utils/notifications
 
 const onAccept = (): void => {
     Notifier.setEnabled(true);
-    const cli = MatrixClientPeg.get();
+    const cli = MatrixClientPeg.safeGet();
     const eventType = getLocalNotificationAccountDataEventType(cli.deviceId!);
     cli.setAccountData(eventType, {
         is_silenced: false,

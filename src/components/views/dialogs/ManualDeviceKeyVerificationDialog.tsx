@@ -37,7 +37,7 @@ export function ManualDeviceKeyVerificationDialog({
     device,
     onFinished,
 }: IManualDeviceKeyVerificationDialogProps): JSX.Element {
-    const mxClient = MatrixClientPeg.get();
+    const mxClient = MatrixClientPeg.safeGet();
 
     const onLegacyFinished = useCallback(
         (confirm: boolean) => {

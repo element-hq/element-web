@@ -52,7 +52,7 @@ export function eventTriggersUnreadCount(client: MatrixClient, ev: MatrixEvent):
     }
 
     if (ev.isRedacted()) return false;
-    return haveRendererForEvent(ev, false /* hidden messages should never trigger unread counts anyways */);
+    return haveRendererForEvent(ev, client, false /* hidden messages should never trigger unread counts anyways */);
 }
 
 export function doesRoomHaveUnreadMessages(room: Room): boolean {

@@ -237,7 +237,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                 continue;
             }
 
-            if (!haveRendererForEvent(mxEv, roomContext.showHiddenEvents)) {
+            if (!haveRendererForEvent(mxEv, client, roomContext.showHiddenEvents)) {
                 // XXX: can this ever happen? It will make the result count
                 // not match the displayed count.
                 continue;

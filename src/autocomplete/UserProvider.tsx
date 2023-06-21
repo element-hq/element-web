@@ -60,15 +60,13 @@ export default class UserProvider extends AutocompleteProvider {
             shouldMatchWordsOnly: false,
         });
 
-        MatrixClientPeg.get().on(RoomEvent.Timeline, this.onRoomTimeline);
-        MatrixClientPeg.get().on(RoomStateEvent.Update, this.onRoomStateUpdate);
+        MatrixClientPeg.safeGet().on(RoomEvent.Timeline, this.onRoomTimeline);
+        MatrixClientPeg.safeGet().on(RoomStateEvent.Update, this.onRoomStateUpdate);
     }
 
     public destroy(): void {
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener(RoomEvent.Timeline, this.onRoomTimeline);
-            MatrixClientPeg.get().removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
-        }
+        MatrixClientPeg.get()?.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
+        MatrixClientPeg.get()?.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
     }
 
     private onRoomTimeline = (
@@ -155,7 +153,7 @@ export default class UserProvider extends AutocompleteProvider {
             lastSpoken[event.getSender()!] = event.getTs();
         }
 
-        const currentUserId = MatrixClientPeg.get().credentials.userId;
+        const currentUserId = MatrixClientPeg.safeGet().credentials.userId;
         this.users = this.room.getJoinedMembers().filter(({ userId }) => userId !== currentUserId);
         this.users = this.users.concat(this.room.getMembersWithMembership("invite"));
 
@@ -167,7 +165,7 @@ export default class UserProvider extends AutocompleteProvider {
     public onUserSpoke(user: RoomMember | null): void {
         if (!this.users) return;
         if (!user) return;
-        if (user.userId === MatrixClientPeg.get().credentials.userId) return;
+        if (user.userId === MatrixClientPeg.safeGet().getSafeUserId()) return;
 
         // Move the user that spoke to the front of the array
         this.users.splice(

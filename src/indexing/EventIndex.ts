@@ -69,7 +69,7 @@ export default class EventIndex extends EventEmitter {
      * Register event listeners that are necessary for the event index to work.
      */
     public registerListeners(): void {
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
 
         client.on(ClientEvent.Sync, this.onSync);
         client.on(RoomEvent.Timeline, this.onRoomTimeline);
@@ -96,7 +96,7 @@ export default class EventIndex extends EventEmitter {
     public async addInitialCheckpoints(): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const rooms = client.getRooms();
 
         const isRoomEncrypted = (room: Room): boolean => {
@@ -200,7 +200,7 @@ export default class EventIndex extends EventEmitter {
     ): Promise<void> => {
         if (!room) return; // notification timeline, we'll get this event again with a room specific timeline
 
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
 
         // We only index encrypted rooms locally.
         if (!client.isRoomEncrypted(ev.getRoomId()!)) return;
@@ -220,7 +220,7 @@ export default class EventIndex extends EventEmitter {
     };
 
     private onRoomStateEvent = async (ev: MatrixEvent, state: RoomState): Promise<void> => {
-        if (!MatrixClientPeg.get().isRoomEncrypted(state.roomId)) return;
+        if (!MatrixClientPeg.safeGet().isRoomEncrypted(state.roomId)) return;
 
         if (ev.getType() === EventType.RoomEncryption && !(await this.isRoomIndexed(state.roomId))) {
             logger.log("EventIndex: Adding a checkpoint for a newly encrypted room", state.roomId);
@@ -254,7 +254,7 @@ export default class EventIndex extends EventEmitter {
      */
     private onTimelineReset = async (room: Room | undefined): Promise<void> => {
         if (!room) return;
-        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
+        if (!MatrixClientPeg.safeGet().isRoomEncrypted(room.roomId)) return;
 
         logger.log("EventIndex: Adding a checkpoint because of a limited timeline", room.roomId);
 
@@ -364,7 +364,7 @@ export default class EventIndex extends EventEmitter {
     private async addRoomCheckpoint(roomId: string, fullCrawl = false): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const room = client.getRoom(roomId);
 
         if (!room) return;
@@ -410,7 +410,7 @@ export default class EventIndex extends EventEmitter {
     private async crawlerFunc(): Promise<void> {
         let cancelled = false;
 
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
 
@@ -707,7 +707,7 @@ export default class EventIndex extends EventEmitter {
         fromEvent?: string,
         direction: string = EventTimeline.BACKWARDS,
     ): Promise<MatrixEvent[]> {
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return [];
 
@@ -942,7 +942,7 @@ export default class EventIndex extends EventEmitter {
             return null;
         }
 
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
 
         if (this.currentCheckpoint !== null) {
             return client.getRoom(this.currentCheckpoint.roomId);
@@ -966,7 +966,7 @@ export default class EventIndex extends EventEmitter {
             crawlingRooms.add(this.currentCheckpoint.roomId);
         }
 
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
         const rooms = client.getRooms();
 
         const isRoomEncrypted = (room: Room): boolean => {

@@ -55,7 +55,7 @@ export class IntegrationManagers {
 
     public startWatching(): void {
         this.stopWatching();
-        this.client = MatrixClientPeg.get();
+        this.client = MatrixClientPeg.safeGet();
         this.client.on(ClientEvent.AccountData, this.onAccountData);
         this.client.on(ClientEvent.ClientWellKnown, this.setupHomeserverManagers);
         this.compileManagers();

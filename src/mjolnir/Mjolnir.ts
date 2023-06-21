@@ -67,7 +67,7 @@ export class Mjolnir {
     public setup(): void {
         if (!MatrixClientPeg.get()) return;
         this.updateLists(SettingsStore.getValue("mjolnirRooms"));
-        MatrixClientPeg.get().on(RoomStateEvent.Events, this.onEvent);
+        MatrixClientPeg.get()!.on(RoomStateEvent.Events, this.onEvent);
     }
 
     public stop(): void {
@@ -81,14 +81,13 @@ export class Mjolnir {
             this.dispatcherRef = null;
         }
 
-        if (!MatrixClientPeg.get()) return;
-        MatrixClientPeg.get().removeListener(RoomStateEvent.Events, this.onEvent);
+        MatrixClientPeg.get()?.removeListener(RoomStateEvent.Events, this.onEvent);
     }
 
     public async getOrCreatePersonalList(): Promise<BanList> {
         let personalRoomId = SettingsStore.getValue("mjolnirPersonalRoom");
         if (!personalRoomId) {
-            const resp = await MatrixClientPeg.get().createRoom({
+            const resp = await MatrixClientPeg.safeGet().createRoom({
                 name: _t("My Ban List"),
                 topic: _t("This is your list of users/servers you have blocked - don't leave the room!"),
                 preset: Preset.PrivateChat,

@@ -93,7 +93,7 @@ export default class JSONExporter extends Exporter {
                 true,
             );
             if (this.cancelled) return this.cleanUp();
-            if (!haveRendererForEvent(event, false)) continue;
+            if (!haveRendererForEvent(event, this.room.client, false)) continue;
             this.messages.push(await this.getJSONString(event));
         }
         return this.createJSONString();

@@ -73,7 +73,7 @@ export interface IMatrixClientPeg {
      */
     getHomeserverName(): string | null;
 
-    get(): MatrixClient;
+    get(): MatrixClient | null;
     safeGet(): MatrixClient;
     unset(): void;
     assign(): Promise<any>;
@@ -142,7 +142,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     // used if we tear it down & recreate it with a different store
     private currentClientCreds: IMatrixClientCreds | null = null;
 
-    public get(): MatrixClient {
+    public get(): MatrixClient | null {
         return this.matrixClient;
     }
 

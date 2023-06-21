@@ -38,9 +38,9 @@ export default class NotifProvider extends AutocompleteProvider {
         force = false,
         limit = -1,
     ): Promise<ICompletion[]> {
-        const client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.safeGet();
 
-        if (!this.room.currentState.mayTriggerNotifOfType("room", client.credentials.userId!)) return [];
+        if (!this.room.currentState.mayTriggerNotifOfType("room", client.getSafeUserId())) return [];
 
         const { command, range } = this.getCurrentCommand(query, selection, force);
         if (
