@@ -89,6 +89,7 @@ export function getMentionDisplayText(completion: ICompletion, client: MatrixCli
  *
  * @param completion - the item selected from the autocomplete
  * @param client - the MatrixClient is required for us to look up the correct room mention text
+ * @param room - the room the composer is currently in
  * @returns an object of attributes containing HTMLAnchor attributes or data-* attributes
  */
 export function getMentionAttributes(
@@ -133,8 +134,18 @@ export function getMentionAttributes(
         attributes.set("data-mention-type", completion.type);
         attributes.set("style", `--avatar-background: url(${avatarUrl}); --avatar-letter: '${initialLetter}'`);
     } else if (completion.type === "at-room") {
-        // TODO add avatar logic for at-room
+        // logic as used in RoomPillPart.setAvatar in parts.ts, but now we know the current room
+        // from the arguments passed
+        let initialLetter = defaultLetterContent;
+        let avatarUrl = Avatar.avatarUrlForRoom(room, 16, 16, "crop");
+
+        if (!avatarUrl) {
+            initialLetter = Avatar.getInitialLetter(room.name) ?? defaultLetterContent;
+            avatarUrl = Avatar.defaultAvatarUrlForString(room.roomId);
+        }
+
         attributes.set("data-mention-type", completion.type);
+        attributes.set("style", `--avatar-background: url(${avatarUrl}); --avatar-letter: '${initialLetter}'`);
     }
 
     return attributes;

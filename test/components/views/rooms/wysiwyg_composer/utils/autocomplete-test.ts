@@ -242,12 +242,36 @@ describe("getMentionAttributes", () => {
     });
 
     describe("at-room mentions", () => {
-        it("returns expected attributes", () => {
+        it("returns expected attributes when avatar url for room is truthyf", () => {
             const atRoomCompletion = createMockCompletion({ type: "at-room" });
 
             const result = getMentionAttributes(atRoomCompletion, mockClient, mockRoom);
 
-            expect(result).toEqual(new Map([["data-mention-type", "at-room"]]));
+            expect(result).toEqual(
+                new Map([
+                    ["data-mention-type", "at-room"],
+                    ["style", `--avatar-background: url(${testAvatarUrlForRoom}); --avatar-letter: '\u200b'`],
+                ]),
+            );
+        });
+
+        it("returns expected style attributes when avatar url for room is falsy", () => {
+            const atRoomCompletion = createMockCompletion({ type: "at-room" });
+
+            // mock a single implementation of avatarUrlForRoom to make it falsy
+            mockAvatar.avatarUrlForRoom.mockReturnValueOnce(null);
+
+            const result = getMentionAttributes(atRoomCompletion, mockClient, mockRoom);
+
+            expect(result).toEqual(
+                new Map([
+                    ["data-mention-type", "at-room"],
+                    [
+                        "style",
+                        `--avatar-background: url(${testAvatarUrlForString}); --avatar-letter: '${testInitialLetter}'`,
+                    ],
+                ]),
+            );
         });
     });
 });
