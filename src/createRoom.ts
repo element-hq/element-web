@@ -43,6 +43,7 @@ import Spinner from "./components/views/elements/Spinner";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { findDMForUser } from "./utils/dm/findDMForUser";
 import { privateShouldBeEncrypted } from "./utils/rooms";
+import { shouldForceDisableEncryption } from "./utils/room/shouldForceDisableEncryption";
 import { waitForMember } from "./utils/membership";
 import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
 import SettingsStore from "./settings/SettingsStore";
@@ -470,4 +471,50 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
         await waitForMember(client, roomId, userId);
     }
     return roomId;
+}
+
+interface AllowedEncryptionSetting {
+    /**
+     * True when the user is allowed to choose whether encryption is enabled
+     */
+    allowChange: boolean;
+    /**
+     * Set when user is not allowed to choose encryption setting
+     * True when encryption is forced to enabled
+     */
+    forcedValue?: boolean;
+}
+/**
+ * Check if server configuration supports the user changing encryption for a room
+ * First check if server features force enable encryption for the given room type
+ * If not, check if server .well-known forces encryption to disabled
+ * If either are forced, then do not allow the user to change room's encryption
+ * @param client
+ * @param chatPreset chat type
+ * @returns Promise<boolean>
+ */
+export async function checkUserIsAllowedToChangeEncryption(
+    client: MatrixClient,
+    chatPreset: Preset,
+): Promise<AllowedEncryptionSetting> {
+    const doesServerForceEncryptionForPreset = await client.doesServerForceEncryptionForPreset(chatPreset);
+    const doesWellKnownForceDisableEncryption = shouldForceDisableEncryption(client);
+
+    // server is forcing encryption to ENABLED
+    // while .well-known config is forcing it to DISABLED
+    // server version config overrides wk config
+    if (doesServerForceEncryptionForPreset && doesWellKnownForceDisableEncryption) {
+        console.warn(
+            `Conflicting e2ee settings: server config and .well-known configuration disagree. Using server forced encryption setting for chat type ${chatPreset}`,
+        );
+    }
+
+    if (doesServerForceEncryptionForPreset) {
+        return { allowChange: false, forcedValue: true };
+    }
+    if (doesWellKnownForceDisableEncryption) {
+        return { allowChange: false, forcedValue: false };
+    }
+
+    return { allowChange: true };
 }

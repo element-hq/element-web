@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 import { mocked, Mocked } from "jest-mock";
-import { CryptoApi, MatrixClient, Device } from "matrix-js-sdk/src/matrix";
+import { CryptoApi, MatrixClient, Device, Preset } from "matrix-js-sdk/src/matrix";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 
-import { stubClient, setupAsyncStoreWithClient, mockPlatformPeg } from "./test-utils";
+import { stubClient, setupAsyncStoreWithClient, mockPlatformPeg, getMockClientWithEventEmitter } from "./test-utils";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import WidgetStore from "../src/stores/WidgetStore";
 import WidgetUtils from "../src/utils/WidgetUtils";
 import { JitsiCall, ElementCall } from "../src/models/Call";
-import createRoom, { canEncryptToAllUsers } from "../src/createRoom";
+import createRoom, { checkUserIsAllowedToChangeEncryption, canEncryptToAllUsers } from "../src/createRoom";
 import SettingsStore from "../src/settings/SettingsStore";
 
 describe("createRoom", () => {
@@ -205,5 +205,57 @@ describe("canEncryptToAllUsers", () => {
         );
         const result = await canEncryptToAllUsers(client, [user1Id, user2Id]);
         expect(result).toBe(true);
+    });
+});
+
+describe("checkUserIsAllowedToChangeEncryption()", () => {
+    const mockClient = getMockClientWithEventEmitter({
+        doesServerForceEncryptionForPreset: jest.fn(),
+        getClientWellKnown: jest.fn().mockReturnValue({}),
+    });
+    beforeEach(() => {
+        mockClient.doesServerForceEncryptionForPreset.mockClear().mockResolvedValue(false);
+        mockClient.getClientWellKnown.mockClear().mockReturnValue({});
+    });
+
+    it("should allow changing when neither server nor well known force encryption", async () => {
+        expect(await checkUserIsAllowedToChangeEncryption(mockClient, Preset.PrivateChat)).toEqual({
+            allowChange: true,
+        });
+
+        expect(mockClient.doesServerForceEncryptionForPreset).toHaveBeenCalledWith(Preset.PrivateChat);
+    });
+
+    it("should not allow changing when server forces encryption", async () => {
+        mockClient.doesServerForceEncryptionForPreset.mockResolvedValue(true);
+        expect(await checkUserIsAllowedToChangeEncryption(mockClient, Preset.PrivateChat)).toEqual({
+            allowChange: false,
+            forcedValue: true,
+        });
+    });
+
+    it("should not allow changing when well-known force_disable is true", async () => {
+        mockClient.getClientWellKnown.mockReturnValue({
+            "io.element.e2ee": {
+                force_disable: true,
+            },
+        });
+        expect(await checkUserIsAllowedToChangeEncryption(mockClient, Preset.PrivateChat)).toEqual({
+            allowChange: false,
+            forcedValue: false,
+        });
+    });
+
+    it("should not allow changing when server forces enabled and wk forces disabled encryption", async () => {
+        mockClient.getClientWellKnown.mockReturnValue({
+            "io.element.e2ee": {
+                force_disable: true,
+            },
+        });
+        mockClient.doesServerForceEncryptionForPreset.mockResolvedValue(true);
+        expect(await checkUserIsAllowedToChangeEncryption(mockClient, Preset.PrivateChat)).toEqual(
+            // server's forced enable takes precedence
+            { allowChange: false, forcedValue: true },
+        );
     });
 });
