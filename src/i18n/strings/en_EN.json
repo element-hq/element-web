@@ -1762,6 +1762,7 @@
     "Security & Privacy": "Security & Privacy",
     "Once enabled, encryption cannot be disabled.": "Once enabled, encryption cannot be disabled.",
     "Encrypted": "Encrypted",
+    "Your server requires encryption to be disabled.": "Your server requires encryption to be disabled.",
     "Enable %(brand)s as an additional calling option in this room": "Enable %(brand)s as an additional calling option in this room",
     "%(brand)s is end-to-end encrypted, but is currently limited to smaller numbers of users.": "%(brand)s is end-to-end encrypted, but is currently limited to smaller numbers of users.",
     "You do not have sufficient permissions to change this.": "You do not have sufficient permissions to change this.",

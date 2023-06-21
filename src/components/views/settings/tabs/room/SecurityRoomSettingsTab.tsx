@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2022 The Matrix.org Foundation C.I.C.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@ import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsTab from "../SettingsTab";
 import SdkConfig from "../../../../../SdkConfig";
+import { shouldForceDisableEncryption } from "../../../../../utils/room/shouldForceDisableEncryption";
+import { Caption } from "../../../typography/Caption";
 
 interface IProps {
     room: Room;
@@ -442,7 +444,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const room = this.props.room;
         const isEncrypted = this.state.encrypted;
         const hasEncryptionPermission = room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, client);
-        const canEnableEncryption = !isEncrypted && hasEncryptionPermission;
+        const isEncryptionForceDisabled = shouldForceDisableEncryption(client);
+        const canEnableEncryption = !isEncrypted && !isEncryptionForceDisabled && hasEncryptionPermission;
 
         let encryptionSettings: JSX.Element | undefined;
         if (isEncrypted && SettingsStore.isEnabled("blacklistUnverifiedDevices")) {
@@ -463,7 +466,11 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 <SettingsSection heading={_t("Security & Privacy")}>
                     <SettingsFieldset
                         legend={_t("Encryption")}
-                        description={_t("Once enabled, encryption cannot be disabled.")}
+                        description={
+                            isEncryptionForceDisabled && !isEncrypted
+                                ? undefined
+                                : _t("Once enabled, encryption cannot be disabled.")
+                        }
                     >
                         <LabelledToggleSwitch
                             value={isEncrypted}
@@ -471,6 +478,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                             label={_t("Encrypted")}
                             disabled={!canEnableEncryption}
                         />
+                        {isEncryptionForceDisabled && !isEncrypted && (
+                            <Caption>{_t("Your server requires encryption to be disabled.")}</Caption>
+                        )}
                         {encryptionSettings}
                     </SettingsFieldset>
 
