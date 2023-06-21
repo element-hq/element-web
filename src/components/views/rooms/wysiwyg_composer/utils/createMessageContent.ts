@@ -18,8 +18,9 @@ import { richToPlain, plainToRich } from "@matrix-org/matrix-wysiwyg";
 import { IContent, IEventRelation, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
+import { parsePermalink, RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
+import { isNotNull } from "../../../../../Typeguards";
 
 export const EMOTE_PREFIX = "/me ";
 
@@ -94,8 +95,8 @@ export async function createMessageContent(
     }
 
     // if we're editing rich text, the message content is pure html
-    // BUT if we're not, the message content will be plain text
-    const body = isHTML ? await richToPlain(message) : message;
+    // BUT if we're not, the message content will be plain text where we need to convert the mentions
+    const body = isHTML ? await richToPlain(message) : convertPlainTextToBody(message);
     const bodyPrefix = (isReplyAndEditing && getTextReplyFallback(editedEvent)) || "";
     const formattedBodyPrefix = (isReplyAndEditing && getHtmlReplyFallback(editedEvent)) || "";
 
@@ -140,4 +141,52 @@ export async function createMessageContent(
     }
 
     return content;
+}
+
+/**
+ * Without a model, we need to manually amend mentions in uncontrolled message content
+ * to make sure that mentions meet the matrix specification.
+ *
+ * @param content - the output from the `MessageComposer` state when in plain text mode
+ * @returns - a string formatted with the mentions replaced as required
+ */
+function convertPlainTextToBody(content: string): string {
+    const document = new DOMParser().parseFromString(content, "text/html");
+    const mentions = Array.from(document.querySelectorAll("a[data-mention-type]"));
+
+    mentions.forEach((mention) => {
+        const mentionType = mention.getAttribute("data-mention-type");
+        switch (mentionType) {
+            case "at-room": {
+                mention.replaceWith("@room");
+                break;
+            }
+            case "user": {
+                const innerText = mention.innerHTML;
+                mention.replaceWith(innerText);
+                break;
+            }
+            case "room": {
+                // for this case we use parsePermalink to try and get the mx id
+                const href = mention.getAttribute("href");
+
+                // if the mention has no href attribute, leave it alone
+                if (href === null) break;
+
+                // otherwise, attempt to parse the room alias or id from the href
+                const permalinkParts = parsePermalink(href);
+
+                // then if we have permalink parts with a valid roomIdOrAlias, replace the
+                // room mention with that text
+                if (isNotNull(permalinkParts) && isNotNull(permalinkParts.roomIdOrAlias)) {
+                    mention.replaceWith(permalinkParts.roomIdOrAlias);
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    });
+
+    return document.body.innerHTML;
 }
