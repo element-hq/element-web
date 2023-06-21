@@ -40,7 +40,7 @@ const Content = forwardRef<HTMLElement, ContentProps>(function Content(
     return null;
 });
 
-interface SendWysiwygComposerProps {
+export interface SendWysiwygComposerProps {
     initialContent?: string;
     isRichTextEnabled: boolean;
     placeholder?: string;
