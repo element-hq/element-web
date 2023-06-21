@@ -31,6 +31,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
 import TooltipTarget from "./TooltipTarget";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
+import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 
 interface IProps extends React.HTMLProps<HTMLDivElement> {
     room: Room;
@@ -46,12 +47,22 @@ export default function RoomTopic({ room, ...props }: IProps): JSX.Element {
     const onClick = useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {
             props.onClick?.(e);
+
             const target = e.target as HTMLElement;
-            if (target.tagName.toUpperCase() === "A") {
+
+            if (target.tagName.toUpperCase() !== "A") {
+                dis.fire(Action.ShowRoomTopic);
                 return;
             }
 
-            dis.fire(Action.ShowRoomTopic);
+            const anchor = e.target as HTMLLinkElement;
+            const localHref = tryTransformPermalinkToLocalHref(anchor.href);
+
+            if (localHref !== anchor.href) {
+                // it could be converted to a localHref -> therefore handle locally
+                e.preventDefault();
+                window.location.hash = localHref;
+            }
         },
         [props],
     );
