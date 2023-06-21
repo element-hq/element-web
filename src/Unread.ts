@@ -159,15 +159,13 @@ function makeHasReceipt(
         // If we found an event matching our receipt, then it's easy: this event
         // has a receipt if its ID is the same as the one in the receipt.
         return (ev) => ev.getId() == readUpToId;
-    } else {
-        // If we didn't, we have to guess by saying if this event is before the
-        // receipt's ts, then it we pretend it has a receipt.
-        const receipt = roomOrThread.getReadReceiptForUserId(myUserId);
-        if (receipt) {
-            const receiptTimestamp = receipt.data.ts;
-            return (ev) => ev.getTs() < receiptTimestamp;
-        } else {
-            return (_ev) => false;
-        }
     }
+
+    // If we didn't, we have to guess by saying if this event is before the
+    // receipt's ts, then it we pretend it has a receipt.
+    const receiptTs = roomOrThread.getReadReceiptForUserId(myUserId)?.data.ts ?? 0;
+    const unthreadedReceiptTs = roomOrThread.getLastUnthreadedReceiptFor(myUserId)?.ts ?? 0;
+    // We pick the more recent of the two receipts as the latest
+    const receiptTimestamp = Math.max(receiptTs, unthreadedReceiptTs);
+    return (ev) => ev.getTs() < receiptTimestamp;
 }
