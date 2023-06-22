@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import fetchMockJest from "fetch-mock-jest";
+import { OidcError } from "matrix-js-sdk/src/oidc/error";
 
-import { OidcClientError } from "../../../src/utils/oidc/error";
 import { getOidcClientId } from "../../../src/utils/oidc/registerClient";
 
 describe("getOidcClientId()", () => {
@@ -56,7 +56,7 @@ describe("getOidcClientId()", () => {
         };
         expect(
             async () => await getOidcClientId(authConfigWithoutRegistration, clientName, baseUrl, staticOidcClients),
-        ).rejects.toThrow(OidcClientError.DynamicRegistrationNotSupported);
+        ).rejects.toThrow(OidcError.DynamicRegistrationNotSupported);
         // didn't try to register
         expect(fetchMockJest).toHaveFetchedTimes(0);
     });
@@ -67,20 +67,55 @@ describe("getOidcClientId()", () => {
             registrationEndpoint: undefined,
         };
         expect(async () => await getOidcClientId(authConfigWithoutRegistration, clientName, baseUrl)).rejects.toThrow(
-            OidcClientError.DynamicRegistrationNotSupported,
+            OidcError.DynamicRegistrationNotSupported,
         );
         // didn't try to register
         expect(fetchMockJest).toHaveFetchedTimes(0);
     });
 
-    it("should throw while dynamic registration is not implemented", async () => {
+    it("should make correct request to register client", async () => {
         fetchMockJest.post(registrationEndpoint, {
             status: 200,
             body: JSON.stringify({ client_id: dynamicClientId }),
         });
+        expect(await getOidcClientId(delegatedAuthConfig, clientName, baseUrl)).toEqual(dynamicClientId);
+        // didn't try to register
+        expect(fetchMockJest).toHaveBeenCalledWith(registrationEndpoint, {
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({
+                client_name: clientName,
+                client_uri: baseUrl,
+                response_types: ["code"],
+                grant_types: ["authorization_code", "refresh_token"],
+                redirect_uris: [baseUrl],
+                id_token_signed_response_alg: "RS256",
+                token_endpoint_auth_method: "none",
+                application_type: "web",
+            }),
+        });
+    });
 
-        expect(async () => await getOidcClientId(delegatedAuthConfig, clientName, baseUrl)).rejects.toThrow(
-            OidcClientError.DynamicRegistrationNotSupported,
+    it("should throw when registration request fails", async () => {
+        fetchMockJest.post(registrationEndpoint, {
+            status: 500,
+        });
+        expect(() => getOidcClientId(delegatedAuthConfig, clientName, baseUrl)).rejects.toThrow(
+            OidcError.DynamicRegistrationFailed,
+        );
+    });
+
+    it("should throw when registration response is invalid", async () => {
+        fetchMockJest.post(registrationEndpoint, {
+            status: 200,
+            // no clientId in response
+            body: "{}",
+        });
+        expect(() => getOidcClientId(delegatedAuthConfig, clientName, baseUrl)).rejects.toThrow(
+            OidcError.DynamicRegistrationInvalid,
         );
     });
 });

@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { registerOidcClient } from "matrix-js-sdk/src/oidc/register";
 
 import { ValidatedDelegatedAuthConfig } from "../ValidatedServerConfig";
-import { OidcClientError } from "./error";
 
 /**
  * Get the statically configured clientId for the issuer
@@ -34,6 +34,7 @@ const getStaticOidcClientId = (issuer: string, staticOidcClients?: Record<string
 /**
  * Get the clientId for an OIDC OP
  * Checks statically configured clientIds first
+ * Then attempts dynamic registration with the OP
  * @param delegatedAuthConfig Auth config from ValidatedServerConfig
  * @param clientName Client name to register with the OP, eg 'Element'
  * @param baseUrl URL of the home page of the Client, eg 'https://app.element.io/'
@@ -44,8 +45,8 @@ const getStaticOidcClientId = (issuer: string, staticOidcClients?: Record<string
 export const getOidcClientId = async (
     delegatedAuthConfig: ValidatedDelegatedAuthConfig,
     // these are used in the following PR
-    _clientName: string,
-    _baseUrl: string,
+    clientName: string,
+    baseUrl: string,
     staticOidcClients?: Record<string, string>,
 ): Promise<string> => {
     const staticClientId = getStaticOidcClientId(delegatedAuthConfig.issuer, staticOidcClients);
@@ -53,8 +54,5 @@ export const getOidcClientId = async (
         logger.debug(`Using static clientId for issuer ${delegatedAuthConfig.issuer}`);
         return staticClientId;
     }
-
-    // TODO attempt dynamic registration
-    logger.error("Dynamic registration not yet implemented.");
-    throw new Error(OidcClientError.DynamicRegistrationNotSupported);
+    return await registerOidcClient(delegatedAuthConfig, clientName, baseUrl);
 };

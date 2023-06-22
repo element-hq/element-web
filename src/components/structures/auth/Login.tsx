@@ -50,7 +50,6 @@ _td("Invalid identity server discovery response");
 _td("Invalid base_url for m.identity_server");
 _td("Identity server URL does not appear to be a valid identity server");
 _td("General failure");
-
 interface IProps {
     serverConfig: ValidatedServerConfig;
     // If true, the component will consider itself busy.
