@@ -194,6 +194,14 @@ export interface IConfigOptions {
         existing_issues_url: string;
         new_issue_url: string;
     };
+
+    /**
+     * Configuration for OIDC issuers where a static client_id has been issued for the app.
+     * Otherwise dynamic client registration is attempted.
+     * The issuer URL must have a trailing `/`.
+     * OPTIONAL
+     */
+    oidc_static_client_ids?: Record<string, string>;
 }
 
 export interface ISsoRedirectOptions {

@@ -17,10 +17,10 @@ limitations under the License.
 import React, { ReactNode } from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ISSOFlow, LoginFlow, SSOAction } from "matrix-js-sdk/src/@types/auth";
+import { ISSOFlow, SSOAction } from "matrix-js-sdk/src/@types/auth";
 
 import { _t, _td, UserFriendlyError } from "../../../languageHandler";
-import Login from "../../../Login";
+import Login, { ClientLoginFlow } from "../../../Login";
 import { messageForConnectionError, messageForLoginError } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import AuthPage from "../../views/auth/AuthPage";
@@ -38,6 +38,7 @@ import AuthHeader from "../../views/auth/AuthHeader";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { filterBoolean } from "../../../utils/arrays";
+import { Features } from "../../../settings/Settings";
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -84,7 +85,7 @@ interface IState {
     // can we attempt to log in or are there validation errors?
     canTryLogin: boolean;
 
-    flows?: LoginFlow[];
+    flows?: ClientLoginFlow[];
 
     // used for preserving form values when changing homeserver
     username: string;
@@ -110,12 +111,16 @@ type OnPasswordLogin = {
  */
 export default class LoginComponent extends React.PureComponent<IProps, IState> {
     private unmounted = false;
+    private oidcNativeFlowEnabled = false;
     private loginLogic!: Login;
 
     private readonly stepRendererMap: Record<string, () => ReactNode>;
 
     public constructor(props: IProps) {
         super(props);
+
+        // only set on a config level, so we don't need to watch
+        this.oidcNativeFlowEnabled = SettingsStore.getValue(Features.OidcNativeFlow);
 
         this.state = {
             busy: false,
@@ -156,7 +161,10 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
     public componentDidUpdate(prevProps: IProps): void {
         if (
             prevProps.serverConfig.hsUrl !== this.props.serverConfig.hsUrl ||
-            prevProps.serverConfig.isUrl !== this.props.serverConfig.isUrl
+            prevProps.serverConfig.isUrl !== this.props.serverConfig.isUrl ||
+            // delegatedAuthentication is only set by buildValidatedConfigFromDiscovery and won't be modified
+            // so shallow comparison is fine
+            prevProps.serverConfig.delegatedAuthentication !== this.props.serverConfig.delegatedAuthentication
         ) {
             // Ensure that we end up actually logging in to the right place
             this.initLoginLogic(this.props.serverConfig);
@@ -322,28 +330,10 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
     };
 
-    private async initLoginLogic({ hsUrl, isUrl }: ValidatedServerConfig): Promise<void> {
-        let isDefaultServer = false;
-        if (
-            this.props.serverConfig.isDefault &&
-            hsUrl === this.props.serverConfig.hsUrl &&
-            isUrl === this.props.serverConfig.isUrl
-        ) {
-            isDefaultServer = true;
-        }
-
-        const fallbackHsUrl = isDefaultServer ? this.props.fallbackHsUrl! : null;
-
-        const loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
-            defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
-        });
-        this.loginLogic = loginLogic;
-
-        this.setState({
-            busy: true,
-            loginIncorrect: false,
-        });
-
+    private async checkServerLiveliness({
+        hsUrl,
+        isUrl,
+    }: Pick<ValidatedServerConfig, "hsUrl" | "isUrl">): Promise<void> {
         // Do a quick liveliness check on the URLs
         try {
             const { warning } = await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
@@ -361,9 +351,38 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         } catch (e) {
             this.setState({
                 busy: false,
-                ...AutoDiscoveryUtils.authComponentStateForError(e),
+                ...AutoDiscoveryUtils.authComponentStateForError(e as Error),
             });
         }
+    }
+
+    private async initLoginLogic({ hsUrl, isUrl }: ValidatedServerConfig): Promise<void> {
+        let isDefaultServer = false;
+        if (
+            this.props.serverConfig.isDefault &&
+            hsUrl === this.props.serverConfig.hsUrl &&
+            isUrl === this.props.serverConfig.isUrl
+        ) {
+            isDefaultServer = true;
+        }
+
+        const fallbackHsUrl = isDefaultServer ? this.props.fallbackHsUrl! : null;
+
+        this.setState({
+            busy: true,
+            loginIncorrect: false,
+        });
+
+        await this.checkServerLiveliness({ hsUrl, isUrl });
+
+        const loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
+            defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
+            // if native OIDC is enabled in the client pass the server's delegated auth settings
+            delegatedAuthentication: this.oidcNativeFlowEnabled
+                ? this.props.serverConfig.delegatedAuthentication
+                : undefined,
+        });
+        this.loginLogic = loginLogic;
 
         loginLogic
             .getFlows()
@@ -401,7 +420,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             });
     }
 
-    private isSupportedFlow = (flow: LoginFlow): boolean => {
+    private isSupportedFlow = (flow: ClientLoginFlow): boolean => {
         // technically the flow can have multiple steps, but no one does this
         // for login and loginLogic doesn't support it so we can ignore it.
         if (!this.stepRendererMap[flow.type]) {
