@@ -491,7 +491,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         // This would cause jumping to happen on Chrome/macOS.
         return new Promise((resolve) => window.setTimeout(resolve, 1))
             .then(() => {
-                return this.props.onFillRequest(backwards);
+                return this.props.onFillRequest?.(backwards);
             })
             .finally(() => {
                 this.pendingFillRequests[dir] = false;

@@ -66,7 +66,7 @@ describe("DeviceSettingsHandler", () => {
 
         afterEach(() => {
             MatrixClientPeg.get = () => null;
-            MatrixClientPeg.safeGet = () => null;
+            MatrixClientPeg.safeGet = () => new MatrixClient({ baseUrl: "foobar" });
         });
 
         it("Returns the value for a disabled feature", () => {

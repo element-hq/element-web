@@ -75,7 +75,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
                 this.openRequest();
                 await request.accept();
             } catch (err) {
-                logger.error(err.message);
+                logger.error(err);
             }
         }
     };
@@ -86,7 +86,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             try {
                 await request.cancel();
             } catch (err) {
-                logger.error(err.message);
+                logger.error(err);
             }
         }
     };

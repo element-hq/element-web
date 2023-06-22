@@ -1623,12 +1623,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
             // dialog, let's jump to the end of the timeline. If we weren't,
             // something has gone badly wrong and rather than causing a loop of
             // undismissable dialogs, let's just give up.
-            if (eventId) {
+            if (eventId && this.props.timelineSet.room) {
                 onFinished = () => {
                     // go via the dispatcher so that the URL is updated
                     dis.dispatch<ViewRoomPayload>({
                         action: Action.ViewRoom,
-                        room_id: this.props.timelineSet.room.roomId,
+                        room_id: this.props.timelineSet.room!.roomId,
                         metricsTrigger: undefined, // room doesn't change
                     });
                 };
@@ -2098,7 +2098,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // forwards, otherwise if somebody hits the bottom of the loaded
         // events when viewing historical messages, we get stuck in a loop
         // of paginating our way through the entire history of the room.
-        const stickyBottom = !this.timelineWindow.canPaginate(EventTimeline.FORWARDS);
+        const stickyBottom = !this.timelineWindow?.canPaginate(EventTimeline.FORWARDS);
 
         // If the state is PREPARED or CATCHUP, we're still waiting for the js-sdk to sync with
         // the HS and fetch the latest events, so we are effectively forward paginating.

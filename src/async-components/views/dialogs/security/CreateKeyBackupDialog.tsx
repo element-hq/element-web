@@ -42,7 +42,7 @@ interface IState {
     passPhraseConfirm: string;
     copied: boolean;
     downloaded: boolean;
-    error?: string;
+    error?: boolean;
 }
 
 /*
@@ -94,7 +94,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
                 cli.deleteKeyBackupVersion(info.version);
             }
             this.setState({
-                error: e,
+                error: true,
             });
         }
     };

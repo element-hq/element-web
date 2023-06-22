@@ -28,14 +28,14 @@ import { Action } from "../../../dispatcher/actions";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import SettingsFlag from "../elements/SettingsFlag";
 import SettingsFieldset from "../settings/SettingsFieldset";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {
     room: Room;
 }
 
 export default class UrlPreviewSettings extends React.Component<IProps> {
-    private onClickUserSettings = (e: React.MouseEvent): void => {
+    private onClickUserSettings = (e: ButtonEvent): void => {
         e.preventDefault();
         e.stopPropagation();
         dis.fire(Action.ViewUserSettings);

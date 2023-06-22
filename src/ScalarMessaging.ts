@@ -626,7 +626,7 @@ async function setBotPower(
             success: true,
         });
     } catch (err) {
-        sendError(event, err.message ? err.message : _t("Failed to send request."), err);
+        sendError(event, err instanceof Error ? err.message : _t("Failed to send request."), err);
     }
 }
 

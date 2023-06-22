@@ -208,8 +208,8 @@ describe("MessagePreviewStore", () => {
 
         const preview = await store.getPreviewForRoom(room, DefaultTagID.Untagged);
         expect(preview).toBeDefined();
-        expect(preview.isThreadReply).toBe(false);
-        expect(preview.text).toMatchInlineSnapshot(`"@sender:server reacted 🙃 to First message"`);
+        expect(preview?.isThreadReply).toBe(false);
+        expect(preview?.text).toMatchInlineSnapshot(`"@sender:server reacted 🙃 to First message"`);
     });
 
     it("should generate the correct preview for a reaction on a thread root", async () => {
@@ -227,7 +227,7 @@ describe("MessagePreviewStore", () => {
 
         const preview = await store.getPreviewForRoom(room, DefaultTagID.Untagged);
         expect(preview).toBeDefined();
-        expect(preview.isThreadReply).toBe(false);
-        expect(preview.text).toContain("You reacted 🙃 to root event message");
+        expect(preview?.isThreadReply).toBe(false);
+        expect(preview?.text).toContain("You reacted 🙃 to root event message");
     });
 });

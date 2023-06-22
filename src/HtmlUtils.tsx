@@ -466,7 +466,7 @@ const emojiToJsxSpan = (emoji: string, key: number): JSX.Element => (
  */
 export function formatEmojis(message: string | undefined, isHtmlMessage?: false): JSX.Element[];
 export function formatEmojis(message: string | undefined, isHtmlMessage: true): string[];
-export function formatEmojis(message: string | undefined, isHtmlMessage: boolean): (JSX.Element | string)[] {
+export function formatEmojis(message: string | undefined, isHtmlMessage?: boolean): (JSX.Element | string)[] {
     const emojiToSpan = isHtmlMessage ? emojiToHtmlSpan : emojiToJsxSpan;
     const result: (JSX.Element | string)[] = [];
     if (!message) return result;

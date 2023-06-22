@@ -220,7 +220,6 @@ export interface IRoomState {
     showUrlPreview?: boolean;
     e2eStatus?: E2EStatus;
     rejecting?: boolean;
-    rejectError?: Error;
     hasPinnedWidgets?: boolean;
     mainSplitContentType?: MainSplitContentType;
     // whether or not a spaces context switch brought us here,
@@ -1680,7 +1679,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
                 this.setState({
                     rejecting: false,
-                    rejectError: error,
                 });
             },
         );
@@ -1714,7 +1712,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
             this.setState({
                 rejecting: false,
-                rejectError: error,
             });
         }
     };
