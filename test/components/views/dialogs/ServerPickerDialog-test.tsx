@@ -114,6 +114,35 @@ describe("<ServerPickerDialog />", () => {
             expect(onFinished).toHaveBeenCalledWith(defaultServerConfig);
         });
 
+        it("should allow user to revert from a custom server to the default", async () => {
+            fetchMock.get(`https://custom.org/_matrix/client/versions`, {
+                unstable_features: {},
+                versions: [],
+            });
+
+            const onFinished = jest.fn();
+            const serverConfig = {
+                hsUrl: "https://custom.org",
+                hsName: "custom.org",
+                hsNameIsDifferent: true,
+                isUrl: "https://is.org",
+                isDefault: false,
+                isNameResolvable: true,
+                warning: "",
+            };
+            getComponent({ onFinished, serverConfig });
+
+            fireEvent.click(screen.getByTestId("defaultHomeserver"));
+            expect(screen.getByTestId("defaultHomeserver")).toBeChecked();
+
+            fireEvent.click(screen.getByText("Continue"));
+            await flushPromises();
+
+            // closed dialog with default server and nothing else
+            expect(onFinished).toHaveBeenCalledWith(defaultServerConfig);
+            expect(onFinished).toHaveBeenCalledTimes(1);
+        });
+
         it("should submit successfully with a valid custom homeserver", async () => {
             const homeserver = "https://myhomeserver.site";
             fetchMock.get(`${homeserver}/_matrix/client/versions`, {

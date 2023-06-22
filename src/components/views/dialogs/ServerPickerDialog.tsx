@@ -159,6 +159,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
 
         if (this.state.defaultChosen) {
             this.props.onFinished(this.defaultServer);
+            return;
         }
 
         const valid = await this.fieldRef.current?.validate({ allowEmpty: false });
@@ -173,7 +174,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
     };
 
     public render(): React.ReactNode {
-        let text;
+        let text: string | undefined;
         if (this.defaultServer.hsName === "matrix.org") {
             text = _t("Matrix.org is the biggest public homeserver in the world, so it's a good place for many.");
         }
