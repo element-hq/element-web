@@ -16,7 +16,7 @@ limitations under the License.
 
 import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import type { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api";
 
 export type EmojiMapping = [emoji: string, name: string];
 
@@ -39,15 +39,15 @@ export function waitForVerificationRequest(cli: MatrixClient): Promise<Verificat
 }
 
 /**
- * Automatically handle an incoming verification request
+ * Automatically handle a SAS verification
  *
- * Starts the key verification process, and, once it is accepted on the other side, confirms that the
- * emojis match.
+ * Given a verifier which has already been started, wait for the emojis to be received, blindly confirm they
+ * match, and return them
  *
- * @param request - incoming verification request
+ * @param verifier - verifier
  * @returns A promise that resolves, with the emoji list, once we confirm the emojis
  */
-export function handleVerificationRequest(request: VerificationRequest): Promise<EmojiMapping[]> {
+export function handleSasVerification(verifier: Verifier): Promise<EmojiMapping[]> {
     return new Promise<EmojiMapping[]>((resolve) => {
         const onShowSas = (event: ISasEvent) => {
             // @ts-ignore VerifierEvent is a pain to get at here as we don't have a reference to matrixcs;
@@ -57,7 +57,6 @@ export function handleVerificationRequest(request: VerificationRequest): Promise
             resolve(event.sas.emoji);
         };
 
-        const verifier = request.beginKeyVerification("m.sas.v1");
         // @ts-ignore as above, avoiding reference to VerifierEvent
         verifier.on("show_sas", onShowSas);
         verifier.verify();
@@ -118,4 +117,25 @@ export function logIntoElement(homeserverUrl: string, username: string, password
     cy.findByRole("textbox", { name: "Username" }).type(username);
     cy.findByPlaceholderText("Password").type(password);
     cy.findByRole("button", { name: "Sign in" }).click();
+}
+
+/**
+ * Given a SAS verifier for a bot client, add cypress commands to:
+ *   - wait for the bot to receive the emojis
+ *   - check that the bot sees the same emoji as the application
+ *
+ * @param botVerificationRequest - a verification request in a bot client
+ */
+export function doTwoWaySasVerification(verifier: Verifier): void {
+    // on the bot side, wait for the emojis, confirm they match, and return them
+    const emojiPromise = handleSasVerification(verifier);
+
+    // then, check that our application shows an emoji panel with the same emojis.
+    cy.wrap(emojiPromise).then((emojis: EmojiMapping[]) => {
+        cy.get(".mx_VerificationShowSas_emojiSas_block").then((emojiBlocks) => {
+            emojis.forEach((emoji: EmojiMapping, index: number) => {
+                expect(emojiBlocks[index].textContent.toLowerCase()).to.eq(emoji[0] + emoji[1]);
+            });
+        });
+    });
 }

@@ -14,11 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
-import { handleVerificationRequest, logIntoElement, waitForVerificationRequest } from "./utils";
-import { CypressBot } from "../../support/bot";
-import { skipIfRustCrypto } from "../../support/util";
+import { logIntoElement } from "./utils";
 
 describe("Complete security", () => {
     let homeserver: HomeserverInstance;
@@ -46,39 +43,5 @@ describe("Complete security", () => {
         cy.findByText("Welcome Jeff");
     });
 
-    it("should walk through device verification if we have a signed device", () => {
-        skipIfRustCrypto();
-
-        // create a new user, and have it bootstrap cross-signing
-        let botClient: CypressBot;
-        cy.getBot(homeserver, { displayName: "Jeff" })
-            .then(async (bot) => {
-                botClient = bot;
-                await bot.bootstrapCrossSigning({});
-            })
-            .then(() => {
-                // now log in, in Element. We go in through the login page because otherwise the device setup flow
-                // doesn't get triggered
-                console.log("%cAccount set up; logging in user", "font-weight: bold; font-size:x-large");
-                logIntoElement(homeserver.baseUrl, botClient.getSafeUserId(), botClient.__cypress_password);
-
-                // we should see a prompt for a device verification
-                cy.findByRole("heading", { name: "Verify this device" });
-                const botVerificationRequestPromise = waitForVerificationRequest(botClient);
-                cy.findByRole("button", { name: "Verify with another device" }).click();
-
-                // accept the verification request on the "bot" side
-                cy.wrap(botVerificationRequestPromise).then(async (verificationRequest: VerificationRequest) => {
-                    await handleVerificationRequest(verificationRequest);
-                });
-
-                // confirm that the emojis match
-                cy.findByRole("button", { name: "They match" }).click();
-
-                // we should get the confirmation box
-                cy.findByText(/You've successfully verified/);
-
-                cy.findByRole("button", { name: "Got it" }).click();
-            });
-    });
+    // see also "Verify device during login with SAS" in `verifiction.spec.ts`.
 });

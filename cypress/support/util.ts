@@ -17,6 +17,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import "cypress-each";
+import EventEmitter from "events";
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -74,4 +75,11 @@ export function skipIfRustCrypto() {
  */
 export function isRustCryptoEnabled(): boolean {
     return !!Cypress.env("RUST_CRYPTO");
+}
+
+/**
+ * Returns a Promise which will resolve when the given event emitter emits a given event
+ */
+export function emitPromise(e: EventEmitter, k: string | symbol) {
+    return new Promise((r) => e.once(k, r));
 }
