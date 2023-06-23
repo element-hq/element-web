@@ -104,10 +104,10 @@ export function getLineAndNodePosition(
 } {
     const { parts } = model;
     const partIndex = caretPosition.index;
-    const lineResult = findNodeInLineForPart(parts, partIndex);
+    let { offset } = caretPosition;
+    const lineResult = findNodeInLineForPart(parts, partIndex, offset);
     const { lineIndex } = lineResult;
     let { nodeIndex } = lineResult;
-    let { offset } = caretPosition;
     // we're at an empty line between a newline part
     // and another newline part or end/start of parts.
     // set offset to 0 so it gets set to the <br> inside the line container
@@ -120,7 +120,11 @@ export function getLineAndNodePosition(
     return { lineIndex, nodeIndex, offset };
 }
 
-function findNodeInLineForPart(parts: Part[], partIndex: number): { lineIndex: number; nodeIndex: number } {
+function findNodeInLineForPart(
+    parts: Part[],
+    partIndex: number,
+    offset: number,
+): { lineIndex: number; nodeIndex: number } {
     let lineIndex = 0;
     let nodeIndex = -1;
 
@@ -130,6 +134,10 @@ function findNodeInLineForPart(parts: Part[], partIndex: number): { lineIndex: n
     for (let i = 0; i <= partIndex; ++i) {
         const part = parts[i];
         if (part.type === Type.Newline) {
+            // don't jump over the linebreak if the offset is before it
+            if (i == partIndex && offset === 0) {
+                continue;
+            }
             lineIndex += 1;
             nodeIndex = -1;
             prevPart = undefined;
@@ -140,7 +148,7 @@ function findNodeInLineForPart(parts: Part[], partIndex: number): { lineIndex: n
             }
             // only jump over caret node if we're not at our destination node already,
             // as we'll assume in moveOutOfUnselectablePart that nodeIndex
-            // refers to the node  corresponding to the part,
+            // refers to the node corresponding to the part,
             // and not an adjacent caret node
             if (i < partIndex) {
                 const nextPart = parts[i + 1];

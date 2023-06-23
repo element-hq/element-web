@@ -46,6 +46,14 @@ describe("editor/caret: DOM position for caret", function () {
         });
     });
     describe("handling line breaks", function () {
+        it("at start of first line which is empty", function () {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.newline(), pc.plain("hello world")], pc);
+            const { offset, lineIndex, nodeIndex } = getLineAndNodePosition(model, { index: 0, offset: 0 });
+            expect(lineIndex).toBe(0);
+            expect(nodeIndex).toBe(-1);
+            expect(offset).toBe(0);
+        });
         it("at end of last line", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("hello"), pc.newline(), pc.plain("world")], pc);
@@ -61,6 +69,14 @@ describe("editor/caret: DOM position for caret", function () {
             expect(lineIndex).toBe(1);
             expect(nodeIndex).toBe(0);
             expect(offset).toBe(0);
+        });
+        it("before empty line", function () {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.plain("hello"), pc.newline(), pc.newline(), pc.plain("world")], pc);
+            const { offset, lineIndex, nodeIndex } = getLineAndNodePosition(model, { index: 0, offset: 5 });
+            expect(lineIndex).toBe(0);
+            expect(nodeIndex).toBe(0);
+            expect(offset).toBe(5);
         });
         it("in empty line", function () {
             const pc = createPartCreator();
