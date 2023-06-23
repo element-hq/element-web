@@ -18,15 +18,15 @@ import React from "react";
 import { verificationMethods } from "matrix-js-sdk/src/crypto";
 import { SCAN_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import {
-    VerificationRequest,
     VerificationPhase as Phase,
+    VerificationRequest,
     VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto-api";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
 import { logger } from "matrix-js-sdk/src/logger";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { ShowQrCodeCallbacks, ShowSasCallbacks, VerifierEvent } from "matrix-js-sdk/src/crypto-api/verification";
+import { Device } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
@@ -52,10 +52,20 @@ interface IState {
     emojiButtonClicked?: boolean;
     reciprocateButtonClicked?: boolean;
     reciprocateQREvent: ShowQrCodeCallbacks | null;
+
+    /**
+     * Details of the other device involved in the transaction.
+     *
+     * `undefined` if there is not (yet) another device in the transaction, or if we do not know about it.
+     */
+    otherDeviceDetails?: Device;
 }
 
 export default class VerificationPanel extends React.PureComponent<IProps, IState> {
     private hasVerifier: boolean;
+
+    /** have we yet tried to check the other device's info */
+    private haveCheckedDevice = false;
 
     public constructor(props: IProps) {
         super(props);
@@ -201,14 +211,25 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         this.state.reciprocateQREvent?.cancel();
     };
 
-    private getDevice(): DeviceInfo | null {
+    /**
+     * Get details of the other device involved in the verification, if we haven't before, and store in the state.
+     */
+    private async maybeGetOtherDevice(): Promise<void> {
+        if (this.haveCheckedDevice) return;
+
+        const client = MatrixClientPeg.safeGet();
         const deviceId = this.props.request?.otherDeviceId;
-        const userId = MatrixClientPeg.safeGet().getUserId();
-        if (deviceId && userId) {
-            return MatrixClientPeg.safeGet().getStoredDevice(userId, deviceId);
-        } else {
-            return null;
+        const userId = client.getUserId();
+        if (!deviceId || !userId) {
+            return;
         }
+        this.haveCheckedDevice = true;
+
+        const deviceMap = await client.getCrypto()?.getUserDeviceInfo([userId]);
+        if (!deviceMap) return;
+        const userDevices = deviceMap.get(userId);
+        if (!userDevices) return;
+        this.setState({ otherDeviceDetails: userDevices.get(deviceId) });
     }
 
     private renderQRReciprocatePhase(): JSX.Element {
@@ -272,7 +293,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
         let description: string;
         if (request.isSelfVerification) {
-            const device = this.getDevice();
+            const device = this.state.otherDeviceDetails;
             if (!device) {
                 // This can happen if the device is logged out while we're still showing verification
                 // UI for it.
@@ -280,8 +301,8 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                 description = _t("You've successfully verified your device!");
             } else {
                 description = _t("You've successfully verified %(deviceName)s (%(deviceId)s)!", {
-                    deviceName: device ? device.getDisplayName() : "",
-                    deviceId: this.props.request.otherDeviceId,
+                    deviceName: device.displayName,
+                    deviceId: device.deviceId,
                 });
             }
         } else {
@@ -356,7 +377,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                         const emojis = this.state.sasEvent ? (
                             <VerificationShowSas
                                 displayName={displayName}
-                                device={this.getDevice() ?? undefined}
+                                otherDeviceDetails={this.state.otherDeviceDetails}
                                 sas={this.state.sasEvent.sas}
                                 onCancel={this.onSasMismatchesClick}
                                 onDone={this.onSasMatchesClick}
@@ -410,6 +431,10 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
     private onRequestChange = async (): Promise<void> => {
         const { request } = this.props;
+
+        // if we have a device ID and did not have one before, fetch the device's details
+        this.maybeGetOtherDevice();
+
         const hadVerifier = this.hasVerifier;
         this.hasVerifier = !!request.verifier;
         if (!hadVerifier && this.hasVerifier) {

@@ -18,24 +18,27 @@ import { act, render, waitFor } from "@testing-library/react";
 import React, { ComponentProps } from "react";
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 import { User } from "matrix-js-sdk/src/models/user";
-import { Mocked } from "jest-mock";
+import { mocked, Mocked } from "jest-mock";
 import {
     EmojiMapping,
     ShowSasCallbacks,
-    Verifier,
-    VerifierEvent,
-    VerifierEventHandlerMap,
     VerificationPhase as Phase,
     VerificationRequest,
     VerificationRequestEvent,
+    Verifier,
+    VerifierEvent,
+    VerifierEventHandlerMap,
 } from "matrix-js-sdk/src/crypto-api/verification";
+import { Device, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import VerificationPanel from "../../../../src/components/views/right_panel/VerificationPanel";
-import { stubClient } from "../../../test-utils";
+import { flushPromises, stubClient } from "../../../test-utils";
 
 describe("<VerificationPanel />", () => {
+    let client: MatrixClient;
+
     beforeEach(() => {
-        stubClient();
+        client = stubClient();
     });
 
     describe("'Ready' phase (dialog mode)", () => {
@@ -129,6 +132,51 @@ describe("<VerificationPanel />", () => {
             for (const emoji of emojis) {
                 expect(emoji).toHaveTextContent("🦄Unicorn");
             }
+        });
+
+        describe("'Verify own device' flow", () => {
+            beforeEach(() => {
+                Object.defineProperty(mockRequest, "isSelfVerification", { get: () => true });
+                Object.defineProperty(mockRequest, "otherDeviceId", { get: () => "other_device" });
+
+                const otherDeviceDetails = new Device({
+                    algorithms: [],
+                    deviceId: "other_device",
+                    keys: new Map(),
+                    userId: "",
+                    displayName: "my other device",
+                });
+
+                mocked(client.getCrypto()!).getUserDeviceInfo.mockResolvedValue(
+                    new Map([[client.getSafeUserId(), new Map([["other_device", otherDeviceDetails]])]]),
+                );
+            });
+
+            it("should show 'Waiting for you to verify' after confirming", async () => {
+                const rendered = renderComponent({
+                    request: mockRequest,
+                    phase: Phase.Started,
+                });
+
+                // wait for the device to be looked up
+                await act(() => flushPromises());
+
+                // fire the ShowSas event
+                const sasEvent = makeMockSasCallbacks();
+                mockVerifier.getShowSasCallbacks.mockReturnValue(sasEvent);
+                act(() => {
+                    mockVerifier.emit(VerifierEvent.ShowSas, sasEvent);
+                });
+
+                // confirm
+                act(() => {
+                    rendered.getByRole("button", { name: "They match" }).click();
+                });
+
+                expect(rendered.container).toHaveTextContent(
+                    "Waiting for you to verify on your other device, my other device (other_device)…",
+                );
+            });
         });
     });
 });
