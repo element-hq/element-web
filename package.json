@@ -166,7 +166,7 @@
         "prettier": "2.8.8",
         "raw-loader": "^4.0.2",
         "rimraf": "^5.0.0",
-        "semver": "^7.3.7",
+        "semver": "^7.5.2",
         "simple-proxy-agent": "^1.1.0",
         "string-replace-loader": "3",
         "style-loader": "2",
