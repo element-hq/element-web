@@ -26,5 +26,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s utiliza funções avançadas que não são suportadas pelo teu atual browser.",
     "Your browser can't run %(brand)s": "O teu browser não consegue executar %(brand)s",
     "Use %(brand)s on mobile": "Usar %(brand)s no telemóvel",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Chat descentralizado e encriptado &amp; colaboração alimentada por $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Chat descentralizado e encriptado &amp; colaboração alimentada por $matrixLogo",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s em %(osName)s"
 }

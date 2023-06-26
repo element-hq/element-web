@@ -105,11 +105,6 @@ For some sample themes, check out [aaronraimist/element-themes](https://github.c
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
 
-## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
-
-Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
-triggered by the button to the right of the filter field.
-
 ## Spotlight search (`feature_spotlight`) [In Development]
 
 Switches to a new room search experience.
@@ -167,10 +162,6 @@ Enables rendering of MD / HTML in room topics.
 
 Enables exploring public spaces in the new search dialog. Requires the server to
 have [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827) enabled.
-
-## Favourite Messages (`feature_favourite_messages`) [In Development]
-
-Enables users to bookmark a message or content for a later reference.
 
 ## Sign in another device by showing a QR code (`feature_qr_signin_reciprocate_show`)
 
