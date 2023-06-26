@@ -166,9 +166,9 @@ jobs:
               uses: cypress-io/github-action@d69252d52b9a31bad4f418f05ba2bc83687a02eb
               with:
                   working-directory: matrix-react-sdk
-                  # The built-in Electron runner seems to grind to a halt trying
-                  # to run the tests, so use chrome.
-                  browser: "${{ env.BROWSER_PATH }}"
+                  # The built-in Electron runner seems to grind to a halt trying to run the tests, so use chrome.
+                  browser: ${{ steps.setup-chrome.outputs.chrome-path }}
+                  headed: true
                   start: npx serve -p 8080 ../webapp
                   wait-on: "http://localhost:8080"
                   record: true
@@ -202,7 +202,7 @@ jobs:
                   # pass the Percy token as an environment variable
                   PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
                   PERCY_ENABLE: ${{ needs.prepare.outputs.percy_enable }}
-                  PERCY_BROWSER_EXECUTABLE: /usr/bin/chromium-browser
+                  PERCY_BROWSER_EXECUTABLE: ${{ steps.setup-chrome.outputs.chrome-path }}
                   # tell Percy more details about the context of this run
                   PERCY_BRANCH: ${{ github.event.workflow_run.head_branch }}
                   PERCY_COMMIT: ${{ github.event.workflow_run.head_sha }}
