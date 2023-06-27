@@ -105,11 +105,6 @@ For some sample themes, check out [aaronraimist/element-themes](https://github.c
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
 
-## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
-
-Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
-triggered by the button to the right of the filter field.
-
 ## Spotlight search (`feature_spotlight`) [In Development]
 
 Switches to a new room search experience.

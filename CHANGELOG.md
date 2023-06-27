@@ -1,3 +1,25 @@
+Changes in [1.11.34](https://github.com/vector-im/element-web/releases/tag/v1.11.34) (2023-06-20)
+=================================================================================================
+
+## ✨ Features
+ * OIDC: add delegatedauthentication to validated server config ([\#11053](https://github.com/matrix-org/matrix-react-sdk/pull/11053)). Contributed by @kerryarchibald.
+ * Allow image pasting in plain mode in RTE ([\#11056](https://github.com/matrix-org/matrix-react-sdk/pull/11056)). Contributed by @alunturner.
+ * Show room options menu if "UIComponent.roomOptionsMenu" is enabled ([\#10365](https://github.com/matrix-org/matrix-react-sdk/pull/10365)). Contributed by @maheichyk.
+ * Allow image pasting in rich text mode in RTE ([\#11049](https://github.com/matrix-org/matrix-react-sdk/pull/11049)). Contributed by @alunturner.
+ * Update voice broadcast redaction to use MSC3912 `with_rel_type` instead of `with_relations` ([\#11014](https://github.com/matrix-org/matrix-react-sdk/pull/11014)). Fixes #25471.
+ * Add config to skip widget_build_url for DM rooms ([\#11044](https://github.com/matrix-org/matrix-react-sdk/pull/11044)). Fixes vector-im/customer-retainer#74.
+ * Inhibit interactions on forward dialog message previews ([\#11025](https://github.com/matrix-org/matrix-react-sdk/pull/11025)). Fixes #23459.
+ * Removed `DecryptionFailureBar.tsx` ([\#11027](https://github.com/matrix-org/matrix-react-sdk/pull/11027)). Fixes vector-im/element-meta#1358. Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+ * Fix translucent `TextualEvent` on search results panel ([\#10810](https://github.com/matrix-org/matrix-react-sdk/pull/10810)). Fixes #25292. Contributed by @luixxiul.
+ * Matrix matrix scheme permalink constructor not stripping query params ([\#11060](https://github.com/matrix-org/matrix-react-sdk/pull/11060)). Fixes #25535.
+ * Fix: "manually verify by text" does nothing ([\#11059](https://github.com/matrix-org/matrix-react-sdk/pull/11059)). Fixes #25375. Contributed by @kerryarchibald.
+ * Make group calls respect the ICE fallback setting ([\#11047](https://github.com/matrix-org/matrix-react-sdk/pull/11047)). Fixes vector-im/voip-internal#65.
+ * Align list items on the tooltip to the start ([\#11041](https://github.com/matrix-org/matrix-react-sdk/pull/11041)). Fixes #25355. Contributed by @luixxiul.
+ * Clear thread panel event permalink when changing rooms ([\#11024](https://github.com/matrix-org/matrix-react-sdk/pull/11024)). Fixes #25484.
+ * Fix spinner placement on pinned widgets being reloaded ([\#10970](https://github.com/matrix-org/matrix-react-sdk/pull/10970)). Fixes #25431. Contributed by @luixxiul.
+
 Changes in [1.11.33](https://github.com/vector-im/element-web/releases/tag/v1.11.33) (2023-06-09)
 =================================================================================================
 
