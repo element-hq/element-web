@@ -850,6 +850,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                     dir="auto"
                     aria-disabled={this.props.disabled}
                     data-testid="basicmessagecomposer"
+                    translate="no"
                 />
             </div>
         );
