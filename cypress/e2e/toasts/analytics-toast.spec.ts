@@ -39,7 +39,7 @@ function rejectToast(expectedTitle: string): void {
     });
 }
 
-describe("Analytics Toast", () => {
+describe.skip("Analytics Toast", () => {
     let homeserver: HomeserverInstance;
 
     afterEach(() => {

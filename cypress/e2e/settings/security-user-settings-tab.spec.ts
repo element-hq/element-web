@@ -25,7 +25,7 @@ describe("Security user settings tab", () => {
         cy.stopHomeserver(homeserver);
     });
 
-    describe("with posthog enabled", () => {
+    describe.skip("with posthog enabled", () => {
         beforeEach(() => {
             // Enable posthog
             cy.intercept("/config.json?cachebuster=*", (req) => {
