@@ -239,7 +239,6 @@
     "Reject all %(invitedRooms)s invites": "Reject all %(invitedRooms)s invites",
     "Failed to invite": "Failed to invite",
     "Confirm Removal": "Confirm Removal",
-    "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.",
     "Unknown error": "Unknown error",
     "Incorrect password": "Incorrect password",
     "Unable to restore session": "Unable to restore session",

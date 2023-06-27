@@ -292,7 +292,6 @@
     "Custom level": "Nivell personalitzat",
     "And %(count)s more...|other": "I %(count)s més...",
     "Confirm Removal": "Confirmeu l'eliminació",
-    "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Estàs segur que vols eliminar (suprimir) aquest esdeveniment? Tingues en compte que, si suprimeixes un nom de sala o es canvia el tema, podria ser que es revertís.",
     "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s han entrat %(count)s vegades",
     "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sha entrat %(count)s vegades",
     "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s han sortit %(count)s vegades",

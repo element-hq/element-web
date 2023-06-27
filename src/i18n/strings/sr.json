@@ -288,7 +288,6 @@
     "Start chat": "Започни разговор",
     "And %(count)s more...|other": "И %(count)s других...",
     "Confirm Removal": "Потврди уклањање",
-    "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Да ли сте сигурни да желите уклонити (обрисати) овај догађај? Знајте да брисање назива собе или мењање теме може опозвати измену.",
     "Create": "Направи",
     "Unknown error": "Непозната грешка",
     "Incorrect password": "Нетачна лозинка",
