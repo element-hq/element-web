@@ -75,13 +75,17 @@ function makeRegistrationUrl(params: QueryDict): string {
 
 function onTokenLoginCompleted(): void {
     // if we did a token login, we're now left with the token, hs and is
-    // url as query params in the url; a little nasty but let's redirect to
-    // clear them.
+    // url as query params in the url;
+    // if we did an oidc authorization code flow login, we're left with the auth code and state
+    // as query params in the url;
+    // a little nasty but let's redirect to clear them.
     const url = new URL(window.location.href);
 
     url.searchParams.delete("loginToken");
+    url.searchParams.delete("state");
+    url.searchParams.delete("code");
 
-    logger.log(`Redirecting to ${url.href} to drop loginToken from queryparams`);
+    logger.log(`Redirecting to ${url.href} to drop delegated authentication params from queryparams`);
     window.history.replaceState(null, "", url.href);
 }
 
