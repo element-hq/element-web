@@ -664,7 +664,7 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
     if (credentials.accessToken) {
         localStorage.setItem("mx_has_access_token", "true");
     } else {
-        localStorage.deleteItem("mx_has_access_token");
+        localStorage.removeItem("mx_has_access_token");
     }
 
     if (credentials.pickleKey) {

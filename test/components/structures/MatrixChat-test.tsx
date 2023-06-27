@@ -116,7 +116,13 @@ describe("<MatrixChat />", () => {
     };
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) =>
         render(<MatrixChat {...defaultProps} {...props} />);
-    const localStorageSpy = jest.spyOn(localStorage.__proto__, "getItem").mockReturnValue(undefined);
+    const localStorageSetSpy = jest.spyOn(localStorage.__proto__, "setItem");
+    const localStorageGetSpy = jest.spyOn(localStorage.__proto__, "getItem").mockReturnValue(undefined);
+    const localStorageClearSpy = jest.spyOn(localStorage.__proto__, "clear");
+    const sessionStorageSetSpy = jest.spyOn(sessionStorage.__proto__, "setItem");
+
+    // make test results readable
+    filterConsole("Failed to parse localStorage object");
 
     beforeEach(async () => {
         mockClient = getMockClientWithEventEmitter(getMockClientMethods());
@@ -124,10 +130,14 @@ describe("<MatrixChat />", () => {
             unstable_features: {},
             versions: [],
         });
-        localStorageSpy.mockReset();
+        localStorageGetSpy.mockReset();
+        localStorageSetSpy.mockReset();
+        sessionStorageSetSpy.mockReset();
         jest.spyOn(StorageManager, "idbLoad").mockRestore();
         jest.spyOn(StorageManager, "idbSave").mockResolvedValue(undefined);
         jest.spyOn(defaultDispatcher, "dispatch").mockClear();
+
+        await clearAllModals();
     });
 
     it("should render spinner while app is loading", () => {
@@ -151,7 +161,7 @@ describe("<MatrixChat />", () => {
         };
 
         beforeEach(() => {
-            localStorageSpy.mockImplementation((key: unknown) => mockLocalStorage[key as string] || "");
+            localStorageGetSpy.mockImplementation((key: unknown) => mockLocalStorage[key as string] || "");
 
             jest.spyOn(StorageManager, "idbLoad").mockImplementation(async (table, key) => {
                 const safeKey = Array.isArray(key) ? key[0] : key;
@@ -350,9 +360,6 @@ describe("<MatrixChat />", () => {
         const userName = "ernie";
         const password = "ilovebert";
 
-        // make test results readable
-        filterConsole("Failed to parse localStorage object");
-
         const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
             const renderResult = getComponent();
             // wait for welcome page chrome render
@@ -532,6 +539,170 @@ describe("<MatrixChat />", () => {
 
                 // set up keys screen is rendered
                 expect(screen.getByText("Setting up keys")).toBeInTheDocument();
+            });
+        });
+    });
+
+    describe("when query params have a loginToken", () => {
+        const loginToken = "test-login-token";
+        const realQueryParams = {
+            loginToken,
+        };
+
+        const mockLocalStorage: Record<string, string> = {
+            mx_sso_hs_url: serverConfig.hsUrl,
+            mx_sso_is_url: serverConfig.isUrl,
+            // these are only going to be set during login
+            mx_hs_url: serverConfig.hsUrl,
+            mx_is_url: serverConfig.isUrl,
+        };
+
+        let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
+        const userId = "@alice:server.org";
+        const deviceId = "test-device-id";
+        const accessToken = "test-access-token";
+        const clientLoginResponse = {
+            user_id: userId,
+            device_id: deviceId,
+            access_token: accessToken,
+        };
+
+        beforeEach(() => {
+            loginClient = getMockClientWithEventEmitter(getMockClientMethods());
+            // this is used to create a temporary client during login
+            jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
+
+            loginClient.login.mockClear().mockResolvedValue(clientLoginResponse);
+
+            localStorageGetSpy.mockImplementation((key: unknown) => mockLocalStorage[key as string] || "");
+        });
+
+        it("should show an error dialog when no homeserver is found in local storage", async () => {
+            localStorageGetSpy.mockReturnValue(undefined);
+            getComponent({ realQueryParams });
+
+            expect(localStorageGetSpy).toHaveBeenCalledWith("mx_sso_hs_url");
+            expect(localStorageGetSpy).toHaveBeenCalledWith("mx_sso_is_url");
+
+            const dialog = await screen.findByRole("dialog");
+
+            // warning dialog
+            expect(
+                within(dialog).getByText(
+                    "We asked the browser to remember which homeserver you use to let you sign in, " +
+                        "but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
+                ),
+            ).toBeInTheDocument();
+        });
+
+        it("should attempt token login", async () => {
+            getComponent({ realQueryParams });
+
+            expect(loginClient.login).toHaveBeenCalledWith("m.login.token", {
+                initial_device_display_name: undefined,
+                token: loginToken,
+            });
+        });
+
+        it("should call onTokenLoginCompleted", async () => {
+            const onTokenLoginCompleted = jest.fn();
+            getComponent({ realQueryParams, onTokenLoginCompleted });
+
+            await flushPromises();
+
+            expect(onTokenLoginCompleted).toHaveBeenCalled();
+        });
+
+        describe("when login fails", () => {
+            beforeEach(() => {
+                loginClient.login.mockRejectedValue(new Error("oups"));
+            });
+            it("should show a dialog", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                const dialog = await screen.findByRole("dialog");
+
+                // warning dialog
+                expect(
+                    within(dialog).getByText(
+                        "There was a problem communicating with the homeserver, please try again later.",
+                    ),
+                ).toBeInTheDocument();
+            });
+
+            it("should not clear storage", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                expect(loginClient.clearStores).not.toHaveBeenCalled();
+            });
+        });
+
+        describe("when login succeeds", () => {
+            beforeEach(() => {
+                jest.spyOn(StorageManager, "idbLoad").mockImplementation(
+                    async (_table: string, key: string | string[]) => {
+                        if (key === "mx_access_token") {
+                            return accessToken as any;
+                        }
+                    },
+                );
+            });
+            it("should clear storage", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                // just check we called the clearStorage function
+                expect(loginClient.clearStores).toHaveBeenCalled();
+                expect(localStorageClearSpy).toHaveBeenCalled();
+            });
+
+            it("should persist login credentials", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                expect(localStorageSetSpy).toHaveBeenCalledWith("mx_hs_url", serverConfig.hsUrl);
+                expect(localStorageSetSpy).toHaveBeenCalledWith("mx_user_id", userId);
+                expect(localStorageSetSpy).toHaveBeenCalledWith("mx_has_access_token", "true");
+                expect(localStorageSetSpy).toHaveBeenCalledWith("mx_device_id", deviceId);
+            });
+
+            it("should set fresh login flag in session storage", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                expect(sessionStorageSetSpy).toHaveBeenCalledWith("mx_fresh_login", "true");
+            });
+
+            it("should override hsUrl in creds when login response wellKnown differs from config", async () => {
+                const hsUrlFromWk = "https://hsfromwk.org";
+                const loginResponseWithWellKnown = {
+                    ...clientLoginResponse,
+                    well_known: {
+                        "m.homeserver": {
+                            base_url: hsUrlFromWk,
+                        },
+                    },
+                };
+                loginClient.login.mockResolvedValue(loginResponseWithWellKnown);
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                expect(localStorageSetSpy).toHaveBeenCalledWith("mx_hs_url", hsUrlFromWk);
+            });
+
+            it("should continue to post login setup when no session is found in local storage", async () => {
+                getComponent({ realQueryParams });
+
+                // logged in but waiting for sync screen
+                await screen.findByText("Logout");
             });
         });
     });
