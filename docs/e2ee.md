@@ -16,6 +16,28 @@ Set the following on your homeserver's
 }
 ```
 
+## Disabling encryption
+
+Set the following on your homeserver's
+`/.well-known/matrix/client` config:
+
+```json
+{
+    "io.element.e2ee": {
+        "force_disable": true
+    }
+}
+```
+
+When `force_disable` is true:
+
+-   all rooms will be created with encryption disabled, and it will not be possible to enable
+    encryption from room settings.
+-   any `io.element.e2ee.default` value will be disregarded.
+
+Note: If the server is configured to forcibly enable encryption for some or all rooms,
+this behaviour will be overriden.
+
 # Secure backup
 
 By default, Element strongly encourages (but does not require) users to set up

@@ -167,7 +167,7 @@ export default class WebPlatform extends VectorBasePlatform {
                 logger.error("Failed to poll for update", err);
                 return {
                     status: UpdateCheckStatus.Error,
-                    detail: err.message || err.status ? err.status.toString() : "Unknown Error",
+                    detail: err.message || (err.status ? err.status.toString() : "Unknown Error"),
                 };
             },
         );
