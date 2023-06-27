@@ -16,7 +16,7 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { shouldForceDisableEncryption } from "./room/shouldForceDisableEncryption";
+import { shouldForceDisableEncryption } from "./crypto/shouldForceDisableEncryption";
 import { getE2EEWellKnown } from "./WellKnownUtils";
 
 export function privateShouldBeEncrypted(client: MatrixClient): boolean {

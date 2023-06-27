@@ -144,6 +144,7 @@ import { findDMForUser } from "../../utils/dm/findDMForUser";
 import { Linkify } from "../../HtmlUtils";
 import { NotificationColor } from "../../stores/notifications/NotificationColor";
 import { UserTab } from "../views/dialogs/UserTab";
+import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -394,7 +395,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             } else {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             }
-        } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
+        } else if (
+            (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) &&
+            !shouldSkipSetupEncryption(cli)
+        ) {
             // if cross-signing is not yet set up, do so now if possible.
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {

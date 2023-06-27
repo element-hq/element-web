@@ -44,7 +44,7 @@ import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsTab from "../SettingsTab";
 import SdkConfig from "../../../../../SdkConfig";
-import { shouldForceDisableEncryption } from "../../../../../utils/room/shouldForceDisableEncryption";
+import { shouldForceDisableEncryption } from "../../../../../utils/crypto/shouldForceDisableEncryption";
 import { Caption } from "../../../typography/Caption";
 
 interface IProps {

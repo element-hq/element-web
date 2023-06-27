@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { shouldForceDisableEncryption } from "../../../src/utils/room/shouldForceDisableEncryption";
+import { shouldForceDisableEncryption } from "../../../src/utils/crypto/shouldForceDisableEncryption";
 import { getMockClientWithEventEmitter } from "../../test-utils";
 
 describe("shouldForceDisableEncryption()", () => {
