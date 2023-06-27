@@ -70,11 +70,7 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
                 widgetRoomId,
                 sourceWidgetId: sourceWidget.id,
                 onFinished: (success, data) => {
-                    if (!success) {
-                        this.closeModalWidget(sourceWidget, widgetRoomId, { "m.exited": true });
-                    } else {
-                        this.closeModalWidget(sourceWidget, widgetRoomId, data);
-                    }
+                    this.closeModalWidget(sourceWidget, widgetRoomId, success && data ? data : { "m.exited": true });
 
                     this.openSourceWidgetId = null;
                     this.openSourceWidgetRoomId = null;

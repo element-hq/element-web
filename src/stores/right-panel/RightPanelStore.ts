@@ -363,7 +363,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
             const panel = this.byRoom[this.viewedRoomId];
             if (panel?.history) {
                 panel.history = panel.history.filter(
-                    (card) =>
+                    (card: IRightPanelCard) =>
                         card.phase != RightPanelPhases.RoomMemberInfo &&
                         card.phase != RightPanelPhases.Room3pidMemberInfo,
                 );
@@ -371,7 +371,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         }
         // when we're switching to a room, clear out thread permalinks to not get you stuck in the middle of the thread
         // in order to fix https://github.com/matrix-org/matrix-react-sdk/pull/11011
-        if (this.currentCard?.phase === RightPanelPhases.ThreadView) {
+        if (this.currentCard?.phase === RightPanelPhases.ThreadView && this.currentCard.state) {
             this.currentCard.state.initialEvent = undefined;
             this.currentCard.state.isInitialEventHighlighted = undefined;
             this.currentCard.state.initialEventScrollIntoView = undefined;

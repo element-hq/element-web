@@ -1704,7 +1704,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         } catch (error) {
             logger.error(`Failed to reject invite: ${error}`);
 
-            const msg = error.message ? error.message : JSON.stringify(error);
+            const msg = error instanceof Error ? error.message : JSON.stringify(error);
             Modal.createDialog(ErrorDialog, {
                 title: _t("Failed to reject invite"),
                 description: msg,

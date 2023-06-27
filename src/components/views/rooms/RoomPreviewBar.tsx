@@ -155,7 +155,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 );
                 this.setState({ invitedEmailMxid: result.mxid });
             } catch (err) {
-                this.setState({ threePidFetchError: err });
+                this.setState({ threePidFetchError: err as MatrixError });
             }
             this.setState({ busy: false });
         }

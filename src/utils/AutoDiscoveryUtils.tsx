@@ -261,7 +261,15 @@ export default class AutoDiscoveryUtils {
             throw new UserFriendlyError("Unexpected error resolving homeserver configuration");
         }
 
-        let delegatedAuthentication = undefined;
+        let delegatedAuthentication:
+            | {
+                  authorizationEndpoint: string;
+                  registrationEndpoint?: string;
+                  tokenEndpoint: string;
+                  account?: string;
+                  issuer: string;
+              }
+            | undefined;
         if (discoveryResult[M_AUTHENTICATION.stable!]?.state === AutoDiscovery.SUCCESS) {
             const { authorizationEndpoint, registrationEndpoint, tokenEndpoint, account, issuer } = discoveryResult[
                 M_AUTHENTICATION.stable!

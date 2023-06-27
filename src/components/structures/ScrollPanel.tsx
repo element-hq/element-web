@@ -700,7 +700,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             const trackedNode = this.getTrackedNode();
             if (trackedNode) {
                 const newBottomOffset = this.topFromBottom(trackedNode);
-                const bottomDiff = newBottomOffset - scrollState.bottomOffset;
+                const bottomDiff = newBottomOffset - (scrollState.bottomOffset ?? 0);
                 this.bottomGrowth += bottomDiff;
                 scrollState.bottomOffset = newBottomOffset;
                 const newHeight = `${this.getListHeight()}px`;

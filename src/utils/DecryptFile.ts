@@ -60,7 +60,7 @@ export async function decryptFile(file?: IEncryptedFile, info?: IMediaEventInfo)
         }
         responseData = await response.arrayBuffer();
     } catch (e) {
-        throw new DownloadError(e);
+        throw new DownloadError(e as Error);
     }
 
     try {
@@ -77,6 +77,6 @@ export async function decryptFile(file?: IEncryptedFile, info?: IMediaEventInfo)
 
         return new Blob([dataArray], { type: mimetype });
     } catch (e) {
-        throw new DecryptError(e);
+        throw new DecryptError(e as Error);
     }
 }

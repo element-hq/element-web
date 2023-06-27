@@ -234,9 +234,11 @@ async function localPagination(
 ): Promise<ISeshatSearchResults> {
     const eventIndex = EventIndexPeg.get();
 
-    const searchArgs = searchResult.seshatQuery;
+    if (!searchResult.seshatQuery) {
+        throw new Error("localSearchProcess must be called first");
+    }
 
-    const localResult = await eventIndex!.search(searchArgs);
+    const localResult = await eventIndex!.search(searchResult.seshatQuery);
     if (!localResult) {
         throw new Error("Local search pagination failed");
     }
@@ -408,7 +410,7 @@ function combineEvents(
 ): IResultRoomEvents {
     const response = {} as IResultRoomEvents;
 
-    const cachedEvents = previousSearchResult.cachedEvents;
+    const cachedEvents = previousSearchResult.cachedEvents ?? [];
     let oldestEventFrom = previousSearchResult.oldestEventFrom;
     response.highlights = previousSearchResult.highlights;
 
@@ -564,7 +566,7 @@ async function combinedPagination(
     // Fetch events from the server if we have a token for it and if it's the
     // local indexes turn or the local index has exhausted its results.
     if (searchResult.serverSideNextBatch && (oldestEventFrom === "local" || !searchArgs.next_batch)) {
-        const body = { body: searchResult._query, next_batch: searchResult.serverSideNextBatch };
+        const body = { body: searchResult._query!, next_batch: searchResult.serverSideNextBatch };
         serverSideResult = await client.search(body);
     }
 

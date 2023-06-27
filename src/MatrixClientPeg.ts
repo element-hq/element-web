@@ -71,7 +71,7 @@ export interface IMatrixClientPeg {
      *
      * @returns {string} The homeserver name, if present.
      */
-    getHomeserverName(): string | null;
+    getHomeserverName(): string;
 
     get(): MatrixClient | null;
     safeGet(): MatrixClient;
@@ -358,10 +358,8 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         };
     }
 
-    public getHomeserverName(): string | null {
-        if (!this.matrixClient) return null;
-
-        const matches = /^@[^:]+:(.+)$/.exec(this.matrixClient.getSafeUserId());
+    public getHomeserverName(): string {
+        const matches = /^@[^:]+:(.+)$/.exec(this.safeGet().getSafeUserId());
         if (matches === null || matches.length < 1) {
             throw new Error("Failed to derive homeserver name from user ID!");
         }

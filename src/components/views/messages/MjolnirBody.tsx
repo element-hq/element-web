@@ -18,7 +18,7 @@ import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from "../../../languageHandler";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -26,7 +26,7 @@ interface IProps {
 }
 
 export default class MjolnirBody extends React.Component<IProps> {
-    private onAllowClick = (e: React.MouseEvent): void => {
+    private onAllowClick = (e: ButtonEvent): void => {
         e.preventDefault();
         e.stopPropagation();
 
