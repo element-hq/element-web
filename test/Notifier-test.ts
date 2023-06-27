@@ -538,4 +538,28 @@ describe("Notifier", () => {
             expect(localStorage.getItem("notifications_hidden")).toBeTruthy();
         });
     });
+
+    describe("onEvent", () => {
+        it("should not evaluate events from the thread list fake timeline sets", async () => {
+            mockClient.supportsThreads.mockReturnValue(true);
+
+            const fn = jest.spyOn(Notifier, "evaluateEvent");
+
+            await testRoom.createThreadsTimelineSets();
+            testRoom.threadsTimelineSets[0]!.addEventToTimeline(
+                mkEvent({
+                    event: true,
+                    type: "m.room.message",
+                    user: "@user1:server",
+                    room: roomId,
+                    content: { body: "this is a thread root" },
+                }),
+                testRoom.threadsTimelineSets[0]!.getLiveTimeline(),
+                false,
+                false,
+            );
+
+            expect(fn).not.toHaveBeenCalled();
+        });
+    });
 });
