@@ -351,13 +351,15 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 }
                 break;
             case KeyBindingAction.CancelReplyOrEdit:
-                dis.dispatch({
-                    action: "reply_to_event",
-                    event: null,
-                    context: this.context.timelineRenderingType,
-                });
-                event.preventDefault();
-                event.stopPropagation();
+                if (!!this.context.replyToEvent) {
+                    dis.dispatch({
+                        action: "reply_to_event",
+                        event: null,
+                        context: this.context.timelineRenderingType,
+                    });
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
                 break;
         }
     };
