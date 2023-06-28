@@ -460,8 +460,8 @@ describe("loading:", function () {
                     httpBackend.verifyNoOutstandingExpectation();
                     expect(matrixChat?.container.querySelector(".mx_Welcome")).toBeTruthy();
                     expect(windowLocation?.hash).toEqual("#/welcome");
-                    expect(MatrixClientPeg.get().baseUrl).toEqual(DEFAULT_HS_URL);
-                    expect(MatrixClientPeg.get().idBaseUrl).toEqual(DEFAULT_IS_URL);
+                    expect(MatrixClientPeg.safeGet().baseUrl).toEqual(DEFAULT_HS_URL);
+                    expect(MatrixClientPeg.safeGet().idBaseUrl).toEqual(DEFAULT_IS_URL);
                 });
         });
 
