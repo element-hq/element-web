@@ -46,6 +46,7 @@ import { FontWatcher } from "./watchers/FontWatcher";
 import RustCryptoSdkController from "./controllers/RustCryptoSdkController";
 import ServerSupportUnstableFeatureController from "./controllers/ServerSupportUnstableFeatureController";
 import { WatchManager } from "./WatchManager";
+import { CustomTheme } from "../theme";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -111,7 +112,15 @@ export const labGroupNames: Record<LabGroup, string> = {
     [LabGroup.Developer]: _td("Developer"),
 };
 
-export type SettingValueType = boolean | number | string | number[] | string[] | Record<string, unknown> | null;
+export type SettingValueType =
+    | boolean
+    | number
+    | string
+    | number[]
+    | string[]
+    | Record<string, unknown>
+    | Record<string, unknown>[]
+    | null;
 
 export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     isFeature?: false | undefined;
@@ -653,7 +662,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "custom_themes": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: [],
+        default: [] as CustomTheme[],
     },
     "use_system_theme": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

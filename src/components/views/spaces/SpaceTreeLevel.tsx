@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -95,9 +95,9 @@ export const SpaceButton = forwardRef<HTMLElement, IButtonProps>(
         }
 
         let notifBadge;
-        if (notificationState) {
+        if (space && notificationState) {
             let ariaLabel = _t("Jump to first unread room.");
-            if (space?.getMyMembership() === "invite") {
+            if (space.getMyMembership() === "invite") {
                 ariaLabel = _t("Jump to first invite.");
             }
 
@@ -133,8 +133,9 @@ export const SpaceButton = forwardRef<HTMLElement, IButtonProps>(
         }
 
         const viewSpaceHome = (): void =>
-            defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: space.roomId });
-        const activateSpace = (): void => SpaceStore.instance.setActiveSpace(spaceKey ?? space.roomId);
+            // space is set here because of the assignment condition of onClick
+            defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: space!.roomId });
+        const activateSpace = (): void => SpaceStore.instance.setActiveSpace(spaceKey ?? space?.roomId ?? "");
         const onClick = props.onClick ?? (selected && space ? viewSpaceHome : activateSpace);
 
         return (
