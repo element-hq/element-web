@@ -65,10 +65,10 @@ interface InterfaceConfig extends _InterfaceConfig {
 }
 
 interface ExternalAPIOptions extends _ExternalAPIOptions {
-    // Jitsi's types are missing these fields
-    lang?: string;
     configOverwrite?: Config;
     interfaceConfigOverwrite?: InterfaceConfig;
+    // Jitsi's types are missing these fields
+    lang?: string;
 }
 
 // We have to trick webpack into loading our CSS for us.
