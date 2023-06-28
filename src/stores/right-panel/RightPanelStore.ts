@@ -90,7 +90,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
      * during room changes.
      */
     public get isOpen(): boolean {
-        return this.byRoom[this.viewedRoomId]?.isOpen ?? false;
+        return this.byRoom[this.viewedRoomId ?? ""]?.isOpen ?? false;
     }
 
     public isOpenForRoom(roomId: string): boolean {
@@ -98,7 +98,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     public get roomPhaseHistory(): Array<IRightPanelCard> {
-        return this.byRoom[this.viewedRoomId]?.history ?? [];
+        return this.byRoom[this.viewedRoomId ?? ""]?.history ?? [];
     }
 
     /**
@@ -133,7 +133,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
     // Setters
     public setCard(card: IRightPanelCard, allowClose = true, roomId?: string): void {
-        const rId = roomId ?? this.viewedRoomId;
+        const rId = roomId ?? this.viewedRoomId ?? "";
         // This function behaves as following:
         // Update state: if the same phase is send but with a state
         // Set right panel and erase history: if a "different to the current" phase is send (with or without a state)
@@ -163,7 +163,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
     public setCards(cards: IRightPanelCard[], allowClose = true, roomId: string | null = null): void {
         // This function sets the history of the right panel and shows the right panel if not already visible.
-        const rId = roomId ?? this.viewedRoomId;
+        const rId = roomId ?? this.viewedRoomId ?? "";
         const history = cards.map((c) => ({ phase: c.phase, state: c.state ?? {} }));
         this.byRoom[rId] = { history, isOpen: true };
         this.show(rId);
@@ -172,7 +172,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
     // Appends a card to the history and shows the right panel if not already visible
     public pushCard(card: IRightPanelCard, allowClose = true, roomId: string | null = null): void {
-        const rId = roomId ?? this.viewedRoomId;
+        const rId = roomId ?? this.viewedRoomId ?? "";
         const redirect = this.getVerificationRedirect(card);
         const targetPhase = redirect?.phase ?? card.phase;
         const pState = redirect?.state ?? card.state ?? {};
@@ -198,7 +198,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     public popCard(roomId: string | null = null): IRightPanelCard | undefined {
-        const rId = roomId ?? this.viewedRoomId;
+        const rId = roomId ?? this.viewedRoomId ?? "";
         if (!this.byRoom[rId]) return;
 
         const removedCard = this.byRoom[rId].history.pop();
@@ -207,7 +207,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     public togglePanel(roomId: string | null): void {
-        const rId = roomId ?? this.viewedRoomId;
+        const rId = roomId ?? this.viewedRoomId ?? "";
         if (!this.byRoom[rId]) return;
 
         this.byRoom[rId].isOpen = !this.byRoom[rId].isOpen;
@@ -215,13 +215,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     public show(roomId: string | null): void {
-        if (!this.isOpenForRoom(roomId ?? this.viewedRoomId)) {
+        if (!this.isOpenForRoom(roomId ?? this.viewedRoomId ?? "")) {
             this.togglePanel(roomId);
         }
     }
 
     public hide(roomId: string | null): void {
-        if (this.isOpenForRoom(roomId ?? this.viewedRoomId)) {
+        if (this.isOpenForRoom(roomId ?? this.viewedRoomId ?? "")) {
             this.togglePanel(roomId);
         }
     }
@@ -360,7 +360,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         // when we're switching to a room, clear out any stale MemberInfo cards
         // in order to fix https://github.com/vector-im/element-web/issues/21487
         if (this.currentCard?.phase !== RightPanelPhases.EncryptionPanel) {
-            const panel = this.byRoom[this.viewedRoomId];
+            const panel = this.byRoom[this.viewedRoomId ?? ""];
             if (panel?.history) {
                 panel.history = panel.history.filter(
                     (card: IRightPanelCard) =>
@@ -380,13 +380,16 @@ export default class RightPanelStore extends ReadyWatchingStore {
         // If the right panel stays open mode is used, and the panel was either
         // closed or never shown for that room, then force it open and display
         // the room member list.
-        if (SettingsStore.getValue("feature_right_panel_default_open") && !this.byRoom[this.viewedRoomId]?.isOpen) {
+        if (
+            SettingsStore.getValue("feature_right_panel_default_open") &&
+            !this.byRoom[this.viewedRoomId ?? ""]?.isOpen
+        ) {
             const history = [{ phase: RightPanelPhases.RoomMemberList }];
             const room = this.viewedRoomId ? this.mxClient?.getRoom(this.viewedRoomId) : undefined;
             if (!room?.isSpaceRoom()) {
                 history.unshift({ phase: RightPanelPhases.RoomSummary });
             }
-            this.byRoom[this.viewedRoomId] = {
+            this.byRoom[this.viewedRoomId ?? ""] = {
                 isOpen: true,
                 history,
             };

@@ -16,14 +16,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IAuthData, IRequestMsisdnTokenResponse, IRequestTokenResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
+import {
+    IAddThreePidOnlyBody,
+    IAuthData,
+    IRequestMsisdnTokenResponse,
+    IRequestTokenResponse,
+    MatrixClient,
+} from "matrix-js-sdk/src/matrix";
 import { MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
 
 import Modal from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
 import IdentityAuthClient from "./IdentityAuthClient";
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
-import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
+import InteractiveAuthDialog, { InteractiveAuthDialogProps } from "./components/views/dialogs/InteractiveAuthDialog";
 
 function getIdServerDomain(matrixClient: MatrixClient): string {
     const idBaseUrl = matrixClient.getIdentityServerUrl(true);
@@ -239,7 +245,7 @@ export default class AddThreepid {
                                 [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
                                 [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
                             },
-                        });
+                        } as InteractiveAuthDialogProps<IAddThreePidOnlyBody>);
                         return finished;
                     }
                 }
@@ -270,11 +276,11 @@ export default class AddThreepid {
      * @param {{type: string, session?: string}} auth UI auth object
      * @return {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
      */
-    private makeAddThreepidOnlyRequest = (auth?: { type: string; session?: string }): Promise<{}> => {
+    private makeAddThreepidOnlyRequest = (auth?: IAddThreePidOnlyBody["auth"] | null): Promise<{}> => {
         return this.matrixClient.addThreePidOnly({
             sid: this.sessionId,
             client_secret: this.clientSecret,
-            auth,
+            auth: auth ?? undefined,
         });
     };
 
@@ -360,7 +366,7 @@ export default class AddThreepid {
                             [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
                             [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
                         },
-                    });
+                    } as InteractiveAuthDialogProps<IAddThreePidOnlyBody>);
                     return finished;
                 }
             }
