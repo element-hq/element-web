@@ -44,7 +44,6 @@ const getStaticOidcClientId = (issuer: string, staticOidcClients?: Record<string
  */
 export const getOidcClientId = async (
     delegatedAuthConfig: ValidatedDelegatedAuthConfig,
-    // these are used in the following PR
     clientName: string,
     baseUrl: string,
     staticOidcClients?: Record<string, string>,

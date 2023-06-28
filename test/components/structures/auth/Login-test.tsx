@@ -409,7 +409,7 @@ describe("Login", function () {
         });
 
         // short term during active development, UI will be added in next PRs
-        it("should show error when oidc native flow is correctly configured but not supported by UI", async () => {
+        it("should show continue button when oidc native flow is correctly configured", async () => {
             fetchMock.post(delegatedAuth.registrationEndpoint, { client_id: "abc123" });
             getComponent(hsUrl, isUrl, delegatedAuth);
 
@@ -417,10 +417,7 @@ describe("Login", function () {
 
             // did not continue with matrix login
             expect(mockClient.loginFlows).not.toHaveBeenCalled();
-            // no oidc native UI yet
-            expect(
-                screen.getByText("This homeserver doesn't offer any login flows which are supported by this client."),
-            ).toBeInTheDocument();
+            expect(screen.getByText("Continue")).toBeInTheDocument();
         });
 
         /**
