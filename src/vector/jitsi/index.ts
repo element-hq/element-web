@@ -39,6 +39,7 @@ import type {
     VideoMuteStatusChangedEvent,
     ExternalAPIOptions as _ExternalAPIOptions,
     Config as _Config,
+    InterfaceConfig as _InterfaceConfig,
 } from "jitsi-meet";
 import { getVectorConfig } from "../getconfig";
 
@@ -57,10 +58,17 @@ interface Config extends _Config {
     disableSelfViewSettings?: boolean;
 }
 
+interface InterfaceConfig extends _InterfaceConfig {
+    // XXX: It is unclear whether this is a typo of TOOLBAR_BUTTONS or if its just really undocumented,
+    // either way it is missing in types, yet we try and use it
+    MAIN_TOOLBAR_BUTTONS?: string[];
+}
+
 interface ExternalAPIOptions extends _ExternalAPIOptions {
     // Jitsi's types are missing these fields
     lang?: string;
     configOverwrite?: Config;
+    interfaceConfigOverwrite?: InterfaceConfig;
 }
 
 // We have to trick webpack into loading our CSS for us.
