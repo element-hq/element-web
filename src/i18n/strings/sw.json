@@ -22,5 +22,9 @@
     "Go to element.io": "Nenda kwenye element.io",
     "Failed to start": "Imeshindwa kuanza",
     "Welcome to Element": "Karibu katika Elementi",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Tafadhali sakinisha <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, au <safariLink>Safari</safariLink> kwa uzoefu bora zaidi."
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Tafadhali sakinisha <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, au <safariLink>Safari</safariLink> kwa uzoefu bora zaidi.",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "\"Ujumbe  umesambazwa, nakufichwa\" \"ushirikiano unaoendeshwa na\"",
+    "Sign In": "Ingia",
+    "Create Account": "\"Tengeneza Akaunti\" or \"Unda Akaunti\"",
+    "Explore rooms": "Tafuta nafasi"
 }
