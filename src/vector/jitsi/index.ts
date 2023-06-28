@@ -37,8 +37,31 @@ import type {
     AudioMuteStatusChangedEvent,
     LogEvent,
     VideoMuteStatusChangedEvent,
+    ExternalAPIOptions as _ExternalAPIOptions,
+    Config as _Config,
 } from "jitsi-meet";
 import { getVectorConfig } from "../getconfig";
+
+interface Config extends _Config {
+    // Jitsi's types are missing these fields
+    prejoinConfig?: {
+        enabled: boolean;
+        hideDisplayName?: boolean;
+        hideExtraJoinButtons?: string[];
+    };
+    toolbarButtons?: string[];
+    conferenceInfo?: {
+        alwaysVIsible?: string[];
+        autoHide?: string[];
+    };
+    disableSelfViewSettings?: boolean;
+}
+
+interface ExternalAPIOptions extends _ExternalAPIOptions {
+    // Jitsi's types are missing these fields
+    lang?: string;
+    configOverwrite?: Config;
+}
 
 // We have to trick webpack into loading our CSS for us.
 require("./index.pcss");
@@ -382,7 +405,7 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
             "our fragment values and not recognizing the options.",
     );
 
-    const options = {
+    const options: ExternalAPIOptions = {
         width: "100%",
         height: "100%",
         parentNode: document.querySelector("#jitsiContainer") ?? undefined,
