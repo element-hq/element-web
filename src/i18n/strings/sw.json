@@ -1,1 +1,3 @@
-{}
+{
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Tafsiri siyosahii: fanya chaguo moja tu default_server_config, default_server_name, au default_hs_url."
+}
