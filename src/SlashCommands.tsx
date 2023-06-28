@@ -70,6 +70,7 @@ import { leaveRoomBehaviour } from "./utils/leave-behaviour";
 import { isLocalRoom } from "./utils/localRoom/isLocalRoom";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { MatrixClientPeg } from "./MatrixClientPeg";
+import { getDeviceCryptoInfo } from "./utils/crypto/deviceInfo";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -1031,7 +1032,7 @@ export const Commands = [
 
                     return success(
                         (async (): Promise<void> => {
-                            const device = cli.getStoredDevice(userId, deviceId);
+                            const device = await getDeviceCryptoInfo(cli, userId, deviceId);
                             if (!device) {
                                 throw new UserFriendlyError(
                                     "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)",

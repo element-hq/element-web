@@ -60,6 +60,8 @@ import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/Matri
  * TODO: once the components are updated to get their MatrixClients from
  * the react context, we can get rid of this and just inject a test client
  * via the context instead.
+ *
+ * See also `getMockClientWithEventEmitter` which does something similar but different.
  */
 export function stubClient(): MatrixClient {
     const client = createTestClient();

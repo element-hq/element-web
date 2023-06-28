@@ -160,7 +160,6 @@ beforeEach(() => {
         credentials: {},
         setPowerLevel: jest.fn(),
         downloadKeys: jest.fn(),
-        getStoredDevicesForUser: jest.fn(),
         getCrypto: jest.fn().mockReturnValue(mockCrypto),
         getStoredCrossSigningForUser: jest.fn(),
     } as unknown as MatrixClient);

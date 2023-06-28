@@ -64,6 +64,8 @@ export class MockClientWithEventEmitter extends EventEmitter {
         getUserId: jest.fn().mockReturnValue(aliceId),
     });
  * ```
+ *
+ * See also `stubClient()` which does something similar but uses a more complete mock client.
  */
 export const getMockClientWithEventEmitter = (
     mockProperties: Partial<Record<keyof MatrixClient, unknown>>,
@@ -158,6 +160,7 @@ export const mockClientMethodsCrypto = (): Partial<
         getSessionBackupPrivateKey: jest.fn(),
     },
     getCrypto: jest.fn().mockReturnValue({
+        getUserDeviceInfo: jest.fn(),
         getCrossSigningStatus: jest.fn().mockResolvedValue({
             publicKeysOnDevice: true,
             privateKeysInSecretStorage: false,

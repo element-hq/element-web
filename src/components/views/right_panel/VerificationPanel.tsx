@@ -36,6 +36,7 @@ import E2EIcon, { E2EState } from "../rooms/E2EIcon";
 import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
 import VerificationShowSas from "../verification/VerificationShowSas";
+import { getDeviceCryptoInfo } from "../../../utils/crypto/deviceInfo";
 
 interface IProps {
     layout: string;
@@ -224,12 +225,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             return;
         }
         this.haveCheckedDevice = true;
-
-        const deviceMap = await client.getCrypto()?.getUserDeviceInfo([userId]);
-        if (!deviceMap) return;
-        const userDevices = deviceMap.get(userId);
-        if (!userDevices) return;
-        this.setState({ otherDeviceDetails: userDevices.get(deviceId) });
+        this.setState({ otherDeviceDetails: await getDeviceCryptoInfo(client, userId, deviceId) });
     }
 
     private renderQRReciprocatePhase(): JSX.Element {

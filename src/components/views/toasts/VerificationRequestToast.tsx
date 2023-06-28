@@ -20,8 +20,8 @@ import {
     VerificationRequest,
     VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto-api";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Device } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -35,6 +35,7 @@ import { Action } from "../../../dispatcher/actions";
 import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { getDeviceCryptoInfo } from "../../../utils/crypto/deviceInfo";
 
 interface IProps {
     toastKey: string;
@@ -44,7 +45,7 @@ interface IProps {
 interface IState {
     /** number of seconds left in the timeout counter. Zero if there is no timeout. */
     counter: number;
-    device?: DeviceInfo;
+    device?: Device;
     ip?: string;
 }
 
@@ -74,15 +75,13 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         // a toast hanging around after logging in if you did a verification as part of login).
         this.checkRequestIsPending();
 
-        if (request.isSelfVerification) {
+        const otherDeviceId = request.otherDeviceId;
+        if (request.isSelfVerification && !!otherDeviceId) {
             const cli = MatrixClientPeg.safeGet();
-            const device = request.otherDeviceId ? await cli.getDevice(request.otherDeviceId) : null;
-            const ip = device?.last_seen_ip;
+            const device = await cli.getDevice(otherDeviceId);
             this.setState({
-                device:
-                    (request.otherDeviceId && cli.getStoredDevice(cli.getSafeUserId(), request.otherDeviceId)) ||
-                    undefined,
-                ip,
+                ip: device.last_seen_ip,
+                device: await getDeviceCryptoInfo(cli, cli.getSafeUserId(), otherDeviceId),
             });
         }
     }
@@ -158,7 +157,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         let detail;
         if (request.isSelfVerification) {
             if (this.state.device) {
-                description = this.state.device.getDisplayName();
+                description = this.state.device.displayName;
                 detail = _t("%(deviceId)s from %(ip)s", {
                     deviceId: this.state.device.deviceId,
                     ip: this.state.ip,

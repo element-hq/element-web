@@ -46,6 +46,7 @@ import { recordClientInformation, removeClientInformation } from "./utils/device
 import SettingsStore, { CallbackFn } from "./settings/SettingsStore";
 import { UIFeature } from "./settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
+import { getUserDeviceIds } from "./utils/crypto/deviceInfo";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -161,12 +162,8 @@ export default class DeviceListener {
      */
     private async getDeviceIds(): Promise<Set<string>> {
         const cli = this.client;
-        const crypto = cli?.getCrypto();
-        if (crypto === undefined) return new Set();
-
-        const userId = cli!.getSafeUserId();
-        const devices = await crypto.getUserDeviceInfo([userId]);
-        return new Set(devices.get(userId)?.keys() ?? []);
+        if (!cli) return new Set();
+        return await getUserDeviceIds(cli, cli.getSafeUserId());
     }
 
     private onWillUpdateDevices = async (users: string[], initialFetch?: boolean): Promise<void> => {

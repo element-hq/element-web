@@ -34,6 +34,7 @@ import DisambiguatedProfile from "../messages/DisambiguatedProfile";
 import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import { E2EState } from "./E2EIcon";
 import { asyncSome } from "../../../utils/arrays";
+import { getUserDeviceIds } from "../../../utils/crypto/deviceInfo";
 
 interface IProps {
     member: RoomMember;
@@ -127,9 +128,8 @@ export default class MemberTile extends React.Component<IProps, IState> {
             return;
         }
 
-        const devices = cli.getStoredDevicesForUser(userId);
-        const anyDeviceUnverified = await asyncSome(devices, async (device) => {
-            const { deviceId } = device;
+        const deviceIDs = await getUserDeviceIds(cli, userId);
+        const anyDeviceUnverified = await asyncSome(deviceIDs, async (deviceId) => {
             // For your own devices, we use the stricter check of cross-signing
             // verification to encourage everyone to trust their own devices via
             // cross-signing so that other users can then safely trust you.
