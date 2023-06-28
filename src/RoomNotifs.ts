@@ -219,7 +219,10 @@ function isRuleRoomMuteRuleForRoomId(roomId: string, rule: IPushRule): boolean {
 }
 
 function isMuteRule(rule: IPushRule): boolean {
-    return rule.actions.length === 1 && rule.actions[0] === PushRuleActionName.DontNotify;
+    // DontNotify is equivalent to the empty actions array
+    return (
+        rule.actions.length === 0 || (rule.actions.length === 1 && rule.actions[0] === PushRuleActionName.DontNotify)
+    );
 }
 
 export function determineUnreadState(
