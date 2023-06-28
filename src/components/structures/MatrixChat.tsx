@@ -1659,7 +1659,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             Modal.createDialog(KeySignatureUploadFailedDialog, { failures, source, continuation });
         });
 
-        cli.on(CryptoEvent.VerificationRequest, (request) => {
+        cli.on(CryptoEvent.VerificationRequestReceived, (request) => {
             if (request.verifier) {
                 Modal.createDialog(
                     IncomingSasDialog,

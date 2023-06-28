@@ -64,7 +64,7 @@ export class SetupEncryptionStore extends EventEmitter {
         this.phase = Phase.Loading;
 
         const cli = MatrixClientPeg.safeGet();
-        cli.on(CryptoEvent.VerificationRequest, this.onVerificationRequest);
+        cli.on(CryptoEvent.VerificationRequestReceived, this.onVerificationRequest);
         cli.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
 
         const requestsInProgress = cli.getCrypto()!.getVerificationRequestsToDeviceInProgress(cli.getUserId()!);
@@ -87,7 +87,7 @@ export class SetupEncryptionStore extends EventEmitter {
 
         const cli = MatrixClientPeg.get();
         if (!!cli) {
-            cli.removeListener(CryptoEvent.VerificationRequest, this.onVerificationRequest);
+            cli.removeListener(CryptoEvent.VerificationRequestReceived, this.onVerificationRequest);
             cli.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
         }
     }

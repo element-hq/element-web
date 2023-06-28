@@ -66,13 +66,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
     protected async onReady(): Promise<any> {
         this.viewedRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
-        this.matrixClient?.on(CryptoEvent.VerificationRequest, this.onVerificationRequestUpdate);
+        this.matrixClient?.on(CryptoEvent.VerificationRequestReceived, this.onVerificationRequestUpdate);
         this.loadCacheFromSettings();
         this.emitAndUpdateSettings();
     }
 
     protected async onNotReady(): Promise<any> {
-        this.matrixClient?.off(CryptoEvent.VerificationRequest, this.onVerificationRequestUpdate);
+        this.matrixClient?.off(CryptoEvent.VerificationRequestReceived, this.onVerificationRequestUpdate);
     }
 
     protected onDispatcherAction(payload: ActionPayload): void {

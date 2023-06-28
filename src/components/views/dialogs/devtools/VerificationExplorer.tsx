@@ -83,7 +83,7 @@ const VerificationExplorer: Tool = ({ onBack }: IDevtoolsProps) => {
     const cli = useContext(MatrixClientContext);
     const context = useContext(DevtoolsContext);
 
-    const requests = useTypedEventEmitterState(cli, CryptoEvent.VerificationRequest, () => {
+    const requests = useTypedEventEmitterState(cli, CryptoEvent.VerificationRequestReceived, () => {
         return (
             cli.crypto?.inRoomVerificationRequests["requestsByRoomId"]?.get(context.room.roomId) ??
             new Map<string, VerificationRequest>()
