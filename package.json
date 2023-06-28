@@ -123,7 +123,7 @@
         "cpx": "^1.5.0",
         "css-loader": "^4",
         "dotenv": "^16.0.2",
-        "eslint": "8.41.0",
+        "eslint": "8.43.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-deprecate": "^0.7.0",
