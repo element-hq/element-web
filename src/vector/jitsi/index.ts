@@ -444,20 +444,20 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
     if (isVideoChannel) {
         // Ensure that we skip Jitsi Meet's native prejoin screen, for
         // deployments that have it enabled
-        options.configOverwrite.prejoinConfig = { enabled: false };
+        options.configOverwrite!.prejoinConfig = { enabled: false };
         // Use a simplified set of toolbar buttons
-        options.configOverwrite.toolbarButtons = ["microphone", "camera", "tileview", "hangup"];
+        options.configOverwrite!.toolbarButtons = ["microphone", "camera", "tileview", "hangup"];
         // Note: We can hide the screenshare button in video rooms but not in
         // normal conference calls, since in video rooms we control exactly what
         // set of controls appear, but in normal calls we need to leave that up
         // to the deployment's configuration.
         // https://github.com/vector-im/element-web/issues/4880#issuecomment-940002464
-        if (supportsScreensharing) options.configOverwrite.toolbarButtons.splice(2, 0, "desktop");
+        if (supportsScreensharing) options.configOverwrite!.toolbarButtons.splice(2, 0, "desktop");
         // Hide all top bar elements
-        options.configOverwrite.conferenceInfo = { autoHide: [] };
+        options.configOverwrite!.conferenceInfo = { autoHide: [] };
         // Remove the ability to hide your own tile, since we're hiding the
         // settings button which would be the only way to get it back
-        options.configOverwrite.disableSelfViewSettings = true;
+        options.configOverwrite!.disableSelfViewSettings = true;
     }
 
     meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
