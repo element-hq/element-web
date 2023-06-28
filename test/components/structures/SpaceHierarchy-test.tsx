@@ -166,7 +166,7 @@ describe("SpaceHierarchy", () => {
                 observe: () => null,
                 unobserve: () => null,
                 disconnect: () => null,
-            });
+            } as ResizeObserver);
             window.IntersectionObserver = mockIntersectionObserver;
         });
 

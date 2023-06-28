@@ -1597,14 +1597,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private injectSticker(url: string, info: object, text: string, threadId: string | null): void {
-        if (!this.context.client) return;
+        const roomId = this.getRoomId();
+        if (!this.context.client || !roomId) return;
         if (this.context.client.isGuest()) {
             dis.dispatch({ action: "require_registration" });
             return;
         }
 
         ContentMessages.sharedInstance()
-            .sendStickerContentToRoom(url, this.getRoomId(), threadId, info, text, this.context.client)
+            .sendStickerContentToRoom(url, roomId, threadId, info, text, this.context.client)
             .then(undefined, (error) => {
                 if (error.name === "UnknownDeviceError") {
                     // Let the staus bar handle this
@@ -1636,7 +1637,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null): void => {
         this.setState({
             search: {
-                ...this.state.search,
+                ...this.state.search!,
                 count: searchResults?.count,
                 inProgress,
             },
@@ -1658,10 +1659,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onRejectButtonClicked = (): void => {
+        const roomId = this.getRoomId();
+        if (!roomId) return;
         this.setState({
             rejecting: true,
         });
-        this.context.client?.leave(this.getRoomId()).then(
+        this.context.client?.leave(roomId).then(
             () => {
                 dis.dispatch({ action: Action.ViewHomePage });
                 this.setState({
@@ -1896,14 +1899,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     }
 
-    private onFileDrop = (dataTransfer: DataTransfer): Promise<void> =>
-        ContentMessages.sharedInstance().sendContentListToRoom(
+    private onFileDrop = async (dataTransfer: DataTransfer): Promise<void> => {
+        const roomId = this.getRoomId();
+        if (!roomId || !this.context.client) return;
+        await ContentMessages.sharedInstance().sendContentListToRoom(
             Array.from(dataTransfer.files),
-            this.getRoomId(),
-            null,
+            roomId,
+            undefined,
             this.context.client,
             TimelineRenderingType.Room,
         );
+    };
 
     private onMeasurement = (narrow: boolean): void => {
         this.setState({ narrow });

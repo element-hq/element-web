@@ -18,6 +18,7 @@ import fetchMockJest from "fetch-mock-jest";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 
 import { getOidcClientId } from "../../../src/utils/oidc/registerClient";
+import { ValidatedDelegatedAuthConfig } from "../../../src/utils/ValidatedServerConfig";
 
 describe("getOidcClientId()", () => {
     const issuer = "https://auth.com/";
@@ -49,7 +50,7 @@ describe("getOidcClientId()", () => {
     });
 
     it("should throw when no static clientId is configured and no registration endpoint", async () => {
-        const authConfigWithoutRegistration = {
+        const authConfigWithoutRegistration: ValidatedDelegatedAuthConfig = {
             ...delegatedAuthConfig,
             issuer: "https://issuerWithoutStaticClientId.org/",
             registrationEndpoint: undefined,
@@ -62,7 +63,7 @@ describe("getOidcClientId()", () => {
     });
 
     it("should handle when staticOidcClients object is falsy", async () => {
-        const authConfigWithoutRegistration = {
+        const authConfigWithoutRegistration: ValidatedDelegatedAuthConfig = {
             ...delegatedAuthConfig,
             registrationEndpoint: undefined,
         };

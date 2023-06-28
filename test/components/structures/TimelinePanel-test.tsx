@@ -70,7 +70,7 @@ const mkTimeline = (room: Room, events: MatrixEvent[]): [EventTimeline, EventTim
         room: room as Room,
         getLiveTimeline: () => timeline,
         getTimelineForEvent: () => timeline,
-        getPendingEvents: () => [],
+        getPendingEvents: () => [] as MatrixEvent[],
     } as unknown as EventTimelineSet;
     const timeline = new EventTimeline(timelineSet);
     events.forEach((event) => timeline.addEvent(event, { toStartOfTimeline: false }));

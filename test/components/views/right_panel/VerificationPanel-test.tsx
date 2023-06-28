@@ -185,7 +185,7 @@ function renderComponent(props: Partial<ComponentProps<typeof VerificationPanel>
     const defaultProps = {
         layout: "",
         member: {} as User,
-        onClose: () => undefined,
+        onClose: () => {},
         isRoomEncrypted: false,
         inDialog: false,
         phase: props.request.phase,

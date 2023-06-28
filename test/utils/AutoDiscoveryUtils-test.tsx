@@ -214,7 +214,7 @@ describe("AutoDiscoveryUtils", () => {
                 registrationEndpoint: "https://test.com/registration",
                 tokenEndpoint: "https://test.com/token",
             };
-            const discoveryResult = {
+            const discoveryResult: ClientConfig = {
                 ...validIsConfig,
                 ...validHsConfig,
                 [M_AUTHENTICATION.stable!]: {
