@@ -137,7 +137,14 @@ Cypress.Commands.add(
                 prelaunchFn?.();
 
                 return cy
-                    .visit("/")
+                    .visit("/", {
+                        onBeforeLoad(win) {
+                            // reset notification permissions so we have predictable behaviour
+                            // of notifications toast
+                            // @ts-ignore allow setting default
+                            cy.stub(win.Notification, "permission", "default");
+                        },
+                    })
                     .then(() => {
                         // wait for the app to load
                         return cy.get(".mx_MatrixChat", { timeout: 30000 });
