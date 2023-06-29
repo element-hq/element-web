@@ -1135,7 +1135,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const lastReadEventIndex = this.getLastDisplayedEventIndex({
             ignoreOwn: true,
         });
-        const lastReadEvent: MatrixEvent | null = this.state.events[lastReadEventIndex ?? 0] ?? null;
+        const lastReadEvent = this.state.events[lastReadEventIndex ?? this.state.events.length - 1] ?? null;
 
         const shouldSendReadReceipt = this.shouldSendReadReceipt(
             currentReadReceiptEventId,
