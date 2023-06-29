@@ -330,6 +330,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.tokenLogin = true;
 
                     // Create and start the client
+                    // accesses the new credentials just set in storage during attemptTokenLogin
+                    // and sets logged in state
                     await Lifecycle.restoreFromLocalStorage({
                         ignoreGuest: true,
                     });
