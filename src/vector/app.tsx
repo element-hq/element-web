@@ -169,6 +169,13 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
         const isUrl = config["default_is_url"];
 
         const incompatibleOptions = [wkConfig, serverName, hsUrl].filter((i) => !!i);
+        if (hsUrl && (wkConfig || serverName)) {
+            // noinspection ExceptionCaughtLocallyJS
+            throw new UserFriendlyError(
+                "Invalid configuration: a default_hs_url can't be specified along with default_server_name " +
+                    "or default_server_config",
+            );
+        }
         if (incompatibleOptions.length < 1) {
             // noinspection ExceptionCaughtLocallyJS
             throw new UserFriendlyError("Invalid configuration: no default server specified.");

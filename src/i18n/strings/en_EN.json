@@ -1,5 +1,5 @@
 {
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
     "Invalid configuration: no default server specified.": "Invalid configuration: no default server specified.",
     "Your Element is misconfigured": "Your Element is misconfigured",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
