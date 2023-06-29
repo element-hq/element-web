@@ -17,7 +17,7 @@ exports[`<LoginWithQRSection /> should render panel MSC3882 + MSC3886 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Sign in with QR code
       </h3>
@@ -55,7 +55,7 @@ exports[`<LoginWithQRSection /> should render panel MSC3882 r1 + MSC3886 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Sign in with QR code
       </h3>

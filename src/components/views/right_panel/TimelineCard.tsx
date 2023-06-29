@@ -190,7 +190,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     private renderTimelineCardHeader = (): JSX.Element => {
         return (
             <div className="mx_BaseCard_header_title">
-                <Heading size="h4" className="mx_BaseCard_header_title_heading">
+                <Heading size="4" className="mx_BaseCard_header_title_heading">
                     {_t("Chat")}
                 </Heading>
             </div>

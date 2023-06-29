@@ -30,7 +30,7 @@ export interface DeviceTileProps {
 }
 
 const DeviceTileName: React.FC<{ device: ExtendedDevice }> = ({ device }) => {
-    return <Heading size="h4">{device.display_name || device.device_id}</Heading>;
+    return <Heading size="4">{device.display_name || device.device_id}</Heading>;
 };
 
 const DeviceTile: React.FC<DeviceTileProps> = ({ device, children, isSelected, onClick }) => {

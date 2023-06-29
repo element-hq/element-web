@@ -92,7 +92,7 @@ export function UserOnboardingHeader({ useCase }: Props): JSX.Element {
     return (
         <div className="mx_UserOnboardingHeader">
             <div className="mx_UserOnboardingHeader_content">
-                <Heading size="h1">
+                <Heading size="1">
                     {title}
                     <span className="mx_UserOnboardingHeader_dot">.</span>
                 </Heading>

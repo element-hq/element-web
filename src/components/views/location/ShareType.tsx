@@ -81,7 +81,7 @@ const ShareType: React.FC<Props> = ({ setShareType, enabledShareTypes }) => {
     return (
         <div className="mx_ShareType">
             <LocationIcon className="mx_ShareType_badge" />
-            <Heading className="mx_ShareType_heading" size="h3">
+            <Heading className="mx_ShareType_heading" size="3">
                 {_t("What location type do you want to share?")}
             </Heading>
             <div className="mx_ShareType_wrapper_options">

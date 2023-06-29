@@ -54,7 +54,7 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
         >
             {desktopBuilds?.get("available") && (
                 <div className="mx_AppDownloadDialog_desktop">
-                    <Heading size="h3">{_t("Download %(brand)s Desktop", { brand })}</Heading>
+                    <Heading size="3">{_t("Download %(brand)s Desktop", { brand })}</Heading>
                     <AccessibleButton
                         kind="primary"
                         element="a"
@@ -68,7 +68,7 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
             )}
             <div className="mx_AppDownloadDialog_mobile">
                 <div className="mx_AppDownloadDialog_app">
-                    <Heading size="h3">{_t("iOS")}</Heading>
+                    <Heading size="3">{_t("iOS")}</Heading>
                     <QRCode data={urlAppStore} margin={0} width={172} />
                     <div className="mx_AppDownloadDialog_info">
                         {_t("%(qrCode)s or %(appLinks)s", {
@@ -89,7 +89,7 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
                     </div>
                 </div>
                 <div className="mx_AppDownloadDialog_app">
-                    <Heading size="h3">{_t("Android")}</Heading>
+                    <Heading size="3">{_t("Android")}</Heading>
                     <QRCode data={urlAndroid} margin={0} width={172} />
                     <div className="mx_AppDownloadDialog_info">
                         {_t("%(qrCode)s or %(appLinks)s", {

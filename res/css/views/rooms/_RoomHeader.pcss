@@ -71,8 +71,8 @@ limitations under the License.
     flex: 0 1 auto;
     overflow: hidden;
     color: $primary-content;
-    font-weight: var(--font-semi-bold);
-    font-size: $font-15px;
+    font: var(--cpd-font-heading-sm-semibold);
+    font-weight: var(--cpd-font-weight-semibold);
     min-height: 24px;
     align-items: center;
     border-radius: 6px;
@@ -135,15 +135,13 @@ limitations under the License.
 }
 
 .mx_RoomHeader_topic {
-    $lineHeight: $font-16px;
     $lines: 2;
 
     flex: 1;
     color: $roomtopic-color;
-    font-weight: 400;
-    font-size: $font-13px;
-    line-height: $lineHeight;
-    max-height: calc($lineHeight * $lines);
+    font: var(--cpd-font-body-sm-regular);
+    line-height: 1rem;
+    max-height: calc(1rem * $lines);
 
     overflow: hidden;
     -webkit-line-clamp: $lines; /* See: https://drafts.csswg.org/css-overflow-3/#webkit-line-clamp */

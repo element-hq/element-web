@@ -33,7 +33,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Theme
               </h3>
@@ -99,7 +99,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Message layout
               </h3>
@@ -239,7 +239,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Font size
               </h3>
@@ -276,20 +276,20 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <input
                     aria-label="Font size"
                     autocomplete="off"
-                    max="18"
-                    min="13"
+                    max="21"
+                    min="11"
                     step="1"
                     type="range"
-                    value="15"
+                    value="16"
                   />
                   <output
                     class="mx_Slider_selection"
-                    style="left: calc(2px + 40% + 1.2em - 0.96em);"
+                    style="left: calc(2px + 50% + 1.2em - 1.2em);"
                   >
                     <span
                       class="mx_Slider_selection_label"
                     >
-                      15
+                      16
                     </span>
                   </output>
                 </div>
@@ -329,9 +329,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   disabled=""
                   id="font_size_field"
                   label="Font size"
-                  placeholder="15"
+                  placeholder="16"
                   type="number"
-                  value="15"
+                  value="16"
                 />
                 <label
                   for="font_size_field"
@@ -364,7 +364,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Image size in the timeline
               </h3>

@@ -79,8 +79,8 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
             >
                 <div className="mx_SettingsFlag">
                     <div className="mx_SetIntegrationManager_heading_manager">
-                        <Heading size="h2">{_t("Manage integrations")}</Heading>
-                        <Heading size="h3">{managerName}</Heading>
+                        <Heading size="2">{_t("Manage integrations")}</Heading>
+                        <Heading size="3">{managerName}</Heading>
                     </div>
                     <ToggleSwitch
                         id="toggle_integration"

@@ -69,7 +69,7 @@ export const PollHistory: React.FC<PollHistoryProps> = ({ room, matrixClient, pe
     return (
         <div className="mx_PollHistory_content">
             {/* @TODO this probably needs some style */}
-            <Heading className="mx_PollHistory_header" size="h2">
+            <Heading className="mx_PollHistory_header" size="2">
                 {title}
             </Heading>
             {focusedPoll ? (

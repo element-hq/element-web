@@ -9,7 +9,7 @@ exports[`<EmailAddresses /> should handle no email addresses 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Email addresses
       </h3>
@@ -36,7 +36,7 @@ exports[`<EmailAddresses /> should render a loader while loading 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Email addresses
       </h3>
@@ -67,7 +67,7 @@ exports[`<EmailAddresses /> should render email addresses 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Email addresses
       </h3>

@@ -17,7 +17,7 @@ limitations under the License.
 .mx_ReplyTile {
     position: relative;
     padding: 2px 0;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
 
     &.mx_ReplyTile_audio .mx_MFileBody_info_icon::before {
         mask-image: url("$(res)/img/element-icons/speaker.svg");
@@ -122,7 +122,7 @@ limitations under the License.
         gap: 4px;
 
         .mx_DisambiguatedProfile {
-            font-size: $font-14px;
+            font: var(--cpd-font-body-md-regular);
 
             display: inline-block; // anti-zalgo, with overflow hidden
             padding: 0;

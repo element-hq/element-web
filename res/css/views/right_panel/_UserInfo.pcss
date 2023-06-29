@@ -19,7 +19,6 @@ limitations under the License.
     /* UserInfo has a circular image at the top so it fits between the back & close buttons */
     padding-top: 0;
     overflow-y: auto;
-    font-size: $font-12px;
 
     .mx_UserInfo_cancel {
         cursor: pointer;
@@ -43,7 +42,7 @@ limitations under the License.
 
     h2 {
         font-size: $font-18px;
-        font-weight: var(--font-semi-bold);
+        font-weight: var(--cpd-font-weight-semibold);
         margin: 18px 0 0 0;
     }
 
@@ -145,8 +144,8 @@ limitations under the License.
     h3 {
         text-transform: uppercase;
         color: $tertiary-content;
-        font-weight: var(--font-semi-bold);
-        font-size: $font-12px;
+        font: var(--cpd-font-heading-sm-semibold);
+        font-weight: var(--cpd-font-weight-semibold);
         margin: $spacing-4 0;
     }
 
@@ -159,7 +158,7 @@ limitations under the License.
 
         h2 {
             display: flex;
-            font-size: $font-18px;
+            font-size: $font-17px;
             line-height: $font-25px;
             flex: 1;
             justify-content: center;
@@ -221,17 +220,17 @@ limitations under the License.
     }
 
     .mx_UserInfo_statusMessage {
-        $statusLineHeight: 16px;
         $statusNumberOfLines: 3;
 
+        font: var(--cpd-font-body-sm-regular);
         font-size: $font-11px;
-        line-height: $statusLineHeight;
+        line-height: 1rem;
         opacity: 0.5;
         overflow: hidden;
         word-break: break-word;
         text-overflow: ellipsis;
         display: -webkit-box;
-        max-height: calc($statusLineHeight * $statusNumberOfLines);
+        max-height: calc(1rem * $statusNumberOfLines);
         -webkit-line-clamp: $statusNumberOfLines;
         -webkit-box-orient: vertical;
     }

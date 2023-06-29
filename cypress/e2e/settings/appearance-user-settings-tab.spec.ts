@@ -122,9 +122,10 @@ describe("Appearance user settings tab", () => {
                 // Click the left position of the slider
                 cy.get("input").realClick({ position: "left" });
 
+                const MIN_FONT_SIZE = 11;
                 // Assert that the smallest font size is selected
-                cy.get("input[value='13']").should("exist");
-                cy.get("output .mx_Slider_selection_label").findByText("13");
+                cy.get(`input[value='${MIN_FONT_SIZE}']`).should("exist");
+                cy.get("output .mx_Slider_selection_label").findByText(MIN_FONT_SIZE);
             });
 
             cy.get(".mx_FontScalingPanel_fontSlider").percySnapshotElement("Font size slider - smallest (13)", {
@@ -135,12 +136,13 @@ describe("Appearance user settings tab", () => {
                 // Click the right position of the slider
                 cy.get("input").realClick({ position: "right" });
 
+                const MAX_FONT_SIZE = 21;
                 // Assert that the largest font size is selected
-                cy.get("input[value='18']").should("exist");
-                cy.get("output .mx_Slider_selection_label").findByText("18");
+                cy.get(`input[value='${MAX_FONT_SIZE}']`).should("exist");
+                cy.get("output .mx_Slider_selection_label").findByText(MAX_FONT_SIZE);
             });
 
-            cy.get(".mx_FontScalingPanel_fontSlider").percySnapshotElement("Font size slider - largest (18)", {
+            cy.get(".mx_FontScalingPanel_fontSlider").percySnapshotElement("Font size slider - largest (21)", {
                 widths: [486],
             });
         });

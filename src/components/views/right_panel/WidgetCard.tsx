@@ -73,7 +73,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
 
     const header = (
         <div className="mx_BaseCard_header_title">
-            <Heading size="h4" className="mx_BaseCard_header_title_heading">
+            <Heading size="4" className="mx_BaseCard_header_title_heading">
                 {WidgetUtils.getWidgetName(app)}
             </Heading>
             <ContextMenuButton

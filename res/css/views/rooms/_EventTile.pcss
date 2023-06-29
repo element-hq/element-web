@@ -29,7 +29,6 @@ $left-gutter: 64px;
     max-width: 100%;
     clear: both; /* TODO: check if this is necessary */
     padding-top: 18px;
-    font-size: $font-14px;
     position: relative;
 
     .mx_EventTile_avatar {
@@ -105,7 +104,7 @@ $left-gutter: 64px;
 
     .mx_DisambiguatedProfile {
         color: $primary-content;
-        font-size: $font-14px;
+        font: var(--cpd-font-body-md-regular);
         display: inline-block;
         padding-bottom: 0px;
         padding-top: 0px;
@@ -697,11 +696,9 @@ $left-gutter: 64px;
     }
 
     .markdown-body {
-        font-family: inherit !important;
-        white-space: normal !important;
-        line-height: inherit !important;
+        font: var(--cpd-font-body-md-regular) !important;
+        letter-spacing: var(--cpd-font-letter-spacing-body-md);
         color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
-        font-size: $font-14px;
 
         pre,
         code {

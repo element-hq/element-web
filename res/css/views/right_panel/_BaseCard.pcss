@@ -25,6 +25,7 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     flex: 1;
+    font-size: var(--cpd-font-size-body-sm);
 
     .mx_BaseCard_header {
         --BaseCard_header_button-margin: $spacing-12;
@@ -33,8 +34,7 @@ limitations under the License.
 
         > h2 {
             margin: 0 44px;
-            font-size: $font-18px;
-            font-weight: var(--font-semi-bold);
+            font: var(--cpd-font-body-sm-semibold);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -153,8 +153,7 @@ limitations under the License.
 
         > h2 {
             color: $tertiary-content;
-            font-size: $font-12px;
-            font-weight: 500;
+            font: var(--cpd-font-body-sm-medium);
             margin: $spacing-12;
         }
 
@@ -163,9 +162,8 @@ limitations under the License.
             padding-inline-start: $spacing-12;
             margin: 0;
             position: relative;
-            font-size: $font-13px;
+            font: var(--cpd-font-heading-sm-medium);
             height: 20px;
-            line-height: 20px;
             border-radius: 8px;
             overflow: hidden;
             white-space: nowrap;
@@ -199,8 +197,7 @@ limitations under the License.
         .mx_AccessibleButton_kind_secondary {
             color: $secondary-content;
             background-color: rgba(141, 151, 165, 0.2);
-            font-weight: var(--font-semi-bold);
-            font-size: $font-14px;
+            font: var(--cpd-font-body-md-semibold);
         }
 
         .mx_AccessibleButton_disabled {
@@ -227,7 +224,7 @@ limitations under the License.
         position: initial;
 
         span:first-of-type {
-            font-weight: var(--font-semi-bold);
+            font-weight: var(--cpd-font-weight-semibold);
             font-size: inherit;
             color: $primary-content;
         }

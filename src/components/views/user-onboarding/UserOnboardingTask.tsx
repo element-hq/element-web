@@ -45,7 +45,7 @@ export function UserOnboardingTask({ task, completed = false }: Props): JSX.Elem
                 aria-labelledby={`mx_UserOnboardingTask_${task.id}`}
             />
             <div id={`mx_UserOnboardingTask_${task.id}`} className="mx_UserOnboardingTask_content">
-                <Heading size="h4" className="mx_UserOnboardingTask_title">
+                <Heading size="4" className="mx_UserOnboardingTask_title">
                     {title}
                 </Heading>
                 <div className="mx_UserOnboardingTask_description">{description}</div>

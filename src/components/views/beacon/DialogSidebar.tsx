@@ -33,7 +33,7 @@ const DialogSidebar: React.FC<Props> = ({ beacons, onBeaconClick, requestClose }
     return (
         <div className="mx_DialogSidebar">
             <div className="mx_DialogSidebar_header">
-                <Heading size="h4">{_t("View List")}</Heading>
+                <Heading size="4">{_t("View List")}</Heading>
                 <AccessibleButton
                     className="mx_DialogSidebar_closeButton"
                     onClick={requestClose}

@@ -459,6 +459,18 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "baseFontSize": {
         displayName: _td("Font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: "",
+        controller: new FontSizeController(),
+    },
+    /**
+     * With the transition to Compound we are moving to a base font size
+     * of 16px. We're taking the opportunity to move away from the `baseFontSize`
+     * setting that had a 5px offset.
+     *
+     */
+    "baseFontSizeV2": {
+        displayName: _td("Font size"),
+        supportedLevels: [SettingLevel.DEVICE],
         default: FontWatcher.DEFAULT_SIZE,
         controller: new FontSizeController(),
     },

@@ -47,7 +47,7 @@ exports[`<MjolnirUserSettingsTab /> renders correctly when user has no ignored u
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Personal ban list
               </h3>
@@ -104,7 +104,7 @@ exports[`<MjolnirUserSettingsTab /> renders correctly when user has no ignored u
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Subscribed lists
               </h3>

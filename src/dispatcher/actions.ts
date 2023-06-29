@@ -104,6 +104,11 @@ export enum Action {
     /**
      * Sets the apps root font size. Should be used with UpdateFontSizePayload
      */
+    MigrateBaseFontSize = "migrate_base_font_size",
+
+    /**
+     * Sets the apps root font size. Should be used with UpdateFontSizePayload
+     */
     UpdateFontSize = "update_font_size",
 
     /**

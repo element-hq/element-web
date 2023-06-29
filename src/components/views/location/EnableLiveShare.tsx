@@ -31,7 +31,7 @@ export const EnableLiveShare: React.FC<Props> = ({ onSubmit }) => {
     return (
         <div data-testid="location-picker-enable-live-share" className="mx_EnableLiveShare">
             <StyledLiveBeaconIcon className="mx_EnableLiveShare_icon" />
-            <Heading className="mx_EnableLiveShare_heading" size="h3">
+            <Heading className="mx_EnableLiveShare_heading" size="3">
                 {_t("Live location sharing")}
             </Heading>
             <p className="mx_EnableLiveShare_description">

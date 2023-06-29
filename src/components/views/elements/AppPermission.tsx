@@ -146,7 +146,7 @@ export default class AppPermission extends React.Component<IProps, IState> {
                     <div className="mx_AppPermission_content_bolder">{_t("Widget added by")}</div>
                     <div>
                         {avatar}
-                        <Heading size="h4">{displayName}</Heading>
+                        <Heading size="4">{displayName}</Heading>
                         <div>{userId}</div>
                     </div>
                     <div>{warning}</div>

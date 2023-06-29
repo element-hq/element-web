@@ -541,7 +541,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                 />
             ) : null;
             const heading = (
-                <Heading size="h2">
+                <Heading size="2">
                     {discoWarning}
                     {_t("Discovery")}
                 </Heading>

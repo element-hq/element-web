@@ -38,9 +38,7 @@ limitations under the License.
 .mx_Field input,
 .mx_Field select,
 .mx_Field textarea {
-    font-family: inherit;
-    font-weight: normal;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
     border: none;
     /* Even without a border here, we still need this avoid overlapping the rounded */
     /* corners on the field above. */
@@ -99,7 +97,7 @@ limitations under the License.
     transition: font-size 0.25s ease-out 0.1s, color 0.25s ease-out 0.1s, transform 0.25s ease-out 0.1s,
         background-color 0.25s ease-out 0.1s;
     background-color: transparent;
-    font-size: $font-14px;
+    font: var(--cpd-font-body-md-regular);
     transform: translateY(0);
     position: absolute;
     left: 0px;
@@ -183,5 +181,5 @@ limitations under the License.
 }
 
 .mx_Field .mx_CountryDropdown {
-    width: $font-78px;
+    width: fit-content;
 }

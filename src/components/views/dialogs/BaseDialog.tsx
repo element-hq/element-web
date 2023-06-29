@@ -174,7 +174,8 @@ export default class BaseDialog extends React.Component<IProps> {
                     >
                         {!!(this.props.title || headerImage) && (
                             <Heading
-                                size="h2"
+                                as="h2"
+                                size="4"
                                 className={classNames("mx_Dialog_title", this.props.titleClass)}
                                 id="mx_BaseDialog_title"
                             >

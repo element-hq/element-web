@@ -274,7 +274,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                             </AccessibleButton>
                         </div>
                         <div>
-                            <h4>{_t("Set a new custom sound")}</h4>
+                            <h4 className="mx_Heading_h4">{_t("Set a new custom sound")}</h4>
                             <div className="mx_SettingsFlag">
                                 <form autoComplete="off" noValidate={true}>
                                     <input

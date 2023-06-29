@@ -26,7 +26,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Composer
               </h3>
@@ -387,7 +387,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Calls
               </h3>
@@ -448,7 +448,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Room
               </h3>
@@ -617,7 +617,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Room List
               </h3>
@@ -708,7 +708,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Accessibility
               </h3>
@@ -757,7 +757,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Navigation
               </h3>
@@ -1002,7 +1002,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
               class="mx_SettingsSubsectionHeading"
             >
               <h3
-                class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Autocomplete
               </h3>

@@ -75,7 +75,7 @@ exports[`<GeneralUserSettingsTab /> deactive account should render section when 
         class="mx_SettingsSubsectionHeading"
       >
         <h3
-          class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+          class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
         >
           Account management
         </h3>

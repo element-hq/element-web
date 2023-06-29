@@ -50,7 +50,7 @@ export function UserOnboardingList({ tasks }: Props): JSX.Element {
     return (
         <div className="mx_UserOnboardingList" data-testid="user-onboarding-list">
             <div className="mx_UserOnboardingList_header">
-                <Heading size="h3" className="mx_UserOnboardingList_title">
+                <Heading size="3" className="mx_UserOnboardingList_title">
                     {waiting > 0
                         ? _t("Only %(count)s steps to go", {
                               count: waiting,

@@ -47,7 +47,7 @@ limitations under the License.
     }
 
     .mx_UserMenu_name {
-        font-weight: var(--font-semi-bold);
+        font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-15px;
         line-height: $font-24px;
         margin-left: 10px;
@@ -104,7 +104,7 @@ limitations under the License.
 
             .mx_UserMenu_contextMenu_displayName,
             .mx_UserMenu_contextMenu_userId {
-                font-size: $font-15px;
+                font: var(--cpd-font-heading-sm-regular);
 
                 /* Automatically grow subelements to fit the container */
                 flex: 1;
@@ -117,12 +117,7 @@ limitations under the License.
             }
 
             .mx_UserMenu_contextMenu_displayName {
-                font-weight: bold;
-                line-height: $font-20px;
-            }
-
-            .mx_UserMenu_contextMenu_userId {
-                line-height: $font-24px;
+                font-weight: var(--cpd-font-weight-semibold);
             }
         }
 
@@ -147,7 +142,7 @@ limitations under the License.
             display: inline-block;
 
             > span {
-                font-weight: var(--font-semi-bold);
+                font-weight: var(--cpd-font-weight-semibold);
                 display: block;
 
                 & + span {

@@ -204,13 +204,6 @@ describe("Timeline", () => {
                 cy.findByRole("button", { name: "collapse" }).should("exist");
             });
 
-            // Check the height of expanded GELS line
-            cy.get(".mx_GenericEventListSummary[data-layout=irc] .mx_GenericEventListSummary_spacer").should(
-                "have.css",
-                "line-height",
-                "18px", // var(--irc-line-height): $font-18px (See: _IRCLayout.pcss)
-            );
-
             cy.get(".mx_MainSplit").percySnapshotElement("Expanded GELS on IRC layout", { percyCSS });
         });
 
@@ -237,13 +230,6 @@ describe("Timeline", () => {
                 // Assert that the "expand" link button worked
                 cy.findByRole("button", { name: "collapse" }).should("exist");
             });
-
-            // Check the height of expanded GELS line
-            cy.get(".mx_GenericEventListSummary[data-layout=group] .mx_GenericEventListSummary_spacer").should(
-                "have.css",
-                "line-height",
-                "22px", // $font-22px (See: _GenericEventListSummary.pcss)
-            );
 
             cy.get(".mx_MainSplit").percySnapshotElement("Expanded GELS on modern layout", { percyCSS });
         });

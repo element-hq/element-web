@@ -603,7 +603,7 @@ describe("ElementCall", () => {
             const originalGetValue = SettingsStore.getValue;
             SettingsStore.getValue = <T>(name: string, roomId?: string, excludeDefault?: boolean) => {
                 switch (name) {
-                    case "baseFontSize":
+                    case "baseFontSizeV2":
                         return 12 as T;
                     case "useSystemFont":
                         return true as T;
@@ -619,7 +619,7 @@ describe("ElementCall", () => {
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
-            expect(urlParams.get("fontScale")).toBe("1.2");
+            expect(urlParams.get("fontScale")).toBe("0.75");
             expect(urlParams.getAll("font")).toEqual(["OpenDyslexic", "DejaVu Sans"]);
 
             SettingsStore.getValue = originalGetValue;
