@@ -1,8 +1,8 @@
 {
     "Dismiss": "Aizvērt",
     "Unknown device": "Nezināma ierīce",
-    "Welcome to Element": "Esiet laipni gaidīti Elementā",
-    "Sign In": "Ierakstīties",
+    "Welcome to Element": "Laipni lūdzam Element!",
+    "Sign In": "Pieteikties",
     "Create Account": "Izveidot kontu",
     "Explore rooms": "Pārlūkot istabas",
     "Unexpected error preparing the app. See console for details.": "Lietotnes sagatavošanā gadījās negaidīta kļūda. Izvērsums ir atrodams konsolē.",
@@ -13,8 +13,8 @@
     "Unable to load config file: please refresh the page to try again.": "Neizdevās ielādēt konfigurācijas datni. Lūgums pārlādēt lapu, lai mēģinātu vēlreiz.",
     "Go to your browser to complete Sign In": "Jādodas uz pārlūku, lai pabeigtu pieteikšanos",
     "Unsupported browser": "Neatbalstīts pārlūks",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Lai gūtu labāko lietošanas pieredzi, lūdzu, instalējiet <chromeLink>Chromium</chromeLink>, <firefoxLink>Firefox</firefoxLink> vai <safariLink>Safari</safariLink> pārlūku.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Jūs varat turpināt lietot savu pašreizējo pārlūku, bet dažas funkcijas nestrādās un lietotnes izskats/saskarne var būt atspoguļoti nekorekti.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Lūgums uzstādīt <chromeLink>Chromium</chromeLink>, <firefoxLink>Firefox</firefoxLink> vai <safariLink>Safari</safariLink>, lai gūtu labāko lietošanas pieredzi.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Var turpināt izmantot savu pašreizējo pārlūku, bet dažas iespējas nedarbosies, un lietotnes izskats un saskarne var būt nepilnīga.",
     "I understand the risks and wish to continue": "Es apzinos riskus un vēlos turpināt",
     "Go to element.io": "Doties uz element.io",
     "Failed to start": "Neizdevās palaist",
@@ -26,7 +26,7 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Element konfigurācija satur nederīgu JSON. Lūgums novērst kļūmi un pārlādēt lapu.",
     "Your Element is misconfigured": "Element ir kļūdaini iestatīts",
     "Use %(brand)s on mobile": "Viedtālrunī jāizmanto %(brand)s",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralizēta, šifrēta saziņa &amp; sadarbība, ko nodrošina $matrixLogo",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralizēta, šifrēta saziņa un sadarbība, ko nodrošina $matrixLogo",
     "%(brand)s Desktop: %(platformName)s": "%(brand)s darbvirsma: %(platformName)s",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s %(osName)s"
 }
