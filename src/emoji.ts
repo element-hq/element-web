@@ -16,17 +16,11 @@ limitations under the License.
 
 import EMOJIBASE from "emojibase-data/en/compact.json";
 import SHORTCODES from "emojibase-data/en/shortcodes/iamcal.json";
+import { CompactEmoji } from "emojibase";
 
-export interface IEmoji {
-    label: string;
-    group: number;
-    hexcode: string;
-    order: number;
+export interface IEmoji extends Omit<CompactEmoji, "shortcodes"> {
+    // We generate a shortcode based on the label if none exist in the dataset
     shortcodes: string[];
-    tags?: string[];
-    unicode: string;
-    skins?: Omit<IEmoji, "shortcodes" | "tags">[]; // Currently unused
-    emoticon?: string | string[];
 }
 
 // The unicode is stored without the variant selector
@@ -74,7 +68,7 @@ export const DATA_BY_CATEGORY: Record<string, IEmoji[]> = {
 };
 
 // Store various mappings from unicode/emoticon/shortcode to the Emoji objects
-export const EMOJI: IEmoji[] = EMOJIBASE.map((emojiData: Omit<IEmoji, "shortcodes">) => {
+export const EMOJI: IEmoji[] = EMOJIBASE.map((emojiData) => {
     // If there's ever a gap in shortcode coverage, we fudge it by
     // filling it in with the emoji's CLDR annotation
     const shortcodeData = SHORTCODES[emojiData.hexcode] ?? [emojiData.label.toLowerCase().replace(/\W+/g, "_")];
@@ -88,7 +82,7 @@ export const EMOJI: IEmoji[] = EMOJIBASE.map((emojiData: Omit<IEmoji, "shortcode
     // We manually include regional indicators in the symbols group, since
     // Emojibase intentionally leaves them uncategorized
     const categoryId =
-        EMOJIBASE_GROUP_ID_TO_CATEGORY[emoji.group] ?? (isRegionalIndicator(emoji.unicode) ? "symbols" : null);
+        EMOJIBASE_GROUP_ID_TO_CATEGORY[emoji.group!] ?? (isRegionalIndicator(emoji.unicode) ? "symbols" : null);
 
     if (DATA_BY_CATEGORY.hasOwnProperty(categoryId)) {
         DATA_BY_CATEGORY[categoryId].push(emoji);

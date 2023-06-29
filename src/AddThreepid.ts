@@ -58,7 +58,7 @@ export type Binding = {
  * https://gist.github.com/jryans/839a09bf0c5a70e2f36ed990d50ed928
  */
 export default class AddThreepid {
-    private sessionId: string;
+    private sessionId?: string;
     private submitUrl?: string;
     private bind = false;
     private readonly clientSecret: string;
@@ -202,7 +202,7 @@ export default class AddThreepid {
                         throw new UserFriendlyError("No identity access token found");
                     }
                     await this.matrixClient.bindThreePid({
-                        sid: this.sessionId,
+                        sid: this.sessionId!,
                         client_secret: this.clientSecret,
                         id_server: getIdServerDomain(this.matrixClient),
                         id_access_token: identityAccessToken,
@@ -278,7 +278,7 @@ export default class AddThreepid {
      */
     private makeAddThreepidOnlyRequest = (auth?: IAddThreePidOnlyBody["auth"] | null): Promise<{}> => {
         return this.matrixClient.addThreePidOnly({
-            sid: this.sessionId,
+            sid: this.sessionId!,
             client_secret: this.clientSecret,
             auth: auth ?? undefined,
         });
@@ -302,13 +302,13 @@ export default class AddThreepid {
         if (this.submitUrl) {
             result = await this.matrixClient.submitMsisdnTokenOtherUrl(
                 this.submitUrl,
-                this.sessionId,
+                this.sessionId!,
                 this.clientSecret,
                 msisdnToken,
             );
         } else if (this.bind || !supportsSeparateAddAndBind) {
             result = await this.matrixClient.submitMsisdnToken(
-                this.sessionId,
+                this.sessionId!,
                 this.clientSecret,
                 msisdnToken,
                 await authClient.getAccessToken(),
@@ -323,7 +323,7 @@ export default class AddThreepid {
         if (supportsSeparateAddAndBind) {
             if (this.bind) {
                 await this.matrixClient.bindThreePid({
-                    sid: this.sessionId,
+                    sid: this.sessionId!,
                     client_secret: this.clientSecret,
                     id_server: getIdServerDomain(this.matrixClient),
                     id_access_token: await authClient.getAccessToken(),

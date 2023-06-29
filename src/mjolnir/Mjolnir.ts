@@ -144,7 +144,12 @@ export class Mjolnir {
         this.updateLists(this._roomIds);
     };
 
-    private onListsChanged(settingName: string, roomId: string, atLevel: SettingLevel, newValue: string[]): void {
+    private onListsChanged(
+        settingName: string,
+        roomId: string | null,
+        atLevel: SettingLevel,
+        newValue: string[],
+    ): void {
         // We know that ban lists are only recorded at one level so we don't need to re-eval them
         this.updateLists(newValue);
     }

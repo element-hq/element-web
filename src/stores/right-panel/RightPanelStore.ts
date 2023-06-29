@@ -47,7 +47,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     private static internalInstance: RightPanelStore;
 
     private global?: IRightPanelForRoom;
-    private byRoom: { [roomId: string]: IRightPanelForRoom };
+    private byRoom: { [roomId: string]: IRightPanelForRoom } = {};
     private viewedRoomId: Optional<string>;
 
     private constructor() {

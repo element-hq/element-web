@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ICryptoCallbacks } from "matrix-js-sdk/src/matrix";
+import { DeviceVerificationStatus, ICryptoCallbacks } from "matrix-js-sdk/src/matrix";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { deriveKey } from "matrix-js-sdk/src/crypto/key_passphrase";
 import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto/recoverykey";
 import { encodeBase64 } from "matrix-js-sdk/src/crypto/olmlib";
-import { DeviceTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type CreateSecretStorageDialog from "./async-components/views/dialogs/security/CreateSecretStorageDialog";
@@ -241,7 +240,7 @@ async function onSecretRequested(
     deviceId: string,
     requestId: string,
     name: string,
-    deviceTrust: DeviceTrustLevel,
+    deviceTrust: DeviceVerificationStatus,
 ): Promise<string | undefined> {
     logger.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
     const client = MatrixClientPeg.safeGet();

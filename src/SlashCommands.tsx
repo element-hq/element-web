@@ -81,8 +81,8 @@ const singleMxcUpload = async (cli: MatrixClient): Promise<string | null> => {
     return new Promise((resolve) => {
         const fileSelector = document.createElement("input");
         fileSelector.setAttribute("type", "file");
-        fileSelector.onchange = (ev: HTMLInputEvent) => {
-            const file = ev.target.files?.[0];
+        fileSelector.onchange = (ev: Event) => {
+            const file = (ev as HTMLInputEvent).target.files?.[0];
             if (!file) return;
 
             Modal.createDialog(UploadConfirmDialog, {

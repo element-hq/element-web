@@ -47,9 +47,9 @@ interface ISortedEmoji {
 
 const SORTED_EMOJI: ISortedEmoji[] = EMOJI.sort((a, b) => {
     if (a.group === b.group) {
-        return a.order - b.order;
+        return a.order! - b.order!;
     }
-    return a.group - b.group;
+    return a.group! - b.group!;
 }).map((emoji, index) => ({
     emoji,
     // Include the index so that we can preserve the original order
