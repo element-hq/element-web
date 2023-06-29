@@ -169,13 +169,6 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
         const isUrl = config["default_is_url"];
 
         const incompatibleOptions = [wkConfig, serverName, hsUrl].filter((i) => !!i);
-        if (incompatibleOptions.length > 1) {
-            // noinspection ExceptionCaughtLocallyJS
-            throw new UserFriendlyError(
-                "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
-                    "or default_hs_url.",
-            );
-        }
         if (incompatibleOptions.length < 1) {
             // noinspection ExceptionCaughtLocallyJS
             throw new UserFriendlyError("Invalid configuration: no default server specified.");
@@ -201,7 +194,7 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
         }
 
         let discoveryResult: ClientConfig | undefined;
-        if (wkConfig) {
+        if (!serverName && wkConfig) {
             logger.log("Config uses a default_server_config - validating object");
             discoveryResult = await AutoDiscovery.fromDiscoveryConfig(wkConfig);
         }
@@ -213,6 +206,10 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
                     "use default_server_config instead.",
             );
             discoveryResult = await AutoDiscovery.findClientConfig(serverName);
+            if (discoveryResult["m.homeserver"].base_url === null && wkConfig) {
+                logger.log("Finding base_url failed but a default_server_config was found - using it as a fallback");
+                discoveryResult = await AutoDiscovery.fromDiscoveryConfig(wkConfig);
+            }
         }
 
         validatedConfig = AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, true);
