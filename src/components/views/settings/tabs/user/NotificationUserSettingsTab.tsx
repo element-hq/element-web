@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2021 The Matrix.org Foundation C.I.C.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,17 +17,26 @@ limitations under the License.
 import React from "react";
 
 import { _t } from "../../../../../languageHandler";
+import { Features } from "../../../../../settings/Settings";
+import SettingsStore from "../../../../../settings/SettingsStore";
 import Notifications from "../../Notifications";
+import NotificationSettings2 from "../../notifications/NotificationSettings2";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsTab from "../SettingsTab";
 
 export default class NotificationUserSettingsTab extends React.Component {
     public render(): React.ReactNode {
+        const newNotificationSettingsEnabled = SettingsStore.getValue(Features.NotificationSettings2);
+
         return (
             <SettingsTab>
-                <SettingsSection heading={_t("Notifications")}>
-                    <Notifications />
-                </SettingsSection>
+                {newNotificationSettingsEnabled ? (
+                    <NotificationSettings2 />
+                ) : (
+                    <SettingsSection heading={_t("Notifications")}>
+                        <Notifications />
+                    </SettingsSection>
+                )}
             </SettingsTab>
         );
     }

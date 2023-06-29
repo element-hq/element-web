@@ -196,6 +196,11 @@ export function reconcileNotificationSettings(
         }
     }
 
+    const mentionActions = NotificationUtils.encodeActions({
+        notify: true,
+        sound: model.sound.mentions,
+        highlight: true,
+    });
     const contentRules = pushRules.global.content?.filter((rule) => !rule.rule_id.startsWith(".")) ?? [];
     const newKeywords = new Set(model.keywords);
     for (const rule of contentRules) {
@@ -204,12 +209,27 @@ export function reconcileNotificationSettings(
                 rule_id: rule.rule_id,
                 kind: PushRuleKind.ContentSpecific,
             });
-        } else if (rule.enabled !== model.mentions.keywords) {
-            changes.updated.push({
-                rule_id: rule.rule_id,
-                kind: PushRuleKind.ContentSpecific,
-                enabled: model.mentions.keywords,
-            });
+        } else {
+            let changed = false;
+            if (rule.enabled !== model.mentions.keywords) {
+                changed = true;
+            } else if (rule.actions !== undefined) {
+                const originalActions = NotificationUtils.decodeActions(rule.actions);
+                const actions = NotificationUtils.decodeActions(mentionActions);
+                if (originalActions === null || actions === null) {
+                    changed = true;
+                } else if (!deepCompare(actions, originalActions)) {
+                    changed = true;
+                }
+            }
+            if (changed) {
+                changes.updated.push({
+                    rule_id: rule.rule_id,
+                    kind: PushRuleKind.ContentSpecific,
+                    enabled: model.mentions.keywords,
+                    actions: mentionActions,
+                });
+            }
         }
         newKeywords.delete(rule.pattern!);
     }
@@ -220,7 +240,7 @@ export function reconcileNotificationSettings(
             default: false,
             enabled: model.mentions.keywords,
             pattern: keyword,
-            actions: StandardActions.ACTION_NOTIFY,
+            actions: mentionActions,
         });
     }
 

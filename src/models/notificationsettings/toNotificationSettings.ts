@@ -37,6 +37,22 @@ function shouldNotify(rules: (IPushRule | null | undefined | false)[]): boolean 
     return false;
 }
 
+function isMuted(rules: (IPushRule | null | undefined | false)[]): boolean {
+    if (rules.length === 0) {
+        return false;
+    }
+    for (const rule of rules) {
+        if (rule === null || rule === undefined || rule === false || !rule.enabled) {
+            continue;
+        }
+        const actions = NotificationUtils.decodeActions(rule.actions);
+        if (actions !== null && !actions.notify && actions.highlight !== true && actions.sound === undefined) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function determineSound(rules: (IPushRule | null | undefined | false)[]): string | undefined {
     for (const rule of rules) {
         if (rule === null || rule === undefined || rule === false || !rule.enabled) {
@@ -74,7 +90,7 @@ export function toNotificationSettings(
             people: determineSound(dmRules),
         },
         activity: {
-            bot_notices: shouldNotify([standardRules.get(RuleId.SuppressNotices)]),
+            bot_notices: !isMuted([standardRules.get(RuleId.SuppressNotices)]),
             invite: shouldNotify([standardRules.get(RuleId.InviteToSelf)]),
             status_event: shouldNotify([standardRules.get(RuleId.MemberEvent), standardRules.get(RuleId.Tombstone)]),
         },
