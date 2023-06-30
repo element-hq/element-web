@@ -399,12 +399,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
     private startSAS = async (): Promise<void> => {
         this.setState({ emojiButtonClicked: true });
-        const verifier = this.props.request.beginKeyVerification(verificationMethods.SAS);
-        try {
-            await verifier.verify();
-        } catch (err) {
-            logger.error(err);
-        }
+        await this.props.request.startVerification(verificationMethods.SAS);
     };
 
     private onSasMatchesClick = (): void => {
