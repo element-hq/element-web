@@ -117,6 +117,7 @@ import { WidgetType } from "../../widgets/WidgetType";
 import WidgetUtils from "../../utils/WidgetUtils";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
 import { WaitingForThirdPartyRoomView } from "./WaitingForThirdPartyRoomView";
+import { isNotUndefined } from "../../Typeguards";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -809,7 +810,21 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return this.state.room?.roomId ?? this.state.roomId;
     };
 
-    private getPermalinkCreatorForRoom(room: Room): RoomPermalinkCreator {
+    private getPermalinkCreatorForRoom(): RoomPermalinkCreator {
+        const { room, roomId } = this.state;
+
+        // If room is undefined, attempt to use the roomId to create and store a permalinkCreator.
+        // Throw an error if we can not find a roomId in state.
+        if (room === undefined) {
+            if (isNotUndefined(roomId)) {
+                const permalinkCreator = new RoomPermalinkCreator(null, roomId);
+                this.permalinkCreators[roomId] = permalinkCreator;
+                return permalinkCreator;
+            } else {
+                throw new Error("Cannot get a permalink creator without a roomId");
+            }
+        }
+
         if (this.permalinkCreators[room.roomId]) return this.permalinkCreators[room.roomId];
 
         this.permalinkCreators[room.roomId] = new RoomPermalinkCreator(room);
@@ -1096,14 +1111,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     payload.data.threadId,
                 );
                 break;
-            case "picture_snapshot":
-                ContentMessages.sharedInstance().sendContentListToRoom(
-                    [payload.file],
-                    this.getRoomId(),
-                    undefined,
-                    this.context.client,
-                );
+            case "picture_snapshot": {
+                const roomId = this.getRoomId();
+                if (isNotUndefined(roomId)) {
+                    ContentMessages.sharedInstance().sendContentListToRoom(
+                        [payload.file],
+                        roomId,
+                        undefined,
+                        this.context.client,
+                    );
+                }
+
                 break;
+            }
             case "notifier_enabled":
             case Action.UploadStarted:
             case Action.UploadFinished:
@@ -1552,12 +1572,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         } else {
             Promise.resolve().then(() => {
                 const signUrl = this.props.threepidInvite?.signUrl;
-                dis.dispatch<JoinRoomPayload>({
-                    action: Action.JoinRoom,
-                    roomId: this.getRoomId(),
-                    opts: { inviteSignUrl: signUrl },
-                    metricsTrigger: this.state.room?.getMyMembership() === "invite" ? "Invite" : "RoomPreview",
-                });
+                const roomId = this.getRoomId();
+                if (isNotUndefined(roomId)) {
+                    dis.dispatch<JoinRoomPayload>({
+                        action: Action.JoinRoom,
+                        roomId,
+                        opts: { inviteSignUrl: signUrl },
+                        metricsTrigger: this.state.room?.getMyMembership() === "invite" ? "Invite" : "RoomPreview",
+                    });
+                }
+
                 return Promise.resolve();
             });
         }
@@ -1920,7 +1944,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     private get permalinkCreator(): RoomPermalinkCreator {
-        return this.getPermalinkCreatorForRoom(this.state.room);
+        return this.getPermalinkCreatorForRoom();
     }
 
     private renderLocalRoomCreateLoader(localRoom: LocalRoom): ReactNode {
