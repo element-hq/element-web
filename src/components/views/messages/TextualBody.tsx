@@ -388,6 +388,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             return false;
         }
 
+        const url = node.getAttribute("href");
+        const host = url?.match(/^https?:\/\/(.*?)(\/|$)/)?.[1];
+
+        // never preview permalinks (if anything we should give a smart
+        // preview of the room/user they point to: nobody needs to be reminded
+        // what the matrix.to site looks like).
+        if (!host || isPermalinkHost(host)) return false;
+
         // as a random heuristic to avoid highlighting things like "foo.pl"
         // we require the linked text to either include a / (either from http://
         // or from a full foo.bar/baz style schemeless URL) - or be a markdown-style
@@ -396,14 +404,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (node.textContent?.includes("/")) {
             return true;
         }
-
-        const url = node.getAttribute("href");
-        const host = url?.match(/^https?:\/\/(.*?)(\/|$)/)?.[1];
-
-        // never preview permalinks (if anything we should give a smart
-        // preview of the room/user they point to: nobody needs to be reminded
-        // what the matrix.to site looks like).
-        if (!host || isPermalinkHost(host)) return false;
 
         if (node.textContent?.toLowerCase().trim().startsWith(host.toLowerCase())) {
             // it's a "foo.pl" style link
