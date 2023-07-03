@@ -24,3 +24,6 @@ trim_trailing_whitespace = true
 
 [*.{yml,yaml}]
 indent_size = 4
+
+[*.tsx.snap]
+trim_trailing_whitespace = false
