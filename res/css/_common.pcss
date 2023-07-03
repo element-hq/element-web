@@ -51,6 +51,20 @@ limitations under the License.
     --dialog-zIndex-standard: calc(var(--dialog-zIndex-standard-background) + 1); /* 4012 */
 }
 
+/**
+ * We need to increase the specificity of the selector to override the 
+ * custom property set by the design tokens package
+ */
+[class^="cpd-theme"][class^="cpd-theme"] {
+    /**
+     * The design tokens package currently does not expose the fallback fonts
+     * We want to keep on re-using `$font-family` to not break custom themes
+     * and because we can to use `Twemoji` to display emoji rather than using
+     * system ones
+     */
+    --cpd-font-family-sans: $font-family;
+}
+
 @media only percy {
     :root {
         --percy-color-avatar: $username-variant2-color;
