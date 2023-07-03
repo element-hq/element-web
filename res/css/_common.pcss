@@ -52,7 +52,7 @@ limitations under the License.
 }
 
 /**
- * We need to increase the specificity of the selector to override the 
+ * We need to increase the specificity of the selector to override the
  * custom property set by the design tokens package
  */
 [class^="cpd-theme"][class^="cpd-theme"] {
@@ -352,6 +352,9 @@ legend {
     .markdown-body {
         font: var(--cpd-font-body-md-regular) !important;
         letter-spacing: var(--cpd-font-letter-spacing-body-md);
+        font-family: inherit !important;
+        white-space: normal !important;
+        line-height: inherit !important;
         color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
 
         pre,
