@@ -17,7 +17,7 @@ limitations under the License.
 import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api/verification";
 import { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
-import { emitPromise, skipIfRustCrypto } from "../../support/util";
+import { emitPromise } from "../../support/util";
 import { checkDeviceIsCrossSigned, doTwoWaySasVerification, logIntoElement, waitForVerificationRequest } from "./utils";
 import { getToast } from "../../support/toasts";
 
@@ -26,7 +26,6 @@ describe("Device verification", () => {
     let homeserver: HomeserverInstance;
 
     beforeEach(() => {
-        skipIfRustCrypto();
         cy.startHomeserver("default").then((data: HomeserverInstance) => {
             homeserver = data;
 
