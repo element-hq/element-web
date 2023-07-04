@@ -3569,7 +3569,7 @@
     "General failure": "General failure",
     "This homeserver does not support login using email address.": "This homeserver does not support login using email address.",
     "Failed to perform homeserver discovery": "Failed to perform homeserver discovery",
-    "This homeserver doesn't offer any login flows which are supported by this client.": "This homeserver doesn't offer any login flows which are supported by this client.",
+    "This homeserver doesn't offer any login flows that are supported by this client.": "This homeserver doesn't offer any login flows that are supported by this client.",
     "Syncing…": "Syncing…",
     "Signing In…": "Signing In…",
     "If you've joined lots of rooms, this might take a while": "If you've joined lots of rooms, this might take a while",

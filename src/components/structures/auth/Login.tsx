@@ -392,19 +392,17 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                     // look for a flow where we understand all of the steps.
                     const supportedFlows = flows.filter(this.isSupportedFlow);
 
-                    if (supportedFlows.length > 0) {
-                        this.setState({
-                            flows: supportedFlows,
-                        });
-                        return;
-                    }
-
-                    // we got to the end of the list without finding a suitable flow.
                     this.setState({
-                        errorText: _t(
-                            "This homeserver doesn't offer any login flows which are supported by this client.",
-                        ),
+                        flows: supportedFlows,
                     });
+
+                    if (supportedFlows.length === 0) {
+                        this.setState({
+                            errorText: _t(
+                                "This homeserver doesn't offer any login flows that are supported by this client.",
+                            ),
+                        });
+                    }
                 },
                 (err) => {
                     this.setState({
