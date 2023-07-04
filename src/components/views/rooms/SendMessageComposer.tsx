@@ -447,7 +447,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         const posthogEvent: ComposerEvent = {
             eventName: "Composer",
             isEditing: false,
-            isLocation: false,
             isReply: !!this.props.replyToEvent,
             inThread: this.props.relation?.rel_type === THREAD_RELATION_TYPE.name,
         };
