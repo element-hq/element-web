@@ -132,7 +132,7 @@ export default class HTMLExporter extends Exporter {
             currentPage !== 0 ? (
                 <div style={{ textAlign: "center" }}>
                     <a href={`./messages${currentPage === 1 ? "" : currentPage}.html`} style={{ fontWeight: "bold" }}>
-                        Previous group of messages
+                        {_t("Previous group of messages")}
                     </a>
                 </div>
             ) : (
@@ -144,7 +144,7 @@ export default class HTMLExporter extends Exporter {
             currentPage < nbPages - 1 ? (
                 <div style={{ textAlign: "center", margin: "10px" }}>
                     <a href={"./messages" + (currentPage + 2) + ".html"} style={{ fontWeight: "bold" }}>
-                        Next group of messages
+                        {_t("Next group of messages")}
                     </a>
                 </div>
             ) : (
@@ -161,7 +161,7 @@ export default class HTMLExporter extends Exporter {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <link href="css/style.css" rel="stylesheet" />
                 <script src="js/script.js"></script>
-                <title>Exported Data</title>
+                <title>${_t("Exported Data")}</title>
             </head>
             <body style="height: 100vh;">
                 <section
