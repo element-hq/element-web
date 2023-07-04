@@ -9,20 +9,24 @@
 
 set -ex
 
-scripts/fetchdep.sh matrix-org matrix-js-sdk
+scripts/fetchdep.sh matrix-org matrix-js-sdk develop
 pushd matrix-js-sdk
 [ -n "$JS_SDK_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF && git checkout $JS_SDK_GITHUB_BASE_REF
 yarn link
 yarn install --frozen-lockfile $@
 popd
 
-scripts/fetchdep.sh matrix-org matrix-analytics-events main
-pushd matrix-analytics-events
-yarn link
-yarn install --frozen-lockfile $@
-yarn build:ts
-popd
+scripts/fetchdep.sh matrix-org matrix-analytics-events
+# We don't pass a default branch so cloning may fail when we are not in a PR
+# This is expected as this project does not share a release cycle but we still branch match it
+if [ -d matrix-analytics-events ]; then
+    pushd matrix-analytics-events
+    yarn link
+    yarn install --frozen-lockfile $@
+    yarn build:ts
+    popd
+fi
 
 yarn link matrix-js-sdk
-yarn link @matrix-org/analytics-events
+[ -d matrix-analytics-events ] && yarn link @matrix-org/analytics-events
 yarn install --frozen-lockfile $@

@@ -6,8 +6,6 @@ deforg="$1"
 defrepo="$2"
 defbranch="$3"
 
-[ -z "$defbranch" ] && defbranch="develop"
-
 rm -r "$defrepo" || true
 
 # figure out where to look for pull requests:
