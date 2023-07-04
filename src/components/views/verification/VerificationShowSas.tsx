@@ -42,8 +42,19 @@ interface IState {
     cancelling?: boolean;
 }
 
+/** Convert the names of emojis returned by the js-sdk into the display names, which we use as
+ * a base for our translations.
+ */
 function capFirst(s: string): string {
-    return s.charAt(0).toUpperCase() + s.slice(1);
+    // Our translations (currently) have names like "Thumbs up".
+    //
+    // With legacy crypto, the js-sdk returns lower-case names ("thumbs up"). With Rust crypto, the js-sdk follows
+    // the spec and returns title-case names ("Thumbs Up"). So, to convert both into names that match our i18n data,
+    // we upcase the first character and downcase the rest.
+    //
+    // Once legacy crypto is dead, we could consider getting rid of this and just making the i18n data use the
+    // title-case names (which would also match the spec).
+    return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 }
 
 export default class VerificationShowSas extends React.Component<IProps, IState> {
