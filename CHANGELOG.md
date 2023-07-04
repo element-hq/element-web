@@ -1,5 +1,5 @@
-Changes in [3.75.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.75.0-rc.1) (2023-06-27)
-===============================================================================================================
+Changes in [3.75.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.75.0) (2023-07-04)
+=====================================================================================================
 
 ## 🦖 Deprecations
  * Remove `feature_favourite_messages` as it is has been abandoned for now ([\#11097](https://github.com/matrix-org/matrix-react-sdk/pull/11097)). Fixes vector-im/element-web#25555.
