@@ -29,6 +29,8 @@ popd
 
 # Also set up matrix-analytics-events for branch with matching name
 node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-analytics-events
+# We don't pass a default branch so cloning may fail when we are not in a PR
+# This is expected as this project does not share a release cycle but we still branch match it
 if [ -d matrix-analytics-events ]; then
     pushd matrix-analytics-events
     yarn link
