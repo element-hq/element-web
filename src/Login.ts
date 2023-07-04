@@ -102,7 +102,7 @@ export default class Login {
                 const oidcFlow = await tryInitOidcNativeFlow(
                     this.delegatedAuthentication,
                     SdkConfig.get().brand,
-                    SdkConfig.get().oidc_static_client_ids,
+                    SdkConfig.get().oidc_static_clients,
                 );
                 return [oidcFlow];
             } catch (error) {
@@ -211,9 +211,9 @@ export interface OidcNativeFlow extends ILoginFlow {
 const tryInitOidcNativeFlow = async (
     delegatedAuthConfig: ValidatedDelegatedAuthConfig,
     brand: string,
-    oidcStaticClientIds?: IConfigOptions["oidc_static_client_ids"],
+    oidcStaticClients?: IConfigOptions["oidc_static_clients"],
 ): Promise<OidcNativeFlow> => {
-    const clientId = await getOidcClientId(delegatedAuthConfig, brand, window.location.origin, oidcStaticClientIds);
+    const clientId = await getOidcClientId(delegatedAuthConfig, brand, window.location.origin, oidcStaticClients);
 
     const flow = {
         type: "oidcNativeFlow",

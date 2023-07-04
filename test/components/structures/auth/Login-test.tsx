@@ -37,7 +37,9 @@ jest.mock("matrix-js-sdk/src/matrix");
 jest.useRealTimers();
 
 const oidcStaticClientsConfig = {
-    "https://staticallyregisteredissuer.org/": "static-clientId-123",
+    "https://staticallyregisteredissuer.org/": {
+        client_id: "static-clientId-123",
+    },
 };
 
 describe("Login", function () {
@@ -52,7 +54,7 @@ describe("Login", function () {
         SdkConfig.put({
             brand: "test-brand",
             disable_custom_urls: true,
-            oidc_static_client_ids: oidcStaticClientsConfig,
+            oidc_static_clients: oidcStaticClientsConfig,
         });
         mockClient.login.mockClear().mockResolvedValue({
             access_token: "TOKEN",

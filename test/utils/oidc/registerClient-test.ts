@@ -27,7 +27,9 @@ describe("getOidcClientId()", () => {
     const baseUrl = "https://just.testing";
     const dynamicClientId = "xyz789";
     const staticOidcClients = {
-        [issuer]: "abc123",
+        [issuer]: {
+            client_id: "abc123",
+        },
     };
     const delegatedAuthConfig = {
         issuer,
@@ -42,9 +44,7 @@ describe("getOidcClientId()", () => {
     });
 
     it("should return static clientId when configured", async () => {
-        expect(await getOidcClientId(delegatedAuthConfig, clientName, baseUrl, staticOidcClients)).toEqual(
-            staticOidcClients[issuer],
-        );
+        expect(await getOidcClientId(delegatedAuthConfig, clientName, baseUrl, staticOidcClients)).toEqual("abc123");
         // didn't try to register
         expect(fetchMockJest).toHaveFetchedTimes(0);
     });

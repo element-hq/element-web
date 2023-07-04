@@ -17,6 +17,7 @@ limitations under the License.
 import { logger } from "matrix-js-sdk/src/logger";
 import { registerOidcClient } from "matrix-js-sdk/src/oidc/register";
 
+import { IConfigOptions } from "../../IConfigOptions";
 import { ValidatedDelegatedAuthConfig } from "../ValidatedServerConfig";
 
 /**
@@ -25,10 +26,13 @@ import { ValidatedDelegatedAuthConfig } from "../ValidatedServerConfig";
  * @param staticOidcClients static client config from config.json
  * @returns clientId if found, otherwise undefined
  */
-const getStaticOidcClientId = (issuer: string, staticOidcClients?: Record<string, string>): string | undefined => {
+const getStaticOidcClientId = (
+    issuer: string,
+    staticOidcClients?: IConfigOptions["oidc_static_clients"],
+): string | undefined => {
     // static_oidc_clients are configured with a trailing slash
     const issuerWithTrailingSlash = issuer.endsWith("/") ? issuer : issuer + "/";
-    return staticOidcClients?.[issuerWithTrailingSlash];
+    return staticOidcClients?.[issuerWithTrailingSlash]?.client_id;
 };
 
 /**
@@ -46,7 +50,7 @@ export const getOidcClientId = async (
     delegatedAuthConfig: ValidatedDelegatedAuthConfig,
     clientName: string,
     baseUrl: string,
-    staticOidcClients?: Record<string, string>,
+    staticOidcClients?: IConfigOptions["oidc_static_clients"],
 ): Promise<string> => {
     const staticClientId = getStaticOidcClientId(delegatedAuthConfig.issuer, staticOidcClients);
     if (staticClientId) {

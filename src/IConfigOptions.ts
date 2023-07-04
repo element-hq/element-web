@@ -201,7 +201,12 @@ export interface IConfigOptions {
      * The issuer URL must have a trailing `/`.
      * OPTIONAL
      */
-    oidc_static_client_ids?: Record<string, string>;
+    oidc_static_clients?: Record<
+        string,
+        {
+            client_id: string;
+        }
+    >;
 }
 
 export interface ISsoRedirectOptions {
