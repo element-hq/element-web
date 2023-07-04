@@ -25,20 +25,19 @@ import {
 } from "matrix-js-sdk/src/interactive-auth";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
-import { UIAResponse } from "matrix-js-sdk/src/@types/uia";
 
 import getEntryComponentForLoginType, { IStageComponent } from "../views/auth/InteractiveAuthEntryComponents";
 import Spinner from "../views/elements/Spinner";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
-type InteractiveAuthCallbackSuccess = (
+type InteractiveAuthCallbackSuccess<T> = (
     success: true,
-    response?: IAuthData,
+    response: T,
     extra?: { emailSid?: string; clientSecret?: string },
 ) => void;
 type InteractiveAuthCallbackFailure = (success: false, response: IAuthData | Error) => void;
-export type InteractiveAuthCallback = InteractiveAuthCallbackSuccess & InteractiveAuthCallbackFailure;
+export type InteractiveAuthCallback<T> = InteractiveAuthCallbackSuccess<T> & InteractiveAuthCallbackFailure;
 
 export interface InteractiveAuthProps<T> {
     // matrix client to use for UI auth requests
@@ -62,7 +61,7 @@ export interface InteractiveAuthProps<T> {
     continueText?: string;
     continueKind?: string;
     // callback
-    makeRequest(auth: IAuthDict | null): Promise<UIAResponse<T>>;
+    makeRequest(auth: IAuthDict | null): Promise<T>;
     // callback called when the auth process has finished,
     // successfully or unsuccessfully.
     // @param {boolean} status True if the operation requiring
@@ -75,7 +74,7 @@ export interface InteractiveAuthProps<T> {
     //            the auth session.
     //      * clientSecret {string} The client secret used in auth
     //            sessions with the ID server.
-    onAuthFinished: InteractiveAuthCallback;
+    onAuthFinished: InteractiveAuthCallback<T>;
     // As js-sdk interactive-auth
     requestEmailToken?(email: string, secret: string, attempt: number, session: string): Promise<{ sid: string }>;
     // Called when the stage changes, or the stage's phase changes. First
@@ -94,7 +93,7 @@ interface IState {
 }
 
 export default class InteractiveAuthComponent<T> extends React.Component<InteractiveAuthProps<T>, IState> {
-    private readonly authLogic: InteractiveAuth;
+    private readonly authLogic: InteractiveAuth<T>;
     private readonly intervalId: number | null = null;
     private readonly stageComponent = createRef<IStageComponent>();
 
@@ -108,7 +107,7 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
             submitButtonEnabled: false,
         };
 
-        this.authLogic = new InteractiveAuth({
+        this.authLogic = new InteractiveAuth<T>({
             authData: this.props.authData,
             doRequest: this.requestCallback,
             busyChanged: this.onBusyChanged,
@@ -211,7 +210,7 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
         );
     };
 
-    private requestCallback = (auth: IAuthDict | null, background: boolean): Promise<UIAResponse<T>> => {
+    private requestCallback = (auth: IAuthDict | null, background: boolean): Promise<T> => {
         // This wrapper just exists because the js-sdk passes a second
         // 'busy' param for backwards compat. This throws the tests off
         // so discard it here.

@@ -2076,6 +2076,7 @@
     "Currently removing messages in %(count)s rooms|one": "Currently removing messages in %(count)s room",
     "%(spaceName)s menu": "%(spaceName)s menu",
     "Home options": "Home options",
+    "Unable to find user by email": "Unable to find user by email",
     "Joining space…": "Joining space…",
     "Joining room…": "Joining room…",
     "Joining…": "Joining…",

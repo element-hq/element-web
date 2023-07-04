@@ -54,7 +54,11 @@ describe("Login", function () {
             disable_custom_urls: true,
             oidc_static_client_ids: oidcStaticClientsConfig,
         });
-        mockClient.login.mockClear().mockResolvedValue({});
+        mockClient.login.mockClear().mockResolvedValue({
+            access_token: "TOKEN",
+            device_id: "IAMADEVICE",
+            user_id: "@user:server",
+        });
         mockClient.loginFlows.mockClear().mockResolvedValue({ flows: [{ type: "m.login.password" }] });
         mocked(createClient).mockImplementation((opts) => {
             mockClient.idBaseUrl = opts.idBaseUrl;

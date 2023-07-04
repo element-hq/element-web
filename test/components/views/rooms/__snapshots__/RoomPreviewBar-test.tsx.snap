@@ -116,10 +116,40 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
   class="mx_RoomPreviewBar_message"
 >
   <h3>
-    This invite to RoomPreviewBar-test-room was sent to test@test.com
+    Do you want to join RoomPreviewBar-test-room?
   </h3>
   <p>
-    Share this email in Settings to receive invites directly in Element.
+    <span
+      class="mx_BaseAvatar"
+      role="presentation"
+    >
+      <span
+        aria-hidden="true"
+        class="mx_BaseAvatar_initial"
+        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
+      >
+        R
+      </span>
+      <img
+        alt=""
+        aria-hidden="true"
+        class="mx_BaseAvatar_image"
+        data-testid="avatar-img"
+        loading="lazy"
+        src="data:image/png;base64,00"
+        style="width: 36px; height: 36px;"
+      />
+    </span>
+  </p>
+  <p>
+    <span>
+      <span
+        class="mx_RoomPreviewBar_inviter"
+      >
+        @inviter:test.com
+      </span>
+       invited you
+    </span>
   </p>
 </div>
 `;

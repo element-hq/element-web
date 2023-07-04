@@ -760,7 +760,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 const lookup = await MatrixClientPeg.safeGet().lookupThreePid("email", term, token);
                 if (term !== this.state.filterText) return; // abandon hope
 
-                if (!lookup || !lookup.mxid) {
+                if (!lookup || !("mxid" in lookup)) {
                     // We weren't able to find anyone - we're already suggesting the plain email
                     // as an alternative, so do nothing.
                     return;

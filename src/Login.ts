@@ -19,7 +19,7 @@ limitations under the License.
 import { createClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
-import { DELEGATED_OIDC_COMPATIBILITY, ILoginFlow, ILoginParams, LoginFlow } from "matrix-js-sdk/src/@types/auth";
+import { DELEGATED_OIDC_COMPATIBILITY, ILoginFlow, LoginFlow, LoginRequest } from "matrix-js-sdk/src/@types/auth";
 
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
@@ -238,7 +238,7 @@ export async function sendLoginRequest(
     hsUrl: string,
     isUrl: string | undefined,
     loginType: string,
-    loginParams: ILoginParams,
+    loginParams: Omit<LoginRequest, "type">,
 ): Promise<IMatrixClientCreds> {
     const client = createClient({
         baseUrl: hsUrl,

@@ -25,7 +25,7 @@ import { RoomPreviewOpts, RoomViewLifecycle } from "@matrix-org/react-sdk-module
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
-import { _t } from "../../../languageHandler";
+import { _t, UserFriendlyError } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import InviteReason from "../elements/InviteReason";
@@ -153,6 +153,9 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                     this.props.invitedEmail,
                     identityAccessToken!,
                 );
+                if (!("mxid" in result)) {
+                    throw new UserFriendlyError("Unable to find user by email");
+                }
                 this.setState({ invitedEmailMxid: result.mxid });
             } catch (err) {
                 this.setState({ threePidFetchError: err as MatrixError });

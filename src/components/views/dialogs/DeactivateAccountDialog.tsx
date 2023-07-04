@@ -18,6 +18,7 @@ limitations under the License.
 import React from "react";
 import { AuthType, IAuthData } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
@@ -109,7 +110,10 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         this.setState({ bodyText, continueText, continueKind });
     };
 
-    private onUIAuthFinished: InteractiveAuthCallback = (success, result) => {
+    private onUIAuthFinished: InteractiveAuthCallback<Awaited<ReturnType<MatrixClient["deactivateAccount"]>>> = (
+        success,
+        result,
+    ) => {
         if (success) return; // great! makeRequest() will be called too.
 
         if (result === ERROR_USER_CANCELLED) {

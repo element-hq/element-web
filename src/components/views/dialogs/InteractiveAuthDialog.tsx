@@ -18,7 +18,8 @@ limitations under the License.
 
 import React from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { AuthType, IAuthData } from "matrix-js-sdk/src/interactive-auth";
+import { AuthType } from "matrix-js-sdk/src/interactive-auth";
+import { UIAResponse } from "matrix-js-sdk/src/@types/uia";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -70,7 +71,7 @@ export interface InteractiveAuthDialogProps<T = unknown>
     // Default is defined in _getDefaultDialogAesthetics()
     aestheticsForStagePhases?: DialogAesthetics;
 
-    onFinished(success?: boolean, result?: IAuthData | Error | null): void;
+    onFinished(success?: boolean, result?: UIAResponse<T> | Error | null): void;
 }
 
 interface IState {
@@ -116,7 +117,7 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
         };
     }
 
-    private onAuthFinished: InteractiveAuthCallback = (success, result): void => {
+    private onAuthFinished: InteractiveAuthCallback<T> = (success, result): void => {
         if (success) {
             this.props.onFinished(true, result);
         } else {

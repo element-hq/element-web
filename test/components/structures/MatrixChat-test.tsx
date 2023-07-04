@@ -418,7 +418,11 @@ describe("<MatrixChat />", () => {
             // this is used to create a temporary client during login
             jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
 
-            loginClient.login.mockClear().mockResolvedValue({});
+            loginClient.login.mockClear().mockResolvedValue({
+                access_token: "TOKEN",
+                device_id: "IMADEVICE",
+                user_id: userId,
+            });
             loginClient.loginFlows.mockClear().mockResolvedValue({ flows: [{ type: "m.login.password" }] });
 
             loginClient.getProfileInfo.mockResolvedValue({

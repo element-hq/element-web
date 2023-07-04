@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { AuthType, createClient, IAuthDict, IAuthData, IInputs, MatrixError } from "matrix-js-sdk/src/matrix";
+import { AuthType, createClient, IAuthData, IAuthDict, IInputs, MatrixError } from "matrix-js-sdk/src/matrix";
 import React, { Fragment, ReactNode } from "react";
 import { IRegisterRequestParams, IRequestTokenResponse, MatrixClient } from "matrix-js-sdk/src/client";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ISSOFlow, SSOAction } from "matrix-js-sdk/src/@types/auth";
+import { RegisterResponse } from "matrix-js-sdk/src/@types/registration";
 
 import { _t } from "../../../languageHandler";
 import { adminContactStrings, messageForResourceLimitError, resourceLimitStrings } from "../../../utils/ErrorUtils";
@@ -305,7 +306,7 @@ export default class Registration extends React.Component<IProps, IState> {
         );
     };
 
-    private onUIAuthFinished: InteractiveAuthCallback = async (success, response): Promise<void> => {
+    private onUIAuthFinished: InteractiveAuthCallback<RegisterResponse> = async (success, response): Promise<void> => {
         if (!this.state.matrixClient) throw new Error("Matrix client has not yet been loaded");
 
         debuglog("Registration: ui authentication finished: ", { success, response });
@@ -329,8 +330,8 @@ export default class Registration extends React.Component<IProps, IState> {
                         <p>{errorDetail}</p>
                     </div>
                 );
-            } else if ((response as IAuthData).required_stages?.includes(AuthType.Msisdn)) {
-                const flows = (response as IAuthData).available_flows ?? [];
+            } else if ((response as IAuthData).flows?.some((flow) => flow.stages.includes(AuthType.Msisdn))) {
+                const flows = (response as IAuthData).flows ?? [];
                 const msisdnAvailable = flows.some((flow) => flow.stages.includes(AuthType.Msisdn));
                 if (!msisdnAvailable) {
                     errorText = _t("This server does not support authentication with a phone number.");
@@ -349,15 +350,15 @@ export default class Registration extends React.Component<IProps, IState> {
             return;
         }
 
-        const userId = (response as IAuthData).user_id;
-        const accessToken = (response as IAuthData).access_token;
+        const userId = (response as RegisterResponse).user_id;
+        const accessToken = (response as RegisterResponse).access_token;
         if (!userId || !accessToken) throw new Error("Registration failed");
 
         MatrixClientPeg.setJustRegisteredUserId(userId);
 
         const newState: Partial<IState> = {
             doingUIAuth: false,
-            registeredUsername: (response as IAuthData).user_id,
+            registeredUsername: userId,
             differentLoggedInUserId: undefined,
             completedNoSignin: false,
             // we're still busy until we get unmounted: don't show the registration form again
@@ -370,10 +371,8 @@ export default class Registration extends React.Component<IProps, IState> {
         // starting the registration process. This isn't perfect since it's possible
         // the user had a separate guest session they didn't actually mean to replace.
         const [sessionOwner, sessionIsGuest] = await Lifecycle.getStoredSessionOwner();
-        if (sessionOwner && !sessionIsGuest && sessionOwner !== (response as IAuthData).user_id) {
-            logger.log(
-                `Found a session for ${sessionOwner} but ${(response as IAuthData).user_id} has just registered.`,
-            );
+        if (sessionOwner && !sessionIsGuest && sessionOwner !== userId) {
+            logger.log(`Found a session for ${sessionOwner} but ${userId} has just registered.`);
             newState.differentLoggedInUserId = sessionOwner;
         }
 
@@ -390,7 +389,7 @@ export default class Registration extends React.Component<IProps, IState> {
         // as the client that started registration may be gone by the time we've verified the email, and only the client
         // that verified the email is guaranteed to exist, we'll always do the login in that client.
         const hasEmail = Boolean(this.state.formVals.email);
-        const hasAccessToken = Boolean((response as IAuthData).access_token);
+        const hasAccessToken = Boolean(accessToken);
         debuglog("Registration: ui auth finished:", { hasEmail, hasAccessToken });
         // don’t log in if we found a session for a different user
         if (!hasEmail && hasAccessToken && !newState.differentLoggedInUserId) {
@@ -399,7 +398,7 @@ export default class Registration extends React.Component<IProps, IState> {
             await this.props.onLoggedIn(
                 {
                     userId,
-                    deviceId: (response as IAuthData).device_id,
+                    deviceId: (response as RegisterResponse).device_id!,
                     homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
                     identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
                     accessToken,
@@ -461,7 +460,7 @@ export default class Registration extends React.Component<IProps, IState> {
         });
     };
 
-    private makeRegisterRequest = (auth: IAuthDict | null): Promise<IAuthData> => {
+    private makeRegisterRequest = (auth: IAuthDict | null): Promise<RegisterResponse> => {
         if (!this.state.matrixClient) throw new Error("Matrix client has not yet been loaded");
 
         const registerParams: IRegisterRequestParams = {

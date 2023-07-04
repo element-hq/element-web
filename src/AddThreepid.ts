@@ -236,7 +236,7 @@ export default class AddThreepid {
                                 continueKind: "primary",
                             },
                         };
-                        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+                        const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
                             title: _t("Add Email Address"),
                             matrixClient: this.matrixClient,
                             authData: err.data,
@@ -357,7 +357,7 @@ export default class AddThreepid {
                             continueKind: "primary",
                         },
                     };
-                    const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+                    const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
                         title: _t("Add Phone Number"),
                         matrixClient: this.matrixClient,
                         authData: err.data,
