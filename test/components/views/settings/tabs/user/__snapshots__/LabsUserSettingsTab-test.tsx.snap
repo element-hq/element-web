@@ -5,7 +5,7 @@ exports[`<LabsUserSettingsTab /> renders settings marked as beta as beta cards 1
   class="mx_SettingsSection"
 >
   <h2
-    class="mx_Heading_h2"
+    class="mx_Heading_h3"
   >
     Upcoming features
   </h2>

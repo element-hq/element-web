@@ -43,7 +43,13 @@ export interface SettingsSectionProps extends HTMLAttributes<HTMLDivElement> {
  */
 export const SettingsSection: React.FC<SettingsSectionProps> = ({ className, heading, children, ...rest }) => (
     <div {...rest} className={classnames("mx_SettingsSection", className)}>
-        {typeof heading === "string" ? <Heading size="2">{heading}</Heading> : <>{heading}</>}
+        {typeof heading === "string" ? (
+            <Heading as="h2" size="3">
+                {heading}
+            </Heading>
+        ) : (
+            <>{heading}</>
+        )}
         <div className="mx_SettingsSection_subSections">{children}</div>
     </div>
 );

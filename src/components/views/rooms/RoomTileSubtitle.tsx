@@ -57,7 +57,7 @@ export const RoomTileSubtitle: React.FC<Props> = ({
             "mx_RoomTile_subtitle--thread-reply": messagePreview.isThreadReply,
         });
 
-        const icon = messagePreview.isThreadReply ? <ThreadIcon className="mx_Icon mx_Icon_16" /> : null;
+        const icon = messagePreview.isThreadReply ? <ThreadIcon className="mx_Icon mx_Icon_12" /> : null;
 
         return (
             <div className={className} id={messagePreviewId(roomId)} title={messagePreview.text}>

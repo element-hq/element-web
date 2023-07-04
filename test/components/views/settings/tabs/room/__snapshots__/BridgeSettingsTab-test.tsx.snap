@@ -12,7 +12,7 @@ exports[`<BridgeSettingsTab /> renders when room is bridging messages 1`] = `
         class="mx_SettingsSection"
       >
         <h2
-          class="mx_Heading_h2"
+          class="mx_Heading_h3"
         >
           Bridges
         </h2>
@@ -101,7 +101,7 @@ exports[`<BridgeSettingsTab /> renders when room is not bridging messages to any
         class="mx_SettingsSection"
       >
         <h2
-          class="mx_Heading_h2"
+          class="mx_Heading_h3"
         >
           Bridges
         </h2>

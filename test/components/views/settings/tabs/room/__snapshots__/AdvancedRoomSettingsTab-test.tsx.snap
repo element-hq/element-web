@@ -12,7 +12,7 @@ exports[`AdvancedRoomSettingsTab should render as expected 1`] = `
         class="mx_SettingsSection"
       >
         <h2
-          class="mx_Heading_h2"
+          class="mx_Heading_h3"
         >
           Advanced
         </h2>

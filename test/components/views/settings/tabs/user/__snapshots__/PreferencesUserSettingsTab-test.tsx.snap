@@ -13,7 +13,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
         class="mx_SettingsSection"
       >
         <h2
-          class="mx_Heading_h2"
+          class="mx_Heading_h3"
         >
           Preferences
         </h2>

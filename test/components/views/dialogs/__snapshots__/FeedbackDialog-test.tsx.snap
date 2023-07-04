@@ -18,7 +18,7 @@ exports[`FeedbackDialog should respect feedback config 1`] = `
       class="mx_Dialog_header"
     >
       <h2
-        class="mx_Heading_h4 mx_Dialog_title"
+        class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
         Feedback

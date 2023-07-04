@@ -18,7 +18,7 @@ exports[`ManualDeviceKeyVerificationDialog should display the device 1`] = `
       class="mx_Dialog_header mx_Dialog_headerWithCancel"
     >
       <h2
-        class="mx_Heading_h4 mx_Dialog_title"
+        class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
         Verify session
@@ -133,7 +133,7 @@ exports[`ManualDeviceKeyVerificationDialog should display the device of another 
       class="mx_Dialog_header mx_Dialog_headerWithCancel"
     >
       <h2
-        class="mx_Heading_h4 mx_Dialog_title"
+        class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
         Verify session

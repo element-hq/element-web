@@ -75,7 +75,7 @@ describe("<UserSettingsDialog />", () => {
     const getActiveTabLabel = (container: Element) =>
         container.querySelector(".mx_TabbedView_tabLabel_active")?.textContent;
     const getActiveTabHeading = (container: Element) =>
-        container.querySelector(".mx_SettingsSection .mx_Heading_h2")?.textContent;
+        container.querySelector(".mx_SettingsSection .mx_Heading_h3")?.textContent;
 
     it("should render general settings tab when no initialTabId", () => {
         const { container } = render(getComponent());

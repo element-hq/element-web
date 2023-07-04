@@ -9,7 +9,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
       class="mx_SettingsSection"
     >
       <h2
-        class="mx_Heading_h2"
+        class="mx_Heading_h3"
       >
         Notifications
       </h2>
@@ -728,7 +728,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
       class="mx_SettingsSection"
     >
       <h2
-        class="mx_Heading_h2"
+        class="mx_Heading_h3"
       >
         Notifications
       </h2>

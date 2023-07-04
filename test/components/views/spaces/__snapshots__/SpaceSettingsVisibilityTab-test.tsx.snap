@@ -27,7 +27,7 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
         class="mx_SettingsSection"
       >
         <h2
-          class="mx_Heading_h2"
+          class="mx_Heading_h3"
         >
           Visibility
         </h2>

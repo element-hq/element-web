@@ -17,7 +17,7 @@ exports[`CreateKeyBackupDialog should display the error message when backup crea
       class="mx_Dialog_header"
     >
       <h2
-        class="mx_Heading_h4 mx_Dialog_title"
+        class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
         Starting backup…
@@ -77,7 +77,7 @@ exports[`CreateKeyBackupDialog should display the spinner when creating backup 1
       class="mx_Dialog_header"
     >
       <h2
-        class="mx_Heading_h4 mx_Dialog_title"
+        class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
         Starting backup…
@@ -124,7 +124,7 @@ exports[`CreateKeyBackupDialog should display the success dialog when the key ba
       class="mx_Dialog_header mx_Dialog_headerWithCancel"
     >
       <h2
-        class="mx_Heading_h4 mx_Dialog_title"
+        class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
         Success!
