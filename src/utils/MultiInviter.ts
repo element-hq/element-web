@@ -178,7 +178,7 @@ export default class MultiInviter {
                 } catch (err) {
                     // The error handling during the invitation process covers any API.
                     // Some errors must to me mapped from profile API errors to more specific ones to avoid collisions.
-                    switch (err.errcode) {
+                    switch (err instanceof MatrixError ? err.errcode : err) {
                         case "M_FORBIDDEN":
                             throw new MatrixError({ errcode: "M_PROFILE_UNDISCLOSED" });
                         case "M_NOT_FOUND":

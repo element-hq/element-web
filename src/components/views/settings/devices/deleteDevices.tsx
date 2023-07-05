@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { IAuthDict, IAuthData } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from "../../../../languageHandler";
@@ -42,7 +42,7 @@ export const deleteDevicesWithInteractiveAuth = async (
         // no interactive auth needed
         onFinished(true, undefined);
     } catch (error) {
-        if (error.httpStatus !== 401 || !error.data?.flows) {
+        if (!(error instanceof MatrixError) || error.httpStatus !== 401 || !error.data?.flows) {
             // doesn't look like an interactive-auth failure
             throw error;
         }
@@ -73,7 +73,7 @@ export const deleteDevicesWithInteractiveAuth = async (
         Modal.createDialog(InteractiveAuthDialog, {
             title: _t("Authentication"),
             matrixClient: matrixClient,
-            authData: error.data,
+            authData: error.data as IAuthData,
             onFinished,
             makeRequest: makeDeleteRequest(matrixClient, deviceIds),
             aestheticsForStagePhases: {

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { createRef, KeyboardEventHandler } from "react";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import withValidation, { IFieldState, IValidationResult } from "./Validation";
@@ -209,7 +210,7 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
                               // any server error code will do,
                               // either it M_NOT_FOUND or the alias is invalid somehow,
                               // in which case we don't want to show the invalid message
-                              return !!err.errcode;
+                              return err instanceof MatrixError;
                           }
                       },
                       valid: () => _t("This address is available to use"),

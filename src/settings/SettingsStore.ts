@@ -666,7 +666,9 @@ export default class SettingsStore {
                     logger.log(`---     ${handlerName}@${roomId || "<no_room>"} = ${JSON.stringify(value)}`);
                 } catch (e) {
                     logger.log(
-                        `---     ${handler.constructor.name}@${roomId || "<no_room>"} THREW ERROR: ${e.message}`,
+                        `---     ${handler.constructor.name}@${roomId || "<no_room>"} THREW ERROR: ${
+                            e instanceof Error ? e.message : e
+                        }`,
                     );
                     logger.error(e);
                 }
@@ -676,7 +678,11 @@ export default class SettingsStore {
                         const value = handler.getValue(settingName, null);
                         logger.log(`---     ${handlerName}@<no_room> = ${JSON.stringify(value)}`);
                     } catch (e) {
-                        logger.log(`---     ${handler.constructor.name}@<no_room> THREW ERROR: ${e.message}`);
+                        logger.log(
+                            `---     ${handler.constructor.name}@<no_room> THREW ERROR: ${
+                                e instanceof Error ? e.message : e
+                            }`,
+                        );
                         logger.error(e);
                     }
                 }
@@ -689,7 +695,11 @@ export default class SettingsStore {
                 const value = SettingsStore.getValue(settingName, roomId);
                 logger.log(`---     SettingsStore#generic@${roomId || "<no_room>"}  = ${JSON.stringify(value)}`);
             } catch (e) {
-                logger.log(`---     SettingsStore#generic@${roomId || "<no_room>"} THREW ERROR: ${e.message}`);
+                logger.log(
+                    `---     SettingsStore#generic@${roomId || "<no_room>"} THREW ERROR: ${
+                        e instanceof Error ? e.message : e
+                    }`,
+                );
                 logger.error(e);
             }
 
@@ -698,7 +708,9 @@ export default class SettingsStore {
                     const value = SettingsStore.getValue(settingName, null);
                     logger.log(`---     SettingsStore#generic@<no_room>  = ${JSON.stringify(value)}`);
                 } catch (e) {
-                    logger.log(`---     SettingsStore#generic@$<no_room> THREW ERROR: ${e.message}`);
+                    logger.log(
+                        `---     SettingsStore#generic@$<no_room> THREW ERROR: ${e instanceof Error ? e.message : e}`,
+                    );
                     logger.error(e);
                 }
             }
@@ -708,7 +720,11 @@ export default class SettingsStore {
                     const value = SettingsStore.getValueAt(level, settingName, roomId);
                     logger.log(`---     SettingsStore#${level}@${roomId || "<no_room>"} = ${JSON.stringify(value)}`);
                 } catch (e) {
-                    logger.log(`---     SettingsStore#${level}@${roomId || "<no_room>"} THREW ERROR: ${e.message}`);
+                    logger.log(
+                        `---     SettingsStore#${level}@${roomId || "<no_room>"} THREW ERROR: ${
+                            e instanceof Error ? e.message : e
+                        }`,
+                    );
                     logger.error(e);
                 }
 
@@ -717,7 +733,11 @@ export default class SettingsStore {
                         const value = SettingsStore.getValueAt(level, settingName, null);
                         logger.log(`---     SettingsStore#${level}@<no_room> = ${JSON.stringify(value)}`);
                     } catch (e) {
-                        logger.log(`---     SettingsStore#${level}@$<no_room> THREW ERROR: ${e.message}`);
+                        logger.log(
+                            `---     SettingsStore#${level}@$<no_room> THREW ERROR: ${
+                                e instanceof Error ? e.message : e
+                            }`,
+                        );
                         logger.error(e);
                     }
                 }

@@ -1105,7 +1105,7 @@ export const Commands = [
             try {
                 cli.forceDiscardSession(roomId);
             } catch (e) {
-                return reject(e.message);
+                return reject(e instanceof Error ? e.message : e);
             }
             return success();
         },
@@ -1134,7 +1134,7 @@ export const Commands = [
                     }),
                 );
             } catch (e) {
-                return reject(e.message);
+                return reject(e instanceof Error ? e.message : e);
             }
         },
         category: CommandCategories.advanced,

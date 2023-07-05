@@ -131,7 +131,7 @@ describe("InteractiveAuthDialog", function () {
             const successfulResult = { test: 1 };
             const makeRequest = jest
                 .fn()
-                .mockRejectedValueOnce(new MatrixError({ data: { flows: [{ stages: ["m.login.sso"] }] } }, 401))
+                .mockRejectedValueOnce(new MatrixError({ flows: [{ stages: ["m.login.sso"] }] }, 401))
                 .mockResolvedValue(successfulResult);
 
             mockClient.credentials = { userId: "@user:id" };

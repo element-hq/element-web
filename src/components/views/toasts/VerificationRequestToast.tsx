@@ -147,7 +147,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
             }
             await request.accept();
         } catch (err) {
-            logger.error(err.message);
+            logger.error("Failed to accept verification request", err);
         }
     };
 

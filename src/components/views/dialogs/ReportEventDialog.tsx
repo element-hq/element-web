@@ -272,7 +272,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             logger.error(e);
             this.setState({
                 busy: false,
-                err: e.message,
+                err: e instanceof Error ? e.message : String(e),
             });
         }
     };

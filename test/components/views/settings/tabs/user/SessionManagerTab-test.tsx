@@ -31,6 +31,7 @@ import {
     UNSTABLE_MSC3882_CAPABILITY,
     CryptoApi,
     DeviceVerificationStatus,
+    MatrixError,
 } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
@@ -722,10 +723,12 @@ describe("<SessionManagerTab />", () => {
         });
 
         describe("other devices", () => {
-            const interactiveAuthError = {
-                httpStatus: 401,
-                data: { flows: [{ stages: ["m.login.password"] }] },
-            };
+            const interactiveAuthError = new MatrixError(
+                {
+                    flows: [{ stages: ["m.login.password"] }],
+                },
+                401,
+            );
 
             beforeEach(() => {
                 mockClient.deleteMultipleDevices.mockReset();

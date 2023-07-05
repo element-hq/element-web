@@ -92,7 +92,7 @@ export default class LazyRenderList<T = any> extends React.Component<IProps<T>, 
         this.state = LazyRenderList.getDerivedStateFromProps(props, {} as IState) as IState;
     }
 
-    public static getDerivedStateFromProps(props: IProps<unknown>, state: IState): Partial<IState> | null {
+    public static getDerivedStateFromProps<T>(props: IProps<T>, state: IState): Partial<IState> | null {
         const range = LazyRenderList.getVisibleRangeFromProps(props);
         const intersectRange = range.expand(props.overflowMargin);
         const renderRange = range.expand(props.overflowItems);
@@ -105,7 +105,7 @@ export default class LazyRenderList<T = any> extends React.Component<IProps<T>, 
         return null;
     }
 
-    private static getVisibleRangeFromProps(props: IProps<unknown>): ItemRange {
+    private static getVisibleRangeFromProps<T>(props: IProps<T>): ItemRange {
         const { items, itemHeight, scrollTop, height } = props;
         const length = items ? items.length : 0;
         const topCount = Math.min(Math.max(0, Math.floor(scrollTop / itemHeight)), length);

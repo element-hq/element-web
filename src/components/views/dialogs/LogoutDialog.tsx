@@ -39,7 +39,6 @@ interface IState {
     shouldLoadBackupStatus: boolean;
     loading: boolean;
     backupInfo: IKeyBackupInfo | null;
-    error?: string;
 }
 
 export default class LogoutDialog extends React.Component<IProps, IState> {
@@ -75,7 +74,6 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
             logger.log("Unable to fetch key backup status", e);
             this.setState({
                 loading: false,
-                error: e,
             });
         }
     }

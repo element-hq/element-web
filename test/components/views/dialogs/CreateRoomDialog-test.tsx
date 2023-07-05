@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { Preset, Visibility } from "matrix-js-sdk/src/matrix";
+import { MatrixError, Preset, Visibility } from "matrix-js-sdk/src/matrix";
 
 import CreateRoomDialog from "../../../../src/components/views/dialogs/CreateRoomDialog";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
@@ -29,7 +29,7 @@ describe("<CreateRoomDialog />", () => {
         getClientWellKnown: jest.fn(),
         doesServerForceEncryptionForPreset: jest.fn(),
         // make every alias available
-        getRoomIdForAlias: jest.fn().mockRejectedValue({ errcode: "M_NOT_FOUND" }),
+        getRoomIdForAlias: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_NOT_FOUND" })),
     });
 
     const getE2eeEnableToggleInputElement = () => screen.getByLabelText("Enable end-to-end encryption");

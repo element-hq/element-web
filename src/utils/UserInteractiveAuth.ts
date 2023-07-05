@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IAuthDict } from "matrix-js-sdk/src/interactive-auth";
+import { AuthDict } from "matrix-js-sdk/src/interactive-auth";
 import { UIAResponse } from "matrix-js-sdk/src/@types/uia";
 
 import Modal from "../Modal";
 import InteractiveAuthDialog, { InteractiveAuthDialogProps } from "../components/views/dialogs/InteractiveAuthDialog";
 
-type FunctionWithUIA<R, A> = (auth?: IAuthDict | null, ...args: A[]) => Promise<UIAResponse<R>>;
+type FunctionWithUIA<R, A> = (auth?: AuthDict, ...args: A[]) => Promise<UIAResponse<R>>;
 
 export function wrapRequestWithDialog<R, A = any>(
     requestFunction: FunctionWithUIA<R, A>,
@@ -29,7 +29,7 @@ export function wrapRequestWithDialog<R, A = any>(
     return async function (...args): Promise<R> {
         return new Promise((resolve, reject) => {
             const boundFunction = requestFunction.bind(opts.matrixClient) as FunctionWithUIA<R, A>;
-            boundFunction(null, ...args)
+            boundFunction(undefined, ...args)
                 .then((res) => resolve(res as R))
                 .catch((error) => {
                     if (error.httpStatus !== 401 || !error.data?.flows) {
@@ -40,7 +40,7 @@ export function wrapRequestWithDialog<R, A = any>(
                     Modal.createDialog(InteractiveAuthDialog, {
                         ...opts,
                         authData: error.data,
-                        makeRequest: (authData: IAuthDict | null) => boundFunction(authData, ...args),
+                        makeRequest: (authData: AuthDict) => boundFunction(authData, ...args),
                         onFinished: (success, result) => {
                             if (success) {
                                 resolve(result as R);
