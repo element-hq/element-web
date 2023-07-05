@@ -22,7 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { linkify } from "./linkify-matrix";
 
-const ALLOWED_HTML_TAGS = ["sub", "sup", "del", "u"];
+const ALLOWED_HTML_TAGS = ["sub", "sup", "del", "u", "br", "br/"];
 
 // These types of node are definitely text
 const TEXT_NODES = ["text", "softbreak", "linebreak", "paragraph", "document"];
@@ -36,8 +36,8 @@ function isAllowedHtmlTag(node: commonmark.Node): boolean {
         return true;
     }
 
-    // Regex won't work for tags with attrs, but we only
-    // allow <del> anyway.
+    // Regex won't work for tags with attrs, but the tags we allow
+    // shouldn't really have any anyway.
     const matches = /^<\/?(.*)>$/.exec(node.literal);
     if (matches && matches.length == 2) {
         const tag = matches[1];

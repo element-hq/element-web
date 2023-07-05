@@ -63,6 +63,12 @@ describe("editor/serialize", function () {
             const html = htmlSerializeIfNeeded(model, {});
             expect(html).toBe('<a href="https://matrix.to/#/@user:server">Displayname]</a>');
         });
+        it("displaynames containing a newline work", function () {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.userPill("Display\nname", "@user:server")], pc);
+            const html = htmlSerializeIfNeeded(model, {});
+            expect(html).toBe('<a href="https://matrix.to/#/@user:server">Display<br>name</a>');
+        });
         it("escaped markdown should not retain backslashes", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("\\*hello\\* world")], pc);
@@ -96,7 +102,6 @@ describe("editor/serialize", function () {
             const html = htmlSerializeIfNeeded(model, { useMarkdown: false });
             expect(html).toBe("\\*hello\\* world &lt; hey world!");
         });
-
         it("plaintext remains plaintext even when forcing html", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("hello world")], pc);

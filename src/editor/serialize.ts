@@ -36,20 +36,20 @@ export function mdSerialize(model: EditorModel): string {
             case Type.PillCandidate:
             case Type.AtRoomPill:
                 return html + part.text;
-            case Type.RoomPill:
+            case Type.RoomPill: {
+                const url = makeGenericPermalink(part.resourceId);
+                // Escape square brackets and backslashes
                 // Here we use the resourceId for compatibility with non-rich text clients
                 // See https://github.com/vector-im/element-web/issues/16660
-                return (
-                    html +
-                    `[${part.resourceId.replace(/[[\\\]]/g, (c) => "\\" + c)}](${makeGenericPermalink(
-                        part.resourceId,
-                    )})`
-                );
-            case Type.UserPill:
-                return (
-                    html +
-                    `[${part.text.replace(/[[\\\]]/g, (c) => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`
-                );
+                const title = part.resourceId.replace(/[[\\\]]/g, (c) => "\\" + c);
+                return html + `[${title}](${url})`;
+            }
+            case Type.UserPill: {
+                const url = makeGenericPermalink(part.resourceId);
+                // Escape square brackets and backslashes; convert newlines to HTML
+                const title = part.text.replace(/[[\\\]]/g, (c) => "\\" + c).replace(/\n/g, "<br>");
+                return html + `[${title}](${url})`;
+            }
         }
     }, "");
 }
