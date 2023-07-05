@@ -473,6 +473,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 value={this.state.password}
                 onChange={this.onPasswordChange}
                 onValidate={this.onPasswordValidate}
+                userInputs={[this.state.username]}
             />
         );
     }

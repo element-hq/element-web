@@ -31,6 +31,8 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     minScore: 0 | 1 | 2 | 3 | 4;
     value: string;
     fieldRef?: RefCallback<Field> | RefObject<Field>;
+    // Additional strings such as a username used to catch bad passwords
+    userInputs?: string[];
 
     label: string;
     labelEnterPassword: string;
@@ -57,7 +59,7 @@ class PassphraseField extends PureComponent<IProps> {
         deriveData: async ({ value }): Promise<zxcvbn.ZXCVBNResult | null> => {
             if (!value) return null;
             const { scorePassword } = await import("../../../utils/PasswordScorer");
-            return scorePassword(MatrixClientPeg.get(), value);
+            return scorePassword(MatrixClientPeg.get(), value, this.props.userInputs);
         },
         rules: [
             {

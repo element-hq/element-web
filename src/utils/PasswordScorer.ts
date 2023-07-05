@@ -18,6 +18,7 @@ import zxcvbn, { ZXCVBNFeedbackWarning } from "zxcvbn";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td } from "../languageHandler";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 const ZXCVBN_USER_INPUTS = ["riot", "matrix"];
 
@@ -59,20 +60,32 @@ _td("Short keyboard patterns are easy to guess");
  *
  * @param {string} password Password to score
  * @param matrixClient the client of the logged in user, if any
+ * @param userInputs additional strings such as the user's name which should be considered a bad password component
  * @returns {object} Score result with `score` and `feedback` properties
  */
-export function scorePassword(matrixClient: MatrixClient | null, password: string): zxcvbn.ZXCVBNResult | null {
+export function scorePassword(
+    matrixClient: MatrixClient | null,
+    password: string,
+    userInputs: string[] = [],
+): zxcvbn.ZXCVBNResult | null {
     if (password.length === 0) return null;
 
-    const userInputs = ZXCVBN_USER_INPUTS.slice();
+    const inputs = [...userInputs, ...ZXCVBN_USER_INPUTS];
     if (matrixClient) {
-        userInputs.push(matrixClient.getUserIdLocalpart()!);
+        inputs.push(matrixClient.getUserIdLocalpart()!);
     }
 
-    let zxcvbnResult = zxcvbn(password, userInputs);
+    try {
+        const domain = MatrixClientPeg.getHomeserverName();
+        inputs.push(domain);
+    } catch {
+        // This is fine
+    }
+
+    let zxcvbnResult = zxcvbn(password, inputs);
     // Work around https://github.com/dropbox/zxcvbn/issues/216
     if (password.includes(" ")) {
-        const resultNoSpaces = zxcvbn(password.replace(/ /g, ""), userInputs);
+        const resultNoSpaces = zxcvbn(password.replace(/ /g, ""), inputs);
         if (resultNoSpaces.score < zxcvbnResult.score) zxcvbnResult = resultNoSpaces;
     }
 
