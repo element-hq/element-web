@@ -446,6 +446,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         return (
             <div className="mx_UserMenu">
                 <ContextMenuButton
+                    className="mx_UserMenu_contextMenuButton"
                     onClick={this.onOpenMenuClick}
                     inputRef={this.buttonRef}
                     label={_t("User menu")}
