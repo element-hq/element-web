@@ -94,7 +94,11 @@ export default class BaseDialog extends React.Component<IProps> {
     public constructor(props: IProps) {
         super(props);
 
-        this.matrixClient = MatrixClientPeg.get();
+        // XXX: The contract on MatrixClientContext says it is only available within a LoggedInView subtree,
+        // given that modals function outside the MatrixChat React tree this simulates that. We don't want to
+        // use safeGet as it throwing would mean we cannot use modals whilst the user isn't logged in.
+        // The longer term solution is to move our ModalManager into the React tree to inherit contexts properly.
+        this.matrixClient = MatrixClientPeg.get()!;
     }
 
     private onKeyDown = (e: KeyboardEvent | React.KeyboardEvent): void => {

@@ -7,7 +7,7 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "target": "es2016",
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "noUnusedLocals": true,
         "sourceMap": false,
         "outDir": "./lib",
@@ -16,6 +16,7 @@
         "lib": ["es2020", "dom", "dom.iterable"],
         "alwaysStrict": true,
         "strictBindCallApply": true,
+        "strictNullChecks": true,
         "noImplicitThis": true
     },
     "include": [
