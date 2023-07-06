@@ -15,23 +15,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
+import * as React from "react";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
 export default class VectorAuthHeaderLogo extends React.PureComponent {
-    static replaces = 'AuthHeaderLogo';
-
-    render() {
-        const brandingConfig = SdkConfig.get().branding;
-        let logoUrl = "themes/element/img/logos/element-logo.svg";
-        if (brandingConfig && brandingConfig.authHeaderLogoUrl) {
-            logoUrl = brandingConfig.authHeaderLogoUrl;
-        }
+    public render(): React.ReactElement {
+        const brandingConfig = SdkConfig.getObject("branding");
+        const logoUrl = brandingConfig?.get("auth_header_logo_url") ?? "themes/element/img/logos/element-logo.svg";
 
         return (
-            <div className="mx_AuthHeaderLogo">
+            <aside className="mx_AuthHeaderLogo">
                 <img src={logoUrl} alt="Element" />
-            </div>
+            </aside>
         );
     }
 }

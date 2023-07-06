@@ -1,5 +1,5 @@
 # Builder
-FROM node:14-buster as builder
+FROM --platform=$BUILDPLATFORM node:20-bullseye as builder
 
 # Support custom branches of the react-sdk and js-sdk. This also helps us build
 # images of element-web develop.
@@ -15,23 +15,17 @@ WORKDIR /src
 
 COPY . /src
 RUN dos2unix /src/scripts/docker-link-repos.sh && bash /src/scripts/docker-link-repos.sh
-RUN yarn --network-timeout=100000 install
-RUN yarn build
+RUN yarn --network-timeout=200000 install
+
+RUN dos2unix /src/scripts/docker-package.sh && bash /src/scripts/docker-package.sh
 
 # Copy the config now so that we don't create another layer in the app image
 RUN cp /src/config.sample.json /src/webapp/config.json
 
-# Ensure we populate the version file
-RUN dos2unix /src/scripts/docker-write-version.sh && bash /src/scripts/docker-write-version.sh
-
-
 # App
-FROM nginx:alpine
+FROM nginx:alpine-slim
 
 COPY --from=builder /src/webapp /app
-
-# Insert wasm type into Nginx mime.types file so they load correctly.
-RUN sed -i '3i\ \ \ \ application/wasm wasm\;' /etc/nginx/mime.types
 
 # Override default nginx config
 COPY /nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf

@@ -1,0 +1,161 @@
+name: Move labelled issues to correct projects
+
+on:
+    issues:
+        types: [labeled]
+
+jobs:
+    apply_Z-Labs_label:
+        name: Add Z-Labs label for features behind labs flags
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-Maths') ||
+            contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
+            contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+            contains(github.event.issue.labels.*.name, 'Z-IA') ||
+            contains(github.event.issue.labels.*.name, 'A-Jump-To-Date ') ||
+            contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
+            contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
+            contains(github.event.issue.labels.*.name, 'A-Tags') ||
+            contains(github.event.issue.labels.*.name, 'A-Video-Rooms') ||
+            contains(github.event.issue.labels.*.name, 'A-Message-Starring') ||
+            contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor') ||
+            contains(github.event.issue.labels.*.name, 'A-Element-Call')
+        steps:
+            - uses: actions/github-script@v6
+              with:
+                  script: |
+                      github.rest.issues.addLabels({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        labels: ['Z-Labs']
+                      })
+
+    apply_Help-Wanted_label:
+        name: Add "Help Wanted" label to all "good first issue" and Hacktoberfest
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'good first issue') ||
+            contains(github.event.issue.labels.*.name, 'Hacktoberfest')
+        steps:
+            - uses: actions/github-script@v6
+              with:
+                  script: |
+                      github.rest.issues.addLabels({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        labels: ['Help Wanted']
+                      })
+
+    move_needs_info_issues:
+        name: X-Needs-Info issues to Need info column on triage board
+        runs-on: ubuntu-latest
+        steps:
+            - uses: konradpabjan/move-labeled-or-milestoned-issue@190352295fe309fcb113b49193bc81d9aaa9cb01
+              with:
+                  action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
+                  project-url: "https://github.com/vector-im/element-web/projects/27"
+                  column-name: "Need info"
+                  label-name: "X-Needs-Info"
+
+    add_priority_design_issues_to_project:
+        name: P1 X-Needs-Design to Design project board
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
+            (contains(github.event.issue.labels.*.name, 'S-Critical') &&
+             (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+              contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
+             contains(github.event.issue.labels.*.name, 'S-Major') &&
+             contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+             contains(github.event.issue.labels.*.name, 'A11y'))
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/vector-im/projects/18
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    add_product_issues:
+        name: X-Needs-Product to product project board
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'X-Needs-Product')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/vector-im/projects/28
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    Search_issues_to_board:
+        name: Search issues to project board
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-New-Search-Experience')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/vector-im/projects/48
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    ps_features1:
+        name: Add labelled issues to PS features team 1
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-Polls') ||
+            contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+            (contains(github.event.issue.labels.*.name, 'A-Voice-Messages') &&
+              !contains(github.event.issue.labels.*.name, 'A-Broadcast')) ||
+            (contains(github.event.issue.labels.*.name, 'A-Session-Mgmt') &&
+              contains(github.event.issue.labels.*.name, 'A-User-Settings'))
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/vector-im/projects/56
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    ps_features2:
+        name: Add labelled issues to PS features team 2
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-DM-Start') ||
+            contains(github.event.issue.labels.*.name, 'A-Broadcast')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/vector-im/projects/58
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    ps_features3:
+        name: Add labelled issues to PS features team 3
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/vector-im/projects/57
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    voip:
+        name: Add labelled issues to VoIP project board
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'Team: VoIP')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/vector-im/projects/41
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    verticals_feature:
+        name: Add labelled issues to Verticals Feature project
+        runs-on: ubuntu-latest
+        if: >
+            contains(github.event.issue.labels.*.name, 'Team: Verticals Feature')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/vector-im/projects/57
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
