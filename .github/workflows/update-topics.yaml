@@ -51,6 +51,7 @@ jobs:
 
                           const data = await res.json();
                           const topic = data.topic.replace(regex, RELEASE_TOPIC);
+                          if (topic === data.topic) return; // nothing to do
 
                           await fetch(apiUrl, {
                               method: "PUT",
