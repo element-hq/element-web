@@ -433,6 +433,15 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         controller: new ReloadOnChangeController(),
         default: false,
     },
+    "feature_allow_screen_share_only_mode": {
+        isFeature: true,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        description: _td("Under active development."),
+        labsGroup: LabGroup.VoiceAndVideo,
+        displayName: _td("Allow screen share only mode"),
+        controller: new ReloadOnChangeController(),
+        default: false,
+    },
     "feature_location_share_live": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,

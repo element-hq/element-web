@@ -660,6 +660,7 @@ export class ElementCall extends Call {
         });
 
         if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "");
+        if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) params.append("allowVoipWithNoMedia", "");
 
         // Set custom fonts
         if (SettingsStore.getValue("useSystemFont")) {

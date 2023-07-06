@@ -32,7 +32,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-import MediaDeviceHandler from "../../../MediaDeviceHandler";
+import MediaDeviceHandler, { IMediaDevices } from "../../../MediaDeviceHandler";
 import { CallStore } from "../../../stores/CallStore";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
@@ -149,14 +149,32 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabledTooltip, con
         setVideoMuted(!videoMuted);
     }, [videoMuted, setVideoMuted]);
 
+    // In case we can not fetch media devices we should mute the devices
+    const handleMediaDeviceFailing = (message: string): void => {
+        MediaDeviceHandler.startWithAudioMuted = true;
+        MediaDeviceHandler.startWithVideoMuted = true;
+        logger.warn(message);
+    };
+
     const [videoStream, audioInputs, videoInputs] = useAsyncMemo(
         async (): Promise<[MediaStream | null, MediaDeviceInfo[], MediaDeviceInfo[]]> => {
-            let devices = await MediaDeviceHandler.getDevices();
+            let devices: IMediaDevices | undefined;
+            try {
+                devices = await MediaDeviceHandler.getDevices();
+                if (devices === undefined) {
+                    handleMediaDeviceFailing("Could not access devices!");
+                    return [null, [], []];
+                }
+            } catch (error) {
+                handleMediaDeviceFailing(`Unable to get Media Devices: ${error}`);
+                return [null, [], []];
+            }
 
             // We get the preview stream before requesting devices: this is because
             // we need (in some browsers) an active media stream in order to get
             // non-blank labels for the devices.
             let stream: MediaStream | null = null;
+
             try {
                 if (devices!.audioinput.length > 0) {
                     // Holding just an audio stream will be enough to get us all device labels, so
@@ -170,7 +188,8 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabledTooltip, con
                     stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: videoInputId } });
                 }
             } catch (e) {
-                logger.error(`Failed to get stream for device ${videoInputId}`, e);
+                logger.warn(`Failed to get stream for device ${videoInputId}`, e);
+                handleMediaDeviceFailing(`Have access to Device list but unable to read from Media Devices`);
             }
 
             // Refresh the devices now that we hold a stream
