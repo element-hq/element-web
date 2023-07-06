@@ -20,19 +20,9 @@ import { diff_match_patch as DiffMatchPatch } from "diff-match-patch";
 import { DiffDOM, IDiff } from "diff-dom";
 import { IContent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
+import { unescape } from "lodash";
 
 import { bodyToHtml, checkBlockNode, IOptsReturnString } from "../HtmlUtils";
-
-const decodeEntities = (function () {
-    let textarea: HTMLTextAreaElement | undefined;
-    return function (str: string): string {
-        if (!textarea) {
-            textarea = document.createElement("textarea");
-        }
-        textarea.innerHTML = str;
-        return textarea.value;
-    };
-})();
 
 function textToHtml(text: string): string {
     const container = document.createElement("div");
@@ -153,7 +143,7 @@ function adjustRoutes(diff: IDiff, remainingDiffs: IDiff[]): void {
 }
 
 function stringAsTextNode(string: string): Text {
-    return document.createTextNode(decodeEntities(string));
+    return document.createTextNode(unescape(string));
 }
 
 function renderDifferenceInDOM(originalRootNode: Node, diff: IDiff, diffMathPatch: DiffMatchPatch): void {
