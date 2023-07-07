@@ -7,17 +7,15 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "target": "es2016",
-        "noImplicitAny": true,
         "noUnusedLocals": true,
         "sourceMap": false,
         "outDir": "./lib",
         "declaration": true,
         "jsx": "react",
         "lib": ["es2020", "dom", "dom.iterable"],
-        "alwaysStrict": true,
-        "strictBindCallApply": true,
-        "strictNullChecks": true,
-        "noImplicitThis": true
+        "strict": true,
+        "strictFunctionTypes": false,
+        "useUnknownInCatchVariables": false
     },
     "include": [
         "./node_modules/matrix-js-sdk/src/@types/*.d.ts",
