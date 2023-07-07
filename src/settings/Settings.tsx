@@ -338,7 +338,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "useOnlyCurrentProfiles": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show current avatar and name for users in message history"),
+        displayName: _td("Show current profile picture and name for users in message history"),
         default: false,
     },
     "mjolnirRooms": {
@@ -576,7 +576,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "showAvatarChanges": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td("Show avatar changes"),
+        displayName: _td("Show profile picture changes"),
         default: true,
         invertedSettingName: "hideAvatarChanges",
     },

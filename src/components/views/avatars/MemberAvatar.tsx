@@ -26,6 +26,7 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import { CardContext } from "../right_panel/context";
 import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
+import { _t } from "../../../languageHandler";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
     member: RoomMember | null;
@@ -103,6 +104,8 @@ export default function MemberAvatar({
                       }
                     : props.onClick
             }
+            altText={_t("Profile picture")}
+            ariaLabel={_t("Profile picture")}
         />
     );
 }

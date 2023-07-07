@@ -899,13 +899,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show avatar changes
+                    Show profile picture changes
                   </span>
                 </label>
                 <div
                   aria-checked="true"
                   aria-disabled="true"
-                  aria-label="Show avatar changes"
+                  aria-label="Show profile picture changes"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
                   role="switch"
                   tabindex="0"
@@ -999,13 +999,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Show current avatar and name for users in message history
+                    Show current profile picture and name for users in message history
                   </span>
                 </label>
                 <div
                   aria-checked="false"
                   aria-disabled="true"
-                  aria-label="Show current avatar and name for users in message history"
+                  aria-label="Show current profile picture and name for users in message history"
                   class="mx_AccessibleButton mx_ToggleSwitch"
                   role="switch"
                   tabindex="0"

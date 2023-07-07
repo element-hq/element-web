@@ -127,7 +127,7 @@ describe("CallLobby", () => {
             const carol = mkRoomMember(room.roomId, "@carol:example.org");
 
             const expectAvatars = (userIds: string[]) => {
-                const avatars = screen.queryAllByRole("button", { name: "Avatar" });
+                const avatars = screen.queryAllByRole("button", { name: "Profile picture" });
                 expect(userIds.length).toBe(avatars.length);
 
                 for (const [userId, avatar] of zip(userIds, avatars)) {

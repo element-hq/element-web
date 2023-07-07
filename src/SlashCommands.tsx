@@ -440,7 +440,7 @@ export const Commands = [
     new Command({
         command: "myroomavatar",
         args: "[<mxc_url>]",
-        description: _td("Changes your avatar in this current room only"),
+        description: _td("Changes your profile picture in this current room only"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, args) {
             const room = cli.getRoom(roomId);
@@ -469,7 +469,7 @@ export const Commands = [
     new Command({
         command: "myavatar",
         args: "[<mxc_url>]",
-        description: _td("Changes your avatar in all rooms"),
+        description: _td("Changes your profile picture in all rooms"),
         runFn: function (cli, roomId, args) {
             let promise = Promise.resolve(args ?? null);
             if (!args) {

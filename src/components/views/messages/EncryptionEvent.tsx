@@ -54,7 +54,7 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp
             const displayName = room?.getMember(dmPartner)?.rawDisplayName || dmPartner;
             subtitle = _t(
                 "Messages here are end-to-end encrypted. " +
-                    "Verify %(displayName)s in their profile - tap on their avatar.",
+                    "Verify %(displayName)s in their profile - tap on their profile picture.",
                 { displayName },
             );
         } else if (room && isLocalRoom(room)) {
@@ -62,7 +62,7 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp
         } else {
             subtitle = _t(
                 "Messages in this room are end-to-end encrypted. " +
-                    "When people join, you can verify them in their profile, just tap on their avatar.",
+                    "When people join, you can verify them in their profile, just tap on their profile picture.",
             );
         }
 

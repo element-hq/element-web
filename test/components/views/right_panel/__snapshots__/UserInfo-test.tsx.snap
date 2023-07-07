@@ -94,7 +94,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
             class="mx_UserInfo_avatar_transition_child"
           >
             <span
-              aria-label="Avatar"
+              aria-label="Profile picture"
               aria-live="off"
               class="mx_AccessibleButton mx_BaseAvatar"
               role="button"

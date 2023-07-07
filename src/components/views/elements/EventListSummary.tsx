@@ -324,8 +324,11 @@ export default class EventListSummary extends React.Component<
             case TransitionType.ChangedAvatar:
                 res =
                     userCount > 1
-                        ? _t("%(severalUsers)schanged their avatar %(count)s times", { severalUsers: "", count })
-                        : _t("%(oneUser)schanged their avatar %(count)s times", { oneUser: "", count });
+                        ? _t("%(severalUsers)schanged their profile picture %(count)s times", {
+                              severalUsers: "",
+                              count,
+                          })
+                        : _t("%(oneUser)schanged their profile picture %(count)s times", { oneUser: "", count });
                 break;
             case TransitionType.NoChange:
                 res =
