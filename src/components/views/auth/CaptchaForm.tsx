@@ -117,7 +117,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
             });
         } catch (e) {
             this.setState({
-                errorText: e.toString(),
+                errorText: e instanceof Error ? e.message : String(e),
             });
         }
     }

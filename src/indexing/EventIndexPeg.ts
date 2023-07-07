@@ -37,7 +37,7 @@ const INDEX_VERSION = 1;
  */
 export class EventIndexPeg {
     public index: EventIndex | null = null;
-    public error: Error | null = null;
+    public error: unknown;
 
     private _supportIsInstalled = false;
 

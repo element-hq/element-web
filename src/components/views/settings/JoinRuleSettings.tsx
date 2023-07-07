@@ -40,7 +40,7 @@ export interface JoinRuleSettingsProps {
     room: Room;
     promptUpgrade?: boolean;
     closeSettingsFn(): void;
-    onError(error: Error): void;
+    onError(error: unknown): void;
     beforeChange?(joinRule: JoinRule): Promise<boolean>; // if returns false then aborts the change
     aliasWarning?: ReactNode;
 }

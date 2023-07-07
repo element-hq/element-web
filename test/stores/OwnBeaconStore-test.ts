@@ -1101,7 +1101,10 @@ describe("OwnBeaconStore", () => {
             // still sharing
             expect(mockClient.unstable_setLiveBeacon).not.toHaveBeenCalled();
             expect(store.isMonitoringLiveLocation).toEqual(true);
-            expect(errorLogSpy).toHaveBeenCalledWith("Geolocation failed", "error message");
+            expect(errorLogSpy).toHaveBeenCalledWith(
+                "Geolocation failed",
+                expect.objectContaining({ message: "error message" }),
+            );
         });
 
         it("publishes last known position after 30s of inactivity", async () => {

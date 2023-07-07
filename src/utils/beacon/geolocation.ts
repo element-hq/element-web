@@ -41,8 +41,8 @@ const isGeolocationPositionError = (error: unknown): error is GeolocationPositio
 /**
  * Maps GeolocationPositionError to our GeolocationError enum
  */
-export const mapGeolocationError = (error: GeolocationPositionError | Error): GeolocationError => {
-    logger.error("Geolocation failed", error?.message ?? error);
+export const mapGeolocationError = (error: GeolocationPositionError | Error | unknown): GeolocationError => {
+    logger.error("Geolocation failed", error);
 
     if (isGeolocationPositionError(error)) {
         switch (error?.code) {
@@ -55,7 +55,7 @@ export const mapGeolocationError = (error: GeolocationPositionError | Error): Ge
             default:
                 return GeolocationError.Default;
         }
-    } else if (error.message === GeolocationError.Unavailable) {
+    } else if (error instanceof Error && error.message === GeolocationError.Unavailable) {
         return GeolocationError.Unavailable;
     } else {
         return GeolocationError.Default;

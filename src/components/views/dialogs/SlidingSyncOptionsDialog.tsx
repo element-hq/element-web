@@ -84,8 +84,8 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
             : _t("Your server lacks native support");
     }
 
-    const validProxy = withValidation<undefined, { error?: Error }>({
-        async deriveData({ value }): Promise<{ error?: Error }> {
+    const validProxy = withValidation<undefined, { error?: unknown }>({
+        async deriveData({ value }): Promise<{ error?: unknown }> {
             try {
                 await proxyHealthCheck(value!, MatrixClientPeg.safeGet().baseUrl);
                 return {};
@@ -104,7 +104,7 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
                 final: true,
                 test: async (_, { error }) => !error,
                 valid: () => _t("Looks good"),
-                invalid: ({ error }) => error?.message ?? null,
+                invalid: ({ error }) => (error instanceof Error ? error.message : null),
             },
         ],
     });

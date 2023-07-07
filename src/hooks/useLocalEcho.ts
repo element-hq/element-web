@@ -19,7 +19,7 @@ import { useState } from "react";
 export const useLocalEcho = <T>(
     currentFactory: () => T,
     setterFn: (value: T) => Promise<unknown>,
-    errorFn: (error: Error) => void,
+    errorFn: (error: unknown) => void,
 ): [value: T, handler: (value: T) => void] => {
     const [value, setValue] = useState(currentFactory);
     const handler = async (value: T): Promise<void> => {

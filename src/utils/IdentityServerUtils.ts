@@ -40,7 +40,7 @@ export async function doesIdentityServerHaveTerms(matrixClient: MatrixClient, fu
         terms = await matrixClient.getTerms(SERVICE_TYPES.IS, fullUrl);
     } catch (e) {
         logger.error(e);
-        if (e.cors === "rejected" || (e instanceof HTTPError && e.httpStatus === 404)) {
+        if (e instanceof HTTPError && e.httpStatus === 404) {
             terms = null;
         } else {
             throw e;

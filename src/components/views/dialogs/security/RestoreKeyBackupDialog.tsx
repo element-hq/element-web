@@ -20,6 +20,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IKeyBackupInfo, IKeyBackupRestoreResult } from "matrix-js-sdk/src/crypto/keybackup";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { _t } from "../../../../languageHandler";
@@ -56,9 +57,7 @@ interface IState {
     backupKeyStored: Record<string, ISecretStorageKeyInfo> | null;
     loading: boolean;
     loadError: boolean | null;
-    restoreError: {
-        errcode: string;
-    } | null;
+    restoreError: unknown | null;
     recoveryKey: string;
     recoverInfo: IKeyBackupRestoreResult | null;
     recoveryKeyValid: boolean;
@@ -343,7 +342,10 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             title = _t("Error");
             content = _t("Unable to load backup status");
         } else if (this.state.restoreError) {
-            if (this.state.restoreError.errcode === MatrixClient.RESTORE_BACKUP_ERROR_BAD_KEY) {
+            if (
+                this.state.restoreError instanceof MatrixError &&
+                this.state.restoreError.errcode === MatrixClient.RESTORE_BACKUP_ERROR_BAD_KEY
+            ) {
                 if (this.state.restoreType === RestoreType.RecoveryKey) {
                     title = _t("Security Key mismatch");
                     content = (

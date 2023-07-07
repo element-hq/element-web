@@ -497,7 +497,7 @@ export class RoomViewStore extends EventEmitter {
                         action: Action.ViewRoomError,
                         room_id: null,
                         room_alias: payload.room_alias,
-                        err,
+                        err: err instanceof MatrixError ? err : undefined,
                     });
                     return;
                 }

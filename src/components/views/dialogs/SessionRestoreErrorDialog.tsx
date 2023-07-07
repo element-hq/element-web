@@ -27,7 +27,7 @@ import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
-    error: Error;
+    error: unknown;
     onFinished(clear?: boolean): void;
 }
 

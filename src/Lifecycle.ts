@@ -497,7 +497,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
     }
 }
 
-async function handleLoadSessionFailure(e: Error): Promise<boolean> {
+async function handleLoadSessionFailure(e: unknown): Promise<boolean> {
     logger.error("Unable to load session", e);
 
     const modal = Modal.createDialog(SessionRestoreErrorDialog, {

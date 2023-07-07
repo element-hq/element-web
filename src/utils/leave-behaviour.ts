@@ -105,8 +105,10 @@ export async function leaveRoomBehaviour(
             if (e instanceof MatrixError) {
                 const message = e.data.error || _t("Unexpected server error trying to leave the room");
                 results[roomId] = Object.assign(new Error(message), { errcode: e.data.errcode, data: e.data });
+            } else if (e instanceof Error) {
+                results[roomId] = e;
             } else {
-                results[roomId] = e || new Error("Failed to leave room for unknown causes");
+                results[roomId] = new Error("Failed to leave room for unknown causes");
             }
         }
     } else {

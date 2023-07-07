@@ -35,7 +35,7 @@ import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 
 interface IState {
     loading: boolean;
-    error: Error | null;
+    error: boolean;
     backupKeyStored: boolean | null;
     backupKeyCached: boolean | null;
     backupKeyWellFormed: boolean | null;
@@ -54,7 +54,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
 
         this.state = {
             loading: true,
-            error: null,
+            error: false,
             backupKeyStored: null,
             backupKeyCached: null,
             backupKeyWellFormed: null,
@@ -103,7 +103,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             const keyBackupResult = await MatrixClientPeg.safeGet().checkKeyBackup();
             this.setState({
                 loading: false,
-                error: null,
+                error: false,
                 backupInfo: keyBackupResult?.backupInfo ?? null,
                 backupSigStatus: keyBackupResult?.trustInfo ?? null,
             });
@@ -112,7 +112,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             if (this.unmounted) return;
             this.setState({
                 loading: false,
-                error: e,
+                error: true,
                 backupInfo: null,
                 backupSigStatus: null,
             });
@@ -128,7 +128,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             if (this.unmounted) return;
             this.setState({
                 loading: false,
-                error: null,
+                error: false,
                 backupInfo,
                 backupSigStatus,
             });
@@ -137,7 +137,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             if (this.unmounted) return;
             this.setState({
                 loading: false,
-                error: e,
+                error: true,
                 backupInfo: null,
                 backupSigStatus: null,
             });
@@ -209,13 +209,13 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     };
 
     private resetSecretStorage = async (): Promise<void> => {
-        this.setState({ error: null });
+        this.setState({ error: false });
         try {
             await accessSecretStorage(async (): Promise<void> => {}, /* forceReset = */ true);
         } catch (e) {
             logger.error("Error resetting secret storage", e);
             if (this.unmounted) return;
-            this.setState({ error: e });
+            this.setState({ error: true });
         }
         if (this.unmounted) return;
         this.loadBackupStatus();

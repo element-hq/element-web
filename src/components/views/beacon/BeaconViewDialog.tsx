@@ -112,7 +112,7 @@ const BeaconViewDialog: React.FC<IProps> = ({ initialFocusedBeacon, roomId, matr
 
     const { bounds, centerGeoUri } = useMapPosition(liveBeacons, focusedBeaconState);
 
-    const [mapDisplayError, setMapDisplayError] = useState<Error>();
+    const [mapDisplayError, setMapDisplayError] = useState<unknown>();
 
     // automatically open the sidebar if there is no map to see
     useEffect(() => {
@@ -156,7 +156,9 @@ const BeaconViewDialog: React.FC<IProps> = ({ initialFocusedBeacon, roomId, matr
                         )}
                     </Map>
                 )}
-                {mapDisplayError && <MapError error={mapDisplayError.message as LocationShareError} isMinimised />}
+                {mapDisplayError instanceof Error && (
+                    <MapError error={mapDisplayError.message as LocationShareError} isMinimised />
+                )}
                 {!centerGeoUri && !mapDisplayError && (
                     <MapFallback data-testid="beacon-view-dialog-map-fallback" className="mx_BeaconViewDialog_map">
                         <span className="mx_BeaconViewDialog_mapFallbackMessage">{_t("No live locations")}</span>

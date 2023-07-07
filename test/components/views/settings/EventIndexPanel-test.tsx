@@ -79,7 +79,7 @@ describe("<EventIndexPanel />", () => {
             jest.spyOn(SettingsStore, "getValueAt").mockReturnValue(true);
 
             // @ts-ignore private property
-            EventIndexPeg.error = { message: "Test error message" };
+            EventIndexPeg.error = new Error("Test error message");
         });
 
         it("displays an error when no event index is found and enabling not in progress", () => {

@@ -324,7 +324,7 @@ export class PosthogAnalytics {
             } catch (e) {
                 // The above could fail due to network requests, but not essential to starting the application,
                 // so swallow it.
-                logger.log("Unable to identify user for tracking" + e.toString());
+                logger.log("Unable to identify user for tracking", e);
             }
         }
     }

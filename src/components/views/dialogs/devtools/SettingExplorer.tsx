@@ -125,7 +125,7 @@ const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
             }
             onBack();
         } catch (e) {
-            return _t("Failed to save settings.") + ` (${e.message})`;
+            return _t("Failed to save settings.") + (e instanceof Error ? ` (${e.message})` : "");
         }
     };
 

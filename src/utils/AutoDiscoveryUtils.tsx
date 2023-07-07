@@ -43,11 +43,9 @@ export default class AutoDiscoveryUtils {
      * @param {string | Error} error The error to check
      * @returns {boolean} True if the error is a liveliness error.
      */
-    public static isLivelinessError(error?: string | Error | null): boolean {
+    public static isLivelinessError(error: unknown): boolean {
         if (!error) return false;
-        return !!LIVELINESS_DISCOVERY_ERRORS.find((e) =>
-            typeof error === "string" ? e === error : e === error.message,
-        );
+        return !!LIVELINESS_DISCOVERY_ERRORS.find((e) => (error instanceof Error ? e === error.message : e === error));
     }
 
     /**
@@ -58,7 +56,7 @@ export default class AutoDiscoveryUtils {
      * implementation for known values.
      * @returns {*} The state for the component, given the error.
      */
-    public static authComponentStateForError(err: string | Error | null, pageName = "login"): IAuthComponentState {
+    public static authComponentStateForError(err: unknown, pageName = "login"): IAuthComponentState {
         if (!err) {
             return {
                 serverIsAlive: true,
@@ -93,7 +91,7 @@ export default class AutoDiscoveryUtils {
         }
 
         let isFatalError = true;
-        const errorMessage = typeof err === "string" ? err : err.message;
+        const errorMessage = err instanceof Error ? err.message : err;
         if (errorMessage === AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER) {
             isFatalError = false;
             title = _t("Cannot reach identity server");

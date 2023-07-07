@@ -32,7 +32,7 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 import MediaProcessingError from "./shared/MediaProcessingError";
 
 interface IState {
-    error?: Error;
+    error?: boolean;
     playback?: Playback;
 }
 
@@ -54,12 +54,12 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
                 const blob = await this.props.mediaEventHelper!.sourceBlob.value;
                 buffer = await blob.arrayBuffer();
             } catch (e) {
-                this.setState({ error: e });
+                this.setState({ error: true });
                 logger.warn("Unable to decrypt audio message", e);
                 return; // stop processing the audio file
             }
         } catch (e) {
-            this.setState({ error: e });
+            this.setState({ error: true });
             logger.warn("Unable to decrypt/download audio message", e);
             return; // stop processing the audio file
         }

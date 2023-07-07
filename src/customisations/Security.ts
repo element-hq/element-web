@@ -42,7 +42,7 @@ function getSecretStorageKey(): Uint8Array | null {
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-function catchAccessSecretStorageError(e: Error): void {
+function catchAccessSecretStorageError(e: unknown): void {
     // E.g. notify the user in some way
 }
 

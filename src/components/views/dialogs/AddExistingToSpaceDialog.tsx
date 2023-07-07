@@ -154,7 +154,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
 
     const [selectedToAdd, setSelectedToAdd] = useState(new Set<Room>());
     const [progress, setProgress] = useState<number | null>(null);
-    const [error, setError] = useState<Error | null>(null);
+    const [error, setError] = useState(false);
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase().trim();
 
@@ -196,10 +196,10 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     }, [visibleRooms, space, lcQuery, existingRoomsSet, existingSubspacesSet]);
 
     const addRooms = async (): Promise<void> => {
-        setError(null);
+        setError(false);
         setProgress(0);
 
-        let error: Error | undefined;
+        let error = false;
 
         for (const room of selectedToAdd) {
             const via = calculateRoomVia(room);
@@ -216,7 +216,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 setProgress((i) => (i ?? 0) + 1);
             } catch (e) {
                 logger.error("Failed to add rooms to space", e);
-                error = e;
+                error = true;
                 break;
             }
         }

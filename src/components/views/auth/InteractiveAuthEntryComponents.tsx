@@ -647,7 +647,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
                 });
             }
         } catch (e) {
-            this.props.fail(e);
+            this.props.fail(e instanceof Error ? e : new Error("Failed to submit msisdn token"));
             logger.log("Failed to submit msisdn token");
         }
     };

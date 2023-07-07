@@ -41,7 +41,10 @@ export const useMap = ({ interactive, bodyId, onError }: UseMapProps): MapLibreM
             try {
                 setMap(createMap(cli, !!interactive, bodyId, onError));
             } catch (error) {
-                onError?.(error);
+                console.error("Error encountered in useMap", error);
+                if (error instanceof Error) {
+                    onError?.(error);
+                }
             }
             return () => {
                 if (map) {

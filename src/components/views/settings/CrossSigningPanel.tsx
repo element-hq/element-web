@@ -31,7 +31,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 
 interface IState {
-    error?: Error;
+    error: boolean;
     crossSigningPublicKeysOnDevice?: boolean;
     crossSigningPrivateKeysInStorage?: boolean;
     masterPrivateKeyCached?: boolean;
@@ -47,7 +47,9 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
     public constructor(props: {}) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            error: false,
+        };
     }
 
     public componentDidMount(): void {
@@ -125,7 +127,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
      * @param {bool} [forceReset] Bootstrap again even if keys already present
      */
     private bootstrapCrossSigning = async ({ forceReset = false }): Promise<void> => {
-        this.setState({ error: undefined });
+        this.setState({ error: false });
         try {
             const cli = MatrixClientPeg.safeGet();
             await cli.bootstrapCrossSigning({
@@ -143,7 +145,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
                 setupNewCrossSigning: forceReset,
             });
         } catch (e) {
-            this.setState({ error: e });
+            this.setState({ error: true });
             logger.error("Error bootstrapping cross-signing", e);
         }
         if (this.unmounted) return;

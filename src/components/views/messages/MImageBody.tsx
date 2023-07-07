@@ -50,7 +50,7 @@ interface IState {
     contentUrl: string | null;
     thumbUrl: string | null;
     isAnimated?: boolean;
-    error?: Error;
+    error?: unknown;
     imgError: boolean;
     imgLoaded: boolean;
     loadedImageDimensions?: {

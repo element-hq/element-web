@@ -37,7 +37,7 @@ interface IProps {
     onFinished: (success: boolean) => void;
     initialText?: string;
     label?: string;
-    error?: Error;
+    error?: unknown;
 }
 
 interface IState {

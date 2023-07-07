@@ -37,7 +37,7 @@ interface IProps {
 }
 
 interface IState {
-    error: Error | null;
+    error: boolean;
     canUploadKeysWithPasswordOnly: boolean | null;
     accountPassword: string;
 }
@@ -52,7 +52,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
         super(props);
 
         this.state = {
-            error: null,
+            error: false,
             // Does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
             // If we have an account password in memory, let's simplify and
@@ -145,7 +145,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
 
     private bootstrapCrossSigning = async (): Promise<void> => {
         this.setState({
-            error: null,
+            error: false,
         });
 
         try {
@@ -161,7 +161,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
                 return;
             }
 
-            this.setState({ error: e });
+            this.setState({ error: true });
             logger.error("Error bootstrapping cross-signing", e);
         }
     };

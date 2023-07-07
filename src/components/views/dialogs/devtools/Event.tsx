@@ -111,7 +111,7 @@ export const EventEditor: React.FC<IEventEditorProps> = ({ fieldDefs, defaultCon
             const json = JSON.parse(content);
             await onSend(fieldData, json);
         } catch (e) {
-            return _t("Failed to send event!") + ` (${e.toString()})`;
+            return _t("Failed to send event!") + (e instanceof Error ? ` (${e.message})` : "");
         }
         return _t("Event sent!");
     };
