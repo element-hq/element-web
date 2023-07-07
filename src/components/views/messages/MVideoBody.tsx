@@ -143,7 +143,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
             logger.error("Failed to load blurhash", e);
         }
 
-        if (this.props.mediaEventHelper.media.isEncrypted && this.state.decryptedUrl === null) {
+        if (this.props.mediaEventHelper?.media.isEncrypted && this.state.decryptedUrl === null) {
             try {
                 const autoplay = SettingsStore.getValue("autoplayVideo") as boolean;
                 const thumbnailUrl = await this.props.mediaEventHelper.thumbnailUrl.value;
@@ -199,7 +199,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
             // To stop subsequent download attempts
             fetchingData: true,
         });
-        if (!this.props.mediaEventHelper.media.isEncrypted) {
+        if (!this.props.mediaEventHelper!.media.isEncrypted) {
             this.setState({
                 error: "No file given in content",
             });
@@ -207,8 +207,8 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         }
         this.setState(
             {
-                decryptedUrl: await this.props.mediaEventHelper.sourceUrl.value,
-                decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
+                decryptedUrl: await this.props.mediaEventHelper!.sourceUrl.value,
+                decryptedBlob: await this.props.mediaEventHelper!.sourceBlob.value,
                 fetchingData: false,
             },
             () => {

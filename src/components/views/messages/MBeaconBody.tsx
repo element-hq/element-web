@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { ForwardRefExoticComponent, useCallback, useContext, useEffect, useState } from "react";
 import {
     Beacon,
     BeaconEvent,
@@ -234,6 +234,6 @@ const MBeaconBody = React.forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent, get
             )}
         </div>
     );
-});
+}) as ForwardRefExoticComponent<IBodyProps>;
 
 export default MBeaconBody;

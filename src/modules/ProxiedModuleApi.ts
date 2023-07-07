@@ -17,7 +17,7 @@ limitations under the License.
 import { ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
 import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import { Optional } from "matrix-events-sdk";
-import { DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
+import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import React from "react";
 import { AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
 import { PlainSubstitution } from "@matrix-org/react-sdk-module-api/lib/types/translations";
@@ -81,23 +81,22 @@ export class ProxiedModuleApi implements ModuleApi {
     /**
      * @override
      */
-    public openDialog<
-        M extends object,
-        P extends DialogProps = DialogProps,
-        C extends React.Component = React.Component,
-    >(
+    public openDialog<M extends object, P extends DialogProps, C extends DialogContent<P>>(
         title: string,
         body: (props: P, ref: React.RefObject<C>) => React.ReactNode,
+        props?: Omit<P, keyof DialogProps>,
     ): Promise<{ didOkOrSubmit: boolean; model: M }> {
         return new Promise<{ didOkOrSubmit: boolean; model: M }>((resolve) => {
             Modal.createDialog(
-                ModuleUiDialog,
+                ModuleUiDialog<P, C>,
                 {
                     title: title,
                     contentFactory: body,
-                    contentProps: <DialogProps>{
+                    // Typescript isn't very happy understanding that `props` satisfies `Omit<P, keyof DialogProps>`
+                    contentProps: {
+                        ...props,
                         moduleApi: this,
-                    },
+                    } as unknown as P,
                 },
                 "mx_CompoundDialog",
             ).finished.then(([didOkOrSubmit, model]) => {

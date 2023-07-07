@@ -21,21 +21,24 @@ import { logger } from "matrix-js-sdk/src/logger";
 import ScrollableBaseModal, { IScrollableBaseState } from "./ScrollableBaseModal";
 import { _t } from "../../../languageHandler";
 
-interface IProps<C extends React.Component = React.Component> {
-    contentFactory: (props: DialogProps, ref: React.Ref<C>) => React.ReactNode;
-    contentProps: DialogProps;
+interface IProps<P extends DialogProps, C extends DialogContent<P>> {
+    contentFactory: (props: P, ref: React.RefObject<C>) => React.ReactNode;
+    contentProps: P;
     title: string;
-    onFinished(ok?: boolean, model?: Awaited<ReturnType<DialogContent["trySubmit"]>>): void;
+    onFinished(ok?: boolean, model?: Awaited<ReturnType<DialogContent<P>["trySubmit"]>>): void;
 }
 
 interface IState extends IScrollableBaseState {
     // nothing special
 }
 
-export class ModuleUiDialog extends ScrollableBaseModal<IProps, IState> {
-    private contentRef = createRef<DialogContent>();
+export class ModuleUiDialog<P extends DialogProps, C extends DialogContent<P>> extends ScrollableBaseModal<
+    IProps<P, C>,
+    IState
+> {
+    private contentRef = createRef<C>();
 
-    public constructor(props: IProps) {
+    public constructor(props: IProps<P, C>) {
         super(props);
 
         this.state = {

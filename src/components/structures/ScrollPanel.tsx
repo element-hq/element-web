@@ -854,7 +854,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         return this.divScroll;
     }
 
-    private collectScroll = (divScroll: HTMLDivElement): void => {
+    private collectScroll = (divScroll: HTMLDivElement | null): void => {
         this.divScroll = divScroll;
     };
 

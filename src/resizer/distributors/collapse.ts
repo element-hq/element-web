@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import FixedDistributor from "./fixed";
+import { BaseDistributor } from "./fixed";
 import ResizeItem from "../item";
 import Resizer, { IConfig } from "../resizer";
 import Sizer from "../sizer";
@@ -25,7 +25,7 @@ export interface ICollapseConfig extends IConfig {
     isItemCollapsed(element: HTMLElement): boolean;
 }
 
-class CollapseItem extends ResizeItem<ICollapseConfig> {
+export class CollapseItem extends ResizeItem<ICollapseConfig> {
     public notifyCollapsed(collapsed: boolean): void {
         this.resizer.config?.onCollapsed?.(collapsed, this.id, this.domNode);
     }
@@ -35,10 +35,10 @@ class CollapseItem extends ResizeItem<ICollapseConfig> {
     }
 }
 
-export default class CollapseDistributor extends FixedDistributor<ICollapseConfig, CollapseItem> {
+export default class CollapseDistributor extends BaseDistributor<ICollapseConfig, CollapseItem> {
     public static createItem(
         resizeHandle: HTMLDivElement,
-        resizer: Resizer<ICollapseConfig>,
+        resizer: Resizer<ICollapseConfig, CollapseItem>,
         sizer: Sizer,
         container?: HTMLElement,
     ): CollapseItem {

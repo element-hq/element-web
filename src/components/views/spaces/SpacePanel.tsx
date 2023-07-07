@@ -243,7 +243,7 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
                 label={menuDisplayed ? _t("Cancel") : _t("Create a space")}
                 onClick={onNewClick}
                 isNarrow={isPanelCollapsed}
-                ref={handle}
+                innerRef={handle}
             />
 
             {contextMenu}

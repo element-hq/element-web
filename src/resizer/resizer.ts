@@ -38,7 +38,7 @@ export interface IConfig {
     handler?: HTMLDivElement;
 }
 
-export default class Resizer<C extends IConfig = IConfig> {
+export default class Resizer<C extends IConfig, I extends ResizeItem<C> = ResizeItem<C>> {
     private classNames: IClassNames;
 
     // TODO move vertical/horizontal to config option/container class
@@ -46,13 +46,8 @@ export default class Resizer<C extends IConfig = IConfig> {
     public constructor(
         public container: HTMLElement | null,
         private readonly distributorCtor: {
-            new (item: ResizeItem): FixedDistributor<C, any>;
-            createItem(
-                resizeHandle: HTMLDivElement,
-                resizer: Resizer,
-                sizer: Sizer,
-                container?: HTMLElement,
-            ): ResizeItem;
+            new (item: I): FixedDistributor<C, I>;
+            createItem(resizeHandle: HTMLDivElement, resizer: Resizer<C, I>, sizer: Sizer, container?: HTMLElement): I;
             createSizer(containerElement: HTMLElement | null, vertical: boolean, reverse: boolean): Sizer;
         },
         public readonly config?: C,
@@ -87,7 +82,7 @@ export default class Resizer<C extends IConfig = IConfig> {
     @param {number} handleIndex the index of the resize handle in the container
     @return {FixedDistributor} a new distributor for the given handle
     */
-    public forHandleAt(handleIndex: number): FixedDistributor<C> | undefined {
+    public forHandleAt(handleIndex: number): FixedDistributor<C, I> | undefined {
         const handles = this.getResizeHandles();
         const handle = handles[handleIndex];
         if (handle) {
@@ -96,7 +91,7 @@ export default class Resizer<C extends IConfig = IConfig> {
         }
     }
 
-    public forHandleWithId(id: string): FixedDistributor<C> | undefined {
+    public forHandleWithId(id: string): FixedDistributor<C, I> | undefined {
         const handles = this.getResizeHandles();
         const handle = handles.find((h) => h.getAttribute("data-id") === id);
         if (handle) {
@@ -178,7 +173,7 @@ export default class Resizer<C extends IConfig = IConfig> {
         { trailing: true, leading: true },
     );
 
-    public getDistributors = (): FixedDistributor<any, ResizeItem<any>>[] => {
+    public getDistributors = (): FixedDistributor<C, I>[] => {
         return this.getResizeHandles().map((handle) => {
             const { distributor } = this.createSizerAndDistributor(<HTMLDivElement>handle);
             return distributor;
@@ -187,7 +182,7 @@ export default class Resizer<C extends IConfig = IConfig> {
 
     private createSizerAndDistributor(resizeHandle: HTMLDivElement): {
         sizer: Sizer;
-        distributor: FixedDistributor<any>;
+        distributor: FixedDistributor<C, I>;
     } {
         const vertical = resizeHandle.classList.contains(this.classNames.vertical!);
         const reverse = this.isReverseResizeHandle(resizeHandle);

@@ -27,7 +27,6 @@ import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
 import { IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
-import { ReactAnyComponent } from "../../../@types/common";
 import { IBodyProps } from "./IBodyProps";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import TextualBody from "./TextualBody";
@@ -70,7 +69,7 @@ const baseBodyTypes = new Map<string, typeof React.Component>([
     [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, MVideoBody],
 ]);
-const baseEvTypes = new Map<string, React.ComponentType<Partial<IBodyProps>>>([
+const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],
     [M_POLL_START.name, MPollBody],
     [M_POLL_START.altName, MPollBody],
@@ -84,7 +83,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
     private body: React.RefObject<React.Component | IOperableEventTile> = createRef();
     private mediaHelper?: MediaEventHelper;
     private bodyTypes = new Map<string, typeof React.Component>(baseBodyTypes.entries());
-    private evTypes = new Map<string, React.ComponentType<Partial<IBodyProps>>>(baseEvTypes.entries());
+    private evTypes = new Map<string, React.ComponentType<IBodyProps>>(baseEvTypes.entries());
 
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
@@ -123,7 +122,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             this.bodyTypes.set(bodyType, bodyComponent);
         }
 
-        this.evTypes = new Map<string, React.ComponentType<Partial<IBodyProps>>>(baseEvTypes.entries());
+        this.evTypes = new Map<string, React.ComponentType<IBodyProps>>(baseEvTypes.entries());
         for (const [evType, evComponent] of Object.entries(this.props.overrideEventTypes ?? {})) {
             this.evTypes.set(evType, evComponent);
         }
@@ -153,7 +152,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;
-        let BodyType: React.ComponentType<Partial<IBodyProps>> | ReactAnyComponent = RedactedBody;
+        let BodyType: React.ComponentType<IBodyProps> = RedactedBody;
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
             if (this.props.mxEvent.isDecryptionFailure()) {
@@ -195,7 +194,6 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
         }
 
-        // @ts-ignore - this is a dynamic react component
         return BodyType ? (
             <BodyType
                 ref={this.body}

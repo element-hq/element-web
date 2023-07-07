@@ -51,7 +51,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
 
         try {
             try {
-                const blob = await this.props.mediaEventHelper.sourceBlob.value;
+                const blob = await this.props.mediaEventHelper!.sourceBlob.value;
                 buffer = await blob.arrayBuffer();
             } catch (e) {
                 this.setState({ error: e });

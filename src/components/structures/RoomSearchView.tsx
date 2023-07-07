@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, RefObject, useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { forwardRef, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ISearchResults } from "matrix-js-sdk/src/@types/search";
 import { IThreadBundledRelationship } from "matrix-js-sdk/src/models/event";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
@@ -57,10 +57,7 @@ interface Props {
 // XXX: todo: merge overlapping results somehow?
 // XXX: why doesn't searching on name work?
 export const RoomSearchView = forwardRef<ScrollPanel, Props>(
-    (
-        { term, scope, promise, abortController, resizeNotifier, className, onUpdate }: Props,
-        ref: RefObject<ScrollPanel>,
-    ) => {
+    ({ term, scope, promise, abortController, resizeNotifier, className, onUpdate }: Props, ref) => {
         const client = useContext(MatrixClientContext);
         const roomContext = useContext(RoomContext);
         const [inProgress, setInProgress] = useState(true);
@@ -69,6 +66,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
         const aborted = useRef(false);
         // A map from room ID to permalink creator
         const permalinkCreators = useRef(new Map<string, RoomPermalinkCreator>()).current;
+        const innerRef = useRef<ScrollPanel | null>();
 
         useEffect(() => {
             return () => {
@@ -214,8 +212,16 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
         // once dynamic content in the search results load, make the scrollPanel check
         // the scroll offsets.
         const onHeightChanged = (): void => {
-            const scrollPanel = ref.current;
-            scrollPanel?.checkScroll();
+            innerRef.current?.checkScroll();
+        };
+
+        const onRef = (e: ScrollPanel | null): void => {
+            if (typeof ref === "function") {
+                ref(e);
+            } else if (!!ref) {
+                ref.current = e;
+            }
+            innerRef.current = e;
         };
 
         let lastRoomId: string | undefined;
@@ -317,7 +323,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
 
         return (
             <ScrollPanel
-                ref={ref}
+                ref={onRef}
                 className={"mx_RoomView_searchResultsPanel " + className}
                 onFillRequest={onSearchResultsFillRequest}
                 resizeNotifier={resizeNotifier}

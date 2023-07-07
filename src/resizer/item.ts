@@ -17,14 +17,14 @@ limitations under the License.
 import Resizer, { IConfig } from "./resizer";
 import Sizer from "./sizer";
 
-export default class ResizeItem<C extends IConfig = IConfig> {
+export default class ResizeItem<C extends IConfig> {
     public readonly domNode: HTMLElement;
     protected readonly id: string | null;
     protected reverse: boolean;
 
     public constructor(
         handle: HTMLElement,
-        public readonly resizer: Resizer<C>,
+        public readonly resizer: Resizer<C, any>,
         public readonly sizer: Sizer,
         public readonly container?: HTMLElement,
     ) {
@@ -37,12 +37,17 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         this.id = handle.getAttribute("data-id");
     }
 
-    private copyWith(handle: HTMLElement, resizer: Resizer, sizer: Sizer, container?: HTMLElement): ResizeItem {
+    private copyWith(
+        handle: HTMLElement,
+        resizer: Resizer<C, any>,
+        sizer: Sizer,
+        container?: HTMLElement,
+    ): ResizeItem<C> {
         const Ctor = this.constructor as typeof ResizeItem;
         return new Ctor(handle, resizer, sizer, container);
     }
 
-    private advance(forwards: boolean): ResizeItem | undefined {
+    private advance(forwards: boolean): ResizeItem<C> | undefined {
         // opposite direction from fromResizeHandle to get back to handle
         let handle: Element | null | undefined = this.reverse
             ? this.domNode.previousElementSibling
@@ -64,11 +69,11 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         }
     }
 
-    public next(): ResizeItem | undefined {
+    public next(): ResizeItem<C> | undefined {
         return this.advance(true);
     }
 
-    public previous(): ResizeItem | undefined {
+    public previous(): ResizeItem<C> | undefined {
         return this.advance(false);
     }
 
@@ -106,7 +111,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         this.resizer.config?.onResized?.(null, this.id, this.domNode);
     }
 
-    public first(): ResizeItem | undefined {
+    public first(): ResizeItem<C> | undefined {
         if (!this.domNode.parentElement?.children) {
             return;
         }
@@ -118,7 +123,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         }
     }
 
-    public last(): ResizeItem | undefined {
+    public last(): ResizeItem<C> | undefined {
         if (!this.domNode.parentElement?.children) {
             return;
         }

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef } from "react";
+import React, { forwardRef, ForwardRefExoticComponent } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
@@ -27,12 +27,10 @@ function getErrorMessage(mxEvent?: MatrixEvent): string {
 }
 
 // A placeholder element for messages that could not be decrypted
-export const DecryptionFailureBody = forwardRef<HTMLDivElement, Partial<IBodyProps>>(
-    ({ mxEvent }, ref): JSX.Element => {
-        return (
-            <div className="mx_DecryptionFailureBody mx_EventTile_content" ref={ref}>
-                {getErrorMessage(mxEvent)}
-            </div>
-        );
-    },
-);
+export const DecryptionFailureBody = forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent }, ref): JSX.Element => {
+    return (
+        <div className="mx_DecryptionFailureBody mx_EventTile_content" ref={ref}>
+            {getErrorMessage(mxEvent)}
+        </div>
+    );
+}) as ForwardRefExoticComponent<IBodyProps>;

@@ -15,24 +15,19 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import { IBodyProps } from "./IBodyProps";
 
-interface IProps {
-    mxEvent: MatrixEvent;
-    onMessageAllowed: () => void;
-}
-
-export default class MjolnirBody extends React.Component<IProps> {
+export default class MjolnirBody extends React.Component<IBodyProps> {
     private onAllowClick = (e: ButtonEvent): void => {
         e.preventDefault();
         e.stopPropagation();
 
         const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
         localStorage.setItem(key, "true");
-        this.props.onMessageAllowed();
+        this.props.onMessageAllowed?.();
     };
 
     public render(): React.ReactNode {

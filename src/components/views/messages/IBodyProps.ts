@@ -39,9 +39,9 @@ export interface IBodyProps {
     maxImageHeight?: number;
     replacingEventId?: string;
     editState?: EditorStateTransfer;
-    onMessageAllowed: () => void; // TODO: Docs
+    onMessageAllowed?: () => void; // TODO: Docs
     permalinkCreator?: RoomPermalinkCreator;
-    mediaEventHelper: MediaEventHelper;
+    mediaEventHelper?: MediaEventHelper;
 
     /*
     If present and `true`, the message has been marked as hidden pending moderation

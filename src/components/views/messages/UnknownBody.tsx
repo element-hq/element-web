@@ -15,15 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { forwardRef, ForwardRefExoticComponent } from "react";
 
-interface IProps {
-    mxEvent: MatrixEvent;
-    children?: React.ReactNode;
-}
+import { IBodyProps } from "./IBodyProps";
 
-export default forwardRef<HTMLDivElement, IProps>(({ mxEvent, children }, ref) => {
+export default forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent, children }, ref) => {
     const text = mxEvent.getContent().body;
     return (
         <div className="mx_UnknownBody" ref={ref}>
@@ -31,4 +27,4 @@ export default forwardRef<HTMLDivElement, IProps>(({ mxEvent, children }, ref) =
             {children}
         </div>
     );
-});
+}) as ForwardRefExoticComponent<IBodyProps>;

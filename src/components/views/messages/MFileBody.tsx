@@ -168,7 +168,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         try {
             this.userDidClick = true;
             this.setState({
-                decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
+                decryptedBlob: await this.props.mediaEventHelper!.sourceBlob.value,
             });
         } catch (err) {
             logger.warn("Unable to decrypt attachment: ", err);
@@ -188,7 +188,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
             // As a button we're missing the `download` attribute for styling reasons, so
             // download with the file downloader.
             this.fileDownloader.download({
-                blob: await mediaHelper.sourceBlob.value,
+                blob: await mediaHelper!.sourceBlob.value,
                 name: this.fileName,
             });
         }
@@ -322,7 +322,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
 
                     // Start a fetch for the download
                     // Based upon https://stackoverflow.com/a/49500465
-                    this.props.mediaEventHelper.sourceBlob.value.then((blob) => {
+                    this.props.mediaEventHelper?.sourceBlob.value.then((blob) => {
                         const blobUrl = URL.createObjectURL(blob);
 
                         // We have to create an anchor to download the file
