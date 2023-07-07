@@ -16,14 +16,13 @@ limitations under the License.
 */
 
 import React from "react";
-import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { _t, UserFriendlyError } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Modal from "../../../../Modal";
-import AddThreepid, { Binding } from "../../../../AddThreepid";
+import AddThreepid, { Binding, ThirdPartyIdentifier } from "../../../../AddThreepid";
 import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
 import Field from "../../elements/Field";
 import SettingsSubsection from "../shared/SettingsSubsection";
@@ -38,7 +37,7 @@ This is a copy/paste of EmailAddresses, mostly.
 // TODO: Combine EmailAddresses and PhoneNumbers to be 3pid agnostic
 
 interface IPhoneNumberProps {
-    msisdn: IThreepid;
+    msisdn: ThirdPartyIdentifier;
 }
 
 interface IPhoneNumberState {
@@ -274,7 +273,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
 }
 
 interface IProps {
-    msisdns: IThreepid[];
+    msisdns: ThirdPartyIdentifier[];
     isLoading?: boolean;
 }
 

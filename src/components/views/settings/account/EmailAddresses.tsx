@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
+import { ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
 
@@ -25,7 +25,7 @@ import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
 import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 import * as Email from "../../../../email";
-import AddThreepid from "../../../../AddThreepid";
+import AddThreepid, { ThirdPartyIdentifier } from "../../../../AddThreepid";
 import Modal from "../../../../Modal";
 import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
 
@@ -42,8 +42,8 @@ that is available.
  */
 
 interface IExistingEmailAddressProps {
-    email: IThreepid;
-    onRemoved: (emails: IThreepid) => void;
+    email: ThirdPartyIdentifier;
+    onRemoved: (emails: ThirdPartyIdentifier) => void;
 }
 
 interface IExistingEmailAddressState {
@@ -130,8 +130,8 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
 }
 
 interface IProps {
-    emails: IThreepid[];
-    onEmailsChange: (emails: Partial<IThreepid>[]) => void;
+    emails: ThirdPartyIdentifier[];
+    onEmailsChange: (emails: ThirdPartyIdentifier[]) => void;
 }
 
 interface IState {
@@ -153,7 +153,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         };
     }
 
-    private onRemoved = (address: IThreepid): void => {
+    private onRemoved = (address: ThirdPartyIdentifier): void => {
         const emails = this.props.emails.filter((e) => e !== address);
         this.props.onEmailsChange(emails);
     };

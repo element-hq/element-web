@@ -16,14 +16,14 @@ limitations under the License.
 */
 
 import React from "react";
-import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
+import { ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, UserFriendlyError } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
 import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
-import AddThreepid from "../../../../AddThreepid";
+import AddThreepid, { ThirdPartyIdentifier } from "../../../../AddThreepid";
 import CountryDropdown from "../../auth/CountryDropdown";
 import Modal from "../../../../Modal";
 import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
@@ -37,8 +37,8 @@ This is a copy/paste of EmailAddresses, mostly.
 // TODO: Combine EmailAddresses and PhoneNumbers to be 3pid agnostic
 
 interface IExistingPhoneNumberProps {
-    msisdn: IThreepid;
-    onRemoved: (phoneNumber: IThreepid) => void;
+    msisdn: ThirdPartyIdentifier;
+    onRemoved: (phoneNumber: ThirdPartyIdentifier) => void;
 }
 
 interface IExistingPhoneNumberState {
@@ -125,8 +125,8 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
 }
 
 interface IProps {
-    msisdns: IThreepid[];
-    onMsisdnsChange: (phoneNumbers: Partial<IThreepid>[]) => void;
+    msisdns: ThirdPartyIdentifier[];
+    onMsisdnsChange: (phoneNumbers: ThirdPartyIdentifier[]) => void;
 }
 
 interface IState {
@@ -156,7 +156,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         };
     }
 
-    private onRemoved = (address: IThreepid): void => {
+    private onRemoved = (address: ThirdPartyIdentifier): void => {
         const msisdns = this.props.msisdns.filter((e) => e !== address);
         this.props.onMsisdnsChange(msisdns);
     };

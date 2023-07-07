@@ -61,6 +61,7 @@ import { SettingsSubsectionHeading } from "../../shared/SettingsSubsectionHeadin
 import Heading from "../../../typography/Heading";
 import InlineSpinner from "../../../elements/InlineSpinner";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
+import { ThirdPartyIdentifier } from "../../../../../AddThreepid";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -87,8 +88,8 @@ interface IState {
               agreedUrls: string[];
               resolve: (values: string[]) => void;
           };
-    emails: IThreepid[];
-    msisdns: IThreepid[];
+    emails: ThirdPartyIdentifier[];
+    msisdns: ThirdPartyIdentifier[];
     loading3pids: boolean; // whether or not the emails and msisdns have been loaded
     canChangePassword: boolean;
     idServerName?: string;
@@ -156,11 +157,11 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         }
     };
 
-    private onEmailsChange = (emails: IThreepid[]): void => {
+    private onEmailsChange = (emails: ThirdPartyIdentifier[]): void => {
         this.setState({ emails });
     };
 
-    private onMsisdnsChange = (msisdns: IThreepid[]): void => {
+    private onMsisdnsChange = (msisdns: ThirdPartyIdentifier[]): void => {
         this.setState({ msisdns });
     };
 

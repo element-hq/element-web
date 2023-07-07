@@ -566,7 +566,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             let isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
             let isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
             if (this.slidingSyncMode) {
-                const slidingList = SlidingSyncManager.instance.slidingSync.getListParams(this.props.tagId);
+                const slidingList = SlidingSyncManager.instance.slidingSync?.getListParams(this.props.tagId);
                 isAlphabetical = (slidingList?.sort || [])[0] === "by_name";
                 isUnreadFirst = (slidingList?.sort || [])[0] === "by_notification_level";
             }

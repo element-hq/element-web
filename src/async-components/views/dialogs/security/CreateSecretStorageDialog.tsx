@@ -103,7 +103,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         hasCancel: true,
         forceReset: false,
     };
-    private recoveryKey: IRecoveryKey;
+    private recoveryKey?: IRecoveryKey;
     private backupKey?: Uint8Array;
     private recoveryKeyNode = createRef<HTMLElement>();
     private passphraseField = createRef<Field>();
@@ -270,6 +270,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private onDownloadClick = (): void => {
+        if (!this.recoveryKey) return;
         const blob = new Blob([this.recoveryKey.encodedPrivateKey!], {
             type: "text/plain;charset=us-ascii",
         });
@@ -341,7 +342,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             if (forceReset) {
                 logger.log("Forcing secret storage reset");
                 await cli.bootstrapSecretStorage({
-                    createSecretStorageKey: async () => this.recoveryKey,
+                    createSecretStorageKey: async () => this.recoveryKey!,
                     setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
                 });
@@ -357,7 +358,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     authUploadDeviceSigningKeys: this.doBootstrapUIAuth,
                 });
                 await cli.bootstrapSecretStorage({
-                    createSecretStorageKey: async () => this.recoveryKey,
+                    createSecretStorageKey: async () => this.recoveryKey!,
                     keyBackupInfo: this.state.backupInfo!,
                     setupNewKeyBackup: !this.state.backupInfo,
                     getKeyBackupPassphrase: async (): Promise<Uint8Array> => {
@@ -762,7 +763,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 <div className="mx_CreateSecretStorageDialog_primaryContainer mx_CreateSecretStorageDialog_recoveryKeyPrimarycontainer">
                     <div className="mx_CreateSecretStorageDialog_recoveryKeyContainer">
                         <div className="mx_CreateSecretStorageDialog_recoveryKey">
-                            <code ref={this.recoveryKeyNode}>{this.recoveryKey.encodedPrivateKey}</code>
+                            <code ref={this.recoveryKeyNode}>{this.recoveryKey?.encodedPrivateKey}</code>
                         </div>
                         <div className="mx_CreateSecretStorageDialog_recoveryKeyButtons">
                             <AccessibleButton

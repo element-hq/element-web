@@ -16,14 +16,13 @@ limitations under the License.
 */
 
 import React from "react";
-import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { _t, UserFriendlyError } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Modal from "../../../../Modal";
-import AddThreepid, { Binding } from "../../../../AddThreepid";
+import AddThreepid, { Binding, ThirdPartyIdentifier } from "../../../../AddThreepid";
 import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
 import SettingsSubsection from "../shared/SettingsSubsection";
 import InlineSpinner from "../../elements/InlineSpinner";
@@ -46,7 +45,7 @@ TODO: Reduce all the copying between account vs. discovery components.
 */
 
 interface IEmailAddressProps {
-    email: IThreepid;
+    email: ThirdPartyIdentifier;
 }
 
 interface IEmailAddressState {
@@ -259,7 +258,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
     }
 }
 interface IProps {
-    emails: IThreepid[];
+    emails: ThirdPartyIdentifier[];
     isLoading?: boolean;
 }
 

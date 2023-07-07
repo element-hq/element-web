@@ -164,7 +164,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
         // check all lists for each tag we know about and see if the room is there
         const tags: TagID[] = [];
         for (const tagId in this.tagIdToSortAlgo) {
-            const listData = this.context.slidingSyncManager.slidingSync.getListData(tagId);
+            const listData = this.context.slidingSyncManager.slidingSync?.getListData(tagId);
             if (!listData) {
                 continue;
             }
@@ -294,7 +294,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
             if (room) {
                 // resort it based on the slidingSync view of the list. This may cause this old sticky
                 // room to cease to exist.
-                const listData = this.context.slidingSyncManager.slidingSync.getListData(tagId);
+                const listData = this.context.slidingSyncManager.slidingSync?.getListData(tagId);
                 if (!listData) {
                     continue;
                 }
@@ -313,7 +313,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
     protected async onReady(): Promise<any> {
         logger.info("SlidingRoomListStore.onReady");
         // permanent listeners: never get destroyed. Could be an issue if we want to test this in isolation.
-        this.context.slidingSyncManager.slidingSync.on(SlidingSyncEvent.List, this.onSlidingSyncListUpdate.bind(this));
+        this.context.slidingSyncManager.slidingSync!.on(SlidingSyncEvent.List, this.onSlidingSyncListUpdate.bind(this));
         this.context.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdated.bind(this));
         this.context.spaceStore.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdated.bind(this));
         if (this.context.spaceStore.activeSpace) {
