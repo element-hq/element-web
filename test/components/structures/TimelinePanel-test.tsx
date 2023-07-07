@@ -851,22 +851,22 @@ describe("TimelinePanel", () => {
         });
 
         it("updates thread previews", async () => {
-            root.setUnsigned({
-                "m.relations": {
-                    [THREAD_RELATION_TYPE.name]: {
-                        latest_event: reply1.event,
-                        count: 1,
-                        current_user_participated: true,
-                    },
-                },
-            });
+            mocked(client.supportsThreads).mockReturnValue(true);
+            reply1.getContent()["m.relates_to"] = {
+                rel_type: RelationType.Thread,
+                event_id: root.getId(),
+            };
+            reply2.getContent()["m.relates_to"] = {
+                rel_type: RelationType.Thread,
+                event_id: root.getId(),
+            };
 
             const thread = room.createThread(root.getId()!, root, [], true);
             // So that we do not have to mock the thread loading
             thread.initialEventsFetched = true;
             // @ts-ignore
             thread.fetchEditsWhereNeeded = () => Promise.resolve();
-            await thread.addEvent(reply1, true);
+            await thread.addEvent(reply1, false, true);
             await allThreads.getLiveTimeline().addEvent(thread.rootEvent!, { toStartOfTimeline: true });
             const replyToEvent = jest.spyOn(thread, "replyToEvent", "get");
 
@@ -878,16 +878,6 @@ describe("TimelinePanel", () => {
             await dom.findByText("RootEvent");
             await dom.findByText("ReplyEvent1");
             expect(replyToEvent).toHaveBeenCalled();
-
-            root.setUnsigned({
-                "m.relations": {
-                    [THREAD_RELATION_TYPE.name]: {
-                        latest_event: reply2.event,
-                        count: 2,
-                        current_user_participated: true,
-                    },
-                },
-            });
 
             replyToEvent.mockClear();
             await thread.addEvent(reply2, false, true);
