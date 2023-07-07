@@ -24,6 +24,9 @@ import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { EventEditor, EventViewer, eventTypeField, stateKeyField, IEditorProps, stringify } from "./Event";
 import FilteredList from "./FilteredList";
+import Spinner from "../../elements/Spinner";
+import SyntaxHighlight from "../../elements/SyntaxHighlight";
+import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 
 export const StateEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const context = useContext(DevtoolsContext);
@@ -46,6 +49,48 @@ interface StateEventButtonProps {
     label: string;
     onClick(): void;
 }
+
+const RoomStateHistory: React.FC<{
+    mxEvent: MatrixEvent;
+    onBack(): void;
+}> = ({ mxEvent, onBack }) => {
+    const cli = useContext(MatrixClientContext);
+    const events = useAsyncMemo(
+        async () => {
+            const events = [mxEvent.event];
+            while (!!events[0].unsigned?.replaces_state) {
+                try {
+                    events.unshift(await cli.fetchRoomEvent(mxEvent.getRoomId()!, events[0].unsigned.replaces_state));
+                } catch (e) {
+                    events.unshift({
+                        event_id: events[0].unsigned.replaces_state,
+                        unsigned: {
+                            error: e instanceof Error ? e.message : String(e),
+                        },
+                    });
+                }
+            }
+            return events;
+        },
+        [cli, mxEvent],
+        null,
+    );
+
+    let body = <Spinner />;
+    if (events !== null) {
+        body = (
+            <>
+                {events.map((ev) => (
+                    <SyntaxHighlight language="json" key={ev.event_id}>
+                        {stringify(ev)}
+                    </SyntaxHighlight>
+                ))}
+            </>
+        );
+    }
+
+    return <BaseTool onBack={onBack}>{body}</BaseTool>;
+};
 
 const StateEventButton: React.FC<StateEventButtonProps> = ({ label, onClick }) => {
     const trimmed = label.trim();
@@ -71,6 +116,7 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
     const context = useContext(DevtoolsContext);
     const [query, setQuery] = useState("");
     const [event, setEvent] = useState<MatrixEvent | null>(null);
+    const [history, setHistory] = useState(false);
 
     const events = context.room.currentState.events.get(eventType)!;
 
@@ -82,6 +128,12 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
         }
     }, [events]);
 
+    if (event && history) {
+        const _onBack = (): void => {
+            setHistory(false);
+        };
+        return <RoomStateHistory mxEvent={event} onBack={_onBack} />;
+    }
     if (event) {
         const _onBack = (): void => {
             if (events?.size === 1 && events.has("")) {
@@ -90,7 +142,11 @@ const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBa
                 setEvent(null);
             }
         };
-        return <EventViewer mxEvent={event} onBack={_onBack} Editor={StateEventEditor} />;
+        const onHistoryClick = (): void => {
+            setHistory(true);
+        };
+        const extraButton = <button onClick={onHistoryClick}>{_t("See history")}</button>;
+        return <EventViewer mxEvent={event} onBack={_onBack} Editor={StateEventEditor} extraButton={extraButton} />;
     }
 
     return (

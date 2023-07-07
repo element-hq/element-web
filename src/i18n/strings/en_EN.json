@@ -3224,6 +3224,7 @@
     "<%(count)s spaces>|other": "<%(count)s spaces>",
     "<%(count)s spaces>|one": "<space>",
     "<%(count)s spaces>|zero": "<empty string>",
+    "See history": "See history",
     "Send custom state event": "Send custom state event",
     "Capabilities": "Capabilities",
     "Failed to load.": "Failed to load.",

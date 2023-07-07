@@ -31,6 +31,7 @@ export interface IDevtoolsProps {
 interface IMinProps extends Pick<IDevtoolsProps, "onBack"> {
     className?: string;
     children?: ReactNode;
+    extraButton?: ReactNode;
 }
 
 interface IProps extends IMinProps {
@@ -38,7 +39,14 @@ interface IProps extends IMinProps {
     onAction(): Promise<string | void>;
 }
 
-const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({ className, actionLabel, onBack, onAction, children }) => {
+const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({
+    className,
+    actionLabel,
+    onBack,
+    onAction,
+    children,
+    extraButton,
+}) => {
     const [message, setMessage] = useState<string | null>(null);
 
     const onBackClick = (): void => {
@@ -68,6 +76,7 @@ const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({ className, actionLabel, on
         <>
             <div className={classNames("mx_DevTools_content", className)}>{children}</div>
             <div className="mx_Dialog_buttons">
+                {extraButton}
                 <button onClick={onBackClick}>{_t("Back")}</button>
                 {actionButton}
             </div>

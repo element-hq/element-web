@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ChangeEvent, useContext, useMemo, useRef, useState } from "react";
+import React, { ChangeEvent, ReactNode, useContext, useMemo, useRef, useState } from "react";
 import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t, _td } from "../../../../languageHandler";
@@ -143,9 +143,10 @@ export interface IEditorProps extends Pick<IDevtoolsProps, "onBack"> {
 
 interface IViewerProps extends Required<IEditorProps> {
     Editor: React.FC<IEditorProps>;
+    extraButton?: ReactNode;
 }
 
-export const EventViewer: React.FC<IViewerProps> = ({ mxEvent, onBack, Editor }) => {
+export const EventViewer: React.FC<IViewerProps> = ({ mxEvent, onBack, Editor, extraButton }) => {
     const [editing, setEditing] = useState(false);
 
     if (editing) {
@@ -160,7 +161,7 @@ export const EventViewer: React.FC<IViewerProps> = ({ mxEvent, onBack, Editor })
     };
 
     return (
-        <BaseTool onBack={onBack} actionLabel={_t("Edit")} onAction={onAction}>
+        <BaseTool onBack={onBack} actionLabel={_t("Edit")} onAction={onAction} extraButton={extraButton}>
             <SyntaxHighlight language="json">{stringify(mxEvent.event)}</SyntaxHighlight>
         </BaseTool>
     );
