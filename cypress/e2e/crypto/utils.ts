@@ -28,13 +28,11 @@ export type EmojiMapping = [emoji: string, name: string];
 export function waitForVerificationRequest(cli: MatrixClient): Promise<VerificationRequest> {
     return new Promise<VerificationRequest>((resolve) => {
         const onVerificationRequestEvent = async (request: VerificationRequest) => {
-            // @ts-ignore CryptoEvent is not exported to window.matrixcs; using the string value here
-            cli.off("crypto.verification.request", onVerificationRequestEvent);
             await request.accept();
             resolve(request);
         };
-        // @ts-ignore
-        cli.on("crypto.verification.request", onVerificationRequestEvent);
+        // @ts-ignore CryptoEvent is not exported to window.matrixcs; using the string value here
+        cli.once("crypto.verificationRequestReceived", onVerificationRequestEvent);
     });
 }
 
@@ -59,7 +57,6 @@ export function handleSasVerification(verifier: Verifier): Promise<EmojiMapping[
 
         // @ts-ignore as above, avoiding reference to VerifierEvent
         verifier.on("show_sas", onShowSas);
-        verifier.verify();
     });
 }
 
@@ -134,7 +131,10 @@ export function doTwoWaySasVerification(verifier: Verifier): void {
     cy.wrap(emojiPromise).then((emojis: EmojiMapping[]) => {
         cy.get(".mx_VerificationShowSas_emojiSas_block").then((emojiBlocks) => {
             emojis.forEach((emoji: EmojiMapping, index: number) => {
-                expect(emojiBlocks[index].textContent.toLowerCase()).to.eq(emoji[0] + emoji[1]);
+                // VerificationShowSas munges the case of the emoji descriptions returned by the js-sdk before
+                // displaying them. Once we drop support for legacy crypto, that code can go away, and so can the
+                // case-munging here.
+                expect(emojiBlocks[index].textContent.toLowerCase()).to.eq(emoji[0] + emoji[1].toLowerCase());
             });
         });
     });

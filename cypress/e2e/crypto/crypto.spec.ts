@@ -116,9 +116,9 @@ const verify = function (this: CryptoTestContext) {
         // this requires creating a DM, so can take a while. Give it a longer timeout.
         cy.findByRole("button", { name: "Verify by emoji", timeout: 30000 }).click();
 
-        cy.wrap(bobsVerificationRequestPromise).then((request: VerificationRequest) => {
+        cy.wrap(bobsVerificationRequestPromise).then(async (request: VerificationRequest) => {
             // the bot user races with the Element user to hit the "verify by emoji" button
-            const verifier = request.beginKeyVerification("m.sas.v1");
+            const verifier = await request.startVerification("m.sas.v1");
             doTwoWaySasVerification(verifier);
         });
         cy.findByRole("button", { name: "They match" }).click();
