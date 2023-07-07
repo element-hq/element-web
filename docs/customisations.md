@@ -1,5 +1,13 @@
 # Customisations
 
+### 🦖 DEPRECATED
+
+Customisations have been deprecated in favour of the [Module API](https://github.com/vector-im/element-web/blob/develop/docs/modules.md).
+If you have use cases from customisations which are not yet available via the Module API please open an issue.
+Customisations will be removed from the codebase in a future release.
+
+---
+
 Element Web and the React SDK support "customisation points" that can be used to
 easily add custom logic specific to a particular deployment of Element Web.
 
