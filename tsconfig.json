@@ -13,8 +13,7 @@
         "declaration": true,
         "jsx": "react",
         "lib": ["es2020", "dom", "dom.iterable"],
-        "strict": true,
-        "useUnknownInCatchVariables": false
+        "strict": true
     },
     "include": [
         "./node_modules/matrix-js-sdk/src/@types/*.d.ts",
