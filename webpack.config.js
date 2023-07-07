@@ -61,6 +61,15 @@ try {
     // stringify the output so it appears in logs correctly, as large files can sometimes get
     // represented as `<Object>` which is less than helpful.
     console.log("Using customisations.json : " + JSON.stringify(fileOverrides, null, 4));
+
+    process.on("exit", () => {
+        console.log(""); // blank line
+        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.warn("!! Customisations have been deprecated and will be removed in a future release      !!");
+        console.warn("!! See https://github.com/vector-im/element-web/blob/develop/docs/customisations.md !!");
+        console.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.log(""); // blank line
+    });
 } catch (e) {
     // ignore - not important
 }
