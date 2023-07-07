@@ -25,10 +25,6 @@ import Modal from "../../../../../Modal";
 import PlatformPeg from "../../../../../PlatformPeg";
 import UpdateCheckButton from "../../UpdateCheckButton";
 import BugReportDialog from "../../../dialogs/BugReportDialog";
-import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
-import { Action } from "../../../../../dispatcher/actions";
-import { UserTab } from "../../../dialogs/UserTab";
-import dis from "../../../../../dispatcher/dispatcher";
 import CopyableText from "../../../elements/CopyableText";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
@@ -232,13 +228,6 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         return `${appVersion}\n${olmVersion}`;
     };
 
-    private onKeyboardShortcutsClicked = (): void => {
-        dis.dispatch<OpenToTabPayload>({
-            action: Action.ViewUserSettings,
-            initialTabId: UserTab.Keyboard,
-        });
-    };
-
     public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
@@ -336,11 +325,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             <SettingsTab>
                 <SettingsSection heading={_t("Help & About")}>
                     {bugReportingSection}
-                    <SettingsSubsection heading={_t("FAQ")} description={faqText}>
-                        <AccessibleButton kind="primary" onClick={this.onKeyboardShortcutsClicked}>
-                            {_t("Keyboard Shortcuts")}
-                        </AccessibleButton>
-                    </SettingsSubsection>
+                    <SettingsSubsection heading={_t("FAQ")} description={faqText} />
                     <SettingsSubsection heading={_t("Versions")}>
                         <SettingsSubsectionText>
                             <CopyableText getTextToCopy={this.getVersionTextToCopy}>

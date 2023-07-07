@@ -1579,7 +1579,6 @@
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.",
     "Help & About": "Help & About",
     "FAQ": "FAQ",
-    "Keyboard Shortcuts": "Keyboard Shortcuts",
     "Versions": "Versions",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Homeserver is <code>%(homeserverUrl)s</code>",
     "Identity server is <code>%(identityServerUrl)s</code>": "Identity server is <code>%(identityServerUrl)s</code>",
