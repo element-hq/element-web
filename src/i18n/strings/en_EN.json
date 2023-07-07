@@ -2841,6 +2841,7 @@
     "Toolbox": "Toolbox",
     "Developer Tools": "Developer Tools",
     "Room ID: %(roomId)s": "Room ID: %(roomId)s",
+    "Thread Root ID: %(threadRootId)s": "Thread Root ID: %(threadRootId)s",
     "The poll has ended. No votes were cast.": "The poll has ended. No votes were cast.",
     "The poll has ended. Top answer: %(topAnswer)s": "The poll has ended. Top answer: %(topAnswer)s",
     "Failed to end poll": "Failed to end poll",

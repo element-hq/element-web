@@ -65,12 +65,13 @@ const Tools: Record<Category, [label: string, tool: Tool][]> = {
 
 interface IProps {
     roomId: string;
+    threadRootId?: string | null;
     onFinished(finished?: boolean): void;
 }
 
 type ToolInfo = [label: string, tool: Tool];
 
-const DevtoolsDialog: React.FC<IProps> = ({ roomId, onFinished }) => {
+const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) => {
     const [tool, setTool] = useState<ToolInfo | null>(null);
 
     let body: JSX.Element;
@@ -125,9 +126,18 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, onFinished }) => {
                         <CopyableText className="mx_DevTools_label_right" getTextToCopy={() => roomId} border={false}>
                             {_t("Room ID: %(roomId)s", { roomId })}
                         </CopyableText>
+                        {!threadRootId ? null : (
+                            <CopyableText
+                                className="mx_DevTools_label_right"
+                                getTextToCopy={() => threadRootId}
+                                border={false}
+                            >
+                                {_t("Thread Root ID: %(threadRootId)s", { threadRootId })}
+                            </CopyableText>
+                        )}
                         <div className="mx_DevTools_label_bottom" />
                         {cli.getRoom(roomId) && (
-                            <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId)! }}>
+                            <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId)!, threadRootId }}>
                                 {body}
                             </DevtoolsContext.Provider>
                         )}

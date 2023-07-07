@@ -204,6 +204,13 @@ export const TimelineEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack })
         };
 
         defaultContent = stringify(newContent);
+    } else if (context.threadRootId) {
+        defaultContent = stringify({
+            "m.relates_to": {
+                rel_type: "m.thread",
+                event_id: context.threadRootId,
+            },
+        });
     }
 
     return <EventEditor fieldDefs={fields} defaultContent={defaultContent} onSend={onSend} onBack={onBack} />;
