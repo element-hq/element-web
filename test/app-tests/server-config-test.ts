@@ -47,16 +47,16 @@ describe("Loading server config", function () {
                 },
             },
         });
-        await loadApp();
-        expect(SdkConfig.get("validated_server_config").hsUrl).toBe("https://matrix-client.matrix.org");
+        await loadApp({});
+        expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
     });
 
     it("should use the default_server_name when resolveable", async function () {
         SdkConfig.put({
             default_server_name: "matrix.org",
         });
-        await loadApp();
-        expect(SdkConfig.get("validated_server_config").hsUrl).toBe("https://matrix-client.matrix.org");
+        await loadApp({});
+        expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
     });
 
     it(
@@ -72,8 +72,8 @@ describe("Loading server config", function () {
                     },
                 },
             });
-            await loadApp();
-            expect(SdkConfig.get("validated_server_config").hsUrl).toBe("https://matrix-client.matrix.org");
+            await loadApp({});
+            expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
         },
     );
 });

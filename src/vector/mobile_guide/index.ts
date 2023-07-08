@@ -79,10 +79,10 @@ async function initPage(): Promise<void> {
             }
         } catch (e) {
             if (wkConfig && wkConfig["m.homeserver"]) {
-                hsUrl = wkConfig["m.homeserver"]["base_url"];
+                hsUrl = wkConfig["m.homeserver"]["base_url"] || undefined;
 
                 if (wkConfig["m.identity_server"]) {
-                    isUrl = wkConfig["m.identity_server"]["base_url"];
+                    isUrl = wkConfig["m.identity_server"]["base_url"] || undefined;
                 }
             } else {
                 logger.error(e);
