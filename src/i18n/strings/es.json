@@ -6,7 +6,6 @@
     "Create Account": "Crear cuenta",
     "Explore rooms": "Explorar salas",
     "Unexpected error preparing the app. See console for details.": "Error inesperado preparando la aplicación. Ver la consola para más detalles.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuración errónea: sólo puede especificar uno de default_server_config, default_server_name, o default_hs_url.",
     "Invalid configuration: no default server specified.": "Configuración errónea: no se ha especificado servidor.",
     "The message from the parser is: %(message)s": "El mensaje del parser es: %(message)s",
     "Invalid JSON": "JSON inválido",

@@ -6,7 +6,6 @@
     "Create Account": "Fiók létrehozása",
     "Explore rooms": "Szobák felderítése",
     "Unexpected error preparing the app. See console for details.": "Váratlan hiba történt az alkalmazás előkészítésénél. A részletekért lásd a konzolt.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Érvénytelen konfiguráció: ezek közül csak egyet lehet megadni: default_server_config, default_server_name és default_hs_url.",
     "Invalid configuration: no default server specified.": "Érvénytelen konfiguráció: nincs megadva alapértelmezett kiszolgáló.",
     "The message from the parser is: %(message)s": "A feldolgozó algoritmus üzenete: %(message)s",
     "Invalid JSON": "Érvénytelen JSON",

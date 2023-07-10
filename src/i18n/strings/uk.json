@@ -6,7 +6,6 @@
     "Create Account": "Створити обліковий запис",
     "Explore rooms": "Каталог кімнат",
     "Unexpected error preparing the app. See console for details.": "Неочікувана помилка при підготовці програми. Дивіться деталі у виводі консолі.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Невірна конфігурація: можна вказати лише default_server_config, default_server_name або default_hs_url.",
     "Invalid configuration: no default server specified.": "Невірна конфігурація: не вказано сервер за замовчуванням.",
     "The message from the parser is: %(message)s": "Повідомлення від аналізатора : %(message)s",
     "Invalid JSON": "Хибний JSON",

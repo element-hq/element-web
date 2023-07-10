@@ -5,7 +5,6 @@
     "The message from the parser is: %(message)s": "பாகுபடுத்தி அனுப்பிய செய்தி: %(message)s",
     "Invalid JSON": "தவறான JSON",
     "Unexpected error preparing the app. See console for details.": "பயன்பாட்டைத் தயார் செய்வதில் எதிர்பாராத பிழை. விவரங்களுக்கு console ஐப் பார்க்கவும்.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "தவறான உள்ளமைவு: default_server_config, default_server_name அல்லது default_hs_url இல் ஒன்றை மட்டுமே குறிப்பிட முடியும்.",
     "Invalid configuration: no default server specified.": "தவறான உள்ளமைவு: இயல்புநிலை சேவையகம் குறிப்பிடப்படவில்லை.",
     "Sign In": "உள்நுழைக",
     "Create Account": "உங்கள் கணக்கை துவங்குங்கள்",
