@@ -16,7 +16,7 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { Widget, WidgetKind } from "matrix-widget-api";
+import { MatrixWidgetType, Widget, WidgetKind } from "matrix-widget-api";
 
 import { OIDCState, WidgetPermissionStore } from "../../../src/stores/widgets/WidgetPermissionStore";
 import SettingsStore from "../../../src/settings/SettingsStore";
@@ -24,6 +24,7 @@ import { TestSdkContext } from "../../TestSdkContext";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { stubClient } from "../../test-utils";
+import { StopGapWidgetDriver } from "../../../src/stores/widgets/StopGapWidgetDriver";
 
 jest.mock("../../../src/settings/SettingsStore");
 
@@ -37,6 +38,12 @@ describe("WidgetPermissionStore", () => {
         creatorUserId: userId,
         type: "m.custom",
         url: "https://invalid.address.here",
+    });
+    const elementCallWidget = new Widget({
+        id: "group_call",
+        creatorUserId: "@alice:example.org",
+        type: MatrixWidgetType.Custom,
+        url: "https://call.element.io",
     });
     let settings: Record<string, any> = {}; // key value store
 
@@ -91,5 +98,11 @@ describe("WidgetPermissionStore", () => {
         expect(store).toBeDefined();
         const store2 = context.widgetPermissionStore;
         expect(store2).toStrictEqual(store);
+    });
+    it("auto-approves OIDC requests for element-call", async () => {
+        new StopGapWidgetDriver([], elementCallWidget, WidgetKind.Room, true, roomId);
+        expect(widgetPermissionStore.getOIDCState(elementCallWidget, WidgetKind.Room, roomId)).toEqual(
+            OIDCState.Allowed,
+        );
     });
 });

@@ -165,6 +165,14 @@ export class StopGapWidgetDriver extends WidgetDriver {
                     WidgetEventCapability.forToDeviceEvent(EventDirection.Receive, eventType).raw,
                 );
             }
+
+            // To always allow OIDC requests for element call, the widgetPermissionStore is used:
+            SdkContextClass.instance.widgetPermissionStore.setOIDCState(
+                forWidget,
+                forWidgetKind,
+                inRoomId,
+                OIDCState.Allowed,
+            );
         }
     }
 
