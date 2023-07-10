@@ -53,6 +53,7 @@ jobs:
                           const topic = data.topic.replace(regex, RELEASE_TOPIC);
                           if (topic === data.topic) {
                               console.log(roomId, "nothing to do");
+                              return;
                           }
 
                           await fetch(apiUrl, {
@@ -63,7 +64,7 @@ jobs:
                               },
                               headers,
                           });
-                          console.log(roomId, "topic updated");
+                          console.log(roomId, "topic updated:", topic);
                       }
 
                       await updateReleaseInTopic(LOBBY_ROOM_ID);
