@@ -1,5 +1,4 @@
 {
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Neispravna konfiguracija: navesti se samo može jedan od default_server_config, default_server_name ili default_hs_url.",
     "Invalid configuration: no default server specified.": "Neispravna konfiguracija: nije naveden zadani server.",
     "Your Element is misconfigured": "Vaš element je pogrešno konfiguriran",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfiguracija vašeg elementa sadrži nevažeći JSON. Ispravite problem i ponovo učitajte stranicu.",

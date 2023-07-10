@@ -27,6 +27,5 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "คุณสามารถใช้เบราว์เซอร์ปัจจุบันของคุณต่อไปได้ แต่คุณสมบัติบางอย่างหรือทั้งหมดอาจไม่ทำงาน และรูปลักษณ์ของแอปพลิเคชันอาจไม่ถูกต้อง.",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s ใช้คุณลักษณะขั้นสูงของเบราว์เซอร์ซึ่งไม่รองรับโดยเบราว์เซอร์ปัจจุบันของคุณ.",
     "Use %(brand)s on mobile": "ใช้ %(brand)s บนมือถือ",
-    "Go to your browser to complete Sign In": "ไปที่เบราว์เซอร์ของคุณเพื่อลงชื่อเข้าใช้ให้เสร็จสมบูรณ์.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "การกำหนดค่าไม่ถูกต้อง: สามารถระบุได้เพียงอย่างใดอย่างหนึ่ง default_server_config, default_server_name, or default_hs_url."
+    "Go to your browser to complete Sign In": "ไปที่เบราว์เซอร์ของคุณเพื่อลงชื่อเข้าใช้ให้เสร็จสมบูรณ์."
 }

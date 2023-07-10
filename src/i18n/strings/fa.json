@@ -7,7 +7,6 @@
     "Sign In": "ورود",
     "Create Account": "ایجاد حساب کاربری",
     "Explore rooms": "جستجو در اتاق ها",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "پیکربندی نامعتبر: فقط میتوانید یکی از default_server_config، default_server_name یا default_hs_url را مشخص کنید.",
     "Invalid configuration: no default server specified.": "پیکربندی نامعتبر: سرور پیشفرض مشخص نشده است.",
     "Your Element is misconfigured": "Element شما پیکربندی نشده است",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "پیکربندی المنت شما شامل JSON نا معتبر است. لطفا مشکل را اصلاح کنید و صفحه را بارگذاری مجدد کنید.",

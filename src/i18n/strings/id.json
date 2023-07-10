@@ -25,7 +25,6 @@
     "Invalid JSON": "JSON tidak absah",
     "The message from the parser is: %(message)s": "Pesan dari pengurai adalah: %(message)s",
     "Your Element is misconfigured": "Anda salah mengatur Element",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Konfigurasi tidak absah: hanya bisa menentukan satu dari default_server_config, default_server_name, atau default_hs_url.",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s di %(osName)s",
     "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
