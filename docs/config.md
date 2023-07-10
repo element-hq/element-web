@@ -45,8 +45,9 @@ One of the following options **must** be supplied:
    information. These are the same values seen as `base_url` in the `default_server_config` example, with `default_is_url`
    being optional.
 
-If a combination of these three methods is used then Element will fail to load. This is because it is unclear which
-should be considered "first".
+If both `default_server_config` and `default_server_name` are used, Element will try to look up the connection
+infomation using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
+infomation.
 
 ## Labs flags
 
