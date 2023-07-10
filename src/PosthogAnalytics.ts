@@ -138,6 +138,7 @@ export class PosthogAnalytics {
     private propertiesForNextEvent: Partial<Record<"$set" | "$set_once", UserProperties>> = {};
     private userPropertyCache: UserProperties = {};
     private authenticationType: Signup["authenticationType"] = "Other";
+    private watchSettingRef?: string;
 
     public static get instance(): PosthogAnalytics {
         if (!this._instance) {
@@ -337,6 +338,7 @@ export class PosthogAnalytics {
         if (this.enabled) {
             this.posthog.reset();
         }
+        if (this.watchSettingRef) SettingsStore.unwatchSetting(this.watchSettingRef);
         this.setAnonymity(Anonymity.Disabled);
     }
 
@@ -400,7 +402,7 @@ export class PosthogAnalytics {
         //  * When the user changes their preferences on this device
         // Note that for new accounts, pseudonymousAnalyticsOptIn won't be set, so updateAnonymityFromSettings
         // won't be called (i.e. this.anonymity will be left as the default, until the setting changes)
-        SettingsStore.watchSetting(
+        this.watchSettingRef = SettingsStore.watchSetting(
             "pseudonymousAnalyticsOptIn",
             null,
             (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
