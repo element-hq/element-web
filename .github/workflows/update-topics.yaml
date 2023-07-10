@@ -57,7 +57,7 @@ jobs:
                           }
                           if (data["org.matrix.msc3765.topic"]) {
                               data["org.matrix.msc3765.topic"].forEach(d => {
-                                  data.body = data.body.replace(regex, RELEASE_TOPIC);
+                                  d.body = d.body.replace(regex, RELEASE_TOPIC);
                               });
                           }
 
