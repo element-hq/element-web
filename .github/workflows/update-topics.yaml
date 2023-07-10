@@ -44,6 +44,12 @@ jobs:
                               "Content-Type": "application/json",
                               "Authorization": `Bearer ${TOKEN}`,
                           };
+                          await fetch(`${HS_URL}/_matrix/client/v3/rooms/${roomId}/join`, {
+                              method: "POST",
+                              headers,
+                              body: "{}",
+                          });
+                          
                           let res = await fetch(apiUrl, {
                               method: "GET",
                               headers,
