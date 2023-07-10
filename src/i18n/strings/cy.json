@@ -2,7 +2,6 @@
     "The message from the parser is: %(message)s": "Y neges gan y dosrannudd yn: %(message)s",
     "Invalid JSON": "JSON annilys",
     "Unexpected error preparing the app. See console for details.": "Gwall annisgwyl wrth baratoi'r app. Gweler y consol am fanylion.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Gosodiad annilys: dim ond un o default_server_config, default_server_name, neu default_hs_url y gall ei nodi.",
     "Invalid configuration: no default server specified.": "Gosodiad annilys: ni nodwyd gweinydd diofyn.",
     "Unknown device": "Dyfais anhysbys",
     "Dismiss": "Wfftio",
