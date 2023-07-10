@@ -51,7 +51,9 @@ jobs:
 
                           const data = await res.json();
                           const topic = data.topic.replace(regex, RELEASE_TOPIC);
-                          if (topic === data.topic) return; // nothing to do
+                          if (topic === data.topic) {
+                              console.log(roomId, "nothing to do");
+                          }
 
                           await fetch(apiUrl, {
                               method: "PUT",
@@ -61,6 +63,7 @@ jobs:
                               },
                               headers,
                           });
+                          console.log(roomId, "topic updated");
                       }
 
                       await updateReleaseInTopic(LOBBY_ROOM_ID);
