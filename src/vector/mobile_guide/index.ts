@@ -44,10 +44,10 @@ async function initPage(): Promise<void> {
     const defaultIsUrl = config?.["default_is_url"];
 
     const incompatibleOptions = [wkConfig, serverName, defaultHsUrl].filter((i) => !!i);
-    if (incompatibleOptions.length > 1) {
+    if (defaultHsUrl && (wkConfig || serverName)) {
         return renderConfigError(
-            "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
-                "or default_hs_url.",
+            "Invalid configuration: a default_hs_url can't be specified along with default_server_name " +
+                "or default_server_config",
         );
     }
     if (incompatibleOptions.length < 1) {
@@ -57,7 +57,7 @@ async function initPage(): Promise<void> {
     let hsUrl: string | undefined;
     let isUrl: string | undefined;
 
-    if (typeof wkConfig?.["m.homeserver"]?.["base_url"] === "string") {
+    if (!serverName && typeof wkConfig?.["m.homeserver"]?.["base_url"] === "string") {
         hsUrl = wkConfig["m.homeserver"]["base_url"];
 
         if (typeof wkConfig["m.identity_server"]?.["base_url"] === "string") {
@@ -78,8 +78,16 @@ async function initPage(): Promise<void> {
                 }
             }
         } catch (e) {
-            logger.error(e);
-            return renderConfigError("Unable to fetch homeserver configuration");
+            if (wkConfig && wkConfig["m.homeserver"]) {
+                hsUrl = wkConfig["m.homeserver"]["base_url"] || undefined;
+
+                if (wkConfig["m.identity_server"]) {
+                    isUrl = wkConfig["m.identity_server"]["base_url"] || undefined;
+                }
+            } else {
+                logger.error(e);
+                return renderConfigError("Unable to fetch homeserver configuration");
+            }
         }
     }
 
