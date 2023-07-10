@@ -44,7 +44,7 @@ jobs:
                               "Content-Type": "application/json",
                               "Authorization": `Bearer ${TOKEN}`,
                           };
-                          const res = await fetch(apiUrl, {
+                          let res = await fetch(apiUrl, {
                               method: "GET",
                               headers,
                           });
@@ -56,7 +56,7 @@ jobs:
                               return;
                           }
 
-                          const res = await fetch(apiUrl, {
+                          res = await fetch(apiUrl, {
                               method: "PUT",
                               body: {
                                   ...data,
