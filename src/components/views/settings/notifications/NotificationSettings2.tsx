@@ -180,7 +180,7 @@ export default function NotificationSettings2(): JSX.Element {
                     <LabelledCheckbox
                         label="People"
                         value={settings.sound.people !== undefined}
-                        disabled={disabled}
+                        disabled={disabled || settings.defaultLevels.dm === RoomNotifState.MentionsOnly}
                         onChange={(value) => {
                             reconcile({
                                 ...model!,
