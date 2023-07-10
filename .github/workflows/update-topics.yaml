@@ -78,6 +78,5 @@ jobs:
                       }
 
                       await updateReleaseInTopic(LOBBY_ROOM_ID);
-
-#                      await updateReleaseInTopic(PUBLIC_ROOM_ID);
-#                      await updateReleaseInTopic(ANNOUNCEMENT_ROOM_ID);
+                      await updateReleaseInTopic(PUBLIC_ROOM_ID);
+                      await updateReleaseInTopic(ANNOUNCEMENT_ROOM_ID);
