@@ -27,5 +27,6 @@
     "Use %(brand)s on mobile": "Kasuta rakendust %(brand)s nutiseadmes",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Hajutatud ja krüpteeritud suhtlus- ning ühistöörakendus, mille aluseks on $matrixLogo",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "Vigane seadistus: default_hs_url ei saa olla määratud koos default_server_name või default_server_config tunnustega"
 }
