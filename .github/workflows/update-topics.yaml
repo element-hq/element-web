@@ -55,6 +55,11 @@ jobs:
                               console.log(roomId, "nothing to do");
                               return;
                           }
+                          if (data["org.matrix.msc3765.topic"]) {
+                              data["org.matrix.msc3765.topic"].forEach(d => {
+                                  data.body = data.body.replace(regex, RELEASE_TOPIC);
+                              });
+                          }
 
                           res = await fetch(apiUrl, {
                               method: "PUT",
