@@ -5,7 +5,6 @@
     "Unexpected error preparing the app. See console for details.": "Có lỗi xảy ra trong lúc thiết lập ứng dụng. Mở bảng điều khiển (console) để biết chi tiết.",
     "The message from the parser is: %(message)s": "Thông báo của trình xử lý là: %(message)s",
     "Invalid JSON": "JSON không hợp lệ",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Thiết lập không hợp lệ: chỉ có thể điền một trong số sau default_server_config, default_server_name, hoặc default_hs_url.",
     "Invalid configuration: no default server specified.": "Thiết lập không hợp lệ: chưa chỉ định máy chủ mặc định.",
     "Sign In": "Đăng nhập",
     "Create Account": "Tạo tài khoản",

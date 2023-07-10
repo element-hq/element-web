@@ -8,7 +8,6 @@
     "The message from the parser is: %(message)s": "Meddelandet från parsern är: %(message)s",
     "Invalid JSON": "Ogiltig JSON",
     "Unexpected error preparing the app. See console for details.": "Oväntat fel vid appstart. Se konsolen för mer information.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ogiltiga inställningar: det är enbart möjligt att specificera en default_config, default_server, eller default_hs_url.",
     "Invalid configuration: no default server specified.": "Ogiltiga inställningar: ingen standardserver specificerad.",
     "Go to your browser to complete Sign In": "Gå till din webbläsare för att slutföra inloggningen",
     "Unable to load config file: please refresh the page to try again.": "Kan inte ladda konfigurationsfilen: ladda om sidan för att försöka igen.",

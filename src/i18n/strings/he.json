@@ -3,7 +3,6 @@
     "Unknown device": "מכשיר לא ידוע",
     "Welcome to Element": "ברוכים הבאים ל Element",
     "Invalid JSON": "JSON לא חוקי",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "תצורה שגויה: ניתן לציין רק אחד מהערכים הבאים, default_server_config, default_server_name, או default_hs_url.",
     "Invalid configuration: no default server specified.": "תצורה שגויה: לא צוין שרת ברירת מחדל.",
     "Go to your browser to complete Sign In": "עבור לדפדפן להמשך ההתחברות",
     "Explore rooms": "גלה חדרים",

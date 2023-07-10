@@ -5,7 +5,6 @@
     "Create Account": "Hesab Aç",
     "Explore rooms": "Otaqları kəşf edin",
     "Unexpected error preparing the app. See console for details.": "Tətbiqin başladılmasında gözlənilməz xəta.Təfərrüatlar üçün konsola baxın.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Yanlış konfiqurasiya: bunlardan yalnız birini təyin edin - default_server_config, default_server_name, və ya default_hs_url.",
     "Invalid configuration: no default server specified.": "Yanlış konfiqurasiya: standart server göstərilməyib.",
     "The message from the parser is: %(message)s": "Sözügedən mesaj: %(message)s",
     "Dismiss": "Nəzərə almayın",

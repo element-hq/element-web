@@ -6,7 +6,6 @@
     "Create Account": "Izveidot kontu",
     "Explore rooms": "Pārlūkot istabas",
     "Unexpected error preparing the app. See console for details.": "Lietotnes sagatavošanā gadījās negaidīta kļūda. Izvērsums ir atrodams konsolē.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Nederīga konfigurācija: var norādīt tikai vienu no default_server_config, default_server_name vai default_hs_url.",
     "Invalid configuration: no default server specified.": "Nederīga konfigurācija: nav norādīts noklusējuma serveris.",
     "The message from the parser is: %(message)s": "Ziņa no pārsētāja ir: %(message)s",
     "Invalid JSON": "Nederīgs JSON",

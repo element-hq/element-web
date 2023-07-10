@@ -25,6 +25,5 @@
     "The message from the parser is: %(message)s": "पार्सर का संदेश है: %(message)s",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "आपके एलीमेंट कॉन्फ़िगरेशन में अमान्य JSON है. कृपया समस्या को ठीक करें और पृष्ठ को पुनः लोड करें।",
     "Your Element is misconfigured": "आपका तत्व गलत कॉन्फ़िगर किया गया है",
-    "Invalid configuration: no default server specified.": "अमान्य कॉन्फ़िगरेशन: कोई डिफ़ॉल्ट सर्वर निर्दिष्ट नहीं है।",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "अमान्य कॉन्फ़िगरेशन: केवल default_server_config, default_server_name, या default_hs_url में से कोई एक निर्दिष्ट कर सकता है।"
+    "Invalid configuration: no default server specified.": "अमान्य कॉन्फ़िगरेशन: कोई डिफ़ॉल्ट सर्वर निर्दिष्ट नहीं है।"
 }

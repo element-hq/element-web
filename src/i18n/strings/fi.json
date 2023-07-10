@@ -6,7 +6,6 @@
     "Create Account": "Luo tili",
     "Explore rooms": "Selaa huoneita",
     "Unexpected error preparing the app. See console for details.": "Odottamaton virhe sovellusta valmisteltaessa. Katso konsolista lisätietoja.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Virheellinen asetus. Vain yhden seuraavista voi määrittää: default_server_config, default_server_name, tai default_hs_url.",
     "Invalid configuration: no default server specified.": "Virheellinen asetus: oletuspalvelinta ei ole määritetty.",
     "The message from the parser is: %(message)s": "Viesti jäsentimeltä: %(message)s",
     "Invalid JSON": "Virheellinen JSON",

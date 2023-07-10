@@ -1,5 +1,4 @@
 {
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Tafsiri siyosahii: fanya chaguo moja tu default_server_config, default_server_name, au default_hs_url.",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Mipangilio wa Element yako una JSON batili. Tafadhali sahihisha tatizo na upakie upya ukurasa.",
     "The message from the parser is: %(message)s": "Ujumbe kutoka kwa mchanganuzi ni: %(message)s",
     "Invalid JSON": "JSON ni batili",

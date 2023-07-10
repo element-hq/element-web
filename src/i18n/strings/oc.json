@@ -10,7 +10,6 @@
     "Create Account": "Crear un compte",
     "Explore rooms": "Percórrer las salas",
     "Invalid configuration: no default server specified.": "Configuracion invalida : pas de servidor per defauta especificat.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuracion invalida : podètz unicament especifiar un champ entre default_server_config, default_server_name, o default_hs_url.",
     "Failed to start": "Se pòt pas lançar",
     "Go to element.io": "Anar vès element.io",
     "I understand the risks and wish to continue": "Comprène los risques e vòle contunhar",
