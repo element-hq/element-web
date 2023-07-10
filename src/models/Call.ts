@@ -689,6 +689,13 @@ export class ElementCall extends Call {
                     name: "Element Call",
                     type: MatrixWidgetType.Custom,
                     url: url.toString(),
+                    // This option makes the widget API wait for the 'contentLoaded' event instead
+                    // of waiting for a 'load' event from the iframe, which means the widget code isn't
+                    // racing to set up its listener before the 'load' event is fired. EC sends this event
+                    // of of https://github.com/matrix-org/matrix-js-sdk/pull/3556 so we should uncomment
+                    // the line below once we've made both livekit and full-mesh releases that include that
+                    // PR, and everything will be less racy.
+                    //waitForIframeLoad: false,
                 },
                 groupCall.room.roomId,
             ),
