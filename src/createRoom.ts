@@ -222,6 +222,10 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
         });
     }
 
+    if (opts.joinRule === JoinRule.Knock) {
+        createOpts.room_version = PreferredRoomVersions.KnockRooms;
+    }
+
     if (opts.parentSpace) {
         createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
         if (!opts.historyVisibility) {

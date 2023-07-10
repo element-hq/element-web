@@ -19,12 +19,14 @@ import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import Dropdown from "./Dropdown";
 import { NonEmptyArray } from "../../../@types/common";
+import { Icon as AskToJoinIcon } from "../../../../res/img/element-icons/ask-to-join.svg";
 
 interface IProps {
     value: JoinRule;
     label: string;
     width?: number;
     labelInvite: string;
+    labelKnock?: string;
     labelPublic: string;
     labelRestricted?: string; // if omitted then this option will be hidden, e.g if unsupported
     onChange(value: JoinRule): void;
@@ -33,6 +35,7 @@ interface IProps {
 const JoinRuleDropdown: React.FC<IProps> = ({
     label,
     labelInvite,
+    labelKnock,
     labelPublic,
     labelRestricted,
     value,
@@ -47,6 +50,17 @@ const JoinRuleDropdown: React.FC<IProps> = ({
             {labelPublic}
         </div>,
     ] as NonEmptyArray<ReactElement & { key: string }>;
+
+    if (labelKnock) {
+        options.unshift(
+            (
+                <div key={JoinRule.Knock} className="mx_JoinRuleDropdown_knock">
+                    <AskToJoinIcon className="mx_Icon mx_Icon_16 mx_JoinRuleDropdown_icon" />
+                    {labelKnock}
+                </div>
+            ) as ReactElement & { key: string },
+        );
+    }
 
     if (labelRestricted) {
         options.unshift(

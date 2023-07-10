@@ -286,6 +286,8 @@ function textForJoinRulesEvent(ev: MatrixEvent, client: MatrixClient, allowJSX: 
                 _t("%(senderDisplayName)s made the room invite only.", {
                     senderDisplayName,
                 });
+        case JoinRule.Knock:
+            return () => _t("%(senderDisplayName)s changed the join rule to ask to join.", { senderDisplayName });
         case JoinRule.Restricted:
             if (allowJSX) {
                 return () => (

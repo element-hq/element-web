@@ -24,6 +24,11 @@ limitations under the License.
  */
 export class PreferredRoomVersions {
     /**
+     * The room version to use when creating "knock" rooms.
+     */
+    public static readonly KnockRooms = "7";
+
+    /**
      * The room version to use when creating "restricted" rooms.
      */
     public static readonly RestrictedRooms = "9";

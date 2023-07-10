@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { render } from "@testing-library/react";
 import { ReactElement } from "react";
 import { Mocked, mocked } from "jest-mock";
@@ -510,6 +510,65 @@ describe("TextForEvent", () => {
                     mockClient,
                 ),
             ).toMatchInlineSnapshot(`"Andy changed their display name and profile picture"`);
+        });
+    });
+
+    describe("textForJoinRulesEvent()", () => {
+        type TestCase = [string, { result: string }];
+        const testCases: TestCase[] = [
+            [JoinRule.Public, { result: "@a made the room public to whoever knows the link." }],
+            [JoinRule.Invite, { result: "@a made the room invite only." }],
+            [JoinRule.Knock, { result: "@a changed the join rule to ask to join." }],
+            [JoinRule.Restricted, { result: "@a changed who can join this room." }],
+        ];
+
+        it.each(testCases)("returns correct message when room join rule changed to %s", (joinRule, { result }) => {
+            expect(
+                textForEvent(
+                    new MatrixEvent({
+                        type: "m.room.join_rules",
+                        sender: "@a",
+                        content: {
+                            join_rule: joinRule,
+                        },
+                        state_key: "",
+                    }),
+                    mockClient,
+                ),
+            ).toEqual(result);
+        });
+
+        it(`returns correct JSX message when room join rule changed to ${JoinRule.Restricted}`, () => {
+            expect(
+                textForEvent(
+                    new MatrixEvent({
+                        type: "m.room.join_rules",
+                        sender: "@a",
+                        content: {
+                            join_rule: JoinRule.Restricted,
+                        },
+                        state_key: "",
+                    }),
+                    mockClient,
+                    true,
+                ),
+            ).toMatchSnapshot();
+        });
+
+        it("returns correct default message", () => {
+            expect(
+                textForEvent(
+                    new MatrixEvent({
+                        type: "m.room.join_rules",
+                        sender: "@a",
+                        content: {
+                            join_rule: "a not implemented one",
+                        },
+                        state_key: "",
+                    }),
+                    mockClient,
+                ),
+            ).toEqual("@a changed the join rule to a not implemented one");
         });
     });
 });

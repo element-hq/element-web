@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextForEvent textForJoinRulesEvent() returns correct JSX message when room join rule changed to restricted 1`] = `
+<span>
+  <span>
+    @a changed who can join this room. 
+    <AccessibleButton
+      kind="link_inline"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+    >
+      View settings
+    </AccessibleButton>
+    .
+  </span>
+</span>
+`;

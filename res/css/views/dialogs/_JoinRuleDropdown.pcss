@@ -44,6 +44,10 @@ limitations under the License.
                 mask-position: center;
                 background-color: $secondary-content;
             }
+
+            &.mx_JoinRuleDropdown_knock::before {
+                content: normal;
+            }
         }
     }
 
@@ -62,5 +66,12 @@ limitations under the License.
     .mx_JoinRuleDropdown_restricted::before {
         mask-image: url("$(res)/img/element-icons/group-members.svg");
         mask-size: contain;
+    }
+
+    .mx_JoinRuleDropdown_icon {
+        color: $secondary-content;
+        position: absolute;
+        left: 6px;
+        top: 8px;
     }
 }

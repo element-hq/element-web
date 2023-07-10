@@ -16,10 +16,11 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { MatrixError, Preset, Visibility } from "matrix-js-sdk/src/matrix";
+import { JoinRule, MatrixError, Preset, Visibility } from "matrix-js-sdk/src/matrix";
 
 import CreateRoomDialog from "../../../../src/components/views/dialogs/CreateRoomDialog";
 import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 describe("<CreateRoomDialog />", () => {
     const userId = "@alice:server.org";
@@ -202,6 +203,50 @@ describe("<CreateRoomDialog />", () => {
                     name: roomName,
                 },
                 encryption: true,
+                parentSpace: undefined,
+                roomType: undefined,
+            });
+        });
+    });
+
+    describe("for a knock room", () => {
+        it("should not have the option to create a knock room", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            getComponent();
+            fireEvent.click(screen.getByLabelText("Room visibility"));
+
+            expect(screen.queryByRole("option", { name: "Ask to join" })).not.toBeInTheDocument();
+        });
+
+        it("should create a knock room", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "feature_ask_to_join");
+            const onFinished = jest.fn();
+            getComponent({ onFinished });
+            await flushPromises();
+
+            const roomName = "Test Room Name";
+            fireEvent.change(screen.getByLabelText("Name"), { target: { value: roomName } });
+
+            fireEvent.click(screen.getByLabelText("Room visibility"));
+            fireEvent.click(screen.getByRole("option", { name: "Ask to join" }));
+
+            fireEvent.click(screen.getByText("Create room"));
+            await flushPromises();
+
+            expect(screen.getByText("Create a room")).toBeInTheDocument();
+
+            expect(
+                screen.getByText(
+                    "Anyone can request to join, but admins or moderators need to grant access. You can change this later.",
+                ),
+            ).toBeInTheDocument();
+
+            expect(onFinished).toHaveBeenCalledWith(true, {
+                createOpts: {
+                    name: roomName,
+                },
+                encryption: true,
+                joinRule: JoinRule.Knock,
                 parentSpace: undefined,
                 roomType: undefined,
             });

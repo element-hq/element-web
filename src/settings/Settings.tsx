@@ -556,6 +556,13 @@ export const SETTINGS: { [setting: string]: ISetting } = {
             ["org.matrix.msc3952_intentional_mentions"],
         ]),
     },
+    "feature_ask_to_join": {
+        default: false,
+        displayName: _td("Enable ask to join"),
+        isFeature: true,
+        labsGroup: LabGroup.Rooms,
+        supportedLevels: LEVELS_FEATURE,
+    },
     "useCompactLayout": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("Use a more compact 'Modern' layout"),

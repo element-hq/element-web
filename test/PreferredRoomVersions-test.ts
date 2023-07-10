@@ -36,6 +36,14 @@ describe("doesRoomVersionSupport", () => {
         expect(doesRoomVersionSupport("3.1", "2.2")).toBe(true); // newer
     });
 
+    it("should detect knock rooms in v7 and above", () => {
+        expect(doesRoomVersionSupport("6", PreferredRoomVersions.KnockRooms)).toBe(false);
+        expect(doesRoomVersionSupport("7", PreferredRoomVersions.KnockRooms)).toBe(true);
+        expect(doesRoomVersionSupport("8", PreferredRoomVersions.KnockRooms)).toBe(true);
+        expect(doesRoomVersionSupport("9", PreferredRoomVersions.KnockRooms)).toBe(true);
+        expect(doesRoomVersionSupport("10", PreferredRoomVersions.KnockRooms)).toBe(true);
+    });
+
     it("should detect restricted rooms in v9 and v10", () => {
         // Dev note: we consider it a feature that v8 rooms have to upgrade considering the bug in v8.
         // https://spec.matrix.org/v1.3/rooms/v8/#redactions
