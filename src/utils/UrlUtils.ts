@@ -57,3 +57,31 @@ export function parseUrl(u: string): URL {
     }
     return new URL(u);
 }
+
+export const PERMITTED_URL_SCHEMES = [
+    "bitcoin",
+    "ftp",
+    "geo",
+    "http",
+    "https",
+    "im",
+    "irc",
+    "ircs",
+    "magnet",
+    "mailto",
+    "matrix",
+    "mms",
+    "news",
+    "nntp",
+    "openpgp4fpr",
+    "sip",
+    "sftp",
+    "sms",
+    "smsto",
+    "ssh",
+    "tel",
+    "urn",
+    "webcal",
+    "wtai",
+    "xmpp",
+];

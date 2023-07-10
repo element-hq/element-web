@@ -42,6 +42,7 @@ import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks"
 import { getEmojiFromUnicode } from "./emoji";
 import { mediaFromMxc } from "./customisations/Media";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
+import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 
 // Anything outside the basic multilingual plane will be a surrogate pair
 const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
@@ -57,34 +58,6 @@ const EMOJI_SEPARATOR_REGEX = /[\u200D\u200B\s]/g;
 const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, "i");
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
-
-export const PERMITTED_URL_SCHEMES = [
-    "bitcoin",
-    "ftp",
-    "geo",
-    "http",
-    "https",
-    "im",
-    "irc",
-    "ircs",
-    "magnet",
-    "mailto",
-    "matrix",
-    "mms",
-    "news",
-    "nntp",
-    "openpgp4fpr",
-    "sip",
-    "sftp",
-    "sms",
-    "smsto",
-    "ssh",
-    "tel",
-    "urn",
-    "webcal",
-    "wtai",
-    "xmpp",
-];
 
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
 

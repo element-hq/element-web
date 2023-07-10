@@ -31,6 +31,7 @@ import { Action } from "./dispatcher/actions";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { MatrixClientPeg } from "./MatrixClientPeg";
+import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 
 export enum Type {
     URL = "url",
@@ -242,7 +243,32 @@ registerPlugin(Type.UserId, ({ scanner, parser }) => {
     });
 });
 
-registerCustomProtocol("matrix", true);
+// Linkify supports some common protocols but not others, register all permitted url schemes if unsupported
+// https://github.com/Hypercontext/linkifyjs/blob/f4fad9df1870259622992bbfba38bfe3d0515609/packages/linkifyjs/src/scanner.js#L133-L141
+// This also handles registering the `matrix:` protocol scheme
+const linkifySupportedProtocols = ["file", "mailto", "http", "https", "ftp", "ftps"];
+const optionalSlashProtocols = [
+    "bitcoin",
+    "geo",
+    "im",
+    "magnet",
+    "mailto",
+    "matrix",
+    "news",
+    "openpgp4fpr",
+    "sip",
+    "sms",
+    "smsto",
+    "tel",
+    "urn",
+    "xmpp",
+];
+
+PERMITTED_URL_SCHEMES.forEach((scheme) => {
+    if (!linkifySupportedProtocols.includes(scheme)) {
+        registerCustomProtocol(scheme, optionalSlashProtocols.includes(scheme));
+    }
+});
 
 export const linkify = linkifyjs;
 export const _linkifyElement = linkifyElement;
