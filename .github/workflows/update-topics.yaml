@@ -58,10 +58,10 @@ jobs:
 
                           res = await fetch(apiUrl, {
                               method: "PUT",
-                              body: {
+                              body: JSON.stringify({
                                   ...data,
                                   topic,
-                              },
+                              }),
                               headers,
                           });
                           
