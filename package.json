@@ -170,7 +170,7 @@
         "simple-proxy-agent": "^1.1.0",
         "string-replace-loader": "3",
         "style-loader": "2",
-        "stylelint": "^15.3.0",
+        "stylelint": "^15.10.1",
         "stylelint-config-standard": "^33.0.0",
         "stylelint-scss": "^5.0.0",
         "terser-webpack-plugin": "^4.0.0",
