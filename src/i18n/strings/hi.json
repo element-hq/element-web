@@ -5,7 +5,6 @@
     "Sign In": "साइन करना",
     "Create Account": "खाता बनाएं",
     "Explore rooms": "रूम का अन्वेषण करें",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "अमान्य कॉन्फ़िगरेशन: केवल default_server_config, default_server_name, या default_hs_url में से कोई एक निर्दिष्ट कर सकता है।",
     "Failed to start": "प्रारंभ करने में विफल",
     "Go to element.io": "element.io पर जाएं",
     "I understand the risks and wish to continue": "मैं जोखिमों को समझता हूं और जारी रखना चाहता हूं",

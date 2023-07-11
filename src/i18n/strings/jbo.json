@@ -17,7 +17,6 @@
     "Sign In": "nu co'a jaspu",
     "Create Account": "nu pa re'u co'a jaspu",
     "Explore rooms": "nu facki le du'u ve zilbe'i",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": ".i le tcimi'e vreji na drani le ka jai do'e fai gi jo nai zoi zoi. default_server_config .zoi gi zoi zoi. default_server_name .zoi gi zoi zoi. default_hs_url .zoi cmene da",
     "Invalid configuration: no default server specified.": ".i le tcimi'e vreji na drani le ka jai do'e zmicu'a fo le ka samtcise'u",
     "Your Element is misconfigured": ".i le tcimi'e be la .elyment. be'o vreji na drani",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": ".i le tcimi'e be la .elyment. be'o vreji na drani le ka veirdjeisano .i gau ko drani je ba kibycpa le kibypapri",

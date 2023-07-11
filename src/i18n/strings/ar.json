@@ -5,7 +5,6 @@
     "Create Account": "أنشِئ حسابًا",
     "Explore rooms": "استكشِف الغرف",
     "Sign In": "لِج",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "الضبط غير صالح: يمكنك تحديد واحدًا من الآتي فقط: default_server_config أو default_server_name أو default_hs_url.",
     "Invalid configuration: no default server specified.": "الضبط غير صالح: لم تحدّد خادومًا مبدئيًا.",
     "Your Element is misconfigured": "لم يُضبط تطبيق Element كما ينبغي",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "يحتوي ضبط تطبيق Element على تنسيق JSON غير صالح. من فضلك صحّح المشكلة وأعِد تحميل الصفحة.",

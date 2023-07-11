@@ -21,7 +21,6 @@
     "Invalid JSON": "JSON neamhbhailí",
     "The message from the parser is: %(message)s": "Is í an teachtaireacht as an parsálaí: %(message)s",
     "Invalid configuration: no default server specified.": "Cumraíocht neamhbhailí: Níl aon freastalaí réamhshocraithe a sonrú.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Cumraíocht neamhbhailí: ní féidir ach ceann de default_server_config, default_server_name, nó default_hs_url a shonrú.",
     "Powered by Matrix": "Cumhachtaithe ag Matrix",
     "Go to element.io": "Téigh go element.io",
     "Open": "Oscail",

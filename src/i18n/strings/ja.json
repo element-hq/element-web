@@ -9,7 +9,6 @@
     "Explore rooms": "ルームを探す",
     "The message from the parser is: %(message)s": "パーサーのメッセージ：%(message)s",
     "Invalid JSON": "不正なJSON",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "不正な設定：default_server_config、default_server_name、またはdefault_hs_urlのいずれか一つのみを指定できます。",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "最高のユーザー体験を得るためには、<chromeLink>Chrome</chromeLink>か<firefoxLink>Firefox</firefoxLink>、もしくは<safariLink>Safari</safariLink>をインストールしてください。",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "現在のブラウザーを使い続けることもできますが、いくつか（もしくは全ての）機能が動作しなかったり、外観が崩れたりする可能性があります。",
     "I understand the risks and wish to continue": "リスクを理解して続行",

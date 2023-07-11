@@ -8,7 +8,6 @@
     "The message from the parser is: %(message)s": "Analizatoriaus žinutė yra: %(message)s",
     "Invalid JSON": "Klaidingas JSON",
     "Unexpected error preparing the app. See console for details.": "Netikėta klaida ruošiant programą. Norėdami sužinoti daugiau detalių, žiūrėkite konsolę.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Klaidinga konfigūracija: galima nurodyti tik vieną iš default_server_config, default_server_name, arba default_hs_url.",
     "Invalid configuration: no default server specified.": "Klaidinga konfigūracija: nenurodytas numatytasis serveris.",
     "Go to your browser to complete Sign In": "Norėdami užbaigti prisijungimą, eikite į naršyklę",
     "Unable to load config file: please refresh the page to try again.": "Nepavyko įkelti konfigūracijos failo: atnaujinkite puslapį, kad pabandytumėte dar kartą.",

@@ -7,7 +7,6 @@
     "The message from the parser is: %(message)s": "Το μήνυμα από τον αναλυτή είναι: %(message)s",
     "Invalid JSON": "Μη έγκυρο JSON",
     "Unexpected error preparing the app. See console for details.": "Απρόοπτο σφάλμα κατά την προετοιμασία της εφαρμογής. Δείτε το τερματικό για λεπτομέρειες.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Μη έγκυρη ρύθμιση: δυνατότητα ορισμού μόνο ένα από τα default_server_config, default_server_name, ή default_hs_url.",
     "Invalid configuration: no default server specified.": "Μη έγκυρη ρύθμιση παραμέτρων: δεν έχει οριστεί προκαθορισμένος διακομιστής.",
     "Explore rooms": "Εξερευνήστε δωμάτια",
     "Open": "Άνοιγμα",
