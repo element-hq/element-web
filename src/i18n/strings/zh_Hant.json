@@ -27,5 +27,6 @@
     "Use %(brand)s on mobile": "在行動裝置上使用 %(brand)s",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "由 $matrixLogo 驅動的去中心化、加密的聊天與協作工具",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s：%(osName)s 的 %(browserName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s 桌面版：%(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s 桌面版：%(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "無效設定：default_hs_url 不能與 default_server_name 或 default_server_config 一起指定"
 }
