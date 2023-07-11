@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 /// <reference types="cypress" />
+import installLogsPrinter from "cypress-terminal-report/src/installLogsPrinter";
 
 import PluginEvents = Cypress.PluginEvents;
 import PluginConfigOptions = Cypress.PluginConfigOptions;
@@ -35,4 +36,7 @@ export default function (on: PluginEvents, config: PluginConfigOptions) {
     slidingSyncProxyDocker(on, config);
     webserver(on, config);
     log(on, config);
+    installLogsPrinter(on, {
+        // printLogsToConsole: "always",
+    });
 }

@@ -184,6 +184,7 @@
         "cypress-each": "^1.13.3",
         "cypress-multi-reporters": "^1.6.1",
         "cypress-real-events": "^1.7.1",
+        "cypress-terminal-report": "^5.3.2",
         "eslint": "8.43.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^8.5.0",

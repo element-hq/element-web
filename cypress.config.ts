@@ -38,4 +38,8 @@ export default defineConfig({
         runMode: 4,
         openMode: 0,
     },
+
+    // disable logging of HTTP requests made to the Cypress server. They are noisy and not very helpful.
+    // @ts-ignore https://github.com/cypress-io/cypress/issues/26284
+    morgan: false,
 });

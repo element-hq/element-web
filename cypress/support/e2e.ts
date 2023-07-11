@@ -19,6 +19,7 @@ limitations under the License.
 import "@percy/cypress";
 import "cypress-real-events";
 import "@testing-library/cypress/add-commands";
+import installLogsCollector from "cypress-terminal-report/src/installLogsCollector";
 
 import "./config.json";
 import "./homeserver";
@@ -39,3 +40,20 @@ import "./network";
 import "./composer";
 import "./proxy";
 import "./axe";
+
+installLogsCollector({
+    // specify the types of logs to collect (and report to the node console at the end of the test)
+    collectTypes: [
+        "cons:log",
+        "cons:info",
+        "cons:warn",
+        "cons:error",
+        // "cons:debug",
+        "cy:log",
+        "cy:xhr",
+        "cy:fetch",
+        "cy:request",
+        "cy:intercept",
+        "cy:command",
+    ],
+});
