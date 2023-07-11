@@ -201,8 +201,6 @@
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "¯ \\ _ (ツ) _ / ¯ işarəsini mesaja elavə edir.",
     "Upgrades a room to a new version": "Bir otağı yeni bir versiyaya yüksəldir",
     "Changes your display nickname in the current room only": "Yalnız cari otaqda ekran ləqəbinizi dəyişdirir",
-    "Changes your avatar in this current room only": "Avatarınızı yalnız bu cari otaqda dəyişir",
-    "Changes your avatar in all rooms": "Bütün otaqlarda avatarınızı dəyişdirir",
     "Gets or sets the room topic": "Otaq mövzusunu alır və ya təyin edir",
     "This room has no topic.": "Bu otağın mövzusu yoxdur.",
     "Sets the room name": "Otaq adını təyin edir",

@@ -197,8 +197,6 @@
     "You do not have the required permissions to use this command.": "Du har ikke de nødvendige rettigheder for at udføre denne kommando.",
     "Changes your display nickname in the current room only": "Ændrer kun dit viste navn for det nuværende rum",
     "Changes the avatar of the current room": "Ændrer avataren i det nuværende rum",
-    "Changes your avatar in this current room only": "Ændrer kun din avatar for det nuværende rum",
-    "Changes your avatar in all rooms": "Ændrer din avatar i alle rum",
     "Gets or sets the room topic": "Henter eller sætter rummets emne",
     "This room has no topic.": "Dette rum har intet emne.",
     "Sets the room name": "Sætter rumnavnet",
