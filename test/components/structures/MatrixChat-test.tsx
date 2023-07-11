@@ -16,12 +16,17 @@ limitations under the License.
 
 import React, { ComponentProps } from "react";
 import { fireEvent, render, RenderResult, screen, within } from "@testing-library/react";
-import fetchMockJest from "fetch-mock-jest";
+import fetchMock from "fetch-mock-jest";
+import { mocked } from "jest-mock";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { SyncState } from "matrix-js-sdk/src/sync";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
 import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize";
+import { logger } from "matrix-js-sdk/src/logger";
+import { OidcError } from "matrix-js-sdk/src/oidc/error";
+import { BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
 
 import MatrixChat from "../../../src/components/structures/MatrixChat";
 import * as StorageManager from "../../../src/utils/StorageManager";
@@ -36,6 +41,10 @@ import {
     mockClientMethodsUser,
 } from "../../test-utils";
 import * as leaveRoomUtils from "../../../src/utils/leave-behaviour";
+
+jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
+    completeAuthorizationCodeGrant: jest.fn(),
+}));
 
 describe("<MatrixChat />", () => {
     const userId = "@alice:server.org";
@@ -64,6 +73,7 @@ describe("<MatrixChat />", () => {
         setAccountData: jest.fn(),
         store: {
             destroy: jest.fn(),
+            startup: jest.fn(),
         },
         login: jest.fn(),
         loginFlows: jest.fn(),
@@ -85,6 +95,7 @@ describe("<MatrixChat />", () => {
             isStored: jest.fn().mockReturnValue(null),
         },
         getDehydratedDevice: jest.fn(),
+        whoami: jest.fn(),
         isRoomEncrypted: jest.fn(),
     });
     let mockClient = getMockClientWithEventEmitter(getMockClientMethods());
@@ -124,16 +135,47 @@ describe("<MatrixChat />", () => {
     // make test results readable
     filterConsole("Failed to parse localStorage object");
 
+    /**
+     * Wait for a bunch of stuff to happen
+     * between deciding we are logged in and removing the spinner
+     * including waiting for initial sync
+     */
+    const waitForSyncAndLoad = async (client: MatrixClient, withoutSecuritySetup?: boolean): Promise<void> => {
+        // need to wait for different elements depending on which flow
+        // without security setup we go to a loading page
+        if (withoutSecuritySetup) {
+            // we think we are logged in, but are still waiting for the /sync to complete
+            await screen.findByText("Logout");
+            // initial sync
+            client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+            // wait for logged in view to load
+            await screen.findByLabelText("User menu");
+
+            // otherwise we stay on login and load from there for longer
+        } else {
+            // we are logged in, but are still waiting for the /sync to complete
+            await screen.findByText("Syncing…");
+            // initial sync
+            client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+        }
+
+        // let things settle
+        await flushPromises();
+        // and some more for good measure
+        // this proved to be a little flaky
+        await flushPromises();
+    };
+
     beforeEach(async () => {
         mockClient = getMockClientWithEventEmitter(getMockClientMethods());
-        fetchMockJest.get("https://test.com/_matrix/client/versions", {
+        fetchMock.get("https://test.com/_matrix/client/versions", {
             unstable_features: {},
             versions: [],
         });
         localStorageGetSpy.mockReset();
         localStorageSetSpy.mockReset();
         sessionStorageSetSpy.mockReset();
-        jest.spyOn(StorageManager, "idbLoad").mockRestore();
+        jest.spyOn(StorageManager, "idbLoad").mockReset();
         jest.spyOn(StorageManager, "idbSave").mockResolvedValue(undefined);
         jest.spyOn(defaultDispatcher, "dispatch").mockClear();
 
@@ -375,32 +417,6 @@ describe("<MatrixChat />", () => {
             return renderResult;
         };
 
-        const waitForSyncAndLoad = async (client: MatrixClient, withoutSecuritySetup?: boolean): Promise<void> => {
-            // need to wait for different elements depending on which flow
-            // without security setup we go to a loading page
-            if (withoutSecuritySetup) {
-                // we think we are logged in, but are still waiting for the /sync to complete
-                await screen.findByText("Logout");
-                // initial sync
-                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
-                // wait for logged in view to load
-                await screen.findByLabelText("User menu");
-
-                // otherwise we stay on login and load from there for longer
-            } else {
-                // we are logged in, but are still waiting for the /sync to complete
-                await screen.findByText("Syncing…");
-                // initial sync
-                client.emit(ClientEvent.Sync, SyncState.Prepared, null);
-            }
-
-            // let things settle
-            await flushPromises();
-            // and some more for good measure
-            // this proved to be a little flaky
-            await flushPromises();
-        };
-
         const getComponentAndLogin = async (withoutSecuritySetup?: boolean): Promise<void> => {
             await getComponentAndWaitForReady();
 
@@ -416,7 +432,7 @@ describe("<MatrixChat />", () => {
         beforeEach(() => {
             loginClient = getMockClientWithEventEmitter(getMockClientMethods());
             // this is used to create a temporary client during login
-            jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
+            jest.spyOn(MatrixJs, "createClient").mockClear().mockReturnValue(loginClient);
 
             loginClient.login.mockClear().mockResolvedValue({
                 access_token: "TOKEN",
@@ -707,6 +723,219 @@ describe("<MatrixChat />", () => {
 
                 // logged in but waiting for sync screen
                 await screen.findByText("Logout");
+            });
+        });
+    });
+
+    describe("when query params have a OIDC params", () => {
+        const issuer = "https://auth.com/";
+        const homeserverUrl = "https://matrix.org";
+        const identityServerUrl = "https://is.org";
+        const clientId = "xyz789";
+
+        const code = "test-oidc-auth-code";
+        const state = "test-oidc-state";
+        const realQueryParams = {
+            code,
+            state: state,
+        };
+
+        const userId = "@alice:server.org";
+        const deviceId = "test-device-id";
+        const accessToken = "test-access-token-from-oidc";
+
+        const mockLocalStorage: Record<string, string> = {
+            // these are only going to be set during login
+            mx_hs_url: homeserverUrl,
+            mx_is_url: identityServerUrl,
+            mx_user_id: userId,
+            mx_device_id: deviceId,
+        };
+
+        const tokenResponse: BearerTokenResponse = {
+            access_token: accessToken,
+            refresh_token: "def456",
+            scope: "test",
+            token_type: "Bearer",
+            expires_at: 12345,
+        };
+
+        let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
+
+        // for now when OIDC fails for any reason we just bump back to welcome
+        // error handling screens in https://github.com/vector-im/element-web/issues/25665
+        const expectOIDCError = async (): Promise<void> => {
+            await flushPromises();
+            // just check we're back on welcome page
+            expect(document.querySelector(".mx_Welcome")!).toBeInTheDocument();
+        };
+
+        beforeEach(() => {
+            mocked(completeAuthorizationCodeGrant).mockClear().mockResolvedValue({
+                oidcClientSettings: {
+                    clientId,
+                    issuer,
+                },
+                tokenResponse,
+                homeserverUrl,
+                identityServerUrl,
+            });
+
+            jest.spyOn(logger, "error").mockClear();
+        });
+
+        beforeEach(() => {
+            loginClient = getMockClientWithEventEmitter(getMockClientMethods());
+            // this is used to create a temporary client during login
+            jest.spyOn(MatrixJs, "createClient").mockReturnValue(loginClient);
+
+            jest.spyOn(logger, "error").mockClear();
+            jest.spyOn(logger, "log").mockClear();
+
+            localStorageGetSpy.mockImplementation((key: unknown) => mockLocalStorage[key as string] || "");
+            loginClient.whoami.mockResolvedValue({
+                user_id: userId,
+                device_id: deviceId,
+                is_guest: false,
+            });
+        });
+
+        it("should fail when query params do not include valid code and state", async () => {
+            const queryParams = {
+                code: 123,
+                state: "abc",
+            };
+            getComponent({ realQueryParams: queryParams });
+
+            await flushPromises();
+
+            expect(logger.error).toHaveBeenCalledWith(
+                "Failed to login via OIDC",
+                new Error("Invalid query parameters for OIDC native login. `code` and `state` are required."),
+            );
+
+            await expectOIDCError();
+        });
+
+        it("should make correct request to complete authorization", async () => {
+            getComponent({ realQueryParams });
+
+            await flushPromises();
+
+            expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state);
+        });
+
+        it("should look up userId using access token", async () => {
+            getComponent({ realQueryParams });
+
+            await flushPromises();
+
+            // check we used a client with the correct accesstoken
+            expect(MatrixJs.createClient).toHaveBeenCalledWith({
+                baseUrl: homeserverUrl,
+                accessToken,
+                idBaseUrl: identityServerUrl,
+            });
+            expect(loginClient.whoami).toHaveBeenCalled();
+        });
+
+        it("should log error and return to welcome page when userId lookup fails", async () => {
+            loginClient.whoami.mockRejectedValue(new Error("oups"));
+            getComponent({ realQueryParams });
+
+            await flushPromises();
+
+            expect(logger.error).toHaveBeenCalledWith(
+                "Failed to login via OIDC",
+                new Error("Failed to retrieve userId using accessToken"),
+            );
+            await expectOIDCError();
+        });
+
+        it("should call onTokenLoginCompleted", async () => {
+            const onTokenLoginCompleted = jest.fn();
+            getComponent({ realQueryParams, onTokenLoginCompleted });
+
+            await flushPromises();
+
+            expect(onTokenLoginCompleted).toHaveBeenCalled();
+        });
+
+        describe("when login fails", () => {
+            beforeEach(() => {
+                mocked(completeAuthorizationCodeGrant).mockRejectedValue(new Error(OidcError.CodeExchangeFailed));
+            });
+
+            it("should log and return to welcome page", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                expect(logger.error).toHaveBeenCalledWith(
+                    "Failed to login via OIDC",
+                    new Error(OidcError.CodeExchangeFailed),
+                );
+
+                // warning dialog
+                await expectOIDCError();
+            });
+
+            it("should not clear storage", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                expect(loginClient.clearStores).not.toHaveBeenCalled();
+            });
+        });
+
+        describe("when login succeeds", () => {
+            beforeEach(() => {
+                localStorageGetSpy.mockImplementation((key: unknown) => mockLocalStorage[key as string] || "");
+                jest.spyOn(StorageManager, "idbLoad").mockImplementation(
+                    async (_table: string, key: string | string[]) => (key === "mx_access_token" ? accessToken : null),
+                );
+                loginClient.getProfileInfo.mockResolvedValue({
+                    displayname: "Ernie",
+                });
+            });
+
+            it("should persist login credentials", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                expect(localStorageSetSpy).toHaveBeenCalledWith("mx_hs_url", homeserverUrl);
+                expect(localStorageSetSpy).toHaveBeenCalledWith("mx_user_id", userId);
+                expect(localStorageSetSpy).toHaveBeenCalledWith("mx_has_access_token", "true");
+                expect(localStorageSetSpy).toHaveBeenCalledWith("mx_device_id", deviceId);
+            });
+
+            it("should set logged in and start MatrixClient", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+                await flushPromises();
+
+                expect(logger.log).toHaveBeenCalledWith(
+                    "setLoggedIn: mxid: " +
+                        userId +
+                        " deviceId: " +
+                        deviceId +
+                        " guest: " +
+                        false +
+                        " hs: " +
+                        homeserverUrl +
+                        " softLogout: " +
+                        false,
+                    " freshLogin: " + false,
+                );
+
+                // client successfully started
+                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "client_started" });
+
+                // check we get to logged in view
+                await waitForSyncAndLoad(loginClient, true);
             });
         });
     });

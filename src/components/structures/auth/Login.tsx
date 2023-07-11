@@ -477,6 +477,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                         this.props.serverConfig.delegatedAuthentication!,
                         flow.clientId,
                         this.props.serverConfig.hsUrl,
+                        this.props.serverConfig.isUrl,
                     );
                 }}
             >

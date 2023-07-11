@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize";
+import { QueryDict } from "matrix-js-sdk/src/utils";
 import { OidcClientConfig } from "matrix-js-sdk/src/autodiscovery";
 import { generateOidcAuthorizationUrl } from "matrix-js-sdk/src/oidc/authorize";
 import { randomString } from "matrix-js-sdk/src/randomstring";
@@ -48,4 +50,46 @@ export const startOidcLogin = async (
     });
 
     window.location.href = authorizationUrl;
+};
+
+/**
+ * Gets `code` and `state` query params
+ *
+ * @param queryParams
+ * @returns code and state
+ * @throws when code and state are not valid strings
+ */
+const getCodeAndStateFromQueryParams = (queryParams: QueryDict): { code: string; state: string } => {
+    const code = queryParams["code"];
+    const state = queryParams["state"];
+
+    if (!code || typeof code !== "string" || !state || typeof state !== "string") {
+        throw new Error("Invalid query parameters for OIDC native login. `code` and `state` are required.");
+    }
+    return { code, state };
+};
+
+/**
+ * Attempt to complete authorization code flow to get an access token
+ * @param queryParams the query-parameters extracted from the real query-string of the starting URI.
+ * @returns Promise that resolves with accessToken, identityServerUrl, and homeserverUrl when login was successful
+ * @throws When we failed to get a valid access token
+ */
+export const completeOidcLogin = async (
+    queryParams: QueryDict,
+): Promise<{
+    homeserverUrl: string;
+    identityServerUrl?: string;
+    accessToken: string;
+}> => {
+    const { code, state } = getCodeAndStateFromQueryParams(queryParams);
+    const { homeserverUrl, tokenResponse, identityServerUrl } = await completeAuthorizationCodeGrant(code, state);
+
+    // @TODO(kerrya) do something with the refresh token https://github.com/vector-im/element-web/issues/25444
+
+    return {
+        homeserverUrl: homeserverUrl,
+        identityServerUrl: identityServerUrl,
+        accessToken: tokenResponse.access_token,
+    };
 };

@@ -101,6 +101,7 @@
     "Failed to transfer call": "Failed to transfer call",
     "Permission Required": "Permission Required",
     "You do not have permission to start a conference call in this room": "You do not have permission to start a conference call in this room",
+    "Something went wrong.": "Something went wrong.",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
     "We couldn't log you in": "We couldn't log you in",
     "Try again": "Try again",
