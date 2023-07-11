@@ -86,6 +86,7 @@ export function toNotificationSettings(
                 supportsIntentionalMentions && standardRules.get(RuleId.IsUserMention),
                 standardRules.get(RuleId.ContainsUserName),
                 standardRules.get(RuleId.ContainsDisplayName),
+                ...contentRules,
             ]),
             people: determineSound(dmRules),
         },

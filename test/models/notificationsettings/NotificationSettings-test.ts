@@ -190,4 +190,37 @@ describe("NotificationSettings", () => {
         expect(pendingChanges.deleted).toHaveLength(0);
         expect(pendingChanges.updated).toHaveLength(0);
     });
+
+    it("correctly handles audible keywords without mentions settings", async () => {
+        const pushRules = (await import("./pushrules_bug_keyword_only.json")) as IPushRules;
+        const model = toNotificationSettings(pushRules, false);
+        const pendingChanges = reconcileNotificationSettings(pushRules, model, false);
+        const expectedModel: NotificationSettings = {
+            globalMute: false,
+            defaultLevels: {
+                dm: RoomNotifState.MentionsOnly,
+                room: RoomNotifState.MentionsOnly,
+            },
+            sound: {
+                calls: "ring",
+                mentions: "default",
+                people: undefined,
+            },
+            activity: {
+                bot_notices: true,
+                invite: true,
+                status_event: false,
+            },
+            mentions: {
+                user: false,
+                room: true,
+                keywords: true,
+            },
+            keywords: ["janne"],
+        };
+        expect(model).toEqual(expectedModel);
+        expect(pendingChanges.added).toHaveLength(0);
+        expect(pendingChanges.deleted).toHaveLength(0);
+        expect(pendingChanges.updated).toHaveLength(0);
+    });
 });
