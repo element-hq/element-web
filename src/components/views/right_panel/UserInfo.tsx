@@ -513,7 +513,7 @@ export const UserOptionsSection: React.FC<{
     );
 };
 
-const warnSelfDemote = async (isSpace: boolean): Promise<boolean> => {
+export const warnSelfDemote = async (isSpace: boolean): Promise<boolean> => {
     const { finished } = Modal.createDialog(QuestionDialog, {
         title: _t("Demote yourself?"),
         description: (

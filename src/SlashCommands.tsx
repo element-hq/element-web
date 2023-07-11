@@ -20,13 +20,10 @@ limitations under the License.
 import * as React from "react";
 import { User } from "matrix-js-sdk/src/models/user";
 import { Direction } from "matrix-js-sdk/src/models/event-timeline";
-import { EventType } from "matrix-js-sdk/src/@types/event";
 import * as ContentHelpers from "matrix-js-sdk/src/content-helpers";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IContent } from "matrix-js-sdk/src/models/event";
 import { MRoomTopicEventContent } from "matrix-js-sdk/src/@types/topic";
-import { SlashCommand as SlashCommandEvent } from "@matrix-org/analytics-events/types/typescript/SlashCommand";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import dis from "./dispatcher/dispatcher";
 import { _t, _td, UserFriendlyError } from "./languageHandler";
@@ -46,7 +43,6 @@ import BugReportDialog from "./components/views/dialogs/BugReportDialog";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
-import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
 import { UIComponent, UIFeature } from "./settings/UIFeature";
@@ -54,184 +50,24 @@ import { CHAT_EFFECTS } from "./effects";
 import LegacyCallHandler from "./LegacyCallHandler";
 import { guessAndSetDMRoom } from "./Rooms";
 import { upgradeRoom } from "./utils/RoomUpgrade";
-import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog";
 import DevtoolsDialog from "./components/views/dialogs/DevtoolsDialog";
 import RoomUpgradeWarningDialog from "./components/views/dialogs/RoomUpgradeWarningDialog";
 import InfoDialog from "./components/views/dialogs/InfoDialog";
 import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
 import { shouldShowComponent } from "./customisations/helpers/UIComponents";
 import { TimelineRenderingType } from "./contexts/RoomContext";
-import { XOR } from "./@types/common";
-import { PosthogAnalytics } from "./PosthogAnalytics";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import VoipUserMapper from "./VoipUserMapper";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 import { leaveRoomBehaviour } from "./utils/leave-behaviour";
-import { isLocalRoom } from "./utils/localRoom/isLocalRoom";
-import { SdkContextClass } from "./contexts/SDKContext";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { getDeviceCryptoInfo } from "./utils/crypto/deviceInfo";
+import { isCurrentLocalRoom, reject, singleMxcUpload, success, successSync } from "./slash-commands/utils";
+import { deop, op } from "./slash-commands/op";
+import { CommandCategories } from "./slash-commands/interface";
+import { Command } from "./slash-commands/command";
 
-// XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
-interface HTMLInputEvent extends Event {
-    target: HTMLInputElement & EventTarget;
-}
-
-const singleMxcUpload = async (cli: MatrixClient): Promise<string | null> => {
-    return new Promise((resolve) => {
-        const fileSelector = document.createElement("input");
-        fileSelector.setAttribute("type", "file");
-        fileSelector.onchange = (ev: Event) => {
-            const file = (ev as HTMLInputEvent).target.files?.[0];
-            if (!file) return;
-
-            Modal.createDialog(UploadConfirmDialog, {
-                file,
-                onFinished: async (shouldContinue): Promise<void> => {
-                    if (shouldContinue) {
-                        const { content_uri: uri } = await cli.uploadContent(file);
-                        resolve(uri);
-                    } else {
-                        resolve(null);
-                    }
-                },
-            });
-        };
-
-        fileSelector.click();
-    });
-};
-
-export const CommandCategories = {
-    messages: _td("Messages"),
-    actions: _td("Actions"),
-    admin: _td("Admin"),
-    advanced: _td("Advanced"),
-    effects: _td("Effects"),
-    other: _td("Other"),
-};
-
-export type RunResult = XOR<{ error: Error }, { promise: Promise<IContent | undefined> }>;
-
-type RunFn = (
-    this: Command,
-    matrixClient: MatrixClient,
-    roomId: string,
-    threadId: string | null,
-    args?: string,
-) => RunResult;
-
-interface ICommandOpts {
-    command: string;
-    aliases?: string[];
-    args?: string;
-    description: string;
-    analyticsName?: SlashCommandEvent["command"];
-    runFn?: RunFn;
-    category: string;
-    hideCompletionAfterSpace?: boolean;
-    isEnabled?(matrixClient: MatrixClient | null): boolean;
-    renderingTypes?: TimelineRenderingType[];
-}
-
-export class Command {
-    public readonly command: string;
-    public readonly aliases: string[];
-    public readonly args?: string;
-    public readonly description: string;
-    public readonly runFn?: RunFn;
-    public readonly category: string;
-    public readonly hideCompletionAfterSpace: boolean;
-    public readonly renderingTypes?: TimelineRenderingType[];
-    public readonly analyticsName?: SlashCommandEvent["command"];
-    private readonly _isEnabled?: (matrixClient: MatrixClient | null) => boolean;
-
-    public constructor(opts: ICommandOpts) {
-        this.command = opts.command;
-        this.aliases = opts.aliases || [];
-        this.args = opts.args || "";
-        this.description = opts.description;
-        this.runFn = opts.runFn?.bind(this);
-        this.category = opts.category || CommandCategories.other;
-        this.hideCompletionAfterSpace = opts.hideCompletionAfterSpace || false;
-        this._isEnabled = opts.isEnabled;
-        this.renderingTypes = opts.renderingTypes;
-        this.analyticsName = opts.analyticsName;
-    }
-
-    public getCommand(): string {
-        return `/${this.command}`;
-    }
-
-    public getCommandWithArgs(): string {
-        return this.getCommand() + " " + this.args;
-    }
-
-    public run(matrixClient: MatrixClient, roomId: string, threadId: string | null, args?: string): RunResult {
-        // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
-        if (!this.runFn) {
-            return reject(new UserFriendlyError("Command error: Unable to handle slash command."));
-        }
-
-        const renderingType = threadId ? TimelineRenderingType.Thread : TimelineRenderingType.Room;
-        if (this.renderingTypes && !this.renderingTypes?.includes(renderingType)) {
-            return reject(
-                new UserFriendlyError("Command error: Unable to find rendering type (%(renderingType)s)", {
-                    renderingType,
-                    cause: undefined,
-                }),
-            );
-        }
-
-        if (this.analyticsName) {
-            PosthogAnalytics.instance.trackEvent<SlashCommandEvent>({
-                eventName: "SlashCommand",
-                command: this.analyticsName,
-            });
-        }
-
-        return this.runFn(matrixClient, roomId, threadId, args);
-    }
-
-    public getUsage(): string {
-        return _t("Usage") + ": " + this.getCommandWithArgs();
-    }
-
-    public isEnabled(cli: MatrixClient | null): boolean {
-        return this._isEnabled?.(cli) ?? true;
-    }
-}
-
-function reject(error?: any): RunResult {
-    return { error };
-}
-
-function success(promise: Promise<any> = Promise.resolve()): RunResult {
-    return { promise };
-}
-
-function successSync(value: any): RunResult {
-    return success(Promise.resolve(value));
-}
-
-const isCurrentLocalRoom = (cli: MatrixClient | null): boolean => {
-    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
-    if (!roomId) return false;
-    const room = cli?.getRoom(roomId);
-    if (!room) return false;
-    return isLocalRoom(room);
-};
-
-const canAffectPowerlevels = (cli: MatrixClient | null): boolean => {
-    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
-    if (!cli || !roomId) return false;
-    const room = cli?.getRoom(roomId);
-    return !!room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getSafeUserId()) && !isLocalRoom(room);
-};
-
-/* Disable the "unexpected this" error for these commands - all of the run
- * functions are called with `this` bound to the Command instance.
- */
+export { CommandCategories, Command };
 
 export const Commands = [
     new Command({
@@ -886,78 +722,8 @@ export const Commands = [
         },
         category: CommandCategories.actions,
     }),
-    new Command({
-        command: "op",
-        args: "<user-id> [<power-level>]",
-        description: _td("Define the power level of a user"),
-        isEnabled: canAffectPowerlevels,
-        runFn: function (cli, roomId, threadId, args) {
-            if (args) {
-                const matches = args.match(/^(\S+?)( +(-?\d+))?$/);
-                let powerLevel = 50; // default power level for op
-                if (matches) {
-                    const userId = matches[1];
-                    if (matches.length === 4 && undefined !== matches[3]) {
-                        powerLevel = parseInt(matches[3], 10);
-                    }
-                    if (!isNaN(powerLevel)) {
-                        const room = cli.getRoom(roomId);
-                        if (!room) {
-                            return reject(
-                                new UserFriendlyError("Command failed: Unable to find room (%(roomId)s", {
-                                    roomId,
-                                    cause: undefined,
-                                }),
-                            );
-                        }
-                        const member = room.getMember(userId);
-                        if (
-                            !member?.membership ||
-                            getEffectiveMembership(member.membership) === EffectiveMembership.Leave
-                        ) {
-                            return reject(new UserFriendlyError("Could not find user in room"));
-                        }
-                        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-                        return success(cli.setPowerLevel(roomId, userId, powerLevel, powerLevelEvent));
-                    }
-                }
-            }
-            return reject(this.getUsage());
-        },
-        category: CommandCategories.admin,
-        renderingTypes: [TimelineRenderingType.Room],
-    }),
-    new Command({
-        command: "deop",
-        args: "<user-id>",
-        description: _td("Deops user with given id"),
-        isEnabled: canAffectPowerlevels,
-        runFn: function (cli, roomId, threadId, args) {
-            if (args) {
-                const matches = args.match(/^(\S+)$/);
-                if (matches) {
-                    const room = cli.getRoom(roomId);
-                    if (!room) {
-                        return reject(
-                            new UserFriendlyError("Command failed: Unable to find room (%(roomId)s", {
-                                roomId,
-                                cause: undefined,
-                            }),
-                        );
-                    }
-
-                    const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-                    if (!powerLevelEvent?.getContent().users[args]) {
-                        return reject(new UserFriendlyError("Could not find user in room"));
-                    }
-                    return success(cli.setPowerLevel(roomId, args, undefined, powerLevelEvent));
-                }
-            }
-            return reject(this.getUsage());
-        },
-        category: CommandCategories.admin,
-        renderingTypes: [TimelineRenderingType.Room],
-    }),
+    op,
+    deop,
     new Command({
         command: "devtools",
         description: _td("Opens the Developer Tools dialog"),
