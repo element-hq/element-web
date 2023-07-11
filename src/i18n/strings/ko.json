@@ -5,7 +5,6 @@
     "The message from the parser is: %(message)s": "파서에서 온 메시지: %(message)s",
     "Invalid JSON": "유효하지 않은 JSON",
     "Unexpected error preparing the app. See console for details.": "앱을 준비하는 동안 예기치 않은 오류가 발생했습니다. 자세한 내용은 콘솔을 확인하세요.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "잘못된 설정: default_server_config 와 defalut_server_name, default_hs_url 중 하나만 지정할 수 있습니다.",
     "Invalid configuration: no default server specified.": "잘못된 설정: 기본 서버가 지정되지 않았습니다.",
     "Sign In": "로그인",
     "Create Account": "계정 만들기",

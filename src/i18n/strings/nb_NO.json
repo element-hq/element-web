@@ -9,7 +9,6 @@
     "Invalid JSON": "Ugyldig JSON",
     "Invalid configuration: no default server specified.": "Ugyldig konfigurasjon: ingen standardserver spesifisert.",
     "Unexpected error preparing the app. See console for details.": "Uventet feil ved klargjøring av appen. Se konsollen for detaljer.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig konfigurasjon: Spesifiser kun en av følgende: default_server_config, default_server_name eller default_hs_url.",
     "Go to your browser to complete Sign In": "Gå til nettleseren din for å fullføre innloggingen",
     "Failed to start": "Kunne ikke starte",
     "Go to element.io": "Gå til element.io",

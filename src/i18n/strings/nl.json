@@ -6,7 +6,6 @@
     "Create Account": "Registreren",
     "Explore rooms": "Kamers ontdekken",
     "Unexpected error preparing the app. See console for details.": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Zie de console voor details.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuratiefout: kan slechts één van default_server_config, default_server_name, of default_hs_url opgeven.",
     "Invalid configuration: no default server specified.": "Configuratie ongeldig: geen standaardserver opgegeven.",
     "The message from the parser is: %(message)s": "De ontleder meldt: %(message)s",
     "Invalid JSON": "Ongeldige JSON",

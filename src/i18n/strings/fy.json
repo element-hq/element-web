@@ -24,6 +24,5 @@
     "Open": "Iepenje",
     "Invalid JSON": "Unjildige JSON",
     "Your Element is misconfigured": "Jo Element is net goed konfigurearre",
-    "Invalid configuration: no default server specified.": "Unjildiche konfiguraasje: gjin standertserver selektearre.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Unjildige konfiguraasje: kin allinnich kieze út default_server_config, default_server_name, as default_hs_url."
+    "Invalid configuration: no default server specified.": "Unjildiche konfiguraasje: gjin standertserver selektearre."
 }

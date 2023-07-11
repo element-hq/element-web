@@ -8,7 +8,6 @@
     "The message from the parser is: %(message)s": "Meldinga frå kodetolkaren er: %(message)s",
     "Invalid JSON": "Ugyldig JSON",
     "Unexpected error preparing the app. See console for details.": "Uventa feil under lasting av programmet. Sjå konsollen for detaljar.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig oppsett: du kan berre spesifiere ein av default_server_config, default_server_name eller default_hs_url.",
     "Invalid configuration: no default server specified.": "Ugyldig oppsett: Ingen standardtener er spesifisert.",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Oppsettet for din Element inneheld ugyldig JSON. Sjekk konfigurasjonsfila, deretter last om sida.",
     "Unable to load config file: please refresh the page to try again.": "Fekk ikkje til å lasta konfigurasjonsfila: last inn sida for å prøva om att.",

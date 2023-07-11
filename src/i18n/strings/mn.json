@@ -2,7 +2,6 @@
     "The message from the parser is: %(message)s": "Парсераас ирсэн мессеж нь: %(message)s",
     "Invalid JSON": "Буруу ЖСОН",
     "Unexpected error preparing the app. See console for details.": "Апп бэлдэх үед гарах ёсгүй алдаа. Дэлгэрэнгүйг консолоос харна уу.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Буруу тохиргоо: default_server_config, default_server_name, эсвэл default_hs_url утгын зөвхөн аль нэгийг л зааж болно.",
     "Invalid configuration: no default server specified.": "Буруу тохиргоо: Өгөгдсөл серверийг зааж өгөөгүй байна.",
     "Unknown device": "Үл мэдэгдэх төхөөрөмж",
     "Dismiss": "Орхих",
