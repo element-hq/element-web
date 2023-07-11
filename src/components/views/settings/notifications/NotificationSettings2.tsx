@@ -31,6 +31,7 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import { NotificationColor } from "../../../../stores/notifications/NotificationColor";
 import { clearAllNotifications } from "../../../../utils/notifications";
 import AccessibleButton from "../../elements/AccessibleButton";
+import ExternalLink from "../../elements/ExternalLink";
 import LabelledCheckbox from "../../elements/LabelledCheckbox";
 import LabelledToggleSwitch from "../../elements/LabelledToggleSwitch";
 import StyledRadioGroup from "../../elements/StyledRadioGroup";
@@ -76,6 +77,10 @@ function boldText(text: string): JSX.Element {
     return <strong>{text}</strong>;
 }
 
+function helpLink(sub: string): JSX.Element {
+    return <ExternalLink href="https://element.io/help#settings2">{sub}</ExternalLink>;
+}
+
 function useHasUnreadNotifications(): boolean {
     const cli = useMatrixClientContext();
     return cli.getRooms().some((room) => room.getUnreadNotificationCount() > 0);
@@ -101,13 +106,20 @@ export default function NotificationSettings2(): JSX.Element {
             {hasPendingChanges && model !== null && (
                 <SettingsBanner
                     icon={<img src={NewAndImprovedIcon} alt="" width={12} />}
-                    action={_t("Switch now")}
+                    action={_t("Proceed")}
                     onAction={() => reconcile(model!)}
                 >
                     {_t(
-                        "<strong>Update:</strong> We have updated our notification settings. This won’t affect your previously selected settings.",
+                        "<strong>Update:</strong>" +
+                            "We’ve simplified Notifications Settings to make options easier to find. " +
+                            "Some custom settings you’ve chosen in the past are not shown here, but they’re still active. " +
+                            "If you proceed, some of your settings may change. " +
+                            "<a>Learn more</a>",
                         {},
-                        { strong: boldText },
+                        {
+                            strong: boldText,
+                            a: helpLink,
+                        },
                     )}
                 </SettingsBanner>
             )}
