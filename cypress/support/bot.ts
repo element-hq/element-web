@@ -17,6 +17,8 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import type { ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import type { AddSecretStorageKeyOpts } from "matrix-js-sdk/src/secret-storage";
 import { HomeserverInstance } from "../plugins/utils/homeserver";
 import { Credentials } from "./homeserver";
 import Chainable = Cypress.Chainable;
@@ -47,6 +49,10 @@ interface CreateBotOpts {
      * Whether to use the rust crypto impl. Defaults to false (for now!)
      */
     rustCrypto?: boolean;
+    /**
+     * Whether or not to bootstrap the secret storage
+     */
+    bootstrapSecretStorage?: boolean;
 }
 
 const defaultCreateBotOptions = {
@@ -58,6 +64,7 @@ const defaultCreateBotOptions = {
 
 export interface CypressBot extends MatrixClient {
     __cypress_password: string;
+    __cypress_recovery_key: GeneratedSecretStorageKey;
 }
 
 declare global {
@@ -143,6 +150,24 @@ function setupBotClient(
                 Object.assign(keys, k);
             };
 
+            // Store the cached secret storage key and return it when `getSecretStorageKey` is called
+            let cachedKey: { keyId: string; key: Uint8Array };
+            const cacheSecretStorageKey = (keyId: string, keyInfo: AddSecretStorageKeyOpts, key: Uint8Array) => {
+                cachedKey = {
+                    keyId,
+                    key,
+                };
+            };
+
+            const getSecretStorageKey = () => Promise.resolve<[string, Uint8Array]>([cachedKey.keyId, cachedKey.key]);
+
+            const cryptoCallbacks = {
+                getCrossSigningKey,
+                saveCrossSigningKeys,
+                cacheSecretStorageKey,
+                getSecretStorageKey,
+            };
+
             const cli = new win.matrixcs.MatrixClient({
                 baseUrl: homeserver.baseUrl,
                 userId: credentials.userId,
@@ -151,7 +176,7 @@ function setupBotClient(
                 store: new win.matrixcs.MemoryStore(),
                 scheduler: new win.matrixcs.MatrixScheduler(),
                 cryptoStore: new win.matrixcs.MemoryCryptoStore(),
-                cryptoCallbacks: { getCrossSigningKey, saveCrossSigningKeys },
+                cryptoCallbacks,
             });
 
             if (opts.autoAcceptInvites) {
@@ -192,6 +217,18 @@ function setupBotClient(
                     },
                 });
             }
+
+            if (opts.bootstrapSecretStorage) {
+                const passphrase = "new passphrase";
+                const recoveryKey = await cli.getCrypto().createRecoveryKeyFromPassphrase(passphrase);
+                Object.assign(cli, { __cypress_recovery_key: recoveryKey });
+
+                await cli.getCrypto()!.bootstrapSecretStorage({
+                    setupNewSecretStorage: true,
+                    createSecretStorageKey: () => Promise.resolve(recoveryKey),
+                });
+            }
+
             return cli;
         },
     );

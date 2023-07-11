@@ -36,7 +36,11 @@ describe("Device verification", () => {
             cy.window({ log: false }).should("have.property", "matrixcs");
 
             // Create a new device for alice
-            cy.getBot(homeserver, { rustCrypto: true, bootstrapCrossSigning: true }).then((bot) => {
+            cy.getBot(homeserver, {
+                rustCrypto: true,
+                bootstrapCrossSigning: true,
+                bootstrapSecretStorage: true,
+            }).then((bot) => {
                 aliceBotClient = bot;
             });
         });
@@ -81,6 +85,51 @@ describe("Device verification", () => {
 
             cy.findByRole("button", { name: "They match" }).click();
             cy.findByRole("button", { name: "Got it" }).click();
+        });
+
+        // Check that our device is now cross-signed
+        checkDeviceIsCrossSigned();
+    });
+
+    it("Verify device during login with Security Phrase", () => {
+        logIntoElement(homeserver.baseUrl, aliceBotClient.getUserId(), aliceBotClient.__cypress_password);
+
+        // Select the security phrase
+        cy.get(".mx_AuthPage").within(() => {
+            cy.findByRole("button", { name: "Verify with Security Key or Phrase" }).click();
+        });
+
+        // Fill the passphrase
+        cy.get(".mx_Dialog").within(() => {
+            cy.get("input").type("new passphrase");
+            cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
+        });
+
+        cy.get(".mx_AuthPage").within(() => {
+            cy.findByRole("button", { name: "Done" }).click();
+        });
+
+        // Check that our device is now cross-signed
+        checkDeviceIsCrossSigned();
+    });
+
+    it("Verify device during login with Security Key", () => {
+        logIntoElement(homeserver.baseUrl, aliceBotClient.getUserId(), aliceBotClient.__cypress_password);
+
+        // Select the security phrase
+        cy.get(".mx_AuthPage").within(() => {
+            cy.findByRole("button", { name: "Verify with Security Key or Phrase" }).click();
+        });
+
+        // Fill the security key
+        cy.get(".mx_Dialog").within(() => {
+            cy.findByRole("button", { name: "use your Security Key" }).click();
+            cy.get("#mx_securityKey").type(aliceBotClient.__cypress_recovery_key.encodedPrivateKey);
+            cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
+        });
+
+        cy.get(".mx_AuthPage").within(() => {
+            cy.findByRole("button", { name: "Done" }).click();
         });
 
         // Check that our device is now cross-signed
