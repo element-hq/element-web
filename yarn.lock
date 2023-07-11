@@ -1633,10 +1633,10 @@
   dependencies:
     "@babel/runtime" "^7.17.9"
 
-"@matrix-org/react-sdk-module-api@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-0.0.6.tgz#941872ed081acdca9d247ccd6e146265aa24010b"
-  integrity sha512-FydbJYSMecpDIGk4fVQ9djjckQdbJPV9bH3px78TQ+MX/WHmzPmjEpMPTeP3uDSeg0EWmfoIFdNypJglMqAHpw==
+"@matrix-org/react-sdk-module-api@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-1.0.0.tgz#de73e163a439fe330f6971a6a0cef2ccb090d616"
+  integrity sha512-drhPkoPWitAv9bXS2q8cyaqPta/KGF+Ph3aZSmaYiOPyY5S84e4Ju3JI6/HExqF8+HyBsajlCKtyvTZsMsTIFA==
   dependencies:
     "@babel/runtime" "^7.17.9"
 
