@@ -245,7 +245,7 @@ describe("ContentMessages", () => {
                 expect.objectContaining({
                     "url": "mxc://server/file",
                     "msgtype": "m.image",
-                    "org.matrix.msc3952.mentions": {
+                    "m.mentions": {
                         user_ids: ["@bob:test"],
                     },
                 }),

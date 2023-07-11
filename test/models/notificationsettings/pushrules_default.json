@@ -259,7 +259,7 @@
                 "conditions": [
                     {
                         "kind": "event_property_contains",
-                        "key": "content.org\\.matrix\\.msc3952\\.mentions.user_ids",
+                        "key": "content.m\\.mentions.user_ids",
                         "value": "@jannetestuser:beta.matrix.org"
                     }
                 ],
@@ -269,7 +269,7 @@
                         "set_tweak": "highlight"
                     }
                 ],
-                "rule_id": ".org.matrix.msc3952.is_user_mention",
+                "rule_id": ".m.rule.is_user_mention",
                 "default": true,
                 "enabled": true,
                 "kind": "override"
@@ -299,7 +299,7 @@
                 "conditions": [
                     {
                         "kind": "event_property_is",
-                        "key": "content.org\\.matrix\\.msc3952\\.mentions.room",
+                        "key": "content.m\\.mentions.room",
                         "value": true
                     },
                     {
@@ -313,7 +313,7 @@
                         "set_tweak": "highlight"
                     }
                 ],
-                "rule_id": ".org.matrix.msc3952.is_room_mention",
+                "rule_id": ".m.rule.is_room_mention",
                 "default": true,
                 "enabled": true,
                 "kind": "override"

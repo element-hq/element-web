@@ -237,12 +237,12 @@ export const DEFAULT_PUSH_RULES: IPushRules = Object.freeze({
                 conditions: [
                     {
                         kind: "event_property_contains",
-                        key: "content.org\\.matrix\\.msc3952\\.mentions.user_ids",
+                        key: "content.m\\.mentions.user_ids",
                         value_type: "user_id",
                     },
                 ],
                 actions: ["notify", { set_tweak: "highlight" }, { set_tweak: "sound", value: "default" }],
-                rule_id: ".org.matrix.msc3952.is_user_mention",
+                rule_id: ".m.rule.is_user_mention",
                 default: true,
                 enabled: true,
             },
@@ -255,11 +255,11 @@ export const DEFAULT_PUSH_RULES: IPushRules = Object.freeze({
             },
             {
                 conditions: [
-                    { kind: "event_property_is", key: "content.org\\.matrix\\.msc3952\\.mentions.room", value: true },
+                    { kind: "event_property_is", key: "content.m\\.mentions.room", value: true },
                     { kind: "sender_notification_permission", key: "room" },
                 ],
                 actions: ["notify", { set_tweak: "highlight" }],
-                rule_id: ".org.matrix.msc3952.is_room_mention",
+                rule_id: ".m.rule.is_room_mention",
                 default: true,
                 enabled: true,
             },

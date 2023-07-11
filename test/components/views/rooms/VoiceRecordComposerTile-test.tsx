@@ -135,7 +135,7 @@ describe("<VoiceRecordComposerTile/>", () => {
                 "org.matrix.msc1767.text": "Voice message",
                 "org.matrix.msc3245.voice": {},
                 "url": "mxc://example.com/voice",
-                "org.matrix.msc3952.mentions": {},
+                "m.mentions": {},
             });
         });
 
@@ -189,7 +189,7 @@ describe("<VoiceRecordComposerTile/>", () => {
                         event_id: replyToEvent.getId(),
                     },
                 },
-                "org.matrix.msc3952.mentions": { user_ids: ["@bob:test"] },
+                "m.mentions": { user_ids: ["@bob:test"] },
             });
         });
     });
