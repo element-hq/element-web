@@ -38,7 +38,7 @@ import { QueryDict, encodeParams } from "matrix-js-sdk/src/utils";
 
 import { parseQs } from "./url_utils";
 import VectorBasePlatform from "./platform/VectorBasePlatform";
-import { getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
+import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
 
 // add React and ReactPerf to the global namespace, to make them easier to access via the console
 // this incidentally means we can forget our React imports in JSX files without penalty.
@@ -133,6 +133,8 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
     const defaultDeviceName =
         snakedConfig.get("default_device_display_name") ?? platform?.getDefaultDeviceDisplayName();
 
+    const initialScreenAfterLogin = getInitialScreenAfterLogin(window.location);
+
     return (
         <MatrixChat
             onNewScreen={onNewScreen}
@@ -142,7 +144,7 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
             startingFragmentQueryParams={fragParams}
             enableGuest={!config.disable_guests}
             onTokenLoginCompleted={onTokenLoginCompleted}
-            initialScreenAfterLogin={getScreenFromLocation(window.location)}
+            initialScreenAfterLogin={initialScreenAfterLogin}
             defaultDeviceDisplayName={defaultDeviceName}
         />
     );
