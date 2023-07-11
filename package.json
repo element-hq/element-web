@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.11.34",
+    "version": "1.11.35",
     "description": "A feature-rich client for Matrix.org",
     "author": "New Vector Ltd.",
     "repository": {
@@ -70,7 +70,7 @@
     },
     "dependencies": {
         "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz",
-        "@matrix-org/react-sdk-module-api": "^0.0.5",
+        "@matrix-org/react-sdk-module-api": "^0.0.6",
         "gfm.css": "^1.1.2",
         "jsrsasign": "^10.5.25",
         "katex": "^0.16.0",
@@ -170,7 +170,7 @@
         "simple-proxy-agent": "^1.1.0",
         "string-replace-loader": "3",
         "style-loader": "2",
-        "stylelint": "^15.3.0",
+        "stylelint": "^15.10.1",
         "stylelint-config-standard": "^33.0.0",
         "stylelint-scss": "^5.0.0",
         "terser-webpack-plugin": "^4.0.0",
