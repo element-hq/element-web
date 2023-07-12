@@ -22,8 +22,6 @@
         "https://scalar-staging.vector.im/api",
         "https://scalar-staging.riot.im/scalar/api"
     ],
-    "bug_report_endpoint_url": "https://element.io/bugreports/submit",
-    "uisi_autorageshake_app": "element-auto-uisi",
     "default_country_code": "GB",
     "show_labs_settings": false,
     "features": {},
