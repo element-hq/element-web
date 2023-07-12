@@ -130,7 +130,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         // but given that a deactivation is followed by a local logout and all object instances being thrown away
         // this isn't done.
         MatrixClientPeg.safeGet()
-            .deactivateAccount(auth, this.state.shouldErase)
+            .deactivateAccount(auth ?? undefined, this.state.shouldErase)
             .then((r) => {
                 // Deactivation worked - logout & close this dialog
                 defaultDispatcher.fire(Action.TriggerLogout);
@@ -163,7 +163,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
 
     private initAuth(shouldErase: boolean): void {
         MatrixClientPeg.safeGet()
-            .deactivateAccount(null, shouldErase)
+            .deactivateAccount(undefined, shouldErase)
             .then((r) => {
                 // If we got here, oops. The server didn't require any auth.
                 // Our application lifecycle will catch the error and do the logout bits.

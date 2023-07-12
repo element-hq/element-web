@@ -345,12 +345,15 @@ export default class ForgotPassword extends React.Component<Props, State> {
         }
     };
 
-    private onInputChanged = (stateKey: string, ev: React.FormEvent<HTMLInputElement>): void => {
+    private onInputChanged = (
+        stateKey: "email" | "password" | "password2",
+        ev: React.FormEvent<HTMLInputElement>,
+    ): void => {
         let value = ev.currentTarget.value;
         if (stateKey === "email") value = value.trim();
         this.setState({
             [stateKey]: value,
-        } as any);
+        } as Pick<State, typeof stateKey>);
     };
 
     public renderEnterEmail(): JSX.Element {

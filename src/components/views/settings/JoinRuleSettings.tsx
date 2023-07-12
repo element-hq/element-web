@@ -61,7 +61,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
 
     const disabled = !room.currentState.mayClientSendStateEvent(EventType.RoomJoinRules, cli);
 
-    const [content, setContent] = useLocalEcho<IJoinRuleEventContent | undefined>(
+    const [content, setContent] = useLocalEcho<IJoinRuleEventContent | undefined, IJoinRuleEventContent>(
         () => room.currentState.getStateEvents(EventType.RoomJoinRules, "")?.getContent(),
         (content) => cli.sendStateEvent(room.roomId, EventType.RoomJoinRules, content, ""),
         onError,

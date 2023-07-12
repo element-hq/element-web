@@ -256,7 +256,7 @@ export default class AddThreepid {
             } else {
                 await this.matrixClient.addThreePid(
                     {
-                        sid: this.sessionId,
+                        sid: this.sessionId!,
                         client_secret: this.clientSecret,
                         id_server: getIdServerDomain(this.matrixClient),
                     },
@@ -377,7 +377,7 @@ export default class AddThreepid {
         } else {
             await this.matrixClient.addThreePid(
                 {
-                    sid: this.sessionId,
+                    sid: this.sessionId!,
                     client_secret: this.clientSecret,
                     id_server: getIdServerDomain(this.matrixClient),
                 },

@@ -53,14 +53,13 @@ import { Key } from "../../../Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { Action } from "../../../dispatcher/actions";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
-import { GetRelationsForEvent } from "../rooms/EventTile";
+import { GetRelationsForEvent, IEventTileType } from "../rooms/EventTile";
 import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast/types";
 import { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
-    // TODO: Types
-    getTile: () => any | null;
+    getTile: () => IEventTileType | null;
     getReplyChain: () => ReplyChain | null;
     permalinkCreator?: RoomPermalinkCreator;
     onFocusChange: (menuDisplayed: boolean) => void;
@@ -97,7 +96,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
 
     let contextMenu: ReactElement | undefined;
     if (menuDisplayed && button.current) {
-        const tile = getTile && getTile();
+        const tile = getTile?.();
         const replyChain = getReplyChain();
 
         const buttonRect = button.current.getBoundingClientRect();
@@ -254,8 +253,7 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
 interface IMessageActionBarProps {
     mxEvent: MatrixEvent;
     reactions?: Relations | null | undefined;
-    // TODO: Types
-    getTile: () => any | null;
+    getTile: () => IEventTileType | null;
     getReplyChain: () => ReplyChain | null;
     permalinkCreator?: RoomPermalinkCreator;
     onFocusChange?: (menuDisplayed: boolean) => void;
@@ -487,7 +485,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                         0,
                         <DownloadActionButton
                             mxEvent={this.props.mxEvent}
-                            mediaEventHelperGet={() => this.props.getTile?.().getMediaHelper?.()}
+                            mediaEventHelperGet={() => this.props.getTile()?.getMediaHelper?.()}
                             key="download"
                         />,
                     );

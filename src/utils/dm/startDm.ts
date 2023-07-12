@@ -25,7 +25,7 @@ import { isLocalRoom } from "../localRoom/isLocalRoom";
 import { findDMForUser } from "./findDMForUser";
 import dis from "../../dispatcher/dispatcher";
 import { getAddressType } from "../../UserAddress";
-import createRoom from "../../createRoom";
+import createRoom, { IOpts } from "../../createRoom";
 
 /**
  * Start a DM.
@@ -53,7 +53,7 @@ export async function startDm(client: MatrixClient, targets: Member[], showSpinn
         return Promise.resolve(existingRoom.roomId);
     }
 
-    const createRoomOptions = { inlineErrors: true } as any; // XXX: Type out `createRoomOptions`
+    const createRoomOptions: IOpts = { inlineErrors: true };
 
     if (await determineCreateRoomEncryptionOption(client, targets)) {
         createRoomOptions.encryption = true;

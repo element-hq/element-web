@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import posthog, { PostHog, Properties } from "posthog-js";
+import posthog, { CaptureOptions, PostHog, Properties } from "posthog-js";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 import { UserProperties } from "@matrix-org/analytics-events/types/typescript/UserProperties";
@@ -54,10 +54,6 @@ export interface IPosthogEvent {
     // do not allow these to be sent manually, we enqueue them all for caching purposes
     $set?: void;
     $set_once?: void;
-}
-
-export interface IPostHogEventOptions {
-    timestamp?: Date;
 }
 
 export enum Anonymity {
@@ -256,19 +252,13 @@ export class PosthogAnalytics {
     }
 
     // eslint-disable-nextline no-unused-vars
-    private capture(eventName: string, properties: Properties, options?: IPostHogEventOptions): void {
+    private capture(eventName: string, properties: Properties, options?: CaptureOptions): void {
         if (!this.enabled) {
             return;
         }
         const { origin, hash, pathname } = window.location;
         properties["redactedCurrentUrl"] = getRedactedCurrentLocation(origin, hash, pathname);
-        this.posthog.capture(
-            eventName,
-            { ...this.propertiesForNextEvent, ...properties },
-            // TODO: Uncomment below once https://github.com/PostHog/posthog-js/pull/391
-            // gets merged
-            /* options as any, */ // No proper type definition in the posthog library
-        );
+        this.posthog.capture(eventName, { ...this.propertiesForNextEvent, ...properties }, options);
         this.propertiesForNextEvent = {};
     }
 
@@ -342,7 +332,7 @@ export class PosthogAnalytics {
         this.setAnonymity(Anonymity.Disabled);
     }
 
-    public trackEvent<E extends IPosthogEvent>({ eventName, ...properties }: E, options?: IPostHogEventOptions): void {
+    public trackEvent<E extends IPosthogEvent>({ eventName, ...properties }: E, options?: CaptureOptions): void {
         if (this.anonymity == Anonymity.Disabled || this.anonymity == Anonymity.Anonymous) return;
         this.capture(eventName, properties, options);
     }
@@ -420,7 +410,7 @@ export class PosthogAnalytics {
         // that we want to accumulate before the user has given consent
         // All other scenarios should not track a user before they have given
         // explicit consent that they are ok with their analytics data being collected
-        const options: IPostHogEventOptions = {};
+        const options: CaptureOptions = {};
         const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time")!, 10);
         if (!isNaN(registrationTime)) {
             options.timestamp = new Date(registrationTime);

@@ -29,7 +29,7 @@ interface EnterEmailProps {
     errorText: string | ReactNode | null;
     homeserver: string;
     loading: boolean;
-    onInputChanged: (stateKey: string, ev: React.FormEvent<HTMLInputElement>) => void;
+    onInputChanged: (stateKey: "email", ev: React.FormEvent<HTMLInputElement>) => void;
     onLoginClick: () => void;
     onSubmitForm: (ev: React.FormEvent) => void;
 }
