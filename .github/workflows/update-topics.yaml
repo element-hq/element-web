@@ -22,7 +22,7 @@ jobs:
         environment: Matrix
         steps:
             - id: stable
-              uses: fangqiuming/latest-release-version@45b2da0e20968cd18c356c548d3c5ccb7318bb8f
+              uses: fangqiuming/latest-release-version@3225574bda429695112385003694f43c51f93635 # forked
 
             - uses: actions/github-script@v6
               env:
