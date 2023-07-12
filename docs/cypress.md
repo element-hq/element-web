@@ -230,3 +230,10 @@ having to figure it out later after the nightly build. If you don't have
 permission to add a label, please ask your reviewer to do it. Note: it's best to
 add this label when the change is nearly ready, because the screenshots will be
 re-created every time you make a change to your PR.
+
+Some UI elements render differently between test runs, such as BaseAvatar when
+there is no avatar set, choosing a colour from the theme palette based on the
+hash of the user/room's Matrix ID. To avoid this creating flaky tests we can use
+the `@media only percy` CSS query to override the variable colour into a fixed one
+for tests where it is not feasible to fix the underlying identifiers issued by the
+server. See https://docs.percy.io/docs/percy-specific-css#percy-css-media-query.
