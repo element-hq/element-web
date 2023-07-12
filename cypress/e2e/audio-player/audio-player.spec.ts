@@ -43,6 +43,8 @@ describe("Audio player", () => {
         // Wait until the file is sent
         cy.get(".mx_RoomView_statusArea_expanded").should("not.exist");
         cy.get(".mx_EventTile.mx_EventTile_last .mx_EventTile_receiptSent").should("exist");
+        // wait for the tile to finish loading
+        cy.get(".mx_AudioPlayer_mediaName").should("exist");
     };
 
     /**
