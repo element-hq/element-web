@@ -306,6 +306,10 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private emojiMatchesFilter = (emoji: IEmoji, filter: string): boolean => {
+        // If the query is an emoji containing a variation then strip it to provide more useful matches
+        if (filter.includes(ZERO_WIDTH_JOINER)) {
+            filter = filter.split(ZERO_WIDTH_JOINER, 2)[0];
+        }
         return (
             emoji.label.toLowerCase().includes(filter) ||
             (Array.isArray(emoji.emoticon)
