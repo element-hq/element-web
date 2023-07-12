@@ -59,6 +59,7 @@ $event-selected-color: $header-panel-bg-color;
 
 /* used for the hairline dividers in RoomView */
 $primary-hairline-color: #e5e5e5;
+$secondary-hairline-color: var(--cpd-color-gray-300);
 
 /* used for the border of input text fields */
 $input-border-color: #e7e7e7;
@@ -76,6 +77,7 @@ $strong-input-border-color: #c7c7c7;
 /* used for UserSettings EditableText */
 $input-underline-color: rgba(151, 151, 151, 0.5);
 $input-fg-color: rgba(74, 74, 74, 0.9);
+$input-placeholder: var(--cpd-color-text-placeholder);
 /* scrollbars */
 $scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
 /* context menus */
@@ -87,11 +89,12 @@ $menu-selected-color: #f5f8fa;
 $avatar-initial-color: #ffffff;
 
 $h3-color: #3d3b39;
+$icon-button-color: var(--cpd-color-icon-tertiary);
 
 $dialog-title-fg-color: #45474a;
 $dialog-backdrop-color: rgba(46, 48, 51, 0.38);
 $dialog-shadow-color: rgba(0, 0, 0, 0.48);
-$dialog-close-fg-color: #c1c1c1;
+$dialog-close-fg-color: $icon-button-color;
 $dialog-close-external-color: $primary-bg-color;
 
 $lightbox-background-bg-color: #000;
@@ -124,9 +127,8 @@ $topleftmenu-color: #212121;
 $roomheader-bg-color: $primary-bg-color;
 $roomheader-addroom-bg-color: #91a1c0;
 $roomheader-addroom-fg-color: $accent-fg-color;
-$icon-button-color: #91a1c0;
 $roomtopic-color: #9e9e9e;
-$room-icon-unread-color: #737d8c;
+$room-icon-unread-color: var(--cpd-color-icon-tertiary);
 
 /* ******************** */
 
@@ -150,22 +152,21 @@ $tertiary-content: $tertiary-fg-color;
 $quaternary-content: #6f7882;
 $quinary-content: $quaternary-content;
 $system: #f4f6fa;
-$system-transparent: rgba($system, 0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
+$system-transparent: #e1e6ec00;
 $background: $primary-bg-color;
 $overlay-background: rgba($background, 0.85);
 
 $panels: rgba($system, 0.9);
-$panel-base: #8d97a5; /* This color is not intended for use in the app */
-$panel-selected: rgba($tertiary-content, 0.3);
-$panel-hover: rgba($tertiary-content, 0.1);
 $panel-actions: $roomtile-selected-bg-color;
-$space-nav: rgba($tertiary-content, 0.15);
+
+$separator: var(--cpd-color-alpha-gray-400);
+
 /* Legacy theme backports */
 
 /* ******************** */
 
 $roomlist-filter-active-bg-color: $panel-actions;
-$roomlist-bg-color: $header-panel-bg-color;
+$roomlist-bg-color: var(--cpd-color-bg-subtle-secondary);
 $roomlist-header-color: $primary-fg-color;
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
 
@@ -185,14 +186,39 @@ $call-background: #15191e;
 $call-primary-content: #ffffff;
 $call-light-quaternary-content: #c1c6cd;
 
-$username-variant1-color: #368bd6;
-$username-variant2-color: #ac3ba8;
-$username-variant3-color: #03b381;
-$username-variant4-color: #e64f7a;
-$username-variant5-color: #ff812d;
-$username-variant6-color: #2dc2c5;
-$username-variant7-color: #5c56f5;
-$username-variant8-color: #74d12c;
+$username-variant1-color: var(--cpd-color-blue-900);
+$username-variant2-color: var(--cpd-color-fuchsia-900);
+$username-variant3-color: var(--cpd-color-green-900);
+$username-variant4-color: var(--cpd-color-pink-900);
+$username-variant5-color: var(--cpd-color-orange-900);
+$username-variant6-color: var(--cpd-color-cyan-900);
+$username-variant7-color: var(--cpd-color-purple-900);
+$username-variant8-color: var(--cpd-color-lime-900);
+
+/**
+ * Creating a `semantic` color scale. This will not be needed with the new
+ * visual language, but necessary during the transition period
+ * This abstract the `green` away from where accent shades are used
+ * Take: `background: rgba($accent, 0.1);`
+ * would be transformed to: `background: $accent-300;`
+ *
+ * To use under very rare circumstances, always prefer the semantics defined
+ * in https://compound.element.io/?path=/docs/tokens-semantic-colors--docs
+ */
+$accent-100: var(--cpd-color-green-100);
+$accent-200: var(--cpd-color-green-200);
+$accent-300: var(--cpd-color-green-300);
+$accent-400: var(--cpd-color-green-400);
+$accent-500: var(--cpd-color-green-500);
+$accent-600: var(--cpd-color-green-600);
+$accent-700: var(--cpd-color-green-700);
+$accent-800: var(--cpd-color-green-800);
+$accent-900: var(--cpd-color-green-900);
+$accent-1000: var(--cpd-color-green-1000);
+$accent-1100: var(--cpd-color-green-1100);
+$accent-1200: var(--cpd-color-green-1200);
+$accent-1300: var(--cpd-color-green-1300);
+$accent-1400: var(--cpd-color-green-1400);
 
 /* ******************** */
 
@@ -218,8 +244,8 @@ $e2e-verified-color: #0dbd8b;
 $e2e-unknown-color: #e8bf37;
 $e2e-unverified-color: #e8bf37;
 $e2e-warning-color: #ff5b55;
-$e2e-verified-color-light: rgba($e2e-verified-color, 0.06);
-$e2e-warning-color-light: rgba($e2e-warning-color, 0.06);
+$e2e-verified-color-light: var(--cpd-color-green-300);
+$e2e-warning-color-light: var(--cpd-color-red-300);
 
 /*** ImageView ***/
 $lightbox-bg-color: #454545;
@@ -241,7 +267,7 @@ $visual-bell-bg-color: #faa;
 
 /* Toggle switch */
 $togglesw-off-color: #c1c9d6;
-$togglesw-ball-color: #fff;
+$togglesw-ball-color: var(--cpd-color-bg-action-primary-rest);
 
 /* Slider */
 $slider-background-color: #c1c9d6;
@@ -251,11 +277,11 @@ $progressbar-bg-color: rgba(141, 151, 165, 0.2);
 $authpage-bg-color: #2e3649;
 $authpage-modal-bg-color: rgba(255, 255, 255, 0.59);
 $authpage-focus-bg-color: #dddddd;
-$authpage-lang-color: #4e5054;
-$authpage-primary-color: #232f32;
-$authpage-secondary-color: #61708b;
+$authpage-lang-color: $secondary-content;
+$authpage-primary-color: $primary-content;
+$authpage-secondary-color: $secondary-content;
 
-$dark-panel-bg-color: $secondary-accent-color;
+$dark-panel-bg-color: var(--cpd-color-bg-subtle-secondary);
 $panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
 
 $message-action-bar-bg-color: $primary-bg-color;
@@ -266,7 +292,7 @@ $message-action-bar-hover-border-color: $focus-bg-color;
 $reaction-row-button-hover-border-color: $focus-bg-color;
 $reaction-row-button-selected-bg-color: #e9fff9;
 
-$kbd-border-color: $message-action-bar-border-color;
+$kbd-border-color: $strong-input-border-color;
 
 $tooltip-timeline-bg-color: $spacePanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;

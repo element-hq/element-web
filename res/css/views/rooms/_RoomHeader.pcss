@@ -56,7 +56,7 @@ limitations under the License.
     min-width: 0;
     margin: 0 20px 0 16px;
     padding-top: 6px;
-    border-bottom: 1px solid $system;
+    border-bottom: 1px solid $separator;
 
     .mx_InviteOnlyIcon_large {
         margin: 0;
@@ -112,7 +112,7 @@ limitations under the License.
     }
 
     &[aria-expanded="true"] {
-        background-color: $quinary-content;
+        background-color: $separator;
 
         .mx_RoomHeader_chevron {
             transform: rotate(180deg);
@@ -138,7 +138,7 @@ limitations under the License.
     $lines: 2;
 
     flex: 1;
-    color: $roomtopic-color;
+    color: $secondary-content;
     font: var(--cpd-font-body-sm-regular);
     line-height: 1rem;
     max-height: calc(1rem * $lines);
@@ -189,7 +189,7 @@ limitations under the License.
     }
 
     &:hover {
-        background: rgba($accent, 0.1);
+        background: $accent-300;
 
         &::before {
             background-color: $accent;
@@ -207,7 +207,7 @@ limitations under the License.
     border-radius: 50%;
     transform: scale(1.6);
     transform-origin: center center;
-    background: rgba($background, 1);
+    background: $background;
 }
 
 .mx_RoomHeader_button_unreadIndicator {
@@ -217,18 +217,18 @@ limitations under the License.
     margin: 4px;
 
     &.mx_Indicator_red {
-        background: rgba($alert, 1);
-        box-shadow: rgba($alert, 1);
+        background: $alert;
+        box-shadow: $alert;
     }
 
     &.mx_Indicator_gray {
-        background: rgba($room-icon-unread-color, 1);
-        box-shadow: rgba($room-icon-unread-color, 1);
+        background: $room-icon-unread-color;
+        box-shadow: $room-icon-unread-color;
     }
 
     &.mx_Indicator_bold {
-        background: rgba($primary-content, 1);
-        box-shadow: rgba($primary-content, 1);
+        background: $primary-content;
+        box-shadow: $primary-content;
     }
 }
 

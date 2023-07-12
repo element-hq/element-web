@@ -15,66 +15,90 @@ $monospace-font-family: "Inconsolata", "Twemoji", "Apple Color Emoji", "Segoe UI
 
 /* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A120 */
 /* ******************** */
-$primary-content: #17191c;
-$secondary-content: #737d8c;
-$tertiary-content: #8d97a5;
-$quaternary-content: #c1c6cd;
-$quinary-content: #e3e8f0;
+$primary-content: var(--cpd-color-text-primary);
+$secondary-content: var(--cpd-color-text-secondary);
+$tertiary-content: var(--cpd-color-gray-800);
+$quaternary-content: var(--cpd-color-gray-600);
+$quinary-content: var(--cpd-color-gray-400);
 
-$system: #f4f6fa;
-$system-transparent: rgba($system, 0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
-$background: #ffffff;
-$overlay-background: rgba($background, 0.85);
+$system: var(--cpd-color-bg-subtle-primary);
+$system-transparent: #e1e6ec00;
+$background: var(--cpd-color-bg-canvas-default);
+$overlay-background: var(--cpd-color-alpha-gray-1300);
 
-$panels: rgba($system, 0.9);
-$panel-selected: rgba($tertiary-content, 0.3);
-$panel-hover: rgba($tertiary-content, 0.1);
-$panel-actions: rgba($tertiary-content, 0.2);
-$space-nav: rgba($tertiary-content, 0.15);
+$panels: var(--cpd-color-bg-subtle-secondary);
+$panel-actions: var(--cpd-color-alpha-gray-300);
 
-$accent: #0dbd8b;
-$alert: #ff5b55;
-$links: #0086e6;
-$link-external: #0467dd;
+$separator: var(--cpd-color-alpha-gray-400);
 
-$username-variant1-color: #368bd6;
-$username-variant2-color: #ac3ba8;
-$username-variant3-color: #0dbd8b;
-$username-variant4-color: #e64f7a;
-$username-variant5-color: #ff812d;
-$username-variant6-color: #2dc2c5;
-$username-variant7-color: #5c56f5;
-$username-variant8-color: #74d12c;
+$accent: var(--cpd-color-text-action-accent);
+$alert: var(--cpd-color-text-critical-primary);
+$links: var(--cpd-color-text-link-external);
+$link-external: var(--cpd-color-text-link-external);
+
+$username-variant1-color: var(--cpd-color-blue-900);
+$username-variant2-color: var(--cpd-color-fuchsia-900);
+$username-variant3-color: var(--cpd-color-green-900);
+$username-variant4-color: var(--cpd-color-pink-900);
+$username-variant5-color: var(--cpd-color-orange-900);
+$username-variant6-color: var(--cpd-color-cyan-900);
+$username-variant7-color: var(--cpd-color-purple-900);
+$username-variant8-color: var(--cpd-color-lime-900);
 /* ******************** */
+
+/**
+ * Creating a `semantic` color scale. This will not be needed with the new
+ * visual language, but necessary during the transition period
+ * This abstract the `green` away from where accent shades are used
+ * Take: `background: rgba($accent, 0.1);`
+ * would be transformed to: `background: $accent-300;`
+ *
+ * To use under very rare circumstances, always prefer the semantics defined
+ * in https://compound.element.io/?path=/docs/tokens-semantic-colors--docs
+ */
+$accent-100: var(--cpd-color-green-100);
+$accent-200: var(--cpd-color-green-200);
+$accent-300: var(--cpd-color-green-300);
+$accent-400: var(--cpd-color-green-400);
+$accent-500: var(--cpd-color-green-500);
+$accent-600: var(--cpd-color-green-600);
+$accent-700: var(--cpd-color-green-700);
+$accent-800: var(--cpd-color-green-800);
+$accent-900: var(--cpd-color-green-900);
+$accent-1000: var(--cpd-color-green-1000);
+$accent-1100: var(--cpd-color-green-1100);
+$accent-1200: var(--cpd-color-green-1200);
+$accent-1300: var(--cpd-color-green-1300);
+$accent-1400: var(--cpd-color-green-1400);
 
 /* Reused Figma non-compound colors */
 /* ******************** */
-$inverted-bg-color: #27303a;
-$header-panel-bg-color: #f3f8fd;
+$inverted-bg-color: var(--cpd-color-bg-action-primary-rest);
+$header-panel-bg-color: var(--cpd-color-bg-subtle-primary);
 /* ******************** */
 
 /* Theme specific colors */
 /* ******************** */
-$icon-button-color: $quaternary-content;
+$icon-button-color: var(--cpd-color-icon-tertiary);
 /* ******************** */
 
 /* Colors that aren't in Figma and are theme specific - we need to get rid of these */
 /* ******************** */
 $selection-fg-color: $background;
-$yellow-background: #fff8e3;
+$yellow-background: var(--cpd-color-yellow-200);
 $secondary-accent-color: #f2f5f8;
 $button-fg-color: $background;
 $neutral-badge-color: #dbdbdb;
-$strong-input-border-color: #c7c7c7;
-$preview-widget-bar-color: #dddddd;
-$accent-fg-color: $background;
-$accent-alt: #238cf5;
-$info-plinth-fg-color: #888;
+$strong-input-border-color: var(--cpd-color-border-interactive-primary);
+$preview-widget-bar-color: var(--cpd-color-subtle-secondary);
+$accent-fg-color: #f4f6fa;
+$accent-alt: var(--cpd-color-text-link-external);
+$info-plinth-fg-color: var(--cpd-color-gray-900);
 /* ******************** */
 
 /* Colors that aren't in Figma - we need to get rid of these */
 /* ******************** */
-$dark-panel-bg-color: $secondary-accent-color;
+$dark-panel-bg-color: var(--cpd-color-bg-subtle-secondary);
 $muted-fg-color: #61708b;
 $light-fg-color: #747474;
 $focus-bg-color: $preview-widget-bar-color;
@@ -122,7 +146,7 @@ $settings-subsection-fg-color: $muted-fg-color;
 
 /* Room */
 /* ******************** */
-$room-icon-unread-color: $secondary-content;
+$room-icon-unread-color: var(--cpd-color-icon-tertiary);
 /* ******************** */
 
 /* RoomHeader */
@@ -154,13 +178,14 @@ $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: $secondary-accent-color;
 $input-underline-color: rgba(151, 151, 151, 0.5);
 $input-fg-color: rgba(74, 74, 74, 0.9);
+$input-placeholder: var(--cpd-color-text-placeholder);
 /* ******************** */
 
 /* Dialog */
 /* ******************** */
-$dialog-title-fg-color: #45474a;
+$dialog-title-fg-color: var(--cpd-color-text-primary);
 $dialog-backdrop-color: rgba(46, 48, 51, 0.38);
-$dialog-close-fg-color: #c1c1c1;
+$dialog-close-fg-color: $icon-button-color;
 $dialog-close-external-color: $background;
 $dialog-shadow-color: rgba(0, 0, 0, 0.48);
 /* ******************** */
@@ -174,19 +199,19 @@ $imagebody-giflabel-color: $background;
 
 /* RoomList */
 /* ******************** */
-$roomlist-bg-color: rgba(245, 245, 245, 0.9);
+$roomlist-bg-color: var(--cpd-color-bg-subtle-secondary);
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, $background 0%, #ffffff00 100%);
 $roomtile-default-badge-bg-color: $muted-fg-color;
 /* ******************** */
 
 /* e2e */
 /* ******************** */
-$e2e-verified-color: #0dbd8b;
-$e2e-unknown-color: #e8bf37;
-$e2e-unverified-color: #e8bf37;
-$e2e-warning-color: #ff5b55;
-$e2e-verified-color-light: rgba($e2e-verified-color, 0.06);
-$e2e-warning-color-light: rgba($e2e-warning-color, 0.06);
+$e2e-verified-color: var(--cpd-color-green-900);
+$e2e-unknown-color: var(--cpd-color-yellow-900);
+$e2e-unverified-color: var(--cpd-color-green-900);
+$e2e-warning-color: var(--cpd-color-red-900);
+$e2e-verified-color-light: var(--cpd-color-green-300);
+$e2e-warning-color-light: var(--cpd-color-red-300);
 /* ******************** */
 
 /* Tabbed views */
@@ -207,7 +232,7 @@ $button-danger-disabled-bg-color: #f5b6bb; /* TODO: Verify color */
 /* Toggle switch */
 /* ******************** */
 $togglesw-off-color: #c1c9d6;
-$togglesw-ball-color: $background;
+$togglesw-ball-color: var(--cpd-color-bg-action-primary-rest);
 /* ******************** */
 
 /* Authpage */
@@ -216,8 +241,9 @@ $authpage-primary-color: #232f32;
 $authpage-bg-color: #2e3649;
 $authpage-modal-bg-color: $roomlist-bg-color;
 $authpage-focus-bg-color: $focus-bg-color;
-$authpage-lang-color: #4e5054;
-$authpage-secondary-color: $muted-fg-color;
+$authpage-lang-color: $secondary-content;
+$authpage-primary-color: $primary-content;
+$authpage-secondary-color: $secondary-content;
 /* ******************** */
 
 /* Message action bar */
@@ -281,7 +307,7 @@ $call-light-quaternary-content: #c1c6cd;
 /* One-off colors */
 /* ******************** */
 $progressbar-bg-color: $panel-actions;
-$kbd-border-color: $message-action-bar-border-color;
+$kbd-border-color: $strong-input-border-color;
 $visual-bell-bg-color: #faa;
 $event-timestamp-color: #acacac;
 $slider-background-color: $togglesw-off-color;
@@ -302,6 +328,7 @@ $selected-color: $secondary-accent-color;
 $pinned-color: $tertiary-content;
 $avatar-initial-color: $background;
 $primary-hairline-color: transparent;
+$secondary-hairline-color: var(--cpd-color-gray-300);
 $focus-brightness: 105%;
 /* ******************** */
 
@@ -320,14 +347,14 @@ $copy-button-url: "$(res)/img/element-icons/copy.svg";
 
 /* Location sharing */
 /* ******************** */
-$location-marker-color: #ffffff;
-$location-live-color: #5c56f5;
-$location-live-secondary-color: #deddfd;
+$location-marker-color: var(--cpd-color-icon-on-solid-primary);
+$location-live-color: var(--cpd-color-purple-900);
+$location-live-secondary-color: var(--cpd-color-purple-600);
 /* ******************** */
 
 /* Voice Broadcast */
 /* ******************** */
-$live-badge-color: #ffffff;
+$live-badge-color: var(--cpd-color-icon-on-solid-primary);
 /* ******************** */
 
 body {
@@ -339,11 +366,11 @@ body {
 /* diff highlight colors */
 /* ******************** */
 .hljs-addition {
-    background: #dfd;
+    background: var(--cpd-color-green-500);
 }
 
 .hljs-deletion {
-    background: #fdd;
+    background: var(--cpd-color-red-500);
 }
 
 /* ******************** */

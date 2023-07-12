@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_EmojiButton {
-    @mixin composerButton 50%, $accent;
+    @mixin composerButton 50%, $accent, $accent-300;
 }
 
 .mx_EmojiButton_highlight {
@@ -28,6 +28,6 @@ limitations under the License.
 
 .mx_MessageComposer_wysiwyg {
     .mx_EmojiButton {
-        @mixin composerButton 5px, $tertiary-content;
+        @mixin composerButton 5px, $tertiary-content, $panels;
     }
 }

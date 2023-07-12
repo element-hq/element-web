@@ -1,28 +1,28 @@
 /* Reference: https://www.figma.com/file/RnLKnv09glhxGIZtn8zfmh/UI-Themes-%26-Accessibility?node-id=321%3A65847 */
-$accent: #268075;
-$alert: #d62c25;
-$links: #0a6eca;
-$primary-content: #17191c;
-$secondary-content: #5e6266;
-$tertiary-content: $secondary-content;
-$quaternary-content: $secondary-content;
-$quinary-content: $secondary-content;
+$accent: var(--cpd-color-text-action-accent);
+$alert: var(--cpd-color-text-critical-primary);
+$links: var(--cpd-color-text-link-external);
+$primary-content: var(--cpd-color-text-primary);
+$secondary-content: var(--cpd-color-text-secondary);
+$tertiary-content: var(--cpd-color-gray-800);
+$quaternary-content: var(--cpd-color-gray-600);
+$quinary-content: var(--cpd-color-gray-400);
 
-$username-variant1-color: #0a6eca;
-$username-variant2-color: #ac3ba8;
-$username-variant3-color: #078662;
-$username-variant4-color: #cc1449;
-$username-variant5-color: #be4c00;
-$username-variant6-color: #1c7274;
-$username-variant7-color: #5c56f5;
-$username-variant8-color: #3e810a;
+$username-variant1-color: var(--cpd-color-blue-900);
+$username-variant2-color: var(--cpd-color-fuchsia-900);
+$username-variant3-color: var(--cpd-color-green-900);
+$username-variant4-color: var(--cpd-color-pink-900);
+$username-variant5-color: var(--cpd-color-orange-900);
+$username-variant6-color: var(--cpd-color-cyan-900);
+$username-variant7-color: var(--cpd-color-purple-900);
+$username-variant8-color: var(--cpd-color-lime-900);
 
 $accent-alt: $links;
 $input-border-color: $secondary-content;
 $input-darker-bg-color: $quinary-content;
 $input-darker-fg-color: $secondary-content;
 $resend-button-divider-color: $input-darker-bg-color;
-$icon-button-color: $quaternary-content;
+$icon-button-color: var(--cpd-color-icon-tertiary);
 $theme-button-bg-color: $quinary-content;
 $presence-offline: $quinary-content;
 $pinned-color: $tertiary-content;
@@ -33,6 +33,31 @@ $voice-record-icon-color: $tertiary-content;
 $appearance-tab-border-color: $input-darker-bg-color;
 $eventbubble-reply-color: $quaternary-content;
 $roomtopic-color: $secondary-content;
+
+/**
+ * Creating a `semantic` color scale. This will not be needed with the new
+ * visual language, but necessary during the transition period
+ * This abstract the `green` away from where accent shades are used
+ * Take: `background: rgba($accent, 0.1);`
+ * would be transformed to: `background: $accent-300;`
+ *
+ * To use under very rare circumstances, always prefer the semantics defined
+ * in https://compound.element.io/?path=/docs/tokens-semantic-colors--docs
+ */
+$accent-100: var(--cpd-color-green-100);
+$accent-200: var(--cpd-color-green-200);
+$accent-300: var(--cpd-color-green-300);
+$accent-400: var(--cpd-color-green-400);
+$accent-500: var(--cpd-color-green-500);
+$accent-600: var(--cpd-color-green-600);
+$accent-700: var(--cpd-color-green-700);
+$accent-800: var(--cpd-color-green-800);
+$accent-900: var(--cpd-color-green-900);
+$accent-1000: var(--cpd-color-green-1000);
+$accent-1100: var(--cpd-color-green-1100);
+$accent-1200: var(--cpd-color-green-1200);
+$accent-1300: var(--cpd-color-green-1300);
+$accent-1400: var(--cpd-color-green-1400);
 
 /* Draw an outline on buttons with focus */
 .mx_AccessibleButton:focus {

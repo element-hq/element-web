@@ -64,9 +64,6 @@ describe("Threads", () => {
             "Hello there. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt " +
             "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi";
 
-        // --MessageTimestamp-color = #acacac = rgb(172, 172, 172)
-        // See: _MessageTimestamp.pcss
-        const MessageTimestampColor = "rgb(172, 172, 172)";
         const ThreadViewGroupSpacingStart = "56px"; // --ThreadView_group_spacing-start
         // Exclude timestamp and read marker from snapshots
         const percyCSS = ".mx_MessageTimestamp, .mx_MessagePanel_myReadMarker { visibility: hidden !important; }";
@@ -74,13 +71,6 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body").within(() => {
             // User sends message
             cy.findByRole("textbox", { name: "Send a message…" }).type("Hello Mr. Bot{enter}");
-
-            // Check the colour of timestamp on the main timeline
-            cy.get(".mx_EventTile_last .mx_EventTile_line .mx_MessageTimestamp").should(
-                "have.css",
-                "color",
-                MessageTimestampColor,
-            );
 
             // Wait for message to send, get its ID and save as @threadId
             cy.contains(".mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
@@ -151,13 +141,6 @@ describe("Threads", () => {
         cy.get(".mx_ThreadView").within(() => {
             // User responds in thread
             cy.findByRole("textbox", { name: "Send a message…" }).type("Test{enter}");
-
-            // Check the colour of timestamp on EventTile in a thread (mx_ThreadView)
-            cy.get(".mx_EventTile_last[data-layout='group'] .mx_EventTile_line .mx_MessageTimestamp").should(
-                "have.css",
-                "color",
-                MessageTimestampColor,
-            );
         });
 
         // User asserts summary was updated correctly
@@ -306,9 +289,6 @@ describe("Threads", () => {
 
             // Check the number of the replies
             cy.get(".mx_ThreadPanel_replies_amount").findByText("2").should("exist");
-
-            // Check the colour of timestamp on thread list
-            cy.get(".mx_EventTile_details .mx_MessageTimestamp").should("have.css", "color", MessageTimestampColor);
 
             // Make sure the notification dot is visible
             cy.get(".mx_NotificationBadge_visible").should("be.visible");

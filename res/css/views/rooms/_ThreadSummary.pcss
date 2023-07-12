@@ -37,7 +37,7 @@ limitations under the License.
     width: fit-content;
     height: 40px;
     position: relative;
-    background-color: $system;
+    background-color: $panels;
     padding-inline: $spacing-12 $spacing-16;
     display: flex;
     align-items: center;
@@ -46,7 +46,7 @@ limitations under the License.
     box-sizing: border-box;
     clear: both;
     overflow: hidden;
-    border: 1px solid $system; /* always render a border so the hover effect doesn't require a re-layout */
+    border: 1px solid $panels; /* always render a border so the hover effect doesn't require a re-layout */
 
     .mx_ThreadSummary_chevron {
         position: absolute;
@@ -55,7 +55,7 @@ limitations under the License.
         bottom: 0;
         width: 60px;
         box-sizing: border-box;
-        /* XXX: We use `$system-transparent` instead of `transparent` to work around a Safari <15.4 bug */
+        /* XXX: We use an HEXA `transparent` to work around a Safari <15.4 bug */
         background: linear-gradient(270deg, $system 50%, $system-transparent 100%);
 
         opacity: 0;

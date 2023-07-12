@@ -42,8 +42,7 @@ limitations under the License.
             height: $size;
             width: $size;
             size: 0.5rem;
-
-            border: 1px solid rgba($muted-fg-color, 0.5);
+            border: 1px solid $strong-input-border-color;
             box-sizing: border-box;
             border-radius: $border-radius;
 
@@ -68,7 +67,6 @@ limitations under the License.
         }
 
         &:disabled + label {
-            opacity: 0.5;
             cursor: not-allowed;
         }
 
@@ -88,6 +86,10 @@ limitations under the License.
     &:checked + label > .mx_Checkbox_background {
         background: $accent;
         border-color: $accent;
+    }
+
+    &:checked:disabled + label > .mx_Checkbox_background {
+        opacity: 0.5;
     }
 }
 

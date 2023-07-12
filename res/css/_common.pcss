@@ -250,7 +250,7 @@ legend {
         background-color: transparent;
         color: $input-darker-fg-color;
         border-radius: 4px;
-        border: 1px solid rgba($primary-content, 0.1);
+        border: 1px solid $secondary-hairline-color;
         /* these things should probably not be defined globally */
         margin: 9px;
     }
@@ -263,7 +263,7 @@ legend {
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"]::placeholder,
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"]::placeholder,
     .mx_textinput input::placeholder {
-        color: rgba($input-darker-fg-color, 0.75);
+        color: $input-placeholder;
     }
 }
 
@@ -584,9 +584,9 @@ legend {
 
     /* flip colours for the secondary ones */
     font-weight: var(--cpd-font-weight-semibold);
-    border: 1px solid $accent;
+    border: 1px solid currentColor;
     color: $accent;
-    background-color: $button-secondary-bg-color;
+    background-color: transparent;
     font-family: inherit;
 }
 
@@ -808,18 +808,19 @@ legend {
     mask-size: contain;
     height: 18px;
     min-width: 18px;
-    background-color: $secondary-content !important;
+    background-color: $icon-button-color !important;
 }
 
 @define-mixin composerButtonHighLight {
-    background: rgba($accent, 0.25);
+    /* TODO: Refactor as this will break for apps that override the accent color */
+    background: var(--cpd-color-green-300);
     /* make the icon the accent color too */
     &::before {
         background-color: $accent !important;
     }
 }
 
-@define-mixin composerButton $border-radius, $hover-color {
+@define-mixin composerButton $border-radius, $hover-color, $hover-bg {
     --size: 26px;
     position: relative;
     cursor: pointer;
@@ -840,6 +841,7 @@ legend {
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;
+        z-index: 2;
     }
 
     &::after {
@@ -855,7 +857,7 @@ legend {
 
     &:hover {
         &::after {
-            background: rgba($hover-color, 0.1);
+            background: $hover-bg;
         }
 
         &::before {

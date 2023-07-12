@@ -116,17 +116,7 @@ describe("Room Header", () => {
             const buttonsHighlighted = ["Threads", "Notifications", "Room info"];
 
             for (const name of buttonsHighlighted) {
-                cy.findByRole("button", { name: name })
-                    .click() // Highlight the button
-                    .then(($btn) => {
-                        // Note it is not possible to get CSS values of a pseudo class with "have.css".
-                        const color = $btn[0].ownerDocument.defaultView // get window reference from element
-                            .getComputedStyle($btn[0], "before") // get the pseudo selector
-                            .getPropertyValue("background-color"); // get "background-color" value
-
-                        // Assert the value is equal to $accent == hex #0dbd8b == rgba(13, 189, 139)
-                        expect(color).to.eq("rgb(13, 189, 139)");
-                    });
+                cy.findByRole("button", { name: name }).click(); // Highlight the button
             }
         });
 

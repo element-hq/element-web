@@ -26,16 +26,11 @@ $secondary-content: var(--secondary-content, $secondary-content);
 $tertiary-content: var(--tertiary-content, $tertiary-content);
 $quaternary-content: var(--quaternary-content, $quaternary-content);
 $quinary-content: var(--quinary-content, $quinary-content);
-/* XXX: workaround for Safari 15.3 linear-gradient bug https://github.com/vector-im/element-web/issues/21670 */
-$system-transparent: var(--system-transparent, rgba($system, 0));
 $system: var(--system, $system);
+$system-transparent: var(--system-transparent, #e1e6ec00);
 $background: var(--background, $background);
-$panels: rgba($system, 0.9);
-$panel-base: var(--panel-base, $tertiary-content); /* This color is not intended for use in the app */
-$panel-selected: rgba($panel-base, 0.3);
-$panel-hover: rgba($panel-base, 0.1);
-$panel-actions: rgba($panel-base, 0.2);
-$space-nav: rgba($panel-base, 0.1);
+$panels: var(--panels, var(--cpd-color-gray-600));
+$panel-actions: var(--panels-actions, var(--cpd-color-gray-300));
 
 /* --accent-color */
 $username-variant3-color: var(--accent-color);
@@ -46,7 +41,7 @@ $lightbox-border-color: var(--timeline-background-color);
 $menu-bg-color: var(--timeline-background-color);
 $message-action-bar-bg-color: var(--timeline-background-color);
 $background: var(--timeline-background-color);
-$togglesw-ball-color: var(--timeline-background-color);
+$togglesw-ball-color: var(--cpd-color-bg-action-primary-rest);
 $togglesw-off-color: var(--togglesw-off-color);
 $droptarget-bg-color: var(--timeline-background-color-50pct); /* still needs alpha at .5 */
 $authpage-modal-bg-color: var(--timeline-background-color-50pct); /* still needs alpha at .59 */
@@ -91,6 +86,7 @@ $roomtile-default-badge-bg-color: var(--roomlist-text-secondary-color);
 /* --roomlist-separator-color */
 $input-darker-bg-color: var(--roomlist-separator-color);
 $primary-hairline-color: var(--roomlist-separator-color); /* originally #e5e5e5, but close enough */
+$secondary-hairline-color: var(--secondary-hairline-color);
 
 /* --timeline-text-secondary-color */
 $authpage-secondary-color: var(--timeline-text-secondary-color);
@@ -145,3 +141,26 @@ $menu-selected-color: var(--menu-selected-color, $menu-selected-color);
 $pill-bg-color: var(--other-user-pill-bg-color, $pill-bg-color);
 $pill-hover-bg-color: var(--other-user-pill-bg-color, $pill-hover-bg-color);
 $icon-button-color: var(--icon-button-color, $icon-button-color);
+
+$strong-input-border-color: var(--strong-input-border-color, $strong-input-border-color);
+$inverted-bg-color: var(--strong-input-border-color, $inverted-bg-color);
+
+/**
+ * Variation of the accent color.
+ * Generate this colour scale using LeonardoColor
+ * TODO: Add link
+ */
+$accent-100: var(--accent-color-100);
+$accent-200: var(--accent-color-200);
+$accent-300: var(--accent-color-300);
+$accent-400: var(--accent-color-400);
+$accent-500: var(--accent-color-500);
+$accent-600: var(--accent-color-600);
+$accent-700: var(--accent-color-700);
+$accent-800: var(--accent-color-800);
+$accent-900: var(--accent-color-900);
+$accent-1000: var(--accent-color-1000);
+$accent-1100: var(--accent-color-1100);
+$accent-1200: var(--accent-color-1200);
+$accent-1300: var(--accent-color-1300);
+$accent-1400: var(--accent-color-1400);

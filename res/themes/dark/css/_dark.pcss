@@ -1,33 +1,64 @@
 /* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741 */
 /* ******************** */
-$primary-content: #ffffff;
-$secondary-content: #a9b2bc;
-$tertiary-content: #8e99a4;
-$quaternary-content: #6f7882;
-$quinary-content: #394049;
+$primary-content: var(--cpd-color-text-primary);
+$secondary-content: var(--cpd-color-text-secondary);
+$tertiary-content: var(--cpd-color-gray-800);
+$quaternary-content: var(--cpd-color-gray-600);
+$quinary-content: var(--cpd-color-gray-400);
 
-$system: #21262c;
-$system-transparent: rgba($system, 0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
-$background: #15191e;
-$overlay-background: rgba($background, 0.85);
+$system: var(--cpd-color-bg-subtle-primary);
+$system-transparent: #e1e6ec00;
+$background: var(--cpd-color-bg-canvas-default);
+$overlay-background: var(--cpd-color-alpha-gray-1300);
 
-$panel-base: #8d97a5; /* This color is not intended for use in the app */
-$panels: rgba($system, 0.9);
-$panel-selected: rgba($panel-base, 0.3);
-$panel-hover: rgba($panel-base, 0.1);
-$panel-actions: rgba($panel-base, 0.2);
-$space-nav: rgba($panel-base, 0.1);
+$panels: var(--cpd-color-bg-subtle-secondary);
+$panel-actions: var(--cpd-color-alpha-gray-300);
+
+$separator: var(--cpd-color-alpha-gray-400);
+
 /* ******************** */
+
+/* RoomList */
+/* ******************** */
+$roomlist-bg-color: var(--cpd-color-bg-subtle-secondary); /* TODO: there's no corresponding compound color */
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, $background 0%, #ffffff00 100%);
+$roomtile-default-badge-bg-color: $muted-fg-color;
+/* ******************** */
+
+/**
+ * Creating a `semantic` color scale. This will not be needed with the new
+ * visual language, but necessary during the transition period
+ * This abstract the `green` away from where accent shades are used
+ * Take: `background: rgba($accent, 0.1);`
+ * would be transformed to: `background: $accent-300;`
+ *
+ * To use under very rare circumstances, always prefer the semantics defined
+ * in https://compound.element.io/?path=/docs /tokens-semantic-colors--docs
+ */
+$accent-100: var(--cpd-color-green-100);
+$accent-200: var(--cpd-color-green-200);
+$accent-300: var(--cpd-color-green-300);
+$accent-400: var(--cpd-color-green-400);
+$accent-500: var(--cpd-color-green-500);
+$accent-600: var(--cpd-color-green-600);
+$accent-700: var(--cpd-color-green-700);
+$accent-800: var(--cpd-color-green-800);
+$accent-900: var(--cpd-color-green-900);
+$accent-1000: var(--cpd-color-green-1000);
+$accent-1100: var(--cpd-color-green-1100);
+$accent-1200: var(--cpd-color-green-1200);
+$accent-1300: var(--cpd-color-green-1300);
+$accent-1400: var(--cpd-color-green-1400);
 
 /* Reused Figma non-compound colors */
 /* ******************** */
-$inverted-bg-color: $background;
-$header-panel-bg-color: #20252b;
+$inverted-bg-color: var(--cpd-color-bg-action-primary-rest);
+$header-panel-bg-color: var(--cpd-color-bg-subtle-secondary);
 /* ******************** */
 
 /* Theme specific colors */
 /* ******************** */
-$icon-button-color: $tertiary-content;
+$icon-button-color: var(--cpd-color-icon-tertiary);
 /* ******************** */
 
 /* Colors that aren't in Figma and are theme specific - we need to get rid of these */
@@ -39,7 +70,7 @@ $text-secondary-color: #b9bec6;
 
 /* Colors that aren't in Figma - we need to get rid of these */
 /* ******************** */
-$dark-panel-bg-color: $header-panel-bg-color;
+$dark-panel-bg-color: var(--cpd-color-bg-subtle-secondary);
 $muted-fg-color: $header-panel-text-primary-color;
 $light-fg-color: $header-panel-text-secondary-color;
 $focus-bg-color: $room-highlight-color;
@@ -82,7 +113,7 @@ $settings-subsection-fg-color: $text-secondary-color;
 
 /* Room */
 /* ******************** */
-$room-icon-unread-color: #fff;
+$room-icon-unread-color: var(--cpd-color-icon-tertiary);
 /* ******************** */
 
 /* RoomHeader */
@@ -103,19 +134,20 @@ $input-border-color: rgba(231, 231, 231, 0.2);
 $input-darker-bg-color: #181b21;
 $input-darker-fg-color: #61708b;
 $input-lighter-bg-color: #f2f5f8;
+$input-placeholder: var(--cpd-color-text-placeholder);
 /* ******************** */
 
 /* Dialog */
 /* ******************** */
 $dialog-title-fg-color: $primary-content;
 $dialog-backdrop-color: $menu-border-color;
-$dialog-close-fg-color: #9fa9ba;
+$dialog-close-fg-color: $icon-button-color;
 $dialog-close-external-color: $primary-content;
 /* ******************** */
 
 /* RoomList */
 /* ******************** */
-$roomlist-bg-color: rgba($system, 0.9);
+$system: var(--cpd-color-bg-subtle-secondary);
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 $roomtile-default-badge-bg-color: $input-darker-fg-color;
 /* ******************** */
@@ -215,7 +247,7 @@ $live-badge-color: #ffffff;
 /* One-off colors */
 /* ******************** */
 $progressbar-bg-color: $system;
-$kbd-border-color: $menu-border-color;
+$kbd-border-color: $strong-input-border-color;
 $visual-bell-bg-color: #800;
 $event-timestamp-color: $text-secondary-color;
 $slider-background-color: $quinary-content;
@@ -223,7 +255,7 @@ $appearance-tab-border-color: $room-highlight-color;
 $composer-shadow-color: rgba(0, 0, 0, 0.28);
 $breadcrumb-placeholder-bg-color: #272c35;
 $theme-button-bg-color: #e3e8f0;
-$resend-button-divider-color: rgba($header-panel-text-primary-color, 0.74);
+$resend-button-divider-color: var(--cpd-color-gray-700);
 $inlinecode-border-color: $quinary-content;
 $inlinecode-background-color: $system;
 $codeblock-background-color: #2a3039;
@@ -285,10 +317,10 @@ body {
 .mx_SplashPage::before {
     background-image: radial-gradient(
             53.85% 66.75% at 87.55% 0%,
-            hsla(0, 0%, 11%, 0.15) 0%,
-            hsla(250, 100%, 88%, 0) 100%
+            hsla(0deg, 0%, 11%, 0.15) 0%,
+            hsla(250deg, 100%, 88%, 0) 100%
         ),
-        radial-gradient(41.93% 41.93% at 0% 0%, hsla(0, 0%, 38%, 0.28) 0%, hsla(250, 100%, 88%, 0) 100%),
-        radial-gradient(100% 100% at 0% 0%, hsla(250, 100%, 88%, 0.3) 0%, hsla(0, 100%, 86%, 0) 100%),
-        radial-gradient(106.35% 96.26% at 100% 0%, hsla(25, 100%, 88%, 0.4) 0%, hsla(167, 76%, 82%, 0) 100%) !important;
+        radial-gradient(41.93% 41.93% at 0% 0%, hsla(0deg, 0%, 38%, 0.28) 0%, hsla(250deg, 100%, 88%, 0) 100%),
+        radial-gradient(100% 100% at 0% 0%, hsla(250deg, 100%, 88%, 0.3) 0%, hsla(0deg, 100%, 86%, 0) 100%),
+        radial-gradient(106.35% 96.26% at 100% 0%, hsla(25deg, 100%, 88%, 0.4) 0%, hsla(167deg, 76%, 82%, 0) 100%) !important;
 }
