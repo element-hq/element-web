@@ -71,7 +71,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
         };
 
         return (
-            <div className="mx_RoomAvatarEvent">
+            <>
                 {_t(
                     "%(senderDisplayName)s changed the room avatar to <img/>",
                     { senderDisplayName: senderDisplayName },
@@ -87,7 +87,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
                         ),
                     },
                 )}
-            </div>
+            </>
         );
     }
 }
