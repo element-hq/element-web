@@ -38,8 +38,10 @@ jobs:
                           owner: repo.owner,
                           repo: repo.repo,
                       });
+                      console.log("Found latest version: " + data.tag_name);
 
                       const releaseTopic = `Stable: ${data.tag_name} | ${RELEASE_STATUS}`;
+                      console.log("Release topic: " + releaseTopic);
 
                       const regex = /Stable: v(\d+.\d+.\d+) \| Release status: (\w+) expected (\w+ \d+\w+)/gm;
 
