@@ -43,7 +43,7 @@ jobs:
                       const releaseTopic = `Stable: ${data.tag_name} | ${RELEASE_STATUS}`;
                       console.log("Release topic: " + releaseTopic);
 
-                      const regex = /Stable: v(\d+.\d+.\d+) \| Release status: (\w+) expected (\w+ \d+\w+)/gm;
+                      const regex = /Stable: v(.+) \| Release status: (\w+) expected (\w+ \d+\w\w)gm;
 
                       async function updateReleaseInTopic(roomId) {
                           const apiUrl = `${HS_URL}/_matrix/client/v3/rooms/${roomId}/state/m.room.topic/`;
