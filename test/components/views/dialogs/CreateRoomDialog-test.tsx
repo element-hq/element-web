@@ -79,7 +79,7 @@ describe("<CreateRoomDialog />", () => {
                 screen.getByText(
                     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
                 ),
-            );
+            ).toBeDefined();
         });
 
         it("should use server .well-known force_disable for encryption setting", async () => {
@@ -99,7 +99,7 @@ describe("<CreateRoomDialog />", () => {
                 screen.getByText(
                     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
                 ),
-            );
+            ).toBeDefined();
         });
 
         it("should use defaultEncrypted prop", async () => {
@@ -150,7 +150,7 @@ describe("<CreateRoomDialog />", () => {
                 screen.getByText(
                     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
                 ),
-            );
+            ).toBeDefined();
         });
 
         it("should override defaultEncrypted when server forces enabled encryption", async () => {
@@ -161,7 +161,7 @@ describe("<CreateRoomDialog />", () => {
             // server forces encryption to enabled, even though defaultEncrypted is true
             expect(getE2eeEnableToggleInputElement()).toBeChecked();
             expect(getE2eeEnableToggleIsDisabled()).toBeTruthy();
-            expect(screen.getByText("Your server requires encryption to be enabled in private rooms."));
+            expect(screen.getByText("Your server requires encryption to be enabled in private rooms.")).toBeDefined();
         });
 
         it("should enable encryption toggle and disable field when server forces encryption", async () => {
@@ -172,7 +172,7 @@ describe("<CreateRoomDialog />", () => {
             expect(getE2eeEnableToggleInputElement()).toBeChecked();
             expect(getE2eeEnableToggleIsDisabled()).toBeTruthy();
 
-            expect(screen.getByText("Your server requires encryption to be enabled in private rooms."));
+            expect(screen.getByText("Your server requires encryption to be enabled in private rooms.")).toBeDefined();
         });
 
         it("should warn when trying to create a room with an invalid form", async () => {

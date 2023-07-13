@@ -114,7 +114,7 @@ describe("OIDC authorization", () => {
         });
 
         it("should throw when query params do not include state and code", async () => {
-            expect(async () => await completeOidcLogin({})).rejects.toThrow(
+            await expect(completeOidcLogin({})).rejects.toThrow(
                 "Invalid query parameters for OIDC native login. `code` and `state` are required.",
             );
         });

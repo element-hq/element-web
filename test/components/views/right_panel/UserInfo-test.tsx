@@ -509,18 +509,23 @@ describe("<DeviceItem />", () => {
     });
 
     it("when userId is the same as userId from client, uses isCrossSigningVerified to determine if button is shown", async () => {
+        const deferred = defer<DeviceVerificationStatus>();
+        mockCrypto.getDeviceVerificationStatus.mockReturnValue(deferred.promise);
+
         mockClient.getSafeUserId.mockReturnValueOnce(defaultUserId);
         mockClient.getUserId.mockReturnValueOnce(defaultUserId);
         renderComponent();
         await act(flushPromises);
 
         // set trust to be false for isVerified, true for isCrossSigningVerified
-        setMockDeviceTrust(false, true);
+        deferred.resolve({
+            isVerified: () => false,
+            crossSigningVerified: true,
+        } as DeviceVerificationStatus);
 
+        await expect(screen.findByText(device.displayName!)).resolves.toBeInTheDocument();
         // expect to see no button in this case
-        // TODO `toBeInTheDocument` is not called, if called the test is failing
-        expect(screen.queryByRole("button")).not.toBeInTheDocument;
-        expect(screen.getByText(device.displayName!)).toBeInTheDocument();
+        expect(screen.queryByRole("button")).not.toBeInTheDocument();
     });
 
     it("with verified user and device, displays no button and a 'Trusted' label", async () => {

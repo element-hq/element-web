@@ -60,9 +60,7 @@ describe("ConfirmRedactDialog", () => {
             user: client.getSafeUserId(),
         });
         jest.spyOn(mxEvent, "getId").mockReturnValue(undefined);
-        expect(async () => {
-            await confirmDeleteVoiceBroadcastStartedEvent();
-        }).rejects.toThrow("cannot redact event without ID");
+        await expect(confirmDeleteVoiceBroadcastStartedEvent()).rejects.toThrow("cannot redact event without ID");
     });
 
     it("should raise an error for an event without room-ID", async () => {
@@ -74,9 +72,9 @@ describe("ConfirmRedactDialog", () => {
             user: client.getSafeUserId(),
         });
         jest.spyOn(mxEvent, "getRoomId").mockReturnValue(undefined);
-        expect(async () => {
-            await confirmDeleteVoiceBroadcastStartedEvent();
-        }).rejects.toThrow(`cannot redact event ${mxEvent.getId()} without room ID`);
+        await expect(confirmDeleteVoiceBroadcastStartedEvent()).rejects.toThrow(
+            `cannot redact event ${mxEvent.getId()} without room ID`,
+        );
     });
 
     describe("when redacting a voice broadcast started event", () => {
