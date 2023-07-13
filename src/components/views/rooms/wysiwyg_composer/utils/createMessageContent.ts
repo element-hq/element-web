@@ -108,7 +108,7 @@ export async function createMessageContent(
     // TODO markdown support
 
     const isMarkdownEnabled = SettingsStore.getValue<boolean>("MessageComposerInput.useMarkdown");
-    const formattedBody = isHTML ? message : isMarkdownEnabled ? await plainToRich(message) : null;
+    const formattedBody = isHTML ? message : isMarkdownEnabled ? await plainToRich(message, true) : null;
 
     if (formattedBody) {
         content.format = "org.matrix.custom.html";

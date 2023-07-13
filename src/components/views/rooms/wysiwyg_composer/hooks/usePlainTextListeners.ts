@@ -31,16 +31,6 @@ function isDivElement(target: EventTarget): target is HTMLDivElement {
     return target instanceof HTMLDivElement;
 }
 
-// Hitting enter inside the editor inserts an editable div, initially containing a <br />
-// For correct display, first replace this pattern with a newline character and then remove divs
-// noting that they are used to delimit paragraphs
-function amendInnerHtml(text: string): string {
-    return text
-        .replace(/<div><br><\/div>/g, "\n") // this is pressing enter then not typing
-        .replace(/<div>/g, "\n") // this is from pressing enter, then typing inside the div
-        .replace(/<\/div>/g, "");
-}
-
 /**
  * React hook which generates all of the listeners and the ref to be attached to the editor.
  *
@@ -100,9 +90,8 @@ export function usePlainTextListeners(
             } else if (isNotNull(ref) && isNotNull(ref.current)) {
                 // if called with no argument, read the current innerHTML from the ref and amend it as per `onInput`
                 const currentRefContent = ref.current.innerHTML;
-                const amendedContent = amendInnerHtml(currentRefContent);
-                setContent(amendedContent);
-                onChange?.(amendedContent);
+                setContent(currentRefContent);
+                onChange?.(currentRefContent);
             }
         },
         [onChange, ref],
@@ -113,16 +102,13 @@ export function usePlainTextListeners(
     // when a user selects a suggestion from the autocomplete menu
     const { suggestion, onSelect, handleCommand, handleMention, handleAtRoomMention } = useSuggestion(ref, setText);
 
-    const enterShouldSend = !useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
     const onInput = useCallback(
         (event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>) => {
             if (isDivElement(event.target)) {
-                // if enterShouldSend, we do not need to amend the html before setting text
-                const newInnerHTML = enterShouldSend ? event.target.innerHTML : amendInnerHtml(event.target.innerHTML);
-                setText(newInnerHTML);
+                setText(event.target.innerHTML);
             }
         },
-        [setText, enterShouldSend],
+        [setText],
     );
 
     const onPaste = useCallback(
@@ -146,6 +132,7 @@ export function usePlainTextListeners(
         [eventRelation, mxClient, onInput, roomContext],
     );
 
+    const enterShouldSend = !useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
     const onKeyDown = useCallback(
         (event: KeyboardEvent<HTMLDivElement>) => {
             // we need autocomplete to take priority when it is open for using enter to select

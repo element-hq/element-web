@@ -372,7 +372,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         const { isRichTextEnabled, composerContent } = this.state;
         const convertedContent = isRichTextEnabled
             ? await richToPlain(composerContent)
-            : await plainToRich(composerContent);
+            : await plainToRich(composerContent, false);
 
         this.setState({
             isRichTextEnabled: !isRichTextEnabled,
