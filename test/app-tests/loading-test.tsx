@@ -593,6 +593,11 @@ describe("loading:", function () {
                     return tokenLoginCompletePromise;
                 })
                 .then(() => {
+                    return expectAndAwaitSync().catch((e) => {
+                        throw new Error("Never got /sync after login: did the client start?");
+                    });
+                })
+                .then(() => {
                     // check that the localstorage has been set up in such a way that
                     // the reloaded app can pick up where we leave off.
                     expect(localStorage.getItem("mx_user_id")).toEqual("@user:localhost");
