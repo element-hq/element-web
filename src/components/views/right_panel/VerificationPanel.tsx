@@ -49,6 +49,14 @@ interface IProps {
 }
 
 interface IState {
+    /**
+     * The data for the QR code to display.
+     *
+     * We attempt to calculate this once the verification request transitions into the "Ready" phase. If the other
+     * side cannot scan QR codes, it will remain `undefined`.
+     */
+    qrCodeBytes: Buffer | undefined;
+
     sasEvent: ShowSasCallbacks | null;
     emojiButtonClicked?: boolean;
     reciprocateButtonClicked?: boolean;
@@ -68,9 +76,12 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     /** have we yet tried to check the other device's info */
     private haveCheckedDevice = false;
 
+    /** have we yet tried to get the QR code */
+    private haveFetchedQRCode = false;
+
     public constructor(props: IProps) {
         super(props);
-        this.state = { sasEvent: null, reciprocateQREvent: null };
+        this.state = { qrCodeBytes: undefined, sasEvent: null, reciprocateQREvent: null };
         this.hasVerifier = false;
     }
 
@@ -78,7 +89,6 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const { member, request } = this.props;
         const showSAS: boolean = request.otherPartySupportsMethod(verificationMethods.SAS);
         const showQR: boolean = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
-        const qrCodeBytes = showQR ? request.getQRCodeBytes() : null;
         const brand = SdkConfig.get().brand;
 
         const noCommonMethodError: JSX.Element | null =
@@ -97,11 +107,11 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             // HACK: This is a terrible idea.
             let qrBlockDialog: JSX.Element | undefined;
             let sasBlockDialog: JSX.Element | undefined;
-            if (!!qrCodeBytes) {
+            if (showQR) {
                 qrBlockDialog = (
                     <div className="mx_VerificationPanel_QRPhase_startOption">
                         <p>{_t("Scan this unique code")}</p>
-                        <VerificationQRCode qrCodeBytes={qrCodeBytes} />
+                        <VerificationQRCode qrCodeBytes={this.state.qrCodeBytes} />
                     </div>
                 );
             }
@@ -145,7 +155,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         }
 
         let qrBlock: JSX.Element | undefined;
-        if (!!qrCodeBytes) {
+        if (showQR) {
             qrBlock = (
                 <div className="mx_UserInfo_container">
                     <h3>{_t("Verify by scanning")}</h3>
@@ -156,7 +166,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                     </p>
 
                     <div className="mx_VerificationPanel_qrCode">
-                        <VerificationQRCode qrCodeBytes={qrCodeBytes} />
+                        <VerificationQRCode qrCodeBytes={this.state.qrCodeBytes} />
                     </div>
                 </div>
             );
@@ -425,6 +435,20 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
         // if we have a device ID and did not have one before, fetch the device's details
         this.maybeGetOtherDevice();
+
+        // if we have had a reply from the other side (ie, the phase is "ready") and we have not
+        // yet done so, fetch the QR code
+        if (request.phase === Phase.Ready && !this.haveFetchedQRCode) {
+            this.haveFetchedQRCode = true;
+            request.generateQRCode().then(
+                (buf) => {
+                    this.setState({ qrCodeBytes: buf });
+                },
+                (error) => {
+                    console.error("Error generating QR code:", error);
+                },
+            );
+        }
 
         const hadVerifier = this.hasVerifier;
         this.hasVerifier = !!request.verifier;

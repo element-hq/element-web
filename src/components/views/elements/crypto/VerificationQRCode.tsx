@@ -19,14 +19,15 @@ import React from "react";
 import QRCode from "../QRCode";
 
 interface IProps {
-    qrCodeBytes: Buffer;
+    /** The data for the QR code. If `undefined`, a spinner is shown. */
+    qrCodeBytes: undefined | Buffer;
 }
 
 export default class VerificationQRCode extends React.PureComponent<IProps> {
     public render(): React.ReactNode {
         return (
             <QRCode
-                data={[{ data: this.props.qrCodeBytes, mode: "byte" }]}
+                data={this.props.qrCodeBytes === undefined ? null : [{ data: this.props.qrCodeBytes, mode: "byte" }]}
                 className="mx_VerificationQRCode"
                 width={196}
             />

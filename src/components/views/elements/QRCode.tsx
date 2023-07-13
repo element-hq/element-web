@@ -22,7 +22,8 @@ import { _t } from "../../../languageHandler";
 import Spinner from "./Spinner";
 
 interface IProps extends QRCodeRenderersOptions {
-    data: string | QRCodeSegment[];
+    /** The data for the QR code. If `null`, a spinner is shown. */
+    data: null | string | QRCodeSegment[];
     className?: string;
 }
 
@@ -33,6 +34,10 @@ const defaultOptions: QRCodeToDataURLOptions = {
 const QRCode: React.FC<IProps> = ({ data, className, ...options }) => {
     const [dataUri, setUri] = React.useState<string | null>(null);
     React.useEffect(() => {
+        if (data === null) {
+            setUri(null);
+            return;
+        }
         let cancelled = false;
         toDataURL(data, { ...defaultOptions, ...options }).then((uri) => {
             if (cancelled) return;
