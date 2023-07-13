@@ -14,12 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import jsQR from "jsqr";
+
 import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api/verification";
 import { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { emitPromise } from "../../support/util";
 import { checkDeviceIsCrossSigned, doTwoWaySasVerification, logIntoElement, waitForVerificationRequest } from "./utils";
 import { getToast } from "../../support/toasts";
+
+/** Render a data URL and return the rendered image data */
+async function renderQRCode(dataUrl: string): Promise<ImageData> {
+    // create a new image and set the source to the data url
+    const img = new Image();
+    await new Promise((r) => {
+        img.onload = r;
+        img.src = dataUrl;
+    });
+
+    // draw the image on a canvas
+    const myCanvas = new OffscreenCanvas(256, 256);
+    const ctx = myCanvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+
+    // read the image data
+    return ctx.getImageData(0, 0, myCanvas.width, myCanvas.height);
+}
 
 describe("Device verification", () => {
     let aliceBotClient: CypressBot;
@@ -86,6 +106,49 @@ describe("Device verification", () => {
             cy.findByRole("button", { name: "They match" }).click();
             cy.findByRole("button", { name: "Got it" }).click();
         });
+
+        // Check that our device is now cross-signed
+        checkDeviceIsCrossSigned();
+    });
+
+    it("Verify device during login with QR code", () => {
+        logIntoElement(homeserver.baseUrl, aliceBotClient.getUserId(), aliceBotClient.__cypress_password);
+
+        // Launch the verification request between alice and the bot
+        initiateAliceVerificationRequest();
+
+        cy.get(".mx_InfoDialog").within(() => {
+            cy.get('[alt="QR Code"]').then((qrCode) => {
+                /* the bot scans the QR code */
+                cy.get<VerificationRequest>("@verificationRequest")
+                    .then(async (request: VerificationRequest) => {
+                        // because I don't know how to scrape the imagedata from the cypress browser window,
+                        // we extract the data url and render it to a new canvas.
+                        const imageData = await renderQRCode(qrCode.attr("src"));
+
+                        // now we can decode the QR code...
+                        const result = jsQR(imageData.data, imageData.width, imageData.height);
+
+                        // ... and feed it into the verification request.
+                        return await request.scanQRCode(new Uint8Array(result.binaryData));
+                    })
+                    .as("verifier");
+            });
+
+            // Confirm that the bot user scanned successfully
+            cy.findByText("Almost there! Is your other device showing the same shield?");
+            cy.findByRole("button", { name: "Yes" }).click();
+
+            cy.findByRole("button", { name: "Got it" }).click();
+        });
+
+        // wait for the bot to see we have finished
+        cy.get<Verifier>("@verifier").then(async (verifier) => {
+            await verifier.verify();
+        });
+
+        // the bot uploads the signatures asynchronously, so wait for that to happen
+        cy.wait(1000);
 
         // Check that our device is now cross-signed
         checkDeviceIsCrossSigned();
