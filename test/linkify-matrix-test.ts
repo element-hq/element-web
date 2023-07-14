@@ -13,7 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { linkify, Type } from "../src/linkify-matrix";
+
+import { EventListeners } from "linkifyjs";
+
+import { linkify, Type, options } from "../src/linkify-matrix";
+import dispatcher from "../src/dispatcher/dispatcher";
+import { Action } from "../src/dispatcher/actions";
 
 describe("linkify-matrix", () => {
     const linkTypesByInitialCharacter: Record<string, string> = {
@@ -324,6 +329,26 @@ describe("linkify-matrix", () => {
 
     describe("roomalias plugin", () => {
         genTests("#");
+
+        it("should intercept clicks with a ViewRoom dispatch", () => {
+            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+
+            const handlers = (options.events as (href: string, type: string) => EventListeners)(
+                "#room:server.com",
+                "roomalias",
+            );
+
+            const event = new MouseEvent("mousedown");
+            event.preventDefault = jest.fn();
+            handlers.click(event);
+            expect(event.preventDefault).toHaveBeenCalled();
+            expect(dispatchSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: Action.ViewRoom,
+                    room_alias: "#room:server.com",
+                }),
+            );
+        });
     });
 
     describe("userid plugin", () => {
@@ -343,6 +368,28 @@ describe("linkify-matrix", () => {
                     isLink: true,
                 },
             ]);
+        });
+
+        it("should intercept clicks with a ViewUser dispatch", () => {
+            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+
+            const handlers = (options.events as (href: string, type: string) => EventListeners)(
+                "@localpart:server.com",
+                "userid",
+            );
+
+            const event = new MouseEvent("mousedown");
+            event.preventDefault = jest.fn();
+            handlers.click(event);
+            expect(event.preventDefault).toHaveBeenCalled();
+            expect(dispatchSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: Action.ViewUser,
+                    member: expect.objectContaining({
+                        userId: "@localpart:server.com",
+                    }),
+                }),
+            );
         });
     });
 
