@@ -47,8 +47,15 @@ Cypress.Commands.add("percySnapshotElement", { prevSubject: "element" }, (subjec
         // Await inline spinners to vanish
         cy.get(".mx_InlineSpinner", { log: false }).should("not.exist");
     }
+
+    let selector = subject.selector;
+    // cy.findByTestId sets the selector to `findByTestId(<testId>)`
+    // which is not usable as a scope
+    if (selector.startsWith("findByTestId")) {
+        selector = `[data-testid="${subject.attr("data-testid")}"]`;
+    }
     cy.percySnapshot(name, {
-        domTransformation: (documentClone) => scope(documentClone, subject.selector),
+        domTransformation: (documentClone) => scope(documentClone, selector),
         ...options,
     });
 });
