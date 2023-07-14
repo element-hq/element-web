@@ -25,7 +25,15 @@ export class SnakedObject<T = Record<string, any>> {
         const val = this.obj[key];
         if (val !== undefined) return val;
 
-        return this.obj[<K>(altCaseName ?? snakeToCamel(key))];
+        const fallbackKey = altCaseName ?? snakeToCamel(key);
+        const fallback = this.obj[<K>fallbackKey];
+        if (!!fallback) {
+            console.warn(`Using deprecated camelCase config ${fallbackKey}`);
+            console.warn(
+                "See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice",
+            );
+        }
+        return fallback;
     }
 
     // Make JSON.stringify() pretend that everything is fine
