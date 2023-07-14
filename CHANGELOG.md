@@ -1,3 +1,10 @@
+Changes in [1.11.36-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.36-rc.2) (2023-07-14)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix read receipt sending behaviour around thread roots ([\#3600](https://github.com/matrix-org/matrix-js-sdk/pull/3600)).
+ * Fix missing metaspace notification badges ([\#11269](https://github.com/matrix-org/matrix-react-sdk/pull/11269)). Fixes #25679.
+
 Changes in [1.11.36-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.36-rc.1) (2023-07-11)
 ===========================================================================================================
 
