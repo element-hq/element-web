@@ -164,12 +164,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
             });
         });
 
-        window.electron.on("openDesktopCapturerSourcePicker", async () => {
+        window.electron.on("openDesktopCapturerSourcePicker", () => {
             const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
-            const [source] = await finished;
-            if (!source) return;
-
-            await this.ipc.call("callDisplayMediaCallback", source);
+            finished.then(([source]) => {
+                if (!source) return;
+                this.ipc.call("callDisplayMediaCallback", source);
+            });
         });
 
         this.ipc.call("startSSOFlow", this.ssoID);

@@ -82,16 +82,25 @@ describe("ElectronPlatform", () => {
     it("creates a modal on openDesktopCapturerSourcePicker", async () => {
         const plat = new ElectronPlatform();
         Modal.createDialog = jest.fn();
-        mocked(Modal.createDialog).mockReturnValue({
-            // @ts-ignore mock
-            finished: ["source"],
-        });
 
         // @ts-ignore mock
-        jest.spyOn(plat.ipc, "call").mockResolvedValue(undefined);
+        mocked(Modal.createDialog).mockReturnValue({
+            finished: new Promise((r) => r(["source"])),
+        });
+
+        let res: () => void;
+        const waitForIPCSend = new Promise<void>((r) => {
+            res = r;
+        });
+        // @ts-ignore mock
+        jest.spyOn(plat.ipc, "call").mockImplementation(() => {
+            res();
+        });
 
         const [event, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
-        await handler();
+        handler();
+
+        await waitForIPCSend;
 
         expect(event).toBeTruthy();
         expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
