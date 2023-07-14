@@ -36,7 +36,6 @@ import { textToHtmlRainbow } from "./utils/colour";
 import { AddressType, getAddressType } from "./UserAddress";
 import { abbreviateUrl } from "./utils/UrlUtils";
 import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "./utils/IdentityServerUtils";
-import { isPermalinkHost, parsePermalink } from "./utils/permalinks/Permalinks";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
 import BugReportDialog from "./components/views/dialogs/BugReportDialog";
@@ -66,6 +65,7 @@ import { isCurrentLocalRoom, reject, singleMxcUpload, success, successSync } fro
 import { deop, op } from "./slash-commands/op";
 import { CommandCategories } from "./slash-commands/interface";
 import { Command } from "./slash-commands/command";
+import { goto, join } from "./slash-commands/join";
 
 export { CommandCategories, Command };
 
@@ -458,118 +458,8 @@ export const Commands = [
         category: CommandCategories.actions,
         renderingTypes: [TimelineRenderingType.Room],
     }),
-    new Command({
-        command: "join",
-        aliases: ["j", "goto"],
-        args: "<room-address>",
-        description: _td("Joins room with given address"),
-        runFn: function (cli, roomId, threadId, args) {
-            if (args) {
-                // Note: we support 2 versions of this command. The first is
-                // the public-facing one for most users and the other is a
-                // power-user edition where someone may join via permalink or
-                // room ID with optional servers. Practically, this results
-                // in the following variations:
-                //   /join #example:example.org
-                //   /join !example:example.org
-                //   /join !example:example.org altserver.com elsewhere.ca
-                //   /join https://matrix.to/#/!example:example.org?via=altserver.com
-                // The command also supports event permalinks transparently:
-                //   /join https://matrix.to/#/!example:example.org/$something:example.org
-                //   /join https://matrix.to/#/!example:example.org/$something:example.org?via=altserver.com
-                const params = args.split(" ");
-                if (params.length < 1) return reject(this.getUsage());
-
-                let isPermalink = false;
-                if (params[0].startsWith("http:") || params[0].startsWith("https:")) {
-                    // It's at least a URL - try and pull out a hostname to check against the
-                    // permalink handler
-                    const parsedUrl = new URL(params[0]);
-                    const hostname = parsedUrl.host || parsedUrl.hostname; // takes first non-falsey value
-
-                    // if we're using a Element permalink handler, this will catch it before we get much further.
-                    // see below where we make assumptions about parsing the URL.
-                    if (isPermalinkHost(hostname)) {
-                        isPermalink = true;
-                    }
-                }
-                if (params[0][0] === "#") {
-                    let roomAlias = params[0];
-                    if (!roomAlias.includes(":")) {
-                        roomAlias += ":" + cli.getDomain();
-                    }
-
-                    dis.dispatch<ViewRoomPayload>({
-                        action: Action.ViewRoom,
-                        room_alias: roomAlias,
-                        auto_join: true,
-                        metricsTrigger: "SlashCommand",
-                        metricsViaKeyboard: true,
-                    });
-                    return success();
-                } else if (params[0][0] === "!") {
-                    const [roomId, ...viaServers] = params;
-
-                    dis.dispatch<ViewRoomPayload>({
-                        action: Action.ViewRoom,
-                        room_id: roomId,
-                        via_servers: viaServers, // for the rejoin button
-                        auto_join: true,
-                        metricsTrigger: "SlashCommand",
-                        metricsViaKeyboard: true,
-                    });
-                    return success();
-                } else if (isPermalink) {
-                    const permalinkParts = parsePermalink(params[0]);
-
-                    // This check technically isn't needed because we already did our
-                    // safety checks up above. However, for good measure, let's be sure.
-                    if (!permalinkParts) {
-                        return reject(this.getUsage());
-                    }
-
-                    // If for some reason someone wanted to join a user, we should
-                    // stop them now.
-                    if (!permalinkParts.roomIdOrAlias) {
-                        return reject(this.getUsage());
-                    }
-
-                    const entity = permalinkParts.roomIdOrAlias;
-                    const viaServers = permalinkParts.viaServers;
-                    const eventId = permalinkParts.eventId;
-
-                    const dispatch: ViewRoomPayload = {
-                        action: Action.ViewRoom,
-                        auto_join: true,
-                        metricsTrigger: "SlashCommand",
-                        metricsViaKeyboard: true,
-                    };
-
-                    if (entity[0] === "!") dispatch["room_id"] = entity;
-                    else dispatch["room_alias"] = entity;
-
-                    if (eventId) {
-                        dispatch["event_id"] = eventId;
-                        dispatch["highlighted"] = true;
-                    }
-
-                    if (viaServers) {
-                        // For the join, these are passed down to the js-sdk's /join call
-                        dispatch["opts"] = { viaServers };
-
-                        // For if the join fails (rejoin button)
-                        dispatch["via_servers"] = viaServers;
-                    }
-
-                    dis.dispatch(dispatch);
-                    return success();
-                }
-            }
-            return reject(this.getUsage());
-        },
-        category: CommandCategories.actions,
-        renderingTypes: [TimelineRenderingType.Room],
-    }),
+    goto,
+    join,
     new Command({
         command: "part",
         args: "[<room-address>]",

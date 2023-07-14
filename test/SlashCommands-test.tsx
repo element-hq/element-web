@@ -27,6 +27,7 @@ import Modal from "../src/Modal";
 import WidgetUtils from "../src/utils/WidgetUtils";
 import { WidgetType } from "../src/widgets/WidgetType";
 import { warnSelfDemote } from "../src/components/views/right_panel/UserInfo";
+import dispatcher from "../src/dispatcher/dispatcher";
 
 jest.mock("../src/components/views/right_panel/UserInfo");
 
@@ -342,6 +343,60 @@ describe("SlashCommands", () => {
                 "https://element.io",
                 "Custom",
                 {},
+            );
+        });
+    });
+
+    describe("/join", () => {
+        beforeEach(() => {
+            jest.spyOn(dispatcher, "dispatch");
+            command = findCommand("join")!;
+        });
+
+        it("should return usage if no args", () => {
+            expect(command.run(client, roomId, null, undefined).error).toBe(command.getUsage());
+        });
+
+        it("should handle matrix.org permalinks", () => {
+            command.run(client, roomId, null, "https://matrix.to/#/!roomId:server/$eventId");
+            expect(dispatcher.dispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_id: "!roomId:server",
+                    event_id: "$eventId",
+                    highlighted: true,
+                }),
+            );
+        });
+
+        it("should handle room aliases", () => {
+            command.run(client, roomId, null, "#test:server");
+            expect(dispatcher.dispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_alias: "#test:server",
+                }),
+            );
+        });
+
+        it("should handle room aliases with no server component", () => {
+            command.run(client, roomId, null, "#test");
+            expect(dispatcher.dispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_alias: `#test:${client.getDomain()}`,
+                }),
+            );
+        });
+
+        it("should handle room IDs and via servers", () => {
+            command.run(client, roomId, null, "!foo:bar serv1.com serv2.com");
+            expect(dispatcher.dispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_id: "!foo:bar",
+                    via_servers: ["serv1.com", "serv2.com"],
+                }),
             );
         });
     });
