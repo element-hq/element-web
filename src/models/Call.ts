@@ -48,10 +48,7 @@ import { ElementWidgetActions } from "../stores/widgets/ElementWidgetActions";
 import WidgetStore from "../stores/WidgetStore";
 import { WidgetMessagingStore, WidgetMessagingStoreEvent } from "../stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
-import PlatformPeg from "../PlatformPeg";
 import { getCurrentLanguage } from "../languageHandler";
-import DesktopCapturerSourcePicker from "../components/views/elements/DesktopCapturerSourcePicker";
-import Modal from "../Modal";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 
@@ -762,7 +759,6 @@ export class ElementCall extends Call {
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
-        this.messaging!.on(`action:${ElementWidgetActions.ScreenshareRequest}`, this.onScreenshareRequest);
     }
 
     protected async performDisconnection(): Promise<void> {
@@ -777,7 +773,6 @@ export class ElementCall extends Call {
         this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.off(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.off(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
-        this.messaging!.off(`action:${ElementWidgetActions.ScreenshareRequest}`, this.onScreenshareRequest);
         super.setDisconnected();
         this.groupCall.enteredViaAnotherSession = false;
     }
@@ -877,26 +872,5 @@ export class ElementCall extends Call {
         ev.preventDefault();
         this.layout = Layout.Spotlight;
         await this.messaging!.transport.reply(ev.detail, {}); // ack
-    };
-
-    private onScreenshareRequest = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
-        ev.preventDefault();
-
-        if (PlatformPeg.get()?.supportsDesktopCapturer()) {
-            await this.messaging!.transport.reply(ev.detail, { pending: true });
-
-            const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
-            const [source] = await finished;
-
-            if (source) {
-                await this.messaging!.transport.send(ElementWidgetActions.ScreenshareStart, {
-                    desktopCapturerSourceId: source,
-                });
-            } else {
-                await this.messaging!.transport.send(ElementWidgetActions.ScreenshareStop, {});
-            }
-        } else {
-            await this.messaging!.transport.reply(ev.detail, { pending: false });
-        }
     };
 }

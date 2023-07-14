@@ -79,10 +79,10 @@ export class ExistingSource extends React.Component<ExistingSourceIProps> {
 export interface PickerIState {
     selectedTab: Tabs;
     sources: Array<DesktopCapturerSource>;
-    selectedSource: DesktopCapturerSource | null;
+    selectedSource?: DesktopCapturerSource;
 }
 export interface PickerIProps {
-    onFinished(sourceId?: string): void;
+    onFinished(source?: DesktopCapturerSource): void;
 }
 
 type TabId = "screen" | "window";
@@ -96,7 +96,6 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
         this.state = {
             selectedTab: Tabs.Screens,
             sources: [],
-            selectedSource: null,
         };
     }
 
@@ -125,11 +124,11 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
     };
 
     private onShare = (): void => {
-        this.props.onFinished(this.state.selectedSource?.id);
+        this.props.onFinished(this.state.selectedSource);
     };
 
     private onTabChange = (): void => {
-        this.setState({ selectedSource: null });
+        this.setState({ selectedSource: undefined });
     };
 
     private onCloseClick = (): void => {

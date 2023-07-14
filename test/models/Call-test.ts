@@ -39,8 +39,6 @@ import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingSt
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../src/stores/ActiveWidgetStore";
 import { ElementWidgetActions } from "../../src/stores/widgets/ElementWidgetActions";
 import SettingsStore from "../../src/settings/SettingsStore";
-import Modal, { IHandle } from "../../src/Modal";
-import PlatformPeg from "../../src/PlatformPeg";
 import { PosthogAnalytics } from "../../src/PosthogAnalytics";
 
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -945,83 +943,6 @@ describe("ElementCall", () => {
             expect(onLayout.mock.calls).toEqual([[Layout.Spotlight], [Layout.Tile]]);
 
             call.off(CallEvent.Layout, onLayout);
-        });
-
-        describe("screensharing", () => {
-            it("passes source id if we can get it", async () => {
-                const sourceId = "source_id";
-                jest.spyOn(Modal, "createDialog").mockReturnValue({
-                    finished: new Promise((r) => r([sourceId])),
-                } as IHandle<any>);
-                jest.spyOn(PlatformPeg.get()!, "supportsDesktopCapturer").mockReturnValue(true);
-
-                await call.connect();
-
-                messaging.emit(
-                    `action:${ElementWidgetActions.ScreenshareRequest}`,
-                    new CustomEvent("widgetapirequest", { detail: {} }),
-                );
-
-                await waitFor(() => {
-                    expect(messaging!.transport.reply).toHaveBeenCalledWith(
-                        expect.objectContaining({}),
-                        expect.objectContaining({ pending: true }),
-                    );
-                });
-
-                await waitFor(() => {
-                    expect(messaging!.transport.send).toHaveBeenCalledWith(
-                        "io.element.screenshare_start",
-                        expect.objectContaining({ desktopCapturerSourceId: sourceId }),
-                    );
-                });
-            });
-
-            it("sends ScreenshareStop if we couldn't get a source id", async () => {
-                jest.spyOn(Modal, "createDialog").mockReturnValue({
-                    finished: new Promise((r) => r([null])),
-                } as IHandle<any>);
-                jest.spyOn(PlatformPeg.get()!, "supportsDesktopCapturer").mockReturnValue(true);
-
-                await call.connect();
-
-                messaging.emit(
-                    `action:${ElementWidgetActions.ScreenshareRequest}`,
-                    new CustomEvent("widgetapirequest", { detail: {} }),
-                );
-
-                await waitFor(() => {
-                    expect(messaging!.transport.reply).toHaveBeenCalledWith(
-                        expect.objectContaining({}),
-                        expect.objectContaining({ pending: true }),
-                    );
-                });
-
-                await waitFor(() => {
-                    expect(messaging!.transport.send).toHaveBeenCalledWith(
-                        "io.element.screenshare_stop",
-                        expect.objectContaining({}),
-                    );
-                });
-            });
-
-            it("replies with pending: false if we don't support desktop capturer", async () => {
-                jest.spyOn(PlatformPeg.get()!, "supportsDesktopCapturer").mockReturnValue(false);
-
-                await call.connect();
-
-                messaging.emit(
-                    `action:${ElementWidgetActions.ScreenshareRequest}`,
-                    new CustomEvent("widgetapirequest", { detail: {} }),
-                );
-
-                await waitFor(() => {
-                    expect(messaging!.transport.reply).toHaveBeenCalledWith(
-                        expect.objectContaining({}),
-                        expect.objectContaining({ pending: false }),
-                    );
-                });
-            });
         });
 
         it("ends the call immediately if we're the last participant to leave", async () => {

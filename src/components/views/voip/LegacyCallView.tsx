@@ -30,12 +30,9 @@ import VideoFeed from "./VideoFeed";
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from "../elements/AccessibleButton";
 import { avatarUrlForMember } from "../../../Avatar";
-import DesktopCapturerSourcePicker from "../elements/DesktopCapturerSourcePicker";
-import Modal from "../../../Modal";
 import LegacyCallViewSidebar from "./LegacyCallViewSidebar";
 import LegacyCallViewHeader from "./LegacyCallView/LegacyCallViewHeader";
 import LegacyCallViewButtons from "./LegacyCallView/LegacyCallViewButtons";
-import PlatformPeg from "../../../PlatformPeg";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -289,17 +286,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         if (this.state.screensharing) {
             isScreensharing = await this.props.call.setScreensharingEnabled(false);
         } else {
-            if (PlatformPeg.get()?.supportsDesktopCapturer()) {
-                const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
-                const [source] = await finished;
-                if (!source) return;
-
-                isScreensharing = await this.props.call.setScreensharingEnabled(true, {
-                    desktopCapturerSourceId: source,
-                });
-            } else {
-                isScreensharing = await this.props.call.setScreensharingEnabled(true);
-            }
+            isScreensharing = await this.props.call.setScreensharingEnabled(true);
         }
 
         this.setState({
