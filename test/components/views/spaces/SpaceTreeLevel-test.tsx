@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { fireEvent, getByTestId, render } from "@testing-library/react";
 
-import { stubClient, mkRoom } from "../../../test-utils";
+import { mkRoom, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
@@ -25,6 +25,8 @@ import { Action } from "../../../../src/dispatcher/actions";
 import { SpaceButton } from "../../../../src/components/views/spaces/SpaceTreeLevel";
 import { MetaSpace, SpaceKey } from "../../../../src/stores/spaces";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
+import { StaticNotificationState } from "../../../../src/stores/notifications/StaticNotificationState";
+import { NotificationColor } from "../../../../src/stores/notifications/NotificationColor";
 
 jest.mock("../../../../src/stores/spaces/SpaceStore", () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -98,6 +100,23 @@ describe("SpaceButton", () => {
             expect(dispatchSpy).not.toHaveBeenCalled();
             // Re-activating the metaspace is a no-op
             expect(SpaceStore.instance.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
+        });
+
+        it("should render notificationState if one is provided", () => {
+            const notificationState = new StaticNotificationState(null, 8, NotificationColor.Grey);
+
+            const { container, asFragment } = render(
+                <SpaceButton
+                    spaceKey={MetaSpace.People}
+                    selected={true}
+                    label="People"
+                    data-testid="create-space-button"
+                    notificationState={notificationState}
+                />,
+            );
+
+            expect(container.querySelector(".mx_NotificationBadge_count")).toHaveTextContent("8");
+            expect(asFragment()).toMatchSnapshot();
         });
     });
 });
