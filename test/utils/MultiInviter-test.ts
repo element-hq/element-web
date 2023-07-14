@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixError, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import Modal, { ComponentType, ComponentProps } from "../../src/Modal";
@@ -23,6 +23,7 @@ import SettingsStore from "../../src/settings/SettingsStore";
 import MultiInviter, { CompletionStates } from "../../src/utils/MultiInviter";
 import * as TestUtilsMatrix from "../test-utils";
 import AskInviteAnywayDialog from "../../src/components/views/dialogs/AskInviteAnywayDialog";
+import ConfirmUserActionDialog from "../../src/components/views/dialogs/ConfirmUserActionDialog";
 
 const ROOMID = "!room:server";
 
@@ -89,6 +90,7 @@ describe("MultiInviter", () => {
         client.getProfileInfo.mockImplementation((userId: string) => {
             return MXID_PROFILE_STATES[userId] || Promise.reject();
         });
+        client.unban = jest.fn();
 
         inviter = new MultiInviter(client, ROOMID);
     });
@@ -153,6 +155,37 @@ describe("MultiInviter", () => {
             expect(inviter.getErrorText("foo@bar.com")).toMatchInlineSnapshot(
                 `"Cannot invite user by email without an identity server. You can connect to one under "Settings"."`,
             );
+        });
+
+        it("should ask if user wants to unban user if they have permission", async () => {
+            mocked(Modal.createDialog).mockImplementation(
+                (Element: ComponentType, props?: ComponentProps<ComponentType>): any => {
+                    // We stub out the modal with an immediate affirmative (proceed) return
+                    return { finished: Promise.resolve([true]) };
+                },
+            );
+
+            const room = new Room(ROOMID, client, client.getSafeUserId());
+            mocked(client.getRoom).mockReturnValue(room);
+            const ourMember = new RoomMember(ROOMID, client.getSafeUserId());
+            ourMember.membership = "join";
+            ourMember.powerLevel = 100;
+            const member = new RoomMember(ROOMID, MXID1);
+            member.membership = "ban";
+            member.powerLevel = 0;
+            room.getMember = (userId: string) => {
+                if (userId === client.getSafeUserId()) return ourMember;
+                if (userId === MXID1) return member;
+                return null;
+            };
+
+            await inviter.invite([MXID1]);
+            expect(Modal.createDialog).toHaveBeenCalledWith(ConfirmUserActionDialog, {
+                member,
+                title: "User cannot be invited until they are unbanned",
+                action: "Unban",
+            });
+            expect(client.unban).toHaveBeenCalledWith(ROOMID, MXID1);
         });
     });
 });

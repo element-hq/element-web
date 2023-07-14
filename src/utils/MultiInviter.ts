@@ -26,6 +26,7 @@ import { _t } from "../languageHandler";
 import Modal from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
 import AskInviteAnywayDialog from "../components/views/dialogs/AskInviteAnywayDialog";
+import ConfirmUserActionDialog from "../components/views/dialogs/ConfirmUserActionDialog";
 
 export enum InviteState {
     Invited = "invited",
@@ -48,6 +49,7 @@ export type CompletionStates = Record<string, InviteState>;
 
 const USER_ALREADY_JOINED = "IO.ELEMENT.ALREADY_JOINED";
 const USER_ALREADY_INVITED = "IO.ELEMENT.ALREADY_INVITED";
+const USER_BANNED = "IO.ELEMENT.BANNED";
 
 /**
  * Invites multiple addresses to a room, handling rate limiting from the server
@@ -170,6 +172,34 @@ export default class MultiInviter {
                     errcode: USER_ALREADY_INVITED,
                     error: "Member already invited",
                 });
+            } else if (member?.membership === "ban") {
+                let proceed = false;
+                // Check if we can unban the invitee.
+                // See https://spec.matrix.org/v1.7/rooms/v10/#authorization-rules, particularly 4.5.3 and 4.5.4.
+                const ourMember = room.getMember(this.matrixClient.getSafeUserId());
+                if (
+                    !!ourMember &&
+                    member.powerLevel < ourMember.powerLevel &&
+                    room.currentState.hasSufficientPowerLevelFor("ban", ourMember.powerLevel) &&
+                    room.currentState.hasSufficientPowerLevelFor("kick", ourMember.powerLevel)
+                ) {
+                    const { finished } = Modal.createDialog(ConfirmUserActionDialog, {
+                        member,
+                        action: _t("Unban"),
+                        title: _t("User cannot be invited until they are unbanned"),
+                    });
+                    [proceed = false] = await finished;
+                    if (proceed) {
+                        await this.matrixClient.unban(roomId, member.userId);
+                    }
+                }
+
+                if (!proceed) {
+                    throw new MatrixError({
+                        errcode: USER_BANNED,
+                        error: "Member is banned",
+                    });
+                }
             }
 
             if (!ignoreProfile && SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {
@@ -268,6 +298,7 @@ export default class MultiInviter {
                             }
                             break;
                         case "M_BAD_STATE":
+                        case USER_BANNED:
                             errorText = _t("The user must be unbanned before they can be invited.");
                             break;
                         case "M_UNSUPPORTED_ROOM_VERSION":
