@@ -169,7 +169,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
             const [source] = await finished;
             if (!source) return;
 
-            await this.ipc.call("callDisplayMediaCallback", source);
+            this.ipc.call("callDisplayMediaCallback", source);
         });
 
         this.ipc.call("startSSOFlow", this.ssoID);

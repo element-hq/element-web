@@ -86,14 +86,19 @@ describe("ElectronPlatform", () => {
             // @ts-ignore mock
             finished: ["source"],
         });
-        mockElectron.send.mockClear();
 
         const [event, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
         await handler();
 
         expect(event).toBeTruthy();
         expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
-        expect(mockElectron.send).toHaveBeenCalledWith("callDisplayMediaCallback", "source");
+        expect(mockElectron.send).toHaveBeenCalledWith(
+            "ipcCall",
+            expect.objectContaining({
+                args: ["source"],
+                name: "callDisplayMediaCallback",
+            }),
+        );
     });
 
     describe("updates", () => {
