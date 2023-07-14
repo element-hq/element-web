@@ -1,3 +1,9 @@
+Changes in [3.76.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.76.0-rc.2) (2023-07-14)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix missing metaspace notification badges ([\#11269](https://github.com/matrix-org/matrix-react-sdk/pull/11269)). Fixes vector-im/element-web#25679.
+
 Changes in [3.76.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.76.0-rc.1) (2023-07-11)
 ===============================================================================================================
 
