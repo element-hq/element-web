@@ -19,7 +19,7 @@ import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import React, { useState } from "react";
@@ -35,7 +35,7 @@ import DMRoomMap from "../../../src/utils/DMRoomMap";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { mockPlatformPeg } from "../../test-utils/platform";
 import { getRoomContext } from "../../test-utils/room";
-import { stubClient } from "../../test-utils/test-utils";
+import { mkMessage, stubClient } from "../../test-utils/test-utils";
 import { mkThread } from "../../test-utils/threads";
 
 describe("ThreadView", () => {
@@ -133,6 +133,24 @@ describe("ThreadView", () => {
 
         DMRoomMap.makeShared(mockClient);
         jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(SENDER);
+    });
+
+    it("does not include pending root event in the timeline twice", async () => {
+        rootEvent = mkMessage({
+            user: mockClient.getUserId()!,
+            event: true,
+            room: room.roomId,
+            msg: "root event message " + Math.random(),
+        });
+
+        rootEvent.status = EventStatus.SENDING;
+        rootEvent.setTxnId("1234");
+        room.addPendingEvent(rootEvent, "1234");
+        room.updatePendingEvent(rootEvent, EventStatus.SENT, rootEvent.getId());
+
+        const { container } = await getComponent();
+        const tiles = container.getElementsByClassName("mx_EventTile");
+        expect(tiles.length).toEqual(1);
     });
 
     it("sends a message with the correct fallback", async () => {
