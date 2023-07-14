@@ -21,6 +21,9 @@ import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import dispatcher from "matrix-react-sdk/src/dispatcher/dispatcher";
 import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
 import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
+import Modal from "matrix-react-sdk/src/Modal";
+import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
+import { mocked } from "jest-mock";
 
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 
@@ -74,6 +77,23 @@ describe("ElectronPlatform", () => {
         handler();
 
         expect(dispatchFireSpy).toHaveBeenCalledWith(Action.ViewUserSettings);
+    });
+
+    it("creates a modal on openDesktopCapturerSourcePicker", async () => {
+        new ElectronPlatform();
+        Modal.createDialog = jest.fn();
+        mocked(Modal.createDialog).mockReturnValue({
+            // @ts-ignore mock
+            finished: ["source"],
+        });
+        mockElectron.send.mockClear();
+
+        const [event, handler] = getElectronEventHandlerCall("openDesktopCapturerSourcePicker")!;
+        await handler();
+
+        expect(event).toBeTruthy();
+        expect(Modal.createDialog).toHaveBeenCalledWith(DesktopCapturerSourcePicker);
+        expect(mockElectron.send).toHaveBeenCalledWith("callDisplayMediaCallback", "source");
     });
 
     describe("updates", () => {
