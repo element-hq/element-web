@@ -43,6 +43,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "matrix-react-sdk/src/stores/AsyncStore";
 import { avatarUrlForRoom, getInitialLetter } from "matrix-react-sdk/src/Avatar";
+import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
 
 import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
@@ -162,6 +163,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 priority: 99,
             });
         });
+
+        window.electron.on("openDesktopCapturerSourcePicker", async () => {
+            const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
+            const [source] = await finished;
+            if (!source) return;
+
+            this.ipc.call("callDisplayMediaCallback", source)
+        })
 
         this.ipc.call("startSSOFlow", this.ssoID);
 
@@ -417,13 +426,13 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
             await this.ipc.call("destroyPickleKey", userId, deviceId);
-        } catch (e) {}
+        } catch (e) { }
     }
 
     public async clearStorage(): Promise<void> {
         try {
             await super.clearStorage();
             await this.ipc.call("clearStorage");
-        } catch (e) {}
+        } catch (e) { }
     }
 }
