@@ -43,6 +43,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "matrix-react-sdk/src/stores/AsyncStore";
 import { avatarUrlForRoom, getInitialLetter } from "matrix-react-sdk/src/Avatar";
+import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/elements/DesktopCapturerSourcePicker";
 
 import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
@@ -160,6 +161,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 },
                 component: GenericExpiringToast,
                 priority: 99,
+            });
+        });
+
+        window.electron.on("openDesktopCapturerSourcePicker", () => {
+            const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
+            finished.then(([source]) => {
+                if (!source) return;
+                this.ipc.call("callDisplayMediaCallback", source);
             });
         });
 

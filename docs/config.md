@@ -1,5 +1,13 @@
 # Configuration
 
+### 🦖 Deprecation notice
+
+Configuration keys were previously a mix of camelCase and snake_case.
+We standardised to snake_case but added compatibility for camelCase to all settings.
+This backwards compatibility will be getting removed in a future release so please ensure you are using snake_case.
+
+---
+
 You can configure the app by copying `config.sample.json` to `config.json` or `config.$domain.json` and customising it.
 Element will attempt to load first `config.$domain.json` and if it fails `config.json`. This mechanism allows different
 configuration options depending on if you're hitting e.g. `app1.example.com` or `app2.example.com`. Configs are not mixed

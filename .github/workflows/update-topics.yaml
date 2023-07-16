@@ -21,9 +21,6 @@ jobs:
         runs-on: ubuntu-latest
         environment: Matrix
         steps:
-            - id: stable
-              uses: fangqiuming/latest-release-version@3225574bda429695112385003694f43c51f93635 # forked
-
             - uses: actions/github-script@v6
               env:
                   HS_URL: ${{ secrets.BETABOT_HS_URL }}
@@ -31,12 +28,22 @@ jobs:
                   PUBLIC_ROOM_ID: "!YTvKGNlinIzlkMTVRl:matrix.org"
                   ANNOUNCEMENT_ROOM_ID: "!bijaLdadorKgNGtHdA:matrix.org"
                   TOKEN: ${{ secrets.BETABOT_ACCESS_TOKEN }}
-                  RELEASE_TOPIC: "Stable: ${{ steps.stable.outputs.tag_name }} | Release status: ${{ inputs.expected_status }} expected ${{ inputs.expected_date }}"
+                  RELEASE_STATUS: "Release status: ${{ inputs.expected_status }} expected ${{ inputs.expected_date }}"
               with:
                   script: |
-                      const { HS_URL, TOKEN, RELEASE_TOPIC, LOBBY_ROOM_ID, PUBLIC_ROOM_ID, ANNOUNCEMENT_ROOM_ID } = process.env;
+                      const { HS_URL, TOKEN, RELEASE_STATUS, LOBBY_ROOM_ID, PUBLIC_ROOM_ID, ANNOUNCEMENT_ROOM_ID } = process.env;
 
-                      const regex = /Stable: v(\d+.\d+.\d+) \| Release status: (\w+) expected (\w+ \d+\w+)/gm;
+                      const repo = context.repo;
+                      const { data } = await github.rest.repos.getLatestRelease({
+                          owner: repo.owner,
+                          repo: repo.repo,
+                      });
+                      console.log("Found latest version: " + data.tag_name);
+
+                      const releaseTopic = `Stable: ${data.tag_name} | ${RELEASE_STATUS}`;
+                      console.log("Release topic: " + releaseTopic);
+
+                      const regex = /Stable: v(.+) \| Release status: (\w+) expected (\w+ \d+\w\w)/gm;
 
                       async function updateReleaseInTopic(roomId) {
                           const apiUrl = `${HS_URL}/_matrix/client/v3/rooms/${roomId}/state/m.room.topic/`;
@@ -56,14 +63,14 @@ jobs:
                           });
 
                           const data = await res.json();
-                          const topic = data.topic.replace(regex, RELEASE_TOPIC);
+                          const topic = data.topic.replace(regex, releaseTopic);
                           if (topic === data.topic) {
                               console.log(roomId, "nothing to do");
                               return;
                           }
                           if (data["org.matrix.msc3765.topic"]) {
                               data["org.matrix.msc3765.topic"].forEach(d => {
-                                  d.body = d.body.replace(regex, RELEASE_TOPIC);
+                                  d.body = d.body.replace(regex, releaseTopic);
                               });
                           }
 
