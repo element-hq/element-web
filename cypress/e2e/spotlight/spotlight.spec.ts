@@ -345,8 +345,7 @@ describe("Spotlight", () => {
                 cy.spotlightFilter(Filter.People);
                 cy.spotlightSearch().clear().type(bot2Name);
                 cy.spotlightResults().should("have.length", 1);
-                cy.spotlightResults().eq(0).should("contain", bot2Name);
-                cy.spotlightResults().eq(0).click();
+                cy.spotlightResults().contains(bot2Name).click();
             })
             .then(() => {
                 cy.roomHeaderName().should("contain", bot2Name);
@@ -361,9 +360,7 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.People);
             cy.spotlightSearch().clear().type(bot2Name);
-            cy.spotlightResults().should("have.length", 1);
-            cy.spotlightResults().eq(0).should("contain", bot2Name);
-            cy.spotlightResults().eq(0).click();
+            cy.spotlightResults().contains(bot2Name).click();
         });
 
         // Send first message to actually start DM
@@ -390,11 +387,10 @@ describe("Spotlight", () => {
                     cy.spotlightFilter(Filter.People);
                     cy.spotlightSearch().clear().type(bot1.getUserId());
                     cy.wait(1000); // wait for the dialog code to settle
-                    cy.spotlightResults().should("have.length", 2);
                     cy.contains(
                         ".mx_SpotlightDialog_section.mx_SpotlightDialog_results .mx_SpotlightDialog_option",
                         groupDm.name,
-                    );
+                    ).should("exist");
                 });
 
                 // Search for ByteBot by id, should return group DM and user
@@ -402,11 +398,10 @@ describe("Spotlight", () => {
                     cy.spotlightFilter(Filter.People);
                     cy.spotlightSearch().clear().type(bot2.getUserId());
                     cy.wait(1000); // wait for the dialog code to settle
-                    cy.spotlightResults().should("have.length", 2);
                     cy.contains(
                         ".mx_SpotlightDialog_section.mx_SpotlightDialog_results .mx_SpotlightDialog_option",
                         groupDm.name,
-                    );
+                    ).should("exist");
                 });
             });
     });
@@ -436,9 +431,7 @@ describe("Spotlight", () => {
             .within(() => {
                 cy.spotlightFilter(Filter.People);
                 cy.spotlightSearch().clear().type(bot2Name);
-                cy.wait(3000); // wait for the dialog code to settle
-                cy.spotlightResults().should("have.length", 1);
-                cy.spotlightResults().eq(0).should("contain", bot2Name);
+                cy.spotlightResults().should("contain", bot2Name);
                 cy.get(".mx_SpotlightDialog_startGroupChat").should("contain", "Start a group chat");
                 cy.get(".mx_SpotlightDialog_startGroupChat").click();
             })

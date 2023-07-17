@@ -338,6 +338,27 @@ describe("Spotlight Dialog", () => {
         });
     });
 
+    it("should not filter out users sent by the server", async () => {
+        mocked(mockedClient.searchUserDirectory).mockResolvedValue({
+            results: [
+                { user_id: "@user1:server", display_name: "User Alpha", avatar_url: "mxc://1/avatar" },
+                { user_id: "@user2:server", display_name: "User Beta", avatar_url: "mxc://2/avatar" },
+            ],
+            limited: false,
+        });
+
+        render(<SpotlightDialog initialFilter={Filter.People} initialText="Alpha" onFinished={() => null} />);
+        // search is debounced
+        jest.advanceTimersByTime(200);
+        await flushPromisesWithFakeTimers();
+
+        const content = document.querySelector("#mx_SpotlightDialog_content")!;
+        const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+        expect(options.length).toBeGreaterThanOrEqual(2);
+        expect(options[0]).toHaveTextContent("User Alpha");
+        expect(options[1]).toHaveTextContent("User Beta");
+    });
+
     it("should start a DM when clicking a person", async () => {
         render(
             <SpotlightDialog
