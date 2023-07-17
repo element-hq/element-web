@@ -38,7 +38,8 @@ export function initRageshake(): Promise<void> {
         () => {
             logger.log("Initialised rageshake.");
             logger.log(
-                "To fix line numbers in Chrome: " + "Meatball menu → Settings → Ignore list → Add /rageshake\\.js$",
+                "To fix line numbers in Chrome: " +
+                    "Meatball menu → Settings → Ignore list → Add /rageshake\\.ts & /logger\\.ts$",
             );
 
             window.addEventListener("beforeunload", () => {

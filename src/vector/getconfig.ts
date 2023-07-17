@@ -21,7 +21,13 @@ import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 export async function getVectorConfig(relativeLocation = ""): Promise<IConfigOptions | undefined> {
     if (relativeLocation !== "" && !relativeLocation.endsWith("/")) relativeLocation += "/";
 
-    const specificConfigPromise = getConfig(`${relativeLocation}config.${window.location.hostname}.json`);
+    // Handle trailing dot FQDNs
+    let domain = window.location.hostname.trimEnd();
+    if (domain[domain.length - 1] === ".") {
+        domain = domain.slice(0, -1);
+    }
+
+    const specificConfigPromise = getConfig(`${relativeLocation}config.${domain}.json`);
     const generalConfigPromise = getConfig(relativeLocation + "config.json");
 
     try {

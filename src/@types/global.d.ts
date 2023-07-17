@@ -32,7 +32,8 @@ type ElectronChannel =
     | "setBadgeCount"
     | "update-downloaded"
     | "userDownloadCompleted"
-    | "userDownloadAction";
+    | "userDownloadAction"
+    | "openDesktopCapturerSourcePicker";
 
 declare global {
     interface Window {

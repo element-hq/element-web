@@ -6,7 +6,6 @@
     "Create Account": "Створити обліковий запис",
     "Explore rooms": "Каталог кімнат",
     "Unexpected error preparing the app. See console for details.": "Неочікувана помилка при підготовці програми. Дивіться деталі у виводі консолі.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Невірна конфігурація: можна вказати лише default_server_config, default_server_name або default_hs_url.",
     "Invalid configuration: no default server specified.": "Невірна конфігурація: не вказано сервер за замовчуванням.",
     "The message from the parser is: %(message)s": "Повідомлення від аналізатора : %(message)s",
     "Invalid JSON": "Хибний JSON",
@@ -28,5 +27,6 @@
     "Use %(brand)s on mobile": "Користуйтеся %(brand)s на мобільному",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентралізована, зашифрована бесіда та співпраця на основі $matrixLogo",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s на %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s для комп'ютера: %(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s для комп'ютера: %(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "Неправильна конфігурація: не можна вказати default_hs_url разом з default_server_name або default_server_config"
 }

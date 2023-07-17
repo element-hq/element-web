@@ -6,7 +6,6 @@
     "Create Account": "Krijoni Llogari",
     "Explore rooms": "Eksploroni dhoma",
     "Unexpected error preparing the app. See console for details.": "Gabim i papritur gjatë përgatitjes së aplikacionit. Për hollësi, shihni konsolën.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Formësim i pavlefshëm: mund të caktohet vetëm një prej default_server_config, default_server_name, ose default_hs_url.",
     "Invalid configuration: no default server specified.": "Formësim i pavlefshëm: s’është caktuar shërbyes parazgjedhje.",
     "The message from the parser is: %(message)s": "Mesazhi prej procesit është: %(message)s",
     "Invalid JSON": "JSON i pavlefshëm",

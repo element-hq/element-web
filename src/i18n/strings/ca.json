@@ -8,7 +8,6 @@
     "Invalid configuration: no default server specified.": "Configuració invàlida: no s'ha especificat cap servidor predeterminat.",
     "Invalid JSON": "JSON invàlid",
     "Go to your browser to complete Sign In": "Vés al navegador per completar l'inici de sessió",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuració invàlida: només pots especificar una únic default_server_config, default_server_name, o default_hs_url.",
     "Your Element is misconfigured": "Element està mal configurat",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "La configuració d'Element conté un JSON invàlid. Soluciona el problema i actualitza la pàgina.",
     "The message from the parser is: %(message)s": "El missatge de l'analitzador és: %(message)s",

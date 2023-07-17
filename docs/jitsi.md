@@ -30,7 +30,7 @@ to your [config](./config.md) the following:
 ```json
 {
     "jitsi": {
-        "preferredDomain": "your.jitsi.example.org"
+        "preferred_domain": "your.jitsi.example.org"
     }
 }
 ```

@@ -5,7 +5,6 @@
     "Sign In": "Prijava",
     "Create Account": "Registracija",
     "Explore rooms": "Raziščite sobe",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Neveljavna konfiguracija: lahko izberete samo eno izmed default_server_config, default_server_name ali default_hs_url.",
     "Invalid configuration: no default server specified.": "Neveljavna konfiguracija: privzeti strežnik ni nastavljen.",
     "Your Element is misconfigured": "Vaš Element je napačno nastavljen",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfiguracije vašega Elementa vsebujejo neveljaven JSON. Prosim, popravite napako in znova naložite stran.",

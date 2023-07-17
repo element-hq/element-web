@@ -167,7 +167,7 @@ we don't have an account and should hide them. No account == no guest account ei
 
 <div class="mx_Parent">
     <a href="https://element.io" target="_blank" rel="noopener">
-        <img src="welcome/images/logo.svg" alt="" class="mx_Logo" />
+        <img src="$logoUrl" alt="" class="mx_Logo" />
     </a>
     <h1 class="mx_Header_title">_t("Welcome to Element")</h1>
     <!-- XXX: Our translations system isn't smart enough to recognize variables in the HTML, so we manually do it -->
@@ -181,11 +181,6 @@ we don't have an account and should hide them. No account == no guest account ei
                 <div class="mx_ButtonLabel">_t("Create Account")</div>
             </a>
         </div>
-        <!-- The comments below are meant to be used by Ansible as a quick way
-             to strip out the marked content when desired.
-             See https://github.com/vector-im/element-web/issues/8622.
-             TODO: Strip out these comments and rely on the guest flag -->
-        <!-- BEGIN Ansible: Remove these lines when guest access is disabled -->
         <div class="mx_ButtonRow mx_WelcomePage_guestFunctions">
             <div>
                 <a href="#/directory" class="mx_ButtonParent mx_SecondaryButton mx_Button_iconRoomDirectory">
@@ -193,6 +188,5 @@ we don't have an account and should hide them. No account == no guest account ei
                 </a>
             </div>
         </div>
-        <!-- END Ansible: Remove these lines when guest access is disabled -->
     </div>
 </div>

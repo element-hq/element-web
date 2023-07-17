@@ -1,5 +1,13 @@
 # Configuration
 
+### 🦖 Deprecation notice
+
+Configuration keys were previously a mix of camelCase and snake_case.
+We standardised to snake_case but added compatibility for camelCase to all settings.
+This backwards compatibility will be getting removed in a future release so please ensure you are using snake_case.
+
+---
+
 You can configure the app by copying `config.sample.json` to `config.json` or `config.$domain.json` and customising it.
 Element will attempt to load first `config.$domain.json` and if it fails `config.json`. This mechanism allows different
 configuration options depending on if you're hitting e.g. `app1.example.com` or `app2.example.com`. Configs are not mixed
@@ -45,8 +53,9 @@ One of the following options **must** be supplied:
    information. These are the same values seen as `base_url` in the `default_server_config` example, with `default_is_url`
    being optional.
 
-If a combination of these three methods is used then Element will fail to load. This is because it is unclear which
-should be considered "first".
+If both `default_server_config` and `default_server_name` are used, Element will try to look up the connection
+infomation using `.well-known`, and if that fails, take `default_server_config` as the homeserver connection
+infomation.
 
 ## Labs flags
 
@@ -144,6 +153,8 @@ complete re-branding/private labeling, a more personalised experience can be ach
     1. `title`: Required. Title to show at the top of the notice.
     2. `description`: Required. The description to use for the notice.
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
+18. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
+19. `help_encrption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -320,7 +331,8 @@ The VoIP and Jitsi options are:
     }
     ```
     The `widget` is the `content` of a normal widget state event. The `layout` is the layout specifier for the widget being created,
-    as defined by the `io.element.widgets.layout` state event.
+    as defined by the `io.element.widgets.layout` state event. By default this applies to all rooms, but the behaviour can be skipped for DMs
+    by setting the option `widget_build_url_ignore_dm` to `true`.
 5. `audio_stream_url`: Optional URL to pass to Jitsi to enable live streaming. This option is considered experimental and may be removed
    at any time without notice.
 6. `element_call`: Optional configuration for native group calls using Element Call, with the following subkeys:

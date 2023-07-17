@@ -6,7 +6,6 @@
     "Create Account": "建立帳號",
     "Explore rooms": "探索聊天室",
     "Unexpected error preparing the app. See console for details.": "準備應用程式時發生未知錯誤。請見主控台以取得更多資訊。",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "無效設定：只能指定 default_server_config、default_server_name 或 default_hs_url 其中之一。",
     "Invalid configuration: no default server specified.": "無效設定：未指定預設伺服器。",
     "The message from the parser is: %(message)s": "解析器收到的訊息：%(message)s",
     "Invalid JSON": "無效的 JSON",
@@ -28,5 +27,6 @@
     "Use %(brand)s on mobile": "在行動裝置上使用 %(brand)s",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "由 $matrixLogo 驅動的去中心化、加密的聊天與協作工具",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s：%(osName)s 的 %(browserName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s 桌面版：%(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s 桌面版：%(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "無效設定：default_hs_url 不能與 default_server_name 或 default_server_config 一起指定"
 }

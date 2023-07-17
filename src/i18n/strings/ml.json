@@ -4,7 +4,6 @@
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "ദയവായി <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, അല്ലെങ്കിൽ <safariLink>Safari</safariLink> ഇൻസ്റ്റാൾ ചെയ്യുക.",
     "Your Element is misconfigured": "നിങ്ങളുടെ Element തെറ്റായിട്ടാണ് കോൺഫിഗർ ചെയ്തിരിക്കുന്നത്",
     "Invalid configuration: no default server specified.": "അസാധുവായ കോൺഫിഗറേഷൻ: സ്ഥിര സെർവർ ഒന്നും വ്യക്തമാക്കിയില്ല.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "അസാധുവായ കോൺഫിഗറേഷൻ: default_server_config, default_server_name, or default_hs_url-ൽ ഒരെണ്ണം മാത്രമേ വ്യക്തമാക്കാൻ കഴിയൂ.",
     "Download Completed": "ഡൗൺലോഡ് പൂർത്തിയായി",
     "Unsupported browser": "പിന്തുണയ്‌ക്കാത്ത ബ്രൗസർ",
     "I understand the risks and wish to continue": "ഞാൻ അപകടസാധ്യതകൾ മനസിലാക്കുകയും തുടരാൻ ആഗ്രഹിക്കുകയും ചെയ്യുന്നു",
