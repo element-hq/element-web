@@ -169,12 +169,12 @@ jobs:
                   # The built-in Electron runner seems to grind to a halt trying to run the tests, so use chrome.
                   browser: ${{ steps.setup-chrome.outputs.chrome-path }}
                   headed: true
-                  start: npx serve -p 8080 ../webapp
+                  start: npx serve -p 8080 -L ../webapp
                   wait-on: "http://localhost:8080"
                   record: true
                   parallel: true
                   command-prefix: "yarn percy exec --parallel --"
-                  config: '{"reporter":"cypress-multi-reporters", "reporterOptions": { "configFile": "cypress-ci-reporter-config.json" }, "morgan": false }'
+                  config: '{"reporter":"cypress-multi-reporters", "reporterOptions": { "configFile": "cypress-ci-reporter-config.json" } }'
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}
               env:
                   # pass the Dashboard record key as an environment variable
