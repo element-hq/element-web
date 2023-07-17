@@ -18,7 +18,6 @@ limitations under the License.
 import React from "react";
 import { EventEmitter } from "events";
 import { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import FakeTimers from "@sinonjs/fake-timers";
 import { render } from "@testing-library/react";
 import { Thread } from "matrix-js-sdk/src/models/thread";
 
@@ -46,7 +45,6 @@ jest.mock("../../../src/utils/beacon", () => ({
 const roomId = "!roomId:server_name";
 
 describe("MessagePanel", function () {
-    let clock: FakeTimers.InstalledClock;
     const events = mkEvents();
     const userId = "@me:here";
     const client = getMockClientWithEventEmitter({
@@ -114,10 +112,6 @@ describe("MessagePanel", function () {
         });
 
         DMRoomMap.makeShared(client);
-    });
-
-    afterEach(function () {
-        clock?.uninstall();
     });
 
     function mkEvents() {
@@ -406,7 +400,7 @@ describe("MessagePanel", function () {
 
     it("shows a ghost read-marker when the read-marker moves", function () {
         // fake the clock so that we can test the velocity animation.
-        clock = FakeTimers.install();
+        jest.useFakeTimers();
 
         const { container, rerender } = render(
             <div>
@@ -447,7 +441,7 @@ describe("MessagePanel", function () {
         expect(readMarkers[1].previousSibling).toEqual(tiles[6]);
 
         // advance the clock, and then let the browser run an animation frame to let the animation start
-        clock.tick(1500);
+        jest.advanceTimersByTime(1500);
         expect(hr.style.opacity).toEqual("0");
     });
 

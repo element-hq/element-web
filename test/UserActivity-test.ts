@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import FakeTimers from "@sinonjs/fake-timers";
 import EventEmitter from "events";
 
 import UserActivity from "../src/UserActivity";
@@ -33,19 +32,17 @@ describe("UserActivity", function () {
     let fakeWindow: FakeDomEventEmitter;
     let fakeDocument: FakeDomEventEmitter & { hasFocus?(): boolean };
     let userActivity: UserActivity;
-    let clock: FakeTimers.InstalledClock;
 
     beforeEach(function () {
         fakeWindow = new FakeDomEventEmitter();
         fakeDocument = new FakeDomEventEmitter();
         userActivity = new UserActivity(fakeWindow as unknown as Window, fakeDocument as unknown as Document);
         userActivity.start();
-        clock = FakeTimers.install();
+        jest.useFakeTimers();
     });
 
     afterEach(function () {
         userActivity.stop();
-        clock.uninstall();
     });
 
     it("should return the same shared instance", function () {
@@ -74,7 +71,7 @@ describe("UserActivity", function () {
         userActivity.onUserActivity({ type: "event" } as Event);
         expect(userActivity.userActiveNow()).toBe(true);
         expect(userActivity.userActiveRecently()).toBe(true);
-        clock.tick(200);
+        jest.advanceTimersByTime(200);
         expect(userActivity.userActiveNow()).toBe(true);
         expect(userActivity.userActiveRecently()).toBe(true);
     });
@@ -83,7 +80,7 @@ describe("UserActivity", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({ type: "event" } as Event);
-        clock.tick(10000);
+        jest.advanceTimersByTime(10000);
         expect(userActivity.userActiveNow()).toBe(false);
     });
 
@@ -91,7 +88,7 @@ describe("UserActivity", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({ type: "event" } as Event);
-        clock.tick(10000);
+        jest.advanceTimersByTime(10000);
         expect(userActivity.userActiveRecently()).toBe(true);
     });
 
@@ -99,7 +96,7 @@ describe("UserActivity", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({ type: "event" } as Event);
-        clock.tick(10000);
+        jest.advanceTimersByTime(10000);
 
         fakeDocument.hasFocus = jest.fn().mockReturnValue(false);
         fakeWindow.emit("blur", {});
@@ -111,7 +108,7 @@ describe("UserActivity", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({ type: "event" } as Event);
-        clock.tick(3 * 60 * 1000);
+        jest.advanceTimersByTime(3 * 60 * 1000);
 
         expect(userActivity.userActiveRecently()).toBe(false);
     });
@@ -120,11 +117,11 @@ describe("UserActivity", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({ type: "event" } as Event);
-        clock.tick(1 * 60 * 1000);
+        jest.advanceTimersByTime(1 * 60 * 1000);
         userActivity.onUserActivity({ type: "event" } as Event);
-        clock.tick(1 * 60 * 1000);
+        jest.advanceTimersByTime(1 * 60 * 1000);
         userActivity.onUserActivity({ type: "event" } as Event);
-        clock.tick(1 * 60 * 1000);
+        jest.advanceTimersByTime(1 * 60 * 1000);
 
         expect(userActivity.userActiveRecently()).toBe(true);
     });

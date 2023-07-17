@@ -143,7 +143,6 @@
         "@peculiar/webcrypto": "^1.4.3",
         "@percy/cli": "^1.11.0",
         "@percy/cypress": "^3.1.2",
-        "@sinonjs/fake-timers": "^9.1.2",
         "@testing-library/cypress": "^9.0.0",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^12.1.5",
