@@ -52,6 +52,7 @@ import ToastStore from "./stores/ToastStore";
 import { ElementCall } from "./models/Call";
 import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoEventType } from "./voice-broadcast";
 import { getSenderName } from "./utils/event/getSenderName";
+import { stripPlainReply } from "./utils/Reply";
 
 /*
  * Dispatches:
@@ -138,7 +139,7 @@ class NotifierClass {
             // notificationMessageForEvent includes sender, but we already have the sender here
             const msgType = ev.getContent().msgtype;
             if (ev.getContent().body && (!msgType || !msgTypeHandlers.hasOwnProperty(msgType))) {
-                msg = ev.getContent().body;
+                msg = stripPlainReply(ev.getContent().body);
             }
         } else if (ev.getType() === "m.room.member") {
             // context is all in the message here, we don't need
@@ -149,7 +150,7 @@ class NotifierClass {
             // notificationMessageForEvent includes sender, but we've just out sender in the title
             const msgType = ev.getContent().msgtype;
             if (ev.getContent().body && (!msgType || !msgTypeHandlers.hasOwnProperty(msgType))) {
-                msg = ev.getContent().body;
+                msg = stripPlainReply(ev.getContent().body);
             }
         }
 

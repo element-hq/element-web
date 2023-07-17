@@ -31,7 +31,13 @@ import {
     createLocalNotificationSettingsIfNeeded,
     getLocalNotificationAccountDataEventType,
 } from "../src/utils/notifications";
-import { getMockClientWithEventEmitter, mkEvent, mockClientMethodsUser, mockPlatformPeg } from "./test-utils";
+import {
+    getMockClientWithEventEmitter,
+    mkEvent,
+    mkMessage,
+    mockClientMethodsUser,
+    mockPlatformPeg,
+} from "./test-utils";
 import { IncomingCallToast } from "../src/toasts/IncomingCallToast";
 import { SdkContextClass } from "../src/contexts/SDKContext";
 import UserActivity from "../src/UserActivity";
@@ -42,6 +48,7 @@ import { ThreadPayload } from "../src/dispatcher/payloads/ThreadPayload";
 import { Action } from "../src/dispatcher/actions";
 import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoState } from "../src/voice-broadcast";
 import { mkVoiceBroadcastInfoStateEvent } from "./voice-broadcast/utils/test-utils";
+import { addReplyToMessageContent } from "../src/utils/Reply";
 
 jest.mock("../src/utils/notifications", () => ({
     // @ts-ignore
@@ -306,6 +313,30 @@ describe("Notifier", () => {
             const audioEvent = mkAudioEvent({ sequence: 2 });
             Notifier.displayPopupNotification(audioEvent, testRoom);
             expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
+        });
+
+        it("should strip reply fallback", () => {
+            const event = mkMessage({
+                msg: "Test",
+                event: true,
+                user: mockClient.getSafeUserId(),
+                room: testRoom.roomId,
+            });
+            const reply = mkMessage({
+                msg: "This was a triumph",
+                event: true,
+                user: mockClient.getSafeUserId(),
+                room: testRoom.roomId,
+            });
+            addReplyToMessageContent(reply.getContent(), event, { includeLegacyFallback: true });
+            Notifier.displayPopupNotification(reply, testRoom);
+            expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
+                "@bob:example.org (!room1:server)",
+                "This was a triumph",
+                expect.any(String),
+                testRoom,
+                reply,
+            );
         });
     });
 
