@@ -15,11 +15,13 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitForElementToBeRemoved } from "@testing-library/react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import encrypt from "matrix-encrypt-attachment";
 import { mocked } from "jest-mock";
+import fs from "fs";
+import path from "path";
 
 import MImageBody from "../../../../src/components/views/messages/MImageBody";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
@@ -56,7 +58,11 @@ describe("<MImageBody/>", () => {
     });
     const url = "https://server/_matrix/media/r0/download/server/encrypted-image";
     // eslint-disable-next-line no-restricted-properties
-    cli.mxcUrlToHttp.mockReturnValue(url);
+    cli.mxcUrlToHttp.mockImplementation(
+        (mxcUrl: string, width?: number, height?: number, resizeMethod?: string, allowDirectLinks?: boolean) => {
+            return getHttpUriForMxc("https://server", mxcUrl, width, height, resizeMethod, allowDirectLinks);
+        },
+    );
     const encryptedMediaEvent = new MatrixEvent({
         room_id: "!room:server",
         sender: userId,
@@ -175,12 +181,6 @@ describe("<MImageBody/>", () => {
     it("should fall back to /download/ if /thumbnail/ fails", async () => {
         const thumbUrl = "https://server/_matrix/media/r0/thumbnail/server/image?width=800&height=600&method=scale";
         const downloadUrl = "https://server/_matrix/media/r0/download/server/image";
-        // eslint-disable-next-line no-restricted-properties
-        cli.mxcUrlToHttp.mockImplementation(
-            (mxcUrl: string, width?: number, height?: number, resizeMethod?: string, allowDirectLinks?: boolean) => {
-                return getHttpUriForMxc("https://server", mxcUrl, width, height, resizeMethod, allowDirectLinks);
-            },
-        );
 
         const event = new MatrixEvent({
             room_id: "!room:server",
@@ -205,5 +205,57 @@ describe("<MImageBody/>", () => {
 
         fireEvent.error(img);
         expect(img).toHaveProperty("src", downloadUrl);
+    });
+
+    it("should generate a thumbnail if one isn't included for animated media", async () => {
+        Object.defineProperty(global.Image.prototype, "src", {
+            set(src) {
+                window.setTimeout(() => this.onload());
+            },
+        });
+        Object.defineProperty(global.Image.prototype, "height", {
+            get() {
+                return 600;
+            },
+        });
+        Object.defineProperty(global.Image.prototype, "width", {
+            get() {
+                return 800;
+            },
+        });
+
+        mocked(global.URL.createObjectURL).mockReturnValue("blob:generated-thumb");
+
+        fetchMock.getOnce(
+            "https://server/_matrix/media/r0/download/server/image",
+            {
+                body: fs.readFileSync(path.resolve(__dirname, "..", "..", "..", "images", "animated-logo.webp")),
+            },
+            { sendAsJson: false },
+        );
+
+        const event = new MatrixEvent({
+            room_id: "!room:server",
+            sender: userId,
+            type: EventType.RoomMessage,
+            content: {
+                body: "alt for a test image",
+                info: {
+                    w: 40,
+                    h: 50,
+                    mimetype: "image/webp",
+                },
+                url: "mxc://server/image",
+            },
+        });
+
+        const { container } = render(
+            <MImageBody {...props} mxEvent={event} mediaEventHelper={new MediaEventHelper(event)} />,
+        );
+
+        // Wait for spinners to go away
+        await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
+        // thumbnail with dimensions present
+        expect(container).toMatchSnapshot();
     });
 });

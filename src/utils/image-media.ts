@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { BlurhashEncoder } from "../BlurhashEncoder";
-import { IEncryptedFile } from "../customisations/models/IMediaEventContent";
+import { EncryptedFile } from "../customisations/models/IMediaEventContent";
 
 type ThumbnailableElement = HTMLImageElement | HTMLVideoElement;
 
@@ -33,7 +33,7 @@ interface IThumbnail {
         h: number;
         [BLURHASH_FIELD]?: string;
         thumbnail_url?: string;
-        thumbnail_file?: IEncryptedFile;
+        thumbnail_file?: EncryptedFile;
     };
     thumbnail: Blob;
 }

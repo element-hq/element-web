@@ -163,6 +163,11 @@ describe("ContentMessages", () => {
                             return 800;
                         },
                     });
+                    Object.defineProperty(element, "duration", {
+                        get() {
+                            return 123;
+                        },
+                    });
                 }
                 return element;
             });
@@ -176,11 +181,31 @@ describe("ContentMessages", () => {
                 expect.objectContaining({
                     url: "mxc://server/file",
                     msgtype: "m.video",
+                    info: expect.objectContaining({
+                        duration: 123000,
+                    }),
                 }),
             );
         });
 
         it("should use m.audio for audio files", async () => {
+            jest.spyOn(document, "createElement").mockImplementation((tagName) => {
+                const element = createElement(tagName);
+                if (tagName === "audio") {
+                    Object.defineProperty(element, "duration", {
+                        get() {
+                            return 621;
+                        },
+                    });
+                    Object.defineProperty(element, "src", {
+                        set() {
+                            element.onloadedmetadata!(new Event("loadedmetadata"));
+                        },
+                    });
+                }
+                return element;
+            });
+
             mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "audio/mp3" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
@@ -190,6 +215,34 @@ describe("ContentMessages", () => {
                 expect.objectContaining({
                     url: "mxc://server/file",
                     msgtype: "m.audio",
+                    info: expect.objectContaining({
+                        duration: 621000,
+                    }),
+                }),
+            );
+        });
+
+        it("should fall back to m.file for invalid audio files", async () => {
+            jest.spyOn(document, "createElement").mockImplementation((tagName) => {
+                const element = createElement(tagName);
+                if (tagName === "audio") {
+                    Object.defineProperty(element, "src", {
+                        set() {
+                            element.onerror!("fail");
+                        },
+                    });
+                }
+                return element;
+            });
+            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            const file = new File([], "fileName", { type: "audio/mp3" });
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    url: "mxc://server/file",
+                    msgtype: "m.file",
                 }),
             );
         });

@@ -29,7 +29,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import Spinner from "../elements/Spinner";
 import { Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
-import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
+import { ImageContent } from "../../../customisations/models/IMediaEventContent";
 import ImageView from "../elements/ImageView";
 import { IBodyProps } from "./IBodyProps";
 import { ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
@@ -102,7 +102,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 return;
             }
 
-            const content = this.props.mxEvent.getContent<IMediaEventContent>();
+            const content = this.props.mxEvent.getContent<ImageContent>();
             const httpUrl = this.state.contentUrl;
             if (!httpUrl) return;
             const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
@@ -212,7 +212,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         const thumbWidth = 800;
         const thumbHeight = 600;
 
-        const content = this.props.mxEvent.getContent<IMediaEventContent>();
+        const content = this.props.mxEvent.getContent<ImageContent>();
         const media = mediaFromContent(content);
         const info = content.info;
 
@@ -287,7 +287,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             contentUrl = this.getContentUrl();
         }
 
-        const content = this.props.mxEvent.getContent<IMediaEventContent>();
+        const content = this.props.mxEvent.getContent<ImageContent>();
         let isAnimated = mayBeAnimated(content.info?.mimetype);
 
         // If there is no included non-animated thumbnail then we will generate our own, we can't depend on the server
@@ -317,7 +317,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                     }
 
                     if (isAnimated) {
-                        const thumb = await createThumbnail(img, img.width, img.height, content.info!.mimetype, false);
+                        const thumb = await createThumbnail(
+                            img,
+                            img.width,
+                            img.height,
+                            content.info?.mimetype ?? "image/jpeg",
+                            false,
+                        );
                         thumbUrl = URL.createObjectURL(thumb.thumbnail);
                     }
                 } catch (error) {
@@ -381,7 +387,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    protected getBanner(content: IMediaEventContent): ReactNode {
+    protected getBanner(content: ImageContent): ReactNode {
         // Hide it for the threads list & the file panel where we show it as text anyway.
         if (
             [TimelineRenderingType.ThreadsList, TimelineRenderingType.File].includes(this.context.timelineRenderingType)
@@ -395,7 +401,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     protected messageContent(
         contentUrl: string | null,
         thumbUrl: string | null,
-        content: IMediaEventContent,
+        content: ImageContent,
         forcedHeight?: number,
     ): ReactNode {
         if (!thumbUrl) thumbUrl = contentUrl; // fallback
@@ -591,7 +597,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const content = this.props.mxEvent.getContent<IMediaEventContent>();
+        const content = this.props.mxEvent.getContent<ImageContent>();
 
         if (this.state.error) {
             let errorText = _t("Unable to show image due to error");

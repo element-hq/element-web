@@ -183,7 +183,7 @@ describe("FilePanel", () => {
             });
         });
 
-        it("should render the audio pleyer and play the audio file on the panel", () => {
+        it("should render the audio player and play the audio file on the panel", () => {
             // Upload an image file
             uploadFile("cypress/fixtures/1sec.ogg");
 
@@ -202,10 +202,14 @@ describe("FilePanel", () => {
                                 cy.contains(".mx_AudioPlayer_byline", "(3.56 KB)").should("exist"); // actual size
                             });
 
+                            // Assert that the duration counter is 00:01 before clicking the play button
+                            cy.contains(".mx_AudioPlayer_mediaInfo time", "00:01").should("exist");
+
                             // Assert that the counter is zero before clicking the play button
                             cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
                             // Click the play button
+                            cy.wait(500);
                             cy.findByRole("button", { name: "Play" }).click();
 
                             // Assert that the pause button is rendered

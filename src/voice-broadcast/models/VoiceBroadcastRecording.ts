@@ -38,7 +38,7 @@ import {
     VoiceBroadcastRecorderEvent,
 } from "..";
 import { uploadFile } from "../../ContentMessages";
-import { IEncryptedFile } from "../../customisations/models/IMediaEventContent";
+import { EncryptedFile } from "../../customisations/models/IMediaEventContent";
 import { createVoiceMessageContent } from "../../utils/createVoiceMessageContent";
 import { IDestroyable } from "../../utils/IDestroyable";
 import dis from "../../dispatcher/dispatcher";
@@ -367,7 +367,7 @@ export class VoiceBroadcastRecording
         );
     }
 
-    private async sendVoiceMessage(chunk: ChunkRecordedPayload, url?: string, file?: IEncryptedFile): Promise<void> {
+    private async sendVoiceMessage(chunk: ChunkRecordedPayload, url?: string, file?: EncryptedFile): Promise<void> {
         /**
          * Increment the last sequence number and use it for this message.
          * Done outside of the sendMessageFn to get a scoped value.

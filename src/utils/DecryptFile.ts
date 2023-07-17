@@ -19,7 +19,7 @@ import encrypt from "matrix-encrypt-attachment";
 import { parseErrorResponse } from "matrix-js-sdk/src/http-api";
 
 import { mediaFromContent } from "../customisations/Media";
-import { IEncryptedFile, IMediaEventInfo } from "../customisations/models/IMediaEventContent";
+import { EncryptedFile, IMediaEventInfo } from "../customisations/models/IMediaEventContent";
 import { getBlobSafeMimeType } from "./blobs";
 
 export class DownloadError extends Error {
@@ -40,14 +40,14 @@ export class DecryptError extends Error {
 
 /**
  * Decrypt a file attached to a matrix event.
- * @param {IEncryptedFile} file The encrypted file information taken from the matrix event.
+ * @param {EncryptedFile} file The encrypted file information taken from the matrix event.
  *   This passed to [link]{@link https://github.com/matrix-org/matrix-encrypt-attachment}
  *   as the encryption info object, so will also have the those keys in addition to
  *   the keys below.
  * @param {IMediaEventInfo} info The info parameter taken from the matrix event.
  * @returns {Promise<Blob>} Resolves to a Blob of the file.
  */
-export async function decryptFile(file?: IEncryptedFile, info?: IMediaEventInfo): Promise<Blob> {
+export async function decryptFile(file?: EncryptedFile, info?: IMediaEventInfo): Promise<Blob> {
     // throws if file is falsy
     const media = mediaFromContent({ file });
 

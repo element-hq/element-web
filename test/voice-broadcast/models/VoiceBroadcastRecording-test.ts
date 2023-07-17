@@ -31,7 +31,7 @@ import { Relations } from "matrix-js-sdk/src/models/relations";
 import { SyncState } from "matrix-js-sdk/src/sync";
 
 import { uploadFile } from "../../../src/ContentMessages";
-import { IEncryptedFile } from "../../../src/customisations/models/IMediaEventContent";
+import { EncryptedFile } from "../../../src/customisations/models/IMediaEventContent";
 import { createVoiceMessageContent } from "../../../src/utils/createVoiceMessageContent";
 import {
     createVoiceBroadcastRecorder,
@@ -82,7 +82,7 @@ jest.mock("../../../src/utils/createVoiceMessageContent", () => ({
 describe("VoiceBroadcastRecording", () => {
     const roomId = "!room:example.com";
     const uploadedUrl = "mxc://example.com/vb";
-    const uploadedFile = { file: true } as unknown as IEncryptedFile;
+    const uploadedFile = { file: true } as unknown as EncryptedFile;
     const maxLength = getMaxBroadcastLength();
     let room: Room;
     let client: MatrixClient;
@@ -223,7 +223,7 @@ describe("VoiceBroadcastRecording", () => {
                 mimetype: string,
                 duration: number,
                 size: number,
-                file?: IEncryptedFile,
+                file?: EncryptedFile,
                 waveform?: number[],
             ) => {
                 return {
