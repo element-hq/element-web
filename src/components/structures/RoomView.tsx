@@ -743,7 +743,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
         }
 
-        if (this.state.roomId === null && newState.roomId !== null) {
+        if (this.state.roomId === undefined && newState.roomId !== undefined) {
             // Get the scroll state for the new room
 
             // If an event ID wasn't specified, default to the one saved for this room
