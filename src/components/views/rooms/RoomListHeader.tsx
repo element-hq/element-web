@@ -45,7 +45,13 @@ import {
     showCreateNewSubspace,
     showSpaceInvite,
 } from "../../../utils/space";
-import { ChevronFace, ContextMenuTooltipButton, useContextMenu, MenuProps } from "../../structures/ContextMenu";
+import {
+    ChevronFace,
+    ContextMenuTooltipButton,
+    useContextMenu,
+    MenuProps,
+    ContextMenuButton,
+} from "../../structures/ContextMenu";
 import { BetaPill } from "../beta/BetaCard";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
@@ -390,21 +396,24 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
 
     let contextMenuButton: JSX.Element = <div className="mx_RoomListHeader_contextLessTitle">{title}</div>;
     if (canShowMainMenu) {
-        contextMenuButton = (
-            <ContextMenuTooltipButton
-                inputRef={mainMenuHandle}
-                onClick={openMainMenu}
-                isExpanded={mainMenuDisplayed}
-                className="mx_RoomListHeader_contextMenuButton"
-                title={
-                    activeSpace
-                        ? _t("%(spaceName)s menu", { spaceName: spaceName ?? activeSpace.name })
-                        : _t("Home options")
-                }
-            >
-                {title}
-            </ContextMenuTooltipButton>
-        );
+        const commonProps = {
+            inputRef: mainMenuHandle,
+            onClick: openMainMenu,
+            isExpanded: mainMenuDisplayed,
+            className: "mx_RoomListHeader_contextMenuButton",
+            children: title,
+        };
+
+        if (!!activeSpace) {
+            contextMenuButton = (
+                <ContextMenuButton
+                    {...commonProps}
+                    label={_t("%(spaceName)s menu", { spaceName: spaceName ?? activeSpace.name })}
+                />
+            );
+        } else {
+            contextMenuButton = <ContextMenuTooltipButton {...commonProps} title={_t("Home options")} />;
+        }
     }
 
     return (
