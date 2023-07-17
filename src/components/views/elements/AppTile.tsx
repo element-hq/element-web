@@ -36,7 +36,7 @@ import { aboveLeftOf, ContextMenuButton } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, StopGapWidget } from "../../../stores/widgets/StopGapWidget";
-import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
+import { showContextMenu, WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { IApp, isAppWidget } from "../../../stores/WidgetStore";
@@ -107,6 +107,7 @@ interface IState {
     error: Error | null;
     menuDisplayed: boolean;
     requiresClient: boolean;
+    hasContextMenuOptions: boolean;
 }
 
 export default class AppTile extends React.Component<IProps, IState> {
@@ -249,6 +250,14 @@ export default class AppTile extends React.Component<IProps, IState> {
             error: null,
             menuDisplayed: false,
             requiresClient: this.determineInitialRequiresClientState(),
+            hasContextMenuOptions: showContextMenu(
+                this.context,
+                this.props.room,
+                newProps.app,
+                newProps.userWidget,
+                !newProps.userWidget,
+                newProps.onDeleteClick,
+            ),
         };
     }
 
@@ -770,15 +779,17 @@ export default class AppTile extends React.Component<IProps, IState> {
                                         <PopoutIcon className="mx_Icon mx_Icon_12 mx_Icon--stroke" />
                                     </AccessibleButton>
                                 )}
-                                <ContextMenuButton
-                                    className="mx_AppTileMenuBar_widgets_button"
-                                    label={_t("Options")}
-                                    isExpanded={this.state.menuDisplayed}
-                                    inputRef={this.contextMenuButton}
-                                    onClick={this.onContextMenuClick}
-                                >
-                                    <MenuIcon className="mx_Icon mx_Icon_12" />
-                                </ContextMenuButton>
+                                {this.state.hasContextMenuOptions && (
+                                    <ContextMenuButton
+                                        className="mx_AppTileMenuBar_widgets_button"
+                                        label={_t("Options")}
+                                        isExpanded={this.state.menuDisplayed}
+                                        inputRef={this.contextMenuButton}
+                                        onClick={this.onContextMenuClick}
+                                    >
+                                        <MenuIcon className="mx_Icon mx_Icon_12" />
+                                    </ContextMenuButton>
+                                )}
                             </span>
                         </div>
                     )}
