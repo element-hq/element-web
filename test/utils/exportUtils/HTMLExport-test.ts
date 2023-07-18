@@ -25,6 +25,7 @@ import {
     RoomState,
 } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
+import escapeHtml from "escape-html";
 
 import { filterConsole, mkStubRoom, REPEATABLE_DATE, stubClient } from "../../test-utils";
 import { ExportType, IExportOptions } from "../../../src/utils/exportUtils/exportUtils";
@@ -504,5 +505,50 @@ describe("HTMLExport", () => {
             '<div style="text-align:center"><a href="./messages2.html" style="font-weight:bold">Previous group of messages</a></div>',
         );
         expect(result).not.toContain("Next group of messages");
+    });
+
+    it("should not leak javascript from room names or topics", async () => {
+        const name = "<svg onload=alert(3)>";
+        const topic = "<svg onload=alert(5)>";
+        mockMessages(EVENT_MESSAGE);
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                type: EventType.RoomName,
+                event_id: "$00001",
+                room_id: room.roomId,
+                sender: "@alice:example.com",
+                origin_server_ts: 0,
+                content: { name },
+                state_key: "",
+            }),
+            new MatrixEvent({
+                type: EventType.RoomTopic,
+                event_id: "$00002",
+                room_id: room.roomId,
+                sender: "@alice:example.com",
+                origin_server_ts: 1,
+                content: { topic },
+                state_key: "",
+            }),
+        ]);
+        room.recalculate();
+
+        const exporter = new HTMLExporter(
+            room,
+            ExportType.Timeline,
+            {
+                attachmentsIncluded: false,
+                maxSize: 1_024 * 1_024,
+            },
+            () => {},
+        );
+
+        await exporter.export();
+        const html = await getMessageFile(exporter).text();
+
+        expect(html).not.toContain(`${name}`);
+        expect(html).toContain(`${escapeHtml(name)}`);
+        expect(html).not.toContain(`${topic}`);
+        expect(html).toContain(`Topic: ${escapeHtml(topic)}`);
     });
 });
