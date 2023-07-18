@@ -27,5 +27,6 @@
     "Your Element is misconfigured": "당신의 Element가 잘못 설정되었습니다",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "$matrixLogo 에서 제공하는 탈중앙화되고 암호화된 협업",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(osName)s 의 %(browserName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s 데스크탑: %(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s 데스크탑: %(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "구성이 잘못되었습니다: default_server_name 또는 default_server_config와 함께 default_hs_url을 지정할 수 없습니다."
 }
