@@ -21,6 +21,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { renderToStaticMarkup } from "react-dom/server";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
+import escapeHtml from "escape-html";
 
 import Exporter from "./Exporter";
 import { mediaFromMxc } from "../../customisations/Media";
@@ -97,11 +98,16 @@ export default class HTMLExporter extends Exporter {
         const exporter = this.room.client.getSafeUserId();
         const exporterName = this.room.getMember(exporter)?.rawDisplayName;
         const topic = this.room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || "";
-        const createdText = _t("%(creatorName)s created this room.", {
-            creatorName,
-        });
 
-        const exportedText = renderToStaticMarkup(
+        const safeCreatedText = escapeHtml(
+            _t("%(creatorName)s created this room.", {
+                creatorName,
+            }),
+        );
+        const safeExporter = escapeHtml(exporter);
+        const safeRoomName = escapeHtml(this.room.name);
+        const safeTopic = escapeHtml(topic);
+        const safeExportedText = renderToStaticMarkup(
             <p>
                 {_t(
                     "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.",
@@ -109,16 +115,19 @@ export default class HTMLExporter extends Exporter {
                         exportDate,
                     },
                     {
-                        roomName: () => <b>{this.room.name}</b>,
+                        roomName: () => <b>{safeRoomName}</b>,
                         exporterDetails: () => (
-                            <a href={`https://matrix.to/#/${exporter}`} target="_blank" rel="noopener noreferrer">
+                            <a
+                                href={`https://matrix.to/#/${encodeURIComponent(exporter)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 {exporterName ? (
                                     <>
-                                        <b>{exporterName}</b>
-                                        {" (" + exporter + ")"}
+                                        <b>{escapeHtml(exporterName)}</b>I {" (" + safeExporter + ")"}
                                     </>
                                 ) : (
-                                    <b>{exporter}</b>
+                                    <b>{safeExporter}</b>
                                 )}
                             </a>
                         ),
@@ -127,7 +136,7 @@ export default class HTMLExporter extends Exporter {
             </p>,
         );
 
-        const topicText = topic ? _t("Topic: %(topic)s", { topic }) : "";
+        const safeTopicText = topic ? _t("Topic: %(topic)s", { topic: safeTopic }) : "";
         const previousMessagesLink = renderToStaticMarkup(
             currentPage !== 0 ? (
                 <div style={{ textAlign: "center" }}>
@@ -183,12 +192,12 @@ export default class HTMLExporter extends Exporter {
                             <div
                                 dir="auto"
                                 class="mx_RoomHeader_nametext"
-                                title="${this.room.name}"
+                                title="${safeRoomName}"
                             >
-                                ${this.room.name}
+                                ${safeRoomName}
                             </div>
                             </div>
-                            <div class="mx_RoomHeader_topic" dir="auto"> ${topic} </div>
+                            <div class="mx_RoomHeader_topic" dir="auto"> ${safeTopic} </div>
                         </div>
                         </div>
                         ${previousMessagesLink}
@@ -214,10 +223,10 @@ export default class HTMLExporter extends Exporter {
                                     currentPage == 0
                                         ? `<div class="mx_NewRoomIntro">
                                         ${roomAvatar}
-                                        <h2> ${this.room.name} </h2>
-                                        <p> ${createdText} <br/><br/> ${exportedText} </p>
+                                        <h2> ${safeRoomName} </h2>
+                                        <p> ${safeCreatedText} <br/><br/> ${safeExportedText} </p>
                                         <br/>
-                                        <p> ${topicText} </p>
+                                        <p> ${safeTopicText} </p>
                                     </div>`
                                         : ""
                                 }
