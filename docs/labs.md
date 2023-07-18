@@ -86,11 +86,6 @@ present in the room. The Bridge info tab pulls information from the `m.bridge` s
 bridges are not expected to be compatible, and users should not rely on this
 tab as the single source of truth just yet.
 
-## Presence indicator in room list (`feature_presence_in_room_list`)
-
-This adds a presence indicator in the room list next to DM rooms where the other
-person is online.
-
 ## Custom themes (`feature_custom_themes`)
 
 Custom themes are possible through Element's [theme support](./theming.md), though
@@ -104,26 +99,6 @@ For some sample themes, check out [aaronraimist/element-themes](https://github.c
 
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
-
-## Spotlight search (`feature_spotlight`) [In Development]
-
-Switches to a new room search experience.
-
-## Extensible events rendering (`feature_extensible_events`) [In Development]
-
-_Intended for developer use only at the moment._
-
-Extensible Events are a [new event format](https://github.com/matrix-org/matrix-doc/pull/1767) which
-supports graceful fallback in unknown event types. Instead of rendering nothing or a blank space, events
-can define a series of other events which represent the event's information but in different ways. The
-base of these fallbacks being text.
-
-Turning this flag on indicates that, when possible, the extensible events structure should be parsed on
-supported event types. This should lead to zero perceptual change in the timeline except in cases where
-the sender is using unknown/unrecognised event types.
-
-Sending events with extensible events structure is always enabled - this should not affect any downstream
-client.
 
 ## Right panel stays open (`feature_right_panel_default_open`)
 
@@ -162,10 +137,6 @@ Enables rendering of MD / HTML in room topics.
 
 Enables exploring public spaces in the new search dialog. Requires the server to
 have [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827) enabled.
-
-## Sign in another device by showing a QR code (`feature_qr_signin_reciprocate_show`)
-
-Add capability to the session/device manager screens to generate a QR code to sign in another device + set up E2EE. This requires the homeserver to have support for [MSC3882](https://github.com/matrix-org/matrix-spec-proposals/pull/3882) and [MSC3886](https://github.com/matrix-org/matrix-spec-proposals/pull/3886) enabled.
 
 ## Use the Rust cryptography implementation (`feature_rust_crypto`) [In Development]
 
