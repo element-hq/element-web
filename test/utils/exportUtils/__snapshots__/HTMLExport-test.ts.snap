@@ -62,7 +62,7 @@ exports[`HTMLExport should export 1`] = `
                                 <div class="mx_NewRoomIntro">
                                         <span class="mx_BaseAvatar" role="presentation"><span class="mx_BaseAvatar_initial" aria-hidden="true" style="font-size:20.8px;width:32px;line-height:32px">!</span><img loading="lazy" class="mx_BaseAvatar_image" src="data:image/png;base64,00" alt="" title="!myroom:example.org" style="width:32px;height:32px" aria-hidden="true" data-testid="avatar-img"/></span>
                                         <h2> !myroom:example.org </h2>
-                                        <p>  created this room. <br/><br/> <p><span>This is the start of export of <b>!myroom:example.org</b>. Exported by <a href="https://matrix.to/#/@userId:matrix.org" target="_blank" rel="noopener noreferrer"><b>@userId:matrix.org</b></a> at 2022/11/17.</span></p> </p>
+                                        <p>  created this room. <br/><br/> <p><span>This is the start of export of <b>!myroom:example.org</b>. Exported by <a href="https://matrix.to/#/%40userId%3Amatrix.org" target="_blank" rel="noopener noreferrer"><b>@userId:matrix.org</b></a> at 2022/11/17.</span></p> </p>
                                         <br/>
                                         <p>  </p>
                                     </div>
