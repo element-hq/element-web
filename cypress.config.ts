@@ -20,6 +20,7 @@ export default defineConfig({
     videoUploadOnPasses: false,
     projectId: "ppvnzg",
     experimentalInteractiveRunEvents: true,
+    experimentalMemoryManagement: true,
     defaultCommandTimeout: 10000,
     chromeWebSecurity: false,
     e2e: {
