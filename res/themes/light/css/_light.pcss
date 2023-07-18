@@ -166,7 +166,10 @@ $rte-code-bg-color: rgba(0, 0, 0, 0.04);
 /* Presence */
 /* ******************** */
 $presence-away: #d9b072;
-$presence-offline: $quinary-content;
+/* not using a compound color here for now as we want to have the same color in
+   light and dark theme. Until we have a non-symetrical token for it, let's keep
+   it hardcoded to the following value */
+$presence-offline: #e3e8f0;
 $presence-busy: $alert;
 /* ******************** */
 
