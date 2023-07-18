@@ -1,12 +1,8 @@
-Changes in [1.11.36-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.36-rc.2) (2023-07-14)
-===========================================================================================================
+Changes in [1.11.36](https://github.com/vector-im/element-web/releases/tag/v1.11.36) (2023-07-18)
+=================================================================================================
 
-## 🐛 Bug Fixes
- * Fix read receipt sending behaviour around thread roots ([\#3600](https://github.com/matrix-org/matrix-js-sdk/pull/3600)).
- * Fix missing metaspace notification badges ([\#11269](https://github.com/matrix-org/matrix-react-sdk/pull/11269)). Fixes #25679.
-
-Changes in [1.11.36-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.36-rc.1) (2023-07-11)
-===========================================================================================================
+## 🔒 Security
+ * Fixes for [CVE-2023-37259](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE-2023-37259) / [GHSA-c9vx-2g7w-rp65](https://github.com/matrix-org/matrix-react-sdk/security/advisories/GHSA-c9vx-2g7w-rp65)
 
 ## 🦖 Deprecations
  * Deprecate customisations in favour of Module API ([\#25736](https://github.com/vector-im/element-web/pull/25736)). Fixes #25733.
@@ -32,6 +28,8 @@ Changes in [1.11.36-rc.1](https://github.com/vector-im/element-web/releases/tag/
  * OIDC: navigate to authorization endpoint ([\#11096](https://github.com/matrix-org/matrix-react-sdk/pull/11096)). Fixes #25574. Contributed by @kerryarchibald.
 
 ## 🐛 Bug Fixes
+ * Fix read receipt sending behaviour around thread roots ([\#3600](https://github.com/matrix-org/matrix-js-sdk/pull/3600)).
+ * Fix missing metaspace notification badges ([\#11269](https://github.com/matrix-org/matrix-react-sdk/pull/11269)). Fixes #25679.
  * Make checkboxes less rounded ([\#11224](https://github.com/matrix-org/matrix-react-sdk/pull/11224)). Contributed by @andybalaam.
  * GYU: Fix issues with audible keywords without activated mentions ([\#11218](https://github.com/matrix-org/matrix-react-sdk/pull/11218)). Contributed by @justjanne.
  * PosthogAnalytics unwatch settings on logout ([\#11207](https://github.com/matrix-org/matrix-react-sdk/pull/11207)). Fixes #25703.
