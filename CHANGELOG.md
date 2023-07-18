@@ -1,11 +1,8 @@
-Changes in [3.76.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.76.0-rc.2) (2023-07-14)
-===============================================================================================================
+Changes in [3.76.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.76.0) (2023-07-18)
+=====================================================================================================
 
-## 🐛 Bug Fixes
- * Fix missing metaspace notification badges ([\#11269](https://github.com/matrix-org/matrix-react-sdk/pull/11269)). Fixes vector-im/element-web#25679.
-
-Changes in [3.76.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.76.0-rc.1) (2023-07-11)
-===============================================================================================================
+## 🔒 Security
+ * Fixes for [CVE-2023-37259](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE-2023-37259) / [GHSA-c9vx-2g7w-rp65](https://github.com/matrix-org/matrix-react-sdk/security/advisories/GHSA-c9vx-2g7w-rp65)
 
 ## ✨ Features
  * GYU: Update banner ([\#11211](https://github.com/matrix-org/matrix-react-sdk/pull/11211)). Fixes vector-im/element-web#25530. Contributed by @justjanne.
@@ -25,6 +22,7 @@ Changes in [3.76.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * OIDC: navigate to authorization endpoint ([\#11096](https://github.com/matrix-org/matrix-react-sdk/pull/11096)). Fixes vector-im/element-web#25574. Contributed by @kerryarchibald.
 
 ## 🐛 Bug Fixes
+ * Fix missing metaspace notification badges ([\#11269](https://github.com/matrix-org/matrix-react-sdk/pull/11269)). Fixes vector-im/element-web#25679.
  * Make checkboxes less rounded ([\#11224](https://github.com/matrix-org/matrix-react-sdk/pull/11224)). Contributed by @andybalaam.
  * GYU: Fix issues with audible keywords without activated mentions ([\#11218](https://github.com/matrix-org/matrix-react-sdk/pull/11218)). Contributed by @justjanne.
  * PosthogAnalytics unwatch settings on logout ([\#11207](https://github.com/matrix-org/matrix-react-sdk/pull/11207)). Fixes vector-im/element-web#25703.
