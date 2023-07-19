@@ -38,7 +38,9 @@ exports[`<ChangelogDialog /> should fetch github proxy url for each repo with ol
         class="mx_ChangelogDialog_content"
       >
         <div>
-          <h2>
+          <h2
+            class="mx_Heading_h4"
+          >
             vector-im/element-web
           </h2>
           <ul>
@@ -56,7 +58,9 @@ exports[`<ChangelogDialog /> should fetch github proxy url for each repo with ol
           </ul>
         </div>
         <div>
-          <h2>
+          <h2
+            class="mx_Heading_h4"
+          >
             matrix-org/matrix-react-sdk
           </h2>
           <ul>
@@ -74,7 +78,9 @@ exports[`<ChangelogDialog /> should fetch github proxy url for each repo with ol
           </ul>
         </div>
         <div>
-          <h2>
+          <h2
+            class="mx_Heading_h4"
+          >
             matrix-org/matrix-js-sdk
           </h2>
           <ul>
