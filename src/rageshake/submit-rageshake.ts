@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { Method } from "matrix-js-sdk/src/http-api";
 
 import type * as Pako from "pako";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -25,6 +26,7 @@ import { _t } from "../languageHandler";
 import * as rageshake from "./rageshake";
 import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
+import { getServerVersionFromFederationApi } from "../components/views/dialogs/devtools/ServerInfo";
 
 interface IOpts {
     labels?: string[];
@@ -121,6 +123,43 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
             const sessionBackupKeyFromCache = await client.crypto.getSessionBackupPrivateKey();
             body.append("session_backup_key_cached", String(!!sessionBackupKeyFromCache));
             body.append("session_backup_key_well_formed", String(sessionBackupKeyFromCache instanceof Uint8Array));
+        }
+
+        try {
+            // XXX: This is synapse-specific but better than nothing until MSC support for a server version endpoint
+            const data = await client.http.request<Record<string, any>>(
+                Method.Get,
+                "/server_version",
+                undefined,
+                undefined,
+                {
+                    prefix: "/_synapse/admin/v1",
+                },
+            );
+            Object.keys(data).forEach((key) => {
+                body.append(`matrix_hs_${key}`, data[key]);
+            });
+        } catch {
+            try {
+                // XXX: This relies on the federation listener being delegated via well-known
+                // or at the same place as the client server endpoint
+                const data = await getServerVersionFromFederationApi(client);
+                body.append("matrix_hs_name", data.server.name);
+                body.append("matrix_hs_version", data.server.version);
+            } catch {
+                try {
+                    // If that fails we'll hit any endpoint and look at the server response header
+                    const res = await window.fetch(client.http.getUrl("/login"), {
+                        method: "GET",
+                        mode: "cors",
+                    });
+                    if (res.headers.has("server")) {
+                        body.append("matrix_hs_server", res.headers.get("server")!);
+                    }
+                } catch {
+                    // Could not determine server version
+                }
+            }
         }
     }
 
