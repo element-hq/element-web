@@ -46,6 +46,9 @@ describe("Read receipts", () => {
             getId: () => eventResponse.event_id,
             threadRootId,
             getTs: () => 1,
+            isRelation: (relType) => {
+                return !relType || relType === "m.thread";
+            },
         } as any as MatrixEvent;
     };
 
