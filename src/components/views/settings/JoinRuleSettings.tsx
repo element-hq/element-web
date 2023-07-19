@@ -35,6 +35,7 @@ import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { doesRoomVersionSupport, PreferredRoomVersions } from "../../../utils/PreferredRoomVersions";
+import SettingsStore from "../../../settings/SettingsStore";
 
 export interface JoinRuleSettingsProps {
     room: Room;
@@ -54,6 +55,10 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
     closeSettingsFn,
 }) => {
     const cli = room.client;
+
+    const askToJoinEnabled = SettingsStore.getValue("feature_ask_to_join");
+    const roomSupportsKnock = doesRoomVersionSupport(room.getVersion(), PreferredRoomVersions.KnockRooms);
+    const preferredKnockVersion = !roomSupportsKnock && promptUpgrade ? PreferredRoomVersions.KnockRooms : undefined;
 
     const roomSupportsRestricted = doesRoomVersionSupport(room.getVersion(), PreferredRoomVersions.RestrictedRooms);
     const preferredRestrictionVersion =
@@ -92,6 +97,68 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
         return roomIds;
     };
 
+    const upgradeRequiredDialog = (targetVersion: string, description?: ReactNode): void => {
+        Modal.createDialog(RoomUpgradeWarningDialog, {
+            roomId: room.roomId,
+            targetVersion,
+            description,
+            doUpgrade: async (
+                opts: IFinishedOpts,
+                fn: (progressText: string, progress: number, total: number) => void,
+            ): Promise<void> => {
+                const roomId = await upgradeRoom(room, targetVersion, opts.invite, true, true, true, (progress) => {
+                    const total = 2 + progress.updateSpacesTotal + progress.inviteUsersTotal;
+                    if (!progress.roomUpgraded) {
+                        fn(_t("Upgrading room"), 0, total);
+                    } else if (!progress.roomSynced) {
+                        fn(_t("Loading new room"), 1, total);
+                    } else if (
+                        progress.inviteUsersProgress !== undefined &&
+                        progress.inviteUsersProgress < progress.inviteUsersTotal
+                    ) {
+                        fn(
+                            _t("Sending invites... (%(progress)s out of %(count)s)", {
+                                progress: progress.inviteUsersProgress,
+                                count: progress.inviteUsersTotal,
+                            }),
+                            2 + progress.inviteUsersProgress,
+                            total,
+                        );
+                    } else if (
+                        progress.updateSpacesProgress !== undefined &&
+                        progress.updateSpacesProgress < progress.updateSpacesTotal
+                    ) {
+                        fn(
+                            _t("Updating spaces... (%(progress)s out of %(count)s)", {
+                                progress: progress.updateSpacesProgress,
+                                count: progress.updateSpacesTotal,
+                            }),
+                            2 + (progress.inviteUsersProgress ?? 0) + progress.updateSpacesProgress,
+                            total,
+                        );
+                    }
+                });
+
+                closeSettingsFn();
+
+                // switch to the new room in the background
+                dis.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    room_id: roomId,
+                    metricsTrigger: undefined, // other
+                });
+
+                // open new settings on this tab
+                dis.dispatch({
+                    action: "open_room_settings",
+                    initial_tab_id: RoomSettingsTab.Security,
+                });
+            },
+        });
+    };
+
+    const upgradeRequiredPill = <span className="mx_JoinRuleSettings_upgradeRequired">{_t("Upgrade required")}</span>;
+
     const definitions: IDefinition<JoinRule>[] = [
         {
             value: JoinRule.Invite,
@@ -113,11 +180,6 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
     ];
 
     if (roomSupportsRestricted || preferredRestrictionVersion || joinRule === JoinRule.Restricted) {
-        let upgradeRequiredPill;
-        if (preferredRestrictionVersion) {
-            upgradeRequiredPill = <span className="mx_JoinRuleSettings_upgradeRequired">{_t("Upgrade required")}</span>;
-        }
-
         let description;
         if (joinRule === JoinRule.Restricted && restrictedAllowRoomIds?.length) {
             // only show the first 4 spaces we know about, so that the UI doesn't grow out of proportion there are lots.
@@ -219,12 +281,25 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
             label: (
                 <>
                     {_t("Space members")}
-                    {upgradeRequiredPill}
+                    {preferredRestrictionVersion && upgradeRequiredPill}
                 </>
             ),
             description,
             // if there are 0 allowed spaces then render it as invite only instead
             checked: joinRule === JoinRule.Restricted && !!restrictedAllowRoomIds?.length,
+        });
+    }
+
+    if (askToJoinEnabled && (roomSupportsKnock || preferredKnockVersion)) {
+        definitions.push({
+            value: JoinRule.Knock,
+            label: (
+                <>
+                    {_t("Ask to join")}
+                    {preferredKnockVersion && upgradeRequiredPill}
+                </>
+            ),
+            description: _t("People cannot join unless access is granted."),
         });
     }
 
@@ -258,78 +333,16 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                     );
                 }
 
-                Modal.createDialog(RoomUpgradeWarningDialog, {
-                    roomId: room.roomId,
+                upgradeRequiredDialog(
                     targetVersion,
-                    description: (
-                        <>
-                            {_t(
-                                "This upgrade will allow members of selected spaces " +
-                                    "access to this room without an invite.",
-                            )}
-                            {warning}
-                        </>
-                    ),
-                    doUpgrade: async (
-                        opts: IFinishedOpts,
-                        fn: (progressText: string, progress: number, total: number) => void,
-                    ): Promise<void> => {
-                        const roomId = await upgradeRoom(
-                            room,
-                            targetVersion,
-                            opts.invite,
-                            true,
-                            true,
-                            true,
-                            (progress) => {
-                                const total = 2 + progress.updateSpacesTotal + progress.inviteUsersTotal;
-                                if (!progress.roomUpgraded) {
-                                    fn(_t("Upgrading room"), 0, total);
-                                } else if (!progress.roomSynced) {
-                                    fn(_t("Loading new room"), 1, total);
-                                } else if (
-                                    progress.inviteUsersProgress !== undefined &&
-                                    progress.inviteUsersProgress < progress.inviteUsersTotal
-                                ) {
-                                    fn(
-                                        _t("Sending invites... (%(progress)s out of %(count)s)", {
-                                            progress: progress.inviteUsersProgress,
-                                            count: progress.inviteUsersTotal,
-                                        }),
-                                        2 + progress.inviteUsersProgress,
-                                        total,
-                                    );
-                                } else if (
-                                    progress.updateSpacesProgress !== undefined &&
-                                    progress.updateSpacesProgress < progress.updateSpacesTotal
-                                ) {
-                                    fn(
-                                        _t("Updating spaces... (%(progress)s out of %(count)s)", {
-                                            progress: progress.updateSpacesProgress,
-                                            count: progress.updateSpacesTotal,
-                                        }),
-                                        2 + (progress.inviteUsersProgress ?? 0) + progress.updateSpacesProgress,
-                                        total,
-                                    );
-                                }
-                            },
-                        );
-                        closeSettingsFn();
-
-                        // switch to the new room in the background
-                        dis.dispatch<ViewRoomPayload>({
-                            action: Action.ViewRoom,
-                            room_id: roomId,
-                            metricsTrigger: undefined, // other
-                        });
-
-                        // open new settings on this tab
-                        dis.dispatch({
-                            action: "open_room_settings",
-                            initial_tab_id: RoomSettingsTab.Security,
-                        });
-                    },
-                });
+                    <>
+                        {_t(
+                            "This upgrade will allow members of selected spaces " +
+                                "access to this room without an invite.",
+                        )}
+                        {warning}
+                    </>,
+                );
 
                 return;
             }
@@ -337,6 +350,11 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
             // when setting to 0 allowed rooms/spaces set to invite only instead as per the note
             if (!restrictedAllowRoomIds?.length) {
                 joinRule = JoinRule.Invite;
+            }
+        } else if (joinRule === JoinRule.Knock) {
+            if (preferredKnockVersion) {
+                upgradeRequiredDialog(preferredKnockVersion);
+                return;
             }
         }
 

@@ -54,7 +54,8 @@ interface IState {
 }
 
 export default class RoomUpgradeWarningDialog extends React.Component<IProps, IState> {
-    private readonly isPrivate: boolean;
+    private readonly joinRule: JoinRule;
+    private readonly isInviteOrKnockRoom: boolean;
     private readonly currentVersion?: string;
 
     public constructor(props: IProps) {
@@ -62,7 +63,8 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
 
         const room = MatrixClientPeg.safeGet().getRoom(this.props.roomId);
         const joinRules = room?.currentState.getStateEvents(EventType.RoomJoinRules, "");
-        this.isPrivate = joinRules?.getContent()["join_rule"] !== JoinRule.Public ?? true;
+        this.joinRule = joinRules?.getContent()["join_rule"] ?? JoinRule.Invite;
+        this.isInviteOrKnockRoom = [JoinRule.Invite, JoinRule.Knock].includes(this.joinRule);
         this.currentVersion = room?.getVersion();
 
         this.state = {
@@ -83,7 +85,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
     private onContinue = async (): Promise<void> => {
         const opts = {
             continue: true,
-            invite: this.isPrivate && this.state.inviteUsersToNewRoom,
+            invite: this.isInviteOrKnockRoom && this.state.inviteUsersToNewRoom,
         };
 
         await this.props.doUpgrade?.(opts, this.onProgressCallback);
@@ -109,7 +111,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         const brand = SdkConfig.get().brand;
 
         let inviteToggle: JSX.Element | undefined;
-        if (this.isPrivate) {
+        if (this.isInviteOrKnockRoom) {
             inviteToggle = (
                 <LabelledToggleSwitch
                     value={this.state.inviteUsersToNewRoom}
@@ -119,7 +121,17 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
             );
         }
 
-        const title = this.isPrivate ? _t("Upgrade private room") : _t("Upgrade public room");
+        let title: string;
+        switch (this.joinRule) {
+            case JoinRule.Invite:
+                title = _t("Upgrade private room");
+                break;
+            case JoinRule.Public:
+                title = _t("Upgrade public room");
+                break;
+            default:
+                title = _t("Upgrade room");
+        }
 
         let bugReports = (
             <p>
