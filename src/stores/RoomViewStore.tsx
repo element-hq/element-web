@@ -545,8 +545,8 @@ export class RoomViewStore extends EventEmitter {
                     }),
                 NUM_JOIN_RETRY,
                 (err) => {
-                    // if we received a Gateway timeout then retry
-                    return err.httpStatus === 504;
+                    // if we received a Gateway timeout or Cloudflare timeout then retry
+                    return err.httpStatus === 504 || err.httpStatus === 524;
                 },
             );
 
