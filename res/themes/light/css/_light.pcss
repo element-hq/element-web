@@ -283,7 +283,10 @@ $eventbubble-reply-color: $quaternary-content;
 
 /* Lightbox */
 /* ******************** */
-$lightbox-fg-color: $background;
+/* not using a compound color here for now as we want to have the same color in
+   light and dark theme. Until we have a non-symetrical token for it, let's keep
+   it hardcoded to the following value */
+$lightbox-fg-color: #fff;
 $lightbox-background-bg-color: #000;
 $lightbox-background-bg-opacity: 0.95;
 /* ******************** */
