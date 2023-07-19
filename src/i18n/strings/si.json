@@ -16,7 +16,6 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "ඔබගේ වත්මන් අතිරික්සුව සහාය නොදක්වන උසස් විශේෂාංග %(brand)s භාවිත කරයි.",
     "The message from the parser is: %(message)s": "විග්‍රහය වෙතින් පණිවිඩය: %(message)s",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "ඔබගේ ඉලෙමන්ට් වින්‍යාසයෙහි වැරදි JSON අඩංගුය. ගැටලුව නිවැරදි කර පිටුව නැවුම් කරන්න.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "වින්‍යාසය වැරදිය: default_server_config, default_server_name, හෝ default_hs_url න් එකක් සඳහන් කළ හැකිය.",
     "Invalid configuration: no default server specified.": "වින්‍යාසය වලංගු නොවේ: පෙරනිමි සේවාදායකයක් දක්වා නැත.",
     "Your Element is misconfigured": "ඉලෙමන්ට් වැරදියට වින්‍යාසගතයි",
     "Unable to load config file: please refresh the page to try again.": "වින්‍යාස ගොනුව පූරණය කළ නොහැකිය: පිටුව නැවුම් කරන්න.",

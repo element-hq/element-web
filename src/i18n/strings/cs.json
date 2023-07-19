@@ -8,7 +8,6 @@
     "The message from the parser is: %(message)s": "Zpráva z parseru je: %(message)s",
     "Invalid JSON": "Neplatný JSON",
     "Unexpected error preparing the app. See console for details.": "Neočekávaná chyba při přípravě aplikace. Podrobnosti najdete v konzoli.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Neplatná konfigurace: je možné specifikovat pouze jednu volbu z default_server_config, default_server_name, nebo default_hs_url.",
     "Invalid configuration: no default server specified.": "Neplatná konfigurace: není zadán výchozí server.",
     "Go to your browser to complete Sign In": "Přejděte do prohlížeče a dokončete přihlášení",
     "Your Element is misconfigured": "Váš Element je nesprávně nastaven",

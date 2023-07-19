@@ -8,7 +8,6 @@
     "The message from the parser is: %(message)s": "A mensaxe desde o intérprete é: %(message)s",
     "Invalid JSON": "JSON non válido",
     "Unexpected error preparing the app. See console for details.": "Fallo non agardado ao preparar a app. Detalles na consola.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuración non válida: só se pode indicar un de default_server_config, default_server_name, ou default_hs_url.",
     "Invalid configuration: no default server specified.": "Configuración non válida: non se indicou servidor por defecto.",
     "Unable to load config file: please refresh the page to try again.": "Non se cargou o ficheiro de configuración: actualiza a páxina para reintentalo.",
     "Go to your browser to complete Sign In": "Abre o navegador para realizar a Conexión",

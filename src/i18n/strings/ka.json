@@ -27,6 +27,5 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s იყენებს ბრაუზერის გაფართოებულ ფუნქციებს, რომლებიც არ არის მხარდაჭერილი თქვენი ამჟამინდელი ბრაუზერის მიერ.",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s %(osName)s-ზე",
     "%(brand)s Desktop: %(platformName)s": "%(brand)s სამუშაო მაგიდა: %(platformName)s",
-    "The message from the parser is: %(message)s": "პარსერის შეტყობინებაა: %(message)s",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "არასწორი კონფიგურაცია: შეიძლება მიუთითოთ მხოლოდ ერთი default_server_config, default_server_name ან default_hs_url."
+    "The message from the parser is: %(message)s": "პარსერის შეტყობინებაა: %(message)s"
 }

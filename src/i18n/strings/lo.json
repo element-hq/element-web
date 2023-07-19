@@ -25,6 +25,5 @@
     "The message from the parser is: %(message)s": "ຂໍ້ຄວາມຈາກຕົວປ່ຽນແມ່ນ: %(message)s",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "ການຕັ້ງຄ່າແອັບ Element ຂອງທ່ານມີຄ່າ JSON ທີ່ບໍ່ຖືກຕ້ອງ. ກະລຸນາແກ້ໄຂບັນຫາ ແລະໂຫຼດໜ້ານີ້ຄືນໃໝ່.",
     "Your Element is misconfigured": "ການຕັ້ງຄ່າແອັບ Element ຂອງທ່ານບໍ່ຖືກຕ້ອງ",
-    "Invalid configuration: no default server specified.": "ການຕັ້ງຄ່າບໍ່ຖືກຕ້ອງ: ບໍ່ໄດ້ລະບຸເຊີບເວີເລີ່ມຕົ້ນ.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "ການຕັ້ງຄ່າບໍ່ຖືກຕ້ອງ: ສາມາດລະບຸໄດ້ພຽງແຕ່ອັນດຽວຂອງ default_server_config, default_server_name, or default_hs_url."
+    "Invalid configuration: no default server specified.": "ການຕັ້ງຄ່າບໍ່ຖືກຕ້ອງ: ບໍ່ໄດ້ລະບຸເຊີບເວີເລີ່ມຕົ້ນ."
 }

@@ -6,7 +6,6 @@
     "Create Account": "Créer un compte",
     "Explore rooms": "Parcourir les salons",
     "Unexpected error preparing the app. See console for details.": "Une erreur inattendue est survenue pendant la préparation de l’application. Consultez la console pour avoir des détails.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuration invalide : il ne faut spécifier qu’un des trois champs parmi default_server_config, default_server_name et default_hs_url.",
     "Invalid configuration: no default server specified.": "Configuration invalide : aucun serveur par défaut indiqué.",
     "The message from the parser is: %(message)s": "Le message de l’analyseur est : %(message)s",
     "Invalid JSON": "JSON non valide",
@@ -28,5 +27,6 @@
     "Use %(brand)s on mobile": "Utiliser %(brand)s sur téléphone",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Messagerie décentralisée, chiffrée &amp; une collaboration alimentée par $matrixLogo",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s : %(browserName)s pour %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s pour bureau : %(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s pour bureau : %(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "Configuration invalide : default_hs_url ne peut pas être défini en même temps que default_server_name ou default_server_config"
 }

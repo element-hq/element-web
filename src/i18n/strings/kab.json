@@ -6,7 +6,6 @@
     "Dismiss": "Agwi",
     "Sign In": "Kcem",
     "Explore rooms": "Snirem tixxamin",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Tawila d tarmeɣtut: mudd-d kan yiwen seg default_server_config, default_server_name, neɣ default_hs_url.",
     "Invalid configuration: no default server specified.": "Tawila d tarmeɣtut: ulac aqeddac amezwer i d-yettwafernen.",
     "The message from the parser is: %(message)s": "Izen n umaslaḍ d: %(message)s",
     "Unable to load config file: please refresh the page to try again.": "Yegguma ad d-yali ufaylu n twila: ma ulac aɣilif smiren asebter akken ad tεerḍeḍ tikkelt-nniḍen.",

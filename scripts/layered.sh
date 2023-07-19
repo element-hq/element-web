@@ -21,27 +21,30 @@ export PR_ORG=vector-im
 export PR_REPO=element-web
 
 # Set up the js-sdk first
-node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-js-sdk
+node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-js-sdk develop
 pushd matrix-js-sdk
 yarn link
 yarn install --frozen-lockfile
 popd
 
-# Also set up matrix-analytics-events so we get the latest from
-# the main branch or a branch with matching name
-node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-analytics-events main
-pushd matrix-analytics-events
-yarn link
-yarn install --frozen-lockfile
-yarn build:ts
-popd
+# Also set up matrix-analytics-events for branch with matching name
+node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-analytics-events
+# We don't pass a default branch so cloning may fail when we are not in a PR
+# This is expected as this project does not share a release cycle but we still branch match it
+if [ -d matrix-analytics-events ]; then
+    pushd matrix-analytics-events
+    yarn link
+    yarn install --frozen-lockfile
+    yarn build:ts
+    popd
+fi
 
 # Now set up the react-sdk
-node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-react-sdk
+node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-react-sdk develop
 pushd matrix-react-sdk
 yarn link
 yarn link matrix-js-sdk
-yarn link @matrix-org/analytics-events
+[ -d matrix-analytics-events ] && yarn link @matrix-org/analytics-events
 yarn install --frozen-lockfile
 popd
 

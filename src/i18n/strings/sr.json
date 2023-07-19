@@ -9,7 +9,6 @@
     "The message from the parser is: %(message)s": "Порука из парсера: %(message)s",
     "Invalid JSON": "Погрешан JSON",
     "Unexpected error preparing the app. See console for details.": "Неочекивана грешка приликом припреме апликације. Погледајте конзолу за више детаља.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Погрешно подешавање: можете навести само једну вредност од default_server_config, default_server_name, или default_hs_url.",
     "Your Element is misconfigured": "Ваша Елемент апликација је лоше подешена",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Подешавање ваше Елемент апликације садржи неисправни „JSON“. Поправите проблем па поново учитајте ову страницу.",
     "Unable to load config file: please refresh the page to try again.": "Не могу да учитам датотеку подешавања: освежите страницу и покушајте поново.",
