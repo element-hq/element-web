@@ -18,6 +18,7 @@ import React, { useContext, useEffect } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import LinkPreviewWidget from "./LinkPreviewWidget";
@@ -106,7 +107,12 @@ const fetchPreviews = (cli: MatrixClient, links: string[], ts: number): Promise<
                     return [link, preview];
                 }
             } catch (error) {
-                logger.error("Failed to get URL preview: " + error);
+                if (error instanceof MatrixError && error.httpStatus === 404) {
+                    // Quieten 404 Not found errors, not all URLs can have a preview generated
+                    logger.debug("Failed to get URL preview: ", error);
+                } else {
+                    logger.error("Failed to get URL preview: ", error);
+                }
             }
         }),
     ).then((a) => a.filter(Boolean)) as Promise<[string, IPreviewUrlResponse][]>;
