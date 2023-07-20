@@ -66,6 +66,7 @@ import { OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPaylo
 import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
 import { completeOidcLogin } from "./utils/oidc/authorize";
+import { persistOidcAuthenticatedSettings } from "./utils/oidc/persistOidcSettings";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -215,7 +216,9 @@ export async function attemptDelegatedAuthLogin(
  */
 async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> {
     try {
-        const { accessToken, homeserverUrl, identityServerUrl } = await completeOidcLogin(queryParams);
+        const { accessToken, homeserverUrl, identityServerUrl, clientId, issuer } = await completeOidcLogin(
+            queryParams,
+        );
 
         const {
             user_id: userId,
@@ -234,6 +237,8 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
 
         logger.debug("Logged in via OIDC native flow");
         await onSuccessfulDelegatedAuthLogin(credentials);
+        // this needs to happen after success handler which clears storages
+        persistOidcAuthenticatedSettings(clientId, issuer);
         return true;
     } catch (error) {
         logger.error("Failed to login via OIDC", error);

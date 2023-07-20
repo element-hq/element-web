@@ -31,6 +31,7 @@ import TypingStore from "../stores/TypingStore";
 import { UserProfilesStore } from "../stores/UserProfilesStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
+import { OidcClientStore } from "../stores/oidc/OidcClientStore";
 import WidgetStore from "../stores/WidgetStore";
 import {
     VoiceBroadcastPlaybacksStore,
@@ -80,6 +81,7 @@ export class SdkContextClass {
     protected _VoiceBroadcastPlaybacksStore?: VoiceBroadcastPlaybacksStore;
     protected _AccountPasswordStore?: AccountPasswordStore;
     protected _UserProfilesStore?: UserProfilesStore;
+    protected _OidcClientStore?: OidcClientStore;
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
@@ -201,6 +203,18 @@ export class SdkContextClass {
         }
 
         return this._UserProfilesStore;
+    }
+
+    public get oidcClientStore(): OidcClientStore {
+        if (!this.client) {
+            throw new Error("Unable to create OidcClientStore without a client");
+        }
+
+        if (!this._OidcClientStore) {
+            this._OidcClientStore = new OidcClientStore(this.client);
+        }
+
+        return this._OidcClientStore;
     }
 
     public onLoggedOut(): void {

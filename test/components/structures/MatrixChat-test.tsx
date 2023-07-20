@@ -887,6 +887,15 @@ describe("<MatrixChat />", () => {
 
                 expect(loginClient.clearStores).not.toHaveBeenCalled();
             });
+
+            it("should not store clientId or issuer", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                expect(sessionStorageSetSpy).not.toHaveBeenCalledWith("mx_oidc_client_id", clientId);
+                expect(sessionStorageSetSpy).not.toHaveBeenCalledWith("mx_oidc_token_issuer", issuer);
+            });
         });
 
         describe("when login succeeds", () => {
@@ -909,6 +918,15 @@ describe("<MatrixChat />", () => {
                 expect(localStorageSetSpy).toHaveBeenCalledWith("mx_user_id", userId);
                 expect(localStorageSetSpy).toHaveBeenCalledWith("mx_has_access_token", "true");
                 expect(localStorageSetSpy).toHaveBeenCalledWith("mx_device_id", deviceId);
+            });
+
+            it("should store clientId and issuer in session storage", async () => {
+                getComponent({ realQueryParams });
+
+                await flushPromises();
+
+                expect(sessionStorageSetSpy).toHaveBeenCalledWith("mx_oidc_client_id", clientId);
+                expect(sessionStorageSetSpy).toHaveBeenCalledWith("mx_oidc_token_issuer", issuer);
             });
 
             it("should set logged in and start MatrixClient", async () => {

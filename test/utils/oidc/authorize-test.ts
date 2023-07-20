@@ -132,6 +132,8 @@ describe("OIDC authorization", () => {
                 accessToken: tokenResponse.access_token,
                 homeserverUrl,
                 identityServerUrl,
+                issuer,
+                clientId,
             });
         });
     });
