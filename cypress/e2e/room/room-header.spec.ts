@@ -160,7 +160,7 @@ describe("Room Header", () => {
                 }
 
                 // Assert that there is not a button except those buttons
-                cy.findAllByRole("button").should("have.length", 5);
+                cy.findAllByRole("button").should("have.length", 7);
             });
 
             cy.get(".mx_RoomHeader").percySnapshotElement("Room header - with a video room");
