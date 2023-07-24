@@ -21,11 +21,12 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s uporablja napredne lastnosti brskalnika, ki jih vaš trenutni brskalnik ne podpira.",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Za najboljšo izkušnjo, prosim namestite <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ali <safariLink>Safari</safariLink>.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Lahko nadaljujete z uporabo vašega trenutnega brskalnika, vendar lahko to privede do manjkajočih funkcionalnosti ali napačnega izgleda aplikacije.",
-    "I understand the risks and wish to continue": "Razumem riziko in želim vseeno nadaljevati",
+    "I understand the risks and wish to continue": "Razumem tveganje in želim vseeno nadaljevati",
     "Go to element.io": "Pojdi na element.io",
     "Failed to start": "Neuspel zagon",
     "Use %(brand)s on mobile": "Uporabi %(brand)s na mobilni napravi",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentraliziran, šifriran pogovor in sodelovanje, omogočen z $matrixLogo",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s na %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Namizni računalnik: %(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Namizni računalnik: %(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "Nepravilna konfiguracija: če določite default_server_name ali default_server_config default_hs_url ne more biti določen"
 }

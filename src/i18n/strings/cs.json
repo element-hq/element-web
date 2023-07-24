@@ -27,5 +27,6 @@
     "Use %(brand)s on mobile": "Používání %(brand)s v mobilních zařízeních",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralizovaný, šifrovaný chat a spolupráce na platformě $matrixLogo",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s na %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "Neplatná konfigurace: default_hs_url nelze použít spolu s default_server_name nebo default_server_config"
 }

@@ -27,5 +27,6 @@
     "Use %(brand)s on mobile": "Użyj %(brand)s w telefonie",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Zdecentralizowany, szyfrowany czat i współpraca oparte na $matrixLogo",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s na %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "Komputer %(brand)s: %(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "Komputer %(brand)s: %(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "Nieprawidłowa konfiguracja: nie można określić default_hs_url wraz z default_server_name lub default_server_config"
 }
