@@ -20,8 +20,8 @@
     ],
     "bug_report_endpoint_url": "https://element.io/bugreports/submit",
     "uisi_autorageshake_app": "element-auto-uisi",
-    "showLabsSettings": false,
-    "roomDirectory": {
+    "show_labs_settings": false,
+    "room_directory": {
         "servers": ["matrix.org", "gitter.im", "libera.chat"]
     },
     "enable_presence_by_hs_url": {
@@ -39,8 +39,8 @@
         }
     ],
     "posthog": {
-        "projectApiKey": "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
-        "apiHost": "https://posthog.element.io"
+        "project_api_key": "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
+        "api_host": "https://posthog.element.io"
     },
     "privacy_policy_url": "https://element.io/cookie-policy",
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
