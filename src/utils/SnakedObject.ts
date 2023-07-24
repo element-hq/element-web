@@ -19,6 +19,8 @@ export function snakeToCamel(s: string): string {
 }
 
 export class SnakedObject<T = Record<string, any>> {
+    private fallbackWarnings = new Set<string>();
+
     public constructor(private obj: T) {}
 
     public get<K extends string & keyof T>(key: K, altCaseName?: string): T[K] {
@@ -27,7 +29,8 @@ export class SnakedObject<T = Record<string, any>> {
 
         const fallbackKey = altCaseName ?? snakeToCamel(key);
         const fallback = this.obj[<K>fallbackKey];
-        if (!!fallback) {
+        if (!!fallback && !this.fallbackWarnings.has(fallbackKey)) {
+            this.fallbackWarnings.add(fallbackKey);
             console.warn(`Using deprecated camelCase config ${fallbackKey}`);
             console.warn(
                 "See https://github.com/vector-im/element-web/blob/develop/docs/config.md#-deprecation-notice",
