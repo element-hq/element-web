@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient, MatrixError, Room } from "matrix-js-sdk/src/matrix";
@@ -364,6 +364,35 @@ describe("InviteDialog", () => {
                 user_id: aliceId,
             }),
         ]);
+    });
+
+    it("should not allow pasting the same user multiple times", async () => {
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+
+        const input = screen.getByTestId("invite-dialog-input");
+        input.focus();
+        await userEvent.paste(`${bobId}`);
+        await userEvent.paste(`${bobId}`);
+        await userEvent.paste(`${bobId}`);
+
+        expect(input).toHaveValue("");
+        await expect(screen.findAllByText(bobId, { selector: "a" })).resolves.toHaveLength(1);
+    });
+
+    it("should add to selection on click of user tile", async () => {
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+
+        const input = screen.getByTestId("invite-dialog-input");
+        input.focus();
+        await userEvent.keyboard(`${aliceId}`);
+
+        const btn = await screen.findByText(aliceId, {
+            selector: ".mx_InviteDialog_tile_nameStack_userId .mx_InviteDialog_tile--room_highlight",
+        });
+        fireEvent.click(btn);
+
+        const tile = await screen.findByText(aliceId, { selector: ".mx_InviteDialog_userTile_name" });
+        expect(tile).toBeInTheDocument();
     });
 
     describe("when inviting a user with an unknown profile", () => {
