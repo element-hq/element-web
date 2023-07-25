@@ -735,6 +735,34 @@ describe("MessagePanel", function () {
 
         expect(cpt).toMatchSnapshot();
     });
+
+    it("should set lastSuccessful=true on non-last event if last event is not eligible for special receipt", () => {
+        client.getRoom.mockImplementation((id) => (id === room.roomId ? room : null));
+        const events = [
+            TestUtilsMatrix.mkMessage({
+                event: true,
+                room: room.roomId,
+                user: client.getSafeUserId(),
+                ts: 1000,
+            }),
+            TestUtilsMatrix.mkEvent({
+                event: true,
+                room: room.roomId,
+                user: client.getSafeUserId(),
+                ts: 1000,
+                type: "m.room.topic",
+                skey: "",
+                content: { topic: "TOPIC" },
+            }),
+        ];
+        const { container } = render(getComponent({ events, showReadReceipts: true }));
+
+        // just check we have the right number of tiles for now
+        const tiles = container.getElementsByClassName("mx_EventTile");
+        expect(tiles.length).toEqual(2);
+        expect(tiles[0].querySelector(".mx_EventTile_receiptSent")).toBeTruthy();
+        expect(tiles[1].querySelector(".mx_EventTile_receiptSent")).toBeFalsy();
+    });
 });
 
 describe("shouldFormContinuation", () => {
