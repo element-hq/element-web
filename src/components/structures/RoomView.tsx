@@ -2449,6 +2449,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 viewingCall = true;
         }
 
+        const myMember = this.state.room!.getMember(this.context.client!.getSafeUserId());
+        const showForgetButton =
+            !this.context.client.isGuest() && (["leave", "ban"].includes(myMembership) || myMember?.isKicked());
+
         return (
             <RoomContext.Provider value={this.state}>
                 <main className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
@@ -2463,7 +2467,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             inRoom={myMembership === "join"}
                             onSearchClick={onSearchClick}
                             onInviteClick={onInviteClick}
-                            onForgetClick={myMembership === "leave" ? onForgetClick : null}
+                            onForgetClick={showForgetButton ? onForgetClick : null}
                             e2eStatus={this.state.e2eStatus}
                             onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
                             appsShown={this.state.showApps}
