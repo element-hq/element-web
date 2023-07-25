@@ -43,6 +43,15 @@ jobs:
             - name: Typecheck (release mode)
               run: "yarn run lint:types"
 
+            # Temporary while we directly import matrix-js-sdk/src/* which means we need
+            # certain @types/* packages to make sense of matrix-js-sdk types.
+            - name: Typecheck (release mode; no yarn link)
+              if: github.event_name != 'pull_request'
+              run: |
+                  yarn unlink matrix-js-sdk
+                  yarn install --force
+                  yarn run lint:types
+
     i18n_lint:
         name: "i18n Check"
         uses: matrix-org/matrix-react-sdk/.github/workflows/i18n_check.yml@develop
