@@ -548,6 +548,8 @@ export class Algorithm extends EventEmitter {
         const tags: TagID[] = [];
 
         const membership = getEffectiveMembership(room.getMyMembership());
+        if (!membership) return []; // peeked room has no tags
+
         if (membership === EffectiveMembership.Invite) {
             tags.push(DefaultTagID.Invite);
         } else if (membership === EffectiveMembership.Leave) {

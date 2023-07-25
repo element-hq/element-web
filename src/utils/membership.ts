@@ -56,7 +56,11 @@ export function splitRoomsByMembership(rooms: Room[]): MembershipSplit {
     };
 
     for (const room of rooms) {
-        split[getEffectiveMembership(room.getMyMembership())].push(room);
+        const membership = room.getMyMembership();
+        // Filter out falsey relationship as this will be peeked rooms
+        if (!!membership) {
+            split[getEffectiveMembership(membership)].push(room);
+        }
     }
 
     return split;
