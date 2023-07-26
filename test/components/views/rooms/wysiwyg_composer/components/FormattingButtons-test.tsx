@@ -21,6 +21,7 @@ import { ActionState, ActionTypes, AllActionStates, FormattingFunctions } from "
 
 import { FormattingButtons } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/FormattingButtons";
 import * as LinkModal from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/LinkModal";
+import { setLanguage } from "../../../../../../src/languageHandler";
 
 const mockWysiwyg = {
     bold: jest.fn(),
@@ -74,6 +75,14 @@ const classes = {
 describe("FormattingButtons", () => {
     afterEach(() => {
         jest.resetAllMocks();
+    });
+
+    it("renders in german", async () => {
+        await setLanguage("de");
+        const { asFragment } = renderComponent();
+        expect(asFragment()).toMatchSnapshot();
+
+        await setLanguage("en");
     });
 
     it("Each button should not have active class when enabled", () => {
