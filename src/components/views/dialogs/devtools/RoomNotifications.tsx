@@ -17,6 +17,8 @@ limitations under the License.
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { Thread } from "matrix-js-sdk/src/models/thread";
 import React, { useContext } from "react";
+import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
+import { ReadReceipt } from "matrix-js-sdk/src/models/read-receipt";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { useNotificationState } from "../../../../hooks/useRoomNotificationState";
@@ -25,6 +27,42 @@ import { determineUnreadState } from "../../../../RoomNotifs";
 import { humanReadableNotificationColor } from "../../../../stores/notifications/NotificationColor";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../../../Unread";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
+
+function UserReadUpTo({ target }: { target: ReadReceipt<any, any> }): JSX.Element {
+    const cli = useContext(MatrixClientContext);
+    const userId = cli.getSafeUserId();
+    const hasPrivate = !!target.getReadReceiptForUserId(userId, false, ReceiptType.ReadPrivate);
+    return (
+        <>
+            <li>
+                {_t("User read up to: ")}
+                <strong>{target.getReadReceiptForUserId(userId)?.eventId ?? _t("No receipt found")}</strong>
+            </li>
+            <li>
+                {_t("User read up to (ignoreSynthetic): ")}
+                <strong>{target.getReadReceiptForUserId(userId, true)?.eventId ?? _t("No receipt found")}</strong>
+            </li>
+            {hasPrivate && (
+                <>
+                    <li>
+                        {_t("User read up to (m.read.private): ")}
+                        <strong>
+                            {target.getReadReceiptForUserId(userId, false, ReceiptType.ReadPrivate)?.eventId ??
+                                _t("No receipt found")}
+                        </strong>
+                    </li>
+                    <li>
+                        {_t("User read up to (m.read.private;ignoreSynthetic): ")}
+                        <strong>
+                            {target.getReadReceiptForUserId(userId, true, ReceiptType.ReadPrivate)?.eventId ??
+                                _t("No receipt found")}
+                        </strong>
+                    </li>
+                </>
+            )}
+        </>
+    );
+}
 
 export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Element {
     const { room } = useContext(DevtoolsContext);
@@ -90,13 +128,7 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                     </li>
                     {roomHasUnread(room) && (
                         <>
-                            <li>
-                                {_t("User read up to: ")}
-                                <strong>
-                                    {room.getReadReceiptForUserId(cli.getSafeUserId())?.eventId ??
-                                        _t("No receipt found")}
-                                </strong>
-                            </li>
+                            <UserReadUpTo target={room} />
                             <li>
                                 {_t("Last event:")}
                                 <ul>
@@ -149,13 +181,7 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                                     <li>
                                         {_t("Dot: ")} <strong>{doesRoomOrThreadHaveUnreadMessages(thread) + ""}</strong>
                                     </li>
-                                    <li>
-                                        {_t("User read up to: ")}
-                                        <strong>
-                                            {thread.getReadReceiptForUserId(cli.getSafeUserId())?.eventId ??
-                                                _t("No receipt found")}
-                                        </strong>
-                                    </li>
+                                    <UserReadUpTo target={thread} />
                                     <li>
                                         {_t("Last event:")}
                                         <ul>
