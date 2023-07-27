@@ -93,9 +93,6 @@ exports[`<SecureBackupPanel /> suggests connecting session to key backup when ba
       </tr>
     </table>
     
-    <div>
-      Backup is not signed by any of your sessions
-    </div>
     <div />
   </details>
   <div
