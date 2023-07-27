@@ -2467,9 +2467,9 @@
     "@types/node" "*"
 
 "@types/katex@^0.16.0":
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/@types/katex/-/katex-0.16.0.tgz#0e640df3647fe237212be863e1f5111eb9754f93"
-  integrity sha512-hz+S3nV6Mym5xPbT9fnO8dDhBFQguMYpY0Ipxv06JMi1ORgnEM4M1ymWDUhUNer3ElLmT583opRo4RzxKmh9jw==
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@types/katex/-/katex-0.16.1.tgz#e1faa29f131c241a7669e65bdf8ce470c9c4e3a9"
+  integrity sha512-cwglq2A63Yk082CQk0t8LIoDhZAVgJqkumLyk3grpg3K8sevaDW//Qsspmxj9Sf+97biqt79CfAlPrvizHlP0w==
 
 "@types/lodash@^4.14.168":
   version "4.14.195"
@@ -2509,9 +2509,9 @@
     form-data "^3.0.0"
 
 "@types/node@*":
-  version "20.4.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.4.2.tgz#129cc9ae69f93824f92fac653eebfb4812ab4af9"
-  integrity sha512-Dd0BYtWgnWJKwO1jkmTrzofjK2QXXcai0dmtzvIBhcA+RsG5h8R3xlyta0kGOZRNfL9GuRtb1knmPEhQrePCEw==
+  version "20.4.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.4.4.tgz#c79c7cc22c9d0e97a7944954c9e663bcbd92b0cb"
+  integrity sha512-CukZhumInROvLq3+b5gLev+vgpsIqC2D0deQr/yS1WnxvmYLlJXZpaQrQiseMY+6xusl79E04UjWoqyr+t1/Ew==
 
 "@types/node@^14.14.31":
   version "14.18.53"
@@ -2519,9 +2519,9 @@
   integrity sha512-soGmOpVBUq+gaBMwom1M+krC/NNbWlosh4AtGA03SyWNDiqSKtwp7OulO1M6+mg8YkHMvJ/y0AkCeO8d1hNb7A==
 
 "@types/node@^16":
-  version "16.18.37"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.37.tgz#a1f8728e4dc30163deb41e9b7aba65d0c2d4eda1"
-  integrity sha512-ql+4dw4PlPFBP495k8JzUX/oMNRI2Ei4PrMHgj8oT4VhGlYUzF4EYr0qk2fW+XBVGIrq8Zzk13m4cvyXZuv4pA==
+  version "16.18.39"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.39.tgz#aa39a1a87a40ef6098ee69689a1acb0c1b034832"
+  integrity sha512-8q9ZexmdYYyc5/cfujaXb4YOucpQxAV4RMG0himLyDUOEr8Mr79VrqsFI+cQ2M2h89YIuy95lbxuYjxT4Hk4kQ==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -2554,9 +2554,9 @@
   integrity sha512-L28j2FcJfSZOnL1WBjDYp2vUHCeIFlyYI/53EwD/rKUBQ7MtUUfbQWiyKJGpcnv4/WgrhWsFKrcPstcAt/J0tQ==
 
 "@types/qrcode@^1.3.5":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@types/qrcode/-/qrcode-1.5.0.tgz#6a98fe9a9a7b2a9a3167b6dde17eff999eabe40b"
-  integrity sha512-x5ilHXRxUPIMfjtM+1vf/GPTRWZ81nqscursm5gMznJeK9M0YnZ1c3bEvRLQ0zSSgedLx1J6MGL231ObQGGhaA==
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@types/qrcode/-/qrcode-1.5.1.tgz#027c2dbfbc8505e1fe2f4033daba920dbd182b44"
+  integrity sha512-HpSN675K0PmxIDRpjMI3Mc2GiKo3dNu+X/F5SoItiaDS1lVfgC6Wac1c5lQDfKWbTJUSHWiHKzpJpBZG7k9gaA==
   dependencies:
     "@types/node" "*"
 
