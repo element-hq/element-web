@@ -19,7 +19,7 @@ import jsQR from "jsqr";
 import type { VerificationRequest, Verifier } from "matrix-js-sdk/src/crypto-api/verification";
 import { CypressBot } from "../../support/bot";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
-import { emitPromise, skipIfRustCrypto } from "../../support/util";
+import { emitPromise } from "../../support/util";
 import { checkDeviceIsCrossSigned, doTwoWaySasVerification, logIntoElement, waitForVerificationRequest } from "./utils";
 import { getToast } from "../../support/toasts";
 
@@ -155,8 +155,6 @@ describe("Device verification", () => {
     });
 
     it("Verify device during login with Security Phrase", () => {
-        skipIfRustCrypto();
-
         logIntoElement(homeserver.baseUrl, aliceBotClient.getUserId(), aliceBotClient.__cypress_password);
 
         // Select the security phrase
@@ -179,8 +177,6 @@ describe("Device verification", () => {
     });
 
     it("Verify device during login with Security Key", () => {
-        skipIfRustCrypto();
-
         logIntoElement(homeserver.baseUrl, aliceBotClient.getUserId(), aliceBotClient.__cypress_password);
 
         // Select the security phrase
