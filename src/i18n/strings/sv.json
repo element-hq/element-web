@@ -3718,5 +3718,9 @@
     "Match default setting": "Matcha förvalsinställning",
     "Mute room": "Tysta rum",
     "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Rummets oläst-status: <strong>%(status)s</strong>, antal: <strong>%(count)s</strong>",
-    "Unable to find event at that date": "Kunde inte hitta händelse vid det datumet"
+    "Unable to find event at that date": "Kunde inte hitta händelse vid det datumet",
+    "Enable new native OIDC flows (Under active development)": "Aktivera nya inbyggda OIDC-flöden (Under aktiv utveckling)",
+    "Your server requires encryption to be disabled.": "Din server kräver att kryptering är inaktiverat.",
+    "Are you sure you wish to remove (delete) this event?": "Är du säker på att du vill ta bort (radera) den här händelsen?",
+    "Note that removing room changes like this could undo the change.": "Observera att om du tar bort rumsändringar som den här kanske det ångrar ändringen."
 }
