@@ -55,12 +55,6 @@ declare global {
         on(channel: ElectronChannel, listener: (event: Event, ...args: any[]) => void): void;
         send(channel: ElectronChannel, ...args: any[]): void;
     }
-
-    interface Navigator {
-        // PWA badging extensions https://w3c.github.io/badging/
-        setAppBadge?(count: number): Promise<void>;
-        clearAppBadge?(): Promise<void>;
-    }
 }
 
 // add method which is missing from the node typing
