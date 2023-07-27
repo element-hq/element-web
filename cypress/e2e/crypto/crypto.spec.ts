@@ -149,9 +149,8 @@ describe("Cryptography", function () {
         cy.stopHomeserver(this.homeserver);
     });
 
-    describe.each([{ isDeviceVerified: true }, { isDeviceVerified: false }])(
-        "setting up secure key backup should work %j",
-        ({ isDeviceVerified }) => {
+    for (const isDeviceVerified of [true, false]) {
+        it(`setting up secure key backup should work isDeviceVerified=${isDeviceVerified}`, () => {
             /**
              * Verify that the `m.cross_signing.${keyType}` key is available on the account data on the server
              * @param keyType
@@ -251,8 +250,8 @@ describe("Cryptography", function () {
                 verifyKey("self_signing");
                 verifyKey("user_signing");
             });
-        },
-    );
+        });
+    }
 
     it("creating a DM should work, being e2e-encrypted / user verification", function (this: CryptoTestContext) {
         skipIfRustCrypto();

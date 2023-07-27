@@ -16,7 +16,6 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import "cypress-each";
 import EventEmitter from "events";
 
 declare global {

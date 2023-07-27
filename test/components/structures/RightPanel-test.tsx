@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { jest } from "@jest/globals";
