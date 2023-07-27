@@ -5313,10 +5313,10 @@ eslint-module-utils@^2.7.4:
   dependencies:
     debug "^3.2.7"
 
-eslint-plugin-deprecate@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-deprecate/-/eslint-plugin-deprecate-0.8.0.tgz#6eaa48a5b32c77b3d1b9c6280d6cd19d63a5318c"
-  integrity sha512-9CbKxZyVM3E4MwXvVejq+OXSnah5l7sqkg6rOYhil37GAGFjZtyOYUEEPZ+LUpk6FUUL5Upy8zpaaLhN+Ke7Tw==
+eslint-plugin-deprecate@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-deprecate/-/eslint-plugin-deprecate-0.7.0.tgz#04805d2f2884800c580d59933b9c895f31b02437"
+  integrity sha512-MylhCqoH/SJ2MwzVgX0we6oE+lKPVwhOu9hAJ98vMCmbz3FNwqJ8XipdI23bCF7NHxUbhd6mdxFjywKE52pt7A==
 
 eslint-plugin-import@^2.26.0:
   version "2.27.5"
