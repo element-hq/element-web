@@ -20,6 +20,7 @@ import { EventEmitter } from "events";
 import { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { render } from "@testing-library/react";
 import { Thread } from "matrix-js-sdk/src/models/thread";
+import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
 import MessagePanel, { shouldFormContinuation } from "../../../src/components/structures/MessagePanel";
 import SettingsStore from "../../../src/settings/SettingsStore";
@@ -757,10 +758,42 @@ describe("MessagePanel", function () {
         ];
         const { container } = render(getComponent({ events, showReadReceipts: true }));
 
-        // just check we have the right number of tiles for now
         const tiles = container.getElementsByClassName("mx_EventTile");
         expect(tiles.length).toEqual(2);
         expect(tiles[0].querySelector(".mx_EventTile_receiptSent")).toBeTruthy();
+        expect(tiles[1].querySelector(".mx_EventTile_receiptSent")).toBeFalsy();
+    });
+
+    it("should set lastSuccessful=false on non-last event if last event has a receipt from someone else", () => {
+        client.getRoom.mockImplementation((id) => (id === room.roomId ? room : null));
+        const events = [
+            TestUtilsMatrix.mkMessage({
+                event: true,
+                room: room.roomId,
+                user: client.getSafeUserId(),
+                ts: 1000,
+            }),
+            TestUtilsMatrix.mkMessage({
+                event: true,
+                room: room.roomId,
+                user: "@other:user",
+                ts: 1001,
+            }),
+        ];
+        room.addReceiptToStructure(
+            events[1].getId()!,
+            ReceiptType.Read,
+            "@other:user",
+            {
+                ts: 1001,
+            },
+            true,
+        );
+        const { container } = render(getComponent({ events, showReadReceipts: true }));
+
+        const tiles = container.getElementsByClassName("mx_EventTile");
+        expect(tiles.length).toEqual(2);
+        expect(tiles[0].querySelector(".mx_EventTile_receiptSent")).toBeFalsy();
         expect(tiles[1].querySelector(".mx_EventTile_receiptSent")).toBeFalsy();
     });
 });

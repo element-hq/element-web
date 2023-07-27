@@ -251,10 +251,7 @@ interface IState {
  * This could be a 'sending' or 'sent' receipt, for example.
  * @returns {boolean}
  */
-export function isEligibleForSpecialReceipt(event: MatrixEvent, myUserId: string): boolean {
-    // Check to see if the event was sent by us. If it wasn't, it won't qualify for special read receipts.
-    if (event.getSender() !== myUserId) return false;
-
+export function isEligibleForSpecialReceipt(event: MatrixEvent): boolean {
     // Determine if the type is relevant to the user.
     // This notably excludes state events and pretty much anything that can't be sent by the composer as a message.
     // For those we rely on local echo giving the impression of things changing, and expect them to be quick.
@@ -332,7 +329,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Quickly check to see if the event was sent by us. If it wasn't, it won't qualify for
         // special read receipts.
         const myUserId = MatrixClientPeg.safeGet().getSafeUserId();
-        return isEligibleForSpecialReceipt(this.props.mxEvent, myUserId);
+        // Check to see if the event was sent by us. If it wasn't, it won't qualify for special read receipts.
+        if (this.props.mxEvent.getSender() !== myUserId) return false;
+        return isEligibleForSpecialReceipt(this.props.mxEvent);
     }
 
     private get shouldShowSentReceipt(): boolean {
