@@ -39,8 +39,16 @@ import {
     flushPromises,
     getMockClientWithEventEmitter,
     mockClientMethodsUser,
+    mockPlatformPeg,
 } from "../../test-utils";
 import * as leaveRoomUtils from "../../../src/utils/leave-behaviour";
+import * as voiceBroadcastUtils from "../../../src/voice-broadcast/utils/cleanUpBroadcasts";
+import LegacyCallHandler from "../../../src/LegacyCallHandler";
+import { CallStore } from "../../../src/stores/CallStore";
+import { Call } from "../../../src/models/Call";
+import { PosthogAnalytics } from "../../../src/PosthogAnalytics";
+import PlatformPeg from "../../../src/PlatformPeg";
+import EventIndexPeg from "../../../src/indexing/EventIndexPeg";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -97,6 +105,8 @@ describe("<MatrixChat />", () => {
         getDehydratedDevice: jest.fn(),
         whoami: jest.fn(),
         isRoomEncrypted: jest.fn(),
+        logout: jest.fn(),
+        getDeviceId: jest.fn(),
     });
     let mockClient = getMockClientWithEventEmitter(getMockClientMethods());
     const serverConfig = {
@@ -127,10 +137,10 @@ describe("<MatrixChat />", () => {
     };
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) =>
         render(<MatrixChat {...defaultProps} {...props} />);
-    const localStorageSetSpy = jest.spyOn(localStorage.__proto__, "setItem");
-    const localStorageGetSpy = jest.spyOn(localStorage.__proto__, "getItem").mockReturnValue(undefined);
-    const localStorageClearSpy = jest.spyOn(localStorage.__proto__, "clear");
-    const sessionStorageSetSpy = jest.spyOn(sessionStorage.__proto__, "setItem");
+    let localStorageSetSpy = jest.spyOn(localStorage.__proto__, "setItem");
+    let localStorageGetSpy = jest.spyOn(localStorage.__proto__, "getItem").mockReturnValue(undefined);
+    let localStorageClearSpy = jest.spyOn(localStorage.__proto__, "clear");
+    let sessionStorageSetSpy = jest.spyOn(sessionStorage.__proto__, "setItem");
 
     // make test results readable
     filterConsole("Failed to parse localStorage object");
@@ -172,14 +182,20 @@ describe("<MatrixChat />", () => {
             unstable_features: {},
             versions: [],
         });
-        localStorageGetSpy.mockReset();
-        localStorageSetSpy.mockReset();
-        sessionStorageSetSpy.mockReset();
+        localStorageSetSpy = jest.spyOn(localStorage.__proto__, "setItem");
+        localStorageGetSpy = jest.spyOn(localStorage.__proto__, "getItem").mockReturnValue(undefined);
+        localStorageClearSpy = jest.spyOn(localStorage.__proto__, "clear");
+        sessionStorageSetSpy = jest.spyOn(sessionStorage.__proto__, "setItem");
+
         jest.spyOn(StorageManager, "idbLoad").mockReset();
         jest.spyOn(StorageManager, "idbSave").mockResolvedValue(undefined);
         jest.spyOn(defaultDispatcher, "dispatch").mockClear();
 
         await clearAllModals();
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     it("should render spinner while app is loading", () => {
@@ -250,6 +266,10 @@ describe("<MatrixChat />", () => {
         });
 
         describe("onAction()", () => {
+            beforeEach(() => {
+                jest.spyOn(defaultDispatcher, "dispatch").mockClear();
+                jest.spyOn(defaultDispatcher, "fire").mockClear();
+            });
             it("should open user device settings", async () => {
                 await getComponentAndWaitForReady();
 
@@ -270,13 +290,12 @@ describe("<MatrixChat />", () => {
                 const spaceId = "!spaceRoom:server.org";
                 const room = new Room(roomId, mockClient, userId);
                 const spaceRoom = new Room(spaceId, mockClient, userId);
-                jest.spyOn(spaceRoom, "isSpaceRoom").mockReturnValue(true);
 
                 beforeEach(() => {
                     mockClient.getRoom.mockImplementation(
                         (id) => [room, spaceRoom].find((room) => room.roomId === id) || null,
                     );
-                    jest.spyOn(defaultDispatcher, "dispatch").mockClear();
+                    jest.spyOn(spaceRoom, "isSpaceRoom").mockReturnValue(true);
                 });
 
                 describe("leave_room", () => {
@@ -385,6 +404,117 @@ describe("<MatrixChat />", () => {
                                 ),
                             ).toBeInTheDocument();
                         });
+                    });
+                });
+            });
+
+            describe("logout", () => {
+                let logoutClient!: ReturnType<typeof getMockClientWithEventEmitter>;
+                const call1 = { disconnect: jest.fn() } as unknown as Call;
+                const call2 = { disconnect: jest.fn() } as unknown as Call;
+
+                const dispatchLogoutAndWait = async (): Promise<void> => {
+                    defaultDispatcher.dispatch({
+                        action: "logout",
+                    });
+
+                    await flushPromises();
+                };
+
+                beforeEach(() => {
+                    // stub out various cleanup functions
+                    jest.spyOn(LegacyCallHandler.instance, "hangupAllCalls")
+                        .mockClear()
+                        .mockImplementation(() => {});
+                    jest.spyOn(voiceBroadcastUtils, "cleanUpBroadcasts").mockImplementation(async () => {});
+                    jest.spyOn(PosthogAnalytics.instance, "logout").mockImplementation(() => {});
+                    jest.spyOn(EventIndexPeg, "deleteEventIndex").mockImplementation(async () => {});
+
+                    jest.spyOn(CallStore.instance, "activeCalls", "get").mockReturnValue(new Set([call1, call2]));
+
+                    mockPlatformPeg({
+                        destroyPickleKey: jest.fn(),
+                    });
+
+                    logoutClient = getMockClientWithEventEmitter(getMockClientMethods());
+                    mockClient = getMockClientWithEventEmitter(getMockClientMethods());
+                    mockClient.logout.mockResolvedValue({});
+                    mockClient.getDeviceId.mockReturnValue(deviceId);
+                    // this is used to create a temporary client to cleanup after logout
+                    jest.spyOn(MatrixJs, "createClient").mockClear().mockReturnValue(logoutClient);
+
+                    jest.spyOn(logger, "warn").mockClear();
+                });
+
+                afterAll(() => {
+                    jest.spyOn(voiceBroadcastUtils, "cleanUpBroadcasts").mockRestore();
+                });
+
+                it("should hangup all legacy calls", async () => {
+                    await getComponentAndWaitForReady();
+                    await dispatchLogoutAndWait();
+                    expect(LegacyCallHandler.instance.hangupAllCalls).toHaveBeenCalled();
+                });
+
+                it("should cleanup broadcasts", async () => {
+                    await getComponentAndWaitForReady();
+                    await dispatchLogoutAndWait();
+                    expect(voiceBroadcastUtils.cleanUpBroadcasts).toHaveBeenCalled();
+                });
+
+                it("should disconnect all calls", async () => {
+                    await getComponentAndWaitForReady();
+                    await dispatchLogoutAndWait();
+                    expect(call1.disconnect).toHaveBeenCalled();
+                    expect(call2.disconnect).toHaveBeenCalled();
+                });
+
+                it("should logout of posthog", async () => {
+                    await getComponentAndWaitForReady();
+                    await dispatchLogoutAndWait();
+
+                    expect(PosthogAnalytics.instance.logout).toHaveBeenCalled();
+                });
+
+                it("should destroy pickle key", async () => {
+                    await getComponentAndWaitForReady();
+                    await dispatchLogoutAndWait();
+
+                    expect(PlatformPeg.get()!.destroyPickleKey).toHaveBeenCalledWith(userId, deviceId);
+                });
+
+                describe("without delegated auth", () => {
+                    it("should call /logout", async () => {
+                        await getComponentAndWaitForReady();
+                        await dispatchLogoutAndWait();
+
+                        expect(mockClient.logout).toHaveBeenCalledWith(true);
+                    });
+
+                    it("should warn and do post-logout cleanup anyway when logout fails", async () => {
+                        const error = new Error("test logout failed");
+                        mockClient.logout.mockRejectedValue(error);
+                        await getComponentAndWaitForReady();
+                        await dispatchLogoutAndWait();
+
+                        expect(logger.warn).toHaveBeenCalledWith(
+                            "Failed to call logout API: token will not be invalidated",
+                            error,
+                        );
+
+                        // stuff that happens in onloggedout
+                        expect(defaultDispatcher.fire).toHaveBeenCalledWith(Action.OnLoggedOut, true);
+                        expect(logoutClient.clearStores).toHaveBeenCalled();
+                    });
+
+                    it("should do post-logout cleanup", async () => {
+                        await getComponentAndWaitForReady();
+                        await dispatchLogoutAndWait();
+
+                        // stuff that happens in onloggedout
+                        expect(defaultDispatcher.fire).toHaveBeenCalledWith(Action.OnLoggedOut, true);
+                        expect(EventIndexPeg.deleteEventIndex).toHaveBeenCalled();
+                        expect(logoutClient.clearStores).toHaveBeenCalled();
                     });
                 });
             });
