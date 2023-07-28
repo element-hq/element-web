@@ -45,9 +45,11 @@ export const dynamicImportConversionFunctions = async (): Promise<{
      * ensure that HTML entities are correctly interpreted, and to prevent newline characters being turned into `<br>`.
      *
      * @param rich - html to convert
+     * @param inMessageFormat - `true` to format the return value for use as a message `formatted_body`.
+     * `false` to format it for writing to an editor element.
      * @returns a string of plain text that may contain markdown
      */
-    richToPlain(rich: string): Promise<string>;
+    richToPlain(rich: string, inMessageFormat: boolean): Promise<string>;
 
     /**
      * Creates a rust model from plain text input (interpreted as markdown) and uses it to generate the rich text

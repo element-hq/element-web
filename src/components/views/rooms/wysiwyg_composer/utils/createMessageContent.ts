@@ -96,7 +96,7 @@ export async function createMessageContent(
 
     // if we're editing rich text, the message content is pure html
     // BUT if we're not, the message content will be plain text where we need to convert the mentions
-    const body = isHTML ? await richToPlain(message) : convertPlainTextToBody(message);
+    const body = isHTML ? await richToPlain(message, false) : convertPlainTextToBody(message);
     const bodyPrefix = (isReplyAndEditing && getTextReplyFallback(editedEvent)) || "";
     const formattedBodyPrefix = (isReplyAndEditing && getHtmlReplyFallback(editedEvent)) || "";
 
