@@ -146,7 +146,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
 
     private async getUpdatedDiagnostics(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
-        const crypto = cli.crypto;
+        const crypto = cli.getCrypto();
         if (!crypto) return;
 
         const secretStorage = cli.secretStorage;
