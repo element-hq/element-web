@@ -45,9 +45,13 @@ interface IState {
     error?: boolean;
 }
 
-/*
- * Walks the user through the process of creating an e2e key backup
- * on the server.
+/**
+ * Walks the user through the process of setting up e2e key backups to a new backup, and storing the decryption key in
+ * SSSS.
+ *
+ * Uses {@link accessSecretStorage}, which means that if 4S is not already configured, it will be bootstrapped (which
+ * involves displaying an {@link CreateSecretStorageDialog} so the user can enter a passphrase and/or download the 4S
+ * key).
  */
 export default class CreateKeyBackupDialog extends React.PureComponent<IProps, IState> {
     public constructor(props: IProps) {
@@ -75,6 +79,14 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         const cli = MatrixClientPeg.safeGet();
         try {
             await accessSecretStorage(async (): Promise<void> => {
+                // `accessSecretStorage` will have bootstrapped secret storage if necessary, so we can now
+                // set up key backup.
+                //
+                // XXX: `bootstrapSecretStorage` also sets up key backup as a side effect, so there is a 90% chance
+                // this is actually redundant.
+                //
+                // The only time it would *not* be redundant would be if, for some reason, we had working 4S but no
+                // working key backup. (For example, if the user clicked "Delete Backup".)
                 info = await cli.prepareKeyBackupVersion(null /* random key */, {
                     secureSecretStorage: true,
                 });

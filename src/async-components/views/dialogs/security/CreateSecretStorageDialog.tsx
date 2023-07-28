@@ -94,9 +94,12 @@ interface IState {
     error?: boolean;
 }
 
-/*
- * Walks the user through the process of creating a passphrase to guard Secure
- * Secret Storage in account data.
+/**
+ * Walks the user through the process of creating a 4S passphrase and bootstrapping secret storage.
+ *
+ * If the user already has a key backup, follows a "migration" flow (aka "Upgrade your encryption") which
+ * prompts the user to enter their backup decryption password (a Curve25519 private key, possibly derived
+ * from a passphrase), and uses that as the (AES) 4S encryption key.
  */
 export default class CreateSecretStorageDialog extends React.PureComponent<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
@@ -576,12 +579,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     }
 
     private renderPhaseMigrate(): JSX.Element {
-        // TODO: This is a temporary screen so people who have the labs flag turned on and
-        // click the button are aware they're making a change to their account.
-        // Once we're confident enough in this (and it's supported enough) we can do
-        // it automatically.
-        // https://github.com/vector-im/element-web/issues/11696
-
         let authPrompt;
         let nextCaption = _t("Next");
         if (this.state.canUploadKeysWithPasswordOnly) {
