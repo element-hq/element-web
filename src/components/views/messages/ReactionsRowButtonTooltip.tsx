@@ -27,8 +27,8 @@ interface IProps {
     mxEvent: MatrixEvent;
     // The reaction content / key / emoji
     content: string;
-    // A Set of Matrix reaction events for this key
-    reactionEvents: Set<MatrixEvent>;
+    // A list of Matrix reaction events for this key
+    reactionEvents: MatrixEvent[];
     visible: boolean;
 }
 

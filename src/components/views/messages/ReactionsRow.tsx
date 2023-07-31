@@ -18,6 +18,7 @@ import React, { SyntheticEvent } from "react";
 import classNames from "classnames";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { Relations, RelationsEvent } from "matrix-js-sdk/src/models/relations";
+import { uniqBy } from "lodash";
 
 import { _t } from "../../../languageHandler";
 import { isContentActionable } from "../../../utils/EventUtils";
@@ -177,6 +178,10 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                 if (!count) {
                     return null;
                 }
+                // Deduplicate the events as per the spec https://spec.matrix.org/v1.7/client-server-api/#annotations-client-behaviour
+                // This isn't done by the underlying data model as applications may still need access to the whole list of events
+                // for moderation purposes.
+                const deduplicatedEvents = uniqBy([...events], (e) => e.getSender());
                 const myReactionEvent = myReactions?.find((mxEvent) => {
                     if (mxEvent.isRedacted()) {
                         return false;
@@ -187,9 +192,9 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                     <ReactionsRowButton
                         key={content}
                         content={content}
-                        count={count}
+                        count={deduplicatedEvents.length}
                         mxEvent={mxEvent}
-                        reactionEvents={events}
+                        reactionEvents={deduplicatedEvents}
                         myReactionEvent={myReactionEvent}
                         disabled={
                             !this.context.canReact ||

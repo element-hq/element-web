@@ -31,8 +31,8 @@ interface IProps {
     content: string;
     // The count of votes for this key
     count: number;
-    // A Set of Matrix reaction events for this key
-    reactionEvents: Set<MatrixEvent>;
+    // A list of Matrix reaction events for this key
+    reactionEvents: MatrixEvent[];
     // A possible Matrix event if the current user has voted for this type
     myReactionEvent?: MatrixEvent;
     // Whether to prevent quick-reactions by clicking on this reaction
