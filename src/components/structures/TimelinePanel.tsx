@@ -58,8 +58,10 @@ import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 
-const PAGINATE_SIZE = 20;
-const INITIAL_SIZE = 20;
+// These pagination sizes are higher than they may possibly need be
+// once https://github.com/matrix-org/matrix-spec-proposals/pull/3874 lands
+const PAGINATE_SIZE = 50;
+const INITIAL_SIZE = 30;
 const READ_RECEIPT_INTERVAL_MS = 500;
 
 const READ_MARKER_DEBOUNCE_MS = 100;
