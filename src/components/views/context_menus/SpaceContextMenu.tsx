@@ -43,13 +43,17 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps extends IContextMenuProps {
-    space: Room;
+    space?: Room;
     hideHeader?: boolean;
 }
 
 const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...props }) => {
     const cli = useContext(MatrixClientContext);
-    const userId = cli.getUserId()!;
+    const userId = cli.getSafeUserId();
+    const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
+    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
+
+    if (!space) return null;
 
     let inviteOption: JSX.Element | null = null;
     if (space.getJoinRule() === "public" || space.canInvite(userId)) {
@@ -134,9 +138,6 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
             />
         );
     }
-
-    const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
-    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
 
     const hasPermissionToAddSpaceChild = space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
     const canAddRooms = hasPermissionToAddSpaceChild && shouldShowComponent(UIComponent.CreateRooms);

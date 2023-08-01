@@ -121,7 +121,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
     }
 
     let contextMenu: JSX.Element | undefined;
-    if (space && menuDisplayed && handle.current && ContextMenuComponent) {
+    if (menuDisplayed && handle.current && ContextMenuComponent) {
         contextMenu = (
             <ContextMenuComponent
                 {...toRightOf(handle.current.getBoundingClientRect(), 0)}

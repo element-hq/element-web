@@ -56,6 +56,7 @@ describe("<SpaceContextMenu />", () => {
 
     const mockClient = {
         getUserId: jest.fn().mockReturnValue(userId),
+        getSafeUserId: jest.fn().mockReturnValue(userId),
     } as unknown as Mocked<MatrixClient>;
 
     const makeMockSpace = (props = {}) =>
@@ -86,6 +87,7 @@ describe("<SpaceContextMenu />", () => {
     beforeEach(() => {
         jest.resetAllMocks();
         mockClient.getUserId.mockReturnValue(userId);
+        mockClient.getSafeUserId.mockReturnValue(userId);
     });
 
     it("renders menu correctly", () => {
