@@ -6,13 +6,13 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="mx_RoomHeader light-panel"
+      class="mx_LegacyRoomHeader light-panel"
     >
       <div
-        class="mx_RoomHeader_wrapper"
+        class="mx_LegacyRoomHeader_wrapper"
       >
         <div
-          class="mx_RoomHeader_avatar"
+          class="mx_LegacyRoomHeader_avatar"
         >
           <div
             class="mx_DecoratedRoomAvatar"
@@ -41,11 +41,11 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
           </div>
         </div>
         <div
-          class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
+          class="mx_LegacyRoomHeader_name mx_LegacyRoomHeader_name--textonly"
         >
           <div
             aria-level="1"
-            class="mx_RoomHeader_nametext"
+            class="mx_LegacyRoomHeader_nametext"
             dir="auto"
             role="heading"
             title="@user:example.com"
@@ -55,7 +55,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
         </div>
         <div
           aria-describedby="mx_TooltipTarget_abdefghi"
-          class="mx_RoomHeader_topic mx_RoomTopic"
+          class="mx_LegacyRoomHeader_topic mx_RoomTopic"
           dir="auto"
           tabindex="0"
         >
@@ -99,13 +99,13 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="mx_RoomHeader light-panel"
+      class="mx_LegacyRoomHeader light-panel"
     >
       <div
-        class="mx_RoomHeader_wrapper"
+        class="mx_LegacyRoomHeader_wrapper"
       >
         <div
-          class="mx_RoomHeader_avatar"
+          class="mx_LegacyRoomHeader_avatar"
         >
           <div
             class="mx_DecoratedRoomAvatar"
@@ -134,11 +134,11 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           </div>
         </div>
         <div
-          class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
+          class="mx_LegacyRoomHeader_name mx_LegacyRoomHeader_name--textonly"
         >
           <div
             aria-level="1"
-            class="mx_RoomHeader_nametext"
+            class="mx_LegacyRoomHeader_nametext"
             dir="auto"
             role="heading"
             title="@user:example.com"
@@ -148,7 +148,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         </div>
         <div
           aria-describedby="mx_TooltipTarget_abdefghi"
-          class="mx_RoomHeader_topic mx_RoomTopic"
+          class="mx_LegacyRoomHeader_topic mx_RoomTopic"
           dir="auto"
           tabindex="0"
         >
@@ -289,13 +289,13 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="mx_RoomHeader light-panel"
+      class="mx_LegacyRoomHeader light-panel"
     >
       <div
-        class="mx_RoomHeader_wrapper"
+        class="mx_LegacyRoomHeader_wrapper"
       >
         <div
-          class="mx_RoomHeader_avatar"
+          class="mx_LegacyRoomHeader_avatar"
         >
           <div
             class="mx_DecoratedRoomAvatar"
@@ -324,11 +324,11 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
           </div>
         </div>
         <div
-          class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
+          class="mx_LegacyRoomHeader_name mx_LegacyRoomHeader_name--textonly"
         >
           <div
             aria-level="1"
-            class="mx_RoomHeader_nametext"
+            class="mx_LegacyRoomHeader_nametext"
             dir="auto"
             role="heading"
             title="@user:example.com"
@@ -338,7 +338,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
         </div>
         <div
           aria-describedby="mx_TooltipTarget_abdefghi"
-          class="mx_RoomHeader_topic mx_RoomTopic"
+          class="mx_LegacyRoomHeader_topic mx_RoomTopic"
           dir="auto"
           tabindex="0"
         >
@@ -554,13 +554,13 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
     class="mx_RoomView mx_RoomView--local"
   >
     <header
-      class="mx_RoomHeader light-panel"
+      class="mx_LegacyRoomHeader light-panel"
     >
       <div
-        class="mx_RoomHeader_wrapper"
+        class="mx_LegacyRoomHeader_wrapper"
       >
         <div
-          class="mx_RoomHeader_avatar"
+          class="mx_LegacyRoomHeader_avatar"
         >
           <div
             class="mx_DecoratedRoomAvatar"
@@ -590,14 +590,14 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         </div>
         <div
           aria-label="This room is end-to-end encrypted"
-          class="mx_E2EIcon mx_E2EIcon_normal mx_RoomHeader_icon"
+          class="mx_E2EIcon mx_E2EIcon_normal mx_LegacyRoomHeader_icon"
         />
         <div
-          class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
+          class="mx_LegacyRoomHeader_name mx_LegacyRoomHeader_name--textonly"
         >
           <div
             aria-level="1"
-            class="mx_RoomHeader_nametext"
+            class="mx_LegacyRoomHeader_nametext"
             dir="auto"
             role="heading"
             title="@user:example.com"
@@ -607,7 +607,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
         </div>
         <div
           aria-describedby="mx_TooltipTarget_abdefghi"
-          class="mx_RoomHeader_topic mx_RoomTopic"
+          class="mx_LegacyRoomHeader_topic mx_RoomTopic"
           dir="auto"
           tabindex="0"
         >

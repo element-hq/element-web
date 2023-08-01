@@ -63,7 +63,8 @@ import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
 import SearchBar, { SearchScope } from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
-import RoomHeader, { ISearchInfo } from "../views/rooms/RoomHeader";
+import LegacyRoomHeader, { ISearchInfo } from "../views/rooms/LegacyRoomHeader";
+import RoomHeader from "../views/rooms/RoomHeader";
 import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from "../../effects/utils";
@@ -295,22 +296,26 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     return (
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
-                <RoomHeader
-                    room={context.room}
-                    searchInfo={undefined}
-                    inRoom={true}
-                    onSearchClick={null}
-                    onInviteClick={null}
-                    onForgetClick={null}
-                    e2eStatus={room.encrypted ? E2EStatus.Normal : undefined}
-                    onAppsClick={null}
-                    appsShown={false}
-                    excludedRightPanelPhaseButtons={[]}
-                    showButtons={false}
-                    enableRoomOptionsMenu={false}
-                    viewingCall={false}
-                    activeCall={null}
-                />
+                {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
+                    <RoomHeader room={context.room} />
+                ) : (
+                    <LegacyRoomHeader
+                        room={context.room}
+                        searchInfo={undefined}
+                        inRoom={true}
+                        onSearchClick={null}
+                        onInviteClick={null}
+                        onForgetClick={null}
+                        e2eStatus={room.encrypted ? E2EStatus.Normal : undefined}
+                        onAppsClick={null}
+                        appsShown={false}
+                        excludedRightPanelPhaseButtons={[]}
+                        showButtons={false}
+                        enableRoomOptionsMenu={false}
+                        viewingCall={false}
+                        activeCall={null}
+                    />
+                )}
                 <main className="mx_RoomView_body" ref={props.roomView}>
                     <FileDropTarget parent={props.roomView.current} onFileDrop={props.onFileDrop} />
                     <div className="mx_RoomView_timeline">
@@ -345,22 +350,26 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
     return (
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
-                <RoomHeader
-                    room={context.room}
-                    searchInfo={undefined}
-                    inRoom={true}
-                    onSearchClick={null}
-                    onInviteClick={null}
-                    onForgetClick={null}
-                    e2eStatus={props.localRoom.encrypted ? E2EStatus.Normal : undefined}
-                    onAppsClick={null}
-                    appsShown={false}
-                    excludedRightPanelPhaseButtons={[]}
-                    showButtons={false}
-                    enableRoomOptionsMenu={false}
-                    viewingCall={false}
-                    activeCall={null}
-                />
+                {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
+                    <RoomHeader room={context.room} />
+                ) : (
+                    <LegacyRoomHeader
+                        room={context.room}
+                        searchInfo={undefined}
+                        inRoom={true}
+                        onSearchClick={null}
+                        onInviteClick={null}
+                        onForgetClick={null}
+                        e2eStatus={props.localRoom.encrypted ? E2EStatus.Normal : undefined}
+                        onAppsClick={null}
+                        appsShown={false}
+                        excludedRightPanelPhaseButtons={[]}
+                        showButtons={false}
+                        enableRoomOptionsMenu={false}
+                        viewingCall={false}
+                        activeCall={null}
+                    />
+                )}
                 <div className="mx_RoomView_body">
                     <LargeLoader text={text} />
                 </div>
@@ -2460,23 +2469,27 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
                     )}
                     <ErrorBoundary>
-                        <RoomHeader
-                            room={this.state.room}
-                            searchInfo={this.state.search}
-                            oobData={this.props.oobData}
-                            inRoom={myMembership === "join"}
-                            onSearchClick={onSearchClick}
-                            onInviteClick={onInviteClick}
-                            onForgetClick={showForgetButton ? onForgetClick : null}
-                            e2eStatus={this.state.e2eStatus}
-                            onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
-                            appsShown={this.state.showApps}
-                            excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
-                            showButtons={!this.viewsLocalRoom}
-                            enableRoomOptionsMenu={!this.viewsLocalRoom}
-                            viewingCall={viewingCall}
-                            activeCall={this.state.activeCall}
-                        />
+                        {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
+                            <RoomHeader room={this.state.room} />
+                        ) : (
+                            <LegacyRoomHeader
+                                room={this.state.room}
+                                searchInfo={this.state.search}
+                                oobData={this.props.oobData}
+                                inRoom={myMembership === "join"}
+                                onSearchClick={onSearchClick}
+                                onInviteClick={onInviteClick}
+                                onForgetClick={showForgetButton ? onForgetClick : null}
+                                e2eStatus={this.state.e2eStatus}
+                                onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
+                                appsShown={this.state.showApps}
+                                excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
+                                showButtons={!this.viewsLocalRoom}
+                                enableRoomOptionsMenu={!this.viewsLocalRoom}
+                                viewingCall={viewingCall}
+                                activeCall={this.state.activeCall}
+                            />
+                        )}
                         <MainSplit
                             panel={rightPanel}
                             resizeNotifier={this.props.resizeNotifier}

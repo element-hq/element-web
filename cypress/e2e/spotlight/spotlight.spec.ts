@@ -114,7 +114,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
     "roomHeaderName",
     (options?: Partial<Loggable & Timeoutable & Withinable & Shadow>): Chainable<JQuery<HTMLElement>> => {
-        return cy.get(".mx_RoomHeader_nametext", options);
+        return cy.get(".mx_LegacyRoomHeader_nametext", options);
     },
 );
 
@@ -204,7 +204,7 @@ describe("Spotlight", () => {
                 });
         });
         // wait for the room to have the right name
-        cy.get(".mx_RoomHeader").within(() => {
+        cy.get(".mx_LegacyRoomHeader").within(() => {
             cy.findByText(room1Name);
         });
     });

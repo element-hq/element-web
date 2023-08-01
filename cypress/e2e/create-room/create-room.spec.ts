@@ -59,7 +59,7 @@ describe("Create Room", () => {
 
         cy.url().should("contain", "/#/room/#test-room-1:localhost");
 
-        cy.get(".mx_RoomHeader").within(() => {
+        cy.get(".mx_LegacyRoomHeader").within(() => {
             cy.findByText(name);
             cy.findByText(topic);
         });

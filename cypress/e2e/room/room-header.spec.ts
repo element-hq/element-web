@@ -38,8 +38,8 @@ describe("Room Header", () => {
     it("should render default buttons properly", () => {
         cy.createRoom({ name: "Test Room" }).viewRoomByName("Test Room");
 
-        cy.get(".mx_RoomHeader").within(() => {
-            // Names (aria-label) of every button rendered on mx_RoomHeader by default
+        cy.get(".mx_LegacyRoomHeader").within(() => {
+            // Names (aria-label) of every button rendered on mx_LegacyRoomHeader by default
             const expectedButtonNames = [
                 "Room options", // The room name button next to the room avatar, which renders dropdown menu on click
                 "Voice call",
@@ -55,11 +55,11 @@ describe("Room Header", () => {
                 cy.findByRole("button", { name }).should("be.visible");
             }
 
-            // Assert that just those seven buttons exist on mx_RoomHeader by default
+            // Assert that just those seven buttons exist on mx_LegacyRoomHeader by default
             cy.findAllByRole("button").should("have.length", 7);
         });
 
-        cy.get(".mx_RoomHeader").percySnapshotElement("Room header");
+        cy.get(".mx_LegacyRoomHeader").percySnapshotElement("Room header");
     });
 
     it("should render the pin button for pinned messages card", () => {
@@ -73,7 +73,7 @@ describe("Room Header", () => {
 
         cy.findByRole("menuitem", { name: "Pin" }).should("be.visible").click();
 
-        cy.get(".mx_RoomHeader").within(() => {
+        cy.get(".mx_LegacyRoomHeader").within(() => {
             cy.findByRole("button", { name: "Pinned messages" }).should("be.visible");
         });
     });
@@ -88,22 +88,22 @@ describe("Room Header", () => {
 
         cy.createRoom({ name: LONG_ROOM_NAME }).viewRoomByName(LONG_ROOM_NAME);
 
-        cy.get(".mx_RoomHeader").within(() => {
+        cy.get(".mx_LegacyRoomHeader").within(() => {
             // Wait until the room name is set
-            cy.get(".mx_RoomHeader_nametext").within(() => {
+            cy.get(".mx_LegacyRoomHeader_nametext").within(() => {
                 cy.findByText(LONG_ROOM_NAME).should("exist");
             });
 
             // Assert the size of buttons on RoomHeader are specified and the buttons are not compressed
-            // Note these assertions do not check the size of mx_RoomHeader_name button
-            cy.get(".mx_RoomHeader_button")
+            // Note these assertions do not check the size of mx_LegacyRoomHeader_name button
+            cy.get(".mx_LegacyRoomHeader_button")
                 .should("have.length", 6)
                 .should("be.visible")
                 .should("have.css", "height", "32px")
                 .should("have.css", "width", "32px");
         });
 
-        cy.get(".mx_RoomHeader").percySnapshotElement("Room header - with a long room name", {
+        cy.get(".mx_LegacyRoomHeader").percySnapshotElement("Room header - with a long room name", {
             widths: [300, 600], // Magic numbers to emulate the narrow RoomHeader on the actual UI
         });
     });
@@ -111,7 +111,7 @@ describe("Room Header", () => {
     it("should have buttons highlighted by being clicked", () => {
         cy.createRoom({ name: "Test Room" }).viewRoomByName("Test Room");
 
-        cy.get(".mx_RoomHeader").within(() => {
+        cy.get(".mx_LegacyRoomHeader").within(() => {
             // Check these buttons
             const buttonsHighlighted = ["Threads", "Notifications", "Room info"];
 
@@ -120,7 +120,7 @@ describe("Room Header", () => {
             }
         });
 
-        cy.get(".mx_RoomHeader").percySnapshotElement("Room header - with a highlighted button");
+        cy.get(".mx_LegacyRoomHeader").percySnapshotElement("Room header - with a highlighted button");
     });
 
     describe("with a video room", () => {
@@ -144,7 +144,7 @@ describe("Room Header", () => {
         it("should render buttons for room options, beta pill, invite, chat, and room info", () => {
             createVideoRoom();
 
-            cy.get(".mx_RoomHeader").within(() => {
+            cy.get(".mx_LegacyRoomHeader").within(() => {
                 // Names (aria-label) of the buttons on the video room header
                 const expectedButtonNames = [
                     "Room options",
@@ -163,13 +163,13 @@ describe("Room Header", () => {
                 cy.findAllByRole("button").should("have.length", 7);
             });
 
-            cy.get(".mx_RoomHeader").percySnapshotElement("Room header - with a video room");
+            cy.get(".mx_LegacyRoomHeader").percySnapshotElement("Room header - with a video room");
         });
 
         it("should render a working chat button which opens the timeline on a right panel", () => {
             createVideoRoom();
 
-            cy.get(".mx_RoomHeader").findByRole("button", { name: "Chat" }).click();
+            cy.get(".mx_LegacyRoomHeader").findByRole("button", { name: "Chat" }).click();
 
             // Assert that the video is rendered
             cy.get(".mx_CallView video").should("exist");
@@ -250,20 +250,20 @@ describe("Room Header", () => {
             // Assert that AppsDrawer is rendered
             cy.get(".mx_AppsDrawer").should("exist");
 
-            cy.get(".mx_RoomHeader").within(() => {
+            cy.get(".mx_LegacyRoomHeader").within(() => {
                 // Assert that "Hide Widgets" button is rendered and aria-checked is set to true
                 cy.findByRole("button", { name: "Hide Widgets" })
                     .should("exist")
                     .should("have.attr", "aria-checked", "true");
             });
 
-            cy.get(".mx_RoomHeader").percySnapshotElement("Room header - with apps button (highlighted)");
+            cy.get(".mx_LegacyRoomHeader").percySnapshotElement("Room header - with apps button (highlighted)");
         });
 
         it("should support hiding a widget", () => {
             cy.get(".mx_AppsDrawer").should("exist");
 
-            cy.get(".mx_RoomHeader").within(() => {
+            cy.get(".mx_LegacyRoomHeader").within(() => {
                 // Click the apps button to hide AppsDrawer
                 cy.findByRole("button", { name: "Hide Widgets" }).should("exist").click();
 
@@ -276,7 +276,7 @@ describe("Room Header", () => {
             // Assert that AppsDrawer is not rendered
             cy.get(".mx_AppsDrawer").should("not.exist");
 
-            cy.get(".mx_RoomHeader").percySnapshotElement("Room header - with apps button (not highlighted)");
+            cy.get(".mx_LegacyRoomHeader").percySnapshotElement("Room header - with apps button (not highlighted)");
         });
     });
 });

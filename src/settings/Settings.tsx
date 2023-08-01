@@ -566,6 +566,14 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Rooms,
         supportedLevels: LEVELS_FEATURE,
     },
+    "feature_new_room_decoration_ui": {
+        isFeature: true,
+        labsGroup: LabGroup.Rooms,
+        displayName: _td("Under active development, new room header & details interface"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+        controller: new ReloadOnChangeController(),
+    },
     "useCompactLayout": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("Use a more compact 'Modern' layout"),

@@ -45,7 +45,7 @@ describe("1:1 chat room", () => {
 
     it("should open new 1:1 chat room after leaving the old one", () => {
         // leave 1:1 chat room
-        cy.get(".mx_RoomHeader_nametext").within(() => {
+        cy.get(".mx_LegacyRoomHeader_nametext").within(() => {
             cy.findByText(username).click();
         });
         cy.findByRole("menuitem", { name: "Leave" }).click();
@@ -60,7 +60,7 @@ describe("1:1 chat room", () => {
 
         // open new 1:1 chat room
         cy.visit(`/#/user/${user2.userId}?action=chat`);
-        cy.get(".mx_RoomHeader_nametext").within(() => {
+        cy.get(".mx_LegacyRoomHeader_nametext").within(() => {
             cy.findByText(username);
         });
     });

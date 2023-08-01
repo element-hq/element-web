@@ -59,6 +59,7 @@ interface IProps extends IContextMenuProps {
 
 /**
  * Room context menu accessible via the room header.
+ * @deprecated will be removed as part of `feature_new_room_decoration_ui`
  */
 const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     const cli = useContext(MatrixClientContext);

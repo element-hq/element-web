@@ -21,12 +21,12 @@ import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import React from "react";
 
-import RoomHeaderButtons from "../../../../src/components/views/right_panel/RoomHeaderButtons";
+import LegacyRoomHeaderButtons from "../../../../src/components/views/right_panel/LegacyRoomHeaderButtons";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { mkEvent, stubClient } from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
 
-describe("RoomHeaderButtons-test.tsx", function () {
+describe("LegacyRoomHeaderButtons-test.tsx", function () {
     const ROOM_ID = "!roomId:example.org";
     let room: Room;
     let client: MatrixClient;
@@ -43,7 +43,7 @@ describe("RoomHeaderButtons-test.tsx", function () {
     });
 
     function getComponent(room?: Room) {
-        return render(<RoomHeaderButtons room={room} excludedRightPanelPhaseButtons={[]} />);
+        return render(<LegacyRoomHeaderButtons room={room} excludedRightPanelPhaseButtons={[]} />);
     }
 
     function getThreadButton(container: HTMLElement) {
@@ -75,10 +75,10 @@ describe("RoomHeaderButtons-test.tsx", function () {
 
     it("thread notification does change the thread button", () => {
         const { container } = getComponent(room);
-        expect(getThreadButton(container)!.className.includes("mx_RoomHeader_button--unread")).toBeFalsy();
+        expect(getThreadButton(container)!.className.includes("mx_LegacyRoomHeader_button--unread")).toBeFalsy();
 
         room.setThreadUnreadNotificationCount("$123", NotificationCountType.Total, 1);
-        expect(getThreadButton(container)!.className.includes("mx_RoomHeader_button--unread")).toBeTruthy();
+        expect(getThreadButton(container)!.className.includes("mx_LegacyRoomHeader_button--unread")).toBeTruthy();
         expect(isIndicatorOfType(container, "gray")).toBe(true);
 
         room.setThreadUnreadNotificationCount("$123", NotificationCountType.Highlight, 1);

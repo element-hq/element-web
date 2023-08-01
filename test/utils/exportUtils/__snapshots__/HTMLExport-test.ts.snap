@@ -21,23 +21,23 @@ exports[`HTMLExport should export 1`] = `
                 <div class="mx_MatrixChat_wrapper" aria-hidden="false">
                     <div class="mx_MatrixChat">
                     <main class="mx_RoomView">
-                        <div class="mx_RoomHeader light-panel">
-                        <div class="mx_RoomHeader_wrapper" aria-owns="mx_RightPanel">
-                            <div class="mx_RoomHeader_avatar">
+                        <div class="mx_LegacyRoomHeader light-panel">
+                        <div class="mx_LegacyRoomHeader_wrapper" aria-owns="mx_RightPanel">
+                            <div class="mx_LegacyRoomHeader_avatar">
                             <div class="mx_DecoratedRoomAvatar">
                                <span class="mx_BaseAvatar" role="presentation"><span class="mx_BaseAvatar_initial" aria-hidden="true" style="font-size:20.8px;width:32px;line-height:32px">!</span><img loading="lazy" class="mx_BaseAvatar_image" src="data:image/png;base64,00" alt="" title="!myroom:example.org" style="width:32px;height:32px" aria-hidden="true" data-testid="avatar-img"/></span>
                             </div>
                             </div>
-                            <div class="mx_RoomHeader_name">
+                            <div class="mx_LegacyRoomHeader_name">
                             <div
                                 dir="auto"
-                                class="mx_RoomHeader_nametext"
+                                class="mx_LegacyRoomHeader_nametext"
                                 title="!myroom:example.org"
                             >
                                 !myroom:example.org
                             </div>
                             </div>
-                            <div class="mx_RoomHeader_topic" dir="auto">  </div>
+                            <div class="mx_LegacyRoomHeader_topic" dir="auto">  </div>
                         </div>
                         </div>
                         

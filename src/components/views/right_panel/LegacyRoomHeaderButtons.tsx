@@ -64,14 +64,14 @@ const UnreadIndicator: React.FC<IUnreadIndicatorProps> = ({ color }) => {
 
     const classes = classNames({
         mx_Indicator: true,
-        mx_RoomHeader_button_unreadIndicator: true,
+        mx_LegacyRoomHeader_button_unreadIndicator: true,
         mx_Indicator_bold: color === NotificationColor.Bold,
         mx_Indicator_gray: color === NotificationColor.Grey,
         mx_Indicator_red: color === NotificationColor.Red,
     });
     return (
         <>
-            <div className="mx_RoomHeader_button_unreadIndicator_bg" />
+            <div className="mx_LegacyRoomHeader_button_unreadIndicator_bg" />
             <div className={classes} />
         </>
     );
@@ -127,7 +127,10 @@ interface IProps {
     excludedRightPanelPhaseButtons?: Array<RightPanelPhases>;
 }
 
-export default class RoomHeaderButtons extends HeaderButtons<IProps> {
+/**
+ * @deprecated will be removed as part of 'feature_new_room_decoration_ui'
+ */
+export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
     private static readonly THREAD_PHASES = [RightPanelPhases.ThreadPanel, RightPanelPhases.ThreadView];
     private globalNotificationState: SummarizedNotificationState;
 
@@ -257,7 +260,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
     };
 
     private onThreadsPanelClicked = (ev: ButtonEvent): void => {
-        if (this.state.phase && RoomHeaderButtons.THREAD_PHASES.includes(this.state.phase)) {
+        if (this.state.phase && LegacyRoomHeaderButtons.THREAD_PHASES.includes(this.state.phase)) {
             RightPanelStore.instance.togglePanel(this.props.room?.roomId ?? null);
         } else {
             showThreadPanel();
@@ -300,7 +303,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                 data-testid="threadsButton"
                 title={_t("Threads")}
                 onClick={this.onThreadsPanelClicked}
-                isHighlighted={this.isPhase(RoomHeaderButtons.THREAD_PHASES)}
+                isHighlighted={this.isPhase(LegacyRoomHeaderButtons.THREAD_PHASES)}
                 isUnread={this.state.threadNotificationColor > NotificationColor.None}
             >
                 <UnreadIndicator color={this.state.threadNotificationColor} />

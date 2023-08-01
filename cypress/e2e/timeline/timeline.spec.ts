@@ -755,7 +755,7 @@ describe("Timeline", () => {
                 sendEvent(roomId, true);
                 cy.visit("/#/room/" + roomId);
 
-                cy.get(".mx_RoomHeader").findByRole("button", { name: "Search" }).click();
+                cy.get(".mx_LegacyRoomHeader").findByRole("button", { name: "Search" }).click();
 
                 cy.get(".mx_SearchBar").percySnapshotElement("Search bar on the timeline", {
                     // Emulate narrow timeline
@@ -791,7 +791,7 @@ describe("Timeline", () => {
                     .should("have.class", "mx_TextualEvent");
 
                 // Display the room search bar
-                cy.get(".mx_RoomHeader").findByRole("button", { name: "Search" }).click();
+                cy.get(".mx_LegacyRoomHeader").findByRole("button", { name: "Search" }).click();
 
                 // Search the string to display both the message and TextualEvent on search results panel
                 cy.get(".mx_SearchBar").within(() => {
