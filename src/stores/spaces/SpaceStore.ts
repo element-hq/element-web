@@ -929,6 +929,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 this._suggestedRooms = this._suggestedRooms.filter((r) => r.room_id !== room.roomId);
                 if (numSuggestedRooms !== this._suggestedRooms.length) {
                     this.emit(UPDATE_SUGGESTED_ROOMS, this._suggestedRooms);
+                    // If the suggested room was present in the list then we know we don't need to switch space
+                    return;
                 }
 
                 // if the room currently being viewed was just joined then switch to its related space
