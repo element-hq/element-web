@@ -1,5 +1,5 @@
-Changes in [3.77.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.77.0-rc.1) (2023-07-27)
-===============================================================================================================
+Changes in [3.77.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.77.0) (2023-08-01)
+=====================================================================================================
 
 ## 🦖 Deprecations
  * Deprecate camelCase config options ([\#11261](https://github.com/matrix-org/matrix-react-sdk/pull/11261)).
