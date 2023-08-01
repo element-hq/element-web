@@ -15,12 +15,6 @@ limitations under the License.
 */
 
 .mx_ThreadSummary,
-.mx_ThreadSummary_content,
-.mx_ThreadSummary_icon {
-    font-size: $font-12px;
-}
-
-.mx_ThreadSummary,
 .mx_ThreadSummary_content {
     color: $secondary-content;
 }
@@ -47,6 +41,7 @@ limitations under the License.
     clear: both;
     overflow: hidden;
     border: 1px solid $panels; /* always render a border so the hover effect doesn't require a re-layout */
+    font: var(--cpd-font-body-sm-regular);
 
     .mx_ThreadSummary_chevron {
         position: absolute;

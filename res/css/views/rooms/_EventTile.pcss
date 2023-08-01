@@ -1160,6 +1160,7 @@ $left-gutter: 64px;
         display: flex;
         align-items: center;
         position: relative;
+        font: var(--cpd-font-body-sm-regular);
 
         &::before {
             @mixin ThreadSummaryIcon;
@@ -1167,8 +1168,6 @@ $left-gutter: 64px;
 
         .mx_ThreadPanel_replies_amount {
             @mixin ThreadRepliesAmount;
-            line-height: var(--EventTile_ThreadSummary-line-height);
-            font-size: $font-12px; /* Same font size as the counter on the main panel */
         }
 
         .mx_ThreadSummary_content {
