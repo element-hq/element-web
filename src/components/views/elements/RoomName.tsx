@@ -20,10 +20,13 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 
 interface IProps {
-    room: Room;
+    room?: Room;
     children?(name: string): JSX.Element;
 }
 
+/**
+ * @deprecated use `useRoomName.ts` instead
+ */
 const RoomName = ({ room, children }: IProps): JSX.Element => {
     const [name, setName] = useState(room?.name);
     useTypedEventEmitter(room, RoomEvent.Name, () => {
@@ -33,7 +36,7 @@ const RoomName = ({ room, children }: IProps): JSX.Element => {
         setName(room?.name);
     }, [room]);
 
-    if (children) return children(name);
+    if (children) return children(name ?? "");
     return <>{name || ""}</>;
 };
 

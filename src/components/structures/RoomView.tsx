@@ -2470,7 +2470,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     )}
                     <ErrorBoundary>
                         {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                            <RoomHeader room={this.state.room} />
+                            <RoomHeader room={this.state.room} oobData={this.props.oobData} />
                         ) : (
                             <LegacyRoomHeader
                                 room={this.state.room}

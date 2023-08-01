@@ -3,11 +3,21 @@
 exports[`Roomeader renders with no props 1`] = `
 <DocumentFragment>
   <header
-    class="mx_LegacyRoomHeader light-panel"
+    class="mx_RoomHeader light-panel"
   >
     <div
-      class="mx_LegacyRoomHeader_wrapper"
-    />
+      class="mx_RoomHeader_wrapper"
+    >
+      <div
+        aria-level="1"
+        class="mx_RoomHeader_name"
+        dir="auto"
+        role="heading"
+        title="Join Room"
+      >
+        Join Room
+      </div>
+    </div>
   </header>
 </DocumentFragment>
 `;

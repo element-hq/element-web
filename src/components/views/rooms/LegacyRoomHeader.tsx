@@ -483,6 +483,9 @@ interface IState {
     rightPanelOpen: boolean;
 }
 
+/**
+ * @deprecated use `src/components/views/rooms/RoomHeader.tsx` instead
+ */
 export default class RoomHeader extends React.Component<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
         inRoom: false,
