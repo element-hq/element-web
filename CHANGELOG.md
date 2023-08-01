@@ -1,5 +1,5 @@
-Changes in [1.11.37-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.37-rc.1) (2023-07-27)
-===========================================================================================================
+Changes in [1.11.37](https://github.com/vector-im/element-web/releases/tag/v1.11.37) (2023-08-01)
+=================================================================================================
 
 ## 🦖 Deprecations
  * Deprecate camelCase config options ([\#25800](https://github.com/vector-im/element-web/pull/25800)).
