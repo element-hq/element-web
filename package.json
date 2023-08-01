@@ -60,8 +60,8 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
-        "@matrix-org/matrix-wysiwyg": "^2.4.1",
         "@matrix-org/analytics-events": "^0.6.0",
+        "@matrix-org/matrix-wysiwyg": "^2.4.1",
         "@matrix-org/react-sdk-module-api": "^1.0.0",
         "@sentry/browser": "^7.0.0",
         "@sentry/tracing": "^7.0.0",
@@ -97,7 +97,7 @@
         "maplibre-gl": "^2.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-events-sdk": "0.0.1",
-        "matrix-js-sdk": "27.1.0",
+        "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
         "matrix-widget-api": "^1.4.0",
         "memoize-one": "^6.0.0",
         "minimist": "^1.2.5",
