@@ -33,17 +33,24 @@ jobs:
                   chmod -R u=rw,go=r debian/usr/share/element-web/
                   dpkg-deb -Zxz --root-owner-group -VVersion=$VERSION --build debian element-web.deb
 
-            - name: Upload incoming deb
-              run: aws s3 cp element-io-archive-keyring.deb "s3://$R2_INCOMING_BUCKET" --endpoint-url "$R2_URL" --region auto
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+            # For now just upload the artifact to github
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: element-io-archive-keyring
+                  path: element-io-archive-keyring.deb
+                  retention-days: 14
 
-    reprepro:
-        needs: build
-        name: Run reprepro
-        if: inputs.deploy && github.event.release.prerelease == false
-        uses: ./.github/workflows/reprepro.yaml
-        secrets: inherit
-        with:
-            incoming: element-web.deb
+            #- name: Upload incoming deb
+            #  run: aws s3 cp element-io-archive-keyring.deb "s3://$R2_INCOMING_BUCKET" --endpoint-url "$R2_URL" --region auto
+            #  env:
+            #      AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+            #      AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+
+    #reprepro:
+    #    needs: build
+    #    name: Run reprepro
+    #    if: inputs.deploy && github.event.release.prerelease == false
+    #    uses: ./.github/workflows/reprepro.yaml
+    #    secrets: inherit
+    #    with:
+    #        incoming: element-web.deb
