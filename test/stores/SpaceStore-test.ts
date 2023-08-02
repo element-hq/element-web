@@ -20,7 +20,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { defer } from "matrix-js-sdk/src/utils";
-import { ClientEvent, RoomEvent, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixEvent, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 
 import SpaceStore from "../../src/stores/spaces/SpaceStore";
 import {
@@ -38,6 +38,10 @@ import SettingsStore from "../../src/settings/SettingsStore";
 import { SettingLevel } from "../../src/settings/SettingLevel";
 import { Action } from "../../src/dispatcher/actions";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
+import RoomListStore from "../../src/stores/room-list/RoomListStore";
+import { DefaultTagID } from "../../src/stores/room-list/models";
+import { RoomNotificationStateStore } from "../../src/stores/notifications/RoomNotificationStateStore";
+import { NotificationColor } from "../../src/stores/notifications/NotificationColor";
 
 jest.useFakeTimers();
 
@@ -1450,6 +1454,31 @@ describe("SpaceStore", () => {
             expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
             expect(client.getVisibleRooms).not.toHaveBeenCalledWith(false);
             expect(client.getVisibleRooms).not.toHaveBeenCalledWith();
+        });
+    });
+
+    describe("setActiveRoomInSpace", () => {
+        it("should work with Home as all rooms space", async () => {
+            const room = mkRoom(room1);
+            const state = RoomNotificationStateStore.instance.getRoomState(room);
+            // @ts-ignore
+            state._color = NotificationColor.Grey;
+            jest.spyOn(RoomListStore.instance, "orderedLists", "get").mockReturnValue({
+                [DefaultTagID.Untagged]: [room],
+            });
+
+            // init the store
+            await run();
+            await setShowAllRooms(true);
+
+            store.setActiveRoomInSpace(MetaSpace.Home);
+
+            expect(spyDispatcher).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: "view_room",
+                    room_id: room.roomId,
+                }),
+            );
         });
     });
 });
