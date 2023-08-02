@@ -51,7 +51,7 @@ export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resize
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
                 {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                    <RoomHeader room={context.room} />
+                    <RoomHeader room={context.room!} />
                 ) : (
                     <LegacyRoomHeader
                         room={context.room}

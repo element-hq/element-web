@@ -297,7 +297,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
                 {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                    <RoomHeader room={context.room} />
+                    <RoomHeader room={room} />
                 ) : (
                     <LegacyRoomHeader
                         room={context.room}
@@ -345,16 +345,15 @@ interface ILocalRoomCreateLoaderProps {
  * @return {ReactElement}
  */
 function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement {
-    const context = useContext(RoomContext);
     const text = _t("We're creating a room with %(names)s", { names: props.names });
     return (
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
                 {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                    <RoomHeader room={context.room} />
+                    <RoomHeader room={props.localRoom} />
                 ) : (
                     <LegacyRoomHeader
-                        room={context.room}
+                        room={props.localRoom}
                         searchInfo={undefined}
                         inRoom={true}
                         onSearchClick={null}
@@ -2470,7 +2469,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     )}
                     <ErrorBoundary>
                         {SettingsStore.getValue("feature_new_room_decoration_ui") ? (
-                            <RoomHeader room={this.state.room} oobData={this.props.oobData} />
+                            <RoomHeader room={this.state.room} />
                         ) : (
                             <LegacyRoomHeader
                                 room={this.state.room}

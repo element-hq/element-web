@@ -46,26 +46,9 @@ describe("Roomeader", () => {
         setCardSpy = jest.spyOn(RightPanelStore.instance, "setCard");
     });
 
-    it("renders with no props", () => {
-        const { asFragment } = render(<RoomHeader />);
-        expect(asFragment()).toMatchSnapshot();
-    });
-
     it("renders the room header", () => {
         const { container } = render(<RoomHeader room={room} />);
         expect(container).toHaveTextContent(ROOM_ID);
-    });
-
-    it("display the out-of-band room name", () => {
-        const OOB_NAME = "My private room";
-        const { container } = render(
-            <RoomHeader
-                oobData={{
-                    name: OOB_NAME,
-                }}
-            />,
-        );
-        expect(container).toHaveTextContent(OOB_NAME);
     });
 
     it("renders the room topic", async () => {
