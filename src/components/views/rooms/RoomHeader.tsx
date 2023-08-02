@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import { Body as BodyText } from "@vector-im/compound-web";
 
 import type { Room } from "matrix-js-sdk/src/models/room";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
@@ -45,10 +46,22 @@ export default function RoomHeader({ room, oobData }: { room?: Room; oobData?: I
                 <RoomAvatar oobData={oobData} width={40} height={40} />
             )}
             <div className="mx_RoomHeader_info">
-                <div dir="auto" title={roomName} role="heading" aria-level={1} className="mx_RoomHeader_name">
+                <BodyText
+                    as="div"
+                    size="lg"
+                    weight="semibold"
+                    dir="auto"
+                    title={roomName}
+                    role="heading"
+                    aria-level={1}
+                >
                     {roomName}
-                </div>
-                {roomTopic && <div className="mx_RoomHeader_topic">{roomTopic.text}</div>}
+                </BodyText>
+                {roomTopic && (
+                    <BodyText as="div" size="sm" className="mx_RoomHeader_topic">
+                        {roomTopic.text}
+                    </BodyText>
+                )}
             </div>
         </header>
     );
