@@ -19,16 +19,36 @@ import React from "react";
 import type { Room } from "matrix-js-sdk/src/models/room";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
 import { useRoomName } from "../../../hooks/useRoomName";
+import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import { useTopic } from "../../../hooks/room/useTopic";
+import RoomAvatar from "../avatars/RoomAvatar";
 
 export default function RoomHeader({ room, oobData }: { room?: Room; oobData?: IOOBData }): JSX.Element {
     const roomName = useRoomName(room, oobData);
+    const roomTopic = useTopic(room);
 
     return (
-        <header className="mx_RoomHeader light-panel">
-            <div className="mx_RoomHeader_wrapper">
-                <div className="mx_RoomHeader_name" dir="auto" title={roomName} role="heading" aria-level={1}>
+        <header
+            className="mx_RoomHeader light-panel"
+            onClick={() => {
+                const rightPanel = RightPanelStore.instance;
+                rightPanel.isOpen
+                    ? rightPanel.togglePanel(null)
+                    : rightPanel.setCard({ phase: RightPanelPhases.RoomSummary });
+            }}
+        >
+            {room ? (
+                <DecoratedRoomAvatar room={room} oobData={oobData} avatarSize={40} displayBadge={false} />
+            ) : (
+                <RoomAvatar oobData={oobData} width={40} height={40} />
+            )}
+            <div className="mx_RoomHeader_info">
+                <div dir="auto" title={roomName} role="heading" aria-level={1} className="mx_RoomHeader_name">
                     {roomName}
                 </div>
+                {roomTopic && <div className="mx_RoomHeader_topic">{roomTopic.text}</div>}
             </div>
         </header>
     );

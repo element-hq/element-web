@@ -5,8 +5,29 @@ exports[`Roomeader renders with no props 1`] = `
   <header
     class="mx_RoomHeader light-panel"
   >
+    <span
+      class="mx_BaseAvatar"
+      role="presentation"
+    >
+      <span
+        aria-hidden="true"
+        class="mx_BaseAvatar_initial"
+        style="font-size: 26px; width: 40px; line-height: 40px;"
+      >
+        ?
+      </span>
+      <img
+        alt=""
+        aria-hidden="true"
+        class="mx_BaseAvatar_image"
+        data-testid="avatar-img"
+        loading="lazy"
+        src="data:image/png;base64,00"
+        style="width: 40px; height: 40px;"
+      />
+    </span>
     <div
-      class="mx_RoomHeader_wrapper"
+      class="mx_RoomHeader_info"
     >
       <div
         aria-level="1"
