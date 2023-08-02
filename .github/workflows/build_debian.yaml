@@ -1,0 +1,56 @@
+name: Build Debian package
+on:
+    release:
+        types: [published]
+concurrency: ${{ github.workflow }}
+jobs:
+    build:
+        name: Build package
+        if: github.event.release.prerelease == false
+        environment: packages.element.io
+        runs-on: ubuntu-latest
+        env:
+            R2_INCOMING_BUCKET: ${{ vars.R2_INCOMING_BUCKET }}
+            R2_URL: ${{ vars.CF_R2_S3_API }}
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Prepare
+              run: |
+                  mkdir debian/DEBIAN
+                  mv debian/* debian/DEBIAN/
+                  mkdir -p debian/usr/share/element-web/
+
+                  wget https://github.com/vector-im/element-web/releases/download/$VERSION/element-$VERSION.tar.gz
+                  mv element-* debian/usr/share/element-web
+                  mv debian/usr/share/element-web/config.sample.json debian/usr/share/element-web/config.json
+              env:
+                  VERSION: ${{ github.ref_name }}
+
+            - name: Build deb package
+              run: |
+                  VERSION=$(cat package.json | jq -r .version)
+                  chmod -R u=rw,go=r debian/usr/share/element-web/
+                  dpkg-deb -Zxz --root-owner-group -VVersion=$VERSION --build debian element-web.deb
+
+            # For now just upload the artifact to github
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: element-io-archive-keyring
+                  path: element-io-archive-keyring.deb
+                  retention-days: 14
+
+            #- name: Upload incoming deb
+            #  run: aws s3 cp element-io-archive-keyring.deb "s3://$R2_INCOMING_BUCKET" --endpoint-url "$R2_URL" --region auto
+            #  env:
+            #      AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+            #      AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+
+    #reprepro:
+    #    needs: build
+    #    name: Run reprepro
+    #    if: inputs.deploy && github.event.release.prerelease == false
+    #    uses: ./.github/workflows/reprepro.yaml
+    #    secrets: inherit
+    #    with:
+    #        incoming: element-web.deb
