@@ -285,6 +285,7 @@ export class StopGapWidget extends EventEmitter {
 
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.on("preparing", () => this.emit("preparing"));
+        this.messaging.on("error:preparing", (err: unknown) => this.emit("error:preparing", err));
         this.messaging.on("ready", () => {
             WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.roomId, this.messaging!);
             this.emit("ready");

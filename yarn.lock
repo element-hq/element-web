@@ -7019,14 +7019,6 @@ matrix-web-i18n@^1.4.0:
     "@babel/traverse" "^7.18.5"
     walk "^2.3.15"
 
-matrix-widget-api@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.4.0.tgz#e426ec16a013897f3a4a9c2bff423f54ab0ba745"
-  integrity sha512-dw0dRylGQzDUoiaY/g5xx1tBbS7aoov31PRtFMAvG58/4uerYllV9Gfou7w+I1aglwB6hihTREzKltVjARWV6A==
-  dependencies:
-    "@types/events" "^3.0.0"
-    events "^3.2.0"
-
 matrix-widget-api@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.5.0.tgz#4ae3e46a7f2854f944ddaf8a5af63d72fba76c45"

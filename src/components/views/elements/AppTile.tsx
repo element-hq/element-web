@@ -346,14 +346,16 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private setupSgListeners(): void {
         this.sgWidget?.on("preparing", this.onWidgetPreparing);
+        this.sgWidget?.on("error:preparing", this.updateRequiresClient);
         // emits when the capabilities have been set up or changed
-        this.sgWidget?.on("capabilitiesNotified", this.onWidgetCapabilitiesNotified);
+        this.sgWidget?.on("capabilitiesNotified", this.updateRequiresClient);
     }
 
     private stopSgListeners(): void {
         if (!this.sgWidget) return;
         this.sgWidget.off("preparing", this.onWidgetPreparing);
-        this.sgWidget.off("capabilitiesNotified", this.onWidgetCapabilitiesNotified);
+        this.sgWidget.off("error:preparing", this.updateRequiresClient);
+        this.sgWidget.off("capabilitiesNotified", this.updateRequiresClient);
     }
 
     private resetWidget(newProps: IProps): void {
@@ -442,7 +444,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.setState({ loading: false });
     };
 
-    private onWidgetCapabilitiesNotified = (): void => {
+    private updateRequiresClient = (): void => {
         this.setState({
             requiresClient: !!this.sgWidget?.widgetApi?.hasCapability(ElementWidgetCapabilities.RequiresClient),
         });
