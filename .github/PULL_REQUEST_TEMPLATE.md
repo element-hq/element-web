@@ -18,4 +18,9 @@ element-web notes: none
 or specify alternative text:
 
 element-web notes: Add super cool feature
+
+Changes to this project require tagging with the type of change. If you know the correct type, add the following:
+
+Type: [enhancement/defect/task]
+
 -->
