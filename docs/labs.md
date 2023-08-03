@@ -138,3 +138,7 @@ This setting is (currently) _sticky_ to a user's session: it only takes effect w
 ## New room header & details (`feature_new_room_decoration_ui`) [In Development]
 
 Refactors visually the room header and room sidebar
+
+## Notifications panels (`feature_notifications_panel`)
+
+A list of all events notifying the current user. Only works with unencrypted content.
