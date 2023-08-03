@@ -139,6 +139,19 @@ exports[`AppTile for a pinned widget should render 1`] = `
             class="mx_Icon mx_Icon_12"
           />
         </div>
+        <div
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Options"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Options"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
       </span>
     </div>
     <div
@@ -196,6 +209,19 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           role="button"
           tabindex="0"
           title="Minimise"
+        >
+          <div
+            class="mx_Icon mx_Icon_12"
+          />
+        </div>
+        <div
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Options"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+          title="Options"
         >
           <div
             class="mx_Icon mx_Icon_12"
@@ -336,6 +362,19 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                 role="button"
                 tabindex="0"
                 title="Minimise"
+              >
+                <div
+                  class="mx_Icon mx_Icon_12"
+                />
+              </div>
+              <div
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-label="Options"
+                class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                role="button"
+                tabindex="0"
+                title="Options"
               >
                 <div
                   class="mx_Icon mx_Icon_12"
