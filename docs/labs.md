@@ -100,15 +100,6 @@ For some sample themes, check out [aaronraimist/element-themes](https://github.c
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
 
-## Right panel stays open (`feature_right_panel_default_open`)
-
-This is an experimental default open right panel mode as a quick fix for those
-who prefer to have the right panel open consistently across rooms.
-
-If no right panel state is known for the room or it was closed on the last room
-visit, it will default to the room member list. Otherwise, the saved card last
-used in that room is shown.
-
 ## Live location sharing (`feature_location_share_live`) [In Development]
 
 Enables sharing your current location to the timeline, with live updates.
