@@ -28,7 +28,7 @@ import {
 } from "matrix-js-sdk/src/@types/polls";
 import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
 
-import { allVotes, findTopAnswer, isPollEnded } from "../../../../src/components/views/messages/MPollBody";
+import MPollBody, { allVotes, findTopAnswer, isPollEnded } from "../../../../src/components/views/messages/MPollBody";
 import { IBodyProps } from "../../../../src/components/views/messages/IBodyProps";
 import {
     flushPromises,
@@ -38,7 +38,6 @@ import {
     setupRoomWithPollEvents,
 } from "../../../test-utils";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
-import MPollBody from "../../../../src/components/views/messages/MPollBody";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../../src/utils/MediaEventHelper";
 

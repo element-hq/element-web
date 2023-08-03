@@ -22,8 +22,9 @@ import {
     IRequestMsisdnTokenResponse,
     IRequestTokenResponse,
     MatrixClient,
+    MatrixError,
+    HTTPError,
 } from "matrix-js-sdk/src/matrix";
-import { MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
 import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 
 import Modal from "./Modal";

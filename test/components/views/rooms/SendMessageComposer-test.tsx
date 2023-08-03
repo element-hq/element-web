@@ -39,7 +39,6 @@ import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalink
 import { mockPlatformPeg } from "../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../test-utils/composer";
-import dis from "../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/utils/local-room", () => ({
@@ -510,7 +509,7 @@ describe("<SendMessageComposer/>", () => {
                 msgtype: MsgType.Text,
             });
 
-            expect(dis.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` });
+            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` });
         });
 
         it("not to send chat effects on message sending for threads", () => {
@@ -537,7 +536,7 @@ describe("<SendMessageComposer/>", () => {
                 msgtype: MsgType.Text,
             });
 
-            expect(dis.dispatch).not.toHaveBeenCalledWith({ action: `effects.confetti` });
+            expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: `effects.confetti` });
         });
     });
 

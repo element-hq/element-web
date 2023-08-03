@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
+import { MatrixClient, Room, RoomMember, TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import { IDestroyable } from "../../utils/IDestroyable";
 import { VoiceBroadcastPlaybacksStore } from "../stores/VoiceBroadcastPlaybacksStore";

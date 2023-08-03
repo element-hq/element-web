@@ -16,8 +16,7 @@ limitations under the License.
 
 import { getByLabelText, render, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
-import { ComponentProps } from "react";
+import React, { ComponentProps } from "react";
 
 import { EventTileThreadToolbar } from "../../../../../src/components/views/rooms/EventTile/EventTileThreadToolbar";
 

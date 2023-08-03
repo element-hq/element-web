@@ -24,8 +24,8 @@ import {
     MatrixEventEvent,
     MsgType,
     RelationType,
+    TypedEventEmitter,
 } from "matrix-js-sdk/src/matrix";
-import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
 import {
     ChunkRecordedPayload,

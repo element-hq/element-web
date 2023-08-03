@@ -17,11 +17,9 @@ limitations under the License.
 import { useState, useCallback, useMemo } from "react";
 
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { Call, ConnectionState, ElementCall, Layout } from "../models/Call";
-import { useTypedEventEmitterState } from "./useEventEmitter";
-import { CallEvent } from "../models/Call";
+import { Call, ConnectionState, ElementCall, Layout, CallEvent } from "../models/Call";
+import { useTypedEventEmitterState, useEventEmitter } from "./useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
-import { useEventEmitter } from "./useEventEmitter";
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import { _t } from "../languageHandler";
 

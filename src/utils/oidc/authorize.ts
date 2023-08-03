@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize";
+import { completeAuthorizationCodeGrant, generateOidcAuthorizationUrl } from "matrix-js-sdk/src/oidc/authorize";
 import { QueryDict } from "matrix-js-sdk/src/utils";
 import { OidcClientConfig } from "matrix-js-sdk/src/autodiscovery";
-import { generateOidcAuthorizationUrl } from "matrix-js-sdk/src/oidc/authorize";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 
 /**

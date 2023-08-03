@@ -19,7 +19,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import { defer, sleep } from "matrix-js-sdk/src/utils";
-import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
+import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import dis from "./dispatcher/dispatcher";
 import AsyncWrapper from "./AsyncWrapper";

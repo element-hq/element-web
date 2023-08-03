@@ -46,7 +46,7 @@
         "start:build": "babel src -w -s -d lib --verbose --extensions \".ts,.js\"",
         "lint": "yarn lint:types && yarn lint:js && yarn lint:style",
         "lint:js": "eslint --max-warnings 0 src test cypress && prettier --check .",
-        "lint:js-fix": "prettier --loglevel=warn --write . && eslint --fix src test cypress",
+        "lint:js-fix": "eslint --fix src test cypress && prettier --loglevel=warn --write .",
         "lint:types": "tsc --noEmit --jsx react && tsc --noEmit --jsx react -p cypress",
         "lint:style": "stylelint \"res/css/**/*.pcss\"",
         "test": "jest",

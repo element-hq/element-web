@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { renderHook } from "@testing-library/react-hooks";
-import { EventStatus, NotificationCountType, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { EventStatus, NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { useUnreadNotifications } from "../../src/hooks/useUnreadNotifications";

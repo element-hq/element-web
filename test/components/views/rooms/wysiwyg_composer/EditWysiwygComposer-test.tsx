@@ -27,7 +27,6 @@ import { EditWysiwygComposer } from "../../../../../src/components/views/rooms/w
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
 import { Emoji } from "../../../../../src/components/views/rooms/wysiwyg_composer/components/Emoji";
 import { ChevronFace } from "../../../../../src/components/structures/ContextMenu";
-import dis from "../../../../../src/dispatcher/dispatcher";
 import { ComposerInsertPayload, ComposerType } from "../../../../../src/dispatcher/payloads/ComposerInsertPayload";
 import { ActionPayload } from "../../../../../src/dispatcher/payloads";
 import * as EmojiButton from "../../../../../src/components/views/rooms/EmojiButton";
@@ -290,8 +289,8 @@ describe("EditWysiwygComposer", () => {
         // RoomView is re-dispatching the composer messages.
         // It adds the composerType fields where the value refers if the composer is in editing or not
         // The listeners in the RTE ignore the message if the composerType is missing in the payload
-        const dispatcherRef = dis.register((payload: ActionPayload) => {
-            dis.dispatch<ComposerInsertPayload>({
+        const dispatcherRef = defaultDispatcher.register((payload: ActionPayload) => {
+            defaultDispatcher.dispatch<ComposerInsertPayload>({
                 ...(payload as ComposerInsertPayload),
                 composerType: ComposerType.Edit,
             });
@@ -301,6 +300,6 @@ describe("EditWysiwygComposer", () => {
 
         // Then
         await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(/🦫/));
-        dis.unregister(dispatcherRef);
+        defaultDispatcher.unregister(dispatcherRef);
     });
 });

@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent, MatrixEventEvent, RelationType } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, MatrixEventEvent, RelationType, TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { Relations, RelationsEvent } from "matrix-js-sdk/src/models/relations";
-import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
 import { IDestroyable } from "../utils/IDestroyable";
 

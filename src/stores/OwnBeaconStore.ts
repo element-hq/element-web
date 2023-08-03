@@ -40,8 +40,8 @@ import {
     sortBeaconsByLatestCreation,
     TimedGeoUri,
     watchPosition,
+    getCurrentPosition,
 } from "../utils/beacon";
-import { getCurrentPosition } from "../utils/beacon";
 import { doMaybeLocalRoomAction } from "../utils/local-room";
 import SettingsStore from "../settings/SettingsStore";
 

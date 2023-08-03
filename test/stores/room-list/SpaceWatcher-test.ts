@@ -22,9 +22,8 @@ import type { RoomListStoreClass } from "../../../src/stores/room-list/RoomListS
 import SettingsStore from "../../../src/settings/SettingsStore";
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { MetaSpace, UPDATE_HOME_BEHAVIOUR } from "../../../src/stores/spaces";
-import { stubClient } from "../../test-utils";
+import { stubClient, mkSpace, emitPromise, setupAsyncStoreWithClient } from "../../test-utils";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
-import { mkSpace, emitPromise, setupAsyncStoreWithClient } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { SpaceFilterCondition } from "../../../src/stores/room-list/filters/SpaceFilterCondition";
 import DMRoomMap from "../../../src/utils/DMRoomMap";

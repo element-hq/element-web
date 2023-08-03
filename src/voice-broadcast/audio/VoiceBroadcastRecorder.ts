@@ -17,7 +17,7 @@ limitations under the License.
 import { isEqual } from "lodash";
 import { Optional } from "matrix-events-sdk";
 import { logger } from "matrix-js-sdk/src/logger";
-import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
+import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import { getChunkLength } from "..";
 import { IRecordingUpdate, VoiceRecording } from "../../audio/VoiceRecording";

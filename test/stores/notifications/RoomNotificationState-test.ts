@@ -21,8 +21,8 @@ import {
     EventStatus,
     NotificationCountType,
     EventType,
+    MatrixEvent,
 } from "matrix-js-sdk/src/matrix";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mkEvent, muteRoom, stubClient } from "../../test-utils";

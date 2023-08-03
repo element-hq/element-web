@@ -16,9 +16,7 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import type { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
-import type { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
-import type { IContent } from "matrix-js-sdk/src/models/event";
+import type { EventType, MsgType, ISendEventResponse, IContent } from "matrix-js-sdk/src/matrix";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;

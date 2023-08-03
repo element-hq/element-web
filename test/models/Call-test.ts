@@ -29,11 +29,18 @@ import type { Mocked } from "jest-mock";
 import type { MatrixClient, IMyDevice } from "matrix-js-sdk/src/client";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import type { ClientWidgetApi } from "matrix-widget-api";
-import { JitsiCallMemberContent, Layout } from "../../src/models/Call";
+import {
+    JitsiCallMemberContent,
+    Layout,
+    Call,
+    CallEvent,
+    ConnectionState,
+    JitsiCall,
+    ElementCall,
+} from "../../src/models/Call";
 import { stubClient, mkEvent, mkRoomMember, setupAsyncStoreWithClient, mockPlatformPeg } from "../test-utils";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../src/MediaDeviceHandler";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import { Call, CallEvent, ConnectionState, JitsiCall, ElementCall } from "../../src/models/Call";
 import WidgetStore from "../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../src/stores/ActiveWidgetStore";
