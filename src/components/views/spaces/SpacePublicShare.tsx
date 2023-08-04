@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { _t } from "../../../languageHandler";

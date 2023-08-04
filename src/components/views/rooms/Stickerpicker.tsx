@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IWidget } from "matrix-widget-api";
 import { ClientEvent } from "matrix-js-sdk/src/client";

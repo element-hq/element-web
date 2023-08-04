@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";

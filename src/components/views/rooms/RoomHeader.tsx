@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { Body as BodyText } from "@vector-im/compound-web";
 
-import type { Room } from "matrix-js-sdk/src/models/room";
+import type { Room } from "matrix-js-sdk/src/matrix";
 import { useRoomName } from "../../../hooks/useRoomName";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";

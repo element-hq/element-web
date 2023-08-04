@@ -18,7 +18,7 @@ limitations under the License.
 import React from "react";
 import classNames from "classnames";
 import { Resizable, Size } from "re-resizable";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { IWidget } from "matrix-widget-api";
 
 import AppTile from "../elements/AppTile";

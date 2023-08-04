@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useContext, useEffect } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseCard from "./BaseCard";

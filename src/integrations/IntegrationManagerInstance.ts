@@ -17,7 +17,7 @@ limitations under the License.
 import { ComponentProps } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import type { Room } from "matrix-js-sdk/src/models/room";
+import type { Room } from "matrix-js-sdk/src/matrix";
 import ScalarAuthClient from "../ScalarAuthClient";
 import { dialogTermsInteractionCallback, TermsNotSignedError } from "../Terms";
 import Modal from "../Modal";

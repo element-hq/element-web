@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { FC, MutableRefObject, useCallback, useMemo } from "react";
-import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 
 import PersistentApp from "../elements/PersistentApp";
 import defaultDispatcher from "../../../dispatcher/dispatcher";

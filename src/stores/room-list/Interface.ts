@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type { Room } from "matrix-js-sdk/src/models/room";
+import type { Room } from "matrix-js-sdk/src/matrix";
 import type { EventEmitter } from "events";
 import { ITagMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
 import { RoomUpdateCause, TagID } from "./models";

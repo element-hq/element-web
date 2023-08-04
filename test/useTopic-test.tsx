@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { act, render, screen } from "@testing-library/react";
 
 import { useTopic } from "../src/hooks/room/useTopic";

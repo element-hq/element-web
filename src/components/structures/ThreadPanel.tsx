@@ -18,7 +18,7 @@ import { Optional } from "matrix-events-sdk";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
 import { Thread } from "matrix-js-sdk/src/models/thread";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import BaseCard from "../views/right_panel/BaseCard";
 import ResizeNotifier from "../../utils/ResizeNotifier";

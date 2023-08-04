@@ -16,7 +16,7 @@ limitations under the License.
 
 import { ListIteratee, Many, sortBy } from "lodash";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
-import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { ClientEvent } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";

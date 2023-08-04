@@ -18,7 +18,7 @@ import React from "react";
 import { render, screen, act, fireEvent, waitFor, getByRole, RenderResult } from "@testing-library/react";
 import { mocked, Mocked } from "jest-mock";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { PendingEventOrdering } from "matrix-js-sdk/src/client";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";

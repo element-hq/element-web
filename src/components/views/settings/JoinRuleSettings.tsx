@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { IJoinRuleEventContent, JoinRule, RestrictedAllowType } from "matrix-js-sdk/src/@types/partials";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import StyledRadioGroup, { IDefinition } from "../elements/StyledRadioGroup";

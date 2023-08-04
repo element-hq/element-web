@@ -16,8 +16,14 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import { PushRuleActionName, TweakName } from "matrix-js-sdk/src/@types/PushRules";
-import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
-import { EventStatus, EventType, MatrixEvent, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import {
+    NotificationCountType,
+    Room,
+    EventStatus,
+    EventType,
+    MatrixEvent,
+    PendingEventOrdering,
+} from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mkEvent, mkRoom, muteRoom, stubClient, upsertRoomStateEvents } from "./test-utils";

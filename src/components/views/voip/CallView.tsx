@@ -19,7 +19,7 @@ import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 
-import type { Room } from "matrix-js-sdk/src/models/room";
+import type { Room } from "matrix-js-sdk/src/matrix";
 import type { ConnectionState } from "../../../models/Call";
 import { Call, CallEvent, ElementCall, isConnected } from "../../../models/Call";
 import {

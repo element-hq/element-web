@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, createRef } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import {
     KnownPollKind,
     M_POLL_KIND_DISCLOSED,

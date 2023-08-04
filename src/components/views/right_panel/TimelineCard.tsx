@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
-import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
+import { NotificationCountType, Room } from "matrix-js-sdk/src/matrix";
 import { Thread } from "matrix-js-sdk/src/models/thread";
 
 import BaseCard from "./BaseCard";

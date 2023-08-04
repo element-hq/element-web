@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, createRef, KeyboardEvent, SyntheticEvent } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { JoinRule, Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 

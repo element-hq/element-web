@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
+import { TypedEventEmitter, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { RoomEvent } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
@@ -33,9 +32,7 @@ import {
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import type EventEmitter from "events";
-import type { IMyDevice } from "matrix-js-sdk/src/client";
-import type { Room } from "matrix-js-sdk/src/models/room";
-import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import type { Room, IMyDevice, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import type { IApp } from "../stores/WidgetStore";
 import SdkConfig, { DEFAULTS } from "../SdkConfig";

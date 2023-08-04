@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 // Populate this file with the details of your customisations when copying it.
 

@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import { ReactElement } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import CommandProvider from "./CommandProvider";
 import RoomProvider from "./RoomProvider";

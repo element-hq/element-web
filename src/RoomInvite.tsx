@@ -15,12 +15,8 @@ limitations under the License.
 */
 
 import React, { ComponentProps } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { User } from "matrix-js-sdk/src/models/user";
+import { Room, MatrixEvent, MatrixClient, User, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import MultiInviter, { CompletionStates } from "./utils/MultiInviter";
 import Modal from "./Modal";

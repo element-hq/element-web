@@ -16,7 +16,7 @@ limitations under the License.
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { User } from "matrix-js-sdk/src/models/user";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 

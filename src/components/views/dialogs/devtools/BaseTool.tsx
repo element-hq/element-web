@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { createContext, ReactNode, useState } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { _t } from "../../../../languageHandler";

@@ -14,10 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { User } from "matrix-js-sdk/src/models/user";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
+import { RoomMember, User, Room, ResizeMethod } from "matrix-js-sdk/src/matrix";
 
 import DMRoomMap from "./utils/DMRoomMap";
 import { mediaFromMxc } from "./customisations/Media";

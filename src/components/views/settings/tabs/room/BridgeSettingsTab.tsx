@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import BridgeTile from "../../BridgeTile";

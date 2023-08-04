@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomEvent } from "matrix-js-sdk/src/models/room";
+import { RoomEvent } from "matrix-js-sdk/src/matrix";
 import { useCallback, useEffect, useState } from "react";
 
-import type { NotificationCount, Room } from "matrix-js-sdk/src/models/room";
+import type { NotificationCount, Room } from "matrix-js-sdk/src/matrix";
 import { determineUnreadState } from "../RoomNotifs";
 import { NotificationColor } from "../stores/notifications/NotificationColor";
 import { useEventEmitter } from "./useEventEmitter";

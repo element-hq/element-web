@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useMemo } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { _t, _td } from "../../../languageHandler";

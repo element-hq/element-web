@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { IJoinRuleEventContent, JoinRule } from "matrix-js-sdk/src/@types/partials";

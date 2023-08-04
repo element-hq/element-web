@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";

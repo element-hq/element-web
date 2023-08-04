@@ -17,8 +17,7 @@ limitations under the License.
 import React, { ReactNode } from "react";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SyncState, ISyncStateData } from "matrix-js-sdk/src/sync";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { Icon as WarningIcon } from "../../../res/img/feather-customised/warning-triangle.svg";
 import { _t, _td } from "../../languageHandler";

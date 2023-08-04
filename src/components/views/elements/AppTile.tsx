@@ -20,7 +20,7 @@ limitations under the License.
 import React, { ContextType, createRef, CSSProperties, MutableRefObject, ReactNode } from "react";
 import classNames from "classnames";
 import { IWidget, MatrixCapabilities } from "matrix-widget-api";
-import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 

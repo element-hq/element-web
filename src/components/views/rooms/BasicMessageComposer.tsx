@@ -16,7 +16,7 @@ limitations under the License.
 
 import classNames from "classnames";
 import React, { createRef, ClipboardEvent, SyntheticEvent } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import EMOTICON_REGEX from "emojibase-regex/emoticon";
 import { logger } from "matrix-js-sdk/src/logger";

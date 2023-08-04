@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { FC, useContext, useState } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { _t } from "../../../languageHandler";

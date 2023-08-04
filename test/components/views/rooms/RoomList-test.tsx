@@ -19,7 +19,7 @@ import React, { ComponentProps } from "react";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import RoomList from "../../../../src/components/views/rooms/RoomList";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";

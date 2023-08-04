@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { CSSTransition } from "react-transition-group";
 
 import { BreadcrumbsStore } from "../../../stores/BreadcrumbsStore";

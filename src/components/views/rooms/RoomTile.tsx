@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { createRef } from "react";
-import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import type { Call } from "../../../models/Call";

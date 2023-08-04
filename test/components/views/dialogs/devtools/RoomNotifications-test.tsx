@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render } from "@testing-library/react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { PendingEventOrdering } from "matrix-js-sdk/src/client";
 
 import RoomNotifications from "../../../../../src/components/views/dialogs/devtools/RoomNotifications";

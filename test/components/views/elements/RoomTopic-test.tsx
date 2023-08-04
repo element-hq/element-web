@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 import { mkEvent, stubClient } from "../../../test-utils";

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { EventEmitter } from "events";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import { FILTER_CHANGED, IFilterCondition } from "./IFilterCondition";
 import { IDestroyable } from "../../../utils/IDestroyable";

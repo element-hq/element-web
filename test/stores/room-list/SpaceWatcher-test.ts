@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import { SpaceWatcher } from "../../../src/stores/room-list/SpaceWatcher";
 import type { RoomListStoreClass } from "../../../src/stores/room-list/RoomListStore";

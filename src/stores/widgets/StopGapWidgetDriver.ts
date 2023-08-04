@@ -36,10 +36,9 @@ import {
 import { ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, Direction } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
-import { Direction } from "matrix-js-sdk/src/matrix";
 import {
     ApprovalOpts,
     CapabilitiesOpts,

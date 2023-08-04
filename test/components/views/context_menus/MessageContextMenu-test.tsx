@@ -17,8 +17,8 @@ limitations under the License.
 import React from "react";
 import { fireEvent, render, RenderResult } from "@testing-library/react";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
 import {
+    Room,
     PendingEventOrdering,
     BeaconIdentifier,
     Beacon,

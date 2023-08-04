@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { IEventRelation } from "matrix-js-sdk/src/matrix";
+import { Room, IEventRelation } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
 
 import ContentMessages from "../../ContentMessages";

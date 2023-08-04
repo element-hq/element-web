@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../languageHandler";
 import AutocompleteProvider from "./AutocompleteProvider";

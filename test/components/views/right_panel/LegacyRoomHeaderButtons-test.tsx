@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import { render } from "@testing-library/react";
-import { MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, MsgType, RelationType, NotificationCountType, Room } from "matrix-js-sdk/src/matrix";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import React from "react";
 

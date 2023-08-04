@@ -16,12 +16,11 @@ limitations under the License.
 
 import React from "react";
 import { jest } from "@jest/globals";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { Optional } from "matrix-events-sdk";
 import { act, render, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { SpiedFunction } from "jest-mock";
 import {
     ApprovalOpts,

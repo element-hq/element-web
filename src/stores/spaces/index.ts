@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 
 import { _t } from "../../languageHandler";

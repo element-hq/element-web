@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import { MatrixEventEvent } from "matrix-js-sdk/src/models/event";
-import { RoomEvent } from "matrix-js-sdk/src/models/room";
+import { RoomEvent } from "matrix-js-sdk/src/matrix";
 import { ClientEvent } from "matrix-js-sdk/src/client";
 
-import type { Room } from "matrix-js-sdk/src/models/room";
+import type { Room } from "matrix-js-sdk/src/matrix";
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { IDestroyable } from "../../utils/IDestroyable";
 import { MatrixClientPeg } from "../../MatrixClientPeg";

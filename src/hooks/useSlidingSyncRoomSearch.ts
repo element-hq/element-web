@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { useCallback, useState } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { useLatestResult } from "./useLatestResult";

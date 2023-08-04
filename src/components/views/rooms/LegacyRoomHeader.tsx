@@ -23,7 +23,7 @@ import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { ISearchResults } from "matrix-js-sdk/src/@types/search";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import type { Room } from "matrix-js-sdk/src/models/room";
+import type { Room } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../../languageHandler";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";

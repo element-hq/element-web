@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useContext } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 
 import { IProps as IContextMenuProps } from "../../structures/ContextMenu";

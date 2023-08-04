@@ -19,7 +19,7 @@ import { zip } from "lodash";
 import { render, screen, act, fireEvent, waitFor, cleanup } from "@testing-library/react";
 import { mocked, Mocked } from "jest-mock";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { Widget } from "matrix-widget-api";
 

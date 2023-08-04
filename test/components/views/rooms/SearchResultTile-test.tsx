@@ -18,7 +18,7 @@ import * as React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { render, type RenderResult } from "@testing-library/react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import { stubClient } from "../../../test-utils";
 import SearchResultTile from "../../../../src/components/views/rooms/SearchResultTile";

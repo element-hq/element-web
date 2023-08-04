@@ -18,7 +18,7 @@ import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 

@@ -15,12 +15,15 @@ limitations under the License.
 */
 
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
-import { NotificationCountType } from "matrix-js-sdk/src/models/room";
-import { ConditionKind, PushRuleActionName, PushRuleKind, TweakName } from "matrix-js-sdk/src/@types/PushRules";
+import {
+    NotificationCountType,
+    ConditionKind,
+    PushRuleActionName,
+    PushRuleKind,
+    TweakName,
+} from "matrix-js-sdk/src/matrix";
 
-import type { IPushRule } from "matrix-js-sdk/src/@types/PushRules";
-import type { Room } from "matrix-js-sdk/src/models/room";
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { IPushRule, Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { NotificationColor } from "./stores/notifications/NotificationColor";
 import { getUnsentMessages } from "./components/structures/RoomStatusBar";
 import { doesRoomHaveUnreadMessages, doesRoomOrThreadHaveUnreadMessages } from "./Unread";

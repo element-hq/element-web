@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { FormEvent, useCallback, useContext, useRef, useState } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from "../../../languageHandler";
