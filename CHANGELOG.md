@@ -1,3 +1,9 @@
+Changes in [3.77.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.77.1) (2023-08-04)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Revert to using the /presence API for presence ([\#11366](https://github.com/matrix-org/matrix-react-sdk/pull/11366))
+
 Changes in [3.77.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.77.0) (2023-08-01)
 =====================================================================================================
 
