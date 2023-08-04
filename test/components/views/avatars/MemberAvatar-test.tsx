@@ -17,8 +17,7 @@ limitations under the License.
 import { getByTestId, render, waitFor } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import React, { ComponentProps } from "react";
 
 import MemberAvatar from "../../../../src/components/views/avatars/MemberAvatar";

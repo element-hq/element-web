@@ -16,10 +16,9 @@ limitations under the License.
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { User, UserEvent } from "matrix-js-sdk/src/models/user";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { RoomStateEvent, MatrixError } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";

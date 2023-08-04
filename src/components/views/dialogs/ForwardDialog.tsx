@@ -17,9 +17,8 @@ limitations under the License.
 import React, { useEffect, useMemo, useState } from "react";
 import classnames from "classnames";
 import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { ILocationContent, LocationAssetType, M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
 import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";

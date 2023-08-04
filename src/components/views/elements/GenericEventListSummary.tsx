@@ -17,7 +17,7 @@ limitations under the License.
 import React, { ReactNode, useEffect } from "react";
 import { uniqBy } from "lodash";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MemberAvatar from "../avatars/MemberAvatar";

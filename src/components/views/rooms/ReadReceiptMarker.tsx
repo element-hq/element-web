@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { createRef, RefObject } from "react";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import NodeAnimator from "../../../NodeAnimator";

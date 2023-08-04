@@ -16,14 +16,13 @@ limitations under the License.
 
 import React, { createRef, ReactNode } from "react";
 import ReactDOM from "react-dom";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { Room, RoomEvent, RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/matrix";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { EventTimelineSet, IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { SyncState } from "matrix-js-sdk/src/sync";
-import { RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
 import { debounce, findLastIndex, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";

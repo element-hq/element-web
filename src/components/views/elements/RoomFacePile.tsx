@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { FC, HTMLAttributes, useContext } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { sortBy } from "lodash";
 
 import { _t } from "../../../languageHandler";

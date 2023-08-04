@@ -19,12 +19,18 @@ limitations under the License.
 
 import React, { createRef, ReactElement, ReactNode, RefObject, useContext } from "react";
 import classNames from "classnames";
-import { IRecommendedVersion, NotificationCountType, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import {
+    IRecommendedVersion,
+    NotificationCountType,
+    Room,
+    RoomEvent,
+    RoomState,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { throttle } from "lodash";
 import { MatrixError } from "matrix-js-sdk/src/http-api";

@@ -17,8 +17,7 @@ limitations under the License.
 import React, { createRef, ReactNode } from "react";
 import classNames from "classnames";
 import { IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { Optional } from "matrix-events-sdk";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";

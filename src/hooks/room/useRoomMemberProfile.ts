@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 import { useContext, useMemo } from "react";
 
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";

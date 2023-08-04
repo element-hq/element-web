@@ -18,12 +18,11 @@ import React from "react";
 import { mocked, Mocked } from "jest-mock";
 import { render, screen, act } from "@testing-library/react";
 import { PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 
 import type { MatrixClient } from "matrix-js-sdk/src/client";
-import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import { stubClient, wrapInMatrixClientContext, mkRoomMember } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";

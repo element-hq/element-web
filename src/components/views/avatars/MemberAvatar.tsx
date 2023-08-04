@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { ReactNode, useContext } from "react";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
 
 import dis from "../../../dispatcher/dispatcher";

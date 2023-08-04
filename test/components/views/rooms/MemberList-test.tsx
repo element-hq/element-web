@@ -17,8 +17,7 @@ limitations under the License.
 
 import React from "react";
 import { act, render, RenderResult } from "@testing-library/react";
-import { Room, MatrixClient, RoomState } from "matrix-js-sdk/src/matrix";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { Room, MatrixClient, RoomState, RoomMember } from "matrix-js-sdk/src/matrix";
 import { User } from "matrix-js-sdk/src/models/user";
 import { compare } from "matrix-js-sdk/src/utils";
 

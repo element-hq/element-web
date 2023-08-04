@@ -16,13 +16,11 @@ limitations under the License.
 
 import React from "react";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { RoomMember, RoomState, RoomStateEvent, Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle, get } from "lodash";
 import { compare } from "matrix-js-sdk/src/utils";
 import { IContent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td } from "../../../../../languageHandler";
 import AccessibleButton from "../../../elements/AccessibleButton";

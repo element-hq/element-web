@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { FC, HTMLAttributes, ReactNode } from "react";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 
 import MemberAvatar from "../avatars/MemberAvatar";
 import TooltipTarget from "./TooltipTarget";

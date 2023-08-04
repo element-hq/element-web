@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, FormEvent, ReactNode } from "react";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";

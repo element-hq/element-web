@@ -16,9 +16,8 @@ limitations under the License.
 
 import isIp from "is-ip";
 import * as utils from "matrix-js-sdk/src/utils";
-import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixClient, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import MatrixToPermalinkConstructor, {

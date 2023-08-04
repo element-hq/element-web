@@ -16,8 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
+import { Room, RoomEvent, RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/matrix";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { compare } from "matrix-js-sdk/src/utils";
 

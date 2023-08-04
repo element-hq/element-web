@@ -19,14 +19,13 @@ import { mocked } from "jest-mock";
 import { waitFor } from "@testing-library/react";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { Room, RoomEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { Room, RoomEvent, MatrixEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { Widget } from "matrix-widget-api";
 import { GroupCallIntent } from "matrix-js-sdk/src/webrtc/groupCall";
 
 import type { Mocked } from "jest-mock";
 import type { MatrixClient, IMyDevice } from "matrix-js-sdk/src/client";
-import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     JitsiCallMemberContent,

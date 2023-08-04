@@ -21,8 +21,7 @@ import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 import { IUsageLimit } from "matrix-js-sdk/src/@types/partials";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { RoomStateEvent, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../Keyboard";
 import PageTypes from "../../PageTypes";
