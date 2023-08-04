@@ -1,3 +1,12 @@
+Changes in [1.11.38](https://github.com/vector-im/element-web/releases/tag/v1.11.38) (2023-08-04)
+=================================================================================================
+
+## ✨ Features
+ * Package release builds of element-web in package.element.io debs ([\#25198](https://github.com/vector-im/element-web/pull/25198)).
+
+## 🐛 Bug Fixes
+ * Revert to using the /presence API for presence ([\#11366](https://github.com/matrix-org/matrix-react-sdk/pull/11366))
+
 Changes in [1.11.37](https://github.com/vector-im/element-web/releases/tag/v1.11.37) (2023-08-01)
 =================================================================================================
 
