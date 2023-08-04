@@ -138,3 +138,7 @@ This setting is (currently) _sticky_ to a user's session: it only takes effect w
 ## New room header & details (`feature_new_room_decoration_ui`) [In Development]
 
 Refactors visually the room header and room sidebar
+
+## Knock rooms (`feature_ask_to_join`) [In Development]
+
+Enables knock feature for rooms. This allows users to ask to join a room.
