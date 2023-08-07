@@ -37,7 +37,7 @@ import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { ClientEvent } from "matrix-js-sdk/src/client";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
-import { HistoryVisibility } from "matrix-js-sdk/src/@types/partials";
+import { HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { ISearchResults } from "matrix-js-sdk/src/@types/search";
 import { IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 
@@ -125,6 +125,8 @@ import WidgetUtils from "../../utils/WidgetUtils";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
 import { WaitingForThirdPartyRoomView } from "./WaitingForThirdPartyRoomView";
 import { isNotUndefined } from "../../Typeguards";
+import { CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoinPayload";
+import { SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -238,6 +240,10 @@ export interface IRoomState {
     liveTimeline?: EventTimeline;
     narrow: boolean;
     msc3946ProcessDynamicPredecessor: boolean;
+
+    canAskToJoin: boolean;
+    promptAskToJoin: boolean;
+    knocked: boolean;
 }
 
 interface LocalRoomViewProps {
@@ -384,6 +390,7 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
 }
 
 export class RoomView extends React.Component<IRoomProps, IRoomState> {
+    private readonly askToJoinEnabled: boolean;
     private readonly dispatcherRef: string;
     private settingWatchers: string[];
 
@@ -400,6 +407,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     public constructor(props: IRoomProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
+
+        this.askToJoinEnabled = SettingsStore.getValue("feature_ask_to_join");
 
         if (!context.client) {
             throw new Error("Unable to create RoomView without MatrixClient");
@@ -445,6 +454,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             liveTimeline: undefined,
             narrow: false,
             msc3946ProcessDynamicPredecessor: SettingsStore.getValue("feature_dynamic_room_predecessors"),
+            canAskToJoin: this.askToJoinEnabled,
+            promptAskToJoin: false,
+            knocked: false,
         };
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -649,6 +661,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                   )
                 : false,
             activeCall: roomId ? CallStore.instance.getActiveCall(roomId) : null,
+            promptAskToJoin: this.context.roomViewStore.promptAskToJoin(),
+            knocked: this.context.roomViewStore.knocked(),
         };
 
         if (
@@ -891,6 +905,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         this.setState({
                             room: room,
                             peekLoading: false,
+                            canAskToJoin: this.askToJoinEnabled && room.getJoinRule() === JoinRule.Knock,
                         });
                         this.onRoomLoaded(room);
                     })
@@ -919,7 +934,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             } else if (room) {
                 // Stop peeking because we have joined this room previously
                 this.context.client?.stopPeeking();
-                this.setState({ isPeeking: false });
+                this.setState({
+                    isPeeking: false,
+                    canAskToJoin: this.askToJoinEnabled && room.getJoinRule() === JoinRule.Knock,
+                });
             }
         }
     }
@@ -1593,6 +1611,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         roomId,
                         opts: { inviteSignUrl: signUrl },
                         metricsTrigger: this.state.room?.getMyMembership() === "invite" ? "Invite" : "RoomPreview",
+                        canAskToJoin: this.state.canAskToJoin,
                     });
                 }
 
@@ -1997,6 +2016,40 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         );
     }
 
+    /**
+     * Handles the submission of a request to join a room.
+     *
+     * @param {string} reason - An optional reason for the request to join.
+     * @returns {void}
+     */
+    private onSubmitAskToJoin = (reason?: string): void => {
+        const roomId = this.getRoomId();
+
+        if (isNotUndefined(roomId)) {
+            dis.dispatch<SubmitAskToJoinPayload>({
+                action: Action.SubmitAskToJoin,
+                roomId,
+                opts: { reason },
+            });
+        }
+    };
+
+    /**
+     * Handles the cancellation of a request to join a room.
+     *
+     * @returns {void}
+     */
+    private onCancelAskToJoin = (): void => {
+        const roomId = this.getRoomId();
+
+        if (isNotUndefined(roomId)) {
+            dis.dispatch<CancelAskToJoinPayload>({
+                action: Action.CancelAskToJoin,
+                roomId,
+            });
+        }
+    };
+
     public render(): ReactNode {
         if (!this.context.client) return null;
 
@@ -2062,6 +2115,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 oobData={this.props.oobData}
                                 signUrl={this.props.threepidInvite?.signUrl}
                                 roomId={this.state.roomId}
+                                promptAskToJoin={this.state.promptAskToJoin}
+                                knocked={this.state.knocked}
+                                onSubmitAskToJoin={this.onSubmitAskToJoin}
+                                onCancelAskToJoin={this.onCancelAskToJoin}
                             />
                         </ErrorBoundary>
                     </div>
@@ -2134,6 +2191,22 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     </div>
                 );
             }
+        }
+
+        if (this.state.canAskToJoin && ["knock", "leave"].includes(myMembership)) {
+            return (
+                <div className="mx_RoomView">
+                    <ErrorBoundary>
+                        <RoomPreviewBar
+                            room={this.state.room}
+                            promptAskToJoin={myMembership === "leave" || this.state.promptAskToJoin}
+                            knocked={myMembership === "knock" || this.state.knocked}
+                            onSubmitAskToJoin={this.onSubmitAskToJoin}
+                            onCancelAskToJoin={this.onCancelAskToJoin}
+                        />
+                    </ErrorBoundary>
+                </div>
+            );
         }
 
         // We have successfully loaded this room, and are not previewing.

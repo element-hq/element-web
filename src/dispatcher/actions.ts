@@ -351,4 +351,19 @@ export enum Action {
      * Fired when we want to view a thread, either a new one or an existing one
      */
     ShowThread = "show_thread",
+
+    /**
+     * Fired when requesting to prompt for ask to join a room.
+     */
+    PromptAskToJoin = "prompt_ask_to_join",
+
+    /**
+     * Fired when requesting to submit an ask to join a room. Use with a SubmitAskToJoinPayload.
+     */
+    SubmitAskToJoin = "submit_ask_to_join",
+
+    /**
+     * Fired when requesting to cancel an ask to join a room. Use with a CancelAskToJoinPayload.
+     */
+    CancelAskToJoin = "cancel_ask_to_join",
 }

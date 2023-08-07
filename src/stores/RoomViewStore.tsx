@@ -61,6 +61,8 @@ import { IRoomStateEventsActionPayload } from "../actions/MatrixActionCreators";
 import { showCantStartACallDialog } from "../voice-broadcast/utils/showCantStartACallDialog";
 import { pauseNonLiveBroadcastFromOtherRoom } from "../voice-broadcast/utils/pauseNonLiveBroadcastFromOtherRoom";
 import { ActionPayload } from "../dispatcher/payloads";
+import { CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
+import { SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -118,6 +120,9 @@ interface State {
      * Whether we're viewing a call or call lobby in this room
      */
     viewingCall: boolean;
+
+    promptAskToJoin: boolean;
+    knocked: boolean;
 }
 
 const INITIAL_STATE: State = {
@@ -138,6 +143,8 @@ const INITIAL_STATE: State = {
     viaServers: [],
     wasContextSwitch: false,
     viewingCall: false,
+    promptAskToJoin: false,
+    knocked: false,
 };
 
 type Listener = (isActive: boolean) => void;
@@ -356,6 +363,18 @@ export class RoomViewStore extends EventEmitter {
                     }
                 }
                 break;
+            case Action.PromptAskToJoin: {
+                this.setState({ promptAskToJoin: true });
+                break;
+            }
+            case Action.SubmitAskToJoin: {
+                this.submitAskToJoin(payload as SubmitAskToJoinPayload);
+                break;
+            }
+            case Action.CancelAskToJoin: {
+                this.cancelAskToJoin(payload as CancelAskToJoinPayload);
+                break;
+            }
         }
     }
 
@@ -563,7 +582,12 @@ export class RoomViewStore extends EventEmitter {
                 action: Action.JoinRoomError,
                 roomId,
                 err,
+                canAskToJoin: payload.canAskToJoin,
             });
+
+            if (payload.canAskToJoin) {
+                this.dis?.dispatch({ action: Action.PromptAskToJoin });
+            }
         }
     }
 
@@ -632,7 +656,7 @@ export class RoomViewStore extends EventEmitter {
             joining: false,
             joinError: payload.err,
         });
-        if (payload.err) {
+        if (payload.err && !payload.canAskToJoin) {
             this.showJoinRoomError(payload.err, payload.roomId);
         }
     }
@@ -745,5 +769,58 @@ export class RoomViewStore extends EventEmitter {
 
     public isViewingCall(): boolean {
         return this.state.viewingCall;
+    }
+
+    /**
+     * Gets the current state of the 'promptForAskToJoin' property.
+     *
+     * @returns {boolean} The value of the 'promptForAskToJoin' property.
+     */
+    public promptAskToJoin(): boolean {
+        return this.state.promptAskToJoin;
+    }
+
+    /**
+     * Gets the current state of the 'knocked' property.
+     *
+     * @returns {boolean} The value of the 'knocked' property.
+     */
+    public knocked(): boolean {
+        return this.state.knocked;
+    }
+
+    /**
+     * Submits a request to join a room by sending a knock request.
+     *
+     * @param {SubmitAskToJoinPayload} payload - The payload containing information to submit the request.
+     * @returns {void}
+     */
+    private submitAskToJoin(payload: SubmitAskToJoinPayload): void {
+        MatrixClientPeg.safeGet()
+            .knockRoom(payload.roomId, { viaServers: this.state.viaServers, ...payload.opts })
+            .then(() => this.setState({ promptAskToJoin: false, knocked: true }))
+            .catch((err: MatrixError) => {
+                this.setState({ promptAskToJoin: false });
+
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("Failed to join"),
+                    description: err.httpStatus === 403 ? _t("You need an invite to access this room.") : err.message,
+                });
+            });
+    }
+
+    /**
+     * Cancels a request to join a room by sending a leave request.
+     *
+     * @param {CancelAskToJoinPayload} payload - The payload containing information to cancel the request.
+     * @returns {void}
+     */
+    private cancelAskToJoin(payload: CancelAskToJoinPayload): void {
+        MatrixClientPeg.safeGet()
+            .leave(payload.roomId)
+            .then(() => this.setState({ knocked: false }))
+            .catch((err: MatrixError) =>
+                Modal.createDialog(ErrorDialog, { title: _t("Failed to cancel"), description: err.message }),
+            );
     }
 }

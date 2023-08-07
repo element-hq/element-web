@@ -425,4 +425,60 @@ describe("<RoomPreviewBar />", () => {
             });
         });
     });
+
+    describe("message case AskToJoin", () => {
+        it("renders the corresponding message", () => {
+            const component = getComponent({ promptAskToJoin: true });
+            expect(getMessage(component)).toMatchSnapshot();
+        });
+
+        it("renders the corresponding message with a generic title", () => {
+            const component = render(<RoomPreviewBar promptAskToJoin />);
+            expect(getMessage(component)).toMatchSnapshot();
+        });
+
+        it("renders the corresponding actions", () => {
+            const component = getComponent({ promptAskToJoin: true });
+            expect(getActions(component)).toMatchSnapshot();
+        });
+
+        it("triggers the primary action callback", () => {
+            const onSubmitAskToJoin = jest.fn();
+            const component = getComponent({ promptAskToJoin: true, onSubmitAskToJoin });
+
+            fireEvent.click(getPrimaryActionButton(component)!);
+            expect(onSubmitAskToJoin).toHaveBeenCalled();
+        });
+
+        it("triggers the primary action callback with a reason", () => {
+            const onSubmitAskToJoin = jest.fn();
+            const reason = "some reason";
+            const component = getComponent({ promptAskToJoin: true, onSubmitAskToJoin });
+
+            fireEvent.change(component.container.querySelector("textarea")!, { target: { value: reason } });
+            fireEvent.click(getPrimaryActionButton(component)!);
+
+            expect(onSubmitAskToJoin).toHaveBeenCalledWith(reason);
+        });
+    });
+
+    describe("message case Knocked", () => {
+        it("renders the corresponding message", () => {
+            const component = getComponent({ knocked: true });
+            expect(getMessage(component)).toMatchSnapshot();
+        });
+
+        it("renders the corresponding actions", () => {
+            const component = getComponent({ knocked: true, onCancelAskToJoin: () => {} });
+            expect(getActions(component)).toMatchSnapshot();
+        });
+
+        it("triggers the secondary action callback", () => {
+            const onCancelAskToJoin = jest.fn();
+            const component = getComponent({ knocked: true, onCancelAskToJoin });
+
+            fireEvent.click(getSecondaryActionButton(component)!);
+            expect(onCancelAskToJoin).toHaveBeenCalled();
+        });
+    });
 });

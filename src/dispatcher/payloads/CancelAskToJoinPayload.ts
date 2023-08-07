@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2023 Nordeck IT + Consulting GmbH
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixError } from "matrix-js-sdk/src/http-api";
-
-import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
+import { ActionPayload } from "../payloads";
 
-export interface JoinRoomErrorPayload extends Pick<ActionPayload, "action"> {
-    action: Action.JoinRoomError;
+export interface CancelAskToJoinPayload extends Pick<ActionPayload, "action"> {
+    action: Action.CancelAskToJoin;
 
     roomId: string;
-    err: MatrixError;
-
-    canAskToJoin?: boolean;
 }

@@ -1,5 +1,121 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding actions 1`] = `
+<div
+  class="mx_RoomPreviewBar_actions mx_RoomPreviewBar_fullWidth"
+>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    role="button"
+    tabindex="0"
+  >
+    Request access
+  </div>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding message 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    Ask to join RoomPreviewBar-test-room?
+  </h3>
+  <p>
+    <span
+      class="mx_BaseAvatar"
+      role="presentation"
+    >
+      <span
+        aria-hidden="true"
+        class="mx_BaseAvatar_initial"
+        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
+      >
+        R
+      </span>
+      <img
+        alt=""
+        aria-hidden="true"
+        class="mx_BaseAvatar_image"
+        data-testid="avatar-img"
+        loading="lazy"
+        src="data:image/png;base64,00"
+        style="width: 36px; height: 36px;"
+      />
+    </span>
+  </p>
+  <p>
+    You need to be granted access to this room in order to view or participate in the conversation. You can send a request to join below.
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding message with a generic title 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    Ask to join?
+  </h3>
+  <p>
+    <span
+      class="mx_BaseAvatar"
+      role="presentation"
+    >
+      <span
+        aria-hidden="true"
+        class="mx_BaseAvatar_initial"
+        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
+      >
+        ?
+      </span>
+      <img
+        alt=""
+        aria-hidden="true"
+        class="mx_BaseAvatar_image"
+        data-testid="avatar-img"
+        loading="lazy"
+        src="data:image/png;base64,00"
+        style="width: 36px; height: 36px;"
+      />
+    </span>
+  </p>
+  <p>
+    You need to be granted access to this room in order to view or participate in the conversation. You can send a request to join below.
+  </p>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> message case Knocked renders the corresponding actions 1`] = `
+<div
+  class="mx_RoomPreviewBar_actions"
+>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+    role="button"
+    tabindex="0"
+  >
+    Cancel request
+  </div>
+</div>
+`;
+
+exports[`<RoomPreviewBar /> message case Knocked renders the corresponding message 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    Request to join sent
+  </h3>
+  <p>
+    <div
+      class="mx_Icon mx_Icon_16 mx_RoomPreviewBar_icon"
+    />
+    Your request to join is pending.
+  </p>
+</div>
+`;
+
 exports[`<RoomPreviewBar /> renders banned message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"

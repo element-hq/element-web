@@ -242,6 +242,8 @@ export function createTestClient(): MatrixClient {
         getSyncStateData: jest.fn(),
         getDehydratedDevice: jest.fn(),
         exportRoomKeys: jest.fn(),
+        knockRoom: jest.fn(),
+        leave: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

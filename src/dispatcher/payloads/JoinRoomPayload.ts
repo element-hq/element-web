@@ -29,5 +29,7 @@ export interface JoinRoomPayload extends Pick<ActionPayload, "action"> {
 
     // additional parameters for the purpose of metrics & instrumentation
     metricsTrigger: JoinedRoomEvent["trigger"];
+
+    canAskToJoin?: boolean;
 }
 /* eslint-enable camelcase */
