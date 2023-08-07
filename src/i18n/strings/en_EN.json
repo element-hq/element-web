@@ -983,8 +983,6 @@
     "Show current profile picture and name for users in message history": "Show current profile picture and name for users in message history",
     "Show HTML representation of room topics": "Show HTML representation of room topics",
     "Show info about bridges in room settings": "Show info about bridges in room settings",
-    "Right panel stays open": "Right panel stays open",
-    "Defaults to room member list.": "Defaults to room member list.",
     "Jump to date (adds /jumptodate and jump to date headers)": "Jump to date (adds /jumptodate and jump to date headers)",
     "Requires your server to support MSC3030": "Requires your server to support MSC3030",
     "Send read receipts": "Send read receipts",

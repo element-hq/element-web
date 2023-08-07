@@ -377,23 +377,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
             this.currentCard.state.initialEventScrollIntoView = undefined;
         }
 
-        // If the right panel stays open mode is used, and the panel was either
-        // closed or never shown for that room, then force it open and display
-        // the room member list.
-        if (
-            SettingsStore.getValue("feature_right_panel_default_open") &&
-            !this.byRoom[this.viewedRoomId ?? ""]?.isOpen
-        ) {
-            const history = [{ phase: RightPanelPhases.RoomMemberList }];
-            const room = this.viewedRoomId ? this.mxClient?.getRoom(this.viewedRoomId) : undefined;
-            if (!room?.isSpaceRoom()) {
-                history.unshift({ phase: RightPanelPhases.RoomSummary });
-            }
-            this.byRoom[this.viewedRoomId ?? ""] = {
-                isOpen: true,
-                history,
-            };
-        }
         this.emitAndUpdateSettings();
     }
 

@@ -363,14 +363,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("Show info about bridges in room settings"),
         default: false,
     },
-    "feature_right_panel_default_open": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Right panel stays open"),
-        description: _td("Defaults to room member list."),
-        default: false,
-    },
     "feature_jump_to_date": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
