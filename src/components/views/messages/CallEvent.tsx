@@ -16,8 +16,7 @@ limitations under the License.
 
 import React, { forwardRef, useCallback, useContext, useMemo } from "react";
 
-import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import type { RoomMember } from "matrix-js-sdk/src/matrix";
+import type { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { ConnectionState, ElementCall } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
 import {

@@ -16,8 +16,7 @@ limitations under the License.
 
 import React, { createRef, ReactNode } from "react";
 import ReactDOM from "react-dom";
-import { Room, RoomEvent, RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/matrix";
-import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
+import { Room, RoomEvent, RoomMember, RoomMemberEvent, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { EventTimelineSet, IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";

@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import { EventEmitter } from "events";
-import { RoomMember, Room, RoomEvent, RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { RoomMember, Room, RoomEvent, RoomState, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventTimelineSet, IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 import { TimelineIndex, TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { sleep } from "matrix-js-sdk/src/utils";

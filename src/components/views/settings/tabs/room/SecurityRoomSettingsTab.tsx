@@ -16,8 +16,7 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RoomStateEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, RoomStateEvent, Room } from "matrix-js-sdk/src/matrix";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
 

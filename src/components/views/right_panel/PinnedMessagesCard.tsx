@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Room, RoomEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room, RoomEvent, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
 

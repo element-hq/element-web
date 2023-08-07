@@ -16,8 +16,7 @@ limitations under the License.
 
 import React, { ReactNode, SyntheticEvent, useContext } from "react";
 import classNames from "classnames";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
-import { IEventRelation } from "matrix-js-sdk/src/models/event";
+import { RoomMember, IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "../rooms/CollapsibleButton";

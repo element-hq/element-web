@@ -26,8 +26,9 @@ import {
     RoomEvent,
     RoomState,
     RoomStateEvent,
+    MatrixEvent,
+    MatrixEventEvent,
 } from "matrix-js-sdk/src/matrix";
-import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { EventType } from "matrix-js-sdk/src/@types/event";

@@ -18,8 +18,15 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room, RoomEvent, RoomMember, RoomMemberEvent, RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixEvent,
+    Room,
+    RoomEvent,
+    RoomMember,
+    RoomMemberEvent,
+    RoomState,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
 import { User, UserEvent } from "matrix-js-sdk/src/models/user";
 import { throttle } from "lodash";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";

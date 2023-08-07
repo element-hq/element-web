@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, ContextType, createRef, SyntheticEvent } from "react";
-import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 

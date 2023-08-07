@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { clamp } from "lodash";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { SerializedPart } from "./editor/parts";

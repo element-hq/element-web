@@ -19,8 +19,7 @@ limitations under the License.
 
 import React from "react";
 import { sortBy } from "lodash";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room, RoomEvent, RoomMember, RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room, RoomEvent, RoomMember, RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";

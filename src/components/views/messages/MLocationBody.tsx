@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent, ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import { ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";

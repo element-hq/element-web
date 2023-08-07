@@ -18,7 +18,7 @@ import React from "react";
 import classNames from "classnames";
 import { diff_match_patch as DiffMatchPatch } from "diff-match-patch";
 import { DiffDOM, IDiff } from "diff-dom";
-import { IContent } from "matrix-js-sdk/src/models/event";
+import { IContent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { unescape } from "lodash";
 

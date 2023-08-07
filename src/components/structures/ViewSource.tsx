@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import SyntaxHighlight from "../views/elements/SyntaxHighlight";
 import { _t } from "../../languageHandler";

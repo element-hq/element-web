@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, createRef } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     KnownPollKind,
     M_POLL_KIND_DISCLOSED,
@@ -23,7 +23,6 @@ import {
     M_POLL_START,
 } from "matrix-js-sdk/src/@types/polls";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IPartialEvent } from "matrix-js-sdk/src/@types/extensible_events";
 
 import ScrollableBaseModal, { IScrollableBaseState } from "../dialogs/ScrollableBaseModal";

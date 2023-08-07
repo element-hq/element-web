@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { EventEmitter } from "events";
 

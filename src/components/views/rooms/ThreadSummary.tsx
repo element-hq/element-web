@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { useContext, useState } from "react";
 import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
-import { IContent, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { CardContext } from "../right_panel/context";

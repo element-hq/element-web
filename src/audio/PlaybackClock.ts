@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { SimpleObservable } from "matrix-widget-api";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { IDestroyable } from "../utils/IDestroyable";
 

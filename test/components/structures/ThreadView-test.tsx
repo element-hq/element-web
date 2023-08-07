@@ -19,8 +19,7 @@ import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { EventStatus, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import React, { useState } from "react";
 

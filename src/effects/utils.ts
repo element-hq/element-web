@@ -15,7 +15,7 @@
  limitations under the License.
  */
 
-import { IContent } from "matrix-js-sdk/src/models/event";
+import { IContent } from "matrix-js-sdk/src/matrix";
 
 /**
  * Checks a message if it contains one of the provided emojis

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { LegacyRef } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";

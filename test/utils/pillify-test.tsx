@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render } from "@testing-library/react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { ConditionKind, EventType, PushRuleActionName, Room, TweakName } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, ConditionKind, EventType, PushRuleActionName, Room, TweakName } from "matrix-js-sdk/src/matrix";
 
 import { pillifyLinks } from "../../src/utils/pillify";
 import { stubClient } from "../test-utils";

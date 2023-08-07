@@ -16,11 +16,10 @@ limitations under the License.
 
 import React, { createRef, KeyboardEvent, SyntheticEvent } from "react";
 import EMOJI_REGEX from "emojibase-regex";
-import { IContent, MatrixEvent, IEventRelation, IMentions } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent, IEventRelation, IMentions, Room } from "matrix-js-sdk/src/matrix";
 import { DebouncedFunc, throttle } from "lodash";
 import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Room } from "matrix-js-sdk/src/matrix";
 import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 

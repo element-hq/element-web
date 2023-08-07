@@ -22,10 +22,10 @@ import {
     HttpApiEvent,
     MatrixClient,
     MatrixEventEvent,
+    MatrixEvent,
 } from "matrix-js-sdk/src/matrix";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";

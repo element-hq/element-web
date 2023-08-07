@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { createRef } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { CallErrorCode, CallState } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { Optional } from "matrix-events-sdk";
 import { M_POLL_END, M_POLL_START } from "matrix-js-sdk/src/@types/polls";

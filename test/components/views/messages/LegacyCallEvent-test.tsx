@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { CallErrorCode, CallState } from "matrix-js-sdk/src/webrtc/call";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import LegacyCallEvent from "../../../../src/components/views/messages/LegacyCallEvent";
 import LegacyCallEventGrouper from "../../../../src/components/structures/LegacyCallEventGrouper";

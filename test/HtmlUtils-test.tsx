@@ -17,7 +17,7 @@ limitations under the License.
 import React, { ReactElement } from "react";
 import { mocked } from "jest-mock";
 import { render, screen } from "@testing-library/react";
-import { IContent } from "matrix-js-sdk/src/models/event";
+import { IContent } from "matrix-js-sdk/src/matrix";
 
 import { bodyToHtml, formatEmojis, topicToHtml } from "../src/HtmlUtils";
 import SettingsStore from "../src/settings/SettingsStore";

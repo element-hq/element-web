@@ -17,10 +17,9 @@ limitations under the License.
 */
 
 import React, { createRef, useContext } from "react";
-import { EventStatus, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
+import { EventStatus, MatrixEvent, MatrixEventEvent, RoomMemberEvent } from "matrix-js-sdk/src/matrix";
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
-import { RoomMemberEvent } from "matrix-js-sdk/src/matrix";
 import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { Thread } from "matrix-js-sdk/src/models/thread";
 

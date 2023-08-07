@@ -26,8 +26,7 @@ import EventEmitter from "events";
 import { ISearchResults } from "matrix-js-sdk/src/@types/search";
 
 import type { MatrixClient } from "matrix-js-sdk/src/client";
-import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import type { RoomMember } from "matrix-js-sdk/src/matrix";
+import type { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import {
     stubClient,

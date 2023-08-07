@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ForwardedRef, forwardRef, MutableRefObject, useRef } from "react";
-import { IEventRelation } from "matrix-js-sdk/src/models/event";
+import { IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useWysiwygSendActionHandler } from "./hooks/useWysiwygSendActionHandler";
 import { WysiwygComposer } from "./components/WysiwygComposer";

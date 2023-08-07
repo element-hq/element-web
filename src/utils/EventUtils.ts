@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { EventType, EVENT_VISIBILITY_CHANGE_TYPE, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";

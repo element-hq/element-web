@@ -16,9 +16,8 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { lexicographicCompare } from "matrix-js-sdk/src/utils";
-import { Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { Room, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AppsDrawer from "./AppsDrawer";

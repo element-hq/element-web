@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { useContext, useMemo, useState } from "react";
-import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";

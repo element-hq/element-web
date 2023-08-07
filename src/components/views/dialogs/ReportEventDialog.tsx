@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { ChangeEvent } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, UserFriendlyError } from "../../../languageHandler";

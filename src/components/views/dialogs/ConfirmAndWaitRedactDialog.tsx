@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import ConfirmRedactDialog from "./ConfirmRedactDialog";

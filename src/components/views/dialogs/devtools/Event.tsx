@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, ReactNode, useContext, useMemo, useRef, useState } from "react";
-import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td } from "../../../../languageHandler";
 import Field from "../../elements/Field";

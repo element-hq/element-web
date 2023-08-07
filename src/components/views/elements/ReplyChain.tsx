@@ -17,8 +17,7 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { _t } from "../../../languageHandler";

@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent, IContent, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { M_POLL_END, M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
-import { IContent, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../settings/SettingsStore";
 import { haveRendererForEvent, JitsiEventFactory, JSONEventFactory, pickFactory } from "../events/EventTileFactory";

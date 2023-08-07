@@ -18,7 +18,7 @@ limitations under the License.
 
 import React, { createRef, CSSProperties } from "react";
 import FocusLock from "react-focus-lock";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";

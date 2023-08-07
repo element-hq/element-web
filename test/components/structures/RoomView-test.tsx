@@ -17,8 +17,15 @@ limitations under the License.
 import React, { createRef, RefObject } from "react";
 import { mocked, MockedObject } from "jest-mock";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
-import { Room, RoomEvent, EventType, JoinRule, MatrixError, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import {
+    Room,
+    RoomEvent,
+    EventType,
+    JoinRule,
+    MatrixError,
+    RoomStateEvent,
+    MatrixEvent,
+} from "matrix-js-sdk/src/matrix";
 import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
 import { fireEvent, render, screen, RenderResult } from "@testing-library/react";
 

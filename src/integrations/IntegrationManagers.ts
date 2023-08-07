@@ -18,7 +18,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/client";
 import { compare } from "matrix-js-sdk/src/utils";
 
-import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import SdkConfig from "../SdkConfig";
 import Modal from "../Modal";
 import { IntegrationManagerInstance, Kind } from "./IntegrationManagerInstance";

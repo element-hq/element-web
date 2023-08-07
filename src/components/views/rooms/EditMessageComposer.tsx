@@ -16,9 +16,8 @@ limitations under the License.
 
 import React, { createRef, KeyboardEvent } from "react";
 import classNames from "classnames";
-import { EventStatus, IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventStatus, IContent, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
-import { Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
 

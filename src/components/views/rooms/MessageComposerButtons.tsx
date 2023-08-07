@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 import classNames from "classnames";
-import { IEventRelation } from "matrix-js-sdk/src/models/event";
+import { IEventRelation, Room } from "matrix-js-sdk/src/matrix";
 import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import React, { createContext, ReactElement, ReactNode, useContext, useRef } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 

@@ -19,7 +19,7 @@ import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import { M_POLL_END, M_POLL_START } from "matrix-js-sdk/src/@types/polls";
-import { MatrixEventEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";

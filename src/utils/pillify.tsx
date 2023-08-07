@@ -17,8 +17,7 @@ limitations under the License.
 import React from "react";
 import ReactDOM from "react-dom";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../settings/SettingsStore";
 import { Pill, PillType, pillRoomNotifLen, pillRoomNotifPos } from "../components/views/elements/Pill";

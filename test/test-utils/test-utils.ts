@@ -16,9 +16,8 @@ limitations under the License.
 
 import EventEmitter from "events";
 import { mocked, MockedObject } from "jest-mock";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import {
+    MatrixEvent,
     Room,
     User,
     IContent,
@@ -37,6 +36,7 @@ import {
     IPushRules,
     RelationType,
 } from "matrix-js-sdk/src/matrix";
+import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";

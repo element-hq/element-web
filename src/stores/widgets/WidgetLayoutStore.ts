@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
 import { compare, MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
 import { IWidget } from "matrix-widget-api";

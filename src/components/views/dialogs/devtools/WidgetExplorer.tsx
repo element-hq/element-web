@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { useContext, useState } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { useEventEmitterState } from "../../../../hooks/useEventEmitter";
 import { _t } from "../../../../languageHandler";

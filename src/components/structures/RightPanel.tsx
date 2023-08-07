@@ -16,8 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room, RoomState, RoomStateEvent, RoomMember } from "matrix-js-sdk/src/matrix";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room, RoomState, RoomStateEvent, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
 import dis from "../../dispatcher/dispatcher";

@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 import React, { useContext, useEffect } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent, MatrixError } from "matrix-js-sdk/src/matrix";
 import { IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import LinkPreviewWidget from "./LinkPreviewWidget";

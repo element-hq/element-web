@@ -17,8 +17,7 @@ limitations under the License.
 
 import { base32 } from "rfc4648";
 import { IWidget, IWidgetData } from "matrix-widget-api";
-import { Room, ClientEvent, MatrixClient, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room, ClientEvent, MatrixClient, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { randomString, randomLowercaseString, randomUppercaseString } from "matrix-js-sdk/src/randomstring";

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import {
     ClientWidgetApi,
     IModalWidgetOpenRequest,
@@ -36,7 +36,6 @@ import {
 import { Optional } from "matrix-events-sdk";
 import { EventEmitter } from "events";
 import { MatrixClient, ClientEvent } from "matrix-js-sdk/src/client";
-import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, getUserLanguage } from "../../languageHandler";

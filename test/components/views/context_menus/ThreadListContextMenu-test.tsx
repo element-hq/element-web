@@ -18,8 +18,7 @@ import { getByTestId, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import ThreadListContextMenu, {

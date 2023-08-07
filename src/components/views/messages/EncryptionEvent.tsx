@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { forwardRef, useContext } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { IRoomEncryption } from "matrix-js-sdk/src/crypto/RoomList";
 
 import { _t } from "../../../languageHandler";
