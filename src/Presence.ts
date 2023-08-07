@@ -103,7 +103,7 @@ class Presence {
 
         try {
             await MatrixClientPeg.safeGet().setPresence({ presence: this.state });
-            logger.info("Presence:", newState);
+            logger.debug("Presence:", newState);
         } catch (err) {
             logger.error("Failed to set presence:", err);
             this.state = oldState;
