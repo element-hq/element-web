@@ -59,10 +59,6 @@ Cypress.Commands.overwrite(
                     "color-contrast": {
                         enabled: false,
                     },
-                    // link-in-text-block also complains due to known contrast issues
-                    "link-in-text-block": {
-                        enabled: false,
-                    },
                     ...options.rules,
                 },
             },
