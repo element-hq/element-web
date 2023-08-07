@@ -70,7 +70,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
         if (
             spaceAliasField.current &&
             joinRule === JoinRule.Public &&
-            (await spaceAliasField.current.validate({ allowEmpty: true }))
+            !(await spaceAliasField.current.validate({ allowEmpty: true }))
         ) {
             spaceAliasField.current.focus();
             spaceAliasField.current.validate({ allowEmpty: true, focused: true });
