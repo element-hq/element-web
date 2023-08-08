@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import { Room, RoomEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { User, UserEvent } from "matrix-js-sdk/src/models/user";
+import { Room, RoomEvent, MatrixEvent, User, UserEvent } from "matrix-js-sdk/src/matrix";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";

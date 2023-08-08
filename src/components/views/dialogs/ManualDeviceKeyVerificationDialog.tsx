@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 import React, { useCallback } from "react";
-import { Device } from "matrix-js-sdk/src/models/device";
+import { Device } from "matrix-js-sdk/src/matrix";
 
 import * as FormattingUtils from "../../../utils/FormattingUtils";
 import { _t } from "../../../languageHandler";

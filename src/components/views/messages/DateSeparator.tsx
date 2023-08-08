@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Direction } from "matrix-js-sdk/src/models/event-timeline";
+import { Direction } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/http-api";
 

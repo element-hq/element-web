@@ -83,6 +83,26 @@ module.exports = {
                         message: "Please use matrix-js-sdk/src/matrix instead",
                     },
                     {
+                        name: "matrix-js-sdk/src/models/event-status",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/models/user",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/models/device",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/models/event-timeline",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/models/event-timeline-set",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
                         name: "matrix-react-sdk",
                         message: "Please use matrix-react-sdk/src/index instead",
                     },

@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
-import { User } from "matrix-js-sdk/src/models/user";
+import { User } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";

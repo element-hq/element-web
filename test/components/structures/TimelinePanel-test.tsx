@@ -28,8 +28,8 @@ import {
     RoomMember,
     RoomState,
     TimelineWindow,
+    EventTimeline,
 } from "matrix-js-sdk/src/matrix";
-import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import {
     FeatureSupport,
     Thread,

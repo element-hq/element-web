@@ -28,9 +28,10 @@ import {
     RoomStateEvent,
     MatrixEvent,
     MatrixEventEvent,
+    EventTimeline,
+    IRoomTimelineData,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { throttle } from "lodash";
@@ -40,7 +41,6 @@ import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { ISearchResults } from "matrix-js-sdk/src/@types/search";
-import { IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";

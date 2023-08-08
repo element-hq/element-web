@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useContext } from "react";
-import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { EventTimeline } from "matrix-js-sdk/src/matrix";
 
 import EventTileBubble from "../messages/EventTileBubble";
 import RoomContext from "../../../contexts/RoomContext";

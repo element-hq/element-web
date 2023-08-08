@@ -27,6 +27,7 @@ import {
     EventType,
     CryptoApi,
     DeviceVerificationStatus,
+    Device,
 } from "matrix-js-sdk/src/matrix";
 import {
     Phase,
@@ -34,7 +35,6 @@ import {
     VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
-import { Device } from "matrix-js-sdk/src/models/device";
 import { defer } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
 

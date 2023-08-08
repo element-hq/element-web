@@ -17,12 +17,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ICreateClientOpts, PendingEventOrdering, RoomNameState, RoomNameType } from "matrix-js-sdk/src/matrix";
+import {
+    ICreateClientOpts,
+    PendingEventOrdering,
+    RoomNameState,
+    RoomNameType,
+    EventTimeline,
+    EventTimelineSet,
+} from "matrix-js-sdk/src/matrix";
 import { IStartClientOpts, MatrixClient } from "matrix-js-sdk/src/client";
 import { MemoryStore } from "matrix-js-sdk/src/store/memory";
 import * as utils from "matrix-js-sdk/src/utils";
-import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
-import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
 import { verificationMethods } from "matrix-js-sdk/src/crypto";
 import { SHOW_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import { logger } from "matrix-js-sdk/src/logger";

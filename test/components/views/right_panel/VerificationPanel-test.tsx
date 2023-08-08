@@ -16,7 +16,7 @@ limitations under the License.
 
 import { act, render, waitFor } from "@testing-library/react";
 import React, { ComponentProps } from "react";
-import { User } from "matrix-js-sdk/src/models/user";
+import { User, TypedEventEmitter, Device, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mocked, Mocked } from "jest-mock";
 import {
     EmojiMapping,
@@ -28,7 +28,6 @@ import {
     VerifierEvent,
     VerifierEventHandlerMap,
 } from "matrix-js-sdk/src/crypto-api/verification";
-import { TypedEventEmitter, Device, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import VerificationPanel from "../../../../src/components/views/right_panel/VerificationPanel";
 import { flushPromises, stubClient } from "../../../test-utils";
