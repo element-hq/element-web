@@ -17,28 +17,33 @@ limitations under the License.
 
 import { ReactElement, ReactNode } from "react";
 
-import { _t } from "../languageHandler";
+import { _t, getCurrentLanguage } from "../languageHandler";
 import { jsxJoin } from "./ReactUtils";
+const locale = getCurrentLanguage();
+
+// It's quite costly to instanciate `Intl.NumberFormat`, hence why we do not do
+// it in every function call
+const compactFormatter = new Intl.NumberFormat(locale, {
+    notation: "compact",
+});
 
 /**
- * formats numbers to fit into ~3 characters, suitable for badge counts
- * e.g: 999, 9.9K, 99K, 0.9M, 9.9M, 99M, 0.9B, 9.9B
+ * formats and rounds numbers to fit into ~3 characters, suitable for badge counts
+ * e.g: 999, 10K, 99K, 1M, 10M, 99M, 1B, 10B, ...
  */
 export function formatCount(count: number): string {
-    if (count < 1000) return count.toString();
-    if (count < 10000) return (count / 1000).toFixed(1) + "K";
-    if (count < 100000) return (count / 1000).toFixed(0) + "K";
-    if (count < 10000000) return (count / 1000000).toFixed(1) + "M";
-    if (count < 100000000) return (count / 1000000).toFixed(0) + "M";
-    return (count / 1000000000).toFixed(1) + "B"; // 10B is enough for anyone, right? :S
+    return compactFormatter.format(count);
 }
+
+// It's quite costly to instanciate `Intl.NumberFormat`, hence why we do not do
+// it in every function call
+const formatter = new Intl.NumberFormat(locale);
 
 /**
  * Format a count showing the whole number but making it a bit more readable.
  * e.g: 1000 => 1,000
  */
 export function formatCountLong(count: number): string {
-    const formatter = new Intl.NumberFormat();
     return formatter.format(count);
 }
 
