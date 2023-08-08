@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Room, RoomEvent, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { Room, RoomEvent, RoomStateEvent, MatrixEvent, EventType, RelationType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { Icon as ContextMenuIcon } from "../../../../res/img/element-icons/context-menu.svg";

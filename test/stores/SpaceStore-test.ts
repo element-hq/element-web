@@ -16,8 +16,15 @@ limitations under the License.
 
 import { EventEmitter } from "events";
 import { mocked } from "jest-mock";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { RoomMember, RoomStateEvent, ClientEvent, MatrixEvent, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    RoomMember,
+    RoomStateEvent,
+    ClientEvent,
+    MatrixEvent,
+    Room,
+    RoomEvent,
+} from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import SpaceStore from "../../src/stores/spaces/SpaceStore";

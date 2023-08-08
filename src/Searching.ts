@@ -23,9 +23,8 @@ import {
     SearchOrderBy,
 } from "matrix-js-sdk/src/@types/search";
 import { IRoomEventFilter } from "matrix-js-sdk/src/filter";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { SearchResult } from "matrix-js-sdk/src/models/search-result";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { ISearchArgs } from "./indexing/BaseEventIndexManager";
 import EventIndexPeg from "./indexing/EventIndexPeg";

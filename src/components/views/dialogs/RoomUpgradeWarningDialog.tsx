@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode, SyntheticEvent } from "react";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { EventType, JoinRule } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";

@@ -15,9 +15,7 @@ limitations under the License.
 */
 
 import React, { useCallback, useMemo, useState } from "react";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { RoomState, Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, EventType, RoomState, Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";

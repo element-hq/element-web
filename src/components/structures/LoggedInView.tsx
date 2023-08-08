@@ -16,11 +16,10 @@ limitations under the License.
 
 import React, { ClipboardEvent } from "react";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
-import { MatrixEvent, RoomStateEvent, MatrixError } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, RoomStateEvent, MatrixError, IUsageLimit } from "matrix-js-sdk/src/matrix";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
-import { IUsageLimit } from "matrix-js-sdk/src/@types/partials";
 
 import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../Keyboard";
 import PageTypes from "../../PageTypes";

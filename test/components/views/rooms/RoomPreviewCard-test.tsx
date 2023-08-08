@@ -18,8 +18,7 @@ import React from "react";
 import { mocked, Mocked } from "jest-mock";
 import { render, screen, act } from "@testing-library/react";
 import { PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { RoomType } from "matrix-js-sdk/src/@types/event";
+import { Room, RoomStateEvent, RoomType } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/client";
 import type { RoomMember } from "matrix-js-sdk/src/matrix";

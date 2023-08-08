@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 
 import { IPreview } from "./IPreview";
 import { TagID } from "../models";

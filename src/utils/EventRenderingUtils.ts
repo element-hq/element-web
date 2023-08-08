@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent, IContent, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent, IContent, MatrixClient, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { M_POLL_END, M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 

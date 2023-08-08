@@ -16,9 +16,8 @@ limitations under the License.
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { renderToStaticMarkup } from "react-dom/server";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import escapeHtml from "escape-html";
 

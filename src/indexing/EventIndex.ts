@@ -26,12 +26,12 @@ import {
     EventTimeline,
     EventTimelineSet,
     IRoomTimelineData,
+    EventType,
 } from "matrix-js-sdk/src/matrix";
 import { TimelineIndex, TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { IEventWithRoomId, IMatrixProfile, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType } from "matrix-js-sdk/src/@types/event";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 import { HTTPError } from "matrix-js-sdk/src/http-api";

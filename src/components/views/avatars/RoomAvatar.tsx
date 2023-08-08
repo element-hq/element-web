@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React, { ComponentProps } from "react";
-import { Room, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { Room, RoomStateEvent, MatrixEvent, EventType, RoomType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 
 import BaseAvatar from "./BaseAvatar";
 import ImageView from "../elements/ImageView";

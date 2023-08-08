@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import classNames from "classnames";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType } from "matrix-js-sdk/src/matrix";
 import React, { useContext, useRef, useState, MouseEvent, ReactNode } from "react";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

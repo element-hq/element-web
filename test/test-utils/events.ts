@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MsgType } from "matrix-js-sdk/src/@types/event";
+import { MsgType } from "matrix-js-sdk/src/matrix";
 
 interface MessageContent {
     msgtype: MsgType;

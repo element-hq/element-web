@@ -17,7 +17,7 @@ limitations under the License.
 import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
 import highlight from "highlight.js";
-import { MsgType } from "matrix-js-sdk/src/@types/event";
+import { MsgType } from "matrix-js-sdk/src/matrix";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";

@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React, { useContext } from "react";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, Room, User } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Room, User } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";

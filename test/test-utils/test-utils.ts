@@ -35,8 +35,8 @@ import {
     ConditionKind,
     IPushRules,
     RelationType,
+    JoinRule,
 } from "matrix-js-sdk/src/matrix";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";

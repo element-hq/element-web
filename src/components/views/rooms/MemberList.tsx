@@ -28,11 +28,11 @@ import {
     RoomStateEvent,
     User,
     UserEvent,
+    JoinRule,
+    EventType,
 } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { ClientEvent } from "matrix-js-sdk/src/client";
-import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

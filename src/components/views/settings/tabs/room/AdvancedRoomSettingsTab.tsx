@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { EventType, Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";

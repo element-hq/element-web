@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomType } from "matrix-js-sdk/src/@types/event";
+import { RoomType } from "matrix-js-sdk/src/matrix";
 import { IRoomDirectoryOptions } from "matrix-js-sdk/src/@types/requests";
 import { IProtocol, IPublicRoomsChunkRoom } from "matrix-js-sdk/src/client";
 import { useCallback, useEffect, useState } from "react";

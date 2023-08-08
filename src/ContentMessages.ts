@@ -17,12 +17,9 @@ limitations under the License.
 */
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { MsgType } from "matrix-js-sdk/src/@types/event";
-import encrypt from "matrix-encrypt-attachment";
-import extractPngChunks from "png-chunks-extract";
-import { IImageInfo } from "matrix-js-sdk/src/@types/partials";
-import { logger } from "matrix-js-sdk/src/logger";
 import {
+    MsgType,
+    IImageInfo,
     HTTPError,
     IEventRelation,
     ISendEventResponse,
@@ -30,6 +27,9 @@ import {
     UploadOpts,
     UploadProgress,
 } from "matrix-js-sdk/src/matrix";
+import encrypt from "matrix-encrypt-attachment";
+import extractPngChunks from "png-chunks-extract";
+import { logger } from "matrix-js-sdk/src/logger";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { removeElement } from "matrix-js-sdk/src/utils";
 

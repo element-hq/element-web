@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactElement } from "react";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { JoinRule } from "matrix-js-sdk/src/matrix";
 
 import Dropdown from "./Dropdown";
 import { NonEmptyArray } from "../../../@types/common";

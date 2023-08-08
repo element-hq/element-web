@@ -22,8 +22,7 @@ import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import { JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
-import { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { JoinRule, Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
 import EventEmitter from "events";
 

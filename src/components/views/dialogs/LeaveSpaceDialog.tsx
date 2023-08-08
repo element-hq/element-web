@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { useMemo, useState } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { Room, JoinRule } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";

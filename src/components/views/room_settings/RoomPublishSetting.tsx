@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { JoinRule, Visibility } from "matrix-js-sdk/src/@types/partials";
+import { JoinRule, Visibility } from "matrix-js-sdk/src/matrix";
 
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { _t } from "../../../languageHandler";

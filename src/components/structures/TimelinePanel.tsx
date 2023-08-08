@@ -27,9 +27,10 @@ import {
     IRoomTimelineData,
     Direction,
     EventTimeline,
+    EventType,
+    RelationType,
 } from "matrix-js-sdk/src/matrix";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
-import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { SyncState } from "matrix-js-sdk/src/sync";
 import { debounce, findLastIndex, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";

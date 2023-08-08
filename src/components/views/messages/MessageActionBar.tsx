@@ -17,9 +17,8 @@ limitations under the License.
 */
 
 import React, { ReactElement, useCallback, useContext, useEffect } from "react";
-import { EventStatus, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { EventStatus, MatrixEvent, MatrixEventEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 
 import { Icon as ContextMenuIcon } from "../../../../res/img/element-icons/context-menu.svg";

@@ -17,8 +17,7 @@ limitations under the License.
 */
 
 import React, { ComponentProps, ReactNode } from "react";
-import { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent, RoomMember, EventType } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { formatCommaSeparatedList } from "../../../utils/FormattingUtils";

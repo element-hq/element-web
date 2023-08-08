@@ -16,8 +16,7 @@ limitations under the License.
 
 import React, { createRef } from "react";
 import classNames from "classnames";
-import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent, MatrixEventEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";

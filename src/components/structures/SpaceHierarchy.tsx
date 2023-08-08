@@ -28,13 +28,21 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { Room, RoomEvent, ClientEvent, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import {
+    Room,
+    RoomEvent,
+    ClientEvent,
+    MatrixClient,
+    MatrixError,
+    EventType,
+    RoomType,
+    GuestAccess,
+    HistoryVisibility,
+} from "matrix-js-sdk/src/matrix";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
-import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { IHierarchyRelation, IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
-import { GuestAccess, HistoryVisibility } from "matrix-js-sdk/src/@types/partials";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";

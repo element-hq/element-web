@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { LOCAL_NOTIFICATION_SETTINGS_PREFIX } from "matrix-js-sdk/src/@types/event";
+import { LOCAL_NOTIFICATION_SETTINGS_PREFIX, NotificationCountType, Room } from "matrix-js-sdk/src/matrix";
 import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
-import { NotificationCountType, Room } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../settings/SettingsStore";
 
