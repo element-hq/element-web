@@ -12,7 +12,7 @@ jobs:
             - name: "Get modified files"
               id: changed_files
               if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'RiotTranslateBot'
-              uses: tj-actions/changed-files@920e7b9ae1d45913fc81f86c956fee89c77d2e5e # v37
+              uses: tj-actions/changed-files@87697c0dca7dd44e37a2b79a79489332556ff1f3 # v37
               with:
                   files: |
                       src/i18n/strings/*
