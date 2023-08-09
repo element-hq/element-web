@@ -19,8 +19,7 @@ limitations under the License.
 
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
-import { ResizeMethod } from "matrix-js-sdk/src/matrix";
-import { ClientEvent } from "matrix-js-sdk/src/client";
+import { ResizeMethod, ClientEvent } from "matrix-js-sdk/src/matrix";
 
 import * as AvatarLogic from "../../../Avatar";
 import SettingsStore from "../../../settings/SettingsStore";

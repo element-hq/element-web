@@ -16,8 +16,7 @@ limitations under the License.
 
 import { mocked, MockedObject } from "jest-mock";
 import { last } from "lodash";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { MatrixClient, ClientEvent } from "matrix-js-sdk/src/client";
+import { MatrixEvent, MatrixClient, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi } from "matrix-widget-api";
 
 import { stubClient, mkRoom, mkEvent } from "../../test-utils";

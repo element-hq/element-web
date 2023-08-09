@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { Mocked } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import {
     M_POLL_START,
     PollAnswer,

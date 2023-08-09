@@ -30,9 +30,9 @@ import {
     UserEvent,
     JoinRule,
     EventType,
+    ClientEvent,
 } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
-import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

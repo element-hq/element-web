@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ConditionKind, EventType, MatrixEvent, PushRuleActionName, Room } from "matrix-js-sdk/src/matrix";
-import { ClientEvent } from "matrix-js-sdk/src/client";
+import { ConditionKind, EventType, MatrixEvent, PushRuleActionName, Room, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { NaturalAlgorithm } from "../../../../../src/stores/room-list/algorithms/list-ordering/NaturalAlgorithm";

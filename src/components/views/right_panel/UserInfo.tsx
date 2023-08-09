@@ -19,8 +19,17 @@ limitations under the License.
 
 import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
-import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
-import { RoomMember, Room, RoomStateEvent, MatrixEvent, User, Device, EventType } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    MatrixClient,
+    RoomMember,
+    Room,
+    RoomStateEvent,
+    MatrixEvent,
+    User,
+    Device,
+    EventType,
+} from "matrix-js-sdk/src/matrix";
 import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";

@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render, RenderResult, screen } from "@testing-library/react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
 import NotificationSettingsTab from "../../../../../../src/components/views/settings/tabs/room/NotificationSettingsTab";

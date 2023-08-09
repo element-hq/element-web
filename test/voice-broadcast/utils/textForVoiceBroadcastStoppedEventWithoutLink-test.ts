@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { textForVoiceBroadcastStoppedEventWithoutLink, VoiceBroadcastInfoState } from "../../../src/voice-broadcast";
 import { stubClient } from "../../test-utils";

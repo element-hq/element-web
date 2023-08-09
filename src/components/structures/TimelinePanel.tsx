@@ -29,12 +29,13 @@ import {
     EventTimeline,
     EventType,
     RelationType,
+    ClientEvent,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { SyncState } from "matrix-js-sdk/src/sync";
 import { debounce, findLastIndex, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import { MatrixError } from "matrix-js-sdk/src/http-api";

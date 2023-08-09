@@ -23,8 +23,8 @@ import {
     RoomMember,
     RoomStateEvent,
     MatrixEvent,
+    ClientEvent,
 } from "matrix-js-sdk/src/matrix";
-import { ClientEvent } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
 

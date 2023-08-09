@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 import {
     IdentityProviderBrand,

@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render } from "@testing-library/react";
-import { IPublicRoomsChunkRoom } from "matrix-js-sdk/src/client";
+import { IPublicRoomsChunkRoom } from "matrix-js-sdk/src/matrix";
 
 import { PublicRoomResultDetails } from "../../../../../src/components/views/dialogs/spotlight/PublicRoomResultDetails";
 

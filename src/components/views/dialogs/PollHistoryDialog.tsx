@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { PollHistory } from "../polls/pollHistory/PollHistory";

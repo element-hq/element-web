@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
-import { Room, EventType } from "matrix-js-sdk/src/matrix";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Room, EventType, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";

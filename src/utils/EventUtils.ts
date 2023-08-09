@@ -21,8 +21,8 @@ import {
     EVENT_VISIBILITY_CHANGE_TYPE,
     MsgType,
     RelationType,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 import { M_POLL_END, M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { M_LOCATION } from "matrix-js-sdk/src/@types/location";

@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { IPushRule, PushRuleAction, PushRuleKind } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, IPushRule, PushRuleAction, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 /**

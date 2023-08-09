@@ -17,8 +17,15 @@ limitations under the License.
 import { act, getByTestId, render, RenderResult, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { MsgType, RelationType, EventStatus, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
+import {
+    MsgType,
+    RelationType,
+    EventStatus,
+    MatrixEvent,
+    Room,
+    MatrixClient,
+    PendingEventOrdering,
+} from "matrix-js-sdk/src/matrix";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import React, { useState } from "react";
 

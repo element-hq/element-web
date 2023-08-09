@@ -16,8 +16,7 @@ limitations under the License.
 
 import React, { ComponentProps, createRef, ReactNode } from "react";
 import { decode } from "html-entities";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { IPreviewUrlResponse } from "matrix-js-sdk/src/client";
+import { MatrixEvent, IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
 
 import { Linkify } from "../../../HtmlUtils";
 import SettingsStore from "../../../settings/SettingsStore";

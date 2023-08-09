@@ -14,6 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IProtocol } from "matrix-js-sdk/src/client";
+import { IProtocol } from "matrix-js-sdk/src/matrix";
 
 export type Protocols = Record<string, IProtocol>;

@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent, EventType, RelationType } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, EventType, RelationType, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

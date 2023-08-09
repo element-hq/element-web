@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent, IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/client";
+import { ClientEvent, IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { compare } from "matrix-js-sdk/src/utils";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";

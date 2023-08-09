@@ -33,8 +33,15 @@ import {
     WidgetKind,
     ISearchUserDirectoryResult,
 } from "matrix-widget-api";
-import { ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
-import { EventType, IContent, MatrixEvent, Room, Direction } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    ITurnServer as IClientTurnServer,
+    EventType,
+    IContent,
+    MatrixEvent,
+    Room,
+    Direction,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import {

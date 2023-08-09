@@ -16,8 +16,9 @@ limitations under the License.
 
 import React, { createRef, RefObject } from "react";
 import { mocked, MockedObject } from "jest-mock";
-import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import {
+    ClientEvent,
+    MatrixClient,
     Room,
     RoomEvent,
     EventType,

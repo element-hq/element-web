@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { OidcClientConfig } from "matrix-js-sdk/src/autodiscovery";
-import { IDelegatedAuthConfig } from "matrix-js-sdk/src/client";
+import { IDelegatedAuthConfig } from "matrix-js-sdk/src/matrix";
 import { ValidatedIssuerConfig } from "matrix-js-sdk/src/oidc/validate";
 
 export type ValidatedDelegatedAuthConfig = IDelegatedAuthConfig & ValidatedIssuerConfig;

@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { MatrixEvent, Poll, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Poll, Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import { PollHistoryList } from "./PollHistoryList";

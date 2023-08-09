@@ -15,8 +15,14 @@ limitations under the License.
 */
 
 import React, { ClipboardEvent } from "react";
-import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
-import { MatrixEvent, RoomStateEvent, MatrixError, IUsageLimit } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    MatrixClient,
+    MatrixEvent,
+    RoomStateEvent,
+    MatrixError,
+    IUsageLimit,
+} from "matrix-js-sdk/src/matrix";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";

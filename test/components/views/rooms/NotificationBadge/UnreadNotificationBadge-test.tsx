@@ -17,11 +17,18 @@ limitations under the License.
 import React from "react";
 import "jest-mock";
 import { screen, act, render } from "@testing-library/react";
-import { MatrixEvent, MsgType, RelationType, NotificationCountType, Room, EventStatus } from "matrix-js-sdk/src/matrix";
-import { PendingEventOrdering } from "matrix-js-sdk/src/client";
+import {
+    MatrixEvent,
+    MsgType,
+    RelationType,
+    NotificationCountType,
+    Room,
+    EventStatus,
+    PendingEventOrdering,
+} from "matrix-js-sdk/src/matrix";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
-import type { MatrixClient } from "matrix-js-sdk/src/client";
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mkThread } from "../../../../test-utils/threads";
 import { UnreadNotificationBadge } from "../../../../../src/components/views/rooms/NotificationBadge/UnreadNotificationBadge";
 import { mkEvent, mkMessage, muteRoom, stubClient } from "../../../../test-utils/test-utils";

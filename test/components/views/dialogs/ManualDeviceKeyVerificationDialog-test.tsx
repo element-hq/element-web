@@ -16,8 +16,7 @@
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { Device } from "matrix-js-sdk/src/matrix";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Device, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { stubClient } from "../../../test-utils";
 import { ManualDeviceKeyVerificationDialog } from "../../../../src/components/views/dialogs/ManualDeviceKeyVerificationDialog";

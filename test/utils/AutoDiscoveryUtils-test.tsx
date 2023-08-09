@@ -16,7 +16,7 @@ limitations under the License.
 
 import { AutoDiscovery, AutoDiscoveryAction, ClientConfig } from "matrix-js-sdk/src/autodiscovery";
 import { logger } from "matrix-js-sdk/src/logger";
-import { M_AUTHENTICATION } from "matrix-js-sdk/src/client";
+import { M_AUTHENTICATION } from "matrix-js-sdk/src/matrix";
 
 import AutoDiscoveryUtils from "../../src/utils/AutoDiscoveryUtils";
 

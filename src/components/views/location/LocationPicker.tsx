@@ -17,8 +17,7 @@ limitations under the License.
 import React, { SyntheticEvent } from "react";
 import maplibregl, { MapMouseEvent } from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
-import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/client";
+import { RoomMember, ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

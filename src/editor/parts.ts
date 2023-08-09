@@ -16,8 +16,7 @@ limitations under the License.
 */
 
 import EMOJIBASE_REGEX from "emojibase-regex";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { RoomMember, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, RoomMember, Room } from "matrix-js-sdk/src/matrix";
 import GraphemeSplitter from "graphemer";
 
 import AutocompleteWrapperModel, { GetAutocompleterComponent, UpdateCallback, UpdateQuery } from "./autocomplete";

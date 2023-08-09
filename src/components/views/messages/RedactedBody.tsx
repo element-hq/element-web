@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ForwardRefExoticComponent, useContext } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

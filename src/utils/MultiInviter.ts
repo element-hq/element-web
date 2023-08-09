@@ -17,8 +17,7 @@ limitations under the License.
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { EventType, HistoryVisibility } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, EventType, HistoryVisibility } from "matrix-js-sdk/src/matrix";
 
 import { AddressType, getAddressType } from "../UserAddress";
 import { _t } from "../languageHandler";

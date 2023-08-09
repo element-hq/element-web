@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import posthog, { CaptureOptions, PostHog, Properties } from "posthog-js";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { UserProperties } from "@matrix-org/analytics-events/types/typescript/UserProperties";
 import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";

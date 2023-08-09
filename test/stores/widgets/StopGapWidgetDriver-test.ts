@@ -15,9 +15,17 @@ limitations under the License.
 */
 
 import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient, ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
+import {
+    MatrixClient,
+    ClientEvent,
+    ITurnServer as IClientTurnServer,
+    Direction,
+    EventType,
+    MatrixEvent,
+    MsgType,
+    RelationType,
+} from "matrix-js-sdk/src/matrix";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
-import { Direction, EventType, MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 import {
     Widget,
     MatrixWidgetType,

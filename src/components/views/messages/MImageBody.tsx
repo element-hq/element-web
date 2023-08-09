@@ -20,7 +20,7 @@ import { Blurhash } from "react-blurhash";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/client";
+import { ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
 
 import MFileBody from "./MFileBody";
 import Modal from "../../../Modal";

@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
-import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import SettingsStore from "../settings/SettingsStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";

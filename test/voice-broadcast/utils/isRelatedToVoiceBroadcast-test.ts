@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, MatrixEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { EventType, MatrixEvent, RelationType, Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import { isRelatedToVoiceBroadcast, VoiceBroadcastInfoState } from "../../../src/voice-broadcast";

@@ -17,7 +17,7 @@ limitations under the License.
 
 import FileSaver from "file-saver";
 import React, { ChangeEvent } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from "../../../../languageHandler";

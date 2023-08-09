@@ -17,8 +17,7 @@ limitations under the License.
 import { fireEvent, getByLabelText, render, screen } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
-import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 

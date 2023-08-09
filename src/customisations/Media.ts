@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { ResizeMethod } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, ResizeMethod } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";

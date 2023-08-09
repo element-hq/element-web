@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/client";
+import { IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 
 const CALL_BEHAVIOUR_WK_KEY = "io.element.call_behaviour";

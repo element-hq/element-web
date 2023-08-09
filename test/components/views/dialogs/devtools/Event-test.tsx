@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render } from "@testing-library/react";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { PendingEventOrdering } from "matrix-js-sdk/src/client";
+import { Room, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";

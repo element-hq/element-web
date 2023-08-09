@@ -14,9 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { AuthType, createClient, IAuthData, IAuthDict, IInputs, MatrixError } from "matrix-js-sdk/src/matrix";
+import {
+    AuthType,
+    createClient,
+    IAuthData,
+    IAuthDict,
+    IInputs,
+    MatrixError,
+    IRegisterRequestParams,
+    IRequestTokenResponse,
+    MatrixClient,
+} from "matrix-js-sdk/src/matrix";
 import React, { Fragment, ReactNode } from "react";
-import { IRegisterRequestParams, IRequestTokenResponse, MatrixClient } from "matrix-js-sdk/src/client";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ISSOFlow, SSOAction } from "matrix-js-sdk/src/@types/auth";

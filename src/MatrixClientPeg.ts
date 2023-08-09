@@ -24,8 +24,9 @@ import {
     RoomNameType,
     EventTimeline,
     EventTimelineSet,
+    IStartClientOpts,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
-import { IStartClientOpts, MatrixClient } from "matrix-js-sdk/src/client";
 import { MemoryStore } from "matrix-js-sdk/src/store/memory";
 import * as utils from "matrix-js-sdk/src/utils";
 import { verificationMethods } from "matrix-js-sdk/src/crypto";

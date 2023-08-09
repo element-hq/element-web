@@ -23,7 +23,7 @@ import React, {
     useContext,
     RefAttributes,
 } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 // This context is available to components under LoggedInView,
 // the context must not be used by components outside a MatrixClientContext tree.
