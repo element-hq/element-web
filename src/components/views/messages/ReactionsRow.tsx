@@ -16,8 +16,7 @@ limitations under the License.
 
 import React, { SyntheticEvent } from "react";
 import classNames from "classnames";
-import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
-import { Relations, RelationsEvent } from "matrix-js-sdk/src/models/relations";
+import { MatrixEvent, MatrixEventEvent, Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 import { uniqBy } from "lodash";
 
 import { _t } from "../../../languageHandler";

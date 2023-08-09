@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IAnnotatedPushRule, IPushRules, PushRuleKind, PushRuleSet } from "matrix-js-sdk/src/@types/PushRules";
+import { IAnnotatedPushRule, IPushRules, PushRuleKind, PushRuleSet } from "matrix-js-sdk/src/matrix";
 
 import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
 

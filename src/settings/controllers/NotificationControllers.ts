@@ -18,7 +18,7 @@ limitations under the License.
 import { logger } from "matrix-js-sdk/src/logger";
 // XXX: This feels wrong.
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
-import { PushRuleActionName } from "matrix-js-sdk/src/@types/PushRules";
+import { PushRuleActionName } from "matrix-js-sdk/src/matrix";
 
 import SettingController from "./SettingController";
 import { MatrixClientPeg } from "../../MatrixClientPeg";

@@ -17,8 +17,7 @@ limitations under the License.
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { TimestampToEventResponse } from "matrix-js-sdk/src/matrix";
-import { ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/http-api";
+import { TimestampToEventResponse, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";

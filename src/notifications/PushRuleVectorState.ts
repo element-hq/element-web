@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IPushRule, PushRuleAction } from "matrix-js-sdk/src/@types/PushRules";
+import { IPushRule, PushRuleAction } from "matrix-js-sdk/src/matrix";
 
 import { StandardActions } from "./StandardActions";
 import { NotificationUtils } from "./NotificationUtils";

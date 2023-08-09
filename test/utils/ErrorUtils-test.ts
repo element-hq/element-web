@@ -16,7 +16,7 @@ limitations under the License.
 
 import { ReactElement } from "react";
 import { render } from "@testing-library/react";
-import { MatrixError, ConnectionError } from "matrix-js-sdk/src/http-api";
+import { MatrixError, ConnectionError } from "matrix-js-sdk/src/matrix";
 
 import {
     adminContactStrings,

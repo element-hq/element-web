@@ -31,6 +31,8 @@ import {
     RelationType,
     ClientEvent,
     MatrixClient,
+    Relations,
+    MatrixError,
 } from "matrix-js-sdk/src/matrix";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { SyncState } from "matrix-js-sdk/src/sync";
@@ -38,8 +40,6 @@ import { debounce, findLastIndex, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
-import { MatrixError } from "matrix-js-sdk/src/http-api";
-import { Relations } from "matrix-js-sdk/src/models/relations";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";

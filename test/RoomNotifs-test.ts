@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { PushRuleActionName, TweakName } from "matrix-js-sdk/src/@types/PushRules";
 import {
+    PushRuleActionName,
+    TweakName,
     NotificationCountType,
     Room,
     EventStatus,

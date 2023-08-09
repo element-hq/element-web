@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { PushRuleAction, PushRuleActionName, TweakHighlight, TweakSound } from "matrix-js-sdk/src/@types/PushRules";
+import { PushRuleAction, PushRuleActionName, TweakHighlight, TweakSound } from "matrix-js-sdk/src/matrix";
 
 export interface PushRuleActions {
     notify: boolean;

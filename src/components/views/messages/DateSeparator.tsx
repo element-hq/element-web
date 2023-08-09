@@ -16,9 +16,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { Direction } from "matrix-js-sdk/src/matrix";
+import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/http-api";
 
 import { _t } from "../../../languageHandler";
 import { formatFullDateNoDay, formatFullDateNoTime } from "../../../DateUtils";

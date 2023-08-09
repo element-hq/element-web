@@ -16,8 +16,7 @@ limitations under the License.
 
 import React, { useEffect, useState } from "react";
 import { PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
-import { MatrixEvent, Poll, PollEvent } from "matrix-js-sdk/src/matrix";
-import { Relations } from "matrix-js-sdk/src/models/relations";
+import { MatrixEvent, Poll, PollEvent, Relations } from "matrix-js-sdk/src/matrix";
 
 import { Icon as PollIcon } from "../../../../../res/img/element-icons/room/composer/poll.svg";
 import { _t } from "../../../../languageHandler";

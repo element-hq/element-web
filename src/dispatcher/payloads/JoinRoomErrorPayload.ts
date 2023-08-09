@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixError } from "matrix-js-sdk/src/http-api";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";

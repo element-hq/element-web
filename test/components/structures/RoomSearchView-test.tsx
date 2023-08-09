@@ -17,10 +17,9 @@ limitations under the License.
 import React from "react";
 import { mocked } from "jest-mock";
 import { render, screen } from "@testing-library/react";
-import { Room, MatrixClient, IEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixClient, IEvent, MatrixEvent, EventType, SearchResult } from "matrix-js-sdk/src/matrix";
 import { ISearchResults } from "matrix-js-sdk/src/@types/search";
 import { defer } from "matrix-js-sdk/src/utils";
-import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 
 import { RoomSearchView } from "../../../src/components/structures/RoomSearchView";
 import { SearchScope } from "../../../src/components/views/rooms/SearchBar";

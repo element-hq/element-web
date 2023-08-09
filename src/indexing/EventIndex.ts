@@ -29,13 +29,13 @@ import {
     EventType,
     ClientEvent,
     MatrixClient,
+    HTTPError,
 } from "matrix-js-sdk/src/matrix";
 import { TimelineIndex, TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { IEventWithRoomId, IMatrixProfile, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
-import { HTTPError } from "matrix-js-sdk/src/http-api";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";

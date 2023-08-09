@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import { IPusher } from "matrix-js-sdk/src/@types/PushRules";
-import { PUSHER_ENABLED } from "matrix-js-sdk/src/matrix";
+import { IPusher, PUSHER_ENABLED } from "matrix-js-sdk/src/matrix";
 import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
 
 import { formatDate } from "../../../../DateUtils";

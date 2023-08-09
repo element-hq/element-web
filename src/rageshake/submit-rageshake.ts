@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { Method } from "matrix-js-sdk/src/http-api";
+import { Method } from "matrix-js-sdk/src/matrix";
 
 import type * as Pako from "pako";
 import { MatrixClientPeg } from "../MatrixClientPeg";

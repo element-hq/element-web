@@ -34,11 +34,11 @@ import {
     HistoryVisibility,
     JoinRule,
     ClientEvent,
+    MatrixError,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { throttle } from "lodash";
-import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { ISearchResults } from "matrix-js-sdk/src/@types/search";

@@ -16,8 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent, EventType, RelationType } from "matrix-js-sdk/src/matrix";
-import { Relations } from "matrix-js-sdk/src/models/relations";
+import { MatrixEvent, EventType, RelationType, Relations } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";

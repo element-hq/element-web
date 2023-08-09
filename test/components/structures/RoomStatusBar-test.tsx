@@ -16,8 +16,14 @@ limitations under the License.
 
 import React from "react";
 import { render } from "@testing-library/react";
-import { MatrixClient, PendingEventOrdering, EventStatus, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { MatrixError } from "matrix-js-sdk/src/http-api";
+import {
+    MatrixClient,
+    PendingEventOrdering,
+    EventStatus,
+    MatrixEvent,
+    Room,
+    MatrixError,
+} from "matrix-js-sdk/src/matrix";
 
 import RoomStatusBar, { getUnsentMessages } from "../../../src/components/structures/RoomStatusBar";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";

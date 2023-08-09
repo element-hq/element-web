@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { MatrixError, ConnectionError } from "matrix-js-sdk/src/http-api";
+import { MatrixError, ConnectionError } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td, Tags, TranslatedString } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
