@@ -21,11 +21,6 @@ import ShareLatestLocation from "../../../../src/components/views/beacon/ShareLa
 import { copyPlaintext } from "../../../../src/utils/strings";
 import { flushPromises } from "../../../test-utils";
 
-// Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: () => "abdefghi",
-}));
-
 jest.mock("../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn().mockResolvedValue(undefined),
 }));

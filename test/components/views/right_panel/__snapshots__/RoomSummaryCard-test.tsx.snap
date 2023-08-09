@@ -41,7 +41,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           />
         </span>
         <div
-          aria-describedby="mx_TooltipTarget_abdefghi"
+          aria-describedby="mx_TooltipTarget_vY7Q4uEh"
           class="mx_TextWithTooltip_target mx_RoomSummaryCard_e2ee"
           tabindex="0"
         />

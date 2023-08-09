@@ -21,13 +21,6 @@ import * as TestUtils from "../../../test-utils";
 import FontScalingPanel from "../../../../src/components/views/settings/FontScalingPanel";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 
-// Fake random strings to give a predictable snapshot
-jest.mock("matrix-js-sdk/src/randomstring", () => {
-    return {
-        randomString: () => "abdefghi",
-    };
-});
-
 describe("FontScalingPanel", () => {
     it("renders the font scaling UI", () => {
         TestUtils.stubClient();

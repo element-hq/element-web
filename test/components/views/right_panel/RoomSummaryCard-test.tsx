@@ -32,11 +32,6 @@ import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../t
 import { PollHistoryDialog } from "../../../../src/components/views/dialogs/PollHistoryDialog";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
-// Fake random strings to give a predictable snapshot for checkbox IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: () => "abdefghi",
-}));
-
 describe("<RoomSummaryCard />", () => {
     const userId = "@alice:domain.org";
     const mockClient = getMockClientWithEventEmitter({

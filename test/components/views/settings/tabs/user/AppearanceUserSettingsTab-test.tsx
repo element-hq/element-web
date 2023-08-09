@@ -21,11 +21,6 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import AppearanceUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/AppearanceUserSettingsTab";
 import { withClientContextRenderOptions, stubClient } from "../../../../../test-utils";
 
-// Fake random strings to give a predictable snapshot
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: () => "abdefghi",
-}));
-
 describe("AppearanceUserSettingsTab", () => {
     let client: MatrixClient;
 

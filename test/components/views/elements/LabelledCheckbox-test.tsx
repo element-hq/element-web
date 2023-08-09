@@ -19,13 +19,6 @@ import React from "react";
 
 import LabelledCheckbox from "../../../../src/components/views/elements/LabelledCheckbox";
 
-// Fake random strings to give a predictable snapshot for checkbox IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => {
-    return {
-        randomString: () => "abdefghi",
-    };
-});
-
 describe("<LabelledCheckbox />", () => {
     type CompProps = React.ComponentProps<typeof LabelledCheckbox>;
     const getComponent = (props: CompProps) => <LabelledCheckbox {...props} />;

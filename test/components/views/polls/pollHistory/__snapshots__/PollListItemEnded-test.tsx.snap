@@ -7,7 +7,7 @@ exports[`<PollListItemEnded /> renders a poll with no responses 1`] = `
     data-testid="pollListItem-1"
   >
     <div
-      aria-describedby="mx_TooltipTarget_abdefghi"
+      aria-describedby="mx_TooltipTarget_vY7Q4uEh"
       tabindex="0"
     >
       <div

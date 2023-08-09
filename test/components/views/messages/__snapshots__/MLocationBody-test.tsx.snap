@@ -34,17 +34,17 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
     class="mx_MLocationBody"
   >
     <div
-      aria-describedby="mx_TooltipTarget_abdefghi"
+      aria-describedby="mx_TooltipTarget_9K38QgU2"
       tabindex="0"
     >
       <div
         class="mx_Map mx_MLocationBody_map"
-        id="mx_Map_mx_MLocationBody_$2_abdefghi"
+        id="mx_Map_mx_MLocationBody_$2_vY7Q4uEh"
       >
         <span>
           <div
             class="mx_Marker mx_Marker_defaultColor"
-            id="mx_MLocationBody_$2_abdefghi-marker"
+            id="mx_MLocationBody_$2_vY7Q4uEh-marker"
           >
             <div
               class="mx_Marker_border"
@@ -67,17 +67,17 @@ exports[`MLocationBody <MLocationBody> without error renders marker correctly fo
     class="mx_MLocationBody"
   >
     <div
-      aria-describedby="mx_TooltipTarget_abdefghi"
+      aria-describedby="mx_TooltipTarget_9K38QgU2"
       tabindex="0"
     >
       <div
         class="mx_Map mx_MLocationBody_map"
-        id="mx_Map_mx_MLocationBody_$3_abdefghi"
+        id="mx_Map_mx_MLocationBody_$3_vY7Q4uEh"
       >
         <span>
           <div
             class="mx_Marker mx_Marker_defaultColor"
-            id="mx_MLocationBody_$3_abdefghi-marker"
+            id="mx_MLocationBody_$3_vY7Q4uEh-marker"
           >
             <div
               class="mx_Marker_border"

@@ -67,11 +67,6 @@ import { WidgetType } from "../../../src/widgets/WidgetType";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { ViewRoomErrorPayload } from "../../../src/dispatcher/payloads/ViewRoomErrorPayload";
 
-// Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: () => "abdefghi",
-}));
-
 const RoomView = wrapInMatrixClientContext(_RoomView);
 
 describe("RoomView", () => {

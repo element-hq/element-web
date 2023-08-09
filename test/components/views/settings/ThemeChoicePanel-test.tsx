@@ -20,13 +20,6 @@ import { render } from "@testing-library/react";
 import * as TestUtils from "../../../test-utils";
 import ThemeChoicePanel from "../../../../src/components/views/settings/ThemeChoicePanel";
 
-// Fake random strings to give a predictable snapshot
-jest.mock("matrix-js-sdk/src/randomstring", () => {
-    return {
-        randomString: () => "abdefghi",
-    };
-});
-
 describe("ThemeChoicePanel", () => {
     it("renders the theme choice UI", () => {
         TestUtils.stubClient();

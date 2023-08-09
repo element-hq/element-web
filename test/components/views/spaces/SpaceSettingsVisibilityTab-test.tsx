@@ -32,11 +32,6 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
 const SpaceSettingsVisibilityTab = wrapInMatrixClientContext(_SpaceSettingsVisibilityTab);
 
-// Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: jest.fn(),
-}));
-
 jest.useFakeTimers();
 
 describe("<SpaceSettingsVisibilityTab />", () => {

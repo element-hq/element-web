@@ -10,11 +10,11 @@ exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`
     >
       <input
         checked=""
-        id="checkbox_abdefghi"
+        id="checkbox_vY7Q4uEh9K"
         type="checkbox"
       />
       <label
-        for="checkbox_abdefghi"
+        for="checkbox_vY7Q4uEh9K"
       >
         <div
           class="mx_Checkbox_background"
@@ -53,11 +53,11 @@ exports[`<LabelledCheckbox /> should render with byline of undefined 1`] = `
     >
       <input
         checked=""
-        id="checkbox_abdefghi"
+        id="checkbox_vY7Q4uEh9K"
         type="checkbox"
       />
       <label
-        for="checkbox_abdefghi"
+        for="checkbox_vY7Q4uEh9K"
       >
         <div
           class="mx_Checkbox_background"

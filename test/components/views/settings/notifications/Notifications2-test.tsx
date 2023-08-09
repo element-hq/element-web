@@ -22,25 +22,8 @@ import NotificationSettings2 from "../../../../../src/components/views/settings/
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { StandardActions } from "../../../../../src/notifications/StandardActions";
-import { PredictableRandom } from "../../../../predictableRandom";
 import { mkMessage, stubClient } from "../../../../test-utils";
 import Mock = jest.Mock;
-
-const mockRandom = new PredictableRandom();
-
-// Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: jest.fn((len): string => {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let ret = "";
-
-        for (let i = 0; i < len; ++i) {
-            ret += chars.charAt(Math.floor(mockRandom.get() * chars.length));
-        }
-
-        return ret;
-    }),
-}));
 
 const waitForUpdate = (): Promise<void> => new Promise((resolve) => setTimeout(resolve));
 
@@ -80,8 +63,6 @@ describe("<Notifications />", () => {
         cli.deletePushRule = jest.fn(cli.deletePushRule).mockResolvedValue({});
         cli.removePusher = jest.fn(cli.removePusher).mockResolvedValue({});
         cli.setPusher = jest.fn(cli.setPusher).mockResolvedValue({});
-
-        mockRandom.reset();
     });
 
     it("matches the snapshot", async () => {

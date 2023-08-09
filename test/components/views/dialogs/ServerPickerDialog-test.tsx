@@ -23,11 +23,6 @@ import SdkConfig from "../../../../src/SdkConfig";
 import { flushPromises } from "../../../test-utils";
 import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
 
-// Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: () => "abdefghi",
-}));
-
 describe("<ServerPickerDialog />", () => {
     const defaultServerConfig = {
         hsUrl: "https://matrix.org",

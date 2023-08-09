@@ -70,11 +70,6 @@ jest.mock("../../../../src/Modal", () => ({
     ModalManagerEvent: { Opened: "opened" },
 }));
 
-// Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: () => "abdefghi",
-}));
-
 describe("<LocationShareMenu />", () => {
     const userId = "@ernie:server.org";
     const mockClient = getMockClientWithEventEmitter({

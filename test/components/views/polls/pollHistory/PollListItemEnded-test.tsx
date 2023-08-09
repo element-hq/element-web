@@ -32,11 +32,6 @@ import {
     unmockIntlDateTimeFormat,
 } from "../../../../test-utils";
 
-// Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: () => "abdefghi",
-}));
-
 describe("<PollListItemEnded />", () => {
     const userId = "@alice:domain.org";
     const roomId = "!room:domain.org";

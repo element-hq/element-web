@@ -45,11 +45,6 @@ jest.mock("matrix-js-sdk/src/logger");
 // Avoid indirectly importing any eagerly created stores that would require extra setup
 jest.mock("../../../../src/Notifier");
 
-// Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: jest.fn(),
-}));
-
 const masterRule: IPushRule = {
     actions: [PushRuleActionName.DontNotify],
     conditions: [],

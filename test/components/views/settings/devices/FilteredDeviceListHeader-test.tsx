@@ -19,11 +19,6 @@ import React from "react";
 
 import FilteredDeviceListHeader from "../../../../../src/components/views/settings/devices/FilteredDeviceListHeader";
 
-// Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: () => "abdefghi",
-}));
-
 describe("<FilteredDeviceListHeader />", () => {
     const defaultProps = {
         selectedDeviceCount: 0,

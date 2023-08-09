@@ -23,6 +23,8 @@ import { mocked } from "jest-mock";
 import { completeOidcLogin, startOidcLogin } from "../../../src/utils/oidc/authorize";
 import { makeDelegatedAuthConfig } from "../../test-utils/oidc";
 
+jest.unmock("matrix-js-sdk/src/randomstring");
+
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     ...jest.requireActual("matrix-js-sdk/src/oidc/authorize"),
     completeAuthorizationCodeGrant: jest.fn(),

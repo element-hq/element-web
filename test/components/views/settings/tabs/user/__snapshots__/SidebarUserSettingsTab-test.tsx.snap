@@ -49,11 +49,11 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings 1`] = `
                 <input
                   checked=""
                   disabled=""
-                  id="checkbox_abcd"
+                  id="checkbox_vY7Q4uEh9K"
                   type="checkbox"
                 />
                 <label
-                  for="checkbox_abcd"
+                  for="checkbox_vY7Q4uEh9K"
                 >
                   <div
                     class="mx_Checkbox_background"
@@ -82,11 +82,11 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings 1`] = `
               >
                 <input
                   data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
-                  id="checkbox_abcd"
+                  id="checkbox_38QgU2Pomx"
                   type="checkbox"
                 />
                 <label
-                  for="checkbox_abcd"
+                  for="checkbox_38QgU2Pomx"
                 >
                   <div
                     class="mx_Checkbox_background"
@@ -113,11 +113,11 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings 1`] = `
                 class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
               >
                 <input
-                  id="checkbox_abcd"
+                  id="checkbox_wKpa6hpi3Y"
                   type="checkbox"
                 />
                 <label
-                  for="checkbox_abcd"
+                  for="checkbox_wKpa6hpi3Y"
                 >
                   <div
                     class="mx_Checkbox_background"
@@ -145,11 +145,11 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings 1`] = `
                 class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
               >
                 <input
-                  id="checkbox_abcd"
+                  id="checkbox_EetmBG4yVC"
                   type="checkbox"
                 />
                 <label
-                  for="checkbox_abcd"
+                  for="checkbox_EetmBG4yVC"
                 >
                   <div
                     class="mx_Checkbox_background"
@@ -177,11 +177,11 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings 1`] = `
                 class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
               >
                 <input
-                  id="checkbox_abcd"
+                  id="checkbox_eEefiPqpMR"
                   type="checkbox"
                 />
                 <label
-                  for="checkbox_abcd"
+                  for="checkbox_eEefiPqpMR"
                 >
                   <div
                     class="mx_Checkbox_background"

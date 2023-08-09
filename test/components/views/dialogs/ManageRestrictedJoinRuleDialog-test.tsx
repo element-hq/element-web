@@ -23,13 +23,6 @@ import ManageRestrictedJoinRuleDialog from "../../../../src/components/views/dia
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 
-// Fake random strings to give a predictable snapshot
-jest.mock("matrix-js-sdk/src/randomstring", () => {
-    return {
-        randomString: () => "abdefghi",
-    };
-});
-
 describe("<ManageRestrictedJoinRuleDialog />", () => {
     const userId = "@alice:server.org";
     const mockClient = getMockClientWithEventEmitter({

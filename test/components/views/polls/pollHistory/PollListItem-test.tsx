@@ -21,11 +21,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { PollListItem } from "../../../../../src/components/views/polls/pollHistory/PollListItem";
 import { makePollStartEvent, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../../../../test-utils";
 
-// Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: () => "abdefghi",
-}));
-
 describe("<PollListItem />", () => {
     const event = makePollStartEvent("Question?", "@me:domain.org");
     event.getContent().origin;

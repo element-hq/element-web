@@ -61,11 +61,6 @@ jest.mock("../../../../src/stores/OwnProfileStore", () => ({
     },
 }));
 
-// Fake random strings to give a predictable snapshot
-jest.mock("matrix-js-sdk/src/randomstring", () => ({
-    randomString: () => "abdefghi",
-}));
-
 describe("AppTile", () => {
     let cli: MatrixClient;
     let r1: Room;

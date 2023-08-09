@@ -79,7 +79,7 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
           data-testid="pollListItem-$2"
         >
           <div
-            aria-describedby="mx_TooltipTarget_abdefghi"
+            aria-describedby="mx_TooltipTarget_PomxwKpa"
             tabindex="0"
           >
             <div
@@ -104,7 +104,7 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
           data-testid="pollListItem-$1"
         >
           <div
-            aria-describedby="mx_TooltipTarget_abdefghi"
+            aria-describedby="mx_TooltipTarget_tmBG4yVC"
             tabindex="0"
           >
             <div
