@@ -76,7 +76,11 @@ export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" |
         } else {
             avatarSection = (
                 <React.Fragment>
-                    <div className="mx_SpaceBasicSettings_avatar" onClick={() => avatarUploadRef.current?.click()} />
+                    <AccessibleButton
+                        className="mx_SpaceBasicSettings_avatar"
+                        onClick={() => avatarUploadRef.current?.click()}
+                        alt=""
+                    />
                     <AccessibleButton
                         onClick={() => avatarUploadRef.current?.click()}
                         kind="link"

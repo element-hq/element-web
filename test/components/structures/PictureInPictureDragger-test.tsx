@@ -92,6 +92,7 @@ describe("PictureInPictureDragger", () => {
                 <PictureInPictureDragger draggable={true}>
                     {[
                         ({ onStartMoving }) => (
+                            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
                             <div onMouseDown={onStartMoving} onClick={clickSpy}>
                                 Hello
                             </div>

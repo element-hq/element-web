@@ -293,10 +293,10 @@ describe("<TextualBody />", () => {
             expect(content).toContainHTML(
                 '<span class="mx_EventTile_body markdown-body" dir="auto">' +
                     "Hey <span>" +
-                    '<span class="mx_EventTile_spoiler">' +
+                    '<button class="mx_EventTile_spoiler">' +
                     '<span class="mx_EventTile_spoiler_reason">(movie)</span>&nbsp;' +
                     '<span class="mx_EventTile_spoiler_content"><span>the movie was awesome</span></span>' +
-                    "</span></span></span>",
+                    "</span></button></span>",
             );
         });
 

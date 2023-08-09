@@ -809,6 +809,16 @@ $left-gutter: 64px;
 .mx_EventTile_spoiler {
     cursor: pointer;
 
+    // clear button styles
+    appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+
     .mx_EventTile_spoiler_reason {
         color: $event-timestamp-color;
         font-size: $font-11px;
@@ -821,6 +831,7 @@ $left-gutter: 64px;
 
     &.visible > .mx_EventTile_spoiler_content {
         filter: none;
+        user-select: auto;
     }
 }
 

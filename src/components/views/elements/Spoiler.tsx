@@ -50,7 +50,7 @@ export default class Spoiler extends React.Component<IProps, IState> {
         // as such, we pass the this.props.contentHtml instead and then set the raw
         // HTML content. This is secure as the contents have already been parsed previously
         return (
-            <span
+            <button
                 className={"mx_EventTile_spoiler" + (this.state.visible ? " visible" : "")}
                 onClick={this.toggleVisible}
             >
@@ -60,7 +60,7 @@ export default class Spoiler extends React.Component<IProps, IState> {
                     className="mx_EventTile_spoiler_content"
                     dangerouslySetInnerHTML={{ __html: this.props.contentHtml }}
                 />
-            </span>
+            </button>
         );
     }
 }

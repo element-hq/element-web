@@ -274,7 +274,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
             : this.highlightName(userIdentifier || this.props.member.userId);
 
         return (
-            <div className="mx_InviteDialog_tile mx_InviteDialog_tile--room" onClick={this.onClick}>
+            <AccessibleButton className="mx_InviteDialog_tile mx_InviteDialog_tile--room" onClick={this.onClick}>
                 {stackedAvatar}
                 <span className="mx_InviteDialog_tile_nameStack">
                     <div className="mx_InviteDialog_tile_nameStack_name">
@@ -283,7 +283,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
                     <div className="mx_InviteDialog_tile_nameStack_userId">{caption}</div>
                 </span>
                 {timestamp}
-            </div>
+            </AccessibleButton>
         );
     }
 }

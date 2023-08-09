@@ -173,7 +173,7 @@ describe("Composer", () => {
                     cy.findByRole("textbox").type("this is the spoiler text ");
                     cy.findByRole("button", { name: "Send message" }).click();
                     // Check that a spoiler item has appeared in the timeline and contains the spoiler command text
-                    cy.get("span.mx_EventTile_spoiler").should("exist");
+                    cy.get("button.mx_EventTile_spoiler").should("exist");
                     cy.findByText("this is the spoiler text").should("exist");
                 });
             });
