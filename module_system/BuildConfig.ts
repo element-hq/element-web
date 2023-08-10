@@ -26,8 +26,9 @@ export type BuildConfig = {
 };
 
 export function readBuildConfig(): BuildConfig {
-    if (fs.existsSync("./build_config.yaml")) {
-        return YAML.parse(fs.readFileSync("./build_config.yaml", "utf-8"));
+    const configFile = process.env.ELEMENT_BUILD_CONFIG ?? "./build_config.yaml";
+    if (fs.existsSync(configFile)) {
+        return YAML.parse(fs.readFileSync(configFile, "utf-8"));
     }
     return {}; // no config
 }

@@ -277,6 +277,11 @@ module.exports = (env, argv) => {
                         // probably be removed.
                         if (f.includes("@vector-im/compound-web")) return true;
 
+                        // In Cypress we define an example module to test the Module API.
+                        // This is written in typescript and directly imported, so we need
+                        // to apply babel to it to compile it.
+                        if (f.includes("example_module")) return true;
+
                         // but we can't run all of our dependencies through babel (many of them still
                         // use module.exports which breaks if babel injects an 'include' for its
                         // polyfills: probably fixable but babeling all our dependencies is probably
