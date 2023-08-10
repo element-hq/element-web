@@ -281,7 +281,7 @@ describe("loading:", function () {
                     // the only outstanding request should be a GET /login
                     // (in particular there should be no /register request for
                     // guest registration).
-                    const allowedRequests = ["/_matrix/client/r0/login", "/versions", "/_matrix/identity/v2"];
+                    const allowedRequests = ["/_matrix/client/v3/login", "/versions", "/_matrix/identity/v2"];
                     for (const req of httpBackend.requests) {
                         if (req.method === "GET" && allowedRequests.find((p) => req.path.endsWith(p))) {
                             continue;
