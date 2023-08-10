@@ -16,7 +16,6 @@ limitations under the License.
 
 import { groupBy, mapValues, maxBy, minBy, sumBy, takeRight } from "lodash";
 import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import { compare } from "matrix-js-sdk/src/utils";
 
 import { Member } from "./direct-messages";
 import DMRoomMap from "./DMRoomMap";
@@ -39,7 +38,9 @@ export const compareMembers =
 
         if (aScore === bScore) {
             if (aNumRooms === bNumRooms) {
-                return compare(a.userId, b.userId);
+                // If there is no activity between members,
+                // keep the order received from the user directory search results
+                return 0;
             }
 
             return bNumRooms - aNumRooms;

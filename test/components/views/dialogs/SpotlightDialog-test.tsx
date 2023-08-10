@@ -143,7 +143,11 @@ describe("Spotlight Dialog", () => {
         guest_can_join: false,
     };
 
+    const testDMRoomId = "!testDM:example.com";
+    const testDMUserId = "@alice:matrix.org";
+
     let testRoom: Room;
+    let testDM: Room;
     let testLocalRoom: LocalRoom;
 
     let mockedClient: MatrixClient;
@@ -159,6 +163,19 @@ describe("Spotlight Dialog", () => {
         jest.spyOn(DMRoomMap, "shared").mockReturnValue({
             getUserIdForRoomId: jest.fn(),
         } as unknown as DMRoomMap);
+
+        testDM = mkRoom(mockedClient, testDMRoomId);
+        testDM.name = "Chat with Alice";
+        mocked(testDM.getMyMembership).mockReturnValue("join");
+
+        mocked(DMRoomMap.shared().getUserIdForRoomId).mockImplementation((roomId: string) => {
+            if (roomId === testDMRoomId) {
+                return testDMUserId;
+            }
+            return undefined;
+        });
+
+        mocked(mockedClient.getVisibleRooms).mockReturnValue([testRoom, testLocalRoom, testDM]);
     });
 
     describe("should apply filters supplied via props", () => {
@@ -389,6 +406,50 @@ describe("Spotlight Dialog", () => {
         expect(options.length).toBeGreaterThanOrEqual(2);
         expect(options[0]).toHaveTextContent(testPerson.display_name!);
         expect(options[1]).toHaveTextContent("User Beta");
+    });
+
+    it("show non-matching query members with DMs if they are present in the server search results", async () => {
+        mocked(mockedClient.searchUserDirectory).mockResolvedValue({
+            results: [
+                { user_id: testDMUserId, display_name: "Alice Wonder", avatar_url: "mxc://1/avatar" },
+                { user_id: "@bob:matrix.org", display_name: "Bob Wonder", avatar_url: "mxc://2/avatar" },
+            ],
+            limited: false,
+        });
+        render(
+            <SpotlightDialog initialFilter={Filter.People} initialText="Something Wonder" onFinished={() => null} />,
+        );
+        // search is debounced
+        jest.advanceTimersByTime(200);
+        await flushPromisesWithFakeTimers();
+
+        const content = document.querySelector("#mx_SpotlightDialog_content")!;
+        const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+        expect(options.length).toBeGreaterThanOrEqual(2);
+        expect(options[0]).toHaveTextContent(testDMUserId);
+        expect(options[1]).toHaveTextContent("Bob Wonder");
+    });
+
+    it("don't sort the order of users sent by the server", async () => {
+        const serverList = [
+            { user_id: "@user2:server", display_name: "User Beta", avatar_url: "mxc://2/avatar" },
+            { user_id: "@user1:server", display_name: "User Alpha", avatar_url: "mxc://1/avatar" },
+        ];
+        mocked(mockedClient.searchUserDirectory).mockResolvedValue({
+            results: serverList,
+            limited: false,
+        });
+
+        render(<SpotlightDialog initialFilter={Filter.People} initialText="User" onFinished={() => null} />);
+        // search is debounced
+        jest.advanceTimersByTime(200);
+        await flushPromisesWithFakeTimers();
+
+        const content = document.querySelector("#mx_SpotlightDialog_content")!;
+        const options = content.querySelectorAll("li.mx_SpotlightDialog_option");
+        expect(options.length).toBeGreaterThanOrEqual(2);
+        expect(options[0]).toHaveTextContent("User Beta");
+        expect(options[1]).toHaveTextContent("User Alpha");
     });
 
     it("should start a DM when clicking a person", async () => {
