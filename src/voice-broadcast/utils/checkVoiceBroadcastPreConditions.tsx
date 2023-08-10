@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
-import { SyncState } from "matrix-js-sdk/src/sync";
+import { MatrixClient, Room, SyncState } from "matrix-js-sdk/src/matrix";
 
 import { hasRoomLiveVoiceBroadcast, VoiceBroadcastInfoEventType, VoiceBroadcastRecordingsStore } from "..";
 import InfoDialog from "../../components/views/dialogs/InfoDialog";

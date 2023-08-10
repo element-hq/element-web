@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent, ClientEvent, EventType, MatrixClient, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, ClientEvent, EventType, MatrixClient, RoomStateEvent, SyncState } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { SyncState } from "matrix-js-sdk/src/sync";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 
 import dis from "./dispatcher/dispatcher";

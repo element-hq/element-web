@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { SyncState } from "matrix-js-sdk/src/sync";
+import { MatrixClient, SyncState } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "events";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";

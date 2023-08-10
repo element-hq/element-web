@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import classNames from "classnames";
-import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
+import { SERVICE_TYPES, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import Modal from "./Modal";
 import TermsDialog from "./components/views/dialogs/TermsDialog";

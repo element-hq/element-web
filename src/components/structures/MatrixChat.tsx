@@ -24,8 +24,9 @@ import {
     MatrixEventEvent,
     MatrixEvent,
     RoomType,
+    SyncStateData,
+    SyncState,
 } from "matrix-js-sdk/src/matrix";
-import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -1502,7 +1503,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return this.loggedInView.current.canResetTimelineInRoom(roomId);
         });
 
-        cli.on(ClientEvent.Sync, (state: SyncState, prevState: SyncState | null, data?: ISyncStateData) => {
+        cli.on(ClientEvent.Sync, (state: SyncState, prevState: SyncState | null, data?: SyncStateData) => {
             if (state === SyncState.Error || state === SyncState.Reconnecting) {
                 if (data?.error instanceof InvalidStoreError) {
                     Lifecycle.handleInvalidStoreError(data.error);

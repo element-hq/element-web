@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { FC, useState, useEffect, memo } from "react";
-import { GroupCall } from "matrix-js-sdk/src/webrtc/groupCall";
+import { GroupCall } from "matrix-js-sdk/src/matrix";
 
 import { formatPreciseDuration } from "../../../DateUtils";
 

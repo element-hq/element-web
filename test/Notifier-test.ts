@@ -24,8 +24,8 @@ import {
     MsgType,
     IContent,
     MatrixEvent,
+    SyncState,
 } from "matrix-js-sdk/src/matrix";
-import { SyncState } from "matrix-js-sdk/src/sync";
 import { waitFor } from "@testing-library/react";
 
 import BasePlatform from "../src/BasePlatform";

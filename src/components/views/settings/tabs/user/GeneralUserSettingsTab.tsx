@@ -17,10 +17,9 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
+import { SERVICE_TYPES, IDelegatedAuthConfig, M_AUTHENTICATION, HTTPError } from "matrix-js-sdk/src/matrix";
 import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
-import { IDelegatedAuthConfig, M_AUTHENTICATION, HTTPError } from "matrix-js-sdk/src/matrix";
 
 import { Icon as WarningIcon } from "../../../../../../res/img/feather-customised/warning-triangle.svg";
 import { UserFriendlyError, _t } from "../../../../../languageHandler";

@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ClientEvent, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixEvent, MatrixEventEvent, SyncStateData, SyncState } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 
 import SdkConfig from "../SdkConfig";
 import sendBugReport from "../rageshake/submit-rageshake";
@@ -145,7 +144,7 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
     private async onSyncStateChange(
         _state: SyncState,
         _prevState: SyncState | null,
-        data?: ISyncStateData,
+        data?: SyncStateData,
     ): Promise<void> {
         if (!this.state.initialSyncCompleted) {
             await this.updateState({ initialSyncCompleted: !!data?.nextSyncToken });

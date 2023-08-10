@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
+import { SERVICE_TYPES } from "matrix-js-sdk/src/matrix";
 
 import { _t, pickBestLanguage } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";

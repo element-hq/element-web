@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { EventStatus, MatrixEvent, Room, MatrixError } from "matrix-js-sdk/src/matrix";
-import { SyncState, ISyncStateData } from "matrix-js-sdk/src/sync";
+import { EventStatus, MatrixEvent, Room, MatrixError, SyncState, SyncStateData } from "matrix-js-sdk/src/matrix";
 
 import { Icon as WarningIcon } from "../../../res/img/feather-customised/warning-triangle.svg";
 import { _t, _td } from "../../languageHandler";
@@ -81,7 +80,7 @@ interface IProps {
 
 interface IState {
     syncState: SyncState;
-    syncStateData: ISyncStateData;
+    syncStateData: SyncStateData;
     unsentMessages: MatrixEvent[];
     isResending: boolean;
 }
@@ -123,7 +122,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         }
     }
 
-    private onSyncStateChange = (state: SyncState, prevState: SyncState, data: ISyncStateData): void => {
+    private onSyncStateChange = (state: SyncState, prevState: SyncState, data: SyncStateData): void => {
         if (state === "SYNCING" && prevState === "SYNCING") {
             return;
         }

@@ -30,12 +30,15 @@ import {
     ClientEvent,
     MatrixClient,
     HTTPError,
+    IEventWithRoomId,
+    IMatrixProfile,
+    IResultRoomEvents,
+    SyncStateData,
+    SyncState,
 } from "matrix-js-sdk/src/matrix";
 import { TimelineIndex, TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { IEventWithRoomId, IMatrixProfile, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -168,7 +171,7 @@ export default class EventIndex extends EventEmitter {
      *     - Every other sync, tell the event index to commit all the queued up
      *         live events
      */
-    private onSync = async (state: SyncState, prevState: SyncState | null, data?: ISyncStateData): Promise<void> => {
+    private onSync = async (state: SyncState, prevState: SyncState | null, data?: SyncStateData): Promise<void> => {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         if (!indexManager) return;
 

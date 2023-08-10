@@ -16,8 +16,8 @@ limitations under the License.
 */
 
 import React, { createRef } from "react";
-import { Filter } from "matrix-js-sdk/src/filter";
 import {
+    Filter,
     EventTimelineSet,
     IRoomTimelineData,
     Direction,

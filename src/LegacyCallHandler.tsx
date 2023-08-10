@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixError, RuleId, TweakName } from "matrix-js-sdk/src/matrix";
+import { MatrixError, RuleId, TweakName, SyncState } from "matrix-js-sdk/src/matrix";
 import {
     CallError,
     CallErrorCode,
@@ -32,7 +32,6 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import EventEmitter from "events";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
-import { SyncState } from "matrix-js-sdk/src/sync";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";

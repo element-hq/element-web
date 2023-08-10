@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { SyncState } from "matrix-js-sdk/src/sync";
+import { MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
 
 import Modal from "../../../src/Modal";
 import {

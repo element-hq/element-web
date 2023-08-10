@@ -17,8 +17,7 @@ limitations under the License.
 import { logger } from "matrix-js-sdk/src/logger";
 import { GroupCallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/groupCallEventHandler";
 
-import type { GroupCall } from "matrix-js-sdk/src/webrtc/groupCall";
-import type { Room } from "matrix-js-sdk/src/matrix";
+import type { GroupCall, Room } from "matrix-js-sdk/src/matrix";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";

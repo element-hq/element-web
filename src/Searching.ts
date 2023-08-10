@@ -21,9 +21,11 @@ import {
     ISearchResult,
     ISearchResults,
     SearchOrderBy,
-} from "matrix-js-sdk/src/@types/search";
-import { IRoomEventFilter } from "matrix-js-sdk/src/filter";
-import { EventType, MatrixClient, SearchResult } from "matrix-js-sdk/src/matrix";
+    IRoomEventFilter,
+    EventType,
+    MatrixClient,
+    SearchResult,
+} from "matrix-js-sdk/src/matrix";
 
 import { ISearchArgs } from "./indexing/BaseEventIndexManager";
 import EventIndexPeg from "./indexing/EventIndexPeg";

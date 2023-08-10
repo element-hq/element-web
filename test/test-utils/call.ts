@@ -16,8 +16,7 @@ limitations under the License.
 
 import { MatrixWidgetType } from "matrix-widget-api";
 
-import type { GroupCall } from "matrix-js-sdk/src/webrtc/groupCall";
-import type { Room, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import type { GroupCall, Room, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { mkEvent } from "./test-utils";
 import { Call, ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";
 import { CallStore } from "../../src/stores/CallStore";

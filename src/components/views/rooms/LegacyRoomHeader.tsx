@@ -18,9 +18,8 @@ limitations under the License.
 import React, { FC, useState, useMemo, useCallback } from "react";
 import classNames from "classnames";
 import { throttle } from "lodash";
-import { RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { RoomStateEvent, ISearchResults } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { ISearchResults } from "matrix-js-sdk/src/@types/search";
 
 import type { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../../languageHandler";

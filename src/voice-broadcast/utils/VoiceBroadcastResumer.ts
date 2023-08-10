@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ClientEvent, MatrixClient, MatrixEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
-import { SyncState } from "matrix-js-sdk/src/sync";
+import { ClientEvent, MatrixClient, MatrixEvent, RelationType, Room, SyncState } from "matrix-js-sdk/src/matrix";
 
 import { VoiceBroadcastInfoEventContent, VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "..";
 import { IDestroyable } from "../../utils/IDestroyable";

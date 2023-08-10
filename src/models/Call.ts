@@ -14,19 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { TypedEventEmitter, RoomEvent, RoomStateEvent, EventType, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
-import { randomString } from "matrix-js-sdk/src/randomstring";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
-import { IWidgetApiRequest, MatrixWidgetType } from "matrix-widget-api";
 import {
+    TypedEventEmitter,
+    RoomEvent,
+    RoomStateEvent,
+    EventType,
+    MatrixClient,
     GroupCall,
     GroupCallEvent,
     GroupCallIntent,
     GroupCallState,
     GroupCallType,
-} from "matrix-js-sdk/src/webrtc/groupCall";
+} from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
+import { randomString } from "matrix-js-sdk/src/randomstring";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
+import { IWidgetApiRequest, MatrixWidgetType } from "matrix-widget-api";
 
 import type EventEmitter from "events";
 import type { IMyDevice, Room, RoomMember } from "matrix-js-sdk/src/matrix";

@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { ClientEvent, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
-import { SyncState } from "matrix-js-sdk/src/sync";
+import { ClientEvent, MatrixClient, Room, SyncState } from "matrix-js-sdk/src/matrix";
 
 import { createTestClient, setupAsyncStoreWithClient } from "../test-utils";
 import {

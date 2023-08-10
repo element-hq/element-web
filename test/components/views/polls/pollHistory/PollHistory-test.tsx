@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render } from "@testing-library/react";
-import { Filter } from "matrix-js-sdk/src/filter";
-import { EventTimeline, Room } from "matrix-js-sdk/src/matrix";
+import { Filter, EventTimeline, Room } from "matrix-js-sdk/src/matrix";
 import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 
 import { PollHistory } from "../../../../../src/components/views/polls/pollHistory/PollHistory";
