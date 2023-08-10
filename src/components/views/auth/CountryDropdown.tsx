@@ -50,10 +50,11 @@ interface IProps {
 
 interface IState {
     searchQuery: string;
-    defaultCountry: PhoneNumberCountryDefinition;
 }
 
 export default class CountryDropdown extends React.Component<IProps, IState> {
+    private readonly defaultCountry: PhoneNumberCountryDefinition;
+
     public constructor(props: IProps) {
         super(props);
 
@@ -78,9 +79,9 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
             }
         }
 
+        this.defaultCountry = defaultCountry ?? COUNTRIES[0];
         this.state = {
             searchQuery: "",
-            defaultCountry: defaultCountry ?? COUNTRIES[0],
         };
     }
 
@@ -89,7 +90,7 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
             // If no value is given, we start with the default
             // country selected, but our parent component
             // doesn't know this, therefore we do this.
-            this.props.onOptionChange(this.state.defaultCountry);
+            this.props.onOptionChange(this.defaultCountry);
         }
     }
 
@@ -150,7 +151,7 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
 
         // default value here too, otherwise we need to handle null / undefined
         // values between mounting and the initial value propagating
-        const value = this.props.value || this.state.defaultCountry.iso2;
+        const value = this.props.value || this.defaultCountry.iso2;
 
         return (
             <Dropdown
