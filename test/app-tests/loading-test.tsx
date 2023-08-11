@@ -143,9 +143,6 @@ describe("loading:", function () {
                     enableGuest={true}
                     onTokenLoginCompleted={resolve}
                     initialScreenAfterLogin={getScreenFromLocation(windowLocation!)}
-                    makeRegistrationUrl={(): string => {
-                        throw new Error("Not implemented");
-                    }}
                 />,
             );
         });
