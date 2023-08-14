@@ -16,8 +16,7 @@ limitations under the License.
 
 import { Optional } from "matrix-events-sdk";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { EventTimelineSet, Room } from "matrix-js-sdk/src/matrix";
-import { Thread } from "matrix-js-sdk/src/models/thread";
+import { EventTimelineSet, Room, Thread } from "matrix-js-sdk/src/matrix";
 
 import BaseCard from "../views/right_panel/BaseCard";
 import ResizeNotifier from "../../utils/ResizeNotifier";

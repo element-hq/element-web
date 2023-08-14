@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room, RelationType, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { Room, RelationType, MatrixEvent, Thread } from "matrix-js-sdk/src/matrix";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
-import { Thread } from "matrix-js-sdk/src/models/thread";
 
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";

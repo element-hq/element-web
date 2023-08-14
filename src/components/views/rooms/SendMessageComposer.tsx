@@ -25,11 +25,11 @@ import {
     EventType,
     MsgType,
     RelationType,
+    THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import { DebouncedFunc, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
-import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
 import dis from "../../../dispatcher/dispatcher";
 import EditorModel from "../../../editor/model";

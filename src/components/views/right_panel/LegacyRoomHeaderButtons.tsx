@@ -20,8 +20,7 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import { NotificationCountType, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { ThreadEvent } from "matrix-js-sdk/src/models/thread";
+import { NotificationCountType, Room, RoomEvent, ThreadEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import HeaderButton from "./HeaderButton";

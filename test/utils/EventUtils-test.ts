@@ -25,8 +25,8 @@ import {
     PendingEventOrdering,
     RelationType,
     Room,
+    Thread,
 } from "matrix-js-sdk/src/matrix";
-import { Thread } from "matrix-js-sdk/src/models/thread";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import {

@@ -155,6 +155,26 @@ module.exports = {
                         message: "Please use matrix-js-sdk/src/matrix instead",
                     },
                     {
+                        name: "matrix-js-sdk/src/timeline-window",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/store/indexeddb",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/crypto/store/localStorage-crypto-store",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/models/thread",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
                         name: "matrix-react-sdk",
                         message: "Please use matrix-react-sdk/src/index instead",
                     },

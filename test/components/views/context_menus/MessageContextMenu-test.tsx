@@ -25,10 +25,11 @@ import {
     Beacon,
     getBeaconInfoIdentifier,
     EventType,
+    FeatureSupport,
+    Thread,
 } from "matrix-js-sdk/src/matrix";
 import { M_POLL_KIND_DISCLOSED } from "matrix-js-sdk/src/@types/polls";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
-import { FeatureSupport, Thread } from "matrix-js-sdk/src/models/thread";
 import { mocked } from "jest-mock";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";

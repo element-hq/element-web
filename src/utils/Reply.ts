@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-import { IContent, IEventRelation, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { IContent, IEventRelation, MatrixEvent, MsgType, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import sanitizeHtml from "sanitize-html";
 import escapeHtml from "escape-html";
-import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { M_POLL_END, M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";

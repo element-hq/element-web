@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent, MatrixEventEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
-import { Thread } from "matrix-js-sdk/src/models/thread";
+import { MatrixClient, MatrixEvent, MatrixEventEvent, RelationType, Room, Thread } from "matrix-js-sdk/src/matrix";
 
 import { mkMessage, MessageEventProps } from "./test-utils";
 

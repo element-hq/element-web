@@ -35,8 +35,9 @@ import {
     IResultRoomEvents,
     SyncStateData,
     SyncState,
+    TimelineIndex,
+    TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
-import { TimelineIndex, TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 

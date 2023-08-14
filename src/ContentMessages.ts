@@ -26,11 +26,11 @@ import {
     MatrixEvent,
     UploadOpts,
     UploadProgress,
+    THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import { logger } from "matrix-js-sdk/src/logger";
-import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { removeElement } from "matrix-js-sdk/src/utils";
 
 import {

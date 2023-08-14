@@ -15,8 +15,12 @@ limitations under the License.
 */
 
 import React, { forwardRef, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ISearchResults, IThreadBundledRelationship, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
+import {
+    ISearchResults,
+    IThreadBundledRelationship,
+    MatrixEvent,
+    THREAD_RELATION_TYPE,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import ScrollPanel from "./ScrollPanel";

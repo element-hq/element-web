@@ -29,14 +29,12 @@ import {
     RoomState,
     TimelineWindow,
     EventTimeline,
-} from "matrix-js-sdk/src/matrix";
-import {
     FeatureSupport,
     Thread,
     THREAD_RELATION_TYPE,
     ThreadEvent,
     ThreadFilterType,
-} from "matrix-js-sdk/src/models/thread";
+} from "matrix-js-sdk/src/matrix";
 import React, { createRef } from "react";
 import { Mocked, mocked } from "jest-mock";
 import { forEachRight } from "lodash";

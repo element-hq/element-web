@@ -41,9 +41,9 @@ import {
     MatrixEvent,
     Room,
     Direction,
+    THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import {
     ApprovalOpts,
     CapabilitiesOpts,

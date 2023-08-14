@@ -16,8 +16,16 @@ limitations under the License.
 
 import React from "react";
 import { act, render, fireEvent } from "@testing-library/react";
-import { EventType, EventStatus, MatrixEvent, MatrixEventEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
-import { FeatureSupport, Thread } from "matrix-js-sdk/src/models/thread";
+import {
+    EventType,
+    EventStatus,
+    MatrixEvent,
+    MatrixEventEvent,
+    MsgType,
+    Room,
+    FeatureSupport,
+    Thread,
+} from "matrix-js-sdk/src/matrix";
 
 import MessageActionBar from "../../../../src/components/views/messages/MessageActionBar";
 import {

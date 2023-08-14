@@ -25,8 +25,8 @@ import {
     Room,
     MatrixClient,
     PendingEventOrdering,
+    THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
-import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import React, { useState } from "react";
 
 import ThreadView from "../../../src/components/structures/ThreadView";

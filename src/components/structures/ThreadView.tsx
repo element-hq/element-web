@@ -15,8 +15,15 @@ limitations under the License.
 */
 
 import React, { createRef, KeyboardEvent } from "react";
-import { Thread, THREAD_RELATION_TYPE, ThreadEvent } from "matrix-js-sdk/src/models/thread";
-import { Room, RoomEvent, IEventRelation, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import {
+    Thread,
+    THREAD_RELATION_TYPE,
+    ThreadEvent,
+    Room,
+    RoomEvent,
+    IEventRelation,
+    MatrixEvent,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import classNames from "classnames";
 

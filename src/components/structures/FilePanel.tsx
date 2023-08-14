@@ -25,8 +25,8 @@ import {
     MatrixEventEvent,
     Room,
     RoomEvent,
+    TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
-import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";

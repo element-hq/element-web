@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { LocalStorageCryptoStore } from "matrix-js-sdk/src/crypto/store/localStorage-crypto-store";
-import { IndexedDBStore } from "matrix-js-sdk/src/store/indexeddb";
-import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
+import { LocalStorageCryptoStore, IndexedDBStore, IndexedDBCryptoStore } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 const localStorage = window.localStorage;
