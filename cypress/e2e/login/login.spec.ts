@@ -84,6 +84,64 @@ describe("Login", () => {
         });
     });
 
+    // tests for old-style SSO login, in which we exchange tokens with Synapse, and Synapse talks to an auth server
+    describe("SSO login", () => {
+        beforeEach(() => {
+            cy.task("startOAuthServer")
+                .then((oAuthServerPort: number) => {
+                    return cy.startHomeserver({ template: "default", oAuthServerPort });
+                })
+                .then((data) => {
+                    homeserver = data;
+                    cy.visit("/#/login");
+                });
+        });
+
+        afterEach(() => {
+            cy.task("stopOAuthServer");
+        });
+
+        it("logs in with SSO and lands on the home screen", () => {
+            // If this test fails with a screen showing "Timeout connecting to remote server", it is most likely due to
+            // your firewall settings: Synapse is unable to reach the OIDC server.
+            //
+            // If you are using ufw, try something like:
+            //    sudo ufw allow in on docker0
+            //
+            cy.findByRole("button", { name: "Edit" }).click();
+            cy.findByRole("textbox", { name: "Other homeserver" }).type(homeserver.baseUrl);
+            cy.findByRole("button", { name: "Continue" }).click();
+            // wait for the dialog to go away
+            cy.get(".mx_ServerPickerDialog").should("not.exist");
+
+            // click on "Continue with OAuth test"
+            cy.findByRole("button", { name: "Continue with OAuth test" }).click();
+
+            // wait for the Test OAuth Page to load
+            cy.findByText("Test OAuth page");
+
+            // click the submit button
+            cy.findByRole("button", { name: "Submit" }).click();
+
+            // Synapse prompts us to pick a user ID
+            cy.findByRole("heading", { name: "Create your account" });
+            cy.findByRole("textbox", { name: "Username (required)" }).type("alice");
+
+            // wait for username validation to start, and complete
+            cy.wait(50);
+            cy.get("#field-username-output").should("have.value", "");
+            cy.findByRole("button", { name: "Continue" }).click();
+
+            // Synapse prompts us to grant permission to Element
+            cy.findByRole("heading", { name: "Continue to your account" });
+            cy.findByRole("link", { name: "Continue" }).click();
+
+            // Eventually, we should end up at the home screen.
+            cy.url().should("contain", "/#/home", { timeout: 30000 });
+            cy.findByRole("heading", { name: "Welcome Alice" });
+        });
+    });
+
     describe("logout", () => {
         beforeEach(() => {
             cy.startHomeserver("consent").then((data) => {

@@ -74,3 +74,20 @@ suppress_key_server_warning: true
 
 ui_auth:
     session_timeout: "300s"
+
+oidc_providers:
+    - idp_id: test
+      idp_name: "OAuth test"
+      issuer: "http://localhost:{{OAUTH_SERVER_PORT}}/oauth"
+      authorization_endpoint: "http://localhost:{{OAUTH_SERVER_PORT}}/oauth/auth.html"
+      # the token endpoint receives requests from synapse, rather than the webapp, so needs to escape the docker container.
+      # Hence, host.docker.internal rather than localhost.
+      token_endpoint: "http://host.docker.internal:{{OAUTH_SERVER_PORT}}/oauth/token"
+      userinfo_endpoint: "http://host.docker.internal:{{OAUTH_SERVER_PORT}}/oauth/userinfo"
+      client_id: "synapse"
+      discover: false
+      scopes: ["profile"]
+      skip_verification: true
+      user_mapping_provider:
+          config:
+              display_name_template: "{{ user.name }}"

@@ -26,6 +26,7 @@ import PluginConfigOptions = Cypress.PluginConfigOptions;
 import { getFreePort } from "../utils/port";
 import { dockerExec, dockerLogs, dockerRun, dockerStop } from "../docker";
 import { HomeserverConfig, HomeserverInstance } from "../utils/homeserver";
+import { StartHomeserverOpts } from "../../support/homeserver";
 
 // A cypress plugins to add command to start & stop synapses in
 // docker with preset templates.
@@ -36,12 +37,12 @@ function randB64Bytes(numBytes: number): string {
     return crypto.randomBytes(numBytes).toString("base64").replace(/=*$/, "");
 }
 
-async function cfgDirFromTemplate(template: string): Promise<HomeserverConfig> {
-    const templateDir = path.join(__dirname, "templates", template);
+async function cfgDirFromTemplate(opts: StartHomeserverOpts): Promise<HomeserverConfig> {
+    const templateDir = path.join(__dirname, "templates", opts.template);
 
     const stats = await fse.stat(templateDir);
     if (!stats?.isDirectory) {
-        throw new Error(`No such template: ${template}`);
+        throw new Error(`No such template: ${opts.template}`);
     }
     const tempDir = await fse.mkdtemp(path.join(os.tmpdir(), "react-sdk-synapsedocker-"));
 
@@ -63,6 +64,7 @@ async function cfgDirFromTemplate(template: string): Promise<HomeserverConfig> {
     hsYaml = hsYaml.replace(/{{MACAROON_SECRET_KEY}}/g, macaroonSecret);
     hsYaml = hsYaml.replace(/{{FORM_SECRET}}/g, formSecret);
     hsYaml = hsYaml.replace(/{{PUBLIC_BASEURL}}/g, baseUrl);
+    hsYaml = hsYaml.replace(/{{OAUTH_SERVER_PORT}}/g, opts.oAuthServerPort?.toString());
     await fse.writeFile(path.join(tempDir, "homeserver.yaml"), hsYaml);
 
     // now generate a signing key (we could use synapse's config generation for
@@ -83,15 +85,24 @@ async function cfgDirFromTemplate(template: string): Promise<HomeserverConfig> {
 // Start a synapse instance: the template must be the name of
 // one of the templates in the cypress/plugins/synapsedocker/templates
 // directory
-async function synapseStart(template: string): Promise<HomeserverInstance> {
-    const synCfg = await cfgDirFromTemplate(template);
+async function synapseStart(opts: StartHomeserverOpts): Promise<HomeserverInstance> {
+    const synCfg = await cfgDirFromTemplate(opts);
 
     console.log(`Starting synapse with config dir ${synCfg.configDir}...`);
 
     const synapseId = await dockerRun({
         image: "matrixdotorg/synapse:develop",
         containerName: `react-sdk-cypress-synapse`,
-        params: ["--rm", "-v", `${synCfg.configDir}:/data`, "-p", `${synCfg.port}:8008/tcp`],
+        params: [
+            "--rm",
+            "-v",
+            `${synCfg.configDir}:/data`,
+            "-p",
+            `${synCfg.port}:8008/tcp`,
+            // make host.docker.internal work to allow Synapse to talk to the test OIDC server
+            "--add-host",
+            "host.docker.internal:host-gateway",
+        ],
         cmd: ["run"],
     });
 

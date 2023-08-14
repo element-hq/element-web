@@ -26,6 +26,7 @@ import PluginConfigOptions = Cypress.PluginConfigOptions;
 import { getFreePort } from "../utils/port";
 import { dockerExec, dockerLogs, dockerRun, dockerStop } from "../docker";
 import { HomeserverConfig, HomeserverInstance } from "../utils/homeserver";
+import { StartHomeserverOpts } from "../../support/homeserver";
 
 // A cypress plugins to add command to start & stop dendrites in
 // docker with preset templates.
@@ -82,8 +83,8 @@ async function cfgDirFromTemplate(template: string, dendriteImage: string): Prom
 // Start a dendrite instance: the template must be the name of
 // one of the templates in the cypress/plugins/dendritedocker/templates
 // directory
-async function dendriteStart(template: string): Promise<HomeserverInstance> {
-    return containerStart(template, false);
+async function dendriteStart(opts: StartHomeserverOpts): Promise<HomeserverInstance> {
+    return containerStart(opts.template, false);
 }
 
 // Start a dendrite instance using pinecone routing: the template must be the name of
