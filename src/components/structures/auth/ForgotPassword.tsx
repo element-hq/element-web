@@ -18,7 +18,6 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { createClient } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { _t, _td } from "../../../languageHandler";
@@ -81,7 +80,6 @@ interface State {
     serverIsAlive: boolean;
     serverDeadError: string;
 
-    serverSupportsControlOfDevicesLogout: boolean;
     logoutDevices: boolean;
 }
 
@@ -104,14 +102,9 @@ export default class ForgotPassword extends React.Component<Props, State> {
             // be seeing.
             serverIsAlive: true,
             serverDeadError: "",
-            serverSupportsControlOfDevicesLogout: false,
             logoutDevices: false,
         };
         this.reset = new PasswordReset(this.props.serverConfig.hsUrl, this.props.serverConfig.isUrl);
-    }
-
-    public componentDidMount(): void {
-        this.checkServerCapabilities(this.props.serverConfig);
     }
 
     public componentDidUpdate(prevProps: Readonly<Props>): void {
@@ -121,9 +114,6 @@ export default class ForgotPassword extends React.Component<Props, State> {
         ) {
             // Do a liveliness check on the new URLs
             this.checkServerLiveliness(this.props.serverConfig);
-
-            // Do capabilities check on new URLs
-            this.checkServerCapabilities(this.props.serverConfig);
         }
     }
 
@@ -144,19 +134,6 @@ export default class ForgotPassword extends React.Component<Props, State> {
                 errorText: serverDeadError,
             });
         }
-    }
-
-    private async checkServerCapabilities(serverConfig: ValidatedServerConfig): Promise<void> {
-        const tempClient = createClient({
-            baseUrl: serverConfig.hsUrl,
-        });
-
-        const serverSupportsControlOfDevicesLogout = await tempClient.doesServerSupportLogoutDevices();
-
-        this.setState({
-            logoutDevices: !serverSupportsControlOfDevicesLogout,
-            serverSupportsControlOfDevicesLogout,
-        });
     }
 
     private async onPhaseEmailInputSubmit(): Promise<void> {
@@ -376,16 +353,10 @@ export default class ForgotPassword extends React.Component<Props, State> {
             description: (
                 <div>
                     <p>
-                        {!this.state.serverSupportsControlOfDevicesLogout
-                            ? _t(
-                                  "Resetting your password on this homeserver will cause all of your devices to be " +
-                                      "signed out. This will delete the message encryption keys stored on them, " +
-                                      "making encrypted chat history unreadable.",
-                              )
-                            : _t(
-                                  "Signing out your devices will delete the message encryption keys stored on them, " +
-                                      "making encrypted chat history unreadable.",
-                              )}
+                        {_t(
+                            "Signing out your devices will delete the message encryption keys stored on them, " +
+                                "making encrypted chat history unreadable.",
+                        )}
                     </p>
                     <p>
                         {_t(
@@ -446,16 +417,14 @@ export default class ForgotPassword extends React.Component<Props, State> {
                                 autoComplete="new-password"
                             />
                         </div>
-                        {this.state.serverSupportsControlOfDevicesLogout ? (
-                            <div className="mx_AuthBody_fieldRow">
-                                <StyledCheckbox
-                                    onChange={() => this.setState({ logoutDevices: !this.state.logoutDevices })}
-                                    checked={this.state.logoutDevices}
-                                >
-                                    {_t("Sign out of all devices")}
-                                </StyledCheckbox>
-                            </div>
-                        ) : null}
+                        <div className="mx_AuthBody_fieldRow">
+                            <StyledCheckbox
+                                onChange={() => this.setState({ logoutDevices: !this.state.logoutDevices })}
+                                checked={this.state.logoutDevices}
+                            >
+                                {_t("Sign out of all devices")}
+                            </StyledCheckbox>
+                        </div>
                         {this.state.errorText && <ErrorMessage message={this.state.errorText} />}
                         <button type="submit" className="mx_Login_submit">
                             {submitButtonChild}

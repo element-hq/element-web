@@ -26,6 +26,7 @@ import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import Modal from "../src/Modal";
 import * as StorageManager from "../src/utils/StorageManager";
 import { getMockClientWithEventEmitter, mockPlatformPeg } from "./test-utils";
+import ToastStore from "../src/stores/ToastStore";
 
 const webCrypto = new Crypto();
 
@@ -50,6 +51,7 @@ describe("Lifecycle", () => {
         store: {
             destroy: jest.fn(),
         },
+        getVersions: jest.fn().mockResolvedValue({ versions: ["v1.1"] }),
     });
 
     beforeEach(() => {
@@ -342,6 +344,22 @@ describe("Lifecycle", () => {
                         pickleKey: expect.any(String),
                     });
                 });
+            });
+
+            it("should show a toast if the matrix server version is unsupported", async () => {
+                const toastSpy = jest.spyOn(ToastStore.sharedInstance(), "addOrReplaceToast");
+                mockClient.getVersions.mockResolvedValue({
+                    versions: ["r0.6.0"],
+                    unstable_features: {},
+                });
+                initLocalStorageMock({ ...localStorageSession });
+
+                expect(await restoreFromLocalStorage()).toEqual(true);
+                expect(toastSpy).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        title: "Your server is unsupported",
+                    }),
+                );
             });
         });
     });

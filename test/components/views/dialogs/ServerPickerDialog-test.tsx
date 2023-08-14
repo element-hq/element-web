@@ -112,7 +112,7 @@ describe("<ServerPickerDialog />", () => {
         it("should allow user to revert from a custom server to the default", async () => {
             fetchMock.get(`https://custom.org/_matrix/client/versions`, {
                 unstable_features: {},
-                versions: [],
+                versions: ["v1.1"],
             });
 
             const onFinished = jest.fn();
@@ -142,7 +142,7 @@ describe("<ServerPickerDialog />", () => {
             const homeserver = "https://myhomeserver.site";
             fetchMock.get(`${homeserver}/_matrix/client/versions`, {
                 unstable_features: {},
-                versions: [],
+                versions: ["v1.1"],
             });
             const onFinished = jest.fn();
             getComponent({ onFinished });
@@ -195,7 +195,7 @@ describe("<ServerPickerDialog />", () => {
 
                 fetchMock.getOnce(wellKnownUrl, validWellKnown);
                 fetchMock.getOnce(versionsUrl, {
-                    versions: [],
+                    versions: ["v1.1"],
                 });
                 fetchMock.getOnce(isWellKnownUrl, {});
                 const onFinished = jest.fn();
@@ -231,7 +231,7 @@ describe("<ServerPickerDialog />", () => {
                 const wellKnownUrl = `https://${homeserver}/.well-known/matrix/client`;
                 fetchMock.get(wellKnownUrl, { status: 404 });
                 // but is otherwise live (happy versions response)
-                fetchMock.get(`https://${homeserver}/_matrix/client/versions`, { versions: ["1"] });
+                fetchMock.get(`https://${homeserver}/_matrix/client/versions`, { versions: ["v1.1"] });
                 const onFinished = jest.fn();
                 getComponent({ onFinished });
 

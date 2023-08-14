@@ -56,7 +56,7 @@ describe("<MImageBody/>", () => {
             },
         }),
     });
-    const url = "https://server/_matrix/media/r0/download/server/encrypted-image";
+    const url = "https://server/_matrix/media/v3/download/server/encrypted-image";
     // eslint-disable-next-line no-restricted-properties
     cli.mxcUrlToHttp.mockImplementation(
         (mxcUrl: string, width?: number, height?: number, resizeMethod?: string, allowDirectLinks?: boolean) => {
@@ -179,8 +179,8 @@ describe("<MImageBody/>", () => {
     });
 
     it("should fall back to /download/ if /thumbnail/ fails", async () => {
-        const thumbUrl = "https://server/_matrix/media/r0/thumbnail/server/image?width=800&height=600&method=scale";
-        const downloadUrl = "https://server/_matrix/media/r0/download/server/image";
+        const thumbUrl = "https://server/_matrix/media/v3/thumbnail/server/image?width=800&height=600&method=scale";
+        const downloadUrl = "https://server/_matrix/media/v3/download/server/image";
 
         const event = new MatrixEvent({
             room_id: "!room:server",
@@ -227,7 +227,7 @@ describe("<MImageBody/>", () => {
         mocked(global.URL.createObjectURL).mockReturnValue("blob:generated-thumb");
 
         fetchMock.getOnce(
-            "https://server/_matrix/media/r0/download/server/image",
+            "https://server/_matrix/media/v3/download/server/image",
             {
                 body: fs.readFileSync(path.resolve(__dirname, "..", "..", "..", "images", "animated-logo.webp")),
             },

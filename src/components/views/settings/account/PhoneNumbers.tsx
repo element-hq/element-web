@@ -210,7 +210,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
             ?.haveMsisdnToken(token)
             .then(([finished] = []) => {
                 let newPhoneNumber = this.state.newPhoneNumber;
-                if (finished) {
+                if (finished !== false) {
                     const msisdns = [...this.props.msisdns, { address, medium: ThreepidMedium.Phone }];
                     this.props.onMsisdnsChange(msisdns);
                     newPhoneNumber = "";

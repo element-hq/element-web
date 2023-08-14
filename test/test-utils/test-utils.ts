@@ -217,7 +217,6 @@ export function createTestClient(): MatrixClient {
         uploadContent: jest.fn(),
         getEventMapper: (_options?: MapperOpts) => (event: Partial<IEvent>) => new MatrixEvent(event),
         leaveRoomChain: jest.fn((roomId) => ({ [roomId]: null })),
-        doesServerSupportLogoutDevices: jest.fn().mockReturnValue(true),
         requestPasswordEmailToken: jest.fn().mockRejectedValue({}),
         setPassword: jest.fn().mockRejectedValue({}),
         groupCallEventHandler: { groupCalls: new Map<string, GroupCall>() },
@@ -244,6 +243,12 @@ export function createTestClient(): MatrixClient {
         exportRoomKeys: jest.fn(),
         knockRoom: jest.fn(),
         leave: jest.fn(),
+        getVersions: jest.fn().mockResolvedValue({ versions: ["v1.1"] }),
+        requestAdd3pidMsisdnToken: jest.fn(),
+        submitMsisdnTokenOtherUrl: jest.fn(),
+        addThreePidOnly: jest.fn(),
+        requestMsisdnToken: jest.fn(),
+        submitMsisdnToken: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

@@ -71,7 +71,7 @@ describe("Login", function () {
         fetchMock.resetHistory();
         fetchMock.get("https://matrix.org/_matrix/client/versions", {
             unstable_features: {},
-            versions: [],
+            versions: ["v1.1"],
         });
         platform = mockPlatformPeg({
             startSingleSignOn: jest.fn(),
@@ -209,7 +209,7 @@ describe("Login", function () {
 
         fetchMock.get("https://server2/_matrix/client/versions", {
             unstable_features: {},
-            versions: [],
+            versions: ["v1.1"],
         });
         rerender(getRawComponent("https://server2"));
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
@@ -359,7 +359,7 @@ describe("Login", function () {
         // but server2 is
         fetchMock.get("https://server2/_matrix/client/versions", {
             unstable_features: {},
-            versions: [],
+            versions: ["v1.1"],
         });
         const { rerender } = render(getRawComponent());
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));

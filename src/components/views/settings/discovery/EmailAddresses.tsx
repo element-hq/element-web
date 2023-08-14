@@ -77,10 +77,6 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
     }
 
     private async changeBinding({ bind, label, errorTitle }: Binding): Promise<void> {
-        if (!(await MatrixClientPeg.safeGet().doesServerSupportSeparateAddAndBind())) {
-            return this.changeBindingTangledAddBind({ bind, label, errorTitle });
-        }
-
         const { medium, address } = this.props.email;
 
         try {
@@ -101,41 +97,6 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
             this.setState({ bound: bind });
         } catch (err) {
             logger.error(`changeBinding: Unable to ${label} email address ${address}`, err);
-            this.setState({
-                verifying: false,
-                continueDisabled: false,
-                addTask: null,
-            });
-            Modal.createDialog(ErrorDialog, {
-                title: errorTitle,
-                description: extractErrorMessageFromError(err, _t("Operation failed")),
-            });
-        }
-    }
-
-    private async changeBindingTangledAddBind({ bind, label, errorTitle }: Binding): Promise<void> {
-        const { medium, address } = this.props.email;
-
-        const task = new AddThreepid(MatrixClientPeg.safeGet());
-        this.setState({
-            verifying: true,
-            continueDisabled: true,
-            addTask: task,
-        });
-
-        try {
-            await MatrixClientPeg.safeGet().deleteThreePid(medium, address);
-            if (bind) {
-                await task.bindEmailAddress(address);
-            } else {
-                await task.addEmailAddress(address);
-            }
-            this.setState({
-                continueDisabled: false,
-                bound: bind,
-            });
-        } catch (err) {
-            logger.error(`changeBindingTangledAddBind: Unable to ${label} email address ${address}`, err);
             this.setState({
                 verifying: false,
                 continueDisabled: false,

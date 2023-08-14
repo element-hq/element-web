@@ -57,7 +57,7 @@ describe("MVideoBody", () => {
                 },
             }),
         });
-        const thumbUrl = "https://server/_matrix/media/r0/download/server/encrypted-poster";
+        const thumbUrl = "https://server/_matrix/media/v3/download/server/encrypted-poster";
         fetchMock.getOnce(thumbUrl, { status: 200 });
 
         // eslint-disable-next-line no-restricted-properties

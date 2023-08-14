@@ -37,7 +37,7 @@ exports[`MVideoBody should show poster for encrypted media before downloading it
         class="mx_MVideoBody"
         controls=""
         controlslist="nodownload"
-        poster="https://server/_matrix/media/r0/download/server/encrypted-poster"
+        poster="https://server/_matrix/media/v3/download/server/encrypted-poster"
         preload="none"
         title="alt for a test video"
       />

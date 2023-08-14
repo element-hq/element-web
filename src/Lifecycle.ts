@@ -24,6 +24,7 @@ import { decryptAES, encryptAES, IEncryptedPayload } from "matrix-js-sdk/src/cry
 import { QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { SSOAction } from "matrix-js-sdk/src/@types/auth";
+import { MINIMUM_MATRIX_VERSION } from "matrix-js-sdk/src/version-support";
 
 import { IMatrixClientCreds, MatrixClientPeg } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
@@ -66,6 +67,7 @@ import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
 import { completeOidcLogin } from "./utils/oidc/authorize";
 import { persistOidcAuthenticatedSettings } from "./utils/oidc/persistOidcSettings";
+import GenericToast from "./components/views/toasts/GenericToast";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -584,11 +586,41 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
             },
             false,
         );
+        checkServerVersions();
         return true;
     } else {
         logger.log("No previous session found.");
         return false;
     }
+}
+
+async function checkServerVersions(): Promise<void> {
+    MatrixClientPeg.get()
+        ?.getVersions()
+        .then((response) => {
+            if (!response.versions.includes(MINIMUM_MATRIX_VERSION)) {
+                const toastKey = "LEGACY_SERVER";
+                ToastStore.sharedInstance().addOrReplaceToast({
+                    key: toastKey,
+                    title: _t("Your server is unsupported"),
+                    props: {
+                        description: _t(
+                            "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.",
+                            {
+                                version: MINIMUM_MATRIX_VERSION,
+                                brand: SdkConfig.get().brand,
+                            },
+                        ),
+                        acceptLabel: _t("OK"),
+                        onAccept: () => {
+                            ToastStore.sharedInstance().dismissToast(toastKey);
+                        },
+                    },
+                    component: GenericToast,
+                    priority: 98,
+                });
+            }
+        });
 }
 
 async function handleLoadSessionFailure(e: unknown): Promise<boolean> {

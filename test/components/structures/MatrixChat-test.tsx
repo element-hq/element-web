@@ -59,6 +59,7 @@ describe("<MatrixChat />", () => {
     // reused in createClient mock below
     const getMockClientMethods = () => ({
         ...mockClientMethodsUser(userId),
+        getVersions: jest.fn().mockResolvedValue({ versions: ["v1.1"] }),
         startClient: jest.fn(),
         stopClient: jest.fn(),
         setCanResetTimelineCallback: jest.fn(),
@@ -178,7 +179,7 @@ describe("<MatrixChat />", () => {
         mockClient = getMockClientWithEventEmitter(getMockClientMethods());
         fetchMock.get("https://test.com/_matrix/client/versions", {
             unstable_features: {},
-            versions: [],
+            versions: ["v1.1"],
         });
         localStorageSetSpy = jest.spyOn(localStorage.__proto__, "setItem");
         localStorageGetSpy = jest.spyOn(localStorage.__proto__, "getItem").mockReturnValue(undefined);

@@ -73,10 +73,6 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
     }
 
     private async changeBinding({ bind, label, errorTitle }: Binding): Promise<void> {
-        if (!(await MatrixClientPeg.safeGet().doesServerSupportSeparateAddAndBind())) {
-            return this.changeBindingTangledAddBind({ bind, label, errorTitle });
-        }
-
         const { medium, address } = this.props.msisdn;
 
         try {
@@ -102,47 +98,6 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             this.setState({ bound: bind });
         } catch (err) {
             logger.error(`changeBinding: Unable to ${label} phone number ${address}`, err);
-            this.setState({
-                verifying: false,
-                continueDisabled: false,
-                addTask: null,
-            });
-            Modal.createDialog(ErrorDialog, {
-                title: errorTitle,
-                description: extractErrorMessageFromError(err, _t("Operation failed")),
-            });
-        }
-    }
-
-    private async changeBindingTangledAddBind({ bind, label, errorTitle }: Binding): Promise<void> {
-        const { medium, address } = this.props.msisdn;
-
-        const task = new AddThreepid(MatrixClientPeg.safeGet());
-        this.setState({
-            verifying: true,
-            continueDisabled: true,
-            addTask: task,
-        });
-
-        try {
-            await MatrixClientPeg.safeGet().deleteThreePid(medium, address);
-            // XXX: Sydent will accept a number without country code if you add
-            // a leading plus sign to a number in E.164 format (which the 3PID
-            // address is), but this goes against the spec.
-            // See https://github.com/matrix-org/matrix-doc/issues/2222
-            if (bind) {
-                // @ts-ignore
-                await task.bindMsisdn(null, `+${address}`);
-            } else {
-                // @ts-ignore
-                await task.addMsisdn(null, `+${address}`);
-            }
-            this.setState({
-                continueDisabled: false,
-                bound: bind,
-            });
-        } catch (err) {
-            logger.error(`changeBindingTangledAddBind: Unable to ${label} phone number ${address}`, err);
             this.setState({
                 verifying: false,
                 continueDisabled: false,

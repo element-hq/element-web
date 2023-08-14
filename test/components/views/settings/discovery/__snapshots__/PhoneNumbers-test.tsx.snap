@@ -1,5 +1,67 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<PhoneNumbers /> should allow binding msisdn 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="mx_DiscoveryPhoneNumbers"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Phone numbers
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+    >
+      <div
+        class="mx_GeneralUserSettingsTab_section--discovery_existing"
+      >
+        <span
+          class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
+        >
+          +441111111111
+        </span>
+        <span
+          class="mx_GeneralUserSettingsTab_section--discovery_existing_verification"
+        >
+          <span>
+            Please enter verification code sent via text.
+            <br />
+          </span>
+          <form
+            autocomplete="off"
+            novalidate=""
+          >
+            <div
+              class="mx_Field mx_Field_input"
+            >
+              <input
+                autocomplete="off"
+                id="mx_Field_1"
+                label="Verification code"
+                placeholder="Verification code"
+                type="text"
+                value=""
+              />
+              <label
+                for="mx_Field_1"
+              >
+                Verification code
+              </label>
+            </div>
+          </form>
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
 exports[`<PhoneNumbers /> should handle no numbers 1`] = `
 <div>
   <div
@@ -85,14 +147,14 @@ exports[`<PhoneNumbers /> should render phone numbers 1`] = `
           class="mx_GeneralUserSettingsTab_section--discovery_existing_address"
         >
           +
-          +441111111111
+          441111111111
         </span>
         <div
-          class="mx_AccessibleButton mx_GeneralUserSettingsTab_section--discovery_existing_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_sm"
+          class="mx_AccessibleButton mx_GeneralUserSettingsTab_section--discovery_existing_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm"
           role="button"
           tabindex="0"
         >
-          Revoke
+          Share
         </div>
       </div>
     </div>

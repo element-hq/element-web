@@ -36,6 +36,7 @@ describe("Registration", function () {
     const mockClient = mocked({
         registerRequest,
         loginFlows: jest.fn(),
+        getVersions: jest.fn().mockResolvedValue({ versions: ["v1.1"] }),
     } as unknown as MatrixClient);
 
     beforeEach(function () {
@@ -59,7 +60,7 @@ describe("Registration", function () {
         });
         fetchMock.get("https://matrix.org/_matrix/client/versions", {
             unstable_features: {},
-            versions: [],
+            versions: ["v1.1"],
         });
         mockPlatformPeg({
             startSingleSignOn: jest.fn(),
@@ -125,7 +126,7 @@ describe("Registration", function () {
 
         fetchMock.get("https://server2/_matrix/client/versions", {
             unstable_features: {},
-            versions: [],
+            versions: ["v1.1"],
         });
         rerender(getRawComponent("https://server2"));
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));

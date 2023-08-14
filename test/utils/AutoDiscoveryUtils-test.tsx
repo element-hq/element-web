@@ -232,5 +232,22 @@ describe("AutoDiscoveryUtils", () => {
                 warning: undefined,
             });
         });
+
+        it("handles homeserver too old error", () => {
+            const discoveryResult: ClientConfig = {
+                ...validIsConfig,
+                "m.homeserver": {
+                    state: AutoDiscoveryAction.FAIL_ERROR,
+                    error: AutoDiscovery.ERROR_HOMESERVER_TOO_OLD,
+                    base_url: "https://matrix.org",
+                },
+            };
+            const syntaxOnly = true;
+            expect(() =>
+                AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult, syntaxOnly),
+            ).toThrow(
+                "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.",
+            );
+        });
     });
 });

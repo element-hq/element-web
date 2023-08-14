@@ -62,7 +62,7 @@ declare global {
 Cypress.Commands.add(
     "loginUser",
     (homeserver: HomeserverInstance, username: string, password: string): Chainable<UserCredentials> => {
-        const url = `${homeserver.baseUrl}/_matrix/client/r0/login`;
+        const url = `${homeserver.baseUrl}/_matrix/client/v3/login`;
         return cy
             .request<{
                 access_token: string;

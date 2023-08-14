@@ -100,30 +100,25 @@ export default class AddThreepid {
      */
     public async bindEmailAddress(emailAddress: string): Promise<IRequestTokenResponse> {
         this.bind = true;
-        if (await this.matrixClient.doesServerSupportSeparateAddAndBind()) {
-            // For separate bind, request a token directly from the IS.
-            const authClient = new IdentityAuthClient();
-            const identityAccessToken = (await authClient.getAccessToken()) ?? undefined;
-            try {
-                const res = await this.matrixClient.requestEmailToken(
-                    emailAddress,
-                    this.clientSecret,
-                    1,
-                    undefined,
-                    identityAccessToken,
-                );
-                this.sessionId = res.sid;
-                return res;
-            } catch (err) {
-                if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
-                    throw new UserFriendlyError("This email address is already in use", { cause: err });
-                }
-                // Otherwise, just blurt out the same error
-                throw err;
+        // For separate bind, request a token directly from the IS.
+        const authClient = new IdentityAuthClient();
+        const identityAccessToken = (await authClient.getAccessToken()) ?? undefined;
+        try {
+            const res = await this.matrixClient.requestEmailToken(
+                emailAddress,
+                this.clientSecret,
+                1,
+                undefined,
+                identityAccessToken,
+            );
+            this.sessionId = res.sid;
+            return res;
+        } catch (err) {
+            if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
+                throw new UserFriendlyError("This email address is already in use", { cause: err });
             }
-        } else {
-            // For tangled bind, request a token via the HS.
-            return this.addEmailAddress(emailAddress);
+            // Otherwise, just blurt out the same error
+            throw err;
         }
     }
 
@@ -163,31 +158,26 @@ export default class AddThreepid {
      */
     public async bindMsisdn(phoneCountry: string, phoneNumber: string): Promise<IRequestMsisdnTokenResponse> {
         this.bind = true;
-        if (await this.matrixClient.doesServerSupportSeparateAddAndBind()) {
-            // For separate bind, request a token directly from the IS.
-            const authClient = new IdentityAuthClient();
-            const identityAccessToken = (await authClient.getAccessToken()) ?? undefined;
-            try {
-                const res = await this.matrixClient.requestMsisdnToken(
-                    phoneCountry,
-                    phoneNumber,
-                    this.clientSecret,
-                    1,
-                    undefined,
-                    identityAccessToken,
-                );
-                this.sessionId = res.sid;
-                return res;
-            } catch (err) {
-                if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
-                    throw new UserFriendlyError("This phone number is already in use", { cause: err });
-                }
-                // Otherwise, just blurt out the same error
-                throw err;
+        // For separate bind, request a token directly from the IS.
+        const authClient = new IdentityAuthClient();
+        const identityAccessToken = (await authClient.getAccessToken()) ?? undefined;
+        try {
+            const res = await this.matrixClient.requestMsisdnToken(
+                phoneCountry,
+                phoneNumber,
+                this.clientSecret,
+                1,
+                undefined,
+                identityAccessToken,
+            );
+            this.sessionId = res.sid;
+            return res;
+        } catch (err) {
+            if (err instanceof MatrixError && err.errcode === "M_THREEPID_IN_USE") {
+                throw new UserFriendlyError("This phone number is already in use", { cause: err });
             }
-        } else {
-            // For tangled bind, request a token via the HS.
-            return this.addMsisdn(phoneCountry, phoneNumber);
+            // Otherwise, just blurt out the same error
+            throw err;
         }
     }
 
@@ -199,70 +189,59 @@ export default class AddThreepid {
      */
     public async checkEmailLinkClicked(): Promise<[success?: boolean, result?: IAuthData | Error | null]> {
         try {
-            if (await this.matrixClient.doesServerSupportSeparateAddAndBind()) {
-                if (this.bind) {
-                    const authClient = new IdentityAuthClient();
-                    const identityAccessToken = await authClient.getAccessToken();
-                    if (!identityAccessToken) {
-                        throw new UserFriendlyError("No identity access token found");
-                    }
-                    await this.matrixClient.bindThreePid({
-                        sid: this.sessionId!,
-                        client_secret: this.clientSecret,
-                        id_server: getIdServerDomain(this.matrixClient),
-                        id_access_token: identityAccessToken,
-                    });
-                } else {
-                    try {
-                        await this.makeAddThreepidOnlyRequest();
-
-                        // The spec has always required this to use UI auth but synapse briefly
-                        // implemented it without, so this may just succeed and that's OK.
-                        return [true];
-                    } catch (err) {
-                        if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
-                            // doesn't look like an interactive-auth failure
-                            throw err;
-                        }
-
-                        const dialogAesthetics = {
-                            [SSOAuthEntry.PHASE_PREAUTH]: {
-                                title: _t("Use Single Sign On to continue"),
-                                body: _t(
-                                    "Confirm adding this email address by using Single Sign On to prove your identity.",
-                                ),
-                                continueText: _t("Single Sign On"),
-                                continueKind: "primary",
-                            },
-                            [SSOAuthEntry.PHASE_POSTAUTH]: {
-                                title: _t("Confirm adding email"),
-                                body: _t("Click the button below to confirm adding this email address."),
-                                continueText: _t("Confirm"),
-                                continueKind: "primary",
-                            },
-                        };
-                        const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
-                            title: _t("Add Email Address"),
-                            matrixClient: this.matrixClient,
-                            authData: err.data,
-                            makeRequest: this.makeAddThreepidOnlyRequest,
-                            aestheticsForStagePhases: {
-                                [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                                [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-                            },
-                        } as InteractiveAuthDialogProps<IAddThreePidOnlyBody>);
-                        return finished;
-                    }
+            if (this.bind) {
+                const authClient = new IdentityAuthClient();
+                const identityAccessToken = await authClient.getAccessToken();
+                if (!identityAccessToken) {
+                    throw new UserFriendlyError("No identity access token found");
                 }
+                await this.matrixClient.bindThreePid({
+                    sid: this.sessionId!,
+                    client_secret: this.clientSecret,
+                    id_server: getIdServerDomain(this.matrixClient),
+                    id_access_token: identityAccessToken,
+                });
             } else {
-                await this.matrixClient.addThreePid(
-                    {
-                        sid: this.sessionId!,
-                        client_secret: this.clientSecret,
-                        id_server: getIdServerDomain(this.matrixClient),
-                    },
-                    this.bind,
-                );
+                try {
+                    await this.makeAddThreepidOnlyRequest();
+
+                    // The spec has always required this to use UI auth but synapse briefly
+                    // implemented it without, so this may just succeed and that's OK.
+                    return [true];
+                } catch (err) {
+                    if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
+                        // doesn't look like an interactive-auth failure
+                        throw err;
+                    }
+
+                    const dialogAesthetics = {
+                        [SSOAuthEntry.PHASE_PREAUTH]: {
+                            title: _t("Use Single Sign On to continue"),
+                            body: _t(
+                                "Confirm adding this email address by using Single Sign On to prove your identity.",
+                            ),
+                            continueText: _t("Single Sign On"),
+                            continueKind: "primary",
+                        },
+                        [SSOAuthEntry.PHASE_POSTAUTH]: {
+                            title: _t("Confirm adding email"),
+                            body: _t("Click the button below to confirm adding this email address."),
+                            continueText: _t("Confirm"),
+                            continueKind: "primary",
+                        },
+                    };
+                    const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
+                        title: _t("Add Email Address"),
+                        matrixClient: this.matrixClient,
+                        authData: err.data,
+                        makeRequest: this.makeAddThreepidOnlyRequest,
+                        aestheticsForStagePhases: {
+                            [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                            [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                        },
+                    } as InteractiveAuthDialogProps<IAddThreePidOnlyBody>);
+                    return finished;
+                }
             }
         } catch (err) {
             if (err instanceof HTTPError && err.httpStatus === 401) {
@@ -301,7 +280,6 @@ export default class AddThreepid {
         msisdnToken: string,
     ): Promise<[success?: boolean, result?: IAuthData | Error | null] | undefined> {
         const authClient = new IdentityAuthClient();
-        const supportsSeparateAddAndBind = await this.matrixClient.doesServerSupportSeparateAddAndBind();
 
         let result: { success: boolean } | MatrixError;
         if (this.submitUrl) {
@@ -311,7 +289,7 @@ export default class AddThreepid {
                 this.clientSecret,
                 msisdnToken,
             );
-        } else if (this.bind || !supportsSeparateAddAndBind) {
+        } else if (this.bind) {
             result = await this.matrixClient.submitMsisdnToken(
                 this.sessionId!,
                 this.clientSecret,
@@ -325,65 +303,52 @@ export default class AddThreepid {
             throw result;
         }
 
-        if (supportsSeparateAddAndBind) {
-            if (this.bind) {
-                await this.matrixClient.bindThreePid({
-                    sid: this.sessionId!,
-                    client_secret: this.clientSecret,
-                    id_server: getIdServerDomain(this.matrixClient),
-                    id_access_token: await authClient.getAccessToken(),
-                });
-            } else {
-                try {
-                    await this.makeAddThreepidOnlyRequest();
-
-                    // The spec has always required this to use UI auth but synapse briefly
-                    // implemented it without, so this may just succeed and that's OK.
-                    return;
-                } catch (err) {
-                    if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
-                        // doesn't look like an interactive-auth failure
-                        throw err;
-                    }
-
-                    const dialogAesthetics = {
-                        [SSOAuthEntry.PHASE_PREAUTH]: {
-                            title: _t("Use Single Sign On to continue"),
-                            body: _t(
-                                "Confirm adding this phone number by using Single Sign On to prove your identity.",
-                            ),
-                            continueText: _t("Single Sign On"),
-                            continueKind: "primary",
-                        },
-                        [SSOAuthEntry.PHASE_POSTAUTH]: {
-                            title: _t("Confirm adding phone number"),
-                            body: _t("Click the button below to confirm adding this phone number."),
-                            continueText: _t("Confirm"),
-                            continueKind: "primary",
-                        },
-                    };
-                    const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
-                        title: _t("Add Phone Number"),
-                        matrixClient: this.matrixClient,
-                        authData: err.data,
-                        makeRequest: this.makeAddThreepidOnlyRequest,
-                        aestheticsForStagePhases: {
-                            [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                            [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-                        },
-                    } as InteractiveAuthDialogProps<IAddThreePidOnlyBody>);
-                    return finished;
-                }
-            }
+        if (this.bind) {
+            await this.matrixClient.bindThreePid({
+                sid: this.sessionId!,
+                client_secret: this.clientSecret,
+                id_server: getIdServerDomain(this.matrixClient),
+                id_access_token: await authClient.getAccessToken(),
+            });
         } else {
-            await this.matrixClient.addThreePid(
-                {
-                    sid: this.sessionId!,
-                    client_secret: this.clientSecret,
-                    id_server: getIdServerDomain(this.matrixClient),
-                },
-                this.bind,
-            );
+            try {
+                await this.makeAddThreepidOnlyRequest();
+
+                // The spec has always required this to use UI auth but synapse briefly
+                // implemented it without, so this may just succeed and that's OK.
+                return;
+            } catch (err) {
+                if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
+                    // doesn't look like an interactive-auth failure
+                    throw err;
+                }
+
+                const dialogAesthetics = {
+                    [SSOAuthEntry.PHASE_PREAUTH]: {
+                        title: _t("Use Single Sign On to continue"),
+                        body: _t("Confirm adding this phone number by using Single Sign On to prove your identity."),
+                        continueText: _t("Single Sign On"),
+                        continueKind: "primary",
+                    },
+                    [SSOAuthEntry.PHASE_POSTAUTH]: {
+                        title: _t("Confirm adding phone number"),
+                        body: _t("Click the button below to confirm adding this phone number."),
+                        continueText: _t("Confirm"),
+                        continueKind: "primary",
+                    },
+                };
+                const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
+                    title: _t("Add Phone Number"),
+                    matrixClient: this.matrixClient,
+                    authData: err.data,
+                    makeRequest: this.makeAddThreepidOnlyRequest,
+                    aestheticsForStagePhases: {
+                        [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                        [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                    },
+                } as InteractiveAuthDialogProps<IAddThreePidOnlyBody>);
+                return finished;
+            }
         }
     }
 }

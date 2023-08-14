@@ -6,7 +6,7 @@ exports[`<MImageBody/> should generate a thumbnail if one isn't included for ani
     class="mx_MImageBody"
   >
     <a
-      href="https://server/_matrix/media/r0/download/server/image"
+      href="https://server/_matrix/media/v3/download/server/image"
     >
       <div
         class="mx_MImageBody_thumbnail_container"
