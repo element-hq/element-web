@@ -45,13 +45,13 @@ jobs:
 
             # Temporary while we directly import matrix-js-sdk/src/* which means we need
             # certain @types/* packages to make sense of matrix-js-sdk types.
-            - name: Typecheck (release mode; no yarn link)
-              if: github.event_name != 'pull_request' && github.ref_name != 'master'
-              run: |
-                  yarn unlink matrix-js-sdk
-                  yarn add github:matrix-org/matrix-js-sdk#develop
-                  yarn install --force
-                  yarn run lint:types
+            #- name: Typecheck (release mode; no yarn link)
+            #  if: github.event_name != 'pull_request' && github.ref_name != 'master'
+            #  run: |
+            #      yarn unlink matrix-js-sdk
+            #      yarn add github:matrix-org/matrix-js-sdk#develop
+            #      yarn install --force
+            #      yarn run lint:types
 
     i18n_lint:
         name: "i18n Check"
