@@ -44,6 +44,8 @@ describe("UserView", () => {
             cy.findByText("Usman").should("exist");
         });
 
+        cy.findByText("1 session").should("be.visible");
+
         cy.get(".mx_RightPanel").percySnapshotElement("User View", {
             // Hide the MXID field as it'll vary on each test
             percyCSS: ".mx_UserInfo_profile_mxid { visibility: hidden !important; }",
