@@ -20,6 +20,129 @@ exports[`<MatrixChat /> should render spinner while app is loading 1`] = `
 </div>
 `;
 
+exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logout page 1`] = `
+<div>
+  <div
+    class="mx_AuthPage"
+  >
+    <div
+      class="mx_AuthPage_modal"
+    >
+      <div
+        class="mx_AuthHeader"
+      >
+        <aside
+          class="mx_AuthHeaderLogo"
+        >
+          Matrix
+        </aside>
+        <div
+          class="mx_Dropdown mx_AuthBody_language"
+        >
+          <div
+            aria-describedby="mx_LanguageDropdown_value"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Language Dropdown"
+            aria-owns="mx_LanguageDropdown_input"
+            class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="mx_Dropdown_option"
+              id="mx_LanguageDropdown_value"
+            >
+              <div>
+                English
+              </div>
+            </div>
+            <span
+              class="mx_Dropdown_arrow"
+            />
+          </div>
+        </div>
+      </div>
+      <main
+        class="mx_AuthBody"
+      >
+        <h1>
+          You're signed out
+        </h1>
+        <h2>
+          Sign in
+        </h2>
+        <div>
+          <form>
+            <p>
+              Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.
+            </p>
+            <div
+              class="mx_Field mx_Field_input"
+            >
+              <input
+                id="mx_Field_1"
+                label="Password"
+                placeholder="Password"
+                type="password"
+                value=""
+              />
+              <label
+                for="mx_Field_1"
+              >
+                Password
+              </label>
+            </div>
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+              role="button"
+              tabindex="0"
+              type="submit"
+            >
+              Sign In
+            </div>
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+              role="button"
+              tabindex="0"
+            >
+              Forgotten your password?
+            </div>
+          </form>
+        </div>
+        <h2>
+          Clear personal data
+        </h2>
+        <p>
+          Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.
+        </p>
+        <div>
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+            role="button"
+            tabindex="0"
+          >
+            Clear all data
+          </div>
+        </div>
+      </main>
+    </div>
+    <footer
+      class="mx_AuthFooter"
+      role="contentinfo"
+    >
+      <a
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        powered by Matrix
+      </a>
+    </footer>
+  </div>
+</div>
+`;
+
 exports[`<MatrixChat /> with an existing session onAction() room actions leave_room for a room should launch a confirmation modal 1`] = `
 <div
   aria-describedby="mx_Dialog_content"

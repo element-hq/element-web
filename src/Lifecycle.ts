@@ -204,6 +204,7 @@ export async function attemptDelegatedAuthLogin(
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
     if (queryParams.code && queryParams.state) {
+        console.log("We have OIDC params - attempting OIDC login");
         return attemptOidcNativeLogin(queryParams);
     }
 
@@ -296,6 +297,8 @@ export function attemptTokenLogin(
     if (!queryParams.loginToken) {
         return Promise.resolve(false);
     }
+
+    console.log("We have token login params - attempting token login");
 
     const homeserver = localStorage.getItem(SSO_HOMESERVER_URL_KEY);
     const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY) ?? undefined;

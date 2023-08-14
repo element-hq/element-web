@@ -520,6 +520,36 @@ describe("<MatrixChat />", () => {
         });
     });
 
+    describe("with a soft-logged-out session", () => {
+        const mockidb: Record<string, Record<string, string>> = {};
+        const mockLocalStorage: Record<string, string> = {
+            mx_hs_url: serverConfig.hsUrl,
+            mx_is_url: serverConfig.isUrl,
+            mx_access_token: accessToken,
+            mx_user_id: userId,
+            mx_device_id: deviceId,
+            mx_soft_logout: "true",
+        };
+
+        beforeEach(() => {
+            localStorageGetSpy.mockImplementation((key: unknown) => mockLocalStorage[key as string] || "");
+
+            mockClient.loginFlows.mockResolvedValue({ flows: [{ type: "m.login.password" }] });
+
+            jest.spyOn(StorageManager, "idbLoad").mockImplementation(async (table, key) => {
+                const safeKey = Array.isArray(key) ? key[0] : key;
+                return mockidb[table]?.[safeKey];
+            });
+        });
+
+        it("should show the soft-logout page", async () => {
+            const result = getComponent();
+
+            await result.findByText("You're signed out");
+            expect(result.container).toMatchSnapshot();
+        });
+    });
+
     describe("login via key/pass", () => {
         let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
 

@@ -293,14 +293,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         RoomNotificationStateStore.instance.on(UPDATE_STATUS_INDICATOR, this.onUpdateStatusIndicator);
 
-        // Force users to go through the soft logout page if they're soft logged out
-        if (Lifecycle.isSoftLogout()) {
-            // When the session loads it'll be detected as soft logged out and a dispatch
-            // will be sent out to say that, triggering this MatrixChat to show the soft
-            // logout page.
-            Lifecycle.loadSession();
-        }
-
         this.dispatcherRef = dis.register(this.onAction);
 
         this.themeWatcher = new ThemeWatcher();
@@ -314,52 +306,77 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // we don't do it as react state as i'm scared about triggering needless react refreshes.
         this.subTitleStatus = "";
 
-        // the first thing to do is to try the token params in the query-string
-        // if the session isn't soft logged out (ie: is a clean session being logged in)
-        if (!Lifecycle.isSoftLogout()) {
-            Lifecycle.attemptDelegatedAuthLogin(
-                this.props.realQueryParams,
-                this.props.defaultDeviceDisplayName,
-                this.getFragmentAfterLogin(),
-            ).then(async (loggedIn): Promise<boolean | void> => {
-                if (
-                    this.props.realQueryParams?.loginToken ||
-                    this.props.realQueryParams?.code ||
-                    this.props.realQueryParams?.state
-                ) {
-                    // remove the loginToken or auth code from the URL regardless
-                    this.props.onTokenLoginCompleted();
-                }
+        initSentry(SdkConfig.get("sentry"));
 
-                if (loggedIn) {
-                    this.tokenLogin = true;
+        this.initSession().catch((err) => {
+            // TODO: show an error screen, rather than a spinner of doom
+            logger.error("Error initialising Matrix session", err);
+        });
+    }
 
-                    // Create and start the client
-                    // accesses the new credentials just set in storage during attemptTokenLogin
-                    // and sets logged in state
-                    await Lifecycle.restoreFromLocalStorage({
-                        ignoreGuest: true,
-                    });
-                    return this.postLoginSetup();
-                }
-
-                // if the user has followed a login or register link, don't reanimate
-                // the old creds, but rather go straight to the relevant page
-                const firstScreen = this.screenAfterLogin ? this.screenAfterLogin.screen : null;
-                const restoreSuccess = await this.loadSession();
-                if (restoreSuccess) {
-                    return true;
-                }
-
-                if (firstScreen === "login" || firstScreen === "register" || firstScreen === "forgot_password") {
-                    this.showScreenAfterLogin();
-                }
-
-                return false;
-            });
+    /**
+     * Do what we can to establish a Matrix session.
+     *
+     *  * Special-case soft-logged-out sessions
+     *  * If we have OIDC or token login parameters, follow them
+     *  * If we have a guest access token in the query params, use that
+     *  * If we have parameters in local storage, use them
+     *  * Attempt to auto-register as a guest
+     *  * If all else fails, present a login screen.
+     */
+    private async initSession(): Promise<void> {
+        // If the user was soft-logged-out, we want to make the SoftLogout component responsible for doing any
+        // token auth (rather than Lifecycle.attemptDelegatedAuthLogin), since SoftLogout knows about submitting the
+        // device ID and preserving the session.
+        //
+        // So, we start by special-casing soft-logged-out sessions.
+        if (Lifecycle.isSoftLogout()) {
+            // When the session loads it'll be detected as soft logged out and a dispatch
+            // will be sent out to say that, triggering this MatrixChat to show the soft
+            // logout page.
+            Lifecycle.loadSession();
+            return;
         }
 
-        initSentry(SdkConfig.get("sentry"));
+        // Otherwise, the first thing to do is to try the token params in the query-string
+        const delegatedAuthSucceeded = await Lifecycle.attemptDelegatedAuthLogin(
+            this.props.realQueryParams,
+            this.props.defaultDeviceDisplayName,
+            this.getFragmentAfterLogin(),
+        );
+
+        // remove the loginToken or auth code from the URL regardless
+        if (
+            this.props.realQueryParams?.loginToken ||
+            this.props.realQueryParams?.code ||
+            this.props.realQueryParams?.state
+        ) {
+            this.props.onTokenLoginCompleted();
+        }
+
+        if (delegatedAuthSucceeded) {
+            // token auth/OIDC worked! Time to fire up the client.
+            this.tokenLogin = true;
+
+            // Create and start the client
+            // accesses the new credentials just set in storage during attemptDelegatedAuthLogin
+            // and sets logged in state
+            await Lifecycle.restoreFromLocalStorage({ ignoreGuest: true });
+            await this.postLoginSetup();
+            return;
+        }
+
+        // if the user has followed a login or register link, don't reanimate
+        // the old creds, but rather go straight to the relevant page
+        const firstScreen = this.screenAfterLogin ? this.screenAfterLogin.screen : null;
+        const restoreSuccess = await this.loadSession();
+        if (restoreSuccess) {
+            return;
+        }
+
+        if (firstScreen === "login" || firstScreen === "register" || firstScreen === "forgot_password") {
+            this.showScreenAfterLogin();
+        }
     }
 
     private async postLoginSetup(): Promise<void> {
