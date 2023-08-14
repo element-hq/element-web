@@ -122,7 +122,7 @@ exports[`<ServerPickerDialog /> should render dialog 1`] = `
       </h2>
       <a
         class="mx_ExternalLink"
-        href="https://matrix.org/faq/#what-is-a-homeserver%3F"
+        href="https://matrix.org/docs/matrix-concepts/elements-of-matrix/#homeserver"
         rel="noreferrer noopener"
         target="_blank"
       >
