@@ -176,8 +176,6 @@ interface IProps {
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
     defaultDeviceDisplayName?: string;
-    // A function that makes a registration URL
-    makeRegistrationUrl: (params: QueryDict) => string;
 }
 
 interface IState {
@@ -2004,13 +2002,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setState({ serverConfig });
     };
 
-    private makeRegistrationUrl = (params: QueryDict): string => {
-        if (this.props.startingFragmentQueryParams?.referrer) {
-            params.referrer = this.props.startingFragmentQueryParams.referrer;
-        }
-        return this.props.makeRegistrationUrl(params);
-    };
-
     /**
      * After registration or login, we run various post-auth steps before entering the app
      * proper, such setting up cross-signing or verifying the new session.
@@ -2121,7 +2112,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     idSid={this.state.register_id_sid}
                     email={email}
                     brand={this.props.config.brand}
-                    makeRegistrationUrl={this.makeRegistrationUrl}
                     onLoggedIn={this.onRegisterFlowComplete}
                     onLoginClick={this.onLoginClick}
                     onServerConfigChange={this.onServerConfigChange}

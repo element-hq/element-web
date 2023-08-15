@@ -28,6 +28,9 @@ export interface StartHomeserverOpts {
 
     /** Port of an OAuth server to configure the homeserver to use */
     oAuthServerPort?: number;
+
+    /** Additional variables to inject into the configuration template **/
+    variables?: Record<string, string | number>;
 }
 
 declare global {

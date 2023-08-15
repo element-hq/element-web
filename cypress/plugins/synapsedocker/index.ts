@@ -65,6 +65,12 @@ async function cfgDirFromTemplate(opts: StartHomeserverOpts): Promise<Homeserver
     hsYaml = hsYaml.replace(/{{FORM_SECRET}}/g, formSecret);
     hsYaml = hsYaml.replace(/{{PUBLIC_BASEURL}}/g, baseUrl);
     hsYaml = hsYaml.replace(/{{OAUTH_SERVER_PORT}}/g, opts.oAuthServerPort?.toString());
+    if (opts.variables) {
+        for (const key in opts.variables) {
+            hsYaml = hsYaml.replace(new RegExp("%" + key + "%", "g"), String(opts.variables[key]));
+        }
+    }
+
     await fse.writeFile(path.join(tempDir, "homeserver.yaml"), hsYaml);
 
     // now generate a signing key (we could use synapse's config generation for

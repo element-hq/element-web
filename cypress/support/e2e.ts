@@ -40,6 +40,8 @@ import "./network";
 import "./composer";
 import "./proxy";
 import "./axe";
+import "./mailhog";
+import "./promise";
 
 installLogsCollector({
     // specify the types of logs to collect (and report to the node console at the end of the test)

@@ -131,7 +131,6 @@ describe("<MatrixChat />", () => {
         },
         onNewScreen: jest.fn(),
         onTokenLoginCompleted: jest.fn(),
-        makeRegistrationUrl: jest.fn(),
         realQueryParams: {},
     };
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) =>

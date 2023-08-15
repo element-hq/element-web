@@ -208,6 +208,7 @@
         "jest-mock": "^29.2.2",
         "jest-raw-loader": "^1.0.1",
         "jsqr": "^1.4.0",
+        "mailhog": "^4.16.0",
         "matrix-mock-request": "^2.5.0",
         "matrix-web-i18n": "^1.4.0",
         "mocha-junit-reporter": "^2.2.0",

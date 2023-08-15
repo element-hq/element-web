@@ -26,6 +26,7 @@ import { webserver } from "./webserver";
 import { docker } from "./docker";
 import { log } from "./log";
 import { oAuthServer } from "./oauth_server";
+import { mailhogDocker } from "./mailhog";
 
 /**
  * @type {Cypress.PluginConfig}
@@ -41,4 +42,5 @@ export default function (on: PluginEvents, config: PluginConfigOptions) {
     installLogsPrinter(on, {
         // printLogsToConsole: "always",
     });
+    mailhogDocker(on, config);
 }

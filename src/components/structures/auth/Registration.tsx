@@ -73,15 +73,7 @@ interface IProps {
     // - The user's password, if available and applicable (may be cached in memory
     //   for a short time so the user is not required to re-enter their password
     //   for operations like uploading cross-signing keys).
-    onLoggedIn(params: IMatrixClientCreds, password: string): void;
-    makeRegistrationUrl(params: {
-        /* eslint-disable camelcase */
-        client_secret: string;
-        hs_url: string;
-        is_url?: string;
-        session_id: string;
-        /* eslint-enable camelcase */
-    }): string;
+    onLoggedIn(params: IMatrixClientCreds, password: string): Promise<void>;
     // registration shouldn't know or care how login is done.
     onLoginClick(): void;
     onServerConfigChange(config: ValidatedServerConfig): void;
@@ -302,17 +294,7 @@ export default class Registration extends React.Component<IProps, IState> {
         sessionId: string,
     ): Promise<IRequestTokenResponse> => {
         if (!this.state.matrixClient) throw new Error("Matrix client has not yet been loaded");
-        return this.state.matrixClient.requestRegisterEmailToken(
-            emailAddress,
-            clientSecret,
-            sendAttempt,
-            this.props.makeRegistrationUrl({
-                client_secret: clientSecret,
-                hs_url: this.state.matrixClient.getHomeserverUrl(),
-                is_url: this.state.matrixClient.getIdentityServerUrl(),
-                session_id: sessionId,
-            }),
-        );
+        return this.state.matrixClient.requestRegisterEmailToken(emailAddress, clientSecret, sendAttempt);
     };
 
     private onUIAuthFinished: InteractiveAuthCallback<RegisterResponse> = async (success, response): Promise<void> => {
@@ -401,9 +383,7 @@ export default class Registration extends React.Component<IProps, IState> {
         const hasAccessToken = Boolean(accessToken);
         debuglog("Registration: ui auth finished:", { hasEmail, hasAccessToken });
         // don’t log in if we found a session for a different user
-        if (!hasEmail && hasAccessToken && !newState.differentLoggedInUserId) {
-            // we'll only try logging in if we either have no email to verify at all or we're the client that verified
-            // the email, not the client that started the registration flow
+        if (hasAccessToken && !newState.differentLoggedInUserId) {
             await this.props.onLoggedIn(
                 {
                     userId,

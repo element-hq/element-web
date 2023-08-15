@@ -75,7 +75,6 @@ describe("Registration", function () {
 
     const defaultProps = {
         defaultDeviceDisplayName: "test-device-display-name",
-        makeRegistrationUrl: jest.fn(),
         onLoggedIn: jest.fn(),
         onLoginClick: jest.fn(),
         onServerConfigChange: jest.fn(),
