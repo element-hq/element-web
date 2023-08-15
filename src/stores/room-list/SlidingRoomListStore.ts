@@ -399,6 +399,4 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
     }
 
     protected async onAction(payload: ActionPayload): Promise<void> {}
-
-    protected async onDispatchAsync(payload: ActionPayload): Promise<void> {}
 }

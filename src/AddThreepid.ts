@@ -281,16 +281,15 @@ export default class AddThreepid {
     ): Promise<[success?: boolean, result?: IAuthData | Error | null] | undefined> {
         const authClient = new IdentityAuthClient();
 
-        let result: { success: boolean } | MatrixError;
         if (this.submitUrl) {
-            result = await this.matrixClient.submitMsisdnTokenOtherUrl(
+            await this.matrixClient.submitMsisdnTokenOtherUrl(
                 this.submitUrl,
                 this.sessionId!,
                 this.clientSecret,
                 msisdnToken,
             );
         } else if (this.bind) {
-            result = await this.matrixClient.submitMsisdnToken(
+            await this.matrixClient.submitMsisdnToken(
                 this.sessionId!,
                 this.clientSecret,
                 msisdnToken,
@@ -298,9 +297,6 @@ export default class AddThreepid {
             );
         } else {
             throw new UserFriendlyError("The add / bind with MSISDN flow is misconfigured");
-        }
-        if (result instanceof Error) {
-            throw result;
         }
 
         if (this.bind) {

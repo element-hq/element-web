@@ -113,13 +113,6 @@ export default abstract class BaseEventIndexManager {
     }
 
     /**
-     * Check if our event index is empty.
-     */
-    public indexIsEmpty(): Promise<boolean> {
-        throw new Error("Unimplemented");
-    }
-
-    /**
      * Check if the room with the given id is already indexed.
      *
      * @param {string} roomId The ID of the room which we want to check if it

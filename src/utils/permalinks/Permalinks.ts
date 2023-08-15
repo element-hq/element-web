@@ -114,6 +114,7 @@ export class RoomPermalinkCreator {
     }
 
     public start(): void {
+        if (this.started) return;
         this.load();
         this.room?.currentState.on(RoomStateEvent.Update, this.onRoomStateUpdate);
         this.started = true;
@@ -126,10 +127,6 @@ export class RoomPermalinkCreator {
 
     public get serverCandidates(): string[] | undefined {
         return this._serverCandidates;
-    }
-
-    public isStarted(): boolean {
-        return this.started;
     }
 
     public forEvent(eventId: string): string {

@@ -69,8 +69,4 @@ export class PermalinkParts {
     public get primaryEntityId(): string | null {
         return this.roomIdOrAlias || this.userId;
     }
-
-    public get sigil(): string {
-        return this.primaryEntityId?.[0] || "?";
-    }
 }

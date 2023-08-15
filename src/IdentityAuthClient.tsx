@@ -75,10 +75,6 @@ export default class IdentityAuthClient {
         return window.localStorage.getItem("mx_is_access_token");
     }
 
-    public hasCredentials(): boolean {
-        return Boolean(this.accessToken);
-    }
-
     // Returns a promise that resolves to the access_token string from the IS
     public async getAccessToken({ check = true } = {}): Promise<string | null> {
         if (!this.authEnabled) {

@@ -48,41 +48,6 @@ export default class PasswordReset {
     }
 
     /**
-     * Attempt to reset the user's password. This will trigger a side-effect of
-     * sending an email to the provided email address.
-     * @param {string} emailAddress The email address
-     * @param {string} newPassword The new password for the account.
-     * @param {boolean} logoutDevices Should all devices be signed out after the reset? Defaults to `true`.
-     * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
-     */
-    public async resetPassword(
-        emailAddress: string,
-        newPassword: string,
-        logoutDevices = true,
-    ): Promise<IRequestTokenResponse> {
-        this.password = newPassword;
-        this.logoutDevices = logoutDevices;
-        this.sendAttempt++;
-
-        try {
-            const result = await this.client.requestPasswordEmailToken(
-                emailAddress,
-                this.clientSecret,
-                this.sendAttempt,
-            );
-            this.sessionId = result.sid;
-            return result;
-        } catch (err: any) {
-            if (err.errcode === "M_THREEPID_NOT_FOUND") {
-                err.message = _t("This email address was not found");
-            } else if (err.httpStatus) {
-                err.message = err.message + ` (Status ${err.httpStatus})`;
-            }
-            throw err;
-        }
-    }
-
-    /**
      * Request a password reset token.
      * This will trigger a side-effect of sending an email to the provided email address.
      */

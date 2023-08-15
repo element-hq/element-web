@@ -242,10 +242,6 @@ export class StopGapWidget extends EventEmitter {
         return parsed.toString().replace(/%24/g, "$");
     }
 
-    public get isManagedByManager(): boolean {
-        return !!this.scalarToken;
-    }
-
     public get started(): boolean {
         return !!this.messaging;
     }

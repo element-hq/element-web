@@ -26,7 +26,6 @@ import IntegrationsImpossibleDialog from "../components/views/dialogs/Integratio
 import IntegrationsDisabledDialog from "../components/views/dialogs/IntegrationsDisabledDialog";
 import WidgetUtils from "../utils/WidgetUtils";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { parseUrl } from "../utils/UrlUtils";
 
 const KIND_PREFERENCE = [
     // Ordered: first is most preferred, last is least preferred.
@@ -178,52 +177,6 @@ export class IntegrationManagers {
 
     public showDisabledDialog(): void {
         Modal.createDialog(IntegrationsDisabledDialog);
-    }
-
-    /**
-     * Attempts to discover an integration manager using only its name. This will not validate that
-     * the integration manager is functional - that is the caller's responsibility.
-     * @param {string} domainName The domain name to look up.
-     * @returns {Promise<IntegrationManagerInstance>} Resolves to an integration manager instance,
-     * or null if none was found.
-     */
-    public async tryDiscoverManager(domainName: string): Promise<IntegrationManagerInstance | null> {
-        logger.log("Looking up integration manager via .well-known");
-        if (domainName.startsWith("http:") || domainName.startsWith("https:")) {
-            // trim off the scheme and just use the domain
-            domainName = parseUrl(domainName).host;
-        }
-
-        let wkConfig: IClientWellKnown;
-        try {
-            const result = await fetch(`https://${domainName}/.well-known/matrix/integrations`);
-            wkConfig = await result.json();
-        } catch (e) {
-            logger.error(e);
-            logger.warn("Failed to locate integration manager");
-            return null;
-        }
-
-        if (!wkConfig || !wkConfig["m.integrations_widget"]) {
-            logger.warn("Missing integrations widget on .well-known response");
-            return null;
-        }
-
-        const widget = wkConfig["m.integrations_widget"];
-        if (!widget["url"] || !widget["data"] || !widget["data"]["api_url"]) {
-            logger.warn("Malformed .well-known response for integrations widget");
-            return null;
-        }
-
-        // All discovered managers are per-user managers
-        const manager = new IntegrationManagerInstance(Kind.Account, widget["data"]["api_url"], widget["url"]);
-        logger.log("Got an integration manager (untested)");
-
-        // We don't test the manager because the caller may need to do extra
-        // checks or similar with it. For instance, they may need to deal with
-        // terms of service or want to call something particular.
-
-        return manager;
     }
 }
 

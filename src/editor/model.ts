@@ -461,7 +461,7 @@ export default class EditorModel {
      */
     public transform(callback: ManualTransformCallback): Promise<void> {
         const pos = callback();
-        let acPromise: Promise<void> | null = null;
+        let acPromise: Promise<void> | null;
         if (!(pos instanceof Range)) {
             acPromise = this.setActivePart(pos, true);
         } else {

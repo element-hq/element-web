@@ -679,7 +679,7 @@ function canSendEvent(event: MessageEvent<any>, roomId: string): void {
     }
     const me = client.credentials.userId!;
 
-    let canSend = false;
+    let canSend: boolean;
     if (isState) {
         canSend = room.currentState.maySendStateEvent(evType, me);
     } else {

@@ -245,7 +245,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
         if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
 
-        let r: { event_id: string } | null = null; // eslint-disable-line camelcase
+        let r: { event_id: string } | null;
         if (stateKey !== null) {
             // state event
             r = await client.sendStateEvent(roomId, eventType, content, stateKey);

@@ -429,15 +429,6 @@ export default class LegacyCallHandler extends EventEmitter {
         return this.calls.get(roomId) || null;
     }
 
-    public getAnyActiveCall(): MatrixCall | null {
-        for (const call of this.calls.values()) {
-            if (call.state !== CallState.Ended) {
-                return call;
-            }
-        }
-        return null;
-    }
-
     public getAllActiveCalls(): MatrixCall[] {
         const activeCalls: MatrixCall[] = [];
 

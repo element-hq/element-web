@@ -117,7 +117,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
     return (
         <QuestionDialog
             className="mx_FeedbackDialog"
-            hasCancelButton={!!hasFeedback}
+            hasCancelButton={hasFeedback}
             title={_t("Feedback")}
             description={
                 <React.Fragment>

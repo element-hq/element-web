@@ -157,7 +157,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         this.emit(CallEvent.Participants, value, prevValue);
     }
 
-    public constructor(
+    protected constructor(
         /**
          * The widget used to access this call.
          */

@@ -63,10 +63,6 @@ export class BanList {
         return this._rules.filter((r) => r.kind === RULE_USER);
     }
 
-    public get roomRules(): ListRule[] {
-        return this._rules.filter((r) => r.kind === RULE_ROOM);
-    }
-
     public async banEntity(kind: string, entity: string, reason: string): Promise<any> {
         const type = ruleTypeToStable(kind);
         if (!type) return; // unknown rule type

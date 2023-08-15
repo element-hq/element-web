@@ -31,7 +31,6 @@ describe("transforming search term", () => {
             eventId: "",
             userId: "",
             viaServers: [],
-            sigil: "",
         });
 
         expect(transformSearchTerm(roomLink)).toBe(parsedPermalink);
@@ -46,7 +45,6 @@ describe("transforming search term", () => {
             eventId: null,
             userId: null,
             viaServers: null,
-            sigil: "?",
         });
 
         expect(transformSearchTerm(searchTerm)).toBe(searchTerm);

@@ -139,7 +139,7 @@ async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
             !!(pkCache && (await pkCache.getCrossSigningKeyCache?.("user_signing"))),
         ),
         secret_storage_ready: String(await client.isSecretStorageReady()),
-        secret_storage_key_in_account: String(!!(await secretStorage.hasKey())),
+        secret_storage_key_in_account: String(await secretStorage.hasKey()),
         session_backup_key_in_secret_storage: String(!!(await client.isKeyBackupKeyStored())),
         session_backup_key_cached: String(!!sessionBackupKeyFromCache),
         session_backup_key_well_formed: String(sessionBackupKeyFromCache instanceof Uint8Array),

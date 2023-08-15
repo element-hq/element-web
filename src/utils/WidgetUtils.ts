@@ -411,45 +411,6 @@ export default class WidgetUtils {
         return widgets.filter((w) => w.content?.type === "m.integration_manager");
     }
 
-    public static getRoomWidgetsOfType(room: Room, type: WidgetType): MatrixEvent[] {
-        const widgets = WidgetUtils.getRoomWidgets(room) || [];
-        return widgets.filter((w) => {
-            const content = w.getContent();
-            return content.url && type.matches(content.type);
-        });
-    }
-
-    public static async removeIntegrationManagerWidgets(client: MatrixClient | undefined): Promise<void> {
-        if (!client) {
-            throw new Error("User not logged in");
-        }
-        const widgets = client.getAccountData("m.widgets");
-        if (!widgets) return;
-        const userWidgets: Record<string, IWidgetEvent> = widgets.getContent() || {};
-        Object.entries(userWidgets).forEach(([key, widget]) => {
-            if (widget.content && widget.content.type === "m.integration_manager") {
-                delete userWidgets[key];
-            }
-        });
-        await client.setAccountData("m.widgets", userWidgets);
-    }
-
-    public static addIntegrationManagerWidget(
-        client: MatrixClient,
-        name: string,
-        uiUrl: string,
-        apiUrl: string,
-    ): Promise<void> {
-        return WidgetUtils.setUserWidget(
-            client,
-            "integration_manager_" + new Date().getTime(),
-            WidgetType.INTEGRATION_MANAGER,
-            uiUrl,
-            "Integration manager: " + name,
-            { api_url: apiUrl },
-        );
-    }
-
     /**
      * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
      * @param client The matrix client of the logged-in user

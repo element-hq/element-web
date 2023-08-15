@@ -12,6 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import { EventEmitter } from "events";
 import { Room, RoomMember, EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
@@ -85,6 +87,26 @@ describe("Permalinks", function () {
 
     afterAll(() => {
         jest.spyOn(MatrixClientPeg, "get").mockRestore();
+    });
+
+    it("should not clean up listeners even if start was called multiple times", () => {
+        const room = mockRoom("!fake:example.org", []);
+        const getListenerCount = (emitter: EventEmitter) =>
+            emitter
+                .eventNames()
+                .map((e) => emitter.listenerCount(e))
+                .reduce((a, b) => a + b, 0);
+        const listenerCountBefore = getListenerCount(room.currentState);
+
+        const creator = new RoomPermalinkCreator(room);
+        creator.start();
+        creator.start();
+        creator.start();
+        creator.start();
+        expect(getListenerCount(room.currentState)).toBeGreaterThan(listenerCountBefore);
+
+        creator.stop();
+        expect(getListenerCount(room.currentState)).toBe(listenerCountBefore);
     });
 
     it("should pick no candidate servers when the room has no members", function () {

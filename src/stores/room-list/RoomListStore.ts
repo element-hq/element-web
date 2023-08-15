@@ -577,10 +577,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
      * @param {IFilterCondition} filter The filter condition to add.
      */
     public async addFilter(filter: IFilterCondition): Promise<void> {
-        let promise = Promise.resolve();
         filter.on(FILTER_CHANGED, this.onPrefilterUpdated);
         this.prefilterConditions.push(filter);
-        promise = this.recalculatePrefiltering();
+        const promise = this.recalculatePrefiltering();
         promise.then(() => this.updateFn.trigger());
     }
 

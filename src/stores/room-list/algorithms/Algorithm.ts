@@ -90,10 +90,6 @@ export class Algorithm extends EventEmitter {
         return this._stickyRoom ? this._stickyRoom.room : null;
     }
 
-    public get knownRooms(): Room[] {
-        return this.rooms;
-    }
-
     public get hasTagSortingMap(): boolean {
         return !!this.sortAlgorithms;
     }
