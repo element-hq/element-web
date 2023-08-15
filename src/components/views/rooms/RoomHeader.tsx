@@ -23,13 +23,18 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { useTopic } from "../../../hooks/room/useTopic";
+import { Flex } from "../../utils/Flex";
+import { Box } from "../../utils/Box";
 
 export default function RoomHeader({ room }: { room: Room }): JSX.Element {
     const roomName = useRoomName(room);
     const roomTopic = useTopic(room);
 
     return (
-        <header
+        <Flex
+            as="header"
+            align="center"
+            gap="var(--cpd-space-3x)"
             className="mx_RoomHeader light-panel"
             onClick={() => {
                 const rightPanel = RightPanelStore.instance;
@@ -39,7 +44,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
             }}
         >
             <DecoratedRoomAvatar room={room} avatarSize={40} displayBadge={false} />
-            <div className="mx_RoomHeader_info">
+            <Box flex="1" className="mx_RoomHeader_info">
                 <BodyText
                     as="div"
                     size="lg"
@@ -56,7 +61,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                         {roomTopic.text}
                     </BodyText>
                 )}
-            </div>
-        </header>
+            </Box>
+        </Flex>
     );
 }
