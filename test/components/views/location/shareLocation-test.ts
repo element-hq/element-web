@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
+import { ContentHelpers, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { LegacyLocationEventContent, MLocationEventContent } from "matrix-js-sdk/src/@types/location";
 
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
@@ -30,10 +29,6 @@ jest.mock("../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
 }));
 
-jest.mock("matrix-js-sdk/src/content-helpers", () => ({
-    makeLocationContent: jest.fn(),
-}));
-
 describe("shareLocation", () => {
     const roomId = "!room:example.com";
     const shareType = LocationShareType.Pin;
@@ -42,6 +37,7 @@ describe("shareLocation", () => {
     let shareLocationFn: ShareLocationFn;
 
     beforeEach(() => {
+        const makeLocationContent = jest.spyOn(ContentHelpers, "makeLocationContent");
         client = {
             sendMessage: jest.fn(),
         } as unknown as MatrixClient;

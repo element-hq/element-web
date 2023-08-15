@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
-import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
+import { Room, HierarchyRoom } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../languageHandler";
 
@@ -50,7 +49,7 @@ export const getMetaSpaceName = (spaceKey: MetaSpace, allRoomsInHome = false): s
 
 export type SpaceKey = MetaSpace | Room["roomId"];
 
-export interface ISuggestedRoom extends IHierarchyRoom {
+export interface ISuggestedRoom extends HierarchyRoom {
     viaServers: string[];
 }
 

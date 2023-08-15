@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { BeaconInfoState } from "matrix-js-sdk/src/content-helpers";
-import { Beacon } from "matrix-js-sdk/src/matrix";
+import { Beacon, ContentHelpers } from "matrix-js-sdk/src/matrix";
 
 /**
  * Get ms until expiry
@@ -27,7 +26,7 @@ import { Beacon } from "matrix-js-sdk/src/matrix";
 export const msUntilExpiry = (startTimestamp: number, durationMs: number): number =>
     Math.max(0, startTimestamp + durationMs - Date.now());
 
-export const getBeaconMsUntilExpiry = (beaconInfo: BeaconInfoState): number =>
+export const getBeaconMsUntilExpiry = (beaconInfo: ContentHelpers.BeaconInfoState): number =>
     msUntilExpiry(beaconInfo.timestamp || 0, beaconInfo.timeout);
 
 export const getBeaconExpiryTimestamp = (beacon: Beacon): number =>

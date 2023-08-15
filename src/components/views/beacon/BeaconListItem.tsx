@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { HTMLProps, useContext } from "react";
-import { Beacon, BeaconEvent } from "matrix-js-sdk/src/matrix";
-import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
+import { Beacon, BeaconEvent, LocationAssetType } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";

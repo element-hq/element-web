@@ -17,15 +17,9 @@ limitations under the License.
 import React from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, IdentityProviderBrand, SSOFlow, SSOAction } from "matrix-js-sdk/src/matrix";
 import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
-import {
-    IdentityProviderBrand,
-    IIdentityProvider,
-    ISSOFlow,
-    DELEGATED_OIDC_COMPATIBILITY,
-    SSOAction,
-} from "matrix-js-sdk/src/@types/auth";
+import { IIdentityProvider, DELEGATED_OIDC_COMPATIBILITY } from "matrix-js-sdk/src/@types/auth";
 
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";
@@ -147,7 +141,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
 
 interface IProps {
     matrixClient: MatrixClient;
-    flow: ISSOFlow;
+    flow: SSOFlow;
     loginType: "sso" | "cas";
     fragmentAfterLogin?: string;
     primary?: boolean;

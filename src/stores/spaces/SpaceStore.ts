@@ -24,9 +24,9 @@ import {
     RoomStateEvent,
     MatrixEvent,
     ClientEvent,
+    ISendEventResponse,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";

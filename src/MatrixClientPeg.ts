@@ -26,8 +26,8 @@ import {
     EventTimelineSet,
     IStartClientOpts,
     MatrixClient,
+    MemoryStore,
 } from "matrix-js-sdk/src/matrix";
-import { MemoryStore } from "matrix-js-sdk/src/store/memory";
 import * as utils from "matrix-js-sdk/src/utils";
 import { verificationMethods } from "matrix-js-sdk/src/crypto";
 import { SHOW_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";

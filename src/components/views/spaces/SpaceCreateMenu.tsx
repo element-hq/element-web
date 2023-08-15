@@ -26,8 +26,14 @@ import React, {
     ReactNode,
 } from "react";
 import classNames from "classnames";
-import { RoomType, HistoryVisibility, Preset, Visibility, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
+import {
+    RoomType,
+    HistoryVisibility,
+    Preset,
+    Visibility,
+    MatrixClient,
+    ICreateRoomOpts,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";

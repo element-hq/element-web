@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { act, fireEvent, render } from "@testing-library/react";
-import { Beacon, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
+import { Beacon, RoomMember, MatrixEvent, LocationAssetType } from "matrix-js-sdk/src/matrix";
 
 import BeaconListItem from "../../../../src/components/views/beacon/BeaconListItem";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";

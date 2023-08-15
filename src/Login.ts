@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { createClient, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { createClient, MatrixClient, LoginFlow } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { DELEGATED_OIDC_COMPATIBILITY, ILoginFlow, LoginFlow, LoginRequest } from "matrix-js-sdk/src/@types/auth";
+import { DELEGATED_OIDC_COMPATIBILITY, ILoginFlow, LoginRequest } from "matrix-js-sdk/src/@types/auth";
 
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";

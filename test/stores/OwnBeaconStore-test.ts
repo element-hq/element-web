@@ -22,8 +22,8 @@ import {
     MatrixEvent,
     RoomStateEvent,
     RoomMember,
+    ContentHelpers,
 } from "matrix-js-sdk/src/matrix";
-import { makeBeaconContent, makeBeaconInfoContent } from "matrix-js-sdk/src/content-helpers";
 import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Mocked } from "jest-mock";
@@ -239,12 +239,12 @@ describe("OwnBeaconStore", () => {
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
                 room1Id,
                 M_BEACON.name,
-                makeBeaconContent(defaultLocationUri, now, alicesRoom1BeaconInfo.getId()!),
+                ContentHelpers.makeBeaconContent(defaultLocationUri, now, alicesRoom1BeaconInfo.getId()!),
             );
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
                 room2Id,
                 M_BEACON.name,
-                makeBeaconContent(defaultLocationUri, now, alicesRoom2BeaconInfo.getId()!),
+                ContentHelpers.makeBeaconContent(defaultLocationUri, now, alicesRoom2BeaconInfo.getId()!),
             );
         });
     });
@@ -1155,14 +1155,14 @@ describe("OwnBeaconStore", () => {
 
         it("creates a live beacon", async () => {
             const store = await makeOwnBeaconStore();
-            const content = makeBeaconInfoContent(100);
+            const content = ContentHelpers.makeBeaconInfoContent(100);
             await store.createLiveBeacon(room1Id, content);
             expect(mockClient.unstable_createLiveBeacon).toHaveBeenCalledWith(room1Id, content);
         });
 
         it("sets new beacon event id in local storage", async () => {
             const store = await makeOwnBeaconStore();
-            const content = makeBeaconInfoContent(100);
+            const content = ContentHelpers.makeBeaconInfoContent(100);
             await store.createLiveBeacon(room1Id, content);
 
             expect(localStorageSetSpy).toHaveBeenCalledWith(
@@ -1174,7 +1174,7 @@ describe("OwnBeaconStore", () => {
         it("handles saving beacon event id when local storage has bad value", async () => {
             localStorageGetSpy.mockReturnValue(JSON.stringify({ id: "1" }));
             const store = await makeOwnBeaconStore();
-            const content = makeBeaconInfoContent(100);
+            const content = ContentHelpers.makeBeaconInfoContent(100);
             await store.createLiveBeacon(room1Id, content);
 
             // stored successfully
@@ -1183,7 +1183,7 @@ describe("OwnBeaconStore", () => {
 
         it("creates a live beacon without error when no beacons exist for room", async () => {
             const store = await makeOwnBeaconStore();
-            const content = makeBeaconInfoContent(100);
+            const content = ContentHelpers.makeBeaconInfoContent(100);
             await store.createLiveBeacon(room1Id, content);
 
             // didn't throw, no error log
@@ -1195,7 +1195,7 @@ describe("OwnBeaconStore", () => {
             makeRoomsWithStateEvents([alicesRoom1BeaconInfo, alicesRoom2BeaconInfo]);
             const store = await makeOwnBeaconStore();
 
-            const content = makeBeaconInfoContent(100);
+            const content = ContentHelpers.makeBeaconInfoContent(100);
             await store.createLiveBeacon(room1Id, content);
 
             // stop alicesRoom1BeaconInfo

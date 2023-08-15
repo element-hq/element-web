@@ -24,8 +24,8 @@ import {
     RoomMember,
     RoomState,
     RoomStateEvent,
+    ContentHelpers,
 } from "matrix-js-sdk/src/matrix";
-import { BeaconInfoState, makeBeaconContent, makeBeaconInfoContent } from "matrix-js-sdk/src/content-helpers";
 import { MBeaconInfoEventContent, M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -549,13 +549,16 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * Records error in beaconUpdateErrors
      * rethrows
      */
-    private updateBeaconEvent = async (beacon: Beacon, update: Partial<BeaconInfoState>): Promise<void> => {
+    private updateBeaconEvent = async (
+        beacon: Beacon,
+        update: Partial<ContentHelpers.BeaconInfoState>,
+    ): Promise<void> => {
         const { description, timeout, timestamp, live, assetType } = {
             ...beacon.beaconInfo,
             ...update,
         };
 
-        const updateContent = makeBeaconInfoContent(timeout, live, description, assetType, timestamp);
+        const updateContent = ContentHelpers.makeBeaconInfoContent(timeout, live, description, assetType, timestamp);
 
         try {
             await this.matrixClient!.unstable_setLiveBeacon(beacon.roomId, updateContent);
@@ -593,7 +596,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * Sends m.location event to referencing given beacon
      */
     private sendLocationToBeacon = async (beacon: Beacon, { geoUri, timestamp }: TimedGeoUri): Promise<void> => {
-        const content = makeBeaconContent(geoUri, timestamp, beacon.beaconInfoId);
+        const content = ContentHelpers.makeBeaconContent(geoUri, timestamp, beacon.beaconInfoId);
         try {
             await this.matrixClient!.sendEvent(beacon.roomId, M_BEACON.name, content);
             this.incrementBeaconLocationPublishErrorCount(beacon.identifier, false);

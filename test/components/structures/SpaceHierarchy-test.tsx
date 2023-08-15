@@ -17,9 +17,8 @@ limitations under the License.
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Room, HierarchyRoom } from "matrix-js-sdk/src/matrix";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
-import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { mkStubRoom, stubClient } from "../../test-utils";
@@ -85,41 +84,41 @@ describe("SpaceHierarchy", () => {
         it("grabs last room that is in hierarchy when latest version is in hierarchy", () => {
             const hierarchy = {
                 roomMap: new Map([
-                    [roomV1.roomId, { room_id: roomV1.roomId } as IHierarchyRoom],
-                    [roomV2.roomId, { room_id: roomV2.roomId } as IHierarchyRoom],
-                    [roomV3.roomId, { room_id: roomV3.roomId } as IHierarchyRoom],
+                    [roomV1.roomId, { room_id: roomV1.roomId } as HierarchyRoom],
+                    [roomV2.roomId, { room_id: roomV2.roomId } as HierarchyRoom],
+                    [roomV3.roomId, { room_id: roomV3.roomId } as HierarchyRoom],
                 ]),
             } as RoomHierarchy;
-            const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+            const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as HierarchyRoom, hierarchy);
             expect(localRoomV1.room_id).toEqual(roomV3.roomId);
-            const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as IHierarchyRoom, hierarchy);
+            const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as HierarchyRoom, hierarchy);
             expect(localRoomV2.room_id).toEqual(roomV3.roomId);
-            const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as IHierarchyRoom, hierarchy);
+            const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as HierarchyRoom, hierarchy);
             expect(localRoomV3.room_id).toEqual(roomV3.roomId);
         });
 
         it("grabs last room that is in hierarchy when latest version is *not* in hierarchy", () => {
             const hierarchy = {
                 roomMap: new Map([
-                    [roomV1.roomId, { room_id: roomV1.roomId } as IHierarchyRoom],
-                    [roomV2.roomId, { room_id: roomV2.roomId } as IHierarchyRoom],
+                    [roomV1.roomId, { room_id: roomV1.roomId } as HierarchyRoom],
+                    [roomV2.roomId, { room_id: roomV2.roomId } as HierarchyRoom],
                 ]),
             } as RoomHierarchy;
-            const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+            const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as HierarchyRoom, hierarchy);
             expect(localRoomV1.room_id).toEqual(roomV2.roomId);
-            const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as IHierarchyRoom, hierarchy);
+            const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as HierarchyRoom, hierarchy);
             expect(localRoomV2.room_id).toEqual(roomV2.roomId);
-            const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as IHierarchyRoom, hierarchy);
+            const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as HierarchyRoom, hierarchy);
             expect(localRoomV3.room_id).toEqual(roomV2.roomId);
         });
 
         it("returns specified room when none of the versions is in hierarchy", () => {
             const hierarchy = { roomMap: new Map([]) } as RoomHierarchy;
-            const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+            const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as HierarchyRoom, hierarchy);
             expect(localRoomV1.room_id).toEqual(roomV1.roomId);
-            const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as IHierarchyRoom, hierarchy);
+            const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as HierarchyRoom, hierarchy);
             expect(localRoomV2.room_id).toEqual(roomV2.roomId);
-            const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as IHierarchyRoom, hierarchy);
+            const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as HierarchyRoom, hierarchy);
             expect(localRoomV3.room_id).toEqual(roomV3.roomId);
         });
 
@@ -130,7 +129,7 @@ describe("SpaceHierarchy", () => {
             it("Passes through the dynamic predecessor setting", async () => {
                 mocked(client.getRoomUpgradeHistory).mockClear();
                 const hierarchy = { roomMap: new Map([]) } as RoomHierarchy;
-                toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+                toLocalRoom(client, { room_id: roomV1.roomId } as HierarchyRoom, hierarchy);
                 expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(roomV1.roomId, true, false);
             });
         });
@@ -146,7 +145,7 @@ describe("SpaceHierarchy", () => {
             it("Passes through the dynamic predecessor setting", async () => {
                 mocked(client.getRoomUpgradeHistory).mockClear();
                 const hierarchy = { roomMap: new Map([]) } as RoomHierarchy;
-                toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+                toLocalRoom(client, { room_id: roomV1.roomId } as HierarchyRoom, hierarchy);
                 expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(roomV1.roomId, true, true);
             });
         });
@@ -183,7 +182,7 @@ describe("SpaceHierarchy", () => {
         );
         [room1, room2, space1, room3].forEach((r) => mocked(r.getMyMembership).mockReturnValue("leave"));
 
-        const hierarchyRoot: IHierarchyRoom = {
+        const hierarchyRoot: HierarchyRoom = {
             room_id: root.roomId,
             num_joined_members: 1,
             room_type: "m.space",
@@ -213,21 +212,21 @@ describe("SpaceHierarchy", () => {
             world_readable: true,
             guest_can_join: true,
         };
-        const hierarchyRoom1: IHierarchyRoom = {
+        const hierarchyRoom1: HierarchyRoom = {
             room_id: room1.roomId,
             num_joined_members: 2,
             children_state: [],
             world_readable: true,
             guest_can_join: true,
         };
-        const hierarchyRoom2: IHierarchyRoom = {
+        const hierarchyRoom2: HierarchyRoom = {
             room_id: room2.roomId,
             num_joined_members: 3,
             children_state: [],
             world_readable: true,
             guest_can_join: true,
         };
-        const hierarchyRoom3: IHierarchyRoom = {
+        const hierarchyRoom3: HierarchyRoom = {
             name: "Nested room",
             room_id: room3.roomId,
             num_joined_members: 3,
@@ -235,7 +234,7 @@ describe("SpaceHierarchy", () => {
             world_readable: true,
             guest_can_join: true,
         };
-        const hierarchySpace1: IHierarchyRoom = {
+        const hierarchySpace1: HierarchyRoom = {
             room_id: space1.roomId,
             name: "Nested space",
             num_joined_members: 1,

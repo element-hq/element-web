@@ -17,8 +17,7 @@ limitations under the License.
 import React, { ChangeEvent, SyntheticEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
-import { ISSOFlow, LoginFlow, SSOAction } from "matrix-js-sdk/src/@types/auth";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { SSOFlow, LoginFlow, SSOAction, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -257,7 +256,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
     private renderSsoForm(introText: Optional<string>): JSX.Element {
         const loginType = this.state.loginView === LoginView.CAS ? "cas" : "sso";
-        const flow = this.state.flows.find((flow) => flow.type === "m.login." + loginType) as ISSOFlow;
+        const flow = this.state.flows.find((flow) => flow.type === "m.login." + loginType) as SSOFlow;
 
         return (
             <div>

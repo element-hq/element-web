@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { KnockRoomOpts } from "matrix-js-sdk/src/@types/requests";
+import { KnockRoomOpts } from "matrix-js-sdk/src/matrix";
 
 import { Action } from "../actions";
 import { ActionPayload } from "../payloads";

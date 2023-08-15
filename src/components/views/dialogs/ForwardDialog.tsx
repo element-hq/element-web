@@ -16,9 +16,16 @@ limitations under the License.
 
 import React, { useEffect, useMemo, useState } from "react";
 import classnames from "classnames";
-import { IContent, MatrixEvent, Room, RoomMember, EventType, MatrixClient } from "matrix-js-sdk/src/matrix";
+import {
+    IContent,
+    MatrixEvent,
+    Room,
+    RoomMember,
+    EventType,
+    MatrixClient,
+    ContentHelpers,
+} from "matrix-js-sdk/src/matrix";
 import { ILocationContent, LocationAssetType, M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
-import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
 import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 
 import { _t } from "../../../languageHandler";
@@ -176,7 +183,7 @@ const transformEvent = (event: MatrixEvent): { type: string; content: IContent }
             type,
             content: {
                 ...content,
-                ...makeLocationContent(
+                ...ContentHelpers.makeLocationContent(
                     undefined, // text
                     geoUri,
                     timestamp || Date.now(),

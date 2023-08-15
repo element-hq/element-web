@@ -23,8 +23,8 @@ import {
     MatrixClient,
     RelationType,
     IRedactOpts,
+    ContentHelpers,
 } from "matrix-js-sdk/src/matrix";
-import { BeaconLocationState } from "matrix-js-sdk/src/content-helpers";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 import classNames from "classnames";
@@ -51,7 +51,7 @@ const useBeaconState = (
 ): {
     beacon?: Beacon;
     description?: string;
-    latestLocationState?: BeaconLocationState;
+    latestLocationState?: ContentHelpers.BeaconLocationState;
     isLive?: boolean;
     waitingToStart?: boolean;
 } => {

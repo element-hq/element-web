@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, createRef, SyntheticEvent } from "react";
-import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
+import { AutoDiscovery } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";

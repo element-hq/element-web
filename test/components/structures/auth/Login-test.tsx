@@ -20,7 +20,7 @@ import { mocked, MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 import { DELEGATED_OIDC_COMPATIBILITY, IdentityProviderBrand } from "matrix-js-sdk/src/@types/auth";
 import { logger } from "matrix-js-sdk/src/logger";
-import { createClient, MatrixClient } from "matrix-js-sdk/src/matrix";
+import * as Matrix from "matrix-js-sdk/src/matrix";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 
 import SdkConfig from "../../../../src/SdkConfig";
@@ -31,8 +31,6 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import { Features } from "../../../../src/settings/Settings";
 import { ValidatedDelegatedAuthConfig } from "../../../../src/utils/ValidatedServerConfig";
 import * as registerClientUtils from "../../../../src/utils/oidc/registerClient";
-
-jest.mock("matrix-js-sdk/src/matrix");
 
 jest.useRealTimers();
 
@@ -48,7 +46,7 @@ describe("Login", function () {
     const mockClient = mocked({
         login: jest.fn().mockResolvedValue({}),
         loginFlows: jest.fn(),
-    } as unknown as MatrixClient);
+    } as unknown as Matrix.MatrixClient);
 
     beforeEach(function () {
         SdkConfig.put({
@@ -62,7 +60,7 @@ describe("Login", function () {
             user_id: "@user:server",
         });
         mockClient.loginFlows.mockClear().mockResolvedValue({ flows: [{ type: "m.login.password" }] });
-        mocked(createClient).mockImplementation((opts) => {
+        jest.spyOn(Matrix, "createClient").mockImplementation((opts) => {
             mockClient.idBaseUrl = opts.idBaseUrl;
             mockClient.baseUrl = opts.baseUrl;
             return mockClient;

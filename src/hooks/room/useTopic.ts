@@ -15,19 +15,18 @@ limitations under the License.
 */
 
 import { useEffect, useState } from "react";
-import { EventType, MatrixEvent, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { parseTopicContent, TopicState } from "matrix-js-sdk/src/content-helpers";
+import { EventType, MatrixEvent, Room, RoomStateEvent, ContentHelpers } from "matrix-js-sdk/src/matrix";
 import { MRoomTopicEventContent } from "matrix-js-sdk/src/@types/topic";
 import { Optional } from "matrix-events-sdk";
 
 import { useTypedEventEmitter } from "../useEventEmitter";
 
-export const getTopic = (room?: Room): Optional<TopicState> => {
+export const getTopic = (room?: Room): Optional<ContentHelpers.TopicState> => {
     const content = room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent<MRoomTopicEventContent>();
-    return !!content ? parseTopicContent(content) : null;
+    return !!content ? ContentHelpers.parseTopicContent(content) : null;
 };
 
-export function useTopic(room?: Room): Optional<TopicState> {
+export function useTopic(room?: Room): Optional<ContentHelpers.TopicState> {
     const [topic, setTopic] = useState(getTopic(room));
     useTypedEventEmitter(room?.currentState, RoomStateEvent.Events, (ev: MatrixEvent) => {
         if (ev.getType() !== EventType.RoomTopic) return;

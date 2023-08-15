@@ -17,8 +17,14 @@ limitations under the License.
 import { WebSearch as WebSearchEvent } from "@matrix-org/analytics-events/types/typescript/WebSearch";
 import classNames from "classnames";
 import { capitalize, sum } from "lodash";
-import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
-import { IPublicRoomsChunkRoom, MatrixClient, RoomMember, RoomType, Room } from "matrix-js-sdk/src/matrix";
+import {
+    IPublicRoomsChunkRoom,
+    MatrixClient,
+    RoomMember,
+    RoomType,
+    Room,
+    HierarchyRoom,
+} from "matrix-js-sdk/src/matrix";
 import { normalize } from "matrix-js-sdk/src/utils";
 import React, { ChangeEvent, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import sanitizeHtml from "sanitize-html";
@@ -825,7 +831,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     </h4>
                     <div>
                         {spaceResults.slice(0, SECTION_LIMIT).map(
-                            (room: IHierarchyRoom): JSX.Element => (
+                            (room: HierarchyRoom): JSX.Element => (
                                 <Option
                                     id={`mx_SpotlightDialog_button_result_${room.room_id}`}
                                     key={room.room_id}

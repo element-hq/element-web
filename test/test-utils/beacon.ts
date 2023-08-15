@@ -15,10 +15,15 @@ limitations under the License.
 */
 
 import { MockedObject } from "jest-mock";
-import { makeBeaconInfoContent, makeBeaconContent } from "matrix-js-sdk/src/content-helpers";
-import { MatrixClient, MatrixEvent, Beacon, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixClient,
+    MatrixEvent,
+    Beacon,
+    getBeaconInfoIdentifier,
+    ContentHelpers,
+    LocationAssetType,
+} from "matrix-js-sdk/src/matrix";
 import { M_BEACON, M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
-import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
 
 import { getMockGeolocationPositionError } from "./location";
 import { makeRoomWithStateEvents } from "./room";
@@ -54,7 +59,7 @@ export const makeBeaconInfoEvent = (
         room_id: roomId,
         state_key: sender,
         sender,
-        content: makeBeaconInfoContent(timeout, isLive, description, assetType, timestamp),
+        content: ContentHelpers.makeBeaconInfoContent(timeout, isLive, description, assetType, timestamp),
     });
 
     event.event.origin_server_ts = Date.now();
@@ -97,7 +102,7 @@ export const makeBeaconEvent = (
         type: M_BEACON.name,
         room_id: roomId,
         sender,
-        content: makeBeaconContent(geoUri, timestamp, beaconInfoId, description),
+        content: ContentHelpers.makeBeaconContent(geoUri, timestamp, beaconInfoId, description),
     });
 };
 

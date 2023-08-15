@@ -38,9 +38,10 @@ import {
     RoomType,
     GuestAccess,
     HistoryVisibility,
+    HierarchyRelation,
+    HierarchyRoom,
 } from "matrix-js-sdk/src/matrix";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
-import { IHierarchyRelation, IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -85,7 +86,7 @@ interface IProps {
 }
 
 interface ITileProps {
-    room: IHierarchyRoom;
+    room: HierarchyRoom;
     suggested?: boolean;
     selected?: boolean;
     numChildRooms?: number;
@@ -429,8 +430,8 @@ export const joinRoom = async (cli: MatrixClient, hierarchy: RoomHierarchy, room
 };
 
 interface IHierarchyLevelProps {
-    root: IHierarchyRoom;
-    roomSet: Set<IHierarchyRoom>;
+    root: HierarchyRoom;
+    roomSet: Set<HierarchyRoom>;
     hierarchy: RoomHierarchy;
     parents: Set<string>;
     selectedMap?: Map<string, Set<string>>;
@@ -439,7 +440,7 @@ interface IHierarchyLevelProps {
     onToggleClick?(parentId: string, childId: string): void;
 }
 
-export const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom, hierarchy: RoomHierarchy): IHierarchyRoom => {
+export const toLocalRoom = (cli: MatrixClient, room: HierarchyRoom, hierarchy: RoomHierarchy): HierarchyRoom => {
     const history = cli.getRoomUpgradeHistory(
         room.room_id,
         true,
@@ -497,14 +498,14 @@ export const HierarchyLevel: React.FC<IHierarchyLevelProps> = ({
     });
 
     const [subspaces, childRooms] = sortedChildren.reduce(
-        (result, ev: IHierarchyRelation) => {
+        (result, ev: HierarchyRelation) => {
             const room = hierarchy.roomMap.get(ev.state_key);
             if (room && roomSet.has(room)) {
                 result[room.room_type === RoomType.Space ? 0 : 1].push(toLocalRoom(cli, room, hierarchy));
             }
             return result;
         },
-        [[] as IHierarchyRoom[], [] as IHierarchyRoom[]],
+        [[] as HierarchyRoom[], [] as HierarchyRoom[]],
     );
 
     const newParents = new Set(parents).add(root.room_id);
@@ -564,12 +565,12 @@ export const useRoomHierarchy = (
     space: Room,
 ): {
     loading: boolean;
-    rooms?: IHierarchyRoom[];
+    rooms?: HierarchyRoom[];
     hierarchy?: RoomHierarchy;
     error?: Error;
     loadMore(pageSize?: number): Promise<void>;
 } => {
-    const [rooms, setRooms] = useState<IHierarchyRoom[]>([]);
+    const [rooms, setRooms] = useState<HierarchyRoom[]>([]);
     const [hierarchy, setHierarchy] = useState<RoomHierarchy>();
     const [error, setError] = useState<Error | undefined>();
 
@@ -760,7 +761,7 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
 
     const { loading, rooms, hierarchy, loadMore, error: hierarchyError } = useRoomHierarchy(space);
 
-    const filteredRoomSet = useMemo<Set<IHierarchyRoom>>(() => {
+    const filteredRoomSet = useMemo<Set<HierarchyRoom>>(() => {
         if (!rooms?.length || !hierarchy) return new Set();
         const lcQuery = query.toLowerCase().trim();
         if (!lcQuery) return new Set(rooms);

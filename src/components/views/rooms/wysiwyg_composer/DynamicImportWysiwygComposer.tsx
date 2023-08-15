@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ComponentProps, lazy, Suspense } from "react";
-import { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
+import { ISendEventResponse } from "matrix-js-sdk/src/matrix";
 
 // we need to import the types for TS, but do not import the sendMessage
 // function to avoid importing from "@matrix-org/matrix-wysiwyg"

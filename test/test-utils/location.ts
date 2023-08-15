@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { LocationAssetType, M_LOCATION } from "matrix-js-sdk/src/@types/location";
-import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
-import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, EventType, ContentHelpers } from "matrix-js-sdk/src/matrix";
 
 let id = 1;
 export const makeLegacyLocationEvent = (geoUri: string): MatrixEvent => {
@@ -35,7 +34,7 @@ export const makeLocationEvent = (geoUri: string, assetType?: LocationAssetType)
     return new MatrixEvent({
         event_id: `$${++id}`,
         type: M_LOCATION.name,
-        content: makeLocationContent(
+        content: ContentHelpers.makeLocationContent(
             `Found at ${geoUri} at 2021-12-21T12:22+0000`,
             geoUri,
             252523,

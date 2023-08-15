@@ -16,8 +16,7 @@ limitations under the License.
 
 import React, { ComponentProps } from "react";
 import { fireEvent, render } from "@testing-library/react";
-import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
-import { ClientEvent, RoomMember, SyncState } from "matrix-js-sdk/src/matrix";
+import { LocationAssetType, ClientEvent, RoomMember, SyncState } from "matrix-js-sdk/src/matrix";
 import * as maplibregl from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
 

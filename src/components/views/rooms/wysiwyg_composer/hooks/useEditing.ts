@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
+import { ISendEventResponse } from "matrix-js-sdk/src/matrix";
 import { useCallback, useState } from "react";
 
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
