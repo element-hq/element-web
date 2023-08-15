@@ -1,5 +1,5 @@
-Changes in [3.78.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.78.0-rc.1) (2023-08-08)
-===============================================================================================================
+Changes in [3.78.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.78.0) (2023-08-15)
+=====================================================================================================
 
 ## 🦖 Deprecations
  * Deprecate camelCase config options ([\#11261](https://github.com/matrix-org/matrix-react-sdk/pull/11261)).
