@@ -68,11 +68,15 @@ describe("Read receipts", () => {
         cy.stopHomeserver(homeserver);
     });
 
-    abstract class MessageSpec {
+    abstract class MessageContentSpec {
         public abstract getContent(room: Room): Promise<Record<string, unknown>>;
     }
 
-    type Message = string | MessageSpec;
+    abstract class BotActionSpec {
+        public abstract performAction(cli: MatrixClient, room: Room): Promise<void>;
+    }
+
+    type Message = string | MessageContentSpec | BotActionSpec;
 
     function goTo(room: string) {
         cy.viewRoomByName(room);
@@ -95,22 +99,37 @@ describe("Read receipts", () => {
         cy.get(".mx_ThreadView_timelinePanelWrapper", { log: false }).should("have.length", 1);
     }
 
-    /**
-     * Sends messages into given room as a bot
-     * @param room - the name of the room to send messages into
-     * @param messages - the list of messages to send, these can be strings or implementations of MessageSpace like `editOf`
-     */
-    function receiveMessages(room: string, messages: Message[]) {
+    function sendMessageAsClient(cli: MatrixClient, room: string, messages: Message[]) {
         findRoomByName(room).then(async ({ roomId }) => {
-            const room = bot.getRoom(roomId);
+            const room = cli.getRoom(roomId);
             for (const message of messages) {
                 if (typeof message === "string") {
-                    await bot.sendTextMessage(roomId, message);
+                    await cli.sendTextMessage(roomId, message);
+                } else if (message instanceof MessageContentSpec) {
+                    await cli.sendMessage(roomId, await message.getContent(room));
                 } else {
-                    await bot.sendMessage(roomId, await message.getContent(room));
+                    await message.performAction(cli, room);
                 }
             }
         });
+    }
+
+    /**
+     * Sends messages into given room as a bot
+     * @param room - the name of the room to send messages into
+     * @param messages - the list of messages to send, these can be strings or implementations of MessageSpec like `editOf`
+     */
+    function receiveMessages(room: string, messages: Message[]) {
+        sendMessageAsClient(bot, room, messages);
+    }
+
+    /**
+     * Sends messages into given room as the currently logged-in user
+     * @param room - the name of the room to send messages into
+     * @param messages - the list of messages to send, these can be strings or implementations of MessageSpec like `editOf`
+     */
+    function sendMessages(room: string, messages: Message[]) {
+        cy.getClient().then((cli) => sendMessageAsClient(cli, room, messages));
     }
 
     /**
@@ -140,12 +159,12 @@ describe("Read receipts", () => {
     }
 
     /**
-     * MessageSpec to send an edit into a room
+     * MessageContentSpec to send an edit into a room
      * @param originalMessage - the body of the message to edit
      * @param newMessage - the message body to send in the edit
      */
-    function editOf(originalMessage: string, newMessage: string): MessageSpec {
-        return new (class extends MessageSpec {
+    function editOf(originalMessage: string, newMessage: string): MessageContentSpec {
+        return new (class extends MessageContentSpec {
             public async getContent(room: Room): Promise<Record<string, unknown>> {
                 const ev = await getMessage(room, originalMessage, true);
 
@@ -163,12 +182,12 @@ describe("Read receipts", () => {
     }
 
     /**
-     * MessageSpec to send a reply into a room
+     * MessageContentSpec to send a reply into a room
      * @param targetMessage - the body of the message to reply to
      * @param newMessage - the message body to send into the reply
      */
-    function replyTo(targetMessage: string, newMessage: string): MessageSpec {
-        return new (class extends MessageSpec {
+    function replyTo(targetMessage: string, newMessage: string): MessageContentSpec {
+        return new (class extends MessageContentSpec {
             public async getContent(room: Room): Promise<Record<string, unknown>> {
                 const ev = await getMessage(room, targetMessage);
 
@@ -186,12 +205,12 @@ describe("Read receipts", () => {
     }
 
     /**
-     * MessageSpec to send a threaded response into a room
+     * MessageContentSpec to send a threaded response into a room
      * @param rootMessage - the body of the thread root message to send a response to
      * @param newMessage - the message body to send into the thread response
      */
-    function threadedOff(rootMessage: string, newMessage: string): MessageSpec {
-        return new (class extends MessageSpec {
+    function threadedOff(rootMessage: string, newMessage: string): MessageContentSpec {
+        return new (class extends MessageContentSpec {
             public async getContent(room: Room): Promise<Record<string, unknown>> {
                 const ev = await getMessage(room, rootMessage);
 
@@ -204,6 +223,53 @@ describe("Read receipts", () => {
                         rel_type: "m.thread",
                     },
                 };
+            }
+        })();
+    }
+
+    /**
+     * BotActionSpec to send a reaction to an existing event into a room
+     * @param targetMessage - the body of the message to send a reaction to
+     * @param reaction - the key of the reaction to send into the room
+     */
+    function reactionTo(targetMessage: string, reaction: string): BotActionSpec {
+        return new (class extends BotActionSpec {
+            public async performAction(cli: MatrixClient, room: Room): Promise<void> {
+                const ev = await getMessage(room, targetMessage, true);
+                const threadId = !ev.isThreadRoot ? ev.threadRootId : undefined;
+                await cli.sendEvent(room.roomId, threadId ?? null, "m.reaction", {
+                    "m.relates_to": {
+                        rel_type: "m.annotation",
+                        event_id: ev.getId(),
+                        key: reaction,
+                    },
+                });
+            }
+        })();
+    }
+
+    /**
+     * BotActionSpec to send a custom event
+     * @param eventType - the type of the event to send
+     * @param content - the event content to send
+     */
+    function customEvent(eventType: string, content: Record<string, any>): BotActionSpec {
+        return new (class extends BotActionSpec {
+            public async performAction(cli: MatrixClient, room: Room): Promise<void> {
+                await cli.sendEvent(room.roomId, null, eventType, content);
+            }
+        })();
+    }
+
+    /**
+     * BotActionSpec to send a redaction into a room
+     * @param targetMessage - the body of the message to send a redaction to
+     */
+    function redactionOf(targetMessage: string): BotActionSpec {
+        return new (class extends BotActionSpec {
+            public async performAction(cli: MatrixClient, room: Room): Promise<void> {
+                const ev = await getMessage(room, targetMessage, true);
+                await cli.redactEvent(room.roomId, ev.threadRootId, ev.getId());
             }
         })();
     }
@@ -246,7 +312,7 @@ describe("Read receipts", () => {
         cy.log("Open thread list");
         cy.findByTestId("threadsButton", { log: false }).then(($button) => {
             if ($button?.attr("aria-current") !== "true") {
-                $button.trigger("click");
+                cy.findByTestId("threadsButton", { log: false }).click();
             }
         });
 
@@ -296,7 +362,7 @@ describe("Read receipts", () => {
 
     describe("new messages", () => {
         describe("in the main timeline", () => {
-            it("Sending a message makes a room unread", () => {
+            it("Receiving a message makes a room unread", () => {
                 goTo(room1);
                 assertRead(room2);
 
@@ -323,7 +389,7 @@ describe("Read receipts", () => {
                 markAsRead(room2);
                 assertRead(room2);
             });
-            it("Sending a new message after marking as read makes it unread", () => {
+            it("Receiving a new message after marking as read makes it unread", () => {
                 goTo(room1);
                 assertRead(room2);
                 receiveMessages(room2, ["Msg1"]);
@@ -354,6 +420,16 @@ describe("Read receipts", () => {
                 assertRead(room2);
 
                 saveAndReload();
+                assertRead(room2);
+            });
+            it.skip("Sending a message from a different client marks room as read", () => {
+                goTo(room1);
+                assertRead(room2);
+
+                receiveMessages(room2, ["Msg1"]);
+                assertUnread(room2, 1);
+
+                sendMessages(room2, ["Msg2"]);
                 assertRead(room2);
             });
         });
@@ -527,7 +603,7 @@ describe("Read receipts", () => {
                 // Given a thread exists
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
-                assertUnread(room2, 1); // (Sanity)
+                assertUnread(room2, 2); // (Sanity)
 
                 // When I read the main timeline
                 goTo(room2);
@@ -801,24 +877,78 @@ describe("Read receipts", () => {
     });
 
     describe("reactions", () => {
-        // Justification for this section: edits an reactions are similar, so we
-        // might choose to miss this section, but I have included it because
-        // edits replace the content of the original event in our code and
-        // reactions don't, so it seems possible that bugs could creep in that
-        // affect only one or the other.
-
         describe("in the main timeline", () => {
-            it.skip("Reacting to a message makes a room unread", () => {});
-            it.skip("Reading a reaction makes the room read", () => {});
-            it.skip("Marking a room as read after a reaction makes it read", () => {});
-            it.skip("Reacting to a message after marking as read makes the room unread", () => {});
-            it.skip("A room with a reaction is still unread after restart", () => {});
-            it.skip("A room where all reactions are read is still read after restart", () => {});
+            it("Receiving a reaction to a message does not make a room unread", () => {
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
+
+                // When I read the main timeline
+                goTo(room2);
+                assertRead(room2);
+
+                goTo(room1);
+                receiveMessages(room2, [reactionTo("Msg2", "🪿")]);
+                assertRead(room2);
+            });
+            it("Reacting to a message after marking as read does not make the room unread", () => {
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
+
+                markAsRead(room2);
+                assertRead(room2);
+
+                receiveMessages(room2, [reactionTo("Msg2", "🪿")]);
+                assertRead(room2);
+            });
+            it("A room with an unread reaction is still read after restart", () => {
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
+
+                markAsRead(room2);
+                assertRead(room2);
+
+                receiveMessages(room2, [reactionTo("Msg2", "🪿")]);
+                assertRead(room2);
+
+                saveAndReload();
+                assertRead(room2);
+            });
+            it("A room where all reactions are read is still read after restart", () => {
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", "Msg2", reactionTo("Msg2", "🪿")]);
+                assertUnread(room2, 2);
+
+                markAsRead(room2);
+                assertRead(room2);
+
+                saveAndReload();
+                assertRead(room2);
+            });
         });
 
         describe("in threads", () => {
-            it.skip("A reaction to a threaded message makes the room unread", () => {});
-            it.skip("Reading a reaction to a threaded message makes the room read", () => {});
+            it("A reaction to a threaded message does not make the room unread", () => {
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Reply1")]);
+                assertUnread(room2, 2);
+
+                goTo(room2);
+                openThread("Msg1");
+                assertRead(room2);
+
+                goTo(room1);
+                receiveMessages(room2, [reactionTo("Reply1", "🪿")]);
+
+                assertRead(room2);
+            });
             it.skip("Marking a room as read after a reaction in a thread makes it read", () => {});
             it.skip("Reacting to a thread message after marking as read makes the room unread", () => {});
             it.skip("A room with a reaction to a threaded message is still unread after restart", () => {});
@@ -826,7 +956,21 @@ describe("Read receipts", () => {
         });
 
         describe("thread roots", () => {
-            it.skip("A reaction to a thread root makes the room unread", () => {});
+            it("A reaction to a thread root does not make the room unread", () => {
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Reply1")]);
+                assertUnread(room2, 2);
+
+                goTo(room2);
+                openThread("Msg1");
+                assertRead(room2);
+
+                goTo(room1);
+                receiveMessages(room2, [reactionTo("Msg1", "🪿")]);
+
+                assertRead(room2);
+            });
             it.skip("Reading a reaction to a thread root makes the room read", () => {});
             it.skip("Marking a room as read after a reaction to a thread root makes it read", () => {});
             it.skip("Reacting to a thread root after marking as read makes the room unread but not the thread", () => {});
@@ -835,9 +979,20 @@ describe("Read receipts", () => {
 
     describe("redactions", () => {
         describe("in the main timeline", () => {
-            // One of the following two must be right:
-            it.skip("Redacting the message pointed to by my receipt leaves the room read", () => {});
-            it.skip("Redacting a message after it was read makes the room unread", () => {});
+            it("Redacting the message pointed to by my receipt leaves the room read", () => {
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 1);
+
+                // When I read the main timeline
+                goTo(room2);
+                assertRead(room2);
+
+                goTo(room1);
+                receiveMessages(room2, [redactionOf("Msg2")]);
+                assertRead(room2);
+            });
 
             it.skip("Reading an unread room after a redaction of the latest message makes it read", () => {});
             it.skip("Reading an unread room after a redaction of an older message makes it read", () => {});
@@ -949,8 +1104,31 @@ describe("Read receipts", () => {
     });
 
     describe("Ignored events", () => {
-        it.skip("If all events after receipt are unimportant, the room is read", () => {});
-        it.skip("Sending an important event after unimportant ones makes the room unread", () => {});
+        it("If all events after receipt are unimportant, the room is read", () => {
+            goTo(room1);
+            assertRead(room2);
+            receiveMessages(room2, ["Msg1", "Msg2"]);
+            assertUnread(room2, 2);
+
+            markAsRead(room2);
+
+            receiveMessages(room2, [customEvent("org.custom.event", { body: "foobar" })]);
+            assertRead(room2);
+        });
+        it("Sending an important event after unimportant ones makes the room unread", () => {
+            goTo(room1);
+            assertRead(room2);
+            receiveMessages(room2, ["Msg1", "Msg2"]);
+            assertUnread(room2, 2);
+
+            markAsRead(room2);
+
+            receiveMessages(room2, [customEvent("org.custom.event", { body: "foobar" })]);
+            assertRead(room2);
+
+            receiveMessages(room2, ["Hello"]);
+            assertUnread(room2, 1);
+        });
         it.skip("A receipt for the last unimportant event makes the room read, even if all are unimportant", () => {});
     });
 
