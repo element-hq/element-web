@@ -477,7 +477,6 @@
     "Go Back": "Gå tilbage",
     "Are you sure you want to cancel entering passphrase?": "Er du sikker på, at du vil annullere indtastning af adgangssætning?",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s og %(count)s andre",
-    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
     "%(spaceName)s and %(count)s others|other": "%(spaceName)s og %(count)s andre",
     "Some invites couldn't be sent": "Nogle invitationer kunne ikke blive sendt",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Vi har sendt til de andre, men nedenstående mennesker kunne ikke blive inviteret til <RoomName/>",

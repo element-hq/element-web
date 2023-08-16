@@ -336,7 +336,7 @@
     "Failed to load timeline position": "No s'ha pogut carregar aquesta posició de la línia de temps",
     "Signed Out": "Sessió tancada",
     "Uploading %(filename)s and %(count)s others|other": "Pujant %(filename)s i %(count)s més",
-    "Uploading %(filename)s and %(count)s others|zero": "Pujant %(filename)s",
+    "Uploading %(filename)s": "Pujant %(filename)s",
     "Sign out": "Tanca la sessió",
     "Import E2E room keys": "Importar claus E2E de sala",
     "Cryptography": "Criptografia",

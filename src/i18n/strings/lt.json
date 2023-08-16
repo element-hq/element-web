@@ -202,7 +202,7 @@
     "Room": "Kambarys",
     "Failed to reject invite": "Nepavyko atmesti pakvietimo",
     "Uploading %(filename)s and %(count)s others|other": "Įkeliamas %(filename)s ir dar %(count)s failai",
-    "Uploading %(filename)s and %(count)s others|zero": "Įkeliamas %(filename)s",
+    "Uploading %(filename)s": "Įkeliamas %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Įkeliamas %(filename)s ir dar %(count)s failas",
     "Success": "Pavyko",
     "Unable to remove contact information": "Nepavyko pašalinti kontaktinės informacijos",

@@ -43,11 +43,17 @@ export function roomContextDetails(room: Room): RoomContextDetails | null {
             ariaLabel: _t("In spaces %(space1Name)s and %(space2Name)s.", { space1Name, space2Name }),
         };
     } else if (parent) {
-        const spaceName = room.client.getRoom(parent)?.name;
+        const spaceName = room.client.getRoom(parent)?.name ?? "";
         const count = otherParents.length;
+        if (count > 0) {
+            return {
+                details: _t("%(spaceName)s and %(count)s others", { spaceName, count }),
+                ariaLabel: _t("In %(spaceName)s and %(count)s other spaces.", { spaceName, count }),
+            };
+        }
         return {
-            details: _t("%(spaceName)s and %(count)s others", { spaceName, count }),
-            ariaLabel: _t("In %(spaceName)s and %(count)s other spaces.", { spaceName, count }),
+            details: spaceName,
+            ariaLabel: _t("In %(spaceName)s.", { spaceName }),
         };
     }
 

@@ -854,7 +854,7 @@
     "Welcome to %(appName)s": "Velkommen til %(appName)s",
     "Send a Direct Message": "Send en direktemelding",
     "Connectivity to the server has been lost.": "Tilkoblingen til tjeneren er nede.",
-    "Uploading %(filename)s and %(count)s others|zero": "Laster opp %(filename)s",
+    "Uploading %(filename)s": "Laster opp %(filename)s",
     "Could not load user profile": "Klarte ikke å laste inn brukerprofilen",
     "A new password must be entered.": "Et nytt passord må bli skrevet inn.",
     "New passwords must match each other.": "De nye passordene må samsvare med hverandre.",

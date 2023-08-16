@@ -333,7 +333,7 @@
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Покушао сам да учитам одређену тачку у временској линији ове собе али нисам могао да је нађем.",
     "Failed to load timeline position": "Нисам могао да учитам позицију у временској линији",
     "Uploading %(filename)s and %(count)s others|other": "Отпремам датотеку %(filename)s и још %(count)s других",
-    "Uploading %(filename)s and %(count)s others|zero": "Отпремам датотеку %(filename)s",
+    "Uploading %(filename)s": "Отпремам датотеку %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Отпремам датотеку %(filename)s и %(count)s других датотека",
     "Sign out": "Одјави ме",
     "Failed to change password. Is your password correct?": "Нисам успео да променим лозинку. Да ли је ваша лозинка тачна?",

@@ -247,7 +247,7 @@
     "No display name": "Sem nome público de usuária(o)",
     "Uploading %(filename)s and %(count)s others|one": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
     "You must <a>register</a> to use this functionality": "Você deve <a>se registrar</a> para poder usar esta funcionalidade",
-    "Uploading %(filename)s and %(count)s others|zero": "Enviando o arquivo %(filename)s",
+    "Uploading %(filename)s": "Enviando o arquivo %(filename)s",
     "Admin Tools": "Ferramentas de Administração",
     "%(roomName)s does not exist.": "%(roomName)s não existe.",
     "(~%(count)s results)|other": "(~%(count)s resultados)",

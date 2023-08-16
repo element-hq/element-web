@@ -272,7 +272,7 @@
     "%(roomName)s is not accessible at this time.": "%(roomName)s is not accessible at this time.",
     "Start authentication": "Start authentication",
     "Unnamed Room": "Unnamed Room",
-    "Uploading %(filename)s and %(count)s others|zero": "Uploading %(filename)s",
+    "Uploading %(filename)s": "Uploading %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Uploading %(filename)s and %(count)s other",
     "Uploading %(filename)s and %(count)s others|other": "Uploading %(filename)s and %(count)s others",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",

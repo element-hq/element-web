@@ -418,7 +418,7 @@
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Prøvde å lasta eit bestemt punkt i rommet sin historikk, men klarde ikkje å finna det.",
     "Failed to load timeline position": "Innlasting av punkt i historikken feila.",
     "Uploading %(filename)s and %(count)s others|other": "Lastar opp %(filename)s og %(count)s andre",
-    "Uploading %(filename)s and %(count)s others|zero": "Lastar opp %(filename)s",
+    "Uploading %(filename)s": "Lastar opp %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Lastar opp %(filename)s og %(count)s andre",
     "Success": "Suksess",
     "Unable to remove contact information": "Klarte ikkje å fjerna kontaktinfo",

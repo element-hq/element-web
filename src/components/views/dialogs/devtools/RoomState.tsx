@@ -95,6 +95,11 @@ const RoomStateHistory: React.FC<{
 const StateEventButton: React.FC<StateEventButtonProps> = ({ label, onClick }) => {
     const trimmed = label.trim();
 
+    let content = label;
+    if (!trimmed) {
+        content = label.length > 0 ? _t("<%(count)s spaces>", { count: label.length }) : _t("<empty string>");
+    }
+
     return (
         <button
             className={classNames("mx_DevTools_button", {
@@ -103,7 +108,7 @@ const StateEventButton: React.FC<StateEventButtonProps> = ({ label, onClick }) =
             })}
             onClick={onClick}
         >
-            {trimmed ? label : _t("<%(count)s spaces>", { count: label.length })}
+            {content}
         </button>
     );
 };

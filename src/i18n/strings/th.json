@@ -139,7 +139,7 @@
     "Unable to verify email address.": "ไม่สามารถยืนยันที่อยู่อีเมล",
     "Unban": "ปลดแบน",
     "Unable to enable Notifications": "ไม่สามารถเปิดใช้งานการแจ้งเตือน",
-    "Uploading %(filename)s and %(count)s others|zero": "กำลังอัปโหลด %(filename)s",
+    "Uploading %(filename)s": "กำลังอัปโหลด %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "กำลังอัปโหลด %(filename)s และอีก %(count)s ไฟล์",
     "Uploading %(filename)s and %(count)s others|other": "กำลังอัปโหลด %(filename)s และอีก %(count)s ไฟล์",
     "Upload Failed": "การอัปโหลดล้มเหลว",

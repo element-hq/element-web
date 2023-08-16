@@ -138,7 +138,7 @@
     "%(roomName)s is not accessible at this time.": "%(roomName)s šobrīd nav pieejama.",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s nosūtīja attēlu.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s nosūtīja uzaicinājumu %(targetDisplayName)s pievienoties istabai.",
-    "Uploading %(filename)s and %(count)s others|zero": "Tiek augšupielādēts %(filename)s",
+    "Uploading %(filename)s": "Tiek augšupielādēts %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Tiek augšupielādēts %(filename)s un %(count)s citi",
     "Uploading %(filename)s and %(count)s others|other": "Tiek augšupielādēts %(filename)s un %(count)s citi",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (tiesību līmenis %(powerLevelNumber)s)",

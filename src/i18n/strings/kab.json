@@ -1336,7 +1336,7 @@
     "Search failed": "Ur iddi ara unadi",
     "No more results": "Ulac ugar n yigmaḍ",
     "Uploading %(filename)s and %(count)s others|other": "Asali n %(filename)s d %(count)s wiyaḍ-nniḍen",
-    "Uploading %(filename)s and %(count)s others|zero": "Asali n %(filename)s",
+    "Uploading %(filename)s": "Asali n %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Asali n %(filename)s d %(count)s wayeḍ-nniḍen",
     "User menu": "Umuɣ n useqdac",
     "Could not load user profile": "Yegguma ad d-yali umaɣnu n useqdac",

@@ -334,7 +334,7 @@
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Беше направен опит да се зареди конкретна точка в хронологията на тази стая, но нямате разрешение да разгледате въпросното съобщение.",
     "Failed to load timeline position": "Неуспешно зареждане на позицията в хронологията",
     "Uploading %(filename)s and %(count)s others|other": "Качване на %(filename)s и %(count)s други",
-    "Uploading %(filename)s and %(count)s others|zero": "Качване на %(filename)s",
+    "Uploading %(filename)s": "Качване на %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Качване на %(filename)s и %(count)s друг",
     "Success": "Успешно",
     "<not supported>": "<не се поддържа>",

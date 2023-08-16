@@ -173,7 +173,7 @@
     "unknown error code": "bilinmeyen hata kodu",
     "Unmute": "Sesi aç",
     "Unnamed Room": "İsimsiz Oda",
-    "Uploading %(filename)s and %(count)s others|zero": "%(filename)s yükleniyor",
+    "Uploading %(filename)s": "%(filename)s yükleniyor",
     "Uploading %(filename)s and %(count)s others|one": "%(filename)s ve %(count)s kadarı yükleniyor",
     "Uploading %(filename)s and %(count)s others|other": "%(filename)s ve %(count)s kadarları yükleniyor",
     "Upload avatar": "Avatar yükle",
