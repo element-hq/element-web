@@ -1627,7 +1627,6 @@
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz":
   version "3.2.14"
-  uid acd96c00a881d0f462e1f97a56c73742c8dbc984
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz#acd96c00a881d0f462e1f97a56c73742c8dbc984"
 
 "@matrix-org/react-sdk-module-api@^1.0.0":
@@ -8483,9 +8482,8 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "27.1.0"
-  uid b8c19c47ab67f894704a58d3107b8581eb911512
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b8c19c47ab67f894704a58d3107b8581eb911512"
+  version "27.2.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/97cf73bc52814c2a479161caffffb85fe6ce63c8"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^1.2.0"
@@ -8510,9 +8508,8 @@ matrix-mock-request@^2.5.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.77.1"
-  uid "2b17fc3221b77147db52e47d44cc5015f53926e1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/2b17fc3221b77147db52e47d44cc5015f53926e1"
+  version "3.78.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/65b518dfe10d18d4b151caa9368cdfb8c2fbc929"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.6.0"
