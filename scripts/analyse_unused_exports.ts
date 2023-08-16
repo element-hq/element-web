@@ -1,13 +1,12 @@
 #!/usr/bin/env node
-"use strict";
 
-const fs = require("fs");
-const { exec } = require("node:child_process");
+import * as fs from "node:fs";
+import { exec } from "node:child_process";
 
 const includeJSSDK = process.argv.includes("--include-js-sdk");
 const ignore = [];
 
-ignore.push(...Object.values(JSON.parse(fs.readFileSync(`${__dirname}/../components.json`))));
+ignore.push(...Object.values(JSON.parse(fs.readFileSync(`${__dirname}/../components.json`, "utf-8"))));
 ignore.push("/index.ts");
 // We ignore js-sdk by default as it may export for other non element-web projects
 if (!includeJSSDK) ignore.push("matrix-js-sdk");
