@@ -7,7 +7,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { mkdirpSync } from "mkdirp";
 import fetch from "node-fetch";
-import ProxyAgent from "simple-proxy-agent";
+import { ProxyAgent } from "proxy-agent";
 
 console.log("Making webapp directory");
 mkdirpSync("webapp");
@@ -16,12 +16,9 @@ mkdirpSync("webapp");
 console.log("Downloading Jitsi script");
 const fname = path.join("webapp", "jitsi_external_api.min.js");
 
-const options: Parameters<typeof fetch>[1] = {};
-if (process.env.HTTPS_PROXY) {
-    options.agent = new ProxyAgent(process.env.HTTPS_PROXY, { tunnel: true });
-}
-
-fetch("https://meet.element.io/libs/external_api.min.js", options)
+fetch("https://meet.element.io/libs/external_api.min.js", {
+    agent: new ProxyAgent(),
+})
     .then((res) => {
         const stream = fs.createWriteStream(fname);
         return new Promise<void>((resolve, reject) => {

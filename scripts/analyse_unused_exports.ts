@@ -4,9 +4,9 @@ import * as fs from "node:fs";
 import { exec } from "node:child_process";
 
 const includeJSSDK = process.argv.includes("--include-js-sdk");
-const ignore = [];
+const ignore: string[] = [];
 
-ignore.push(...Object.values(JSON.parse(fs.readFileSync(`${__dirname}/../components.json`, "utf-8"))));
+ignore.push(...Object.values<string>(JSON.parse(fs.readFileSync(`${__dirname}/../components.json`, "utf-8"))));
 ignore.push("/index.ts");
 // We ignore js-sdk by default as it may export for other non element-web projects
 if (!includeJSSDK) ignore.push("matrix-js-sdk");
@@ -30,7 +30,7 @@ exec(command, (error, stdout, stderr) => {
     // won't have an "/" character at the start, so we try to fix that for
     // better UX
     // TODO: This might break on Windows
-    lines = lines.reduce((newLines, line) => {
+    lines = lines.reduce<string[]>((newLines, line) => {
         if (!line.startsWith("/")) newLines.push("/" + line);
         else newLines.push(line);
         return newLines;
