@@ -21,6 +21,7 @@ import Recorder from "opus-recorder/dist/recorder.min.js";
 import { VoiceRecording, voiceRecorderOptions, highQualityRecorderOptions } from "../../src/audio/VoiceRecording";
 import { createAudioContext } from "../..//src/audio/compat";
 import MediaDeviceHandler from "../../src/MediaDeviceHandler";
+import { useMockMediaDevices } from "../test-utils";
 
 jest.mock("opus-recorder/dist/recorder.min.js");
 const RecorderMock = mocked(Recorder);
@@ -56,6 +57,7 @@ describe("VoiceRecording", () => {
     };
 
     beforeEach(() => {
+        useMockMediaDevices();
         recording = new VoiceRecording();
         // @ts-ignore
         recording.observable = {

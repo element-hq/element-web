@@ -20,7 +20,13 @@ import { Widget } from "matrix-widget-api";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { ClientWidgetApi } from "matrix-widget-api";
-import { stubClient, setupAsyncStoreWithClient, useMockedCalls, MockedCall } from "../../../test-utils";
+import {
+    stubClient,
+    setupAsyncStoreWithClient,
+    useMockedCalls,
+    MockedCall,
+    useMockMediaDevices,
+} from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
@@ -37,6 +43,7 @@ describe("Algorithm", () => {
     let algorithm: Algorithm;
 
     beforeEach(() => {
+        useMockMediaDevices();
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
         DMRoomMap.makeShared(client);

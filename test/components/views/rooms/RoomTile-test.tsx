@@ -38,6 +38,7 @@ import {
     filterConsole,
     flushPromises,
     mkMessage,
+    useMockMediaDevices,
 } from "../../../test-utils";
 import { CallStore } from "../../../../src/stores/CallStore";
 import RoomTile from "../../../../src/components/views/rooms/RoomTile";
@@ -134,6 +135,7 @@ describe("RoomTile", () => {
     };
 
     beforeEach(() => {
+        useMockMediaDevices();
         sdkContext = new TestSdkContext();
 
         client = mocked(stubClient());

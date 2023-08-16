@@ -19,7 +19,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { screen } from "@testing-library/react";
 
 import { requestMediaPermissions } from "../../../src/utils/media/requestMediaPermissions";
-import { flushPromises } from "../../test-utils";
+import { flushPromises, useMockMediaDevices } from "../../test-utils";
 
 describe("requestMediaPermissions", () => {
     let error: Error;
@@ -34,6 +34,7 @@ describe("requestMediaPermissions", () => {
     };
 
     beforeEach(() => {
+        useMockMediaDevices();
         error = new Error();
         jest.spyOn(logger, "log");
     });

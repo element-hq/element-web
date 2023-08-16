@@ -91,11 +91,3 @@ window.fetch = fetchMock.sandbox();
 
 // @ts-ignore
 window.Response = Response;
-
-// set up mediaDevices mock
-Object.defineProperty(navigator, "mediaDevices", {
-    value: {
-        enumerateDevices: jest.fn().mockResolvedValue([]),
-        getUserMedia: jest.fn(),
-    },
-});
