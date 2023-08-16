@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { RoomEvent, Room } from "matrix-js-sdk/src/matrix";
+import { RoomEvent, Room, RoomStateEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 
 import TabbedView, { Tab } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -39,9 +39,11 @@ import { ActionPayload } from "../../../dispatcher/payloads";
 import { NonEmptyArray } from "../../../@types/common";
 import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 import ErrorBoundary from "../elements/ErrorBoundary";
+import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsTab";
 
 export const enum RoomSettingsTab {
     General = "ROOM_GENERAL_TAB",
+    People = "ROOM_PEOPLE_TAB",
     Voip = "ROOM_VOIP_TAB",
     Security = "ROOM_SECURITY_TAB",
     Roles = "ROOM_ROLES_TAB",
@@ -74,6 +76,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
     public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.safeGet().on(RoomEvent.Name, this.onRoomName);
+        MatrixClientPeg.safeGet().on(RoomStateEvent.Events, this.onStateEvent);
         this.onRoomName();
     }
 
@@ -90,6 +93,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
         }
 
         MatrixClientPeg.get()?.removeListener(RoomEvent.Name, this.onRoomName);
+        MatrixClientPeg.get()?.removeListener(RoomStateEvent.Events, this.onStateEvent);
     }
 
     /**
@@ -120,6 +124,10 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
         this.forceUpdate();
     };
 
+    private onStateEvent = (event: MatrixEvent): void => {
+        if (event.getType() === EventType.RoomJoinRules) this.forceUpdate();
+    };
+
     private getTabs(): NonEmptyArray<Tab<RoomSettingsTab>> {
         const tabs: Tab<RoomSettingsTab>[] = [];
 
@@ -132,6 +140,16 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
                 "RoomSettingsGeneral",
             ),
         );
+        if (SettingsStore.getValue("feature_ask_to_join") && this.state.room.getJoinRule() === "knock") {
+            tabs.push(
+                new Tab(
+                    RoomSettingsTab.People,
+                    _td("People"),
+                    "mx_RoomSettingsDialog_peopleIcon",
+                    <PeopleRoomSettingsTab room={this.state.room} />,
+                ),
+            );
+        }
         if (SettingsStore.getValue("feature_group_calls")) {
             tabs.push(
                 new Tab(

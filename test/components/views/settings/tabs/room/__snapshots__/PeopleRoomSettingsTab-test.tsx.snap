@@ -1,0 +1,161 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] = `
+<fieldset
+  class="mx_SettingsFieldset"
+>
+  <legend
+    class="mx_SettingsFieldset_legend"
+  >
+    Asking to join
+  </legend>
+  <div
+    class="mx_SettingsFieldset_content"
+  >
+    <div
+      class="mx_PeopleRoomSettingsTab_knock"
+    >
+      <img
+        alt=""
+        class="mx_BaseAvatar mx_BaseAvatar_image"
+        data-testid="avatar-img"
+        loading="lazy"
+        src="mxc://example.org/albert-einstein.png"
+        style="width: 42px; height: 42px;"
+        title="@albert.einstein:example.org"
+      />
+      <div
+        class="mx_PeopleRoomSettingsTab_content"
+      >
+        <span
+          class="mx_PeopleRoomSettingsTab_name"
+        >
+          Albert Einstein
+        </span>
+        <time
+          class="mx_PeopleRoomSettingsTab_timestamp"
+        >
+          Apr 18, 1955
+        </time>
+        <span
+          class="mx_PeopleRoomSettingsTab_userId"
+        >
+          @albert.einstein:example.org
+        </span>
+        <p
+          class="mx_PeopleRoomSettingsTab_seeMoreOrLess"
+        >
+          There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is a…
+        </p>
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+          role="button"
+          tabindex="0"
+        >
+          See more
+        </div>
+      </div>
+      <div
+        class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary_outline"
+        role="button"
+        tabindex="0"
+        title="Deny"
+      >
+        <div
+          height="18"
+          width="18"
+        />
+      </div>
+      <div
+        class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary"
+        role="button"
+        tabindex="0"
+        title="Approve"
+      >
+        <div
+          height="18"
+          width="18"
+        />
+      </div>
+    </div>
+  </div>
+</fieldset>
+`;
+
+exports[`PeopleRoomSettingsTab with requests to join renders requests reduced 1`] = `
+<fieldset
+  class="mx_SettingsFieldset"
+>
+  <legend
+    class="mx_SettingsFieldset_legend"
+  >
+    Asking to join
+  </legend>
+  <div
+    class="mx_SettingsFieldset_content"
+  >
+    <div
+      class="mx_PeopleRoomSettingsTab_knock"
+    >
+      <span
+        class="mx_BaseAvatar"
+        role="presentation"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar_initial"
+          style="font-size: 27.3px; width: 42px; line-height: 42px;"
+        >
+          A
+        </span>
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar_image"
+          data-testid="avatar-img"
+          loading="lazy"
+          src="data:image/png;base64,00"
+          style="width: 42px; height: 42px;"
+          title="@albert.einstein:example.org"
+        />
+      </span>
+      <div
+        class="mx_PeopleRoomSettingsTab_content"
+      >
+        <span
+          class="mx_PeopleRoomSettingsTab_name"
+        >
+          albert.einstein
+        </span>
+        <span
+          class="mx_PeopleRoomSettingsTab_userId"
+        >
+          @albert.einstein:example.org
+        </span>
+      </div>
+      <div
+        class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary_outline"
+        role="button"
+        tabindex="0"
+        title="Deny"
+      >
+        <div
+          height="18"
+          width="18"
+        />
+      </div>
+      <div
+        class="mx_AccessibleButton mx_PeopleRoomSettingsTab_action mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon_primary"
+        role="button"
+        tabindex="0"
+        title="Approve"
+      >
+        <div
+          height="18"
+          width="18"
+        />
+      </div>
+    </div>
+  </div>
+</fieldset>
+`;

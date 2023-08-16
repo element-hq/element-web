@@ -38,7 +38,9 @@ type AccessibleButtonKind =
     | "link_sm"
     | "confirm_sm"
     | "cancel_sm"
-    | "icon";
+    | "icon"
+    | "icon_primary"
+    | "icon_primary_outline";
 
 /**
  * This type construct allows us to specifically pass those props down to the element we’re creating that the element

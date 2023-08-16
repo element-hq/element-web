@@ -20,6 +20,8 @@ limitations under the License.
     &.mx_AccessibleButton_disabled {
         cursor: not-allowed;
 
+        &.mx_AccessibleButton_kind_icon_primary,
+        &.mx_AccessibleButton_kind_icon_primary_outline,
         &.mx_AccessibleButton_kind_primary,
         &.mx_AccessibleButton_kind_primary_outline,
         &.mx_AccessibleButton_kind_primary_sm,
@@ -80,29 +82,37 @@ limitations under the License.
             }
         }
 
-        &.mx_AccessibleButton_kind_icon {
+        &.mx_AccessibleButton_kind_icon,
+        &.mx_AccessibleButton_kind_icon_primary,
+        &.mx_AccessibleButton_kind_icon_primary_outline {
             padding: 0;
             height: 32px;
             width: 32px;
         }
     }
 
+    &.mx_AccessibleButton_kind_icon_primary,
+    &.mx_AccessibleButton_kind_icon_primary_outline,
     &.mx_AccessibleButton_kind_primary,
     &.mx_AccessibleButton_kind_primary_outline,
     &.mx_AccessibleButton_kind_secondary {
         font-weight: var(--cpd-font-weight-semibold);
     }
 
+    &.mx_AccessibleButton_kind_icon_primary,
+    &.mx_AccessibleButton_kind_icon_primary_outline,
     &.mx_AccessibleButton_kind_primary,
     &.mx_AccessibleButton_kind_primary_outline {
         border: 1px solid $accent;
     }
 
+    &.mx_AccessibleButton_kind_icon_primary,
     &.mx_AccessibleButton_kind_primary {
         color: $button-primary-fg-color;
         background-color: $accent;
     }
 
+    &.mx_AccessibleButton_kind_icon_primary_outline,
     &.mx_AccessibleButton_kind_primary_outline {
         color: $accent;
     }
