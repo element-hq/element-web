@@ -2447,7 +2447,6 @@
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "אם ברצונכם לשמור על גישה להיסטוריית הצ'אט שלכם בחדרים מוצפנים, הגדירו גיבוי מפתחות או ייצאו את מפתחות ההודעות שלכם מאחד מהמכשירים האחרים שלכם לפני שתמשיך.",
     "Select from the options below to export chats from your timeline": "ביחרו מבין האפשרויות למטה כדי לייצא צ'אטים מציר הזמן שלכם",
     "Export Chat": "ייצוא צ'אט",
-    "If you want to retain access to your chat history in encrypted rooms you should first export your room keys and re-import them afterwards.": "אם אתם רוצים לשמור על גישה להיסטוריית הצ'אט שלכם בחדרים מוצפנים, עליכם לייצא תחילה את מפתחות החדר שלכם ולייבא אותם מחדש לאחר מכן.",
     "Export chat": "ייצוא צ'אט",
     "Joining the beta will reload %(brand)s.": "הצטרפות לפיתוח תטען מחדש את %(brand)s.",
     "Leaving the beta will reload %(brand)s.": "עזיבת הניסוי תטען מחדש את %(brand)s.",

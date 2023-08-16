@@ -3105,14 +3105,9 @@
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Sa oled kõikidest seadmetest välja logitud ning enam ei saa tõuketeavitusi. Nende taaskuvamiseks logi sisse igas oma soovitud seadmetes.",
     "Seen by %(count)s people|one": "Seda nägi %(count)s lugeja",
     "Seen by %(count)s people|other": "Seda nägid %(count)s lugejat",
-    "You will not receive push notifications on other devices until you sign back in to them.": "Sa ei saa teistes seadetes tõuketeavitusi enne, kui sa seal uuesti sisse logid.",
     "Your password was successfully changed.": "Sinu salasõna muutmine õnnestus.",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "Kui sa soovid ligipääsu varasematele krüptitud vestlustele, palun seadista võtmete varundus või enne jätkamist ekspordi mõnest seadmest krüptovõtmed.",
     "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "Kõikide sinu seadmete võrgust välja logimine kustutab ka nendes salvestatud krüptovõtmed ja sellega muutuvad ka krüptitud vestlused loetamatuteks.",
-    "Resetting your password on this homeserver will cause all of your devices to be signed out. This will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "Selles koduserveris sinu kasutajakonto salasõna lähtestamine põhjustab kõikide sinu muude seadmete automaatse väljalogimise. Samaga kustutatakse ka krüptitud sõnumite võtmed ning varasemad krüptitud sõnumid muutuvad loetamatuteks.",
-    "You can also ask your homeserver admin to upgrade the server to change this behaviour.": "Sa võid ka paluda, et sinu koduserveri haldaja uuendaks serveritarkvara ja väldiks kirjeldatud olukorra tekkimist.",
-    "If you want to retain access to your chat history in encrypted rooms you should first export your room keys and re-import them afterwards.": "Kui sa soovid, et krüptitud vestluste sõnumid oleks ka hiljem loetavad, siis esmalt ekspordi kõik krüptovõtmed ning hiljem impordi nad tagasi.",
-    "Changing your password on this homeserver will cause all of your other devices to be signed out. This will delete the message encryption keys stored on them, and may make encrypted chat history unreadable.": "Selles koduserveris oma kasutajakonto salasõna muutmine põhjustab kõikide sinu muude seadmete automaatse väljalogimise. Samaga kustutatakse ka krüptitud sõnumite võtmed ning varasemad krüptitud sõnumid muutuvad loetamatuteks.",
     "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "Palun arvesta järgnevaga: see katseline funktsionaalsus kasutab ajutist lahendust. See tähendab, et sa ei saa oma asukoha jagamise ajalugu kustutada ning heade arvutioskustega kasutajad saavad näha sinu asukohta ka siis, kui sa oled oma asukoha jagamise selles jututoas lõpetanud.",
     "An error occurred while stopping your live location": "Sinu asukoha reaalajas jagamise lõpetamisel tekkis viga",
     "Enable live location sharing": "Luba asukohta jagada reaalajas",
@@ -3781,5 +3776,11 @@
     "Request access": "Küsi ligipääsu",
     "Cancel request": "Tühista liitumissoov",
     "Your request to join is pending.": "Sinu liitumissoov on ootel.",
-    "Request to join sent": "Ligipääsu päring on saadetud"
+    "Request to join sent": "Ligipääsu päring on saadetud",
+    "%(severalUsers)schanged their profile picture %(count)s times|one": "%(severalUsers)s kasutajat muutsid oma profiilipilti",
+    "%(oneUser)schanged their profile picture %(count)s times|one": "%(oneUser)s muutis oma profiilipilti",
+    "Failed to query public rooms": "Avalike jututubade tuvastamise päring ei õnnestunud",
+    "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.": "See server kasutab Matrixi vanemat versiooni. Selleks, et %(brand)s'i kasutamisel vigu ei tekiks palun uuenda serverit nii, et kasutusel oleks Matrixi %(version)s.",
+    "Your server is unsupported": "Sinu server ei ole toetatud",
+    "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.": "Sinu koduserver on liiga vana ega toeta vähimat nõutavat API versiooni. Lisateavet saad oma serveri haldajalt või kui ise oled haldaja, siis palun uuenda serverit."
 }

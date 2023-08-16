@@ -3105,14 +3105,9 @@
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "您已登出所有裝置，並將不再收到推送通知。要重新啟用通知，請在每台裝置上重新登入。",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "若您想在加密聊天室中保留對聊天紀錄的存取權限，請設定金鑰備份或從您的其他裝置之一匯出您的訊息金鑰，然後再繼續。",
     "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "登出您的裝置將會刪除儲存在其上的訊息加密金鑰，讓加密的聊天紀錄變為無法讀取。",
-    "Resetting your password on this homeserver will cause all of your devices to be signed out. This will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "在此家伺服器上重設您的密碼將會導致登出您所有的裝置。這將會刪除儲存在其上的訊息加密金鑰，讓加密的聊天紀錄變為無法讀取。",
     "Seen by %(count)s people|one": "已被 %(count)s 個人看過",
     "Seen by %(count)s people|other": "已被 %(count)s 個人看過",
-    "You will not receive push notifications on other devices until you sign back in to them.": "在您重新登入前，您不會在其他裝置上收到推送通知。",
     "Your password was successfully changed.": "您的密碼已成功變更。",
-    "You can also ask your homeserver admin to upgrade the server to change this behaviour.": "您也可以請家伺服器管理員升級伺服器，來變更此行為。",
-    "If you want to retain access to your chat history in encrypted rooms you should first export your room keys and re-import them afterwards.": "若您想保留對加密聊天室中聊天紀錄的存取權限，您應該先匯出您的聊天室金鑰，然後再重新匯入它們。",
-    "Changing your password on this homeserver will cause all of your other devices to be signed out. This will delete the message encryption keys stored on them, and may make encrypted chat history unreadable.": "變更此家伺服器上的密碼將導致您的所有其他裝置登出。這將會刪除儲存在其中的訊息加密金鑰，並可能使加密的聊天紀錄無法讀取。",
     "An error occurred while stopping your live location": "停止您的即時位置時發生錯誤",
     "Enable live location sharing": "啟用即時位置分享",
     "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "請注意：這是暫時開發的實驗性功能。您無法刪除位置紀錄，而且即使您停止與此聊天室分享即時位置，進階使用者仍能看見您的定位紀錄。",
@@ -3783,5 +3778,9 @@
     "Request access": "請求存取權",
     "Request to join sent": "已傳送加入請求",
     "Your request to join is pending.": "您的加入請求正在等待處理。",
-    "Cancel request": "取消請求"
+    "Cancel request": "取消請求",
+    "Failed to query public rooms": "檢索公開聊天室失敗",
+    "Your server is unsupported": "您的伺服器不支援",
+    "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.": "此伺服器正在使用較舊版本的 Matrix。升級至 Matrix %(version)s 以在沒有錯誤的情況下使用 %(brand)s。",
+    "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.": "您的家伺服器太舊了，不支援所需的最低 API 版本。請聯絡您的伺服器擁有者，或是升級您的伺服器。"
 }

@@ -989,7 +989,6 @@
     "Click the button below to confirm signing out these devices.|one": "Trykk på knappen under for å stadfesta utlogging frå denne eininga.",
     "Confirm signing out these devices|one": "Stadfest utlogging frå denne eininga",
     "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Stadfest utlogging av denne eininga ved å nytta Single-sign-on for å bevise identiteten din.",
-    "Changing your password on this homeserver will cause all of your other devices to be signed out. This will delete the message encryption keys stored on them, and may make encrypted chat history unreadable.": "Ved å endra passord på denne heimetenaren vil du bli logga ut frå alle andre einingar. Krypteringsnøklane som er lagra der vil bli sletta, og samtale-historikken din kan bli uleseleg.",
     "Verify this device by confirming the following number appears on its screen.": "Verifiser denne eininga ved å stadfeste det følgjande talet når det kjem til syne på skjermen.",
     "Quick settings": "Hurtigval",
     "More options": "Fleire val",
