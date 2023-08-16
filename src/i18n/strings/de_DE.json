@@ -133,8 +133,10 @@
     "Connectivity to the server has been lost.": "Verbindung zum Server wurde unterbrochen.",
     "Sent messages will be stored until your connection has returned.": "Nachrichten werden gespeichert und gesendet, wenn die Internetverbindung wiederhergestellt ist.",
     "Failed to forget room %(errCode)s": "Das Entfernen des Raums ist fehlgeschlagen %(errCode)s",
-    "and %(count)s others...|other": "und %(count)s weitere …",
-    "and %(count)s others...|one": "und ein weiterer …",
+    "and %(count)s others...": {
+        "other": "und %(count)s weitere …",
+        "one": "und ein weiterer …"
+    },
     "Are you sure?": "Bist du sicher?",
     "Attachment": "Anhang",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Es kann keine Verbindung zum Heim-Server via HTTP aufgebaut werden, wenn die Adresszeile des Browsers eine HTTPS-URL enthält. Entweder HTTPS verwenden oder alternativ <a>unsichere Skripte erlauben</a>.",
@@ -246,8 +248,10 @@
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s hat das Raumbild von %(roomName)s geändert",
     "Add": "Hinzufügen",
     "Uploading %(filename)s": "%(filename)s wird hochgeladen",
-    "Uploading %(filename)s and %(count)s others|one": "%(filename)s und %(count)s weitere Dateien werden hochgeladen",
-    "Uploading %(filename)s and %(count)s others|other": "%(filename)s und %(count)s weitere Dateien werden hochgeladen",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "%(filename)s und %(count)s weitere Dateien werden hochgeladen",
+        "other": "%(filename)s und %(count)s weitere Dateien werden hochgeladen"
+    },
     "You must <a>register</a> to use this functionality": "Du musst dich <a>registrieren</a>, um diese Funktionalität nutzen zu können",
     "Create new room": "Neuer Raum",
     "Start chat": "Unterhaltung beginnen",
@@ -265,8 +269,10 @@
     "Start authentication": "Authentifizierung beginnen",
     "Unnamed Room": "Unbenannter Raum",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (Berechtigungslevel %(powerLevelNumber)s)",
-    "(~%(count)s results)|one": "(~%(count)s Ergebnis)",
-    "(~%(count)s results)|other": "(~%(count)s Ergebnisse)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s Ergebnis)",
+        "other": "(~%(count)s Ergebnisse)"
+    },
     "Your browser does not support the required cryptography extensions": "Dein Browser unterstützt die benötigten Verschlüsselungserweiterungen nicht",
     "Not a valid %(brand)s keyfile": "Keine gültige %(brand)s-Schlüsseldatei",
     "Authentication check failed: incorrect password?": "Authentifizierung fehlgeschlagen: Falsches Passwort?",
@@ -306,59 +312,103 @@
     "Jump to read receipt": "Zur Lesebestätigung springen",
     "Message Pinning": "Nachrichten anheften",
     "Unnamed room": "Unbenannter Raum",
-    "And %(count)s more...|other": "Und %(count)s weitere …",
+    "And %(count)s more...": {
+        "other": "Und %(count)s weitere …"
+    },
     "Delete Widget": "Widget löschen",
     "Mention": "Erwähnen",
     "Invite": "Einladen",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Das Löschen des Widgets entfernt es für alle in diesem Raum. Wirklich löschen?",
     "Mirror local video feed": "Lokalen Video-Feed spiegeln",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)shaben den Raum %(count)s-mal betreten",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)shaben den Raum betreten",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)shat den Raum %(count)s-mal betreten",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)shat den Raum betreten",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)shaben den Raum %(count)s-mal verlassen",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)shaben den Raum verlassen",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)shat den Raum %(count)s-mal verlassen",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)shat den Raum verlassen",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)shaben %(count)s-mal den Raum betreten und verlassen",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)shaben den Raum betreten und wieder verlassen",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)shat den Raum %(count)s-mal betreten und wieder verlassen",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)shat den Raum betreten und wieder verlassen",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)shaben den Raum %(count)s-mal verlassen und wieder betreten",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)shaben den Raum verlassen und wieder betreten",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)shat den Raum %(count)s-mal verlassen und wieder betreten",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)shat den Raum verlassen und wieder betreten",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)shaben ihre Einladungen abgelehnt",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)swurde die Einladung %(count)s-mal wieder entzogen",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)swurde die Einladung wieder entzogen",
-    "were invited %(count)s times|other": "wurden %(count)s-mal eingeladen",
-    "were invited %(count)s times|one": "wurden eingeladen",
-    "was invited %(count)s times|other": "wurde %(count)s-mal eingeladen",
-    "was invited %(count)s times|one": "wurde eingeladen",
-    "were banned %(count)s times|other": "wurden %(count)s-mal verbannt",
-    "were banned %(count)s times|one": "wurden verbannt",
-    "was banned %(count)s times|other": "wurde %(count)s-mal verbannt",
-    "was banned %(count)s times|one": "wurde verbannt",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s haben %(count)s-mal ihren Namen geändert",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)shaben ihren Namen geändert",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)shat %(count)s-mal den Namen geändert",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)shaben den Raum %(count)s-mal betreten",
+        "one": "%(severalUsers)shaben den Raum betreten"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)shat den Raum %(count)s-mal betreten",
+        "one": "%(oneUser)shat den Raum betreten"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)shaben den Raum %(count)s-mal verlassen",
+        "one": "%(severalUsers)shaben den Raum verlassen"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)shat den Raum %(count)s-mal verlassen",
+        "one": "%(oneUser)shat den Raum verlassen"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)shaben %(count)s-mal den Raum betreten und verlassen",
+        "one": "%(severalUsers)shaben den Raum betreten und wieder verlassen"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)shat den Raum %(count)s-mal betreten und wieder verlassen",
+        "one": "%(oneUser)shat den Raum betreten und wieder verlassen"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)shaben den Raum %(count)s-mal verlassen und wieder betreten",
+        "one": "%(severalUsers)shaben den Raum verlassen und wieder betreten"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)shat den Raum %(count)s-mal verlassen und wieder betreten",
+        "one": "%(oneUser)shat den Raum verlassen und wieder betreten"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "one": "%(severalUsers)shaben ihre Einladungen abgelehnt",
+        "other": "%(severalUsers)shaben ihre Einladungen %(count)s-mal abgelehnt"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)swurde die Einladung %(count)s-mal wieder entzogen",
+        "one": "%(severalUsers)swurde die Einladung wieder entzogen"
+    },
+    "were invited %(count)s times": {
+        "other": "wurden %(count)s-mal eingeladen",
+        "one": "wurden eingeladen"
+    },
+    "was invited %(count)s times": {
+        "other": "wurde %(count)s-mal eingeladen",
+        "one": "wurde eingeladen"
+    },
+    "were banned %(count)s times": {
+        "other": "wurden %(count)s-mal verbannt",
+        "one": "wurden verbannt"
+    },
+    "was banned %(count)s times": {
+        "other": "wurde %(count)s-mal verbannt",
+        "one": "wurde verbannt"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)s haben %(count)s-mal ihren Namen geändert",
+        "one": "%(severalUsers)shaben ihren Namen geändert"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)shat %(count)s-mal den Namen geändert",
+        "one": "%(oneUser)shat den Namen geändert"
+    },
     "Members only (since the point in time of selecting this option)": "Mitglieder",
     "Members only (since they were invited)": "Mitglieder (ab Einladung)",
     "Members only (since they joined)": "Mitglieder (ab Betreten)",
     "A text message has been sent to %(msisdn)s": "Eine Textnachricht wurde an %(msisdn)s gesendet",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)shaben ihre Einladungen %(count)s-mal abgelehnt",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)shat die Einladung %(count)s-mal abgelehnt",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)shat die Einladung abgelehnt",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)swurde die Einladung %(count)s-mal wieder entzogen",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)swurde die Einladung wieder entzogen",
-    "were unbanned %(count)s times|other": "wurden %(count)s-mal entbannt",
-    "were unbanned %(count)s times|one": "wurden entbannt",
-    "was unbanned %(count)s times|other": "wurde %(count)s-mal entbannt",
-    "was unbanned %(count)s times|one": "wurde entbannt",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)shat den Namen geändert",
-    "%(items)s and %(count)s others|other": "%(items)s und %(count)s andere",
-    "%(items)s and %(count)s others|one": "%(items)s und ein weiteres Raummitglied",
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)shat die Einladung %(count)s-mal abgelehnt",
+        "one": "%(oneUser)shat die Einladung abgelehnt"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)swurde die Einladung %(count)s-mal wieder entzogen",
+        "one": "%(oneUser)swurde die Einladung wieder entzogen"
+    },
+    "were unbanned %(count)s times": {
+        "other": "wurden %(count)s-mal entbannt",
+        "one": "wurden entbannt"
+    },
+    "was unbanned %(count)s times": {
+        "other": "wurde %(count)s-mal entbannt",
+        "one": "wurde entbannt"
+    },
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s und %(count)s andere",
+        "one": "%(items)s und ein weiteres Raummitglied"
+    },
     "Notify the whole room": "Alle im Raum benachrichtigen",
     "Room Notification": "Raum-Benachrichtigung",
     "Enable inline URL previews by default": "URL-Vorschau standardmäßig aktivieren",
@@ -590,8 +640,10 @@
     "Sets the room name": "Setze einen Raumnamen",
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s hat diesen Raum aktualisiert.",
     "%(displayName)s is typing …": "%(displayName)s tippt …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s und %(count)s andere tippen …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s und eine weitere Person tippen …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s und %(count)s andere tippen …",
+        "one": "%(names)s und eine weitere Person tippen …"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s und %(lastPerson)s tippen …",
     "Render simple counters in room header": "Einfache Zähler in Raumkopfzeile anzeigen",
     "Enable Emoji suggestions while typing": "Emoji-Vorschläge während Eingabe",
@@ -950,7 +1002,10 @@
     "Go": "Los",
     "Command Help": "Befehl Hilfe",
     "To help us prevent this in future, please <a>send us logs</a>.": "Um uns zu helfen, dies in Zukunft zu vermeiden, <a>sende uns bitte die Protokolldateien</a>.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Du hast %(count)s ungelesene Benachrichtigungen in einer früheren Version dieses Raumes.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "one": "Du hast %(count)s ungelesene Benachrichtigungen in einer früheren Version dieses Raumes.",
+        "other": "Du hast %(count)s ungelesene Benachrichtigungen in einer früheren Version dieses Raums."
+    },
     "Go Back": "Zurück",
     "Notification Autocomplete": "Benachrichtigung Autovervollständigen",
     "If disabled, messages from encrypted rooms won't appear in search results.": "Wenn deaktiviert, werden Nachrichten von verschlüsselten Räumen nicht in den Ergebnissen auftauchen.",
@@ -959,9 +1014,15 @@
     "Room %(name)s": "Raum %(name)s",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Die Aktualisierung dieses Raums deaktiviert die aktuelle Instanz des Raums und erstellt einen aktualisierten Raum mit demselben Namen.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) hat sich zu einer neuen Sitzung angemeldet, ohne sie zu verifizieren:",
-    "%(count)s verified sessions|other": "%(count)s verifizierte Sitzungen",
+    "%(count)s verified sessions": {
+        "other": "%(count)s verifizierte Sitzungen",
+        "one": "Eine verifizierte Sitzung"
+    },
     "Hide verified sessions": "Verifizierte Sitzungen ausblenden",
-    "%(count)s sessions|other": "%(count)s Sitzungen",
+    "%(count)s sessions": {
+        "other": "%(count)s Sitzungen",
+        "one": "%(count)s Sitzung"
+    },
     "Hide sessions": "Sitzungen ausblenden",
     "Encryption enabled": "Verschlüsselung aktiviert",
     "Encryption not enabled": "Verschlüsselung nicht aktiviert",
@@ -996,8 +1057,6 @@
     "Done": "Fertig",
     "Trusted": "Vertrauenswürdig",
     "Not trusted": "Nicht vertrauenswürdig",
-    "%(count)s verified sessions|one": "Eine verifizierte Sitzung",
-    "%(count)s sessions|one": "%(count)s Sitzung",
     "Messages in this room are not end-to-end encrypted.": "Nachrichten in diesem Raum sind nicht Ende-zu-Ende verschlüsselt.",
     "Security": "Sicherheit",
     "Ask %(displayName)s to scan your code:": "Bitte %(displayName)s, deinen Code zu scannen:",
@@ -1025,17 +1084,23 @@
     "Remove %(email)s?": "%(email)s entfernen?",
     "Remove %(phone)s?": "%(phone)s entfernen?",
     "Remove recent messages by %(user)s": "Kürzlich gesendete Nachrichten von %(user)s entfernen",
-    "Remove %(count)s messages|other": "%(count)s Nachrichten entfernen",
-    "Remove %(count)s messages|one": "Eine Nachricht entfernen",
+    "Remove %(count)s messages": {
+        "other": "%(count)s Nachrichten entfernen",
+        "one": "Eine Nachricht entfernen"
+    },
     "Remove recent messages": "Kürzlich gesendete Nachrichten entfernen",
     "You're previewing %(roomName)s. Want to join it?": "Du erkundest den Raum %(roomName)s. Willst du ihn betreten?",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum hinzugefügt.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "one": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum hinzugefügt.",
+        "other": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum hinzugefügt."
+    },
     "%(senderName)s changed the addresses for this room.": "%(senderName)s hat die Adresse für diesen Raum geändert.",
     "Displays information about a user": "Zeigt Informationen über Benutzer",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s hat den Raumnamen von %(oldRoomName)s zu %(newRoomName)s geändert.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum hinzugefügt.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s hat die alternativen Adressen %(addresses)s für diesen Raum entfernt.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum entfernt.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s hat die alternativen Adressen %(addresses)s für diesen Raum entfernt.",
+        "one": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum entfernt."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s hat die alternative Adresse für diesen Raum geändert.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s hat die Haupt- und Alternativadressen für diesen Raum geändert.",
     "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s entfernte die Ausschlussregel für Benutzer, die %(glob)s entsprechen",
@@ -1217,10 +1282,14 @@
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Verknüpfe einen Identitäts-Server in den Einstellungen, um die Einladungen direkt in %(brand)s zu erhalten.",
     "Share this email in Settings to receive invites directly in %(brand)s.": "Teile diese E-Mail-Adresse in den Einstellungen, um Einladungen direkt in %(brand)s zu erhalten.",
     "%(roomName)s can't be previewed. Do you want to join it?": "Vorschau von %(roomName)s kann nicht angezeigt werden. Möchtest du den Raum betreten?",
-    "%(count)s unread messages including mentions.|other": "%(count)s ungelesene Nachrichten einschließlich Erwähnungen.",
-    "%(count)s unread messages including mentions.|one": "1 ungelesene Erwähnung.",
-    "%(count)s unread messages.|other": "%(count)s ungelesene Nachrichten.",
-    "%(count)s unread messages.|one": "1 ungelesene Nachricht.",
+    "%(count)s unread messages including mentions.": {
+        "other": "%(count)s ungelesene Nachrichten einschließlich Erwähnungen.",
+        "one": "1 ungelesene Erwähnung."
+    },
+    "%(count)s unread messages.": {
+        "other": "%(count)s ungelesene Nachrichten.",
+        "one": "1 ungelesene Nachricht."
+    },
     "Unread messages.": "Ungelesene Nachrichten.",
     "This room has already been upgraded.": "Dieser Raum wurde bereits aktualisiert.",
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Dieser Raum läuft mit der Raumversion <roomVersion />, welche dieser Heim-Server als <i>instabil</i> markiert hat.",
@@ -1298,9 +1367,14 @@
     "Rotate Left": "Nach links drehen",
     "Rotate Right": "Nach rechts drehen",
     "Language Dropdown": "Sprachauswahl",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)shaben keine Änderung vorgenommen",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)shat %(count)s mal keine Änderung vorgenommen",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)shat keine Änderung vorgenommen",
+    "%(severalUsers)smade no changes %(count)s times": {
+        "one": "%(severalUsers)shaben keine Änderung vorgenommen",
+        "other": "%(severalUsers)s haben %(count)s mal nichts geändert"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)shat %(count)s mal keine Änderung vorgenommen",
+        "one": "%(oneUser)shat keine Änderung vorgenommen"
+    },
     "Some characters not allowed": "Einige Zeichen sind nicht erlaubt",
     "Enter a server name": "Gib einen Server-Namen ein",
     "Looks good": "Das sieht gut aus",
@@ -1359,8 +1433,10 @@
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Die Datei ist <b>zu groß</b>, um hochgeladen zu werden. Die maximale Dateigröße ist %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Einige Dateien sind <b>zu groß</b>, um hochgeladen zu werden. Die maximale Dateigröße ist %(limit)s.",
     "Verification Request": "Verifizierungsanfrage",
-    "Upload %(count)s other files|other": "%(count)s andere Dateien hochladen",
-    "Upload %(count)s other files|one": "%(count)s andere Datei hochladen",
+    "Upload %(count)s other files": {
+        "other": "%(count)s andere Dateien hochladen",
+        "one": "%(count)s andere Datei hochladen"
+    },
     "Remember my selection for this widget": "Speichere meine Auswahl für dieses Widget",
     "Restoring keys from backup": "Schlüssel aus der Sicherung wiederherstellen",
     "%(completed)s of %(total)s keys restored": "%(completed)s von %(total)s Schlüsseln wiederhergestellt",
@@ -1380,7 +1456,6 @@
     "Use lowercase letters, numbers, dashes and underscores only": "Verwende nur Kleinbuchstaben, Zahlen, Bindestriche und Unterstriche",
     "Jump to first unread room.": "Zum ersten ungelesenen Raum springen.",
     "Jump to first invite.": "Zur ersten Einladung springen.",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Du hast %(count)s ungelesene Benachrichtigungen in einer früheren Version dieses Raums.",
     "Failed to get autodiscovery configuration from server": "Abrufen der Autodiscovery-Konfiguration vom Server fehlgeschlagen",
     "Invalid base_url for m.homeserver": "Ungültige base_url für m.homeserver",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "Die Heim-Server-URL scheint kein gültiger Matrix-Heim-Server zu sein",
@@ -1400,7 +1475,6 @@
     "Click the link in the email you received to verify and then click continue again.": "Klicke auf den Link in der Bestätigungs-E-Mail, und dann auf Weiter.",
     "Unable to revoke sharing for phone number": "Widerrufen der geteilten Telefonnummer nicht möglich",
     "Unable to share phone number": "Teilen der Telefonnummer nicht möglich",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s haben %(count)s mal nichts geändert",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Das Löschen von Quersignierungsschlüsseln ist dauerhaft. Alle, mit dem du dich verifiziert hast, werden Sicherheitswarnungen angezeigt bekommen. Du möchtest dies mit ziemlicher Sicherheit nicht tun, es sei denn, du hast jedes Gerät verloren, von dem aus du quersignieren kannst.",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Das Löschen aller Daten aus dieser Sitzung ist dauerhaft. Verschlüsselte Nachrichten gehen verloren, sofern deine Schlüssel nicht gesichert wurden.",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Wenn du diesen Benutzer verifizierst werden seine Sitzungen für dich und deine Sitzungen für ihn als vertrauenswürdig markiert.",
@@ -1515,8 +1589,10 @@
     "Sort by": "Sortieren nach",
     "Message preview": "Nachrichtenvorschau",
     "List options": "Optionen anzeigen",
-    "Show %(count)s more|other": "%(count)s weitere anzeigen",
-    "Show %(count)s more|one": "%(count)s weitere anzeigen",
+    "Show %(count)s more": {
+        "other": "%(count)s weitere anzeigen",
+        "one": "%(count)s weitere anzeigen"
+    },
     "Room options": "Raumoptionen",
     "Activity": "Aktivität",
     "A-Z": "A–Z",
@@ -1645,7 +1721,9 @@
     "Move right": "Nach rechts schieben",
     "Move left": "Nach links schieben",
     "Revoke permissions": "Berechtigungen widerrufen",
-    "You can only pin up to %(count)s widgets|other": "Du kannst nur %(count)s Widgets anheften",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Du kannst nur %(count)s Widgets anheften"
+    },
     "Show Widgets": "Widgets anzeigen",
     "Hide Widgets": "Widgets verstecken",
     "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Alle Server sind von der Teilnahme ausgeschlossen! Dieser Raum kann nicht mehr genutzt werden.",
@@ -1725,8 +1803,10 @@
     "%(senderName)s ended the call": "%(senderName)s hat den Anruf beendet",
     "Use Command + Enter to send a message": "Benutze Betriebssystemtaste + Eingabe um eine Nachricht zu senden",
     "Use Ctrl + Enter to send a message": "Nutze Strg + Enter, um Nachrichten zu senden",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Verschlüsselte Nachrichten sicher lokal zwischenspeichern, um sie in Suchergebnissen finden zu können. Es werden %(size)s benötigt, um die Nachrichten von %(rooms)s Räumen zu speichern.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Verschlüsselte Nachrichten sicher lokal zwischenspeichern, um sie in Suchergebnissen finden zu können. Es werden %(size)s benötigt, um die Nachrichten vom Raum %(rooms)s zu speichern.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "other": "Verschlüsselte Nachrichten sicher lokal zwischenspeichern, um sie in Suchergebnissen finden zu können. Es werden %(size)s benötigt, um die Nachrichten von %(rooms)s Räumen zu speichern.",
+        "one": "Verschlüsselte Nachrichten sicher lokal zwischenspeichern, um sie in Suchergebnissen finden zu können. Es werden %(size)s benötigt, um die Nachrichten vom Raum %(rooms)s zu speichern."
+    },
     "Only the two of you are in this conversation, unless either of you invites anyone to join.": "Nur ihr beide nehmt an dieser Konversation teil, es sei denn, ihr ladet jemanden ein.",
     "This is the beginning of your direct message history with <displayName/>.": "Dies ist der Beginn deiner Direktnachrichten mit <displayName/>.",
     "Topic: %(topic)s (<a>edit</a>)": "Thema: %(topic)s (<a>ändern</a>)",
@@ -2124,7 +2204,10 @@
     "Values at explicit levels": "Werte für explizite Stufen",
     "Settable at room": "Für den Raum einstellbar",
     "Room name": "Raumname",
-    "%(count)s members|other": "%(count)s Mitglieder",
+    "%(count)s members": {
+        "other": "%(count)s Mitglieder",
+        "one": "%(count)s Mitglied"
+    },
     "Save Changes": "Speichern",
     "Create a new room": "Neuen Raum erstellen",
     "Suggested Rooms": "Vorgeschlagene Räume",
@@ -2162,9 +2245,10 @@
     "No results found": "Keine Ergebnisse",
     "Failed to remove some rooms. Try again later": "Einige Räume konnten nicht entfernt werden. Versuche es bitte später nocheinmal",
     "Suggested": "Vorgeschlagen",
-    "%(count)s rooms|one": "%(count)s Raum",
-    "%(count)s rooms|other": "%(count)s Räume",
-    "%(count)s members|one": "%(count)s Mitglied",
+    "%(count)s rooms": {
+        "one": "%(count)s Raum",
+        "other": "%(count)s Räume"
+    },
     "Are you sure you want to leave the space '%(spaceName)s'?": "Bist du sicher, dass du den Space „%(spaceName)s“ verlassen möchtest?",
     "Start audio stream": "Audiostream starten",
     "Failed to start livestream": "Livestream konnte nicht gestartet werden",
@@ -2204,8 +2288,10 @@
     "We couldn't create your DM.": "Wir konnten deine Direktnachricht nicht erstellen.",
     "Add existing rooms": "Bestehende Räume hinzufügen",
     "Space selection": "Space-Auswahl",
-    "%(count)s people you know have already joined|one": "%(count)s Person, die du kennst, ist schon beigetreten",
-    "%(count)s people you know have already joined|other": "%(count)s Leute, die du kennst, sind bereits beigetreten",
+    "%(count)s people you know have already joined": {
+        "one": "%(count)s Person, die du kennst, ist schon beigetreten",
+        "other": "%(count)s Leute, die du kennst, sind bereits beigetreten"
+    },
     "Warn before quitting": "Vor Beenden warnen",
     "Space options": "Space-Optionen",
     "Manage & explore rooms": "Räume erkunden und verwalten",
@@ -2242,8 +2328,10 @@
     "%(seconds)ss left": "%(seconds)s verbleibend",
     "Change server ACLs": "Server-ACLs bearbeiten",
     "Failed to send": "Fehler beim Senden",
-    "View all %(count)s members|other": "Alle %(count)s Mitglieder anzeigen",
-    "View all %(count)s members|one": "Mitglied anzeigen",
+    "View all %(count)s members": {
+        "other": "Alle %(count)s Mitglieder anzeigen",
+        "one": "Mitglied anzeigen"
+    },
     "Some of your messages have not been sent": "Einige Nachrichten konnten nicht gesendet werden",
     "Original event source": "Ursprüngliche Rohdaten",
     "Decrypted event source": "Entschlüsselte Rohdaten",
@@ -2267,8 +2355,10 @@
     "Leave the beta": "Beta verlassen",
     "Beta": "Beta",
     "Want to add a new room instead?": "Willst du einen neuen Raum hinzufügen?",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Raum hinzufügen …",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Räume hinzufügen … (%(progress)s von %(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Raum hinzufügen …",
+        "other": "Räume hinzufügen … (%(progress)s von %(count)s)"
+    },
     "You are not allowed to view this server's rooms list": "Du darfst diese Raumliste nicht sehen",
     "We didn't find a microphone on your device. Please check your settings and try again.": "Es konnte kein Mikrofon gefunden werden. Überprüfe deine Einstellungen und versuche es erneut.",
     "No microphone found": "Kein Mikrofon gefunden",
@@ -2288,8 +2378,10 @@
     "sends space invaders": "sendet Space Invaders",
     "Sends the given message with a space themed effect": "Sendet die Nachricht mit Raumschiffen",
     "Space Autocomplete": "Spaces automatisch vervollständigen",
-    "Currently joining %(count)s rooms|one": "Betrete %(count)s Raum",
-    "Currently joining %(count)s rooms|other": "Betrete %(count)s Räume",
+    "Currently joining %(count)s rooms": {
+        "one": "Betrete %(count)s Raum",
+        "other": "Betrete %(count)s Räume"
+    },
     "Go to my space": "Zu meinem Space",
     "See when people join, leave, or are invited to this room": "Anzeigen, wenn Leute eingeladen werden, den Raum betreten oder verlassen",
     "The user you called is busy.": "Die angerufene Person ist momentan beschäftigt.",
@@ -2324,10 +2416,14 @@
     "Any other reason. Please describe the problem.\nThis will be reported to the room moderators.": "Anderer Grund. Bitte beschreibe das Problem.\nDies wird an die Raummoderation gemeldet.",
     "This user is spamming the room with ads, links to ads or to propaganda.\nThis will be reported to the room moderators.": "Dieser Benutzer spammt den Raum mit Werbung, Links zu Werbung oder Propaganda.\nDies wird an die Raummoderation gemeldet.",
     "Please provide an address": "Bitte gib eine Adresse an",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)s hat die Server-ACLs geändert",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)s hat die Server-ACLs %(count)s Mal geändert",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)s haben die Server-ACLs geändert",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)s haben die Server-ACLs %(count)s Mal geändert",
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "one": "%(oneUser)s hat die Server-ACLs geändert",
+        "other": "%(oneUser)s hat die Server-ACLs %(count)s Mal geändert"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "one": "%(severalUsers)s haben die Server-ACLs geändert",
+        "other": "%(severalUsers)s haben die Server-ACLs %(count)s Mal geändert"
+    },
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "Füge Adressen für diesen Space hinzu, damit andere Leute ihn über deinen Heim-Server (%(localDomain)s) finden können",
     "To publish an address, it needs to be set as a local address first.": "Damit du die Adresse veröffentlichen kannst, musst du sie zuerst als lokale Adresse hinzufügen.",
     "Published addresses can be used by anyone on any server to join your room.": "Veröffentlichte Adressen erlauben jedem, den Raum zu betreten.",
@@ -2376,8 +2472,10 @@
     "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s. The administrators will NOT be able to read the encrypted content of this room.": "Der Raum beinhaltet illegale oder toxische Nachrichten und die Raummoderation verhindert es nicht.\nDies wird an die Betreiber von %(homeserver)s gemeldet werden. Diese können jedoch die verschlüsselten Nachrichten nicht lesen.",
     "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.": "Diese Person verhält sich illegal, beispielsweise durch das Veröffentlichen persönlicher Daten oder Gewaltdrohungen.\nDies wird an die Raummoderation gemeldet, welche dies an die Behörden weitergeben kann.",
     "Unnamed audio": "Unbenannte Audiodatei",
-    "Show %(count)s other previews|one": "%(count)s andere Vorschau zeigen",
-    "Show %(count)s other previews|other": "%(count)s weitere Vorschauen zeigen",
+    "Show %(count)s other previews": {
+        "one": "%(count)s andere Vorschau zeigen",
+        "other": "%(count)s weitere Vorschauen zeigen"
+    },
     "Images, GIFs and videos": "Mediendateien",
     "Keyboard shortcuts": "Tastenkombinationen",
     "Unable to copy a link to the room to the clipboard.": "Der Link zum Raum konnte nicht kopiert werden.",
@@ -2450,8 +2548,14 @@
     "Anyone in a space can find and join. You can select multiple spaces.": "Das Betreten ist allen in den gewählten Spaces möglich.",
     "Spaces with access": "Spaces mit Zutritt",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Das Betreten ist allen in diesen Spaces möglich. <a>Ändere, welche Spaces Zutritt haben.</a>",
-    "Currently, %(count)s spaces have access|other": "%(count)s Spaces haben Zutritt",
-    "& %(count)s more|other": "und %(count)s weitere",
+    "Currently, %(count)s spaces have access": {
+        "other": "%(count)s Spaces haben Zutritt",
+        "one": "Derzeit hat ein Space Zutritt"
+    },
+    "& %(count)s more": {
+        "other": "und %(count)s weitere",
+        "one": "und %(count)s weitere"
+    },
     "Upgrade required": "Aktualisierung erforderlich",
     "Only invited people can join.": "Nur Eingeladene können betreten.",
     "Private (invite only)": "Privat (Betreten mit Einladung)",
@@ -2517,8 +2621,6 @@
     "Change space name": "Name des Space ändern",
     "Change space avatar": "Space-Icon ändern",
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Finden und betreten ist Mitgliedern von <spaceName/> erlaubt. Du kannst auch weitere Spaces wählen.",
-    "Currently, %(count)s spaces have access|one": "Derzeit hat ein Space Zutritt",
-    "& %(count)s more|one": "und %(count)s weitere",
     "Autoplay videos": "Videos automatisch abspielen",
     "Autoplay GIFs": "GIFs automatisch abspielen",
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s hat eine Nachricht losgelöst. Alle angepinnten Nachrichten anzeigen.",
@@ -2537,8 +2639,10 @@
     "To avoid these issues, create a <a>new public room</a> for the conversation you plan to have.": "<a>Erstelle einen neuen Raum für deine Konversation</a>, um diese Probleme zu umgehen.",
     "<b>It's not recommended to make encrypted rooms public.</b> It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Es ist nicht sinnvoll, verschlüsselte Räume öffentlich zu machen.</b> Das würde bedeuten, dass alle den Raum finden und betreten, also auch Nachrichten lesen könnten. Du erhältst also keinen Vorteil der Verschlüsselung, während sie das Senden und Empfangen von Nachrichten langsamer macht.",
     "Select the roles required to change various parts of the space": "Wähle, von wem folgende Aktionen ausgeführt werden können",
-    "%(count)s reply|one": "%(count)s Antwort",
-    "%(count)s reply|other": "%(count)s Antworten",
+    "%(count)s reply": {
+        "one": "%(count)s Antwort",
+        "other": "%(count)s Antworten"
+    },
     "I'll verify later": "Später verifizieren",
     "The email address doesn't appear to be valid.": "E-Mail-Adresse scheint ungültig zu sein.",
     "Skip verification for now": "Verifizierung vorläufig überspringen",
@@ -2577,10 +2681,14 @@
     "Threads": "Threads",
     "Insert link": "Link einfügen",
     "Create poll": "Umfrage erstellen",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Space aktualisieren …",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Spaces aktualisieren … (%(progress)s von %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Einladung senden …",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Einladungen senden … (%(progress)s von %(count)s)",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Space aktualisieren …",
+        "other": "Spaces aktualisieren … (%(progress)s von %(count)s)"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Einladung senden …",
+        "other": "Einladungen senden … (%(progress)s von %(count)s)"
+    },
     "Loading new room": "Neuer Raum wird geladen",
     "Upgrading room": "Raum wird aktualisiert",
     "Developer mode": "Entwicklungsmodus",
@@ -2640,12 +2748,18 @@
     "Rename": "Umbenennen",
     "Deselect all": "Alle abwählen",
     "Select all": "Alle auswählen",
-    "Sign out devices|one": "Gerät abmelden",
-    "Sign out devices|other": "Geräte abmelden",
-    "Click the button below to confirm signing out these devices.|one": "Klicke unten auf den Knopf, um dieses Gerät abzumelden.",
-    "Click the button below to confirm signing out these devices.|other": "Klicke unten auf den Knopf, um diese Geräte abzumelden.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Abmelden dieses Geräts durch Beweisen deiner Identität mit Single Sign-On bestätigen.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Bestätige das Abmelden dieser Geräte, indem du dich erneut anmeldest.",
+    "Sign out devices": {
+        "one": "Gerät abmelden",
+        "other": "Geräte abmelden"
+    },
+    "Click the button below to confirm signing out these devices.": {
+        "one": "Klicke unten auf den Knopf, um dieses Gerät abzumelden.",
+        "other": "Klicke unten auf den Knopf, um diese Geräte abzumelden."
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Abmelden dieses Geräts durch Beweisen deiner Identität mit Single Sign-On bestätigen.",
+        "other": "Bestätige das Abmelden dieser Geräte, indem du dich erneut anmeldest."
+    },
     "Automatically send debug logs on any error": "Sende bei Fehlern automatisch Protokolle zur Fehlerkorrektur",
     "Use a more compact 'Modern' layout": "Modernes kompaktes Layout verwenden",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s hat geändert, wer diesen Raum betreten darf.",
@@ -2685,8 +2799,10 @@
     "Rooms outside of a space": "Räume außerhalb von Spaces",
     "Manage rooms in this space": "Räume in diesem Space verwalten",
     "Clear": "Löschen",
-    "%(count)s votes|one": "%(count)s Stimme",
-    "%(count)s votes|other": "%(count)s Stimmen",
+    "%(count)s votes": {
+        "one": "%(count)s Stimme",
+        "other": "%(count)s Stimmen"
+    },
     "Chat": "Unterhaltung",
     "%(spaceName)s menu": "%(spaceName)s-Menü",
     "Join public room": "Öffentlichen Raum betreten",
@@ -2702,8 +2818,10 @@
     "Experimental": "Experimentell",
     "Themes": "Themen",
     "Moderation": "Moderation",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s und %(count)s anderer",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s und %(count)s andere",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s und %(count)s anderer",
+        "other": "%(spaceName)s und %(count)s andere"
+    },
     "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Teile Daten anonymisiert um uns zu helfen Probleme zu identifizieren. Nichts persönliches. Keine Dritten. <LearnMoreLink>Mehr dazu hier</LearnMoreLink>",
     "You previously consented to share anonymous usage data with us. We're updating how that works.": "Sie haben zuvor zugestimmt, anonymisierte Nutzungsdaten mit uns zu teilen. Wir aktualisieren, wie das funktioniert.",
     "Help improve %(analyticsOwner)s": "Hilf mit, %(analyticsOwner)s zu verbessern",
@@ -2739,13 +2857,19 @@
     "Sorry, the poll you tried to create was not posted.": "Leider wurde die Umfrage nicht gesendet.",
     "Failed to post poll": "Absenden der Umfrage fehlgeschlagen",
     "Share location": "Standort teilen",
-    "Based on %(count)s votes|one": "%(count)s Stimme abgegeben",
-    "Based on %(count)s votes|other": "%(count)s Stimmen abgegeben",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s Stimme abgegeben. Stimme ab, um die Ergebnisse zu sehen",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s Stimmen abgegeben. Stimme ab, um die Ergebnisse zu sehen",
+    "Based on %(count)s votes": {
+        "one": "%(count)s Stimme abgegeben",
+        "other": "%(count)s Stimmen abgegeben"
+    },
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s Stimme abgegeben. Stimme ab, um die Ergebnisse zu sehen",
+        "other": "%(count)s Stimmen abgegeben. Stimme ab, um die Ergebnisse zu sehen"
+    },
     "No votes cast": "Es wurden noch keine Stimmen abgegeben",
-    "Final result based on %(count)s votes|one": "Es wurde %(count)s Stimme abgegeben",
-    "Final result based on %(count)s votes|other": "Es wurden %(count)s Stimmen abgegeben",
+    "Final result based on %(count)s votes": {
+        "one": "Es wurde %(count)s Stimme abgegeben",
+        "other": "Es wurden %(count)s Stimmen abgegeben"
+    },
     "Sorry, your vote was not registered. Please try again.": "Wir konnten deine Stimme leider nicht erfassen. Versuche es bitte erneut.",
     "Vote not registered": "Stimme nicht erfasst",
     "Ban them from specific things I'm able to": "In ausgewählten Räumen und Spaces bannen",
@@ -2755,16 +2879,24 @@
     "Copy room link": "Raumlink kopieren",
     "Manage pinned events": "Angeheftete Ereignisse verwalten",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Teile anonyme Nutzungsdaten mit uns, damit wir Probleme in Element finden können. Nichts Persönliches. Keine Drittparteien.",
-    "Exported %(count)s events in %(seconds)s seconds|one": "%(count)s Ereignis in %(seconds)s Sekunden exportiert",
-    "Exported %(count)s events in %(seconds)s seconds|other": "%(count)s Ereignisse in %(seconds)s Sekunden exportiert",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "%(count)s Ereignis in %(seconds)s Sekunden exportiert",
+        "other": "%(count)s Ereignisse in %(seconds)s Sekunden exportiert"
+    },
     "Export successful!": "Die Daten wurden erfolgreich exportiert!",
-    "Fetched %(count)s events in %(seconds)ss|one": "%(count)s Ereignis in %(seconds)s s abgerufen",
-    "Fetched %(count)s events in %(seconds)ss|other": "%(count)s Ereignisse in %(seconds)s s abgerufen",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "%(count)s Ereignis in %(seconds)s s abgerufen",
+        "other": "%(count)s Ereignisse in %(seconds)s s abgerufen"
+    },
     "Processing event %(number)s out of %(total)s": "Verarbeite Event %(number)s von %(total)s",
-    "Fetched %(count)s events so far|one": "Bisher wurde %(count)s Ereignis abgerufen",
-    "Fetched %(count)s events so far|other": "Bisher wurden %(count)s Ereignisse abgerufen",
-    "Fetched %(count)s events out of %(total)s|one": "%(count)s von %(total)s Ereignis abgerufen",
-    "Fetched %(count)s events out of %(total)s|other": "%(count)s von %(total)s Ereignisse abgerufen",
+    "Fetched %(count)s events so far": {
+        "one": "Bisher wurde %(count)s Ereignis abgerufen",
+        "other": "Bisher wurden %(count)s Ereignisse abgerufen"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "%(count)s von %(total)s Ereignis abgerufen",
+        "other": "%(count)s von %(total)s Ereignisse abgerufen"
+    },
     "Generating a ZIP": "ZIP-Archiv wird generiert",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Ups! Leider können wir das Datum \"%(inputDate)s\" nicht verstehen. Bitte gib es im Format JJJJ-MM-TT (Jahr-Monat-Tag) ein.",
     "Messaging": "Kommunikation",
@@ -2833,10 +2965,14 @@
     "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "<PrivacyPolicyUrl>Du kannst unsere Datenschutzbedingungen hier lesen</PrivacyPolicyUrl>",
     "Missing room name or separator e.g. (my-room:domain.org)": "Fehlender Raumname oder Doppelpunkt (z. B. dein-raum:domain.org)",
     "Missing domain separator e.g. (:domain.org)": "Fehlender Doppelpunkt vor Server (z. B. :domain.org)",
-    "was removed %(count)s times|other": "wurde %(count)s mal entfernt",
-    "was removed %(count)s times|one": "wurde entfernt",
-    "were removed %(count)s times|one": "wurden entfernt",
-    "were removed %(count)s times|other": "wurden %(count)s mal entfernt",
+    "was removed %(count)s times": {
+        "other": "wurde %(count)s mal entfernt",
+        "one": "wurde entfernt"
+    },
+    "were removed %(count)s times": {
+        "one": "wurden entfernt",
+        "other": "wurden %(count)s mal entfernt"
+    },
     "Let moderators hide messages pending moderation.": "Erlaube Moderatoren, noch nicht moderierte Nachrichten auszublenden.",
     "Message pending moderation: %(reason)s": "Nachricht erwartet Moderation: %(reason)s",
     "Message pending moderation": "Nachricht erwartet Moderation",
@@ -2908,22 +3044,32 @@
     "Search Dialog": "Suchdialog",
     "Join %(roomAddress)s": "%(roomAddress)s betreten",
     "<empty string>": "<Leere Zeichenkette>",
-    "<%(count)s spaces>|one": "<Leerzeichen>",
-    "<%(count)s spaces>|other": "<%(count)s Leerzeichen>",
+    "<%(count)s spaces>": {
+        "one": "<Leerzeichen>",
+        "other": "<%(count)s Leerzeichen>"
+    },
     "Results are only revealed when you end the poll": "Die Ergebnisse werden erst sichtbar, sobald du die Umfrage beendest",
     "Voters see results as soon as they have voted": "Abstimmende können die Ergebnisse nach Stimmabgabe sehen",
     "Open poll": "Offene Umfrage",
     "Closed poll": "Versteckte Umfrage",
     "Poll type": "Abstimmungsart",
     "Edit poll": "Umfrage bearbeiten",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)s hat eine versteckte Nachricht gesendet",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s hat %(count)s versteckte Nachrichten gesendet",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)s hat eine versteckte Nachricht gesendet",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)s haben %(count)s versteckte Nachrichten gesendet",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)s hat eine Nachricht gelöscht",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)s hat %(count)s Nachrichten gelöscht",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)s hat eine Nachricht gelöscht",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)s haben %(count)s Nachrichten gelöscht",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "one": "%(oneUser)s hat eine versteckte Nachricht gesendet",
+        "other": "%(oneUser)s hat %(count)s versteckte Nachrichten gesendet"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)s hat eine versteckte Nachricht gesendet",
+        "other": "%(severalUsers)s haben %(count)s versteckte Nachrichten gesendet"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "one": "%(oneUser)s hat eine Nachricht gelöscht",
+        "other": "%(oneUser)s hat %(count)s Nachrichten gelöscht"
+    },
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)s hat eine Nachricht gelöscht",
+        "other": "%(severalUsers)s haben %(count)s Nachrichten gelöscht"
+    },
     "Results will be visible when the poll is ended": "Ergebnisse werden nach Abschluss der Umfrage sichtbar",
     "Sorry, you can't edit a poll after votes have been cast.": "Du kannst Umfragen nicht bearbeiten, sobald Stimmen abgegeben wurden.",
     "Can't edit poll": "Umfrage kann nicht bearbeitet werden",
@@ -2948,10 +3094,14 @@
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Antworte auf einen Thread oder klicke bei einer Nachricht auf „%(replyInThread)s“, um einen Thread zu starten.",
     "We'll create rooms for each of them.": "Wir werden für jedes einen Raum erstellen.",
     "Export Cancelled": "Exportieren abgebrochen",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)s hat die <a>angehefteten Nachrichten</a> des Raumes bearbeitet",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)s hat die <a>angehefteten Nachrichten</a> des Raumes %(count)s-Mal bearbeitet",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)s hat die <a>angehefteten Nachrichten</a> des Raumes bearbeitet",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)s haben die <a>angehefteten Nachrichten</a> des Raumes %(count)s-Mal bearbeitet",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(oneUser)s hat die <a>angehefteten Nachrichten</a> des Raumes bearbeitet",
+        "other": "%(oneUser)s hat die <a>angehefteten Nachrichten</a> des Raumes %(count)s-Mal bearbeitet"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)s hat die <a>angehefteten Nachrichten</a> des Raumes bearbeitet",
+        "other": "%(severalUsers)s haben die <a>angehefteten Nachrichten</a> des Raumes %(count)s-Mal bearbeitet"
+    },
     "What location type do you want to share?": "Wie willst du deinen Standort teilen?",
     "Drop a Pin": "Standort setzen",
     "My live location": "Mein Echtzeit-Standort",
@@ -2966,11 +3116,15 @@
     "You are sharing your live location": "Du teilst deinen Echtzeit-Standort",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Deaktivieren, wenn du auch Systemnachrichten bzgl. des Nutzers löschen willst (z. B. Mitglieds- und Profiländerungen …)",
     "Preserve system messages": "Systemnachrichten behalten",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|one": "Du bist gerade dabei, %(count)s Nachricht von %(user)s Benutzern zu löschen. Die Nachrichten werden für niemanden mehr sichtbar sein. Willst du fortfahren?",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "Du bist gerade dabei, %(count)s Nachrichten von %(user)s Benutzern zu löschen. Die Nachrichten werden für niemanden mehr sichtbar sein. Willst du fortfahren?",
+    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
+        "one": "Du bist gerade dabei, %(count)s Nachricht von %(user)s Benutzern zu löschen. Die Nachrichten werden für niemanden mehr sichtbar sein. Willst du fortfahren?",
+        "other": "Du bist gerade dabei, %(count)s Nachrichten von %(user)s Benutzern zu löschen. Die Nachrichten werden für niemanden mehr sichtbar sein. Willst du fortfahren?"
+    },
     "%(displayName)s's live location": "Echtzeit-Standort von %(displayName)s",
-    "Currently removing messages in %(count)s rooms|one": "Entferne Nachrichten in %(count)s Raum",
-    "Currently removing messages in %(count)s rooms|other": "Entferne Nachrichten in %(count)s Räumen",
+    "Currently removing messages in %(count)s rooms": {
+        "one": "Entferne Nachrichten in %(count)s Raum",
+        "other": "Entferne Nachrichten in %(count)s Räumen"
+    },
     "%(timeRemaining)s left": "%(timeRemaining)s übrig",
     "Share for %(duration)s": "Geteilt für %(duration)s",
     "%(value)ss": "%(value)ss",
@@ -3003,8 +3157,10 @@
     "Disinvite from room": "Einladung zurückziehen",
     "Remove from space": "Aus Space entfernen",
     "Disinvite from space": "Einladung zurückziehen",
-    "%(count)s participants|one": "1 Teilnehmer",
-    "%(count)s participants|other": "%(count)s Teilnehmer",
+    "%(count)s participants": {
+        "one": "1 Teilnehmer",
+        "other": "%(count)s Teilnehmer"
+    },
     "Video": "Video",
     "Try again later, or ask a room or space admin to check if you have access.": "Versuche es später erneut oder bitte einen Raum- oder Space-Admin um eine Zutrittserlaubnis.",
     "This room or space is not accessible at this time.": "Dieser Raum oder Space ist im Moment nicht zugänglich.",
@@ -3022,15 +3178,19 @@
     "Loading preview": "Lade Vorschau",
     "New video room": "Neuer Videoraum",
     "New room": "Neuer Raum",
-    "Seen by %(count)s people|one": "Von %(count)s Person gesehen",
-    "Seen by %(count)s people|other": "Von %(count)s Personen gesehen",
+    "Seen by %(count)s people": {
+        "one": "Von %(count)s Person gesehen",
+        "other": "Von %(count)s Personen gesehen"
+    },
     "%(members)s and %(last)s": "%(members)s und %(last)s",
     "%(members)s and more": "%(members)s und weitere",
     "View older version of %(spaceName)s.": "Alte Version von %(spaceName)s anzeigen.",
     "Upgrade this space to the recommended room version": "Space auf die empfohlene Version aktualisieren",
     "Your password was successfully changed.": "Dein Passwort wurde erfolgreich geändert.",
-    "Confirm signing out these devices|one": "Abmelden des Geräts bestätigen",
-    "Confirm signing out these devices|other": "Abmelden dieser Geräte bestätigen",
+    "Confirm signing out these devices": {
+        "one": "Abmelden des Geräts bestätigen",
+        "other": "Abmelden dieser Geräte bestätigen"
+    },
     "Developer tools": "Entwicklungswerkzeuge",
     "Turn on camera": "Kamera aktivieren",
     "Turn off camera": "Kamera deaktivieren",
@@ -3099,8 +3259,10 @@
     "Can I use text chat alongside the video call?": "Kann ich während Videoanrufen auch Textnachrichten verschicken?",
     "How can I create a video room?": "Wie kann ich einen Videoraum erstellen?",
     "Enable hardware acceleration (restart %(appName)s to take effect)": "Hardwarebeschleunigung aktivieren (Neustart von %(appName)s erforderlich)",
-    "%(count)s people joined|one": "%(count)s Person beigetreten",
-    "%(count)s people joined|other": "%(count)s Personen beigetreten",
+    "%(count)s people joined": {
+        "one": "%(count)s Person beigetreten",
+        "other": "%(count)s Personen beigetreten"
+    },
     "Enable hardware acceleration": "Aktiviere die Hardwarebeschleunigung",
     "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "Bitte beachte: Dies ist eine experimentelle Funktion, die eine temporäre Implementierung nutzt. Das bedeutet, dass du deinen Standortverlauf nicht löschen kannst und erfahrene Nutzer ihn sehen können, selbst wenn du deinen Echtzeit-Standort nicht mehr mit diesem Raum teilst.",
     "Video room": "Videoraum",
@@ -3118,8 +3280,10 @@
     "Ignore user": "Nutzer ignorieren",
     "Show rooms": "Räume zeigen",
     "Search for": "Suche nach",
-    "%(count)s Members|one": "%(count)s Mitglied",
-    "%(count)s Members|other": "%(count)s Mitglieder",
+    "%(count)s Members": {
+        "one": "%(count)s Mitglied",
+        "other": "%(count)s Mitglieder"
+    },
     "Check if you want to hide all current and future messages from this user.": "Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Nutzers verstecken willst.",
     "Show spaces": "Spaces zeigen",
     "You cannot search for rooms that are neither a room nor a space": "Du kannst nicht nach Räumen suchen, die kein Raum oder Space sind",
@@ -3210,8 +3374,10 @@
     "Spell check": "Rechtschreibprüfung",
     "Complete these to get the most out of %(brand)s": "Vervollständige sie für die beste %(brand)s-Erfahrung",
     "You did it!": "Geschafft!",
-    "Only %(count)s steps to go|one": "Nur noch %(count)s Schritt",
-    "Only %(count)s steps to go|other": "Nur noch %(count)s Schritte",
+    "Only %(count)s steps to go": {
+        "one": "Nur noch %(count)s Schritt",
+        "other": "Nur noch %(count)s Schritte"
+    },
     "Welcome to %(brand)s": "Willkommen bei %(brand)s",
     "Find your co-workers": "Finde deine Kollegen",
     "Secure messaging for work": "Sichere Kommunikation für die Arbeit",
@@ -3227,9 +3393,11 @@
     "Find friends": "Freunde finden",
     "Find and invite your friends": "Finde deine Freunde und lade sie ein",
     "You made it!": "Geschafft!",
-    "In %(spaceName)s and %(count)s other spaces.|one": "Im Space %(spaceName)s und %(count)s weiteren Spaces.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "Im Space %(spaceName)s und %(count)s weiteren Spaces.",
+        "other": "In %(spaceName)s und %(count)s weiteren Spaces."
+    },
     "In %(spaceName)s.": "Im Space %(spaceName)s.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "In %(spaceName)s und %(count)s weiteren Spaces.",
     "Download %(brand)s": "%(brand)s herunterladen",
     "Find and invite your community members": "Finde deine Community-Mitglieder und lade sie ein",
     "Get stuff done by finding your teammates": "Finde dein Team und werdet produktiv",
@@ -3290,12 +3458,16 @@
     "It’s what you’re here for, so lets get to it": "Dafür bist du hier, also dann mal los",
     "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Verschlüsselung ist für öffentliche Räume nicht empfohlen.</b> Jeder kann öffentliche Räume finden und betreten, also kann auch jeder die Nachrichten lesen. Du wirst keine der Vorteile von Verschlüsselung erhalten und kannst sie später auch nicht mehr deaktivieren. Nachrichten in öffentlichen Räumen zu verschlüsseln, wird das empfangen und senden verlangsamen.",
     "Empty room (was %(oldName)s)": "Leerer Raum (war %(oldName)s)",
-    "Inviting %(user)s and %(count)s others|other": "Lade %(user)s und %(count)s weitere Person ein",
+    "Inviting %(user)s and %(count)s others": {
+        "other": "Lade %(user)s und %(count)s weitere Person ein",
+        "one": "Lade %(user)s und eine weitere Person ein"
+    },
     "Inviting %(user1)s and %(user2)s": "Lade %(user1)s und %(user2)s ein",
-    "%(user)s and %(count)s others|one": "%(user)s und 1 anderer",
-    "%(user)s and %(count)s others|other": "%(user)s und %(count)s andere",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s und 1 anderer",
+        "other": "%(user)s und %(count)s andere"
+    },
     "%(user1)s and %(user2)s": "%(user1)s und %(user2)s",
-    "Inviting %(user)s and %(count)s others|one": "Lade %(user)s und eine weitere Person ein",
     "Sliding Sync configuration": "Sliding-Sync-Konfiguration",
     "Your server has native support": "Dein Server unterstützt dies nativ",
     "%(qrCode)s or %(appLinks)s": "%(qrCode)s oder %(appLinks)s",
@@ -3392,8 +3564,10 @@
     "Can't start a new voice broadcast": "Sprachübertragung kann nicht gestartet werden",
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Du kannst dieses Gerät verwenden, um ein neues Gerät per QR-Code anzumelden. Dazu musst du den auf diesem Gerät angezeigten QR-Code mit deinem nicht angemeldeten Gerät einlesen.",
     "play voice broadcast": "Sprachübertragung wiedergeben",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "Bist du sicher, dass du dich von %(count)s Sitzung abmelden möchtest?",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "Bist du sicher, dass du dich von %(count)s Sitzungen abmelden möchtest?",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "one": "Bist du sicher, dass du dich von %(count)s Sitzung abmelden möchtest?",
+        "other": "Bist du sicher, dass du dich von %(count)s Sitzungen abmelden möchtest?"
+    },
     "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.": "Inaktive Sitzungen sind jene, die du schon seit geraumer Zeit nicht mehr verwendet hast, aber nach wie vor Verschlüsselungs-Schlüssel erhalten.",
     "You should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.": "Du solltest besonders sicher gehen, dass du diese Sitzungen kennst, da sie die unbefugte Nutzung deines Kontos durch Dritte bedeuten könnten.",
     "Unverified sessions are sessions that have logged in with your credentials but have not been cross-verified.": "Nicht verifizierte Sitzungen sind jene, die mit deinen Daten angemeldet, aber nicht quer signiert wurden.",
@@ -3489,8 +3663,10 @@
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "Du kannst keinen Anruf beginnen, da du im Moment eine Sprachübertragung aufzeichnest. Bitte beende deine Sprachübertragung, um ein Gespräch zu beginnen.",
     "Can’t start a call": "Kann keinen Anruf beginnen",
     "Improve your account security by following these recommendations.": "Verbessere deine Kontosicherheit, indem du diese Empfehlungen beherzigst.",
-    "%(count)s sessions selected|one": "%(count)s Sitzung ausgewählt",
-    "%(count)s sessions selected|other": "%(count)s Sitzungen ausgewählt",
+    "%(count)s sessions selected": {
+        "one": "%(count)s Sitzung ausgewählt",
+        "other": "%(count)s Sitzungen ausgewählt"
+    },
     "Failed to read events": "Lesen der Ereignisse fehlgeschlagen",
     "Failed to send event": "Übertragung des Ereignisses fehlgeschlagen",
     " in <strong>%(room)s</strong>": " in <strong>%(room)s</strong>",
@@ -3501,8 +3677,10 @@
     "Create a link": "Link erstellen",
     "Link": "Link",
     "Force 15s voice broadcast chunk length": "Die Chunk-Länge der Sprachübertragungen auf 15 Sekunden erzwingen",
-    "Sign out of %(count)s sessions|one": "Von %(count)s Sitzung abmelden",
-    "Sign out of %(count)s sessions|other": "Von %(count)s Sitzungen abmelden",
+    "Sign out of %(count)s sessions": {
+        "one": "Von %(count)s Sitzung abmelden",
+        "other": "Von %(count)s Sitzungen abmelden"
+    },
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Von allen anderen Sitzungen abmelden (%(otherSessionsCount)s)",
     "Listen to live broadcast?": "Echtzeitübertragung anhören?",
     "Yes, end my recording": "Ja, beende meine Aufzeichnung",
@@ -3611,7 +3789,9 @@
     "Room is <strong>encrypted ✅</strong>": "Raum ist <strong>verschlüsselt ✅</strong>",
     "Notification state is <strong>%(notificationState)s</strong>": "Benachrichtigungsstand ist <strong>%(notificationState)s</strong>",
     "Room unread status: <strong>%(status)s</strong>": "Ungelesen-Status im Raum: <strong>%(status)s</strong>",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Ungelesen-Status im Raum: <strong>%(status)s</strong>, Anzahl: <strong>%(count)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>": {
+        "other": "Ungelesen-Status im Raum: <strong>%(status)s</strong>, Anzahl: <strong>%(count)s</strong>"
+    },
     "Identity server is <code>%(identityServerUrl)s</code>": "Identitäts-Server ist <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Heim-Server ist <code>%(homeserverUrl)s</code>",
     "Yes, it was me": "Ja, das war ich",
@@ -3619,10 +3799,14 @@
     "If you know a room address, try joining through that instead.": "Falls du eine Adresse kennst, versuche den Raum mit dieser zu betreten.",
     "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Du hast versucht einen Raum via Raum-ID, aber ohne Angabe von Servern zu betreten. Raum-IDs sind interne Kennungen und können nicht ohne weitere Informationen zum Betreten von Räumen genutzt werden.",
     "View poll": "Umfrage ansehen",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Für den vergangenen Tag sind keine beendeten Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Für die vergangenen %(count)s Tage sind keine beendeten Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Für den vergangenen Tag sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Für die vergangenen %(count)s Tage sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Für den vergangenen Tag sind keine beendeten Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
+        "other": "Für die vergangenen %(count)s Tage sind keine beendeten Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen"
+    },
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Für den vergangenen Tag sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
+        "other": "Für die vergangenen %(count)s Tage sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen"
+    },
     "There are no past polls. Load more polls to view polls for previous months": "Es sind keine vergangenen Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
     "There are no active polls. Load more polls to view polls for previous months": "Es sind keine aktiven Umfragen verfügbar. Lade weitere Umfragen, um die der vorherigen Monate zu sehen",
     "Load more polls": "Weitere Umfragen laden",
@@ -3752,8 +3936,14 @@
     "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "Nachrichten hier sind Ende-zu-Ende-verschlüsselt. Verifiziere %(displayName)s in deren Profil – klicke auf deren Profilbild.",
     "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Nachrichten in diesem Raum sind Ende-zu-Ende-verschlüsselt. Wenn Personen beitreten, kannst du sie in ihrem Profil verifizieren, indem du auf deren Profilbild klickst.",
     "Your profile picture URL": "Deine Profilbild-URL",
-    "%(severalUsers)schanged their profile picture %(count)s times|other": "%(severalUsers)s haben das Profilbild %(count)s-mal geändert",
-    "%(oneUser)schanged their profile picture %(count)s times|other": "%(oneUser)s hat das Profilbild %(count)s-mal geändert",
+    "%(severalUsers)schanged their profile picture %(count)s times": {
+        "other": "%(severalUsers)s haben das Profilbild %(count)s-mal geändert",
+        "one": "%(severalUsers)shaben ihr Profilbild geändert"
+    },
+    "%(oneUser)schanged their profile picture %(count)s times": {
+        "other": "%(oneUser)s hat das Profilbild %(count)s-mal geändert",
+        "one": "%(oneUser)shat das Profilbild geändert"
+    },
     "Ask to join": "Beitrittsanfragen",
     "Thread Root ID: %(threadRootId)s": "Thread-Ursprungs-ID: %(threadRootId)s",
     "See history": "Verlauf anzeigen",
@@ -3776,8 +3966,6 @@
     "Request to join sent": "Beitrittsanfrage gestellt",
     "Your request to join is pending.": "Deine Beitrittsanfrage wurde noch nicht bearbeitet.",
     "Cancel request": "Anfrage abbrechen",
-    "%(severalUsers)schanged their profile picture %(count)s times|one": "%(severalUsers)shaben ihr Profilbild geändert",
-    "%(oneUser)schanged their profile picture %(count)s times|one": "%(oneUser)shat das Profilbild geändert",
     "Failed to query public rooms": "Abfrage öffentlicher Räume fehlgeschlagen",
     "Your server is unsupported": "Dein Server wird nicht unterstützt",
     "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.": "Dieser Server nutzt eine ältere Matrix-Version. Aktualisiere auf Matrix %(version)s, um %(brand)s fehlerfrei nutzen zu können.",

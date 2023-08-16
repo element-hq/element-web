@@ -4,8 +4,10 @@
     "Already have an account? <a>Sign in here</a>": "An bhfuil cuntas agat cheana? <a>Sínigh isteach anseo</a>",
     "Show less": "Taispeáin níos lú",
     "Show more": "Taispeáin níos mó",
-    "Show %(count)s more|one": "Taispeáin %(count)s níos mó",
-    "Show %(count)s more|other": "Taispeáin %(count)s níos mó",
+    "Show %(count)s more": {
+        "one": "Taispeáin %(count)s níos mó",
+        "other": "Taispeáin %(count)s níos mó"
+    },
     "Switch to dark mode": "Athraigh go mód dorcha",
     "Switch to light mode": "Athraigh go mód geal",
     "Got an account? <a>Sign in</a>": "An bhfuil cuntas agat? <a>Sínigh isteach</a>",
@@ -378,10 +380,18 @@
     "Notes": "Nótaí",
     "expand": "méadaigh",
     "collapse": "cumaisc",
-    "%(oneUser)sleft %(count)s times|one": "D'fhág %(oneUser)s",
-    "%(severalUsers)sleft %(count)s times|one": "D'fhág %(severalUsers)s",
-    "%(oneUser)sjoined %(count)s times|one": "Tháinig %(oneUser)s isteach",
-    "%(severalUsers)sjoined %(count)s times|one": "Tháinig %(severalUsers)s isteach",
+    "%(oneUser)sleft %(count)s times": {
+        "one": "D'fhág %(oneUser)s"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "one": "D'fhág %(severalUsers)s"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "one": "Tháinig %(oneUser)s isteach"
+    },
+    "%(severalUsers)sjoined %(count)s times": {
+        "one": "Tháinig %(severalUsers)s isteach"
+    },
     "Join": "Téigh isteach",
     "Warning": "Rabhadh",
     "Update": "Uasdátaigh",
@@ -689,8 +699,10 @@
     "Share room": "Roinn seomra",
     "Forget room": "Déan dearmad ar an seomra",
     "Join Room": "Téigh isteach an seomra",
-    "(~%(count)s results)|one": "(~%(count)s toradh)",
-    "(~%(count)s results)|other": "(~%(count)s torthaí)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s toradh)",
+        "other": "(~%(count)s torthaí)"
+    },
     "No answer": "Gan freagair",
     "Unknown failure: %(reason)s": "Teip anaithnid: %(reason)s",
     "Enable encryption in settings.": "Tosaigh criptiú sna socruithe.",

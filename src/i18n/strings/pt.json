@@ -136,8 +136,10 @@
     "Sent messages will be stored until your connection has returned.": "Imagens enviadas ficarão armazenadas até que sua conexão seja reestabelecida.",
     "Failed to forget room %(errCode)s": "Falha ao esquecer a sala %(errCode)s",
     "%(items)s and %(lastItem)s": "%(items)s e %(lastItem)s",
-    "and %(count)s others...|other": "e %(count)s outros...",
-    "and %(count)s others...|one": "e um outro...",
+    "and %(count)s others...": {
+        "other": "e %(count)s outros...",
+        "one": "e um outro..."
+    },
     "Are you sure?": "Você tem certeza?",
     "Attachment": "Anexo",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s de %(fullYear)s às %(time)s",
@@ -245,17 +247,21 @@
     "You have <a>enabled</a> URL previews by default.": "Você <a>habilitou</a> pré-visualizações de links por padrão.",
     "Create new room": "Criar nova sala",
     "No display name": "Sem nome público de usuária(o)",
-    "Uploading %(filename)s and %(count)s others|one": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
+        "other": "Enviando o arquivo %(filename)s e %(count)s outros arquivos"
+    },
     "You must <a>register</a> to use this functionality": "Você deve <a>se registrar</a> para poder usar esta funcionalidade",
     "Uploading %(filename)s": "Enviando o arquivo %(filename)s",
     "Admin Tools": "Ferramentas de Administração",
     "%(roomName)s does not exist.": "%(roomName)s não existe.",
-    "(~%(count)s results)|other": "(~%(count)s resultados)",
+    "(~%(count)s results)": {
+        "other": "(~%(count)s resultados)",
+        "one": "(~%(count)s resultado)"
+    },
     "Start authentication": "Iniciar autenticação",
-    "(~%(count)s results)|one": "(~%(count)s resultado)",
     "New Password": "Nova Palavra-Passe",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Não foi possível conectar ao Servidor de Base. Por favor, confira sua conectividade à internet, garanta que o <a>certificado SSL do Servidor de Base</a> é confiável, e que uma extensão do navegador não esteja bloqueando as requisições de rede.",
-    "Uploading %(filename)s and %(count)s others|other": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
     "Close": "Fechar",
     "Decline": "Recusar",
     "Add": "Adicionar",
@@ -438,7 +444,10 @@
     "Aruba": "Aruba",
     "Unable to transfer call": "Não foi possível transferir a chamada",
     "Transfer Failed": "A Transferência Falhou",
-    "Inviting %(user)s and %(count)s others|other": "Convidando %(user)s e %(count)s outros",
+    "Inviting %(user)s and %(count)s others": {
+        "other": "Convidando %(user)s e %(count)s outros",
+        "one": "Convidando %(user)s e 1 outro"
+    },
     "Azerbaijan": "Azerbaijão",
     "Failed to transfer call": "Falha ao transferir chamada",
     "%(user1)s and %(user2)s": "%(user1)s e %(user2)s",
@@ -446,7 +455,10 @@
     "Unable to look up phone number": "Não foi possível procurar o número de telefone",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Pedimos ao navegador que se lembrasse do homeserver que usa para permitir o início de sessão, mas infelizmente o seu navegador esqueceu. Aceda à página de início de sessão e tente novamente.",
     "This may be caused by having the app open in multiple tabs or due to clearing browser data.": "Isto pode ser causado por ter a aplicação aberta em vários separadores ou devido à limpeza dos dados do navegador.",
-    "%(user)s and %(count)s others|one": "%(user)s e 1 outro",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s e 1 outro",
+        "other": "%(user)s e %(count)s outros"
+    },
     "Inviting %(user1)s and %(user2)s": "Convidando %(user1)s e %(user2)s",
     "United Kingdom": "Reino Unido",
     "Bahrain": "Bahrain",
@@ -464,8 +476,6 @@
     "%(name)s is requesting verification": "%(name)s está a pedir verificação",
     "Permission Required": "Permissão Requerida",
     "%(senderName)s started a voice broadcast": "%(senderName)s iniciou uma transmissão de voz",
-    "%(user)s and %(count)s others|other": "%(user)s e %(count)s outros",
-    "Inviting %(user)s and %(count)s others|one": "Convidando %(user)s e 1 outro",
     "Antigua & Barbuda": "Antígua e Barbuda",
     "Andorra": "Andorra",
     "Cocos (Keeling) Islands": "Ilhas Cocos (Keeling)",

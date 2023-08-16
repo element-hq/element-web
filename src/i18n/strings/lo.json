@@ -704,7 +704,10 @@
     "Italics": "ໂຕໜັງສືອຽງ",
     "Home options": "ຕົວເລືອກໜ້າຫຼັກ",
     "%(spaceName)s menu": "ເມນູ %(spaceName)s",
-    "Currently removing messages in %(count)s rooms|one": "ຕອນນີ້ກຳລັງລຶບຂໍ້ຄວາມຢູ່ໃນຫ້ອງ %(count)s",
+    "Currently removing messages in %(count)s rooms": {
+        "one": "ຕອນນີ້ກຳລັງລຶບຂໍ້ຄວາມຢູ່ໃນຫ້ອງ %(count)s",
+        "other": "ກຳລັງລຶບຂໍ້ຄວາມຢູ່ໃນ %(count)s ຫ້ອງ"
+    },
     "Live location enabled": "ເປີດໃຊ້ສະຖານທີປັດຈຸບັນແລ້ວ",
     "You are sharing your live location": "ທ່ານກໍາລັງແບ່ງປັນສະຖານທີ່ປັດຈຸບັນຂອງທ່ານ",
     "Close sidebar": "ປິດແຖບດ້ານຂ້າງ",
@@ -774,15 +777,26 @@
     "This UI does NOT check the types of the values. Use at your own risk.": "UI ນີ້ບໍ່ໄດ້ກວດເບິ່ງປະເພດຂອງຄ່າ. ໃຊ້ຢູ່ໃນຄວາມສ່ຽງຂອງທ່ານເອງ.",
     "Caution:": "ຂໍ້ຄວນລະວັງ:",
     "Setting:": "ການຕັ້ງຄ່າ:",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)sໄດ້ປ່ຽນຊື່ຂອງເຂົາເຈົ້າ",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ",
-    "was removed %(count)s times|one": "ລືບອອກ",
+    "%(oneUser)schanged their name %(count)s times": {
+        "one": "%(oneUser)sໄດ້ປ່ຽນຊື່ຂອງເຂົາເຈົ້າ",
+        "other": "%(oneUser)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ %(count)sຄັ້ງ"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "one": "%(severalUsers)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ",
+        "other": "%(severalUsers)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ %(count)sຄັ້ງ"
+    },
+    "was removed %(count)s times": {
+        "one": "ລືບອອກ",
+        "other": "ລຶບອອກ %(count)s ເທື່ອ"
+    },
     "We encountered an error trying to restore your previous session.": "ພວກເຮົາພົບຄວາມຜິດພາດໃນການພະຍາຍາມຟື້ນຟູພາກສ່ວນທີ່ຜ່ານມາຂອງທ່ານ.",
     "Please provide an address": "ກະລຸນາລະບຸທີ່ຢູ່",
     "Some characters not allowed": "ບໍ່ອະນຸຍາດໃຫ້ບາງຕົວອັກສອນ",
     "Missing room name or separator e.g. (my-room:domain.org)": "ບໍ່ມີຊື່ຫ້ອງ ຫຼື ຕົວແຍກເຊັ່ນ: (my-room:domain.org)",
-    "View all %(count)s members|one": "ເບິ່ງສະມາຊິກ 1 ຄົນ",
-    "View all %(count)s members|other": "ເບິ່ງສະມາຊິກ %(count)s ທັງໝົດ",
+    "View all %(count)s members": {
+        "one": "ເບິ່ງສະມາຊິກ 1 ຄົນ",
+        "other": "ເບິ່ງສະມາຊິກ %(count)s ທັງໝົດ"
+    },
     "Including %(commaSeparatedMembers)s": "ລວມທັງ %(commaSeparatedMembers)s",
     "Including you, %(commaSeparatedMembers)s": "ລວມທັງທ່ານ, %(commaSeparatedMembers)s",
     "This address had invalid server or is already in use": "ທີ່ຢູ່ນີ້ມີເຊີບເວີທີ່ບໍ່ຖືກຕ້ອງ ຫຼື ຖືກໃຊ້ງານຢູ່ແລ້ວ",
@@ -800,8 +814,10 @@
     "Server name": "ຊື່ເຊີບເວີ",
     "Enter the name of a new server you want to explore.": "ໃສ່ຊື່ຂອງເຊີບເວີໃໝ່ທີ່ທ່ານຕ້ອງການສຳຫຼວດ.",
     "Add a new server": "ເພີ່ມເຊີບເວີໃໝ່",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "ກຳລັງເພີ່ມຫ້ອງ...",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "ກຳລັງເພີ່ມຫ້ອງ... (%(progress)s ຈາກທັງໝົດ %(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "ກຳລັງເພີ່ມຫ້ອງ...",
+        "other": "ກຳລັງເພີ່ມຫ້ອງ... (%(progress)s ຈາກທັງໝົດ %(count)s)"
+    },
     "Search for spaces": "ຊອກຫາພື້ນທີ່",
     "Create a new space": "ສ້າງພື້ນທີ່ໃຫມ່",
     "Want to add a new space instead?": "ຕ້ອງການເພີ່ມພື້ນທີ່ໃໝ່ແທນບໍ?",
@@ -850,7 +866,9 @@
     "Close this widget to view it in this panel": "ປິດວິດເຈັດນີ້ເພື່ອເບິ່ງມັນຢູ່ໃນແຜງນີ້",
     "Unpin this widget to view it in this panel": "ຖອນປັກໝຸດວິດເຈັດນີ້ເພື່ອເບິ່ງມັນຢູ່ໃນແຜງນີ້",
     "Maximise": "ສູງສຸດ",
-    "You can only pin up to %(count)s widgets|other": "ທ່ານສາມາດປັກໝຸດໄດ້ເຖິງ %(count)s widget ເທົ່ານັ້ນ",
+    "You can only pin up to %(count)s widgets": {
+        "other": "ທ່ານສາມາດປັກໝຸດໄດ້ເຖິງ %(count)s widget ເທົ່ານັ້ນ"
+    },
     "Spaces": "ພື້ນທີ່",
     "Profile": "ໂປຣໄຟລ໌",
     "Messaging": "ການສົ່ງຂໍ້ຄວາມ",
@@ -924,9 +942,11 @@
     "Switch to light mode": "ສະຫຼັບໄປໂໝດແສງ",
     "New here? <a>Create an account</a>": "ມາໃໝ່ບໍ? <a>ສ້າງບັນຊີ</a>",
     "Got an account? <a>Sign in</a>": "ມີບັນຊີບໍ? <a>ເຂົ້າສູ່ລະບົບ</a>",
-    "Uploading %(filename)s and %(count)s others|one": "ກຳລັງອັບໂຫລດ %(filename)s ແລະ %(count)s ອື່ນໆ",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "ກຳລັງອັບໂຫລດ %(filename)s ແລະ %(count)s ອື່ນໆ",
+        "other": "ກຳລັງອັບໂຫລດ %(filename)s ແລະ %(count)s ອື່ນໆ"
+    },
     "Uploading %(filename)s": "ກຳລັງອັບໂຫລດ %(filename)s",
-    "Uploading %(filename)s and %(count)s others|other": "ກຳລັງອັບໂຫລດ %(filename)s ແລະ %(count)s ອື່ນໆ",
     "Failed to load timeline position": "ໂຫຼດຕໍາແໜ່ງທາມລາຍບໍ່ສຳເລັດ",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "ພະຍາຍາມໂຫຼດຈຸດສະເພາະໃນທາມລາຍຂອງຫ້ອງນີ້, ແຕ່ບໍ່ສາມາດຊອກຫາມັນໄດ້.",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "ພະຍາຍາມໂຫຼດຈຸດສະເພາະຢູ່ໃນທາມລາຍຂອງຫ້ອງນີ້, ແຕ່ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເບິ່ງຂໍ້ຄວາມທີ່ເປັນຄໍາຖາມ.",
@@ -985,8 +1005,10 @@
     "Joined": "ເຂົ້າຮ່ວມແລ້ວ",
     "You don't have permission": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດ",
     "Joining": "ເຂົ້າຮ່ວມ",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "ທ່ານມີ %(count)s ການແຈ້ງເຕືອນທີ່ຍັງບໍ່ໄດ້ອ່ານຢູ່ໃນສະບັບກ່ອນໜ້າຂອງຫ້ອງນີ້.",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "ທ່ານມີ %(count)s ການແຈ້ງເຕືອນທີ່ຍັງບໍ່ໄດ້ອ່ານຢູ່ໃນສະບັບກ່ອນໜ້າຂອງຫ້ອງນີ້.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "one": "ທ່ານມີ %(count)s ການແຈ້ງເຕືອນທີ່ຍັງບໍ່ໄດ້ອ່ານຢູ່ໃນສະບັບກ່ອນໜ້າຂອງຫ້ອງນີ້.",
+        "other": "ທ່ານມີ %(count)s ການແຈ້ງເຕືອນທີ່ຍັງບໍ່ໄດ້ອ່ານຢູ່ໃນສະບັບກ່ອນໜ້າຂອງຫ້ອງນີ້."
+    },
     "Failed to reject invite": "ປະຕິເສດຄຳເຊີນບໍ່ສຳເລັດ",
     "No more results": "ບໍ່ມີຜົນອີກຕໍ່ໄປ",
     "Server may be unavailable, overloaded, or search timed out :(": "ເຊີບເວີອາດຈະບໍ່ມີຢູ່, ໂຫຼດເກີນ, ຫຼື ໝົດເວລາການຊອກຫາ :(",
@@ -1050,10 +1072,15 @@
     "Jump to read receipt": "ຂ້າມເພື່ອອ່ານໃບຮັບເງິນ",
     "Message": "ຂໍ້ຄວາມ",
     "Hide sessions": "ເຊື່ອງsessions",
-    "%(count)s sessions|one": "%(count)s ລະບົບ",
-    "%(count)s sessions|other": "%(count)ssessions",
+    "%(count)s sessions": {
+        "one": "%(count)s ລະບົບ",
+        "other": "%(count)ssessions"
+    },
     "Hide verified sessions": "ເຊື່ອງ sessionsທີ່ຢືນຢັນແລ້ວ",
-    "%(count)s verified sessions|one": "ຢືນຢັນ 1 session ແລ້ວ",
+    "%(count)s verified sessions": {
+        "one": "ຢືນຢັນ 1 session ແລ້ວ",
+        "other": "%(count)sລະບົບຢືນຢັນແລ້ວ"
+    },
     "Chat": "ສົນທະນາ",
     "Pinned messages": "ປັກໝຸດຂໍ້ຄວາມ",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "ຖ້າຫາກທ່ານມີການອະນຸຍາດ, ເປີດເມນູໃນຂໍ້ຄວາມໃດຫນຶ່ງ ແລະ ເລືອກ <b>Pin</b> ເພື່ອຕິດໃຫ້ເຂົາເຈົ້າຢູ່ທີ່ນີ້.",
@@ -1117,8 +1144,10 @@
     "Mark all as read": "ໝາຍທັງໝົດວ່າອ່ານແລ້ວ",
     "Jump to first unread message.": "ຂ້າມໄປຫາຂໍ້ຄວາມທຳອິດທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
     "Open thread": "ເປີດກະທູ້",
-    "%(count)s reply|one": "%(count)s ຕອບກັບ",
-    "%(count)s reply|other": "%(count)s ຕອບກັບ",
+    "%(count)s reply": {
+        "one": "%(count)s ຕອບກັບ",
+        "other": "%(count)s ຕອບກັບ"
+    },
     "Invited by %(sender)s": "ເຊີນໂດຍ%(sender)s",
     "Revoke invite": "ຍົກເລີກຄຳເຊີນ",
     "Admin Tools": "ເຄື່ອງມືຜູ້ຄຸ້ມຄອງ",
@@ -1136,12 +1165,18 @@
     "This room has already been upgraded.": "ຫ້ອງນີ້ໄດ້ຖືກປັບປຸງແລ້ວ.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "ການຍົກລະດັບຫ້ອງນີ້ຈະປິດຕົວຢ່າງປັດຈຸບັນຂອງຫ້ອງ ແລະ ຍົກລະດັບການສ້າງຫ້ອງທີ່ມີຊື່ດຽວກັນ.",
     "Unread messages.": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
-    "%(count)s unread messages.|one": "1 ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
-    "%(count)s unread messages.|other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
-    "%(count)s unread messages including mentions.|one": "ການກ່າວເຖິງທີ່ຍັງບໍ່ໄດ້ອ່ານ 1.",
-    "%(count)s unread messages including mentions.|other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ ລວມທັງການກ່າວເຖິງ.",
-    "%(count)s participants|one": "ຜູ້ເຂົ້າຮ່ວມ 1ຄົນ",
-    "%(count)s participants|other": "ຜູ້ເຂົ້າຮ່ວມ %(count)s ຄົນ",
+    "%(count)s unread messages.": {
+        "one": "1 ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
+        "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ."
+    },
+    "%(count)s unread messages including mentions.": {
+        "one": "ການກ່າວເຖິງທີ່ຍັງບໍ່ໄດ້ອ່ານ 1.",
+        "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ ລວມທັງການກ່າວເຖິງ."
+    },
+    "%(count)s participants": {
+        "one": "ຜູ້ເຂົ້າຮ່ວມ 1ຄົນ",
+        "other": "ຜູ້ເຂົ້າຮ່ວມ %(count)s ຄົນ"
+    },
     "Video": "ວິດີໂອ",
     "Leave": "ອອກຈາກ",
     "Copy room link": "ສຳເນົາລິ້ງຫ້ອງ",
@@ -1151,8 +1186,10 @@
     "Forget Room": "ລືມຫ້ອງ",
     "Notification options": "ຕົວເລືອກການແຈ້ງເຕືອນ",
     "Show less": "ສະແດງໜ້ອຍລົງ",
-    "Show %(count)s more|one": "ສະແດງ %(count)s ເພີ່ມເຕີມ",
-    "Show %(count)s more|other": "ສະແດງ %(count)s ເພີ່ມເຕີມ",
+    "Show %(count)s more": {
+        "one": "ສະແດງ %(count)s ເພີ່ມເຕີມ",
+        "other": "ສະແດງ %(count)s ເພີ່ມເຕີມ"
+    },
     "List options": "ລາຍຊື່ຕົວເລືອກ",
     "A-Z": "A-Z",
     "Activity": "ກິດຈະກໍາ",
@@ -1364,10 +1401,14 @@
     "%(senderName)s changed the addresses for this room.": "%(senderName)s ໄດ້ປ່ຽນທີ່ຢູ່ຂອງຫ້ອງນີ້.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ໄດ້ປ່ຽນທີ່ຢູ່ຫລັກ ແລະ ທາງເລືອກສຳລັບຫ້ອງນີ້.",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s ໄດ້ປ່ຽນທີ່ຢູ່ທາງເລືອກສຳລັບຫ້ອງນີ້.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s ໄດ້ລຶບທີ່ຢູ່ສຳຮອງ%(addresses)s ສໍາລັບຫ້ອງນີ້.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s ໄດ້ລຶບທີ່ຢູ່ສຳຮອງ %(addresses)s ຂອງຫ້ອງນີ້ອອກ.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s ໄດ້ເພີ່ມທີ່ຢູ່ສຳຮອງ%(addresses)sສໍາລັບຫ້ອງນີ້.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s ໄດ້ເພີ່ມທີ່ຢູ່ສຳຮອງ%(addresses)s ສໍາລັບຫ້ອງນີ້.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "one": "%(senderName)s ໄດ້ລຶບທີ່ຢູ່ສຳຮອງ%(addresses)s ສໍາລັບຫ້ອງນີ້.",
+        "other": "%(senderName)s ໄດ້ລຶບທີ່ຢູ່ສຳຮອງ %(addresses)s ຂອງຫ້ອງນີ້ອອກ."
+    },
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "one": "%(senderName)s ໄດ້ເພີ່ມທີ່ຢູ່ສຳຮອງ%(addresses)sສໍາລັບຫ້ອງນີ້.",
+        "other": "%(senderName)s ໄດ້ເພີ່ມທີ່ຢູ່ສຳຮອງ%(addresses)s ສໍາລັບຫ້ອງນີ້."
+    },
     "%(senderName)s removed the main address for this room.": "%(senderName)s ໄດ້ລຶບທີ່ຢູ່ຂອງຫ້ອງນີ້ອອກ.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s ກຳນົດທີ່ຢູ່ຂອງຫ້ອງນີ້ເປັນ %(address)s.",
     "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s ສົ່ງສະຕິກເກີ.",
@@ -1521,8 +1562,10 @@
     "Remain on your screen while running": "ຢູ່ໃນຫນ້າຈໍຂອງທ່ານໃນຂະນະທີ່ກຳລັງດຳເນີນການ",
     "Remain on your screen when viewing another room, when running": "ຢູ່ຫນ້າຈໍຂອງທ່ານໃນເວລາເບິ່ງຫ້ອງອື່ນ, ໃນຄະນະທີ່ກຳລັງດຳເນີນການ",
     "%(names)s and %(lastPerson)s are typing …": "%(names)s ແລະ %(lastPerson)s ກຳລັງພິມ…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s ແລະ ອີກຄົນນຶ່ງກຳລັງພິມ…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s and %(count)sຄົນອື່ນກຳລັງພິມ…",
+    "%(names)s and %(count)s others are typing …": {
+        "one": "%(names)s ແລະ ອີກຄົນນຶ່ງກຳລັງພິມ…",
+        "other": "%(names)s and %(count)sຄົນອື່ນກຳລັງພິມ…"
+    },
     "%(displayName)s is typing …": "%(displayName)s ກຳລັງພິມ…",
     "Dark": "ມືດ",
     "Light high contrast": "ແສງສະຫວ່າງຄວາມຄົມຊັດສູງ",
@@ -1562,10 +1605,14 @@
     "Modern": "ທັນສະໄຫມ",
     "IRC (Experimental)": "(ທົດລອງ)IRC",
     "Message layout": "ຮູບແບບຂໍ້ຄວາມ",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "ກຳລັງປັບປຸງພື້ນທີ່..",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "ກຳລັງຍົກລະດັບພື້ນທີ່... (%(progress)s ຈາກທັງໝົດ %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "ກຳລັງສົ່ງຄຳເຊີນ...",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "ກຳລັງສົ່ງຄຳເຊີນ... (%(progress)s ຈາກທັງໝົດ %(count)s)",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "ກຳລັງປັບປຸງພື້ນທີ່..",
+        "other": "ກຳລັງຍົກລະດັບພື້ນທີ່... (%(progress)s ຈາກທັງໝົດ %(count)s)"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "ກຳລັງສົ່ງຄຳເຊີນ...",
+        "other": "ກຳລັງສົ່ງຄຳເຊີນ... (%(progress)s ຈາກທັງໝົດ %(count)s)"
+    },
     "Loading new room": "ກຳລັງໂຫຼດຫ້ອງໃໝ່",
     "Upgrading room": "ການຍົກລະດັບຫ້ອງ",
     "This upgrade will allow members of selected spaces access to this room without an invite.": "ການຍົກລະດັບນີ້ຈະອະນຸຍາດໃຫ້ສະມາຊິກຂອງພື້ນທີ່ທີ່ເລືອກເຂົ້າມາໃນຫ້ອງນີ້ໂດຍບໍ່ມີການເຊີນ.",
@@ -1575,10 +1622,14 @@
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "ທຸກຄົນໃນ <spaceName/> ສາມາດຊອກຫາ ແລະເຂົ້າຮ່ວມໄດ້. ທ່ານສາມາດເລືອກບ່ອນອື່ນໄດ້ຄືກັນ.",
     "Spaces with access": "ພຶ້ນທີ່ ທີ່ມີການເຂົ້າເຖິງ",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "ທຸກຄົນຢູ່ໃນພື້ນທີ່ສາມາດຊອກຫາ ແລະເຂົ້າຮ່ວມໄດ້. <a>ແກ້ໄຂພື້ນທີ່ໃດທີ່ສາມາດເຂົ້າເຖິງທີ່ນີ້.</a>",
-    "Currently, %(count)s spaces have access|one": "ໃນປັດຈຸບັນ, ມີການເຂົ້າເຖິງພື້ນທີ່",
-    "Currently, %(count)s spaces have access|other": "ໃນປັດຈຸບັນ, %(count)s ມີການເຂົ້າເຖິງພື້ນທີ່",
-    "& %(count)s more|one": "& %(count)s ເພີ່ມເຕີມ",
-    "& %(count)s more|other": "&%(count)s ເພີ່ມເຕີມ",
+    "Currently, %(count)s spaces have access": {
+        "one": "ໃນປັດຈຸບັນ, ມີການເຂົ້າເຖິງພື້ນທີ່",
+        "other": "ໃນປັດຈຸບັນ, %(count)s ມີການເຂົ້າເຖິງພື້ນທີ່"
+    },
+    "& %(count)s more": {
+        "one": "& %(count)s ເພີ່ມເຕີມ",
+        "other": "&%(count)s ເພີ່ມເຕີມ"
+    },
     "Upgrade required": "ຕ້ອງການບົກລະດັບ",
     "Anyone can find and join.": "ທຸກຄົນສາມາດຊອກຫາ ແລະ ເຂົ້າຮ່ວມໄດ້.",
     "Only invited people can join.": "ສະເພາະຄົນທີ່ຖືກເຊີນເທົ່ານັ້ນທີ່ສາມາດເຂົ້າຮ່ວມໄດ້.",
@@ -1597,8 +1648,10 @@
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s ຂາດບາງອົງປະກອບທີ່ຕ້ອງການສໍາລັບການເກັບຂໍ້ຄວາມເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງ. ຖ້າທ່ານຕ້ອງການທົດລອງໃຊ້ຄຸນສົມບັດນີ້, ສ້າງ %(brand)s Desktop ແບບກຳນົດເອງດ້ວຍການເພີ່ມ <nativeLink>ອົງປະກອບການຄົ້ນຫາ</nativeLink>.",
     "Securely cache encrypted messages locally for them to appear in search results.": "ເກັບຮັກສາຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຄົ້ນຫາ.",
     "Manage": "ຄຸ້ມຄອງ",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "ຈັດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຊອກຫາ, ໂດຍໃຊ້ %(size)s ເພື່ອເກັບຂໍ້ຄວາມຈາກຫ້ອງ %(rooms)s.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "ຈັດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຊອກຫາ, ໂດຍໃຊ້ %(size)s ເພື່ອເກັບຂໍ້ຄວາມຈາກ %(rooms)s ຫ້ອງ.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "ຈັດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຊອກຫາ, ໂດຍໃຊ້ %(size)s ເພື່ອເກັບຂໍ້ຄວາມຈາກຫ້ອງ %(rooms)s.",
+        "other": "ຈັດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຊອກຫາ, ໂດຍໃຊ້ %(size)s ເພື່ອເກັບຂໍ້ຄວາມຈາກ %(rooms)s ຫ້ອງ."
+    },
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "ຢືນຢັນແຕ່ລະລະບົບທີ່ໃຊ້ໂດຍຜູ້ໃຊ້ເພື່ອໝາຍວ່າເປັນທີ່ໜ້າເຊື່ອຖືໄດ້, ບໍ່ໄວ້ໃຈອຸປະກອນທີ່ cross-signed.",
     "Rename": "ປ່ຽນຊື່",
     "Display Name": "ຊື່ສະແດງ",
@@ -1747,8 +1800,10 @@
     "Verify other device": "ຢືນຢັນອຸປະກອນອື່ນ",
     "Upload Error": "ອັບໂຫຼດຜິດພາດ",
     "Cancel All": "ຍົກເລີກທັງໝົດ",
-    "Upload %(count)s other files|one": "ອັບໂຫຼດ %(count)s ໄຟລ໌ອື່ນ",
-    "Upload %(count)s other files|other": "ອັບໂຫຼດ %(count)s ໄຟລ໌ອື່ນໆ",
+    "Upload %(count)s other files": {
+        "one": "ອັບໂຫຼດ %(count)s ໄຟລ໌ອື່ນ",
+        "other": "ອັບໂຫຼດ %(count)s ໄຟລ໌ອື່ນໆ"
+    },
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "ບາງໄຟລ໌ <b>ໃຫຍ່ເກີນໄປ</b> ທີ່ຈະອັບໂຫລດໄດ້. ຂີດຈຳກັດຂະໜາດໄຟລ໌ແມ່ນ %(limit)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "ໄຟລ໌ເຫຼົ່ານີ້ <b>ໃຫຍ່ເກີນໄປ</b> ທີ່ຈະອັບໂຫລດ. ຂີດຈຳກັດຂະໜາດໄຟລ໌ແມ່ນ %(limit)s.",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "ໄຟລ໌ນີ້ <b>ໃຫຍ່ເກີນໄປ</b> ທີ່ຈະອັບໂຫລດໄດ້. ຂະໜາດໄຟລ໌ຈຳກັດ%(limit)s ແຕ່ໄຟລ໌ນີ້ແມ່ນ %(sizeOfThisFile)s.",
@@ -1891,62 +1946,114 @@
     "Rotate Left": "ໝຸນດ້ານຊ້າຍ",
     "expand": "ຂະຫຍາຍ",
     "collapse": "ບໍ່ສຳເລັດ",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)sສົ່ງຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s ສົ່ງ %(count)s ຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)sສົ່ງຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)s ສົ່ງ %(count)s ຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)sລຶບຂໍ້ຄວາມອອກແລ້ວ",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)sລຶບ %(count)s ຂໍ້ຄວາມອອກແລ້ວ",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)sໄດ້ລຶບຂໍ້ຄວາມອອກ",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)sລຶບ %(count)s ຂໍ້ຄວາມອອກແລ້ວ",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ %(count)s ເທື່ອ",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)sໄດ້ປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ%(count)sເທື່ອ",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)sໄດ້ປ່ຽນເຊີບເວີ ACLs",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)sປ່ຽນເຊີບເວີ ACLs %(count)s ເທື່ອ",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)sປ່ຽນ ACL ຂອງເຊີບເວີ",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)sປ່ຽນເຊີບເວີ ACLs %(count)sຄັ້ງ",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)sບໍ່ໄດ້ປ່ຽນແປງ",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sບໍ່ໄດ້ປ່ຽນແປງ %(count)s ເທື່ອ",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)sບໍ່ມີການປ່ຽນແປງ",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)sບໍ່ໄດ້ປ່ຽນແປງ %(count)s ເທື່ອ",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ %(count)sຄັ້ງ",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ %(count)sຄັ້ງ",
-    "were unbanned %(count)s times|one": "ຍົກເລີກການຫ້າມ",
-    "were unbanned %(count)s times|other": "ຖືກຫ້າມ %(count)s ເທື່ອ",
-    "was banned %(count)s times|one": "ຖືກຫ້າມ",
-    "was banned %(count)s times|other": "ຖືກຫ້າມ %(count)s ເທື່ອ",
-    "were banned %(count)s times|one": "ຖືກຫ້າມ",
-    "were banned %(count)s times|other": "ຖືກຫ້າມ %(count)s ເທື່ອ",
-    "was invited %(count)s times|one": "ຖືກເຊີນ",
-    "was invited %(count)s times|other": "ຖືກເຊີນ %(count)s ເທື່ອ",
-    "were invited %(count)s times|one": "ໄດ້ຖືກເຊື້ອເຊີນ",
-    "were invited %(count)s times|other": "ໄດ້ຖືກເຊີນ %(count)s ເທື່ອ",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)sໄດ້ຖອນການເຊີນຂອງເຂົາເຈົ້າອອກແລ້ວ",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)sshad ການເຊີນຂອງເຂົາເຈົ້າຖອນອອກ %(count)s ຄັ້ງ",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)s shad ການເຊີນຂອງເຂົາເຈົ້າຖອນອອກ",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s shad ການເຊີນຂອງພວກເຂົາຖືກຖອນ %(count)s ຄັ້ງ",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)sປະຕິເສດການເຊີນຂອງເຂົາເຈົ້າ",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)sປະຕິເສດການເຊີນຂອງເຂົາເຈົ້າ %(count)s ຄັ້ງ",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)sປະຕິເສດຄຳເຊີນຂອງເຂົາເຈົ້າ",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)sປະຕິເສດຄຳເຊີນຂອງເຂົາເຈົ້າ %(count)sເທື່ອ",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s ອອກ ແລະເຂົ້າຮ່ວມຄືນໃໝ່",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)sອອກ ແລະເຂົ້າຮ່ວມ %(count)sຄັ້ງ",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s ອອກ ແລະເຂົ້າຮ່ວມໃຫມ່",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s ອອກ ແລະເຂົ້າຮ່ວມຄືນ %(count)sຄັ້ງ",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)sເຂົ້າຮ່ວມ ແລະ ອອກ",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)sເຂົ້າຮ່ວມ ແລະ ອອກ %(count)s ຄັ້ງ",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)sເຂົ້າຮ່ວມ ແລະ ອອກ",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)sເຂົ້າຮ່ວມ ແລະອອກຈາກ %(count)s ເທື່ອ",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)sອອກ",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)sອອກຈາກ%(count)s ເທື່ອ",
-    "%(severalUsers)sleft %(count)s times|one": "ອອກຈາກ%(severalUsers)s",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)sອອກ %(count)sຄັ້ງ",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)sເຂົ້າຮ່ວມ",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sເຂົ້າຮ່ວມ %(count)sຄັ້ງ",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sເຂົ້າຮ່ວມ",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)sເຂົ້າຮ່ວມ %(count)sຄັ້ງ",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "one": "%(oneUser)sສົ່ງຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
+        "other": "%(oneUser)s ສົ່ງ %(count)s ຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)sສົ່ງຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
+        "other": "%(severalUsers)s ສົ່ງ %(count)s ຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "one": "%(oneUser)sລຶບຂໍ້ຄວາມອອກແລ້ວ",
+        "other": "%(oneUser)sລຶບ %(count)s ຂໍ້ຄວາມອອກແລ້ວ"
+    },
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)sໄດ້ລຶບຂໍ້ຄວາມອອກ",
+        "other": "%(severalUsers)sລຶບ %(count)s ຂໍ້ຄວາມອອກແລ້ວ"
+    },
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(oneUser)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ",
+        "other": "%(oneUser)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ %(count)s ເທື່ອ"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)sໄດ້ປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ",
+        "other": "%(severalUsers)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ%(count)sເທື່ອ"
+    },
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "one": "%(oneUser)sໄດ້ປ່ຽນເຊີບເວີ ACLs",
+        "other": "%(oneUser)sປ່ຽນເຊີບເວີ ACLs %(count)s ເທື່ອ"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "one": "%(severalUsers)sປ່ຽນ ACL ຂອງເຊີບເວີ",
+        "other": "%(severalUsers)sປ່ຽນເຊີບເວີ ACLs %(count)sຄັ້ງ"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "one": "%(oneUser)sບໍ່ໄດ້ປ່ຽນແປງ",
+        "other": "%(oneUser)sບໍ່ໄດ້ປ່ຽນແປງ %(count)s ເທື່ອ"
+    },
+    "%(severalUsers)smade no changes %(count)s times": {
+        "one": "%(severalUsers)sບໍ່ມີການປ່ຽນແປງ",
+        "other": "%(severalUsers)sບໍ່ໄດ້ປ່ຽນແປງ %(count)s ເທື່ອ"
+    },
+    "were unbanned %(count)s times": {
+        "one": "ຍົກເລີກການຫ້າມ",
+        "other": "ຖືກຫ້າມ %(count)s ເທື່ອ"
+    },
+    "was banned %(count)s times": {
+        "one": "ຖືກຫ້າມ",
+        "other": "ຖືກຫ້າມ %(count)s ເທື່ອ"
+    },
+    "were banned %(count)s times": {
+        "one": "ຖືກຫ້າມ",
+        "other": "ຖືກຫ້າມ %(count)s ເທື່ອ"
+    },
+    "was invited %(count)s times": {
+        "one": "ຖືກເຊີນ",
+        "other": "ຖືກເຊີນ %(count)s ເທື່ອ"
+    },
+    "were invited %(count)s times": {
+        "one": "ໄດ້ຖືກເຊື້ອເຊີນ",
+        "other": "ໄດ້ຖືກເຊີນ %(count)s ເທື່ອ"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "one": "%(oneUser)sໄດ້ຖອນການເຊີນຂອງເຂົາເຈົ້າອອກແລ້ວ",
+        "other": "%(oneUser)sshad ການເຊີນຂອງເຂົາເຈົ້າຖອນອອກ %(count)s ຄັ້ງ"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "one": "%(severalUsers)s shad ການເຊີນຂອງເຂົາເຈົ້າຖອນອອກ",
+        "other": "%(severalUsers)s shad ການເຊີນຂອງພວກເຂົາຖືກຖອນ %(count)s ຄັ້ງ"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "one": "%(oneUser)sປະຕິເສດການເຊີນຂອງເຂົາເຈົ້າ",
+        "other": "%(oneUser)sປະຕິເສດການເຊີນຂອງເຂົາເຈົ້າ %(count)s ຄັ້ງ"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "one": "%(severalUsers)sປະຕິເສດຄຳເຊີນຂອງເຂົາເຈົ້າ",
+        "other": "%(severalUsers)sປະຕິເສດຄຳເຊີນຂອງເຂົາເຈົ້າ %(count)sເທື່ອ"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "one": "%(oneUser)s ອອກ ແລະເຂົ້າຮ່ວມຄືນໃໝ່",
+        "other": "%(oneUser)sອອກ ແລະເຂົ້າຮ່ວມ %(count)sຄັ້ງ"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "one": "%(severalUsers)s ອອກ ແລະເຂົ້າຮ່ວມໃຫມ່",
+        "other": "%(severalUsers)s ອອກ ແລະເຂົ້າຮ່ວມຄືນ %(count)sຄັ້ງ"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "one": "%(oneUser)sເຂົ້າຮ່ວມ ແລະ ອອກ",
+        "other": "%(oneUser)sເຂົ້າຮ່ວມ ແລະ ອອກ %(count)s ຄັ້ງ"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "one": "%(severalUsers)sເຂົ້າຮ່ວມ ແລະ ອອກ",
+        "other": "%(severalUsers)sເຂົ້າຮ່ວມ ແລະອອກຈາກ %(count)s ເທື່ອ"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "one": "%(oneUser)sອອກ",
+        "other": "%(oneUser)sອອກຈາກ%(count)s ເທື່ອ"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "one": "ອອກຈາກ%(severalUsers)s",
+        "other": "%(severalUsers)sອອກ %(count)sຄັ້ງ"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "one": "%(oneUser)sເຂົ້າຮ່ວມ",
+        "other": "%(oneUser)sເຂົ້າຮ່ວມ %(count)sຄັ້ງ"
+    },
+    "%(severalUsers)sjoined %(count)s times": {
+        "one": "%(severalUsers)sເຂົ້າຮ່ວມ",
+        "other": "%(severalUsers)sເຂົ້າຮ່ວມ %(count)sຄັ້ງ"
+    },
     "Something went wrong!": "ມີບາງຢ່າງຜິດພາດ!",
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "ກະລຸນາ <newIssueLink>ສ້າງບັນຫາໃໝ່</newIssueLink> ໃນ GitHub ເພື່ອໃຫ້ພວກເຮົາສາມາດກວດສອບຂໍ້ຜິດພາດນີ້ໄດ້.",
     "Backspace": "ປຸ່ມກົດລຶບ",
@@ -2188,8 +2295,10 @@
     "Favourites": "ລາຍການທີ່ມັກ",
     "Replying": "ກຳລັງຕອບກັບ",
     "Recently viewed": "ເບິ່ງເມື່ອບໍ່ດົນມານີ້",
-    "Seen by %(count)s people|one": "ເຫັນໂດຍ %(count)s ຄົນ",
-    "Seen by %(count)s people|other": "ເຫັນໂດຍ %(count)s ຄົນ",
+    "Seen by %(count)s people": {
+        "one": "ເຫັນໂດຍ %(count)s ຄົນ",
+        "other": "ເຫັນໂດຍ %(count)s ຄົນ"
+    },
     "Join": "ເຂົ້າຮ່ວມ",
     "View": "ເບິ່ງ",
     "Unknown": "ບໍ່ຮູ້ຈັກ",
@@ -2260,17 +2369,25 @@
     "Add reaction": "ເພີ່ມການຕອບໂຕ້",
     "Error processing voice message": "ການປະມວນຜົນຂໍ້ຄວາມສຽງຜິດພາດ",
     "Error decrypting video": "ການຖອດລະຫັດວິດີໂອຜິດພາດ",
-    "%(count)s votes|one": "%(count)s ລົງຄະແນນສຽງ",
-    "%(count)s votes|other": "%(count)s ຄະແນນສຽງ",
+    "%(count)s votes": {
+        "one": "%(count)s ລົງຄະແນນສຽງ",
+        "other": "%(count)s ຄະແນນສຽງ"
+    },
     "edited": "ດັດແກ້",
-    "Based on %(count)s votes|one": "ອີງຕາມການລົງຄະແນນສຽງ %(count)s",
-    "Based on %(count)s votes|other": "ອີງຕາມ %(count)s ການລົງຄະເເນນສຽງ",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s ລົງຄະແນນສຽງ. ລົງຄະແນນສຽງເພື່ອເບິ່ງຜົນໄດ້ຮັບ",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s ລົງຄະແນນສຽງ. ລົງຄະແນນສຽງເພື່ອເບິ່ງຜົນໄດ້ຮັບ",
+    "Based on %(count)s votes": {
+        "one": "ອີງຕາມການລົງຄະແນນສຽງ %(count)s",
+        "other": "ອີງຕາມ %(count)s ການລົງຄະເເນນສຽງ"
+    },
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s ລົງຄະແນນສຽງ. ລົງຄະແນນສຽງເພື່ອເບິ່ງຜົນໄດ້ຮັບ",
+        "other": "%(count)s ລົງຄະແນນສຽງ. ລົງຄະແນນສຽງເພື່ອເບິ່ງຜົນໄດ້ຮັບ"
+    },
     "No votes cast": "ບໍ່ມີການລົງຄະແນນສຽງ",
     "Results will be visible when the poll is ended": "ຜົນໄດ້ຮັບຈະເຫັນໄດ້ເມື່ອການສໍາຫຼວດສິ້ນສຸດລົງ",
-    "Final result based on %(count)s votes|one": "ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %(count)s ຄະແນນສຽງ",
-    "Final result based on %(count)s votes|other": "ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %(count)s ຄະແນນສຽງ",
+    "Final result based on %(count)s votes": {
+        "one": "ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %(count)s ຄະແນນສຽງ",
+        "other": "ຜົນສຸດທ້າຍໂດຍອີງໃສ່ %(count)s ຄະແນນສຽງ"
+    },
     "Sorry, your vote was not registered. Please try again.": "ຂໍອະໄພ, ການລົງຄະແນນສຽງຂອງທ່ານບໍ່ໄດ້ລົງທະບຽນ. ກະລຸນາລອງອີກຄັ້ງ.",
     "Vote not registered": "ລົງຄະແນນສຽງບໍ່ໄດ້ລົງທະບຽນ",
     "Sorry, you can't edit a poll after votes have been cast.": "ຂໍອະໄພ, ທ່ານບໍ່ສາມາດແກ້ໄຂແບບສຳຫຼວດໄດ້ຫຼັງຈາກລົງຄະແນນສຽງແລ້ວ.",
@@ -2339,11 +2456,15 @@
     "That's fine": "ບໍ່ເປັນຫຍັງ",
     "Enable": "ເປີດໃຊ້ງານ",
     "File Attached": "ແນບໄຟລ໌",
-    "Exported %(count)s events in %(seconds)s seconds|one": "ສົ່ງອອກ %(count)s ເຫດການໃນ %(seconds)sວິນາທີ",
-    "Exported %(count)s events in %(seconds)s seconds|other": "ສົ່ງອອກ %(count)s ເຫດການໃນ %(seconds)s ວິນາທີ",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "ສົ່ງອອກ %(count)s ເຫດການໃນ %(seconds)sວິນາທີ",
+        "other": "ສົ່ງອອກ %(count)s ເຫດການໃນ %(seconds)s ວິນາທີ"
+    },
     "Export successful!": "ສົ່ງອອກສຳເລັດ!",
-    "Fetched %(count)s events in %(seconds)ss|one": "ດຶງເອົາ %(count)s ໃນເຫດການ%(seconds)ss",
-    "Fetched %(count)s events in %(seconds)ss|other": "ດຶງເອົາເຫດການ %(count)s ໃນ %(seconds)s",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "ດຶງເອົາ %(count)s ໃນເຫດການ%(seconds)ss",
+        "other": "ດຶງເອົາເຫດການ %(count)s ໃນ %(seconds)s"
+    },
     "Processing event %(number)s out of %(total)s": "ກຳລັງປະມວນຜົນເຫດການ %(number)s ຈາກທັງໝົດ %(total)s",
     "Error fetching file": "ເກີດຄວາມຜິດພາດໃນການດຶງໄຟລ໌",
     "Topic: %(topic)s": "ຫົວຂໍ້: %(topic)s",
@@ -2357,10 +2478,14 @@
     "Plain Text": "ຂໍ້ຄວາມທຳມະດາ",
     "JSON": "JSON",
     "HTML": "HTML",
-    "Fetched %(count)s events so far|one": "ດຶງເອົາເຫດການ %(count)s ຈົນເຖິງຕອນນັ້ນ",
-    "Fetched %(count)s events so far|other": "ດຶງເອົາເຫດການ %(count)s ຈົນເຖິງຕອນນັ້ນ",
-    "Fetched %(count)s events out of %(total)s|one": "ດຶງເອົາເຫດການ %(count)s ອອກຈາກ %(total)s ແລ້ວ",
-    "Fetched %(count)s events out of %(total)s|other": "ດຶງເອົາ %(count)sunt)s ເຫດການອອກຈາກ %(total)s",
+    "Fetched %(count)s events so far": {
+        "one": "ດຶງເອົາເຫດການ %(count)s ຈົນເຖິງຕອນນັ້ນ",
+        "other": "ດຶງເອົາເຫດການ %(count)s ຈົນເຖິງຕອນນັ້ນ"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "ດຶງເອົາເຫດການ %(count)s ອອກຈາກ %(total)s ແລ້ວ",
+        "other": "ດຶງເອົາ %(count)sunt)s ເຫດການອອກຈາກ %(total)s"
+    },
     "Generating a ZIP": "ການສ້າງ ZIP",
     "Are you sure you want to exit during this export?": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການອອກໃນລະຫວ່າງການສົ່ງອອກນີ້?",
     "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.": "homeserver ນີ້ບໍ່ໄດ້ຖືກຕັ້ງຄ່າຢ່າງຖືກຕ້ອງເພື່ອສະແດງແຜນທີ່, ຫຼື ເຊີບເວີແຜນທີ່ ທີ່ຕັ້ງໄວ້ອາດຈະບໍ່ສາມາດຕິດຕໍ່ໄດ້.",
@@ -2419,8 +2544,10 @@
     "Can't leave Server Notices room": "ບໍ່ສາມາດອອກຈາກຫ້ອງແຈ້ງເຕືອນຂອງເຊີບເວີໄດ້",
     "Unexpected server error trying to leave the room": "ເກີດຄວາມຜິດພາດທີ່ບໍ່ຄາດຄິດຂອງເຊີບເວີ ໃນຄະນະທີ່ພະຍາຍາມອອກຈາກຫ້ອງ",
     "%(name)s (%(userId)s)": "%(name)s(%(userId)s)",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s ແລະ %(count)s ອື່ນໆ",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s ແລະ %(count)s ອື່ນໆ",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s ແລະ %(count)s ອື່ນໆ",
+        "other": "%(spaceName)s ແລະ %(count)s ອື່ນໆ"
+    },
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s ແລະ %(space2Name)s",
     "%(num)s days from now": "%(num)s ມື້ຕໍ່ຈາກນີ້",
     "about a day from now": "ປະມານນຶ່ງມື້ຈາກນີ້",
@@ -2437,8 +2564,10 @@
     "about a minute ago": "ປະມານໜຶ່ງວິນາທີກ່ອນຫນ້ານີ້",
     "a few seconds ago": "ສອງສາມວິນາທີກ່ອນຫນ້ານີ້",
     "%(items)s and %(lastItem)s": "%(items)s ແລະ %(lastItem)s",
-    "%(items)s and %(count)s others|one": "%(items)s ແລະ ອີກນຶ່ງລາຍການ",
-    "%(items)s and %(count)s others|other": "%(items)s ແລະ %(count)s ອື່ນໆ",
+    "%(items)s and %(count)s others": {
+        "one": "%(items)s ແລະ ອີກນຶ່ງລາຍການ",
+        "other": "%(items)s ແລະ %(count)s ອື່ນໆ"
+    },
     "Attachment": "ຄັດຕິດ",
     "This homeserver has exceeded one of its resource limits.": "homeserverນີ້ໃຊ້ຊັບພະຍາກອນເກີນຂີດຈຳກັດຢ່າງໃດຢ່າງໜຶ່ງ.",
     "This homeserver has been blocked by its administrator.": "homeserver ນີ້ຖືກບລັອກໂດຍຜູູ້ຄຸ້ມຄອງລະບົບ.",
@@ -2481,7 +2610,10 @@
     "Please fill why you're reporting.": "ກະລຸນາຕື່ມຂໍ້ມູນວ່າເປັນຫຍັງທ່ານກໍາລັງລາຍງານ.",
     "Email (optional)": "ອີເມວ (ທາງເລືອກ)",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "ກະລຸນາຮັບຊາບວ່າ, ຖ້າທ່ານບໍ່ເພີ່ມອີເມວ ແລະ ລືມລະຫັດຜ່ານຂອງທ່ານ, ທ່ານອາດ <b>ສູນເສຍການເຂົ້າເຖິງບັນຊີຂອງທ່ານຢ່າງຖາວອນ</b>.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "ຢືນຢັນການອອກຈາກລະບົບອຸປະກອນເຫຼົ່ານີ້ໂດຍໃຊ້ລະບົບປະຕູດຽວ( SSO) ເພື່ອພິສູດຕົວຕົນຂອງທ່ານ.",
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "other": "ຢືນຢັນການອອກຈາກລະບົບອຸປະກອນເຫຼົ່ານີ້ໂດຍໃຊ້ລະບົບປະຕູດຽວ( SSO) ເພື່ອພິສູດຕົວຕົນຂອງທ່ານ.",
+        "one": "ຢືນຢັນການອອກຈາກລະບົບອຸປະກອນນີ້ໂດຍໃຊ້ ລະບົບຈັດການປະຕູດຽວ (SSO) ເພື່ອພິສູດຕົວຕົນຂອງທ່ານ."
+    },
     "Session key:": "ກະແຈລະບົບ:",
     "Session ID:": "ID ລະບົບ:",
     "Cryptography": "ການເຂົ້າລະຫັດລັບ",
@@ -2579,13 +2711,18 @@
     "Select all": "ເລືອກທັງຫມົດ",
     "Deselect all": "ຍົກເລີກການເລືອກທັງໝົດ",
     "Authentication": "ການຢືນຢັນ",
-    "Sign out devices|one": "ອອກຈາກລະບົບອຸປະກອນ",
-    "Sign out devices|other": "ອອກຈາກລະບົບອຸປະກອນ",
-    "Click the button below to confirm signing out these devices.|one": "ກົດທີ່ປຸ່ມຂ້າງລຸ່ມນີ້ເພື່ອຢືນຢັນການອອກຈາກລະບົບອຸປະກອນນີ້.",
-    "Click the button below to confirm signing out these devices.|other": "ກົດທີ່ປຸ່ມຂ້າງລຸ່ມນີ້ເພື່ອຢືນຢັນການອອກຈາກລະບົບອຸປະກອນເຫຼົ່ານີ້.",
-    "Confirm signing out these devices|one": "ຢືນຢັນການອອກຈາກລະບົບອຸປະກອນນີ້",
-    "Confirm signing out these devices|other": "ຢືນຢັນການອອກຈາກລະບົບອຸປະກອນເຫຼົ່ານີ້",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "ຢືນຢັນການອອກຈາກລະບົບອຸປະກອນນີ້ໂດຍໃຊ້ ລະບົບຈັດການປະຕູດຽວ (SSO) ເພື່ອພິສູດຕົວຕົນຂອງທ່ານ.",
+    "Sign out devices": {
+        "one": "ອອກຈາກລະບົບອຸປະກອນ",
+        "other": "ອອກຈາກລະບົບອຸປະກອນ"
+    },
+    "Click the button below to confirm signing out these devices.": {
+        "one": "ກົດທີ່ປຸ່ມຂ້າງລຸ່ມນີ້ເພື່ອຢືນຢັນການອອກຈາກລະບົບອຸປະກອນນີ້.",
+        "other": "ກົດທີ່ປຸ່ມຂ້າງລຸ່ມນີ້ເພື່ອຢືນຢັນການອອກຈາກລະບົບອຸປະກອນເຫຼົ່ານີ້."
+    },
+    "Confirm signing out these devices": {
+        "one": "ຢືນຢັນການອອກຈາກລະບົບອຸປະກອນນີ້",
+        "other": "ຢືນຢັນການອອກຈາກລະບົບອຸປະກອນເຫຼົ່ານີ້"
+    },
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "ການລຶບລ້າງຂໍ້ມູນທັງໝົດຈາກລະບົບນີ້ຖາວອນ. ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດຈະສູນເສຍເວັ້ນເສຍແຕ່ກະແຈຂອງເຂົາເຈົ້າໄດ້ຮັບການສໍາຮອງຂໍ້ມູນ.",
     "%(duration)sd": "%(duration)sd",
     "Topic: %(topic)s (<a>edit</a>)": "ຫົວຂໍ້: %(topic)s (<a>ແກ້ໄຂ</a>)",
@@ -2632,9 +2769,10 @@
     "Loading preview": "ກຳລັງໂຫຼດຕົວຢ່າງ",
     "Sign Up": "ລົງທະບຽນ",
     "Join the conversation with an account": "ເຂົ້າຮ່ວມການສົນທະນາດ້ວຍບັນຊີ",
-    "Currently removing messages in %(count)s rooms|other": "ກຳລັງລຶບຂໍ້ຄວາມຢູ່ໃນ %(count)s ຫ້ອງ",
-    "Currently joining %(count)s rooms|one": "ກຳລັງເຂົ້າຮ່ວມຫ້ອງ %(count)s",
-    "Currently joining %(count)s rooms|other": "ປະຈຸບັນກຳລັງເຂົ້າຮ່ວມ %(count)s ຫ້ອງ",
+    "Currently joining %(count)s rooms": {
+        "one": "ກຳລັງເຂົ້າຮ່ວມຫ້ອງ %(count)s",
+        "other": "ປະຈຸບັນກຳລັງເຂົ້າຮ່ວມ %(count)s ຫ້ອງ"
+    },
     "Join public room": "ເຂົ້າຮ່ວມຫ້ອງສາທາລະນະ",
     "You do not have permissions to add spaces to this space": "ທ່ານບໍ່ມີການອະນຸຍາດໃຫ້ເພີ່ມພື້ນທີ່ໃສ່ພື້ນທີ່ນີ້",
     "Add space": "ເພີ່ມພື້ນທີ່",
@@ -2679,10 +2817,14 @@
     "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "ຕັດສິນໃຈວ່າບ່ອນໃດທີ່ສາມາດເຂົ້າເຖິງຫ້ອງນີ້ໄດ້. ຖ້າຫາກພື້ນທີ່ເລືອກ, ສະມາຊິກຂອງຕົນສາມາດຊອກຫາ ແລະເຂົ້າຮ່ວມ <RoomName/>.",
     "Select spaces": "ເລືອກພື້ນທີ່",
     "You're removing all spaces. Access will default to invite only": "ທ່ານກຳລັງລຶບພື້ນທີ່ທັງໝົດອອກ. ການເຂົ້າເຖິງຈະເປັນຄ່າເລີ່ມຕົ້ນເພື່ອເຊີນເທົ່ານັ້ນ",
-    "%(count)s rooms|one": "%(count)s ຫ້ອງ",
-    "%(count)s rooms|other": "%(count)s ຫ້ອງ",
-    "%(count)s members|one": "ສະມາຊິກ %(count)s",
-    "%(count)s members|other": "ສະມາຊິກ %(count)s",
+    "%(count)s rooms": {
+        "one": "%(count)s ຫ້ອງ",
+        "other": "%(count)s ຫ້ອງ"
+    },
+    "%(count)s members": {
+        "one": "ສະມາຊິກ %(count)s",
+        "other": "ສະມາຊິກ %(count)s"
+    },
     "Are you sure you want to sign out?": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການອອກຈາກລະບົບ?",
     "You'll lose access to your encrypted messages": "ທ່ານຈະສູນເສຍການເຂົ້າເຖິງລະຫັດຂໍ້ຄວາມຂອງທ່ານ",
     "Manually export keys": "ສົ່ງກະແຈອອກດ້ວຍຕົນເອງ",
@@ -2730,11 +2872,14 @@
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "ຕອນນີ້ທ່ານກຳລັງໃຊ້ <server></server> ເພື່ອຄົ້ນຫາ ແລະ ສາມາດຄົ້ນຫາໄດ້ໂດຍຜູ້ຕິດຕໍ່ທີ່ມີຢູ່ແລ້ວ. ທ່ານສາມາດປ່ຽນເຊີບເວນຂອງທ່ານໄດ້ຂ້າງລຸ່ມນີ້.",
     "Identity server (%(server)s)": "ເຊີບເວີ %(server)s)",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "ພວກເຮົາແນະນໍາໃຫ້ທ່ານເອົາທີ່ຢູ່ອີເມວ ແລະ ເບີໂທລະສັບຂອງທ່ານອອກຈາກເຊີບເວີກ່ອນທີ່ຈະຕັດການເຊື່ອມຕໍ່.",
-    "was unbanned %(count)s times|one": "ຍົກເລີກການຫ້າມ",
-    "was unbanned %(count)s times|other": "ຖືກຍົກເລີກການຫ້າມ %(count)s ເທື່ອ",
-    "was removed %(count)s times|other": "ລຶບອອກ %(count)s ເທື່ອ",
-    "were removed %(count)s times|one": "ໄດ້ຖືກລຶບອອກ",
-    "were removed %(count)s times|other": "ໄດ້ຖືກ]ລືບອອກ %(count)s ເທື່ອ",
+    "was unbanned %(count)s times": {
+        "one": "ຍົກເລີກການຫ້າມ",
+        "other": "ຖືກຍົກເລີກການຫ້າມ %(count)s ເທື່ອ"
+    },
+    "were removed %(count)s times": {
+        "one": "ໄດ້ຖືກລຶບອອກ",
+        "other": "ໄດ້ຖືກ]ລືບອອກ %(count)s ເທື່ອ"
+    },
     "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "ທ່ານຍັງ <b>ແບ່ງປັນຂໍ້ມູນສ່ວນຕົວຂອງທ່ານ</b> ຢູ່ໃນເຊີບເວີ <idserver />.",
     "Disconnect anyway": "ຍົກເລີກການເຊື່ອມຕໍ່",
     "wait and try again later": "ລໍຖ້າແລ້ວລອງໃໝ່ໃນພາຍຫຼັງ",
@@ -2942,13 +3087,17 @@
     "Changelog": "ບັນທຶກການປ່ຽນແປງ",
     "Unavailable": "ບໍ່ສາມາດໃຊ້ງານໄດ້",
     "Unable to load commit detail: %(msg)s": "ບໍ່ສາມາດໂຫຼດລາຍລະອຽດຂອງ commit: %(msg)s",
-    "Remove %(count)s messages|one": "ລຶບອອກ 1 ຂໍ້ຄວາມ",
-    "Remove %(count)s messages|other": "ເອົາ %(count)s ຂໍ້ຄວາມອອກ",
+    "Remove %(count)s messages": {
+        "one": "ລຶບອອກ 1 ຂໍ້ຄວາມ",
+        "other": "ເອົາ %(count)s ຂໍ້ຄວາມອອກ"
+    },
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "ຍົກເລີກການກວດກາ ຖ້າທ່ານຕ້ອງການລຶບຂໍ້ຄວາມໃນລະບົບຜູ້ໃຊ້ນີ້ (ເຊັ່ນ: ການປ່ຽນແປງສະມາຊິກ, ການປ່ຽນແປງໂປຣໄຟລ໌...)",
     "Preserve system messages": "ຮັກສາຂໍ້ຄວາມຂອງລະບົບ",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "ສໍາລັບຈໍານວນຂໍ້ຄວາມຂະຫນາດໃຫຍ່, ນີ້ອາດຈະໃຊ້ເວລາ, ກະລຸນາຢ່າໂຫຼດຂໍ້ມູນລູກຄ້າຂອງທ່ານຄືນໃໝ່ໃນລະຫວ່າງນີ້.",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|one": "ທ່ານກຳລັງຈະລຶບ %(count)s ຂໍ້ຄວາມໂດຍ %(user)s. ນີ້ຈະເປັນການລຶບຂໍ້ຄວາມອອກຖາວອນສຳລັບທຸກຄົນໃນການສົນທະນາ. ທ່ານຕ້ອງການສືບຕໍ່ບໍ?",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "ທ່ານກຳລັງຈະລຶບ %(count)s ຂໍ້ຄວາມອອກໂດຍ %(user)s. ນີ້ຈະເປັນການລຶບຂໍ້ຄວາມອອກຖາວອນສຳລັບທຸກຄົນໃນການສົນທະນາ. ທ່ານຕ້ອງການສືບຕໍ່ບໍ?",
+    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
+        "one": "ທ່ານກຳລັງຈະລຶບ %(count)s ຂໍ້ຄວາມໂດຍ %(user)s. ນີ້ຈະເປັນການລຶບຂໍ້ຄວາມອອກຖາວອນສຳລັບທຸກຄົນໃນການສົນທະນາ. ທ່ານຕ້ອງການສືບຕໍ່ບໍ?",
+        "other": "ທ່ານກຳລັງຈະລຶບ %(count)s ຂໍ້ຄວາມອອກໂດຍ %(user)s. ນີ້ຈະເປັນການລຶບຂໍ້ຄວາມອອກຖາວອນສຳລັບທຸກຄົນໃນການສົນທະນາ. ທ່ານຕ້ອງການສືບຕໍ່ບໍ?"
+    },
     "Remove recent messages by %(user)s": "ລຶບຂໍ້ຄວາມຫຼ້າສຸດໂດຍ %(user)s",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "ລອງເລື່ອນຂຶ້ນໃນທາມລາຍເພື່ອເບິ່ງວ່າມີອັນໃດກ່ອນໜ້ານີ້.",
     "No recent messages by %(user)s found": "ບໍ່ພົບຂໍ້ຄວາມຫຼ້າສຸດໂດຍ %(user)s",
@@ -2968,8 +3117,10 @@
     "Report the entire room": "ລາຍງານຫ້ອງທັງໝົດ",
     "Spam or propaganda": "ຂໍ້ຄວາມຂີ້ເຫຍື້ອ ຫຼື ການໂຄສະນາເຜີຍແຜ່",
     "Close preview": "ປິດຕົວຢ່າງ",
-    "Show %(count)s other previews|one": "ສະແດງຕົວຢ່າງ %(count)s ອື່ນໆ",
-    "Show %(count)s other previews|other": "ສະແດງຕົວຢ່າງອື່ນໆ %(count)s",
+    "Show %(count)s other previews": {
+        "one": "ສະແດງຕົວຢ່າງ %(count)s ອື່ນໆ",
+        "other": "ສະແດງຕົວຢ່າງອື່ນໆ %(count)s"
+    },
     "Scroll to most recent messages": "ເລື່ອນໄປຫາຂໍ້ຄວາມຫຼ້າສຸດ",
     "You can't see earlier messages": "ທ່ານບໍ່ສາມາດເຫັນຂໍ້ຄວາມກ່ອນໜ້ານີ້",
     "Mod": "ກາປັບປ່ຽນ",
@@ -3036,8 +3187,10 @@
     "Report Content": "ລາຍງານເນື້ອຫາ",
     "Please pick a nature and describe what makes this message abusive.": "ກະລຸນາເລືອກລັກສະນະ ແລະ ການອະທິບາຍຂອງຂໍ້ຄວາມໃດໜຶ່ງທີ່ສຸພາບ.",
     "<empty string>": "<Empty string>",
-    "<%(count)s spaces>|one": "<space>",
-    "<%(count)s spaces>|other": "<%(count)s spaces>",
+    "<%(count)s spaces>": {
+        "one": "<space>",
+        "other": "<%(count)s spaces>"
+    },
     "Link to room": "ເຊື່ອມຕໍ່ທີ່ຫ້ອງ",
     "Link to selected message": "ເຊື່ອມຕໍ່ກັບຂໍ້ຄວາມທີ່ເລືອກ",
     "Share Room Message": "ແບ່ງປັນຂໍ້ຄວາມໃນຫ້ອງ",
@@ -3056,9 +3209,13 @@
     "Not all selected were added": "ບໍ່ໄດ້ເລືອກທັງໝົດທີ່ຖືກເພີ່ມ",
     "Matrix": "Matrix",
     "Looks good": "ດີ",
-    "And %(count)s more...|other": "ແລະ %(count)sອີກ...",
-    "%(count)s people you know have already joined|one": "%(count)s ຄົນທີ່ທ່ານຮູ້ຈັກໄດ້ເຂົ້າຮ່ວມແລ້ວ",
-    "%(count)s people you know have already joined|other": "%(count)s ຄົນທີ່ທ່ານຮູ້ຈັກໄດ້ເຂົ້າຮ່ວມແລ້ວ",
+    "And %(count)s more...": {
+        "other": "ແລະ %(count)sອີກ..."
+    },
+    "%(count)s people you know have already joined": {
+        "one": "%(count)s ຄົນທີ່ທ່ານຮູ້ຈັກໄດ້ເຂົ້າຮ່ວມແລ້ວ",
+        "other": "%(count)s ຄົນທີ່ທ່ານຮູ້ຈັກໄດ້ເຂົ້າຮ່ວມແລ້ວ"
+    },
     "%(nameList)s %(transitionList)s": "%(nameList)s%(transitionList)s",
     "%(brand)s URL": "%(brand)s URL",
     "Failed to ban user": "ຫ້າມຜູ້ໃຊ້ບໍ່ສຳເລັດ",
@@ -3072,7 +3229,6 @@
     "Ban from room": "ຫ້າມອອກຈາກຫ້ອງ",
     "Unban from room": "ຫ້າມຈາກຫ້ອງ",
     "Ban from space": "ພື້ນທີ່ຫ້າມຈາກ",
-    "%(count)s verified sessions|other": "%(count)sລະບົບຢືນຢັນແລ້ວ",
     "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "ໃນຫ້ອງທີ່ເຂົ້າລະຫັດ, ເຊັ່ນດຽວກັບ, ການສະແດງຕົວຢ່າງ URLໄດ້ປິດໃຊ້ງານໂດຍຄ່າເລີ່ມຕົ້ນເພື່ອຮັບປະກັນວ່າ homeserver ຂອງທ່ານ (ບ່ອນສະແດງຕົວຢ່າງ) ບໍ່ສາມາດລວບລວມຂໍ້ມູນກ່ຽວກັບການເຊື່ອມຕໍ່ທີ່ທ່ານເຫັນຢູ່ໃນຫ້ອງນີ້.",
     "Invite": "ເຊີນ",
     "Search": "ຊອກຫາ",
@@ -3081,8 +3237,10 @@
     "Forget room": "ລືມຫ້ອງ",
     "Room options": "ຕົວເລືອກຫ້ອງ",
     "Join Room": "ເຂົ້າຮ່ວມຫ້ອງ",
-    "(~%(count)s results)|one": "(~%(count)sຜົນຮັບ)",
-    "(~%(count)s results)|other": "(~%(count)sຜົນຮັບ)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)sຜົນຮັບ)",
+        "other": "(~%(count)sຜົນຮັບ)"
+    },
     "No recently visited rooms": "ບໍ່ມີຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້",
     "Recently visited rooms": "ຫ້ອງທີ່ເຂົ້າເບິ່ງເມື່ອບໍ່ດົນມານີ້",
     "Room %(name)s": "ຫ້ອງ %(name)s",
@@ -3109,8 +3267,10 @@
     "Reply to thread…": "ຕອບກັບກະທູ້…",
     "Invite to this space": "ເຊີນໄປບ່ອນນີ້",
     "Invite to this room": "ເຊີນເຂົ້າຫ້ອງນີ້",
-    "and %(count)s others...|one": "ແລະ ອີກອັນນຶ່ງ...",
-    "and %(count)s others...|other": "ແລະ %(count)s ຜູ້ອຶ່ນ...",
+    "and %(count)s others...": {
+        "one": "ແລະ ອີກອັນນຶ່ງ...",
+        "other": "ແລະ %(count)s ຜູ້ອຶ່ນ..."
+    },
     "%(members)s and %(last)s": "%(members)s ແລະ %(last)s",
     "%(members)s and more": "%(members)s ແລະອື່ນໆ",
     "Open room": "ເປີດຫ້ອງ",
@@ -3136,8 +3296,10 @@
     "Click to read topic": "ກົດເພື່ອອ່ານຫົວຂໍ້",
     "Edit topic": "ແກ້ໄຂຫົວຂໍ້",
     "Joining…": "ກຳລັງເຂົ້າ…",
-    "%(count)s people joined|one": "%(count)s ຄົນເຂົ້າຮ່ວມ\"",
-    "%(count)s people joined|other": "%(count)s ຄົນເຂົ້າຮ່ວມ",
+    "%(count)s people joined": {
+        "one": "%(count)s ຄົນເຂົ້າຮ່ວມ\"",
+        "other": "%(count)s ຄົນເຂົ້າຮ່ວມ"
+    },
     "View related event": "ເບິ່ງເຫດການທີ່ກ່ຽວຂ້ອງ",
     "Read receipts": "ຢັ້ງຢືນອ່ານແລ້ວ",
     "Enable hardware acceleration (restart %(appName)s to take effect)": "ເພີ່ມຂີດຄວາມສາມາດຂອງອຸປະກອນ (ບູສແອັບ %(appName)s ນີ້ໃໝ່ເພື່ອເຫັນຜົນ)"

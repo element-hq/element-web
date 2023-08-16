@@ -26,8 +26,10 @@
     "Attachment": "Επισύναψη",
     "%(items)s and %(lastItem)s": "%(items)s και %(lastItem)s",
     "Always show message timestamps": "Εμφάνιση πάντα της ένδειξης ώρας στα μηνύματα",
-    "and %(count)s others...|one": "και ένας ακόμα...",
-    "and %(count)s others...|other": "και %(count)s άλλοι...",
+    "and %(count)s others...": {
+        "one": "και ένας ακόμα...",
+        "other": "και %(count)s άλλοι..."
+    },
     "Change Password": "Αλλαγή κωδικού πρόσβασης",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "Ο %(senderDisplayName)s άλλαξε το όνομα του δωματίου σε %(roomName)s.",
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "Ο %(senderDisplayName)s άλλαξε το θέμα σε \"%(topic)s\".",
@@ -174,8 +176,10 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "This server does not support authentication with a phone number.": "Αυτός ο διακομιστής δεν υποστηρίζει πιστοποίηση με αριθμό τηλεφώνου.",
     "Room": "Δωμάτιο",
-    "(~%(count)s results)|one": "(~%(count)s αποτέλεσμα)",
-    "(~%(count)s results)|other": "(~%(count)s αποτελέσματα)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s αποτέλεσμα)",
+        "other": "(~%(count)s αποτελέσματα)"
+    },
     "New Password": "Νέος κωδικός πρόσβασης",
     "Start automatically after system login": "Αυτόματη έναρξη μετά τη σύνδεση",
     "Options": "Επιλογές",
@@ -226,7 +230,10 @@
     "Server unavailable, overloaded, or something else went wrong.": "Ο διακομιστής μπορεί να είναι μη διαθέσιμος, υπερφορτωμένος, ή κάτι άλλο να πήγε στραβά.",
     "This room is not recognised.": "Αυτό το δωμάτιο δεν αναγνωρίζεται.",
     "Uploading %(filename)s": "Γίνεται αποστολή του %(filename)s",
-    "Uploading %(filename)s and %(count)s others|other": "Γίνεται αποστολή του %(filename)s και %(count)s υπολοίπων",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "Γίνεται αποστολή του %(filename)s και %(count)s υπολοίπων",
+        "one": "Γίνεται αποστολή του %(filename)s και %(count)s υπολοίπα"
+    },
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (δύναμη %(powerLevelNumber)s)",
     "Verification Pending": "Εκκρεμεί επιβεβαίωση",
     "Verified key": "Επιβεβαιωμένο κλειδί",
@@ -246,7 +253,6 @@
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "Ο %(senderName)s έστειλε μια πρόσκληση στον %(targetDisplayName)s για να συνδεθεί στο δωμάτιο.",
     "The email address linked to your account must be entered.": "Πρέπει να εισηχθεί η διεύθυνση ηλ. αλληλογραφίας που είναι συνδεδεμένη με τον λογαριασμό σας.",
     "This room is not accessible by remote Matrix servers": "Αυτό το δωμάτιο δεν είναι προσβάσιμο από απομακρυσμένους διακομιστές Matrix",
-    "Uploading %(filename)s and %(count)s others|one": "Γίνεται αποστολή του %(filename)s και %(count)s υπολοίπα",
     "You have <a>disabled</a> URL previews by default.": "Έχετε <a>απενεργοποιημένη</a> από προεπιλογή την προεπισκόπηση συνδέσμων.",
     "You have <a>enabled</a> URL previews by default.": "Έχετε <a>ενεργοποιημένη</a> από προεπιλογή την προεπισκόπηση συνδέσμων.",
     "You need to be able to invite users to do that.": "Για να το κάνετε αυτό πρέπει να έχετε τη δυνατότητα να προσκαλέσετε χρήστες.",
@@ -413,11 +419,15 @@
     "%(num)s minutes ago": "%(num)s λεπτά πριν",
     "about a minute ago": "σχεδόν ένα λεπτό πριν",
     "a few seconds ago": "λίγα δευτερόλεπτα πριν",
-    "%(items)s and %(count)s others|one": "%(items)s και ένα ακόμα",
-    "%(items)s and %(count)s others|other": "%(items)s και %(count)s άλλα",
+    "%(items)s and %(count)s others": {
+        "one": "%(items)s και ένα ακόμα",
+        "other": "%(items)s και %(count)s άλλα"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s και %(lastPerson)s πληκτρολογούν …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s και ένας ακόμα πληκτρολογούν …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s και %(count)s άλλοι πληκτρολογούν …",
+    "%(names)s and %(count)s others are typing …": {
+        "one": "%(names)s και ένας ακόμα πληκτρολογούν …",
+        "other": "%(names)s και %(count)s άλλοι πληκτρολογούν …"
+    },
     "%(displayName)s is typing …": "%(displayName)s πληκτρολογεί …",
     "Ask this user to verify their session, or manually verify it below.": "Ζητήστε από αυτόν τον χρήστη να επιβεβαιώσει την συνεδρία του, ή επιβεβαιώστε την χειροκίνητα παρακάτω.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "Ο %(name)s (%(userId)s) συνδέθηκε σε μία νέα συνεδρία χωρίς να την επιβεβαιώσει:",
@@ -431,10 +441,14 @@
     "%(senderName)s placed a voice call. (not supported by this browser)": "Ο %(senderName)s έκανε μια ηχητική κλήση. (δεν υποστηρίζεται από το πρόγραμμα περιήγησης)",
     "%(senderName)s placed a voice call.": "Ο %(senderName)s έκανε μία ηχητική κλήση.",
     "%(senderName)s changed the alternative addresses for this room.": "Ο %(senderName)s άλλαξε την εναλλακτική διεύθυνση για αυτό το δωμάτιο.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "Ο %(senderName)s αφαίρεσε την εναλλακτική διεύθυνση %(addresses)s για αυτό το δωμάτιο.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "Ο %(senderName)s αφαίρεσε τις εναλλακτικές διευθύνσεις %(addresses)s για αυτό το δωμάτιο.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "Ο %(senderName)s πρόσθεσε τις εναλλακτικές διευθύνσεις %(addresses)s για αυτό το δωμάτιο.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "Ο %(senderName)s πρόσθεσε τις εναλλακτικές διευθύνσεις %(addresses)s για αυτό το δωμάτιο.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "one": "Ο %(senderName)s αφαίρεσε την εναλλακτική διεύθυνση %(addresses)s για αυτό το δωμάτιο.",
+        "other": "Ο %(senderName)s αφαίρεσε τις εναλλακτικές διευθύνσεις %(addresses)s για αυτό το δωμάτιο."
+    },
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "one": "Ο %(senderName)s πρόσθεσε τις εναλλακτικές διευθύνσεις %(addresses)s για αυτό το δωμάτιο.",
+        "other": "Ο %(senderName)s πρόσθεσε τις εναλλακτικές διευθύνσεις %(addresses)s για αυτό το δωμάτιο."
+    },
     "%(senderName)s removed the main address for this room.": "Ο %(senderName)s αφαίρεσε την κύρια διεύθυνση για αυτό το δωμάτιο.",
     "%(senderName)s set the main address for this room to %(address)s.": "Ο %(senderName)s έθεσε την κύρια διεύθυνση αυτού του δωματίου σε %(address)s.",
     "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Όλοι οι διακομιστές αποκλείστηκαν από την συμμετοχή! Αυτό το δωμάτιο δεν μπορεί να χρησιμοποιηθεί πλέον.",
@@ -683,13 +697,22 @@
     "Already in call": "Ήδη σε κλήση",
     "Verifies a user, session, and pubkey tuple": "Επιβεβαιώνει έναν χρήστη, συνεδρία, και pubkey tuple",
     "The user you called is busy.": "Ο χρήστης που καλέσατε είναι απασχολημένος.",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s απέρριψε τις προσκλήσεις",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s απέρριψε τις προσκλήσεις %(count)s φορές",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s απέρριψαν τις προσκλήσεις τους",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s απέρριψαν τις προσκλήσεις τους %(count)s φορές",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s έφυγε και επανασυνδέθηκε",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s έφυγε και επανασυνδέθηκε %(count)s φορές",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s έφυγαν και επανασυνδέθηκαν",
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "one": "%(oneUser)s απέρριψε τις προσκλήσεις",
+        "other": "%(oneUser)s απέρριψε τις προσκλήσεις %(count)s φορές"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "one": "%(severalUsers)s απέρριψαν τις προσκλήσεις τους",
+        "other": "%(severalUsers)s απέρριψαν τις προσκλήσεις τους %(count)s φορές"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "one": "%(oneUser)s έφυγε και επανασυνδέθηκε",
+        "other": "%(oneUser)s έφυγε και επανασυνδέθηκε %(count)s φορές"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "one": "%(severalUsers)s έφυγαν και επανασυνδέθηκαν",
+        "other": "%(severalUsers)sέφυγε και επανασυνδέθηκε %(count)s φορές"
+    },
     "Ignored user": "Αγνοημένος χρήστης",
     "Ignores a user, hiding their messages from you": "Αγνοεί ένα χρήστη, αποκρύπτοντας τα μηνύματα του σε εσάς",
     "Unbans user with given ID": "Άρση αποκλεισμού χρήστη με το συγκεκριμένο αναγνωριστικό",
@@ -823,7 +846,10 @@
     "Failed to get room topic: Unable to find room (%(roomId)s": "Αποτυχία λήψης θέματος δωματίου: Αδυναμία εύρεσης δωματίου (%(roomId)s",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s kai %(space2Name)s",
     "Unrecognised room address: %(roomAlias)s": "Μη αναγνωρισμένη διεύθυνση δωματίου: %(roomAlias)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s και άλλα %(count)s",
+    "%(spaceName)s and %(count)s others": {
+        "other": "%(spaceName)s και άλλα %(count)s",
+        "one": "%(spaceName)s και %(count)s άλλο"
+    },
     "Message didn't send. Click for info.": "Το μήνυμα δεν στάλθηκε. Κάντε κλικ για πληροφορίες.",
     "End-to-end encryption isn't enabled": "Η κρυπτογράφηση από άκρο σε άκρο δεν είναι ενεργοποιημένη",
     "Enable encryption in settings.": "Ενεργοποιήστε την κρυπτογράφηση στις ρυθμίσεις.",
@@ -897,10 +923,14 @@
     "Message bubbles": "Συννεφάκια μηνυμάτων",
     "Modern": "Μοντέρνο",
     "Message layout": "Διάταξη μηνύματος",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Ενημέρωση χώρου...",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Ενημέρωση χώρων... (%(progress)s out of %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Αποστολή πρόσκλησης...",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Αποστολή προσκλήσεων... (%(progress)s από %(count)s)",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Ενημέρωση χώρου...",
+        "other": "Ενημέρωση χώρων... (%(progress)s out of %(count)s)"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Αποστολή πρόσκλησης...",
+        "other": "Αποστολή προσκλήσεων... (%(progress)s από %(count)s)"
+    },
     "Loading new room": "Φόρτωση νέου δωματίου",
     "Upgrading room": "Αναβάθμιση δωματίου",
     "Space members": "Μέλη χώρου",
@@ -1097,10 +1127,14 @@
     "Plain Text": "Απλό κείμενο",
     "JSON": "JSON",
     "HTML": "HTML",
-    "Fetched %(count)s events so far|one": "Ανακτήθηκαν %(count)s συμβάντα μέχρι τώρα",
-    "Fetched %(count)s events so far|other": "Ανακτήθηκαν %(count)s συμβάντα μέχρι τώρα",
-    "Fetched %(count)s events out of %(total)s|one": "Ανακτήθηκαν %(count)s συμβάντα από %(total)s",
-    "Fetched %(count)s events out of %(total)s|other": "Ανακτήθηκαν %(count)s συμβάντα από %(total)s",
+    "Fetched %(count)s events so far": {
+        "one": "Ανακτήθηκαν %(count)s συμβάντα μέχρι τώρα",
+        "other": "Ανακτήθηκαν %(count)s συμβάντα μέχρι τώρα"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "Ανακτήθηκαν %(count)s συμβάντα από %(total)s",
+        "other": "Ανακτήθηκαν %(count)s συμβάντα από %(total)s"
+    },
     "This homeserver has been blocked by its administrator.": "Αυτός ο κεντρικός διακομιστής έχει αποκλειστεί από τον διαχειριστή του.",
     "This homeserver has hit its Monthly Active User limit.": "Αυτός ο κεντρικός διακομιστής έχει φτάσει το μηνιαίο όριο ενεργού χρήστη.",
     "Unexpected error resolving homeserver configuration": "Μη αναμενόμενο σφάλμα κατά την επίλυση της διαμόρφωσης του κεντρικού διακομιστή",
@@ -1120,12 +1154,15 @@
     "Send stickers to your active room as you": "Στείλτε αυτοκόλλητα στο ενεργό δωμάτιό σας",
     "Send stickers to this room as you": "Στείλτε αυτοκόλλητα σε αυτό το δωμάτιο",
     "Command error: Unable to handle slash command.": "Σφάλμα εντολής: Δεν είναι δυνατή η χρήση της εντολής slash.",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s και %(count)s άλλο",
-    "Exported %(count)s events in %(seconds)s seconds|one": "Έγινε εξαγωγή %(count)s συμβάντος σε %(seconds)s δευτερόλεπτα",
-    "Exported %(count)s events in %(seconds)s seconds|other": "Έγινε εξαγωγή %(count)s συμβάντων σε %(seconds)s δευτερόλεπτα",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "Έγινε εξαγωγή %(count)s συμβάντος σε %(seconds)s δευτερόλεπτα",
+        "other": "Έγινε εξαγωγή %(count)s συμβάντων σε %(seconds)s δευτερόλεπτα"
+    },
     "Export successful!": "Επιτυχής εξαγωγή!",
-    "Fetched %(count)s events in %(seconds)ss|one": "Λήφθηκε %(count)s συμβάν σε %(seconds)s''",
-    "Fetched %(count)s events in %(seconds)ss|other": "Λήφθηκαν %(count)s συμβάντα σε %(seconds)s''",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "Λήφθηκε %(count)s συμβάν σε %(seconds)s''",
+        "other": "Λήφθηκαν %(count)s συμβάντα σε %(seconds)s''"
+    },
     "Processing event %(number)s out of %(total)s": "Επεξεργασία συμβάντος %(number)s από %(total)s",
     "Error fetching file": "Σφάλμα κατά την ανάκτηση του αρχείου",
     "Topic: %(topic)s": "Θέμα: %(topic)s",
@@ -1424,9 +1461,14 @@
     "Back up your keys before signing out to avoid losing them.": "Δημιουργήστε αντίγραφα ασφαλείας των κλειδιών σας πριν αποσυνδεθείτε για να μην τα χάσετε.",
     "Your keys are <b>not being backed up from this session</b>.": "<b>Δεν δημιουργούνται αντίγραφα ασφαλείας των κλειδιών σας από αυτήν την συνεδρία</b>.",
     "This backup is trusted because it has been restored on this session": "Αυτό το αντίγραφο ασφαλείας είναι αξιόπιστο επειδή έχει αποκατασταθεί σε αυτήν τη συνεδρία",
-    "Click the button below to confirm signing out these devices.|other": "Κάντε κλικ στο κουμπί παρακάτω για να επιβεβαιώσετε αποσύνδεση αυτών των συσκευών.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Επιβεβαιώστε ότι αποσυνδέεστε από αυτήν τη συσκευή χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Επιβεβαιώστε την αποσύνδεση από αυτές τις συσκευές χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας.",
+    "Click the button below to confirm signing out these devices.": {
+        "other": "Κάντε κλικ στο κουμπί παρακάτω για να επιβεβαιώσετε αποσύνδεση αυτών των συσκευών.",
+        "one": "Κάντε κλικ στο κουμπί παρακάτω για επιβεβαίωση αποσύνδεση αυτής της συσκευής."
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Επιβεβαιώστε ότι αποσυνδέεστε από αυτήν τη συσκευή χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας.",
+        "other": "Επιβεβαιώστε την αποσύνδεση από αυτές τις συσκευές χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας."
+    },
     "Session key:": "Κλειδί συνεδρίας:",
     "Session ID:": "Αναγνωριστικό συνεδρίας:",
     "exists": "υπάρχει",
@@ -1439,16 +1481,19 @@
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "Λείπουν ορισμένα στοιχεία από το %(brand)s που απαιτούνται για την ασφαλή αποθήκευση κρυπτογραφημένων μηνυμάτων τοπικά. Εάν θέλετε να πειραματιστείτε με αυτό το χαρακτηριστικό, δημιουργήστε μια προσαρμοσμένη %(brand)s επιφάνεια εργασίαςμε <nativeLink>προσθήκη στοιχείων αναζήτησης</nativeLink>.",
     "Securely cache encrypted messages locally for them to appear in search results.": "Αποθηκεύστε με ασφάλεια κρυπτογραφημένα μηνύματα τοπικά για να εμφανίζονται στα αποτελέσματα αναζήτησης.",
     "Manage": "Διαχειριστείτε",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Αποθηκεύστε με ασφάλεια κρυπτογραφημένα μηνύματα τοπικά για να εμφανίζονται στα αποτελέσματα αναζήτησης, χρησιμοποιώντας %(size)s για αποθήκευση μηνυμάτων από το %(rooms)sδωμάτιο .",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Αποθηκεύστε με ασφάλεια κρυπτογραφημένα μηνύματα τοπικά για να εμφανίζονται στα αποτελέσματα αναζήτησης, χρησιμοποιώντας %(size)s για αποθήκευση μηνυμάτων από τα %(rooms)sδωμάτια .",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "Αποθηκεύστε με ασφάλεια κρυπτογραφημένα μηνύματα τοπικά για να εμφανίζονται στα αποτελέσματα αναζήτησης, χρησιμοποιώντας %(size)s για αποθήκευση μηνυμάτων από το %(rooms)sδωμάτιο .",
+        "other": "Αποθηκεύστε με ασφάλεια κρυπτογραφημένα μηνύματα τοπικά για να εμφανίζονται στα αποτελέσματα αναζήτησης, χρησιμοποιώντας %(size)s για αποθήκευση μηνυμάτων από τα %(rooms)sδωμάτια ."
+    },
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Επαληθεύστε μεμονωμένα κάθε συνεδρία που χρησιμοποιείται από έναν χρήστη για να την επισημάνετε ως αξιόπιστη, χωρίς να εμπιστεύεστε συσκευές με διασταυρούμενη υπογραφή.",
     "Rename": "Μετονομασία",
     "Display Name": "Εμφανιζόμενο όνομα",
     "Select all": "Επιλογή όλων",
     "Deselect all": "Αποεπιλογή όλων",
-    "Sign out devices|one": "Αποσύνδεση συσκευής",
-    "Sign out devices|other": "Αποσύνδεση συσκευών",
-    "Click the button below to confirm signing out these devices.|one": "Κάντε κλικ στο κουμπί παρακάτω για επιβεβαίωση αποσύνδεση αυτής της συσκευής.",
+    "Sign out devices": {
+        "one": "Αποσύνδεση συσκευής",
+        "other": "Αποσύνδεση συσκευών"
+    },
     "Account management": "Διαχείριση λογαριασμών",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Αποδεχτείτε τους Όρους χρήσης του διακομιστή ταυτότητας (%(serverName)s), ώστε να μπορείτε να είστε ανιχνεύσιμοι μέσω της διεύθυνσης ηλεκτρονικού ταχυδρομείου ή του αριθμού τηλεφώνου.",
     "Language and region": "Γλώσσα και περιοχή",
@@ -1501,10 +1546,14 @@
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Οποιοσδήποτε στο <spaceName/> μπορεί να το βρει και να εγγραφεί. Μπορείτε να επιλέξετε και άλλους χώρους.",
     "Spaces with access": "Χώροι με πρόσβαση",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Οποιοσδήποτε σε ένα χώρο μπορεί να το βρει και να εγγραφεί. <a>Επεξεργαστείτε τους χώρους που έχουν πρόσβαση εδώ.</a>",
-    "Currently, %(count)s spaces have access|one": "Αυτήν τη στιγμή, ένας χώρος έχει πρόσβαση",
-    "Currently, %(count)s spaces have access|other": "Αυτήν τη στιγμή, %(count)s χώροι έχουν πρόσβαση",
-    "& %(count)s more|one": "& %(count)s περισσότερα",
-    "& %(count)s more|other": "& %(count)s περισσότερα",
+    "Currently, %(count)s spaces have access": {
+        "one": "Αυτήν τη στιγμή, ένας χώρος έχει πρόσβαση",
+        "other": "Αυτήν τη στιγμή, %(count)s χώροι έχουν πρόσβαση"
+    },
+    "& %(count)s more": {
+        "one": "& %(count)s περισσότερα",
+        "other": "& %(count)s περισσότερα"
+    },
     "Upgrade required": "Απαιτείται αναβάθμιση",
     "Anyone can find and join.": "Οποιοσδήποτε μπορεί να το βρει και να εγγραφεί.",
     "Private (invite only)": "Ιδιωτικό (μόνο με πρόσκληση)",
@@ -1567,8 +1616,10 @@
     "Space": "Χώρος",
     "Clear all data in this session?": "Εκκαθάριση όλων των δεδομένων σε αυτήν την περίοδο σύνδεσης;",
     "Clear all data": "Εκκαθάριση όλων των δεδομένων",
-    "Remove %(count)s messages|other": "Αφαίρεση %(count)s μηνυμάτων",
-    "Remove %(count)s messages|one": "Αφαίρεση 1 μηνύματος",
+    "Remove %(count)s messages": {
+        "other": "Αφαίρεση %(count)s μηνυμάτων",
+        "one": "Αφαίρεση 1 μηνύματος"
+    },
     "Backspace": "Backspace",
     "Share content": "Κοινή χρήση περιεχομένου",
     "Application window": "Παράθυρο εφαρμογής",
@@ -1735,10 +1786,14 @@
     "Session key": "Κλειδί συνεδρίας",
     "Session name": "Όνομα συνεδρίας",
     "Select spaces": "Επιλέξτε χώρους",
-    "%(count)s rooms|one": "%(count)s δωμάτιο",
-    "%(count)s rooms|other": "%(count)s δωμάτια",
-    "%(count)s members|one": "%(count)s μέλος",
-    "%(count)s members|other": "%(count)s μέλη",
+    "%(count)s rooms": {
+        "one": "%(count)s δωμάτιο",
+        "other": "%(count)s δωμάτια"
+    },
+    "%(count)s members": {
+        "one": "%(count)s μέλος",
+        "other": "%(count)s μέλη"
+    },
     "Are you sure you want to sign out?": "Είσαστε σίγουροι ότι θέλετε να αποσυνδεθείτε;",
     "You'll lose access to your encrypted messages": "Θα χάσετε την πρόσβαση στα κρυπτογραφημένα μηνύματά σας",
     "Manually export keys": "Μη αυτόματη εξαγωγή κλειδιών",
@@ -1758,7 +1813,10 @@
     "Enter Security Phrase": "Εισαγάγετε τη Φράση Ασφαλείας",
     "Moderation": "Συντονισμός",
     "Light high contrast": "Ελαφριά υψηλή αντίθεση",
-    "Show %(count)s other previews|other": "Εμφάνιση %(count)s άλλων προεπισκοπήσεων",
+    "Show %(count)s other previews": {
+        "other": "Εμφάνιση %(count)s άλλων προεπισκοπήσεων",
+        "one": "Εμφάνιση%(count)s άλλων προεπισκοπήσεων"
+    },
     "Encrypted by an unverified session": "Κρυπτογραφήθηκε από μια μη επαληθευμένη συνεδρία",
     "Copy link to thread": "Αντιγραφή συνδέσμου στο νήμα εκτέλεσης",
     "View in room": "Δείτε στο δωμάτιο",
@@ -1783,10 +1841,14 @@
     "Re-join": "Επανασύνδεση",
     "You were removed from %(roomName)s by %(memberName)s": "Αφαιρεθήκατε από το %(roomName)s από τον %(memberName)s",
     "%(spaceName)s menu": "%(spaceName)s μενού",
-    "Currently removing messages in %(count)s rooms|one": "Αυτήν τη στιγμή γίνεται κατάργηση μηνυμάτων σε %(count)s δωμάτιο",
-    "Currently removing messages in %(count)s rooms|other": "Αυτήν τη στιγμή γίνεται κατάργηση μηνυμάτων σε %(count)s δωμάτια",
-    "Currently joining %(count)s rooms|one": "Αυτήν τη στιγμή συμμετέχετε σε%(count)sδωμάτιο",
-    "Currently joining %(count)s rooms|other": "Αυτήν τη στιγμή συμμετέχετε σε %(count)s δωμάτια",
+    "Currently removing messages in %(count)s rooms": {
+        "one": "Αυτήν τη στιγμή γίνεται κατάργηση μηνυμάτων σε %(count)s δωμάτιο",
+        "other": "Αυτήν τη στιγμή γίνεται κατάργηση μηνυμάτων σε %(count)s δωμάτια"
+    },
+    "Currently joining %(count)s rooms": {
+        "one": "Αυτήν τη στιγμή συμμετέχετε σε%(count)sδωμάτιο",
+        "other": "Αυτήν τη στιγμή συμμετέχετε σε %(count)s δωμάτια"
+    },
     "Join public room": "Εγγραφείτε στο δημόσιο δωμάτιο",
     "Show Widgets": "Εμφάνιση μικροεφαρμογών",
     "Hide Widgets": "Απόκρυψη μικροεφαρμογών",
@@ -1795,7 +1857,6 @@
     "Unknown for %(duration)s": "Άγνωστο για %(duration)s",
     "This is the start of <roomName/>.": "Αυτή είναι η αρχή του <roomName/>.",
     "Topic: %(topic)s (<a>edit</a>)": "Θέμα: %(topic)s (<a>επεξεργασία</a>)",
-    "Show %(count)s other previews|one": "Εμφάνιση%(count)s άλλων προεπισκοπήσεων",
     "A connection error occurred while trying to contact the server.": "Παρουσιάστηκε σφάλμα σύνδεσης κατά την προσπάθεια επικοινωνίας με τον διακομιστή.",
     "Your area is experiencing difficulties connecting to the internet.": "Η περιοχή σας αντιμετωπίζει δυσκολίες σύνδεσης στο διαδίκτυο.",
     "The server has denied your request.": "Ο διακομιστής απέρριψε το αίτημά σας.",
@@ -1916,8 +1977,10 @@
     "Verify other device": "Επαλήθευση άλλης συσκευής",
     "Upload Error": "Σφάλμα μεταφόρτωσης",
     "Cancel All": "Ακύρωση Όλων",
-    "Upload %(count)s other files|one": "Μεταφόρτωση %(count)s άλλου αρχείου",
-    "Upload %(count)s other files|other": "Μεταφόρτωση %(count)s άλλων αρχείων",
+    "Upload %(count)s other files": {
+        "one": "Μεταφόρτωση %(count)s άλλου αρχείου",
+        "other": "Μεταφόρτωση %(count)s άλλων αρχείων"
+    },
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Ορισμένα αρχεία είναι <b>πολύ μεγάλα</b> για να μεταφορτωθούν. Το όριο μεγέθους αρχείου είναι %(limit)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Αυτά τα αρχεία είναι <b>πολύ μεγάλα</b> για μεταφόρτωση. Το όριο μεγέθους αρχείου είναι %(limit)s.",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Αυτό το αρχείο είναι <b>πολύ μεγάλο</b> για μεταφόρτωση. Το όριο μεγέθους αρχείου είναι %(limit)s αλλά αυτό το αρχείο είναι %(sizeOfThisFile)s.",
@@ -1960,17 +2023,23 @@
     "Specify a homeserver": "Καθορίστε τον κεντρικό διακομιστή σας",
     "Invalid URL": "Μη έγκυρο URL",
     "Unread messages.": "Μη αναγνωσμένα μηνύματα.",
-    "%(count)s unread messages.|one": "1 μη αναγνωσμένο μήνυμα.",
-    "%(count)s unread messages.|other": "%(count)s μη αναγνωσμένα μηνύματα.",
-    "%(count)s unread messages including mentions.|one": "1 μη αναγνωσμένη αναφορά.",
-    "%(count)s unread messages including mentions.|other": "%(count)s μη αναγνωσμένα μηνύματα συμπεριλαμβανομένων των αναφορών.",
+    "%(count)s unread messages.": {
+        "one": "1 μη αναγνωσμένο μήνυμα.",
+        "other": "%(count)s μη αναγνωσμένα μηνύματα."
+    },
+    "%(count)s unread messages including mentions.": {
+        "one": "1 μη αναγνωσμένη αναφορά.",
+        "other": "%(count)s μη αναγνωσμένα μηνύματα συμπεριλαμβανομένων των αναφορών."
+    },
     "Join": "Συμμετοχή",
     "Copy room link": "Αντιγραφή συνδέσμου δωματίου",
     "Forget Room": "Ξεχάστε το δωμάτιο",
     "Notification options": "Επιλογές ειδοποίησης",
     "Show less": "Εμφάνιση λιγότερων",
-    "Show %(count)s more|one": "Εμφάνιση %(count)s περισσότερων",
-    "Show %(count)s more|other": "Εμφάνιση %(count)s περισσότερων",
+    "Show %(count)s more": {
+        "one": "Εμφάνιση %(count)s περισσότερων",
+        "other": "Εμφάνιση %(count)s περισσότερων"
+    },
     "List options": "Επιλογές λίστας",
     "A-Z": "Α-Ω",
     "Activity": "Δραστηριότητα",
@@ -2076,8 +2145,10 @@
     "Unable to access your microphone": "Αδυναμία πρόσβασης μικροφώνου",
     "Mark all as read": "Επισήμανση όλων ως αναγνωσμένων",
     "Open thread": "Άνοιγμα νήματος",
-    "%(count)s reply|one": "%(count)s απάντηση",
-    "%(count)s reply|other": "%(count)s απαντήσεις",
+    "%(count)s reply": {
+        "one": "%(count)s απάντηση",
+        "other": "%(count)s απαντήσεις"
+    },
     "No microphone found": "Δε βρέθηκε μικρόφωνο",
     "We were unable to access your microphone. Please check your browser settings and try again.": "Δεν ήταν δυνατή η πρόσβαση στο μικρόφωνο σας. Ελέγξτε τις ρυθμίσεις του προγράμματος περιήγησης σας και δοκιμάστε ξανά.",
     "Your export was successful. Find it in your Downloads folder.": "Η εξαγωγή σας ήταν επιτυχής. Βρείτε τη στο φάκελο Λήψεις.",
@@ -2122,17 +2193,25 @@
     "Show all": "Εμφάνιση όλων",
     "Add reaction": "Προσθέστε αντίδραση",
     "Error processing voice message": "Σφάλμα επεξεργασίας του φωνητικού μηνύματος",
-    "%(count)s votes|one": "%(count)s ψήφος",
-    "%(count)s votes|other": "%(count)s ψήφοι",
+    "%(count)s votes": {
+        "one": "%(count)s ψήφος",
+        "other": "%(count)s ψήφοι"
+    },
     "edited": "επεξεργάστηκε",
-    "Based on %(count)s votes|one": "Με βάση %(count)s ψήφο",
-    "Based on %(count)s votes|other": "Με βάση %(count)s ψήφους",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s ψήφος. Ψηφίστε για να δείτε τα αποτελέσματα",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s ψήφοι. Ψηφίστε για να δείτε τα αποτελέσματα",
+    "Based on %(count)s votes": {
+        "one": "Με βάση %(count)s ψήφο",
+        "other": "Με βάση %(count)s ψήφους"
+    },
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s ψήφος. Ψηφίστε για να δείτε τα αποτελέσματα",
+        "other": "%(count)s ψήφοι. Ψηφίστε για να δείτε τα αποτελέσματα"
+    },
     "No votes cast": "Καμία ψήφος",
     "Results will be visible when the poll is ended": "Τα αποτελέσματα θα είναι ορατά όταν τελειώσει η δημοσκόπηση",
-    "Final result based on %(count)s votes|one": "Τελικό αποτέλεσμα με βάση %(count)s ψήφο",
-    "Final result based on %(count)s votes|other": "Τελικό αποτέλεσμα με βάση %(count)s ψήφους",
+    "Final result based on %(count)s votes": {
+        "one": "Τελικό αποτέλεσμα με βάση %(count)s ψήφο",
+        "other": "Τελικό αποτέλεσμα με βάση %(count)s ψήφους"
+    },
     "Sorry, your vote was not registered. Please try again.": "Λυπούμαστε, η ψήφος σας δεν καταχωρήθηκε. Παρακαλώ προσπαθήστε ξανά.",
     "Vote not registered": "Η ψήφος δεν έχει καταχωρηθεί",
     "Download": "Λήψη",
@@ -2197,11 +2276,15 @@
     "Jump to read receipt": "Μετάβαση στο αποδεικτικό ανάγνωσης",
     "Message": "Μήνυμα",
     "Hide sessions": "Απόκρυψη συνεδριών",
-    "%(count)s sessions|one": "%(count)s συνεδρία",
-    "%(count)s sessions|other": "%(count)s συνεδρίες",
+    "%(count)s sessions": {
+        "one": "%(count)s συνεδρία",
+        "other": "%(count)s συνεδρίες"
+    },
     "Hide verified sessions": "Απόκρυψη επαληθευμένων συνεδριών",
-    "%(count)s verified sessions|one": "1 επαληθευμένη συνεδρία",
-    "%(count)s verified sessions|other": "%(count)s επαληθευμένες συνεδρίες",
+    "%(count)s verified sessions": {
+        "one": "1 επαληθευμένη συνεδρία",
+        "other": "%(count)s επαληθευμένες συνεδρίες"
+    },
     "Trusted": "Έμπιστο",
     "Room settings": "Ρυθμίσεις δωματίου",
     "Share room": "Κοινή χρήση δωματίου",
@@ -2216,7 +2299,9 @@
     "Close this widget to view it in this panel": "Κλείστε αυτήν τη μικροεφαρμογή για να την προβάλετε σε αυτόν τον πίνακα",
     "Unpin this widget to view it in this panel": "Ξεκαρφιτσώστε αυτήν τη μικροεφαρμογή για να την προβάλετε σε αυτόν τον πίνακα",
     "Maximise": "Μεγιστοποίηση",
-    "You can only pin up to %(count)s widgets|other": "Μπορείτε να καρφιτσώσετε μόνο έως %(count)s μικρεοεφαρμογές",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Μπορείτε να καρφιτσώσετε μόνο έως %(count)s μικρεοεφαρμογές"
+    },
     "Chat": "Συνομιλία",
     "Pinned messages": "Καρφιτσωμένα μηνύματα",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Εάν έχετε δικαιώματα, ανοίξτε το μενού σε οποιοδήποτε μήνυμα και επιλέξτε <b>Καρφίτσωμα</b> για να τα κολλήσετε εδώ.",
@@ -2295,8 +2380,10 @@
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Καταργήστε την επιλογή εάν θέλετε επίσης να καταργήσετε τα μηνύματα συστήματος σε αυτόν τον χρήστη (π.χ. αλλαγή μέλους, αλλαγή προφίλ…)",
     "Preserve system messages": "Διατήρηση μηνυμάτων συστήματος",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Για μεγάλο αριθμό μηνυμάτων, αυτό μπορεί να πάρει κάποιο χρόνο. Μην ανανεώνετε το προγράμμα-πελάτη σας στο μεταξύ.",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "Πρόκειται να αφαιρέσετε %(count)s μηνύματα του χρήστη %(user)s. Αυτό θα τα καταργήσει οριστικά για όλους στη συνομιλία. Θέλετε να συνεχίσετε;",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|one": "Πρόκειται να αφαιρέσετε %(count)s μήνυμα του χρήστη %(user)s. Αυτό θα το καταργήσει οριστικά για όλους στη συνομιλία. Θέλετε να συνεχίσετε;",
+    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
+        "other": "Πρόκειται να αφαιρέσετε %(count)s μηνύματα του χρήστη %(user)s. Αυτό θα τα καταργήσει οριστικά για όλους στη συνομιλία. Θέλετε να συνεχίσετε;",
+        "one": "Πρόκειται να αφαιρέσετε %(count)s μήνυμα του χρήστη %(user)s. Αυτό θα το καταργήσει οριστικά για όλους στη συνομιλία. Θέλετε να συνεχίσετε;"
+    },
     "Remove recent messages by %(user)s": "Καταργήστε πρόσφατα μηνύματα από %(user)s",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Δοκιμάστε να κάνετε κύλιση στη γραμμή χρόνου για να δείτε αν υπάρχουν παλαιότερα.",
     "No recent messages by %(user)s found": "Δε βρέθηκαν πρόσφατα μηνύματα από %(user)s",
@@ -2324,8 +2411,10 @@
     "Want to add a new room instead?": "Θέλετε να προσθέσετε ένα νέο δωμάτιο αντί αυτού;",
     "Add existing rooms": "Προσθέστε υπάρχοντα δωμάτια",
     "Direct Messages": "Άμεσα Μηνύματα",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Προσθήκη δωματίου...",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Προσθήκη δωματίων... (%(progress)s από %(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Προσθήκη δωματίου...",
+        "other": "Προσθήκη δωματίων... (%(progress)s από %(count)s)"
+    },
     "Not all selected were added": "Δεν προστέθηκαν όλοι οι επιλεγμένοι",
     "Search for spaces": "Αναζητήστε χώρους",
     "Create a new space": "Δημιουργήστε ένα νέο χώρο",
@@ -2364,7 +2453,10 @@
     "Information": "Πληροφορίες",
     "Rotate Right": "Περιστροφή δεξιά",
     "Rotate Left": "Περιστροφή αριστερά",
-    "View all %(count)s members|one": "Προβολή 1 μέλους",
+    "View all %(count)s members": {
+        "one": "Προβολή 1 μέλους",
+        "other": "Προβολή όλων των %(count)s μελών"
+    },
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Παρακαλούμε <newIssueLink>δημιουργήστε ένα νέο issue</newIssueLink> στο GitHub ώστε να μπορέσουμε να διερευνήσουμε αυτό το σφάλμα.",
     "This version of %(brand)s does not support searching encrypted messages": "Αυτή η έκδοση του %(brand)s δεν υποστηρίζει την αναζήτηση κρυπτογραφημένων μηνυμάτων",
     "This version of %(brand)s does not support viewing some encrypted files": "Αυτή η έκδοση του %(brand)s δεν υποστηρίζει την προβολή ορισμένων κρυπτογραφημένων αρχείων",
@@ -2621,8 +2713,10 @@
     "Suggested": "Προτεινόμενα",
     "This room is suggested as a good one to join": "Αυτό το δωμάτιο προτείνεται ως ένα καλό δωμάτιο για συμμετοχή",
     "You don't have permission": "Δεν έχετε άδεια",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Έχετε %(count)s μη αναγνωσμένη ειδοποιήση σε προηγούμενη έκδοση αυτού του δωματίου.",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Έχετε %(count)s μη αναγνωσμένες ειδοποιήσεις σε προηγούμενη έκδοση αυτού του δωματίου.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "one": "Έχετε %(count)s μη αναγνωσμένη ειδοποιήση σε προηγούμενη έκδοση αυτού του δωματίου.",
+        "other": "Έχετε %(count)s μη αναγνωσμένες ειδοποιήσεις σε προηγούμενη έκδοση αυτού του δωματίου."
+    },
     "You can select all or individual messages to retry or delete": "Μπορείτε να επιλέξετε όλα ή μεμονωμένα μηνύματα για επανάληψη ή διαγραφή",
     "Retry all": "Επανάληψη όλων",
     "Delete all": "Διαγραφή όλων",
@@ -2657,60 +2751,108 @@
     "Sign in with single sign-on": "Συνδεθείτε με απλή σύνδεση",
     "Continue with %(provider)s": "Συνεχίστε με %(provider)s",
     "Join millions for free on the largest public server": "Συμμετέχετε δωρεάν στον μεγαλύτερο δημόσιο διακομιστή",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)sάλλαξε το όνομα τους",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)sάλλαξε το όνομα τους %(count)s φορές",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)sάλλαξαν το όνομα τους",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)sάλλαξαν το όνομα τους %(count)s φορές",
-    "was removed %(count)s times|one": "αφαιρέθηκε",
-    "was removed %(count)s times|other": "αφαιρέθηκε %(count)s φορές",
-    "were removed %(count)s times|one": "αφαιρέθηκαν",
-    "were removed %(count)s times|other": "αφαιρέθηκαν %(count)s φορές",
-    "was banned %(count)s times|one": "αποκλείστηκε",
-    "was banned %(count)s times|other": "αποκλείστηκε %(count)s φορές",
-    "were banned %(count)s times|one": "αποκλείστηκαν",
-    "were banned %(count)s times|other": "αποκλείστηκαν %(count)s φορές",
-    "was invited %(count)s times|one": "προσκλήθηκε",
-    "was invited %(count)s times|other": "προσκλήθηκε %(count)s φορές",
-    "were invited %(count)s times|one": "προσκλήθηκαν",
-    "were invited %(count)s times|other": "προσκλήθηκαν %(count)s φορές",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)sαπέσυρε την πρόσκληση του",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)sαπέσυρε την πρόσκληση του %(count)s φορές",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)sαπέσυραν τις προσκλήσεις τους",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)sαπέσυραν τις προσκλήσεις τους%(count)s φορές",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)sέφυγε και επανασυνδέθηκε %(count)s φορές",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)sjσυνδέθηκε και έφυγε",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)sσυνδέθηκε και έφυγε%(count)s φορές",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)sσυνδέθηκαν και έφυγαν",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)sσυνδέθηκαν και έφυγαν %(count)s φορές",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)sέφυγε",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)sέφυγαν %(count)s φορές",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)sέφυγαν",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)sέφυγαν %(count)s φορές",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)sσυνδέθηκαν",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sσυνδέθηκαν %(count)s φορές",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sσυνδέθηκαν",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)sσυνδέθηκαν %(count)s φορές",
+    "%(oneUser)schanged their name %(count)s times": {
+        "one": "%(oneUser)sάλλαξε το όνομα τους",
+        "other": "%(oneUser)sάλλαξε το όνομα τους %(count)s φορές"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "one": "%(severalUsers)sάλλαξαν το όνομα τους",
+        "other": "%(severalUsers)sάλλαξαν το όνομα τους %(count)s φορές"
+    },
+    "was removed %(count)s times": {
+        "one": "αφαιρέθηκε",
+        "other": "αφαιρέθηκε %(count)s φορές"
+    },
+    "were removed %(count)s times": {
+        "one": "αφαιρέθηκαν",
+        "other": "αφαιρέθηκαν %(count)s φορές"
+    },
+    "was banned %(count)s times": {
+        "one": "αποκλείστηκε",
+        "other": "αποκλείστηκε %(count)s φορές"
+    },
+    "were banned %(count)s times": {
+        "one": "αποκλείστηκαν",
+        "other": "αποκλείστηκαν %(count)s φορές"
+    },
+    "was invited %(count)s times": {
+        "one": "προσκλήθηκε",
+        "other": "προσκλήθηκε %(count)s φορές"
+    },
+    "were invited %(count)s times": {
+        "one": "προσκλήθηκαν",
+        "other": "προσκλήθηκαν %(count)s φορές"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "one": "%(oneUser)sαπέσυρε την πρόσκληση του",
+        "other": "%(oneUser)sαπέσυρε την πρόσκληση του %(count)s φορές"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "one": "%(severalUsers)sαπέσυραν τις προσκλήσεις τους",
+        "other": "%(severalUsers)sαπέσυραν τις προσκλήσεις τους%(count)s φορές"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "one": "%(oneUser)sjσυνδέθηκε και έφυγε",
+        "other": "%(oneUser)sσυνδέθηκε και έφυγε%(count)s φορές"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "one": "%(severalUsers)sσυνδέθηκαν και έφυγαν",
+        "other": "%(severalUsers)sσυνδέθηκαν και έφυγαν %(count)s φορές"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "one": "%(oneUser)sέφυγε",
+        "other": "%(oneUser)sέφυγαν %(count)s φορές"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "one": "%(severalUsers)sέφυγαν",
+        "other": "%(severalUsers)sέφυγαν %(count)s φορές"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "one": "%(oneUser)sσυνδέθηκαν",
+        "other": "%(oneUser)sσυνδέθηκαν %(count)s φορές"
+    },
+    "%(severalUsers)sjoined %(count)s times": {
+        "one": "%(severalUsers)sσυνδέθηκαν",
+        "other": "%(severalUsers)sσυνδέθηκαν %(count)s φορές"
+    },
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "Popout widget": "Αναδυόμενη μικροεφαρμογή",
     "Widget ID": "Ταυτότητα μικροεφαρμογής",
     "toggle event": "μεταβολή συμβάντος",
     "Could not connect media": "Δεν ήταν δυνατή η σύνδεση πολυμέσων",
     "Secure Backup": "Ασφαλές αντίγραφο ασφαλείας",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)sάλλαξε %(count)s μηνύματα",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)sάλλαξαν ένα μήνυμα",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)sάλλαξαν %(count)s μηνύματα",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "Οι %(severalUsers)sάλλαξαν τα <a>καρφιτσωμένα μηνύματα</a> για το δωμάτιο %(count)s φορές",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "Οι %(severalUsers)s άλλαξαν τα <a>καρφιτσωμένα μηνύματα</a> για το δωμάτιο",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "Ο/η %(oneUser)s άλλαξε τα <a>καρφιτσωμένα μηνύματα</a> για το δωμάτιο",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "Ο/η %(oneUser)s άλλαξε τα <a>καρφιτσωμένα μηνύματα</a> για το δωμάτιο %(count)s φορές",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)sάλλαξε τα ACLs του διακομιστή",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)sάλλαξαν τα ACLs του διακομιστή %(count)s φορές",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)sάλλαξαν τα ACLs του διακομιστή",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)sάλλαξε τα ACLs του διακομιστή %(count)s φορές",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)sδεν έκανε αλλαγές",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sδεν έκανε αλλαγές %(count)s φορές",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)sδεν έκαναν αλλαγές",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)sδεν έκαναν αλλαγές %(count)s φορές",
+    "%(oneUser)sremoved a message %(count)s times": {
+        "other": "%(oneUser)sάλλαξε %(count)s μηνύματα",
+        "one": "%(oneUser)sαφαίρεσε ένα μήνυμα"
+    },
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)sάλλαξαν ένα μήνυμα",
+        "other": "%(severalUsers)sάλλαξαν %(count)s μηνύματα"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "other": "Οι %(severalUsers)sάλλαξαν τα <a>καρφιτσωμένα μηνύματα</a> για το δωμάτιο %(count)s φορές",
+        "one": "Οι %(severalUsers)s άλλαξαν τα <a>καρφιτσωμένα μηνύματα</a> για το δωμάτιο"
+    },
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "Ο/η %(oneUser)s άλλαξε τα <a>καρφιτσωμένα μηνύματα</a> για το δωμάτιο",
+        "other": "Ο/η %(oneUser)s άλλαξε τα <a>καρφιτσωμένα μηνύματα</a> για το δωμάτιο %(count)s φορές"
+    },
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "one": "%(oneUser)sάλλαξε τα ACLs του διακομιστή",
+        "other": "%(oneUser)sάλλαξε τα ACLs του διακομιστή %(count)s φορές"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "other": "%(severalUsers)sάλλαξαν τα ACLs του διακομιστή %(count)s φορές",
+        "one": "%(severalUsers)sάλλαξαν τα ACLs του διακομιστή"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "one": "%(oneUser)sδεν έκανε αλλαγές",
+        "other": "%(oneUser)sδεν έκανε αλλαγές %(count)s φορές"
+    },
+    "%(severalUsers)smade no changes %(count)s times": {
+        "one": "%(severalUsers)sδεν έκαναν αλλαγές",
+        "other": "%(severalUsers)sδεν έκαναν αλλαγές %(count)s φορές"
+    },
     "Home is useful for getting an overview of everything.": "Ο Αρχικός χώρος είναι χρήσιμος για να έχετε μια επισκόπηση των πάντων.",
     "Exporting your data": "Εξαγωγή των δεδομένων σας",
     "Are you sure you want to stop exporting your data? If you do, you'll need to start over.": "Είστε βέβαιοι ότι θέλετε να διακόψετε την εξαγωγή των δεδομένων σας; Εάν το κάνετε, θα πρέπει να ξεκινήσετε από την αρχή.",
@@ -2718,23 +2860,31 @@
     "Offline encrypted messaging using dehydrated devices": "Κρυπτογραφημένα μηνύματα εκτός σύνδεσης με χρήση αφυδατωμένων συσκευών",
     "Adding spaces has moved.": "Η προσθήκη χώρων μετακινήθηκε.",
     "Matrix": "Matrix",
-    "And %(count)s more...|other": "Και %(count)s ακόμα...",
+    "And %(count)s more...": {
+        "other": "Και %(count)s ακόμα..."
+    },
     "Homeserver": "Κεντρικός διακομιστής",
     "In reply to <a>this message</a>": "Ως απαντηση σε<a>αυτό το μήνυμα</a>",
     "<a>In reply to</a> <pill>": "<a>Ως απαντηση σε</a> <pill>",
     "Power level": "Επίπεδο ισχύος",
-    "%(count)s people you know have already joined|one": "%(count)s άτομο που γνωρίζετε έχει ήδη εγγραφεί",
-    "%(count)s people you know have already joined|other": "%(count)s άτομα που γνωρίζετε έχουν ήδη εγγραφεί",
-    "View all %(count)s members|other": "Προβολή όλων των %(count)s μελών",
+    "%(count)s people you know have already joined": {
+        "one": "%(count)s άτομο που γνωρίζετε έχει ήδη εγγραφεί",
+        "other": "%(count)s άτομα που γνωρίζετε έχουν ήδη εγγραφεί"
+    },
     "Including %(commaSeparatedMembers)s": "Συμπεριλαμβανομένου %(commaSeparatedMembers)s",
     "Including you, %(commaSeparatedMembers)s": "Συμπεριλαμβανομένου σας, %(commaSeparatedMembers)s",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)sέστειλε ένα κρυφό μήνυμα",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)sέστειλε %(count)s κρυφά μηνύματα",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)sέστειλαν ένα κρυφό μήνυμα",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)sέστειλαν %(count)s κρυφά μηνύματα",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)sαφαίρεσε ένα μήνυμα",
-    "were unbanned %(count)s times|one": "αφαιρέθηκε η απόκλιση σας",
-    "were unbanned %(count)s times|other": "αφαιρέθηκε η απόκλιση σας %(count)s φορές",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "one": "%(oneUser)sέστειλε ένα κρυφό μήνυμα",
+        "other": "%(oneUser)sέστειλε %(count)s κρυφά μηνύματα"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)sέστειλαν ένα κρυφό μήνυμα",
+        "other": "%(severalUsers)sέστειλαν %(count)s κρυφά μηνύματα"
+    },
+    "were unbanned %(count)s times": {
+        "one": "αφαιρέθηκε η απόκλιση σας",
+        "other": "αφαιρέθηκε η απόκλιση σας %(count)s φορές"
+    },
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Έχετε χρησιμοποιήσει στο παρελθόν μια νεότερη έκδοση του %(brand)s με αυτήν την συνεδρία. Για να χρησιμοποιήσετε ξανά αυτήν την έκδοση με κρυπτογράφηση από άκρο σε άκρο, θα πρέπει να αποσυνδεθείτε και να συνδεθείτε ξανά.",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Για να αποφύγετε να χάσετε το ιστορικό των συνομιλιών σας, πρέπει να εξαγάγετε τα κλειδιά του δωματίου σας πριν αποσυνδεθείτε. Για να το κάνετε αυτό, θα χρειαστεί να επιστρέψετε στη νεότερη έκδοση του %(brand)s",
     "Add a space to a space you manage.": "Προσθέστε έναν χώρο σε ένα χώρο που διαχειρίζεστε.",
@@ -2822,8 +2972,10 @@
     "Server": "Διακομιστής",
     "Failed to load.": "Αποτυχία φόρτωσης.",
     "Capabilities": "Δυνατότητες",
-    "<%(count)s spaces>|one": "<χώρος>",
-    "<%(count)s spaces>|other": "<%(count)s χώροι>",
+    "<%(count)s spaces>": {
+        "one": "<χώρος>",
+        "other": "<%(count)s χώροι>"
+    },
     "No results found": "Δε βρέθηκαν αποτελέσματα",
     "Filter results": "Φιλτράρισμα αποτελεσμάτων",
     "Doesn't look like valid JSON.": "Δε μοιάζει με έγκυρο JSON.",
@@ -2917,8 +3069,10 @@
     "a new master key signature": "μια νέα υπογραφή κύριου κλειδιού",
     "We couldn't create your DM.": "Δεν μπορέσαμε να δημιουργήσουμε το DM σας.",
     "Send custom timeline event": "Αποστολή προσαρμοσμένου συμβάντος χρονολογίου",
-    "was unbanned %(count)s times|one": "αφαιρέθηκε η απόκλιση του",
-    "was unbanned %(count)s times|other": "αφαιρέθηκε η απόκλιση του %(count)s φορές",
+    "was unbanned %(count)s times": {
+        "one": "αφαιρέθηκε η απόκλιση του",
+        "other": "αφαιρέθηκε η απόκλιση του %(count)s φορές"
+    },
     "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "Το %(errcode)s επιστράφηκε κατά την προσπάθεια πρόσβασης στο δωμάτιο ή στο χώρο. Εάν πιστεύετε ότι βλέπετε αυτό το μήνυμα κατά λάθος, <issueLink>υποβάλετε μια αναφορά σφάλματος</issueLink>.",
     "Try again later, or ask a room or space admin to check if you have access.": "Δοκιμάστε ξανά αργότερα ή ζητήστε από έναν διαχειριστή δωματίου ή χώρου να ελέγξει εάν έχετε πρόσβαση.",
     "This room or space is not accessible at this time.": "Αυτό το δωμάτιο ή ο χώρος δεν είναι προσβάσιμος αυτήν τη στιγμή.",
@@ -3066,8 +3220,10 @@
     "New room": "Νέο δωμάτιο",
     "Private room": "Ιδιωτικό δωμάτιο",
     "Your password was successfully changed.": "Ο κωδικός πρόσβασης σας άλλαξε με επιτυχία.",
-    "Confirm signing out these devices|one": "Επιβεβαιώστε την αποσύνδεση αυτής της συσκευής",
-    "Confirm signing out these devices|other": "Επιβεβαιώστε την αποσύνδεση αυτών των συσκευών",
+    "Confirm signing out these devices": {
+        "one": "Επιβεβαιώστε την αποσύνδεση αυτής της συσκευής",
+        "other": "Επιβεβαιώστε την αποσύνδεση αυτών των συσκευών"
+    },
     "Turn on camera": "Ενεργοποίηση κάμερας",
     "Turn off camera": "Απενεργοποίηση κάμερας",
     "Video devices": "Συσκευές βίντεο",
@@ -3085,8 +3241,10 @@
     "If you can't see who you're looking for, send them your invite link.": "Εάν δεν εμφανίζεται το άτομο που αναζητάτε, στείλτε τους τον σύνδεσμο πρόσκλησης.",
     "Some results may be hidden for privacy": "Ορισμένα αποτελέσματα ενδέχεται να είναι κρυφά για λόγους απορρήτου",
     "Search for": "Αναζήτηση για",
-    "%(count)s Members|one": "%(count)s Μέλος",
-    "%(count)s Members|other": "%(count)s Μέλη",
+    "%(count)s Members": {
+        "one": "%(count)s Μέλος",
+        "other": "%(count)s Μέλη"
+    },
     "You will leave all rooms and DMs that you are in": "Θα αποχωρήσετε από όλα τα δωμάτια και τις συνομιλίες σας",
     "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Κανείς δε θα μπορεί να επαναχρησιμοποιήσει το όνομα χρήστη σας (MXID), συμπεριλαμβανομένου εσάς: αυτό το όνομα χρήστη θα παραμείνει μη διαθέσιμο",
     "You will not be able to reactivate your account": "Δεν θα μπορείτε να ενεργοποιήσετε ξανά τον λογαριασμό σας",
@@ -3100,8 +3258,10 @@
     "Disinvite from room": "Ακύρωση πρόσκλησης από το δωμάτιο",
     "Remove from space": "Αφαίρεση από τον χώρο",
     "Disinvite from space": "Ακύρωση πρόσκλησης από τον χώρο",
-    "%(count)s participants|one": "1 συμμετέχων",
-    "%(count)s participants|other": "%(count)s συμμετέχοντες",
+    "%(count)s participants": {
+        "one": "1 συμμετέχων",
+        "other": "%(count)s συμμετέχοντες"
+    },
     "Joining…": "Συμμετοχή…",
     "Show Labs settings": "Εμφάνιση ρυθμίσεων Labs",
     "To join, please enable video rooms in Labs first": "Για να συμμετέχετε, ενεργοποιήστε πρώτα τις αίθουσες βίντεο στο Labs",
@@ -3110,8 +3270,10 @@
     "New video room": "Νέο δωμάτιο βίντεο",
     "Video room": "Δωμάτια βίντεο",
     "Video rooms are a beta feature": "Οι αίθουσες βίντεο είναι μια λειτουργία beta",
-    "Seen by %(count)s people|one": "Αναγνώστηκε από %(count)s άτομο",
-    "Seen by %(count)s people|other": "Αναγνώστηκε από %(count)s άτομα",
+    "Seen by %(count)s people": {
+        "one": "Αναγνώστηκε από %(count)s άτομο",
+        "other": "Αναγνώστηκε από %(count)s άτομα"
+    },
     "Enable hardware acceleration (restart %(appName)s to take effect)": "Ενεργοποίηση επιτάχυνσης υλικού (κάντε επανεκκίνηση του %(appName)s για να τεθεί σε ισχύ)",
     "Deactivating your account is a permanent action — be careful!": "Η απενεργοποίηση του λογαριασμού σας είναι μια μόνιμη ενέργεια — να είστε προσεκτικοί!",
     "Enable hardware acceleration": "Ενεργοποίηση επιτάχυνσης υλικού",

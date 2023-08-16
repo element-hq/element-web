@@ -84,8 +84,10 @@
     "Camera": "摄像头",
     "Authentication": "认证",
     "%(items)s and %(lastItem)s": "%(items)s 和 %(lastItem)s",
-    "and %(count)s others...|other": "和其他%(count)s个人……",
-    "and %(count)s others...|one": "和其它一个...",
+    "and %(count)s others...": {
+        "other": "和其他%(count)s个人……",
+        "one": "和其它一个..."
+    },
     "Anyone": "任何人",
     "Are you sure?": "你确定吗？",
     "Are you sure you want to leave the room '%(roomName)s'?": "你确定要离开房间 “%(roomName)s” 吗？",
@@ -236,8 +238,10 @@
     "Copied!": "已复制！",
     "Failed to copy": "复制失败",
     "Sent messages will be stored until your connection has returned.": "已发送的消息会被保存直到你的连接回来。",
-    "(~%(count)s results)|one": "（~%(count)s 个结果）",
-    "(~%(count)s results)|other": "（~%(count)s 个结果）",
+    "(~%(count)s results)": {
+        "one": "（~%(count)s 个结果）",
+        "other": "（~%(count)s 个结果）"
+    },
     "Start automatically after system login": "开机自启",
     "Analytics": "统计分析服务",
     "Reject all %(invitedRooms)s invites": "拒绝所有 %(invitedRooms)s 的邀请",
@@ -289,24 +293,42 @@
     "Unnamed room": "未命名的房间",
     "A text message has been sent to %(msisdn)s": "一封短信已发送到 %(msisdn)s",
     "Delete Widget": "删除挂件",
-    "were invited %(count)s times|other": "被邀请 %(count)s 次",
-    "were invited %(count)s times|one": "被邀请",
-    "was invited %(count)s times|other": "被邀请 %(count)s 次",
-    "was invited %(count)s times|one": "被邀请",
-    "were banned %(count)s times|other": "被封禁 %(count)s 次",
-    "were banned %(count)s times|one": "被封禁",
-    "was banned %(count)s times|other": "被封禁 %(count)s 次",
-    "was banned %(count)s times|one": "被封禁",
-    "were unbanned %(count)s times|other": "被解封 %(count)s 次",
-    "were unbanned %(count)s times|one": "被解封",
-    "was unbanned %(count)s times|other": "被解封 %(count)s 次",
-    "was unbanned %(count)s times|one": "被解封",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s 修改了他们的名称 %(count)s 次",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s 修改了他们的名称",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)s 修改了自己的名称 %(count)s 次",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s 修改了自己的名称",
-    "%(items)s and %(count)s others|other": "%(items)s 和其他 %(count)s 人",
-    "%(items)s and %(count)s others|one": "%(items)s 与另一个人",
+    "were invited %(count)s times": {
+        "other": "被邀请 %(count)s 次",
+        "one": "被邀请"
+    },
+    "was invited %(count)s times": {
+        "other": "被邀请 %(count)s 次",
+        "one": "被邀请"
+    },
+    "were banned %(count)s times": {
+        "other": "被封禁 %(count)s 次",
+        "one": "被封禁"
+    },
+    "was banned %(count)s times": {
+        "other": "被封禁 %(count)s 次",
+        "one": "被封禁"
+    },
+    "were unbanned %(count)s times": {
+        "other": "被解封 %(count)s 次",
+        "one": "被解封"
+    },
+    "was unbanned %(count)s times": {
+        "other": "被解封 %(count)s 次",
+        "one": "被解封"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)s 修改了他们的名称 %(count)s 次",
+        "one": "%(severalUsers)s 修改了他们的名称"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)s 修改了自己的名称 %(count)s 次",
+        "one": "%(oneUser)s 修改了自己的名称"
+    },
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s 和其他 %(count)s 人",
+        "one": "%(items)s 与另一个人"
+    },
     "collapse": "折叠",
     "expand": "展开",
     "Leave": "离开",
@@ -345,30 +367,54 @@
     "Unknown for %(duration)s": "未知状态已持续 %(duration)s",
     "Code": "代码",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s 已加入 %(count)s 次",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s 已加入",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s 已加入 %(count)s 次",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s 已加入",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s 已离开 %(count)s 次",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s 已离开",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s 已离开 %(count)s 次",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s 已离开",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s加入并离开了%(count)s次",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s加入并离开了",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s加入并离开了%(count)s次",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s加入并离开了",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s离开并重新加入了%(count)s次",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s离开并重新加入了",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s离开并重新加入了%(count)s次",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s离开并重新加入了",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s 拒绝了他们的邀请",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s 拒绝了他们的邀请共 %(count)s 次",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s 拒绝了他们的邀请共 %(count)s 次",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s 拒绝了他们的邀请",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s 撤回了他们的邀请共 %(count)s 次",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)s 撤回了他们的邀请",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)s 撤回了他们的邀请共 %(count)s 次",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)s 撤回了他们的邀请",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)s 已加入 %(count)s 次",
+        "one": "%(severalUsers)s 已加入"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)s 已加入 %(count)s 次",
+        "one": "%(oneUser)s 已加入"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)s 已离开 %(count)s 次",
+        "one": "%(severalUsers)s 已离开"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)s 已离开 %(count)s 次",
+        "one": "%(oneUser)s 已离开"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)s加入并离开了%(count)s次",
+        "one": "%(severalUsers)s加入并离开了"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)s加入并离开了%(count)s次",
+        "one": "%(oneUser)s加入并离开了"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)s离开并重新加入了%(count)s次",
+        "one": "%(severalUsers)s离开并重新加入了"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)s离开并重新加入了%(count)s次",
+        "one": "%(oneUser)s离开并重新加入了"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "one": "%(severalUsers)s 拒绝了他们的邀请",
+        "other": "%(severalUsers)s 拒绝了他们的邀请共 %(count)s 次"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)s 拒绝了他们的邀请共 %(count)s 次",
+        "one": "%(oneUser)s 拒绝了他们的邀请"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)s 撤回了他们的邀请共 %(count)s 次",
+        "one": "%(severalUsers)s 撤回了他们的邀请"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)s 撤回了他们的邀请共 %(count)s 次",
+        "one": "%(oneUser)s 撤回了他们的邀请"
+    },
     "<a>In reply to</a> <pill>": "<a>答复</a> <pill>",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "如果你之前使用过较新版本的 %(brand)s，则你的会话可能与当前版本不兼容。请关闭此窗口并使用最新版本。",
     "URL previews are enabled by default for participants in this room.": "已对此房间的参与者默认启用URL预览。",
@@ -377,9 +423,11 @@
     "Please enter the code it contains:": "请输入其包含的代码：",
     "Old cryptography data detected": "检测到旧的加密数据",
     "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "已检测到旧版%(brand)s的数据，这将导致端到端加密在旧版本中发生故障。在此版本中，使用旧版本交换的端到端加密消息可能无法解密。这也可能导致与此版本交换的消息失败。如果你遇到问题，请登出并重新登录。要保留历史消息，请先导出并在重新登录后导入你的密钥。",
-    "Uploading %(filename)s and %(count)s others|other": "正在上传 %(filename)s 与其他 %(count)s 个文件",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "正在上传 %(filename)s 与其他 %(count)s 个文件",
+        "one": "正在上传 %(filename)s 与其他 %(count)s 个文件"
+    },
     "Uploading %(filename)s": "正在上传 %(filename)s",
-    "Uploading %(filename)s and %(count)s others|one": "正在上传 %(filename)s 与其他 %(count)s 个文件",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "请注意，你正在登录 %(hs)s，而非 matrix.org。",
     "Opens the Developer Tools dialog": "打开开发者工具窗口",
     "Notify the whole room": "通知房间全体成员",
@@ -451,7 +499,9 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "你将被带到一个第三方网站以便验证你的账户来使用 %(integrationsUrl)s 提供的集成。你希望继续吗？",
     "Popout widget": "在弹出式窗口中打开挂件",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "无法加载被回复的事件，它可能不存在，也可能是你没有权限查看它。",
-    "And %(count)s more...|other": "和 %(count)s 个其他…",
+    "And %(count)s more...": {
+        "other": "和 %(count)s 个其他…"
+    },
     "Send analytics data": "发送统计数据",
     "Enable widget screenshots on supported widgets": "对支持的挂件启用挂件截图",
     "Demote yourself?": "是否降低你自己的权限？",
@@ -547,8 +597,10 @@
     "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s 将此房间改为仅限邀请。",
     "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s 将加入规则改为 %(rule)s",
     "%(displayName)s is typing …": "%(displayName)s 正在输入…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s 与其他 %(count)s 位正在输入…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s 与另一位正在输入…",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s 与其他 %(count)s 位正在输入…",
+        "one": "%(names)s 与另一位正在输入…"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s和%(lastPerson)s正在输入……",
     "Unrecognised address": "无法识别地址",
     "Predictable substitutions like '@' instead of 'a' don't help very much": "可预见的替换如将 '@' 替换为 'a' 并不会有太大效果",
@@ -798,8 +850,10 @@
     "Revoke invite": "撤销邀请",
     "Invited by %(sender)s": "被 %(sender)s 邀请",
     "Remember my selection for this widget": "记住我对此挂件的选择",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "你在此房间的先前版本中有 %(count)s 条未读通知。",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "你在此房间的先前版本中有 %(count)s 条未读通知。",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "你在此房间的先前版本中有 %(count)s 条未读通知。",
+        "one": "你在此房间的先前版本中有 %(count)s 条未读通知。"
+    },
     "Add Email Address": "添加邮箱",
     "Add Phone Number": "添加电话号码",
     "Call failed due to misconfigured server": "服务器配置错误导致通话失败",
@@ -856,10 +910,14 @@
     "Opens chat with the given user": "与指定用户发起聊天",
     "Sends a message to the given user": "向指定用户发消息",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s 将房间名称从 %(oldRoomName)s 改为 %(newRoomName)s。",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s 为此房间添加备用地址 %(addresses)s。",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s 为此房间添加了备用地址 %(addresses)s。",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s 为此房间移除了备用地址 %(addresses)s。",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s 为此房间移除了备用地址 %(addresses)s。",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s 为此房间添加备用地址 %(addresses)s。",
+        "one": "%(senderName)s 为此房间添加了备用地址 %(addresses)s。"
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s 为此房间移除了备用地址 %(addresses)s。",
+        "one": "%(senderName)s 为此房间移除了备用地址 %(addresses)s。"
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s 更改了此房间的备用地址。",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s 更改了此房间的主要地址与备用地址。",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s 更改了此房间的地址。",
@@ -1167,16 +1225,22 @@
     "Jump to first unread room.": "跳转至第一个未读房间。",
     "Jump to first invite.": "跳转至第一个邀请。",
     "Add room": "添加房间",
-    "Show %(count)s more|other": "多显示 %(count)s 个",
-    "Show %(count)s more|one": "多显示 %(count)s 个",
+    "Show %(count)s more": {
+        "other": "多显示 %(count)s 个",
+        "one": "多显示 %(count)s 个"
+    },
     "Notification options": "通知选项",
     "Forget Room": "忘记房间",
     "Favourited": "已收藏",
     "Room options": "房间选项",
-    "%(count)s unread messages including mentions.|other": "包括提及在内有 %(count)s 个未读消息。",
-    "%(count)s unread messages including mentions.|one": "1 个未读提及。",
-    "%(count)s unread messages.|other": "%(count)s 个未读消息。",
-    "%(count)s unread messages.|one": "1 个未读消息。",
+    "%(count)s unread messages including mentions.": {
+        "other": "包括提及在内有 %(count)s 个未读消息。",
+        "one": "1 个未读提及。"
+    },
+    "%(count)s unread messages.": {
+        "other": "%(count)s 个未读消息。",
+        "one": "1 个未读消息。"
+    },
     "Unread messages.": "未读消息。",
     "This room is public": "此房间为公共的",
     "Away": "离开",
@@ -1215,18 +1279,24 @@
     "Your homeserver": "你的家服务器",
     "Trusted": "受信任的",
     "Not trusted": "不受信任的",
-    "%(count)s verified sessions|other": "%(count)s 个已验证的会话",
-    "%(count)s verified sessions|one": "1 个已验证的会话",
+    "%(count)s verified sessions": {
+        "other": "%(count)s 个已验证的会话",
+        "one": "1 个已验证的会话"
+    },
     "Hide verified sessions": "隐藏已验证的会话",
-    "%(count)s sessions|other": "%(count)s 个会话",
-    "%(count)s sessions|one": "%(count)s 个会话",
+    "%(count)s sessions": {
+        "other": "%(count)s 个会话",
+        "one": "%(count)s 个会话"
+    },
     "Hide sessions": "隐藏会话",
     "No recent messages by %(user)s found": "没有找到 %(user)s 最近发送的消息",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "请尝试在时间线中向上滚动以查看是否有更早的。",
     "Remove recent messages by %(user)s": "删除 %(user)s 最近发送的消息",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "对于大量消息，可能会消耗一段时间。在此期间请不要刷新你的客户端。",
-    "Remove %(count)s messages|other": "删除 %(count)s 条消息",
-    "Remove %(count)s messages|one": "删除 1 条消息",
+    "Remove %(count)s messages": {
+        "other": "删除 %(count)s 条消息",
+        "one": "删除 1 条消息"
+    },
     "Remove recent messages": "移除最近消息",
     "Deactivate user?": "停用用户吗？",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "停用此用户将会使其登出并阻止其再次登入。而且此用户也会离开其所在的所有房间。此操作不可逆。你确定要停用此用户吗？",
@@ -1427,8 +1497,10 @@
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "此文件<b>过大</b>而不能上传。文件大小限制是 %(limit)s 但此文件为 %(sizeOfThisFile)s。",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "这些文件<b>过大</b>而不能上传。文件大小限制为 %(limit)s。",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "一些文件<b>过大</b>而不能上传。文件大小限制为 %(limit)s。",
-    "Upload %(count)s other files|other": "上传 %(count)s 个别的文件",
-    "Upload %(count)s other files|one": "上传 %(count)s 个别的文件",
+    "Upload %(count)s other files": {
+        "other": "上传 %(count)s 个别的文件",
+        "one": "上传 %(count)s 个别的文件"
+    },
     "Cancel All": "全部取消",
     "Upload Error": "上传错误",
     "Verification Request": "验证请求",
@@ -1575,10 +1647,14 @@
     "Explore public rooms": "探索公共房间",
     "You can only join it with a working invite.": "你只能通过有效邀请加入。",
     "Language Dropdown": "语言下拉菜单",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s 未做更改 %(count)s 次",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s 未做更改",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s 未做更改 %(count)s 次",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s 未做更改",
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)s 未做更改 %(count)s 次",
+        "one": "%(severalUsers)s 未做更改"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)s 未做更改 %(count)s 次",
+        "one": "%(oneUser)s 未做更改"
+    },
     "Preparing to download logs": "正在准备下载日志",
     "Download logs": "下载日志",
     "%(brand)s encountered an error during upload of:": "%(brand)s 在上传此文件时出错：",
@@ -1744,8 +1820,10 @@
     "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)s 或 %(usernamePassword)s",
     "Room name": "房间名称",
     "Random": "随机",
-    "%(count)s members|one": "%(count)s 位成员",
-    "%(count)s members|other": "%(count)s 位成员",
+    "%(count)s members": {
+        "one": "%(count)s 位成员",
+        "other": "%(count)s 位成员"
+    },
     "Welcome %(name)s": "欢迎 %(name)s",
     "Forgot password?": "忘记密码？",
     "Enter Security Key": "输入安全密钥",
@@ -1891,8 +1969,10 @@
     "Mark as not suggested": "标记为不建议",
     "Failed to remove some rooms. Try again later": "无法移除某些房间。请稍后再试",
     "Suggested": "建议",
-    "%(count)s rooms|one": "%(count)s 个房间",
-    "%(count)s rooms|other": "%(count)s 个房间",
+    "%(count)s rooms": {
+        "one": "%(count)s 个房间",
+        "other": "%(count)s 个房间"
+    },
     "You don't have permission": "你没有权限",
     "Enter phone number": "输入电话号码",
     "Enter email address": "输入邮箱地址",
@@ -2179,8 +2259,10 @@
     "Your platform and username will be noted to help us use your feedback as much as we can.": "我们将会记录你的平台及用户名，以帮助我们尽我们所能地使用你的反馈。",
     "Want to add a new room instead?": "想要添加一个新的房间吗？",
     "Add existing rooms": "添加现有房间",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "正在新增房间……",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "正在新增房间……（%(count)s 中的第 %(progress)s 个）",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "正在新增房间……",
+        "other": "正在新增房间……（%(count)s 中的第 %(progress)s 个）"
+    },
     "Not all selected were added": "并非所有选中的都被添加",
     "You are not allowed to view this server's rooms list": "你不被允许查看此服务器的房间列表",
     "Sends the given message with a space themed effect": "此消息带有空间主题化效果",
@@ -2189,17 +2271,23 @@
     "View message": "查看消息",
     "Zoom in": "放大",
     "Zoom out": "缩小",
-    "%(count)s people you know have already joined|one": "已有你所认识的 %(count)s 个人加入",
-    "%(count)s people you know have already joined|other": "已有你所认识的 %(count)s 个人加入",
+    "%(count)s people you know have already joined": {
+        "one": "已有你所认识的 %(count)s 个人加入",
+        "other": "已有你所认识的 %(count)s 个人加入"
+    },
     "Including %(commaSeparatedMembers)s": "包括 %(commaSeparatedMembers)s",
-    "View all %(count)s members|one": "查看 1 位成员",
-    "View all %(count)s members|other": "查看全部 %(count)s 位成员",
+    "View all %(count)s members": {
+        "one": "查看 1 位成员",
+        "other": "查看全部 %(count)s 位成员"
+    },
     "Use the <a>Desktop app</a> to search encrypted messages": "使用<a>桌面端英语</a>来搜索加密消息",
     "Use the <a>Desktop app</a> to see all encrypted files": "使用<a>桌面端应用</a>来查看所有加密文件",
     "Add reaction": "添加反应",
     "Error processing voice message": "处理语音消息时发生错误",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "当你将自己降级后，你将无法撤销此更改。如果你是此空间的最后一名拥有权限的用户，则无法重新获得权限。",
-    "You can only pin up to %(count)s widgets|other": "你仅能固定 %(count)s 个挂件",
+    "You can only pin up to %(count)s widgets": {
+        "other": "你仅能固定 %(count)s 个挂件"
+    },
     "We didn't find a microphone on your device. Please check your settings and try again.": "我们没能在你的设备上找到麦克风。请检查设置并重试。",
     "No microphone found": "未找到麦克风",
     "We were unable to access your microphone. Please check your browser settings and try again.": "我们无法访问你的麦克风。 请检查浏览器设置并重试。",
@@ -2217,8 +2305,10 @@
     "Your access token gives full access to your account. Do not share it with anyone.": "你的访问令牌可以完全访问你的账户。不要将其与任何人分享。",
     "Access Token": "访问令牌",
     "Message search initialisation failed": "消息搜索初始化失败",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "使用%(size)s存储%(rooms)s个房间的消息。在本地安全地缓存已加密的消息以使其出现在搜索结果中。",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "使用%(size)s存储%(rooms)s个房间的消息。在本地安全地缓存已加密的消息以使其出现在搜索结果中。",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "使用%(size)s存储%(rooms)s个房间的消息。在本地安全地缓存已加密的消息以使其出现在搜索结果中。",
+        "other": "使用%(size)s存储%(rooms)s个房间的消息。在本地安全地缓存已加密的消息以使其出现在搜索结果中。"
+    },
     "Manage & explore rooms": "管理并探索房间",
     "Please enter a name for the space": "请输入空间名称",
     "Play": "播放",
@@ -2289,8 +2379,10 @@
     "Send stickers to your active room as you": "发送贴纸到你所活跃的房间",
     "See when people join, leave, or are invited to your active room": "查看人们何时加入、离开或被邀请到你所活跃的房间",
     "See when people join, leave, or are invited to this room": "查看人们加入、离开或被邀请到此房间的时间",
-    "Currently joining %(count)s rooms|one": "目前正在加入 %(count)s 个房间",
-    "Currently joining %(count)s rooms|other": "目前正在加入 %(count)s 个房间",
+    "Currently joining %(count)s rooms": {
+        "one": "目前正在加入 %(count)s 个房间",
+        "other": "目前正在加入 %(count)s 个房间"
+    },
     "The user you called is busy.": "你所呼叫的用户正忙。",
     "User Busy": "用户正忙",
     "Or send invite link": "或发送邀请链接",
@@ -2325,10 +2417,14 @@
     "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.": "此用户正在做出违法行为，如对他人施暴，或威胁使用暴力。\n这将报告给房间协管员，他们可能会将其报告给执法部门。",
     "What this user is writing is wrong.\nThis will be reported to the room moderators.": "此用户所写的是错误内容。\n这将会报告给房间协管员。",
     "Please provide an address": "请提供地址",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)s 已更改服务器访问控制列表",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)s 已更改服务器访问控制列表 %(count)s 次",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)s 已更改服务器访问控制列表",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)s 已更改服务器的访问控制列表 %(count)s 此",
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "one": "%(oneUser)s 已更改服务器访问控制列表",
+        "other": "%(oneUser)s 已更改服务器访问控制列表 %(count)s 次"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "one": "%(severalUsers)s 已更改服务器访问控制列表",
+        "other": "%(severalUsers)s 已更改服务器的访问控制列表 %(count)s 此"
+    },
     "Message search initialisation failed, check <a>your settings</a> for more information": "消息搜索初始化失败，请检查<a>你的设置</a>以获取更多信息",
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "设置此空间的地址，这样用户就能通过你的家服务器找到此空间（%(localDomain)s）",
     "To publish an address, it needs to be set as a local address first.": "要公布地址，首先需要将其设为本地地址。",
@@ -2487,8 +2583,10 @@
     "Call back": "回拨",
     "Call declined": "拒绝通话",
     "Stop recording": "停止录制",
-    "Show %(count)s other previews|one": "显示 %(count)s 个其他预览",
-    "Show %(count)s other previews|other": "显示 %(count)s 个其他预览",
+    "Show %(count)s other previews": {
+        "one": "显示 %(count)s 个其他预览",
+        "other": "显示 %(count)s 个其他预览"
+    },
     "Access": "访问",
     "People with supported clients will be able to join the room without having a registered account.": "拥有受支持客户端的人无需注册账户即可加入房间。",
     "Decide who can join %(roomName)s.": "决定谁可以加入 %(roomName)s。",
@@ -2496,8 +2594,14 @@
     "Anyone in a space can find and join. You can select multiple spaces.": "空间中的任何人都可以找到并加入。你可以选择多个空间。",
     "Spaces with access": "可访问的空间",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "空间中的任何人都可以找到并加入。<a>在此处编辑哪些空间可以访问。</a>",
-    "Currently, %(count)s spaces have access|other": "目前，%(count)s 个空间可以访问",
-    "& %(count)s more|other": "以及另 %(count)s",
+    "Currently, %(count)s spaces have access": {
+        "other": "目前，%(count)s 个空间可以访问",
+        "one": "目前，一个空间有访问权限"
+    },
+    "& %(count)s more": {
+        "other": "以及另 %(count)s",
+        "one": "& 另外 %(count)s"
+    },
     "Upgrade required": "需要升级",
     "%(sharerName)s is presenting": "%(sharerName)s 正在展示",
     "You are presenting": "你正在展示",
@@ -2521,8 +2625,6 @@
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s 从此房间中取消固定了<a>一条消息</a>。查看所有<b>固定消息</b>。",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s将一条消息固定到此房间。查看所有固定消息。",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s 将<a>一条消息</a>固定到此房间。查看所有<b>固定消息</b>。",
-    "Currently, %(count)s spaces have access|one": "目前，一个空间有访问权限",
-    "& %(count)s more|one": "& 另外 %(count)s",
     "Some encryption parameters have been changed.": "一些加密参数已更改。",
     "Role in <RoomName/>": "<RoomName/> 中的角色",
     "Send a sticker": "发送贴纸",
@@ -2589,10 +2691,14 @@
     "Skip verification for now": "暂时跳过验证",
     "Really reset verification keys?": "确实要重置验证密钥？",
     "Create poll": "创建投票",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "正在更新房间… （%(count)s 中的 %(progress)s）",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "正在更新空间…",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "正在发送邀请…",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "正在发送邀请… （%(count)s 中的 %(progress)s）",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "other": "正在更新房间… （%(count)s 中的 %(progress)s）",
+        "one": "正在更新空间…"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "正在发送邀请…",
+        "other": "正在发送邀请… （%(count)s 中的 %(progress)s）"
+    },
     "Loading new room": "正在加载新房间",
     "Upgrading room": "正在升级房间",
     "Threads": "消息列",
@@ -2610,8 +2716,10 @@
     "Unban from %(roomName)s": "解除 %(roomName)s 禁令",
     "They'll still be able to access whatever you're not an admin of.": "他们仍然可以访问任何你不是管理员的地方。",
     "Downloading": "下载中",
-    "%(count)s reply|one": "%(count)s 条回复",
-    "%(count)s reply|other": "%(count)s 条回复",
+    "%(count)s reply": {
+        "one": "%(count)s 条回复",
+        "other": "%(count)s 条回复"
+    },
     "View in room": "在房间内查看",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "输入安全短语或<button>使用安全密钥</button>以继续。",
     "What projects are your team working on?": "你的团队正在进行什么项目?",
@@ -2629,12 +2737,18 @@
     "Rename": "重命名",
     "Select all": "全选",
     "Deselect all": "取消全选",
-    "Sign out devices|one": "注销设备",
-    "Sign out devices|other": "注销设备",
-    "Click the button below to confirm signing out these devices.|one": "单击下面的按钮以确认登出此设备。",
-    "Click the button below to confirm signing out these devices.|other": "单击下面的按钮以确认登出这些设备。",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "确认注销此设备需要使用单点登录来证明您的身份。",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "确认注销这些设备需要使用单点登录来证明你的身份。",
+    "Sign out devices": {
+        "one": "注销设备",
+        "other": "注销设备"
+    },
+    "Click the button below to confirm signing out these devices.": {
+        "one": "单击下面的按钮以确认登出此设备。",
+        "other": "单击下面的按钮以确认登出这些设备。"
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "确认注销此设备需要使用单点登录来证明您的身份。",
+        "other": "确认注销这些设备需要使用单点登录来证明你的身份。"
+    },
     "Store your Security Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.": "将您的安全密钥存放在安全的地方，例如密码管理器或保险箱，因为它用于保护您的加密数据。",
     "We'll generate a Security Key for you to store somewhere safe, like a password manager or a safe.": "我们将为您生成一个安全密钥，将其存储在安全的地方，例如密码管理器或保险箱。",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "重新获取账户访问权限并恢复存储在此会话中的加密密钥。 没有它们，您将无法在任何会话中阅读所有安全消息。",
@@ -2692,12 +2806,18 @@
     "Large": "大",
     "Image size in the timeline": "时间线中的图像大小",
     "%(senderName)s has updated the room layout": "%(senderName)s 更新了房间布局",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s 和其他 %(count)s 个空间",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s 和其他 %(count)s 个空间",
-    "Based on %(count)s votes|one": "基于 %(count)s 票",
-    "Based on %(count)s votes|other": "基于 %(count)s 票",
-    "%(count)s votes|one": "%(count)s 票",
-    "%(count)s votes|other": "%(count)s 票",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s 和其他 %(count)s 个空间",
+        "other": "%(spaceName)s 和其他 %(count)s 个空间"
+    },
+    "Based on %(count)s votes": {
+        "one": "基于 %(count)s 票",
+        "other": "基于 %(count)s 票"
+    },
+    "%(count)s votes": {
+        "one": "%(count)s 票",
+        "other": "%(count)s 票"
+    },
     "Sorry, the poll you tried to create was not posted.": "抱歉，您尝试创建的投票未被发布。",
     "Failed to post poll": "发布投票失败",
     "Sorry, your vote was not registered. Please try again.": "抱歉，你的投票未登记。请重试。",
@@ -2722,8 +2842,10 @@
     "Start new chat": "开始新的聊天",
     "Recently viewed": "最近查看",
     "To view all keyboard shortcuts, <a>click here</a>.": "要查看所有的键盘快捷键，<a>点击此处</a>。",
-    "%(count)s votes cast. Vote to see the results|one": "票数已达 %(count)s 票。要查看结果请亲自投票",
-    "%(count)s votes cast. Vote to see the results|other": "票数已达 %(count)s 票。要查看结果请亲自投票",
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "票数已达 %(count)s 票。要查看结果请亲自投票",
+        "other": "票数已达 %(count)s 票。要查看结果请亲自投票"
+    },
     "No votes cast": "尚无投票",
     "You can turn this off anytime in settings": "您可以随时在设置中关闭此功能",
     "We <Bold>don't</Bold> share information with third parties": "我们<Bold>不会</Bold>与第三方共享信息",
@@ -2747,8 +2869,10 @@
     "Failed to end poll": "结束投票失败",
     "The poll has ended. Top answer: %(topAnswer)s": "投票已经结束。 得票最多答案：%(topAnswer)s",
     "The poll has ended. No votes were cast.": "投票已经结束。 没有投票。",
-    "Final result based on %(count)s votes|one": "基于 %(count)s 票数的最终结果",
-    "Final result based on %(count)s votes|other": "基于 %(count)s 票数的最终结果",
+    "Final result based on %(count)s votes": {
+        "one": "基于 %(count)s 票数的最终结果",
+        "other": "基于 %(count)s 票数的最终结果"
+    },
     "Link to room": "房间链接",
     "Recent searches": "最近的搜索",
     "To search messages, look for this icon at the top of a room <icon/>": "要搜索消息，请在房间顶部查找此图标<icon/>",
@@ -2760,18 +2884,26 @@
     "Including you, %(commaSeparatedMembers)s": "包括你，%(commaSeparatedMembers)s",
     "Copy room link": "复制房间链接",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "我们无法理解给定日期 (%(inputDate)s)。尝试使用如下格式 YYYY-MM-DD。",
-    "Fetched %(count)s events out of %(total)s|one": "已获取总共 %(total)s 事件中的 %(count)s 个",
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "已获取总共 %(total)s 事件中的 %(count)s 个",
+        "other": "已获取 %(total)s 事件中的 %(count)s 个"
+    },
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "将您与该空间的成员的聊天进行分组。关闭这个后你将无法在 %(spaceName)s 内看到这些聊天。",
     "Sections to show": "要显示的部分",
-    "Exported %(count)s events in %(seconds)s seconds|one": "在 %(seconds)s 秒内导出了 %(count)s 个事件",
-    "Exported %(count)s events in %(seconds)s seconds|other": "在 %(seconds)s 秒内导出了 %(count)s 个事件",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "在 %(seconds)s 秒内导出了 %(count)s 个事件",
+        "other": "在 %(seconds)s 秒内导出了 %(count)s 个事件"
+    },
     "Export successful!": "成功导出！",
-    "Fetched %(count)s events in %(seconds)ss|one": "%(seconds)s 秒内获取了 %(count)s 个事件",
-    "Fetched %(count)s events in %(seconds)ss|other": "%(seconds)s 秒内获取了 %(count)s 个事件",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "%(seconds)s 秒内获取了 %(count)s 个事件",
+        "other": "%(seconds)s 秒内获取了 %(count)s 个事件"
+    },
     "Processing event %(number)s out of %(total)s": "正在处理总共 %(total)s 事件中的事件 %(number)s",
-    "Fetched %(count)s events so far|one": "迄今获取了 %(count)s 事件",
-    "Fetched %(count)s events so far|other": "迄今获取了 %(count)s 事件",
-    "Fetched %(count)s events out of %(total)s|other": "已获取 %(total)s 事件中的 %(count)s 个",
+    "Fetched %(count)s events so far": {
+        "one": "迄今获取了 %(count)s 事件",
+        "other": "迄今获取了 %(count)s 事件"
+    },
     "Generating a ZIP": "生成 ZIP",
     "Failed to load list of rooms.": "加载房间列表失败。",
     "Open in OpenStreetMap": "在 OpenStreetMap 中打开",
@@ -2809,9 +2941,11 @@
     "User is already invited to the room": "用户已被邀请至房间",
     "User is already invited to the space": "用户已被邀请至空间",
     "You do not have permission to invite people to this space.": "你无权邀请他人加入此空间。",
-    "In %(spaceName)s and %(count)s other spaces.|one": "在 %(spaceName)s 和其他 %(count)s 个空间。",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "在 %(spaceName)s 和其他 %(count)s 个空间。",
+        "other": "在 %(spaceName)s 和其他 %(count)s 个空间。"
+    },
     "In %(spaceName)s.": "在 %(spaceName)s 空间。",
-    "In %(spaceName)s and %(count)s other spaces.|other": "在 %(spaceName)s 和其他 %(count)s 个空间。",
     "In spaces %(space1Name)s and %(space2Name)s.": "在 %(space1Name)s 和 %(space2Name)s 空间。",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s 与 %(space2Name)s",
     "Remove, ban, or invite people to your active room, and make you leave": "移除、封禁或邀请他人加入你的活跃房间，方可离开",
@@ -2840,8 +2974,10 @@
     "Pinned": "已固定",
     "Maximise": "最大化",
     "To proceed, please accept the verification request on your other device.": "要继续进行，请接受你另一设备上的验证请求。",
-    "%(count)s participants|other": "%(count)s 名参与者",
-    "%(count)s participants|one": "一名参与者",
+    "%(count)s participants": {
+        "other": "%(count)s 名参与者",
+        "one": "一名参与者"
+    },
     "Joining…": "加入中…",
     "Video": "视频",
     "Open thread": "打开消息列",
@@ -2880,8 +3016,10 @@
     "Video room": "视频房间",
     "Video rooms are a beta feature": "视频房间是beta功能",
     "Read receipts": "已读回执",
-    "Seen by %(count)s people|one": "已被%(count)s人查看",
-    "Seen by %(count)s people|other": "已被%(count)s人查看",
+    "Seen by %(count)s people": {
+        "one": "已被%(count)s人查看",
+        "other": "已被%(count)s人查看"
+    },
     "%(members)s and %(last)s": "%(members)s和%(last)s",
     "%(members)s and more": "%(members)s和更多",
     "Busy": "忙",
@@ -2916,8 +3054,10 @@
     "Deactivating your account is a permanent action — be careful!": "停用你的账户是永久性动作——小心！",
     "Your password was successfully changed.": "你的密码已成功更改。",
     "IRC (Experimental)": "IRC（实验性）",
-    "Confirm signing out these devices|one": "确认登出此设备",
-    "Confirm signing out these devices|other": "确认登出这些设备",
+    "Confirm signing out these devices": {
+        "one": "确认登出此设备",
+        "other": "确认登出这些设备"
+    },
     "Spaces are a new way to group rooms and people. What kind of Space do you want to create? You can change this later.": "空间是将房间和人分组的一种新方式。你想创建什么类型的空间？你可以在以后更改。",
     "Match system": "匹配系统",
     "Developer tools": "开发者工具",
@@ -2932,8 +3072,10 @@
     "Unmute microphone": "取消静音麦克风",
     "Mute microphone": "静音麦克风",
     "Audio devices": "音频设备",
-    "%(count)s people joined|one": "%(count)s个人已加入",
-    "%(count)s people joined|other": "%(count)s个人已加入",
+    "%(count)s people joined": {
+        "one": "%(count)s个人已加入",
+        "other": "%(count)s个人已加入"
+    },
     "Dial": "拨号",
     "Enable hardware acceleration": "启用硬件加速",
     "Automatically send debug logs when key backup is not functioning": "当密钥备份无法运作时自动发送debug日志",
@@ -2991,10 +3133,14 @@
     "Navigate to next message to edit": "导航到下条要编辑的消息",
     "Space home": "空间首页",
     "Open this settings tab": "打开此设置标签页",
-    "was removed %(count)s times|one": "被移除",
-    "was removed %(count)s times|other": "被移除%(count)s次",
-    "were removed %(count)s times|one": "被移除",
-    "were removed %(count)s times|other": "被移除了%(count)s次",
+    "was removed %(count)s times": {
+        "one": "被移除",
+        "other": "被移除%(count)s次"
+    },
+    "were removed %(count)s times": {
+        "one": "被移除",
+        "other": "被移除了%(count)s次"
+    },
     "Unknown error fetching location. Please try again later.": "获取位置时发生错误。请之后再试。",
     "Timed out trying to fetch your location. Please try again later.": "尝试获取你的位置超时。请之后再试。",
     "Failed to fetch your location. Please try again later.": "获取你的位置失败。请之后再试。",
@@ -3038,12 +3184,18 @@
     "Ban from space": "从空间封禁",
     "Remove from %(roomName)s": "从%(roomName)s移除",
     "Remove from room": "从房间移除",
-    "Currently removing messages in %(count)s rooms|one": "目前正在移除%(count)s个房间中的消息",
-    "Currently removing messages in %(count)s rooms|other": "目前正在移除%(count)s个房间中的消息",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)s更改了房间的<a>固定消息</a>",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)s更改了房间的<a>固定消息</a>%(count)s次",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)s更改了房间的<a>固定消息</a>",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)s更改了房间的<a>固定消息</a>%(count)s次",
+    "Currently removing messages in %(count)s rooms": {
+        "one": "目前正在移除%(count)s个房间中的消息",
+        "other": "目前正在移除%(count)s个房间中的消息"
+    },
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(oneUser)s更改了房间的<a>固定消息</a>",
+        "other": "%(oneUser)s更改了房间的<a>固定消息</a>%(count)s次"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)s更改了房间的<a>固定消息</a>",
+        "other": "%(severalUsers)s更改了房间的<a>固定消息</a>%(count)s次"
+    },
     "Minimise": "最小化",
     "Un-maximise": "取消最大化",
     "What location type do you want to share?": "你想分享什么位置类型？",
@@ -3058,7 +3210,10 @@
     "Click to move the pin": "点击以移动图钉",
     "Share for %(duration)s": "分享%(duration)s",
     "Enable live location sharing": "启用实时位置分享",
-    "%(count)s Members|one": "%(count)s个成员",
+    "%(count)s Members": {
+        "one": "%(count)s个成员",
+        "other": "%(count)s个成员"
+    },
     "Search for": "搜索",
     "Some results may be hidden for privacy": "为保护隐私，一些结果可能被隐藏",
     "If you can't see who you're looking for, send them your invite link.": "若你无法看到你正在查找的人，给他们发送你的邀请链接。",
@@ -3089,8 +3244,10 @@
     "Failed to load.": "载入失败。",
     "Send custom state event": "发送自定义状态事件",
     "<empty string>": "<空字符串>",
-    "<%(count)s spaces>|one": "<空间>",
-    "<%(count)s spaces>|other": "<%(count)s个空间>",
+    "<%(count)s spaces>": {
+        "one": "<空间>",
+        "other": "<%(count)s个空间>"
+    },
     "Failed to send event!": "发送事件失败！",
     "Doesn't look like valid JSON.": "看起来不像有效的JSON。",
     "Send custom room account data event": "发送自定义房间账户资料事件",
@@ -3122,8 +3279,10 @@
     "Find and invite your friends": "发现并邀请你的朋友",
     "Find your people": "寻找你的人",
     "Welcome to %(brand)s": "欢迎来到%(brand)s",
-    "Only %(count)s steps to go|other": "仅需%(count)s步",
-    "Only %(count)s steps to go|one": "仅需%(count)s步",
+    "Only %(count)s steps to go": {
+        "other": "仅需%(count)s步",
+        "one": "仅需%(count)s步"
+    },
     "Download %(brand)s": "下载%(brand)s",
     "Download %(brand)s Desktop": "下载%(brand)s桌面版",
     "Download on the App Store": "在App Store下载",
@@ -3143,8 +3302,10 @@
     "Other sessions": "其他会话",
     "Welcome": "欢迎",
     "Show shortcut to welcome checklist above the room list": "在房间列表上方显示欢迎清单的捷径",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)s移除了1条消息",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)s移除了%(count)s条消息",
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)s移除了1条消息",
+        "other": "%(severalUsers)s移除了%(count)s条消息"
+    },
     "Remove them from everything I'm able to": "",
     "Inactive sessions": "不活跃的会话",
     "View all": "查看全部",
@@ -3159,8 +3320,10 @@
     "Verify or sign out from this session for best security and reliability.": "验证此会话或从之登出，以取得最佳安全性和可靠性。",
     "Unverified session": "未验证的会话",
     "This session is ready for secure messaging.": "此会话已准备好进行安全的消息传输。",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s发送了%(count)s条隐藏消息",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)s发送了一条隐藏消息",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "other": "%(oneUser)s发送了%(count)s条隐藏消息",
+        "one": "%(oneUser)s发送了一条隐藏消息"
+    },
     "Remove server “%(roomServer)s”": "移除服务器“%(roomServer)s”",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "你可以使用自定义服务器选项来指定不同的家服务器URL以登录其他Matrix服务器。这让你能把%(brand)s和不同家服务器上的已有Matrix账户搭配使用。",
     "Started": "已开始",
@@ -3174,7 +3337,6 @@
     "Send custom account data event": "发送自定义账户数据事件",
     "Search Dialog": "搜索对话",
     "Join %(roomAddress)s": "加入%(roomAddress)s",
-    "%(count)s Members|other": "%(count)s个成员",
     "Ignore user": "忽略用户",
     "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "当你登出时，这些密钥会从此设备删除。这意味着你将无法查阅已加密消息，除非你在其他设备上有那些消息的密钥，或者已将其备份到服务器。",
     "Open room": "打开房间",
@@ -3242,10 +3404,14 @@
     "Click to read topic": "点击阅读话题",
     "Edit topic": "编辑话题",
     "Edit poll": "编辑投票",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)s发送了一条隐藏消息",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)s发送了%(count)s条隐藏消息",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)s移除了一条消息",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)s移除了%(count)s条消息",
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)s发送了一条隐藏消息",
+        "other": "%(severalUsers)s发送了%(count)s条隐藏消息"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "one": "%(oneUser)s移除了一条消息",
+        "other": "%(oneUser)s移除了%(count)s条消息"
+    },
     "Don’t miss a thing by taking %(brand)s with you": "随身携带%(brand)s，不错过任何事情",
     "It’s what you’re here for, so lets get to it": "这就是你来这里的目的，所以让我们开始吧",
     "You made it!": "你做到了！",
@@ -3272,8 +3438,10 @@
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "若你也想移除关于此用户的系统消息（例如，成员更改、用户资料更改……），则取消勾选",
     "Check if you want to hide all current and future messages from this user.": "若想隐藏来自此用户的全部当前和未来的消息，请打勾。",
     "Inviting %(user1)s and %(user2)s": "正在邀请 %(user1)s 与 %(user2)s",
-    "%(user)s and %(count)s others|one": "%(user)s 与 1 个人",
-    "%(user)s and %(count)s others|other": "%(user)s 与 %(count)s 个人",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s 与 1 个人",
+        "other": "%(user)s 与 %(count)s 个人"
+    },
     "Voice broadcast": "语音广播",
     "Element Call video rooms": "Element通话视频房间",
     "Voice broadcasts": "语音广播",
@@ -3287,8 +3455,10 @@
     "Video call started in %(roomName)s. (not supported by this browser)": "%(roomName)s里的视频通话开始了。（此浏览器不支持）",
     "Video call started in %(roomName)s.": "%(roomName)s里的视频通话开始了。",
     "You need to be able to kick users to do that.": "你需要能够移除用户才能做到那件事。",
-    "Inviting %(user)s and %(count)s others|one": "正在邀请%(user)s和另外1个人",
-    "Inviting %(user)s and %(count)s others|other": "正在邀请%(user)s和其他%(count)s人",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "正在邀请%(user)s和另外1个人",
+        "other": "正在邀请%(user)s和其他%(count)s人"
+    },
     "Turn off to disable notifications on all your devices and sessions": "关闭以在你全部设备和会话上停用通知",
     "Enable notifications for this account": "为此账户启用通知",
     "Enable notifications for this device": "为此设备启用通知",
@@ -3345,8 +3515,10 @@
     "Join %(brand)s calls": "加入%(brand)s呼叫",
     "Start %(brand)s calls": "开始%(brand)s呼叫",
     "Automatically adjust the microphone volume": "自动调整话筒音量",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "你确定要登出%(count)s个会话吗？",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "你确定要退出这 %(count)s 个会话吗？",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "one": "你确定要登出%(count)s个会话吗？",
+        "other": "你确定要退出这 %(count)s 个会话吗？"
+    },
     "Presence": "在线",
     "Apply": "申请",
     "Search users in this room…": "搜索该房间内的用户……",

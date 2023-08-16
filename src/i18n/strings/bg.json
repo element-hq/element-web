@@ -149,8 +149,10 @@
     "Invite": "Покани",
     "Unmute": "Премахни заглушаването",
     "Admin Tools": "Инструменти на администратора",
-    "and %(count)s others...|other": "и %(count)s други...",
-    "and %(count)s others...|one": "и още един...",
+    "and %(count)s others...": {
+        "other": "и %(count)s други...",
+        "one": "и още един..."
+    },
     "Invited": "Поканен",
     "Filter room members": "Филтриране на членовете",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (ниво на достъп %(powerLevelNumber)s)",
@@ -177,8 +179,10 @@
     "Unknown": "Неизвестен",
     "Replying": "Отговаря",
     "Save": "Запази",
-    "(~%(count)s results)|other": "(~%(count)s резултати)",
-    "(~%(count)s results)|one": "(~%(count)s резултат)",
+    "(~%(count)s results)": {
+        "other": "(~%(count)s резултати)",
+        "one": "(~%(count)s резултат)"
+    },
     "Join Room": "Присъединяване към стаята",
     "Upload avatar": "Качи профилна снимка",
     "Settings": "Настройки",
@@ -241,55 +245,99 @@
     "No results": "Няма резултати",
     "Home": "Начална страница",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)sсе присъединиха %(count)s пъти",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sсе присъединиха",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sсе присъедини %(count)s пъти",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)sсе присъедини",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)sнапуснаха %(count)s пъти",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)sнапуснаха",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)sнапусна %(count)s пъти",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)sнапусна",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)sсе присъединиха и напуснаха %(count)s пъти",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)sсе присъединиха и напуснаха",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)sсе присъедини и напусна %(count)s пъти",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)sсе присъедини и напусна",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)sнапуснаха и се присъединиха отново %(count)s пъти",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)sнапуснаха и се присъединиха отново",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)sнапусна и се присъедини отново %(count)s пъти",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)sнапусна и се присъедини отново",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)sотхвърлиха своите покани %(count)s пъти",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)sотхвърлиха своите покани",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)sотхвърли своята покана %(count)s пъти",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)sотхвърли своята покана",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)sоттеглиха своите покани %(count)s пъти",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)sоттеглиха своите покани",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)sоттегли своята покана %(count)s пъти",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)sоттегли своята покана",
-    "were invited %(count)s times|other": "бяха поканени %(count)s пъти",
-    "were invited %(count)s times|one": "бяха поканени",
-    "was invited %(count)s times|other": "беше поканен %(count)s пъти",
-    "was invited %(count)s times|one": "беше поканен",
-    "were banned %(count)s times|other": "бяха блокирани %(count)s пъти",
-    "were banned %(count)s times|one": "бяха блокирани",
-    "was banned %(count)s times|other": "беше блокиран %(count)s пъти",
-    "was banned %(count)s times|one": "беше блокиран",
-    "were unbanned %(count)s times|other": "бяха отблокирани %(count)s пъти",
-    "were unbanned %(count)s times|one": "бяха отблокирани",
-    "was unbanned %(count)s times|other": "беше отблокиран %(count)s пъти",
-    "was unbanned %(count)s times|one": "беше отблокиран",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)sсмениха своето име %(count)s пъти",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)sсмениха своето име",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)sсмени своето име %(count)s пъти",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)sсмени своето име",
-    "%(items)s and %(count)s others|other": "%(items)s и %(count)s други",
-    "%(items)s and %(count)s others|one": "%(items)s и още един",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)sсе присъединиха %(count)s пъти",
+        "one": "%(severalUsers)sсе присъединиха"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)sсе присъедини %(count)s пъти",
+        "one": "%(oneUser)sсе присъедини"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)sнапуснаха %(count)s пъти",
+        "one": "%(severalUsers)sнапуснаха"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)sнапусна %(count)s пъти",
+        "one": "%(oneUser)sнапусна"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)sсе присъединиха и напуснаха %(count)s пъти",
+        "one": "%(severalUsers)sсе присъединиха и напуснаха"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)sсе присъедини и напусна %(count)s пъти",
+        "one": "%(oneUser)sсе присъедини и напусна"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)sнапуснаха и се присъединиха отново %(count)s пъти",
+        "one": "%(severalUsers)sнапуснаха и се присъединиха отново"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)sнапусна и се присъедини отново %(count)s пъти",
+        "one": "%(oneUser)sнапусна и се присъедини отново"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)sотхвърлиха своите покани %(count)s пъти",
+        "one": "%(severalUsers)sотхвърлиха своите покани"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)sотхвърли своята покана %(count)s пъти",
+        "one": "%(oneUser)sотхвърли своята покана"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)sоттеглиха своите покани %(count)s пъти",
+        "one": "%(severalUsers)sоттеглиха своите покани"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)sоттегли своята покана %(count)s пъти",
+        "one": "%(oneUser)sоттегли своята покана"
+    },
+    "were invited %(count)s times": {
+        "other": "бяха поканени %(count)s пъти",
+        "one": "бяха поканени"
+    },
+    "was invited %(count)s times": {
+        "other": "беше поканен %(count)s пъти",
+        "one": "беше поканен"
+    },
+    "were banned %(count)s times": {
+        "other": "бяха блокирани %(count)s пъти",
+        "one": "бяха блокирани"
+    },
+    "was banned %(count)s times": {
+        "other": "беше блокиран %(count)s пъти",
+        "one": "беше блокиран"
+    },
+    "were unbanned %(count)s times": {
+        "other": "бяха отблокирани %(count)s пъти",
+        "one": "бяха отблокирани"
+    },
+    "was unbanned %(count)s times": {
+        "other": "беше отблокиран %(count)s пъти",
+        "one": "беше отблокиран"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)sсмениха своето име %(count)s пъти",
+        "one": "%(severalUsers)sсмениха своето име"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)sсмени своето име %(count)s пъти",
+        "one": "%(oneUser)sсмени своето име"
+    },
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s и %(count)s други",
+        "one": "%(items)s и още един"
+    },
     "%(items)s and %(lastItem)s": "%(items)s и %(lastItem)s",
     "collapse": "свий",
     "expand": "разшири",
     "Custom level": "Персонализирано ниво",
     "<a>In reply to</a> <pill>": "<a>В отговор на</a> <pill>",
     "Start chat": "Започни чат",
-    "And %(count)s more...|other": "И %(count)s други...",
+    "And %(count)s more...": {
+        "other": "И %(count)s други..."
+    },
     "Confirm Removal": "Потвърдете премахването",
     "Create": "Създай",
     "Unknown error": "Неизвестна грешка",
@@ -333,9 +381,11 @@
     "Reject all %(invitedRooms)s invites": "Отхвърли всички %(invitedRooms)s покани",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Беше направен опит да се зареди конкретна точка в хронологията на тази стая, но нямате разрешение да разгледате въпросното съобщение.",
     "Failed to load timeline position": "Неуспешно зареждане на позицията в хронологията",
-    "Uploading %(filename)s and %(count)s others|other": "Качване на %(filename)s и %(count)s други",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "Качване на %(filename)s и %(count)s други",
+        "one": "Качване на %(filename)s и %(count)s друг"
+    },
     "Uploading %(filename)s": "Качване на %(filename)s",
-    "Uploading %(filename)s and %(count)s others|one": "Качване на %(filename)s и %(count)s друг",
     "Success": "Успешно",
     "<not supported>": "<не се поддържа>",
     "Import E2E room keys": "Импортирай E2E ключове",
@@ -590,8 +640,10 @@
     "Sets the room name": "Настройва име на стаята",
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s обнови тази стая.",
     "%(displayName)s is typing …": "%(displayName)s пише …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s и %(count)s други пишат …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s и още един пишат …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s и %(count)s други пишат …",
+        "one": "%(names)s и още един пишат …"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s и %(lastPerson)s пишат …",
     "Render simple counters in room header": "Визуализирай прости броячи в заглавието на стаята",
     "Enable Emoji suggestions while typing": "Включи емоджи предложенията по време на писане",
@@ -814,13 +866,17 @@
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Файлът е <b>прекалено голям</b> за да се качи. Максималният допустим размер е %(limit)s, докато този файл е %(sizeOfThisFile)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Тези файлове са <b>прекалено големи</b> за да се качат. Максималният допустим размер е %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Някои файлове са <b>прекалено големи</b> за да се качат. Максималният допустим размер е %(limit)s.",
-    "Upload %(count)s other files|other": "Качи %(count)s други файла",
-    "Upload %(count)s other files|one": "Качи %(count)s друг файл",
+    "Upload %(count)s other files": {
+        "other": "Качи %(count)s други файла",
+        "one": "Качи %(count)s друг файл"
+    },
     "Cancel All": "Откажи всички",
     "Upload Error": "Грешка при качване",
     "Remember my selection for this widget": "Запомни избора ми за това приспособление",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Имате %(count)s непрочетени известия в предишна версия на тази стая.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Имате %(count)s непрочетено известие в предишна версия на тази стая.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "Имате %(count)s непрочетени известия в предишна версия на тази стая.",
+        "one": "Имате %(count)s непрочетено известие в предишна версия на тази стая."
+    },
     "The server does not support the room version specified.": "Сървърът не поддържа указаната версия на стая.",
     "Unbans user with given ID": "Премахва блокирането на потребител с даден идентификатор",
     "Sends the given message coloured as a rainbow": "Изпраща текущото съобщение оцветено като дъга",
@@ -895,10 +951,14 @@
     "Message edits": "Редакции на съобщение",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Обновяването на тази стая изисква затварянето на текущата и създаване на нова на нейно място. За да е най-удобно за членовете на стаята, ще:",
     "Show all": "Покажи всички",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)sне направиха промени %(count)s пъти",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)sне направиха промени",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sне направи промени %(count)s пъти",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)sне направи промени",
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)sне направиха промени %(count)s пъти",
+        "one": "%(severalUsers)sне направиха промени"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)sне направи промени %(count)s пъти",
+        "one": "%(oneUser)sне направи промени"
+    },
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Моля, кажете ни какво се обърка, или още по-добре - създайте проблем в GitHub обясняващ ситуацията.",
     "Removing…": "Премахване…",
     "Clear all data": "Изчисти всички данни",
@@ -987,7 +1047,10 @@
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Опитайте се да проверите по-нагоре в историята за по-ранни.",
     "Remove recent messages by %(user)s": "Премахване на скорошни съобщения от %(user)s",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Може да отнеме известно време за голям брой съобщения. Моля, не презареждайте страницата междувременно.",
-    "Remove %(count)s messages|other": "Премахни %(count)s съобщения",
+    "Remove %(count)s messages": {
+        "other": "Премахни %(count)s съобщения",
+        "one": "Премахни 1 съобщение"
+    },
     "Remove recent messages": "Премахни скорошни съобщения",
     "Bold": "Удебелено",
     "Italics": "Наклонено",
@@ -1026,12 +1089,15 @@
     "Clear cache and reload": "Изчисти кеша и презареди",
     "Your email address hasn't been verified yet": "Имейл адресът ви все още не е потвърден",
     "Click the link in the email you received to verify and then click continue again.": "Кликнете на връзката получена по имейл за да потвърдите, а след това натиснете продължи отново.",
-    "Remove %(count)s messages|one": "Премахни 1 съобщение",
     "Room %(name)s": "Стая %(name)s",
-    "%(count)s unread messages including mentions.|other": "%(count)s непрочетени съобщения, включително споменавания.",
-    "%(count)s unread messages including mentions.|one": "1 непрочетено споменаване.",
-    "%(count)s unread messages.|other": "%(count)s непрочетени съобщения.",
-    "%(count)s unread messages.|one": "1 непрочетено съобщение.",
+    "%(count)s unread messages including mentions.": {
+        "other": "%(count)s непрочетени съобщения, включително споменавания.",
+        "one": "1 непрочетено споменаване."
+    },
+    "%(count)s unread messages.": {
+        "other": "%(count)s непрочетени съобщения.",
+        "one": "1 непрочетено съобщение."
+    },
     "Unread messages.": "Непрочетени съобщения.",
     "Failed to deactivate user": "Неуспешно деактивиране на потребител",
     "This client does not support end-to-end encryption.": "Този клиент не поддържа шифроване от край до край.",
@@ -1145,8 +1211,10 @@
     "Trusted": "Доверени",
     "Not trusted": "Недоверени",
     "Hide verified sessions": "Скрий потвърдените сесии",
-    "%(count)s verified sessions|other": "%(count)s потвърдени сесии",
-    "%(count)s verified sessions|one": "1 потвърдена сесия",
+    "%(count)s verified sessions": {
+        "other": "%(count)s потвърдени сесии",
+        "one": "1 потвърдена сесия"
+    },
     "Messages in this room are end-to-end encrypted.": "Съобщенията в тази стая са шифровани от край-до-край.",
     "Verify": "Потвърди",
     "Security": "Сигурност",
@@ -1208,10 +1276,14 @@
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Предоставения от вас ключ за подписване съвпада с ключа за подписване получен от сесия %(deviceId)s на %(userId)s. Сесията е маркирана като потвърдена.",
     "Displays information about a user": "Показва информация за потребителя",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s промени името на стаята от %(oldRoomName)s на %(newRoomName)s.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s добави алтернативните адреси %(addresses)s към стаята.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s добави алтернативният адрес %(addresses)s към стаята.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s премахна алтернативните адреси %(addresses)s от стаята.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s премахна алтернативният адрес %(addresses)s от стаята.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s добави алтернативните адреси %(addresses)s към стаята.",
+        "one": "%(senderName)s добави алтернативният адрес %(addresses)s към стаята."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s премахна алтернативните адреси %(addresses)s от стаята.",
+        "one": "%(senderName)s премахна алтернативният адрес %(addresses)s от стаята."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s промени алтернативните адреси на стаята.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s промени основният и алтернативните адреси на стаята.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s промени адресите на стаята.",
@@ -1332,8 +1404,10 @@
     "Your messages are not secure": "Съобщенията ви не са защитени",
     "One of the following may be compromised:": "Едно от следните неща може да е било компрометирано:",
     "Your homeserver": "Сървърът ви",
-    "%(count)s sessions|other": "%(count)s сесии",
-    "%(count)s sessions|one": "%(count)s сесия",
+    "%(count)s sessions": {
+        "other": "%(count)s сесии",
+        "one": "%(count)s сесия"
+    },
     "Hide sessions": "Скрий сесиите",
     "Verify by scanning": "Верифицирай чрез сканиране",
     "Ask %(displayName)s to scan your code:": "Попитайте %(displayName)s да сканира вашия код:",
@@ -1516,8 +1590,10 @@
     "Sort by": "Подреди по",
     "Activity": "Активност",
     "A-Z": "Азбучен ред",
-    "Show %(count)s more|other": "Покажи още %(count)s",
-    "Show %(count)s more|one": "Покажи още %(count)s",
+    "Show %(count)s more": {
+        "other": "Покажи още %(count)s",
+        "one": "Покажи още %(count)s"
+    },
     "Light": "Светла",
     "Dark": "Тъмна",
     "Use custom size": "Използвай собствен размер",
@@ -1624,7 +1700,9 @@
     "Edit widgets, bridges & bots": "Промени приспособления, мостове и ботове",
     "Widgets": "Приспособления",
     "Unpin": "Разкачи",
-    "You can only pin up to %(count)s widgets|other": "Може да закачите максимум %(count)s приспособления",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Може да закачите максимум %(count)s приспособления"
+    },
     "Favourited": "В любими",
     "Forget Room": "Забрави стаята",
     "Notification options": "Настройки за уведомление",
@@ -2031,11 +2109,15 @@
     "Some invites couldn't be sent": "Някои покани не можаха да бъдат изпратени",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Изпратихме останалите покани, но следните хора не можаха да бъдат поканени в <RoomName/>",
     "Empty room (was %(oldName)s)": "Празна стая (беше %(oldName)s)",
-    "Inviting %(user)s and %(count)s others|one": "Канене на %(user)s и още 1 друг",
-    "Inviting %(user)s and %(count)s others|other": "Канене на %(user)s и %(count)s други",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "Канене на %(user)s и още 1 друг",
+        "other": "Канене на %(user)s и %(count)s други"
+    },
     "Inviting %(user1)s and %(user2)s": "Канене на %(user1)s и %(user2)s",
-    "%(user)s and %(count)s others|one": "%(user)s и още 1",
-    "%(user)s and %(count)s others|other": "%(user)s и %(count)s други",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s и още 1",
+        "other": "%(user)s и %(count)s други"
+    },
     "%(user1)s and %(user2)s": "%(user1)s и %(user2)s",
     "Empty room": "Празна стая"
 }

@@ -191,10 +191,14 @@
     "%(senderDisplayName)s sent an image.": "قام %(senderDisplayName)s بإرسال صورة.",
     "%(senderName)s set the main address for this room to %(address)s.": "قام %(senderName)s بتعديل العنوان الرئيسي لهذه الغرفة الى %(address)s.",
     "%(senderName)s removed the main address for this room.": "قام %(senderName)s بإزالة العنوان الرئيسي لهذه الغرفة.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "قام %(senderName)s بإضافة العناوين البديلة %(addresses)s لهذه الغرفة.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "قام %(senderName)s بإضافة العنوان البديل %(addresses)s لهذه الغرفة.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "قام %(senderName)s بإزالة العناوين البديلة %(addresses)s لهذه الغرفة.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "قام %(senderName)s بإزالة العنوان البديل %(addresses)s لهذه الغرفة.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "قام %(senderName)s بإضافة العناوين البديلة %(addresses)s لهذه الغرفة.",
+        "one": "قام %(senderName)s بإضافة العنوان البديل %(addresses)s لهذه الغرفة."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "قام %(senderName)s بإزالة العناوين البديلة %(addresses)s لهذه الغرفة.",
+        "one": "قام %(senderName)s بإزالة العنوان البديل %(addresses)s لهذه الغرفة."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "قام %(senderName)s بتعديل العناوين البديلة لهذه الغرفة.",
     "%(senderName)s changed the main and alternative addresses for this room.": "قام %(senderName)s بتعديل العناوين الرئيسية و البديلة لهذه الغرفة.",
     "%(senderName)s changed the addresses for this room.": "قام %(senderName)s بتعديل عناوين هذه الغرفة.",
@@ -240,8 +244,10 @@
     "Not Trusted": "غير موثوقة",
     "Done": "تم",
     "%(displayName)s is typing …": "%(displayName)s يكتب…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s و %(count)s آخرون يكتبون…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s وآخر يكتبون…",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s و %(count)s آخرون يكتبون…",
+        "one": "%(names)s وآخر يكتبون…"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s و %(lastPerson)s يكتبون…",
     "Cannot reach homeserver": "لا يمكن الوصول إلى السيرفر",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "تأكد من أنك تملك اتصال بالانترنت مستقر أو تواصل مع مدير السيرفر",
@@ -402,10 +408,14 @@
     "This room has already been upgraded.": "سبق وأن تمت ترقية هذه الغرفة.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "ستؤدي ترقية هذه الغرفة إلى إغلاق النسخة الحالية للغرفة وإنشاء غرفة تمت ترقيتها بنفس الاسم.",
     "Unread messages.": "رسائل غير المقروءة.",
-    "%(count)s unread messages.|one": "رسالة واحدة غير مقروءة.",
-    "%(count)s unread messages.|other": "%(count)s من الرسائل غير مقروءة.",
-    "%(count)s unread messages including mentions.|one": "إشارة واحدة غير مقروءة.",
-    "%(count)s unread messages including mentions.|other": "%(count)s من الرسائل والإشارات غير المقروءة.",
+    "%(count)s unread messages.": {
+        "one": "رسالة واحدة غير مقروءة.",
+        "other": "%(count)s من الرسائل غير مقروءة."
+    },
+    "%(count)s unread messages including mentions.": {
+        "one": "إشارة واحدة غير مقروءة.",
+        "other": "%(count)s من الرسائل والإشارات غير المقروءة."
+    },
     "Room options": "خيارات الغرفة",
     "Settings": "الإعدادات",
     "Low Priority": "أولوية منخفضة",
@@ -413,8 +423,10 @@
     "Favourited": "فُضلت",
     "Forget Room": "انسَ الغرفة",
     "Notification options": "خيارات الإشعارات",
-    "Show %(count)s more|one": "أظهر %(count)s زيادة",
-    "Show %(count)s more|other": "أظهر %(count)s زيادة",
+    "Show %(count)s more": {
+        "one": "أظهر %(count)s زيادة",
+        "other": "أظهر %(count)s زيادة"
+    },
     "Jump to first invite.": "الانتقال لأول دعوة.",
     "Jump to first unread room.": "الانتقال لأول غرفة لم تقرأ.",
     "List options": "خيارات القائمة",
@@ -466,8 +478,10 @@
     "Hide Widgets": "إخفاء عناصر الواجهة",
     "Forget room": "انسَ الغرفة",
     "Join Room": "انضم للغرفة",
-    "(~%(count)s results)|one": "(~%(count)s نتيجة)",
-    "(~%(count)s results)|other": "(~%(count)s نتائج)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s نتيجة)",
+        "other": "(~%(count)s نتائج)"
+    },
     "Unnamed room": "غرفة بلا اسم",
     "No recently visited rooms": "لا توجد غرف تمت زيارتها مؤخرًا",
     "Room %(name)s": "الغرفة %(name)s",
@@ -512,8 +526,10 @@
     "Filter room members": "تصفية أعضاء الغرفة",
     "Invited": "مدعو",
     "Invite to this room": "ادع لهذه الغرفة",
-    "and %(count)s others...|one": "وواحدة أخرى...",
-    "and %(count)s others...|other": "و %(count)s أخر...",
+    "and %(count)s others...": {
+        "one": "وواحدة أخرى...",
+        "other": "و %(count)s أخر..."
+    },
     "Close preview": "إغلاق المعاينة",
     "Scroll to most recent messages": "انتقل إلى أحدث الرسائل",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "لا يمكن ضمان موثوقية هذه الرسالة المشفرة على هذا الجهاز.",
@@ -670,8 +686,10 @@
     "Failed to mute user": "تعذر كتم المستخدم",
     "Failed to ban user": "تعذر حذف المستخدم",
     "Remove recent messages": "احذف الرسائل الحديثة",
-    "Remove %(count)s messages|one": "احذف رسالة واحدة",
-    "Remove %(count)s messages|other": "احذف %(count)s رسائل",
+    "Remove %(count)s messages": {
+        "one": "احذف رسالة واحدة",
+        "other": "احذف %(count)s رسائل"
+    },
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "قد يستغرق هذا وقتًا بحسب عدد الرسائل. من فضلك لا تحدث عمليك أثناء ذلك.",
     "Remove recent messages by %(user)s": "قم بإزالة رسائل %(user)s الأخيرة",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "حاول الصعود في المخطط الزمني لمعرفة ما إذا كانت هناك سابقات.",
@@ -684,11 +702,15 @@
     "Invite": "دعوة",
     "Jump to read receipt": "انتقل لإيصال قراءة",
     "Hide sessions": "اخف الاتصالات",
-    "%(count)s sessions|one": "%(count)s اتصال",
-    "%(count)s sessions|other": "%(count)s اتصالات",
+    "%(count)s sessions": {
+        "one": "%(count)s اتصال",
+        "other": "%(count)s اتصالات"
+    },
     "Hide verified sessions": "اخف الاتصالات المحققة",
-    "%(count)s verified sessions|one": "اتصال واحد محقق",
-    "%(count)s verified sessions|other": "%(count)s اتصالات محققة",
+    "%(count)s verified sessions": {
+        "one": "اتصال واحد محقق",
+        "other": "%(count)s اتصالات محققة"
+    },
     "Not trusted": "غير موثوق",
     "Trusted": "موثوق",
     "Room settings": "إعدادات الغرفة",
@@ -700,7 +722,9 @@
     "Widgets": "عناصر الواجهة",
     "Options": "الخيارات",
     "Unpin": "فك التثبيت",
-    "You can only pin up to %(count)s widgets|other": "تثبيت عناصر واجهة المستخدم ممكن إلى %(count)s بحدٍ أعلى",
+    "You can only pin up to %(count)s widgets": {
+        "other": "تثبيت عناصر واجهة المستخدم ممكن إلى %(count)s بحدٍ أعلى"
+    },
     "Your homeserver": "خادمك الوسيط",
     "One of the following may be compromised:": "قد يتم اختراق أي مما يلي:",
     "Your messages are not secure": "رسائلك ليست آمنة",

@@ -515,8 +515,10 @@
     "about a minute ago": "לפני בערך דקה",
     "a few seconds ago": "לפני מספר שניות",
     "%(items)s and %(lastItem)s": "%(items)s ו%(lastItem)s אחרון",
-    "%(items)s and %(count)s others|one": "%(items)s ועוד אחד אחר",
-    "%(items)s and %(count)s others|other": "%(items)s ו%(count)s אחרים",
+    "%(items)s and %(count)s others": {
+        "one": "%(items)s ועוד אחד אחר",
+        "other": "%(items)s ו%(count)s אחרים"
+    },
     "This homeserver has exceeded one of its resource limits.": "השרת הזה חרג מאחד ממגבלות המשאבים שלו.",
     "This homeserver has hit its Monthly Active User limit.": "השרת הזה הגיע לקצה מספר המשתמשים הפעילים לחודש.",
     "Unexpected error resolving identity server configuration": "שגיאה לא צפויה בהתחברות אל שרת הזיהוי",
@@ -586,8 +588,10 @@
     "Remain on your screen while running": "השארו במסך זה כאשר אתם פעילים",
     "Remain on your screen when viewing another room, when running": "השארו במסך הראשי כאשר אתם עברים בין חדרים בכל קהילה",
     "%(names)s and %(lastPerson)s are typing …": "%(names)s ו%(lastPerson)s כותבים…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s ועוד משהו כותבים…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s ו%(count)s אחרים כותבים…",
+    "%(names)s and %(count)s others are typing …": {
+        "one": "%(names)s ועוד משהו כותבים…",
+        "other": "%(names)s ו%(count)s אחרים כותבים…"
+    },
     "%(displayName)s is typing …": "%(displayName)s כותב…",
     "Done": "סיום",
     "Not Trusted": "לא אמין",
@@ -635,10 +639,14 @@
     "%(senderName)s changed the addresses for this room.": "%(senderName)s שינה את הכתובות של חדר זה.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s שינה את הכתובת הראשית והמשנית של חדר זה.",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s שניה את הכתובת המשנית של חדר זה.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s הסיר את הכתובת המשנית %(addresses)s עבור חדר זה.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s הסיר את הכתובת המשנית %(addresses)s עבור חדר זה.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s הוסיף כתובת משנית %(addresses)s עבור חדר זה.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s הוסיף את הכתובת המשנית %(addresses)s עבור חדר זה.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "one": "%(senderName)s הסיר את הכתובת המשנית %(addresses)s עבור חדר זה.",
+        "other": "%(senderName)s הסיר את הכתובת המשנית %(addresses)s עבור חדר זה."
+    },
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "one": "%(senderName)s הוסיף כתובת משנית %(addresses)s עבור חדר זה.",
+        "other": "%(senderName)s הוסיף את הכתובת המשנית %(addresses)s עבור חדר זה."
+    },
     "%(senderName)s removed the main address for this room.": "%(senderName)s הסיר את הכתובת הראשית עבור חדר זה.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s הגדיר את הכתובת הראשית עבור חדר זה ל- %(address)s.",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s שלח תמונה.",
@@ -687,8 +695,10 @@
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s חסרים כמה רכיבים הנדרשים לצורך אחסון במטמון מאובטח של הודעות מוצפנות באופן מקומי. אם תרצה להתנסות בתכונה זו, בנה %(brand)s מותאם אישית לדסקטום עם <nativeLink>חפש רכיבים להוספה</nativeLink>.",
     "Securely cache encrypted messages locally for them to appear in search results.": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש.",
     "Manage": "ניהול",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש באמצעות %(size)s לשמור הודעות מחדרים %(rooms)s.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש באמצעות %(size)s לשמור הודעות מחדרים %(rooms)s.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש באמצעות %(size)s לשמור הודעות מחדרים %(rooms)s.",
+        "other": "שמור באופן מאובטח הודעות מוצפנות באופן מקומי כדי שיופיעו בתוצאות החיפוש באמצעות %(size)s לשמור הודעות מחדרים %(rooms)s."
+    },
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "אמת בנפרד כל מושב שמשתמש בו כדי לסמן אותו כאמצעי מהימן, ולא אמון על מכשירים חתומים צולבים.",
     "Encryption": "הצפנה",
     "Failed to set display name": "עדכון שם תצוגה נכשל",
@@ -997,7 +1007,9 @@
     "Looks good": "נראה טוב",
     "Enter a server name": "הכנס שם שרת",
     "Home": "הבית",
-    "And %(count)s more...|other": "ו%(count)s עוד...",
+    "And %(count)s more...": {
+        "other": "ו%(count)s עוד..."
+    },
     "Sign in with single sign-on": "היכנס באמצעות כניסה יחידה",
     "Continue with %(provider)s": "המשך עם %(provider)s",
     "Homeserver": "שרת הבית",
@@ -1013,50 +1025,94 @@
     "QR Code": "קוד QR",
     "Custom level": "דרגה מותאמת",
     "Power level": "דרגת מנהל",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s לא ערכו שינוי",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s לא ערך שום שינוי %(count)s פעמים",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s לא ערכו שום שינוי",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s לא ערכו שום שינוי %(count)s פעמים",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s שינו את שמם",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)s שינו את שמם %(count)s פעמים",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s שינו את שמם",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s שינו את שמם %(count)s פעמים",
-    "was unbanned %(count)s times|one": "חסימה בוטלה",
-    "was unbanned %(count)s times|other": "חסימה בוטלה %(count)s פעמים",
-    "were unbanned %(count)s times|one": "חסימה בוטלה",
-    "were unbanned %(count)s times|other": "חסימה בוטלה %(count)s פעמים",
-    "was banned %(count)s times|one": "נחסם",
-    "was banned %(count)s times|other": "נחסם %(count)s פעמים",
-    "were banned %(count)s times|one": "נחסמו",
-    "were banned %(count)s times|other": "נחסם %(count)s פעמים",
-    "was invited %(count)s times|one": "הוזמן",
-    "was invited %(count)s times|other": "הוזמן %(count)s פעמים",
-    "were invited %(count)s times|one": "הוזמנו",
-    "were invited %(count)s times|other": "הוזמנו %(count)s פעמים",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)s משכו את ההזמנה שלהם",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)s משך את ההזמנה שלו %(count)s פעמים",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)s משכו את ההזמנות שלהם",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s משכו את ההזמנות שלהם %(count)s פעמים",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s דחו את ההזמנה שלו\\ה",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s דחה את ההזמנה %(count)s פעמים",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s דחו את ההזמנה שלהם",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s דחו את ההזמנה שלהם%(count)s פעמים",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s עזב/ה וחזר/ה",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s עזב/ה וחזר/ה %(count)s פעמים",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s עזבו וחזרו",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s עזבו וחזרו %(count)s פעמים",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s הצטרף/ה ועזב/ה",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s הצטרף/ה ועזב/ה %(count)s פעמים",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s הצטרפו ועזבו",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s הצטרפו ועזבו %(count)s פעמים",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s עזב/ה",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s עזב/ה %(count)s פעמים",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s עזבו",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s עזבו %(count)s פעמים",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s הצטרף/ה",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s הצטרפו %(count)s פעמים",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s הצטרף/ה %(count)s פעמים",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s הצטרפ/ה",
+    "%(oneUser)smade no changes %(count)s times": {
+        "one": "%(oneUser)s לא ערכו שינוי",
+        "other": "%(oneUser)s לא ערך שום שינוי %(count)s פעמים"
+    },
+    "%(severalUsers)smade no changes %(count)s times": {
+        "one": "%(severalUsers)s לא ערכו שום שינוי",
+        "other": "%(severalUsers)s לא ערכו שום שינוי %(count)s פעמים"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "one": "%(oneUser)s שינו את שמם",
+        "other": "%(oneUser)s שינו את שמם %(count)s פעמים"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "one": "%(severalUsers)s שינו את שמם",
+        "other": "%(severalUsers)s שינו את שמם %(count)s פעמים"
+    },
+    "was unbanned %(count)s times": {
+        "one": "חסימה בוטלה",
+        "other": "חסימה בוטלה %(count)s פעמים"
+    },
+    "were unbanned %(count)s times": {
+        "one": "חסימה בוטלה",
+        "other": "חסימה בוטלה %(count)s פעמים"
+    },
+    "was banned %(count)s times": {
+        "one": "נחסם",
+        "other": "נחסם %(count)s פעמים"
+    },
+    "were banned %(count)s times": {
+        "one": "נחסמו",
+        "other": "נחסם %(count)s פעמים"
+    },
+    "was invited %(count)s times": {
+        "one": "הוזמן",
+        "other": "הוזמן %(count)s פעמים"
+    },
+    "were invited %(count)s times": {
+        "one": "הוזמנו",
+        "other": "הוזמנו %(count)s פעמים"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "one": "%(oneUser)s משכו את ההזמנה שלהם",
+        "other": "%(oneUser)s משך את ההזמנה שלו %(count)s פעמים"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "one": "%(severalUsers)s משכו את ההזמנות שלהם",
+        "other": "%(severalUsers)s משכו את ההזמנות שלהם %(count)s פעמים"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "one": "%(oneUser)s דחו את ההזמנה שלו\\ה",
+        "other": "%(oneUser)s דחה את ההזמנה %(count)s פעמים"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "one": "%(severalUsers)s דחו את ההזמנה שלהם",
+        "other": "%(severalUsers)s דחו את ההזמנה שלהם%(count)s פעמים"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "one": "%(oneUser)s עזב/ה וחזר/ה",
+        "other": "%(oneUser)s עזב/ה וחזר/ה %(count)s פעמים"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "one": "%(severalUsers)s עזבו וחזרו",
+        "other": "%(severalUsers)s עזבו וחזרו %(count)s פעמים"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "one": "%(oneUser)s הצטרף/ה ועזב/ה",
+        "other": "%(oneUser)s הצטרף/ה ועזב/ה %(count)s פעמים"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "one": "%(severalUsers)s הצטרפו ועזבו",
+        "other": "%(severalUsers)s הצטרפו ועזבו %(count)s פעמים"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "one": "%(oneUser)s עזב/ה",
+        "other": "%(oneUser)s עזב/ה %(count)s פעמים"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "one": "%(severalUsers)s עזבו",
+        "other": "%(severalUsers)s עזבו %(count)s פעמים"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "one": "%(oneUser)s הצטרף/ה",
+        "other": "%(oneUser)s הצטרף/ה %(count)s פעמים"
+    },
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)s הצטרפו %(count)s פעמים",
+        "one": "%(severalUsers)s הצטרפ/ה"
+    },
     "%(nameList)s %(transitionList)s": "%(nameList)s-%(transitionList)s",
     "Language Dropdown": "תפריט שפות",
     "Information": "מידע",
@@ -1137,8 +1193,10 @@
     "Failed to mute user": "כשלון בהשתקת משתמש",
     "Failed to ban user": "כשלון בחסימת משתמש",
     "Remove recent messages": "הסר הודעות אחרונות",
-    "Remove %(count)s messages|one": "הסר הודעה 1",
-    "Remove %(count)s messages|other": "הסר %(count)s הודעות",
+    "Remove %(count)s messages": {
+        "one": "הסר הודעה 1",
+        "other": "הסר %(count)s הודעות"
+    },
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "עבור כמות גדולה של הודעות, זה עלול לארוך זמן מה. אנא אל תרענן את הלקוח שלך בינתיים.",
     "Remove recent messages by %(user)s": "הסר את ההודעות האחרונות של %(user)s",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "נסה לגלול למעלה בציר הזמן כדי לראות אם יש קודמים.",
@@ -1151,11 +1209,15 @@
     "Mention": "אזכר",
     "Jump to read receipt": "קפצו לקבלת קריאה",
     "Hide sessions": "הסתר מושבים",
-    "%(count)s sessions|one": "%(count)s מושבים",
-    "%(count)s sessions|other": "%(count)s מושבים",
+    "%(count)s sessions": {
+        "one": "%(count)s מושבים",
+        "other": "%(count)s מושבים"
+    },
     "Hide verified sessions": "הסתר מושבים מאומתים",
-    "%(count)s verified sessions|one": "1 מושב מאומת",
-    "%(count)s verified sessions|other": "%(count)s מושבים מאומתים",
+    "%(count)s verified sessions": {
+        "one": "1 מושב מאומת",
+        "other": "%(count)s מושבים מאומתים"
+    },
     "Not trusted": "לא אמין",
     "Trusted": "אמין",
     "Room settings": "הגדרות חדר",
@@ -1167,7 +1229,9 @@
     "Widgets": "ישומונים",
     "Options": "אפשרויות",
     "Unpin": "הסר נעיצה",
-    "You can only pin up to %(count)s widgets|other": "אתה יכול להצמיד עד%(count)s ווידג'טים בלבד",
+    "You can only pin up to %(count)s widgets": {
+        "other": "אתה יכול להצמיד עד%(count)s ווידג'טים בלבד"
+    },
     "Your homeserver": "שרת הבית שלכם",
     "One of the following may be compromised:": "אחד מהדברים הבאים עלול להוות סיכון:",
     "Your messages are not secure": "ההודעות שלך אינן מאובטחות",
@@ -1231,10 +1295,14 @@
     "This room has already been upgraded.": "החדר הזה כבר שודרג.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "שדרוג חדר זה יסגור את המופע הנוכחי של החדר וייצור חדר משודרג עם אותו שם.",
     "Unread messages.": "הודעות שלא נקראו.",
-    "%(count)s unread messages.|one": "1 הודעה שלא נקראה.",
-    "%(count)s unread messages.|other": "%(count)s הודעות שלא נקראו.",
-    "%(count)s unread messages including mentions.|one": "1 אזכור שלא נקרא.",
-    "%(count)s unread messages including mentions.|other": "%(count)s הודעות שלא נקראו כולל אזכורים.",
+    "%(count)s unread messages.": {
+        "one": "1 הודעה שלא נקראה.",
+        "other": "%(count)s הודעות שלא נקראו."
+    },
+    "%(count)s unread messages including mentions.": {
+        "one": "1 אזכור שלא נקרא.",
+        "other": "%(count)s הודעות שלא נקראו כולל אזכורים."
+    },
     "Room options": "אפשרויות חדר",
     "Sign Up": "הרשמה",
     "Join the conversation with an account": "הצטרף לשיחה עם חשבון",
@@ -1252,8 +1320,10 @@
     "Hide Widgets": "הסתר ישומונים",
     "Forget room": "שכח חדר",
     "Join Room": "הצטרף אל חדר",
-    "(~%(count)s results)|one": "(תוצאת %(count)s)",
-    "(~%(count)s results)|other": "(תוצאת %(count)s)",
+    "(~%(count)s results)": {
+        "one": "(תוצאת %(count)s)",
+        "other": "(תוצאת %(count)s)"
+    },
     "No recently visited rooms": "אין חדרים שבקרתם בהם לאחרונה",
     "Room %(name)s": "חדר %(name)s",
     "Replying": "משיבים",
@@ -1294,8 +1364,10 @@
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (רמת הרשאה %(powerLevelNumber)s)",
     "Filter room members": "סינון חברי חדר",
     "Invited": "מוזמן",
-    "and %(count)s others...|one": "ועוד אחד אחר...",
-    "and %(count)s others...|other": "ו %(count)s אחרים...",
+    "and %(count)s others...": {
+        "one": "ועוד אחד אחר...",
+        "other": "ו %(count)s אחרים..."
+    },
     "Close preview": "סגור תצוגה מקדימה",
     "Scroll to most recent messages": "גלול להודעות האחרונות",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "לא ניתן להבטיח את האותנטיות של הודעה מוצפנת זו במכשיר זה.",
@@ -1589,8 +1661,10 @@
     "Favourited": "מועדפים",
     "Forget Room": "שכח חדר",
     "Notification options": "אפשרויות התרעות",
-    "Show %(count)s more|one": "הצג עוד %(count)s",
-    "Show %(count)s more|other": "הצג עוד %(count)s",
+    "Show %(count)s more": {
+        "one": "הצג עוד %(count)s",
+        "other": "הצג עוד %(count)s"
+    },
     "Jump to first invite.": "קפצו להזמנה ראשונה.",
     "Jump to first unread room.": "קפצו לחדר הראשון שלא נקרא.",
     "List options": "רשימת אפשרויות",
@@ -1723,8 +1797,10 @@
     "Verification Request": "בקשת אימות",
     "Upload Error": "שגיאת העלאה",
     "Cancel All": "בטל הכל",
-    "Upload %(count)s other files|one": "העלה %(count)s של קובץ אחר",
-    "Upload %(count)s other files|other": "העלה %(count)s של קבצים אחרים",
+    "Upload %(count)s other files": {
+        "one": "העלה %(count)s של קובץ אחר",
+        "other": "העלה %(count)s של קבצים אחרים"
+    },
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "חלק מהקבצים <b> גדולים מדי </b> כדי להעלות אותם. מגבלת גודל הקובץ היא %(limit)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "קבצים אלה <b> גדולים מדי </b> להעלאה. מגבלת גודל הקובץ היא %(limit)s.",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "קובץ זה <b> גדול מדי </b> להעלאה. מגבלת גודל הקובץ היא %(limit)s אך קובץ זה הוא %(sizeOfThisFile)s.",
@@ -2027,14 +2103,18 @@
     "All settings": "כל ההגדרות",
     "New here? <a>Create an account</a>": "חדש פה? <a> צור חשבון </a>",
     "Got an account? <a>Sign in</a>": "יש לך חשבון? <a> היכנס </a>",
-    "Uploading %(filename)s and %(count)s others|one": "מעלה %(filename)s ו-%(count)s אחרים",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "מעלה %(filename)s ו-%(count)s אחרים",
+        "other": "מעלה %(filename)s ו-%(count)s אחרים"
+    },
     "Uploading %(filename)s": "מעלה %(filename)s",
-    "Uploading %(filename)s and %(count)s others|other": "מעלה %(filename)s ו-%(count)s אחרים",
     "Failed to load timeline position": "טעינת מיקום ציר הזמן נכשלה",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "ניסה לטעון נקודה מסוימת בציר הזמן של החדר הזה, אך לא הצליח למצוא אותה.",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "ניסיתי לטעון נקודה ספציפית בציר הזמן של החדר הזה, אך אין לך הרשאה להציג את ההודעה המדוברת.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "יש לך %(count)s הודעה שלא נקראה בגירסה קודמת של חדר זה.",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "יש לך %(count)s הודעות שלא נקראו בגרסה קודמת של חדר זה.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "one": "יש לך %(count)s הודעה שלא נקראה בגירסה קודמת של חדר זה.",
+        "other": "יש לך %(count)s הודעות שלא נקראו בגרסה קודמת של חדר זה."
+    },
     "Failed to reject invite": "דחיית הזמנה נכשלה",
     "Room": "חדר",
     "No more results": "אין יותר תוצאות",
@@ -2184,15 +2264,19 @@
     "Keyboard": "מקלדת",
     "Global": "כללי",
     "Loading new room": "טוען חדר חדש",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "שולח הזמנה...",
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "שולח הזמנה..."
+    },
     "Upgrade required": "נדרש שדרוג",
     "Anyone can find and join.": "כל אחד יכול למצוא ולהצטרף.",
     "Large": "גדול",
     "Rename": "שנה שם",
     "Select all": "בחר הכל",
     "Deselect all": "הסר סימון מהכל",
-    "Sign out devices|one": "צא מהמכשיר",
-    "Sign out devices|other": "צא ממכשירים",
+    "Sign out devices": {
+        "one": "צא מהמכשיר",
+        "other": "צא ממכשירים"
+    },
     "Visibility": "רְאוּת",
     "Share invite link": "שתף קישור להזמנה",
     "Invite people": "הזמן אנשים",
@@ -2242,8 +2326,14 @@
     "You previously consented to share anonymous usage data with us. We're updating how that works.": "הסכמתם בעבר לשתף איתנו מידע אנונימי לגבי השימוש שלכם. אנחנו מעדכנים איך זה מתבצע.",
     "Topic: %(topic)s": "נושא: %(topic)s",
     "%(creatorName)s created this room.": "%(creatorName)s יצר/ה חדר זה.",
-    "Fetched %(count)s events so far|other": "נטענו %(count)s אירועים עד כה",
-    "Fetched %(count)s events out of %(total)s|other": "טוען %(count)s אירועים מתוך %(total)s",
+    "Fetched %(count)s events so far": {
+        "other": "נטענו %(count)s אירועים עד כה",
+        "one": "נטענו %(count)s אירועים עד כה"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "other": "טוען %(count)s אירועים מתוך %(total)s",
+        "one": "טוען %(count)s אירועים מתוך %(total)s"
+    },
     "Generating a ZIP": "מייצר קובץ ZIP",
     "This homeserver has been blocked by its administrator.": "שרת זה נחסם על ידי מנהלו.",
     "%(senderName)s has shared their location": "%(senderName)s שיתף/ה מיקום",
@@ -2264,8 +2354,13 @@
     "Confirm your Security Phrase": "אשר את ביטוי האבטחה שלך",
     "You're already in a call with this person.": "אתה כבר בשיחה עם האדם הזה.",
     "Already in call": "כבר בשיחה",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)sהסיר%(count)sהודעות",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)sהסיר הודעה",
+    "%(oneUser)sremoved a message %(count)s times": {
+        "other": "%(oneUser)sהסיר%(count)sהודעות",
+        "one": "%(oneUser)sהסיר הודעה"
+    },
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)sהסיר הודעה"
+    },
     "Application window": "חלון אפליקציה",
     "Results are only revealed when you end the poll": "תוצאות יהיה זמינות להצגה רק עם סגירת הסקר",
     "What is your poll question or topic?": "מה השאלה או הנושא שלכם בסקר?",
@@ -2294,17 +2389,27 @@
     "Capabilities": "יכולות",
     "Send custom state event": "שלח אירוע מצב מותאם אישית",
     "<empty string>": "<מחרוזת ריקה>",
-    "<%(count)s spaces>|one": "<רווח>",
+    "<%(count)s spaces>": {
+        "one": "<רווח>"
+    },
     "Friends and family": "חברים ומשפחה",
     "Android": "אנדרויד",
     "An error occurred whilst sharing your live location, please try again": "אירעה שגיאה במהלך שיתוף המיקום החי שלכם, אנא נסו שוב",
     "Only invited people can join.": "רק משתשים מוזמנים יכולים להצטרף.",
     "Private (invite only)": "פרטי (הזמנות בלבד)",
-    "%(count)s Members|one": "%(count)s חברים",
-    "%(count)s rooms|other": "%(count)s חדרים",
-    "Based on %(count)s votes|one": "מתבסס על %(count)s הצבעות",
-    "Based on %(count)s votes|other": "מתבסס על %(count)s הצבעות",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s.קולות הצביעו כדי לראות את התוצאות",
+    "%(count)s Members": {
+        "one": "%(count)s חברים"
+    },
+    "%(count)s rooms": {
+        "other": "%(count)s חדרים"
+    },
+    "Based on %(count)s votes": {
+        "one": "מתבסס על %(count)s הצבעות",
+        "other": "מתבסס על %(count)s הצבעות"
+    },
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s.קולות הצביעו כדי לראות את התוצאות"
+    },
     "Create a video room": "צרו חדר וידאו",
     "Verification requested": "התבקש אימות",
     "Verify this device by completing one of the following:": "אמתו מכשיר זה על ידי מילוי אחת מהפעולות הבאות:",
@@ -2314,11 +2419,14 @@
     "Share your activity and status with others.": "שתפו את הפעילות והסטטוס שלכם עם אחרים.",
     "Presence": "נוכחות",
     "Room visibility": "נראות של החדר",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)sשלח הודעה חבויה",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)sשלח%(count)sהודעות מוחבאות",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)sשלחו הודעות מוחבאות",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)sשלחו%(count)sהודעות מוחבאות",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)sהסיר הודעה",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "one": "%(oneUser)sשלח הודעה חבויה",
+        "other": "%(oneUser)sשלח%(count)sהודעות מוחבאות"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)sשלחו הודעות מוחבאות",
+        "other": "%(severalUsers)sשלחו%(count)sהודעות מוחבאות"
+    },
     "Send your first message to invite <displayName/> to chat": "שילחו את ההודעה הראשונה שלכם להזמין את <displayName/> לצ'אט",
     "sends hearts": "שולח לבבות",
     "Developer command: Discards the current outbound group session and sets up new Olm sessions": "פקודת מפתחים: מסלקת את הפגישה הנוכחית של הקבוצה היוצאת ומגדירה הפעלות חדשות של Olm",
@@ -2413,18 +2521,20 @@
     "Review to ensure your account is safe": "בידקו כדי לוודא שהחשבון שלך בטוח",
     "Help improve %(analyticsOwner)s": "עזרו בשיפור %(analyticsOwner)s",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "שתף נתונים אנונימיים כדי לעזור לנו לזהות בעיות. ללא אישי. אין צדדים שלישיים. <LearnMoreLink>למידע נוסף</LearnMoreLink>",
-    "Exported %(count)s events in %(seconds)s seconds|one": "ייצא %(count)s תוך %(seconds)s שניות",
-    "Exported %(count)s events in %(seconds)s seconds|other": "ייצא %(count)s אירועים תוך %(seconds)s שניות",
-    "Fetched %(count)s events in %(seconds)ss|one": "משך %(count)s אירועים תוך %(seconds)s שניות",
-    "Fetched %(count)s events in %(seconds)ss|other": "עיבד %(count)s אירועים תוך %(seconds)s שניות",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "ייצא %(count)s תוך %(seconds)s שניות",
+        "other": "ייצא %(count)s אירועים תוך %(seconds)s שניות"
+    },
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "משך %(count)s אירועים תוך %(seconds)s שניות",
+        "other": "עיבד %(count)s אירועים תוך %(seconds)s שניות"
+    },
     "Processing event %(number)s out of %(total)s": "מעבד אירוע %(number)s מתוך %(total)s",
     "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "זאת התחלת ייצוא של <roomName/>. ייצוא ע\"י <exporterDetails/> ב %(exportDate)s.",
     "Media omitted - file size limit exceeded": "מדיה הושמטה - גודל קובץ חרג מהמותר",
     "Media omitted": "מדיה הושמטה",
     "JSON": "JSON",
     "HTML": "HTML",
-    "Fetched %(count)s events so far|one": "נטענו %(count)s אירועים עד כה",
-    "Fetched %(count)s events out of %(total)s|one": "טוען %(count)s אירועים מתוך %(total)s",
     "Zoom out": "התמקדות החוצה",
     "Zoom in": "התמקדות פנימה",
     "Reset bearing to north": "נעלו את המפה לכיוון צפון",
@@ -2534,8 +2644,10 @@
     "Space information": "מידע על מרחב העבודה",
     "View older version of %(spaceName)s.": "צפו בגירסא ישנה יותר של %(spaceName)s.",
     "Upgrade this space to the recommended room version": "שדרג את מרחב העבודה הזה לגרסת החדר המומלצת",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "מעדכן מרחב עבודה...",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "מעדכן את מרחבי העבודה...%(progress)s מתוך %(count)s",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "מעדכן מרחב עבודה...",
+        "other": "מעדכן את מרחבי העבודה...%(progress)s מתוך %(count)s"
+    },
     "This upgrade will allow members of selected spaces access to this room without an invite.": "שדרוג זה יאפשר לחברים במרחבים נבחרים גישה לחדר זה ללא הזמנה.",
     "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "החדר הזה נמצא בחלק ממרחבי העבודה שאתם לא מוגדרים כמנהלים בהם. במרחבים האלה, החדר הישן עדיין יוצג, אבל אנשים יתבקשו להצטרף לחדר החדש.",
     "Space members": "משתתפי מרחב העבודה",
@@ -2543,8 +2655,10 @@
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "כל אחד ב-<spaceName/> יכול למצוא ולהצטרף. אתם יכולים לבחור גם מרחבי עבודה אחרים.",
     "Spaces with access": "מרחבי עבודה עם גישה",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "כל אחד במרחב העבודה יכול למצוא ולהצטרף. <a>ערוך לאילו מרחבי עבודה יש גישה כאן.</a>",
-    "Currently, %(count)s spaces have access|one": "כרגע, למרחב העבודה יש גישה",
-    "Currently, %(count)s spaces have access|other": "כרגע ל, %(count)s מרחבי עבודה יש גישה",
+    "Currently, %(count)s spaces have access": {
+        "one": "כרגע, למרחב העבודה יש גישה",
+        "other": "כרגע ל, %(count)s מרחבי עבודה יש גישה"
+    },
     "Space options": "אפשרויות מרחב העבודה",
     "Decide who can view and join %(spaceName)s.": "החליטו מי יכול לראות ולהצטרף אל %(spaceName)s.",
     "This may be useful for public spaces.": "זה יכול להיות שימושי למרחבי עבודה ציבוריים.",
@@ -2566,16 +2680,20 @@
     "User is already in the space": "המשתמש כבר במרחב העבודה",
     "User is already invited to the space": "המשתמש כבר מוזמן למרחב העבודה",
     "You do not have permission to invite people to this space.": "אין לכם הרשאה להזמין משתתפים אחרים למרחב עבודה זה.",
-    "In %(spaceName)s and %(count)s other spaces.|one": "ב%(spaceName)sו%(count)s מרחבי עבודה אחרים.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "ב%(spaceName)sו%(count)s מרחבי עבודה אחרים.",
+        "other": "%(spaceName)sו%(count)s מרחבי עבודה אחרים."
+    },
     "In %(spaceName)s.": "במרחבי עבודה%(spaceName)s.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "%(spaceName)sו%(count)s מרחבי עבודה אחרים.",
     "In spaces %(space1Name)s and %(space2Name)s.": "במרחבי עבודה %(space1Name)sו%(space2Name)s.",
     "Search %(spaceName)s": "חיפוש %(spaceName)s",
     "sends space invaders": "שולח פולשים לחלל",
     "Sends the given message with a space themed effect": "שולח את ההודעה הנתונה עם אפקט בנושא חלל",
     "Invite to %(spaceName)s": "הזמן אל %(spaceName)s",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)sו%(count)sאחרים",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)sו%(count)s אחרים",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)sו%(count)sאחרים",
+        "other": "%(spaceName)sו%(count)s אחרים"
+    },
     "%(space1Name)s and %(space2Name)s": "%(space1Name)sו%(space2Name)s",
     "To leave the beta, visit your settings.": "כדי לעזוב את התכונה הניסיונית, כנסו להגדרות.",
     "Keyboard shortcuts": "קיצורי מקלדת",

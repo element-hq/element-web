@@ -34,8 +34,10 @@
     "Close": "Bezárás",
     "Start chat": "Csevegés indítása",
     "%(items)s and %(lastItem)s": "%(items)s és %(lastItem)s",
-    "and %(count)s others...|other": "és még: %(count)s ...",
-    "and %(count)s others...|one": "és még egy...",
+    "and %(count)s others...": {
+        "other": "és még: %(count)s ...",
+        "one": "és még egy..."
+    },
     "A new password must be entered.": "Új jelszót kell megadni.",
     "An error has occurred.": "Hiba történt.",
     "Anyone": "Bárki",
@@ -178,8 +180,10 @@
     "Unmute": "Némítás visszavonása",
     "Unnamed Room": "Névtelen szoba",
     "Uploading %(filename)s": "%(filename)s feltöltése",
-    "Uploading %(filename)s and %(count)s others|one": "%(filename)s és még %(count)s db másik feltöltése",
-    "Uploading %(filename)s and %(count)s others|other": "%(filename)s és még %(count)s db másik feltöltése",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "%(filename)s és még %(count)s db másik feltöltése",
+        "other": "%(filename)s és még %(count)s db másik feltöltése"
+    },
     "Upload avatar": "Profilkép feltöltése",
     "Upload Failed": "Feltöltés sikertelen",
     "Usage": "Használat",
@@ -227,8 +231,10 @@
     "Room": "Szoba",
     "Connectivity to the server has been lost.": "A kapcsolat megszakadt a kiszolgálóval.",
     "Sent messages will be stored until your connection has returned.": "Az elküldött üzenetek addig lesznek tárolva amíg a kapcsolatod újra elérhető lesz.",
-    "(~%(count)s results)|one": "(~%(count)s db eredmény)",
-    "(~%(count)s results)|other": "(~%(count)s db eredmény)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s db eredmény)",
+        "other": "(~%(count)s db eredmény)"
+    },
     "New Password": "Új jelszó",
     "Start automatically after system login": "Automatikus indítás rendszerindítás után",
     "Analytics": "Analitika",
@@ -306,7 +312,9 @@
     "Message Pinning": "Üzenet kitűzése",
     "%(senderName)s changed the pinned messages for the room.": "%(senderName)s megváltoztatta a szoba kitűzött üzeneteit.",
     "Unnamed room": "Névtelen szoba",
-    "And %(count)s more...|other": "És még %(count)s...",
+    "And %(count)s more...": {
+        "other": "És még %(count)s..."
+    },
     "Mention": "Megemlítés",
     "Invite": "Meghívás",
     "Delete Widget": "Kisalkalmazás törlése",
@@ -317,48 +325,90 @@
     "Members only (since they joined)": "Csak tagoknak (amióta csatlakoztak)",
     "A text message has been sent to %(msisdn)s": "Szöveges üzenetet küldtünk neki: %(msisdn)s",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s %(count)s alkalommal csatlakozott",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s csatlakozott",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s %(count)s alkalommal csatlakozott",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s csatlakozott",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s %(count)s alkalommal távozott",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s távozott",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s %(count)s alkalommal távozott",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s távozott",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s %(count)s alkalommal csatlakozott és távozott",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s csatlakozott és távozott",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s %(count)s alkalommal csatlakozott és távozott",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s csatlakozott és távozott",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s %(count)s alkalommal távozott és újra csatlakozott",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s távozott és újra csatlakozott",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s %(count)s alkalommal távozott és újra csatlakozott",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s távozott és újra csatlakozott",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s %(count)s alkalommal elutasította a meghívóit",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s elutasította a meghívóit",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s %(count)s alkalommal elutasította a meghívóit",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s elutasította a meghívóit",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s meghívóit %(count)s alkalommal visszavonták",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)s visszavonták a meghívásukat",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)s meghívóit %(count)s alkalommal vonták vissza",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)s meghívóit visszavonták",
-    "were invited %(count)s times|other": "%(count)s alkalommal lett meghívva",
-    "were invited %(count)s times|one": "meg lett hívva",
-    "was invited %(count)s times|other": "%(count)s alkalommal lett meghívva",
-    "was invited %(count)s times|one": "meg lett hívva",
-    "were banned %(count)s times|other": "%(count)s alkalommal lett kitiltva",
-    "were banned %(count)s times|one": "lett kitiltva",
-    "was banned %(count)s times|other": "%(count)s alkalommal lett kitiltva",
-    "was banned %(count)s times|one": "ki lett tiltva",
-    "were unbanned %(count)s times|other": "%(count)s alkalommal lett visszaengedve",
-    "were unbanned %(count)s times|one": "vissza lett engedve",
-    "was unbanned %(count)s times|other": "%(count)s alkalommal lett visszaengedve",
-    "was unbanned %(count)s times|one": "vissza lett engedve",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s %(count)s alkalommal megváltoztatta a nevét",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s megváltoztatta a nevét",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)s %(count)s alkalommal megváltoztatta a nevét",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s megváltoztatta a nevét",
-    "%(items)s and %(count)s others|other": "%(items)s és még %(count)s másik",
-    "%(items)s and %(count)s others|one": "%(items)s és még egy másik",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)s %(count)s alkalommal csatlakozott",
+        "one": "%(severalUsers)s csatlakozott"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)s %(count)s alkalommal csatlakozott",
+        "one": "%(oneUser)s csatlakozott"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)s %(count)s alkalommal távozott",
+        "one": "%(severalUsers)s távozott"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)s %(count)s alkalommal távozott",
+        "one": "%(oneUser)s távozott"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)s %(count)s alkalommal csatlakozott és távozott",
+        "one": "%(severalUsers)s csatlakozott és távozott"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)s %(count)s alkalommal csatlakozott és távozott",
+        "one": "%(oneUser)s csatlakozott és távozott"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)s %(count)s alkalommal távozott és újra csatlakozott",
+        "one": "%(severalUsers)s távozott és újra csatlakozott"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)s %(count)s alkalommal távozott és újra csatlakozott",
+        "one": "%(oneUser)s távozott és újra csatlakozott"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)s %(count)s alkalommal elutasította a meghívóit",
+        "one": "%(severalUsers)s elutasította a meghívóit"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)s %(count)s alkalommal elutasította a meghívóit",
+        "one": "%(oneUser)s elutasította a meghívóit"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)s meghívóit %(count)s alkalommal visszavonták",
+        "one": "%(severalUsers)s visszavonták a meghívásukat"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)s meghívóit %(count)s alkalommal vonták vissza",
+        "one": "%(oneUser)s meghívóit visszavonták"
+    },
+    "were invited %(count)s times": {
+        "other": "%(count)s alkalommal lett meghívva",
+        "one": "meg lett hívva"
+    },
+    "was invited %(count)s times": {
+        "other": "%(count)s alkalommal lett meghívva",
+        "one": "meg lett hívva"
+    },
+    "were banned %(count)s times": {
+        "other": "%(count)s alkalommal lett kitiltva",
+        "one": "lett kitiltva"
+    },
+    "was banned %(count)s times": {
+        "other": "%(count)s alkalommal lett kitiltva",
+        "one": "ki lett tiltva"
+    },
+    "were unbanned %(count)s times": {
+        "other": "%(count)s alkalommal lett visszaengedve",
+        "one": "vissza lett engedve"
+    },
+    "was unbanned %(count)s times": {
+        "other": "%(count)s alkalommal lett visszaengedve",
+        "one": "vissza lett engedve"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)s %(count)s alkalommal megváltoztatta a nevét",
+        "one": "%(severalUsers)s megváltoztatta a nevét"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)s %(count)s alkalommal megváltoztatta a nevét",
+        "one": "%(oneUser)s megváltoztatta a nevét"
+    },
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s és még %(count)s másik",
+        "one": "%(items)s és még egy másik"
+    },
     "Notify the whole room": "Az egész szoba értesítése",
     "Room Notification": "Szoba értesítések",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Vegye figyelembe, hogy a(z) %(hs)s kiszolgálóra jelentkezik be, és nem a matrix.org-ra.",
@@ -590,8 +640,10 @@
     "Sets the room name": "Szobanév beállítása",
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s fejlesztette a szobát.",
     "%(displayName)s is typing …": "%(displayName)s gépel…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s és még %(count)s felhasználó gépel…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s és még valaki gépel…",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s és még %(count)s felhasználó gépel…",
+        "one": "%(names)s és még valaki gépel…"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s és %(lastPerson)s gépelnek…",
     "Render simple counters in room header": "Egyszerű számlálók a szoba fejlécében",
     "Enable Emoji suggestions while typing": "Emodzsik gépelés közbeni felajánlásának bekapcsolása",
@@ -800,8 +852,10 @@
     "Revoke invite": "Meghívó visszavonása",
     "Invited by %(sender)s": "Meghívta: %(sender)s",
     "Remember my selection for this widget": "A döntés megjegyzése ehhez a kisalkalmazáshoz",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "%(count)s olvasatlan értesítésed van a régi verziójú szobában.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "%(count)s olvasatlan értesítésed van a régi verziójú szobában.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "%(count)s olvasatlan értesítésed van a régi verziójú szobában.",
+        "one": "%(count)s olvasatlan értesítésed van a régi verziójú szobában."
+    },
     "The file '%(fileName)s' failed to upload.": "A(z) „%(fileName)s” fájl feltöltése sikertelen.",
     "GitHub issue": "GitHub hibajegy",
     "Notes": "Megjegyzések",
@@ -817,8 +871,10 @@
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Ez a fájl <b>túl nagy</b>, hogy fel lehessen tölteni. A fájlméret korlátja %(limit)s, de a fájl %(sizeOfThisFile)s méretű.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "A fájl <b>túl nagy</b> a feltöltéshez. A fájlméret korlátja %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Néhány fájl <b>túl nagy</b>, hogy fel lehessen tölteni. A fájlméret korlátja %(limit)s.",
-    "Upload %(count)s other files|other": "%(count)s másik fájlt feltöltése",
-    "Upload %(count)s other files|one": "%(count)s másik fájl feltöltése",
+    "Upload %(count)s other files": {
+        "other": "%(count)s másik fájlt feltöltése",
+        "one": "%(count)s másik fájl feltöltése"
+    },
     "Cancel All": "Összes megszakítása",
     "Upload Error": "Feltöltési hiba",
     "The server does not support the room version specified.": "A kiszolgáló nem támogatja a megadott szobaverziót.",
@@ -895,10 +951,14 @@
     "Message edits": "Üzenetszerkesztések",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "A szoba fejlesztéséhez be kell zárnia ezt a szobát, és egy újat kell létrehoznia helyette. Hogy a szoba tagjai számára a lehető legjobb legyen a felhasználói élmény, a következők lépések lesznek végrehajtva:",
     "Show all": "Mind megjelenítése",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s %(count)s alkalommal nem változtattak semmit",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s nem változtattak semmit",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s %(count)s alkalommal nem változtatott semmit",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)snem változtatott semmit",
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)s %(count)s alkalommal nem változtattak semmit",
+        "one": "%(severalUsers)s nem változtattak semmit"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)s %(count)s alkalommal nem változtatott semmit",
+        "one": "%(oneUser)snem változtatott semmit"
+    },
     "Removing…": "Eltávolítás…",
     "Clear all data": "Minden adat törlése",
     "Your homeserver doesn't seem to support this feature.": "Úgy tűnik, hogy a Matrix-kiszolgálója nem támogatja ezt a szolgáltatást.",
@@ -989,7 +1049,10 @@
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Az idővonalon próbálj meg felgörgetni, hogy megnézd van-e régebbi üzenet.",
     "Remove recent messages by %(user)s": "Friss üzenetek törlése a felhasználótól: %(user)s",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Ez időt vehet igénybe ha sok üzenet érintett. Kérlek közben ne frissíts a kliensben.",
-    "Remove %(count)s messages|other": "%(count)s db üzenet törlése",
+    "Remove %(count)s messages": {
+        "other": "%(count)s db üzenet törlése",
+        "one": "1 üzenet törlése"
+    },
     "Remove recent messages": "Friss üzenetek törlése",
     "Error changing power level requirement": "A szükséges hozzáférési szint megváltoztatása nem sikerült",
     "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "Hiba történt a szobához szükséges hozzáférési szint megváltoztatása során. Ellenőrizze, hogy megvan-e hozzá a megfelelő jogosultsága, és próbálja újra.",
@@ -1015,8 +1078,14 @@
     "Close dialog": "Ablak bezárása",
     "Show previews/thumbnails for images": "Előnézet/bélyegkép megjelenítése a képekhez",
     "Clear cache and reload": "Gyorsítótár ürítése és újratöltés",
-    "%(count)s unread messages including mentions.|other": "%(count)s olvasatlan üzenet megemlítéssel.",
-    "%(count)s unread messages.|other": "%(count)s olvasatlan üzenet.",
+    "%(count)s unread messages including mentions.": {
+        "other": "%(count)s olvasatlan üzenet megemlítéssel.",
+        "one": "1 olvasatlan megemlítés."
+    },
+    "%(count)s unread messages.": {
+        "other": "%(count)s olvasatlan üzenet.",
+        "one": "1 olvasatlan üzenet."
+    },
     "Show image": "Kép megjelenítése",
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Ahhoz hogy megvizsgálhassuk a hibát, <newIssueLink>hozzon létre egy új hibajegyet</newIssueLink> a GitHubon.",
     "To continue you need to accept the terms of this service.": "A folytatáshoz el kell fogadnia a felhasználási feltételeket.",
@@ -1026,7 +1095,6 @@
     "Room Autocomplete": "Szoba automatikus kiegészítése",
     "User Autocomplete": "Felhasználó automatikus kiegészítése",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "A Matrix-kiszolgáló konfigurációjából hiányzik a captcha nyilvános kulcsa. Értesítse erről a Matrix-kiszolgáló rendszergazdáját.",
-    "Remove %(count)s messages|one": "1 üzenet törlése",
     "Your email address hasn't been verified yet": "Az e-mail-címe még nincs ellenőrizve",
     "Click the link in the email you received to verify and then click continue again.": "Ellenőrzéshez kattints a linkre az e-mailben amit kaptál és itt kattints a folytatásra újra.",
     "Add Email Address": "E-mail-cím hozzáadása",
@@ -1056,8 +1124,6 @@
     "Jump to first unread room.": "Ugrás az első olvasatlan szobához.",
     "Jump to first invite.": "Újrás az első meghívóhoz.",
     "Room %(name)s": "Szoba: %(name)s",
-    "%(count)s unread messages including mentions.|one": "1 olvasatlan megemlítés.",
-    "%(count)s unread messages.|one": "1 olvasatlan üzenet.",
     "Unread messages.": "Olvasatlan üzenetek.",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ez a művelet az e-mail-cím vagy telefonszám ellenőrzése miatt hozzáférést igényel a(z) <server /> alapértelmezett azonosítási kiszolgálójához, de a kiszolgálónak nincsenek felhasználási feltételei.",
     "Trust": "Megbízom benne",
@@ -1171,8 +1237,10 @@
     "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s megváltoztatta a kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s",
     "not stored": "nincs tárolva",
     "Hide verified sessions": "Ellenőrzött munkamenetek eltakarása",
-    "%(count)s verified sessions|other": "%(count)s ellenőrzött munkamenet",
-    "%(count)s verified sessions|one": "1 ellenőrzött munkamenet",
+    "%(count)s verified sessions": {
+        "other": "%(count)s ellenőrzött munkamenet",
+        "one": "1 ellenőrzött munkamenet"
+    },
     "Close preview": "Előnézet bezárása",
     "Language Dropdown": "Nyelvválasztó lenyíló menü",
     "Country Dropdown": "Ország lenyíló menü",
@@ -1279,8 +1347,10 @@
     "Your messages are not secure": "Az üzeneteid nincsenek biztonságban",
     "One of the following may be compromised:": "Valamelyik az alábbiak közül kompromittált:",
     "Your homeserver": "Matrix szervered",
-    "%(count)s sessions|other": "%(count)s munkamenet",
-    "%(count)s sessions|one": "%(count)s munkamenet",
+    "%(count)s sessions": {
+        "other": "%(count)s munkamenet",
+        "one": "%(count)s munkamenet"
+    },
     "Hide sessions": "Munkamenetek elrejtése",
     "Verify by emoji": "Ellenőrzés emodzsival",
     "Verify by comparing unique emoji.": "Ellenőrzés egyedi emodzsik összehasonlításával.",
@@ -1336,10 +1406,14 @@
     "Not currently indexing messages for any room.": "Jelenleg egyik szoba indexelése sem történik.",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s / %(totalRooms)s",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s megváltoztatta a szoba nevét erről: %(oldRoomName)s, erre: %(newRoomName)s.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s hozzáadta a szoba alternatív címeit: %(addresses)s.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s alternatív címeket adott hozzá a szobához: %(addresses)s.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s eltávolította az alternatív címeket a szobáról: %(addresses)s.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s eltávolította az alternatív címet a szobáról: %(addresses)s.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s hozzáadta a szoba alternatív címeit: %(addresses)s.",
+        "one": "%(senderName)s alternatív címeket adott hozzá a szobához: %(addresses)s."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s eltávolította az alternatív címeket a szobáról: %(addresses)s.",
+        "one": "%(senderName)s eltávolította az alternatív címet a szobáról: %(addresses)s."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s megváltoztatta a szoba alternatív címeit.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s megváltoztatta a szoba elsődleges és alternatív címeit.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s megváltoztatta a szoba címeit.",
@@ -1510,8 +1584,10 @@
     "Sort by": "Rendezés",
     "Message preview": "Üzenet előnézet",
     "List options": "Lista beállításai",
-    "Show %(count)s more|other": "Még %(count)s megjelenítése",
-    "Show %(count)s more|one": "Még %(count)s megjelenítése",
+    "Show %(count)s more": {
+        "other": "Még %(count)s megjelenítése",
+        "one": "Még %(count)s megjelenítése"
+    },
     "Room options": "Szoba beállítások",
     "Switch to light mode": "Világos módra váltás",
     "Switch to dark mode": "Sötét módra váltás",
@@ -1652,7 +1728,9 @@
     "Revoke permissions": "Jogosultságok visszavonása",
     "Data on this screen is shared with %(widgetDomain)s": "Az ezen a képernyőn látható adatok megosztásra kerülnek ezzel: %(widgetDomain)s",
     "Modal Widget": "Előugró kisalkalmazás",
-    "You can only pin up to %(count)s widgets|other": "Csak %(count)s kisalkalmazást tud kitűzni",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Csak %(count)s kisalkalmazást tud kitűzni"
+    },
     "Show Widgets": "Kisalkalmazások megjelenítése",
     "Hide Widgets": "Kisalkalmazások elrejtése",
     "The call was answered on another device.": "A hívás másik eszközön lett fogadva.",
@@ -2050,8 +2128,10 @@
     "Send messages as you in your active room": "Üzenetek küldése az aktív szobájába saját néven",
     "Send messages as you in this room": "Üzenetek küldése ebbe a szobába saját néven",
     "Send stickers to your active room as you": "Matricák küldése az aktív szobájába saját néven",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között, ehhez %(size)s helyet használ %(rooms)s szoba üzeneteihez.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között, ehhez %(size)s helyet használ %(rooms)s szoba üzeneteihez.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között, ehhez %(size)s helyet használ %(rooms)s szoba üzeneteihez.",
+        "other": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között, ehhez %(size)s helyet használ %(rooms)s szoba üzeneteihez."
+    },
     "%(name)s on hold": "%(name)s várakoztatva",
     "You held the call <a>Switch</a>": "A hívás várakozik, <a>átkapcsolás</a>",
     "sends snowfall": "hóesést küld",
@@ -2140,8 +2220,10 @@
     "Support": "Támogatás",
     "Random": "Véletlen",
     "Welcome to <name/>": "Üdvözöl a(z) <name/>",
-    "%(count)s members|one": "%(count)s tag",
-    "%(count)s members|other": "%(count)s tag",
+    "%(count)s members": {
+        "one": "%(count)s tag",
+        "other": "%(count)s tag"
+    },
     "Your server does not support showing space hierarchies.": "A kiszolgálója nem támogatja a terek hierarchiájának megjelenítését.",
     "Are you sure you want to leave the space '%(spaceName)s'?": "Biztos, hogy elhagyja ezt a teret: %(spaceName)s?",
     "This space is not public. You will not be able to rejoin without an invite.": "Ez a tér nem nyilvános. Kilépés után csak újabb meghívóval lehet újra belépni.",
@@ -2203,8 +2285,10 @@
     "Failed to remove some rooms. Try again later": "Néhány szoba törlése sikertelen. Próbálja később",
     "Suggested": "Javaslat",
     "This room is suggested as a good one to join": "Ez egy javasolt szoba csatlakozáshoz",
-    "%(count)s rooms|one": "%(count)s szoba",
-    "%(count)s rooms|other": "%(count)s szoba",
+    "%(count)s rooms": {
+        "one": "%(count)s szoba",
+        "other": "%(count)s szoba"
+    },
     "You don't have permission": "Nincs jogosultsága",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Ez általában a szoba kiszolgálóoldali kezelésében jelent változást. Ha a(z) %(brand)s kliensben tapasztal problémát, akkor küldjön egy hibajelentést.",
     "Invite to %(roomName)s": "Meghívás ide: %(roomName)s",
@@ -2225,8 +2309,10 @@
     "Invited people will be able to read old messages.": "A meghívott személyek el tudják olvasni a régi üzeneteket.",
     "We couldn't create your DM.": "Nem tudjuk elkészíteni a közvetlen üzenetét.",
     "Add existing rooms": "Létező szobák hozzáadása",
-    "%(count)s people you know have already joined|one": "%(count)s ismerős már csatlakozott",
-    "%(count)s people you know have already joined|other": "%(count)s ismerős már csatlakozott",
+    "%(count)s people you know have already joined": {
+        "one": "%(count)s ismerős már csatlakozott",
+        "other": "%(count)s ismerős már csatlakozott"
+    },
     "Invite to just this room": "Meghívás csak ebbe a szobába",
     "Warn before quitting": "Figyelmeztetés kilépés előtt",
     "Manage & explore rooms": "Szobák kezelése és felderítése",
@@ -2252,8 +2338,10 @@
     "Delete all": "Mind törlése",
     "Some of your messages have not been sent": "Néhány üzenete nem lett elküldve",
     "Including %(commaSeparatedMembers)s": "Beleértve: %(commaSeparatedMembers)s",
-    "View all %(count)s members|one": "1 résztvevő megmutatása",
-    "View all %(count)s members|other": "Az összes %(count)s résztvevő megmutatása",
+    "View all %(count)s members": {
+        "one": "1 résztvevő megmutatása",
+        "other": "Az összes %(count)s résztvevő megmutatása"
+    },
     "Failed to send": "Küldés sikertelen",
     "Enter your Security Phrase a second time to confirm it.": "A megerősítéshez adja meg a biztonsági jelmondatot még egyszer.",
     "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Válassz szobákat vagy beszélgetéseket amit hozzáadhat. Ez csak az ön tere, senki nem lesz értesítve. Továbbiakat később is hozzáadhat.",
@@ -2266,8 +2354,10 @@
     "Leave the beta": "Béta kikapcsolása",
     "Beta": "Béta",
     "Want to add a new room instead?": "Inkább új szobát adna hozzá?",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Szobák hozzáadása…",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Szobák hozzáadása… (%(progress)s ennyiből: %(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Szobák hozzáadása…",
+        "other": "Szobák hozzáadása… (%(progress)s ennyiből: %(count)s)"
+    },
     "Not all selected were added": "Nem az összes kijelölt lett hozzáadva",
     "You are not allowed to view this server's rooms list": "Nincs joga ennek a szervernek a szobalistáját megnézni",
     "Error processing voice message": "Hiba a hangüzenet feldolgozásánál",
@@ -2291,8 +2381,10 @@
     "Sends the given message with a space themed effect": "Világűrös effekttel küldi el az üzenetet",
     "See when people join, leave, or are invited to your active room": "Emberek belépésének, távozásának vagy meghívásának a megjelenítése az aktív szobájában",
     "See when people join, leave, or are invited to this room": "Emberek belépésének, távozásának vagy meghívásának a megjelenítése ebben a szobában",
-    "Currently joining %(count)s rooms|one": "%(count)s szobába lép be",
-    "Currently joining %(count)s rooms|other": "%(count)s szobába lép be",
+    "Currently joining %(count)s rooms": {
+        "one": "%(count)s szobába lép be",
+        "other": "%(count)s szobába lép be"
+    },
     "The user you called is busy.": "A hívott felhasználó foglalt.",
     "User Busy": "A felhasználó foglalt",
     "Some suggestions may be hidden for privacy.": "Adatvédelmi okokból néhány javaslat rejtve lehet.",
@@ -2332,9 +2424,14 @@
     "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s. The administrators will NOT be able to read the encrypted content of this room.": "Ez a szoba illegális vagy mérgező tartalmat közvetít, vagy a moderátorok képtelenek ezeket megfelelően moderálni.\nEz jelezve lesz a(z) %(homeserver)s rendszergazdái felé. Az rendszergazdák NEM tudják olvasni a szoba titkosított tartalmát.",
     "This user is spamming the room with ads, links to ads or to propaganda.\nThis will be reported to the room moderators.": "A felhasználó kéretlen reklámokkal, reklámhivatkozásokkal vagy propagandával bombázza a szobát.\nEz jelezve lesz a szoba moderátorai felé.",
     "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.": "A felhasználó illegális viselkedést valósít meg, például kipécézett valakit vagy tettlegességgel fenyeget.\nEz moderátorok felé jelzésre kerül akik akár hivatalos személyek felé továbbíthatják ezt.",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)smegváltoztatta a szerver ACL-eket",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)s %(count)s alkalommal megváltoztatta a kiszolgáló ACL-t",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)s %(count)s alkalommal megváltoztatta a kiszolgáló ACL-t",
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "one": "%(oneUser)smegváltoztatta a szerver ACL-eket",
+        "other": "%(oneUser)s %(count)s alkalommal megváltoztatta a kiszolgáló ACL-t"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "other": "%(severalUsers)s %(count)s alkalommal megváltoztatta a kiszolgáló ACL-t",
+        "one": "%(severalUsers)smegváltoztatta a szerver ACL-eket"
+    },
     "Message search initialisation failed, check <a>your settings</a> for more information": "Üzenek keresés kezdő beállítása sikertelen, ellenőrizze a <a>beállításait</a> további információkért",
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "Cím beállítása ehhez a térhez, hogy a felhasználók a matrix szerveren megtalálhassák (%(localDomain)s)",
     "To publish an address, it needs to be set as a local address first.": "A cím publikálásához először helyi címet kell beállítani.",
@@ -2358,7 +2455,6 @@
     "Any other reason. Please describe the problem.\nThis will be reported to the room moderators.": "Bármi más ok. Írja le a problémát.\nEz lesz elküldve a szoba moderátorainak.",
     "What this user is writing is wrong.\nThis will be reported to the room moderators.": "Amit ez a felhasználó ír az rossz.\nErről a szoba moderátorának jelentés készül.",
     "Please provide an address": "Kérem adja meg a címet",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)smegváltoztatta a szerver ACL-eket",
     "This space has no local addresses": "Ennek a térnek nincs helyi címe",
     "Space information": "Tér információi",
     "Collapse": "Összecsukás",
@@ -2379,8 +2475,10 @@
     "Use Command + F to search timeline": "Command + F használata az idővonalon való kereséshez",
     "Unnamed audio": "Névtelen hang",
     "Error processing audio message": "Hiba a hangüzenet feldolgozásánál",
-    "Show %(count)s other previews|one": "%(count)s további előnézet megjelenítése",
-    "Show %(count)s other previews|other": "%(count)s további előnézet megjelenítése",
+    "Show %(count)s other previews": {
+        "one": "%(count)s további előnézet megjelenítése",
+        "other": "%(count)s további előnézet megjelenítése"
+    },
     "Images, GIFs and videos": "Képek, GIF-ek és videók",
     "Code blocks": "Kódblokkok",
     "Displaying time": "Idő megjelenítése",
@@ -2436,8 +2534,14 @@
     "Anyone in a space can find and join. You can select multiple spaces.": "A téren bárki megtalálhatja és beléphet. Több teret is kiválaszthat.",
     "Spaces with access": "Terek hozzáféréssel",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "A téren bárki megtalálhatja és beléphet. <a>Szerkessze, hogy melyik tér férhet hozzá.</a>",
-    "Currently, %(count)s spaces have access|other": "Jelenleg %(count)s tér rendelkezik hozzáféréssel",
-    "& %(count)s more|other": "és még %(count)s",
+    "Currently, %(count)s spaces have access": {
+        "other": "Jelenleg %(count)s tér rendelkezik hozzáféréssel",
+        "one": "Jelenleg egy tér rendelkezik hozzáféréssel"
+    },
+    "& %(count)s more": {
+        "other": "és még %(count)s",
+        "one": "és még %(count)s"
+    },
     "Upgrade required": "Fejlesztés szükséges",
     "Anyone can find and join.": "Bárki megtalálhatja és beléphet.",
     "Only invited people can join.": "Csak a meghívott emberek léphetnek be.",
@@ -2521,8 +2625,6 @@
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s levett egy kitűzött <a>üzenetet</a> ebben a szobában. Minden <b>kitűzött üzenet</b> megjelenítése.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s kitűzött egy üzenetet ebben a szobában. Minden kitűzött üzenet megjelenítése.",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s kitűzött <a>egy üzenetet</a> ebben a szobában. Minden <b>kitűzött üzenet</b> megjelenítése.",
-    "Currently, %(count)s spaces have access|one": "Jelenleg egy tér rendelkezik hozzáféréssel",
-    "& %(count)s more|one": "és még %(count)s",
     "Some encryption parameters have been changed.": "Néhány titkosítási paraméter megváltozott.",
     "Role in <RoomName/>": "Szerep itt: <RoomName/>",
     "Send a sticker": "Matrica küldése",
@@ -2589,10 +2691,14 @@
     "Select from the options below to export chats from your timeline": "Az idővonalon a beszélgetés exportálásához tartozó beállítások kiválasztása",
     "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "Ez a(z) <roomName/> szoba exportálásának kezdete. Exportálta: <exporterDetails/>, időpont: %(exportDate)s.",
     "Create poll": "Szavazás létrehozása",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Terek frissítése…",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Terek frissítése… (%(progress)s / %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Meghívók küldése…",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Meghívók küldése… (%(progress)s / %(count)s)",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Terek frissítése…",
+        "other": "Terek frissítése… (%(progress)s / %(count)s)"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Meghívók küldése…",
+        "other": "Meghívók küldése… (%(progress)s / %(count)s)"
+    },
     "Loading new room": "Új szoba betöltése",
     "Upgrading room": "Szoba fejlesztése",
     "Show:": "Megjelenítés:",
@@ -2610,8 +2716,10 @@
     "Disinvite from %(roomName)s": "Meghívó visszavonása innen: %(roomName)s",
     "They'll still be able to access whatever you're not an admin of.": "Továbbra is hozzáférhetnek olyan helyekhez ahol ön nem adminisztrátor.",
     "Threads": "Üzenetszálak",
-    "%(count)s reply|one": "%(count)s válasz",
-    "%(count)s reply|other": "%(count)s válasz",
+    "%(count)s reply": {
+        "one": "%(count)s válasz",
+        "other": "%(count)s válasz"
+    },
     "View in room": "Megjelenítés szobában",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Adja meg a biztonsági jelmondatot vagy <button>használja a biztonsági kulcsot</button> a folytatáshoz.",
     "What projects are your team working on?": "Milyen projekteken dolgozik a csoportja?",
@@ -2626,7 +2734,10 @@
     "Use high contrast": "Nagy kontraszt használata",
     "Light high contrast": "Világos, nagy kontrasztú",
     "Automatically send debug logs on any error": "Hibakeresési naplók automatikus küldése bármilyen hiba esetén",
-    "Click the button below to confirm signing out these devices.|other": "Ezeknek a eszközöknek törlésének a megerősítéséhez kattintson a gombra lent.",
+    "Click the button below to confirm signing out these devices.": {
+        "other": "Ezeknek a eszközöknek törlésének a megerősítéséhez kattintson a gombra lent.",
+        "one": "Az eszközből való kilépés megerősítéséhez kattintson a lenti gombra."
+    },
     "Use a more compact 'Modern' layout": "Kompaktabb „Modern” elrendezés használata",
     "You do not have permission to start polls in this room.": "Nincs joga szavazást kezdeményezni ebben a szobában.",
     "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "Ez a szoba egy platformra sem hidalja át az üzeneteket. <a>Tudjon meg többet.</a>",
@@ -2634,11 +2745,14 @@
     "Rename": "Átnevezés",
     "Select all": "Mindet kijelöli",
     "Deselect all": "Semmit nem jelöl ki",
-    "Sign out devices|one": "Eszközből való kijelentkezés",
-    "Sign out devices|other": "Eszközökből való kijelentkezés",
-    "Click the button below to confirm signing out these devices.|one": "Az eszközből való kilépés megerősítéséhez kattintson a lenti gombra.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Az eszközből való kijelentkezéshez erősítse meg a személyazonosságát az egyszeri bejelentkezés használatával.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Az eszközökből való kijelentkezéshez erősítse meg a személyazonosságát az egyszeri bejelentkezés használatával.",
+    "Sign out devices": {
+        "one": "Eszközből való kijelentkezés",
+        "other": "Eszközökből való kijelentkezés"
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Az eszközből való kijelentkezéshez erősítse meg a személyazonosságát az egyszeri bejelentkezés használatával.",
+        "other": "Az eszközökből való kijelentkezéshez erősítse meg a személyazonosságát az egyszeri bejelentkezés használatával."
+    },
     "Store your Security Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.": "A biztonsági kulcsot tárolja biztonságos helyen, például egy jelszókezelőben vagy egy széfben, mivel ez tartja biztonságban a titkosított adatait.",
     "We'll generate a Security Key for you to store somewhere safe, like a password manager or a safe.": "A biztonsági kulcsodat elkészül, ezt tárolja valamilyen biztonságos helyen, például egy jelszókezelőben vagy egy széfben.",
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Szerezze vissza a hozzáférést a fiókjához és állítsa vissza az elmentett titkosítási kulcsokat ebben a munkamenetben. Ezek nélkül egyetlen munkamenetben sem tudja elolvasni a titkosított üzeneteit.",
@@ -2692,12 +2806,18 @@
     "%(senderName)s has updated the room layout": "%(senderName)s frissítette a szoba kinézetét",
     "Large": "Nagy",
     "Image size in the timeline": "Képméret az idővonalon",
-    "Based on %(count)s votes|one": "%(count)s szavazat alapján",
-    "Based on %(count)s votes|other": "%(count)s szavazat alapján",
-    "%(count)s votes|one": "%(count)s szavazat",
-    "%(count)s votes|other": "%(count)s szavazat",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s és még %(count)s másik",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s és még %(count)s másik",
+    "Based on %(count)s votes": {
+        "one": "%(count)s szavazat alapján",
+        "other": "%(count)s szavazat alapján"
+    },
+    "%(count)s votes": {
+        "one": "%(count)s szavazat",
+        "other": "%(count)s szavazat"
+    },
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s és még %(count)s másik",
+        "other": "%(spaceName)s és még %(count)s másik"
+    },
     "Sorry, the poll you tried to create was not posted.": "Sajnos a szavazás amit készített nem lett elküldve.",
     "Failed to post poll": "A szavazást nem sikerült beküldeni",
     "Sorry, your vote was not registered. Please try again.": "Sajnos az Ön szavazata nem lett rögzítve. Kérjük ismételje meg újra.",
@@ -2725,8 +2845,10 @@
     "You can turn this off anytime in settings": "Ezt bármikor kikapcsolhatja a beállításokban",
     "We <Bold>don't</Bold> share information with third parties": "<Bold>Nem</Bold> osztunk meg információt harmadik féllel",
     "We <Bold>don't</Bold> record or profile any account data": "<Bold>Nem</Bold> mentünk vagy analizálunk semmilyen felhasználói adatot",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s leadott szavazat. Szavazzon az eredmény megtekintéséhez",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s leadott szavazat. Szavazzon az eredmény megtekintéséhez",
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s leadott szavazat. Szavazzon az eredmény megtekintéséhez",
+        "other": "%(count)s leadott szavazat. Szavazzon az eredmény megtekintéséhez"
+    },
     "No votes cast": "Nem adtak le szavazatot",
     "Share location": "Tartózkodási hely megosztása",
     "Manage pinned events": "Kitűzött események kezelése",
@@ -2736,24 +2858,34 @@
     "Connectivity to the server has been lost": "Megszakadt a kapcsolat a kiszolgálóval",
     "You cannot place calls in this browser.": "Nem indíthat hívást ebben a böngészőben.",
     "Calls are unsupported": "A hívások nem támogatottak",
-    "Final result based on %(count)s votes|one": "Végeredmény %(count)s szavazat alapján",
-    "Final result based on %(count)s votes|other": "Végeredmény %(count)s szavazat alapján",
+    "Final result based on %(count)s votes": {
+        "one": "Végeredmény %(count)s szavazat alapján",
+        "other": "Végeredmény %(count)s szavazat alapján"
+    },
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Biztosan lezárod ezt a szavazást? Ez megszünteti az új szavazatok leadásának lehetőségét, és kijelzi a végeredményt.",
     "End Poll": "Szavazás lezárása",
     "Sorry, the poll did not end. Please try again.": "Sajnáljuk, a szavazás nem lett lezárva. Kérjük, próbáld újra.",
     "Failed to end poll": "Nem sikerült a szavazás lezárása",
     "The poll has ended. Top answer: %(topAnswer)s": "A szavazás le lett zárva. Nyertes válasz: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "A szavazás le lett zárva. Nem lettek leadva szavazatok.",
-    "Exported %(count)s events in %(seconds)s seconds|one": "%(count)s esemény exportálva %(seconds)s másodperc alatt",
-    "Exported %(count)s events in %(seconds)s seconds|other": "%(count)s esemény exportálva %(seconds)s másodperc alatt",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "%(count)s esemény exportálva %(seconds)s másodperc alatt",
+        "other": "%(count)s esemény exportálva %(seconds)s másodperc alatt"
+    },
     "Export successful!": "Sikeres exportálás!",
-    "Fetched %(count)s events in %(seconds)ss|one": "%(count)s esemény lekérve %(seconds)s másodperc alatt",
-    "Fetched %(count)s events in %(seconds)ss|other": "%(count)s esemény lekérve %(seconds)s másodperc alatt",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "%(count)s esemény lekérve %(seconds)s másodperc alatt",
+        "other": "%(count)s esemény lekérve %(seconds)s másodperc alatt"
+    },
     "Processing event %(number)s out of %(total)s": "Esemény feldolgozása: %(number)s. / %(total)s",
-    "Fetched %(count)s events so far|one": "Eddig %(count)s esemény lett lekérve",
-    "Fetched %(count)s events so far|other": "Eddig %(count)s esemény lett lekérve",
-    "Fetched %(count)s events out of %(total)s|one": "%(count)s / %(total)s esemény lekérve",
-    "Fetched %(count)s events out of %(total)s|other": "%(count)s / %(total)s esemény lekérve",
+    "Fetched %(count)s events so far": {
+        "one": "Eddig %(count)s esemény lett lekérve",
+        "other": "Eddig %(count)s esemény lett lekérve"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "%(count)s / %(total)s esemény lekérve",
+        "other": "%(count)s / %(total)s esemény lekérve"
+    },
     "Generating a ZIP": "ZIP előállítása",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "A megadott dátum (%(inputDate)s) nem értelmezhető. Próbálja meg az ÉÉÉÉ-HH-NN formátum használatát.",
     "Failed to load list of rooms.": "A szobák listájának betöltése nem sikerült.",
@@ -2813,10 +2945,14 @@
     "Command error: Unable to handle slash command.": "Parancs hiba: A / jellel kezdődő parancs támogatott.",
     "Open this settings tab": "Beállítások fül megnyitása",
     "Space home": "Kezdő tér",
-    "was removed %(count)s times|one": "eltávolítva",
-    "was removed %(count)s times|other": "%(count)s alkalommal lett eltávolítva",
-    "were removed %(count)s times|one": "eltávolítva",
-    "were removed %(count)s times|other": "%(count)s alkalommal lett eltávolítva",
+    "was removed %(count)s times": {
+        "one": "eltávolítva",
+        "other": "%(count)s alkalommal lett eltávolítva"
+    },
+    "were removed %(count)s times": {
+        "one": "eltávolítva",
+        "other": "%(count)s alkalommal lett eltávolítva"
+    },
     "Unknown error fetching location. Please try again later.": "Ismeretlen hiba a földrajzi helyzetének lekérésekor. Próbálja újra később.",
     "Timed out trying to fetch your location. Please try again later.": "Időtúllépés történt a földrajzi helyzetének lekérésekor. Próbálja újra később.",
     "Failed to fetch your location. Please try again later.": "Nem sikerült a földrajzi helyzetének lekérése. Próbálja újra később.",
@@ -2898,20 +3034,30 @@
     "This is a beta feature": "Ez egy beta állapotú funkció",
     "Use <arrows/> to scroll": "Görgetés ezekkel: <arrows/>",
     "Feedback sent! Thanks, we appreciate it!": "Visszajelzés elküldve. Köszönjük, nagyra értékeljük.",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)s rejtett üzenetet küldött",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s %(count)s rejtett üzenetet küldött",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)s rejtett üzenetet küldött",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)s %(count)s rejtett üzenetet küldött",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)s üzenetet törölt",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)s %(count)s üzenetet törölt",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)s üzenetet törölt",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)s %(count)s üzenetet törölt",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "one": "%(oneUser)s rejtett üzenetet küldött",
+        "other": "%(oneUser)s %(count)s rejtett üzenetet küldött"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)s rejtett üzenetet küldött",
+        "other": "%(severalUsers)s %(count)s rejtett üzenetet küldött"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "one": "%(oneUser)s üzenetet törölt",
+        "other": "%(oneUser)s %(count)s üzenetet törölt"
+    },
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)s üzenetet törölt",
+        "other": "%(severalUsers)s %(count)s üzenetet törölt"
+    },
     "Maximise": "Teljes méret",
     "Automatically send debug logs when key backup is not functioning": "Hibakeresési naplók automatikus küldése, ha a kulcsmentés nem működik",
     "Thank you for trying the beta, please go into as much detail as you can so we can improve it.": "Köszönjük, hogy kipróbálja a béta programunkat, hogy fejleszthessünk, adjon olyan részletes visszajelzést, amennyire csak lehet.",
     "<empty string>": "<üres karakterek>",
-    "<%(count)s spaces>|other": "<%(count)s szóköz>",
-    "<%(count)s spaces>|one": "<szóköz>",
+    "<%(count)s spaces>": {
+        "other": "<%(count)s szóköz>",
+        "one": "<szóköz>"
+    },
     "Edit poll": "Szavazás szerkesztése",
     "Sorry, you can't edit a poll after votes have been cast.": "Sajnos a szavazás nem szerkeszthető miután szavazatok érkeztek.",
     "Can't edit poll": "A szavazás nem szerkeszthető",
@@ -2941,10 +3087,14 @@
     "We couldn't send your location": "A földrajzi helyzetet nem sikerült elküldeni",
     "Insert a trailing colon after user mentions at the start of a message": "Záró kettőspont beszúrása egy felhasználó üzenet elején való megemlítésekor",
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Válaszoljon egy meglévő üzenetszálban, vagy új üzenetszál indításához használja a „%(replyInThread)s” lehetőséget az üzenet sarkában megjelenő menüben.",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)s módosította a szoba <a>kitűzött üzeneteit</a>",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)s %(count)s alkalommal módosította a szoba <a>kitűzött üzeneteit</a>",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)s módosította a szoba <a>kitűzött üzeneteit</a>",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)s %(count)s alkalommal módosította a szoba <a>kitűzött üzeneteit</a>",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(oneUser)s módosította a szoba <a>kitűzött üzeneteit</a>",
+        "other": "%(oneUser)s %(count)s alkalommal módosította a szoba <a>kitűzött üzeneteit</a>"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)s módosította a szoba <a>kitűzött üzeneteit</a>",
+        "other": "%(severalUsers)s %(count)s alkalommal módosította a szoba <a>kitűzött üzeneteit</a>"
+    },
     "Show polls button": "Szavazások gomb megjelenítése",
     "We'll create rooms for each of them.": "Mindenhez készítünk egy szobát.",
     "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.": "Ez a Matrix-kiszolgáló nincs megfelelően beállítva a térképek megjelenítéséhez, vagy a beállított térképkiszolgáló nem érhető el.",
@@ -2966,8 +3116,10 @@
     "You are sharing your live location": "Ön folyamatosan megosztja az aktuális földrajzi pozícióját",
     "%(displayName)s's live location": "%(displayName)s élő földrajzi helyzete",
     "Preserve system messages": "Rendszerüzenetek megtartása",
-    "Currently removing messages in %(count)s rooms|one": "Üzenet törlése %(count)s szobából",
-    "Currently removing messages in %(count)s rooms|other": "Üzenet törlése %(count)s szobából",
+    "Currently removing messages in %(count)s rooms": {
+        "one": "Üzenet törlése %(count)s szobából",
+        "other": "Üzenet törlése %(count)s szobából"
+    },
     "Verification explorer": "Ellenőrzések böngésző",
     "Next recently visited room or space": "Következő, nemrég meglátogatott szoba vagy tér",
     "Previous recently visited room or space": "Előző, nemrég meglátogatott szoba vagy tér",
@@ -3007,8 +3159,10 @@
     "Explore room state": "Szoba állapot felderítése",
     "Send custom timeline event": "Egyedi idővonal esemény küldése",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Törölje a kijelölést ha a rendszer üzeneteket is törölni szeretné ettől a felhasználótól (pl. tagság változás, profil változás…)",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|one": "%(count)s üzenetet készül törölni az alábbi felhasználótól: %(user)s. A művelet mindenki számára visszavonhatatlanul eltávolítja ezeket a beszélgetésekből. Biztos, hogy folytatja?",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "%(count)s üzenetet készül törölni az alábbi felhasználótól: %(user)s. A művelet mindenki számára visszavonhatatlanul eltávolítja ezeket a beszélgetésekből. Biztos, hogy folytatja?",
+    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
+        "one": "%(count)s üzenetet készül törölni az alábbi felhasználótól: %(user)s. A művelet mindenki számára visszavonhatatlanul eltávolítja ezeket a beszélgetésekből. Biztos, hogy folytatja?",
+        "other": "%(count)s üzenetet készül törölni az alábbi felhasználótól: %(user)s. A művelet mindenki számára visszavonhatatlanul eltávolítja ezeket a beszélgetésekből. Biztos, hogy folytatja?"
+    },
     "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Segítsen észrevennünk a hibákat, és jobbá tenni a(z) %(analyticsOwner)s a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközei között meg lesz osztva.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Használhatja a más szerver opciót, hogy egy másik matrix szerverre jelentkezz be amihez megadod a szerver url címét. Ezzel használhatja a(z) %(brand)s klienst egy már létező Matrix fiókkal egy másik matrix szerveren.",
     "%(brand)s was denied permission to fetch your location. Please allow location access in your browser settings.": "A(z) %(brand)s alkalmazásnak nincs jogosultsága a földrajzi helyzetének lekérdezéséhez. Engedélyezze a hely hozzáférését a böngészőbeállításokban.",
@@ -3058,8 +3212,10 @@
     "Ban from space": "Kitiltás a térről",
     "Unban from space": "Visszaengedés a térre",
     "Remove from space": "Eltávolítás a térről",
-    "%(count)s participants|one": "1 résztvevő",
-    "%(count)s participants|other": "%(count)s résztvevő",
+    "%(count)s participants": {
+        "one": "1 résztvevő",
+        "other": "%(count)s résztvevő"
+    },
     "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "Amikor a szobát vagy teret próbáltuk elérni ezt a hibaüzenetet kaptuk: %(errcode)s. Ha úgy gondolja, hogy ez egy hiba legyen szíves<issueLink>nyisson egy hibajegyet</issueLink>.",
     "Try again later, or ask a room or space admin to check if you have access.": "Próbálkozzon később vagy kérje meg a szoba vagy tér adminisztrátorát, hogy nézze meg van-e hozzáférése.",
     "This room or space is not accessible at this time.": "Ez a szoba vagy tér jelenleg elérhetetlen.",
@@ -3078,8 +3234,10 @@
     "New room": "Új szoba",
     "View older version of %(spaceName)s.": "A(z) %(spaceName)s tér régebbi verziójának megtekintése.",
     "Upgrade this space to the recommended room version": "A tér frissítése a javasolt szobaverzióra",
-    "Confirm signing out these devices|one": "Megerősítés ebből az eszközből való kijelentkezéshez",
-    "Confirm signing out these devices|other": "Megerősítés ezekből az eszközökből való kijelentkezéshez",
+    "Confirm signing out these devices": {
+        "one": "Megerősítés ebből az eszközből való kijelentkezéshez",
+        "other": "Megerősítés ezekből az eszközökből való kijelentkezéshez"
+    },
     "Turn on camera": "Kamera bekapcsolása",
     "Turn off camera": "Kamera kikapcsolása",
     "Video devices": "Videóeszközök",
@@ -3099,8 +3257,10 @@
     "You will not be able to reactivate your account": "A fiók többi nem aktiválható",
     "Confirm that you would like to deactivate your account. If you proceed:": "Erősítse meg a fiók deaktiválását. Ha folytatja:",
     "To continue, please enter your account password:": "A folytatáshoz adja meg a jelszavát:",
-    "Seen by %(count)s people|one": "%(count)s ember látta",
-    "Seen by %(count)s people|other": "%(count)s ember látta",
+    "Seen by %(count)s people": {
+        "one": "%(count)s ember látta",
+        "other": "%(count)s ember látta"
+    },
     "Your password was successfully changed.": "A jelszó sikeresen megváltozott.",
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Az összes eszközéről kijelentkezett és leküldéses értesítéseket sem fog kapni. Az értesítések újbóli engedélyezéséhez újra be kell jelentkezni az egyes eszközökön.",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "Ha szeretné megtartani a hozzáférést a titkosított szobákban lévő csevegésekhez, állítson be Kulcs mentést vagy exportálja ki a kulcsokat valamelyik eszközéről mielőtt továbblép.",
@@ -3134,8 +3294,10 @@
     "Show Labs settings": "Labor beállítások megjelenítése",
     "To join, please enable video rooms in Labs first": "A belépéshez a Laborban be kell kapcsolni a videó szobákat",
     "To view, please enable video rooms in Labs first": "A megjelenítéshez a Laborban be kell kapcsolni a videó szobákat",
-    "%(count)s people joined|one": "%(count)s személy belépett",
-    "%(count)s people joined|other": "%(count)s személy belépett",
+    "%(count)s people joined": {
+        "one": "%(count)s személy belépett",
+        "other": "%(count)s személy belépett"
+    },
     "View related event": "Kapcsolódó események megjelenítése",
     "Check if you want to hide all current and future messages from this user.": "Válaszd ki ha ennek a felhasználónak a jelenlegi és jövőbeli üzeneteit el szeretnéd rejteni.",
     "Ignore user": "Felhasználó mellőzése",
@@ -3162,8 +3324,10 @@
     "Show spaces": "Terek megjelenítése",
     "Show rooms": "Szobák megjelenítése",
     "Search for": "Keresés:",
-    "%(count)s Members|one": "%(count)s tag",
-    "%(count)s Members|other": "%(count)s tag",
+    "%(count)s Members": {
+        "one": "%(count)s tag",
+        "other": "%(count)s tag"
+    },
     "Show: Matrix rooms": "Megjelenít: Matrix szobák",
     "Show: %(instance)s rooms (%(server)s)": "Megjelenít: %(instance)s szoba (%(server)s)",
     "Add new server…": "Új szerver hozzáadása…",
@@ -3198,16 +3362,20 @@
     "Enter fullscreen": "Teljes képernyőre váltás",
     "Map feedback": "Visszajelzés a térképről",
     "Toggle attribution": "Forrásmegjelölés be/ki",
-    "In %(spaceName)s and %(count)s other spaces.|one": "Itt: %(spaceName)s és %(count)s másik térben.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "Itt: %(spaceName)s és %(count)s másik térben.",
+        "other": "Itt: %(spaceName)s és %(count)s másik térben."
+    },
     "In %(spaceName)s.": "Ebben a térben: %(spaceName)s.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "Itt: %(spaceName)s és %(count)s másik térben.",
     "In spaces %(space1Name)s and %(space2Name)s.": "Ezekben a terekben: %(space1Name)s és %(space2Name)s.",
     "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Fejlesztői parancs: Eldobja a jelenlegi kimenő csoport kapcsolatot és új Olm munkamenetet hoz létre",
     "Send your first message to invite <displayName/> to chat": "Küldj egy üzenetet ahhoz, hogy meghívd <displayName/> felhasználót",
     "Messages in this chat will be end-to-end encrypted.": "Az üzenetek ebben a beszélgetésben végponti titkosítással vannak védve.",
     "You did it!": "Kész!",
-    "Only %(count)s steps to go|one": "Még %(count)s lépés",
-    "Only %(count)s steps to go|other": "Még %(count)s lépés",
+    "Only %(count)s steps to go": {
+        "one": "Még %(count)s lépés",
+        "other": "Még %(count)s lépés"
+    },
     "Welcome to %(brand)s": "Üdvözli a(z) %(brand)s",
     "Find your people": "Találja meg az embereket",
     "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.": "Tartsa meg a közösségi beszélgetések feletti irányítást.\nAkár milliók támogatásával, hatékony moderációs és együttműködési lehetőségekkel.",
@@ -3291,11 +3459,15 @@
     "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Nyilvános szobához nem javasolt a titkosítás beállítása.</b>Bárki megtalálhatja és csatlakozhat nyilvános szobákhoz, így bárki elolvashatja az üzeneteket bennük. A titkosítás előnyeit így nem jelentkeznek és később ezt nem lehet kikapcsolni. Nyilvános szobákban a titkosított üzenetek az üzenetküldést és fogadást csak lassítják.",
     "Don’t miss a thing by taking %(brand)s with you": "Ne maradjon le semmiről, legyen Önnél a(z) %(brand)s",
     "Empty room (was %(oldName)s)": "Üres szoba (%(oldName)s volt)",
-    "Inviting %(user)s and %(count)s others|one": "%(user)s és 1 további meghívása",
-    "Inviting %(user)s and %(count)s others|other": "%(user)s és %(count)s további meghívása",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "%(user)s és 1 további meghívása",
+        "other": "%(user)s és %(count)s további meghívása"
+    },
     "Inviting %(user1)s and %(user2)s": "%(user1)s és %(user2)s meghívása",
-    "%(user)s and %(count)s others|one": "%(user)s és 1 további",
-    "%(user)s and %(count)s others|other": "%(user)s és %(count)s további",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s és 1 további",
+        "other": "%(user)s és %(count)s további"
+    },
     "%(user1)s and %(user2)s": "%(user1)s és %(user2)s",
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s vagy %(copyButton)s",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s vagy %(recoveryFile)s",
@@ -3392,8 +3564,10 @@
     "Review and approve the sign in": "Belépés áttekintése és engedélyezés",
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Ennek az eszköznek a felhasználásával és a QR kóddal beléptethet egy másik eszközt. Be kell olvasni a QR kódot azon az eszközön ami még nincs belépve.",
     "play voice broadcast": "hangközvetítés lejátszása",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "Biztos, hogy ki szeretne lépni %(count)s munkamenetből?",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "Biztos, hogy ki szeretne lépni %(count)s munkamenetből?",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "one": "Biztos, hogy ki szeretne lépni %(count)s munkamenetből?",
+        "other": "Biztos, hogy ki szeretne lépni %(count)s munkamenetből?"
+    },
     "Show formatting": "Formázás megjelenítése",
     "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.": "Fontolja meg a kijelentkezést a régi munkamenetekből (%(inactiveAgeDays)s napnál régebbi) ha már nem használja azokat.",
     "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.": "Az inaktív munkamenetek törlése növeli a biztonságot és a sebességet, valamint egyszerűbbé teszi a gyanús munkamenetek felismerését.",
@@ -3487,8 +3661,10 @@
     "%(senderName)s ended a voice broadcast": "%(senderName)s befejezte a hangközvetítést",
     "You ended a voice broadcast": "A hangközvetítés befejeződött",
     "Improve your account security by following these recommendations.": "Javítsa a fiókja biztonságát azzal, hogy követi a következő javaslatokat.",
-    "%(count)s sessions selected|one": "%(count)s munkamenet kiválasztva",
-    "%(count)s sessions selected|other": "%(count)s munkamenet kiválasztva",
+    "%(count)s sessions selected": {
+        "one": "%(count)s munkamenet kiválasztva",
+        "other": "%(count)s munkamenet kiválasztva"
+    },
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "Nem lehet hívást kezdeményezni élő közvetítés felvétele közben. Az élő közvetítés bejezése szükséges a hívás indításához.",
     "Can’t start a call": "Nem sikerült hívást indítani",
     " in <strong>%(room)s</strong>": " itt: <strong>%(room)s</strong>",
@@ -3501,8 +3677,10 @@
     "Create a link": "Hivatkozás készítése",
     "Link": "Hivatkozás",
     "Force 15s voice broadcast chunk length": "Hangközvetítések 15 másodperces darabolásának kényszerítése",
-    "Sign out of %(count)s sessions|one": "Kijelentkezés %(count)s munkamenetből",
-    "Sign out of %(count)s sessions|other": "Kijelentkezés %(count)s munkamenetből",
+    "Sign out of %(count)s sessions": {
+        "one": "Kijelentkezés %(count)s munkamenetből",
+        "other": "Kijelentkezés %(count)s munkamenetből"
+    },
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Kijelentkezés minden munkamenetből (%(otherSessionsCount)s)",
     "Yes, end my recording": "Igen, a felvétel befejezése",
     "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "Ha hallgatja ezt az élő közvetítést, akkor a jelenlegi élő közvetítésének a felvétele befejeződik.",
@@ -3606,7 +3784,9 @@
     "Room is <strong>encrypted ✅</strong>": "A szoba <strong>titkosított ✅</strong>",
     "Notification state is <strong>%(notificationState)s</strong>": "Értesítés állapot: <strong>%(notificationState)s</strong>",
     "Room unread status: <strong>%(status)s</strong>": "Szoba olvasatlan állapota: <strong>%(status)s</strong>",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Szoba olvasatlan állapota: <strong>%(status)s</strong>, darabszám: <strong>%(count)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>": {
+        "other": "Szoba olvasatlan állapota: <strong>%(status)s</strong>, darabszám: <strong>%(count)s</strong>"
+    },
     "Ended a poll": "Lezárta a szavazást",
     "Due to decryption errors, some votes may not be counted": "Visszafejtési hibák miatt néhány szavazat nem kerül beszámításra",
     "The sender has blocked you from receiving this message": "A feladó megtagadta az Ön hozzáférését ehhez az üzenethez",
@@ -3616,7 +3796,10 @@
     "Show NSFW content": "Felnőtt tartalmak megjelenítése",
     "Yes, it was me": "Igen, én voltam",
     "Answered elsewhere": "Máshol lett felvéve",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "%(count)s napja nincs aktív szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "other": "%(count)s napja nincs aktív szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
+        "one": "Nincs aktív szavazás az elmúlt napokból. További szavazások betöltése az előző havi szavazások megjelenítéséhez"
+    },
     "There are no past polls. Load more polls to view polls for previous months": "Nincs régebbi szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
     "There are no active polls. Load more polls to view polls for previous months": "Nincs aktív szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
     "Load more polls": "Még több szavazás betöltése",
@@ -3630,9 +3813,10 @@
     "Could not find room": "A szoba nem található",
     "iframe has no src attribute": "az iframe-nek nincs src attribútuma",
     "View poll": "Szavazás megtekintése",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Nincs aktív szavazás az elmúlt napokból. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "%(count)s napja nincs aktív szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Nincs aktív szavazás az elmúlt napokból. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Nincs aktív szavazás az elmúlt napokból. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
+        "other": "%(count)s napja nincs aktív szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez"
+    },
     "Invites by email can only be sent one at a time": "E-mail meghívóból egyszerre csak egy küldhető el",
     "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "A belépéshez csak a szoba azonosítóját adta meg a kiszolgáló nélkül. A szobaazonosító egy belső azonosító, amellyel további információk nélkül nem lehet belépni szobába.",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Hiba történt az értesítési beállítások frissítése során. Próbálja meg be- és kikapcsolni a beállítást.",

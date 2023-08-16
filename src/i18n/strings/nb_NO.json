@@ -156,8 +156,10 @@
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s sendte en invitasjon til %(targetDisplayName)s om å bli med i rommet.",
     "Done": "Fullført",
     "%(displayName)s is typing …": "%(displayName)s skriver …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s og %(count)s andre skriver …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s og én annen bruker skriver …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s og %(count)s andre skriver …",
+        "one": "%(names)s og én annen bruker skriver …"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s og %(lastPerson)s skriver …",
     "%(num)s minutes ago": "%(num)s minutter siden",
     "%(num)s hours ago": "%(num)s timer siden",
@@ -530,10 +532,22 @@
     "No results": "Ingen treff",
     "Rotate Left": "Roter til venstre",
     "Rotate Right": "Roter til høyre",
-    "were invited %(count)s times|one": "ble invitert",
-    "was invited %(count)s times|one": "ble invitert",
-    "were banned %(count)s times|one": "ble bannlyst",
-    "was banned %(count)s times|one": "ble bannlyst",
+    "were invited %(count)s times": {
+        "one": "ble invitert",
+        "other": "ble invitert %(count)s ganger"
+    },
+    "was invited %(count)s times": {
+        "one": "ble invitert",
+        "other": "ble invitert %(count)s ganger"
+    },
+    "were banned %(count)s times": {
+        "one": "ble bannlyst",
+        "other": "ble bannlyst %(count)s ganger"
+    },
+    "was banned %(count)s times": {
+        "one": "ble bannlyst",
+        "other": "ble bannlyst %(count)s ganger"
+    },
     "Power level": "Styrkenivå",
     "e.g. my-room": "f.eks. mitt-rom",
     "Enter a server name": "Skriv inn et tjenernavn",
@@ -574,8 +588,10 @@
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s endret rommets navn fra %(oldRoomName)s til %(newRoomName)s.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s endret rommets navn til %(roomName)s.",
     "Not Trusted": "Ikke betrodd",
-    "%(items)s and %(count)s others|other": "%(items)s og %(count)s andre",
-    "%(items)s and %(count)s others|one": "%(items)s og én annen",
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s og %(count)s andre",
+        "one": "%(items)s og én annen"
+    },
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "a few seconds ago": "noen sekunder siden",
     "about a minute ago": "cirka 1 minutt siden",
@@ -628,7 +644,10 @@
     "Replying": "Svarer på",
     "Room %(name)s": "Rom %(name)s",
     "Start chatting": "Begynn å chatte",
-    "%(count)s unread messages.|one": "1 ulest melding.",
+    "%(count)s unread messages.": {
+        "one": "1 ulest melding.",
+        "other": "%(count)s uleste meldinger."
+    },
     "Unread messages.": "Uleste meldinger.",
     "Send as message": "Send som en melding",
     "You don't currently have any stickerpacks enabled": "Du har ikke skrudd på noen klistremerkepakker for øyeblikket",
@@ -654,18 +673,33 @@
     "Create new room": "Opprett et nytt rom",
     "Language Dropdown": "Språk-nedfallsmeny",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s ble med %(count)s ganger",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s ble med",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s ble med %(count)s ganger",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s ble med",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s forlot rommet %(count)s ganger",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s forlot rommet",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s forlot rommet %(count)s ganger",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s forlot rommet",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s endret navnene sine",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s endret navnet sitt",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)s ble med %(count)s ganger",
+        "one": "%(severalUsers)s ble med"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)s ble med %(count)s ganger",
+        "one": "%(oneUser)s ble med"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)s forlot rommet %(count)s ganger",
+        "one": "%(severalUsers)s forlot rommet"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)s forlot rommet %(count)s ganger",
+        "one": "%(oneUser)s forlot rommet"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "one": "%(severalUsers)s endret navnene sine"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "one": "%(oneUser)s endret navnet sitt",
+        "other": "%(oneUser)sendret navnet sitt %(count)s ganger"
+    },
     "Custom level": "Tilpasset nivå",
-    "And %(count)s more...|other": "Og %(count)s til...",
+    "And %(count)s more...": {
+        "other": "Og %(count)s til..."
+    },
     "Matrix": "Matrix",
     "Logs sent": "Loggbøkene ble sendt",
     "GitHub issue": "Github-saksrapport",
@@ -722,15 +756,22 @@
     "Remove %(email)s?": "Vil du fjerne %(email)s?",
     "Invalid Email Address": "Ugyldig E-postadresse",
     "Try to join anyway": "Forsøk å bli med likevel",
-    "%(count)s unread messages including mentions.|one": "1 ulest nevnelse.",
-    "%(count)s unread messages.|other": "%(count)s uleste meldinger.",
+    "%(count)s unread messages including mentions.": {
+        "one": "1 ulest nevnelse.",
+        "other": "%(count)s uleste meldinger inkludert der du nevnes."
+    },
     "Command error": "Kommandofeil",
     "Room avatar": "Rommets avatar",
     "Start Verification": "Begynn verifisering",
     "Verify User": "Verifiser bruker",
-    "%(count)s verified sessions|one": "1 verifisert økt",
-    "%(count)s sessions|other": "%(count)s økter",
-    "%(count)s sessions|one": "%(count)s økt",
+    "%(count)s verified sessions": {
+        "one": "1 verifisert økt",
+        "other": "%(count)s verifiserte økter"
+    },
+    "%(count)s sessions": {
+        "other": "%(count)s økter",
+        "one": "%(count)s økt"
+    },
     "Verify by scanning": "Verifiser med skanning",
     "Verify by emoji": "Verifiser med emoji",
     "Message Actions": "Meldingshandlinger",
@@ -740,14 +781,14 @@
     "%(name)s wants to verify": "%(name)s ønsker å verifisere",
     "Failed to copy": "Mislyktes i å kopiere",
     "Submit logs": "Send inn loggføringer",
-    "were invited %(count)s times|other": "ble invitert %(count)s ganger",
-    "was invited %(count)s times|other": "ble invitert %(count)s ganger",
-    "were banned %(count)s times|other": "ble bannlyst %(count)s ganger",
-    "was banned %(count)s times|other": "ble bannlyst %(count)s ganger",
-    "were unbanned %(count)s times|other": "fikk bannlysningene sine opphevet %(count)s ganger",
-    "were unbanned %(count)s times|one": "fikk bannlysningene sine opphevet",
-    "was unbanned %(count)s times|other": "fikk bannlysningen sin opphevet %(count)s ganger",
-    "was unbanned %(count)s times|one": "fikk bannlysningen sin opphevet",
+    "were unbanned %(count)s times": {
+        "other": "fikk bannlysningene sine opphevet %(count)s ganger",
+        "one": "fikk bannlysningene sine opphevet"
+    },
+    "was unbanned %(count)s times": {
+        "other": "fikk bannlysningen sin opphevet %(count)s ganger",
+        "one": "fikk bannlysningen sin opphevet"
+    },
     "Clear all data": "Tøm alle data",
     "Verify session": "Verifiser økten",
     "Upload completed": "Opplasting fullført",
@@ -822,8 +863,10 @@
     "Close preview": "Lukk forhåndsvisning",
     "Demote yourself?": "Vil du degradere deg selv?",
     "Demote": "Degrader",
-    "and %(count)s others...|other": "og %(count)s andre …",
-    "and %(count)s others...|one": "og én annen …",
+    "and %(count)s others...": {
+        "other": "og %(count)s andre …",
+        "one": "og én annen …"
+    },
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (styrkenivå %(powerLevelNumber)s)",
     "Hangup": "Legg på røret",
     "The conversation continues here.": "Samtalen fortsetter her.",
@@ -841,7 +884,6 @@
     "Other published addresses:": "Andre publiserte adresser:",
     "Waiting for %(displayName)s to accept…": "Venter på at %(displayName)s skal akseptere …",
     "Your homeserver": "Hjemmetjeneren din",
-    "%(count)s verified sessions|other": "%(count)s verifiserte økter",
     "Hide verified sessions": "Skjul verifiserte økter",
     "Decrypt %(text)s": "Dekrypter %(text)s",
     "You verified %(name)s": "Du verifiserte %(name)s",
@@ -902,8 +944,10 @@
     "Message preview": "Meldingsforhåndsvisning",
     "This room has no local addresses": "Dette rommet har ikke noen lokale adresser",
     "Remove recent messages by %(user)s": "Fjern nylige meldinger fra %(user)s",
-    "Remove %(count)s messages|other": "Slett %(count)s meldinger",
-    "Remove %(count)s messages|one": "Slett 1 melding",
+    "Remove %(count)s messages": {
+        "other": "Slett %(count)s meldinger",
+        "one": "Slett 1 melding"
+    },
     "You've successfully verified your device!": "Du har vellykket verifisert enheten din!",
     "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Du har vellykket verifisert %(deviceName)s (%(deviceId)s)!",
     "You've successfully verified %(displayName)s!": "Du har vellykket verifisert %(displayName)s!",
@@ -930,8 +974,10 @@
     "Verification Pending": "Avventer verifisering",
     "Share Room": "Del rommet",
     "Share User": "Del brukeren",
-    "Upload %(count)s other files|other": "Last opp %(count)s andre filer",
-    "Upload %(count)s other files|one": "Last opp %(count)s annen fil",
+    "Upload %(count)s other files": {
+        "other": "Last opp %(count)s andre filer",
+        "one": "Last opp %(count)s annen fil"
+    },
     "Appearance": "Utseende",
     "Keys restored": "Nøklene ble gjenopprettet",
     "Reject invitation": "Avslå invitasjonen",
@@ -965,8 +1011,10 @@
     "Lock": "Lås",
     "Modern": "Moderne",
     "Server or user ID to ignore": "Tjener- eller bruker-ID-en som skal ignoreres",
-    "Show %(count)s more|other": "Vis %(count)s til",
-    "Show %(count)s more|one": "Vis %(count)s til",
+    "Show %(count)s more": {
+        "other": "Vis %(count)s til",
+        "one": "Vis %(count)s til"
+    },
     "Notification options": "Varselsinnstillinger",
     "Room options": "Rominnstillinger",
     "Your messages are not secure": "Dine meldinger er ikke sikre",
@@ -1016,7 +1064,6 @@
     "Use Single Sign On to continue": "Bruk Single Sign On for å fortsette",
     "Appearance Settings only affect this %(brand)s session.": "Stilendringer gjelder kun i denne %(brand)s sesjonen.",
     "Use Ctrl + Enter to send a message": "Bruk Ctrl + Enter for å sende en melding",
-    "%(count)s unread messages including mentions.|other": "%(count)s uleste meldinger inkludert der du nevnes.",
     "Belgium": "Belgia",
     "American Samoa": "Amerikansk Samoa",
     "United States": "USA",
@@ -1081,7 +1128,10 @@
     "Suggested Rooms": "Foreslåtte rom",
     "Welcome %(name)s": "Velkommen, %(name)s",
     "Verification requested": "Verifisering ble forespurt",
-    "%(count)s members|one": "%(count)s medlem",
+    "%(count)s members": {
+        "one": "%(count)s medlem",
+        "other": "%(count)s medlemmer"
+    },
     "No results found": "Ingen resultater ble funnet",
     "Public space": "Offentlig område",
     "Private space": "Privat område",
@@ -1092,14 +1142,15 @@
     "Leave Space": "Forlat området",
     "Save Changes": "Lagre endringer",
     "You don't have permission": "Du har ikke tillatelse",
-    "%(count)s rooms|other": "%(count)s rom",
-    "%(count)s rooms|one": "%(count)s rom",
+    "%(count)s rooms": {
+        "other": "%(count)s rom",
+        "one": "%(count)s rom"
+    },
     "Invite by username": "Inviter etter brukernavn",
     "Delete": "Slett",
     "Your public space": "Ditt offentlige område",
     "Your private space": "Ditt private område",
     "Invite to %(spaceName)s": "Inviter til %(spaceName)s",
-    "%(count)s members|other": "%(count)s medlemmer",
     "Random": "Tilfeldig",
     "unknown person": "ukjent person",
     "Public": "Offentlig",
@@ -1108,7 +1159,9 @@
     "Share invite link": "Del invitasjonslenke",
     "Leave space": "Forlat området",
     "Warn before quitting": "Advar før avslutning",
-    "%(count)s people you know have already joined|other": "%(count)s personer du kjenner har allerede blitt med",
+    "%(count)s people you know have already joined": {
+        "other": "%(count)s personer du kjenner har allerede blitt med"
+    },
     "Add existing rooms": "Legg til eksisterende rom",
     "Create a new room": "Opprett et nytt rom",
     "Value": "Verdi",
@@ -1164,14 +1217,27 @@
     "Continue with %(provider)s": "Fortsett med %(provider)s",
     "This address is already in use": "Denne adressen er allerede i bruk",
     "<a>In reply to</a> <pill>": "<a>Som svar på</a> <pill>",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)sendret navnet sitt %(count)s ganger",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)sfikk sin invitasjon trukket tilbake",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)sfikk sine invitasjoner trukket tilbake",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)savslo invitasjonen sin",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)sforlot og ble med igjen",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)sforlot og ble med igjen",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)sble med og forlot igjen",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)sble med og forlot igjen",
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "one": "%(oneUser)sfikk sin invitasjon trukket tilbake"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "one": "%(severalUsers)sfikk sine invitasjoner trukket tilbake"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "one": "%(oneUser)savslo invitasjonen sin"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "one": "%(oneUser)sforlot og ble med igjen"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "one": "%(severalUsers)sforlot og ble med igjen"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "one": "%(oneUser)sble med og forlot igjen"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "one": "%(severalUsers)sble med og forlot igjen"
+    },
     "Information": "Informasjon",
     "%(name)s cancelled verifying": "%(name)s avbrøt verifiseringen",
     "You cancelled verifying %(name)s": "Du avbrøt verifiseringen av %(name)s",

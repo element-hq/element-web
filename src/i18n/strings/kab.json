@@ -399,16 +399,23 @@
     "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s yefka tisirag i uttekki deg texxamt.",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s yuzen-d tugna.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s yekkes tansa tagejdant n texxamt-a.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s yerna tansiwin-nniḍen %(addresses)s ɣer texxamt-a.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s yerna tansiwin-nniḍen %(addresses)s ɣer texxamt-a.",
+        "one": "%(senderName)s yerna tansa-nniḍen %(addresses)s i texxamt-a."
+    },
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s awiǧit yettwarna sɣur %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s awiǧit yettwakkes sɣur %(senderName)s",
     "Not Trusted": "Ur yettwattkal ara",
     "%(displayName)s is typing …": "%(displayName)s yettaru-d …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s d %(count)s wiyaḍ ttarun-d …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s d wayeḍ-nniḍen yettaru-d …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s d %(count)s wiyaḍ ttarun-d …",
+        "one": "%(names)s d wayeḍ-nniḍen yettaru-d …"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s d %(lastPerson)s ttarun-d …",
-    "%(items)s and %(count)s others|other": "%(items)s d %(count)s wiyaḍ",
-    "%(items)s and %(count)s others|one": "%(items)s d wayeḍ-nniḍen",
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s d %(count)s wiyaḍ",
+        "one": "%(items)s d wayeḍ-nniḍen"
+    },
     "%(items)s and %(lastItem)s": "%(items)s d %(lastItem)s",
     "a few seconds ago": "kra n tesinin seg yimir-nni",
     "about a minute ago": "tasdidt seg yimir-nni",
@@ -543,9 +550,10 @@
     "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s ur yeǧǧi ara i yimerza ad kecmen ɣer texxamt.",
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s ibeddel anekcum n yimerza s %(rule)s",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s yesbadu tansa tagejdant i texxamt-a s %(address)s.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s yerna tansa-nniḍen %(addresses)s i texxamt-a.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s yekkes tansa-nni-nniḍen %(addresses)s i texxamt-a.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s yekkes tansa-nni tayeḍ %(addresses)s i texxamt-a.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s yekkes tansa-nni-nniḍen %(addresses)s i texxamt-a.",
+        "one": "%(senderName)s yekkes tansa-nni tayeḍ %(addresses)s i texxamt-a."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s ibeddel tansa-nni tayeḍ n texxamt-a.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ibeddel tansa tagejdant d tansa-nni tayeḍ i texxamt-a.",
     "Sends a message as html, without interpreting it as markdown": "Yuzen izen d html war ma isegza-t belli d tukksa n tecreḍt",
@@ -663,8 +671,10 @@
     "Encrypted by a deleted session": "Yettuwgelhen s texxamt yettwakksen",
     "Scroll to most recent messages": "Drurem ɣer yiznan akk n melmi kan",
     "Close preview": "Mdel taskant",
-    "and %(count)s others...|other": "d %(count)s wiyaḍ...",
-    "and %(count)s others...|one": "d wayeḍ-nniḍen...",
+    "and %(count)s others...": {
+        "other": "d %(count)s wiyaḍ...",
+        "one": "d wayeḍ-nniḍen..."
+    },
     "Invite to this room": "Nced-d ɣer texxamt-a",
     "Filter room members": "Sizdeg iɛeggalen n texxamt",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (i iǧehden %(powerLevelNumber)s",
@@ -679,7 +689,10 @@
     "Idle for %(duration)s": "D arurmid azal n %(duration)s",
     "Offline for %(duration)s": "Beṛṛa n tuqqna  azal n %(duration)s",
     "Replying": "Tiririt",
-    "(~%(count)s results)|one": "(~%(count)s igmaḍ)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s igmaḍ)",
+        "other": "(~%(count)s igmaḍ)"
+    },
     "Join Room": "Rnu ɣer texxamt",
     "Forget room": "Tettuḍ taxxamt",
     "Rooms": "Timɣiwent",
@@ -709,11 +722,17 @@
     "Verify User": "Senqed aseqdac",
     "Your messages are not secure": "Iznan-inek·inem d ariɣelsanen",
     "Hide verified sessions": "Ffer tiɣimiyin yettwasneqden",
-    "%(count)s sessions|other": "Tiɣimiyin n %(count)s",
+    "%(count)s sessions": {
+        "other": "Tiɣimiyin n %(count)s",
+        "one": "Tiɣimit n %(count)s"
+    },
     "Hide sessions": "Ffer tiɣimiyin",
     "Jump to read receipt": "Ɛeddi ɣer tɣuri n wawwaḍ",
     "Share Link to User": "Bḍu aseɣwen d useqdac",
-    "Remove %(count)s messages|one": "Kkes 1 izen",
+    "Remove %(count)s messages": {
+        "one": "Kkes 1 izen",
+        "other": "Kkes iznan n %(count)s"
+    },
     "Remove recent messages": "Kkes iznan n melmi kan",
     "Failed to mute user": "Tasusmi n useqdac ur yeddi ara",
     "Deactivate user?": "Kkes aseqdac-a?",
@@ -756,7 +775,9 @@
     "<a>In reply to</a> <pill>": "<a>Deg tririt i</a> <pill>",
     "e.g. my-room": "e.g. taxxamt-inu",
     "Sign in with single sign-on": "Qqen s unekcum asuf",
-    "And %(count)s more...|other": "D %(count)s ugar...",
+    "And %(count)s more...": {
+        "other": "D %(count)s ugar..."
+    },
     "Enter a server name": "Sekcem isem n uqeddac",
     "Matrix": "Matrix",
     "The following users may not exist": "Iseqdacen i d-iteddun yezmer ad ilin ulac-iten",
@@ -865,13 +886,20 @@
     "%(roomName)s does not exist.": "%(roomName)s ulac-it.",
     "Show rooms with unread messages first": "Sken tixxamin yesεan iznan ur nettwaɣra ara d timezwura",
     "List options": "Tixtiṛiyin n tebdart",
-    "Show %(count)s more|other": "Sken %(count)s ugar",
-    "Show %(count)s more|one": "Sken %(count)s ugar",
+    "Show %(count)s more": {
+        "other": "Sken %(count)s ugar",
+        "one": "Sken %(count)s ugar"
+    },
     "Notification options": "Tixtiṛiyin n wulɣu",
     "Room options": "Tixtiṛiyin n texxamt",
-    "%(count)s unread messages including mentions.|one": "1 ubdar ur nettwaɣra ara.",
-    "%(count)s unread messages.|other": "Iznan ur nettwaɣra ara %(count)s.",
-    "%(count)s unread messages.|one": "1 yizen ur nettwaɣra ara.",
+    "%(count)s unread messages including mentions.": {
+        "one": "1 ubdar ur nettwaɣra ara.",
+        "other": "%(count)s yiznan ur nettwaɣra ara rnu ɣer-sen ibdaren."
+    },
+    "%(count)s unread messages.": {
+        "other": "Iznan ur nettwaɣra ara %(count)s.",
+        "one": "1 yizen ur nettwaɣra ara."
+    },
     "Unread messages.": "Iznan ur nettwaɣra ara.",
     "All Rooms": "Akk tixxamin",
     "Unknown Command": "Taladna tarussint",
@@ -902,50 +930,94 @@
     "Rotate Left": "Zzi ɣer uzelmaḍ",
     "Rotate Right": "Zzi ɣer uyeffus",
     "Language Dropdown": "Tabdart n udrurem n tutlayin",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)srnan-d %(count)s tikkal",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)srnan-d",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)syerna-d %(count)s tikkal",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)syerna-d",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)sffɣen %(count)s tikkal",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s ffɣen",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s yeffeɣ %(count)s tikkal",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s yeffeɣ",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)srnan-d syen ffɣen %(count)s tikkal",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)srnan-d syen ffɣen",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)syerna-d syen yeffeɣ %(count)s tikkal",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)syerna-d syen yeffeɣ",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)sffɣen syen uɣalen-d %(count)s tikkal",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)sffɣen syen uɣalen-d",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)syeffeɣ-d syen yuɣal-d %(count)s tikkal",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)syeffeɣ-d syen yuɣal-d",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)sugin tinubgiwin-nsen %(count)s tikkal",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)sugin tinubgiwin-nsen",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)syugi tinubga-ines %(count)s tikkal",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)syugi tinubga-ines",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)sunfen i tinubgiwin-nsen yettwagin %(count)s tikkal",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)sunfen i tinubgiwin-nsen yettwagin",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)syunef i tinubga-ines yettwagin %(count)s tikkal",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)syunef i tinubga-ines yettwagin",
-    "were invited %(count)s times|other": "ttwanecden-d %(count)s tikkal",
-    "were invited %(count)s times|one": "ttwanecden-d",
-    "was invited %(count)s times|other": "yettwanced-d %(count)s tikkal",
-    "was invited %(count)s times|one": "yettwanced-d",
-    "were banned %(count)s times|other": "ttwazeglen %(count)s tikkal",
-    "were banned %(count)s times|one": "ttwazeglen",
-    "was banned %(count)s times|other": "yettwazgel %(count)s tikkal",
-    "was banned %(count)s times|one": "yettwazgel",
-    "were unbanned %(count)s times|other": "ur ttwazeglen ara %(count)s tikkal",
-    "were unbanned %(count)s times|one": "ur ttwazeglen ara",
-    "was unbanned %(count)s times|other": "ur yettwazgel ara %(count)s tikkal",
-    "was unbanned %(count)s times|one": "ur yettwazgel ara",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)sbeddlen ismawen-nsen %(count)s tikkal",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)sbeddlen ismawen-nsen",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)sibeddel isem-is %(count)s tikkal",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)sibeddel isem-is",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)sur gin ara isnifal %(count)s tikkal",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)sur gin ara isnifal",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sur ye gi ara isnifal %(count)s tikkal",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)sur ye gi ara isnifal",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)srnan-d %(count)s tikkal",
+        "one": "%(severalUsers)srnan-d"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)syerna-d %(count)s tikkal",
+        "one": "%(oneUser)syerna-d"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)sffɣen %(count)s tikkal",
+        "one": "%(severalUsers)s ffɣen"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)s yeffeɣ %(count)s tikkal",
+        "one": "%(oneUser)s yeffeɣ"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)srnan-d syen ffɣen %(count)s tikkal",
+        "one": "%(severalUsers)srnan-d syen ffɣen"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)syerna-d syen yeffeɣ %(count)s tikkal",
+        "one": "%(oneUser)syerna-d syen yeffeɣ"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)sffɣen syen uɣalen-d %(count)s tikkal",
+        "one": "%(severalUsers)sffɣen syen uɣalen-d"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)syeffeɣ-d syen yuɣal-d %(count)s tikkal",
+        "one": "%(oneUser)syeffeɣ-d syen yuɣal-d"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)sugin tinubgiwin-nsen %(count)s tikkal",
+        "one": "%(severalUsers)sugin tinubgiwin-nsen"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)syugi tinubga-ines %(count)s tikkal",
+        "one": "%(oneUser)syugi tinubga-ines"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)sunfen i tinubgiwin-nsen yettwagin %(count)s tikkal",
+        "one": "%(severalUsers)sunfen i tinubgiwin-nsen yettwagin"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)syunef i tinubga-ines yettwagin %(count)s tikkal",
+        "one": "%(oneUser)syunef i tinubga-ines yettwagin"
+    },
+    "were invited %(count)s times": {
+        "other": "ttwanecden-d %(count)s tikkal",
+        "one": "ttwanecden-d"
+    },
+    "was invited %(count)s times": {
+        "other": "yettwanced-d %(count)s tikkal",
+        "one": "yettwanced-d"
+    },
+    "were banned %(count)s times": {
+        "other": "ttwazeglen %(count)s tikkal",
+        "one": "ttwazeglen"
+    },
+    "was banned %(count)s times": {
+        "other": "yettwazgel %(count)s tikkal",
+        "one": "yettwazgel"
+    },
+    "were unbanned %(count)s times": {
+        "other": "ur ttwazeglen ara %(count)s tikkal",
+        "one": "ur ttwazeglen ara"
+    },
+    "was unbanned %(count)s times": {
+        "other": "ur yettwazgel ara %(count)s tikkal",
+        "one": "ur yettwazgel ara"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)sbeddlen ismawen-nsen %(count)s tikkal",
+        "one": "%(severalUsers)sbeddlen ismawen-nsen"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)sibeddel isem-is %(count)s tikkal",
+        "one": "%(oneUser)sibeddel isem-is"
+    },
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)sur gin ara isnifal %(count)s tikkal",
+        "one": "%(severalUsers)sur gin ara isnifal"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)sur ye gi ara isnifal %(count)s tikkal",
+        "one": "%(oneUser)sur ye gi ara isnifal"
+    },
     "QR Code": "Tangalt QR",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "YEgguma ad d-tali tedyant iɣef d-ttunefk tririt, ahat d tilin ur telli ara neɣ ur tesɛiḍ ara tisirag ad tt-twaliḍ.",
     "Room address": "Tansa n texxamt",
@@ -1030,16 +1102,16 @@
     "Phone numbers": "Uṭṭunen n tiliɣri",
     "Language and region": "Tutlayt d temnaḍt",
     "Not trusted": "Ur yettwattkal ara",
-    "%(count)s verified sessions|other": "%(count)s isenqed tiɣimiyin",
-    "%(count)s verified sessions|one": "1 n tɣimit i yettwasneqden",
-    "%(count)s sessions|one": "Tiɣimit n %(count)s",
+    "%(count)s verified sessions": {
+        "other": "%(count)s isenqed tiɣimiyin",
+        "one": "1 n tɣimit i yettwasneqden"
+    },
     "Demote yourself?": "Ṣubb deg usellun-ik·im?",
     "Demote": "Ṣubb deg usellun",
     "No recent messages by %(user)s found": "Ulac iznan i yettwafen sɣur %(user)s",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Ɛreḍ adrurem deg wazemzakud i wakken ad twaliḍ ma yella llan wid yellan uqbel.",
     "Remove recent messages by %(user)s": "Kkes iznan n melmi kan sɣur %(user)s",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "I tugget meqqren n yiznan, ayagi yezmer ad yeṭṭef kra n wakud. Ṛǧu ur sirin ara amsaɣ-ik·im deg leɛḍil.",
-    "Remove %(count)s messages|other": "Kkes iznan n %(count)s",
     "Failed to ban user": "Tigtin n useqdac ur yeddi ara",
     "Failed to change power level": "Asnifel n uswir afellay ur yeddi ara",
     "Failed to deactivate user": "Asensi n useqdac ur yeddi ara",
@@ -1192,7 +1264,6 @@
     "Room %(name)s": "Taxxamt %(name)s",
     "No recently visited rooms": "Ulac taxxamt yemmeẓren melmi kan",
     "Unnamed room": "Taxxamt war isem",
-    "(~%(count)s results)|other": "(~%(count)s igmaḍ)",
     "Share room": "Bḍu taxxamt",
     "Invites": "Inced-d",
     "Start chat": "Bdu adiwenni",
@@ -1219,7 +1290,6 @@
     "Favourited": "Yettusmenyaf",
     "Favourite": "Asmenyif",
     "Low Priority": "Tazwart taddayt",
-    "%(count)s unread messages including mentions.|other": "%(count)s yiznan ur nettwaɣra ara rnu ɣer-sen ibdaren.",
     "This room has already been upgraded.": "Taxxamt-a tettuleqqam yakan.",
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Taxxamt-a tesedday lqem n texxamt <roomVersion />, i yecreḍ uqeddac-a agejdan <i>ur yerkid ara</i>.",
     "Only room administrators will see this warning": "Ala inedbalen kan n texxamt ara iwalin tuccḍa-a",
@@ -1335,9 +1405,11 @@
     "Failed to forget room %(errCode)s": "Tatut n texxamt %(errCode)s ur teddi ara",
     "Search failed": "Ur iddi ara unadi",
     "No more results": "Ulac ugar n yigmaḍ",
-    "Uploading %(filename)s and %(count)s others|other": "Asali n %(filename)s d %(count)s wiyaḍ-nniḍen",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "Asali n %(filename)s d %(count)s wiyaḍ-nniḍen",
+        "one": "Asali n %(filename)s d %(count)s wayeḍ-nniḍen"
+    },
     "Uploading %(filename)s": "Asali n %(filename)s",
-    "Uploading %(filename)s and %(count)s others|one": "Asali n %(filename)s d %(count)s wayeḍ-nniḍen",
     "User menu": "Umuɣ n useqdac",
     "Could not load user profile": "Yegguma ad d-yali umaɣnu n useqdac",
     "New passwords must match each other.": "Awalen uffiren imaynuten ilaq ad mṣadan.",
@@ -1445,8 +1517,10 @@
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Afaylu-a <b>ɣezzif aṭas</b> i wakken ad d-yali. Talast n teɣzi n ufaylu d %(limit)s maca afaylu-a d %(sizeOfThisFile)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Ifuyla-a <b>ɣezzifit aṭas</b> i wakken ad d-alin. Talast n teɣzi n ufaylu d %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Kra n yifuyla <b>ɣezzifit aṭas</b> i wakken ad d-alin. Talast n teɣzi n ufaylu d %(limit)s.",
-    "Upload %(count)s other files|other": "Sali-d %(count)s ifuyla-nniḍen",
-    "Upload %(count)s other files|one": "Sali-d %(count)s afaylu-nniḍen",
+    "Upload %(count)s other files": {
+        "other": "Sali-d %(count)s ifuyla-nniḍen",
+        "one": "Sali-d %(count)s afaylu-nniḍen"
+    },
     "Upload Error": "Tuccḍa deg usali",
     "Remember my selection for this widget": "Cfu ɣef tefrant-inu i uwiǧit-a",
     "Wrong file type": "Anaw n yifuyla d arameɣtu",
@@ -1460,8 +1534,10 @@
     "Sent messages will be stored until your connection has returned.": "Iznan yettwaznen ad ttwakelsen alamma tuɣal-d tuqqna.",
     "You seem to be uploading files, are you sure you want to quit?": "Aql-ak·akem tessalayeḍ-d ifuyla, tebɣiḍ stidet ad teffɣeḍ?",
     "Server may be unavailable, overloaded, or search timed out :(": "Aqeddac yezmer ulac-it, iɛedda aɛebbi i ilaqen neɣ yekfa wakud n unadi:(",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Ɣur-k·m %(count)s ilɣa ur nettwaɣra ara deg lqem yezrin n texxamt-a.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Ɣur-k·m %(count)s ilɣa ur nettwaɣra ara deg lqem yezrin n texxamt-a.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "Ɣur-k·m %(count)s ilɣa ur nettwaɣra ara deg lqem yezrin n texxamt-a.",
+        "one": "Ɣur-k·m %(count)s ilɣa ur nettwaɣra ara deg lqem yezrin n texxamt-a."
+    },
     "The email address linked to your account must be entered.": "Tansa n yimayl i icudden ɣer umiḍan-ik·im ilaq ad tettwasekcem.",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Ttxil-k·m gar tamawt aql-ak·akem tkecmeḍ ɣer uqeddac %(hs)s, neɣ matrix.org.",
     "Failed to perform homeserver discovery": "Tifin n uqeddac agejdan tegguma ad teddu",

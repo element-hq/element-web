@@ -161,8 +161,10 @@
     "Unmute": "Fjern demping",
     "Mute": "Demp",
     "Admin Tools": "Administratorverktøy",
-    "and %(count)s others...|other": "og %(count)s andre...",
-    "and %(count)s others...|one": "og ein annan...",
+    "and %(count)s others...": {
+        "other": "og %(count)s andre...",
+        "one": "og ein annan..."
+    },
     "Invited": "Invitert",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (tilgangsnivå %(powerLevelNumber)s)",
     "Attachment": "Vedlegg",
@@ -190,8 +192,10 @@
     "Replying": "Svarar",
     "Unnamed room": "Rom utan namn",
     "Save": "Lagra",
-    "(~%(count)s results)|other": "(~%(count)s resultat)",
-    "(~%(count)s results)|one": "(~%(count)s resultat)",
+    "(~%(count)s results)": {
+        "other": "(~%(count)s resultat)",
+        "one": "(~%(count)s resultat)"
+    },
     "Join Room": "Bli med i rom",
     "Upload avatar": "Last avatar opp",
     "Settings": "Innstillingar",
@@ -283,54 +287,98 @@
     "Create new room": "Lag nytt rom",
     "No results": "Ingen resultat",
     "Home": "Heim",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s har kome inn %(count)s gonger",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s kom inn",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s har kome inn %(count)s gonger",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s kom inn",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s har fare %(count)s gonger",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s fór",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s har fare %(count)s gonger",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s fór",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s har kome inn og fare att %(count)s gonger",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s kom inn og fór",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s har kome inn og fare att %(count)s gonger",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s kom inn og fór",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s har fare og kome inn att %(count)s gonger",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s fór og kom inn att",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s har fare og kome inn att %(count)s gonger",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s fór og kom inn att",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s sa nei til innbydingane %(count)s gonger",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s sa nei til innbydingane",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s sa nei til innbydinga %(count)s gonger",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s sa nei til innbydinga",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s fekk innbydingane sine attekne %(count)s gonger",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)s fekk innbydinga si attteke",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)s fekk innbydinga si atteke %(count)s gonger",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)s fekk innbydinga si atteke",
-    "were invited %(count)s times|other": "vart boden inn %(count)s gonger",
-    "were invited %(count)s times|one": "vart boden inn",
-    "was invited %(count)s times|other": "vart boden inn %(count)s gonger",
-    "was invited %(count)s times|one": "vart boden inn",
-    "were banned %(count)s times|other": "har vore stengd ute %(count)s gonger",
-    "were banned %(count)s times|one": "vart stengd ute",
-    "was banned %(count)s times|other": "har vore stengd ute %(count)s gonger",
-    "was banned %(count)s times|one": "vart stengd ute",
-    "were unbanned %(count)s times|other": "har vorta sloppe inn att %(count)s gonger",
-    "were unbanned %(count)s times|one": "vart sloppe inn att",
-    "was unbanned %(count)s times|other": "har vorte sloppe inn att %(count)s gonger",
-    "was unbanned %(count)s times|one": "vart sloppe inn att",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s har endra namna sine %(count)s gonger",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s endra namna sine",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)s har endra namnet sitt %(count)s gonger",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s endra namnet sitt",
-    "%(items)s and %(count)s others|other": "%(items)s og %(count)s til",
-    "%(items)s and %(count)s others|one": "%(items)s og ein til",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)s har kome inn %(count)s gonger",
+        "one": "%(severalUsers)s kom inn"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)s har kome inn %(count)s gonger",
+        "one": "%(oneUser)s kom inn"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)s har fare %(count)s gonger",
+        "one": "%(severalUsers)s fór"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)s har fare %(count)s gonger",
+        "one": "%(oneUser)s fór"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)s har kome inn og fare att %(count)s gonger",
+        "one": "%(severalUsers)s kom inn og fór"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)s har kome inn og fare att %(count)s gonger",
+        "one": "%(oneUser)s kom inn og fór"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)s har fare og kome inn att %(count)s gonger",
+        "one": "%(severalUsers)s fór og kom inn att"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)s har fare og kome inn att %(count)s gonger",
+        "one": "%(oneUser)s fór og kom inn att"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)s sa nei til innbydingane %(count)s gonger",
+        "one": "%(severalUsers)s sa nei til innbydingane"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)s sa nei til innbydinga %(count)s gonger",
+        "one": "%(oneUser)s sa nei til innbydinga"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)s fekk innbydingane sine attekne %(count)s gonger",
+        "one": "%(severalUsers)s fekk innbydinga si attteke"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)s fekk innbydinga si atteke %(count)s gonger",
+        "one": "%(oneUser)s fekk innbydinga si atteke"
+    },
+    "were invited %(count)s times": {
+        "other": "vart boden inn %(count)s gonger",
+        "one": "vart boden inn"
+    },
+    "was invited %(count)s times": {
+        "other": "vart boden inn %(count)s gonger",
+        "one": "vart boden inn"
+    },
+    "were banned %(count)s times": {
+        "other": "har vore stengd ute %(count)s gonger",
+        "one": "vart stengd ute"
+    },
+    "was banned %(count)s times": {
+        "other": "har vore stengd ute %(count)s gonger",
+        "one": "vart stengd ute"
+    },
+    "were unbanned %(count)s times": {
+        "other": "har vorta sloppe inn att %(count)s gonger",
+        "one": "vart sloppe inn att"
+    },
+    "was unbanned %(count)s times": {
+        "other": "har vorte sloppe inn att %(count)s gonger",
+        "one": "vart sloppe inn att"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)s har endra namna sine %(count)s gonger",
+        "one": "%(severalUsers)s endra namna sine"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)s har endra namnet sitt %(count)s gonger",
+        "one": "%(oneUser)s endra namnet sitt"
+    },
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s og %(count)s til",
+        "one": "%(items)s og ein til"
+    },
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "collapse": "Slå saman",
     "expand": "Utvid",
     "<a>In reply to</a> <pill>": "<a>Som svar til</a> <pill>",
     "Start chat": "Start samtale",
-    "And %(count)s more...|other": "Og %(count)s til...",
+    "And %(count)s more...": {
+        "other": "Og %(count)s til..."
+    },
     "Preparing to send logs": "Førebur loggsending",
     "Logs sent": "Loggar sende",
     "Thank you!": "Takk skal du ha!",
@@ -417,9 +465,11 @@
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Prøvde å laste eit bestemt punkt i rommet sin historikk, men du har ikkje lov til å sjå den spesifike meldingen.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Prøvde å lasta eit bestemt punkt i rommet sin historikk, men klarde ikkje å finna det.",
     "Failed to load timeline position": "Innlasting av punkt i historikken feila.",
-    "Uploading %(filename)s and %(count)s others|other": "Lastar opp %(filename)s og %(count)s andre",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "Lastar opp %(filename)s og %(count)s andre",
+        "one": "Lastar opp %(filename)s og %(count)s andre"
+    },
     "Uploading %(filename)s": "Lastar opp %(filename)s",
-    "Uploading %(filename)s and %(count)s others|one": "Lastar opp %(filename)s og %(count)s andre",
     "Success": "Suksess",
     "Unable to remove contact information": "Klarte ikkje å fjerna kontaktinfo",
     "<not supported>": "<ikkje støtta>",
@@ -498,8 +548,10 @@
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Meldinga di vart ikkje send, for denne heimetenaren har nådd grensa for maksimalt aktive brukarar pr. månad. Kontakt <a>systemadministratoren</a> for å vidare nytte denne tenesta.",
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Denne meldingen vart ikkje send fordi heimetenaren har nådd grensa for tilgjengelege systemressursar. Kontakt <a>systemadministratoren</a> for å vidare nytta denne tenesta.",
     "Add room": "Legg til rom",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Du har %(count)s uleste varslingar i ein tidligare versjon av dette rommet.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Du har %(count)s ulest varsel i ein tidligare versjon av dette rommet.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "Du har %(count)s uleste varslingar i ein tidligare versjon av dette rommet.",
+        "one": "Du har %(count)s ulest varsel i ein tidligare versjon av dette rommet."
+    },
     "Guest": "Gjest",
     "Could not load user profile": "Klarde ikkje å laste brukarprofilen",
     "Your password has been reset.": "Passodet ditt vart nullstilt.",
@@ -629,8 +681,10 @@
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Prøv å rulle oppover i historikken for å sjå om det finst nokon eldre.",
     "Remove recent messages by %(user)s": "Fjern nyare meldingar frå %(user)s",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Ved store mengder meldingar kan dette ta tid. Ver venleg å ikkje last om klienten din mens dette pågår.",
-    "Remove %(count)s messages|other": "Fjern %(count)s meldingar",
-    "Remove %(count)s messages|one": "Fjern 1 melding",
+    "Remove %(count)s messages": {
+        "other": "Fjern %(count)s meldingar",
+        "one": "Fjern 1 melding"
+    },
     "Deactivate user?": "Deaktivere brukar?",
     "Deactivate user": "Deaktiver brukar",
     "Failed to deactivate user": "Fekk ikkje til å deaktivere brukaren",
@@ -668,8 +722,10 @@
     "Reject & Ignore user": "Avslå og ignorer brukar",
     "You're previewing %(roomName)s. Want to join it?": "Du førehandsviser %(roomName)s. Ynskjer du å bli med ?",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s kan ikkje førehandsvisast. Ynskjer du å bli med ?",
-    "%(count)s unread messages.|other": "%(count)s uleste meldingar.",
-    "%(count)s unread messages.|one": "1 ulesen melding.",
+    "%(count)s unread messages.": {
+        "other": "%(count)s uleste meldingar.",
+        "one": "1 ulesen melding."
+    },
     "Unread messages.": "Uleste meldingar.",
     "Unknown Command": "Ukjend kommando",
     "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Du kan bruka <code>/help</code> for å lista tilgjengelege kommandoar. Meinte du å senda dette som ein melding ?",
@@ -745,8 +801,10 @@
     "Collapse room list section": "Minimer romkatalog-seksjonen",
     "Expand room list section": "Utvid romkatalog-seksjonen",
     "%(displayName)s is typing …": "%(displayName)s skriv…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s og %(count)s andre skriv…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s og ein annan skriv…",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s og %(count)s andre skriv…",
+        "one": "%(names)s og ein annan skriv…"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s og %(lastPerson)s skriv…",
     "Enable Emoji suggestions while typing": "Aktiver Emoji-forslag under skriving",
     "Show a placeholder for removed messages": "Vis ein plassholdar for sletta meldingar",
@@ -815,10 +873,14 @@
     "Opens chat with the given user": "Opna ein samtale med den spesifiserte brukaren",
     "Sends a message to the given user": "Send ein melding til den spesifiserte brukaren",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s endra romnamnet frå %(oldRoomName)s til %(newRoomName)s.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s la til dei alternative adressene %(addresses)s for dette rommet.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s la til ei alternativ adresse %(addresses)s for dette rommet.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s tok vekk dei alternative adressene %(addresses)s for dette rommet.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s tok vekk den alternative adressa %(addresses)s for dette rommet.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s la til dei alternative adressene %(addresses)s for dette rommet.",
+        "one": "%(senderName)s la til ei alternativ adresse %(addresses)s for dette rommet."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s tok vekk dei alternative adressene %(addresses)s for dette rommet.",
+        "one": "%(senderName)s tok vekk den alternative adressa %(addresses)s for dette rommet."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s endre den alternative adressa for dette rommet.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s endra hovud- og alternativ-adressene for dette rommet.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s endre adressene for dette rommet.",
@@ -986,9 +1048,15 @@
     "Deactivate account": "Avliv brukarkontoen",
     "Enter a new identity server": "Skriv inn ein ny identitetstenar",
     "Rename": "Endra namn",
-    "Click the button below to confirm signing out these devices.|one": "Trykk på knappen under for å stadfesta utlogging frå denne eininga.",
-    "Confirm signing out these devices|one": "Stadfest utlogging frå denne eininga",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Stadfest utlogging av denne eininga ved å nytta Single-sign-on for å bevise identiteten din.",
+    "Click the button below to confirm signing out these devices.": {
+        "one": "Trykk på knappen under for å stadfesta utlogging frå denne eininga."
+    },
+    "Confirm signing out these devices": {
+        "one": "Stadfest utlogging frå denne eininga"
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Stadfest utlogging av denne eininga ved å nytta Single-sign-on for å bevise identiteten din."
+    },
     "Verify this device by confirming the following number appears on its screen.": "Verifiser denne eininga ved å stadfeste det følgjande talet når det kjem til syne på skjermen.",
     "Quick settings": "Hurtigval",
     "More options": "Fleire val",
@@ -998,8 +1066,10 @@
     "Room settings": "Rominnstillingar",
     "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s endra kven som kan bli med i rommet. <a>Vis innstillingar</a>.",
     "Join the conference from the room information card on the right": "Bli med i konferanse frå rominfo-kortet til høgre",
-    "Final result based on %(count)s votes|one": "Endeleg resultat basert etter %(count)s stemme",
-    "Final result based on %(count)s votes|other": "Endeleg resultat basert etter %(count)s stemmer",
+    "Final result based on %(count)s votes": {
+        "one": "Endeleg resultat basert etter %(count)s stemme",
+        "other": "Endeleg resultat basert etter %(count)s stemmer"
+    },
     "Failed to transfer call": "Overføring av samtalen feila",
     "Transfer Failed": "Overføring feila",
     "Unable to transfer call": "Fekk ikkje til å overføra samtalen",

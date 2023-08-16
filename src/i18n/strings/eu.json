@@ -189,8 +189,10 @@
     "Unmute": "Audioa aktibatu",
     "Unnamed Room": "Izen gabeko gela",
     "Uploading %(filename)s": "%(filename)s igotzen",
-    "Uploading %(filename)s and %(count)s others|one": "%(filename)s eta beste %(count)s igotzen",
-    "Uploading %(filename)s and %(count)s others|other": "%(filename)s eta beste %(count)s igotzen",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "%(filename)s eta beste %(count)s igotzen",
+        "other": "%(filename)s eta beste %(count)s igotzen"
+    },
     "Upload avatar": "Igo abatarra",
     "Upload Failed": "Igoerak huts egin du",
     "Usage": "Erabilera",
@@ -232,8 +234,10 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "This server does not support authentication with a phone number.": "Zerbitzari honek ez du telefono zenbakia erabiliz autentifikatzea onartzen.",
     "Sent messages will be stored until your connection has returned.": "Bidalitako mezuak zure konexioa berreskuratu arte gordeko dira.",
-    "(~%(count)s results)|one": "(~%(count)s emaitza)",
-    "(~%(count)s results)|other": "(~%(count)s emaitza)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s emaitza)",
+        "other": "(~%(count)s emaitza)"
+    },
     "New Password": "Pasahitz berria",
     "Start automatically after system login": "Hasi automatikoki sisteman saioa hasi eta gero",
     "Analytics": "Estatistikak",
@@ -270,8 +274,10 @@
     "Do you want to set an email address?": "E-mail helbidea ezarri nahi duzu?",
     "This will allow you to reset your password and receive notifications.": "Honek zure pasahitza berrezarri eta jakinarazpenak jasotzea ahalbidetuko dizu.",
     "Deops user with given id": "Emandako ID-a duen erabiltzailea mailaz jaisten du",
-    "and %(count)s others...|other": "eta beste %(count)s…",
-    "and %(count)s others...|one": "eta beste bat…",
+    "and %(count)s others...": {
+        "other": "eta beste %(count)s…",
+        "one": "eta beste bat…"
+    },
     "Delete widget": "Ezabatu trepeta",
     "Define the power level of a user": "Zehaztu erabiltzaile baten botere maila",
     "Edit": "Editatu",
@@ -333,55 +339,99 @@
     "URL previews are disabled by default for participants in this room.": "URLen aurrebistak desgaituta daude gela honetako partaideentzat.",
     "A text message has been sent to %(msisdn)s": "Testu mezu bat bidali da hona: %(msisdn)s",
     "Jump to read receipt": "Saltatu irakurragirira",
-    "was banned %(count)s times|one": "debekatua izan da",
-    "were invited %(count)s times|other": "%(count)s aldiz gonbidatuak izan dira",
-    "were invited %(count)s times|one": "gonbidatuak izan dira",
-    "was invited %(count)s times|other": "%(count)s aldiz gonbidatua izan da",
-    "was invited %(count)s times|one": "gonbidatua izan da",
-    "were banned %(count)s times|other": "%(count)s aldiz debekatuak izan dira",
-    "were banned %(count)s times|one": "debekatuak izan dira",
-    "was banned %(count)s times|other": "%(count)s aldiz debekatuak izan dira",
-    "were unbanned %(count)s times|other": "%(count)s aldiz kendu zaie debekua",
-    "were unbanned %(count)s times|one": "debekua kendu zaie",
-    "was unbanned %(count)s times|other": "%(count)s aldiz kendu zaio debekua",
-    "was unbanned %(count)s times|one": "debekua kendu zaio",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s erabiltzaileek bere izena aldatu dute %(count)s aldiz",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s erabiltzaileek bere izena aldatu dute",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)s erabiltzaileak bere izena aldatu du %(count)s aldiz",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s erabiltzaileak bere izena aldatu du",
+    "was banned %(count)s times": {
+        "one": "debekatua izan da",
+        "other": "%(count)s aldiz debekatuak izan dira"
+    },
+    "were invited %(count)s times": {
+        "other": "%(count)s aldiz gonbidatuak izan dira",
+        "one": "gonbidatuak izan dira"
+    },
+    "was invited %(count)s times": {
+        "other": "%(count)s aldiz gonbidatua izan da",
+        "one": "gonbidatua izan da"
+    },
+    "were banned %(count)s times": {
+        "other": "%(count)s aldiz debekatuak izan dira",
+        "one": "debekatuak izan dira"
+    },
+    "were unbanned %(count)s times": {
+        "other": "%(count)s aldiz kendu zaie debekua",
+        "one": "debekua kendu zaie"
+    },
+    "was unbanned %(count)s times": {
+        "other": "%(count)s aldiz kendu zaio debekua",
+        "one": "debekua kendu zaio"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)s erabiltzaileek bere izena aldatu dute %(count)s aldiz",
+        "one": "%(severalUsers)s erabiltzaileek bere izena aldatu dute"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)s erabiltzaileak bere izena aldatu du %(count)s aldiz",
+        "one": "%(oneUser)s erabiltzaileak bere izena aldatu du"
+    },
     "collapse": "tolestu",
     "expand": "hedatu",
-    "And %(count)s more...|other": "Eta %(count)s gehiago…",
+    "And %(count)s more...": {
+        "other": "Eta %(count)s gehiago…"
+    },
     "Idle for %(duration)s": "Inaktibo %(duration)s",
     "Delete Widget": "Ezabatu trepeta",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Trepeta ezabatzean gelako kide guztientzat kentzen da. Ziur trepeta ezabatu nahi duzula?",
     "%(nameList)s %(transitionList)s": "%(nameList)s%(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s %(count)s aldiz elkartu dira",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s elkartu dira",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s%(count)s aldiz elkartu da",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s elkartu da",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s%(count)s aldiz atera dira",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s atera dira",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s%(count)s aldiz atera da",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s atera da",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s elkartu eta atera dira %(count)s aldiz",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s elkartu eta atera dira",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s elkartu eta atera da %(count)s aldiz",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s elkartu eta atera da",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s atera eta berriz elkartu dira %(count)s aldiz",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s atera eta berriz elkartu da",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s atera eta berriz elkartu da %(count)s aldiz",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s atera eta berriz elkartu da",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s erabiltzaileek bere gonbidapenak ukatu dituzte %(count)s aldiz",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s erabiltzaileek bere gonbidapenak ukatu dituzte",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s erabiltzaileak bere gonbidapena ukatu du %(count)s aldiz",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s erabiltzaileak bere gonbidapena ukatu du",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s erabiltzaileei gonbidapena indargabetu zaie %(count)s aldiz",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)s erabiltzaileei gonbidapena indargabetu zaie",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)s erabiltzaileari gonbidapena indargabetu zaio %(count)s aldiz",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)s erabiltzaileari gonbidapena indargabetu zaio",
-    "%(items)s and %(count)s others|other": "%(items)s eta beste %(count)s",
-    "%(items)s and %(count)s others|one": "%(items)s eta beste bat",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)s %(count)s aldiz elkartu dira",
+        "one": "%(severalUsers)s elkartu dira"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)s%(count)s aldiz elkartu da",
+        "one": "%(oneUser)s elkartu da"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)s%(count)s aldiz atera dira",
+        "one": "%(severalUsers)s atera dira"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)s%(count)s aldiz atera da",
+        "one": "%(oneUser)s atera da"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)s elkartu eta atera dira %(count)s aldiz",
+        "one": "%(severalUsers)s elkartu eta atera dira"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)s elkartu eta atera da %(count)s aldiz",
+        "one": "%(oneUser)s elkartu eta atera da"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)s atera eta berriz elkartu dira %(count)s aldiz",
+        "one": "%(severalUsers)s atera eta berriz elkartu da"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)s atera eta berriz elkartu da %(count)s aldiz",
+        "one": "%(oneUser)s atera eta berriz elkartu da"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)s erabiltzaileek bere gonbidapenak ukatu dituzte %(count)s aldiz",
+        "one": "%(severalUsers)s erabiltzaileek bere gonbidapenak ukatu dituzte"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)s erabiltzaileak bere gonbidapena ukatu du %(count)s aldiz",
+        "one": "%(oneUser)s erabiltzaileak bere gonbidapena ukatu du"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)s erabiltzaileei gonbidapena indargabetu zaie %(count)s aldiz",
+        "one": "%(severalUsers)s erabiltzaileei gonbidapena indargabetu zaie"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)s erabiltzaileari gonbidapena indargabetu zaio %(count)s aldiz",
+        "one": "%(oneUser)s erabiltzaileari gonbidapena indargabetu zaio"
+    },
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s eta beste %(count)s",
+        "one": "%(items)s eta beste bat"
+    },
     "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "%(brand)s bertsio zahar batek datuak antzeman dira. Honek bertsio zaharrean  muturretik muturrerako zifratzea ez funtzionatzea eragingo du. Azkenaldian bertsio zaharrean bidali edo jasotako zifratutako mezuak agian ezin izango dira deszifratu bertsio honetan. Honek ere Bertsio honekin egindako mezu trukeak huts egitea ekar dezake. Arazoak badituzu, amaitu saioa eta hasi berriro saioa. Mezuen historiala gordetzeko, esportatu eta berriro inportatu zure gakoak.",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Ezin izango duzu hau aldatu zure burua mailaz jaisten ari zarelako, zu bazara gelan baimenak dituen azken erabiltzailea ezin izango dira baimenak berreskuratu.",
     "Send an encrypted reply…": "Bidali zifratutako erantzun bat…",
@@ -594,8 +644,10 @@
     "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s erabiltzaileak gela publikoa bihurtu du esteka dakien edonorentzat.",
     "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s erabiltzaileak gela soilik gonbidatuentzat bihurtu du.",
     "%(displayName)s is typing …": "%(displayName)s idazten ari da …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s eta beste %(count)s idatzen ari dira …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s eta beste bat idazten ari dira …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s eta beste %(count)s idatzen ari dira …",
+        "one": "%(names)s eta beste bat idazten ari dira …"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s eta %(lastPerson)s idazten ari dira …",
     "Render simple counters in room header": "Jarri kontagailu sinpleak gelaren goiburuan",
     "Enable Emoji suggestions while typing": "Proposatu emojiak  idatzi bitartean",
@@ -795,8 +847,10 @@
     "Revoke invite": "Indargabetu gonbidapena",
     "Invited by %(sender)s": "%(sender)s erabiltzaileak gonbidatuta",
     "Remember my selection for this widget": "Gogoratu nire hautua trepeta honentzat",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Irakurri gabeko %(count)s jakinarazpen dituzu gela honen aurreko bertsio batean.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Irakurri gabeko %(count)s jakinarazpen duzu gela honen aurreko bertsio batean.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "Irakurri gabeko %(count)s jakinarazpen dituzu gela honen aurreko bertsio batean.",
+        "one": "Irakurri gabeko %(count)s jakinarazpen duzu gela honen aurreko bertsio batean."
+    },
     "The file '%(fileName)s' failed to upload.": "Huts egin du '%(fileName)s' fitxategia igotzean.",
     "The server does not support the room version specified.": "Zerbitzariak ez du emandako gela-bertsioa onartzen.",
     "Unbans user with given ID": "ID zehatz bat duen erabiltzaileari debekua altxatzen dio",
@@ -850,8 +904,10 @@
     "Upload files (%(current)s of %(total)s)": "Igo fitxategiak (%(current)s / %(total)s)",
     "Upload files": "Igo fitxategiak",
     "Upload": "Igo",
-    "Upload %(count)s other files|other": "Igo beste %(count)s fitxategiak",
-    "Upload %(count)s other files|one": "Igo beste fitxategi %(count)s",
+    "Upload %(count)s other files": {
+        "other": "Igo beste %(count)s fitxategiak",
+        "one": "Igo beste fitxategi %(count)s"
+    },
     "Cancel All": "Ezeztatu dena",
     "Upload Error": "Igoera errorea",
     "Use an email address to recover your account": "Erabili e-mail helbidea zure kontua berreskuratzeko",
@@ -893,10 +949,14 @@
     "Edited at %(date)s. Click to view edits.": "Edizio data: %(date)s. Sakatu edizioak ikusteko.",
     "Message edits": "Mezuaren edizioak",
     "Show all": "Erakutsi denak",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s erabiltzaileek ez dute aldaketarik egin %(count)s aldiz",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s erabiltzaileek ez dute aldaketarik egin",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s erabiltzaileak ez du aldaketarik egin %(count)s aldiz",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s erabiltzaileak ez du aldaketarik egin",
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)s erabiltzaileek ez dute aldaketarik egin %(count)s aldiz",
+        "one": "%(severalUsers)s erabiltzaileek ez dute aldaketarik egin"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)s erabiltzaileak ez du aldaketarik egin %(count)s aldiz",
+        "one": "%(oneUser)s erabiltzaileak ez du aldaketarik egin"
+    },
     "Removing…": "Kentzen…",
     "Clear all data": "Garbitu datu guztiak",
     "Your homeserver doesn't seem to support this feature.": "Antza zure hasiera-zerbitzariak ez du ezaugarri hau onartzen.",
@@ -990,8 +1050,10 @@
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Saiatu denbora-lerroa gora korritzen aurreko besterik dagoen ikusteko.",
     "Remove recent messages by %(user)s": "Kendu %(user)s erabiltzailearen azken mezuak",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Mezu kopuru handientzako, honek denbora behar lezake. Ez freskatu zure bezeroa bitartean.",
-    "Remove %(count)s messages|other": "Kendu %(count)s mezu",
-    "Remove %(count)s messages|one": "Kendu mezu 1",
+    "Remove %(count)s messages": {
+        "other": "Kendu %(count)s mezu",
+        "one": "Kendu mezu 1"
+    },
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Erabiltzailea desaktibatzean saioa itxiko zaio eta ezin izango du berriro hasi. Gainera, dauden gela guztietatik aterako da. Ekintza hau ezin da aurreko egoera batera ekarri. Ziur erabiltzaile hau desaktibatu nahi duzula?",
     "Remove recent messages": "Kendu azken mezuak",
     "Bold": "Lodia",
@@ -1001,8 +1063,14 @@
     "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "%(roomName)s gelarako gonbidapena zure kontuarekin lotuta ez dagoen %(email)s helbidera bidali da",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Erabili identitate zerbitzari bat ezarpenetan gonbidapenak zuzenean %(brand)s-en jasotzeko.",
     "Share this email in Settings to receive invites directly in %(brand)s.": "Partekatu e-mail hau ezarpenetan gonbidapenak zuzenean %(brand)s-en jasotzeko.",
-    "%(count)s unread messages including mentions.|other": "irakurri gabeko %(count)s mezu aipamenak barne.",
-    "%(count)s unread messages.|other": "irakurri gabeko %(count)s mezu.",
+    "%(count)s unread messages including mentions.": {
+        "other": "irakurri gabeko %(count)s mezu aipamenak barne.",
+        "one": "Irakurri gabeko aipamen 1."
+    },
+    "%(count)s unread messages.": {
+        "other": "irakurri gabeko %(count)s mezu.",
+        "one": "Irakurri gabeko mezu 1."
+    },
     "Show image": "Erakutsi irudia",
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "<newIssueLink>Sortu txosten berri bat</newIssueLink> GitHub zerbitzarian arazo hau ikertu dezagun.",
     "e.g. my-room": "adib. nire-gela",
@@ -1036,8 +1104,6 @@
     "contact the administrators of identity server <idserver />": "<idserver /> identitate-zerbitzariko administratzaileekin kontaktuak jarri",
     "wait and try again later": "itxaron eta berriro saiatu",
     "Room %(name)s": "%(name)s gela",
-    "%(count)s unread messages including mentions.|one": "Irakurri gabeko aipamen 1.",
-    "%(count)s unread messages.|one": "Irakurri gabeko mezu 1.",
     "Unread messages.": "Irakurri gabeko mezuak.",
     "Failed to deactivate user": "Huts egin du erabiltzailea desaktibatzeak",
     "This client does not support end-to-end encryption.": "Bezero honek ez du muturretik muturrerako zifratzea onartzen.",
@@ -1162,8 +1228,10 @@
     "<userName/> wants to chat": "<userName/> erabiltzaileak txateatu nahi du",
     "Start chatting": "Hasi txateatzen",
     "Hide verified sessions": "Ezkutatu egiaztatutako saioak",
-    "%(count)s verified sessions|other": "%(count)s egiaztatutako saio",
-    "%(count)s verified sessions|one": "Egiaztatutako saio 1",
+    "%(count)s verified sessions": {
+        "other": "%(count)s egiaztatutako saio",
+        "one": "Egiaztatutako saio 1"
+    },
     "Reactions": "Erreakzioak",
     "Upgrade private room": "Eguneratu gela pribatua",
     "Upgrade public room": "Eguneratu gela publikoa",
@@ -1263,8 +1331,10 @@
     "Encrypted by a deleted session": "Ezabatutako saio batek zifratua",
     "Your messages are not secure": "Zure mezuak ez daude babestuta",
     "Your homeserver": "Zure hasiera-zerbitzaria",
-    "%(count)s sessions|other": "%(count)s saio",
-    "%(count)s sessions|one": "saio %(count)s",
+    "%(count)s sessions": {
+        "other": "%(count)s saio",
+        "one": "saio %(count)s"
+    },
     "Hide sessions": "Ezkutatu saioak",
     "Verify by emoji": "Egiaztatu emoji bidez",
     "Verify by comparing unique emoji.": "Egiaztatu emoji bakanak konparatuz.",
@@ -1333,10 +1403,14 @@
     "Not currently indexing messages for any room.": "Orain ez da inolako gelako mezurik indexatzen.",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s / %(totalRooms)s",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s erabiltzaileak gelaren izena aldatu du%(oldRoomName)s izatetik %(newRoomName)s izatera.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak gehitu dizkio gela honi.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s erabiltzaileak %(addresses)s helbideak gehitu dizkio gela honi.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s erabiltzaileak %(addresses)s helbideak kendu dizkio gela honi.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak kendu dizkio gela honi.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak gehitu dizkio gela honi.",
+        "one": "%(senderName)s erabiltzaileak %(addresses)s helbideak gehitu dizkio gela honi."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s erabiltzaileak %(addresses)s helbideak kendu dizkio gela honi.",
+        "one": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak kendu dizkio gela honi."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s erabiltzaileak gela honen ordezko helbideak aldatu ditu.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s erabiltzaileak gela honen helbide nagusia eta ordezko helbideak aldatu ditu.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s erabiltzaileak gela honen helbideak aldatu ditu.",
@@ -1498,8 +1572,10 @@
     "A-Z": "A-Z",
     "Message preview": "Mezu-aurrebista",
     "List options": "Zerrenda-aukerak",
-    "Show %(count)s more|other": "Erakutsi %(count)s gehiago",
-    "Show %(count)s more|one": "Erakutsi %(count)s gehiago",
+    "Show %(count)s more": {
+        "other": "Erakutsi %(count)s gehiago",
+        "one": "Erakutsi %(count)s gehiago"
+    },
     "Room options": "Gelaren aukerak",
     "Error creating address": "Errorea helbidea sortzean",
     "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.": "Errorea gertatu da helbidea sortzean. Agian ez du zerbitzariak onartzen edo behin behineko arazo bat egon da.",

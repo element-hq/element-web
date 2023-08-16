@@ -14,8 +14,10 @@
     "Always show message timestamps": "Always show message timestamps",
     "Authentication": "Authentication",
     "%(items)s and %(lastItem)s": "%(items)s and %(lastItem)s",
-    "and %(count)s others...|other": "and %(count)s others...",
-    "and %(count)s others...|one": "and one other...",
+    "and %(count)s others...": {
+        "other": "and %(count)s others...",
+        "one": "and one other..."
+    },
     "A new password must be entered.": "A new password must be entered.",
     "An error has occurred.": "An error has occurred.",
     "Anyone": "Anyone",
@@ -273,12 +275,16 @@
     "Start authentication": "Start authentication",
     "Unnamed Room": "Unnamed Room",
     "Uploading %(filename)s": "Uploading %(filename)s",
-    "Uploading %(filename)s and %(count)s others|one": "Uploading %(filename)s and %(count)s other",
-    "Uploading %(filename)s and %(count)s others|other": "Uploading %(filename)s and %(count)s others",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "Uploading %(filename)s and %(count)s other",
+        "other": "Uploading %(filename)s and %(count)s others"
+    },
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
     "You must <a>register</a> to use this functionality": "You must <a>register</a> to use this functionality",
-    "(~%(count)s results)|one": "(~%(count)s result)",
-    "(~%(count)s results)|other": "(~%(count)s results)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s result)",
+        "other": "(~%(count)s results)"
+    },
     "New Password": "New Password",
     "Something went wrong!": "Something went wrong!",
     "Your browser does not support the required cryptography extensions": "Your browser does not support the required cryptography extensions",
@@ -385,7 +391,9 @@
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s widget modified by %(senderName)s",
     "%(displayName)s is typing …": "%(displayName)s is typing …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s and %(count)s others are typing …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s and %(count)s others are typing …"
+    },
     "Your %(brand)s is misconfigured": "Your %(brand)s is misconfigured",
     "Call failed due to misconfigured server": "Call failed due to misconfigured server",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.",

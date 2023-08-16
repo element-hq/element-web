@@ -42,8 +42,10 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Yhdistäminen kotipalvelimeen HTTP:n avulla ei ole mahdollista, kun selaimen osoitepalkissa on HTTPS-osoite. Käytä joko HTTPS:ää tai <a>salli turvattomat komentosarjat</a>.",
     "Change Password": "Vaihda salasana",
     "Account": "Tili",
-    "and %(count)s others...|other": "ja %(count)s muuta...",
-    "and %(count)s others...|one": "ja yksi muu...",
+    "and %(count)s others...": {
+        "other": "ja %(count)s muuta...",
+        "one": "ja yksi muu..."
+    },
     "Banned users": "Porttikiellon saaneet käyttäjät",
     "Bans user with given id": "Antaa porttikiellon tunnuksen mukaiselle käyttäjälle",
     "Changes your display nickname": "Vaihtaa näyttönimesi",
@@ -133,7 +135,10 @@
     "Unmute": "Poista mykistys",
     "Unnamed Room": "Nimeämätön huone",
     "Uploading %(filename)s": "Lähetetään %(filename)s",
-    "Uploading %(filename)s and %(count)s others|one": "Lähetetään %(filename)s ja %(count)s muuta",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "Lähetetään %(filename)s ja %(count)s muuta",
+        "other": "Lähetetään %(filename)s ja %(count)s muuta"
+    },
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s vaihtoi huoneen nimeksi %(roomName)s.",
     "Enable automatic language detection for syntax highlighting": "Ota automaattinen kielentunnistus käyttöön syntaksikorostusta varten",
     "Hangup": "Lopeta",
@@ -172,8 +177,10 @@
     "Failed to copy": "Kopiointi epäonnistui",
     "Connectivity to the server has been lost.": "Yhteys palvelimeen menetettiin.",
     "Sent messages will be stored until your connection has returned.": "Lähetetyt viestit tallennetaan kunnes yhteys on taas muodostettu.",
-    "(~%(count)s results)|one": "(~%(count)s tulos)",
-    "(~%(count)s results)|other": "(~%(count)s tulosta)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s tulos)",
+        "other": "(~%(count)s tulosta)"
+    },
     "New Password": "Uusi salasana",
     "Start automatically after system login": "Käynnistä automaattisesti käyttöjärjestelmään kirjautumisen jälkeen",
     "Analytics": "Analytiikka",
@@ -212,7 +219,6 @@
     "Unable to remove contact information": "Yhteystietojen poistaminen epäonnistui",
     "Unable to verify email address.": "Sähköpostin vahvistaminen epäonnistui.",
     "Unable to enable Notifications": "Ilmoitusten käyttöönotto epäonnistui",
-    "Uploading %(filename)s and %(count)s others|other": "Lähetetään %(filename)s ja %(count)s muuta",
     "Upload Failed": "Lähetys epäonnistui",
     "Usage": "Käyttö",
     "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s vaihtoi aiheeksi \"%(topic)s\".",
@@ -296,8 +302,13 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Sinut ohjataan kolmannen osapuolen sivustolle, jotta voit autentikoida tilisi käyttääksesi palvelua %(integrationsUrl)s. Haluatko jatkaa?",
     "A text message has been sent to %(msisdn)s": "Tekstiviesti lähetetty numeroon %(msisdn)s",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "were unbanned %(count)s times|other": "vapautettiin porttikiellosta %(count)s kertaa",
-    "And %(count)s more...|other": "Ja %(count)s muuta...",
+    "were unbanned %(count)s times": {
+        "other": "vapautettiin porttikiellosta %(count)s kertaa",
+        "one": "vapautettiin porttikiellosta"
+    },
+    "And %(count)s more...": {
+        "other": "Ja %(count)s muuta..."
+    },
     "Leave": "Poistu",
     "Description": "Kuvaus",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Huomaa että olet kirjautumassa palvelimelle %(hs)s, etkä palvelimelle matrix.org.",
@@ -334,50 +345,89 @@
     "URL previews are disabled by default for participants in this room.": "URL-esikatselut ovat oletuksena pois päältä tämän huoneen jäsenillä.",
     "Token incorrect": "Väärä tunniste",
     "Delete Widget": "Poista sovelma",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s liittyivät",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s liittyi %(count)s kertaa",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s liittyi",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s poistuivat %(count)s kertaa",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s poistuivat",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s poistui %(count)s kertaa",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s poistui",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s liittyivät ja poistuivat %(count)s kertaa",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s liittyivät ja poistuivat",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s liittyi ja poistui %(count)s kertaa",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s liittyi ja poistui",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s poistuivat ja liittyivät uudelleen %(count)s kertaa",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s poistuivat ja liittyivät uudelleen",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s poistui ja liittyi uudelleen %(count)s kertaa",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s poistui ja liittyi uudelleen",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s hylkäsivät kutsunsa %(count)s kertaa",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s hylkäsivät kutsunsa",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s hylkäsi kutsun %(count)s kertaa",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s hylkäsi kutsun",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "Käyttäjien %(severalUsers)s kutsut peruttiin %(count)s kertaa",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "Käyttäjien %(severalUsers)s kutsut peruttiin",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "Käyttäjän %(oneUser)s kutsu peruttiin %(count)s kertaa",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "Käyttäjän %(oneUser)s kutsu peruttiin",
-    "were invited %(count)s times|other": "kutsuttiin %(count)s kertaa",
-    "were invited %(count)s times|one": "kutsuttiin",
-    "was invited %(count)s times|other": "kutsuttiin %(count)s kertaa",
-    "was invited %(count)s times|one": "kutsuttiin",
-    "were banned %(count)s times|other": "saivat porttikiellon %(count)s kertaa",
-    "were banned %(count)s times|one": "saivat porttikiellon",
-    "was banned %(count)s times|other": "sai porttikiellon %(count)s kertaa",
-    "was banned %(count)s times|one": "sai porttikiellon",
-    "were unbanned %(count)s times|one": "vapautettiin porttikiellosta",
-    "was unbanned %(count)s times|other": "porttikielto poistettiin %(count)s kertaa",
-    "was unbanned %(count)s times|one": "porttikielto poistettiin",
+    "%(severalUsers)sjoined %(count)s times": {
+        "one": "%(severalUsers)s liittyivät",
+        "other": "%(severalUsers)s liittyivät %(count)s kertaa"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)s liittyi %(count)s kertaa",
+        "one": "%(oneUser)s liittyi"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)s poistuivat %(count)s kertaa",
+        "one": "%(severalUsers)s poistuivat"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)s poistui %(count)s kertaa",
+        "one": "%(oneUser)s poistui"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)s liittyivät ja poistuivat %(count)s kertaa",
+        "one": "%(severalUsers)s liittyivät ja poistuivat"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)s liittyi ja poistui %(count)s kertaa",
+        "one": "%(oneUser)s liittyi ja poistui"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)s poistuivat ja liittyivät uudelleen %(count)s kertaa",
+        "one": "%(severalUsers)s poistuivat ja liittyivät uudelleen"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)s poistui ja liittyi uudelleen %(count)s kertaa",
+        "one": "%(oneUser)s poistui ja liittyi uudelleen"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)s hylkäsivät kutsunsa %(count)s kertaa",
+        "one": "%(severalUsers)s hylkäsivät kutsunsa"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)s hylkäsi kutsun %(count)s kertaa",
+        "one": "%(oneUser)s hylkäsi kutsun"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "Käyttäjien %(severalUsers)s kutsut peruttiin %(count)s kertaa",
+        "one": "Käyttäjien %(severalUsers)s kutsut peruttiin"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "Käyttäjän %(oneUser)s kutsu peruttiin %(count)s kertaa",
+        "one": "Käyttäjän %(oneUser)s kutsu peruttiin"
+    },
+    "were invited %(count)s times": {
+        "other": "kutsuttiin %(count)s kertaa",
+        "one": "kutsuttiin"
+    },
+    "was invited %(count)s times": {
+        "other": "kutsuttiin %(count)s kertaa",
+        "one": "kutsuttiin"
+    },
+    "were banned %(count)s times": {
+        "other": "saivat porttikiellon %(count)s kertaa",
+        "one": "saivat porttikiellon"
+    },
+    "was banned %(count)s times": {
+        "other": "sai porttikiellon %(count)s kertaa",
+        "one": "sai porttikiellon"
+    },
+    "was unbanned %(count)s times": {
+        "other": "porttikielto poistettiin %(count)s kertaa",
+        "one": "porttikielto poistettiin"
+    },
     "expand": "laajenna",
     "collapse": "supista",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Sovelman poistaminen poistaa sen kaikilta huoneen käyttäjiltä. Haluatko varmasti poistaa tämän sovelman?",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s liittyivät %(count)s kertaa",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s vaihtoivat nimensä %(count)s kertaa",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s vaihtoivat nimensä",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)s vaihtoi nimensä %(count)s kertaa",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s vaihtoi nimensä",
-    "%(items)s and %(count)s others|other": "%(items)s ja %(count)s muuta",
-    "%(items)s and %(count)s others|one": "%(items)s ja yksi muu",
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)s vaihtoivat nimensä %(count)s kertaa",
+        "one": "%(severalUsers)s vaihtoivat nimensä"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)s vaihtoi nimensä %(count)s kertaa",
+        "one": "%(oneUser)s vaihtoi nimensä"
+    },
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s ja %(count)s muuta",
+        "one": "%(items)s ja yksi muu"
+    },
     "Old cryptography data detected": "Vanhaa salaustietoa havaittu",
     "Warning": "Varoitus",
     "Sunday": "Sunnuntai",
@@ -626,8 +676,10 @@
     "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s vaihtoi liittymisen ehdoksi säännön %(rule)s",
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s vaihtoi vieraiden pääsyn tilaan %(rule)s",
     "%(displayName)s is typing …": "%(displayName)s kirjoittaa…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s ja %(count)s muuta kirjoittavat…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s ja yksi muu kirjoittavat…",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s ja %(count)s muuta kirjoittavat…",
+        "one": "%(names)s ja yksi muu kirjoittavat…"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s ja %(lastPerson)s kirjoittavat…",
     "This homeserver has hit its Monthly Active User limit.": "Tämän kotipalvelimen kuukausittaisten aktiivisten käyttäjien raja on täynnä.",
     "This homeserver has exceeded one of its resource limits.": "Tämä kotipalvelin on ylittänyt yhden rajoistaan.",
@@ -790,8 +842,10 @@
     "Invited by %(sender)s": "Kutsuttu henkilön %(sender)s toimesta",
     "Remember my selection for this widget": "Muista valintani tälle sovelmalle",
     "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Tunnistimme dataa, joka on lähtöisin vanhasta %(brand)sin versiosta. Tämä aiheuttaa toimintahäiriöitä päästä päähän -salauksessa vanhassa versiossa. Viestejä, jotka on salattu päästä päähän -salauksella vanhalla versiolla, ei välttämättä voida purkaa tällä versiolla. Tämä voi myös aiheuttaa epäonnistumisia viestien välityksessä tämän version kanssa. Jos kohtaat ongelmia, kirjaudu ulos ja takaisin sisään. Säilyttääksesi viestihistoriasi, vie salausavaimesi ja tuo ne uudelleen.",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Sinulla on %(count)s lukematonta ilmoitusta huoneen edellisessä versiossa.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Sinulla on %(count)s lukematon ilmoitus huoneen edellisessä versiossa.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "Sinulla on %(count)s lukematonta ilmoitusta huoneen edellisessä versiossa.",
+        "one": "Sinulla on %(count)s lukematon ilmoitus huoneen edellisessä versiossa."
+    },
     "Your password has been reset.": "Salasanasi on nollattu.",
     "Invalid homeserver discovery response": "Epäkelpo kotipalvelimen etsinnän vastaus",
     "Invalid identity server discovery response": "Epäkelpo identiteettipalvelimen etsinnän vastaus",
@@ -835,8 +889,10 @@
     "Upload files": "Lähetä tiedostot",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Tiedostot ovat <b>liian isoja</b> lähetettäväksi. Tiedoston kokoraja on %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Osa tiedostoista on <b>liian isoja</b> lähetettäväksi. Tiedoston kokoraja on %(limit)s.",
-    "Upload %(count)s other files|other": "Lähetä %(count)s muuta tiedostoa",
-    "Upload %(count)s other files|one": "Lähetä %(count)s muu tiedosto",
+    "Upload %(count)s other files": {
+        "other": "Lähetä %(count)s muuta tiedostoa",
+        "one": "Lähetä %(count)s muu tiedosto"
+    },
     "Cancel All": "Peruuta kaikki",
     "Upload Error": "Lähetysvirhe",
     "Use an email address to recover your account": "Voit palauttaa tilisi sähköpostiosoitteen avulla",
@@ -891,10 +947,14 @@
     "Upload all": "Lähetä kaikki palvelimelle",
     "Upload": "Lähetä",
     "Show all": "Näytä kaikki",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s eivät tehneet muutoksia %(count)s kertaa",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s eivät tehneet muutoksia",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s ei tehnyt muutoksia %(count)s kertaa",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s ei tehnyt muutoksia",
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)s eivät tehneet muutoksia %(count)s kertaa",
+        "one": "%(severalUsers)s eivät tehneet muutoksia"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)s ei tehnyt muutoksia %(count)s kertaa",
+        "one": "%(oneUser)s ei tehnyt muutoksia"
+    },
     "Your homeserver doesn't seem to support this feature.": "Kotipalvelimesi ei näytä tukevan tätä ominaisuutta.",
     "Resend %(unsentCount)s reaction(s)": "Lähetä %(unsentCount)s reaktio(ta) uudelleen",
     "You're signed out": "Sinut on kirjattu ulos",
@@ -961,7 +1021,10 @@
     "No recent messages by %(user)s found": "Käyttäjän %(user)s kirjoittamia viimeaikaisia viestejä ei löytynyt",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Kokeile vierittää aikajanaa ylöspäin nähdäksesi, löytyykö aiempia viestejä.",
     "Remove recent messages by %(user)s": "Poista käyttäjän %(user)s viimeaikaiset viestit",
-    "Remove %(count)s messages|other": "Poista %(count)s viestiä",
+    "Remove %(count)s messages": {
+        "other": "Poista %(count)s viestiä",
+        "one": "Poista yksi viesti"
+    },
     "Remove recent messages": "Poista viimeaikaiset viestit",
     "Bold": "Lihavoitu",
     "Italics": "Kursivoitu",
@@ -995,8 +1058,14 @@
     "Topic (optional)": "Aihe (valinnainen)",
     "Show previews/thumbnails for images": "Näytä kuvien esikatselut/pienoiskuvat",
     "Clear cache and reload": "Tyhjennä välimuisti ja lataa uudelleen",
-    "%(count)s unread messages including mentions.|other": "%(count)s lukematonta viestiä, sisältäen maininnat.",
-    "%(count)s unread messages.|other": "%(count)s lukematonta viestiä.",
+    "%(count)s unread messages including mentions.": {
+        "other": "%(count)s lukematonta viestiä, sisältäen maininnat.",
+        "one": "Yksi lukematon maininta."
+    },
+    "%(count)s unread messages.": {
+        "other": "%(count)s lukematonta viestiä.",
+        "one": "Yksi lukematon viesti."
+    },
     "Show image": "Näytä kuva",
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "<newIssueLink>Luo uusi issue</newIssueLink> GitHubissa, jotta voimme tutkia tätä ongelmaa.",
     "Close dialog": "Sulje dialogi",
@@ -1008,7 +1077,6 @@
     "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "tarkistaa, että selaimen lisäosat (kuten Privacy Badger) eivät estä identiteettipalvelinta",
     "contact the administrators of identity server <idserver />": "ottaa yhteyttä identiteettipalvelimen <idserver /> ylläpitäjiin",
     "wait and try again later": "odottaa ja yrittää uudelleen myöhemmin",
-    "Remove %(count)s messages|one": "Poista yksi viesti",
     "Room %(name)s": "Huone %(name)s",
     "React": "Reagoi",
     "Frequently Used": "Usein käytetyt",
@@ -1046,8 +1114,6 @@
     "eg: @bot:* or example.org": "esim. @bot:* tai esimerkki.org",
     "Your email address hasn't been verified yet": "Sähköpostiosoitettasi ei ole vielä varmistettu",
     "Verify the link in your inbox": "Varmista sähköpostiisi saapunut linkki",
-    "%(count)s unread messages including mentions.|one": "Yksi lukematon maininta.",
-    "%(count)s unread messages.|one": "Yksi lukematon viesti.",
     "Unread messages.": "Lukemattomat viestit.",
     "Message Actions": "Viestitoiminnot",
     "Custom (%(level)s)": "Mukautettu (%(level)s)",
@@ -1163,8 +1229,10 @@
     "<userName/> wants to chat": "<userName/> haluaa keskustella",
     "Start chatting": "Aloita keskustelu",
     "Hide verified sessions": "Piilota varmennetut istunnot",
-    "%(count)s verified sessions|other": "%(count)s varmennettua istuntoa",
-    "%(count)s verified sessions|one": "1 varmennettu istunto",
+    "%(count)s verified sessions": {
+        "other": "%(count)s varmennettua istuntoa",
+        "one": "1 varmennettu istunto"
+    },
     "Reactions": "Reaktiot",
     "Language Dropdown": "Kielipudotusvalikko",
     "Upgrade private room": "Päivitä yksityinen huone",
@@ -1212,8 +1280,10 @@
     "Enable desktop notifications for this session": "Ota käyttöön työpöytäilmoitukset tälle istunnolle",
     "Enable audible notifications for this session": "Ota käyttöön ääni-ilmoitukset tälle istunnolle",
     "Someone is using an unknown session": "Joku käyttää tuntematonta istuntoa",
-    "%(count)s sessions|other": "%(count)s istuntoa",
-    "%(count)s sessions|one": "%(count)s istunto",
+    "%(count)s sessions": {
+        "other": "%(count)s istuntoa",
+        "one": "%(count)s istunto"
+    },
     "Hide sessions": "Piilota istunnot",
     "Clear all data in this session?": "Poista kaikki tämän istunnon tiedot?",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Kaikkien tämän istunnon tietojen poistaminen on pysyvää. Salatut viestit menetetään, ellei niiden avaimia ole varmuuskopioitu.",
@@ -1263,10 +1333,14 @@
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Antamasi allekirjoitusavain täsmää käyttäjältä %(userId)s saamaasi istunnon %(deviceId)s allekirjoitusavaimeen. Istunto on varmennettu.",
     "Displays information about a user": "Näyttää tietoa käyttäjästä",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s vaihtoi huoneen nimen %(oldRoomName)s nimeksi %(newRoomName)s.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s lisäsi vaihtoehtoiset osoitteet %(addresses)s tälle huoneelle.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s lisäsi vaihtoehtoisen osoitteen %(addresses)s tälle huoneelle.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s poisti vaihtoehtoiset osoitteet %(addresses)s tältä huoneelta.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s poisti vaihtoehtoisen osoitteitteen %(addresses)s tältä huoneelta.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s lisäsi vaihtoehtoiset osoitteet %(addresses)s tälle huoneelle.",
+        "one": "%(senderName)s lisäsi vaihtoehtoisen osoitteen %(addresses)s tälle huoneelle."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s poisti vaihtoehtoiset osoitteet %(addresses)s tältä huoneelta.",
+        "one": "%(senderName)s poisti vaihtoehtoisen osoitteitteen %(addresses)s tältä huoneelta."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s muutti tämän huoneen vaihtoehtoisia osoitteita.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s muutti tämän huoneen pää- sekä vaihtoehtoisia osoitteita.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s muutti tämän huoneen osoitteita.",
@@ -1498,8 +1572,10 @@
     "Wrong file type": "Väärä tiedostotyyppi",
     "Room address": "Huoneen osoite",
     "Message deleted on %(date)s": "Viesti poistettu %(date)s",
-    "Show %(count)s more|one": "Näytä %(count)s lisää",
-    "Show %(count)s more|other": "Näytä %(count)s lisää",
+    "Show %(count)s more": {
+        "one": "Näytä %(count)s lisää",
+        "other": "Näytä %(count)s lisää"
+    },
     "Mod": "Valvoja",
     "Read Marker off-screen lifetime (ms)": "Viestin luetuksi merkkaamisen kesto, kun Element ei ole näkyvissä (ms)",
     "Add widgets, bridges & bots": "Lisää sovelmia, siltoja ja botteja",
@@ -1890,7 +1966,9 @@
     "Use the <a>Desktop app</a> to see all encrypted files": "Voit tarkastella kaikkia salattuja tiedostoja <a>työpöytäsovelluksella</a>",
     "Use the <a>Desktop app</a> to search encrypted messages": "Käytä salattuja viestejä <a>työpöytäsovelluksella</a>",
     "Ignored attempt to disable encryption": "Ohitettu yritys poistaa salaus käytöstä",
-    "You can only pin up to %(count)s widgets|other": "Voit kiinnittää enintään %(count)s sovelmaa",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Voit kiinnittää enintään %(count)s sovelmaa"
+    },
     "Favourited": "Suositut",
     "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s loi tämän huoneen palvelinten pääsynvalvontalistan.",
     "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s muutti tämän huoneen palvelinten pääsynvalvontalistaa.",
@@ -2019,10 +2097,14 @@
     "No results found": "Tuloksia ei löytynyt",
     "Mark as not suggested": "Merkitse ei-ehdotetuksi",
     "Mark as suggested": "Merkitse ehdotetuksi",
-    "%(count)s rooms|one": "%(count)s huone",
-    "%(count)s rooms|other": "%(count)s huonetta",
-    "%(count)s members|one": "%(count)s jäsen",
-    "%(count)s members|other": "%(count)s jäsentä",
+    "%(count)s rooms": {
+        "one": "%(count)s huone",
+        "other": "%(count)s huonetta"
+    },
+    "%(count)s members": {
+        "one": "%(count)s jäsen",
+        "other": "%(count)s jäsentä"
+    },
     "You don't have permission": "Sinulla ei ole lupaa",
     "Remember this": "Muista tämä",
     "Save Changes": "Tallenna muutokset",
@@ -2077,15 +2159,21 @@
     "We couldn't create your DM.": "Yksityisviestiä ei voitu luoda.",
     "Want to add a new room instead?": "Haluatko kuitenkin lisätä uuden huoneen?",
     "Add existing rooms": "Lisää olemassa olevia huoneita",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Lisätään huonetta...",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Lisätään huoneita... (%(progress)s/%(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Lisätään huonetta...",
+        "other": "Lisätään huoneita... (%(progress)s/%(count)s)"
+    },
     "Not all selected were added": "Kaikkia valittuja ei lisätty",
     "You are not allowed to view this server's rooms list": "Sinulla ei ole oikeuksia nähdä tämän palvelimen huoneluetteloa",
     "View message": "Näytä viesti",
-    "%(count)s people you know have already joined|one": "%(count)s tuntemasi henkilö on jo liittynyt",
-    "%(count)s people you know have already joined|other": "%(count)s tuntemaasi ihmistä on jo liittynyt",
-    "View all %(count)s members|one": "Näytä yksi jäsen",
-    "View all %(count)s members|other": "Näytä kaikki %(count)s jäsentä",
+    "%(count)s people you know have already joined": {
+        "one": "%(count)s tuntemasi henkilö on jo liittynyt",
+        "other": "%(count)s tuntemaasi ihmistä on jo liittynyt"
+    },
+    "View all %(count)s members": {
+        "one": "Näytä yksi jäsen",
+        "other": "Näytä kaikki %(count)s jäsentä"
+    },
     "Add reaction": "Lisää reaktio",
     "Error processing voice message": "Virhe ääniviestin käsittelyssä",
     "We were unable to access your microphone. Please check your browser settings and try again.": "Mikrofoniasi ei voitu käyttää. Tarkista selaimesi asetukset ja yritä uudelleen.",
@@ -2186,8 +2274,10 @@
     "Change space avatar": "Vaihda avaruuden kuva",
     "Message bubbles": "Viestikuplat",
     "Space members": "Avaruuden jäsenet",
-    "& %(count)s more|one": "& %(count)s lisää",
-    "& %(count)s more|other": "& %(count)s lisää",
+    "& %(count)s more": {
+        "one": "& %(count)s lisää",
+        "other": "& %(count)s lisää"
+    },
     "Anyone can find and join.": "Kuka tahansa voi löytää ja liittyä.",
     "Only invited people can join.": "Vain kutsutut ihmiset voivat liittyä.",
     "Space options": "Avaruuden valinnat",
@@ -2369,13 +2459,19 @@
     "Unban from %(roomName)s": "Poista porttikielto huoneeseen %(roomName)s",
     "Export chat": "Vie keskustelu",
     "Insert link": "Lisää linkki",
-    "Show %(count)s other previews|one": "Näytä %(count)s muu esikatselu",
-    "Show %(count)s other previews|other": "Näytä %(count)s muuta esikatselua",
-    "%(count)s reply|one": "%(count)s vastaus",
-    "%(count)s reply|other": "%(count)s vastausta",
+    "Show %(count)s other previews": {
+        "one": "Näytä %(count)s muu esikatselu",
+        "other": "Näytä %(count)s muuta esikatselua"
+    },
+    "%(count)s reply": {
+        "one": "%(count)s vastaus",
+        "other": "%(count)s vastausta"
+    },
     "Failed to update the join rules": "Liittymissääntöjen päivittäminen epäonnistui",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Lähetetään kutsua...",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Lähetetään kutsuja... (%(progress)s / %(count)s)",
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Lähetetään kutsua...",
+        "other": "Lähetetään kutsuja... (%(progress)s / %(count)s)"
+    },
     "Loading new room": "Ladataan uutta huonetta",
     "Upgrading room": "Päivitetään huonetta",
     "Upgrade required": "Päivitys vaaditaan",
@@ -2393,14 +2489,18 @@
     "%(senderName)s banned %(targetName)s: %(reason)s": "%(senderName)s antoi porttikiellon käyttäjälle %(targetName)s: %(reason)s",
     "Sidebar": "Sivupalkki",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Jaa anonyymia tietoa auttaaksesi ongelmien tunnistamisessa. Ei mitään henkilökohtaista. Ei kolmansia osapuolia.",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Päivitetään avaruutta...",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Päivitetään avaruuksia... (%(progress)s/%(count)s)",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Päivitetään avaruutta...",
+        "other": "Päivitetään avaruuksia... (%(progress)s/%(count)s)"
+    },
     "Use high contrast": "Käytä suurta kontrastia",
     "To view all keyboard shortcuts, <a>click here</a>.": "Katso kaikki pikanäppäimet <a>napsauttamalla tästä</a>.",
     "Select all": "Valitse kaikki",
     "Deselect all": "Älä valitse mitään",
-    "Click the button below to confirm signing out these devices.|one": "Napsauta alla olevaa painiketta vahvistaaksesi tämän laitteen uloskirjauksen.",
-    "Click the button below to confirm signing out these devices.|other": "Napsauta alla olevaa painiketta vahvistaaksesi näiden laitteiden uloskirjauksen.",
+    "Click the button below to confirm signing out these devices.": {
+        "one": "Napsauta alla olevaa painiketta vahvistaaksesi tämän laitteen uloskirjauksen.",
+        "other": "Napsauta alla olevaa painiketta vahvistaaksesi näiden laitteiden uloskirjauksen."
+    },
     "Add some details to help people recognise it.": "Lisää joitain tietoja, jotta ihmiset tunnistavat sen.",
     "Pin to sidebar": "Kiinnitä sivupalkkiin",
     "Quick settings": "Pika-asetukset",
@@ -2452,14 +2552,18 @@
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Kuka tahansa avaruudessa <spaceName/> voi löytää ja liittyä. Voit valita muitakin avaruuksia.",
     "Spaces with access": "Avaruudet, joilla on pääsyoikeus",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Kuka tahansa avaruuden jäsen voi löytää ja liittyä. <a>Muokkaa millä avaruuksilla on pääsyoikeus täällä.</a>",
-    "Currently, %(count)s spaces have access|one": "Tällä hetkellä yhdellä avaruudella on pääsyoikeus",
-    "Currently, %(count)s spaces have access|other": "Tällä hetkellä %(count)s avaruudella on pääsyoikeus",
+    "Currently, %(count)s spaces have access": {
+        "one": "Tällä hetkellä yhdellä avaruudella on pääsyoikeus",
+        "other": "Tällä hetkellä %(count)s avaruudella on pääsyoikeus"
+    },
     "Failed to update the visibility of this space": "Avaruuden näkyvyyden muuttaminen epäonnistui",
     "Failed to update the history visibility of this space": "Historian näkyvyysasetusten muuttaminen epäonnistui",
     "Failed to update the guest access of this space": "Vieraiden pääsyasetusten muuttaminen epäonnistui",
     "Sends the given message with a space themed effect": "Lähetä annettu viesti avaruusteemaisella tehosteella",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s ja %(count)s muu",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s ja %(count)s muuta",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s ja %(count)s muu",
+        "other": "%(spaceName)s ja %(count)s muuta"
+    },
     "Consult first": "Tiedustele ensin",
     "Transfer": "Siirrä",
     "Some suggestions may be hidden for privacy.": "Jotkut ehdotukset voivat olla piilotettu yksityisyyden takia.",
@@ -2486,15 +2590,23 @@
     "Command error: Unable to handle slash command.": "Määräys virhe: Ei voitu käsitellä / komentoa",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Lähetimme toisille, alla lista henkilöistä joita ei voitu kutsua <RoomName/>",
     "Location": "Sijainti",
-    "%(count)s votes|one": "%(count)s ääni",
-    "%(count)s votes|other": "%(count)s ääntä",
-    "Based on %(count)s votes|one": "Perustuu %(count)s ääneen",
-    "Based on %(count)s votes|other": "Perustuu %(count)s ääneen",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s ääni annettu. Äänestä nähdäksesi tulokset",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s ääntä annettu. Äänestä nähdäksesi tulokset",
+    "%(count)s votes": {
+        "one": "%(count)s ääni",
+        "other": "%(count)s ääntä"
+    },
+    "Based on %(count)s votes": {
+        "one": "Perustuu %(count)s ääneen",
+        "other": "Perustuu %(count)s ääneen"
+    },
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s ääni annettu. Äänestä nähdäksesi tulokset",
+        "other": "%(count)s ääntä annettu. Äänestä nähdäksesi tulokset"
+    },
     "No votes cast": "Ääniä ei annettu",
-    "Final result based on %(count)s votes|one": "Lopullinen tulos %(count)s äänen perusteella",
-    "Final result based on %(count)s votes|other": "Lopullinen tulos %(count)s äänen perusteella",
+    "Final result based on %(count)s votes": {
+        "one": "Lopullinen tulos %(count)s äänen perusteella",
+        "other": "Lopullinen tulos %(count)s äänen perusteella"
+    },
     "Sorry, your vote was not registered. Please try again.": "Valitettavasti ääntäsi ei rekisteröity. Yritä uudelleen.",
     "Vote not registered": "Ääntä ei rekisteröity",
     "Almost there! Is your other device showing the same shield?": "Melkein valmista! Näyttääkö toinen laitteesi saman kilven?",
@@ -2507,8 +2619,10 @@
     "To publish an address, it needs to be set as a local address first.": "Osoitteen julkaisemiseksi se täytyy ensin asettaa paikalliseksi osoitteeksi.",
     "Published addresses can be used by anyone on any server to join your room.": "Julkaistujen osoitteiden avulla kuka tahansa millä tahansa palvelimella voi liittyä huoneeseesi.",
     "You were removed from %(roomName)s by %(memberName)s": "%(memberName)s poisti sinut huoneesta %(roomName)s",
-    "Currently joining %(count)s rooms|one": "Liitytään parhaillaan %(count)s huoneeseen",
-    "Currently joining %(count)s rooms|other": "Liitytään parhaillaan %(count)s huoneeseen",
+    "Currently joining %(count)s rooms": {
+        "one": "Liitytään parhaillaan %(count)s huoneeseen",
+        "other": "Liitytään parhaillaan %(count)s huoneeseen"
+    },
     "Join public room": "Liity julkiseen huoneeseen",
     "Start new chat": "Aloita uusi keskustelu",
     "Message didn't send. Click for info.": "Viestiä ei lähetetty. Lisätietoa napsauttamalla.",
@@ -2538,16 +2652,24 @@
     "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Jaa anonyymiä tietoa ongelmien tunnistamiseksi. Ei mitään henkilökohtaista. Ei kolmansia tahoja. <LearnMoreLink>Lue lisää</LearnMoreLink>",
     "You previously consented to share anonymous usage data with us. We're updating how that works.": "Olet aiemmin suostunut jakamaan anonyymiä käyttötietoa kanssamme. Päivitämme jakamisen toimintaperiaatteita.",
     "That's fine": "Sopii",
-    "Exported %(count)s events in %(seconds)s seconds|one": "%(count)s tapahtuma viety %(seconds)s sekunnissa",
-    "Exported %(count)s events in %(seconds)s seconds|other": "%(count)s tapahtumaa viety %(seconds)s sekunnissa",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "%(count)s tapahtuma viety %(seconds)s sekunnissa",
+        "other": "%(count)s tapahtumaa viety %(seconds)s sekunnissa"
+    },
     "Export successful!": "Vienti onnistui!",
-    "Fetched %(count)s events in %(seconds)ss|one": "%(count)s tapahtuma noudettu %(seconds)s sekunnissa",
-    "Fetched %(count)s events in %(seconds)ss|other": "%(count)s tapahtumaa noudettu %(seconds)s sekunnissa",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "%(count)s tapahtuma noudettu %(seconds)s sekunnissa",
+        "other": "%(count)s tapahtumaa noudettu %(seconds)s sekunnissa"
+    },
     "Processing event %(number)s out of %(total)s": "Käsitellään tapahtumaa %(number)s / %(total)s",
-    "Fetched %(count)s events so far|one": "%(count)s tapahtuma noudettu tähän mennessä",
-    "Fetched %(count)s events so far|other": "%(count)s tapahtumaa noudettu tähän mennessä",
-    "Fetched %(count)s events out of %(total)s|one": "%(count)s / %(total)s tapahtumaa noudettu",
-    "Fetched %(count)s events out of %(total)s|other": "%(count)s / %(total)s tapahtumaa noudettu",
+    "Fetched %(count)s events so far": {
+        "one": "%(count)s tapahtuma noudettu tähän mennessä",
+        "other": "%(count)s tapahtumaa noudettu tähän mennessä"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "%(count)s / %(total)s tapahtumaa noudettu",
+        "other": "%(count)s / %(total)s tapahtumaa noudettu"
+    },
     "Generating a ZIP": "Luodaan ZIPiä",
     "Light high contrast": "Vaalea, suuri kontrasti",
     "%(senderName)s has ended a poll": "%(senderName)s on lopettanut kyselyn",
@@ -2571,14 +2693,22 @@
     "Edit poll": "Muokkaa kyselyä",
     "Create Poll": "Luo kysely",
     "Create poll": "Luo kysely",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)spoisti viestin",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)spoistivat %(count)s viestiä",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)spoistivat viestin",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)spoistivat %(count)s viestiä",
-    "was removed %(count)s times|one": "poistettiin",
-    "was removed %(count)s times|other": "poistettiin %(count)s kertaa",
-    "were removed %(count)s times|one": "poistettiin",
-    "were removed %(count)s times|other": "poistettiin %(count)s kertaa",
+    "%(oneUser)sremoved a message %(count)s times": {
+        "one": "%(oneUser)spoisti viestin",
+        "other": "%(oneUser)spoistivat %(count)s viestiä"
+    },
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)spoistivat viestin",
+        "other": "%(severalUsers)spoistivat %(count)s viestiä"
+    },
+    "was removed %(count)s times": {
+        "one": "poistettiin",
+        "other": "poistettiin %(count)s kertaa"
+    },
+    "were removed %(count)s times": {
+        "one": "poistettiin",
+        "other": "poistettiin %(count)s kertaa"
+    },
     "My current location": "Tämänhetkinen sijaintini",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s ei voinut lähettää sijaintiasi. Yritä myöhemmin uudelleen.",
     "Unknown error fetching location. Please try again later.": "Tuntematon virhe sijaintia noudettaessa. Yritä myöhemmin uudelleen.",
@@ -2599,8 +2729,10 @@
     "Manage pinned events": "Hallitse kiinnitettyjä tapahtumia",
     "Remove messages sent by me": "Poista lähettämäni viestit",
     "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "Tämä huone ei siltaa viestejä millekään alustalle. <a>Lue lisää.</a>",
-    "Sign out devices|one": "Kirjaa laite ulos",
-    "Sign out devices|other": "Kirjaa laitteet ulos",
+    "Sign out devices": {
+        "one": "Kirjaa laite ulos",
+        "other": "Kirjaa laitteet ulos"
+    },
     "No virtual room for this room": "Tällä huoneella ei ole virtuaalihuonetta",
     "Switches to this room's virtual room, if it has one": "Vaihtaa tämän huoneen virtuaalihuoneeseen, mikäli huoneella sellainen on",
     "Removes user with given id from this room": "Poistaa tunnuksen mukaisen käyttäjän tästä huoneesta",
@@ -2613,7 +2745,10 @@
     "Export Cancelled": "Vienti peruttu",
     "The poll has ended. Top answer: %(topAnswer)s": "Kysely on päättynyt. Suosituin vastaus: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Kysely on päättynyt. Ääniä ei annettu.",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "Olet poistamassa käyttäjän %(user)s %(count)s viestiä. Toimenpide poistaa ne pysyvästi kaikilta keskustelun osapuolilta. Haluatko jatkaa?",
+    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
+        "other": "Olet poistamassa käyttäjän %(user)s %(count)s viestiä. Toimenpide poistaa ne pysyvästi kaikilta keskustelun osapuolilta. Haluatko jatkaa?",
+        "one": "Olet poistamassa käyttäjän %(user)s yhtä viestiä. Toimenpide poistaa ne pysyvästi kaikilta keskustelun osapuolilta. Haluatko jatkaa?"
+    },
     "To leave the beta, visit your settings.": "Poistu beetasta asetuksista.",
     "You can turn this off anytime in settings": "Tämän voi poistaa käytöstä koska tahansa asetuksista",
     "We <Bold>don't</Bold> share information with third parties": "<Bold>Emme</Bold> jaa tietoja kolmansille tahoille",
@@ -2623,14 +2758,22 @@
     "Missing room name or separator e.g. (my-room:domain.org)": "Puuttuva huoneen nimi tai erotin, esim. (oma-huone:verkkotunnus.org)",
     "Sorry, the poll you tried to create was not posted.": "Kyselyä, jota yritit luoda, ei valitettavasti julkaistu.",
     "Failed to post poll": "Kyselyn julkaiseminen epäonnistui",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)slähetti piilotetun viestin",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)slähetti %(count)s piilotettua viestiä",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)slähettivät piilotetun viestin",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)slähettivät %(count)s piilotettua viestiä",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)svaihtoi huoneen <a>kiinnitettyjä viestejä</a>",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)svaihtoi huoneen <a>kiinnitettyjä viestejä</a> %(count)s kertaa",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)svaihtoivat huoneen <a>kiinnitettyjä viestejä</a>",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)svaihtoivat huoneen <a>kiinnitettyjä viestejä</a> %(count)s kertaa",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "one": "%(oneUser)slähetti piilotetun viestin",
+        "other": "%(oneUser)slähetti %(count)s piilotettua viestiä"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)slähettivät piilotetun viestin",
+        "other": "%(severalUsers)slähettivät %(count)s piilotettua viestiä"
+    },
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(oneUser)svaihtoi huoneen <a>kiinnitettyjä viestejä</a>",
+        "other": "%(oneUser)svaihtoi huoneen <a>kiinnitettyjä viestejä</a> %(count)s kertaa"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)svaihtoivat huoneen <a>kiinnitettyjä viestejä</a>",
+        "other": "%(severalUsers)svaihtoivat huoneen <a>kiinnitettyjä viestejä</a> %(count)s kertaa"
+    },
     "Backspace": "Askelpalautin",
     "We couldn't send your location": "Emme voineet lähettää sijaintiasi",
     "%(brand)s was denied permission to fetch your location. Please allow location access in your browser settings.": "%(brand)s ei saanut lupaa noutaa sijaintiasi. Salli sijainnin käyttäminen selaimen asetuksista.",
@@ -2642,8 +2785,10 @@
     "You were banned by %(memberName)s": "%(memberName)s antoi sinulle porttikiellon",
     "You were removed by %(memberName)s": "%(memberName)s poisti sinut",
     "Loading preview": "Ladataan esikatselua",
-    "Currently removing messages in %(count)s rooms|one": "Poistetaan parhaillaan viestejä yhdessä huoneessa",
-    "Currently removing messages in %(count)s rooms|other": "Poistetaan parhaillaan viestejä %(count)s huoneesta",
+    "Currently removing messages in %(count)s rooms": {
+        "one": "Poistetaan parhaillaan viestejä yhdessä huoneessa",
+        "other": "Poistetaan parhaillaan viestejä %(count)s huoneesta"
+    },
     "Busy": "Varattu",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "Tämän salatun viestin aitoutta ei voida taata tällä laitteella.",
     "Developer tools": "Kehittäjätyökalut",
@@ -2728,8 +2873,10 @@
     "The beginning of the room": "Huoneen alku",
     "Last month": "Viime kuukausi",
     "Last week": "Viime viikko",
-    "%(count)s participants|one": "1 osallistuja",
-    "%(count)s participants|other": "%(count)s osallistujaa",
+    "%(count)s participants": {
+        "one": "1 osallistuja",
+        "other": "%(count)s osallistujaa"
+    },
     "Copy room link": "Kopioi huoneen linkki",
     "New video room": "Uusi videohuone",
     "New room": "Uusi huone",
@@ -2744,7 +2891,6 @@
     "To continue, please enter your account password:": "Jatka kirjoittamalla tilisi salasana:",
     "You can't disable this later. Bridges & most bots won't work yet.": "Et voi poistaa tätä käytöstä myöhemmin. SIllat ja useimmat botit eivät vielä toimi.",
     "Preserve system messages": "Säilytä järjestelmän viestit",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|one": "Olet poistamassa käyttäjän %(user)s yhtä viestiä. Toimenpide poistaa ne pysyvästi kaikilta keskustelun osapuolilta. Haluatko jatkaa?",
     "Click to read topic": "Lue aihe napsauttamalla",
     "Edit topic": "Muokkaa aihetta",
     "What location type do you want to share?": "Minkä sijaintityypin haluat jakaa?",
@@ -2759,8 +2905,10 @@
     "Private room": "Yksityinen huone",
     "Video room": "Videohuone",
     "Read receipts": "Lukukuittaukset",
-    "Seen by %(count)s people|one": "Nähnyt yksi ihminen",
-    "Seen by %(count)s people|other": "Nähnyt %(count)s ihmistä",
+    "Seen by %(count)s people": {
+        "one": "Nähnyt yksi ihminen",
+        "other": "Nähnyt %(count)s ihmistä"
+    },
     "%(members)s and %(last)s": "%(members)s ja %(last)s",
     "<b>It's not recommended to make encrypted rooms public.</b> It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Ei ole suositeltavaa tehdä salausta käyttävistä huoneista julkisia.</b> Se tarkoittaa, että kuka vain voi löytää huoneen, joten kuka vain voi lukea viestejä. Salauksesta ei siis ole hyötyä. Viestien salaaminen julkisessa huoneessa hidastaa viestien vastaanottamista ja lähettämistä.",
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Vältä nämä ongelmat luomalla <a>uusi salausta käyttävä huone</a> keskustelua varten.",
@@ -2772,8 +2920,10 @@
     "Unmute microphone": "Poista mikrofonin mykistys",
     "Mute microphone": "Mykistä mikrofoni",
     "Audio devices": "Äänilaitteet",
-    "%(count)s people joined|one": "%(count)s ihminen liittyi",
-    "%(count)s people joined|other": "%(count)s ihmistä liittyi",
+    "%(count)s people joined": {
+        "one": "%(count)s ihminen liittyi",
+        "other": "%(count)s ihmistä liittyi"
+    },
     "sends hearts": "lähettää sydämiä",
     "Sends the given message with hearts": "Lähettää viestin sydämien kera",
     "Enable Markdown": "Ota Markdown käyttöön",
@@ -2807,7 +2957,9 @@
     "Input devices": "Sisääntulolaitteet",
     "Client Versions": "Asiakasversiot",
     "Server Versions": "Palvelinversiot",
-    "<%(count)s spaces>|other": "<%(count)s avaruutta>",
+    "<%(count)s spaces>": {
+        "other": "<%(count)s avaruutta>"
+    },
     "Click the button below to confirm setting up encryption.": "Napsauta alla olevaa painiketta vahvistaaksesi salauksen asettamisen.",
     "Forgotten or lost all recovery methods? <a>Reset all</a>": "Unohtanut tai kadottanut kaikki palautustavat? <a>Nollaa kaikki</a>",
     "Open room": "Avaa huone",
@@ -2834,8 +2986,10 @@
     "Group all your favourite rooms and people in one place.": "Ryhmitä kaikki suosimasi huoneet ja henkilöt yhteen paikkaan.",
     "Home is useful for getting an overview of everything.": "Koti on hyödyllinen, sillä sieltä näet yleisnäkymän kaikkeen.",
     "Deactivating your account is a permanent action — be careful!": "Tilin deaktivointi on peruuttamaton toiminto — ole varovainen!",
-    "Confirm signing out these devices|one": "Vahvista uloskirjautuminen tältä laitteelta",
-    "Confirm signing out these devices|other": "Vahvista uloskirjautuminen näiltä laitteilta",
+    "Confirm signing out these devices": {
+        "one": "Vahvista uloskirjautuminen tältä laitteelta",
+        "other": "Vahvista uloskirjautuminen näiltä laitteilta"
+    },
     "Cross-signing is ready but keys are not backed up.": "Ristiinvarmennus on valmis, mutta avaimia ei ole varmuuskopioitu.",
     "Search %(spaceName)s": "Etsi %(spaceName)s",
     "Call": "Soita",
@@ -2895,8 +3049,10 @@
     "We call the places where you can host your account 'homeservers'.": "Kutsumme \"kotipalvelimiksi\" paikkoja, missä voit isännöidä tiliäsi.",
     "Something went wrong in confirming your identity. Cancel and try again.": "Jokin meni pieleen henkilöllisyyttä vahvistaessa. Peruuta ja yritä uudelleen.",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Vahvista tilin deaktivointi todistamalla henkilöllisyytesi kertakirjautumista käyttäen.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Vahvista tämän laitteen uloskirjaaminen todistamalla henkilöllisyytesi kertakirjautumista käyttäen.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Vahvista näiden laitteiden uloskirjaaminen todistamalla henkilöllisyytesi kertakirjautumista käyttäen.",
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Vahvista tämän laitteen uloskirjaaminen todistamalla henkilöllisyytesi kertakirjautumista käyttäen.",
+        "other": "Vahvista näiden laitteiden uloskirjaaminen todistamalla henkilöllisyytesi kertakirjautumista käyttäen."
+    },
     "Switch to space by number": "Vaihda avaruuteen numerolla",
     "Navigate up in the room list": "Liiku ylös huoneluettelossa",
     "Navigate down in the room list": "Liiku alas huoneluettelossa",
@@ -2914,8 +3070,10 @@
     "You cannot search for rooms that are neither a room nor a space": "Et voi etsiä huoneita, jotka eivät ole huoneita tai avaruuksia",
     "Show spaces": "Näytä avaruudet",
     "Show rooms": "Näytä huoneet",
-    "%(count)s Members|one": "%(count)s jäsen",
-    "%(count)s Members|other": "%(count)s jäsentä",
+    "%(count)s Members": {
+        "one": "%(count)s jäsen",
+        "other": "%(count)s jäsentä"
+    },
     "Sections to show": "Näytettävät osiot",
     "Show: Matrix rooms": "Näytä: Matrix-huoneet",
     "Show: %(instance)s rooms (%(server)s)": "Näytä: %(instance)s-huoneet (%(server)s)",
@@ -3035,8 +3193,10 @@
     "Enable notifications for this device": "Ota ilmoitukset käyttöön tälle laitteelle",
     "Turn off to disable notifications on all your devices and sessions": "Poista käytöstä, niin kaikkien laitteiden ja istuntojen ilmoitukset ovat pois päältä",
     "Enable notifications for this account": "Ota ilmoitukset käyttöön tälle tilille",
-    "Only %(count)s steps to go|one": "Vain %(count)s vaihe jäljellä",
-    "Only %(count)s steps to go|other": "Vain %(count)s vaihetta jäljellä",
+    "Only %(count)s steps to go": {
+        "one": "Vain %(count)s vaihe jäljellä",
+        "other": "Vain %(count)s vaihetta jäljellä"
+    },
     "Welcome to %(brand)s": "Tervetuloa, tämä on %(brand)s",
     "Find your people": "Löydä ihmiset",
     "Community ownership": "Yhteisön omistajuus",
@@ -3077,19 +3237,25 @@
     "Video call started in %(roomName)s. (not supported by this browser)": "Videopuhelu alkoi huoneessa %(roomName)s. (ei tuettu selaimesi toimesta)",
     "Video call started in %(roomName)s.": "Videopuhelu alkoi huoneessa %(roomName)s.",
     "Empty room (was %(oldName)s)": "Tyhjä huone (oli %(oldName)s)",
-    "Inviting %(user)s and %(count)s others|one": "Kutsutaan %(user)s ja 1 muu",
-    "Inviting %(user)s and %(count)s others|other": "Kutsutaan %(user)s ja %(count)s muuta",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "Kutsutaan %(user)s ja 1 muu",
+        "other": "Kutsutaan %(user)s ja %(count)s muuta"
+    },
     "Inviting %(user1)s and %(user2)s": "Kutsutaan %(user1)s ja %(user2)s",
-    "%(user)s and %(count)s others|one": "%(user)s ja 1 muu",
-    "%(user)s and %(count)s others|other": "%(user)s ja %(count)s muuta",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s ja 1 muu",
+        "other": "%(user)s ja %(count)s muuta"
+    },
     "%(user1)s and %(user2)s": "%(user1)s ja %(user2)s",
     "Force complete": "Pakota täydennys",
     "Open this settings tab": "Avaa tämä asetusvälilehti",
     "Jump to end of the composer": "Hyppää viestimuokkaimen loppuun",
     "Jump to start of the composer": "Hyppää viestimuokkaimen alkuun",
     "Toggle Link": "Linkki päälle/pois",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Pidä salatut viestit turvallisessa välimuistissa, jotta ne näkyvät hakutuloksissa. Käytössä %(size)s, talletetaan viestit %(rooms)s huoneesta.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Pidä salatut viestit turvallisessa välimuistissa, jotta ne näkyvät hakutuloksissa. Käytössä %(size)s, talletetaan viestit %(rooms)s huoneesta.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "other": "Pidä salatut viestit turvallisessa välimuistissa, jotta ne näkyvät hakutuloksissa. Käytössä %(size)s, talletetaan viestit %(rooms)s huoneesta.",
+        "one": "Pidä salatut viestit turvallisessa välimuistissa, jotta ne näkyvät hakutuloksissa. Käytössä %(size)s, talletetaan viestit %(rooms)s huoneesta."
+    },
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Varmuuskopioi salausavaimesi tilisi datan kanssa siltä varalta, että menetät pääsyn istuntoihisi. Avaimesi turvataan yksilöllisellä turva-avaimella.",
     "Your server doesn't support disabling sending read receipts.": "Palvelimesi ei tue lukukuittausten lähettämisen poistamista käytöstä.",
     "Next recently visited room or space": "Seuraava vierailtu huone tai avaruus",
@@ -3106,8 +3272,10 @@
     "Yes, the chat timeline is displayed alongside the video.": "Kyllä, keskustelun aikajana esitetään videon yhteydessä.",
     "Use the “+” button in the room section of the left panel.": "Käytä ”+”-painiketta vasemman paneelin huoneosiossa.",
     "A new way to chat over voice and video in %(brand)s.": "Uusi tapa keskustella äänen ja videon välityksellä %(brand)sissä.",
-    "In %(spaceName)s and %(count)s other spaces.|one": "Avaruudessa %(spaceName)s ja %(count)s muussa avaruudessa.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "Avaruudessa %(spaceName)s ja %(count)s muussa avaruudessa.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "Avaruudessa %(spaceName)s ja %(count)s muussa avaruudessa.",
+        "other": "Avaruudessa %(spaceName)s ja %(count)s muussa avaruudessa."
+    },
     "Get notifications as set up in your <a>settings</a>": "Vastaanota ilmoitukset <a>asetuksissa</a> määrittämälläsi tavalla",
     "PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Vinkki: Jos teet virheilmoituksen, lähetä <debugLogsLink>vianjäljityslokit</debugLogsLink> jotta ongelman ratkaiseminen helpottuu.",
     "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "Katso ensin <existingIssuesLink>aiemmin raportoidut virheet Githubissa</existingIssuesLink>. Eikö samanlaista virhettä löydy? <newIssueLink>Tee uusi ilmoitus virheestä</newIssueLink>.",
@@ -3166,8 +3334,10 @@
     "Video settings": "Videoasetukset",
     "Automatically adjust the microphone volume": "Säädä mikrofonin äänenvoimakkuutta automaattisesti",
     "Voice settings": "Ääniasetukset",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "Haluatko varmasti kirjautua ulos %(count)s istunnosta?",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "Haluatko varmasti kirjautua ulos %(count)s istunnosta?",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "one": "Haluatko varmasti kirjautua ulos %(count)s istunnosta?",
+        "other": "Haluatko varmasti kirjautua ulos %(count)s istunnosta?"
+    },
     "Reply in thread": "Vastaa ketjuun",
     "That e-mail address or phone number is already in use.": "Tämä sähköpostiosoite tai puhelinnumero on jo käytössä.",
     "Exporting your data": "Tietojen vienti",
@@ -3211,8 +3381,10 @@
     "Change layout": "Vaihda asettelua",
     "This message could not be decrypted": "Tämän viestin salausta ei voitu purkaa",
     "Improve your account security by following these recommendations.": "Paranna tilisi tietoturvaa seuraamalla näitä suosituksia.",
-    "%(count)s sessions selected|one": "%(count)s istunto valittu",
-    "%(count)s sessions selected|other": "%(count)s istuntoa valittu",
+    "%(count)s sessions selected": {
+        "one": "%(count)s istunto valittu",
+        "other": "%(count)s istuntoa valittu"
+    },
     "This session doesn't support encryption and thus can't be verified.": "Tämä istunto ei tue salausta, joten sitä ei voi vahvistaa.",
     "For best security and privacy, it is recommended to use Matrix clients that support encryption.": "Parhaan tietoturvan ja yksityisyyden vuoksi on suositeltavaa käyttää salausta tukevia Matrix-asiakasohjelmistoja.",
     "Upcoming features": "Tulevat ominaisuudet",
@@ -3268,8 +3440,10 @@
     "Link": "Linkki",
     "Create a link": "Luo linkki",
     " in <strong>%(room)s</strong>": " huoneessa <strong>%(room)s</strong>",
-    "Sign out of %(count)s sessions|one": "Kirjaudu ulos %(count)s istunnosta",
-    "Sign out of %(count)s sessions|other": "Kirjaudu ulos %(count)s istunnosta",
+    "Sign out of %(count)s sessions": {
+        "one": "Kirjaudu ulos %(count)s istunnosta",
+        "other": "Kirjaudu ulos %(count)s istunnosta"
+    },
     "Your current session is ready for secure messaging.": "Nykyinen istuntosi on valmis turvalliseen viestintään.",
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Kirjaudu ulos kaikista muista istunnoista (%(otherSessionsCount)s)",
     "You did it!": "Teit sen!",
@@ -3329,10 +3503,14 @@
     "unknown status code": "tuntematon tilakoodi",
     "Server returned %(statusCode)s with error code %(errorCode)s": "Palvelin palautti tilakoodin %(statusCode)s ja virhekoodin %(errorCode)s",
     "View poll": "Näytä kysely",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Menneitä kyselyitä ei ole viimeisen vuorokauden ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Menneitä kyselyitä ei ole viimeisen %(count)s päivän ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Aktiivisia kyselyitä ei ole viimeisen vuorokauden ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Aktiivisia kyselyitä ei ole viimeisen %(count)s päivän ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Menneitä kyselyitä ei ole viimeisen vuorokauden ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
+        "other": "Menneitä kyselyitä ei ole viimeisen %(count)s päivän ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt."
+    },
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Aktiivisia kyselyitä ei ole viimeisen vuorokauden ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
+        "other": "Aktiivisia kyselyitä ei ole viimeisen %(count)s päivän ajalta. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt."
+    },
     "There are no past polls. Load more polls to view polls for previous months": "Menneitä kyselyitä ei ole. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
     "There are no active polls. Load more polls to view polls for previous months": "Aktiivisia kyselyitä ei ole. Lataa lisää kyselyitä nähdäksesi aiempien kuukausien kyselyt.",
     "There are no past polls in this room": "Tässä huoneessa ei ole menneitä kyselyitä",

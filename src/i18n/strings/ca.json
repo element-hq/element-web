@@ -153,8 +153,10 @@
     "Invite": "Convida",
     "Unmute": "No silenciïs",
     "Admin Tools": "Eines d'administració",
-    "and %(count)s others...|other": "i %(count)s altres...",
-    "and %(count)s others...|one": "i un altre...",
+    "and %(count)s others...": {
+        "other": "i %(count)s altres...",
+        "one": "i un altre..."
+    },
     "Invited": "Convidat",
     "Filter room members": "Filtra els membres de la sala",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (autoritat %(powerLevelNumber)s)",
@@ -184,8 +186,10 @@
     "Replying": "S'està contestant",
     "Unnamed room": "Sala sense nom",
     "Save": "Desa",
-    "(~%(count)s results)|other": "(~%(count)s resultats)",
-    "(~%(count)s results)|one": "(~%(count)s resultat)",
+    "(~%(count)s results)": {
+        "other": "(~%(count)s resultats)",
+        "one": "(~%(count)s resultat)"
+    },
     "Join Room": "Entra a la sala",
     "Upload avatar": "Puja l'avatar",
     "Forget room": "Oblida la sala",
@@ -244,54 +248,98 @@
     "No results": "Sense resultats",
     "Home": "Inici",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s s'hi han unit",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)ss'ha unit",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s han sortit",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)sha sortit",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s s'hi han unit i han sortit %(count)s vegades",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s s'hi han unit i han sortit",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)sha entrat i ha sortit %(count)s vegades",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)sha entrat i ha sortit",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s han sortit i han tornat a entrar %(count)s vegades",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s han sortit i han tornat a entrar",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)sha sortit i ha tornat a entrar %(count)s vegades",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)sha sortit i ha tornat a entrar",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s han rebutjat les seves invitacions %(count)s vegades",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s han rebutjat les seves invitacions",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)sha rebutjat la seva invitació %(count)s vegades",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)sha rebutjat la seva invitació",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "S'han retirat les invitacions de %(severalUsers)s %(count)s vegades",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "S'han retirat les invitacions de %(severalUsers)s",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "S'ha retirat la invitació de %(oneUser)s %(count)s vegades",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "S'ha retirat la invitació de %(oneUser)s",
-    "were invited %(count)s times|other": "a sigut invitat %(count)s vegades",
-    "were invited %(count)s times|one": "han sigut convidats",
-    "was invited %(count)s times|other": "ha sigut convidat %(count)s vegades",
-    "was invited %(count)s times|one": "ha sigut convidat",
-    "were banned %(count)s times|other": "han sigut expulsats %(count)s vegades",
-    "were banned %(count)s times|one": "ha sigut expulsat",
-    "was banned %(count)s times|other": "ha sigut expulsat %(count)s vegades",
-    "was banned %(count)s times|one": "ha sigut expulsat",
-    "were unbanned %(count)s times|other": "han sigut readmesos %(count)s vegades",
-    "were unbanned %(count)s times|one": "han sigut readmesos",
-    "was unbanned %(count)s times|other": "ha sigut readmès %(count)s vegades",
-    "was unbanned %(count)s times|one": "ha sigut readmès",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s han canviat el seu nom %(count)s vegades",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s han canviat el seu nom",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)sha canviat el seu nom %(count)s vegades",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s ha canviat el seu nom",
-    "%(items)s and %(count)s others|other": "%(items)s i %(count)s altres",
-    "%(items)s and %(count)s others|one": "%(items)s i un altre",
+    "%(severalUsers)sjoined %(count)s times": {
+        "one": "%(severalUsers)s s'hi han unit",
+        "other": "%(severalUsers)s han entrat %(count)s vegades"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "one": "%(oneUser)ss'ha unit",
+        "other": "%(oneUser)sha entrat %(count)s vegades"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "one": "%(severalUsers)s han sortit",
+        "other": "%(severalUsers)s han sortit %(count)s vegades"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "one": "%(oneUser)sha sortit",
+        "other": "%(oneUser)sha sortit %(count)s vegades"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)s s'hi han unit i han sortit %(count)s vegades",
+        "one": "%(severalUsers)s s'hi han unit i han sortit"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)sha entrat i ha sortit %(count)s vegades",
+        "one": "%(oneUser)sha entrat i ha sortit"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)s han sortit i han tornat a entrar %(count)s vegades",
+        "one": "%(severalUsers)s han sortit i han tornat a entrar"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)sha sortit i ha tornat a entrar %(count)s vegades",
+        "one": "%(oneUser)sha sortit i ha tornat a entrar"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)s han rebutjat les seves invitacions %(count)s vegades",
+        "one": "%(severalUsers)s han rebutjat les seves invitacions"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)sha rebutjat la seva invitació %(count)s vegades",
+        "one": "%(oneUser)sha rebutjat la seva invitació"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "S'han retirat les invitacions de %(severalUsers)s %(count)s vegades",
+        "one": "S'han retirat les invitacions de %(severalUsers)s"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "S'ha retirat la invitació de %(oneUser)s %(count)s vegades",
+        "one": "S'ha retirat la invitació de %(oneUser)s"
+    },
+    "were invited %(count)s times": {
+        "other": "a sigut invitat %(count)s vegades",
+        "one": "han sigut convidats"
+    },
+    "was invited %(count)s times": {
+        "other": "ha sigut convidat %(count)s vegades",
+        "one": "ha sigut convidat"
+    },
+    "were banned %(count)s times": {
+        "other": "han sigut expulsats %(count)s vegades",
+        "one": "ha sigut expulsat"
+    },
+    "was banned %(count)s times": {
+        "other": "ha sigut expulsat %(count)s vegades",
+        "one": "ha sigut expulsat"
+    },
+    "were unbanned %(count)s times": {
+        "other": "han sigut readmesos %(count)s vegades",
+        "one": "han sigut readmesos"
+    },
+    "was unbanned %(count)s times": {
+        "other": "ha sigut readmès %(count)s vegades",
+        "one": "ha sigut readmès"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)s han canviat el seu nom %(count)s vegades",
+        "one": "%(severalUsers)s han canviat el seu nom"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)sha canviat el seu nom %(count)s vegades",
+        "one": "%(oneUser)s ha canviat el seu nom"
+    },
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s i %(count)s altres",
+        "one": "%(items)s i un altre"
+    },
     "%(items)s and %(lastItem)s": "%(items)s i %(lastItem)s",
     "collapse": "col·lapsa",
     "expand": "expandeix",
     "Custom level": "Nivell personalitzat",
-    "And %(count)s more...|other": "I %(count)s més...",
+    "And %(count)s more...": {
+        "other": "I %(count)s més..."
+    },
     "Confirm Removal": "Confirmeu l'eliminació",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s han entrat %(count)s vegades",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sha entrat %(count)s vegades",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s han sortit %(count)s vegades",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)sha sortit %(count)s vegades",
     "Create": "Crea",
     "Unknown error": "Error desconegut",
     "Incorrect password": "Contrasenya incorrecta",
@@ -335,7 +383,9 @@
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "S'ha intentat carregar un punt específic de la línia de temps d'aquesta sala, però no s'ha pogut trobar.",
     "Failed to load timeline position": "No s'ha pogut carregar aquesta posició de la línia de temps",
     "Signed Out": "Sessió tancada",
-    "Uploading %(filename)s and %(count)s others|other": "Pujant %(filename)s i %(count)s més",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "Pujant %(filename)s i %(count)s més"
+    },
     "Uploading %(filename)s": "Pujant %(filename)s",
     "Sign out": "Tanca la sessió",
     "Import E2E room keys": "Importar claus E2E de sala",
@@ -438,8 +488,10 @@
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s ha canviat l'adreça principal d'aquesta sala a %(address)s.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s ha retirat l'adreça principal d'aquesta sala.",
     "%(displayName)s is typing …": "%(displayName)s està escrivint…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s i %(count)s més estan escrivint…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s i una altra persona estan escrivint…",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s i %(count)s més estan escrivint…",
+        "one": "%(names)s i una altra persona estan escrivint…"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s i %(lastPerson)s estan escrivint…",
     "You do not have permission to invite people to this room.": "No teniu permís per convidar gent a aquesta sala.",
     "Use a few words, avoid common phrases": "Feu servir unes quantes paraules, eviteu frases comunes",
@@ -594,8 +646,10 @@
     "Unable to access webcam / microphone": "No s'ha pogut accedir a la càmera web / micròfon",
     "Unable to access microphone": "No s'ha pogut accedir al micròfon",
     "Explore rooms": "Explora sales",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)sno ha fet canvis",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sno ha fet canvis %(count)s cops",
+    "%(oneUser)smade no changes %(count)s times": {
+        "one": "%(oneUser)sno ha fet canvis",
+        "other": "%(oneUser)sno ha fet canvis %(count)s cops"
+    },
     "Integration manager": "Gestor d'integracions",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Els gestors d'integracions reben dades de configuració i poden modificar ginys, enviar invitacions a sales i establir nivells d'autoritat en nom teu.",
     "Identity server": "Servidor d'identitat",

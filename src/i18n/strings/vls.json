@@ -125,15 +125,19 @@
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s-widget toegevoegd gewist deur %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s-widget verwyderd gewist deur %(senderName)s",
     "%(displayName)s is typing …": "%(displayName)s es an ’t typn…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s en %(count)s anderen zyn an ’t typn…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s en nog etwien zyn an ’t typn…",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s en %(count)s anderen zyn an ’t typn…",
+        "one": "%(names)s en nog etwien zyn an ’t typn…"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s en %(lastPerson)s zyn an ’t typn…",
     "No homeserver URL provided": "Geen thuusserver-URL ingegeevn",
     "Unexpected error resolving homeserver configuration": "Ounverwachte foute by ’t controleern van de thuusserverconfiguroasje",
     "This homeserver has hit its Monthly Active User limit.": "Dezen thuusserver èt z’n limiet vo moandeliks actieve gebruukers bereikt.",
     "This homeserver has exceeded one of its resource limits.": "Dezen thuusserver èt één van z’n systeembronlimietn overschreedn.",
-    "%(items)s and %(count)s others|other": "%(items)s en %(count)s andere",
-    "%(items)s and %(count)s others|one": "%(items)s en één ander",
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s en %(count)s andere",
+        "one": "%(items)s en één ander"
+    },
     "%(items)s and %(lastItem)s": "%(items)s en %(lastItem)s",
     "Your browser does not support the required cryptography extensions": "Je browser oundersteunt de benodigde cryptografie-extensies nie",
     "Not a valid %(brand)s keyfile": "Geen geldig %(brand)s-sleuterbestand",
@@ -440,8 +444,10 @@
     "Mute": "Dempn",
     "Admin Tools": "Beheerdersgereedschap",
     "Close": "Sluutn",
-    "and %(count)s others...|other": "en %(count)s anderen…",
-    "and %(count)s others...|one": "en één andere…",
+    "and %(count)s others...": {
+        "other": "en %(count)s anderen…",
+        "one": "en één andere…"
+    },
     "Invite to this room": "Uutnodign in dit gesprek",
     "Invited": "Uutgenodigd",
     "Filter room members": "Gespreksleedn filtern",
@@ -471,8 +477,10 @@
     "Unknown": "Ounbekend",
     "Replying": "An ’t beantwoordn",
     "Unnamed room": "Noamloos gesprek",
-    "(~%(count)s results)|other": "(~%(count)s resultoatn)",
-    "(~%(count)s results)|one": "(~%(count)s resultoat)",
+    "(~%(count)s results)": {
+        "other": "(~%(count)s resultoatn)",
+        "one": "(~%(count)s resultoat)"
+    },
     "Join Room": "Gesprek toetreedn",
     "Settings": "Instelliengn",
     "Forget room": "Gesprek vergeetn",
@@ -580,46 +588,86 @@
     "Rotate Left": "Links droain",
     "Rotate Right": "Rechts droain",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s zyn %(count)s kis toegetreedn",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s zyn toegetreedn",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s es %(count)s kis toegetreedn",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s es toegetreedn",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s es %(count)s kis deuregegoan",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s es deuregegoan",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s es %(count)s kis deuregegoan",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s es deuregegoan",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s zyn %(count)s kis toegetreedn en deuregegoan",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s zyn toegetreedn en deuregegoan",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s es %(count)s kis toegetreedn en deuregegoan",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s es toegetreedn en deuregegoan",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s zyn %(count)s kis deuregegoan en were toegetreedn",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s zyn deuregegoan en were toegetreedn",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s es %(count)s kis deuregegoan en were toegetreedn",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s es deuregegoan en were toegetreedn",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s èn hunder uutnodigiengn %(count)s kis afgeweezn",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s èn hunder uutnodigiengn afgeweezn",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s è zyn/heur uutnodigienge %(count)s kis afgeweezn",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s è zyn/heur uutnodigienge afgeweezn",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "D’uutnodigiengn van %(severalUsers)s zyn %(count)s kis ingetrokkn gewist",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "D’uutnodigiengn van %(severalUsers)s zyn ingetrokkn gewist",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "D’uutnodigienge van %(oneUser)s es %(count)s kis ingetrokkn gewist",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "D’uutnodigienge van %(oneUser)s es ingetrokkn gewist",
-    "were invited %(count)s times|other": "zyn %(count)s kis uutgenodigd gewist",
-    "were invited %(count)s times|one": "zyn uutgenodigd gewist",
-    "was invited %(count)s times|other": "es %(count)s kis uutgenodigd gewist",
-    "was invited %(count)s times|one": "es uutgenodigd gewist",
-    "were banned %(count)s times|other": "zyn %(count)s kis verbann gewist",
-    "were banned %(count)s times|one": "zyn verbann gewist",
-    "was banned %(count)s times|other": "es %(count)s kis verbann gewist",
-    "was banned %(count)s times|one": "es verbann gewist",
-    "were unbanned %(count)s times|other": "zyn %(count)s kis ountbann gewist",
-    "were unbanned %(count)s times|one": "zyn ountbann gewist",
-    "was unbanned %(count)s times|other": "es %(count)s kis ountbann gewist",
-    "was unbanned %(count)s times|one": "es ountbann gewist",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s èn hunder noame %(count)s kis gewyzigd",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s èn hunder noame gewyzigd",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)s è zyn/heur noame %(count)s kis gewyzigd",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s è zyn/heur noame gewyzigd",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)s zyn %(count)s kis toegetreedn",
+        "one": "%(severalUsers)s zyn toegetreedn"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)s es %(count)s kis toegetreedn",
+        "one": "%(oneUser)s es toegetreedn"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)s es %(count)s kis deuregegoan",
+        "one": "%(severalUsers)s es deuregegoan"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)s es %(count)s kis deuregegoan",
+        "one": "%(oneUser)s es deuregegoan"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)s zyn %(count)s kis toegetreedn en deuregegoan",
+        "one": "%(severalUsers)s zyn toegetreedn en deuregegoan"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)s es %(count)s kis toegetreedn en deuregegoan",
+        "one": "%(oneUser)s es toegetreedn en deuregegoan"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)s zyn %(count)s kis deuregegoan en were toegetreedn",
+        "one": "%(severalUsers)s zyn deuregegoan en were toegetreedn"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)s es %(count)s kis deuregegoan en were toegetreedn",
+        "one": "%(oneUser)s es deuregegoan en were toegetreedn"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)s èn hunder uutnodigiengn %(count)s kis afgeweezn",
+        "one": "%(severalUsers)s èn hunder uutnodigiengn afgeweezn"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)s è zyn/heur uutnodigienge %(count)s kis afgeweezn",
+        "one": "%(oneUser)s è zyn/heur uutnodigienge afgeweezn"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "D’uutnodigiengn van %(severalUsers)s zyn %(count)s kis ingetrokkn gewist",
+        "one": "D’uutnodigiengn van %(severalUsers)s zyn ingetrokkn gewist"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "D’uutnodigienge van %(oneUser)s es %(count)s kis ingetrokkn gewist",
+        "one": "D’uutnodigienge van %(oneUser)s es ingetrokkn gewist"
+    },
+    "were invited %(count)s times": {
+        "other": "zyn %(count)s kis uutgenodigd gewist",
+        "one": "zyn uutgenodigd gewist"
+    },
+    "was invited %(count)s times": {
+        "other": "es %(count)s kis uutgenodigd gewist",
+        "one": "es uutgenodigd gewist"
+    },
+    "were banned %(count)s times": {
+        "other": "zyn %(count)s kis verbann gewist",
+        "one": "zyn verbann gewist"
+    },
+    "was banned %(count)s times": {
+        "other": "es %(count)s kis verbann gewist",
+        "one": "es verbann gewist"
+    },
+    "were unbanned %(count)s times": {
+        "other": "zyn %(count)s kis ountbann gewist",
+        "one": "zyn ountbann gewist"
+    },
+    "was unbanned %(count)s times": {
+        "other": "es %(count)s kis ountbann gewist",
+        "one": "es ountbann gewist"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)s èn hunder noame %(count)s kis gewyzigd",
+        "one": "%(severalUsers)s èn hunder noame gewyzigd"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)s è zyn/heur noame %(count)s kis gewyzigd",
+        "one": "%(oneUser)s è zyn/heur noame gewyzigd"
+    },
     "collapse": "toeklappn",
     "expand": "uutklappn",
     "Edit message": "Bericht bewerkn",
@@ -627,7 +675,9 @@
     "Custom level": "Angepast niveau",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Kostege de gebeurtenisse woarip da der gereageerd gewist was nie loadn. Allichte bestoa ze nie, of è je geen toeloatienge vo ze te bekykn.",
     "<a>In reply to</a> <pill>": "<a>As antwoord ip</a> <pill>",
-    "And %(count)s more...|other": "En %(count)s meer…",
+    "And %(count)s more...": {
+        "other": "En %(count)s meer…"
+    },
     "The following users may not exist": "De volgende gebruukers bestoan meugliks nie",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Kostege geen profieln vo de Matrix-ID’s hieroundern viendn - wil je ze algelyk uutnodign?",
     "Invite anyway and never warn me again": "Algelyk uutnodign en myn nooit nie mi woarschuwn",
@@ -711,8 +761,10 @@
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Dit bestand is <b>te groot</b> vo te kunn iploadn. De bestandsgroottelimiet is %(limit)s, ma dit bestand is %(sizeOfThisFile)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Deze bestandn zyn <b>te groot</b> vo te kunn iploadn. De bestandsgroottelimiet is %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Sommige bestandn zyn <b>te groot</b> vo te kunn iploadn. De bestandsgroottelimiet is %(limit)s.",
-    "Upload %(count)s other files|other": "%(count)s overige bestandn iploadn",
-    "Upload %(count)s other files|one": "%(count)s overig bestand iploadn",
+    "Upload %(count)s other files": {
+        "other": "%(count)s overige bestandn iploadn",
+        "one": "%(count)s overig bestand iploadn"
+    },
     "Cancel All": "Alles annuleern",
     "Upload Error": "Iploadfout",
     "Remember my selection for this widget": "Onthoudt myn keuze vo deze widget",
@@ -799,15 +851,19 @@
     "No more results": "Geen resultoatn nie mi",
     "Room": "Gesprek",
     "Failed to reject invite": "Weigern van d’uutnodigienge is mislukt",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "J’èt %(count)s oungeleezn meldiengn in e voorgoande versie van dit gesprek.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "J’èt %(count)s oungeleezn meldieng in e voorgoande versie van dit gesprek.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "J’èt %(count)s oungeleezn meldiengn in e voorgoande versie van dit gesprek.",
+        "one": "J’èt %(count)s oungeleezn meldieng in e voorgoande versie van dit gesprek."
+    },
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "J’è geprobeerd van e gegeven punt in de tydslyn van dit gesprek te loadn, moa j’è geen toeloatienge vo ’t desbetreffend bericht te zien.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Geprobeerd voor e gegeven punt in de tydslyn van dit gesprek te loadn, moar kostege dit nie viendn.",
     "Failed to load timeline position": "Loadn van tydslynpositie is mislukt",
     "Guest": "Gast",
-    "Uploading %(filename)s and %(count)s others|other": "%(filename)s en %(count)s andere wordn ipgeloadn",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "%(filename)s en %(count)s andere wordn ipgeloadn",
+        "one": "%(filename)s en %(count)s ander wordn ipgeloadn"
+    },
     "Uploading %(filename)s": "%(filename)s wordt ipgeloadn",
-    "Uploading %(filename)s and %(count)s others|one": "%(filename)s en %(count)s ander wordn ipgeloadn",
     "Could not load user profile": "Kostege ’t gebruukersprofiel nie loadn",
     "The email address linked to your account must be entered.": "’t E-mailadresse da me joun account verboundn is moet ingegeevn wordn.",
     "A new password must be entered.": "’t Moet e nieuw paswoord ingegeevn wordn.",
@@ -895,10 +951,14 @@
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Je nieuwen account (%(newAccountId)s) is geregistreerd, mo je zyt al angemeld met een anderen account (%(loggedInUserId)s).",
     "Continue with previous account": "Verdergoan me de vorigen account",
     "Show all": "Alles toogn",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s èn %(count)s kis nietent gewyzigd",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s èn nietent gewyzigd",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s èt %(count)s kis nietent gewyzigd",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s è nietent gewyzigd",
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)s èn %(count)s kis nietent gewyzigd",
+        "one": "%(severalUsers)s èn nietent gewyzigd"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)s èt %(count)s kis nietent gewyzigd",
+        "one": "%(oneUser)s è nietent gewyzigd"
+    },
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Vertelt uus wuk dat der verkeerd is geloopn, of nog beter, makt e foutmeldienge an ip GitHub woarin da je 't probleem beschryft.",
     "Removing…": "Bezig me te verwydern…",
     "Clear all data": "Alle gegeevns wissn",

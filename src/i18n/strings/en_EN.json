@@ -113,11 +113,15 @@
     "Reload": "Reload",
     "Empty room": "Empty room",
     "%(user1)s and %(user2)s": "%(user1)s and %(user2)s",
-    "%(user)s and %(count)s others|other": "%(user)s and %(count)s others",
-    "%(user)s and %(count)s others|one": "%(user)s and 1 other",
+    "%(user)s and %(count)s others": {
+        "other": "%(user)s and %(count)s others",
+        "one": "%(user)s and 1 other"
+    },
     "Inviting %(user1)s and %(user2)s": "Inviting %(user1)s and %(user2)s",
-    "Inviting %(user)s and %(count)s others|other": "Inviting %(user)s and %(count)s others",
-    "Inviting %(user)s and %(count)s others|one": "Inviting %(user)s and 1 other",
+    "Inviting %(user)s and %(count)s others": {
+        "other": "Inviting %(user)s and %(count)s others",
+        "one": "Inviting %(user)s and 1 other"
+    },
     "Empty room (was %(oldName)s)": "Empty room (was %(oldName)s)",
     "Default Device": "Default Device",
     "%(name)s is requesting verification": "%(name)s is requesting verification",
@@ -531,10 +535,14 @@
     "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s sent a sticker.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s set the main address for this room to %(address)s.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s removed the main address for this room.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s added the alternative addresses %(addresses)s for this room.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s added alternative address %(addresses)s for this room.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s removed the alternative addresses %(addresses)s for this room.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s removed alternative address %(addresses)s for this room.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s added the alternative addresses %(addresses)s for this room.",
+        "one": "%(senderName)s added alternative address %(addresses)s for this room."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s removed the alternative addresses %(addresses)s for this room.",
+        "one": "%(senderName)s removed alternative address %(addresses)s for this room."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s changed the alternative addresses for this room.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s changed the main and alternative addresses for this room.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s changed the addresses for this room.",
@@ -583,8 +591,10 @@
     "Light high contrast": "Light high contrast",
     "Dark": "Dark",
     "%(displayName)s is typing …": "%(displayName)s is typing …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s and %(count)s others are typing …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s and one other is typing …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s and %(count)s others are typing …",
+        "one": "%(names)s and one other is typing …"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s and %(lastPerson)s are typing …",
     "Remain on your screen when viewing another room, when running": "Remain on your screen when viewing another room, when running",
     "Remain on your screen while running": "Remain on your screen while running",
@@ -704,8 +714,10 @@
     "There was a problem communicating with the homeserver, please try again later.": "There was a problem communicating with the homeserver, please try again later.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
-    "%(items)s and %(count)s others|other": "%(items)s and %(count)s others",
-    "%(items)s and %(count)s others|one": "%(items)s and one other",
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s and %(count)s others",
+        "one": "%(items)s and one other"
+    },
     "%(items)s and %(lastItem)s": "%(items)s and %(lastItem)s",
     "a few seconds ago": "a few seconds ago",
     "about a minute ago": "about a minute ago",
@@ -723,10 +735,14 @@
     "%(num)s days from now": "%(num)s days from now",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s and %(space2Name)s",
     "In spaces %(space1Name)s and %(space2Name)s.": "In spaces %(space1Name)s and %(space2Name)s.",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s and %(count)s others",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s and %(count)s other",
-    "In %(spaceName)s and %(count)s other spaces.|other": "In %(spaceName)s and %(count)s other spaces.",
-    "In %(spaceName)s and %(count)s other spaces.|one": "In %(spaceName)s and %(count)s other space.",
+    "%(spaceName)s and %(count)s others": {
+        "other": "%(spaceName)s and %(count)s others",
+        "one": "%(spaceName)s and %(count)s other"
+    },
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "other": "In %(spaceName)s and %(count)s other spaces.",
+        "one": "In %(spaceName)s and %(count)s other space."
+    },
     "In %(spaceName)s.": "In %(spaceName)s.",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "Unexpected server error trying to leave the room": "Unexpected server error trying to leave the room",
@@ -805,10 +821,14 @@
     "Are you sure you want to exit during this export?": "Are you sure you want to exit during this export?",
     "Unnamed Room": "Unnamed Room",
     "Generating a ZIP": "Generating a ZIP",
-    "Fetched %(count)s events out of %(total)s|other": "Fetched %(count)s events out of %(total)s",
-    "Fetched %(count)s events out of %(total)s|one": "Fetched %(count)s event out of %(total)s",
-    "Fetched %(count)s events so far|other": "Fetched %(count)s events so far",
-    "Fetched %(count)s events so far|one": "Fetched %(count)s event so far",
+    "Fetched %(count)s events out of %(total)s": {
+        "other": "Fetched %(count)s events out of %(total)s",
+        "one": "Fetched %(count)s event out of %(total)s"
+    },
+    "Fetched %(count)s events so far": {
+        "other": "Fetched %(count)s events so far",
+        "one": "Fetched %(count)s event so far"
+    },
     "HTML": "HTML",
     "JSON": "JSON",
     "Plain Text": "Plain Text",
@@ -826,12 +846,16 @@
     "Error fetching file": "Error fetching file",
     "Processing event %(number)s out of %(total)s": "Processing event %(number)s out of %(total)s",
     "Starting export…": "Starting export…",
-    "Fetched %(count)s events in %(seconds)ss|other": "Fetched %(count)s events in %(seconds)ss",
-    "Fetched %(count)s events in %(seconds)ss|one": "Fetched %(count)s event in %(seconds)ss",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "other": "Fetched %(count)s events in %(seconds)ss",
+        "one": "Fetched %(count)s event in %(seconds)ss"
+    },
     "Creating HTML…": "Creating HTML…",
     "Export successful!": "Export successful!",
-    "Exported %(count)s events in %(seconds)s seconds|other": "Exported %(count)s events in %(seconds)s seconds",
-    "Exported %(count)s events in %(seconds)s seconds|one": "Exported %(count)s event in %(seconds)s seconds",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "other": "Exported %(count)s events in %(seconds)s seconds",
+        "one": "Exported %(count)s event in %(seconds)s seconds"
+    },
     "File Attached": "File Attached",
     "Starting export process…": "Starting export process…",
     "Fetching events…": "Fetching events…",
@@ -1150,8 +1174,10 @@
     "Video devices": "Video devices",
     "Turn off camera": "Turn off camera",
     "Turn on camera": "Turn on camera",
-    "%(count)s people joined|other": "%(count)s people joined",
-    "%(count)s people joined|one": "%(count)s person joined",
+    "%(count)s people joined": {
+        "other": "%(count)s people joined",
+        "one": "%(count)s person joined"
+    },
     "Dial": "Dial",
     "You are presenting": "You are presenting",
     "%(sharerName)s is presenting": "%(sharerName)s is presenting",
@@ -1268,8 +1294,10 @@
     "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.": "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.",
     "Find your people": "Find your people",
     "Welcome to %(brand)s": "Welcome to %(brand)s",
-    "Only %(count)s steps to go|other": "Only %(count)s steps to go",
-    "Only %(count)s steps to go|one": "Only %(count)s step to go",
+    "Only %(count)s steps to go": {
+        "other": "Only %(count)s steps to go",
+        "one": "Only %(count)s step to go"
+    },
     "You did it!": "You did it!",
     "Complete these to get the most out of %(brand)s": "Complete these to get the most out of %(brand)s",
     "Your server isn't responding to some <a>requests</a>.": "Your server isn't responding to some <a>requests</a>.",
@@ -1391,8 +1419,10 @@
     "Session ID:": "Session ID:",
     "Session key:": "Session key:",
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s room.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "other": "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
+        "one": "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s room."
+    },
     "Manage": "Manage",
     "Securely cache encrypted messages locally for them to appear in search results.": "Securely cache encrypted messages locally for them to appear in search results.",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.",
@@ -1411,18 +1441,26 @@
     "Integration manager": "Integration manager",
     "Upgrading room": "Upgrading room",
     "Loading new room": "Loading new room",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Sending invites... (%(progress)s out of %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Sending invite...",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Updating spaces... (%(progress)s out of %(count)s)",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Updating space...",
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "other": "Sending invites... (%(progress)s out of %(count)s)",
+        "one": "Sending invite..."
+    },
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "other": "Updating spaces... (%(progress)s out of %(count)s)",
+        "one": "Updating space..."
+    },
     "Upgrade required": "Upgrade required",
     "Private (invite only)": "Private (invite only)",
     "Only invited people can join.": "Only invited people can join.",
     "Anyone can find and join.": "Anyone can find and join.",
-    "& %(count)s more|other": "& %(count)s more",
-    "& %(count)s more|one": "& %(count)s more",
-    "Currently, %(count)s spaces have access|other": "Currently, %(count)s spaces have access",
-    "Currently, %(count)s spaces have access|one": "Currently, a space has access",
+    "& %(count)s more": {
+        "other": "& %(count)s more",
+        "one": "& %(count)s more"
+    },
+    "Currently, %(count)s spaces have access": {
+        "other": "Currently, %(count)s spaces have access",
+        "one": "Currently, a space has access"
+    },
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>",
     "Spaces with access": "Spaces with access",
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Anyone in <spaceName/> can find and join. You can select other spaces too.",
@@ -1645,8 +1683,10 @@
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Share anonymous data to help us identify issues. Nothing personal. No third parties.",
     "Sessions": "Sessions",
     "Sign out": "Sign out",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "Are you sure you want to sign out of %(count)s sessions?",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "Are you sure you want to sign out of %(count)s session?",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "other": "Are you sure you want to sign out of %(count)s sessions?",
+        "one": "Are you sure you want to sign out of %(count)s session?"
+    },
     "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.": "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.",
     "Sidebar": "Sidebar",
     "Spaces to show": "Spaces to show",
@@ -1821,14 +1861,22 @@
     "Discovery options will appear once you have added a phone number above.": "Discovery options will appear once you have added a phone number above.",
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Sign out of all other sessions (%(otherSessionsCount)s)",
     "Current session": "Current session",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Confirm logging out these devices by using Single Sign On to prove your identity.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Confirm logging out this device by using Single Sign On to prove your identity.",
-    "Confirm signing out these devices|other": "Confirm signing out these devices",
-    "Confirm signing out these devices|one": "Confirm signing out this device",
-    "Click the button below to confirm signing out these devices.|other": "Click the button below to confirm signing out these devices.",
-    "Click the button below to confirm signing out these devices.|one": "Click the button below to confirm signing out this device.",
-    "Sign out devices|other": "Sign out devices",
-    "Sign out devices|one": "Sign out device",
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "other": "Confirm logging out these devices by using Single Sign On to prove your identity.",
+        "one": "Confirm logging out this device by using Single Sign On to prove your identity."
+    },
+    "Confirm signing out these devices": {
+        "other": "Confirm signing out these devices",
+        "one": "Confirm signing out this device"
+    },
+    "Click the button below to confirm signing out these devices.": {
+        "other": "Click the button below to confirm signing out these devices.",
+        "one": "Click the button below to confirm signing out this device."
+    },
+    "Sign out devices": {
+        "other": "Sign out devices",
+        "one": "Sign out device"
+    },
     "Authentication": "Authentication",
     "Failed to set display name": "Failed to set display name",
     "Rename session": "Rename session",
@@ -1897,13 +1945,17 @@
     "Show": "Show",
     "Deselect all": "Deselect all",
     "Select all": "Select all",
-    "%(count)s sessions selected|other": "%(count)s sessions selected",
-    "%(count)s sessions selected|one": "%(count)s session selected",
+    "%(count)s sessions selected": {
+        "other": "%(count)s sessions selected",
+        "one": "%(count)s session selected"
+    },
     "Sign in with QR code": "Sign in with QR code",
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.",
     "Show QR code": "Show QR code",
-    "Sign out of %(count)s sessions|other": "Sign out of %(count)s sessions",
-    "Sign out of %(count)s sessions|one": "Sign out of %(count)s session",
+    "Sign out of %(count)s sessions": {
+        "other": "Sign out of %(count)s sessions",
+        "one": "Sign out of %(count)s session"
+    },
     "Other sessions": "Other sessions",
     "Security recommendations": "Security recommendations",
     "Improve your account security by following these recommendations.": "Improve your account security by following these recommendations.",
@@ -1962,16 +2014,24 @@
     "Close call": "Close call",
     "View chat timeline": "View chat timeline",
     "Room options": "Room options",
-    "(~%(count)s results)|other": "(~%(count)s results)",
-    "(~%(count)s results)|one": "(~%(count)s result)",
+    "(~%(count)s results)": {
+        "other": "(~%(count)s results)",
+        "one": "(~%(count)s result)"
+    },
     "Video rooms are a beta feature": "Video rooms are a beta feature",
-    "Show %(count)s other previews|other": "Show %(count)s other previews",
-    "Show %(count)s other previews|one": "Show %(count)s other preview",
+    "Show %(count)s other previews": {
+        "other": "Show %(count)s other previews",
+        "one": "Show %(count)s other preview"
+    },
     "Close preview": "Close preview",
-    "%(count)s participants|other": "%(count)s participants",
-    "%(count)s participants|one": "1 participant",
-    "and %(count)s others...|other": "and %(count)s others...",
-    "and %(count)s others...|one": "and one other...",
+    "%(count)s participants": {
+        "other": "%(count)s participants",
+        "one": "1 participant"
+    },
+    "and %(count)s others...": {
+        "other": "and %(count)s others...",
+        "one": "and one other..."
+    },
     "Invite to this room": "Invite to this room",
     "Invite to this space": "Invite to this space",
     "You do not have permission to invite users": "You do not have permission to invite users",
@@ -2035,8 +2095,10 @@
     "Unknown": "Unknown",
     "%(members)s and more": "%(members)s and more",
     "%(members)s and %(last)s": "%(members)s and %(last)s",
-    "Seen by %(count)s people|other": "Seen by %(count)s people",
-    "Seen by %(count)s people|one": "Seen by %(count)s person",
+    "Seen by %(count)s people": {
+        "other": "Seen by %(count)s people",
+        "one": "Seen by %(count)s person"
+    },
     "Read receipts": "Read receipts",
     "Replying": "Replying",
     "Room %(name)s": "Room %(name)s",
@@ -2047,8 +2109,10 @@
     "Public room": "Public room",
     "Private space": "Private space",
     "Private room": "Private room",
-    "%(count)s members|other": "%(count)s members",
-    "%(count)s members|one": "%(count)s member",
+    "%(count)s members": {
+        "other": "%(count)s members",
+        "one": "%(count)s member"
+    },
     "Start new chat": "Start new chat",
     "Invite to space": "Invite to space",
     "You do not have permissions to invite people to this space": "You do not have permissions to invite people to this space",
@@ -2071,10 +2135,14 @@
     "Add space": "Add space",
     "You do not have permissions to add spaces to this space": "You do not have permissions to add spaces to this space",
     "Join public room": "Join public room",
-    "Currently joining %(count)s rooms|other": "Currently joining %(count)s rooms",
-    "Currently joining %(count)s rooms|one": "Currently joining %(count)s room",
-    "Currently removing messages in %(count)s rooms|other": "Currently removing messages in %(count)s rooms",
-    "Currently removing messages in %(count)s rooms|one": "Currently removing messages in %(count)s room",
+    "Currently joining %(count)s rooms": {
+        "other": "Currently joining %(count)s rooms",
+        "one": "Currently joining %(count)s room"
+    },
+    "Currently removing messages in %(count)s rooms": {
+        "other": "Currently removing messages in %(count)s rooms",
+        "one": "Currently removing messages in %(count)s room"
+    },
     "%(spaceName)s menu": "%(spaceName)s menu",
     "Home options": "Home options",
     "Unable to find user by email": "Unable to find user by email",
@@ -2148,14 +2216,20 @@
     "Activity": "Activity",
     "A-Z": "A-Z",
     "List options": "List options",
-    "Show %(count)s more|other": "Show %(count)s more",
-    "Show %(count)s more|one": "Show %(count)s more",
+    "Show %(count)s more": {
+        "other": "Show %(count)s more",
+        "one": "Show %(count)s more"
+    },
     "Show less": "Show less",
     "Notification options": "Notification options",
-    "%(count)s unread messages including mentions.|other": "%(count)s unread messages including mentions.",
-    "%(count)s unread messages including mentions.|one": "1 unread mention.",
-    "%(count)s unread messages.|other": "%(count)s unread messages.",
-    "%(count)s unread messages.|one": "1 unread message.",
+    "%(count)s unread messages including mentions.": {
+        "other": "%(count)s unread messages including mentions.",
+        "one": "1 unread mention."
+    },
+    "%(count)s unread messages.": {
+        "other": "%(count)s unread messages.",
+        "one": "1 unread message."
+    },
     "Unread messages.": "Unread messages.",
     "Joined": "Joined",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.",
@@ -2176,8 +2250,10 @@
     "Admin Tools": "Admin Tools",
     "Revoke invite": "Revoke invite",
     "Invited by %(sender)s": "Invited by %(sender)s",
-    "%(count)s reply|other": "%(count)s replies",
-    "%(count)s reply|one": "%(count)s reply",
+    "%(count)s reply": {
+        "other": "%(count)s replies",
+        "one": "%(count)s reply"
+    },
     "Open thread": "Open thread",
     "Unable to decrypt message": "Unable to decrypt message",
     "Jump to first unread message.": "Jump to first unread message.",
@@ -2259,7 +2335,9 @@
     "Room info": "Room info",
     "Nothing pinned, yet": "Nothing pinned, yet",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.",
-    "You can only pin up to %(count)s widgets|other": "You can only pin up to %(count)s widgets",
+    "You can only pin up to %(count)s widgets": {
+        "other": "You can only pin up to %(count)s widgets"
+    },
     "Maximise": "Maximise",
     "Unpin this widget to view it in this panel": "Unpin this widget to view it in this panel",
     "Close this widget to view it in this panel": "Close this widget to view it in this panel",
@@ -2276,11 +2354,15 @@
     "Room settings": "Room settings",
     "Trusted": "Trusted",
     "Not trusted": "Not trusted",
-    "%(count)s verified sessions|other": "%(count)s verified sessions",
-    "%(count)s verified sessions|one": "1 verified session",
+    "%(count)s verified sessions": {
+        "other": "%(count)s verified sessions",
+        "one": "1 verified session"
+    },
     "Hide verified sessions": "Hide verified sessions",
-    "%(count)s sessions|other": "%(count)s sessions",
-    "%(count)s sessions|one": "%(count)s session",
+    "%(count)s sessions": {
+        "other": "%(count)s sessions",
+        "one": "%(count)s session"
+    },
     "Hide sessions": "Hide sessions",
     "Message": "Message",
     "Ignore %(user)s": "Ignore %(user)s",
@@ -2356,8 +2438,10 @@
     "%(displayName)s cancelled verification.": "%(displayName)s cancelled verification.",
     "You cancelled verification.": "You cancelled verification.",
     "Verification cancelled": "Verification cancelled",
-    "%(count)s votes|other": "%(count)s votes",
-    "%(count)s votes|one": "%(count)s vote",
+    "%(count)s votes": {
+        "other": "%(count)s votes",
+        "one": "%(count)s vote"
+    },
     "View poll in timeline": "View poll in timeline",
     "Active polls": "Active polls",
     "Past polls": "Past polls",
@@ -2367,13 +2451,19 @@
     "There are no past polls in this room": "There are no past polls in this room",
     "There are no active polls. Load more polls to view polls for previous months": "There are no active polls. Load more polls to view polls for previous months",
     "There are no past polls. Load more polls to view polls for previous months": "There are no past polls. Load more polls to view polls for previous months",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "There are no active polls for the past day. Load more polls to view polls for previous months",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "There are no past polls for the past day. Load more polls to view polls for previous months",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "other": "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months",
+        "one": "There are no active polls for the past day. Load more polls to view polls for previous months"
+    },
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "other": "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months",
+        "one": "There are no past polls for the past day. Load more polls to view polls for previous months"
+    },
     "View poll": "View poll",
-    "Final result based on %(count)s votes|other": "Final result based on %(count)s votes",
-    "Final result based on %(count)s votes|one": "Final result based on %(count)s vote",
+    "Final result based on %(count)s votes": {
+        "other": "Final result based on %(count)s votes",
+        "one": "Final result based on %(count)s vote"
+    },
     "%(name)s started a video call": "%(name)s started a video call",
     "Video call ended": "Video call ended",
     "Sunday": "Sunday",
@@ -2475,10 +2565,14 @@
     "Due to decryption errors, some votes may not be counted": "Due to decryption errors, some votes may not be counted",
     "Results will be visible when the poll is ended": "Results will be visible when the poll is ended",
     "No votes cast": "No votes cast",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s votes cast. Vote to see the results",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s vote cast. Vote to see the results",
-    "Based on %(count)s votes|other": "Based on %(count)s votes",
-    "Based on %(count)s votes|one": "Based on %(count)s vote",
+    "%(count)s votes cast. Vote to see the results": {
+        "other": "%(count)s votes cast. Vote to see the results",
+        "one": "%(count)s vote cast. Vote to see the results"
+    },
+    "Based on %(count)s votes": {
+        "other": "Based on %(count)s votes",
+        "one": "Based on %(count)s vote"
+    },
     "edited": "edited",
     "Ended a poll": "Ended a poll",
     "Error decrypting video": "Error decrypting video",
@@ -2561,74 +2655,142 @@
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.",
     "Something went wrong!": "Something went wrong!",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)sjoined %(count)s times",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sjoined",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sjoined %(count)s times",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)sjoined",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)sleft %(count)s times",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)sleft",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)sleft %(count)s times",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)sleft",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)sjoined and left %(count)s times",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)sjoined and left",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)sjoined and left %(count)s times",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)sjoined and left",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)sleft and rejoined %(count)s times",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)sleft and rejoined",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)sleft and rejoined %(count)s times",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)sleft and rejoined",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)srejected their invitations %(count)s times",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)srejected their invitations",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)srejected their invitation %(count)s times",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)srejected their invitation",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)shad their invitations withdrawn %(count)s times",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)shad their invitations withdrawn",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)shad their invitation withdrawn %(count)s times",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)shad their invitation withdrawn",
-    "were invited %(count)s times|other": "were invited %(count)s times",
-    "were invited %(count)s times|one": "were invited",
-    "was invited %(count)s times|other": "was invited %(count)s times",
-    "was invited %(count)s times|one": "was invited",
-    "were banned %(count)s times|other": "were banned %(count)s times",
-    "were banned %(count)s times|one": "were banned",
-    "was banned %(count)s times|other": "was banned %(count)s times",
-    "was banned %(count)s times|one": "was banned",
-    "were unbanned %(count)s times|other": "were unbanned %(count)s times",
-    "were unbanned %(count)s times|one": "were unbanned",
-    "was unbanned %(count)s times|other": "was unbanned %(count)s times",
-    "was unbanned %(count)s times|one": "was unbanned",
-    "were removed %(count)s times|other": "were removed %(count)s times",
-    "were removed %(count)s times|one": "were removed",
-    "was removed %(count)s times|other": "was removed %(count)s times",
-    "was removed %(count)s times|one": "was removed",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)schanged their name %(count)s times",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)schanged their name",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)schanged their name %(count)s times",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)schanged their name",
-    "%(severalUsers)schanged their profile picture %(count)s times|other": "%(severalUsers)schanged their profile picture %(count)s times",
-    "%(severalUsers)schanged their profile picture %(count)s times|one": "%(severalUsers)schanged their profile picture",
-    "%(oneUser)schanged their profile picture %(count)s times|other": "%(oneUser)schanged their profile picture %(count)s times",
-    "%(oneUser)schanged their profile picture %(count)s times|one": "%(oneUser)schanged their profile picture",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)smade no changes %(count)s times",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)smade no changes",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)smade no changes %(count)s times",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)smade no changes",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)schanged the server ACLs %(count)s times",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)schanged the server ACLs",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)schanged the server ACLs %(count)s times",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)schanged the server ACLs",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)schanged the <a>pinned messages</a> for the room",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)schanged the <a>pinned messages</a> for the room",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)sremoved %(count)s messages",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)sremoved a message",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)sremoved %(count)s messages",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)sremoved a message",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)ssent %(count)s hidden messages",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)ssent a hidden message",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)ssent %(count)s hidden messages",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)ssent a hidden message",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)sjoined %(count)s times",
+        "one": "%(severalUsers)sjoined"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)sjoined %(count)s times",
+        "one": "%(oneUser)sjoined"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)sleft %(count)s times",
+        "one": "%(severalUsers)sleft"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)sleft %(count)s times",
+        "one": "%(oneUser)sleft"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)sjoined and left %(count)s times",
+        "one": "%(severalUsers)sjoined and left"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)sjoined and left %(count)s times",
+        "one": "%(oneUser)sjoined and left"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)sleft and rejoined %(count)s times",
+        "one": "%(severalUsers)sleft and rejoined"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)sleft and rejoined %(count)s times",
+        "one": "%(oneUser)sleft and rejoined"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)srejected their invitations %(count)s times",
+        "one": "%(severalUsers)srejected their invitations"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)srejected their invitation %(count)s times",
+        "one": "%(oneUser)srejected their invitation"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)shad their invitations withdrawn %(count)s times",
+        "one": "%(severalUsers)shad their invitations withdrawn"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)shad their invitation withdrawn %(count)s times",
+        "one": "%(oneUser)shad their invitation withdrawn"
+    },
+    "were invited %(count)s times": {
+        "other": "were invited %(count)s times",
+        "one": "were invited"
+    },
+    "was invited %(count)s times": {
+        "other": "was invited %(count)s times",
+        "one": "was invited"
+    },
+    "were banned %(count)s times": {
+        "other": "were banned %(count)s times",
+        "one": "were banned"
+    },
+    "was banned %(count)s times": {
+        "other": "was banned %(count)s times",
+        "one": "was banned"
+    },
+    "were unbanned %(count)s times": {
+        "other": "were unbanned %(count)s times",
+        "one": "were unbanned"
+    },
+    "was unbanned %(count)s times": {
+        "other": "was unbanned %(count)s times",
+        "one": "was unbanned"
+    },
+    "were removed %(count)s times": {
+        "other": "were removed %(count)s times",
+        "one": "were removed"
+    },
+    "was removed %(count)s times": {
+        "other": "was removed %(count)s times",
+        "one": "was removed"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)schanged their name %(count)s times",
+        "one": "%(severalUsers)schanged their name"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)schanged their name %(count)s times",
+        "one": "%(oneUser)schanged their name"
+    },
+    "%(severalUsers)schanged their profile picture %(count)s times": {
+        "other": "%(severalUsers)schanged their profile picture %(count)s times",
+        "one": "%(severalUsers)schanged their profile picture"
+    },
+    "%(oneUser)schanged their profile picture %(count)s times": {
+        "other": "%(oneUser)schanged their profile picture %(count)s times",
+        "one": "%(oneUser)schanged their profile picture"
+    },
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)smade no changes %(count)s times",
+        "one": "%(severalUsers)smade no changes"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)smade no changes %(count)s times",
+        "one": "%(oneUser)smade no changes"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "other": "%(severalUsers)schanged the server ACLs %(count)s times",
+        "one": "%(severalUsers)schanged the server ACLs"
+    },
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "other": "%(oneUser)schanged the server ACLs %(count)s times",
+        "one": "%(oneUser)schanged the server ACLs"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "other": "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times",
+        "one": "%(severalUsers)schanged the <a>pinned messages</a> for the room"
+    },
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "other": "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times",
+        "one": "%(oneUser)schanged the <a>pinned messages</a> for the room"
+    },
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "other": "%(severalUsers)sremoved %(count)s messages",
+        "one": "%(severalUsers)sremoved a message"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "other": "%(oneUser)sremoved %(count)s messages",
+        "one": "%(oneUser)sremoved a message"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "other": "%(severalUsers)ssent %(count)s hidden messages",
+        "one": "%(severalUsers)ssent a hidden message"
+    },
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "other": "%(oneUser)ssent %(count)s hidden messages",
+        "one": "%(oneUser)ssent a hidden message"
+    },
     "collapse": "collapse",
     "expand": "expand",
     "Image view": "Image view",
@@ -2672,12 +2834,16 @@
     "This address is available to use": "This address is available to use",
     "This address is already in use": "This address is already in use",
     "This address had invalid server or is already in use": "This address had invalid server or is already in use",
-    "View all %(count)s members|other": "View all %(count)s members",
-    "View all %(count)s members|one": "View 1 member",
+    "View all %(count)s members": {
+        "other": "View all %(count)s members",
+        "one": "View 1 member"
+    },
     "Including you, %(commaSeparatedMembers)s": "Including you, %(commaSeparatedMembers)s",
     "Including %(commaSeparatedMembers)s": "Including %(commaSeparatedMembers)s",
-    "%(count)s people you know have already joined|other": "%(count)s people you know have already joined",
-    "%(count)s people you know have already joined|one": "%(count)s person you know has already joined",
+    "%(count)s people you know have already joined": {
+        "other": "%(count)s people you know have already joined",
+        "one": "%(count)s person you know has already joined"
+    },
     "Edit topic": "Edit topic",
     "Click to read topic": "Click to read topic",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Message search initialisation failed, check <a>your settings</a> for more information",
@@ -2695,7 +2861,9 @@
     "Choose a locale": "Choose a locale",
     "Continue with %(provider)s": "Continue with %(provider)s",
     "Sign in with single sign-on": "Sign in with single sign-on",
-    "And %(count)s more...|other": "And %(count)s more...",
+    "And %(count)s more...": {
+        "other": "And %(count)s more..."
+    },
     "You're in": "You're in",
     "Who will you chat to the most?": "Who will you chat to the most?",
     "We'll help you get connected.": "We'll help you get connected.",
@@ -2721,8 +2889,10 @@
     "Create a new space": "Create a new space",
     "Search for spaces": "Search for spaces",
     "Not all selected were added": "Not all selected were added",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Adding rooms... (%(progress)s out of %(count)s)",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Adding room...",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "other": "Adding rooms... (%(progress)s out of %(count)s)",
+        "one": "Adding room..."
+    },
     "Direct Messages": "Direct Messages",
     "Add existing rooms": "Add existing rooms",
     "Want to add a new room instead?": "Want to add a new room instead?",
@@ -2766,13 +2936,17 @@
     "No recent messages by %(user)s found": "No recent messages by %(user)s found",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Try scrolling up in the timeline to see if there are any earlier ones.",
     "Remove recent messages by %(user)s": "Remove recent messages by %(user)s",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|one": "You are about to remove %(count)s message by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?",
+    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
+        "other": "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?",
+        "one": "You are about to remove %(count)s message by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?"
+    },
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.",
     "Preserve system messages": "Preserve system messages",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)",
-    "Remove %(count)s messages|other": "Remove %(count)s messages",
-    "Remove %(count)s messages|one": "Remove 1 message",
+    "Remove %(count)s messages": {
+        "other": "Remove %(count)s messages",
+        "one": "Remove 1 message"
+    },
     "Can't start voice message": "Can't start voice message",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.",
     "Unable to load commit detail: %(msg)s": "Unable to load commit detail: %(msg)s",
@@ -2974,8 +3148,10 @@
     "Manually export keys": "Manually export keys",
     "You'll lose access to your encrypted messages": "You'll lose access to your encrypted messages",
     "Are you sure you want to sign out?": "Are you sure you want to sign out?",
-    "%(count)s rooms|other": "%(count)s rooms",
-    "%(count)s rooms|one": "%(count)s room",
+    "%(count)s rooms": {
+        "other": "%(count)s rooms",
+        "one": "%(count)s room"
+    },
     "You're removing all spaces. Access will default to invite only": "You're removing all spaces. Access will default to invite only",
     "Select spaces": "Select spaces",
     "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.",
@@ -3119,8 +3295,10 @@
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "These files are <b>too large</b> to upload. The file size limit is %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.",
-    "Upload %(count)s other files|other": "Upload %(count)s other files",
-    "Upload %(count)s other files|one": "Upload %(count)s other file",
+    "Upload %(count)s other files": {
+        "other": "Upload %(count)s other files",
+        "one": "Upload %(count)s other file"
+    },
     "Cancel All": "Cancel All",
     "Upload Error": "Upload Error",
     "Labs": "Labs",
@@ -3134,8 +3312,10 @@
     "The widget will verify your user ID, but won't be able to perform actions for you:": "The widget will verify your user ID, but won't be able to perform actions for you:",
     "Remember this": "Remember this",
     "Unnamed room": "Unnamed room",
-    "%(count)s Members|other": "%(count)s Members",
-    "%(count)s Members|one": "%(count)s Member",
+    "%(count)s Members": {
+        "other": "%(count)s Members",
+        "one": "%(count)s Member"
+    },
     "Public rooms": "Public rooms",
     "Use \"%(query)s\" to search": "Use \"%(query)s\" to search",
     "Search for": "Search for",
@@ -3221,7 +3401,9 @@
     "User read up to (m.read.private): ": "User read up to (m.read.private): ",
     "User read up to (m.read.private;ignoreSynthetic): ": "User read up to (m.read.private;ignoreSynthetic): ",
     "Room status": "Room status",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>": {
+        "other": "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>"
+    },
     "Room unread status: <strong>%(status)s</strong>": "Room unread status: <strong>%(status)s</strong>",
     "Notification state is <strong>%(notificationState)s</strong>": "Notification state is <strong>%(notificationState)s</strong>",
     "Room is <strong>encrypted ✅</strong>": "Room is <strong>encrypted ✅</strong>",
@@ -3236,8 +3418,10 @@
     "Sender: ": "Sender: ",
     "Threads timeline": "Threads timeline",
     "Thread Id: ": "Thread Id: ",
-    "<%(count)s spaces>|other": "<%(count)s spaces>",
-    "<%(count)s spaces>|one": "<space>",
+    "<%(count)s spaces>": {
+        "other": "<%(count)s spaces>",
+        "one": "<space>"
+    },
     "<empty string>": "<empty string>",
     "See history": "See history",
     "Send custom state event": "Send custom state event",
@@ -3481,8 +3665,10 @@
     "You seem to be uploading files, are you sure you want to quit?": "You seem to be uploading files, are you sure you want to quit?",
     "You seem to be in a call, are you sure you want to quit?": "You seem to be in a call, are you sure you want to quit?",
     "Failed to reject invite": "Failed to reject invite",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "You have %(count)s unread notifications in a prior version of this room.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "You have %(count)s unread notification in a prior version of this room.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "You have %(count)s unread notifications in a prior version of this room.",
+        "one": "You have %(count)s unread notification in a prior version of this room."
+    },
     "Joining": "Joining",
     "You don't have permission": "You don't have permission",
     "This room is suggested as a good one to join": "This room is suggested as a good one to join",
@@ -3540,8 +3726,10 @@
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tried to load a specific point in this room's timeline, but was unable to find it.",
     "Failed to load timeline position": "Failed to load timeline position",
-    "Uploading %(filename)s and %(count)s others|other": "Uploading %(filename)s and %(count)s others",
-    "Uploading %(filename)s and %(count)s others|one": "Uploading %(filename)s and %(count)s other",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "Uploading %(filename)s and %(count)s others",
+        "one": "Uploading %(filename)s and %(count)s other"
+    },
     "Uploading %(filename)s": "Uploading %(filename)s",
     "Got an account? <a>Sign in</a>": "Got an account? <a>Sign in</a>",
     "New here? <a>Create an account</a>": "New here? <a>Create an account</a>",

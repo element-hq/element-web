@@ -124,8 +124,10 @@
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s widget được thêm vào bởi %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget được gỡ bởi %(senderName)s",
     "%(displayName)s is typing …": "%(displayName)s đang gõ …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s và %(count)s người khác đang gõ …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s và một người khác đang gõ …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s và %(count)s người khác đang gõ …",
+        "one": "%(names)s và một người khác đang gõ …"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s và %(lastPerson)s đang gõ …",
     "Cannot reach homeserver": "Không thể kết nối tới máy chủ",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Đảm bảo bạn có kết nối Internet ổn định, hoặc liên hệ quản trị viên để được hỗ trợ",
@@ -139,8 +141,10 @@
     "Unexpected error resolving identity server configuration": "Lỗi xảy ra khi xử lý thiết lập máy chủ định danh",
     "This homeserver has hit its Monthly Active User limit.": "Máy chủ nhà này đã đạt đến giới hạn người dùng hoạt động hàng tháng.",
     "This homeserver has exceeded one of its resource limits.": "Homeserver này đã vượt quá một trong những giới hạn tài nguyên của nó.",
-    "%(items)s and %(count)s others|other": "%(items)s và %(count)s mục khác",
-    "%(items)s and %(count)s others|one": "%(items)s và một mục khác",
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s và %(count)s mục khác",
+        "one": "%(items)s và một mục khác"
+    },
     "%(items)s and %(lastItem)s": "%(items)s và %(lastItem)s",
     "Your browser does not support the required cryptography extensions": "Trình duyệt của bạn không hỗ trợ chức năng mã hóa",
     "Not a valid %(brand)s keyfile": "Tệp khóa %(brand)s không hợp lệ",
@@ -632,10 +636,14 @@
     "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Quyết định space nào có thể vào phòng này. Nếu một space được chọn, các thành viên của nó có thể tìm và tham gia <RoomName/>.",
     "Select spaces": "Chọn Không gian",
     "You're removing all spaces. Access will default to invite only": "Bạn đang xóa tất cả space. Quyền truy cập sẽ mặc định chỉ để mời",
-    "%(count)s rooms|one": "%(count)s phòng",
-    "%(count)s rooms|other": "%(count)s phòng",
-    "%(count)s members|one": "%(count)s thành viên",
-    "%(count)s members|other": "%(count)s thành viên",
+    "%(count)s rooms": {
+        "one": "%(count)s phòng",
+        "other": "%(count)s phòng"
+    },
+    "%(count)s members": {
+        "one": "%(count)s thành viên",
+        "other": "%(count)s thành viên"
+    },
     "Are you sure you want to sign out?": "Bạn có chắc mình muốn đăng xuất không?",
     "You'll lose access to your encrypted messages": "Bạn sẽ mất quyền truy cập vào các tin nhắn được mã hóa của mình",
     "Manually export keys": "Xuất các khóa thủ công",
@@ -871,8 +879,10 @@
     "Add existing rooms": "Thêm các phòng hiện có",
     "Space selection": "Lựa chọn space",
     "Direct Messages": "Tin nhắn trực tiếp",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Đang thêm phòng…",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Đang thêm các phòng... (%(progress)s trong %(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Đang thêm phòng…",
+        "other": "Đang thêm các phòng... (%(progress)s trong %(count)s)"
+    },
     "Not all selected were added": "Không phải tất cả các mục đã chọn đều được thêm vào",
     "Search for spaces": "Tìm kiếm space",
     "Create a new space": "Tạo space mới",
@@ -887,7 +897,9 @@
     "You are not allowed to view this server's rooms list": "Bạn không được phép xem danh sách phòng của máy chủ này",
     "Looks good": "Có vẻ ổn",
     "Enter a server name": "Nhập tên máy chủ",
-    "And %(count)s more...|other": "Và %(count)s thêm…",
+    "And %(count)s more...": {
+        "other": "Và %(count)s thêm…"
+    },
     "Sign in with single sign-on": "Đăng nhập bằng đăng nhập một lần",
     "Continue with %(provider)s": "Tiếp tục với %(provider)s",
     "Homeserver": "Máy chủ",
@@ -905,20 +917,34 @@
     "QR Code": "Mã QR",
     "Custom level": "Cấp độ tùy chọn",
     "Power level": "Cấp độ sức mạnh",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)s đã thay đổi ACLs máy chủ",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)s đã thay đổi ACLs máy chủ %(count)s lần",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)s đã thay đổi ACLs máy chủ",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)s đã thay đổi ACLs máy chủ %(count)s lần",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s không thay đổi",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s không thay đổi %(count)s lần",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s không thay đổi",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s không thay đổi %(count)s lần",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s đã thay đổi tên của họ",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)s đã thay đổi tên của họ %(count)s lần",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s đã thay đổi tên của họ",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s đã thay đổi tên của họ %(count)s lần",
-    "was unbanned %(count)s times|one": "đã được hủy cấm",
-    "was unbanned %(count)s times|other": "đã được hủy cấm %(count)s lần",
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "one": "%(oneUser)s đã thay đổi ACLs máy chủ",
+        "other": "%(oneUser)s đã thay đổi ACLs máy chủ %(count)s lần"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "one": "%(severalUsers)s đã thay đổi ACLs máy chủ",
+        "other": "%(severalUsers)s đã thay đổi ACLs máy chủ %(count)s lần"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "one": "%(oneUser)s không thay đổi",
+        "other": "%(oneUser)s không thay đổi %(count)s lần"
+    },
+    "%(severalUsers)smade no changes %(count)s times": {
+        "one": "%(severalUsers)s không thay đổi",
+        "other": "%(severalUsers)s không thay đổi %(count)s lần"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "one": "%(oneUser)s đã thay đổi tên của họ",
+        "other": "%(oneUser)s đã thay đổi tên của họ %(count)s lần"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "one": "%(severalUsers)s đã thay đổi tên của họ",
+        "other": "%(severalUsers)s đã thay đổi tên của họ %(count)s lần"
+    },
+    "was unbanned %(count)s times": {
+        "one": "đã được hủy cấm",
+        "other": "đã được hủy cấm %(count)s lần"
+    },
     "Use your Security Key to continue.": "Sử dụng Khóa bảo mật của bạn để tiếp tục.",
     "Security Key": "Chìa khóa bảo mật",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Nhập Chuỗi bảo mật hoặc <button>sử dụng Khóa bảo mật</button> của bạn để tiếp tục.",
@@ -993,32 +1019,58 @@
     "Learn more": "Tìm hiểu thêm",
     "Use your preferred Matrix homeserver if you have one, or host your own.": "Sử dụng máy chủ Matrix ưa thích của bạn nếu bạn có, hoặc tự tạo máy chủ lưu trữ của riêng bạn.",
     "Other homeserver": "Máy chủ khác",
-    "were unbanned %(count)s times|one": "đã được hủy cấm",
-    "were unbanned %(count)s times|other": "đã được hủy cấm %(count)s lần",
-    "was banned %(count)s times|one": "đã bị cấm",
-    "was banned %(count)s times|other": "đã bị cấm %(count)s lần",
-    "were banned %(count)s times|one": "đã bị cấm",
-    "were banned %(count)s times|other": "đã bị cấm %(count)s lần",
-    "was invited %(count)s times|one": "đã được mời",
-    "was invited %(count)s times|other": "đã được mời %(count)s lần",
-    "were invited %(count)s times|one": "đã được mời",
-    "were invited %(count)s times|other": "đã được mời %(count)s lần",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)s đã rút lời mợi của họ",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)s đã rút lời mợi của họ %(count)s lần",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)s đã rút các lời mời của họ",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s đã rút các lời mời của họ %(count)s lần",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s đã từ chối lời mời của họ",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s đã từ chối lời mời của họ %(count)s lần",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s đã từ chối các lời mời của họ",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s đã từ chối các lời mời của họ %(count)s lần",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s đã rời khỏi và tham gia lại",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s đã rời khỏi và tham gia lại %(count)s lần",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s đã rời khỏi và tham gia lại",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s đã rời khỏi và tham gia lại %(count)s lần",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s đã tham gia và rời khỏi",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s đã tham gia và rời khỏi %(count)s lần",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s đã tham gia và rời khỏi",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s đã tham gia và rời khỏi %(count)s lần",
+    "were unbanned %(count)s times": {
+        "one": "đã được hủy cấm",
+        "other": "đã được hủy cấm %(count)s lần"
+    },
+    "was banned %(count)s times": {
+        "one": "đã bị cấm",
+        "other": "đã bị cấm %(count)s lần"
+    },
+    "were banned %(count)s times": {
+        "one": "đã bị cấm",
+        "other": "đã bị cấm %(count)s lần"
+    },
+    "was invited %(count)s times": {
+        "one": "đã được mời",
+        "other": "đã được mời %(count)s lần"
+    },
+    "were invited %(count)s times": {
+        "one": "đã được mời",
+        "other": "đã được mời %(count)s lần"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "one": "%(oneUser)s đã rút lời mợi của họ",
+        "other": "%(oneUser)s đã rút lời mợi của họ %(count)s lần"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "one": "%(severalUsers)s đã rút các lời mời của họ",
+        "other": "%(severalUsers)s đã rút các lời mời của họ %(count)s lần"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "one": "%(oneUser)s đã từ chối lời mời của họ",
+        "other": "%(oneUser)s đã từ chối lời mời của họ %(count)s lần"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "one": "%(severalUsers)s đã từ chối các lời mời của họ",
+        "other": "%(severalUsers)s đã từ chối các lời mời của họ %(count)s lần"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "one": "%(oneUser)s đã rời khỏi và tham gia lại",
+        "other": "%(oneUser)s đã rời khỏi và tham gia lại %(count)s lần"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "one": "%(severalUsers)s đã rời khỏi và tham gia lại",
+        "other": "%(severalUsers)s đã rời khỏi và tham gia lại %(count)s lần"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "one": "%(oneUser)s đã tham gia và rời khỏi",
+        "other": "%(oneUser)s đã tham gia và rời khỏi %(count)s lần"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "one": "%(severalUsers)s đã tham gia và rời khỏi",
+        "other": "%(severalUsers)s đã tham gia và rời khỏi %(count)s lần"
+    },
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "Language Dropdown": "Danh sách ngôn ngữ",
     "Information": "Thông tin",
@@ -1026,11 +1078,15 @@
     "Rotate Left": "Xoay trái",
     "Zoom in": "Phóng to",
     "Zoom out": "Thu nhỏ",
-    "%(count)s people you know have already joined|one": "%(count)s người bạn đã biết vừa tham gia",
-    "%(count)s people you know have already joined|other": "%(count)s người bạn đã biết vừa tham gia",
+    "%(count)s people you know have already joined": {
+        "one": "%(count)s người bạn đã biết vừa tham gia",
+        "other": "%(count)s người bạn đã biết vừa tham gia"
+    },
     "Including %(commaSeparatedMembers)s": "Bao gồm %(commaSeparatedMembers)s",
-    "View all %(count)s members|one": "Xem một thành viên",
-    "View all %(count)s members|other": "Xem tất cả %(count)s thành viên",
+    "View all %(count)s members": {
+        "one": "Xem một thành viên",
+        "other": "Xem tất cả %(count)s thành viên"
+    },
     "expand": "mở rộng",
     "collapse": "thu hẹp",
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Vui lòng <newIssueLink> tạo một vấn đề mới </newIssueLink> trên GitHub để chúng tôi có thể điều tra lỗi này.",
@@ -1205,8 +1261,10 @@
     "Ban from %(roomName)s": "Cấm từ %(roomName)s",
     "Unban from %(roomName)s": "Hủy cấm từ %(roomName)s",
     "Remove recent messages": "Bỏ các tin nhắn gần đây",
-    "Remove %(count)s messages|one": "Bỏ một tin nhắn",
-    "Remove %(count)s messages|other": "Bỏ %(count)s tin nhắn",
+    "Remove %(count)s messages": {
+        "one": "Bỏ một tin nhắn",
+        "other": "Bỏ %(count)s tin nhắn"
+    },
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Đối với một lượng lớn thư, quá trình này có thể mất một chút thời gian. Vui lòng không làm mới khách hàng của bạn trong thời gian chờ đợi.",
     "Remove recent messages by %(user)s": "Bỏ các tin nhắn gần đây bởi %(user)s",
     "Show more": "Cho xem nhiều hơn",
@@ -1257,10 +1315,14 @@
     "This room has already been upgraded.": "Phòng này đã được nâng cấp.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Việc nâng cấp phòng này sẽ đóng phiên bản hiện tại của phòng và tạo một phòng được nâng cấp có cùng tên.",
     "Unread messages.": "Các tin nhắn chưa đọc.",
-    "%(count)s unread messages.|one": "1 tin chưa đọc.",
-    "%(count)s unread messages.|other": "%(count)s tin nhắn chưa đọc.",
-    "%(count)s unread messages including mentions.|one": "1 đề cập chưa đọc.",
-    "%(count)s unread messages including mentions.|other": "%(count)s tin nhắn chưa đọc bao gồm các đề cập.",
+    "%(count)s unread messages.": {
+        "one": "1 tin chưa đọc.",
+        "other": "%(count)s tin nhắn chưa đọc."
+    },
+    "%(count)s unread messages including mentions.": {
+        "one": "1 đề cập chưa đọc.",
+        "other": "%(count)s tin nhắn chưa đọc bao gồm các đề cập."
+    },
     "Room options": "Tùy chọn phòng",
     "Settings": "Cài đặt",
     "Low Priority": "Ưu tiên thấp",
@@ -1270,8 +1332,10 @@
     "Notification options": "Tùy chọn thông báo",
     "All messages": "Tất cả tin nhắn",
     "Show less": "Hiện ít hơn",
-    "Show %(count)s more|one": "Hiển thị %(count)s thêm",
-    "Show %(count)s more|other": "Hiển thị %(count)s thêm",
+    "Show %(count)s more": {
+        "one": "Hiển thị %(count)s thêm",
+        "other": "Hiển thị %(count)s thêm"
+    },
     "List options": "Liệt kê các tùy chọn",
     "A-Z": "AZ",
     "Activity": "Hoạt động",
@@ -1326,8 +1390,10 @@
     "Hide Widgets": "Ẩn widget",
     "Forget room": "Quên phòng",
     "Join Room": "Vào phòng",
-    "(~%(count)s results)|one": "(~%(count)s kết quả)",
-    "(~%(count)s results)|other": "(~%(count)s kết quả)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s kết quả)",
+        "other": "(~%(count)s kết quả)"
+    },
     "Unnamed room": "Phòng không tên",
     "No recently visited rooms": "Không có phòng nào được truy cập gần đây",
     "Recently visited rooms": "Các phòng đã ghé thăm gần đây",
@@ -1361,14 +1427,22 @@
     "Topic: %(topic)s (<a>edit</a>)": "Chủ đề: %(topic)s (<a>edit</a>)",
     "This is the beginning of your direct message history with <displayName/>.": "Đây là phần bắt đầu của lịch sử tin nhắn trực tiếp của bạn với <displayName/>.",
     "Only the two of you are in this conversation, unless either of you invites anyone to join.": "Chỉ có hai người trong cuộc trò chuyện này, trừ khi một trong hai người mời bất kỳ ai tham gia.",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s đã rời khỏi",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s đã rời khỏi %(count)s lần",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s đã rời khỏi",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s đã rời khỏi %(count)s lần",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s đã tham gia",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s đã tham gia %(count)s lần",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s đã tham gia",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s đã tham gia %(count)s lần",
+    "%(oneUser)sleft %(count)s times": {
+        "one": "%(oneUser)s đã rời khỏi",
+        "other": "%(oneUser)s đã rời khỏi %(count)s lần"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "one": "%(severalUsers)s đã rời khỏi",
+        "other": "%(severalUsers)s đã rời khỏi %(count)s lần"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "one": "%(oneUser)s đã tham gia",
+        "other": "%(oneUser)s đã tham gia %(count)s lần"
+    },
+    "%(severalUsers)sjoined %(count)s times": {
+        "one": "%(severalUsers)s đã tham gia",
+        "other": "%(severalUsers)s đã tham gia %(count)s lần"
+    },
     "Insert link": "Chèn liên kết",
     "Quote": "Trích",
     "Code block": "Khối mã",
@@ -1561,11 +1635,15 @@
     "Mention": "Nhắc đến",
     "Jump to read receipt": "Nhảy để đọc biên nhận",
     "Hide sessions": "Ẩn các phiên",
-    "%(count)s sessions|one": "%(count)s phiên",
-    "%(count)s sessions|other": "%(count)s phiên",
+    "%(count)s sessions": {
+        "one": "%(count)s phiên",
+        "other": "%(count)s phiên"
+    },
     "Hide verified sessions": "Ẩn các phiên đã xác thực",
-    "%(count)s verified sessions|one": "1 phiên đã xác thực",
-    "%(count)s verified sessions|other": "%(count)s phiên đã xác thực",
+    "%(count)s verified sessions": {
+        "one": "1 phiên đã xác thực",
+        "other": "%(count)s phiên đã xác thực"
+    },
     "Not trusted": "Không đáng tin cậy",
     "Trusted": "Tin cậy",
     "Room settings": "Cài đặt phòng",
@@ -1577,7 +1655,9 @@
     "Edit widgets, bridges & bots": "Chỉnh sửa tiện ích widget, cầu nối và bot",
     "Widgets": "Vật dụng",
     "Set my room layout for everyone": "Đặt bố cục phòng của tôi cho mọi người",
-    "You can only pin up to %(count)s widgets|other": "Bạn chỉ có thể ghim tối đa %(count)s widget",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Bạn chỉ có thể ghim tối đa %(count)s widget"
+    },
     "Threads": "Chủ đề",
     "Pinned messages": "Tin nhắn đã ghim",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Nếu bạn có quyền, hãy mở menu trên bất kỳ tin nhắn nào và chọn Ghim <b>Pin</b> để dán chúng vào đây.",
@@ -1807,11 +1887,15 @@
     "Invited": "Đã mời",
     "Invite to this space": "Mời vào space này",
     "Invite to this room": "Mời vào phòng này",
-    "and %(count)s others...|one": "và một cái khác…",
-    "and %(count)s others...|other": "và %(count)s khác…",
+    "and %(count)s others...": {
+        "one": "và một cái khác…",
+        "other": "và %(count)s khác…"
+    },
     "Close preview": "Đóng bản xem trước",
-    "Show %(count)s other previews|one": "Hiển thị %(count)s bản xem trước khác",
-    "Show %(count)s other previews|other": "Hiển thị %(count)s bản xem trước khác",
+    "Show %(count)s other previews": {
+        "one": "Hiển thị %(count)s bản xem trước khác",
+        "other": "Hiển thị %(count)s bản xem trước khác"
+    },
     "Scroll to most recent messages": "Di chuyển đến các tin nhắn gần đây nhất",
     "Failed to send": "Gửi thất bại",
     "Your message was sent": "Tin nhắn của bạn đã được gửi đi",
@@ -1820,8 +1904,10 @@
     "Unencrypted": "Không được mã hóa",
     "Encrypted by an unverified session": "Được mã hóa bởi một phiên chưa được xác thực",
     "This event could not be displayed": "Sự kiện này không thể được hiển thị",
-    "%(count)s reply|one": "%(count)s trả lời",
-    "%(count)s reply|other": "%(count)s trả lời",
+    "%(count)s reply": {
+        "one": "%(count)s trả lời",
+        "other": "%(count)s trả lời"
+    },
     "Mod": "Người quản trị",
     "Edit message": "Chỉnh sửa tin nhắn",
     "Send as message": "Gửi dưới dạng tin nhắn",
@@ -2095,10 +2181,14 @@
     "%(senderName)s changed the addresses for this room.": "%(senderName)s đã thay đổi địa chỉ cho phòng này.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s đã thay đổi địa chỉ chính và địa chỉ thay thế cho phòng này.",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s đã thay đổi các địa chỉ thay thế cho phòng này.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s đã bỏ địa chỉ thay thế %(addresses)s cho phòng này.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s đã bỏ các địa chỉ thay thế %(addresses)s cho phòng này.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s đã thêm địa chỉ thay thế %(addresses)s cho phòng này.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s đã thêm các địa chỉ thay thế %(addresses)s cho phòng này.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "one": "%(senderName)s đã bỏ địa chỉ thay thế %(addresses)s cho phòng này.",
+        "other": "%(senderName)s đã bỏ các địa chỉ thay thế %(addresses)s cho phòng này."
+    },
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "one": "%(senderName)s đã thêm địa chỉ thay thế %(addresses)s cho phòng này.",
+        "other": "%(senderName)s đã thêm các địa chỉ thay thế %(addresses)s cho phòng này."
+    },
     "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s đã gửi một sticker.",
     "Message deleted by %(name)s": "Tin nhắn đã bị %(name)s xóa",
     "Message deleted": "Tin nhắn đã xóa",
@@ -2147,10 +2237,14 @@
     "Message bubbles": "Bong bóng tin nhắn",
     "Modern": "Hiện đại",
     "Message layout": "Bố cục tin nhắn",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Đang cập nhật space…",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Đang cập nhật space… (%(progress)s trên %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Đang gửi lời mời…",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Đang gửi lời mời... (%(progress)s trên %(count)s)",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Đang cập nhật space…",
+        "other": "Đang cập nhật space… (%(progress)s trên %(count)s)"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Đang gửi lời mời…",
+        "other": "Đang gửi lời mời... (%(progress)s trên %(count)s)"
+    },
     "Loading new room": "Đang tải phòng mới",
     "Upgrading room": "Đang nâng cấp phòng",
     "This upgrade will allow members of selected spaces access to this room without an invite.": "Nâng cấp này sẽ cho phép các thành viên của các space đã chọn vào phòng này mà không cần lời mời.",
@@ -2159,10 +2253,14 @@
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Bất cứ ai trong <spaceName/> có thể tìm và tham gia. Bạn cũng có thể chọn các space khác.",
     "Spaces with access": "Các Space có quyền truy cập",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Bất kỳ ai trong một space đều có thể tìm và tham gia. Chỉnh sửa space nào có thể truy cập tại đây. <a>Edit which spaces can access here.</a>",
-    "Currently, %(count)s spaces have access|one": "Hiện tại, một space có quyền truy cập",
-    "Currently, %(count)s spaces have access|other": "Hiện tại, %(count)s spaces có quyền truy cập",
-    "& %(count)s more|one": "& %(count)s thêm",
-    "& %(count)s more|other": "& %(count)s thêm",
+    "Currently, %(count)s spaces have access": {
+        "one": "Hiện tại, một space có quyền truy cập",
+        "other": "Hiện tại, %(count)s spaces có quyền truy cập"
+    },
+    "& %(count)s more": {
+        "one": "& %(count)s thêm",
+        "other": "& %(count)s thêm"
+    },
     "Upgrade required": "Yêu cầu nâng cấp",
     "Anyone can find and join.": "Bất kỳ ai cũng có thể tìm và tham gia.",
     "Only invited people can join.": "Chỉ những người được mời mới có thể tham gia.",
@@ -2178,8 +2276,10 @@
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s thiếu một số thành phần thiết yếu để lưu trữ cục bộ an toàn các tin nhắn được mã hóa. Nếu bạn muốn thử nghiệm với tính năng này, hãy dựng một bản %(brand)s tùy chỉnh cho máy tính có thêm <nativeLink>các thành phần để tìm kiếm</nativeLink>.",
     "Securely cache encrypted messages locally for them to appear in search results.": "Bộ nhớ cache an toàn các tin nhắn được mã hóa cục bộ để chúng xuất hiện trong kết quả tìm kiếm.",
     "Manage": "Quản lý",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Lưu trữ cục bộ an toàn các tin nhắn đã được mã hóa để chúng xuất hiện trong các kết quả tìm kiếm, sử dụng %(size)s để lưu trữ các tin nhắn từ %(rooms)s phòng.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Lưu trữ an toàn các tin nhắn đã được mã hóa trên thiết bị để chúng xuất hiện trong các kết quả tìm kiếm, sử dụng %(size)s để lưu trữ các tin nhắn từ các %(rooms)s phòng.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "Lưu trữ cục bộ an toàn các tin nhắn đã được mã hóa để chúng xuất hiện trong các kết quả tìm kiếm, sử dụng %(size)s để lưu trữ các tin nhắn từ %(rooms)s phòng.",
+        "other": "Lưu trữ an toàn các tin nhắn đã được mã hóa trên thiết bị để chúng xuất hiện trong các kết quả tìm kiếm, sử dụng %(size)s để lưu trữ các tin nhắn từ các %(rooms)s phòng."
+    },
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Xác thực riêng từng phiên được người dùng sử dụng để đánh dấu phiên đó là đáng tin cậy, không tin cậy vào các thiết bị được xác thực chéo.",
     "Encryption": "Mã hóa",
     "Failed to set display name": "Không đặt được tên hiển thị",
@@ -2601,9 +2701,11 @@
     "Skip verification for now": "Bỏ qua xác thực ngay bây giờ",
     "Really reset verification keys?": "Thực sự đặt lại các khóa xác minh?",
     "Clear": "Xoá",
-    "Uploading %(filename)s and %(count)s others|one": "Đang tải lên %(filename)s và %(count)s tập tin khác",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "Đang tải lên %(filename)s và %(count)s tập tin khác",
+        "other": "Đang tải lên %(filename)s và %(count)s tập tin khác"
+    },
     "Uploading %(filename)s": "Đang tải lên %(filename)s",
-    "Uploading %(filename)s and %(count)s others|other": "Đang tải lên %(filename)s và %(count)s tập tin khác",
     "Show all threads": "Hiển thị tất cả chủ đề",
     "Keep discussions organised with threads": "Giữ các cuộc thảo luận được tổ chức với các chủ đề này",
     "Show:": "Hiển thị:",
@@ -2616,8 +2718,10 @@
     "Results": "Kết quả",
     "Joined": "Đã tham gia",
     "Joining": "Đang tham gia",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Bạn có %(count)s thông báo chưa đọc trong phiên bản trước của phòng này.",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Bạn có %(count)s thông báo chưa đọc trong phiên bản trước của phòng này.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "one": "Bạn có %(count)s thông báo chưa đọc trong phiên bản trước của phòng này.",
+        "other": "Bạn có %(count)s thông báo chưa đọc trong phiên bản trước của phòng này."
+    },
     "You're all caught up": "Tất cả các bạn đều bị bắt",
     "Own your conversations.": "Sở hữu các cuộc trò chuyện của bạn.",
     "Someone already has that username. Try another or if it is you, sign in below.": "Ai đó đã có username đó. Hãy thử một cái khác hoặc nếu đó là bạn, hay đăng nhập bên dưới.",
@@ -2628,8 +2732,10 @@
     "Mentions only": "Chỉ tin nhắn được đề cập",
     "Forget": "Quên",
     "View in room": "Xem phòng này",
-    "Upload %(count)s other files|one": "Tải lên %(count)s tệp khác",
-    "Upload %(count)s other files|other": "Tải lên %(count)s tệp khác",
+    "Upload %(count)s other files": {
+        "one": "Tải lên %(count)s tệp khác",
+        "other": "Tải lên %(count)s tệp khác"
+    },
     "We call the places where you can host your account 'homeservers'.": "Chúng tôi gọi những nơi bạn có thể lưu trữ tài khoản của bạn là 'homeserver'.",
     "Matrix.org is the biggest public homeserver in the world, so it's a good place for many.": "Matrix.org là homeserver công cộng lớn nhất, vì vậy nó là nơi lý tưởng cho nhiều người.",
     "Any other reason. Please describe the problem.\nThis will be reported to the room moderators.": "Bất kỳ lý do nào khác. Xin hãy mô tả vấn đề.\nĐiều này sẽ được báo cáo cho người điều hành phòng.",
@@ -2654,12 +2760,18 @@
     "Sorry, the poll you tried to create was not posted.": "Xin lỗi, cuộc thăm dò mà bạn đã cố gắng tạo đã không được đăng.",
     "Failed to post poll": "Đăng cuộc thăm dò thất bại",
     "Create Poll": "Tạo Cuộc thăm dò ý kiến",
-    "%(count)s votes|one": "%(count)s phiếu bầu",
-    "%(count)s votes|other": "%(count)s phiếu bầu",
-    "Based on %(count)s votes|one": "Dựa theo %(count)s phiếu bầu",
-    "Based on %(count)s votes|other": "Dựa theo %(count)s phiếu bầu",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s phiếu bầu. Bỏ phiếu để xem kết quả",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s phiếu bầu. Bỏ phiếu để xem kết quả",
+    "%(count)s votes": {
+        "one": "%(count)s phiếu bầu",
+        "other": "%(count)s phiếu bầu"
+    },
+    "Based on %(count)s votes": {
+        "one": "Dựa theo %(count)s phiếu bầu",
+        "other": "Dựa theo %(count)s phiếu bầu"
+    },
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s phiếu bầu. Bỏ phiếu để xem kết quả",
+        "other": "%(count)s phiếu bầu. Bỏ phiếu để xem kết quả"
+    },
     "No votes cast": "Không có phiếu",
     "Sorry, your vote was not registered. Please try again.": "Xin lỗi, phiếu bầu của bạn đã không được đăng ký. Vui lòng thử lại.",
     "Vote not registered": "Bỏ phiếu không đăng ký",
@@ -2673,8 +2785,10 @@
     "The homeserver the user you're verifying is connected to": "Máy chủ nhà người dùng bạn đang xác thực được kết nối đến",
     "Home options": "Các tùy chọn Home",
     "%(spaceName)s menu": "%(spaceName)s menu",
-    "Currently joining %(count)s rooms|one": "Hiện đang tham gia %(count)s phòng",
-    "Currently joining %(count)s rooms|other": "Hiện đang tham gia %(count)s phòng",
+    "Currently joining %(count)s rooms": {
+        "one": "Hiện đang tham gia %(count)s phòng",
+        "other": "Hiện đang tham gia %(count)s phòng"
+    },
     "Join public room": "Tham gia vào phòng công cộng",
     "Add people": "Thêm người",
     "You do not have permissions to invite people to this space": "Bạn không có quyền mời mọi người vào space này",
@@ -2707,12 +2821,18 @@
     "Rename": "Đặt lại tên",
     "Select all": "Chọn tất cả",
     "Deselect all": "Bỏ chọn tất cả",
-    "Sign out devices|one": "Đăng xuất thiết bị",
-    "Sign out devices|other": "Đăng xuất các thiết bị",
-    "Click the button below to confirm signing out these devices.|one": "Nhấn nút bên dưới để xác nhận đăng xuất thiết bị này.",
-    "Click the button below to confirm signing out these devices.|other": "Nhấn nút bên dưới để xác nhận đăng xuất các thiết bị này.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Xác nhận đăng xuất thiết bị này bằng cách sử dụng Single Sign On để xác thực danh tính của bạn.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Xác nhận đăng xuất các thiết bị này bằng cách sử dụng Single Sign On để xác thực danh tính.",
+    "Sign out devices": {
+        "one": "Đăng xuất thiết bị",
+        "other": "Đăng xuất các thiết bị"
+    },
+    "Click the button below to confirm signing out these devices.": {
+        "one": "Nhấn nút bên dưới để xác nhận đăng xuất thiết bị này.",
+        "other": "Nhấn nút bên dưới để xác nhận đăng xuất các thiết bị này."
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Xác nhận đăng xuất thiết bị này bằng cách sử dụng Single Sign On để xác thực danh tính của bạn.",
+        "other": "Xác nhận đăng xuất các thiết bị này bằng cách sử dụng Single Sign On để xác thực danh tính."
+    },
     "Pin to sidebar": "Ghim vào sidebar",
     "Quick settings": "Cài đặt nhanh",
     "sends rainfall": "gửi kiểu mưa rơi",
@@ -2735,8 +2855,10 @@
     "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s đã thay đổi ai có thể tham gia phòng này. <a> Xem cài đặt </a>.",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Khóa đăng nhập bạn cung cấp khớp với khóa đăng nhập bạn nhận từ thiết bị %(deviceId)s của %(userId)s. Thiết bị được đánh dấu là đã được xác minh.",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Sử dụng máy chủ định danh để mời qua thư điện tử. Bấm Tiếp tục để sử dụng máy chủ định danh mặc định (%(defaultIdentityServerName)s) hoặc quản lý trong Cài đặt.",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s và %(count)s khác",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s và %(count)s khác",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s và %(count)s khác",
+        "other": "%(spaceName)s và %(count)s khác"
+    },
     "You cannot place calls without a connection to the server.": "Bạn không thể gọi khi không có kết nối tới máy chủ.",
     "Connectivity to the server has been lost": "Mất kết nối đến máy chủ",
     "You cannot place calls in this browser.": "Bạn không thể gọi trong trình duyệt này.",
@@ -2773,8 +2895,10 @@
     "Including you, %(commaSeparatedMembers)s": "Bao gồm bạn, %(commaSeparatedMembers)s",
     "Backspace": "Phím lùi",
     "toggle event": "chuyển đổi sự kiện",
-    "Final result based on %(count)s votes|one": "Kết quả cuối cùng dựa trên %(count)s phiếu bầu",
-    "Final result based on %(count)s votes|other": "Kết quả cuối cùng dựa trên %(count)s phiếu bầu",
+    "Final result based on %(count)s votes": {
+        "one": "Kết quả cuối cùng dựa trên %(count)s phiếu bầu",
+        "other": "Kết quả cuối cùng dựa trên %(count)s phiếu bầu"
+    },
     "Expand map": "Mở rộng bản đồ",
     "You cancelled verification on your other device.": "Bạn đã hủy xác thực trên thiết bị khác của bạn.",
     "Almost there! Is your other device showing the same shield?": "Sắp xong rồi! Có phải thiết bị khác của bạn hiển thị cùng một lá chắn không?",
@@ -2790,16 +2914,24 @@
     "Back to thread": "Quay lại luồng",
     "Room members": "Thành viên phòng",
     "Back to chat": "Quay lại trò chuyện",
-    "Exported %(count)s events in %(seconds)s seconds|one": "Đã xuất %(count)s sự kiện trong %(seconds)s giây",
-    "Exported %(count)s events in %(seconds)s seconds|other": "Đã xuất %(count)s sự kiện trong %(seconds)s giây",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "Đã xuất %(count)s sự kiện trong %(seconds)s giây",
+        "other": "Đã xuất %(count)s sự kiện trong %(seconds)s giây"
+    },
     "Export successful!": "Xuất thành công!",
-    "Fetched %(count)s events in %(seconds)ss|one": "Đã tìm thấy %(count)s sự kiện trong %(seconds)s giây",
-    "Fetched %(count)s events in %(seconds)ss|other": "Đã tìm thấy %(count)s sự kiện trong %(seconds)s giây",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "Đã tìm thấy %(count)s sự kiện trong %(seconds)s giây",
+        "other": "Đã tìm thấy %(count)s sự kiện trong %(seconds)s giây"
+    },
     "Processing event %(number)s out of %(total)s": "Đang sử lý %(number)s sự kiện trong %(total)s",
-    "Fetched %(count)s events so far|one": "Đã tìm thấy %(count)s sự kiện đến hiện tại",
-    "Fetched %(count)s events so far|other": "Đã tìm thấy %(count)s sự kiện đến hiện tại",
-    "Fetched %(count)s events out of %(total)s|one": "Đã tìm thấy %(count)s sự kiện trong %(total)s",
-    "Fetched %(count)s events out of %(total)s|other": "Đã tìm thấy %(count)s sự kiện trong %(total)s",
+    "Fetched %(count)s events so far": {
+        "one": "Đã tìm thấy %(count)s sự kiện đến hiện tại",
+        "other": "Đã tìm thấy %(count)s sự kiện đến hiện tại"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "Đã tìm thấy %(count)s sự kiện trong %(total)s",
+        "other": "Đã tìm thấy %(count)s sự kiện trong %(total)s"
+    },
     "Generating a ZIP": "Tạo ZIP",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Chúng tôi không thể hiểu ngày được nhập (%(inputDate)s). Hãy thử dùng định dạng YYYY-MM-DD.",
     "Command failed: Unable to find room (%(roomId)s": "Lỗi khi thực hiện lệnh: Không tìm thấy phòng (%(roomId)s)",
@@ -2853,9 +2985,11 @@
     "User is already invited to the room": "Người dùng đã được mời vào phòng",
     "User is already invited to the space": "Người dùng đã được mời vào space",
     "You do not have permission to invite people to this space.": "Bạn không có quyền để mời mọi người vào space này.",
-    "In %(spaceName)s and %(count)s other spaces.|one": "Trong %(spaceName)s và %(count)s space khác.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "Trong %(spaceName)s và %(count)s space khác.",
+        "other": "Trong %(spaceName)s và %(count)s space khác."
+    },
     "In %(spaceName)s.": "Trong space %(spaceName)s.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "Trong %(spaceName)s và %(count)s space khác.",
     "In spaces %(space1Name)s and %(space2Name)s.": "Trong các space %(space1Name)s và %(space2Name)s.",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s và %(space2Name)s",
     "Remove, ban, or invite people to your active room, and make you leave": "Xóa, cấm, hoặc mời mọi người vào phòng đang hoạt động của bạn, và bạn rời khỏi đó",
@@ -2893,11 +3027,15 @@
     "Use your account to continue.": "Dùng tài khoản của bạn để tiếp tục.",
     "%(senderName)s started a voice broadcast": "%(senderName)s đã bắt đầu phát thanh",
     "Empty room (was %(oldName)s)": "Phòng trống (trước kia là %(oldName)s)",
-    "Inviting %(user)s and %(count)s others|one": "Đang mời %(user)s và 1 người khác",
-    "Inviting %(user)s and %(count)s others|other": "Đang mời %(user)s và %(count)s người khác",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "Đang mời %(user)s và 1 người khác",
+        "other": "Đang mời %(user)s và %(count)s người khác"
+    },
     "Inviting %(user1)s and %(user2)s": "Mời %(user1)s và %(user2)s",
-    "%(user)s and %(count)s others|one": "%(user)s và 1 người khác",
-    "%(user)s and %(count)s others|other": "%(user)s và %(count)s người khác",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s và 1 người khác",
+        "other": "%(user)s và %(count)s người khác"
+    },
     "%(user1)s and %(user2)s": "%(user1)s và %(user2)s",
     "Reload": "Tải lại",
     "Database unexpectedly closed": "Cơ sở dữ liệu đột nhiên bị đóng",
@@ -2918,7 +3056,10 @@
     "Device": "Thiết bị",
     "Version": "Phiên bản",
     "Rename session": "Đổi tên phiên",
-    "Confirm signing out these devices|one": "Xác nhận đăng xuất khỏi thiết bị này",
+    "Confirm signing out these devices": {
+        "one": "Xác nhận đăng xuất khỏi thiết bị này",
+        "other": "Xác nhận đăng xuất khỏi các thiết bị này"
+    },
     "Current session": "Phiên hiện tại",
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Đăng xuất khỏi mọi phiên khác (%(otherSessionsCount)s)",
     "You do not have sufficient permissions to change this.": "Bạn không có đủ quyền để thay đổi cái này.",
@@ -2931,8 +3072,10 @@
     "Video settings": "Cài đặt truyền hình",
     "Voice settings": "Cài đặt âm thanh",
     "Group all your people in one place.": "Đưa tất cả mọi người vào một chỗ.",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "Bạn có muốn đăng xuất %(count)s phiên?",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "Bạn có muốn đăng xuất %(count)s phiên?",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "one": "Bạn có muốn đăng xuất %(count)s phiên?",
+        "other": "Bạn có muốn đăng xuất %(count)s phiên?"
+    },
     "Sessions": "Các phiên",
     "Share your activity and status with others.": "Chia sẻ hoạt động và trạng thái với người khác.",
     "Early previews": "Thử trước tính năng mới",
@@ -2954,8 +3097,10 @@
     "Saving…": "Đang lưu…",
     "Creating…": "Đang tạo…",
     "Secure messaging for friends and family": "Tin nhắn bảo mật cho bạn bè và gia đình",
-    "%(count)s people joined|one": "%(count)s người đã tham gia",
-    "%(count)s people joined|other": "%(count)s người đã tham gia",
+    "%(count)s people joined": {
+        "one": "%(count)s người đã tham gia",
+        "other": "%(count)s người đã tham gia"
+    },
     "Turn on camera": "Bật máy ghi hình",
     "Turn off camera": "Tắt máy ghi hình",
     "Video devices": "Thiết bị ghi hình",
@@ -3041,15 +3186,16 @@
     "Hide details": "Ẩn chi tiết",
     "Last activity": "Hoạt động cuối",
     "Renaming sessions": "Đổi tên các phiên",
-    "Confirm signing out these devices|other": "Xác nhận đăng xuất khỏi các thiết bị này",
     "Call type": "Loại cuộc gọi",
     "Internal room ID": "Định danh riêng của phòng",
     "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.": "Để bảo mật nhất, hãy xác thực các phiên và đăng xuất khỏi phiên nào bạn không nhận ra hay dùng nữa.",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (Trạng thái HTTP %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Lỗi không xác định khi đổi mật khẩu (%(stringifiedError)s)",
     "You did it!": "Hoàn thành rồi!",
-    "Only %(count)s steps to go|one": "Chỉ %(count)s bước nữa thôi",
-    "Only %(count)s steps to go|other": "Chỉ %(count)s bước nữa thôi",
+    "Only %(count)s steps to go": {
+        "one": "Chỉ %(count)s bước nữa thôi",
+        "other": "Chỉ %(count)s bước nữa thôi"
+    },
     "Ignore (%(counter)s)": "Ẩn (%(counter)s)",
     "Developer tools": "Công cụ phát triển",
     "Match system": "Theo hệ thống",
@@ -3165,7 +3311,10 @@
     "Unban from space": "Bỏ cấm trong space",
     "Re-enter email address": "Điền lại địa chỉ thư điện tử",
     "Decrypted source unavailable": "Nguồn được giải mã không khả dụng",
-    "Seen by %(count)s people|one": "Gửi bởi %(count)s người",
+    "Seen by %(count)s people": {
+        "one": "Gửi bởi %(count)s người",
+        "other": "Gửi bởi %(count)s người"
+    },
     "Search all rooms": "Tìm tất cả phòng",
     "Link": "Liên kết",
     "Rejecting invite…": "Từ chối lời mời…",
@@ -3175,7 +3324,10 @@
     "Event ID: %(eventId)s": "Định danh (ID) sự kiện: %(eventId)s",
     "Disinvite from room": "Không mời vào phòng nữa",
     "Your language": "Ngôn ngữ của bạn",
-    "%(count)s participants|one": "1 người tham gia",
+    "%(count)s participants": {
+        "one": "1 người tham gia",
+        "other": "%(count)s người tham gia"
+    },
     "You were removed from %(roomName)s by %(memberName)s": "Bạn đã bị loại khỏi %(roomName)s bởi %(memberName)s",
     "Voice Message": "Tin nhắn thoại",
     "Show formatting": "Hiện định dạng",
@@ -3223,10 +3375,8 @@
     "Did not receive it?": "Không nhận được nó?",
     "Remove from room": "Loại bỏ khỏi phòng",
     "You can't see earlier messages": "Bạn khồng thể thấy các tin nhắn trước",
-    "%(count)s participants|other": "%(count)s người tham gia",
     "Send your first message to invite <displayName/> to chat": "Gửi tin nhắn đầu tiên để mời <displayName/> vào cuộc trò chuyện",
     "%(members)s and %(last)s": "%(members)s và %(last)s",
-    "Seen by %(count)s people|other": "Gửi bởi %(count)s người",
     "Private room": "Phòng riêng tư",
     "Join the room to participate": "Tham gia phòng để tương tác",
     "Underline": "Gạch chân",
@@ -3248,8 +3398,10 @@
     "This session is ready for secure messaging.": "Phiên này sẵn sàng nhắn tin bảo mật.",
     "Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.": "Xác thực phiên để nhắn tin bảo mật tốt hơn hoặc đăng xuất khỏi các phiên mà bạn không nhận ra hay không dùng nữa.",
     "No verified sessions found.": "Không thấy phiên được xác thực nào.",
-    "%(count)s sessions selected|other": "%(count)s phiên đã chọn",
-    "%(count)s sessions selected|one": "%(count)s phiên đã chọn",
+    "%(count)s sessions selected": {
+        "other": "%(count)s phiên đã chọn",
+        "one": "%(count)s phiên đã chọn"
+    },
     "Verified session": "Phiên đã xác thực",
     "Web session": "Phiên trên trình duyệt",
     "No sessions found.": "Không thấy phiên nào.",
@@ -3280,8 +3432,10 @@
     "Improve your account security by following these recommendations.": "Tăng cường bảo mật cho tài khoản bằng cách làm theo các đề xuất này.",
     "You made it!": "Bạn làm rồi!",
     "Ready for secure messaging": "Sẵn sàng nhắn tin bảo mật",
-    "Sign out of %(count)s sessions|other": "Đăng xuất khỏi %(count)s phiên",
-    "Sign out of %(count)s sessions|one": "Đăng xuất khỏi %(count)s phiên",
+    "Sign out of %(count)s sessions": {
+        "other": "Đăng xuất khỏi %(count)s phiên",
+        "one": "Đăng xuất khỏi %(count)s phiên"
+    },
     "You don't have permission to view messages from before you joined.": "Bạn không có quyền xem tin nhắn trước lúc bạn tham gia.",
     "Encrypted messages before this point are unavailable.": "Các tin nhắn được mã hóa trước thời điểm này không có sẵn.",
     "Video call (%(brand)s)": "Cuộc gọi truyền hình (%(brand)s)",
@@ -3292,7 +3446,10 @@
     "Loading preview": "Đang tải xem trước",
     "Find your co-workers": "Tìm các đồng nghiệp của bạn",
     "This room or space is not accessible at this time.": "Phòng hoặc space này không thể truy cập được bây giờ.",
-    "Currently removing messages in %(count)s rooms|one": "Hiện đang xóa tin nhắn ở %(count)s phòng",
+    "Currently removing messages in %(count)s rooms": {
+        "one": "Hiện đang xóa tin nhắn ở %(count)s phòng",
+        "other": "Hiện đang xóa tin nhắn ở %(count)s phòng"
+    },
     "Joining space…": "Đang tham gia space…",
     "Joining room…": "Đang tham gia phòng…",
     "Find and invite your co-workers": "Tìm và mời các đồng nghiệp của bạn",
@@ -3300,7 +3457,6 @@
     "You do not have permission to start voice calls": "Bạn không có quyền để bắt đầu cuộc gọi",
     "View chat timeline": "Xem dòng tin nhắn",
     "There's no preview, would you like to join?": "Không xem trước được, bạn có muốn tham gia?",
-    "Currently removing messages in %(count)s rooms|other": "Hiện đang xóa tin nhắn ở %(count)s phòng",
     "Disinvite from space": "Hủy lời mời vào space",
     "You can still join here.": "Bạn vẫn có thể tham gia.",
     "Verify or sign out from this session for best security and reliability.": "Xác thực hoặc đăng xuất khỏi các phiên này để bảo mật và đáng tin cậy nhất.",
@@ -3350,9 +3506,11 @@
     "Input devices": "Thiết bị đầu vào",
     "Output devices": "Thiết bị đầu ra",
     "Mark as read": "Đánh dấu đã đọc",
-    "%(count)s Members|one": "%(count)s thành viên",
+    "%(count)s Members": {
+        "one": "%(count)s thành viên",
+        "other": "%(count)s thành viên"
+    },
     "Manually verify by text": "Xác thực thủ công bằng văn bản",
-    "%(count)s Members|other": "%(count)s thành viên",
     "Show rooms": "Hiện phòng",
     "Upload custom sound": "Tải lên âm thanh tùy chỉnh",
     "Room is <strong>encrypted ✅</strong>": "Phòng <strong>được mã hóa ✅</strong>",
@@ -3416,10 +3574,22 @@
     "Download on the App Store": "Tải trên App Store",
     "Your device ID": "Định danh thiết bị của bạn",
     "Un-maximise": "Hủy thu nhỏ",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)sthay đổi <a>tin nhắn đã ghim</a> cho phòng",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng %(count)s lần",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)sxóa %(count)s tin nhắn",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)sgửi %(count)s tin nhắn ẩn",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)sthay đổi <a>tin nhắn đã ghim</a> cho phòng",
+        "other": "%(severalUsers)sthay đổi <a>tin nhắn đã ghim</a> cho phòng %(count)s lần"
+    },
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "other": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng %(count)s lần",
+        "one": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "other": "%(oneUser)sxóa %(count)s tin nhắn",
+        "one": "%(oneUser)sxóa một tin nhắn"
+    },
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "other": "%(oneUser)sgửi %(count)s tin nhắn ẩn",
+        "one": "%(oneUser)sgửi một tin nhắn ẩn"
+    },
     "This address does not point at this room": "Địa chỉ này không trỏ đến phòng này",
     "Edit topic": "Sửa chủ đề",
     "Choose a locale": "Chọn vùng miền",
@@ -3431,8 +3601,6 @@
     "Message pending moderation": "Tin nhắn chờ duyệt",
     "Message in %(room)s": "Tin nhắn trong %(room)s",
     "Explore room account data": "Xem thông tin tài khoản trong phòng",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)sxóa một tin nhắn",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)sgửi một tin nhắn ẩn",
     "Message from %(user)s": "Tin nhắn từ %(user)s",
     "Get it on F-Droid": "Tải trên F-Droid",
     "Help": "Hỗ trợ",
@@ -3441,23 +3609,30 @@
     "Show: Matrix rooms": "Hiện: Phòng Matrix",
     "Notifications debug": "Gỡ lỗi thông báo",
     "Minimise": "Thu nhỏ",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)sthay đổi <a>tin nhắn đã ghim</a> cho phòng",
     "Friends and family": "Bạn bè và gia đình",
     "Adding…": "Đang thêm…",
     "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Không ai có thể dùng lại tên người dùng của bạn (MXID), kể cả bạn: tên người dùng này sẽ trở thành không có sẵn",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)sgửi một tin nhắn ẩn",
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)sgửi một tin nhắn ẩn",
+        "other": "%(severalUsers)sgửi %(count)s tin nhắn ẩn"
+    },
     "<w>WARNING:</w> <description/>": "",
     "Shared their location: ": "",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)sxóa một tin nhắn",
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)sxóa một tin nhắn",
+        "other": "%(severalUsers)sxóa %(count)s tin nhắn"
+    },
     "Settings explorer": "Xem cài đặt",
     "Error downloading image": "Lỗi khi tải hình ảnh",
     "Unable to show image due to error": "Không thể hiển thị hình ảnh do lỗi",
     "Create room": "Tạo phòng",
     "To continue, please enter your account password:": "Để tiếp tục, vui lòng nhập mật khẩu tài khoản của bạn:",
-    "were removed %(count)s times|one": "",
+    "were removed %(count)s times": {
+        "one": "",
+        "other": ""
+    },
     "Closed poll": "Bỏ phiếu kín",
     "Explore account data": "Xem thông tin tài khoản",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)sthay đổi <a>tin nhắn đã ghim</a> cho phòng %(count)s lần",
     "Edit poll": "Chỉnh sửa bỏ phiếu",
     "Explore room state": "Xem trạng thái phòng",
     "View servers in room": "Xem các máy chủ trong phòng",
@@ -3465,9 +3640,6 @@
     "Create a video room": "Tạo một phòng truyền hình",
     "Image view": "Xem ảnh",
     "Get it on Google Play": "Tải trên CH Play",
-    "were removed %(count)s times|other": "",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)sxóa %(count)s tin nhắn",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)sgửi %(count)s tin nhắn ẩn",
     "Create video room": "Tạo phòng truyền hình",
     "People cannot join unless access is granted.": "Người khác không thể tham gia khi chưa có phép.",
     "Something went wrong.": "Đã xảy ra lỗi.",

@@ -206,8 +206,10 @@
     "Mute": "म्यूट",
     "Admin Tools": "व्यवस्थापक उपकरण",
     "Close": "बंद",
-    "and %(count)s others...|other": "और %(count)s अन्य ...",
-    "and %(count)s others...|one": "और एक अन्य...",
+    "and %(count)s others...": {
+        "other": "और %(count)s अन्य ...",
+        "one": "और एक अन्य..."
+    },
     "Invited": "आमंत्रित",
     "Filter room members": "रूम के सदस्यों को फ़िल्टर करें",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (शक्ति %(powerLevelNumber)s)",
@@ -248,8 +250,10 @@
     "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s ने मेहमानों को कमरे में शामिल होने से रोका है।",
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s ने अतिथि पहुंच %(rule)s में बदल दी",
     "%(displayName)s is typing …": "%(displayName)s टाइप कर रहा है …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s और %(count)s अन्य टाइप कर रहे हैं …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s और एक अन्य टाइप कर रहा है …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s और %(count)s अन्य टाइप कर रहे हैं …",
+        "one": "%(names)s और एक अन्य टाइप कर रहा है …"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s और %(lastPerson)s टाइप कर रहे हैं …",
     "Unrecognised address": "अपरिचित पता",
     "Straight rows of keys are easy to guess": "कुंजी की सीधी पंक्तियों का अनुमान लगाना आसान है",

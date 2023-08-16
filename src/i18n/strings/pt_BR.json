@@ -136,8 +136,10 @@
     "Sent messages will be stored until your connection has returned.": "Imagens enviadas ficarão armazenadas até que sua conexão seja reestabelecida.",
     "Failed to forget room %(errCode)s": "Falhou ao esquecer a sala %(errCode)s",
     "%(items)s and %(lastItem)s": "%(items)s e %(lastItem)s",
-    "and %(count)s others...|one": "e um outro...",
-    "and %(count)s others...|other": "e %(count)s outros...",
+    "and %(count)s others...": {
+        "one": "e um outro...",
+        "other": "e %(count)s outros..."
+    },
     "Are you sure?": "Você tem certeza?",
     "Attachment": "Anexo",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s de %(fullYear)s às %(time)s",
@@ -246,8 +248,10 @@
     "Add": "Adicionar",
     "Home": "Home",
     "Uploading %(filename)s": "Enviando o arquivo %(filename)s",
-    "Uploading %(filename)s and %(count)s others|one": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
-    "Uploading %(filename)s and %(count)s others|other": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
+        "other": "Enviando o arquivo %(filename)s e %(count)s outros arquivos"
+    },
     "You must <a>register</a> to use this functionality": "Você deve <a>se registrar</a> para usar este recurso",
     "Create new room": "Criar nova sala",
     "Start chat": "Iniciar conversa",
@@ -264,8 +268,10 @@
     "Start authentication": "Iniciar autenticação",
     "Unnamed Room": "Sala sem nome",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nível de permissão %(powerLevelNumber)s)",
-    "(~%(count)s results)|one": "(~%(count)s resultado)",
-    "(~%(count)s results)|other": "(~%(count)s resultados)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s resultado)",
+        "other": "(~%(count)s resultados)"
+    },
     "Your browser does not support the required cryptography extensions": "O seu navegador não suporta as extensões de criptografia necessárias",
     "Not a valid %(brand)s keyfile": "Não é um arquivo de chave válido do %(brand)s",
     "Authentication check failed: incorrect password?": "Falha ao checar a autenticação: senha incorreta?",
@@ -330,52 +336,96 @@
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Remover um widget o remove para todas as pessoas desta sala. Tem certeza que quer remover este widget?",
     "Delete widget": "Remover widget",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s entraram %(count)s vezes",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s entraram",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s entrou %(count)s vezes",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s entrou",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s saíram %(count)s vezes",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s saíram",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s saiu %(count)s vezes",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s saiu",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s entraram e saíram %(count)s vezes",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s entraram e saíram",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s entrou e saiu %(count)s vezes",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s entrou e saiu",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s saíram e entraram %(count)s vezes",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s saíram e entraram",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s saiu e entrou %(count)s vezes",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s saiu e entrou",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s recusaram os convites %(count)s vezes",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s recusaram os convites",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s recusou o convite %(count)s vezes",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s recusou o convite",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s tiveram os convites retirados %(count)s vezes",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)s tiveram os convites retirados",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)s teve os convites removidos %(count)s vezes",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)s teve o convite removido",
-    "were invited %(count)s times|other": "foram convidadas/os %(count)s vezes",
-    "were invited %(count)s times|one": "foram convidadas/os",
-    "was invited %(count)s times|other": "foi convidada/o %(count)s vezes",
-    "was invited %(count)s times|one": "foi convidada/o",
-    "were banned %(count)s times|other": "foram banidos %(count)s vezes",
-    "were banned %(count)s times|one": "foram banidos",
-    "was banned %(count)s times|other": "foi banido %(count)s vezes",
-    "was banned %(count)s times|one": "foi banido",
-    "were unbanned %(count)s times|other": "tiveram o banimento removido %(count)s vezes",
-    "were unbanned %(count)s times|one": "tiveram o banimento removido",
-    "was unbanned %(count)s times|other": "teve o banimento removido %(count)s vezes",
-    "was unbanned %(count)s times|one": "teve o banimento removido",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)s alteraram o nome e sobrenome %(count)s vezes",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)s alteraram o nome e sobrenome",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)s alterou o nome e sobrenome %(count)s vezes",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)s alterou o nome e sobrenome",
-    "%(items)s and %(count)s others|other": "%(items)s e %(count)s outras",
-    "%(items)s and %(count)s others|one": "%(items)s e uma outra",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)s entraram %(count)s vezes",
+        "one": "%(severalUsers)s entraram"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)s entrou %(count)s vezes",
+        "one": "%(oneUser)s entrou"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)s saíram %(count)s vezes",
+        "one": "%(severalUsers)s saíram"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)s saiu %(count)s vezes",
+        "one": "%(oneUser)s saiu"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)s entraram e saíram %(count)s vezes",
+        "one": "%(severalUsers)s entraram e saíram"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)s entrou e saiu %(count)s vezes",
+        "one": "%(oneUser)s entrou e saiu"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)s saíram e entraram %(count)s vezes",
+        "one": "%(severalUsers)s saíram e entraram"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)s saiu e entrou %(count)s vezes",
+        "one": "%(oneUser)s saiu e entrou"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)s recusaram os convites %(count)s vezes",
+        "one": "%(severalUsers)s recusaram os convites"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)s recusou o convite %(count)s vezes",
+        "one": "%(oneUser)s recusou o convite"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)s tiveram os convites retirados %(count)s vezes",
+        "one": "%(severalUsers)s tiveram os convites retirados"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)s teve os convites removidos %(count)s vezes",
+        "one": "%(oneUser)s teve o convite removido"
+    },
+    "were invited %(count)s times": {
+        "other": "foram convidadas/os %(count)s vezes",
+        "one": "foram convidadas/os"
+    },
+    "was invited %(count)s times": {
+        "other": "foi convidada/o %(count)s vezes",
+        "one": "foi convidada/o"
+    },
+    "were banned %(count)s times": {
+        "other": "foram banidos %(count)s vezes",
+        "one": "foram banidos"
+    },
+    "was banned %(count)s times": {
+        "other": "foi banido %(count)s vezes",
+        "one": "foi banido"
+    },
+    "were unbanned %(count)s times": {
+        "other": "tiveram o banimento removido %(count)s vezes",
+        "one": "tiveram o banimento removido"
+    },
+    "was unbanned %(count)s times": {
+        "other": "teve o banimento removido %(count)s vezes",
+        "one": "teve o banimento removido"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)s alteraram o nome e sobrenome %(count)s vezes",
+        "one": "%(severalUsers)s alteraram o nome e sobrenome"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)s alterou o nome e sobrenome %(count)s vezes",
+        "one": "%(oneUser)s alterou o nome e sobrenome"
+    },
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s e %(count)s outras",
+        "one": "%(items)s e uma outra"
+    },
     "collapse": "recolher",
     "expand": "expandir",
     "<a>In reply to</a> <pill>": "<a>Em resposta a</a> <pill>",
-    "And %(count)s more...|other": "E %(count)s mais...",
+    "And %(count)s more...": {
+        "other": "E %(count)s mais..."
+    },
     "Create": "Criar",
     "Leave": "Sair",
     "Description": "Descrição",
@@ -602,8 +652,10 @@
     "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s impediu que convidados entrassem na sala.",
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s alterou a permissão de acesso de convidados para %(rule)s",
     "%(displayName)s is typing …": "%(displayName)s está digitando…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s e %(count)s outras pessoas estão digitando…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s e outra pessoa estão digitando…",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s e %(count)s outras pessoas estão digitando…",
+        "one": "%(names)s e outra pessoa estão digitando…"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s e %(lastPerson)s estão digitando…",
     "Show read receipts sent by other users": "Mostrar confirmações de leitura dos outros usuários",
     "Enable big emoji in chat": "Ativar emojis grandes no bate-papo",
@@ -794,10 +846,14 @@
     "Opens chat with the given user": "Abre um chat com determinada pessoa",
     "Sends a message to the given user": "Envia uma mensagem para determinada pessoa",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s alterou o nome da sala de %(oldRoomName)s para %(newRoomName)s.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s adicionou os endereços alternativos %(addresses)s desta sala.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s adicionou o endereço alternativo %(addresses)s desta sala.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s removeu os endereços alternativos %(addresses)s desta sala.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s removeu o endereço alternativo %(addresses)s desta sala.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s adicionou os endereços alternativos %(addresses)s desta sala.",
+        "one": "%(senderName)s adicionou o endereço alternativo %(addresses)s desta sala."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s removeu os endereços alternativos %(addresses)s desta sala.",
+        "one": "%(senderName)s removeu o endereço alternativo %(addresses)s desta sala."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s alterou os endereços alternativos desta sala.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s alterou os endereços principal e alternativos desta sala.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s alterou os endereços desta sala.",
@@ -1118,13 +1174,19 @@
     "Jump to first unread room.": "Ir para a primeira sala não lida.",
     "Jump to first invite.": "Ir para o primeiro convite.",
     "Add room": "Adicionar sala",
-    "Show %(count)s more|other": "Mostrar %(count)s a mais",
-    "Show %(count)s more|one": "Mostrar %(count)s a mais",
+    "Show %(count)s more": {
+        "other": "Mostrar %(count)s a mais",
+        "one": "Mostrar %(count)s a mais"
+    },
     "Room options": "Opções da Sala",
-    "%(count)s unread messages including mentions.|other": "%(count)s mensagens não lidas, incluindo menções.",
-    "%(count)s unread messages including mentions.|one": "1 menção não lida.",
-    "%(count)s unread messages.|other": "%(count)s mensagens não lidas.",
-    "%(count)s unread messages.|one": "1 mensagem não lida.",
+    "%(count)s unread messages including mentions.": {
+        "other": "%(count)s mensagens não lidas, incluindo menções.",
+        "one": "1 menção não lida."
+    },
+    "%(count)s unread messages.": {
+        "other": "%(count)s mensagens não lidas.",
+        "one": "1 mensagem não lida."
+    },
     "Unread messages.": "Mensagens não lidas.",
     "This room is public": "Esta sala é pública",
     "Away": "Ausente",
@@ -1140,10 +1202,14 @@
     "Your user ID": "Sua ID de usuário",
     "%(brand)s URL": "Link do %(brand)s",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Se você usar esse widget, os dados <helpIcon /> poderão ser compartilhados com %(widgetDomain)s.",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s não fizeram alterações %(count)s vezes",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s não fizeram alterações",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s não fez alterações %(count)s vezes",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s não fez alterações",
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)s não fizeram alterações %(count)s vezes",
+        "one": "%(severalUsers)s não fizeram alterações"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)s não fez alterações %(count)s vezes",
+        "one": "%(oneUser)s não fez alterações"
+    },
     "Power level": "Nível de permissão",
     "Looks good": "Muito bem",
     "Close dialog": "Fechar caixa de diálogo",
@@ -1359,16 +1425,22 @@
     "Your homeserver": "Seu servidor local",
     "Trusted": "Confiável",
     "Not trusted": "Não confiável",
-    "%(count)s verified sessions|other": "%(count)s sessões confirmadas",
-    "%(count)s verified sessions|one": "1 sessão confirmada",
+    "%(count)s verified sessions": {
+        "other": "%(count)s sessões confirmadas",
+        "one": "1 sessão confirmada"
+    },
     "Hide verified sessions": "Esconder sessões confirmadas",
-    "%(count)s sessions|other": "%(count)s sessões",
-    "%(count)s sessions|one": "%(count)s sessão",
+    "%(count)s sessions": {
+        "other": "%(count)s sessões",
+        "one": "%(count)s sessão"
+    },
     "Hide sessions": "Esconder sessões",
     "No recent messages by %(user)s found": "Nenhuma mensagem recente de %(user)s foi encontrada",
     "Remove recent messages by %(user)s": "Apagar mensagens de %(user)s na sala",
-    "Remove %(count)s messages|other": "Apagar %(count)s mensagens para todos",
-    "Remove %(count)s messages|one": "Remover 1 mensagem",
+    "Remove %(count)s messages": {
+        "other": "Apagar %(count)s mensagens para todos",
+        "one": "Remover 1 mensagem"
+    },
     "Remove recent messages": "Apagar mensagens desta pessoa na sala",
     "Deactivate user?": "Desativar usuário?",
     "Deactivate user": "Desativar usuário",
@@ -1415,8 +1487,10 @@
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Este arquivo é <b>muito grande</b> para ser enviado. O limite do tamanho de arquivos é %(limit)s, enquanto que o tamanho desse arquivo é %(sizeOfThisFile)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Esses arquivos são <b>muito grandes</b> para serem enviados. O limite do tamanho de arquivos é %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Alguns arquivos são <b>muito grandes</b> para serem enviados. O limite do tamanho de arquivos é %(limit)s.",
-    "Upload %(count)s other files|other": "Enviar %(count)s outros arquivos",
-    "Upload %(count)s other files|one": "Enviar %(count)s outros arquivos",
+    "Upload %(count)s other files": {
+        "other": "Enviar %(count)s outros arquivos",
+        "one": "Enviar %(count)s outros arquivos"
+    },
     "Cancel All": "Cancelar tudo",
     "Upload Error": "Erro no envio",
     "Verification Request": "Solicitação de confirmação",
@@ -1432,8 +1506,10 @@
     "Sign in with SSO": "Faça login com SSO (Login Único)",
     "Couldn't load page": "Não foi possível carregar a página",
     "View": "Ver",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Você tem %(count)s notificações não lidas em uma versão anterior desta sala.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Você tem %(count)s notificações não lidas em uma versão anterior desta sala.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "Você tem %(count)s notificações não lidas em uma versão anterior desta sala.",
+        "one": "Você tem %(count)s notificações não lidas em uma versão anterior desta sala."
+    },
     "Feedback": "Fale conosco",
     "User menu": "Menu do usuário",
     "Could not load user profile": "Não foi possível carregar o perfil do usuário",
@@ -1645,7 +1721,9 @@
     "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s definiu a lista de controle de acesso do servidor para esta sala.",
     "The call could not be established": "Não foi possível iniciar a chamada",
     "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Todos os servidores foram banidos desta sala! Esta sala não pode mais ser utilizada.",
-    "You can only pin up to %(count)s widgets|other": "Você pode fixar até %(count)s widgets",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Você pode fixar até %(count)s widgets"
+    },
     "Move right": "Mover para a direita",
     "Move left": "Mover para a esquerda",
     "Revoke permissions": "Revogar permissões",
@@ -1935,8 +2013,10 @@
     "Vatican City": "Cidade do Vaticano",
     "Vanuatu": "Vanuatu",
     "Uzbekistan": "Uzbequistão",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Armazene mensagens criptografadas de forma segura localmente para que apareçam nos resultados das buscas. %(size)s é necessário para armazenar mensagens de %(rooms)s sala.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Armazene mensagens criptografadas de forma segura localmente para que apareçam nos resultados das buscas. %(size)s é necessário para armazenar mensagens de %(rooms)s salas.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "Armazene mensagens criptografadas de forma segura localmente para que apareçam nos resultados das buscas. %(size)s é necessário para armazenar mensagens de %(rooms)s sala.",
+        "other": "Armazene mensagens criptografadas de forma segura localmente para que apareçam nos resultados das buscas. %(size)s é necessário para armazenar mensagens de %(rooms)s salas."
+    },
     "Go to Home View": "Ir para a tela inicial",
     "Remain on your screen while running": "Permaneça na tela, quando executar",
     "Remain on your screen when viewing another room, when running": "Permaneça na tela ao visualizar outra sala, quando executar",
@@ -2138,8 +2218,10 @@
     "This homeserver has been blocked by its administrator.": "Este servidor local foi bloqueado pelo seu administrador.",
     "You're already in a call with this person.": "Você já está em uma chamada com essa pessoa.",
     "Failed to create initial space rooms": "Falha ao criar salas de espaço iniciais",
-    "%(count)s members|one": "%(count)s integrante",
-    "%(count)s members|other": "%(count)s integrantes",
+    "%(count)s members": {
+        "one": "%(count)s integrante",
+        "other": "%(count)s integrantes"
+    },
     "Are you sure you want to leave the space '%(spaceName)s'?": "Tem certeza de que deseja sair desse espaço '%(spaceName)s'?",
     "This space is not public. You will not be able to rejoin without an invite.": "Este espaço não é público. Você não poderá entrar novamente sem um convite.",
     "Save Changes": "Salvar alterações",
@@ -2207,7 +2289,10 @@
     "Decide who can join %(roomName)s.": "Decida quem pode entrar em %(roomName)s.",
     "Space members": "Membros do espaço",
     "Spaces with access": "Espaço com acesso",
-    "& %(count)s more|other": "e %(count)s mais",
+    "& %(count)s more": {
+        "other": "e %(count)s mais",
+        "one": "& %(count)s mais"
+    },
     "Upgrade required": "Atualização necessária",
     "Anyone can find and join.": "Todos podem encontrar e entrar.",
     "Only invited people can join.": "Apenas pessoas convidadas podem entrar.",
@@ -2329,17 +2414,23 @@
     "To leave the beta, visit your settings.": "Para sair do beta, vá nas suas configurações.",
     "Search for rooms": "Buscar salas",
     "Add existing rooms": "Adicionar salas existentes",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Adicionando sala…",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Adicionando salas… (%(progress)s de %(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Adicionando sala…",
+        "other": "Adicionando salas… (%(progress)s de %(count)s)"
+    },
     "Create a new space": "Criar um novo espaço",
     "Add existing space": "Adicionar espaço existente",
     "You are not allowed to view this server's rooms list": "Você não tem a permissão para ver a lista de salas deste servidor",
     "Please provide an address": "Por favor, digite um endereço",
-    "%(count)s people you know have already joined|one": "%(count)s pessoa que você conhece já entrou",
-    "%(count)s people you know have already joined|other": "%(count)s pessoas que você conhece já entraram",
+    "%(count)s people you know have already joined": {
+        "one": "%(count)s pessoa que você conhece já entrou",
+        "other": "%(count)s pessoas que você conhece já entraram"
+    },
     "Including %(commaSeparatedMembers)s": "Incluindo %(commaSeparatedMembers)s",
-    "View all %(count)s members|one": "Ver 1 membro",
-    "View all %(count)s members|other": "Ver todos os %(count)s membros",
+    "View all %(count)s members": {
+        "one": "Ver 1 membro",
+        "other": "Ver todos os %(count)s membros"
+    },
     "Share content": "Compatilhe conteúdo",
     "Application window": "Janela da aplicação",
     "Share entire screen": "Compartilhe a tela inteira",
@@ -2411,8 +2502,10 @@
     "Space selection": "Seleção de Espaços",
     "Use a more compact 'Modern' layout": "Usar um layout \"moderno\" mais compacto",
     "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s mudou a foto da sala.",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s e %(count)s outro",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s e %(count)s outros",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s e %(count)s outro",
+        "other": "%(spaceName)s e %(count)s outros"
+    },
     "%(date)s at %(time)s": "%(date)s às %(time)s",
     "Experimental": "Experimental",
     "Themes": "Temas",
@@ -2453,14 +2546,20 @@
     "Developer mode": "Modo desenvolvedor",
     "Automatically send debug logs on any error": "Enviar automaticamente logs de depuração em qualquer erro",
     "Surround selected text when typing special characters": "Circule o texto selecionado ao digitar caracteres especiais",
-    "Click the button below to confirm signing out these devices.|one": "Clique no botão abaixo para confirmar a desconexão deste dispositivo.",
-    "Click the button below to confirm signing out these devices.|other": "Clique no botão abaixo para confirmar a desconexão de outros dispositivos.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Confirme o logout deste dispositivo usando o logon único para provar sua identidade.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Confirme o logout desses dispositivos usando o logon único para provar sua identidade.",
+    "Click the button below to confirm signing out these devices.": {
+        "one": "Clique no botão abaixo para confirmar a desconexão deste dispositivo.",
+        "other": "Clique no botão abaixo para confirmar a desconexão de outros dispositivos."
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Confirme o logout deste dispositivo usando o logon único para provar sua identidade.",
+        "other": "Confirme o logout desses dispositivos usando o logon único para provar sua identidade."
+    },
     "Error - Mixed content": "Erro - Conteúdo misto",
     "Error loading Widget": "Erro ao carregar o Widget",
-    "Show %(count)s other previews|one": "Exibir a %(count)s outra prévia",
-    "Show %(count)s other previews|other": "Exibir as %(count)s outras prévias",
+    "Show %(count)s other previews": {
+        "one": "Exibir a %(count)s outra prévia",
+        "other": "Exibir as %(count)s outras prévias"
+    },
     "People with supported clients will be able to join the room without having a registered account.": "Pessoas com clientes suportados poderão entrar na sala sem ter uma conta registrada.",
     "<b>It's not recommended to make encrypted rooms public.</b> It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Não é recomendado adicionar criptografia a salas públicas.</b>Qualqer um pode encontrar e se juntar a salas públicas, então qualquer um pode ler as mensagens nelas. Você não terá nenhum dos benefícios da criptografia, e você não poderá desligá-la depois. Criptografar mensagens em uma sala pública fará com que receber e enviar mensagens fiquem mais lentos do que o normal.",
     "Failed to update the join rules": "Falha ao atualizar as regras de entrada",
@@ -2469,18 +2568,28 @@
     "This upgrade will allow members of selected spaces access to this room without an invite.": "Esta melhoria permite que membros de espaços selecionados acessem esta sala sem um convite.",
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Qualquer um em <spaceName/> pode encontrar e se juntar. Você pode selecionar outros espaços também.",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Qualquer um em um espaço pode encontrar e se juntar. <a>Edite quais espaços podem ser acessados aqui.</a>",
-    "Currently, %(count)s spaces have access|one": "Atualmente, um espaço tem acesso",
-    "Currently, %(count)s spaces have access|other": "Atualmente, %(count)s espaços tem acesso",
+    "Currently, %(count)s spaces have access": {
+        "one": "Atualmente, um espaço tem acesso",
+        "other": "Atualmente, %(count)s espaços tem acesso"
+    },
     "Including you, %(commaSeparatedMembers)s": "Incluindo você, %(commaSeparatedMembers)s",
-    "%(count)s votes|one": "%(count)s voto",
-    "%(count)s votes|other": "%(count)s votos",
-    "Based on %(count)s votes|one": "Com base na votação de %(count)s",
-    "Based on %(count)s votes|other": "Com base em %(count)s votos",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s votos expressos. Vote para ver os resultados",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s votos expressos. Vote para ver os resultados",
+    "%(count)s votes": {
+        "one": "%(count)s voto",
+        "other": "%(count)s votos"
+    },
+    "Based on %(count)s votes": {
+        "one": "Com base na votação de %(count)s",
+        "other": "Com base em %(count)s votos"
+    },
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s votos expressos. Vote para ver os resultados",
+        "other": "%(count)s votos expressos. Vote para ver os resultados"
+    },
     "No votes cast": "Sem votos expressos",
-    "Final result based on %(count)s votes|one": "Resultado final baseado em %(count)s votos",
-    "Final result based on %(count)s votes|other": "Resultado final baseado em %(count)s votos",
+    "Final result based on %(count)s votes": {
+        "one": "Resultado final baseado em %(count)s votos",
+        "other": "Resultado final baseado em %(count)s votos"
+    },
     "Sorry, your vote was not registered. Please try again.": "Desculpe, seu voto não foi registrado. Por favor, tente novamente.",
     "Vote not registered": "Voto não registrado",
     "Downloading": "Baixando",
@@ -2504,8 +2613,10 @@
     "The homeserver the user you're verifying is connected to": "O servidor doméstico do usuário que você está verificando está conectado",
     "Home options": "Opções do Início",
     "%(spaceName)s menu": "%(spaceName)s menu",
-    "Currently joining %(count)s rooms|one": "Entrando na %(count)s sala",
-    "Currently joining %(count)s rooms|other": "Entrando atualmente em %(count)s salas",
+    "Currently joining %(count)s rooms": {
+        "one": "Entrando na %(count)s sala",
+        "other": "Entrando atualmente em %(count)s salas"
+    },
     "Join public room": "Entrar na sala pública",
     "Add people": "Adicionar pessoas",
     "You do not have permissions to invite people to this space": "Você não tem permissão para convidar pessoas para este espaço",
@@ -2520,8 +2631,10 @@
     "You do not have permission to start polls in this room.": "Você não tem permissão para iniciar enquetes nesta sala.",
     "Share location": "Compartilhar localização",
     "Reply in thread": "Responder no tópico",
-    "%(count)s reply|one": "%(count)s resposta",
-    "%(count)s reply|other": "%(count)s respostas",
+    "%(count)s reply": {
+        "one": "%(count)s resposta",
+        "other": "%(count)s respostas"
+    },
     "Manage pinned events": "Gerenciar eventos fixados",
     "Manage rooms in this space": "Gerenciar salas neste espaço",
     "Change space avatar": "Alterar avatar do espaço",
@@ -2542,21 +2655,26 @@
     "To view all keyboard shortcuts, <a>click here</a>.": "Para ver todos os atalhos do teclado, <a>clique aqui</a>.",
     "Show tray icon and minimise window to it on close": "Mostrar o ícone da bandeja e minimizar a janela ao fechar",
     "Use high contrast": "Usar alto contraste",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Atualizando espaço...",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Atualizando espaços... (%(progress)s de %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Enviando convite...",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Enviando convites... (%(progress)s de %(count)s)",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Atualizando espaço...",
+        "other": "Atualizando espaços... (%(progress)s de %(count)s)"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Enviando convite...",
+        "other": "Enviando convites... (%(progress)s de %(count)s)"
+    },
     "Loading new room": "Carregando nova sala",
     "Upgrading room": "Atualizando sala",
     "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Esta sala está em alguns espaços dos quais você não é administrador. Nesses espaços, a sala antiga ainda será exibida, mas as pessoas serão solicitadas a ingressar na nova.",
-    "& %(count)s more|one": "& %(count)s mais",
     "Large": "Grande",
     "Image size in the timeline": "Tamanho da imagem na linha do tempo",
     "Rename": "Renomear",
     "Deselect all": "Desmarcar todos",
     "Select all": "Selecionar tudo",
-    "Sign out devices|one": "Desconectar dispositivo",
-    "Sign out devices|other": "Desconectar dispositivos",
+    "Sign out devices": {
+        "one": "Desconectar dispositivo",
+        "other": "Desconectar dispositivos"
+    },
     "Command error: Unable to handle slash command.": "Erro de comando: Não é possível manipular o comando de barra.",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s e %(space2Name)s",
     "%(value)ss": "%(value)ss",
@@ -2590,14 +2708,20 @@
     "Android": "Android",
     "iOS": "iOS",
     "Add new server…": "Adicionar um novo servidor…",
-    "were removed %(count)s times|other": "foram removidos %(count)s vezes",
-    "were removed %(count)s times|one": "foram removidos",
-    "was removed %(count)s times|other": "foi removido %(count)s vezes",
-    "was removed %(count)s times|one": "foi removido",
+    "were removed %(count)s times": {
+        "other": "foram removidos %(count)s vezes",
+        "one": "foram removidos"
+    },
+    "was removed %(count)s times": {
+        "other": "foi removido %(count)s vezes",
+        "one": "foi removido"
+    },
     "Last month": "Último mês",
     "Last week": "Última semana",
-    "%(count)s participants|other": "%(count)s participantes",
-    "%(count)s participants|one": "1 participante",
+    "%(count)s participants": {
+        "other": "%(count)s participantes",
+        "one": "1 participante"
+    },
     "Saved Items": "Itens salvos",
     "Add space": "Adicionar espaço",
     "Video room": "Sala de vídeo",
@@ -2605,8 +2729,10 @@
     "Private room": "Sala privada",
     "New video room": "Nova sala de vídeo",
     "New room": "Nova sala",
-    "Seen by %(count)s people|one": "Visto por %(count)s pessoa",
-    "Seen by %(count)s people|other": "Visto por %(count)s pessoas",
+    "Seen by %(count)s people": {
+        "one": "Visto por %(count)s pessoa",
+        "other": "Visto por %(count)s pessoas"
+    },
     "Security recommendations": "Recomendações de segurança",
     "Filter devices": "Filtrar dispositivos",
     "Inactive sessions": "Sessões inativas",
@@ -2658,15 +2784,21 @@
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Não foi possível entender a data fornecida (%(inputDate)s). Tente usando o formato AAAA-MM-DD.",
     "You need to be able to kick users to do that.": "Você precisa ter permissão de expulsar usuários para fazer isso.",
     "Failed to invite users to %(roomName)s": "Falha ao convidar usuários para %(roomName)s",
-    "Inviting %(user)s and %(count)s others|one": "Convidando %(user)s e 1 outro",
-    "Inviting %(user)s and %(count)s others|other": "Convidando %(user)s e %(count)s outros",
-    "%(user)s and %(count)s others|one": "%(user)s e 1 outro",
-    "%(user)s and %(count)s others|other": "%(user)s e %(count)s outros",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "Convidando %(user)s e 1 outro",
+        "other": "Convidando %(user)s e %(count)s outros"
+    },
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s e 1 outro",
+        "other": "%(user)s e %(count)s outros"
+    },
     "You were disconnected from the call. (Error: %(message)s)": "Você foi desconectado da chamada. (Erro: %(message)s)",
     "Remove messages sent by me": "",
     "Welcome": "Boas-vindas",
-    "%(count)s people joined|one": "%(count)s pessoa entrou",
-    "%(count)s people joined|other": "%(count)s pessoas entraram",
+    "%(count)s people joined": {
+        "one": "%(count)s pessoa entrou",
+        "other": "%(count)s pessoas entraram"
+    },
     "Audio devices": "Dispositivos de áudio",
     "Unmute microphone": "Habilitar microfone",
     "Mute microphone": "Silenciar microfone",
@@ -2692,9 +2824,11 @@
     "User is already invited to the room": "O usuário já foi convidado para a sala",
     "User is already invited to the space": "O usuário já foi convidado para o espaço",
     "You do not have permission to invite people to this space.": "Você não tem permissão para convidar pessoas para este espaço.",
-    "In %(spaceName)s and %(count)s other spaces.|one": "Em %(spaceName)s e %(count)s outro espaço.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "Em %(spaceName)s e %(count)s outro espaço.",
+        "other": "Em %(spaceName)s e %(count)s outros espaços."
+    },
     "In %(spaceName)s.": "No espaço %(spaceName)s.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "Em %(spaceName)s e %(count)s outros espaços.",
     "In spaces %(space1Name)s and %(space2Name)s.": "Nos espaços %(space1Name)s e %(space2Name)s.",
     "Empty room (was %(oldName)s)": "Sala vazia (era %(oldName)s)",
     "Unknown session type": "Tipo de sessão desconhecido",
@@ -2708,14 +2842,18 @@
     "Version": "Versão",
     "Application": "Aplicação",
     "Last activity": "Última atividade",
-    "Confirm signing out these devices|other": "Confirme a saída destes dispositivos",
-    "Confirm signing out these devices|one": "Confirme a saída deste dispositivo",
+    "Confirm signing out these devices": {
+        "other": "Confirme a saída destes dispositivos",
+        "one": "Confirme a saída deste dispositivo"
+    },
     "Current session": "Sessão atual",
     "Developer tools": "Ferramentas de desenvolvimento",
     "Welcome to %(brand)s": "Bem-vindo a %(brand)s",
     "Processing event %(number)s out of %(total)s": "Processando evento %(number)s de %(total)s",
-    "Exported %(count)s events in %(seconds)s seconds|one": "%(count)s evento exportado em %(seconds)s segundos",
-    "Exported %(count)s events in %(seconds)s seconds|other": "%(count)s eventos exportados em %(seconds)s segundos",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "%(count)s evento exportado em %(seconds)s segundos",
+        "other": "%(count)s eventos exportados em %(seconds)s segundos"
+    },
     "Yes, stop broadcast": "Sim, interromper a transmissão",
     "Stop live broadcasting?": "Parar a transmissão ao vivo?",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Outra pessoa já está gravando uma transmissão de voz. Aguarde o término da transmissão de voz para iniciar uma nova.",

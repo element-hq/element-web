@@ -12,8 +12,10 @@
     "Always show message timestamps": "Visa alltid tidsstämplar för meddelanden",
     "Authentication": "Autentisering",
     "%(items)s and %(lastItem)s": "%(items)s och %(lastItem)s",
-    "and %(count)s others...|other": "och %(count)s andra…",
-    "and %(count)s others...|one": "och en annan…",
+    "and %(count)s others...": {
+        "other": "och %(count)s andra…",
+        "one": "och en annan…"
+    },
     "A new password must be entered.": "Ett nytt lösenord måste anges.",
     "Anyone": "Vem som helst",
     "An error has occurred.": "Ett fel har inträffat.",
@@ -288,24 +290,40 @@
     "Offline for %(duration)s": "Offline i %(duration)s",
     "Idle": "Inaktiv",
     "Offline": "Offline",
-    "(~%(count)s results)|other": "(~%(count)s resultat)",
-    "(~%(count)s results)|one": "(~%(count)s resultat)",
+    "(~%(count)s results)": {
+        "other": "(~%(count)s resultat)",
+        "one": "(~%(count)s resultat)"
+    },
     "Upload avatar": "Ladda upp avatar",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (behörighet %(powerLevelNumber)s)",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)sgick med %(count)s gånger",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sgick med",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sgick med %(count)s gånger",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)sgick med",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)slämnade %(count)s gånger",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)slämnade",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)slämnade %(count)s gånger",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)slämnade",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)sgick med och lämnade %(count)s gånger",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)sgick med och lämnade",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)sgick med och lämnade %(count)s gånger",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)sgick med och lämnade",
-    "And %(count)s more...|other": "Och %(count)s till…",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)sgick med %(count)s gånger",
+        "one": "%(severalUsers)sgick med"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)sgick med %(count)s gånger",
+        "one": "%(oneUser)sgick med"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)slämnade %(count)s gånger",
+        "one": "%(severalUsers)slämnade"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)slämnade %(count)s gånger",
+        "one": "%(oneUser)slämnade"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)sgick med och lämnade %(count)s gånger",
+        "one": "%(severalUsers)sgick med och lämnade"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)sgick med och lämnade %(count)s gånger",
+        "one": "%(oneUser)sgick med och lämnade"
+    },
+    "And %(count)s more...": {
+        "other": "Och %(count)s till…"
+    },
     "Preparing to send logs": "Förbereder sändning av loggar",
     "Logs sent": "Loggar skickade",
     "Failed to send logs: ": "Misslyckades att skicka loggar: ",
@@ -315,9 +333,11 @@
     "Please enter the code it contains:": "Vänligen ange koden det innehåller:",
     "Code": "Kod",
     "This server does not support authentication with a phone number.": "Denna server stöder inte autentisering via telefonnummer.",
-    "Uploading %(filename)s and %(count)s others|other": "Laddar upp %(filename)s och %(count)s till",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "Laddar upp %(filename)s och %(count)s till",
+        "one": "Laddar upp %(filename)s och %(count)s till"
+    },
     "Uploading %(filename)s": "Laddar upp %(filename)s",
-    "Uploading %(filename)s and %(count)s others|one": "Laddar upp %(filename)s och %(count)s till",
     "This doesn't appear to be a valid email address": "Det här verkar inte vara en giltig e-postadress",
     "Verification Pending": "Avvaktar verifiering",
     "Unable to add email address": "Kunde inte lägga till e-postadress",
@@ -403,33 +423,59 @@
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Detta rum används för viktiga meddelanden från hemservern, så du kan inte lämna det.",
     "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Data från en äldre version av %(brand)s has upptäckts. Detta ska ha orsakat att totalsträckskryptering inte fungerat i den äldre versionen. Krypterade meddelanden som nyligen har skickats medans den äldre versionen användes kanske inte kan avkrypteras i denna version. Detta kan även orsaka att meddelanden skickade med denna version inte fungerar. Om du upplever problem, logga ut och in igen. För att behålla meddelandehistoriken, exportera dina nycklar och importera dem igen.",
     "Confirm Removal": "Bekräfta borttagning",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)slämnade och gick med igen %(count)s gånger",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)slämnade och gick med igen",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)slämnade och gick med igen %(count)s gånger",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)slämnade och gick med igen",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)savböjde sina inbjudningar %(count)s gånger",
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)slämnade och gick med igen %(count)s gånger",
+        "one": "%(severalUsers)slämnade och gick med igen"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)slämnade och gick med igen %(count)s gånger",
+        "one": "%(oneUser)slämnade och gick med igen"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)savböjde sina inbjudningar %(count)s gånger",
+        "one": "%(severalUsers)savböjde sina inbjudningar"
+    },
     "Reject all %(invitedRooms)s invites": "Avböj alla %(invitedRooms)s inbjudningar",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)savböjde sina inbjudningar",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)savböjde sin inbjudan %(count)s gånger",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)savböjde sin inbjudan",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)sfick sina inbjudningar tillbakadragna %(count)s gånger",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)sfick sina inbjudningar tillbakadragna",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)sfick sin inbjudan tillbakadragen %(count)s gånger",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)sfick sin inbjudan tillbakadragen",
-    "were invited %(count)s times|other": "blev inbjudna %(count)s gånger",
-    "were invited %(count)s times|one": "blev inbjudna",
-    "was invited %(count)s times|other": "blev inbjuden %(count)s gånger",
-    "was invited %(count)s times|one": "blev inbjuden",
-    "were banned %(count)s times|other": "blev bannade %(count)s gånger",
-    "were banned %(count)s times|one": "blev bannade",
-    "was banned %(count)s times|other": "blev bannad %(count)s gånger",
-    "was banned %(count)s times|one": "blev bannad",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)sbytte namn %(count)s gånger",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)sbytte namn",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)sbytte namn %(count)s gånger",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)sbytte namn",
-    "%(items)s and %(count)s others|other": "%(items)s och %(count)s till",
-    "%(items)s and %(count)s others|one": "%(items)s och en till",
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)savböjde sin inbjudan %(count)s gånger",
+        "one": "%(oneUser)savböjde sin inbjudan"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)sfick sina inbjudningar tillbakadragna %(count)s gånger",
+        "one": "%(severalUsers)sfick sina inbjudningar tillbakadragna"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)sfick sin inbjudan tillbakadragen %(count)s gånger",
+        "one": "%(oneUser)sfick sin inbjudan tillbakadragen"
+    },
+    "were invited %(count)s times": {
+        "other": "blev inbjudna %(count)s gånger",
+        "one": "blev inbjudna"
+    },
+    "was invited %(count)s times": {
+        "other": "blev inbjuden %(count)s gånger",
+        "one": "blev inbjuden"
+    },
+    "were banned %(count)s times": {
+        "other": "blev bannade %(count)s gånger",
+        "one": "blev bannade"
+    },
+    "was banned %(count)s times": {
+        "other": "blev bannad %(count)s gånger",
+        "one": "blev bannad"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "%(severalUsers)sbytte namn %(count)s gånger",
+        "one": "%(severalUsers)sbytte namn"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "other": "%(oneUser)sbytte namn %(count)s gånger",
+        "one": "%(oneUser)sbytte namn"
+    },
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s och %(count)s till",
+        "one": "%(items)s och en till"
+    },
     "collapse": "fäll ihop",
     "expand": "fäll ut",
     "<a>In reply to</a> <pill>": "<a>Som svar på</a> <pill>",
@@ -456,10 +502,14 @@
     "Add an Integration": "Lägg till integration",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Du kommer att skickas till en tredjepartswebbplats så att du kan autentisera ditt konto för användning med %(integrationsUrl)s. Vill du fortsätta?",
     "Popout widget": "Poppa ut widget",
-    "were unbanned %(count)s times|other": "blev avbannade %(count)s gånger",
-    "were unbanned %(count)s times|one": "blev avbannade",
-    "was unbanned %(count)s times|other": "blev avbannad %(count)s gånger",
-    "was unbanned %(count)s times|one": "blev avbannad",
+    "were unbanned %(count)s times": {
+        "other": "blev avbannade %(count)s gånger",
+        "one": "blev avbannade"
+    },
+    "was unbanned %(count)s times": {
+        "other": "blev avbannad %(count)s gånger",
+        "one": "blev avbannad"
+    },
     "Analytics": "Statistik",
     "Send analytics data": "Skicka statistik",
     "Passphrases must match": "Lösenfraser måste matcha",
@@ -527,8 +577,10 @@
     "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s har nekat gäster att gå med i rummet.",
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s ändrade gäståtkomst till %(rule)s",
     "%(displayName)s is typing …": "%(displayName)s skriver …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s och %(count)s andra skriver …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s och en till skriver …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s och %(count)s andra skriver …",
+        "one": "%(names)s och en till skriver …"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s och %(lastPerson)s skriver …",
     "Unrecognised address": "Okänd adress",
     "You do not have permission to invite people to this room.": "Du har inte behörighet att bjuda in användare till det här rummet.",
@@ -777,8 +829,10 @@
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Den här filen är <b>för stor</b> för att ladda upp. Filstorleksgränsen är %(limit)s men den här filen är %(sizeOfThisFile)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Dessa filer är <b>för stora</b> för att laddas upp. Filstorleksgränsen är %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Vissa filer är <b>för stora</b> för att laddas upp. Filstorleksgränsen är %(limit)s.",
-    "Upload %(count)s other files|other": "Ladda upp %(count)s andra filer",
-    "Upload %(count)s other files|one": "Ladda upp %(count)s annan fil",
+    "Upload %(count)s other files": {
+        "other": "Ladda upp %(count)s andra filer",
+        "one": "Ladda upp %(count)s annan fil"
+    },
     "Cancel All": "Avbryt alla",
     "Upload Error": "Uppladdningsfel",
     "Your %(brand)s is misconfigured": "Din %(brand)s är felkonfigurerad",
@@ -844,7 +898,10 @@
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Pröva att skrolla upp i tidslinjen för att se om det finns några tidigare.",
     "Remove recent messages by %(user)s": "Ta bort nyliga meddelanden från %(user)s",
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "För en stor mängd meddelanden kan det ta lite tid. Vänligen ladda inte om din klient under tiden.",
-    "Remove %(count)s messages|other": "Ta bort %(count)s meddelanden",
+    "Remove %(count)s messages": {
+        "other": "Ta bort %(count)s meddelanden",
+        "one": "Ta bort 1 meddelande"
+    },
     "Deactivate user?": "Inaktivera användare?",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Vid inaktivering av användare loggas den ut och förhindras från att logga in igen. Den kommer dessutom att lämna alla rum den befinner sig i. Den här åtgärden kan inte ångras. Är du säker på att du vill inaktivera den här användaren?",
     "Deactivate user": "Inaktivera användaren",
@@ -947,10 +1004,14 @@
     "Rotate Left": "Rotera vänster",
     "Rotate Right": "Rotera höger",
     "Language Dropdown": "Språkmeny",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)sgjorde inga ändringar %(count)s gånger",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)sgjorde inga ändringar",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sgjorde inga ändringar %(count)s gånger",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)sgjorde inga ändringar",
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)sgjorde inga ändringar %(count)s gånger",
+        "one": "%(severalUsers)sgjorde inga ändringar"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)sgjorde inga ändringar %(count)s gånger",
+        "one": "%(oneUser)sgjorde inga ändringar"
+    },
     "e.g. my-room": "t.ex. mitt-rum",
     "Some characters not allowed": "Vissa tecken är inte tillåtna",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Använd en identitetsserver för att bjuda in via e-post. <default>Använd förval (%(defaultIdentityServerName)s)</default> eller hantera i <settings>inställningarna</settings>.",
@@ -1047,10 +1108,14 @@
     "Opens chat with the given user": "Öppnar en chatt med den valda användaren",
     "Sends a message to the given user": "Skickar ett meddelande till den valda användaren",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s bytte rummets namn från %(oldRoomName)s till %(newRoomName)s.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s lade till de alternativa adresserna %(addresses)s till det här rummet.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s lade till den alternativa adressen %(addresses)s till det här rummet.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s tog bort de alternativa adresserna %(addresses)s från det här rummet.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s tog bort den alternativa adressen %(addresses)s från det här rummet.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s lade till de alternativa adresserna %(addresses)s till det här rummet.",
+        "one": "%(senderName)s lade till den alternativa adressen %(addresses)s till det här rummet."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s tog bort de alternativa adresserna %(addresses)s från det här rummet.",
+        "one": "%(senderName)s tog bort den alternativa adressen %(addresses)s från det här rummet."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s ändrade de alternativa adresserna för det här rummet.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ändrade huvudadressen och de alternativa adresserna för det här rummet.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s ändrade adresserna för det här rummet.",
@@ -1289,16 +1354,22 @@
     "List options": "Listalternativ",
     "Jump to first unread room.": "Hoppa till första olästa rum.",
     "Jump to first invite.": "Hoppa till första inbjudan.",
-    "Show %(count)s more|other": "Visa %(count)s till",
-    "Show %(count)s more|one": "Visa %(count)s till",
+    "Show %(count)s more": {
+        "other": "Visa %(count)s till",
+        "one": "Visa %(count)s till"
+    },
     "Notification options": "Aviseringsinställningar",
     "Forget Room": "Glöm rum",
     "Favourited": "Favoritmarkerad",
     "Room options": "Rumsinställningar",
-    "%(count)s unread messages including mentions.|other": "%(count)s olästa meddelanden inklusive omnämnanden.",
-    "%(count)s unread messages including mentions.|one": "1 oläst omnämnande.",
-    "%(count)s unread messages.|other": "%(count)s olästa meddelanden.",
-    "%(count)s unread messages.|one": "1 oläst meddelande.",
+    "%(count)s unread messages including mentions.": {
+        "other": "%(count)s olästa meddelanden inklusive omnämnanden.",
+        "one": "1 oläst omnämnande."
+    },
+    "%(count)s unread messages.": {
+        "other": "%(count)s olästa meddelanden.",
+        "one": "1 oläst meddelande."
+    },
     "Unread messages.": "Olästa meddelanden.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Att uppgradera det här rummet kommer att stänga den nuvarande instansen av rummet och skapa ett uppgraderat rum med samma namn.",
     "This room has already been upgraded.": "Det här rummet har redan uppgraderats.",
@@ -1336,13 +1407,16 @@
     "Your homeserver": "Din hemserver",
     "Trusted": "Betrodd",
     "Not trusted": "Inte betrodd",
-    "%(count)s verified sessions|other": "%(count)s verifierade sessioner",
-    "%(count)s verified sessions|one": "1 verifierad session",
+    "%(count)s verified sessions": {
+        "other": "%(count)s verifierade sessioner",
+        "one": "1 verifierad session"
+    },
     "Hide verified sessions": "Dölj verifierade sessioner",
-    "%(count)s sessions|other": "%(count)s sessioner",
-    "%(count)s sessions|one": "%(count)s session",
+    "%(count)s sessions": {
+        "other": "%(count)s sessioner",
+        "one": "%(count)s session"
+    },
     "Hide sessions": "Dölj sessioner",
-    "Remove %(count)s messages|one": "Ta bort 1 meddelande",
     "Failed to deactivate user": "Misslyckades att inaktivera användaren",
     "This client does not support end-to-end encryption.": "Den här klienten stöder inte totalsträckskryptering.",
     "Security": "Säkerhet",
@@ -1509,8 +1583,10 @@
     "Explore rooms": "Utforska rum",
     "%(creator)s created and configured the room.": "%(creator)s skapade och konfigurerade rummet.",
     "View": "Visa",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Du har %(count)s olästa aviseringar i en tidigare version av det här rummet.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Du har %(count)s oläst avisering i en tidigare version av det här rummet.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "Du har %(count)s olästa aviseringar i en tidigare version av det här rummet.",
+        "one": "Du har %(count)s oläst avisering i en tidigare version av det här rummet."
+    },
     "All settings": "Alla inställningar",
     "Feedback": "Återkoppling",
     "Switch to light mode": "Byt till ljust läge",
@@ -1650,7 +1726,9 @@
     "Revoke permissions": "Återkalla behörigheter",
     "Data on this screen is shared with %(widgetDomain)s": "Data på den här skärmen delas med %(widgetDomain)s",
     "Modal Widget": "Dialogruta",
-    "You can only pin up to %(count)s widgets|other": "Du kan bara fästa upp till %(count)s widgets",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Du kan bara fästa upp till %(count)s widgets"
+    },
     "Show Widgets": "Visa widgets",
     "Hide Widgets": "Dölj widgets",
     "The call was answered on another device.": "Samtalet mottogs på en annan enhet.",
@@ -1975,8 +2053,10 @@
     "Continue with %(provider)s": "Fortsätt med %(provider)s",
     "Homeserver": "Hemserver",
     "Server Options": "Serveralternativ",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Cacha på ett säkert sätt krypterade meddelanden lokalt för att de ska visas i sökresultat, och använd %(size)s för att lagra meddelanden från %(rooms)s rum.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Cacha på ett säkert sätt krypterade meddelanden lokalt för att de ska visas i sökresultat, och använd %(size)s för att lagra meddelanden från %(rooms)s rum.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "Cacha på ett säkert sätt krypterade meddelanden lokalt för att de ska visas i sökresultat, och använd %(size)s för att lagra meddelanden från %(rooms)s rum.",
+        "other": "Cacha på ett säkert sätt krypterade meddelanden lokalt för att de ska visas i sökresultat, och använd %(size)s för att lagra meddelanden från %(rooms)s rum."
+    },
     "Return to call": "Återgå till samtal",
     "Use Ctrl + Enter to send a message": "Använd Ctrl + Enter för att skicka ett meddelande",
     "Use Command + Enter to send a message": "Använd Kommando + Enter för att skicka ett meddelande",
@@ -2138,8 +2218,10 @@
     "Support": "Hjälp",
     "Random": "Slumpmässig",
     "Welcome to <name/>": "Välkommen till <name/>",
-    "%(count)s members|one": "%(count)s medlem",
-    "%(count)s members|other": "%(count)s medlemmar",
+    "%(count)s members": {
+        "one": "%(count)s medlem",
+        "other": "%(count)s medlemmar"
+    },
     "Your server does not support showing space hierarchies.": "Din server stöder inte att visa utrymmeshierarkier.",
     "Are you sure you want to leave the space '%(spaceName)s'?": "Är du säker på att du vill lämna utrymmet '%(spaceName)s'?",
     "This space is not public. You will not be able to rejoin without an invite.": "Det här utrymmet är inte offentligt. Du kommer inte kunna gå med igen utan en inbjudan.",
@@ -2201,8 +2283,10 @@
     "Failed to remove some rooms. Try again later": "Misslyckades att ta bort vissa rum. Försök igen senare",
     "Suggested": "Föreslaget",
     "This room is suggested as a good one to join": "Det här rummet föreslås som ett bra att gå med i",
-    "%(count)s rooms|one": "%(count)s rum",
-    "%(count)s rooms|other": "%(count)s rum",
+    "%(count)s rooms": {
+        "one": "%(count)s rum",
+        "other": "%(count)s rum"
+    },
     "You don't have permission": "Du har inte behörighet",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Detta påverkar normalt bara hur rummet hanteras på serven. Om du upplever problem med din %(brand)s, vänligen rapportera en bugg.",
     "Invite to %(roomName)s": "Bjud in till %(roomName)s",
@@ -2210,7 +2294,10 @@
     "Invite with email or username": "Bjud in med e-postadress eller användarnamn",
     "You can change these anytime.": "Du kan ändra dessa när som helst.",
     "Add some details to help people recognise it.": "Lägg till några detaljer för att hjälpa folk att känn igen det.",
-    "%(count)s people you know have already joined|other": "%(count)s personer du känner har redan gått med",
+    "%(count)s people you know have already joined": {
+        "other": "%(count)s personer du känner har redan gått med",
+        "one": "%(count)s person du känner har redan gått med"
+    },
     "What are some things you want to discuss in %(spaceName)s?": "Vad är några saker du vill diskutera i %(spaceName)s?",
     "You can add more later too, including already existing ones.": "Du kan lägga till flera senare också, inklusive redan existerande.",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Tillfrågar %(transferTarget)s. <a>%(transferTarget)sÖverför till %(transferee)s</a>",
@@ -2219,7 +2306,6 @@
     "unknown person": "okänd person",
     "Warn before quitting": "Varna innan avslutning",
     "Invite to just this room": "Bjud in till bara det här rummet",
-    "%(count)s people you know have already joined|one": "%(count)s person du känner har redan gått med",
     "Add existing rooms": "Lägg till existerande rum",
     "We couldn't create your DM.": "Vi kunde inte skapa ditt DM.",
     "Reset event store": "Återställ händelselagring",
@@ -2245,8 +2331,10 @@
     "%(seconds)ss left": "%(seconds)ss kvar",
     "Change server ACLs": "Ändra server-ACLer",
     "Delete all": "Radera alla",
-    "View all %(count)s members|one": "Visa 1 medlem",
-    "View all %(count)s members|other": "Visa alla %(count)s medlemmar",
+    "View all %(count)s members": {
+        "one": "Visa 1 medlem",
+        "other": "Visa alla %(count)s medlemmar"
+    },
     "You can select all or individual messages to retry or delete": "Du kan välja alla eller individuella meddelanden att försöka igen eller radera",
     "Sending": "Skickar",
     "Retry all": "Försök alla igen",
@@ -2269,8 +2357,10 @@
     "To leave the beta, visit your settings.": "För att lämna betan, besök dina inställningar.",
     "Your platform and username will be noted to help us use your feedback as much as we can.": "Din plattform och ditt användarnamn kommer att noteras för att hjälpa oss att använda din återkoppling så mycket vi kan.",
     "Want to add a new room instead?": "Vill du lägga till ett nytt rum istället?",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Lägger till rum…",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Lägger till rum… (%(progress)s av %(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Lägger till rum…",
+        "other": "Lägger till rum… (%(progress)s av %(count)s)"
+    },
     "Not all selected were added": "Inte alla valda tillades",
     "You are not allowed to view this server's rooms list": "Du tillåts inte att se den här serverns rumslista",
     "Add reaction": "Lägg till reaktion",
@@ -2289,8 +2379,10 @@
     "Sends the given message with a space themed effect": "Skickar det givna meddelandet med en effekt med rymdtema",
     "See when people join, leave, or are invited to your active room": "Se när folk går med, lämnar eller bjuds in till ditt aktiva rum",
     "See when people join, leave, or are invited to this room": "Se när folk går med, lämnar eller bjuds in till det här rummet",
-    "Currently joining %(count)s rooms|one": "Går just nu med i %(count)s rum",
-    "Currently joining %(count)s rooms|other": "Går just nu med i %(count)s rum",
+    "Currently joining %(count)s rooms": {
+        "one": "Går just nu med i %(count)s rum",
+        "other": "Går just nu med i %(count)s rum"
+    },
     "The user you called is busy.": "Användaren du ringde är upptagen.",
     "User Busy": "Användare upptagen",
     "Or send invite link": "Eller skicka inbjudningslänk",
@@ -2399,8 +2491,10 @@
     "Enable guest access": "Aktivera gäståtkomst",
     "Stop recording": "Stoppa inspelning",
     "Send voice message": "Skicka röstmeddelande",
-    "Show %(count)s other previews|one": "Visa %(count)s annan förhandsgranskning",
-    "Show %(count)s other previews|other": "Visa %(count)s andra förhandsgranskningar",
+    "Show %(count)s other previews": {
+        "one": "Visa %(count)s annan förhandsgranskning",
+        "other": "Visa %(count)s andra förhandsgranskningar"
+    },
     "Access": "Åtkomst",
     "People with supported clients will be able to join the room without having a registered account.": "Personer med stödda klienter kommer kunna gå med i rummet utan ett registrerat konto.",
     "Decide who can join %(roomName)s.": "Bestäm vem som kan gå med i %(roomName)s.",
@@ -2408,8 +2502,14 @@
     "Anyone in a space can find and join. You can select multiple spaces.": "Vem som helst i ett utrymme kan hitta och gå med. Du kan välja flera utrymmen.",
     "Spaces with access": "Utrymmen med åtkomst",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Vem som helst i ett utrymme kan hitta och gå med. <a>Redigera vilka utrymmen som kan komma åt här.</a>",
-    "Currently, %(count)s spaces have access|other": "Just nu har %(count)s utrymmen åtkomst",
-    "& %(count)s more|other": "& %(count)s till",
+    "Currently, %(count)s spaces have access": {
+        "other": "Just nu har %(count)s utrymmen åtkomst",
+        "one": "Just nu har ett utrymme åtkomst"
+    },
+    "& %(count)s more": {
+        "other": "& %(count)s till",
+        "one": "& %(count)s till"
+    },
     "Upgrade required": "Uppgradering krävs",
     "Anyone can find and join.": "Vem som helst kan hitta och gå med.",
     "Only invited people can join.": "Endast inbjudna personer kan gå med.",
@@ -2435,10 +2535,14 @@
     "Published addresses can be used by anyone on any server to join your room.": "Publicerade adresser kan användas av vem som helst på vilken server som helst för att gå med i ditt rum.",
     "Published addresses can be used by anyone on any server to join your space.": "Publicerade adresser kan användas av vem som helst på vilken server som helst för att gå med i ditt utrymme.",
     "Please provide an address": "Ange en adress, tack",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)sändrade server-ACL:erna",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)sändrade server-ACL:erna %(count)s gånger",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)sändrade server-ACL:erna",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)sändrade server-ACL:erna %(count)s gånger",
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "one": "%(oneUser)sändrade server-ACL:erna",
+        "other": "%(oneUser)sändrade server-ACL:erna %(count)s gånger"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "one": "%(severalUsers)sändrade server-ACL:erna",
+        "other": "%(severalUsers)sändrade server-ACL:erna %(count)s gånger"
+    },
     "Share content": "Dela innehåll",
     "Application window": "Programfönster",
     "Share entire screen": "Dela hela skärmen",
@@ -2521,7 +2625,6 @@
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s avfäste <a>ett meddelande</a> i det här rummet. Se alla <b>fästa meddelanden</b>.",
     "%(senderName)s pinned a message to this room. See all pinned messages.": "%(senderName)s fäste ett meddelande i det här rummet. Se alla fästa meddelanden.",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s fäste <a>ett meddelande</a> i det här rummet. Se alla <b>fästa meddelanden</b>.",
-    "& %(count)s more|one": "& %(count)s till",
     "Some encryption parameters have been changed.": "Vissa krypteringsparametrar har ändrats.",
     "Role in <RoomName/>": "Roll i <RoomName/>",
     "Send a sticker": "Skicka en dekal",
@@ -2535,7 +2638,6 @@
     "Change space name": "Byt utrymmesnamn",
     "Change space avatar": "Byt utrymmesavatar",
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Vem som helst i <spaceName/> kan hitta och gå med. Du kan välja andra utrymmen också.",
-    "Currently, %(count)s spaces have access|one": "Just nu har ett utrymme åtkomst",
     "%(reactors)s reacted with %(content)s": "%(reactors)s reagerade med %(content)s",
     "Message": "Meddelande",
     "Message didn't send. Click for info.": "Meddelande skickades inte. Klicka för info.",
@@ -2575,12 +2677,18 @@
     "Export chat": "Exportera chatt",
     "Threads": "Trådar",
     "Create poll": "Skapa omröstning",
-    "%(count)s reply|one": "%(count)s svar",
-    "%(count)s reply|other": "%(count)s svar",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Uppdaterar utrymme…",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Uppdaterar utrymmen… (%(progress)s av %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Skickar inbjudan…",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Skickar inbjudningar… (%(progress)s av %(count)s)",
+    "%(count)s reply": {
+        "one": "%(count)s svar",
+        "other": "%(count)s svar"
+    },
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Uppdaterar utrymme…",
+        "other": "Uppdaterar utrymmen… (%(progress)s av %(count)s)"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Skickar inbjudan…",
+        "other": "Skickar inbjudningar… (%(progress)s av %(count)s)"
+    },
     "Loading new room": "Laddar nytt rum",
     "Upgrading room": "Uppgraderar rum",
     "File Attached": "Fil bifogad",
@@ -2656,18 +2764,26 @@
     "Rename": "Döp om",
     "Select all": "Välj alla",
     "Deselect all": "Välj bort alla",
-    "Sign out devices|one": "Logga ut enhet",
-    "Sign out devices|other": "Logga ut enheter",
-    "Click the button below to confirm signing out these devices.|one": "Klicka på knappen nedan för att bekräfta utloggning av denna enhet.",
-    "Click the button below to confirm signing out these devices.|other": "Klicka på knappen nedan för att bekräfta utloggning av dessa enheter.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Bekräfta utloggning av denna enhet genom att använda samlad inloggning för att bevisa din identitet.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Bekräfta utloggning av dessa enheter genom att använda samlad inloggning för att bevisa din identitet.",
+    "Sign out devices": {
+        "one": "Logga ut enhet",
+        "other": "Logga ut enheter"
+    },
+    "Click the button below to confirm signing out these devices.": {
+        "one": "Klicka på knappen nedan för att bekräfta utloggning av denna enhet.",
+        "other": "Klicka på knappen nedan för att bekräfta utloggning av dessa enheter."
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Bekräfta utloggning av denna enhet genom att använda samlad inloggning för att bevisa din identitet.",
+        "other": "Bekräfta utloggning av dessa enheter genom att använda samlad inloggning för att bevisa din identitet."
+    },
     "Someone already has that username, please try another.": "Någon annan har redan det användarnamnet, vänligen pröva ett annat.",
     "Someone already has that username. Try another or if it is you, sign in below.": "Någon annan har redan det användarnamnet. Pröva ett annat, eller om det är ditt, logga in nedan.",
     "Own your conversations.": "Äg dina konversationer.",
     "%(senderName)s has updated the room layout": "%(senderName)s har uppdaterat rummets arrangemang",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s och %(count)s till",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s och %(count)s till",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s och %(count)s till",
+        "other": "%(spaceName)s och %(count)s till"
+    },
     "Other rooms": "Andra rum",
     "You cannot place calls in this browser.": "Du kan inte ringa samtal i den här webbläsaren.",
     "Calls are unsupported": "Samtal stöds ej",
@@ -2694,16 +2810,24 @@
     "Show tray icon and minimise window to it on close": "Visa ikon i systembrickan och minimera programmet till den när fönstret stängs",
     "Large": "Stor",
     "Image size in the timeline": "Bildstorlek i tidslinjen",
-    "Exported %(count)s events in %(seconds)s seconds|one": "Exporterade %(count)s händelse på %(seconds)s sekunder",
-    "Exported %(count)s events in %(seconds)s seconds|other": "Exporterade %(count)s händelser på %(seconds)s sekunder",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "Exporterade %(count)s händelse på %(seconds)s sekunder",
+        "other": "Exporterade %(count)s händelser på %(seconds)s sekunder"
+    },
     "Export successful!": "Export lyckades!",
-    "Fetched %(count)s events in %(seconds)ss|one": "Hämtade %(count)s händelse på %(seconds)s s",
-    "Fetched %(count)s events in %(seconds)ss|other": "Hämtade %(count)s händelser på %(seconds)s s",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "Hämtade %(count)s händelse på %(seconds)s s",
+        "other": "Hämtade %(count)s händelser på %(seconds)s s"
+    },
     "Processing event %(number)s out of %(total)s": "Hanterade händelse %(number)s av %(total)s",
-    "Fetched %(count)s events so far|one": "Hämtade %(count)s händelse än så länge",
-    "Fetched %(count)s events so far|other": "Hämtade %(count)s händelser än så länge",
-    "Fetched %(count)s events out of %(total)s|one": "Hämtade %(count)s händelse av %(total)s",
-    "Fetched %(count)s events out of %(total)s|other": "Hämtade %(count)s händelser av %(total)s",
+    "Fetched %(count)s events so far": {
+        "one": "Hämtade %(count)s händelse än så länge",
+        "other": "Hämtade %(count)s händelser än så länge"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "Hämtade %(count)s händelse av %(total)s",
+        "other": "Hämtade %(count)s händelser av %(total)s"
+    },
     "Generating a ZIP": "Genererar en ZIP",
     "%(senderName)s has ended a poll": "%(senderName)s har avslutat en omröstning",
     "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s har startat en omröstning - %(pollQuestion)s",
@@ -2797,10 +2921,14 @@
     "You don't have permission to view messages from before you were invited.": "Du är inte behörig att se meddelanden från innan du bjöds in.",
     "Sorry, the poll you tried to create was not posted.": "Tyvärr så lades omröstningen du försökte skapa inte upp.",
     "Failed to post poll": "Misslyckades att lägga upp omröstning",
-    "was removed %(count)s times|one": "togs bort",
-    "was removed %(count)s times|other": "togs bort %(count)s gånger",
-    "were removed %(count)s times|one": "togs bort",
-    "were removed %(count)s times|other": "togs bort %(count)s gånger",
+    "was removed %(count)s times": {
+        "one": "togs bort",
+        "other": "togs bort %(count)s gånger"
+    },
+    "were removed %(count)s times": {
+        "one": "togs bort",
+        "other": "togs bort %(count)s gånger"
+    },
     "Including you, %(commaSeparatedMembers)s": "Inklusive dig, %(commaSeparatedMembers)s",
     "Backspace": "Backsteg",
     "Unknown error fetching location. Please try again later.": "Ökänt fel när plats hämtades. Pröva igen senare.",
@@ -2810,15 +2938,23 @@
     "Could not fetch location": "Kunde inte hämta plats",
     "Location": "Plats",
     "toggle event": "växla händelse",
-    "%(count)s votes|one": "%(count)s röst",
-    "%(count)s votes|other": "%(count)s röster",
-    "Based on %(count)s votes|one": "Baserat på %(count)s röst",
-    "Based on %(count)s votes|other": "Baserat på %(count)s röster",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s röst avgiven. Rösta för att ser resultatet",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s röster avgivna. Rösta för att se resultatet",
+    "%(count)s votes": {
+        "one": "%(count)s röst",
+        "other": "%(count)s röster"
+    },
+    "Based on %(count)s votes": {
+        "one": "Baserat på %(count)s röst",
+        "other": "Baserat på %(count)s röster"
+    },
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s röst avgiven. Rösta för att ser resultatet",
+        "other": "%(count)s röster avgivna. Rösta för att se resultatet"
+    },
     "No votes cast": "Inga röster avgivna",
-    "Final result based on %(count)s votes|one": "Slutgiltigt resultat baserat på %(count)s röst",
-    "Final result based on %(count)s votes|other": "Slutgiltigt resultat baserat på %(count)s röster",
+    "Final result based on %(count)s votes": {
+        "one": "Slutgiltigt resultat baserat på %(count)s röst",
+        "other": "Slutgiltigt resultat baserat på %(count)s röster"
+    },
     "Sorry, your vote was not registered. Please try again.": "Tyvärr så registrerades inte din röst. Vänligen pröva igen.",
     "You do not have permissions to add spaces to this space": "Du är inte behörig att lägga till utrymmen till det här utrymmet",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Det här grupperar dina chattar med medlemmar i det här utrymmet. Att stänga av det kommer att dölja dessa chattar från din vy av %(spaceName)s.",
@@ -2899,18 +3035,28 @@
     "Thank you for trying the beta, please go into as much detail as you can so we can improve it.": "Tack för att du prövar betan, vänligen ge så många detaljer du kan så att vi kan förbättra den.",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s och %(space2Name)s",
     "Maximise": "Maximera",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)sskickade ett dolt meddelande",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)sskickade %(count)s dolda meddelanden",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)sskickade ett dolt meddelande",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)sskickade %(count)s dolda meddelanden",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)stog bort ett meddelande",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)stog bort %(count)s meddelanden",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)stog bort ett meddelande",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)stog bort %(count)s meddelanden",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "one": "%(oneUser)sskickade ett dolt meddelande",
+        "other": "%(oneUser)sskickade %(count)s dolda meddelanden"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)sskickade ett dolt meddelande",
+        "other": "%(severalUsers)sskickade %(count)s dolda meddelanden"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "one": "%(oneUser)stog bort ett meddelande",
+        "other": "%(oneUser)stog bort %(count)s meddelanden"
+    },
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)stog bort ett meddelande",
+        "other": "%(severalUsers)stog bort %(count)s meddelanden"
+    },
     "Automatically send debug logs when key backup is not functioning": "Skicka automatiskt felsökningsloggar när nyckelsäkerhetskopiering inte funkar",
     "<empty string>": "<tom sträng>",
-    "<%(count)s spaces>|one": "<mellanslag>",
-    "<%(count)s spaces>|other": "<%(count)s mellanslag>",
+    "<%(count)s spaces>": {
+        "one": "<mellanslag>",
+        "other": "<%(count)s mellanslag>"
+    },
     "Join %(roomAddress)s": "Gå med i %(roomAddress)s",
     "Edit poll": "Redigera omröstning",
     "Sorry, you can't edit a poll after votes have been cast.": "Tyvärr kan du inte redigera en omröstning efter att röster har avgivits.",
@@ -2951,8 +3097,10 @@
     "Forget this space": "Glöm det här utrymmet",
     "You were removed by %(memberName)s": "Du togs bort av %(memberName)s",
     "Loading preview": "Laddar förhandsgranskning",
-    "Currently removing messages in %(count)s rooms|one": "Tar just nu bort meddelanden i %(count)s rum",
-    "Currently removing messages in %(count)s rooms|other": "Tar just nu bort meddelanden i %(count)s rum",
+    "Currently removing messages in %(count)s rooms": {
+        "one": "Tar just nu bort meddelanden i %(count)s rum",
+        "other": "Tar just nu bort meddelanden i %(count)s rum"
+    },
     "New video room": "Nytt videorum",
     "New room": "Nytt rum",
     "Busy": "Upptagen",
@@ -2975,8 +3123,10 @@
     "User is already invited to the space": "Användaren är redan inbjuden till det här utrymmet",
     "You do not have permission to invite people to this space.": "Du är inte behörig att bjuda in folk till det här utrymmet.",
     "Failed to invite users to %(roomName)s": "Misslyckades att bjuda in användare till %(roomName)s",
-    "%(count)s participants|one": "1 deltagare",
-    "%(count)s participants|other": "%(count)s deltagare",
+    "%(count)s participants": {
+        "one": "1 deltagare",
+        "other": "%(count)s deltagare"
+    },
     "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "%(errcode)s returnerades vid försök att komma åt rummet eller utrymmet. Om du tror att du ser det här meddelandet felaktigt, vänligen <issueLink>skicka en buggrapport</issueLink>.",
     "Try again later, or ask a room or space admin to check if you have access.": "Pröva igen senare eller be en rums- eller utrymmesadministratör att kolla om du har åtkomst.",
     "This room or space is not accessible at this time.": "Det är rummet eller utrymmet är inte åtkomligt för tillfället.",
@@ -2992,8 +3142,10 @@
     "Can't create a thread from an event with an existing relation": "Kan inte skapa tråd från en händelse med en existerande relation",
     "sends hearts": "skicka hjärtan",
     "Sends the given message with hearts": "Skickar det givna meddelandet med hjärtan",
-    "Confirm signing out these devices|one": "Bekräfta utloggning av denna enhet",
-    "Confirm signing out these devices|other": "Bekräfta utloggning av dessa enheter",
+    "Confirm signing out these devices": {
+        "one": "Bekräfta utloggning av denna enhet",
+        "other": "Bekräfta utloggning av dessa enheter"
+    },
     "Jump to the given date in the timeline": "Hoppa till det angivna datumet i tidslinjen",
     "Unban from room": "Avbanna i rum",
     "Ban from space": "Banna från utrymme",
@@ -3071,15 +3223,21 @@
     "Create a video room": "Skapa ett videorum",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Bocka ur om du även vill ta bort systemmeddelanden för denna användaren (förändrat medlemskap, ny profilbild, m.m.)",
     "Preserve system messages": "Bevara systemmeddelanden",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|one": "Du håller på att ta bort %(count)s meddelanden från %(user)s. Detta kommer ta bort dem permanent för alla i konversationen. Vill du verkligen fortsätta?",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "Du håller på att ta bort %(count)s meddelanden från %(user)s. Detta kommer ta bort dem permanent för alla i konversationen. Vill du verkligen fortsätta?",
+    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
+        "one": "Du håller på att ta bort %(count)s meddelanden från %(user)s. Detta kommer ta bort dem permanent för alla i konversationen. Vill du verkligen fortsätta?",
+        "other": "Du håller på att ta bort %(count)s meddelanden från %(user)s. Detta kommer ta bort dem permanent för alla i konversationen. Vill du verkligen fortsätta?"
+    },
     "%(featureName)s Beta feedback": "%(featureName)s Betaåterkoppling",
     "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Hjälp oss hitta fel och förbättra %(analyticsOwner)s genom att dela anonym användardata. För att förstå hur folk använder flera enheter så skapar vi en slumpmässig identifierare som delas mellan dina enheter.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Du kan använda egna serverinställningar för att logga in på andra Matrix-servrar genom att ange en URL för en annan hemserver. Då kan du använda %(brand)s med ett existerande Matrix-konto på en annan hemserver.",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)s ändrade de <a>fästa meddelandena</a> för rummet",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)s ändrade de <a>fästa meddelandena</a> för rummet %(count)s gånger",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)s ändrade de <a>fästa meddelandena</a> för rummet",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)s ändrade <a>fästa meddelanden</a> för rummet %(count)s gånger",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(oneUser)s ändrade de <a>fästa meddelandena</a> för rummet",
+        "other": "%(oneUser)s ändrade de <a>fästa meddelandena</a> för rummet %(count)s gånger"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)s ändrade de <a>fästa meddelandena</a> för rummet",
+        "other": "%(severalUsers)s ändrade <a>fästa meddelanden</a> för rummet %(count)s gånger"
+    },
     "What location type do you want to share?": "Vilken typ av positionsdelning vill du använda?",
     "Drop a Pin": "Sätt en nål",
     "My live location": "Min realtidsposition",
@@ -3104,8 +3262,10 @@
     "You will no longer be able to log in": "Kommer du inte längre kunna logga in",
     "You will not be able to reactivate your account": "Kommer du inte kunna återaktivera ditt konto",
     "To continue, please enter your account password:": "För att fortsätta, vänligen ange ditt kontolösenord:",
-    "Seen by %(count)s people|one": "Sedd av %(count)s person",
-    "Seen by %(count)s people|other": "Sedd av %(count)s personer",
+    "Seen by %(count)s people": {
+        "one": "Sedd av %(count)s person",
+        "other": "Sedd av %(count)s personer"
+    },
     "Your password was successfully changed.": "Ditt lösenord byttes framgångsrikt.",
     "An error occurred while stopping your live location": "Ett fel inträffade vid delning av din realtidsposition",
     "Enable live location sharing": "Aktivera platsdelning i realtid",
@@ -3134,8 +3294,10 @@
     "Click to read topic": "Klicka för att läsa ämne",
     "Edit topic": "Redigera ämne",
     "Joining…": "Går med…",
-    "%(count)s people joined|other": "%(count)s personer gick med",
-    "%(count)s people joined|one": "%(count)s person gick med",
+    "%(count)s people joined": {
+        "other": "%(count)s personer gick med",
+        "one": "%(count)s person gick med"
+    },
     "View related event": "Visa relaterade händelser",
     "Check if you want to hide all current and future messages from this user.": "Bocka i om du vill dölja alla nuvarande och framtida meddelanden från den här användaren.",
     "Ignore user": "Ignorera användare",
@@ -3161,8 +3323,10 @@
     "Show spaces": "Visa utrymmen",
     "Show rooms": "Visa rum",
     "Search for": "Sök efter",
-    "%(count)s Members|one": "%(count)s medlem",
-    "%(count)s Members|other": "%(count)s medlemmar",
+    "%(count)s Members": {
+        "one": "%(count)s medlem",
+        "other": "%(count)s medlemmar"
+    },
     "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "När du loggar ut kommer nycklarna att raderas från den här enheten, vilket betyder att du inte kommer kunna läsa krypterade meddelanden om du inte har nycklarna för dem på dina andra enheter, eller säkerhetskopierade dem till servern.",
     "Show: Matrix rooms": "Visa: Matrixrum",
     "Show: %(instance)s rooms (%(server)s)": "Visa: %(instance)s-rum (%(server)s)",
@@ -3179,9 +3343,11 @@
     "Video rooms are always-on VoIP channels embedded within a room in %(brand)s.": "Videorum är ständigt aktiva VoIP-kanaler inbäddade i ett rum i %(brand)s.",
     "A new way to chat over voice and video in %(brand)s.": "Ett nytt sätt att chatta över röst och video i %(brand)s.",
     "Video rooms": "Videorum",
-    "In %(spaceName)s and %(count)s other spaces.|one": "I %(spaceName)s och %(count)s annat utrymme.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "I %(spaceName)s och %(count)s annat utrymme.",
+        "other": "I %(spaceName)s och %(count)s andra utrymmen."
+    },
     "In %(spaceName)s.": "I utrymmet %(spaceName)s.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "I %(spaceName)s och %(count)s andra utrymmen.",
     "In spaces %(space1Name)s and %(space2Name)s.": "I utrymmena %(space1Name)s och %(space2Name)s.",
     "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Utvecklarkommando: Slänger den nuvarande utgående gruppsessionen och sätter upp nya Olm-sessioner",
     "Stop and close": "Sluta och stäng",
@@ -3211,11 +3377,15 @@
     "Video call started in %(roomName)s.": "Videosamtal startade i %(roomName)s.",
     "You need to be able to kick users to do that.": "Du behöver kunna kicka användare för att göra det.",
     "Empty room (was %(oldName)s)": "Tomt rum (var %(oldName)s)",
-    "Inviting %(user)s and %(count)s others|one": "Bjuder in %(user)s och 1 till",
-    "Inviting %(user)s and %(count)s others|other": "Bjuder in %(user)s och %(count)s till",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "Bjuder in %(user)s och 1 till",
+        "other": "Bjuder in %(user)s och %(count)s till"
+    },
     "Inviting %(user1)s and %(user2)s": "Bjuder in %(user1)s och %(user2)s",
-    "%(user)s and %(count)s others|one": "%(user)s och 1 till",
-    "%(user)s and %(count)s others|other": "%(user)s och %(count)s till",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s och 1 till",
+        "other": "%(user)s och %(count)s till"
+    },
     "%(user1)s and %(user2)s": "%(user1)s och %(user2)s",
     "Stop live broadcasting?": "Avsluta livesändning?",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Någon annan spelar redan in en röstsändning. Vänta på att deras röstsändning tar slut för att starta en ny.",
@@ -3275,8 +3445,10 @@
     "Voice settings": "Röstinställningar",
     "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.": "För bäst säkerhet, verifiera dina sessioner och logga ut alla sessioner du inte känner igen eller använder längre.",
     "Other sessions": "Andra sessioner",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "Är du säker på att du vill logga ut %(count)s session?",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "Är du säker på att du vill logga ut %(count)s sessioner?",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "one": "Är du säker på att du vill logga ut %(count)s session?",
+        "other": "Är du säker på att du vill logga ut %(count)s sessioner?"
+    },
     "Sessions": "Sessioner",
     "Your server doesn't support disabling sending read receipts.": "Din server stöder inte inaktivering av läskvitton.",
     "Share your activity and status with others.": "Dela din aktivitet och status med andra.",
@@ -3295,8 +3467,10 @@
     "Add privileged users": "Lägg till privilegierade användare",
     "Complete these to get the most out of %(brand)s": "Gör dessa för att få ut så mycket som möjligt av %(brand)s",
     "You did it!": "Du klarade det!",
-    "Only %(count)s steps to go|one": "Bara %(count)s steg kvar",
-    "Only %(count)s steps to go|other": "Bara %(count)s steg kvar",
+    "Only %(count)s steps to go": {
+        "one": "Bara %(count)s steg kvar",
+        "other": "Bara %(count)s steg kvar"
+    },
     "Welcome to %(brand)s": "Välkommen till %(brand)s",
     "Find your people": "Hitta ditt folk",
     "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.": "Håll ägandeskap och kontroll över gemenskapsdiskussioner.\nSkala för att stöda miljoner, med kraftfull moderering och interoperabilitet.",
@@ -3495,10 +3669,14 @@
     "Link": "Länk",
     " in <strong>%(room)s</strong>": " i <strong>%(room)s</strong>",
     "Improve your account security by following these recommendations.": "Förbättra din kontosäkerhet genom att följa dessa rekommendationer.",
-    "Sign out of %(count)s sessions|one": "Logga ut ur %(count)s session",
-    "Sign out of %(count)s sessions|other": "Logga ut ur %(count)s sessioner",
-    "%(count)s sessions selected|one": "%(count)s session vald",
-    "%(count)s sessions selected|other": "%(count)s sessioner valda",
+    "Sign out of %(count)s sessions": {
+        "one": "Logga ut ur %(count)s session",
+        "other": "Logga ut ur %(count)s sessioner"
+    },
+    "%(count)s sessions selected": {
+        "one": "%(count)s session vald",
+        "other": "%(count)s sessioner valda"
+    },
     "Verify your current session for enhanced secure messaging.": "Verifiera din nuvarande session för förbättrade säkra meddelanden.",
     "Your current session is ready for secure messaging.": "Din nuvarande session är redo för säkra meddelanden.",
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Logga ut ur alla andra sessioner (%(otherSessionsCount)s)",
@@ -3626,10 +3804,14 @@
     "User": "Användare",
     "Log out and back in to disable": "Logga ut och in igen för att inaktivera",
     "View poll": "Visa omröstning",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Det finns inga tidigare omröstningar för det senaste dygnet. Ladda fler omröstningar för att se omröstningar för tidigare månader",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Det finns inga tidigare omröstningar under de senaste %(count)s dagarna. Ladda fler omröstningar för att se omröstningar för tidigare månader",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Det finns inga aktiva omröstningar det senaste dygnet. Ladda fler omröstningar för att se omröstningar för tidigare månader",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Det finns inga aktiva omröstningar under de senaste %(count)s dagarna. Ladda fler omröstningar för att se omröstningar för tidigare månader",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Det finns inga tidigare omröstningar för det senaste dygnet. Ladda fler omröstningar för att se omröstningar för tidigare månader",
+        "other": "Det finns inga tidigare omröstningar under de senaste %(count)s dagarna. Ladda fler omröstningar för att se omröstningar för tidigare månader"
+    },
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Det finns inga aktiva omröstningar det senaste dygnet. Ladda fler omröstningar för att se omröstningar för tidigare månader",
+        "other": "Det finns inga aktiva omröstningar under de senaste %(count)s dagarna. Ladda fler omröstningar för att se omröstningar för tidigare månader"
+    },
     "There are no past polls. Load more polls to view polls for previous months": "Det finns inga tidigare omröstningar. Ladda fler omröstningar för att se omröstningar för tidigare månader",
     "There are no active polls. Load more polls to view polls for previous months": "Det finns inga aktiva omröstningar. Ladda fler omröstningar för att se omröstningar för tidigare månader",
     "Load more polls": "Ladda fler omröstningar",
@@ -3697,7 +3879,9 @@
     "Invites by email can only be sent one at a time": "Inbjudningar via e-post kan endast skickas en i taget",
     "Match default setting": "Matcha förvalsinställning",
     "Mute room": "Tysta rum",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Rummets oläst-status: <strong>%(status)s</strong>, antal: <strong>%(count)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>": {
+        "other": "Rummets oläst-status: <strong>%(status)s</strong>, antal: <strong>%(count)s</strong>"
+    },
     "Unable to find event at that date": "Kunde inte hitta händelse vid det datumet",
     "Enable new native OIDC flows (Under active development)": "Aktivera nya inbyggda OIDC-flöden (Under aktiv utveckling)",
     "Your server requires encryption to be disabled.": "Din server kräver att kryptering är inaktiverat.",

@@ -35,8 +35,10 @@
     "Always show message timestamps": "Завжди показувати часові позначки повідомлень",
     "Authentication": "Автентифікація",
     "%(items)s and %(lastItem)s": "%(items)s та %(lastItem)s",
-    "and %(count)s others...|one": "і інше...",
-    "and %(count)s others...|other": "та %(count)s інші...",
+    "and %(count)s others...": {
+        "one": "і інше...",
+        "other": "та %(count)s інші..."
+    },
     "A new password must be entered.": "Має бути введений новий пароль.",
     "An error has occurred.": "Сталася помилка.",
     "Anyone": "Кожний",
@@ -309,7 +311,10 @@
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Файл <b>є надто великим</b> для відвантаження. Допустимий розмір файлів — %(limit)s, але цей файл займає %(sizeOfThisFile)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Ці файли є <b>надто великими</b> для відвантаження. Допустимий розмір файлів — %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Деякі файли є <b>надто великими</b> для відвантаження. Допустимий розмір файлів — %(limit)s.",
-    "Upload %(count)s other files|other": "Вивантажити %(count)s інших файлів",
+    "Upload %(count)s other files": {
+        "other": "Вивантажити %(count)s інших файлів",
+        "one": "Вивантажити %(count)s інший файл"
+    },
     "Upload Error": "Помилка вивантаження",
     "Upload avatar": "Вивантажити аватар",
     "For security, this session has been signed out. Please sign in again.": "З метою безпеки ваш сеанс було завершено. Увійдіть знову.",
@@ -383,8 +388,10 @@
     "No more results": "Інших результатів нема",
     "Room": "Кімната",
     "Failed to reject invite": "Не вдалось відхилити запрошення",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Ви маєте %(count)s непрочитаних сповіщень у попередній версії цієї кімнати.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "У вас %(count)s непрочитане сповіщення у попередній версії цієї кімнати.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "Ви маєте %(count)s непрочитаних сповіщень у попередній версії цієї кімнати.",
+        "one": "У вас %(count)s непрочитане сповіщення у попередній версії цієї кімнати."
+    },
     "Deactivate user?": "Деактивувати користувача?",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Деактивація цього користувача виведе їх з системи й унеможливить вхід у майбутньому. До того ж вони вийдуть з усіх кімнат, у яких перебувають. Ця дія безповоротна. Ви впевнені, що хочете деактивувати цього користувача?",
     "Deactivate user": "Деактивувати користувача",
@@ -425,10 +432,14 @@
     "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s дозволяє гостям приєднуватися до кімнати.",
     "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s забороняє гостям приєднуватися до кімнати.",
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s змінює гостьовий доступ на \"%(rule)s\"",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s додає альтернативні адреси %(addresses)s для цієї кімнати.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s додає альтернативні адреси %(addresses)s для цієї кімнати.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s вилучає альтернативні адреси %(addresses)s для цієї кімнати.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s вилучає альтернативні адреси %(addresses)s для цієї кімнати.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s додає альтернативні адреси %(addresses)s для цієї кімнати.",
+        "one": "%(senderName)s додає альтернативні адреси %(addresses)s для цієї кімнати."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s вилучає альтернативні адреси %(addresses)s для цієї кімнати.",
+        "one": "%(senderName)s вилучає альтернативні адреси %(addresses)s для цієї кімнати."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s змінює альтернативні адреси для цієї кімнати.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s змінює головні та альтернативні адреси для цієї кімнати.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s змінює адреси для цієї кімнати.",
@@ -458,16 +469,20 @@
     "Not Trusted": "Не довірений",
     "Done": "Готово",
     "%(displayName)s is typing …": "%(displayName)s пише…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s та ще %(count)s учасників пишуть…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s та ще один учасник пишуть…",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s та ще %(count)s учасників пишуть…",
+        "one": "%(names)s та ще один учасник пишуть…"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s та %(lastPerson)s пишуть…",
     "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.": "Попросіть адміністратора %(brand)s перевірити <a>конфігураційний файл</a> на наявність неправильних або повторюваних записів.",
     "Cannot reach identity server": "Не вдається зв'язатися із сервером ідентифікаціїї",
     "No homeserver URL provided": "URL адресу домашнього сервера не вказано",
     "Unexpected error resolving homeserver configuration": "Неочікувана помилка в налаштуваннях домашнього серверу",
     "Unexpected error resolving identity server configuration": "Незрозуміла помилка при розборі параметру сервера ідентифікації",
-    "%(items)s and %(count)s others|other": "%(items)s та ще %(count)s учасників",
-    "%(items)s and %(count)s others|one": "%(items)s і ще хтось",
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s та ще %(count)s учасників",
+        "one": "%(items)s і ще хтось"
+    },
     "a few seconds ago": "Декілька секунд тому",
     "about a minute ago": "близько хвилини тому",
     "%(num)s minutes ago": "%(num)s хвилин тому",
@@ -726,10 +741,14 @@
     "Notification options": "Параметри сповіщень",
     "Forget Room": "Забути кімнату",
     "Favourited": "В улюблених",
-    "%(count)s unread messages including mentions.|other": "%(count)s непрочитаних повідомлень включно зі згадками.",
-    "%(count)s unread messages including mentions.|one": "1 непрочитана згадка.",
-    "%(count)s unread messages.|other": "%(count)s непрочитаних повідомлень.",
-    "%(count)s unread messages.|one": "1 непрочитане повідомлення.",
+    "%(count)s unread messages including mentions.": {
+        "other": "%(count)s непрочитаних повідомлень включно зі згадками.",
+        "one": "1 непрочитана згадка."
+    },
+    "%(count)s unread messages.": {
+        "other": "%(count)s непрочитаних повідомлень.",
+        "one": "1 непрочитане повідомлення."
+    },
     "Unread messages.": "Непрочитані повідомлення.",
     "This room is public": "Ця кімната загальнодоступна",
     "Failed to revoke invite": "Не вдалось відкликати запрошення",
@@ -836,8 +855,10 @@
     "The integration manager is offline or it cannot reach your homeserver.": "Менеджер інтеграцій не під'єднаний або не може зв'язатися з вашим домашнім сервером.",
     "Enable desktop notifications for this session": "Увімкнути стільничні сповіщення для цього сеансу",
     "Profile picture": "Зображення профілю",
-    "Show %(count)s more|other": "Показати ще %(count)s",
-    "Show %(count)s more|one": "Показати ще %(count)s",
+    "Show %(count)s more": {
+        "other": "Показати ще %(count)s",
+        "one": "Показати ще %(count)s"
+    },
     "Failed to connect to integration manager": "Не вдалось з'єднатись з менеджером інтеграцій",
     "Show image": "Показати зображення",
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Ви ігноруєте цього користувача, тож його повідомлення приховано. <a>Все одно показати.</a>",
@@ -1149,23 +1170,39 @@
     "A microphone and webcam are plugged in and set up correctly": "Мікрофон і вебкамера під'єднані та налаштовані правильно",
     "Call failed because webcam or microphone could not be accessed. Check that:": "Збій виклику, оскільки не вдалося отримати доступ до вебкамери або мікрофона. Перевірте, що:",
     "Unable to access webcam / microphone": "Не вдається отримати доступ до вебкамери / мікрофона",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)sприєдналися й вийшли %(count)s разів",
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)sприєдналися й вийшли %(count)s разів",
+        "one": "%(severalUsers)sприєдналися й вийшли"
+    },
     "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Ви можете вимкнути це, якщо кімната буде використовуватися для співпраці із зовнішніми командами, які мають власний домашній сервер. Це неможливо змінити пізніше.",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)sзмінює своє ім'я",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)sзмінює своє ім'я %(count)s разів",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)sзмінили свої імена",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)sзмінили свої імена %(count)s разів",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)sвиходить і повертається",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)sвиходить і повертається %(count)s разів",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)sвиходять і повертаються",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)sвиходять і повертаються %(count)s разів",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)sприєднується й виходить",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)sприєднується й виходить %(count)s разів",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)sприєдналися й вийшли",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)sприєднується",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sприєднується %(count)s разів",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sприєдналися",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)sприєдналися %(count)s разів",
+    "%(oneUser)schanged their name %(count)s times": {
+        "one": "%(oneUser)sзмінює своє ім'я",
+        "other": "%(oneUser)sзмінює своє ім'я %(count)s разів"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "one": "%(severalUsers)sзмінили свої імена",
+        "other": "%(severalUsers)sзмінили свої імена %(count)s разів"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "one": "%(oneUser)sвиходить і повертається",
+        "other": "%(oneUser)sвиходить і повертається %(count)s разів"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "one": "%(severalUsers)sвиходять і повертаються",
+        "other": "%(severalUsers)sвиходять і повертаються %(count)s разів"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "one": "%(oneUser)sприєднується й виходить",
+        "other": "%(oneUser)sприєднується й виходить %(count)s разів"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "one": "%(oneUser)sприєднується",
+        "other": "%(oneUser)sприєднується %(count)s разів"
+    },
+    "%(severalUsers)sjoined %(count)s times": {
+        "one": "%(severalUsers)sприєдналися",
+        "other": "%(severalUsers)sприєдналися %(count)s разів"
+    },
     "Members only (since they joined)": "Лише учасники (від часу приєднання)",
     "This room is not accessible by remote Matrix servers": "Ця кімната недоступна для віддалених серверів Matrix",
     "Manually verify all remote sessions": "Звірити всі сеанси власноруч",
@@ -1282,10 +1319,14 @@
     "Edited at %(date)s": "Змінено %(date)s",
     "%(senderName)s changed their profile picture": "%(senderName)s змінює зображення профілю",
     "Phone Number": "Телефонний номер",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)sвиходить",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)sвийшли %(count)s разів",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)sвийшли",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)sвийшли %(count)s разів",
+    "%(oneUser)sleft %(count)s times": {
+        "one": "%(oneUser)sвиходить",
+        "other": "%(oneUser)sвийшли %(count)s разів"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "one": "%(severalUsers)sвийшли",
+        "other": "%(severalUsers)sвийшли %(count)s разів"
+    },
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "Language Dropdown": "Спадне меню мов",
     "Information": "Відомості",
@@ -1317,14 +1358,22 @@
     "Banned by %(displayName)s": "Блокує %(displayName)s",
     "Ban users": "Блокування користувачів",
     "You were banned from %(roomName)s by %(memberName)s": "%(memberName)s блокує вас у %(roomName)s",
-    "were banned %(count)s times|other": "заблоковані %(count)s разів",
-    "were banned %(count)s times|one": "заблоковані",
-    "was banned %(count)s times|other": "заблоковано %(count)s разів",
-    "was banned %(count)s times|one": "заблоковано",
-    "were unbanned %(count)s times|other": "розблоковані %(count)s разів",
-    "were unbanned %(count)s times|one": "розблоковані",
-    "was unbanned %(count)s times|other": "розблоковано %(count)s разів",
-    "was unbanned %(count)s times|one": "розблоковано",
+    "were banned %(count)s times": {
+        "other": "заблоковані %(count)s разів",
+        "one": "заблоковані"
+    },
+    "was banned %(count)s times": {
+        "other": "заблоковано %(count)s разів",
+        "one": "заблоковано"
+    },
+    "were unbanned %(count)s times": {
+        "other": "розблоковані %(count)s разів",
+        "one": "розблоковані"
+    },
+    "was unbanned %(count)s times": {
+        "other": "розблоковано %(count)s разів",
+        "one": "розблоковано"
+    },
     "This is the beginning of your direct message history with <displayName/>.": "Це початок історії вашого особистого спілкування з <displayName/>.",
     "Publish this room to the public in %(domain)s's room directory?": "Опублікувати цю кімнату для всіх у каталозі кімнат %(domain)s?",
     "Recently Direct Messaged": "Недавно надіслані особисті повідомлення",
@@ -1332,10 +1381,14 @@
     "Room version:": "Версія кімнати:",
     "Change topic": "Змінити тему",
     "Change the topic of this room": "Змінювати тему цієї кімнати",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)sзмінює серверні права доступу",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)sзмінює серверні права доступу %(count)s разів",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)sзмінює серверні права доступу",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)sзмінює серверні права доступу %(count)s разів",
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "one": "%(oneUser)sзмінює серверні права доступу",
+        "other": "%(oneUser)sзмінює серверні права доступу %(count)s разів"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "one": "%(severalUsers)sзмінює серверні права доступу",
+        "other": "%(severalUsers)sзмінює серверні права доступу %(count)s разів"
+    },
     "Change server ACLs": "Змінити серверні права доступу",
     "Change permissions": "Змінити дозволи",
     "Change room name": "Змінити назву кімнати",
@@ -1539,8 +1592,10 @@
     "Want to add a new room instead?": "Хочете додати нову кімнату натомість?",
     "Add existing rooms": "Додати наявні кімнати",
     "Space selection": "Вибір простору",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Додавання кімнат...",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Додавання кімнат... (%(progress)s з %(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Додавання кімнат...",
+        "other": "Додавання кімнат... (%(progress)s з %(count)s)"
+    },
     "Not all selected were added": "Не всі вибрані додано",
     "Search for spaces": "Пошук просторів",
     "Create a new space": "Створити новий простір",
@@ -1556,7 +1611,9 @@
     "You are not allowed to view this server's rooms list": "Вам не дозволено переглядати список кімнат цього сервера",
     "Looks good": "Все добре",
     "Enter a server name": "Введіть назву сервера",
-    "And %(count)s more...|other": "І ще %(count)s...",
+    "And %(count)s more...": {
+        "other": "І ще %(count)s..."
+    },
     "Sign in with single sign-on": "Увійти за допомогою єдиного входу",
     "Continue with %(provider)s": "Продовжити з %(provider)s",
     "Join millions for free on the largest public server": "Приєднуйтесь безплатно до мільйонів інших на найбільшому загальнодоступному сервері",
@@ -1660,7 +1717,10 @@
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Будь-хто у <spaceName/> може знайти та приєднатися. Ви можете вибрати інші простори.",
     "Spaces with access": "Простори з доступом",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Будь-хто у просторі може знайти та приєднатися. <a>Укажіть, які простори можуть отримати доступ сюди.</a>",
-    "Currently, %(count)s spaces have access|one": "На разі простір має доступ",
+    "Currently, %(count)s spaces have access": {
+        "one": "На разі простір має доступ",
+        "other": "На разі доступ мають %(count)s просторів"
+    },
     "contact the administrators of identity server <idserver />": "зв'язатися з адміністратором сервера ідентифікації <idserver />",
     "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "перевірити плагіни браузера на наявність будь-чого, що може заблокувати сервер ідентифікації (наприклад, Privacy Badger)",
     "Disconnect from the identity server <idserver />?": "Від'єднатися від сервера ідентифікації <idserver />?",
@@ -1674,16 +1734,19 @@
     "Secret storage:": "Таємне сховище:",
     "Algorithm:": "Алгоритм:",
     "Backup version:": "Версія резервної копії:",
-    "Currently, %(count)s spaces have access|other": "На разі доступ мають %(count)s просторів",
-    "& %(count)s more|one": "і ще %(count)s",
-    "& %(count)s more|other": "і ще %(count)s",
+    "& %(count)s more": {
+        "one": "і ще %(count)s",
+        "other": "і ще %(count)s"
+    },
     "Upgrade required": "Потрібне поліпшення",
     "Anyone can find and join.": "Будь-хто може знайти та приєднатися.",
     "Only invited people can join.": "Приєднатися можуть лише запрошені люди.",
     "Private (invite only)": "Приватно (лише за запрошенням)",
     "Message search initialisation failed": "Не вдалося ініціалізувати пошук повідомлень",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Безпечно кешуйте зашифровані повідомлення локально, щоб вони з'являлися в результатах пошуку, використовуючи %(size)s для зберігання повідомлень з %(rooms)s кімнат.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Безпечно кешуйте зашифровані повідомлення локально, щоб вони з'являлися в результатах пошуку, використовуючи %(size)s для зберігання повідомлень з %(rooms)s кімнат.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "other": "Безпечно кешуйте зашифровані повідомлення локально, щоб вони з'являлися в результатах пошуку, використовуючи %(size)s для зберігання повідомлень з %(rooms)s кімнат.",
+        "one": "Безпечно кешуйте зашифровані повідомлення локально, щоб вони з'являлися в результатах пошуку, використовуючи %(size)s для зберігання повідомлень з %(rooms)s кімнат."
+    },
     "Homeserver feature support:": "Підтримка функції домашнім сервером:",
     "User signing private key:": "Приватний ключ підпису користувача:",
     "Self signing private key:": "Самопідписаний приватний ключ:",
@@ -1746,7 +1809,6 @@
     "Collapse room list section": "Згорнути розділ з переліком кімнат",
     "Go to Home View": "Перейти до домівки",
     "Cancel All": "Скасувати все",
-    "Upload %(count)s other files|one": "Вивантажити %(count)s інший файл",
     "Settings - %(spaceName)s": "Налаштування — %(spaceName)s",
     "Refresh": "Оновити",
     "Send Logs": "Надіслати журнали",
@@ -1756,10 +1818,14 @@
     "Email (optional)": "Е-пошта (необов'язково)",
     "Search spaces": "Пошук просторів",
     "Select spaces": "Вибрати простори",
-    "%(count)s rooms|one": "%(count)s кімната",
-    "%(count)s rooms|other": "%(count)s кімнат",
-    "%(count)s members|one": "%(count)s учасник",
-    "%(count)s members|other": "%(count)s учасників",
+    "%(count)s rooms": {
+        "one": "%(count)s кімната",
+        "other": "%(count)s кімнат"
+    },
+    "%(count)s members": {
+        "one": "%(count)s учасник",
+        "other": "%(count)s учасників"
+    },
     "Value in this room:": "Значення у цій кімнаті:",
     "Value:": "Значення:",
     "Level": "Рівень",
@@ -1818,9 +1884,14 @@
     "MB": "МБ",
     "Number of messages": "Кількість повідомлень",
     "In reply to <a>this message</a>": "У відповідь на <a>це повідомлення</a>",
-    "was invited %(count)s times|one": "запрошено",
-    "was invited %(count)s times|other": "запрошено %(count)s разів",
-    "were invited %(count)s times|one": "запрошені",
+    "was invited %(count)s times": {
+        "one": "запрошено",
+        "other": "запрошено %(count)s разів"
+    },
+    "were invited %(count)s times": {
+        "one": "запрошені",
+        "other": "були запрошені %(count)s разів"
+    },
     "Join": "Приєднатися",
     "Widget added by": "Вджет додано",
     "Image": "Зображення",
@@ -1832,10 +1903,14 @@
     "Retry": "Повторити спробу",
     "Got it": "Зрозуміло",
     "Message": "Повідомлення",
-    "%(count)s sessions|one": "%(count)s сеанс",
-    "%(count)s sessions|other": "Сеансів: %(count)s",
-    "%(count)s verified sessions|one": "1 звірений сеанс",
-    "%(count)s verified sessions|other": "Довірених сеансів: %(count)s",
+    "%(count)s sessions": {
+        "one": "%(count)s сеанс",
+        "other": "Сеансів: %(count)s"
+    },
+    "%(count)s verified sessions": {
+        "one": "1 звірений сеанс",
+        "other": "Довірених сеансів: %(count)s"
+    },
     "Not encrypted": "Не зашифровано",
     "Add widgets, bridges & bots": "Додати віджети, мости та ботів",
     "Edit widgets, bridges & bots": "Редагувати віджети, мости та ботів",
@@ -1866,8 +1941,10 @@
     "Hide Widgets": "Сховати віджети",
     "Forget room": "Забути кімнату",
     "Join Room": "Приєднатися до кімнати",
-    "(~%(count)s results)|one": "(~%(count)s результат)",
-    "(~%(count)s results)|other": "(~%(count)s результатів)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s результат)",
+        "other": "(~%(count)s результатів)"
+    },
     "Recently visited rooms": "Недавно відвідані кімнати",
     "Room %(name)s": "Кімната %(name)s",
     "Unknown": "Невідомо",
@@ -1900,8 +1977,10 @@
     "Invite to this space": "Запросити до цього простору",
     "Failed to send": "Не вдалося надіслати",
     "Your message was sent": "Ваше повідомлення було надіслано",
-    "%(count)s reply|one": "%(count)s відповідь",
-    "%(count)s reply|other": "%(count)s відповідей",
+    "%(count)s reply": {
+        "one": "%(count)s відповідь",
+        "other": "%(count)s відповідей"
+    },
     "Mod": "Модератор",
     "Edit message": "Редагувати повідомлення",
     "Unrecognised command: %(commandText)s": "Нерозпізнана команда: %(commandText)s",
@@ -1946,20 +2025,31 @@
     "Light high contrast": "Контрастна світла",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s змінює, хто може приєднатися до цієї кімнати.",
     "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s змінює, хто може приєднатися до цієї кімнати. <a>Переглянути налаштування</a>.",
-    "were invited %(count)s times|other": "були запрошені %(count)s разів",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "%(oneUser)s відкликали запрошення",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)s відкликали запрошення %(count)s разів",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "%(severalUsers)s відкликали запрошення",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s відкликали запрошення %(count)s разів",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s відхилили запрошення",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s відхилили запрошення %(count)s разів",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s відхилили запрошення",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s відхилили запрошення %(count)s разів",
-    "%(count)s people you know have already joined|one": "%(count)s осіб, яких ви знаєте, уже приєдналися",
-    "%(count)s people you know have already joined|other": "%(count)s людей, яких ви знаєте, уже приєдналися",
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "one": "%(oneUser)s відкликали запрошення",
+        "other": "%(oneUser)s відкликали запрошення %(count)s разів"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "one": "%(severalUsers)s відкликали запрошення",
+        "other": "%(severalUsers)s відкликали запрошення %(count)s разів"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "one": "%(oneUser)s відхилили запрошення",
+        "other": "%(oneUser)s відхилили запрошення %(count)s разів"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "one": "%(severalUsers)s відхилили запрошення",
+        "other": "%(severalUsers)s відхилили запрошення %(count)s разів"
+    },
+    "%(count)s people you know have already joined": {
+        "one": "%(count)s осіб, яких ви знаєте, уже приєдналися",
+        "other": "%(count)s людей, яких ви знаєте, уже приєдналися"
+    },
     "Including %(commaSeparatedMembers)s": "Включно з %(commaSeparatedMembers)s",
-    "View all %(count)s members|one": "Переглянути 1 учасника",
-    "View all %(count)s members|other": "Переглянути усіх %(count)s учасників",
+    "View all %(count)s members": {
+        "one": "Переглянути 1 учасника",
+        "other": "Переглянути усіх %(count)s учасників"
+    },
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "<newIssueLink>Створіть нове обговорення</newIssueLink> на GitHub, щоб ми могли розібратися з цією вадою.",
     "Popout widget": "Спливний віджет",
     "This widget may use cookies.": "Цей віджет може використовувати куки.",
@@ -1981,13 +2071,19 @@
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Ви раніше використовували новішу версію %(brand)s для цього сеансу. Щоб знову використовувати цю версію із наскрізним шифруванням, вам потрібно буде вийти та знову ввійти.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Налаштуйте цьому сеансу резервне копіювання, інакше при виході втратите ключі, доступні лише в цьому сеансі.",
     "Signed Out": "Виконано вихід",
-    "Sign out devices|one": "Вийти з пристрою",
-    "Sign out devices|other": "Вийти з пристроїв",
-    "Click the button below to confirm signing out these devices.|other": "Клацніть кнопку внизу, щоб підтвердити вихід із цих пристроїв.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Підтвердьте вихід із цих пристроїв за допомогою єдиного входу, щоб довести вашу справжність.",
+    "Sign out devices": {
+        "one": "Вийти з пристрою",
+        "other": "Вийти з пристроїв"
+    },
+    "Click the button below to confirm signing out these devices.": {
+        "other": "Клацніть кнопку внизу, щоб підтвердити вихід із цих пристроїв.",
+        "one": "Натисніть кнопку внизу, щоб підтвердити вихід із цього пристрою."
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "other": "Підтвердьте вихід із цих пристроїв за допомогою єдиного входу, щоб довести вашу справжність.",
+        "one": "Підтвердьте вихід із цього пристрою за допомогою єдиного входу, щоб підтвердити вашу особу."
+    },
     "To continue, use Single Sign On to prove your identity.": "Щоб продовжити, скористайтеся єдиним входом для підтвердження особи.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Підтвердьте вихід із цього пристрою за допомогою єдиного входу, щоб підтвердити вашу особу.",
-    "Click the button below to confirm signing out these devices.|one": "Натисніть кнопку внизу, щоб підтвердити вихід із цього пристрою.",
     "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Ваші приватні повідомлення, зазвичай, зашифровані, але ця кімната — ні. Зазвичай це пов'язано з непідтримуваним пристроєм або використаним методом, наприклад, запрошення електронною поштою.",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Для додаткової безпеки перевірте цього користувача, звіривши одноразовий код на обох своїх пристроях.",
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Якщо звірити цей пристрій, його буде позначено надійним, а користувачі, які перевірили у вас, будуть довіряти цьому пристрою.",
@@ -1999,8 +2095,10 @@
     "You have no ignored users.": "Ви не маєте нехтуваних користувачів.",
     "Rename": "Перейменувати",
     "The server is offline.": "Сервер вимкнено.",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s і %(count)s інших",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s і %(count)s інших",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s і %(count)s інших",
+        "other": "%(spaceName)s і %(count)s інших"
+    },
     "Connectivity to the server has been lost": "Втрачено зʼєднання з сервером",
     "Calls are unsupported": "Виклики не підтримуються",
     "To view all keyboard shortcuts, <a>click here</a>.": "Щоб переглянути всі комбінації клавіш, <a>натисніть сюди</a>.",
@@ -2170,10 +2268,14 @@
     "Select from the options below to export chats from your timeline": "Налаштуйте параметри внизу, щоб експортувати бесіди вашої стрічки",
     "Export Chat": "Експортувати бесіду",
     "Exporting your data": "Експортування ваших даних",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Оновлення простору...",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Оновлення просторів... (%(progress)s із %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Надсилання запрошення...",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Надсилання запрошень... (%(progress)s із %(count)s)",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Оновлення простору...",
+        "other": "Оновлення просторів... (%(progress)s із %(count)s)"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Надсилання запрошення...",
+        "other": "Надсилання запрошень... (%(progress)s із %(count)s)"
+    },
     "Loading new room": "Звантаження нової кімнати",
     "Upgrading room": "Поліпшення кімнати",
     "Stop": "Припинити",
@@ -2201,7 +2303,9 @@
     "Only the two of you are in this conversation, unless either of you invites anyone to join.": "У цій розмові вас лише двоє, поки хтось із вас не запросить іще когось приєднатися.",
     "Set my room layout for everyone": "Встановити мій вигляд кімнати всім",
     "Close this widget to view it in this panel": "Закрийте віджет, щоб він зʼявився на цій панелі",
-    "You can only pin up to %(count)s widgets|other": "Закріпити можна до %(count)s віджетів",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Закріпити можна до %(count)s віджетів"
+    },
     "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "Ваші повідомлення захищені. Лише ви з отримувачем маєте унікальні ключі їхнього розшифрування.",
     "Pinned messages": "Закріплені повідомлення",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Якщо маєте дозвіл, відкрийте меню будь-якого повідомлення й натисніть <b>Закріпити</b>, щоб додати його сюди.",
@@ -2380,14 +2484,22 @@
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Ви будете спрямовані до стороннього сайту, щоб автентифікувати використання облікового запису в %(integrationsUrl)s. Продовжити?",
     "Error processing voice message": "Помилка обробки голосового повідомлення",
     "Error decrypting video": "Помилка розшифрування відео",
-    "%(count)s votes|one": "%(count)s голос",
-    "%(count)s votes|other": "%(count)s голосів",
-    "Based on %(count)s votes|one": "На підставі %(count)s голосу",
-    "Based on %(count)s votes|other": "На підставі %(count)s голосів",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s голос надісланий. Проголосуйте, щоб побачити результати",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s голосів надіслано. Проголосуйте, щоб побачити результати",
-    "Final result based on %(count)s votes|one": "Остаточний результат на підставі %(count)s голосу",
-    "Final result based on %(count)s votes|other": "Остаточний результат на підставі %(count)s голосів",
+    "%(count)s votes": {
+        "one": "%(count)s голос",
+        "other": "%(count)s голосів"
+    },
+    "Based on %(count)s votes": {
+        "one": "На підставі %(count)s голосу",
+        "other": "На підставі %(count)s голосів"
+    },
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s голос надісланий. Проголосуйте, щоб побачити результати",
+        "other": "%(count)s голосів надіслано. Проголосуйте, щоб побачити результати"
+    },
+    "Final result based on %(count)s votes": {
+        "one": "Остаточний результат на підставі %(count)s голосу",
+        "other": "Остаточний результат на підставі %(count)s голосів"
+    },
     "%(name)s wants to verify": "%(name)s бажає звірити",
     "%(name)s cancelled": "%(name)s скасовує",
     "%(name)s declined": "%(name)s відхиляє",
@@ -2427,8 +2539,10 @@
     "Unban them from everything I'm able to": "Розблокувати скрізь, де маю доступ",
     "Ban from %(roomName)s": "Заблокувати в %(roomName)s",
     "Unban from %(roomName)s": "Розблокувати в %(roomName)s",
-    "Remove %(count)s messages|one": "Видалити 1 повідомлення",
-    "Remove %(count)s messages|other": "Видалити %(count)s повідомлень",
+    "Remove %(count)s messages": {
+        "one": "Видалити 1 повідомлення",
+        "other": "Видалити %(count)s повідомлень"
+    },
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Залежно від кількості повідомлень, це може тривати довго. Не перезавантажуйте клієнт, поки це триває.",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Гортайте стрічку вище, щоб побачити, чи були такі раніше.",
     "No recent messages by %(user)s found": "Не знайдено недавніх повідомлень %(user)s",
@@ -2456,8 +2570,10 @@
     "<userName/> wants to chat": "<userName/> бажає поговорити",
     "Do you want to chat with %(user)s?": "Бажаєте поговорити з %(user)s?",
     "You can only join it with a working invite.": "Приєднатися можна лише за дійсним запрошенням.",
-    "Currently joining %(count)s rooms|one": "Приєднання до %(count)s кімнати",
-    "Currently joining %(count)s rooms|other": "Приєднання до %(count)s кімнат",
+    "Currently joining %(count)s rooms": {
+        "one": "Приєднання до %(count)s кімнати",
+        "other": "Приєднання до %(count)s кімнат"
+    },
     "Suggested Rooms": "Пропоновані кімнати",
     "Historical": "Історичні",
     "System Alerts": "Системні попередження",
@@ -2467,8 +2583,10 @@
     "No recently visited rooms": "Немає недавно відвіданих кімнат",
     "Recently viewed": "Недавно переглянуті",
     "Close preview": "Закрити попередній перегляд",
-    "Show %(count)s other previews|one": "Показати %(count)s інший попередній перегляд",
-    "Show %(count)s other previews|other": "Показати %(count)s інших попередніх переглядів",
+    "Show %(count)s other previews": {
+        "one": "Показати %(count)s інший попередній перегляд",
+        "other": "Показати %(count)s інших попередніх переглядів"
+    },
     "Scroll to most recent messages": "Перейти до найновіших повідомлень",
     "Unencrypted": "Не зашифроване",
     "Message Actions": "Дії з повідомленням",
@@ -2550,10 +2668,14 @@
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Нагадуємо, що ваш браузер не підтримується, тож деякі функції можуть не працювати.",
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Будь ласка, повідомте нам, що пішло не так; а ще краще створіть обговорення на GitHub із описом проблеми.",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Використовуйте сервер ідентифікації, щоб запрошувати через е-пошту. <default>Наприклад, типовий %(defaultIdentityServerName)s,</default> або інший у <settings>налаштуваннях</settings>.",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)sнічого не змінює",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sнічого не змінює %(count)s разів",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)sнічого не змінюють",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)sнічого не змінюють %(count)s разів",
+    "%(oneUser)smade no changes %(count)s times": {
+        "one": "%(oneUser)sнічого не змінює",
+        "other": "%(oneUser)sнічого не змінює %(count)s разів"
+    },
+    "%(severalUsers)smade no changes %(count)s times": {
+        "one": "%(severalUsers)sнічого не змінюють",
+        "other": "%(severalUsers)sнічого не змінюють %(count)s разів"
+    },
     "Unable to load commit detail: %(msg)s": "Не вдалося звантажити дані про коміт: %(msg)s",
     "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Наведіть додатковий контекст, який може допомогти нам аналізувати проблему, наприклад що ви намагалися зробити, ID кімнат і користувачів тощо.",
     "Clear": "Очистити",
@@ -2580,9 +2702,11 @@
     "New passwords must match each other.": "Нові паролі мають збігатися.",
     "The email address linked to your account must be entered.": "Введіть е-пошту, прив'язану до вашого облікового запису.",
     "Really reset verification keys?": "Точно скинути ключі звірки?",
-    "Uploading %(filename)s and %(count)s others|one": "Вивантаження %(filename)s і ще %(count)s",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "Вивантаження %(filename)s і ще %(count)s",
+        "other": "Вивантаження %(filename)s і ще %(count)s"
+    },
     "Uploading %(filename)s": "Вивантаження %(filename)s",
-    "Uploading %(filename)s and %(count)s others|other": "Вивантаження %(filename)s і ще %(count)s",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Зауважте, ви входите на сервер %(hs)s, не на matrix.org.",
     "Enter your Security Phrase a second time to confirm it.": "Введіть свою фразу безпеки ще раз для підтвердження.",
     "Go back to set it again.": "Поверніться, щоб налаштувати заново.",
@@ -2752,16 +2876,24 @@
     "Recent Conversations": "Недавні бесіди",
     "A call can only be transferred to a single user.": "Виклик можна переадресувати лише на одного користувача.",
     "Search for rooms or people": "Пошук кімнат або людей",
-    "Exported %(count)s events in %(seconds)s seconds|one": "Експортовано %(count)s подій за %(seconds)s секунд",
-    "Exported %(count)s events in %(seconds)s seconds|other": "Експортовано %(count)s подій за %(seconds)s секунд",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "Експортовано %(count)s подій за %(seconds)s секунд",
+        "other": "Експортовано %(count)s подій за %(seconds)s секунд"
+    },
     "Export successful!": "Успішно експортовано!",
-    "Fetched %(count)s events in %(seconds)ss|one": "Знайдено %(count)s подій за %(seconds)sс",
-    "Fetched %(count)s events in %(seconds)ss|other": "Знайдено %(count)s подій за %(seconds)sс",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "Знайдено %(count)s подій за %(seconds)sс",
+        "other": "Знайдено %(count)s подій за %(seconds)sс"
+    },
     "Processing event %(number)s out of %(total)s": "Оброблено %(number)s з %(total)s подій",
-    "Fetched %(count)s events so far|one": "Знайдено %(count)s подій",
-    "Fetched %(count)s events so far|other": "Знайдено %(count)s подій",
-    "Fetched %(count)s events out of %(total)s|one": "Знайдено %(count)s з %(total)s подій",
-    "Fetched %(count)s events out of %(total)s|other": "Знайдено %(count)s з %(total)s подій",
+    "Fetched %(count)s events so far": {
+        "one": "Знайдено %(count)s подій",
+        "other": "Знайдено %(count)s подій"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "Знайдено %(count)s з %(total)s подій",
+        "other": "Знайдено %(count)s з %(total)s подій"
+    },
     "Generating a ZIP": "Генерування ZIP-файлу",
     "Failed to load list of rooms.": "Не вдалося отримати список кімнат.",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Це групує ваші бесіди з учасниками цього простору. Вимкніть, щоб сховати ці бесіди з вашого огляду %(spaceName)s.",
@@ -2817,10 +2949,14 @@
     "Failed to fetch your location. Please try again later.": "Не вдалося отримати ваше місцеперебування. Повторіть спробу пізніше.",
     "Could not fetch location": "Не вдалося отримати місцеперебування",
     "Automatically send debug logs on decryption errors": "Автоматично надсилати журнали зневадження при збоях розшифрування",
-    "was removed %(count)s times|one": "було вилучено",
-    "was removed %(count)s times|other": "було вилучено %(count)s разів",
-    "were removed %(count)s times|one": "було вилучено",
-    "were removed %(count)s times|other": "було вилучено %(count)s разів",
+    "was removed %(count)s times": {
+        "one": "було вилучено",
+        "other": "було вилучено %(count)s разів"
+    },
+    "were removed %(count)s times": {
+        "one": "було вилучено",
+        "other": "було вилучено %(count)s разів"
+    },
     "Remove from room": "Вилучити з кімнати",
     "Failed to remove user": "Не вдалося вилучити користувача",
     "Remove them from specific things I'm able to": "Вилучити їх з деяких місць, де мене на це уповноважено",
@@ -2900,18 +3036,28 @@
     "Feedback sent! Thanks, we appreciate it!": "Відгук надісланий! Дякуємо, візьмемо до уваги!",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s і %(space2Name)s",
     "Maximise": "Розгорнути",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)sнадсилає приховане повідомлення",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)sнадсилає %(count)s прихованих повідомлень",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)sнадсилають приховане повідомлення",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)sнадсилають %(count)s прихованих повідомлень",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)sвидаляє повідомлення",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)sвидаляє %(count)s повідомлень",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)sвидаляють повідомлення",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)sвидаляють %(count)s повідомлень",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "one": "%(oneUser)sнадсилає приховане повідомлення",
+        "other": "%(oneUser)sнадсилає %(count)s прихованих повідомлень"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)sнадсилають приховане повідомлення",
+        "other": "%(severalUsers)sнадсилають %(count)s прихованих повідомлень"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "one": "%(oneUser)sвидаляє повідомлення",
+        "other": "%(oneUser)sвидаляє %(count)s повідомлень"
+    },
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)sвидаляють повідомлення",
+        "other": "%(severalUsers)sвидаляють %(count)s повідомлень"
+    },
     "Automatically send debug logs when key backup is not functioning": "Автоматично надсилати журнали зневадження при збоях резервного копіювання ключів",
     "<empty string>": "<порожній рядок>",
-    "<%(count)s spaces>|one": "<простір>",
-    "<%(count)s spaces>|other": "<%(count)s просторів>",
+    "<%(count)s spaces>": {
+        "one": "<простір>",
+        "other": "<%(count)s просторів>"
+    },
     "Edit poll": "Редагувати опитування",
     "Sorry, you can't edit a poll after votes have been cast.": "Ви не можете редагувати опитування після завершення голосування.",
     "Can't edit poll": "Неможливо редагувати опитування",
@@ -2942,10 +3088,14 @@
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Дайте відповідь у наявну гілку, або створіть нову, навівши курсор на повідомлення й натиснувши «%(replyInThread)s».",
     "Insert a trailing colon after user mentions at the start of a message": "Додавати двокрапку після згадки користувача на початку повідомлення",
     "Show polls button": "Показувати кнопку опитування",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)sзмінює <a>закріплені повідомлення</a> кімнати",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)sзмінює <a>закріплені повідомлення</a> кімнати %(count)s разів",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)sзмінюють <a>закріплені повідомлення</a> кімнати",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)sзмінюють <a>закріплені повідомлення</a> кімнати %(count)s разів",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(oneUser)sзмінює <a>закріплені повідомлення</a> кімнати",
+        "other": "%(oneUser)sзмінює <a>закріплені повідомлення</a> кімнати %(count)s разів"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)sзмінюють <a>закріплені повідомлення</a> кімнати",
+        "other": "%(severalUsers)sзмінюють <a>закріплені повідомлення</a> кімнати %(count)s разів"
+    },
     "We'll create rooms for each of them.": "Ми створимо кімнати для кожного з них.",
     "Click": "Клацнути",
     "Expand quotes": "Розгорнути цитати",
@@ -2967,10 +3117,14 @@
     "%(displayName)s's live location": "Місцеперебування %(displayName)s наживо",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Вимкніть, щоб також видалити системні повідомлення про користувача (зміни членства, редагування профілю…)",
     "Preserve system messages": "Залишити системні повідомлення",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|one": "Ви збираєтеся видалити %(count)s повідомлення від %(user)s. Це видалить його назавжди для всіх у розмові. Точно продовжити?",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "Ви збираєтеся видалити %(count)s повідомлень від %(user)s. Це видалить їх назавжди для всіх у розмові. Точно продовжити?",
-    "Currently removing messages in %(count)s rooms|one": "Триває видалення повідомлень в %(count)s кімнаті",
-    "Currently removing messages in %(count)s rooms|other": "Триває видалення повідомлень у %(count)s кімнатах",
+    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
+        "one": "Ви збираєтеся видалити %(count)s повідомлення від %(user)s. Це видалить його назавжди для всіх у розмові. Точно продовжити?",
+        "other": "Ви збираєтеся видалити %(count)s повідомлень від %(user)s. Це видалить їх назавжди для всіх у розмові. Точно продовжити?"
+    },
+    "Currently removing messages in %(count)s rooms": {
+        "one": "Триває видалення повідомлень в %(count)s кімнаті",
+        "other": "Триває видалення повідомлень у %(count)s кімнатах"
+    },
     "%(value)ss": "%(value)sс",
     "%(value)sm": "%(value)sхв",
     "%(value)sh": "%(value)sгод",
@@ -3056,16 +3210,20 @@
     "Create room": "Створити кімнату",
     "Create video room": "Створити відеокімнату",
     "Create a video room": "Створити відеокімнату",
-    "%(count)s participants|one": "1 учасник",
-    "%(count)s participants|other": "%(count)s учасників",
+    "%(count)s participants": {
+        "one": "1 учасник",
+        "other": "%(count)s учасників"
+    },
     "New video room": "Нова відеокімната",
     "New room": "Нова кімната",
     "Threads help keep your conversations on-topic and easy to track.": "Гілки допомагають підтримувати розмови за темою та за ними легко стежити.",
     "%(featureName)s Beta feedback": "%(featureName)s — відгук про бетаверсію",
     "sends hearts": "надсилає сердечка",
     "Sends the given message with hearts": "Надсилає це повідомлення з сердечками",
-    "Confirm signing out these devices|one": "Підтвердьте вихід із цього пристрою",
-    "Confirm signing out these devices|other": "Підтвердьте вихід із цих пристроїв",
+    "Confirm signing out these devices": {
+        "one": "Підтвердьте вихід із цього пристрою",
+        "other": "Підтвердьте вихід із цих пристроїв"
+    },
     "Live location ended": "Показ місцеперебування наживо завершено",
     "View live location": "Показувати місцеперебування наживо",
     "Jump to the given date in the timeline": "Перейти до вказаної дати в стрічці",
@@ -3101,8 +3259,10 @@
     "You will not be able to reactivate your account": "Відновити обліковий запис буде неможливо",
     "Confirm that you would like to deactivate your account. If you proceed:": "Підтвердьте, що справді бажаєте знищити обліковий запис. Якщо продовжите:",
     "To continue, please enter your account password:": "Для продовження введіть пароль облікового запису:",
-    "Seen by %(count)s people|one": "Переглянули %(count)s осіб",
-    "Seen by %(count)s people|other": "Переглянули %(count)s людей",
+    "Seen by %(count)s people": {
+        "one": "Переглянули %(count)s осіб",
+        "other": "Переглянули %(count)s людей"
+    },
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Ви виходите з усіх пристроїв, і більше не отримуватимете сповіщень. Щоб повторно ввімкнути сповіщення, увійдіть знову на кожному пристрої.",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "Якщо ви хочете зберегти доступ до історії бесіди у кімнатах з шифруванням, налаштуйте резервну копію ключа або експортуйте ключі з одного з інших пристроїв, перш ніж продовжувати.",
     "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "Вихід з ваших пристроїв, видалить ключі шифрування повідомлень, що зберігаються на них і зробить зашифровану історію бесіди нечитабельною.",
@@ -3134,8 +3294,10 @@
     "Unread email icon": "Піктограма непрочитаного електронного листа",
     "Check your email to continue": "Перегляньте свою електронну пошту, щоб продовжити",
     "Joining…": "Приєднання…",
-    "%(count)s people joined|one": "%(count)s осіб приєдналися",
-    "%(count)s people joined|other": "%(count)s людей приєдналися",
+    "%(count)s people joined": {
+        "one": "%(count)s осіб приєдналися",
+        "other": "%(count)s людей приєдналися"
+    },
     "Check if you want to hide all current and future messages from this user.": "Виберіть, чи хочете ви сховати всі поточні та майбутні повідомлення від цього користувача.",
     "Ignore user": "Нехтувати користувача",
     "View related event": "Переглянути пов'язані події",
@@ -3169,8 +3331,10 @@
     "If you can't see who you're looking for, send them your invite link.": "Якщо ви не знаходите тих, кого шукаєте, надішліть їм своє запрошення.",
     "Some results may be hidden for privacy": "Деякі результати можуть бути приховані через приватність",
     "Search for": "Пошук",
-    "%(count)s Members|one": "%(count)s учасник",
-    "%(count)s Members|other": "%(count)s учасників",
+    "%(count)s Members": {
+        "one": "%(count)s учасник",
+        "other": "%(count)s учасників"
+    },
     "Show: Matrix rooms": "Показати: кімнати Matrix",
     "Show: %(instance)s rooms (%(server)s)": "Показати: кімнати %(instance)s (%(server)s)",
     "Add new server…": "Додати новий сервер…",
@@ -3189,9 +3353,11 @@
     "Enter fullscreen": "Перейти у повноекранний режим",
     "Map feedback": "Карта відгуку",
     "Toggle attribution": "Перемкнути атрибуцію",
-    "In %(spaceName)s and %(count)s other spaces.|one": "У %(spaceName)s та %(count)s іншому просторі.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "У %(spaceName)s та %(count)s іншому просторі.",
+        "other": "У %(spaceName)s та %(count)s інших пристроях."
+    },
     "In %(spaceName)s.": "У просторі %(spaceName)s.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "У %(spaceName)s та %(count)s інших пристроях.",
     "In spaces %(space1Name)s and %(space2Name)s.": "У просторах %(space1Name)s і %(space2Name)s.",
     "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Команда розробника: відкликає поточний сеанс вихідної групи та встановлює нові сеанси Olm",
     "You don't have permission to share locations": "Ви не маєте дозволу ділитися місцем перебування",
@@ -3210,8 +3376,10 @@
     "Spell check": "Перевірка правопису",
     "Complete these to get the most out of %(brand)s": "Виконайте їх, щоб отримати максимальну віддачу від %(brand)s",
     "You did it!": "Ви це зробили!",
-    "Only %(count)s steps to go|one": "Лише %(count)s крок для налаштування",
-    "Only %(count)s steps to go|other": "Лише %(count)s кроків для налаштування",
+    "Only %(count)s steps to go": {
+        "one": "Лише %(count)s крок для налаштування",
+        "other": "Лише %(count)s кроків для налаштування"
+    },
     "Welcome to %(brand)s": "Вітаємо в %(brand)s",
     "Find your people": "Знайдіть своїх людей",
     "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.": "Зберігайте право власності та контроль над обговоренням спільноти.\nМасштабуйте для підтримки мільйонів завдяки потужній модерації та сумісності.",
@@ -3290,11 +3458,15 @@
     "Don’t miss a thing by taking %(brand)s with you": "Не пропускайте нічого, взявши з собою %(brand)s",
     "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Не варто додавати шифрування загальнодоступним кімнатам.</b> Будь-хто може знаходити загальнодоступні кімнати, приєднатись і читати повідомлення в них. Ви не отримаєте переваг від шифрування й не зможете вимкнути його пізніше. Зашифровані повідомлення в загальнодоступній кімнаті отримуватимуться й надсилатимуться повільніше.",
     "Empty room (was %(oldName)s)": "Порожня кімната (були %(oldName)s)",
-    "Inviting %(user)s and %(count)s others|one": "Запрошення %(user)s і ще 1",
-    "Inviting %(user)s and %(count)s others|other": "Запрошення %(user)s і ще %(count)s",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "Запрошення %(user)s і ще 1",
+        "other": "Запрошення %(user)s і ще %(count)s"
+    },
     "Inviting %(user1)s and %(user2)s": "Запрошення %(user1)s і %(user2)s",
-    "%(user)s and %(count)s others|one": "%(user)s і ще 1",
-    "%(user)s and %(count)s others|other": "%(user)s і ще %(count)s",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s і ще 1",
+        "other": "%(user)s і ще %(count)s"
+    },
     "%(user1)s and %(user2)s": "%(user1)s і %(user2)s",
     "Show": "Показати",
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s або %(copyButton)s",
@@ -3392,8 +3564,10 @@
     "Show QR code": "Показати QR-код",
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Ви можете використовувати цей пристрій для входу на новому пристрої за допомогою QR-коду. Вам потрібно буде сканувати QR-код, показаний на цьому пристрої, своїм пристроєм, на якому ви вийшли.",
     "play voice broadcast": "відтворити голосову трансляцію",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "Ви впевнені, що хочете вийти з %(count)s сеансів?",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "Ви впевнені, що хочете вийти з %(count)s сеансів?",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "one": "Ви впевнені, що хочете вийти з %(count)s сеансів?",
+        "other": "Ви впевнені, що хочете вийти з %(count)s сеансів?"
+    },
     "Show formatting": "Показати форматування",
     "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.": "Вилучення неактивних сеансів посилює безпеку і швидкодію, а також полегшує виявлення підозрілих нових сеансів.",
     "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.": "Неактивні сеанси — це сеанси, які ви не використовували протягом певного часу, але вони продовжують отримувати ключі шифрування.",
@@ -3489,8 +3663,10 @@
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "Ви не можете розпочати виклик, оскільки зараз ведеться запис прямої трансляції. Будь ласка, заверште її, щоб розпочати виклик.",
     "Can’t start a call": "Не вдалося розпочати виклик",
     "Improve your account security by following these recommendations.": "Удоскональте безпеку свого облікового запису, дотримуючись цих порад.",
-    "%(count)s sessions selected|one": "%(count)s сеанс вибрано",
-    "%(count)s sessions selected|other": "Вибрано сеансів: %(count)s",
+    "%(count)s sessions selected": {
+        "one": "%(count)s сеанс вибрано",
+        "other": "Вибрано сеансів: %(count)s"
+    },
     "Failed to read events": "Не вдалося прочитати події",
     "Failed to send event": "Не вдалося надіслати подію",
     " in <strong>%(room)s</strong>": " в <strong>%(room)s</strong>",
@@ -3501,8 +3677,10 @@
     "Create a link": "Створити посилання",
     "Link": "Посилання",
     "Force 15s voice broadcast chunk length": "Примусово обмежити тривалість голосових трансляцій до 15 с",
-    "Sign out of %(count)s sessions|one": "Вийти з %(count)s сеансу",
-    "Sign out of %(count)s sessions|other": "Вийти з %(count)s сеансів",
+    "Sign out of %(count)s sessions": {
+        "one": "Вийти з %(count)s сеансу",
+        "other": "Вийти з %(count)s сеансів"
+    },
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Вийти з усіх інших сеансів (%(otherSessionsCount)s)",
     "Yes, end my recording": "Так, завершити мій запис",
     "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "Якщо ви почнете слухати цю трансляцію наживо, ваш поточний запис трансляції наживо завершиться.",
@@ -3606,7 +3784,9 @@
     "Room is <strong>encrypted ✅</strong>": "Кімната <strong>зашифрована ✅</strong>",
     "Notification state is <strong>%(notificationState)s</strong>": "Стан сповіщень <strong>%(notificationState)s</strong>",
     "Room unread status: <strong>%(status)s</strong>": "Стан непрочитаного в кімнаті: <strong>%(status)s</strong>",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Стан непрочитаного в кімнаті: <strong>%(status)s</strong>, кількість: <strong>%(count)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>": {
+        "other": "Стан непрочитаного в кімнаті: <strong>%(status)s</strong>, кількість: <strong>%(count)s</strong>"
+    },
     "Ended a poll": "Завершує опитування",
     "Due to decryption errors, some votes may not be counted": "Через помилки розшифрування деякі голоси можуть бути не враховані",
     "The sender has blocked you from receiving this message": "Відправник заблокував вам отримання цього повідомлення",
@@ -3622,10 +3802,14 @@
     "Past polls": "Минулі опитування",
     "Active polls": "Активні опитування",
     "View poll in timeline": "Переглянути опитування у стрічці",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "За попередній день немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "За останні %(count)s днів немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "За попередній день немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "За останні %(count)s днів немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "За попередній день немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+        "other": "За останні %(count)s днів немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці"
+    },
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "За попередній день немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+        "other": "За останні %(count)s днів немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці"
+    },
     "There are no past polls. Load more polls to view polls for previous months": "Немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
     "There are no active polls. Load more polls to view polls for previous months": "Немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
     "Load more polls": "Завантажити більше опитувань",
@@ -3726,8 +3910,14 @@
     "Mark all messages as read": "Позначити всі повідомлення прочитаними",
     "Enter keywords here, or use for spelling variations or nicknames": "Введіть сюди ключові слова або використовуйте для варіацій написання чи нікнеймів",
     "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Повідомлення в цій кімнаті наскрізно зашифровані. Коли люди приєднуються, ви можете перевірити їх у їхньому профілі, просто торкнувшись зображення профілю.",
-    "%(severalUsers)schanged their profile picture %(count)s times|other": "%(severalUsers)sзмінює своє зображення профілю %(count)s рази",
-    "%(oneUser)schanged their profile picture %(count)s times|other": "%(oneUser)sзмінює своє зображення профілю %(count)s рази",
+    "%(severalUsers)schanged their profile picture %(count)s times": {
+        "other": "%(severalUsers)sзмінює своє зображення профілю %(count)s рази",
+        "one": "%(severalUsers)sзмінюють зображення профілів"
+    },
+    "%(oneUser)schanged their profile picture %(count)s times": {
+        "other": "%(oneUser)sзмінює своє зображення профілю %(count)s рази",
+        "one": "%(oneUser)sзмінюють зображення профілів"
+    },
     "Are you sure you wish to remove (delete) this event?": "Ви впевнені, що хочете вилучити (видалити) цю подію?",
     "Thread Root ID: %(threadRootId)s": "ID кореневої гілки: %(threadRootId)s",
     "Upgrade room": "Поліпшити кімнату",
@@ -3766,8 +3956,6 @@
     "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a unique passphrase below, which will only be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": "Експортований файл дозволить будь-кому, хто зможе його прочитати, розшифрувати будь-які зашифровані повідомлення, які ви бачите, тому ви повинні бути обережними, щоб зберегти його в безпеці. Щоб зробити це, вам слід ввести унікальну парольну фразу нижче, яка буде використовуватися тільки для шифрування експортованих даних. Імпортувати дані можна буде лише за допомогою тієї ж самої парольної фрази.",
     "Under active development, new room header & details interface": "В активній розробці новий інтерфейс заголовка та подробиць кімнати",
     "Other spaces you know": "Інші відомі вам простори",
-    "%(severalUsers)schanged their profile picture %(count)s times|one": "%(severalUsers)sзмінюють зображення профілів",
-    "%(oneUser)schanged their profile picture %(count)s times|one": "%(oneUser)sзмінюють зображення профілів",
     "You need an invite to access this room.": "Для доступу до цієї кімнати потрібне запрошення.",
     "Failed to cancel": "Не вдалося скасувати",
     "Ask to join %(roomName)s?": "Надіслати запит на приєднання до %(roomName)s?",

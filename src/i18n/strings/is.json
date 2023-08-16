@@ -255,9 +255,17 @@
     "Delete Widget": "Eyða viðmótshluta",
     "Delete widget": "Eyða viðmótshluta",
     "Create new room": "Búa til nýja spjallrás",
-    "were invited %(count)s times|one": "var boðið",
-    "was invited %(count)s times|one": "var boðið",
-    "And %(count)s more...|other": "Og %(count)s til viðbótar...",
+    "were invited %(count)s times": {
+        "one": "var boðið",
+        "other": "var boðið %(count)s sinnum"
+    },
+    "was invited %(count)s times": {
+        "one": "var boðið",
+        "other": "var boðið %(count)s sinnum"
+    },
+    "And %(count)s more...": {
+        "other": "Og %(count)s til viðbótar..."
+    },
     "Event sent!": "Atburður sendur!",
     "State Key": "Stöðulykill",
     "Clear Storage and Sign Out": "Hreinsa gagnageymslu og skrá út",
@@ -271,9 +279,11 @@
     "No more results": "Ekki fleiri niðurstöður",
     "Failed to reject invite": "Mistókst að hafna boði",
     "Failed to load timeline position": "Mistókst að hlaða inn staðsetningu á tímalínu",
-    "Uploading %(filename)s and %(count)s others|other": "Sendi inn %(filename)s og %(count)s til viðbótar",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "Sendi inn %(filename)s og %(count)s til viðbótar",
+        "one": "Sendi inn %(filename)s og %(count)s til viðbótar"
+    },
     "Uploading %(filename)s": "Sendi inn %(filename)s",
-    "Uploading %(filename)s and %(count)s others|one": "Sendi inn %(filename)s og %(count)s til viðbótar",
     "Unable to remove contact information": "Ekki tókst að fjarlægja upplýsingar um tengilið",
     "<not supported>": "<ekki stutt>",
     "No Microphones detected": "Engir hljóðnemar fundust",
@@ -406,8 +416,10 @@
     "Share Link to User": "Deila Hlekk að Notanda",
     "You have verified this user. This user has verified all of their sessions.": "Þú hefur sannreynt þennan notanda. Þessi notandi hefur sannreynt öll tæki þeirra.",
     "This user has not verified all of their sessions.": "Þessi notandi hefur ekki sannreynt öll tæki þeirra.",
-    "%(count)s verified sessions|one": "1 sannreynd seta",
-    "%(count)s verified sessions|other": "%(count)s sannreyndar setur",
+    "%(count)s verified sessions": {
+        "one": "1 sannreynd seta",
+        "other": "%(count)s sannreyndar setur"
+    },
     "Hide verified sessions": "Fela sannreyndar setur",
     "Remove recent messages": "Fjarlægja nýleg skilaboð",
     "Remove recent messages by %(user)s": "Fjarlægja nýleg skilaboð frá %(user)s",
@@ -499,10 +511,22 @@
     "Next": "Næsta",
     "Legal": "Lagalegir fyrirvarar",
     "Demote": "Leggja til baka",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)sfór út",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)sfóru út",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)sskráði sig",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sskráðu sig",
+    "%(oneUser)sleft %(count)s times": {
+        "one": "%(oneUser)sfór út",
+        "other": "%(oneUser)sfór út %(count)s sinnum"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "one": "%(severalUsers)sfóru út",
+        "other": "%(severalUsers)sfóru út %(count)s sinnum"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "one": "%(oneUser)sskráði sig",
+        "other": "%(oneUser)shefur skráð sig %(count)s sinnum"
+    },
+    "%(severalUsers)sjoined %(count)s times": {
+        "one": "%(severalUsers)sskráðu sig",
+        "other": "%(severalUsers)shafa skráð sig %(count)s sinnum"
+    },
     "Stickerpack": "Límmerkjapakki",
     "Replying": "Svara",
     "%(duration)sd": "%(duration)sd",
@@ -523,8 +547,10 @@
     "Unable to access microphone": "Mistókst að ná aðgangi að hljóðnema",
     "Search for rooms": "Leita að spjallrásum",
     "Create a new room": "Búa til nýja spjallrás",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Bæti við spjallrás ...",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Bæti við spjallrásum... (%(progress)s af %(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Bæti við spjallrás ...",
+        "other": "Bæti við spjallrásum... (%(progress)s af %(count)s)"
+    },
     "Role in <RoomName/>": "Hlutverk í <RoomName/>",
     "Forget Room": "Gleyma spjallrás",
     "Spaces": "Svæði",
@@ -835,7 +861,10 @@
     "Sets the room name": "Stillir heiti spjallrásar",
     "Effects": "Brellur",
     "Setting up keys": "Set upp dulritunarlykla",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s og %(count)s til viðbótar",
+    "%(spaceName)s and %(count)s others": {
+        "other": "%(spaceName)s og %(count)s til viðbótar",
+        "one": "%(spaceName)s og %(count)s til viðbótar"
+    },
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s og %(space2Name)s",
     "Custom (%(level)s)": "Sérsniðið (%(level)s)",
     "Sign In or Create Account": "Skráðu þig inn eða búðu til aðgang",
@@ -955,8 +984,10 @@
     "Send report": "Senda kæru",
     "Email (optional)": "Tölvupóstfang (valfrjálst)",
     "Session name": "Nafn á setu",
-    "%(count)s rooms|one": "%(count)s spjallrás",
-    "%(count)s rooms|other": "%(count)s spjallrásir",
+    "%(count)s rooms": {
+        "one": "%(count)s spjallrás",
+        "other": "%(count)s spjallrásir"
+    },
     "Are you sure you want to sign out?": "Ertu viss um að þú viljir skrá þig út?",
     "Leave space": "Yfirgefa svæði",
     "Leave %(spaceName)s": "Yfirgefa %(spaceName)s",
@@ -982,8 +1013,10 @@
     "Edit setting": "Breyta stillingu",
     "Value": "Gildi",
     "<empty string>": "<auður strengur>",
-    "<%(count)s spaces>|one": "<svæði>",
-    "<%(count)s spaces>|other": "<%(count)s svæði>",
+    "<%(count)s spaces>": {
+        "one": "<svæði>",
+        "other": "<%(count)s svæði>"
+    },
     "Public space": "Opinbert svæði",
     "Private space (invite only)": "Einkasvæði (einungis gegn boði)",
     "Public room": "Almenningsspjallrás",
@@ -1011,8 +1044,10 @@
     "Share location": "Deila staðsetningu",
     "Location": "Staðsetning",
     "Show all": "Sýna allt",
-    "%(count)s votes|one": "%(count)s atkvæði",
-    "%(count)s votes|other": "%(count)s atkvæði",
+    "%(count)s votes": {
+        "one": "%(count)s atkvæði",
+        "other": "%(count)s atkvæði"
+    },
     "Zoom out": "Renna frá",
     "Zoom in": "Renna að",
     "Image": "Mynd",
@@ -1044,7 +1079,10 @@
     "No microphone found": "Enginn hljóðnemi fannst",
     "Mark all as read": "Merkja allt sem lesið",
     "Unread messages.": "Ólesin skilaboð.",
-    "%(count)s unread messages.|one": "1 ólesin skilaboð.",
+    "%(count)s unread messages.": {
+        "one": "1 ólesin skilaboð.",
+        "other": "%(count)s ólesin skilaboð."
+    },
     "Copy room link": "Afrita tengil spjallrásar",
     "A-Z": "A-Ö",
     "Activity": "Virkni",
@@ -1104,7 +1142,10 @@
     "Global": "Víðvært",
     "Keyword": "Stikkorð",
     "Modern": "Nútímalegt",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Uppfæri svæði...",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Uppfæri svæði...",
+        "other": "Uppfæri svæði... (%(progress)s af %(count)s)"
+    },
     "Space members": "Meðlimir svæðis",
     "Upgrade required": "Uppfærsla er nauðsynleg",
     "Large": "Stórt",
@@ -1203,11 +1244,12 @@
     "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s samþykkti boð um að taka þátt í %(displayName)s",
     "Are you sure you want to cancel entering passphrase?": "Viltu örugglega hætta við að setja inn lykilfrasa?",
     "Cancel entering passphrase?": "Hætta við að setja inn lykilfrasa?",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s og %(count)s til viðbótar",
     "Connectivity to the server has been lost": "Tenging við vefþjón hefur rofnað",
     "%(names)s and %(lastPerson)s are typing …": "%(names)s og %(lastPerson)s eru að skrifa…… …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s og einn til viðbótar eru að skrifa……",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s og %(count)s til viðbótar eru að skrifa……",
+    "%(names)s and %(count)s others are typing …": {
+        "one": "%(names)s og einn til viðbótar eru að skrifa……",
+        "other": "%(names)s og %(count)s til viðbótar eru að skrifa……"
+    },
     "%(senderName)s has ended a poll": "%(senderName)s hefur lokið könnun",
     "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s hefur sett í gang könnun - %(pollQuestion)s",
     "%(senderName)s has shared their location": "%(senderName)s hefur deilt staðsetningu sinni",
@@ -1353,19 +1395,27 @@
     "Don't miss a reply": "Ekki missa af svari",
     "Review to ensure your account is safe": "Yfirfarðu þetta til að tryggja að aðgangurinn þinn sé öruggur",
     "Help improve %(analyticsOwner)s": "Hjálpaðu okkur að bæta %(analyticsOwner)s",
-    "Exported %(count)s events in %(seconds)s seconds|one": "Flutti út %(count)s atburð á %(seconds)ssek",
-    "Exported %(count)s events in %(seconds)s seconds|other": "Flutti út %(count)s atburði á %(seconds)ssek",
-    "Fetched %(count)s events in %(seconds)ss|one": "Hef náð í %(count)s atburð á %(seconds)ssek",
-    "Fetched %(count)s events in %(seconds)ss|other": "Hef náð í %(count)s atburði á %(seconds)ssek",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "Flutti út %(count)s atburð á %(seconds)ssek",
+        "other": "Flutti út %(count)s atburði á %(seconds)ssek"
+    },
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "Hef náð í %(count)s atburð á %(seconds)ssek",
+        "other": "Hef náð í %(count)s atburði á %(seconds)ssek"
+    },
     "Processing event %(number)s out of %(total)s": "Vinn með atburð %(number)s af %(total)s",
     "Error fetching file": "Villa við að sækja skrá",
     "%(creatorName)s created this room.": "%(creatorName)s bjó til þessa spjallrás.",
     "Media omitted - file size limit exceeded": "Myndefni sleppt - skráastærð fer fram úr hámarki",
     "Media omitted": "Myndefni sleppt",
-    "Fetched %(count)s events so far|one": "Hef náð í %(count)s atburð að svo komnu",
-    "Fetched %(count)s events so far|other": "Hef náð í %(count)s atburði að svo komnu",
-    "Fetched %(count)s events out of %(total)s|one": "Hef náð í %(count)s atburð af %(total)s",
-    "Fetched %(count)s events out of %(total)s|other": "Hef náð í %(count)s atburði af %(total)s",
+    "Fetched %(count)s events so far": {
+        "one": "Hef náð í %(count)s atburð að svo komnu",
+        "other": "Hef náð í %(count)s atburði að svo komnu"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "Hef náð í %(count)s atburð af %(total)s",
+        "other": "Hef náð í %(count)s atburði af %(total)s"
+    },
     "Specify a number of messages": "Skilgreindu fjölda skilaboða",
     "Generating a ZIP": "Útbý ZIP-safnskrá",
     "Are you sure you want to exit during this export?": "Ertu viss um að þú viljir hætta á meðan þessum útflutningi stendur?",
@@ -1391,8 +1441,10 @@
     "about a minute ago": "fyrir um það bil mínútu síðan",
     "a few seconds ago": "fyrir örfáum sekúndum síðan",
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
-    "%(items)s and %(count)s others|one": "%(items)s og einn til viðbótar",
-    "%(items)s and %(count)s others|other": "%(items)s og %(count)s til viðbótar",
+    "%(items)s and %(count)s others": {
+        "one": "%(items)s og einn til viðbótar",
+        "other": "%(items)s og %(count)s til viðbótar"
+    },
     "No homeserver URL provided": "Engin slóð heimaþjóns tilgreind",
     "Cannot reach identity server": "Næ ekki sambandi við auðkennisþjón",
     "Send a sticker": "Senda límmerki",
@@ -1420,10 +1472,14 @@
     "Edit poll": "Breyta könnun",
     "Create Poll": "Búa til könnun",
     "Create poll": "Búa til könnun",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)sbreytti nafni sínu",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)sbreytti nafni sínu %(count)s sinnum",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)sbreyttu nafni sínu",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)sbreyttu nafni sínu %(count)s sinnum",
+    "%(oneUser)schanged their name %(count)s times": {
+        "one": "%(oneUser)sbreytti nafni sínu",
+        "other": "%(oneUser)sbreytti nafni sínu %(count)s sinnum"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "one": "%(severalUsers)sbreyttu nafni sínu",
+        "other": "%(severalUsers)sbreyttu nafni sínu %(count)s sinnum"
+    },
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "Share content": "Deila efni",
     "Share entire screen": "Deila öllum skjánum",
@@ -1448,8 +1504,10 @@
     "Start new chat": "Hefja nýtt spjall",
     "Show Widgets": "Sýna viðmótshluta",
     "Hide Widgets": "Fela viðmótshluta",
-    "(~%(count)s results)|one": "(~%(count)s niðurstaða)",
-    "(~%(count)s results)|other": "(~%(count)s niðurstöður)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s niðurstaða)",
+        "other": "(~%(count)s niðurstöður)"
+    },
     "No recently visited rooms": "Engar nýlega skoðaðar spjallrásir",
     "Recently visited rooms": "Nýlega skoðaðar spjallrásir",
     "Room %(name)s": "Spjallrás %(name)s",
@@ -1461,8 +1519,10 @@
     "Send voice message": "Senda talskilaboð",
     "%(seconds)ss left": "%(seconds)ssek eftir",
     "Invite to this space": "Bjóða inn á þetta svæði",
-    "and %(count)s others...|one": "og einn í viðbót...",
-    "and %(count)s others...|other": "og %(count)s til viðbótar...",
+    "and %(count)s others...": {
+        "one": "og einn í viðbót...",
+        "other": "og %(count)s til viðbótar..."
+    },
     "Close preview": "Loka forskoðun",
     "View in room": "Skoða á spjallrás",
     "Notify everyone": "Tilkynna öllum",
@@ -1504,8 +1564,10 @@
     "Displays information about a user": "Birtir upplýsingar um notanda",
     "Define the power level of a user": "Skilgreindu völd notanda",
     "Failed to set display name": "Mistókst að stilla birtingarnafn",
-    "Sign out devices|one": "Skrá út tæki",
-    "Sign out devices|other": "Skrá út tæki",
+    "Sign out devices": {
+        "one": "Skrá út tæki",
+        "other": "Skrá út tæki"
+    },
     "Show advanced": "Birta ítarlegt",
     "Hide advanced": "Fela ítarlegt",
     "Edit settings relating to your space.": "Breyta stillingum viðkomandi svæðinu þínu.",
@@ -1581,11 +1643,15 @@
     "Message bubbles": "Skilaboðablöðrur",
     "IRC (Experimental)": "IRC (á tilraunastigi)",
     "Message layout": "Framsetning skilaboða",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Sendi boð...",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Sendi boð... (%(progress)s af %(count)s)",
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Sendi boð...",
+        "other": "Sendi boð... (%(progress)s af %(count)s)"
+    },
     "Spaces with access": "Svæði með aðgang",
-    "& %(count)s more|one": "og %(count)s til viðbótar",
-    "& %(count)s more|other": "og %(count)s til viðbótar",
+    "& %(count)s more": {
+        "one": "og %(count)s til viðbótar",
+        "other": "og %(count)s til viðbótar"
+    },
     "Anyone can find and join.": "Hver sem er getur fundið og tekið þátt.",
     "Only invited people can join.": "Aðeins fólk sem er boðið getur tekið þátt.",
     "Private (invite only)": "Einka (einungis gegn boði)",
@@ -1606,8 +1672,10 @@
     "Could not find user in room": "Gat ekki fundið notanda á spjallrás",
     "Favourited": "Í eftirlætum",
     "Notification options": "Valkostir tilkynninga",
-    "Show %(count)s more|one": "Birta %(count)s til viðbótar",
-    "Show %(count)s more|other": "Birta %(count)s til viðbótar",
+    "Show %(count)s more": {
+        "one": "Birta %(count)s til viðbótar",
+        "other": "Birta %(count)s til viðbótar"
+    },
     "Show previews of messages": "Sýna forskoðun skilaboða",
     "Show rooms with unread messages first": "Birta spjallrásir með ólesnum skilaboðum fyrst",
     "Spaces are a new way to group rooms and people. What kind of Space do you want to create? You can change this later.": "Svæði eru ný leið til að hópa fólk og spjallrásir. Hverskyns svæði langar þig til að útbúa? Þessu má breyta síðar.",
@@ -1820,8 +1888,10 @@
     "You can turn this off anytime in settings": "Þú getur slökkt á þessu hvenær sem er í stillingunum",
     "Create a new space": "Búa til nýtt svæði",
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Þú hefur hunsað þennan notanda, þannig að skilaboð frá honum eru falin. <a>Birta samts.</a>",
-    "Show %(count)s other previews|one": "Sýna %(count)s forskoðun til viðbótar",
-    "Show %(count)s other previews|other": "Sýna %(count)s forskoðanir til viðbótar",
+    "Show %(count)s other previews": {
+        "one": "Sýna %(count)s forskoðun til viðbótar",
+        "other": "Sýna %(count)s forskoðanir til viðbótar"
+    },
     "You have no ignored users.": "Þú ert ekki með neina hunsaða notendur.",
     "Read Marker off-screen lifetime (ms)": "Líftími lesmerkis utan skjás (ms)",
     "Read Marker lifetime (ms)": "Líftími lesmerkis (ms)",
@@ -1875,9 +1945,10 @@
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Notaðu samþættingarstýringu <b>(%(serverName)s)</b> til að stýra vélmennum, viðmótshlutum og límmerkjapökkum.",
     "An error occurred whilst saving your notification preferences.": "Villa kom upp við að vista valkosti þína fyrir tilkynningar.",
     "Error saving notification preferences": "Villa við að vista valkosti tilkynninga",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Uppfæri svæði... (%(progress)s af %(count)s)",
-    "Currently, %(count)s spaces have access|one": "Núna er svæði með aðgang",
-    "Currently, %(count)s spaces have access|other": "Núna eru %(count)s svæði með aðgang",
+    "Currently, %(count)s spaces have access": {
+        "one": "Núna er svæði með aðgang",
+        "other": "Núna eru %(count)s svæði með aðgang"
+    },
     "The integration manager is offline or it cannot reach your homeserver.": "Samþættingarstýringin er ekki nettengd og nær ekki að tengjast heimaþjóninum þínum.",
     "Cannot connect to integration manager": "Get ekki tengst samþættingarstýringu",
     "Use between %(min)s pt and %(max)s pt": "Nota á milli %(min)s pt og %(max)s pt",
@@ -1885,8 +1956,10 @@
     "Size must be a number": "Stærð verður að vera tala",
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s nær ekki að setja dulrituð skilaboð leynilega í skyndiminni á tækinu á meðan keyrt er í vafra. Notaðu <desktopLink>%(brand)s Desktop vinnutölvuútgáfuna</desktopLink> svo skilaboðin birtist í leitarniðurstöðum.",
     "Securely cache encrypted messages locally for them to appear in search results.": "Setja dulrituð skilaboð leynilega í skyndiminni á tækinu svo þau birtist í leitarniðurstöðum.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Setja dulrituð skilaboð leynilega í skyndiminni á tækinu svo þau birtist í leitarniðurstöðum, notar %(size)s til að geyma skilaboð frá %(rooms)s spjallrásum.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Setja dulrituð skilaboð leynilega í skyndiminni á tækinu svo þau birtist í leitarniðurstöðum, notar %(size)s til að geyma skilaboð frá %(rooms)s spjallrásum.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "Setja dulrituð skilaboð leynilega í skyndiminni á tækinu svo þau birtist í leitarniðurstöðum, notar %(size)s til að geyma skilaboð frá %(rooms)s spjallrásum.",
+        "other": "Setja dulrituð skilaboð leynilega í skyndiminni á tækinu svo þau birtist í leitarniðurstöðum, notar %(size)s til að geyma skilaboð frá %(rooms)s spjallrásum."
+    },
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Sannreyndu hverja setu sem notandinn notar til að merkja hana sem treysta, án þess að treyta kross-undirrituðum tækjum.",
     "Cross-signing private keys:": "Kross-undirritun einkalykla:",
     "Cross-signing public keys:": "Kross-undirritun dreifilykla:",
@@ -1935,13 +2008,19 @@
     "Add reaction": "Bæta við viðbrögðum",
     "Error processing voice message": "Villa við meðhöndlun talskilaboða",
     "Error decrypting video": "Villa við afkóðun myndskeiðs",
-    "Based on %(count)s votes|one": "Byggt á %(count)s atkvæði",
-    "Based on %(count)s votes|other": "Byggt á %(count)s atkvæðum",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s atkvæði greitt. Greiddu atkvæði til að sjá útkomuna",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s atkvæði greidd. Greiddu atkvæði til að sjá útkomuna",
+    "Based on %(count)s votes": {
+        "one": "Byggt á %(count)s atkvæði",
+        "other": "Byggt á %(count)s atkvæðum"
+    },
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s atkvæði greitt. Greiddu atkvæði til að sjá útkomuna",
+        "other": "%(count)s atkvæði greidd. Greiddu atkvæði til að sjá útkomuna"
+    },
     "Results will be visible when the poll is ended": "Niðurstöður birtast einungis eftir að könnuninni hefur lokið",
-    "Final result based on %(count)s votes|one": "Lokaniðurstöður byggðar á %(count)s atkvæði",
-    "Final result based on %(count)s votes|other": "Lokaniðurstöður byggðar á %(count)s atkvæðum",
+    "Final result based on %(count)s votes": {
+        "one": "Lokaniðurstöður byggðar á %(count)s atkvæði",
+        "other": "Lokaniðurstöður byggðar á %(count)s atkvæðum"
+    },
     "Sorry, your vote was not registered. Please try again.": "Því miður, atkvæðið þitt var ekki skráð. Prófaðu aftur.",
     "Vote not registered": "Atkvæði ekki skráð",
     "Sorry, you can't edit a poll after votes have been cast.": "Því miður, þú getur ekki breytt könnun eftir að atkvæði hafa verið greidd.",
@@ -1965,12 +2044,16 @@
     "Deactivate user?": "Gera notanda óvirkan?",
     "Failed to mute user": "Mistókst að þagga niður í notanda",
     "Failed to ban user": "Mistókst að banna notanda",
-    "Remove %(count)s messages|one": "Fjarlægja 1 skilaboð",
-    "Remove %(count)s messages|other": "Fjarlægja %(count)s skilaboð",
+    "Remove %(count)s messages": {
+        "one": "Fjarlægja 1 skilaboð",
+        "other": "Fjarlægja %(count)s skilaboð"
+    },
     "Failed to remove user": "Mistókst að fjarlægja notanda",
     "Hide sessions": "Fela setur",
-    "%(count)s sessions|one": "%(count)s seta",
-    "%(count)s sessions|other": "%(count)s setur",
+    "%(count)s sessions": {
+        "one": "%(count)s seta",
+        "other": "%(count)s setur"
+    },
     "Not trusted": "Ekki treyst",
     "Export chat": "Flytja út spjall",
     "Pinned": "Fest",
@@ -1987,8 +2070,10 @@
     "Disagree": "Ósammála",
     "Verify session": "Sannprófa setu",
     "Search spaces": "Leita að svæðum",
-    "%(count)s members|one": "%(count)s þátttakandi",
-    "%(count)s members|other": "%(count)s þátttakendur",
+    "%(count)s members": {
+        "one": "%(count)s þátttakandi",
+        "other": "%(count)s þátttakendur"
+    },
     "You'll lose access to your encrypted messages": "Þú munt tapa dulrituðu skilaboðunum þínum",
     "Leave some rooms": "Yfirgefa sumar spjallrásir",
     "Leave all rooms": "Yfirgefa allar spjallrásir",
@@ -2043,36 +2128,54 @@
     "What is your poll question or topic?": "Hver er spurning eða viðfangsefni könnunarinnar?",
     "Failed to post poll": "Mistókst að birta könnun",
     "Language Dropdown": "Fellilisti tungumála",
-    "%(count)s people you know have already joined|one": "%(count)s aðili sem þú þekkir hefur þegar tekið þátt",
-    "%(count)s people you know have already joined|other": "%(count)s aðilar sem þú þekkir hafa þegar tekið þátt",
-    "View all %(count)s members|one": "Sjá 1 meðlim",
-    "View all %(count)s members|other": "Sjá alla %(count)s meðlimina",
-    "was removed %(count)s times|one": "var fjarlægð/ur",
-    "was removed %(count)s times|other": "var fjarlægður %(count)s sinnum",
-    "were removed %(count)s times|one": "voru fjarlægð",
-    "were removed %(count)s times|other": "voru fjarlægð %(count)s sinnum",
-    "was unbanned %(count)s times|one": "var tekin/n úr banni",
-    "was unbanned %(count)s times|other": "var tekin/n úr banni %(count)s sinnum",
-    "were unbanned %(count)s times|one": "voru tekin úr banni",
-    "were unbanned %(count)s times|other": "voru tekin úr banni %(count)s sinnum",
-    "was banned %(count)s times|one": "var bannaður",
-    "was banned %(count)s times|other": "var bannaður %(count)s sinnum",
-    "were banned %(count)s times|one": "voru bönnuð",
-    "were banned %(count)s times|other": "voru bönnuð %(count)s sinnum",
-    "was invited %(count)s times|other": "var boðið %(count)s sinnum",
-    "were invited %(count)s times|other": "var boðið %(count)s sinnum",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)sfór og skráði sig aftur",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)sfór og skráði sig aftur %(count)s sinnum",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)sfóru og skráðu sig aftur",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)shafa skráð sig aftur %(count)s sinnum",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)sskráði sig og fór",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)shefur skráð sig og farið %(count)s sinnum",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)sskráðu sig og fóru",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)sskráðu sig og fóru %(count)s sinnum",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)sfór út %(count)s sinnum",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)sfóru út %(count)s sinnum",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)shefur skráð sig %(count)s sinnum",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)shafa skráð sig %(count)s sinnum",
+    "%(count)s people you know have already joined": {
+        "one": "%(count)s aðili sem þú þekkir hefur þegar tekið þátt",
+        "other": "%(count)s aðilar sem þú þekkir hafa þegar tekið þátt"
+    },
+    "View all %(count)s members": {
+        "one": "Sjá 1 meðlim",
+        "other": "Sjá alla %(count)s meðlimina"
+    },
+    "was removed %(count)s times": {
+        "one": "var fjarlægð/ur",
+        "other": "var fjarlægður %(count)s sinnum"
+    },
+    "were removed %(count)s times": {
+        "one": "voru fjarlægð",
+        "other": "voru fjarlægð %(count)s sinnum"
+    },
+    "was unbanned %(count)s times": {
+        "one": "var tekin/n úr banni",
+        "other": "var tekin/n úr banni %(count)s sinnum"
+    },
+    "were unbanned %(count)s times": {
+        "one": "voru tekin úr banni",
+        "other": "voru tekin úr banni %(count)s sinnum"
+    },
+    "was banned %(count)s times": {
+        "one": "var bannaður",
+        "other": "var bannaður %(count)s sinnum"
+    },
+    "were banned %(count)s times": {
+        "one": "voru bönnuð",
+        "other": "voru bönnuð %(count)s sinnum"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "one": "%(oneUser)sfór og skráði sig aftur",
+        "other": "%(oneUser)sfór og skráði sig aftur %(count)s sinnum"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "one": "%(severalUsers)sfóru og skráðu sig aftur",
+        "other": "%(severalUsers)shafa skráð sig aftur %(count)s sinnum"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "one": "%(oneUser)sskráði sig og fór",
+        "other": "%(oneUser)shefur skráð sig og farið %(count)s sinnum"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "one": "%(severalUsers)sskráðu sig og fóru",
+        "other": "%(severalUsers)sskráðu sig og fóru %(count)s sinnum"
+    },
     "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s breytti auðkennismynd spjallrásarinnar í <img/>",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s breytti auðkennismyndinni fyrir %(roomName)s",
     "You don't have permission to view messages from before you joined.": "Þú hefur ekki heimildir til að skoða skilaboð frá því áður en þú fórst að taka þátt.",
@@ -2202,13 +2305,22 @@
     "Confirm to continue": "Staðfestu til að halda áfram",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Staðfestu að aðgangurinn þinn sé gerður óvirkur með því að nota einfalda innskráningu (single-sign-on) til að sanna auðkennið þitt.",
     "Clear all data in this session?": "Hreinsa öll gögn í þessari setu?",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)ssendi falin skilaboð",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)ssendi %(count)s falin skilaboð",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)sfjarlægði skilaboð",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)sbreytti <a>föstum skilaboðum</a> fyrir spjallrásina",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)sbreytti <a>föstum skilaboðum</a> fyrir spjallrásina %(count)s sinnum",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)sgerði engar breytingar",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sgerði engar breytingar %(count)s sinnum",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "one": "%(oneUser)ssendi falin skilaboð",
+        "other": "%(oneUser)ssendi %(count)s falin skilaboð"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "one": "%(oneUser)sfjarlægði skilaboð",
+        "other": "%(oneUser)sfjarlægði %(count)s skilaboð"
+    },
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(oneUser)sbreytti <a>föstum skilaboðum</a> fyrir spjallrásina",
+        "other": "%(oneUser)sbreytti <a>föstum skilaboðum</a> fyrir spjallrásina %(count)s sinnum"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "one": "%(oneUser)sgerði engar breytingar",
+        "other": "%(oneUser)sgerði engar breytingar %(count)s sinnum"
+    },
     "%(displayName)s's live location": "Staðsetning fyrir %(displayName)s í rauntíma",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s gat ekki sent staðsetninguna þína. Reyndu aftur síðar.",
     "Edited at %(date)s. Click to view edits.": "Breytt þann %(date)s. Smelltu hér til að skoða breytingar.",
@@ -2221,12 +2333,15 @@
     "Ask %(displayName)s to scan your code:": "Biddu %(displayName)s um að skanna kóðann þinn:",
     "Compare unique emoji": "Bera saman einstakar táknmyndir",
     "Accepting…": "Samþykki…",
-    "%(count)s reply|one": "%(count)s svar",
-    "%(count)s reply|other": "%(count)s svör",
+    "%(count)s reply": {
+        "one": "%(count)s svar",
+        "other": "%(count)s svör"
+    },
     "Add some now": "Bæta við núna",
-    "%(count)s unread messages.|other": "%(count)s ólesin skilaboð.",
-    "%(count)s unread messages including mentions.|one": "1 ólesin tilvísun í þig.",
-    "%(count)s unread messages including mentions.|other": "%(count)s ólesin skilaboð að meðtöldum þar sem minnst er á þig.",
+    "%(count)s unread messages including mentions.": {
+        "one": "1 ólesin tilvísun í þig.",
+        "other": "%(count)s ólesin skilaboð að meðtöldum þar sem minnst er á þig."
+    },
     "%(roomName)s is not accessible at this time.": "%(roomName)s er ekki aðgengileg í augnablikinu.",
     "Do you want to chat with %(user)s?": "Viltu spjalla við %(user)s?",
     "Add space": "Bæta við svæði",
@@ -2235,8 +2350,10 @@
     "Decide who can join %(roomName)s.": "Veldu hverjir geta tekið þátt í %(roomName)s.",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "Aftengjast frá auðkennisþjóninum <current /> og tengjast í staðinn við <new />?",
     "Checking server": "Athuga með þjón",
-    "Click the button below to confirm signing out these devices.|one": "Smelltu á hnappinn hér að neðan til að staðfesta útskráningu þessa tækis.",
-    "Click the button below to confirm signing out these devices.|other": "Smelltu á hnappinn hér að neðan til að staðfesta útskráningu þessara tækja.",
+    "Click the button below to confirm signing out these devices.": {
+        "one": "Smelltu á hnappinn hér að neðan til að staðfesta útskráningu þessa tækis.",
+        "other": "Smelltu á hnappinn hér að neðan til að staðfesta útskráningu þessara tækja."
+    },
     "Do you want to set an email address?": "Viltu skrá tölvupóstfang?",
     "Decide who can view and join %(spaceName)s.": "Veldu hverjir geta skoðað og tekið þátt í %(spaceName)s.",
     "Change the avatar of your active room": "Breyta auðkennismynd virku spjallrásarinnar þinnar",
@@ -2425,10 +2542,14 @@
     "Try to join anyway": "Reyna samt að taka þátt",
     "You were removed from %(roomName)s by %(memberName)s": "Þú hefur verið fjarlægð/ur á %(roomName)s af %(memberName)s",
     "Join the conversation with an account": "Taktu þátt í samtalinu með notandaaðgangi",
-    "Currently removing messages in %(count)s rooms|one": "Er núna að fjarlægja skilaboð í %(count)s spjallrás",
-    "Currently removing messages in %(count)s rooms|other": "Er núna að fjarlægja skilaboð í %(count)s spjallrásum",
-    "Currently joining %(count)s rooms|one": "Er núna að ganga til liðs við %(count)s spjallrás",
-    "Currently joining %(count)s rooms|other": "Er núna að ganga til liðs við %(count)s spjallrásir",
+    "Currently removing messages in %(count)s rooms": {
+        "one": "Er núna að fjarlægja skilaboð í %(count)s spjallrás",
+        "other": "Er núna að fjarlægja skilaboð í %(count)s spjallrásum"
+    },
+    "Currently joining %(count)s rooms": {
+        "one": "Er núna að ganga til liðs við %(count)s spjallrás",
+        "other": "Er núna að ganga til liðs við %(count)s spjallrásir"
+    },
     "You do not have permissions to add spaces to this space": "Þú hefur ekki heimild til að bæta svæðum í þetta svæði",
     "You do not have permissions to add rooms to this space": "Þú hefur ekki heimild til að bæta spjallrásum í þetta svæði",
     "You do not have permissions to create new rooms in this space": "Þú hefur ekki heimild til að búa til nýjar spjallrásir í þessu svæði",
@@ -2451,8 +2572,10 @@
     "Please review and accept the policies of this homeserver:": "Yfirfarðu og samþykktu reglur þessa heimaþjóns:",
     "Please review and accept all of the homeserver's policies": "Yfirfarðu og samþykktu allar reglur þessa heimaþjóns",
     "To continue, use Single Sign On to prove your identity.": "Til að halda áfram skaltu nota einfalda innskráningu (single-sign-on) til að sanna auðkennið þitt.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Staðfestu útskráningu af þessu tæki með því að nota einfalda innskráningu (single-sign-on) til að sanna auðkennið þitt.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Staðfestu útskráningu af þessum tækjum með því að nota einfalda innskráningu (single-sign-on) til að sanna auðkennið þitt.",
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Staðfestu útskráningu af þessu tæki með því að nota einfalda innskráningu (single-sign-on) til að sanna auðkennið þitt.",
+        "other": "Staðfestu útskráningu af þessum tækjum með því að nota einfalda innskráningu (single-sign-on) til að sanna auðkennið þitt."
+    },
     "Homeserver feature support:": "Heimaþjónninn styður eftirfarandi eiginleika:",
     "Waiting for you to verify on your other device…": "Bíð eftir að þú staðfestir á hinu tækinu…",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Bíð eftir að þú staðfestir á hinu tækinu, %(deviceName)s (%(deviceId)s)…",
@@ -2573,8 +2696,10 @@
     "Safeguard against losing access to encrypted messages & data": "Tryggðu þig gegn því að missa aðgang að dulrituðum skilaboðum og gögnum",
     "Unable to query secret storage status": "Tókst ekki að finna stöðu á leynigeymslu",
     "Unable to restore backup": "Tekst ekki að endurheimta öryggisafrit",
-    "Upload %(count)s other files|one": "Senda inn %(count)s skrá til viðbótar",
-    "Upload %(count)s other files|other": "Senda inn %(count)s skrár til viðbótar",
+    "Upload %(count)s other files": {
+        "one": "Senda inn %(count)s skrá til viðbótar",
+        "other": "Senda inn %(count)s skrár til viðbótar"
+    },
     "Use \"%(query)s\" to search": "Notaðu \"%(query)s\" til að leita",
     "Sections to show": "Hlutar sem á að sýna",
     "The server has denied your request.": "Þjóninum hefur hafnað beiðninni þinni.",
@@ -2590,7 +2715,9 @@
     "Almost there! Is your other device showing the same shield?": "Næstum því búið! Sýnir hitt tækið þitt sama skjöldinn?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Þú getur ekki afturkallað þessa aðgerð, þar sem þú ert að gefa notandanum jafn mikil völd og þú hefur sjálf/ur.",
     "Failed to change power level": "Mistókst að breyta valdastigi",
-    "You can only pin up to %(count)s widgets|other": "Þú getur bara fest allt að %(count)s viðmótshluta",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Þú getur bara fest allt að %(count)s viðmótshluta"
+    },
     "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "Öryggi skilaboðanna þinna er tryggt og einungis þú og viðtakendurnir hafa dulritunarlyklana til að opna skilaboðin.",
     "Waiting for %(displayName)s to accept…": "Bíð eftir að %(displayName)s samþykki…",
     "Your area is experiencing difficulties connecting to the internet.": "Landssvæðið þar sem þú ert á í vandræðum með að tengjast við internetið.",
@@ -2634,10 +2761,14 @@
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s gerði ferilskrá spjallrásar héðan í frá sýnilega fyrir alla meðlimi spjallrásarinnar síðan þeim var boðið.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s sendi boð til %(targetDisplayName)s um þátttöku í spjallrásinni.",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s afturkallaði boð til %(targetDisplayName)s um þátttöku í spjallrásinni.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s fjarlægði varavistfangið %(addresses)s af þessari spjallrás.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s fjarlægði varavistföngin %(addresses)s af þessari spjallrás.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s bætti við varavistfanginu %(addresses)s fyrir þessa spjallrás.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s bætti við varavistföngunum %(addresses)s fyrir þessa spjallrás.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "one": "%(senderName)s fjarlægði varavistfangið %(addresses)s af þessari spjallrás.",
+        "other": "%(senderName)s fjarlægði varavistföngin %(addresses)s af þessari spjallrás."
+    },
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "one": "%(senderName)s bætti við varavistfanginu %(addresses)s fyrir þessa spjallrás.",
+        "other": "%(senderName)s bætti við varavistföngunum %(addresses)s fyrir þessa spjallrás."
+    },
     "Failed to join": "Mistókst að taka þátt",
     "The person who invited you has already left, or their server is offline.": "Aðilinn sem bauð þér er þegar farinn eða að netþjónninn hans/hennar er ekki tengdur.",
     "The person who invited you has already left.": "Aðilinn sem bauð þér er þegar farinn.",
@@ -2788,10 +2919,14 @@
     "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s breytti reglu sem bannar notendur sem samsvara %(oldGlob)s yfir í að samsvara %(glob)s, vegna %(reason)s",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Undirritunarlykillinn sem þú gafst upp samsvarar lyklinum sem þú fékkst frá %(userId)s og setunni %(deviceId)s. Setan er því merkt sem sannreynd.",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "AÐVÖRUN: SANNVOTTUN LYKILS MISTÓKST! Undirritunarlykillinn fyrir %(userId)s og setuna %(deviceId)s er \"%(fprint)s\" sem samsvarar ekki uppgefna lyklinum \"%(fingerprint)s\". Þetta gæti þýtt að einhver hafi komist inn í samskiptin þín!",
-    "Confirm signing out these devices|one": "Staðfestu útskráningu þessa tækis",
-    "Confirm signing out these devices|other": "Staðfestu útskráningu þessara tækja",
-    "%(count)s people joined|one": "%(count)s aðili hefur tekið þátt",
-    "%(count)s people joined|other": "%(count)s aðilar hafa tekið þátt",
+    "Confirm signing out these devices": {
+        "one": "Staðfestu útskráningu þessa tækis",
+        "other": "Staðfestu útskráningu þessara tækja"
+    },
+    "%(count)s people joined": {
+        "one": "%(count)s aðili hefur tekið þátt",
+        "other": "%(count)s aðilar hafa tekið þátt"
+    },
     "sends hearts": "sendir hjörtu",
     "Sends the given message with hearts": "Sendir skilaboðin með hjörtum",
     "Enable hardware acceleration": "Virkja vélbúnaðarhröðun",
@@ -2814,15 +2949,19 @@
     "Some results may be hidden": "Sumar niðurstöður gætu verið faldar",
     "Copy invite link": "Afrita boðstengil",
     "Search for": "Leita að",
-    "%(count)s Members|one": "%(count)s meðlimur",
-    "%(count)s Members|other": "%(count)s meðlimir",
+    "%(count)s Members": {
+        "one": "%(count)s meðlimur",
+        "other": "%(count)s meðlimir"
+    },
     "Ignore user": "Hunsa notanda",
     "Create room": "Búa til spjallrás",
     "Create video room": "Búa til myndspjallrás",
     "Add new server…": "Bæta við nýjum þjóni…",
     "Minimise": "Lágmarka",
-    "%(count)s participants|one": "1 þáttakandi",
-    "%(count)s participants|other": "%(count)s þátttakendur",
+    "%(count)s participants": {
+        "one": "1 þáttakandi",
+        "other": "%(count)s þátttakendur"
+    },
     "Joining…": "Geng í hópinn…",
     "New video room": "Ný myndspjallrás",
     "New room": "Ný spjallrás",
@@ -2847,14 +2986,23 @@
     "Unban from room": "Afbanna úr herbergi",
     "Ban from space": "Banna úr svæði",
     "Unban from space": "Afbanna úr svæði",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)sfjarlægðu skilaboð",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)sfjarlægði %(count)s skilaboð",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)sfjarlægðu %(count)s skilaboð",
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)sfjarlægðu skilaboð",
+        "other": "%(severalUsers)sfjarlægðu %(count)s skilaboð"
+    },
     "Confirm account deactivation": "Staðfestu óvirkjun reiknings",
     "a key signature": "Fingrafar lykils",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)sgerðu engar breytingar",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)shafnaði boði sínu",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)shöfnuðu boði þeirra",
+    "%(severalUsers)smade no changes %(count)s times": {
+        "one": "%(severalUsers)sgerðu engar breytingar"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "one": "%(oneUser)shafnaði boði sínu",
+        "other": "%(oneUser)shafnaði boði sínu %(count)s sinnum"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "one": "%(severalUsers)shöfnuðu boði þeirra",
+        "other": "%(severalUsers)shöfnuðu boðum þeirra %(count)s sinnum"
+    },
     "Enable notifications": "Virkja tilkynningar",
     "Your profile": "Notandasnið þitt",
     "Download apps": "Sækja forrit",
@@ -2933,11 +3081,15 @@
     "Live": "Beint",
     "You need to be able to kick users to do that.": "Þú þarft að hafa heimild til að sparka notendum til að gera þetta.",
     "Empty room (was %(oldName)s)": "Tóm spjallrás (var %(oldName)s)",
-    "Inviting %(user)s and %(count)s others|one": "Býð %(user)s og 1 öðrum",
-    "Inviting %(user)s and %(count)s others|other": "Býð %(user)s og %(count)s til viðbótar",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "Býð %(user)s og 1 öðrum",
+        "other": "Býð %(user)s og %(count)s til viðbótar"
+    },
     "Inviting %(user1)s and %(user2)s": "Býð %(user1)s og %(user2)s",
-    "%(user)s and %(count)s others|one": "%(user)s og 1 annar",
-    "%(user)s and %(count)s others|other": "%(user)s og %(count)s til viðbótar",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s og 1 annar",
+        "other": "%(user)s og %(count)s til viðbótar"
+    },
     "%(user1)s and %(user2)s": "%(user1)s og %(user2)s",
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s eða %(copyButton)s",
     "Did not receive it? <a>Resend it</a>": "Fékkstu hann ekki? <a>Endursenda hann</a>",
@@ -2959,8 +3111,10 @@
     "To view %(roomName)s, you need an invite": "Til að skoða %(roomName)s þarftu boð",
     "Ongoing call": "Símtal í gangi",
     "Video call (Jitsi)": "Myndsímtal (Jitsi)",
-    "Seen by %(count)s people|one": "Séð af %(count)s aðila",
-    "Seen by %(count)s people|other": "Séð af %(count)s aðilum",
+    "Seen by %(count)s people": {
+        "one": "Séð af %(count)s aðila",
+        "other": "Séð af %(count)s aðilum"
+    },
     "Send your first message to invite <displayName/> to chat": "Sendu fyrstu skilaboðin þín til að bjóða <displayName/> að spjalla",
     "Security recommendations": "Ráðleggingar varðandi öryggi",
     "Filter devices": "Sía tæki",
@@ -2981,12 +3135,14 @@
     "You will not be able to reactivate your account": "Þú munt ekki geta endurvirkjað aðganginn þinn",
     "Google Play and the Google Play logo are trademarks of Google LLC.": "Google Play og Google Play táknmerkið eru vörumerki í eigu Google LLC.",
     "App Store® and the Apple logo® are trademarks of Apple Inc.": "App Store® og Apple logo® eru vörumerki í eigu Apple Inc.",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)ssendu falin skilaboð",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)ssendu %(count)s falin skilaboð",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)sbreyttu <a>föstum skilaboðum</a> fyrir spjallrásina",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)sbreyttu <a>föstum skilaboðum</a> fyrir spjallrásina %(count)s sinnum",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)shafnaði boði sínu %(count)s sinnum",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)shöfnuðu boðum þeirra %(count)s sinnum",
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)ssendu falin skilaboð",
+        "other": "%(severalUsers)ssendu %(count)s falin skilaboð"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)sbreyttu <a>föstum skilaboðum</a> fyrir spjallrásina",
+        "other": "%(severalUsers)sbreyttu <a>föstum skilaboðum</a> fyrir spjallrásina %(count)s sinnum"
+    },
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Að nota þennan viðmótshluta gæti deilt gögnum <helpIcon /> með %(widgetDomain)s.",
     "Any of the following data may be shared:": "Eftirfarandi gögnum gæti verið deilt:",
     "You don't have permission to share locations": "Þú hefur ekki heimildir til að deila staðsetningum",
@@ -3015,9 +3171,11 @@
     "You were disconnected from the call. (Error: %(message)s)": "Þú varst aftengd/ur frá samtalinu. (Villa: %(message)s)",
     "Reset bearing to north": "Frumstilla stefnu á norður",
     "Toggle attribution": "Víxla tilvísun af/á",
-    "In %(spaceName)s and %(count)s other spaces.|one": "Á %(spaceName)s og %(count)s svæði til viðbótar.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "Á %(spaceName)s og %(count)s svæði til viðbótar.",
+        "other": "Á %(spaceName)s og %(count)s svæðum til viðbótar."
+    },
     "In %(spaceName)s.": "Á svæðinu %(spaceName)s.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "Á %(spaceName)s og %(count)s svæðum til viðbótar.",
     "In spaces %(space1Name)s and %(space2Name)s.": "Á svæðunum %(space1Name)s og %(space2Name)s.",
     "You're the only admin of this space. Leaving it will mean no one has control over it.": "Þú ert eini stjórnandi þessa svæðis. Ef þú yfirgefur það verður enginn annar sem er með stjórn yfir því.",
     "You won't be able to rejoin unless you are re-invited.": "Þú munt ekki geta tekið þátt aftur nema þér verði boðið aftur.",
@@ -3108,8 +3266,10 @@
     "Search users in this room…": "Leita að notendum á þessari spjallrás…",
     "Complete these to get the most out of %(brand)s": "Kláraðu þetta til að fá sem mest út úr %(brand)s",
     "You did it!": "Þú kláraðir þetta!",
-    "Only %(count)s steps to go|one": "Aðeins %(count)s skref í viðbót",
-    "Only %(count)s steps to go|other": "Aðeins %(count)s skref í viðbót",
+    "Only %(count)s steps to go": {
+        "one": "Aðeins %(count)s skref í viðbót",
+        "other": "Aðeins %(count)s skref í viðbót"
+    },
     "Find your people": "Finndu fólkið þitt",
     "Find your co-workers": "Finndu samstarfsaðilana þína",
     "Secure messaging for work": "Örugg skilaboð í vinnunni",
@@ -3159,10 +3319,14 @@
     "You don't have permission to view messages from before you were invited.": "Þú hefur ekki heimildir til að skoða skilaboð frá því áður en þér var boðið.",
     "This message could not be decrypted": "Þessi skilaboð er ekki hægt að afkóða",
     " in <strong>%(room)s</strong>": " í <strong>%(room)s</strong>",
-    "Sign out of %(count)s sessions|one": "Skrá út úr %(count)s setu",
-    "Sign out of %(count)s sessions|other": "Skrá út úr %(count)s setum",
-    "%(count)s sessions selected|one": "%(count)s seta valin",
-    "%(count)s sessions selected|other": "%(count)s setur valdar",
+    "Sign out of %(count)s sessions": {
+        "one": "Skrá út úr %(count)s setu",
+        "other": "Skrá út úr %(count)s setum"
+    },
+    "%(count)s sessions selected": {
+        "one": "%(count)s seta valin",
+        "other": "%(count)s setur valdar"
+    },
     "Inactive for %(inactiveAgeDays)s days or longer": "Óvirk í %(inactiveAgeDays)s+ daga eða lengur",
     "Not ready for secure messaging": "Ekki tilbúið fyrir örugg skilaboð",
     "Ready for secure messaging": "Tilbúið fyrir örugg skilaboð",
@@ -3182,8 +3346,10 @@
     "Voice broadcasts": "Útsendingar tals",
     "Voice processing": "Meðhöndlun tals",
     "Automatically adjust the microphone volume": "Aðlaga hljóðstyrk hljóðnema sjálfvirkt",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "Ertu viss um að þú viljir skrá þig út úr %(count)s setu?",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "Ertu viss um að þú viljir skrá þig út úr %(count)s setum?",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "one": "Ertu viss um að þú viljir skrá þig út úr %(count)s setu?",
+        "other": "Ertu viss um að þú viljir skrá þig út úr %(count)s setum?"
+    },
     "What's next for %(brand)s? Labs are the best way to get things early, test out new features and help shape them before they actually launch.": "Hvað er væntanlegt í %(brand)s? Að taka þátt í tilraunum gefur færi á að sjá nýja hluti fyrr, prófa nýja eiginleika og vera með í að móta þá áður en þeir fara í almenna notkun.",
     "Upcoming features": "Væntanlegir eiginleikar",
     "Enable notifications for this device": "Virkja tilkynningar á þessu tæki",

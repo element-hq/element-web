@@ -600,10 +600,22 @@
     "Code": "Kode",
     "Next": "Lanjut",
     "Refresh": "Muat Ulang",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)skeluar",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)skeluar",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)sbergabung",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)sbergabung",
+    "%(oneUser)sleft %(count)s times": {
+        "one": "%(oneUser)skeluar",
+        "other": "%(oneUser)skeluar %(count)s kali"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "one": "%(severalUsers)skeluar",
+        "other": "%(severalUsers)skeluar %(count)s kali"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "one": "%(oneUser)sbergabung",
+        "other": "%(oneUser)sbergabung %(count)s kali"
+    },
+    "%(severalUsers)sjoined %(count)s times": {
+        "one": "%(severalUsers)sbergabung",
+        "other": "%(severalUsers)sbergabung %(count)s kali"
+    },
     "Invite": "Undang",
     "Mention": "Sebutkan",
     "Unknown": "Tidak Dikenal",
@@ -895,19 +907,39 @@
     "Event Type": "Tipe Peristiwa",
     "Event sent!": "Peristiwa terkirim!",
     "Logs sent": "Catatan terkirim",
-    "was unbanned %(count)s times|one": "dihilangkan cekalannya",
-    "were unbanned %(count)s times|one": "dihilangkan cekalannya",
-    "was banned %(count)s times|one": "dicekal",
+    "was unbanned %(count)s times": {
+        "one": "dihilangkan cekalannya",
+        "other": "dihilangkan cekalannya %(count)s kali"
+    },
+    "were unbanned %(count)s times": {
+        "one": "dihilangkan cekalannya",
+        "other": "dihilangkan cekalannya %(count)s kali"
+    },
+    "was banned %(count)s times": {
+        "one": "dicekal",
+        "other": "dicekal %(count)s kali"
+    },
     "Popout widget": "Widget popout",
     "Muted Users": "Pengguna yang Dibisukan",
     "Uploading %(filename)s": "Mengunggah %(filename)s",
     "Delete Widget": "Hapus Widget",
-    "were banned %(count)s times|one": "dicekal",
-    "was invited %(count)s times|one": "diundang",
-    "were invited %(count)s times|one": "diundang",
+    "were banned %(count)s times": {
+        "one": "dicekal",
+        "other": "dicekal %(count)s kali"
+    },
+    "was invited %(count)s times": {
+        "one": "diundang",
+        "other": "diundang %(count)s kali"
+    },
+    "were invited %(count)s times": {
+        "one": "diundang",
+        "other": "diundang %(count)s kali"
+    },
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "(~%(count)s results)|one": "(~%(count)s hasil)",
-    "(~%(count)s results)|other": "(~%(count)s hasil)",
+    "(~%(count)s results)": {
+        "one": "(~%(count)s hasil)",
+        "other": "(~%(count)s hasil)"
+    },
     "Message Pinning": "Pin Pesan",
     "Signed Out": "Keluar",
     "Start authentication": "Mulai autentikasi",
@@ -984,8 +1016,10 @@
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s mengubah akses tamu ke %(rule)s",
     "%(senderName)s withdrew %(targetName)s's invitation: %(reason)s": "%(senderName)s menghapus undangannya %(targetName)s: %(reason)s",
     "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s membuat semua riwayat ruangan di masa mendatang dapat dilihat oleh orang yang tidak dikenal (%(visibility)s).",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s menghapus alamat alternatif %(addresses)s untuk ruangan ini.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s menghapus alamat alternatif %(addresses)s untuk ruangan ini.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "one": "%(senderName)s menghapus alamat alternatif %(addresses)s untuk ruangan ini.",
+        "other": "%(senderName)s menghapus alamat alternatif %(addresses)s untuk ruangan ini."
+    },
     "Hey you. You're the best!": "Hei kamu. Kamu adalah yang terbaik!",
     "See when a sticker is posted in this room": "Lihat saat sebuah stiker telah dikirim ke ruangan ini",
     "Send stickers to this room as you": "Kirim stiker ke ruangan ini sebagai Anda",
@@ -1010,8 +1044,10 @@
     "Remain on your screen while running": "Tetap di layar Anda saat berjalan",
     "Remain on your screen when viewing another room, when running": "Tetap di layar Anda saat melihat ruangan yang lain, saat berjalan",
     "%(names)s and %(lastPerson)s are typing …": "%(names)s dan %(lastPerson)s sedang mengetik …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s dan satu lainnya sedang mengetik …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s dan %(count)s lainnya sedang mengetik …",
+    "%(names)s and %(count)s others are typing …": {
+        "one": "%(names)s dan satu lainnya sedang mengetik …",
+        "other": "%(names)s dan %(count)s lainnya sedang mengetik …"
+    },
     "%(displayName)s is typing …": "%(displayName)s sedang mengetik …",
     "Light high contrast": "Kontras tinggi terang",
     "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s memperbarui sebuah peraturan pencekalan yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
@@ -1049,8 +1085,10 @@
     "%(senderName)s changed the addresses for this room.": "%(senderName)s mengubah alamat-alamatnya untuk ruangan ini.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s mengubah alamat utama dan alamat alternatif untuk ruangan ini.",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s mengubah alamat alternatifnya untuk ruangan ini.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s menambahkan alamat alternatif %(addresses)s untuk ruangan ini.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s menambahkan alamat alternatif %(addresses)s untuk ruangan ini.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s menambahkan alamat alternatif %(addresses)s untuk ruangan ini.",
+        "one": "%(senderName)s menambahkan alamat alternatif %(addresses)s untuk ruangan ini."
+    },
     "%(senderName)s removed the main address for this room.": "%(senderName)s menghapus alamat utamanya untuk ruangan ini.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s mengatur alamat utama untuk ruangan ini ke %(address)s.",
     "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s mengirim sebuah stiker.",
@@ -1123,8 +1161,10 @@
     "%(num)s minutes ago": "%(num)s menit yang lalu",
     "about a minute ago": "1 menit yang lalu",
     "a few seconds ago": "beberapa detik yang lalu",
-    "%(items)s and %(count)s others|one": "%(items)s dan satu lainnya",
-    "%(items)s and %(count)s others|other": "%(items)s dan %(count)s lainnya",
+    "%(items)s and %(count)s others": {
+        "one": "%(items)s dan satu lainnya",
+        "other": "%(items)s dan %(count)s lainnya"
+    },
     "This homeserver has exceeded one of its resource limits.": "Homeserver ini telah melebihi batas sumber dayanya.",
     "This homeserver has been blocked by its administrator.": "Homeserver ini telah diblokir oleh administratornya.",
     "This homeserver has hit its Monthly Active User limit.": "Homeserver ini telah mencapai batasnya Pengguna Aktif Bulanan.",
@@ -1221,10 +1261,14 @@
     "Messages containing keywords": "Pesan berisi kata kunci",
     "Message bubbles": "Gelembung pesan",
     "Message layout": "Tata letak pesan",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Memperbarui space...",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Memperbarui space... (%(progress)s dari %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Mengirimkan undangan...",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Mengirimkan undangan... (%(progress)s dari %(count)s)",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Memperbarui space...",
+        "other": "Memperbarui space... (%(progress)s dari %(count)s)"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Mengirimkan undangan...",
+        "other": "Mengirimkan undangan... (%(progress)s dari %(count)s)"
+    },
     "Loading new room": "Memuat ruangan baru",
     "Upgrading room": "Meningkatkan ruangan",
     "This upgrade will allow members of selected spaces access to this room without an invite.": "Peningkatan ini akan mengizinkan anggota di space yang terpilih untuk dapat mengakses ruangan ini tanpa sebuah undangan.",
@@ -1234,10 +1278,14 @@
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "Siapa saja di <spaceName/> dapat menemukan dan bergabung. Anda juga dapat memilih space yang lain.",
     "Spaces with access": "Space dengan akses",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Siapa saja di dalam space dapat menemukan dan bergabung. <a>Edit space apa saja yang dapat mengakses.</a>",
-    "Currently, %(count)s spaces have access|one": "Saat ini, sebuah space memiliki akses",
-    "Currently, %(count)s spaces have access|other": "Saat ini, %(count)s space memiliki akses",
-    "& %(count)s more|one": "& %(count)s lainnya",
-    "& %(count)s more|other": "& %(count)s lainnya",
+    "Currently, %(count)s spaces have access": {
+        "one": "Saat ini, sebuah space memiliki akses",
+        "other": "Saat ini, %(count)s space memiliki akses"
+    },
+    "& %(count)s more": {
+        "one": "& %(count)s lainnya",
+        "other": "& %(count)s lainnya"
+    },
     "Upgrade required": "Peningkatan diperlukan",
     "Anyone can find and join.": "Siapa saja dapat menemukan dan bergabung.",
     "Only invited people can join.": "Hanya orang yang diundang dapat bergabung.",
@@ -1251,17 +1299,26 @@
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s tidak dapat menyimpan pesan terenkripsi secara lokal dengan aman saat dijalankan di browser. Gunakan <desktopLink>%(brand)s Desktop</desktopLink> supaya pesan terenkripsi dapat muncul di hasil pencarian.",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s tidak memiliki beberapa komponen yang diperlukan untuk menyimpan pesan terenkripsi secara lokal dengan aman. Jika Anda ingin bereksperimen dengan fitur ini, buat %(brand)s Desktop yang khusus dengan <nativeLink>tambahan komponen penelusuran</nativeLink>.",
     "Securely cache encrypted messages locally for them to appear in search results.": "Simpan pesan terenkripsi secara lokal dengan aman agar muncul di hasil pencarian.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Simpan pesan terenkripsi secara lokal dengan aman agar muncul di hasil pencarian, menggunakan %(size)s untuk menyimpan pesan dari %(rooms)s ruangan.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Simpan pesan terenkripsi secara lokal dengan aman agar muncul di hasil pencarian, menggunakan %(size)s untuk menyimpan pesan dari %(rooms)s ruangan.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "Simpan pesan terenkripsi secara lokal dengan aman agar muncul di hasil pencarian, menggunakan %(size)s untuk menyimpan pesan dari %(rooms)s ruangan.",
+        "other": "Simpan pesan terenkripsi secara lokal dengan aman agar muncul di hasil pencarian, menggunakan %(size)s untuk menyimpan pesan dari %(rooms)s ruangan."
+    },
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Verifikasi setiap sesi yang digunakan oleh pengguna satu per satu untuk menandainya sebagai tepercaya, dan tidak memercayai perangkat yang ditandatangani silang.",
     "Failed to set display name": "Gagal untuk menetapkan nama tampilan",
     "Deselect all": "Batalkan semua pilihan",
     "Select all": "Pilih semua",
-    "Sign out devices|one": "Keluarkan perangkat",
-    "Sign out devices|other": "Keluarkan perangkat",
-    "Click the button below to confirm signing out these devices.|one": "Klik tombol di bawah untuk mengkonfirmasi mengeluarkan perangkat ini.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Konfirmasi mengeluarkan perangkat ini dengan menggunakan Single Sign On untuk membuktikan identitas Anda.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Konfirmasi mengeluarkan perangkat-perangkat ini dengan menggunakan Single Sign On untuk membuktikan identitas Anda.",
+    "Sign out devices": {
+        "one": "Keluarkan perangkat",
+        "other": "Keluarkan perangkat"
+    },
+    "Click the button below to confirm signing out these devices.": {
+        "one": "Klik tombol di bawah untuk mengkonfirmasi mengeluarkan perangkat ini.",
+        "other": "Klik tombol di bawah untuk mengkonfirmasi mengeluarkan perangkat-perangkat ini."
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Konfirmasi mengeluarkan perangkat ini dengan menggunakan Single Sign On untuk membuktikan identitas Anda.",
+        "other": "Konfirmasi mengeluarkan perangkat-perangkat ini dengan menggunakan Single Sign On untuk membuktikan identitas Anda."
+    },
     "Session key:": "Kunci sesi:",
     "Session ID:": "ID Sesi:",
     "Import E2E room keys": "Impor kunci enkripsi ujung ke ujung",
@@ -1509,7 +1566,6 @@
     "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "periksa plugin browser Anda untuk apa saja yang mungkin memblokir server identitasnya (seperti Privacy Badger)",
     "You should:": "Anda seharusnya:",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Anda seharusnya <b>menghapus data personal Anda</b> dari server identitas <idserver /> sebelum memutuskan hubungan. Sayangnya, server identitas <idserver /> saat ini sedang luring atau tidak dapat dicapai.",
-    "Click the button below to confirm signing out these devices.|other": "Klik tombol di bawah untuk mengkonfirmasi mengeluarkan perangkat-perangkat ini.",
     "sends rainfall": "mengirim hujan",
     "Sends the given message with rainfall": "Kirim pesan dengan hujan",
     "Show all your rooms in Home, even if they're in a space.": "Tampilkan semua ruangan di Beranda, walaupun mereka berada di sebuah space.",
@@ -1585,7 +1641,9 @@
     "Unpin this widget to view it in this panel": "Lepaskan pin widget ini untuk menampilkanya di panel ini",
     "Pinned messages": "Pesan yang dipasangi pin",
     "Nothing pinned, yet": "Belum ada yang dipasangi pin",
-    "You can only pin up to %(count)s widgets|other": "Anda hanya dapat memasang pin sampai %(count)s widget",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Anda hanya dapat memasang pin sampai %(count)s widget"
+    },
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Jika Anda memiliki izin, buka menunya di pesan apa saja dan pilih <b>Pin</b> untuk menempelkannya di sini.",
     "Yours, or the other users' session": "Sesi Anda, atau pengguna yang lain",
     "Yours, or the other users' internet connection": "Koneksi internet Anda, atau pengguna yang lain",
@@ -1648,15 +1706,21 @@
     "This room has already been upgraded.": "Ruangan ini telah ditingkatkan.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Meningkatkan ruangan ini akan mematikan instansi ruangan saat ini dan membuat ruangan yang ditingkatkan dengan nama yang sama.",
     "Unread messages.": "Pesan yang belum dibaca.",
-    "%(count)s unread messages.|one": "1 pesan yang belum dibaca.",
-    "%(count)s unread messages.|other": "%(count)s pesan yang belum dibaca.",
-    "%(count)s unread messages including mentions.|one": "1 sebutan yang belum dibaca.",
-    "%(count)s unread messages including mentions.|other": "%(count)s pesan yang belum dibaca termasuk sebutan.",
+    "%(count)s unread messages.": {
+        "one": "1 pesan yang belum dibaca.",
+        "other": "%(count)s pesan yang belum dibaca."
+    },
+    "%(count)s unread messages including mentions.": {
+        "one": "1 sebutan yang belum dibaca.",
+        "other": "%(count)s pesan yang belum dibaca termasuk sebutan."
+    },
     "Forget Room": "Lupakan Ruangan",
     "Notification options": "Opsi notifikasi",
     "Show less": "Tampilkan lebih sedikit",
-    "Show %(count)s more|one": "Tampilkan %(count)s lagi",
-    "Show %(count)s more|other": "Tampilkan %(count)s lagi",
+    "Show %(count)s more": {
+        "one": "Tampilkan %(count)s lagi",
+        "other": "Tampilkan %(count)s lagi"
+    },
     "List options": "Tampilkan daftar opsi",
     "Sort by": "Sortir berdasarkan",
     "Show previews of messages": "Tampilkan tampilan pesan",
@@ -1735,11 +1799,15 @@
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (tingkat daya %(powerLevelNumber)s)",
     "Filter room members": "Saring anggota ruangan",
     "Invite to this space": "Undang ke space ini",
-    "and %(count)s others...|one": "dan satu lainnya...",
-    "and %(count)s others...|other": "dan %(count)s lainnya...",
+    "and %(count)s others...": {
+        "one": "dan satu lainnya...",
+        "other": "dan %(count)s lainnya..."
+    },
     "Close preview": "Tutup tampilan",
-    "Show %(count)s other previews|one": "Tampilkan %(count)s tampilan lainnya",
-    "Show %(count)s other previews|other": "Tampilkan %(count)s tampilan lainnya",
+    "Show %(count)s other previews": {
+        "one": "Tampilkan %(count)s tampilan lainnya",
+        "other": "Tampilkan %(count)s tampilan lainnya"
+    },
     "Scroll to most recent messages": "Gulir ke pesan yang terbaru",
     "Failed to send": "Gagal untuk dikirim",
     "Your message was sent": "Pesan Anda telah terkirim",
@@ -1749,8 +1817,10 @@
     "Reply in thread": "Balas di utasan",
     "Message Actions": "Aksi Pesan",
     "This event could not be displayed": "Peristiwa ini tidak dapat ditampilkan",
-    "%(count)s reply|one": "%(count)s balasan",
-    "%(count)s reply|other": "%(count)s balasan",
+    "%(count)s reply": {
+        "one": "%(count)s balasan",
+        "other": "%(count)s balasan"
+    },
     "Send as message": "Kirim sebagai pesan",
     "Hint: Begin your message with <code>//</code> to start it with a slash.": "Petunjuk: Mulai pesan Anda dengan <code>//</code> untuk memulainya dengan sebuah garis miring.",
     "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Anda dapat menggunakan <code>/help</code> untuk melihat perintah yang tersedia. Apakah Anda bermaksud untuk mengirimkannya sebagai sebuah pesan?",
@@ -1930,8 +2000,10 @@
     "Ban from %(roomName)s": "Cekal dari %(roomName)s",
     "Unban from %(roomName)s": "Batalkan cekalan dari %(roomName)s",
     "Remove recent messages": "Hapus pesan terkini",
-    "Remove %(count)s messages|one": "Hapus 1 pesan",
-    "Remove %(count)s messages|other": "Hapus %(count)s pesan",
+    "Remove %(count)s messages": {
+        "one": "Hapus 1 pesan",
+        "other": "Hapus %(count)s pesan"
+    },
     "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.": "Untuk pesan yang jumlahnya banyak, ini mungkin membutuhkan beberapa waktu. Jangan muat ulang klien Anda untuk sementara.",
     "Remove recent messages by %(user)s": "Hapus pesan terkini dari %(user)s",
     "No recent messages by %(user)s found": "Tidak ada pesan terkini dari %(user)s yang ditemukan",
@@ -1943,11 +2015,15 @@
     "Share Link to User": "Bagikan Tautan ke Pengguna",
     "Jump to read receipt": "Pergi ke laporan dibaca",
     "Hide sessions": "Sembunyikan sesi",
-    "%(count)s sessions|one": "%(count)s sesi",
-    "%(count)s sessions|other": "%(count)s sesi",
+    "%(count)s sessions": {
+        "one": "%(count)s sesi",
+        "other": "%(count)s sesi"
+    },
     "Hide verified sessions": "Sembunyikan sesi terverifikasi",
-    "%(count)s verified sessions|one": "1 sesi terverifikasi",
-    "%(count)s verified sessions|other": "%(count)s sesi terverifikasi",
+    "%(count)s verified sessions": {
+        "one": "1 sesi terverifikasi",
+        "other": "%(count)s sesi terverifikasi"
+    },
     "Not trusted": "Tidak dipercayai",
     "Room settings": "Pengaturan ruangan",
     "Export chat": "Ekspor obrolan",
@@ -2036,8 +2112,10 @@
     "Add existing rooms": "Tambahkan ruangan yang sudah ada",
     "Space selection": "Pilihan space",
     "Direct Messages": "Pesan Langsung",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Menambahkan ruangan...",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Menambahkan ruangan... (%(progress)s dari %(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Menambahkan ruangan...",
+        "other": "Menambahkan ruangan... (%(progress)s dari %(count)s)"
+    },
     "Not all selected were added": "Tidak semua yang terpilih ditambahkan",
     "Search for spaces": "Cari space",
     "Create a new space": "Buat sebuah space baru",
@@ -2052,7 +2130,9 @@
     "Sign in with single sign-on": "Masuk dengan single sign on",
     "Looks good": "Kelihatannya bagus",
     "Enter a server name": "Masukkan sebuah nama server",
-    "And %(count)s more...|other": "Dan %(count)s lagi...",
+    "And %(count)s more...": {
+        "other": "Dan %(count)s lagi..."
+    },
     "Continue with %(provider)s": "Lanjutkan dengan %(provider)s",
     "Join millions for free on the largest public server": "Bergabung dengan jutaan orang lainnya secara gratis di server publik terbesar",
     "Server Options": "Opsi Server",
@@ -2073,52 +2153,74 @@
     "Question or topic": "Pertanyaan atau topik",
     "What is your poll question or topic?": "Apa pertanyaan atau topik poll Anda?",
     "Create Poll": "Buat Poll",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)smengubah ACL server",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)smengubah ACL server %(count)s kali",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)smengubah ACL server",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)smengubah ACL server %(count)s kali",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)stidak membuat perubahan",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)stidak membuat perubahan %(count)s kali",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)stidak membuat perubahan",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)stidak membuat perubahan %(count)s kali",
-    "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)smengubah namanya",
-    "%(oneUser)schanged their name %(count)s times|other": "%(oneUser)smengubah namanya %(count)s kali",
-    "%(severalUsers)schanged their name %(count)s times|one": "%(severalUsers)smengubah namanya",
-    "%(severalUsers)schanged their name %(count)s times|other": "%(severalUsers)smengubah namanya %(count)s kali",
-    "was unbanned %(count)s times|other": "dihilangkan cekalannya %(count)s kali",
-    "were unbanned %(count)s times|other": "dihilangkan cekalannya %(count)s kali",
-    "was banned %(count)s times|other": "dicekal %(count)s kali",
-    "were banned %(count)s times|other": "dicekal %(count)s kali",
-    "was invited %(count)s times|other": "diundang %(count)s kali",
-    "were invited %(count)s times|other": "diundang %(count)s kali",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "undangannya %(oneUser)s dihapus",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "undangannya %(oneUser)s dihapus %(count)s kali",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "undangannya %(severalUsers)s dihapus",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "undangannya %(severalUsers)s dihapus %(count)s kali",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)smenolak undangannya",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)smenolak undangannya %(count)s kali",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)smenolak undangannya",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)smenolak undangannya %(count)s kali",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)skeluar dan bergabung kembali",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)skeluar dan bergabung kembali %(count)s kali",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)skeluar dan bergabung kembali",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)skeluar dan bergabung kembali %(count)s kali",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)sbergabung dan keluar",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)sbergabung dan keluar %(count)s kali",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)sbergabung dan keluar",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)sbergabung dan keluar %(count)s kali",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)skeluar %(count)s kali",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)skeluar %(count)s kali",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)sbergabung %(count)s kali",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)sbergabung %(count)s kali",
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "one": "%(oneUser)smengubah ACL server",
+        "other": "%(oneUser)smengubah ACL server %(count)s kali"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "one": "%(severalUsers)smengubah ACL server",
+        "other": "%(severalUsers)smengubah ACL server %(count)s kali"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "one": "%(oneUser)stidak membuat perubahan",
+        "other": "%(oneUser)stidak membuat perubahan %(count)s kali"
+    },
+    "%(severalUsers)smade no changes %(count)s times": {
+        "one": "%(severalUsers)stidak membuat perubahan",
+        "other": "%(severalUsers)stidak membuat perubahan %(count)s kali"
+    },
+    "%(oneUser)schanged their name %(count)s times": {
+        "one": "%(oneUser)smengubah namanya",
+        "other": "%(oneUser)smengubah namanya %(count)s kali"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "one": "%(severalUsers)smengubah namanya",
+        "other": "%(severalUsers)smengubah namanya %(count)s kali"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "one": "undangannya %(oneUser)s dihapus",
+        "other": "undangannya %(oneUser)s dihapus %(count)s kali"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "one": "undangannya %(severalUsers)s dihapus",
+        "other": "undangannya %(severalUsers)s dihapus %(count)s kali"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "one": "%(oneUser)smenolak undangannya",
+        "other": "%(oneUser)smenolak undangannya %(count)s kali"
+    },
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "one": "%(severalUsers)smenolak undangannya",
+        "other": "%(severalUsers)smenolak undangannya %(count)s kali"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "one": "%(oneUser)skeluar dan bergabung kembali",
+        "other": "%(oneUser)skeluar dan bergabung kembali %(count)s kali"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "one": "%(severalUsers)skeluar dan bergabung kembali",
+        "other": "%(severalUsers)skeluar dan bergabung kembali %(count)s kali"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "one": "%(oneUser)sbergabung dan keluar",
+        "other": "%(oneUser)sbergabung dan keluar %(count)s kali"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "one": "%(severalUsers)sbergabung dan keluar",
+        "other": "%(severalUsers)sbergabung dan keluar %(count)s kali"
+    },
     "Language Dropdown": "Dropdown Bahasa",
     "Zoom in": "Perbesar",
     "Zoom out": "Perkecil",
-    "%(count)s people you know have already joined|one": "%(count)s orang yang Anda tahu telah bergabung",
-    "%(count)s people you know have already joined|other": "%(count)s orang yang Anda tahu telah bergabung",
+    "%(count)s people you know have already joined": {
+        "one": "%(count)s orang yang Anda tahu telah bergabung",
+        "other": "%(count)s orang yang Anda tahu telah bergabung"
+    },
     "Including %(commaSeparatedMembers)s": "Termasuk %(commaSeparatedMembers)s",
-    "View all %(count)s members|one": "Tampilkan 1 pengguna",
-    "View all %(count)s members|other": "Tampilkan semua %(count)s anggota",
+    "View all %(count)s members": {
+        "one": "Tampilkan 1 pengguna",
+        "other": "Tampilkan semua %(count)s anggota"
+    },
     "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Mohon <newIssueLink>buat sebuah issue baru</newIssueLink> di GitHub supaya kami dapat memeriksa kutu ini.",
     "Share content": "Bagikan konten",
     "Application window": "Jendela aplikasi",
@@ -2254,8 +2356,10 @@
     "Original event source": "Sumber peristiwa asli",
     "Decrypted event source": "Sumber peristiwa terdekripsi",
     "Could not load user profile": "Tidak dapat memuat profil pengguna",
-    "Currently joining %(count)s rooms|one": "Saat ini bergabung dengan %(count)s ruangan",
-    "Currently joining %(count)s rooms|other": "Saat ini bergabung dengan %(count)s ruangan",
+    "Currently joining %(count)s rooms": {
+        "one": "Saat ini bergabung dengan %(count)s ruangan",
+        "other": "Saat ini bergabung dengan %(count)s ruangan"
+    },
     "User menu": "Menu pengguna",
     "Switch theme": "Ubah tema",
     "Switch to dark mode": "Ubah ke mode gelap",
@@ -2263,8 +2367,10 @@
     "All settings": "Semua pengaturan",
     "New here? <a>Create an account</a>": "Baru di sini? <a>Buat sebuah akun</a>",
     "Got an account? <a>Sign in</a>": "Punya sebuah akun? <a>Masuk</a>",
-    "Uploading %(filename)s and %(count)s others|one": "Mengunggah %(filename)s dan %(count)s lainnya",
-    "Uploading %(filename)s and %(count)s others|other": "Mengunggah %(filename)s dan %(count)s lainnya",
+    "Uploading %(filename)s and %(count)s others": {
+        "one": "Mengunggah %(filename)s dan %(count)s lainnya",
+        "other": "Mengunggah %(filename)s dan %(count)s lainnya"
+    },
     "Failed to load timeline position": "Gagal untuk memuat posisi lini masa",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Mencoba memuat titik spesifik di lini masa ruangan ini, tetapi tidak dapat menemukannya.",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Mencoba memuat titik spesifik di lini masa ruangan ini, tetapi Anda tidak memiliki izin untuk menampilkan pesannya.",
@@ -2310,8 +2416,10 @@
     "Select a room below first": "Pilih sebuah ruangan di bawah dahulu",
     "This room is suggested as a good one to join": "Ruangan ini disarankan sebagai ruangan yang baik untuk bergabung",
     "You don't have permission": "Anda tidak memiliki izin",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Anda punya %(count)s notifikasi yang belum dibaca dalam versi sebelumnya dari ruangan ini.",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Anda punya %(count)s notifikasi yang belum dibaca dalam versi sebelumnya dari ruangan ini.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "one": "Anda punya %(count)s notifikasi yang belum dibaca dalam versi sebelumnya dari ruangan ini.",
+        "other": "Anda punya %(count)s notifikasi yang belum dibaca dalam versi sebelumnya dari ruangan ini."
+    },
     "Drop file here to upload": "Lepaskan file di sini untuk mengunggah",
     "Failed to reject invite": "Gagal untuk menolak undangan",
     "No more results": "Tidak ada hasil lagi",
@@ -2508,8 +2616,10 @@
     "<a>Log in</a> to your new account.": "<a>Masuk</a> ke akun yang baru.",
     "Continue with previous account": "Lanjutkan dengan akun sebelumnya",
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Akun Anda yang baru (%(newAccountId)s) telah didaftarkan, tetapi Anda telah masuk ke akun yang lain (%(loggedInUserId)s).",
-    "Upload %(count)s other files|one": "Unggah %(count)s file lainnya",
-    "Upload %(count)s other files|other": "Unggah %(count)s file lainnya",
+    "Upload %(count)s other files": {
+        "one": "Unggah %(count)s file lainnya",
+        "other": "Unggah %(count)s file lainnya"
+    },
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Beberapa file <b>terlalu besar</b> untuk diunggah. Batas ukuran unggahan file adalah %(limit)s.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "File-file ini <b>terlalu besar</b> untuk diunggah. Batas ukuran unggahan file adalah %(limit)s.",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "File ini <b>terlalu besar</b> untuk diunggah. Batas ukuran unggahan file adalah %(limit)s tetapi file ini %(sizeOfThisFile)s.",
@@ -2564,10 +2674,14 @@
     "Decide which spaces can access this room. If a space is selected, its members can find and join <RoomName/>.": "Tentukan space mana yang dapat mengakses ruangan ini. Jika sebuah space dipilih, anggotanya dapat menemukan dan bergabung <RoomName/>.",
     "Select spaces": "Pilih space",
     "You're removing all spaces. Access will default to invite only": "Anda menghilangkan semua space. Akses secara bawaan ke undangan saja",
-    "%(count)s rooms|one": "%(count)s ruangan",
-    "%(count)s rooms|other": "%(count)s ruangan",
-    "%(count)s members|one": "%(count)s anggota",
-    "%(count)s members|other": "%(count)s anggota",
+    "%(count)s rooms": {
+        "one": "%(count)s ruangan",
+        "other": "%(count)s ruangan"
+    },
+    "%(count)s members": {
+        "one": "%(count)s anggota",
+        "other": "%(count)s anggota"
+    },
     "Are you sure you want to sign out?": "Apakah Anda yakin ingin keluar?",
     "You'll lose access to your encrypted messages": "Anda akan kehilangan akses ke pesan terenkripsi Anda",
     "Manually export keys": "Ekspor kunci secara manual",
@@ -2635,12 +2749,18 @@
     "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Verifikasi perangkat ini untuk menandainya sebagai terpercaya. Mempercayai perangkat ini akan memberikan Anda dan pengguna lain ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Memverifikasi pengguna ini akan menandai sesinya sebagai terpercaya, dan juga menandai sesi Anda sebagai terpercaya kepadanya.",
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Verifikasi pengguna ini untuk menandainya sebagai terpercaya. Mempercayai pengguna memberikan Anda ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
-    "Based on %(count)s votes|one": "Berdasarkan oleh %(count)s suara",
-    "Based on %(count)s votes|other": "Berdasarkan oleh %(count)s suara",
-    "%(count)s votes|one": "%(count)s suara",
-    "%(count)s votes|other": "%(count)s suara",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s dan %(count)s lainnya",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s dan %(count)s lainnya",
+    "Based on %(count)s votes": {
+        "one": "Berdasarkan oleh %(count)s suara",
+        "other": "Berdasarkan oleh %(count)s suara"
+    },
+    "%(count)s votes": {
+        "one": "%(count)s suara",
+        "other": "%(count)s suara"
+    },
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s dan %(count)s lainnya",
+        "other": "%(spaceName)s dan %(count)s lainnya"
+    },
     "Jump to room search": "Pergi ke pencarian ruangan",
     "Search (must be enabled)": "Cari (harus diaktifkan)",
     "Upload a file": "Unggah sebuah file",
@@ -2721,8 +2841,10 @@
     "Invite to space": "Undang ke space",
     "Start new chat": "Mulai obrolan baru",
     "Recently viewed": "Baru saja dilihat",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s suara. Vote untuk melihat hasilnya",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s suara. Vote untuk melihat hasilnya",
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s suara. Vote untuk melihat hasilnya",
+        "other": "%(count)s suara. Vote untuk melihat hasilnya"
+    },
     "No votes cast": "Tidak ada suara",
     "To view all keyboard shortcuts, <a>click here</a>.": "Untuk melihat semua shortcut keyboard, <a>klik di sini</a>.",
     "You can turn this off anytime in settings": "Anda dapat mematikannya kapan saja di pengaturan",
@@ -2747,8 +2869,10 @@
     "Failed to end poll": "Gagal untuk mengakhiri poll",
     "The poll has ended. Top answer: %(topAnswer)s": "Poll telah berakhir. Jawaban teratas: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Poll telah berakhir. Tidak ada yang memberi suara.",
-    "Final result based on %(count)s votes|other": "Hasil akhir bedasarkan dari %(count)s suara",
-    "Final result based on %(count)s votes|one": "Hasil akhir bedasarkan dari %(count)s suara",
+    "Final result based on %(count)s votes": {
+        "other": "Hasil akhir bedasarkan dari %(count)s suara",
+        "one": "Hasil akhir bedasarkan dari %(count)s suara"
+    },
     "Link to room": "Tautan ke ruangan",
     "Recent searches": "Pencarian terkini",
     "To search messages, look for this icon at the top of a room <icon/>": "Untuk mencari pesan-pesan, lihat ikon ini di atas ruangan <icon/>",
@@ -2760,16 +2884,24 @@
     "Including you, %(commaSeparatedMembers)s": "Termasuk Anda, %(commaSeparatedMembers)s",
     "Copy room link": "Salin tautan ruangan",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Kami tidak dapat mengerti tanggal yang dicantumkan (%(inputDate)s). Coba menggunakan format TTTT-BB-HH.",
-    "Exported %(count)s events in %(seconds)s seconds|one": "Telah mengekspor %(count)s peristiwa dalam %(seconds)s detik",
-    "Exported %(count)s events in %(seconds)s seconds|other": "Telah mengekspor %(count)s peristiwa dalam %(seconds)s detik",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "Telah mengekspor %(count)s peristiwa dalam %(seconds)s detik",
+        "other": "Telah mengekspor %(count)s peristiwa dalam %(seconds)s detik"
+    },
     "Export successful!": "Pengeksporan berhasil!",
-    "Fetched %(count)s events in %(seconds)ss|one": "Telah mendapatkan %(count)s peristiwa dalam %(seconds)sd",
-    "Fetched %(count)s events in %(seconds)ss|other": "Telah mendapatkan %(count)s peristiwa dalam %(seconds)sd",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "Telah mendapatkan %(count)s peristiwa dalam %(seconds)sd",
+        "other": "Telah mendapatkan %(count)s peristiwa dalam %(seconds)sd"
+    },
     "Processing event %(number)s out of %(total)s": "Memproses peristiwa %(number)s dari %(total)s peristiwa",
-    "Fetched %(count)s events so far|one": "Telah mendapatkan %(count)s peristiwa sejauh ini",
-    "Fetched %(count)s events so far|other": "Telah mendapatkan %(count)s peristiwa sejauh ini",
-    "Fetched %(count)s events out of %(total)s|one": "Mendapatkan %(count)s peristiwa dari %(total)s peristiwa",
-    "Fetched %(count)s events out of %(total)s|other": "Mendapatkan %(count)s peristiwa dari %(total)s peristiwa",
+    "Fetched %(count)s events so far": {
+        "one": "Telah mendapatkan %(count)s peristiwa sejauh ini",
+        "other": "Telah mendapatkan %(count)s peristiwa sejauh ini"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "Mendapatkan %(count)s peristiwa dari %(total)s peristiwa",
+        "other": "Mendapatkan %(count)s peristiwa dari %(total)s peristiwa"
+    },
     "Generating a ZIP": "Membuat sebuah ZIP",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Ini mengelompokkan obrolan Anda dengan anggota space ini. Menonaktifkan ini akan menyembunyikan obrolan dari tampilan %(spaceName)s Anda.",
     "Sections to show": "Bagian untuk ditampilkan",
@@ -2821,10 +2953,14 @@
     "You were removed from %(roomName)s by %(memberName)s": "Anda telah dikeluarkan dari %(roomName)s oleh %(memberName)s",
     "%(senderName)s removed %(targetName)s": "%(senderName)s mengeluarkan %(targetName)s",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s mengeluarkan %(targetName)s: %(reason)s",
-    "was removed %(count)s times|one": "dikeluarkan",
-    "was removed %(count)s times|other": "dikeluarkan %(count)s kali",
-    "were removed %(count)s times|one": "dikeluarkan",
-    "were removed %(count)s times|other": "dikeluarkan %(count)s kali",
+    "was removed %(count)s times": {
+        "one": "dikeluarkan",
+        "other": "dikeluarkan %(count)s kali"
+    },
+    "were removed %(count)s times": {
+        "one": "dikeluarkan",
+        "other": "dikeluarkan %(count)s kali"
+    },
     "Remove from room": "Keluarkan dari ruangan",
     "Failed to remove user": "Gagal untuk mengeluarkan pengguna",
     "Remove them from specific things I'm able to": "Keluarkan dari hal-hal spesifik yang saya bisa",
@@ -2900,18 +3036,28 @@
     "Feedback sent! Thanks, we appreciate it!": "Masukan terkirim! Terima kasih, kami mengapresiasinya!",
     "Maximise": "Maksimalkan",
     "Thank you for trying the beta, please go into as much detail as you can so we can improve it.": "Terima kasih untuk mencoba beta, silakan jelaskan secara detail sebanyaknya supaya kami dapat membuatnya lebih baik.",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)s menghapus %(count)s pesan",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)s menghapus sebuah pesan",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)s menghapus %(count)s pesan",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)s menghapus sebuah pesan",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)s mengirim %(count)s pesan tersembunyi",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)s mengirim sebuah pesan tersembunyi",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s sent %(count)s hidden messages",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)s mengirim sebuah pesan tersembunyi",
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "other": "%(severalUsers)s menghapus %(count)s pesan",
+        "one": "%(severalUsers)s menghapus sebuah pesan"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "other": "%(oneUser)s menghapus %(count)s pesan",
+        "one": "%(oneUser)s menghapus sebuah pesan"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "other": "%(severalUsers)s mengirim %(count)s pesan tersembunyi",
+        "one": "%(severalUsers)s mengirim sebuah pesan tersembunyi"
+    },
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "other": "%(oneUser)s sent %(count)s hidden messages",
+        "one": "%(oneUser)s mengirim sebuah pesan tersembunyi"
+    },
     "Automatically send debug logs when key backup is not functioning": "Kirim catatan pengawakutu secara otomatis ketika pencadangan kunci tidak berfungsi",
     "<empty string>": "<string kosong>",
-    "<%(count)s spaces>|one": "<space>",
-    "<%(count)s spaces>|other": "<%(count)s space>",
+    "<%(count)s spaces>": {
+        "one": "<space>",
+        "other": "<%(count)s space>"
+    },
     "Edit poll": "Edit pungutan suara",
     "Sorry, you can't edit a poll after votes have been cast.": "Maaf, Anda tidak dapat mengedit sebuah poll setelah suara-suara diberikan.",
     "Can't edit poll": "Tidak dapat mengedit poll",
@@ -2942,10 +3088,14 @@
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Balas ke utasan yang sedang terjadi atau gunakan “%(replyInThread)s” ketika kursor diletakkan pada pesan untuk memulai yang baru.",
     "Insert a trailing colon after user mentions at the start of a message": "Tambahkan sebuah karakter titik dua sesudah sebutan pengguna dari awal pesan",
     "Show polls button": "Tampilkan tombol pemungutan suara",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)s mengubah <a>pesan-pesan yang disematkan</a> di ruangan ini",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)smengubah <a>pesan-pesan yang dipasangi pin</a> untuk ruangan ini %(count)s kali",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)s mengubah <a>pesan-pesan yang disematkan</a> di ruangan ini",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)smengubah <a>pesan-pesan yang dipasangi pin</a> untuk ruangan ini %(count)s kali",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(oneUser)s mengubah <a>pesan-pesan yang disematkan</a> di ruangan ini",
+        "other": "%(oneUser)smengubah <a>pesan-pesan yang dipasangi pin</a> untuk ruangan ini %(count)s kali"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)s mengubah <a>pesan-pesan yang disematkan</a> di ruangan ini",
+        "other": "%(severalUsers)smengubah <a>pesan-pesan yang dipasangi pin</a> untuk ruangan ini %(count)s kali"
+    },
     "Spaces are a new way to group rooms and people. What kind of Space do you want to create? You can change this later.": "Space adalah cara yang baru untuk mengelompokkan ruangan dan orang. Space apa yang Anda ingin buat? Ini dapat diubah nanti.",
     "Click": "Klik",
     "Expand quotes": "Buka kutip",
@@ -2967,10 +3117,14 @@
     "%(displayName)s's live location": "Lokasi langsung %(displayName)s",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Jangan centang jika Anda juga ingin menghapus pesan-pesan sistem pada pengguna ini (mis. perubahan keanggotaan, perubahan profil…)",
     "Preserve system messages": "Simpan pesan-pesan sistem",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|one": "Anda akan menghapus %(count)s pesan dari %(user)s. Ini akan dihapus secara permanen untuk semua dalam obrolan. Apakah Anda ingin lanjut?",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "Anda akan menghapus %(count)s pesan dari %(user)s. Ini akan dihapus secara permanen untuk semua dalam obrolan. Apakah Anda ingin lanjut?",
-    "Currently removing messages in %(count)s rooms|one": "Saat ini menghapus pesan-pesan di %(count)s ruangan",
-    "Currently removing messages in %(count)s rooms|other": "Saat ini menghapus pesan-pesan di %(count)s ruangan",
+    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
+        "one": "Anda akan menghapus %(count)s pesan dari %(user)s. Ini akan dihapus secara permanen untuk semua dalam obrolan. Apakah Anda ingin lanjut?",
+        "other": "Anda akan menghapus %(count)s pesan dari %(user)s. Ini akan dihapus secara permanen untuk semua dalam obrolan. Apakah Anda ingin lanjut?"
+    },
+    "Currently removing messages in %(count)s rooms": {
+        "one": "Saat ini menghapus pesan-pesan di %(count)s ruangan",
+        "other": "Saat ini menghapus pesan-pesan di %(count)s ruangan"
+    },
     "Share for %(duration)s": "Bagikan selama %(duration)s",
     "%(value)ss": "%(value)sd",
     "%(value)sm": "%(value)sm",
@@ -3056,16 +3210,20 @@
     "Create room": "Buat ruangan",
     "Create video room": "Buat ruangan video",
     "Create a video room": "Buat sebuah ruangan video",
-    "%(count)s participants|one": "1 perserta",
-    "%(count)s participants|other": "%(count)s perserta",
+    "%(count)s participants": {
+        "one": "1 perserta",
+        "other": "%(count)s perserta"
+    },
     "New video room": "Ruangan video baru",
     "New room": "Ruangan baru",
     "Threads help keep your conversations on-topic and easy to track.": "Utasan membantu membuat obrolan sesuai topik dan mudah untuk dilacak.",
     "%(featureName)s Beta feedback": "Masukan %(featureName)s Beta",
     "sends hearts": "mengirim hati",
     "Sends the given message with hearts": "Kirim pesan dengan hati",
-    "Confirm signing out these devices|one": "Konfirmasi mengeluarkan perangkat ini",
-    "Confirm signing out these devices|other": "Konfirmasi mengeluarkan perangkat ini",
+    "Confirm signing out these devices": {
+        "one": "Konfirmasi mengeluarkan perangkat ini",
+        "other": "Konfirmasi mengeluarkan perangkat ini"
+    },
     "Live location ended": "Lokasi langsung berakhir",
     "View live location": "Tampilkan lokasi langsung",
     "Live location enabled": "Lokasi langsung diaktifkan",
@@ -3104,8 +3262,10 @@
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Anda telah dikeluarkan dari semua perangkat Anda dan tidak akan dapat notifikasi. Untuk mengaktifkan ulang notifikasi, masuk ulang pada setiap perangkat.",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "Jika Anda ingin mengakses riwayat obrolan di ruangan terenkripsi Anda, siapkan Cadangan Kunci atau ekspor kunci-kunci pesan Anda dari salah satu perangkat Anda yang lain sebelum melanjutkan.",
     "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "Mengeluarkan perangkat Anda akan menghapus kunci enkripsi pesan pada perangkat, dan membuat riwayat obrolan terenkripsi tidak dapat dibaca.",
-    "Seen by %(count)s people|one": "Dilihat oleh %(count)s orang",
-    "Seen by %(count)s people|other": "Dilihat oleh %(count)s orang",
+    "Seen by %(count)s people": {
+        "one": "Dilihat oleh %(count)s orang",
+        "other": "Dilihat oleh %(count)s orang"
+    },
     "Your password was successfully changed.": "Kata sandi Anda berhasil diubah.",
     "An error occurred while stopping your live location": "Sebuah kesalahan terjadi saat menghentikan lokasi langsung Anda",
     "Enable live location sharing": "Aktifkan pembagian lokasi langsung",
@@ -3134,8 +3294,10 @@
     "Unread email icon": "Ikon email belum dibaca",
     "Check your email to continue": "Periksa email Anda untuk melanjutkan",
     "Joining…": "Bergabung…",
-    "%(count)s people joined|one": "%(count)s orang bergabung",
-    "%(count)s people joined|other": "%(count)s orang bergabung",
+    "%(count)s people joined": {
+        "one": "%(count)s orang bergabung",
+        "other": "%(count)s orang bergabung"
+    },
     "Check if you want to hide all current and future messages from this user.": "Periksa jika Anda ingin menyembunyikan semua pesan saat ini dan pesan baru dari pengguna ini.",
     "Ignore user": "Abaikan pengguna",
     "View related event": "Tampilkan peristiwa terkait",
@@ -3169,8 +3331,10 @@
     "If you can't see who you're looking for, send them your invite link.": "Jika Anda tidak dapat menemukan siapa yang Anda mencari, kirimkan tautan undangan Anda.",
     "Some results may be hidden for privacy": "Beberapa hasil mungkin disembunyikan untuk privasi",
     "Search for": "Cari",
-    "%(count)s Members|one": "%(count)s Anggota",
-    "%(count)s Members|other": "%(count)s Anggota",
+    "%(count)s Members": {
+        "one": "%(count)s Anggota",
+        "other": "%(count)s Anggota"
+    },
     "Show: Matrix rooms": "Tampilkan: ruangan Matrix",
     "Show: %(instance)s rooms (%(server)s)": "Tampilkan: %(instance)s ruangan (%(server)s)",
     "Add new server…": "Tambahkan server baru…",
@@ -3189,9 +3353,11 @@
     "Enter fullscreen": "Masuki layar penuh",
     "Map feedback": "Masukan peta",
     "Toggle attribution": "Alih atribusi",
-    "In %(spaceName)s and %(count)s other spaces.|one": "Dalam %(spaceName)s dan %(count)s space lainnya.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "Dalam %(spaceName)s dan %(count)s space lainnya.",
+        "other": "Dalam %(spaceName)s dan %(count)s space lainnya."
+    },
     "In %(spaceName)s.": "Dalam space %(spaceName)s.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "Dalam %(spaceName)s dan %(count)s space lainnya.",
     "In spaces %(space1Name)s and %(space2Name)s.": "Dalam space %(space1Name)s dan %(space2Name)s.",
     "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Perintah pengembang: Membuang sesi grup keluar saat ini dan menyiapkan sesi Olm baru",
     "Stop and close": "Berhenti dan tutup",
@@ -3225,8 +3391,10 @@
     "Share your activity and status with others.": "Bagikan aktivitas dan status Anda dengan orang lain.",
     "Presence": "Presensi",
     "You did it!": "Anda berhasil!",
-    "Only %(count)s steps to go|one": "Hanya %(count)s langkah lagi untuk dilalui",
-    "Only %(count)s steps to go|other": "Hanya %(count)s langkah lagi untuk dilalui",
+    "Only %(count)s steps to go": {
+        "one": "Hanya %(count)s langkah lagi untuk dilalui",
+        "other": "Hanya %(count)s langkah lagi untuk dilalui"
+    },
     "Find your people": "Temukan orang-orang Anda",
     "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.": "Tetap miliki kemilikan dan kendali atas diskusi komunitas.\nBesar untuk mendukung jutaan anggota, dengan moderasi dan interoperabilitas berdaya.",
     "Community ownership": "Kemilikan komunitas",
@@ -3291,10 +3459,14 @@
     "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Menambahkan enkripsi pada ruangan publik tidak disarankan.</b> Siapa pun dapat menemukan dan bergabung dengan ruangan publik, supaya siapa pun dapat membaca pesan di ruangan. Anda tidak akan mendapatkan manfaat dari enkripsi, dan Anda tidak akan dapat menonaktifkan nanti. Mengenkripsi pesan di ruangan publik akan membuat penerimaan dan pengiriman pesan lebih lambat.",
     "Don’t miss a thing by taking %(brand)s with you": "Jangan lewatkan hal-hal dengan membawa %(brand)s dengan Anda",
     "Empty room (was %(oldName)s)": "Ruangan kosong (sebelumnya %(oldName)s)",
-    "Inviting %(user)s and %(count)s others|one": "Mengundang %(user)s dan 1 lainnya",
-    "Inviting %(user)s and %(count)s others|other": "Mengundang %(user)s dan %(count)s lainnya",
-    "%(user)s and %(count)s others|one": "%(user)s dan 1 lainnya",
-    "%(user)s and %(count)s others|other": "%(user)s dan %(count)s lainnya",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "Mengundang %(user)s dan 1 lainnya",
+        "other": "Mengundang %(user)s dan %(count)s lainnya"
+    },
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s dan 1 lainnya",
+        "other": "%(user)s dan %(count)s lainnya"
+    },
     "%(user1)s and %(user2)s": "%(user1)s dan %(user2)s",
     "Show": "Tampilkan",
     "%(downloadButton)s or %(copyButton)s": "-%(downloadButton)s atau %(copyButton)s",
@@ -3392,8 +3564,10 @@
     "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "Anda tidak memiliki izin untuk memulai sebuah siaran suara di ruangan ini. Hubungi sebuah administrator ruangan untuk meningkatkan izin Anda.",
     "You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.": "Anda saat ini merekam sebuah siaran suara. Mohon akhiri siaran suara Anda saat ini untuk memulai yang baru.",
     "Can't start a new voice broadcast": "Tidak dapat memulai sebuah siaran suara baru",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "Apakah Anda yakin untuk mengeluarkan %(count)s sesi?",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "Apakah Anda yakin untuk mengeluarkan %(count)s sesi?",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "one": "Apakah Anda yakin untuk mengeluarkan %(count)s sesi?",
+        "other": "Apakah Anda yakin untuk mengeluarkan %(count)s sesi?"
+    },
     "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.": "Mengeluarkan sesi yang tidak aktif meningkatkan keamanan dan performa, dan membuatnya lebih mudah untuk Anda untuk mengenal jika sebuah sesi baru itu mencurigakan.",
     "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.": "Sesi tidak aktif adalah sesi yang Anda belum gunakan dalam beberapa waktu, tetapi mereka masih mendapatkan kunci enkripsi.",
     "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.": "Pertimbangkan untuk mengeluarkan sesi lama (%(inactiveAgeDays)s hari atau lebih) yang Anda tidak gunakan lagi.",
@@ -3489,8 +3663,10 @@
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "Anda tidak dapat memulai sebuah panggilan karena Anda saat ini merekam sebuah siaran langsung. Mohon akhiri siaran langsung Anda untuk memulai sebuah panggilan.",
     "Can’t start a call": "Tidak dapat memulai panggilan",
     "Improve your account security by following these recommendations.": "Tingkatkan keamanan akun Anda dengan mengikuti saran berikut.",
-    "%(count)s sessions selected|one": "%(count)s sesi dipilih",
-    "%(count)s sessions selected|other": "%(count)s sesi dipilih",
+    "%(count)s sessions selected": {
+        "one": "%(count)s sesi dipilih",
+        "other": "%(count)s sesi dipilih"
+    },
     "Failed to read events": "Gagal membaca peristiwa",
     "Failed to send event": "Gagal mengirimkan peristiwa",
     " in <strong>%(room)s</strong>": " di <strong>%(room)s</strong>",
@@ -3501,8 +3677,10 @@
     "Create a link": "Buat sebuah tautan",
     "Link": "Tautan",
     "Force 15s voice broadcast chunk length": "Paksakan panjang bagian siaran suara 15d",
-    "Sign out of %(count)s sessions|one": "Keluar dari %(count)s sesi",
-    "Sign out of %(count)s sessions|other": "Keluar dari %(count)s sesi",
+    "Sign out of %(count)s sessions": {
+        "one": "Keluar dari %(count)s sesi",
+        "other": "Keluar dari %(count)s sesi"
+    },
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Keluar dari semua sesi lain (%(otherSessionsCount)s)",
     "Yes, end my recording": "Ya, hentikan rekaman saya",
     "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "Jika Anda mendengarkan siaran langsung ini, rekaman siaran langsung Anda saat ini akan dihentikan.",
@@ -3603,7 +3781,9 @@
     "Your keys are now being backed up from this device.": "Kunci Anda sekarang dicadangkan dari perangkat ini.",
     "Loading polls": "Memuat pemungutan suara",
     "Room unread status: <strong>%(status)s</strong>": "Keadaan belum dibaca ruangan: <strong>%(status)s</strong>",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Keadaan belum dibaca ruangan: <strong>%(status)s</strong>, jumlah: <strong>%(count)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>": {
+        "other": "Keadaan belum dibaca ruangan: <strong>%(status)s</strong>, jumlah: <strong>%(count)s</strong>"
+    },
     "Ended a poll": "Mengakhiri sebuah pemungutan suara",
     "Due to decryption errors, some votes may not be counted": "Karena kesalahan pendekripsian, beberapa suara tidak dihitung",
     "The sender has blocked you from receiving this message": "Pengirim telah memblokir Anda supaya tidak menerima pesan ini",
@@ -3619,10 +3799,14 @@
     "If you know a room address, try joining through that instead.": "Jika Anda tahu sebuah alamat ruangan, coba bergabung melalui itu saja.",
     "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Anda mencoba untuk bergabung menggunakan sebuah ID ruangan tanpa menyediakan daftar server untuk bergabung melalui server. ID ruangan adalah pengenal internal dan tidak dapat digunakan untuk bergabung dengan sebuah ruangan tanpa informasi tambahan.",
     "View poll": "Tampilkan pemungutan suara",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Tidak ada pemungutan suara untuk hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Tidak ada pemungutan suara untuk %(count)s hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Tidak ada pemungutan suara untuk hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Tidak ada pemungutan suara yang aktif %(count)s hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Tidak ada pemungutan suara untuk hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
+        "other": "Tidak ada pemungutan suara untuk %(count)s hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir"
+    },
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Tidak ada pemungutan suara untuk hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
+        "other": "Tidak ada pemungutan suara yang aktif %(count)s hari terakhir. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir"
+    },
     "There are no past polls. Load more polls to view polls for previous months": "Tidak ada pemungutan suara sebelumnya. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
     "There are no active polls. Load more polls to view polls for previous months": "Tidak ada pemungutan suara yang aktif. Muat lebih banyak pemungutan suara untuk melihat pemungutan suara untuk bulan-bulan terakhir",
     "Load more polls": "Muat lebih banyak pemungutan suara",
@@ -3738,8 +3922,14 @@
     "Notify when someone mentions using @displayname or %(mxid)s": "Beri tahu ketika seseorang memberi tahu menggunakan @namatampilan atau %(mxid)s",
     "Unable to find user by email": "Tidak dapat mencari pengguna dengan surel",
     "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Pesan-pesan di ruangan ini dienkripsi secara ujung ke ujung. Ketika orang-orang bergabung, Anda dapat memverifikasi mereka di profil mereka dengan mengetuk pada foto profil mereka.",
-    "%(severalUsers)schanged their profile picture %(count)s times|other": "%(severalUsers)smengubah foto profil mereka %(count)s kali",
-    "%(oneUser)schanged their profile picture %(count)s times|other": "%(oneUser)smengubah foto profilnya %(count)s kali",
+    "%(severalUsers)schanged their profile picture %(count)s times": {
+        "other": "%(severalUsers)smengubah foto profil mereka %(count)s kali",
+        "one": "%(severalUsers)smengubah foto profil mereka"
+    },
+    "%(oneUser)schanged their profile picture %(count)s times": {
+        "other": "%(oneUser)smengubah foto profilnya %(count)s kali",
+        "one": "%(oneUser)smengubah foto profilnya"
+    },
     "Anyone can request to join, but admins or moderators need to grant access. You can change this later.": "Siapa pun dapat meminta untuk bergabung, tetapi admin atau administrator perlu memberikan akses. Anda dapat mengubah ini nanti.",
     "Upgrade room": "Tingkatkan ruangan",
     "User read up to (ignoreSynthetic): ": "Pengguna membaca sampai (ignoreSynthetic): ",
@@ -3772,8 +3962,6 @@
     "Request access": "Minta akses",
     "Your request to join is pending.": "Permintaan Anda untuk bergabung sedang ditunda.",
     "Cancel request": "Batalkan permintaan",
-    "%(severalUsers)schanged their profile picture %(count)s times|one": "%(severalUsers)smengubah foto profil mereka",
-    "%(oneUser)schanged their profile picture %(count)s times|one": "%(oneUser)smengubah foto profilnya",
     "You need an invite to access this room.": "Anda memerlukan undangan untuk mengakses ruangan ini.",
     "Failed to cancel": "Gagal membatalkan",
     "You need to be granted access to this room in order to view or participate in the conversation. You can send a request to join below.": "Anda memerlukan akses untuk mengakses ruangan ini supaya dapat melihat atau berpartisipasi dalam percakapan. Anda dapat mengirimkan permintaan untuk bergabung di bawah.",

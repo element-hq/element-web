@@ -94,8 +94,10 @@
     "Members only (since the point in time of selecting this option)": "Ainult liikmetele (alates selle seadistuse kasutuselevõtmisest)",
     "Members only (since they were invited)": "Ainult liikmetele (alates nende kutsumise ajast)",
     "Members only (since they joined)": "Ainult liikmetele (alates liitumisest)",
-    "Remove %(count)s messages|other": "Eemalda %(count)s sõnumit",
-    "Remove %(count)s messages|one": "Eemalda 1 sõnum",
+    "Remove %(count)s messages": {
+        "other": "Eemalda %(count)s sõnumit",
+        "one": "Eemalda 1 sõnum"
+    },
     "Remove recent messages": "Eemalda hiljutised sõnumid",
     "Filter room members": "Filtreeri jututoa liikmeid",
     "Sign out and remove encryption keys?": "Logi välja ja eemalda krüptimisvõtmed?",
@@ -103,7 +105,10 @@
     "Upload files": "Laadi failid üles",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Need failid on üleslaadimiseks <b>liiga suured</b>. Failisuuruse piir on %(limit)s.",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Mõned failid on üleslaadimiseks <b>liiga suured</b>. Failisuuruse piir on %(limit)s.",
-    "Upload %(count)s other files|other": "Laadi üles %(count)s muud faili",
+    "Upload %(count)s other files": {
+        "other": "Laadi üles %(count)s muud faili",
+        "one": "Laadi üles %(count)s muu fail"
+    },
     "Resend": "Saada uuesti",
     "Resend %(unsentCount)s reaction(s)": "Saada uuesti %(unsentCount)s reaktsioon(i)",
     "Source URL": "Lähteaadress",
@@ -145,7 +150,10 @@
     "Admin Tools": "Haldustoimingud",
     "Online": "Võrgus",
     "Reject & Ignore user": "Hülga ja eira kasutaja",
-    "%(count)s unread messages including mentions.|one": "1 lugemata mainimine.",
+    "%(count)s unread messages including mentions.": {
+        "one": "1 lugemata mainimine.",
+        "other": "%(count)s lugemata sõnumit kaasa arvatud mainimised."
+    },
     "Filter results": "Filtreeri tulemusi",
     "Report Content to Your Homeserver Administrator": "Teata sisust Sinu koduserveri haldurile",
     "Send report": "Saada veateade",
@@ -248,8 +256,10 @@
     "Replying": "Vastan",
     "Room %(name)s": "Jututuba %(name)s",
     "Unnamed room": "Nimeta jututuba",
-    "(~%(count)s results)|other": "(~%(count)s tulemust)",
-    "(~%(count)s results)|one": "(~%(count)s tulemus)",
+    "(~%(count)s results)": {
+        "other": "(~%(count)s tulemust)",
+        "one": "(~%(count)s tulemus)"
+    },
     "Join Room": "Liitu jututoaga",
     "Forget room": "Unusta jututuba",
     "Search": "Otsing",
@@ -338,10 +348,14 @@
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s saatis pildi.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s muutis selle jututoa põhiaadressiks %(address)s.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s eemaldas põhiaadressi sellest jututoast.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s lisas sellele jututoale täiendava aadressi %(addresses)s.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s lisas sellele jututoale täiendava aadressi %(addresses)s.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s eemaldas täiendavad aadressid %(addresses)s sellelt jututoalt.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s eemaldas täiendava aadressi %(addresses)s sellelt jututoalt.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s lisas sellele jututoale täiendava aadressi %(addresses)s.",
+        "one": "%(senderName)s lisas sellele jututoale täiendava aadressi %(addresses)s."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s eemaldas täiendavad aadressid %(addresses)s sellelt jututoalt.",
+        "one": "%(senderName)s eemaldas täiendava aadressi %(addresses)s sellelt jututoalt."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s muutis selle jututoa täiendavat aadressi.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s muutis selle jututoa põhiaadressi ja täiendavat aadressi.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s muutis selle jututoa aadresse.",
@@ -641,9 +655,11 @@
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Üritasin laadida teatud hetke selle jututoa ajajoonelt, kuid sul ei ole õigusi selle sõnumi nägemiseks.",
     "Failed to load timeline position": "Asukoha laadimine ajajoonel ei õnnestunud",
     "Guest": "Külaline",
-    "Uploading %(filename)s and %(count)s others|other": "Laadin üles %(filename)s ning %(count)s muud faili",
+    "Uploading %(filename)s and %(count)s others": {
+        "other": "Laadin üles %(filename)s ning %(count)s muud faili",
+        "one": "Laadin üles %(filename)s ning veel %(count)s faili"
+    },
     "Uploading %(filename)s": "Laadin üles %(filename)s",
-    "Uploading %(filename)s and %(count)s others|one": "Laadin üles %(filename)s ning veel %(count)s faili",
     "The email address linked to your account must be entered.": "Sa pead sisestama oma kontoga seotud e-posti aadressi.",
     "A new password must be entered.": "Palun sisesta uus salasõna.",
     "New passwords must match each other.": "Uued salasõnad peavad omavahel klappima.",
@@ -731,9 +747,10 @@
     "%(roomName)s can't be previewed. Do you want to join it?": "Jututoal %(roomName)s puudub eelvaate võimalus. Kas sa soovid sellega liituda?",
     "%(roomName)s does not exist.": "Jututuba %(roomName)s ei ole olemas.",
     "%(roomName)s is not accessible at this time.": "Jututuba %(roomName)s ei ole parasjagu kättesaadav.",
-    "%(count)s unread messages including mentions.|other": "%(count)s lugemata sõnumit kaasa arvatud mainimised.",
-    "%(count)s unread messages.|other": "%(count)s lugemata teadet.",
-    "%(count)s unread messages.|one": "1 lugemata teade.",
+    "%(count)s unread messages.": {
+        "other": "%(count)s lugemata teadet.",
+        "one": "1 lugemata teade."
+    },
     "Unread messages.": "Lugemata sõnumid.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Selle jututoa versiooni uuendamine sulgeb tema praeguse instantsi ja loob sama nimega uuendatud jututoa.",
     "This room has already been upgraded.": "See jututuba on juba uuendatud.",
@@ -798,7 +815,10 @@
     "Verify session": "Verifitseeri sessioon",
     "Skip": "Jäta vahele",
     "Token incorrect": "Vigane tunnusluba",
-    "%(oneUser)schanged their name %(count)s times|one": "Kasutaja %(oneUser)s muutis oma nime",
+    "%(oneUser)schanged their name %(count)s times": {
+        "one": "Kasutaja %(oneUser)s muutis oma nime",
+        "other": "Kasutaja %(oneUser)s muutis oma nime %(count)s korda"
+    },
     "Are you sure you want to deactivate your account? This is irreversible.": "Kas sa oled kindel, et soovid oma konto sulgeda? Seda tegevust ei saa hiljem tagasi pöörata.",
     "Confirm account deactivation": "Kinnita konto sulgemine",
     "There was a problem communicating with the server. Please try again.": "Serveriühenduses tekkis viga. Palun proovi uuesti.",
@@ -816,7 +836,6 @@
     "Manually export keys": "Ekspordi võtmed käsitsi",
     "You'll lose access to your encrypted messages": "Sa kaotad ligipääsu oma krüptitud sõnumitele",
     "Are you sure you want to sign out?": "Kas sa oled kindel, et soovid välja logida?",
-    "Upload %(count)s other files|one": "Laadi üles %(count)s muu fail",
     "Cancel All": "Tühista kõik",
     "Upload Error": "Üleslaadimise viga",
     "Verification Request": "Verifitseerimispäring",
@@ -857,8 +876,10 @@
     "Your message wasn't sent because this homeserver has exceeded a resource limit. Please <a>contact your service administrator</a> to continue using the service.": "Sinu sõnumit ei saadetud, kuna see koduserver on ületanud on ületanud ressursipiirangu. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
     "Connectivity to the server has been lost.": "Ühendus sinu serveriga on katkenud.",
     "Sent messages will be stored until your connection has returned.": "Saadetud sõnumid salvestatakse seniks, kuni võrguühendus on taastunud.",
-    "You have %(count)s unread notifications in a prior version of this room.|other": "Sinul on selle jututoa varasemas versioonis %(count)s lugemata teavitust.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "Sinul on selle jututoa varasemas versioonis %(count)s lugemata teavitus.",
+    "You have %(count)s unread notifications in a prior version of this room.": {
+        "other": "Sinul on selle jututoa varasemas versioonis %(count)s lugemata teavitust.",
+        "one": "Sinul on selle jututoa varasemas versioonis %(count)s lugemata teavitus."
+    },
     "Your password has been reset.": "Sinu salasõna on muudetud.",
     "Dismiss read marker and jump to bottom": "Ära arvesta loetud sõnumite järjehoidjat ning mine kõige lõppu",
     "Jump to oldest unread message": "Mine vanima lugemata sõnumi juurde",
@@ -879,13 +900,18 @@
     "Notification sound": "Teavitusheli",
     "Reset": "Taasta algolek",
     "Set a new custom sound": "Seadista uus kohandatud heli",
-    "were invited %(count)s times|other": "said kutse %(count)s korda",
-    "were invited %(count)s times|one": "said kutse",
-    "was invited %(count)s times|other": "sai kutse %(count)s korda",
-    "was invited %(count)s times|one": "sai kutse",
-    "%(severalUsers)schanged their name %(count)s times|other": "Mitu kasutajat %(severalUsers)s muutsid oma nime %(count)s korda",
-    "%(severalUsers)schanged their name %(count)s times|one": "Mitu kasutajat %(severalUsers)s muutsid oma nime",
-    "%(oneUser)schanged their name %(count)s times|other": "Kasutaja %(oneUser)s muutis oma nime %(count)s korda",
+    "were invited %(count)s times": {
+        "other": "said kutse %(count)s korda",
+        "one": "said kutse"
+    },
+    "was invited %(count)s times": {
+        "other": "sai kutse %(count)s korda",
+        "one": "sai kutse"
+    },
+    "%(severalUsers)schanged their name %(count)s times": {
+        "other": "Mitu kasutajat %(severalUsers)s muutsid oma nime %(count)s korda",
+        "one": "Mitu kasutajat %(severalUsers)s muutsid oma nime"
+    },
     "You cannot place a call with yourself.": "Sa ei saa iseendale helistada.",
     "You do not have permission to start a conference call in this room": "Sul ei ole piisavalt õigusi, et selles jututoas alustada konverentsikõnet",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Palu oma koduserveri haldajat (<code>%(homeserverDomain)s</code>), et ta seadistaks kõnede kindlamaks toimimiseks TURN serveri.",
@@ -925,8 +951,10 @@
     "Not Trusted": "Ei ole usaldusväärne",
     "Done": "Valmis",
     "%(displayName)s is typing …": "%(displayName)s kirjutab midagi…",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s ja %(count)s muud kasutajat kirjutavad midagi…",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s ja üks teine kasutaja kirjutavad midagi…",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s ja %(count)s muud kasutajat kirjutavad midagi…",
+        "one": "%(names)s ja üks teine kasutaja kirjutavad midagi…"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s ja %(lastPerson)s kirjutavad midagi…",
     "Cannot reach homeserver": "Koduserver ei ole hetkel leitav",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Palun kontrolli, kas sul on toimiv internetiühendus ning kui on, siis küsi abi koduserveri haldajalt",
@@ -951,8 +979,10 @@
     "Unexpected error resolving homeserver configuration": "Koduserveri seadistustest selguse saamisel tekkis ootamatu viga",
     "Unexpected error resolving identity server configuration": "Isikutuvastusserveri seadistustest selguse saamisel tekkis ootamatu viga",
     "This homeserver has exceeded one of its resource limits.": "See koduserver ületanud ühe oma ressursipiirangutest.",
-    "%(items)s and %(count)s others|other": "%(items)s ja %(count)s muud",
-    "%(items)s and %(count)s others|one": "%(items)s ja üks muu",
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s ja %(count)s muud",
+        "one": "%(items)s ja üks muu"
+    },
     "%(items)s and %(lastItem)s": "%(items)s ja %(lastItem)s",
     "a few seconds ago": "mõni sekund tagasi",
     "%(num)s minutes ago": "%(num)s minutit tagasi",
@@ -1009,8 +1039,10 @@
     "Code block": "Koodiplokk",
     "Message preview": "Sõnumi eelvaade",
     "List options": "Loendi valikud",
-    "Show %(count)s more|other": "Näita veel %(count)s sõnumit",
-    "Show %(count)s more|one": "Näita veel %(count)s sõnumit",
+    "Show %(count)s more": {
+        "other": "Näita veel %(count)s sõnumit",
+        "one": "Näita veel %(count)s sõnumit"
+    },
     "Upgrade this room to version %(version)s": "Uuenda jututuba versioonini %(version)s",
     "Upgrade Room Version": "Uuenda jututoa versioon",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Selle jututoa uuendamine eeldab tema praeguse ilmingu tegevuse lõpetamist ja uue jututoa loomist selle asemele. Selleks, et kõik kulgeks jututoas osalejate jaoks ladusalt, toimime nüüd nii:",
@@ -1157,22 +1189,38 @@
     "More options": "Täiendavad seadistused",
     "Language Dropdown": "Keelevalik",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times|other": "%(severalUsers)s liitusid %(count)s korda",
-    "%(severalUsers)sjoined %(count)s times|one": "%(severalUsers)s liitusid",
-    "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s liitus %(count)s korda",
-    "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s liitus",
-    "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s lahkusid %(count)s korda",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s lahkusid",
-    "%(oneUser)sleft %(count)s times|other": "%(oneUser)s lahkus %(count)s korda",
-    "%(oneUser)sleft %(count)s times|one": "%(oneUser)s lahkus",
-    "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s liitusid ja lahkusid %(count)s korda",
-    "%(severalUsers)sjoined and left %(count)s times|one": "%(severalUsers)s liitusid ja lahkusid",
-    "%(oneUser)sjoined and left %(count)s times|other": "%(oneUser)s liitus ja lahkus %(count)s korda",
-    "%(oneUser)sjoined and left %(count)s times|one": "%(oneUser)s liitus ja lahkus",
-    "%(severalUsers)sleft and rejoined %(count)s times|other": "%(severalUsers)s lahkusid ja liitusid uuesti %(count)s korda",
-    "%(severalUsers)sleft and rejoined %(count)s times|one": "%(severalUsers)s lahkusid ja liitusid uuesti",
-    "%(oneUser)sleft and rejoined %(count)s times|other": "%(oneUser)s lahkus ja liitus uuesti %(count)s korda",
-    "%(oneUser)sleft and rejoined %(count)s times|one": "%(oneUser)s lahkus ja liitus uuesti",
+    "%(severalUsers)sjoined %(count)s times": {
+        "other": "%(severalUsers)s liitusid %(count)s korda",
+        "one": "%(severalUsers)s liitusid"
+    },
+    "%(oneUser)sjoined %(count)s times": {
+        "other": "%(oneUser)s liitus %(count)s korda",
+        "one": "%(oneUser)s liitus"
+    },
+    "%(severalUsers)sleft %(count)s times": {
+        "other": "%(severalUsers)s lahkusid %(count)s korda",
+        "one": "%(severalUsers)s lahkusid"
+    },
+    "%(oneUser)sleft %(count)s times": {
+        "other": "%(oneUser)s lahkus %(count)s korda",
+        "one": "%(oneUser)s lahkus"
+    },
+    "%(severalUsers)sjoined and left %(count)s times": {
+        "other": "%(severalUsers)s liitusid ja lahkusid %(count)s korda",
+        "one": "%(severalUsers)s liitusid ja lahkusid"
+    },
+    "%(oneUser)sjoined and left %(count)s times": {
+        "other": "%(oneUser)s liitus ja lahkus %(count)s korda",
+        "one": "%(oneUser)s liitus ja lahkus"
+    },
+    "%(severalUsers)sleft and rejoined %(count)s times": {
+        "other": "%(severalUsers)s lahkusid ja liitusid uuesti %(count)s korda",
+        "one": "%(severalUsers)s lahkusid ja liitusid uuesti"
+    },
+    "%(oneUser)sleft and rejoined %(count)s times": {
+        "other": "%(oneUser)s lahkus ja liitus uuesti %(count)s korda",
+        "one": "%(oneUser)s lahkus ja liitus uuesti"
+    },
     "Bans user with given id": "Keela ligipääs antud tunnusega kasutajale",
     "Unbans user with given ID": "Taasta ligipääs antud tunnusega kasutajale",
     "Ignores a user, hiding their messages from you": "Eirab kasutajat peites kõik tema sõnumid sinu eest",
@@ -1280,8 +1328,10 @@
     "Discovery options will appear once you have added a phone number above.": "Otsinguvõimaluste loend kuvatakse, kui oled ülale sisestanud telefoninumbri.",
     "Mod": "Moderaator",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "Selle krüptitud sõnumi autentsus pole selles seadmes tagatud.",
-    "and %(count)s others...|other": "ja %(count)s muud...",
-    "and %(count)s others...|one": "ja üks muu...",
+    "and %(count)s others...": {
+        "other": "ja %(count)s muud...",
+        "one": "ja üks muu..."
+    },
     "Invited": "Kutsutud",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (õigused %(powerLevelNumber)s)",
     "No recently visited rooms": "Hiljuti külastatud jututubasid ei leidu",
@@ -1316,26 +1366,46 @@
     "Add an Integration": "Lisa lõiming",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Sind juhatatakse kolmanda osapoole veebisaiti, kus sa saad autentida oma kontoga %(integrationsUrl)s kasutamiseks. Kas sa soovid jätkata?",
     "Categories": "Kategooriad",
-    "%(severalUsers)srejected their invitations %(count)s times|other": "%(severalUsers)s lükkasid tagasi oma kutse %(count)s korda",
-    "%(severalUsers)srejected their invitations %(count)s times|one": "%(severalUsers)s lükkasid tagasi oma kutse",
-    "%(oneUser)srejected their invitation %(count)s times|other": "%(oneUser)s lükkas tagasi oma kutse %(count)s korda",
-    "%(oneUser)srejected their invitation %(count)s times|one": "%(oneUser)s lükkas taagasi oma kutse",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|other": "%(severalUsers)s kutse võeti tagasi %(count)s korda",
-    "%(severalUsers)shad their invitations withdrawn %(count)s times|one": "Kasutajate %(severalUsers)s kutse võeti tagasi",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|other": "%(oneUser)s kutse võeti tagasi %(count)s korda",
-    "%(oneUser)shad their invitation withdrawn %(count)s times|one": "Kasutaja %(oneUser)s kutse võeti tagasi",
-    "were banned %(count)s times|other": "said ligipääsukeelu %(count)s korda",
-    "were banned %(count)s times|one": "said ligipääsukeelu",
-    "was banned %(count)s times|other": "sai ligipääsukeelu %(count)s korda",
-    "was banned %(count)s times|one": "sai ligipääsukeelu",
-    "were unbanned %(count)s times|other": "taastati ligipääs %(count)s korda",
-    "were unbanned %(count)s times|one": "taastati ligipääs",
-    "was unbanned %(count)s times|other": "taastati ligipääs %(count)s korda",
-    "was unbanned %(count)s times|one": "taastati ligipääs",
-    "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s ei teinud muudatusi %(count)s korda",
-    "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)s ei teinud muudatusi",
-    "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)s ei teinud muutusi %(count)s korda",
-    "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)s ei teinud muudatusi",
+    "%(severalUsers)srejected their invitations %(count)s times": {
+        "other": "%(severalUsers)s lükkasid tagasi oma kutse %(count)s korda",
+        "one": "%(severalUsers)s lükkasid tagasi oma kutse"
+    },
+    "%(oneUser)srejected their invitation %(count)s times": {
+        "other": "%(oneUser)s lükkas tagasi oma kutse %(count)s korda",
+        "one": "%(oneUser)s lükkas taagasi oma kutse"
+    },
+    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
+        "other": "%(severalUsers)s kutse võeti tagasi %(count)s korda",
+        "one": "Kasutajate %(severalUsers)s kutse võeti tagasi"
+    },
+    "%(oneUser)shad their invitation withdrawn %(count)s times": {
+        "other": "%(oneUser)s kutse võeti tagasi %(count)s korda",
+        "one": "Kasutaja %(oneUser)s kutse võeti tagasi"
+    },
+    "were banned %(count)s times": {
+        "other": "said ligipääsukeelu %(count)s korda",
+        "one": "said ligipääsukeelu"
+    },
+    "was banned %(count)s times": {
+        "other": "sai ligipääsukeelu %(count)s korda",
+        "one": "sai ligipääsukeelu"
+    },
+    "were unbanned %(count)s times": {
+        "other": "taastati ligipääs %(count)s korda",
+        "one": "taastati ligipääs"
+    },
+    "was unbanned %(count)s times": {
+        "other": "taastati ligipääs %(count)s korda",
+        "one": "taastati ligipääs"
+    },
+    "%(severalUsers)smade no changes %(count)s times": {
+        "other": "%(severalUsers)s ei teinud muudatusi %(count)s korda",
+        "one": "%(severalUsers)s ei teinud muudatusi"
+    },
+    "%(oneUser)smade no changes %(count)s times": {
+        "other": "%(oneUser)s ei teinud muutusi %(count)s korda",
+        "one": "%(oneUser)s ei teinud muudatusi"
+    },
     "Power level": "Õiguste tase",
     "Custom level": "Kohandatud õigused",
     "QR Code": "QR kood",
@@ -1345,7 +1415,9 @@
     "This address is available to use": "See aadress on kasutatav",
     "This address is already in use": "See aadress on juba kasutusel",
     "Sign in with single sign-on": "Logi sisse ühekordse sisselogimise abil",
-    "And %(count)s more...|other": "Ja %(count)s muud...",
+    "And %(count)s more...": {
+        "other": "Ja %(count)s muud..."
+    },
     "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Kui sul leidub lisateavet, mis võis selle vea analüüsimisel abiks olla, siis palun lisa need ka siia - näiteks mida sa vea tekkimise hetkel tegid, jututoa tunnus, kasutajate tunnused, jne.",
     "Send logs": "Saada logikirjed",
     "Unable to load commit detail: %(msg)s": "Ei õnnestu laadida sõnumi lisateavet: %(msg)s",
@@ -1498,11 +1570,15 @@
     "Your homeserver": "Sinu koduserver",
     "Trusted": "Usaldusväärne",
     "Not trusted": "Ei ole usaldusväärne",
-    "%(count)s verified sessions|other": "%(count)s verifitseeritud sessiooni",
-    "%(count)s verified sessions|one": "1 verifitseeritud sessioon",
+    "%(count)s verified sessions": {
+        "other": "%(count)s verifitseeritud sessiooni",
+        "one": "1 verifitseeritud sessioon"
+    },
     "Hide verified sessions": "Peida verifitseeritud sessioonid",
-    "%(count)s sessions|other": "%(count)s sessiooni",
-    "%(count)s sessions|one": "%(count)s sessioon",
+    "%(count)s sessions": {
+        "other": "%(count)s sessiooni",
+        "one": "%(count)s sessioon"
+    },
     "Hide sessions": "Peida sessioonid",
     "Verify by scanning": "Verifitseeri skaneerides",
     "Ask %(displayName)s to scan your code:": "Palu, et %(displayName)s skaneeriks sinu koodi:",
@@ -1650,7 +1726,9 @@
     "Move right": "Liigu paremale",
     "Move left": "Liigu vasakule",
     "Revoke permissions": "Tühista õigused",
-    "You can only pin up to %(count)s widgets|other": "Sa saad kinnitada kuni %(count)s vidinat",
+    "You can only pin up to %(count)s widgets": {
+        "other": "Sa saad kinnitada kuni %(count)s vidinat"
+    },
     "Show Widgets": "Näita vidinaid",
     "Hide Widgets": "Peida vidinad",
     "The call was answered on another device.": "Kõnele vastati teises seadmes.",
@@ -1938,8 +2016,10 @@
     "Takes the call in the current room off hold": "Võtab selles jututoas ootel oleva kõne",
     "Places the call in the current room on hold": "Jätab kõne selles jututoas ootele",
     "Go to Home View": "Avalehele",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(rooms)s jututoa andmete salvestamiseks kulub hetkel %(size)s.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(rooms)s jututoa andmete salvestamiseks kulub hetkel %(size)s.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
+        "one": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(rooms)s jututoa andmete salvestamiseks kulub hetkel %(size)s.",
+        "other": "Selleks, et sisu saaks otsingus kasutada, puhverda krüptitud sõnumid kohalikus seadmes turvaliselt. %(rooms)s jututoa andmete salvestamiseks kulub hetkel %(size)s."
+    },
     "This widget would like to:": "See vidin sooviks:",
     "Approve widget permissions": "Anna vidinale õigused",
     "Use Ctrl + Enter to send a message": "Sõnumi saatmiseks vajuta Ctrl + Enter",
@@ -2169,8 +2249,10 @@
     "Create a space": "Loo kogukonnakeskus",
     "Delete": "Kustuta",
     "Jump to the bottom of the timeline when you send a message": "Sõnumi saatmiseks hüppa ajajoone lõppu",
-    "%(count)s members|other": "%(count)s liiget",
-    "%(count)s members|one": "%(count)s liige",
+    "%(count)s members": {
+        "other": "%(count)s liiget",
+        "one": "%(count)s liige"
+    },
     "Add some details to help people recognise it.": "Tegemaks teiste jaoks äratundmise lihtsamaks, palun lisa natuke teavet.",
     "You can change these anytime.": "Sa võid neid alati muuta.",
     "Invite with email or username": "Kutsu e-posti aadressi või kasutajanime alusel",
@@ -2178,8 +2260,10 @@
     "Invite to %(roomName)s": "Kutsu jututuppa %(roomName)s",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "See tavaliselt mõjutab vaid viisi, kuidas server jututuba teenindab. Kui sul tekib %(brand)s kasutamisel vigu, siis palun anna sellest meile teada.",
     "You don't have permission": "Sul puuduvad selleks õigused",
-    "%(count)s rooms|other": "%(count)s jututuba",
-    "%(count)s rooms|one": "%(count)s jututuba",
+    "%(count)s rooms": {
+        "other": "%(count)s jututuba",
+        "one": "%(count)s jututuba"
+    },
     "This room is suggested as a good one to join": "Teised kasutajad soovitavad liitumist selle jututoaga",
     "Suggested": "Soovitatud",
     "Your server does not support showing space hierarchies.": "Sinu koduserver ei võimalda kuvada kogukonnakeskuste hierarhiat.",
@@ -2220,7 +2304,10 @@
     "%(deviceId)s from %(ip)s": "%(deviceId)s ip-aadressil %(ip)s",
     "Review to ensure your account is safe": "Tagamaks, et su konto on sinu kontrolli all, vaata andmed üle",
     "Add existing rooms": "Lisa olemasolevaid jututubasid",
-    "%(count)s people you know have already joined|other": "%(count)s sulle tuttavat kasutajat on juba liitunud",
+    "%(count)s people you know have already joined": {
+        "other": "%(count)s sulle tuttavat kasutajat on juba liitunud",
+        "one": "%(count)s sulle tuttav kasutaja on juba liitunud"
+    },
     "We couldn't create your DM.": "Otsesuhtluse loomine ei õnnestunud.",
     "Invited people will be able to read old messages.": "Kutse saanud kasutajad saavad lugeda vanu sõnumeid.",
     "Consult first": "Pea esmalt nõu",
@@ -2229,7 +2316,6 @@
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Suhtlen teise osapoolega %(transferTarget)s. <a>Saadan andmeid kasutajale %(transferee)s</a>",
     "Avatar": "Tunnuspilt",
     "Verification requested": "Verifitseerimistaotlus on saadetud",
-    "%(count)s people you know have already joined|one": "%(count)s sulle tuttav kasutaja on juba liitunud",
     "You most likely do not want to reset your event index store": "Pigem sa siiski ei taha lähtestada sündmuste andmekogu ja selle indeksit",
     "You can add more later too, including already existing ones.": "Sa võid ka hiljem siia luua uusi jututubasid või lisada olemasolevaid.",
     "What are some things you want to discuss in %(spaceName)s?": "Mida sa sooviksid arutada %(spaceName)s kogukonnakeskuses?",
@@ -2252,8 +2338,10 @@
     "Delete all": "Kustuta kõik",
     "Some of your messages have not been sent": "Mõned sinu sõnumid on saatmata",
     "Including %(commaSeparatedMembers)s": "Sealhulgas %(commaSeparatedMembers)s",
-    "View all %(count)s members|one": "Vaata üht liiget",
-    "View all %(count)s members|other": "Vaata kõiki %(count)s liiget",
+    "View all %(count)s members": {
+        "one": "Vaata üht liiget",
+        "other": "Vaata kõiki %(count)s liiget"
+    },
     "Failed to send": "Saatmine ei õnnestunud",
     "Enter your Security Phrase a second time to confirm it.": "Kinnitamiseks palun sisesta turvafraas teist korda.",
     "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.": "Lisamiseks vali vestlusi ja jututubasid. Hetkel on see kogukonnakeskus vaid sinu jaoks ja esialgu keegi ei saa sellest teada. Teisi saad liituma kutsuda hiljem.",
@@ -2266,8 +2354,10 @@
     "Leave the beta": "Lõpeta beetaversiooni kasutamine",
     "Beta": "Beetaversioon",
     "Want to add a new room instead?": "Kas sa selle asemel soovid lisada jututuba?",
-    "Adding rooms... (%(progress)s out of %(count)s)|one": "Lisan jututuba...",
-    "Adding rooms... (%(progress)s out of %(count)s)|other": "Lisan jututubasid... (%(progress)s/%(count)s)",
+    "Adding rooms... (%(progress)s out of %(count)s)": {
+        "one": "Lisan jututuba...",
+        "other": "Lisan jututubasid... (%(progress)s/%(count)s)"
+    },
     "Not all selected were added": "Kõiki valituid me ei lisanud",
     "You are not allowed to view this server's rooms list": "Sul puuduvad õigused selle serveri jututubade loendi vaatamiseks",
     "Error processing voice message": "Viga häälsõnumi töötlemisel",
@@ -2290,8 +2380,10 @@
     "Go to my space": "Palun vaata minu kogukonnakeskust",
     "User Busy": "Kasutaja on hõivatud",
     "The user you called is busy.": "Kasutaja, kellele sa helistasid, on hõivatud.",
-    "Currently joining %(count)s rooms|other": "Parasjagu liitun %(count)s jututoaga",
-    "Currently joining %(count)s rooms|one": "Parasjagu liitun %(count)s jututoaga",
+    "Currently joining %(count)s rooms": {
+        "other": "Parasjagu liitun %(count)s jututoaga",
+        "one": "Parasjagu liitun %(count)s jututoaga"
+    },
     "Or send invite link": "Või saada kutse link",
     "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.": "Kui sul on vastavad õigused olemas, siis ava sõnumi juuresolev menüü ning püsisõnumi tekitamiseks vali <b>Klammerda</b>.",
     "Pinned messages": "Klammerdatud sõnumid",
@@ -2348,10 +2440,14 @@
     "Decide who can view and join %(spaceName)s.": "Otsusta kes saada näha ja liituda %(spaceName)s kogukonnaga.",
     "Show all rooms in Home": "Näita kõiki jututubasid avalehel",
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "Selleks et teised kasutajad saaks seda kogukonda leida oma koduserveri kaudu (%(localDomain)s) seadista talle aadressid",
-    "%(oneUser)schanged the server ACLs %(count)s times|one": "%(oneUser)s kasutaja muutis serveri pääsuloendit",
-    "%(oneUser)schanged the server ACLs %(count)s times|other": "%(oneUser)s kasutaja muutis serveri pääsuloendit %(count)s korda",
-    "%(severalUsers)schanged the server ACLs %(count)s times|other": "%(severalUsers)s kasutajat muutsid serveri pääsuloendit %(count)s korda",
-    "%(severalUsers)schanged the server ACLs %(count)s times|one": "%(severalUsers)s kasutajat muutsid serveri pääsuloendit",
+    "%(oneUser)schanged the server ACLs %(count)s times": {
+        "one": "%(oneUser)s kasutaja muutis serveri pääsuloendit",
+        "other": "%(oneUser)s kasutaja muutis serveri pääsuloendit %(count)s korda"
+    },
+    "%(severalUsers)schanged the server ACLs %(count)s times": {
+        "other": "%(severalUsers)s kasutajat muutsid serveri pääsuloendit %(count)s korda",
+        "one": "%(severalUsers)s kasutajat muutsid serveri pääsuloendit"
+    },
     "Message search initialisation failed, check <a>your settings</a> for more information": "Sõnumite otsingu ettevalmistamine ei õnnestunud, lisateavet leiad <a>rakenduse seadistustest</a>",
     "Report": "Teata sisust",
     "Collapse reply thread": "Ahenda vastuste jutulõnga",
@@ -2374,8 +2470,10 @@
     "Unnamed audio": "Nimetu helifail",
     "Code blocks": "Lähtekoodi lõigud",
     "Images, GIFs and videos": "Pildid, gif'id ja videod",
-    "Show %(count)s other previews|other": "Näita %(count)s muud eelvaadet",
-    "Show %(count)s other previews|one": "Näita veel %(count)s eelvaadet",
+    "Show %(count)s other previews": {
+        "other": "Näita %(count)s muud eelvaadet",
+        "one": "Näita veel %(count)s eelvaadet"
+    },
     "Error processing audio message": "Viga häälsõnumi töötlemisel",
     "Integration manager": "Lõiminguhaldur",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Sinu %(brand)s ei võimalda selle tegevuse jaoks kasutada lõiminguhaldurit. Palun küsi lisateavet serveri haldajalt.",
@@ -2487,7 +2585,10 @@
     "Results": "Tulemused",
     "Error downloading audio": "Helifaili allalaadimine ei õnnestunud",
     "These are likely ones other room admins are a part of.": "Ilmselt on tegemist nendega, mille liikmed on teiste jututubade haldajad.",
-    "& %(count)s more|other": "ja veel %(count)s",
+    "& %(count)s more": {
+        "other": "ja veel %(count)s",
+        "one": "ja veel %(count)s"
+    },
     "Add existing space": "Lisa olemasolev kogukonnakeskus",
     "Image": "Pilt",
     "Sticker": "Kleeps",
@@ -2496,7 +2597,10 @@
     "Connection failed": "Ühendus ebaõnnestus",
     "Could not connect media": "Meediaseadme ühendamine ei õnnestunud",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "Kõik kogukonnakeskuse liikmed saavad jututuba leida ja sellega liituda. <a>Muuda lubatud kogukonnakeskuste loendit.</a>",
-    "Currently, %(count)s spaces have access|other": "Hetkel on ligipääs %(count)s'l kogukonnakeskusel",
+    "Currently, %(count)s spaces have access": {
+        "other": "Hetkel on ligipääs %(count)s'l kogukonnakeskusel",
+        "one": "Hetkel sellel kogukonnal on ligipääs"
+    },
     "Upgrade required": "Vajalik on uuendus",
     "Anyone can find and join.": "Kõik saavad jututuba leida ja sellega liituda.",
     "Only invited people can join.": "Liitumine toimub vaid kutse alusel.",
@@ -2514,8 +2618,6 @@
     "Autoplay GIFs": "Esita automaatselt liikuvaid pilte",
     "The above, but in any room you are joined or invited to as well": "Ülaltoodu, aga samuti igas jututoas, millega oled liitunud või kuhu oled kutsutud",
     "The above, but in <Room /> as well": "Ülaltoodu, aga samuti <Room /> jututoas",
-    "Currently, %(count)s spaces have access|one": "Hetkel sellel kogukonnal on ligipääs",
-    "& %(count)s more|one": "ja veel %(count)s",
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s eemaldas siin jututoas klammerduse ühelt sõnumilt. Vaata kõiki klammerdatud sõnumeid.",
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s eemaldas siin jututoas klammerduse <a>ühelt sõnumilt</a>. Vaata kõiki <b>klammerdatud sõnumeid</b>.",
     "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.": "%(senderName)s klammerdas siin jututoas <a>ühe sõnumi</a>. Vaata kõiki <b>klammerdatud sõnumeid</b>.",
@@ -2589,10 +2691,14 @@
     "Really reset verification keys?": "Kas tõesti kustutame kõik verifitseerimisvõtmed?",
     "Create poll": "Loo selline küsitlus",
     "Space Autocomplete": "Kogukonnakeskuste dünaamiline otsing",
-    "Updating spaces... (%(progress)s out of %(count)s)|one": "Uuendan kogukonnakeskust...",
-    "Updating spaces... (%(progress)s out of %(count)s)|other": "Uuendan kogukonnakeskuseid... (%(progress)s / %(count)s)",
-    "Sending invites... (%(progress)s out of %(count)s)|one": "Saadan kutset...",
-    "Sending invites... (%(progress)s out of %(count)s)|other": "Saadan kutseid... (%(progress)s / %(count)s)",
+    "Updating spaces... (%(progress)s out of %(count)s)": {
+        "one": "Uuendan kogukonnakeskust...",
+        "other": "Uuendan kogukonnakeskuseid... (%(progress)s / %(count)s)"
+    },
+    "Sending invites... (%(progress)s out of %(count)s)": {
+        "one": "Saadan kutset...",
+        "other": "Saadan kutseid... (%(progress)s / %(count)s)"
+    },
     "Loading new room": "Laadin uut jututuba",
     "Upgrading room": "Uuendan jututoa versiooni",
     "Show:": "Näita:",
@@ -2610,8 +2716,10 @@
     "Disinvite from %(roomName)s": "Võta tagasi %(roomName)s jututoa kutse",
     "Threads": "Jutulõngad",
     "Downloading": "Laadin alla",
-    "%(count)s reply|one": "%(count)s vastus",
-    "%(count)s reply|other": "%(count)s vastust",
+    "%(count)s reply": {
+        "one": "%(count)s vastus",
+        "other": "%(count)s vastust"
+    },
     "View in room": "Vaata jututoas",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "Jätkamiseks sisesta oma turvafraas või <button>kasuta oma turvavõtit</button>.",
     "What projects are your team working on?": "Missuguste projektidega sinu tiim tegeleb?",
@@ -2644,12 +2752,18 @@
     "Rename": "Muuda nime",
     "Select all": "Vali kõik",
     "Deselect all": "Eemalda kõik valikud",
-    "Sign out devices|other": "Logi seadmed võrgust välja",
-    "Sign out devices|one": "Logi seade võrgust välja",
-    "Click the button below to confirm signing out these devices.|one": "Kinnitamaks selle seadme väljalogimine klõpsi järgnevat nuppu.",
-    "Click the button below to confirm signing out these devices.|other": "Kinnitamaks nende seadmete väljalogimine klõpsi järgnevat nuppu.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Kasutades ühekordse sisselogimisega oma isiku tõestamist kinnita selle seadme väljalogimine.",
-    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Kasutades ühekordse sisselogimisega oma isiku tõestamist kinnita nende seadmete väljalogimine.",
+    "Sign out devices": {
+        "other": "Logi seadmed võrgust välja",
+        "one": "Logi seade võrgust välja"
+    },
+    "Click the button below to confirm signing out these devices.": {
+        "one": "Kinnitamaks selle seadme väljalogimine klõpsi järgnevat nuppu.",
+        "other": "Kinnitamaks nende seadmete väljalogimine klõpsi järgnevat nuppu."
+    },
+    "Confirm logging out these devices by using Single Sign On to prove your identity.": {
+        "one": "Kasutades ühekordse sisselogimisega oma isiku tõestamist kinnita selle seadme väljalogimine.",
+        "other": "Kasutades ühekordse sisselogimisega oma isiku tõestamist kinnita nende seadmete väljalogimine."
+    },
     "Automatically send debug logs on any error": "Iga vea puhul saada silumislogid automaatselt arendajatele",
     "Use a more compact 'Modern' layout": "Kasuta kompaktsemat moodsat kasutajaliidest",
     "Add option": "Lisa valik",
@@ -2692,12 +2806,18 @@
     "Large": "Suur",
     "Image size in the timeline": "Ajajoone piltide suurus",
     "%(senderName)s has updated the room layout": "%(senderName)s on uuendanud jututoa välimust",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s ja veel %(count)s kogukond",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s ja muud %(count)s kogukonda",
-    "Based on %(count)s votes|one": "Aluseks on %(count)s hääl",
-    "Based on %(count)s votes|other": "Aluseks on %(count)s häält",
-    "%(count)s votes|one": "%(count)s hääl",
-    "%(count)s votes|other": "%(count)s häält",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s ja veel %(count)s kogukond",
+        "other": "%(spaceName)s ja muud %(count)s kogukonda"
+    },
+    "Based on %(count)s votes": {
+        "one": "Aluseks on %(count)s hääl",
+        "other": "Aluseks on %(count)s häält"
+    },
+    "%(count)s votes": {
+        "one": "%(count)s hääl",
+        "other": "%(count)s häält"
+    },
     "Sorry, the poll you tried to create was not posted.": "Vabandust, aga sinu loodud küsitlus jäi üleslaadimata.",
     "Failed to post poll": "Küsitluse üleslaadimine ei õnnestunud",
     "Sorry, your vote was not registered. Please try again.": "Vabandust, aga sinu valik jäi salvestamata. Palun proovi uuesti.",
@@ -2733,8 +2853,10 @@
     "We <Bold>don't</Bold> share information with third parties": "Meie <Bold>ei</Bold> jaga teavet kolmandate osapooltega",
     "We <Bold>don't</Bold> record or profile any account data": "Meie <Bold>ei</Bold> salvesta ega profileeri sinu kasutajakonto andmeid",
     "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "Meie kasutustingimused leiad <PrivacyPolicyUrl>siit</PrivacyPolicyUrl>",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s hääl antud. Tulemuste nägemiseks tee oma valik",
-    "%(count)s votes cast. Vote to see the results|other": "%(count)s häält antud. Tulemuste nägemiseks tee oma valik",
+    "%(count)s votes cast. Vote to see the results": {
+        "one": "%(count)s hääl antud. Tulemuste nägemiseks tee oma valik",
+        "other": "%(count)s häält antud. Tulemuste nägemiseks tee oma valik"
+    },
     "No votes cast": "Hääletanuid ei ole",
     "Chat": "Vestle",
     "Share location": "Jaga asukohta",
@@ -2747,8 +2869,10 @@
     "Failed to end poll": "Küsitluse lõpetamine ei õnnestunud",
     "The poll has ended. Top answer: %(topAnswer)s": "Küsitlus on läbi. Populaarseim vastus: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Küsitlus on läbi. Ühtegi osalejate ei ole.",
-    "Final result based on %(count)s votes|one": "%(count)s'l häälel põhinev lõpptulemus",
-    "Final result based on %(count)s votes|other": "%(count)s'l häälel põhinev lõpptulemus",
+    "Final result based on %(count)s votes": {
+        "one": "%(count)s'l häälel põhinev lõpptulemus",
+        "other": "%(count)s'l häälel põhinev lõpptulemus"
+    },
     "Recent searches": "Hiljutised otsingud",
     "To search messages, look for this icon at the top of a room <icon/>": "Sõnumite otsimiseks klõpsi <icon/> ikooni jututoa ülaosas",
     "Other searches": "Muud otsingud",
@@ -2760,17 +2884,25 @@
     "Including you, %(commaSeparatedMembers)s": "Seahulgas Sina, %(commaSeparatedMembers)s",
     "Copy room link": "Kopeeri jututoa link",
     "Processing event %(number)s out of %(total)s": "Sündmuste töötlemine %(number)s / %(total)s",
-    "Fetched %(count)s events so far|one": "%(count)s sündmust laaditud",
-    "Fetched %(count)s events so far|other": "%(count)s sündmust laaditud",
-    "Fetched %(count)s events out of %(total)s|one": "Laadisin %(count)s / %(total)s sündmust",
-    "Fetched %(count)s events out of %(total)s|other": "Laadisin %(count)s / %(total)s sündmust",
+    "Fetched %(count)s events so far": {
+        "one": "%(count)s sündmust laaditud",
+        "other": "%(count)s sündmust laaditud"
+    },
+    "Fetched %(count)s events out of %(total)s": {
+        "one": "Laadisin %(count)s / %(total)s sündmust",
+        "other": "Laadisin %(count)s / %(total)s sündmust"
+    },
     "Generating a ZIP": "Pakin ZIP faili",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Me ei suutnud sellist kuupäeva mõista (%(inputDate)s). Pigem kasuta aaaa-kk-pp vormingut.",
-    "Exported %(count)s events in %(seconds)s seconds|one": "Eksporditud %(count)s sündmus %(seconds)s sekundiga",
-    "Exported %(count)s events in %(seconds)s seconds|other": "Eksporditud %(count)s sündmust %(seconds)s sekundiga",
+    "Exported %(count)s events in %(seconds)s seconds": {
+        "one": "Eksporditud %(count)s sündmus %(seconds)s sekundiga",
+        "other": "Eksporditud %(count)s sündmust %(seconds)s sekundiga"
+    },
     "Export successful!": "Eksport õnnestus!",
-    "Fetched %(count)s events in %(seconds)ss|one": "%(count)s sündmus laaditud %(seconds)s sekundiga",
-    "Fetched %(count)s events in %(seconds)ss|other": "%(count)s sündmust laaditud %(seconds)s sekundiga",
+    "Fetched %(count)s events in %(seconds)ss": {
+        "one": "%(count)s sündmus laaditud %(seconds)s sekundiga",
+        "other": "%(count)s sündmust laaditud %(seconds)s sekundiga"
+    },
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Sellega rühmitad selle kogukonna liikmetega peetavaid vestlusi. Kui seadistus pole kasutusel, siis on neid vestlusi %(spaceName)s kogukonna vaates ei kuvata.",
     "Sections to show": "Näidatavad valikud",
     "Failed to load list of rooms.": "Jututubade loendi laadimine ei õnnestunud.",
@@ -2817,10 +2949,14 @@
     "Failed to fetch your location. Please try again later.": "Asukoha tuvastamine ei õnnestunud. Palun proovi hiljem uuesti.",
     "Could not fetch location": "Asukoha tuvastamine ei õnnestunud",
     "Automatically send debug logs on decryption errors": "Dekrüptimisvigade puhul saada silumislogid automaatselt arendajatele",
-    "was removed %(count)s times|one": "eemaldati",
-    "was removed %(count)s times|other": "eemaldati %(count)s korda",
-    "were removed %(count)s times|one": "eemaldati",
-    "were removed %(count)s times|other": "eemaldati %(count)s korda",
+    "was removed %(count)s times": {
+        "one": "eemaldati",
+        "other": "eemaldati %(count)s korda"
+    },
+    "were removed %(count)s times": {
+        "one": "eemaldati",
+        "other": "eemaldati %(count)s korda"
+    },
     "Remove from room": "Eemalda jututoast",
     "Failed to remove user": "Kasutaja eemaldamine ebaõnnestus",
     "Remove them from specific things I'm able to": "Eemalda kasutaja valitud kohtadest, kust ma saan",
@@ -2897,18 +3033,28 @@
     "Feedback sent! Thanks, we appreciate it!": "Tagasiside on saadetud. Täname, sellest on loodetavasti kasu!",
     "Thank you for trying the beta, please go into as much detail as you can so we can improve it.": "Täname, et liitusid testprogrammiga. Et me saaksime võimalikult asjakohaseid täiendusi teha, palun jaga nii detailset teavet kui võimalik.",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s ja %(space2Name)s",
-    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)s saatis ühe peidetud sõnumi",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s saatis %(count)s peidetud sõnumit",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)s saatsid ühe peidetud sõnumi",
-    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)s saatsid %(count)s peidetud sõnumit",
-    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)s kustutas sõnumi",
-    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)s kustutas %(count)s sõnumit",
-    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)s kustutas sõnumi",
-    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)s kustutasid %(count)s sõnumit",
+    "%(oneUser)ssent %(count)s hidden messages": {
+        "one": "%(oneUser)s saatis ühe peidetud sõnumi",
+        "other": "%(oneUser)s saatis %(count)s peidetud sõnumit"
+    },
+    "%(severalUsers)ssent %(count)s hidden messages": {
+        "one": "%(severalUsers)s saatsid ühe peidetud sõnumi",
+        "other": "%(severalUsers)s saatsid %(count)s peidetud sõnumit"
+    },
+    "%(oneUser)sremoved a message %(count)s times": {
+        "one": "%(oneUser)s kustutas sõnumi",
+        "other": "%(oneUser)s kustutas %(count)s sõnumit"
+    },
+    "%(severalUsers)sremoved a message %(count)s times": {
+        "one": "%(severalUsers)s kustutas sõnumi",
+        "other": "%(severalUsers)s kustutasid %(count)s sõnumit"
+    },
     "Maximise": "Suurenda maksimaalseks",
     "Automatically send debug logs when key backup is not functioning": "Kui krüptovõtmete varundus ei toimi, siis automaatselt saada silumislogid arendajatele",
-    "<%(count)s spaces>|other": "<%(count)s kogukonda>",
-    "<%(count)s spaces>|one": "<kogukond>",
+    "<%(count)s spaces>": {
+        "other": "<%(count)s kogukonda>",
+        "one": "<kogukond>"
+    },
     "Can't edit poll": "Küsimustikku ei saa muuta",
     "Sorry, you can't edit a poll after votes have been cast.": "Vabandust, aga küsimustikku ei saa enam peale hääletamise lõppu muuta.",
     "Edit poll": "Muuda küsitlust",
@@ -2927,10 +3073,14 @@
     "Switch to space by number": "Vaata kogukonnakeskust tema numbri alusel",
     "Accessibility": "Ligipääsetavus",
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Vasta jätkuvas jutulõngas või uue jutulõnga loomiseks kasuta „%(replyInThread)s“ valikut, mida kuvatakse hiire liigutamisel sõnumi kohal.",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(oneUser)s muutis selle jututoa <a>klammerdatud sõnumeid</a>",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)s muutis jututoa <a>klammerdatud sõnumeid</a> %(count)s korda",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)s muutsid selle jututoa <a>klammerdatud sõnumeid</a>",
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)s muutsid jututoa <a>klammerdatud sõnumeid</a> %(count)s korda",
+    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(oneUser)s muutis selle jututoa <a>klammerdatud sõnumeid</a>",
+        "other": "%(oneUser)s muutis jututoa <a>klammerdatud sõnumeid</a> %(count)s korda"
+    },
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
+        "one": "%(severalUsers)s muutsid selle jututoa <a>klammerdatud sõnumeid</a>",
+        "other": "%(severalUsers)s muutsid jututoa <a>klammerdatud sõnumeid</a> %(count)s korda"
+    },
     "What location type do you want to share?": "Missugust asukohta sa soovid jagada?",
     "Drop a Pin": "Märgi nööpnõelaga",
     "My live location": "Minu asukoht reaalajas",
@@ -2962,10 +3112,14 @@
     "Toggle Link": "Lülita link sisse/välja",
     "You are sharing your live location": "Sa jagad oma asukohta reaalajas",
     "%(displayName)s's live location": "%(displayName)s asukoht reaalajas",
-    "Currently removing messages in %(count)s rooms|other": "Kustutame sõnumeid %(count)s jututoas",
-    "Currently removing messages in %(count)s rooms|one": "Kustutame sõnumeid %(count)s jututoas",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "Sa oled kustutamas %(count)s sõnumit kasutajalt %(user)s. Sellega kustutatakse nad püsivalt ka kõikidelt vestluses osalejatelt. Kas sa soovid jätkata?",
-    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|one": "Sa oled kustutamas %(count)s sõnumi kasutajalt %(user)s. Sellega kustutatakse ta püsivalt ka kõikidelt vestluses osalejatelt. Kas sa soovid jätkata?",
+    "Currently removing messages in %(count)s rooms": {
+        "other": "Kustutame sõnumeid %(count)s jututoas",
+        "one": "Kustutame sõnumeid %(count)s jututoas"
+    },
+    "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
+        "other": "Sa oled kustutamas %(count)s sõnumit kasutajalt %(user)s. Sellega kustutatakse nad püsivalt ka kõikidelt vestluses osalejatelt. Kas sa soovid jätkata?",
+        "one": "Sa oled kustutamas %(count)s sõnumi kasutajalt %(user)s. Sellega kustutatakse ta püsivalt ka kõikidelt vestluses osalejatelt. Kas sa soovid jätkata?"
+    },
     "Preserve system messages": "Näita süsteemseid teateid",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Kui sa samuti soovid mitte kuvada selle kasutajaga seotud süsteemseid teateid (näiteks liikmelisuse muutused, profiili muutused, jne), siis eemalda see valik",
     "Share for %(duration)s": "Jaga nii kaua - %(duration)s",
@@ -3056,8 +3210,10 @@
     "Create room": "Loo jututuba",
     "Create video room": "Loo videotuba",
     "Create a video room": "Loo uus videotuba",
-    "%(count)s participants|one": "1 osaleja",
-    "%(count)s participants|other": "%(count)s oselejat",
+    "%(count)s participants": {
+        "one": "1 osaleja",
+        "other": "%(count)s oselejat"
+    },
     "New video room": "Uus videotuba",
     "New room": "Uus jututuba",
     "Threads help keep your conversations on-topic and easy to track.": "Jutulõngad aitavad hoida vestlused teemakohastena ning mugavalt loetavatena.",
@@ -3066,8 +3222,10 @@
     "Sends the given message with hearts": "Lisab sellele sõnumile südamed",
     "Live location ended": "Reaalajas asukoha jagamine on lõppenud",
     "View live location": "Vaata asukohta reaalajas",
-    "Confirm signing out these devices|one": "Kinnita selle seadme väljalogimine",
-    "Confirm signing out these devices|other": "Kinnita nende seadmete väljalogimine",
+    "Confirm signing out these devices": {
+        "one": "Kinnita selle seadme väljalogimine",
+        "other": "Kinnita nende seadmete väljalogimine"
+    },
     "Live location enabled": "Reaalajas asukoha jagamine on kasutusel",
     "Live location error": "Viga asukoha jagamisel reaalajas",
     "Live until %(expiryTime)s": "Kuvamine toimib kuni %(expiryTime)s",
@@ -3102,8 +3260,10 @@
     "Hide my messages from new joiners": "Peida minu sõnumid uute liitujate eest",
     "Your old messages will still be visible to people who received them, just like emails you sent in the past. Would you like to hide your sent messages from people who join rooms in the future?": "Nii nagu e-posti puhul, on sinu vanad sõnumid on jätkuvalt loetavad nendele kasutajate, kes nad saanud on. Kas sa soovid peita oma sõnumid nende kasutaja eest, kes jututubadega hiljem liituvad?",
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Sa oled kõikidest seadmetest välja logitud ning enam ei saa tõuketeavitusi. Nende taaskuvamiseks logi sisse igas oma soovitud seadmetes.",
-    "Seen by %(count)s people|one": "Seda nägi %(count)s lugeja",
-    "Seen by %(count)s people|other": "Seda nägid %(count)s lugejat",
+    "Seen by %(count)s people": {
+        "one": "Seda nägi %(count)s lugeja",
+        "other": "Seda nägid %(count)s lugejat"
+    },
     "Your password was successfully changed.": "Sinu salasõna muutmine õnnestus.",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "Kui sa soovid ligipääsu varasematele krüptitud vestlustele, palun seadista võtmete varundus või enne jätkamist ekspordi mõnest seadmest krüptovõtmed.",
     "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "Kõikide sinu seadmete võrgust välja logimine kustutab ka nendes salvestatud krüptovõtmed ja sellega muutuvad ka krüptitud vestlused loetamatuteks.",
@@ -3134,8 +3294,10 @@
     "Click to read topic": "Teema lugemiseks klõpsi",
     "Edit topic": "Muuda teemat",
     "Joining…": "Liitun…",
-    "%(count)s people joined|other": "%(count)s osalejat liitus",
-    "%(count)s people joined|one": "%(count)s osaleja liitus",
+    "%(count)s people joined": {
+        "other": "%(count)s osalejat liitus",
+        "one": "%(count)s osaleja liitus"
+    },
     "Check if you want to hide all current and future messages from this user.": "Selle valikuga peidad kõik antud kasutaja praegused ja tulevased sõnumid.",
     "Ignore user": "Eira kasutajat",
     "View related event": "Vaata seotud sündmust",
@@ -3169,8 +3331,10 @@
     "If you can't see who you're looking for, send them your invite link.": "Kui sa ei leia otsitavaid, siis saada neile kutse.",
     "Some results may be hidden for privacy": "Mõned tulemused võivad privaatsusseadistuste tõttu olla peidetud",
     "Search for": "Otsingusõna",
-    "%(count)s Members|one": "%(count)s liige",
-    "%(count)s Members|other": "%(count)s liiget",
+    "%(count)s Members": {
+        "one": "%(count)s liige",
+        "other": "%(count)s liiget"
+    },
     "Show: Matrix rooms": "Näita: Matrix'i jututoad",
     "Show: %(instance)s rooms (%(server)s)": "Näita: %(instance)s jututuba %(server)s serveris",
     "Add new server…": "Lisa uus server…",
@@ -3187,9 +3351,11 @@
     "Find my location": "Leia minu asukoht",
     "Exit fullscreen": "Lülita täisekraanivaade välja",
     "Enter fullscreen": "Lülita täisekraanivaade sisse",
-    "In %(spaceName)s and %(count)s other spaces.|one": "Kogukonnas %(spaceName)s ja veel %(count)s's kogukonnas.",
+    "In %(spaceName)s and %(count)s other spaces.": {
+        "one": "Kogukonnas %(spaceName)s ja veel %(count)s's kogukonnas.",
+        "other": "Kogukonnas %(spaceName)s ja %(count)s's muus kogukonnas."
+    },
     "In %(spaceName)s.": "Kogukonnas %(spaceName)s.",
-    "In %(spaceName)s and %(count)s other spaces.|other": "Kogukonnas %(spaceName)s ja %(count)s's muus kogukonnas.",
     "In spaces %(space1Name)s and %(space2Name)s.": "Kogukondades %(space1Name)s ja %(space2Name)s.",
     "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Arendaja toiming: Lõpetab kehtiva väljuva rühmasessiooni ja seadistab uue Olm sessiooni",
     "Stop and close": "Peata ja sulge",
@@ -3218,8 +3384,10 @@
     "Complete these to get the most out of %(brand)s": "Kasutamaks kõiki %(brand)s'i võimalusi tee läbi alljärgnev",
     "You're in": "Kõik on tehtud",
     "You did it!": "Valmis!",
-    "Only %(count)s steps to go|one": "Ainult %(count)s samm veel",
-    "Only %(count)s steps to go|other": "Ainult %(count)s sammu veel",
+    "Only %(count)s steps to go": {
+        "one": "Ainult %(count)s samm veel",
+        "other": "Ainult %(count)s sammu veel"
+    },
     "Enable notifications": "Võta teavitused kasutusele",
     "Don’t miss a reply or important message": "Ära jäta vahele vastuseid ega olulisi sõnumeid",
     "Turn on notifications": "Lülita seadistused välja",
@@ -3285,11 +3453,15 @@
     "For best security, sign out from any session that you don't recognize or use anymore.": "Parima turvalisuse nimel logi välja neist sessioonidest, mida sa enam ei kasuta või ei tunne ära.",
     "Verified sessions": "Verifitseeritud sessioonid",
     "Empty room (was %(oldName)s)": "Tühi jututuba (varasema nimega %(oldName)s)",
-    "Inviting %(user)s and %(count)s others|one": "Saadame kutset kasutajale %(user)s ning veel ühele muule kasutajale",
-    "Inviting %(user)s and %(count)s others|other": "Saadame kutset kasutajale %(user)s ja veel %(count)s'le muule kasutajale",
+    "Inviting %(user)s and %(count)s others": {
+        "one": "Saadame kutset kasutajale %(user)s ning veel ühele muule kasutajale",
+        "other": "Saadame kutset kasutajale %(user)s ja veel %(count)s'le muule kasutajale"
+    },
     "Inviting %(user1)s and %(user2)s": "Saadame kutset kasutajatele %(user1)s ja %(user2)s",
-    "%(user)s and %(count)s others|one": "%(user)s ja veel 1 kasutaja",
-    "%(user)s and %(count)s others|other": "%(user)s ja veel %(count)s kasutajat",
+    "%(user)s and %(count)s others": {
+        "one": "%(user)s ja veel 1 kasutaja",
+        "other": "%(user)s ja veel %(count)s kasutajat"
+    },
     "%(user1)s and %(user2)s": "%(user1)s ja %(user2)s",
     "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Me ei soovita avalikes jututubades krüptimise kasutamist.</b> Kuna kõik huvilised saavad vabalt leida avalikke jututube ning nendega liituda, siis saavad nad niikuinii ka neis leiduvaid sõnumeid lugeda. Olemuselt puuduvad sellises olukorras krüptimise eelised ning sa ei saa hiljem krüptimist välja lülitada. Avalike jututubade sõnumite krüptimine teeb ka sõnumite saatmise ja vastuvõtmise aeglasemaks.",
     "Toggle attribution": "Lülita omistamine sisse või välja",
@@ -3392,8 +3564,10 @@
     "You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.": "Sa juba salvestad ringhäälingukõnet. Uue alustamiseks palun lõpeta eelmine salvestus.",
     "Can't start a new voice broadcast": "Uue ringhäälingukõne alustamine pole võimalik",
     "play voice broadcast": "esita ringhäälingukõnet",
-    "Are you sure you want to sign out of %(count)s sessions?|one": "Kas sa oled kindel et soovid %(count)s sessiooni võrgust välja logida?",
-    "Are you sure you want to sign out of %(count)s sessions?|other": "Kas sa oled kindel et soovid %(count)s sessiooni võrgust välja logida?",
+    "Are you sure you want to sign out of %(count)s sessions?": {
+        "one": "Kas sa oled kindel et soovid %(count)s sessiooni võrgust välja logida?",
+        "other": "Kas sa oled kindel et soovid %(count)s sessiooni võrgust välja logida?"
+    },
     "This provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.": "Muu hulgas selle alusel saavad nad olla kindlad, et nad tõesti suhtlevad sinuga, kuid samas nad näevad nimesid, mida sa siia sisestad.",
     "Other users in direct messages and rooms that you join are able to view a full list of your sessions.": "Nii otsesuhtluse osapooled kui jututubades osalejad näevad sinu kõikide sessioonide loendit.",
     "Renaming sessions": "Sessioonide nimede muutmine",
@@ -3489,8 +3663,10 @@
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "Kuna sa hetkel salvestad ringhäälingukõnet, siis tavakõne algatamine ei õnnestu. Kõne alustamiseks palun lõpeta ringhäälingukõne.",
     "Can’t start a call": "Kõne algatamine ei õnnestu",
     "Improve your account security by following these recommendations.": "Kui järgid neid soovitusi, siis sa parandad oma kasutajakonto turvalisust.",
-    "%(count)s sessions selected|one": "%(count)s sessioon valitud",
-    "%(count)s sessions selected|other": "%(count)s sessiooni valitud",
+    "%(count)s sessions selected": {
+        "one": "%(count)s sessioon valitud",
+        "other": "%(count)s sessiooni valitud"
+    },
     "Failed to read events": "Päringu või sündmuse lugemine ei õnnestunud",
     "Failed to send event": "Päringu või sündmuse saatmine ei õnnestunud",
     " in <strong>%(room)s</strong>": " <strong>%(room)s</strong> jututoas",
@@ -3501,8 +3677,10 @@
     "Create a link": "Tee link",
     "Force 15s voice broadcast chunk length": "Kasuta ringhäälingusõnumi puhul 15-sekundilist blokipikkust",
     "Link": "Link",
-    "Sign out of %(count)s sessions|one": "Logi %(count)s'st sessioonist välja",
-    "Sign out of %(count)s sessions|other": "Logi %(count)s'st sessioonist välja",
+    "Sign out of %(count)s sessions": {
+        "one": "Logi %(count)s'st sessioonist välja",
+        "other": "Logi %(count)s'st sessioonist välja"
+    },
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Logi kõikidest ülejäänud sessioonidest välja: %(otherSessionsCount)s sessioon(i)",
     "Yes, end my recording": "Jah, lõpeta salvestamine",
     "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "Kui hakkad kuulama seda ringhäälingukõnet, siis hetkel toimuv ringhäälingukõne salvestamine lõppeb.",
@@ -3608,7 +3786,9 @@
     "Show NSFW content": "Näita töökeskkonnas mittesobilikku sisu",
     "Notification state is <strong>%(notificationState)s</strong>": "Teavituste olek: <strong>%(notificationState)s</strong>",
     "Room unread status: <strong>%(status)s</strong>": "Lugemata sõnumite olek jututoas: <strong>%(status)s</strong>",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Lugemata sõnumite olek jututoas: <strong>%(status)s</strong>, kokku: <strong>%(count)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>": {
+        "other": "Lugemata sõnumite olek jututoas: <strong>%(status)s</strong>, kokku: <strong>%(count)s</strong>"
+    },
     "Ended a poll": "Lõpetas küsitluse",
     "Identity server is <code>%(identityServerUrl)s</code>": "Isikutuvastusserveri aadress <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Koduserveri aadress <code>%(homeserverUrl)s</code>",
@@ -3623,10 +3803,14 @@
     "Active polls": "Käimasolevad küsitlused",
     "View poll in timeline": "Näita küsitlust ajajoonel",
     "View poll": "Vaata küsitlust",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Tänasest ja eilsest pole ühtegi toimunud küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
-    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Möödunud %(count)s päeva jooksul polnud ühtegi toimumas olnud küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Tänasest ja eilsest pole ühtegi käimas küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
-    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Möödunud %(count)s päeva jooksul polnud ühtegi küsitlust. Varasemate päevade vaatamiseks laadi veel küsitlusi",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Tänasest ja eilsest pole ühtegi toimunud küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
+        "other": "Möödunud %(count)s päeva jooksul polnud ühtegi toimumas olnud küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi"
+    },
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months": {
+        "one": "Tänasest ja eilsest pole ühtegi käimas küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
+        "other": "Möödunud %(count)s päeva jooksul polnud ühtegi küsitlust. Varasemate päevade vaatamiseks laadi veel küsitlusi"
+    },
     "There are no past polls. Load more polls to view polls for previous months": "Pole ühtegi hiljutist küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
     "There are no active polls. Load more polls to view polls for previous months": "Pole ühtegi käimas küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
     "Verify Session": "Verifitseeri sessioon",
@@ -3748,7 +3932,10 @@
     "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "Sõnumid siin vestluses on läbivalt krüptitud. Klõpsides tunnuspilti saad verifitseerida kasutaja %(displayName)s.",
     "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Sõnumid siin jututoas on läbivalt krüptitud. Kui uued kasutajad liituvad, siis klõpsides nende tunnuspilti saad neid verifitseerida.",
     "Your profile picture URL": "Sinu tunnuspildi URL",
-    "%(severalUsers)schanged their profile picture %(count)s times|other": "Mitu kasutajat %(severalUsers)s muutsid oma tunnuspilti %(count)s korda",
+    "%(severalUsers)schanged their profile picture %(count)s times": {
+        "other": "Mitu kasutajat %(severalUsers)s muutsid oma tunnuspilti %(count)s korda",
+        "one": "%(severalUsers)s kasutajat muutsid oma profiilipilti"
+    },
     "Anyone can request to join, but admins or moderators need to grant access. You can change this later.": "Kõik võivad liituda, kuid jututoa haldur või moderaator peab eelnevalt ligipääsu kinnitama. Sa saad seda hiljem muuta.",
     "Thread Root ID: %(threadRootId)s": "Jutulõnga esimese kirje tunnus: %(threadRootId)s",
     "Upgrade room": "Uuenda jututoa versiooni",
@@ -3759,7 +3946,10 @@
     "Quick Actions": "Kiirtoimingud",
     "Mark all messages as read": "Märgi kõik sõnumid loetuks",
     "Reset to default settings": "Lähtesta kõik seadistused",
-    "%(oneUser)schanged their profile picture %(count)s times|other": "Kasutaja %(oneUser)s muutis oma tunnuspilti %(count)s korda",
+    "%(oneUser)schanged their profile picture %(count)s times": {
+        "other": "Kasutaja %(oneUser)s muutis oma tunnuspilti %(count)s korda",
+        "one": "%(oneUser)s muutis oma profiilipilti"
+    },
     "User read up to (m.read.private): ": "Kasutaja luges kuni sõnumini (m.read.private): ",
     "See history": "Vaata ajalugu",
     "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a unique passphrase below, which will only be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": "Kes iganes saab kätte selle ekspordifaili, saab ka lugeda sinu krüptitud sõnumeid, seega ole hoolikas selle faili talletamisel. Andmaks lisakihi turvalisust, peaksid sa alljärgnevalt sisestama unikaalse paroolifraasi, millega krüptitakse eksporditavad andmed. Faili hilisem importimine õnnestub vaid sama paroolifraasi sisestamisel.",
@@ -3776,8 +3966,6 @@
     "Cancel request": "Tühista liitumissoov",
     "Your request to join is pending.": "Sinu liitumissoov on ootel.",
     "Request to join sent": "Ligipääsu päring on saadetud",
-    "%(severalUsers)schanged their profile picture %(count)s times|one": "%(severalUsers)s kasutajat muutsid oma profiilipilti",
-    "%(oneUser)schanged their profile picture %(count)s times|one": "%(oneUser)s muutis oma profiilipilti",
     "Failed to query public rooms": "Avalike jututubade tuvastamise päring ei õnnestunud",
     "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.": "See server kasutab Matrixi vanemat versiooni. Selleks, et %(brand)s'i kasutamisel vigu ei tekiks palun uuenda serverit nii, et kasutusel oleks Matrixi %(version)s.",
     "Your server is unsupported": "Sinu server ei ole toetatud",

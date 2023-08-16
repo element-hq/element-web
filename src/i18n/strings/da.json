@@ -237,8 +237,10 @@
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s widget tilføjet af %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s fjernet af %(senderName)s",
     "%(displayName)s is typing …": "%(displayName)s skriver …",
-    "%(names)s and %(count)s others are typing …|other": "%(names)s og %(count)s andre skriver …",
-    "%(names)s and %(count)s others are typing …|one": "%(names)s og en anden skriver …",
+    "%(names)s and %(count)s others are typing …": {
+        "other": "%(names)s og %(count)s andre skriver …",
+        "one": "%(names)s og en anden skriver …"
+    },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s og %(lastPerson)s skriver …",
     "Cannot reach homeserver": "Homeserveren kan ikke kontaktes",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Vær sikker at du har en stabil internetforbindelse, eller kontakt serveradministratoren",
@@ -253,8 +255,10 @@
     "Unexpected error resolving identity server configuration": "Uventet fejl ved indlæsning af identitetsserver-konfigurationen",
     "This homeserver has hit its Monthly Active User limit.": "Denne homeserver har nået sin begrænsning for antallet af aktive brugere per måned.",
     "This homeserver has exceeded one of its resource limits.": "Denne homeserver har overskredet en af dens ressourcegrænser.",
-    "%(items)s and %(count)s others|other": "%(items)s og %(count)s andre",
-    "%(items)s and %(count)s others|one": "%(items)s og en anden",
+    "%(items)s and %(count)s others": {
+        "other": "%(items)s og %(count)s andre",
+        "one": "%(items)s og en anden"
+    },
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "Your browser does not support the required cryptography extensions": "Din browser understøtter ikke de påkrævede kryptografiske udvidelser",
     "Not a valid %(brand)s keyfile": "Ikke en gyldig %(brand)s nøglefil",
@@ -333,10 +337,14 @@
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Underskriftsnøglen du supplerede matcher den underskriftsnøgle du modtog fra %(userId)s's session %(deviceId)s. Sessionen er markeret som verificeret.",
     "Displays information about a user": "Viser information om en bruger",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s ændrede rumnavnet fra %(oldRoomName)s til %(newRoomName)s.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s tilføjede de alternative adresser %(addresses)s til dette rum.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s tilføjede alternative adresser %(addresses)s til dette rum.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s fjernede de alternative adresser %(addresses)s til dette rum.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s fjernede alternative adresser %(addresses)s til dette rum.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s tilføjede de alternative adresser %(addresses)s til dette rum.",
+        "one": "%(senderName)s tilføjede alternative adresser %(addresses)s til dette rum."
+    },
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
+        "other": "%(senderName)s fjernede de alternative adresser %(addresses)s til dette rum.",
+        "one": "%(senderName)s fjernede alternative adresser %(addresses)s til dette rum."
+    },
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s ændrede de alternative adresser til dette rum.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ændrede hoved- og alternative adresser til dette rum.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s ændrede adresserne til dette rum.",
@@ -476,8 +484,10 @@
     "Effects": "Effekter",
     "Go Back": "Gå tilbage",
     "Are you sure you want to cancel entering passphrase?": "Er du sikker på, at du vil annullere indtastning af adgangssætning?",
-    "%(spaceName)s and %(count)s others|one": "%(spaceName)s og %(count)s andre",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s og %(count)s andre",
+    "%(spaceName)s and %(count)s others": {
+        "one": "%(spaceName)s og %(count)s andre",
+        "other": "%(spaceName)s og %(count)s andre"
+    },
     "Some invites couldn't be sent": "Nogle invitationer kunne ikke blive sendt",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Vi har sendt til de andre, men nedenstående mennesker kunne ikke blive inviteret til <RoomName/>",
     "Zimbabwe": "Zimbabwe",
