@@ -28,6 +28,7 @@ import {
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
 import EventEmitter from "events";
+import { setupJestCanvasMock } from "jest-canvas-mock";
 
 import type { MatrixClient, MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
@@ -73,6 +74,10 @@ describe("LegacyRoomHeader", () => {
     let carol: RoomMember;
 
     beforeEach(async () => {
+        // some of our tests rely on the jest canvas mock, and `afterEach` will have reset the mock, so we need to
+        // restore it.
+        setupJestCanvasMock();
+
         mockPlatformPeg({ supportsJitsiScreensharing: () => true });
 
         stubClient();

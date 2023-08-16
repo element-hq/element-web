@@ -28,7 +28,7 @@ describe("<SidebarUserSettingsTab />", () => {
     beforeEach(() => {
         jest.spyOn(PosthogTrackers, "trackInteraction").mockClear();
         jest.spyOn(SettingsStore, "getValue").mockRestore();
-        jest.spyOn(SettingsStore, "setValue").mockReset();
+        jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
     });
 
     it("renders sidebar settings", () => {

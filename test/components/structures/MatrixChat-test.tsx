@@ -193,7 +193,7 @@ describe("<MatrixChat />", () => {
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        jest.clearAllMocks();
     });
 
     it("should render spinner while app is loading", () => {

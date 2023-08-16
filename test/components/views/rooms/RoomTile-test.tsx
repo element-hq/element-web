@@ -154,7 +154,7 @@ describe("RoomTile", () => {
     afterEach(() => {
         // @ts-ignore
         MessagePreviewStore.instance.previews = new Map<string, Map<TagID | TAG_ANY, MessagePreview | null>>();
-        jest.restoreAllMocks();
+        jest.clearAllMocks();
     });
 
     describe("when message previews are not enabled", () => {

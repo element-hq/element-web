@@ -73,6 +73,10 @@ const classes = {
 };
 
 describe("FormattingButtons", () => {
+    beforeEach(() => {
+        openLinkModalSpy.mockReturnValue(undefined);
+    });
+
     afterEach(() => {
         jest.resetAllMocks();
     });

@@ -61,17 +61,18 @@ describe("DeviceListener", () => {
     let mockClient: Mocked<MatrixClient>;
     let mockCrypto: Mocked<CryptoApi>;
 
-    // spy on various toasts' hide and show functions
-    // easier than mocking
-    jest.spyOn(SetupEncryptionToast, "showToast");
-    jest.spyOn(SetupEncryptionToast, "hideToast");
-    jest.spyOn(BulkUnverifiedSessionsToast, "showToast");
-    jest.spyOn(BulkUnverifiedSessionsToast, "hideToast");
-    jest.spyOn(UnverifiedSessionToast, "showToast");
-    jest.spyOn(UnverifiedSessionToast, "hideToast");
-
     beforeEach(() => {
         jest.resetAllMocks();
+
+        // spy on various toasts' hide and show functions
+        // easier than mocking
+        jest.spyOn(SetupEncryptionToast, "showToast").mockReturnValue(undefined);
+        jest.spyOn(SetupEncryptionToast, "hideToast").mockReturnValue(undefined);
+        jest.spyOn(BulkUnverifiedSessionsToast, "showToast").mockReturnValue(undefined);
+        jest.spyOn(BulkUnverifiedSessionsToast, "hideToast").mockReturnValue(undefined);
+        jest.spyOn(UnverifiedSessionToast, "showToast").mockResolvedValue(undefined);
+        jest.spyOn(UnverifiedSessionToast, "hideToast").mockReturnValue(undefined);
+
         mockPlatformPeg({
             getAppVersion: jest.fn().mockResolvedValue("1.2.3"),
         });

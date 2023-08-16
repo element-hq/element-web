@@ -24,12 +24,12 @@ import SdkConfig from "../../../../src/SdkConfig";
 
 jest.mock("../../../../src/components/structures/EmbeddedPage", () => ({
     __esModule: true,
-    default: jest.fn().mockImplementation(({ url }) => <div>{url}</div>),
+    default: ({ url }: { url: string }) => <div>{url}</div>,
 }));
 
 jest.mock("../../../../src/components/structures/HomePage", () => ({
     __esModule: true,
-    default: jest.fn().mockImplementation(() => <div>home page</div>),
+    default: () => <div>home page</div>,
 }));
 
 describe("UserOnboardingPage", () => {
