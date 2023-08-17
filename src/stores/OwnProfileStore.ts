@@ -100,6 +100,7 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onNotReady(): Promise<void> {
+        this.onProfileUpdate.cancel();
         if (this.monitoredUser) {
             this.monitoredUser.removeListener(UserEvent.DisplayName, this.onProfileUpdate);
             this.monitoredUser.removeListener(UserEvent.AvatarUrl, this.onProfileUpdate);

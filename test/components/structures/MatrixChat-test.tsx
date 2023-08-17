@@ -17,7 +17,7 @@ limitations under the License.
 import React, { ComponentProps } from "react";
 import { fireEvent, render, RenderResult, screen, within } from "@testing-library/react";
 import fetchMock from "fetch-mock-jest";
-import { mocked } from "jest-mock";
+import { Mocked, mocked } from "jest-mock";
 import { ClientEvent, MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
@@ -107,7 +107,7 @@ describe("<MatrixChat />", () => {
         logout: jest.fn(),
         getDeviceId: jest.fn(),
     });
-    let mockClient = getMockClientWithEventEmitter(getMockClientMethods());
+    let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
         hsUrl: "https://test.com",
         hsName: "Test Server",
@@ -185,9 +185,12 @@ describe("<MatrixChat />", () => {
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        jest.restoreAllMocks();
         localStorage.clear();
         sessionStorage.clear();
+
+        // emit a loggedOut event so that all of the Store singletons forget about their references to the mock client
+        defaultDispatcher.dispatch({ action: Action.OnLoggedOut });
     });
 
     it("should render spinner while app is loading", () => {
@@ -540,11 +543,6 @@ describe("<MatrixChat />", () => {
     describe("login via key/pass", () => {
         let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
 
-        const mockCrypto = {
-            getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
-            getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
-        };
-
         const userName = "ernie";
         const password = "ilovebert";
 
@@ -578,6 +576,7 @@ describe("<MatrixChat />", () => {
         beforeEach(() => {
             loginClient = getMockClientWithEventEmitter(getMockClientMethods());
             // this is used to create a temporary client during login
+            // FIXME: except it is *also* used as the permanent client for the rest of the test.
             jest.spyOn(MatrixJs, "createClient").mockClear().mockReturnValue(loginClient);
 
             loginClient.login.mockClear().mockResolvedValue({
@@ -600,6 +599,10 @@ describe("<MatrixChat />", () => {
 
         describe("post login setup", () => {
             beforeEach(() => {
+                const mockCrypto = {
+                    getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
+                    getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
+                };
                 loginClient.isCryptoEnabled.mockReturnValue(true);
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
                 loginClient.userHasCrossSigningKeys.mockClear().mockResolvedValue(false);
