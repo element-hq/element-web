@@ -27,5 +27,6 @@
     "Use %(brand)s on mobile": "Använd %(brand)s på mobilen",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentraliserad krypterad chatt &amp; samarbete som drivs av $matrixLogo",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s på %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Skrivbord: %(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Skrivbord: %(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "Ogiltig konfiguration: en default_hs_url kan inte anges tillsammans med default_server_name eller default_server_config"
 }

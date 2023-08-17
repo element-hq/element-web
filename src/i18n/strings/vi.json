@@ -27,5 +27,6 @@
     "Your Element is misconfigured": "Element đang bị thiết lập sai",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dịch vụ nhắn tin &amp; liên lạc được mã hóa, phi tập trung. Được vận hành trên $matrixLogo",
     "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s trên %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s máy tính: %(platformName)s"
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s máy tính: %(platformName)s",
+    "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config": "Cấu hình không hợp lệ: không thể xác định default_hs_url song song với default_server_name hay default_server_config"
 }
