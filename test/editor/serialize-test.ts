@@ -81,6 +81,29 @@ describe("editor/serialize", function () {
             const html = htmlSerializeIfNeeded(model, {});
             expect(html).toBe("*hello* world &lt; hey world!");
         });
+
+        it("lists with a single empty item are not considered markdown", function () {
+            const pc = createPartCreator();
+
+            const model1 = new EditorModel([pc.plain("-")], pc);
+            const html1 = htmlSerializeIfNeeded(model1, {});
+            expect(html1).toBe(undefined);
+
+            const model2 = new EditorModel([pc.plain("* ")], pc);
+            const html2 = htmlSerializeIfNeeded(model2, {});
+            expect(html2).toBe(undefined);
+
+            const model3 = new EditorModel([pc.plain("2021.")], pc);
+            const html3 = htmlSerializeIfNeeded(model3, {});
+            expect(html3).toBe(undefined);
+        });
+
+        it("lists with a single non-empty item are still markdown", function () {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.plain("2021. foo")], pc);
+            const html = htmlSerializeIfNeeded(model, {});
+            expect(html).toBe('<ol start="2021">\n<li>foo</li>\n</ol>\n');
+        });
     });
 
     describe("with plaintext", function () {
