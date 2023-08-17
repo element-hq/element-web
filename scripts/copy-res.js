@@ -188,9 +188,9 @@ function genLangList(langFileMap) {
         const normalizedLanguage = lang.value.toLowerCase().replace("_", "-");
         const languageParts = normalizedLanguage.split("-");
         if (languageParts.length == 2 && languageParts[0] == languageParts[1]) {
-            languages[languageParts[0]] = { fileName: langFileMap[lang.value], label: lang.label };
+            languages[languageParts[0]] = langFileMap[lang.value];
         } else {
-            languages[normalizedLanguage] = { fileName: langFileMap[lang.value], label: lang.label };
+            languages[normalizedLanguage] = langFileMap[lang.value];
         }
     });
     fs.writeFile("webapp/i18n/languages.json", JSON.stringify(languages, null, 4), function (err) {
