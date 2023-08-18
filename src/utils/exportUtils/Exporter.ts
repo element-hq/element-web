@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent, Room, Direction } from "matrix-js-sdk/src/matrix";
+import { Direction, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { saveAs } from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import sanitizeFilename from "sanitize-filename";
@@ -135,9 +135,6 @@ export default abstract class Exporter {
                 // when export type is LastNMessages
                 limit = this.exportOptions.numberOfMessages!;
                 break;
-            case ExportType.Timeline:
-                limit = 40;
-                break;
             default:
                 limit = 10 ** 8;
         }
@@ -148,58 +145,60 @@ export default abstract class Exporter {
         const eventMapper = this.room.client.getEventMapper();
 
         let prevToken: string | null = null;
-        let limit = this.getLimit();
-        const events: MatrixEvent[] = [];
 
-        while (limit) {
-            const eventsPerCrawl = Math.min(limit, 1000);
-            const res = await this.room.client.createMessagesRequest(
-                this.room.roomId,
-                prevToken,
-                eventsPerCrawl,
-                Direction.Backward,
-            );
-
-            if (this.cancelled) {
-                this.cleanUp();
-                return [];
-            }
-
-            if (res.chunk.length === 0) break;
-
-            limit -= res.chunk.length;
-
-            const matrixEvents: MatrixEvent[] = res.chunk.map(eventMapper);
-
-            for (const mxEv of matrixEvents) {
-                // if (this.exportOptions.startDate && mxEv.getTs() < this.exportOptions.startDate) {
-                //     // Once the last message received is older than the start date, we break out of both the loops
-                //     limit = 0;
-                //     break;
-                // }
-                events.push(mxEv);
-            }
-
-            if (this.exportType === ExportType.LastNMessages) {
-                this.updateProgress(
-                    _t("Fetched %(count)s events out of %(total)s", {
-                        count: events.length,
-                        total: this.exportOptions.numberOfMessages,
-                    }),
+        let events: MatrixEvent[] = [];
+        if (this.exportType === ExportType.Timeline) {
+            events = this.room.getLiveTimeline().getEvents();
+        } else {
+            let limit = this.getLimit();
+            while (limit) {
+                const eventsPerCrawl = Math.min(limit, 1000);
+                const res = await this.room.client.createMessagesRequest(
+                    this.room.roomId,
+                    prevToken,
+                    eventsPerCrawl,
+                    Direction.Backward,
                 );
-            } else {
-                this.updateProgress(
-                    _t("Fetched %(count)s events so far", {
-                        count: events.length,
-                    }),
-                );
-            }
 
-            prevToken = res.end ?? null;
-        }
-        // Reverse the events so that we preserve the order
-        for (let i = 0; i < Math.floor(events.length / 2); i++) {
-            [events[i], events[events.length - i - 1]] = [events[events.length - i - 1], events[i]];
+                if (this.cancelled) {
+                    this.cleanUp();
+                    return [];
+                }
+
+                if (res.chunk.length === 0) break;
+
+                limit -= res.chunk.length;
+
+                const matrixEvents: MatrixEvent[] = res.chunk.map(eventMapper);
+
+                for (const mxEv of matrixEvents) {
+                    // if (this.exportOptions.startDate && mxEv.getTs() < this.exportOptions.startDate) {
+                    //     // Once the last message received is older than the start date, we break out of both the loops
+                    //     limit = 0;
+                    //     break;
+                    // }
+                    events.push(mxEv);
+                }
+
+                if (this.exportType === ExportType.LastNMessages) {
+                    this.updateProgress(
+                        _t("Fetched %(count)s events out of %(total)s", {
+                            count: events.length,
+                            total: this.exportOptions.numberOfMessages,
+                        }),
+                    );
+                } else {
+                    this.updateProgress(
+                        _t("Fetched %(count)s events so far", {
+                            count: events.length,
+                        }),
+                    );
+                }
+
+                prevToken = res.end ?? null;
+            }
+            // Reverse the events so that we preserve the order
+            events.reverse();
         }
 
         const decryptionPromises = events
