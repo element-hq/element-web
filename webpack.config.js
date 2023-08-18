@@ -725,14 +725,20 @@ module.exports = (env, argv) => {
  * @return {string} The returned paths will look like `img/warning.1234567.svg`.
  */
 function getAssetOutputPath(url, resourcePath) {
+    const isKaTeX = resourcePath.includes("KaTeX");
     // `res` is the parent dir for our own assets in various layers
     // `dist` is the parent dir for KaTeX assets
     const prefix = /^.*[/\\](dist|res)[/\\]/;
-    if (!resourcePath.match(prefix)) {
+    /**
+     * Only needed for https://github.com/vector-im/element-web/pull/15939
+     * If keeping this, we are not able to load external assets such as SVG
+     * images coming from @vector-im/compound-web.
+     */
+    if (isKaTeX && !resourcePath.match(prefix)) {
         throw new Error(`Unexpected asset path: ${resourcePath}`);
     }
     let outputDir = path.dirname(resourcePath).replace(prefix, "");
-    if (resourcePath.includes("KaTeX")) {
+    if (isKaTeX) {
         // Add a clearly named directory segment, rather than leaving the KaTeX
         // assets loose in each asset type directory.
         outputDir = path.join(outputDir, "KaTeX");
