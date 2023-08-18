@@ -24,7 +24,7 @@ import * as fse from "fs-extra";
 import PluginEvents = Cypress.PluginEvents;
 import PluginConfigOptions = Cypress.PluginConfigOptions;
 import { getFreePort } from "../utils/port";
-import { dockerExec, dockerLogs, dockerRun, dockerStop } from "../docker";
+import { dockerExec, dockerLogs, dockerRun, dockerStop, hostContainerName, isPodman } from "../docker";
 import { HomeserverConfig, HomeserverInstance } from "../utils/homeserver";
 import { StartHomeserverOpts } from "../../support/homeserver";
 
@@ -58,27 +58,41 @@ async function cfgDirFromTemplate(opts: StartHomeserverOpts): Promise<Homeserver
     const baseUrl = `http://localhost:${port}`;
 
     // now copy homeserver.yaml, applying substitutions
-    console.log(`Gen ${path.join(templateDir, "homeserver.yaml")}`);
-    let hsYaml = await fse.readFile(path.join(templateDir, "homeserver.yaml"), "utf8");
+    const templateHomeserver = path.join(templateDir, "homeserver.yaml");
+    const outputHomeserver = path.join(tempDir, "homeserver.yaml");
+    console.log(`Gen ${templateHomeserver} -> ${outputHomeserver}`);
+    let hsYaml = await fse.readFile(templateHomeserver, "utf8");
     hsYaml = hsYaml.replace(/{{REGISTRATION_SECRET}}/g, registrationSecret);
     hsYaml = hsYaml.replace(/{{MACAROON_SECRET_KEY}}/g, macaroonSecret);
     hsYaml = hsYaml.replace(/{{FORM_SECRET}}/g, formSecret);
     hsYaml = hsYaml.replace(/{{PUBLIC_BASEURL}}/g, baseUrl);
     hsYaml = hsYaml.replace(/{{OAUTH_SERVER_PORT}}/g, opts.oAuthServerPort?.toString());
+    hsYaml = hsYaml.replace(/{{HOST_DOCKER_INTERNAL}}/g, await hostContainerName());
     if (opts.variables) {
+        let fetchedHostContainer = null;
         for (const key in opts.variables) {
-            hsYaml = hsYaml.replace(new RegExp("%" + key + "%", "g"), String(opts.variables[key]));
+            let value = String(opts.variables[key]);
+
+            if (value === "{{HOST_DOCKER_INTERNAL}}") {
+                if (!fetchedHostContainer) {
+                    fetchedHostContainer = await hostContainerName();
+                }
+                value = fetchedHostContainer;
+            }
+
+            hsYaml = hsYaml.replace(new RegExp("%" + key + "%", "g"), value);
         }
     }
 
-    await fse.writeFile(path.join(tempDir, "homeserver.yaml"), hsYaml);
+    await fse.writeFile(outputHomeserver, hsYaml);
 
     // now generate a signing key (we could use synapse's config generation for
     // this, or we could just do this...)
     // NB. This assumes the homeserver.yaml specifies the key in this location
     const signingKey = randB64Bytes(32);
-    console.log(`Gen ${path.join(templateDir, "localhost.signing.key")}`);
-    await fse.writeFile(path.join(tempDir, "localhost.signing.key"), `ed25519 x ${signingKey}`);
+    const outputSigningKey = path.join(tempDir, "localhost.signing.key");
+    console.log(`Gen -> ${outputSigningKey}`);
+    await fse.writeFile(outputSigningKey, `ed25519 x ${signingKey}`);
 
     return {
         port,
@@ -88,27 +102,38 @@ async function cfgDirFromTemplate(opts: StartHomeserverOpts): Promise<Homeserver
     };
 }
 
-// Start a synapse instance: the template must be the name of
-// one of the templates in the cypress/plugins/synapsedocker/templates
-// directory
+/**
+ * Start a synapse instance: the template must be the name of
+ * one of the templates in the cypress/plugins/synapsedocker/templates
+ * directory.
+ *
+ * Any value in opts.variables that is set to `{{HOST_DOCKER_INTERNAL}}'
+ * will be replaced with 'host.docker.internal' (if we are on Docker) or
+ * 'host.containers.interal' if we are on Podman.
+ */
 async function synapseStart(opts: StartHomeserverOpts): Promise<HomeserverInstance> {
     const synCfg = await cfgDirFromTemplate(opts);
 
     console.log(`Starting synapse with config dir ${synCfg.configDir}...`);
 
+    const dockerSynapseParams = ["--rm", "-v", `${synCfg.configDir}:/data`, "-p", `${synCfg.port}:8008/tcp`];
+
+    if (await isPodman()) {
+        // Make host.containers.internal work to allow Synapse to talk to the
+        // test OIDC server.
+        dockerSynapseParams.push("--network");
+        dockerSynapseParams.push("slirp4netns:allow_host_loopback=true");
+    } else {
+        // Make host.docker.internal work to allow Synapse to talk to the test
+        // OIDC server.
+        dockerSynapseParams.push("--add-host");
+        dockerSynapseParams.push("host.docker.internal:host-gateway");
+    }
+
     const synapseId = await dockerRun({
         image: "matrixdotorg/synapse:develop",
         containerName: `react-sdk-cypress-synapse`,
-        params: [
-            "--rm",
-            "-v",
-            `${synCfg.configDir}:/data`,
-            "-p",
-            `${synCfg.port}:8008/tcp`,
-            // make host.docker.internal work to allow Synapse to talk to the test OIDC server
-            "--add-host",
-            "host.docker.internal:host-gateway",
-        ],
+        params: dockerSynapseParams,
         cmd: ["run"],
     });
 

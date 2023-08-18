@@ -157,6 +157,14 @@ export function isPodman(): Promise<boolean> {
 }
 
 /**
+ * Supply the right hostname to use to talk to the host machine. On Docker this
+ * is "host.docker.internal" and on Podman this is "host.containers.internal".
+ */
+export async function hostContainerName() {
+    return (await isPodman()) ? "host.containers.internal" : "host.docker.internal";
+}
+
+/**
  * @type {Cypress.PluginConfig}
  */
 export function docker(on: PluginEvents, config: PluginConfigOptions) {

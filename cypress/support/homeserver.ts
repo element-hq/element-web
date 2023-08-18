@@ -39,15 +39,22 @@ declare global {
         interface Chainable {
             /**
              * Start a homeserver instance with a given config template.
+             *
              * @param opts: either the template path (within cypress/plugins/{homeserver}docker/template/), or
              *   an options object
+             *
+             * If any of opts.variables has the special value
+             * '{{HOST_DOCKER_INTERNAL}}', it will be replaced by
+             * 'host.docker.interal' if we are on Docker, or
+             * 'host.containers.internal' on Podman.
              */
             startHomeserver(opts: string | StartHomeserverOpts): Chainable<HomeserverInstance>;
 
             /**
              * Custom command wrapping task:{homeserver}Stop whilst preventing uncaught exceptions
              * for if Homeserver stopping races with the app's background sync loop.
-             * @param homeserver the homeserver instance returned by start{Homeserver}
+             *
+             * @param homeserver the homeserver instance returned by {homeserver}Start (e.g. synapseStart).
              */
             stopHomeserver(homeserver: HomeserverInstance): Chainable<AUTWindow>;
 

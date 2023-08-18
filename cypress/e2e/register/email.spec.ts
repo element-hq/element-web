@@ -29,7 +29,7 @@ describe("Email Registration", () => {
             cy.startHomeserver({
                 template: "email",
                 variables: {
-                    SMTP_HOST: "host.docker.internal",
+                    SMTP_HOST: "{{HOST_DOCKER_INTERNAL}}", // This will get replaced in synapseStart
                     SMTP_PORT: _mailhog.instance.smtpPort,
                 },
             }).then((_homeserver) => {
