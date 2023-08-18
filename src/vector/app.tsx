@@ -35,7 +35,7 @@ import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 import { ValidatedServerConfig } from "matrix-react-sdk/src/utils/ValidatedServerConfig";
 import { QueryDict, encodeParams } from "matrix-js-sdk/src/utils";
-import { BannerLifecycle, BannerOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/BannerLifecycle";
+import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 
 import { parseQs } from "./url_utils";
@@ -137,12 +137,11 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
 
     const initialScreenAfterLogin = getInitialScreenAfterLogin(window.location);
 
-    const opts: BannerOpts = { banner: undefined };
-    ModuleRunner.instance.invoke(BannerLifecycle.Banner, opts);
+    const wrapperOpts: WrapperOpts = { Wrapper: React.Fragment };
+    ModuleRunner.instance.invoke(WrapperLifecycle.Wrapper, wrapperOpts);
 
     return (
-        <>
-            {opts.banner}
+        <wrapperOpts.Wrapper>
             <MatrixChat
                 onNewScreen={onNewScreen}
                 makeRegistrationUrl={makeRegistrationUrl}
@@ -154,7 +153,7 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
                 initialScreenAfterLogin={initialScreenAfterLogin}
                 defaultDeviceDisplayName={defaultDeviceName}
             />
-        </>
+        </wrapperOpts.Wrapper>
     );
 }
 
