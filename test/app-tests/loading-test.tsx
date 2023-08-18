@@ -143,9 +143,6 @@ describe("loading:", function () {
                     enableGuest={true}
                     onTokenLoginCompleted={resolve}
                     initialScreenAfterLogin={getScreenFromLocation(windowLocation!)}
-                    makeRegistrationUrl={(): string => {
-                        throw new Error("Not implemented");
-                    }}
                 />,
             );
         });
@@ -158,10 +155,8 @@ describe("loading:", function () {
     async function expectAndAwaitSync(opts?: { isGuest?: boolean }): Promise<any> {
         let syncRequest: (typeof MockHttpBackend.prototype.requests)[number] | null = null;
         httpBackend.when("GET", "/_matrix/client/versions").respond(200, {
-            versions: ["r0.3.0"],
-            unstable_features: {
-                "m.lazy_load_members": true,
-            },
+            versions: ["v1.1"],
+            unstable_features: {},
         });
         const isGuest = opts?.isGuest;
         if (!isGuest) {
@@ -220,7 +215,7 @@ describe("loading:", function () {
             });
 
             // Pass the liveliness checks
-            httpBackend.when("GET", "/versions").respond(200, { versions: ["r0.4.0"] });
+            httpBackend.when("GET", "/versions").respond(200, { versions: ["v1.1"] });
             httpBackend.when("GET", "/_matrix/identity/v2").respond(200, {});
 
             return sleep(1)
@@ -270,7 +265,7 @@ describe("loading:", function () {
             });
 
             // Pass the liveliness checks
-            httpBackend.when("GET", "/versions").respond(200, { versions: ["r0.4.0"] });
+            httpBackend.when("GET", "/versions").respond(200, { versions: ["v1.1"] });
             httpBackend.when("GET", "/_matrix/identity/v2").respond(200, {});
 
             return awaitLoginComponent(matrixChat)
@@ -283,7 +278,7 @@ describe("loading:", function () {
                     // the only outstanding request should be a GET /login
                     // (in particular there should be no /register request for
                     // guest registration).
-                    const allowedRequests = ["/_matrix/client/r0/login", "/versions", "/_matrix/identity/v2"];
+                    const allowedRequests = ["/_matrix/client/v3/login", "/versions", "/_matrix/identity/v2"];
                     for (const req of httpBackend.requests) {
                         if (req.method === "GET" && allowedRequests.find((p) => req.path.endsWith(p))) {
                             continue;

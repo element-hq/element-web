@@ -81,7 +81,6 @@ const parseArgs = require("minimist");
 const Cpx = require("cpx");
 const chokidar = require("chokidar");
 const fs = require("fs");
-const rimraf = require("rimraf");
 
 const argv = parseArgs(process.argv.slice(2), {});
 
@@ -158,7 +157,7 @@ function genLangFile(lang, dest) {
     const reactSdkFile = "node_modules/matrix-react-sdk/src/i18n/strings/" + lang + ".json";
     const riotWebFile = "src/i18n/strings/" + lang + ".json";
 
-    let translations = {};
+    const translations = {};
     [reactSdkFile, riotWebFile].forEach(function (f) {
         if (fs.existsSync(f)) {
             try {
@@ -169,8 +168,6 @@ function genLangFile(lang, dest) {
             }
         }
     });
-
-    translations = weblateToCounterpart(translations);
 
     const json = JSON.stringify(translations, null, 4);
     const jsonBuffer = Buffer.from(json);
@@ -205,46 +202,6 @@ function genLangList(langFileMap) {
     if (verbose) {
         console.log("Generated languages.json");
     }
-}
-
-/**
- * Convert translation key from weblate format
- * (which only supports a single level) to counterpart
- * which requires object values for 'count' translations.
- *
- * eg.
- *     "there are %(count)s badgers|one": "a badger",
- *     "there are %(count)s badgers|other": "%(count)s badgers"
- *   becomes
- *     "there are %(count)s badgers": {
- *         "one": "a badger",
- *         "other": "%(count)s badgers"
- *     }
- */
-function weblateToCounterpart(inTrs) {
-    const outTrs = {};
-
-    for (const key of Object.keys(inTrs)) {
-        const keyParts = key.split("|", 2);
-        if (keyParts.length === 2) {
-            let obj = outTrs[keyParts[0]];
-            if (obj === undefined) {
-                obj = outTrs[keyParts[0]] = {};
-            } else if (typeof obj === "string") {
-                // This is a transitional edge case if a string went from singular to pluralised and both still remain
-                // in the translation json file. Use the singular translation as `other` and merge pluralisation atop.
-                obj = outTrs[keyParts[0]] = {
-                    other: inTrs[key],
-                };
-                console.warn("Found entry in i18n file in both singular and pluralised form", keyParts[0]);
-            }
-            obj[keyParts[1]] = inTrs[key];
-        } else {
-            outTrs[key] = inTrs[key];
-        }
-    }
-
-    return outTrs;
 }
 
 /**

@@ -34,7 +34,6 @@ import { createClient } from "matrix-js-sdk/src/matrix";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 import { ValidatedServerConfig } from "matrix-react-sdk/src/utils/ValidatedServerConfig";
-import { QueryDict, encodeParams } from "matrix-js-sdk/src/utils";
 import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 
@@ -49,31 +48,6 @@ window.React = React;
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
 window.matrixLogger = logger;
-
-// We use this to work out what URL the SDK should
-// pass through when registering to allow the user to
-// click back to the client having registered.
-// It's up to us to recognise if we're loaded with
-// this URL and tell MatrixClient to resume registration.
-//
-// If we're in electron, we should never pass through a file:// URL otherwise
-// the identity server will try to 302 the browser to it, which breaks horribly.
-// so in that instance, hardcode to use app.element.io for now instead.
-function makeRegistrationUrl(params: QueryDict): string {
-    let url: string;
-    if (window.location.protocol === "vector:") {
-        url = "https://app.element.io/#/register";
-    } else {
-        url = window.location.protocol + "//" + window.location.host + window.location.pathname + "#/register";
-    }
-
-    const encodedParams = encodeParams(params);
-    if (encodedParams) {
-        url += "?" + encodedParams;
-    }
-
-    return url;
-}
 
 function onTokenLoginCompleted(): void {
     // if we did a token login, we're now left with the token, hs and is
@@ -144,7 +118,6 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
         <wrapperOpts.Wrapper>
             <MatrixChat
                 onNewScreen={onNewScreen}
-                makeRegistrationUrl={makeRegistrationUrl}
                 config={config}
                 realQueryParams={params}
                 startingFragmentQueryParams={fragParams}
