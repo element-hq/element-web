@@ -216,6 +216,10 @@ module.exports = (env, argv) => {
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": path.resolve(__dirname, "node_modules/matrix-js-sdk"),
                 "matrix-react-sdk": path.resolve(__dirname, "node_modules/matrix-react-sdk"),
+                "@matrix-org/react-sdk-module-api": path.resolve(
+                    __dirname,
+                    "node_modules/@matrix-org/react-sdk-module-api",
+                ),
                 // and matrix-events-sdk & matrix-widget-api
                 "matrix-events-sdk": path.resolve(__dirname, "node_modules/matrix-events-sdk"),
                 "matrix-widget-api": path.resolve(__dirname, "node_modules/matrix-widget-api"),
