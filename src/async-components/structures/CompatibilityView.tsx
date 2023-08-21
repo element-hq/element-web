@@ -112,15 +112,13 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                             <h2 id="step1_heading">{_t("Your browser can't run %(brand)s", { brand })}</h2>
                             <p>
                                 {_t(
-                                    "%(brand)s uses advanced browser features which aren't " +
-                                        "supported by your current browser.",
+                                    "%(brand)s uses advanced browser features which aren't supported by your current browser.",
                                     { brand },
                                 )}
                             </p>
                             <p>
                                 {_t(
-                                    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, " +
-                                        "or <safariLink>Safari</safariLink> for the best experience.",
+                                    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
                                     {},
                                     {
                                         chromeLink: (sub) => <a href="https://www.google.com/chrome">{sub}</a>,
@@ -131,8 +129,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                             </p>
                             <p>
                                 {_t(
-                                    "You can continue using your current browser, but some or all features may not work " +
-                                        "and the look and feel of the application may be incorrect.",
+                                    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
                                 )}
                             </p>
                             <button onClick={onAccept}>{_t("I understand the risks and wish to continue")}</button>

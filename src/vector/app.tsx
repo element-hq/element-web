@@ -147,8 +147,7 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
         if (hsUrl && (wkConfig || serverName)) {
             // noinspection ExceptionCaughtLocallyJS
             throw new UserFriendlyError(
-                "Invalid configuration: a default_hs_url can't be specified along with default_server_name " +
-                    "or default_server_config",
+                "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
             );
         }
         if (incompatibleOptions.length < 1) {
