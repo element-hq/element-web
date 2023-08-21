@@ -184,4 +184,4 @@ export async function loadModules(): Promise<void> {
     }
 }
 
-export const _t = languageHandler._t;
+export { _t } from "../languageHandler";

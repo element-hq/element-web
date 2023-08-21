@@ -18,7 +18,6 @@ limitations under the License.
 
 import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
 import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
-import { _t } from "matrix-react-sdk/src/languageHandler";
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
@@ -27,6 +26,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import VectorBasePlatform from "./VectorBasePlatform";
 import { parseQs } from "../url_utils";
+import { _t } from "../../languageHandler";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
