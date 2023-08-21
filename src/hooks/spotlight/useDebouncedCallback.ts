@@ -20,7 +20,7 @@ const DEBOUNCE_TIMEOUT = 100;
 
 export function useDebouncedCallback<T extends any[]>(
     enabled: boolean,
-    callback: (...params: T) => void,
+    callback: (...params: T) => unknown,
     params: T,
 ): void {
     useEffect(() => {

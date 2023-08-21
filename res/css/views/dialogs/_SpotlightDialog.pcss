@@ -97,7 +97,11 @@ limitations under the License.
             }
 
             &.mx_SpotlightDialog_filterPublicRooms::before {
-                mask-image: url("$(res)/img/element-icons/roomlist/explore.svg");
+                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+            }
+
+            &.mx_SpotlightDialog_filterPublicSpaces::before {
+                mask-image: url("$(res)/img/element-icons/spaces.svg");
             }
 
             .mx_SpotlightDialog_filter--close {
@@ -408,6 +412,7 @@ limitations under the License.
             .mx_SpotlightDialog_startChat,
             .mx_SpotlightDialog_joinRoomAlias,
             .mx_SpotlightDialog_explorePublicRooms,
+            .mx_SpotlightDialog_explorePublicSpaces,
             .mx_SpotlightDialog_startGroupChat {
                 padding-left: $spacing-32;
                 position: relative;
@@ -436,7 +441,11 @@ limitations under the License.
             }
 
             .mx_SpotlightDialog_explorePublicRooms::before {
-                mask-image: url("$(res)/img/element-icons/roomlist/explore.svg");
+                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
+            }
+
+            .mx_SpotlightDialog_explorePublicSpaces::before {
+                mask-image: url("$(res)/img/element-icons/spaces.svg");
             }
 
             .mx_SpotlightDialog_startGroupChat::before {

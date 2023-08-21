@@ -71,7 +71,7 @@ describe("<LabsUserSettingsTab />", () => {
         // non-beta labs section
         expect(screen.getByText("Early previews")).toBeInTheDocument();
         const labsSections = container.getElementsByClassName("mx_SettingsSubsection");
-        expect(labsSections).toHaveLength(10);
+        expect(labsSections).toHaveLength(9);
     });
 
     it("allow setting a labs flag which requires unstable support once support is confirmed", async () => {
@@ -80,21 +80,21 @@ describe("<LabsUserSettingsTab />", () => {
 
         const deferred = defer<boolean>();
         cli.doesServerSupportUnstableFeature.mockImplementation(async (featureName) => {
-            return featureName === "org.matrix.msc3827.stable" ? deferred.promise : false;
+            return featureName === "org.matrix.msc3952_intentional_mentions" ? deferred.promise : false;
         });
         MatrixClientBackedController.matrixClient = cli;
 
         const { queryByText } = render(getComponent());
 
         expect(
-            queryByText("Explore public spaces in the new search dialog")!
+            queryByText("Enable intentional mentions")!
                 .closest(".mx_SettingsFlag")!
                 .querySelector(".mx_AccessibleButton"),
         ).toHaveAttribute("aria-disabled", "true");
         deferred.resolve(true);
         await waitFor(() => {
             expect(
-                queryByText("Explore public spaces in the new search dialog")!
+                queryByText("Enable intentional mentions")!
                     .closest(".mx_SettingsFlag")!
                     .querySelector(".mx_AccessibleButton"),
             ).toHaveAttribute("aria-disabled", "false");

@@ -218,20 +218,20 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.wait(1000); // wait for the dialog to settle, otherwise our keypresses might race with an update
 
-            // initially, publicrooms should be highlighted (because there are no other suggestions)
-            cy.get("#mx_SpotlightDialog_button_explorePublicRooms").should("have.attr", "aria-selected", "true");
+            // initially, public spaces should be highlighted (because there are no other suggestions)
+            cy.get("#mx_SpotlightDialog_button_explorePublicSpaces").should("have.attr", "aria-selected", "true");
 
-            // hitting enter should enable the publicrooms filter
+            // hitting enter should enable the public rooms filter
             cy.spotlightSearch().type("{enter}");
-            cy.get(".mx_SpotlightDialog_filter").should("contain", "Public rooms");
+            cy.get(".mx_SpotlightDialog_filter").should("contain", "Public spaces");
             cy.spotlightSearch().type("{backspace}");
             cy.get(".mx_SpotlightDialog_filter").should("not.exist");
 
             cy.spotlightSearch().type("{downArrow}");
             cy.spotlightSearch().type("{downArrow}");
-            cy.get("#mx_SpotlightDialog_button_startChat").should("have.attr", "aria-selected", "true");
+            cy.get("#mx_SpotlightDialog_button_explorePublicRooms").should("have.attr", "aria-selected", "true");
             cy.spotlightSearch().type("{enter}");
-            cy.get(".mx_SpotlightDialog_filter").should("contain", "People");
+            cy.get(".mx_SpotlightDialog_filter").should("contain", "Public rooms");
             cy.spotlightSearch().type("{backspace}");
             cy.get(".mx_SpotlightDialog_filter").should("not.exist");
         });

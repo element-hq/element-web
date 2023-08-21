@@ -27,7 +27,8 @@ import {
 import sanitizeHtml from "sanitize-html";
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import SpotlightDialog, { Filter } from "../../../../src/components/views/dialogs/spotlight/SpotlightDialog";
+import SpotlightDialog from "../../../../src/components/views/dialogs/spotlight/SpotlightDialog";
+import { Filter } from "../../../../src/components/views/dialogs/spotlight/Filter";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../src/models/LocalRoom";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
@@ -352,12 +353,12 @@ describe("Spotlight Dialog", () => {
         });
 
         it("should find Rooms", () => {
-            expect(options.length).toBe(3);
+            expect(options).toHaveLength(4);
             expect(options[0]!.innerHTML).toContain(testRoom.name);
         });
 
         it("should not find LocalRooms", () => {
-            expect(options.length).toBe(3);
+            expect(options).toHaveLength(4);
             expect(options[0]!.innerHTML).not.toContain(testLocalRoom.name);
         });
     });
@@ -572,23 +573,5 @@ describe("Spotlight Dialog", () => {
         await flushPromisesWithFakeTimers();
 
         expect(screen.getByText("Failed to query public rooms")).toBeInTheDocument();
-    });
-
-    it("should show error both 'Show rooms' and 'Show spaces' are unchecked", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, roomId, excludeDefault) => {
-            if (settingName === "feature_exploring_public_spaces") {
-                return true;
-            } else {
-                return []; // SpotlightSearch.recentSearches
-            }
-        });
-        render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
-
-        jest.advanceTimersByTime(200);
-        await flushPromisesWithFakeTimers();
-
-        fireEvent.click(screen.getByText("Show rooms"));
-
-        expect(screen.getByText("You cannot search for rooms that are neither a room nor a space")).toBeInTheDocument();
     });
 });

@@ -366,4 +366,9 @@ export enum Action {
      * Fired when requesting to cancel an ask to join a room. Use with a CancelAskToJoinPayload.
      */
     CancelAskToJoin = "cancel_ask_to_join",
+
+    /**
+     * Fired when we want to open spotlight search. Use with a OpenSpotlightPayload.
+     */
+    OpenSpotlight = "open_spotlight",
 }

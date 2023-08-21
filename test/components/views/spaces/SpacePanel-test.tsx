@@ -24,7 +24,7 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { MetaSpace, SpaceKey } from "../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../src/settings/UIFeature";
-import { mkStubRoom, wrapInSdkContext } from "../../../test-utils";
+import { mkStubRoom, wrapInMatrixClientContext, wrapInSdkContext } from "../../../test-utils";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
@@ -122,9 +122,12 @@ describe("<SpacePanel />", () => {
         isGuest: jest.fn(),
         getAccountData: jest.fn(),
         on: jest.fn(),
+        off: jest.fn(),
         removeListener: jest.fn(),
+        isVersionSupported: jest.fn().mockResolvedValue(true),
+        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
     } as unknown as MatrixClient;
-    const SpacePanel = wrapInSdkContext(UnwrappedSpacePanel, SdkContextClass.instance);
+    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), SdkContextClass.instance);
 
     beforeAll(() => {
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);

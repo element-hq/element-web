@@ -40,7 +40,9 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
     const [error, setError] = useState("");
     const serverSupportsExploringSpaces = useAsyncMemo<boolean>(
         async (): Promise<boolean> => {
-            return cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
+            return cli.isVersionSupported("v1.4").then((supported) => {
+                return supported || cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
+            });
         },
         [cli],
         false,

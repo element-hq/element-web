@@ -24,6 +24,7 @@ import React, {
     useState,
     ChangeEvent,
     ReactNode,
+    useEffect,
 } from "react";
 import classNames from "classnames";
 import {
@@ -48,6 +49,9 @@ import withValidation from "../elements/Validation";
 import RoomAliasField from "../elements/RoomAliasField";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { Filter } from "../dialogs/spotlight/Filter";
 
 export const createSpace = async (
     client: MatrixClient,
@@ -225,6 +229,17 @@ const SpaceCreateMenu: React.FC<{
     const [avatar, setAvatar] = useState<File | undefined>(undefined);
     const [topic, setTopic] = useState<string>("");
 
+    const [supportsSpaceFiltering, setSupportsSpaceFiltering] = useState(true); // assume it does until we find out it doesn't
+    useEffect(() => {
+        cli.isVersionSupported("v1.4")
+            .then((supported) => {
+                return supported || cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
+            })
+            .then((supported) => {
+                setSupportsSpaceFiltering(supported);
+            });
+    }, [cli]);
+
     const onSpaceCreateClick = async (e: ButtonEvent): Promise<void> => {
         e.preventDefault();
         if (busy) return;
@@ -258,6 +273,13 @@ const SpaceCreateMenu: React.FC<{
         }
     };
 
+    const onSearchClick = (): void => {
+        defaultDispatcher.dispatch({
+            action: Action.OpenSpotlight,
+            initialFilter: Filter.PublicSpaces,
+        });
+    };
+
     let body;
     if (visibility === null) {
         body = (
@@ -283,7 +305,11 @@ const SpaceCreateMenu: React.FC<{
                     onClick={() => setVisibility(Visibility.Private)}
                 />
 
-                <p>{_t("To join a space you'll need an invite.")}</p>
+                {supportsSpaceFiltering && (
+                    <AccessibleButton kind="primary_outline" onClick={onSearchClick}>
+                        {_t("Search for public spaces")}
+                    </AccessibleButton>
+                )}
             </React.Fragment>
         );
     } else {

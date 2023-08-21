@@ -252,20 +252,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
             ),
         },
     },
-    "feature_exploring_public_spaces": {
-        isFeature: true,
-        labsGroup: LabGroup.Spaces,
-        displayName: _td("Explore public spaces in the new search dialog"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-        controller: new ServerSupportUnstableFeatureController(
-            "feature_exploring_public_spaces",
-            defaultWatchManager,
-            [["org.matrix.msc3827.stable"]],
-            "v1.4",
-            _td("Requires your server to support the stable version of MSC3827"),
-        ),
-    },
     "feature_msc3531_hide_messages_pending_moderation": {
         isFeature: true,
         labsGroup: LabGroup.Moderation,
