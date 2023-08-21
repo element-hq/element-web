@@ -29,6 +29,7 @@ export interface IScrollableBaseState {
     canSubmit: boolean;
     title: string;
     actionLabel: string;
+    cancelLabel?: string;
 }
 
 /**
@@ -103,7 +104,7 @@ export default abstract class ScrollableBaseModal<
                         <div className="mx_CompoundDialog_content">{this.renderContent()}</div>
                         <div className="mx_CompoundDialog_footer">
                             <AccessibleButton onClick={this.onCancel} kind="primary_outline">
-                                {_t("Cancel")}
+                                {this.state.cancelLabel ?? _t("Cancel")}
                             </AccessibleButton>
                             <AccessibleButton
                                 onClick={this.onSubmit}

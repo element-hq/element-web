@@ -1867,10 +1867,10 @@
   version "3.2.14"
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz#acd96c00a881d0f462e1f97a56c73742c8dbc984"
 
-"@matrix-org/react-sdk-module-api@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-1.0.0.tgz#de73e163a439fe330f6971a6a0cef2ccb090d616"
-  integrity sha512-drhPkoPWitAv9bXS2q8cyaqPta/KGF+Ph3aZSmaYiOPyY5S84e4Ju3JI6/HExqF8+HyBsajlCKtyvTZsMsTIFA==
+"@matrix-org/react-sdk-module-api@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-2.0.0.tgz#f894af429ad352d5151dc7240cc2f987d9dab780"
+  integrity sha512-o/M+IfB3bu4S3yTO10zMRiEtTQagV9AJ9cNmq8a/ksniCx3QLShtzWeL5FkTa8co0ab/VdxdqTlEux0aStT/dg==
   dependencies:
     "@babel/runtime" "^7.17.9"
 
