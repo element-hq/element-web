@@ -103,6 +103,7 @@ export const makeBeaconEvent = (
         room_id: roomId,
         sender,
         content: ContentHelpers.makeBeaconContent(geoUri, timestamp, beaconInfoId, description),
+        origin_server_ts: 0,
     });
 };
 

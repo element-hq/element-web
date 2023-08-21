@@ -45,7 +45,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
           >
             <li>
               <div
-                aria-label="Thu, Jan 1 1970"
+                aria-label="Thu, Jan 1, 1970"
                 class="mx_DateSeparator"
                 role="separator"
               >
@@ -59,7 +59,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
                     aria-hidden="true"
                     class="mx_DateSeparator_dateHeading"
                   >
-                    Thu, Jan 1 1970
+                    Thu, Jan 1, 1970
                   </h2>
                 </div>
                 <hr
@@ -161,7 +161,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
           >
             <li>
               <div
-                aria-label=",  NaN NaN"
+                aria-label="Thu, Jan 1, 1970"
                 class="mx_DateSeparator"
                 role="separator"
               >
@@ -175,7 +175,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                     aria-hidden="true"
                     class="mx_DateSeparator_dateHeading"
                   >
-                    ,  NaN NaN
+                    Thu, Jan 1, 1970
                   </h2>
                 </div>
                 <hr
@@ -193,7 +193,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   <span
                     class="mx_MessageTimestamp"
                   >
-                    NaN:NaN
+                    00:00
                   </span>
                   <div
                     class="mx_EventTile_content"
@@ -236,7 +236,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   <span
                     class="mx_MessageTimestamp"
                   >
-                    NaN:NaN
+                    00:00
                   </span>
                   <div
                     class="mx_EventTile_content"
@@ -290,7 +290,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   <span
                     class="mx_MessageTimestamp"
                   >
-                    NaN:NaN
+                    00:00
                   </span>
                   <div
                     class="mx_EventTile_content"

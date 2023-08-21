@@ -27,6 +27,7 @@ export const makeLegacyLocationEvent = (geoUri: string): MatrixEvent => {
             msgtype: "m.location",
             geo_uri: geoUri,
         },
+        origin_server_ts: 0,
     });
 };
 
@@ -41,6 +42,7 @@ export const makeLocationEvent = (geoUri: string, assetType?: LocationAssetType)
             "Human-readable label",
             assetType,
         ),
+        origin_server_ts: 0,
     });
 };
 

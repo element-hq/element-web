@@ -119,7 +119,7 @@ describe("Editing", () => {
                 // Assert that the date separator is rendered at the top
                 cy.get("li:nth-child(1) .mx_DateSeparator").within(() => {
                     cy.get("h2").within(() => {
-                        cy.findByText("Today");
+                        cy.findByText("today").should("have.css", "text-transform", "capitalize");
                     });
                 });
 
@@ -184,7 +184,7 @@ describe("Editing", () => {
                 // Assert that the date is rendered
                 cy.get("li:nth-child(1) .mx_DateSeparator").within(() => {
                     cy.get("h2").within(() => {
-                        cy.findByText("Today");
+                        cy.findByText("today").should("have.css", "text-transform", "capitalize");
                     });
                 });
 

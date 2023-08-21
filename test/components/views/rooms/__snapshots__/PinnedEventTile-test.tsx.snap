@@ -51,7 +51,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
       <span
         class="mx_MessageTimestamp mx_PinnedEventTile_timestamp"
       >
-        Thu, Jan 1 1970 00:00:00
+        Thu, Jan 1, 1970, 00:00
       </span>
       <div
         class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"

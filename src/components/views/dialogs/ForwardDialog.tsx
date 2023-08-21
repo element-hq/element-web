@@ -216,6 +216,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         },
         event_id: "$9999999999999999999999999999999999999999999",
         room_id: event.getRoomId(),
+        origin_server_ts: event.getTs(),
     });
     mockEvent.sender = {
         name: profileInfo.displayname || userId,

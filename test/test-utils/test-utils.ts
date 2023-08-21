@@ -538,6 +538,7 @@ export function mkMessage({
     }
     const message = msg ?? "Random->" + Math.random();
     const event: MakeEventProps = {
+        ts: 0,
         ...opts,
         type: "m.room.message",
         content: {

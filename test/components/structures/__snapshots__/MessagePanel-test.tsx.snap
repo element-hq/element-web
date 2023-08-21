@@ -39,7 +39,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
           data-testid="__testid__"
         >
           <div
-            aria-label="Thu, Jan 1 1970"
+            aria-label="Thu, Jan 1, 1970"
             class="mx_DateSeparator"
             role="separator"
           >
@@ -53,7 +53,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
                 aria-hidden="true"
                 class="mx_DateSeparator_dateHeading"
               >
-                Thu, Jan 1 1970
+                Thu, Jan 1, 1970
               </h2>
             </div>
             <hr

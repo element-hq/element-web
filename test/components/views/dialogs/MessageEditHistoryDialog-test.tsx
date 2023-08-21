@@ -51,7 +51,7 @@ describe("<MessageEditHistory />", () => {
                         new MatrixEvent({
                             type: EventType.RoomMessage,
                             room_id: roomId,
-                            origin_server_ts: e.ts,
+                            origin_server_ts: e.ts ?? 0,
                             content: {
                                 body: e.msg,
                             },

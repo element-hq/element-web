@@ -93,7 +93,7 @@ export class UserFriendlyError extends Error {
 
 export function getUserLanguage(): string {
     const language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
-    if (language) {
+    if (typeof language === "string" && language !== "") {
         return language;
     } else {
         return normalizeLanguageKey(getLanguageFromBrowser());

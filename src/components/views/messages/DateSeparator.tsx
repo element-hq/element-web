@@ -19,8 +19,8 @@ import React from "react";
 import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from "../../../languageHandler";
-import { formatFullDateNoDay, formatFullDateNoTime } from "../../../DateUtils";
+import { _t, getUserLanguage } from "../../../languageHandler";
+import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -39,10 +39,6 @@ import IconizedContextMenu, {
 import JumpToDatePicker from "./JumpToDatePicker";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { SdkContextClass } from "../../../contexts/SDKContext";
-
-function getDaysArray(): string[] {
-    return [_t("Sunday"), _t("Monday"), _t("Tuesday"), _t("Wednesday"), _t("Thursday"), _t("Friday"), _t("Saturday")];
-}
 
 interface IProps {
     roomId: string;
@@ -105,15 +101,16 @@ export default class DateSeparator extends React.Component<IProps, IState> {
 
         const today = new Date();
         const yesterday = new Date();
-        const days = getDaysArray();
+        const days = getDaysArray("long");
         yesterday.setDate(today.getDate() - 1);
 
+        const relativeTimeFormat = new Intl.RelativeTimeFormat(getUserLanguage(), { style: "long", numeric: "auto" });
         if (date.toDateString() === today.toDateString()) {
-            return _t("Today");
+            return relativeTimeFormat.format(0, "day"); // Today
         } else if (date.toDateString() === yesterday.toDateString()) {
-            return _t("Yesterday");
+            return relativeTimeFormat.format(-1, "day"); // Yesterday
         } else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            return days[date.getDay()];
+            return days[date.getDay()]; // Sunday-Saturday
         } else {
             return formatFullDateNoTime(date);
         }

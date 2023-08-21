@@ -93,7 +93,7 @@ describe("SearchResultTile", () => {
                         room_id: ROOM_ID,
                         content: { body: `Message #${i}` },
                         event_id: `$${i}:server`,
-                        origin_server_ts: undefined,
+                        origin_server_ts: i,
                     }),
             ),
         });
