@@ -16,11 +16,10 @@ limitations under the License.
 */
 
 import React from "react";
-
-import { IEmoji } from "../../../emoji";
+import { Emoji } from "@matrix-org/emojibase-bindings";
 
 interface IProps {
-    emoji: IEmoji;
+    emoji: Emoji;
 }
 
 class Preview extends React.PureComponent<IProps> {

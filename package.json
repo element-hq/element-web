@@ -61,6 +61,7 @@
     "dependencies": {
         "@babel/runtime": "^7.12.5",
         "@matrix-org/analytics-events": "^0.6.0",
+        "@matrix-org/emojibase-bindings": "^1.1.2",
         "@matrix-org/matrix-wysiwyg": "^2.4.1",
         "@matrix-org/react-sdk-module-api": "^2.1.0",
         "@matrix-org/spec": "^1.7.0",
@@ -76,8 +77,6 @@
         "counterpart": "^0.18.6",
         "diff-dom": "^4.2.2",
         "diff-match-patch": "^1.0.5",
-        "emojibase": "15.0.0",
-        "emojibase-data": "15.0.0",
         "emojibase-regex": "15.0.0",
         "escape-html": "^1.0.3",
         "file-saver": "^2.0.5",

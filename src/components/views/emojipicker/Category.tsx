@@ -16,10 +16,10 @@ limitations under the License.
 */
 
 import React, { RefObject } from "react";
+import { DATA_BY_CATEGORY, Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
 import { CATEGORY_HEADER_HEIGHT, EMOJI_HEIGHT, EMOJIS_PER_ROW } from "./EmojiPicker";
 import LazyRenderList from "../elements/LazyRenderList";
-import { DATA_BY_CATEGORY, IEmoji } from "../../../emoji";
 import Emoji from "./Emoji";
 import { ButtonEvent } from "../elements/AccessibleButton";
 

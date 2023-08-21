@@ -16,8 +16,8 @@ limitations under the License.
 */
 
 import React from "react";
+import { Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
-import { IEmoji } from "../../../emoji";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 

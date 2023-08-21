@@ -16,10 +16,10 @@ limitations under the License.
 */
 
 import React, { Dispatch } from "react";
+import { DATA_BY_CATEGORY, getEmojiFromUnicode, Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
 import { _t } from "../../../languageHandler";
 import * as recent from "../../../emojipicker/recent";
-import { DATA_BY_CATEGORY, getEmojiFromUnicode, IEmoji } from "../../../emoji";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import Header from "./Header";
 import Search from "./Search";

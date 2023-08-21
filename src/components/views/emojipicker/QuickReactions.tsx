@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 import React from "react";
+import { getEmojiFromUnicode, Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
 import { _t } from "../../../languageHandler";
-import { getEmojiFromUnicode, IEmoji } from "../../../emoji";
 import Emoji from "./Emoji";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import Toolbar from "../../../accessibility/Toolbar";
