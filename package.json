@@ -212,7 +212,7 @@
         "jsqr": "^1.4.0",
         "mailhog": "^4.16.0",
         "matrix-mock-request": "^2.5.0",
-        "matrix-web-i18n": "^2.0.0",
+        "matrix-web-i18n": "^2.1.0",
         "mocha-junit-reporter": "^2.2.0",
         "node-fetch": "2",
         "postcss-scss": "^4.0.4",
