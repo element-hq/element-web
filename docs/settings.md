@@ -174,7 +174,7 @@ An example of a watcher in action would be:
 class MyComponent extends React.Component {
     settingWatcherRef = null;
 
-    componentWillMount() {
+    componentDidMount() {
         const callback = (settingName, roomId, level, newValAtLevel, newVal) => {
             this.setState({ color: newVal });
         };

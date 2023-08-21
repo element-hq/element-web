@@ -1874,6 +1874,11 @@
   dependencies:
     "@babel/runtime" "^7.17.9"
 
+"@matrix-org/spec@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/spec/-/spec-1.7.0.tgz#8a6b93edf0d99f8a6e0a25eea8613b5ada3e6b56"
+  integrity sha512-sLRdmk64dNd7X+jXgWFEatJbf2BOFX/a1VxHqWWTerzZntKsjKzz42sD2Mj1QWrsGp01u99fRNU8oy4DcmFn3w==
+
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
   version "2.1.8-no-fsevents.3"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/chokidar-2/-/chokidar-2-2.1.8-no-fsevents.3.tgz#323d72dd25103d0c4fbdce89dadf574a787b1f9b"
