@@ -216,6 +216,10 @@ module.exports = (env, argv) => {
                 // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": path.resolve(__dirname, "node_modules/matrix-js-sdk"),
                 "matrix-react-sdk": path.resolve(__dirname, "node_modules/matrix-react-sdk"),
+                "@matrix-org/react-sdk-module-api": path.resolve(
+                    __dirname,
+                    "node_modules/@matrix-org/react-sdk-module-api",
+                ),
                 // and matrix-events-sdk & matrix-widget-api
                 "matrix-events-sdk": path.resolve(__dirname, "node_modules/matrix-events-sdk"),
                 "matrix-widget-api": path.resolve(__dirname, "node_modules/matrix-widget-api"),
@@ -275,7 +279,7 @@ module.exports = (env, argv) => {
                         // either webpack or our babel setup.
                         // When we do get to upgrade our current setup, this should
                         // probably be removed.
-                        if (f.includes("@vector-im/compound-web")) return true;
+                        if (f.includes(path.join("@vector-im", "compound-web"))) return true;
 
                         // but we can't run all of our dependencies through babel (many of them still
                         // use module.exports which breaks if babel injects an 'include' for its
