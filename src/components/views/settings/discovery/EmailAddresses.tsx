@@ -46,6 +46,7 @@ TODO: Reduce all the copying between account vs. discovery components.
 
 interface IEmailAddressProps {
     email: ThirdPartyIdentifier;
+    disabled?: boolean;
 }
 
 interface IEmailAddressState {
@@ -194,6 +195,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                     className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
                     kind="danger_sm"
                     onClick={this.onRevokeClick}
+                    disabled={this.props.disabled}
                 >
                     {_t("Revoke")}
                 </AccessibleButton>
@@ -204,6 +206,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                     className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
                     kind="primary_sm"
                     onClick={this.onShareClick}
+                    disabled={this.props.disabled}
                 >
                     {_t("Share")}
                 </AccessibleButton>
@@ -221,6 +224,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
 interface IProps {
     emails: ThirdPartyIdentifier[];
     isLoading?: boolean;
+    disabled?: boolean;
 }
 
 export default class EmailAddresses extends React.Component<IProps> {
@@ -230,7 +234,7 @@ export default class EmailAddresses extends React.Component<IProps> {
             content = <InlineSpinner />;
         } else if (this.props.emails.length > 0) {
             content = this.props.emails.map((e) => {
-                return <EmailAddress email={e} key={e.address} />;
+                return <EmailAddress email={e} key={e.address} disabled={this.props.disabled} />;
             });
         }
 

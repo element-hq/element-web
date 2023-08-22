@@ -38,6 +38,7 @@ This is a copy/paste of EmailAddresses, mostly.
 
 interface IPhoneNumberProps {
     msisdn: ThirdPartyIdentifier;
+    disabled?: boolean;
 }
 
 interface IPhoneNumberState {
@@ -202,6 +203,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
                     className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
                     kind="danger_sm"
                     onClick={this.onRevokeClick}
+                    disabled={this.props.disabled}
                 >
                     {_t("Revoke")}
                 </AccessibleButton>
@@ -212,6 +214,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
                     className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
                     kind="primary_sm"
                     onClick={this.onShareClick}
+                    disabled={this.props.disabled}
                 >
                     {_t("Share")}
                 </AccessibleButton>
@@ -230,6 +233,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
 interface IProps {
     msisdns: ThirdPartyIdentifier[];
     isLoading?: boolean;
+    disabled?: boolean;
 }
 
 export default class PhoneNumbers extends React.Component<IProps> {
@@ -239,7 +243,7 @@ export default class PhoneNumbers extends React.Component<IProps> {
             content = <InlineSpinner />;
         } else if (this.props.msisdns.length > 0) {
             content = this.props.msisdns.map((e) => {
-                return <PhoneNumber msisdn={e} key={e.address} />;
+                return <PhoneNumber msisdn={e} key={e.address} disabled={this.props.disabled} />;
             });
         }
 

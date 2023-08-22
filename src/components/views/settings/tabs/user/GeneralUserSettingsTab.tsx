@@ -91,6 +91,7 @@ interface IState {
     canChangePassword: boolean;
     idServerName?: string;
     externalAccountManagementUrl?: string;
+    canMake3pidChanges: boolean;
 }
 
 export default class GeneralUserSettingsTab extends React.Component<IProps, IState> {
@@ -120,6 +121,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             msisdns: [],
             loading3pids: true, // whether or not the emails and msisdns have been loaded
             canChangePassword: false,
+            canMake3pidChanges: false,
         };
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -174,8 +176,12 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         const canChangePassword = !changePasswordCap || changePasswordCap["enabled"] !== false;
 
         const externalAccountManagementUrl = getDelegatedAuthAccountUrl(cli.getClientWellKnown());
+        // https://spec.matrix.org/v1.7/client-server-api/#m3pid_changes-capability
+        // We support as far back as v1.1 which doesn't have m.3pid_changes
+        // so the behaviour for when it is missing has to be assume true
+        const canMake3pidChanges = !capabilities["m.3pid_changes"] || capabilities["m.3pid_changes"].enabled === true;
 
-        this.setState({ canChangePassword, externalAccountManagementUrl });
+        this.setState({ canChangePassword, externalAccountManagementUrl, canMake3pidChanges });
     }
 
     private async getThreepidState(): Promise<void> {
@@ -323,12 +329,20 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             const emails = this.state.loading3pids ? (
                 <InlineSpinner />
             ) : (
-                <AccountEmailAddresses emails={this.state.emails} onEmailsChange={this.onEmailsChange} />
+                <AccountEmailAddresses
+                    emails={this.state.emails}
+                    onEmailsChange={this.onEmailsChange}
+                    disabled={!this.state.canMake3pidChanges}
+                />
             );
             const msisdns = this.state.loading3pids ? (
                 <InlineSpinner />
             ) : (
-                <AccountPhoneNumbers msisdns={this.state.msisdns} onMsisdnsChange={this.onMsisdnsChange} />
+                <AccountPhoneNumbers
+                    msisdns={this.state.msisdns}
+                    onMsisdnsChange={this.onMsisdnsChange}
+                    disabled={!this.state.canMake3pidChanges}
+                />
             );
             threepidSection = (
                 <>
@@ -463,8 +477,16 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
         const threepidSection = this.state.haveIdServer ? (
             <>
-                <DiscoveryEmailAddresses emails={this.state.emails} isLoading={this.state.loading3pids} />
-                <DiscoveryPhoneNumbers msisdns={this.state.msisdns} isLoading={this.state.loading3pids} />
+                <DiscoveryEmailAddresses
+                    emails={this.state.emails}
+                    isLoading={this.state.loading3pids}
+                    disabled={!this.state.canMake3pidChanges}
+                />
+                <DiscoveryPhoneNumbers
+                    msisdns={this.state.msisdns}
+                    isLoading={this.state.loading3pids}
+                    disabled={!this.state.canMake3pidChanges}
+                />
             </>
         ) : null;
 

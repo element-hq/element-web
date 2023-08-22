@@ -15,6 +15,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import React from "react";
 import { M_AUTHENTICATION } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 
 import GeneralUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/GeneralUserSettingsTab";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
@@ -38,6 +39,10 @@ describe("<GeneralUserSettingsTab />", () => {
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsServer(),
+        getCapabilities: jest.fn(),
+        getThreePids: jest.fn(),
+        getIdentityServerUrl: jest.fn(),
+        deleteThreePid: jest.fn(),
     });
 
     const getComponent = () => (
@@ -46,15 +51,23 @@ describe("<GeneralUserSettingsTab />", () => {
         </MatrixClientContext.Provider>
     );
 
-    jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
     const clientWellKnownSpy = jest.spyOn(mockClient, "getClientWellKnown");
 
     beforeEach(() => {
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
         mockPlatformPeg();
         jest.clearAllMocks();
         clientWellKnownSpy.mockReturnValue({});
         jest.spyOn(SettingsStore, "getValue").mockRestore();
         jest.spyOn(logger, "error").mockRestore();
+
+        mockClient.getCapabilities.mockResolvedValue({});
+        mockClient.getThreePids.mockResolvedValue({
+            threepids: [],
+        });
+        mockClient.deleteThreePid.mockResolvedValue({
+            id_server_unbind_result: "success",
+        });
     });
 
     it("does not show account management link when not available", () => {
@@ -157,6 +170,176 @@ describe("<GeneralUserSettingsTab />", () => {
             render(getComponent());
 
             expect(screen.getByText("Deactivate account").parentElement!).toMatchSnapshot();
+        });
+    });
+
+    describe("3pids", () => {
+        beforeEach(() => {
+            mockClient.getCapabilities.mockResolvedValue({
+                "m.3pid_changes": {
+                    enabled: true,
+                },
+            });
+
+            mockClient.getThreePids.mockResolvedValue({
+                threepids: [
+                    {
+                        medium: ThreepidMedium.Email,
+                        address: "test@test.io",
+                        validated_at: 1685067124552,
+                        added_at: 1685067124552,
+                    },
+                    {
+                        medium: ThreepidMedium.Phone,
+                        address: "123456789",
+                        validated_at: 1685067124552,
+                        added_at: 1685067124552,
+                    },
+                ],
+            });
+
+            mockClient.getIdentityServerUrl.mockReturnValue(undefined);
+        });
+
+        it("should show loaders while 3pids load", () => {
+            render(getComponent());
+
+            expect(
+                within(screen.getByTestId("mx_AccountEmailAddresses")).getByLabelText("Loading…"),
+            ).toBeInTheDocument();
+            expect(within(screen.getByTestId("mx_AccountPhoneNumbers")).getByLabelText("Loading…")).toBeInTheDocument();
+        });
+
+        it("should display 3pid email addresses and phone numbers", async () => {
+            render(getComponent());
+
+            await flushPromises();
+
+            expect(screen.getByTestId("mx_AccountEmailAddresses")).toMatchSnapshot();
+            expect(screen.getByTestId("mx_AccountPhoneNumbers")).toMatchSnapshot();
+        });
+
+        it("should allow removing an existing email addresses", async () => {
+            render(getComponent());
+
+            await flushPromises();
+
+            const section = screen.getByTestId("mx_AccountEmailAddresses");
+
+            fireEvent.click(within(section).getByText("Remove"));
+
+            // confirm removal
+            expect(screen.getByText("Remove test@test.io?")).toBeInTheDocument();
+            fireEvent.click(within(section).getByText("Remove"));
+
+            expect(mockClient.deleteThreePid).toHaveBeenCalledWith(ThreepidMedium.Email, "test@test.io");
+        });
+
+        it("should allow adding a new email address", async () => {
+            render(getComponent());
+
+            await flushPromises();
+
+            const section = screen.getByTestId("mx_AccountEmailAddresses");
+
+            // just check the fields are enabled
+            expect(within(section).getByLabelText("Email Address")).not.toBeDisabled();
+            expect(within(section).getByText("Add")).not.toHaveAttribute("aria-disabled");
+        });
+
+        it("should allow removing an existing phone number", async () => {
+            render(getComponent());
+
+            await flushPromises();
+
+            const section = screen.getByTestId("mx_AccountPhoneNumbers");
+
+            fireEvent.click(within(section).getByText("Remove"));
+
+            // confirm removal
+            expect(screen.getByText("Remove 123456789?")).toBeInTheDocument();
+            fireEvent.click(within(section).getByText("Remove"));
+
+            expect(mockClient.deleteThreePid).toHaveBeenCalledWith(ThreepidMedium.Phone, "123456789");
+        });
+
+        it("should allow adding a new phone number", async () => {
+            render(getComponent());
+
+            await flushPromises();
+
+            const section = screen.getByTestId("mx_AccountPhoneNumbers");
+
+            // just check the fields are enabled
+            expect(within(section).getByLabelText("Phone Number")).not.toBeDisabled();
+        });
+
+        it("should allow 3pid changes when capabilities does not have 3pid_changes", async () => {
+            // We support as far back as v1.1 which doesn't have m.3pid_changes
+            // so the behaviour for when it is missing has to be assume true
+            mockClient.getCapabilities.mockResolvedValue({});
+
+            render(getComponent());
+
+            await flushPromises();
+
+            const section = screen.getByTestId("mx_AccountEmailAddresses");
+
+            // just check the fields are enabled
+            expect(within(section).getByLabelText("Email Address")).not.toBeDisabled();
+            expect(within(section).getByText("Add")).not.toHaveAttribute("aria-disabled");
+        });
+
+        describe("when 3pid changes capability is disabled", () => {
+            beforeEach(() => {
+                mockClient.getCapabilities.mockResolvedValue({
+                    "m.3pid_changes": {
+                        enabled: false,
+                    },
+                });
+            });
+
+            it("should not allow removing email addresses", async () => {
+                render(getComponent());
+
+                await flushPromises();
+
+                const section = screen.getByTestId("mx_AccountEmailAddresses");
+
+                expect(within(section).getByText("Remove")).toHaveAttribute("aria-disabled");
+            });
+
+            it("should not allow adding a new email addresses", async () => {
+                render(getComponent());
+
+                await flushPromises();
+
+                const section = screen.getByTestId("mx_AccountEmailAddresses");
+
+                // fields are not enabled
+                expect(within(section).getByLabelText("Email Address")).toBeDisabled();
+                expect(within(section).getByText("Add")).toHaveAttribute("aria-disabled");
+            });
+
+            it("should not allow removing phone numbers", async () => {
+                render(getComponent());
+
+                await flushPromises();
+
+                const section = screen.getByTestId("mx_AccountPhoneNumbers");
+
+                expect(within(section).getByText("Remove")).toHaveAttribute("aria-disabled");
+            });
+
+            it("should not allow adding a new phone number", async () => {
+                render(getComponent());
+
+                await flushPromises();
+
+                const section = screen.getByTestId("mx_AccountPhoneNumbers");
+
+                expect(within(section).getByLabelText("Phone Number")).toBeDisabled();
+            });
         });
     });
 });
