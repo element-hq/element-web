@@ -396,7 +396,6 @@
     "Original event source": "Nguồn sự kiện ban đầu",
     "Decrypted event source": "Nguồn sự kiện được giải mã",
     "Could not load user profile": "Không thể tải hồ sơ người dùng",
-    "User menu": "Menu người dùng",
     "Switch theme": "Chuyển đổi chủ đề",
     "Switch to dark mode": "Chuyển sang chế độ tối",
     "Switch to light mode": "Chuyển sang chế độ ánh sáng",
@@ -3672,5 +3671,8 @@
     "Invited to a room": "Được mời vào phòng",
     "New room activity, upgrades and status messages occur": "Hoạt động mới trong phòng, nâng cấp và tin nhắn trạng thái",
     "Mark all messages as read": "Đánh dấu đã đọc cho mọi tin nhắn",
-    "You need an invite to access this room.": "Bạn cần được mời để truy cập phòng này."
+    "You need an invite to access this room.": "Bạn cần được mời để truy cập phòng này.",
+    "a11y": {
+        "user_menu": "Menu người dùng"
+    }
 }

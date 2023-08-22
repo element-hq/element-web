@@ -621,7 +621,6 @@
     "Confirm by comparing the following with the User Settings in your other session:": "Підтвердьте шляхом порівняння наступного рядка з рядком у користувацьких налаштуваннях вашого іншого сеансу:",
     "Confirm this user's session by comparing the following with their User Settings:": "Підтвердьте сеанс цього користувача шляхом порівняння наступного рядка з рядком з їхніх користувацьких налаштувань:",
     "All settings": "Усі налаштування",
-    "User menu": "Користувацьке меню",
     "Go to Settings": "Перейти до налаштувань",
     "Compare unique emoji": "Порівняйте унікальні емодзі",
     "Cancelling…": "Скасування…",
@@ -3969,5 +3968,8 @@
     "Failed to query public rooms": "Не вдалося зробити запит до загальнодоступних кімнат",
     "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.": "Цей сервер використовує стару версію Matrix. Оновіть Matrix до %(version)s, щоб використовувати %(brand)s без помилок.",
     "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.": "Ваш домашній сервер застарілий і не підтримує мінімально необхідну версію API. Будь ласка, зв'яжіться з власником вашого сервера або оновіть його.",
-    "Your server is unsupported": "Ваш сервер не підтримується"
+    "Your server is unsupported": "Ваш сервер не підтримується",
+    "a11y": {
+        "user_menu": "Користувацьке меню"
+    }
 }

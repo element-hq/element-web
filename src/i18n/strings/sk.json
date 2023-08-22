@@ -1227,7 +1227,6 @@
     "Strikethrough": "Preškrtnuté",
     "Security": "Zabezpečenie",
     "Send a Direct Message": "Poslať priamu správu",
-    "User menu": "Používateľské menu",
     "Toggle Italics": "Prepnúť kurzíva",
     "Zimbabwe": "Zimbabwe",
     "Zambia": "Zambia",
@@ -3969,5 +3968,8 @@
     "Your request to join is pending.": "Vaša žiadosť o pripojenie čaká na vybavenie.",
     "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.": "Tento server používa staršiu verziu systému Matrix. Ak chcete používať %(brand)s bez chýb, aktualizujte na Matrix %(version)s.",
     "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.": "Váš domovský server je príliš starý a nepodporuje minimálnu požadovanú verziu API. Obráťte sa na vlastníka servera alebo aktualizujte svoj server.",
-    "Your server is unsupported": "Váš server nie je podporovaný"
+    "Your server is unsupported": "Váš server nie je podporovaný",
+    "a11y": {
+        "user_menu": "Používateľské menu"
+    }
 }

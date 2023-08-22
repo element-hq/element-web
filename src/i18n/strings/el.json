@@ -2637,7 +2637,6 @@
     "Original event source": "Αρχική πηγή συμβάντος",
     "Decrypted event source": "Αποκρυπτογραφημένη πηγή συμβάντος",
     "Could not load user profile": "Αδυναμία φόρτωσης του προφίλ χρήστη",
-    "User menu": "Μενού χρήστη",
     "Switch theme": "Αλλαγή θέματος",
     "Switch to dark mode": "Αλλαγή σε σκοτεινό",
     "Switch to light mode": "Αλλαγή σε φωτεινό",
@@ -3285,5 +3284,8 @@
     "Video rooms": "Δωμάτια βίντεο",
     "You were disconnected from the call. (Error: %(message)s)": "Αποσυνδεθήκατε από την κλήση. (Σφάλμα: %(message)s)",
     "Connection lost": "Η σύνδεση χάθηκε",
-    "Jump to the given date in the timeline": "Μεταβείτε στη δεδομένη ημερομηνία στη γραμμή χρόνου"
+    "Jump to the given date in the timeline": "Μεταβείτε στη δεδομένη ημερομηνία στη γραμμή χρόνου",
+    "a11y": {
+        "user_menu": "Μενού χρήστη"
+    }
 }

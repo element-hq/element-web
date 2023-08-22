@@ -1640,7 +1640,6 @@
     "Favourited": "Con marca de Favorita",
     "Forget Room": "Esquecer sala",
     "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Se a outra versión de %(brand)s aínda está aberta noutra lapela, péchaa xa que usar %(brand)s no mesmo servidor con carga preguiceira activada e desactivada ao mesmo tempo causará problemas.",
-    "User menu": "Menú de usuaria",
     "This room is public": "Esta é unha sala pública",
     "Away": "Fóra",
     "Show rooms with unread messages first": "Mostrar primeiro as salas con mensaxes sen ler",
@@ -3494,5 +3493,8 @@
     "%(hours)sh %(minutes)sm %(seconds)ss": "%(hours)sh %(minutes)sm %(seconds)ss",
     "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
     "%(minutes)sm %(seconds)ss left": "%(minutes)sm %(seconds)ss restantes",
-    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sh %(minutes)sm %(seconds)ss restantes"
+    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
+    "a11y": {
+        "user_menu": "Menú de usuaria"
+    }
 }

@@ -1647,7 +1647,6 @@
     "Edited at %(date)s": "編輯於 %(date)s",
     "Click to view edits": "點擊以檢視編輯",
     "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "如果其他版本的 %(brand)s 仍在其他分頁中開啟，請關閉它，因為在同一主機上使用同時啟用與停用惰性載入的 %(brand)s 可能會造成問題。",
-    "User menu": "使用者選單",
     "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
     "Change notification settings": "變更通知設定",
     "Your server isn't responding to some <a>requests</a>.": "您的伺服器未回應某些<a>請求</a>。",
@@ -3969,5 +3968,8 @@
     "Failed to query public rooms": "檢索公開聊天室失敗",
     "Your server is unsupported": "您的伺服器不支援",
     "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.": "此伺服器正在使用較舊版本的 Matrix。升級至 Matrix %(version)s 以在沒有錯誤的情況下使用 %(brand)s。",
-    "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.": "您的家伺服器太舊了，不支援所需的最低 API 版本。請聯絡您的伺服器擁有者，或是升級您的伺服器。"
+    "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.": "您的家伺服器太舊了，不支援所需的最低 API 版本。請聯絡您的伺服器擁有者，或是升級您的伺服器。",
+    "a11y": {
+        "user_menu": "使用者選單"
+    }
 }

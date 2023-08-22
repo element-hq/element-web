@@ -1410,7 +1410,6 @@
         "one": "Asali n %(filename)s d %(count)s wayeḍ-nniḍen"
     },
     "Uploading %(filename)s": "Asali n %(filename)s",
-    "User menu": "Umuɣ n useqdac",
     "Could not load user profile": "Yegguma ad d-yali umaɣnu n useqdac",
     "New passwords must match each other.": "Awalen uffiren imaynuten ilaq ad mṣadan.",
     "Return to login screen": "Uɣal ɣer ugdil n tuqqna",
@@ -2000,5 +1999,8 @@
     "Identity server (%(server)s)": "Aqeddac n timagit (%(server)s)",
     "Could not connect to identity server": "Ur izmir ara ad yeqqen ɣer uqeddac n timagit",
     "Not a valid identity server (status code %(code)s)": "Aqeddac n timagit mačči d ameɣtu (status code %(code)s)",
-    "Identity server URL must be HTTPS": "URL n uqeddac n timagit ilaq ad yili d HTTPS"
+    "Identity server URL must be HTTPS": "URL n uqeddac n timagit ilaq ad yili d HTTPS",
+    "a11y": {
+        "user_menu": "Umuɣ n useqdac"
+    }
 }

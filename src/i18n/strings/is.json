@@ -1818,7 +1818,6 @@
     "in secret storage": "í leynigeymslu",
     "Manually verify all remote sessions": "Sannreyna handvirkt allar fjartengdar setur",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Deildu nafnlausum gögnum til að hjálpa okkur við að greina vandamál. Ekkert persónulegt. Engir utanaðkomandi. <LearnMoreLink>Kanna nánar</LearnMoreLink>",
-    "User menu": "Valmynd notandans",
     "Switch theme": "Skipta um þema",
     "Got an account? <a>Sign in</a>": "Ertu með aðgang? <a>Skráðu þig inn</a>",
     "Shows all threads you've participated in": "Birtir alla spjallþræði sem þú hefur tekið þátt í",
@@ -3361,5 +3360,8 @@
     "Find and invite your community members": "Finndu og bjóddu meðlimum í samfélaginu þínu",
     "Get stuff done by finding your teammates": "Komdu hlutum í verk með því að finna félaga í teyminu þínu",
     "It’s what you’re here for, so lets get to it": "Það er nú einusinni það sem þú komst hingað til að gera, þannug að við skulum skella okkur í málið",
-    "Sorry — this call is currently full": "Því miður - þetta símtal er fullt í augnablikinu"
+    "Sorry — this call is currently full": "Því miður - þetta símtal er fullt í augnablikinu",
+    "a11y": {
+        "user_menu": "Valmynd notandans"
+    }
 }

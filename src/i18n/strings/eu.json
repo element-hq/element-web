@@ -1617,7 +1617,6 @@
     "The server has denied your request.": "Zerbitzariak zure eskariari uko egin dio.",
     "Wrong file type": "Okerreko fitxategi-mota",
     "Looks good!": "Itxura ona du!",
-    "User menu": "Erabiltzailea-menua",
     "Integration manager": "Integrazio-kudeatzailea",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Zure %(brand)s aplikazioak ez dizu hau egiteko integrazio kudeatzaile bat erabiltzen uzten. Kontaktatu administratzaileren batekin.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Trepeta hau erabiltzean <helpIcon />  %(widgetDomain)s domeinuarekin eta zure integrazio kudeatzailearekin datuak partekatu daitezke.",
@@ -1628,5 +1627,8 @@
     "Identity server (%(server)s)": "Identitate-zerbitzaria (%(server)s)",
     "Could not connect to identity server": "Ezin izan da identitate-zerbitzarira konektatu",
     "Not a valid identity server (status code %(code)s)": "Ez da identitate zerbitzari baliogarria (egoera-mezua %(code)s)",
-    "Identity server URL must be HTTPS": "Identitate zerbitzariaren URL-a HTTPS motakoa izan behar du"
+    "Identity server URL must be HTTPS": "Identitate zerbitzariaren URL-a HTTPS motakoa izan behar du",
+    "a11y": {
+        "user_menu": "Erabiltzailea-menua"
+    }
 }

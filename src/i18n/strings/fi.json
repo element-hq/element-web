@@ -1563,7 +1563,6 @@
     "Notification options": "Ilmoitusasetukset",
     "Room options": "Huoneen asetukset",
     "This room is public": "Tämä huone on julkinen",
-    "User menu": "Käyttäjän valikko",
     "Video conference started by %(senderName)s": "%(senderName)s aloitti ryhmävideopuhelun",
     "Video conference updated by %(senderName)s": "%(senderName)s päivitti ryhmävideopuhelun",
     "Video conference ended by %(senderName)s": "%(senderName)s päätti ryhmävideopuhelun",
@@ -3568,5 +3567,8 @@
     "Encrypting your message…": "Salataan viestiäsi…",
     "Joining space…": "Liitytään avaruuteen…",
     "Sending your message…": "Lähetetään viestiäsi…",
-    "Error details": "Virheen tiedot"
+    "Error details": "Virheen tiedot",
+    "a11y": {
+        "user_menu": "Käyttäjän valikko"
+    }
 }

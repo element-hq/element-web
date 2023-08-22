@@ -1026,7 +1026,6 @@
     "The server is offline.": "Denne tjeneren er offline.",
     "Wrong file type": "Feil filtype",
     "Looks good!": "Ser bra ut!",
-    "User menu": "Brukermeny",
     "Your message was sent": "Meldingen ble sendt",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "Autentisiteten av denne krypterte meldingen kan ikke garanteres på denne enheten.",
     "Encrypted by a deleted session": "Kryptert av en slettet sesjon",
@@ -1583,5 +1582,8 @@
     "Calls are unsupported": "Samtaler støttes ikke",
     "No other application is using the webcam": "Ingen andre applikasjoner bruker webkameraet",
     "A microphone and webcam are plugged in and set up correctly": "En mikrofon og webkamera er koblet til og satt opp riktig",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Samtalen mislyktes fordi mikrofonen ikke var tilgjengelig. Sjekk at en mikrofon er koblet til og satt opp riktig."
+    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Samtalen mislyktes fordi mikrofonen ikke var tilgjengelig. Sjekk at en mikrofon er koblet til og satt opp riktig.",
+    "a11y": {
+        "user_menu": "Brukermeny"
+    }
 }

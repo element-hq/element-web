@@ -3802,7 +3802,6 @@
     "Original event source": "Oryginalne źródło wydarzenia",
     "Decrypted source unavailable": "Rozszyfrowane źródło niedostępne",
     "Decrypted event source": "Rozszyfrowane wydarzenie źródłowe",
-    "User menu": "Menu użytkownika",
     "Got an account? <a>Sign in</a>": "Posiadasz już konto? <a>Zaloguj się</a>",
     "Thread": "Wątek",
     "Keep discussions organised with threads": "Organizuj dyskusje za pomocą wątków",
@@ -3951,5 +3950,8 @@
     "User read up to (m.read.private): ": "Użytkownik przeczytał do (m.read.private): ",
     "User read up to (m.read.private;ignoreSynthetic): ": "Użytkownik przeczytał do (m.read.private;ignoreSynthetic): ",
     "Upgrade room": "Ulepsz pokój",
-    "See history": "Pokaż historię"
+    "See history": "Pokaż historię",
+    "a11y": {
+        "user_menu": "Menu użytkownika"
+    }
 }

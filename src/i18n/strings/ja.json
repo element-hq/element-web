@@ -929,7 +929,6 @@
     "Switch theme": "テーマを切り替える",
     "All settings": "全ての設定",
     "Feedback": "フィードバック",
-    "User menu": "ユーザーメニュー",
     "Cannot connect to integration manager": "インテグレーションマネージャーに接続できません",
     "Failed to connect to integration manager": "インテグレーションマネージャーへの接続に失敗しました",
     "Start verification again from their profile.": "プロフィールから再度認証を開始してください。",
@@ -3771,5 +3770,8 @@
     "Unable to connect to Homeserver. Retrying…": "ホームサーバーに接続できません。 再試行しています…",
     "Secure Backup successful": "セキュアバックアップに成功しました",
     "Your keys are now being backed up from this device.": "鍵はこの端末からバックアップされています。",
-    "Show avatars in user, room and event mentions": "アバターをユーザー、ルーム、イベントのメンションに表示"
+    "Show avatars in user, room and event mentions": "アバターをユーザー、ルーム、イベントのメンションに表示",
+    "a11y": {
+        "user_menu": "ユーザーメニュー"
+    }
 }

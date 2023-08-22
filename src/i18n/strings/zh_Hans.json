@@ -1543,7 +1543,6 @@
     "Switch theme": "切换主题",
     "All settings": "所有设置",
     "Feedback": "反馈",
-    "User menu": "用户菜单",
     "Failed to get autodiscovery configuration from server": "从服务器获取自动发现配置时失败",
     "Invalid base_url for m.homeserver": "m.homeserver 的 base_url 无效",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "家服务器链接不像是有效的 Matrix 家服务器",
@@ -3561,5 +3560,8 @@
     "This session is backing up your keys.": "此会话正在备份你的密钥。",
     "Identity server not set": "身份服务器未设置",
     "The add / bind with MSISDN flow is misconfigured": "MSISDN的新增/绑定流程配置错误",
-    "User is not logged in": "用户未登录"
+    "User is not logged in": "用户未登录",
+    "a11y": {
+        "user_menu": "用户菜单"
+    }
 }

@@ -1467,7 +1467,6 @@
     "Verify User": "Verifitseeri kasutaja",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Lisaturvalisus mõttes verifitseeri see kasutaja võrreldes selleks üheks korraks loodud koodi mõlemas seadmes.",
     "Your messages are not secure": "Sinu sõnumid ei ole turvatud",
-    "User menu": "Kasutajamenüü",
     "Return to login screen": "Mine tagasi sisselogimisvaatele",
     "Invalid homeserver discovery response": "Vigane vastus koduserveri tuvastamise päringule",
     "Failed to get autodiscovery configuration from server": "Serveri automaattuvastuse seadistuste laadimine ei õnnestunud",
@@ -3969,5 +3968,8 @@
     "Failed to query public rooms": "Avalike jututubade tuvastamise päring ei õnnestunud",
     "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.": "See server kasutab Matrixi vanemat versiooni. Selleks, et %(brand)s'i kasutamisel vigu ei tekiks palun uuenda serverit nii, et kasutusel oleks Matrixi %(version)s.",
     "Your server is unsupported": "Sinu server ei ole toetatud",
-    "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.": "Sinu koduserver on liiga vana ega toeta vähimat nõutavat API versiooni. Lisateavet saad oma serveri haldajalt või kui ise oled haldaja, siis palun uuenda serverit."
+    "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.": "Sinu koduserver on liiga vana ega toeta vähimat nõutavat API versiooni. Lisateavet saad oma serveri haldajalt või kui ise oled haldaja, siis palun uuenda serverit.",
+    "a11y": {
+        "user_menu": "Kasutajamenüü"
+    }
 }

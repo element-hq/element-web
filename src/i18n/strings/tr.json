@@ -1775,7 +1775,6 @@
     "Widgets": "Widgetlar",
     "Unpin": "Sabitlemeyi kaldır",
     "Download logs": "Günlükleri indir",
-    "User menu": "Kullanıcı menüsü",
     "Notification options": "Bildirim ayarları",
     "Looks good!": "İyi görünüyor!",
     "Security Key": "Güvenlik anahtarı",
@@ -2026,5 +2025,8 @@
         "other": "Şu cihazlardan oturumu kapatmayı onayla"
     },
     "Current session": "Şimdiki oturum",
-    "Search (must be enabled)": "Arama (etkinleştirilmeli)"
+    "Search (must be enabled)": "Arama (etkinleştirilmeli)",
+    "a11y": {
+        "user_menu": "Kullanıcı menüsü"
+    }
 }

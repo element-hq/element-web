@@ -1969,7 +1969,6 @@
     "Original event source": "منبع اصلی رخداد",
     "Decrypted event source": "رمزگشایی منبع رخداد",
     "Could not load user profile": "امکان نمایش پروفایل کاربر میسر نیست",
-    "User menu": "منوی کاربر",
     "Switch theme": "تعویض پوسته",
     "Switch to dark mode": "انتخاب حالت تاریک",
     "Switch to light mode": "انتخاب حالت روشن",
@@ -2623,5 +2622,8 @@
     "Alternatively, you can try to use the public server at <server/>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "از طرف دیگر، می‌توانید سعی کنید از سرور عمومی در <server/> استفاده کنید، اما این به آن اندازه قابل اعتماد نخواهد بود و آدرس IP شما را با آن سرور به اشتراک می‌گذارد. شما همچنین می توانید این قابلیت را در تنظیمات مدیریت کنید.",
     "Try using %(server)s": "سعی کنید از %(server)s استفاده کنید",
     "Keyboard shortcuts": "میانبرهای صفحه کلید",
-    "Poll type": "نوع نظرسنجی"
+    "Poll type": "نوع نظرسنجی",
+    "a11y": {
+        "user_menu": "منوی کاربر"
+    }
 }

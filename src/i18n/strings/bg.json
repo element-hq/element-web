@@ -1736,7 +1736,6 @@
     "Update %(brand)s": "Обнови %(brand)s",
     "Enable desktop notifications": "Включете уведомления на работния плот",
     "Don't miss a reply": "Не пропускайте отговор",
-    "User menu": "Потребителско меню",
     "Save your Security Key": "Запази ключа за сигурност",
     "Confirm Security Phrase": "Потвърди фразата за сигурност",
     "Set a Security Phrase": "Настрой фраза за сигурност",
@@ -2119,5 +2118,8 @@
         "other": "%(user)s и %(count)s други"
     },
     "%(user1)s and %(user2)s": "%(user1)s и %(user2)s",
-    "Empty room": "Празна стая"
+    "Empty room": "Празна стая",
+    "a11y": {
+        "user_menu": "Потребителско меню"
+    }
 }

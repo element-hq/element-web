@@ -1511,7 +1511,6 @@
         "one": "Você tem %(count)s notificações não lidas em uma versão anterior desta sala."
     },
     "Feedback": "Fale conosco",
-    "User menu": "Menu do usuário",
     "Could not load user profile": "Não foi possível carregar o perfil do usuário",
     "Your password has been reset.": "Sua senha foi alterada.",
     "Invalid base_url for m.homeserver": "base_url inválido para m.homeserver",
@@ -2892,5 +2891,8 @@
     "Copy link to thread": "Copiar ligação para o tópico",
     "Create a link": "Criar uma ligação",
     "Italic": "Itálico",
-    "View in room": "Ver na sala"
+    "View in room": "Ver na sala",
+    "a11y": {
+        "user_menu": "Menu do usuário"
+    }
 }

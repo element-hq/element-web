@@ -892,7 +892,6 @@
     "If you've joined lots of rooms, this might take a while": "Ja esat pievienojies daudzām istabām, tas var aizņemt kādu laiku",
     "Your password has been reset.": "Jūsu parole ir atiestatīta.",
     "Could not load user profile": "Nevarēja ielādēt lietotāja profilu",
-    "User menu": "Lietotāja izvēlne",
     "New here? <a>Create an account</a>": "Pirmo reizi šeit? <a>Izveidojiet kontu</a>",
     "Got an account? <a>Sign in</a>": "Vai jums ir konts? <a>Pierakstieties</a>",
     "You have %(count)s unread notifications in a prior version of this room.": {
@@ -1826,5 +1825,8 @@
     "Messages in this chat will be end-to-end encrypted.": "Ziņām šajā istabā tiek piemērota pilnīga šifrēšana.",
     "Export Chat": "Eksportēt čatu",
     "Export chat": "Eksportēt čatu",
-    "Back to chat": "Atgriezties uz čatu"
+    "Back to chat": "Atgriezties uz čatu",
+    "a11y": {
+        "user_menu": "Lietotāja izvēlne"
+    }
 }

@@ -1624,7 +1624,6 @@
     "Unknown caller": "Unbekannter Anrufer",
     "Are you sure you want to cancel entering passphrase?": "Bist du sicher, dass du die Eingabe der Passphrase abbrechen möchtest?",
     "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
-    "User menu": "Benutzermenü",
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "Das Durchsuchen von verschlüsselten Nachrichten wird aus Sicherheitsgründen nur von %(brand)s Desktop unterstützt. <desktopLink>Hier gehts zum Download</desktopLink>.",
     "Show rooms with unread messages first": "Räume mit ungelesenen Nachrichten zuerst zeigen",
     "Show previews of messages": "Nachrichtenvorschau anzeigen",
@@ -3974,5 +3973,8 @@
     "No requests": "Keine Anfragen",
     "Asking to join": "Beitrittsanfragen",
     "See less": "Weniger",
-    "See more": "Mehr"
+    "See more": "Mehr",
+    "a11y": {
+        "user_menu": "Benutzermenü"
+    }
 }

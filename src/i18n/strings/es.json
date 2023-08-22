@@ -1594,7 +1594,6 @@
     "Switch to light mode": "Cambiar al tema claro",
     "Switch to dark mode": "Cambiar al tema oscuro",
     "Switch theme": "Cambiar tema",
-    "User menu": "Menú del Usuario",
     "Failed to perform homeserver discovery": "No se ha podido realizar el descubrimiento del servidor base",
     "If you've joined lots of rooms, this might take a while": "Si te has unido a muchas salas, esto puede tardar un poco",
     "Create account": "Crear una cuenta",
@@ -3775,5 +3774,8 @@
     "You reacted %(reaction)s to %(message)s": "Reaccionaste %(reaction)s a %(message)s",
     "Requires your server to support MSC3030": "Requiere que tu servidor sea compatible con MSC3030",
     "Enable MSC3946 (to support late-arriving room archives)": "",
-    "Try using %(server)s": "Probar a usar %(server)s"
+    "Try using %(server)s": "Probar a usar %(server)s",
+    "a11y": {
+        "user_menu": "Menú del Usuario"
+    }
 }

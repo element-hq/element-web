@@ -3388,7 +3388,9 @@
     "Switch to light mode": "Switch to light mode",
     "Switch to dark mode": "Switch to dark mode",
     "Switch theme": "Switch theme",
-    "User menu": "User menu",
+    "a11y": {
+        "user_menu": "User menu"
+    },
     "Could not load user profile": "Could not load user profile",
     "Decrypted event source": "Decrypted event source",
     "Decrypted source unavailable": "Decrypted source unavailable",

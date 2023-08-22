@@ -2360,7 +2360,6 @@
         "one": "Saat ini bergabung dengan %(count)s ruangan",
         "other": "Saat ini bergabung dengan %(count)s ruangan"
     },
-    "User menu": "Menu pengguna",
     "Switch theme": "Ubah tema",
     "Switch to dark mode": "Ubah ke mode gelap",
     "Switch to light mode": "Ubah ke mode terang",
@@ -3974,5 +3973,8 @@
     "See more": "Lihat lebih banyak",
     "Deny": "Tolak",
     "Asking to join": "Meminta untuk bergabung",
-    "No requests": "Tidak ada permintaan"
+    "No requests": "Tidak ada permintaan",
+    "a11y": {
+        "user_menu": "Menu pengguna"
+    }
 }

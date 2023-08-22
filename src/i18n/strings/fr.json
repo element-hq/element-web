@@ -1642,7 +1642,6 @@
     "This room is public": "Ce salon est public",
     "Edited at %(date)s": "Modifié le %(date)s",
     "Click to view edits": "Cliquez pour voir les modifications",
-    "User menu": "Menu utilisateur",
     "Are you sure you want to cancel entering passphrase?": "Souhaitez-vous vraiment annuler la saisie de la phrase de passe ?",
     "Unexpected server error trying to leave the room": "Erreur de serveur inattendue en essayant de quitter le salon",
     "Error leaving room": "Erreur en essayant de quitter le salon",
@@ -3969,5 +3968,8 @@
     "Failed to query public rooms": "Impossible d’interroger les salons publics",
     "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.": "Votre serveur d’accueil est trop ancien et ne prend pas en charge la version minimale requise de l’API. Veuillez contacter le propriétaire du serveur, ou bien mettez à jour votre serveur.",
     "Your server is unsupported": "Votre serveur n’est pas pris en charge",
-    "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.": "Ce serveur utilise une ancienne version de Matrix. Mettez-le à jour vers Matrix %(version)s pour utiliser %(brand)s sans erreurs."
+    "This server is using an older version of Matrix. Upgrade to Matrix %(version)s to use %(brand)s without errors.": "Ce serveur utilise une ancienne version de Matrix. Mettez-le à jour vers Matrix %(version)s pour utiliser %(brand)s sans erreurs.",
+    "a11y": {
+        "user_menu": "Menu utilisateur"
+    }
 }

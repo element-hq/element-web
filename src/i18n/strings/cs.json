@@ -1661,7 +1661,6 @@
     "Upload a file": "Nahrát soubor",
     "You've reached the maximum number of simultaneous calls.": "Dosáhli jste maximálního počtu souběžných hovorů.",
     "Too Many Calls": "Přiliš mnoho hovorů",
-    "User menu": "Uživatelská nabídka",
     "Switch theme": "Přepnout téma",
     "Switch to dark mode": "Přepnout do tmavého režimu",
     "Switch to light mode": "Přepnout do světlého režimu",
@@ -3974,5 +3973,8 @@
     "See more": "Zobrazit více",
     "Deny": "Odmítnout",
     "Asking to join": "Žádá se o vstup",
-    "No requests": "Žádné žádosti"
+    "No requests": "Žádné žádosti",
+    "a11y": {
+        "user_menu": "Uživatelská nabídka"
+    }
 }

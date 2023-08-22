@@ -2036,7 +2036,6 @@
     "New? <a>Create account</a>": "Nieuw? <a>Maak een account aan</a>",
     "If you've joined lots of rooms, this might take a while": "Als je bij veel kamers bent aangesloten kan dit een tijdje duren",
     "There was a problem communicating with the homeserver, please try again later.": "Er was een communicatieprobleem met de homeserver, probeer het later opnieuw.",
-    "User menu": "Persoonsmenu",
     "Switch theme": "Thema wisselen",
     "New here? <a>Create an account</a>": "Nieuw hier? <a>Maak een account</a>",
     "Got an account? <a>Sign in</a>": "Heb je een account? <a>Inloggen</a>",
@@ -3577,5 +3576,8 @@
     "Can't start a new voice broadcast": "Kan geen nieuwe spraakuitzending starten",
     "Video call started in %(roomName)s. (not supported by this browser)": "Videogesprek gestart in %(roomName)s. (niet ondersteund door deze browser)",
     "Video call started in %(roomName)s.": "Videogesprek gestart in %(roomName)s.",
-    "You need to be able to kick users to do that.": "U moet in staat zijn om gebruikers te verwijderen om dit te doen."
+    "You need to be able to kick users to do that.": "U moet in staat zijn om gebruikers te verwijderen om dit te doen.",
+    "a11y": {
+        "user_menu": "Persoonsmenu"
+    }
 }

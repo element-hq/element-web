@@ -1592,7 +1592,6 @@
     "Switch to light mode": "Byt till ljust läge",
     "Switch to dark mode": "Byt till mörkt läge",
     "Switch theme": "Byt tema",
-    "User menu": "Användarmeny",
     "Invalid homeserver discovery response": "Ogiltigt hemserverupptäcktssvar",
     "Failed to get autodiscovery configuration from server": "Misslyckades att få konfiguration för autoupptäckt från servern",
     "Invalid base_url for m.homeserver": "Ogiltig base_url för m.homeserver",
@@ -3909,5 +3908,8 @@
     "Failed to cancel": "Misslyckades att avbryta",
     "Views room with given address": "Visar rum med den angivna adressen",
     "Something went wrong.": "Nånting gick snett.",
-    "New Notification Settings": "Nya aviseringsinställningar"
+    "New Notification Settings": "Nya aviseringsinställningar",
+    "a11y": {
+        "user_menu": "Användarmeny"
+    }
 }

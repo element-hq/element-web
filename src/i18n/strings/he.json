@@ -2096,7 +2096,6 @@
     "A new password must be entered.": "יש להזין סיסמה חדשה.",
     "The email address linked to your account must be entered.": "יש להזין את כתובת הדוא\"ל המקושרת לחשבונך.",
     "Could not load user profile": "לא ניתן לטעון את פרופיל המשתמש",
-    "User menu": "תפריט משתמש",
     "Switch theme": "שנה ערכת נושא",
     "Switch to dark mode": "שנה למצב כהה",
     "Switch to light mode": "שנה למצב בהיר",
@@ -2768,5 +2767,8 @@
     "Show NSFW content": "הצג תוכן NSFW (תוכן שלא מתאים לצפיה במקום ציבורי)",
     "Room directory": "רשימת חדרים",
     "Enable Markdown": "אפשר Markdown",
-    "New room": "חדר חדש"
+    "New room": "חדר חדש",
+    "a11y": {
+        "user_menu": "תפריט משתמש"
+    }
 }

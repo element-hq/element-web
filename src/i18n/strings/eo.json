@@ -1630,7 +1630,6 @@
     "Switch to dark mode": "Ŝalti malhelan reĝimon",
     "Switch theme": "Ŝalti haŭton",
     "All settings": "Ĉiuj agordoj",
-    "User menu": "Menuo de uzanto",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Malhelpu perdon de aliro al ĉifritaj mesaĝoj kaj datumoj per savkopiado de ĉifraj ŝlosiloj al via servilo.",
     "Generate a Security Key": "Generi sekurecan ŝlosilon",
     "Enter a Security Phrase": "Enigiu sekurecan frazon",
@@ -2952,5 +2951,8 @@
     "Unable to decrypt voice broadcast": "Ne eblas deĉifri voĉan elsendon",
     "WARNING: session already verified, but keys do NOT MATCH!": "AVERTO: Salutaĵo jam estas kontrolita, sed la ŝlosiloj NE AKORDAS!",
     "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Via retpoŝtareso ŝajne ne ligiĝas al Matrix-identigilo sur tiu ĉi hejmservilo.",
-    "%(senderName)s started a voice broadcast": "%(senderName)s komencis voĉan elsendon"
+    "%(senderName)s started a voice broadcast": "%(senderName)s komencis voĉan elsendon",
+    "a11y": {
+        "user_menu": "Menuo de uzanto"
+    }
 }

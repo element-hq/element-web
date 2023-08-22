@@ -936,7 +936,6 @@
     "Original event source": "ແຫຼ່ງຕົ້ນສະບັບ",
     "Decrypted event source": "ບ່ອນທີ່ຖືກຖອດລະຫັດໄວ້",
     "Could not load user profile": "ບໍ່ສາມາດໂຫຼດໂປຣໄຟລ໌ຂອງຜູ້ໃຊ້ໄດ້",
-    "User menu": "ເມນູຜູ້ໃຊ້",
     "Switch theme": "ສະຫຼັບຫົວຂໍ້",
     "Switch to dark mode": "ສະຫຼັບໄປໂໝດມືດ",
     "Switch to light mode": "ສະຫຼັບໄປໂໝດແສງ",
@@ -3302,5 +3301,8 @@
     },
     "View related event": "ເບິ່ງເຫດການທີ່ກ່ຽວຂ້ອງ",
     "Read receipts": "ຢັ້ງຢືນອ່ານແລ້ວ",
-    "Enable hardware acceleration (restart %(appName)s to take effect)": "ເພີ່ມຂີດຄວາມສາມາດຂອງອຸປະກອນ (ບູສແອັບ %(appName)s ນີ້ໃໝ່ເພື່ອເຫັນຜົນ)"
+    "Enable hardware acceleration (restart %(appName)s to take effect)": "ເພີ່ມຂີດຄວາມສາມາດຂອງອຸປະກອນ (ບູສແອັບ %(appName)s ນີ້ໃໝ່ເພື່ອເຫັນຜົນ)",
+    "a11y": {
+        "user_menu": "ເມນູຜູ້ໃຊ້"
+    }
 }

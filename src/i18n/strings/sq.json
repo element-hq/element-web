@@ -1645,7 +1645,6 @@
     "Away": "I larguar",
     "Edited at %(date)s": "Përpunuar më %(date)s",
     "Click to view edits": "Klikoni që të shihni përpunime",
-    "User menu": "Menu përdoruesi",
     "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
     "Change notification settings": "Ndryshoni rregullime njoftimesh",
     "Your server isn't responding to some <a>requests</a>.": "Shërbyesi juaj s’po u përgjigjet ca <a>kërkesave</a>.",
@@ -3862,5 +3861,8 @@
     "Once invited users have joined %(brand)s, you will be able to chat and the room will be end-to-end encrypted": "Pasi përdoruesit e ftuar të kenë ardhur në %(brand)s, do të jeni në gjendje të bisedoni dhe dhoma do të jetë e fshehtëzuar skaj-më-skaj",
     "Waiting for users to join %(brand)s": "Po pritet që përdorues të vijnë në %(brand)s",
     "You do not have permission to invite users": "S’keni leje të ftoni përdorues",
-    "%(oldDisplayName)s changed their display name and profile picture": "%(oldDisplayName)s ndryshoi emrin e vet në ekran dhe foton e profilit"
+    "%(oldDisplayName)s changed their display name and profile picture": "%(oldDisplayName)s ndryshoi emrin e vet në ekran dhe foton e profilit",
+    "a11y": {
+        "user_menu": "Menu përdoruesi"
+    }
 }

@@ -1637,7 +1637,6 @@
     "Notification options": "Értesítési beállítások",
     "Favourited": "Kedvencnek jelölt",
     "Forget Room": "Szoba elfelejtése",
-    "User menu": "Felhasználói menü",
     "This room is public": "Ez egy nyilvános szoba",
     "Away": "Távol",
     "Are you sure you want to cancel entering passphrase?": "Biztos, hogy megszakítja a jelmondat bevitelét?",
@@ -3873,5 +3872,8 @@
     "Cannot invite user by email without an identity server. You can connect to one under \"Settings\".": "Matrix-kiszolgáló nélkül nem lehet felhasználókat meghívni e-mailben. Kapcsolódjon egyhez a „Beállítások” alatt.",
     "%(oldDisplayName)s changed their display name and profile picture": "%(oldDisplayName)s megváltoztatta a megjelenítendő nevét és profilképét",
     "Failed to download source media, no source url was found": "A forrásmédia letöltése sikertelen, nem található forráswebcím",
-    "Unable to create room with moderation bot": "Nem hozható létre szoba moderációs bottal"
+    "Unable to create room with moderation bot": "Nem hozható létre szoba moderációs bottal",
+    "a11y": {
+        "user_menu": "Felhasználói menü"
+    }
 }
