@@ -205,8 +205,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             header = (
                 <blockquote className="mx_ReplyChain mx_ReplyChain_error">
                     {_t(
-                        "Unable to load event that was replied to, " +
-                            "it either does not exist or you do not have permission to view it.",
+                        "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.",
                     )}
                 </blockquote>
             );

@@ -622,8 +622,7 @@ export default class Registration extends React.Component<IProps, IState> {
                     <div>
                         <p>
                             {_t(
-                                "Your new account (%(newAccountId)s) is registered, but you're already " +
-                                    "logged into a different account (%(loggedInUserId)s).",
+                                "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).",
                                 {
                                     newAccountId: this.state.registeredUsername,
                                     loggedInUserId: this.state.differentLoggedInUserId,

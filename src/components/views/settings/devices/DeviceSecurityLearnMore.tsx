@@ -42,8 +42,7 @@ const securityCardContent: Record<
                 </p>
                 <p>
                     {_t(
-                        `This means that you have all the keys needed to unlock your encrypted messages ` +
-                            `and confirm to other users that you trust this session.`,
+                        "This means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.",
                     )}
                 </p>
             </>
@@ -60,8 +59,7 @@ const securityCardContent: Record<
                 </p>
                 <p>
                     {_t(
-                        `You should make especially certain that you recognise these sessions ` +
-                            `as they could represent an unauthorised use of your account.`,
+                        "You should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.",
                     )}
                 </p>
             </>
@@ -98,8 +96,7 @@ const securityCardContent: Record<
                 </p>
                 <p>
                     {_t(
-                        `Removing inactive sessions improves security and performance, ` +
-                            `and makes it easier for you to identify if a new session is suspicious.`,
+                        "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.",
                     )}
                 </p>
             </>

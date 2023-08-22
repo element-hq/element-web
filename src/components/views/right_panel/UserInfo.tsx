@@ -383,8 +383,7 @@ export const UserOptionsSection: React.FC<{
             description: (
                 <div>
                     {_t(
-                        "All messages and invites from this user will be hidden. " +
-                            "Are you sure you want to ignore them?",
+                        "All messages and invites from this user will be hidden. Are you sure you want to ignore them?",
                     )}
                 </div>
             ),
@@ -523,14 +522,10 @@ export const warnSelfDemote = async (isSpace: boolean): Promise<boolean> => {
             <div>
                 {isSpace
                     ? _t(
-                          "You will not be able to undo this change as you are demoting yourself, " +
-                              "if you are the last privileged user in the space it will be impossible " +
-                              "to regain privileges.",
+                          "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.",
                       )
                     : _t(
-                          "You will not be able to undo this change as you are demoting yourself, " +
-                              "if you are the last privileged user in the room it will be impossible " +
-                              "to regain privileges.",
+                          "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.",
                       )}
             </div>
         ),
@@ -1185,8 +1180,7 @@ export const PowerLevelEditor: React.FC<{
                     description: (
                         <div>
                             {_t(
-                                "You will not be able to undo this change as you are promoting the user " +
-                                    "to have the same power level as yourself.",
+                                "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.",
                             )}
                             <br />
                             {_t("Are you sure?")}
@@ -1355,9 +1349,7 @@ const BasicUserInfo: React.FC<{
             description: (
                 <div>
                     {_t(
-                        "Deactivating this user will log them out and prevent them from logging back in. Additionally, " +
-                            "they will leave all the rooms they are in. This action cannot be reversed. Are you sure you " +
-                            "want to deactivate this user?",
+                        "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?",
                     )}
                 </div>
             ),

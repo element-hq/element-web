@@ -18,7 +18,7 @@ import React, { PureComponent, RefCallback, RefObject } from "react";
 
 import Field, { IInputProps } from "../elements/Field";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "label" | "element"> {
     id?: string;
@@ -27,9 +27,9 @@ interface IProps extends Omit<IInputProps, "onValidate" | "label" | "element"> {
     value: string;
     password: string; // The password we're confirming
 
-    label: string;
-    labelRequired: string;
-    labelInvalid: string;
+    label: TranslationKey;
+    labelRequired: TranslationKey;
+    labelInvalid: TranslationKey;
 
     onChange(ev: React.FormEvent<HTMLElement>): void;
     onValidate?(result: IValidationResult): void;

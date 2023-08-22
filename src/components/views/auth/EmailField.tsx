@@ -17,7 +17,7 @@ limitations under the License.
 import React, { PureComponent, RefCallback, RefObject } from "react";
 
 import Field, { IInputProps } from "../elements/Field";
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import * as Email from "../../../email";
 
@@ -27,9 +27,9 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     value: string;
     autoFocus?: boolean;
 
-    label?: string;
-    labelRequired?: string;
-    labelInvalid?: string;
+    label: TranslationKey;
+    labelRequired: TranslationKey;
+    labelInvalid: TranslationKey;
 
     // When present, completely overrides the default validation rules.
     validationRules?: (fieldState: IFieldState) => Promise<IValidationResult>;
@@ -50,12 +50,12 @@ class EmailField extends PureComponent<IProps> {
             {
                 key: "required",
                 test: ({ value, allowEmpty }) => allowEmpty || !!value,
-                invalid: () => _t(this.props.labelRequired!),
+                invalid: () => _t(this.props.labelRequired),
             },
             {
                 key: "email",
                 test: ({ value }) => !value || Email.looksValid(value),
-                invalid: () => _t(this.props.labelInvalid!),
+                invalid: () => _t(this.props.labelInvalid),
             },
         ],
     });
@@ -80,7 +80,7 @@ class EmailField extends PureComponent<IProps> {
                 id={this.props.id}
                 ref={this.props.fieldRef}
                 type="text"
-                label={_t(this.props.label!)}
+                label={_t(this.props.label)}
                 value={this.props.value}
                 autoFocus={this.props.autoFocus}
                 onChange={this.props.onChange}

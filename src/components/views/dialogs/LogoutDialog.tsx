@@ -138,16 +138,12 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
                 <div>
                     <p>
                         {_t(
-                            "Encrypted messages are secured with end-to-end encryption. " +
-                                "Only you and the recipient(s) have the keys to read these messages.",
+                            "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.",
                         )}
                     </p>
                     <p>
                         {_t(
-                            "When you sign out, these keys will be deleted from this device, " +
-                                "which means you won't be able to read encrypted messages unless you " +
-                                "have the keys for them on your other devices, or backed them up to the " +
-                                "server.",
+                            "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
                         )}
                     </p>
                     <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>

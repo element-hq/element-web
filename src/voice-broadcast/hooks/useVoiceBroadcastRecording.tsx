@@ -35,8 +35,7 @@ const showStopBroadcastingDialog = async (): Promise<boolean> => {
         description: (
             <p>
                 {_t(
-                    "Are you sure you want to stop your live broadcast? " +
-                        "This will end the broadcast and the full recording will be available in the room.",
+                    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.",
                 )}
             </p>
         ),

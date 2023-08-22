@@ -224,10 +224,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                     {warning}
                     <p>
                         {_t(
-                            "Debug logs contain application usage data including your " +
-                                "username, the IDs or aliases of the rooms you " +
-                                "have visited, which UI elements you last interacted with, " +
-                                "and the usernames of other users. They do not contain messages.",
+                            "Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.",
                         )}
                     </p>
                     <p>
@@ -273,10 +270,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                         onChange={this.onTextChange}
                         value={this.state.text}
                         placeholder={_t(
-                            "If there is additional context that would help in " +
-                                "analysing the issue, such as what you were doing at " +
-                                "the time, room IDs, user IDs, etc., " +
-                                "please include those things here.",
+                            "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.",
                         )}
                     />
                     {progress}

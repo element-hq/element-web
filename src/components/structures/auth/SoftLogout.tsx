@@ -281,8 +281,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         let introText: string | null = null; // null is translated to something area specific in this function
         if (this.state.keyBackupNeeded) {
             introText = _t(
-                "Regain access to your account and recover encryption keys stored in this session. " +
-                    "Without them, you won't be able to read all of your secure messages in any session.",
+                "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.",
             );
         }
 
@@ -329,10 +328,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         // Default: assume unsupported/error
         return (
             <p>
-                {_t(
-                    "You cannot sign in to your account. Please contact your " +
-                        "homeserver admin for more information.",
-                )}
+                {_t("You cannot sign in to your account. Please contact your homeserver admin for more information.")}
             </p>
         );
     }
@@ -350,9 +346,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                     <h2>{_t("Clear personal data")}</h2>
                     <p>
                         {_t(
-                            "Warning: your personal data (including encryption keys) is still stored " +
-                                "in this session. Clear it if you're finished using this session, or want to sign " +
-                                "in to another account.",
+                            "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.",
                         )}
                     </p>
                     <div>

@@ -43,8 +43,7 @@ export default class IntegrationsImpossibleDialog extends React.Component<IProps
                 <div className="mx_IntegrationsImpossibleDialog_content">
                     <p>
                         {_t(
-                            "Your %(brand)s doesn't allow you to use an integration manager to do this. " +
-                                "Please contact an admin.",
+                            "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.",
                             { brand },
                         )}
                     </p>

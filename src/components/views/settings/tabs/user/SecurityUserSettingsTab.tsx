@@ -302,8 +302,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             warning = (
                 <div className="mx_SecurityUserSettingsTab_warning">
                     {_t(
-                        "Your server admin has disabled end-to-end encryption by default " +
-                            "in private rooms & Direct Messages.",
+                        "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
                     )}
                 </div>
             );

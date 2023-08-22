@@ -28,9 +28,7 @@ interface IProps {
 const LazyLoadingResyncDialog: React.FC<IProps> = (props) => {
     const brand = SdkConfig.get().brand;
     const description = _t(
-        "%(brand)s now uses 3-5x less memory, by only loading information " +
-            "about other users when needed. Please wait whilst we resynchronise " +
-            "with the server!",
+        "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!",
         { brand },
     );
 

@@ -63,15 +63,12 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
 
     let onlyAdminWarning;
     if (isOnlyAdmin(space)) {
-        onlyAdminWarning = _t(
-            "You're the only admin of this space. " + "Leaving it will mean no one has control over it.",
-        );
+        onlyAdminWarning = _t("You're the only admin of this space. Leaving it will mean no one has control over it.");
     } else {
         const numChildrenOnlyAdminIn = roomsToLeave.filter(isOnlyAdmin).length;
         if (numChildrenOnlyAdminIn > 0) {
             onlyAdminWarning = _t(
-                "You're the only admin of some of the rooms or spaces you wish to leave. " +
-                    "Leaving them will leave them without any admins.",
+                "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.",
             );
         }
     }

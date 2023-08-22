@@ -259,17 +259,14 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                     <>
                         <SettingsSubsectionText>
                             {_t(
-                                "This session is <b>not backing up your keys</b>, " +
-                                    "but you do have an existing backup you can restore from " +
-                                    "and add to going forward.",
+                                "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.",
                                 {},
                                 { b: (sub) => <b>{sub}</b> },
                             )}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>
                             {_t(
-                                "Connect this session to key backup before signing out to avoid " +
-                                    "losing any keys that may only be on this session.",
+                                "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.",
                             )}
                         </SettingsSubsectionText>
                     </>
@@ -382,9 +379,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             <>
                 <SettingsSubsectionText>
                     {_t(
-                        "Back up your encryption keys with your account data in case you " +
-                            "lose access to your sessions. Your keys will be secured with a " +
-                            "unique Security Key.",
+                        "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.",
                     )}
                 </SettingsSubsectionText>
                 {statusDescription}

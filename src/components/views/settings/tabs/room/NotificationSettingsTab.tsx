@@ -221,8 +221,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                             {_t("@mentions & keywords")}
                                             <div className="mx_NotificationSettingsTab_microCopy">
                                                 {_t(
-                                                    "Get notified only with mentions and keywords " +
-                                                        "as set up in your <a>settings</a>",
+                                                    "Get notified only with mentions and keywords as set up in your <a>settings</a>",
                                                     {},
                                                     {
                                                         a: (sub) => (

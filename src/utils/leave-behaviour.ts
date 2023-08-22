@@ -135,8 +135,7 @@ export async function leaveRoomBehaviour(
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Can't leave Server Notices room"),
                         description: _t(
-                            "This room is used for important messages from the Homeserver, " +
-                                "so you cannot leave it.",
+                            "This room is used for important messages from the Homeserver, so you cannot leave it.",
                         ),
                     });
                     return;

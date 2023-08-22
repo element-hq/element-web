@@ -93,9 +93,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             !showSAS && !showQR ? (
                 <p>
                     {_t(
-                        "The device you are trying to verify doesn't support scanning a " +
-                            "QR code or emoji verification, which is what %(brand)s supports. Try " +
-                            "with a different client.",
+                        "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
                         { brand },
                     )}
                 </p>

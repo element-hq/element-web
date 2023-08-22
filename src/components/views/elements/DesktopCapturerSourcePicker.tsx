@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import classNames from "classnames";
 
-import { _t } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import BaseDialog from "..//dialogs/BaseDialog";
 import DialogButtons from "./DialogButtons";
 import AccessibleButton from "./AccessibleButton";
@@ -135,7 +135,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
         this.props.onFinished();
     };
 
-    private getTab(type: TabId, label: string): Tab<TabId> {
+    private getTab(type: TabId, label: TranslationKey): Tab<TabId> {
         const sources = this.state.sources
             .filter((source) => source.id.startsWith(type))
             .map((source) => {
@@ -154,8 +154,8 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
 
     public render(): React.ReactNode {
         const tabs: NonEmptyArray<Tab<TabId>> = [
-            this.getTab("screen", _t("Share entire screen")),
-            this.getTab("window", _t("Application window")),
+            this.getTab("screen", _td("Share entire screen")),
+            this.getTab("window", _td("Application window")),
         ];
 
         return (

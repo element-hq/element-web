@@ -192,8 +192,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
                 Modal.createDialog(QuestionDialog, {
                     title: _t("Delete Widget"),
                     description: _t(
-                        "Deleting a widget removes it for all users in this room." +
-                            " Are you sure you want to delete this widget?",
+                        "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?",
                     ),
                     button: _t("Delete widget"),
                     onFinished: (confirmed) => {

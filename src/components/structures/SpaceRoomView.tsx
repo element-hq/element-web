@@ -401,8 +401,7 @@ const SpaceAddExistingRooms: React.FC<{
             <h1>{_t("What do you want to organise?")}</h1>
             <div className="mx_SpaceRoomView_description">
                 {_t(
-                    "Pick rooms or conversations to add. This is just a space for you, " +
-                        "no one will be informed. You can add more later.",
+                    "Pick rooms or conversations to add. This is just a space for you, no one will be informed. You can add more later.",
                 )}
             </div>
 

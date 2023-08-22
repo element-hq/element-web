@@ -559,8 +559,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             <form onSubmit={this.onChooseKeyPassphraseFormSubmit}>
                 <p className="mx_CreateSecretStorageDialog_centeredBody">
                     {_t(
-                        "Safeguard against losing access to encrypted messages & data by " +
-                            "backing up encryption keys on your server.",
+                        "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.",
                     )}
                 </p>
                 <div className="mx_CreateSecretStorageDialog_primaryContainer" role="radiogroup">
@@ -611,9 +610,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             <form onSubmit={this.onMigrateFormSubmit}>
                 <p>
                     {_t(
-                        "Upgrade this session to allow it to verify other sessions, " +
-                            "granting them access to encrypted messages and marking them " +
-                            "as trusted for other users.",
+                        "Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.",
                     )}
                 </p>
                 <div>{authPrompt}</div>
@@ -636,8 +633,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             <form onSubmit={this.onPassPhraseNextClick}>
                 <p>
                     {_t(
-                        "Enter a Security Phrase only you know, as it's used to safeguard your data. " +
-                            "To be secure, you shouldn't re-use your account password.",
+                        "Enter a Security Phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.",
                     )}
                 </p>
 
@@ -752,8 +748,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             <div>
                 <p>
                     {_t(
-                        "Store your Security Key somewhere safe, like a password manager or a safe, " +
-                            "as it's used to safeguard your encrypted data.",
+                        "Store your Security Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.",
                     )}
                 </p>
                 <div className="mx_CreateSecretStorageDialog_primaryContainer mx_CreateSecretStorageDialog_recoveryKeyPrimarycontainer">

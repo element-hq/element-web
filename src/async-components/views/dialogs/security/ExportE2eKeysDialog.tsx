@@ -164,21 +164,12 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                     <div className="mx_Dialog_content">
                         <p>
                             {_t(
-                                "This process allows you to export the keys for messages " +
-                                    "you have received in encrypted rooms to a local file. You " +
-                                    "will then be able to import the file into another Matrix " +
-                                    "client in the future, so that client will also be able to " +
-                                    "decrypt these messages.",
+                                "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.",
                             )}
                         </p>
                         <p>
                             {_t(
-                                "The exported file will allow anyone who can read it to decrypt " +
-                                    "any encrypted messages that you can see, so you should be " +
-                                    "careful to keep it secure. To help with this, you should enter " +
-                                    "a unique passphrase below, which will only be used to encrypt the " +
-                                    "exported data. " +
-                                    "It will only be possible to import the data by using the same passphrase.",
+                                "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a unique passphrase below, which will only be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.",
                             )}
                         </p>
                         <div className="error">{this.state.errStr}</div>

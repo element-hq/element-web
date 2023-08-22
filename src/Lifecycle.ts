@@ -305,8 +305,7 @@ export function attemptTokenLogin(
         logger.warn("Cannot log in with token: can't determine HS URL to use");
         onFailedDelegatedAuthLogin(
             _t(
-                "We asked the browser to remember which homeserver you use to let you sign in, " +
-                    "but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
+                "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.",
             ),
         );
         return Promise.resolve(false);

@@ -20,7 +20,7 @@ import { Room, EventType } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
@@ -357,7 +357,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
 };
 
 const defaultRendererFactory =
-    (title: string): Renderer =>
+    (title: TranslationKey): Renderer =>
     (rooms, selectedToAdd, { scrollTop, height }, onChange) =>
         (
             <div className="mx_AddExistingToSpace_section">

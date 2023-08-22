@@ -56,8 +56,7 @@ export default class LoginWithQRSection extends React.Component<IProps> {
                 <div className="mx_LoginWithQRSection">
                     <p className="mx_SettingsTab_subsectionText">
                         {_t(
-                            "You can use this device to sign in a new device with a QR code. You will need to " +
-                                "scan the QR code shown on this device with your device that's signed out.",
+                            "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.",
                         )}
                     </p>
                     <AccessibleButton onClick={this.props.onShowQr} kind="primary">

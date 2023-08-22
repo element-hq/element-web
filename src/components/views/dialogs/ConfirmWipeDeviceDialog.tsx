@@ -44,8 +44,7 @@ export default class ConfirmWipeDeviceDialog extends React.Component<IProps> {
                 <div className="mx_ConfirmWipeDeviceDialog_content">
                     <p>
                         {_t(
-                            "Clearing all data from this session is permanent. Encrypted messages will be lost " +
-                                "unless their keys have been backed up.",
+                            "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.",
                         )}
                     </p>
                 </div>

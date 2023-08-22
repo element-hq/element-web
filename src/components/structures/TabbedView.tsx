@@ -20,7 +20,7 @@ import * as React from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from "../../languageHandler";
+import { _t, TranslationKey } from "../../languageHandler";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { PosthogScreenTracker, ScreenName } from "../../PosthogTrackers";
 import { NonEmptyArray } from "../../@types/common";
@@ -40,7 +40,7 @@ export class Tab<T extends string> {
      */
     public constructor(
         public readonly id: T,
-        public readonly label: string,
+        public readonly label: TranslationKey,
         public readonly icon: string | null,
         public readonly body: React.ReactNode,
         public readonly screenName?: ScreenName,

@@ -43,8 +43,7 @@ export function UserOnboardingHeader({ useCase }: Props): JSX.Element {
         case UseCase.PersonalMessaging:
             title = _t("Secure messaging for friends and family");
             description = _t(
-                "With free end-to-end encrypted messaging, and unlimited voice and video calls, " +
-                    "%(brand)s is a great way to stay in touch.",
+                "With free end-to-end encrypted messaging, and unlimited voice and video calls, %(brand)s is a great way to stay in touch.",
                 {
                     brand: SdkConfig.get("brand"),
                 },
@@ -55,8 +54,7 @@ export function UserOnboardingHeader({ useCase }: Props): JSX.Element {
         case UseCase.WorkMessaging:
             title = _t("Secure messaging for work");
             description = _t(
-                "With free end-to-end encrypted messaging, and unlimited voice and video calls," +
-                    " %(brand)s is a great way to stay in touch.",
+                "With free end-to-end encrypted messaging, and unlimited voice and video calls, %(brand)s is a great way to stay in touch.",
                 {
                     brand: SdkConfig.get("brand"),
                 },
@@ -67,8 +65,7 @@ export function UserOnboardingHeader({ useCase }: Props): JSX.Element {
         case UseCase.CommunityMessaging:
             title = _t("Community ownership");
             description = _t(
-                "Keep ownership and control of community discussion.\n" +
-                    "Scale to support millions, with powerful moderation and interoperability.",
+                "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.",
             );
             image = require("../../../../res/img/user-onboarding/CommunityMessaging.png");
             actionLabel = _t("Find your people");
@@ -78,8 +75,7 @@ export function UserOnboardingHeader({ useCase }: Props): JSX.Element {
                 brand: SdkConfig.get("brand"),
             });
             description = _t(
-                "With free end-to-end encrypted messaging, and unlimited voice and video calls," +
-                    " %(brand)s is a great way to stay in touch.",
+                "With free end-to-end encrypted messaging, and unlimited voice and video calls, %(brand)s is a great way to stay in touch.",
                 {
                     brand: SdkConfig.get("brand"),
                 },

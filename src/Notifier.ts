@@ -299,8 +299,7 @@ class NotifierClass {
                     const description =
                         result === "denied"
                             ? _t(
-                                  "%(brand)s does not have permission to send you notifications - " +
-                                      "please check your browser settings",
+                                  "%(brand)s does not have permission to send you notifications - please check your browser settings",
                                   { brand },
                               )
                             : _t("%(brand)s was not given permission to send notifications - please try again", {

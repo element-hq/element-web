@@ -44,10 +44,7 @@ export default class ConfirmDestroyCrossSigningDialog extends React.Component<IP
                 <div className="mx_ConfirmDestroyCrossSigningDialog_content">
                     <p>
                         {_t(
-                            "Deleting cross-signing keys is permanent. " +
-                                "Anyone you have verified with will see security alerts. " +
-                                "You almost certainly don't want to do this, unless " +
-                                "you've lost every device you can cross-sign from.",
+                            "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.",
                         )}
                     </p>
                 </div>

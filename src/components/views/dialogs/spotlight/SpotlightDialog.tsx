@@ -923,10 +923,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 <div className="mx_SpotlightDialog_section mx_SpotlightDialog_hiddenResults" role="group">
                     <h4>{_t("Some results may be hidden")}</h4>
                     <div className="mx_SpotlightDialog_otherSearches_messageSearchText">
-                        {_t(
-                            "If you can't find the room you're looking for, " +
-                                "ask for an invite or create a new room.",
-                        )}
+                        {_t("If you can't find the room you're looking for, ask for an invite or create a new room.")}
                     </div>
                     <Option
                         id="mx_SpotlightDialog_button_createNewRoom"

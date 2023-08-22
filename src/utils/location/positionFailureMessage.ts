@@ -27,8 +27,7 @@ export const positionFailureMessage = (code: number): string | undefined => {
     switch (code) {
         case 1:
             return _t(
-                "%(brand)s was denied permission to fetch your location. " +
-                    "Please allow location access in your browser settings.",
+                "%(brand)s was denied permission to fetch your location. Please allow location access in your browser settings.",
                 { brand },
             );
         case 2:

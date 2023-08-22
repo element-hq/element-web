@@ -14,7 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, JoinRule, MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    HistoryVisibility,
+    JoinRule,
+    MatrixClient,
+    MatrixEvent,
+    Room,
+    RoomMember,
+} from "matrix-js-sdk/src/matrix";
 import { render } from "@testing-library/react";
 import { ReactElement } from "react";
 import { Mocked, mocked } from "jest-mock";
@@ -570,5 +578,40 @@ describe("TextForEvent", () => {
                 ),
             ).toEqual("@a changed the join rule to a not implemented one");
         });
+    });
+
+    describe("textForHistoryVisibilityEvent()", () => {
+        type TestCase = [string, { result: string }];
+        const testCases: TestCase[] = [
+            [
+                HistoryVisibility.Invited,
+                { result: "@a made future room history visible to all room members, from the point they are invited." },
+            ],
+            [
+                HistoryVisibility.Joined,
+                { result: "@a made future room history visible to all room members, from the point they joined." },
+            ],
+            [HistoryVisibility.Shared, { result: "@a made future room history visible to all room members." }],
+            [HistoryVisibility.WorldReadable, { result: "@a made future room history visible to anyone." }],
+        ];
+
+        it.each(testCases)(
+            "returns correct message when room join rule changed to %s",
+            (historyVisibility, { result }) => {
+                expect(
+                    textForEvent(
+                        new MatrixEvent({
+                            type: "m.room.history_visibility",
+                            sender: "@a",
+                            content: {
+                                history_visibility: historyVisibility,
+                            },
+                            state_key: "",
+                        }),
+                        mockClient,
+                    ),
+                ).toEqual(result);
+            },
+        );
     });
 });

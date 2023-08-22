@@ -26,8 +26,7 @@ export const showCantStartACallDialog = (): void => {
         description: (
             <p>
                 {_t(
-                    "You can’t start a call as you are currently recording a live broadcast. " +
-                        "Please end your live broadcast in order to start a call.",
+                    "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.",
                 )}
             </p>
         ),

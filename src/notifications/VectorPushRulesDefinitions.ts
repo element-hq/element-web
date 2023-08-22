@@ -17,7 +17,7 @@ limitations under the License.
 import { IAnnotatedPushRule, PushRuleAction, RuleId } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _td } from "../languageHandler";
+import { _td, TranslationKey } from "../languageHandler";
 import { StandardActions } from "./StandardActions";
 import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
 import { NotificationUtils } from "./NotificationUtils";
@@ -27,7 +27,7 @@ type StateToActionsMap = {
 };
 
 interface IVectorPushRuleDefinition {
-    description: string;
+    description: TranslationKey;
     vectorStateToActions: StateToActionsMap;
     /**
      * Rules that should be updated to be kept in sync
@@ -37,7 +37,7 @@ interface IVectorPushRuleDefinition {
 }
 
 class VectorPushRuleDefinition {
-    public readonly description: string;
+    public readonly description: TranslationKey;
     public readonly vectorStateToActions: StateToActionsMap;
     public readonly syncedRuleIds?: (RuleId | string)[];
 

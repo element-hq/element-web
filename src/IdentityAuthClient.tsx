@@ -141,9 +141,7 @@ export default class IdentityAuthClient {
                     <div>
                         <p>
                             {_t(
-                                "This action requires accessing the default identity server " +
-                                    "<server /> to validate an email address or phone number, " +
-                                    "but the server does not have any terms of service.",
+                                "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.",
                                 {},
                                 {
                                     server: () => <b>{abbreviateUrl(identityServerUrl)}</b>,

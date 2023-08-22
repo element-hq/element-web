@@ -25,7 +25,7 @@ import { IRegisterRequestParams } from "matrix-js-sdk/src/matrix";
 import { ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib/types/ModuleUiDialogOptions";
 
 import Modal from "../Modal";
-import { _t } from "../languageHandler";
+import { _t, TranslationKey } from "../languageHandler";
 import { ModuleUiDialog } from "../components/views/dialogs/ModuleUiDialog";
 import SdkConfig from "../SdkConfig";
 import PlatformPeg from "../PlatformPeg";
@@ -74,7 +74,7 @@ export class ProxiedModuleApi implements ModuleApi {
     /**
      * @override
      */
-    public translateString(s: string, variables?: Record<string, PlainSubstitution>): string {
+    public translateString(s: TranslationKey, variables?: Record<string, PlainSubstitution>): string {
         return _t(s, variables);
     }
 

@@ -23,6 +23,7 @@ import { LabGroup, SETTINGS } from "../../../src/settings/Settings";
 import { stubClient } from "../../test-utils";
 import { WatchManager } from "../../../src/settings/WatchManager";
 import MatrixClientBackedController from "../../../src/settings/controllers/MatrixClientBackedController";
+import { TranslationKey } from "../../../src/languageHandler";
 
 describe("ServerSupportUnstableFeatureController", () => {
     const watchers = new WatchManager();
@@ -35,7 +36,7 @@ describe("ServerSupportUnstableFeatureController", () => {
         SETTINGS[setting] = {
             isFeature: true,
             labsGroup: LabGroup.Messaging,
-            displayName: "name of some kind",
+            displayName: "name of some kind" as TranslationKey,
             supportedLevels: [SettingLevel.DEVICE, SettingLevel.CONFIG],
             default: false,
             controller,

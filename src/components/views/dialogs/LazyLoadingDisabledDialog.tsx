@@ -29,19 +29,14 @@ interface IProps {
 const LazyLoadingDisabledDialog: React.FC<IProps> = (props) => {
     const brand = SdkConfig.get().brand;
     const description1 = _t(
-        "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. " +
-            "In this version lazy loading is disabled. " +
-            "As the local cache is not compatible between these two settings, " +
-            "%(brand)s needs to resync your account.",
+        "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.",
         {
             brand,
             host: props.host,
         },
     );
     const description2 = _t(
-        "If the other version of %(brand)s is still open in another tab, " +
-            "please close it as using %(brand)s on the same host with both " +
-            "lazy loading enabled and disabled simultaneously will cause issues.",
+        "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.",
         {
             brand,
         },

@@ -17,7 +17,7 @@ limitations under the License.
 
 import React, { useState } from "react";
 
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseDialog from "./BaseDialog";
 import { TimelineEventEditor } from "./devtools/Event";
@@ -40,13 +40,13 @@ enum Category {
     Other,
 }
 
-const categoryLabels: Record<Category, string> = {
+const categoryLabels: Record<Category, TranslationKey> = {
     [Category.Room]: _td("Room"),
     [Category.Other]: _td("Other"),
 };
 
 export type Tool = React.FC<IDevtoolsProps> | ((props: IDevtoolsProps) => JSX.Element);
-const Tools: Record<Category, [label: string, tool: Tool][]> = {
+const Tools: Record<Category, [label: TranslationKey, tool: Tool][]> = {
     [Category.Room]: [
         [_td("Send custom timeline event"), TimelineEventEditor],
         [_td("Explore room state"), RoomStateExplorer],

@@ -20,7 +20,7 @@ import React from "react";
 import classNames from "classnames";
 
 import AccessibleButton from "../elements/AccessibleButton";
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import E2EIcon, { E2EState } from "./E2EIcon";
 import BaseAvatar from "../avatars/BaseAvatar";
 import PresenceLabel from "./PresenceLabel";
@@ -30,7 +30,7 @@ export enum PowerStatus {
     Moderator = "moderator",
 }
 
-const PowerLabel: Record<PowerStatus, string> = {
+const PowerLabel: Record<PowerStatus, TranslationKey> = {
     [PowerStatus.Admin]: _td("Admin"),
     [PowerStatus.Moderator]: _td("Mod"),
 };

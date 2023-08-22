@@ -149,8 +149,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                 <>
                     <SettingsSubsectionText>
                         {_t(
-                            "Securely cache encrypted messages locally for them " +
-                                "to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
+                            "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
                             {
                                 size: formatBytes(this.state.eventIndexSize, 0),
                                 // This drives the singular / plural string
@@ -188,10 +187,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             eventIndexingSettings = (
                 <SettingsSubsectionText>
                     {_t(
-                        "%(brand)s is missing some components required for securely " +
-                            "caching encrypted messages locally. If you'd like to " +
-                            "experiment with this feature, build a custom %(brand)s Desktop " +
-                            "with <nativeLink>search components added</nativeLink>.",
+                        "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.",
                         {
                             brand,
                         },
@@ -209,9 +205,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             eventIndexingSettings = (
                 <SettingsSubsectionText>
                     {_t(
-                        "%(brand)s can't securely cache encrypted messages locally " +
-                            "while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> " +
-                            "for encrypted messages to appear in search results.",
+                        "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.",
                         {
                             brand,
                         },

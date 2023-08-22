@@ -87,6 +87,20 @@ describe("AutoDiscoveryUtils", () => {
             expect(logger.error).toHaveBeenCalled();
         });
 
+        it("throws an error when homeserver config has fail error and recognised error string", () => {
+            const discoveryResult = {
+                ...validIsConfig,
+                "m.homeserver": {
+                    state: AutoDiscoveryAction.FAIL_ERROR,
+                    error: AutoDiscovery.ERROR_INVALID_HOMESERVER,
+                },
+            };
+            expect(() => AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, discoveryResult)).toThrow(
+                "Unexpected error resolving homeserver configuration",
+            );
+            expect(logger.error).toHaveBeenCalled();
+        });
+
         it("throws an error with fallback message identity server config has fail error", () => {
             const discoveryResult = {
                 ...validHsConfig,
@@ -247,6 +261,14 @@ describe("AutoDiscoveryUtils", () => {
             ).toThrow(
                 "Your homeserver is too old and does not support the minimum API version required. Please contact your server owner, or upgrade your server.",
             );
+        });
+    });
+
+    describe("authComponentStateForError", () => {
+        const error = new Error("TEST");
+
+        it("should return expected error for the registration page", () => {
+            expect(AutoDiscoveryUtils.authComponentStateForError(error, "register")).toMatchSnapshot();
         });
     });
 });

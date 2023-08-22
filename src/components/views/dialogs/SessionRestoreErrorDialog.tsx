@@ -101,17 +101,14 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
 
                     <p>
                         {_t(
-                            "If you have previously used a more recent version of %(brand)s, your session " +
-                                "may be incompatible with this version. Close this window and return " +
-                                "to the more recent version.",
+                            "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",
                             { brand },
                         )}
                     </p>
 
                     <p>
                         {_t(
-                            "Clearing your browser's storage may fix the problem, but will sign you " +
-                                "out and cause any encrypted chat history to become unreadable.",
+                            "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.",
                         )}
                     </p>
                 </div>

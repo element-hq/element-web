@@ -161,10 +161,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                     <div>
                         <p>
                             {_t(
-                                "It looks like you don't have a Security Key or any other devices you can " +
-                                    "verify against.  This device will not be able to access old encrypted messages. " +
-                                    "In order to verify your identity on this device, you'll need to reset " +
-                                    "your verification keys.",
+                                "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
                             )}
                         </p>
 
@@ -234,8 +231,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 message = (
                     <p>
                         {_t(
-                            "Your new device is now verified. It has access to your " +
-                                "encrypted messages, and other users will see it as trusted.",
+                            "Your new device is now verified. It has access to your encrypted messages, and other users will see it as trusted.",
                         )}
                     </p>
                 );
@@ -258,8 +254,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 <div>
                     <p>
                         {_t(
-                            "Without verifying, you won't have access to all your messages " +
-                                "and may appear as untrusted to others.",
+                            "Without verifying, you won't have access to all your messages and may appear as untrusted to others.",
                         )}
                     </p>
                     <div className="mx_CompleteSecurity_actionRow">
@@ -277,16 +272,12 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 <div>
                     <p>
                         {_t(
-                            "Resetting your verification keys cannot be undone. After resetting, " +
-                                "you won't have access to old encrypted messages, and any friends who " +
-                                "have previously verified you will see security warnings until you " +
-                                "re-verify with them.",
+                            "Resetting your verification keys cannot be undone. After resetting, you won't have access to old encrypted messages, and any friends who have previously verified you will see security warnings until you re-verify with them.",
                         )}
                     </p>
                     <p>
                         {_t(
-                            "Please only proceed if you're sure you've lost all of your other " +
-                                "devices and your Security Key.",
+                            "Please only proceed if you're sure you've lost all of your other devices and your Security Key.",
                         )}
                     </p>
 

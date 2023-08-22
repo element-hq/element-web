@@ -136,8 +136,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                     <ul>
                         <li>
                             {_t(
-                                "The <photo>default cover photo</photo> is © " +
-                                    "<author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.",
+                                "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.",
                                 {},
                                 {
                                     photo: (sub) => (
@@ -166,8 +165,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         </li>
                         <li>
                             {_t(
-                                "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> " +
-                                    "used under the terms of <terms>Apache 2.0</terms>.",
+                                "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.",
                                 {},
                                 {
                                     colr: (sub) => (
@@ -194,9 +192,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         </li>
                         <li>
                             {_t(
-                                "The <twemoji>Twemoji</twemoji> emoji art is © " +
-                                    "<author>Twitter, Inc and other contributors</author> used under the terms of " +
-                                    "<terms>CC-BY 4.0</terms>.",
+                                "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.",
                                 {},
                                 {
                                     twemoji: (sub) => (
@@ -244,8 +240,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             faqText = (
                 <div>
                     {_t(
-                        "For help with using %(brand)s, click <a>here</a> or start a chat with our " +
-                            "bot using the button below.",
+                        "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.",
                         {
                             brand,
                         },
@@ -284,16 +279,11 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         <>
                             <SettingsSubsectionText>
                                 {_t(
-                                    "If you've submitted a bug via GitHub, debug logs can help " +
-                                        "us track down the problem. ",
+                                    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
                                 )}
                             </SettingsSubsectionText>
                             {_t(
-                                "Debug logs contain application " +
-                                    "usage data including your username, the IDs or aliases of " +
-                                    "the rooms you have visited, which UI elements you " +
-                                    "last interacted with, and the usernames of other users. " +
-                                    "They do not contain messages.",
+                                "Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.",
                             )}
                         </>
                     }
@@ -303,8 +293,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                     </AccessibleButton>
                     <SettingsSubsectionText>
                         {_t(
-                            "To report a Matrix-related security issue, please read the Matrix.org " +
-                                "<a>Security Disclosure Policy</a>.",
+                            "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.",
                             {},
                             {
                                 a: (sub) => (
@@ -369,8 +358,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                                 <summary>{_t("Access Token")}</summary>
                                 <b>
                                     {_t(
-                                        "Your access token gives full access to your account." +
-                                            " Do not share it with anyone.",
+                                        "Your access token gives full access to your account. Do not share it with anyone.",
                                     )}
                                 </b>
                                 <CopyableText getTextToCopy={() => this.context.getAccessToken()}>

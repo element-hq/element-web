@@ -135,8 +135,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         let bugReports = (
             <p>
                 {_t(
-                    "This usually only affects how the room is processed on the server. If you're " +
-                        "having problems with your %(brand)s, please report a bug.",
+                    "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.",
                     { brand },
                 )}
             </p>
@@ -145,8 +144,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
             bugReports = (
                 <p>
                     {_t(
-                        "This usually only affects how the room is processed on the server. If you're " +
-                            "having problems with your %(brand)s, please <a>report a bug</a>.",
+                        "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.",
                         {
                             brand,
                         },
@@ -195,14 +193,12 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
                     <p>
                         {this.props.description ||
                             _t(
-                                "Upgrading a room is an advanced action and is usually recommended when a room " +
-                                    "is unstable due to bugs, missing features or security vulnerabilities.",
+                                "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.",
                             )}
                     </p>
                     <p>
                         {_t(
-                            "<b>Please note upgrading will make a new version of the room</b>. " +
-                                "All current messages will stay in this archived room.",
+                            "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.",
                             {},
                             {
                                 b: (sub) => <b>{sub}</b>,

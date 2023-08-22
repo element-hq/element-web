@@ -88,8 +88,7 @@ const securityCardContent: Record<
     [DeviceSecurityVariation.Unverified]: {
         title: _t("Unverified sessions"),
         description: _t(
-            `Verify your sessions for enhanced secure messaging or ` +
-                `sign out from those you don't recognize or use anymore.`,
+            "Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.",
         ),
     },
     [DeviceSecurityVariation.Unverifiable]: {
@@ -99,7 +98,7 @@ const securityCardContent: Record<
     [DeviceSecurityVariation.Inactive]: {
         title: _t("Inactive sessions"),
         description: _t(
-            `Consider signing out from old sessions ` + `(%(inactiveAgeDays)s days or older) you don't use anymore.`,
+            "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.",
             { inactiveAgeDays: INACTIVE_DEVICE_AGE_DAYS },
         ),
     },

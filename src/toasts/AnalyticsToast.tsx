@@ -104,8 +104,7 @@ export const showToast = (): void => {
         );
         props = {
             description: _t(
-                "Share anonymous data to help us identify issues. Nothing personal. No third parties. " +
-                    "<LearnMoreLink>Learn More</LearnMoreLink>",
+                "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>",
                 {},
                 { LearnMoreLink: learnMoreLink },
             ),

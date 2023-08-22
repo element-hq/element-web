@@ -630,9 +630,7 @@ export class RoomViewStore extends EventEmitter {
                 description = (
                     <div>
                         {_t(
-                            "You attempted to join using a room ID without providing a list " +
-                                "of servers to join through. Room IDs are internal identifiers and " +
-                                "cannot be used to join a room without additional information.",
+                            "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.",
                         )}
                         <br />
                         <br />

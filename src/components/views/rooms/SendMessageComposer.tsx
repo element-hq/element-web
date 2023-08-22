@@ -496,7 +496,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     return; // errored
                 }
 
-                if (content && [CommandCategories.messages, CommandCategories.effects].includes(cmd.category)) {
+                if (
+                    content &&
+                    [CommandCategories.messages as string, CommandCategories.effects as string].includes(cmd.category)
+                ) {
                     // Attach any mentions which might be contained in the command content.
                     attachMentions(this.props.mxClient.getSafeUserId(), content, model, replyToEvent);
                     attachRelation(content, this.props.relation);

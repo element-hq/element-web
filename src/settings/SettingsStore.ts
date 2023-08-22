@@ -269,7 +269,7 @@ export default class SettingsStore {
             else displayName = displayName["default"];
         }
 
-        return _t(displayName as string);
+        return displayName ? _t(displayName) : null;
     }
 
     /**

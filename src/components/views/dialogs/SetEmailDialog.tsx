@@ -78,8 +78,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                 Modal.createDialog(QuestionDialog, {
                     title: _t("Verification Pending"),
                     description: _t(
-                        "Please check your email and click on the link it contains. Once this " +
-                            "is done, click continue.",
+                        "Please check your email and click on the link it contains. Once this is done, click continue.",
                     ),
                     button: _t("Continue"),
                     onFinished: this.onEmailDialogFinished,

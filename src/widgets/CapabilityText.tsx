@@ -29,7 +29,7 @@ import {
 import { EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
-import { _t, _td, TranslatedString } from "../languageHandler";
+import { _t, _td, TranslatedString, TranslationKey } from "../languageHandler";
 import { ElementWidgetCapabilities } from "../stores/widgets/ElementWidgetCapabilities";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import TextWithTooltip from "../components/views/elements/TextWithTooltip";
@@ -38,7 +38,10 @@ type GENERIC_WIDGET_KIND = "generic"; // eslint-disable-line @typescript-eslint/
 const GENERIC_WIDGET_KIND: GENERIC_WIDGET_KIND = "generic";
 
 type SendRecvStaticCapText = Partial<
-    Record<EventType | string, Partial<Record<WidgetKind | GENERIC_WIDGET_KIND, Record<EventDirection, string>>>>
+    Record<
+        EventType | string,
+        Partial<Record<WidgetKind | GENERIC_WIDGET_KIND, Record<EventDirection, TranslationKey>>>
+    >
 >;
 
 export interface TranslatedCapabilityText {
@@ -47,7 +50,7 @@ export interface TranslatedCapabilityText {
 }
 
 export class CapabilityText {
-    private static simpleCaps: Record<Capability, Partial<Record<WidgetKind | GENERIC_WIDGET_KIND, string>>> = {
+    private static simpleCaps: Record<Capability, Partial<Record<WidgetKind | GENERIC_WIDGET_KIND, TranslationKey>>> = {
         [MatrixCapabilities.AlwaysOnScreen]: {
             [WidgetKind.Room]: _td("Remain on your screen when viewing another room, when running"),
             [GENERIC_WIDGET_KIND]: _td("Remain on your screen while running"),

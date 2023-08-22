@@ -22,7 +22,7 @@ import { SlashCommand as SlashCommandEvent } from "@matrix-org/analytics-events/
 
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { reject } from "./utils";
-import { _t, UserFriendlyError } from "../languageHandler";
+import { _t, TranslationKey, UserFriendlyError } from "../languageHandler";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { CommandCategories, RunResult } from "./interface";
 
@@ -38,7 +38,7 @@ interface ICommandOpts {
     command: string;
     aliases?: string[];
     args?: string;
-    description: string;
+    description: TranslationKey;
     analyticsName?: SlashCommandEvent["command"];
     runFn?: RunFn;
     category: string;
@@ -51,7 +51,7 @@ export class Command {
     public readonly command: string;
     public readonly aliases: string[];
     public readonly args?: string;
-    public readonly description: string;
+    public readonly description: TranslationKey;
     public readonly runFn?: RunFn;
     public readonly category: string;
     public readonly hideCompletionAfterSpace: boolean;

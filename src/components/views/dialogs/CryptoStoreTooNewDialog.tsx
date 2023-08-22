@@ -36,9 +36,7 @@ const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
         Modal.createDialog(QuestionDialog, {
             title: _t("Sign out"),
             description: _t(
-                "To avoid losing your chat history, you must export your room keys " +
-                    "before logging out. You will need to go back to the newer version of " +
-                    "%(brand)s to do this",
+                "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this",
                 { brand },
             ),
             button: _t("Sign out"),
@@ -53,9 +51,7 @@ const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
     };
 
     const description = _t(
-        "You've previously used a newer version of %(brand)s with this session. " +
-            "To use this version again with end to end encryption, you will " +
-            "need to sign out and back in again.",
+        "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.",
         { brand },
     );
 

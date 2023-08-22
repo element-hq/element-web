@@ -23,12 +23,14 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
 import { MapWithDefault, safeSet } from "matrix-js-sdk/src/utils";
 
+import type Translations from "./i18n/strings/en_EN.json";
 import SettingsStore from "./settings/SettingsStore";
 import PlatformPeg from "./PlatformPeg";
 import { SettingLevel } from "./settings/SettingLevel";
 import { retry } from "./utils/promise";
 import SdkConfig from "./SdkConfig";
 import { ModuleRunner } from "./modules/ModuleRunner";
+import { Leaves } from "./@types/common";
 
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
@@ -46,7 +48,7 @@ counterpart.setSeparator("|");
 const FALLBACK_LOCALE = "en";
 counterpart.setFallbackLocale(FALLBACK_LOCALE);
 
-interface ErrorOptions {
+export interface ErrorOptions {
     // Because we're mixing the subsitution variables and `cause` into the same object
     // below, we want them to always explicitly say whether there is an underlying error
     // or not to avoid typos of "cause" slipping through unnoticed.
@@ -72,7 +74,7 @@ interface ErrorOptions {
 export class UserFriendlyError extends Error {
     public readonly translatedMessage: string;
 
-    public constructor(message: string, substitutionVariablesAndCause?: IVariables & ErrorOptions) {
+    public constructor(message: TranslationKey, substitutionVariablesAndCause?: IVariables & ErrorOptions) {
         const errorOptions = {
             cause: substitutionVariablesAndCause?.cause,
         };
@@ -100,10 +102,20 @@ export function getUserLanguage(): string {
     }
 }
 
+/**
+ * A type representing the union of possible keys into the translation file using `|` delimiter to access nested fields.
+ * @example `common|error` to access `error` within the `common` sub-object.
+ * {
+ *     "common": {
+ *         "error": "Error"
+ *     }
+ * }
+ */
+export type TranslationKey = Leaves<typeof Translations, "|", string | { other: string }>;
+
 // Function which only purpose is to mark that a string is translatable
 // Does not actually do anything. It's helpful for automatic extraction of translatable strings
-export function _td(s: string): string {
-    // eslint-disable-line @typescript-eslint/naming-convention
+export function _td(s: TranslationKey): TranslationKey {
     return s;
 }
 
@@ -176,6 +188,9 @@ function safeCounterpartTranslate(text: string, variables?: IVariables): { trans
     return translateWithFallback(text, options);
 }
 
+/**
+ * The value a variable or tag can take for a translation interpolation.
+ */
 type SubstitutionValue = number | string | React.ReactNode | ((sub: string) => React.ReactNode);
 
 export interface IVariables {
@@ -189,7 +204,7 @@ export type TranslatedString = string | React.ReactNode;
 
 // For development/testing purposes it is useful to also output the original string
 // Don't do that for release versions
-const annotateStrings = (result: TranslatedString, translationKey: string): TranslatedString => {
+const annotateStrings = (result: TranslatedString, translationKey: TranslationKey): TranslatedString => {
     if (!ANNOTATE_STRINGS) {
         return result;
     }
@@ -222,9 +237,9 @@ const annotateStrings = (result: TranslatedString, translationKey: string): Tran
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 // eslint-next-line @typescript-eslint/naming-convention
-export function _t(text: string, variables?: IVariables): string;
-export function _t(text: string, variables: IVariables | undefined, tags: Tags): React.ReactNode;
-export function _t(text: string, variables?: IVariables, tags?: Tags): TranslatedString {
+export function _t(text: TranslationKey, variables?: IVariables): string;
+export function _t(text: TranslationKey, variables: IVariables | undefined, tags: Tags): React.ReactNode;
+export function _t(text: TranslationKey, variables?: IVariables, tags?: Tags): TranslatedString {
     // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
     const { translated } = safeCounterpartTranslate(text, variables);
     const substituted = substitute(translated, variables, tags);
@@ -243,9 +258,9 @@ export function _t(text: string, variables?: IVariables, tags?: Tags): Translate
  * or translation used a fallback locale, otherwise a string
  */
 // eslint-next-line @typescript-eslint/naming-convention
-export function _tDom(text: string, variables?: IVariables): TranslatedString;
-export function _tDom(text: string, variables: IVariables, tags: Tags): React.ReactNode;
-export function _tDom(text: string, variables?: IVariables, tags?: Tags): TranslatedString {
+export function _tDom(text: TranslationKey, variables?: IVariables): TranslatedString;
+export function _tDom(text: TranslationKey, variables: IVariables, tags: Tags): React.ReactNode;
+export function _tDom(text: TranslationKey, variables?: IVariables, tags?: Tags): TranslatedString {
     // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
     const { translated, isFallback } = safeCounterpartTranslate(text, variables);
     const substituted = substitute(translated, variables, tags);

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { _td } from "./languageHandler";
+import { _td, TranslationKey } from "./languageHandler";
 
 const PHONE_NUMBER_REGEXP = /^[0-9 -.]+$/;
 
@@ -44,7 +44,7 @@ export const getEmojiFlag = (countryCode: string): string => {
 
 export interface PhoneNumberCountryDefinition {
     iso2: string;
-    name: string;
+    name: TranslationKey;
     prefix: string;
 }
 

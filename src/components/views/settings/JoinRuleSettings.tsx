@@ -323,9 +323,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                     warning = (
                         <b>
                             {_t(
-                                "This room is in some spaces you're not an admin of. " +
-                                    "In those spaces, the old room will still be shown, " +
-                                    "but people will be prompted to join the new one.",
+                                "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.",
                             )}
                         </b>
                     );
@@ -335,8 +333,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                     targetVersion,
                     <>
                         {_t(
-                            "This upgrade will allow members of selected spaces " +
-                                "access to this room without an invite.",
+                            "This upgrade will allow members of selected spaces access to this room without an invite.",
                         )}
                         {warning}
                     </>,

@@ -70,9 +70,7 @@ export default class EndPollDialog extends React.Component<IProps> {
             <QuestionDialog
                 title={_t("End Poll")}
                 description={_t(
-                    "Are you sure you want to end this poll? " +
-                        "This will show the final results of the poll and " +
-                        "stop people from being able to vote.",
+                    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.",
                 )}
                 button={_t("End Poll")}
                 onFinished={(endPoll: boolean) => this.onFinished(endPoll)}

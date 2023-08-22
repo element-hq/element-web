@@ -19,7 +19,7 @@ import { Room, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IWidget } from "matrix-widget-api";
 
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import AppTile from "../elements/AppTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
@@ -159,7 +159,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         this.sendVisibilityToWidget(this.props.isStickerPickerOpen);
     }
 
-    private imError(errorMsg: string, e: Error): void {
+    private imError(errorMsg: TranslationKey, e: Error): void {
         logger.error(errorMsg, e);
         this.setState({
             imError: _t(errorMsg),

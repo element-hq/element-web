@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { _td } from "../languageHandler";
+import { _td, TranslationKey } from "../languageHandler";
 import { IS_MAC, Key } from "../Keyboard";
 import { IBaseSetting } from "../settings/Settings";
 import { KeyCombo } from "../KeyBindingsManager";
@@ -154,13 +154,15 @@ export enum KeyBindingAction {
     ToggleHiddenEventVisibility = "KeyBinding.toggleHiddenEventVisibility",
 }
 
-type KeyboardShortcutSetting = Omit<IBaseSetting<KeyCombo>, "supportedLevels">;
+export type KeyboardShortcutSetting = Omit<IBaseSetting<KeyCombo>, "supportedLevels" | "displayName"> & {
+    displayName?: TranslationKey;
+};
 
 // TODO: We should figure out what to do with the keyboard shortcuts that are not handled by KeybindingManager
 export type IKeyboardShortcuts = Partial<Record<KeyBindingAction, KeyboardShortcutSetting>>;
 
 export interface ICategory {
-    categoryLabel?: string;
+    categoryLabel?: TranslationKey;
     // TODO: We should figure out what to do with the keyboard shortcuts that are not handled by KeybindingManager
     settingNames: KeyBindingAction[];
 }
@@ -179,7 +181,7 @@ export enum CategoryName {
 // Meta-key representing the digits [0-9] often found at the top of standard keyboard layouts
 export const DIGITS = "digits";
 
-export const ALTERNATE_KEY_NAME: Record<string, string> = {
+export const ALTERNATE_KEY_NAME: Record<string, TranslationKey> = {
     [Key.PAGE_UP]: _td("Page Up"),
     [Key.PAGE_DOWN]: _td("Page Down"),
     [Key.ESCAPE]: _td("Esc"),

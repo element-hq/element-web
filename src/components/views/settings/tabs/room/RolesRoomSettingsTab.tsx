@@ -20,7 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { throttle, get } from "lodash";
 import { compare } from "matrix-js-sdk/src/utils";
 
-import { _t, _td } from "../../../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../../../languageHandler";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
@@ -207,8 +207,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             Modal.createDialog(ErrorDialog, {
                 title: _t("Error changing power level requirement"),
                 description: _t(
-                    "An error occurred changing the room's power level requirements. Ensure you have sufficient " +
-                        "permissions and try again.",
+                    "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.",
                 ),
             });
         });
@@ -233,8 +232,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             Modal.createDialog(ErrorDialog, {
                 title: _t("Error changing power level"),
                 description: _t(
-                    "An error occurred changing the user's power level. Ensure you have sufficient " +
-                        "permissions and try again.",
+                    "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.",
                 ),
             });
         });
@@ -249,7 +247,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         const plContent = plEvent ? plEvent.getContent() || {} : {};
         const canChangeLevels = room.currentState.mayClientSendStateEvent(EventType.RoomPowerLevels, client);
 
-        const plEventsToLabels: Record<EventType | string, string | null> = {
+        const plEventsToLabels: Record<EventType | string, TranslationKey | null> = {
             // These will be translated for us later.
             [EventType.RoomAvatar]: isSpaceRoom ? _td("Change space avatar") : _td("Change room avatar"),
             [EventType.RoomName]: isSpaceRoom ? _td("Change space name") : _td("Change room name"),
@@ -458,10 +456,11 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                     return null;
                 }
 
-                let label = plEventsToLabels[eventType];
-                if (label) {
+                const translationKeyForEvent = plEventsToLabels[eventType];
+                let label: string;
+                if (translationKeyForEvent) {
                     const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;
-                    label = _t(label, { brand });
+                    label = _t(translationKeyForEvent, { brand });
                 } else {
                     label = _t("Send %(eventType)s events", { eventType });
                 }

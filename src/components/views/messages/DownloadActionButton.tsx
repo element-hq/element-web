@@ -22,7 +22,7 @@ import { Icon as DownloadIcon } from "../../../../res/img/download.svg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Spinner from "../elements/Spinner";
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import { FileDownloader } from "../../../utils/FileDownloader";
 
 interface IProps {
@@ -37,7 +37,7 @@ interface IProps {
 interface IState {
     loading: boolean;
     blob?: Blob;
-    tooltip: string;
+    tooltip: TranslationKey;
 }
 
 export default class DownloadActionButton extends React.PureComponent<IProps, IState> {

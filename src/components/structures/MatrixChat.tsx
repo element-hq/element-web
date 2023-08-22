@@ -482,12 +482,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const waitText = _t("Wait!");
         const scamText = _t(
-            "If someone told you to copy/paste something here, " + "there is a high likelihood you're being scammed!",
+            "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!",
         );
         const devText = _t(
-            "If you know what you're doing, Element is open-source, " +
-                "be sure to check out our GitHub (https://github.com/vector-im/element-web/) " +
-                "and contribute!",
+            "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!",
         );
 
         global.mx_rage_logger.bypassRageshake(
@@ -1166,8 +1164,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 <span className="warning" key="only_member_warning">
                     {" " /* Whitespace, otherwise the sentences get smashed together */}
                     {_t(
-                        "You are the only person here. " +
-                            "If you leave, no one will be able to join in the future, including you.",
+                        "You are the only person here. If you leave, no one will be able to join in the future, including you.",
                     )}
                 </span>,
             );
@@ -1593,8 +1590,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                             <p>
                                 {" "}
                                 {_t(
-                                    "To continue using the %(homeserverDomain)s homeserver " +
-                                        "you must review and agree to our terms and conditions.",
+                                    "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.",
                                     { homeserverDomain: cli.getDomain() },
                                 )}
                             </p>
@@ -1643,13 +1639,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Old cryptography data detected"),
                         description: _t(
-                            "Data from an older version of %(brand)s has been detected. " +
-                                "This will have caused end-to-end cryptography to malfunction " +
-                                "in the older version. End-to-end encrypted messages exchanged " +
-                                "recently whilst using the older version may not be decryptable " +
-                                "in this version. This may also cause messages exchanged with this " +
-                                "version to fail. If you experience problems, log out and back in " +
-                                "again. To retain message history, export and re-import your keys.",
+                            "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.",
                             { brand: SdkConfig.get().brand },
                         ),
                     });

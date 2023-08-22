@@ -82,10 +82,9 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
         <LabelledToggleSwitch
             data-testid="element-call-switch"
             label={_t("Enable %(brand)s as an additional calling option in this room", { brand })}
-            caption={_t(
-                "%(brand)s is end-to-end encrypted, " + "but is currently limited to smaller numbers of users.",
-                { brand },
-            )}
+            caption={_t("%(brand)s is end-to-end encrypted, but is currently limited to smaller numbers of users.", {
+                brand,
+            })}
             value={elementCallEnabled}
             onChange={onChange}
             disabled={!maySend}

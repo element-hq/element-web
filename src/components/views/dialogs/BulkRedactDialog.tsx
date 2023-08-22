@@ -114,16 +114,13 @@ const BulkRedactDialog: React.FC<Props> = (props) => {
                 <div className="mx_Dialog_content" id="mx_Dialog_content">
                     <p>
                         {_t(
-                            "You are about to remove %(count)s messages by %(user)s. " +
-                                "This will remove them permanently for everyone in the conversation. " +
-                                "Do you wish to continue?",
+                            "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?",
                             { count, user },
                         )}
                     </p>
                     <p>
                         {_t(
-                            "For a large amount of messages, this might take some time. " +
-                                "Please don't refresh your client in the meantime.",
+                            "For a large amount of messages, this might take some time. Please don't refresh your client in the meantime.",
                         )}
                     </p>
                     <StyledCheckbox checked={keepStateEvents} onChange={(e) => setKeepStateEvents(e.target.checked)}>
@@ -131,8 +128,7 @@ const BulkRedactDialog: React.FC<Props> = (props) => {
                     </StyledCheckbox>
                     <div className="mx_BulkRedactDialog_checkboxMicrocopy">
                         {_t(
-                            "Uncheck if you also want to remove system messages on this user " +
-                                "(e.g. membership change, profile change…)",
+                            "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)",
                         )}
                     </div>
                 </div>

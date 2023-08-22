@@ -65,9 +65,7 @@ export default class StorageEvictedDialog extends React.Component<IProps> {
                 <div className="mx_Dialog_content" id="mx_Dialog_content">
                     <p>
                         {_t(
-                            "Some session data, including encrypted message keys, is " +
-                                "missing. Sign out and sign in to fix this, restoring keys " +
-                                "from backup.",
+                            "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.",
                         )}
                     </p>
                     <p>

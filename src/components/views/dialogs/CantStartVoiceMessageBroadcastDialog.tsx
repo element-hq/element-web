@@ -26,8 +26,7 @@ export const createCantStartVoiceMessageBroadcastDialog = (): void => {
         description: (
             <p>
                 {_t(
-                    "You can't start a voice message as you are currently recording a live broadcast. " +
-                        "Please end your live broadcast in order to start recording a voice message.",
+                    "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.",
                 )}
             </p>
         ),

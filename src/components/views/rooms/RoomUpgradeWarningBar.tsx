@@ -73,15 +73,12 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
                 <div className="mx_RoomUpgradeWarningBar_body">
                     <p>
                         {_t(
-                            "Upgrading this room will shut down the current instance of the room and create " +
-                                "an upgraded room with the same name.",
+                            "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.",
                         )}
                     </p>
                     <p>
                         {_t(
-                            "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members " +
-                                "to the new version of the room.</i> We'll post a link to the new room in the old " +
-                                "version of the room - room members will have to click this link to join the new room.",
+                            "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.",
                             {},
                             {
                                 b: (sub) => <b>{sub}</b>,
@@ -111,8 +108,7 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
                 <div className="mx_RoomUpgradeWarningBar_wrapped">
                     <div className="mx_RoomUpgradeWarningBar_header">
                         {_t(
-                            "This room is running room version <roomVersion />, which this homeserver has " +
-                                "marked as <i>unstable</i>.",
+                            "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.",
                             {},
                             {
                                 roomVersion: () => <code>{this.props.room.getVersion()}</code>,

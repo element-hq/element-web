@@ -68,8 +68,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                 <SettingsSubsection
                     heading={_t("Spaces to show")}
                     description={_t(
-                        "Spaces are ways to group rooms and people. " +
-                            "Alongside the spaces you're in, you can use some pre-built ones too.",
+                        "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.",
                     )}
                 >
                     <StyledCheckbox

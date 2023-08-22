@@ -95,9 +95,7 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
             }
         } else {
             previewsForAccount = _t(
-                "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your " +
-                    "homeserver (where the previews are generated) cannot gather information about links you see in " +
-                    "this room.",
+                "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.",
             );
         }
 
@@ -114,8 +112,7 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
             <>
                 <p>
                     {_t(
-                        "When someone puts a URL in their message, a URL preview can be shown to give more " +
-                            "information about that link such as the title, description, and an image from the website.",
+                        "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.",
                     )}
                 </p>
                 <p>{previewsForAccount}</p>

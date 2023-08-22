@@ -203,8 +203,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
             summarisedStatus = (
                 <SettingsSubsectionText data-testid="summarised-status">
                     {_t(
-                        "Your account has a cross-signing identity in secret storage, " +
-                            "but it is not yet trusted by this session.",
+                        "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.",
                     )}
                 </SettingsSubsectionText>
             );

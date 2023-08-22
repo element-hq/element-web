@@ -1133,9 +1133,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             return (
                 <div className="mx_InviteDialog_identityServer">
                     {_t(
-                        "Use an identity server to invite by email. " +
-                            "<default>Use the default (%(defaultIdentityServerName)s)</default> " +
-                            "or manage in <settings>Settings</settings>.",
+                        "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.",
                         {
                             defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
                         },
@@ -1158,7 +1156,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             return (
                 <div className="mx_InviteDialog_identityServer">
                     {_t(
-                        "Use an identity server to invite by email. " + "Manage in <settings>Settings</settings>.",
+                        "Use an identity server to invite by email. Manage in <settings>Settings</settings>.",
                         {},
                         {
                             settings: (sub) => (
@@ -1349,23 +1347,21 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             if (isSpace) {
                 if (identityServersEnabled) {
                     helpTextUntranslated = _td(
-                        "Invite someone using their name, email address, username " +
-                            "(like <userId/>) or <a>share this space</a>.",
+                        "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.",
                     );
                 } else {
                     helpTextUntranslated = _td(
-                        "Invite someone using their name, username " + "(like <userId/>) or <a>share this space</a>.",
+                        "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.",
                     );
                 }
             } else {
                 if (identityServersEnabled) {
                     helpTextUntranslated = _td(
-                        "Invite someone using their name, email address, username " +
-                            "(like <userId/>) or <a>share this room</a>.",
+                        "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.",
                     );
                 } else {
                     helpTextUntranslated = _td(
-                        "Invite someone using their name, username " + "(like <userId/>) or <a>share this room</a>.",
+                        "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.",
                     );
                 }
             }

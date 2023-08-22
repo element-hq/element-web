@@ -110,11 +110,7 @@ export default function NotificationSettings2(): JSX.Element {
                     onAction={() => reconcile(model!)}
                 >
                     {_t(
-                        "<strong>Update:</strong>" +
-                            "We’ve simplified Notifications Settings to make options easier to find. " +
-                            "Some custom settings you’ve chosen in the past are not shown here, but they’re still active. " +
-                            "If you proceed, some of your settings may change. " +
-                            "<a>Learn more</a>",
+                        "<strong>Update:</strong>We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active. If you proceed, some of your settings may change. <a>Learn more</a>",
                         {},
                         {
                             strong: boldText,

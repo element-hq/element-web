@@ -32,8 +32,7 @@ export const getLocationShareErrorMessage = (errorType?: LocationShareError): st
         case LocationShareError.MapStyleUrlNotReachable:
         default:
             return _t(
-                `This homeserver is not configured correctly to display maps, ` +
-                    `or the configured map server may be unreachable.`,
+                "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.",
             );
     }
 };

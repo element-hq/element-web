@@ -351,8 +351,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                         <div>
                             <p>
                                 {_t(
-                                    "Backup could not be decrypted with this Security Key: " +
-                                        "please verify that you entered the correct Security Key.",
+                                    "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.",
                                 )}
                             </p>
                         </div>
@@ -363,8 +362,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                         <div>
                             <p>
                                 {_t(
-                                    "Backup could not be decrypted with this Security Phrase: " +
-                                        "please verify that you entered the correct Security Phrase.",
+                                    "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.",
                                 )}
                             </p>
                         </div>
@@ -418,8 +416,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                     </p>
                     <p>
                         {_t(
-                            "Access your secure message history and set up secure " +
-                                "messaging by entering your Security Phrase.",
+                            "Access your secure message history and set up secure messaging by entering your Security Phrase.",
                         )}
                     </p>
 
@@ -441,9 +438,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                         />
                     </form>
                     {_t(
-                        "If you've forgotten your Security Phrase you can " +
-                            "<button1>use your Security Key</button1> or " +
-                            "<button2>set up new recovery options</button2>",
+                        "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>",
                         {},
                         {
                             button1: (s) => (
@@ -493,8 +488,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                     </p>
                     <p>
                         {_t(
-                            "Access your secure message history and set up secure " +
-                                "messaging by entering your Security Key.",
+                            "Access your secure message history and set up secure messaging by entering your Security Key.",
                         )}
                     </p>
 
@@ -516,8 +510,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                         />
                     </div>
                     {_t(
-                        "If you've forgotten your Security Key you can " +
-                            "<button>set up new recovery options</button>",
+                        "If you've forgotten your Security Key you can <button>set up new recovery options</button>",
                         {},
                         {
                             button: (s) => (

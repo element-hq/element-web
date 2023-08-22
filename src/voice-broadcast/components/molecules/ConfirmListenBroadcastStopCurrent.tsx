@@ -30,8 +30,7 @@ export const ConfirmListenBroadcastStopCurrentDialog: React.FC<Props> = ({ onFin
         <BaseDialog title={_t("Listen to live broadcast?")} hasCancel={true} onFinished={onFinished}>
             <p>
                 {_t(
-                    "If you start listening to this live broadcast, " +
-                        "your current live broadcast recording will be ended.",
+                    "If you start listening to this live broadcast, your current live broadcast recording will be ended.",
                 )}
             </p>
             <DialogButtons

@@ -181,8 +181,7 @@ const PinnedMessagesCard: React.FC<IProps> = ({ room, onClose, permalinkCreator 
                         {_t("Nothing pinned, yet")}
                     </Heading>
                     {_t(
-                        "If you have permissions, open the menu on any message and select " +
-                            "<b>Pin</b> to stick them here.",
+                        "If you have permissions, open the menu on any message and select <b>Pin</b> to stick them here.",
                         {},
                         {
                             b: (sub) => <b>{sub}</b>,

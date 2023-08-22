@@ -122,11 +122,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         <p>
                             {" "}
                             {_t(
-                                "<b>It's not recommended to add encryption to public rooms.</b> " +
-                                    "Anyone can find and join public rooms, so anyone can read messages in them. " +
-                                    "You'll get none of the benefits of encryption, and you won't be able to turn it " +
-                                    "off later. Encrypting messages in a public room will make receiving and sending " +
-                                    "messages slower.",
+                                "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.",
                                 undefined,
                                 { b: (sub) => <b>{sub}</b> },
                             )}{" "}
@@ -134,8 +130,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         <p>
                             {" "}
                             {_t(
-                                "To avoid these issues, create a <a>new encrypted room</a> for " +
-                                    "the conversation you plan to have.",
+                                "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.",
                                 undefined,
                                 {
                                     a: (sub) => (
@@ -165,9 +160,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         Modal.createDialog(QuestionDialog, {
             title: _t("Enable encryption?"),
             description: _t(
-                "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted " +
-                    "room cannot be seen by the server, only by the participants of the room. Enabling encryption " +
-                    "may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>",
+                "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>",
                 {},
                 {
                     a: (sub) => <ExternalLink href={SdkConfig.get("help_encryption_url")}>{sub}</ExternalLink>,
@@ -322,10 +315,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         <p>
                             {" "}
                             {_t(
-                                "<b>It's not recommended to make encrypted rooms public.</b> " +
-                                    "It will mean anyone can find and join the room, so anyone can read messages. " +
-                                    "You'll get none of the benefits of encryption. Encrypting messages in a public " +
-                                    "room will make receiving and sending messages slower.",
+                                "<b>It's not recommended to make encrypted rooms public.</b> It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.",
                                 undefined,
                                 { b: (sub) => <b>{sub}</b> },
                             )}{" "}
@@ -333,8 +323,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         <p>
                             {" "}
                             {_t(
-                                "To avoid these issues, create a <a>new public room</a> for the conversation " +
-                                    "you plan to have.",
+                                "To avoid these issues, create a <a>new public room</a> for the conversation you plan to have.",
                                 undefined,
                                 {
                                     a: (sub) => (
@@ -398,8 +387,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         }
 
         const description = _t(
-            "Changes to who can read history will only apply to future messages in this room. " +
-                "The visibility of existing history will be unchanged.",
+            "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.",
         );
 
         return (
@@ -435,8 +423,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 />
                 <p>
                     {_t(
-                        "People with supported clients will be able to join " +
-                            "the room without having a registered account.",
+                        "People with supported clients will be able to join the room without having a registered account.",
                     )}
                 </p>
             </div>

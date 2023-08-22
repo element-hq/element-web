@@ -259,28 +259,21 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                         <span className="warning">{_t("⚠ These settings are meant for advanced users.")}</span>
                         <p>
                             {_t(
-                                "Add users and servers you want to ignore here. Use asterisks " +
-                                    "to have %(brand)s match any characters. For example, <code>@bot:*</code> " +
-                                    "would ignore all users that have the name 'bot' on any server.",
+                                "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.",
                                 { brand },
                                 { code: (s) => <code>{s}</code> },
                             )}
                         </p>
                         <p>
                             {_t(
-                                "Ignoring people is done through ban lists which contain rules for " +
-                                    "who to ban. Subscribing to a ban list means the users/servers blocked by " +
-                                    "that list will be hidden from you.",
+                                "Ignoring people is done through ban lists which contain rules for who to ban. Subscribing to a ban list means the users/servers blocked by that list will be hidden from you.",
                             )}
                         </p>
                     </SettingsSubsectionText>
                     <SettingsSubsection
                         heading={_t("Personal ban list")}
                         description={_t(
-                            "Your personal ban list holds all the users/servers you personally don't " +
-                                "want to see messages from. After ignoring your first user/server, a new room " +
-                                "will show up in your room list named '%(myBanList)s' - stay in this room to keep " +
-                                "the ban list in effect.",
+                            "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named '%(myBanList)s' - stay in this room to keep the ban list in effect.",
                             {
                                 myBanList: _t("My Ban List"),
                             },

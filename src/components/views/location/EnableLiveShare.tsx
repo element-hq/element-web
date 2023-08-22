@@ -36,10 +36,7 @@ export const EnableLiveShare: React.FC<Props> = ({ onSubmit }) => {
             </Heading>
             <p className="mx_EnableLiveShare_description">
                 {_t(
-                    "Please note: this is a labs feature using a temporary implementation. " +
-                        "This means you will not be able to delete your location history, " +
-                        "and advanced users will be able to see your location history " +
-                        "even after you stop sharing your live location with this room.",
+                    "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.",
                 )}
             </p>
             <LabelledToggleSwitch

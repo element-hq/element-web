@@ -823,19 +823,14 @@ export default class LegacyCallHandler extends EventEmitter {
                     <div>
                         <p>
                             {_t(
-                                "Please ask the administrator of your homeserver " +
-                                    "(<code>%(homeserverDomain)s</code>) to configure a TURN server in " +
-                                    "order for calls to work reliably.",
+                                "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.",
                                 { homeserverDomain: cli.getDomain() },
                                 { code: (sub: string) => <code>{sub}</code> },
                             )}
                         </p>
                         <p>
                             {_t(
-                                "Alternatively, you can try to use the public server at " +
-                                    "<server/>, but this will not be as reliable, and " +
-                                    "it will share your IP address with that server. You can also manage " +
-                                    "this in Settings.",
+                                "Alternatively, you can try to use the public server at <server/>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.",
                                 undefined,
                                 { server: () => <code>{new URL(FALLBACK_ICE_SERVER).pathname}</code> },
                             )}
@@ -865,8 +860,7 @@ export default class LegacyCallHandler extends EventEmitter {
             description = (
                 <div>
                     {_t(
-                        "Call failed because microphone could not be accessed. " +
-                            "Check that a microphone is plugged in and set up correctly.",
+                        "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.",
                     )}
                 </div>
             );

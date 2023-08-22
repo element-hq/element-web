@@ -421,8 +421,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 }
                 const joinRule = this.joinRule();
                 const errCodeMessage = _t(
-                    "An error (%(errcode)s) was returned while trying to validate your " +
-                        "invite. You could try to pass this information on to the person who invited you.",
+                    "An error (%(errcode)s) was returned while trying to validate your invite. You could try to pass this information on to the person who invited you.",
                     { errcode: this.state.threePidFetchError?.errcode || _t("unknown error code") },
                 );
                 switch (joinRule) {
@@ -447,8 +446,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             case MessageCase.InvitedEmailNotFoundInAccount: {
                 if (roomName) {
                     title = _t(
-                        "This invite to %(roomName)s was sent to %(email)s which is not " +
-                            "associated with your account",
+                        "This invite to %(roomName)s was sent to %(email)s which is not associated with your account",
                         {
                             roomName,
                             email: this.props.invitedEmail,
@@ -585,9 +583,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 subTitle = [
                     _t("Try again later, or ask a room or space admin to check if you have access."),
                     _t(
-                        "%(errcode)s was returned while trying to access the room or space. " +
-                            "If you think you're seeing this message in error, please " +
-                            "<issueLink>submit a bug report</issueLink>.",
+                        "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.",
                         { errcode: String(this.props.error?.errcode) },
                         {
                             issueLink: (label) => (

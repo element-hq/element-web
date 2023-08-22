@@ -17,7 +17,7 @@ limitations under the License.
 import zxcvbn, { ZXCVBNFeedbackWarning } from "zxcvbn";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { _t, _td } from "../languageHandler";
+import { _t, _td, TranslationKey } from "../languageHandler";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
 const ZXCVBN_USER_INPUTS = ["riot", "matrix"];
@@ -90,8 +90,9 @@ export function scorePassword(
     }
 
     for (let i = 0; i < zxcvbnResult.feedback.suggestions.length; ++i) {
-        // translate suggestions
-        zxcvbnResult.feedback.suggestions[i] = _t(zxcvbnResult.feedback.suggestions[i]);
+        // translate suggestions - we ensure we mark them as `_td` at the top of this file
+        // https://github.com/dropbox/zxcvbn/issues/284 will be a better approach when it lands
+        zxcvbnResult.feedback.suggestions[i] = _t(zxcvbnResult.feedback.suggestions[i] as TranslationKey);
     }
     // and warning, if any
     if (zxcvbnResult.feedback.warning) {

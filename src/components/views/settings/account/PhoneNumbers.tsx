@@ -280,8 +280,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
                 <div>
                     <div>
                         {_t(
-                            "A text message has been sent to +%(msisdn)s. " +
-                                "Please enter the verification code it contains.",
+                            "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.",
                             { msisdn: msisdn },
                         )}
                         <br />

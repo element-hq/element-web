@@ -17,7 +17,7 @@ limitations under the License.
 import React, { ChangeEvent, createRef } from "react";
 
 import Field from "../elements/Field";
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import { IFieldState, IValidationResult } from "../elements/Validation";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
@@ -28,7 +28,7 @@ interface IProps {
     value: string;
     placeholder?: string;
     button?: string;
-    busyMessage: string; // pass _td string
+    busyMessage: TranslationKey;
     focus: boolean;
     hasCancel: boolean;
     validator?: (fieldState: IFieldState) => Promise<IValidationResult>; // result of withValidation

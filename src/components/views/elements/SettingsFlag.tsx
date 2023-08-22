@@ -29,7 +29,7 @@ interface IProps {
     name: string;
     level: SettingLevel;
     roomId?: string; // for per-room settings
-    label?: string; // untranslated
+    label?: string;
     isExplicit?: boolean;
     // XXX: once design replaces all toggles make this the default
     useCheckbox?: boolean;
@@ -105,10 +105,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
 
         if (!canChange && this.props.hideIfCannotSet) return null;
 
-        const label =
-            (this.props.label
-                ? _t(this.props.label)
-                : SettingsStore.getDisplayName(this.props.name, this.props.level)) ?? undefined;
+        const label = this.props.label ?? SettingsStore.getDisplayName(this.props.name, this.props.level);
         const description = SettingsStore.getDescription(this.props.name);
         const shouldWarn = SettingsStore.shouldHaveWarning(this.props.name);
         const disabled = this.state.disabled || !canChange;
@@ -146,7 +143,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                         onChange={this.onChange}
                         disabled={disabled}
                         tooltip={disabled ? SettingsStore.disabledMessage(this.props.name) : undefined}
-                        title={label}
+                        title={label ?? undefined}
                     />
                 </div>
             );

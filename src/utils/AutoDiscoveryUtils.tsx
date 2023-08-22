@@ -24,7 +24,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, UserFriendlyError } from "../languageHandler";
+import { _t, TranslationKey, UserFriendlyError } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 import { ValidatedServerConfig } from "./ValidatedServerConfig";
 
@@ -104,21 +104,15 @@ export default class AutoDiscoveryUtils {
             // don't make this easy to avoid.
             if (pageName === "register") {
                 body = _t(
-                    "You can register, but some features will be unavailable until the identity server is " +
-                        "back online. If you keep seeing this warning, check your configuration or contact a server " +
-                        "admin.",
+                    "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.",
                 );
             } else if (pageName === "reset_password") {
                 body = _t(
-                    "You can reset your password, but some features will be unavailable until the identity " +
-                        "server is back online. If you keep seeing this warning, check your configuration or contact " +
-                        "a server admin.",
+                    "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.",
                 );
             } else {
                 body = _t(
-                    "You can log in, but some features will be unavailable until the identity server is " +
-                        "back online. If you keep seeing this warning, check your configuration or contact a server " +
-                        "admin.",
+                    "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.",
                 );
             }
         }
@@ -223,7 +217,8 @@ export default class AutoDiscoveryUtils {
             logger.error("Error determining preferred identity server URL:", isResult);
             if (isResult.state === AutoDiscovery.FAIL_ERROR) {
                 if (AutoDiscovery.ALL_ERRORS.indexOf(isResult.error as string) !== -1) {
-                    throw new UserFriendlyError(String(isResult.error));
+                    // XXX: We mark these with _td at the top of Login.tsx - we should come up with a better solution
+                    throw new UserFriendlyError(String(isResult.error) as TranslationKey);
                 }
                 throw new UserFriendlyError("Unexpected error resolving identity server configuration");
             } // else the error is not related to syntax - continue anyways.
@@ -239,7 +234,8 @@ export default class AutoDiscoveryUtils {
             logger.error("Error processing homeserver config:", hsResult);
             if (!syntaxOnly || !AutoDiscoveryUtils.isLivelinessError(hsResult.error)) {
                 if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error as string) !== -1) {
-                    throw new UserFriendlyError(String(hsResult.error));
+                    // XXX: We mark these with _td at the top of Login.tsx - we should come up with a better solution
+                    throw new UserFriendlyError(String(hsResult.error) as TranslationKey);
                 }
                 if (hsResult.error === AutoDiscovery.ERROR_HOMESERVER_TOO_OLD) {
                     throw new UserFriendlyError(

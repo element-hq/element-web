@@ -108,8 +108,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Failed to revoke invite"),
                     description: _t(
-                        "Could not revoke the invite. The server may be experiencing a temporary problem or " +
-                            "you do not have sufficient permissions to revoke the invite.",
+                        "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.",
                     ),
                 });
             });

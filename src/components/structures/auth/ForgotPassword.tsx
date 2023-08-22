@@ -354,14 +354,12 @@ export default class ForgotPassword extends React.Component<Props, State> {
                 <div>
                     <p>
                         {_t(
-                            "Signing out your devices will delete the message encryption keys stored on them, " +
-                                "making encrypted chat history unreadable.",
+                            "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.",
                         )}
                     </p>
                     <p>
                         {_t(
-                            "If you want to retain access to your chat history in encrypted rooms, set up Key Backup " +
-                                "or export your message keys from one of your other devices before proceeding.",
+                            "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.",
                         )}
                     </p>
                 </div>
@@ -443,9 +441,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                 {this.state.logoutDevices ? (
                     <p>
                         {_t(
-                            "You have been logged out of all devices and will no longer receive " +
-                                "push notifications. To re-enable notifications, sign in again on each " +
-                                "device.",
+                            "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.",
                         )}
                     </p>
                 ) : null}

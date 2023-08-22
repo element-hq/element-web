@@ -31,8 +31,7 @@ export default class VerificationComplete extends React.Component<IProps> {
                 <p>{_t("You've successfully verified this user.")}</p>
                 <p>
                     {_t(
-                        "Secure messages with this user are end-to-end encrypted and not able to be " +
-                            "read by third parties.",
+                        "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.",
                     )}
                 </p>
                 <DialogButtons

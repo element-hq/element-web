@@ -20,7 +20,7 @@ import zxcvbn from "zxcvbn";
 
 import SdkConfig from "../../../SdkConfig";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import Field, { IInputProps } from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
@@ -34,10 +34,10 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     // Additional strings such as a username used to catch bad passwords
     userInputs?: string[];
 
-    label: string;
-    labelEnterPassword: string;
-    labelStrongPassword: string;
-    labelAllowedButUnsafe: string;
+    label: TranslationKey;
+    labelEnterPassword: TranslationKey;
+    labelStrongPassword: TranslationKey;
+    labelAllowedButUnsafe: TranslationKey;
 
     onChange(ev: React.FormEvent<HTMLElement>): void;
     onValidate?(result: IValidationResult): void;

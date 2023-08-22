@@ -20,7 +20,7 @@ import { EventType, Room, User, MatrixClient } from "matrix-js-sdk/src/matrix";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { _t, _td } from "../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -44,7 +44,7 @@ function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): 
     return isPublic || !privateShouldBeEncrypted(matrixClient) || isEncrypted;
 }
 
-const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolean): string => {
+const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolean): TranslationKey => {
     if (room instanceof LocalRoom) {
         return _td("Send your first message to invite <displayName/> to chat");
     }
@@ -270,9 +270,7 @@ const NewRoomIntro: React.FC = () => {
     }
 
     const subText = _t(
-        "Your private messages are normally encrypted, but this room isn't. " +
-            "Usually this is due to an unsupported device or method being used, " +
-            "like email invites.",
+        "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.",
     );
 
     let subButton: JSX.Element | undefined;

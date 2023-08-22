@@ -106,9 +106,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
                         {!!guessedLink ? (
                             <>
                                 {_t(
-                                    "Can't find the old version of this room (room ID: %(roomId)s), and we have not been " +
-                                        "provided with 'via_servers' to look for it. It's possible that guessing the " +
-                                        "server from the room ID will work. If you want to try, click this link:",
+                                    "Can't find the old version of this room (room ID: %(roomId)s), and we have not been provided with 'via_servers' to look for it. It's possible that guessing the server from the room ID will work. If you want to try, click this link:",
                                     {
                                         roomId: predecessor.roomId,
                                     },
@@ -117,8 +115,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
                             </>
                         ) : (
                             _t(
-                                "Can't find the old version of this room (room ID: %(roomId)s), and we have not been " +
-                                    "provided with 'via_servers' to look for it.",
+                                "Can't find the old version of this room (room ID: %(roomId)s), and we have not been provided with 'via_servers' to look for it.",
                                 {
                                     roomId: predecessor.roomId,
                                 },

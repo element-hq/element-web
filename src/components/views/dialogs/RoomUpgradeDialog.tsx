@@ -94,9 +94,7 @@ export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
             >
                 <p>
                     {_t(
-                        "Upgrading this room requires closing down the current " +
-                            "instance of the room and creating a new room in its place. " +
-                            "To give room members the best possible experience, we will:",
+                        "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:",
                     )}
                 </p>
                 <ol>
@@ -104,14 +102,12 @@ export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
                     <li>{_t("Update any local room aliases to point to the new room")}</li>
                     <li>
                         {_t(
-                            "Stop users from speaking in the old version of the room, " +
-                                "and post a message advising users to move to the new room",
+                            "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room",
                         )}
                     </li>
                     <li>
                         {_t(
-                            "Put a link back to the old room at the start of the new room " +
-                                "so people can see old messages",
+                            "Put a link back to the old room at the start of the new room so people can see old messages",
                         )}
                     </li>
                 </ol>

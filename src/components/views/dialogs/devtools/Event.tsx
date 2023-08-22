@@ -18,7 +18,7 @@ limitations under the License.
 import React, { ChangeEvent, ReactNode, useContext, useMemo, useRef, useState } from "react";
 import { IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { _t, _td } from "../../../../languageHandler";
+import { _t, _td, TranslationKey } from "../../../../languageHandler";
 import Field from "../../elements/Field";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
@@ -37,7 +37,7 @@ interface IEventEditorProps extends Pick<IDevtoolsProps, "onBack"> {
 
 interface IFieldDef {
     id: string;
-    label: string; // _td
+    label: TranslationKey;
     default?: string;
 }
 

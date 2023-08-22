@@ -107,8 +107,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
                 <div className="mx_ServerOfflineDialog_content">
                     <p>
                         {_t(
-                            "Your server isn't responding to some of your requests. " +
-                                "Below are some of the most likely reasons.",
+                            "Your server isn't responding to some of your requests. Below are some of the most likely reasons.",
                         )}
                     </p>
                     <ul>

@@ -113,9 +113,7 @@ export default class LabsUserSettingsTab extends React.Component<{}> {
                 <SettingsSection heading={_t("Upcoming features")}>
                     <SettingsSubsectionText>
                         {_t(
-                            "What's next for %(brand)s? " +
-                                "Labs are the best way to get things early, " +
-                                "test out new features and help shape them before they actually launch.",
+                            "What's next for %(brand)s? Labs are the best way to get things early, test out new features and help shape them before they actually launch.",
                             { brand: SdkConfig.get("brand") },
                         )}
                     </SettingsSubsectionText>
@@ -126,11 +124,7 @@ export default class LabsUserSettingsTab extends React.Component<{}> {
                     <SettingsSection heading={_t("Early previews")}>
                         <SettingsSubsectionText>
                             {_t(
-                                "Feeling experimental? " +
-                                    "Try out our latest ideas in development. " +
-                                    "These features are not finalised; " +
-                                    "they may be unstable, may change, or may be dropped altogether. " +
-                                    "<a>Learn more</a>.",
+                                "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.",
                                 {},
                                 {
                                     a: (sub) => {

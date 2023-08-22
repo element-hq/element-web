@@ -47,9 +47,7 @@ const onHelpClick = (): void => {
         {
             title: _t("Server Options"),
             description: _t(
-                "You can use the custom server options to sign into other Matrix servers by specifying " +
-                    "a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on " +
-                    "a different homeserver.",
+                "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.",
                 { brand },
             ),
             button: _t("Dismiss"),
