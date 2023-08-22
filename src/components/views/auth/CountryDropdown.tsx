@@ -18,16 +18,15 @@ import React, { ReactElement } from "react";
 
 import { COUNTRIES, getEmojiFlag, PhoneNumberCountryDefinition } from "../../../phonenumber";
 import SdkConfig from "../../../SdkConfig";
-import { _t } from "../../../languageHandler";
+import { _t, getUserLanguage } from "../../../languageHandler";
 import Dropdown from "../elements/Dropdown";
 import { NonEmptyArray } from "../../../@types/common";
 
-const COUNTRIES_BY_ISO2: Record<string, PhoneNumberCountryDefinition> = {};
-for (const c of COUNTRIES) {
-    COUNTRIES_BY_ISO2[c.iso2] = c;
+interface InternationalisedCountry extends PhoneNumberCountryDefinition {
+    name: string; // already translated to the user's locale
 }
 
-function countryMatchesSearchQuery(query: string, country: PhoneNumberCountryDefinition): boolean {
+function countryMatchesSearchQuery(query: string, country: InternationalisedCountry): boolean {
     // Remove '+' if present (when searching for a prefix)
     if (query[0] === "+") {
         query = query.slice(1);
@@ -41,7 +40,7 @@ function countryMatchesSearchQuery(query: string, country: PhoneNumberCountryDef
 
 interface IProps {
     value?: string;
-    onOptionChange: (country: PhoneNumberCountryDefinition) => void;
+    onOptionChange: (country: InternationalisedCountry) => void;
     isSmall: boolean; // if isSmall, show +44 in the selected value
     showPrefix: boolean;
     className?: string;
@@ -53,15 +52,25 @@ interface IState {
 }
 
 export default class CountryDropdown extends React.Component<IProps, IState> {
-    private readonly defaultCountry: PhoneNumberCountryDefinition;
+    private readonly defaultCountry: InternationalisedCountry;
+    private readonly countries: InternationalisedCountry[];
+    private readonly countryMap: Map<string, InternationalisedCountry>;
 
     public constructor(props: IProps) {
         super(props);
 
-        let defaultCountry: PhoneNumberCountryDefinition | undefined;
+        const displayNames = new Intl.DisplayNames([getUserLanguage()], { type: "region" });
+
+        this.countries = COUNTRIES.map((c) => ({
+            name: displayNames.of(c.iso2) ?? c.iso2,
+            ...c,
+        }));
+        this.countryMap = new Map(this.countries.map((c) => [c.iso2, c]));
+
+        let defaultCountry: InternationalisedCountry | undefined;
         const defaultCountryCode = SdkConfig.get("default_country_code");
         if (defaultCountryCode) {
-            const country = COUNTRIES.find((c) => c.iso2 === defaultCountryCode.toUpperCase());
+            const country = this.countries.find((c) => c.iso2 === defaultCountryCode.toUpperCase());
             if (country) defaultCountry = country;
         }
 
@@ -69,9 +78,8 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
             try {
                 const locale = new Intl.Locale(navigator.language ?? navigator.languages[0]);
                 const code = locale.region ?? locale.language ?? locale.baseName;
-                const displayNames = new Intl.DisplayNames(["en"], { type: "region" });
                 const displayName = displayNames.of(code)!.toUpperCase();
-                defaultCountry = COUNTRIES.find(
+                defaultCountry = this.countries.find(
                     (c) => c.iso2 === code.toUpperCase() || c.name.toUpperCase() === displayName,
                 );
             } catch (e) {
@@ -79,7 +87,7 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
             }
         }
 
-        this.defaultCountry = defaultCountry ?? COUNTRIES[0];
+        this.defaultCountry = defaultCountry ?? this.countries[0];
         this.state = {
             searchQuery: "",
         };
@@ -101,7 +109,7 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
     };
 
     private onOptionChange = (iso2: string): void => {
-        this.props.onOptionChange(COUNTRIES_BY_ISO2[iso2]);
+        this.props.onOptionChange(this.countryMap.get(iso2)!);
     };
 
     private flagImgForIso2(iso2: string): React.ReactNode {
@@ -112,9 +120,9 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
         if (!this.props.isSmall) {
             return undefined;
         }
-        let countryPrefix;
+        let countryPrefix: string | undefined;
         if (this.props.showPrefix) {
-            countryPrefix = "+" + COUNTRIES_BY_ISO2[iso2].prefix;
+            countryPrefix = "+" + this.countryMap.get(iso2)!.prefix;
         }
         return (
             <span className="mx_CountryDropdown_shortOption">
@@ -125,26 +133,28 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        let displayedCountries;
+        let displayedCountries: InternationalisedCountry[];
         if (this.state.searchQuery) {
-            displayedCountries = COUNTRIES.filter(countryMatchesSearchQuery.bind(this, this.state.searchQuery));
-            if (this.state.searchQuery.length == 2 && COUNTRIES_BY_ISO2[this.state.searchQuery.toUpperCase()]) {
+            displayedCountries = this.countries.filter((country) =>
+                countryMatchesSearchQuery(this.state.searchQuery, country),
+            );
+            if (this.state.searchQuery.length == 2 && this.countryMap.has(this.state.searchQuery.toUpperCase())) {
                 // exact ISO2 country name match: make the first result the matches ISO2
-                const matched = COUNTRIES_BY_ISO2[this.state.searchQuery.toUpperCase()];
+                const matched = this.countryMap.get(this.state.searchQuery.toUpperCase())!;
                 displayedCountries = displayedCountries.filter((c) => {
                     return c.iso2 != matched.iso2;
                 });
                 displayedCountries.unshift(matched);
             }
         } else {
-            displayedCountries = COUNTRIES;
+            displayedCountries = this.countries;
         }
 
         const options = displayedCountries.map((country) => {
             return (
                 <div className="mx_CountryDropdown_option" key={country.iso2}>
                     {this.flagImgForIso2(country.iso2)}
-                    {_t(country.name)} (+{country.prefix})
+                    {country.name} (+{country.prefix})
                 </div>
             );
         }) as NonEmptyArray<ReactElement & { key: string }>;

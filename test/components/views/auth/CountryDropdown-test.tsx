@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import CountryDropdown from "../../../../src/components/views/auth/CountryDropdown";
 import SdkConfig from "../../../../src/SdkConfig";
@@ -64,5 +65,19 @@ describe("CountryDropdown", () => {
             render(<CountryDropdown onOptionChange={fn} isSmall={false} showPrefix={false} />);
             expect(fn).toHaveBeenCalledWith(expect.objectContaining({ prefix: defaultCountryCode.toString() }));
         });
+    });
+
+    it("should allow filtering", async () => {
+        const fn = jest.fn();
+        const { getByRole, findByText } = render(
+            <CountryDropdown onOptionChange={fn} isSmall={false} showPrefix={false} />,
+        );
+
+        const dropdown = getByRole("button");
+        fireEvent.click(dropdown);
+
+        await userEvent.keyboard("Al");
+
+        await expect(findByText("Albania (+355)")).resolves.toBeInTheDocument();
     });
 });
