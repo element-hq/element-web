@@ -81,7 +81,7 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
                     visible={this.state.visible}
                 />
                 <FormatButton
-                    label={_t("Quote")}
+                    label={_t("action|quote")}
                     onClick={() => this.props.onAction(Formatting.Quote)}
                     icon="Quote"
                     shortcut={this.props.shortcuts.quote}

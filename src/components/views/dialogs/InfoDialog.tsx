@@ -62,7 +62,7 @@ export default class InfoDialog extends React.Component<IProps> {
                 </div>
                 {this.props.button !== false && (
                     <DialogButtons
-                        primaryButton={this.props.button || _t("OK")}
+                        primaryButton={this.props.button || _t("action|ok")}
                         onPrimaryButtonClick={this.onFinished}
                         hasCancel={false}
                     />

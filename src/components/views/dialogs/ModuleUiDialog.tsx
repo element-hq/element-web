@@ -46,7 +46,7 @@ export class ModuleUiDialog<P extends DialogProps, C extends DialogContent<P>> e
 
         this.state = {
             title: this.props.initialOptions.title,
-            actionLabel: this.props.initialOptions.actionLabel ?? _t("OK"),
+            actionLabel: this.props.initialOptions.actionLabel ?? _t("action|ok"),
             cancelLabel: this.props.initialOptions.cancelLabel,
             canSubmit: this.props.initialOptions.canSubmit ?? true,
         };

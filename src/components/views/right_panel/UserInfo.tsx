@@ -486,7 +486,7 @@ export const UserOptionsSection: React.FC<{
 
             inviteUserButton = (
                 <AccessibleButton kind="link" onClick={onInviteUserButton} className="mx_UserInfo_field">
-                    {_t("Invite")}
+                    {_t("action|invite")}
                 </AccessibleButton>
             );
         }
@@ -1186,7 +1186,7 @@ export const PowerLevelEditor: React.FC<{
                             {_t("Are you sure?")}
                         </div>
                     ),
-                    button: _t("Continue"),
+                    button: _t("action|continue"),
                 });
 
                 const [confirmed] = await finished;

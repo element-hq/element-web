@@ -36,7 +36,7 @@ export function EditionButtons({
                 {_t("Cancel")}
             </AccessibleButton>
             <AccessibleButton kind="primary" onClick={onSaveClick} disabled={isSaveDisabled}>
-                {_t("Save")}
+                {_t("action|save")}
             </AccessibleButton>
         </div>
     );

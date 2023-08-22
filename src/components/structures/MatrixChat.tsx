@@ -1196,7 +1196,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const isSpace = roomToLeave?.isSpaceRoom();
         Modal.createDialog(QuestionDialog, {
-            title: isSpace ? _t("Leave space") : _t("Leave room"),
+            title: isSpace ? _t("Leave space") : _t("action|leave_room"),
             description: (
                 <span>
                     {isSpace
@@ -1209,7 +1209,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {warnings}
                 </span>
             ),
-            button: _t("Leave"),
+            button: _t("action|leave"),
             onFinished: async (shouldLeave) => {
                 if (shouldLeave) {
                     await leaveRoomBehaviour(cli, roomId);
@@ -1398,7 +1398,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     title: userNotice.title,
                     props: {
                         description: <Linkify>{userNotice.description}</Linkify>,
-                        acceptLabel: _t("OK"),
+                        acceptLabel: _t("action|ok"),
                         onAccept: () => {
                             ToastStore.sharedInstance().dismissToast(key);
                             localStorage.setItem(key, "1");

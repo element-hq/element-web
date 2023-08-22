@@ -840,7 +840,7 @@ export default class LegacyCallHandler extends EventEmitter {
                 button: _t("Try using %(server)s", {
                     server: new URL(FALLBACK_ICE_SERVER).pathname,
                 }),
-                cancelButton: _t("OK"),
+                cancelButton: _t("action|ok"),
                 onFinished: (allow) => {
                     SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
                     cli.setFallbackICEServerAllowed(!!allow);

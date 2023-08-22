@@ -80,7 +80,7 @@ const AvatarSetting: React.FC<IProps> = ({ avatarUrl, avatarAltText, avatarName,
     if (avatarUrl && removeAvatar) {
         removeAvatarBtn = (
             <AccessibleButton onClick={removeAvatar} kind="link_sm">
-                {_t("Remove")}
+                {_t("action|remove")}
             </AccessibleButton>
         );
     }

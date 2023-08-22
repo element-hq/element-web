@@ -61,7 +61,7 @@ export const showToast = async (deviceId: string): Promise<void> => {
             detail: <DeviceMetaData device={extendedDevice} />,
             acceptLabel: _t("Yes, it was me"),
             onAccept,
-            rejectLabel: _t("No"),
+            rejectLabel: _t("action|no"),
             onReject,
         },
         component: GenericToast,

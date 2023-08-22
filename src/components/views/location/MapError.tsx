@@ -44,7 +44,7 @@ export const MapError: React.FC<MapErrorProps> = ({ error, isMinimised, classNam
         <p className="mx_MapError_message">{getLocationShareErrorMessage(error)}</p>
         {onFinished && (
             <AccessibleButton element="button" kind="primary" onClick={onFinished}>
-                {_t("OK")}
+                {_t("action|ok")}
             </AccessibleButton>
         )}
     </div>

@@ -50,7 +50,7 @@ const getIcon = (kind: Kind): string => {
 const getSetupCaption = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
-            return _t("Continue");
+            return _t("action|continue");
         case Kind.UPGRADE_ENCRYPTION:
             return _t("Upgrade");
         case Kind.VERIFY_THIS_SESSION:

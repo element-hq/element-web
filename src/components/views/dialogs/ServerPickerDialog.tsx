@@ -239,10 +239,10 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                     <p>{_t("Use your preferred Matrix homeserver if you have one, or host your own.")}</p>
 
                     <AccessibleButton className="mx_ServerPickerDialog_continue" kind="primary" onClick={this.onSubmit}>
-                        {_t("Continue")}
+                        {_t("action|continue")}
                     </AccessibleButton>
 
-                    <h2>{_t("Learn more")}</h2>
+                    <h2>{_t("action|learn_more")}</h2>
                     <ExternalLink
                         href="https://matrix.org/docs/matrix-concepts/elements-of-matrix/#homeserver"
                         target="_blank"

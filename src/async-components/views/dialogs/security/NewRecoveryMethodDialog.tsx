@@ -75,7 +75,7 @@ export default class NewRecoveryMethodDialog extends React.PureComponent<IProps>
                     <p>{_t("This session is encrypting history using the new recovery method.")}</p>
                     {hackWarning}
                     <DialogButtons
-                        primaryButton={_t("OK")}
+                        primaryButton={_t("action|ok")}
                         onPrimaryButtonClick={this.onOkClick}
                         cancelButton={_t("Go to Settings")}
                         onCancel={this.onGoToSettingsClick}

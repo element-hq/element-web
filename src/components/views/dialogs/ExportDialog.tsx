@@ -315,7 +315,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     primaryButton={_t("Stop")}
                     primaryButtonClass="danger"
                     hasCancel={true}
-                    cancelButton={_t("Continue")}
+                    cancelButton={_t("action|continue")}
                     onCancel={() => setCancelWarning(false)}
                     onPrimaryButtonClick={confirmCancel}
                 />

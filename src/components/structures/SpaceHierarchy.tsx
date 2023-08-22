@@ -716,7 +716,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
                 kind="danger_outline"
                 disabled={disabled}
             >
-                {removing ? _t("Removing…") : _t("Remove")}
+                {removing ? _t("Removing…") : _t("action|remove")}
             </Button>
             <Button
                 {...props}

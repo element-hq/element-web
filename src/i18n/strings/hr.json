@@ -126,7 +126,6 @@
     "Upload Failed": "Prijenos neuspješan",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Datoteka '%(fileName)s' premašuje maksimalnu veličinu ovog kućnog poslužitelja za prijenose",
     "The file '%(fileName)s' failed to upload.": "Prijenos datoteke '%(fileName)s' nije uspio.",
-    "Continue": "Nastavi",
     "You do not have permission to start a conference call in this room": "Nemate dopuštenje uspostaviti konferencijski poziv u ovoj sobi",
     "Permission Required": "Potrebno dopuštenje",
     "You cannot place a call with yourself.": "Ne možete uspostaviti poziv sami sa sobom.",
@@ -141,7 +140,6 @@
     "Call failed because webcam or microphone could not be accessed. Check that:": "Poziv nije uspio jer nije bilo moguće pristupiti web kameri ili mikrofonu. Provjerite:",
     "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Poziv nije uspio jer nije bilo moguće pristupiti mikrofonu. Provjerite je li mikrofon priključen i ispravno postavljen.",
     "Unable to access microphone": "Nije moguće pristupiti mikrofonu",
-    "OK": "OK",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Zamolite administratora Vašeg kućnog poslužitelja (<code>%(homeserverDomain)s</code>) da konfigurira TURN poslužitelj kako bi pozivi mogli pouzdano funkcionirati.",
     "Call failed due to misconfigured server": "Poziv neuspješan radi pogrešno konfiguriranog poslužitelja",
     "The call was answered on another device.": "Na poziv je odgovoreno sa drugog uređaja.",
@@ -168,5 +166,9 @@
     "common": {
         "analytics": "Analitika",
         "error": "Geška"
+    },
+    "action": {
+        "continue": "Nastavi",
+        "ok": "OK"
     }
 }

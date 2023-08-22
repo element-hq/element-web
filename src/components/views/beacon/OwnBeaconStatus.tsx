@@ -77,7 +77,7 @@ const OwnBeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({ beacon, 
                     onClick={preventDefaultWrapper(onResetLocationPublishError)}
                     className="mx_OwnBeaconStatus_button mx_OwnBeaconStatus_destructiveButton"
                 >
-                    {_t("Retry")}
+                    {_t("action|retry")}
                 </AccessibleButton>
             )}
             {hasStopSharingError && (
@@ -89,7 +89,7 @@ const OwnBeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({ beacon, 
                     onClick={preventDefaultWrapper(onStopSharing)}
                     className="mx_OwnBeaconStatus_button mx_OwnBeaconStatus_destructiveButton"
                 >
-                    {_t("Retry")}
+                    {_t("action|retry")}
                 </AccessibleButton>
             )}
         </BeaconStatus>

@@ -138,7 +138,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                         }),
                     onPostInviteClick,
                 )}
-                label={_t("Invite")}
+                label={_t("action|invite")}
                 iconClassName="mx_RoomGeneralContextMenu_iconInvite"
             />
         );
@@ -205,7 +205,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                         }),
                     onPostLeaveClick,
                 )}
-                label={_t("Leave")}
+                label={_t("action|leave")}
                 className="mx_IconizedContextMenu_option_red"
                 iconClassName="mx_RoomGeneralContextMenu_iconSignOut"
             />

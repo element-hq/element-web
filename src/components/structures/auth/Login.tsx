@@ -481,7 +481,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                     );
                 }}
             >
-                {_t("Continue")}
+                {_t("action|continue")}
             </AccessibleButton>
         );
     };

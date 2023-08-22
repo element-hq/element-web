@@ -72,7 +72,7 @@ const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onSe
         };
         editBtn = (
             <AccessibleButton className="mx_ServerPicker_change" kind="link" onClick={onClick}>
-                {_t("Edit")}
+                {_t("action|edit")}
             </AccessibleButton>
         );
     }

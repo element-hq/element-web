@@ -28,7 +28,11 @@ export default class VerificationCancelled extends React.Component<IProps> {
         return (
             <div>
                 <p>{_t("The other party cancelled the verification.")}</p>
-                <DialogButtons primaryButton={_t("OK")} hasCancel={false} onPrimaryButtonClick={this.props.onDone} />
+                <DialogButtons
+                    primaryButton={_t("action|ok")}
+                    hasCancel={false}
+                    onPrimaryButtonClick={this.props.onDone}
+                />
             </div>
         );
     }

@@ -100,7 +100,7 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({ failures, source, co
         body = (
             <div>
                 <span>{text}</span>
-                <DialogButtons primaryButton={_t("OK")} hasCancel={false} onPrimaryButtonClick={onFinished} />
+                <DialogButtons primaryButton={_t("action|ok")} hasCancel={false} onPrimaryButtonClick={onFinished} />
             </div>
         );
     }

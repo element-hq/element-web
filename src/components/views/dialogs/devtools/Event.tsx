@@ -161,7 +161,7 @@ export const EventViewer: React.FC<IViewerProps> = ({ mxEvent, onBack, Editor, e
     };
 
     return (
-        <BaseTool onBack={onBack} actionLabel={_t("Edit")} onAction={onAction} extraButton={extraButton}>
+        <BaseTool onBack={onBack} actionLabel={_t("action|edit")} onAction={onAction} extraButton={extraButton}>
             <SyntaxHighlight language="json">{stringify(mxEvent.event)}</SyntaxHighlight>
         </BaseTool>
     );

@@ -88,7 +88,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     if (idp) {
         label = _t("Continue with %(provider)s", { provider: idp.name });
     } else if (DELEGATED_OIDC_COMPATIBILITY.findIn<boolean>(flow)) {
-        label = _t("Continue");
+        label = _t("action|continue");
     } else {
         label = _t("Sign in with single sign-on");
     }

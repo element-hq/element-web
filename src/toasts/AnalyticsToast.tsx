@@ -51,7 +51,7 @@ const onLearnMoreNoOptIn = (): void => {
             // otherwise, the user either clicked "Cancel", or closed the dialog without making a choice,
             // leave the toast open
         },
-        primaryButton: _t("Enable"),
+        primaryButton: _t("action|enable"),
     });
 };
 
@@ -91,7 +91,7 @@ export const showToast = (): void => {
             ),
             acceptLabel: _t("That's fine"),
             onAccept,
-            rejectLabel: _t("Learn more"),
+            rejectLabel: _t("action|learn_more"),
             onReject: onLearnMorePreviouslyOptedIn,
         };
     } else if (legacyAnalyticsOptIn === null || legacyAnalyticsOptIn === undefined) {
@@ -108,9 +108,9 @@ export const showToast = (): void => {
                 {},
                 { LearnMoreLink: learnMoreLink },
             ),
-            acceptLabel: _t("Yes"),
+            acceptLabel: _t("action|yes"),
             onAccept,
-            rejectLabel: _t("No"),
+            rejectLabel: _t("action|no"),
             onReject,
         };
     } else {

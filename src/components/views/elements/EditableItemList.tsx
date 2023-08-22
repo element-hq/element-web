@@ -67,14 +67,14 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
                         kind="primary_sm"
                         className="mx_EditableItem_confirmBtn"
                     >
-                        {_t("Yes")}
+                        {_t("action|yes")}
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.onDontRemove}
                         kind="danger_sm"
                         className="mx_EditableItem_confirmBtn"
                     >
-                        {_t("No")}
+                        {_t("action|no")}
                     </AccessibleButton>
                 </div>
             );
@@ -82,7 +82,12 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
 
         return (
             <div className="mx_EditableItem">
-                <div onClick={this.onRemove} className="mx_EditableItem_delete" title={_t("Remove")} role="button" />
+                <div
+                    onClick={this.onRemove}
+                    className="mx_EditableItem_delete"
+                    title={_t("action|remove")}
+                    role="button"
+                />
                 <span className="mx_EditableItem_item">{this.props.value}</span>
             </div>
         );

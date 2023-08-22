@@ -89,7 +89,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
                     </p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Continue")}
+                    primaryButton={_t("action|continue")}
                     onPrimaryButtonClick={this.onAllow}
                     onCancel={this.onDeny}
                     additive={

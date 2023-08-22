@@ -490,7 +490,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                         {_t("Cancel")}
                     </AccessibleButton>
                     <AccessibleButton kind="primary" onClick={this.sendEdit} disabled={this.state.saveDisabled}>
-                        {_t("Save")}
+                        {_t("action|save")}
                     </AccessibleButton>
                 </div>
             </div>

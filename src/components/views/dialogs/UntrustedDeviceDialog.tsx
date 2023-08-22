@@ -71,7 +71,7 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
                     {_t("Interactively verify by emoji")}
                 </AccessibleButton>
                 <AccessibleButton kind="primary" onClick={() => onFinished(false)}>
-                    {_t("Done")}
+                    {_t("action|done")}
                 </AccessibleButton>
             </div>
         </BaseDialog>

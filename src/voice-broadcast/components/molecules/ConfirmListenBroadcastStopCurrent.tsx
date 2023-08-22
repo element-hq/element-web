@@ -36,7 +36,7 @@ export const ConfirmListenBroadcastStopCurrentDialog: React.FC<Props> = ({ onFin
             <DialogButtons
                 onPrimaryButtonClick={() => onFinished(true)}
                 primaryButton={_t("Yes, end my recording")}
-                cancelButton={_t("No")}
+                cancelButton={_t("action|no")}
                 onCancel={() => onFinished(false)}
             />
         </BaseDialog>

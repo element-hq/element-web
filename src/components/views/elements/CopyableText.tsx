@@ -54,7 +54,7 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true
         <div className={combinedClassName}>
             {children}
             <AccessibleTooltipButton
-                title={tooltip ?? _t("Copy")}
+                title={tooltip ?? _t("action|copy")}
                 onClick={onCopyClickInternal}
                 className="mx_CopyableText_copyButton"
                 onHideTooltip={onHideTooltip}

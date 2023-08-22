@@ -33,12 +33,10 @@
     "Command error": "కమాండ్ లోపం",
     "Commands": "కమ్మండ్స్",
     "Confirm password": "పాస్వర్డ్ని నిర్ధారించండి",
-    "Continue": "కొనసాగించు",
     "Cryptography": "క్రిప్టోగ్రఫీ",
     "Current password": "ప్రస్తుత పాస్వర్డ్",
     "Custom level": "అనుకూల స్థాయి",
     "Deactivate Account": "ఖాతాను డీయాక్టివేట్ చేయండి",
-    "Decline": "డిక్లైన్",
     "Deops user with given id": "ఇచ్చిన ID తో వినియోగదారుని విడదీస్తుంది",
     "Default": "డిఫాల్ట్",
     "Sun": "ఆదివారం",
@@ -76,7 +74,6 @@
     "unknown error code": "తెలియని కోడ్ లోపం",
     "Please enter the code it contains:": "దయచేసి దాన్ని కలిగి ఉన్న కోడ్ను నమోదు చేయండి:",
     "Unable to restore session": "సెషన్ను పునరుద్ధరించడానికి సాధ్యపడలేదు",
-    "Remove": "తొలగించు",
     "Create new room": "క్రొత్త గది సృష్టించండి",
     "Dismiss": "రద్దుచేసే",
     "Favourite": "గుర్తుంచు",
@@ -90,7 +87,6 @@
     "Friday": "శుక్రువారం",
     "On": "వేయుము",
     "Changelog": "మార్పు వివరణ",
-    "Leave": "వదిలి",
     "Source URL": "మూల URL",
     "Warning": "హెచ్చరిక",
     "Noisy": "శబ్దం",
@@ -130,5 +126,11 @@
         "error": "లోపం",
         "mute": "నిశబ్ధము",
         "settings": "అమరికలు"
+    },
+    "action": {
+        "continue": "కొనసాగించు",
+        "decline": "డిక్లైన్",
+        "leave": "వదిలి",
+        "remove": "తొలగించు"
     }
 }

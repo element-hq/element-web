@@ -229,7 +229,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                         {_t("Cancel")}
                     </AccessibleButton>
                     <AccessibleButton onClick={this.saveProfile} kind="primary" disabled={!this.isSaveEnabled()}>
-                        {_t("Save")}
+                        {_t("action|save")}
                     </AccessibleButton>
                 </div>
             );

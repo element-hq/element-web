@@ -219,7 +219,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                         kind="primary"
                         disabled={!this.state.enableProfileSave}
                     >
-                        {_t("Save")}
+                        {_t("action|save")}
                     </AccessibleButton>
                 </div>
             </form>

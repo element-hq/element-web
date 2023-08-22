@@ -159,7 +159,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
             onFinished();
         };
 
-        editButton = <IconizedContextMenuOption onClick={_onEditClick} label={_t("Edit")} />;
+        editButton = <IconizedContextMenuOption onClick={_onEditClick} label={_t("action|edit")} />;
     }
 
     let snapshotButton: JSX.Element | undefined;
@@ -208,7 +208,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
         deleteButton = (
             <IconizedContextMenuOption
                 onClick={_onDeleteClick}
-                label={userWidget ? _t("Remove") : _t("Remove for everyone")}
+                label={userWidget ? _t("action|remove") : _t("Remove for everyone")}
             />
         );
     }

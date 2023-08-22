@@ -185,7 +185,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                         onClick={() => this.removePersonalRule(rule)}
                         disabled={this.state.busy}
                     >
-                        {_t("Remove")}
+                        {_t("action|remove")}
                     </AccessibleButton>
                     &nbsp;
                     <code>{rule.entity}</code>

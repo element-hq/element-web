@@ -95,7 +95,7 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
                     <>
                         &nbsp;
                         <AccessibleButton onClick={this.onViewSource} kind="link">
-                            {_t("View Source")}
+                            {_t("action|view_source")}
                         </AccessibleButton>
                     </>
                 );

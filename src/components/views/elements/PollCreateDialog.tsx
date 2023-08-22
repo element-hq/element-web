@@ -79,7 +79,7 @@ function editingInitialState(editingMxEvent: MatrixEvent): IState {
 
     return {
         title: _t("Edit poll"),
-        actionLabel: _t("Done"),
+        actionLabel: _t("action|done"),
         canSubmit: true,
         question: poll.question.text,
         options: poll.answers.map((ans) => ans.text),

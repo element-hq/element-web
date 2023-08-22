@@ -77,7 +77,7 @@ export default class QuestionDialog extends React.Component<IQuestionDialogProps
                     {this.props.description}
                 </div>
                 <DialogButtons
-                    primaryButton={this.props.button || _t("OK")}
+                    primaryButton={this.props.button || _t("action|ok")}
                     primaryButtonClass={primaryButtonClass}
                     primaryDisabled={this.props.buttonDisabled}
                     cancelButton={this.props.cancelButton}

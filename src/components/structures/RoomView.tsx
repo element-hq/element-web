@@ -286,7 +286,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     if (room.isError) {
         const buttons = (
             <AccessibleButton onClick={onRetryClicked} className="mx_RoomStatusBar_unsentRetry">
-                {_t("Retry")}
+                {_t("action|retry")}
             </AccessibleButton>
         );
 

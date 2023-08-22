@@ -185,7 +185,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
         if (shouldShowSpaceInvite(activeSpace)) {
             inviteOption = (
                 <IconizedContextMenuOption
-                    label={_t("Invite")}
+                    label={_t("action|invite")}
                     iconClassName="mx_RoomListHeader_iconInvite"
                     onClick={(e) => {
                         e.preventDefault();

@@ -246,7 +246,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 </span>
 
                 <AccessibleButton className="mx_AddExistingToSpaceDialog_retryButton" onClick={addRooms}>
-                    {_t("Retry")}
+                    {_t("action|retry")}
                 </AccessibleButton>
             </>
         );

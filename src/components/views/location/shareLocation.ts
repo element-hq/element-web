@@ -63,7 +63,7 @@ const getPermissionsErrorParams = (
     const modalParams = {
         title: _t("You don't have permission to share locations"),
         description: _t("You need to have the right permissions in order to share locations in this room."),
-        button: _t("OK"),
+        button: _t("action|ok"),
         hasCancelButton: false,
         onFinished: () => {}, // NOOP
     };

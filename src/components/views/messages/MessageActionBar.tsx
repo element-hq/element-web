@@ -173,7 +173,7 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
         <React.Fragment>
             <ContextMenuTooltipButton
                 className="mx_MessageActionBar_iconButton"
-                title={_t("React")}
+                title={_t("action|react")}
                 onClick={onClick}
                 onContextMenu={onClick}
                 isExpanded={menuDisplayed}
@@ -391,7 +391,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
             toolbarOpts.push(
                 <RovingAccessibleTooltipButton
                     className="mx_MessageActionBar_iconButton"
-                    title={_t("Edit")}
+                    title={_t("action|edit")}
                     onClick={this.onEditClick}
                     onContextMenu={this.onEditClick}
                     key="edit"
@@ -429,7 +429,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                 0,
                 <RovingAccessibleTooltipButton
                     className="mx_MessageActionBar_iconButton"
-                    title={_t("Retry")}
+                    title={_t("action|retry")}
                     onClick={this.onResendClick}
                     onContextMenu={this.onResendClick}
                     key="resend"
@@ -455,7 +455,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                         0,
                         <RovingAccessibleTooltipButton
                             className="mx_MessageActionBar_iconButton"
-                            title={_t("Reply")}
+                            title={_t("action|reply")}
                             onClick={this.onReplyClick}
                             onContextMenu={this.onReplyClick}
                             key="reply"

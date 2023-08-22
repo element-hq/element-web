@@ -60,7 +60,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
             );
             buttons = (
                 <DialogButtons
-                    primaryButton={_t("OK")}
+                    primaryButton={_t("action|ok")}
                     hasCancel={false}
                     onPrimaryButtonClick={this.onCancelClick}
                     focus={true}
@@ -78,7 +78,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
             );
             buttons = (
                 <DialogButtons
-                    primaryButton={_t("OK")}
+                    primaryButton={_t("action|ok")}
                     hasCancel={false}
                     onPrimaryButtonClick={this.onCancelClick}
                     focus={true}

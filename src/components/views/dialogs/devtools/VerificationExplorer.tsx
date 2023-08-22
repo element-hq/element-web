@@ -30,7 +30,7 @@ const PHASE_MAP: Record<Phase, TranslationKey> = {
     [Phase.Unsent]: _td("Unsent"),
     [Phase.Requested]: _td("Requested"),
     [Phase.Ready]: _td("Ready"),
-    [Phase.Done]: _td("Done"),
+    [Phase.Done]: _td("action|done"),
     [Phase.Started]: _td("Started"),
     [Phase.Cancelled]: _td("Cancelled"),
 };

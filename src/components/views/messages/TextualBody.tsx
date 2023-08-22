@@ -499,7 +499,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                         )}
                     </div>
                 ),
-                button: _t("Continue"),
+                button: _t("action|continue"),
                 onFinished(confirmed) {
                     if (!confirmed) {
                         return;

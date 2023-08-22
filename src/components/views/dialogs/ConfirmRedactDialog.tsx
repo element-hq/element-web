@@ -48,7 +48,7 @@ export default class ConfirmRedactDialog extends React.Component<IProps> {
                 description={description}
                 placeholder={_t("Reason (optional)")}
                 focus
-                button={_t("Remove")}
+                button={_t("action|remove")}
             />
         );
     }

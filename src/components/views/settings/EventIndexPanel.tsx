@@ -172,7 +172,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                     </SettingsSubsectionText>
                     <div>
                         <AccessibleButton kind="primary" disabled={this.state.enabling} onClick={this.onEnable}>
-                            {_t("Enable")}
+                            {_t("action|enable")}
                         </AccessibleButton>
                         {this.state.enabling ? <InlineSpinner /> : <div />}
                     </div>

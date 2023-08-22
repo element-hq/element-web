@@ -122,7 +122,7 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
             }
             placeholder={hasNativeSupport ? _t("Proxy URL (optional)") : _t("Proxy URL")}
             value={currentProxy}
-            button={_t("Enable")}
+            button={_t("action|enable")}
             validator={validProxy}
             onFinished={(enable, proxyUrl) => {
                 if (enable) {

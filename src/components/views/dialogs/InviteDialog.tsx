@@ -135,7 +135,7 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
                 <AccessibleButton className="mx_InviteDialog_userTile_remove" onClick={this.onRemove}>
                     <img
                         src={require("../../../../res/img/icon-pill-remove.svg").default}
-                        alt={_t("Remove")}
+                        alt={_t("action|remove")}
                         width={8}
                         height={8}
                     />
@@ -944,7 +944,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s",
                     { csvNames: failed.join(", ") },
                 ),
-                button: _t("OK"),
+                button: _t("action|ok"),
             });
         }
 
@@ -1388,7 +1388,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 },
             );
 
-            buttonText = _t("Invite");
+            buttonText = _t("action|invite");
             goButtonFn = this.inviteUsers;
 
             if (cli.isRoomEncrypted(this.props.roomId)) {

@@ -148,7 +148,7 @@ export function FormattingButtons({ composer, actionStates }: FormattingButtonsP
             )}
             <Button
                 actionState={actionStates.quote}
-                label={_t("Quote")}
+                label={_t("action|quote")}
                 onClick={() => composer.quote()}
                 icon={<QuoteIcon className="mx_FormattingButtons_Icon" />}
             />

@@ -127,8 +127,8 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
                 <Toolbar className="mx_WidgetPip_footer">
                     <RovingAccessibleTooltipButton
                         onClick={onLeaveClick}
-                        tooltip={_t("Leave")}
-                        aria-label={_t("Leave")}
+                        tooltip={_t("action|leave")}
+                        aria-label={_t("action|leave")}
                         alignment={Alignment.Top}
                     >
                         <HangupIcon className="mx_Icon mx_Icon_24" />

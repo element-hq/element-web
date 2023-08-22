@@ -126,7 +126,7 @@ export default class InlineTermsAgreement extends React.Component<IProps, IState
                     disabled={hasUnchecked || this.state.busy}
                     kind="primary_sm"
                 >
-                    {_t("Continue")}
+                    {_t("action|continue")}
                 </AccessibleButton>
             </div>
         );

@@ -131,7 +131,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         return (
             <div>
                 <p>{_t("Your keys are being backed up (the first backup could take a few minutes).")}</p>
-                <DialogButtons primaryButton={_t("OK")} onPrimaryButtonClick={this.onDone} hasCancel={false} />
+                <DialogButtons primaryButton={_t("action|ok")} onPrimaryButtonClick={this.onDone} hasCancel={false} />
             </div>
         );
     }
@@ -154,7 +154,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
                 <div>
                     <p>{_t("Unable to create key backup")}</p>
                     <DialogButtons
-                        primaryButton={_t("Retry")}
+                        primaryButton={_t("action|retry")}
                         onPrimaryButtonClick={this.createBackup}
                         hasCancel={true}
                         onCancel={this.onCancel}

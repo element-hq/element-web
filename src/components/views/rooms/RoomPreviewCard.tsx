@@ -84,7 +84,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
                     });
                 }}
             >
-                {_t("Leave")}
+                {_t("action|leave")}
             </AccessibleButton>
         );
     } else if (myMembership === "invite") {

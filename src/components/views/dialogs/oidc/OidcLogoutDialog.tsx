@@ -64,7 +64,7 @@ export const OidcLogoutDialog: React.FC<OidcLogoutDialogProps> = ({
                             href={logoutUrl}
                             target="_blank"
                         >
-                            {_t("Continue")}
+                            {_t("action|continue")}
                         </AccessibleButton>
                     </>
                 )}

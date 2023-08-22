@@ -111,7 +111,7 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
                 element="button"
                 disabled={stoppingInProgress}
             >
-                {hasError ? _t("Retry") : _t("Stop")}
+                {hasError ? _t("action|retry") : _t("Stop")}
             </AccessibleButton>
             {hasLocationPublishError && (
                 <AccessibleButton

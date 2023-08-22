@@ -4,7 +4,6 @@
     "All messages": "Усе паведамленні",
     "Notification targets": "Мэты апавяшчэння",
     "Favourite": "Улюбёнае",
-    "Quote": "Цытата",
     "Dismiss": "Aдхіліць",
     "Failed to add tag %(tagName)s to room": "Не атрымалася дадаць %(tagName)s ў пакоі",
     "Close": "Зачыніць",
@@ -15,14 +14,17 @@
     "On": "Уключыць",
     "Off": "Выключыць",
     "Invite to this room": "Запрасіць у гэты пакой",
-    "Remove": "Выдалiць",
     "Failed to remove tag %(tagName)s from room": "Не ўдалося выдаліць %(tagName)s з пакоя",
-    "Leave": "Пакінуць",
     "Operation failed": "Не атрымалася выканаць аперацыю",
     "powered by Matrix": "працуе на Matrix",
     "Source URL": "URL-адрас крыніцы",
     "common": {
         "error": "Памылка",
         "mute": "Без гуку"
+    },
+    "action": {
+        "leave": "Пакінуць",
+        "quote": "Цытата",
+        "remove": "Выдалiць"
     }
 }

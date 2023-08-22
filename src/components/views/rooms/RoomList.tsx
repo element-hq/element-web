@@ -195,8 +195,8 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                 }}
                 className="mx_RoomSublist_auxButton"
                 tooltipClassName="mx_RoomSublist_addRoomTooltip"
-                aria-label={_t("Start chat")}
-                title={_t("Start chat")}
+                aria-label={_t("action|start_chat")}
+                title={_t("action|start_chat")}
             />
         );
     }
@@ -387,7 +387,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
 
 const TAG_AESTHETICS: TagAestheticsMap = {
     [DefaultTagID.Invite]: {
-        sectionLabel: _td("Invites"),
+        sectionLabel: _td("action|invites_list"),
         isInvite: true,
         defaultHidden: false,
     },

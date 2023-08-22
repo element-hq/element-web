@@ -107,7 +107,7 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
                         kind="danger_sm"
                         className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
                     >
-                        {_t("Remove")}
+                        {_t("action|remove")}
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.onDontRemove}
@@ -126,7 +126,7 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
                     {this.props.email.address}
                 </span>
                 <AccessibleButton onClick={this.onRemove} kind="danger_sm" disabled={this.props.disabled}>
-                    {_t("Remove")}
+                    {_t("action|remove")}
                 </AccessibleButton>
             </div>
         );
@@ -284,7 +284,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
                         kind="primary"
                         disabled={this.state.continueDisabled}
                     >
-                        {_t("Continue")}
+                        {_t("action|continue")}
                     </AccessibleButton>
                 </div>
             );

@@ -366,7 +366,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                         />
                         {keyStatus}
                         <DialogButtons
-                            primaryButton={_t("Continue")}
+                            primaryButton={_t("action|continue")}
                             onPrimaryButtonClick={this.onPassPhraseNext}
                             hasCancel={true}
                             onCancel={this.onCancel}
@@ -432,7 +432,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                         </div>
                         {recoveryKeyFeedback}
                         <DialogButtons
-                            primaryButton={_t("Continue")}
+                            primaryButton={_t("action|continue")}
                             onPrimaryButtonClick={this.onRecoveryKeyNext}
                             hasCancel={true}
                             cancelButton={_t("Go Back")}

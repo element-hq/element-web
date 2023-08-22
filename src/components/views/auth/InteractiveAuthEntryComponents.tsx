@@ -153,7 +153,7 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
                     type="submit"
                     className="mx_Dialog_primary"
                     disabled={!this.state.password}
-                    value={_t("Continue")}
+                    value={_t("action|continue")}
                 />
             );
         }
@@ -745,7 +745,7 @@ export class RegistrationTokenAuthEntry extends React.Component<IAuthEntryProps,
         } else {
             submitButtonOrSpinner = (
                 <AccessibleButton onClick={this.onSubmit} kind="primary" disabled={!this.state.registrationToken}>
-                    {_t("Continue")}
+                    {_t("action|continue")}
                 </AccessibleButton>
             );
         }

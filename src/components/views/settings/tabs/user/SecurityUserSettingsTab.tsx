@@ -312,7 +312,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         if (PosthogAnalytics.instance.isEnabled()) {
             const onClickAnalyticsLearnMore = (): void => {
                 showAnalyticsLearnMoreDialog({
-                    primaryButton: _t("OK"),
+                    primaryButton: _t("action|ok"),
                     hasCancel: false,
                 });
             };
@@ -325,7 +325,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                         )}
                     >
                         <AccessibleButton kind="link" onClick={onClickAnalyticsLearnMore}>
-                            {_t("Learn more")}
+                            {_t("action|learn_more")}
                         </AccessibleButton>
                         {PosthogAnalytics.instance.isEnabled() && (
                             <SettingsFlag name="pseudonymousAnalyticsOptIn" level={SettingLevel.ACCOUNT} />

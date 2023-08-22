@@ -232,7 +232,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                     showSpaceInvite(space);
                 }}
             >
-                {_t("Invite")}
+                {_t("action|invite")}
             </AccessibleButton>
         );
     }
@@ -364,7 +364,7 @@ const SpaceSetupFirstRooms: React.FC<{
     let buttonLabel = _t("Skip for now");
     if (roomNames.some((name) => name.trim())) {
         onClick = onNextClick;
-        buttonLabel = busy ? _t("Creating rooms…") : _t("Continue");
+        buttonLabel = busy ? _t("Creating rooms…") : _t("action|continue");
     }
 
     return (
@@ -572,7 +572,7 @@ const SpaceSetupPrivateInvite: React.FC<{
     let buttonLabel = _t("Skip for now");
     if (emailAddresses.some((name) => name.trim())) {
         onClick = onNextClick;
-        buttonLabel = busy ? _t("Inviting…") : _t("Continue");
+        buttonLabel = busy ? _t("Inviting…") : _t("action|continue");
     }
 
     return (

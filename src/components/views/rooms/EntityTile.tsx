@@ -162,7 +162,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
             inviteButton = (
                 <div className="mx_EntityTile_invite">
                     <img
-                        alt={_t("Invite")}
+                        alt={_t("action|invite")}
                         src={require("../../../../res/img/plus.svg").default}
                         width="16"
                         height="16"

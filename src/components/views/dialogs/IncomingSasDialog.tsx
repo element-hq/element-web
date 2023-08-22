@@ -211,7 +211,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
                 {profile}
                 {isSelf ? selfDetailText : userDetailText}
                 <DialogButtons
-                    primaryButton={_t("Continue")}
+                    primaryButton={_t("action|continue")}
                     hasCancel={true}
                     onPrimaryButtonClick={this.onContinueClick}
                     onCancel={this.onCancelClick}

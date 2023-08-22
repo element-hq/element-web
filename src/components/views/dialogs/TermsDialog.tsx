@@ -213,7 +213,7 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
                 </div>
 
                 <DialogButtons
-                    primaryButton={_t("Next")}
+                    primaryButton={_t("action|next")}
                     hasCancel={true}
                     onCancel={this.onCancelClick}
                     onPrimaryButtonClick={this.onNextClick}

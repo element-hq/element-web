@@ -49,7 +49,7 @@ export default class IntegrationsImpossibleDialog extends React.Component<IProps
                     </p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("OK")}
+                    primaryButton={_t("action|ok")}
                     onPrimaryButtonClick={this.onAcknowledgeClick}
                     hasCancel={false}
                 />

@@ -361,7 +361,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                 <BaseDialog
                     className="mx_ReportEventDialog"
                     onFinished={this.props.onFinished}
-                    title={_t("Report Content")}
+                    title={_t("action|report_content")}
                     contentId="mx_ReportEventDialog"
                 >
                     <div>

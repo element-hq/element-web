@@ -364,7 +364,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                     </p>
                 </div>
             ),
-            button: _t("Continue"),
+            button: _t("action|continue"),
         });
         const [confirmed] = await finished;
         return !!confirmed;

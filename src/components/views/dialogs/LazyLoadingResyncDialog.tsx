@@ -37,7 +37,7 @@ const LazyLoadingResyncDialog: React.FC<IProps> = (props) => {
             hasCancelButton={false}
             title={_t("Updating %(brand)s", { brand })}
             description={<div>{description}</div>}
-            button={_t("OK")}
+            button={_t("action|ok")}
             onFinished={props.onFinished}
         />
     );

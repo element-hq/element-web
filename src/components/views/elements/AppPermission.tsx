@@ -155,7 +155,7 @@ export default class AppPermission extends React.Component<IProps, IState> {
                     </div>
                     <div>
                         <AccessibleButton kind="primary_sm" onClick={this.props.onPermissionGranted}>
-                            {_t("Continue")}
+                            {_t("action|continue")}
                         </AccessibleButton>
                     </div>
                 </div>

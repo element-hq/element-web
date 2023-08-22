@@ -128,11 +128,11 @@ export const LinkModal: React.FC<LinkModalProps> = ({
                                 onFinished();
                             }}
                         >
-                            {_t("Remove")}
+                            {_t("action|remove")}
                         </button>
                     )}
                     <DialogButtons
-                        primaryButton={_t("Save")}
+                        primaryButton={_t("action|save")}
                         primaryDisabled={isSaveDisabled}
                         primaryIsSubmit={true}
                         onCancel={onFinished}

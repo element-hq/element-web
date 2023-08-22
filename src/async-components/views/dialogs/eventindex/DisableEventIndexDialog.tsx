@@ -62,7 +62,7 @@ export default class DisableEventIndexDialog extends React.Component<IProps, ISt
                 {_t("If disabled, messages from encrypted rooms won't appear in search results.")}
                 {this.state.disabling ? <Spinner /> : <div />}
                 <DialogButtons
-                    primaryButton={_t("Disable")}
+                    primaryButton={_t("action|disable")}
                     onPrimaryButtonClick={this.onDisable}
                     primaryButtonClass="danger"
                     cancelButtonClass="warning"

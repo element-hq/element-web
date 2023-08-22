@@ -105,7 +105,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
         leaveOption = (
             <IconizedContextMenuOption
                 onClick={onLeaveRoomClick}
-                label={_t("Leave")}
+                label={_t("action|leave")}
                 className="mx_IconizedContextMenu_option_red"
                 iconClassName="mx_RoomTile_iconSignOut"
             />
@@ -136,7 +136,7 @@ const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
         inviteOption = (
             <IconizedContextMenuOption
                 onClick={onInviteClick}
-                label={_t("Invite")}
+                label={_t("action|invite")}
                 iconClassName="mx_RoomTile_iconInvite"
             />
         );

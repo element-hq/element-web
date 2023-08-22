@@ -133,9 +133,9 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
             case ConnectionState.Connecting:
                 return [_t("Join"), "primary", null];
             case ConnectionState.Connected:
-                return [_t("Leave"), "danger", disconnect];
+                return [_t("action|leave"), "danger", disconnect];
             case ConnectionState.Disconnecting:
-                return [_t("Leave"), "danger", null];
+                return [_t("action|leave"), "danger", null];
         }
     }, [connectionState, connect, disconnect]);
 
