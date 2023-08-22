@@ -53,6 +53,21 @@ exports[`<SessionManagerTab /> Sign out Signs out of current device 1`] = `
 </div>
 `;
 
+exports[`<SessionManagerTab /> Sign out for an OIDC-aware server Signs out of current device 1`] = `
+<div
+  class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_inline"
+  data-testid="device-detail-sign-out-cta"
+  role="button"
+  tabindex="0"
+>
+  <span
+    class="mx_DeviceDetails_signOutButtonContent"
+  >
+    Sign out of this session
+  </span>
+</div>
+`;
+
 exports[`<SessionManagerTab /> current session section renders current session section with a verified session 1`] = `
 <div
   class="mx_SettingsSubsection"

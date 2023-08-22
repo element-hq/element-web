@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { act, fireEvent, render, RenderResult } from "@testing-library/react";
+import { act, fireEvent, render, RenderResult, screen } from "@testing-library/react";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { logger } from "matrix-js-sdk/src/logger";
 import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
@@ -32,6 +32,7 @@ import {
     CryptoApi,
     DeviceVerificationStatus,
     MatrixError,
+    M_AUTHENTICATION,
 } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
@@ -87,7 +88,7 @@ describe("<SessionManagerTab />", () => {
         requestDeviceVerification: jest.fn().mockResolvedValue(mockVerificationRequest),
     } as unknown as CryptoApi);
 
-    const mockClient = getMockClientWithEventEmitter({
+    let mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(aliceId),
         getCrypto: jest.fn().mockReturnValue(mockCrypto),
         getDevices: jest.fn(),
@@ -104,6 +105,7 @@ describe("<SessionManagerTab />", () => {
         setLocalNotificationSettings: jest.fn(),
         getVersions: jest.fn().mockResolvedValue({}),
         getCapabilities: jest.fn().mockResolvedValue({}),
+        getClientWellKnown: jest.fn().mockReturnValue({}),
     });
 
     const defaultProps = {};
@@ -173,6 +175,25 @@ describe("<SessionManagerTab />", () => {
     };
 
     beforeEach(async () => {
+        mockClient = getMockClientWithEventEmitter({
+            ...mockClientMethodsUser(aliceId),
+            getCrypto: jest.fn().mockReturnValue(mockCrypto),
+            getDevices: jest.fn(),
+            getStoredDevice: jest.fn(),
+            getDeviceId: jest.fn().mockReturnValue(deviceId),
+            deleteMultipleDevices: jest.fn(),
+            generateClientSecret: jest.fn(),
+            setDeviceDetails: jest.fn(),
+            getAccountData: jest.fn(),
+            deleteAccountData: jest.fn(),
+            doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(true),
+            getPushers: jest.fn(),
+            setPusher: jest.fn(),
+            setLocalNotificationSettings: jest.fn(),
+            getVersions: jest.fn().mockResolvedValue({}),
+            getCapabilities: jest.fn().mockResolvedValue({}),
+            getClientWellKnown: jest.fn().mockReturnValue({}),
+        });
         jest.clearAllMocks();
         jest.spyOn(logger, "error").mockRestore();
         mockClient.getStoredDevice.mockImplementation((_userId, id) => {
@@ -1010,6 +1031,138 @@ describe("<SessionManagerTab />", () => {
                     [alicesMobileDevice.device_id, alicesOlderMobileDevice.device_id],
                     undefined,
                 );
+            });
+        });
+
+        describe("for an OIDC-aware server", () => {
+            beforeEach(() => {
+                mockClient.getClientWellKnown.mockReturnValue({
+                    [M_AUTHENTICATION.name]: {
+                        issuer: "https://issuer.org",
+                        account: "https://issuer.org/account",
+                    },
+                });
+            });
+
+            // signing out the current device works as usual
+            it("Signs out of current device", async () => {
+                const modalSpy = jest.spyOn(Modal, "createDialog");
+
+                mockClient.getDevices.mockResolvedValue({
+                    devices: [alicesDevice],
+                });
+                const { getByTestId } = render(getComponent());
+
+                await act(async () => {
+                    await flushPromises();
+                });
+
+                toggleDeviceDetails(getByTestId, alicesDevice.device_id);
+
+                const signOutButton = getByTestId("device-detail-sign-out-cta");
+                expect(signOutButton).toMatchSnapshot();
+                fireEvent.click(signOutButton);
+
+                // logout dialog opened
+                expect(modalSpy).toHaveBeenCalledWith(LogoutDialog, {}, undefined, false, true);
+            });
+
+            it("does not allow signing out of all other devices from current session context menu", async () => {
+                mockClient.getDevices.mockResolvedValue({
+                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                });
+                const { getByTestId } = render(getComponent());
+
+                await act(async () => {
+                    await flushPromises();
+                });
+
+                fireEvent.click(getByTestId("current-session-menu"));
+                expect(screen.queryByLabelText("Sign out of all other sessions (2)")).not.toBeInTheDocument();
+            });
+
+            describe("other devices", () => {
+                // signing out a single device still works
+                // this test will be updated once redirect to MAS is added
+                // https://github.com/vector-im/element-web/issues/26000
+                it("deletes a device when interactive auth is not required", async () => {
+                    mockClient.deleteMultipleDevices.mockResolvedValue({});
+                    mockClient.getDevices
+                        .mockResolvedValueOnce({
+                            devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                        })
+                        // pretend it was really deleted on refresh
+                        .mockResolvedValueOnce({
+                            devices: [alicesDevice, alicesOlderMobileDevice],
+                        });
+
+                    const { getByTestId } = render(getComponent());
+
+                    await act(async () => {
+                        await flushPromises();
+                    });
+
+                    toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+
+                    const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
+                    const signOutButton = deviceDetails.querySelector(
+                        '[data-testid="device-detail-sign-out-cta"]',
+                    ) as Element;
+                    fireEvent.click(signOutButton);
+
+                    await confirmSignout(getByTestId);
+
+                    // sign out button is disabled with spinner
+                    expect(
+                        (
+                            deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]') as Element
+                        ).getAttribute("aria-disabled"),
+                    ).toEqual("true");
+                    // delete called
+                    expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
+                        [alicesMobileDevice.device_id],
+                        undefined,
+                    );
+
+                    await flushPromises();
+
+                    // devices refreshed
+                    expect(mockClient.getDevices).toHaveBeenCalled();
+                });
+
+                it("does not allow removing multiple devices at once", async () => {
+                    mockClient.getDevices.mockResolvedValue({
+                        devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice, alicesInactiveDevice],
+                    });
+
+                    render(getComponent());
+
+                    await act(async () => {
+                        await flushPromises();
+                    });
+
+                    // sessions don't have checkboxes
+                    expect(
+                        screen.queryByTestId(`device-tile-checkbox-${alicesMobileDevice.device_id}`),
+                    ).not.toBeInTheDocument();
+                    // no select all
+                    expect(screen.queryByLabelText("Select all")).not.toBeInTheDocument();
+                });
+
+                it("does not allow signing out of all other devices from other sessions context menu", async () => {
+                    mockClient.getDevices.mockResolvedValue({
+                        devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                    });
+                    render(getComponent());
+
+                    await act(async () => {
+                        await flushPromises();
+                    });
+
+                    // no context menu because 'sign out all' is the only option
+                    // and it is not allowed when server is oidc-aware
+                    expect(screen.queryByTestId("other-sessions-menu")).not.toBeInTheDocument();
+                });
             });
         });
     });

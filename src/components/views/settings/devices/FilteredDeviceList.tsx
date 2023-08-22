@@ -31,6 +31,7 @@ import { DevicesState } from "./useOwnDevices";
 import FilteredDeviceListHeader from "./FilteredDeviceListHeader";
 import Spinner from "../../elements/Spinner";
 import { DeviceSecurityLearnMore } from "./DeviceSecurityLearnMore";
+import DeviceTile from "./DeviceTile";
 
 interface Props {
     devices: DevicesDictionary;
@@ -48,6 +49,11 @@ interface Props {
     setPushNotifications: (deviceId: string, enabled: boolean) => Promise<void>;
     setSelectedDeviceIds: (deviceIds: ExtendedDevice["device_id"][]) => void;
     supportsMSC3881?: boolean | undefined;
+    /**
+     * Only allow sessions to be signed out individually
+     * Removes checkboxes and multi selection header
+     */
+    disableMultipleSignout?: boolean;
 }
 
 const isDeviceSelected = (
@@ -178,6 +184,7 @@ const DeviceListItem: React.FC<{
     toggleSelected: () => void;
     setPushNotifications: (deviceId: string, enabled: boolean) => Promise<void>;
     supportsMSC3881?: boolean | undefined;
+    isSelectDisabled?: boolean;
 }> = ({
     device,
     pusher,
@@ -192,33 +199,47 @@ const DeviceListItem: React.FC<{
     setPushNotifications,
     toggleSelected,
     supportsMSC3881,
-}) => (
-    <li className="mx_FilteredDeviceList_listItem">
-        <SelectableDeviceTile
-            isSelected={isSelected}
-            onSelect={toggleSelected}
-            onClick={onDeviceExpandToggle}
-            device={device}
-        >
+    isSelectDisabled,
+}) => {
+    const tileContent = (
+        <>
             {isSigningOut && <Spinner w={16} h={16} />}
             <DeviceExpandDetailsButton isExpanded={isExpanded} onClick={onDeviceExpandToggle} />
-        </SelectableDeviceTile>
-        {isExpanded && (
-            <DeviceDetails
-                device={device}
-                pusher={pusher}
-                localNotificationSettings={localNotificationSettings}
-                isSigningOut={isSigningOut}
-                onVerifyDevice={onRequestDeviceVerification}
-                onSignOutDevice={onSignOutDevice}
-                saveDeviceName={saveDeviceName}
-                setPushNotifications={setPushNotifications}
-                supportsMSC3881={supportsMSC3881}
-                className="mx_FilteredDeviceList_deviceDetails"
-            />
-        )}
-    </li>
-);
+        </>
+    );
+    return (
+        <li className="mx_FilteredDeviceList_listItem">
+            {isSelectDisabled ? (
+                <DeviceTile device={device} onClick={onDeviceExpandToggle}>
+                    {tileContent}
+                </DeviceTile>
+            ) : (
+                <SelectableDeviceTile
+                    isSelected={isSelected}
+                    onSelect={toggleSelected}
+                    onClick={onDeviceExpandToggle}
+                    device={device}
+                >
+                    {tileContent}
+                </SelectableDeviceTile>
+            )}
+            {isExpanded && (
+                <DeviceDetails
+                    device={device}
+                    pusher={pusher}
+                    localNotificationSettings={localNotificationSettings}
+                    isSigningOut={isSigningOut}
+                    onVerifyDevice={onRequestDeviceVerification}
+                    onSignOutDevice={onSignOutDevice}
+                    saveDeviceName={saveDeviceName}
+                    setPushNotifications={setPushNotifications}
+                    supportsMSC3881={supportsMSC3881}
+                    className="mx_FilteredDeviceList_deviceDetails"
+                />
+            )}
+        </li>
+    );
+};
 
 /**
  * Filtered list of devices
@@ -242,6 +263,7 @@ export const FilteredDeviceList = forwardRef(
             setPushNotifications,
             setSelectedDeviceIds,
             supportsMSC3881,
+            disableMultipleSignout,
         }: Props,
         ref: ForwardedRef<HTMLDivElement>,
     ) => {
@@ -302,6 +324,7 @@ export const FilteredDeviceList = forwardRef(
                     selectedDeviceCount={selectedDeviceIds.length}
                     isAllSelected={isAllSelected}
                     toggleSelectAll={toggleSelectAll}
+                    isSelectDisabled={disableMultipleSignout}
                 >
                     {selectedDeviceIds.length ? (
                         <>
@@ -351,6 +374,7 @@ export const FilteredDeviceList = forwardRef(
                             isExpanded={expandedDeviceIds.includes(device.device_id)}
                             isSigningOut={signingOutDeviceIds.includes(device.device_id)}
                             isSelected={isDeviceSelected(device.device_id, selectedDeviceIds)}
+                            isSelectDisabled={disableMultipleSignout}
                             onDeviceExpandToggle={() => onDeviceExpandToggle(device.device_id)}
                             onSignOutDevice={() => onSignOutDevices([device.device_id])}
                             saveDeviceName={(deviceName: string) => saveDeviceName(device.device_id, deviceName)}

@@ -20,6 +20,7 @@ import { _t } from "../../../../languageHandler";
 import { KebabContextMenu } from "../../context_menus/KebabContextMenu";
 import { SettingsSubsectionHeading } from "../shared/SettingsSubsectionHeading";
 import { IconizedContextMenuOption } from "../../context_menus/IconizedContextMenu";
+import { filterBoolean } from "../../../../utils/arrays";
 
 interface Props {
     // total count of other sessions
@@ -27,7 +28,8 @@ interface Props {
     // not affected by filters
     otherSessionsCount: number;
     disabled?: boolean;
-    signOutAllOtherSessions: () => void;
+    // not provided when sign out all other sessions is not available
+    signOutAllOtherSessions?: () => void;
 }
 
 export const OtherSessionsSectionHeading: React.FC<Props> = ({
@@ -35,22 +37,26 @@ export const OtherSessionsSectionHeading: React.FC<Props> = ({
     disabled,
     signOutAllOtherSessions,
 }) => {
-    const menuOptions = [
-        <IconizedContextMenuOption
-            key="sign-out-all-others"
-            label={_t("Sign out of %(count)s sessions", { count: otherSessionsCount })}
-            onClick={signOutAllOtherSessions}
-            isDestructive
-        />,
-    ];
+    const menuOptions = filterBoolean([
+        signOutAllOtherSessions ? (
+            <IconizedContextMenuOption
+                key="sign-out-all-others"
+                label={_t("Sign out of %(count)s sessions", { count: otherSessionsCount })}
+                onClick={signOutAllOtherSessions}
+                isDestructive
+            />
+        ) : null,
+    ]);
     return (
         <SettingsSubsectionHeading heading={_t("Other sessions")}>
-            <KebabContextMenu
-                disabled={disabled}
-                title={_t("Options")}
-                options={menuOptions}
-                data-testid="other-sessions-menu"
-            />
+            {!!menuOptions.length && (
+                <KebabContextMenu
+                    disabled={disabled}
+                    title={_t("Options")}
+                    options={menuOptions}
+                    data-testid="other-sessions-menu"
+                />
+            )}
         </SettingsSubsectionHeading>
     );
 };

@@ -24,6 +24,7 @@ import TooltipTarget from "../../elements/TooltipTarget";
 interface Props extends Omit<HTMLProps<HTMLDivElement>, "className"> {
     selectedDeviceCount: number;
     isAllSelected: boolean;
+    isSelectDisabled?: boolean;
     toggleSelectAll: () => void;
     children?: React.ReactNode;
 }
@@ -31,6 +32,7 @@ interface Props extends Omit<HTMLProps<HTMLDivElement>, "className"> {
 const FilteredDeviceListHeader: React.FC<Props> = ({
     selectedDeviceCount,
     isAllSelected,
+    isSelectDisabled,
     toggleSelectAll,
     children,
     ...rest
@@ -38,16 +40,18 @@ const FilteredDeviceListHeader: React.FC<Props> = ({
     const checkboxLabel = isAllSelected ? _t("Deselect all") : _t("Select all");
     return (
         <div className="mx_FilteredDeviceListHeader" {...rest}>
-            <TooltipTarget label={checkboxLabel} alignment={Alignment.Top}>
-                <StyledCheckbox
-                    kind={CheckboxStyle.Solid}
-                    checked={isAllSelected}
-                    onChange={toggleSelectAll}
-                    id="device-select-all-checkbox"
-                    data-testid="device-select-all-checkbox"
-                    aria-label={checkboxLabel}
-                />
-            </TooltipTarget>
+            {!isSelectDisabled && (
+                <TooltipTarget label={checkboxLabel} alignment={Alignment.Top}>
+                    <StyledCheckbox
+                        kind={CheckboxStyle.Solid}
+                        checked={isAllSelected}
+                        onChange={toggleSelectAll}
+                        id="device-select-all-checkbox"
+                        data-testid="device-select-all-checkbox"
+                        aria-label={checkboxLabel}
+                    />
+                </TooltipTarget>
+            )}
             <span className="mx_FilteredDeviceListHeader_label">
                 {selectedDeviceCount > 0
                     ? _t("%(count)s sessions selected", { count: selectedDeviceCount })
