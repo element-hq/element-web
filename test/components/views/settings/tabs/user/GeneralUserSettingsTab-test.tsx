@@ -163,6 +163,23 @@ describe("<GeneralUserSettingsTab />", () => {
             expect(screen.queryByText("Deactivate account")).not.toBeInTheDocument();
             expect(SettingsStore.getValue).toHaveBeenCalledWith(UIFeature.Deactivate);
         });
+        it("should not render section when account is managed externally", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === UIFeature.Deactivate,
+            );
+            // account is managed externally when we have delegated auth configured
+            mockClient.getClientWellKnown.mockReturnValue({
+                [M_AUTHENTICATION.name]: {
+                    issuer: "https://issuer.org",
+                    account: "https://issuer.org/account",
+                },
+            });
+            render(getComponent());
+
+            await flushPromises();
+
+            expect(screen.queryByText("Deactivate account")).not.toBeInTheDocument();
+        });
         it("should render section when account deactivation feature is enabled", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName === UIFeature.Deactivate,

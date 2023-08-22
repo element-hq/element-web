@@ -527,7 +527,8 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         const supportsMultiLanguageSpellCheck = plaf?.supportsSpellCheckSettings();
 
         let accountManagementSection: JSX.Element | undefined;
-        if (SettingsStore.getValue(UIFeature.Deactivate)) {
+        const isAccountManagedExternally = !!this.state.externalAccountManagementUrl;
+        if (SettingsStore.getValue(UIFeature.Deactivate) && !isAccountManagedExternally) {
             accountManagementSection = this.renderManagementSection();
         }
 
