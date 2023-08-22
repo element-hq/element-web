@@ -19,12 +19,14 @@ import React, { ReactElement } from "react";
 import Dropdown from "../../views/elements/Dropdown";
 import PlatformPeg from "../../../PlatformPeg";
 import SettingsStore from "../../../settings/SettingsStore";
-import { _t } from "../../../languageHandler";
+import { _t, getUserLanguage } from "../../../languageHandler";
 import Spinner from "./Spinner";
-import * as languageHandler from "../../../languageHandler";
 import { NonEmptyArray } from "../../../@types/common";
 
-type Languages = Awaited<ReturnType<typeof languageHandler.getAllLanguagesFromJson>>;
+type Languages = {
+    value: string;
+    label: string; // translated
+}[];
 function languageMatchesSearchQuery(query: string, language: Languages[0]): boolean {
     if (language.label.toUpperCase().includes(query.toUpperCase())) return true;
     if (language.value.toUpperCase() === query.toUpperCase()) return true;
@@ -58,6 +60,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
     public componentDidMount(): void {
         const plaf = PlatformPeg.get();
         if (plaf) {
+            const languageNames = new Intl.DisplayNames([getUserLanguage()], { type: "language", style: "short" });
             plaf.getAvailableSpellCheckLanguages()
                 ?.then((languages) => {
                     languages.sort(function (a, b) {
@@ -68,7 +71,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
                     const langs: Languages = [];
                     languages.forEach((language) => {
                         langs.push({
-                            label: language,
+                            label: languageNames.of(language)!,
                             value: language,
                         });
                     });
@@ -79,7 +82,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
                         languages: [
                             {
                                 value: "en",
-                                label: "English",
+                                label: languageNames.of("en")!,
                             },
                         ],
                     });

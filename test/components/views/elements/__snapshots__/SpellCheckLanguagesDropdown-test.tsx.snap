@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SpellCheckLanguagesDropdown /> renders as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Dropdown mx_GeneralUserSettingsTab_spellCheckLanguageInput"
+  >
+    <div
+      aria-describedby="mx_LanguageDropdown_value"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-label="Language Dropdown"
+      aria-owns="mx_LanguageDropdown_input"
+      class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_Dropdown_option"
+        id="mx_LanguageDropdown_value"
+      >
+        <div>
+          English
+        </div>
+      </div>
+      <span
+        class="mx_Dropdown_arrow"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

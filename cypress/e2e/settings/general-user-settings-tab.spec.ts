@@ -133,9 +133,11 @@ describe("General user settings tab", () => {
                     cy.findByRole("button", { name: "Language Dropdown" }).click();
 
                     // Assert that the default option is rendered and highlighted
-                    cy.findByRole("option", { name: /Bahasa Indonesia/ })
+                    cy.findByRole("option", { name: /Albanian/ })
                         .should("be.visible")
                         .should("have.class", "mx_Dropdown_option_highlight");
+
+                    cy.findByRole("option", { name: /Deutsch/ }).should("be.visible");
 
                     // Click again to close the dropdown
                     cy.findByRole("button", { name: "Language Dropdown" }).click();

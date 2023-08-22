@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React, { ReactElement } from "react";
+import classNames from "classnames";
 
 import * as languageHandler from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -24,9 +25,10 @@ import Spinner from "./Spinner";
 import Dropdown from "./Dropdown";
 import { NonEmptyArray } from "../../../@types/common";
 
-type Languages = Awaited<ReturnType<typeof languageHandler.getAllLanguagesFromJson>>;
+type Languages = Awaited<ReturnType<typeof languageHandler.getAllLanguagesWithLabels>>;
 
 function languageMatchesSearchQuery(query: string, language: Languages[0]): boolean {
+    if (language.labelInTargetLanguage.toUpperCase().includes(query.toUpperCase())) return true;
     if (language.label.toUpperCase().includes(query.toUpperCase())) return true;
     if (language.value.toUpperCase() === query.toUpperCase()) return true;
     return false;
@@ -56,23 +58,30 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         languageHandler
-            .getAllLanguagesFromJson()
+            .getAllLanguagesWithLabels()
             .then((langs) => {
                 langs.sort(function (a, b) {
-                    if (a.label < b.label) return -1;
-                    if (a.label > b.label) return 1;
+                    if (a.labelInTargetLanguage < b.labelInTargetLanguage) return -1;
+                    if (a.labelInTargetLanguage > b.labelInTargetLanguage) return 1;
                     return 0;
                 });
                 this.setState({ langs });
             })
             .catch(() => {
-                this.setState({ langs: [{ value: "en", label: "English" }] });
+                this.setState({
+                    langs: [
+                        {
+                            value: "en",
+                            label: "English",
+                            labelInTargetLanguage: "English",
+                        },
+                    ],
+                });
             });
 
         if (!this.props.value) {
-            // If no value is given, we start with the first
-            // country selected, but our parent component
-            // doesn't know this, therefore we do this.
+            // If no value is given, we start with the first country selected,
+            // but our parent component doesn't know this, therefore we do this.
             const language = languageHandler.getUserLanguage();
             this.props.onOptionChange(language);
         }
@@ -89,7 +98,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
             return <Spinner />;
         }
 
-        let displayedLanguages: Awaited<ReturnType<typeof languageHandler.getAllLanguagesFromJson>>;
+        let displayedLanguages: Awaited<ReturnType<typeof languageHandler.getAllLanguagesWithLabels>>;
         if (this.state.searchQuery) {
             displayedLanguages = this.state.langs.filter((lang) => {
                 return languageMatchesSearchQuery(this.state.searchQuery, lang);
@@ -99,7 +108,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
         }
 
         const options = displayedLanguages.map((language) => {
-            return <div key={language.value}>{language.label}</div>;
+            return <div key={language.value}>{language.labelInTargetLanguage}</div>;
         }) as NonEmptyArray<ReactElement & { key: string }>;
 
         // default value here too, otherwise we need to handle null / undefined
@@ -116,7 +125,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
         return (
             <Dropdown
                 id="mx_LanguageDropdown"
-                className={this.props.className}
+                className={classNames("mx_LanguageDropdown", this.props.className)}
                 onOptionChange={this.props.onOptionChange}
                 onSearchChange={this.onSearchChange}
                 searchEnabled={true}

@@ -433,10 +433,7 @@ export function setMissingEntryGenerator(f: (value: string) => void): void {
 }
 
 type Languages = {
-    [lang: string]: {
-        fileName: string;
-        label: string;
-    };
+    [lang: string]: string;
 };
 
 export function setLanguage(preferredLangs: string | string[]): Promise<void> {
@@ -467,7 +464,7 @@ export function setLanguage(preferredLangs: string | string[]): Promise<void> {
                 logger.error("Unable to find an appropriate language");
             }
 
-            return getLanguageRetry(i18nFolder + availLangs[langToUse].fileName);
+            return getLanguageRetry(i18nFolder + availLangs[langToUse]);
         })
         .then(async (langData): Promise<ICounterpartTranslation | undefined> => {
             counterpart.registerTranslations(langToUse, langData);
@@ -481,7 +478,7 @@ export function setLanguage(preferredLangs: string | string[]): Promise<void> {
 
             // Set 'en' as fallback language:
             if (langToUse !== "en") {
-                return getLanguageRetry(i18nFolder + availLangs["en"].fileName);
+                return getLanguageRetry(i18nFolder + availLangs["en"]);
             }
         })
         .then(async (langData): Promise<void> => {
@@ -492,21 +489,23 @@ export function setLanguage(preferredLangs: string | string[]): Promise<void> {
 
 type Language = {
     value: string;
-    label: string;
+    label: string; // translated
+    labelInTargetLanguage: string; // translated
 };
 
-export function getAllLanguagesFromJson(): Promise<Language[]> {
-    return getLangsJson().then((langsObject) => {
-        const langs: Language[] = [];
-        for (const langKey in langsObject) {
-            if (langsObject.hasOwnProperty(langKey)) {
-                langs.push({
-                    value: langKey,
-                    label: langsObject[langKey].label,
-                });
-            }
-        }
-        return langs;
+export async function getAllLanguagesFromJson(): Promise<string[]> {
+    return Object.keys(await getLangsJson());
+}
+
+export async function getAllLanguagesWithLabels(): Promise<Language[]> {
+    const languageNames = new Intl.DisplayNames([getUserLanguage()], { type: "language", style: "short" });
+    const languages = await getAllLanguagesFromJson();
+    return languages.map<Language>((langKey) => {
+        return {
+            value: langKey,
+            label: languageNames.of(langKey)!,
+            labelInTargetLanguage: new Intl.DisplayNames([langKey], { type: "language", style: "short" }).of(langKey)!,
+        };
     });
 }
 

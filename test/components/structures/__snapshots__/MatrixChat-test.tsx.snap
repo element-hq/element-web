@@ -37,7 +37,7 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
           Matrix
         </aside>
         <div
-          class="mx_Dropdown mx_AuthBody_language"
+          class="mx_Dropdown mx_LanguageDropdown mx_AuthBody_language"
         >
           <div
             aria-describedby="mx_LanguageDropdown_value"

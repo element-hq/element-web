@@ -32,24 +32,18 @@ const lv = {
 // de_DE.json
 // lv.json - mock version with few translations, used to test fallback translation
 
-fetchMock
-    .get("/i18n/languages.json", {
-        en: {
-            fileName: "en_EN.json",
-            label: "English",
-        },
-        de: {
-            fileName: "de_DE.json",
-            label: "German",
-        },
-        lv: {
-            fileName: "lv.json",
-            label: "Latvian",
-        },
-    })
-    .get("end:en_EN.json", en)
-    .get("end:de_DE.json", de)
-    .get("end:lv.json", lv);
+export function setupLanguageMock() {
+    fetchMock
+        .get("/i18n/languages.json", {
+            en: "en_EN.json",
+            de: "de_DE.json",
+            lv: "lv.json",
+        })
+        .get("end:en_EN.json", en)
+        .get("end:de_DE.json", de)
+        .get("end:lv.json", lv);
+}
+setupLanguageMock();
 
 languageHandler.setLanguage("en");
 languageHandler.setMissingEntryGenerator((key) => key.split("|", 2)[1]);
