@@ -77,7 +77,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
             return <Component {...this.props} />;
         } else if (this.state.error) {
             return (
-                <BaseDialog onFinished={this.props.onFinished} title={_t("Error")}>
+                <BaseDialog onFinished={this.props.onFinished} title={_t("common|error")}>
                     {_t("Unable to load! Check your network connectivity and try again.")}
                     <DialogButtons
                         primaryButton={_t("Dismiss")}

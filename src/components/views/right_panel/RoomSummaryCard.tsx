@@ -337,9 +337,9 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) 
 
     return (
         <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
-            <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">
+            <Group title={_t("common|about")} className="mx_RoomSummaryCard_aboutGroup">
                 <Button className="mx_RoomSummaryCard_icon_people" onClick={onRoomMembersClick}>
-                    {_t("People")}
+                    {_t("common|people")}
                     <span className="mx_BaseCard_Button_sublabel">{memberCount}</span>
                 </Button>
                 {!isVideoRoom && (

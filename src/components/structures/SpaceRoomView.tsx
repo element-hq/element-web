@@ -253,7 +253,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
                 onClick={() => {
                     showSpaceSettings(space);
                 }}
-                title={_t("Settings")}
+                title={_t("common|settings")}
             />
         );
     }
@@ -313,7 +313,7 @@ const SpaceSetupFirstRooms: React.FC<{
                 key={name}
                 name={name}
                 type="text"
-                label={_t("Room name")}
+                label={_t("common|room_name")}
                 placeholder={placeholders[i]}
                 value={roomNames[i]}
                 onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setRoomName(i, ev.target.value)}

@@ -199,7 +199,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
             if (!results?.results?.length) {
                 ret.push(
                     <li key="search-top-marker">
-                        <h2 className="mx_RoomView_topMarker">{_t("No results")}</h2>
+                        <h2 className="mx_RoomView_topMarker">{_t("common|no_results")}</h2>
                     </li>,
                 );
             } else {

@@ -402,7 +402,7 @@ const TAG_AESTHETICS: TagAestheticsMap = {
         defaultHidden: false,
     },
     [DefaultTagID.DM]: {
-        sectionLabel: _td("People"),
+        sectionLabel: _td("common|people"),
         isInvite: false,
         defaultHidden: false,
         AuxButtonComponent: DmAuxButton,

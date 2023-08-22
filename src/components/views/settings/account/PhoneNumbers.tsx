@@ -201,7 +201,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
                 logger.error("Unable to add phone number " + phoneNumber + " " + err);
                 this.setState({ verifying: false, continueDisabled: false, addTask: null });
                 Modal.createDialog(ErrorDialog, {
-                    title: _t("Error"),
+                    title: _t("common|error"),
                     description: extractErrorMessageFromError(err, _t("Operation failed")),
                 });
             });

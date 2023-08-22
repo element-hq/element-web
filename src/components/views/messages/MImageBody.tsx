@@ -395,7 +395,11 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             return null;
         }
 
-        return <span className="mx_MImageBody_banner">{presentableTextForFile(content, _t("Image"), true, true)}</span>;
+        return (
+            <span className="mx_MImageBody_banner">
+                {presentableTextForFile(content, _t("common|image"), true, true)}
+            </span>
+        );
     }
 
     protected messageContent(

@@ -586,7 +586,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     <div>
                         <Field
                             type="password"
-                            label={_t("Password")}
+                            label={_t("common|password")}
                             value={this.state.accountPassword}
                             onChange={this.onAccountPasswordChange}
                             forceValidity={this.state.accountPasswordCorrect === false ? false : undefined}

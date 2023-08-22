@@ -320,7 +320,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         if (!options?.length) {
             return [
                 <li key="0" className="mx_Dropdown_option" role="option" aria-selected={false}>
-                    {_t("No results")}
+                    {_t("common|no_results")}
                 </li>,
             ];
         }

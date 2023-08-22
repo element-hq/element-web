@@ -74,7 +74,7 @@ export default class ErrorDialog extends React.Component<IProps, IState> {
             <BaseDialog
                 className="mx_ErrorDialog"
                 onFinished={this.props.onFinished}
-                title={this.props.title || _t("Error")}
+                title={this.props.title || _t("common|error")}
                 headerImage={this.props.headerImage}
                 contentId="mx_Dialog_content"
             >

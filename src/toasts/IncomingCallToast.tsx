@@ -140,7 +140,7 @@ export function IncomingCallToast({ callEvent }: Props): JSX.Element {
                     ) : (
                         <LiveContentSummary
                             type={LiveContentType.Video}
-                            text={_t("Video")}
+                            text={_t("common|video")}
                             active={false}
                             participantCount={0}
                         />

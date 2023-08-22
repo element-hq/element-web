@@ -55,7 +55,7 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
                             );
                         }}
                     >
-                        {_t("People")}
+                        {_t("common|people")}
                     </StyledCheckbox>
                     <SettingsSubsectionText>
                         {_t(

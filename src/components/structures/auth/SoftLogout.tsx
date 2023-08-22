@@ -234,7 +234,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                 {error}
                 <Field
                     type="password"
-                    label={_t("Password")}
+                    label={_t("common|password")}
                     onChange={this.onPasswordChange}
                     value={this.state.password}
                     disabled={this.state.busy}

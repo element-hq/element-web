@@ -67,7 +67,7 @@ interface LiveContentSummaryWithCallProps {
 export const LiveContentSummaryWithCall: FC<LiveContentSummaryWithCallProps> = ({ call }) => (
     <LiveContentSummary
         type={LiveContentType.Video}
-        text={_t("Video")}
+        text={_t("common|video")}
         active={false}
         participantCount={useParticipantCount(call)}
     />

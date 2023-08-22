@@ -79,13 +79,10 @@
     "Remove": "తొలగించు",
     "Create new room": "క్రొత్త గది సృష్టించండి",
     "Dismiss": "రద్దుచేసే",
-    "Error": "లోపం",
     "Favourite": "గుర్తుంచు",
-    "Mute": "నిశబ్ధము",
     "Notifications": "ప్రకటనలు",
     "Operation failed": "కార్యం విఫలమైంది",
     "Search": "శోధన",
-    "Settings": "అమరికలు",
     "Sunday": "ఆదివారం",
     "Messages sent by bot": "బాట్ పంపిన సందేశాలు",
     "Notification targets": "తాఖీదు లక్ష్యాలు",
@@ -128,5 +125,10 @@
     "Failed to verify email address: make sure you clicked the link in the email": "ఇమెయిల్ అడ్రస్ ని నిరూపించలేక పోయాము. ఈమెయిల్ లో వచ్చిన లింక్ ని నొక్కారా",
     "Call Failed": "కాల్ విఫలమయింది",
     "Confirm adding email": "ఈమెయిల్ చేర్చుటకు ధ్రువీకరించు",
-    "Single Sign On": "సింగిల్ సైన్ ఆన్"
+    "Single Sign On": "సింగిల్ సైన్ ఆన్",
+    "common": {
+        "error": "లోపం",
+        "mute": "నిశబ్ధము",
+        "settings": "అమరికలు"
+    }
 }

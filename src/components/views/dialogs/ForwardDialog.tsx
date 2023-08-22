@@ -276,7 +276,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
 
     return (
         <BaseDialog
-            title={_t("Forward message")}
+            title={_t("common|forward_message")}
             className="mx_ForwardDialog"
             contentId="mx_ForwardList"
             onFinished={onFinished}
@@ -329,7 +329,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                             />
                         </div>
                     ) : (
-                        <span className="mx_ForwardList_noResults">{_t("No results")}</span>
+                        <span className="mx_ForwardList_noResults">{_t("common|no_results")}</span>
                     )}
                 </AutoHideScrollbar>
             </div>

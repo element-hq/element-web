@@ -104,7 +104,7 @@ export function createRedactEventDialog({
                     if (typeof code !== "undefined") {
                         // display error message stating you couldn't delete this.
                         Modal.createDialog(ErrorDialog, {
-                            title: _t("Error"),
+                            title: _t("common|error"),
                             description: _t("You cannot delete this message. (%(code)s)", { code }),
                         });
                     }

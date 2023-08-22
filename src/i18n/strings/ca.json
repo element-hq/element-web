@@ -9,11 +9,8 @@
     "Cancel": "Cancel·la",
     "Close": "Tanca",
     "Create new room": "Crea una sala nova",
-    "Error": "Error",
     "Failed to forget room %(errCode)s": "No s'ha pogut oblidar la sala %(errCode)s",
     "Favourite": "Favorit",
-    "Mute": "Silencia",
-    "Settings": "Configuració",
     "Start chat": "Inicia un xat",
     "Failed to change password. Is your password correct?": "S'ha produït un error en canviar la contrasenya. És correcta la teva contrasenya?",
     "Continue": "Continua",
@@ -130,7 +127,6 @@
     "Export E2E room keys": "Exporta les claus E2E de la sala",
     "Do you want to set an email address?": "Voleu establir una adreça de correu electrònic?",
     "Current password": "Contrasenya actual",
-    "Password": "Contrasenya",
     "New Password": "Nova contrasenya",
     "Confirm password": "Confirma la contrasenya",
     "Change Password": "Canvia la contrasenya",
@@ -151,7 +147,6 @@
     "Jump to read receipt": "Vés a l'últim missatge llegit",
     "Mention": "Menciona",
     "Invite": "Convida",
-    "Unmute": "No silenciïs",
     "Admin Tools": "Eines d'administració",
     "and %(count)s others...": {
         "other": "i %(count)s altres...",
@@ -181,7 +176,6 @@
     "Unknown for %(duration)s": "Desconegut durant %(duration)s",
     "Online": "En línia",
     "Idle": "Inactiu",
-    "Offline": "Fora de línia",
     "Unknown": "Desconegut",
     "Replying": "S'està contestant",
     "Unnamed room": "Sala sense nom",
@@ -245,7 +239,6 @@
     "Delete Widget": "Suprimeix el giny",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "La supressió d'un giny l'elimina per a tots els usuaris d'aquesta sala. Esteu segur que voleu eliminar aquest giny?",
     "Delete widget": "Suprimeix el giny",
-    "No results": "Sense resultats",
     "Home": "Inici",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "%(severalUsers)sjoined %(count)s times": {
@@ -400,7 +393,6 @@
     "Import room keys": "Importa les claus de la sala",
     "Import": "Importa",
     "Email": "Correu electrònic",
-    "Analytics": "Analítiques",
     "Submit debug logs": "Enviar logs de depuració",
     "Sunday": "Diumenge",
     "Failed to add tag %(tagName)s to room": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala",
@@ -653,5 +645,15 @@
     "Integration manager": "Gestor d'integracions",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Els gestors d'integracions reben dades de configuració i poden modificar ginys, enviar invitacions a sales i establir nivells d'autoritat en nom teu.",
     "Identity server": "Servidor d'identitat",
-    "Could not connect to identity server": "No s'ha pogut connectar amb el servidor d'identitat"
+    "Could not connect to identity server": "No s'ha pogut connectar amb el servidor d'identitat",
+    "common": {
+        "analytics": "Analítiques",
+        "error": "Error",
+        "mute": "Silencia",
+        "no_results": "Sense resultats",
+        "offline": "Fora de línia",
+        "password": "Contrasenya",
+        "settings": "Configuració",
+        "unmute": "No silenciïs"
+    }
 }

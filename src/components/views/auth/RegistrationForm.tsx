@@ -525,8 +525,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 ref={(field) => (this[RegistrationField.Username] = field)}
                 type="text"
                 autoFocus={true}
-                label={_t("Username")}
-                placeholder={_t("Username").toLocaleLowerCase()}
+                label={_t("common|username")}
+                placeholder={_t("common|username").toLocaleLowerCase()}
                 value={this.state.username}
                 onChange={this.onUsernameChange}
                 onValidate={this.onUsernameValidate}

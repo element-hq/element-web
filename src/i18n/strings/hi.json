@@ -7,7 +7,6 @@
     "Failed to verify email address: make sure you clicked the link in the email": "ईमेल आईडी सत्यापित नही हो पाया: कृपया सुनिश्चित कर लें कि आपने ईमेल में मौजूद लिंक पर क्लिक किया है",
     "Dismiss": "खारिज",
     "powered by Matrix": "मैट्रिक्स द्वारा संचालित",
-    "Analytics": "एनालिटिक्स",
     "Call Failed": "कॉल विफल",
     "You cannot place a call with yourself.": "आप अपने साथ कॉल नहीं कर सकते हैं।",
     "Permission Required": "अनुमति आवश्यक है",
@@ -128,7 +127,6 @@
     "Messages sent by bot": "रोबॉट द्वारा भेजे गए संदेश",
     "Decline": "पतन",
     "Accept": "स्वीकार",
-    "Error": "त्रुटि",
     "Incorrect verification code": "गलत सत्यापन कोड",
     "Submit": "जमा करें",
     "Phone": "फ़ोन",
@@ -140,7 +138,6 @@
     "Export E2E room keys": "E2E रूम कुंजी निर्यात करें",
     "Do you want to set an email address?": "क्या आप एक ईमेल पता सेट करना चाहते हैं?",
     "Current password": "वर्तमान पासवर्ड",
-    "Password": "पासवर्ड",
     "New Password": "नया पासवर्ड",
     "Confirm password": "पासवर्ड की पुष्टि कीजिये",
     "Change Password": "पासवर्ड बदलें",
@@ -202,8 +199,6 @@
     "Mention": "उल्लेख",
     "Invite": "आमंत्रण",
     "Share Link to User": "उपयोगकर्ता को लिंक साझा करें",
-    "Unmute": "अनम्यूट",
-    "Mute": "म्यूट",
     "Admin Tools": "व्यवस्थापक उपकरण",
     "Close": "बंद",
     "and %(count)s others...": {
@@ -235,7 +230,6 @@
     "Unknown for %(duration)s": "%(duration)s के लिए अज्ञात",
     "Online": "ऑनलाइन",
     "Idle": "निष्क्रिय",
-    "Offline": "ऑफलाइन",
     "Unknown": "अज्ञात",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "फ़ाइल '%(fileName)s' अपलोड के लिए इस होमस्वर के आकार की सीमा से अधिक है",
     "Upgrades a room to a new version": "एक रूम को एक नए संस्करण में अपग्रेड करता है",
@@ -369,7 +363,6 @@
     "Publish this room to the public in %(domain)s's room directory?": "इस कमरे को %(domain)s के कमरे की निर्देशिका में जनता के लिए प्रकाशित करें?",
     "URL Previews": "URL पूर्वावलोकन",
     "Failed to change password. Is your password correct?": "पासवर्ड बदलने में विफल। क्या आपका पासवर्ड सही है?",
-    "Success": "सफल",
     "Profile": "प्रोफाइल",
     "Account": "अकाउंट",
     "Email addresses": "ईमेल पता",
@@ -629,5 +622,14 @@
     "Confirm adding email": "ईमेल जोड़ने की पुष्टि करें",
     "Single Sign On": "केवल हस्ताक्षर के ऊपर",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "अपनी पहचान साबित करने के लिए सिंगल साइन ऑन का उपयोग करके इस ईमेल पते को जोड़ने की पुष्टि करें।",
-    "Use Single Sign On to continue": "जारी रखने के लिए सिंगल साइन ऑन का उपयोग करें"
+    "Use Single Sign On to continue": "जारी रखने के लिए सिंगल साइन ऑन का उपयोग करें",
+    "common": {
+        "analytics": "एनालिटिक्स",
+        "error": "त्रुटि",
+        "mute": "म्यूट",
+        "offline": "ऑफलाइन",
+        "password": "पासवर्ड",
+        "success": "सफल",
+        "unmute": "अनम्यूट"
+    }
 }

@@ -120,7 +120,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                     >
                         <SettingsSubsectionText>
                             <MembersIcon />
-                            {_t("People")}
+                            {_t("common|people")}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>{_t("Group all your people in one place.")}</SettingsSubsectionText>
                     </StyledCheckbox>

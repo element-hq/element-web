@@ -67,7 +67,7 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp
         return (
             <EventTileBubble
                 className="mx_cryptoEvent mx_cryptoEvent_icon"
-                title={_t("Encryption enabled")}
+                title={_t("common|encryption_enabled")}
                 subtitle={subtitle}
                 timestamp={timestamp}
             />
@@ -78,7 +78,7 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp
         return (
             <EventTileBubble
                 className="mx_cryptoEvent mx_cryptoEvent_icon"
-                title={_t("Encryption enabled")}
+                title={_t("common|encryption_enabled")}
                 subtitle={_t("Ignored attempt to disable encryption")}
                 timestamp={timestamp}
             />

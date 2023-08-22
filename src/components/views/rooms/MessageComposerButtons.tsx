@@ -259,7 +259,7 @@ function showStickersButton(props: IProps): ReactElement | null {
             className="mx_MessageComposer_button"
             iconClassName="mx_MessageComposer_stickers"
             onClick={() => props.setStickerPickerOpen(!props.isStickerPickerOpen)}
-            title={props.isStickerPickerOpen ? _t("Hide stickers") : _t("Sticker")}
+            title={props.isStickerPickerOpen ? _t("Hide stickers") : _t("common|sticker")}
         />
     ) : null;
 }

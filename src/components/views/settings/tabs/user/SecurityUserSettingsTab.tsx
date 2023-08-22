@@ -319,7 +319,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             privacySection = (
                 <SettingsSection heading={_t("Privacy")}>
                     <SettingsSubsection
-                        heading={_t("Analytics")}
+                        heading={_t("common|analytics")}
                         description={_t(
                             "Share anonymous data to help us identify issues. Nothing personal. No third parties.",
                         )}

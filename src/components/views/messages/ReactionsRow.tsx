@@ -225,7 +225,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         }
 
         return (
-            <div className="mx_ReactionsRow" role="toolbar" aria-label={_t("Reactions")}>
+            <div className="mx_ReactionsRow" role="toolbar" aria-label={_t("common|reactions")}>
                 {items}
                 {showAllButton}
                 {addReactionButton}

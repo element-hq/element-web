@@ -76,7 +76,7 @@ export default class PresenceLabel extends React.Component<IProps> {
         } else {
             if (presence === "online") return _t("Online");
             if (presence === "unavailable") return _t("Idle"); // XXX: is this actually right?
-            if (presence === "offline") return _t("Offline");
+            if (presence === "offline") return _t("common|offline");
             return _t("Unknown");
         }
     }

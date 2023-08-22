@@ -172,7 +172,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                     }),
                 onPostSettingsClick,
             )}
-            label={_t("Settings")}
+            label={_t("common|settings")}
             iconClassName="mx_RoomGeneralContextMenu_iconSettings"
         />
     );

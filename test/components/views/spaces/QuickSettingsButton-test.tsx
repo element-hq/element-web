@@ -44,6 +44,11 @@ describe("QuickSettingsButton", () => {
         expect(getQuickSettingsButton()).toBeInTheDocument();
     });
 
+    it("should render the quick settings button in expanded mode", () => {
+        const { asFragment } = render(<QuickSettingsButton isPanelCollapsed={false} />);
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     describe("when the quick settings are open", () => {
         beforeEach(async () => {
             renderQuickSettingsButton();

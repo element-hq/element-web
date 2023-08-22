@@ -72,7 +72,6 @@
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s hüquqların səviyyələrini dəyişdirdi %(powerLevelDiffText)s.",
     "Always show message timestamps": "Həmişə mesajların göndərilməsi vaxtını göstərmək",
     "Accept": "Qəbul etmək",
-    "Error": "Səhv",
     "Incorrect verification code": "Təsdiq etmənin səhv kodu",
     "Phone": "Telefon",
     "New passwords don't match": "Yeni şifrlər uyğun gəlmir",
@@ -80,7 +79,6 @@
     "Continue": "Davam etmək",
     "Export E2E room keys": "Şifrləmənin açarlarının ixracı",
     "Current password": "Cari şifrə",
-    "Password": "Şifrə",
     "New Password": "Yeni şifrə",
     "Confirm password": "Yeni şifrə təsdiq edin",
     "Change Password": "Şifrəni dəyişdirin",
@@ -106,7 +104,6 @@
     "Command error": "Komandanın səhvi",
     "Join Room": "Otağa girmək",
     "Upload avatar": "Avatar-ı yükləmək",
-    "Settings": "Qurmalar",
     "Forget room": "Otağı unutmaq",
     "Invites": "Dəvətlər",
     "Favourites": "Seçilmişlər",
@@ -134,7 +131,6 @@
     "What's New": "Nə dəyişdi",
     "Update": "Yeniləmək",
     "Create new room": "Otağı yaratmaq",
-    "No results": "Nəticə yoxdur",
     "Home": "Başlanğıc",
     "%(items)s and %(lastItem)s": "%(items)s və %(lastItem)s",
     "Start chat": "Çata başlamaq",
@@ -176,7 +172,6 @@
     "Confirm passphrase": "Şifrəni təsdiqləyin",
     "This email address is already in use": "Bu e-mail ünvanı istifadə olunur",
     "This phone number is already in use": "Bu telefon nömrəsi artıq istifadə olunur",
-    "Analytics": "Analitik",
     "Call Failed": "Uğursuz zəng",
     "Permission Required": "İzn tələb olunur",
     "You do not have permission to start a conference call in this room": "Bu otaqda konfrans başlamaq üçün icazə yoxdur",
@@ -251,5 +246,12 @@
     "Create Account": "Hesab Aç",
     "Explore rooms": "Otaqları kəşf edin",
     "Sign In": "Daxil ol",
-    "Identity server": "Eyniləşdirmənin serveri"
+    "Identity server": "Eyniləşdirmənin serveri",
+    "common": {
+        "analytics": "Analitik",
+        "error": "Səhv",
+        "no_results": "Nəticə yoxdur",
+        "password": "Şifrə",
+        "settings": "Qurmalar"
+    }
 }

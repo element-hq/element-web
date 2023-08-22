@@ -139,7 +139,7 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
                     });
                 } else {
                     avatar = linkIcon;
-                    pillText = _t("Message");
+                    pillText = _t("common|message");
                 }
             }
             break;

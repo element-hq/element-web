@@ -620,7 +620,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         const loadingElement = (
             <div className="mx_AppTileBody_fadeInSpinner">
-                <Spinner message={_t("Loading…")} />
+                <Spinner message={_t("common|loading")} />
             </div>
         );
 

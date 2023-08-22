@@ -144,7 +144,7 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
             tabs.push(
                 new Tab(
                     RoomSettingsTab.People,
-                    _td("People"),
+                    _td("common|people"),
                     "mx_RoomSettingsDialog_peopleIcon",
                     <PeopleRoomSettingsTab room={this.state.room} />,
                 ),

@@ -211,7 +211,7 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                 buttons = this.cancelButton();
                 break;
             case Phase.Verifying:
-                title = _t("Success");
+                title = _t("common|success");
                 centreTitle = true;
                 main = this.simpleSpinner(_t("Completing set up of your new device"));
                 break;

@@ -45,7 +45,7 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
 
 class PassphraseField extends PureComponent<IProps> {
     public static defaultProps = {
-        label: _td("Password"),
+        label: _td("common|password"),
         labelEnterPassword: _td("Enter password"),
         labelStrongPassword: _td("Nice, strong password!"),
         labelAllowedButUnsafe: _td("Password is allowed, but unsafe"),

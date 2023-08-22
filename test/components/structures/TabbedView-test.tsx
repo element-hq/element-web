@@ -19,11 +19,12 @@ import { act, fireEvent, render } from "@testing-library/react";
 
 import TabbedView, { Tab, TabLocation } from "../../../src/components/structures/TabbedView";
 import { NonEmptyArray } from "../../../src/@types/common";
+import { _t } from "../../../src/languageHandler";
 
 describe("<TabbedView />", () => {
     const generalTab = new Tab("GENERAL", "General", "general", <div>general</div>);
     const labsTab = new Tab("LABS", "Labs", "labs", <div>labs</div>);
-    const securityTab = new Tab("SECURITY", "Security", "security", <div>security</div>);
+    const securityTab = new Tab("SECURITY", "common|security", "security", <div>security</div>);
     const defaultProps = {
         tabLocation: TabLocation.LEFT,
         tabs: [generalTab, labsTab, securityTab] as NonEmptyArray<Tab<any>>,
@@ -55,7 +56,7 @@ describe("<TabbedView />", () => {
 
     it("renders initialTabId tab as active when valid", () => {
         const { container } = render(getComponent({ initialTabId: securityTab.id }));
-        expect(getActiveTab(container)?.textContent).toEqual(securityTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(_t(securityTab.label));
         expect(getActiveTabBody(container)?.textContent).toEqual("security");
     });
 
@@ -66,7 +67,7 @@ describe("<TabbedView />", () => {
             fireEvent.click(getByTestId(getTabTestId(securityTab)));
         });
 
-        expect(getActiveTab(container)?.textContent).toEqual(securityTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(_t(securityTab.label));
         expect(getActiveTabBody(container)?.textContent).toEqual("security");
     });
 
@@ -102,12 +103,12 @@ describe("<TabbedView />", () => {
         act(() => {
             fireEvent.click(getByTestId(getTabTestId(securityTab)));
         });
-        expect(getActiveTab(container)?.textContent).toEqual(securityTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(_t(securityTab.label));
 
         // rerender with new tab location
         rerender(getComponent({ tabLocation: TabLocation.TOP }));
 
         // still security tab
-        expect(getActiveTab(container)?.textContent).toEqual(securityTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(_t(securityTab.label));
     });
 });

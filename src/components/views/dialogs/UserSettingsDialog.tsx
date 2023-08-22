@@ -205,7 +205,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 className="mx_UserSettingsDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Settings")}
+                title={_t("common|settings")}
             >
                 <div className="mx_SettingsDialog_content">
                     <TabbedView

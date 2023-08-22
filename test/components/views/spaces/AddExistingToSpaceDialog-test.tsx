@@ -22,13 +22,34 @@ import React from "react";
 import AddExistingToSpaceDialog from "../../../../src/components/views/dialogs/AddExistingToSpaceDialog";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { mkSpace, stubClient } from "../../../test-utils";
+import { mkRoom, mkSpace, stubClient } from "../../../test-utils";
 
 describe("<AddExistingToSpaceDialog />", () => {
+    beforeEach(() => {
+        jest.spyOn(Element.prototype, "clientHeight", "get").mockReturnValue(600);
+    });
+
     it("looks as expected", () => {
         const client = stubClient();
         const dialog = renderAddExistingToSpaceDialog(client);
         expect(dialog.asFragment()).toMatchSnapshot();
+    });
+
+    it("should show 'no results' if appropriate", () => {
+        const client = stubClient();
+        const { getByText } = renderAddExistingToSpaceDialog(client);
+        expect(getByText("No results")).toBeInTheDocument();
+    });
+
+    it("should not show 'no results' if we have results to show", () => {
+        const client = stubClient();
+        mocked(client.getVisibleRooms).mockReturnValue([
+            mkSpace(client, "!space2:example.com"),
+            mkRoom(client, "!room2:example.com"),
+        ]);
+        const { queryByText, getByText } = renderAddExistingToSpaceDialog(client);
+        expect(queryByText("No results")).not.toBeInTheDocument();
+        expect(getByText("!room2:example.com")).toBeInTheDocument();
     });
 
     describe("If the feature_dynamic_room_predecessors is not enabled", () => {

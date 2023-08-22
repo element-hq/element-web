@@ -33,7 +33,6 @@
     "PM": "poslepodne",
     "AM": "prepodne",
     "Unnamed Room": "Soba bez imena",
-    "Error": "Greška",
     "Unable to load! Check your network connectivity and try again.": "Neuspelo učitavanje! Proverite vašu mrežu i pokušajte ponovo.",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s nema dozvolu da vam šalje obaveštenja. Molim proverite podešavanja vašeg internet pregledača",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s nije dobio dozvolu da šalje obaveštenja. Molim pokušajte ponovo",
@@ -94,5 +93,8 @@
     "Start a group chat": "Pokreni grupni razgovor",
     "Stop the camera": "Zaustavi kameru",
     "Use Ctrl + Enter to send a message": "Koristi Ctrl + Enter za slanje poruke",
-    "User is already in the room": "Korisnik je već u sobi"
+    "User is already in the room": "Korisnik je već u sobi",
+    "common": {
+        "error": "Greška"
+    }
 }

@@ -353,7 +353,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
         return (
             <div className="mx_UserInfo_container">
-                <h3>{_t("Verification cancelled")}</h3>
+                <h3>{_t("common|verification_cancelled")}</h3>
                 <p>{text}</p>
 
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>

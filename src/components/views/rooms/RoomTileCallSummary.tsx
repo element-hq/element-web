@@ -32,7 +32,7 @@ export const RoomTileCallSummary: FC<Props> = ({ call }) => {
 
     switch (useConnectionState(call)) {
         case ConnectionState.Disconnected:
-            text = _t("Video");
+            text = _t("common|video");
             active = false;
             break;
         case ConnectionState.Connecting:

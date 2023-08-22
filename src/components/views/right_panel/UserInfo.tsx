@@ -344,7 +344,7 @@ const MessageButton = ({ member }: { member: Member }): JSX.Element => {
             className="mx_UserInfo_field"
             disabled={busy}
         >
-            {_t("Message")}
+            {_t("common|message")}
         </AccessibleButton>
     );
 };
@@ -845,7 +845,7 @@ export const BanToggleButton = ({
                 function (err) {
                     logger.error("Ban error: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: _t("Error"),
+                        title: _t("common|error"),
                         description: _t("Failed to ban user"),
                     });
                 },
@@ -927,7 +927,7 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({
                 function (err) {
                     logger.error("Mute error: " + err);
                     Modal.createDialog(ErrorDialog, {
-                        title: _t("Error"),
+                        title: _t("common|error"),
                         description: _t("Failed to mute user"),
                     });
                 },
@@ -941,7 +941,7 @@ const MuteToggleButton: React.FC<IBaseRoomProps> = ({
         mx_UserInfo_destructive: !muted,
     });
 
-    const muteLabel = muted ? _t("Unmute") : _t("Mute");
+    const muteLabel = muted ? _t("common|unmute") : _t("common|mute");
     return (
         <AccessibleButton kind="link" className={classes} onClick={onMuteToggle} disabled={isUpdating}>
             {muteLabel}
@@ -1159,7 +1159,7 @@ export const PowerLevelEditor: React.FC<{
                     function (err) {
                         logger.error("Failed to change power level " + err);
                         Modal.createDialog(ErrorDialog, {
-                            title: _t("Error"),
+                            title: _t("common|error"),
                             description: _t("Failed to change power level"),
                         });
                     },
@@ -1516,7 +1516,7 @@ const BasicUserInfo: React.FC<{
 
     const securitySection = (
         <div className="mx_UserInfo_container">
-            <h3>{_t("Security")}</h3>
+            <h3>{_t("common|security")}</h3>
             <p>{text}</p>
             {verifyButton}
             {cryptoEnabled && (

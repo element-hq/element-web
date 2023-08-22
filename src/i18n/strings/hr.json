@@ -151,8 +151,6 @@
     "User Busy": "Korisnik zauzet",
     "Call Failed": "Poziv neuspješan",
     "Unable to load! Check your network connectivity and try again.": "Učitavanje nije moguće! Provjerite mrežnu povezanost i pokušajte ponovo.",
-    "Error": "Geška",
-    "Analytics": "Analitika",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potvrdite dodavanje ovog telefonskog broja koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Potvrdite dodavanje ove email adrese koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
     "Single Sign On": "Jedinstvena prijava (SSO)",
@@ -166,5 +164,9 @@
     "Confirm adding email": "Potvrdite dodavanje email adrese",
     "Integration manager": "Upravitelj integracijama",
     "Identity server": "Poslužitelj identiteta",
-    "Could not connect to identity server": "Nije moguće spojiti se na poslužitelja identiteta"
+    "Could not connect to identity server": "Nije moguće spojiti se na poslužitelja identiteta",
+    "common": {
+        "analytics": "Analitika",
+        "error": "Geška"
+    }
 }

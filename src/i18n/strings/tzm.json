@@ -25,7 +25,6 @@
     "Sun": "Asa",
     "OK": "WAX",
     "Dismiss": "Nexxel",
-    "Error": "Tazgelt",
     "Add Phone Number": "Rnu uṭṭun n utilifun",
     "Add Email Address": "Rnu tasna imayl",
     "Permissions": "Tisirag",
@@ -80,13 +79,10 @@
     "Home": "Asnubeg",
     "Reply": "Rar",
     "Yes": "Yah",
-    "About": "Xef",
     "Search…": "Arezzu…",
     "A-Z": "A-Ẓ",
-    "Settings": "Tisɣal",
     "Reject": "Agy",
     "Re-join": "als-lkem",
-    "People": "Midden",
     "Search": "Rzu",
     "%(duration)sd": "%(duration)sas",
     "Share": "Bḍu",
@@ -137,5 +133,11 @@
     "Usage": "Asemres",
     "Feb": "Bṛa",
     "Jan": "Yen",
-    "Continue": "Kemmel"
+    "Continue": "Kemmel",
+    "common": {
+        "about": "Xef",
+        "error": "Tazgelt",
+        "people": "Midden",
+        "settings": "Tisɣal"
+    }
 }

@@ -333,7 +333,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 break;
             }
             case MessageCase.Loading: {
-                title = _t("Loading…");
+                title = _t("common|loading");
                 showSpinner = true;
                 break;
             }

@@ -990,10 +990,10 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         let showNum = kind === "recents" ? this.state.numRecentsShown : this.state.numSuggestionsShown;
         const showMoreFn = kind === "recents" ? this.showMoreRecents.bind(this) : this.showMoreSuggestions.bind(this);
         const lastActive = (m: Result): number | undefined => (kind === "recents" ? m.lastActive : undefined);
-        let sectionName = kind === "recents" ? _t("Recent Conversations") : _t("Suggestions");
+        let sectionName = kind === "recents" ? _t("Recent Conversations") : _t("common|suggestions");
 
         if (this.props.kind === InviteKind.Invite) {
-            sectionName = kind === "recents" ? _t("Recently Direct Messaged") : _t("Suggestions");
+            sectionName = kind === "recents" ? _t("Recently Direct Messaged") : _t("common|suggestions");
         }
 
         // Mix in the server results if we have any, but only if we're searching. We track the additional
@@ -1038,7 +1038,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 return (
                     <div className="mx_InviteDialog_section">
                         <h3>{sectionName}</h3>
-                        <p>{_t("No results")}</p>
+                        <p>{_t("common|no_results")}</p>
                     </div>
                 );
             }

@@ -94,7 +94,7 @@ export class BannedUser extends React.Component<IBannedUserProps> {
         this.context.unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
             logger.error("Failed to unban: " + err);
             Modal.createDialog(ErrorDialog, {
-                title: _t("Error"),
+                title: _t("common|error"),
                 description: _t("Failed to unban"),
             });
         });

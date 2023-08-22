@@ -2,7 +2,6 @@
     "This email address is already in use": ".i xa'o pilno fa da le samymri judri",
     "This phone number is already in use": ".i xa'o pilno fa da le fonxa judri",
     "Failed to verify email address: make sure you clicked the link in the email": ".i da nabmi fi lo nu facki le du'u do ponse le te samymri .i ko birti le du'u do samcu'a le judrysni pe le se samymri",
-    "Analytics": "lanli datni",
     "Call Failed": ".i da nabmi fi lo nu co'a fonjo'e",
     "You cannot place a call with yourself.": ".i do na ka'e fonjo'e do",
     "Permission Required": ".i lo nu curmi cu sarcu",
@@ -123,7 +122,6 @@
     "Messages sent by bot": "nu da zilbe'i fi pa sampre",
     "Decline": "nu na fonjo'e",
     "Accept": "nu fonjo'e",
-    "Error": "nabmi",
     "Incorrect verification code": ".i na'e drani ke lacri lerpoi",
     "Submit": "nu zilbe'i",
     "Phone": "fonxa",
@@ -136,7 +134,6 @@
     "Continue": "",
     "Do you want to set an email address?": ".i .au pei do jmina lo te samymri",
     "Current password": "lo ca japyvla",
-    "Password": "lerpoijaspu",
     "New Password": "lerpoijaspu vau je cnino",
     "Confirm password": "lo za'u re'u japyvla poi cnino",
     "Change Password": "nu basti fi le ka lerpoijaspu",
@@ -241,7 +238,6 @@
     "Send an encrypted message…": "nu pa mifra be pa notci cu zilbe'i",
     "Send a message…": "nu pa notci cu zilbe'i",
     "Search": "nu sisku",
-    "People": "prenu",
     "Rooms": "ve zilbe'i",
     "Show %(count)s more": {
         "other": "nu viska %(count)s na du",
@@ -328,7 +324,6 @@
     "Sign Up": "nu co'a na'o jaspu",
     "<userName/> wants to chat": ".i la'o zoi. <userName/> .zoi kaidji le ka tavla do",
     "<userName/> invited you": ".i la'o zoi. <userName/> .zoi friti le ka ziljmina kei do",
-    "Username": "judri cmene",
     "Enter username": ".i ko cuxna fo le ka judri cmene",
     "Messages in this room are end-to-end encrypted.": ".i ro zilbe'i be fo le cei'i cu mifra",
     "Messages in this room are not end-to-end encrypted.": ".i na pa zilbe'i be fo le cei'i cu mifra",
@@ -392,5 +387,12 @@
     "Download %(text)s": "nu kibycpa la'o zoi. %(text)s .zoi",
     "Explore rooms": "nu facki le du'u ve zilbe'i",
     "Create Account": "nu pa re'u co'a jaspu",
-    "Dismiss": "nu mipri"
+    "Dismiss": "nu mipri",
+    "common": {
+        "analytics": "lanli datni",
+        "error": "nabmi",
+        "password": "lerpoijaspu",
+        "people": "prenu",
+        "username": "judri cmene"
+    }
 }

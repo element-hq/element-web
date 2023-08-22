@@ -52,7 +52,7 @@ export default class IntegrationsDisabledDialog extends React.Component<IProps> 
                     </p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Settings")}
+                    primaryButton={_t("common|settings")}
                     onPrimaryButtonClick={this.onOpenSettingsClick}
                     cancelButton={_t("OK")}
                     onCancel={this.onAcknowledgeClick}

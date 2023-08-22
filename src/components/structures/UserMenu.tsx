@@ -378,7 +378,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     {homeButton}
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconSettings"
-                        label={_t("Settings")}
+                        label={_t("common|settings")}
                         onClick={(e) => this.onSettingsOpen(e)}
                     />
                     {feedbackButton}

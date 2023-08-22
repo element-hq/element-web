@@ -67,7 +67,7 @@ function tooltipText(variant: Icon): string | undefined {
         case Icon.PresenceAway:
             return _t("Away");
         case Icon.PresenceOffline:
-            return _t("Offline");
+            return _t("common|offline");
         case Icon.PresenceBusy:
             return _t("Busy");
     }

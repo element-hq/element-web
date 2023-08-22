@@ -28,6 +28,8 @@ import { stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import { EchoChamber } from "../../../../src/stores/local-echo/EchoChamber";
+import { RoomNotifState } from "../../../../src/RoomNotifs";
 
 jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -99,5 +101,16 @@ describe("RoomContextMenu", () => {
             renderComponent();
             expect(screen.getByText("Developer tools")).toBeInTheDocument();
         });
+    });
+
+    it("should render notification option for joined rooms", () => {
+        const chamber = EchoChamber.forRoom(room);
+        chamber.notificationVolume = RoomNotifState.Mute;
+        jest.spyOn(room, "getMyMembership").mockReturnValue("join");
+        renderComponent();
+
+        expect(
+            screen.getByRole("menuitem", { name: "Notifications" }).querySelector(".mx_IconizedContextMenu_sublabel"),
+        ).toHaveTextContent("Mute");
     });
 });

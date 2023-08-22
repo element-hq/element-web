@@ -1990,7 +1990,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         this.subTitleStatus = "";
         if (state === SyncState.Error) {
-            this.subTitleStatus += `[${_t("Offline")}] `;
+            this.subTitleStatus += `[${_t("common|offline")}] `;
         }
         if (numUnreadRooms > 0) {
             this.subTitleStatus += `[${numUnreadRooms}]`;

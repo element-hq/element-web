@@ -50,9 +50,11 @@
     "Failure to create room": "ოთახის შექმნის შეცდომა",
     "Upload Failed": "ატვირთვა ვერ მოხერხდა",
     "Unable to load! Check your network connectivity and try again.": "ვერ იტვირთება! შეამოწმეთ თქვენი ინტერნეტ-კავშირი და სცადეთ ისევ.",
-    "Error": "შეცდომა",
     "Add Phone Number": "მობილურის ნომრის დამატება",
     "Confirm adding phone number": "დაადასტურეთ მობილურის ნომრის დამატება",
     "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sს %(minutes)sწთ %(seconds)sწმ დარჩა",
-    "Feb": "თებ"
+    "Feb": "თებ",
+    "common": {
+        "error": "შეცდომა"
+    }
 }

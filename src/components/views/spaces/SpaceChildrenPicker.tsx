@@ -83,7 +83,7 @@ const SpecificChildrenPicker: React.FC<ISpecificChildrenPickerProps> = ({
                     );
                 })}
                 {filteredRooms.length < 1 ? (
-                    <span className="mx_SpaceChildrenPicker_noResults">{_t("No results")}</span>
+                    <span className="mx_SpaceChildrenPicker_noResults">{_t("common|no_results")}</span>
                 ) : undefined}
             </AutoHideScrollbar>
         </div>

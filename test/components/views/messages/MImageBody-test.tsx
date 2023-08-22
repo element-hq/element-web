@@ -22,6 +22,7 @@ import encrypt from "matrix-encrypt-attachment";
 import { mocked } from "jest-mock";
 import fs from "fs";
 import path from "path";
+import userEvent from "@testing-library/user-event";
 
 import MImageBody from "../../../../src/components/views/messages/MImageBody";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
@@ -257,5 +258,30 @@ describe("<MImageBody/>", () => {
         await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
         // thumbnail with dimensions present
         expect(container).toMatchSnapshot();
+    });
+
+    it("should show banner on hover", async () => {
+        const event = new MatrixEvent({
+            room_id: "!room:server",
+            sender: userId,
+            type: EventType.RoomMessage,
+            content: {
+                body: "alt for a test image",
+                info: {
+                    w: 40,
+                    h: 50,
+                },
+                url: "mxc://server/image",
+            },
+        });
+
+        const { container } = render(
+            <MImageBody {...props} mxEvent={event} mediaEventHelper={new MediaEventHelper(event)} />,
+        );
+
+        const img = container.querySelector(".mx_MImageBody_thumbnail")!;
+        await userEvent.hover(img);
+
+        expect(container.querySelector(".mx_MImageBody_banner")).toHaveTextContent("...alt for a test image");
     });
 });

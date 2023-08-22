@@ -28,7 +28,6 @@
     "Cryptography": "Kryptografi",
     "Deactivate Account": "Deaktiver brugerkonto",
     "Default": "Standard",
-    "Error": "Fejl",
     "Export E2E room keys": "Eksporter E2E rum nøgler",
     "Failed to change password. Is your password correct?": "Kunne ikke ændre adgangskoden. Er din adgangskode rigtig?",
     "Failed to reject invitation": "Kunne ikke afvise invitationen",
@@ -36,7 +35,6 @@
     "Favourite": "Favorit",
     "Notifications": "Notifikationer",
     "Remove": "Fjern",
-    "Settings": "Indstillinger",
     "unknown error code": "Ukendt fejlkode",
     "OK": "OK",
     "Search": "Søg",
@@ -46,7 +44,6 @@
     "Cancel": "Afbryd",
     "Edit": "Rediger",
     "Failed to forget room %(errCode)s": "Kunne ikke glemme rummet %(errCode)s",
-    "Mute": "Sæt på lydløs",
     "Leave": "Forlad",
     "Register": "Registrér",
     "Unnamed room": "Unavngivet rum",
@@ -173,7 +170,6 @@
     "Reply": "Besvar",
     "Failed to send logs: ": "Kunne ikke sende logfiler: ",
     "Preparing to send logs": "Forbereder afsendelse af logfiler",
-    "Analytics": "Analyse data",
     "Call Failed": "Opkald mislykkedes",
     "Call failed due to misconfigured server": "Opkaldet mislykkedes pga. fejlkonfigureret server",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Bed administratoren af din homeserver (<code>%(homeserverDomain)s</code>) om at konfigurere en TURN server for at opkald virker pålideligt.",
@@ -405,7 +401,6 @@
     "Comment": "Kommentar",
     "Privacy": "Privatliv",
     "Please enter a name for the room": "Indtast et navn for rummet",
-    "No results": "Ingen resultater",
     "Disable": "Deaktiver",
     "Profile": "Profil",
     "Local address": "Lokal adresse",
@@ -713,9 +708,16 @@
     "Incorrect username and/or password.": "Forkert brugernavn og/eller adgangskode.",
     "Your password has been reset.": "Din adgangskode er blevet nulstillet.",
     "Forgot password?": "Glemt adgangskode?",
-    "Password": "Adgangskode",
     "Your password was successfully changed.": "Din adgangskode blev ændret.",
     "New Password": "Ny adgangskode",
     "Set a new custom sound": "Sæt en ny brugerdefineret lyd",
-    "Empty room": "Tomt rum"
+    "Empty room": "Tomt rum",
+    "common": {
+        "analytics": "Analyse data",
+        "error": "Fejl",
+        "mute": "Sæt på lydløs",
+        "no_results": "Ingen resultater",
+        "password": "Adgangskode",
+        "settings": "Indstillinger"
+    }
 }

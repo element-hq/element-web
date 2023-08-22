@@ -68,7 +68,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
         });
 
         return (
-            <SettingsSubsection heading={_t("Message layout")}>
+            <SettingsSubsection heading={_t("common|message_layout")}>
                 <div className="mx_LayoutSwitcher_RadioButtons">
                     <label className={ircClasses}>
                         <EventTilePreview
@@ -103,7 +103,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
                             checked={this.state.layout == Layout.Group}
                             onChange={this.onLayoutChange}
                         >
-                            {_t("Modern")}
+                            {_t("common|modern")}
                         </StyledRadioButton>
                     </label>
                     <label className={bubbleClasses}>

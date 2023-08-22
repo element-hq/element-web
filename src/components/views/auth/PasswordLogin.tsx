@@ -308,8 +308,8 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         autoComplete="username"
                         key="username_input"
                         type="text"
-                        label={_t("Username")}
-                        placeholder={_t("Username").toLocaleLowerCase()}
+                        label={_t("common|username")}
+                        placeholder={_t("common|username").toLocaleLowerCase()}
                         value={this.props.username}
                         onChange={this.onUsernameChanged}
                         onBlur={this.onUsernameBlur}
@@ -404,7 +404,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         disabled={this.props.busy}
                     >
                         <option key={LoginField.MatrixId} value={LoginField.MatrixId}>
-                            {_t("Username")}
+                            {_t("common|username")}
                         </option>
                         <option key={LoginField.Email} value={LoginField.Email}>
                             {_t("Email address")}
@@ -428,7 +428,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         autoComplete="current-password"
                         type="password"
                         name="password"
-                        label={_t("Password")}
+                        label={_t("common|password")}
                         value={this.state.password}
                         onChange={this.onPasswordChanged}
                         disabled={this.props.busy}

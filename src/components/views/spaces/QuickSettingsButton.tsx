@@ -107,7 +107,7 @@ const QuickSettingsButton: React.FC<{
                     onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebQuickSettingsPinToSidebarCheckbox")}
                 >
                     <MembersIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("People")}
+                    {_t("common|people")}
                 </StyledCheckbox>
                 <AccessibleButton
                     className="mx_QuickSettingsButton_moreOptionsButton"
@@ -138,7 +138,7 @@ const QuickSettingsButton: React.FC<{
                 forceHide={!isPanelCollapsed}
                 aria-expanded={!isPanelCollapsed}
             >
-                {!isPanelCollapsed ? _t("Settings") : null}
+                {!isPanelCollapsed ? _t("common|settings") : null}
             </AccessibleTooltipButton>
 
             {contextMenu}

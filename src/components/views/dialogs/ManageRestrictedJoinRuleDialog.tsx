@@ -229,7 +229,7 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     ) : null}
 
                     {totalResults < 1 ? (
-                        <span className="mx_ManageRestrictedJoinRuleDialog_noResults">{_t("No results")}</span>
+                        <span className="mx_ManageRestrictedJoinRuleDialog_noResults">{_t("common|no_results")}</span>
                     ) : undefined}
                 </AutoHideScrollbar>
 
