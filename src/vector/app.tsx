@@ -23,7 +23,6 @@ import "matrix-js-sdk/src/browser-index";
 
 import React, { ReactElement } from "react";
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
-import { UserFriendlyError } from "matrix-react-sdk/src/languageHandler";
 import AutoDiscoveryUtils from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import { AutoDiscovery, ClientConfig } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
@@ -38,6 +37,7 @@ import { ValidatedServerConfig } from "matrix-react-sdk/src/utils/ValidatedServe
 import { parseQs } from "./url_utils";
 import VectorBasePlatform from "./platform/VectorBasePlatform";
 import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
+import { UserFriendlyError } from "../languageHandler";
 
 // add React and ReactPerf to the global namespace, to make them easier to access via the console
 // this incidentally means we can forget our React imports in JSX files without penalty.
@@ -147,8 +147,7 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
         if (hsUrl && (wkConfig || serverName)) {
             // noinspection ExceptionCaughtLocallyJS
             throw new UserFriendlyError(
-                "Invalid configuration: a default_hs_url can't be specified along with default_server_name " +
-                    "or default_server_config",
+                "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
             );
         }
         if (incompatibleOptions.length < 1) {

@@ -199,8 +199,7 @@ async function start(): Promise<void> {
                 // This uses the default brand since the app config is unavailable.
                 return showError(_t("Your Element is misconfigured"), [
                     _t(
-                        "Your Element configuration contains invalid JSON. " +
-                            "Please correct the problem and reload the page.",
+                        "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
                     ),
                     _t("The message from the parser is: %(message)s", {
                         message: error.message || _t("Invalid JSON"),
