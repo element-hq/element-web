@@ -121,6 +121,7 @@
         "sanitize-html": "2.11.0",
         "tar-js": "^0.3.0",
         "ua-parser-js": "^1.0.2",
+        "uuid": "^9.0.0",
         "what-input": "^5.2.10",
         "zxcvbn": "^4.4.2"
     },
