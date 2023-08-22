@@ -58,26 +58,30 @@ describe("Wrapper", () => {
                 (opts as WrapperOpts).Wrapper = ({ children }) => {
                     return (
                         <>
-                            <div>Header</div>
-                            {children}
-                            <div>Footer</div>
+                            <div data-testid="wrapper-header">Header</div>
+                            <div data-testid="wrapper-matrix-chat">{children}</div>
+                            <div data-testid="wrapper-footer">Footer</div>
                         </>
                     );
                 };
             }
         });
 
-        const matrixChat: RenderResult = render(await loadApp({}));
+        const matrixChatResult: RenderResult = render(await loadApp({}));
 
         // at this point, we're trying to do a guest registration;
         // we expect a spinner
         await assertAtLoadingSpinner();
 
-        await awaitWelcomeComponent(matrixChat);
+        await awaitWelcomeComponent(matrixChatResult);
 
         // Are not semantic elements because Element has a footer already.
-        screen.getByText(/Header/i);
-        screen.getByText(/Footer/i);
+        const header = screen.getByTestId("wrapper-header");
+        const matrixChat = screen.getByTestId("wrapper-matrix-chat");
+        const footer = screen.getByTestId("wrapper-footer");
+
+        expect(header.nextSibling).toBe(matrixChat);
+        expect(matrixChat.nextSibling).toBe(footer);
     });
 });
 
