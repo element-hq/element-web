@@ -110,7 +110,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         this.setState({ bodyText, continueText, continueKind });
     };
 
-    private onUIAuthFinished: InteractiveAuthCallback<Awaited<ReturnType<MatrixClient["deactivateAccount"]>>> = (
+    private onUIAuthFinished: InteractiveAuthCallback<Awaited<ReturnType<MatrixClient["deactivateAccount"]>>> = async (
         success,
         result,
     ) => {

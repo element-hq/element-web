@@ -40,7 +40,7 @@ export const deleteDevicesWithInteractiveAuth = async (
     try {
         await makeDeleteRequest(matrixClient, deviceIds)(null);
         // no interactive auth needed
-        onFinished(true, undefined);
+        await onFinished(true, undefined);
     } catch (error) {
         if (!(error instanceof MatrixError) || error.httpStatus !== 401 || !error.data?.flows) {
             // doesn't look like an interactive-auth failure

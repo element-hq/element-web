@@ -35,8 +35,8 @@ type InteractiveAuthCallbackSuccess<T> = (
     success: true,
     response: T,
     extra?: { emailSid?: string; clientSecret?: string },
-) => void;
-type InteractiveAuthCallbackFailure = (success: false, response: IAuthData | Error) => void;
+) => Promise<void>;
+type InteractiveAuthCallbackFailure = (success: false, response: IAuthData | Error) => Promise<void>;
 export type InteractiveAuthCallback<T> = InteractiveAuthCallbackSuccess<T> & InteractiveAuthCallbackFailure;
 
 export interface InteractiveAuthProps<T> {
@@ -141,15 +141,15 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
     public componentDidMount(): void {
         this.authLogic
             .attemptAuth()
-            .then((result) => {
+            .then(async (result) => {
                 const extra = {
                     emailSid: this.authLogic.getEmailSid(),
                     clientSecret: this.authLogic.getClientSecret(),
                 };
-                this.props.onAuthFinished(true, result, extra);
+                await this.props.onAuthFinished(true, result, extra);
             })
-            .catch((error) => {
-                this.props.onAuthFinished(false, error);
+            .catch(async (error) => {
+                await this.props.onAuthFinished(false, error);
                 logger.error("Error during user-interactive auth:", error);
                 if (this.unmounted) {
                     return;
@@ -251,12 +251,12 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
         this.props.onStagePhaseChange?.(this.state.authStage ?? null, newPhase || 0);
     };
 
-    private onStageCancel = (): void => {
-        this.props.onAuthFinished(false, ERROR_USER_CANCELLED);
+    private onStageCancel = async (): Promise<void> => {
+        await this.props.onAuthFinished(false, ERROR_USER_CANCELLED);
     };
 
-    private onAuthStageFailed = (e: Error): void => {
-        this.props.onAuthFinished(false, e);
+    private onAuthStageFailed = async (e: Error): Promise<void> => {
+        await this.props.onAuthFinished(false, e);
     };
 
     private setEmailSid = (sid: string): void => {

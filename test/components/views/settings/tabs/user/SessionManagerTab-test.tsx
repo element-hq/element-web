@@ -55,6 +55,9 @@ import { getClientInformationEventType } from "../../../../../../src/utils/devic
 
 mockPlatformPeg();
 
+// to restore later
+const realWindowLocation = window.location;
+
 describe("<SessionManagerTab />", () => {
     const aliceId = "@alice:server.org";
     const deviceId = "alices_device";
@@ -166,7 +169,7 @@ describe("<SessionManagerTab />", () => {
         confirm = true,
     ): Promise<void> => {
         // modal has sleeps in rendering process :(
-        await sleep(100);
+        await screen.findByRole("dialog");
         const buttonId = confirm ? "dialog-primary-button" : "dialog-cancel-button";
         fireEvent.click(getByTestId(buttonId));
 
@@ -227,9 +230,21 @@ describe("<SessionManagerTab />", () => {
             }
         });
 
+        // @ts-ignore allow delete of non-optional prop
+        delete window.location;
+        // @ts-ignore ugly mocking
+        window.location = {
+            href: "https://localhost/",
+            origin: "https://localhost/",
+        };
+
         // sometimes a verification modal is in modal state when these tests run
         // make sure the coast is clear
         await clearAllModals();
+    });
+
+    afterAll(() => {
+        window.location = realWindowLocation;
     });
 
     it("renders spinner while devices load", () => {
@@ -858,7 +873,7 @@ describe("<SessionManagerTab />", () => {
 
                 await flushPromises();
                 // modal rendering has some weird sleeps
-                await sleep(100);
+                await screen.findByRole("dialog");
 
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
                     [alicesMobileDevice.device_id],
@@ -1082,25 +1097,19 @@ describe("<SessionManagerTab />", () => {
             });
 
             describe("other devices", () => {
-                // signing out a single device still works
-                // this test will be updated once redirect to MAS is added
-                // https://github.com/vector-im/element-web/issues/26000
-                it("deletes a device when interactive auth is not required", async () => {
-                    mockClient.deleteMultipleDevices.mockResolvedValue({});
-                    mockClient.getDevices
-                        .mockResolvedValueOnce({
-                            devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
-                        })
-                        // pretend it was really deleted on refresh
-                        .mockResolvedValueOnce({
-                            devices: [alicesDevice, alicesOlderMobileDevice],
-                        });
+                it("opens delegated auth provider to sign out a single device", async () => {
+                    mockClient.getDevices.mockResolvedValue({
+                        devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                    });
 
                     const { getByTestId } = render(getComponent());
 
                     await act(async () => {
                         await flushPromises();
                     });
+
+                    // reset call count
+                    mockClient.getDevices.mockClear();
 
                     toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
@@ -1110,23 +1119,28 @@ describe("<SessionManagerTab />", () => {
                     ) as Element;
                     fireEvent.click(signOutButton);
 
-                    await confirmSignout(getByTestId);
-
-                    // sign out button is disabled with spinner
+                    await screen.findByRole("dialog");
                     expect(
-                        (
-                            deviceDetails.querySelector('[data-testid="device-detail-sign-out-cta"]') as Element
-                        ).getAttribute("aria-disabled"),
-                    ).toEqual("true");
-                    // delete called
-                    expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
-                        [alicesMobileDevice.device_id],
-                        undefined,
+                        screen.getByText(
+                            "You will be redirected to your server's authentication provider to complete sign out.",
+                        ),
+                    ).toBeInTheDocument();
+                    // correct link to auth provider
+                    expect(screen.getByText("Continue")).toHaveAttribute(
+                        "href",
+                        `https://issuer.org/account?action=session_end&device_id=${alicesMobileDevice.device_id}`,
                     );
+
+                    // go to the link
+                    fireEvent.click(screen.getByText("Continue"));
+                    await flushPromises();
+
+                    // come back from the link and close the modal
+                    fireEvent.click(screen.getByText("Close"));
 
                     await flushPromises();
 
-                    // devices refreshed
+                    // devices were refreshed
                     expect(mockClient.getDevices).toHaveBeenCalled();
                 });
 

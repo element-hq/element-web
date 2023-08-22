@@ -116,7 +116,7 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
         };
     }
 
-    private onAuthFinished: InteractiveAuthCallback<T> = (success, result): void => {
+    private onAuthFinished: InteractiveAuthCallback<T> = async (success, result): Promise<void> => {
         if (success) {
             this.props.onFinished(true, result);
         } else {

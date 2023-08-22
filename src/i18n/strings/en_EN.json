@@ -3285,6 +3285,7 @@
     "Not a valid Security Key": "Not a valid Security Key",
     "Access your secure message history and set up secure messaging by entering your Security Key.": "Access your secure message history and set up secure messaging by entering your Security Key.",
     "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "If you've forgotten your Security Key you can <button>set up new recovery options</button>",
+    "You will be redirected to your server's authentication provider to complete sign out.": "You will be redirected to your server's authentication provider to complete sign out.",
     "Send custom account data event": "Send custom account data event",
     "Send custom room account data event": "Send custom room account data event",
     "Event Type": "Event Type",
