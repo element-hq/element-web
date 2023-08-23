@@ -212,7 +212,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                         kind="link"
                         disabled={!this.state.enableProfileSave}
                     >
-                        {_t("Cancel")}
+                        {_t("action|cancel")}
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.saveProfile}

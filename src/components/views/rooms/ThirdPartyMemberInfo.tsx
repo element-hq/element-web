@@ -145,7 +145,11 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
             <div className="mx_MemberInfo" role="tabpanel">
                 {scopeHeader}
                 <div className="mx_MemberInfo_name">
-                    <AccessibleButton className="mx_MemberInfo_cancel" onClick={this.onCancel} title={_t("Close")} />
+                    <AccessibleButton
+                        className="mx_MemberInfo_cancel"
+                        onClick={this.onCancel}
+                        title={_t("action|close")}
+                    />
                     <h2>{this.state.displayName}</h2>
                 </div>
                 <div className="mx_MemberInfo_container mx_MemberInfo_container--profile">

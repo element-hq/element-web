@@ -56,7 +56,7 @@ function JoinCallButtonWithCall({ onClick, call }: JoinCallButtonWithCallProps):
             tooltip={disabledTooltip}
             kind="primary"
         >
-            {_t("Join")}
+            {_t("action|join")}
         </AccessibleTooltipButton>
     );
 }
@@ -154,14 +154,14 @@ export function IncomingCallToast({ callEvent }: Props): JSX.Element {
                         onClick={onJoinClick}
                         kind="primary"
                     >
-                        {_t("Join")}
+                        {_t("action|join")}
                     </AccessibleTooltipButton>
                 )}
             </div>
             <AccessibleTooltipButton
                 className="mx_IncomingCallToast_closeButton"
                 onClick={onCloseClick}
-                title={_t("Close")}
+                title={_t("action|close")}
             />
         </React.Fragment>
     );

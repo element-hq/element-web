@@ -77,7 +77,7 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({ roomId, call }) =>
             </div>
 
             <AccessibleButton onClick={connect} kind="primary" element="button" disabled={false}>
-                {_t("Join")}
+                {_t("action|join")}
             </AccessibleButton>
         </div>
     );

@@ -240,7 +240,7 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
                 className={classNames("mx_SpaceButton_new", {
                     mx_SpaceButton_newCancel: menuDisplayed,
                 })}
-                label={menuDisplayed ? _t("Cancel") : _t("Create a space")}
+                label={menuDisplayed ? _t("action|cancel") : _t("Create a space")}
                 onClick={onNewClick}
                 isNarrow={isPanelCollapsed}
                 innerRef={handle}
@@ -367,11 +367,11 @@ const SpacePanel: React.FC = () => {
                             <AccessibleTooltipButton
                                 className={classNames("mx_SpacePanel_toggleCollapse", { expanded: !isPanelCollapsed })}
                                 onClick={() => setPanelCollapsed(!isPanelCollapsed)}
-                                title={isPanelCollapsed ? _t("Expand") : _t("Collapse")}
+                                title={isPanelCollapsed ? _t("action|expand") : _t("action|collapse")}
                                 tooltip={
                                     <div>
                                         <div className="mx_Tooltip_title">
-                                            {isPanelCollapsed ? _t("Expand") : _t("Collapse")}
+                                            {isPanelCollapsed ? _t("action|expand") : _t("action|collapse")}
                                         </div>
                                         <div className="mx_Tooltip_sub">
                                             {IS_MAC

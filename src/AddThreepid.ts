@@ -226,7 +226,7 @@ export default class AddThreepid {
                         [SSOAuthEntry.PHASE_POSTAUTH]: {
                             title: _t("Confirm adding email"),
                             body: _t("Click the button below to confirm adding this email address."),
-                            continueText: _t("Confirm"),
+                            continueText: _t("action|confirm"),
                             continueKind: "primary",
                         },
                     };
@@ -329,7 +329,7 @@ export default class AddThreepid {
                     [SSOAuthEntry.PHASE_POSTAUTH]: {
                         title: _t("Confirm adding phone number"),
                         body: _t("Click the button below to confirm adding this phone number."),
-                        continueText: _t("Confirm"),
+                        continueText: _t("action|confirm"),
                         continueKind: "primary",
                     },
                 };

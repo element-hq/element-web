@@ -269,7 +269,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                 onClick={this.clearSound}
                                 kind="primary"
                             >
-                                {_t("Reset")}
+                                {_t("action|reset")}
                             </AccessibleButton>
                         </div>
                         <div>

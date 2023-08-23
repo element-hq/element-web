@@ -294,7 +294,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             deleteButton = (
                 <AccessibleTooltipButton
                     className="mx_VoiceRecordComposerTile_delete"
-                    title={_t("Delete")}
+                    title={_t("action|delete")}
                     onClick={this.onCancel}
                 />
             );

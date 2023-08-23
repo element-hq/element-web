@@ -34,12 +34,12 @@ const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
 
     const _onLogoutClicked = (): void => {
         Modal.createDialog(QuestionDialog, {
-            title: _t("Sign out"),
+            title: _t("action|sign_out"),
             description: _t(
                 "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this",
                 { brand },
             ),
-            button: _t("Sign out"),
+            button: _t("action|sign_out"),
             focus: false,
             onFinished: (doLogout) => {
                 if (doLogout) {
@@ -71,7 +71,7 @@ const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
                 hasCancel={false}
                 onPrimaryButtonClick={() => props.onFinished(false)}
             >
-                <button onClick={_onLogoutClicked}>{_t("Sign out")}</button>
+                <button onClick={_onLogoutClicked}>{_t("action|sign_out")}</button>
             </DialogButtons>
         </BaseDialog>
     );

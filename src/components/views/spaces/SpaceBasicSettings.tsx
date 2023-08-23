@@ -69,7 +69,7 @@ export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" |
                         className="mx_SpaceBasicSettings_avatar_remove"
                         aria-label={_t("Delete avatar")}
                     >
-                        {_t("Delete")}
+                        {_t("action|delete")}
                     </AccessibleButton>
                 </React.Fragment>
             );
@@ -86,7 +86,7 @@ export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" |
                         kind="link"
                         aria-label={_t("Upload avatar")}
                     >
-                        {_t("Upload")}
+                        {_t("action|upload")}
                     </AccessibleButton>
                 </React.Fragment>
             );

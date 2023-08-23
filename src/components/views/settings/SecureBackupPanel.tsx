@@ -355,7 +355,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         if (secretStorageKeyInAccount) {
             actions.push(
                 <AccessibleButton key="reset" kind="danger" onClick={this.resetSecretStorage}>
-                    {_t("Reset")}
+                    {_t("action|reset")}
                 </AccessibleButton>,
             );
         }

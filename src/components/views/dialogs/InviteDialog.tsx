@@ -1107,7 +1107,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     this.state.busy || (this.props.kind == InviteKind.CallTransfer && this.state.targets.length > 0)
                 }
                 autoComplete="off"
-                placeholder={hasPlaceholder ? _t("Search") : undefined}
+                placeholder={hasPlaceholder ? _t("action|search") : undefined}
                 data-testid="invite-dialog-input"
             />
         );
@@ -1419,7 +1419,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                         onClick={this.onCancel}
                         className="mx_InviteDialog_transferConsultConnect_pushRight"
                     >
-                        {_t("Cancel")}
+                        {_t("action|cancel")}
                     </AccessibleButton>
                     <AccessibleButton
                         kind="primary"

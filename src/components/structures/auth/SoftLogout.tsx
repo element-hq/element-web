@@ -245,7 +245,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                     type="submit"
                     disabled={this.state.busy}
                 >
-                    {_t("Sign In")}
+                    {_t("action|sign_in")}
                 </AccessibleButton>
                 <AccessibleButton onClick={this.onForgotPassword} kind="link">
                     {_t("Forgotten your password?")}
@@ -340,7 +340,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                 <AuthBody>
                     <h1>{_t("You're signed out")}</h1>
 
-                    <h2>{_t("Sign in")}</h2>
+                    <h2>{_t("action|sign_in")}</h2>
                     <div>{this.renderSignInSection()}</div>
 
                     <h2>{_t("Clear personal data")}</h2>

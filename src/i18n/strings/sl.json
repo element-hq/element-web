@@ -2,16 +2,13 @@
     "This email address is already in use": "Ta e-poštni naslov je že v uporabi",
     "This phone number is already in use": "Ta telefonska številka je že v uporabi",
     "Failed to verify email address: make sure you clicked the link in the email": "E-poštnega naslova ni bilo mogoče preveriti: preverite, ali ste kliknili povezavo v e-poštnem sporočilu",
-    "Dismiss": "Opusti",
     "Chat with %(brand)s Bot": "Klepetajte z %(brand)s Botom",
-    "Sign In": "Prijava",
     "powered by Matrix": "poganja Matrix",
     "Use Single Sign On to continue": "Uporabi Single Sign On za prijavo",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Potrdite dodajanje tega e-poštnega naslova z enkratno prijavo, da dokažete svojo identiteto.",
     "Single Sign On": "Enkratna prijava",
     "Confirm adding email": "Potrdi dodajanje e-poštnega naslova",
     "Click the button below to confirm adding this email address.": "Kliknite gumb spodaj za potrditev dodajanja tega elektronskega naslova.",
-    "Confirm": "Potrdi",
     "Add Email Address": "Dodaj e-poštni naslov",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potrdite dodajanje te telefonske številke z enkratno prijavo, da dokažete svojo identiteto.",
     "Confirm adding phone number": "Potrdi dodajanje telefonske številke",
@@ -63,5 +60,10 @@
         "analytics": "Analitika",
         "error": "Napaka",
         "attachment": "Priponka"
+    },
+    "action": {
+        "confirm": "Potrdi",
+        "dismiss": "Opusti",
+        "sign_in": "Prijava"
     }
 }

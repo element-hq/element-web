@@ -687,7 +687,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                 onClick={listener}
                                 tabIndex={-1}
                             >
-                                {showViewButton ? _t("View") : _t("Join")}
+                                {showViewButton ? _t("action|view") : _t("action|join")}
                             </AccessibleButton>
                         }
                         aria-labelledby={`mx_SpotlightDialog_button_result_${result.publicRoom.room_id}_name`}
@@ -1236,13 +1236,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         autoCapitalize="off"
                         autoCorrect="off"
                         spellCheck="false"
-                        placeholder={_t("Search")}
+                        placeholder={_t("action|search")}
                         value={query}
                         onChange={setQuery}
                         onKeyDown={onKeyDown}
                         aria-owns="mx_SpotlightDialog_content"
                         aria-activedescendant={activeDescendant}
-                        aria-label={_t("Search")}
+                        aria-label={_t("action|search")}
                         aria-describedby="mx_SpotlightDialog_keyboardPrompt"
                     />
                     {(publicRoomsLoading || peopleLoading || profileLoading) && <Spinner w={24} h={24} />}

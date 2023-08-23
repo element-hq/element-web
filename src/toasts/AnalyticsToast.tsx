@@ -68,7 +68,7 @@ const onLearnMorePreviouslyOptedIn = (): void => {
             // otherwise, the user closed the dialog without making a choice, leave the toast open
         },
         primaryButton: _t("That's fine"),
-        cancelButton: _t("Stop"),
+        cancelButton: _t("action|stop"),
     });
 };
 

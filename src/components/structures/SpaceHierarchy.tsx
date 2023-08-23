@@ -163,13 +163,13 @@ const Tile: React.FC<ITileProps> = ({
                 onFocus={onFocus}
                 tabIndex={isActive ? 0 : -1}
             >
-                {_t("View")}
+                {_t("action|view")}
             </AccessibleButton>
         );
     } else {
         button = (
             <AccessibleButton onClick={onJoinClick} kind="primary" onFocus={onFocus} tabIndex={isActive ? 0 : -1}>
-                {_t("Join")}
+                {_t("action|join")}
             </AccessibleButton>
         );
     }

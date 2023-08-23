@@ -90,7 +90,7 @@ export default class DialogButtons extends React.Component<IProps> {
                     className={this.props.cancelButtonClass}
                     disabled={this.props.disabled}
                 >
-                    {this.props.cancelButton || _t("Cancel")}
+                    {this.props.cancelButton || _t("action|cancel")}
                 </button>
             );
         }

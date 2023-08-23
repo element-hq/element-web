@@ -609,7 +609,7 @@ export default class Registration extends React.Component<IProps, IState> {
         if (this.state.doingUIAuth) {
             goBack = (
                 <AccessibleButton kind="link" className="mx_AuthBody_changeFlow" onClick={this.onGoToFormClicked}>
-                    {_t("Go back")}
+                    {_t("action|go_back")}
                 </AccessibleButton>
             );
         }

@@ -60,7 +60,7 @@ const CurrentDeviceSectionHeading: React.FC<CurrentDeviceSectionHeadingProps> = 
     const menuOptions = [
         <IconizedContextMenuOption
             key="sign-out"
-            label={_t("Sign out")}
+            label={_t("action|sign_out")}
             onClick={onSignOutCurrentDevice}
             isDestructive
         />,

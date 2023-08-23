@@ -64,7 +64,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
                     if (t.status === TransactionStatus.Error) {
                         button = (
                             <AccessibleButton kind="link" onClick={() => t.run()}>
-                                {_t("Resend")}
+                                {_t("action|resend")}
                             </AccessibleButton>
                         );
                     }

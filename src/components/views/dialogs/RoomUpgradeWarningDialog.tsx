@@ -173,9 +173,9 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         } else {
             footer = (
                 <DialogButtons
-                    primaryButton={_t("Upgrade")}
+                    primaryButton={_t("action|upgrade")}
                     onPrimaryButtonClick={this.onContinue}
-                    cancelButton={_t("Cancel")}
+                    cancelButton={_t("action|cancel")}
                     onCancel={this.onCancel}
                 />
             );

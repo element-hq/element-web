@@ -309,7 +309,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 [SSOAuthEntry.PHASE_POSTAUTH]: {
                     title: _t("Confirm encryption setup"),
                     body: _t("Click the button below to confirm setting up encryption."),
-                    continueText: _t("Confirm"),
+                    continueText: _t("action|confirm"),
                     continueKind: "primary",
                 },
             };
@@ -621,7 +621,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     primaryDisabled={!!this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
                 >
                     <button type="button" className="danger" onClick={this.onCancelClick}>
-                        {_t("Skip")}
+                        {_t("action|skip")}
                     </button>
                 </DialogButtons>
             </form>
@@ -660,7 +660,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     disabled={!this.state.passPhraseValid}
                 >
                     <button type="button" onClick={this.onCancelClick} className="danger">
-                        {_t("Cancel")}
+                        {_t("action|cancel")}
                     </button>
                 </DialogButtons>
             </form>
@@ -718,7 +718,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
                 >
                     <button type="button" onClick={this.onCancelClick} className="danger">
-                        {_t("Skip")}
+                        {_t("action|skip")}
                     </button>
                 </DialogButtons>
             </form>
@@ -763,7 +763,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                                 onClick={this.onDownloadClick}
                                 disabled={this.state.phase === Phase.Storing}
                             >
-                                {_t("Download")}
+                                {_t("action|download")}
                             </AccessibleButton>
                             <span>
                                 {_t("%(downloadButton)s or %(copyButton)s", {
@@ -832,12 +832,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 </p>
                 <p>{_t("You can also set up Secure Backup & manage your keys in Settings.")}</p>
                 <DialogButtons
-                    primaryButton={_t("Go back")}
+                    primaryButton={_t("action|go_back")}
                     onPrimaryButtonClick={this.onGoBackClick}
                     hasCancel={false}
                 >
                     <button type="button" className="danger" onClick={this.onCancel}>
-                        {_t("Cancel")}
+                        {_t("action|cancel")}
                     </button>
                 </DialogButtons>
             </div>

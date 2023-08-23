@@ -41,7 +41,7 @@ const LegacyCallViewHeaderControls: React.FC<LegacyCallControlsProps> = ({ onExp
                 <AccessibleTooltipButton
                     className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_pin"
                     onClick={onPin}
-                    title={_t("Pin")}
+                    title={_t("action|pin")}
                 />
             )}
             {onExpand && (
@@ -94,7 +94,7 @@ const LegacyCallViewHeader: React.FC<LegacyCallViewHeaderProps> = ({
         return (
             <div className="mx_LegacyCallViewHeader">
                 <div className="mx_LegacyCallViewHeader_icon" />
-                <span className="mx_LegacyCallViewHeader_text">{_t("Call")}</span>
+                <span className="mx_LegacyCallViewHeader_text">{_t("action|call")}</span>
                 <LegacyCallViewHeaderControls onMaximize={onMaximize} />
             </div>
         );

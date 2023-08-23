@@ -99,7 +99,7 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
               tabindex="0"
               type="submit"
             >
-              Sign In
+              Sign in
             </div>
             <div
               class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"

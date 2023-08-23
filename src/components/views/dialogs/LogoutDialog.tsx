@@ -202,9 +202,9 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
             return (
                 <QuestionDialog
                     hasCancelButton={true}
-                    title={_t("Sign out")}
+                    title={_t("action|sign_out")}
                     description={_t("Are you sure you want to sign out?")}
-                    button={_t("Sign out")}
+                    button={_t("action|sign_out")}
                     onFinished={this.onFinished}
                 />
             );

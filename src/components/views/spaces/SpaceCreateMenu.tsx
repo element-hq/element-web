@@ -317,7 +317,7 @@ const SpaceCreateMenu: React.FC<{
                 <AccessibleTooltipButton
                     className="mx_SpaceCreateMenu_back"
                     onClick={() => setVisibility(null)}
-                    title={_t("Go back")}
+                    title={_t("action|go_back")}
                 />
 
                 <h2>{visibility === Visibility.Public ? _t("Your public space") : _t("Your private space")}</h2>

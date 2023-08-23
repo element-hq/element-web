@@ -77,7 +77,7 @@ const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({
             <div className={classNames("mx_DevTools_content", className)}>{children}</div>
             <div className="mx_Dialog_buttons">
                 {extraButton}
-                <button onClick={onBackClick}>{_t("Back")}</button>
+                <button onClick={onBackClick}>{_t("action|back")}</button>
                 {actionButton}
             </div>
         </>

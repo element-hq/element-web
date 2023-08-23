@@ -237,10 +237,10 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     {inviteOnlyWarning}
                     <div className="mx_ManageRestrictedJoinRuleDialog_footer_buttons">
                         <AccessibleButton kind="primary_outline" onClick={() => onFinished()}>
-                            {_t("Cancel")}
+                            {_t("action|cancel")}
                         </AccessibleButton>
                         <AccessibleButton kind="primary" onClick={() => onFinished(Array.from(newSelected))}>
-                            {_t("Confirm")}
+                            {_t("action|confirm")}
                         </AccessibleButton>
                     </div>
                 </div>

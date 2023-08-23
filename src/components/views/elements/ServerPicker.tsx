@@ -50,7 +50,7 @@ const onHelpClick = (): void => {
                 "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.",
                 { brand },
             ),
-            button: _t("Dismiss"),
+            button: _t("action|dismiss"),
             hasCloseButton: false,
             fixedWidth: false,
         },

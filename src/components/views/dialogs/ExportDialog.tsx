@@ -312,7 +312,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             >
                 <p>{_t("Are you sure you want to stop exporting your data? If you do, you'll need to start over.")}</p>
                 <DialogButtons
-                    primaryButton={_t("Stop")}
+                    primaryButton={_t("action|stop")}
                     primaryButtonClass="danger"
                     hasCancel={true}
                     cancelButton={_t("action|continue")}
@@ -402,7 +402,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         <Spinner w={24} h={24} />
                         <p>{exportProgressText}</p>
                         <DialogButtons
-                            primaryButton={_t("Cancel")}
+                            primaryButton={_t("action|cancel")}
                             primaryButtonClass="danger"
                             hasCancel={false}
                             onPrimaryButtonClick={onCancel}

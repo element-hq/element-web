@@ -37,9 +37,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s%(monthName)s%(day)s%(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s%(monthName)s%(day)s%(fullYear)s%(time)s",
     "Explore rooms": "Explorează camerele",
-    "Sign In": "Autentificare",
     "Create Account": "Înregistare",
-    "Dismiss": "Închide",
     "You've reached the maximum number of simultaneous calls.": "Ați atins numărul maxim de apeluri simultane.",
     "Too Many Calls": "Prea multe apeluri",
     "No other application is using the webcam": "Nicio altă aplicație nu folosește camera web",
@@ -62,7 +60,6 @@
     "Confirm adding phone number": "Confirmați adăugarea numărului de telefon",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Confirmați adăugarea acestui număr de telefon utilizând Single Sign On pentru a vă dovedi identitatea.",
     "Add Email Address": "Adăugați o adresă de e-mail",
-    "Confirm": "Confirmă",
     "Click the button below to confirm adding this email address.": "Faceți clic pe butonul de mai jos pentru a confirma adăugarea acestei adrese de e-mail.",
     "Confirm adding email": "Confirmați adăugarea e-mailului",
     "Single Sign On": "Single Sign On",
@@ -73,6 +70,9 @@
         "error": "Eroare"
     },
     "action": {
-        "ok": "OK"
+        "ok": "OK",
+        "confirm": "Confirmă",
+        "dismiss": "Închide",
+        "sign_in": "Autentificare"
     }
 }

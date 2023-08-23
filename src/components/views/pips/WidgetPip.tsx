@@ -111,7 +111,7 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
                 <RovingAccessibleButton
                     onClick={onBackClick}
                     className="mx_WidgetPip_backButton"
-                    aria-label={_t("Back")}
+                    aria-label={_t("action|back")}
                 >
                     <BackIcon className="mx_Icon mx_Icon_16" />
                     {roomName}

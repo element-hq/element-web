@@ -105,7 +105,7 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
             [SSOAuthEntry.PHASE_POSTAUTH]: {
                 title: _t("Confirm to continue"),
                 body: _t("Click the button below to confirm your identity."),
-                continueText: _t("Confirm"),
+                continueText: _t("action|confirm"),
                 continueKind: "primary",
             },
         };
@@ -171,7 +171,7 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
                     <div role="alert">{this.state.authError.message || this.state.authError.toString()}</div>
                     <br />
                     <AccessibleButton onClick={this.onDismissClick} className="mx_GeneralButton" autoFocus={true}>
-                        {_t("Dismiss")}
+                        {_t("action|dismiss")}
                     </AccessibleButton>
                 </div>
             );

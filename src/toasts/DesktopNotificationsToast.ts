@@ -44,7 +44,7 @@ export const showToast = (fromMessageSend: boolean): void => {
             description: _t("Enable desktop notifications"),
             acceptLabel: _t("action|enable"),
             onAccept,
-            rejectLabel: _t("Dismiss"),
+            rejectLabel: _t("action|dismiss"),
             onReject,
         },
         component: GenericToast,

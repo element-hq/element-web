@@ -467,7 +467,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             pinButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconPin"
-                    label={this.isPinned() ? _t("Unpin") : _t("Pin")}
+                    label={this.isPinned() ? _t("action|unpin") : _t("action|pin")}
                     onClick={this.onPinClick}
                 />
             );
@@ -499,7 +499,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconPermalink"
                     onClick={this.onShareClick}
-                    label={_t("Share")}
+                    label={_t("action|share")}
                     element="a"
                     {
                         // XXX: Typescript signature for AccessibleButton doesn't work properly for non-inputs like `a`

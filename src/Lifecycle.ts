@@ -364,7 +364,7 @@ async function onFailedDelegatedAuthLogin(description: string | ReactNode, tryAg
     Modal.createDialog(ErrorDialog, {
         title: _t("We couldn't log you in"),
         description,
-        button: _t("Try again"),
+        button: _t("action|try_again"),
         // if we have a tryAgain callback, call it the primary 'try again' button was clicked in the dialog
         onFinished: tryAgain ? (shouldTryAgain?: boolean) => shouldTryAgain && tryAgain() : undefined,
     });

@@ -72,7 +72,9 @@ export default class RoomSearch extends React.PureComponent<IProps> {
         return (
             <AccessibleButton onClick={this.openSpotlight} className={classes}>
                 {icon}
-                {!this.props.isMinimized && <div className="mx_RoomSearch_spotlightTriggerText">{_t("Search")}</div>}
+                {!this.props.isMinimized && (
+                    <div className="mx_RoomSearch_spotlightTriggerText">{_t("action|search")}</div>
+                )}
                 {shortcutPrompt}
             </AccessibleButton>
         );

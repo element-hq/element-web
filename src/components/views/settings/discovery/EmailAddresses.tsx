@@ -208,7 +208,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                     onClick={this.onShareClick}
                     disabled={this.props.disabled}
                 >
-                    {_t("Share")}
+                    {_t("action|share")}
                 </AccessibleButton>
             );
         }

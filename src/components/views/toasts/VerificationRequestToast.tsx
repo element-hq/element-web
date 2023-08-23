@@ -177,7 +177,9 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
             }
         }
         const declineLabel =
-            this.state.counter === 0 ? _t("Ignore") : _t("Ignore (%(counter)s)", { counter: this.state.counter });
+            this.state.counter === 0
+                ? _t("action|ignore")
+                : _t("Ignore (%(counter)s)", { counter: this.state.counter });
 
         return (
             <GenericToast

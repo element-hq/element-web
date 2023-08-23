@@ -70,7 +70,7 @@ class EditableAliasesList extends EditableItemList<IEditableAliasesListProps> {
                     roomId={this.props.roomId}
                 />
                 <AccessibleButton onClick={this.onAliasAdded} kind="primary">
-                    {_t("Add")}
+                    {_t("action|add")}
                 </AccessibleButton>
             </form>
         );

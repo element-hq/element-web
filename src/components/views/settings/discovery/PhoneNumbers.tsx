@@ -216,7 +216,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
                     onClick={this.onShareClick}
                     disabled={this.props.disabled}
                 >
-                    {_t("Share")}
+                    {_t("action|share")}
                 </AccessibleButton>
             );
         }

@@ -166,7 +166,7 @@ const BeaconViewDialog: React.FC<IProps> = ({ initialFocusedBeacon, roomId, matr
                             onClick={onFinished}
                             data-testid="beacon-view-dialog-fallback-close"
                         >
-                            {_t("Close")}
+                            {_t("action|close")}
                         </AccessibleButton>
                     </MapFallback>
                 )}

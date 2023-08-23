@@ -40,7 +40,7 @@ const ZoomButtons: React.FC<Props> = ({ map }) => {
             <AccessibleButton
                 onClick={onZoomIn}
                 data-testid="map-zoom-in-button"
-                title={_t("Zoom in")}
+                title={_t("action|zoom_in")}
                 className="mx_ZoomButtons_button"
             >
                 <PlusIcon className="mx_ZoomButtons_icon" />
@@ -48,7 +48,7 @@ const ZoomButtons: React.FC<Props> = ({ map }) => {
             <AccessibleButton
                 onClick={onZoomOut}
                 data-testid="map-zoom-out-button"
-                title={_t("Zoom out")}
+                title={_t("action|zoom_out")}
                 className="mx_ZoomButtons_button"
             >
                 <MinusIcon className="mx_ZoomButtons_icon" />

@@ -246,7 +246,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         if (keysExistAnywhere) {
             actions.push(
                 <AccessibleButton key="reset" kind="danger" onClick={this.resetCrossSigning}>
-                    {_t("Reset")}
+                    {_t("action|reset")}
                 </AccessibleButton>,
             );
         }

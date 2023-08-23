@@ -166,7 +166,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
             >
                 <TabbedView tabs={tabs} tabLocation={TabLocation.TOP} onChange={this.onTabChange} />
                 <DialogButtons
-                    primaryButton={_t("Share")}
+                    primaryButton={_t("action|share")}
                     hasCancel={true}
                     onCancel={this.onCloseClick}
                     onPrimaryButtonClick={this.onShare}

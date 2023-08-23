@@ -200,9 +200,9 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                 inputRef={handle}
                 onClick={openMenu}
                 isExpanded={menuDisplayed}
-                label={_t("Add")}
+                label={_t("action|add")}
             >
-                {_t("Add")}
+                {_t("action|add")}
             </ContextMenuButton>
             {contextMenu}
         </>

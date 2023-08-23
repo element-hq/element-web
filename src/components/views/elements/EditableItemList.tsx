@@ -147,7 +147,7 @@ export default class EditableItemList<P = {}> extends React.PureComponent<IProps
                     type="submit"
                     disabled={!this.props.newItem}
                 >
-                    {_t("Add")}
+                    {_t("action|add")}
                 </AccessibleButton>
             </form>
         );

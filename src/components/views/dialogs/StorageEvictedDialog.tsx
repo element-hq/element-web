@@ -73,7 +73,7 @@ export default class StorageEvictedDialog extends React.Component<IProps> {
                     </p>
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Sign out")}
+                    primaryButton={_t("action|sign_out")}
                     onPrimaryButtonClick={this.onSignOutClick}
                     focus={true}
                     hasCancel={false}

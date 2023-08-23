@@ -53,7 +53,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
         Modal.createDialog(InfoDialog, {
             title,
             description: _t("Feedback sent! Thanks, we appreciate it!"),
-            button: _t("Close"),
+            button: _t("action|close"),
             hasCloseButton: false,
             fixedWidth: false,
         });

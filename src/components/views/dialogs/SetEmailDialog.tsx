@@ -179,7 +179,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                         value={_t("action|continue")}
                         onClick={this.onSubmit}
                     />
-                    <input type="submit" value={_t("Skip")} onClick={this.onCancelled} />
+                    <input type="submit" value={_t("action|skip")} onClick={this.onCancelled} />
                 </div>
             </BaseDialog>
         );

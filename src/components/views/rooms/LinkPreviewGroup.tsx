@@ -58,7 +58,7 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
         toggleButton = (
             <AccessibleButton onClick={toggleExpanded}>
                 {expanded
-                    ? _t("Collapse")
+                    ? _t("action|collapse")
                     : _t("Show %(count)s other previews", { count: previews.length - showPreviews.length })}
             </AccessibleButton>
         );

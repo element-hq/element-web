@@ -205,7 +205,7 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
                                 <th>{_t("Service")}</th>
                                 <th>{_t("Summary")}</th>
                                 <th>{_t("Document")}</th>
-                                <th>{_t("Accept")}</th>
+                                <th>{_t("action|accept")}</th>
                             </tr>
                             {rows}
                         </tbody>

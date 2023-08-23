@@ -45,7 +45,7 @@ export default class SeshatResetDialog extends React.PureComponent<Props> {
                     primaryButton={_t("Reset event store")}
                     onPrimaryButtonClick={this.props.onFinished.bind(null, true)}
                     primaryButtonClass="danger"
-                    cancelButton={_t("Cancel")}
+                    cancelButton={_t("action|cancel")}
                     onCancel={this.props.onFinished.bind(null, false)}
                 />
             </BaseDialog>

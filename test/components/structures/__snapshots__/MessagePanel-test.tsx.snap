@@ -83,7 +83,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
             role="button"
             tabindex="0"
           >
-            expand
+            Expand
           </div>
           <div
             class="mx_EventTile_line"

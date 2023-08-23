@@ -33,7 +33,7 @@ export function EditionButtons({
     return (
         <div className="mx_EditWysiwygComposer_buttons">
             <AccessibleButton kind="secondary" onClick={onCancelClick}>
-                {_t("Cancel")}
+                {_t("action|cancel")}
             </AccessibleButton>
             <AccessibleButton kind="primary" onClick={onSaveClick} disabled={isSaveDisabled}>
                 {_t("action|save")}

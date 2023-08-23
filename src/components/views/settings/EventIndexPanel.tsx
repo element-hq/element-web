@@ -240,7 +240,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                                 </code>
                                 <p>
                                     <AccessibleButton key="delete" kind="danger" onClick={this.confirmEventStoreReset}>
-                                        {_t("Reset")}
+                                        {_t("action|reset")}
                                     </AccessibleButton>
                                 </p>
                             </details>

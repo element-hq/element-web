@@ -47,8 +47,8 @@ export const createMap = (
                 "GeolocateControl.LocationNotAvailable": _t("Location not available"),
                 "LogoControl.Title": _t("Mapbox logo"),
                 "NavigationControl.ResetBearing": _t("Reset bearing to north"),
-                "NavigationControl.ZoomIn": _t("Zoom in"),
-                "NavigationControl.ZoomOut": _t("Zoom out"),
+                "NavigationControl.ZoomIn": _t("action|zoom_in"),
+                "NavigationControl.ZoomOut": _t("action|zoom_out"),
             },
         });
         map.addControl(new maplibregl.AttributionControl(), "top-right");

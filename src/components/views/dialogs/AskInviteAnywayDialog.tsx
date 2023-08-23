@@ -87,7 +87,7 @@ export default function AskInviteAnywayDialog({
             </div>
 
             <div className="mx_Dialog_buttons">
-                <button onClick={onGiveUpClicked}>{_t("Close")}</button>
+                <button onClick={onGiveUpClicked}>{_t("action|close")}</button>
                 <button onClick={onInviteNeverWarnClicked}>
                     {inviteNeverWarnLabel ?? _t("Invite anyway and never warn me again")}
                 </button>

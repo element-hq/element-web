@@ -65,7 +65,7 @@ const OwnBeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({ beacon, 
                     className="mx_OwnBeaconStatus_button mx_OwnBeaconStatus_destructiveButton"
                     disabled={stoppingInProgress}
                 >
-                    {_t("Stop")}
+                    {_t("action|stop")}
                 </AccessibleButton>
             )}
             {hasLocationPublishError && (

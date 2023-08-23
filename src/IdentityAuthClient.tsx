@@ -151,7 +151,7 @@ export default class IdentityAuthClient {
                         <p>{_t("Only continue if you trust the owner of the server.")}</p>
                     </div>
                 ),
-                button: _t("Trust"),
+                button: _t("action|trust"),
             });
             const [confirmed] = await finished;
             if (confirmed) {

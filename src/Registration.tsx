@@ -53,11 +53,11 @@ export async function startAnyRegistrationFlow(
     const modal = Modal.createDialog(QuestionDialog, {
         hasCancelButton: true,
         quitOnly: true,
-        title: SettingsStore.getValue(UIFeature.Registration) ? _t("Sign In or Create Account") : _t("Sign In"),
+        title: SettingsStore.getValue(UIFeature.Registration) ? _t("Sign In or Create Account") : _t("action|sign_in"),
         description: SettingsStore.getValue(UIFeature.Registration)
             ? _t("Use your account or create a new one to continue.")
             : _t("Use your account to continue."),
-        button: _t("Sign In"),
+        button: _t("action|sign_in"),
         extraButtons: SettingsStore.getValue(UIFeature.Registration)
             ? [
                   <button

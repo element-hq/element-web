@@ -105,7 +105,7 @@ export default class InlineTermsAgreement extends React.Component<IProps, IState
                     <div>{introText}</div>
                     <div className="mx_InlineTermsAgreement_checkbox">
                         <StyledCheckbox onChange={() => this.togglePolicy(i)} checked={policy.checked}>
-                            {_t("Accept")}
+                            {_t("action|accept")}
                         </StyledCheckbox>
                     </div>
                 </div>,

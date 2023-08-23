@@ -73,7 +73,7 @@ class Search extends React.PureComponent<IProps> {
                 <input
                     autoFocus
                     type="text"
-                    placeholder={_t("Search")}
+                    placeholder={_t("action|search")}
                     value={this.props.query}
                     onChange={(ev) => this.props.onChange(ev.target.value)}
                     onKeyDown={this.onKeyDown}

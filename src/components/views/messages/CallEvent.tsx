@@ -129,9 +129,9 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
     const [buttonText, buttonKind, onButtonClick] = useMemo(() => {
         switch (connectionState) {
             case ConnectionState.Disconnected:
-                return [_t("Join"), "primary", connect];
+                return [_t("action|join"), "primary", connect];
             case ConnectionState.Connecting:
-                return [_t("Join"), "primary", null];
+                return [_t("action|join"), "primary", null];
             case ConnectionState.Connected:
                 return [_t("action|leave"), "danger", disconnect];
             case ConnectionState.Disconnecting:
@@ -189,7 +189,7 @@ export const CallEvent = forwardRef<any, CallEventProps>(({ mxEvent }, ref) => {
                 mxEvent={mxEvent}
                 call={null}
                 participatingMembers={[]}
-                buttonText={_t("Join")}
+                buttonText={_t("action|join")}
                 buttonKind="primary"
                 onButtonClick={null}
             />

@@ -78,7 +78,7 @@ export function UseCaseSelection({ onFinished }: Props): JSX.Element {
             </div>
             <div className="mx_UseCaseSelection_skip mx_UseCaseSelection_slideInDelayed">
                 <AccessibleButton kind="link" onClick={async () => setSelected(UseCase.Skip)}>
-                    {_t("Skip")}
+                    {_t("action|skip")}
                 </AccessibleButton>
             </div>
         </SplashPage>

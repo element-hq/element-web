@@ -52,7 +52,7 @@ export default class ConfirmWipeDeviceDialog extends React.Component<IProps> {
                     primaryButton={_t("Clear all data")}
                     onPrimaryButtonClick={this.onConfirm}
                     primaryButtonClass="danger"
-                    cancelButton={_t("Cancel")}
+                    cancelButton={_t("action|cancel")}
                     onCancel={this.onDecline}
                 />
             </BaseDialog>

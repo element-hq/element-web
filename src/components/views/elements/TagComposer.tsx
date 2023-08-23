@@ -85,7 +85,7 @@ export default class TagComposer extends React.PureComponent<IProps, IState> {
                         autoComplete="off"
                     />
                     <AccessibleButton onClick={this.onAdd} kind="primary" disabled={this.props.disabled}>
-                        {_t("Add")}
+                        {_t("action|add")}
                     </AccessibleButton>
                 </form>
                 <div className="mx_TagComposer_tags" role="list">

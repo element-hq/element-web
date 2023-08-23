@@ -52,7 +52,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
             Modal.createDialog(QuestionDialog, {
                 title: _t("What's New"),
                 description: <pre>{releaseNotes}</pre>,
-                button: _t("Update"),
+                button: _t("action|update"),
                 onFinished: (update) => {
                     if (update && PlatformPeg.get()) {
                         PlatformPeg.get()!.installUpdate();
@@ -74,7 +74,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
         };
     } else {
         onAccept = installUpdate;
-        acceptLabel = _t("Update");
+        acceptLabel = _t("action|update");
     }
 
     const brand = SdkConfig.get().brand;
@@ -85,7 +85,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
             description: _t("New version of %(brand)s is available", { brand }),
             acceptLabel,
             onAccept,
-            rejectLabel: _t("Dismiss"),
+            rejectLabel: _t("action|dismiss"),
             onReject,
         },
         component: GenericToast,

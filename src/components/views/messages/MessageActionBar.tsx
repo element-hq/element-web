@@ -410,7 +410,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         const cancelSendingButton = (
             <RovingAccessibleTooltipButton
                 className="mx_MessageActionBar_iconButton"
-                title={_t("Delete")}
+                title={_t("action|delete")}
                 onClick={this.onCancelClick}
                 onContextMenu={this.onCancelClick}
                 key="cancel"

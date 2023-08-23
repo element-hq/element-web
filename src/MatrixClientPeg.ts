@@ -212,7 +212,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
                 description: _t(
                     "This may be caused by having the app open in multiple tabs or due to clearing browser data.",
                 ),
-                button: _t("Reload"),
+                button: _t("action|reload"),
             });
             const [reload] = await finished;
             if (!reload) return;

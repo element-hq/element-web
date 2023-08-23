@@ -153,7 +153,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
                     {feedbackSection}
                 </React.Fragment>
             }
-            button={hasFeedback ? _t("Send feedback") : _t("Go back")}
+            button={hasFeedback ? _t("Send feedback") : _t("action|go_back")}
             buttonDisabled={hasFeedback && !comment}
             onFinished={onFinished}
         />

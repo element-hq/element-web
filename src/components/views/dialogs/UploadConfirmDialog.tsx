@@ -123,7 +123,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                 </div>
 
                 <DialogButtons
-                    primaryButton={_t("Upload")}
+                    primaryButton={_t("action|upload")}
                     hasCancel={false}
                     onPrimaryButtonClick={this.onUploadClick}
                     focus={true}

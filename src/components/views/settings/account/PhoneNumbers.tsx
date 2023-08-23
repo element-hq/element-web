@@ -109,7 +109,7 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
                         kind="link_sm"
                         className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
                     >
-                        {_t("Cancel")}
+                        {_t("action|cancel")}
                     </AccessibleButton>
                 </div>
             );
@@ -271,7 +271,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
 
         let addVerifySection = (
             <AccessibleButton onClick={this.onAddClick} kind="primary" disabled={this.props.disabled}>
-                {_t("Add")}
+                {_t("action|add")}
             </AccessibleButton>
         );
         if (this.state.verifying) {

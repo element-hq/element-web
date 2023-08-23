@@ -132,7 +132,7 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
                             onClick={this.onAnswerClick}
                             kind="primary"
                         >
-                            <span> {_t("Accept")} </span>
+                            <span> {_t("action|accept")} </span>
                         </AccessibleButton>
                     </div>
                 </div>

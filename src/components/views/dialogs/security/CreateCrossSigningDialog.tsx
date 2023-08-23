@@ -120,7 +120,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
                 [SSOAuthEntry.PHASE_POSTAUTH]: {
                     title: _t("Confirm encryption setup"),
                     body: _t("Click the button below to confirm setting up encryption."),
-                    continueText: _t("Confirm"),
+                    continueText: _t("action|confirm"),
                     continueKind: "primary",
                 },
             };

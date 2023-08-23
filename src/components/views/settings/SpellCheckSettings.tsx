@@ -93,7 +93,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
 
         const addButton = (
             <AccessibleButton onClick={this.onAddClick} kind="primary">
-                {_t("Add")}
+                {_t("action|add")}
             </AccessibleButton>
         );
 

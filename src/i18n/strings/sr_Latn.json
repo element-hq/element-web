@@ -4,10 +4,8 @@
     "Add Email Address": "Dodajte adresu elektronske pošte",
     "Failed to verify email address: make sure you clicked the link in the email": "Neuspela provera adrese elektronske pošte: proverite da li ste kliknuli na link u poruci elektronske pošte",
     "Add Phone Number": "Dodajte broj telefona",
-    "Dismiss": "Odbaci",
     "Your %(brand)s is misconfigured": "Vaš %(brand)s nije dobro podešen",
     "Chat with %(brand)s Bot": "Ćaskajte sa %(brand)s botom",
-    "Sign In": "Prijavite se",
     "powered by Matrix": "pokreće Matriks",
     "Explore rooms": "Istražite sobe",
     "Send": "Pošalji",
@@ -55,7 +53,6 @@
     "The user you called is busy.": "Korisnik kojeg ste zvali je zauzet.",
     "User Busy": "Korisnik zauzet",
     "Call Failed": "Poziv nije uspio",
-    "Trust": "Vjeruj",
     "Only continue if you trust the owner of the server.": "Produžite samo pod uslovom da vjerujete vlasniku servera.",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ova akcija zahtijeva pristup zadanom serveru za provjeru identiteta <server /> radi provjere adrese e-pošte ili telefonskog broja, no server nema nikakve uslove za pružanje usluge.",
     "Identity server has no terms of service": "Server identiteta nema uslove pružanja usluge",
@@ -75,7 +72,6 @@
     "Click the button below to confirm adding this phone number.": "Kliknite taster ispod da biste potvrdili dodavanje telefonskog broja.",
     "Confirm adding phone number": "Potvrdite dodavanje telefonskog broja",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potvrdite dodavanje ovog telefonskog broja koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
-    "Confirm": "Potvrdi",
     "Click the button below to confirm adding this email address.": "Kliknite taster ispod da biste potvrdili dodavanje email adrese.",
     "Confirm adding email": "Potvrdite dodavanje email adrese",
     "Single Sign On": "Jedinstvena prijava (SSO)",
@@ -96,5 +92,11 @@
     "common": {
         "error": "Greška",
         "attachment": "Prilog"
+    },
+    "action": {
+        "confirm": "Potvrdi",
+        "dismiss": "Odbaci",
+        "trust": "Vjeruj",
+        "sign_in": "Prijavite se"
     }
 }

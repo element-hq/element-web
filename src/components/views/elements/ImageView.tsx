@@ -515,14 +515,14 @@ export default class ImageView extends React.Component<IProps, IState> {
         const zoomOutButton = (
             <AccessibleTooltipButton
                 className="mx_ImageView_button mx_ImageView_button_zoomOut"
-                title={_t("Zoom out")}
+                title={_t("action|zoom_out")}
                 onClick={this.onZoomOutClick}
             />
         );
         const zoomInButton = (
             <AccessibleTooltipButton
                 className="mx_ImageView_button mx_ImageView_button_zoomIn"
-                title={_t("Zoom in")}
+                title={_t("action|zoom_in")}
                 onClick={this.onZoomInClick}
             />
         );
@@ -565,13 +565,13 @@ export default class ImageView extends React.Component<IProps, IState> {
                         />
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_download"
-                            title={_t("Download")}
+                            title={_t("action|download")}
                             onClick={this.onDownloadClick}
                         />
                         {contextMenuButton}
                         <AccessibleTooltipButton
                             className="mx_ImageView_button mx_ImageView_button_close"
-                            title={_t("Close")}
+                            title={_t("action|close")}
                             onClick={this.props.onFinished}
                         />
                         {this.renderContextMenu()}

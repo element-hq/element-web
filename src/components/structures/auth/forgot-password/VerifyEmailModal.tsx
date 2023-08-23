@@ -73,7 +73,7 @@ export const VerifyEmailModal: React.FC<Props> = ({
                     aria-describedby={tooltipVisible ? tooltipId : undefined}
                 >
                     <RetryIcon className="mx_Icon mx_Icon_16" />
-                    {_t("Resend")}
+                    {_t("action|resend")}
                     <Tooltip
                         id={tooltipId}
                         label={_t("Verification link email resent!")}

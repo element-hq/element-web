@@ -31,7 +31,7 @@ const LearnMore: React.FC<LearnMoreProps> = ({ title, description, ...rest }) =>
         Modal.createDialog(InfoDialog, {
             title,
             description,
-            button: _t("Got it"),
+            button: _t("action|got_it"),
             hasCloseButton: true,
         });
     };

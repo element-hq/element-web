@@ -428,7 +428,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     onClick={openPlusMenu}
                     isExpanded={plusMenuDisplayed}
                     className="mx_RoomListHeader_plusButton"
-                    title={_t("Add")}
+                    title={_t("action|add")}
                 />
             )}
 

@@ -197,10 +197,10 @@ describe("Timeline", () => {
 
             cy.get(".mx_GenericEventListSummary").within(() => {
                 // Click "expand" link button
-                cy.findByRole("button", { name: "expand" }).click();
+                cy.findByRole("button", { name: "Expand" }).click();
 
                 // Assert that the "expand" link button worked
-                cy.findByRole("button", { name: "collapse" }).should("exist");
+                cy.findByRole("button", { name: "Collapse" }).should("exist");
             });
 
             cy.get(".mx_MainSplit").percySnapshotElement("Expanded GELS on IRC layout", { percyCSS });
@@ -224,10 +224,10 @@ describe("Timeline", () => {
 
             cy.get(".mx_GenericEventListSummary").within(() => {
                 // Click "expand" link button
-                cy.findByRole("button", { name: "expand" }).click();
+                cy.findByRole("button", { name: "Expand" }).click();
 
                 // Assert that the "expand" link button worked
-                cy.findByRole("button", { name: "collapse" }).should("exist");
+                cy.findByRole("button", { name: "Collapse" }).should("exist");
             });
 
             cy.get(".mx_MainSplit").percySnapshotElement("Expanded GELS on modern layout", { percyCSS });
@@ -247,10 +247,10 @@ describe("Timeline", () => {
 
             cy.get(".mx_GenericEventListSummary").within(() => {
                 // Click "expand" link button
-                cy.findByRole("button", { name: "expand" }).click();
+                cy.findByRole("button", { name: "Expand" }).click();
 
                 // Assert that the "expand" link button worked
-                cy.findByRole("button", { name: "collapse" }).should("exist");
+                cy.findByRole("button", { name: "Collapse" }).should("exist");
             });
 
             // Make sure spacer is not visible on bubble layout
@@ -270,10 +270,10 @@ describe("Timeline", () => {
                     .realHover()
                     .findByRole("toolbar", { name: "Message Actions" })
                     .should("be.visible");
-                cy.findByRole("button", { name: "collapse" }).click();
+                cy.findByRole("button", { name: "Collapse" }).click();
 
                 // Assert that "collapse" link button worked
-                cy.findByRole("button", { name: "expand" }).should("exist");
+                cy.findByRole("button", { name: "Expand" }).should("exist");
             });
 
             // Save snapshot of collapsed generic event list summary on bubble layout
@@ -292,7 +292,7 @@ describe("Timeline", () => {
             });
 
             // Click "expand" link button
-            cy.get(".mx_GenericEventListSummary").findByRole("button", { name: "expand" }).click();
+            cy.get(".mx_GenericEventListSummary").findByRole("button", { name: "Expand" }).click();
 
             // Check the event line has margin instead of inset property
             // cf. _EventTile.pcss
@@ -388,7 +388,7 @@ describe("Timeline", () => {
 
             // 2. Alignment of expanded GELS and messages
             // Click "expand" link button
-            cy.get(".mx_GenericEventListSummary").findByRole("button", { name: "expand" }).click();
+            cy.get(".mx_GenericEventListSummary").findByRole("button", { name: "Expand" }).click();
             // Check inline start spacing of info line on expanded GELS
             cy.get(".mx_EventTile[data-layout=irc].mx_EventTile_info:first-of-type .mx_EventTile_line")
                 // See: _EventTile.pcss

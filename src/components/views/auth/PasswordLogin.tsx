@@ -441,7 +441,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         <input
                             className="mx_Login_submit"
                             type="submit"
-                            value={_t("Sign in")}
+                            value={_t("action|sign_in")}
                             disabled={this.props.disableSubmit}
                         />
                     )}

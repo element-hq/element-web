@@ -40,9 +40,9 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
 
     private onClearStorageClick = (): void => {
         Modal.createDialog(QuestionDialog, {
-            title: _t("Sign out"),
+            title: _t("action|sign_out"),
             description: <div>{_t("Sign out and remove encryption keys?")}</div>,
-            button: _t("Sign out"),
+            button: _t("action|sign_out"),
             danger: true,
             onFinished: this.props.onFinished,
         });

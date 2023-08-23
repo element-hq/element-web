@@ -43,19 +43,19 @@ export const OidcLogoutDialog: React.FC<OidcLogoutDialogProps> = ({
     const logoutUrl = getOidcLogoutUrl(delegatedAuthAccountUrl, deviceId);
 
     return (
-        <BaseDialog onFinished={onFinished} title={_t("Sign out")} contentId="mx_Dialog_content">
+        <BaseDialog onFinished={onFinished} title={_t("action|sign_out")} contentId="mx_Dialog_content">
             <div className="mx_Dialog_content" id="mx_Dialog_content">
                 {_t("You will be redirected to your server's authentication provider to complete sign out.")}
             </div>
             <div className="mx_Dialog_buttons">
                 {hasOpenedLogoutLink ? (
                     <AccessibleButton kind="primary" onClick={() => onFinished(true)}>
-                        {_t("Close")}
+                        {_t("action|close")}
                     </AccessibleButton>
                 ) : (
                     <>
                         <AccessibleButton kind="secondary" onClick={() => onFinished(false)}>
-                            {_t("Cancel")}
+                            {_t("action|cancel")}
                         </AccessibleButton>
                         <AccessibleButton
                             element="a"

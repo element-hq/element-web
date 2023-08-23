@@ -80,7 +80,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
                 <BaseDialog onFinished={this.props.onFinished} title={_t("common|error")}>
                     {_t("Unable to load! Check your network connectivity and try again.")}
                     <DialogButtons
-                        primaryButton={_t("Dismiss")}
+                        primaryButton={_t("action|dismiss")}
                         onPrimaryButtonClick={this.onWrapperCancelClick}
                         hasCancel={false}
                     />

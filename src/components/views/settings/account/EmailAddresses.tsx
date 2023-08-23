@@ -113,7 +113,7 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
                         kind="link_sm"
                         className="mx_GeneralUserSettingsTab_section--discovery_existing_button"
                     >
-                        {_t("Cancel")}
+                        {_t("action|cancel")}
                     </AccessibleButton>
                 </div>
             );
@@ -267,7 +267,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
 
         let addButton = (
             <AccessibleButton onClick={this.onAddClick} kind="primary" disabled={this.props.disabled}>
-                {_t("Add")}
+                {_t("action|add")}
             </AccessibleButton>
         );
         if (this.state.verifying) {

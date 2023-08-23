@@ -79,7 +79,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
                 <AccessibleTooltipButton
                     onClick={this.props.onUnpinClicked}
                     className="mx_PinnedEventTile_unpinButton"
-                    title={_t("Unpin")}
+                    title={_t("action|unpin")}
                 />
             );
         }

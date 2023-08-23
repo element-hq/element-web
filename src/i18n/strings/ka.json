@@ -2,15 +2,12 @@
     "Dismiss read marker and jump to bottom": "გააუქმეთ წაკითხული მარკერი და გადადით ქვემოთ",
     "Explore rooms": "ოთახების დათავლიერება",
     "Create Account": "ანგარიშის შექმნა",
-    "Sign In": "შესვლა",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "ფაილი '%(fileName)s' აჭარბებს ამ ჰომსერვერის ზომის ლიმიტს ატვირთვისთვის",
     "The file '%(fileName)s' failed to upload.": "ფაილი '%(fileName)s' ვერ აიტვირთა.",
-    "Dismiss": "დახურვა",
     "This email address is already in use": "ელ. ფოსტის ეს მისამართი დაკავებულია",
     "Use Single Sign On to continue": "გასაგრძელებლად გამოიყენე ერთჯერადი ავტორიზაცია",
     "Confirm adding email": "დაადასტურე ელ.ფოსტის დამატება",
     "Click the button below to confirm adding this email address.": "ელ. ფოსტის ამ მისამართის დამატება დაადასტურე ღილაკზე დაჭერით.",
-    "Confirm": "დადასტურება",
     "Add Email Address": "ელ. ფოსტის მისამართის დამატება",
     "Failed to verify email address: make sure you clicked the link in the email": "ელ. ფოსტის მისამართის ვერიფიკაცია ვერ მოხერხდა: დარწმუნდი, რომ დააჭირე ბმულს ელ. ფოსტის წერილში",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "ამ ტელეფონის ნომრის დასადასტურებლად გამოიყენე ერთჯერადი ავტორიზაცია, საკუთარი იდენტობის დასადასტურებლად.",
@@ -56,5 +53,10 @@
     "common": {
         "error": "შეცდომა",
         "attachment": "Მიმაგრებული ფაილი"
+    },
+    "action": {
+        "confirm": "დადასტურება",
+        "dismiss": "დახურვა",
+        "sign_in": "შესვლა"
     }
 }

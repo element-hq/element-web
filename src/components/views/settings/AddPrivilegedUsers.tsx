@@ -98,7 +98,7 @@ export const AddPrivilegedUsers: React.FC<AddPrivilegedUsersProps> = ({ room, de
                     onClick={null}
                     data-testid="add-privileged-users-submit-button"
                 >
-                    {_t("Apply")}
+                    {_t("action|apply")}
                 </AccessibleButton>
             </SettingsFieldset>
         </form>

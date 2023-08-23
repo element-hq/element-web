@@ -242,7 +242,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
 
                 <span className="mx_AddExistingToSpaceDialog_error">
                     <div className="mx_AddExistingToSpaceDialog_errorHeading">{_t("Not all selected were added")}</div>
-                    <div className="mx_AddExistingToSpaceDialog_errorCaption">{_t("Try again")}</div>
+                    <div className="mx_AddExistingToSpaceDialog_errorCaption">{_t("action|try_again")}</div>
                 </span>
 
                 <AccessibleButton className="mx_AddExistingToSpaceDialog_retryButton" onClick={addRooms}>
@@ -267,7 +267,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         if (!button || selectedToAdd.size > 0) {
             button = (
                 <AccessibleButton kind="primary" disabled={selectedToAdd.size < 1} onClick={addRooms}>
-                    {_t("Add")}
+                    {_t("action|add")}
                 </AccessibleButton>
             );
         }

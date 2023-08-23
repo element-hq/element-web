@@ -130,7 +130,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
                 onClick={toggleExpanded}
                 aria-expanded={expanded}
             >
-                {expanded ? _t("collapse") : _t("expand")}
+                {expanded ? _t("action|collapse") : _t("action|expand")}
             </AccessibleButton>
             {body}
         </li>

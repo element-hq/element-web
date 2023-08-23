@@ -348,7 +348,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 className="mx_SpaceButton_toggleCollapse"
                 onClick={this.toggleCollapse}
                 tabIndex={-1}
-                aria-label={collapsed ? _t("Expand") : _t("Collapse")}
+                aria-label={collapsed ? _t("action|expand") : _t("action|collapse")}
             />
         ) : null;
 

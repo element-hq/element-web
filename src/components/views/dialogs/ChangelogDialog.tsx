@@ -119,7 +119,7 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
             <QuestionDialog
                 title={_t("Changelog")}
                 description={content}
-                button={_t("Update")}
+                button={_t("action|update")}
                 onFinished={this.props.onFinished}
             />
         );

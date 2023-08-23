@@ -52,7 +52,7 @@ export default class ConfirmDestroyCrossSigningDialog extends React.Component<IP
                     primaryButton={_t("Clear cross-signing keys")}
                     onPrimaryButtonClick={this.onConfirm}
                     primaryButtonClass="danger"
-                    cancelButton={_t("Cancel")}
+                    cancelButton={_t("action|cancel")}
                     onCancel={this.onDecline}
                 />
             </BaseDialog>
