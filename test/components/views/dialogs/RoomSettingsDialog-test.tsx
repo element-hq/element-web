@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { mkEvent } from "matrix-js-sdk/spec/test-utils/test-utils";
 import {
     EventTimeline,
     EventType,
@@ -133,7 +132,7 @@ describe("<RoomSettingsDialog />", () => {
                 jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Invite);
                 mockClient.emit(
                     RoomStateEvent.Events,
-                    new MatrixEvent(mkEvent({ content: {}, type: EventType.RoomJoinRules })),
+                    new MatrixEvent({ content: {}, type: EventType.RoomJoinRules }),
                     room.getLiveTimeline().getState(EventTimeline.FORWARDS)!,
                     null,
                 );
