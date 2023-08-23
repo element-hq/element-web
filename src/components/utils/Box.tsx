@@ -87,5 +87,17 @@ export function Box({
         addOrRemoveProperty(ref, `--mx-box-grow`, grow);
     }, [flex, grow, shrink]);
 
-    return React.createElement(as, { ...props, className: classNames("mx_Box", className), ref }, children);
+    return React.createElement(
+        as,
+        {
+            ...props,
+            className: classNames("mx_Box", className, {
+                "mx_Box--flex": !!flex,
+                "mx_Box--shrink": !!shrink,
+                "mx_Box--grow": !!grow,
+            }),
+            ref,
+        },
+        children,
+    );
 }

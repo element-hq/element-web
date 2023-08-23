@@ -14,8 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_Box {
-    flex: var(--mx-box-flex, initial);
-    flex-shrink: var(--mx-box-shrink, initial);
-    flex-grow: var(--mx-box-grow, initial);
+.mx_Box--flex {
+    flex: var(--mx-box-flex, unset);
+}
+
+.mx_Box--shrink {
+    flex-shrink: var(--mx-box-shrink, unset);
+}
+
+.mx_Box--grow {
+    flex-grow: var(--mx-box-grow, unset);
 }
