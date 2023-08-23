@@ -168,7 +168,8 @@ describe("Audio player", () => {
     it("should be correctly rendered - light theme with monospace font", () => {
         uploadFile("cypress/fixtures/1sec-long-name-audio-file.ogg");
 
-        takeSnapshots("Selected EventTile of audio player (light theme, monospace font)", true); // Enable monospace
+        // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
+        //takeSnapshots("Selected EventTile of audio player (light theme, monospace font)", true); // Enable monospace
     });
 
     it("should be correctly rendered - high contrast theme", () => {
@@ -186,7 +187,8 @@ describe("Audio player", () => {
 
         uploadFile("cypress/fixtures/1sec-long-name-audio-file.ogg");
 
-        takeSnapshots("Selected EventTile of audio player (high contrast)");
+        // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
+        //takeSnapshots("Selected EventTile of audio player (high contrast)");
     });
 
     it("should be correctly rendered - dark theme", () => {
@@ -254,8 +256,8 @@ describe("Audio player", () => {
             });
         });
 
-        // Take snapshots
-        takeSnapshots("Selected EventTile of audio player with a reply");
+        // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
+        //takeSnapshots("Selected EventTile of audio player with a reply");
     });
 
     it("should support creating a reply chain with multiple audio files", () => {
