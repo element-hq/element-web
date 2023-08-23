@@ -51,11 +51,7 @@
     "Andorra": "Andura",
     "Algeria": "Dzayer",
     "Albania": "Albanya",
-    "End": "End",
     "Space": "Space",
-    "Shift": "Shift",
-    "Ctrl": "Ctrl",
-    "Esc": "Esc",
     "Calls": "Iɣuṛiten",
     "Emoji": "Imuji",
     "Afghanistan": "Afɣanistan",
@@ -66,6 +62,7 @@
     "Flags": "Icenyalen",
     "edited": "infel",
     "Copied!": "inɣel!",
+    "Home": "Asnubeg",
     "Search…": "Arezzu…",
     "A-Z": "A-Ẓ",
     "Re-join": "als-lkem",
@@ -113,10 +110,10 @@
         "error": "Tazgelt",
         "people": "Midden",
         "settings": "Tisɣal",
-        "dark": "Adeɣmum",
-        "home": "Asnubeg",
         "theme": "Asgum",
-        "name": "Isem"
+        "name": "Isem",
+        "home": "Asnubeg",
+        "dark": "Adeɣmum"
     },
     "action": {
         "continue": "Kemmel",
@@ -128,19 +125,26 @@
         "reply": "Rar",
         "save": "Ḥḍu",
         "yes": "Yah",
-        "reject": "Agy",
-        "confirm": "Sentem",
-        "dismiss": "Nexxel",
-        "cancel": "Sser",
-        "join": "Lkem",
-        "close": "Rgel",
         "upgrade": "Leqqem",
-        "share": "Bḍu",
-        "logout": "Ffeɣ",
         "sign_in": "Kcem",
-        "add": "Rnu",
+        "share": "Bḍu",
         "search": "Rzu",
-        "ignore": "Nexxel"
+        "reject": "Agy",
+        "logout": "Ffeɣ",
+        "join": "Lkem",
+        "ignore": "Nexxel",
+        "dismiss": "Nexxel",
+        "confirm": "Sentem",
+        "close": "Rgel",
+        "cancel": "Sser",
+        "add": "Rnu"
     },
-    "Home": "Asnubeg"
+    "keyboard": {
+        "home": "Asnubeg",
+        "space": "Space",
+        "escape": "Esc",
+        "end": "End",
+        "control": "Ctrl",
+        "shift": "Shift"
+    }
 }

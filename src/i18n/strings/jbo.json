@@ -383,18 +383,18 @@
         "save": "nu co'a vreji",
         "start": "nu co'a co'e",
         "start_chat": "nu co'a tavla",
-        "dismiss": "nu mipri",
-        "close": "nu zilmipri",
-        "accept": "nu fonjo'e",
         "verify": "nu co'a lacri",
         "upload": "nu kibdu'a",
-        "share": "nu jungau",
-        "logout": "nu co'u jaspu",
         "sign_out": "nu co'u jaspu",
         "sign_in": "nu co'a jaspu",
-        "add": "jmina",
+        "share": "nu jungau",
         "search": "nu sisku",
+        "pin": "pijne",
+        "logout": "nu co'u jaspu",
         "download": "nu kibycpa",
-        "pin": "pijne"
+        "dismiss": "nu mipri",
+        "close": "nu zilmipri",
+        "add": "jmina",
+        "accept": "nu fonjo'e"
     }
 }

@@ -218,6 +218,7 @@
     "Delete Widget": "Suprimeix el giny",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "La supressió d'un giny l'elimina per a tots els usuaris d'aquesta sala. Esteu segur que voleu eliminar aquest giny?",
     "Delete widget": "Suprimeix el giny",
+    "Home": "Inici",
     "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "%(severalUsers)sjoined %(count)s times": {
         "one": "%(severalUsers)s s'hi han unit",
@@ -610,16 +611,16 @@
         "password": "Contrasenya",
         "settings": "Configuració",
         "unmute": "No silenciïs",
-        "attachment": "Adjunt",
         "warning": "Avís",
+        "theme": "Tema",
+        "room": "Sala",
+        "options": "Opcions",
+        "name": "Nom",
+        "labs": "Laboratoris",
         "home": "Inici",
         "favourites": "Preferits",
-        "room": "Sala",
-        "theme": "Tema",
-        "name": "Nom",
         "description": "Descripció",
-        "options": "Opcions",
-        "labs": "Laboratoris"
+        "attachment": "Adjunt"
     },
     "action": {
         "continue": "Continua",
@@ -637,25 +638,27 @@
         "save": "Desa",
         "start_chat": "Inicia un xat",
         "view_source": "Mostra el codi",
-        "reject": "Rebutja",
-        "confirm": "Confirma",
-        "dismiss": "Omet",
-        "trust": "Confiança",
-        "cancel": "Cancel·la",
-        "close": "Tanca",
-        "accept": "Accepta",
-        "update": "Actualitzar",
         "upload": "Puja",
+        "update": "Actualitzar",
+        "trust": "Confiança",
         "skip": "Omet",
-        "logout": "Surt",
         "sign_out": "Tanca la sessió",
         "sign_in": "Inicia sessió",
-        "add": "Afegeix",
         "search": "Cerca",
-        "go_back": "Torna",
-        "back": "Enrere",
         "resend": "Reenvia",
-        "ignore": "Ignora"
+        "reject": "Rebutja",
+        "logout": "Surt",
+        "ignore": "Ignora",
+        "go_back": "Torna",
+        "dismiss": "Omet",
+        "confirm": "Confirma",
+        "close": "Tanca",
+        "cancel": "Cancel·la",
+        "back": "Enrere",
+        "add": "Afegeix",
+        "accept": "Accepta"
     },
-    "Home": "Inici"
+    "keyboard": {
+        "home": "Inici"
+    }
 }

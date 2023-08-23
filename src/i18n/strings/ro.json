@@ -71,8 +71,8 @@
     },
     "action": {
         "ok": "OK",
-        "confirm": "Confirmă",
+        "sign_in": "Autentificare",
         "dismiss": "Închide",
-        "sign_in": "Autentificare"
+        "confirm": "Confirmă"
     }
 }

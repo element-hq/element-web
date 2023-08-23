@@ -684,9 +684,9 @@
         "password": "Adgangskode",
         "settings": "Indstillinger",
         "warning": "Advarsel",
-        "favourites": "Favoritter",
         "theme": "Tema",
         "name": "Navn",
+        "favourites": "Favoritter",
         "description": "Beskrivelse"
     },
     "action": {
@@ -705,20 +705,20 @@
         "reply": "Besvar",
         "save": "Gem",
         "view_source": "Se Kilde",
-        "reject": "Afvis",
-        "confirm": "Bekræft",
-        "dismiss": "Afvis",
-        "trust": "Tillid",
-        "cancel": "Afbryd",
-        "close": "Luk",
-        "accept": "Accepter",
         "update": "Opdater",
-        "reset": "Nulstil",
+        "try_again": "Prøv igen",
+        "trust": "Tillid",
         "sign_in": "Log ind",
         "search": "Søg",
-        "try_again": "Prøv igen",
+        "reset": "Nulstil",
+        "resend": "Send igen",
+        "reject": "Afvis",
         "go_back": "Gå tilbage",
+        "dismiss": "Afvis",
+        "confirm": "Bekræft",
+        "close": "Luk",
+        "cancel": "Afbryd",
         "back": "Tilbage",
-        "resend": "Send igen"
+        "accept": "Accepter"
     }
 }

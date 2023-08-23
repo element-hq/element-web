@@ -116,21 +116,21 @@
         "error": "లోపం",
         "mute": "నిశబ్ధము",
         "settings": "అమరికలు",
-        "attachment": "జోడింపు",
-        "warning": "హెచ్చరిక"
+        "warning": "హెచ్చరిక",
+        "attachment": "జోడింపు"
     },
     "action": {
         "continue": "కొనసాగించు",
         "decline": "డిక్లైన్",
         "leave": "వదిలి",
         "remove": "తొలగించు",
+        "search": "శోధన",
+        "resend": "మళ్ళి పంపుము",
         "reject": "తిరస్కరించు",
         "dismiss": "రద్దుచేసే",
-        "cancel": "రద్దు",
         "close": "ముసివెయండి",
-        "accept": "అంగీకరించు",
+        "cancel": "రద్దు",
         "add": "చేర్చు",
-        "search": "శోధన",
-        "resend": "మళ్ళి పంపుము"
+        "accept": "అంగీకరించు"
     }
 }

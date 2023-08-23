@@ -120,6 +120,7 @@
     "Register": "Qeydiyyatdan keçmək",
     "What's New": "Nə dəyişdi",
     "Create new room": "Otağı yaratmaq",
+    "Home": "Başlanğıc",
     "%(items)s and %(lastItem)s": "%(items)s və %(lastItem)s",
     "Deactivate Account": "Hesabı bağlamaq",
     "An error has occurred.": "Səhv oldu.",
@@ -234,11 +235,11 @@
         "no_results": "Nəticə yoxdur",
         "password": "Şifrə",
         "settings": "Qurmalar",
-        "attachment": "Əlavə",
+        "name": "Ad",
+        "labs": "Laboratoriya",
         "home": "Başlanğıc",
         "favourites": "Seçilmişlər",
-        "name": "Ad",
-        "labs": "Laboratoriya"
+        "attachment": "Əlavə"
     },
     "action": {
         "continue": "Davam etmək",
@@ -247,14 +248,16 @@
         "ok": "OK",
         "remove": "Silmək",
         "start_chat": "Çata başlamaq",
-        "dismiss": "Nəzərə almayın",
-        "trust": "Etibar",
-        "close": "Bağlamaq",
-        "accept": "Qəbul etmək",
         "update": "Yeniləmək",
-        "logout": "Çıxmaq",
+        "trust": "Etibar",
         "sign_in": "Daxil ol",
-        "ignore": "Bloklamaq"
+        "logout": "Çıxmaq",
+        "ignore": "Bloklamaq",
+        "dismiss": "Nəzərə almayın",
+        "close": "Bağlamaq",
+        "accept": "Qəbul etmək"
     },
-    "Home": "Başlanğıc"
+    "keyboard": {
+        "home": "Başlanğıc"
+    }
 }

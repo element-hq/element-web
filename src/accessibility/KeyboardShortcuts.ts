@@ -182,17 +182,17 @@ export enum CategoryName {
 export const DIGITS = "digits";
 
 export const ALTERNATE_KEY_NAME: Record<string, TranslationKey> = {
-    [Key.PAGE_UP]: _td("Page Up"),
-    [Key.PAGE_DOWN]: _td("Page Down"),
-    [Key.ESCAPE]: _td("Esc"),
-    [Key.ENTER]: _td("Enter"),
-    [Key.SPACE]: _td("Space"),
-    [Key.HOME]: _td("Home"),
-    [Key.END]: _td("End"),
-    [Key.ALT]: _td("Alt"),
-    [Key.CONTROL]: _td("Ctrl"),
-    [Key.SHIFT]: _td("Shift"),
-    [DIGITS]: _td("[number]"),
+    [Key.PAGE_UP]: _td("keyboard|page_up"),
+    [Key.PAGE_DOWN]: _td("keyboard|page_down"),
+    [Key.ESCAPE]: _td("keyboard|escape"),
+    [Key.ENTER]: _td("keyboard|enter"),
+    [Key.SPACE]: _td("keyboard|space"),
+    [Key.HOME]: _td("keyboard|home"),
+    [Key.END]: _td("keyboard|end"),
+    [Key.ALT]: _td("keyboard|alt"),
+    [Key.CONTROL]: _td("keyboard|control"),
+    [Key.SHIFT]: _td("keyboard|shift"),
+    [DIGITS]: _td("keyboard|number"),
 };
 export const KEY_ICON: Record<string, string> = {
     [Key.ARROW_UP]: "↑",

@@ -607,10 +607,10 @@
         "password": "पासवर्ड",
         "success": "सफल",
         "unmute": "अनम्यूट",
-        "attachment": "आसक्ति",
         "theme": "थीम",
         "options": "विकल्प",
-        "labs": "लैब्स"
+        "labs": "लैब्स",
+        "attachment": "आसक्ति"
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -622,16 +622,16 @@
         "remove": "हटाए",
         "save": "अमुकनाम्ना",
         "yes": "हाँ",
-        "confirm": "पुष्टि",
-        "dismiss": "खारिज",
-        "trust": "विश्वास",
-        "cancel": "रद्द",
-        "close": "बंद",
-        "accept": "स्वीकार",
-        "sign_in": "साइन करना",
-        "add": "जोड़े",
         "try_again": "पुनः प्रयास करे",
+        "trust": "विश्वास",
+        "sign_in": "साइन करना",
+        "pin": "पिन",
         "ignore": "अनदेखा करें",
-        "pin": "पिन"
+        "dismiss": "खारिज",
+        "confirm": "पुष्टि",
+        "close": "बंद",
+        "cancel": "रद्द",
+        "add": "जोड़े",
+        "accept": "स्वीकार"
     }
 }

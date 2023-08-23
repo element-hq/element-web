@@ -234,6 +234,7 @@
     "Admin Tools": "Admin Tools",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.",
     "Create new room": "Create new room",
+    "Home": "Home",
     "No display name": "No display name",
     "%(roomName)s does not exist.": "%(roomName)s does not exist.",
     "%(roomName)s is not accessible at this time.": "%(roomName)s is not accessible at this time.",
@@ -414,14 +415,14 @@
         "settings": "Settings",
         "success": "Success",
         "unmute": "Unmute",
-        "attachment": "Attachment",
         "warning": "Warning",
+        "room": "Room",
+        "options": "Options",
+        "name": "Name",
+        "labs": "Labs",
         "home": "Home",
         "favourites": "Favorites",
-        "room": "Room",
-        "name": "Name",
-        "options": "Options",
-        "labs": "Labs"
+        "attachment": "Attachment"
     },
     "action": {
         "continue": "Continue",
@@ -437,23 +438,25 @@
         "save": "Save",
         "start_chat": "Start chat",
         "view_source": "View Source",
-        "reject": "Reject",
-        "confirm": "Confirm",
-        "dismiss": "Dismiss",
-        "trust": "Trust",
-        "cancel": "Cancel",
-        "close": "Close",
-        "accept": "Accept",
         "update": "Update",
+        "trust": "Trust",
         "skip": "Skip",
-        "logout": "Logout",
         "sign_out": "Sign out",
         "sign_in": "Sign in",
-        "add": "Add",
         "search": "Search",
-        "go_back": "Go Back",
         "resend": "Resend",
-        "ignore": "Ignore"
+        "reject": "Reject",
+        "logout": "Logout",
+        "ignore": "Ignore",
+        "go_back": "Go Back",
+        "dismiss": "Dismiss",
+        "confirm": "Confirm",
+        "close": "Close",
+        "cancel": "Cancel",
+        "add": "Add",
+        "accept": "Accept"
     },
-    "Home": "Home"
+    "keyboard": {
+        "home": "Home"
+    }
 }

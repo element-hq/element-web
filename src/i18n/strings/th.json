@@ -162,6 +162,7 @@
     "Confirm Removal": "ยืนยันการลบ",
     "Unknown error": "ข้อผิดพลาดที่ไม่รู้จัก",
     "Incorrect password": "รหัสผ่านไม่ถูกต้อง",
+    "Home": "เมนูหลัก",
     "Unnamed Room": "ห้องที่ยังไม่ได้ตั้งชื่อ",
     "(~%(count)s results)": {
         "one": "(~%(count)s ผลลัพท์)",
@@ -434,14 +435,14 @@
         "success": "สำเร็จ",
         "unmute": "เปิดเสียง",
         "username": "ชื่อผู้ใช้",
-        "attachment": "ไฟล์แนบ",
         "warning": "คำเตือน",
+        "room": "ห้อง",
+        "options": "ตัวเลือก",
+        "name": "ชื่อ",
+        "labs": "ห้องทดลอง",
         "home": "เมนูหลัก",
         "favourites": "รายการโปรด",
-        "room": "ห้อง",
-        "name": "ชื่อ",
-        "options": "ตัวเลือก",
-        "labs": "ห้องทดลอง"
+        "attachment": "ไฟล์แนบ"
     },
     "action": {
         "continue": "ดำเนินการต่อ",
@@ -459,27 +460,29 @@
         "save": "บันทึก",
         "start_chat": "เริ่มแชท",
         "view_source": "ดูซอร์ส",
-        "reject": "ปฏิเสธ",
-        "confirm": "ยืนยัน",
-        "dismiss": "ปิด",
-        "trust": "ไว้ใจ",
-        "cancel": "ยกเลิก",
-        "join": "เข้าร่วม",
-        "close": "ปิด",
-        "accept": "ยอมรับ",
-        "update": "อัปเดต",
-        "delete": "ลบ",
         "upload": "อัปโหลด",
+        "update": "อัปเดต",
+        "try_again": "ลองอีกครั้ง",
+        "trust": "ไว้ใจ",
         "skip": "ข้าม",
-        "logout": "ออกจากระบบ",
         "sign_out": "ออกจากระบบ",
         "sign_in": "เข้าสู่ระบบ",
-        "add": "เพิ่ม",
         "search": "ค้นหา",
-        "try_again": "ลองอีกครั้ง",
         "resend": "ส่งใหม่",
+        "reject": "ปฏิเสธ",
+        "logout": "ออกจากระบบ",
+        "join": "เข้าร่วม",
         "ignore": "เพิกเฉย",
-        "download": "ดาวน์โหลด"
+        "download": "ดาวน์โหลด",
+        "dismiss": "ปิด",
+        "delete": "ลบ",
+        "confirm": "ยืนยัน",
+        "close": "ปิด",
+        "cancel": "ยกเลิก",
+        "add": "เพิ่ม",
+        "accept": "ยอมรับ"
     },
-    "Home": "เมนูหลัก"
+    "keyboard": {
+        "home": "เมนูหลัก"
+    }
 }
