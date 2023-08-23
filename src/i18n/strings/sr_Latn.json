@@ -72,7 +72,6 @@
     "Upload Failed": "Prenos datoteke na server nije uspio",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Datoteka '%(fileName)s' premašuje maksimalnu veličinu za prijenose privatnog/javnog servera koji koristite",
     "The file '%(fileName)s' failed to upload.": "Prenos datoteke '%(fileName)s' nije uspio.",
-    "Attachment": "Prilog",
     "Click the button below to confirm adding this phone number.": "Kliknite taster ispod da biste potvrdili dodavanje telefonskog broja.",
     "Confirm adding phone number": "Potvrdite dodavanje telefonskog broja",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potvrdite dodavanje ovog telefonskog broja koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
@@ -95,6 +94,7 @@
     "Use Ctrl + Enter to send a message": "Koristi Ctrl + Enter za slanje poruke",
     "User is already in the room": "Korisnik je već u sobi",
     "common": {
-        "error": "Greška"
+        "error": "Greška",
+        "attachment": "Prilog"
     }
 }

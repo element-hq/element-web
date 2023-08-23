@@ -23,7 +23,7 @@ import { _t } from "../../../src/languageHandler";
 
 describe("<TabbedView />", () => {
     const generalTab = new Tab("GENERAL", "General", "general", <div>general</div>);
-    const labsTab = new Tab("LABS", "Labs", "labs", <div>labs</div>);
+    const labsTab = new Tab("LABS", "common|labs", "labs", <div>labs</div>);
     const securityTab = new Tab("SECURITY", "common|security", "security", <div>security</div>);
     const defaultProps = {
         tabLocation: TabLocation.LEFT,
@@ -86,12 +86,12 @@ describe("<TabbedView />", () => {
         // start with middle tab active
         const { container, rerender } = render(getComponent({ initialTabId: labsTab.id }));
 
-        expect(getActiveTab(container)?.textContent).toEqual(labsTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(_t(labsTab.label));
 
         rerender(getComponent({ tabs: [labsTab, generalTab, securityTab] }));
 
         // labs tab still active
-        expect(getActiveTab(container)?.textContent).toEqual(labsTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(_t(labsTab.label));
     });
 
     it("does not reactivate inititalTabId on rerender", () => {

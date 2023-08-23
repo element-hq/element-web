@@ -300,7 +300,7 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
                 key={RightPanelPhases.ThreadPanel}
                 name="threadsButton"
                 data-testid="threadsButton"
-                title={_t("Threads")}
+                title={_t("common|threads")}
                 onClick={this.onThreadsPanelClicked}
                 isHighlighted={this.isPhase(LegacyRoomHeaderButtons.THREAD_PHASES)}
                 isUnread={this.state.threadNotificationColor > NotificationColor.None}

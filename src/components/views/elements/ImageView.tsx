@@ -504,7 +504,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             contextMenuButton = (
                 <ContextMenuTooltipButton
                     className="mx_ImageView_button mx_ImageView_button_more"
-                    title={_t("Options")}
+                    title={_t("common|options")}
                     onClick={this.onOpenContextMenu}
                     inputRef={this.contextMenuButton}
                     isExpanded={this.state.contextMenuDisplayed}

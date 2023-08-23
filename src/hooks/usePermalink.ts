@@ -165,9 +165,9 @@ export const usePermalink: (args: Args) => HookResult = ({
             text = targetRoom.name || resourceId;
         }
     } else if (type === PillType.EventInSameRoom) {
-        text = member?.name || _t("User");
+        text = member?.name || _t("common|user");
     } else if (type === PillType.EventInOtherRoom) {
-        text = targetRoom?.name || _t("Room");
+        text = targetRoom?.name || _t("common|room");
     }
 
     return {

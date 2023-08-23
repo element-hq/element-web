@@ -233,7 +233,7 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
         settingNames: [KeyBindingAction.ToggleMicInCall, KeyBindingAction.ToggleWebcamInCall],
     },
     [CategoryName.ROOM]: {
-        categoryLabel: _td("Room"),
+        categoryLabel: _td("common|room"),
         settingNames: [
             KeyBindingAction.SearchInRoom,
             KeyBindingAction.UploadFile,
@@ -303,7 +303,7 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
         ],
     },
     [CategoryName.LABS]: {
-        categoryLabel: _td("Labs"),
+        categoryLabel: _td("common|labs"),
         settingNames: [KeyBindingAction.ToggleHiddenEventVisibility],
     },
 };

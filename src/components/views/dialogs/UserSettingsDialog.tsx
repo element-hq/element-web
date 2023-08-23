@@ -86,7 +86,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         tabs.push(
             new Tab(
                 UserTab.Appearance,
-                _td("Appearance"),
+                _td("common|appearance"),
                 "mx_UserSettingsDialog_appearanceIcon",
                 <AppearanceUserSettingsTab />,
                 "UserSettingsAppearance",
@@ -168,7 +168,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             tabs.push(
                 new Tab(
                     UserTab.Labs,
-                    _td("Labs"),
+                    _td("common|labs"),
                     "mx_UserSettingsDialog_labsIcon",
                     <LabsUserSettingsTab />,
                     "UserSettingsLabs",

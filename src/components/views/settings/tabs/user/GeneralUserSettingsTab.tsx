@@ -540,7 +540,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
                     height="18"
                     // override icon default values
                     aria-hidden={false}
-                    aria-label={_t("Warning")}
+                    aria-label={_t("common|warning")}
                 />
             ) : null;
             const heading = (

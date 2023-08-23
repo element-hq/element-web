@@ -81,7 +81,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
                 inputRef={handle}
                 onClick={openMenu}
                 isExpanded={menuDisplayed}
-                label={_t("Options")}
+                label={_t("common|options")}
             />
             {contextMenu}
         </div>

@@ -536,7 +536,7 @@ export default class ContentMessages {
         replyToEvent: MatrixEvent | undefined,
         promBefore?: Promise<any>,
     ): Promise<void> {
-        const fileName = file.name || _t("Attachment");
+        const fileName = file.name || _t("common|attachment");
         const content: Omit<IMediaEventContent, "info"> & { info: Partial<IMediaEventInfo> } = {
             body: fileName,
             info: {

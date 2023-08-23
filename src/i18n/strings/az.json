@@ -93,7 +93,6 @@
     "Ignore": "Bloklamaq",
     "Invited": "Dəvət edilmişdir",
     "Filter room members": "İştirakçılara görə axtarış",
-    "Attachment": "Əlavə",
     "Hangup": "Bitirmək",
     "Voice call": "Səs çağırış",
     "Video call": "Video çağırış",
@@ -102,7 +101,6 @@
     "Join Room": "Otağa girmək",
     "Upload avatar": "Avatar-ı yükləmək",
     "Forget room": "Otağı unutmaq",
-    "Favourites": "Seçilmişlər",
     "Low priority": "Əhəmiyyətsizlər",
     "Historical": "Arxiv",
     "Failed to unban": "Blokdan çıxarmağı bacarmadı",
@@ -126,7 +124,6 @@
     "What's New": "Nə dəyişdi",
     "Update": "Yeniləmək",
     "Create new room": "Otağı yaratmaq",
-    "Home": "Başlanğıc",
     "%(items)s and %(lastItem)s": "%(items)s və %(lastItem)s",
     "Deactivate Account": "Hesabı bağlamaq",
     "An error has occurred.": "Səhv oldu.",
@@ -138,7 +135,6 @@
     "Failed to change password. Is your password correct?": "Şifrəni əvəz etməyi bacarmadı. Siz cari şifrə düzgün daxil etdiniz?",
     "Reject invitation": "Dəvəti rədd etmək",
     "Are you sure you want to reject the invitation?": "Siz əminsiniz ki, siz dəvəti rədd etmək istəyirsiniz?",
-    "Name": "Ad",
     "Failed to reject invitation": "Dəvəti rədd etməyi bacarmadı",
     "For security, this session has been signed out. Please sign in again.": "Təhlükəsizliyin təmin olunması üçün sizin sessiyanız başa çatmışdır idi. Zəhmət olmasa, yenidən girin.",
     "Logout": "Çıxmaq",
@@ -152,7 +148,6 @@
     "<not supported>": "<dəstəklənmir>",
     "Import E2E room keys": "Şifrləmənin açarlarının idxalı",
     "Cryptography": "Kriptoqrafiya",
-    "Labs": "Laboratoriya",
     "Email": "E-poçt",
     "Profile": "Profil",
     "Account": "Hesab",
@@ -246,7 +241,12 @@
         "error": "Səhv",
         "no_results": "Nəticə yoxdur",
         "password": "Şifrə",
-        "settings": "Qurmalar"
+        "settings": "Qurmalar",
+        "attachment": "Əlavə",
+        "home": "Başlanğıc",
+        "favourites": "Seçilmişlər",
+        "name": "Ad",
+        "labs": "Laboratoriya"
     },
     "action": {
         "continue": "Davam etmək",
@@ -255,5 +255,6 @@
         "ok": "OK",
         "remove": "Silmək",
         "start_chat": "Çata başlamaq"
-    }
+    },
+    "Home": "Başlanğıc"
 }

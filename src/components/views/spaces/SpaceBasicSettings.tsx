@@ -133,7 +133,7 @@ const SpaceBasicSettings: React.FC<IProps> = ({
 
             <Field
                 name="spaceName"
-                label={_t("Name")}
+                label={_t("common|name")}
                 autoFocus={true}
                 value={name}
                 onChange={(ev: ChangeEvent<HTMLInputElement>) => setName(ev.target.value)}
@@ -143,7 +143,7 @@ const SpaceBasicSettings: React.FC<IProps> = ({
             <Field
                 name="spaceTopic"
                 element="textarea"
-                label={_t("Description")}
+                label={_t("common|description")}
                 value={topic}
                 onChange={(ev: ChangeEvent<HTMLTextAreaElement>) => setTopic(ev.target.value)}
                 rows={3}

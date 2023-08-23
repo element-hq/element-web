@@ -369,7 +369,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         return (
             <div className="mx_BaseCard_header_title">
                 <Heading size="4" className="mx_BaseCard_header_title_heading">
-                    {_t("Thread")}
+                    {_t("common|thread")}
                 </Heading>
                 <ThreadListContextMenu mxEvent={this.props.mxEvent} permalinkCreator={this.props.permalinkCreator} />
             </div>

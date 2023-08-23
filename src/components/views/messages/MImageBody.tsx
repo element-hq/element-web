@@ -107,7 +107,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             if (!httpUrl) return;
             const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
                 src: httpUrl,
-                name: content.body && content.body.length > 0 ? content.body : _t("Attachment"),
+                name: content.body && content.body.length > 0 ? content.body : _t("common|attachment"),
                 mxEvent: this.props.mxEvent,
                 permalinkCreator: this.props.permalinkCreator,
             };

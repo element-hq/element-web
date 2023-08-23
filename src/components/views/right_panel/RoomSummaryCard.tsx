@@ -196,7 +196,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
                     className="mx_RoomSummaryCard_app_options"
                     isExpanded={menuDisplayed}
                     onClick={openMenu}
-                    title={_t("Options")}
+                    title={_t("common|options")}
                 />
             )}
 

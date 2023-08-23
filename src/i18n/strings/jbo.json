@@ -166,8 +166,6 @@
     "%(senderName)s placed a video call.": ".i la'o zoi. %(senderName)s .zoi co'a vidvi fonjo'e",
     "%(senderName)s placed a video call. (not supported by this browser)": ".i la'o zoi. %(senderName)s .zoi co'a vidvi fonjo'e .i le do kibrbrauzero na kakne",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": ".i la'o zoi. %(senderName)s .zoi co'u friti le ka ziljmina le se zilbe'i kei la'o zoi. %(targetDisplayName)s .zoi",
-    "Light": "carmi",
-    "Dark": "manku",
     "You signed in to a new session without verifying it:": ".i fe le di'e se samtcise'u pu co'a jaspu vau je za'o na lacri",
     "They match": "du",
     "They don't match": "na du",
@@ -379,7 +377,9 @@
         "error": "nabmi",
         "password": "lerpoijaspu",
         "people": "prenu",
-        "username": "judri cmene"
+        "username": "judri cmene",
+        "light": "carmi",
+        "dark": "manku"
     },
     "action": {
         "continue": "",

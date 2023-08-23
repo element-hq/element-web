@@ -327,7 +327,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             homeButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconHome"
-                    label={_t("Home")}
+                    label={_t("common|home")}
                     onClick={this.onHomeClick}
                 />
             );

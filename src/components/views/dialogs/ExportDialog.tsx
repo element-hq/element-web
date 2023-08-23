@@ -304,7 +304,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         // Display cancel warning
         return (
             <BaseDialog
-                title={_t("Warning")}
+                title={_t("common|warning")}
                 className="mx_ExportDialog"
                 contentId="mx_Dialog_content"
                 onFinished={onFinished}

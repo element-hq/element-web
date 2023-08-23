@@ -112,7 +112,7 @@ export const ThreadPanelHeader: React.FC<{
     return (
         <div className="mx_BaseCard_header_title">
             <Heading size="4" className="mx_BaseCard_header_title_heading">
-                {_t("Threads")}
+                {_t("common|threads")}
             </Heading>
             {!empty && (
                 <>

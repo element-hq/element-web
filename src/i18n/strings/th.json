@@ -12,7 +12,6 @@
     "Download %(text)s": "ดาวน์โหลด %(text)s",
     "Emoji": "อีโมจิ",
     "Low priority": "ความสำคัญต่ำ",
-    "Name": "ชื่อ",
     "Profile": "โปรไฟล์",
     "Reason": "เหตุผล",
     "Register": "ลงทะเบียน",
@@ -41,7 +40,6 @@
     "Are you sure?": "คุณแน่ใจหรือไม่?",
     "Are you sure you want to leave the room '%(roomName)s'?": "คุณแน่ใจหรือว่าต้องการจะออกจากห้อง '%(roomName)s'?",
     "Are you sure you want to reject the invitation?": "คุณแน่ใจหรือว่าต้องการจะปฏิเสธคำเชิญ?",
-    "Attachment": "ไฟล์แนบ",
     "Banned users": "ผู้ใช้ที่ถูกแบน",
     "Bans user with given id": "ผู้ใช้และ id ที่ถูกแบน",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s เปลี่ยนชื่อห้องไปเป็น %(roomName)s",
@@ -66,7 +64,6 @@
     "Failed to unban": "การถอนแบนล้มเหลว",
     "Failed to verify email address: make sure you clicked the link in the email": "การยืนยันอีเมลล้มเหลว: กรุณาตรวจสอบว่าคุณคลิกลิงก์ในอีเมลแล้ว",
     "Failure to create room": "การสร้างห้องล้มเหลว",
-    "Favourites": "รายการโปรด",
     "Filter room members": "กรองสมาชิกห้อง",
     "Forget room": "ลืมห้อง",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s จาก %(fromPowerLevel)s ไปเป็น %(toPowerLevel)s",
@@ -82,7 +79,6 @@
     "Sign in with": "เข้าสู่ระบบด้วย",
     "Join Room": "เข้าร่วมห้อง",
     "Jump to first unread message.": "ข้ามไปยังข้อความแรกที่ยังไม่ได้อ่าน",
-    "Labs": "ห้องทดลอง",
     "Logout": "ออกจากระบบ",
     "Missing user_id in request": "ไม่พบ user_id ในคำขอ",
     "Moderator": "ผู้ช่วยดูแล",
@@ -163,9 +159,7 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s %(day)s %(monthName)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "Room": "ห้อง",
     "New Password": "รหัสผ่านใหม่",
-    "Options": "ตัวเลือก",
     "Export room keys": "ส่งออกกุณแจห้อง",
     "Confirm passphrase": "ยืนยันรหัสผ่าน",
     "Import room keys": "นำเข้ากุณแจห้อง",
@@ -177,7 +171,6 @@
     "Add": "เพิ่ม",
     "Accept": "ยอมรับ",
     "Close": "ปิด",
-    "Home": "เมนูหลัก",
     "Unnamed Room": "ห้องที่ยังไม่ได้ตั้งชื่อ",
     "(~%(count)s results)": {
         "one": "(~%(count)s ผลลัพท์)",
@@ -206,7 +199,6 @@
     "On": "เปิด",
     "Changelog": "บันทึกการเปลี่ยนแปลง",
     "Waiting for response from server": "กำลังรอการตอบสนองจากเซิร์ฟเวอร์",
-    "Warning": "คำเตือน",
     "This Room": "ห้องนี้",
     "Resend": "ส่งใหม่",
     "Messages containing my display name": "ข้อความที่มีชื่อของฉัน",
@@ -463,7 +455,15 @@
         "settings": "การตั้งค่า",
         "success": "สำเร็จ",
         "unmute": "เปิดเสียง",
-        "username": "ชื่อผู้ใช้"
+        "username": "ชื่อผู้ใช้",
+        "attachment": "ไฟล์แนบ",
+        "warning": "คำเตือน",
+        "home": "เมนูหลัก",
+        "favourites": "รายการโปรด",
+        "room": "ห้อง",
+        "name": "ชื่อ",
+        "options": "ตัวเลือก",
+        "labs": "ห้องทดลอง"
     },
     "action": {
         "continue": "ดำเนินการต่อ",
@@ -481,5 +481,6 @@
         "save": "บันทึก",
         "start_chat": "เริ่มแชท",
         "view_source": "ดูซอร์ส"
-    }
+    },
+    "Home": "เมนูหลัก"
 }

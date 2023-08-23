@@ -44,7 +44,7 @@ export enum RightPanelPhases {
 export function backLabelForPhase(phase: RightPanelPhases | null): string | null {
     switch (phase) {
         case RightPanelPhases.ThreadPanel:
-            return _t("Threads");
+            return _t("common|threads");
         case RightPanelPhases.Timeline:
             return _t("Back to chat");
         case RightPanelPhases.RoomSummary:

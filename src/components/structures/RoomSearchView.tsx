@@ -256,7 +256,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                     ret.push(
                         <li key={mxEv.getId() + "-room"}>
                             <h2>
-                                {_t("Room")}: {room.name}
+                                {_t("common|room")}: {room.name}
                             </h2>
                         </li>,
                     );

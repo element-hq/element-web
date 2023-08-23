@@ -58,10 +58,10 @@
     "Sun": "Ned",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Datoteka '%(fileName)s' je večja od omejitve, nastavljene na strežniku",
     "The file '%(fileName)s' failed to upload.": "Datoteka '%(fileName)s' se ni uspešno naložila.",
-    "Attachment": "Priponka",
     "Unable to load! Check your network connectivity and try again.": "Napaka pri nalaganju! Preverite vašo povezavo in poskusite ponovno.",
     "common": {
         "analytics": "Analitika",
-        "error": "Napaka"
+        "error": "Napaka",
+        "attachment": "Priponka"
     }
 }

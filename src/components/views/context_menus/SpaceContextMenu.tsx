@@ -179,7 +179,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                     <IconizedContextMenuOption
                         data-testid="new-room-option"
                         iconClassName="mx_SpacePanel_iconPlus"
-                        label={_t("Room")}
+                        label={_t("common|room")}
                         onClick={onNewRoomClick}
                     />
                 )}

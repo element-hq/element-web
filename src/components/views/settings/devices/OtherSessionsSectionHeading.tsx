@@ -52,7 +52,7 @@ export const OtherSessionsSectionHeading: React.FC<Props> = ({
             {!!menuOptions.length && (
                 <KebabContextMenu
                     disabled={disabled}
-                    title={_t("Options")}
+                    title={_t("common|options")}
                     options={menuOptions}
                     data-testid="other-sessions-menu"
                 />

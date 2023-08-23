@@ -79,7 +79,7 @@ const CurrentDeviceSectionHeading: React.FC<CurrentDeviceSectionHeadingProps> = 
         <SettingsSubsectionHeading heading={_t("Current session")}>
             <KebabContextMenu
                 disabled={disabled}
-                title={_t("Options")}
+                title={_t("common|options")}
                 options={menuOptions}
                 data-testid="current-session-menu"
             />

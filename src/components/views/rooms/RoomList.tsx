@@ -392,7 +392,7 @@ const TAG_AESTHETICS: TagAestheticsMap = {
         defaultHidden: false,
     },
     [DefaultTagID.Favourite]: {
-        sectionLabel: _td("Favourites"),
+        sectionLabel: _td("common|favourites"),
         isInvite: false,
         defaultHidden: false,
     },

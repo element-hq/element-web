@@ -167,7 +167,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
         },
         {
             value: JoinRule.Public,
-            label: _t("Public"),
+            label: _t("common|public"),
             description: (
                 <>
                     {_t("Anyone can find and join.")}

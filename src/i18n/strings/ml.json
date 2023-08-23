@@ -23,7 +23,6 @@
     "On": "ഓണ്‍",
     "Changelog": "മാറ്റങ്ങളുടെ നാള്‍വഴി",
     "Waiting for response from server": "സെര്‍വറില്‍ നിന്നുള്ള പ്രതികരണത്തിന് കാക്കുന്നു",
-    "Warning": "മുന്നറിയിപ്പ്",
     "This Room": "ഈ മുറി",
     "Noisy": "ഉച്ചത്തില്‍",
     "Messages containing my display name": "എന്റെ പേര് അടങ്ങിയിരിക്കുന്ന സന്ദേശങ്ങള്‍ക്ക്",
@@ -67,7 +66,8 @@
     "common": {
         "error": "എറര്‍",
         "mute": "നിശ്ശബ്ദം",
-        "settings": "സജ്ജീകരണങ്ങള്‍"
+        "settings": "സജ്ജീകരണങ്ങള്‍",
+        "warning": "മുന്നറിയിപ്പ്"
     },
     "action": {
         "continue": "മുന്നോട്ട്",

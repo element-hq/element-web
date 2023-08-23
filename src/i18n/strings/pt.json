@@ -23,7 +23,6 @@
     "Failed to reject invitation": "Falha ao tentar rejeitar convite",
     "Failed to unban": "Não foi possível desfazer o banimento",
     "Favourite": "Favorito",
-    "Favourites": "Favoritos",
     "Filter room members": "Filtrar integrantes da sala",
     "Forget room": "Esquecer sala",
     "For security, this session has been signed out. Please sign in again.": "Por questões de segurança, esta sessão foi encerrada. Por gentileza conecte-se novamente.",
@@ -33,11 +32,9 @@
     "Invalid Email Address": "Endereço de email inválido",
     "Invites user with given id to current room": "Convidar usuários com um dado identificador para esta sala",
     "Sign in with": "Quero entrar",
-    "Labs": "Laboratório",
     "Logout": "Sair",
     "Low priority": "Baixa prioridade",
     "Moderator": "Moderador/a",
-    "Name": "Nome",
     "New passwords must match each other.": "Novas palavras-passe devem coincidir.",
     "Notifications": "Notificações",
     "<not supported>": "<não suportado>",
@@ -133,7 +130,6 @@
         "one": "e um outro..."
     },
     "Are you sure?": "Você tem certeza?",
-    "Attachment": "Anexo",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s de %(fullYear)s às %(time)s",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Não consigo conectar ao servidor padrão através de HTTP quando uma URL HTTPS está na barra de endereços do seu navegador. Use HTTPS ou então <a>habilite scripts não seguros no seu navegador</a>.",
     "Change Password": "Alterar Palavra-Passe",
@@ -163,7 +159,6 @@
     "You seem to be in a call, are you sure you want to quit?": "Parece que você está em uma chamada. Tem certeza que quer sair?",
     "You seem to be uploading files, are you sure you want to quit?": "Parece que você está enviando arquivos. Tem certeza que quer sair?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Você não poderá desfazer esta mudança, pois estará dando a este(a) usuário(a) o mesmo nível de permissões que você.",
-    "Room": "Sala",
     "Cancel": "Cancelar",
     "Always show message timestamps": "Sempre mostrar as datas das mensagens",
     "Authentication": "Autenticação",
@@ -177,7 +172,6 @@
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Mostrar os horários em formato de 12h (p.ex: 2:30pm)",
     "Warning!": "Atenção!",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s apagou o nome da sala.",
-    "Options": "Opções",
     "Passphrases must match": "As frases-passe devem coincidir",
     "Passphrase must not be empty": "A frase-passe não pode estar vazia",
     "Export room keys": "Exportar chaves de sala",
@@ -250,7 +244,6 @@
     "Close": "Fechar",
     "Add": "Adicionar",
     "Unnamed Room": "Sala sem nome",
-    "Home": "Início",
     "Something went wrong!": "Algo deu errado!",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nível de permissão %(powerLevelNumber)s)",
     "Accept": "Aceitar",
@@ -279,7 +272,6 @@
     "%(widgetName)s widget modified by %(senderName)s": "Widget %(widgetName)s modificado por %(senderName)s",
     "Ignore": "Ignorar",
     "Ignored user": "Utilizador ignorado",
-    "Description": "Descrição",
     "Unknown": "Desconhecido",
     "Unignore": "Deixar de ignorar",
     "You are now ignoring %(userId)s": "Está agora a ignorar %(userId)s",
@@ -298,7 +290,6 @@
     "On": "Ativado",
     "Changelog": "Histórico de alterações",
     "Waiting for response from server": "À espera de resposta do servidor",
-    "Warning": "Aviso",
     "This Room": "Esta sala",
     "Resend": "Reenviar",
     "Messages containing my display name": "Mensagens contendo o meu nome público",
@@ -752,7 +743,16 @@
         "settings": "Configurações",
         "success": "Sucesso",
         "unmute": "Tirar do mudo",
-        "username": "Nome de utilizador"
+        "username": "Nome de utilizador",
+        "attachment": "Anexo",
+        "warning": "Aviso",
+        "home": "Início",
+        "favourites": "Favoritos",
+        "room": "Sala",
+        "name": "Nome",
+        "description": "Descrição",
+        "options": "Opções",
+        "labs": "Laboratório"
     },
     "action": {
         "continue": "Continuar",
@@ -768,5 +768,6 @@
         "save": "Salvar",
         "start_chat": "Iniciar conversa",
         "view_source": "Ver a fonte"
-    }
+    },
+    "Home": "Início"
 }

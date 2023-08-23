@@ -41,7 +41,7 @@ enum Category {
 }
 
 const categoryLabels: Record<Category, TranslationKey> = {
-    [Category.Room]: _td("Room"),
+    [Category.Room]: _td("common|room"),
     [Category.Other]: _td("Other"),
 };
 
@@ -106,7 +106,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                     </div>
                 ))}
                 <div>
-                    <h3>{_t("Options")}</h3>
+                    <h3>{_t("common|options")}</h3>
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />

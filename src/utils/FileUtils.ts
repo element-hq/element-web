@@ -32,7 +32,7 @@ import { _t } from "../languageHandler";
  */
 export function presentableTextForFile(
     content: IMediaEventContent,
-    fallbackText = _t("Attachment"),
+    fallbackText = _t("common|attachment"),
     withSize = true,
     shortened = false,
 ): string {

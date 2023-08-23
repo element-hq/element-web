@@ -69,12 +69,10 @@
     "Email": "Imayl",
     "Go": "Ddu",
     "Send": "Azen",
-    "Name": "Isem",
     "Flags": "Icenyalen",
     "Join": "Lkem",
     "edited": "infel",
     "Copied!": "inɣel!",
-    "Home": "Asnubeg",
     "Search…": "Arezzu…",
     "A-Z": "A-Ẓ",
     "Reject": "Agy",
@@ -88,7 +86,6 @@
     "Ignore": "Nexxel",
     "None": "Walu",
     "Account": "Amiḍan",
-    "Theme": "Asgum",
     "Algorithm:": "Talguritmit:",
     "Profile": "Ifres",
     "Folder": "Asdaw",
@@ -121,7 +118,6 @@
     "Guest": "Anebgi",
     "Ok": "Wax",
     "Notifications": "Tineɣmisin",
-    "Dark": "Adeɣmum",
     "Usage": "Asemres",
     "Feb": "Bṛa",
     "Jan": "Yen",
@@ -129,7 +125,11 @@
         "about": "Xef",
         "error": "Tazgelt",
         "people": "Midden",
-        "settings": "Tisɣal"
+        "settings": "Tisɣal",
+        "dark": "Adeɣmum",
+        "home": "Asnubeg",
+        "theme": "Asgum",
+        "name": "Isem"
     },
     "action": {
         "continue": "Kemmel",
@@ -141,5 +141,6 @@
         "reply": "Rar",
         "save": "Ḥḍu",
         "yes": "Yah"
-    }
+    },
+    "Home": "Asnubeg"
 }

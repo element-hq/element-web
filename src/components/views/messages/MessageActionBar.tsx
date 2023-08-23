@@ -116,7 +116,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
         <React.Fragment>
             <ContextMenuTooltipButton
                 className="mx_MessageActionBar_iconButton mx_MessageActionBar_optionsButton"
-                title={_t("Options")}
+                title={_t("common|options")}
                 onClick={onOptionsClick}
                 onContextMenu={onOptionsClick}
                 isExpanded={menuDisplayed}

@@ -578,7 +578,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     <React.Fragment>
                         <hr />
                         <fieldset>
-                            <legend className="mx_RoomSublist_contextMenu_title">{_t("Appearance")}</legend>
+                            <legend className="mx_RoomSublist_contextMenu_title">{_t("common|appearance")}</legend>
                             <StyledMenuItemCheckbox
                                 onClose={this.onCloseMenu}
                                 onChange={this.onUnreadFirstChanged}

@@ -99,7 +99,7 @@ const QuickSettingsButton: React.FC<{
                     onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebQuickSettingsPinToSidebarCheckbox")}
                 >
                     <FavoriteIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("Favourites")}
+                    {_t("common|favourites")}
                 </StyledCheckbox>
                 <StyledCheckbox
                     className="mx_QuickSettingsButton_peopleCheckbox"

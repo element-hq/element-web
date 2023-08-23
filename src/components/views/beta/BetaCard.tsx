@@ -61,12 +61,12 @@ export const BetaPill: React.FC<IBetaPillProps> = ({
                 }
                 onClick={onClick}
             >
-                {_t("Beta")}
+                {_t("common|beta")}
             </AccessibleTooltipButton>
         );
     }
 
-    return <span className="mx_BetaCard_betaPill">{_t("Beta")}</span>;
+    return <span className="mx_BetaCard_betaPill">{_t("common|beta")}</span>;
 };
 
 const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {

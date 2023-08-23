@@ -246,7 +246,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
 
         const orderedThemes = getOrderedThemes();
         return (
-            <SettingsSubsection heading={_t("Theme")} data-testid="mx_ThemeChoicePanel">
+            <SettingsSubsection heading={_t("common|theme")} data-testid="mx_ThemeChoicePanel">
                 {systemThemeSection}
                 <div className="mx_ThemeChoicePanel_themeSelectors" data-testid="theme-choice-panel-selectors">
                     <StyledRadioGroup

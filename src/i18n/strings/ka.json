@@ -5,7 +5,6 @@
     "Sign In": "შესვლა",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "ფაილი '%(fileName)s' აჭარბებს ამ ჰომსერვერის ზომის ლიმიტს ატვირთვისთვის",
     "The file '%(fileName)s' failed to upload.": "ფაილი '%(fileName)s' ვერ აიტვირთა.",
-    "Attachment": "Მიმაგრებული ფაილი",
     "Dismiss": "დახურვა",
     "This email address is already in use": "ელ. ფოსტის ეს მისამართი დაკავებულია",
     "Use Single Sign On to continue": "გასაგრძელებლად გამოიყენე ერთჯერადი ავტორიზაცია",
@@ -55,6 +54,7 @@
     "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sს %(minutes)sწთ %(seconds)sწმ დარჩა",
     "Feb": "თებ",
     "common": {
-        "error": "შეცდომა"
+        "error": "შეცდომა",
+        "attachment": "Მიმაგრებული ფაილი"
     }
 }

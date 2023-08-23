@@ -95,9 +95,13 @@ const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onSe
 
     return (
         <div className="mx_ServerPicker">
-            <h2>{title || _t("Homeserver")}</h2>
+            <h2>{title || _t("common|homeserver")}</h2>
             {!disableCustomUrls ? (
-                <AccessibleButton className="mx_ServerPicker_help" onClick={onHelpClick} aria-label={_t("Help")} />
+                <AccessibleButton
+                    className="mx_ServerPicker_help"
+                    onClick={onHelpClick}
+                    aria-label={_t("common|help")}
+                />
             ) : null}
             <span className="mx_ServerPicker_server" title={typeof serverName === "string" ? serverName : undefined}>
                 {serverName}
