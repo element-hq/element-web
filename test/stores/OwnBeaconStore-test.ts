@@ -23,8 +23,8 @@ import {
     RoomStateEvent,
     RoomMember,
     ContentHelpers,
+    M_BEACON,
 } from "matrix-js-sdk/src/matrix";
-import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Mocked } from "jest-mock";
 

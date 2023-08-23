@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ILocationContent, LocationAssetType, M_ASSET } from "matrix-js-sdk/src/@types/location";
+import { ILocationContent, LocationAssetType, M_ASSET } from "matrix-js-sdk/src/matrix";
 
 export const isSelfLocation = (locationContent: ILocationContent): boolean => {
     const asset = M_ASSET.findIn(locationContent) as { type: string };

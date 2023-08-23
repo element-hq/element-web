@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import * as maplibregl from "maplibre-gl";
-import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
+import { MatrixClient, MatrixEvent, M_LOCATION } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../languageHandler";

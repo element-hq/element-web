@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { Mocked } from "jest-mock";
-import { IIdentityServerProvider } from "matrix-js-sdk/src/@types/IIdentityServerProvider";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { IIdentityServerProvider, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { DirectoryMember, ThreepidMember } from "../../src/utils/direct-messages";
 import { lookupThreePids, resolveThreePids } from "../../src/utils/threepids";

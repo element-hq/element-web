@@ -24,8 +24,8 @@ import {
     MatrixEvent,
     EventType,
     Relations,
+    M_BEACON,
 } from "matrix-js-sdk/src/matrix";
-import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 
 import MBeaconBody from "../../../../src/components/views/messages/MBeaconBody";
 import {

@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { PollStartEventContent } from "matrix-js-sdk/src/@types/polls";
+import { MatrixEvent, PollStartEventContent } from "matrix-js-sdk/src/matrix";
 import { InvalidEventError } from "matrix-js-sdk/src/extensible_events_v1/InvalidEventError";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 

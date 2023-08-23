@@ -37,10 +37,10 @@ import {
     TimelineWindow,
     Thread,
     ThreadEvent,
+    ReceiptType,
 } from "matrix-js-sdk/src/matrix";
 import { debounce, findLastIndex, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";

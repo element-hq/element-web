@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixEvent, EventType, MsgType, Room } from "matrix-js-sdk/src/matrix";
-import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
+import { MatrixEvent, EventType, MsgType, Room, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { haveRendererForEvent } from "../src/events/EventTileFactory";

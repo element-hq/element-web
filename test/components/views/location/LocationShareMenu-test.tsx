@@ -16,9 +16,8 @@ limitations under the License.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { RoomMember, RelationType, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { RoomMember, RelationType, MatrixClient, M_ASSET, LocationAssetType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { M_ASSET, LocationAssetType } from "matrix-js-sdk/src/@types/location";
 import { act, fireEvent, render, RenderResult } from "@testing-library/react";
 import * as maplibregl from "maplibre-gl";
 

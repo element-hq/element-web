@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
+import { MatrixEvent, M_LOCATION } from "matrix-js-sdk/src/matrix";
 
 /**
  * Find the geo-URI contained within a location event.

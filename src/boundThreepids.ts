@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
-import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { IThreepid, ThreepidMedium, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import IdentityAuthClient from "./IdentityAuthClient";
 

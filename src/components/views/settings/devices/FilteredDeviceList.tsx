@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { ForwardedRef, forwardRef } from "react";
-import { IPusher, PUSHER_DEVICE_ID } from "matrix-js-sdk/src/matrix";
-import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
+import { IPusher, PUSHER_DEVICE_ID, LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";

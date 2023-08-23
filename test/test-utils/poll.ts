@@ -15,15 +15,17 @@ limitations under the License.
 */
 
 import { Mocked } from "jest-mock";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import {
+    MatrixClient,
+    MatrixEvent,
+    Room,
     M_POLL_START,
     PollAnswer,
     M_POLL_KIND_DISCLOSED,
     M_POLL_END,
     M_POLL_RESPONSE,
-} from "matrix-js-sdk/src/@types/polls";
-import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
+    M_TEXT,
+} from "matrix-js-sdk/src/matrix";
 import { uuid4 } from "@sentry/utils";
 
 import { flushPromises } from "./utilities";

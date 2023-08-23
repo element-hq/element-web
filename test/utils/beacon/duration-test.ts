@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
-import { Beacon } from "matrix-js-sdk/src/matrix";
+import { M_TIMESTAMP, Beacon } from "matrix-js-sdk/src/matrix";
 
 import { msUntilExpiry, sortBeaconsByLatestExpiry, sortBeaconsByLatestCreation } from "../../../src/utils/beacon";
 import { makeBeaconInfoEvent } from "../../test-utils";

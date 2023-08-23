@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render } from "@testing-library/react";
-import { MatrixEvent, Poll, Room } from "matrix-js-sdk/src/matrix";
-import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
+import { MatrixEvent, Poll, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
 
 import { PollListItemEnded } from "../../../../../src/components/views/polls/pollHistory/PollListItemEnded";
 import {

@@ -23,8 +23,8 @@ import {
     Room,
     MatrixClient,
     PendingEventOrdering,
+    ReceiptType,
 } from "matrix-js-sdk/src/matrix";
-import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import React from "react";
 
 import LegacyRoomHeaderButtons from "../../../../src/components/views/right_panel/LegacyRoomHeaderButtons";

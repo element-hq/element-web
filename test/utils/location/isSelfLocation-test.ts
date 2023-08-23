@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
 import {
+    M_TEXT,
     ILocationContent,
     LocationAssetType,
     M_ASSET,
     M_LOCATION,
     M_TIMESTAMP,
-} from "matrix-js-sdk/src/@types/location";
-import { ContentHelpers } from "matrix-js-sdk/src/matrix";
+    ContentHelpers,
+} from "matrix-js-sdk/src/matrix";
 
 import { isSelfLocation } from "../../../src/utils/location";
 

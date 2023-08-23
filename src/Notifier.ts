@@ -27,9 +27,9 @@ import {
     SyncState,
     SyncStateData,
     IRoomTimelineData,
+    M_LOCATION,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import { PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";

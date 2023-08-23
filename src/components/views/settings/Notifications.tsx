@@ -15,10 +15,17 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { IAnnotatedPushRule, IPusher, PushRuleAction, PushRuleKind, RuleId } from "matrix-js-sdk/src/matrix";
-import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
+import {
+    IAnnotatedPushRule,
+    IPusher,
+    PushRuleAction,
+    PushRuleKind,
+    RuleId,
+    IThreepid,
+    ThreepidMedium,
+    LocalNotificationSettings,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
 
 import Spinner from "../elements/Spinner";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

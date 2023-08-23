@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
+import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 

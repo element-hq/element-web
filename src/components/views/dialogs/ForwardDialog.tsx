@@ -24,9 +24,11 @@ import {
     EventType,
     MatrixClient,
     ContentHelpers,
+    ILocationContent,
+    LocationAssetType,
+    M_TIMESTAMP,
+    M_BEACON,
 } from "matrix-js-sdk/src/matrix";
-import { ILocationContent, LocationAssetType, M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
-import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

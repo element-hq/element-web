@@ -15,9 +15,15 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
-import { LocationAssetType, M_ASSET, M_LOCATION, M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
-import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
+import {
+    MatrixEvent,
+    EventType,
+    LocationAssetType,
+    M_ASSET,
+    M_LOCATION,
+    M_TIMESTAMP,
+    M_TEXT,
+} from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, getByTestId, render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 

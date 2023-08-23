@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
+import { MatrixClient, IThreepid } from "matrix-js-sdk/src/matrix";
 
 import { useAsyncRefreshMemo } from "./useAsyncRefreshMemo";
 

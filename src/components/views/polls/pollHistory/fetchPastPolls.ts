@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import { useCallback, useEffect, useState } from "react";
-import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import {
+    M_POLL_START,
     MatrixClient,
     Direction,
     EventTimeline,

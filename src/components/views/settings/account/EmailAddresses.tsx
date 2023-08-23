@@ -16,9 +16,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
+import { ThreepidMedium, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { _t, UserFriendlyError } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";

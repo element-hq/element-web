@@ -24,8 +24,8 @@ import {
     MatrixClient,
     MatrixError,
     HTTPError,
+    IThreepid,
 } from "matrix-js-sdk/src/matrix";
-import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 
 import Modal from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";

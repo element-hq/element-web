@@ -26,8 +26,8 @@ import type {
     UploadOpts,
     ICreateRoomOpts,
     ISendEventResponse,
+    ReceiptType,
 } from "matrix-js-sdk/src/matrix";
-import type { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import Chainable = Cypress.Chainable;
 import { UserCredentials } from "./login";
 

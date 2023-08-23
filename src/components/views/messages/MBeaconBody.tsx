@@ -24,9 +24,9 @@ import {
     RelationType,
     IRedactOpts,
     ContentHelpers,
+    M_BEACON,
 } from "matrix-js-sdk/src/matrix";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 import classNames from "classnames";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

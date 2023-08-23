@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
-import { IRequestTokenResponse, MatrixError } from "matrix-js-sdk/src/matrix";
+import { IThreepid, ThreepidMedium, IRequestTokenResponse, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { TranslationKey, UserFriendlyError } from "../../../../../src/languageHandler";
 import EmailAddresses, { EmailAddress } from "../../../../../src/components/views/settings/discovery/EmailAddresses";

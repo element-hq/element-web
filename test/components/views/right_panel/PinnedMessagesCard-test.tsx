@@ -27,8 +27,8 @@ import {
     EventType,
     RelationType,
     MsgType,
+    M_POLL_KIND_DISCLOSED,
 } from "matrix-js-sdk/src/matrix";
-import { M_POLL_KIND_DISCLOSED } from "matrix-js-sdk/src/@types/polls";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";
 import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEvent";

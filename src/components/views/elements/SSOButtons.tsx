@@ -17,9 +17,15 @@ limitations under the License.
 import React from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
-import { MatrixClient, IdentityProviderBrand, SSOFlow, SSOAction } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixClient,
+    IdentityProviderBrand,
+    SSOFlow,
+    SSOAction,
+    IIdentityProvider,
+    DELEGATED_OIDC_COMPATIBILITY,
+} from "matrix-js-sdk/src/matrix";
 import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
-import { IIdentityProvider, DELEGATED_OIDC_COMPATIBILITY } from "matrix-js-sdk/src/@types/auth";
 
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";

@@ -17,9 +17,8 @@ limitations under the License.
 
 import React from "react";
 import { EventEmitter } from "events";
-import { MatrixEvent, Room, RoomMember, Thread } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room, RoomMember, Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { render } from "@testing-library/react";
-import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
 import MessagePanel, { shouldFormContinuation } from "../../../src/components/structures/MessagePanel";
 import SettingsStore from "../../../src/settings/SettingsStore";

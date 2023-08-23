@@ -25,8 +25,9 @@ import {
     RoomState,
     RoomStateEvent,
     ContentHelpers,
+    MBeaconInfoEventContent,
+    M_BEACON,
 } from "matrix-js-sdk/src/matrix";
-import { MBeaconInfoEventContent, M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import defaultDispatcher from "../dispatcher/dispatcher";

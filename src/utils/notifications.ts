@@ -19,9 +19,9 @@ import {
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     NotificationCountType,
     Room,
+    LocalNotificationSettings,
+    ReceiptType,
 } from "matrix-js-sdk/src/matrix";
-import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
-import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
 import SettingsStore from "../settings/SettingsStore";
 

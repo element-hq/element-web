@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import {
+    M_LOCATION,
     EventStatus,
     EventType,
     IEvent,

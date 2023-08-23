@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import { render, waitFor, screen } from "@testing-library/react";
-import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import {
+    ReceiptType,
     EventTimelineSet,
     EventType,
     MatrixClient,

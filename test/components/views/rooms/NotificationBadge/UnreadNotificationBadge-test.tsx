@@ -25,8 +25,8 @@ import {
     Room,
     EventStatus,
     PendingEventOrdering,
+    ReceiptType,
 } from "matrix-js-sdk/src/matrix";
-import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mkThread } from "../../../../test-utils/threads";

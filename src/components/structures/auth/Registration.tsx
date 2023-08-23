@@ -26,11 +26,11 @@ import {
     MatrixClient,
     SSOFlow,
     SSOAction,
+    RegisterResponse,
 } from "matrix-js-sdk/src/matrix";
 import React, { Fragment, ReactNode } from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
-import { RegisterResponse } from "matrix-js-sdk/src/@types/registration";
 
 import { _t } from "../../../languageHandler";
 import { adminContactStrings, messageForResourceLimitError, resourceLimitStrings } from "../../../utils/ErrorUtils";

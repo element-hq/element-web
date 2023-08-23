@@ -14,10 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IContent, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
-import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
-import { LocationAssetType, M_ASSET } from "matrix-js-sdk/src/@types/location";
-import { M_POLL_END } from "matrix-js-sdk/src/@types/polls";
+import {
+    IContent,
+    MatrixEvent,
+    MsgType,
+    M_BEACON_INFO,
+    LocationAssetType,
+    M_ASSET,
+    M_POLL_END,
+} from "matrix-js-sdk/src/matrix";
 
 import {
     getNestedReplyText,

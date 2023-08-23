@@ -13,9 +13,8 @@ limitations under the License.
 
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import React from "react";
-import { M_AUTHENTICATION } from "matrix-js-sdk/src/matrix";
+import { M_AUTHENTICATION, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 
 import GeneralUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/GeneralUserSettingsTab";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";

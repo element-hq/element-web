@@ -14,8 +14,15 @@ limitations under the License.
 
 import { act, findByRole, getByRole, queryByRole, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
-import { IPushRules, MatrixClient, NotificationCountType, PushRuleKind, Room, RuleId } from "matrix-js-sdk/src/matrix";
+import {
+    ThreepidMedium,
+    IPushRules,
+    MatrixClient,
+    NotificationCountType,
+    PushRuleKind,
+    Room,
+    RuleId,
+} from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import NotificationSettings2 from "../../../../../src/components/views/settings/notifications/NotificationSettings2";

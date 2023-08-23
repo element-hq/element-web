@@ -26,8 +26,8 @@ import {
     RelationType,
     Relations,
     Thread,
+    M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";

@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
-import { IPusher } from "matrix-js-sdk/src/matrix";
+import { ThreepidMedium, IPusher } from "matrix-js-sdk/src/matrix";
 import React, { useCallback, useMemo } from "react";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";

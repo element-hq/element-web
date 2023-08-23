@@ -15,8 +15,12 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { ContentHelpers, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { LegacyLocationEventContent, MLocationEventContent } from "matrix-js-sdk/src/@types/location";
+import {
+    ContentHelpers,
+    MatrixClient,
+    LegacyLocationEventContent,
+    MLocationEventContent,
+} from "matrix-js-sdk/src/matrix";
 
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
 import {
