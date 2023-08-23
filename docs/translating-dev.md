@@ -44,6 +44,9 @@ function getColorName(hex) {
 ### Key naming rules
 
 These rules are based on https://github.com/vector-im/element-x-android/blob/develop/tools/localazy/README.md
+At this time we are not trying to have a translation key per UI element as some methodologies use,
+whilst that would offer the greatest flexibility, it would also make reuse between projects nigh impossible.
+We are aiming for a set of common strings to be shared then some more localised translations per context they may appear in.
 
 1. Ensure the string doesn't already exist in a related project, such as https://localazy.com/p/element
 2. Keys for common strings, i.e. strings that can be used at multiple places must start by `action_` if this is a verb, or `common_` if not
