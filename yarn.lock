@@ -8685,13 +8685,15 @@ matrix-mock-request@^2.5.0:
     what-input "^5.2.10"
     zxcvbn "^4.4.2"
 
-matrix-web-i18n@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-2.0.0.tgz#fe43c9e4061410cef4b8663527ee692296ce023b"
-  integrity sha512-bMn4MsWKnzzfQPVAfgmlMXa1rqVS1kUuTQ//d+Zsze2hGX8pTB1y3qFLYhkgAgVcx89FxiVL7Kw9dUzllvwgOg==
+matrix-web-i18n@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.0.0.tgz#23fe255ab9c7c19a4276608ce2219ca837e2ad58"
+  integrity sha512-82UqBV53VJhLZcb4/9oMQpAAWav2Vk+DtUyTzdTl5ZkQ/eLeeICm7xy4p2/aK1jeN7ppN82yBs2gxx7t7eX67A==
   dependencies:
     "@babel/parser" "^7.18.5"
     "@babel/traverse" "^7.18.5"
+    lodash "^4.17.21"
+    minimist "^1.2.8"
     walk "^2.3.15"
 
 matrix-widget-api@^1.3.1, matrix-widget-api@^1.5.0:
@@ -8949,7 +8951,7 @@ minimist-options@4.1.0:
     is-plain-obj "^1.1.0"
     kind-of "^6.0.3"
 
-minimist@>=1.2.2, minimist@^1.1.0, minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6:
+minimist@>=1.2.2, minimist@^1.1.0, minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6, minimist@^1.2.8:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
