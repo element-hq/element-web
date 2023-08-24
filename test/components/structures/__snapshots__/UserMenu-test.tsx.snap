@@ -18,7 +18,7 @@ exports[`<UserMenu> when rendered should render as expected 1`] = `
         class="mx_UserMenu_userAvatar"
       >
         <span
-          class="_avatar_i91o9_17 mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar"
+          class="_avatar_2lhia_17 mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar _avatar-imageless_2lhia_56"
           data-color="2"
           data-testid="avatar-img"
           data-type="round"

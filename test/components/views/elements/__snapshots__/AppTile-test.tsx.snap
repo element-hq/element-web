@@ -104,7 +104,7 @@ exports[`AppTile for a pinned widget should render 1`] = `
         <span>
           <span
             aria-label="Avatar"
-            class="_avatar_i91o9_17 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar_2lhia_17 mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -112,7 +112,7 @@ exports[`AppTile for a pinned widget should render 1`] = `
           >
             <img
               alt=""
-              class="_image_i91o9_45"
+              class="_image_2lhia_45"
               crossorigin="anonymous"
               data-type="round"
               height="20px"
@@ -192,7 +192,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
         <span>
           <span
             aria-label="Avatar"
-            class="_avatar_i91o9_17 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar_2lhia_17 mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -200,7 +200,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           >
             <img
               alt=""
-              class="_image_i91o9_45"
+              class="_image_2lhia_45"
               crossorigin="anonymous"
               data-type="round"
               height="20px"
@@ -271,7 +271,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           </div>
           <div>
             <span
-              class="_avatar_i91o9_17 mx_BaseAvatar"
+              class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56"
               data-color="1"
               data-testid="avatar-img"
               data-type="round"
@@ -347,7 +347,7 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
               <span>
                 <span
                   aria-label="Avatar"
-                  class="_avatar_i91o9_17 mx_BaseAvatar mx_WidgetAvatar"
+                  class="_avatar_2lhia_17 mx_BaseAvatar mx_WidgetAvatar"
                   data-color="1"
                   data-testid="avatar-img"
                   data-type="round"
@@ -355,7 +355,7 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                 >
                   <img
                     alt=""
-                    class="_image_i91o9_45"
+                    class="_image_2lhia_45"
                     crossorigin="anonymous"
                     data-type="round"
                     height="20px"

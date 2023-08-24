@@ -11,7 +11,7 @@ exports[`<FacePile /> renders with a tooltip 1`] = `
       tabindex="0"
     >
       <span
-        class="_avatar_i91o9_17 mx_BaseAvatar"
+        class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56"
         data-color="8"
         data-testid="avatar-img"
         data-type="round"

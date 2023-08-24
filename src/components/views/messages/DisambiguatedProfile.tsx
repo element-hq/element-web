@@ -40,7 +40,7 @@ export default class DisambiguatedProfile extends React.Component<IProps> {
 
         let colorClass: string | undefined;
         if (colored) {
-            colorClass = getUserNameColorClass(fallbackName);
+            colorClass = getUserNameColorClass(mxid ?? "");
         }
 
         let mxidElement;

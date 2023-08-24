@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import { ReactElement, ReactNode } from "react";
+import { useIdColorHash } from "@vector-im/compound-web";
 
 import { _t, getCurrentLanguage } from "../languageHandler";
 import { jsxJoin } from "./ReactUtils";
@@ -73,30 +74,11 @@ export function formatBytes(bytes: number, decimals = 2): string {
 export function formatCryptoKey(key: string): string {
     return key.match(/.{1,4}/g)!.join(" ");
 }
-/**
- * calculates a numeric hash for a given string
- *
- * @param {string} str string to hash
- *
- * @return {number}
- */
-export function hashCode(str?: string): number {
-    let hash = 0;
-    let chr: number;
-    if (!str?.length) {
-        return hash;
-    }
-    for (let i = 0; i < str.length; i++) {
-        chr = str.charCodeAt(i);
-        hash = (hash << 5) - hash + chr;
-        hash |= 0;
-    }
-    return Math.abs(hash);
-}
 
-export function getUserNameColorClass(userId?: string): string {
-    const colorNumber = (hashCode(userId) % 8) + 1;
-    return `mx_Username_color${colorNumber}`;
+export function getUserNameColorClass(userId: string): string {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const number = useIdColorHash(userId);
+    return `mx_Username_color${number}`;
 }
 
 /**

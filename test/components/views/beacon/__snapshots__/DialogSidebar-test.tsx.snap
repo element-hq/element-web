@@ -32,7 +32,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
         class="mx_BeaconListItem"
       >
         <span
-          class="_avatar_i91o9_17 mx_BaseAvatar mx_BeaconListItem_avatar"
+          class="_avatar_2lhia_17 mx_BaseAvatar mx_BeaconListItem_avatar _avatar-imageless_2lhia_56"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
