@@ -65,8 +65,8 @@
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp"
     },
     "resolutions": {
-        "@types/react-dom": "17.0.20",
-        "@types/react": "17.0.64"
+        "@types/react-dom": "17.0.19",
+        "@types/react": "17.0.58"
     },
     "dependencies": {
         "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz",
@@ -110,8 +110,8 @@
         "@types/modernizr": "^3.5.3",
         "@types/node": "^16",
         "@types/node-fetch": "^2.6.4",
-        "@types/react": "17.0.64",
-        "@types/react-dom": "17.0.20",
+        "@types/react": "17.0.58",
+        "@types/react-dom": "17.0.19",
         "@types/ua-parser-js": "^0.7.36",
         "@typescript-eslint/eslint-plugin": "^5.45.0",
         "@typescript-eslint/parser": "^5.45.0",
