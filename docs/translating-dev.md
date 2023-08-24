@@ -56,8 +56,8 @@ We are aiming for a set of common strings to be shared then some more localised 
 
 ## Editing existing strings
 
-For edits where you only wish to change the English and not cause all languages to need re-translating simply edit `src/i18n/strings/en_EN.json` in a pull request.
-Otherwise, edit every occurrence of the translation key inside `_t()` and `_td()` in the TSX files and follow `Adding new strings` above.
+Edits to existing strings should be performed only via Localazy.
+There you can also require all translations to be redone if the meaning of the string has changed significantly.
 
 ## Adding variables inside a string.
 
