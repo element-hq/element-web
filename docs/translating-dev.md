@@ -34,14 +34,7 @@ function getColorName(hex) {
 }
 ```
 
-## Adding new strings
-
-1. Check if the import `import { _t } from 'matrix-react-sdk/src/languageHandler';` is present. If not add it to the other import statements. Also import `_td` if needed.
-1. Add `_t()` to your string. (Don't forget curly braces when you assign an expression to JSX attributes in the render method). If the string is introduced at a point before the translation system has not yet been initialized, use `_td()` instead, and call `_t()` at the appropriate time.
-1. Run `yarn i18n` to add the keys to `src/i18n/strings/en_EN.json`
-1. Modify the new entries in `src/i18n/strings/en_EN.json` with the English (UK) translations for the added keys.
-
-### Key naming rules
+## Key naming rules
 
 These rules are based on https://github.com/vector-im/element-x-android/blob/develop/tools/localazy/README.md
 At this time we are not trying to have a translation key per UI element as some methodologies use,
@@ -53,6 +46,13 @@ We are aiming for a set of common strings to be shared then some more localised 
 3. Keys for common accessibility strings must start by `a11y_`. Example:` a11y_hide_password`
 4. Otherwise, try to group keys logically and nest where appropriate, such as `keyboard_` for strings relating to keyboard shortcuts.
 5. Ensure your translation keys do not include `.` or `|` or ` `. Try to balance string length against descriptiveness.
+
+## Adding new strings
+
+1. Check if the import `import { _t } from 'matrix-react-sdk/src/languageHandler';` is present. If not add it to the other import statements. Also import `_td` if needed.
+1. Add `_t()` to your string passing the translation key you come up with based on the rules above. If the string is introduced at a point before the translation system has not yet been initialized, use `_td()` instead, and call `_t()` at the appropriate time.
+1. Run `yarn i18n` to add the keys to `src/i18n/strings/en_EN.json`
+1. Modify the new entries in `src/i18n/strings/en_EN.json` with the English (UK) translations for the added keys.
 
 ## Editing existing strings
 
@@ -79,3 +79,4 @@ There you can also require all translations to be redone if the meaning of the s
 -   Concatenating strings often also introduces an implicit assumption about word order (e.g. that the subject of the sentence comes first), which is incorrect for many languages.
 -   Translation 'smell test': If you have a string that does not begin with a capital letter (is not the start of a sentence) or it ends with e.g. ':' or a preposition (e.g. 'to') you should recheck that you are not trying to translate a partial sentence.
 -   If you have multiple strings, that are almost identical, except some part (e.g. a word or two) it is still better to translate the full sentence multiple times. It may seem like inefficient repetition, but unlike programming where you try to minimize repetition, translation is much faster if you have many, full, clear, sentences to work with, rather than fewer, but incomplete sentence fragments.
+-   Don't forget curly braces when you assign an expression to JSX attributes in the render method)
