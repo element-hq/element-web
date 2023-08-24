@@ -246,7 +246,7 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
         <div>
           <form>
             <p>
-              Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.
+              Enter your password to sign in and regain access to your account.
             </p>
             <div
               class="mx_Field mx_Field_input"

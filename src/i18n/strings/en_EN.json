@@ -3469,7 +3469,6 @@
     "Incorrect password": "Incorrect password",
     "Failed to re-authenticate": "Failed to re-authenticate",
     "Forgotten your password?": "Forgotten your password?",
-    "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.",
     "Enter your password to sign in and regain access to your account.": "Enter your password to sign in and regain access to your account.",
     "Sign in and regain access to your account.": "Sign in and regain access to your account.",
     "You cannot sign in to your account. Please contact your homeserver admin for more information.": "You cannot sign in to your account. Please contact your homeserver admin for more information.",

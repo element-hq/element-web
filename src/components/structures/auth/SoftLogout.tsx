@@ -17,7 +17,7 @@ limitations under the License.
 import React, { ChangeEvent, SyntheticEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
-import { SSOFlow, LoginFlow, SSOAction, MatrixError } from "matrix-js-sdk/src/matrix";
+import { LoginFlow, MatrixError, SSOAction, SSOFlow } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -63,7 +63,6 @@ interface IProps {
 
 interface IState {
     loginView: LoginView;
-    keyBackupNeeded: boolean;
     busy: boolean;
     password: string;
     errorText: string;
@@ -76,7 +75,6 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
         this.state = {
             loginView: LoginView.Loading,
-            keyBackupNeeded: true, // assume we do while we figure it out (see componentDidMount)
             busy: false,
             password: "",
             errorText: "",
@@ -92,13 +90,6 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         }
 
         this.initLogin();
-
-        const cli = MatrixClientPeg.safeGet();
-        if (cli.isCryptoEnabled()) {
-            cli.countSessionsNeedingBackup().then((remaining) => {
-                this.setState({ keyBackupNeeded: remaining > 0 });
-            });
-        }
     }
 
     private onClearAll = (): void => {
@@ -278,41 +269,22 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return <Spinner />;
         }
 
-        let introText: string | null = null; // null is translated to something area specific in this function
-        if (this.state.keyBackupNeeded) {
-            introText = _t(
-                "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.",
-            );
-        }
-
         if (this.state.loginView === LoginView.Password) {
-            if (!introText) {
-                introText = _t("Enter your password to sign in and regain access to your account.");
-            } // else we already have a message and should use it (key backup warning)
-
-            return this.renderPasswordForm(introText);
+            return this.renderPasswordForm(_t("Enter your password to sign in and regain access to your account."));
         }
 
         if (this.state.loginView === LoginView.SSO || this.state.loginView === LoginView.CAS) {
-            if (!introText) {
-                introText = _t("Sign in and regain access to your account.");
-            } // else we already have a message and should use it (key backup warning)
-
-            return this.renderSsoForm(introText);
+            return this.renderSsoForm(_t("Sign in and regain access to your account."));
         }
 
         if (this.state.loginView === LoginView.PasswordWithSocialSignOn) {
-            if (!introText) {
-                introText = _t("Sign in and regain access to your account.");
-            }
-
             // We render both forms with no intro/error to ensure the layout looks reasonably
             // okay enough.
             //
             // Note: "mx_AuthBody_centered" text taken from registration page.
             return (
                 <>
-                    <p>{introText}</p>
+                    <p>{_t("Sign in and regain access to your account.")}</p>
                     {this.renderSsoForm(null)}
                     <h2 className="mx_AuthBody_centered">
                         {_t("%(ssoButtons)s Or %(usernamePassword)s", {
