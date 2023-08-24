@@ -32,26 +32,15 @@ exports[`<BeaconViewDialog /> renders own beacon status when user is live sharin
   class="mx_DialogOwnBeaconStatus"
 >
   <span
-    class="mx_BaseAvatar mx_DialogOwnBeaconStatus_avatar"
+    class="_avatar_i91o9_17 mx_BaseAvatar mx_DialogOwnBeaconStatus_avatar"
+    data-color="8"
+    data-testid="avatar-img"
+    data-type="round"
     role="presentation"
+    style="--cpd-avatar-size: 32px;"
+    title="@alice:server"
   >
-    <span
-      aria-hidden="true"
-      class="mx_BaseAvatar_initial"
-      style="font-size: 20.8px; width: 32px; line-height: 32px;"
-    >
-      A
-    </span>
-    <img
-      alt=""
-      aria-hidden="true"
-      class="mx_BaseAvatar_image"
-      data-testid="avatar-img"
-      loading="lazy"
-      src="data:image/png;base64,00"
-      style="width: 32px; height: 32px;"
-      title="@alice:server"
-    />
+    a
   </span>
   <div
     class="mx_BeaconStatus mx_BeaconStatus_Active mx_DialogOwnBeaconStatus_status"

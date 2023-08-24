@@ -71,25 +71,14 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
           <div>
             <div>
               <span
-                class="mx_BaseAvatar"
+                class="_avatar_i91o9_17 mx_BaseAvatar"
+                data-color="7"
+                data-testid="avatar-img"
+                data-type="round"
                 role="presentation"
+                style="--cpd-avatar-size: 20px;"
               >
-                <span
-                  aria-hidden="true"
-                  class="mx_BaseAvatar_initial"
-                  style="font-size: 13px; width: 20px; line-height: 20px;"
-                >
-                  O
-                </span>
-                <img
-                  alt=""
-                  aria-hidden="true"
-                  class="mx_BaseAvatar_image"
-                  data-testid="avatar-img"
-                  loading="lazy"
-                  src="data:image/png;base64,00"
-                  style="width: 20px; height: 20px;"
-                />
+                O
               </span>
               <span
                 class="mx_ManageRestrictedJoinRuleDialog_entry_name"

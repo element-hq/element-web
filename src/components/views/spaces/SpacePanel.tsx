@@ -119,7 +119,7 @@ interface IMetaSpaceButtonProps extends ComponentProps<typeof SpaceButton> {
 
 type MetaSpaceButtonProps = Pick<IMetaSpaceButtonProps, "selected" | "isPanelCollapsed">;
 
-const MetaSpaceButton: React.FC<IMetaSpaceButtonProps> = ({ selected, isPanelCollapsed, ...props }) => {
+const MetaSpaceButton: React.FC<IMetaSpaceButtonProps> = ({ selected, isPanelCollapsed, size = "32px", ...props }) => {
     return (
         <li
             className={classNames("mx_SpaceItem", {
@@ -128,7 +128,7 @@ const MetaSpaceButton: React.FC<IMetaSpaceButtonProps> = ({ selected, isPanelCol
             role="treeitem"
             aria-selected={selected}
         >
-            <SpaceButton {...props} selected={selected} isNarrow={isPanelCollapsed} />
+            <SpaceButton {...props} selected={selected} isNarrow={isPanelCollapsed} size={size} />
         </li>
     );
 };
@@ -160,6 +160,7 @@ const HomeButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollapsed
             notificationState={notificationState}
             ContextMenuComponent={HomeButtonContextMenu}
             contextMenuTooltip={_t("common|options")}
+            size="32px"
         />
     );
 };
@@ -173,6 +174,7 @@ const FavouritesButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCol
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.Favourites)}
             notificationState={SpaceStore.instance.getNotificationState(MetaSpace.Favourites)}
+            size="32px"
         />
     );
 };
@@ -186,6 +188,7 @@ const PeopleButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollaps
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.People)}
             notificationState={SpaceStore.instance.getNotificationState(MetaSpace.People)}
+            size="32px"
         />
     );
 };
@@ -199,6 +202,7 @@ const OrphansButton: React.FC<MetaSpaceButtonProps> = ({ selected, isPanelCollap
             isPanelCollapsed={isPanelCollapsed}
             label={getMetaSpaceName(MetaSpace.Orphans)}
             notificationState={SpaceStore.instance.getNotificationState(MetaSpace.Orphans)}
+            size="32px"
         />
     );
 };
@@ -244,6 +248,7 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
                 onClick={onNewClick}
                 isNarrow={isPanelCollapsed}
                 innerRef={handle}
+                size="32px"
             />
 
             {contextMenu}

@@ -133,9 +133,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
             networkIcon = (
                 <BaseAvatar
                     className="mx_RoomSettingsDialog_protocolIcon"
-                    width={48}
-                    height={48}
-                    resizeMethod="crop"
+                    size="48px"
                     name={protocolName}
                     idName={protocolName}
                     url={avatarUrl}

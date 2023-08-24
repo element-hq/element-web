@@ -83,26 +83,15 @@ exports[`MLocationBody <MLocationBody> without error renders marker correctly fo
               class="mx_Marker_border"
             >
               <span
-                class="mx_BaseAvatar"
+                class="_avatar_i91o9_17 mx_BaseAvatar"
+                data-color="1"
+                data-testid="avatar-img"
+                data-type="round"
                 role="presentation"
+                style="--cpd-avatar-size: 36px;"
+                title="@user:server"
               >
-                <span
-                  aria-hidden="true"
-                  class="mx_BaseAvatar_initial"
-                  style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
-                >
-                  U
-                </span>
-                <img
-                  alt=""
-                  aria-hidden="true"
-                  class="mx_BaseAvatar_image"
-                  data-testid="avatar-img"
-                  loading="lazy"
-                  src="data:image/png;base64,00"
-                  style="width: 36px; height: 36px;"
-                  title="@user:server"
-                />
+                u
               </span>
             </div>
           </div>

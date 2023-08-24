@@ -564,9 +564,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         name,
                         avatarUrl: room.avatar_url,
                     }}
-                    width={32}
-                    height={32}
-                    resizeMethod="crop"
+                    size="32px"
                 />
             );
             const viewRoom = (ev: SyntheticEvent): void => {

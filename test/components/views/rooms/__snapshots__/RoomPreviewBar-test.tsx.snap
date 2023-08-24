@@ -23,25 +23,14 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
   </h3>
   <p>
     <span
-      class="mx_BaseAvatar"
+      class="_avatar_i91o9_17 mx_BaseAvatar"
+      data-color="4"
+      data-testid="avatar-img"
+      data-type="round"
       role="presentation"
+      style="--cpd-avatar-size: 36px;"
     >
-      <span
-        aria-hidden="true"
-        class="mx_BaseAvatar_initial"
-        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
-      >
-        R
-      </span>
-      <img
-        alt=""
-        aria-hidden="true"
-        class="mx_BaseAvatar_image"
-        data-testid="avatar-img"
-        loading="lazy"
-        src="data:image/png;base64,00"
-        style="width: 36px; height: 36px;"
-      />
+      R
     </span>
   </p>
   <p>
@@ -59,25 +48,14 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
   </h3>
   <p>
     <span
-      class="mx_BaseAvatar"
+      class="_avatar_i91o9_17 mx_BaseAvatar"
+      data-color="1"
+      data-testid="avatar-img"
+      data-type="round"
       role="presentation"
+      style="--cpd-avatar-size: 36px;"
     >
-      <span
-        aria-hidden="true"
-        class="mx_BaseAvatar_initial"
-        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
-      >
-        ?
-      </span>
-      <img
-        alt=""
-        aria-hidden="true"
-        class="mx_BaseAvatar_image"
-        data-testid="avatar-img"
-        loading="lazy"
-        src="data:image/png;base64,00"
-        style="width: 36px; height: 36px;"
-      />
+      ?
     </span>
   </p>
   <p>
@@ -236,25 +214,14 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
   </h3>
   <p>
     <span
-      class="mx_BaseAvatar"
+      class="_avatar_i91o9_17 mx_BaseAvatar"
+      data-color="4"
+      data-testid="avatar-img"
+      data-type="round"
       role="presentation"
+      style="--cpd-avatar-size: 36px;"
     >
-      <span
-        aria-hidden="true"
-        class="mx_BaseAvatar_initial"
-        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
-      >
-        R
-      </span>
-      <img
-        alt=""
-        aria-hidden="true"
-        class="mx_BaseAvatar_image"
-        data-testid="avatar-img"
-        loading="lazy"
-        src="data:image/png;base64,00"
-        style="width: 36px; height: 36px;"
-      />
+      R
     </span>
   </p>
   <p>
@@ -305,25 +272,14 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
   </h3>
   <p>
     <span
-      class="mx_BaseAvatar"
+      class="_avatar_i91o9_17 mx_BaseAvatar"
+      data-color="4"
+      data-testid="avatar-img"
+      data-type="round"
       role="presentation"
+      style="--cpd-avatar-size: 36px;"
     >
-      <span
-        aria-hidden="true"
-        class="mx_BaseAvatar_initial"
-        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
-      >
-        R
-      </span>
-      <img
-        alt=""
-        aria-hidden="true"
-        class="mx_BaseAvatar_image"
-        data-testid="avatar-img"
-        loading="lazy"
-        src="data:image/png;base64,00"
-        style="width: 36px; height: 36px;"
-      />
+      R
     </span>
   </p>
   <p>
@@ -381,25 +337,14 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
   </h3>
   <p>
     <span
-      class="mx_BaseAvatar"
+      class="_avatar_i91o9_17 mx_BaseAvatar"
+      data-color="4"
+      data-testid="avatar-img"
+      data-type="round"
       role="presentation"
+      style="--cpd-avatar-size: 36px;"
     >
-      <span
-        aria-hidden="true"
-        class="mx_BaseAvatar_initial"
-        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
-      >
-        R
-      </span>
-      <img
-        alt=""
-        aria-hidden="true"
-        class="mx_BaseAvatar_image"
-        data-testid="avatar-img"
-        loading="lazy"
-        src="data:image/png;base64,00"
-        style="width: 36px; height: 36px;"
-      />
+      R
     </span>
   </p>
   <p>

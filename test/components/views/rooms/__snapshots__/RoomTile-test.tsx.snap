@@ -14,25 +14,14 @@ exports[`RoomTile when message previews are enabled and there is a message in a 
       class="mx_DecoratedRoomAvatar"
     >
       <span
-        class="mx_BaseAvatar"
+        class="_avatar_i91o9_17 mx_BaseAvatar"
+        data-color="7"
+        data-testid="avatar-img"
+        data-type="round"
         role="presentation"
+        style="--cpd-avatar-size: 32px;"
       >
-        <span
-          aria-hidden="true"
-          class="mx_BaseAvatar_initial"
-          style="font-size: 20.8px; width: 32px; line-height: 32px;"
-        >
-          !
-        </span>
-        <img
-          alt=""
-          aria-hidden="true"
-          class="mx_BaseAvatar_image"
-          data-testid="avatar-img"
-          loading="lazy"
-          src="data:image/png;base64,00"
-          style="width: 32px; height: 32px;"
-        />
+        !
       </span>
     </div>
     <div
@@ -99,25 +88,14 @@ exports[`RoomTile when message previews are enabled and there is a message in th
       class="mx_DecoratedRoomAvatar"
     >
       <span
-        class="mx_BaseAvatar"
+        class="_avatar_i91o9_17 mx_BaseAvatar"
+        data-color="7"
+        data-testid="avatar-img"
+        data-type="round"
         role="presentation"
+        style="--cpd-avatar-size: 32px;"
       >
-        <span
-          aria-hidden="true"
-          class="mx_BaseAvatar_initial"
-          style="font-size: 20.8px; width: 32px; line-height: 32px;"
-        >
-          !
-        </span>
-        <img
-          alt=""
-          aria-hidden="true"
-          class="mx_BaseAvatar_image"
-          data-testid="avatar-img"
-          loading="lazy"
-          src="data:image/png;base64,00"
-          style="width: 32px; height: 32px;"
-        />
+        !
       </span>
     </div>
     <div
@@ -184,25 +162,14 @@ exports[`RoomTile when message previews are enabled should render a room without
       class="mx_DecoratedRoomAvatar"
     >
       <span
-        class="mx_BaseAvatar"
+        class="_avatar_i91o9_17 mx_BaseAvatar"
+        data-color="7"
+        data-testid="avatar-img"
+        data-type="round"
         role="presentation"
+        style="--cpd-avatar-size: 32px;"
       >
-        <span
-          aria-hidden="true"
-          class="mx_BaseAvatar_initial"
-          style="font-size: 20.8px; width: 32px; line-height: 32px;"
-        >
-          !
-        </span>
-        <img
-          alt=""
-          aria-hidden="true"
-          class="mx_BaseAvatar_image"
-          data-testid="avatar-img"
-          loading="lazy"
-          src="data:image/png;base64,00"
-          style="width: 32px; height: 32px;"
-        />
+        !
       </span>
     </div>
     <div
@@ -257,25 +224,14 @@ exports[`RoomTile when message previews are not enabled should render the room 1
       class="mx_DecoratedRoomAvatar"
     >
       <span
-        class="mx_BaseAvatar"
+        class="_avatar_i91o9_17 mx_BaseAvatar"
+        data-color="7"
+        data-testid="avatar-img"
+        data-type="round"
         role="presentation"
+        style="--cpd-avatar-size: 32px;"
       >
-        <span
-          aria-hidden="true"
-          class="mx_BaseAvatar_initial"
-          style="font-size: 20.8px; width: 32px; line-height: 32px;"
-        >
-          !
-        </span>
-        <img
-          alt=""
-          aria-hidden="true"
-          class="mx_BaseAvatar_image"
-          data-testid="avatar-img"
-          loading="lazy"
-          src="data:image/png;base64,00"
-          style="width: 32px; height: 32px;"
-        />
+        !
       </span>
     </div>
     <div

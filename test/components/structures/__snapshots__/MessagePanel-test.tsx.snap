@@ -95,26 +95,15 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
                 class="mx_GenericEventListSummary_avatars"
               >
                 <span
-                  class="mx_BaseAvatar"
+                  class="_avatar_i91o9_17 mx_BaseAvatar"
+                  data-color="7"
+                  data-testid="avatar-img"
+                  data-type="round"
                   role="presentation"
+                  style="--cpd-avatar-size: 14px;"
+                  title="@user:id"
                 >
-                  <span
-                    aria-hidden="true"
-                    class="mx_BaseAvatar_initial"
-                    style="font-size: 9.1px; width: 14px; line-height: 14px;"
-                  >
-                    U
-                  </span>
-                  <img
-                    alt=""
-                    aria-hidden="true"
-                    class="mx_BaseAvatar_image"
-                    data-testid="avatar-img"
-                    loading="lazy"
-                    src="data:image/png;base64,00"
-                    style="width: 14px; height: 14px;"
-                    title="@user:id"
-                  />
+                  u
                 </span>
               </span>
               <span

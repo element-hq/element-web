@@ -253,7 +253,7 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                         {shownSpaces.map((room) => {
                             return (
                                 <span key={room.roomId}>
-                                    <RoomAvatar room={room} height={32} width={32} />
+                                    <RoomAvatar room={room} size="32px" />
                                     {room.name}
                                 </span>
                             );

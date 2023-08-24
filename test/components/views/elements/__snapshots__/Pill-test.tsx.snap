@@ -35,25 +35,14 @@ exports[`<Pill> should render the expected pill for @room 1`] = `
       >
         <span
           aria-hidden="true"
-          class="mx_BaseAvatar"
+          class="_avatar_i91o9_17 mx_BaseAvatar"
+          data-color="3"
+          data-testid="avatar-img"
+          data-type="round"
           role="presentation"
+          style="--cpd-avatar-size: 16px;"
         >
-          <span
-            aria-hidden="true"
-            class="mx_BaseAvatar_initial"
-            style="font-size: 10.4px; width: 16px; line-height: 16px;"
-          >
-            R
-          </span>
-          <img
-            alt=""
-            aria-hidden="true"
-            class="mx_BaseAvatar_image"
-            data-testid="avatar-img"
-            loading="lazy"
-            src="data:image/png;base64,00"
-            style="width: 16px; height: 16px;"
-          />
+          R
         </span>
         <span
           class="mx_Pill_text"
@@ -77,25 +66,14 @@ exports[`<Pill> should render the expected pill for a known user not in the room
       >
         <span
           aria-hidden="true"
-          class="mx_BaseAvatar"
+          class="_avatar_i91o9_17 mx_BaseAvatar"
+          data-color="5"
+          data-testid="avatar-img"
+          data-type="round"
           role="presentation"
+          style="--cpd-avatar-size: 16px;"
         >
-          <span
-            aria-hidden="true"
-            class="mx_BaseAvatar_initial"
-            style="font-size: 10.4px; width: 16px; line-height: 16px;"
-          >
-            U
-          </span>
-          <img
-            alt=""
-            aria-hidden="true"
-            class="mx_BaseAvatar_image"
-            data-testid="avatar-img"
-            loading="lazy"
-            src="data:image/png;base64,00"
-            style="width: 16px; height: 16px;"
-          />
+          U
         </span>
         <span
           class="mx_Pill_text"
@@ -119,25 +97,14 @@ exports[`<Pill> should render the expected pill for a message in another room 1`
       >
         <span
           aria-hidden="true"
-          class="mx_BaseAvatar"
+          class="_avatar_i91o9_17 mx_BaseAvatar"
+          data-color="3"
+          data-testid="avatar-img"
+          data-type="round"
           role="presentation"
+          style="--cpd-avatar-size: 16px;"
         >
-          <span
-            aria-hidden="true"
-            class="mx_BaseAvatar_initial"
-            style="font-size: 10.4px; width: 16px; line-height: 16px;"
-          >
-            R
-          </span>
-          <img
-            alt=""
-            aria-hidden="true"
-            class="mx_BaseAvatar_image"
-            data-testid="avatar-img"
-            loading="lazy"
-            src="data:image/png;base64,00"
-            style="width: 16px; height: 16px;"
-          />
+          R
         </span>
         <span
           class="mx_Pill_text"
@@ -161,25 +128,14 @@ exports[`<Pill> should render the expected pill for a message in the same room 1
       >
         <span
           aria-hidden="true"
-          class="mx_BaseAvatar"
+          class="_avatar_i91o9_17 mx_BaseAvatar"
+          data-color="4"
+          data-testid="avatar-img"
+          data-type="round"
           role="presentation"
+          style="--cpd-avatar-size: 16px;"
         >
-          <span
-            aria-hidden="true"
-            class="mx_BaseAvatar_initial"
-            style="font-size: 10.4px; width: 16px; line-height: 16px;"
-          >
-            U
-          </span>
-          <img
-            alt=""
-            aria-hidden="true"
-            class="mx_BaseAvatar_image"
-            data-testid="avatar-img"
-            loading="lazy"
-            src="data:image/png;base64,00"
-            style="width: 16px; height: 16px;"
-          />
+          U
         </span>
         <span
           class="mx_Pill_text"
@@ -203,25 +159,14 @@ exports[`<Pill> should render the expected pill for a room alias 1`] = `
       >
         <span
           aria-hidden="true"
-          class="mx_BaseAvatar"
+          class="_avatar_i91o9_17 mx_BaseAvatar"
+          data-color="3"
+          data-testid="avatar-img"
+          data-type="round"
           role="presentation"
+          style="--cpd-avatar-size: 16px;"
         >
-          <span
-            aria-hidden="true"
-            class="mx_BaseAvatar_initial"
-            style="font-size: 10.4px; width: 16px; line-height: 16px;"
-          >
-            R
-          </span>
-          <img
-            alt=""
-            aria-hidden="true"
-            class="mx_BaseAvatar_image"
-            data-testid="avatar-img"
-            loading="lazy"
-            src="data:image/png;base64,00"
-            style="width: 16px; height: 16px;"
-          />
+          R
         </span>
         <span
           class="mx_Pill_text"
@@ -245,25 +190,14 @@ exports[`<Pill> should render the expected pill for a space 1`] = `
       >
         <span
           aria-hidden="true"
-          class="mx_BaseAvatar"
+          class="_avatar_i91o9_17 mx_BaseAvatar"
+          data-color="2"
+          data-testid="avatar-img"
+          data-type="round"
           role="presentation"
+          style="--cpd-avatar-size: 16px;"
         >
-          <span
-            aria-hidden="true"
-            class="mx_BaseAvatar_initial"
-            style="font-size: 10.4px; width: 16px; line-height: 16px;"
-          >
-            S
-          </span>
-          <img
-            alt=""
-            aria-hidden="true"
-            class="mx_BaseAvatar_image"
-            data-testid="avatar-img"
-            loading="lazy"
-            src="data:image/png;base64,00"
-            style="width: 16px; height: 16px;"
-          />
+          S
         </span>
         <span
           class="mx_Pill_text"
@@ -286,7 +220,7 @@ exports[`<Pill> should render the expected pill for an uknown user not in the ro
         href="https://matrix.to/#/@user3:example.com"
       >
         <div
-          class="mx_Pill_UserIcon mx_BaseAvatar mx_BaseAvatar_image"
+          class="mx_Pill_UserIcon mx_BaseAvatar"
         />
         <span
           class="mx_Pill_text"
@@ -310,25 +244,14 @@ exports[`<Pill> when rendering a pill for a room should render the expected pill
       >
         <span
           aria-hidden="true"
-          class="mx_BaseAvatar"
+          class="_avatar_i91o9_17 mx_BaseAvatar"
+          data-color="3"
+          data-testid="avatar-img"
+          data-type="round"
           role="presentation"
+          style="--cpd-avatar-size: 16px;"
         >
-          <span
-            aria-hidden="true"
-            class="mx_BaseAvatar_initial"
-            style="font-size: 10.4px; width: 16px; line-height: 16px;"
-          >
-            R
-          </span>
-          <img
-            alt=""
-            aria-hidden="true"
-            class="mx_BaseAvatar_image"
-            data-testid="avatar-img"
-            loading="lazy"
-            src="data:image/png;base64,00"
-            style="width: 16px; height: 16px;"
-          />
+          R
         </span>
         <span
           class="mx_Pill_text"
@@ -352,25 +275,14 @@ exports[`<Pill> when rendering a pill for a user in the room should render as ex
       >
         <span
           aria-hidden="true"
-          class="mx_BaseAvatar"
+          class="_avatar_i91o9_17 mx_BaseAvatar"
+          data-color="4"
+          data-testid="avatar-img"
+          data-type="round"
           role="presentation"
+          style="--cpd-avatar-size: 16px;"
         >
-          <span
-            aria-hidden="true"
-            class="mx_BaseAvatar_initial"
-            style="font-size: 10.4px; width: 16px; line-height: 16px;"
-          >
-            U
-          </span>
-          <img
-            alt=""
-            aria-hidden="true"
-            class="mx_BaseAvatar_image"
-            data-testid="avatar-img"
-            loading="lazy"
-            src="data:image/png;base64,00"
-            style="width: 16px; height: 16px;"
-          />
+          U
         </span>
         <span
           class="mx_Pill_text"

@@ -290,7 +290,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                 <div className={className}>
                     {silenceIcon}
                     <div className="mx_LegacyCallEvent_info">
-                        <MemberAvatar member={event.sender} width={32} height={32} />
+                        <MemberAvatar member={event.sender} size="32px" />
                         <div className="mx_LegacyCallEvent_info_basic">
                             <div className="mx_LegacyCallEvent_sender">{sender}</div>
                             <div className="mx_LegacyCallEvent_type">

@@ -20,25 +20,14 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         role="presentation"
       >
         <span
-          class="mx_BaseAvatar"
+          class="_avatar_i91o9_17 mx_BaseAvatar"
+          data-color="7"
+          data-testid="avatar-img"
+          data-type="round"
           role="presentation"
+          style="--cpd-avatar-size: 54px;"
         >
-          <span
-            aria-hidden="true"
-            class="mx_BaseAvatar_initial"
-            style="font-size: 35.1px; width: 54px; line-height: 54px;"
-          >
-            !
-          </span>
-          <img
-            alt=""
-            aria-hidden="true"
-            class="mx_BaseAvatar_image"
-            data-testid="avatar-img"
-            loading="lazy"
-            src="data:image/png;base64,00"
-            style="width: 54px; height: 54px;"
-          />
+          !
         </span>
         <div
           aria-describedby="mx_TooltipTarget_vY7Q4uEh"

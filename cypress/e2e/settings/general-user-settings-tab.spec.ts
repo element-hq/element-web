@@ -232,7 +232,7 @@ describe("General user settings tab", () => {
         cy.closeDialog();
 
         // Assert the avatar's initial characters are set
-        cy.get(".mx_UserMenu .mx_BaseAvatar_initial").findByText("A").should("exist"); // Alice
-        cy.get(".mx_RoomView_wrapper .mx_BaseAvatar_initial").findByText("A").should("exist"); // Alice
+        cy.get(".mx_UserMenu .mx_BaseAvatar").findByText("A").should("exist"); // Alice
+        cy.get(".mx_RoomView_wrapper .mx_BaseAvatar").findByText("A").should("exist"); // Alice
     });
 });

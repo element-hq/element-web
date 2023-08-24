@@ -203,12 +203,12 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
             const callRoom = (callRoomId ? MatrixClientPeg.safeGet().getRoom(callRoomId) : undefined) ?? undefined;
 
             let avatarSize;
-            if (pipMode && primary) avatarSize = 76;
-            else if (pipMode && !primary) avatarSize = 16;
-            else if (!pipMode && primary) avatarSize = 160;
+            if (pipMode && primary) avatarSize = "76px";
+            else if (pipMode && !primary) avatarSize = "16px";
+            else if (!pipMode && primary) avatarSize = "160px";
             else; // TBD
 
-            content = <RoomAvatar room={callRoom} height={avatarSize} width={avatarSize} />;
+            content = <RoomAvatar room={callRoom} size={avatarSize} />;
         } else {
             const videoClasses = classnames("mx_VideoFeed_video", {
                 mx_VideoFeed_video_mirror:

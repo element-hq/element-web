@@ -37,7 +37,7 @@ interface IProps {
     onUnpinClicked?(): void;
 }
 
-const AVATAR_SIZE = 24;
+const AVATAR_SIZE = "24px";
 
 export default class PinnedEventTile extends React.Component<IProps> {
     public static contextType = MatrixClientContext;
@@ -89,8 +89,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
                 <MemberAvatar
                     className="mx_PinnedEventTile_senderAvatar"
                     member={this.props.event.sender}
-                    width={AVATAR_SIZE}
-                    height={AVATAR_SIZE}
+                    size={AVATAR_SIZE}
                     fallbackUserId={sender}
                 />
 

@@ -24,7 +24,7 @@ import BaseAvatar from "./BaseAvatar";
 
 interface SearchResultAvatarProps {
     user: Member | RoomMember;
-    size: number;
+    size: string;
 }
 
 export function SearchResultAvatar({ user, size }: SearchResultAvatarProps): JSX.Element {
@@ -46,11 +46,10 @@ export function SearchResultAvatar({ user, size }: SearchResultAvatarProps): JSX
         return (
             <BaseAvatar
                 className="mx_SearchResultAvatar"
-                url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(size) : null}
+                url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(parseInt(size, 10)) : null}
                 name={user.name}
                 idName={user.userId}
-                width={size}
-                height={size}
+                size={size}
             />
         );
     }

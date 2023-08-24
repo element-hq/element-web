@@ -54,12 +54,7 @@ const DialogOwnBeaconStatus: React.FC<Props> = ({ roomId }) => {
     return (
         <div className="mx_DialogOwnBeaconStatus">
             {isSelfLocation ? (
-                <MemberAvatar
-                    className="mx_DialogOwnBeaconStatus_avatar"
-                    member={beaconMember}
-                    height={32}
-                    width={32}
-                />
+                <MemberAvatar className="mx_DialogOwnBeaconStatus_avatar" member={beaconMember} size="32px" />
             ) : (
                 <StyledLiveBeaconIcon className="mx_DialogOwnBeaconStatus_avatarIcon" />
             )}

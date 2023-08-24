@@ -130,7 +130,7 @@ export function IncomingCallToast({ callEvent }: Props): JSX.Element {
 
     return (
         <React.Fragment>
-            <RoomAvatar room={room ?? undefined} height={24} width={24} />
+            <RoomAvatar room={room ?? undefined} size="24px" />
             <div className="mx_IncomingCallToast_content">
                 <div className="mx_IncomingCallToast_info">
                     <span className="mx_IncomingCallToast_room">{room ? room.name : _t("Unknown room")}</span>

@@ -62,8 +62,7 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
                         member={mxEvent.sender}
                         fallbackUserId={mxEvent.getSender()}
                         viewUserOnClick
-                        width={24}
-                        height={24}
+                        size="24px"
                     />
                     <div className="mx_CallEvent_columns">
                         <div className="mx_CallEvent_details">
@@ -76,7 +75,7 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
                                 active={false}
                                 participantCount={participatingMembers.length}
                             />
-                            <FacePile members={facePileMembers} faceSize={24} overflow={facePileOverflow} />
+                            <FacePile members={facePileMembers} size="24px" overflow={facePileOverflow} />
                         </div>
                         {call && <GroupCallDuration groupCall={call.groupCall} />}
                         <AccessibleTooltipButton

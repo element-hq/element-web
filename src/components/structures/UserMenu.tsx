@@ -458,9 +458,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             idName={userId}
                             name={displayName}
                             url={avatarUrl}
-                            width={avatarSize}
-                            height={avatarSize}
-                            resizeMethod="crop"
+                            size={avatarSize + "px"}
                             className="mx_UserMenu_userAvatar_BaseAvatar"
                         />
                         {liveAvatarAddon}

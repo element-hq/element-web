@@ -68,7 +68,6 @@ import ConfirmUserActionDialog from "../dialogs/ConfirmUserActionDialog";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import { mediaFromMxc } from "../../../customisations/Media";
-import UIStore from "../../../stores/UIStore";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import ConfirmSpaceUserActionDialog from "../dialogs/ConfirmSpaceUserActionDialog";
 import { bulkSpaceBehaviour } from "../../../utils/space";
@@ -1579,8 +1578,7 @@ export const UserInfoHeader: React.FC<{
                     <MemberAvatar
                         key={member.userId} // to instantly blank the avatar when UserInfo changes members
                         member={member as RoomMember}
-                        width={2 * 0.3 * UIStore.instance.windowHeight} // 2x@30vh
-                        height={2 * 0.3 * UIStore.instance.windowHeight} // 2x@30vh
+                        size="30vh" // 2x@30vh
                         resizeMethod="scale"
                         fallbackUserId={member.userId}
                         onClick={onMemberAvatarClick}
@@ -1724,7 +1722,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     if (room?.isSpaceRoom()) {
         scopeHeader = (
             <div data-testid="space-header" className="mx_RightPanel_scopeHeader">
-                <RoomAvatar room={room} height={32} width={32} />
+                <RoomAvatar room={room} size="32px" />
                 <RoomName room={room} />
             </div>
         );

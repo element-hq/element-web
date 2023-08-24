@@ -26,7 +26,7 @@ import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import AccessibleButton from "./AccessibleButton";
 import Spinner from "./Spinner";
 
-export const AVATAR_SIZE = 52;
+export const AVATAR_SIZE = "52px";
 
 interface IProps {
     hasAvatar: boolean;

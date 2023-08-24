@@ -48,7 +48,7 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
-interface IButtonProps extends Omit<ComponentProps<typeof AccessibleTooltipButton>, "title" | "onClick"> {
+interface IButtonProps extends Omit<ComponentProps<typeof AccessibleTooltipButton>, "title" | "onClick" | "size"> {
     space?: Room;
     spaceKey?: SpaceKey;
     className?: string;
@@ -57,7 +57,7 @@ interface IButtonProps extends Omit<ComponentProps<typeof AccessibleTooltipButto
     contextMenuTooltip?: string;
     notificationState?: NotificationState;
     isNarrow?: boolean;
-    avatarSize?: number;
+    size: string;
     innerRef?: RefObject<HTMLElement>;
     ContextMenuComponent?: ComponentType<ComponentProps<typeof SpaceContextMenu>>;
     onClick?(ev?: ButtonEvent): void;
@@ -71,7 +71,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
     label,
     contextMenuTooltip,
     notificationState,
-    avatarSize,
+    size,
     isNarrow,
     children,
     innerRef,
@@ -90,7 +90,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
         </div>
     );
     if (space) {
-        avatar = <RoomAvatar width={avatarSize} height={avatarSize} room={space} />;
+        avatar = <RoomAvatar size={size} room={space} type="square" />;
     }
 
     let notifBadge;
@@ -374,7 +374,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                     contextMenuTooltip={_t("Space options")}
                     notificationState={notificationState}
                     isNarrow={isPanelCollapsed}
-                    avatarSize={isNested ? 24 : 32}
+                    size={isNested ? "24px" : "32px"}
                     onKeyDown={this.onKeyDown}
                     ContextMenuComponent={this.props.space.getMyMembership() === "join" ? SpaceContextMenu : undefined}
                 >

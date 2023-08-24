@@ -194,15 +194,14 @@ const Tile: React.FC<ITileProps> = ({
 
     let avatar: ReactElement;
     if (joinedRoom) {
-        avatar = <RoomAvatar room={joinedRoom} width={20} height={20} />;
+        avatar = <RoomAvatar room={joinedRoom} size="20px" />;
     } else {
         avatar = (
             <BaseAvatar
                 name={name}
                 idName={room.room_id}
                 url={room.avatar_url ? mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(20) : null}
-                width={20}
-                height={20}
+                size="20px"
             />
         );
     }

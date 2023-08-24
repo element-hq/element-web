@@ -51,7 +51,13 @@ describe("SpaceButton", () => {
     describe("real space", () => {
         it("activates the space on click", () => {
             const { container } = render(
-                <SpaceButton space={space} selected={false} label="My space" data-testid="create-space-button" />,
+                <SpaceButton
+                    space={space}
+                    selected={false}
+                    label="My space"
+                    data-testid="create-space-button"
+                    size="32px"
+                />,
             );
 
             expect(SpaceStore.instance.setActiveSpace).not.toHaveBeenCalled();
@@ -61,7 +67,13 @@ describe("SpaceButton", () => {
 
         it("navigates to the space home on click if already active", () => {
             const { container } = render(
-                <SpaceButton space={space} selected={true} label="My space" data-testid="create-space-button" />,
+                <SpaceButton
+                    space={space}
+                    selected={true}
+                    label="My space"
+                    data-testid="create-space-button"
+                    size="32px"
+                />,
             );
 
             expect(dispatchSpy).not.toHaveBeenCalled();
@@ -78,6 +90,7 @@ describe("SpaceButton", () => {
                     selected={false}
                     label="People"
                     data-testid="create-space-button"
+                    size="32px"
                 />,
             );
 
@@ -93,6 +106,7 @@ describe("SpaceButton", () => {
                     selected={true}
                     label="People"
                     data-testid="create-space-button"
+                    size="32px"
                 />,
             );
 
@@ -112,6 +126,7 @@ describe("SpaceButton", () => {
                     label="People"
                     data-testid="create-space-button"
                     notificationState={notificationState}
+                    size="32px"
                 />,
             );
 

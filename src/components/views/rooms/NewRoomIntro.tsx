@@ -87,8 +87,7 @@ const NewRoomIntro: React.FC = () => {
             <React.Fragment>
                 <RoomAvatar
                     room={room}
-                    width={AVATAR_SIZE}
-                    height={AVATAR_SIZE}
+                    size={AVATAR_SIZE}
                     onClick={() => {
                         defaultDispatcher.dispatch<ViewUserPayload>({
                             action: Action.ViewUser,
@@ -223,9 +222,7 @@ const NewRoomIntro: React.FC = () => {
         }
 
         const avatarUrl = room.currentState.getStateEvents(EventType.RoomAvatar, "")?.getContent()?.url;
-        let avatar = (
-            <RoomAvatar room={room} width={AVATAR_SIZE} height={AVATAR_SIZE} viewAvatarOnClick={!!avatarUrl} />
-        );
+        let avatar = <RoomAvatar room={room} size={AVATAR_SIZE} viewAvatarOnClick={!!avatarUrl} />;
 
         if (!avatarUrl) {
             avatar = (

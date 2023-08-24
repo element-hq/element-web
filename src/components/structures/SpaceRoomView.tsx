@@ -265,7 +265,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     return (
         <div className="mx_SpaceRoomView_landing">
             <div className="mx_SpaceRoomView_landing_header">
-                <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
+                <RoomAvatar room={space} size="80px" viewAvatarOnClick={true} type="square" />
             </div>
             <div className="mx_SpaceRoomView_landing_name">
                 <RoomName room={space}>

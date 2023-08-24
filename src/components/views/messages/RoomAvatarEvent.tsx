@@ -82,7 +82,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
                                 className="mx_RoomAvatarEvent_avatar"
                                 onClick={this.onAvatarClick}
                             >
-                                <RoomAvatar width={14} height={14} oobData={oobData} />
+                                <RoomAvatar size="14px" oobData={oobData} />
                             </AccessibleButton>
                         ),
                     },

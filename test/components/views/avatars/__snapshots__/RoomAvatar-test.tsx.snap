@@ -3,25 +3,14 @@
 exports[`RoomAvatar should render as expected for a DM room 1`] = `
 <div>
   <span
-    class="mx_BaseAvatar"
+    class="_avatar_i91o9_17 mx_BaseAvatar"
+    data-color="1"
+    data-testid="avatar-img"
+    data-type="round"
     role="presentation"
+    style="--cpd-avatar-size: 36px;"
   >
-    <span
-      aria-hidden="true"
-      class="mx_BaseAvatar_initial"
-      style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
-    >
-      D
-    </span>
-    <img
-      alt=""
-      aria-hidden="true"
-      class="mx_BaseAvatar_image"
-      data-testid="avatar-img"
-      loading="lazy"
-      src="data:image/png;base64,00"
-      style="width: 36px; height: 36px;"
-    />
+    D
   </span>
 </div>
 `;
@@ -29,25 +18,14 @@ exports[`RoomAvatar should render as expected for a DM room 1`] = `
 exports[`RoomAvatar should render as expected for a LocalRoom 1`] = `
 <div>
   <span
-    class="mx_BaseAvatar"
+    class="_avatar_i91o9_17 mx_BaseAvatar"
+    data-color="7"
+    data-testid="avatar-img"
+    data-type="round"
     role="presentation"
+    style="--cpd-avatar-size: 36px;"
   >
-    <span
-      aria-hidden="true"
-      class="mx_BaseAvatar_initial"
-      style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
-    >
-      L
-    </span>
-    <img
-      alt=""
-      aria-hidden="true"
-      class="mx_BaseAvatar_image"
-      data-testid="avatar-img"
-      loading="lazy"
-      src="data:image/png;base64,00"
-      style="width: 36px; height: 36px;"
-    />
+    l
   </span>
 </div>
 `;
@@ -55,25 +33,14 @@ exports[`RoomAvatar should render as expected for a LocalRoom 1`] = `
 exports[`RoomAvatar should render as expected for a Room 1`] = `
 <div>
   <span
-    class="mx_BaseAvatar"
+    class="_avatar_i91o9_17 mx_BaseAvatar"
+    data-color="2"
+    data-testid="avatar-img"
+    data-type="round"
     role="presentation"
+    style="--cpd-avatar-size: 36px;"
   >
-    <span
-      aria-hidden="true"
-      class="mx_BaseAvatar_initial"
-      style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
-    >
-      T
-    </span>
-    <img
-      alt=""
-      aria-hidden="true"
-      class="mx_BaseAvatar_image"
-      data-testid="avatar-img"
-      loading="lazy"
-      src="data:image/png;base64,00"
-      style="width: 36px; height: 36px;"
-    />
+    t
   </span>
 </div>
 `;

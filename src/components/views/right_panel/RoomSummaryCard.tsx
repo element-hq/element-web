@@ -186,7 +186,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
                 forceHide={!(isPinned || isMaximised)}
                 disabled={isPinned || isMaximised}
             >
-                <WidgetAvatar app={app} />
+                <WidgetAvatar app={app} size="20px" />
                 <span>{name}</span>
                 {subtitle}
             </AccessibleTooltipButton>
@@ -307,7 +307,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) 
     const header = (
         <React.Fragment>
             <div className="mx_RoomSummaryCard_avatar" role="presentation">
-                <RoomAvatar room={room} height={54} width={54} viewAvatarOnClick />
+                <RoomAvatar room={room} size="54px" viewAvatarOnClick />
                 <TextWithTooltip
                     tooltip={isRoomEncrypted ? _t("Encrypted") : _t("Not encrypted")}
                     class={classNames("mx_RoomSummaryCard_e2ee", {

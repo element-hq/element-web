@@ -246,7 +246,7 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabledTooltip, con
         <div className="mx_CallView_lobby">
             {children}
             <div className="mx_CallView_preview">
-                <MemberAvatar key={me.userId} member={me} width={200} height={200} resizeMethod="scale" />
+                <MemberAvatar key={me.userId} member={me} size="200px" resizeMethod="scale" />
                 <video
                     ref={videoRef}
                     style={{ visibility: videoMuted ? "hidden" : undefined }}
@@ -398,7 +398,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
             facePile = (
                 <div className="mx_CallView_participants">
                     {_t("%(count)s people joined", { count: members.length })}
-                    <FacePile members={shownMembers} faceSize={24} overflow={overflow} />
+                    <FacePile members={shownMembers} size="24px" overflow={overflow} />
                 </div>
             );
         }

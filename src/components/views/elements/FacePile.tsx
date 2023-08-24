@@ -23,25 +23,19 @@ import TextWithTooltip from "./TextWithTooltip";
 
 interface IProps extends HTMLAttributes<HTMLSpanElement> {
     members: RoomMember[];
-    faceSize: number;
+    size: string;
     overflow: boolean;
     tooltip?: ReactNode;
     children?: ReactNode;
 }
 
-const FacePile: FC<IProps> = ({ members, faceSize, overflow, tooltip, children, ...props }) => {
+const FacePile: FC<IProps> = ({ members, size, overflow, tooltip, children, ...props }) => {
     const faces = members.map(
         tooltip
-            ? (m) => <MemberAvatar key={m.userId} member={m} width={faceSize} height={faceSize} hideTitle />
+            ? (m) => <MemberAvatar key={m.userId} member={m} size={size} hideTitle />
             : (m) => (
                   <TooltipTarget key={m.userId} label={m.name}>
-                      <MemberAvatar
-                          member={m}
-                          width={faceSize}
-                          height={faceSize}
-                          viewUserOnClick={!props.onClick}
-                          hideTitle
-                      />
+                      <MemberAvatar member={m} size={size} viewUserOnClick={!props.onClick} hideTitle />
                   </TooltipTarget>
               ),
     );

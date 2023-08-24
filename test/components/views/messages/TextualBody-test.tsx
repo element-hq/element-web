@@ -199,7 +199,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Chat with <span><bdi><a class="mx_Pill mx_UserPill mx_UserPill_me" href="https://matrix.to/#/@user:example.com" aria-describedby="mx_Pill_0.123456"><img loading="lazy" class="mx_BaseAvatar mx_BaseAvatar_image" src="mxc://avatar.url/image.png" style="width: 16px; height: 16px;" alt="" data-testid="avatar-img" aria-hidden="true"><span class="mx_Pill_text">Member</span></a></bdi></span>"`,
+                `"Chat with <span><bdi><a class="mx_Pill mx_UserPill mx_UserPill_me" href="https://matrix.to/#/@user:example.com" aria-describedby="mx_Pill_0.123456"><span aria-label="Profile picture" aria-hidden="true" data-testid="avatar-img" data-type="round" data-color="8" class="_avatar_i91o9_17 mx_BaseAvatar" style="--cpd-avatar-size: 16px;"><img loading="lazy" alt="" src="mxc://avatar.url/image.png" crossorigin="anonymous" referrerpolicy="no-referrer" class="_image_i91o9_45" data-type="round" width="16px" height="16px" title="@member:domain.bla"></span><span class="mx_Pill_text">Member</span></a></bdi></span>"`,
             );
         });
 
@@ -217,7 +217,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Visit <span><bdi><a class="mx_Pill mx_RoomPill" href="https://matrix.to/#/#room:example.com" aria-describedby="mx_Pill_0.123456"><div class="mx_Pill_LinkIcon mx_BaseAvatar mx_BaseAvatar_image"></div><span class="mx_Pill_text">#room:example.com</span></a></bdi></span>"`,
+                `"Visit <span><bdi><a class="mx_Pill mx_RoomPill" href="https://matrix.to/#/#room:example.com" aria-describedby="mx_Pill_0.123456"><div class="mx_Pill_LinkIcon mx_BaseAvatar"></div><span class="mx_Pill_text">#room:example.com</span></a></bdi></span>"`,
             );
         });
 

@@ -186,7 +186,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         const name = this.getDisplayName();
         const presenceState = member.user?.presence as PresenceState | undefined;
 
-        const av = <MemberAvatar member={member} width={36} height={36} aria-hidden="true" />;
+        const av = <MemberAvatar member={member} size="36px" aria-hidden="true" />;
 
         if (member.user) {
             this.userLastModifiedTime = member.user.getLastModifiedTime();

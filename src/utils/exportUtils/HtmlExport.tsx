@@ -76,14 +76,7 @@ export default class HTMLExporter extends Exporter {
             }
         }
         const avatar = (
-            <BaseAvatar
-                width={32}
-                height={32}
-                name={this.room.name}
-                title={this.room.name}
-                url={blob ? avatarPath : ""}
-                resizeMethod="crop"
-            />
+            <BaseAvatar size="32px" name={this.room.name} title={this.room.name} url={blob ? avatarPath : ""} />
         );
         return renderToStaticMarkup(avatar);
     }

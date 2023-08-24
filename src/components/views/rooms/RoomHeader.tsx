@@ -113,15 +113,20 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
     const globalNotificationState = useGlobalNotificationState();
 
     return (
-        <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
-            <DecoratedRoomAvatar room={room} avatarSize={40} displayBadge={false} />
-            <Box
-                flex="1"
-                className="mx_RoomHeader_info"
-                onClick={() => {
-                    showOrHidePanel(RightPanelPhases.RoomSummary);
-                }}
-            >
+        <Flex
+            as="header"
+            align="center"
+            gap="var(--cpd-space-3x)"
+            className="mx_RoomHeader light-panel"
+            onClick={() => {
+                const rightPanel = RightPanelStore.instance;
+                rightPanel.isOpen
+                    ? rightPanel.togglePanel(null)
+                    : rightPanel.setCard({ phase: RightPanelPhases.RoomSummary });
+            }}
+        >
+            <DecoratedRoomAvatar room={room} size="40px" displayBadge={false} />
+            <Box flex="1" className="mx_RoomHeader_info">
                 <BodyText
                     as="div"
                     size="lg"

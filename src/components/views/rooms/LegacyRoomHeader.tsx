@@ -729,7 +729,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             roomAvatar = (
                 <DecoratedRoomAvatar
                     room={this.props.room}
-                    avatarSize={24}
+                    size="24px"
                     oobData={this.props.oobData}
                     viewAvatarOnClick={true}
                 />

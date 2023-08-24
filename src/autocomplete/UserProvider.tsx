@@ -135,7 +135,7 @@ export default class UserProvider extends AutocompleteProvider {
                     href: makeUserPermalink(user.userId),
                     component: (
                         <PillCompletion title={displayName} description={description}>
-                            <MemberAvatar member={user} width={24} height={24} />
+                            <MemberAvatar member={user} size="24px" />
                         </PillCompletion>
                     ),
                     range: range!,

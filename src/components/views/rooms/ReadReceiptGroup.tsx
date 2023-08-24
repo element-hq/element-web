@@ -272,8 +272,7 @@ function ReadReceiptPerson({
             <MemberAvatar
                 member={roomMember}
                 fallbackUserId={userId}
-                width={24}
-                height={24}
+                size="24px"
                 aria-hidden="true"
                 aria-live="off"
                 resizeMethod="crop"

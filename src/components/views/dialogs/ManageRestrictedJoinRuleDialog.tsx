@@ -54,11 +54,7 @@ const Entry: React.FC<{
         <label className="mx_ManageRestrictedJoinRuleDialog_entry">
             <div>
                 <div>
-                    {localRoom ? (
-                        <RoomAvatar room={room} height={20} width={20} />
-                    ) : (
-                        <RoomAvatar oobData={room} height={20} width={20} />
-                    )}
+                    {localRoom ? <RoomAvatar room={room} size="20px" /> : <RoomAvatar oobData={room} size="20px" />}
                     <span className="mx_ManageRestrictedJoinRuleDialog_entry_name">{room.name}</span>
                 </div>
                 {description && (

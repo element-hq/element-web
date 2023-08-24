@@ -18,25 +18,14 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
             class="mx_DecoratedRoomAvatar"
           >
             <span
-              class="mx_BaseAvatar"
+              class="_avatar_i91o9_17 mx_BaseAvatar"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
               role="presentation"
+              style="--cpd-avatar-size: 24px;"
             >
-              <span
-                aria-hidden="true"
-                class="mx_BaseAvatar_initial"
-                style="font-size: 15.600000000000001px; width: 24px; line-height: 24px;"
-              >
-                U
-              </span>
-              <img
-                alt=""
-                aria-hidden="true"
-                class="mx_BaseAvatar_image"
-                data-testid="avatar-img"
-                loading="lazy"
-                src="data:image/png;base64,00"
-                style="width: 24px; height: 24px;"
-              />
+              u
             </span>
           </div>
         </div>
@@ -111,25 +100,14 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
             class="mx_DecoratedRoomAvatar"
           >
             <span
-              class="mx_BaseAvatar"
+              class="_avatar_i91o9_17 mx_BaseAvatar"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
               role="presentation"
+              style="--cpd-avatar-size: 24px;"
             >
-              <span
-                aria-hidden="true"
-                class="mx_BaseAvatar_initial"
-                style="font-size: 15.600000000000001px; width: 24px; line-height: 24px;"
-              >
-                U
-              </span>
-              <img
-                alt=""
-                aria-hidden="true"
-                class="mx_BaseAvatar_image"
-                data-testid="avatar-img"
-                loading="lazy"
-                src="data:image/png;base64,00"
-                style="width: 24px; height: 24px;"
-              />
+              u
             </span>
           </div>
         </div>
@@ -198,30 +176,18 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                     </span>
                   </div>
                 </div>
-                <span
+                <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="mx_AccessibleButton mx_BaseAvatar"
+                  class="_avatar_i91o9_17 mx_BaseAvatar"
+                  data-color="3"
+                  data-testid="avatar-img"
+                  data-type="round"
                   role="button"
-                  tabindex="0"
+                  style="--cpd-avatar-size: 52px;"
                 >
-                  <span
-                    aria-hidden="true"
-                    class="mx_BaseAvatar_initial"
-                    style="font-size: 33.800000000000004px; width: 52px; line-height: 52px;"
-                  >
-                    U
-                  </span>
-                  <img
-                    alt=""
-                    aria-hidden="true"
-                    class="mx_BaseAvatar_image"
-                    data-testid="avatar-img"
-                    loading="lazy"
-                    src="data:image/png;base64,00"
-                    style="width: 52px; height: 52px;"
-                  />
-                </span>
+                  u
+                </button>
                 <h2>
                   @user:example.com
                 </h2>
@@ -301,25 +267,14 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             class="mx_DecoratedRoomAvatar"
           >
             <span
-              class="mx_BaseAvatar"
+              class="_avatar_i91o9_17 mx_BaseAvatar"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
               role="presentation"
+              style="--cpd-avatar-size: 24px;"
             >
-              <span
-                aria-hidden="true"
-                class="mx_BaseAvatar_initial"
-                style="font-size: 15.600000000000001px; width: 24px; line-height: 24px;"
-              >
-                U
-              </span>
-              <img
-                alt=""
-                aria-hidden="true"
-                class="mx_BaseAvatar_image"
-                data-testid="avatar-img"
-                loading="lazy"
-                src="data:image/png;base64,00"
-                style="width: 24px; height: 24px;"
-              />
+              u
             </span>
           </div>
         </div>
@@ -388,30 +343,18 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                     </span>
                   </div>
                 </div>
-                <span
+                <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="mx_AccessibleButton mx_BaseAvatar"
+                  class="_avatar_i91o9_17 mx_BaseAvatar"
+                  data-color="3"
+                  data-testid="avatar-img"
+                  data-type="round"
                   role="button"
-                  tabindex="0"
+                  style="--cpd-avatar-size: 52px;"
                 >
-                  <span
-                    aria-hidden="true"
-                    class="mx_BaseAvatar_initial"
-                    style="font-size: 33.800000000000004px; width: 52px; line-height: 52px;"
-                  >
-                    U
-                  </span>
-                  <img
-                    alt=""
-                    aria-hidden="true"
-                    class="mx_BaseAvatar_image"
-                    data-testid="avatar-img"
-                    loading="lazy"
-                    src="data:image/png;base64,00"
-                    style="width: 52px; height: 52px;"
-                  />
-                </span>
+                  u
+                </button>
                 <h2>
                   @user:example.com
                 </h2>
@@ -566,25 +509,14 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
             class="mx_DecoratedRoomAvatar"
           >
             <span
-              class="mx_BaseAvatar"
+              class="_avatar_i91o9_17 mx_BaseAvatar"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
               role="presentation"
+              style="--cpd-avatar-size: 24px;"
             >
-              <span
-                aria-hidden="true"
-                class="mx_BaseAvatar_initial"
-                style="font-size: 15.600000000000001px; width: 24px; line-height: 24px;"
-              >
-                U
-              </span>
-              <img
-                alt=""
-                aria-hidden="true"
-                class="mx_BaseAvatar_image"
-                data-testid="avatar-img"
-                loading="lazy"
-                src="data:image/png;base64,00"
-                style="width: 24px; height: 24px;"
-              />
+              u
             </span>
           </div>
         </div>
@@ -652,30 +584,18 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
               <li
                 class="mx_NewRoomIntro"
               >
-                <span
+                <button
                   aria-label="Avatar"
                   aria-live="off"
-                  class="mx_AccessibleButton mx_BaseAvatar"
+                  class="_avatar_i91o9_17 mx_BaseAvatar"
+                  data-color="3"
+                  data-testid="avatar-img"
+                  data-type="round"
                   role="button"
-                  tabindex="0"
+                  style="--cpd-avatar-size: 52px;"
                 >
-                  <span
-                    aria-hidden="true"
-                    class="mx_BaseAvatar_initial"
-                    style="font-size: 33.800000000000004px; width: 52px; line-height: 52px;"
-                  >
-                    U
-                  </span>
-                  <img
-                    alt=""
-                    aria-hidden="true"
-                    class="mx_BaseAvatar_image"
-                    data-testid="avatar-img"
-                    loading="lazy"
-                    src="data:image/png;base64,00"
-                    style="width: 52px; height: 52px;"
-                  />
-                </span>
+                  u
+                </button>
                 <h2>
                   @user:example.com
                 </h2>

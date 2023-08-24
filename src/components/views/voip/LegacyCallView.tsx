@@ -420,7 +420,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
 
         const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
         const callRoom = (callRoomId ? MatrixClientPeg.safeGet().getRoom(callRoomId) : undefined) ?? undefined;
-        const avatarSize = pipMode ? 76 : 160;
+        const avatarSize = pipMode ? "76px" : "160px";
         const transfereeCall = LegacyCallHandler.instance.getTransfereeForCallId(call.callId);
         const isOnHold = isLocalOnHold || isRemoteOnHold;
 
@@ -507,7 +507,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                             className="mx_LegacyCallView_avatarContainer"
                             style={{ width: avatarSize, height: avatarSize }}
                         >
-                            <RoomAvatar room={callRoom} height={avatarSize} width={avatarSize} />
+                            <RoomAvatar room={callRoom} size={avatarSize} />
                         </div>
                     </div>
                     <div className="mx_LegacyCallView_status">{_t("Connecting")}</div>

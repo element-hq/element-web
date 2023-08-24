@@ -157,12 +157,6 @@ limitations under the License.
 .mx_SubspaceSelector {
     display: flex;
 
-    .mx_BaseAvatar_image {
-        border-radius: 8px;
-        margin: 0;
-        vertical-align: unset;
-    }
-
     .mx_BaseAvatar {
         display: inline-flex;
         margin: auto 16px auto 5px;
@@ -228,14 +222,8 @@ limitations under the License.
     display: flex;
     margin-top: 12px;
 
-    .mx_DecoratedRoomAvatar, /* we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling */
-    .mx_BaseAvatar.mx_RoomAvatar_isSpaceRoom {
+    .mx_DecoratedRoomAvatar, /* we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling */ {
         margin-right: 12px;
-    }
-
-    img.mx_RoomAvatar_isSpaceRoom,
-    .mx_RoomAvatar_isSpaceRoom img {
-        border-radius: 8px;
     }
 
     .mx_AddExistingToSpace_entry_name {

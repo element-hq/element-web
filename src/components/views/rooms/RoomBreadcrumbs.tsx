@@ -59,7 +59,7 @@ const RoomBreadcrumbTile: React.FC<{ room: Room; onClick: (ev: ButtonEvent) => v
         >
             <DecoratedRoomAvatar
                 room={room}
-                avatarSize={32}
+                size="32px"
                 displayBadge={true}
                 forceCount={true}
                 tooltipProps={{ tabIndex: isActive ? 0 : -1 }}

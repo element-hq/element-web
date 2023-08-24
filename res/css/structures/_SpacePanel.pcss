@@ -232,10 +232,6 @@ limitations under the License.
             transform: rotate(45deg);
         }
 
-        .mx_BaseAvatar_image {
-            border-radius: 8px;
-        }
-
         .mx_SpaceButton_menuButton {
             width: 20px;
             min-width: 20px; /* yay flex */
@@ -269,19 +265,6 @@ limitations under the License.
         min-width: 0;
         flex-grow: 1;
 
-        .mx_BaseAvatar:not(.mx_UserMenu_userAvatar_BaseAvatar) .mx_BaseAvatar_initial {
-            color: $secondary-content;
-            border-radius: 8px;
-            background-color: $panel-actions;
-            font-size: $font-15px !important; /* override inline style */
-            font-weight: var(--cpd-font-weight-semibold);
-            line-height: $font-18px;
-
-            & + .mx_BaseAvatar_image {
-                visibility: hidden;
-            }
-        }
-
         .mx_SpaceTreeLevel {
             // Indent subspaces
             padding-left: 16px;
@@ -290,6 +273,7 @@ limitations under the License.
 
     .mx_SpaceButton_avatarWrapper {
         position: relative;
+        line-height: 0;
     }
 
     .mx_SpacePanel_badgeContainer {

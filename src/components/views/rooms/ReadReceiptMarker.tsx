@@ -214,9 +214,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
                     fallbackUserId={this.props.fallbackUserId}
                     aria-hidden="true"
                     aria-live="off"
-                    width={14}
-                    height={14}
-                    resizeMethod="crop"
+                    size="14px"
                     style={style}
                     inputRef={this.avatar as RefObject<HTMLImageElement>}
                     hideTitle

@@ -479,7 +479,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
                         >
                             <DecoratedRoomAvatar
                                 room={this.props.room}
-                                avatarSize={32}
+                                size="32px"
                                 displayBadge={this.props.isMinimized}
                                 tooltipProps={{ tabIndex: isActive ? 0 : -1 }}
                             />

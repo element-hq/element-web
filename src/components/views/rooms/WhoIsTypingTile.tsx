@@ -177,8 +177,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
                 <MemberAvatar
                     key={u.userId}
                     member={u}
-                    width={24}
-                    height={24}
+                    size="24px"
                     resizeMethod="crop"
                     viewUserOnClick={true}
                     aria-live="off"

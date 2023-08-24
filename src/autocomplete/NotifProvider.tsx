@@ -56,7 +56,7 @@ export default class NotifProvider extends AutocompleteProvider {
                     suffix: " ",
                     component: (
                         <PillCompletion title="@room" description={_t("Notify the whole room")}>
-                            <RoomAvatar width={24} height={24} room={this.room} />
+                            <RoomAvatar size="24px" room={this.room} />
                         </PillCompletion>
                     ),
                     range: range!,

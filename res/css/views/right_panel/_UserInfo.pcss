@@ -95,49 +95,14 @@ limitations under the License.
 
         .mx_UserInfo_avatar_transition {
             max-width: 30vh;
+            aspect-ratio: 1 / 1;
             margin: 0 auto;
             transition: 0.5s;
 
-            .mx_UserInfo_avatar_transition_child {
-                /* use padding-top instead of height to make this element square,
-                as the % in padding is a % of the width (including margin,
-                that's why we had to put the margin to center on a parent div),
-                and not a % of the parent height. */
-                padding-top: 100%;
-                position: relative;
-
-                .mx_BaseAvatar,
-                .mx_BaseAvatar_initial,
-                .mx_BaseAvatar_image {
-                    border-radius: 100%;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100% !important;
-                    height: 100% !important;
-                }
-
-                .mx_BaseAvatar {
-                    &.mx_BaseAvatar_image {
-                        cursor: zoom-in;
-                    }
-
-                    .mx_BaseAvatar_initial {
-                        z-index: 1;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-
-                        /* override the calculated sizes so that the letter isn't HUGE */
-                        font-size: 6rem !important;
-                        width: 100% !important;
-                        transition: font-size 0.5s;
-
-                        & + .mx_BaseAvatar_image {
-                            cursor: default;
-                        }
-                    }
-                }
+            .mx_BaseAvatar,
+            .mx_BaseAvatar img {
+                width: 100%;
+                height: 100%;
             }
         }
     }
@@ -284,14 +249,6 @@ limitations under the License.
             .mx_UserInfo_avatar_transition {
                 max-width: 72px;
                 margin: 0 auto;
-            }
-
-            .mx_UserInfo_avatar_transition_child {
-                .mx_BaseAvatar {
-                    .mx_BaseAvatar_initial {
-                        font-size: 40px !important; /* override the other override because here the avatar is smaller */
-                    }
-                }
             }
         }
     }

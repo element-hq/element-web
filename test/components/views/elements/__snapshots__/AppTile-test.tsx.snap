@@ -102,14 +102,27 @@ exports[`AppTile for a pinned widget should render 1`] = `
         style="pointer-events: none;"
       >
         <span>
-          <img
-            alt=""
-            class="mx_BaseAvatar mx_BaseAvatar_image mx_WidgetAvatar"
+          <span
+            aria-label="Avatar"
+            class="_avatar_i91o9_17 mx_BaseAvatar mx_WidgetAvatar"
+            data-color="1"
             data-testid="avatar-img"
-            loading="lazy"
-            src="image-file-stub"
-            style="width: 20px; height: 20px;"
-          />
+            data-type="round"
+            style="--cpd-avatar-size: 20px;"
+          >
+            <img
+              alt=""
+              class="_image_i91o9_45"
+              crossorigin="anonymous"
+              data-type="round"
+              height="20px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="image-file-stub"
+              title=""
+              width="20px"
+            />
+          </span>
           <b>
             Example 1
           </b>
@@ -177,14 +190,27 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
         style="pointer-events: none;"
       >
         <span>
-          <img
-            alt=""
-            class="mx_BaseAvatar mx_BaseAvatar_image mx_WidgetAvatar"
+          <span
+            aria-label="Avatar"
+            class="_avatar_i91o9_17 mx_BaseAvatar mx_WidgetAvatar"
+            data-color="1"
             data-testid="avatar-img"
-            loading="lazy"
-            src="image-file-stub"
-            style="width: 20px; height: 20px;"
-          />
+            data-type="round"
+            style="--cpd-avatar-size: 20px;"
+          >
+            <img
+              alt=""
+              class="_image_i91o9_45"
+              crossorigin="anonymous"
+              data-type="round"
+              height="20px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="image-file-stub"
+              title=""
+              width="20px"
+            />
+          </span>
           <b>
             Example 1
           </b>
@@ -245,25 +271,14 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           </div>
           <div>
             <span
-              class="mx_BaseAvatar"
+              class="_avatar_i91o9_17 mx_BaseAvatar"
+              data-color="1"
+              data-testid="avatar-img"
+              data-type="round"
               role="presentation"
+              style="--cpd-avatar-size: 38px;"
             >
-              <span
-                aria-hidden="true"
-                class="mx_BaseAvatar_initial"
-                style="font-size: 24.7px; width: 38px; line-height: 38px;"
-              >
-                U
-              </span>
-              <img
-                alt=""
-                aria-hidden="true"
-                class="mx_BaseAvatar_image"
-                data-testid="avatar-img"
-                loading="lazy"
-                src="data:image/png;base64,00"
-                style="width: 38px; height: 38px;"
-              />
+              u
             </span>
             <h4
               class="mx_Heading_h4"
@@ -330,14 +345,27 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
               style="pointer-events: none;"
             >
               <span>
-                <img
-                  alt=""
-                  class="mx_BaseAvatar mx_BaseAvatar_image mx_WidgetAvatar"
+                <span
+                  aria-label="Avatar"
+                  class="_avatar_i91o9_17 mx_BaseAvatar mx_WidgetAvatar"
+                  data-color="1"
                   data-testid="avatar-img"
-                  loading="lazy"
-                  src="image-file-stub"
-                  style="width: 20px; height: 20px;"
-                />
+                  data-type="round"
+                  style="--cpd-avatar-size: 20px;"
+                >
+                  <img
+                    alt=""
+                    class="_image_i91o9_45"
+                    crossorigin="anonymous"
+                    data-type="round"
+                    height="20px"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                    src="image-file-stub"
+                    title=""
+                    width="20px"
+                  />
+                </span>
                 <b>
                   Example 1
                 </b>

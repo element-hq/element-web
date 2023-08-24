@@ -177,8 +177,7 @@ export function showAnyInviteErrors(
                                             }
                                             name={name!}
                                             idName={user?.userId}
-                                            width={36}
-                                            height={36}
+                                            size="36px"
                                         />
                                     </div>
                                     <div className="mx_InviteDialog_tile_nameStack">

@@ -184,9 +184,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
             e2eIcon = <E2EIcon status={e2eStatus} isUser={true} bordered={true} />;
         }
 
-        const av = this.props.avatarJsx || (
-            <BaseAvatar name={this.props.name} width={36} height={36} aria-hidden="true" />
-        );
+        const av = this.props.avatarJsx || <BaseAvatar name={this.props.name} size="36px" aria-hidden="true" />;
 
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         return (

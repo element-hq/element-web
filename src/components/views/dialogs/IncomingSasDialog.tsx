@@ -155,9 +155,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
                         name={oppProfile.displayname}
                         idName={this.props.verifier.userId}
                         url={url}
-                        width={48}
-                        height={48}
-                        resizeMethod="crop"
+                        size="48px"
                     />
                     <h2>{oppProfile.displayname}</h2>
                 </div>
@@ -168,8 +166,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
                     <BaseAvatar
                         name={this.props.verifier.userId.slice(1)}
                         idName={this.props.verifier.userId}
-                        width={48}
-                        height={48}
+                        size="48px"
                     />
                     <h2>{this.props.verifier.userId}</h2>
                 </div>

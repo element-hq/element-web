@@ -59,7 +59,7 @@ const getOwnProfile = (
     avatarUrl?: string;
 } => ({
     displayName: OwnProfileStore.instance.displayName || userId,
-    avatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE) ?? undefined,
+    avatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(parseInt(AVATAR_SIZE, 10)) ?? undefined,
 });
 
 const UserWelcomeTop: React.FC = () => {
@@ -84,9 +84,7 @@ const UserWelcomeTop: React.FC = () => {
                     idName={userId}
                     name={ownProfile.displayName}
                     url={ownProfile.avatarUrl}
-                    width={AVATAR_SIZE}
-                    height={AVATAR_SIZE}
-                    resizeMethod="crop"
+                    size={AVATAR_SIZE + "px"}
                 />
             </MiniAvatarUploader>
 
@@ -106,7 +104,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     }
 
     let introSection: JSX.Element;
-    if (justRegistered || !OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE)) {
+    if (justRegistered || !OwnProfileStore.instance.getHttpAvatarUrl(parseInt(AVATAR_SIZE, 10))) {
         introSection = <UserWelcomeTop />;
     } else {
         const brandingConfig = SdkConfig.getObject("branding");

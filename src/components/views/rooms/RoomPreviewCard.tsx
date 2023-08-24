@@ -95,7 +95,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
 
             inviterSection = (
                 <div className="mx_RoomPreviewCard_inviter">
-                    <MemberAvatar member={inviter} fallbackUserId={inviteSender} width={32} height={32} />
+                    <MemberAvatar member={inviter} fallbackUserId={inviteSender} size="32px" />
                     <div>
                         <div className="mx_RoomPreviewCard_inviter_name">
                             {_t(
@@ -160,15 +160,15 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
     if (isVideoRoom) {
         avatarRow = (
             <>
-                <RoomAvatar room={room} height={50} width={50} viewAvatarOnClick />
+                <RoomAvatar room={room} size="50px" viewAvatarOnClick />
                 <div className="mx_RoomPreviewCard_video" />
                 <BetaPill onClick={viewLabs} tooltipTitle={_t("Video rooms are a beta feature")} />
             </>
         );
     } else if (room.isSpaceRoom()) {
-        avatarRow = <RoomAvatar room={room} height={80} width={80} viewAvatarOnClick />;
+        avatarRow = <RoomAvatar room={room} size="80px" viewAvatarOnClick />;
     } else {
-        avatarRow = <RoomAvatar room={room} height={50} width={50} viewAvatarOnClick />;
+        avatarRow = <RoomAvatar room={room} size="50px" viewAvatarOnClick />;
     }
 
     let notice: string | null = null;

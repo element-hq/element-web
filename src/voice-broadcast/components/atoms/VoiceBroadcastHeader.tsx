@@ -113,7 +113,7 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
         });
     };
 
-    let roomAvatar = <RoomAvatar room={room} width={32} height={32} />;
+    let roomAvatar = <RoomAvatar room={room} size="32px" />;
     let roomName = (
         <div className="mx_VoiceBroadcastHeader_room_wrapper">
             <div className="mx_VoiceBroadcastHeader_room">{room.name}</div>

@@ -71,25 +71,14 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="mx_BaseAvatar"
+              class="_avatar_i91o9_17 mx_BaseAvatar"
+              data-color="7"
+              data-testid="avatar-img"
+              data-type="round"
               role="presentation"
+              style="--cpd-avatar-size: 20px;"
             >
-              <span
-                aria-hidden="true"
-                class="mx_BaseAvatar_initial"
-                style="font-size: 13px; width: 20px; line-height: 20px;"
-              >
-                U
-              </span>
-              <img
-                alt=""
-                aria-hidden="true"
-                class="mx_BaseAvatar_image"
-                data-testid="avatar-img"
-                loading="lazy"
-                src="data:image/png;base64,00"
-                style="width: 20px; height: 20px;"
-              />
+              U
             </span>
           </div>
           <div
@@ -152,25 +141,14 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="mx_BaseAvatar"
+              class="_avatar_i91o9_17 mx_BaseAvatar"
+              data-color="8"
+              data-testid="avatar-img"
+              data-type="round"
               role="presentation"
+              style="--cpd-avatar-size: 20px;"
             >
-              <span
-                aria-hidden="true"
-                class="mx_BaseAvatar_initial"
-                style="font-size: 13px; width: 20px; line-height: 20px;"
-              >
-                U
-              </span>
-              <img
-                alt=""
-                aria-hidden="true"
-                class="mx_BaseAvatar_image"
-                data-testid="avatar-img"
-                loading="lazy"
-                src="data:image/png;base64,00"
-                style="width: 20px; height: 20px;"
-              />
+              U
             </span>
           </div>
           <div
@@ -234,25 +212,14 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="mx_BaseAvatar"
+              class="_avatar_i91o9_17 mx_BaseAvatar"
+              data-color="8"
+              data-testid="avatar-img"
+              data-type="round"
               role="presentation"
+              style="--cpd-avatar-size: 20px;"
             >
-              <span
-                aria-hidden="true"
-                class="mx_BaseAvatar_initial"
-                style="font-size: 13px; width: 20px; line-height: 20px;"
-              >
-                N
-              </span>
-              <img
-                alt=""
-                aria-hidden="true"
-                class="mx_BaseAvatar_image"
-                data-testid="avatar-img"
-                loading="lazy"
-                src="data:image/png;base64,00"
-                style="width: 20px; height: 20px;"
-              />
+              N
             </span>
           </div>
           <div
@@ -322,25 +289,14 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
             class="mx_SpaceHierarchy_roomTile_avatar"
           >
             <span
-              class="mx_BaseAvatar"
+              class="_avatar_i91o9_17 mx_BaseAvatar"
+              data-color="2"
+              data-testid="avatar-img"
+              data-type="round"
               role="presentation"
+              style="--cpd-avatar-size: 20px;"
             >
-              <span
-                aria-hidden="true"
-                class="mx_BaseAvatar_initial"
-                style="font-size: 13px; width: 20px; line-height: 20px;"
-              >
-                N
-              </span>
-              <img
-                alt=""
-                aria-hidden="true"
-                class="mx_BaseAvatar_image"
-                data-testid="avatar-img"
-                loading="lazy"
-                src="data:image/png;base64,00"
-                style="width: 20px; height: 20px;"
-              />
+              N
             </span>
           </div>
           <div

@@ -62,9 +62,9 @@ export const Entry: React.FC<{
     return (
         <label className="mx_AddExistingToSpace_entry">
             {room?.isSpaceRoom() ? (
-                <RoomAvatar room={room} height={32} width={32} />
+                <RoomAvatar room={room} size="32px" />
             ) : (
-                <DecoratedRoomAvatar room={room} avatarSize={32} />
+                <DecoratedRoomAvatar room={room} size="32px" />
             )}
             <span className="mx_AddExistingToSpace_entry_name">{room.name}</span>
             <StyledCheckbox
@@ -427,7 +427,7 @@ export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, spac
                         });
                         return (
                             <div key={space.roomId} className={classes}>
-                                <RoomAvatar room={space} width={24} height={24} />
+                                <RoomAvatar room={space} size="24px" />
                                 {space.name || getDisplayAliasForRoom(space) || space.roomId}
                             </div>
                         );
@@ -445,7 +445,7 @@ export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, spac
 
     return (
         <div className="mx_SubspaceSelector">
-            <RoomAvatar room={value} height={40} width={40} />
+            <RoomAvatar room={value} size="40px" />
             <div>
                 <h1>{title}</h1>
                 {body}

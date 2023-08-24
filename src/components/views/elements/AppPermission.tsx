@@ -94,9 +94,9 @@ export default class AppPermission extends React.Component<IProps, IState> {
         const userId = displayName === this.props.creatorUserId ? null : this.props.creatorUserId;
 
         const avatar = this.state.roomMember ? (
-            <MemberAvatar member={this.state.roomMember} width={38} height={38} />
+            <MemberAvatar member={this.state.roomMember} size="38px" />
         ) : (
-            <BaseAvatar name={this.props.creatorUserId} width={38} height={38} />
+            <BaseAvatar name={this.props.creatorUserId} size="38px" />
         );
 
         const warningTooltipText = (

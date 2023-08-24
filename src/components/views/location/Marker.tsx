@@ -78,8 +78,7 @@ const Marker = React.forwardRef<HTMLDivElement, Props>(({ id, roomMember, useMem
                     {roomMember ? (
                         <MemberAvatar
                             member={roomMember}
-                            width={36}
-                            height={36}
+                            size="36px"
                             viewUserOnClick={false}
                             // no mxid on hover when marker has tooltip
                             hideTitle={!!tooltip}

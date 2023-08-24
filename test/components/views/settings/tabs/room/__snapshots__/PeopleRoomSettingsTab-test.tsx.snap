@@ -15,15 +15,28 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] 
     <div
       class="mx_PeopleRoomSettingsTab_knock"
     >
-      <img
-        alt=""
-        class="mx_BaseAvatar mx_BaseAvatar_image"
+      <span
+        aria-label="Profile picture"
+        class="_avatar_i91o9_17 mx_BaseAvatar"
+        data-color="4"
         data-testid="avatar-img"
-        loading="lazy"
-        src="mxc://example.org/albert-einstein.png"
-        style="width: 42px; height: 42px;"
+        data-type="round"
+        style="--cpd-avatar-size: 42px;"
         title="@albert.einstein:example.org"
-      />
+      >
+        <img
+          alt=""
+          class="_image_i91o9_45"
+          crossorigin="anonymous"
+          data-type="round"
+          height="42px"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          src="mxc://example.org/albert-einstein.png"
+          title="@albert.einstein:example.org"
+          width="42px"
+        />
+      </span>
       <div
         class="mx_PeopleRoomSettingsTab_content"
       >
@@ -98,26 +111,15 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests reduced 1`
       class="mx_PeopleRoomSettingsTab_knock"
     >
       <span
-        class="mx_BaseAvatar"
+        class="_avatar_i91o9_17 mx_BaseAvatar"
+        data-color="4"
+        data-testid="avatar-img"
+        data-type="round"
         role="presentation"
+        style="--cpd-avatar-size: 42px;"
+        title="@albert.einstein:example.org"
       >
-        <span
-          aria-hidden="true"
-          class="mx_BaseAvatar_initial"
-          style="font-size: 27.3px; width: 42px; line-height: 42px;"
-        >
-          A
-        </span>
-        <img
-          alt=""
-          aria-hidden="true"
-          class="mx_BaseAvatar_image"
-          data-testid="avatar-img"
-          loading="lazy"
-          src="data:image/png;base64,00"
-          style="width: 42px; height: 42px;"
-          title="@albert.einstein:example.org"
-        />
+        a
       </span>
       <div
         class="mx_PeopleRoomSettingsTab_content"

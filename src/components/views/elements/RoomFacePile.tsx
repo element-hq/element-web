@@ -77,13 +77,7 @@ const RoomFacePile: FC<IProps> = ({ room, onlyKnownUsers = true, numShown = DEFA
     );
 
     return (
-        <FacePile
-            members={shownMembers}
-            faceSize={28}
-            overflow={members.length > numShown}
-            tooltip={tooltip}
-            {...props}
-        >
+        <FacePile members={shownMembers} size="28px" overflow={members.length > numShown} tooltip={tooltip} {...props}>
             {onlyKnownUsers && (
                 <span className="mx_FacePile_summary">
                     {_t("%(count)s people you know have already joined", { count: members.length })}

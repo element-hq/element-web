@@ -477,8 +477,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 <MemberAvatar
                     member={mxEvent.sender}
                     fallbackUserId={mxEvent.getSender()}
-                    width={32}
-                    height={32}
+                    size="32px"
                     viewUserOnClick={true}
                 />
             );

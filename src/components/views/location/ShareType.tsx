@@ -31,8 +31,8 @@ const UserAvatar: React.FC = () => {
     const userId = matrixClient.getSafeUserId();
     const displayName = OwnProfileStore.instance.displayName ?? undefined;
     // 40 - 2px border
-    const avatarSize = 36;
-    const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize) ?? undefined;
+    const avatarSize = "36px";
+    const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(parseInt(avatarSize, 10)) ?? undefined;
 
     return (
         <div className={`mx_ShareType_option-icon ${LocationShareType.Own}`}>
@@ -40,9 +40,7 @@ const UserAvatar: React.FC = () => {
                 idName={userId}
                 name={displayName}
                 url={avatarUrl}
-                width={avatarSize}
-                height={avatarSize}
-                resizeMethod="crop"
+                size={avatarSize}
                 className="mx_UserMenu_userAvatar_BaseAvatar"
             />
         </div>

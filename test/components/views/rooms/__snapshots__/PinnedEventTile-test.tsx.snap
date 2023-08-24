@@ -6,25 +6,14 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
     class="mx_PinnedEventTile"
   >
     <span
-      class="mx_BaseAvatar mx_PinnedEventTile_senderAvatar"
+      class="_avatar_i91o9_17 mx_BaseAvatar mx_PinnedEventTile_senderAvatar"
+      data-color="6"
+      data-testid="avatar-img"
+      data-type="round"
       role="presentation"
+      style="--cpd-avatar-size: 24px;"
     >
-      <span
-        aria-hidden="true"
-        class="mx_BaseAvatar_initial"
-        style="font-size: 15.600000000000001px; width: 24px; line-height: 24px;"
-      >
-        A
-      </span>
-      <img
-        alt=""
-        aria-hidden="true"
-        class="mx_BaseAvatar_image"
-        data-testid="avatar-img"
-        loading="lazy"
-        src="data:image/png;base64,00"
-        style="width: 24px; height: 24px;"
-      />
+      a
     </span>
     <span
       class="mx_PinnedEventTile_sender mx_Username_color6"

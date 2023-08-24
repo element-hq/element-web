@@ -241,12 +241,7 @@ export default class MemberList extends React.Component<IProps, IState> {
             <EntityTile
                 className="mx_EntityTile_ellipsis"
                 avatarJsx={
-                    <BaseAvatar
-                        url={require("../../../../res/img/ellipsis.svg").default}
-                        name="..."
-                        width={36}
-                        height={36}
-                    />
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg").default} name="..." size="36px" />
                 }
                 name={text}
                 presenceState="online"
@@ -412,7 +407,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         if (room?.isSpaceRoom()) {
             scopeHeader = (
                 <div className="mx_RightPanel_scopeHeader">
-                    <RoomAvatar room={room} height={32} width={32} />
+                    <RoomAvatar room={room} size="32px" />
                     <RoomName room={room} />
                 </div>
             );

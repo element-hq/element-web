@@ -33,7 +33,7 @@ import TooltipTarget from "../elements/TooltipTarget";
 
 interface IProps {
     room: Room;
-    avatarSize: number;
+    size: string;
     displayBadge?: boolean;
     forceCount?: boolean;
     oobData?: IOOBData;
@@ -207,8 +207,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
             <div className={classes}>
                 <RoomAvatar
                     room={this.props.room}
-                    width={this.props.avatarSize}
-                    height={this.props.avatarSize}
+                    size={this.props.size}
                     oobData={this.props.oobData}
                     viewAvatarOnClick={this.props.viewAvatarOnClick}
                 />

@@ -36,7 +36,7 @@ describe("MemberAvatar", () => {
     function getComponent(props: Partial<ComponentProps<typeof MemberAvatar>>) {
         return (
             <RoomContext.Provider value={getRoomContext(room, {})}>
-                <MemberAvatar member={null} width={35} height={35} {...props} />
+                <MemberAvatar member={null} size="35px" {...props} />
             </RoomContext.Provider>
         );
     }

@@ -142,7 +142,7 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
                 title={_t("Open room")}
                 alignment={Alignment.Top}
             >
-                <DecoratedRoomAvatar room={room} avatarSize={32} />
+                <DecoratedRoomAvatar room={room} size="32px" />
                 <span className="mx_ForwardList_entry_name">{room.name}</span>
                 <RoomContextDetails component="span" className="mx_ForwardList_entry_detail" room={room} />
             </AccessibleTooltipButton>
@@ -261,12 +261,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             <EntityTile
                 className="mx_EntityTile_ellipsis"
                 avatarJsx={
-                    <BaseAvatar
-                        url={require("../../../../res/img/ellipsis.svg").default}
-                        name="..."
-                        width={36}
-                        height={36}
-                    />
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg").default} name="..." size="36px" />
                 }
                 name={text}
                 presenceState="online"

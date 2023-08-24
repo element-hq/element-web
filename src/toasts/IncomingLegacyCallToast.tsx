@@ -112,7 +112,7 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
 
         return (
             <React.Fragment>
-                <RoomAvatar room={room ?? undefined} height={32} width={32} />
+                <RoomAvatar room={room ?? undefined} size="32px" />
                 <div className={contentClass}>
                     <span className="mx_LegacyCallEvent_caller">{room ? room.name : _t("Unknown caller")}</span>
                     <div className="mx_LegacyCallEvent_type">

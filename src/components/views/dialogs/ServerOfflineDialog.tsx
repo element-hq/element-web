@@ -53,7 +53,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
                 throw new Error("Cannot render unknown context: " + c.constructor.name);
             const header = (
                 <div className="mx_ServerOfflineDialog_content_context_timeline_header">
-                    <RoomAvatar width={24} height={24} room={c.room} />
+                    <RoomAvatar size="24px" room={c.room} />
                     <span>{c.room.name}</span>
                 </div>
             );
