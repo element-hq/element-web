@@ -11,7 +11,7 @@ jobs:
 
             - name: "Get modified files"
               id: changed_files
-              if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'RiotTranslateBot'
+              if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'RiotTranslateBot' && github.event.pull_request.user.login != 't3chguy'
               uses: tj-actions/changed-files@17f3fec1edef0c3916d59cbcee1585fcd457e456 # v38
               with:
                   files: |
@@ -25,8 +25,8 @@ jobs:
                   github.event.pull_request.user.login != 'RiotTranslateBot' &&
                   steps.changed_files.outputs.any_modified == 'true'
               run: |
-                  echo "Only translation files modified by `yarn i18n` can be committed - other translation files will confuse weblate in unrecoverable ways."
                   exit 1
+                  echo "Only translation files modified by 'yarn i18n' can be committed - other translation files will confuse weblate in unrecoverable ways."
 
             - uses: actions/setup-node@v3
               with:
