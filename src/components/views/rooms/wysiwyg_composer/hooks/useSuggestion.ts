@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import { AllowedMentionAttributes, MappedSuggestion } from "@matrix-org/matrix-wysiwyg";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState, SetStateAction } from "react";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { isNotNull } from "../../../../../Typeguards";
 
@@ -59,7 +60,20 @@ export function useSuggestion(
     onSelect: (event: SyntheticEvent<HTMLDivElement>) => void;
     suggestion: MappedSuggestion | null;
 } {
-    const [suggestionData, setSuggestionData] = useState<SuggestionState>(null);
+    const [suggestionData, setSuggestionData0] = useState<SuggestionState>(null);
+
+    // debug for https://github.com/vector-im/element-web/issues/26037
+    const setSuggestionData = (suggestionData: SetStateAction<SuggestionState>): void => {
+        // setState allows either the data itself or a callback which returns the data
+        logger.log(
+            `## 26037 ## wysiwyg useSuggestion hook setting suggestion data to ${
+                suggestionData === null || suggestionData instanceof Function
+                    ? suggestionData
+                    : suggestionData.mappedSuggestion.keyChar + suggestionData.mappedSuggestion.text
+            }`,
+        );
+        setSuggestionData0(suggestionData);
+    };
 
     // We create a `selectionchange` handler here because we need to know when the user has moved the cursor,
     // we can not depend on input events only
