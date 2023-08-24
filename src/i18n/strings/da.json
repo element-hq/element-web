@@ -270,11 +270,9 @@
     "Straight rows of keys are easy to guess": "Bogstaver i en række på tastaturet er nemme at gætte",
     "Short keyboard patterns are easy to guess": "Korte tastaturmønstre er nemme at gætte",
     "Please contact your homeserver administrator.": "Kontakt venligst din homeserver administrator.",
-    "Message Pinning": "Fastgørelse af beskeder",
     "Add Email Address": "Tilføj e-mail adresse",
     "Add Phone Number": "Tilføj telefonnummer",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s ændret af %(senderName)s",
-    "Render simple counters in room header": "Vis simple tællere i rumhovedet",
     "Enable Emoji suggestions while typing": "Aktiver emoji forslag under indtastning",
     "Show a placeholder for removed messages": "Vis en pladsholder for fjernede beskeder",
     "Use Single Sign On to continue": "Brug engangs login for at fortsætte",
@@ -720,5 +718,9 @@
         "cancel": "Afbryd",
         "back": "Tilbage",
         "accept": "Accepter"
+    },
+    "labs": {
+        "pinning": "Fastgørelse af beskeder",
+        "state_counters": "Vis simple tællere i rumhovedet"
     }
 }

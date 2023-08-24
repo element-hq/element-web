@@ -763,7 +763,6 @@
     "Dates are often easy to guess": "Datoer er ofte lette å gjette",
     "This is a top-10 common password": "Dette er et topp-10 vanlig passord",
     "This is a top-100 common password": "Dette er et topp-100 vanlig passord",
-    "Message Pinning": "Meldingsklistring",
     "Aeroplane": "Fly",
     "No display name": "Ingen visningsnavn",
     "New passwords don't match": "De nye passordene samsvarer ikke",
@@ -1580,6 +1579,9 @@
     },
     "a11y": {
         "user_menu": "Brukermeny"
+    },
+    "labs": {
+        "pinning": "Meldingsklistring"
     },
     "keyboard": {
         "home": "Hjem",

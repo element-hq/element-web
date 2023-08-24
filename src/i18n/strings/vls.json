@@ -170,8 +170,6 @@
     "Straight rows of keys are easy to guess": "Zulk’n aneengeslootn riksje toetsn es gemakkelik te roadn",
     "Short keyboard patterns are easy to guess": "Korte patroonn ip ’t toetsenbord wordn gemakkelik geroadn",
     "Please contact your homeserver administrator.": "Gelieve contact ip te neemn me den beheerder van je thuusserver.",
-    "Message Pinning": "Bericht vastprikkn",
-    "Render simple counters in room header": "Eenvoudige tellers boovnan ’t gesprek toogn",
     "Enable Emoji suggestions while typing": "Emoticons voorstelln binst ’t typn",
     "Show a placeholder for removed messages": "Vullienge toogn vo verwyderde berichtn",
     "Show display name changes": "Veranderiengn van weergavenoamn toogn",
@@ -1022,6 +1020,10 @@
         "back": "Were",
         "add": "Toevoegn",
         "accept": "Anveirdn"
+    },
+    "labs": {
+        "pinning": "Bericht vastprikkn",
+        "state_counters": "Eenvoudige tellers boovnan ’t gesprek toogn"
     },
     "keyboard": {
         "home": "Thuus"

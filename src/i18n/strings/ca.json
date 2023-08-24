@@ -99,7 +99,6 @@
     "Your browser does not support the required cryptography extensions": "El vostre navegador no és compatible amb els complements criptogràfics necessaris",
     "Not a valid %(brand)s keyfile": "El fitxer no és un fitxer de claus de %(brand)s vàlid",
     "Authentication check failed: incorrect password?": "Ha fallat l'autenticació: heu introduït correctament la contrasenya?",
-    "Message Pinning": "Fixació de missatges",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Mostra les marques de temps en format de 12 hores (p.e. 2:30pm)",
     "Enable automatic language detection for syntax highlighting": "Activa la detecció automàtica d'idiomes per al ressaltat de sintaxi",
     "Automatically replace plain text Emoji": "Substitueix automàticament Emoji de text pla",
@@ -553,7 +552,6 @@
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Si no has configurat el teu mètode de recuperació, pot ser que un atacant estigui intentant accedir al teu compte. Canvia la teva contrasenya i configura un nou mètode de recuperació a Configuració, immediatament.",
     "You can also set up Secure Backup & manage your keys in Settings.": "També pots configurar la còpia de seguretat segura i gestionar les teves claus a Configuració.",
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Prèviament has fet servir %(brand)s a %(host)s amb la càrrega mandrosa de membres activada. En aquesta versió la càrrega mandrosa està desactivada. Com que la memòria cau local no és compatible entre les dues versions, %(brand)s necessita tornar a sincronitzar el teu compte.",
-    "Show info about bridges in room settings": "Mostra informació d'enllaços a la configuració de sala",
     "Use an identity server to invite by email. Manage in Settings.": "Utilitza un servidor d'identitat per convidar per correu electrònic. Gestiona'l a Configuració.",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. Fes clic a continua per a utilitzar el servidor d'identitat predeterminat (%(defaultIdentityServerName)s) o gestiona'l a Configuració.",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Utilitza un servidor d'identitat per poder convidar per correu electrònic. <default>Utilitza el predeterminat (%(defaultIdentityServerName)s)</default> o gestiona'l a <settings>Configuració</settings>.",
@@ -657,6 +655,10 @@
         "back": "Enrere",
         "add": "Afegeix",
         "accept": "Accepta"
+    },
+    "labs": {
+        "pinning": "Fixació de missatges",
+        "bridge_state": "Mostra informació d'enllaços a la configuració de sala"
     },
     "keyboard": {
         "home": "Inici"

@@ -83,7 +83,6 @@
     "Your browser does not support the required cryptography extensions": "Ваш прегледач не подржава потребна криптографска проширења",
     "Not a valid %(brand)s keyfile": "Није исправана %(brand)s кључ-датотека",
     "Authentication check failed: incorrect password?": "Провера идентитета није успела: нетачна лозинка?",
-    "Message Pinning": "Закачене поруке",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Прикажи временске жигове у 12-сатном облику (нпр.: 2:30 ПоП)",
     "Always show message timestamps": "Увек прикажи временске жигове",
     "Enable automatic language detection for syntax highlighting": "Омогући самостално препознавање језика за истицање синтаксе",
@@ -515,7 +514,6 @@
     "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s је започео видео позив. (није подржано од стране овог прегледача)",
     "You do not have permission to invite people to this room.": "Немате дозволу за позивање људи у ову собу.",
     "Encryption upgrade available": "Надоградња шифровања је доступна",
-    "Show info about bridges in room settings": "Прикажи податке о мостовима у подешавањима собе",
     "Enable Emoji suggestions while typing": "Омогући предлоге емоџија приликом куцања",
     "Show more": "Прикажи више",
     "Cannot connect to integration manager": "Не могу се повезати на управника уградњи",
@@ -1339,6 +1337,10 @@
         "back": "Назад",
         "add": "Додај",
         "accept": "Прихвати"
+    },
+    "labs": {
+        "pinning": "Закачене поруке",
+        "bridge_state": "Прикажи податке о мостовима у подешавањима собе"
     },
     "keyboard": {
         "home": "Почетна",

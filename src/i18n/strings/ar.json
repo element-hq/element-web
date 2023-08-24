@@ -797,11 +797,6 @@
     "Enable Emoji suggestions while typing": "تفعيل اقتراحات الرموز التعبيرية أثناء الكتابة",
     "Use custom size": "استخدام حجم مخصص",
     "Font size": "حجم الخط",
-    "Show info about bridges in room settings": "إظهار المعلومات حول الجسور في إعدادات الغرفة",
-    "Offline encrypted messaging using dehydrated devices": "الرسائل المشفرة في وضع عدم الاتصال باستخدام أجهزة مجففة",
-    "Support adding custom themes": "دعم إضافة ألوان مخصصة",
-    "Render simple counters in room header": "إظهار عدّادات بسيطة في رأس الغرفة",
-    "Message Pinning": "تثبيت الرسالة",
     "Change notification settings": "تغيير إعدادات الإشعار",
     "%(senderName)s is calling": "%(senderName)s يتصل",
     "Waiting for answer": "بانتظار الرد",
@@ -1338,6 +1333,13 @@
         "back": "العودة",
         "add": "أضف",
         "accept": "قبول"
+    },
+    "labs": {
+        "pinning": "تثبيت الرسالة",
+        "state_counters": "إظهار عدّادات بسيطة في رأس الغرفة",
+        "custom_themes": "دعم إضافة ألوان مخصصة",
+        "dehydration": "الرسائل المشفرة في وضع عدم الاتصال باستخدام أجهزة مجففة",
+        "bridge_state": "إظهار المعلومات حول الجسور في إعدادات الغرفة"
     },
     "keyboard": {
         "number": "[رقم]"

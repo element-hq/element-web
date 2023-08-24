@@ -845,12 +845,6 @@
     "Enable Emoji suggestions while typing": "החל הצעות לסמלים בזמן כתיבה",
     "Use custom size": "השתמשו בגודל מותאם אישית",
     "Font size": "גודל אותיות",
-    "Show info about bridges in room settings": "הצג מידע אודות גשרים בהגדרות של החדרים",
-    "Offline encrypted messaging using dehydrated devices": "שליחת הודעות מוצפנות במצב אופליין עם שימוש במכשיר מיובש",
-    "Support adding custom themes": "מיכה להוספת תבניות מותאמות אישית",
-    "Render simple counters in room header": "הצג ספירה בראש החדר",
-    "Message Pinning": "נעיצת הודעות",
-    "Render LaTeX maths in messages": "בצע מתמטיקה של LaTeX בהודעות",
     "Change notification settings": "שינוי הגדרת התרעות",
     "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
     "%(senderName)s: %(message)s": "%(senderName)s :%(message)s",
@@ -2399,7 +2393,6 @@
     "Jump to last message": "קיפצו להודעה האחרונה",
     "Jump to first message": "קיפצו להודעה הראשונה",
     "Send read receipts": "שילחו אישורי קריאה",
-    "Jump to date (adds /jumptodate and jump to date headers)": "קיפצו לתאריך (מוסיף /jumptodate וקפוץ לכותרות תאריך)",
     "Messages in this chat will be end-to-end encrypted.": "הודעות בצ'אט זה יוצפו מקצה לקצה.",
     "Some encryption parameters have been changed.": "מספר פרמטרים של הצפנה שונו.",
     "Decrypting": "מפענח",
@@ -2765,6 +2758,15 @@
     },
     "a11y": {
         "user_menu": "תפריט משתמש"
+    },
+    "labs": {
+        "latex_maths": "בצע מתמטיקה של LaTeX בהודעות",
+        "pinning": "נעיצת הודעות",
+        "state_counters": "הצג ספירה בראש החדר",
+        "custom_themes": "מיכה להוספת תבניות מותאמות אישית",
+        "dehydration": "שליחת הודעות מוצפנות במצב אופליין עם שימוש במכשיר מיובש",
+        "bridge_state": "הצג מידע אודות גשרים בהגדרות של החדרים",
+        "jump_to_date": "קיפצו לתאריך (מוסיף /jumptodate וקפוץ לכותרות תאריך)"
     },
     "keyboard": {
         "home": "הבית",

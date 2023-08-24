@@ -94,7 +94,6 @@
     "Your browser does not support the required cryptography extensions": "Nettlesaren din støttar ikkje dei naudsynte kryptografiske utvidingane",
     "Not a valid %(brand)s keyfile": "Ikkje ei gyldig %(brand)s-nykelfil",
     "Authentication check failed: incorrect password?": "Authentiseringsforsøk mislukkast: feil passord?",
-    "Message Pinning": "Meldingsfesting",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Vis tidspunkt i 12-timarsform (t.d. 2:30pm)",
     "Always show message timestamps": "Vis alltid meldingstidspunkt",
     "Automatically replace plain text Emoji": "Erstatt Emojiar i klartekst av seg sjølv",
@@ -701,7 +700,6 @@
     "Room avatar": "Rom-avatar",
     "Power level": "Tilgangsnivå",
     "Voice & Video": "Tale og video",
-    "Show info about bridges in room settings": "Vis info om bruer under rominnstillingar",
     "Show display name changes": "Vis endringar for visningsnamn",
     "Match system theme": "Følg systemtema",
     "Show shortcuts to recently viewed rooms above the room list": "Vis snarvegar til sist synte rom over romkatalogen",
@@ -1096,6 +1094,10 @@
         "back": "Attende",
         "add": "Legg til",
         "accept": "Sei ja"
+    },
+    "labs": {
+        "pinning": "Meldingsfesting",
+        "bridge_state": "Vis info om bruer under rominnstillingar"
     },
     "keyboard": {
         "home": "Heim"

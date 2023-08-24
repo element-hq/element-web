@@ -99,7 +99,6 @@
     "Your browser does not support the required cryptography extensions": ".i le kibrbrauzero na ka'e pilno le mifra ciste poi jai sarcu",
     "Authentication check failed: incorrect password?": ".i pu fliba lo nu birti lo du'u curmi lo nu do jonse .i na'e drani xu japyvla",
     "Please contact your homeserver administrator.": ".i .e'o ko tavla lo admine be le samtcise'u",
-    "Message Pinning": "lo du'u xu kau kakne lo nu mrilu lo vitno notci",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "lo du'u xu kau lo tcika cu se tarmi mu'a lu ti'u li re pi'e ci no su'i pa re li'u",
     "Always show message timestamps": "lo du'u xu kau do ro roi viska ka'e lo tcika be tu'a lo notci",
     "Enable automatic language detection for syntax highlighting": "lo du'u xu kau zmiku facki lo du'u ma kau bangu ku te zu'e lo nu skari ba'argau lo gensu'a",
@@ -396,5 +395,8 @@
         "close": "nu zilmipri",
         "add": "jmina",
         "accept": "nu fonjo'e"
+    },
+    "labs": {
+        "pinning": "lo du'u xu kau kakne lo nu mrilu lo vitno notci"
     }
 }

@@ -253,7 +253,6 @@
     "New login. Was this you?": "Anekcam amaynut. D kečč/kemm?",
     "What's new?": "D acu-t umaynut?",
     "Please contact your homeserver administrator.": "Ttxil-k/m nermes anedbal-ik/im n usebter agejdan.",
-    "Support adding custom themes": "Tallalt n tmerna n yisental udmawanen",
     "Use custom size": "Seqdec teɣzi tudmawant",
     "Send typing notifications": "Azen ilɣa yettuszemlen",
     "Show typing notifications": "Azen ilɣa yettuszemlen",
@@ -353,7 +352,6 @@
     "%(senderName)s: %(message)s": "%(senderName)s: %(message)s",
     "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
     "%(senderName)s invited %(targetName)s": "%(senderName)s yettusnubget %(targetName)s",
-    "Message Pinning": "Arezzi n yizen",
     "Collecting logs": "Alqaḍ n yiɣmisen",
     "Waiting for response from server": "Aṛaǧu n tririt sɣur aqeddac",
     "Messages containing my display name": "Iznan ideg yella yisem-iw yettwaskanen",
@@ -1074,7 +1072,6 @@
     "Your homeserver has exceeded its user limit.": "Aqeddac-inek·inem agejdan yewweḍ ɣer talast n useqdac.",
     "Your homeserver has exceeded one of its resource limits.": "Aqeddac-inek·inem agejdan iɛedda yiwet seg tlisa-ines tiɣbula.",
     "Contact your <a>server admin</a>.": "Nermes anedbal-inek·inem <a>n uqeddac</a>.",
-    "Render simple counters in room header": "Err amsiḍen afessa ɣef uqerru n texxamt",
     "Enable big emoji in chat": "Rmed imujit ameqqran deg udiwenni",
     "Automatically replace plain text Emoji": "Semselsi iujit n uḍris aččuran s wudem awurman",
     "Use a system font": "Seqdec tasefsit n unagraw",
@@ -1225,7 +1222,6 @@
     "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Tzemreḍ ad tjerrdeḍ, maca kra n tmahilin ur ttilint ara almi yuɣal-d uqeddac n tmagit. Ma mazal tettwaliḍ alɣu-a, senqed tawila-inek•inem neɣ nermes anedbal n uqeddac.",
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Tzemreḍ ad talseḍ awennez i wawal-ik•im uffir, maca kra n tmahilin ur ttilint ara almi yuɣal-d uqeddac n tmagit. Ma mazal tettwaliḍ alɣu-a, senqed tawila-inek•inem neɣ nermes anedbal n uqeddac.",
     "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Tzemreḍ ad teqqneḍ, maca kra n tmahilin ur ttilint ara almi yuɣal-d uqeddac n tmagit. Ma mazal tettwaliḍ alɣu-a senqed tawila-inek•inem neɣ nermes anedbal n uqeddac.",
-    "Show info about bridges in room settings": "Sken-d tilɣa ɣef teqneṭrin deg yiɣewwaṛen n texxamt",
     "Enable Emoji suggestions while typing": "Rmed asumer n yimujiten deg wakud n tira",
     "Show a placeholder for removed messages": "Sken-d iznan yettwakksen",
     "Enable automatic language detection for syntax highlighting": "Rmed tifin tawurmant n tutlayt i useɣti n tira",
@@ -1997,6 +1993,12 @@
     },
     "a11y": {
         "user_menu": "Umuɣ n useqdac"
+    },
+    "labs": {
+        "pinning": "Arezzi n yizen",
+        "state_counters": "Err amsiḍen afessa ɣef uqerru n texxamt",
+        "custom_themes": "Tallalt n tmerna n yisental udmawanen",
+        "bridge_state": "Sken-d tilɣa ɣef teqneṭrin deg yiɣewwaṛen n texxamt"
     },
     "keyboard": {
         "home": "Agejdan",

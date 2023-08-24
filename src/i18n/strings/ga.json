@@ -46,7 +46,6 @@
     "Reject & Ignore user": "Diúltaigh ⁊ Neamaird do úsáideoir",
     "Ignored users": "Úsáideoirí neamhairde",
     "Ignored/Blocked": "Neamhairde/Tachta",
-    "Message Pinning": "Ceangal teachtaireachta",
     "Avoid sequences": "Seachain seicheamh",
     "Unrecognised address": "Seoladh nár aithníodh",
     "Displays action": "Taispeáin gníomh",
@@ -727,6 +726,9 @@
         "back": "Ar Ais",
         "add": "Cuir",
         "accept": "Glac"
+    },
+    "labs": {
+        "pinning": "Ceangal teachtaireachta"
     },
     "keyboard": {
         "home": "Tús",

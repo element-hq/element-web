@@ -269,7 +269,6 @@
     "You are no longer ignoring %(userId)s": "Tu vairāk neignorē %(userId)s",
     "%(senderName)s changed the pinned messages for the room.": "%(senderName)s nomainīja šajā istabā piespraustās ziņas.",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s vidžets, kuru mainīja %(senderName)s",
-    "Message Pinning": "Ziņu piespraušana",
     "Mirror local video feed": "Rādīt spoguļskatā kameras video",
     "Enable inline URL previews by default": "Iespējot URL priekšskatījumus pēc noklusējuma",
     "Enable URL previews for this room (only affects you)": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai jūs pašu)",
@@ -1670,7 +1669,6 @@
     "You can change these anytime.": "Jebkurā laikā varat to mainīt.",
     "Join public room": "Pievienoties publiskai istabai",
     "Let's create a room for each of them.": "Izveidojam katram no tiem savu istabu!",
-    "How can I create a video room?": "Kā izveidot video istabu?",
     "We'll create rooms for each of them.": "Mēs izveidosim istabas katram no tiem.",
     "Failed to create initial space rooms": "Neizdevās izveidot sākotnējās vietas istabas",
     "Create a video room": "Izveidot video istabu",
@@ -1831,6 +1829,10 @@
     },
     "a11y": {
         "user_menu": "Lietotāja izvēlne"
+    },
+    "labs": {
+        "pinning": "Ziņu piespraušana",
+        "video_rooms_faq1_question": "Kā izveidot video istabu?"
     },
     "keyboard": {
         "home": "Mājup"

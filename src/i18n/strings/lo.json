@@ -2177,17 +2177,8 @@
     "Enable Emoji suggestions while typing": "ເປີດໃຊ້ການແນະນຳອີໂມຈິໃນຂະນະທີ່ພິມ",
     "Use custom size": "ໃຊ້ຂະຫນາດທີ່ກໍາຫນົດເອງ",
     "Font size": "ຂະໜາດຕົວອັກສອນ",
-    "Jump to date (adds /jumptodate and jump to date headers)": "ໄປຫາວັນທີ (ເພີ່ມ /jumptodate ແລະໄປຫາຫົວຂໍ້ວັນທີ)",
-    "Show info about bridges in room settings": "ສະແດງຂໍ້ມູນກ່ຽວກັບການແກ້ໄຂການຕັ້ງຄ່າຫ້ອງ",
-    "Offline encrypted messaging using dehydrated devices": "ຂໍ້ຄວາມເຂົ້າລະຫັດແບບອອບໄລນ໌ໂດຍໃຊ້ອຸປະກອນອົບແຫ້ງ",
-    "Support adding custom themes": "ສະຫນັບສະຫນູນການເພີ່ມຫົວຂໍ້ ທີ່ກຳນົດເອງ",
-    "Render simple counters in room header": "ສະເເດງຕົວຢ່າງກົງກັນຂ້າມໃຫ້ຫົວຂໍ້ຂອງຫ້ອງ",
-    "Thank you for trying the beta, please go into as much detail as you can so we can improve it.": "ຂອບໃຈສຳລັບການທົດລອງໃຊ້ເບຕ້າ, ກະລຸນາໃສ່ລາຍລະອຽດໃຫ້ຫຼາຍເທົ່າທີ່ທ່ານເຮັດໄດ້ ເພື່ອໃຫ້ພວກເຮົາສາມາດປັບປຸງມັນໄດ້.",
     "Leave the beta": "ອອກຈາກເບຕ້າ",
     "Reply in thread": "ຕອບໃນກະທູ້",
-    "Message Pinning": "ການປັກໝຸດຂໍ້ຄວາມ",
-    "Render LaTeX maths in messages": "ສະແດງຜົນຄະນິດສາດ LaTeX ໃນຂໍ້ຄວາມ",
-    "Let moderators hide messages pending moderation.": "ໃຫ້ຜູ້ຄວບຄຸມການເຊື່ອງຂໍ້ຄວາມທີ່ລໍຖ້າການກັ່ນຕອງ.",
     "Developer": "ນັກພັດທະນາ",
     "Experimental": "ທົດລອງ",
     "Encryption": "ການເຂົ້າລະຫັດ",
@@ -3298,6 +3289,17 @@
     },
     "a11y": {
         "user_menu": "ເມນູຜູ້ໃຊ້"
+    },
+    "labs": {
+        "msc3531_hide_messages_pending_moderation": "ໃຫ້ຜູ້ຄວບຄຸມການເຊື່ອງຂໍ້ຄວາມທີ່ລໍຖ້າການກັ່ນຕອງ.",
+        "latex_maths": "ສະແດງຜົນຄະນິດສາດ LaTeX ໃນຂໍ້ຄວາມ",
+        "pinning": "ການປັກໝຸດຂໍ້ຄວາມ",
+        "state_counters": "ສະເເດງຕົວຢ່າງກົງກັນຂ້າມໃຫ້ຫົວຂໍ້ຂອງຫ້ອງ",
+        "custom_themes": "ສະຫນັບສະຫນູນການເພີ່ມຫົວຂໍ້ ທີ່ກຳນົດເອງ",
+        "dehydration": "ຂໍ້ຄວາມເຂົ້າລະຫັດແບບອອບໄລນ໌ໂດຍໃຊ້ອຸປະກອນອົບແຫ້ງ",
+        "bridge_state": "ສະແດງຂໍ້ມູນກ່ຽວກັບການແກ້ໄຂການຕັ້ງຄ່າຫ້ອງ",
+        "jump_to_date": "ໄປຫາວັນທີ (ເພີ່ມ /jumptodate ແລະໄປຫາຫົວຂໍ້ວັນທີ)",
+        "thank_you": "ຂອບໃຈສຳລັບການທົດລອງໃຊ້ເບຕ້າ, ກະລຸນາໃສ່ລາຍລະອຽດໃຫ້ຫຼາຍເທົ່າທີ່ທ່ານເຮັດໄດ້ ເພື່ອໃຫ້ພວກເຮົາສາມາດປັບປຸງມັນໄດ້."
     },
     "keyboard": {
         "home": "ໜ້າຫຼັກ",

@@ -102,7 +102,6 @@
     "Your browser does not support the required cryptography extensions": "आपका ब्राउज़र आवश्यक क्रिप्टोग्राफी एक्सटेंशन का समर्थन नहीं करता है",
     "Authentication check failed: incorrect password?": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?",
     "Please contact your homeserver administrator.": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।",
-    "Message Pinning": "संदेश पिनिंग",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "१२ घंटे प्रारूप में टाइमस्टैम्प दिखाएं (उदहारण:२:३० अपराह्न बजे)",
     "Always show message timestamps": "हमेशा संदेश टाइमस्टैम्प दिखाएं",
     "Enable automatic language detection for syntax highlighting": "वाक्यविन्यास हाइलाइटिंग के लिए स्वत: भाषा का पता प्रणाली सक्षम करें",
@@ -240,7 +239,6 @@
     "Unrecognised address": "अपरिचित पता",
     "Straight rows of keys are easy to guess": "कुंजी की सीधी पंक्तियों का अनुमान लगाना आसान है",
     "Short keyboard patterns are easy to guess": "लघु कीबोर्ड पैटर्न का अनुमान लगाना आसान है",
-    "Render simple counters in room header": "कमरे के हेडर में साधारण काउंटर रेंडर करें",
     "Enable Emoji suggestions while typing": "टाइप करते समय इमोजी सुझावों को सक्षम करें",
     "Show a placeholder for removed messages": "हटाए गए संदेशों के लिए एक प्लेसहोल्डर दिखाएँ",
     "Show display name changes": "प्रदर्शन नाम परिवर्तन दिखाएं",
@@ -633,5 +631,9 @@
         "cancel": "रद्द",
         "add": "जोड़े",
         "accept": "स्वीकार"
+    },
+    "labs": {
+        "pinning": "संदेश पिनिंग",
+        "state_counters": "कमरे के हेडर में साधारण काउंटर रेंडर करें"
     }
 }

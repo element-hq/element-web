@@ -192,22 +192,22 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "feature_video_rooms": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
-        displayName: _td("Video rooms"),
+        displayName: _td("labs|video_rooms"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         // Reload to ensure that the left panel etc. get remounted
         controller: new ReloadOnChangeController(),
         betaInfo: {
-            title: _td("Video rooms"),
+            title: _td("labs|video_rooms"),
             caption: () => (
                 <>
                     <p>
-                        {_t("A new way to chat over voice and video in %(brand)s.", {
+                        {_t("labs|video_rooms_a_new_way_to_chat", {
                             brand: SdkConfig.get().brand,
                         })}
                     </p>
                     <p>
-                        {_t("Video rooms are always-on VoIP channels embedded within a room in %(brand)s.", {
+                        {_t("labs|video_rooms_always_on_voip_channels", {
                             brand: SdkConfig.get().brand,
                         })}
                     </p>
@@ -216,10 +216,10 @@ export const SETTINGS: { [setting: string]: ISetting } = {
             faq: () =>
                 SdkConfig.get().bug_report_endpoint_url && (
                     <>
-                        <h4>{_t("How can I create a video room?")}</h4>
-                        <p>{_t("Use the “+” button in the room section of the left panel.")}</p>
-                        <h4>{_t("Can I use text chat alongside the video call?")}</h4>
-                        <p>{_t("Yes, the chat timeline is displayed alongside the video.")}</p>
+                        <h4>{_t("labs|video_rooms_faq1_question")}</h4>
+                        <p>{_t("labs|video_rooms_faq1_answer")}</p>
+                        <h4>{_t("labs|video_rooms_faq2_question")}</h4>
+                        <p>{_t("labs|video_rooms_faq2_answer")}</p>
                     </>
                 ),
             feedbackLabel: "video-room-feedback",
@@ -234,7 +234,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Experimental,
         supportedLevels: LEVELS_FEATURE,
-        displayName: _td("New Notification Settings"),
+        displayName: _td("labs|notification_settings"),
         default: false,
         betaInfo: {
             title: _td("Notification Settings"),
@@ -257,14 +257,14 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Moderation,
         // Requires a reload since this setting is cached in EventUtils
         controller: new ReloadOnChangeController(),
-        displayName: _td("Let moderators hide messages pending moderation."),
+        displayName: _td("labs|msc3531_hide_messages_pending_moderation"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
     "feature_report_to_moderators": {
         isFeature: true,
         labsGroup: LabGroup.Moderation,
-        displayName: _td("Report to moderators"),
+        displayName: _td("labs|report_to_moderators"),
         description: _td(
             "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.",
         ),
@@ -274,51 +274,51 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "feature_latex_maths": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
-        displayName: _td("Render LaTeX maths in messages"),
+        displayName: _td("labs|latex_maths"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
     "feature_pinning": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
-        displayName: _td("Message Pinning"),
+        displayName: _td("labs|pinning"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
     "feature_wysiwyg_composer": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
-        displayName: _td("Rich text editor"),
-        description: _td("Use rich text instead of Markdown in the message composer."),
+        displayName: _td("labs|wysiwyg_composer"),
+        description: _td("labs|feature_wysiwyg_composer_description"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
     "feature_state_counters": {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
-        displayName: _td("Render simple counters in room header"),
+        displayName: _td("labs|state_counters"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
     "feature_mjolnir": {
         isFeature: true,
         labsGroup: LabGroup.Moderation,
-        displayName: _td("New ways to ignore people"),
-        description: _td("Currently experimental."),
+        displayName: _td("labs|mjolnir"),
+        description: _td("labs|currently_experimental"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
     "feature_custom_themes": {
         isFeature: true,
         labsGroup: LabGroup.Themes,
-        displayName: _td("Support adding custom themes"),
+        displayName: _td("labs|custom_themes"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
     "feature_dehydration": {
         isFeature: true,
         labsGroup: LabGroup.Encryption,
-        displayName: _td("Offline encrypted messaging using dehydrated devices"),
+        displayName: _td("labs|dehydration"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -339,20 +339,20 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
         supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Show HTML representation of room topics"),
+        displayName: _td("labs|html_topic"),
         default: false,
     },
     "feature_bridge_state": {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
         supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Show info about bridges in room settings"),
+        displayName: _td("labs|bridge_state"),
         default: false,
     },
     "feature_jump_to_date": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
-        displayName: _td("Jump to date (adds /jumptodate and jump to date headers)"),
+        displayName: _td("labs|jump_to_date"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ServerSupportUnstableFeatureController(
@@ -360,7 +360,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
             defaultWatchManager,
             [["org.matrix.msc3030"], ["org.matrix.msc3030.stable"]],
             "v1.6",
-            _td("Requires your server to support MSC3030"),
+            _td("labs|jump_to_date_msc_support"),
         ),
     },
     "RoomList.backgroundImage": {
@@ -384,8 +384,8 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Developer,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td("Sliding Sync mode"),
-        description: _td("Under active development, cannot be disabled."),
+        displayName: _td("labs|sliding_sync"),
+        description: _td("labs|sliding_sync_description"),
         shouldWarn: true,
         default: false,
         controller: new SlidingSyncController(),
@@ -399,7 +399,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         supportedLevels: LEVELS_FEATURE,
         labsGroup: LabGroup.VoiceAndVideo,
-        displayName: _td("Element Call video rooms"),
+        displayName: _td("labs|element_call_video_rooms"),
         controller: new ReloadOnChangeController(),
         default: false,
     },
@@ -407,16 +407,16 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         supportedLevels: LEVELS_FEATURE,
         labsGroup: LabGroup.VoiceAndVideo,
-        displayName: _td("New group call experience"),
+        displayName: _td("labs|group_calls"),
         controller: new ReloadOnChangeController(),
         default: false,
     },
     "feature_allow_screen_share_only_mode": {
         isFeature: true,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        description: _td("Under active development."),
+        description: _td("labs|under_active_development"),
         labsGroup: LabGroup.VoiceAndVideo,
-        displayName: _td("Allow screen share only mode"),
+        displayName: _td("labs|allow_screen_share_only_mode"),
         controller: new ReloadOnChangeController(),
         default: false,
     },
@@ -424,8 +424,8 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
         supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Live Location Sharing"),
-        description: _td("Temporary implementation. Locations persist in room history."),
+        displayName: _td("labs|location_share_live"),
+        description: _td("labs|location_share_live_description"),
         shouldWarn: true,
         default: false,
     },
@@ -433,7 +433,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
         supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Dynamic room predecessors"),
+        displayName: _td("labs|dynamic_room_predecessors"),
         description: _td("Enable MSC3946 (to support late-arriving room archives)"),
         shouldWarn: true,
         default: false,
@@ -442,7 +442,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
         supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Voice broadcast"),
+        displayName: _td("labs|voice_broadcast"),
         default: false,
     },
     [Features.VoiceBroadcastForceSmallChunks]: {
@@ -460,8 +460,8 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Developer,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td("Rust cryptography implementation"),
-        description: _td("Under active development."),
+        displayName: _td("labs|rust_crypto"),
+        description: _td("labs|under_active_development"),
         // shouldWarn: true,
         default: false,
         controller: new RustCryptoSdkController(),
@@ -519,7 +519,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "feature_hidebold": {
         isFeature: true,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td("Hide notification dot (only display counters badges)"),
+        displayName: _td("labs|hidebold"),
         labsGroup: LabGroup.Rooms,
         default: false,
     },
@@ -527,7 +527,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "feature_intentional_mentions": {
         isFeature: true,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td("Enable intentional mentions"),
+        displayName: _td("labs|intentional_mentions"),
         labsGroup: LabGroup.Rooms,
         default: false,
         controller: new ServerSupportUnstableFeatureController(
@@ -539,7 +539,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "feature_ask_to_join": {
         default: false,
-        displayName: _td("Enable ask to join"),
+        displayName: _td("labs|ask_to_join"),
         isFeature: true,
         labsGroup: LabGroup.Rooms,
         supportedLevels: LEVELS_FEATURE,
@@ -547,7 +547,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "feature_new_room_decoration_ui": {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
-        displayName: _td("Under active development, new room header & details interface"),
+        displayName: _td("labs|new_room_decoration_ui"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ReloadOnChangeController(),

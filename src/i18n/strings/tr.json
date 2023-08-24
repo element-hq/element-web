@@ -558,7 +558,6 @@
     "Checking server": "Sunucu kontrol ediliyor",
     "Change identity server": "Kimlik sunucu değiştir",
     "Please contact your homeserver administrator.": "Lütfen anasunucu yöneticiniz ile bağlantıya geçin.",
-    "Message Pinning": "Mesaj Sabitleme",
     "Enable Emoji suggestions while typing": "Yazarken Emoji önerilerini aç",
     "Enable big emoji in chat": "Sohbette büyük emojileri aç",
     "Send typing notifications": "Yazma bildirimlerini gönder",
@@ -845,7 +844,6 @@
     "This is a very common password": "Bu oldukça yaygın parola",
     "This is similar to a commonly used password": "Bu yaygınca kullanılan bir parolaya benziyor",
     "Names and surnames by themselves are easy to guess": "Adlar ve soyadlar kendi kendilerine tahmin için kolaydır",
-    "Render simple counters in room header": "Oda başlığında basit sayaçları görüntüle",
     "Mirror local video feed": "Yerel video beslemesi yansısı",
     "Match system theme": "Sistem temasıyla eşle",
     "Missing media permissions, click the button below to request.": "Medya izinleri eksik, alttaki butona tıkayarak talep edin.",
@@ -947,7 +945,6 @@
     "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "“abcabcabc” gibi tekrarlar “abc” yi tahmin etmekten çok az daha zor olur",
     "Sequences like abc or 6543 are easy to guess": "abc veya 6543 gibi diziler tahmin için oldukça kolaydır",
     "Common names and surnames are easy to guess": "Yaygın isimleri ve soyisimleri tahmin etmek oldukça kolay",
-    "Show info about bridges in room settings": "Oda ayarlarındaki köprülerin bilgilerini göster",
     "Show a placeholder for removed messages": "Silinen mesajlar için bir yer tutucu göster",
     "Show display name changes": "Ekran isim değişikliklerini göster",
     "Enable URL previews for this room (only affects you)": "Bu oda için URL önizlemeyi aç (sadece sizi etkiler)",
@@ -1166,7 +1163,6 @@
     "A word by itself is easy to guess": "Kelime zaten kolay tahmin edilir",
     "Straight rows of keys are easy to guess": "Aynı klavye satırındaki ardışık tuşlar kolay tahmin edilir",
     "Short keyboard patterns are easy to guess": "Kısa klavye desenleri kolay tahmin edilir",
-    "Support adding custom themes": "Özel tema eklemeyi destekle",
     "Show read receipts sent by other users": "Diğer kullanıcılar tarafından gönderilen okundu bilgisini göster",
     "Enable automatic language detection for syntax highlighting": "Sözdizimi vurgularken otomatik dil algılamayı etkinleştir",
     "Automatically replace plain text Emoji": "Düz metini otomatik olarak emoji ile değiştir",
@@ -1661,7 +1657,6 @@
     },
     "not found in storage": "Cihazda bulunamadı",
     "This bridge was provisioned by <user />.": "Bu köprü <user /> tarafından sağlandı.",
-    "Render LaTeX maths in messages": "Mesajlarda LaTex maths işleyin",
     "See <b>%(eventType)s</b> events posted to this room": "Bu odaya gönderilen <b>%(eventType)s</b> türü etkinlikleri gör",
     "with state key %(stateKey)s": "%(stateKey)s durum anahtarı ile",
     "Verify all users in a room to ensure it's secure.": "Güvenli olduğuna emin olmak için odadaki tüm kullanıcıları onaylayın.",
@@ -2023,6 +2018,13 @@
     },
     "a11y": {
         "user_menu": "Kullanıcı menüsü"
+    },
+    "labs": {
+        "latex_maths": "Mesajlarda LaTex maths işleyin",
+        "pinning": "Mesaj Sabitleme",
+        "state_counters": "Oda başlığında basit sayaçları görüntüle",
+        "custom_themes": "Özel tema eklemeyi destekle",
+        "bridge_state": "Oda ayarlarındaki köprülerin bilgilerini göster"
     },
     "keyboard": {
         "home": "Ev",

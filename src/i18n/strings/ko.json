@@ -323,7 +323,6 @@
     "%(widgetName)s widget modified by %(senderName)s": "%(senderName)s님이 수정한 %(widgetName)s 위젯",
     "%(widgetName)s widget added by %(senderName)s": "%(senderName)s님이 추가한 %(widgetName)s 위젯",
     "%(widgetName)s widget removed by %(senderName)s": "%(senderName)s님이 제거한 %(widgetName)s 위젯",
-    "Message Pinning": "메시지 고정",
     "Send analytics data": "정보 분석 데이터 보내기",
     "Submit debug logs": "디버그 로그 전송하기",
     "Enable inline URL previews by default": "기본으로 인라인 URL 미리 보기 사용하기",
@@ -643,7 +642,6 @@
     "Straight rows of keys are easy to guess": "키의 한 줄은 추측하기 쉽습니다",
     "Short keyboard patterns are easy to guess": "짧은 키보드 패턴은 추측하기 쉽습니다",
     "You do not have the required permissions to use this command.": "이 명령어를 사용하기 위해 필요한 권한이 없습니다.",
-    "Render simple counters in room header": "방 헤더에 간단한 카운터 표현",
     "Enable Emoji suggestions while typing": "입력 중 이모지 제안 켜기",
     "Show a placeholder for removed messages": "감춘 메시지의 자리 표시하기",
     "Show display name changes": "표시 이름 변경 사항 보이기",
@@ -1396,6 +1394,10 @@
         "back": "돌아가기",
         "add": "추가",
         "accept": "수락"
+    },
+    "labs": {
+        "pinning": "메시지 고정",
+        "state_counters": "방 헤더에 간단한 카운터 표현"
     },
     "keyboard": {
         "home": "홈"

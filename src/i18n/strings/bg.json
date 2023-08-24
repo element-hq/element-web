@@ -94,7 +94,6 @@
     "Your browser does not support the required cryptography extensions": "Вашият браузър не поддържа необходимите разширения за шифроване",
     "Not a valid %(brand)s keyfile": "Невалиден файл с ключ за %(brand)s",
     "Authentication check failed: incorrect password?": "Неуспешна автентикация: неправилна парола?",
-    "Message Pinning": "Функция за закачане на съобщения",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Показване на времето в 12-часов формат (напр. 2:30pm)",
     "Always show message timestamps": "Винаги показвай часа на съобщението",
     "Enable automatic language detection for syntax highlighting": "Включване на автоматично разпознаване на език за подчертаване на синтаксиса",
@@ -595,7 +594,6 @@
         "one": "%(names)s и още един пишат …"
     },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s и %(lastPerson)s пишат …",
-    "Render simple counters in room header": "Визуализирай прости броячи в заглавието на стаята",
     "Enable Emoji suggestions while typing": "Включи емоджи предложенията по време на писане",
     "Show a placeholder for removed messages": "Показвай индикатор на позицията на изтритите съобщения",
     "Show display name changes": "Показвай промените в имената",
@@ -1175,7 +1173,6 @@
     "Country Dropdown": "Падащо меню за избор на държава",
     "Verification Request": "Заявка за потвърждение",
     "Unable to set up secret storage": "Неуспешна настройка на секретно складиране",
-    "Show info about bridges in room settings": "Показвай информация за връзки с други мрежи в настройките на стаята",
     "This bridge is managed by <user />.": "Тази връзка с друга мрежа се управлява от <user />.",
     "Recent Conversations": "Скорошни разговори",
     "Show more": "Покажи повече",
@@ -1233,7 +1230,6 @@
     "%(num)s hours from now": "след %(num)s часа",
     "about a day from now": "след около ден",
     "%(num)s days from now": "след %(num)s дни",
-    "Support adding custom themes": "Включи поддръжка за добавяне на собствени теми",
     "Show typing notifications": "Показвай уведомления за писане",
     "Never send encrypted messages to unverified sessions from this session": "Никога не изпращай шифровани съобщения към непотвърдени сесии от тази сесия",
     "Never send encrypted messages to unverified sessions in this room from this session": "Никога не изпращай шифровани съобщения към непотвърдени сесии в тази стая от тази сесия",
@@ -1535,7 +1531,6 @@
     "Unknown caller": "Непознат абонат",
     "Downloading logs": "Изтегляне на логове",
     "Uploading logs": "Качване на логове",
-    "Offline encrypted messaging using dehydrated devices": "Офлайн шифровани съобщения чрез използването на дехидратирани устройства",
     "Change notification settings": "Промяна на настройките за уведомление",
     "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
     "Unexpected server error trying to leave the room": "Възникна неочаквана сървърна грешка при опит за напускане на стаята",
@@ -2116,6 +2111,13 @@
     },
     "a11y": {
         "user_menu": "Потребителско меню"
+    },
+    "labs": {
+        "pinning": "Функция за закачане на съобщения",
+        "state_counters": "Визуализирай прости броячи в заглавието на стаята",
+        "custom_themes": "Включи поддръжка за добавяне на собствени теми",
+        "dehydration": "Офлайн шифровани съобщения чрез използването на дехидратирани устройства",
+        "bridge_state": "Показвай информация за връзки с други мрежи в настройките на стаята"
     },
     "keyboard": {
         "home": "Начална страница",
