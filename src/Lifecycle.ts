@@ -82,6 +82,41 @@ dis.register((payload) => {
     }
 });
 
+/**
+ * This is set to true by {@link #onSessionLockStolen}.
+ *
+ * It is used in various of the async functions to prevent races where we initialise a client after the lock is stolen.
+ */
+let sessionLockStolen = false;
+
+// this is exposed solely for unit tests.
+// ts-prune-ignore-next
+export function setSessionLockNotStolen(): void {
+    sessionLockStolen = false;
+}
+
+/**
+ * Handle the session lock being stolen. Stops any active Matrix Client, and aborts any ongoing client initialisation.
+ */
+export async function onSessionLockStolen(): Promise<void> {
+    sessionLockStolen = true;
+    stopMatrixClient();
+}
+
+/**
+ * Check if we still hold the session lock.
+ *
+ * If not, raises a {@link SessionLockStolenError}.
+ */
+function checkSessionLock(): void {
+    if (sessionLockStolen) {
+        throw new SessionLockStolenError("session lock has been released");
+    }
+}
+
+/** Error type raised by various functions in the Lifecycle workflow if session lock is stolen during execution */
+class SessionLockStolenError extends Error {}
+
 interface ILoadSessionOpts {
     enableGuest?: boolean;
     guestHsUrl?: string;
@@ -153,6 +188,9 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         if (success) {
             return true;
         }
+        if (sessionLockStolen) {
+            return false;
+        }
 
         if (enableGuest && guestHsUrl) {
             return registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
@@ -166,6 +204,12 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             // need to show the general failure dialog. Instead, just go back to welcome.
             return false;
         }
+
+        // likewise, if the session lock has been stolen while we've been trying to start
+        if (sessionLockStolen) {
+            return false;
+        }
+
         return handleLoadSessionFailure(e);
     }
 }
@@ -719,6 +763,7 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
 async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnabled: boolean): Promise<MatrixClient> {
+    checkSessionLock();
     credentials.guest = Boolean(credentials.guest);
 
     const softLogout = isSoftLogout();
@@ -749,6 +794,8 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
         await abortLogin();
     }
 
+    // check the session lock just before creating the new client
+    checkSessionLock();
     MatrixClientPeg.replaceUsingCreds(credentials);
     const client = MatrixClientPeg.safeGet();
 
@@ -781,6 +828,7 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
     } else {
         logger.warn("No local storage available: can't persist session!");
     }
+    checkSessionLock();
 
     dis.fire(Action.OnLoggedIn);
     await startMatrixClient(client, /*startSyncing=*/ !softLogout);
@@ -975,6 +1023,8 @@ async function startMatrixClient(client: MatrixClient, startSyncing = true): Pro
         logger.warn("Caller requested only auxiliary services be started");
         await MatrixClientPeg.assign();
     }
+
+    checkSessionLock();
 
     // Run the migrations after the MatrixClientPeg has been assigned
     SettingsStore.runMigrations();

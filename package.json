@@ -60,7 +60,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
-        "@matrix-org/analytics-events": "^0.6.0",
+        "@matrix-org/analytics-events": "^0.7.0",
         "@matrix-org/emojibase-bindings": "^1.1.2",
         "@matrix-org/matrix-wysiwyg": "^2.4.1",
         "@matrix-org/react-sdk-module-api": "^2.1.0",

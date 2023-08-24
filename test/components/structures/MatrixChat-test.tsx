@@ -25,6 +25,7 @@ import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize
 import { logger } from "matrix-js-sdk/src/logger";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 import { BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
+import { defer, sleep } from "matrix-js-sdk/src/utils";
 
 import MatrixChat from "../../../src/components/structures/MatrixChat";
 import * as StorageManager from "../../../src/utils/StorageManager";
@@ -37,7 +38,9 @@ import {
     flushPromises,
     getMockClientWithEventEmitter,
     mockClientMethodsUser,
+    MockClientWithEventEmitter,
     mockPlatformPeg,
+    resetJsDomAfterEach,
 } from "../../test-utils";
 import * as leaveRoomUtils from "../../../src/utils/leave-behaviour";
 import * as voiceBroadcastUtils from "../../../src/voice-broadcast/utils/cleanUpBroadcasts";
@@ -47,6 +50,7 @@ import { Call } from "../../../src/models/Call";
 import { PosthogAnalytics } from "../../../src/PosthogAnalytics";
 import PlatformPeg from "../../../src/PlatformPeg";
 import EventIndexPeg from "../../../src/indexing/EventIndexPeg";
+import * as Lifecycle from "../../../src/Lifecycle";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -137,7 +141,23 @@ describe("<MatrixChat />", () => {
         render(<MatrixChat {...defaultProps} {...props} />);
 
     // make test results readable
-    filterConsole("Failed to parse localStorage object");
+    filterConsole(
+        "Failed to parse localStorage object",
+        "Sync store cannot be used on this browser",
+        "Crypto store cannot be used on this browser",
+        "Storage consistency checks failed",
+        "LegacyCallHandler: missing <audio",
+    );
+
+    /** populate storage with details of a persisted session */
+    async function populateStorageForSession() {
+        localStorage.setItem("mx_hs_url", serverConfig.hsUrl);
+        localStorage.setItem("mx_is_url", serverConfig.isUrl);
+        // TODO: nowadays the access token lives (encrypted) in indexedDB, and localstorage is only used as a fallback.
+        localStorage.setItem("mx_access_token", accessToken);
+        localStorage.setItem("mx_user_id", userId);
+        localStorage.setItem("mx_device_id", deviceId);
+    }
 
     /**
      * Wait for a bunch of stuff to happen
@@ -184,10 +204,10 @@ describe("<MatrixChat />", () => {
         await clearAllModals();
     });
 
+    resetJsDomAfterEach();
+
     afterEach(() => {
         jest.restoreAllMocks();
-        localStorage.clear();
-        sessionStorage.clear();
 
         // emit a loggedOut event so that all of the Store singletons forget about their references to the mock client
         defaultDispatcher.dispatch({ action: Action.OnLoggedOut });
@@ -206,13 +226,8 @@ describe("<MatrixChat />", () => {
             },
         };
 
-        beforeEach(() => {
-            localStorage.setItem("mx_hs_url", serverConfig.hsUrl);
-            localStorage.setItem("mx_is_url", serverConfig.isUrl);
-            localStorage.setItem("mx_access_token", accessToken);
-            localStorage.setItem("mx_user_id", userId);
-            localStorage.setItem("mx_device_id", deviceId);
-
+        beforeEach(async () => {
+            await populateStorageForSession();
             jest.spyOn(StorageManager, "idbLoad").mockImplementation(async (table, key) => {
                 const safeKey = Array.isArray(key) ? key[0] : key;
                 return mockidb[table]?.[safeKey];
@@ -516,12 +531,8 @@ describe("<MatrixChat />", () => {
     describe("with a soft-logged-out session", () => {
         const mockidb: Record<string, Record<string, string>> = {};
 
-        beforeEach(() => {
-            localStorage.setItem("mx_hs_url", serverConfig.hsUrl);
-            localStorage.setItem("mx_is_url", serverConfig.isUrl);
-            localStorage.setItem("mx_access_token", accessToken);
-            localStorage.setItem("mx_user_id", userId);
-            localStorage.setItem("mx_device_id", deviceId);
+        beforeEach(async () => {
+            await populateStorageForSession();
             localStorage.setItem("mx_soft_logout", "true");
 
             mockClient.loginFlows.mockResolvedValue({ flows: [{ type: "m.login.password" }] });
@@ -742,6 +753,7 @@ describe("<MatrixChat />", () => {
             localStorage.removeItem("mx_sso_hs_url");
             const localStorageGetSpy = jest.spyOn(localStorage.__proto__, "getItem");
             getComponent({ realQueryParams });
+            await flushPromises();
 
             expect(localStorageGetSpy).toHaveBeenCalledWith("mx_sso_hs_url");
             expect(localStorageGetSpy).toHaveBeenCalledWith("mx_sso_is_url");
@@ -759,6 +771,7 @@ describe("<MatrixChat />", () => {
 
         it("should attempt token login", async () => {
             getComponent({ realQueryParams });
+            await flushPromises();
 
             expect(loginClient.login).toHaveBeenCalledWith("m.login.token", {
                 initial_device_display_name: undefined,
@@ -1090,6 +1103,140 @@ describe("<MatrixChat />", () => {
 
                 // check we get to logged in view
                 await waitForSyncAndLoad(loginClient, true);
+            });
+        });
+    });
+
+    describe("Multi-tab lockout", () => {
+        afterEach(() => {
+            Lifecycle.setSessionLockNotStolen();
+        });
+
+        it("waits for other tab to stop during startup", async () => {
+            fetchMock.get("/welcome.html", { body: "<h1>Hello</h1>" });
+            jest.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
+
+            // simulate an active window
+            localStorage.setItem("react_sdk_session_lock_ping", String(Date.now()));
+
+            const rendered = getComponent({});
+            await flushPromises();
+            expect(rendered.container).toMatchSnapshot();
+
+            // user confirms
+            rendered.getByRole("button", { name: "Continue" }).click();
+            await flushPromises();
+
+            // we should have claimed the session, but gone no further
+            expect(Lifecycle.attemptDelegatedAuthLogin).not.toHaveBeenCalled();
+            const sessionId = localStorage.getItem("react_sdk_session_lock_claimant");
+            expect(sessionId).toEqual(expect.stringMatching(/./));
+            expect(rendered.container).toMatchSnapshot();
+
+            // the other tab shuts down
+            localStorage.removeItem("react_sdk_session_lock_ping");
+            // fire the storage event manually, because writes to localStorage from the same javascript context don't
+            // fire it automatically
+            window.dispatchEvent(new StorageEvent("storage", { key: "react_sdk_session_lock_ping" }));
+
+            // startup continues
+            await flushPromises();
+            expect(Lifecycle.attemptDelegatedAuthLogin).toHaveBeenCalled();
+
+            // should just show the welcome screen
+            await rendered.findByText("Hello");
+            expect(rendered.container).toMatchSnapshot();
+        });
+
+        describe("shows the lockout page when a second tab opens", () => {
+            beforeEach(() => {
+                // make sure we start from a clean DOM for each of these tests
+                document.body.replaceChildren();
+            });
+
+            function simulateSessionLockClaim() {
+                localStorage.setItem("react_sdk_session_lock_claimant", "testtest");
+                window.dispatchEvent(new StorageEvent("storage", { key: "react_sdk_session_lock_claimant" }));
+            }
+
+            it("after a session is restored", async () => {
+                await populateStorageForSession();
+
+                const client = getMockClientWithEventEmitter(getMockClientMethods());
+                jest.spyOn(MatrixJs, "createClient").mockReturnValue(client);
+                client.getProfileInfo.mockResolvedValue({ displayname: "Ernie" });
+
+                const rendered = getComponent({});
+                await waitForSyncAndLoad(client, true);
+                rendered.getByText("Welcome Ernie");
+
+                // we're now at the welcome page. Another session wants the lock...
+                simulateSessionLockClaim();
+                await flushPromises();
+                expect(rendered.container).toMatchSnapshot();
+            });
+
+            it("while we were waiting for the lock ourselves", async () => {
+                // simulate there already being one session
+                localStorage.setItem("react_sdk_session_lock_ping", String(Date.now()));
+
+                const rendered = getComponent({});
+                await flushPromises();
+
+                // user confirms continue
+                rendered.getByRole("button", { name: "Continue" }).click();
+                await flushPromises();
+                expect(rendered.getByTestId("spinner")).toBeInTheDocument();
+
+                // now a third session starts
+                simulateSessionLockClaim();
+                await flushPromises();
+                expect(rendered.container).toMatchSnapshot();
+            });
+
+            it("while we are checking the sync store", async () => {
+                const rendered = getComponent({});
+                await flushPromises();
+                expect(rendered.getByTestId("spinner")).toBeInTheDocument();
+
+                // now a third session starts
+                simulateSessionLockClaim();
+                await flushPromises();
+                expect(rendered.container).toMatchSnapshot();
+            });
+
+            it("during crypto init", async () => {
+                await populateStorageForSession();
+
+                const client = new MockClientWithEventEmitter({
+                    initCrypto: jest.fn(),
+                    ...getMockClientMethods(),
+                }) as unknown as Mocked<MatrixClient>;
+                jest.spyOn(MatrixJs, "createClient").mockReturnValue(client);
+
+                // intercept initCrypto and have it block until we complete the deferred
+                const initCryptoCompleteDefer = defer();
+                const initCryptoCalled = new Promise<void>((resolve) => {
+                    client.initCrypto.mockImplementation(() => {
+                        resolve();
+                        return initCryptoCompleteDefer.promise;
+                    });
+                });
+
+                const rendered = getComponent({});
+                await initCryptoCalled;
+                console.log("initCrypto called");
+
+                simulateSessionLockClaim();
+                await flushPromises();
+
+                // now we should see the error page
+                rendered.getByText("Test has been opened in another tab.");
+
+                // let initCrypto complete, and check we don't get a modal
+                initCryptoCompleteDefer.resolve();
+                await sleep(10); // Modals take a few ms to appear
+                expect(document.body).toMatchSnapshot();
             });
         });
     });

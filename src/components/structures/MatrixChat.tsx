@@ -147,6 +147,9 @@ import { NotificationColor } from "../../stores/notifications/NotificationColor"
 import { UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
 import { Filter } from "../views/dialogs/spotlight/Filter";
+import { checkSessionLockFree, getSessionLock } from "../../utils/SessionLock";
+import { SessionLockStolenView } from "./auth/SessionLockStolenView";
+import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -307,11 +310,23 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         initSentry(SdkConfig.get("sentry"));
 
+        if (!checkSessionLockFree()) {
+            // another instance holds the lock; confirm its theft before proceeding
+            setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
+        } else {
+            this.startInitSession();
+        }
+    }
+
+    /**
+     * Kick off a call to {@link initSession}, and handle any errors
+     */
+    private startInitSession = (): void => {
         this.initSession().catch((err) => {
             // TODO: show an error screen, rather than a spinner of doom
             logger.error("Error initialising Matrix session", err);
         });
-    }
+    };
 
     /**
      * Do what we can to establish a Matrix session.
@@ -324,6 +339,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      *  * If all else fails, present a login screen.
      */
     private async initSession(): Promise<void> {
+        // The Rust Crypto SDK will break if two Element instances try to use the same datastore at once, so
+        // make sure we are the only Element instance in town (on this browser/domain).
+        if (!(await getSessionLock(() => this.onSessionLockStolen()))) {
+            // we failed to get the lock. onSessionLockStolen should already have been called, so nothing left to do.
+            return;
+        }
+
         // If the user was soft-logged-out, we want to make the SoftLogout component responsible for doing any
         // token auth (rather than Lifecycle.attemptDelegatedAuthLogin), since SoftLogout knows about submitting the
         // device ID and preserving the session.
@@ -376,6 +398,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (firstScreen === "login" || firstScreen === "register" || firstScreen === "forgot_password") {
             this.showScreenAfterLogin();
         }
+    }
+
+    private async onSessionLockStolen(): Promise<void> {
+        // switch to the LockStolenView. We deliberately do this immediately, rather than going through the dispatcher,
+        // because there can be a substantial queue in the dispatcher, and some of the events in it might require an
+        // active MatrixClient.
+        await new Promise<void>((resolve) => {
+            this.setState({ view: Views.LOCK_STOLEN }, resolve);
+        });
+
+        // now we can tell the Lifecycle routines to abort any active startup, and to stop the active client.
+        await Lifecycle.onSessionLockStolen();
     }
 
     private async postLoginSetup(): Promise<void> {
@@ -574,6 +608,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private onAction = (payload: ActionPayload): void => {
+        // once the session lock has been stolen, don't try to do anything.
+        if (this.state.view === Views.LOCK_STOLEN) {
+            return;
+        }
+
         // Start the onboarding process for certain actions
         if (MatrixClientPeg.get()?.isGuest() && ONBOARDING_FLOW_STARTERS.includes(payload.action)) {
             // This will cause `payload` to be dispatched later, once a
@@ -2051,6 +2090,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     <Spinner />
                 </div>
             );
+        } else if (this.state.view === Views.CONFIRM_LOCK_THEFT) {
+            view = (
+                <ConfirmSessionLockTheftView
+                    onConfirm={() => {
+                        this.setState({ view: Views.LOADING });
+                        this.startInitSession();
+                    }}
+                />
+            );
         } else if (this.state.view === Views.COMPLETE_SECURITY) {
             view = <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.E2E_SETUP) {
@@ -2157,6 +2205,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             );
         } else if (this.state.view === Views.USE_CASE_SELECTION) {
             view = <UseCaseSelection onFinished={(useCase): Promise<void> => this.onShowPostLoginScreen(useCase)} />;
+        } else if (this.state.view === Views.LOCK_STOLEN) {
+            view = <SessionLockStolenView />;
         } else {
             logger.error(`Unknown view ${this.state.view}`);
             return null;

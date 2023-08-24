@@ -234,3 +234,63 @@ export function useMockMediaDevices(): void {
         getUserMedia: jest.fn(),
     };
 }
+
+/**
+ * Clean up the JSDOM after each test.
+ *
+ * Registers `beforeEach` and `afterEach` functions which will deregister any event listeners and timers from the
+ * `window` and `document` objects.
+ *
+ * Also clears out `localStorage` and `sessionStorage`.
+ */
+export function resetJsDomAfterEach(): void {
+    // list of calls to run in afterEach
+    const resetCalls: (() => void)[] = [];
+
+    beforeEach(() => {
+        // intercept `window.addEventListener` and `document.addEventListener`, and register 'removeEventListener' calls
+        // for `afterEach`.
+        for (const obj of [window, document]) {
+            const originalFn = obj.addEventListener;
+            obj.addEventListener = (...args: Parameters<Window["addEventListener"]>) => {
+                originalFn.apply(obj, args);
+                resetCalls.push(() => obj.removeEventListener(...args));
+            };
+
+            // also reset the intercept after the test
+            resetCalls.push(() => {
+                obj.addEventListener = originalFn;
+            });
+        }
+
+        // intercept setTimeout and setInterval, and clear them at the end.
+        //
+        // *Don't* use jest.spyOn for this because it makes the DOM testing library think we are using fake timers.
+        //
+        ["setTimeout", "setInterval"].forEach((name) => {
+            const originalFn = window[name as keyof Window];
+            // @ts-ignore assignment to read-only property
+            window[name] = (...args) => {
+                const result = originalFn.apply(window, args);
+                resetCalls.push(() => window.clearTimeout(result));
+                return result;
+            };
+            resetCalls.push(() => {
+                // @ts-ignore assignment to read-only property
+                window[name] = originalFn;
+            });
+        });
+    });
+
+    afterEach(() => {
+        // clean up event listeners, timers, etc.
+        for (const call of resetCalls) {
+            call();
+        }
+        resetCalls.splice(0);
+
+        // other cleanup
+        localStorage.clear();
+        sessionStorage.clear();
+    });
+}

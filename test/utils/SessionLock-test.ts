@@ -15,45 +15,22 @@ limitations under the License.
 */
 
 import { checkSessionLockFree, getSessionLock, SESSION_LOCK_CONSTANTS } from "../../src/utils/SessionLock";
+import { resetJsDomAfterEach } from "../test-utils";
 
 describe("SessionLock", () => {
     const otherWindows: Array<Window> = [];
-    let windowEventListeners: Array<[string, any]>;
-    let documentEventListeners: Array<[string, any]>;
 
     beforeEach(() => {
         jest.useFakeTimers({ now: 1000 });
-
-        // keep track of the registered event listeners, so that we can unregister them in `afterEach`
-        windowEventListeners = [];
-        const realWindowAddEventListener = window.addEventListener.bind(window);
-        jest.spyOn(window, "addEventListener").mockImplementation((type, listener, options) => {
-            const res = realWindowAddEventListener(type, listener, options);
-            windowEventListeners.push([type, listener]);
-            return res;
-        });
-
-        documentEventListeners = [];
-        const realDocumentAddEventListener = document.addEventListener.bind(document);
-        jest.spyOn(document, "addEventListener").mockImplementation((type, listener, options) => {
-            const res = realDocumentAddEventListener(type, listener, options);
-            documentEventListeners.push([type, listener]);
-            return res;
-        });
     });
 
     afterEach(() => {
         // shut down other windows created by `createWindow`
         otherWindows.forEach((window) => window.close());
         otherWindows.splice(0);
-
-        // remove listeners on our own window
-        windowEventListeners.forEach(([type, listener]) => window.removeEventListener(type, listener));
-        documentEventListeners.forEach(([type, listener]) => document.removeEventListener(type, listener));
-
-        localStorage.clear();
-        jest.restoreAllMocks();
     });
+
+    resetJsDomAfterEach();
 
     it("A single instance starts up normally", async () => {
         const onNewInstance = jest.fn();

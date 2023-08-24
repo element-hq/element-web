@@ -177,7 +177,7 @@ export async function getSessionLock(onNewInstance: () => Promise<void>): Promis
 
         // and, once it has done so, stop pinging the lock.
         if (lockServicer !== null) {
-            clearInterval(lockServicer);
+            window.clearInterval(lockServicer);
         }
         window.localStorage.removeItem(SESSION_LOCK_CONSTANTS.STORAGE_ITEM_PING);
         window.localStorage.removeItem(SESSION_LOCK_CONSTANTS.STORAGE_ITEM_OWNER);
@@ -233,7 +233,7 @@ export async function getSessionLock(onNewInstance: () => Promise<void>): Promis
 
     // claim the lock, and kick off a background process to service it every 5 seconds
     serviceLock();
-    lockServicer = setInterval(serviceLock, 5000);
+    lockServicer = window.setInterval(serviceLock, 5000);
 
     // Now add a listener for other claimants to the lock.
     window.addEventListener("storage", onStorageEvent);
