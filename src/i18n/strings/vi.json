@@ -3376,7 +3376,6 @@
     "Group all your favourite rooms and people in one place.": "Nhóm tất cả các phòng và người mà bạn yêu thích ở một nơi.",
     "The add / bind with MSISDN flow is misconfigured": "Thêm / liên kết với luồng MSISDN sai cấu hình",
     "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.": "Giữ quyền sở hữu và kiểm soát thảo luận cộng đồng.\nMở rộng quy mô để hỗ trợ hàng triệu người, bằng khả năng kiểm duyệt và tương tác mạnh mẽ.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "Các <photo>ảnh bìa mặc định</photo> Là © <author>Chúa Jesus Roncero</author> Được sử dụng theo các điều khoản của <terms>CC-BY-SA 4.0</terms>.",
     "Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Nhật ký gỡ lỗi chứa dữ liệu sử dụng ứng dụng bao gồm tên người dùng của bạn, ID hoặc bí danh của các phòng bạn đã truy cập, các thành phần giao diện người dùng mà bạn tương tác lần cuối và tên người dùng của những người dùng khác. Chúng không chứa tin nhắn.",
     "Allow fallback call assist server (%(server)s)": "Cho phép máy chủ hỗ trợ cuộc gọi dự phòng (%(server)s)",
     "Past polls": "Các cuộc bỏ phiếu trước",
@@ -3684,5 +3683,8 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[con số]"
+    },
+    "credits": {
+        "default_cover_photo": "Các <photo>ảnh bìa mặc định</photo> Là © <author>Chúa Jesus Roncero</author> Được sử dụng theo các điều khoản của <terms>CC-BY-SA 4.0</terms>."
     }
 }

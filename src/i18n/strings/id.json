@@ -3695,9 +3695,6 @@
     "Search all rooms": "Cari semua ruangan",
     "Search this room": "Cari ruangan ini",
     "Upload custom sound": "Unggah suara kustom",
-    "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.": "Gambar emoji <twemoji>Twemoji</twemoji> © <author>Twitter, Inc dan kontributor lainnya</author> digunakan di bawah ketentuan <terms>CC-BY 4.0</terms>.",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "Fon <colr>twemoji-colr</colr> © <author>Mozilla Foundation</author> digunakan di bawah ketentuan <terms>Apache 2.0</terms>.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "<photo>Foto kover bawaan</photo> © <author>Jesús Roncero</author> digunakan di bawah ketentuan <terms>CC-BY-SA 4.0</terms>.",
     "Error changing password": "Terjadi kesalahan mengubah kata sandi",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (status HTTP %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Terjadi kesalahan perubahan kata sandi yang tidak diketahui (%(stringifiedError)s)",
@@ -3986,5 +3983,10 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[nomor]"
+    },
+    "credits": {
+        "default_cover_photo": "<photo>Foto kover bawaan</photo> © <author>Jesús Roncero</author> digunakan di bawah ketentuan <terms>CC-BY-SA 4.0</terms>.",
+        "twemoji_colr": "Fon <colr>twemoji-colr</colr> © <author>Mozilla Foundation</author> digunakan di bawah ketentuan <terms>Apache 2.0</terms>.",
+        "twemoji": "Gambar emoji <twemoji>Twemoji</twemoji> © <author>Twitter, Inc dan kontributor lainnya</author> digunakan di bawah ketentuan <terms>CC-BY 4.0</terms>."
     }
 }

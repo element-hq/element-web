@@ -136,7 +136,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                     <ul>
                         <li>
                             {_t(
-                                "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.",
+                                "credits|default_cover_photo",
                                 {},
                                 {
                                     photo: (sub) => (
@@ -165,7 +165,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         </li>
                         <li>
                             {_t(
-                                "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.",
+                                "credits|twemoji_colr",
                                 {},
                                 {
                                     colr: (sub) => (
@@ -192,7 +192,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         </li>
                         <li>
                             {_t(
-                                "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.",
+                                "credits|twemoji",
                                 {},
                                 {
                                     twemoji: (sub) => (

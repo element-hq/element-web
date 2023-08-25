@@ -3696,9 +3696,6 @@
     "Search all rooms": "Alle Räume durchsuchen",
     "Search this room": "Diesen Raum durchsuchen",
     "Upload custom sound": "Eigenen Ton hochladen",
-    "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.": "Die <twemoji>Twemoji</twemoji>-Emojis sind © <author>Twitter, Inc und weitere Mitwirkende</author> und wird unter den Bedingungen von <terms>CC-BY 4.0</terms> verwendet.",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "Die Schriftart <colr>twemoji-colr</colr> ist © <author>Mozilla Foundation</author> und wird unter den Bedingungen von <terms>Apache 2.0</terms> verwendet.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "Das <photo>Standard-Titelbild</photo> ist © <author>Jesús Roncero</author> und wird unter den Bedingungen von <terms>CC-BY-SA 4.0</terms> verwendet.",
     "Error changing password": "Fehler während der Passwortänderung",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (HTTP-Status %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Unbekannter Fehler während der Passwortänderung (%(stringifiedError)s)",
@@ -3986,5 +3983,10 @@
         "control": "Strg",
         "shift": "Umschalt",
         "number": "[Nummer]"
+    },
+    "credits": {
+        "default_cover_photo": "Das <photo>Standard-Titelbild</photo> ist © <author>Jesús Roncero</author> und wird unter den Bedingungen von <terms>CC-BY-SA 4.0</terms> verwendet.",
+        "twemoji_colr": "Die Schriftart <colr>twemoji-colr</colr> ist © <author>Mozilla Foundation</author> und wird unter den Bedingungen von <terms>Apache 2.0</terms> verwendet.",
+        "twemoji": "Die <twemoji>Twemoji</twemoji>-Emojis sind © <author>Twitter, Inc und weitere Mitwirkende</author> und wird unter den Bedingungen von <terms>CC-BY 4.0</terms> verwendet."
     }
 }

@@ -3385,8 +3385,6 @@
     "Other users in direct messages and rooms that you join are able to view a full list of your sessions.": "Muut käyttäjät yksityisviesteissä ja huoneissa, joihin liityt, näkevät luettelon kaikista istunnoistasi.",
     "Identity server is <code>%(identityServerUrl)s</code>": "Identiteettipalvelin on <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Kotipalvelin on <code>%(homeserverUrl)s</code>",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "<colr>twemoji-colr</colr>-fontti © <author>Mozilla Foundation</author>, käytössä <terms>Apache 2.0</terms>:n ehtojen mukaisesti.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "<photo>Oletuskansikuva</photo> © <author>Jesús Roncero</author>, käytössä <terms>CC-BY-SA 4.0</terms>:n ehtojen mukaisesti.",
     "Manage account": "Hallitse tiliä",
     "Error changing password": "Virhe salasanan vaihtamisessa",
     "Unknown password change error (%(stringifiedError)s)": "Tuntematon salasananvaihtovirhe (%(stringifiedError)s)",
@@ -3580,5 +3578,9 @@
         "control": "Ctrl",
         "shift": "Vaihto",
         "number": "[numero]"
+    },
+    "credits": {
+        "default_cover_photo": "<photo>Oletuskansikuva</photo> © <author>Jesús Roncero</author>, käytössä <terms>CC-BY-SA 4.0</terms>:n ehtojen mukaisesti.",
+        "twemoji_colr": "<colr>twemoji-colr</colr>-fontti © <author>Mozilla Foundation</author>, käytössä <terms>Apache 2.0</terms>:n ehtojen mukaisesti."
     }
 }

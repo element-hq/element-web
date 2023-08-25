@@ -3583,7 +3583,6 @@
     "Can currently only be enabled via config.json": "Ahora mismo solo se puede activar a través de config.json",
     "Log out and back in to disable": "Cierra sesión y vuélvela a abrir para desactivar",
     "This session is backing up your keys.": "",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "La <photo>foto de fondo por defecto</photo> es © <author>Jesús Roncero</author>, usada bajo los términos de la licencia <terms>CC-BY-SA 4.0</terms>.",
     "Once everyone has joined, you’ll be able to chat": "Cuando la gente se una, podrás hablar",
     "Desktop app logo": "Logotipo de la aplicación de escritorio",
     "Buffering…": "Cargando…",
@@ -3787,5 +3786,8 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[número]"
+    },
+    "credits": {
+        "default_cover_photo": "La <photo>foto de fondo por defecto</photo> es © <author>Jesús Roncero</author>, usada bajo los términos de la licencia <terms>CC-BY-SA 4.0</terms>."
     }
 }

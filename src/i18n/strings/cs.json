@@ -3700,9 +3700,6 @@
     "Image view": "Zobrazení obrázku",
     "Search all rooms": "Vyhledávat ve všech místnostech",
     "Search this room": "Vyhledávat v této místnosti",
-    "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.": "<twemoji>Twemoji</twemoji> emoji grafika je © <author>Twitter, Inc a další přispěvatelé</author> používána za podmínek <terms>CC-BY 4.0</terms>.",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "Písmo <colr>twemoji-colr</colr> je © <author>Mozilla Foundation</author> používané za podmínek <terms>Apache 2.0</terms>.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "<photo>Výchozí titulní fotografie</photo> je © <author>Jesús Roncero</author> používaná za podmínek <terms>CC-BY-SA 4.0</terms>.",
     "%(sender)s reacted %(reaction)s to %(message)s": "%(sender)s reagoval(a) %(reaction)s na %(message)s",
     "You reacted %(reaction)s to %(message)s": "Reagovali jste %(reaction)s na %(message)s",
     "Cannot invite user by email without an identity server. You can connect to one under \"Settings\".": "Bez serveru identit nelze uživatele pozvat e-mailem. K nějakému se můžete připojit v \"Nastavení\".",
@@ -3986,5 +3983,10 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[číslo]"
+    },
+    "credits": {
+        "default_cover_photo": "<photo>Výchozí titulní fotografie</photo> je © <author>Jesús Roncero</author> používaná za podmínek <terms>CC-BY-SA 4.0</terms>.",
+        "twemoji_colr": "Písmo <colr>twemoji-colr</colr> je © <author>Mozilla Foundation</author> používané za podmínek <terms>Apache 2.0</terms>.",
+        "twemoji": "<twemoji>Twemoji</twemoji> emoji grafika je © <author>Twitter, Inc a další přispěvatelé</author> používána za podmínek <terms>CC-BY 4.0</terms>."
     }
 }

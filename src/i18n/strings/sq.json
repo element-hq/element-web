@@ -3681,9 +3681,6 @@
     "Search this room": "Kërko në këtë dhomë",
     "Formatting": "Formatim",
     "Upload custom sound": "Ngarkoni tingull vetjak",
-    "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.": "<twemoji>Twemoji</twemoji> © <author>Twitter, Inc dhe kontribues të tjerë</author> përdoren sipas kushteve të <terms>CC-BY 4.0</terms>.",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "Shkronjat <colr>twemoji-colr</colr> © <author>Mozilla Foundation</author> përdoren sipas kushteve të <terms>Apache 2.0</terms>.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "<photo>Fotoja kopertinë parazgjedhje</photo> © <author>Jesús Roncero</author> përdoret sipas kushteve të <terms>CC-BY-SA 4.0</terms>.",
     "Error changing password": "Gabim në ndryshim fjalëkalimi",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (gjendje HTTP %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Gabim i panjohur ndryshimi fjalëkalimi (%(stringifiedError)s)",
@@ -3874,5 +3871,10 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[numër]"
+    },
+    "credits": {
+        "default_cover_photo": "<photo>Fotoja kopertinë parazgjedhje</photo> © <author>Jesús Roncero</author> përdoret sipas kushteve të <terms>CC-BY-SA 4.0</terms>.",
+        "twemoji_colr": "Shkronjat <colr>twemoji-colr</colr> © <author>Mozilla Foundation</author> përdoren sipas kushteve të <terms>Apache 2.0</terms>.",
+        "twemoji": "<twemoji>Twemoji</twemoji> © <author>Twitter, Inc dhe kontribues të tjerë</author> përdoren sipas kushteve të <terms>CC-BY 4.0</terms>."
     }
 }

@@ -3696,9 +3696,6 @@
     "Search all rooms": "Keresés az összes szobában",
     "Search this room": "Keresés ebben a szobában",
     "Upload custom sound": "Egyéni hang feltöltése",
-    "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.": "A <twemoji>Twemoji</twemoji> emodzsikra a következő vonatkozik: © <author>Twitter, Inc. és egyéb közreműködők</author>, a <terms>CC-BY 4.0</terms> licenc feltételei szerint használva.",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "A <colr>twemoji-colr</colr> betűkészletre a következő vonatkozik: © <author>Mozilla Foundation</author>, az <terms>Apache 2.0</terms> licenc feltételei szerint használva.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "Az <photo>alapértelmezett borítóképre</photo> a következő vonatkozik: © <author>Jesús Roncero</author>, a <terms>CC BY-SA 4.0</terms> licenc feltételei szerint használva.",
     "Error changing password": "Hiba a jelszó módosítása során",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (HTTP állapot: %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Ismeretlen jelszómódosítási hiba (%(stringifiedError)s)",
@@ -3885,5 +3882,10 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[szám]"
+    },
+    "credits": {
+        "default_cover_photo": "Az <photo>alapértelmezett borítóképre</photo> a következő vonatkozik: © <author>Jesús Roncero</author>, a <terms>CC BY-SA 4.0</terms> licenc feltételei szerint használva.",
+        "twemoji_colr": "A <colr>twemoji-colr</colr> betűkészletre a következő vonatkozik: © <author>Mozilla Foundation</author>, az <terms>Apache 2.0</terms> licenc feltételei szerint használva.",
+        "twemoji": "A <twemoji>Twemoji</twemoji> emodzsikra a következő vonatkozik: © <author>Twitter, Inc. és egyéb közreműködők</author>, a <terms>CC-BY 4.0</terms> licenc feltételei szerint használva."
     }
 }

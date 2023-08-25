@@ -3696,9 +3696,6 @@
     "Upload custom sound": "Laadi üles oma helifail",
     "Search all rooms": "Otsi kõikidest jututubadest",
     "Search this room": "Otsi sellest jututoast",
-    "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.": "<twemoji>Twemoji</twemoji> emotikonide autoriõiguste omanik on <author>Twitter, Inc koos kaasautoritega</author> ning neid kasutame vastavalt <terms>CC-BY 4.0</terms> litsentsi tingimustele.",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "<colr>Twemoji-colr</colr> kirjatüübi autoriõiguste omanik on <author>Mozilla Foundation</author> seda kasutame vastavalt <terms>Apache 2.0</terms> litsentsi tingimustele.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "<photo>Vaikimisi kasutatava kaanepildi</photo> autoriõiguste omanik on <author>Jesús Roncero</author> ja seda fotot kasutame vastavalt <terms>CC-BY-SA 4.0</terms> litsentsi tingimustele.",
     "Error changing password": "Viga salasõna muutmisel",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (HTTP olekukood %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Tundmatu viga salasõna muutmisel (%(stringifiedError)s)",
@@ -3981,5 +3978,10 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[number]"
+    },
+    "credits": {
+        "default_cover_photo": "<photo>Vaikimisi kasutatava kaanepildi</photo> autoriõiguste omanik on <author>Jesús Roncero</author> ja seda fotot kasutame vastavalt <terms>CC-BY-SA 4.0</terms> litsentsi tingimustele.",
+        "twemoji_colr": "<colr>Twemoji-colr</colr> kirjatüübi autoriõiguste omanik on <author>Mozilla Foundation</author> seda kasutame vastavalt <terms>Apache 2.0</terms> litsentsi tingimustele.",
+        "twemoji": "<twemoji>Twemoji</twemoji> emotikonide autoriõiguste omanik on <author>Twitter, Inc koos kaasautoritega</author> ning neid kasutame vastavalt <terms>CC-BY 4.0</terms> litsentsi tingimustele."
     }
 }

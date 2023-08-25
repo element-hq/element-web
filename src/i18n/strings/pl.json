@@ -2410,8 +2410,6 @@
     "What's next for %(brand)s? Labs are the best way to get things early, test out new features and help shape them before they actually launch.": "Co następne dla %(brand)s? Laboratoria to najlepsze miejsce do przetestowania nowych funkcji i możliwość pomocy w testowaniu zanim dotrą one do szerszego grona użytkowników.",
     "Identity server is <code>%(identityServerUrl)s</code>": "Serwer tożsamości to <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Serwer domowy to <code>%(homeserverUrl)s</code>",
-    "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.": "Czcionka <twemoji>Twemoji</twemoji> jest w użyciu na warunkach licencji <terms>CC-BY 4.0</terms>. <author>© Twitter, Inc i pozostali kontrybutorzy</author>.",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "Czcionka <colr>twemoji-colr</colr> jest w użyciu na warunkach licencji <terms>Apache 2.0</terms>. <author>© Mozilla Foundation</author>.",
     "Your account details are managed separately at <code>%(hostname)s</code>.": "Twoje dane konta są zarządzane oddzielnie na <code>%(hostname)s</code>.",
     "Your password was successfully changed.": "Twoje hasło zostało pomyślnie zmienione.",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (Status HTTP %(httpStatus)s)",
@@ -2658,7 +2656,6 @@
     "This user has not verified all of their sessions.": "Ten użytkownik nie zweryfikował wszystkich swoich sesji.",
     "Your current session is ready for secure messaging.": "Twoja bieżąca sesja jest gotowa do wysyłania bezpiecznych wiadomości.",
     "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named '%(myBanList)s' - stay in this room to keep the ban list in effect.": "Twoja osobista lista banów zawiera wszystkich użytkowników/serwery, z których nie chcesz otrzymywać wiadomości. Po zignorowaniu swojego pierwszego użytkownika/serwera, nowy pokój pojawi się na Twojej liście pokoi z nazwą '%(myBanList)s' - nie wychodź z niego, aby lista działała.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "Autorem <photo>domyślnego zdjęcia okładkowego</photo> jest <author>Jesús Roncero</author> na licencji <terms>CC-BY-SA 4.0</terms>.",
     "Failed to download source media, no source url was found": "Nie udało się pobrać media źródłowego, nie znaleziono źródłowego adresu URL",
     "This room has already been upgraded.": "Ten pokój został już ulepszony.",
     "Joined": "Dołączono",
@@ -3963,5 +3960,10 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[liczba]"
+    },
+    "credits": {
+        "default_cover_photo": "Autorem <photo>domyślnego zdjęcia okładkowego</photo> jest <author>Jesús Roncero</author> na licencji <terms>CC-BY-SA 4.0</terms>.",
+        "twemoji_colr": "Czcionka <colr>twemoji-colr</colr> jest w użyciu na warunkach licencji <terms>Apache 2.0</terms>. <author>© Mozilla Foundation</author>.",
+        "twemoji": "Czcionka <twemoji>Twemoji</twemoji> jest w użyciu na warunkach licencji <terms>CC-BY 4.0</terms>. <author>© Twitter, Inc i pozostali kontrybutorzy</author>."
     }
 }

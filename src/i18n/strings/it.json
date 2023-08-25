@@ -3696,9 +3696,6 @@
     "Search all rooms": "Cerca in tutte le stanze",
     "Search this room": "Cerca in questa stanza",
     "Upload custom sound": "Carica suono personalizzato",
-    "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.": "Gli emoji <twemoji>Twemoji</twemoji> sono © <author>Twitter, Inc ed altri collaboratori</author> utilizzati secondo i termini <terms>CC-BY 4.0</terms>.",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "Il font <colr>twemoji-colr</colr> è © <author>Mozilla Foundation</author> utilizzato secondo i termini <terms>Apache 2.0</terms>.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "La <photo>foto di copertina predefinita</photo> è © <author>Jesús Roncero</author> utilizzata secondo i termini <terms>CC-BY-SA 4.0</terms>.",
     "Error changing password": "Errore nella modifica della password",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (stato HTTP %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Errore sconosciuto di modifica della password (%(stringifiedError)s)",
@@ -3986,5 +3983,10 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[numero]"
+    },
+    "credits": {
+        "default_cover_photo": "La <photo>foto di copertina predefinita</photo> è © <author>Jesús Roncero</author> utilizzata secondo i termini <terms>CC-BY-SA 4.0</terms>.",
+        "twemoji_colr": "Il font <colr>twemoji-colr</colr> è © <author>Mozilla Foundation</author> utilizzato secondo i termini <terms>Apache 2.0</terms>.",
+        "twemoji": "Gli emoji <twemoji>Twemoji</twemoji> sono © <author>Twitter, Inc ed altri collaboratori</author> utilizzati secondo i termini <terms>CC-BY 4.0</terms>."
     }
 }

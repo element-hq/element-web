@@ -3696,9 +3696,6 @@
     "Upload custom sound": "上傳自訂音效",
     "Search all rooms": "搜尋所有聊天室",
     "Search this room": "搜尋此聊天室",
-    "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.": "<twemoji>Twemoji</twemoji> 表情符號藝術作者為 © <author>Twitter 公司與其他貢獻者</author>，以 <terms>CC-BY 4.0</terms> 授權使用。",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "<photo>預設封面照片</photo>作者為 © <author>Jesús Roncero</author>，以 <terms>CC-BY-SA 4.0</terms> 授權使用。",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "<colr>twemoji-colr</colr> 字型作者為 © <author>Mozilla 基金會</author>，以 <terms>Apache 2.0</terms> 授權使用。",
     "Error changing password": "變更密碼錯誤",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s（HTTP 狀態 %(httpStatus)s）",
     "Unknown password change error (%(stringifiedError)s)": "未知密碼變更錯誤（%(stringifiedError)s）",
@@ -3981,5 +3978,10 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[number]"
+    },
+    "credits": {
+        "default_cover_photo": "<photo>預設封面照片</photo>作者為 © <author>Jesús Roncero</author>，以 <terms>CC-BY-SA 4.0</terms> 授權使用。",
+        "twemoji_colr": "<colr>twemoji-colr</colr> 字型作者為 © <author>Mozilla 基金會</author>，以 <terms>Apache 2.0</terms> 授權使用。",
+        "twemoji": "<twemoji>Twemoji</twemoji> 表情符號藝術作者為 © <author>Twitter 公司與其他貢獻者</author>，以 <terms>CC-BY 4.0</terms> 授權使用。"
     }
 }

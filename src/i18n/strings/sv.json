@@ -3661,9 +3661,6 @@
     "Formatting": "Formatering",
     "You do not have permission to invite users": "Du är inte behörig att bjuda in användare",
     "Upload custom sound": "Ladda upp anpassat ljud",
-    "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.": "Emojigrafiken <twemoji>Twemoji</twemoji> är © <author>Twitter, Inc och andra bidragsgivare</author> och används under villkoren i <terms>CC-BY 4.0</terms>.",
-    "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>.": "Teckensnittet <colr>twemoji-colr</colr> är © <author>Mozilla Foundation</author> och används under villkoren för <terms>Apache 2.0</terms>.",
-    "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.": "Det <photo>förvalda omslagsfotot</photo> är © <author>Jesús Roncero</author> och används under villkoren i <terms>CC-BY-SA 4.0</terms>.",
     "Error changing password": "Fel vid byte av lösenord",
     "%(errorMessage)s (HTTP status %(httpStatus)s)": "%(errorMessage)s (HTTP-status %(httpStatus)s)",
     "Unknown password change error (%(stringifiedError)s)": "Okänt fel vid lösenordsändring (%(stringifiedError)s)",
@@ -3921,5 +3918,10 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[nummer]"
+    },
+    "credits": {
+        "default_cover_photo": "Det <photo>förvalda omslagsfotot</photo> är © <author>Jesús Roncero</author> och används under villkoren i <terms>CC-BY-SA 4.0</terms>.",
+        "twemoji_colr": "Teckensnittet <colr>twemoji-colr</colr> är © <author>Mozilla Foundation</author> och används under villkoren för <terms>Apache 2.0</terms>.",
+        "twemoji": "Emojigrafiken <twemoji>Twemoji</twemoji> är © <author>Twitter, Inc och andra bidragsgivare</author> och används under villkoren i <terms>CC-BY 4.0</terms>."
     }
 }
