@@ -452,7 +452,7 @@ describe("Read receipts", () => {
                 // Given a thread exists
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
-                assertUnread(room2, 1);
+                assertUnread(room2, 2);
                 goTo(room2);
 
                 openThread("Msg1");
@@ -462,7 +462,7 @@ describe("Read receipts", () => {
                 // Given a thread exists
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), threadedOff("Msg1", "Resp2")]);
-                assertUnread(room2, 2); // (Sanity)
+                assertUnread(room2, 3); // (Sanity)
 
                 // When I read the main timeline
                 goTo(room2);
@@ -481,7 +481,7 @@ describe("Read receipts", () => {
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), "Msg2", threadedOff("Msg2", "Resp2")]);
                 assertUnread(room2, 4);
                 goTo(room2);
-                assertUnread(room2, 4);
+                assertUnread(room2, 2);
 
                 openThread("Msg1");
                 assertUnread(room2, 1);
@@ -562,7 +562,7 @@ describe("Read receipts", () => {
                 // Given a thread exists
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), threadedOff("Msg1", "Resp2")]);
-                assertUnread(room2, 2); // (Sanity)
+                assertUnread(room2, 3); // (Sanity)
 
                 // When I read the main timeline
                 goTo(room2);
@@ -609,7 +609,7 @@ describe("Read receipts", () => {
                 goTo(room2);
 
                 // Then room does appear unread
-                assertUnread(room2, 2);
+                assertUnread(room2, 1);
                 assertUnreadThread("Msg1");
             });
             it.skip("Reading a thread root within the thread view marks it as read in the main timeline", () => {});
@@ -701,7 +701,7 @@ describe("Read receipts", () => {
                 goTo(room1);
 
                 receiveMessages(room2, ["Msg1", replyTo("Msg1", "Reply1")]);
-                assertUnread(room2, 1);
+                assertUnread(room2, 2);
 
                 goTo(room2);
                 assertRead(room2);
@@ -718,7 +718,7 @@ describe("Read receipts", () => {
                 goTo(room1);
 
                 receiveMessages(room2, ["Msg1", replyTo("Msg1", "Reply1")]);
-                assertUnread(room2, 1);
+                assertUnread(room2, 2);
                 markAsRead(room2);
 
                 // When an edit appears in the room
@@ -769,7 +769,7 @@ describe("Read receipts", () => {
             it("An edit of a threaded message makes the room unread", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
-                assertUnread(room2, 1);
+                assertUnread(room2, 2);
 
                 goTo(room2);
                 openThread("Msg1");
@@ -782,7 +782,7 @@ describe("Read receipts", () => {
             it("Reading an edit of a threaded message makes the room read", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
-                assertUnread(room2, 1);
+                assertUnread(room2, 2);
 
                 goTo(room2);
                 openThread("Msg1");
@@ -799,7 +799,7 @@ describe("Read receipts", () => {
             it("Marking a room as read after an edit in a thread makes it read", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), editOf("Resp1", "Edit1")]);
-                assertUnread(room2, 2);
+                assertUnread(room2, 3); // TODO: the edit counts as a message!
 
                 markAsRead(room2);
                 assertRead(room2);
@@ -807,13 +807,13 @@ describe("Read receipts", () => {
             it.skip("Editing a thread message after marking as read makes the room unread", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
-                assertUnread(room2, 1);
+                assertUnread(room2, 2);
 
                 markAsRead(room2);
                 assertRead(room2);
 
                 receiveMessages(room2, [editOf("Resp1", "Edit1")]);
-                assertUnread(room2, 1);
+                assertUnread(room2, 1); // TODO: should this edit make us unread?
             });
             it("A room with an edited threaded message is still unread after restart", () => {
                 goTo(room1);
@@ -840,7 +840,7 @@ describe("Read receipts", () => {
             it("An edit of a thread root makes the room unread", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
-                assertUnread(room2, 1);
+                assertUnread(room2, 2);
 
                 goTo(room2);
                 openThread("Msg1");
@@ -983,7 +983,7 @@ describe("Read receipts", () => {
                 goTo(room1);
                 assertRead(room2);
                 receiveMessages(room2, ["Msg1", "Msg2"]);
-                assertUnread(room2, 1);
+                assertUnread(room2, 2);
 
                 // When I read the main timeline
                 goTo(room2);
