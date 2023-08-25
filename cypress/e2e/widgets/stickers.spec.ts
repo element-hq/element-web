@@ -86,10 +86,10 @@ function expectTimelineSticker(roomId: string) {
     // Make sure it's in the right room
     cy.get(".mx_EventTile_sticker > a").should("have.attr", "href").and("include", `/${roomId}/`);
 
-    // Make sure the image points at the sticker image
-    cy.get<HTMLImageElement>(`img[alt="${STICKER_NAME}"]`)
-        .should("have.attr", "src")
-        .and("match", /thumbnail\/somewhere\?/);
+    // Make sure the image points at the sticker image. We will briefly show it
+    // using the thumbnail URL, but as soon as that fails, we will switch to the
+    // download URL.
+    cy.get<HTMLImageElement>(`img[alt="${STICKER_NAME}"][src*="download/somewhere"]`).should("exist");
 }
 
 describe("Stickers", () => {

@@ -23,11 +23,11 @@ declare global {
     namespace Cypress {
         interface Chainable {
             /**
-             * Opens the given room by name. The room must be visible in the room list.
-             * It uses a start-anchored regexp to accommodate for room tiles for unread rooms containing additional
-             * context in their aria labels, e.g. "Room name 3 unread messages."
+             * Opens the given room by name. The room must be visible in the
+             * room list, but the room list may be folded horizontally, and the
+             * room may contain unread messages.
              *
-             * @param name The room name to find and click on/open.
+             * @param name The exact room name to find and click on/open.
              */
             viewRoomByName(name: string): Chainable<JQuery<HTMLElement>>;
 
@@ -65,10 +65,20 @@ declare global {
 }
 
 Cypress.Commands.add("viewRoomByName", (name: string): Chainable<JQuery<HTMLElement>> => {
-    return cy
-        .findByRole("treeitem", { name: new RegExp("^" + name) })
-        .should("have.class", "mx_RoomTile")
-        .click();
+    // We look for the room inside the room list, which is a tree called Rooms.
+    //
+    // There are 3 cases:
+    // - the room list is folded:
+    //     then the aria-label on the room tile is the name (with nothing extra)
+    // - the room list is unfolder and the room has messages:
+    //     then the aria-label contains the unread count, but the title of the
+    //     div inside the titleContainer equals the room name
+    // - the room list is unfolded and the room has no messages:
+    //     then the aria-label is the name and so is the title of a div
+    //
+    // So by matching EITHER title=name OR aria-label=name we find this exact
+    // room in all three cases.
+    return cy.findByRole("tree", { name: "Rooms" }).find(`[title="${name}"],[aria-label="${name}"]`).first().click();
 });
 
 Cypress.Commands.add("viewRoomById", (id: string): void => {
