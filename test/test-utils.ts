@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { RenderResult, screen, waitFor } from "@testing-library/react";
+
 export function cleanLocalstorage(): void {
     window.localStorage.clear();
 }
@@ -46,4 +48,13 @@ export function deleteIndexedDB(dbName: string): Promise<void> {
         console.error(`${Date.now()}: Error removing indexeddb instance ${dbName}: ${e}`);
         throw e;
     });
+}
+
+// wait for loading page
+export async function waitForLoadingSpinner(): Promise<void> {
+    await screen.findByRole("progressbar");
+}
+
+export async function waitForWelcomeComponent(matrixChat?: RenderResult): Promise<void> {
+    await waitFor(() => matrixChat?.container.querySelector(".mx_Welcome"));
 }

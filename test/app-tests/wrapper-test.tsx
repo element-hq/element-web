@@ -19,12 +19,13 @@ import React from "react";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import fetchMock from "fetch-mock-jest";
-import { render, RenderResult, screen, waitFor } from "@testing-library/react";
+import { render, RenderResult, screen } from "@testing-library/react";
 import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
 import WebPlatform from "../../src/vector/platform/WebPlatform";
 import { loadApp } from "../../src/vector/app";
+import { waitForLoadingSpinner, waitForWelcomeComponent } from "../test-utils";
 
 fetchMock.config.overwriteRoutes = true;
 
@@ -44,7 +45,7 @@ describe("Wrapper", () => {
         fetchMock.get("/version", "1.10.13");
     });
 
-    it("wrap a matrix client with header and footer", async () => {
+    it("wrap a matrix chat with header and footer", async () => {
         SdkConfig.put({
             default_server_config: {
                 "m.homeserver": {
@@ -71,9 +72,9 @@ describe("Wrapper", () => {
 
         // at this point, we're trying to do a guest registration;
         // we expect a spinner
-        await assertAtLoadingSpinner();
+        await waitForLoadingSpinner();
 
-        await awaitWelcomeComponent(matrixChatResult);
+        await waitForWelcomeComponent(matrixChatResult);
 
         // Are not semantic elements because Element has a footer already.
         const header = screen.getByTestId("wrapper-header");
@@ -84,11 +85,3 @@ describe("Wrapper", () => {
         expect(matrixChat.nextSibling).toBe(footer);
     });
 });
-
-async function assertAtLoadingSpinner(): Promise<void> {
-    await screen.findByRole("progressbar");
-}
-
-async function awaitWelcomeComponent(matrixChat?: RenderResult): Promise<void> {
-    await waitFor(() => matrixChat?.container.querySelector(".mx_Welcome"));
-}

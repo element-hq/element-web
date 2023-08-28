@@ -34,7 +34,7 @@ import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
 import "../jest-mocks";
 import WebPlatform from "../../src/vector/platform/WebPlatform";
 import { parseQs, parseQsFromFragment } from "../../src/vector/url_utils";
-import { cleanLocalstorage, deleteIndexedDB } from "../test-utils";
+import { cleanLocalstorage, deleteIndexedDB, waitForLoadingSpinner, waitForWelcomeComponent } from "../test-utils";
 
 const DEFAULT_HS_URL = "http://my_server";
 const DEFAULT_IS_URL = "http://my_is";
@@ -189,7 +189,7 @@ describe("loading:", function () {
                 .then(async () => {
                     // at this point, we're trying to do a guest registration;
                     // we expect a spinner
-                    await assertAtLoadingSpinner();
+                    await waitForLoadingSpinner();
 
                     httpBackend
                         .when("POST", "/register")
@@ -202,7 +202,7 @@ describe("loading:", function () {
                 })
                 .then(() => {
                     // Wait for another trip around the event loop for the UI to update
-                    return awaitWelcomeComponent(matrixChat);
+                    return waitForWelcomeComponent(matrixChat);
                 })
                 .then(() => {
                     return waitFor(() => expect(windowLocation?.hash).toEqual("#/welcome"));
@@ -222,7 +222,7 @@ describe("loading:", function () {
                 .then(async () => {
                     // at this point, we're trying to do a guest registration;
                     // we expect a spinner
-                    await assertAtLoadingSpinner();
+                    await waitForLoadingSpinner();
 
                     httpBackend
                         .when("POST", "/register")
@@ -391,7 +391,7 @@ describe("loading:", function () {
                 .then(async () => {
                     // at this point, we're trying to do a guest registration;
                     // we expect a spinner
-                    await assertAtLoadingSpinner();
+                    await waitForLoadingSpinner();
 
                     httpBackend
                         .when("POST", "/register")
@@ -427,7 +427,7 @@ describe("loading:", function () {
                 .then(async () => {
                     // at this point, we're trying to do a guest registration;
                     // we expect a spinner
-                    await assertAtLoadingSpinner();
+                    await waitForLoadingSpinner();
 
                     httpBackend
                         .when("POST", "/register")
@@ -468,7 +468,7 @@ describe("loading:", function () {
                 .then(async () => {
                     // at this point, we're trying to do a guest registration;
                     // we expect a spinner
-                    await assertAtLoadingSpinner();
+                    await waitForLoadingSpinner();
 
                     httpBackend
                         .when("POST", "/register")
@@ -562,7 +562,7 @@ describe("loading:", function () {
             return sleep(1)
                 .then(async () => {
                     // we expect a spinner while we're logging in
-                    await assertAtLoadingSpinner();
+                    await waitForLoadingSpinner();
 
                     httpBackend
                         .when("POST", "/login")
@@ -650,11 +650,6 @@ describe("loading:", function () {
     }
 });
 
-// assert that we are on the loading page
-async function assertAtLoadingSpinner(): Promise<void> {
-    await screen.findByRole("progressbar");
-}
-
 async function awaitLoggedIn(matrixChat: RenderResult): Promise<void> {
     if (matrixChat.container.querySelector(".mx_MatrixChat_wrapper")) return; // already logged in
 
@@ -678,10 +673,6 @@ async function awaitRoomView(matrixChat?: RenderResult): Promise<void> {
 
 async function awaitLoginComponent(matrixChat?: RenderResult): Promise<void> {
     await waitFor(() => matrixChat?.container.querySelector(".mx_AuthPage"));
-}
-
-async function awaitWelcomeComponent(matrixChat?: RenderResult): Promise<void> {
-    await waitFor(() => matrixChat?.container.querySelector(".mx_Welcome"));
 }
 
 function moveFromWelcomeToLogin(matrixChat?: RenderResult): Promise<void> {
