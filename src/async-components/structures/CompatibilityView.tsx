@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from "react";
-import { _t } from "matrix-react-sdk/src/languageHandler";
+import React, { ReactNode } from "react";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+
+import { _t } from "../../languageHandler";
+
 // directly import the style here as this layer does not support rethemedex at this time so no matrix-react-sdk
 // PostCSS variables will be accessible.
 import "../../../res/css/structures/ErrorView.pcss";
-import { ReactNode } from "react";
 
 interface IProps {
     onAccept(): void;
@@ -112,15 +113,13 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                             <h2 id="step1_heading">{_t("Your browser can't run %(brand)s", { brand })}</h2>
                             <p>
                                 {_t(
-                                    "%(brand)s uses advanced browser features which aren't " +
-                                        "supported by your current browser.",
+                                    "%(brand)s uses advanced browser features which aren't supported by your current browser.",
                                     { brand },
                                 )}
                             </p>
                             <p>
                                 {_t(
-                                    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, " +
-                                        "or <safariLink>Safari</safariLink> for the best experience.",
+                                    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
                                     {},
                                     {
                                         chromeLink: (sub) => <a href="https://www.google.com/chrome">{sub}</a>,
@@ -131,8 +130,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                             </p>
                             <p>
                                 {_t(
-                                    "You can continue using your current browser, but some or all features may not work " +
-                                        "and the look and feel of the application may be incorrect.",
+                                    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
                                 )}
                             </p>
                             <button onClick={onAccept}>{_t("I understand the risks and wish to continue")}</button>
