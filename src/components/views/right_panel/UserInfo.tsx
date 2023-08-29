@@ -82,6 +82,7 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-messages";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { asyncSome } from "../../../utils/arrays";
+import UIStore from "../../../stores/UIStore";
 
 export interface IDevice extends Device {
     ambiguous?: boolean;
@@ -1578,7 +1579,7 @@ export const UserInfoHeader: React.FC<{
                     <MemberAvatar
                         key={member.userId} // to instantly blank the avatar when UserInfo changes members
                         member={member as RoomMember}
-                        size="30vh" // 2x@30vh
+                        size={UIStore.instance.windowHeight * 0.3 + "px"}
                         resizeMethod="scale"
                         fallbackUserId={member.userId}
                         onClick={onMemberAvatarClick}

@@ -101,7 +101,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
               data-testid="avatar-img"
               data-type="round"
               role="button"
-              style="--cpd-avatar-size: 30vh;"
+              style="--cpd-avatar-size: 230.39999999999998px;"
             >
               u
             </button>
