@@ -1662,7 +1662,6 @@
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz":
   version "3.2.14"
-  uid acd96c00a881d0f462e1f97a56c73742c8dbc984
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz#acd96c00a881d0f462e1f97a56c73742c8dbc984"
 
 "@matrix-org/react-sdk-module-api@^2.0.0", "@matrix-org/react-sdk-module-api@^2.1.0":
@@ -8790,10 +8789,29 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
+matrix-js-sdk@28.0.0:
+  version "28.0.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-28.0.0.tgz#9fc50de7ad540ff84b5a537531f27f723fa8bc8c"
+  integrity sha512-AdvFETHFkAx/Hf94+JXrdPePWiPQOHu4OsqkVbhoOGDlScLCeafWJzdp5sKNx1Yq12ULXWBCgRO2AL1pU8ZY/A==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^1.2.1"
+    another-json "^0.2.0"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    jwt-decode "^3.1.2"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.5.0"
+    oidc-client-ts "^2.2.4"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "9"
+
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "27.2.0"
-  uid c5245a887b677d3e943a74b469dad43a1d962738
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c5245a887b677d3e943a74b469dad43a1d962738"
+  version "28.0.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/4c00b410466b855e178ed47217dac6b31536a7bf"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^1.2.1"
@@ -8817,10 +8835,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.78.0"
-  uid c2e814ce9502e1709c7d83df3655fea0daef4f9e
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/c2e814ce9502e1709c7d83df3655fea0daef4f9e"
+matrix-react-sdk@3.79.0:
+  version "3.79.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.79.0.tgz#198a3ae09d8a09425eec1666911551692e780311"
+  integrity sha512-Hk8vbrb4rSaXhGIk4rwWMruBHHyMN+lLbdPIsIhQleJUGU/ro3A4PDIfB/dAVnOyBpEvaBstZYrsTTNoSVxU7w==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.6.0"
@@ -8884,7 +8902,6 @@ matrix-mock-request@^2.5.0:
     sanitize-html "2.11.0"
     tar-js "^0.3.0"
     ua-parser-js "^1.0.2"
-    uuid "^9.0.0"
     what-input "^5.2.10"
     zxcvbn "^4.4.2"
 
