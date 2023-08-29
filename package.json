@@ -23,7 +23,7 @@
         "package.json",
         ".stylelintrc.js"
     ],
-    "main": "./lib/index.ts",
+    "main": "./src/index.ts",
     "matrix_src_main": "./src/index.ts",
     "matrix_lib_main": "./lib/index.ts",
     "matrix_lib_typings": "./lib/index.d.ts",
@@ -230,6 +230,5 @@
         "outputDirectory": "coverage",
         "outputName": "jest-sonar-report.xml",
         "relativePaths": true
-    },
-    "typings": "./lib/index.d.ts"
+    }
 }
