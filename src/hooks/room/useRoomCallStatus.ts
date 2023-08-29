@@ -142,13 +142,6 @@ export const useRoomCallStatus = (
         useElementCallExclusively,
     ]);
 
-    console.table({
-        voiceCallDisabledReason,
-        voiceCallType,
-        videoCallDisabledReason,
-        videoCallType,
-    });
-
     /**
      * We've gone through all the steps
      */
