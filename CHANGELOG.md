@@ -1,5 +1,5 @@
-Changes in [1.11.40-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.40-rc.1) (2023-08-23)
-===========================================================================================================
+Changes in [1.11.40](https://github.com/vector-im/element-web/releases/tag/v1.11.40) (2023-08-29)
+=================================================================================================
 
 ## ✨ Features
  * Hide account deactivation for externally managed accounts ([\#11445](https://github.com/matrix-org/matrix-react-sdk/pull/11445)). Fixes #26022. Contributed by @kerryarchibald.
