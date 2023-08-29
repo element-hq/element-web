@@ -1,11 +1,5 @@
-Changes in [3.79.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.79.0-rc.2) (2023-08-23)
-===============================================================================================================
-
-## 🐛 Bug Fixes
- * Fix build error ([\#11450](https://github.com/matrix-org/matrix-react-sdk/pull/11450))
-
-Changes in [3.79.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.79.0-rc.1) (2023-08-22)
-===============================================================================================================
+Changes in [3.79.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.79.0) (2023-08-29)
+=====================================================================================================
 
 ## ✨ Features
  * Hide account deactivation for externally managed accounts ([\#11445](https://github.com/matrix-org/matrix-react-sdk/pull/11445)). Fixes vector-im/element-web#26022. Contributed by @kerryarchibald.
