@@ -1637,10 +1637,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.6.0.tgz#6552882f94d026f13da25d49e2a208287521c275"
-  integrity sha512-bTvNpp8LkC/2sItHABd1vGHdB8iclAcdlIYrL0Cn6qT+aohpdjb1wZ0dhUcx3NK5Q98IduI43RVH33V4Li/X0A==
+"@matrix-org/analytics-events@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.7.0.tgz#a9ea47209473d1075704db4eabb6d94c8d99be25"
+  integrity sha512-9M1ESpFbXaU0v8Kzm0N61eAiVymv0tlXP5FfqCUH+BDP7DmW/tqyIpDs9ooUxXoFg1bBEQaRy/xOyO15ZykCAg==
 
 "@matrix-org/emojibase-bindings@^1.1.2":
   version "1.1.2"
@@ -1662,7 +1662,6 @@
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz":
   version "3.2.14"
-  uid acd96c00a881d0f462e1f97a56c73742c8dbc984
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz#acd96c00a881d0f462e1f97a56c73742c8dbc984"
 
 "@matrix-org/react-sdk-module-api@^2.1.0":
@@ -2755,10 +2754,10 @@
     "@typescript-eslint/types" "5.62.0"
     eslint-visitor-keys "^3.3.0"
 
-"@vector-im/compound-design-tokens@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.0.3.tgz#89214c69108a14f5d3e4a73ddc44852862531f2b"
-  integrity sha512-XxmySUvfjD6EuAM7f6lsGIhuv94TFfoEpKxYh+HKn1hPBFcMEKKImu/jK5tnpOv2xuZOSrK0Pm6qMLnxLwOXOw==
+"@vector-im/compound-design-tokens@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.0.4.tgz#bf31120f026118d9dc379917364e2c27b51cce94"
+  integrity sha512-ZGflwlUANnEbsX/whWqRomyRHS36F1t5AoNBez2EfBVGXMIu7IsURVQfK/UJYPLoSHcArcTFCSbi5KSSsSiymw==
   dependencies:
     svg2vectordrawable "^2.9.1"
 
@@ -8791,9 +8790,8 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "27.2.0"
-  uid c5245a887b677d3e943a74b469dad43a1d962738
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c5245a887b677d3e943a74b469dad43a1d962738"
+  version "28.0.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/4c00b410466b855e178ed47217dac6b31536a7bf"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^1.2.1"
@@ -8818,12 +8816,11 @@ matrix-mock-request@^2.5.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.78.0"
-  uid c2e814ce9502e1709c7d83df3655fea0daef4f9e
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/c2e814ce9502e1709c7d83df3655fea0daef4f9e"
+  version "3.79.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/e73cda1b5656f7f6588b684bd42aa53df5a2d4f7"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/analytics-events" "^0.6.0"
+    "@matrix-org/analytics-events" "^0.7.0"
     "@matrix-org/emojibase-bindings" "^1.1.2"
     "@matrix-org/matrix-wysiwyg" "^2.4.1"
     "@matrix-org/react-sdk-module-api" "^2.1.0"
@@ -8831,7 +8828,7 @@ matrix-mock-request@^2.5.0:
     "@sentry/browser" "^7.0.0"
     "@sentry/tracing" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
-    "@vector-im/compound-design-tokens" "^0.0.3"
+    "@vector-im/compound-design-tokens" "^0.0.4"
     "@vector-im/compound-web" "^0.2.3"
     await-lock "^2.1.0"
     blurhash "^1.1.3"
