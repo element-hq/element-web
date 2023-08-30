@@ -26,6 +26,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 54px;"
+          title=""
         >
           !
         </span>

@@ -15,11 +15,20 @@ limitations under the License.
 */
 
 import { RoomMember, User, Room, ResizeMethod } from "matrix-js-sdk/src/matrix";
+import { useIdColorHash } from "@vector-im/compound-web";
 
 import DMRoomMap from "./utils/DMRoomMap";
 import { mediaFromMxc } from "./customisations/Media";
 import { isLocalRoom } from "./utils/localRoom/isLocalRoom";
 import { getFirstGrapheme } from "./utils/strings";
+
+/**
+ * Hardcoded from the Compound colors.
+ * Shade for background as defined in the compound web implementation
+ * https://github.com/vector-im/compound-web/blob/main/src/components/Avatar
+ */
+const AVATAR_BG_COLORS = ["#e9f2ff", "#faeefb", "#e3f7ed", "#ffecf0", "#ffefe4", "#e3f5f8", "#f1efff", "#e0f8d9"];
+const AVATAR_TEXT_COLORS = ["#043894", "#671481", "#004933", "#7e0642", "#850000", "#004077", "#4c05b5", "#004b00"];
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(
@@ -39,6 +48,18 @@ export function avatarUrlForMember(
         url = defaultAvatarUrlForString(member ? member.userId : "");
     }
     return url;
+}
+
+/**
+ * Determines the HEX color to use in the avatar pills
+ * @param id the user or room ID
+ * @returns the text color to use on the avatar
+ */
+export function getAvatarTextColor(id: string): string {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const index = useIdColorHash(id);
+
+    return AVATAR_TEXT_COLORS[index - 1];
 }
 
 export function avatarUrlForUser(
@@ -85,16 +106,12 @@ const colorToDataURLCache = new Map<string, string>();
 
 export function defaultAvatarUrlForString(s: string): string {
     if (!s) return ""; // XXX: should never happen but empirically does by evidence of a rageshake
-    const defaultColors = ["#0DBD8B", "#368bd6", "#ac3ba8"];
-    let total = 0;
-    for (let i = 0; i < s.length; ++i) {
-        total += s.charCodeAt(i);
-    }
-    const colorIndex = total % defaultColors.length;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const colorIndex = useIdColorHash(s);
     // overwritten color value in custom themes
     const cssVariable = `--avatar-background-colors_${colorIndex}`;
     const cssValue = getComputedStyle(document.body).getPropertyValue(cssVariable);
-    const color = cssValue || defaultColors[colorIndex];
+    const color = cssValue || AVATAR_BG_COLORS[colorIndex - 1];
     let dataUrl = colorToDataURLCache.get(color);
     if (!dataUrl) {
         // validate color as this can come from account_data

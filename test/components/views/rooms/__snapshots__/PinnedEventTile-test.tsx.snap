@@ -12,6 +12,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
       data-type="round"
       role="presentation"
       style="--cpd-avatar-size: 24px;"
+      title=""
     >
       a
     </span>

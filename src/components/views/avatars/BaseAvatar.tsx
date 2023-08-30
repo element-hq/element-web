@@ -99,7 +99,7 @@ const BaseAvatar: React.FC<IProps> = (props) => {
     const {
         name,
         idName,
-        title,
+        title = "",
         url,
         urls,
         size = "40px",

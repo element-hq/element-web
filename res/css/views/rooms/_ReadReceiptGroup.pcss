@@ -49,13 +49,11 @@ limitations under the License.
         height: 100%;
 
         .mx_BaseAvatar {
+            box-sizing: content-box;
             position: absolute;
-            display: inline-block;
-            height: 14px;
-            width: 14px;
             border: 1px solid $background;
-            border-radius: 100%;
-
+            width: 14px;
+            height: 14px;
             will-change: left, top;
             transition: left var(--transition-short) ease-out, top var(--transition-standard) ease-out;
         }

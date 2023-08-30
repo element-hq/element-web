@@ -24,6 +24,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 24px;"
+              title=""
             >
               u
             </span>
@@ -106,6 +107,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 24px;"
+              title=""
             >
               u
             </span>
@@ -185,6 +187,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
                   data-type="round"
                   role="button"
                   style="--cpd-avatar-size: 52px;"
+                  title=""
                 >
                   u
                 </button>
@@ -273,6 +276,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 24px;"
+              title=""
             >
               u
             </span>
@@ -352,6 +356,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                   data-type="round"
                   role="button"
                   style="--cpd-avatar-size: 52px;"
+                  title=""
                 >
                   u
                 </button>
@@ -515,6 +520,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 24px;"
+              title=""
             >
               u
             </span>
@@ -593,6 +599,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                   data-type="round"
                   role="button"
                   style="--cpd-avatar-size: 52px;"
+                  title=""
                 >
                   u
                 </button>

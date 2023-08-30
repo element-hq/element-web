@@ -62,6 +62,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
           data-testid="avatar-img"
           data-type="round"
           style="--cpd-avatar-size: 16px;"
+          title=""
         >
           <img
             alt=""
@@ -112,6 +113,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
               data-testid="avatar-img"
               data-type="round"
               style="--cpd-avatar-size: 16px;"
+              title=""
             >
               <img
                 alt=""
@@ -164,6 +166,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
               data-testid="avatar-img"
               data-type="round"
               style="--cpd-avatar-size: 16px;"
+              title=""
             >
               <img
                 alt=""
@@ -275,6 +278,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
           data-testid="avatar-img"
           data-type="round"
           style="--cpd-avatar-size: 16px;"
+          title=""
         >
           <img
             alt=""
@@ -309,6 +313,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
       href="https://matrix.to/#/!room1:example.com/%event_id%"
       aria-describedby="mx_Pill_0.123456"
       ><span
+        title=""
         aria-label="Profile picture"
         aria-hidden="true"
         data-testid="avatar-img"
@@ -343,6 +348,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
       href="https://matrix.to/#/!room2:example.com/%event_id%"
       aria-describedby="mx_Pill_0.123456"
       ><span
+        title=""
         aria-label="Avatar"
         aria-hidden="true"
         data-testid="avatar-img"

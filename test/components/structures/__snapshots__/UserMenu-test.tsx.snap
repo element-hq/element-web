@@ -24,6 +24,7 @@ exports[`<UserMenu> when rendered should render as expected 1`] = `
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 32px;"
+          title=""
         >
           u
         </span>

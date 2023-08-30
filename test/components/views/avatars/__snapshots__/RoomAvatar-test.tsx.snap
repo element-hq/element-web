@@ -9,6 +9,7 @@ exports[`RoomAvatar should render as expected for a DM room 1`] = `
     data-type="round"
     role="presentation"
     style="--cpd-avatar-size: 36px;"
+    title=""
   >
     D
   </span>
@@ -24,6 +25,7 @@ exports[`RoomAvatar should render as expected for a LocalRoom 1`] = `
     data-type="round"
     role="presentation"
     style="--cpd-avatar-size: 36px;"
+    title=""
   >
     l
   </span>
@@ -39,6 +41,7 @@ exports[`RoomAvatar should render as expected for a Room 1`] = `
     data-type="round"
     role="presentation"
     style="--cpd-avatar-size: 36px;"
+    title=""
   >
     t
   </span>
