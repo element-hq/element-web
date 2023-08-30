@@ -524,6 +524,12 @@ module.exports = (env, argv) => {
                                         removeDimensions: true,
                                     },
                                 },
+                                /**
+                                 * Forwards the React ref to the root SVG element
+                                 * Useful when using things like `asChild` in
+                                 * radix-ui
+                                 */
+                                ref: true,
                                 esModule: false,
                                 name: "[name].[hash:7].[ext]",
                                 outputPath: getAssetOutputPath,
