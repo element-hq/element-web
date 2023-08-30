@@ -123,6 +123,7 @@
         "cpx": "^1.5.0",
         "css-loader": "^4",
         "dotenv": "^16.0.2",
+        "esbuild-loader": "^4.0.2",
         "eslint": "8.45.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^9.0.0",

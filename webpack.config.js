@@ -10,6 +10,7 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
 const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 const crypto = require("crypto");
+const { EsbuildPlugin } = require('esbuild-loader');
 
 // XXX: mangle Crypto::createHash to replace md4 with sha256, output.hashFunction is insufficient as multiple bits
 // of webpack hardcode md4. The proper fix it to upgrade to webpack 5.
@@ -184,7 +185,7 @@ module.exports = (env, argv) => {
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
             minimize: enableMinification,
-            minimizer: enableMinification ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
+            minimizer: enableMinification ? [new EsbuildPlugin({ css: true }), new OptimizeCSSAssetsPlugin({})] : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
             // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
@@ -287,9 +288,9 @@ module.exports = (env, argv) => {
                         // not necessary anyway). So, for anything else, don't babel.
                         return false;
                     },
-                    loader: "babel-loader",
+                    loader: "esbuild-loader",
                     options: {
-                        cacheDirectory: true,
+                        // target: ?,
                     },
                 },
                 {
