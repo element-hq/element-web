@@ -733,6 +733,7 @@ function getAssetOutputPath(url, resourcePath) {
     // `res` is the parent dir for our own assets in various layers
     // `dist` is the parent dir for KaTeX assets
     const prefix = /^.*[/\\](dist|res)[/\\]/;
+
     /**
      * Only needed for https://github.com/vector-im/element-web/pull/15939
      * If keeping this, we are not able to load external assets such as SVG
@@ -742,6 +743,21 @@ function getAssetOutputPath(url, resourcePath) {
         throw new Error(`Unexpected asset path: ${resourcePath}`);
     }
     let outputDir = path.dirname(resourcePath).replace(prefix, "");
+
+    /**
+     * Imports from Compound are "absolute", we need to strip out the prefix
+     * coming before the npm package name.
+     *
+     * This logic is scoped to compound packages for now as they are the only
+     * package that imports external assets. This might need to be made more
+     * generic in the future
+     */
+    const compoundImportsPrefix = /@vector-im(?:\\|\/)compound-(.*?)(?:\\|\/)/;
+    const compoundMatch = outputDir.match(compoundImportsPrefix);
+    if (compoundMatch) {
+        outputDir = outputDir.substring(compoundMatch.index + compoundMatch[0].length);
+    }
+
     if (isKaTeX) {
         // Add a clearly named directory segment, rather than leaving the KaTeX
         // assets loose in each asset type directory.
