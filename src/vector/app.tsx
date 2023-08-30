@@ -33,6 +33,8 @@ import { createClient } from "matrix-js-sdk/src/matrix";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 import { ValidatedServerConfig } from "matrix-react-sdk/src/utils/ValidatedServerConfig";
+import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
+import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 
 import { parseQs } from "./url_utils";
 import VectorBasePlatform from "./platform/VectorBasePlatform";
@@ -109,17 +111,22 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
 
     const initialScreenAfterLogin = getInitialScreenAfterLogin(window.location);
 
+    const wrapperOpts: WrapperOpts = { Wrapper: React.Fragment };
+    ModuleRunner.instance.invoke(WrapperLifecycle.Wrapper, wrapperOpts);
+
     return (
-        <MatrixChat
-            onNewScreen={onNewScreen}
-            config={config}
-            realQueryParams={params}
-            startingFragmentQueryParams={fragParams}
-            enableGuest={!config.disable_guests}
-            onTokenLoginCompleted={onTokenLoginCompleted}
-            initialScreenAfterLogin={initialScreenAfterLogin}
-            defaultDeviceDisplayName={defaultDeviceName}
-        />
+        <wrapperOpts.Wrapper>
+            <MatrixChat
+                onNewScreen={onNewScreen}
+                config={config}
+                realQueryParams={params}
+                startingFragmentQueryParams={fragParams}
+                enableGuest={!config.disable_guests}
+                onTokenLoginCompleted={onTokenLoginCompleted}
+                initialScreenAfterLogin={initialScreenAfterLogin}
+                defaultDeviceDisplayName={defaultDeviceName}
+            />
+        </wrapperOpts.Wrapper>
     );
 }
 
