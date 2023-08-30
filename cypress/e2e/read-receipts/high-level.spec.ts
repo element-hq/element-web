@@ -31,40 +31,55 @@ describe("Read receipts", () => {
     let alphaRoomId: string;
     let bot: MatrixClient | undefined;
 
-    beforeEach(() => {
-        // Create 2 rooms: Alpha & Beta. We join the bot to both of them
+    before(() => {
+        // Note: unusually for the Cypress tests in this repo, we share a single
+        // Synapse between all the tests in this file.
+        //
+        // Stopping and starting Synapse costs about 0.25 seconds per test, so
+        // for most suites this is worth the cost for the extra assurance that
+        // each test is independent.
+        //
+        // Because there are so many tests in this file, and because sharing a
+        // Synapse should have no effect (because we create new rooms and users
+        // for each test), we share it here, saving ~30 seconds per run at time
+        // of writing.
+
         cy.startHomeserver("default").then((data) => {
             homeserver = data;
-            cy.initTestUser(homeserver, userName)
-                .then(() => {
-                    cy.createRoom({ name: roomAlpha }).then((createdRoomId) => {
-                        alphaRoomId = createdRoomId;
-                    });
-                })
-                .then(() => {
-                    cy.createRoom({ name: roomBeta }).then((createdRoomId) => {
-                        betaRoomId = createdRoomId;
-                    });
-                })
-                .then(() => {
-                    cy.getBot(homeserver, { displayName: botName }).then((botClient) => {
-                        bot = botClient;
-                    });
-                })
-                .then(() => {
-                    // Invite the bot to both rooms
-                    cy.inviteUser(alphaRoomId, bot.getUserId());
-                    cy.viewRoomById(alphaRoomId);
-                    cy.findByText(botName + " joined the room").should("exist");
-
-                    cy.inviteUser(betaRoomId, bot.getUserId());
-                    cy.viewRoomById(betaRoomId);
-                    cy.findByText(botName + " joined the room").should("exist");
-                });
         });
     });
 
-    afterEach(() => {
+    beforeEach(() => {
+        // Create 2 rooms: Alpha & Beta. We join the bot to both of them
+        cy.initTestUser(homeserver, userName)
+            .then(() => {
+                cy.createRoom({ name: roomAlpha }).then((createdRoomId) => {
+                    alphaRoomId = createdRoomId;
+                });
+            })
+            .then(() => {
+                cy.createRoom({ name: roomBeta }).then((createdRoomId) => {
+                    betaRoomId = createdRoomId;
+                });
+            })
+            .then(() => {
+                cy.getBot(homeserver, { displayName: botName }).then((botClient) => {
+                    bot = botClient;
+                });
+            })
+            .then(() => {
+                // Invite the bot to both rooms
+                cy.inviteUser(alphaRoomId, bot.getUserId());
+                cy.viewRoomById(alphaRoomId);
+                cy.findByText(botName + " joined the room").should("exist");
+
+                cy.inviteUser(betaRoomId, bot.getUserId());
+                cy.viewRoomById(betaRoomId);
+                cy.findByText(botName + " joined the room").should("exist");
+            });
+    });
+
+    after(() => {
         cy.stopHomeserver(homeserver);
     });
 
