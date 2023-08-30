@@ -1821,16 +1821,15 @@
     "Room %(name)s": "Room %(name)s",
     "Recently visited rooms": "Recently visited rooms",
     "No recently visited rooms": "No recently visited rooms",
-    "Threads": "Threads",
+    "%(count)s members": {
+        "other": "%(count)s members",
+        "one": "%(count)s member"
+    },
     "Video room": "Video room",
     "Public space": "Public space",
     "Public room": "Public room",
     "Private space": "Private space",
     "Private room": "Private room",
-    "%(count)s members": {
-        "other": "%(count)s members",
-        "one": "%(count)s member"
-    },
     "Start new chat": "Start new chat",
     "Invite to space": "Invite to space",
     "You do not have permissions to invite people to this space": "You do not have permissions to invite people to this space",

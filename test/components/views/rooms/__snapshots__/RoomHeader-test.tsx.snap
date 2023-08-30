@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoomHeader does not show the face pile for DMs 1`] = `
+<DocumentFragment>
+  <header
+    class="mx_Flex mx_RoomHeader light-panel"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+  >
+    <div
+      class="mx_DecoratedRoomAvatar"
+    >
+      <span
+        class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56"
+        data-color="7"
+        data-testid="avatar-img"
+        data-type="round"
+        role="presentation"
+        style="--cpd-avatar-size: 40px;"
+        title=""
+      >
+        !
+      </span>
+    </div>
+    <div
+      class="mx_Box mx_RoomHeader_info mx_Box--flex"
+      style="--mx-box-flex: 1;"
+    >
+      <div
+        aria-level="1"
+        class="_font-body-lg-semibold_1g2sj_89"
+        dir="auto"
+        role="heading"
+        title="!1:example.org"
+      >
+        !1:example.org
+      </div>
+    </div>
+    <nav
+      class="mx_Flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+    >
+      <button
+        class="_icon-button_yvmcf_17"
+        disabled=""
+        style="--cpd-icon-button-size: 32px;"
+        title="There's no one here to call"
+      >
+        <div />
+      </button>
+      <button
+        class="_icon-button_yvmcf_17"
+        disabled=""
+        style="--cpd-icon-button-size: 32px;"
+        title="There's no one here to call"
+      >
+        <div />
+      </button>
+      <button
+        class="_icon-button_yvmcf_17"
+        style="--cpd-icon-button-size: 32px;"
+        title="Threads"
+      >
+        <div />
+      </button>
+      <button
+        class="_icon-button_yvmcf_17"
+        style="--cpd-icon-button-size: 32px;"
+        title="Notifications"
+      >
+        <div />
+      </button>
+    </nav>
+  </header>
+</DocumentFragment>
+`;

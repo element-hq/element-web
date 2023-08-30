@@ -16,27 +16,27 @@ limitations under the License.
 
 import React, { FC, HTMLAttributes, ReactNode } from "react";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { AvatarStack, Tooltip } from "@vector-im/compound-web";
 
 import MemberAvatar from "../avatars/MemberAvatar";
-import TooltipTarget from "./TooltipTarget";
-import TextWithTooltip from "./TextWithTooltip";
 
 interface IProps extends HTMLAttributes<HTMLSpanElement> {
     members: RoomMember[];
     size: string;
     overflow: boolean;
-    tooltip?: ReactNode;
+    tooltipLabel?: string;
+    tooltipShortcut?: string;
     children?: ReactNode;
 }
 
-const FacePile: FC<IProps> = ({ members, size, overflow, tooltip, children, ...props }) => {
+const FacePile: FC<IProps> = ({ members, size, overflow, tooltipLabel, tooltipShortcut, children, ...props }) => {
     const faces = members.map(
-        tooltip
+        tooltipLabel
             ? (m) => <MemberAvatar key={m.userId} member={m} size={size} hideTitle />
             : (m) => (
-                  <TooltipTarget key={m.userId} label={m.name}>
+                  <Tooltip key={m.userId} label={m.name} shortcut={tooltipShortcut}>
                       <MemberAvatar member={m} size={size} viewUserOnClick={!props.onClick} hideTitle />
-                  </TooltipTarget>
+                  </Tooltip>
               ),
     );
 
@@ -47,17 +47,19 @@ const FacePile: FC<IProps> = ({ members, size, overflow, tooltip, children, ...p
         </>
     );
 
-    return (
-        <div {...props} className="mx_FacePile">
-            {tooltip ? (
-                <TextWithTooltip class="mx_FacePile_faces" tooltip={tooltip}>
-                    {pileContents}
-                </TextWithTooltip>
-            ) : (
-                <div className="mx_FacePile_faces">{pileContents}</div>
-            )}
+    const content = (
+        <div className="mx_FacePile">
+            <AvatarStack>{pileContents}</AvatarStack>
             {children}
         </div>
+    );
+
+    return tooltipLabel ? (
+        <Tooltip label={tooltipLabel} shortcut={tooltipShortcut}>
+            {content}
+        </Tooltip>
+    ) : (
+        content
     );
 };
 

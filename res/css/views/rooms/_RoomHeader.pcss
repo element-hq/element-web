@@ -23,6 +23,7 @@ limitations under the License.
 
 .mx_RoomHeader_info {
     cursor: pointer;
+    flex: 1;
 }
 
 .mx_RoomHeader_topic {
@@ -44,4 +45,20 @@ limitations under the License.
         value in pixels */
     height: calc($font-13px * 1.5);
     opacity: 1;
+}
+
+.mx_RoomHeader .mx_FacePile {
+    color: $secondary-content;
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    border-radius: 9999px;
+    padding: var(--cpd-space-1-5x);
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+        color: $primary-content;
+        background: var(--cpd-color-bg-subtle-primary);
+    }
 }

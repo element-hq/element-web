@@ -15,15 +15,22 @@ limitations under the License.
 import { render } from "@testing-library/react";
 import React from "react";
 
-import FacePile from "../../../../src/components/views/elements/FacePile";
-import { mkRoomMember } from "../../../test-utils";
+import { mkRoom, mkRoomMember, stubClient, withClientContextRenderOptions } from "../../../test-utils";
+import RoomFacePile from "../../../../src/components/views/elements/RoomFacePile";
+import DMRoomMap from "../../../../src/utils/DMRoomMap";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
-describe("<FacePile />", () => {
-    it("renders with a tooltip", () => {
-        const member = mkRoomMember("123", "456", "join");
+describe("<RoomFacePile />", () => {
+    it("renders", () => {
+        const cli = stubClient();
+        DMRoomMap.makeShared(cli);
+        const room = mkRoom(cli, "!123");
+
+        jest.spyOn(room, "getJoinedMembers").mockReturnValue([mkRoomMember(room.roomId, "@bob:example.org", "join")]);
 
         const { asFragment } = render(
-            <FacePile members={[member]} size="36px" overflow={false} tooltipLabel="tooltip" />,
+            <RoomFacePile onlyKnownUsers={false} room={room} />,
+            withClientContextRenderOptions(MatrixClientPeg.get()!),
         );
 
         expect(asFragment()).toMatchSnapshot();
