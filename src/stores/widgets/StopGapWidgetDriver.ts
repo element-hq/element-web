@@ -149,6 +149,12 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, "org.matrix.msc3401.call.member").raw,
             );
 
+            const sendRecvRoomEvents = ["io.element.call.encryption_key"];
+            for (const eventType of sendRecvRoomEvents) {
+                this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Send, eventType).raw);
+                this.allowedCapabilities.add(WidgetEventCapability.forRoomEvent(EventDirection.Receive, eventType).raw);
+            }
+
             const sendRecvToDevice = [
                 EventType.CallInvite,
                 EventType.CallCandidates,

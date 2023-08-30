@@ -654,6 +654,7 @@ export class ElementCall extends Call {
             analyticsID,
         });
 
+        if (client.isRoomEncrypted(groupCall.room.roomId)) params.append("perParticipantE2EE", "");
         if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "");
         if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) params.append("allowVoipWithNoMedia", "");
 
