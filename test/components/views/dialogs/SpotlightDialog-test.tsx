@@ -20,6 +20,7 @@ import {
     ConnectionError,
     IProtocol,
     IPublicRoomsChunkRoom,
+    JoinRule,
     MatrixClient,
     Room,
     RoomMember,
@@ -38,6 +39,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import SdkConfig from "../../../../src/SdkConfig";
+import { Action } from "../../../../src/dispatcher/actions";
 
 jest.useFakeTimers();
 
@@ -573,5 +575,76 @@ describe("Spotlight Dialog", () => {
         await flushPromisesWithFakeTimers();
 
         expect(screen.getByText("Failed to query public rooms")).toBeInTheDocument();
+    });
+
+    describe("knock rooms", () => {
+        const knockRoom: IPublicRoomsChunkRoom = {
+            guest_can_join: false,
+            join_rule: JoinRule.Knock,
+            num_joined_members: 0,
+            room_id: "some-room-id",
+            world_readable: false,
+        };
+
+        const viewRoomParams = {
+            action: Action.ViewRoom,
+            metricsTrigger: "WebUnifiedSearch",
+            metricsViaKeyboard: false,
+            room_alias: undefined,
+            room_id: knockRoom.room_id,
+            should_peek: false,
+            via_servers: ["example.tld"],
+        };
+
+        beforeEach(() => (mockedClient = mockClient({ rooms: [knockRoom] })));
+
+        describe("when disabling feature", () => {
+            beforeEach(async () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) =>
+                    setting === "feature_ask_to_join" ? false : [],
+                );
+
+                render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => {}} />);
+
+                // search is debounced
+                jest.advanceTimersByTime(200);
+                await flushPromisesWithFakeTimers();
+
+                fireEvent.click(screen.getByRole("button", { name: "View" }));
+            });
+
+            it("should not skip to auto join", async () => {
+                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ ...viewRoomParams, auto_join: true });
+            });
+
+            it("should not prompt ask to join", async () => {
+                expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: Action.PromptAskToJoin });
+            });
+        });
+
+        describe("when enabling feature", () => {
+            beforeEach(async () => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) =>
+                    setting === "feature_ask_to_join" ? true : [],
+                );
+                jest.spyOn(mockedClient, "getRoom").mockReturnValue(null);
+
+                render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => {}} />);
+
+                // search is debounced
+                jest.advanceTimersByTime(200);
+                await flushPromisesWithFakeTimers();
+
+                fireEvent.click(screen.getByRole("button", { name: "Ask to join" }));
+            });
+
+            it("should skip to auto join", async () => {
+                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ ...viewRoomParams, auto_join: false });
+            });
+
+            it("should prompt ask to join", async () => {
+                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.PromptAskToJoin });
+            });
+        });
     });
 });
