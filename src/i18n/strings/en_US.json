@@ -8,8 +8,6 @@
     "No media permissions": "No media permissions",
     "You may need to manually permit %(brand)s to access your microphone/webcam": "You may need to manually permit %(brand)s to access your microphone/webcam",
     "Default Device": "Default Device",
-    "Microphone": "Microphone",
-    "Camera": "Camera",
     "Advanced": "Advanced",
     "Always show message timestamps": "Always show message timestamps",
     "Authentication": "Authentication",
@@ -48,7 +46,6 @@
     "Download %(text)s": "Download %(text)s",
     "Email": "Email",
     "Email address": "Email address",
-    "Emoji": "Emoji",
     "Error decrypting attachment": "Error decrypting attachment",
     "Export": "Export",
     "Export E2E room keys": "Export E2E room keys",
@@ -117,7 +114,6 @@
     "Privileged Users": "Privileged Users",
     "Profile": "Profile",
     "Reason": "Reason",
-    "Register": "Register",
     "Reject invitation": "Reject invitation",
     "Return to login screen": "Return to login screen",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s does not have permission to send you notifications - please check your browser settings",
@@ -371,7 +367,6 @@
     "Sign In or Create Account": "Sign In or Create Account",
     "Use your account or create a new one to continue.": "Use your account or create a new one to continue.",
     "Create Account": "Create Account",
-    "Custom (%(level)s)": "Custom (%(level)s)",
     "Sends a message as plain text, without interpreting it as markdown": "Sends a message as plain text, without interpreting it as markdown",
     "Sends a message as html, without interpreting it as markdown": "Sends a message as html, without interpreting it as markdown",
     "You do not have the required permissions to use this command.": "You do not have the required permissions to use this command.",
@@ -418,7 +413,10 @@
         "labs": "Labs",
         "home": "Home",
         "favourites": "Favorites",
-        "attachment": "Attachment"
+        "attachment": "Attachment",
+        "camera": "Camera",
+        "microphone": "Microphone",
+        "emoji": "Emoji"
     },
     "action": {
         "continue": "Continue",
@@ -450,7 +448,8 @@
         "close": "Close",
         "cancel": "Cancel",
         "add": "Add",
-        "accept": "Accept"
+        "accept": "Accept",
+        "register": "Register"
     },
     "keyboard": {
         "home": "Home"
@@ -459,7 +458,8 @@
         "default": "Default",
         "restricted": "Restricted",
         "moderator": "Moderator",
-        "admin": "Admin"
+        "admin": "Admin",
+        "custom": "Custom (%(level)s)"
     },
     "bug_reporting": {
         "send_logs": "Send logs"

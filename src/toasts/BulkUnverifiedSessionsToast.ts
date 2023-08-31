@@ -44,7 +44,7 @@ export const showToast = (deviceIds: Set<string>): void => {
         icon: "verification_warning",
         props: {
             description: _t("Review to ensure your account is safe"),
-            acceptLabel: _t("Review"),
+            acceptLabel: _t("action|review"),
             onAccept,
             rejectLabel: _t("Later"),
             onReject,

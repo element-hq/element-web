@@ -94,7 +94,7 @@ const Knock: VFC<{
                 disabled={!canKick || disabled}
                 kind="icon_primary_outline"
                 onClick={() => handleDeny(roomMember.userId)}
-                title={_t("Deny")}
+                title={_t("action|deny")}
             >
                 <XIcon width={18} height={18} />
             </AccessibleButton>
@@ -103,7 +103,7 @@ const Knock: VFC<{
                 disabled={!canInvite || disabled}
                 kind="icon_primary"
                 onClick={() => handleApprove(roomMember.userId)}
-                title={_t("Approve")}
+                title={_t("action|approve")}
             >
                 <CheckIcon width={18} height={18} />
             </AccessibleButton>

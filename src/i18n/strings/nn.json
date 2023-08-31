@@ -244,7 +244,6 @@
     "powered by Matrix": "Matrixdriven",
     "Sign in with": "Logg inn med",
     "Email address": "Epostadresse",
-    "Register": "Meld deg inn",
     "Something went wrong!": "Noko gjekk gale!",
     "What's New": "Kva er nytt",
     "What's new?": "Kva er nytt?",
@@ -435,8 +434,6 @@
     "No Webcams detected": "Ingen Nettkamera funne",
     "Default Device": "Eininga som brukast i utgangspunktet",
     "Audio Output": "Ljodavspeling",
-    "Microphone": "Ljodopptaking",
-    "Camera": "Kamera",
     "Email": "Epost",
     "Account": "Brukar",
     "%(brand)s version:": "%(brand)s versjon:",
@@ -450,7 +447,6 @@
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Kan ikkje kopla til heimtenaren - ver venleg og sjekk tilkoplinga di, og sjå til at <a>heimtenaren din sitt CCL-sertifikat</a> er stolt på og at ein nettlesartillegg ikkje hindrar førespurnader.",
     "This server does not support authentication with a phone number.": "Denne tenaren støttar ikkje stadfesting gjennom telefonnummer.",
     "Commands": "Kommandoar",
-    "Emoji": "Emoji",
     "Notify the whole room": "Varsle heile rommet",
     "Room Notification": "Romvarsel",
     "Users": "Brukarar",
@@ -500,7 +496,6 @@
         "other": "Du har %(count)s uleste varslingar i ein tidligare versjon av dette rommet.",
         "one": "Du har %(count)s ulest varsel i ein tidligare versjon av dette rommet."
     },
-    "Guest": "Gjest",
     "Could not load user profile": "Klarde ikkje å laste brukarprofilen",
     "Your password has been reset.": "Passodet ditt vart nullstilt.",
     "Invalid homeserver discovery response": "Feil svar frå heimetenaren (discovery response)",
@@ -580,7 +575,6 @@
     "Identity server has no terms of service": "Identitetstenaren manglar bruksvilkår",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Denne handlinga krev kommunikasjon mot <server />(standard identitetstenar) for å verifisere e-post eller telefonnummer, men tenaren manglar bruksvilkår.",
     "Only continue if you trust the owner of the server.": "Gå vidare så lenge du har tillit til eigar av tenaren.",
-    "Custom (%(level)s)": "Tilpassa (%(level)s)",
     "Error upgrading room": "Feil ved oppgradering av rom",
     "Double check that your server supports the room version chosen and try again.": "Sjekk at tenar støttar denne romversjonen, og prøv på nytt.",
     "Verifies a user, session, and pubkey tuple": "Verifiser brukar, økt eller public-key objekt (pubkey tuple)",
@@ -704,9 +698,7 @@
     "Invalid theme schema.": "",
     "Language and region": "Språk og region",
     "General": "Generelt",
-    "Preferences": "Innstillingar",
     "Room list": "Romkatalog",
-    "Timeline": "Historikk",
     "Autocomplete delay (ms)": "Forsinkelse på autofullfør (ms)",
     "Room information": "Rominformasjon",
     "Room Addresses": "Romadresser",
@@ -763,7 +755,6 @@
     "Enable audible notifications for this session": "Aktiver høyrbare varslingar for denne økta",
     "Custom theme URL": "Tilpassa tema-URL",
     "Add theme": "Legg til tema",
-    "Credits": "Bidragsytarar",
     "For help with using %(brand)s, click <a>here</a>.": "For hjelp med å bruka %(brand)s, klikk <a>her</a>.",
     "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "For hjelp med å bruka %(brand)s, klikk <a>her</a>, eller start ein samtale med vår bot ved å bruke knappen under.",
     "Clear cache and reload": "Tøm buffer og last inn på nytt",
@@ -877,9 +868,7 @@
     "Email Address": "E-postadresse",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Du bør <b>fjerne dine personlege data</b> frå identitetstenaren <idserver /> før du koplar frå. Dessverre er identitetstenaren <idserver /> utilgjengeleg og kan ikkje nåast akkurat no.",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Vi tilrår at du slettar personleg informasjon, som e-postadresser og telefonnummer frå identitetstenaren før du koplar frå.",
-    "Privacy": "Personvern",
     "Versions": "Versjonar",
-    "Legal": "Juridisk",
     "Identity server": "Identitetstenar",
     "You're already in a call with this person.": "Du er allereie i ein samtale med denne personen.",
     "Already in call": "Allereie i ein samtale",
@@ -949,7 +938,6 @@
     "Not a valid identity server (status code %(code)s)": "Ikkje ein gyldig identietstenar (statuskode %(code)s)",
     "Identity server URL must be HTTPS": "URL for identitetstenar må vera HTTPS",
     "Review to ensure your account is safe": "Undersøk dette for å gjere kontoen trygg",
-    "Review": "Undersøk",
     "Results are only revealed when you end the poll": "Resultatet blir synleg når du avsluttar røystinga",
     "Results will be visible when the poll is ended": "Resultata vil bli synlege når røystinga er ferdig",
     "Enable Markdown": "Aktiver Markdown",
@@ -967,7 +955,6 @@
     "To view all keyboard shortcuts, <a>click here</a>.": "For å sjå alle tastatursnarvegane, <a>klikk her</a>.",
     "Deactivate account": "Avliv brukarkontoen",
     "Enter a new identity server": "Skriv inn ein ny identitetstenar",
-    "Rename": "Endra namn",
     "Click the button below to confirm signing out these devices.": {
         "one": "Trykk på knappen under for å stadfesta utlogging frå denne eininga."
     },
@@ -1031,7 +1018,16 @@
         "description": "Skildring",
         "dark": "Mørkt tema",
         "attachment": "Vedlegg",
-        "appearance": "Utsjånad"
+        "appearance": "Utsjånad",
+        "guest": "Gjest",
+        "legal": "Juridisk",
+        "credits": "Bidragsytarar",
+        "preferences": "Innstillingar",
+        "timeline": "Historikk",
+        "privacy": "Personvern",
+        "camera": "Kamera",
+        "microphone": "Ljodopptaking",
+        "emoji": "Emoji"
     },
     "action": {
         "continue": "Fortset",
@@ -1077,7 +1073,10 @@
         "cancel": "Bryt av",
         "back": "Attende",
         "add": "Legg til",
-        "accept": "Sei ja"
+        "accept": "Sei ja",
+        "rename": "Endra namn",
+        "review": "Undersøk",
+        "register": "Meld deg inn"
     },
     "labs": {
         "pinning": "Meldingsfesting",
@@ -1098,7 +1097,8 @@
         "default": "Opphavleg innstilling",
         "restricted": "Avgrensa",
         "moderator": "Moderator",
-        "admin": "Administrator"
+        "admin": "Administrator",
+        "custom": "Tilpassa (%(level)s)"
     },
     "bug_reporting": {
         "matrix_security_issue": "For å rapportere eit Matrix-relatert sikkerheitsproblem, les Matrix.org sin <a>Security Disclosure Policy</a>.",

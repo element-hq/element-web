@@ -214,7 +214,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
             items = items.slice(0, MAX_ITEMS_WHEN_LIMITED);
             showAllButton = (
                 <AccessibleButton kind="link_inline" className="mx_ReactionsRow_showAll" onClick={this.onShowAllClick}>
-                    {_t("Show all")}
+                    {_t("action|show_all")}
                 </AccessibleButton>
             );
         }

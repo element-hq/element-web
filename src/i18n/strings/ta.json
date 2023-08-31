@@ -49,7 +49,6 @@
     "Event sent!": "நிகழ்வு அனுப்பப்பட்டது",
     "Event Type": "நிகழ்வு வகை",
     "Event Content": "நிகழ்வு உள்ளடக்கம்",
-    "Register": "பதிவு செய்",
     "Rooms": "அறைகள்",
     "This email address is already in use": "இந்த மின்னஞ்சல் முகவரி முன்னதாகவே பயன்பாட்டில் உள்ளது",
     "This phone number is already in use": "இந்த தொலைபேசி எண் முன்னதாகவே பயன்பாட்டில் உள்ளது",
@@ -146,7 +145,8 @@
         "confirm": "உறுதிப்படுத்தவும்",
         "close": "மூடு",
         "cancel": "ரத்து",
-        "back": "பின்"
+        "back": "பின்",
+        "register": "பதிவு செய்"
     },
     "bug_reporting": {
         "send_logs": "பதிவுகளை அனுப்பு"

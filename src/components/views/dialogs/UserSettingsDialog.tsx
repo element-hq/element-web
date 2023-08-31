@@ -104,7 +104,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         tabs.push(
             new Tab(
                 UserTab.Preferences,
-                _td("Preferences"),
+                _td("common|preferences"),
                 "mx_UserSettingsDialog_preferencesIcon",
                 <PreferencesUserSettingsTab closeSettingsFn={this.props.onFinished} />,
                 "UserSettingsPreferences",

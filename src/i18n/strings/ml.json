@@ -7,8 +7,6 @@
     "powered by Matrix": "മാട്രിക്സില്‍ പ്രവര്‍ത്തിക്കുന്നു",
     "unknown error code": "അപരിചിത എറര്‍ കോഡ്",
     "Failed to change password. Is your password correct?": "രഹസ്യവാക്ക് മാറ്റാന്‍ സാധിച്ചില്ല. രഹസ്യവാക്ക് ശരിയാണോ ?",
-    "Microphone": "മൈക്രോഫോൺ",
-    "Camera": "ക്യാമറ",
     "Sunday": "ഞായര്‍",
     "Messages sent by bot": "ബോട്ട് അയയ്ക്കുന്ന സന്ദേശങ്ങള്‍ക്ക്",
     "Notification targets": "നോട്ടിഫിക്കേഷന്‍ ടാര്‍ഗെറ്റുകള്‍",
@@ -57,7 +55,9 @@
         "error": "എറര്‍",
         "mute": "നിശ്ശബ്ദം",
         "settings": "സജ്ജീകരണങ്ങള്‍",
-        "warning": "മുന്നറിയിപ്പ്"
+        "warning": "മുന്നറിയിപ്പ്",
+        "camera": "ക്യാമറ",
+        "microphone": "മൈക്രോഫോൺ"
     },
     "action": {
         "continue": "മുന്നോട്ട്",

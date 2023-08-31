@@ -121,7 +121,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         }
 
         return (
-            <SettingsSubsection heading={_t("Legal")}>
+            <SettingsSubsection heading={_t("common|legal")}>
                 <SettingsSubsectionText>{legalLinks}</SettingsSubsectionText>
             </SettingsSubsection>
         );
@@ -131,7 +131,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         // Note: This is not translated because it is legal text.
         // Also, &nbsp; is ugly but necessary.
         return (
-            <SettingsSubsection heading={_t("Credits")}>
+            <SettingsSubsection heading={_t("common|credits")}>
                 <SettingsSubsectionText>
                     <ul>
                         <li>
@@ -308,7 +308,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             <SettingsTab>
                 <SettingsSection heading={_t("Help & About")}>
                     {bugReportingSection}
-                    <SettingsSubsection heading={_t("FAQ")} description={faqText} />
+                    <SettingsSubsection heading={_t("common|faq")} description={faqText} />
                     <SettingsSubsection heading={_t("Versions")}>
                         <SettingsSubsectionText>
                             <CopyableText getTextToCopy={this.getVersionTextToCopy}>
@@ -349,7 +349,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         )}
                         <SettingsSubsectionText>
                             <details>
-                                <summary>{_t("Access Token")}</summary>
+                                <summary>{_t("common|access_token")}</summary>
                                 <b>
                                     {_t(
                                         "Your access token gives full access to your account. Do not share it with anyone.",

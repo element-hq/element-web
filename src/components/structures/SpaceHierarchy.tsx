@@ -897,7 +897,7 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                                 className="mx_SpaceHierarchy_list"
                                 onKeyDown={onKeyDownHandler}
                                 role="tree"
-                                aria-label={_t("Space")}
+                                aria-label={_t("common|space")}
                             >
                                 {results}
                             </ul>

@@ -317,7 +317,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                 });
             };
             privacySection = (
-                <SettingsSection heading={_t("Privacy")}>
+                <SettingsSection heading={_t("common|privacy")}>
                     <SettingsSubsection
                         heading={_t("common|analytics")}
                         description={_t(

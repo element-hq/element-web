@@ -197,7 +197,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                     <IconizedContextMenuOption
                         data-testid="new-subspace-option"
                         iconClassName="mx_SpacePanel_iconPlus"
-                        label={_t("Space")}
+                        label={_t("common|space")}
                         onClick={onNewSubspaceClick}
                     >
                         <BetaPill />
@@ -254,7 +254,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 />
                 <IconizedContextMenuOption
                     iconClassName="mx_SpacePanel_iconPreferences"
-                    label={_t("Preferences")}
+                    label={_t("common|preferences")}
                     onClick={onPreferencesClick}
                 />
                 {devtoolsOption}

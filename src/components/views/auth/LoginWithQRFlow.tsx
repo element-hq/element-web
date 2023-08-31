@@ -163,7 +163,7 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                             kind="primary"
                             onClick={this.handleClick(Click.Approve)}
                         >
-                            {_t("Approve")}
+                            {_t("action|approve")}
                         </AccessibleButton>
                     </>
                 );

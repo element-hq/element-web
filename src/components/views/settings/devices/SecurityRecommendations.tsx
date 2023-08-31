@@ -74,7 +74,7 @@ const SecurityRecommendations: React.FC<Props> = ({ devices, currentDeviceId, go
                         onClick={() => goToFilteredList(DeviceSecurityVariation.Unverified)}
                         data-testid="unverified-devices-cta"
                     >
-                        {_t("View all") + ` (${unverifiedDevicesCount})`}
+                        {_t("action|view_all") + ` (${unverifiedDevicesCount})`}
                     </AccessibleButton>
                 </DeviceSecurityCard>
             )}
@@ -99,7 +99,7 @@ const SecurityRecommendations: React.FC<Props> = ({ devices, currentDeviceId, go
                             onClick={() => goToFilteredList(DeviceSecurityVariation.Inactive)}
                             data-testid="inactive-devices-cta"
                         >
-                            {_t("View all") + ` (${inactiveDevicesCount})`}
+                            {_t("action|view_all") + ` (${inactiveDevicesCount})`}
                         </AccessibleButton>
                     </DeviceSecurityCard>
                 </>

@@ -185,7 +185,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                         onClick={this.onContinueClick}
                         disabled={this.state.continueDisabled}
                     >
-                        {_t("Complete")}
+                        {_t("action|complete")}
                     </AccessibleButton>
                 </span>
             );
@@ -197,7 +197,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                     onClick={this.onRevokeClick}
                     disabled={this.props.disabled}
                 >
-                    {_t("Revoke")}
+                    {_t("action|revoke")}
                 </AccessibleButton>
             );
         } else {
