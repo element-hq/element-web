@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Body as BodyText, IconButton, Tooltip } from "@vector-im/compound-web";
 import { Icon as VideoCallIcon } from "@vector-im/compound-design-tokens/icons/video-call.svg";
 import { Icon as VoiceCallIcon } from "@vector-im/compound-design-tokens/icons/voice-call.svg";
@@ -37,15 +37,12 @@ import { _t, getCurrentLanguage } from "../../../languageHandler";
 import { Flex } from "../../utils/Flex";
 import { Box } from "../../utils/Box";
 import { useRoomCallStatus } from "../../../hooks/room/useRoomCallStatus";
-import LegacyCallHandler from "../../../LegacyCallHandler";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { Action } from "../../../dispatcher/actions";
 import { useRoomThreadNotifications } from "../../../hooks/room/useRoomThreadNotifications";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { useGlobalNotificationState } from "../../../hooks/useGlobalNotificationState";
 import SdkConfig from "../../../SdkConfig";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
+import { placeCall } from "../../../utils/room/placeCall";
 import { useEncryptionStatus } from "../../../hooks/useEncryptionStatus";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import FacePile from "../elements/FacePile";
@@ -93,34 +90,6 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
     const useElementCallExclusively = useMemo(() => {
         return SdkConfig.get("element_call").use_exclusively && groupCallsEnabled;
     }, [groupCallsEnabled]);
-
-    const placeCall = useCallback(
-        async (callType: CallType, platformCallType: typeof voiceCallType) => {
-            switch (platformCallType) {
-                case "legacy_or_jitsi":
-                    await LegacyCallHandler.instance.placeCall(room.roomId, callType);
-                    break;
-                // TODO: Remove the jitsi_or_element_call case and
-                // use the commented code below
-                case "element_call":
-                case "jitsi_or_element_call":
-                    defaultDispatcher.dispatch<ViewRoomPayload>({
-                        action: Action.ViewRoom,
-                        room_id: room.roomId,
-                        view_call: true,
-                        metricsTrigger: undefined,
-                    });
-                    break;
-
-                // case "jitsi_or_element_call":
-                // TODO: Open dropdown menu to choice between
-                // EC and Jitsi. Waiting on Compound's dropdown
-                // component
-                // break;
-            }
-        },
-        [room.roomId],
-    );
 
     const threadNotifications = useRoomThreadNotifications(room);
     const globalNotificationState = useGlobalNotificationState();
@@ -193,8 +162,8 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     <IconButton
                         disabled={!!voiceCallDisabledReason}
                         title={!voiceCallDisabledReason ? _t("Voice call") : voiceCallDisabledReason!}
-                        onClick={async () => {
-                            placeCall(CallType.Voice, voiceCallType);
+                        onClick={() => {
+                            placeCall(room, CallType.Voice, voiceCallType);
                         }}
                     >
                         <VoiceCallIcon />
@@ -204,7 +173,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     disabled={!!videoCallDisabledReason}
                     title={!videoCallDisabledReason ? _t("Video call") : videoCallDisabledReason!}
                     onClick={() => {
-                        placeCall(CallType.Video, videoCallType);
+                        placeCall(room, CallType.Video, videoCallType);
                     }}
                 >
                     <VideoCallIcon />

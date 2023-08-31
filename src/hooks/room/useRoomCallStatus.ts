@@ -28,7 +28,7 @@ import { _t } from "../../languageHandler";
 import { useRoomMemberCount } from "../useRoomMembers";
 import { ElementCall } from "../../models/Call";
 
-type CallType = "element_call" | "jitsi_or_element_call" | "legacy_or_jitsi";
+export type PlatformCallType = "element_call" | "jitsi_or_element_call" | "legacy_or_jitsi";
 
 const DEFAULT_DISABLED_REASON = null;
 const DEFAULT_CALL_TYPE = "jitsi_or_element_call";
@@ -42,14 +42,14 @@ export const useRoomCallStatus = (
     room: Room,
 ): {
     voiceCallDisabledReason: string | null;
-    voiceCallType: CallType;
+    voiceCallType: PlatformCallType;
     videoCallDisabledReason: string | null;
-    videoCallType: CallType;
+    videoCallType: PlatformCallType;
 } => {
     const [voiceCallDisabledReason, setVoiceCallDisabledReason] = useState<string | null>(DEFAULT_DISABLED_REASON);
     const [videoCallDisabledReason, setVideoCallDisabledReason] = useState<string | null>(DEFAULT_DISABLED_REASON);
-    const [voiceCallType, setVoiceCallType] = useState<CallType>(DEFAULT_CALL_TYPE);
-    const [videoCallType, setVideoCallType] = useState<CallType>(DEFAULT_CALL_TYPE);
+    const [voiceCallType, setVoiceCallType] = useState<PlatformCallType>(DEFAULT_CALL_TYPE);
+    const [videoCallType, setVideoCallType] = useState<PlatformCallType>(DEFAULT_CALL_TYPE);
 
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
     const useElementCallExclusively = useMemo(() => {
