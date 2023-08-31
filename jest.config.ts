@@ -25,7 +25,7 @@ const config: Config = {
     },
     testMatch: ["<rootDir>/test/**/*-test.[tj]s?(x)"],
     setupFiles: ["jest-canvas-mock"],
-    setupFilesAfterEnv: ["<rootDir>/node_modules/matrix-react-sdk/test/setupTests.js"],
+    setupFilesAfterEnv: ["<rootDir>/node_modules/matrix-react-sdk/test/setupTests.ts"],
     moduleNameMapper: {
         "\\.(css|scss|pcss)$": "<rootDir>/__mocks__/cssMock.js",
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/imageMock.js",

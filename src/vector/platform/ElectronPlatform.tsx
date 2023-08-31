@@ -21,7 +21,6 @@ limitations under the License.
 import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
 import BaseEventIndexManager from "matrix-react-sdk/src/indexing/BaseEventIndexManager";
 import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
-import { _t } from "matrix-react-sdk/src/languageHandler";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
@@ -48,6 +47,7 @@ import DesktopCapturerSourcePicker from "matrix-react-sdk/src/components/views/e
 import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
+import { _t } from "../../languageHandler";
 
 interface SquirrelUpdate {
     releaseNotes: string;

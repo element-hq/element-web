@@ -124,11 +124,6 @@ If you're enabling this at the deployment level, you may also want to reference 
 
 Enables rendering of MD / HTML in room topics.
 
-## Exploring public spaces (`feature_exploring_public_spaces`)
-
-Enables exploring public spaces in the new search dialog. Requires the server to
-have [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827) enabled.
-
 ## Use the Rust cryptography implementation (`feature_rust_crypto`) [In Development]
 
 Configures Element to use a new cryptography implementation based on the [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk).
@@ -142,3 +137,7 @@ Refactors visually the room header and room sidebar
 ## Notifications panels (`feature_notifications_panel`)
 
 A list of all events notifying the current user. Only works with unencrypted content.
+
+## Knock rooms (`feature_ask_to_join`) [In Development]
+
+Enables knock feature for rooms. This allows users to ask to join a room.

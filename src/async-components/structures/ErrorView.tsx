@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { _t } from "matrix-react-sdk/src/languageHandler";
+
+import { _t } from "../../languageHandler";
 
 // directly import the style here as this layer does not support rethemedex at this time so no matrix-react-sdk
 // PostCSS variables will be accessible.

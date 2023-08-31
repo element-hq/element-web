@@ -29,7 +29,7 @@ describe("Loading server config", function () {
         PlatformPeg.set(new WebPlatform());
         fetchMock.get("https://matrix-client.matrix.org/_matrix/client/versions", {
             unstable_features: {},
-            versions: [],
+            versions: ["v1.1"],
         });
         fetchMock.get("https://matrix.org/.well-known/matrix/client", {
             "m.homeserver": {

@@ -5,58 +5,56 @@ const loaderUtils = require("loader-utils");
 // copies the resources into the webapp directory.
 //
 
-// Languages are listed manually so we can choose when to include
-// a translation in the app (because having a translation with only
-// 3 strings translated is just frustrating)
-// This could readily be automated, but it's nice to explicitly
-// control when new languages are available.
+// Languages are listed manually, so we can choose when to include a translation in the app
+// (because having a translation with only 3 strings translated is just frustrating)
+// This could readily be automated, but it's nice to explicitly control when new languages are available.
 const INCLUDE_LANGS = [
-    { value: "bg", label: "Български" },
-    { value: "ca", label: "Català" },
-    { value: "cs", label: "čeština" },
-    { value: "da", label: "Dansk" },
-    { value: "de_DE", label: "Deutsch" },
-    { value: "el", label: "Ελληνικά" },
-    { value: "en_EN", label: "English" },
-    { value: "en_US", label: "English (US)" },
-    { value: "eo", label: "Esperanto" },
-    { value: "es", label: "Español" },
-    { value: "et", label: "Eesti" },
-    { value: "eu", label: "Euskara" },
-    { value: "fi", label: "Suomi" },
-    { value: "fr", label: "Français" },
-    { value: "gl", label: "Galego" },
-    { value: "he", label: "עברית" },
-    { value: "hi", label: "हिन्दी" },
-    { value: "hu", label: "Magyar" },
-    { value: "id", label: "Bahasa Indonesia" },
-    { value: "is", label: "íslenska" },
-    { value: "it", label: "Italiano" },
-    { value: "ja", label: "日本語" },
-    { value: "kab", label: "Taqbaylit" },
-    { value: "ko", label: "한국어" },
-    { value: "lo", label: "ລາວ" },
-    { value: "lt", label: "Lietuvių" },
-    { value: "lv", label: "Latviešu" },
-    { value: "nb_NO", label: "Norwegian Bokmål" },
-    { value: "nl", label: "Nederlands" },
-    { value: "nn", label: "Norsk Nynorsk" },
-    { value: "pl", label: "Polski" },
-    { value: "pt", label: "Português" },
-    { value: "pt_BR", label: "Português do Brasil" },
-    { value: "ru", label: "Русский" },
-    { value: "sk", label: "Slovenčina" },
-    { value: "sq", label: "Shqip" },
-    { value: "sr", label: "српски" },
-    { value: "sv", label: "Svenska" },
-    { value: "te", label: "తెలుగు" },
-    { value: "th", label: "ไทย" },
-    { value: "tr", label: "Türkçe" },
-    { value: "uk", label: "українська мова" },
-    { value: "vi", label: "Tiếng Việt" },
-    { value: "vls", label: "West-Vlaams" },
-    { value: "zh_Hans", label: "简体中文" }, // simplified chinese
-    { value: "zh_Hant", label: "繁體中文" }, // traditional chinese
+    "bg",
+    "ca",
+    "cs",
+    "da",
+    "de_DE",
+    "el",
+    "en_EN",
+    "en_US",
+    "eo",
+    "es",
+    "et",
+    "eu",
+    "fi",
+    "fr",
+    "gl",
+    "he",
+    "hi",
+    "hu",
+    "id",
+    "is",
+    "it",
+    "ja",
+    "kab",
+    "ko",
+    "lo",
+    "lt",
+    "lv",
+    "nb_NO",
+    "nl",
+    "nn",
+    "pl",
+    "pt",
+    "pt_BR",
+    "ru",
+    "sk",
+    "sq",
+    "sr",
+    "sv",
+    "te",
+    "th",
+    "tr",
+    "uk",
+    "vi",
+    "vls",
+    "zh_Hans",
+    "zh_Hant",
 ];
 
 // cpx includes globbed parts of the filename in the destination, but excludes
@@ -81,7 +79,6 @@ const parseArgs = require("minimist");
 const Cpx = require("cpx");
 const chokidar = require("chokidar");
 const fs = require("fs");
-const rimraf = require("rimraf");
 
 const argv = parseArgs(process.argv.slice(2), {});
 
@@ -158,7 +155,7 @@ function genLangFile(lang, dest) {
     const reactSdkFile = "node_modules/matrix-react-sdk/src/i18n/strings/" + lang + ".json";
     const riotWebFile = "src/i18n/strings/" + lang + ".json";
 
-    let translations = {};
+    const translations = {};
     [reactSdkFile, riotWebFile].forEach(function (f) {
         if (fs.existsSync(f)) {
             try {
@@ -169,8 +166,6 @@ function genLangFile(lang, dest) {
             }
         }
     });
-
-    translations = weblateToCounterpart(translations);
 
     const json = JSON.stringify(translations, null, 4);
     const jsonBuffer = Buffer.from(json);
@@ -188,12 +183,12 @@ function genLangFile(lang, dest) {
 function genLangList(langFileMap) {
     const languages = {};
     INCLUDE_LANGS.forEach(function (lang) {
-        const normalizedLanguage = lang.value.toLowerCase().replace("_", "-");
+        const normalizedLanguage = lang.toLowerCase().replace("_", "-");
         const languageParts = normalizedLanguage.split("-");
         if (languageParts.length == 2 && languageParts[0] == languageParts[1]) {
-            languages[languageParts[0]] = { fileName: langFileMap[lang.value], label: lang.label };
+            languages[languageParts[0]] = langFileMap[lang];
         } else {
-            languages[normalizedLanguage] = { fileName: langFileMap[lang.value], label: lang.label };
+            languages[normalizedLanguage] = langFileMap[lang];
         }
     });
     fs.writeFile("webapp/i18n/languages.json", JSON.stringify(languages, null, 4), function (err) {
@@ -207,51 +202,11 @@ function genLangList(langFileMap) {
     }
 }
 
-/**
- * Convert translation key from weblate format
- * (which only supports a single level) to counterpart
- * which requires object values for 'count' translations.
- *
- * eg.
- *     "there are %(count)s badgers|one": "a badger",
- *     "there are %(count)s badgers|other": "%(count)s badgers"
- *   becomes
- *     "there are %(count)s badgers": {
- *         "one": "a badger",
- *         "other": "%(count)s badgers"
- *     }
+/*
+ * watch the input files for a given language,
+ * regenerate the file, adding its content-hashed filename to langFileMap
+ * and regenerating languages.json with the new filename
  */
-function weblateToCounterpart(inTrs) {
-    const outTrs = {};
-
-    for (const key of Object.keys(inTrs)) {
-        const keyParts = key.split("|", 2);
-        if (keyParts.length === 2) {
-            let obj = outTrs[keyParts[0]];
-            if (obj === undefined) {
-                obj = outTrs[keyParts[0]] = {};
-            } else if (typeof obj === "string") {
-                // This is a transitional edge case if a string went from singular to pluralised and both still remain
-                // in the translation json file. Use the singular translation as `other` and merge pluralisation atop.
-                obj = outTrs[keyParts[0]] = {
-                    other: inTrs[key],
-                };
-                console.warn("Found entry in i18n file in both singular and pluralised form", keyParts[0]);
-            }
-            obj[keyParts[1]] = inTrs[key];
-        } else {
-            outTrs[key] = inTrs[key];
-        }
-    }
-
-    return outTrs;
-}
-
-/**
-watch the input files for a given language,
-regenerate the file, adding its content-hashed filename to langFileMap
-and regenerating languages.json with the new filename
-*/
 function watchLanguage(lang, dest, langFileMap) {
     const reactSdkFile = "node_modules/matrix-react-sdk/src/i18n/strings/" + lang + ".json";
     const riotWebFile = "src/i18n/strings/" + lang + ".json";
@@ -279,8 +234,8 @@ function watchLanguage(lang, dest, langFileMap) {
 // language resources
 const I18N_DEST = "webapp/i18n/";
 const I18N_FILENAME_MAP = INCLUDE_LANGS.reduce((m, l) => {
-    const filename = genLangFile(l.value, I18N_DEST);
-    m[l.value] = filename;
+    const filename = genLangFile(l, I18N_DEST);
+    m[l] = filename;
     return m;
 }, {});
 genLangList(I18N_FILENAME_MAP);
