@@ -67,6 +67,8 @@
         "search": "Search",
         "quote": "Quote",
         "unpin": "Unpin",
+        "view": "View",
+        "view_message": "View message",
         "start_chat": "Start chat",
         "invites_list": "Invites",
         "reject": "Reject",
@@ -87,7 +89,6 @@
         "report_content": "Report Content",
         "resend": "Resend",
         "next": "Next",
-        "view": "View",
         "ask_to_join": "Ask to join",
         "forward": "Forward",
         "copy_link": "Copy link",
@@ -1861,6 +1862,15 @@
     "Public room": "Public room",
     "Private space": "Private space",
     "Private room": "Private room",
+    "%(names)s and %(name)s": "%(names)s and %(name)s",
+    "%(names)s and %(count)s others": {
+        "other": "%(names)s and %(count)s others",
+        "one": "%(names)s and %(count)s other"
+    },
+    "%(count)s people asking to join": {
+        "other": "%(count)s people asking to join",
+        "one": "Asking to join"
+    },
     "Start new chat": "Start new chat",
     "Invite to space": "Invite to space",
     "You do not have permissions to invite people to this space": "You do not have permissions to invite people to this space",

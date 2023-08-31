@@ -36,6 +36,7 @@ import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
+import { RoomKnocksBar } from "./RoomKnocksBar";
 import { SearchScope } from "./SearchBar";
 import { aboveLeftOf, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import RoomContextMenu from "../context_menus/RoomContextMenu";
@@ -820,6 +821,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                 </div>
                 {!isVideoRoom && <RoomCallBanner roomId={this.props.room.roomId} />}
                 <RoomLiveShareWarning roomId={this.props.room.roomId} />
+                <RoomKnocksBar room={this.props.room} />
             </header>
         );
     }
