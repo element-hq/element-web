@@ -552,6 +552,14 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    "feature_notifications": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("labs|notifications"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+        controller: new ReloadOnChangeController(),
+    },
     "useCompactLayout": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("Use a more compact 'Modern' layout"),

@@ -868,7 +868,8 @@
         "hidebold": "Hide notification dot (only display counters badges)",
         "intentional_mentions": "Enable intentional mentions",
         "ask_to_join": "Enable ask to join",
-        "new_room_decoration_ui": "Under active development, new room header & details interface"
+        "new_room_decoration_ui": "Under active development, new room header & details interface",
+        "notifications": "Notifications panel"
     },
     "Thank you for trying the beta, please go into as much detail as you can so we can improve it.": "Thank you for trying the beta, please go into as much detail as you can so we can improve it.",
     "Notification Settings": "Notification Settings",
