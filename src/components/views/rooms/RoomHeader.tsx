@@ -27,7 +27,6 @@ import type { Room } from "matrix-js-sdk/src/matrix";
 import { useRoomName } from "../../../hooks/useRoomName";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { useTopic } from "../../../hooks/room/useTopic";
 import { useAccountData } from "../../../hooks/useAccountData";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
@@ -46,6 +45,7 @@ import { useGlobalNotificationState } from "../../../hooks/useGlobalNotification
 import SdkConfig from "../../../SdkConfig";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import FacePile from "../elements/FacePile";
+import { setPhase } from "../../../utils/room/setPhase";
 
 /**
  * A helper to transform a notification color to the what the Compound Icon Button
@@ -59,16 +59,6 @@ function notificationColorToIndicator(color: NotificationColor): React.Component
     } else {
         return "highlight";
     }
-}
-
-/**
- * A helper to show or hide the right panel
- */
-function showOrHidePanel(phase: RightPanelPhases): void {
-    const rightPanel = RightPanelStore.instance;
-    rightPanel.isOpen && rightPanel.currentCard.phase === phase
-        ? rightPanel.togglePanel(null)
-        : rightPanel.setCard({ phase });
 }
 
 export default function RoomHeader({ room }: { room: Room }): JSX.Element {
@@ -139,7 +129,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
             gap="var(--cpd-space-3x)"
             className="mx_RoomHeader light-panel"
             onClick={() => {
-                showOrHidePanel(RightPanelPhases.RoomSummary);
+                setPhase(RightPanelPhases.RoomSummary);
             }}
         >
             <DecoratedRoomAvatar room={room} size="40px" displayBadge={false} />
@@ -185,7 +175,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                 <IconButton
                     indicator={notificationColorToIndicator(threadNotifications)}
                     onClick={() => {
-                        showOrHidePanel(RightPanelPhases.ThreadPanel);
+                        setPhase(RightPanelPhases.ThreadPanel);
                     }}
                     title={_t("common|threads")}
                 >
@@ -194,7 +184,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                 <IconButton
                     indicator={notificationColorToIndicator(globalNotificationState.color)}
                     onClick={() => {
-                        showOrHidePanel(RightPanelPhases.NotificationPanel);
+                        setPhase(RightPanelPhases.NotificationPanel);
                     }}
                     title={_t("Notifications")}
                 >
@@ -208,7 +198,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     weight="medium"
                     aria-label={_t("%(count)s members", { count: memberCount })}
                     onClick={(e: React.MouseEvent) => {
-                        showOrHidePanel(RightPanelPhases.RoomMemberList);
+                        setPhase(RightPanelPhases.RoomMemberList);
                         e.stopPropagation();
                     }}
                 >
