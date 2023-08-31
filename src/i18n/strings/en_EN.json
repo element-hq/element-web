@@ -1851,6 +1851,7 @@
     "Room %(name)s": "Room %(name)s",
     "Recently visited rooms": "Recently visited rooms",
     "No recently visited rooms": "No recently visited rooms",
+    "Untrusted": "Untrusted",
     "%(count)s members": {
         "other": "%(count)s members",
         "one": "%(count)s member"
