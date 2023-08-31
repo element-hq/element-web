@@ -403,6 +403,24 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
+    public async getPlatformSecret(key: string): Promise<string | null> {
+        return await this.ipc.call("getSecret", key).catch((error) => {
+            logger.info(`Failed to connect to password storage to get ${key}`, error);
+        });
+    }
+
+    public async savePlatformSecret(key: string, value: string): Promise<string | null> {
+        return await this.ipc.call("saveSecret", key, value).catch((error) => {
+            logger.info(`Failed to connect to password storage to save ${key}`, error);
+        });
+    }
+
+    public async destroyPlatformSecret(key: string): Promise<void> {
+        return await this.ipc.call("destroySecret", key).catch((error) => {
+            logger.info(`Failed to connect to password storage to destroy ${key}`, error);
+        });
+    }
+
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
             return await this.ipc.call("getPickleKey", userId, deviceId);
