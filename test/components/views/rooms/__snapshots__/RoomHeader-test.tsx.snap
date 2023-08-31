@@ -62,13 +62,6 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       >
         <div />
       </button>
-      <button
-        class="_icon-button_yvmcf_17"
-        style="--cpd-icon-button-size: 32px;"
-        title="Notifications"
-      >
-        <div />
-      </button>
     </nav>
   </header>
 </DocumentFragment>
