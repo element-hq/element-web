@@ -67,7 +67,7 @@ export const useRoomCallStatus = (
 
     const hasGroupCall = useCall(room.roomId) !== null;
 
-    const memberCount = useRoomMemberCount(room, { includeFunctional: false });
+    const memberCount = useRoomMemberCount(room);
 
     const [mayEditWidgets, mayCreateElementCalls] = useTypedEventEmitterState(
         room,
