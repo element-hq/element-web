@@ -19,7 +19,11 @@ import { IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIP
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 
 /**
- * Helper to toggle a right panel view.
+ * Helper to show a right panel phase.
+ * If the UI is already showing that phase, the right panel will be hidden.
+ *
+ * Calling the same phase twice with a different state will update the current
+ * phase and push the old state in the right panel history.
  * @param phase The right panel phase.
  * @param cardState The state within the phase.
  */
