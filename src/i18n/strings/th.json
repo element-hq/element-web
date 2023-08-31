@@ -208,7 +208,6 @@
     "Collecting logs": "กำลังรวบรวมล็อก",
     "All Rooms": "ทุกห้อง",
     "Wednesday": "วันพุธ",
-    "Send logs": "ส่งล็อก",
     "All messages": "ทุกข้อความ",
     "Call invitation": "คำเชิญเข้าร่วมการโทร",
     "What's new?": "มีอะไรใหม่?",
@@ -243,10 +242,6 @@
     "Only continue if you trust the owner of the server.": "ดำเนินการต่อหากคุณไว้วางใจเจ้าของเซิร์ฟเวอร์เท่านั้น.",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "การดำเนินการนี้จำเป็นต้องเข้าถึงเซิร์ฟเวอร์ identity เริ่มต้น <server /> เพื่อตรวจสอบที่อยู่อีเมลหรือหมายเลขโทรศัพท์ แต่เซิร์ฟเวอร์ไม่มีข้อกำหนดในการให้บริการใดๆ.",
     "Identity server has no terms of service": "เซิร์ฟเวอร์ประจำตัวไม่มีข้อกำหนดในการให้บริการ",
-    "%(date)s at %(time)s": "%(date)s เมื่อ %(time)s",
-    "%(seconds)ss left": "%(seconds)ss ที่ผ่านมา",
-    "%(minutes)sm %(seconds)ss left": "%(minutes)sm %(seconds)ss ที่ผ่านมา",
-    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sh %(minutes)sm %(seconds)ss ที่ผ่านมา",
     "The server does not support the room version specified.": "เซิร์ฟเวอร์ไม่รองรับเวอร์ชันห้องที่ระบุ.",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "ไฟล์ '%(fileName)s' เกินขีดจำกัดขนาดของโฮมเซิร์ฟเวอร์นี้สำหรับการอัปโหลด",
     "The file '%(fileName)s' failed to upload.": "ไฟล์ '%(fileName)s' อัปโหลดไม่สำเร็จ.",
@@ -393,10 +388,6 @@
     "Message Actions": "การดำเนินการกับข้อความ",
     "Text": "ตัวอักษร",
     "Create a link": "สร้างลิงค์",
-    "Link": "ลิงค์",
-    "Code": "โค้ด",
-    "Underline": "ขีดเส้นใต้",
-    "Italic": "ตัวเอียง",
     "Stop recording": "หยุดการบันทึก",
     "We didn't find a microphone on your device. Please check your settings and try again.": "เราไม่พบไมโครโฟนบนอุปกรณ์ของคุณ โปรดตรวจสอบการตั้งค่าของคุณแล้วลองอีกครั้ง.",
     "No microphone found": "ไม่พบไมโครโฟน",
@@ -484,5 +475,27 @@
     },
     "keyboard": {
         "home": "เมนูหลัก"
+    },
+    "composer": {
+        "format_italic": "ตัวเอียง",
+        "format_underline": "ขีดเส้นใต้",
+        "format_inline_code": "โค้ด",
+        "format_link": "ลิงค์"
+    },
+    "Link": "ลิงค์",
+    "Code": "โค้ด",
+    "power_level": {
+        "default": "ค่าเริ่มต้น",
+        "moderator": "ผู้ช่วยดูแล",
+        "admin": "ผู้ดูแล"
+    },
+    "bug_reporting": {
+        "send_logs": "ส่งล็อก"
+    },
+    "time": {
+        "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss ที่ผ่านมา",
+        "minutes_seconds_left": "%(minutes)sm %(seconds)ss ที่ผ่านมา",
+        "seconds_left": "%(seconds)ss ที่ผ่านมา",
+        "date_at_time": "%(date)s เมื่อ %(time)s"
     }
 }

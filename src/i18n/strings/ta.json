@@ -24,7 +24,6 @@
     "powered by Matrix": "Matrix-ஆல் ஆனது",
     "Search…": "தேடு…",
     "Send": "அனுப்பு",
-    "Send logs": "பதிவுகளை அனுப்பு",
     "Source URL": "மூல முகவரி",
     "This Room": "இந்த அறை",
     "Unavailable": "இல்லை",
@@ -148,5 +147,8 @@
         "close": "மூடு",
         "cancel": "ரத்து",
         "back": "பின்"
+    },
+    "bug_reporting": {
+        "send_logs": "பதிவுகளை அனுப்பு"
     }
 }

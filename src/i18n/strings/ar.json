@@ -16,7 +16,6 @@
     "Collecting app version information": "تجميع المعلومات حول نسخة التطبيق",
     "Changelog": "سِجل التغييرات",
     "Waiting for response from server": "في انتظار الرد مِن الخادوم",
-    "Send logs": "إرسال السِجلات",
     "Thank you!": "شكرًا !",
     "Call invitation": "دعوة لمحادثة",
     "Developer Tools": "أدوات التطوير",
@@ -468,10 +467,7 @@
     "Topic: %(topic)s (<a>edit</a>)": "الموضوع: %(topic)s (<a>عدل</a>)",
     "This is the beginning of your direct message history with <displayName/>.": "هذه هي بداية محفوظات رسائلك المباشرة باسم <displayName/>.",
     "Only the two of you are in this conversation, unless either of you invites anyone to join.": "أنتما فقط في هذه المحادثة ، إلا إذا دعا أي منكما أي شخص للانضمام.",
-    "Code block": "كتلة برمجية",
-    "Strikethrough": "مشطوب",
     "Italics": "مائل",
-    "Bold": "ثخين",
     "You do not have permission to post to this room": "ليس لديك إذن للنشر في هذه الغرفة",
     "This room has been replaced and is no longer active.": "تم استبدال هذه الغرفة ولم تعد نشطة.",
     "The conversation continues here.": "تستمر المحادثة هنا.",
@@ -524,8 +520,6 @@
     "FAQ": "اسئلة شائعة",
     "Help & About": "المساعدة وعن البرنامج",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "للإبلاغ عن مشكلة أمنية متعلقة بMatrix ، يرجى قراءة <a>سياسة الإفصاح الأمني</a> في Matrix.org.",
-    "Submit debug logs": "إرسال سجلات تصحيح الأخطاء",
-    "Bug reporting": "الإبلاغ عن مشاكل في البرنامج",
     "Chat with %(brand)s Bot": "تخاطب مع الروبوت الخاص ب%(brand)s",
     "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "للمساعدة في استخدام %(brand)s ، انقر <a> هنا </a> أو ابدأ محادثة مع برنامج الروبوت الخاص بنا باستخدام الزر أدناه.",
     "For help with using %(brand)s, click <a>here</a>.": "للمساعدة في استخدام %(brand)s انقر <a>هنا</a>.",
@@ -1256,7 +1250,6 @@
     "Unable to look up phone number": "تعذر العثور على رقم الهاتف",
     "The user you called is busy.": "المستخدم الذي اتصلت به مشغول.",
     "User Busy": "المستخدم مشغول",
-    "%(date)s at %(time)s": "%(date)s في %(time)s",
     "You cannot place calls without a connection to the server.": "لا يمكنك إجراء المكالمات دون اتصال بالخادوم.",
     "Connectivity to the server has been lost": "فُقد الاتصال بالخادوم",
     "You cannot place calls in this browser.": "لا يمكنك إجراء المكالمات في هذا المتصفّح.",
@@ -1343,5 +1336,26 @@
     },
     "keyboard": {
         "number": "[رقم]"
+    },
+    "composer": {
+        "format_bold": "ثخين",
+        "format_strikethrough": "مشطوب",
+        "format_code_block": "كتلة برمجية"
+    },
+    "Bold": "ثخين",
+    "power_level": {
+        "default": "المبدئي",
+        "restricted": "مقيد",
+        "moderator": "مشرف",
+        "admin": "مدير"
+    },
+    "bug_reporting": {
+        "matrix_security_issue": "للإبلاغ عن مشكلة أمنية متعلقة بMatrix ، يرجى قراءة <a>سياسة الإفصاح الأمني</a> في Matrix.org.",
+        "submit_debug_logs": "إرسال سجلات تصحيح الأخطاء",
+        "title": "الإبلاغ عن مشاكل في البرنامج",
+        "send_logs": "إرسال السِجلات"
+    },
+    "time": {
+        "date_at_time": "%(date)s في %(time)s"
     }
 }

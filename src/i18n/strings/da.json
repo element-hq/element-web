@@ -95,7 +95,6 @@
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sendte et billed.",
     "Someone": "Nogen",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s inviterede %(targetDisplayName)s til rummet.",
-    "Submit debug logs": "Indsend debug-logfiler",
     "Online": "Online",
     "Sunday": "Søndag",
     "Messages sent by bot": "Beskeder sendt af en bot",
@@ -128,7 +127,6 @@
     "Invite to this room": "Inviter til dette rum",
     "State Key": "Tilstandsnøgle",
     "Send": "Send",
-    "Send logs": "Send logs",
     "All messages": "Alle beskeder",
     "Call invitation": "Opkalds invitation",
     "What's new?": "Hvad er nyt?",
@@ -661,7 +659,6 @@
     "Algeria": "Algeriet",
     "Åland Islands": "Ålandsøerne",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Vi spurgte din browser om at huske hvilken homeserver du bruger for at logge på, men din browser har desværre glemt det. Gå til log ind siden og prøv igen.",
-    "%(date)s at %(time)s": "%(date)s om %(time)s",
     "Failed to transfer call": "Kunne ikke omstille opkald",
     "Transfer Failed": "Omstilling fejlede",
     "Unable to transfer call": "Kan ikke omstille opkald",
@@ -722,5 +719,18 @@
     "labs": {
         "pinning": "Fastgørelse af beskeder",
         "state_counters": "Vis simple tællere i rumhovedet"
+    },
+    "power_level": {
+        "default": "Standard",
+        "restricted": "Begrænset",
+        "moderator": "Moderator",
+        "admin": "Administrator"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "Indsend debug-logfiler",
+        "send_logs": "Send logs"
+    },
+    "time": {
+        "date_at_time": "%(date)s om %(time)s"
     }
 }

@@ -354,8 +354,6 @@
     "Credits": "क्रेडिट",
     "Check for update": "अपडेट के लिये जांचें",
     "Help & About": "सहायता और के बारे में",
-    "Bug reporting": "बग रिपोर्टिंग",
-    "Submit debug logs": "डिबग लॉग जमा करें",
     "FAQ": "सामान्य प्रश्न",
     "Versions": "संस्करण",
     "Notifications": "सूचनाएं",
@@ -554,11 +552,6 @@
     "Only continue if you trust the owner of the server.": "केवल तभी जारी रखें जब आप सर्वर के स्वामी पर भरोसा करते हैं।",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "इस क्रिया के लिए ईमेल पते या फ़ोन नंबर को मान्य करने के लिए डिफ़ॉल्ट पहचान सर्वर <server /> तक पहुँचने की आवश्यकता है, लेकिन सर्वर के पास सेवा की कोई शर्तें नहीं हैं।",
     "Identity server has no terms of service": "पहचान सर्वर की सेवा की कोई शर्तें नहीं हैं",
-    "%(value)ss": "%(value)s एस",
-    "%(value)sm": "%(value)sएम",
-    "%(value)sh": "%(value)s",
-    "%(value)sd": "%(value)s",
-    "%(date)s at %(time)s": "%(date)s %(time)s पर",
     "The server does not support the room version specified.": "सर्वर निर्दिष्ट कक्ष संस्करण का समर्थन नहीं करता है।",
     "Failed to transfer call": "कॉल स्थानांतरित करने में विफल",
     "Transfer Failed": "स्थानांतरण विफल",
@@ -635,5 +628,22 @@
     "labs": {
         "pinning": "संदेश पिनिंग",
         "state_counters": "कमरे के हेडर में साधारण काउंटर रेंडर करें"
+    },
+    "power_level": {
+        "default": "डिफ़ॉल्ट",
+        "restricted": "वर्जित",
+        "moderator": "मध्यस्थ",
+        "admin": "व्यवस्थापक"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "डिबग लॉग जमा करें",
+        "title": "बग रिपोर्टिंग"
+    },
+    "time": {
+        "date_at_time": "%(date)s %(time)s पर",
+        "short_days": "%(value)s",
+        "short_hours": "%(value)s",
+        "short_minutes": "%(value)sएम",
+        "short_seconds": "%(value)s एस"
     }
 }

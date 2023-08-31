@@ -93,7 +93,6 @@
     "All Rooms": "అన్ని గదులు",
     "Wednesday": "బుధవారం",
     "Send": "పంపండి",
-    "Send logs": "నమోదును పంపు",
     "All messages": "అన్ని సందేశాలు",
     "Call invitation": "మాట్లాడడానికి ఆహ్వానం",
     "Invite to this room": "ఈ గదికి ఆహ్వానించండి",
@@ -132,5 +131,12 @@
         "cancel": "రద్దు",
         "add": "చేర్చు",
         "accept": "అంగీకరించు"
+    },
+    "power_level": {
+        "default": "డిఫాల్ట్",
+        "admin": "అడ్మిన్"
+    },
+    "bug_reporting": {
+        "send_logs": "నమోదును పంపు"
     }
 }

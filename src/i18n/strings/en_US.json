@@ -296,7 +296,6 @@
     "All Rooms": "All Rooms",
     "Wednesday": "Wednesday",
     "Send": "Send",
-    "Send logs": "Send logs",
     "All messages": "All messages",
     "Call invitation": "Call invitation",
     "What's new?": "What's new?",
@@ -402,9 +401,6 @@
     "The call could not be established": "The call could not be established",
     "The user you called is busy.": "The user you called is busy.",
     "User Busy": "User Busy",
-    "%(seconds)ss left": "%(seconds)ss left",
-    "%(minutes)sm %(seconds)ss left": "%(minutes)sm %(seconds)ss left",
-    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sh %(minutes)sm %(seconds)ss left",
     "common": {
         "analytics": "Analytics",
         "error": "Error",
@@ -458,5 +454,19 @@
     },
     "keyboard": {
         "home": "Home"
+    },
+    "power_level": {
+        "default": "Default",
+        "restricted": "Restricted",
+        "moderator": "Moderator",
+        "admin": "Admin"
+    },
+    "bug_reporting": {
+        "send_logs": "Send logs"
+    },
+    "time": {
+        "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss left",
+        "minutes_seconds_left": "%(minutes)sm %(seconds)ss left",
+        "seconds_left": "%(seconds)ss left"
     }
 }

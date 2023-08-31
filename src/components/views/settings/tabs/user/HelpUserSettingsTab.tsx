@@ -274,26 +274,20 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         if (SdkConfig.get().bug_report_endpoint_url) {
             bugReportingSection = (
                 <SettingsSubsection
-                    heading={_t("Bug reporting")}
+                    heading={_t("bug_reporting|title")}
                     description={
                         <>
-                            <SettingsSubsectionText>
-                                {_t(
-                                    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
-                                )}
-                            </SettingsSubsectionText>
-                            {_t(
-                                "Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.",
-                            )}
+                            <SettingsSubsectionText>{_t("bug_reporting|introduction")}</SettingsSubsectionText>
+                            {_t("bug_reporting|description")}
                         </>
                     }
                 >
                     <AccessibleButton onClick={this.onBugReport} kind="primary">
-                        {_t("Submit debug logs")}
+                        {_t("bug_reporting|submit_debug_logs")}
                     </AccessibleButton>
                     <SettingsSubsectionText>
                         {_t(
-                            "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.",
+                            "bug_reporting|matrix_security_issue",
                             {},
                             {
                                 a: (sub) => (

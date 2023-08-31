@@ -428,7 +428,6 @@
     "All Rooms": "Све собе",
     "State Key": "Кључ стања",
     "Wednesday": "Среда",
-    "Send logs": "Пошаљи записнике",
     "All messages": "Све поруке",
     "Call invitation": "Позивница за позив",
     "Messages containing my display name": "Поруке које садрже моје приказно име",
@@ -451,11 +450,9 @@
     "Missing roomId.": "Недостаје roomId.",
     "You don't currently have any stickerpacks enabled": "Тренутно немате омогућено било које паковање са налепницама",
     "Stickerpack": "Паковање са налепницама",
-    "Code": "Код",
     "Preparing to send logs": "Припремам се за слање записника",
     "Logs sent": "Записници су послати",
     "Failed to send logs: ": "Нисам успео да пошаљем записнике: ",
-    "Submit debug logs": "Пошаљи записнике за поправљање грешака",
     "Opens the Developer Tools dialog": "Отвори прозор програмерских алатки",
     "Send Logs": "Пошаљи записнике",
     "Clear Storage and Sign Out": "Очисти складиште и одјави ме",
@@ -1345,5 +1342,19 @@
     "keyboard": {
         "home": "Почетна",
         "alt": "Алт"
+    },
+    "composer": {
+        "format_inline_code": "Код"
+    },
+    "Code": "Код",
+    "power_level": {
+        "default": "Подразумевано",
+        "restricted": "Ограничено",
+        "moderator": "Модератор",
+        "admin": "Админ"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "Пошаљи записнике за поправљање грешака",
+        "send_logs": "Пошаљи записнике"
     }
 }

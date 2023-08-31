@@ -299,7 +299,6 @@
     "Invite to this room": "Convidar para esta sala",
     "State Key": "Chave de estado",
     "Send": "Enviar",
-    "Send logs": "Enviar relatórios de erro",
     "All messages": "Todas as mensagens",
     "Call invitation": "Convite para chamada",
     "What's new?": "O que há de novo?",
@@ -343,20 +342,9 @@
     "The file '%(fileName)s' failed to upload.": "O carregamento do ficheiro '%(fileName)s' falhou.",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "O ficheiro '%(fileName)s' excede o tamanho limite deste homeserver para carregamentos",
     "The server does not support the room version specified.": "O servidor não suporta a versão especificada da sala.",
-    "%(date)s at %(time)s": "%(date)s às %(time)s",
-    "%(value)sh": "%(value)sh",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s-%(monthName)s-%(fullYear)s",
-    "%(value)sd": "%(value)sd",
-    "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
-    "%(hours)sh %(minutes)sm %(seconds)ss": "%(hours)sh %(minutes)sm %(seconds)ss",
-    "%(minutes)sm %(seconds)ss": "%(minutes)sm %(seconds)ss",
-    "%(value)ss": "%(value)ss",
-    "%(seconds)ss left": "%(seconds)ss restantes",
-    "%(value)sm": "%(value)sm",
     "Identity server has no terms of service": "O servidor de identidade não tem termos de serviço",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Esta acção requer acesso ao servidor de identidade padrão <server /> para validar um endereço de email ou número de telefone, mas o servidor não tem quaisquer termos de serviço.",
-    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
-    "%(minutes)sm %(seconds)ss left": "%(minutes)sm %(seconds)ss restantes",
     "Only continue if you trust the owner of the server.": "Continue apenas se confia no dono do servidor.",
     "User Busy": "Utilizador ocupado",
     "The user you called is busy.": "O utilizador para o qual tentou ligar está ocupado.",
@@ -564,7 +552,6 @@
     "New? <a>Create account</a>": "Novo? <a>Crie uma conta</a>",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Convide alguém a partir do nome, endereço de email, nome de utilizador (como <userId/>) ou <a>partilhe este espaço</a>.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this room</a>.": "Convide alguém a partir do nome, email ou nome de utilizador (como <userId/>) ou <a>partilhe esta sala</a>.",
-    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Os registos de depuração contêm dados de utilização da aplicação, incluindo o seu nome de utilizador, os IDs ou pseudónimos das salas que visitou, os últimos elementos da IU com que interagiu e os nomes de utilizador de outros utilizadores. No entanto não contêm mensagens.",
     "Unable to check if username has been taken. Try again later.": "Não foi possível verificar se o nome de utilizador já foi usado. Tente novamente mais tarde.",
     "<userName/> invited you": "<userName/> convidou-o",
     "Someone already has that username. Try another or if it is you, sign in below.": "Alguém já tem esse nome de utilizador. Tente outro ou, se fores tu, inicia sessão em baixo.",
@@ -771,5 +758,28 @@
     },
     "keyboard": {
         "home": "Início"
+    },
+    "power_level": {
+        "default": "Padrão",
+        "restricted": "Restrito",
+        "moderator": "Moderador/a",
+        "admin": "Administrador"
+    },
+    "bug_reporting": {
+        "description": "Os registos de depuração contêm dados de utilização da aplicação, incluindo o seu nome de utilizador, os IDs ou pseudónimos das salas que visitou, os últimos elementos da IU com que interagiu e os nomes de utilizador de outros utilizadores. No entanto não contêm mensagens.",
+        "send_logs": "Enviar relatórios de erro"
+    },
+    "time": {
+        "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
+        "minutes_seconds_left": "%(minutes)sm %(seconds)ss restantes",
+        "seconds_left": "%(seconds)ss restantes",
+        "date_at_time": "%(date)s às %(time)s",
+        "short_days": "%(value)sd",
+        "short_hours": "%(value)sh",
+        "short_minutes": "%(value)sm",
+        "short_seconds": "%(value)ss",
+        "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
+        "short_hours_minutes_seconds": "%(hours)sh %(minutes)sm %(seconds)ss",
+        "short_minutes_seconds": "%(minutes)sm %(seconds)ss"
     }
 }

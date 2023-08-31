@@ -97,8 +97,6 @@
     "Verification code": "Tangalt n usenqed",
     "Email Address": "Tansa n yimayl",
     "Phone Number": "Uṭṭun n tiliɣri",
-    "Bold": "Azuran",
-    "Strikethrough": "Derrer",
     "Idle": "Arurmid",
     "Unknown": "Arussin",
     "Sign Up": "Jerred",
@@ -150,7 +148,6 @@
     "Source URL": "URL aɣbalu",
     "Home": "Agejdan",
     "powered by Matrix": "s lmendad n Matrix",
-    "Code": "Tangalt",
     "Submit": "Azen",
     "Email": "Imayl",
     "Phone": "Tiliɣri",
@@ -540,8 +537,6 @@
     "Account management": "Asefrek n umiḍan",
     "Deactivate Account": "Sens amiḍan",
     "Deactivate account": "Sens amiḍan",
-    "Bug reporting": "Aneqqis n wabug",
-    "Submit debug logs": "Azen iɣmisen n wabug",
     "Clear cache and reload": "Sfeḍ takatut tuffirt syen sali-d",
     "%(brand)s version:": "Lqem %(brand)s:",
     "Ignored/Blocked": "Yettunfen/Yettusweḥlen",
@@ -698,7 +693,6 @@
     "Invite anyway": "Ɣas akken nced-d",
     "Preparing to send logs": "Aheyyi n tuzna n yiɣmisen",
     "Failed to send logs: ": "Tuzna n yiɣmisen ur teddi ara: ",
-    "Send logs": "Azen iɣmisen",
     "Clear all data": "Sfeḍ meṛṛa isefka",
     "Please enter a name for the room": "Ttxil-k·m sekcem isem i texxamt",
     "Enable end-to-end encryption": "Awgelhen seg yixef ɣer yixef ur yeddi ara",
@@ -1161,7 +1155,6 @@
     "The conversation continues here.": "Adiwenni yettkemmil dagi.",
     "This room has been replaced and is no longer active.": "Taxxamt-a ad tettusmelsi, dayen d tarurmidt.",
     "You do not have permission to post to this room": "Ur tesεiḍ ara tasiregt ad d-tsuffɣeḍ deg texxamt-a",
-    "Code block": "Iḥder n tengalt",
     "%(duration)ss": "%(duration)ss",
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
@@ -1487,8 +1480,6 @@
     "For extra security, verify this user by checking a one-time code on both of your devices.": "I wugar n tɣellist, senqed aseqdac-a s usenqed n tengalt i yiwet n tikkelt ɣef yibenkan-ik·im i sin.",
     "One of the following may be compromised:": "Yiwen seg wayen i d-iteddun yezmer ad yettwaker:",
     "Information": "Talɣut",
-    "Download logs": "Sider imisen",
-    "GitHub issue": "Ugur Github",
     "Unable to load commit detail: %(msg)s": "D awezɣi ad d-tali telqayt n usentem: %(msg)s",
     "You cannot delete this message. (%(code)s)": "Ur tezmireḍ ara ad tekkseḍ izen-a. (%(code)s)",
     "Destroy cross-signing keys?": "Erẓ tisura n uzmul anmidag?",
@@ -1536,7 +1527,6 @@
     "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.": "Ma yella teffeḍ tura, ilaq ad tmedleḍ iznan & isefka yettwawgelhen ma yella tesruḥeḍ anekcum ɣer yinekcam-ik·im.",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Ur tettizmireḍ ara ad tesfesxeḍ asnifel-a acku tessebɣaseḍ aseqdac ad yesɛu aswir n tezmert am kečč·kemm.",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Asemmet n useqdac-a ad t-isuffeɣ yerna ur as-yettaǧǧa ara ad yales ad yeqqen. Daɣen, ad ffɣen akk seg texxamin ideg llan. Tigawt-a dayen ur tettwasefsax ara. S tidet tebɣiḍ ad tsemmteḍ aseqdac-a?",
-    "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Ma yella umnaḍ-nniḍen ara iɛawnen deg tesleḍt n wugur, am wamek akken i txeddmeḍ zik, isulay n texxamt, isulay n useqdac, atg., ttxil-k·m rnu iferdisen-a da.",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Tukksa n tsura n uzmul anmidag ad yili i lebda. Yal amdan i tesneqdeḍ ad iwali ilɣa n tɣellist. Maca ur tebɣiḍ ara ad txedmeḍ aya, ala ma yella tesruḥeḍ ibenkan akk ara ak·akem-yeǧǧen ad tkecmeḍ seg-s.",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "I wakken ur tesruḥuyeḍ ara amazray n udiwenni, ilaq ad tsifḍeḍ tisura seg texxam-ik·im send ad teffɣeḍ seg tuqqna. Tesriḍ ad tuɣaleḍ ɣer lqem amaynut n %(brand)s i wakken ad tgeḍ aya",
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Tesxedmeḍ yakan lqem akk aneggaru n %(brand)s s tɣimit-a. I useqdec n lqem-a i tikkelt-nniḍen s uwgelhen seg yixef ɣer yixef, tesriḍ ad teffɣeḍ syen ad talseḍ anekcum i tikkelt-nniḍen.",
@@ -2011,5 +2001,29 @@
         "alt": "Alt",
         "control": "Ctrl",
         "shift": "Shift"
+    },
+    "composer": {
+        "format_bold": "Azuran",
+        "format_strikethrough": "Derrer",
+        "format_inline_code": "Tangalt",
+        "format_code_block": "Iḥder n tengalt"
+    },
+    "Bold": "Azuran",
+    "Code": "Tangalt",
+    "power_level": {
+        "default": "Amezwer",
+        "restricted": "Yesεa tilas",
+        "moderator": "Aseɣyad",
+        "admin": "Anedbal"
+    },
+    "bug_reporting": {
+        "matrix_security_issue": "I wakken ad d-tazneḍ ugur n tɣellist i icudden ɣer Matrix, ttxil-k·m ɣer <a>tasertit n ukcaf n tɣellist</a> deg Matrix.org.",
+        "submit_debug_logs": "Azen iɣmisen n wabug",
+        "title": "Aneqqis n wabug",
+        "additional_context": "Ma yella umnaḍ-nniḍen ara iɛawnen deg tesleḍt n wugur, am wamek akken i txeddmeḍ zik, isulay n texxamt, isulay n useqdac, atg., ttxil-k·m rnu iferdisen-a da.",
+        "send_logs": "Azen iɣmisen",
+        "github_issue": "Ugur Github",
+        "download_logs": "Sider imisen",
+        "before_submitting": "Send ad tazneḍ iɣmisen-ik·im, ilaq <a>ad ternuḍ ugur deg Github</a> i wakken ad d-tgelmeḍ ugur-inek·inem."
     }
 }

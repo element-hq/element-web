@@ -56,9 +56,6 @@
     "Only continue if you trust the owner of the server.": "Produžite samo pod uslovom da vjerujete vlasniku servera.",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ova akcija zahtijeva pristup zadanom serveru za provjeru identiteta <server /> radi provjere adrese e-pošte ili telefonskog broja, no server nema nikakve uslove za pružanje usluge.",
     "Identity server has no terms of service": "Server identiteta nema uslove pružanja usluge",
-    "%(seconds)ss left": "preostalo još %(seconds)ss",
-    "%(minutes)sm %(seconds)ss left": "%(minutes)sm %(seconds)ss preostalo",
-    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sh %(minutes)sm %(seconds)ss preostalo",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s%(day)s%(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s%(day)s%(time)s",
@@ -98,5 +95,16 @@
         "dismiss": "Odbaci",
         "trust": "Vjeruj",
         "sign_in": "Prijavite se"
+    },
+    "power_level": {
+        "default": "Podrazumevano",
+        "restricted": "Ograničeno",
+        "moderator": "Moderator",
+        "admin": "Administrator"
+    },
+    "time": {
+        "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss preostalo",
+        "minutes_seconds_left": "%(minutes)sm %(seconds)ss preostalo",
+        "seconds_left": "preostalo još %(seconds)ss"
     }
 }

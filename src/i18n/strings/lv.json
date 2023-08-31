@@ -385,7 +385,6 @@
     "Stops ignoring a user, showing their messages going forward": "Atceļ lietotāja ignorēšanu, rādot viņa turpmāk sūtītās ziņas",
     "Notify the whole room": "Paziņot visai istabai",
     "Room Notification": "Istabas paziņojums",
-    "Code": "Kods",
     "%(oneUser)srejected their invitation %(count)s times": {
         "other": "%(oneUser)snoraidīja uzaicinājumu %(count)s reizes",
         "one": "%(oneUser)snoraidīja uzaicinājumu"
@@ -402,7 +401,6 @@
         "one": "%(items)s un viens cits",
         "other": "%(items)s un %(count)s citus"
     },
-    "Submit debug logs": "Iesniegt atutošanas logfailus",
     "Opens the Developer Tools dialog": "Atver izstrādātāja rīku logu",
     "Sunday": "Svētdiena",
     "Notification targets": "Paziņojumu adresāti",
@@ -434,7 +432,6 @@
     "All Rooms": "Visās istabās",
     "Wednesday": "Trešdiena",
     "You cannot delete this message. (%(code)s)": "Tu nevari dzēst šo ziņu. (%(code)s)",
-    "Send logs": "Nosūtīt logfailus",
     "All messages": "Visas ziņas",
     "Call invitation": "Uzaicinājuma zvans",
     "State Key": "Stāvokļa atslēga",
@@ -1495,7 +1492,6 @@
     "Forget this room": "Aizmirst šo istabu",
     "Explore public rooms": "Pārlūkot publiskas istabas",
     "Enable encryption in settings.": "Iespējot šifrēšanu iestatījumos.",
-    "%(seconds)ss left": "%(seconds)s sekundes atlikušas",
     "Show %(count)s other previews": {
         "one": "Rādīt %(count)s citu priekšskatījumu",
         "other": "Rādīt %(count)s citus priekšskatījumus"
@@ -1836,5 +1832,22 @@
     },
     "keyboard": {
         "home": "Mājup"
+    },
+    "composer": {
+        "format_inline_code": "Kods"
+    },
+    "Code": "Kods",
+    "power_level": {
+        "default": "Noklusējuma",
+        "restricted": "Ierobežots",
+        "moderator": "Moderators",
+        "admin": "Administrators"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "Iesniegt atutošanas logfailus",
+        "send_logs": "Nosūtīt logfailus"
+    },
+    "time": {
+        "seconds_left": "%(seconds)s sekundes atlikušas"
     }
 }

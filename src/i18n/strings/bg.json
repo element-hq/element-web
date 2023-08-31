@@ -401,8 +401,6 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Този процес Ви позволява да експортирате във файл ключовете за съобщения в шифровани стаи. Така ще можете да импортирате файла в друг Matrix клиент, така че той също да може да разшифрова такива съобщения.",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Този процес позволява да импортирате ключове за шифроване, които преди сте експортирали от друг Matrix клиент. Тогава ще можете да разшифровате всяко съобщение, което другият клиент може да разшифрова.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "Експортираният файл може да бъде предпазен с парола. Трябва да въведете парола тук, за да разшифровате файла.",
-    "Code": "Код",
-    "Submit debug logs": "Изпрати логове за дебъгване",
     "Opens the Developer Tools dialog": "Отваря прозорец с инструменти на разработчика",
     "Stickerpack": "Пакет със стикери",
     "You don't currently have any stickerpacks enabled": "В момента нямате включени пакети със стикери",
@@ -433,7 +431,6 @@
     "Collecting logs": "Събиране на логове",
     "All Rooms": "Във всички стаи",
     "Wednesday": "Сряда",
-    "Send logs": "Изпращане на логове",
     "All messages": "Всички съобщения",
     "Call invitation": "Покана за разговор",
     "Messages containing my display name": "Съобщения, съдържащи моя псевдоним",
@@ -627,7 +624,6 @@
     "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "За помощ при използването на %(brand)s, кликнете <a>тук</a> или започнете чат с бота ни използвайки бутона по-долу.",
     "Chat with %(brand)s Bot": "Чати с %(brand)s Bot",
     "Help & About": "Помощ и относно",
-    "Bug reporting": "Съобщаване за грешка",
     "FAQ": "Често задавани въпроси",
     "Versions": "Версии",
     "Preferences": "Настройки",
@@ -792,9 +788,7 @@
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Поканата не можа да бъде оттеглена. Или има временен проблем със сървъра, или нямате достатъчно права за да оттеглите поканата.",
     "Revoke invite": "Оттегли поканата",
     "Invited by %(sender)s": "Поканен от %(sender)s",
-    "GitHub issue": "GitHub проблем",
     "Notes": "Бележки",
-    "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Моля включете допълнителни сведения, които ще помогнат за анализиране на проблема, като например: какво правихте когато възникна проблема, идентификатори на стаи, идентификатори на потребители и т.н.",
     "Sign out and remove encryption keys?": "Излизане и премахване на ключовете за шифроване?",
     "To help us prevent this in future, please <a>send us logs</a>.": "За да ни помогнете да предотвратим това в бъдеще, моля <a>изпратете логове</a>.",
     "Missing session data": "Липсват данни за сесията",
@@ -988,10 +982,7 @@
         "one": "Премахни 1 съобщение"
     },
     "Remove recent messages": "Премахни скорошни съобщения",
-    "Bold": "Удебелено",
     "Italics": "Наклонено",
-    "Strikethrough": "Задраскано",
-    "Code block": "Блок с код",
     "Please fill why you're reporting.": "Въведете защо докладвате.",
     "Report Content to Your Homeserver Administrator": "Докладвай съдържание до администратора на сървъра",
     "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Докладването на съобщението ще изпрати уникалният номер на събитието (event ID) до администратора на сървъра. Ако съобщенията в стаята са шифровани, администратора няма да може да прочете текста им или да види снимките или файловете.",
@@ -1577,7 +1568,6 @@
     "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Може да изключите това, ако стаята ще се използва за съвместна работа с външни екипи, имащи собствен сървър. Това не може да бъде променено по-късно.",
     "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Може да включите това, ако стаята ще се използва само за съвместна работа на вътрешни екипи на сървъра ви. Това не може да бъде променено по-късно.",
     "Your server requires encryption to be enabled in private rooms.": "Сървърът ви изисква в частните стаи да е включено шифроване.",
-    "Download logs": "Изтегли на логове",
     "Preparing to download logs": "Подготвяне за изтегляне на логове",
     "Information": "Информация",
     "This version of %(brand)s does not support searching encrypted messages": "Тази версия на %(brand)s не поддържа търсенето в шифровани съобщения",
@@ -1982,11 +1972,6 @@
     "Not a valid identity server (status code %(code)s)": "Невалиден сървър за самоличност (статус код %(code)s)",
     "Identity server URL must be HTTPS": "Адресът на сървъра за самоличност трябва да бъде HTTPS",
     "Failed to invite users to %(roomName)s": "Неуспешна покана на потребителите към %(roomName)s",
-    "%(value)ss": "%(value)sс",
-    "%(value)sm": "%(value)sм",
-    "%(value)sh": "%(value)sч",
-    "%(value)sd": "%(value)sд",
-    "%(date)s at %(time)s": "%(date)s в %(time)s",
     "Failed to transfer call": "Неуспешно прехвърляне на повикване",
     "Transfer Failed": "Трансферът Неуспешен",
     "Unable to transfer call": "Не може да се прехвърли обаждането",
@@ -2130,5 +2115,36 @@
         "alt": "Alt",
         "control": "Ctrl",
         "shift": "Shift"
+    },
+    "composer": {
+        "format_bold": "Удебелено",
+        "format_strikethrough": "Задраскано",
+        "format_inline_code": "Код",
+        "format_code_block": "Блок с код"
+    },
+    "Bold": "Удебелено",
+    "Code": "Код",
+    "power_level": {
+        "default": "По подразбиране",
+        "restricted": "Ограничен",
+        "moderator": "Модератор",
+        "admin": "Администратор"
+    },
+    "bug_reporting": {
+        "matrix_security_issue": "За да съобщените за проблем със сигурността свързан с Matrix, прочетете <a>Политиката за споделяне на проблеми със сигурността</a> на Matrix.org.",
+        "submit_debug_logs": "Изпрати логове за дебъгване",
+        "title": "Съобщаване за грешка",
+        "additional_context": "Моля включете допълнителни сведения, които ще помогнат за анализиране на проблема, като например: какво правихте когато възникна проблема, идентификатори на стаи, идентификатори на потребители и т.н.",
+        "send_logs": "Изпращане на логове",
+        "github_issue": "GitHub проблем",
+        "download_logs": "Изтегли на логове",
+        "before_submitting": "Преди да изпратите логове, трябва да <a>отворите доклад за проблем в Github</a>."
+    },
+    "time": {
+        "date_at_time": "%(date)s в %(time)s",
+        "short_days": "%(value)sд",
+        "short_hours": "%(value)sч",
+        "short_minutes": "%(value)sм",
+        "short_seconds": "%(value)sс"
     }
 }

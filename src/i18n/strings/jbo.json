@@ -398,5 +398,11 @@
     },
     "labs": {
         "pinning": "lo du'u xu kau kakne lo nu mrilu lo vitno notci"
+    },
+    "power_level": {
+        "default": "zmiselcu'a",
+        "restricted": "vlipa so'u da",
+        "moderator": "vlipa so'o da",
+        "admin": "vlipa so'i da"
     }
 }

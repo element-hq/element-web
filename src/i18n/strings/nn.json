@@ -240,7 +240,6 @@
     "Failed to copy": "Noko gjekk gale med kopieringa",
     "A text message has been sent to %(msisdn)s": "Ei tekstmelding vart send til %(msisdn)s",
     "Please enter the code it contains:": "Ver venleg og skriv koden den inneheld inn:",
-    "Code": "Kode",
     "Start authentication": "Start authentisering",
     "powered by Matrix": "Matrixdriven",
     "Sign in with": "Logg inn med",
@@ -351,8 +350,6 @@
     "Logs sent": "Loggar sende",
     "Thank you!": "Takk skal du ha!",
     "Failed to send logs: ": "Fekk ikkje til å senda loggar: ",
-    "Submit debug logs": "Send inn feil-logg",
-    "Send logs": "Send loggar inn",
     "Unavailable": "Utilgjengeleg",
     "Changelog": "Endringslogg",
     "not specified": "Ikkje spesifisert",
@@ -616,7 +613,6 @@
     "Email addresses": "E-postadresser",
     "Phone numbers": "Telefonnummer",
     "Help & About": "Hjelp og om",
-    "Bug reporting": "Feilrapportering",
     "Accept all %(invitedRooms)s invites": "Aksepter alle invitasjonar frå %(invitedRooms)s",
     "Security & Privacy": "Tryggleik og personvern",
     "Error changing power level requirement": "Feil under endring av krav for tilgangsnivå",
@@ -641,10 +637,7 @@
     "Send a message…": "Send melding…",
     "The conversation continues here.": "Samtalen held fram her.",
     "This room has been replaced and is no longer active.": "Dette rommet er erstatta og er ikkje lenger aktivt.",
-    "Bold": "Feit",
     "Italics": "Kursiv",
-    "Strikethrough": "Gjennomstreka",
-    "Code block": "Kodeblokk",
     "Room %(name)s": "Rom %(name)s",
     "Direct Messages": "Folk",
     "Join the conversation with an account": "Bli med i samtalen med ein konto",
@@ -790,7 +783,6 @@
     "Server or user ID to ignore": "Tenar eller brukar-ID for å ignorere",
     "If this isn't what you want, please use a different tool to ignore users.": "Om det ikkje var dette du ville, bruk eit anna verktøy til å ignorera brukarar.",
     "Enter the name of a new server you want to explore.": "Skriv inn namn på ny tenar du ynskjer å utforske.",
-    "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Om du har meir info rundt korleis problemet oppstod, som kva du prøvde å gjere på det tidspunktet, brukar-IDar m.m ,inkluder gjerne den informasjonen her.",
     "Topic (optional)": "Emne (valfritt)",
     "Command Help": "Kommandohjelp",
     "To help us prevent this in future, please <a>send us logs</a>.": "For å bistå med å forhindre dette i framtida, gjerne <a>send oss loggar</a>.",
@@ -914,7 +906,6 @@
     "United States": "Sambandsstatane (USA)",
     "United Kingdom": "Storbritannia",
     "We couldn't log you in": "Vi klarte ikkje å logga deg inn",
-    "%(date)s at %(time)s": "%(date)s klokka %(time)s",
     "Too Many Calls": "For mange samtalar",
     "Unable to access microphone": "Får ikkje tilgang til mikrofonen",
     "The call could not be established": "Samtalen kunne ikkje opprettast",
@@ -1014,13 +1005,6 @@
     "Permission is granted to use the webcam": "Tilgang til nettkamera er aktivert",
     "A microphone and webcam are plugged in and set up correctly": "Du har kopla til mikrofon og nettkamera, og at desse fungerer som dei skal",
     "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Samtalen feila fordi mikrofonen ikkje kunne aktiverast. Sjekk att ein mikrofon er tilkopla og at den fungerer.",
-    "%(minutes)sm %(seconds)ss": "%(minutes)sm %(seconds)ss",
-    "%(hours)sh %(minutes)sm %(seconds)ss": "%(hours)st %(minutes)sm %(seconds)ss",
-    "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss": "%(days)sd %(hours)st %(minutes)sm %(seconds)ss",
-    "%(value)sd": "%(value)sd",
-    "%(seconds)ss left": "%(seconds)ss att",
-    "%(minutes)sm %(seconds)ss left": "%(minutes)sm %(seconds)ss att",
-    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)st %(minutes)sm %(seconds)ss att",
     "common": {
         "analytics": "Statistikk",
         "error": "Noko gjekk gale",
@@ -1101,5 +1085,36 @@
     },
     "keyboard": {
         "home": "Heim"
+    },
+    "composer": {
+        "format_bold": "Feit",
+        "format_strikethrough": "Gjennomstreka",
+        "format_inline_code": "Kode",
+        "format_code_block": "Kodeblokk"
+    },
+    "Bold": "Feit",
+    "Code": "Kode",
+    "power_level": {
+        "default": "Opphavleg innstilling",
+        "restricted": "Avgrensa",
+        "moderator": "Moderator",
+        "admin": "Administrator"
+    },
+    "bug_reporting": {
+        "matrix_security_issue": "For å rapportere eit Matrix-relatert sikkerheitsproblem, les Matrix.org sin <a>Security Disclosure Policy</a>.",
+        "submit_debug_logs": "Send inn feil-logg",
+        "title": "Feilrapportering",
+        "additional_context": "Om du har meir info rundt korleis problemet oppstod, som kva du prøvde å gjere på det tidspunktet, brukar-IDar m.m ,inkluder gjerne den informasjonen her.",
+        "send_logs": "Send loggar inn"
+    },
+    "time": {
+        "hours_minutes_seconds_left": "%(hours)st %(minutes)sm %(seconds)ss att",
+        "minutes_seconds_left": "%(minutes)sm %(seconds)ss att",
+        "seconds_left": "%(seconds)ss att",
+        "date_at_time": "%(date)s klokka %(time)s",
+        "short_days": "%(value)sd",
+        "short_days_hours_minutes_seconds": "%(days)sd %(hours)st %(minutes)sm %(seconds)ss",
+        "short_hours_minutes_seconds": "%(hours)st %(minutes)sm %(seconds)ss",
+        "short_minutes_seconds": "%(minutes)sm %(seconds)ss"
     }
 }

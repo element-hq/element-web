@@ -10,7 +10,6 @@
     "Send a reply…": "Enviar una responsa…",
     "Send an encrypted message…": "Enviar un messatge chifrat…",
     "Send a message…": "Enviar un messatge…",
-    "Bold": "Gras",
     "Online for %(duration)s": "En linha dempuèi %(duration)s",
     "Idle for %(duration)s": "Inactiu dempuèi %(duration)s",
     "Offline for %(duration)s": "Fòra linha dempuèi %(duration)s",
@@ -138,7 +137,6 @@
     "Unencrypted": "Pas chifrat",
     "Hangup": "Penjar",
     "Italics": "Italicas",
-    "Strikethrough": "Raiat",
     "Historical": "Istoric",
     "Sign Up": "S’inscriure",
     "Sort by": "Triar per",
@@ -308,5 +306,15 @@
         "alt": "Alt",
         "control": "Ctrl",
         "shift": "Descalatge"
+    },
+    "composer": {
+        "format_bold": "Gras",
+        "format_strikethrough": "Raiat"
+    },
+    "Bold": "Gras",
+    "power_level": {
+        "default": "Predefinit",
+        "moderator": "Moderator",
+        "admin": "Admin"
     }
 }

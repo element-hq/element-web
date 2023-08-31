@@ -259,5 +259,11 @@
     },
     "keyboard": {
         "home": "Başlanğıc"
+    },
+    "power_level": {
+        "default": "Varsayılan olaraq",
+        "restricted": "Məhduddur",
+        "moderator": "Moderator",
+        "admin": "Administrator"
     }
 }

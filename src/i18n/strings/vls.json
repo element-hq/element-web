@@ -328,8 +328,6 @@
     "Chat with %(brand)s Bot": "Chattn me %(brand)s-robot",
     "Check for update": "Controleern ip updates",
     "Help & About": "Hulp & Info",
-    "Bug reporting": "Foutmeldiengn",
-    "Submit debug logs": "Foutipsporiengslogboekn indienn",
     "FAQ": "VGV",
     "Versions": "Versies",
     "%(brand)s version:": "%(brand)s-versie:",
@@ -645,10 +643,7 @@
     "Thank you!": "Merci!",
     "Failed to send logs: ": "Verstuurn van logboekn mislukt: ",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Vooraleer da je logboekn indient, moe j’e <a>meldienge openn ip GitHub</a> woarin da je je probleem beschryft.",
-    "GitHub issue": "GitHub-meldienge",
     "Notes": "Ipmerkiengn",
-    "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Indien da ’t er bykomende context zou kunn helpn vo ’t probleem t’analyseern, lyk wyk dan je juste an ’t doen woart, relevante gespreks-ID’s, gebruukers-ID’s, enz., gelieve deze informoasje ton hier mee te geevn.",
-    "Send logs": "Logboekn verstuurn",
     "Unable to load commit detail: %(msg)s": "Kostege ’t commitdetail nie loadn: %(msg)s",
     "Unavailable": "Nie beschikboar",
     "Changelog": "Wyzigiengslogboek",
@@ -742,7 +737,6 @@
     "Token incorrect": "Verkeerd bewys",
     "A text message has been sent to %(msisdn)s": "’t Is een smse noa %(msisdn)s verstuurd gewist",
     "Please enter the code it contains:": "Gift de code in da ’t er in stoat:",
-    "Code": "Code",
     "Submit": "Bevestign",
     "Start authentication": "Authenticoasje beginn",
     "Email": "E-mailadresse",
@@ -1027,5 +1021,23 @@
     },
     "keyboard": {
         "home": "Thuus"
+    },
+    "composer": {
+        "format_inline_code": "Code"
+    },
+    "Code": "Code",
+    "power_level": {
+        "default": "Standoard",
+        "restricted": "Beperkten toegank",
+        "moderator": "Moderator",
+        "admin": "Beheerder"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "Foutipsporiengslogboekn indienn",
+        "title": "Foutmeldiengn",
+        "additional_context": "Indien da ’t er bykomende context zou kunn helpn vo ’t probleem t’analyseern, lyk wyk dan je juste an ’t doen woart, relevante gespreks-ID’s, gebruukers-ID’s, enz., gelieve deze informoasje ton hier mee te geevn.",
+        "send_logs": "Logboekn verstuurn",
+        "github_issue": "GitHub-meldienge",
+        "before_submitting": "Vooraleer da je logboekn indient, moe j’e <a>meldienge openn ip GitHub</a> woarin da je je probleem beschryft."
     }
 }

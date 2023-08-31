@@ -226,9 +226,7 @@
     "Send an encrypted reply…": "Send et kryptert svar …",
     "Send an encrypted message…": "Send en kryptert beskjed …",
     "Send a message…": "Send en melding …",
-    "Bold": "Fet",
     "Italics": "Kursiv",
-    "Strikethrough": "Gjennomstreking",
     "Online": "Tilkoblet",
     "Idle": "Rolig",
     "Unknown": "Ukjent",
@@ -277,7 +275,6 @@
     "Document": "Dokument",
     "Cancel All": "Avbryt alt",
     "Home": "Hjem",
-    "Code": "Kode",
     "Submit": "Send",
     "Email": "E-post",
     "Phone": "Telefon",
@@ -367,7 +364,6 @@
     "Deactivate account": "Deaktiver kontoen",
     "Check for update": "Let etter oppdateringer",
     "Help & About": "Hjelp/Om",
-    "Bug reporting": "Feilrapportering",
     "%(brand)s version:": "'%(brand)s'-versjon:",
     "Ignored/Blocked": "Ignorert/Blokkert",
     "Server rules": "Tjenerregler",
@@ -544,7 +540,6 @@
     "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Hvis du ikke ønsker å bruke <server /> til å oppdage og bli oppdaget av eksisterende kontakter som du kjenner, skriv inn en annen identitetstjener nedenfor.",
     "Enter a new identity server": "Skriv inn en ny identitetstjener",
     "For help with using %(brand)s, click <a>here</a>.": "For å få hjelp til å bruke %(brand)s, klikk <a>her</a>.",
-    "Submit debug logs": "Send inn avlusingsloggbøker",
     "Clear cache and reload": "Tøm mellomlageret og last inn siden på nytt",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "For å rapportere inn et Matrix-relatert sikkerhetsproblem, vennligst less Matrix.org sine <a>Retningslinjer for sikkerhetspublisering</a>.",
     "Import E2E room keys": "Importer E2E-romnøkler",
@@ -567,7 +562,6 @@
     "Share Link to User": "Del en lenke til brukeren",
     "Filter room members": "Filtrer rommets medlemmer",
     "Send a reply…": "Send et svar …",
-    "Code block": "Kodefelt",
     "Replying": "Svarer på",
     "Room %(name)s": "Rom %(name)s",
     "Start chatting": "Begynn å chatte",
@@ -628,8 +622,6 @@
     },
     "Matrix": "Matrix",
     "Logs sent": "Loggbøkene ble sendt",
-    "GitHub issue": "Github-saksrapport",
-    "Send logs": "Send loggbøker",
     "Please enter a name for the room": "Vennligst skriv inn et navn for rommet",
     "Create a public room": "Opprett et offentlig rom",
     "Create a private room": "Opprett et privat rom",
@@ -1459,7 +1451,6 @@
     "St. Pierre & Miquelon": "Saint-Pierre og Miquelon",
     "St. Martin": "Saint Martin",
     "St. Barthélemy": "Saint Barthélemy",
-    "%(date)s at %(time)s": "%(date)s klokken %(time)s",
     "You cannot place calls without a connection to the server.": "Du kan ikke ringe uten tilkobling til serveren.",
     "Connectivity to the server has been lost": "Mistet forbindelsen til serveren",
     "You cannot place calls in this browser.": "Du kan ikke ringe i denne nettleseren.",
@@ -1594,5 +1585,29 @@
         "alt": "Alt",
         "control": "Ctrl",
         "shift": "Shift"
+    },
+    "composer": {
+        "format_bold": "Fet",
+        "format_strikethrough": "Gjennomstreking",
+        "format_inline_code": "Kode",
+        "format_code_block": "Kodefelt"
+    },
+    "Bold": "Fet",
+    "Code": "Kode",
+    "power_level": {
+        "default": "Standard",
+        "restricted": "Begrenset",
+        "moderator": "Moderator",
+        "admin": "Admin"
+    },
+    "bug_reporting": {
+        "matrix_security_issue": "For å rapportere inn et Matrix-relatert sikkerhetsproblem, vennligst less Matrix.org sine <a>Retningslinjer for sikkerhetspublisering</a>.",
+        "submit_debug_logs": "Send inn avlusingsloggbøker",
+        "title": "Feilrapportering",
+        "send_logs": "Send loggbøker",
+        "github_issue": "Github-saksrapport"
+    },
+    "time": {
+        "date_at_time": "%(date)s klokken %(time)s"
     }
 }

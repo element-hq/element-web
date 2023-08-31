@@ -296,9 +296,7 @@
     "Activities": "Gníomhaíochtaí",
     "Document": "Cáipéis",
     "Complete": "Críochnaigh",
-    "Strikethrough": "Líne a chur trí",
     "Italics": "Iodálach",
-    "Bold": "Trom",
     "Disconnect": "Dícheangail",
     "Revoke": "Cúlghair",
     "Discovery": "Aimsiú",
@@ -316,7 +314,6 @@
     "Phone": "Guthán",
     "Email": "Ríomhphost",
     "Submit": "Cuir isteach",
-    "Code": "Cód",
     "Home": "Tús",
     "Favourite": "Cuir mar ceanán",
     "Summary": "Achoimre",
@@ -740,5 +737,18 @@
         "control": "Ctrl",
         "shift": "Shift",
         "number": "[uimhir]"
+    },
+    "composer": {
+        "format_bold": "Trom",
+        "format_strikethrough": "Líne a chur trí",
+        "format_inline_code": "Cód"
+    },
+    "Bold": "Trom",
+    "Code": "Cód",
+    "power_level": {
+        "default": "Réamhshocrú",
+        "restricted": "Teoranta",
+        "moderator": "Modhnóir",
+        "admin": "Riarthóir"
     }
 }

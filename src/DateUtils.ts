@@ -212,7 +212,7 @@ export function formatTimeLeft(inSeconds: number): string {
     const seconds = Math.floor((inSeconds % (60 * 60)) % 60).toFixed(0);
 
     if (hours !== "0") {
-        return _t("%(hours)sh %(minutes)sm %(seconds)ss left", {
+        return _t("time|hours_minutes_seconds_left", {
             hours,
             minutes,
             seconds,
@@ -220,13 +220,13 @@ export function formatTimeLeft(inSeconds: number): string {
     }
 
     if (minutes !== "0") {
-        return _t("%(minutes)sm %(seconds)ss left", {
+        return _t("time|minutes_seconds_left", {
             minutes,
             seconds,
         });
     }
 
-    return _t("%(seconds)ss left", {
+    return _t("time|seconds_left", {
         seconds,
     });
 }
@@ -258,7 +258,7 @@ export function wantsDateSeparator(prevEventDate: Optional<Date>, nextEventDate:
 
 export function formatFullDateNoDay(date: Date): string {
     const locale = getUserLanguage();
-    return _t("%(date)s at %(time)s", {
+    return _t("time|date_at_time", {
         date: date.toLocaleDateString(locale).replace(/\//g, "-"),
         time: date.toLocaleTimeString(locale).replace(/:/g, "-"),
     });
@@ -311,15 +311,15 @@ export function formatRelativeTime(date: Date, showTwelveHour = false): string {
  */
 export function formatDuration(durationMs: number): string {
     if (durationMs >= DAY_MS) {
-        return _t("%(value)sd", { value: Math.round(durationMs / DAY_MS) });
+        return _t("time|short_days", { value: Math.round(durationMs / DAY_MS) });
     }
     if (durationMs >= HOUR_MS) {
-        return _t("%(value)sh", { value: Math.round(durationMs / HOUR_MS) });
+        return _t("time|short_hours", { value: Math.round(durationMs / HOUR_MS) });
     }
     if (durationMs >= MINUTE_MS) {
-        return _t("%(value)sm", { value: Math.round(durationMs / MINUTE_MS) });
+        return _t("time|short_minutes", { value: Math.round(durationMs / MINUTE_MS) });
     }
-    return _t("%(value)ss", { value: Math.round(durationMs / 1000) });
+    return _t("time|short_seconds", { value: Math.round(durationMs / 1000) });
 }
 
 /**
@@ -334,15 +334,15 @@ export function formatPreciseDuration(durationMs: number): string {
     const seconds = Math.floor((durationMs % MINUTE_MS) / 1000);
 
     if (days > 0) {
-        return _t("%(days)sd %(hours)sh %(minutes)sm %(seconds)ss", { days, hours, minutes, seconds });
+        return _t("time|short_days_hours_minutes_seconds", { days, hours, minutes, seconds });
     }
     if (hours > 0) {
-        return _t("%(hours)sh %(minutes)sm %(seconds)ss", { hours, minutes, seconds });
+        return _t("time|short_hours_minutes_seconds", { hours, minutes, seconds });
     }
     if (minutes > 0) {
-        return _t("%(minutes)sm %(seconds)ss", { minutes, seconds });
+        return _t("time|short_minutes_seconds", { minutes, seconds });
     }
-    return _t("%(value)ss", { value: seconds });
+    return _t("time|short_seconds", { value: seconds });
 }
 
 /**

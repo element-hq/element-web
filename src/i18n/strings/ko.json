@@ -274,7 +274,6 @@
     "Toolbox": "도구 상자",
     "Collecting logs": "로그 수집 중",
     "All Rooms": "모든 방",
-    "Send logs": "로그 보내기",
     "All messages": "모든 메시지",
     "Call invitation": "전화 초대",
     "What's new?": "새로운 점은?",
@@ -324,7 +323,6 @@
     "%(widgetName)s widget added by %(senderName)s": "%(senderName)s님이 추가한 %(widgetName)s 위젯",
     "%(widgetName)s widget removed by %(senderName)s": "%(senderName)s님이 제거한 %(widgetName)s 위젯",
     "Send analytics data": "정보 분석 데이터 보내기",
-    "Submit debug logs": "디버그 로그 전송하기",
     "Enable inline URL previews by default": "기본으로 인라인 URL 미리 보기 사용하기",
     "Enable automatic language detection for syntax highlighting": "구문 강조를 위해 자동 언어 감지 사용하기",
     "Automatically replace plain text Emoji": "일반 문자로 된 이모지 자동으로 변환하기",
@@ -416,7 +414,6 @@
     "Failed to copy": "복사 실패함",
     "Stickerpack": "스티커 팩",
     "You don't currently have any stickerpacks enabled": "현재 사용하고 있는 스티커 팩이 없음",
-    "Code": "코드",
     "Filter results": "필터 결과",
     "Muted Users": "음소거된 사용자",
     "Delete Widget": "위젯 삭제",
@@ -702,7 +699,6 @@
     "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "%(brand)s을 사용하다가 도움이 필요하다면, <a>여기</a>를 클릭하거나, 아래 버튼을 사용해 우리의 봇과 대화를 시작하세요.",
     "Chat with %(brand)s Bot": "%(brand)s 봇과 대화",
     "Help & About": "도움 & 정보",
-    "Bug reporting": "버그 신고하기",
     "FAQ": "자주 묻는 질문 (FAQ)",
     "Versions": "버전",
     "Always show the window menu bar": "항상 윈도우 메뉴 막대에 보이기",
@@ -829,9 +825,7 @@
     "Invite anyway": "무시하고 초대",
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "무엇이 잘못되거나 더 나은 지 알려주세요, 문제를 설명하는 GitHub 이슈를 만들어주세요.",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "로그를 전송하기 전에, 문제를 설명하는 <a>GitHub 이슈를 만들어야 합니다</a>.",
-    "GitHub issue": "GitHub 이슈",
     "Notes": "참고",
-    "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "언제, 방 ID, 사용자 ID 등, 문제 분석에 도움이 되는 추가 문맥이 있다면, 그것들도 여기에 포함해주세요.",
     "Unable to load commit detail: %(msg)s": "커밋 세부 정보를 불러올 수 없음: %(msg)s",
     "Removing…": "제거 중…",
     "Clear all data": "모든 데이터 지우기",
@@ -970,10 +964,7 @@
     "Share this email in Settings to receive invites directly in %(brand)s.": "설정에서 이 이메일을 공유해서 %(brand)s에서 직접 초대를 받을 수 있습니다.",
     "Error changing power level": "권한 등급 변경 중 오류",
     "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "사용자의 권한 등급을 변경하는 중 오류가 발생했습니다. 변경할 수 있는 권한이 있는 지 확인한 후 다시 시도하세요.",
-    "Bold": "굵게",
     "Italics": "기울게",
-    "Strikethrough": "취소선",
-    "Code block": "코드 블록",
     "Change identity server": "ID 서버 변경",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "현재 ID 서버 <current />와의 연결을 끊고 새 ID 서버 <new />에 연결하겠습니까?",
     "Disconnect identity server": "ID 서버 연결 끊기",
@@ -1401,5 +1392,27 @@
     },
     "keyboard": {
         "home": "홈"
+    },
+    "composer": {
+        "format_bold": "굵게",
+        "format_strikethrough": "취소선",
+        "format_inline_code": "코드",
+        "format_code_block": "코드 블록"
+    },
+    "Bold": "굵게",
+    "Code": "코드",
+    "power_level": {
+        "default": "기본",
+        "restricted": "제한됨",
+        "moderator": "조정자",
+        "admin": "관리자"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "디버그 로그 전송하기",
+        "title": "버그 신고하기",
+        "additional_context": "언제, 방 ID, 사용자 ID 등, 문제 분석에 도움이 되는 추가 문맥이 있다면, 그것들도 여기에 포함해주세요.",
+        "send_logs": "로그 보내기",
+        "github_issue": "GitHub 이슈",
+        "before_submitting": "로그를 전송하기 전에, 문제를 설명하는 <a>GitHub 이슈를 만들어야 합니다</a>."
     }
 }

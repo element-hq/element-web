@@ -269,7 +269,6 @@
     "All Rooms": "Tüm Odalar",
     "Wednesday": "Çarşamba",
     "Send": "Gönder",
-    "Send logs": "Kayıtları gönder",
     "All messages": "Tüm mesajlar",
     "Call invitation": "Arama davetiyesi",
     "Messages containing my display name": "İsmimi içeren mesajlar",
@@ -385,7 +384,6 @@
     "Logs sent": "Loglar gönderiliyor",
     "Thank you!": "Teşekkürler!",
     "Failed to send logs: ": "Logların gönderilmesi başarısız: ",
-    "GitHub issue": "GitHub sorunu",
     "Notes": "Notlar",
     "Removing…": "Siliniyor…",
     "Clear all data": "Bütün verileri sil",
@@ -448,7 +446,6 @@
     "Remove for everyone": "Herkes için sil",
     "This homeserver would like to make sure you are not a robot.": "Bu ana sunucu sizin bir robot olup olmadığınızdan emin olmak istiyor.",
     "Country Dropdown": "Ülke Listesi",
-    "Code": "Kod",
     "Use an email address to recover your account": "Hesabınızı kurtarmak için bir e-posta adresi kullanın",
     "Enter email address (required on this homeserver)": "E-posta adresi gir ( bu ana sunucuda gerekli)",
     "Doesn't look like a valid email address": "Geçerli bir e-posta adresine benzemiyor",
@@ -613,7 +610,6 @@
     "Legal": "Yasal",
     "Check for update": "Güncelleme kontrolü",
     "Help & About": "Yardım & Hakkında",
-    "Bug reporting": "Hata raporlama",
     "FAQ": "FAQ",
     "Versions": "Sürümler",
     "Server rules": "Sunucu kuralları",
@@ -689,9 +685,7 @@
     "Share Link to User": "Kullanıcıya Link Paylaş",
     "Send an encrypted reply…": "Şifrelenmiş bir cevap gönder…",
     "Send an encrypted message…": "Şifreli bir mesaj gönder…",
-    "Bold": "Kalın",
     "Italics": "Eğik",
-    "Code block": "Kod bloku",
     "%(duration)ss": "%(duration)ssn",
     "%(duration)sm": "%(duration)sdk",
     "%(duration)sh": "%(duration)ssa",
@@ -757,7 +751,6 @@
     "Deactivate account": "Hesabı pasifleştir",
     "For help with using %(brand)s, click <a>here</a>.": "%(brand)s kullanarak yardım etmek için, <a>buraya</a> tıklayın.",
     "Chat with %(brand)s Bot": "%(brand)s Bot ile Sohbet Et",
-    "Submit debug logs": "Hata ayıklama kayıtlarını gönder",
     "Something went wrong. Please try again or view your console for hints.": "Bir şeyler hatalı gitti. Lütfen yeniden deneyin veya ipuçları için konsolunuza bakın.",
     "Please try again or view your console for hints.": "Lütfen yeniden deneyin veya ipuçları için konsolunuza bakın.",
     "None": "Yok",
@@ -1073,7 +1066,6 @@
     "This room is end-to-end encrypted": "Bu oda uçtan uça şifreli",
     "Encrypted by an unverified session": "Doğrulanmamış bir oturum tarafından şifrelenmiş",
     "Encrypted by a deleted session": "Silinen bir oturumla şifrelenmiş",
-    "Strikethrough": "Üstü çizili",
     "Reject & Ignore user": "Kullanıcı Reddet & Yoksay",
     "%(count)s unread messages including mentions.": {
         "one": "1 okunmamış bahis.",
@@ -1684,7 +1676,6 @@
     "Away": "Uzakta",
     "Quick Reactions": "Hızlı Tepkiler",
     "Widgets": "Widgetlar",
-    "Download logs": "Günlükleri indir",
     "Notification options": "Bildirim ayarları",
     "Looks good!": "İyi görünüyor!",
     "Security Key": "Güvenlik anahtarı",
@@ -1741,7 +1732,6 @@
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Bu oturum <b> anahtarlarınızı yedeklemiyor</b>, ama zaten geri yükleyebileceğiniz ve ileride ekleyebileceğiniz bir yedeğiniz var.",
     "Converts the room to a DM": "Odayı birebir mesajlaşmaya dönüştürür",
     "Converts the DM to a room": "Birebir mesajlaşmayı odaya çevirir",
-    "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "O sırada ne yaptığınız, oda kimlikleri, kullanıcı kimlikleri vb.gibi sorunu analiz etmede yardımcı olacak ek öğe varsa lütfen buraya ekleyin.",
     "Continue with %(provider)s": "%(provider)s ile devam et",
     "Sign in with single sign-on": "Çoklu oturum açma ile giriş yap",
     "Enter a server name": "Sunucu adı girin",
@@ -1855,7 +1845,6 @@
     "Suggested Rooms": "Önerilen Odalar",
     "View message": "Mesajı görüntüle",
     "Invite to just this room": "Sadece bu odaya davet et",
-    "%(seconds)ss left": "%(seconds)s saniye kaldı",
     "Send message": "Mesajı gönder",
     "Your message was sent": "Mesajınız gönderildi",
     "Code blocks": "Kod blokları",
@@ -2037,5 +2026,31 @@
         "alt": "Alt",
         "control": "Ctrl",
         "shift": "Shift"
+    },
+    "composer": {
+        "format_bold": "Kalın",
+        "format_strikethrough": "Üstü çizili",
+        "format_inline_code": "Kod",
+        "format_code_block": "Kod bloku"
+    },
+    "Bold": "Kalın",
+    "Code": "Kod",
+    "power_level": {
+        "default": "Varsayılan",
+        "restricted": "Sınırlı",
+        "moderator": "Moderatör",
+        "admin": "Admin"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "Hata ayıklama kayıtlarını gönder",
+        "title": "Hata raporlama",
+        "additional_context": "O sırada ne yaptığınız, oda kimlikleri, kullanıcı kimlikleri vb.gibi sorunu analiz etmede yardımcı olacak ek öğe varsa lütfen buraya ekleyin.",
+        "send_logs": "Kayıtları gönder",
+        "github_issue": "GitHub sorunu",
+        "download_logs": "Günlükleri indir",
+        "before_submitting": "Logları göndermeden önce, probleminizi betimleyen <a>bir GitHub talebi oluşturun</a>."
+    },
+    "time": {
+        "seconds_left": "%(seconds)s saniye kaldı"
     }
 }

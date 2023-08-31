@@ -36,7 +36,6 @@
     "Wednesday": "ബുധന്‍",
     "You cannot delete this message. (%(code)s)": "നിങ്ങള്‍ക്ക് ഈ സന്ദേശം നീക്കം ചെയ്യാനാകില്ല. (%(code)s)",
     "Send": "അയയ്ക്കുക",
-    "Send logs": "നാള്‍വഴി അയയ്ക്കുക",
     "All messages": "എല്ലാ സന്ദേശങ്ങളും",
     "Call invitation": "വിളിയ്ക്കുന്നു",
     "What's new?": "എന്തൊക്കെ പുതിയ വിശേഷങ്ങള്‍ ?",
@@ -77,5 +76,8 @@
         "close": "അടയ്ക്കുക",
         "cancel": "റദ്ദാക്കുക",
         "back": "തിരികെ"
+    },
+    "bug_reporting": {
+        "send_logs": "നാള്‍വഴി അയയ്ക്കുക"
     }
 }

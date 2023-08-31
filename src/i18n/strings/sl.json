@@ -19,14 +19,6 @@
     "Explore rooms": "Raziščite sobe",
     "Create Account": "Registracija",
     "Identity server has no terms of service": "Identifikacijski strežnik nima pogojev storitve",
-    "%(value)ss": "%(value)s sekunda",
-    "%(value)sm": "%(value)s minuta",
-    "%(value)sh": "%(value)s ura",
-    "%(value)sd": "%(value)sd",
-    "%(date)s at %(time)s": "%(date)s ob %(time)s",
-    "%(seconds)ss left": "Preostalo je %(seconds)s sekund",
-    "%(minutes)sm %(seconds)ss left": "Preostalo je %(minutes)s minut %(seconds)s sekund",
-    "%(hours)sh %(minutes)sm %(seconds)ss left": "Preostalo je %(hours)s ur, %(minutes)s minut %(seconds)s sekund",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
@@ -67,5 +59,15 @@
         "confirm": "Potrdi",
         "dismiss": "Opusti",
         "sign_in": "Prijava"
+    },
+    "time": {
+        "hours_minutes_seconds_left": "Preostalo je %(hours)s ur, %(minutes)s minut %(seconds)s sekund",
+        "minutes_seconds_left": "Preostalo je %(minutes)s minut %(seconds)s sekund",
+        "seconds_left": "Preostalo je %(seconds)s sekund",
+        "date_at_time": "%(date)s ob %(time)s",
+        "short_days": "%(value)sd",
+        "short_hours": "%(value)s ura",
+        "short_minutes": "%(value)s minuta",
+        "short_seconds": "%(value)s sekunda"
     }
 }

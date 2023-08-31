@@ -361,7 +361,6 @@
     "Import room keys": "Importa les claus de la sala",
     "Import": "Importa",
     "Email": "Correu electrònic",
-    "Submit debug logs": "Enviar logs de depuració",
     "Sunday": "Diumenge",
     "Failed to add tag %(tagName)s to room": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala",
     "Notification targets": "Objectius de les notificacions",
@@ -394,7 +393,6 @@
     "All Rooms": "Totes les sales",
     "State Key": "Clau d'estat",
     "Wednesday": "Dimecres",
-    "Send logs": "Envia els registres",
     "All messages": "Tots els missatges",
     "Call invitation": "Invitació de trucada",
     "What's new?": "Què hi ha de nou?",
@@ -662,5 +660,15 @@
     },
     "keyboard": {
         "home": "Inici"
+    },
+    "power_level": {
+        "default": "Predeterminat",
+        "restricted": "Restringit",
+        "moderator": "Moderador",
+        "admin": "Administrador"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "Enviar logs de depuració",
+        "send_logs": "Envia els registres"
     }
 }
