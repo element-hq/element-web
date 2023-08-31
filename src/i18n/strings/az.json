@@ -117,7 +117,6 @@
     "Decrypt %(text)s": "Şifrini açmaq %(text)s",
     "Download %(text)s": "Yükləmək %(text)s",
     "Sign in with": "Seçmək",
-    "Register": "Qeydiyyatdan keçmək",
     "What's New": "Nə dəyişdi",
     "Create new room": "Otağı yaratmaq",
     "Home": "Başlanğıc",
@@ -152,7 +151,6 @@
     "Return to login screen": "Girişin ekranına qayıtmaq",
     "This server does not support authentication with a phone number.": "Bu server telefon nömrəsinin köməyi ilə müəyyənləşdirilməni dəstəkləmir.",
     "Commands": "Komandalar",
-    "Emoji": "Smaylar",
     "Users": "İstifadəçilər",
     "Confirm passphrase": "Şifrəni təsdiqləyin",
     "This email address is already in use": "Bu e-mail ünvanı istifadə olunur",
@@ -201,7 +199,6 @@
     "Identity server has no terms of service": "Şəxsiyyət serverinin xidmət şərtləri yoxdur",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Bu hərəkət e-poçt ünvanı və ya telefon nömrəsini təsdiqləmək üçün standart şəxsiyyət serverinə <server /> girməyi tələb edir, lakin serverdə heç bir xidmət şəraiti yoxdur.",
     "Only continue if you trust the owner of the server.": "Yalnız server sahibinə etibar etsəniz davam edin.",
-    "Custom (%(level)s)": "Xüsusi (%(level)s)",
     "Room %(roomId)s not visible": "Otaq %(roomId)s görünmür",
     "Messages": "Mesajlar",
     "Actions": "Tədbirlər",
@@ -239,7 +236,8 @@
         "labs": "Laboratoriya",
         "home": "Başlanğıc",
         "favourites": "Seçilmişlər",
-        "attachment": "Əlavə"
+        "attachment": "Əlavə",
+        "emoji": "Smaylar"
     },
     "action": {
         "continue": "Davam etmək",
@@ -255,9 +253,17 @@
         "ignore": "Bloklamaq",
         "dismiss": "Nəzərə almayın",
         "close": "Bağlamaq",
-        "accept": "Qəbul etmək"
+        "accept": "Qəbul etmək",
+        "register": "Qeydiyyatdan keçmək"
     },
     "keyboard": {
         "home": "Başlanğıc"
+    },
+    "power_level": {
+        "default": "Varsayılan olaraq",
+        "restricted": "Məhduddur",
+        "moderator": "Moderator",
+        "admin": "Administrator",
+        "custom": "Xüsusi (%(level)s)"
     }
 }

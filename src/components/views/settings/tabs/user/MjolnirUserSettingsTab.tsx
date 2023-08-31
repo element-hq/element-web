@@ -225,7 +225,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                         onClick={() => this.unsubscribeFromList(list)}
                         disabled={this.state.busy}
                     >
-                        {_t("Unsubscribe")}
+                        {_t("action|unsubscribe")}
                     </AccessibleButton>
                     &nbsp;
                     <AccessibleButton
@@ -326,7 +326,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                                 onClick={this.onSubscribeList}
                                 disabled={this.state.busy}
                             >
-                                {_t("Subscribe")}
+                                {_t("action|subscribe")}
                             </AccessibleButton>
                         </form>
                     </SettingsSubsection>

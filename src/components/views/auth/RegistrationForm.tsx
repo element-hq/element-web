@@ -536,7 +536,12 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
     public render(): ReactNode {
         const registerButton = (
-            <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
+            <input
+                className="mx_Login_submit"
+                type="submit"
+                value={_t("action|register")}
+                disabled={!this.props.canSubmit}
+            />
         );
 
         let emailHelperText: JSX.Element | undefined;

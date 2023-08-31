@@ -176,7 +176,7 @@ export default class EmojiProvider extends AutocompleteProvider {
     }
 
     public getName(): string {
-        return "😃 " + _t("Emoji");
+        return "😃 " + _t("common|emoji");
     }
 
     public renderCompletions(completions: React.ReactNode[]): React.ReactNode {

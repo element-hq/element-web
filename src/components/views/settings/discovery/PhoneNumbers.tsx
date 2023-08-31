@@ -205,7 +205,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
                     onClick={this.onRevokeClick}
                     disabled={this.props.disabled}
                 >
-                    {_t("Revoke")}
+                    {_t("action|revoke")}
                 </AccessibleButton>
             );
         } else {

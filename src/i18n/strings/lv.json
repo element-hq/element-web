@@ -7,8 +7,6 @@
     "No media permissions": "Nav datu nesēju, kuriem atļauta piekļuve",
     "You may need to manually permit %(brand)s to access your microphone/webcam": "Jums varētu būt nepieciešams manuāli atļaut %(brand)s piekļuvi mikrofonam vai tīmekļa kamerai",
     "Default Device": "Noklusējuma ierīce",
-    "Microphone": "Mikrofons",
-    "Camera": "Kamera",
     "Advanced": "Papildu",
     "Always show message timestamps": "Vienmēr rādīt ziņas laika zīmogu",
     "Authentication": "Autentifikācija",
@@ -43,7 +41,6 @@
     "Download %(text)s": "Lejupielādēt: %(text)s",
     "Email": "Epasts",
     "Email address": "Epasta adrese",
-    "Emoji": "Emocijzīmes",
     "Enter passphrase": "Ievadiet frāzveida paroli",
     "Error decrypting attachment": "Kļūda atšifrējot pielikumu",
     "Export": "Eksportēt",
@@ -107,7 +104,6 @@
     "Privileged Users": "Priviliģētie lietotāji",
     "Profile": "Profils",
     "Reason": "Iemesls",
-    "Register": "Reģistrēties",
     "Reject invitation": "Noraidīt uzaicinājumu",
     "Return to login screen": "Atgriezties uz pierakstīšanās lapu",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s nav atļauts nosūtīt jums paziņojumus. Lūdzu pārbaudi sava pārlūka iestatījumus",
@@ -385,7 +381,6 @@
     "Stops ignoring a user, showing their messages going forward": "Atceļ lietotāja ignorēšanu, rādot viņa turpmāk sūtītās ziņas",
     "Notify the whole room": "Paziņot visai istabai",
     "Room Notification": "Istabas paziņojums",
-    "Code": "Kods",
     "%(oneUser)srejected their invitation %(count)s times": {
         "other": "%(oneUser)snoraidīja uzaicinājumu %(count)s reizes",
         "one": "%(oneUser)snoraidīja uzaicinājumu"
@@ -402,7 +397,6 @@
         "one": "%(items)s un viens cits",
         "other": "%(items)s un %(count)s citus"
     },
-    "Submit debug logs": "Iesniegt atutošanas logfailus",
     "Opens the Developer Tools dialog": "Atver izstrādātāja rīku logu",
     "Sunday": "Svētdiena",
     "Notification targets": "Paziņojumu adresāti",
@@ -434,7 +428,6 @@
     "All Rooms": "Visās istabās",
     "Wednesday": "Trešdiena",
     "You cannot delete this message. (%(code)s)": "Tu nevari dzēst šo ziņu. (%(code)s)",
-    "Send logs": "Nosūtīt logfailus",
     "All messages": "Visas ziņas",
     "Call invitation": "Uzaicinājuma zvans",
     "State Key": "Stāvokļa atslēga",
@@ -853,7 +846,6 @@
     "Bulk options": "Lielapjoma opcijas",
     "Clear cache and reload": "Notīrīt kešatmiņu un pārlādēt",
     "Versions": "Versijas",
-    "FAQ": "BUJ",
     "For help with using %(brand)s, click <a>here</a>.": "Palīdzībai %(brand)s izmantošanā, spiediet <a>šeit</a>.",
     "Account management": "Konta pārvaldība",
     "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Iestaties uz jūsu sistēmas instalēta fonta nosaukumu, kuru & %(brand)s vajadzētu mēģināt izmantot.",
@@ -884,12 +876,10 @@
     "Enable desktop notifications": "Iespējot darbvirsmas paziņojumus",
     "Don't miss a reply": "Nepalaidiet garām atbildi",
     "Later": "Vēlāk",
-    "Review": "Pārlūkot",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Pārliecinieties par stabilu internet savienojumu vai sazinieties ar servera administratoru",
     "Could not find user in room": "Lietotājs istabā netika atrasts",
     "You do not have the required permissions to use this command.": "Jums trūkst šīs komandas lietošanai nepieciešamo atļauju.",
     "Missing roomId.": "Trūkst roomId.",
-    "Custom (%(level)s)": "Pielāgots (%(level)s)",
     "Create Account": "Izveidot kontu",
     "Use your account or create a new one to continue.": "Izmantojiet esošu kontu vai izveidojiet jaunu, lai turpinātu.",
     "Sign In or Create Account": "Pierakstīties vai izveidot kontu",
@@ -1486,7 +1476,6 @@
     "Share content": "Dalīties ar saturu",
     "Your theme": "Jūsu tēma",
     "Your user ID": "Jūsu lietotāja ID",
-    "Show all": "Rādīt visu",
     "Show image": "Rādīt attēlu",
     "Call back": "Atzvanīt",
     "Call declined": "Zvans noraidīts",
@@ -1495,7 +1484,6 @@
     "Forget this room": "Aizmirst šo istabu",
     "Explore public rooms": "Pārlūkot publiskas istabas",
     "Enable encryption in settings.": "Iespējot šifrēšanu iestatījumos.",
-    "%(seconds)ss left": "%(seconds)s sekundes atlikušas",
     "Show %(count)s other previews": {
         "one": "Rādīt %(count)s citu priekšskatījumu",
         "other": "Rādīt %(count)s citus priekšskatījumus"
@@ -1504,7 +1492,6 @@
     "People with supported clients will be able to join the room without having a registered account.": "Cilvēki ar atbalstītām lietotnēm varēs pievienoties istabai bez reģistrēta konta.",
     "Decide who can join %(roomName)s.": "Nosakiet, kas var pievienoties %(roomName)s.",
     "Select the roles required to change various parts of the room": "Izvēlieties lomas, kas nepieciešamas, lai mainītu dažādus istabas parametrus",
-    "Timeline": "Laika skala",
     "Code blocks": "Koda bloki",
     "Displaying time": "Laika attēlošana",
     "Keyboard shortcuts": "Īsinājumtaustiņi",
@@ -1542,7 +1529,6 @@
     "Use custom size": "Izmantot pielāgotu izmēru",
     "Font size": "Šrifta izmērs",
     "Call ended": "Zvans beidzās",
-    "Guest": "Viesis",
     "Dates are often easy to guess": "Datumi bieži vien ir viegli uzminami",
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s noņēma piespraustu ziņu šajā istabā. Skatīt visas piespraustās ziņas.",
     "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.": "%(senderName)s noņēma piespraustu <a>ziņu</a> šajā istabā. Skatīt visas <b>piespraustās ziņas</b>.",
@@ -1767,7 +1753,13 @@
         "description": "Apraksts",
         "dark": "Tumša",
         "attachment": "Pielikums",
-        "appearance": "Izskats"
+        "appearance": "Izskats",
+        "guest": "Viesis",
+        "faq": "BUJ",
+        "timeline": "Laika skala",
+        "camera": "Kamera",
+        "microphone": "Mikrofons",
+        "emoji": "Emocijzīmes"
     },
     "action": {
         "continue": "Turpināt",
@@ -1825,7 +1817,10 @@
         "cancel": "Atcelt",
         "back": "Atpakaļ",
         "add": "Pievienot",
-        "accept": "Akceptēt"
+        "accept": "Akceptēt",
+        "show_all": "Rādīt visu",
+        "review": "Pārlūkot",
+        "register": "Reģistrēties"
     },
     "a11y": {
         "user_menu": "Lietotāja izvēlne"
@@ -1836,5 +1831,23 @@
     },
     "keyboard": {
         "home": "Mājup"
+    },
+    "composer": {
+        "format_inline_code": "Kods"
+    },
+    "Code": "Kods",
+    "power_level": {
+        "default": "Noklusējuma",
+        "restricted": "Ierobežots",
+        "moderator": "Moderators",
+        "admin": "Administrators",
+        "custom": "Pielāgots (%(level)s)"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "Iesniegt atutošanas logfailus",
+        "send_logs": "Nosūtīt logfailus"
+    },
+    "time": {
+        "seconds_left": "%(seconds)s sekundes atlikušas"
     }
 }

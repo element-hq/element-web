@@ -24,9 +24,6 @@
     "Add Phone Number": "Rnu uṭṭun n utilifun",
     "Add Email Address": "Rnu tasna imayl",
     "Permissions": "Tisirag",
-    "Subscribe": "Zemmem",
-    "Change": "Senfel",
-    "Disconnect": "Kkes azday",
     "exists": "illa",
     "Santa": "Santa",
     "Pizza": "Tapizzat",
@@ -51,9 +48,7 @@
     "Andorra": "Andura",
     "Algeria": "Dzayer",
     "Albania": "Albanya",
-    "Space": "Space",
     "Calls": "Iɣuṛiten",
-    "Emoji": "Imuji",
     "Afghanistan": "Afɣanistan",
     "Phone": "Atilifun",
     "Email": "Imayl",
@@ -67,8 +62,6 @@
     "A-Z": "A-Ẓ",
     "Re-join": "als-lkem",
     "%(duration)sd": "%(duration)sas",
-    "Camera": "Takamiṛa",
-    "Microphone": "Amikṛu",
     "None": "Walu",
     "Account": "Amiḍan",
     "Algorithm:": "Talguritmit:",
@@ -99,7 +92,6 @@
     "Lion": "Izem",
     "Cat": "Amuc",
     "Dog": "Aydi",
-    "Guest": "Anebgi",
     "Ok": "Wax",
     "Notifications": "Tineɣmisin",
     "Usage": "Asemres",
@@ -113,7 +105,12 @@
         "theme": "Asgum",
         "name": "Isem",
         "home": "Asnubeg",
-        "dark": "Adeɣmum"
+        "dark": "Adeɣmum",
+        "guest": "Anebgi",
+        "camera": "Takamiṛa",
+        "microphone": "Amikṛu",
+        "emoji": "Imuji",
+        "space": "Space"
     },
     "action": {
         "continue": "Kemmel",
@@ -137,7 +134,10 @@
         "confirm": "Sentem",
         "close": "Rgel",
         "cancel": "Sser",
-        "add": "Rnu"
+        "add": "Rnu",
+        "disconnect": "Kkes azday",
+        "change": "Senfel",
+        "subscribe": "Zemmem"
     },
     "keyboard": {
         "home": "Asnubeg",

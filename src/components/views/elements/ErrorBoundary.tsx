@@ -99,15 +99,12 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
                             )}
                         </p>
                         <p>
-                            {_t(
-                                "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
-                            )}
-                            {_t(
-                                "Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.",
-                            )}
+                            {_t("bug_reporting|introduction")}
+                            &nbsp;
+                            {_t("bug_reporting|description")}
                         </p>
                         <AccessibleButton onClick={this.onBugReport} kind="primary">
-                            {_t("Submit debug logs")}
+                            {_t("bug_reporting|submit_debug_logs")}
                         </AccessibleButton>
                     </React.Fragment>
                 );

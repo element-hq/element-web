@@ -160,7 +160,7 @@ const NoResults: React.FC<NoResultsProps> = ({ filter, clearFilter }) => (
                 <>
                     &nbsp;
                     <AccessibleButton kind="link_inline" onClick={clearFilter} data-testid="devices-clear-filter-btn">
-                        {_t("Show all")}
+                        {_t("action|show_all")}
                     </AccessibleButton>
                 </>
             )
@@ -353,7 +353,7 @@ export const FilteredDeviceList = forwardRef(
                             value={filter || ALL_FILTER_ID}
                             onOptionChange={onFilterOptionChange}
                             options={options}
-                            selectedLabel={_t("Show")}
+                            selectedLabel={_t("action|show")}
                         />
                     )}
                 </FilteredDeviceListHeader>

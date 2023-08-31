@@ -127,7 +127,7 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
                         <div className="text-muted">{_t("This widget would like to:")}</div>
                         {checkboxRows}
                         <DialogButtons
-                            primaryButton={_t("Approve")}
+                            primaryButton={_t("action|approve")}
                             cancelButton={_t("Decline All")}
                             onPrimaryButtonClick={this.onSubmit}
                             onCancel={this.onReject}

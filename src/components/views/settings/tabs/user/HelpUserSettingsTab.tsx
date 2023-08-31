@@ -121,7 +121,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         }
 
         return (
-            <SettingsSubsection heading={_t("Legal")}>
+            <SettingsSubsection heading={_t("common|legal")}>
                 <SettingsSubsectionText>{legalLinks}</SettingsSubsectionText>
             </SettingsSubsection>
         );
@@ -131,7 +131,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         // Note: This is not translated because it is legal text.
         // Also, &nbsp; is ugly but necessary.
         return (
-            <SettingsSubsection heading={_t("Credits")}>
+            <SettingsSubsection heading={_t("common|credits")}>
                 <SettingsSubsectionText>
                     <ul>
                         <li>
@@ -274,26 +274,20 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         if (SdkConfig.get().bug_report_endpoint_url) {
             bugReportingSection = (
                 <SettingsSubsection
-                    heading={_t("Bug reporting")}
+                    heading={_t("bug_reporting|title")}
                     description={
                         <>
-                            <SettingsSubsectionText>
-                                {_t(
-                                    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
-                                )}
-                            </SettingsSubsectionText>
-                            {_t(
-                                "Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.",
-                            )}
+                            <SettingsSubsectionText>{_t("bug_reporting|introduction")}</SettingsSubsectionText>
+                            {_t("bug_reporting|description")}
                         </>
                     }
                 >
                     <AccessibleButton onClick={this.onBugReport} kind="primary">
-                        {_t("Submit debug logs")}
+                        {_t("bug_reporting|submit_debug_logs")}
                     </AccessibleButton>
                     <SettingsSubsectionText>
                         {_t(
-                            "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.",
+                            "bug_reporting|matrix_security_issue",
                             {},
                             {
                                 a: (sub) => (
@@ -314,7 +308,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             <SettingsTab>
                 <SettingsSection heading={_t("Help & About")}>
                     {bugReportingSection}
-                    <SettingsSubsection heading={_t("FAQ")} description={faqText} />
+                    <SettingsSubsection heading={_t("common|faq")} description={faqText} />
                     <SettingsSubsection heading={_t("Versions")}>
                         <SettingsSubsectionText>
                             <CopyableText getTextToCopy={this.getVersionTextToCopy}>
@@ -355,7 +349,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         )}
                         <SettingsSubsectionText>
                             <details>
-                                <summary>{_t("Access Token")}</summary>
+                                <summary>{_t("common|access_token")}</summary>
                                 <b>
                                     {_t(
                                         "Your access token gives full access to your account. Do not share it with anyone.",

@@ -139,7 +139,7 @@ export const DeviceDetailHeading: React.FC<Props> = ({ device, saveDeviceName })
                 className="mx_DeviceDetailHeading_renameCta"
                 data-testid="device-heading-rename-cta"
             >
-                {_t("Rename")}
+                {_t("action|rename")}
             </AccessibleButton>
         </div>
     );

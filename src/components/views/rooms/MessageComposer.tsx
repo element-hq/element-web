@@ -64,6 +64,7 @@ import { SdkContextClass } from "../../../contexts/SDKContext";
 import { VoiceBroadcastInfoState } from "../../../voice-broadcast";
 import { createCantStartVoiceMessageBroadcastDialog } from "../dialogs/CantStartVoiceMessageBroadcastDialog";
 import { UIFeature } from "../../../settings/UIFeature";
+import { formatTimeLeft } from "../../../DateUtils";
 
 let instanceCount = 0;
 
@@ -569,11 +570,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         if (this.state.recordingTimeLeftSeconds) {
             const secondsLeft = Math.round(this.state.recordingTimeLeftSeconds);
             recordingTooltip = (
-                <Tooltip
-                    id={this.tooltipId}
-                    label={_t("%(seconds)ss left", { seconds: secondsLeft })}
-                    alignment={Alignment.Top}
-                />
+                <Tooltip id={this.tooltipId} label={formatTimeLeft(secondsLeft)} alignment={Alignment.Top} />
             );
         }
 

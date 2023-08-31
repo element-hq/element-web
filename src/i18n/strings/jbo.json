@@ -38,7 +38,6 @@
     "Unnamed Room": "na da cmene",
     "Unable to enable Notifications": ".i na kakne lo nu co'a kakne lo nu benji lo sajgau",
     "This email address was not found": ".i na da zo'u facki le du'u samymri judri da",
-    "Register": "nu co'a na'o jaspu",
     "Default": "zmiselcu'a",
     "Restricted": "vlipa so'u da",
     "Moderator": "vlipa so'o da",
@@ -133,7 +132,6 @@
     "Change Password": "nu basti fi le ka lerpoijaspu",
     "Authentication": "lo nu facki lo du'u do du ma kau",
     "Failed to set display name": ".i pu fliba lo nu galfi lo cmene",
-    "Custom (%(level)s)": "drata (%(level)s)",
     "Messages": "notci",
     "Actions": "ka'e se zukte",
     "Advanced": "macnu",
@@ -248,7 +246,6 @@
     "Switch theme": "nu basti fi le ka jvinu",
     "If you've joined lots of rooms, this might take a while": ".i gi na ja do pagbu so'i se zilbe'i gi la'a ze'u gunka",
     "Incorrect password": ".i le lerpoijaspu na drani",
-    "Emoji": "cinmo sinxa",
     "Users": "pilno",
     "That matches!": ".i du",
     "Success!": ".i snada",
@@ -296,7 +293,6 @@
     "Never send encrypted messages to unverified sessions from this session": "nu na pa mifra be pa notci cu zilbe'i pa se samtcise'u poi na se lanli ku'o le se samtcise'u",
     "Later": "nu ca na co'e",
     "Other users may not trust it": ".i la'a na pa na du be do cu lacri",
-    "Change": "nu basti",
     "Change room avatar": "nu basti fi le ka pixra sinxa le ve zilbe'i",
     "Change room name": "nu basti fi le ka cmene le ve zilbe'i",
     "Change main address for the room": "nu basti fi le ka ralju lu'i ro judri be le ve zilbe'i",
@@ -365,7 +361,8 @@
         "people": "prenu",
         "username": "judri cmene",
         "light": "carmi",
-        "dark": "manku"
+        "dark": "manku",
+        "emoji": "cinmo sinxa"
     },
     "action": {
         "continue": "",
@@ -394,9 +391,18 @@
         "dismiss": "nu mipri",
         "close": "nu zilmipri",
         "add": "jmina",
-        "accept": "nu fonjo'e"
+        "accept": "nu fonjo'e",
+        "change": "nu basti",
+        "register": "nu co'a na'o jaspu"
     },
     "labs": {
         "pinning": "lo du'u xu kau kakne lo nu mrilu lo vitno notci"
+    },
+    "power_level": {
+        "default": "zmiselcu'a",
+        "restricted": "vlipa so'u da",
+        "moderator": "vlipa so'o da",
+        "admin": "vlipa so'i da",
+        "custom": "drata (%(level)s)"
     }
 }

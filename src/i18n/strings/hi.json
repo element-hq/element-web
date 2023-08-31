@@ -37,7 +37,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "Unable to enable Notifications": "अधिसूचनाएं सक्षम करने में असमर्थ",
     "This email address was not found": "यह ईमेल पता नहीं मिला था",
-    "Register": "पंजीकरण करें",
     "Default": "डिफ़ॉल्ट",
     "Restricted": "वर्जित",
     "Moderator": "मध्यस्थ",
@@ -350,21 +349,14 @@
     "Language and region": "भाषा और क्षेत्र",
     "Account management": "खाता प्रबंधन",
     "Deactivate Account": "खाता निष्क्रिय करें",
-    "Legal": "कानूनी",
-    "Credits": "क्रेडिट",
     "Check for update": "अपडेट के लिये जांचें",
     "Help & About": "सहायता और के बारे में",
-    "Bug reporting": "बग रिपोर्टिंग",
-    "Submit debug logs": "डिबग लॉग जमा करें",
-    "FAQ": "सामान्य प्रश्न",
     "Versions": "संस्करण",
     "Notifications": "सूचनाएं",
     "Start automatically after system login": "सिस्टम लॉगिन के बाद स्वचालित रूप से प्रारंभ करें",
-    "Preferences": "अधिमान",
     "Changes your display nickname in the current room only": "केवल वर्तमान कमरे में अपना प्रदर्शन उपनाम बदलता है",
     "Show read receipts sent by other users": "अन्य उपयोगकर्ताओं द्वारा भेजी गई रसीदें दिखाएं",
     "Scissors": "कैंची",
-    "Timeline": "समयसीमा",
     "Room list": "कक्ष सूचि",
     "Autocomplete delay (ms)": "स्वत: पूर्ण विलंब (ms)",
     "<not supported>": "<समर्थित नहीं>",
@@ -382,8 +374,6 @@
     "No Webcams detected": "कोई वेबकैम नहीं मिला",
     "Default Device": "डिफ़ॉल्ट उपकरण",
     "Audio Output": "ध्वनि - उत्पादन",
-    "Microphone": "माइक्रोफ़ोन",
-    "Camera": "कैमरा",
     "Voice & Video": "ध्वनि और वीडियो",
     "Failed to unban": "अप्रतिबंधित करने में विफल",
     "Banned by %(displayName)s": "%(displayName)s द्वारा प्रतिबंधित",
@@ -554,11 +544,6 @@
     "Only continue if you trust the owner of the server.": "केवल तभी जारी रखें जब आप सर्वर के स्वामी पर भरोसा करते हैं।",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "इस क्रिया के लिए ईमेल पते या फ़ोन नंबर को मान्य करने के लिए डिफ़ॉल्ट पहचान सर्वर <server /> तक पहुँचने की आवश्यकता है, लेकिन सर्वर के पास सेवा की कोई शर्तें नहीं हैं।",
     "Identity server has no terms of service": "पहचान सर्वर की सेवा की कोई शर्तें नहीं हैं",
-    "%(value)ss": "%(value)s एस",
-    "%(value)sm": "%(value)sएम",
-    "%(value)sh": "%(value)s",
-    "%(value)sd": "%(value)s",
-    "%(date)s at %(time)s": "%(date)s %(time)s पर",
     "The server does not support the room version specified.": "सर्वर निर्दिष्ट कक्ष संस्करण का समर्थन नहीं करता है।",
     "Failed to transfer call": "कॉल स्थानांतरित करने में विफल",
     "Transfer Failed": "स्थानांतरण विफल",
@@ -608,7 +593,14 @@
         "theme": "थीम",
         "options": "विकल्प",
         "labs": "लैब्स",
-        "attachment": "आसक्ति"
+        "attachment": "आसक्ति",
+        "legal": "कानूनी",
+        "credits": "क्रेडिट",
+        "faq": "सामान्य प्रश्न",
+        "preferences": "अधिमान",
+        "timeline": "समयसीमा",
+        "camera": "कैमरा",
+        "microphone": "माइक्रोफ़ोन"
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -630,10 +622,28 @@
         "close": "बंद",
         "cancel": "रद्द",
         "add": "जोड़े",
-        "accept": "स्वीकार"
+        "accept": "स्वीकार",
+        "register": "पंजीकरण करें"
     },
     "labs": {
         "pinning": "संदेश पिनिंग",
         "state_counters": "कमरे के हेडर में साधारण काउंटर रेंडर करें"
+    },
+    "power_level": {
+        "default": "डिफ़ॉल्ट",
+        "restricted": "वर्जित",
+        "moderator": "मध्यस्थ",
+        "admin": "व्यवस्थापक"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "डिबग लॉग जमा करें",
+        "title": "बग रिपोर्टिंग"
+    },
+    "time": {
+        "date_at_time": "%(date)s %(time)s पर",
+        "short_days": "%(value)s",
+        "short_hours": "%(value)s",
+        "short_minutes": "%(value)sएम",
+        "short_seconds": "%(value)s एस"
     }
 }

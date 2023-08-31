@@ -56,7 +56,7 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
             default: {
                 key: Key.ENTER,
             },
-            displayName: _td("Complete"),
+            displayName: _td("action|complete"),
         },
         [KeyBindingAction.ForceCompleteAutocomplete]: {
             default: {

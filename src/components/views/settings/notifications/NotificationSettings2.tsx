@@ -106,7 +106,7 @@ export default function NotificationSettings2(): JSX.Element {
             {hasPendingChanges && model !== null && (
                 <SettingsBanner
                     icon={<img src={NewAndImprovedIcon} alt="" width={12} />}
-                    action={_t("Proceed")}
+                    action={_t("action|proceed")}
                     onAction={() => reconcile(model!)}
                 >
                     {_t(

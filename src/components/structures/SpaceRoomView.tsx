@@ -304,8 +304,8 @@ const SpaceSetupFirstRooms: React.FC<{
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
     const numFields = 3;
-    const placeholders = [_t("General"), _t("Random"), _t("Support")];
-    const [roomNames, setRoomName] = useStateArray(numFields, [_t("General"), _t("Random"), ""]);
+    const placeholders = [_t("General"), _t("common|random"), _t("common|support")];
+    const [roomNames, setRoomName] = useStateArray(numFields, [_t("General"), _t("common|random"), ""]);
     const fields = new Array(numFields).fill(0).map((x, i) => {
         const name = "roomName" + i;
         return (

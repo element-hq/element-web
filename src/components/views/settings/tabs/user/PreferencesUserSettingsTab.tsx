@@ -145,7 +145,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
         return (
             <SettingsTab data-testid="mx_PreferencesUserSettingsTab">
-                <SettingsSection heading={_t("Preferences")}>
+                <SettingsSection heading={_t("common|preferences")}>
                     {roomListSettings.length > 0 && (
                         <SettingsSubsection heading={_t("Room list")}>
                             {this.renderGroup(roomListSettings)}
@@ -178,7 +178,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     </SettingsSubsection>
 
                     <SettingsSubsection
-                        heading={_t("Presence")}
+                        heading={_t("common|presence")}
                         description={_t("Share your activity and status with others.")}
                     >
                         {this.renderGroup(PreferencesUserSettingsTab.PRESENCE_SETTINGS)}
@@ -196,7 +196,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         {this.renderGroup(PreferencesUserSettingsTab.IMAGES_AND_VIDEOS_SETTINGS)}
                     </SettingsSubsection>
 
-                    <SettingsSubsection heading={_t("Timeline")}>
+                    <SettingsSubsection heading={_t("common|timeline")}>
                         {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
                     </SettingsSubsection>
 

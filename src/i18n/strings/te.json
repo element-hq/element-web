@@ -6,8 +6,6 @@
     "No Webcams detected": "వెబ్కామ్లు కనుగొనబడలేదు",
     "No media permissions": "మీడియా అనుమతులు లేవు",
     "Default Device": "డిఫాల్ట్ పరికరం",
-    "Microphone": "మైక్రోఫోన్",
-    "Camera": "కెమెరా",
     "Advanced": "ఆధునిక",
     "Always show message timestamps": "ఎల్లప్పుడూ సందేశాల సమయ ముద్రలు చూపించు",
     "Authentication": "ప్రామాణీకరణ",
@@ -93,7 +91,6 @@
     "All Rooms": "అన్ని గదులు",
     "Wednesday": "బుధవారం",
     "Send": "పంపండి",
-    "Send logs": "నమోదును పంపు",
     "All messages": "అన్ని సందేశాలు",
     "Call invitation": "మాట్లాడడానికి ఆహ్వానం",
     "Invite to this room": "ఈ గదికి ఆహ్వానించండి",
@@ -117,7 +114,9 @@
         "mute": "నిశబ్ధము",
         "settings": "అమరికలు",
         "warning": "హెచ్చరిక",
-        "attachment": "జోడింపు"
+        "attachment": "జోడింపు",
+        "camera": "కెమెరా",
+        "microphone": "మైక్రోఫోన్"
     },
     "action": {
         "continue": "కొనసాగించు",
@@ -132,5 +131,12 @@
         "cancel": "రద్దు",
         "add": "చేర్చు",
         "accept": "అంగీకరించు"
+    },
+    "power_level": {
+        "default": "డిఫాల్ట్",
+        "admin": "అడ్మిన్"
+    },
+    "bug_reporting": {
+        "send_logs": "నమోదును పంపు"
     }
 }

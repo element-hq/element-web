@@ -601,7 +601,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     <div>{_t("Restore your key backup to upgrade your encryption")}</div>
                 </div>
             );
-            nextCaption = _t("Restore");
+            nextCaption = _t("action|restore");
         } else {
             authPrompt = <p>{_t("You'll need to authenticate with the server to confirm the upgrade.")}</p>;
         }

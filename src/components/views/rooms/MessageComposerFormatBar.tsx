@@ -54,7 +54,7 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
         return (
             <Toolbar className={classes} ref={this.formatBarRef} aria-label={_t("Formatting")}>
                 <FormatButton
-                    label={_t("Bold")}
+                    label={_t("composer|format_bold")}
                     onClick={() => this.props.onAction(Formatting.Bold)}
                     icon="Bold"
                     shortcut={this.props.shortcuts.bold}
@@ -68,13 +68,13 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
                     visible={this.state.visible}
                 />
                 <FormatButton
-                    label={_t("Strikethrough")}
+                    label={_t("composer|format_strikethrough")}
                     onClick={() => this.props.onAction(Formatting.Strikethrough)}
                     icon="Strikethrough"
                     visible={this.state.visible}
                 />
                 <FormatButton
-                    label={_t("Code block")}
+                    label={_t("composer|format_code_block")}
                     onClick={() => this.props.onAction(Formatting.Code)}
                     icon="Code"
                     shortcut={this.props.shortcuts.code}

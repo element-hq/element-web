@@ -2,8 +2,6 @@
     "Account": "Compte",
     "No Microphones detected": "No s'ha detectat cap micròfon",
     "No Webcams detected": "No s'ha detectat cap càmera web",
-    "Microphone": "Micròfon",
-    "Camera": "Càmera",
     "Advanced": "Avançat",
     "Always show message timestamps": "Mostra sempre la marca de temps del missatge",
     "Create new room": "Crea una sala nova",
@@ -14,7 +12,6 @@
     "unknown error code": "codi d'error desconegut",
     "Operation failed": "No s'ha pogut realitzar l'operació",
     "powered by Matrix": "amb tecnologia de Matrix",
-    "Register": "Registre",
     "Rooms": "Sales",
     "This email address is already in use": "Aquesta adreça de correu electrònic ja està en ús",
     "This phone number is already in use": "Aquest número de telèfon ja està en ús",
@@ -361,7 +358,6 @@
     "Import room keys": "Importa les claus de la sala",
     "Import": "Importa",
     "Email": "Correu electrònic",
-    "Submit debug logs": "Enviar logs de depuració",
     "Sunday": "Diumenge",
     "Failed to add tag %(tagName)s to room": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala",
     "Notification targets": "Objectius de les notificacions",
@@ -394,7 +390,6 @@
     "All Rooms": "Totes les sales",
     "State Key": "Clau d'estat",
     "Wednesday": "Dimecres",
-    "Send logs": "Envia els registres",
     "All messages": "Tots els missatges",
     "Call invitation": "Invitació de trucada",
     "What's new?": "Què hi ha de nou?",
@@ -474,7 +469,6 @@
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "No s'ha trobat el perfil pels IDs de Matrix següents, els voleu convidar igualment?",
     "Invite anyway and never warn me again": "Convidar igualment i no avisar-me de nou",
     "Invite anyway": "Convidar igualment",
-    "Guest": "Visitant",
     "This homeserver has hit its Monthly Active User limit.": "Aquest homeserver ha assolit el seu límit d'usuaris actius mensuals.",
     "This homeserver has exceeded one of its resource limits.": "Aquest homeserver ha sobrepassat on dels seus límits de recursos.",
     "Unrecognised address": "Adreça no reconeguda",
@@ -535,7 +529,6 @@
     "Setting up keys": "Configurant claus",
     "Are you sure you want to cancel entering passphrase?": "Estàs segur que vols cancel·lar la introducció de la frase secreta?",
     "Cancel entering passphrase?": "Vols cancel·lar la introducció de la frase secreta?",
-    "Custom (%(level)s)": "Personalitzat (%(level)s)",
     "Create Account": "Crea un compte",
     "Use your account or create a new one to continue.": "Utilitza el teu compte o crea'n un de nou per continuar.",
     "Sign In or Create Account": "Inicia sessió o Crea un compte",
@@ -618,7 +611,10 @@
         "home": "Inici",
         "favourites": "Preferits",
         "description": "Descripció",
-        "attachment": "Adjunt"
+        "attachment": "Adjunt",
+        "guest": "Visitant",
+        "camera": "Càmera",
+        "microphone": "Micròfon"
     },
     "action": {
         "continue": "Continua",
@@ -654,7 +650,8 @@
         "cancel": "Cancel·la",
         "back": "Enrere",
         "add": "Afegeix",
-        "accept": "Accepta"
+        "accept": "Accepta",
+        "register": "Registre"
     },
     "labs": {
         "pinning": "Fixació de missatges",
@@ -662,5 +659,16 @@
     },
     "keyboard": {
         "home": "Inici"
+    },
+    "power_level": {
+        "default": "Predeterminat",
+        "restricted": "Restringit",
+        "moderator": "Moderador",
+        "admin": "Administrador",
+        "custom": "Personalitzat (%(level)s)"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "Enviar logs de depuració",
+        "send_logs": "Envia els registres"
     }
 }

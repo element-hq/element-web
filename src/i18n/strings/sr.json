@@ -203,7 +203,6 @@
     "powered by Matrix": "покреће га Матрикс",
     "Sign in with": "Пријавите се преко",
     "Email address": "Мејл адреса",
-    "Register": "Регистровање",
     "Something went wrong!": "Нешто је пошло наопако!",
     "Delete Widget": "Обриши виџет",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Брисање виџета уклања виџет за све чланове ове собе. Да ли сте сигурни да желите обрисати овај виџет?",
@@ -359,8 +358,6 @@
     "No Microphones detected": "Нема уочених микрофона",
     "No Webcams detected": "Нема уочених веб камера",
     "Default Device": "Подразумевани уређај",
-    "Microphone": "Микрофон",
-    "Camera": "Камера",
     "Email": "Мејл",
     "Notifications": "Обавештења",
     "Profile": "Профил",
@@ -384,7 +381,6 @@
     "Ignores a user, hiding their messages from you": "Занемарује корисника и тиме скрива њихове поруке од вас",
     "Stops ignoring a user, showing their messages going forward": "Престаје са занемаривањем корисника и тиме приказује њихове поруке одсад",
     "Commands": "Наредбе",
-    "Emoji": "Емоџи",
     "Notify the whole room": "Обавести све у соби",
     "Room Notification": "Собно обавештење",
     "Users": "Корисници",
@@ -428,7 +424,6 @@
     "All Rooms": "Све собе",
     "State Key": "Кључ стања",
     "Wednesday": "Среда",
-    "Send logs": "Пошаљи записнике",
     "All messages": "Све поруке",
     "Call invitation": "Позивница за позив",
     "Messages containing my display name": "Поруке које садрже моје приказно име",
@@ -451,11 +446,9 @@
     "Missing roomId.": "Недостаје roomId.",
     "You don't currently have any stickerpacks enabled": "Тренутно немате омогућено било које паковање са налепницама",
     "Stickerpack": "Паковање са налепницама",
-    "Code": "Код",
     "Preparing to send logs": "Припремам се за слање записника",
     "Logs sent": "Записници су послати",
     "Failed to send logs: ": "Нисам успео да пошаљем записнике: ",
-    "Submit debug logs": "Пошаљи записнике за поправљање грешака",
     "Opens the Developer Tools dialog": "Отвори прозор програмерских алатки",
     "Send Logs": "Пошаљи записнике",
     "Clear Storage and Sign Out": "Очисти складиште и одјави ме",
@@ -496,7 +489,6 @@
     "Join millions for free on the largest public server": "Придружите се милионима других бесплатно на највећем јавном серверу",
     "Create account": "Направи налог",
     "Email (optional)": "Мејл (изборно)",
-    "Change": "Промени",
     "Messages containing my username": "Поруке које садрже моје корисничко",
     "Are you sure you want to sign out?": "Заиста желите да се одјавите?",
     "Call failed due to misconfigured server": "Позив неуспешан због лоше подешеног сервера",
@@ -600,10 +592,8 @@
     "Customise your appearance": "Прилагодите изглед",
     "Appearance Settings only affect this %(brand)s session.": "Подешавања изгледа се примењују само на %(brand)s сесију.",
     "Help & About": "Помоћ и подаци о програму",
-    "Preferences": "Поставке",
     "Voice & Video": "Глас и видео",
     "Unable to revoke sharing for email address": "Не могу да опозовем дељење ове мејл адресе",
-    "Revoke": "Опозови",
     "Unable to revoke sharing for phone number": "Не могу да опозовем дељење броја телефона",
     "Send a reply…": "Пошаљи одговор…",
     "No recently visited rooms": "Нема недавно посећених соба",
@@ -640,7 +630,6 @@
     "Setting up keys": "Постављам кључеве",
     "Are you sure you want to cancel entering passphrase?": "Заиста желите да откажете унос фразе?",
     "Cancel entering passphrase?": "Отказати унос фразе?",
-    "Custom (%(level)s)": "Посебан %(level)s",
     "Create Account": "Направи налог",
     "Use your account or create a new one to continue.": "Користите постојећи или направите нови да наставите.",
     "Sign In or Create Account": "Пријавите се или направите налог",
@@ -1079,14 +1068,11 @@
     "Please enter verification code sent via text.": "Унесите верификациони код послат путем текста.",
     "Unable to verify phone number.": "Није могуће верификовати број телефона.",
     "Unable to share phone number": "Није могуће делити телефонски број",
-    "Complete": "Заврши",
     "You'll need to authenticate with the server to confirm the upgrade.": "Да бисте потврдили надоградњу, мораћете да се пријавите на серверу.",
-    "Restore": "Врати",
     "Restore your key backup to upgrade your encryption": "Вратите сигурносну копију кључа да бисте надоградили шифровање",
     "Enter your account password to confirm the upgrade:": "Унесите лозинку за налог да бисте потврдили надоградњу:",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Заштитите од губитка приступа шифрованим порукама и подацима је подржан сигурносном копијом кључева за шифровање на серверу.",
     "Clear all data": "Очисти све податке",
-    "Guest": "Гост",
     "New version of %(brand)s is available": "Доступна је нова верзија %(brand)s",
     "Update %(brand)s": "Ажурирај %(brand)s",
     "New login. Was this you?": "Нова пријава. Да ли сте то били Ви?",
@@ -1189,8 +1175,6 @@
     "Away": "Неприсутан",
     "Go to Home View": "Идите на почетни приказ",
     "End": "",
-    "Credits": "Заслуге",
-    "Legal": "Легално",
     "Deactivate account": "Деактивирај налог",
     "Account management": "Управљање профилом",
     "Server name": "Име сервера",
@@ -1288,7 +1272,14 @@
         "description": "Опис",
         "dark": "Тамна",
         "attachment": "Прилог",
-        "appearance": "Изглед"
+        "appearance": "Изглед",
+        "guest": "Гост",
+        "legal": "Легално",
+        "credits": "Заслуге",
+        "preferences": "Поставке",
+        "camera": "Камера",
+        "microphone": "Микрофон",
+        "emoji": "Емоџи"
     },
     "action": {
         "continue": "Настави",
@@ -1336,7 +1327,12 @@
         "cancel": "Откажи",
         "back": "Назад",
         "add": "Додај",
-        "accept": "Прихвати"
+        "accept": "Прихвати",
+        "change": "Промени",
+        "complete": "Заврши",
+        "revoke": "Опозови",
+        "restore": "Врати",
+        "register": "Регистровање"
     },
     "labs": {
         "pinning": "Закачене поруке",
@@ -1345,5 +1341,20 @@
     "keyboard": {
         "home": "Почетна",
         "alt": "Алт"
+    },
+    "composer": {
+        "format_inline_code": "Код"
+    },
+    "Code": "Код",
+    "power_level": {
+        "default": "Подразумевано",
+        "restricted": "Ограничено",
+        "moderator": "Модератор",
+        "admin": "Админ",
+        "custom": "Посебан %(level)s"
+    },
+    "bug_reporting": {
+        "submit_debug_logs": "Пошаљи записнике за поправљање грешака",
+        "send_logs": "Пошаљи записнике"
     }
 }

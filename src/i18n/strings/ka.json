@@ -16,7 +16,6 @@
     "This phone number is already in use": "ტელეფონის ეს ნომერი დაკავებულია",
     "Identity server not set": "იდენთიფიკაციის სერვერი არ არის განსაზღვრული",
     "No identity access token found": "იდენთიფიკაციის წვდომის ტოკენი ვერ მოიძებნა",
-    "%(seconds)ss left": "%(seconds)sწმ დარჩა",
     "The server does not support the room version specified.": "სერვერი არ მუშაობს ოთახის მითითებულ ვერსიაზე.",
     "Sun": "მზე",
     "Dec": "დეკ",
@@ -34,7 +33,6 @@
     "Click the button below to confirm adding this phone number.": "დააჭირეთ ღილაკს მობილურის ნომრის დასადასტურებლად.",
     "Server may be unavailable, overloaded, or you hit a bug.": "სერვერი შეიძლება იყოს მიუწვდომელი, გადატვირთული, ან შეიძლება ეს ბაგია.",
     "Jan": "იან",
-    "%(minutes)sm %(seconds)ss left": "%(minutes)sწთ %(seconds)sწმ დარჩა",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "ეს მოქმედება საჭიროებს პირადობის სერვერთან კავშირს ელ.ფოსტის ან მობილურის ნომრის დასადასტურებლად, მაგრამ სერვერს არ გააჩნია მომსახურების პირობები.",
     "Cannot invite user by email without an identity server. You can connect to one under \"Settings\".": "შეუძლებელია მომხმარებლის ელ.ფოსტით დამატება პირადობის სერვერის გარეშე. თქვენ შეგიძლიათ დაუკავშირდეთ ერთ-ერთს \"პარამეტრებში\".",
     "Identity server has no terms of service": "პირადობის სერვერს არ აქვს მომსახურების პირობები",
@@ -48,7 +46,6 @@
     "Unable to load! Check your network connectivity and try again.": "ვერ იტვირთება! შეამოწმეთ თქვენი ინტერნეტ-კავშირი და სცადეთ ისევ.",
     "Add Phone Number": "მობილურის ნომრის დამატება",
     "Confirm adding phone number": "დაადასტურეთ მობილურის ნომრის დამატება",
-    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sს %(minutes)sწთ %(seconds)sწმ დარჩა",
     "Feb": "თებ",
     "common": {
         "error": "შეცდომა",
@@ -58,5 +55,10 @@
         "confirm": "დადასტურება",
         "dismiss": "დახურვა",
         "sign_in": "შესვლა"
+    },
+    "time": {
+        "hours_minutes_seconds_left": "%(hours)sს %(minutes)sწთ %(seconds)sწმ დარჩა",
+        "minutes_seconds_left": "%(minutes)sწთ %(seconds)sწმ დარჩა",
+        "seconds_left": "%(seconds)sწმ დარჩა"
     }
 }

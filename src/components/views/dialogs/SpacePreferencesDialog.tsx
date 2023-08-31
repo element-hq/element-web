@@ -86,7 +86,7 @@ const SpacePreferencesDialog: React.FC<IProps> = ({ space, initialTabId, onFinis
             className="mx_SpacePreferencesDialog"
             hasCancel
             onFinished={onFinished}
-            title={_t("Preferences")}
+            title={_t("common|preferences")}
             fixedWidth={false}
         >
             <h4>

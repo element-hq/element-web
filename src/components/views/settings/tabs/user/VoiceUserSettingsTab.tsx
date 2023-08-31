@@ -169,10 +169,10 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
             speakerDropdown = this.renderDropdown(MediaDeviceKindEnum.AudioOutput, _t("Audio Output")) || (
                 <p>{_t("No Audio Outputs detected")}</p>
             );
-            microphoneDropdown = this.renderDropdown(MediaDeviceKindEnum.AudioInput, _t("Microphone")) || (
+            microphoneDropdown = this.renderDropdown(MediaDeviceKindEnum.AudioInput, _t("common|microphone")) || (
                 <p>{_t("No Microphones detected")}</p>
             );
-            webcamDropdown = this.renderDropdown(MediaDeviceKindEnum.VideoInput, _t("Camera")) || (
+            webcamDropdown = this.renderDropdown(MediaDeviceKindEnum.VideoInput, _t("common|camera")) || (
                 <p>{_t("No Webcams detected")}</p>
             );
         }

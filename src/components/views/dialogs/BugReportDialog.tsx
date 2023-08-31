@@ -217,20 +217,16 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
             <BaseDialog
                 className="mx_BugReportDialog"
                 onFinished={this.onCancel}
-                title={_t("Submit debug logs")}
+                title={_t("bug_reporting|submit_debug_logs")}
                 contentId="mx_Dialog_content"
             >
                 <div className="mx_Dialog_content" id="mx_Dialog_content">
                     {warning}
-                    <p>
-                        {_t(
-                            "Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.",
-                        )}
-                    </p>
+                    <p>{_t("bug_reporting|description")}</p>
                     <p>
                         <b>
                             {_t(
-                                "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.",
+                                "bug_reporting|before_submitting",
                                 {},
                                 {
                                     a: (sub) => (
@@ -248,7 +244,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
 
                     <div className="mx_BugReportDialog_download">
                         <AccessibleButton onClick={this.onDownload} kind="link" disabled={this.state.downloadBusy}>
-                            {_t("Download logs")}
+                            {_t("bug_reporting|download_logs")}
                         </AccessibleButton>
                         {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
                     </div>
@@ -256,7 +252,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                     <Field
                         type="text"
                         className="mx_BugReportDialog_field_input"
-                        label={_t("GitHub issue")}
+                        label={_t("bug_reporting|github_issue")}
                         onChange={this.onIssueUrlChange}
                         value={this.state.issueUrl}
                         placeholder="https://github.com/vector-im/element-web/issues/..."
@@ -269,15 +265,13 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                         rows={5}
                         onChange={this.onTextChange}
                         value={this.state.text}
-                        placeholder={_t(
-                            "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.",
-                        )}
+                        placeholder={_t("bug_reporting|additional_context")}
                     />
                     {progress}
                     {error}
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Send logs")}
+                    primaryButton={_t("bug_reporting|send_logs")}
                     onPrimaryButtonClick={this.onSubmit}
                     focus={true}
                     onCancel={this.onCancel}
