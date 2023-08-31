@@ -23,10 +23,8 @@ import React from "react";
 import dis from "../../../dispatcher/dispatcher";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import { IRightPanelCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
-import { ActionPayload } from "../../../dispatcher/payloads";
 
 export enum HeaderKind {
     Room = "room",
@@ -59,25 +57,12 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
 
     public componentDidMount(): void {
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
-        this.dispatcherRef = dis.register(this.onAction.bind(this)); // used by subclasses
     }
 
     public componentWillUnmount(): void {
         this.unmounted = true;
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
-    }
-
-    protected abstract onAction(payload: ActionPayload): void;
-
-    public setPhase(phase: RightPanelPhases, cardState?: Partial<IRightPanelCardState>): void {
-        const rps = RightPanelStore.instance;
-        if (rps.currentCard.phase == phase && !cardState && rps.isOpen) {
-            rps.togglePanel(null);
-        } else {
-            RightPanelStore.instance.setCard({ phase, state: cardState });
-            if (!rps.isOpen) rps.togglePanel(null);
-        }
     }
 
     public isPhase(phases: string | string[]): boolean {
