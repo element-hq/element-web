@@ -130,12 +130,12 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     {roomName}
 
                     {isDirectMessage && e2eStatus === E2EStatus.Verified && (
-                        <Tooltip label={_t("Verified")}>
+                        <Tooltip label={_t("common|verified")}>
                             <VerifiedIcon
                                 width="16px"
                                 height="16px"
                                 className="mx_Verified"
-                                aria-label={_t("Verified")}
+                                aria-label={_t("common|verified")}
                             />
                         </Tooltip>
                     )}
