@@ -171,6 +171,17 @@ module.exports = (env, argv) => {
                         enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.
                     },
+
+                    // put the unhomoglyph data in its own file. It contains
+                    // magic characters which mess up line numbers in the
+                    // javascript debugger.
+                    unhomoglyph_data: {
+                        name: "unhomoglyph_data",
+                        test: /unhomoglyph\/data\.json$/,
+                        enforce: true,
+                        chunks: "all",
+                    },
+
                     default: {
                         reuseExistingChunk: true,
                     },
