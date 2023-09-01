@@ -472,6 +472,14 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         default: "",
         controller: new FontSizeController(),
     },
+    "feature_render_reaction_images": {
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
+        displayName: _td("Render custom images in reactions"),
+        description: _td('Sometimes referred to as "custom emojis".'),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     /**
      * With the transition to Compound we are moving to a base font size
      * of 16px. We're taking the opportunity to move away from the `baseFontSize`
