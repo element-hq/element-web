@@ -1038,7 +1038,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     <h4>
                         <span id="mx_SpotlightDialog_section_recentSearches">{_t("Recent searches")}</span>
                         <AccessibleButton kind="link" onClick={clearRecentSearches}>
-                            {_t("Clear")}
+                            {_t("action|clear")}
                         </AccessibleButton>
                     </h4>
                     <div>

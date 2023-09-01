@@ -68,7 +68,6 @@
     "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s naməlum rejimdə otağın tarixini açdı (%(visibility)s).",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s üçün  %(fromPowerLevel)s-dan %(toPowerLevel)s-lə",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s hüquqların səviyyələrini dəyişdirdi %(powerLevelDiffText)s.",
-    "Always show message timestamps": "Həmişə mesajların göndərilməsi vaxtını göstərmək",
     "Incorrect verification code": "Təsdiq etmənin səhv kodu",
     "Phone": "Telefon",
     "New passwords don't match": "Yeni şifrlər uyğun gəlmir",
@@ -265,5 +264,8 @@
         "moderator": "Moderator",
         "admin": "Administrator",
         "custom": "Xüsusi (%(level)s)"
+    },
+    "settings": {
+        "always_show_message_timestamps": "Həmişə mesajların göndərilməsi vaxtını göstərmək"
     }
 }

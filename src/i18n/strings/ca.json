@@ -3,7 +3,6 @@
     "No Microphones detected": "No s'ha detectat cap micròfon",
     "No Webcams detected": "No s'ha detectat cap càmera web",
     "Advanced": "Avançat",
-    "Always show message timestamps": "Mostra sempre la marca de temps del missatge",
     "Create new room": "Crea una sala nova",
     "Failed to forget room %(errCode)s": "No s'ha pogut oblidar la sala %(errCode)s",
     "Favourite": "Favorit",
@@ -76,7 +75,6 @@
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s ha eliminat el nom de la sala.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s ha canviat el nom de la sala a %(roomName)s.",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s ha enviat una imatge.",
-    "Someone": "Algú",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s ha convidat a %(targetDisplayName)s a entrar a la sala.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres, a partir de que hi són convidats.",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres des de que s'hi uneixen.",
@@ -96,14 +94,9 @@
     "Your browser does not support the required cryptography extensions": "El vostre navegador no és compatible amb els complements criptogràfics necessaris",
     "Not a valid %(brand)s keyfile": "El fitxer no és un fitxer de claus de %(brand)s vàlid",
     "Authentication check failed: incorrect password?": "Ha fallat l'autenticació: heu introduït correctament la contrasenya?",
-    "Show timestamps in 12 hour format (e.g. 2:30pm)": "Mostra les marques de temps en format de 12 hores (p.e. 2:30pm)",
-    "Enable automatic language detection for syntax highlighting": "Activa la detecció automàtica d'idiomes per al ressaltat de sintaxi",
-    "Automatically replace plain text Emoji": "Substitueix automàticament Emoji de text pla",
-    "Enable inline URL previews by default": "Activa per defecte la vista prèvia d'URL en línia",
     "Enable URL previews for this room (only affects you)": "Activa la vista prèvia d'URL d'aquesta sala (no afecta altres usuaris)",
     "Enable URL previews by default for participants in this room": "Activa per defecte la vista prèvia d'URL per als participants d'aquesta sala",
     "Incorrect verification code": "El codi de verificació és incorrecte",
-    "Submit": "Envia",
     "Phone": "Telèfon",
     "No display name": "Sense nom visible",
     "New passwords don't match": "Les noves contrasenyes no coincideixen",
@@ -127,7 +120,6 @@
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "No podràs desfer aquest canvi ja que estàs donant a l'usuari el mateix nivell d'autoritat que el teu.",
     "Unignore": "Deixa de ignorar",
     "Jump to read receipt": "Vés a l'últim missatge llegit",
-    "Mention": "Menciona",
     "Admin Tools": "Eines d'administració",
     "and %(count)s others...": {
         "other": "i %(count)s altres...",
@@ -354,9 +346,7 @@
     "Session ID": "ID de la sessió",
     "Export room keys": "Exporta les claus de la sala",
     "Confirm passphrase": "Introduïu una contrasenya",
-    "Export": "Exporta",
     "Import room keys": "Importa les claus de la sala",
-    "Import": "Importa",
     "Email": "Correu electrònic",
     "Sunday": "Diumenge",
     "Failed to add tag %(tagName)s to room": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala",
@@ -388,7 +378,6 @@
     "Toolbox": "Caixa d'eines",
     "Collecting logs": "S'estan recopilant els registres",
     "All Rooms": "Totes les sales",
-    "State Key": "Clau d'estat",
     "Wednesday": "Dimecres",
     "All messages": "Tots els missatges",
     "Call invitation": "Invitació de trucada",
@@ -404,9 +393,6 @@
     "Low Priority": "Baixa prioritat",
     "Off": "Apagat",
     "Failed to remove tag %(tagName)s from room": "No s'ha pogut esborrar l'etiqueta %(tagName)s de la sala",
-    "Event Type": "Tipus d'esdeveniment",
-    "Event sent!": "Esdeveniment enviat!",
-    "Event Content": "Contingut de l'esdeveniment",
     "Thank you!": "Gràcies!",
     "Permission Required": "Es necessita permís",
     "You do not have permission to start a conference call in this room": "No tens permís per iniciar una conferència telefònica en aquesta sala",
@@ -476,16 +462,11 @@
     "Avoid years that are associated with you": "Eviteu anys que es puguin relacionar amb vós",
     "Avoid dates and years that are associated with you": "Eviteu dates i anys que estiguin associats amb vós",
     "Please contact your homeserver administrator.": "Si us plau contacteu amb l'administrador del vostre homeserver.",
-    "Enable Emoji suggestions while typing": "Habilita els suggeriments d'Emojis mentre escric",
-    "Show display name changes": "Mostra els canvis de nom",
-    "Show read receipts sent by other users": "Mostra les confirmacions de lectura enviades pels altres usuaris",
-    "Enable big emoji in chat": "Activa Emojis grans en xats",
     "Send analytics data": "Envia dades d'anàlisi",
     "Email addresses": "Adreces de correu electrònic",
     "Phone numbers": "Números de telèfon",
     "Language and region": "Idioma i regió",
     "Phone Number": "Número de telèfon",
-    "Send typing notifications": "Envia notificacions d'escriptura",
     "We encountered an error trying to restore your previous session.": "Hem trobat un error en intentar recuperar la teva sessió prèvia.",
     "Upload Error": "Error de pujada",
     "A connection error occurred while trying to contact the server.": "S'ha produït un error de connexió mentre s'intentava connectar al servidor.",
@@ -614,7 +595,8 @@
         "attachment": "Adjunt",
         "guest": "Visitant",
         "camera": "Càmera",
-        "microphone": "Micròfon"
+        "microphone": "Micròfon",
+        "someone": "Algú"
     },
     "action": {
         "continue": "Continua",
@@ -651,7 +633,11 @@
         "back": "Enrere",
         "add": "Afegeix",
         "accept": "Accepta",
-        "register": "Registre"
+        "register": "Registre",
+        "import": "Importa",
+        "export": "Exporta",
+        "mention": "Menciona",
+        "submit": "Envia"
     },
     "labs": {
         "pinning": "Fixació de missatges",
@@ -670,5 +656,23 @@
     "bug_reporting": {
         "submit_debug_logs": "Enviar logs de depuració",
         "send_logs": "Envia els registres"
+    },
+    "devtools": {
+        "event_type": "Tipus d'esdeveniment",
+        "state_key": "Clau d'estat",
+        "event_sent": "Esdeveniment enviat!",
+        "event_content": "Contingut de l'esdeveniment"
+    },
+    "settings": {
+        "use_12_hour_format": "Mostra les marques de temps en format de 12 hores (p.e. 2:30pm)",
+        "always_show_message_timestamps": "Mostra sempre la marca de temps del missatge",
+        "send_typing_notifications": "Envia notificacions d'escriptura",
+        "replace_plain_emoji": "Substitueix automàticament Emoji de text pla",
+        "emoji_autocomplete": "Habilita els suggeriments d'Emojis mentre escric",
+        "automatic_language_detection_syntax_highlight": "Activa la detecció automàtica d'idiomes per al ressaltat de sintaxi",
+        "inline_url_previews_default": "Activa per defecte la vista prèvia d'URL en línia",
+        "show_read_receipts": "Mostra les confirmacions de lectura enviades pels altres usuaris",
+        "show_displayname_changes": "Mostra els canvis de nom",
+        "big_emoji": "Activa Emojis grans en xats"
     }
 }

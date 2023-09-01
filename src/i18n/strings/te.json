@@ -7,7 +7,6 @@
     "No media permissions": "మీడియా అనుమతులు లేవు",
     "Default Device": "డిఫాల్ట్ పరికరం",
     "Advanced": "ఆధునిక",
-    "Always show message timestamps": "ఎల్లప్పుడూ సందేశాల సమయ ముద్రలు చూపించు",
     "Authentication": "ప్రామాణీకరణ",
     "You do not have permission to post to this room": "మీకు ఈ గదికి పోస్ట్ చేయడానికి అనుమతి లేదు",
     "A new password must be entered.": "కొత్త పాస్ వర్డ్ ను తప్పక నమోదు చేయాలి.",
@@ -138,5 +137,8 @@
     },
     "bug_reporting": {
         "send_logs": "నమోదును పంపు"
+    },
+    "settings": {
+        "always_show_message_timestamps": "ఎల్లప్పుడూ సందేశాల సమయ ముద్రలు చూపించు"
     }
 }

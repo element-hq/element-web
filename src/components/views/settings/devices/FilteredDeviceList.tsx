@@ -284,12 +284,12 @@ export const FilteredDeviceList = forwardRef(
             { id: ALL_FILTER_ID, label: _t("All") },
             {
                 id: DeviceSecurityVariation.Verified,
-                label: _t("Verified"),
+                label: _t("common|verified"),
                 description: _t("Ready for secure messaging"),
             },
             {
                 id: DeviceSecurityVariation.Unverified,
-                label: _t("Unverified"),
+                label: _t("common|unverified"),
                 description: _t("Not ready for secure messaging"),
             },
             {

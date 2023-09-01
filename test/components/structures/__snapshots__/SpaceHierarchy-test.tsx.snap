@@ -77,7 +77,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 20px;"
-              title=""
+              title="room-id-2"
             >
               U
             </span>
@@ -148,7 +148,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 20px;"
-              title=""
+              title="room-id-3"
             >
               U
             </span>
@@ -220,7 +220,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 20px;"
-              title=""
+              title="space-id-4"
             >
               N
             </span>
@@ -298,7 +298,7 @@ exports[`SpaceHierarchy <SpaceHierarchy /> renders 1`] = `
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 20px;"
-              title=""
+              title="room-id-5"
             >
               N
             </span>

@@ -74,7 +74,7 @@ function UserOnboardingButtonInternal({ selected, minimized }: Props): JSX.Eleme
                 <>
                     <div className="mx_UserOnboardingButton_content">
                         <Heading size="4" className="mx_Heading_h4">
-                            {_t("Welcome")}
+                            {_t("common|welcome")}
                         </Heading>
                         <AccessibleButton className="mx_UserOnboardingButton_close" onClick={onDismiss} />
                     </div>

@@ -78,7 +78,7 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
         } else {
             dialogButtons = (
                 <DialogButtons
-                    primaryButton={_t("Refresh")}
+                    primaryButton={_t("action|refresh")}
                     onPrimaryButtonClick={this.onRefreshClick}
                     focus={true}
                     hasCancel={false}

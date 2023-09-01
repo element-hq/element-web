@@ -155,7 +155,7 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
         options: [
             {
                 key: { roomServer, instanceId: undefined },
-                label: _t("Matrix"),
+                label: _t("common|matrix"),
             },
             ...(roomServer === homeServer && protocols
                 ? Object.values(protocols)

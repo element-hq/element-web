@@ -332,7 +332,6 @@ describe("Cryptography", function () {
                     cy.findByText("Hoo!");
                 })
                 .closest(".mx_EventTile")
-                .should("have.class", "mx_EventTile_verified")
                 .should("not.have.descendants", ".mx_EventTile_e2eIcon_warning");
 
             // bob sends an edit to the first message with his unverified device
@@ -377,7 +376,6 @@ describe("Cryptography", function () {
                     cy.findByText("Hee!");
                 })
                 .closest(".mx_EventTile")
-                .should("have.class", "mx_EventTile_verified")
                 .should("not.have.descendants", ".mx_EventTile_e2eIcon_warning");
         });
     });

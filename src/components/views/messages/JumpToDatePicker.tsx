@@ -63,7 +63,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
                 className="mx_JumpToDatePicker_submitButton"
                 onClick={onJumpToDateSubmit}
             >
-                {_t("Go")}
+                {_t("action|go")}
             </RovingAccessibleButton>
         </form>
     );

@@ -26,7 +26,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 54px;"
-          title=""
+          title="!room:domain.org"
         >
           !
         </span>
@@ -68,6 +68,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           >
             0
           </span>
+        </div>
+        <div
+          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_search"
+          role="button"
+          tabindex="0"
+        >
+          Search
         </div>
         <div
           class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_files"

@@ -428,7 +428,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                         {ignoreUserCheckbox}
                     </div>
                     <DialogButtons
-                        primaryButton={_t("Send report")}
+                        primaryButton={_t("action|send_report")}
                         onPrimaryButtonClick={this.onSubmit}
                         focus={true}
                         onCancel={this.onCancel}
@@ -467,7 +467,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                     {ignoreUserCheckbox}
                 </div>
                 <DialogButtons
-                    primaryButton={_t("Send report")}
+                    primaryButton={_t("action|send_report")}
                     onPrimaryButtonClick={this.onSubmit}
                     focus={true}
                     onCancel={this.onCancel}

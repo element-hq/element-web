@@ -257,21 +257,6 @@ $left-gutter: 64px;
             .mx_EventTile_line {
                 background-color: $event-selected-color;
             }
-
-            &.mx_EventTile_verified .mx_EventTile_line {
-                box-shadow: inset var(--EventTile-box-shadow-offset-x) 0 0 var(--EventTile-box-shadow-spread-radius)
-                    $e2e-verified-color;
-            }
-
-            &.mx_EventTile_unverified .mx_EventTile_line {
-                box-shadow: inset var(--EventTile-box-shadow-offset-x) 0 0 var(--EventTile-box-shadow-spread-radius)
-                    $e2e-unverified-color;
-            }
-
-            &.mx_EventTile_unknown .mx_EventTile_line {
-                box-shadow: inset var(--EventTile-box-shadow-offset-x) 0 0 var(--EventTile-box-shadow-spread-radius)
-                    $e2e-unknown-color;
-            }
         }
     }
 
@@ -594,14 +579,6 @@ $left-gutter: 64px;
             &.mx_EventTile_selected .mx_EventTile_line {
                 /* TODO: check if this would be necessary; */
                 padding-inline-start: calc(var(--EventTile_group_line-spacing-inline-start) + 20px);
-            }
-        }
-
-        &:hover {
-            &.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
-            &.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
-            &.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-                padding-inline-start: calc($left-gutter + 18px + var(--selected-message-border-width));
             }
         }
     }
@@ -1326,14 +1303,6 @@ $left-gutter: 64px;
             .mx_MessageTimestamp {
                 position: absolute; /* for IRC layout */
                 top: 2px; /* Align with mx_EventTile_content */
-            }
-
-            &:hover {
-                &.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
-                &.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
-                &.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-                    padding-inline-start: 0;
-                }
             }
         }
 

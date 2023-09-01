@@ -83,7 +83,6 @@
     "Open this settings tab": "Otvori podešavanja",
     "Start a group chat": "Pokreni grupni razgovor",
     "Stop the camera": "Zaustavi kameru",
-    "Use Ctrl + Enter to send a message": "Koristi Ctrl + Enter za slanje poruke",
     "User is already in the room": "Korisnik je već u sobi",
     "common": {
         "error": "Greška",
@@ -106,5 +105,8 @@
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss preostalo",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss preostalo",
         "seconds_left": "preostalo još %(seconds)ss"
+    },
+    "settings": {
+        "use_control_enter_send_message": "Koristi Ctrl + Enter za slanje poruke"
     }
 }

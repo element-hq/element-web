@@ -37,7 +37,6 @@ export const useAccountData = <T extends {}>(cli: MatrixClient, eventType: strin
     return value || ({} as T);
 };
 
-// Hook to simplify listening to Matrix room account data
 // Currently not used, commenting out otherwise the dead code CI is unhappy.
 // But this code is valid and probably will be needed.
 

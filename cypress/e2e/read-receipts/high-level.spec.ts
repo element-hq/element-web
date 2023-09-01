@@ -378,13 +378,18 @@ describe("Read receipts", () => {
     describe("new messages", () => {
         describe("in the main timeline", () => {
             it("Receiving a message makes a room unread", () => {
+                // Given I am in a different room
                 goTo(room1);
                 assertRead(room2);
 
+                // When I receive some messages
                 receiveMessages(room2, ["Msg1"]);
+
+                // Then the room is marked as unread
                 assertUnread(room2, 1);
             });
             it("Reading latest message makes the room read", () => {
+                // Given I have some unread messages
                 goTo(room1);
                 assertRead(room2);
                 receiveMessages(room2, ["Msg1"]);
@@ -392,85 +397,111 @@ describe("Read receipts", () => {
 
                 // When I read the main timeline
                 goTo(room2);
+
+                // Then the room becomes read
                 assertRead(room2);
             });
             it.skip("Reading an older message leaves the room unread", () => {});
             it("Marking a room as read makes it read", () => {
+                // Given I have some unread messages
                 goTo(room1);
                 assertRead(room2);
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
 
+                // When I mark the room as read
                 markAsRead(room2);
+
+                // Then it is read
                 assertRead(room2);
             });
             it("Receiving a new message after marking as read makes it unread", () => {
+                // Given I have marked my messages as read
                 goTo(room1);
                 assertRead(room2);
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
-
                 markAsRead(room2);
                 assertRead(room2);
 
+                // When I receive a new message
                 receiveMessages(room2, ["Msg2"]);
+
+                // Then the room is unread
                 assertUnread(room2, 1);
             });
             it("A room with a new message is still unread after restart", () => {
+                // Given I have an unread message
                 goTo(room1);
                 assertRead(room2);
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
 
+                // When I restart
                 saveAndReload();
+
+                // Then I still have an unread message
                 assertUnread(room2, 1);
             });
-            it("A room where all messages are read is still read after restart", () => {
+            it.skip("A room where all messages are read is still read after restart", () => {});
+            it("A room that was marked as read is still read after restart", () => {
+                // Given I have marked all messages as read
                 goTo(room1);
                 assertRead(room2);
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
-
                 markAsRead(room2);
                 assertRead(room2);
 
+                // When I restart
                 saveAndReload();
+
+                // Then all messages are still read
                 assertRead(room2);
             });
-            it.skip("Sending a message from a different client marks room as read", () => {
+            // XXX: fails because the room remains unread even though I sent a message
+            it.skip("Me sending a message from a different client marks room as read", () => {
+                // Given I have unread messages
                 goTo(room1);
                 assertRead(room2);
-
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
 
+                // When I send a new message from a different client
                 sendMessages(room2, ["Msg2"]);
+
+                // Then this room is marked as read
                 assertRead(room2);
             });
         });
 
         describe("in threads", () => {
-            it("Sending a message makes a room unread", () => {
-                // Given a thread exists
+            it("Receiving a message makes a room unread", () => {
+                // Given a message arrived and is read
                 goTo(room1);
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
                 goTo(room2);
-
                 assertRead(room2);
                 goTo(room1);
 
+                // When I receive a threaded message
                 receiveMessages(room2, [threadedOff("Msg1", "Resp1")]);
+
+                // Then the room becomes unread
                 assertUnread(room2, 1);
             });
             it("Reading the last threaded message makes the room read", () => {
-                // Given a thread exists
+                // Given a thread exists and is not read
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
                 assertUnread(room2, 2);
                 goTo(room2);
 
+                // When I read it
                 openThread("Msg1");
+
+                // The room becomes read
                 assertRead(room2);
             });
             it("Reading a thread message makes the thread read", () => {
@@ -492,28 +523,33 @@ describe("Read receipts", () => {
             });
             it.skip("Reading an older thread message (via permalink) leaves the thread unread", () => {});
             it("Reading only one thread's message does not make the room read", () => {
+                // Given two threads are unread
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), "Msg2", threadedOff("Msg2", "Resp2")]);
                 assertUnread(room2, 4);
                 goTo(room2);
                 assertUnread(room2, 2);
 
+                // When I only read one of them
                 openThread("Msg1");
+
+                // The room is still unread
                 assertUnread(room2, 1);
             });
             it("Reading only one thread's message makes that thread read but not others", () => {
+                // Given I have unread threads
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", "Msg2", threadedOff("Msg1", "Resp1"), threadedOff("Msg2", "Resp2")]);
                 assertUnread(room2, 4); // (Sanity)
-
-                // When I read the main timeline
                 goTo(room2);
-
                 assertUnread(room2, 2);
                 assertUnreadThread("Msg1");
                 assertUnreadThread("Msg2");
 
+                // When I read one of them
                 openThread("Msg1");
+
+                // Then that one is read, but the other is not
                 assertReadThread("Msg1");
                 assertUnreadThread("Msg2");
             });
@@ -525,18 +561,22 @@ describe("Read receipts", () => {
 
                 // When I read the main timeline
                 goTo(room2);
-
                 assertUnread(room2, 2);
+
                 // Then thread does appear unread
                 assertUnreadThread("Msg1");
             });
             // XXX: fails because the room is still "bold" even though the notification counts all disappear
             it.skip("Marking a room with unread threads as read makes it read", () => {
+                // Given I have an unread thread
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), threadedOff("Msg1", "Resp2")]);
                 assertUnread(room2, 3); // (Sanity)
 
+                // When I mark the room as read
                 markAsRead(room2);
+
+                // Then the room is read
                 assertRead(room2);
             });
             // XXX: fails for the same reason as "Marking a room with unread threads as read makes it read"
@@ -593,22 +633,19 @@ describe("Read receipts", () => {
                 assertRead(room2);
             });
             it("A room where all threaded messages are read is still read after restart", () => {
-                // Given a thread exists
+                // Given I have read all the threads
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), threadedOff("Msg1", "Resp2")]);
                 assertUnread(room2, 3); // (Sanity)
-
-                // When I read the main timeline
                 goTo(room2);
-
-                // Then room does appear unread
                 assertUnread(room2, 2);
-
-                // Until we open the thread
                 openThread("Msg1");
                 assertRead(room2);
 
+                // When I restart
                 saveAndReload();
+
+                // Then the room is still read
                 assertRead(room2);
             });
         });
@@ -650,6 +687,7 @@ describe("Read receipts", () => {
 
     describe("editing messages", () => {
         describe("in the main timeline", () => {
+            // TODO: this passes but we think this should fail, because we think edits should not cause unreads.
             it("Editing a message makes a room unread", () => {
                 // Given I am not looking at the room
                 goTo(room1);
@@ -665,6 +703,7 @@ describe("Read receipts", () => {
                 assertUnread(room2, 1);
             });
             it("Reading an edit makes the room read", () => {
+                // Given an edit is making the room unread
                 goTo(room1);
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
@@ -685,6 +724,7 @@ describe("Read receipts", () => {
                 assertRead(room2);
             });
             it("Marking a room as read after an edit makes it read", () => {
+                // Given an edit is makng a room unread
                 goTo(room1);
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
@@ -699,20 +739,20 @@ describe("Read receipts", () => {
                 assertRead(room2);
             });
             it("Editing a message after marking as read makes the room unread", () => {
+                // Given the room is marked as read
                 goTo(room1);
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
-
-                // When I mark it as read
                 markAsRead(room2);
 
+                // When a message is edited
                 receiveMessages(room2, [editOf("Msg1", "Msg1 Edit1")]);
 
                 // Then the room becomes unread
                 assertUnread(room2, 1);
             });
             it("Editing a reply after reading it makes the room unread", () => {
-                // Given I am not looking at the room
+                // Given the room is all read
                 goTo(room1);
 
                 receiveMessages(room2, ["Msg1", replyTo("Msg1", "Reply1")]);
@@ -722,30 +762,28 @@ describe("Read receipts", () => {
                 assertRead(room2);
                 goTo(room1);
 
-                // When an edit appears in the room
+                // When a message is edited
                 receiveMessages(room2, [editOf("Reply1", "Reply1 Edit1")]);
 
                 // Then it becomes unread
                 assertUnread(room2, 1);
             });
             it("Editing a reply after marking as read makes the room unread", () => {
-                // Given I am not looking at the room
+                // Given a reply is marked as read
                 goTo(room1);
-
                 receiveMessages(room2, ["Msg1", replyTo("Msg1", "Reply1")]);
                 assertUnread(room2, 2);
                 markAsRead(room2);
 
-                // When an edit appears in the room
+                // When the reply is edited
                 receiveMessages(room2, [editOf("Reply1", "Reply1 Edit1")]);
 
-                // Then it becomes unread
+                // Then the room becomes unread
                 assertUnread(room2, 1);
             });
             it("A room with an edit is still unread after restart", () => {
-                // Given I am not looking at the room
+                // Given a message is marked as read
                 goTo(room1);
-
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
                 markAsRead(room2);
@@ -761,6 +799,7 @@ describe("Read receipts", () => {
                 assertUnread(room2, 1);
             });
             it("A room where all edits are read is still read after restart", () => {
+                // Given an edit made the room unread
                 goTo(room1);
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
@@ -816,18 +855,24 @@ describe("Read receipts", () => {
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), editOf("Resp1", "Edit1")]);
                 assertUnread(room2, 3); // TODO: the edit counts as a message!
 
+                // When I mark the room as read
                 markAsRead(room2);
+
+                // Then it is read
                 assertRead(room2);
             });
             it.skip("Editing a thread message after marking as read makes the room unread", () => {
+                // Given a room is marked as read
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
                 assertUnread(room2, 2);
-
                 markAsRead(room2);
                 assertRead(room2);
 
+                // When a message is edited
                 receiveMessages(room2, [editOf("Resp1", "Edit1")]);
+
+                // Then the room becomes unread
                 assertUnread(room2, 1); // TODO: should this edit make us unread?
             });
             it("A room with an edited threaded message is still unread after restart", () => {

@@ -160,7 +160,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                         )}
                     </SettingsSubsectionText>
                     <AccessibleButton kind="primary" onClick={this.onManage}>
-                        {_t("Manage")}
+                        {_t("action|manage")}
                     </AccessibleButton>
                 </>
             );

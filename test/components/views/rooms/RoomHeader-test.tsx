@@ -17,8 +17,8 @@ limitations under the License.
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { EventType, MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
-import { getAllByTitle, getByLabelText, getByText, getByTitle, render, screen } from "@testing-library/react";
+import { EventType, JoinRule, MatrixClient, MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { getAllByTitle, getByLabelText, getByText, getByTitle, render, screen, waitFor } from "@testing-library/react";
 
 import { mkEvent, stubClient, withClientContextRenderOptions } from "../../../test-utils";
 import RoomHeader from "../../../../src/components/views/rooms/RoomHeader";
@@ -32,6 +32,9 @@ import SdkConfig from "../../../../src/SdkConfig";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
 import { CallStore } from "../../../../src/stores/CallStore";
 import { Call, ElementCall } from "../../../../src/models/Call";
+import * as ShieldUtils from "../../../../src/utils/ShieldUtils";
+
+jest.mock("../../../../src/utils/ShieldUtils");
 
 describe("RoomHeader", () => {
     let room: Room;
@@ -416,6 +419,64 @@ describe("RoomHeader", () => {
             const dispatcherSpy = jest.spyOn(dispatcher, "dispatch");
             await userEvent.click(videoButton);
             expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true }));
+        });
+    });
+
+    describe("public room", () => {
+        it("shows a globe", () => {
+            const joinRuleEvent = new MatrixEvent({
+                type: EventType.RoomJoinRules,
+                content: { join_rule: JoinRule.Public },
+                sender: MatrixClientPeg.get()!.getSafeUserId(),
+                state_key: "",
+                room_id: room.roomId,
+            });
+            room.addLiveEvents([joinRuleEvent]);
+
+            const { container } = render(
+                <RoomHeader room={room} />,
+                withClientContextRenderOptions(MatrixClientPeg.get()!),
+            );
+
+            expect(getByLabelText(container, "Public room")).toBeInTheDocument();
+        });
+    });
+
+    describe("dm", () => {
+        let client: MatrixClient;
+        beforeEach(() => {
+            client = MatrixClientPeg.get()!;
+
+            // Make the mocked room a DM
+            jest.spyOn(client, "getAccountData").mockImplementation((eventType: string): MatrixEvent | undefined => {
+                if (eventType === EventType.Direct) {
+                    return mkEvent({
+                        event: true,
+                        content: {
+                            [client.getUserId()!]: [room.roomId],
+                        },
+                        type: EventType.Direct,
+                        user: client.getSafeUserId(),
+                    });
+                }
+
+                return undefined;
+            });
+            jest.spyOn(client, "isCryptoEnabled").mockReturnValue(true);
+        });
+
+        it.each([
+            [ShieldUtils.E2EStatus.Verified, "Verified"],
+            [ShieldUtils.E2EStatus.Warning, "Untrusted"],
+        ])("shows the %s icon", async (value: ShieldUtils.E2EStatus, expectedLabel: string) => {
+            jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(value);
+
+            const { container } = render(
+                <RoomHeader room={room} />,
+                withClientContextRenderOptions(MatrixClientPeg.get()!),
+            );
+
+            await waitFor(() => expect(getByLabelText(container, expectedLabel)).toBeInTheDocument());
         });
     });
 });

@@ -25,7 +25,7 @@ exports[`HTMLExport should export 1`] = `
                         <div class="mx_LegacyRoomHeader_wrapper" aria-owns="mx_RightPanel">
                             <div class="mx_LegacyRoomHeader_avatar">
                             <div class="mx_DecoratedRoomAvatar">
-                               <span role="presentation" title="!myroom:example.org" data-testid="avatar-img" data-type="round" data-color="1" class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56" style="--cpd-avatar-size:32px">!</span>
+                               <span role="presentation" title="" data-testid="avatar-img" data-type="round" data-color="1" class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56" style="--cpd-avatar-size:32px">!</span>
                             </div>
                             </div>
                             <div class="mx_LegacyRoomHeader_name">
@@ -60,7 +60,7 @@ exports[`HTMLExport should export 1`] = `
                                     role="list"
                                 >
                                 <div class="mx_NewRoomIntro">
-                                        <span role="presentation" title="!myroom:example.org" data-testid="avatar-img" data-type="round" data-color="1" class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56" style="--cpd-avatar-size:32px">!</span>
+                                        <span role="presentation" title="" data-testid="avatar-img" data-type="round" data-color="1" class="_avatar_2lhia_17 mx_BaseAvatar _avatar-imageless_2lhia_56" style="--cpd-avatar-size:32px">!</span>
                                         <h2> !myroom:example.org </h2>
                                         <p>  created this room. <br/><br/> <p><span>This is the start of export of <b>!myroom:example.org</b>. Exported by <a href="https://matrix.to/#/%40userId%3Amatrix.org" target="_blank" rel="noopener noreferrer"><b>@userId:matrix.org</b></a> at 11/17/2022.</span></p> </p>
                                         <br/>

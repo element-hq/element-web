@@ -33,27 +33,29 @@ function UserReadUpTo({ target }: { target: ReadReceipt<any, any> }): JSX.Elemen
     return (
         <>
             <li>
-                {_t("User read up to: ")}
-                <strong>{target.getReadReceiptForUserId(userId)?.eventId ?? _t("No receipt found")}</strong>
+                {_t("devtools|user_read_up_to")}
+                <strong>{target.getReadReceiptForUserId(userId)?.eventId ?? _t("devtools|no_receipt_found")}</strong>
             </li>
             <li>
-                {_t("User read up to (ignoreSynthetic): ")}
-                <strong>{target.getReadReceiptForUserId(userId, true)?.eventId ?? _t("No receipt found")}</strong>
+                {_t("devtools|user_read_up_to_ignore_synthetic")}
+                <strong>
+                    {target.getReadReceiptForUserId(userId, true)?.eventId ?? _t("devtools|no_receipt_found")}
+                </strong>
             </li>
             {hasPrivate && (
                 <>
                     <li>
-                        {_t("User read up to (m.read.private): ")}
+                        {_t("devtools|user_read_up_to_private")}
                         <strong>
                             {target.getReadReceiptForUserId(userId, false, ReceiptType.ReadPrivate)?.eventId ??
-                                _t("No receipt found")}
+                                _t("devtools|no_receipt_found")}
                         </strong>
                     </li>
                     <li>
-                        {_t("User read up to (m.read.private;ignoreSynthetic): ")}
+                        {_t("devtools|user_read_up_to_private_ignore_synthetic")}
                         <strong>
                             {target.getReadReceiptForUserId(userId, true, ReceiptType.ReadPrivate)?.eventId ??
-                                _t("No receipt found")}
+                                _t("devtools|no_receipt_found")}
                         </strong>
                     </li>
                 </>
@@ -72,12 +74,12 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
     return (
         <BaseTool onBack={onBack}>
             <section>
-                <h2>{_t("Room status")}</h2>
+                <h2>{_t("devtools|room_status")}</h2>
                 <ul>
                     <li>
                         {count > 0
                             ? _t(
-                                  "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>",
+                                  "devtools|room_unread_status_count",
                                   {
                                       status: humanReadableNotificationColor(color),
                                       count,
@@ -87,7 +89,7 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                                   },
                               )
                             : _t(
-                                  "Room unread status: <strong>%(status)s</strong>",
+                                  "devtools|room_unread_status",
                                   {
                                       status: humanReadableNotificationColor(color),
                                   },
@@ -98,7 +100,7 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                     </li>
                     <li>
                         {_t(
-                            "Notification state is <strong>%(notificationState)s</strong>",
+                            "devtools|notification_state",
                             {
                                 notificationState,
                             },
@@ -110,8 +112,8 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                     <li>
                         {_t(
                             cli.isRoomEncrypted(room.roomId!)
-                                ? _td("Room is <strong>encrypted ✅</strong>")
-                                : _td("Room is <strong>not encrypted 🚨</strong>"),
+                                ? _td("devtools|room_encrypted")
+                                : _td("devtools|room_not_encrypted"),
                             {},
                             {
                                 strong: (sub) => <strong>{sub}</strong>,
@@ -122,33 +124,36 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
             </section>
 
             <section>
-                <h2>{_t("Main timeline")}</h2>
+                <h2>{_t("devtools|main_timeline")}</h2>
 
                 <ul>
                     <li>
-                        {_t("Total: ")} {room.getRoomUnreadNotificationCount(NotificationCountType.Total)}
+                        {_t("devtools|room_notifications_total")}{" "}
+                        {room.getRoomUnreadNotificationCount(NotificationCountType.Total)}
                     </li>
                     <li>
-                        {_t("Highlight: ")} {room.getRoomUnreadNotificationCount(NotificationCountType.Highlight)}
+                        {_t("devtools|room_notifications_highlight")}{" "}
+                        {room.getRoomUnreadNotificationCount(NotificationCountType.Highlight)}
                     </li>
                     <li>
-                        {_t("Dot: ")} {doesRoomOrThreadHaveUnreadMessages(room) + ""}
+                        {_t("devtools|room_notifications_dot")} {doesRoomOrThreadHaveUnreadMessages(room) + ""}
                     </li>
                     {roomHasUnread(room) && (
                         <>
                             <UserReadUpTo target={room} />
                             <li>
-                                {_t("Last event:")}
+                                {_t("devtools|room_notifications_last_event")}
                                 <ul>
                                     <li>
-                                        {_t("ID: ")} <strong>{room.timeline[room.timeline.length - 1].getId()}</strong>
+                                        {_t("devtools|id")}{" "}
+                                        <strong>{room.timeline[room.timeline.length - 1].getId()}</strong>
                                     </li>
                                     <li>
-                                        {_t("Type: ")}{" "}
+                                        {_t("devtools|room_notifications_type")}{" "}
                                         <strong>{room.timeline[room.timeline.length - 1].getType()}</strong>
                                     </li>
                                     <li>
-                                        {_t("Sender: ")}{" "}
+                                        {_t("devtools|room_notifications_sender")}{" "}
                                         <strong>{room.timeline[room.timeline.length - 1].getSender()}</strong>
                                     </li>
                                 </ul>
@@ -159,17 +164,17 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
             </section>
 
             <section>
-                <h2>{_t("Threads timeline")}</h2>
+                <h2>{_t("devtools|threads_timeline")}</h2>
                 <ul>
                     {room
                         .getThreads()
                         .filter((thread) => threadHasUnread(thread))
                         .map((thread) => (
                             <li key={thread.id}>
-                                {_t("Thread Id: ")} {thread.id}
+                                {_t("devtools|room_notifications_thread_id")} {thread.id}
                                 <ul>
                                     <li>
-                                        {_t("Total: ")}
+                                        {_t("devtools|room_notifications_total")}
                                         <strong>
                                             {room.getThreadUnreadNotificationCount(
                                                 thread.id,
@@ -178,7 +183,7 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                                         </strong>
                                     </li>
                                     <li>
-                                        {_t("Highlight: ")}
+                                        {_t("devtools|room_notifications_highlight")}
                                         <strong>
                                             {room.getThreadUnreadNotificationCount(
                                                 thread.id,
@@ -187,20 +192,23 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                                         </strong>
                                     </li>
                                     <li>
-                                        {_t("Dot: ")} <strong>{doesRoomOrThreadHaveUnreadMessages(thread) + ""}</strong>
+                                        {_t("devtools|room_notifications_dot")}{" "}
+                                        <strong>{doesRoomOrThreadHaveUnreadMessages(thread) + ""}</strong>
                                     </li>
                                     <UserReadUpTo target={thread} />
                                     <li>
-                                        {_t("Last event:")}
+                                        {_t("devtools|room_notifications_last_event")}
                                         <ul>
                                             <li>
-                                                {_t("ID: ")} <strong>{thread.lastReply()?.getId()}</strong>
+                                                {_t("devtools|id")} <strong>{thread.lastReply()?.getId()}</strong>
                                             </li>
                                             <li>
-                                                {_t("Type: ")} <strong>{thread.lastReply()?.getType()}</strong>
+                                                {_t("devtools|room_notifications_type")}{" "}
+                                                <strong>{thread.lastReply()?.getType()}</strong>
                                             </li>
                                             <li>
-                                                {_t("Sender: ")} <strong>{thread.lastReply()?.getSender()}</strong>
+                                                {_t("devtools|room_notifications_sender")}{" "}
+                                                <strong>{thread.lastReply()?.getSender()}</strong>
                                             </li>
                                         </ul>
                                     </li>

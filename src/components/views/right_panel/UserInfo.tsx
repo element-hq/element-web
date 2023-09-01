@@ -206,7 +206,7 @@ export function DeviceItem({ userId, device }: { userId: string; device: IDevice
     }
 
     let trustedLabel: string | undefined;
-    if (userTrust.isVerified()) trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
+    if (userTrust.isVerified()) trustedLabel = isVerified ? _t("common|trusted") : _t("common|not_trusted");
 
     if (isVerified === undefined) {
         // we're still deciding if the device is verified
@@ -443,7 +443,7 @@ export const UserOptionsSection: React.FC<{
 
             insertPillButton = (
                 <AccessibleButton kind="link" onClick={onInsertPillButton} className="mx_UserInfo_field">
-                    {_t("Mention")}
+                    {_t("action|mention")}
                 </AccessibleButton>
             );
         }

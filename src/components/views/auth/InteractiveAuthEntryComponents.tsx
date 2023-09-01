@@ -684,7 +684,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
                             <br />
                             <input
                                 type="submit"
-                                value={_t("Submit")}
+                                value={_t("action|submit")}
                                 className={submitClasses}
                                 disabled={!enableSubmit}
                             />
