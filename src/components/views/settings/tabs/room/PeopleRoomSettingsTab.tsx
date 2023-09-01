@@ -82,7 +82,7 @@ const Knock: VFC<{
 
     return (
         <div className="mx_PeopleRoomSettingsTab_knock">
-            <MemberAvatar member={roomMember} size="42px" />
+            <MemberAvatar className="mx_PeopleRoomSettingsTab_avatar" member={roomMember} size="42px" />
             <div className="mx_PeopleRoomSettingsTab_content">
                 <span className="mx_PeopleRoomSettingsTab_name">{roomMember.name}</span>
                 <Timestamp roomMember={roomMember} />
