@@ -35,53 +35,38 @@ interface Props {
 
 export function UserOnboardingHeader({ useCase }: Props): JSX.Element {
     let title: string;
-    let description: string;
-    let image;
+    let description = _t("onboarding|free_e2ee_messaging_unlimited_voip", {
+        brand: SdkConfig.get("brand"),
+    });
+    let image: string;
     let actionLabel: string;
 
     switch (useCase) {
         case UseCase.PersonalMessaging:
-            title = _t("Secure messaging for friends and family");
-            description = _t(
-                "With free end-to-end encrypted messaging, and unlimited voice and video calls, %(brand)s is a great way to stay in touch.",
-                {
-                    brand: SdkConfig.get("brand"),
-                },
-            );
+            title = _t("onboarding|personal_messaging_title");
             image = require("../../../../res/img/user-onboarding/PersonalMessaging.png");
-            actionLabel = _t("Start your first chat");
+            actionLabel = _t("onboarding|personal_messaging_action");
             break;
         case UseCase.WorkMessaging:
-            title = _t("Secure messaging for work");
-            description = _t(
-                "With free end-to-end encrypted messaging, and unlimited voice and video calls, %(brand)s is a great way to stay in touch.",
-                {
-                    brand: SdkConfig.get("brand"),
-                },
-            );
-            image = require("../../../../res/img/user-onboarding/WorkMessaging.png");
-            actionLabel = _t("Find your co-workers");
-            break;
-        case UseCase.CommunityMessaging:
-            title = _t("Community ownership");
-            description = _t(
-                "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.",
-            );
-            image = require("../../../../res/img/user-onboarding/CommunityMessaging.png");
-            actionLabel = _t("Find your people");
-            break;
-        default:
-            title = _t("Welcome to %(brand)s", {
+            title = _t("onboarding|work_messaging_title");
+            description = _t("onboarding|free_e2ee_messaging_unlimited_voip", {
                 brand: SdkConfig.get("brand"),
             });
-            description = _t(
-                "With free end-to-end encrypted messaging, and unlimited voice and video calls, %(brand)s is a great way to stay in touch.",
-                {
-                    brand: SdkConfig.get("brand"),
-                },
-            );
+            image = require("../../../../res/img/user-onboarding/WorkMessaging.png");
+            actionLabel = _t("onboarding|work_messaging_action");
+            break;
+        case UseCase.CommunityMessaging:
+            title = _t("onboarding|community_messaging_title");
+            description = _t("onboarding|community_messaging_description");
+            image = require("../../../../res/img/user-onboarding/CommunityMessaging.png");
+            actionLabel = _t("onboarding|community_messaging_action");
+            break;
+        default:
+            title = _t("onboarding|welcome_to_brand", {
+                brand: SdkConfig.get("brand"),
+            });
             image = require("../../../../res/img/user-onboarding/PersonalMessaging.png");
-            actionLabel = _t("Start your first chat");
+            actionLabel = _t("onboarding|personal_messaging_action");
             break;
     }
 

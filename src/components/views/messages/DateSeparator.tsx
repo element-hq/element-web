@@ -270,12 +270,12 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 >
                     <IconizedContextMenuOptionList first>
                         <IconizedContextMenuOption
-                            label={_t("Last week")}
+                            label={_t("time|last_week")}
                             onClick={this.onLastWeekClicked}
                             data-testid="jump-to-date-last-week"
                         />
                         <IconizedContextMenuOption
-                            label={_t("Last month")}
+                            label={_t("time|last_month")}
                             onClick={this.onLastMonthClicked}
                             data-testid="jump-to-date-last-month"
                         />

@@ -49,7 +49,6 @@
     "Server may be unavailable, overloaded, or you hit a bug.": "O servidor pode estar indisponível ou sobrecarregado, ou então você encontrou uma falha no sistema.",
     "Session ID": "Identificador de sessão",
     "Signed Out": "Deslogar",
-    "Someone": "Alguém",
     "The email address linked to your account must be entered.": "O endereço de email relacionado a sua conta precisa ser informado.",
     "This doesn't appear to be a valid email address": "Este não aparenta ser um endereço de email válido",
     "This room is not accessible by remote Matrix servers": "Esta sala não é acessível para servidores Matrix remotos",
@@ -147,7 +146,6 @@
     "Server error": "Erro no servidor",
     "Server may be unavailable, overloaded, or search timed out :(": "O servidor pode estar indisponível, sobrecarregado, ou a busca ultrapassou o tempo limite :(",
     "Server unavailable, overloaded, or something else went wrong.": "O servidor pode estar indisponível, sobrecarregado, ou alguma outra coisa não funcionou.",
-    "Submit": "Enviar",
     "This room has no local addresses": "Esta sala não tem endereços locais",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tentei carregar um ponto específico na linha do tempo desta sala, mas parece que você não tem permissões para ver a mensagem em questão.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tentei carregar um ponto específico na linha do tempo desta sala, mas não o encontrei.",
@@ -196,8 +194,6 @@
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
     "Start automatically after system login": "Iniciar automaticamente ao iniciar o sistema",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
-    "Export": "Exportar",
-    "Import": "Importar",
     "Incorrect username and/or password.": "Nome de utilizador e/ou palavra-passe incorreta.",
     "Invited": "Convidada(o)",
     "Verified key": "Chave verificada",
@@ -717,7 +713,8 @@
         "attachment": "Anexo",
         "camera": "Câmera de vídeo",
         "microphone": "Microfone",
-        "emoji": "Emoji"
+        "emoji": "Emoji",
+        "someone": "Alguém"
     },
     "action": {
         "continue": "Continuar",
@@ -753,7 +750,10 @@
         "back": "Voltar",
         "add": "Adicionar",
         "accept": "Aceitar",
-        "register": "Registar"
+        "register": "Registar",
+        "import": "Importar",
+        "export": "Exportar",
+        "submit": "Enviar"
     },
     "keyboard": {
         "home": "Início"

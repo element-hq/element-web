@@ -47,7 +47,6 @@
     "Email": "อีเมล",
     "Email address": "ที่อยู่อีเมล",
     "Error decrypting attachment": "การถอดรหัสไฟล์แนบผิดพลาด",
-    "Export": "ส่งออก",
     "Failed to ban user": "การแบนผู้ใช้ล้มเหลว",
     "Failed to change password. Is your password correct?": "การเปลี่ยนรหัสผ่านล้มเหลว รหัสผ่านของคุณถูกต้องหรือไม่?",
     "Failed to reject invite": "การปฏิเสธคำเชิญล้มเหลว",
@@ -62,7 +61,6 @@
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s จาก %(fromPowerLevel)s ไปเป็น %(toPowerLevel)s",
     "Hangup": "วางสาย",
     "Historical": "ประวัติแชทเก่า",
-    "Import": "นำเข้า",
     "Incorrect username and/or password.": "ชื่อผู้ใช้และ/หรือรหัสผ่านไม่ถูกต้อง",
     "Incorrect verification code": "รหัสยืนยันไม่ถูกต้อง",
     "Invalid Email Address": "ที่อยู่อีเมลไม่ถูกต้อง",
@@ -97,10 +95,8 @@
     "Server may be unavailable, overloaded, or you hit a bug.": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือเจอจุดบกพร่อง",
     "Server unavailable, overloaded, or something else went wrong.": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือบางอย่างผิดปกติ",
     "Signed Out": "ออกจากระบบแล้ว",
-    "Someone": "ใครบางคน",
     "Always show message timestamps": "แสดงเวลาในแชทเสมอ",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "แสดงเวลาในแชทในรูปแบบ 12 ชั่วโมง (เช่น 2:30pm)",
-    "Submit": "ส่ง",
     "This email address is already in use": "ที่อยู่อีเมลถูกใช้แล้ว",
     "This email address was not found": "ไม่พบที่อยู่อีเมล",
     "This phone number is already in use": "หมายเลขโทรศัพท์นี้ถูกใช้งานแล้ว",
@@ -291,9 +287,6 @@
     "IP address": "ที่อยู่ IP",
     "Browser": "เบราว์เซอร์",
     "Operating system": "ระบบปฏิบัติการ",
-    "Device": "อุปกรณ์",
-    "Version": "รุ่น",
-    "Application": "แอปพลิเคชัน",
     "Last activity": "กิจกรรมสุดท้าย",
     "Session ID": "รหัสเซสชัน",
     "This provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.": "สิ่งนี้ทำให้พวกเขามั่นใจว่าพวกเขากำลังพูดกับคุณจริงๆ แต่ก็หมายความว่าพวกเขาสามารถเห็นชื่อเซสชันที่คุณป้อนที่นี่.",
@@ -432,7 +425,11 @@
         "timeline": "เส้นเวลา",
         "camera": "กล้อง",
         "microphone": "ไมโครโฟน",
-        "emoji": "อีโมจิ"
+        "emoji": "อีโมจิ",
+        "someone": "ใครบางคน",
+        "application": "แอปพลิเคชัน",
+        "version": "รุ่น",
+        "device": "อุปกรณ์"
     },
     "action": {
         "continue": "ดำเนินการต่อ",
@@ -471,7 +468,10 @@
         "cancel": "ยกเลิก",
         "add": "เพิ่ม",
         "accept": "ยอมรับ",
-        "register": "ลงทะเบียน"
+        "register": "ลงทะเบียน",
+        "import": "นำเข้า",
+        "export": "ส่งออก",
+        "submit": "ส่ง"
     },
     "keyboard": {
         "home": "เมนูหลัก"

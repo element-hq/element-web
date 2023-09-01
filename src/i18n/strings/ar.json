@@ -183,7 +183,6 @@
     "%(senderName)s changed the alternative addresses for this room.": "قام %(senderName)s بتعديل العناوين البديلة لهذه الغرفة.",
     "%(senderName)s changed the main and alternative addresses for this room.": "قام %(senderName)s بتعديل العناوين الرئيسية و البديلة لهذه الغرفة.",
     "%(senderName)s changed the addresses for this room.": "قام %(senderName)s بتعديل عناوين هذه الغرفة.",
-    "Someone": "شخص ما",
     "%(senderName)s placed a voice call.": "أجرى ⁨%(senderName)s⁩ مكالمة صوتية.",
     "%(senderName)s placed a voice call. (not supported by this browser)": "أجرى %(senderName)s مكالمة صوتية. (غير متوافقة مع هذا المتصفح)",
     "%(senderName)s placed a video call.": "أجرى %(senderName)s مكالمة فيديو.",
@@ -633,7 +632,6 @@
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "لن تتمكن من التراجع عن هذا التغيير لأنك تقوم بتخفيض رتبتك ، إذا كنت آخر مستخدم ذي امتياز في الغرفة ، فسيكون من المستحيل استعادة الامتيازات.",
     "Demote yourself?": "خفض مرتبة نفسك؟",
     "Share Link to User": "مشاركة رابط للمستخدم",
-    "Mention": "إشارة",
     "Jump to read receipt": "انتقل لإيصال قراءة",
     "Hide sessions": "اخف الاتصالات",
     "%(count)s sessions": {
@@ -645,8 +643,6 @@
         "one": "اتصال واحد محقق",
         "other": "%(count)s اتصالات محققة"
     },
-    "Not trusted": "غير موثوق",
-    "Trusted": "موثوق",
     "Room settings": "إعدادات الغرفة",
     "Share room": "شارك الغرفة",
     "Not encrypted": "غير مشفر",
@@ -683,7 +679,6 @@
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s لا يستطيع تخزين الرسائل المشفرة محليًّا (في cache) بشكل آمن طالما أنه يعمل على متصفح ويب. استخدم <desktopLink>%(brand)s على سطح المكتب</desktopLink> لتظهر لك الرسائل المشفرة في نتائج البحث.",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s يفقد بعض المكونات المطلوبة لحفظ آمن محليًّا للرسائل المشفرة. إذا أدرت تجربة هذه الخاصية، فأنشئ %(brand)s على سطح المكتب مع <nativeLink>إضافة مكونات البحث</nativeLink>.",
     "Securely cache encrypted messages locally for them to appear in search results.": "تخزين الرسائل المشفرة بشكل آمن (في cache) محليًا حتى تظهر في نتائج البحث.",
-    "Manage": "إدارة",
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "تحقق بشكل فردي من كل اتصال يستخدمه المستخدم لتمييزه أنه موثوق ، دون الوثوق بالأجهزة الموقعة بالتبادل.",
     "Encryption": "تشفير",
     "Failed to set display name": "تعذر تعيين الاسم الظاهر",
@@ -832,7 +827,6 @@
     "Your email address hasn't been verified yet": "لم يتم التحقق من عنوان بريدك الإلكتروني حتى الآن",
     "Unable to share email address": "تعذرت مشاركة البريد الإلتكروني",
     "Unable to revoke sharing for email address": "تعذر إبطال مشاركة عنوان البريد الإلكتروني",
-    "Encrypted": "التشفير",
     "Once enabled, encryption cannot be disabled.": "لا يمكن تعطيل التشفير بعد تمكينه.",
     "Security & Privacy": "الأمان والخصوصية",
     "Who can read history?": "من يستطيع قراءة التاريخ؟",
@@ -1271,7 +1265,11 @@
         "timeline": "الجدول الزمني",
         "privacy": "الخصوصية",
         "camera": "كاميرا",
-        "microphone": "ميكروفون"
+        "microphone": "ميكروفون",
+        "someone": "شخص ما",
+        "encrypted": "التشفير",
+        "trusted": "موثوق",
+        "not_trusted": "غير موثوق"
     },
     "action": {
         "continue": "واصِل",
@@ -1323,7 +1321,9 @@
         "complete": "تام",
         "revoke": "إبطال",
         "show_all": "أظهر الكل",
-        "review": "مراجعة"
+        "review": "مراجعة",
+        "manage": "إدارة",
+        "mention": "إشارة"
     },
     "labs": {
         "pinning": "تثبيت الرسالة",

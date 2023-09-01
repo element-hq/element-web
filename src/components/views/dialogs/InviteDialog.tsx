@@ -1313,7 +1313,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 );
             }
 
-            buttonText = _t("Go");
+            buttonText = _t("action|go");
             goButtonFn = this.checkProfileAndStartDm;
             extraSection = (
                 <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">

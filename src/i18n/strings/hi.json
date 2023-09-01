@@ -79,7 +79,6 @@
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s ने एक छवि भेजी।",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s ने इस कमरे के लिए मुख्य पता %(address)s पर सेट किया।",
     "%(senderName)s removed the main address for this room.": "%(senderName)s ने इस कमरे के लिए मुख्य पता हटा दिया।",
-    "Someone": "कोई",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s रूम में शामिल होने के लिए %(targetDisplayName)s को निमंत्रण भेजा।",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए प्रकाशित कर दिया जिस बिंदु से उन्हें आमंत्रित किया गया था।",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए दृश्यमान किया, जिस बिंदु में वे शामिल हुए थे।",
@@ -121,7 +120,6 @@
     "Call invitation": "कॉल आमंत्रण",
     "Messages sent by bot": "रोबॉट द्वारा भेजे गए संदेश",
     "Incorrect verification code": "गलत सत्यापन कोड",
-    "Submit": "जमा करें",
     "Phone": "फ़ोन",
     "No display name": "कोई प्रदर्शन नाम नहीं",
     "New passwords don't match": "नए पासवर्ड मेल नहीं खाते हैं",
@@ -185,7 +183,6 @@
     "Are you sure?": "क्या आपको यकीन है?",
     "Unignore": "अनदेखा न करें",
     "Jump to read receipt": "पढ़ी हुई रसीद में कूदें",
-    "Mention": "उल्लेख",
     "Share Link to User": "उपयोगकर्ता को लिंक साझा करें",
     "Admin Tools": "व्यवस्थापक उपकरण",
     "and %(count)s others...": {
@@ -600,7 +597,8 @@
         "preferences": "अधिमान",
         "timeline": "समयसीमा",
         "camera": "कैमरा",
-        "microphone": "माइक्रोफ़ोन"
+        "microphone": "माइक्रोफ़ोन",
+        "someone": "कोई"
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -623,7 +621,9 @@
         "cancel": "रद्द",
         "add": "जोड़े",
         "accept": "स्वीकार",
-        "register": "पंजीकरण करें"
+        "register": "पंजीकरण करें",
+        "mention": "उल्लेख",
+        "submit": "जमा करें"
     },
     "labs": {
         "pinning": "संदेश पिनिंग",

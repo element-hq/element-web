@@ -399,7 +399,6 @@
     "Your email address hasn't been verified yet": "ທີ່ຢູ່ອີເມວຂອງທ່ານຍັງບໍ່ໄດ້ຖືກຢືນຢັນເທື່ອ",
     "Unable to share email address": "ບໍ່ສາມາດແບ່ງປັນທີ່ຢູ່ອີເມວໄດ້",
     "Unable to revoke sharing for email address": "ບໍ່ສາມາດຖອນການແບ່ງປັນສໍາລັບທີ່ຢູ່ອີເມວໄດ້",
-    "Encrypted": "ເຂົ້າລະຫັດແລ້ວ",
     "Once enabled, encryption cannot be disabled.": "ເມື່ອເປີດໃຊ້ແລ້ວ, ການເຂົ້າລະຫັດບໍ່ສາມາດຖືກປິດໃຊ້ງານໄດ້.",
     "Security & Privacy": "ຄວາມປອດໄພ & ຄວາມເປັນສ່ວນຕົວ",
     "People with supported clients will be able to join the room without having a registered account.": "ຄົນທີ່ມີລູກຄ້າສະຫນັບສະຫນູນຈະສາມາດເຂົ້າຮ່ວມຫ້ອງໄດ້ໂດຍບໍ່ຕ້ອງມີບັນຊີລົງທະບຽນ.",
@@ -802,8 +801,6 @@
     "Remove recent messages": "ລຶບຂໍ້ຄວາມຫຼ້າສຸດອອກ",
     "Failed to remove user": "ລຶບຜູ້ໃຊ້ອອກບໍ່ສຳເລັດ",
     "They'll still be able to access whatever you're not an admin of.": "ພວກເຂົາສາມາດເຂົ້າເຖິງອັນໃດກໍໄດ້ທີ່ທ່ານບໍ່ແມ່ນຜູ້ຄຸມລະບົບ.",
-    "Not trusted": "ເຊື່ອຖືບໍ່ໄດ້",
-    "Trusted": "ເຊື່ອຖືໄດ້",
     "Room settings": "ການຕັ້ງຄ່າຫ້ອງ",
     "Share room": "ແບ່ງປັນຫ້ອງ",
     "Export chat": "ສົ່ງການສົນທະນາອອກ",
@@ -815,7 +812,6 @@
     "Set my room layout for everyone": "ກໍານົດຮູບແບບຫ້ອງຂອງຂ້ອຍສໍາລັບທຸກຄົນ",
     "Close this widget to view it in this panel": "ປິດວິດເຈັດນີ້ເພື່ອເບິ່ງມັນຢູ່ໃນແຜງນີ້",
     "Unpin this widget to view it in this panel": "ຖອນປັກໝຸດວິດເຈັດນີ້ເພື່ອເບິ່ງມັນຢູ່ໃນແຜງນີ້",
-    "Maximise": "ສູງສຸດ",
     "You can only pin up to %(count)s widgets": {
         "other": "ທ່ານສາມາດປັກໝຸດໄດ້ເຖິງ %(count)s widget ເທົ່ານັ້ນ"
     },
@@ -1012,7 +1008,6 @@
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "ທ່ານຈະບໍ່ສາມາດຍົກເລີກການປ່ຽນແປງນີ້ໄດ້ໃນຂະນະທີ່ທ່ານກໍາລັງ demoting ຕົວທ່ານເອງ, ຖ້າທ່ານເປັນຜູ້ໃຊ້ສິດທິພິເສດສຸດທ້າຍໃນຊ່ອງ, ມັນຈະເປັນໄປບໍ່ໄດ້ທີ່ຈະຄືນສິດທິພິເສດ.",
     "Demote yourself?": "ຫຼຸດລະດັບຕົວເອງບໍ?",
     "Share Link to User": "ແບ່ງປັນລິ້ງໄປຫາຜູ້ໃຊ້",
-    "Mention": "ກ່າວເຖິງ",
     "Jump to read receipt": "ຂ້າມເພື່ອອ່ານໃບຮັບເງິນ",
     "Hide sessions": "ເຊື່ອງsessions",
     "%(count)s sessions": {
@@ -1190,7 +1185,6 @@
     "Toggle Bold": "ສະຫຼັບຕົວໜາ",
     "Autocomplete": "ຕື່ມຂໍ້ມູນອັດຕະໂນມັດ",
     "Navigation": "ການນໍາທາງ",
-    "Accessibility": "ການເຂົ້າເຖິງ",
     "Room List": "ລາຍການຫ້ອງ",
     "Calls": "ໂທ",
     "Failed to add tag %(tagName)s to room": "ເພີ່ມແທັກ %(tagName)s ໃສ່ຫ້ອງບໍ່ສຳເລັດ",
@@ -1214,7 +1208,6 @@
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "ຖ້າທ່ານບໍ່ໄດ້ກຳນົດວິທີການກູ້ຄືນໃໝ່, ຜູ້ໂຈມຕີອາດຈະພະຍາຍາມເຂົ້າເຖິງບັນຊີຂອງທ່ານ. ປ່ຽນລະຫັດຜ່ານບັນຊີຂອງທ່ານ ແລະກຳນົດ ວິທີການກູ້ຄືນໃໝ່ທັນທີໃນການຕັ້ງຄ່າ.",
     "A new Security Phrase and key for Secure Messages have been detected.": "ກວດພົບປະໂຫຍກຄວາມປອດໄພໃໝ່ ແລະ ກະແຈສຳລັບຂໍ້ຄວາມທີ່ປອດໄພຖືກກວດພົບ.",
     "New Recovery Method": "ວິທີການກູ້ຄືນໃຫມ່",
-    "Import": "ນໍາເຂົ້າ",
     "File to import": "ໄຟລ໌ທີ່ຈະນໍາເຂົ້າ",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "ໄຟລ໌ທີສົ່ງອອກຈະຖືກປ້ອງກັນດ້ວຍປະໂຫຍກລະຫັດຜ່ານ. ທ່ານຄວນໃສ່ລະຫັດຜ່ານທີ່ນີ້, ເພື່ອຖອດລະຫັດໄຟລ໌.",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "ຂະບວນການນີ້ອະນຸຍາດໃຫ້ທ່ານນໍາເຂົ້າລະຫັດ ທີ່ທ່ານໄດ້ສົ່ງອອກຜ່ານມາຈາກລູກຄ້າ Matrix ອື່ນ. ຈາກນັ້ນທ່ານຈະສາມາດຖອດລະຫັດຂໍ້ຄວາມໃດໆທີ່ລູກຄ້າອື່ນສາມາດຖອດລະຫັດໄດ້.",
@@ -1383,7 +1376,6 @@
     "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s ໄດ້ໂທດ້ວຍວິດີໂອ. (ບຣາວເຊີນີ້ບໍ່ຮອງຮັບ)",
     "%(senderName)s placed a video call.": "%(senderName)s ໂທດ້ວຍວິດີໂອ.",
     "%(senderName)s placed a voice call.": "%(senderName)s ໂທອອກ.",
-    "Someone": "ບາງຄົນ",
     "Displays action": "ສະແດງການດຳເນີນການ",
     "Converts the DM to a room": "ປ່ຽນ DM ເປັນຫ້ອງ",
     "Converts the room to a DM": "ປ່ຽນຫ້ອງເປັນ DM",
@@ -1567,7 +1559,6 @@
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s ບໍ່ສາມາດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງ ໃນຂະນະທີ່ກຳລັງດຳເນີນການໃນເວັບບຣາວເຊີ. ໃຊ້ <desktopLink>%(brand)s Desktop</desktopLink> ເພື່ອໃຫ້ຂໍ້ຄວາມເຂົ້າລະຫັດຈະປາກົດໃນຜົນການຊອກຫາ.",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s ຂາດບາງອົງປະກອບທີ່ຕ້ອງການສໍາລັບການເກັບຂໍ້ຄວາມເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງ. ຖ້າທ່ານຕ້ອງການທົດລອງໃຊ້ຄຸນສົມບັດນີ້, ສ້າງ %(brand)s Desktop ແບບກຳນົດເອງດ້ວຍການເພີ່ມ <nativeLink>ອົງປະກອບການຄົ້ນຫາ</nativeLink>.",
     "Securely cache encrypted messages locally for them to appear in search results.": "ເກັບຮັກສາຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຄົ້ນຫາ.",
-    "Manage": "ຄຸ້ມຄອງ",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
         "one": "ຈັດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຊອກຫາ, ໂດຍໃຊ້ %(size)s ເພື່ອເກັບຂໍ້ຄວາມຈາກຫ້ອງ %(rooms)s.",
         "other": "ຈັດເກັບຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດໄວ້ຢ່າງປອດໄພຢູ່ໃນເຄື່ອງເພື່ອໃຫ້ປາກົດໃນຜົນການຊອກຫາ, ໂດຍໃຊ້ %(size)s ເພື່ອເກັບຂໍ້ຄວາມຈາກ %(rooms)s ຫ້ອງ."
@@ -1617,7 +1608,6 @@
     "Enter password": "ໃສ່ລະຫັດຜ່ານ",
     "Start authentication": "ເລີ່ມການພິສູດຢືນຢັນ",
     "Something went wrong in confirming your identity. Cancel and try again.": "ມີບາງຢ່າງຜິດພາດໃນການຢືນຢັນຕົວຕົນຂອງທ່ານ. ຍົກເລີກແລ້ວລອງໃໝ່.",
-    "Submit": "ສົ່ງ",
     "Please enter the code it contains:": "ກະລຸນາໃສ່ລະຫັດທີ່ມີຢູ່:",
     "A text message has been sent to %(msisdn)s": "ຂໍ້ຄວາມໄດ້ຖືກສົ່ງໄປຫາ %(msisdn)s",
     "Token incorrect": "ໂທເຄັນບໍ່ຖືກຕ້ອງ",
@@ -2056,7 +2046,6 @@
     "Please enter a name for the room": "ກະລຸນາໃສ່ຊື່ຫ້ອງ",
     "Clear all data": "ລຶບລ້າງຂໍ້ມູນທັງໝົດ",
     "Feedback sent": "ສົ່ງຄຳຕິຊົມແລ້ວ",
-    "Export": "ສົ່ງອອກ",
     "Include Attachments": "ລວມເອົາໄຟລ໌ຄັດຕິດ",
     "Size Limit": "ຂະໜາດຈຳກັດ",
     "Format": "ຮູບແບບ",
@@ -2827,7 +2816,6 @@
     "Turn off camera": "ປິດກ້ອງຖ່າຍຮູບ",
     "Video devices": "ອຸປະກອນວິດີໂອ",
     "Error processing audio message": "ການປະມວນຜົນຂໍ້ຄວາມສຽງຜິດພາດ",
-    "Go": "ໄປ",
     "Pick a date to jump to": "ເລືອກວັນທີເພື່ອໄປຫາ",
     "Message pending moderation": "ຂໍ້ຄວາມທີ່ລໍຖ້າການກວດກາ",
     "Message pending moderation: %(reason)s": "ຂໍ້ຄວາມທີ່ລໍຖ້າການກວດກາ: %(reason)s",
@@ -2839,8 +2827,6 @@
     "Downloading": "ກຳລັງດາວໂຫຼດ",
     "Jump to date": "ໄປຫາວັນທີ",
     "The beginning of the room": "ຈຸດເລີ່ມຕົ້ນຂອງຫ້ອງ",
-    "Last month": "ເດືອນທີ່ແລ້ວ",
-    "Last week": "ອາທິດທີ່ແລ້ວ",
     "Yesterday": "ມື້ວານນີ້",
     "Today": "ມື້ນີ້",
     "Saturday": "ວັນເສົາ",
@@ -2945,7 +2931,6 @@
     "Room Settings - %(roomName)s": "ການຕັ້ງຄ່າຫ້ອງ - %(roomName)s",
     "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "ການລາຍງານຂໍ້ຄວາມນີ້ຈະສົ່ງ 'ID ເຫດການ' ທີ່ບໍ່ຊໍ້າກັນໄປຫາຜູ້ຄຸ້ມຄອງລະບົບເຊີບເວີຂອງທ່ານ. ຖ້າຂໍ້ຄວາມຢູ່ໃນຫ້ອງນີ້ຖືກເຂົ້າລະຫັດໄວ້, ຜູ້ຄຸ້ມຄອງລະບົບເຊີບເວີຂອງທ່ານຈະບໍ່ສາມາດອ່ານຂໍ້ຄວາມ ຫຼືເບິ່ງໄຟລ໌ ຫຼືຮູບພາບຕ່າງໆໄດ້.",
     "Report Content to Your Homeserver Administrator": "ລາຍງານເນື້ອຫາໃຫ້ຜູ້ຄຸ້ມຄອງລະບົບ Homeserver ຂອງທ່ານ",
-    "Send report": "ສົ່ງບົດລາຍງານ",
     "Report the entire room": "ລາຍງານຫ້ອງທັງໝົດ",
     "Spam or propaganda": "ຂໍ້ຄວາມຂີ້ເຫຍື້ອ ຫຼື ການໂຄສະນາເຜີຍແຜ່",
     "Close preview": "ປິດຕົວຢ່າງ",
@@ -3022,7 +3007,6 @@
     "Share User": "ແບ່ງປັນຜູ້ໃຊ້",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "ຖ້າຫາກວ່າທ່ານເຄິຍໃຊ້ເວີຊັ້ນທີ່ໃໝ່ກວ່າຂອງ %(brand)s,ລະບົບຂອງທ່ານອາດຈະບໍ່ສອດຄ່ອງກັນໄດ້ກັບເວີຊັ້ນນີ້. ປິດໜ້າຕ່າງນີ້ແລ້ວກັບຄືນໄປຫາເວີຊັ້ນຫຼ້າສຸດ.",
     "Unable to restore session": "ບໍ່ສາມາດກູ້ລະບົບໄດ້",
-    "Refresh": "ໂຫຼດຫນ້າຈໍຄືນ",
     "Continuing without email": "ສືບຕໍ່ໂດຍບໍ່ມີອີເມວ",
     "Logs sent": "ສົ່ງບັນທຶກແລ້ວ",
     "Preparing to send logs": "ກຳລັງກະກຽມສົ່ງບັນທຶກ",
@@ -3032,7 +3016,6 @@
     "Close dialog": "ປິດກ່ອງໂຕ້ຕອບ",
     "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "ຊ່ວຍພວກເຮົາລະບຸບັນຫາ ແລະ ປັບປຸງ %(analyticsOwner)s ໂດຍການແບ່ງປັນຂໍ້ມູນການນຳໃຊ້ທີ່ບໍ່ເປີດເຜີຍຊື່. ເພື່ອເຂົ້າໃຈວິທີທີ່ຄົນໃຊ້ຫຼາຍອຸປະກອນ, ພວກເຮົາຈະສ້າງຕົວລະບຸແບບສຸ່ມ, ແບ່ງປັນໂດຍອຸປະກອນຂອງທ່ານ.",
     "Not all selected were added": "ບໍ່ໄດ້ເລືອກທັງໝົດທີ່ຖືກເພີ່ມ",
-    "Matrix": "Matrix",
     "Looks good": "ດີ",
     "And %(count)s more...": {
         "other": "ແລະ %(count)sອີກ..."
@@ -3181,7 +3164,13 @@
         "emoji": "ອີໂມຈິ",
         "random": "ສຸ່ມ",
         "support": "ສະຫນັບສະຫນູນ",
-        "space": "ຍະຫວ່າງ"
+        "space": "ຍະຫວ່າງ",
+        "someone": "ບາງຄົນ",
+        "encrypted": "ເຂົ້າລະຫັດແລ້ວ",
+        "matrix": "Matrix",
+        "trusted": "ເຊື່ອຖືໄດ້",
+        "not_trusted": "ເຊື່ອຖືບໍ່ໄດ້",
+        "accessibility": "ການເຂົ້າເຖິງ"
     },
     "action": {
         "continue": "ສືບຕໍ່",
@@ -3265,7 +3254,16 @@
         "restore": "ກູ້ຄືນ",
         "play": "ຫຼິ້ນ",
         "pause": "ຢຸດຊົ່ວຄາວ",
-        "register": "ລົງທະບຽນ"
+        "register": "ລົງທະບຽນ",
+        "manage": "ຄຸ້ມຄອງ",
+        "go": "ໄປ",
+        "import": "ນໍາເຂົ້າ",
+        "export": "ສົ່ງອອກ",
+        "refresh": "ໂຫຼດຫນ້າຈໍຄືນ",
+        "maximise": "ສູງສຸດ",
+        "mention": "ກ່າວເຖິງ",
+        "submit": "ສົ່ງ",
+        "send_report": "ສົ່ງບົດລາຍງານ"
     },
     "a11y": {
         "user_menu": "ເມນູຜູ້ໃຊ້"
@@ -3328,6 +3326,8 @@
         "short_days": "%(value)sd",
         "short_hours": "%(value)sh",
         "short_minutes": "%(value)sm",
-        "short_seconds": "%(value)ss"
+        "short_seconds": "%(value)ss",
+        "last_week": "ອາທິດທີ່ແລ້ວ",
+        "last_month": "ເດືອນທີ່ແລ້ວ"
     }
 }

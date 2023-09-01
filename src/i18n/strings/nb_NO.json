@@ -135,7 +135,6 @@
     "Add Email Address": "Legg til E-postadresse",
     "Add Phone Number": "Legg til telefonnummer",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sendte et bilde.",
-    "Someone": "Noen",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s sendte en invitasjon til %(targetDisplayName)s om å bli med i rommet.",
     "%(displayName)s is typing …": "%(displayName)s skriver …",
     "%(names)s and %(count)s others are typing …": {
@@ -182,7 +181,6 @@
     "New Password": "Nytt passord",
     "Confirm password": "Bekreft passord",
     "Change Password": "Endre passordet",
-    "Manage": "Administrér",
     "Display Name": "Visningsnavn",
     "Profile": "Profil",
     "Email addresses": "E-postadresser",
@@ -200,7 +198,6 @@
     "Permissions": "Tillatelser",
     "Anyone": "Alle",
     "Encryption": "Kryptering",
-    "Encrypted": "Kryptert",
     "Unable to verify phone number.": "Klarte ikke å verifisere telefonnummeret.",
     "Verification code": "Verifikasjonskode",
     "Email Address": "E-postadresse",
@@ -249,8 +246,6 @@
     "Filter results": "Filtrerresultater",
     "Toolbox": "Verktøykasse",
     "An error has occurred.": "En feil har oppstått.",
-    "Go": "Gå",
-    "Refresh": "Oppdater",
     "Email address": "E-postadresse",
     "Share Room Message": "Del rommelding",
     "Terms of Service": "Vilkår for bruk",
@@ -259,7 +254,6 @@
     "Document": "Dokument",
     "Cancel All": "Avbryt alt",
     "Home": "Hjem",
-    "Submit": "Send",
     "Email": "E-post",
     "Phone": "Telefon",
     "Enter password": "Skriv inn passord",
@@ -269,8 +263,6 @@
     "Create account": "Opprett konto",
     "Commands": "Kommandoer",
     "Users": "Brukere",
-    "Export": "Eksporter",
-    "Import": "Importer",
     "Success!": "Suksess!",
     "Set up": "Sett opp",
     "Identity server has no terms of service": "Identitetstjeneren har ingen brukervilkår",
@@ -464,7 +456,6 @@
     "Session key": "Øktnøkkel",
     "Updating %(brand)s": "Oppdaterer %(brand)s",
     "Message edits": "Meldingsredigeringer",
-    "Send report": "Send inn rapport",
     "Upload files": "Last opp filer",
     "Upload all": "Last opp alle",
     "Upload Error": "Opplastingsfeil",
@@ -562,8 +553,6 @@
     "You have <a>enabled</a> URL previews by default.": "Du har <a>skrudd på</a> URL-forhåndsvisninger som standard.",
     "You have <a>disabled</a> URL previews by default.": "Du har <a>skrudd av</a> URL-forhåndsvisninger som standard.",
     "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Når noen legger til en URL i meldingene deres, kan en URL-forhåndsvisning bli vist for å gi mere informasjonen om den lenken, f.eks. tittelen, beskrivelsen, og et bilde fra nettstedet.",
-    "Trusted": "Betrodd",
-    "Not trusted": "Ikke betrodd",
     "Encryption not enabled": "Kryptering er ikke skrudd på",
     "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s endret rommets avatar til <img/>",
     "Something went wrong!": "Noe gikk galt!",
@@ -600,7 +589,6 @@
     "And %(count)s more...": {
         "other": "Og %(count)s til..."
     },
-    "Matrix": "Matrix",
     "Logs sent": "Loggbøkene ble sendt",
     "Please enter a name for the room": "Vennligst skriv inn et navn for rommet",
     "Create a public room": "Opprett et offentlig rom",
@@ -805,7 +793,6 @@
     "Messages in this room are not end-to-end encrypted.": "Meldinger i dette rommet er ikke start-til-slutt-kryptert.",
     "Use a different passphrase?": "Vil du bruke en annen passfrase?",
     "Jump to read receipt": "Hopp til lesekvitteringen",
-    "Mention": "Nevn",
     "Dismiss read marker and jump to bottom": "Avføy lesekvitteringen og hopp ned til bunnen",
     "Verify your other session using one of the options below.": "Verifiser den andre økten din med en av metodene nedenfor.",
     "Use a few words, avoid common phrases": "Bruk noen få ord, unngå vanlig fraser",
@@ -1487,7 +1474,12 @@
         "emoji": "Emoji",
         "random": "Tilfeldig",
         "support": "Support",
-        "space": "Mellomrom"
+        "space": "Mellomrom",
+        "someone": "Noen",
+        "encrypted": "Kryptert",
+        "matrix": "Matrix",
+        "trusted": "Betrodd",
+        "not_trusted": "Ikke betrodd"
     },
     "action": {
         "continue": "Fortsett",
@@ -1565,7 +1557,15 @@
         "restore": "Gjenopprett",
         "play": "Spill av",
         "pause": "Pause",
-        "register": "Registrer"
+        "register": "Registrer",
+        "manage": "Administrér",
+        "go": "Gå",
+        "import": "Importer",
+        "export": "Eksporter",
+        "refresh": "Oppdater",
+        "mention": "Nevn",
+        "submit": "Send",
+        "send_report": "Send inn rapport"
     },
     "a11y": {
         "user_menu": "Brukermeny"

@@ -162,7 +162,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
               WidgetLayoutStore.instance.moveToContainer(room, app, Container.Center);
           };
 
-    const maximiseTitle = isMaximised ? _t("action|close") : _t("Maximise");
+    const maximiseTitle = isMaximised ? _t("action|close") : _t("action|maximise");
 
     let openTitle = "";
     if (isPinned) {
@@ -309,7 +309,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) 
             <div className="mx_RoomSummaryCard_avatar" role="presentation">
                 <RoomAvatar room={room} size="54px" viewAvatarOnClick />
                 <TextWithTooltip
-                    tooltip={isRoomEncrypted ? _t("Encrypted") : _t("Not encrypted")}
+                    tooltip={isRoomEncrypted ? _t("common|encrypted") : _t("Not encrypted")}
                     class={classNames("mx_RoomSummaryCard_e2ee", {
                         mx_RoomSummaryCard_e2ee_normal: isRoomEncrypted,
                         mx_RoomSummaryCard_e2ee_warning: isRoomEncrypted && e2eStatus === E2EStatus.Warning,

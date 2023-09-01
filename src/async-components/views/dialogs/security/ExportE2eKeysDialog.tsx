@@ -216,7 +216,7 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                         <input
                             className="mx_Dialog_primary"
                             type="submit"
-                            value={_t("Export")}
+                            value={_t("action|export")}
                             disabled={disableForm}
                         />
                         <button onClick={this.onCancelClick} disabled={disableForm}>

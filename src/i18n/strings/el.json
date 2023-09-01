@@ -40,7 +40,6 @@
     "Email": "Ηλεκτρονική διεύθυνση",
     "Email address": "Ηλεκτρονική διεύθυνση",
     "Error decrypting attachment": "Σφάλμα κατά την αποκρυπτογράφηση της επισύναψης",
-    "Export": "Εξαγωγή",
     "Export E2E room keys": "Εξαγωγή κλειδιών κρυπτογράφησης για το δωμάτιο",
     "Failed to change password. Is your password correct?": "Δεν ήταν δυνατή η αλλαγή του κωδικού πρόσβασης. Είναι σωστός ο κωδικός πρόσβασης;",
     "Failed to mute user": "Δεν ήταν δυνατή η σίγαση του χρήστη",
@@ -53,7 +52,6 @@
     "For security, this session has been signed out. Please sign in again.": "Για λόγους ασφαλείας, αυτή η συνεδρία έχει τερματιστεί. Παρακαλούμε συνδεθείτε ξανά.",
     "Hangup": "Κλείσιμο",
     "Historical": "Ιστορικό",
-    "Import": "Εισαγωγή",
     "Import E2E room keys": "Εισαγωγή κλειδιών E2E",
     "Incorrect username and/or password.": "Λανθασμένο όνομα χρήστη και/ή κωδικός.",
     "Incorrect verification code": "Λανθασμένος κωδικός επαλήθευσης",
@@ -79,7 +77,6 @@
     "Search failed": "Η αναζήτηση απέτυχε",
     "Server error": "Σφάλμα διακομιστή",
     "Signed Out": "Αποσυνδέθηκε",
-    "Someone": "Κάποιος",
     "This email address is already in use": "Η διεύθυνση ηλ. αλληλογραφίας χρησιμοποιείται ήδη",
     "This email address was not found": "Δεν βρέθηκε η διεύθυνση ηλ. αλληλογραφίας",
     "Create new room": "Δημιουργία νέου δωματίου",
@@ -102,7 +99,6 @@
     "%(senderDisplayName)s sent an image.": "Ο %(senderDisplayName)s έστειλε μια φωτογραφία.",
     "Session ID": "Αναγνωριστικό συνεδρίας",
     "Start authentication": "Έναρξη πιστοποίησης",
-    "Submit": "Υποβολή",
     "This room has no local addresses": "Αυτό το δωμάτιο δεν έχει τοπικές διευθύνσεις",
     "This doesn't appear to be a valid email address": "Δεν μοιάζει με μια έγκυρη διεύθυνση ηλεκτρονικής αλληλογραφίας",
     "This phone number is already in use": "Αυτός ο αριθμός τηλεφώνου είναι ήδη σε χρήση",
@@ -297,7 +293,6 @@
     "%(widgetName)s widget added by %(senderName)s": "Προστέθηκε η μικροεφαρμογή %(widgetName)s από τον/την %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "Η μικροεφαρμογή %(widgetName)s αφαιρέθηκε από τον/την %(senderName)s",
     "Enable URL previews for this room (only affects you)": "Ενεργοποίηση προεπισκόπισης URL για αυτό το δωμάτιο (επηρεάζει μόνο εσάς)",
-    "Mention": "Αναφορά",
     "Send an encrypted reply…": "Αποστολή κρυπτογραφημένης απάντησης…",
     "Send an encrypted message…": "Αποστολή κρυπτογραφημένου μηνύματος…",
     "%(duration)ss": "%(duration)sδ",
@@ -828,7 +823,6 @@
     "Verify the link in your inbox": "Επαληθεύστε τον σύνδεσμο στα εισερχόμενα σας",
     "Your email address hasn't been verified yet": "Η διεύθυνση email σας δεν έχει επαληθευτεί ακόμα",
     "Unable to share email address": "Δεν είναι δυνατή η κοινή χρήση της διεύθυνσης email",
-    "Encrypted": "Κρυπτογραφημένο",
     "Once enabled, encryption cannot be disabled.": "Αφού ενεργοποιηθεί, η κρυπτογράφηση δεν μπορεί να απενεργοποιηθεί.",
     "To avoid these issues, create a <a>new public room</a> for the conversation you plan to have.": "Για να αποφύγετε αυτά τα ζητήματα, δημιουργήστε ένα <a>νέο δημόσιο δωμάτιο</a> για τη συνομιλία που σκοπεύετε να έχετε.",
     "Are you sure you want to make this encrypted room public?": "Είστε βέβαιοι ότι θέλετε να κάνετε δημόσιο αυτό το κρυπτογραφημένο δωμάτιο;",
@@ -1379,7 +1373,6 @@
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "Το %(brand)s δεν μπορεί να αποθηκεύσει με ασφάλεια κρυπτογραφημένα μηνύματα τοπικά ενώ εκτελείται σε πρόγραμμα περιήγησης ιστού. Χρησιμοποιήστε την <desktopLink>%(brand)s Επιφάνεια εργασίας</desktopLink> για να εμφανίζονται κρυπτογραφημένα μηνύματα στα αποτελέσματα αναζήτησης.",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "Λείπουν ορισμένα στοιχεία από το %(brand)s που απαιτούνται για την ασφαλή αποθήκευση κρυπτογραφημένων μηνυμάτων τοπικά. Εάν θέλετε να πειραματιστείτε με αυτό το χαρακτηριστικό, δημιουργήστε μια προσαρμοσμένη %(brand)s επιφάνεια εργασίαςμε <nativeLink>προσθήκη στοιχείων αναζήτησης</nativeLink>.",
     "Securely cache encrypted messages locally for them to appear in search results.": "Αποθηκεύστε με ασφάλεια κρυπτογραφημένα μηνύματα τοπικά για να εμφανίζονται στα αποτελέσματα αναζήτησης.",
-    "Manage": "Διαχειριστείτε",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
         "one": "Αποθηκεύστε με ασφάλεια κρυπτογραφημένα μηνύματα τοπικά για να εμφανίζονται στα αποτελέσματα αναζήτησης, χρησιμοποιώντας %(size)s για αποθήκευση μηνυμάτων από το %(rooms)sδωμάτιο .",
         "other": "Αποθηκεύστε με ασφάλεια κρυπτογραφημένα μηνύματα τοπικά για να εμφανίζονται στα αποτελέσματα αναζήτησης, χρησιμοποιώντας %(size)s για αποθήκευση μηνυμάτων από τα %(rooms)sδωμάτια ."
@@ -1705,7 +1698,6 @@
     "Failed to upgrade room": "Αποτυχία αναβάθμισης δωματίου",
     "Room Settings - %(roomName)s": "Ρυθμίσεις Δωματίου - %(roomName)s",
     "Report Content to Your Homeserver Administrator": "Αναφορά Περιεχομένου στον Διαχειριστή του Διακομιστή σας",
-    "Send report": "Αποστολή αναφοράς",
     "Report the entire room": "Αναφορά ολόκληρου του δωματίου",
     "Spam or propaganda": "Spam ή προπαγάνδα",
     "Illegal Content": "Παράνομο Περιεχόμενο",
@@ -1880,7 +1872,6 @@
     "Link to most recent message": "Σύνδεσμος προς το πιο πρόσφατο μήνυμα",
     "Share Room": "Κοινή χρήση Δωματίου",
     "We encountered an error trying to restore your previous session.": "Αντιμετωπίσαμε ένα σφάλμα κατά την επαναφορά της προηγούμενης συνεδρίας σας.",
-    "Refresh": "Ανανέωση",
     "Send Logs": "Αποστολή Αρχείων καταγραφής",
     "Clear Storage and Sign Out": "Εκκαθάριση Χώρου αποθήκευσης και Αποσύνδεση",
     "Sign out and remove encryption keys?": "Αποσύνδεση και κατάργηση κλειδιών κρυπτογράφησης;",
@@ -1959,7 +1950,6 @@
     "Can't create a thread from an event with an existing relation": "Δεν είναι δυνατή η δημιουργία νήματος από ένα συμβάν με μια υπάρχουσα σχέση",
     "Reply in thread": "Απάντηση στο νήμα",
     "Error processing audio message": "Σφάλμα επεξεργασίας του ηχητικού μηνύματος",
-    "Go": "Μετάβαση",
     "Pick a date to jump to": "Επιλέξτε μια ημερομηνία για να μεταβείτε",
     "Message pending moderation": "Μήνυμα σε εκκρεμότητα συντονισμού",
     "Message pending moderation: %(reason)s": "Μήνυμα σε εκκρεμότητα συντονισμού: %(reason)s",
@@ -2075,8 +2065,6 @@
     "Downloading": "Γίνεται λήψη",
     "Jump to date": "Μετάβαση σε ημερομηνία",
     "The beginning of the room": "Η αρχή του δωματίου",
-    "Last month": "Προηγούμενο μήνα",
-    "Last week": "Προηγούμενη εβδομάδα",
     "The call is in an unknown state!": "Η κλήση βρίσκεται σε άγνωστη κατάσταση!",
     "Missed call": "Αναπάντητη κλήση",
     "Unknown failure: %(reason)s": "Άγνωστο σφάλμα: %(reason)s",
@@ -2135,7 +2123,6 @@
         "one": "1 επαληθευμένη συνεδρία",
         "other": "%(count)s επαληθευμένες συνεδρίες"
     },
-    "Trusted": "Έμπιστο",
     "Room settings": "Ρυθμίσεις δωματίου",
     "Share room": "Κοινή χρήση δωματίου",
     "Export chat": "Εξαγωγή συνομιλίας",
@@ -2147,7 +2134,6 @@
     "Set my room layout for everyone": "Ορίστε τη διάταξη του δωματίου μου για όλους",
     "Close this widget to view it in this panel": "Κλείστε αυτήν τη μικροεφαρμογή για να την προβάλετε σε αυτόν τον πίνακα",
     "Unpin this widget to view it in this panel": "Ξεκαρφιτσώστε αυτήν τη μικροεφαρμογή για να την προβάλετε σε αυτόν τον πίνακα",
-    "Maximise": "Μεγιστοποίηση",
     "You can only pin up to %(count)s widgets": {
         "other": "Μπορείτε να καρφιτσώσετε μόνο έως %(count)s μικρεοεφαρμογές"
     },
@@ -2361,7 +2347,6 @@
     "Remove them from specific things I'm able to": "Αφαιρέστε τους από συγκεκριμένες λειτουργίες που έχω δικαίωμα",
     "Remove them from everything I'm able to": "Αφαιρέστε τους από οτιδήποτε έχω δικαίωμα",
     "Demote yourself?": "Υποβιβάστε τον εαυτό σας;",
-    "Not trusted": "Μη Έμπιστο",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Η αναβάθμιση αυτού του δωματίου θα τερματίσει το δωμάτιο και θα δημιουργήσει ένα αναβαθμισμένο δωμάτιο με το ίδιο όνομα.",
     "Favourited": "Αγαπημένα",
     "You can only join it with a working invite.": "Μπορείτε να συμμετάσχετε μόνο με ενεργή πρόσκληση.",
@@ -2409,7 +2394,6 @@
     "Cancel replying to a message": "Ακύρωση απάντησης σε μήνυμα",
     "Autocomplete": "Αυτόματη συμπλήρωση",
     "Navigation": "Πλοήγηση",
-    "Accessibility": "Προσβασιμότητα",
     "Room List": "Λίστα Δωματίων",
     "Calls": "Κλήσεις",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s από %(totalRooms)s",
@@ -2691,7 +2675,6 @@
     "Are you sure you want to stop exporting your data? If you do, you'll need to start over.": "Είστε βέβαιοι ότι θέλετε να διακόψετε την εξαγωγή των δεδομένων σας; Εάν το κάνετε, θα πρέπει να ξεκινήσετε από την αρχή.",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Δεν είναι δυνατή η εύρεση προφίλ για τα αναγνωριστικά Matrix που αναφέρονται παρακάτω - θα θέλατε να τα προσκαλέσετε ούτως ή άλλως;",
     "Adding spaces has moved.": "Η προσθήκη χώρων μετακινήθηκε.",
-    "Matrix": "Matrix",
     "And %(count)s more...": {
         "other": "Και %(count)s ακόμα..."
     },
@@ -3071,7 +3054,6 @@
     "Confirm that you would like to deactivate your account. If you proceed:": "Επιβεβαιώστε ότι θέλετε να απενεργοποιήσετε τον λογαριασμό σας. Εάν προχωρήσετε:",
     "Add new server…": "Προσθήκη νέου διακομιστή…",
     "Edit topic": "Επεξεργασία θέματος",
-    "Minimise": "Ελαχιστοποίηση",
     "Ban from space": "Αποκλεισμός από τον χώρο",
     "Unban from space": "Αναίρεση αποκλεισμού από τον χώρο",
     "Disinvite from room": "Ακύρωση πρόσκλησης από το δωμάτιο",
@@ -3158,7 +3140,13 @@
         "emoji": "Εικονίδια",
         "random": "Τυχαία",
         "support": "Υποστήριξη",
-        "space": "Χώρος"
+        "space": "Χώρος",
+        "someone": "Κάποιος",
+        "encrypted": "Κρυπτογραφημένο",
+        "matrix": "Matrix",
+        "trusted": "Έμπιστο",
+        "not_trusted": "Μη Έμπιστο",
+        "accessibility": "Προσβασιμότητα"
     },
     "action": {
         "continue": "Συνέχεια",
@@ -3242,7 +3230,17 @@
         "restore": "Επαναφορά",
         "play": "Αναπαραγωγή",
         "pause": "Παύση",
-        "register": "Εγγραφή"
+        "register": "Εγγραφή",
+        "manage": "Διαχειριστείτε",
+        "go": "Μετάβαση",
+        "import": "Εισαγωγή",
+        "export": "Εξαγωγή",
+        "refresh": "Ανανέωση",
+        "minimise": "Ελαχιστοποίηση",
+        "maximise": "Μεγιστοποίηση",
+        "mention": "Αναφορά",
+        "submit": "Υποβολή",
+        "send_report": "Αποστολή αναφοράς"
     },
     "a11y": {
         "user_menu": "Μενού χρήστη"
@@ -3311,6 +3309,8 @@
         "short_days": "%(value)sμέρες",
         "short_hours": "%(value)sώρες",
         "short_minutes": "%(value)s'",
-        "short_seconds": "%(value)s\""
+        "short_seconds": "%(value)s\"",
+        "last_week": "Προηγούμενη εβδομάδα",
+        "last_month": "Προηγούμενο μήνα"
     }
 }

@@ -410,7 +410,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     </div>
                 ) : (
                     <DialogButtons
-                        primaryButton={_t("Export")}
+                        primaryButton={_t("action|export")}
                         onPrimaryButtonClick={onExportClick}
                         onCancel={() => onFinished(false)}
                     />

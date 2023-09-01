@@ -82,7 +82,6 @@
     "%(senderDisplayName)s sent an image.": ".i pa pixra cu zilbe'i fi la'o zoi. %(senderDisplayName)s .zoi",
     "%(senderName)s set the main address for this room to %(address)s.": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(address)s .zoi co'a ralju le'i judri be le ve zilbe'i",
     "%(senderName)s removed the main address for this room.": ".i gau la'o zoi. %(senderName)s .zoi da co'u ralju le'i judri be le ve zilbe'i",
-    "Someone": "da",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": ".i la'o zoi. %(senderName)s .zoi friti le ka ziljmina le se zilbe'i kei la'o zoi. %(targetDisplayName)s .zoi",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": ".i ro da poi pagbu le se zilbe'i zo'u gau la'o zoi. %(senderName)s .zoi da ka'e tcidu ro notci poi ba lo nu da te friti ba zilbe'i",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": ".i ro da poi pagbu le se zilbe'i zo'u gau la'o zoi. %(senderName)s .zoi da ka'e tcidu ro notci poi ba lo nu da ziljmina ba zilbe'i",
@@ -118,7 +117,6 @@
     "Call invitation": "nu da co'a fonjo'e do",
     "Messages sent by bot": "nu da zilbe'i fi pa sampre",
     "Incorrect verification code": ".i na'e drani ke lacri lerpoi",
-    "Submit": "nu zilbe'i",
     "Phone": "fonxa",
     "No display name": ".i na da cmene",
     "New passwords don't match": ".i le'i lerpoijaspu poi cnino na simxu le ka du",
@@ -303,8 +301,6 @@
     "Enter username": ".i ko cuxna fo le ka judri cmene",
     "Messages in this room are end-to-end encrypted.": ".i ro zilbe'i be fo le cei'i cu mifra",
     "Messages in this room are not end-to-end encrypted.": ".i na pa zilbe'i be fo le cei'i cu mifra",
-    "Trusted": "se lacri",
-    "Not trusted": "na se lacri",
     "%(count)s verified sessions": {
         "other": ".i lacri %(count)s se samtcise'u",
         "one": ".i lacri pa se samtcise'u"
@@ -362,7 +358,10 @@
         "username": "judri cmene",
         "light": "carmi",
         "dark": "manku",
-        "emoji": "cinmo sinxa"
+        "emoji": "cinmo sinxa",
+        "someone": "da",
+        "trusted": "se lacri",
+        "not_trusted": "na se lacri"
     },
     "action": {
         "continue": "",
@@ -393,7 +392,8 @@
         "add": "jmina",
         "accept": "nu fonjo'e",
         "change": "nu basti",
-        "register": "nu co'a na'o jaspu"
+        "register": "nu co'a na'o jaspu",
+        "submit": "nu zilbe'i"
     },
     "labs": {
         "pinning": "lo du'u xu kau kakne lo nu mrilu lo vitno notci"

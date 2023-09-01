@@ -91,7 +91,6 @@
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s fjernede rumnavnet.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s ændrede rumnavnet til %(roomName)s.",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sendte et billed.",
-    "Someone": "Nogen",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s inviterede %(targetDisplayName)s til rummet.",
     "Online": "Online",
     "Sunday": "Søndag",
@@ -327,7 +326,6 @@
     "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s opdaterede en ban-regel der matcher %(glob)s på grund af %(reason)s",
     "Explore rooms": "Udforsk rum",
     "Verification code": "Verifikationskode",
-    "Encrypted": "Krypteret",
     "Once enabled, encryption cannot be disabled.": "Efter aktivering er det ikke muligt at slå kryptering fra.",
     "Security & Privacy": "Sikkerhed & Privatliv",
     "Who can read history?": "Hvem kan læse historikken?",
@@ -343,7 +341,6 @@
     "Confirm password": "Bekræft adgangskode",
     "Enter password": "Indtast adgangskode",
     "Add a new server": "Tilføj en ny server",
-    "Matrix": "Matrix",
     "Change notification settings": "Skift notifikations indstillinger",
     "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
     "%(senderName)s: %(message)s": "%(senderName)s: %(message)s",
@@ -680,7 +677,10 @@
         "favourites": "Favoritter",
         "description": "Beskrivelse",
         "privacy": "Privatliv",
-        "emoji": "Emoji"
+        "emoji": "Emoji",
+        "someone": "Nogen",
+        "encrypted": "Krypteret",
+        "matrix": "Matrix"
     },
     "action": {
         "continue": "Fortsæt",

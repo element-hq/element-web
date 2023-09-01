@@ -52,7 +52,6 @@
     "Afghanistan": "Afɣanistan",
     "Phone": "Atilifun",
     "Email": "Imayl",
-    "Go": "Ddu",
     "Send": "Azen",
     "Flags": "Icenyalen",
     "edited": "infel",
@@ -137,7 +136,8 @@
         "add": "Rnu",
         "disconnect": "Kkes azday",
         "change": "Senfel",
-        "subscribe": "Zemmem"
+        "subscribe": "Zemmem",
+        "go": "Ddu"
     },
     "keyboard": {
         "home": "Asnubeg",

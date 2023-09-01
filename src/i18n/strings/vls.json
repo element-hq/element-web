@@ -104,7 +104,6 @@
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s èt e fotootje gestuurd.",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s èt %(address)s als hoofdadresse vo dit gesprek ingesteld.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s èt ’t hoofdadresse vo dit gesprek verwyderd.",
-    "Someone": "Etwien",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s èt d’uutnodigienge vo %(targetDisplayName)s vo toe te treedn tout ’t gesprek ingetrokkn.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s èt %(targetDisplayName)s in ’t gesprek uutgenodigd.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor alle gespreksleedn, vanaf de moment dan ze uutgenodigd gewist zyn.",
@@ -393,7 +392,6 @@
     "Members only (since they joined)": "Alleen deelnemers (vanaf de moment dan ze toegetreedn zyn)",
     "Encryption": "Versleuterienge",
     "Once enabled, encryption cannot be disabled.": "Eenmoal ingeschoakeld ku versleuterienge nie mi wordn uutgeschoakeld.",
-    "Encrypted": "Versleuterd",
     "Who can read history?": "Wien kut de geschiedenisse leezn?",
     "Drop file here to upload": "Versleep ’t bestand noar hier vo ’t ip te loaden",
     "This event could not be displayed": "Deze gebeurtenisse kostege nie weergegeevn wordn",
@@ -405,7 +403,6 @@
     "Failed to change power level": "Wyzign van ’t machtsniveau es mislukt",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Je kut deze veranderiengn nie oungedoan moakn angezien da je de gebruuker tout ’tzelfste niveau als jen eigen promoveert.",
     "Jump to read receipt": "Noar ’t latst geleezn bericht goan",
-    "Mention": "Vermeldn",
     "Share Link to User": "Koppelienge me de gebruuker deeln",
     "Admin Tools": "Beheerdersgereedschap",
     "and %(count)s others...": {
@@ -677,7 +674,6 @@
     "Sign out and remove encryption keys?": "Afmeldn en versleuteriengssleuters verwydern?",
     "Clear Storage and Sign Out": "Ipslag wissn en afmeldn",
     "Send Logs": "Logboek verstuurn",
-    "Refresh": "Herloadn",
     "Unable to restore session": "’t En is nie meuglik van de sessie t’herstelln",
     "We encountered an error trying to restore your previous session.": "’t Is e foute ipgetreedn by ’t herstelln van je vorige sessie.",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "A j’al e ki gebruuk gemakt èt van e recentere versie van %(brand)s, is je sessie meugliks ounverenigboar me deze versie. Sluut deze veinster en goa were noa de recentere versie.",
@@ -729,7 +725,6 @@
     "Token incorrect": "Verkeerd bewys",
     "A text message has been sent to %(msisdn)s": "’t Is een smse noa %(msisdn)s verstuurd gewist",
     "Please enter the code it contains:": "Gift de code in da ’t er in stoat:",
-    "Submit": "Bevestign",
     "Start authentication": "Authenticoasje beginn",
     "Email": "E-mailadresse",
     "Phone": "Telefongnumero",
@@ -826,12 +821,10 @@
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "Hiermee ku je de sleuters van jen ontvangn berichtn in versleuterde gesprekkn noar e lokoal bestand exporteern. Je kut dit bestand loater in een andere Matrix-cliënt importeern, zodat ook die cliënt deze berichtn ga kunn ountsleutern.",
     "Enter passphrase": "Gif ’t paswoord in",
     "Confirm passphrase": "Bevestig ’t paswoord",
-    "Export": "Exporteern",
     "Import room keys": "Gesprekssleuters importeern",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Hiermee ku je de versleuteriengssleuters da j’uut een andere Matrix-cliënt had geëxporteerd importeern, zoda j’alle berichtn da ’t ander programma kostege ountsleutern ook hier goa kunn leezn.",
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "’t Geëxporteerd bestand is beveiligd met e paswoord. Gift da paswoord hier in vo ’t bestand t’ountsleutern.",
     "File to import": "T’importeern bestand",
-    "Import": "Importeern",
     "That matches!": "Da komt overeen!",
     "That doesn't match.": "Da kom nie overeen.",
     "Go back to set it again.": "Goa were vo ’t herin te stelln.",
@@ -964,7 +957,9 @@
         "timeline": "Tydslyn",
         "camera": "Camera",
         "microphone": "Microfoon",
-        "emoji": "Emoticons"
+        "emoji": "Emoticons",
+        "someone": "Etwien",
+        "encrypted": "Versleuterd"
     },
     "action": {
         "continue": "Verdergoan",
@@ -1013,7 +1008,12 @@
         "change": "Wyzign",
         "revoke": "Intrekkn",
         "show_all": "Alles toogn",
-        "register": "Registreern"
+        "register": "Registreern",
+        "import": "Importeern",
+        "export": "Exporteern",
+        "refresh": "Herloadn",
+        "mention": "Vermeldn",
+        "submit": "Bevestign"
     },
     "labs": {
         "pinning": "Bericht vastprikkn",

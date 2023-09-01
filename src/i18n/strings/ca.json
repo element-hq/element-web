@@ -76,7 +76,6 @@
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s ha eliminat el nom de la sala.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s ha canviat el nom de la sala a %(roomName)s.",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s ha enviat una imatge.",
-    "Someone": "Algú",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s ha convidat a %(targetDisplayName)s a entrar a la sala.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres, a partir de que hi són convidats.",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres des de que s'hi uneixen.",
@@ -103,7 +102,6 @@
     "Enable URL previews for this room (only affects you)": "Activa la vista prèvia d'URL d'aquesta sala (no afecta altres usuaris)",
     "Enable URL previews by default for participants in this room": "Activa per defecte la vista prèvia d'URL per als participants d'aquesta sala",
     "Incorrect verification code": "El codi de verificació és incorrecte",
-    "Submit": "Envia",
     "Phone": "Telèfon",
     "No display name": "Sense nom visible",
     "New passwords don't match": "Les noves contrasenyes no coincideixen",
@@ -127,7 +125,6 @@
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "No podràs desfer aquest canvi ja que estàs donant a l'usuari el mateix nivell d'autoritat que el teu.",
     "Unignore": "Deixa de ignorar",
     "Jump to read receipt": "Vés a l'últim missatge llegit",
-    "Mention": "Menciona",
     "Admin Tools": "Eines d'administració",
     "and %(count)s others...": {
         "other": "i %(count)s altres...",
@@ -354,9 +351,7 @@
     "Session ID": "ID de la sessió",
     "Export room keys": "Exporta les claus de la sala",
     "Confirm passphrase": "Introduïu una contrasenya",
-    "Export": "Exporta",
     "Import room keys": "Importa les claus de la sala",
-    "Import": "Importa",
     "Email": "Correu electrònic",
     "Sunday": "Diumenge",
     "Failed to add tag %(tagName)s to room": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala",
@@ -614,7 +609,8 @@
         "attachment": "Adjunt",
         "guest": "Visitant",
         "camera": "Càmera",
-        "microphone": "Micròfon"
+        "microphone": "Micròfon",
+        "someone": "Algú"
     },
     "action": {
         "continue": "Continua",
@@ -651,7 +647,11 @@
         "back": "Enrere",
         "add": "Afegeix",
         "accept": "Accepta",
-        "register": "Registre"
+        "register": "Registre",
+        "import": "Importa",
+        "export": "Exporta",
+        "mention": "Menciona",
+        "submit": "Envia"
     },
     "labs": {
         "pinning": "Fixació de missatges",

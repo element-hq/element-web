@@ -47,7 +47,6 @@
     "Email": "Email",
     "Email address": "Email address",
     "Error decrypting attachment": "Error decrypting attachment",
-    "Export": "Export",
     "Export E2E room keys": "Export E2E room keys",
     "Failed to ban user": "Failed to ban user",
     "Failed to change password. Is your password correct?": "Failed to change password. Is your password correct?",
@@ -69,7 +68,6 @@
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s",
     "Hangup": "Hangup",
     "Historical": "Historical",
-    "Import": "Import",
     "Import E2E room keys": "Import E2E room keys",
     "Incorrect username and/or password.": "Incorrect username and/or password.",
     "Incorrect verification code": "Incorrect verification code",
@@ -131,8 +129,6 @@
     "Session ID": "Session ID",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Show timestamps in 12 hour format (e.g. 2:30pm)",
     "Signed Out": "Signed Out",
-    "Someone": "Someone",
-    "Submit": "Submit",
     "This email address is already in use": "This email address is already in use",
     "This email address was not found": "This email address was not found",
     "The email address linked to your account must be entered.": "The email address linked to your account must be entered.",
@@ -416,7 +412,8 @@
         "attachment": "Attachment",
         "camera": "Camera",
         "microphone": "Microphone",
-        "emoji": "Emoji"
+        "emoji": "Emoji",
+        "someone": "Someone"
     },
     "action": {
         "continue": "Continue",
@@ -449,7 +446,10 @@
         "cancel": "Cancel",
         "add": "Add",
         "accept": "Accept",
-        "register": "Register"
+        "register": "Register",
+        "import": "Import",
+        "export": "Export",
+        "submit": "Submit"
     },
     "keyboard": {
         "home": "Home"
