@@ -62,7 +62,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
           data-testid="avatar-img"
           data-type="round"
           style="--cpd-avatar-size: 16px;"
-          title=""
+          title="@member:domain.bla"
         >
           <img
             alt=""
@@ -73,7 +73,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for an 
             loading="lazy"
             referrerpolicy="no-referrer"
             src="mxc://avatar.url/image.png"
-            title="@member:domain.bla"
             width="16px"
           />
         </span>
@@ -113,7 +112,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
               data-testid="avatar-img"
               data-type="round"
               style="--cpd-avatar-size: 16px;"
-              title=""
+              title="!room1:example.com"
             >
               <img
                 alt=""
@@ -124,7 +123,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for eve
                 loading="lazy"
                 referrerpolicy="no-referrer"
                 src="mxc://avatar.url/room.png"
-                title="!room1:example.com"
                 width="16px"
               />
             </span>
@@ -166,7 +164,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
               data-testid="avatar-img"
               data-type="round"
               style="--cpd-avatar-size: 16px;"
-              title=""
+              title="!room1:example.com"
             >
               <img
                 alt=""
@@ -177,7 +175,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
                 loading="lazy"
                 referrerpolicy="no-referrer"
                 src="mxc://avatar.url/room.png"
-                title="!room1:example.com"
                 width="16px"
               />
             </span>
@@ -278,7 +275,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
           data-testid="avatar-img"
           data-type="round"
           style="--cpd-avatar-size: 16px;"
-          title=""
+          title="@member:domain.bla"
         >
           <img
             alt=""
@@ -289,7 +286,6 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
             loading="lazy"
             referrerpolicy="no-referrer"
             src="mxc://avatar.url/image.png"
-            title="@member:domain.bla"
             width="16px"
           />
         </span>
@@ -313,7 +309,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
       href="https://matrix.to/#/!room1:example.com/%event_id%"
       aria-describedby="mx_Pill_0.123456"
       ><span
-        title=""
+        title="@member:domain.bla"
         aria-label="Profile picture"
         aria-hidden="true"
         data-testid="avatar-img"
@@ -330,8 +326,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
           class="_image_2lhia_45"
           data-type="round"
           width="16px"
-          height="16px"
-          title="@member:domain.bla" /></span
+          height="16px" /></span
       ><span class="mx_Pill_text">Message from Member</span></a
     ></bdi
   ></span
@@ -348,7 +343,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
       href="https://matrix.to/#/!room2:example.com/%event_id%"
       aria-describedby="mx_Pill_0.123456"
       ><span
-        title=""
+        title="!room2:example.com"
         aria-label="Avatar"
         aria-hidden="true"
         data-testid="avatar-img"
@@ -365,8 +360,7 @@ exports[`<TextualBody /> renders plain-text m.text correctly should pillify a pe
           class="_image_2lhia_45"
           data-type="round"
           width="16px"
-          height="16px"
-          title="!room2:example.com" /></span
+          height="16px" /></span
       ><span class="mx_Pill_text">Message in Room 2</span></a
     ></bdi
   ></span

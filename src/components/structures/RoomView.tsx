@@ -2443,6 +2443,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 resizeNotifier={this.props.resizeNotifier}
                 permalinkCreator={this.permalinkCreator}
                 e2eStatus={this.state.e2eStatus}
+                onSearchClick={this.onSearchClick}
             />
         ) : undefined;
 

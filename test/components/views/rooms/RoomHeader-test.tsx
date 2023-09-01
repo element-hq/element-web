@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { EventType, MatrixClient, MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, MatrixClient, MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
 import { getAllByTitle, getByLabelText, getByText, getByTitle, render, screen, waitFor } from "@testing-library/react";
 
 import { mkEvent, stubClient, withClientContextRenderOptions } from "../../../test-utils";
@@ -419,6 +419,26 @@ describe("RoomHeader", () => {
             const dispatcherSpy = jest.spyOn(dispatcher, "dispatch");
             await userEvent.click(videoButton);
             expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true }));
+        });
+    });
+
+    describe("public room", () => {
+        it("shows a globe", () => {
+            const joinRuleEvent = new MatrixEvent({
+                type: EventType.RoomJoinRules,
+                content: { join_rule: JoinRule.Public },
+                sender: MatrixClientPeg.get()!.getSafeUserId(),
+                state_key: "",
+                room_id: room.roomId,
+            });
+            room.addLiveEvents([joinRuleEvent]);
+
+            const { container } = render(
+                <RoomHeader room={room} />,
+                withClientContextRenderOptions(MatrixClientPeg.get()!),
+            );
+
+            expect(getByLabelText(container, "Public room")).toBeInTheDocument();
         });
     });
 

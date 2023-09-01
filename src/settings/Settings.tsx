@@ -548,6 +548,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
         displayName: _td("labs|new_room_decoration_ui"),
+        description: _td("labs|under_active_development"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ReloadOnChangeController(),

@@ -120,7 +120,6 @@ exports[`AppTile for a pinned widget should render 1`] = `
               loading="lazy"
               referrerpolicy="no-referrer"
               src="image-file-stub"
-              title=""
               width="20px"
             />
           </span>
@@ -209,7 +208,6 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
               loading="lazy"
               referrerpolicy="no-referrer"
               src="image-file-stub"
-              title=""
               width="20px"
             />
           </span>
@@ -366,7 +364,6 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                     loading="lazy"
                     referrerpolicy="no-referrer"
                     src="image-file-stub"
-                    title=""
                     width="20px"
                   />
                 </span>

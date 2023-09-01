@@ -58,6 +58,7 @@ interface IProps {
     room: Room;
     permalinkCreator: RoomPermalinkCreator;
     onClose(): void;
+    onSearchClick?: () => void;
 }
 
 interface IAppsSectionProps {
@@ -272,7 +273,7 @@ const onRoomSettingsClick = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebRightPanelRoomInfoSettingsButton", ev);
 };
 
-const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) => {
+const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, onSearchClick }) => {
     const cli = useContext(MatrixClientContext);
 
     const onShareRoomClick = (): void => {
@@ -341,6 +342,14 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) 
                 <Button className="mx_RoomSummaryCard_icon_people" onClick={onRoomMembersClick}>
                     {_t("common|people")}
                     <span className="mx_BaseCard_Button_sublabel">{memberCount}</span>
+                </Button>
+                <Button
+                    className="mx_RoomSummaryCard_icon_search"
+                    onClick={() => {
+                        onSearchClick?.();
+                    }}
+                >
+                    {_t("Search")}
                 </Button>
                 {!isVideoRoom && (
                     <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>

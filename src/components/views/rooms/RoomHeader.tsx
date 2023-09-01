@@ -22,18 +22,18 @@ import { Icon as ThreadsIcon } from "@vector-im/compound-design-tokens/icons/thr
 import { Icon as NotificationsIcon } from "@vector-im/compound-design-tokens/icons/notifications-solid.svg";
 import { Icon as VerifiedIcon } from "@vector-im/compound-design-tokens/icons/verified.svg";
 import { Icon as ErrorIcon } from "@vector-im/compound-design-tokens/icons/error.svg";
+import { Icon as PublicIcon } from "@vector-im/compound-design-tokens/icons/public.svg";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { EventType, type Room } from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 
 import { useRoomName } from "../../../hooks/useRoomName";
-import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { useTopic } from "../../../hooks/room/useTopic";
 import { useAccountData } from "../../../hooks/useAccountData";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useRoomMemberCount, useRoomMembers } from "../../../hooks/useRoomMembers";
-import { _t, getCurrentLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import { Flex } from "../../utils/Flex";
 import { Box } from "../../utils/Box";
 import { useRoomCallStatus } from "../../../hooks/room/useRoomCallStatus";
@@ -46,6 +46,9 @@ import { placeCall } from "../../../utils/room/placeCall";
 import { useEncryptionStatus } from "../../../hooks/useEncryptionStatus";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import FacePile from "../elements/FacePile";
+import { useRoomState } from "../../../hooks/useRoomState";
+import RoomAvatar from "../avatars/RoomAvatar";
+import { formatCount } from "../../../utils/FormattingUtils";
 
 /**
  * A helper to transform a notification color to the what the Compound Icon Button
@@ -76,9 +79,10 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
 
     const roomName = useRoomName(room);
     const roomTopic = useTopic(room);
+    const roomState = useRoomState(room);
 
-    const members = useRoomMembers(room);
-    const memberCount = useRoomMemberCount(room);
+    const members = useRoomMembers(room, 2500);
+    const memberCount = useRoomMemberCount(room, { throttleWait: 2500 });
 
     const { voiceCallDisabledReason, voiceCallType, videoCallDisabledReason, videoCallType } = useRoomCallStatus(room);
 
@@ -116,7 +120,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                 showOrHidePanel(RightPanelPhases.RoomSummary);
             }}
         >
-            <DecoratedRoomAvatar room={room} size="40px" displayBadge={false} />
+            <RoomAvatar room={room} size="40px" />
             <Box flex="1" className="mx_RoomHeader_info">
                 <BodyText
                     as="div"
@@ -126,8 +130,20 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     title={roomName}
                     role="heading"
                     aria-level={1}
+                    className="mx_RoomHeader_heading"
                 >
                     {roomName}
+
+                    {!isDirectMessage && roomState.getJoinRule() === JoinRule.Public && (
+                        <Tooltip label={_t("Public room")}>
+                            <PublicIcon
+                                width="16px"
+                                height="16px"
+                                className="text-secondary"
+                                aria-label={_t("Public room")}
+                            />
+                        </Tooltip>
+                    )}
 
                     {isDirectMessage && e2eStatus === E2EStatus.Verified && (
                         <Tooltip label={_t("common|verified")}>
@@ -214,7 +230,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                         size="20px"
                         overflow={false}
                     >
-                        {memberCount.toLocaleString(getCurrentLanguage())}
+                        {formatCount(memberCount)}
                     </FacePile>
                 </BodyText>
             )}

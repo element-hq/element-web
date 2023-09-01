@@ -31,7 +31,7 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
             data-testid="avatar-img"
             data-type="square"
             style="--cpd-avatar-size: 40px;"
-            title=""
+            title="!spaceid:example.com"
           >
             <img
               alt=""
@@ -42,7 +42,6 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
               loading="lazy"
               referrerpolicy="no-referrer"
               src="http://this.is.a.url/avatar.url/room.png"
-              title="!spaceid:example.com"
               width="40px"
             />
           </span>
