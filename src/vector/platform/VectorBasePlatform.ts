@@ -85,6 +85,6 @@ export default abstract class VectorBasePlatform extends BasePlatform {
      * device Vector is running on
      */
     public getDefaultDeviceDisplayName(): string {
-        return _t("Unknown device");
+        return _t("unknown_device");
     }
 }

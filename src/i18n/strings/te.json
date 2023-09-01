@@ -1,13 +1,21 @@
 {
-    "Dismiss": "రద్దుచేయి",
-    "Unknown device": "తెలియని పరికరము",
-    "Go to element.io": "element.io కు వెళ్ళు",
-    "I understand the risks and wish to continue": "నాకు పర్యవసానాలు తెలిసే ముందుకు కొనసాగుతా",
-    "Explore rooms": "గదులను అన్వేెషించు",
-    "Welcome to Element": "ఎలిమెంట్ కు స్వాగతం",
-    "Failed to start": "ప్రారంభించుటలో విఫలం",
-    "Create Account": "ఖాతా తెరువు",
-    "Open": "తెరువు",
-    "Download Completed": "దిగుమతి పూర్తయినది",
-    "Unexpected error preparing the app. See console for details.": "ఆప్ ని తయారు చేసే ప్రక్రియాలో అనుకోని లోపం తలెత్తింది. మరిన్ని వివరాల కోసం కాన్సోల్ ను చూడండి."
+    "error": {
+        "app_launch_unexpected_error": "ఆప్ ని తయారు చేసే ప్రక్రియాలో అనుకోని లోపం తలెత్తింది. మరిన్ని వివరాల కోసం కాన్సోల్ ను చూడండి."
+    },
+    "download_completed": "దిగుమతి పూర్తయినది",
+    "action": {
+        "open": "తెరువు",
+        "dismiss": "రద్దుచేయి"
+    },
+    "unknown_device": "తెలియని పరికరము",
+    "incompatible_browser": {
+        "continue_warning": "నాకు పర్యవసానాలు తెలిసే ముందుకు కొనసాగుతా"
+    },
+    "go_to_element_io": "element.io కు వెళ్ళు",
+    "failed_to_start": "ప్రారంభించుటలో విఫలం",
+    "welcome_to_element": "ఎలిమెంట్ కు స్వాగతం",
+    "common": {
+        "create_account": "ఖాతా తెరువు",
+        "explore_rooms": "గదులను అన్వేెషించు"
+    }
 }

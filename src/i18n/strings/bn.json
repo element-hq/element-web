@@ -1,4 +1,6 @@
 {
-    "Dismiss": "সরাও",
-    "Open": "খোলা"
+    "action": {
+        "open": "খোলা",
+        "dismiss": "সরাও"
+    }
 }

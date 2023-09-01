@@ -1,3 +1,5 @@
 {
-    "Dismiss": "Aдхіліць"
+    "action": {
+        "dismiss": "Aдхіліць"
+    }
 }

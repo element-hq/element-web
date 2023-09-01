@@ -1,3 +1,5 @@
 {
-    "Unexpected error preparing the app. See console for details.": "Unexpectit error came up gittin the app set up. See the console? Mair details ur thare."
+    "error": {
+        "app_launch_unexpected_error": "Unexpectit error came up gittin the app set up. See the console? Mair details ur thare."
+    }
 }

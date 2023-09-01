@@ -1,27 +1,37 @@
 {
-    "Dismiss": "Baztertu",
-    "Unknown device": "Gailu ezezaguna",
-    "Welcome to Element": "Ongi etorri Element mezularitzara",
-    "Sign In": "Hasi saioa",
-    "Create Account": "Sortu kontua",
-    "Explore rooms": "Arakatu gelak",
-    "Unexpected error preparing the app. See console for details.": "Ustekabeko errorea aplikazioa prestatzean. Ikusi xehetasunak kontsolan.",
-    "Invalid configuration: no default server specified.": "Konfigurazio baliogabea: Ez da lehenetsitako zerbitzaririk zehaztu.",
-    "The message from the parser is: %(message)s": "Prozesatzailearen mezua hau da: %(message)s",
-    "Invalid JSON": "JSON baliogabea",
-    "Go to your browser to complete Sign In": "Joan zure nabigatzailera izena ematen bukatzeko",
-    "Unable to load config file: please refresh the page to try again.": "Ezin izan da konfigurazio fitxategia kargatu: Saiatu orria birkargatzen.",
-    "Unsupported browser": "Onartu gabeko nabigatzailea",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Instalatu <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, edo <safariLink>Safari</safariLink> esperientzia hobe baterako.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Zure oraingo nabigatzailea erabiltzen jarraitu dezakezu, baina ezaugarri batzuk agian ez dute funtzionatuko eta itxura desegokia izan daiteke.",
-    "I understand the risks and wish to continue": "Arriskuak ulertzen ditut eta jarraitu nahi dut",
-    "Go to element.io": "Joan element.io gunera",
-    "Failed to start": "Huts egin du abiatzean",
-    "Your Element is misconfigured": "Zure Element ez dago ondo konfiguratuta",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Zure Element-en konfigurazioak JSON baliogabea dauka. Mesedez, konpondu arazoa eta birkargatu orria.",
-    "Download Completed": "Deskarga burututa",
-    "Open": "Ireki",
-    "Your browser can't run %(brand)s": "Zure nabigatzaileak ezin du %(brand)s exekutatu",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s-(e)k zure oraingo nabigatzaile honek euskarririk ematen ez dien ezaugarri aurreratuak erabiltzen ditu.",
-    "Powered by Matrix": "Matrixekin egina"
+    "error": {
+        "invalid_configuration_no_server": "Konfigurazio baliogabea: Ez da lehenetsitako zerbitzaririk zehaztu.",
+        "misconfigured": "Zure Element ez dago ondo konfiguratuta",
+        "invalid_json": "Zure Element-en konfigurazioak JSON baliogabea dauka. Mesedez, konpondu arazoa eta birkargatu orria.",
+        "invalid_json_detail": "Prozesatzailearen mezua hau da: %(message)s",
+        "invalid_json_generic": "JSON baliogabea",
+        "cannot_load_config": "Ezin izan da konfigurazio fitxategia kargatu: Saiatu orria birkargatzen.",
+        "app_launch_unexpected_error": "Ustekabeko errorea aplikazioa prestatzean. Ikusi xehetasunak kontsolan."
+    },
+    "download_completed": "Deskarga burututa",
+    "action": {
+        "open": "Ireki",
+        "dismiss": "Baztertu"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Joan zure nabigatzailera izena ematen bukatzeko"
+    },
+    "unknown_device": "Gailu ezezaguna",
+    "powered_by_matrix": "Matrixekin egina",
+    "incompatible_browser": {
+        "title": "Onartu gabeko nabigatzailea",
+        "summary": "Zure nabigatzaileak ezin du %(brand)s exekutatu",
+        "features": "%(brand)s-(e)k zure oraingo nabigatzaile honek euskarririk ematen ez dien ezaugarri aurreratuak erabiltzen ditu.",
+        "browser_links": "Instalatu <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, edo <safariLink>Safari</safariLink> esperientzia hobe baterako.",
+        "feature_warning": "Zure oraingo nabigatzailea erabiltzen jarraitu dezakezu, baina ezaugarri batzuk agian ez dute funtzionatuko eta itxura desegokia izan daiteke.",
+        "continue_warning": "Arriskuak ulertzen ditut eta jarraitu nahi dut"
+    },
+    "go_to_element_io": "Joan element.io gunera",
+    "failed_to_start": "Huts egin du abiatzean",
+    "welcome_to_element": "Ongi etorri Element mezularitzara",
+    "common": {
+        "sign_in": "Hasi saioa",
+        "create_account": "Sortu kontua",
+        "explore_rooms": "Arakatu gelak"
+    }
 }

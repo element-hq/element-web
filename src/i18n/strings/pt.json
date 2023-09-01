@@ -1,31 +1,41 @@
 {
-    "Dismiss": "Descartar",
-    "Unknown device": "Dispositivo desconhecido",
-    "Welcome to Element": "Boas-vindas ao Element",
-    "The message from the parser is: %(message)s": "A mensagem do parser é: %(message)s",
-    "Invalid JSON": "JSON inválido",
-    "Unexpected error preparing the app. See console for details.": "Erro inesperado na preparação da aplicação. Veja a consola para mais detalhes.",
-    "Invalid configuration: no default server specified.": "Configuração inválida: servidor padrão não especificado.",
-    "Sign In": "Iniciar sessão",
-    "Create Account": "Criar conta",
-    "Explore rooms": "Explorar rooms",
-    "Go to your browser to complete Sign In": "Abra o seu navegador para completar o inicio de sessão",
-    "Open": "Abrir",
-    "Download Completed": "Transferência concluída",
-    "Unable to load config file: please refresh the page to try again.": "Não foi possível carregar o ficheiro de configuração: atualize a página para tentar novamente.",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "A sua configuração do Element contém JSON inválido. Por favor, corrija o problema e recarregue a página.",
-    "Your Element is misconfigured": "O Element está configurado incorretamente",
-    "Powered by Matrix": "Desenvolvido por Matrix",
-    "Go to element.io": "Visite element.io",
-    "I understand the risks and wish to continue": "Compreendo os riscos e pretendo continuar",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Podes continuar a utilizar teu browser atual, mas algumas funcionalidades podem não funcionar ou aparecerem de forma incorrecta.",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Por favor, instala <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ou <safariLink>Safari</safariLink> para uma melhor experiência.",
-    "Unsupported browser": "Browser não suportado",
-    "Failed to start": "Erro ao iniciar",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s utiliza funcionalidades avançadas que o seu Navegador actual não suporta.",
-    "Your browser can't run %(brand)s": "O teu browser não consegue executar %(brand)s",
-    "Use %(brand)s on mobile": "Usar %(brand)s no telemóvel",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Chat descentralizado e encriptado &amp; colaboração alimentada por $matrixLogo",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s em %(osName)s"
+    "error": {
+        "invalid_configuration_no_server": "Configuração inválida: servidor padrão não especificado.",
+        "misconfigured": "O Element está configurado incorretamente",
+        "invalid_json": "A sua configuração do Element contém JSON inválido. Por favor, corrija o problema e recarregue a página.",
+        "invalid_json_detail": "A mensagem do parser é: %(message)s",
+        "invalid_json_generic": "JSON inválido",
+        "cannot_load_config": "Não foi possível carregar o ficheiro de configuração: atualize a página para tentar novamente.",
+        "app_launch_unexpected_error": "Erro inesperado na preparação da aplicação. Veja a consola para mais detalhes."
+    },
+    "download_completed": "Transferência concluída",
+    "action": {
+        "open": "Abrir",
+        "dismiss": "Descartar"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Abra o seu navegador para completar o inicio de sessão"
+    },
+    "unknown_device": "Dispositivo desconhecido",
+    "web_default_device_name": "%(appName)s: %(browserName)s em %(osName)s",
+    "powered_by_matrix": "Desenvolvido por Matrix",
+    "use_brand_on_mobile": "Usar %(brand)s no telemóvel",
+    "incompatible_browser": {
+        "title": "Browser não suportado",
+        "summary": "O teu browser não consegue executar %(brand)s",
+        "features": "%(brand)s utiliza funcionalidades avançadas que o seu Navegador actual não suporta.",
+        "browser_links": "Por favor, instala <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ou <safariLink>Safari</safariLink> para uma melhor experiência.",
+        "feature_warning": "Podes continuar a utilizar teu browser atual, mas algumas funcionalidades podem não funcionar ou aparecerem de forma incorrecta.",
+        "continue_warning": "Compreendo os riscos e pretendo continuar"
+    },
+    "go_to_element_io": "Visite element.io",
+    "failed_to_start": "Erro ao iniciar",
+    "welcome_to_element": "Boas-vindas ao Element",
+    "powered_by_matrix_with_logo": "Chat descentralizado e encriptado &amp; colaboração alimentada por $matrixLogo",
+    "common": {
+        "sign_in": "Iniciar sessão",
+        "create_account": "Criar conta",
+        "explore_rooms": "Explorar rooms"
+    }
 }

@@ -1,31 +1,41 @@
 {
-    "Dismiss": "Afvis",
-    "Unknown device": "Ukendt enhed",
-    "Welcome to Element": "Velkommen til Element",
-    "The message from the parser is: %(message)s": "Beskeden fra parseren er: %(message)s",
-    "Invalid JSON": "Ugyldig JSON",
-    "Unexpected error preparing the app. See console for details.": "Uventet fejl ved forberedelse af appen. Se konsollen for detaljer.",
-    "Invalid configuration: no default server specified.": "Ugyldig konfiguration: Ingen standardserver er angivet.",
-    "Sign In": "Log ind",
-    "Create Account": "Opret brugerkonto",
-    "Explore rooms": "Udforsk rum",
-    "Unable to load config file: please refresh the page to try again.": "Ikke i stand til at indlæse konfigurationsfil: Genopfrisk venligst siden for at prøve igen.",
-    "Go to your browser to complete Sign In": "Gå til din browser for at færdiggøre Log ind",
-    "Go to element.io": "Gå til element.io",
-    "I understand the risks and wish to continue": "Jeg forstår risikoen og ønsker at fortsætte",
-    "Unsupported browser": "Browser ikke understøttet",
-    "Open": "Åbn",
-    "Download Completed": "Hentning færdig",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Din Element konfiguration indeholder ugyldig JSON. Løs venligst problemet og genindlæs siden.",
-    "Your Element is misconfigured": "Dit Element er konfigureret forkert",
-    "Your browser can't run %(brand)s": "Din browser kan ikke køre %(brand)s",
-    "Powered by Matrix": "Drevet af Matrix",
-    "Failed to start": "Opstart mislykkedes",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Du kan fortsætte med at bruge din nuværende browser, men du kan opleve at visse eller alle funktioner ikke vil fungere korrekt.",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Venligst installer <chromeLink>Chrome</chromeLink>,<firefoxLink>Firefox</firefoxLink> eller <safariLink>Safari</safariLink> for den bedste oplevelse.",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s bruger avanceret browser funktioner som ikke er understøttet af din nuværende browser.",
-    "Use %(brand)s on mobile": "Brug %(brand)s på mobil",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentraliseret, krypteret chat &amp; samarbejde drevet af $matrixLogo",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s på %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
+    "error": {
+        "invalid_configuration_no_server": "Ugyldig konfiguration: Ingen standardserver er angivet.",
+        "misconfigured": "Dit Element er konfigureret forkert",
+        "invalid_json": "Din Element konfiguration indeholder ugyldig JSON. Løs venligst problemet og genindlæs siden.",
+        "invalid_json_detail": "Beskeden fra parseren er: %(message)s",
+        "invalid_json_generic": "Ugyldig JSON",
+        "cannot_load_config": "Ikke i stand til at indlæse konfigurationsfil: Genopfrisk venligst siden for at prøve igen.",
+        "app_launch_unexpected_error": "Uventet fejl ved forberedelse af appen. Se konsollen for detaljer."
+    },
+    "download_completed": "Hentning færdig",
+    "action": {
+        "open": "Åbn",
+        "dismiss": "Afvis"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Gå til din browser for at færdiggøre Log ind"
+    },
+    "unknown_device": "Ukendt enhed",
+    "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
+    "powered_by_matrix": "Drevet af Matrix",
+    "use_brand_on_mobile": "Brug %(brand)s på mobil",
+    "incompatible_browser": {
+        "title": "Browser ikke understøttet",
+        "summary": "Din browser kan ikke køre %(brand)s",
+        "features": "%(brand)s bruger avanceret browser funktioner som ikke er understøttet af din nuværende browser.",
+        "browser_links": "Venligst installer <chromeLink>Chrome</chromeLink>,<firefoxLink>Firefox</firefoxLink> eller <safariLink>Safari</safariLink> for den bedste oplevelse.",
+        "feature_warning": "Du kan fortsætte med at bruge din nuværende browser, men du kan opleve at visse eller alle funktioner ikke vil fungere korrekt.",
+        "continue_warning": "Jeg forstår risikoen og ønsker at fortsætte"
+    },
+    "go_to_element_io": "Gå til element.io",
+    "failed_to_start": "Opstart mislykkedes",
+    "welcome_to_element": "Velkommen til Element",
+    "powered_by_matrix_with_logo": "Decentraliseret, krypteret chat &amp; samarbejde drevet af $matrixLogo",
+    "common": {
+        "sign_in": "Log ind",
+        "create_account": "Opret brugerkonto",
+        "explore_rooms": "Udforsk rum"
+    }
 }

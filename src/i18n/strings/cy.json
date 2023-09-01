@@ -1,13 +1,21 @@
 {
-    "The message from the parser is: %(message)s": "Y neges gan y dosrannudd yn: %(message)s",
-    "Invalid JSON": "JSON annilys",
-    "Unexpected error preparing the app. See console for details.": "Gwall annisgwyl wrth baratoi'r app. Gweler y consol am fanylion.",
-    "Invalid configuration: no default server specified.": "Gosodiad annilys: ni nodwyd gweinydd diofyn.",
-    "Unknown device": "Dyfais anhysbys",
-    "Dismiss": "Wfftio",
-    "Welcome to Element": "Croeso i Element",
-    "Sign In": "Mewngofnodi",
-    "Create Account": "Creu Cyfrif",
-    "Explore rooms": "Archwilio Ystafelloedd",
-    "Go to your browser to complete Sign In": "Ewch i'ch porwr i gwblhau Mewngofnodi"
+    "error": {
+        "invalid_configuration_no_server": "Gosodiad annilys: ni nodwyd gweinydd diofyn.",
+        "invalid_json_detail": "Y neges gan y dosrannudd yn: %(message)s",
+        "invalid_json_generic": "JSON annilys",
+        "app_launch_unexpected_error": "Gwall annisgwyl wrth baratoi'r app. Gweler y consol am fanylion."
+    },
+    "action": {
+        "dismiss": "Wfftio"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Ewch i'ch porwr i gwblhau Mewngofnodi"
+    },
+    "unknown_device": "Dyfais anhysbys",
+    "welcome_to_element": "Croeso i Element",
+    "common": {
+        "sign_in": "Mewngofnodi",
+        "create_account": "Creu Cyfrif",
+        "explore_rooms": "Archwilio Ystafelloedd"
+    }
 }

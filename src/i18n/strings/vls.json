@@ -1,13 +1,21 @@
 {
-    "Unexpected error preparing the app. See console for details.": "’t Is een onverwachte foute ipgetreedn by ’t voorbereidn van den app. Bekykt de console vo details.",
-    "Invalid configuration: no default server specified.": "Oungeldige configuroasje: geen standoardserver ingegeevn.",
-    "Unknown device": "Ounbekend toestel",
-    "Dismiss": "Afwyzn",
-    "Welcome to Element": "Welgekommn by Element",
-    "Sign In": "Anmeldn",
-    "Create Account": "Account anmoakn",
-    "Explore rooms": "Gesprekkn ountdekkn",
-    "The message from the parser is: %(message)s": "’t Bericht van de verwerker is: %(message)s",
-    "Invalid JSON": "Oungeldigen JSON",
-    "Go to your browser to complete Sign In": "Goa noa je browser voe d’anmeldienge te voltooin"
+    "error": {
+        "invalid_configuration_no_server": "Oungeldige configuroasje: geen standoardserver ingegeevn.",
+        "invalid_json_detail": "’t Bericht van de verwerker is: %(message)s",
+        "invalid_json_generic": "Oungeldigen JSON",
+        "app_launch_unexpected_error": "’t Is een onverwachte foute ipgetreedn by ’t voorbereidn van den app. Bekykt de console vo details."
+    },
+    "action": {
+        "dismiss": "Afwyzn"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Goa noa je browser voe d’anmeldienge te voltooin"
+    },
+    "unknown_device": "Ounbekend toestel",
+    "welcome_to_element": "Welgekommn by Element",
+    "common": {
+        "sign_in": "Anmeldn",
+        "create_account": "Account anmoakn",
+        "explore_rooms": "Gesprekkn ountdekkn"
+    }
 }

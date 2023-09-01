@@ -1,6 +1,10 @@
 {
-    "Create Account": "Ro'yxatdan o'tish",
-    "Sign In": "Kirish",
-    "Dismiss": "Bekor qilish",
-    "Open": "Ochiq"
+    "action": {
+        "open": "Ochiq",
+        "dismiss": "Bekor qilish"
+    },
+    "common": {
+        "sign_in": "Kirish",
+        "create_account": "Ro'yxatdan o'tish"
+    }
 }
