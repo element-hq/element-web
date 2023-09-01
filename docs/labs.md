@@ -134,9 +134,9 @@ This setting is (currently) _sticky_ to a user's session: it only takes effect w
 
 Refactors visually the room header and room sidebar
 
-## Notifications panels (`feature_notifications_panel`)
+## Enable the notifications panel in the room header (`feature_notifications`)
 
-A list of all events notifying the current user. Only works with unencrypted content.
+Unreliable in encrypted rooms.
 
 ## Knock rooms (`feature_ask_to_join`) [In Development]
 
