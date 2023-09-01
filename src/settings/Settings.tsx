@@ -558,7 +558,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("labs|notifications"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new ReloadOnChangeController(),
     },
     "useCompactLayout": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
