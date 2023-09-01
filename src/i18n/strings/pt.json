@@ -152,7 +152,6 @@
     "You seem to be in a call, are you sure you want to quit?": "Parece que você está em uma chamada. Tem certeza que quer sair?",
     "You seem to be uploading files, are you sure you want to quit?": "Parece que você está enviando arquivos. Tem certeza que quer sair?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Você não poderá desfazer esta mudança, pois estará dando a este(a) usuário(a) o mesmo nível de permissões que você.",
-    "Always show message timestamps": "Sempre mostrar as datas das mensagens",
     "Authentication": "Autenticação",
     "An error has occurred.": "Ocorreu um erro.",
     "Email": "Email",
@@ -161,7 +160,6 @@
     "Invalid file%(extra)s": "Arquivo inválido %(extra)s",
     "Operation failed": "A operação falhou",
     "%(brand)s version:": "versão do %(brand)s:",
-    "Show timestamps in 12 hour format (e.g. 2:30pm)": "Mostrar os horários em formato de 12h (p.ex: 2:30pm)",
     "Warning!": "Atenção!",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s apagou o nome da sala.",
     "Passphrases must match": "As frases-passe devem coincidir",
@@ -192,7 +190,6 @@
     "Online": "Online",
     "Idle": "Ocioso",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
-    "Start automatically after system login": "Iniciar automaticamente ao iniciar o sistema",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
     "Incorrect username and/or password.": "Nome de utilizador e/ou palavra-passe incorreta.",
     "Invited": "Convidada(o)",
@@ -234,7 +231,6 @@
     "%(roomName)s is not accessible at this time.": "%(roomName)s não está acessível neste momento.",
     "Delete widget": "Apagar widget",
     "Define the power level of a user": "Definir o nível de privilégios de um utilizador",
-    "Enable automatic language detection for syntax highlighting": "Ativar deteção automática da linguagem para realce da sintaxe",
     "Publish this room to the public in %(domain)s's room directory?": "Publicar esta sala ao público no diretório de salas de %(domain)s's?",
     "AM": "AM",
     "PM": "PM",
@@ -249,7 +245,6 @@
     "Authentication check failed: incorrect password?": "Erro de autenticação: palavra-passe incorreta?",
     "Do you want to set an email address?": "Deseja definir um endereço de e-mail?",
     "This will allow you to reset your password and receive notifications.": "Isto irá permitir-lhe redefinir a sua palavra-passe e receber notificações.",
-    "Automatically replace plain text Emoji": "Substituir Emoji de texto automaticamente",
     "%(widgetName)s widget added by %(senderName)s": "Widget %(widgetName)s adicionado por %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "Widget %(widgetName)s removido por %(senderName)s",
     "%(widgetName)s widget modified by %(senderName)s": "Widget %(widgetName)s modificado por %(senderName)s",
@@ -289,7 +284,6 @@
     "Monday": "Segunda-feira",
     "Collecting logs": "A recolher logs",
     "Invite to this room": "Convidar para esta sala",
-    "State Key": "Chave de estado",
     "Send": "Enviar",
     "All messages": "Todas as mensagens",
     "Call invitation": "Convite para chamada",
@@ -305,9 +299,6 @@
     "Off": "Desativado",
     "Failed to remove tag %(tagName)s from room": "Não foi possível remover a marcação %(tagName)s desta sala",
     "Wednesday": "Quarta-feira",
-    "Event Type": "Tipo de evento",
-    "Event sent!": "Evento enviado!",
-    "Event Content": "Conteúdo do evento",
     "Thank you!": "Obrigado!",
     "Add Email Address": "Adicione adresso de e-mail",
     "Add Phone Number": "Adicione número de telefone",
@@ -781,5 +772,18 @@
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
         "short_hours_minutes_seconds": "%(hours)sh %(minutes)sm %(seconds)ss",
         "short_minutes_seconds": "%(minutes)sm %(seconds)ss"
+    },
+    "devtools": {
+        "event_type": "Tipo de evento",
+        "state_key": "Chave de estado",
+        "event_sent": "Evento enviado!",
+        "event_content": "Conteúdo do evento"
+    },
+    "settings": {
+        "use_12_hour_format": "Mostrar os horários em formato de 12h (p.ex: 2:30pm)",
+        "always_show_message_timestamps": "Sempre mostrar as datas das mensagens",
+        "replace_plain_emoji": "Substituir Emoji de texto automaticamente",
+        "automatic_language_detection_syntax_highlight": "Ativar deteção automática da linguagem para realce da sintaxe",
+        "start_automatically": "Iniciar automaticamente ao iniciar o sistema"
     }
 }

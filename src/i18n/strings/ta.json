@@ -46,9 +46,6 @@
     "Yesterday": "நேற்று",
     "No update available.": "எந்த புதுப்பிப்பும் இல்லை.",
     "Thank you!": "உங்களுக்கு நன்றி",
-    "Event sent!": "நிகழ்வு அனுப்பப்பட்டது",
-    "Event Type": "நிகழ்வு வகை",
-    "Event Content": "நிகழ்வு உள்ளடக்கம்",
     "Rooms": "அறைகள்",
     "This email address is already in use": "இந்த மின்னஞ்சல் முகவரி முன்னதாகவே பயன்பாட்டில் உள்ளது",
     "This phone number is already in use": "இந்த தொலைபேசி எண் முன்னதாகவே பயன்பாட்டில் உள்ளது",
@@ -150,5 +147,10 @@
     },
     "bug_reporting": {
         "send_logs": "பதிவுகளை அனுப்பு"
+    },
+    "devtools": {
+        "event_type": "நிகழ்வு வகை",
+        "event_sent": "நிகழ்வு அனுப்பப்பட்டது",
+        "event_content": "நிகழ்வு உள்ளடக்கம்"
     }
 }

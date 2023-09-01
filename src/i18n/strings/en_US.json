@@ -9,7 +9,6 @@
     "You may need to manually permit %(brand)s to access your microphone/webcam": "You may need to manually permit %(brand)s to access your microphone/webcam",
     "Default Device": "Default Device",
     "Advanced": "Advanced",
-    "Always show message timestamps": "Always show message timestamps",
     "Authentication": "Authentication",
     "%(items)s and %(lastItem)s": "%(items)s and %(lastItem)s",
     "and %(count)s others...": {
@@ -127,7 +126,6 @@
     "Server may be unavailable, overloaded, or you hit a bug.": "Server may be unavailable, overloaded, or you hit a bug.",
     "Server unavailable, overloaded, or something else went wrong.": "Server unavailable, overloaded, or something else went wrong.",
     "Session ID": "Session ID",
-    "Show timestamps in 12 hour format (e.g. 2:30pm)": "Show timestamps in 12 hour format (e.g. 2:30pm)",
     "Signed Out": "Signed Out",
     "This email address is already in use": "This email address is already in use",
     "This email address was not found": "This email address was not found",
@@ -189,7 +187,6 @@
     "This server does not support authentication with a phone number.": "This server does not support authentication with a phone number.",
     "Connectivity to the server has been lost.": "Connectivity to the server has been lost.",
     "Sent messages will be stored until your connection has returned.": "Sent messages will be stored until your connection has returned.",
-    "Start automatically after system login": "Start automatically after system login",
     "Banned by %(displayName)s": "Banned by %(displayName)s",
     "Passphrases must match": "Passphrases must match",
     "Passphrase must not be empty": "Passphrase must not be empty",
@@ -252,12 +249,10 @@
     "This will allow you to reset your password and receive notifications.": "This will allow you to reset your password and receive notifications.",
     "Check for update": "Check for update",
     "Define the power level of a user": "Define the power level of a user",
-    "Enable automatic language detection for syntax highlighting": "Enable automatic language detection for syntax highlighting",
     "Sets the room name": "Sets the room name",
     "Unable to create widget.": "Unable to create widget.",
     "You are not in this room.": "You are not in this room.",
     "You do not have permission to do that in this room.": "You do not have permission to do that in this room.",
-    "Automatically replace plain text Emoji": "Automatically replace plain text Emoji",
     "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s widget added by %(senderName)s",
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget removed by %(senderName)s",
     "%(senderName)s changed the pinned messages for the room.": "%(senderName)s changed the pinned messages for the room.",
@@ -468,5 +463,12 @@
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss left",
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss left",
         "seconds_left": "%(seconds)ss left"
+    },
+    "settings": {
+        "use_12_hour_format": "Show timestamps in 12 hour format (e.g. 2:30pm)",
+        "always_show_message_timestamps": "Always show message timestamps",
+        "replace_plain_emoji": "Automatically replace plain text Emoji",
+        "automatic_language_detection_syntax_highlight": "Enable automatic language detection for syntax highlighting",
+        "start_automatically": "Start automatically after system login"
     }
 }

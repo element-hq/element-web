@@ -23,7 +23,6 @@
     "An error has occurred.": "D’imigh earráid éigin.",
     "A new password must be entered.": "Caithfear focal faire nua a iontráil.",
     "%(items)s and %(lastItem)s": "%(items)s agus %(lastItem)s",
-    "Always show message timestamps": "Taispeáin stampaí ama teachtaireachta i gcónaí",
     "Default Device": "Gléas Réamhshocraithe",
     "No media permissions": "Gan cheadanna meáin",
     "No Webcams detected": "Níor braitheadh aon ceamara gréasáin",
@@ -61,11 +60,6 @@
     "Permission Required": "Is Teastáil Cead",
     "Call Failed": "Chlis an glaoch",
     "Spaces": "Spásanna",
-    "Value:": "Luach:",
-    "Level": "Leibhéal",
-    "Caution:": "Faichill:",
-    "Setting:": "Socrú:",
-    "Value": "Luach",
     "Transfer": "Aistrigh",
     "Hold": "Fan",
     "Resume": "Tosaigh arís",
@@ -750,5 +744,15 @@
         "moderator": "Modhnóir",
         "admin": "Riarthóir",
         "mod": "Mod"
+    },
+    "devtools": {
+        "setting_colon": "Socrú:",
+        "caution_colon": "Faichill:",
+        "level": "Leibhéal",
+        "value_colon": "Luach:",
+        "value": "Luach"
+    },
+    "settings": {
+        "always_show_message_timestamps": "Taispeáin stampaí ama teachtaireachta i gcónaí"
     }
 }

@@ -95,8 +95,6 @@
     "Server may be unavailable, overloaded, or you hit a bug.": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือเจอจุดบกพร่อง",
     "Server unavailable, overloaded, or something else went wrong.": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือบางอย่างผิดปกติ",
     "Signed Out": "ออกจากระบบแล้ว",
-    "Always show message timestamps": "แสดงเวลาในแชทเสมอ",
-    "Show timestamps in 12 hour format (e.g. 2:30pm)": "แสดงเวลาในแชทในรูปแบบ 12 ชั่วโมง (เช่น 2:30pm)",
     "This email address is already in use": "ที่อยู่อีเมลถูกใช้แล้ว",
     "This email address was not found": "ไม่พบที่อยู่อีเมล",
     "This phone number is already in use": "หมายเลขโทรศัพท์นี้ถูกใช้งานแล้ว",
@@ -497,5 +495,9 @@
         "minutes_seconds_left": "%(minutes)sm %(seconds)ss ที่ผ่านมา",
         "seconds_left": "%(seconds)ss ที่ผ่านมา",
         "date_at_time": "%(date)s เมื่อ %(time)s"
+    },
+    "settings": {
+        "use_12_hour_format": "แสดงเวลาในแชทในรูปแบบ 12 ชั่วโมง (เช่น 2:30pm)",
+        "always_show_message_timestamps": "แสดงเวลาในแชทเสมอ"
     }
 }

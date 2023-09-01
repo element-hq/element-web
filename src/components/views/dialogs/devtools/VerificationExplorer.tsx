@@ -28,11 +28,11 @@ import { Tool } from "../DevtoolsDialog";
 
 const PHASE_MAP: Record<Phase, TranslationKey> = {
     [Phase.Unsent]: _td("Unsent"),
-    [Phase.Requested]: _td("Requested"),
-    [Phase.Ready]: _td("Ready"),
+    [Phase.Requested]: _td("devtools|phase_requested"),
+    [Phase.Ready]: _td("devtools|phase_ready"),
     [Phase.Done]: _td("action|done"),
-    [Phase.Started]: _td("Started"),
-    [Phase.Cancelled]: _td("Cancelled"),
+    [Phase.Started]: _td("devtools|phase_started"),
+    [Phase.Cancelled]: _td("devtools|phase_cancelled"),
 };
 
 const VerificationRequestExplorer: React.FC<{
@@ -62,17 +62,17 @@ const VerificationRequestExplorer: React.FC<{
     return (
         <div className="mx_DevTools_VerificationRequest">
             <dl>
-                <dt>{_t("Transaction")}</dt>
+                <dt>{_t("devtools|phase_transaction")}</dt>
                 <dd>{txnId}</dd>
-                <dt>{_t("Phase")}</dt>
+                <dt>{_t("devtools|phase")}</dt>
                 <dd>{PHASE_MAP[request.phase] ? _t(PHASE_MAP[request.phase]) : request.phase}</dd>
-                <dt>{_t("Timeout")}</dt>
+                <dt>{_t("devtools|timeout")}</dt>
                 <dd>{Math.floor(timeout / 1000)}</dd>
-                <dt>{_t("Methods")}</dt>
+                <dt>{_t("devtools|methods")}</dt>
                 <dd>{request.methods && request.methods.join(", ")}</dd>
-                <dt>{_t("Requester")}</dt>
+                <dt>{_t("devtools|requester")}</dt>
                 <dd>{request.requestingUserId}</dd>
-                <dt>{_t("Observe only")}</dt>
+                <dt>{_t("devtools|observe_only")}</dt>
                 <dd>{JSON.stringify(request.observeOnly)}</dd>
             </dl>
         </div>
@@ -97,7 +97,7 @@ const VerificationExplorer: Tool = ({ onBack }: IDevtoolsProps) => {
                 .map(([txnId, request]) => (
                     <VerificationRequestExplorer txnId={txnId} request={request} key={txnId} />
                 ))}
-            {requests.size < 1 && _t("No verification requests found")}
+            {requests.size < 1 && _t("devtools|no_verification_requests_found")}
         </BaseTool>
     );
 };
