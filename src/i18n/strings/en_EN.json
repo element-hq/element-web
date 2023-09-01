@@ -218,9 +218,7 @@
         "short_seconds": "%(value)ss",
         "short_days_hours_minutes_seconds": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
         "short_hours_minutes_seconds": "%(hours)sh %(minutes)sm %(seconds)ss",
-        "short_minutes_seconds": "%(minutes)sm %(seconds)ss",
-        "last_week": "Last week",
-        "last_month": "Last month"
+        "short_minutes_seconds": "%(minutes)sm %(seconds)ss"
     },
     "Identity server has no terms of service": "Identity server has no terms of service",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.",
@@ -948,6 +946,8 @@
     "Force 15s voice broadcast chunk length": "Force 15s voice broadcast chunk length",
     "Enable new native OIDC flows (Under active development)": "Enable new native OIDC flows (Under active development)",
     "Font size": "Font size",
+    "Render custom images in reactions": "Render custom images in reactions",
+    "Sometimes referred to as \"custom emojis\".": "Sometimes referred to as \"custom emojis\".",
     "Use custom size": "Use custom size",
     "Show polls button": "Show polls button",
     "Use a more compact 'Modern' layout": "Use a more compact 'Modern' layout",
@@ -2316,6 +2316,7 @@
     "Error processing voice message": "Error processing voice message",
     "Add reaction": "Add reaction",
     "%(reactors)s reacted with %(content)s": "%(reactors)s reacted with %(content)s",
+    "Custom reaction": "Custom reaction",
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
     "Message deleted on %(date)s": "Message deleted on %(date)s",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s",
