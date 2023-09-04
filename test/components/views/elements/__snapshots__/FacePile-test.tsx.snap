@@ -16,7 +16,7 @@ exports[`<FacePile /> renders with a tooltip 1`] = `
         data-type="round"
         role="presentation"
         style="--cpd-avatar-size: 36px;"
-        title=""
+        title="456"
       >
         4
       </span>

@@ -41,7 +41,7 @@ exports[`<Pill> should render the expected pill for @room 1`] = `
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 16px;"
-          title=""
+          title="!room1:example.com"
         >
           R
         </span>
@@ -73,7 +73,7 @@ exports[`<Pill> should render the expected pill for a known user not in the room
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 16px;"
-          title=""
+          title="@user2:example.com"
         >
           U
         </span>
@@ -105,7 +105,7 @@ exports[`<Pill> should render the expected pill for a message in another room 1`
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 16px;"
-          title=""
+          title="!room1:example.com"
         >
           R
         </span>
@@ -137,7 +137,7 @@ exports[`<Pill> should render the expected pill for a message in the same room 1
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 16px;"
-          title=""
+          title="@user1:example.com"
         >
           U
         </span>
@@ -169,7 +169,7 @@ exports[`<Pill> should render the expected pill for a room alias 1`] = `
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 16px;"
-          title=""
+          title="!room1:example.com"
         >
           R
         </span>
@@ -201,7 +201,7 @@ exports[`<Pill> should render the expected pill for a space 1`] = `
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 16px;"
-          title=""
+          title="!space1:example.com"
         >
           S
         </span>
@@ -256,7 +256,7 @@ exports[`<Pill> when rendering a pill for a room should render the expected pill
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 16px;"
-          title=""
+          title="!room1:example.com"
         >
           R
         </span>
@@ -288,7 +288,7 @@ exports[`<Pill> when rendering a pill for a user in the room should render as ex
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 16px;"
-          title=""
+          title="@user1:example.com"
         >
           U
         </span>

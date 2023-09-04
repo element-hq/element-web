@@ -49,7 +49,7 @@ import { getSenderName } from "./utils/event/getSenderName";
 function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, userId = event.getSender()): string {
     const roomId = event.getRoomId();
     const member = client.getRoom(roomId)?.getMember(userId!);
-    return member?.name || member?.rawDisplayName || userId || _t("Someone");
+    return member?.name || member?.rawDisplayName || userId || _t("common|someone");
 }
 
 function textForCallEvent(event: MatrixEvent, client: MatrixClient): () => string {
@@ -466,7 +466,7 @@ function textForThreePidInviteEvent(event: MatrixEvent): (() => string) | null {
         return () =>
             _t("%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.", {
                 senderName,
-                targetDisplayName: event.getPrevContent().display_name || _t("Someone"),
+                targetDisplayName: event.getPrevContent().display_name || _t("common|someone"),
             });
     }
 

@@ -19,5 +19,5 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../languageHandler";
 
 export function getSenderName(event: MatrixEvent): string {
-    return event.sender?.name ?? event.getSender() ?? _t("Someone");
+    return event.sender?.name ?? event.getSender() ?? _t("common|someone");
 }

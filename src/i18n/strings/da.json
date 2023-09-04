@@ -91,7 +91,6 @@
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s fjernede rumnavnet.",
     "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s ændrede rumnavnet til %(roomName)s.",
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sendte et billed.",
-    "Someone": "Nogen",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s inviterede %(targetDisplayName)s til rummet.",
     "Online": "Online",
     "Sunday": "Søndag",
@@ -117,13 +116,10 @@
     "Search…": "Søg…",
     "When I'm invited to a room": "Når jeg bliver inviteret til et rum",
     "Tuesday": "Tirsdag",
-    "Event sent!": "Begivenhed sendt!",
     "Saturday": "Lørdag",
     "Monday": "Mandag",
-    "Toolbox": "Værktøjer",
     "Collecting logs": "Indsamler logfiler",
     "Invite to this room": "Inviter til dette rum",
-    "State Key": "Tilstandsnøgle",
     "Send": "Send",
     "All messages": "Alle beskeder",
     "Call invitation": "Opkalds invitation",
@@ -135,12 +131,9 @@
     "Messages in group chats": "Beskeder i gruppechats",
     "Yesterday": "I går",
     "Error encountered (%(errorDetail)s).": "En fejl er opstået (%(errorDetail)s).",
-    "Event Type": "Begivenhedstype",
     "Low Priority": "Lav prioritet",
     "Failed to remove tag %(tagName)s from room": "Kunne ikke fjerne tag(s): %(tagName)s fra rummet",
     "Wednesday": "Onsdag",
-    "Developer Tools": "Udviklingsværktøjer",
-    "Event Content": "Begivenhedsindhold",
     "Thank you!": "Tak!",
     "Logs sent": "Logfiler sendt",
     "Failed to send logs: ": "Kunne ikke sende logfiler: ",
@@ -269,8 +262,6 @@
     "Add Email Address": "Tilføj e-mail adresse",
     "Add Phone Number": "Tilføj telefonnummer",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s ændret af %(senderName)s",
-    "Enable Emoji suggestions while typing": "Aktiver emoji forslag under indtastning",
-    "Show a placeholder for removed messages": "Vis en pladsholder for fjernede beskeder",
     "Use Single Sign On to continue": "Brug engangs login for at fortsætte",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Bekræft tilføjelsen af denne email adresse ved at bruge Single Sign On til at bevise din identitet.",
     "Single Sign On": "Engangs login",
@@ -327,7 +318,6 @@
     "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s opdaterede en ban-regel der matcher %(glob)s på grund af %(reason)s",
     "Explore rooms": "Udforsk rum",
     "Verification code": "Verifikationskode",
-    "Encrypted": "Krypteret",
     "Once enabled, encryption cannot be disabled.": "Efter aktivering er det ikke muligt at slå kryptering fra.",
     "Security & Privacy": "Sikkerhed & Privatliv",
     "Who can read history?": "Hvem kan læse historikken?",
@@ -343,7 +333,6 @@
     "Confirm password": "Bekræft adgangskode",
     "Enter password": "Indtast adgangskode",
     "Add a new server": "Tilføj en ny server",
-    "Matrix": "Matrix",
     "Change notification settings": "Skift notifikations indstillinger",
     "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
     "%(senderName)s: %(message)s": "%(senderName)s: %(message)s",
@@ -680,7 +669,10 @@
         "favourites": "Favoritter",
         "description": "Beskrivelse",
         "privacy": "Privatliv",
-        "emoji": "Emoji"
+        "emoji": "Emoji",
+        "someone": "Nogen",
+        "encrypted": "Krypteret",
+        "matrix": "Matrix"
     },
     "action": {
         "continue": "Fortsæt",
@@ -732,5 +724,17 @@
     },
     "time": {
         "date_at_time": "%(date)s om %(time)s"
+    },
+    "settings": {
+        "emoji_autocomplete": "Aktiver emoji forslag under indtastning",
+        "show_redaction_placeholder": "Vis en pladsholder for fjernede beskeder"
+    },
+    "devtools": {
+        "event_type": "Begivenhedstype",
+        "state_key": "Tilstandsnøgle",
+        "event_sent": "Begivenhed sendt!",
+        "event_content": "Begivenhedsindhold",
+        "toolbox": "Værktøjer",
+        "developer_tools": "Udviklingsværktøjer"
     }
 }

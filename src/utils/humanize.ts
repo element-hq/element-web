@@ -38,22 +38,22 @@ export function humanizeTime(timeMillis: number): string {
 
     if (msAgo >= 0) {
         // Past
-        if (msAgo <= MILLISECONDS_RECENT) return _t("a few seconds ago");
-        if (msAgo <= MILLISECONDS_1_MIN) return _t("about a minute ago");
-        if (minutes <= MINUTES_UNDER_1_HOUR) return _t("%(num)s minutes ago", { num: minutes });
-        if (minutes <= MINUTES_1_HOUR) return _t("about an hour ago");
-        if (hours <= HOURS_UNDER_1_DAY) return _t("%(num)s hours ago", { num: hours });
-        if (hours <= HOURS_1_DAY) return _t("about a day ago");
-        return _t("%(num)s days ago", { num: days });
+        if (msAgo <= MILLISECONDS_RECENT) return _t("time|few_seconds_ago");
+        if (msAgo <= MILLISECONDS_1_MIN) return _t("time|about_minute_ago");
+        if (minutes <= MINUTES_UNDER_1_HOUR) return _t("time|n_minutes_ago", { num: minutes });
+        if (minutes <= MINUTES_1_HOUR) return _t("time|about_hour_ago");
+        if (hours <= HOURS_UNDER_1_DAY) return _t("time|n_hours_ago", { num: hours });
+        if (hours <= HOURS_1_DAY) return _t("time|about_day_ago");
+        return _t("time|n_days_ago", { num: days });
     } else {
         // Future
         msAgo = Math.abs(msAgo);
-        if (msAgo <= MILLISECONDS_RECENT) return _t("a few seconds from now");
-        if (msAgo <= MILLISECONDS_1_MIN) return _t("about a minute from now");
-        if (minutes <= MINUTES_UNDER_1_HOUR) return _t("%(num)s minutes from now", { num: minutes });
-        if (minutes <= MINUTES_1_HOUR) return _t("about an hour from now");
-        if (hours <= HOURS_UNDER_1_DAY) return _t("%(num)s hours from now", { num: hours });
-        if (hours <= HOURS_1_DAY) return _t("about a day from now");
-        return _t("%(num)s days from now", { num: days });
+        if (msAgo <= MILLISECONDS_RECENT) return _t("time|in_few_seconds");
+        if (msAgo <= MILLISECONDS_1_MIN) return _t("time|in_about_minute");
+        if (minutes <= MINUTES_UNDER_1_HOUR) return _t("time|in_n_minutes", { num: minutes });
+        if (minutes <= MINUTES_1_HOUR) return _t("time|in_about_hour");
+        if (hours <= HOURS_UNDER_1_DAY) return _t("time|in_n_hours", { num: hours });
+        if (hours <= HOURS_1_DAY) return _t("time|in_about_day");
+        return _t("time|in_n_days", { num: days });
     }
 }

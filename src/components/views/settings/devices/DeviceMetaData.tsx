@@ -63,7 +63,7 @@ const DeviceMetaDatum: React.FC<{ value: string | React.ReactNode; id: string }>
 export const DeviceMetaData: React.FC<Props> = ({ device }) => {
     const inactive = getInactiveMetadata(device);
     const lastActivity = device.last_seen_ts && `${_t("Last activity")} ${formatLastActivity(device.last_seen_ts)}`;
-    const verificationStatus = device.isVerified ? _t("Verified") : _t("Unverified");
+    const verificationStatus = device.isVerified ? _t("common|verified") : _t("common|unverified");
     // if device is inactive, don't display last activity or verificationStatus
     const metadata = inactive
         ? [inactive, { id: "lastSeenIp", value: device.last_seen_ip }]

@@ -79,7 +79,6 @@
     "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s ने एक छवि भेजी।",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s ने इस कमरे के लिए मुख्य पता %(address)s पर सेट किया।",
     "%(senderName)s removed the main address for this room.": "%(senderName)s ने इस कमरे के लिए मुख्य पता हटा दिया।",
-    "Someone": "कोई",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s रूम में शामिल होने के लिए %(targetDisplayName)s को निमंत्रण भेजा।",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए प्रकाशित कर दिया जिस बिंदु से उन्हें आमंत्रित किया गया था।",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए दृश्यमान किया, जिस बिंदु में वे शामिल हुए थे।",
@@ -101,13 +100,8 @@
     "Your browser does not support the required cryptography extensions": "आपका ब्राउज़र आवश्यक क्रिप्टोग्राफी एक्सटेंशन का समर्थन नहीं करता है",
     "Authentication check failed: incorrect password?": "प्रमाणीकरण जांच विफल: गलत पासवर्ड?",
     "Please contact your homeserver administrator.": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।",
-    "Show timestamps in 12 hour format (e.g. 2:30pm)": "१२ घंटे प्रारूप में टाइमस्टैम्प दिखाएं (उदहारण:२:३० अपराह्न बजे)",
-    "Always show message timestamps": "हमेशा संदेश टाइमस्टैम्प दिखाएं",
-    "Enable automatic language detection for syntax highlighting": "वाक्यविन्यास हाइलाइटिंग के लिए स्वत: भाषा का पता प्रणाली सक्षम करें",
-    "Automatically replace plain text Emoji": "स्वचालित रूप से सादा पाठ इमोजी को प्रतिस्थापित करें",
     "Mirror local video feed": "स्थानीय वीडियो फ़ीड को आईना करें",
     "Send analytics data": "विश्लेषण डेटा भेजें",
-    "Enable inline URL previews by default": "डिफ़ॉल्ट रूप से इनलाइन यूआरएल पूर्वावलोकन सक्षम करें",
     "Enable URL previews for this room (only affects you)": "इस रूम के लिए यूआरएल पूर्वावलोकन सक्षम करें (केवल आपको प्रभावित करता है)",
     "Enable URL previews by default for participants in this room": "इस रूम में प्रतिभागियों के लिए डिफ़ॉल्ट रूप से यूआरएल पूर्वावलोकन सक्षम करें",
     "Enable widget screenshots on supported widgets": "समर्थित विजेट्स पर विजेट स्क्रीनशॉट सक्षम करें",
@@ -121,7 +115,6 @@
     "Call invitation": "कॉल आमंत्रण",
     "Messages sent by bot": "रोबॉट द्वारा भेजे गए संदेश",
     "Incorrect verification code": "गलत सत्यापन कोड",
-    "Submit": "जमा करें",
     "Phone": "फ़ोन",
     "No display name": "कोई प्रदर्शन नाम नहीं",
     "New passwords don't match": "नए पासवर्ड मेल नहीं खाते हैं",
@@ -185,7 +178,6 @@
     "Are you sure?": "क्या आपको यकीन है?",
     "Unignore": "अनदेखा न करें",
     "Jump to read receipt": "पढ़ी हुई रसीद में कूदें",
-    "Mention": "उल्लेख",
     "Share Link to User": "उपयोगकर्ता को लिंक साझा करें",
     "Admin Tools": "व्यवस्थापक उपकरण",
     "and %(count)s others...": {
@@ -238,12 +230,6 @@
     "Unrecognised address": "अपरिचित पता",
     "Straight rows of keys are easy to guess": "कुंजी की सीधी पंक्तियों का अनुमान लगाना आसान है",
     "Short keyboard patterns are easy to guess": "लघु कीबोर्ड पैटर्न का अनुमान लगाना आसान है",
-    "Enable Emoji suggestions while typing": "टाइप करते समय इमोजी सुझावों को सक्षम करें",
-    "Show a placeholder for removed messages": "हटाए गए संदेशों के लिए एक प्लेसहोल्डर दिखाएँ",
-    "Show display name changes": "प्रदर्शन नाम परिवर्तन दिखाएं",
-    "Enable big emoji in chat": "चैट में बड़े इमोजी सक्षम करें",
-    "Send typing notifications": "टाइपिंग सूचनाएं भेजें",
-    "Prompt before sending invites to potentially invalid matrix IDs": "संभावित अवैध मैट्रिक्स आईडी को निमंत्रण भेजने से पहले सूचित करें",
     "Messages containing my username": "मेरे उपयोगकर्ता नाम वाले संदेश",
     "The other party cancelled the verification.": "दूसरे पक्ष ने सत्यापन रद्द कर दिया।",
     "Verified!": "सत्यापित!",
@@ -353,9 +339,7 @@
     "Help & About": "सहायता और के बारे में",
     "Versions": "संस्करण",
     "Notifications": "सूचनाएं",
-    "Start automatically after system login": "सिस्टम लॉगिन के बाद स्वचालित रूप से प्रारंभ करें",
     "Changes your display nickname in the current room only": "केवल वर्तमान कमरे में अपना प्रदर्शन उपनाम बदलता है",
-    "Show read receipts sent by other users": "अन्य उपयोगकर्ताओं द्वारा भेजी गई रसीदें दिखाएं",
     "Scissors": "कैंची",
     "Room list": "कक्ष सूचि",
     "Autocomplete delay (ms)": "स्वत: पूर्ण विलंब (ms)",
@@ -600,7 +584,8 @@
         "preferences": "अधिमान",
         "timeline": "समयसीमा",
         "camera": "कैमरा",
-        "microphone": "माइक्रोफ़ोन"
+        "microphone": "माइक्रोफ़ोन",
+        "someone": "कोई"
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -623,7 +608,9 @@
         "cancel": "रद्द",
         "add": "जोड़े",
         "accept": "स्वीकार",
-        "register": "पंजीकरण करें"
+        "register": "पंजीकरण करें",
+        "mention": "उल्लेख",
+        "submit": "जमा करें"
     },
     "labs": {
         "pinning": "संदेश पिनिंग",
@@ -645,5 +632,20 @@
         "short_hours": "%(value)s",
         "short_minutes": "%(value)sएम",
         "short_seconds": "%(value)s एस"
+    },
+    "settings": {
+        "use_12_hour_format": "१२ घंटे प्रारूप में टाइमस्टैम्प दिखाएं (उदहारण:२:३० अपराह्न बजे)",
+        "always_show_message_timestamps": "हमेशा संदेश टाइमस्टैम्प दिखाएं",
+        "send_typing_notifications": "टाइपिंग सूचनाएं भेजें",
+        "replace_plain_emoji": "स्वचालित रूप से सादा पाठ इमोजी को प्रतिस्थापित करें",
+        "emoji_autocomplete": "टाइप करते समय इमोजी सुझावों को सक्षम करें",
+        "automatic_language_detection_syntax_highlight": "वाक्यविन्यास हाइलाइटिंग के लिए स्वत: भाषा का पता प्रणाली सक्षम करें",
+        "inline_url_previews_default": "डिफ़ॉल्ट रूप से इनलाइन यूआरएल पूर्वावलोकन सक्षम करें",
+        "show_redaction_placeholder": "हटाए गए संदेशों के लिए एक प्लेसहोल्डर दिखाएँ",
+        "show_read_receipts": "अन्य उपयोगकर्ताओं द्वारा भेजी गई रसीदें दिखाएं",
+        "show_displayname_changes": "प्रदर्शन नाम परिवर्तन दिखाएं",
+        "big_emoji": "चैट में बड़े इमोजी सक्षम करें",
+        "prompt_invite": "संभावित अवैध मैट्रिक्स आईडी को निमंत्रण भेजने से पहले सूचित करें",
+        "start_automatically": "सिस्टम लॉगिन के बाद स्वचालित रूप से प्रारंभ करें"
     }
 }

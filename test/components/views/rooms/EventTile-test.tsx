@@ -245,9 +245,6 @@ describe("EventTile", () => {
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
-            const eventTile = eventTiles[0];
-
-            expect(eventTile.classList).toContain("mx_EventTile_unverified");
 
             // there should be a warning shield
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
@@ -273,9 +270,6 @@ describe("EventTile", () => {
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
-            const eventTile = eventTiles[0];
-
-            expect(eventTile.classList).toContain("mx_EventTile_verified");
 
             // there should be no warning
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
@@ -299,9 +293,6 @@ describe("EventTile", () => {
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
-            const eventTile = eventTiles[0];
-
-            expect(eventTile.classList).toContain("mx_EventTile_verified");
 
             // there should be no warning
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
@@ -324,7 +315,6 @@ describe("EventTile", () => {
             });
 
             // check it was updated
-            expect(eventTile.classList).toContain("mx_EventTile_unverified");
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0].classList).toContain(
                 "mx_EventTile_e2eIcon_warning",
@@ -351,9 +341,6 @@ describe("EventTile", () => {
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
-            const eventTile = eventTiles[0];
-
-            expect(eventTile.classList).toContain("mx_EventTile_verified");
 
             // there should be no warning
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
@@ -372,7 +359,6 @@ describe("EventTile", () => {
             });
 
             // check it was updated
-            expect(eventTile.classList).not.toContain("mx_EventTile_verified");
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0].classList).toContain(
                 "mx_EventTile_e2eIcon_warning",

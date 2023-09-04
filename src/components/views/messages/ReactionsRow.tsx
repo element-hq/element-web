@@ -18,6 +18,7 @@ import React, { SyntheticEvent } from "react";
 import classNames from "classnames";
 import { MatrixEvent, MatrixEventEvent, Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 import { uniqBy } from "lodash";
+import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 
 import { _t } from "../../../languageHandler";
 import { isContentActionable } from "../../../utils/EventUtils";
@@ -27,9 +28,12 @@ import ReactionPicker from "../emojipicker/ReactionPicker";
 import ReactionsRowButton from "./ReactionsRowButton";
 import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
+import SettingsStore from "../../../settings/SettingsStore";
 
 // The maximum number of reactions to initially show on a message.
 const MAX_ITEMS_WHEN_LIMITED = 8;
+
+export const REACTION_SHORTCODE_KEY = new UnstableValue("shortcode", "com.beeper.reaction.shortcode");
 
 const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -169,6 +173,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         if (!reactions || !isContentActionable(mxEvent)) {
             return null;
         }
+        const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
 
         let items = reactions
             .getSortedAnnotationsByKey()
@@ -195,6 +200,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                         mxEvent={mxEvent}
                         reactionEvents={deduplicatedEvents}
                         myReactionEvent={myReactionEvent}
+                        customReactionImagesEnabled={customReactionImagesEnabled}
                         disabled={
                             !this.context.canReact ||
                             (myReactionEvent && !myReactionEvent.isRedacted() && !this.context.canSelfRedact)

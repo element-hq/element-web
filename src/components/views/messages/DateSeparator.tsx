@@ -18,6 +18,7 @@ limitations under the License.
 import React from "react";
 import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { capitalize } from "lodash";
 
 import { _t, getUserLanguage } from "../../../languageHandler";
 import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
@@ -92,6 +93,10 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         });
     };
 
+    private get relativeTimeFormat(): Intl.RelativeTimeFormat {
+        return new Intl.RelativeTimeFormat(getUserLanguage(), { style: "long", numeric: "auto" });
+    }
+
     private getLabel(): string {
         const date = new Date(this.props.ts);
         const disableRelativeTimestamps = !SettingsStore.getValue(UIFeature.TimelineEnableRelativeDates);
@@ -104,11 +109,10 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         const days = getDaysArray("long");
         yesterday.setDate(today.getDate() - 1);
 
-        const relativeTimeFormat = new Intl.RelativeTimeFormat(getUserLanguage(), { style: "long", numeric: "auto" });
         if (date.toDateString() === today.toDateString()) {
-            return relativeTimeFormat.format(0, "day"); // Today
+            return this.relativeTimeFormat.format(0, "day"); // Today
         } else if (date.toDateString() === yesterday.toDateString()) {
-            return relativeTimeFormat.format(-1, "day"); // Yesterday
+            return this.relativeTimeFormat.format(-1, "day"); // Yesterday
         } else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
             return days[date.getDay()]; // Sunday-Saturday
         } else {
@@ -263,6 +267,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
     private renderJumpToDateMenu(): React.ReactElement {
         let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuPosition) {
+            const relativeTimeFormat = this.relativeTimeFormat;
             contextMenu = (
                 <IconizedContextMenu
                     {...contextMenuBelow(this.state.contextMenuPosition)}
@@ -270,12 +275,12 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 >
                     <IconizedContextMenuOptionList first>
                         <IconizedContextMenuOption
-                            label={_t("Last week")}
+                            label={capitalize(relativeTimeFormat.format(-1, "week"))}
                             onClick={this.onLastWeekClicked}
                             data-testid="jump-to-date-last-week"
                         />
                         <IconizedContextMenuOption
-                            label={_t("Last month")}
+                            label={capitalize(relativeTimeFormat.format(-1, "month"))}
                             onClick={this.onLastMonthClicked}
                             data-testid="jump-to-date-last-month"
                         />

@@ -57,6 +57,7 @@ interface RoomlessProps extends BaseProps {
 interface RoomProps extends BaseProps {
     room: Room;
     permalinkCreator: RoomPermalinkCreator;
+    onSearchClick?: () => void;
 }
 
 type Props = XOR<RoomlessProps, RoomProps>;
@@ -293,6 +294,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                             onClose={this.onClose}
                             // whenever RightPanel is passed a room it is passed a permalinkcreator
                             permalinkCreator={this.props.permalinkCreator!}
+                            onSearchClick={this.props.onSearchClick}
                         />
                     );
                 }

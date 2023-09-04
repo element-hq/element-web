@@ -257,7 +257,7 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
         ],
     },
     [CategoryName.ACCESSIBILITY]: {
-        categoryLabel: _td("Accessibility"),
+        categoryLabel: _td("common|accessibility"),
         settingNames: [
             KeyBindingAction.Escape,
             KeyBindingAction.Enter,

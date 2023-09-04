@@ -98,7 +98,7 @@ export const AccountDataExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool 
         <BaseAccountDataExplorer
             events={cli.store.accountData}
             Editor={AccountDataEventEditor}
-            actionLabel={_t("Send custom account data event")}
+            actionLabel={_t("devtools|send_custom_account_data_event")}
             onBack={onBack}
             setTool={setTool}
         />
@@ -112,7 +112,7 @@ export const RoomAccountDataExplorer: React.FC<IDevtoolsProps> = ({ onBack, setT
         <BaseAccountDataExplorer
             events={context.room.accountData}
             Editor={RoomAccountDataEventEditor}
-            actionLabel={_t("Send custom room account data event")}
+            actionLabel={_t("devtools|send_custom_room_account_data_event")}
             onBack={onBack}
             setTool={setTool}
         />

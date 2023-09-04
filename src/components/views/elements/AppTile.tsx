@@ -737,7 +737,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 <AccessibleButton
                     key="toggleMaximised"
                     className="mx_AppTileMenuBar_widgets_button"
-                    title={isMaximised ? _t("Un-maximise") : _t("Maximise")}
+                    title={isMaximised ? _t("Un-maximise") : _t("action|maximise")}
                     onClick={this.onToggleMaximisedClick}
                 >
                     {isMaximised ? (
@@ -752,7 +752,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 <AccessibleButton
                     key="minimise"
                     className="mx_AppTileMenuBar_widgets_button"
-                    title={_t("Minimise")}
+                    title={_t("action|minimise")}
                     onClick={this.onMinimiseClicked}
                 >
                     <MinimiseIcon className="mx_Icon mx_Icon_12" />

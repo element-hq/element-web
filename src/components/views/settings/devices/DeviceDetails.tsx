@@ -73,18 +73,18 @@ const DeviceDetails: React.FC<Props> = ({
         },
         {
             id: "application",
-            heading: _t("Application"),
+            heading: _t("common|application"),
             values: [
                 { label: _t("common|name"), value: device.appName },
-                { label: _t("Version"), value: device.appVersion },
+                { label: _t("common|version"), value: device.appVersion },
                 { label: _t("URL"), value: device.url },
             ],
         },
         {
             id: "device",
-            heading: _t("Device"),
+            heading: _t("common|device"),
             values: [
-                { label: _t("Model"), value: device.deviceModel },
+                { label: _t("common|model"), value: device.deviceModel },
                 { label: _t("Operating system"), value: device.deviceOperatingSystem },
                 { label: _t("Browser"), value: device.client },
                 { label: _t("IP address"), value: device.last_seen_ip },

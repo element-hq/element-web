@@ -62,13 +62,13 @@ export const DeviceTypeIcon: React.FC<Props> = ({ isVerified, isSelected, device
                 <VerifiedIcon
                     className={classNames("mx_DeviceTypeIcon_verificationIcon", "verified")}
                     role="img"
-                    aria-label={_t("Verified")}
+                    aria-label={_t("common|verified")}
                 />
             ) : (
                 <UnverifiedIcon
                     className={classNames("mx_DeviceTypeIcon_verificationIcon", "unverified")}
                     role="img"
-                    aria-label={_t("Unverified")}
+                    aria-label={_t("common|unverified")}
                 />
             )}
         </div>

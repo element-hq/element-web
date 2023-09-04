@@ -73,25 +73,25 @@ const ServerInfo: React.FC<IDevtoolsProps> = ({ onBack }) => {
     } else {
         body = (
             <>
-                <h4>{_t("Capabilities")}</h4>
+                <h4>{_t("common|capabilities")}</h4>
                 {capabilities !== FAILED_TO_LOAD ? (
                     <SyntaxHighlight language="json" children={JSON.stringify(capabilities, null, 4)} />
                 ) : (
-                    <div>{_t("Failed to load.")}</div>
+                    <div>{_t("devtools|failed_to_load")}</div>
                 )}
 
-                <h4>{_t("Client Versions")}</h4>
+                <h4>{_t("devtools|client_versions")}</h4>
                 {clientVersions !== FAILED_TO_LOAD ? (
                     <SyntaxHighlight language="json" children={JSON.stringify(clientVersions, null, 4)} />
                 ) : (
-                    <div>{_t("Failed to load.")}</div>
+                    <div>{_t("devtools|failed_to_load")}</div>
                 )}
 
-                <h4>{_t("Server Versions")}</h4>
+                <h4>{_t("devtools|server_versions")}</h4>
                 {serverVersions !== FAILED_TO_LOAD ? (
                     <SyntaxHighlight language="json" children={JSON.stringify(serverVersions, null, 4)} />
                 ) : (
-                    <div>{_t("Failed to load.")}</div>
+                    <div>{_t("devtools|failed_to_load")}</div>
                 )}
             </>
         );

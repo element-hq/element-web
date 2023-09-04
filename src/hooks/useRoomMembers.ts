@@ -23,17 +23,20 @@ import { useTypedEventEmitter } from "./useEventEmitter";
 // Hook to simplify watching Matrix Room joined members
 export const useRoomMembers = (room: Room, throttleWait = 250): RoomMember[] => {
     const [members, setMembers] = useState<RoomMember[]>(room.getJoinedMembers());
-    useTypedEventEmitter(
-        room.currentState,
-        RoomStateEvent.Members,
-        throttle(
-            () => {
-                setMembers(room.getJoinedMembers());
-            },
-            throttleWait,
-            { leading: true, trailing: true },
-        ),
+
+    const throttledUpdate = useMemo(
+        () =>
+            throttle(
+                () => {
+                    setMembers(room.getJoinedMembers());
+                },
+                throttleWait,
+                { leading: true, trailing: true },
+            ),
+        [room, throttleWait],
     );
+
+    useTypedEventEmitter(room.currentState, RoomStateEvent.Members, throttledUpdate);
     return members;
 };
 
@@ -50,11 +53,11 @@ type RoomMemberCountOpts = {
  * @param opts The options.
  * @returns the room member count.
  */
-export const useRoomMemberCount = (room: Room, opts: RoomMemberCountOpts = { throttleWait: 250 }): number => {
+export const useRoomMemberCount = (
+    room: Room,
+    { throttleWait }: RoomMemberCountOpts = { throttleWait: 250 },
+): number => {
     const [count, setCount] = useState<number>(room.getJoinedMemberCount());
-
-    const { throttleWait } = opts;
-
     const throttledUpdate = useMemo(
         () =>
             throttle(

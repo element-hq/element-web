@@ -466,7 +466,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                         <LabelledToggleSwitch
                             value={isEncrypted}
                             onChange={this.onEncryptionChange}
-                            label={_t("Encrypted")}
+                            label={_t("common|encrypted")}
                             disabled={!canEnableEncryption}
                         />
                         {isEncryptionForceDisabled && !isEncrypted && (

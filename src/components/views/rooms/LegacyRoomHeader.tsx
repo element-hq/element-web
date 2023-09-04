@@ -480,6 +480,7 @@ export interface IProps {
 interface IState {
     contextMenuPosition?: DOMRect;
     rightPanelOpen: boolean;
+    featureAskToJoin: boolean;
 }
 
 /**
@@ -496,6 +497,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
     private readonly client = this.props.room.client;
+    private readonly featureAskToJoinWatcher: string;
 
     public constructor(props: IProps, context: IState) {
         super(props, context);
@@ -503,7 +505,15 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         notiStore.on(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.state = {
             rightPanelOpen: RightPanelStore.instance.isOpen,
+            featureAskToJoin: SettingsStore.getValue("feature_ask_to_join"),
         };
+        this.featureAskToJoinWatcher = SettingsStore.watchSetting(
+            "feature_ask_to_join",
+            null,
+            (_settingName, _roomId, _atLevel, _newValAtLevel, featureAskToJoin) => {
+                this.setState({ featureAskToJoin });
+            },
+        );
     }
 
     public componentDidMount(): void {
@@ -516,6 +526,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         const notiStore = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         notiStore.removeListener(NotificationStateEvents.Update, this.onNotificationUpdate);
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        SettingsStore.unwatchSetting(this.featureAskToJoinWatcher);
     }
 
     private onRightPanelStoreUpdate = (): void => {
@@ -821,7 +832,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                 </div>
                 {!isVideoRoom && <RoomCallBanner roomId={this.props.room.roomId} />}
                 <RoomLiveShareWarning roomId={this.props.room.roomId} />
-                <RoomKnocksBar room={this.props.room} />
+                {this.state.featureAskToJoin && <RoomKnocksBar room={this.props.room} />}
             </header>
         );
     }

@@ -125,22 +125,22 @@ const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
             }
             onBack();
         } catch (e) {
-            return _t("Failed to save settings.") + (e instanceof Error ? ` (${e.message})` : "");
+            return _t("devtools|failed_to_save") + (e instanceof Error ? ` (${e.message})` : "");
         }
     };
 
     return (
-        <BaseTool onBack={onBack} actionLabel={_t("Save setting values")} onAction={onSave}>
+        <BaseTool onBack={onBack} actionLabel={_t("devtools|save_setting_values")} onAction={onSave}>
             <h3>
-                {_t("Setting:")} <code>{setting}</code>
+                {_t("devtools|setting_colon")} <code>{setting}</code>
             </h3>
 
             <div className="mx_DevTools_SettingsExplorer_warning">
-                <b>{_t("Caution:")}</b> {_t("This UI does NOT check the types of the values. Use at your own risk.")}
+                <b>{_t("devtools|caution_colon")}</b> {_t("devtools|use_at_own_risk")}
             </div>
 
             <div>
-                {_t("Setting definition:")}
+                {_t("devtools|setting_definition")}
                 <pre>
                     <code>{JSON.stringify(SETTINGS[setting], null, 4)}</code>
                 </pre>
@@ -150,9 +150,9 @@ const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
                 <table>
                     <thead>
                         <tr>
-                            <th>{_t("Level")}</th>
-                            <th>{_t("Settable at global")}</th>
-                            <th>{_t("Settable at room")}</th>
+                            <th>{_t("devtools|level")}</th>
+                            <th>{_t("devtools|settable_global")}</th>
+                            <th>{_t("devtools|settable_room")}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -172,7 +172,7 @@ const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
             <div>
                 <Field
                     id="valExpl"
-                    label={_t("Values at explicit levels")}
+                    label={_t("devtools|values_explicit")}
                     type="text"
                     className="mx_DevTools_textarea"
                     element="textarea"
@@ -185,7 +185,7 @@ const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
             <div>
                 <Field
                     id="valExpl"
-                    label={_t("Values at explicit levels in this room")}
+                    label={_t("devtools|values_explicit_room")}
                     type="text"
                     className="mx_DevTools_textarea"
                     element="textarea"
@@ -207,37 +207,37 @@ const ViewSetting: React.FC<IViewSettingProps> = ({ setting, onEdit, onBack }) =
     const context = useContext(DevtoolsContext);
 
     return (
-        <BaseTool onBack={onBack} actionLabel={_t("Edit values")} onAction={onEdit}>
+        <BaseTool onBack={onBack} actionLabel={_t("devtools|edit_values")} onAction={onEdit}>
             <h3>
-                {_t("Setting:")} <code>{setting}</code>
+                {_t("devtools|setting_colon")} <code>{setting}</code>
             </h3>
 
             <div>
-                {_t("Setting definition:")}
+                {_t("devtools|setting_definition")}
                 <pre>
                     <code>{JSON.stringify(SETTINGS[setting], null, 4)}</code>
                 </pre>
             </div>
 
             <div>
-                {_t("Value:")}&nbsp;
+                {_t("devtools|value_colon")}&nbsp;
                 <code>{renderSettingValue(SettingsStore.getValue(setting))}</code>
             </div>
 
             <div>
-                {_t("Value in this room:")}&nbsp;
+                {_t("devtools|value_this_room_colon")}&nbsp;
                 <code>{renderSettingValue(SettingsStore.getValue(setting, context.room.roomId))}</code>
             </div>
 
             <div>
-                {_t("Values at explicit levels:")}
+                {_t("devtools|values_explicit_colon")}
                 <pre>
                     <code>{renderExplicitSettingValues(setting)}</code>
                 </pre>
             </div>
 
             <div>
-                {_t("Values at explicit levels in this room:")}
+                {_t("devtools|values_explicit_this_room_colon")}
                 <pre>
                     <code>{renderExplicitSettingValues(setting, context.room.roomId)}</code>
                 </pre>
@@ -289,9 +289,9 @@ const SettingsList: React.FC<ISettingsListProps> = ({ onBack, onView, onEdit }) 
             <table>
                 <thead>
                     <tr>
-                        <th>{_t("Setting ID")}</th>
-                        <th>{_t("Value")}</th>
-                        <th>{_t("Value in this room")}</th>
+                        <th>{_t("devtools|setting_id")}</th>
+                        <th>{_t("devtools|value")}</th>
+                        <th>{_t("devtools|value_in_this_room")}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -306,7 +306,7 @@ const SettingsList: React.FC<ISettingsListProps> = ({ onBack, onView, onEdit }) 
                                     <code>{i}</code>
                                 </AccessibleButton>
                                 <AccessibleButton
-                                    alt={_t("Edit setting")}
+                                    alt={_t("devtools|edit_setting")}
                                     onClick={() => onEdit(i)}
                                     className="mx_DevTools_SettingsExplorer_edit"
                                 >

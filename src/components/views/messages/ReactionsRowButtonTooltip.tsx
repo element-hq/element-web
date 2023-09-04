@@ -22,6 +22,7 @@ import { _t } from "../../../languageHandler";
 import { formatCommaSeparatedList } from "../../../utils/FormattingUtils";
 import Tooltip from "../elements/Tooltip";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { REACTION_SHORTCODE_KEY } from "./ReactionsRow";
 interface IProps {
     // The event we're displaying reactions for
     mxEvent: MatrixEvent;
@@ -30,6 +31,8 @@ interface IProps {
     // A list of Matrix reaction events for this key
     reactionEvents: MatrixEvent[];
     visible: boolean;
+    // Whether to render custom image reactions
+    customReactionImagesEnabled?: boolean;
 }
 
 export default class ReactionsRowButtonTooltip extends React.PureComponent<IProps> {
@@ -43,12 +46,17 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
         let tooltipLabel: JSX.Element | undefined;
         if (room) {
             const senders: string[] = [];
+            let customReactionName: string | undefined;
             for (const reactionEvent of reactionEvents) {
                 const member = room.getMember(reactionEvent.getSender()!);
                 const name = member?.name ?? reactionEvent.getSender()!;
                 senders.push(name);
+                customReactionName =
+                    (this.props.customReactionImagesEnabled &&
+                        REACTION_SHORTCODE_KEY.findIn(reactionEvent.getContent())) ||
+                    undefined;
             }
-            const shortName = unicodeToShortcode(content);
+            const shortName = unicodeToShortcode(content) || customReactionName;
             tooltipLabel = (
                 <div>
                     {_t(
