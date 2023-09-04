@@ -39,9 +39,6 @@
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "홈서버에 연결할 수 없음 - 연결 상태를 확인하거나, <a>홈서버의 SSL 인증서</a>가 믿을 수 있는지 확인하고, 브라우저 확장 기능이 요청을 막고 있는지 확인해주세요.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "주소 창에 HTTPS URL이 있을 때는 HTTP로 홈서버를 연결할 수 없습니다. HTTPS를 쓰거나 <a>안전하지 않은 스크립트를 허용</a>해주세요.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s님이 %(powerLevelDiffText)s의 권한 등급을 바꿨습니다.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s님이 방 이름을 %(roomName)s(으)로 바꿨습니다.",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s님이 방 이름을 제거했습니다.",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s님이 주제를 \"%(topic)s\"(으)로 바꿨습니다.",
     "Command error": "명령어 오류",
     "Commands": "명령어",
     "Cryptography": "암호화",
@@ -120,7 +117,6 @@
     "%(roomName)s is not accessible at this time.": "현재는 %(roomName)s에 들어갈 수 없습니다.",
     "Rooms": "방",
     "Search failed": "검색 실패함",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s님이 사진을 보냈습니다.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "방에 들어오라고 %(senderName)s님이 %(targetDisplayName)s님에게 초대를 보냈습니다.",
     "Server error": "서버 오류",
     "Server may be unavailable, overloaded, or search timed out :(": "서버를 쓸 수 없거나 과부하거나, 검색 시간을 초과했어요 :(",
@@ -144,7 +140,6 @@
     "Unable to verify email address.": "이메일 주소를 인증할 수 없습니다.",
     "Unban": "출입 금지 풀기",
     "Unable to enable Notifications": "알림을 사용할 수 없음",
-    "Unnamed Room": "이름 없는 방",
     "Uploading %(filename)s": "%(filename)s을(를) 올리는 중",
     "Uploading %(filename)s and %(count)s others": {
         "one": "%(filename)s 외 %(count)s개를 올리는 중",
@@ -236,7 +231,6 @@
     "Do you want to set an email address?": "이메일 주소를 설정하시겠어요?",
     "This will allow you to reset your password and receive notifications.": "이렇게 하면 비밀번호를 다시 설정하고 알림을 받을 수 있습니다.",
     "Sunday": "일요일",
-    "Messages sent by bot": "봇에게 받은 메시지",
     "Notification targets": "알림 대상",
     "Today": "오늘",
     "Friday": "금요일",
@@ -245,8 +239,6 @@
     "Changelog": "바뀐 점",
     "Waiting for response from server": "서버에서 응답을 기다리는 중",
     "This Room": "방",
-    "Messages containing my display name": "내 표시 이름이 포함된 메시지",
-    "Messages in one-to-one chats": "1:1 대화 메시지",
     "Unavailable": "이용할 수 없음",
     "Send": "보내기",
     "Source URL": "출처 URL",
@@ -262,14 +254,11 @@
     "Collecting logs": "로그 수집 중",
     "All Rooms": "모든 방",
     "All messages": "모든 메시지",
-    "Call invitation": "전화 초대",
     "What's new?": "새로운 점은?",
-    "When I'm invited to a room": "방에 초대받았을 때",
     "Invite to this room": "이 방에 초대",
     "You cannot delete this message. (%(code)s)": "이 메시지를 삭제할 수 없습니다. (%(code)s)",
     "Thursday": "목요일",
     "Show message in desktop notification": "컴퓨터 알림에서 내용 보이기",
-    "Messages in group chats": "그룹 대화 메시지",
     "Yesterday": "어제",
     "Error encountered (%(errorDetail)s).": "오류가 일어났습니다 (%(errorDetail)s).",
     "Low Priority": "중요하지 않음",
@@ -492,15 +481,6 @@
     "Sends the given message coloured as a rainbow": "주어진 메시지를 무지개 색으로 보냅니다",
     "Sends the given emote coloured as a rainbow": "주어진 감정 표현을 무지개 색으로 보냅니다",
     "Displays list of commands with usages and descriptions": "사용법과 설명이 포함된 명령어 목록을 표시합니다",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s님이 이 방을 업그레이드했습니다.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s님이 링크를 아는 사람들에게 방을 공개했습니다.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s님이 초대받은 사람만 방에 들어오도록 설정했습니다.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s님이 입장 규칙을 %(rule)s(으)로 변경했습니다",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s님이 손님이 방에 들어갈 수 있도록 허용했습니다.",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s님이 손님이 방에 들어가지 못하도록 했습니다.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s님이 손님 접근을 %(rule)s(으)로 변경했습니다",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s님이 이 방의 메인 주소를 %(address)s(으)로 설정했습니다.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s님이 이 방의 메인 주소를 제거했습니다.",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "방에 들어오라고 %(senderName)s님이 %(targetDisplayName)s님에게 보낸 초대를 취소했습니다.",
     "%(displayName)s is typing …": "%(displayName)s님이 적고 있습니다 …",
     "%(names)s and %(count)s others are typing …": {
@@ -618,11 +598,6 @@
     "Short keyboard patterns are easy to guess": "짧은 키보드 패턴은 추측하기 쉽습니다",
     "You do not have the required permissions to use this command.": "이 명령어를 사용하기 위해 필요한 권한이 없습니다.",
     "Show hidden events in timeline": "타임라인에서 숨겨진 이벤트 보이기",
-    "Messages containing my username": "내 사용자 이름이 있는 메시지",
-    "Messages containing @room": "@room이(가) 있는 메시지",
-    "Encrypted messages in one-to-one chats": "1:1 대화 암호화된 메시지",
-    "Encrypted messages in group chats": "그룹 대화 암호화된 메시지",
-    "When rooms are upgraded": "방을 업그레이드했을 때",
     "The other party cancelled the verification.": "상대방이 확인을 취소했습니다.",
     "Verified!": "인증되었습니다!",
     "You've successfully verified this user.": "성공적으로 이 사용자를 인증했습니다.",
@@ -952,8 +927,6 @@
     "Changes the avatar of the current room": "현재 방의 아바타 변경하기",
     "e.g. my-room": "예: my-room",
     "Please enter a name for the room": "방 이름을 입력해주세요",
-    "Create a public room": "공개 방 만들기",
-    "Create a private room": "개인 방 만들기",
     "Topic (optional)": "주제 (선택)",
     "Hide advanced": "고급 숨기기",
     "Show advanced": "고급 보이기",
@@ -1118,14 +1091,6 @@
     "No recently visited rooms": "최근에 방문하지 않은 방 목록",
     "Recently visited rooms": "최근 방문한 방 목록",
     "Recently viewed": "최근에 확인한",
-    "%(senderName)s removed their display name (%(oldDisplayName)s)": "%(senderName)s님이 표시이름을 제거했습니다 (%(oldDisplayName)s)",
-    "%(senderName)s changed their profile picture": "%(senderName)s님이 프로필 사진을 변경했습니다",
-    "%(senderName)s invited %(targetName)s": "%(senderName)s님이 %(targetName)s님을 초대했습니다",
-    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s님이 방 이름을 %(oldRoomName)s에서 %(newRoomName)s(으)로 변경했습니다.",
-    "%(oldDisplayName)s changed their display name to %(displayName)s": "%(oldDisplayName)s님이 표시이름을 %(displayName)s(으)로 변경했습니다",
-    "%(targetName)s left the room": "%(targetName)s님이 방을 떠났습니다",
-    "%(targetName)s joined the room": "%(targetName)s님이 방에 참여했습니다",
-    "%(senderName)s set a profile picture": "%(senderName)s님이 프로필 사진을 설정했습니다",
     "Scroll to most recent messages": "가장 최근 메세지로 스크롤",
     "If you can't find the room you're looking for, ask for an invite or create a new room.": "만약 찾고 있는 방이 없다면, 초대를 요청하거나 새로운 방을 만드세요.",
     "Unable to copy a link to the room to the clipboard.": "방 링크를 클립보드에 복사할 수 없습니다.",
@@ -1192,15 +1157,12 @@
     "Slovakia": "슬로바키아",
     "Sends the given message as a spoiler": "스포일러로서 주어진 메시지를 전송",
     "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "평문 텍스트 메시지 앞에 (╯°□°）╯︵ ┻━┻ 를 덧붙임",
-    "%(senderName)s banned %(targetName)s: %(reason)s": "%(senderName)s님이 %(targetName)s님을 강퇴함. 사유: %(reason)s",
     "Argentina": "아르헨티나",
     "Laos": "라오스",
-    "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s님이 스티커를 전송했습니다.",
     "Transfer Failed": "전송 실패",
     "User Busy": "사용자 바쁨",
     "Already in call": "이미 전화중",
     "Ukraine": "우크라이나",
-    "%(senderName)s removed their profile picture": "%(senderName)s님이 프로필 사진을 삭제함",
     "United Kingdom": "영국",
     "Converts the DM to a room": "DM을 방으로 변환",
     "Sends a message as html, without interpreting it as markdown": "메시지를 마크다운으로서 해석하지 않고 html로서 전송",
@@ -1224,7 +1186,6 @@
     "The call was answered on another device.": "이 전화는 다른 기기에서 응답했습니다.",
     "Answered Elsewhere": "다른 기기에서 응답함",
     "No active call in this room": "이 방에 진행중인 통화 없음",
-    "%(senderName)s banned %(targetName)s": "%(senderName)s님이 %(targetName)s님을 강퇴함",
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "평문 텍스트 메시지 앞에 ┬──┬ ノ( ゜-゜ノ) 를 덧붙임",
     "Your current session is ready for secure messaging.": "현재 세션에서 보안 메세지를 사용할 수 있습니다.",
     "Last activity": "최근 활동",
@@ -1289,7 +1250,8 @@
         "unverified": "검증 되지 않음",
         "trusted": "신뢰함",
         "not_trusted": "신뢰하지 않음",
-        "accessibility": "접근성"
+        "accessibility": "접근성",
+        "unnamed_room": "이름 없는 방"
     },
     "action": {
         "continue": "계속하기",
@@ -1410,7 +1372,20 @@
         "show_displayname_changes": "표시 이름 변경 사항 보이기",
         "big_emoji": "대화에서 큰 이모지 켜기",
         "prompt_invite": "잠재적으로 올바르지 않은 Matrix ID로 초대를 보내기 전에 확인",
-        "start_automatically": "컴퓨터를 시작할 때 자동으로 실행하기"
+        "start_automatically": "컴퓨터를 시작할 때 자동으로 실행하기",
+        "notifications": {
+            "rule_contains_display_name": "내 표시 이름이 포함된 메시지",
+            "rule_contains_user_name": "내 사용자 이름이 있는 메시지",
+            "rule_roomnotif": "@room이(가) 있는 메시지",
+            "rule_room_one_to_one": "1:1 대화 메시지",
+            "rule_message": "그룹 대화 메시지",
+            "rule_encrypted": "그룹 대화 암호화된 메시지",
+            "rule_invite_for_me": "방에 초대받았을 때",
+            "rule_call": "전화 초대",
+            "rule_suppress_notices": "봇에게 받은 메시지",
+            "rule_tombstone": "방을 업그레이드했을 때",
+            "rule_encrypted_room_one_to_one": "1:1 대화 암호화된 메시지"
+        }
     },
     "devtools": {
         "event_type": "이벤트 종류",
@@ -1420,5 +1395,46 @@
         "threads_timeline": "스레드 타임라인",
         "toolbox": "도구 상자",
         "developer_tools": "개발자 도구"
+    },
+    "create_room": {
+        "title_public_room": "공개 방 만들기",
+        "title_private_room": "개인 방 만들기"
+    },
+    "timeline": {
+        "m.room.member": {
+            "invite": "%(senderName)s님이 %(targetName)s님을 초대했습니다",
+            "ban_reason": "%(senderName)s님이 %(targetName)s님을 강퇴함. 사유: %(reason)s",
+            "ban": "%(senderName)s님이 %(targetName)s님을 강퇴함",
+            "change_name": "%(oldDisplayName)s님이 표시이름을 %(displayName)s(으)로 변경했습니다",
+            "remove_name": "%(senderName)s님이 표시이름을 제거했습니다 (%(oldDisplayName)s)",
+            "remove_avatar": "%(senderName)s님이 프로필 사진을 삭제함",
+            "change_avatar": "%(senderName)s님이 프로필 사진을 변경했습니다",
+            "set_avatar": "%(senderName)s님이 프로필 사진을 설정했습니다",
+            "join": "%(targetName)s님이 방에 참여했습니다",
+            "left": "%(targetName)s님이 방을 떠났습니다"
+        },
+        "m.room.topic": "%(senderDisplayName)s님이 주제를 \"%(topic)s\"(으)로 바꿨습니다.",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s님이 방 이름을 제거했습니다.",
+            "change": "%(senderDisplayName)s님이 방 이름을 %(oldRoomName)s에서 %(newRoomName)s(으)로 변경했습니다.",
+            "set": "%(senderDisplayName)s님이 방 이름을 %(roomName)s(으)로 바꿨습니다."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s님이 이 방을 업그레이드했습니다.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s님이 링크를 아는 사람들에게 방을 공개했습니다.",
+            "invite": "%(senderDisplayName)s님이 초대받은 사람만 방에 들어오도록 설정했습니다.",
+            "unknown": "%(senderDisplayName)s님이 입장 규칙을 %(rule)s(으)로 변경했습니다"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s님이 손님이 방에 들어갈 수 있도록 허용했습니다.",
+            "forbidden": "%(senderDisplayName)s님이 손님이 방에 들어가지 못하도록 했습니다.",
+            "unknown": "%(senderDisplayName)s님이 손님 접근을 %(rule)s(으)로 변경했습니다"
+        },
+        "m.image": "%(senderDisplayName)s님이 사진을 보냈습니다.",
+        "m.sticker": "%(senderDisplayName)s님이 스티커를 전송했습니다.",
+        "m.room.canonical_alias": {
+            "set": "%(senderName)s님이 이 방의 메인 주소를 %(address)s(으)로 설정했습니다.",
+            "removed": "%(senderName)s님이 이 방의 메인 주소를 제거했습니다."
+        }
     }
 }

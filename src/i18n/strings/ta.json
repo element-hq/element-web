@@ -4,17 +4,12 @@
     "Changelog": "மாற்றப்பதிவு",
     "Collecting app version information": "செயலியின் பதிப்பு தகவல்கள் சேகரிக்கப்படுகிறது",
     "Collecting logs": "பதிவுகள் சேகரிக்கப்படுகிறது",
-    "Call invitation": "அழைப்பிற்கான விண்ணப்பம்",
     "Failed to add tag %(tagName)s to room": "%(tagName)s எனும் குறிச்சொல்லை அறையில் சேர்ப்பதில் தோல்வி",
     "Failed to forget room %(errCode)s": "அறையை மறப்பதில் தோல்வி %(errCode)s",
     "Favourite": "விருப்பமான",
     "Invite to this room": "இந்த அறைக்கு அழை",
     "Low Priority": "குறைந்த முன்னுரிமை",
     "Failed to remove tag %(tagName)s from room": "அறையில் இருந்து குறிச்சொல் %(tagName)s களை அகற்றுவது தோல்வியடைந்தது",
-    "Messages containing my display name": "என் காட்சி பெயர் கொண்ட செய்திகள்",
-    "Messages in group chats": "குழு அரட்டைகளில் உள்ள செய்திகள்",
-    "Messages in one-to-one chats": "ஒரு-க்கு-ஒரு அரட்டைகளில் உள்ள செய்திகள்",
-    "Messages sent by bot": "bot மூலம் அனுப்பிய செய்திகள்",
     "Noisy": "சத்தம்",
     "Notification targets": "அறிவிப்பு இலக்குகள்",
     "Notifications": "அறிவிப்புகள்",
@@ -32,7 +27,6 @@
     "What's New": "புதிதாக வந்தவை",
     "What's new?": "புதிதாக என்ன?",
     "Waiting for response from server": "வழங்கியின் பதிலுக்காக காத்திருக்கிறது",
-    "When I'm invited to a room": "நான் அறைக்கு அழைக்கப்பட்ட போது",
     "You cannot delete this message. (%(code)s)": "இந்த செய்தியை நீங்கள் அழிக்க முடியாது. (%(code)s)",
     "Show message in desktop notification": "திரை அறிவிப்புகளில் செய்தியை காண்பிக்கவும்",
     "Sunday": "ஞாயிறு",
@@ -152,5 +146,15 @@
         "event_type": "நிகழ்வு வகை",
         "event_sent": "நிகழ்வு அனுப்பப்பட்டது",
         "event_content": "நிகழ்வு உள்ளடக்கம்"
+    },
+    "settings": {
+        "notifications": {
+            "rule_contains_display_name": "என் காட்சி பெயர் கொண்ட செய்திகள்",
+            "rule_room_one_to_one": "ஒரு-க்கு-ஒரு அரட்டைகளில் உள்ள செய்திகள்",
+            "rule_message": "குழு அரட்டைகளில் உள்ள செய்திகள்",
+            "rule_invite_for_me": "நான் அறைக்கு அழைக்கப்பட்ட போது",
+            "rule_call": "அழைப்பிற்கான விண்ணப்பம்",
+            "rule_suppress_notices": "bot மூலம் அனுப்பிய செய்திகள்"
+        }
     }
 }

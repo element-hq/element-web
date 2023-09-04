@@ -59,10 +59,6 @@
     "You are no longer ignoring %(userId)s": "Више не занемарујете корисника %(userId)s",
     "Verified key": "Проверени кључ",
     "Reason": "Разлог",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s је променио тему у „%(topic)s“.",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s је уклонио назив собе.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s је променио назив собе у %(roomName)s.",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s је послао слику.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s је послао позивницу за приступ соби ка %(targetDisplayName)s.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s је учинио будући историјат собе видљивим свим члановима собе, од тренутка позивања у собу.",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s је учинио будући историјат собе видљивим свим члановима собе, од тренутка приступања соби.",
@@ -78,7 +74,6 @@
     "Failure to create room": "Неуспех при прављењу собе",
     "Server may be unavailable, overloaded, or you hit a bug.": "Сервер је можда недоступан, преоптерећен или сте нашли грешку.",
     "Send": "Пошаљи",
-    "Unnamed Room": "Неименована соба",
     "Your browser does not support the required cryptography extensions": "Ваш прегледач не подржава потребна криптографска проширења",
     "Not a valid %(brand)s keyfile": "Није исправана %(brand)s кључ-датотека",
     "Authentication check failed: incorrect password?": "Провера идентитета није успела: нетачна лозинка?",
@@ -395,10 +390,8 @@
     "Waiting for response from server": "Чекам на одговор са сервера",
     "Off": "Искључено",
     "This Room": "Ова соба",
-    "Messages in one-to-one chats": "Поруке у један-на-један ћаскањима",
     "Unavailable": "Недоступан",
     "Source URL": "Адреса извора",
-    "Messages sent by bot": "Поруке послате од бота",
     "Filter results": "Филтрирај резултате",
     "No update available.": "Нема нових ажурирања.",
     "Noisy": "Бучно",
@@ -411,15 +404,11 @@
     "All Rooms": "Све собе",
     "Wednesday": "Среда",
     "All messages": "Све поруке",
-    "Call invitation": "Позивница за позив",
-    "Messages containing my display name": "Поруке које садрже моје приказно име",
     "What's new?": "Шта је ново?",
-    "When I'm invited to a room": "Када сам позван у собу",
     "Invite to this room": "Позови у ову собу",
     "You cannot delete this message. (%(code)s)": "Не можете обрисати ову поруку. (%(code)s)",
     "Thursday": "Четвртак",
     "Show message in desktop notification": "Прикажи поруку у стоном обавештењу",
-    "Messages in group chats": "Поруке у групним ћаскањима",
     "Yesterday": "Јуче",
     "Error encountered (%(errorDetail)s).": "Догодила се грешка (%(errorDetail)s).",
     "Low Priority": "Најмања важност",
@@ -467,11 +456,9 @@
     "This room has no topic.": "Ова соба нема тему.",
     "Sets the room name": "Поставља назив собе",
     "Forces the current outbound group session in an encrypted room to be discarded": "Присиљава одбацивање тренутне одлазне сесије групе у шифрованој соби",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s је надоградио ову собу.",
     "Join millions for free on the largest public server": "Придружите се милионима других бесплатно на највећем јавном серверу",
     "Create account": "Направи налог",
     "Email (optional)": "Мејл (изборно)",
-    "Messages containing my username": "Поруке које садрже моје корисничко",
     "Are you sure you want to sign out?": "Заиста желите да се одјавите?",
     "Call failed due to misconfigured server": "Позив неуспешан због лоше подешеног сервера",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Замолите администратора вашег сервера (<code>%(homeserverDomain)s</code>) да подеси „TURN“ сервер како би позиви радили поуздано.",
@@ -482,10 +469,6 @@
     "Click the button below to confirm adding this email address.": "Кликните на дугме испод за потврђивање додавања ове е-адресе.",
     "Add Email Address": "Додај адресу е-поште",
     "Identity server has no terms of service": "Идентитетски сервер нема услове коришћења",
-    "%(senderName)s placed a voice call.": "%(senderName)s је започео гласовни позив.",
-    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s је започео гласовни позив. (није подржано од стране овог прегледача)",
-    "%(senderName)s placed a video call.": "%(senderName)s је започео видео позив.",
-    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s је започео видео позив. (није подржано од стране овог прегледача)",
     "You do not have permission to invite people to this room.": "Немате дозволу за позивање људи у ову собу.",
     "Encryption upgrade available": "Надоградња шифровања је доступна",
     "Show more": "Прикажи више",
@@ -888,16 +871,6 @@
         "other": "%(senderName)s је додао алтернативну адресу %(addresses)s за ову собу.",
         "one": "%(senderName)s је додао алтернативну адресу %(addresses)s за ову собу."
     },
-    "%(senderName)s removed the main address for this room.": "%(senderName)s је уклони главну адресу за ову собу.",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s је постави главну адресу собе на %(address)s.",
-    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Свим серверима је забрањено да учествују! Ова соба се више не може користити.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s је изменио гостински приступ на %(rule)s",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s је спречио госте да се придруже у соби.",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s је дозволи гостима да се придруже у собу.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s је измени правило придруживања на %(rule)s",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s је учини собу доступном само позивницом.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s је учини собу јавном за све који знају везу.",
-    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s је изменио назив собе из %(oldRoomName)s у %(newRoomName)s.",
     "Takes the call in the current room off hold": "Узима позив са чекања у тренутној соби",
     "Places the call in the current room on hold": "Ставља позив на чекање у тренутној соби",
     "Sends a message to the given user": "Шаље поруку наведеном кориснику",
@@ -1199,8 +1172,6 @@
     "%(senderName)s updated an invalid ban rule": "%(senderName)s је аужурирао неважеће правило о забрани",
     "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s је уклонио правило о забрани које подудара са %(glob)s",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Користите сервер за идентитет да бисте послали позивнице е-поштом. Кликните на даље да бисте користили уобичајни сервер идентитета %(defaultIdentityServerName)s или управљајте у подешавањима.",
-    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s је променио ACL сервере за ову собу.",
-    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s је подесио ACL сервере за ову собу.",
     "Sends the given emote coloured as a rainbow": "Шаље дату емоцију обојену као дуга",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Кључ за потписивање који сте навели поклапа се са кључем за потписивање који сте добили од %(userId)s сесије %(deviceId)s. Сесија је означена као проверена.",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "УПОЗОРЕЊЕ: ПРОВЕРА КЉУЧА НИЈЕ УСПЕЛА! Кључ за потписивање за %(userId)s и сесију %(deviceId)s је \"%(fprint)s\", који се не подудара са наведеним кључем \"%(fingerprint)s\". То може значити да су ваше комуникације пресретнуте!",
@@ -1250,7 +1221,8 @@
         "someone": "Неко",
         "matrix": "Матрикс",
         "trusted": "поуздан",
-        "not_trusted": "није поуздан"
+        "not_trusted": "није поуздан",
+        "unnamed_room": "Неименована соба"
     },
     "action": {
         "continue": "Настави",
@@ -1352,7 +1324,16 @@
         "show_stickers_button": "Прикажи дугме за налепнице",
         "automatic_language_detection_syntax_highlight": "Омогући самостално препознавање језика за истицање синтаксе",
         "inline_url_previews_default": "Подразумевано укључи УРЛ прегледе",
-        "start_automatically": "Самостално покрећи након пријаве на систем"
+        "start_automatically": "Самостално покрећи након пријаве на систем",
+        "notifications": {
+            "rule_contains_display_name": "Поруке које садрже моје приказно име",
+            "rule_contains_user_name": "Поруке које садрже моје корисничко",
+            "rule_room_one_to_one": "Поруке у један-на-један ћаскањима",
+            "rule_message": "Поруке у групним ћаскањима",
+            "rule_invite_for_me": "Када сам позван у собу",
+            "rule_call": "Позивница за позив",
+            "rule_suppress_notices": "Поруке послате од бота"
+        }
     },
     "devtools": {
         "event_type": "Врста догађаја",
@@ -1362,5 +1343,40 @@
         "caution_colon": "Опрез:",
         "toolbox": "Алатница",
         "developer_tools": "Програмерске алатке"
+    },
+    "timeline": {
+        "m.call.invite": {
+            "voice_call": "%(senderName)s је започео гласовни позив.",
+            "voice_call_unsupported": "%(senderName)s је започео гласовни позив. (није подржано од стране овог прегледача)",
+            "video_call": "%(senderName)s је започео видео позив.",
+            "video_call_unsupported": "%(senderName)s је започео видео позив. (није подржано од стране овог прегледача)"
+        },
+        "m.room.topic": "%(senderDisplayName)s је променио тему у „%(topic)s“.",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s је уклонио назив собе.",
+            "change": "%(senderDisplayName)s је изменио назив собе из %(oldRoomName)s у %(newRoomName)s.",
+            "set": "%(senderDisplayName)s је променио назив собе у %(roomName)s."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s је надоградио ову собу.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s је учини собу јавном за све који знају везу.",
+            "invite": "%(senderDisplayName)s је учини собу доступном само позивницом.",
+            "unknown": "%(senderDisplayName)s је измени правило придруживања на %(rule)s"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s је дозволи гостима да се придруже у собу.",
+            "forbidden": "%(senderDisplayName)s је спречио госте да се придруже у соби.",
+            "unknown": "%(senderDisplayName)s је изменио гостински приступ на %(rule)s"
+        },
+        "m.image": "%(senderDisplayName)s је послао слику.",
+        "m.room.server_acl": {
+            "set": "%(senderDisplayName)s је подесио ACL сервере за ову собу.",
+            "changed": "%(senderDisplayName)s је променио ACL сервере за ову собу.",
+            "all_servers_banned": "🎉 Свим серверима је забрањено да учествују! Ова соба се више не може користити."
+        },
+        "m.room.canonical_alias": {
+            "set": "%(senderName)s је постави главну адресу собе на %(address)s.",
+            "removed": "%(senderName)s је уклони главну адресу за ову собу."
+        }
     }
 }

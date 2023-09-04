@@ -18,6 +18,7 @@ import React from "react";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 
 import { _t } from "../../../languageHandler";
+import { formatDuration } from "../../../DateUtils";
 
 const BUSY_PRESENCE_NAME = new UnstableValue("busy", "org.matrix.msc3026.busy");
 
@@ -37,30 +38,6 @@ export default class PresenceLabel extends React.Component<IProps> {
         activeAgo: -1,
     };
 
-    // Return duration as a string using appropriate time units
-    // XXX: This would be better handled using a culture-aware library, but we don't use one yet.
-    private getDuration(time: number): string | undefined {
-        if (!time) return;
-        const t = Math.round(time / 1000);
-        const s = t % 60;
-        const m = Math.round(t / 60) % 60;
-        const h = Math.round(t / (60 * 60)) % 24;
-        const d = Math.round(t / (60 * 60 * 24));
-        if (t < 60) {
-            if (t < 0) {
-                return _t("%(duration)ss", { duration: 0 });
-            }
-            return _t("%(duration)ss", { duration: s });
-        }
-        if (t < 60 * 60) {
-            return _t("%(duration)sm", { duration: m });
-        }
-        if (t < 24 * 60 * 60) {
-            return _t("%(duration)sh", { duration: h });
-        }
-        return _t("%(duration)sd", { duration: d });
-    }
-
     private getPrettyPresence(presence?: string, activeAgo?: number, currentlyActive?: boolean): string {
         // for busy presence, we ignore the 'currentlyActive' flag: they're busy whether
         // they're active or not. It can be set while the user is active in which case
@@ -68,7 +45,7 @@ export default class PresenceLabel extends React.Component<IProps> {
         if (presence && BUSY_PRESENCE_NAME.matches(presence)) return _t("Busy");
 
         if (!currentlyActive && activeAgo !== undefined && activeAgo > 0) {
-            const duration = this.getDuration(activeAgo);
+            const duration = formatDuration(activeAgo);
             if (presence === "online") return _t("Online for %(duration)s", { duration: duration });
             if (presence === "unavailable") return _t("Idle for %(duration)s", { duration: duration }); // XXX: is this actually right?
             if (presence === "offline") return _t("Offline for %(duration)s", { duration: duration });

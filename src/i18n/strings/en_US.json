@@ -26,9 +26,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
     "Change Password": "Change Password",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s changed the room name to %(roomName)s.",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s removed the room name.",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
     "Changes your display nickname": "Changes your display nickname",
     "Command error": "Command error",
     "Commands": "Commands",
@@ -119,7 +116,6 @@
     "Room %(roomId)s not visible": "Room %(roomId)s not visible",
     "Rooms": "Rooms",
     "Search failed": "Search failed",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sent an image.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.",
     "Server error": "Server error",
     "Server may be unavailable, overloaded, or search timed out :(": "Server may be unavailable, overloaded, or search timed out :(",
@@ -228,7 +224,6 @@
     "%(roomName)s does not exist.": "%(roomName)s does not exist.",
     "%(roomName)s is not accessible at this time.": "%(roomName)s is not accessible at this time.",
     "Start authentication": "Start authentication",
-    "Unnamed Room": "Unnamed Room",
     "Uploading %(filename)s": "Uploading %(filename)s",
     "Uploading %(filename)s and %(count)s others": {
         "one": "Uploading %(filename)s and %(count)s other",
@@ -257,7 +252,6 @@
     "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s widget removed by %(senderName)s",
     "%(senderName)s changed the pinned messages for the room.": "%(senderName)s changed the pinned messages for the room.",
     "Sunday": "Sunday",
-    "Messages sent by bot": "Messages sent by bot",
     "Notification targets": "Notification targets",
     "Today": "Today",
     "Friday": "Friday",
@@ -267,8 +261,6 @@
     "Waiting for response from server": "Waiting for response from server",
     "This Room": "This Room",
     "Noisy": "Noisy",
-    "Messages containing my display name": "Messages containing my display name",
-    "Messages in one-to-one chats": "Messages in one-to-one chats",
     "Unavailable": "Unavailable",
     "Source URL": "Source URL",
     "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
@@ -284,13 +276,10 @@
     "Wednesday": "Wednesday",
     "Send": "Send",
     "All messages": "All messages",
-    "Call invitation": "Call invitation",
     "What's new?": "What's new?",
-    "When I'm invited to a room": "When I'm invited to a room",
     "Invite to this room": "Invite to this room",
     "You cannot delete this message. (%(code)s)": "You cannot delete this message. (%(code)s)",
     "Thursday": "Thursday",
-    "Messages in group chats": "Messages in group chats",
     "Yesterday": "Yesterday",
     "Error encountered (%(errorDetail)s).": "Error encountered (%(errorDetail)s).",
     "Low Priority": "Low Priority",
@@ -322,15 +311,6 @@
     "Adds a custom widget by URL to the room": "Adds a custom widget by URL to the room",
     "Please supply a https:// or http:// widget URL": "Please supply an https:// or http:// widget URL",
     "You cannot modify widgets in this room.": "You cannot modify widgets in this room.",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s upgraded this room.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s made the room public to whoever knows the link.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s made the room invite only.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s changed the join rule to %(rule)s",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s has allowed guests to join the room.",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s has prevented guests from joining the room.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s changed guest access to %(rule)s",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s set the main address for this room to %(address)s.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s removed the main address for this room.",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.",
     "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s widget modified by %(senderName)s",
     "%(displayName)s is typing …": "%(displayName)s is typing …",
@@ -408,7 +388,8 @@
         "camera": "Camera",
         "microphone": "Microphone",
         "emoji": "Emoji",
-        "someone": "Someone"
+        "someone": "Someone",
+        "unnamed_room": "Unnamed Room"
     },
     "action": {
         "continue": "Continue",
@@ -469,6 +450,37 @@
         "always_show_message_timestamps": "Always show message timestamps",
         "replace_plain_emoji": "Automatically replace plain text Emoji",
         "automatic_language_detection_syntax_highlight": "Enable automatic language detection for syntax highlighting",
-        "start_automatically": "Start automatically after system login"
+        "start_automatically": "Start automatically after system login",
+        "notifications": {
+            "rule_contains_display_name": "Messages containing my display name",
+            "rule_room_one_to_one": "Messages in one-to-one chats",
+            "rule_message": "Messages in group chats",
+            "rule_invite_for_me": "When I'm invited to a room",
+            "rule_call": "Call invitation",
+            "rule_suppress_notices": "Messages sent by bot"
+        }
+    },
+    "timeline": {
+        "m.room.topic": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s removed the room name.",
+            "set": "%(senderDisplayName)s changed the room name to %(roomName)s."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s upgraded this room.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s made the room public to whoever knows the link.",
+            "invite": "%(senderDisplayName)s made the room invite only.",
+            "unknown": "%(senderDisplayName)s changed the join rule to %(rule)s"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s has allowed guests to join the room.",
+            "forbidden": "%(senderDisplayName)s has prevented guests from joining the room.",
+            "unknown": "%(senderDisplayName)s changed guest access to %(rule)s"
+        },
+        "m.image": "%(senderDisplayName)s sent an image.",
+        "m.room.canonical_alias": {
+            "set": "%(senderName)s set the main address for this room to %(address)s.",
+            "removed": "%(senderName)s removed the main address for this room."
+        }
     }
 }

@@ -1,5 +1,4 @@
 {
-    "%(senderDisplayName)s sent an image.": "yuzen %(senderDisplayName)s yat twelaft.",
     "Other": "Yaḍn",
     "Actions": "Tugawin",
     "Messages": "Tuzinin",
@@ -146,5 +145,8 @@
         "end": "End",
         "control": "Ctrl",
         "shift": "Shift"
+    },
+    "timeline": {
+        "m.image": "yuzen %(senderDisplayName)s yat twelaft."
     }
 }

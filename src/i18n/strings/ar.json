@@ -16,7 +16,6 @@
     "Changelog": "سِجل التغييرات",
     "Waiting for response from server": "في انتظار الرد مِن الخادوم",
     "Thank you!": "شكرًا !",
-    "Call invitation": "دعوة لمحادثة",
     "What's new?": "ما الجديد ؟",
     "powered by Matrix": "مشغل بواسطة Matrix",
     "Use Single Sign On to continue": "استعمل الولوج الموحّد للمواصلة",
@@ -69,7 +68,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s، ‏%(day)s %(monthName)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s، ‏%(day)s %(monthName)s %(fullYear)s ‏%(time)s",
-    "Unnamed Room": "غرفة بدون اسم",
     "Identity server has no terms of service": "ليس لخادوم الهويّة أيّ شروط خدمة",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "يطلب هذا الإجراء الوصول إلى خادوم الهويّات المبدئي<server />للتثبّت من عنوان البريد الإلكتروني أو رقم الهاتف، ولكن ليس للخادوم أيّ شروط خدمة.",
     "Only continue if you trust the owner of the server.": "لا تُواصل لو لم تكن تثق بمالك الخادوم.",
@@ -155,20 +153,6 @@
     "Sends a message to the given user": "يرسل رسالة الى المستخدم المعطى",
     "Displays action": "يعرض إجراءً",
     "Reason": "السبب",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s غير الموضوع الى \"%(topic)s\".",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s ازال اسم الغرفة.",
-    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s غير اسم الغرفة من %(oldRoomName)s الى %(newRoomName)s.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s غير اسم الغرفة الى %(roomName)s.",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s قام بترقية هذه الغرفة.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s قام بجعل هذة الغرفة عامة لكل شخص يعرف الرابط.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s جعل ممكنه لكل من لديه دعوة فقط.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s قام بتغيير قاعدة الانضمام الى %(rule)s",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s قام بالسماح للضيوف بالانضمام الى الغرفة.",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s قام بإيقاف امكانية انضمام الضيوف الى الغرفة.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s غير طريقة دخول الضيوف الى %(rule)s",
-    "%(senderDisplayName)s sent an image.": "قام %(senderDisplayName)s بإرسال صورة.",
-    "%(senderName)s set the main address for this room to %(address)s.": "قام %(senderName)s بتعديل العنوان الرئيسي لهذه الغرفة الى %(address)s.",
-    "%(senderName)s removed the main address for this room.": "قام %(senderName)s بإزالة العنوان الرئيسي لهذه الغرفة.",
     "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
         "other": "قام %(senderName)s بإضافة العناوين البديلة %(addresses)s لهذه الغرفة.",
         "one": "قام %(senderName)s بإضافة العنوان البديل %(addresses)s لهذه الغرفة."
@@ -180,10 +164,6 @@
     "%(senderName)s changed the alternative addresses for this room.": "قام %(senderName)s بتعديل العناوين البديلة لهذه الغرفة.",
     "%(senderName)s changed the main and alternative addresses for this room.": "قام %(senderName)s بتعديل العناوين الرئيسية و البديلة لهذه الغرفة.",
     "%(senderName)s changed the addresses for this room.": "قام %(senderName)s بتعديل عناوين هذه الغرفة.",
-    "%(senderName)s placed a voice call.": "أجرى ⁨%(senderName)s⁩ مكالمة صوتية.",
-    "%(senderName)s placed a voice call. (not supported by this browser)": "أجرى %(senderName)s مكالمة صوتية. (غير متوافقة مع هذا المتصفح)",
-    "%(senderName)s placed a video call.": "أجرى %(senderName)s مكالمة فيديو.",
-    "%(senderName)s placed a video call. (not supported by this browser)": "أجرى %(senderName)s مكالمة فيديو. (غير متوافقة مع هذا المتصفح)",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "قام %(senderName)s بسحب الدعوة الى %(targetDisplayName)s بالانضمام الى الغرفة.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "أرسل %(senderName)s دعوة الى %(targetDisplayName)s للانضمام الى الغرفة.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "قام %(senderName)s بتعديل رؤية المحادثات السابقة ممكنة لكل الاعضاء من تاريخ دعوتهم بالانضمام.",
@@ -732,16 +712,6 @@
     "Unknown caller": "متصل غير معروف",
     "This is your list of users/servers you have blocked - don't leave the room!": "هذه قائمتك للمستخدمين / الخوادم التي حظرت - لا تغادر الغرفة!",
     "My Ban List": "قائمة الحظر",
-    "When rooms are upgraded": "عند ترقية الغرف",
-    "Messages sent by bot": "رسائل أرسلها آلي (Bot)",
-    "When I'm invited to a room": "عندما أُدعى لغرفة",
-    "Encrypted messages in group chats": "رسائل مشفرة في المحادثات الجماعية",
-    "Messages in group chats": "رسائل المحادثات الجماعية",
-    "Encrypted messages in one-to-one chats": "رسائل مشفرة في المحادثات المباشرة",
-    "Messages in one-to-one chats": "رسائل المحادثات المباشرة",
-    "Messages containing @room": "رسائل تتضمن @غرفة",
-    "Messages containing my username": "رسائل تتضمن اسم المستخدم الخاص بي",
-    "Messages containing my display name": "رسائل تتضمن اسمي الظاهر",
     "Downloading logs": "تحميل السجلات",
     "Uploading logs": "رفع السجلات",
     "IRC display name width": "عرض الاسم الظاهر لIRC",
@@ -999,7 +969,6 @@
     "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s حدَّث قاعدة حظر المستخدمين المطابقة %(glob)s بسبب %(reason)s",
     "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s حدَّث قاعدة حظر الخوادم المطابقة %(glob)s بسبب %(reason)s",
     "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s حدَّث قاعدة حظر الغرفة المطابقة %(glob)s بسبب %(reason)s",
-    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 جميع الخوادم ممنوعة من المشاركة! لم يعد من الممكن استخدام هذه الغرفة.",
     "Takes the call in the current room off hold": "يوقف المكالمة في الغرفة الحالية",
     "Places the call in the current room on hold": "يضع المكالمة في الغرفة الحالية قيد الانتظار",
     "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "يلصق (͡ ° ͜ʖ ͡ °) أوَّل رسالة نصية عادية",
@@ -1080,11 +1049,6 @@
     "Could not connect to identity server": "تعذر الاتصال بخادوم الهوية",
     "Not a valid identity server (status code %(code)s)": "ليس خادوم هوية صالح (رمز الحالة %(code)s)",
     "Identity server URL must be HTTPS": "يجب أن يستعمل رابط (URL) خادوم الهوية ميفاق HTTPS",
-    "%(targetName)s rejected the invitation": "رفض %(targetName)s الدعوة",
-    "%(targetName)s joined the room": "انضم %(targetName)s إلى الغرفة",
-    "%(senderName)s made no change": "لم يقم %(senderName)s بأي تغيير",
-    "%(senderName)s set a profile picture": "قام %(senderName)s بتعيين صورة رمزية",
-    "%(senderName)s changed their profile picture": "%(senderName)s قام بتغيير صورته الرمزية",
     "Paraguay": "باراغواي",
     "Netherlands": "هولندا",
     "Dismiss read marker and jump to bottom": "تجاهل علامة القراءة وانتقل إلى الأسفل",
@@ -1092,15 +1056,6 @@
     "Cancel replying to a message": "إلغاء الرد على رسالة",
     "New line": "سطر جديد",
     "Greece": "اليونان",
-    "%(senderName)s removed their profile picture": "%(senderName)s أزال صورة ملفه الشخصي",
-    "%(senderName)s removed their display name (%(oldDisplayName)s)": "%(senderName)s أزال اسمه (%(oldDisplayName)s)",
-    "%(senderName)s set their display name to %(displayName)s": "%(senderName)s قام بتعيين اسمه إلى %(displayName)s",
-    "%(oldDisplayName)s changed their display name to %(displayName)s": "%(oldDisplayName)s غير اسمه إلى %(displayName)s",
-    "%(senderName)s banned %(targetName)s": "%(senderName)s حظر %(targetName)s",
-    "%(senderName)s banned %(targetName)s: %(reason)s": "%(senderName)s حظر %(targetName)s: %(reason)s",
-    "%(senderName)s invited %(targetName)s": "%(senderName)s دعى %(targetName)s",
-    "%(targetName)s accepted an invitation": "%(targetName)s قبل دعوة",
-    "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s قبل الدعوة ل %(displayName)s",
     "Converts the DM to a room": "تحويل المحادثة المباشرة إلى غرفة",
     "Converts the room to a DM": "تحويل الغرفة إلى محادثة مباشرة",
     "Some invites couldn't be sent": "تعذر إرسال بعض الدعوات",
@@ -1250,7 +1205,8 @@
         "someone": "شخص ما",
         "encrypted": "التشفير",
         "trusted": "موثوق",
-        "not_trusted": "غير موثوق"
+        "not_trusted": "غير موثوق",
+        "unnamed_room": "غرفة بدون اسم"
     },
     "action": {
         "continue": "واصِل",
@@ -1355,11 +1311,73 @@
         "show_displayname_changes": "إظهار تغييرات الاسم الظاهر",
         "big_emoji": "تفعيل الرموز التعبيرية الكبيرة في المحادثة",
         "prompt_invite": "أعلمني قبل إرسال دعوات لمعرِّفات قد لا تكون صحيحة",
-        "start_automatically": "ابدأ تلقائيًا بعد تسجيل الدخول إلى النظام"
+        "start_automatically": "ابدأ تلقائيًا بعد تسجيل الدخول إلى النظام",
+        "notifications": {
+            "rule_contains_display_name": "رسائل تتضمن اسمي الظاهر",
+            "rule_contains_user_name": "رسائل تتضمن اسم المستخدم الخاص بي",
+            "rule_roomnotif": "رسائل تتضمن @غرفة",
+            "rule_room_one_to_one": "رسائل المحادثات المباشرة",
+            "rule_message": "رسائل المحادثات الجماعية",
+            "rule_encrypted": "رسائل مشفرة في المحادثات الجماعية",
+            "rule_invite_for_me": "عندما أُدعى لغرفة",
+            "rule_call": "دعوة لمحادثة",
+            "rule_suppress_notices": "رسائل أرسلها آلي (Bot)",
+            "rule_tombstone": "عند ترقية الغرف",
+            "rule_encrypted_room_one_to_one": "رسائل مشفرة في المحادثات المباشرة"
+        }
     },
     "devtools": {
         "state_key": "مفتاح الحالة",
         "toolbox": "علبة الأدوات",
         "developer_tools": "أدوات التطوير"
+    },
+    "timeline": {
+        "m.call.invite": {
+            "voice_call": "أجرى ⁨%(senderName)s⁩ مكالمة صوتية.",
+            "voice_call_unsupported": "أجرى %(senderName)s مكالمة صوتية. (غير متوافقة مع هذا المتصفح)",
+            "video_call": "أجرى %(senderName)s مكالمة فيديو.",
+            "video_call_unsupported": "أجرى %(senderName)s مكالمة فيديو. (غير متوافقة مع هذا المتصفح)"
+        },
+        "m.room.member": {
+            "accepted_3pid_invite": "%(targetName)s قبل الدعوة ل %(displayName)s",
+            "accepted_invite": "%(targetName)s قبل دعوة",
+            "invite": "%(senderName)s دعى %(targetName)s",
+            "ban_reason": "%(senderName)s حظر %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s حظر %(targetName)s",
+            "change_name": "%(oldDisplayName)s غير اسمه إلى %(displayName)s",
+            "set_name": "%(senderName)s قام بتعيين اسمه إلى %(displayName)s",
+            "remove_name": "%(senderName)s أزال اسمه (%(oldDisplayName)s)",
+            "remove_avatar": "%(senderName)s أزال صورة ملفه الشخصي",
+            "change_avatar": "%(senderName)s قام بتغيير صورته الرمزية",
+            "set_avatar": "قام %(senderName)s بتعيين صورة رمزية",
+            "no_change": "لم يقم %(senderName)s بأي تغيير",
+            "join": "انضم %(targetName)s إلى الغرفة",
+            "reject_invite": "رفض %(targetName)s الدعوة"
+        },
+        "m.room.topic": "%(senderDisplayName)s غير الموضوع الى \"%(topic)s\".",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s ازال اسم الغرفة.",
+            "change": "%(senderDisplayName)s غير اسم الغرفة من %(oldRoomName)s الى %(newRoomName)s.",
+            "set": "%(senderDisplayName)s غير اسم الغرفة الى %(roomName)s."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s قام بترقية هذه الغرفة.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s قام بجعل هذة الغرفة عامة لكل شخص يعرف الرابط.",
+            "invite": "%(senderDisplayName)s جعل ممكنه لكل من لديه دعوة فقط.",
+            "unknown": "%(senderDisplayName)s قام بتغيير قاعدة الانضمام الى %(rule)s"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s قام بالسماح للضيوف بالانضمام الى الغرفة.",
+            "forbidden": "%(senderDisplayName)s قام بإيقاف امكانية انضمام الضيوف الى الغرفة.",
+            "unknown": "%(senderDisplayName)s غير طريقة دخول الضيوف الى %(rule)s"
+        },
+        "m.image": "قام %(senderDisplayName)s بإرسال صورة.",
+        "m.room.server_acl": {
+            "all_servers_banned": "🎉 جميع الخوادم ممنوعة من المشاركة! لم يعد من الممكن استخدام هذه الغرفة."
+        },
+        "m.room.canonical_alias": {
+            "set": "قام %(senderName)s بتعديل العنوان الرئيسي لهذه الغرفة الى %(address)s.",
+            "removed": "قام %(senderName)s بإزالة العنوان الرئيسي لهذه الغرفة."
+        }
     }
 }

@@ -5,7 +5,6 @@
     "Change Password": "เปลี่ยนรหัสผ่าน",
     "Default": "ค่าเริ่มต้น",
     "Default Device": "อุปกรณ์เริ่มต้น",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s เปลี่ยนหัวข้อเป็น \"%(topic)s\"",
     "Decrypt %(text)s": "ถอดรหัส %(text)s",
     "Download %(text)s": "ดาวน์โหลด %(text)s",
     "Low priority": "ความสำคัญต่ำ",
@@ -35,8 +34,6 @@
     "Are you sure you want to reject the invitation?": "คุณแน่ใจหรือว่าต้องการจะปฏิเสธคำเชิญ?",
     "Banned users": "ผู้ใช้ที่ถูกแบน",
     "Bans user with given id": "ผู้ใช้และ id ที่ถูกแบน",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s เปลี่ยนชื่อห้องไปเป็น %(roomName)s",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s ลบชื่อห้อง",
     "Changes your display nickname": "เปลี่ยนชื่อเล่นที่แสดงของคุณ",
     "Command error": "คำสั่งผิดพลาด",
     "Commands": "คำสั่ง",
@@ -88,7 +85,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s ไม่ได้รับสิทธิ์ส่งการแจ้งเตือน - กรุณาลองใหม่อีกครั้ง",
     "Rooms": "ห้องสนทนา",
     "Search failed": "การค้นหาล้มเหลว",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s ได้ส่งรูป",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s ได้ส่งคำเชิญให้ %(targetDisplayName)s เข้าร่วมห้อง",
     "Server error": "เซิร์ฟเวอร์ผิดพลาด",
     "Server may be unavailable, overloaded, or search timed out :(": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือการค้นหาหมดเวลา :(",
@@ -153,7 +149,6 @@
     "Unknown error": "ข้อผิดพลาดที่ไม่รู้จัก",
     "Incorrect password": "รหัสผ่านไม่ถูกต้อง",
     "Home": "เมนูหลัก",
-    "Unnamed Room": "ห้องที่ยังไม่ได้ตั้งชื่อ",
     "(~%(count)s results)": {
         "one": "(~%(count)s ผลลัพท์)",
         "other": "(~%(count)s ผลลัพท์)"
@@ -181,12 +176,9 @@
     "Changelog": "บันทึกการเปลี่ยนแปลง",
     "Waiting for response from server": "กำลังรอการตอบสนองจากเซิร์ฟเวอร์",
     "This Room": "ห้องนี้",
-    "Messages containing my display name": "ข้อความที่มีชื่อของฉัน",
-    "Messages in one-to-one chats": "ข้อความในแชทตัวต่อตัว",
     "Unavailable": "ไม่มี",
     "Send": "ส่ง",
     "Source URL": "URL ต้นฉบับ",
-    "Messages sent by bot": "ข้อความจากบอท",
     "No update available.": "ไม่มีอัปเดตที่ใหม่กว่า",
     "Noisy": "เสียงดัง",
     "Collecting app version information": "กำลังรวบรวมข้อมูลเวอร์ชันแอป",
@@ -199,13 +191,10 @@
     "All Rooms": "ทุกห้อง",
     "Wednesday": "วันพุธ",
     "All messages": "ทุกข้อความ",
-    "Call invitation": "คำเชิญเข้าร่วมการโทร",
     "What's new?": "มีอะไรใหม่?",
-    "When I'm invited to a room": "เมื่อฉันได้รับคำเชิญเข้าห้อง",
     "Invite to this room": "เชิญเข้าห้องนี้",
     "You cannot delete this message. (%(code)s)": "คุณไม่สามารถลบข้อความนี้ได้ (%(code)s)",
     "Thursday": "วันพฤหัสบดี",
-    "Messages in group chats": "ข้อความในแชทกลุ่ม",
     "Yesterday": "เมื่อวานนี้",
     "Error encountered (%(errorDetail)s).": "เกิดข้อผิดพลาด (%(errorDetail)s)",
     "Low Priority": "ความสำคัญต่ำ",
@@ -427,7 +416,8 @@
         "someone": "ใครบางคน",
         "application": "แอปพลิเคชัน",
         "version": "รุ่น",
-        "device": "อุปกรณ์"
+        "device": "อุปกรณ์",
+        "unnamed_room": "ห้องที่ยังไม่ได้ตั้งชื่อ"
     },
     "action": {
         "continue": "ดำเนินการต่อ",
@@ -498,6 +488,22 @@
     },
     "settings": {
         "use_12_hour_format": "แสดงเวลาในแชทในรูปแบบ 12 ชั่วโมง (เช่น 2:30pm)",
-        "always_show_message_timestamps": "แสดงเวลาในแชทเสมอ"
+        "always_show_message_timestamps": "แสดงเวลาในแชทเสมอ",
+        "notifications": {
+            "rule_contains_display_name": "ข้อความที่มีชื่อของฉัน",
+            "rule_room_one_to_one": "ข้อความในแชทตัวต่อตัว",
+            "rule_message": "ข้อความในแชทกลุ่ม",
+            "rule_invite_for_me": "เมื่อฉันได้รับคำเชิญเข้าห้อง",
+            "rule_call": "คำเชิญเข้าร่วมการโทร",
+            "rule_suppress_notices": "ข้อความจากบอท"
+        }
+    },
+    "timeline": {
+        "m.room.topic": "%(senderDisplayName)s เปลี่ยนหัวข้อเป็น \"%(topic)s\"",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s ลบชื่อห้อง",
+            "set": "%(senderDisplayName)s เปลี่ยนชื่อห้องไปเป็น %(roomName)s"
+        },
+        "m.image": "%(senderDisplayName)s ได้ส่งรูป"
     }
 }

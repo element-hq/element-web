@@ -91,7 +91,6 @@
     "Only continue if you trust the owner of the server.": "Nastavite samo ako vjerujete vlasniku poslužitelja.",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ova radnja zahtijeva pristup zadanom poslužitelju identiteta <server /> radi provjere adrese e-pošte ili telefonskog broja, no poslužitelj nema nikakve uvjete usluge.",
     "Identity server has no terms of service": "Poslužitelj identiteta nema uvjete usluge",
-    "Unnamed Room": "Neimenovana soba",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s, %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s. %(monthName)s, %(time)s",
@@ -161,7 +160,8 @@
     "Could not connect to identity server": "Nije moguće spojiti se na poslužitelja identiteta",
     "common": {
         "analytics": "Analitika",
-        "error": "Geška"
+        "error": "Geška",
+        "unnamed_room": "Neimenovana soba"
     },
     "action": {
         "continue": "Nastavi",

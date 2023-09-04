@@ -7,7 +7,6 @@
     "Are you sure you want to reject the invitation?": "Você tem certeza que deseja rejeitar este convite?",
     "Banned users": "Usuárias/os banidas/os",
     "Bans user with given id": "Banir usuários com o identificador informado",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s mudou o tópico para \"%(topic)s\".",
     "Changes your display nickname": "Troca o seu apelido",
     "Commands": "Comandos",
     "Confirm password": "Confirmar palavra-passe",
@@ -86,7 +85,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s às %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s às %(time)s",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s alterou o nível de permissões de %(powerLevelDiffText)s.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s alterou o nome da sala para %(roomName)s.",
     "Failed to send request.": "Não foi possível mandar requisição.",
     "Failed to verify email address: make sure you clicked the link in the email": "Não foi possível verificar o endereço de email: verifique se você realmente clicou no link que está no seu email",
     "Failure to create room": "Não foi possível criar a sala",
@@ -103,7 +101,6 @@
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s não tem permissões para enviar notificações a você - por favor, verifique as configurações do seu navegador",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s não tem permissões para enviar notificações a você - por favor, tente novamente",
     "Room %(roomId)s not visible": "A sala %(roomId)s não está visível",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s enviou uma imagem.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s enviou um convite para %(targetDisplayName)s entrar na sala.",
     "This email address is already in use": "Este endereço de email já está sendo usado",
     "This email address was not found": "Este endereço de email não foi encontrado",
@@ -161,7 +158,6 @@
     "Operation failed": "A operação falhou",
     "%(brand)s version:": "versão do %(brand)s:",
     "Warning!": "Atenção!",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s apagou o nome da sala.",
     "Passphrases must match": "As frases-passe devem coincidir",
     "Passphrase must not be empty": "A frase-passe não pode estar vazia",
     "Export room keys": "Exportar chaves de sala",
@@ -224,7 +220,6 @@
     "Start authentication": "Iniciar autenticação",
     "New Password": "Nova Palavra-Passe",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Não foi possível conectar ao Servidor de Base. Por favor, confira sua conectividade à internet, garanta que o <a>certificado SSL do Servidor de Base</a> é confiável, e que uma extensão do navegador não esteja bloqueando as requisições de rede.",
-    "Unnamed Room": "Sala sem nome",
     "Home": "Início",
     "Something went wrong!": "Algo deu errado!",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (nível de permissão %(powerLevelNumber)s)",
@@ -258,7 +253,6 @@
     "Ignores a user, hiding their messages from you": "Ignora um utilizador, deixando de mostrar as mensagens dele",
     "Banned by %(displayName)s": "Banido por %(displayName)s",
     "Sunday": "Domingo",
-    "Messages sent by bot": "Mensagens enviadas por bots",
     "Notification targets": "Alvos de notificação",
     "Today": "Hoje",
     "Friday": "Sexta-feira",
@@ -267,8 +261,6 @@
     "Changelog": "Histórico de alterações",
     "Waiting for response from server": "À espera de resposta do servidor",
     "This Room": "Esta sala",
-    "Messages containing my display name": "Mensagens contendo o meu nome público",
-    "Messages in one-to-one chats": "Mensagens em conversas pessoais",
     "Unavailable": "Indisponível",
     "Source URL": "URL fonte",
     "Failed to add tag %(tagName)s to room": "Falha ao adicionar %(tagName)s à sala",
@@ -285,13 +277,10 @@
     "Invite to this room": "Convidar para esta sala",
     "Send": "Enviar",
     "All messages": "Todas as mensagens",
-    "Call invitation": "Convite para chamada",
     "What's new?": "O que há de novo?",
-    "When I'm invited to a room": "Quando sou convidado para uma sala",
     "All Rooms": "Todas as salas",
     "You cannot delete this message. (%(code)s)": "Não pode apagar esta mensagem. (%(code)s)",
     "Thursday": "Quinta-feira",
-    "Messages in group chats": "Mensagens em salas",
     "Yesterday": "Ontem",
     "Error encountered (%(errorDetail)s).": "Erro encontrado (%(errorDetail)s).",
     "Low Priority": "Baixa prioridade",
@@ -491,7 +480,6 @@
     "Use email or phone to optionally be discoverable by existing contacts.": "Use email ou telefone para, opcionalmente, ser detectável por contactos existentes.",
     "Invite by username": "Convidar por nome de utilizador",
     "Already have an account? <a>Sign in here</a>": "Já tem uma conta? <a>Entre aqui</a>",
-    "Messages containing my username": "Mensagens contendo o meu nome de utilizador",
     "Use an email address to recover your account": "Usar um endereço de email para recuperar a sua conta",
     "Malta": "Malta",
     "Other": "Outros",
@@ -704,7 +692,8 @@
         "camera": "Câmera de vídeo",
         "microphone": "Microfone",
         "emoji": "Emoji",
-        "someone": "Alguém"
+        "someone": "Alguém",
+        "unnamed_room": "Sala sem nome"
     },
     "action": {
         "continue": "Continuar",
@@ -777,7 +766,16 @@
         "always_show_message_timestamps": "Sempre mostrar as datas das mensagens",
         "replace_plain_emoji": "Substituir Emoji de texto automaticamente",
         "automatic_language_detection_syntax_highlight": "Ativar deteção automática da linguagem para realce da sintaxe",
-        "start_automatically": "Iniciar automaticamente ao iniciar o sistema"
+        "start_automatically": "Iniciar automaticamente ao iniciar o sistema",
+        "notifications": {
+            "rule_contains_display_name": "Mensagens contendo o meu nome público",
+            "rule_contains_user_name": "Mensagens contendo o meu nome de utilizador",
+            "rule_room_one_to_one": "Mensagens em conversas pessoais",
+            "rule_message": "Mensagens em salas",
+            "rule_invite_for_me": "Quando sou convidado para uma sala",
+            "rule_call": "Convite para chamada",
+            "rule_suppress_notices": "Mensagens enviadas por bots"
+        }
     },
     "devtools": {
         "event_type": "Tipo de evento",
@@ -785,5 +783,13 @@
         "event_sent": "Evento enviado!",
         "event_content": "Conteúdo do evento",
         "developer_tools": "Ferramentas de desenvolvedor"
+    },
+    "timeline": {
+        "m.room.topic": "%(senderDisplayName)s mudou o tópico para \"%(topic)s\".",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s apagou o nome da sala.",
+            "set": "%(senderDisplayName)s alterou o nome da sala para %(roomName)s."
+        },
+        "m.image": "%(senderDisplayName)s enviou uma imagem."
     }
 }

@@ -50,11 +50,8 @@
     "Failed to send logs: ": "כשל במשלוח יומנים: ",
     "This Room": "החדר הזה",
     "Noisy": "התראה קולית",
-    "Messages containing my display name": "הודעות המכילות את שם התצוגה שלי",
-    "Messages in one-to-one chats": "הודעות בשיחות פרטיות",
     "Unavailable": "לא זמין",
     "Source URL": "כתובת URL אתר המקור",
-    "Messages sent by bot": "הודעות שנשלחו באמצעות בוט",
     "Filter results": "סנן התוצאות",
     "No update available.": "אין עדכון זמין.",
     "Collecting app version information": "אוסף מידע על גרסת היישום",
@@ -66,16 +63,13 @@
     "All Rooms": "כל החדרים",
     "Wednesday": "רביעי",
     "All messages": "כל ההודעות",
-    "Call invitation": "הזמנה לשיחה",
     "What's new?": "מה חדש?",
-    "When I'm invited to a room": "כאשר אני מוזמן לחדר",
     "Invite to this room": "הזמן לחדר זה",
     "You cannot delete this message. (%(code)s)": "לא ניתן למחוק הודעה זו. (%(code)s)",
     "Thursday": "חמישי",
     "Search…": "חפש…",
     "Logs sent": "יומנים נשלחו",
     "Show message in desktop notification": "הצג הודעה בהתראות שולחן עבודה",
-    "Messages in group chats": "הודעות בקבוצות השיחה",
     "Yesterday": "אתמול",
     "Error encountered (%(errorDetail)s).": "ארעה שגיעה %(errorDetail)s .",
     "Low Priority": "עדיפות נמוכה",
@@ -193,7 +187,6 @@
     "The call could not be established": "לא ניתן להתקשר",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "פעולה זו דורשת להכנס אל שרת הזיהוי <server /> לאשר מייל או טלפון, אבל לשרת אין כללי שרות.",
     "Identity server has no terms of service": "לשרת הזיהוי אין כללי שרות",
-    "Unnamed Room": "חדר ללא שם",
     "Only continue if you trust the owner of the server.": "המשיכו רק אם הנכם בוטחים בבעלים של השרת.",
     "American Samoa": "סמואה האמריקאית",
     "Algeria": "אלג'ריה",
@@ -579,10 +572,6 @@
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s הגדיר את תצוגת ההסטוריה של החדר כפתוחה עבור כל משתמשי החדר, מהרגע שבו הם הוזמנו.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s שלח הזמנה ל%(targetDisplayName)s להצטרף אל החדר.",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s דחה את ההזמנה של %(targetDisplayName)s להצטרף אל החדר.",
-    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s התחיל שיחת וידאו. (אינו נתמך בדפדפן זה)",
-    "%(senderName)s placed a video call.": "%(senderName)s התחיל שיחת וידאו.",
-    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s התחיל שיחה קולית. (אינו נתמך בדפדפן זה)",
-    "%(senderName)s placed a voice call.": "%(senderName)s התחיל שיחה קולית.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s שינה את הכתובות של חדר זה.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s שינה את הכתובת הראשית והמשנית של חדר זה.",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s שניה את הכתובת המשנית של חדר זה.",
@@ -594,23 +583,6 @@
         "one": "%(senderName)s הוסיף כתובת משנית %(addresses)s עבור חדר זה.",
         "other": "%(senderName)s הוסיף את הכתובת המשנית %(addresses)s עבור חדר זה."
     },
-    "%(senderName)s removed the main address for this room.": "%(senderName)s הסיר את הכתובת הראשית עבור חדר זה.",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s הגדיר את הכתובת הראשית עבור חדר זה ל- %(address)s.",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s שלח תמונה.",
-    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 כל השרתים חסומים מהשתתפות! החדר הזה אינו בשימוש יותר.",
-    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s שינה את הגדרות של השרת עבור חדר זה.",
-    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s הגדיר את רשימת הכניסה של השרת עבור חדר זה.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s שינה את כללי הכניסה לאורחים ל- %(rule)s",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s מנע אפשרות מאורחים להכנס אל החדר.",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s איפשר לאורחים להכנס אל החדר.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s שינה את כללי ההצטרפות ל־%(rule)s",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s הגדיר את החדר כ- \"הזמנה בלבד!\".",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s הגדיר את החדר כציבורי עבור כל מי שקיבל את הקישור.",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s שידרג את החדר הזה.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s שינה את שם החדר ל%(roomName)s.",
-    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s שינה את שם החדר מ-%(oldRoomName)s ל%(newRoomName)s.",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s הסיר את שם החדר.",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s שינה את שם הנושא ל-\"%(topic)s\".",
     "Reason": "סיבה",
     "Displays action": "הצג פעולה",
     "Takes the call in the current room off hold": "מחזיר את השיחה הנוכחית ממצב המתנה",
@@ -778,11 +750,6 @@
     "Sends the given message with confetti": "שולח הודעה זו ביחד עם קונפטי",
     "This is your list of users/servers you have blocked - don't leave the room!": "זוהי רשימת השרתים\\משתמשים אשר בחרתם לחסום - אל תצאו מחדר זה!",
     "My Ban List": "רשימת החסומים שלי",
-    "When rooms are upgraded": "כאשר חדרים משתדרגים",
-    "Encrypted messages in group chats": "הודעות מוצפנות בצאטים של קבוצות",
-    "Encrypted messages in one-to-one chats": "הודעות מוצפנות בחדרים של אחד-על-אחד",
-    "Messages containing @room": "הודעות שמכילות שם חדר כגון: room@",
-    "Messages containing my username": "הודעות שמכילות את שם המשתמש שלי",
     "Downloading logs": "מוריד לוגים",
     "Uploading logs": "מעלה לוגים",
     "IRC display name width": "רוחב תצוגת השם של IRC",
@@ -872,8 +839,6 @@
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "כדי להימנע מאיבוד היסטוריית הצ'אט שלכם, עליכם לייצא את מפתחות החדר שלכם לפני שאתם מתנתקים. יהיה עליכם לחזור לגרסה החדשה יותר של %(brand)s כדי לעשות זאת",
     "Block anyone not part of %(serverName)s from ever joining this room.": "חסום ממישהו שאינו חלק מ- %(serverName)s מלהצטרף אי פעם לחדר זה.",
     "Topic (optional)": "נושא (לא חובה)",
-    "Create a private room": "צור חדר פרטי",
-    "Create a public room": "צור חדר ציבורי",
     "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "ייתכן שתשבית זאת אם החדר ישמש לשיתוף פעולה עם צוותים חיצוניים שיש להם שרת בית משלהם. לא ניתן לשנות זאת מאוחר יותר.",
     "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "ייתכן שתאפשר זאת אם החדר ישמש רק לשיתוף פעולה עם צוותים פנימיים בשרת הבית שלך. לא ניתן לשנות זאת מאוחר יותר.",
     "Enable end-to-end encryption": "אפשר הצפנה מקצה לקצה",
@@ -1988,16 +1953,6 @@
     "Enter Security Phrase": "הזן ביטוי אבטחה",
     "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "לא ניתן לפענח גיבוי עם ביטוי אבטחה זה: אנא ודא שהזנת את ביטוי האבטחה הנכון.",
     "Incorrect Security Phrase": "ביטוי אבטחה שגוי",
-    "%(senderName)s withdrew %(targetName)s's invitation": "%(senderName)s ביטל/ה את ההזמנה של %(targetName)s לחדר",
-    "%(senderName)s withdrew %(targetName)s's invitation: %(reason)s": "%(senderName)s ביטל/ה את ההזמנה של %(targetName)s לחדר: %(reason)s",
-    "%(senderName)s unbanned %(targetName)s": "%(senderName)s הסיר/ה את החסימה של %(targetName)s",
-    "%(targetName)s left the room": "%(targetName)s עזב/ה את החדר",
-    "%(targetName)s left the room: %(reason)s": "%(targetName)s עזב/ה את החדר: %(reason)s",
-    "%(targetName)s joined the room": "%(targetName)s הצטרף/ה לחדר",
-    "%(senderName)s set their display name to %(displayName)s": "%(oldDisplayName)s קבע/ה שם תצוגה חדש: %(displayName)s",
-    "%(senderName)s banned %(targetName)s": "%(senderName)s חסם/ה את %(targetName)s",
-    "%(senderName)s banned %(targetName)s: %(reason)s": "%(senderName)s חסם/ה את %(targetName)s: %(reason)s",
-    "%(senderName)s invited %(targetName)s": "%(senderName)s הזמין/ה את %(targetName)s",
     "No active call in this room": "אין שיחה פעילה בחדר זה",
     "Unable to find Matrix ID for phone number": "לא ניתן למצוא מזהה משתמש למספר טלפון",
     "Command failed: Unable to find room (%(roomId)s": "הפעולה נכשלה: לא ניתן למצוא את החדר (%(roomId)s",
@@ -2013,7 +1968,6 @@
     "Connectivity to the server has been lost": "נותק החיבור מול השרת",
     "You cannot place calls in this browser.": "לא ניתן לבצע שיחות בדפדפן זה.",
     "Calls are unsupported": "שיחות לא נתמכות",
-    "%(oldDisplayName)s changed their display name to %(displayName)s": "%(oldDisplayName)s בחר/ה שם תצוגה חדש - %(displayName)s",
     "Your new device is now verified. Other users will see it as trusted.": "המכשיר שלך מוגדר כעת כמאומת. משתמשים אחרים יראו אותו כמכשיר מהימן.",
     "Your new device is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "המכשיר שלך מוגדר כעת כמאומת. יש לו גישה להודעות המוצפנות שלך ומשתמשים אחרים יראו אותו כמכשיר מהימן.",
     "Device verified": "המכשיר אומת",
@@ -2024,10 +1978,6 @@
     "Failed to remove user": "הסרת המשתמש נכשלה",
     "Failed to send": "השליחה נכשלה",
     "Message search initialisation failed": "אתחול חיפוש הודעות נכשל",
-    "Specify a number of messages": "ציין מספר הודעות",
-    "From the beginning": "מההתחלה",
-    "Plain Text": "טקסט רגיל",
-    "Are you sure you want to exit during this export?": "האם אתם בטוחים שברצונכם לצאת במהלך הייצוא הזה?",
     "Share your public space": "שתף את מרחב העבודה הציבורי שלך",
     "Command error: Unable to find rendering type (%(renderingType)s)": "שגיאת פקודה: לא ניתן למצוא את סוג העיבוד (%(renderingType)s)",
     "Command error: Unable to handle slash command.": "שגיאת פקודה: לא ניתן לטפל בפקודת לוכסן.",
@@ -2043,10 +1993,6 @@
     "Back to chat": "חזרה לצ'אט",
     "Sound on": "צליל דולק",
     "That's fine": "זה בסדר",
-    "File Attached": "מצורף קובץ",
-    "Export successful!": "הייצוא הצליח!",
-    "Error fetching file": "שגיאה באחזור הקובץ",
-    "Current Timeline": "ציר הזמן הנוכחי",
     "Voice Message": "הודעה קולית",
     "Send voice message": "שלח הודעה קולית",
     "Reply to thread…": "תשובה לשרשור…",
@@ -2109,22 +2055,8 @@
     "Other rooms": "חדרים אחרים",
     "Silence call": "השתקת שיחה",
     "You previously consented to share anonymous usage data with us. We're updating how that works.": "הסכמתם בעבר לשתף איתנו מידע אנונימי לגבי השימוש שלכם. אנחנו מעדכנים איך זה מתבצע.",
-    "Topic: %(topic)s": "נושא: %(topic)s",
-    "%(creatorName)s created this room.": "%(creatorName)s יצר/ה חדר זה.",
-    "Fetched %(count)s events so far": {
-        "other": "נטענו %(count)s אירועים עד כה",
-        "one": "נטענו %(count)s אירועים עד כה"
-    },
-    "Fetched %(count)s events out of %(total)s": {
-        "other": "טוען %(count)s אירועים מתוך %(total)s",
-        "one": "טוען %(count)s אירועים מתוך %(total)s"
-    },
-    "Generating a ZIP": "מייצר קובץ ZIP",
     "This homeserver has been blocked by its administrator.": "שרת זה נחסם על ידי מנהלו.",
     "%(senderName)s has shared their location": "%(senderName)s שיתף/ה מיקום",
-    "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s שינה את הגדרת המורשים להצטרף לחדר.",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s שינה את הגדרת המורשים להצטרף לחדר. <a>הגדרות</a>",
-    "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s שינה את תמונת החדר.",
     "The user you called is busy.": "המשתמש עסוק כרגע.",
     "User Busy": "המשתמש עסוק",
     "Great! This Security Phrase looks strong enough.": "מצוין! ביטוי אבטחה זה נראה מספיק חזק.",
@@ -2181,7 +2113,6 @@
     "%(count)s votes cast. Vote to see the results": {
         "one": "%(count)s.קולות הצביעו כדי לראות את התוצאות"
     },
-    "Create a video room": "צרו חדר וידאו",
     "Verification requested": "התבקש אימות",
     "Verify this device by completing one of the following:": "אמתו מכשיר זה על ידי מילוי אחת מהפעולות הבאות:",
     "Your server doesn't support disabling sending read receipts.": "השרת שלכם לא תומך בביטול שליחת אישורי קריאה.",
@@ -2282,20 +2213,6 @@
     "Review to ensure your account is safe": "בידקו כדי לוודא שהחשבון שלך בטוח",
     "Help improve %(analyticsOwner)s": "עזרו בשיפור %(analyticsOwner)s",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "שתף נתונים אנונימיים כדי לעזור לנו לזהות בעיות. ללא אישי. אין צדדים שלישיים. <LearnMoreLink>למידע נוסף</LearnMoreLink>",
-    "Exported %(count)s events in %(seconds)s seconds": {
-        "one": "ייצא %(count)s תוך %(seconds)s שניות",
-        "other": "ייצא %(count)s אירועים תוך %(seconds)s שניות"
-    },
-    "Fetched %(count)s events in %(seconds)ss": {
-        "one": "משך %(count)s אירועים תוך %(seconds)s שניות",
-        "other": "עיבד %(count)s אירועים תוך %(seconds)s שניות"
-    },
-    "Processing event %(number)s out of %(total)s": "מעבד אירוע %(number)s מתוך %(total)s",
-    "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "זאת התחלת ייצוא של <roomName/>. ייצוא ע\"י <exporterDetails/> ב %(exportDate)s.",
-    "Media omitted - file size limit exceeded": "מדיה הושמטה - גודל קובץ חרג מהמותר",
-    "Media omitted": "מדיה הושמטה",
-    "JSON": "JSON",
-    "HTML": "HTML",
     "Reset bearing to north": "נעלו את המפה לכיוון צפון",
     "Mapbox logo": "לוגו",
     "Location not available": "מיקום אינו זמין",
@@ -2333,7 +2250,6 @@
     "Spaces to show": "מרחבי עבודה להצגה",
     "Toggle webcam on/off": "הפעלת / כיבוי מצלמה",
     "Send a sticker": "שלח מדבקה",
-    "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s שלח מדבקה",
     "Navigate to previous message in composer history": "עבור להודעה הקודמת בהיסטוריית התכתבות",
     "Navigate to next message in composer history": "עבור להודעה הבאה בהיסטוריית התכתבות",
     "Navigate to previous message to edit": "עבור לעריכת ההודעה הקודמת",
@@ -2486,7 +2402,6 @@
     "Enable notifications for this account": "אפשר קבלת התראות לחשבון זה",
     "Message bubbles": "בועות הודעות",
     "Deactivating your account is a permanent action — be careful!": "סגירת החשבון הינה פעולה שלא ניתנת לביטול - שים לב!",
-    "%(senderName)s set a profile picture": "%(senderName)s הגדיר/ה תמונת פרופיל",
     "Room info": "מידע על החדר",
     "You're all caught up": "אתם כבר מעודכנים בהכל",
     "Search users in this room…": "חיפוש משתמשים בחדר זה…",
@@ -2577,7 +2492,8 @@
         "not_trusted": "לא אמין",
         "accessibility": "נגישות",
         "server": "שרת",
-        "capabilities": "יכולות"
+        "capabilities": "יכולות",
+        "unnamed_room": "חדר ללא שם"
     },
     "action": {
         "continue": "המשך",
@@ -2776,7 +2692,20 @@
         "jump_to_bottom_on_send": "קפוץ לתחתית השיחה בעת שליחת הודעה",
         "show_nsfw_content": "הצג תוכן NSFW (תוכן שלא מתאים לצפיה במקום ציבורי)",
         "prompt_invite": "שאלו אותי לפני שאתם שולחים הזמנה אל קוד זיהוי אפשרי של משתמש מערכת",
-        "start_automatically": "התחל באופן אוטומטי לאחר הכניסה"
+        "start_automatically": "התחל באופן אוטומטי לאחר הכניסה",
+        "notifications": {
+            "rule_contains_display_name": "הודעות המכילות את שם התצוגה שלי",
+            "rule_contains_user_name": "הודעות שמכילות את שם המשתמש שלי",
+            "rule_roomnotif": "הודעות שמכילות שם חדר כגון: room@",
+            "rule_room_one_to_one": "הודעות בשיחות פרטיות",
+            "rule_message": "הודעות בקבוצות השיחה",
+            "rule_encrypted": "הודעות מוצפנות בצאטים של קבוצות",
+            "rule_invite_for_me": "כאשר אני מוזמן לחדר",
+            "rule_call": "הזמנה לשיחה",
+            "rule_suppress_notices": "הודעות שנשלחו באמצעות בוט",
+            "rule_tombstone": "כאשר חדרים משתדרגים",
+            "rule_encrypted_room_one_to_one": "הודעות מוצפנות בחדרים של אחד-על-אחד"
+        }
     },
     "devtools": {
         "event_type": "סוג ארוע",
@@ -2799,5 +2728,98 @@
         "toolbox": "תיבת כלים",
         "developer_tools": "כלי מפתחים",
         "room_id": "זיהוי חדר: %(roomId)s"
+    },
+    "export_chat": {
+        "html": "HTML",
+        "json": "JSON",
+        "text": "טקסט רגיל",
+        "from_the_beginning": "מההתחלה",
+        "number_of_messages": "ציין מספר הודעות",
+        "current_timeline": "ציר הזמן הנוכחי",
+        "export_successful": "הייצוא הצליח!",
+        "unload_confirm": "האם אתם בטוחים שברצונכם לצאת במהלך הייצוא הזה?",
+        "generating_zip": "מייצר קובץ ZIP",
+        "processing_event_n": "מעבד אירוע %(number)s מתוך %(total)s",
+        "fetched_n_events_with_total": {
+            "other": "טוען %(count)s אירועים מתוך %(total)s",
+            "one": "טוען %(count)s אירועים מתוך %(total)s"
+        },
+        "fetched_n_events": {
+            "other": "נטענו %(count)s אירועים עד כה",
+            "one": "נטענו %(count)s אירועים עד כה"
+        },
+        "fetched_n_events_in_time": {
+            "one": "משך %(count)s אירועים תוך %(seconds)s שניות",
+            "other": "עיבד %(count)s אירועים תוך %(seconds)s שניות"
+        },
+        "exported_n_events_in_time": {
+            "one": "ייצא %(count)s תוך %(seconds)s שניות",
+            "other": "ייצא %(count)s אירועים תוך %(seconds)s שניות"
+        },
+        "media_omitted": "מדיה הושמטה",
+        "media_omitted_file_size": "מדיה הושמטה - גודל קובץ חרג מהמותר",
+        "creator_summary": "%(creatorName)s יצר/ה חדר זה.",
+        "export_info": "זאת התחלת ייצוא של <roomName/>. ייצוא ע\"י <exporterDetails/> ב %(exportDate)s.",
+        "topic": "נושא: %(topic)s",
+        "error_fetching_file": "שגיאה באחזור הקובץ",
+        "file_attached": "מצורף קובץ"
+    },
+    "create_room": {
+        "title_video_room": "צרו חדר וידאו",
+        "title_public_room": "צור חדר ציבורי",
+        "title_private_room": "צור חדר פרטי"
+    },
+    "timeline": {
+        "m.call.invite": {
+            "voice_call": "%(senderName)s התחיל שיחה קולית.",
+            "voice_call_unsupported": "%(senderName)s התחיל שיחה קולית. (אינו נתמך בדפדפן זה)",
+            "video_call": "%(senderName)s התחיל שיחת וידאו.",
+            "video_call_unsupported": "%(senderName)s התחיל שיחת וידאו. (אינו נתמך בדפדפן זה)"
+        },
+        "m.room.member": {
+            "invite": "%(senderName)s הזמין/ה את %(targetName)s",
+            "ban_reason": "%(senderName)s חסם/ה את %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s חסם/ה את %(targetName)s",
+            "change_name": "%(oldDisplayName)s בחר/ה שם תצוגה חדש - %(displayName)s",
+            "set_name": "%(oldDisplayName)s קבע/ה שם תצוגה חדש: %(displayName)s",
+            "set_avatar": "%(senderName)s הגדיר/ה תמונת פרופיל",
+            "join": "%(targetName)s הצטרף/ה לחדר",
+            "left_reason": "%(targetName)s עזב/ה את החדר: %(reason)s",
+            "left": "%(targetName)s עזב/ה את החדר",
+            "unban": "%(senderName)s הסיר/ה את החסימה של %(targetName)s",
+            "withdrew_invite_reason": "%(senderName)s ביטל/ה את ההזמנה של %(targetName)s לחדר: %(reason)s",
+            "withdrew_invite": "%(senderName)s ביטל/ה את ההזמנה של %(targetName)s לחדר"
+        },
+        "m.room.topic": "%(senderDisplayName)s שינה את שם הנושא ל-\"%(topic)s\".",
+        "m.room.avatar": "%(senderDisplayName)s שינה את תמונת החדר.",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s הסיר את שם החדר.",
+            "change": "%(senderDisplayName)s שינה את שם החדר מ-%(oldRoomName)s ל%(newRoomName)s.",
+            "set": "%(senderDisplayName)s שינה את שם החדר ל%(roomName)s."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s שידרג את החדר הזה.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s הגדיר את החדר כציבורי עבור כל מי שקיבל את הקישור.",
+            "invite": "%(senderDisplayName)s הגדיר את החדר כ- \"הזמנה בלבד!\".",
+            "restricted_settings": "%(senderDisplayName)s שינה את הגדרת המורשים להצטרף לחדר. <a>הגדרות</a>",
+            "restricted": "%(senderDisplayName)s שינה את הגדרת המורשים להצטרף לחדר.",
+            "unknown": "%(senderDisplayName)s שינה את כללי ההצטרפות ל־%(rule)s"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s איפשר לאורחים להכנס אל החדר.",
+            "forbidden": "%(senderDisplayName)s מנע אפשרות מאורחים להכנס אל החדר.",
+            "unknown": "%(senderDisplayName)s שינה את כללי הכניסה לאורחים ל- %(rule)s"
+        },
+        "m.image": "%(senderDisplayName)s שלח תמונה.",
+        "m.sticker": "%(senderDisplayName)s שלח מדבקה",
+        "m.room.server_acl": {
+            "set": "%(senderDisplayName)s הגדיר את רשימת הכניסה של השרת עבור חדר זה.",
+            "changed": "%(senderDisplayName)s שינה את הגדרות של השרת עבור חדר זה.",
+            "all_servers_banned": "🎉 כל השרתים חסומים מהשתתפות! החדר הזה אינו בשימוש יותר."
+        },
+        "m.room.canonical_alias": {
+            "set": "%(senderName)s הגדיר את הכתובת הראשית עבור חדר זה ל- %(address)s.",
+            "removed": "%(senderName)s הסיר את הכתובת הראשית עבור חדר זה."
+        }
     }
 }

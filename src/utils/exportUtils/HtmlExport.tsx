@@ -57,8 +57,8 @@ export default class HTMLExporter extends Exporter {
         this.permalinkCreator = new RoomPermalinkCreator(this.room);
         this.totalSize = 0;
         this.mediaOmitText = !this.exportOptions.attachmentsIncluded
-            ? _t("Media omitted")
-            : _t("Media omitted - file size limit exceeded");
+            ? _t("export_chat|media_omitted")
+            : _t("export_chat|media_omitted_file_size");
     }
 
     protected async getRoomAvatar(): Promise<string> {
@@ -91,7 +91,7 @@ export default class HTMLExporter extends Exporter {
         const topic = this.room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || "";
 
         const safeCreatedText = escapeHtml(
-            _t("%(creatorName)s created this room.", {
+            _t("export_chat|creator_summary", {
                 creatorName,
             }),
         );
@@ -101,7 +101,7 @@ export default class HTMLExporter extends Exporter {
         const safeExportedText = renderToStaticMarkup(
             <p>
                 {_t(
-                    "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.",
+                    "export_chat|export_info",
                     {
                         exportDate,
                     },
@@ -127,12 +127,12 @@ export default class HTMLExporter extends Exporter {
             </p>,
         );
 
-        const safeTopicText = topic ? _t("Topic: %(topic)s", { topic: safeTopic }) : "";
+        const safeTopicText = topic ? _t("export_chat|topic", { topic: safeTopic }) : "";
         const previousMessagesLink = renderToStaticMarkup(
             currentPage !== 0 ? (
                 <div style={{ textAlign: "center" }}>
                     <a href={`./messages${currentPage === 1 ? "" : currentPage}.html`} style={{ fontWeight: "bold" }}>
-                        {_t("Previous group of messages")}
+                        {_t("export_chat|previous_page")}
                     </a>
                 </div>
             ) : (
@@ -144,7 +144,7 @@ export default class HTMLExporter extends Exporter {
             currentPage < nbPages - 1 ? (
                 <div style={{ textAlign: "center", margin: "10px" }}>
                     <a href={"./messages" + (currentPage + 2) + ".html"} style={{ fontWeight: "bold" }}>
-                        {_t("Next group of messages")}
+                        {_t("export_chat|next_page")}
                     </a>
                 </div>
             ) : (
@@ -161,7 +161,7 @@ export default class HTMLExporter extends Exporter {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <link href="css/style.css" rel="stylesheet" />
                 <script src="js/script.js"></script>
-                <title>${_t("Exported Data")}</title>
+                <title>${_t("export_chat|html_title")}</title>
             </head>
             <body style="height: 100vh;">
                 <section
@@ -385,7 +385,7 @@ export default class HTMLExporter extends Exporter {
                     } catch (e) {
                         logger.log("Error while fetching file" + e);
                         eventTile = await this.getEventTileMarkup(
-                            this.createModifiedEvent(_t("Error fetching file"), mxEv),
+                            this.createModifiedEvent(_t("export_chat|error_fetching_file"), mxEv),
                             joined,
                         );
                     }
@@ -421,7 +421,7 @@ export default class HTMLExporter extends Exporter {
         for (let i = start; i < Math.min(start + 1000, events.length); i++) {
             const event = events[i];
             this.updateProgress(
-                _t("Processing event %(number)s out of %(total)s", {
+                _t("export_chat|processing_event_n", {
                     number: i + 1,
                     total: events.length,
                 }),
@@ -444,14 +444,14 @@ export default class HTMLExporter extends Exporter {
     }
 
     public async export(): Promise<void> {
-        this.updateProgress(_t("Starting export…"));
+        this.updateProgress(_t("export_chat|starting_export"));
 
         const fetchStart = performance.now();
         const res = await this.getRequiredEvents();
         const fetchEnd = performance.now();
 
         this.updateProgress(
-            _t("Fetched %(count)s events in %(seconds)ss", {
+            _t("export_chat|fetched_n_events_in_time", {
                 count: res.length,
                 seconds: (fetchEnd - fetchStart) / 1000,
             }),
@@ -459,7 +459,7 @@ export default class HTMLExporter extends Exporter {
             false,
         );
 
-        this.updateProgress(_t("Creating HTML…"));
+        this.updateProgress(_t("export_chat|creating_html"));
 
         const usedClasses = new Set<string>();
         for (let page = 0; page < res.length / 1000; page++) {
@@ -482,9 +482,9 @@ export default class HTMLExporter extends Exporter {
         if (this.cancelled) {
             logger.info("Export cancelled successfully");
         } else {
-            this.updateProgress(_t("Export successful!"));
+            this.updateProgress(_t("export_chat|export_successful"));
             this.updateProgress(
-                _t("Exported %(count)s events in %(seconds)s seconds", {
+                _t("export_chat|exported_n_events_in_time", {
                     count: res.length,
                     seconds: (exportEnd - fetchStart) / 1000,
                 }),

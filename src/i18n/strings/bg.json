@@ -70,10 +70,6 @@
     "You are no longer ignoring %(userId)s": "Вече не игнорирате %(userId)s",
     "Verified key": "Потвърден ключ",
     "Reason": "Причина",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s смени темата на \"%(topic)s\".",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s премахна името на стаята.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s промени името на стаята на %(roomName)s.",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s изпрати снимка.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s изпрати покана на %(targetDisplayName)s да се присъедини към стаята.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s направи бъдещата история на стаята видима за всички членове, от момента на поканването им в нея.",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s направи бъдещата история на стаята видима за всички членове, от момента на присъединяването им в нея.",
@@ -88,7 +84,6 @@
     "%(widgetName)s widget removed by %(senderName)s": "Приспособлението %(widgetName)s беше премахнато от %(senderName)s",
     "Failure to create room": "Неуспешно създаване на стая",
     "Server may be unavailable, overloaded, or you hit a bug.": "Сървърът може би е претоварен, недостъпен или се натъкнахте на проблем.",
-    "Unnamed Room": "Стая без име",
     "Your browser does not support the required cryptography extensions": "Вашият браузър не поддържа необходимите разширения за шифроване",
     "Not a valid %(brand)s keyfile": "Невалиден файл с ключ за %(brand)s",
     "Authentication check failed: incorrect password?": "Неуспешна автентикация: неправилна парола?",
@@ -398,10 +393,8 @@
     "Waiting for response from server": "Изчакване на отговор от сървъра",
     "Failed to send logs: ": "Неуспешно изпращане на логове: ",
     "This Room": "В тази стая",
-    "Messages in one-to-one chats": "Съобщения в индивидуални чатове",
     "Unavailable": "Не е наличен",
     "Source URL": "URL на източника",
-    "Messages sent by bot": "Съобщения изпратени от бот",
     "Filter results": "Филтриране на резултати",
     "No update available.": "Няма нова версия.",
     "Noisy": "Шумно",
@@ -415,16 +408,12 @@
     "All Rooms": "Във всички стаи",
     "Wednesday": "Сряда",
     "All messages": "Всички съобщения",
-    "Call invitation": "Покана за разговор",
-    "Messages containing my display name": "Съобщения, съдържащи моя псевдоним",
     "What's new?": "Какво ново?",
-    "When I'm invited to a room": "Когато ме поканят в стая",
     "Invite to this room": "Покани в тази стая",
     "You cannot delete this message. (%(code)s)": "Това съобщение не може да бъде изтрито. (%(code)s)",
     "Thursday": "Четвъртък",
     "Logs sent": "Логовете са изпратени",
     "Show message in desktop notification": "Показване на съдържание в известията на работния плот",
-    "Messages in group chats": "Съобщения в групови чатове",
     "Yesterday": "Вчера",
     "Error encountered (%(errorDetail)s).": "Възникна грешка (%(errorDetail)s).",
     "Low Priority": "Нисък приоритет",
@@ -484,8 +473,6 @@
     "The room upgrade could not be completed": "Обновяването на тази стая не можа да бъде завършено",
     "Upgrade this room to version %(version)s": "Обновете тази стая до версия %(version)s",
     "Forces the current outbound group session in an encrypted room to be discarded": "Принудително прекратява текущата изходяща групова сесия в шифрована стая",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s настрой основния адрес на тази стая на %(address)s.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s премахна основния адрес на тази стая.",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Преди да изпратите логове, трябва да <a>отворите доклад за проблем в Github</a>.",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s вече използва 3-5 пъти по-малко памет, като зарежда информация за потребители само когато е нужна. Моля, изчакайте докато ресинхронизираме със сървъра!",
     "Updating %(brand)s": "Обновяване на %(brand)s",
@@ -523,9 +510,6 @@
     "Names and surnames by themselves are easy to guess": "Имена и фамилии сами по себе си са лесни за отгатване",
     "Common names and surnames are easy to guess": "Често срещани имена и фамилии са лесни за отгатване",
     "Use a longer keyboard pattern with more turns": "Използвайте по-дълга клавиатурна последователност с повече разклонения",
-    "Messages containing @room": "Съобщения съдържащи @room",
-    "Encrypted messages in one-to-one chats": "Шифровани съобщения в 1-на-1 чатове",
-    "Encrypted messages in group chats": "Шифровани съобщения в групови чатове",
     "Delete Backup": "Изтрий резервното копие",
     "Unable to load key backup status": "Неуспешно зареждане на състоянието на резервното копие на ключа",
     "Set up": "Настрой",
@@ -560,14 +544,12 @@
     "Invite anyway": "Покани въпреки това",
     "Upgrades a room to a new version": "Обновява стаята до нова версия",
     "Sets the room name": "Настройва име на стаята",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s обнови тази стая.",
     "%(displayName)s is typing …": "%(displayName)s пише …",
     "%(names)s and %(count)s others are typing …": {
         "other": "%(names)s и %(count)s други пишат …",
         "one": "%(names)s и още един пишат …"
     },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s и %(lastPerson)s пишат …",
-    "Messages containing my username": "Съобщения съдържащи потребителското ми име",
     "The other party cancelled the verification.": "Другата страна прекрати потвърждението.",
     "Verified!": "Потвърдено!",
     "You've successfully verified this user.": "Успешно потвърдихте този потребител.",
@@ -625,12 +607,6 @@
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Файлът '%(fileName)s' надхвърля ограничението за размер на файлове за този сървър",
     "Gets or sets the room topic": "Взима или настройва темата на стаята",
     "This room has no topic.": "Тази стая няма тема.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s направи стаята публична за всеки знаещ връзката.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s направи стаята само за поканени.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s промени правилото за влизане на %(rule)s",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s позволи на гости да влизат в стаята.",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s спря достъпа на гости за влизане в стаята.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s промени правилото за достъп на гости на %(rule)s",
     "Verify this user by confirming the following emoji appear on their screen.": "Потвърдете този потребител, като установите че следното емоджи се вижда на екрана им.",
     "Unable to find a supported verification method.": "Не може да бъде намерен поддържан метод за потвърждение.",
     "Dog": "Куче",
@@ -781,7 +757,6 @@
     "The user's homeserver does not support the version of the room.": "Сървърът на потребителя не поддържа версията на стаята.",
     "Sends the given emote coloured as a rainbow": "Изпраща дадената емоция, оцветена като дъга",
     "Show hidden events in timeline": "Покажи скрити събития по времевата линия",
-    "When rooms are upgraded": "Когато стаите се актуализират",
     "View older messages in %(roomName)s.": "Виж по-стари съобщения в %(roomName)s.",
     "Join the conversation with an account": "Присъедини се към разговор с акаунт",
     "Sign Up": "Регистриране",
@@ -953,8 +928,6 @@
     "Changes the avatar of the current room": "Променя снимката на текущата стая",
     "e.g. my-room": "например my-room",
     "Please enter a name for the room": "Въведете име на стаята",
-    "Create a public room": "Създай публична стая",
-    "Create a private room": "Създай частна стая",
     "Topic (optional)": "Тема (незадължително)",
     "Hide advanced": "Скрий разширени настройки",
     "Show advanced": "Покажи разширени настройки",
@@ -1018,10 +991,6 @@
     "%(name)s cancelled": "%(name)s отказа",
     "%(name)s wants to verify": "%(name)s иска да извърши потвърждение",
     "You sent a verification request": "Изпратихте заявка за потвърждение",
-    "%(senderName)s placed a voice call.": "%(senderName)s започна гласово обаждане.",
-    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s започна гласово обаждане. (не се поддържа от този браузър)",
-    "%(senderName)s placed a video call.": "%(senderName)s започна видео обаждане.",
-    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s започна видео обаждане. (не се поддържа от този браузър)",
     "Match system theme": "Напасване със системната тема",
     "My Ban List": "Моя списък с блокирания",
     "This is your list of users/servers you have blocked - don't leave the room!": "Това е списък с хора/сървъри, които сте блокирали - не напускайте стаята!",
@@ -1143,7 +1112,6 @@
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ВНИМАНИЕ: ПОТВЪРЖДАВАНЕТО НА КЛЮЧОВЕТЕ Е НЕУСПЕШНО! Подписващия ключ за %(userId)s и сесия %(deviceId)s е \"%(fprint)s\", което не съвпада с предоставения ключ \"%(fingerprint)s\". Това може би означава, че комуникацията ви бива прихваната!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Предоставения от вас ключ за подписване съвпада с ключа за подписване получен от сесия %(deviceId)s на %(userId)s. Сесията е маркирана като потвърдена.",
     "Displays information about a user": "Показва информация за потребителя",
-    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s промени името на стаята от %(oldRoomName)s на %(newRoomName)s.",
     "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
         "other": "%(senderName)s добави алтернативните адреси %(addresses)s към стаята.",
         "one": "%(senderName)s добави алтернативният адрес %(addresses)s към стаята."
@@ -1447,15 +1415,12 @@
     "Are you sure you want to cancel entering passphrase?": "Сигурни ли сте че желате да прекратите въвеждането на паролата?",
     "The call could not be established": "Обаждането не може да бъде осъществено",
     "Answered Elsewhere": "Отговорено на друго място",
-    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s зададе ACLs на сървър за тази стая.",
     "Unknown caller": "Непознат абонат",
     "Downloading logs": "Изтегляне на логове",
     "Uploading logs": "Качване на логове",
     "Change notification settings": "Промяна на настройките за уведомление",
     "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
     "Unexpected server error trying to leave the room": "Възникна неочаквана сървърна грешка при опит за напускане на стаята",
-    "🎉 All servers are banned from participating! This room can no longer be used.": "🎉 Всички сървъри за възбранени от участие! Тази стая вече не може да бъде използвана.",
-    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s промени сървърните разрешения за контрол на достъпа до тази стая.",
     "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Добавя ( ͡° ͜ʖ ͡°) в началото на текстовото съобщение",
     "The call was answered on another device.": "На обаждането беше отговорено от друго устройство.",
     "This room is public": "Тази стая е публична",
@@ -1973,7 +1938,8 @@
         "encrypted": "Шифровано",
         "matrix": "Matrix",
         "trusted": "Доверени",
-        "not_trusted": "Недоверени"
+        "not_trusted": "Недоверени",
+        "unnamed_room": "Стая без име"
     },
     "action": {
         "continue": "Продължи",
@@ -2141,7 +2107,20 @@
         "show_chat_effects": "Покажи чат ефектите (анимации при получаване, като например конфети)",
         "big_emoji": "Включи големи емоджита в чатовете",
         "prompt_invite": "Питай преди изпращане на покани към потенциално невалидни Matrix идентификатори",
-        "start_automatically": "Автоматично стартиране след влизане в системата"
+        "start_automatically": "Автоматично стартиране след влизане в системата",
+        "notifications": {
+            "rule_contains_display_name": "Съобщения, съдържащи моя псевдоним",
+            "rule_contains_user_name": "Съобщения съдържащи потребителското ми име",
+            "rule_roomnotif": "Съобщения съдържащи @room",
+            "rule_room_one_to_one": "Съобщения в индивидуални чатове",
+            "rule_message": "Съобщения в групови чатове",
+            "rule_encrypted": "Шифровани съобщения в групови чатове",
+            "rule_invite_for_me": "Когато ме поканят в стая",
+            "rule_call": "Покана за разговор",
+            "rule_suppress_notices": "Съобщения изпратени от бот",
+            "rule_tombstone": "Когато стаите се актуализират",
+            "rule_encrypted_room_one_to_one": "Шифровани съобщения в 1-на-1 чатове"
+        }
     },
     "devtools": {
         "event_type": "Вид на събитие",
@@ -2150,5 +2129,44 @@
         "event_content": "Съдържание на събитието",
         "toolbox": "Инструменти",
         "developer_tools": "Инструменти за разработчика"
+    },
+    "create_room": {
+        "title_public_room": "Създай публична стая",
+        "title_private_room": "Създай частна стая"
+    },
+    "timeline": {
+        "m.call.invite": {
+            "voice_call": "%(senderName)s започна гласово обаждане.",
+            "voice_call_unsupported": "%(senderName)s започна гласово обаждане. (не се поддържа от този браузър)",
+            "video_call": "%(senderName)s започна видео обаждане.",
+            "video_call_unsupported": "%(senderName)s започна видео обаждане. (не се поддържа от този браузър)"
+        },
+        "m.room.topic": "%(senderDisplayName)s смени темата на \"%(topic)s\".",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s премахна името на стаята.",
+            "change": "%(senderDisplayName)s промени името на стаята от %(oldRoomName)s на %(newRoomName)s.",
+            "set": "%(senderDisplayName)s промени името на стаята на %(roomName)s."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s обнови тази стая.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s направи стаята публична за всеки знаещ връзката.",
+            "invite": "%(senderDisplayName)s направи стаята само за поканени.",
+            "unknown": "%(senderDisplayName)s промени правилото за влизане на %(rule)s"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s позволи на гости да влизат в стаята.",
+            "forbidden": "%(senderDisplayName)s спря достъпа на гости за влизане в стаята.",
+            "unknown": "%(senderDisplayName)s промени правилото за достъп на гости на %(rule)s"
+        },
+        "m.image": "%(senderDisplayName)s изпрати снимка.",
+        "m.room.server_acl": {
+            "set": "%(senderDisplayName)s зададе ACLs на сървър за тази стая.",
+            "changed": "%(senderDisplayName)s промени сървърните разрешения за контрол на достъпа до тази стая.",
+            "all_servers_banned": "🎉 Всички сървъри за възбранени от участие! Тази стая вече не може да бъде използвана."
+        },
+        "m.room.canonical_alias": {
+            "set": "%(senderName)s настрой основния адрес на тази стая на %(address)s.",
+            "removed": "%(senderName)s премахна основния адрес на тази стая."
+        }
     }
 }

@@ -73,12 +73,6 @@
     "Displays action": "कार्रवाई प्रदर्शित करता है",
     "Forces the current outbound group session in an encrypted room to be discarded": "एक एन्क्रिप्टेड रूम में मौजूदा आउटबाउंड समूह सत्र को त्यागने के लिए मजबूर करता है",
     "Reason": "कारण",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s ने विषय को \"%(topic)s\" में बदल दिया।",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s ने रूम का नाम हटा दिया।",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s कमरे का नाम बदलकर %(roomName)s कर दिया।",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s ने एक छवि भेजी।",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s ने इस कमरे के लिए मुख्य पता %(address)s पर सेट किया।",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s ने इस कमरे के लिए मुख्य पता हटा दिया।",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s रूम में शामिल होने के लिए %(targetDisplayName)s को निमंत्रण भेजा।",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए प्रकाशित कर दिया जिस बिंदु से उन्हें आमंत्रित किया गया था।",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए दृश्यमान किया, जिस बिंदु में वे शामिल हुए थे।",
@@ -94,7 +88,6 @@
     "Failure to create room": "रूम बनाने में विफलता",
     "Server may be unavailable, overloaded, or you hit a bug.": "सर्वर अनुपलब्ध, अधिभारित हो सकता है, या अपने एक सॉफ्टवेयर गर्बरी को पाया।",
     "Send": "भेजें",
-    "Unnamed Room": "अनाम रूम",
     "This homeserver has hit its Monthly Active User limit.": "इस होमसर्वर ने अपनी मासिक सक्रिय उपयोगकर्ता सीमा को प्राप्त कर लिया हैं।",
     "This homeserver has exceeded one of its resource limits.": "यह होम सर्वर अपनी संसाधन सीमाओं में से एक से अधिक हो गया है।",
     "Your browser does not support the required cryptography extensions": "आपका ब्राउज़र आवश्यक क्रिप्टोग्राफी एक्सटेंशन का समर्थन नहीं करता है",
@@ -108,12 +101,6 @@
     "Collecting app version information": "ऐप संस्करण जानकारी एकत्रित कर रहा हैं",
     "Collecting logs": "लॉग एकत्रित कर रहा हैं",
     "Waiting for response from server": "सर्वर से प्रतिक्रिया की प्रतीक्षा कर रहा है",
-    "Messages containing my display name": "मेरे प्रदर्शन नाम वाले संदेश",
-    "Messages in one-to-one chats": "एक-से-एक चैट में संदेश",
-    "Messages in group chats": "समूह चैट में संदेश",
-    "When I'm invited to a room": "जब मुझे एक रूम में आमंत्रित किया जाता है",
-    "Call invitation": "कॉल आमंत्रण",
-    "Messages sent by bot": "रोबॉट द्वारा भेजे गए संदेश",
     "Incorrect verification code": "गलत सत्यापन कोड",
     "Phone": "फ़ोन",
     "No display name": "कोई प्रदर्शन नाम नहीं",
@@ -158,9 +145,6 @@
     "A word by itself is easy to guess": "सिर्फ एक शब्द अनुमान लगाना आसान है",
     "Names and surnames by themselves are easy to guess": "खुद के नाम और उपनाम अनुमान लगाना आसान है",
     "Common names and surnames are easy to guess": "सामान्य नाम और उपनाम अनुमान लगाना आसान है",
-    "Messages containing @room": "@Room युक्त संदेश",
-    "Encrypted messages in one-to-one chats": "एक एक के साथ चैट में एन्क्रिप्टेड संदेश",
-    "Encrypted messages in group chats": "समूह चैट में एन्क्रिप्टेड संदेश",
     "Show message in desktop notification": "डेस्कटॉप अधिसूचना में संदेश दिखाएं",
     "Off": "बंद",
     "On": "चालू",
@@ -214,13 +198,6 @@
     "Gets or sets the room topic": "रूम का विषय प्राप्त या सेट करना",
     "This room has no topic.": "इस रूम का कोई विषय नहीं है।",
     "Sets the room name": "रूम का नाम सेट करता हैं",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s ने रूम को अपग्रेड किया",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s ने कमरे को सार्वजनिक कर दिया, जो कोई भी लिंक जानता है।",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s ने कमरे को सिर्फ आमंत्रित रखा।",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s ने नियम को %(rule)s में बदल दिया",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s ने मेहमानों को कमरे में शामिल होने की अनुमति दी है।",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s ने मेहमानों को कमरे में शामिल होने से रोका है।",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s ने अतिथि पहुंच %(rule)s में बदल दी",
     "%(displayName)s is typing …": "%(displayName)s टाइप कर रहा है …",
     "%(names)s and %(count)s others are typing …": {
         "other": "%(names)s और %(count)s अन्य टाइप कर रहे हैं …",
@@ -230,7 +207,6 @@
     "Unrecognised address": "अपरिचित पता",
     "Straight rows of keys are easy to guess": "कुंजी की सीधी पंक्तियों का अनुमान लगाना आसान है",
     "Short keyboard patterns are easy to guess": "लघु कीबोर्ड पैटर्न का अनुमान लगाना आसान है",
-    "Messages containing my username": "मेरे उपयोगकर्ता नाम वाले संदेश",
     "The other party cancelled the verification.": "दूसरे पक्ष ने सत्यापन रद्द कर दिया।",
     "Verified!": "सत्यापित!",
     "You've successfully verified this user.": "आपने इस उपयोगकर्ता को सफलतापूर्वक सत्यापित कर लिया है।",
@@ -585,7 +561,8 @@
         "timeline": "समयसीमा",
         "camera": "कैमरा",
         "microphone": "माइक्रोफ़ोन",
-        "someone": "कोई"
+        "someone": "कोई",
+        "unnamed_room": "अनाम रूम"
     },
     "action": {
         "continue": "आगे बढ़ें",
@@ -646,6 +623,41 @@
         "show_displayname_changes": "प्रदर्शन नाम परिवर्तन दिखाएं",
         "big_emoji": "चैट में बड़े इमोजी सक्षम करें",
         "prompt_invite": "संभावित अवैध मैट्रिक्स आईडी को निमंत्रण भेजने से पहले सूचित करें",
-        "start_automatically": "सिस्टम लॉगिन के बाद स्वचालित रूप से प्रारंभ करें"
+        "start_automatically": "सिस्टम लॉगिन के बाद स्वचालित रूप से प्रारंभ करें",
+        "notifications": {
+            "rule_contains_display_name": "मेरे प्रदर्शन नाम वाले संदेश",
+            "rule_contains_user_name": "मेरे उपयोगकर्ता नाम वाले संदेश",
+            "rule_roomnotif": "@Room युक्त संदेश",
+            "rule_room_one_to_one": "एक-से-एक चैट में संदेश",
+            "rule_message": "समूह चैट में संदेश",
+            "rule_encrypted": "समूह चैट में एन्क्रिप्टेड संदेश",
+            "rule_invite_for_me": "जब मुझे एक रूम में आमंत्रित किया जाता है",
+            "rule_call": "कॉल आमंत्रण",
+            "rule_suppress_notices": "रोबॉट द्वारा भेजे गए संदेश",
+            "rule_encrypted_room_one_to_one": "एक एक के साथ चैट में एन्क्रिप्टेड संदेश"
+        }
+    },
+    "timeline": {
+        "m.room.topic": "%(senderDisplayName)s ने विषय को \"%(topic)s\" में बदल दिया।",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s ने रूम का नाम हटा दिया।",
+            "set": "%(senderDisplayName)s कमरे का नाम बदलकर %(roomName)s कर दिया।"
+        },
+        "m.room.tombstone": "%(senderDisplayName)s ने रूम को अपग्रेड किया",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s ने कमरे को सार्वजनिक कर दिया, जो कोई भी लिंक जानता है।",
+            "invite": "%(senderDisplayName)s ने कमरे को सिर्फ आमंत्रित रखा।",
+            "unknown": "%(senderDisplayName)s ने नियम को %(rule)s में बदल दिया"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s ने मेहमानों को कमरे में शामिल होने की अनुमति दी है।",
+            "forbidden": "%(senderDisplayName)s ने मेहमानों को कमरे में शामिल होने से रोका है।",
+            "unknown": "%(senderDisplayName)s ने अतिथि पहुंच %(rule)s में बदल दी"
+        },
+        "m.image": "%(senderDisplayName)s ने एक छवि भेजी।",
+        "m.room.canonical_alias": {
+            "set": "%(senderName)s ने इस कमरे के लिए मुख्य पता %(address)s पर सेट किया।",
+            "removed": "%(senderName)s ने इस कमरे के लिए मुख्य पता हटा दिया।"
+        }
     }
 }

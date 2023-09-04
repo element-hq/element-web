@@ -2,12 +2,6 @@
     "Collecting app version information": "Proqramın versiyası haqqında məlumatın yığılması",
     "Collecting logs": "Jurnalların bir yığım",
     "Waiting for response from server": "Serverdən cavabın gözlənməsi",
-    "Messages containing my display name": "Mənim adımı özündə saxlayan mesajlar",
-    "Messages in one-to-one chats": "Fərdi çatlarda mesajlar",
-    "Messages in group chats": "Qrup çatlarında mesajlar",
-    "When I'm invited to a room": "Nə vaxt ki, məni otağa dəvət edirlər",
-    "Call invitation": "Dəvət zəngi",
-    "Messages sent by bot": "Botla göndərilmiş mesajlar",
     "Operation failed": "Əməliyyatın nasazlığı",
     "Failed to verify email address: make sure you clicked the link in the email": "Email-i yoxlamağı bacarmadı: əmin olun ki, siz məktubda istinaddakı ünvana keçdiniz",
     "You cannot place a call with yourself.": "Siz özünə zəng vura bilmirsiniz.",
@@ -59,8 +53,6 @@
     "Deops user with given id": "Verilmiş ID-lə istifadəçidən operatorun səlahiyyətlərini çıxardır",
     "Displays action": "Hərəkətlərin nümayişi",
     "Reason": "Səbəb",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s otağın mövzusunu \"%(topic)s\" dəyişdirdi.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s otağın adını %(roomName)s dəyişdirdi.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s dəvət edilmiş iştirakçılar üçün danışıqların tarixini açdı.",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s girmiş iştirakçılar üçün danışıqların tarixini açdı.",
     "%(senderName)s made future room history visible to all room members.": "%(senderName)s iştirakçılar üçün danışıqların tarixini açdı.",
@@ -162,7 +154,6 @@
     "Send": "Göndər",
     "PM": "24:00",
     "AM": "12:00",
-    "Unnamed Room": "Adı açıqlanmayan otaq",
     "Unable to load! Check your network connectivity and try again.": "Yükləmək olmur! Şəbəkə bağlantınızı yoxlayın və yenidən cəhd edin.",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s-un sizə bildiriş göndərmək icazəsi yoxdur - brauzerinizin parametrlərini yoxlayın",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s bildiriş göndərmək üçün icazə verilmədi - lütfən yenidən cəhd edin",
@@ -213,14 +204,6 @@
     "Please supply a https:// or http:// widget URL": "Zəhmət olmasa https:// və ya http:// widget URL təmin edin",
     "Forces the current outbound group session in an encrypted room to be discarded": "Şifrəli bir otaqda mövcud qrup sessiyasını ləğv etməyə məcbur edir",
     "Displays list of commands with usages and descriptions": "İstifadə qaydaları və təsvirləri ilə komanda siyahısını göstərir",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s otaq otağını sildi.",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s bu otağı təkmilləşdirdi.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s linki olanlara otağı açıq etdi.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s otağı yalnız dəvətlə açıq etdi.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s qoşulma qaydasını %(rule)s olaraq dəyişdirdi",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s qonaq otağa qoşulmasına icazə verdi.",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s qonaqların otağa daxil olmasının qarşısını aldı.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s %(rule)s-a qonaq girişi dəyişdirildi.",
     "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
     "Create Account": "Hesab Aç",
     "Explore rooms": "Otaqları kəşf edin",
@@ -236,7 +219,8 @@
         "home": "Başlanğıc",
         "favourites": "Seçilmişlər",
         "attachment": "Əlavə",
-        "emoji": "Smaylar"
+        "emoji": "Smaylar",
+        "unnamed_room": "Adı açıqlanmayan otaq"
     },
     "action": {
         "continue": "Davam etmək",
@@ -266,6 +250,32 @@
         "custom": "Xüsusi (%(level)s)"
     },
     "settings": {
-        "always_show_message_timestamps": "Həmişə mesajların göndərilməsi vaxtını göstərmək"
+        "always_show_message_timestamps": "Həmişə mesajların göndərilməsi vaxtını göstərmək",
+        "notifications": {
+            "rule_contains_display_name": "Mənim adımı özündə saxlayan mesajlar",
+            "rule_room_one_to_one": "Fərdi çatlarda mesajlar",
+            "rule_message": "Qrup çatlarında mesajlar",
+            "rule_invite_for_me": "Nə vaxt ki, məni otağa dəvət edirlər",
+            "rule_call": "Dəvət zəngi",
+            "rule_suppress_notices": "Botla göndərilmiş mesajlar"
+        }
+    },
+    "timeline": {
+        "m.room.topic": "%(senderDisplayName)s otağın mövzusunu \"%(topic)s\" dəyişdirdi.",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s otaq otağını sildi.",
+            "set": "%(senderDisplayName)s otağın adını %(roomName)s dəyişdirdi."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s bu otağı təkmilləşdirdi.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s linki olanlara otağı açıq etdi.",
+            "invite": "%(senderDisplayName)s otağı yalnız dəvətlə açıq etdi.",
+            "unknown": "%(senderDisplayName)s qoşulma qaydasını %(rule)s olaraq dəyişdirdi"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s qonaq otağa qoşulmasına icazə verdi.",
+            "forbidden": "%(senderDisplayName)s qonaqların otağa daxil olmasının qarşısını aldı.",
+            "unknown": "%(senderDisplayName)s %(rule)s-a qonaq girişi dəyişdirildi."
+        }
     }
 }

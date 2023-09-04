@@ -87,14 +87,9 @@
     "You are no longer ignoring %(userId)s": "Du ignorerer ikke længere %(userId)s",
     "Verified key": "Verificeret nøgle",
     "Reason": "Årsag",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s ændrede emnet til \"%(topic)s\".",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s fjernede rumnavnet.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s ændrede rumnavnet til %(roomName)s.",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sendte et billed.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s inviterede %(targetDisplayName)s til rummet.",
     "Online": "Online",
     "Sunday": "Søndag",
-    "Messages sent by bot": "Beskeder sendt af en bot",
     "Notification targets": "Meddelelsesmål",
     "Today": "I dag",
     "Friday": "Fredag",
@@ -104,8 +99,6 @@
     "Waiting for response from server": "Venter på svar fra server",
     "Off": "Slukket",
     "This Room": "Dette rum",
-    "Messages containing my display name": "Beskeder der indeholder mit viste navn",
-    "Messages in one-to-one chats": "Beskeder i en-til-en chats",
     "Unavailable": "Utilgængelig",
     "Source URL": "Kilde URL",
     "Failed to add tag %(tagName)s to room": "Kunne ikke tilføje tag(s): %(tagName)s til rummet",
@@ -114,7 +107,6 @@
     "Noisy": "Støjende",
     "Collecting app version information": "Indsamler app versionsoplysninger",
     "Search…": "Søg…",
-    "When I'm invited to a room": "Når jeg bliver inviteret til et rum",
     "Tuesday": "Tirsdag",
     "Saturday": "Lørdag",
     "Monday": "Mandag",
@@ -122,13 +114,11 @@
     "Invite to this room": "Inviter til dette rum",
     "Send": "Send",
     "All messages": "Alle beskeder",
-    "Call invitation": "Opkalds invitation",
     "What's new?": "Hvad er nyt?",
     "All Rooms": "Alle rum",
     "You cannot delete this message. (%(code)s)": "Du kan ikke slette denne besked. (%(code)s)",
     "Thursday": "Torsdag",
     "Show message in desktop notification": "Vis besked i skrivebordsnotifikation",
-    "Messages in group chats": "Beskeder i gruppechats",
     "Yesterday": "I går",
     "Error encountered (%(errorDetail)s).": "En fejl er opstået (%(errorDetail)s).",
     "Low Priority": "Lav prioritet",
@@ -149,7 +139,6 @@
     "The server does not support the room version specified.": "Serveren understøtter ikke den oplyste rumversion.",
     "Failure to create room": "Rummet kunne ikke oprettes",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s",
-    "Unnamed Room": "Unavngivet rum",
     "Unable to load! Check your network connectivity and try again.": "Kunne ikke hente! Tjek din netværksforbindelse og prøv igen.",
     "Missing roomId.": "roomId mangler.",
     "Messages": "Beskeder",
@@ -179,15 +168,6 @@
     "Sends the given message coloured as a rainbow": "Sender beskeden med regnbuefarver",
     "Sends the given emote coloured as a rainbow": "Sender emoji'en med regnbuefarver",
     "Displays list of commands with usages and descriptions": "Viser en liste over kommandoer med beskrivelser",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s opgraderede dette rum.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s gjorde rummet offentligt for alle som kender linket.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s begrænsede adgang til rummet til kun inviterede.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s ændrede adgangsreglen til %(rule)s",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s har givet gæster adgang til rummet.",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s har forhindret gæster i at tilgå rummet.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s ændrede gæsteadgang til %(rule)s",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s satte hovedadressen af dette rum til %(address)s.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s fjernede hovedadressen for dette rum.",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s tilbagetrak invitationen til %(targetDisplayName)s om at deltage i rummet.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s gjorde fremtidig rumhistorik synligt for alle rummedlemmer, fra det tidspunkt de blev inviteredet.",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s gjorde fremtidig rumhistorik synligt for alle rummedlemmer, fra det tidspunkt de blev medlem.",
@@ -291,7 +271,6 @@
     "Session already verified!": "Sessionen er allerede verificeret!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Underskriftsnøglen du supplerede matcher den underskriftsnøgle du modtog fra %(userId)s's session %(deviceId)s. Sessionen er markeret som verificeret.",
     "Displays information about a user": "Viser information om en bruger",
-    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s ændrede rumnavnet fra %(oldRoomName)s til %(newRoomName)s.",
     "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
         "other": "%(senderName)s tilføjede de alternative adresser %(addresses)s til dette rum.",
         "one": "%(senderName)s tilføjede alternative adresser %(addresses)s til dette rum."
@@ -303,10 +282,6 @@
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s ændrede de alternative adresser til dette rum.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ændrede hoved- og alternative adresser til dette rum.",
     "%(senderName)s changed the addresses for this room.": "%(senderName)s ændrede adresserne til dette rum.",
-    "%(senderName)s placed a voice call.": "%(senderName)s foretog et stemmeopkald.",
-    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s foretog et stemmeopkald. (ikke understøttet af denne browser)",
-    "%(senderName)s placed a video call.": "%(senderName)s foretog et videoopkald.",
-    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s foretog et videoopkald. (ikke understøttet af denne browser)",
     "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s fjernede den regel der bannede brugere der matcher %(glob)s",
     "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s fjernede den regel der bannede brugere der matcher %(glob)s",
     "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s fjernede den regel der bannede servere som matcher %(glob)s",
@@ -672,7 +647,8 @@
         "emoji": "Emoji",
         "someone": "Nogen",
         "encrypted": "Krypteret",
-        "matrix": "Matrix"
+        "matrix": "Matrix",
+        "unnamed_room": "Unavngivet rum"
     },
     "action": {
         "continue": "Fortsæt",
@@ -727,7 +703,15 @@
     },
     "settings": {
         "emoji_autocomplete": "Aktiver emoji forslag under indtastning",
-        "show_redaction_placeholder": "Vis en pladsholder for fjernede beskeder"
+        "show_redaction_placeholder": "Vis en pladsholder for fjernede beskeder",
+        "notifications": {
+            "rule_contains_display_name": "Beskeder der indeholder mit viste navn",
+            "rule_room_one_to_one": "Beskeder i en-til-en chats",
+            "rule_message": "Beskeder i gruppechats",
+            "rule_invite_for_me": "Når jeg bliver inviteret til et rum",
+            "rule_call": "Opkalds invitation",
+            "rule_suppress_notices": "Beskeder sendt af en bot"
+        }
     },
     "devtools": {
         "event_type": "Begivenhedstype",
@@ -736,5 +720,35 @@
         "event_content": "Begivenhedsindhold",
         "toolbox": "Værktøjer",
         "developer_tools": "Udviklingsværktøjer"
+    },
+    "timeline": {
+        "m.call.invite": {
+            "voice_call": "%(senderName)s foretog et stemmeopkald.",
+            "voice_call_unsupported": "%(senderName)s foretog et stemmeopkald. (ikke understøttet af denne browser)",
+            "video_call": "%(senderName)s foretog et videoopkald.",
+            "video_call_unsupported": "%(senderName)s foretog et videoopkald. (ikke understøttet af denne browser)"
+        },
+        "m.room.topic": "%(senderDisplayName)s ændrede emnet til \"%(topic)s\".",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s fjernede rumnavnet.",
+            "change": "%(senderDisplayName)s ændrede rumnavnet fra %(oldRoomName)s til %(newRoomName)s.",
+            "set": "%(senderDisplayName)s ændrede rumnavnet til %(roomName)s."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s opgraderede dette rum.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s gjorde rummet offentligt for alle som kender linket.",
+            "invite": "%(senderDisplayName)s begrænsede adgang til rummet til kun inviterede.",
+            "unknown": "%(senderDisplayName)s ændrede adgangsreglen til %(rule)s"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s har givet gæster adgang til rummet.",
+            "forbidden": "%(senderDisplayName)s har forhindret gæster i at tilgå rummet.",
+            "unknown": "%(senderDisplayName)s ændrede gæsteadgang til %(rule)s"
+        },
+        "m.image": "%(senderDisplayName)s sendte et billed.",
+        "m.room.canonical_alias": {
+            "set": "%(senderName)s satte hovedadressen af dette rum til %(address)s.",
+            "removed": "%(senderName)s fjernede hovedadressen for dette rum."
+        }
     }
 }

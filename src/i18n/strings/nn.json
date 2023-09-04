@@ -70,10 +70,6 @@
     "Verified key": "Godkjend nøkkel",
     "Displays action": "Visar handlingar",
     "Reason": "Grunnlag",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s gjorde emnet om til \"%(topic)s\".",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s fjerna romnamnet.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s gjorde romnamnet om til %(roomName)s.",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s sende eit bilete.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s inviterte %(targetDisplayName)s til å bli med i rommet.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s gjorde slik at den framtidige romhistoria er tilgjengeleg for alle rommedlemmar frå då dei vart invitert.",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s gjorde slik at framtidig romhistorie er tilgjengeleg for alle rommedlemmar frå då dei kom inn.",
@@ -89,7 +85,6 @@
     "Failure to create room": "Klarte ikkje å laga rommet",
     "Server may be unavailable, overloaded, or you hit a bug.": "Tenaren er kanskje utilgjengeleg, overlasta elles så traff du ein bug.",
     "Send": "Send",
-    "Unnamed Room": "Rom utan namn",
     "Your browser does not support the required cryptography extensions": "Nettlesaren din støttar ikkje dei naudsynte kryptografiske utvidingane",
     "Not a valid %(brand)s keyfile": "Ikkje ei gyldig %(brand)s-nykelfil",
     "Authentication check failed: incorrect password?": "Authentiseringsforsøk mislukkast: feil passord?",
@@ -101,12 +96,6 @@
     "Collecting app version information": "Samlar versjonsinfo for programmet",
     "Collecting logs": "Samlar loggar",
     "Waiting for response from server": "Ventar på svar frå tenaren",
-    "Messages containing my display name": "Meldingar som inneheld visingsnamnet mitt",
-    "Messages in one-to-one chats": "Meldingar i ein-til-ein-samtalar",
-    "Messages in group chats": "Meldingar i gruppesamtalar",
-    "When I'm invited to a room": "Når eg blir invitert til eit rom",
-    "Call invitation": "Samtaleinvitasjonar",
-    "Messages sent by bot": "Meldingar sendt frå ein bot",
     "Incorrect verification code": "Urett stadfestingskode",
     "Phone": "Telefon",
     "No display name": "Ingen visningsnamn",
@@ -549,7 +538,6 @@
     "Forces the current outbound group session in an encrypted room to be discarded": "Tvingar i eit kryptert rom kassering av gjeldande utgåande gruppe-økt",
     "Sends the given message coloured as a rainbow": "Sender den bestemte meldinga farga som ein regnboge",
     "Displays list of commands with usages and descriptions": "Viser ei liste over kommandoar med bruksområde og skildringar",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s oppgraderte dette rommet.",
     "Cancel entering passphrase?": "Avbryte inntasting av passfrase ?",
     "Setting up keys": "Setter opp nøklar",
     "Verify this session": "Stadfest denne økta",
@@ -563,18 +551,6 @@
     "Session already verified!": "Sesjon er tidligare verifisert!",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ÅTVARING: NØKKELVERIFIKASJON FEILA! Signeringsnøkkel for %(userId)s og økt %(deviceId)s er \"%(fprint)s\" stemmer ikkje med innsendt nøkkel \"%(fingerprint)s\". Dette kan vere teikn på at kommunikasjonen er avlytta!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Innsendt signeringsnøkkel er lik nøkkelen du mottok frå %(userId)s med økt %(deviceId)s. Sesjonen no er verifisert.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s satte rommet til offentleg for alle som har linken.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s avgrensa romtilgang til inviterte deltakarar.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s satte tilgangsregelen til %(rule)s",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s har opna for gjestetilgang i rommet.",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s har hindra gjestetilgang i rommet.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s endra gjestetilgang til %(rule)s",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s satte standardadressa for dette rommet til %(address)s.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s fjerna standardadressa for dette rommet.",
-    "%(senderName)s placed a voice call.": "%(senderName)s starta ein talesamtale.",
-    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s starta ein talesamtale. (ikkje støtta av denne nettlesaren)",
-    "%(senderName)s placed a video call.": "%(senderName)s starta ein videosamtale.",
-    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s starta ein videosamtale. (ikkje støtta av denne nettlesaren)",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s trekte tilbake invitasjonen for at %(targetDisplayName)s kan bli medlem i rommet.",
     "Sign In or Create Account": "Logg inn eller opprett konto",
     "Create Account": "Opprett konto",
@@ -717,11 +693,6 @@
     },
     "%(names)s and %(lastPerson)s are typing …": "%(names)s og %(lastPerson)s skriv…",
     "Manually verify all remote sessions": "Manuelt verifiser alle eksterne økter",
-    "Messages containing my username": "Meldingar som inneheld mitt brukarnamn",
-    "Messages containing @room": "Meldingar som inneheld @room",
-    "Encrypted messages in one-to-one chats": "Krypterte meldingar i ein-til-ein-samtalar",
-    "Encrypted messages in group chats": "Krypterte meldingar i gruppesamtalar",
-    "When rooms are upgraded": "Når rom blir oppgraderte",
     "My Ban List": "Mi blokkeringsliste",
     "Enable desktop notifications for this session": "Aktiver skrivebordsvarslingar for denne øka",
     "Enable audible notifications for this session": "Aktiver høyrbare varslingar for denne økta",
@@ -769,7 +740,6 @@
     "Send a bug report with logs": "Send ein feilrapport med loggar",
     "Opens chat with the given user": "Opna ein samtale med den spesifiserte brukaren",
     "Sends a message to the given user": "Send ein melding til den spesifiserte brukaren",
-    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s endra romnamnet frå %(oldRoomName)s til %(newRoomName)s.",
     "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
         "other": "%(senderName)s la til dei alternative adressene %(addresses)s for dette rommet.",
         "one": "%(senderName)s la til ei alternativ adresse %(addresses)s for dette rommet."
@@ -803,7 +773,6 @@
     "Add a new server": "Legg til ein ny tenar",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Tømming av data frå denne sesjonen er permanent. Krypterte meldingar vil gå tapt med mindre krypteringsnøklane har blitt sikkerheitskopierte.",
     "Enable end-to-end encryption": "Skru på ende-til-ende kryptering",
-    "Create a private room": "Lag eit privat rom",
     "Hide advanced": "Gøym avanserte alternativ",
     "Show advanced": "Vis avanserte alternativ",
     "I don't want my encrypted messages": "Eg treng ikkje mine krypterte meldingar",
@@ -932,7 +901,6 @@
     "Match system": "Følg systemet",
     "You can change this at any time from room settings.": "Du kan endra dette kva tid som helst frå rominnstillingar.",
     "Room settings": "Rominnstillingar",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s endra kven som kan bli med i rommet. <a>Vis innstillingar</a>.",
     "Join the conference from the room information card on the right": "Bli med i konferanse frå rominfo-kortet til høgre",
     "Final result based on %(count)s votes": {
         "one": "Endeleg resultat basert etter %(count)s stemme",
@@ -991,7 +959,8 @@
         "emoji": "Emoji",
         "someone": "Nokon",
         "encrypted": "Kryptert",
-        "matrix": "Matrix"
+        "matrix": "Matrix",
+        "unnamed_room": "Rom utan namn"
     },
     "action": {
         "continue": "Fortset",
@@ -1111,7 +1080,20 @@
         "big_emoji": "Aktiver store emolji-ar i samtalen",
         "jump_to_bottom_on_send": "Hopp til botn av tidslinja når du sender ei melding",
         "prompt_invite": "Spør før utsending av invitasjonar til potensielle ugyldige Matrix-IDar",
-        "start_automatically": "Start automatisk etter systeminnlogging"
+        "start_automatically": "Start automatisk etter systeminnlogging",
+        "notifications": {
+            "rule_contains_display_name": "Meldingar som inneheld visingsnamnet mitt",
+            "rule_contains_user_name": "Meldingar som inneheld mitt brukarnamn",
+            "rule_roomnotif": "Meldingar som inneheld @room",
+            "rule_room_one_to_one": "Meldingar i ein-til-ein-samtalar",
+            "rule_message": "Meldingar i gruppesamtalar",
+            "rule_encrypted": "Krypterte meldingar i gruppesamtalar",
+            "rule_invite_for_me": "Når eg blir invitert til eit rom",
+            "rule_call": "Samtaleinvitasjonar",
+            "rule_suppress_notices": "Meldingar sendt frå ein bot",
+            "rule_tombstone": "Når rom blir oppgraderte",
+            "rule_encrypted_room_one_to_one": "Krypterte meldingar i ein-til-ein-samtalar"
+        }
     },
     "devtools": {
         "event_type": "Hendingsort",
@@ -1120,5 +1102,39 @@
         "event_content": "Hendingsinnhald",
         "toolbox": "Verktøykasse",
         "developer_tools": "Utviklarverktøy"
+    },
+    "create_room": {
+        "title_private_room": "Lag eit privat rom"
+    },
+    "timeline": {
+        "m.call.invite": {
+            "voice_call": "%(senderName)s starta ein talesamtale.",
+            "voice_call_unsupported": "%(senderName)s starta ein talesamtale. (ikkje støtta av denne nettlesaren)",
+            "video_call": "%(senderName)s starta ein videosamtale.",
+            "video_call_unsupported": "%(senderName)s starta ein videosamtale. (ikkje støtta av denne nettlesaren)"
+        },
+        "m.room.topic": "%(senderDisplayName)s gjorde emnet om til \"%(topic)s\".",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s fjerna romnamnet.",
+            "change": "%(senderDisplayName)s endra romnamnet frå %(oldRoomName)s til %(newRoomName)s.",
+            "set": "%(senderDisplayName)s gjorde romnamnet om til %(roomName)s."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s oppgraderte dette rommet.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s satte rommet til offentleg for alle som har linken.",
+            "invite": "%(senderDisplayName)s avgrensa romtilgang til inviterte deltakarar.",
+            "restricted_settings": "%(senderDisplayName)s endra kven som kan bli med i rommet. <a>Vis innstillingar</a>.",
+            "unknown": "%(senderDisplayName)s satte tilgangsregelen til %(rule)s"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s har opna for gjestetilgang i rommet.",
+            "forbidden": "%(senderDisplayName)s har hindra gjestetilgang i rommet.",
+            "unknown": "%(senderDisplayName)s endra gjestetilgang til %(rule)s"
+        },
+        "m.image": "%(senderDisplayName)s sende eit bilete.",
+        "m.room.canonical_alias": {
+            "set": "%(senderName)s satte standardadressa for dette rommet til %(address)s.",
+            "removed": "%(senderName)s fjerna standardadressa for dette rommet."
+        }
     }
 }

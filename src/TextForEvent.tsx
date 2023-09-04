@@ -57,8 +57,8 @@ function textForCallEvent(event: MatrixEvent, client: MatrixClient): () => strin
     const isSupported = client.supportsVoip();
 
     return isSupported
-        ? () => _t("Video call started in %(roomName)s.", { roomName })
-        : () => _t("Video call started in %(roomName)s. (not supported by this browser)", { roomName });
+        ? () => _t("timeline|m.call|video_call_started", { roomName })
+        : () => _t("timeline|m.call|video_call_started_unsupported", { roomName });
 }
 
 // These functions are frequently used just to check whether an event has
@@ -75,13 +75,13 @@ function textForCallInviteEvent(event: MatrixEvent, client: MatrixClient): (() =
     // can have a hard time translating those strings. In an effort to make translations easier
     // and more accurate, we break out the string-based variables to a couple booleans.
     if (isVoice && isSupported) {
-        return () => _t("%(senderName)s placed a voice call.", { senderName });
+        return () => _t("timeline|m.call.invite|voice_call", { senderName });
     } else if (isVoice && !isSupported) {
-        return () => _t("%(senderName)s placed a voice call. (not supported by this browser)", { senderName });
+        return () => _t("timeline|m.call.invite|voice_call_unsupported", { senderName });
     } else if (!isVoice && isSupported) {
-        return () => _t("%(senderName)s placed a video call.", { senderName });
+        return () => _t("timeline|m.call.invite|video_call", { senderName });
     } else if (!isVoice && !isSupported) {
-        return () => _t("%(senderName)s placed a video call. (not supported by this browser)", { senderName });
+        return () => _t("timeline|m.call.invite|video_call_unsupported", { senderName });
     }
 
     return null;
@@ -127,22 +127,22 @@ function textForMemberEvent(
             if (threePidContent) {
                 if (threePidContent.display_name) {
                     return () =>
-                        _t("%(targetName)s accepted the invitation for %(displayName)s", {
+                        _t("timeline|m.room.member|accepted_3pid_invite", {
                             targetName,
                             displayName: threePidContent.display_name,
                         });
                 } else {
-                    return () => _t("%(targetName)s accepted an invitation", { targetName });
+                    return () => _t("timeline|m.room.member|accepted_invite", { targetName });
                 }
             } else {
-                return () => _t("%(senderName)s invited %(targetName)s", { senderName, targetName });
+                return () => _t("timeline|m.room.member|invite", { senderName, targetName });
             }
         }
         case "ban":
             return () =>
                 reason
-                    ? _t("%(senderName)s banned %(targetName)s: %(reason)s", { senderName, targetName, reason })
-                    : _t("%(senderName)s banned %(targetName)s", { senderName, targetName });
+                    ? _t("timeline|m.room.member|ban_reason", { senderName, targetName, reason })
+                    : _t("timeline|m.room.member|ban", { senderName, targetName });
         case "join":
             if (prevContent && prevContent.membership === "join") {
                 const modDisplayname = getModification(prevContent.displayname, content.displayname);
@@ -151,7 +151,7 @@ function textForMemberEvent(
                 if (modDisplayname !== Modification.None && modAvatarUrl !== Modification.None) {
                     // Compromise to provide the user with more context without needing 16 translations
                     return () =>
-                        _t("%(oldDisplayName)s changed their display name and profile picture", {
+                        _t("timeline|m.room.member|change_name_avatar", {
                             // We're taking the display namke directly from the event content here so we need
                             // to strip direction override chars which the js-sdk would normally do when
                             // calculating the display name
@@ -159,7 +159,7 @@ function textForMemberEvent(
                         });
                 } else if (modDisplayname === Modification.Changed) {
                     return () =>
-                        _t("%(oldDisplayName)s changed their display name to %(displayName)s", {
+                        _t("timeline|m.room.member|change_name", {
                             // We're taking the display name directly from the event content here so we need
                             // to strip direction override chars which the js-sdk would normally do when
                             // calculating the display name
@@ -168,62 +168,62 @@ function textForMemberEvent(
                         });
                 } else if (modDisplayname === Modification.Set) {
                     return () =>
-                        _t("%(senderName)s set their display name to %(displayName)s", {
+                        _t("timeline|m.room.member|set_name", {
                             senderName: ev.getSender(),
                             displayName: removeDirectionOverrideChars(content.displayname!),
                         });
                 } else if (modDisplayname === Modification.Unset) {
                     return () =>
-                        _t("%(senderName)s removed their display name (%(oldDisplayName)s)", {
+                        _t("timeline|m.room.member|remove_name", {
                             senderName,
                             oldDisplayName: removeDirectionOverrideChars(prevContent.displayname!),
                         });
                 } else if (modAvatarUrl === Modification.Unset) {
-                    return () => _t("%(senderName)s removed their profile picture", { senderName });
+                    return () => _t("timeline|m.room.member|remove_avatar", { senderName });
                 } else if (modAvatarUrl === Modification.Changed) {
-                    return () => _t("%(senderName)s changed their profile picture", { senderName });
+                    return () => _t("timeline|m.room.member|change_avatar", { senderName });
                 } else if (modAvatarUrl === Modification.Set) {
-                    return () => _t("%(senderName)s set a profile picture", { senderName });
+                    return () => _t("timeline|m.room.member|set_avatar", { senderName });
                 } else if (showHiddenEvents ?? SettingsStore.getValue("showHiddenEventsInTimeline")) {
                     // This is a null rejoin, it will only be visible if using 'show hidden events' (labs)
-                    return () => _t("%(senderName)s made no change", { senderName });
+                    return () => _t("timeline|m.room.member|no_change", { senderName });
                 } else {
                     return null;
                 }
             } else {
                 if (!ev.target) logger.warn("Join message has no target! -- " + ev.getContent().state_key);
-                return () => _t("%(targetName)s joined the room", { targetName });
+                return () => _t("timeline|m.room.member|join", { targetName });
             }
         case "leave":
             if (ev.getSender() === ev.getStateKey()) {
                 if (prevContent.membership === "invite") {
-                    return () => _t("%(targetName)s rejected the invitation", { targetName });
+                    return () => _t("timeline|m.room.member|reject_invite", { targetName });
                 } else {
                     return () =>
                         reason
-                            ? _t("%(targetName)s left the room: %(reason)s", { targetName, reason })
-                            : _t("%(targetName)s left the room", { targetName });
+                            ? _t("timeline|m.room.member|left_reason", { targetName, reason })
+                            : _t("timeline|m.room.member|left", { targetName });
                 }
             } else if (prevContent.membership === "ban") {
-                return () => _t("%(senderName)s unbanned %(targetName)s", { senderName, targetName });
+                return () => _t("timeline|m.room.member|unban", { senderName, targetName });
             } else if (prevContent.membership === "invite") {
                 return () =>
                     reason
-                        ? _t("%(senderName)s withdrew %(targetName)s's invitation: %(reason)s", {
+                        ? _t("timeline|m.room.member|withdrew_invite_reason", {
                               senderName,
                               targetName,
                               reason,
                           })
-                        : _t("%(senderName)s withdrew %(targetName)s's invitation", { senderName, targetName });
+                        : _t("timeline|m.room.member|withdrew_invite", { senderName, targetName });
             } else if (prevContent.membership === "join") {
                 return () =>
                     reason
-                        ? _t("%(senderName)s removed %(targetName)s: %(reason)s", {
+                        ? _t("timeline|m.room.member|kick_reason", {
                               senderName,
                               targetName,
                               reason,
                           })
-                        : _t("%(senderName)s removed %(targetName)s", { senderName, targetName });
+                        : _t("timeline|m.room.member|kick", { senderName, targetName });
             } else {
                 return null;
             }
@@ -235,7 +235,7 @@ function textForMemberEvent(
 function textForTopicEvent(ev: MatrixEvent): (() => string) | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     return () =>
-        _t('%(senderDisplayName)s changed the topic to "%(topic)s".', {
+        _t("timeline|m.room.topic", {
             senderDisplayName,
             topic: ev.getContent().topic,
         });
@@ -243,25 +243,25 @@ function textForTopicEvent(ev: MatrixEvent): (() => string) | null {
 
 function textForRoomAvatarEvent(ev: MatrixEvent): (() => string) | null {
     const senderDisplayName = ev?.sender?.name || ev.getSender();
-    return () => _t("%(senderDisplayName)s changed the room avatar.", { senderDisplayName });
+    return () => _t("timeline|m.room.avatar", { senderDisplayName });
 }
 
 function textForRoomNameEvent(ev: MatrixEvent): (() => string) | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 
     if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
-        return () => _t("%(senderDisplayName)s removed the room name.", { senderDisplayName });
+        return () => _t("timeline|m.room.name|remove", { senderDisplayName });
     }
     if (ev.getPrevContent().name) {
         return () =>
-            _t("%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.", {
+            _t("timeline|m.room.name|change", {
                 senderDisplayName,
                 oldRoomName: ev.getPrevContent().name,
                 newRoomName: ev.getContent().name,
             });
     }
     return () =>
-        _t("%(senderDisplayName)s changed the room name to %(roomName)s.", {
+        _t("timeline|m.room.name|set", {
             senderDisplayName,
             roomName: ev.getContent().name,
         });
@@ -269,7 +269,7 @@ function textForRoomNameEvent(ev: MatrixEvent): (() => string) | null {
 
 function textForTombstoneEvent(ev: MatrixEvent): (() => string) | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    return () => _t("%(senderDisplayName)s upgraded this room.", { senderDisplayName });
+    return () => _t("timeline|m.room.tombstone", { senderDisplayName });
 }
 
 const onViewJoinRuleSettingsClick = (): void => {
@@ -284,22 +284,22 @@ function textForJoinRulesEvent(ev: MatrixEvent, client: MatrixClient, allowJSX: 
     switch (ev.getContent().join_rule) {
         case JoinRule.Public:
             return () =>
-                _t("%(senderDisplayName)s made the room public to whoever knows the link.", {
+                _t("timeline|m.room.join_rules|public", {
                     senderDisplayName,
                 });
         case JoinRule.Invite:
             return () =>
-                _t("%(senderDisplayName)s made the room invite only.", {
+                _t("timeline|m.room.join_rules|invite", {
                     senderDisplayName,
                 });
         case JoinRule.Knock:
-            return () => _t("%(senderDisplayName)s changed the join rule to ask to join.", { senderDisplayName });
+            return () => _t("timeline|m.room.join_rules|knock", { senderDisplayName });
         case JoinRule.Restricted:
             if (allowJSX) {
                 return () => (
                     <span>
                         {_t(
-                            "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.",
+                            "timeline|m.room.join_rules|restricted_settings",
                             {
                                 senderDisplayName,
                             },
@@ -315,11 +315,11 @@ function textForJoinRulesEvent(ev: MatrixEvent, client: MatrixClient, allowJSX: 
                 );
             }
 
-            return () => _t("%(senderDisplayName)s changed who can join this room.", { senderDisplayName });
+            return () => _t("timeline|m.room.join_rules|restricted", { senderDisplayName });
         default:
             // The spec supports "knock" and "private", however nothing implements these.
             return () =>
-                _t("%(senderDisplayName)s changed the join rule to %(rule)s", {
+                _t("timeline|m.room.join_rules|unknown", {
                     senderDisplayName,
                     rule: ev.getContent().join_rule,
                 });
@@ -330,13 +330,13 @@ function textForGuestAccessEvent(ev: MatrixEvent): (() => string) | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().guest_access) {
         case GuestAccess.CanJoin:
-            return () => _t("%(senderDisplayName)s has allowed guests to join the room.", { senderDisplayName });
+            return () => _t("timeline|m.room.guest_access|can_join", { senderDisplayName });
         case GuestAccess.Forbidden:
-            return () => _t("%(senderDisplayName)s has prevented guests from joining the room.", { senderDisplayName });
+            return () => _t("timeline|m.room.guest_access|forbidden", { senderDisplayName });
         default:
             // There's no other options we can expect, however just for safety's sake we'll do this.
             return () =>
-                _t("%(senderDisplayName)s changed guest access to %(rule)s", {
+                _t("timeline|m.room.guest_access|unknown", {
                     senderDisplayName,
                     rule: ev.getContent().guest_access,
                 });
@@ -355,9 +355,9 @@ function textForServerACLEvent(ev: MatrixEvent): (() => string) | null {
 
     let getText: () => string;
     if (prev.deny.length === 0 && prev.allow.length === 0) {
-        getText = () => _t("%(senderDisplayName)s set the server ACLs for this room.", { senderDisplayName });
+        getText = () => _t("timeline|m.room.server_acl|set", { senderDisplayName });
     } else {
-        getText = () => _t("%(senderDisplayName)s changed the server ACLs for this room.", { senderDisplayName });
+        getText = () => _t("timeline|m.room.server_acl|changed", { senderDisplayName });
     }
 
     if (!Array.isArray(current.allow)) {
@@ -366,8 +366,7 @@ function textForServerACLEvent(ev: MatrixEvent): (() => string) | null {
 
     // If we know for sure everyone is banned, mark the room as obliterated
     if (current.allow.length === 0) {
-        return () =>
-            getText() + " " + _t("🎉 All servers are banned from participating! This room can no longer be used.");
+        return () => getText() + " " + _t("timeline|m.room.server_acl|all_servers_banned");
     }
 
     return getText;
@@ -388,9 +387,9 @@ function textForMessageEvent(ev: MatrixEvent, client: MatrixClient): (() => stri
         if (ev.getContent().msgtype === MsgType.Emote) {
             message = "* " + senderDisplayName + " " + message;
         } else if (ev.getContent().msgtype === MsgType.Image) {
-            message = _t("%(senderDisplayName)s sent an image.", { senderDisplayName });
+            message = _t("timeline|m.image", { senderDisplayName });
         } else if (ev.getType() == EventType.Sticker) {
-            message = _t("%(senderDisplayName)s sent a sticker.", { senderDisplayName });
+            message = _t("timeline|m.sticker", { senderDisplayName });
         } else {
             // in this case, parse it as a plain text message
             message = senderDisplayName + ": " + message;
@@ -411,13 +410,13 @@ function textForCanonicalAliasEvent(ev: MatrixEvent): (() => string) | null {
     if (!removedAltAliases.length && !addedAltAliases.length) {
         if (newAlias) {
             return () =>
-                _t("%(senderName)s set the main address for this room to %(address)s.", {
+                _t("timeline|m.room.canonical_alias|set", {
                     senderName,
                     address: ev.getContent().alias,
                 });
         } else if (oldAlias) {
             return () =>
-                _t("%(senderName)s removed the main address for this room.", {
+                _t("timeline|m.room.canonical_alias|removed", {
                     senderName,
                 });
         }

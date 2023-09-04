@@ -71,10 +71,6 @@
     "You are no longer ignoring %(userId)s": "Ja no estàs ignorant l'usuari %(userId)s",
     "Verified key": "Claus verificades",
     "Reason": "Raó",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s ha canviat el tema a \"%(topic)s\".",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s ha eliminat el nom de la sala.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s ha canviat el nom de la sala a %(roomName)s.",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s ha enviat una imatge.",
     "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s ha convidat a %(targetDisplayName)s a entrar a la sala.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres, a partir de que hi són convidats.",
     "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres des de que s'hi uneixen.",
@@ -90,7 +86,6 @@
     "Failure to create room": "No s'ha pogut crear la sala",
     "Server may be unavailable, overloaded, or you hit a bug.": "És possible que el servidor no estigui disponible, sobrecarregat o que hagi topat amb un error.",
     "Send": "Envia",
-    "Unnamed Room": "Sala sense nom",
     "Your browser does not support the required cryptography extensions": "El vostre navegador no és compatible amb els complements criptogràfics necessaris",
     "Not a valid %(brand)s keyfile": "El fitxer no és un fitxer de claus de %(brand)s vàlid",
     "Authentication check failed: incorrect password?": "Ha fallat l'autenticació: heu introduït correctament la contrasenya?",
@@ -359,17 +354,13 @@
     "Waiting for response from server": "S'està esperant una resposta del servidor",
     "Failed to send logs: ": "No s'han pogut enviar els logs: ",
     "This Room": "Aquesta sala",
-    "Messages containing my display name": "Missatges que contenen el meu nom visible",
-    "Messages in one-to-one chats": "Missatges en xats un a un",
     "Unavailable": "No disponible",
     "Source URL": "URL origen",
-    "Messages sent by bot": "Missatges enviats pel bot",
     "Filter results": "Resultats del filtre",
     "No update available.": "No hi ha cap actualització disponible.",
     "Noisy": "Sorollós",
     "Collecting app version information": "S'està recollint la informació de la versió de l'aplicació",
     "Search…": "Cerca…",
-    "When I'm invited to a room": "Quan sóc convidat a una sala",
     "Tuesday": "Dimarts",
     "Preparing to send logs": "Preparant l'enviament de logs",
     "Saturday": "Dissabte",
@@ -378,14 +369,12 @@
     "All Rooms": "Totes les sales",
     "Wednesday": "Dimecres",
     "All messages": "Tots els missatges",
-    "Call invitation": "Invitació de trucada",
     "What's new?": "Què hi ha de nou?",
     "Invite to this room": "Convida a aquesta sala",
     "You cannot delete this message. (%(code)s)": "No podeu eliminar aquest missatge. (%(code)s)",
     "Thursday": "Dijous",
     "Logs sent": "Logs enviats",
     "Show message in desktop notification": "Mostra els missatges amb notificacions d'escriptori",
-    "Messages in group chats": "Missatges en xats de grup",
     "Yesterday": "Ahir",
     "Error encountered (%(errorDetail)s).": "S'ha trobat un error (%(errorDetail)s).",
     "Low Priority": "Baixa prioritat",
@@ -410,15 +399,6 @@
     "Gets or sets the room topic": "Obté o estableix el tema de la sala",
     "This room has no topic.": "Aquesta sala no té tema.",
     "Sets the room name": "Estableix el nom de la sala",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s ha actualitzat aquesta sala.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s ha fet la sala pública a tothom qui conegui l'adreça.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s ha limitat la sala als convidats.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s ha canviat la regla d'entrada a %(rule)s",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s ha permès que els convidats puguin entrar a la sala.",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s ha prohibit l'entrada a la sala als visitants.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s ha canviat l'accés dels visitants a %(rule)s",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s ha canviat l'adreça principal d'aquesta sala a %(address)s.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s ha retirat l'adreça principal d'aquesta sala.",
     "%(displayName)s is typing …": "%(displayName)s està escrivint…",
     "%(names)s and %(count)s others are typing …": {
         "other": "%(names)s i %(count)s més estan escrivint…",
@@ -594,7 +574,8 @@
         "guest": "Visitant",
         "camera": "Càmera",
         "microphone": "Micròfon",
-        "someone": "Algú"
+        "someone": "Algú",
+        "unnamed_room": "Sala sense nom"
     },
     "action": {
         "continue": "Continua",
@@ -665,7 +646,15 @@
         "inline_url_previews_default": "Activa per defecte la vista prèvia d'URL en línia",
         "show_read_receipts": "Mostra les confirmacions de lectura enviades pels altres usuaris",
         "show_displayname_changes": "Mostra els canvis de nom",
-        "big_emoji": "Activa Emojis grans en xats"
+        "big_emoji": "Activa Emojis grans en xats",
+        "notifications": {
+            "rule_contains_display_name": "Missatges que contenen el meu nom visible",
+            "rule_room_one_to_one": "Missatges en xats un a un",
+            "rule_message": "Missatges en xats de grup",
+            "rule_invite_for_me": "Quan sóc convidat a una sala",
+            "rule_call": "Invitació de trucada",
+            "rule_suppress_notices": "Missatges enviats pel bot"
+        }
     },
     "devtools": {
         "event_type": "Tipus d'esdeveniment",
@@ -674,5 +663,28 @@
         "event_content": "Contingut de l'esdeveniment",
         "toolbox": "Caixa d'eines",
         "developer_tools": "Eines de desenvolupador"
+    },
+    "timeline": {
+        "m.room.topic": "%(senderDisplayName)s ha canviat el tema a \"%(topic)s\".",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s ha eliminat el nom de la sala.",
+            "set": "%(senderDisplayName)s ha canviat el nom de la sala a %(roomName)s."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s ha actualitzat aquesta sala.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s ha fet la sala pública a tothom qui conegui l'adreça.",
+            "invite": "%(senderDisplayName)s ha limitat la sala als convidats.",
+            "unknown": "%(senderDisplayName)s ha canviat la regla d'entrada a %(rule)s"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s ha permès que els convidats puguin entrar a la sala.",
+            "forbidden": "%(senderDisplayName)s ha prohibit l'entrada a la sala als visitants.",
+            "unknown": "%(senderDisplayName)s ha canviat l'accés dels visitants a %(rule)s"
+        },
+        "m.image": "%(senderDisplayName)s ha enviat una imatge.",
+        "m.room.canonical_alias": {
+            "set": "%(senderName)s ha canviat l'adreça principal d'aquesta sala a %(address)s.",
+            "removed": "%(senderName)s ha retirat l'adreça principal d'aquesta sala."
+        }
     }
 }
