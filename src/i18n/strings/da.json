@@ -118,7 +118,6 @@
     "Tuesday": "Tirsdag",
     "Saturday": "Lørdag",
     "Monday": "Mandag",
-    "Toolbox": "Værktøjer",
     "Collecting logs": "Indsamler logfiler",
     "Invite to this room": "Inviter til dette rum",
     "Send": "Send",
@@ -135,7 +134,6 @@
     "Low Priority": "Lav prioritet",
     "Failed to remove tag %(tagName)s from room": "Kunne ikke fjerne tag(s): %(tagName)s fra rummet",
     "Wednesday": "Onsdag",
-    "Developer Tools": "Udviklingsværktøjer",
     "Thank you!": "Tak!",
     "Logs sent": "Logfiler sendt",
     "Failed to send logs: ": "Kunne ikke sende logfiler: ",
@@ -727,14 +725,16 @@
     "time": {
         "date_at_time": "%(date)s om %(time)s"
     },
+    "settings": {
+        "emoji_autocomplete": "Aktiver emoji forslag under indtastning",
+        "show_redaction_placeholder": "Vis en pladsholder for fjernede beskeder"
+    },
     "devtools": {
         "event_type": "Begivenhedstype",
         "state_key": "Tilstandsnøgle",
         "event_sent": "Begivenhed sendt!",
-        "event_content": "Begivenhedsindhold"
-    },
-    "settings": {
-        "emoji_autocomplete": "Aktiver emoji forslag under indtastning",
-        "show_redaction_placeholder": "Vis en pladsholder for fjernede beskeder"
+        "event_content": "Begivenhedsindhold",
+        "toolbox": "Værktøjer",
+        "developer_tools": "Udviklingsværktøjer"
     }
 }

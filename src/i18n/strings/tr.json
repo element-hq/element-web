@@ -382,8 +382,6 @@
     "Show advanced": "Gelişmiş göster",
     "Incompatible Database": "Uyumsuz Veritabanı",
     "Filter results": "Sonuçları filtrele",
-    "Toolbox": "Araç Kutusu",
-    "Developer Tools": "Geliştirici Araçları",
     "Integrations are disabled": "Bütünleştirmeler kapatılmış",
     "Integrations not allowed": "Bütünleştirmelere izin verilmiyor",
     "Incompatible local cache": "Yerel geçici bellek uyumsuz",
@@ -779,13 +777,6 @@
     "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir sunucular yasaklama kuralı oluşturdu",
     "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir yasak kuralı oluşturdu",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Kararlı bir internet bağlantısına sahip olduğunuzdan emin olun yada sunucu yöneticisi ile iletişime geçin",
-    "a few seconds ago": "bir kaç saniye önce",
-    "about a minute ago": "yaklaşık bir dakika önce",
-    "%(num)s minutes ago": "%(num)s dakika önce",
-    "about an hour ago": "yaklaşık bir saat önce",
-    "%(num)s hours ago": "%(num)s saat önce",
-    "about a day ago": "yaklaşık bir gün önce",
-    "%(num)s days ago": "%(num)s gün önce",
     "The user's homeserver does not support the version of the room.": "Kullanıcının ana sunucusu odanın sürümünü desteklemiyor.",
     "Unknown server error": "Bilinmeyen sunucu hatası",
     "Use a few words, avoid common phrases": "Bir kaç kelime kullanın ve genel ifadelerden kaçının",
@@ -894,13 +885,6 @@
     "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Kayıt olabilirsiniz, fakat kimlik sunucunuz çevrimiçi olana kadar bazı özellikler mevcut olmayacak. Bu uyarıyı sürekli görüyorsanız, yapılandırmanızı kontrol edin veya sunucu yöneticinizle iletişime geçin.",
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Parolanızı sıfırlayabilirsiniz, fakat kimlik sunucunuz çevrimiçi olana kadar bazı özellikler mevcut olmayacak. Bu uyarıyı sürekli görüyorsanız, yapılandırmanızı kontrol edin veya sunucu yöneticinizle iletişime geçin.",
     "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Oturum açabilirsiniz, fakat kimlik sunucunuz çevrimiçi olana kadar bazı özellikler mevcut olmayacak. Bu uyarıyı sürekli görüyorsanız, yapılandırmanızı kontrol edin veya sunucu yöneticinizle iletişime geçin.",
-    "a few seconds from now": "şu andan itibaren bir kaç saniye",
-    "about a minute from now": "şu andan itibaren yaklaşık bir dakika",
-    "%(num)s minutes from now": "şu andan itibaren %(num)s dakika",
-    "about an hour from now": "şu andan itibaren yaklaşık bir saat",
-    "%(num)s hours from now": "şu andan itibaren %(num)s saat",
-    "about a day from now": "şu andan itibaren yaklaşık bir gün",
-    "%(num)s days from now": "şu andan itibaren %(num)s gün",
     "The user must be unbanned before they can be invited.": "Kullanıcının davet edilebilmesi için öncesinde yasağının kaldırılması gereklidir.",
     "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "“abcabcabc” gibi tekrarlar “abc” yi tahmin etmekten çok az daha zor olur",
     "Sequences like abc or 6543 are easy to guess": "abc veya 6543 gibi diziler tahmin için oldukça kolaydır",
@@ -2026,13 +2010,21 @@
         "before_submitting": "Logları göndermeden önce, probleminizi betimleyen <a>bir GitHub talebi oluşturun</a>."
     },
     "time": {
-        "seconds_left": "%(seconds)s saniye kaldı"
-    },
-    "devtools": {
-        "event_type": "Olay Tipi",
-        "state_key": "Durum Anahtarı",
-        "event_sent": "Olay gönderildi!",
-        "event_content": "Olay İçeriği"
+        "seconds_left": "%(seconds)s saniye kaldı",
+        "n_minutes_ago": "%(num)s dakika önce",
+        "n_hours_ago": "%(num)s saat önce",
+        "n_days_ago": "%(num)s gün önce",
+        "in_n_minutes": "şu andan itibaren %(num)s dakika",
+        "in_n_hours": "şu andan itibaren %(num)s saat",
+        "in_n_days": "şu andan itibaren %(num)s gün",
+        "in_few_seconds": "şu andan itibaren bir kaç saniye",
+        "in_about_minute": "şu andan itibaren yaklaşık bir dakika",
+        "in_about_hour": "şu andan itibaren yaklaşık bir saat",
+        "in_about_day": "şu andan itibaren yaklaşık bir gün",
+        "few_seconds_ago": "bir kaç saniye önce",
+        "about_minute_ago": "yaklaşık bir dakika önce",
+        "about_hour_ago": "yaklaşık bir saat önce",
+        "about_day_ago": "yaklaşık bir gün önce"
     },
     "settings": {
         "show_breadcrumbs": "Oda listesinin üzerinde en son kullanılan odaları göster",
@@ -2056,5 +2048,13 @@
         "big_emoji": "Sohbette büyük emojileri aç",
         "prompt_invite": "Potansiyel olarak geçersiz matrix kimliği olanlara davet gönderirken uyarı ver",
         "start_automatically": "Sisteme giriş yaptıktan sonra otomatik başlat"
+    },
+    "devtools": {
+        "event_type": "Olay Tipi",
+        "state_key": "Durum Anahtarı",
+        "event_sent": "Olay gönderildi!",
+        "event_content": "Olay İçeriği",
+        "toolbox": "Araç Kutusu",
+        "developer_tools": "Geliştirici Araçları"
     }
 }

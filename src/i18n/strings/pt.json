@@ -278,7 +278,6 @@
     "Collecting app version information": "A recolher informação da versão da app",
     "Tuesday": "Terça-feira",
     "Search…": "Pesquisar…",
-    "Developer Tools": "Ferramentas de desenvolvedor",
     "Unnamed room": "Sala sem nome",
     "Saturday": "Sábado",
     "Monday": "Segunda-feira",
@@ -773,17 +772,18 @@
         "short_hours_minutes_seconds": "%(hours)sh %(minutes)sm %(seconds)ss",
         "short_minutes_seconds": "%(minutes)sm %(seconds)ss"
     },
-    "devtools": {
-        "event_type": "Tipo de evento",
-        "state_key": "Chave de estado",
-        "event_sent": "Evento enviado!",
-        "event_content": "Conteúdo do evento"
-    },
     "settings": {
         "use_12_hour_format": "Mostrar os horários em formato de 12h (p.ex: 2:30pm)",
         "always_show_message_timestamps": "Sempre mostrar as datas das mensagens",
         "replace_plain_emoji": "Substituir Emoji de texto automaticamente",
         "automatic_language_detection_syntax_highlight": "Ativar deteção automática da linguagem para realce da sintaxe",
         "start_automatically": "Iniciar automaticamente ao iniciar o sistema"
+    },
+    "devtools": {
+        "event_type": "Tipo de evento",
+        "state_key": "Chave de estado",
+        "event_sent": "Evento enviado!",
+        "event_content": "Conteúdo do evento",
+        "developer_tools": "Ferramentas de desenvolvedor"
     }
 }

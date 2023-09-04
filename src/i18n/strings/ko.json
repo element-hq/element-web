@@ -256,11 +256,9 @@
     "Collecting app version information": "앱 버전 정보를 수집하는 중",
     "Tuesday": "화요일",
     "Search…": "찾기…",
-    "Developer Tools": "개발자 도구",
     "Unnamed room": "이름 없는 방",
     "Saturday": "토요일",
     "Monday": "월요일",
-    "Toolbox": "도구 상자",
     "Collecting logs": "로그 수집 중",
     "All Rooms": "모든 방",
     "All messages": "모든 메시지",
@@ -1164,10 +1162,6 @@
     "Voice Message": "음성 메세지",
     "View source": "소스 보기",
     "Report": "보고",
-    "about a day ago": "약 1일 전",
-    "%(num)s days ago": "%(num)s일 전",
-    "about an hour ago": "약 1 시간 전",
-    "%(num)s minutes ago": "%(num)s분 전",
     "Or send invite link": "또는 초대 링크 보내기",
     "Recent Conversations": "최근 대화 목록",
     "Start a conversation with someone using their name or username (like <userId/>).": "이름이나 사용자명(<userId/> 형식)을 사용하는 사람들과 대화를 시작하세요.",
@@ -1241,7 +1235,6 @@
     "Verified session": "검증된 세션",
     "Room info": "방 정보",
     "Match system": "시스템 테마",
-    "%(num)s hours ago": "%(num)s 시간 전",
     "Spell check": "맞춤법 검사",
     "Unverified sessions": "검증되지 않은 세션들",
     "Match system theme": "시스템 테마 사용",
@@ -1395,12 +1388,12 @@
         "github_issue": "GitHub 이슈",
         "before_submitting": "로그를 전송하기 전에, 문제를 설명하는 <a>GitHub 이슈를 만들어야 합니다</a>."
     },
-    "devtools": {
-        "event_type": "이벤트 종류",
-        "state_key": "상태 키",
-        "event_sent": "이벤트를 보냈습니다!",
-        "event_content": "이벤트 내용",
-        "threads_timeline": "스레드 타임라인"
+    "time": {
+        "n_minutes_ago": "%(num)s분 전",
+        "about_hour_ago": "약 1 시간 전",
+        "n_hours_ago": "%(num)s 시간 전",
+        "about_day_ago": "약 1일 전",
+        "n_days_ago": "%(num)s일 전"
     },
     "settings": {
         "use_12_hour_format": "시간을 12시간제로 보이기(예: 오후 2:30)",
@@ -1418,5 +1411,14 @@
         "big_emoji": "대화에서 큰 이모지 켜기",
         "prompt_invite": "잠재적으로 올바르지 않은 Matrix ID로 초대를 보내기 전에 확인",
         "start_automatically": "컴퓨터를 시작할 때 자동으로 실행하기"
+    },
+    "devtools": {
+        "event_type": "이벤트 종류",
+        "state_key": "상태 키",
+        "event_sent": "이벤트를 보냈습니다!",
+        "event_content": "이벤트 내용",
+        "threads_timeline": "스레드 타임라인",
+        "toolbox": "도구 상자",
+        "developer_tools": "개발자 도구"
     }
 }

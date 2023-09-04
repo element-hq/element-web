@@ -411,7 +411,6 @@
     "Preparing to send logs": "Gatavojos nosūtīt atutošanas logfailus",
     "Saturday": "Sestdiena",
     "Monday": "Pirmdiena",
-    "Toolbox": "Instrumentārijs",
     "Collecting logs": "Tiek iegūti logfaili",
     "All Rooms": "Visās istabās",
     "Wednesday": "Trešdiena",
@@ -429,7 +428,6 @@
     "Error encountered (%(errorDetail)s).": "Gadījās kļūda (%(errorDetail)s).",
     "Low Priority": "Zema prioritāte",
     "Off": "Izslēgt",
-    "Developer Tools": "Izstrādātāja rīki",
     "Thank you!": "Tencinam!",
     "Permission Required": "Nepieciešama atļauja",
     "You do not have permission to start a conference call in this room": "Šajā istabā nav atļaujas sākt konferences zvanu",
@@ -738,13 +736,6 @@
     "Animals & Nature": "Dzīvnieki un daba",
     "Frequently Used": "Bieži lietotas",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "Šīs šifrētās ziņas autentiskums nevar tikt garantēts šajā ierīcē.",
-    "%(num)s days ago": "%(num)s dienas iepriekš",
-    "about a day ago": "aptuveni dienu iepriekš",
-    "%(num)s hours ago": "%(num)s stundas iepriekš",
-    "about an hour ago": "aptuveni stundu iepriekš",
-    "%(num)s minutes ago": "%(num)s minūtes iepriekš",
-    "about a minute ago": "aptuveni minūti iepriekš",
-    "a few seconds ago": "pirms dažām sekundēm",
     "Recent Conversations": "Nesenās sarunas",
     "Start a conversation with someone using their name or username (like <userId/>).": "Uzsāciet sarunu ar citiem, izmantojot vārdu vai lietotājvārdu (piemērs - <userId/>).",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Uzsāciet sarunu ar citiem, izmantojot vārdu, epasta adresi vai lietotājvārdu (piemērs - <userId/>).",
@@ -949,13 +940,6 @@
     "Add another word or two. Uncommon words are better.": "Papildiniet ar vēl kādiem vārdiem. Netipiski vārdi ir labāk.",
     "All-uppercase is almost as easy to guess as all-lowercase": "Visus lielos burtus ir gandrīz tikpat viegli uzminēt kā visus mazos",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
-    "%(num)s days from now": "%(num)s dienas kopš šī brīža",
-    "about a day from now": "aptuveni dienu kopš šī brīža",
-    "%(num)s hours from now": "%(num)s stundas kopš šī brīža",
-    "about an hour from now": "aptuveni stundu kopš šī brīža",
-    "%(num)s minutes from now": "%(num)s minūtes kopš šī brīža",
-    "about a minute from now": "aptuveni minūti kopš šī brīža",
-    "a few seconds from now": "dažas sekundes kopš šī brīža",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) pierakstījās jaunā sesijā, neveicot tās verifikāciju:",
     "Actions": "Darbības",
     "Denmark": "Dānija",
@@ -1610,7 +1594,6 @@
     },
     "Files": "Faili",
     "Your private space": "Jūsu privāta vieta",
-    "Your profile": "Jūsu profils",
     "To join a space you'll need an invite.": "Lai pievienotos vietai, ir nepieciešams uzaicinājums.",
     "Your public space": "Jūsu publiska vieta",
     "Share your public space": "Dalīties ar jūsu publisko vietu",
@@ -1819,16 +1802,25 @@
         "send_logs": "Nosūtīt logfailus"
     },
     "time": {
-        "seconds_left": "%(seconds)s sekundes atlikušas"
+        "seconds_left": "%(seconds)s sekundes atlikušas",
+        "n_minutes_ago": "%(num)s minūtes iepriekš",
+        "n_hours_ago": "%(num)s stundas iepriekš",
+        "n_days_ago": "%(num)s dienas iepriekš",
+        "in_n_minutes": "%(num)s minūtes kopš šī brīža",
+        "in_n_hours": "%(num)s stundas kopš šī brīža",
+        "in_n_days": "%(num)s dienas kopš šī brīža",
+        "in_few_seconds": "dažas sekundes kopš šī brīža",
+        "in_about_minute": "aptuveni minūti kopš šī brīža",
+        "in_about_hour": "aptuveni stundu kopš šī brīža",
+        "in_about_day": "aptuveni dienu kopš šī brīža",
+        "few_seconds_ago": "pirms dažām sekundēm",
+        "about_minute_ago": "aptuveni minūti iepriekš",
+        "about_hour_ago": "aptuveni stundu iepriekš",
+        "about_day_ago": "aptuveni dienu iepriekš"
     },
     "onboarding": {
-        "personal_messaging_action": "Sāciet savu pirmo čatu"
-    },
-    "devtools": {
-        "event_type": "Notikuma tips",
-        "state_key": "Stāvokļa atslēga",
-        "event_sent": "Notikums nosūtīts!",
-        "event_content": "Notikuma saturs"
+        "personal_messaging_action": "Sāciet savu pirmo čatu",
+        "set_up_profile_action": "Jūsu profils"
     },
     "settings": {
         "show_breadcrumbs": "Rādīt saīsnes uz nesen skatītajām istabām istabu saraksta augšpusē",
@@ -1855,5 +1847,13 @@
         "big_emoji": "Iespējot lielas emocijzīmes čatā",
         "jump_to_bottom_on_send": "Nosūtot ziņu, pāriet uz laika skalas beigām",
         "start_automatically": "Startēt pie ierīces ielādes"
+    },
+    "devtools": {
+        "event_type": "Notikuma tips",
+        "state_key": "Stāvokļa atslēga",
+        "event_sent": "Notikums nosūtīts!",
+        "event_content": "Notikuma saturs",
+        "toolbox": "Instrumentārijs",
+        "developer_tools": "Izstrādātāja rīki"
     }
 }

@@ -10,7 +10,6 @@
     "All Rooms": "كل الغُرف",
     "All messages": "كل الرسائل",
     "What's New": "آخِر المُستجدّات",
-    "Toolbox": "علبة الأدوات",
     "Collecting logs": "تجميع السجلات",
     "No update available.": "لا يوجد هناك أي تحديث.",
     "Collecting app version information": "تجميع المعلومات حول نسخة التطبيق",
@@ -18,7 +17,6 @@
     "Waiting for response from server": "في انتظار الرد مِن الخادوم",
     "Thank you!": "شكرًا !",
     "Call invitation": "دعوة لمحادثة",
-    "Developer Tools": "أدوات التطوير",
     "What's new?": "ما الجديد ؟",
     "powered by Matrix": "مشغل بواسطة Matrix",
     "Use Single Sign On to continue": "استعمل الولوج الموحّد للمواصلة",
@@ -1341,9 +1339,6 @@
     "time": {
         "date_at_time": "%(date)s في %(time)s"
     },
-    "devtools": {
-        "state_key": "مفتاح الحالة"
-    },
     "settings": {
         "show_breadcrumbs": "إظهار اختصارات للغرف التي تم عرضها مؤخرًا أعلى قائمة الغرف",
         "use_12_hour_format": "عرض الطوابع الزمنية بتنسيق 12 ساعة (على سبيل المثال 2:30pm)",
@@ -1361,5 +1356,10 @@
         "big_emoji": "تفعيل الرموز التعبيرية الكبيرة في المحادثة",
         "prompt_invite": "أعلمني قبل إرسال دعوات لمعرِّفات قد لا تكون صحيحة",
         "start_automatically": "ابدأ تلقائيًا بعد تسجيل الدخول إلى النظام"
+    },
+    "devtools": {
+        "state_key": "مفتاح الحالة",
+        "toolbox": "علبة الأدوات",
+        "developer_tools": "أدوات التطوير"
     }
 }

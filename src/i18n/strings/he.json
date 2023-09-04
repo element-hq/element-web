@@ -62,7 +62,6 @@
     "Preparing to send logs": "מתכונן לשלוח יומנים",
     "Saturday": "שבת",
     "Monday": "שני",
-    "Toolbox": "תיבת כלים",
     "Collecting logs": "אוסף יומנים לנפוי שגיאה (דבאג)",
     "All Rooms": "כל החדרים",
     "Wednesday": "רביעי",
@@ -82,7 +81,6 @@
     "Low Priority": "עדיפות נמוכה",
     "Off": "ללא",
     "Failed to remove tag %(tagName)s from room": "נכשל בעת נסיון הסרת תג %(tagName)s מהחדר",
-    "Developer Tools": "כלי מפתחים",
     "Thank you!": "רב תודות!",
     "Your %(brand)s is misconfigured": "ה %(brand)s שלך מוגדר באופן שגוי",
     "Add Phone Number": "הוסף מספר טלפון",
@@ -467,20 +465,6 @@
     "Not a valid %(brand)s keyfile": "קובץ מפתח של %(brand)s אינו תקין",
     "Your browser does not support the required cryptography extensions": "הדפדפן שלכם אינו תומך בהצפנה הדרושה",
     "%(name)s (%(userId)s)": "%(userId)s %(name)s",
-    "%(num)s days from now": "בעוד %(num)s ימים מעכשיו",
-    "about a day from now": "בערך בעוד יום מעכשיו",
-    "%(num)s hours from now": "בעוד %(num)s שעות",
-    "about an hour from now": "בערך בעוד כשעה",
-    "%(num)s minutes from now": "בעוד %(num)s דקות",
-    "about a minute from now": "בערך עוד דקה אחת",
-    "a few seconds from now": "בעוד מספר שניות מעכשיו",
-    "%(num)s days ago": "לפני %(num)s ימים",
-    "about a day ago": "בערך לפני יום",
-    "%(num)s hours ago": "לפני %(num)s שעות",
-    "about an hour ago": "בערך לפני כשעה",
-    "%(num)s minutes ago": "לפני %(num)s דקות",
-    "about a minute ago": "לפני בערך דקה",
-    "a few seconds ago": "לפני מספר שניות",
     "%(items)s and %(lastItem)s": "%(items)s ו%(lastItem)s אחרון",
     "%(items)s and %(count)s others": {
         "one": "%(items)s ועוד אחד אחר",
@@ -1967,7 +1951,6 @@
     "Dial pad": "לוח חיוג",
     "There was an error looking up the phone number": "אירעה שגיאה בחיפוש מספר הטלפון",
     "Unable to look up phone number": "לא ניתן לחפש את מספר הטלפון",
-    "Active Widgets": "יישומונים פעילים",
     "Set my room layout for everyone": "הגדר את פריסת החדר שלי עבור כולם",
     "Open dial pad": "פתח לוח חיוג",
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "גבה את מפתחות ההצפנה שלך עם נתוני חשבונך במקרה שתאבד את הגישה להפעלות שלך. המפתחות שלך מאובטחים באמצעות מפתח אבטחה ייחודי.",
@@ -2239,7 +2222,6 @@
     "Sorry, the poll did not end. Please try again.": "סליחה, הסקר לא הסתיים. נא נסו שוב.",
     "The poll has ended. Top answer: %(topAnswer)s": "הסקר הסתיים. תשובה הכי נפוצה: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "הסקר הסתיים. לא היו הצבעות.",
-    "Room ID: %(roomId)s": "זיהוי חדר: %(roomId)s",
     "Welcome to <name/>": "ברוכים הבאים אל <name/>",
     "Search names and descriptions": "חיפוש שמות ותיאורים",
     "Rooms and spaces": "חדרים וחללי עבודה",
@@ -2594,8 +2576,8 @@
         "trusted": "אמין",
         "not_trusted": "לא אמין",
         "accessibility": "נגישות",
-        "capabilities": "יכולות",
-        "server": "שרת"
+        "server": "שרת",
+        "capabilities": "יכולות"
     },
     "action": {
         "continue": "המשך",
@@ -2745,25 +2727,21 @@
         "short_days": "%(value)s ימים",
         "short_hours": "%(value)s שעות",
         "short_minutes": "%(value)s דקות",
-        "short_seconds": "%(value)s שניות"
-    },
-    "devtools": {
-        "event_type": "סוג ארוע",
-        "state_key": "מקש מצב",
-        "invalid_json": "תבנית JSON לא חוקית",
-        "event_sent": "ארוע נשלח!",
-        "event_content": "תוכן הארוע",
-        "spaces": {
-            "one": "<רווח>"
-        },
-        "empty_string": "<מחרוזת ריקה>",
-        "send_custom_state_event": "שלח אירוע מצב מותאם אישית",
-        "failed_to_load": "נכשל בטעינה.",
-        "client_versions": "גירסאות",
-        "server_versions": "גירסאות שרת",
-        "value_colon": "ערך:",
-        "phase": "שלב",
-        "failed_to_find_widget": "אירעה שגיאה במציאת היישומון הזה."
+        "short_seconds": "%(value)s שניות",
+        "n_minutes_ago": "לפני %(num)s דקות",
+        "n_hours_ago": "לפני %(num)s שעות",
+        "n_days_ago": "לפני %(num)s ימים",
+        "in_n_minutes": "בעוד %(num)s דקות",
+        "in_n_hours": "בעוד %(num)s שעות",
+        "in_n_days": "בעוד %(num)s ימים מעכשיו",
+        "in_few_seconds": "בעוד מספר שניות מעכשיו",
+        "in_about_minute": "בערך עוד דקה אחת",
+        "in_about_hour": "בערך בעוד כשעה",
+        "in_about_day": "בערך בעוד יום מעכשיו",
+        "few_seconds_ago": "לפני מספר שניות",
+        "about_minute_ago": "לפני בערך דקה",
+        "about_hour_ago": "בערך לפני כשעה",
+        "about_day_ago": "בערך לפני יום"
     },
     "settings": {
         "show_breadcrumbs": "הצג קיצורים אל חדרים שנצפו לאחרונה מעל לרשימת החדרים",
@@ -2799,5 +2777,27 @@
         "show_nsfw_content": "הצג תוכן NSFW (תוכן שלא מתאים לצפיה במקום ציבורי)",
         "prompt_invite": "שאלו אותי לפני שאתם שולחים הזמנה אל קוד זיהוי אפשרי של משתמש מערכת",
         "start_automatically": "התחל באופן אוטומטי לאחר הכניסה"
+    },
+    "devtools": {
+        "event_type": "סוג ארוע",
+        "state_key": "מקש מצב",
+        "invalid_json": "תבנית JSON לא חוקית",
+        "event_sent": "ארוע נשלח!",
+        "event_content": "תוכן הארוע",
+        "spaces": {
+            "one": "<רווח>"
+        },
+        "empty_string": "<מחרוזת ריקה>",
+        "send_custom_state_event": "שלח אירוע מצב מותאם אישית",
+        "failed_to_load": "נכשל בטעינה.",
+        "client_versions": "גירסאות",
+        "server_versions": "גירסאות שרת",
+        "value_colon": "ערך:",
+        "phase": "שלב",
+        "failed_to_find_widget": "אירעה שגיאה במציאת היישומון הזה.",
+        "active_widgets": "יישומונים פעילים",
+        "toolbox": "תיבת כלים",
+        "developer_tools": "כלי מפתחים",
+        "room_id": "זיהוי חדר: %(roomId)s"
     }
 }

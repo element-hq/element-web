@@ -412,7 +412,6 @@
     "Preparing to send logs": "Egunkariak bidaltzeko prestatzen",
     "Saturday": "Larunbata",
     "Monday": "Astelehena",
-    "Toolbox": "Tresna-kutxa",
     "Collecting logs": "Egunkariak biltzen",
     "All Rooms": "Gela guztiak",
     "Wednesday": "Asteazkena",
@@ -431,7 +430,6 @@
     "Error encountered (%(errorDetail)s).": "Errorea aurkitu da (%(errorDetail)s).",
     "Low Priority": "Lehentasun baxua",
     "Off": "Ez",
-    "Developer Tools": "Garatzaile-tresnak",
     "Thank you!": "Eskerrik asko!",
     "Missing roomId.": "Gelaren ID-a falta da.",
     "Popout widget": "Laster-leiho trepeta",
@@ -1121,20 +1119,6 @@
     "Failed to find the following users": "Ezin izan dira honako erabiltzaile hauek aurkitu",
     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Honako erabiltzaile hauek agian ez dira existitzen edo baliogabeak dira, eta ezin dira gonbidatu: %(csvNames)s",
     "Lock": "Blokeatu",
-    "a few seconds ago": "duela segundo batzuk",
-    "about a minute ago": "duela minutu bat inguru",
-    "%(num)s minutes ago": "duela %(num)s minutu",
-    "about an hour ago": "duela ordubete inguru",
-    "%(num)s hours ago": "duela %(num)s ordu",
-    "about a day ago": "duela egun bat inguru",
-    "%(num)s days ago": "duela %(num)s egun",
-    "a few seconds from now": "hemendik segundo batzuetara",
-    "about a minute from now": "hemendik minutu batera",
-    "%(num)s minutes from now": "hemendik %(num)s minututara",
-    "about an hour from now": "hemendik ordubetera",
-    "%(num)s hours from now": "hemendik %(num)s ordutara",
-    "about a day from now": "hemendik egun batera",
-    "%(num)s days from now": "hemendik %(num)s egunetara",
     "Other users may not trust it": "Beste erabiltzaile batzuk ez fidagarritzat jo lezakete",
     "Later": "Geroago",
     "Something went wrong trying to invite the users.": "Okerren bat egon da erabiltzaileak gonbidatzen saiatzean.",
@@ -1634,11 +1618,21 @@
         "github_issue": "GitHub arazo-txostena",
         "before_submitting": "Egunkariak bidali aurretik, <a>GitHub arazo bat sortu</a> behar duzu gertatzen zaizuna azaltzeko."
     },
-    "devtools": {
-        "event_type": "Gertaera mota",
-        "state_key": "Egoera gakoa",
-        "event_sent": "Gertaera bidalita!",
-        "event_content": "Gertaeraren edukia"
+    "time": {
+        "few_seconds_ago": "duela segundo batzuk",
+        "about_minute_ago": "duela minutu bat inguru",
+        "n_minutes_ago": "duela %(num)s minutu",
+        "about_hour_ago": "duela ordubete inguru",
+        "n_hours_ago": "duela %(num)s ordu",
+        "about_day_ago": "duela egun bat inguru",
+        "n_days_ago": "duela %(num)s egun",
+        "in_few_seconds": "hemendik segundo batzuetara",
+        "in_about_minute": "hemendik minutu batera",
+        "in_n_minutes": "hemendik %(num)s minututara",
+        "in_about_hour": "hemendik ordubetera",
+        "in_n_hours": "hemendik %(num)s ordutara",
+        "in_about_day": "hemendik egun batera",
+        "in_n_days": "hemendik %(num)s egunetara"
     },
     "settings": {
         "show_breadcrumbs": "Erakutsi ikusitako azken geletara lasterbideak gelen zerrendaren goialdean",
@@ -1657,5 +1651,13 @@
         "big_emoji": "Gaitu emoji handiak txatean",
         "prompt_invite": "Galdetu baliogabeak izan daitezkeen matrix ID-eetara gonbidapenak bidali aurretik",
         "start_automatically": "Hasi automatikoki sisteman saioa hasi eta gero"
+    },
+    "devtools": {
+        "event_type": "Gertaera mota",
+        "state_key": "Egoera gakoa",
+        "event_sent": "Gertaera bidalita!",
+        "event_content": "Gertaeraren edukia",
+        "toolbox": "Tresna-kutxa",
+        "developer_tools": "Garatzaile-tresnak"
     }
 }
