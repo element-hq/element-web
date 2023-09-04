@@ -172,8 +172,8 @@ jobs:
                   start: npx serve -p 8080 -L ../webapp
                   wait-on: "http://localhost:8080"
                   record: true
-                  parallel: true
-                  command-prefix: "yarn percy exec --parallel --"
+                  parallel: false
+                  command-prefix: "yarn percy exec --"
                   config: '{"reporter":"cypress-multi-reporters", "reporterOptions": { "configFile": "cypress-ci-reporter-config.json" } }'
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}
                   spec: cypress/e2e/[${{ matrix.segment }}]*/**
