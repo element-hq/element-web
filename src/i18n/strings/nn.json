@@ -349,8 +349,6 @@
     "Unknown error": "Noko ukjend gjekk galt",
     "Incorrect password": "Urett passord",
     "Deactivate Account": "Avliv Brukaren",
-    "Toolbox": "Verktøykasse",
-    "Developer Tools": "Utviklarverktøy",
     "An error has occurred.": "Noko gjekk gale.",
     "Clear Storage and Sign Out": "Tøm Lager og Logg Ut",
     "Send Logs": "Send Loggar",
@@ -1088,12 +1086,6 @@
         "short_hours_minutes_seconds": "%(hours)st %(minutes)sm %(seconds)ss",
         "short_minutes_seconds": "%(minutes)sm %(seconds)ss"
     },
-    "devtools": {
-        "event_type": "Hendingsort",
-        "state_key": "Tilstandsnykel",
-        "event_sent": "Hending send!",
-        "event_content": "Hendingsinnhald"
-    },
     "settings": {
         "show_breadcrumbs": "Vis snarvegar til sist synte rom over romkatalogen",
         "all_rooms_home_description": "Alle romma du er i vil vere synlege i Heim.",
@@ -1120,5 +1112,13 @@
         "jump_to_bottom_on_send": "Hopp til botn av tidslinja når du sender ei melding",
         "prompt_invite": "Spør før utsending av invitasjonar til potensielle ugyldige Matrix-IDar",
         "start_automatically": "Start automatisk etter systeminnlogging"
+    },
+    "devtools": {
+        "event_type": "Hendingsort",
+        "state_key": "Tilstandsnykel",
+        "event_sent": "Hending send!",
+        "event_content": "Hendingsinnhald",
+        "toolbox": "Verktøykasse",
+        "developer_tools": "Utviklarverktøy"
     }
 }

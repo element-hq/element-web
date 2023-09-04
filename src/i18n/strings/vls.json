@@ -630,8 +630,6 @@
     "Unknown error": "Ounbekende foute",
     "Incorrect password": "Verkeerd paswoord",
     "Filter results": "Resultoatn filtern",
-    "Toolbox": "Gereedschap",
-    "Developer Tools": "Ountwikkeliengsgereedschap",
     "An error has occurred.": "’t Is e foute ipgetreedn.",
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Verifieert deze gebruuker vo n’hem/heur als vertrouwd te markeern. Gebruukers vertrouwn gift je extra gemoedsrust by ’t gebruuk van eind-tout-eind-versleuterde berichtn.",
     "Incoming Verification Request": "Inkomend verificoasjeverzoek",
@@ -1023,12 +1021,6 @@
         "github_issue": "GitHub-meldienge",
         "before_submitting": "Vooraleer da je logboekn indient, moe j’e <a>meldienge openn ip GitHub</a> woarin da je je probleem beschryft."
     },
-    "devtools": {
-        "event_type": "Gebeurtenistype",
-        "state_key": "Toestandssleuter",
-        "event_sent": "Gebeurtenisse verstuurd!",
-        "event_content": "Gebeurtenisinhoud"
-    },
     "settings": {
         "use_12_hour_format": "Tyd in 12-uursformoat weregeevn (bv. 2:30pm)",
         "always_show_message_timestamps": "Assan de tydstempels van berichtn toogn",
@@ -1043,5 +1035,13 @@
         "big_emoji": "Grote emoticons in gesprekkn inschoakeln",
         "prompt_invite": "Bevestigienge vroagn voda uutnodigiengn noar meuglik oungeldige Matrix-ID’s wordn verstuurd",
         "start_automatically": "Automatisch startn achter systeemanmeldienge"
+    },
+    "devtools": {
+        "event_type": "Gebeurtenistype",
+        "state_key": "Toestandssleuter",
+        "event_sent": "Gebeurtenisse verstuurd!",
+        "event_content": "Gebeurtenisinhoud",
+        "toolbox": "Gereedschap",
+        "developer_tools": "Ountwikkeliengsgereedschap"
     }
 }

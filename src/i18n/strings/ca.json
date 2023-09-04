@@ -371,11 +371,9 @@
     "Search…": "Cerca…",
     "When I'm invited to a room": "Quan sóc convidat a una sala",
     "Tuesday": "Dimarts",
-    "Developer Tools": "Eines de desenvolupador",
     "Preparing to send logs": "Preparant l'enviament de logs",
     "Saturday": "Dissabte",
     "Monday": "Dilluns",
-    "Toolbox": "Caixa d'eines",
     "Collecting logs": "S'estan recopilant els registres",
     "All Rooms": "Totes les sales",
     "Wednesday": "Dimecres",
@@ -657,12 +655,6 @@
         "submit_debug_logs": "Enviar logs de depuració",
         "send_logs": "Envia els registres"
     },
-    "devtools": {
-        "event_type": "Tipus d'esdeveniment",
-        "state_key": "Clau d'estat",
-        "event_sent": "Esdeveniment enviat!",
-        "event_content": "Contingut de l'esdeveniment"
-    },
     "settings": {
         "use_12_hour_format": "Mostra les marques de temps en format de 12 hores (p.e. 2:30pm)",
         "always_show_message_timestamps": "Mostra sempre la marca de temps del missatge",
@@ -674,5 +666,13 @@
         "show_read_receipts": "Mostra les confirmacions de lectura enviades pels altres usuaris",
         "show_displayname_changes": "Mostra els canvis de nom",
         "big_emoji": "Activa Emojis grans en xats"
+    },
+    "devtools": {
+        "event_type": "Tipus d'esdeveniment",
+        "state_key": "Clau d'estat",
+        "event_sent": "Esdeveniment enviat!",
+        "event_content": "Contingut de l'esdeveniment",
+        "toolbox": "Caixa d'eines",
+        "developer_tools": "Eines de desenvolupador"
     }
 }

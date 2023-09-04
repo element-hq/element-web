@@ -300,10 +300,6 @@
         "one": "%(items)s d wayeḍ-nniḍen"
     },
     "%(items)s and %(lastItem)s": "%(items)s d %(lastItem)s",
-    "a few seconds ago": "kra n tesinin seg yimir-nni",
-    "about a minute ago": "tasdidt seg yimir-nni",
-    "%(num)s minutes ago": "%(num)s tesdat seg yimir-nni",
-    "about an hour ago": "azal n usrag seg yimir-nni",
     "Encryption upgrade available": "Yella uleqqem n uwgelhen",
     "Verify this session": "Asenqed n tɣimit",
     "Other users may not trust it": "Iseqdacen-nniḍen yezmer ur tettamnen ara",
@@ -370,10 +366,6 @@
     "Recovery Method Removed": "Tarrayt n ujebber tettwakkes",
     "Failed to remove tag %(tagName)s from room": "Tukksa n tebzimt %(tagName)s seg texxamt ur yeddi ara",
     "Failed to add tag %(tagName)s to room": "Timerna n tebzimt %(tagName)s ɣer texxamt ur yeddi ara",
-    "%(num)s hours ago": "%(num)s usrag seg yimir-nni",
-    "about a day ago": "azal n wass seg yimir-nni",
-    "%(num)s days ago": "%(num)s wussan seg yimir-nni",
-    "a few seconds from now": "kra n tesinin seg yimir-a",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "Not a valid %(brand)s keyfile": "Afaylu n tsarut %(brand)s d arameɣtu",
     "Unknown server error": "Tuccḍa n uqeddac d tarussint",
@@ -453,12 +445,6 @@
     "Cannot reach homeserver": "Anekcum ɣer uqeddac agejdan d awezɣi",
     "Cannot reach identity server": "Anekcum ɣer uqeddac n tmagit d awezɣi",
     "No homeserver URL provided": "Ulac URL n uqeddac agejdan i d-yettunefken",
-    "about a minute from now": "akka tsasdidt seg yimir-a",
-    "%(num)s minutes from now": "%(num)s tesdidin seg yimir-nni",
-    "about an hour from now": "akka asrag seg yimir-a",
-    "%(num)s hours from now": "%(num)s yisragen seg yimir-a",
-    "about a day from now": "akka ass seg yimir-a",
-    "%(num)s days from now": "%(num)s wussan seg yimir-a",
     "Unrecognised address": "Tansa ur tettwassen ara",
     "You do not have permission to invite people to this room.": "Ur tesεiḍ ara tasiregt ad d-necdeḍ imdanen ɣer texxamt-a.",
     "The user's homeserver does not support the version of the room.": "Aqeddac agejdan n useqdac ur issefrek ara lqem n texxamt yettwafernen.",
@@ -1179,8 +1165,6 @@
     "No update available.": "Ulac lqem i yellan.",
     "Hey you. You're the best!": "Kečč·kemm. Ulac win i ak·akem-yifen!",
     "Use between %(min)s pt and %(max)s pt": "Seqdec gar %(min)s pt d %(max)s pt",
-    "Toolbox": "Tabewwaḍt n yifecka",
-    "Developer Tools": "Ifecka n uneflay",
     "An error has occurred.": "Tella-d tuccḍa.",
     "Integrations are disabled": "Imsidaf ttwasensen",
     "Integrations not allowed": "Imsidaf ur ttusirgen ara",
@@ -2006,11 +1990,21 @@
         "download_logs": "Sider imisen",
         "before_submitting": "Send ad tazneḍ iɣmisen-ik·im, ilaq <a>ad ternuḍ ugur deg Github</a> i wakken ad d-tgelmeḍ ugur-inek·inem."
     },
-    "devtools": {
-        "event_type": "Anaw n tedyant",
-        "state_key": "Tasarut n waddad",
-        "event_sent": "Tadyant tettwazen!",
-        "event_content": "Agbur n tedyant"
+    "time": {
+        "few_seconds_ago": "kra n tesinin seg yimir-nni",
+        "about_minute_ago": "tasdidt seg yimir-nni",
+        "n_minutes_ago": "%(num)s tesdat seg yimir-nni",
+        "about_hour_ago": "azal n usrag seg yimir-nni",
+        "n_hours_ago": "%(num)s usrag seg yimir-nni",
+        "about_day_ago": "azal n wass seg yimir-nni",
+        "n_days_ago": "%(num)s wussan seg yimir-nni",
+        "in_few_seconds": "kra n tesinin seg yimir-a",
+        "in_about_minute": "akka tsasdidt seg yimir-a",
+        "in_n_minutes": "%(num)s tesdidin seg yimir-nni",
+        "in_about_hour": "akka asrag seg yimir-a",
+        "in_n_hours": "%(num)s yisragen seg yimir-a",
+        "in_about_day": "akka ass seg yimir-a",
+        "in_n_days": "%(num)s wussan seg yimir-a"
     },
     "settings": {
         "show_breadcrumbs": "Sken inegzumen i texxamin i d-ibanen melmi kan nnig tebdart n texxamt",
@@ -2029,5 +2023,13 @@
         "big_emoji": "Rmed imujit ameqqran deg udiwenni",
         "prompt_invite": "Suter send tuzna n tnubgiwin i yisulayen i izmren ad ilin d arimeɣta",
         "start_automatically": "Bdu s wudem awurman seld tuqqna ɣer unagraw"
+    },
+    "devtools": {
+        "event_type": "Anaw n tedyant",
+        "state_key": "Tasarut n waddad",
+        "event_sent": "Tadyant tettwazen!",
+        "event_content": "Agbur n tedyant",
+        "toolbox": "Tabewwaḍt n yifecka",
+        "developer_tools": "Ifecka n uneflay"
     }
 }
