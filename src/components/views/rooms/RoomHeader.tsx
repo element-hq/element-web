@@ -175,43 +175,55 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
             </Box>
             <Flex as="nav" align="center" gap="var(--cpd-space-2x)">
                 {!useElementCallExclusively && (
+                    <Tooltip label={!voiceCallDisabledReason ? _t("Voice call") : voiceCallDisabledReason!}>
+                        <IconButton
+                            disabled={!!voiceCallDisabledReason}
+                            title={!voiceCallDisabledReason ? _t("Voice call") : voiceCallDisabledReason!}
+                            onClick={(evt) => {
+                                evt.stopPropagation();
+                                placeCall(room, CallType.Voice, voiceCallType);
+                            }}
+                        >
+                            <VoiceCallIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
+                <Tooltip label={!videoCallDisabledReason ? _t("Video call") : videoCallDisabledReason!}>
                     <IconButton
-                        disabled={!!voiceCallDisabledReason}
-                        title={!voiceCallDisabledReason ? _t("Voice call") : voiceCallDisabledReason!}
-                        onClick={() => {
-                            placeCall(room, CallType.Voice, voiceCallType);
+                        disabled={!!videoCallDisabledReason}
+                        title={!videoCallDisabledReason ? _t("Video call") : videoCallDisabledReason!}
+                        onClick={(evt) => {
+                            evt.stopPropagation();
+                            placeCall(room, CallType.Video, videoCallType);
                         }}
                     >
-                        <VoiceCallIcon />
+                        <VideoCallIcon />
                     </IconButton>
-                )}
-                <IconButton
-                    disabled={!!videoCallDisabledReason}
-                    title={!videoCallDisabledReason ? _t("Video call") : videoCallDisabledReason!}
-                    onClick={() => {
-                        placeCall(room, CallType.Video, videoCallType);
-                    }}
-                >
-                    <VideoCallIcon />
-                </IconButton>
-                <IconButton
-                    indicator={notificationColorToIndicator(threadNotifications)}
-                    onClick={() => {
-                        showOrHidePanel(RightPanelPhases.ThreadPanel);
-                    }}
-                    title={_t("common|threads")}
-                >
-                    <ThreadsIcon />
-                </IconButton>
-                <IconButton
-                    indicator={notificationColorToIndicator(globalNotificationState.color)}
-                    onClick={() => {
-                        showOrHidePanel(RightPanelPhases.NotificationPanel);
-                    }}
-                    title={_t("Notifications")}
-                >
-                    <NotificationsIcon />
-                </IconButton>
+                </Tooltip>
+                <Tooltip label={_t("common|threads")}>
+                    <IconButton
+                        indicator={notificationColorToIndicator(threadNotifications)}
+                        onClick={(evt) => {
+                            evt.stopPropagation();
+                            showOrHidePanel(RightPanelPhases.ThreadPanel);
+                        }}
+                        title={_t("common|threads")}
+                    >
+                        <ThreadsIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip label={_t("Notifications")}>
+                    <IconButton
+                        indicator={notificationColorToIndicator(globalNotificationState.color)}
+                        onClick={(evt) => {
+                            evt.stopPropagation();
+                            showOrHidePanel(RightPanelPhases.NotificationPanel);
+                        }}
+                        title={_t("Notifications")}
+                    >
+                        <NotificationsIcon />
+                    </IconButton>
+                </Tooltip>
             </Flex>
             {!isDirectMessage && (
                 <BodyText
@@ -229,6 +241,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                         members={members.slice(0, 3)}
                         size="20px"
                         overflow={false}
+                        viewUserOnClick={false}
                     >
                         {formatCount(memberCount)}
                     </FacePile>
