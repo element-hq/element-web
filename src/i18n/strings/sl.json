@@ -1,42 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_mixed_server": "Nepravilna konfiguracija: če določite default_server_name ali default_server_config default_hs_url ne more biti določen",
-        "invalid_configuration_no_server": "Neveljavna konfiguracija: privzeti strežnik ni nastavljen.",
-        "misconfigured": "Vaš Element je napačno nastavljen",
-        "invalid_json": "Konfiguracije vašega Elementa vsebujejo neveljaven JSON. Prosim, popravite napako in znova naložite stran.",
-        "invalid_json_detail": "Sporočilo parserja je: %(message)s",
-        "invalid_json_generic": "Neveljaven JSON",
-        "cannot_load_config": "Ni uspelo naložiti konfiguracijske datoteke: prosim, ponovno naložite stran.",
-        "app_launch_unexpected_error": "Nepričakovana napaka pri pripravi aplikacije: Za več poglejte konzolo."
-    },
-    "download_completed": "Prenos zaključen",
     "action": {
-        "open": "Odpri",
-        "dismiss": "Opusti"
+        "dismiss": "Opusti",
+        "open": "Odpri"
     },
-    "desktop_default_device_name": "%(brand)s Namizni računalnik: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Nadaljujte s prijavo v spletnem brskalniku"
     },
-    "unknown_device": "Neznana naprava",
-    "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "powered_by_matrix": "Poganja Matrix",
-    "use_brand_on_mobile": "Uporabi %(brand)s na mobilni napravi",
-    "incompatible_browser": {
-        "title": "Nepodprt brskalnik",
-        "summary": "Vaš brskalnik ne more poganjati %(brand)s",
-        "features": "%(brand)s uporablja napredne lastnosti brskalnika, ki jih vaš trenutni brskalnik ne podpira.",
-        "browser_links": "Za najboljšo izkušnjo, prosim namestite <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ali <safariLink>Safari</safariLink>.",
-        "feature_warning": "Lahko nadaljujete z uporabo vašega trenutnega brskalnika, vendar lahko to privede do manjkajočih funkcionalnosti ali napačnega izgleda aplikacije.",
-        "continue_warning": "Razumem tveganje in želim vseeno nadaljevati"
-    },
-    "go_to_element_io": "Pojdi na element.io",
-    "failed_to_start": "Neuspel zagon",
-    "welcome_to_element": "Dobrodošli v Element",
-    "powered_by_matrix_with_logo": "Decentraliziran, šifriran pogovor in sodelovanje, omogočen z $matrixLogo",
     "common": {
-        "sign_in": "Prijava",
         "create_account": "Registracija",
-        "explore_rooms": "Raziščite sobe"
-    }
+        "explore_rooms": "Raziščite sobe",
+        "sign_in": "Prijava"
+    },
+    "desktop_default_device_name": "%(brand)s Namizni računalnik: %(platformName)s",
+    "download_completed": "Prenos zaključen",
+    "error": {
+        "app_launch_unexpected_error": "Nepričakovana napaka pri pripravi aplikacije: Za več poglejte konzolo.",
+        "cannot_load_config": "Ni uspelo naložiti konfiguracijske datoteke: prosim, ponovno naložite stran.",
+        "invalid_configuration_mixed_server": "Nepravilna konfiguracija: če določite default_server_name ali default_server_config default_hs_url ne more biti določen",
+        "invalid_configuration_no_server": "Neveljavna konfiguracija: privzeti strežnik ni nastavljen.",
+        "invalid_json": "Konfiguracije vašega Elementa vsebujejo neveljaven JSON. Prosim, popravite napako in znova naložite stran.",
+        "invalid_json_detail": "Sporočilo parserja je: %(message)s",
+        "invalid_json_generic": "Neveljaven JSON",
+        "misconfigured": "Vaš Element je napačno nastavljen"
+    },
+    "failed_to_start": "Neuspel zagon",
+    "go_to_element_io": "Pojdi na element.io",
+    "incompatible_browser": {
+        "browser_links": "Za najboljšo izkušnjo, prosim namestite <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ali <safariLink>Safari</safariLink>.",
+        "continue_warning": "Razumem tveganje in želim vseeno nadaljevati",
+        "feature_warning": "Lahko nadaljujete z uporabo vašega trenutnega brskalnika, vendar lahko to privede do manjkajočih funkcionalnosti ali napačnega izgleda aplikacije.",
+        "features": "%(brand)s uporablja napredne lastnosti brskalnika, ki jih vaš trenutni brskalnik ne podpira.",
+        "summary": "Vaš brskalnik ne more poganjati %(brand)s",
+        "title": "Nepodprt brskalnik"
+    },
+    "powered_by_matrix": "Poganja Matrix",
+    "powered_by_matrix_with_logo": "Decentraliziran, šifriran pogovor in sodelovanje, omogočen z $matrixLogo",
+    "unknown_device": "Neznana naprava",
+    "use_brand_on_mobile": "Uporabi %(brand)s na mobilni napravi",
+    "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
+    "welcome_to_element": "Dobrodošli v Element"
 }

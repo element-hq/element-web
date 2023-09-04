@@ -1,41 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "不正な設定：デフォルトのサーバーが設定されていません。",
-        "misconfigured": "Elementの設定が誤っています",
-        "invalid_json": "Elementの設定ファイルに不正なJSONが含まれています。問題を修正してからページを再読み込みしてください。",
-        "invalid_json_detail": "パーサーのメッセージ：%(message)s",
-        "invalid_json_generic": "不正なJSON",
-        "cannot_load_config": "設定ファイルの読み込みに失敗しました：ページを再読み込みして、もう一度やり直してください。",
-        "app_launch_unexpected_error": "アプリケーションの準備中に予期しないエラーが発生しました。詳細はコンソールを参照してください。"
-    },
-    "download_completed": "ダウンロードが完了しました",
     "action": {
-        "open": "開く",
-        "dismiss": "閉じる"
+        "dismiss": "閉じる",
+        "open": "開く"
     },
-    "desktop_default_device_name": "%(brand)sデスクトップ：%(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "ブラウザーに移動してサインインを完了してください"
     },
-    "unknown_device": "不明な端末",
-    "web_default_device_name": "%(appName)s： %(osName)sの%(browserName)s",
-    "powered_by_matrix": "Powered by Matrix",
-    "use_brand_on_mobile": "携帯端末で%(brand)sを使用できます",
-    "incompatible_browser": {
-        "title": "サポートされていないブラウザー",
-        "summary": "このブラウザーでは%(brand)sが動きません",
-        "features": "%(brand)sはブラウザーの高度な機能を使う必要がありますが、このブラウザーではその機能がサポートされていないようです。",
-        "browser_links": "最高のユーザー体験を得るためには、<chromeLink>Chrome</chromeLink>か<firefoxLink>Firefox</firefoxLink>、もしくは<safariLink>Safari</safariLink>をインストールしてください。",
-        "feature_warning": "現在のブラウザーを使い続けることもできますが、いくつか（もしくは全ての）機能が動作しなかったり、外観が崩れたりする可能性があります。",
-        "continue_warning": "リスクを理解して続行"
-    },
-    "go_to_element_io": "element.ioへ移動",
-    "failed_to_start": "起動に失敗しました",
-    "welcome_to_element": "Elementにようこそ",
-    "powered_by_matrix_with_logo": "$matrixLogo による、分散型で暗号化された会話とコラボレーション",
     "common": {
-        "sign_in": "サインイン",
         "create_account": "アカウントを作成",
-        "explore_rooms": "ルームを探す"
-    }
+        "explore_rooms": "ルームを探す",
+        "sign_in": "サインイン"
+    },
+    "desktop_default_device_name": "%(brand)sデスクトップ：%(platformName)s",
+    "download_completed": "ダウンロードが完了しました",
+    "error": {
+        "app_launch_unexpected_error": "アプリケーションの準備中に予期しないエラーが発生しました。詳細はコンソールを参照してください。",
+        "cannot_load_config": "設定ファイルの読み込みに失敗しました：ページを再読み込みして、もう一度やり直してください。",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "不正な設定：デフォルトのサーバーが設定されていません。",
+        "invalid_json": "Elementの設定ファイルに不正なJSONが含まれています。問題を修正してからページを再読み込みしてください。",
+        "invalid_json_detail": "パーサーのメッセージ：%(message)s",
+        "invalid_json_generic": "不正なJSON",
+        "misconfigured": "Elementの設定が誤っています"
+    },
+    "failed_to_start": "起動に失敗しました",
+    "go_to_element_io": "element.ioへ移動",
+    "incompatible_browser": {
+        "browser_links": "最高のユーザー体験を得るためには、<chromeLink>Chrome</chromeLink>か<firefoxLink>Firefox</firefoxLink>、もしくは<safariLink>Safari</safariLink>をインストールしてください。",
+        "continue_warning": "リスクを理解して続行",
+        "feature_warning": "現在のブラウザーを使い続けることもできますが、いくつか（もしくは全ての）機能が動作しなかったり、外観が崩れたりする可能性があります。",
+        "features": "%(brand)sはブラウザーの高度な機能を使う必要がありますが、このブラウザーではその機能がサポートされていないようです。",
+        "summary": "このブラウザーでは%(brand)sが動きません",
+        "title": "サポートされていないブラウザー"
+    },
+    "powered_by_matrix": "Powered by Matrix",
+    "powered_by_matrix_with_logo": "$matrixLogo による、分散型で暗号化された会話とコラボレーション",
+    "unknown_device": "不明な端末",
+    "use_brand_on_mobile": "携帯端末で%(brand)sを使用できます",
+    "web_default_device_name": "%(appName)s： %(osName)sの%(browserName)s",
+    "welcome_to_element": "Elementにようこそ"
 }

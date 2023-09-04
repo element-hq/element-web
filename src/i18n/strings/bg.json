@@ -1,41 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Невалидна конфигурация: не е указан сървър по подразбиране.",
-        "misconfigured": "Вашият Element не е конфигуриран правилно",
-        "invalid_json": "Вашата Element конфигурация съдържа невалиден JSON. Коригирайте проблема и презаредете страницата.",
-        "invalid_json_detail": "Грешката от парсъра е: %(message)s",
-        "invalid_json_generic": "Невалиден JSON",
-        "cannot_load_config": "Неуспешно зареждане на конфигурационния файл: презаредете страницата за да опитате пак.",
-        "app_launch_unexpected_error": "Неочаквана грешка при подготвянето на приложението. Вижте конзолата за подробности."
-    },
-    "download_completed": "Свалянето завърши",
     "action": {
-        "open": "Отвори",
-        "dismiss": "Затвори"
+        "dismiss": "Затвори",
+        "open": "Отвори"
     },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Отидете в браузъра за да завършите влизането"
     },
-    "unknown_device": "Непознато устройство",
-    "web_default_device_name": "%(appName)s: %(browserName)s под %(osName)s",
-    "powered_by_matrix": "Базирано на Matrix",
-    "use_brand_on_mobile": "Използвайте %(brand)s на мобилен телефон",
-    "incompatible_browser": {
-        "title": "Неподдържан браузър",
-        "summary": "Браузърът ви не може да изпълни %(brand)s",
-        "features": "%(brand)s използва модерни функции на браузъра, които не се поддържат от Вашия.",
-        "browser_links": "Инсталирайте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> или <safariLink>Safari</safariLink> за най-добра работа.",
-        "feature_warning": "Може да продължите да използвате сегашния си браузър, но някои или всички функции може да се окажат неработещи, или пък външния вид на приложението да изглежда неправилен.",
-        "continue_warning": "Разбирам рисковете и желая да продължа"
-    },
-    "go_to_element_io": "Отиди на element.io",
-    "failed_to_start": "Неуспешно стартиране",
-    "welcome_to_element": "Добре дошли в Element",
-    "powered_by_matrix_with_logo": "Децентрализиран, криптиран чат &amp; сътрудничество, захранено от $matrixlogo",
     "common": {
-        "sign_in": "Вписване",
         "create_account": "Създай профил",
-        "explore_rooms": "Открий стаи"
-    }
+        "explore_rooms": "Открий стаи",
+        "sign_in": "Вписване"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Свалянето завърши",
+    "error": {
+        "app_launch_unexpected_error": "Неочаквана грешка при подготвянето на приложението. Вижте конзолата за подробности.",
+        "cannot_load_config": "Неуспешно зареждане на конфигурационния файл: презаредете страницата за да опитате пак.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Невалидна конфигурация: не е указан сървър по подразбиране.",
+        "invalid_json": "Вашата Element конфигурация съдържа невалиден JSON. Коригирайте проблема и презаредете страницата.",
+        "invalid_json_detail": "Грешката от парсъра е: %(message)s",
+        "invalid_json_generic": "Невалиден JSON",
+        "misconfigured": "Вашият Element не е конфигуриран правилно"
+    },
+    "failed_to_start": "Неуспешно стартиране",
+    "go_to_element_io": "Отиди на element.io",
+    "incompatible_browser": {
+        "browser_links": "Инсталирайте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> или <safariLink>Safari</safariLink> за най-добра работа.",
+        "continue_warning": "Разбирам рисковете и желая да продължа",
+        "feature_warning": "Може да продължите да използвате сегашния си браузър, но някои или всички функции може да се окажат неработещи, или пък външния вид на приложението да изглежда неправилен.",
+        "features": "%(brand)s използва модерни функции на браузъра, които не се поддържат от Вашия.",
+        "summary": "Браузърът ви не може да изпълни %(brand)s",
+        "title": "Неподдържан браузър"
+    },
+    "powered_by_matrix": "Базирано на Matrix",
+    "powered_by_matrix_with_logo": "Децентрализиран, криптиран чат &amp; сътрудничество, захранено от $matrixlogo",
+    "unknown_device": "Непознато устройство",
+    "use_brand_on_mobile": "Използвайте %(brand)s на мобилен телефон",
+    "web_default_device_name": "%(appName)s: %(browserName)s под %(osName)s",
+    "welcome_to_element": "Добре дошли в Element"
 }

@@ -1,41 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "คุณยังไม่ได้ตั้งค่าเซิฟเวอร์หลักในการตั้งค่า.",
-        "misconfigured": "การตั้งค่าของคุณไม่ถูกต้อง",
-        "invalid_json": "การตั้งค่าของ Element จะต้องอยู่ในรูปแบบ JSON. โปรดแก้ไขการตั้งค่าและโหลดหน้านี้ใหม่อีกครั้ง.",
-        "invalid_json_detail": "ข้อความจากตัวแยกวิเคราะห์คือ: %(message)s",
-        "invalid_json_generic": "JSON ไม่ถูกต้อง",
-        "cannot_load_config": "ไม่สามารถโหลดการตั้งค่า: โปรดรีเฟรชหน้าเว็บเพื่อลองใหม่อีกครั้ง.",
-        "app_launch_unexpected_error": "เกิดข้อผิดพลาดที่ไม่คาดคิดขณะการเตรียมพร้อมโปรแกรม. คุณสามารถดูรายละเอียดข้อผิดพลาดได้ที่หน้าคอนโซล."
-    },
-    "download_completed": "การดาวน์โหลดเสร็จสมบูรณ์",
     "action": {
-        "open": "เปิด",
-        "dismiss": "ปิด"
+        "dismiss": "ปิด",
+        "open": "เปิด"
     },
-    "desktop_default_device_name": "%(brand)s เดสก์ทอป: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "ไปที่เบราว์เซอร์ของคุณเพื่อลงชื่อเข้าใช้ให้เสร็จสมบูรณ์."
     },
-    "unknown_device": "อุปกรณ์ที่ไม่รู้จัก",
-    "web_default_device_name": "%(appName)s: %(browserName)s บน %(osName)s",
-    "powered_by_matrix": "ขับเคลื่อนโดย Matrix",
-    "use_brand_on_mobile": "ใช้ %(brand)s บนมือถือ",
-    "incompatible_browser": {
-        "title": "เบราว์เซอร์ไม่รองรับ",
-        "summary": "เบราว์เซอร์ของคุณไม่สามารถใช้งาน %(brand)s ได้",
-        "features": "%(brand)s ใช้คุณลักษณะขั้นสูงของเบราว์เซอร์ซึ่งไม่รองรับโดยเบราว์เซอร์ปัจจุบันของคุณ.",
-        "browser_links": "กรุณาติดตั้ง <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, หรือ <safariLink>Safari</safariLink> เพื่อประสิทธิภาพการใช้งานที่ดีที่สุด.",
-        "feature_warning": "คุณสามารถใช้เบราว์เซอร์ปัจจุบันของคุณต่อไปได้ แต่คุณสมบัติบางอย่างหรือทั้งหมดอาจไม่ทำงาน และรูปลักษณ์ของแอปพลิเคชันอาจไม่ถูกต้อง.",
-        "continue_warning": "ฉันเข้าใจความเสี่ยง และดำเนินการต่อ"
-    },
-    "go_to_element_io": "ไปยัง element.io",
-    "failed_to_start": "ไม่สามารถเริ่ม",
-    "welcome_to_element": "ยินดีต้อนรับสู่ Element",
-    "powered_by_matrix_with_logo": "การกระจายศูนย์, แชทที่เข้ารหัส &amp; ขับเคลื่อนโดย $matrixLogo",
     "common": {
-        "sign_in": "ลงชื่อเข้า",
         "create_account": "สร้างบัญชี",
-        "explore_rooms": "สำรวจห้อง"
-    }
+        "explore_rooms": "สำรวจห้อง",
+        "sign_in": "ลงชื่อเข้า"
+    },
+    "desktop_default_device_name": "%(brand)s เดสก์ทอป: %(platformName)s",
+    "download_completed": "การดาวน์โหลดเสร็จสมบูรณ์",
+    "error": {
+        "app_launch_unexpected_error": "เกิดข้อผิดพลาดที่ไม่คาดคิดขณะการเตรียมพร้อมโปรแกรม. คุณสามารถดูรายละเอียดข้อผิดพลาดได้ที่หน้าคอนโซล.",
+        "cannot_load_config": "ไม่สามารถโหลดการตั้งค่า: โปรดรีเฟรชหน้าเว็บเพื่อลองใหม่อีกครั้ง.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "คุณยังไม่ได้ตั้งค่าเซิฟเวอร์หลักในการตั้งค่า.",
+        "invalid_json": "การตั้งค่าของ Element จะต้องอยู่ในรูปแบบ JSON. โปรดแก้ไขการตั้งค่าและโหลดหน้านี้ใหม่อีกครั้ง.",
+        "invalid_json_detail": "ข้อความจากตัวแยกวิเคราะห์คือ: %(message)s",
+        "invalid_json_generic": "JSON ไม่ถูกต้อง",
+        "misconfigured": "การตั้งค่าของคุณไม่ถูกต้อง"
+    },
+    "failed_to_start": "ไม่สามารถเริ่ม",
+    "go_to_element_io": "ไปยัง element.io",
+    "incompatible_browser": {
+        "browser_links": "กรุณาติดตั้ง <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, หรือ <safariLink>Safari</safariLink> เพื่อประสิทธิภาพการใช้งานที่ดีที่สุด.",
+        "continue_warning": "ฉันเข้าใจความเสี่ยง และดำเนินการต่อ",
+        "feature_warning": "คุณสามารถใช้เบราว์เซอร์ปัจจุบันของคุณต่อไปได้ แต่คุณสมบัติบางอย่างหรือทั้งหมดอาจไม่ทำงาน และรูปลักษณ์ของแอปพลิเคชันอาจไม่ถูกต้อง.",
+        "features": "%(brand)s ใช้คุณลักษณะขั้นสูงของเบราว์เซอร์ซึ่งไม่รองรับโดยเบราว์เซอร์ปัจจุบันของคุณ.",
+        "summary": "เบราว์เซอร์ของคุณไม่สามารถใช้งาน %(brand)s ได้",
+        "title": "เบราว์เซอร์ไม่รองรับ"
+    },
+    "powered_by_matrix": "ขับเคลื่อนโดย Matrix",
+    "powered_by_matrix_with_logo": "การกระจายศูนย์, แชทที่เข้ารหัส &amp; ขับเคลื่อนโดย $matrixLogo",
+    "unknown_device": "อุปกรณ์ที่ไม่รู้จัก",
+    "use_brand_on_mobile": "ใช้ %(brand)s บนมือถือ",
+    "web_default_device_name": "%(appName)s: %(browserName)s บน %(osName)s",
+    "welcome_to_element": "ยินดีต้อนรับสู่ Element"
 }

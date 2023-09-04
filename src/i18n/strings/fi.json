@@ -1,41 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Virheellinen asetus: oletuspalvelinta ei ole määritetty.",
-        "misconfigured": "Elementisi asetukset ovat pielessä",
-        "invalid_json": "Element-asetuksesi sisältävät epäkelpoa JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
-        "invalid_json_detail": "Viesti jäsentimeltä: %(message)s",
-        "invalid_json_generic": "Virheellinen JSON",
-        "cannot_load_config": "Asetustiedostoa ei voi ladata. Yritä uudelleen lataamalla sivu uudelleen.",
-        "app_launch_unexpected_error": "Odottamaton virhe sovellusta valmisteltaessa. Katso konsolista lisätietoja."
-    },
-    "download_completed": "Lataus valmis",
     "action": {
-        "open": "Avaa",
-        "dismiss": "Hylkää"
+        "dismiss": "Hylkää",
+        "open": "Avaa"
     },
-    "desktop_default_device_name": "%(brand)sin työpöytäversio: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Tee kirjautuminen loppuun selaimessasi"
     },
-    "unknown_device": "Tuntematon laite",
-    "web_default_device_name": "%(appName)s: %(browserName)s käyttöjärjestelmällä %(osName)s",
-    "powered_by_matrix": "Moottorina Matrix",
-    "use_brand_on_mobile": "Käytä %(brand)sia mobiilisti",
-    "incompatible_browser": {
-        "title": "Selainta ei tueta",
-        "summary": "%(brand)s ei toimi selaimessasi",
-        "features": "%(brand)s käyttää edistyneitä selaimen ominaisuuksia, joita nykyinen selaimesi ei tue.",
-        "browser_links": "Asenna <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> tai <safariLink>Safari</safariLink>, jotta kaikki toimii parhaiten.",
-        "feature_warning": "Voit käyttää edelleen nykyistä selaintasi, mutta jotkut tai kaikki ominaisuudet eivät ehkä toimi ja sovelluksen ulkoasu voi olla virheellinen.",
-        "continue_warning": "Ymmärrän riskit ja haluan jatkaa"
-    },
-    "go_to_element_io": "Mene osoitteeseen riot.im",
-    "failed_to_start": "Käynnistys ei onnistunut",
-    "welcome_to_element": "Tervetuloa Element-sovellukseen",
-    "powered_by_matrix_with_logo": "Hajautettu, salattu keskustelu &amp; yhteistyö, taustavoimana $matrixLogo",
     "common": {
-        "sign_in": "Kirjaudu",
         "create_account": "Luo tili",
-        "explore_rooms": "Selaa huoneita"
-    }
+        "explore_rooms": "Selaa huoneita",
+        "sign_in": "Kirjaudu"
+    },
+    "desktop_default_device_name": "%(brand)sin työpöytäversio: %(platformName)s",
+    "download_completed": "Lataus valmis",
+    "error": {
+        "app_launch_unexpected_error": "Odottamaton virhe sovellusta valmisteltaessa. Katso konsolista lisätietoja.",
+        "cannot_load_config": "Asetustiedostoa ei voi ladata. Yritä uudelleen lataamalla sivu uudelleen.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Virheellinen asetus: oletuspalvelinta ei ole määritetty.",
+        "invalid_json": "Element-asetuksesi sisältävät epäkelpoa JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
+        "invalid_json_detail": "Viesti jäsentimeltä: %(message)s",
+        "invalid_json_generic": "Virheellinen JSON",
+        "misconfigured": "Elementisi asetukset ovat pielessä"
+    },
+    "failed_to_start": "Käynnistys ei onnistunut",
+    "go_to_element_io": "Mene osoitteeseen riot.im",
+    "incompatible_browser": {
+        "browser_links": "Asenna <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> tai <safariLink>Safari</safariLink>, jotta kaikki toimii parhaiten.",
+        "continue_warning": "Ymmärrän riskit ja haluan jatkaa",
+        "feature_warning": "Voit käyttää edelleen nykyistä selaintasi, mutta jotkut tai kaikki ominaisuudet eivät ehkä toimi ja sovelluksen ulkoasu voi olla virheellinen.",
+        "features": "%(brand)s käyttää edistyneitä selaimen ominaisuuksia, joita nykyinen selaimesi ei tue.",
+        "summary": "%(brand)s ei toimi selaimessasi",
+        "title": "Selainta ei tueta"
+    },
+    "powered_by_matrix": "Moottorina Matrix",
+    "powered_by_matrix_with_logo": "Hajautettu, salattu keskustelu &amp; yhteistyö, taustavoimana $matrixLogo",
+    "unknown_device": "Tuntematon laite",
+    "use_brand_on_mobile": "Käytä %(brand)sia mobiilisti",
+    "web_default_device_name": "%(appName)s: %(browserName)s käyttöjärjestelmällä %(osName)s",
+    "welcome_to_element": "Tervetuloa Element-sovellukseen"
 }

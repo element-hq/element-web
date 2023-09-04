@@ -1,41 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Configurație invalidă: niciun server implicit nu este specificat.",
-        "misconfigured": "Element-ul tău este configurat necorespunzător",
-        "invalid_json": "Configurația ta Element conține JSON invalid. Vă rugăm să corectați problema și să reîncărcați pagina.",
-        "invalid_json_detail": "Mesajul de la parser este: %(message)s",
-        "invalid_json_generic": "JSON invalid",
-        "cannot_load_config": "Nu se poate încărca fișierul de configurație: vă rugăm să reîncărcați pagina și să încercați din nou.",
-        "app_launch_unexpected_error": "Eroare neașteptată în aplicație. Vezi consola pentru detalii."
-    },
-    "download_completed": "Descărcare Completă",
     "action": {
-        "open": "Deschide",
-        "dismiss": "Închide"
+        "dismiss": "Închide",
+        "open": "Deschide"
     },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Deschide în browser pentru a finaliza Autentificarea"
     },
-    "unknown_device": "Dispozitiv necunoscut",
-    "web_default_device_name": "%(appName)s: %(browserName)s pe %(osName)s",
-    "powered_by_matrix": "Cu ajutorul Matrix",
-    "use_brand_on_mobile": "Folosește %(brand)s pe mobil",
-    "incompatible_browser": {
-        "title": "Acest browser nu este suportat",
-        "summary": "Browser-ul tău nu poate rula %(brand)s",
-        "features": "%(brand)s folosește funcții avansate de browser ce nu sunt suportate de browser-ul dumneavoastră.",
-        "browser_links": "Instalați vă rog <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, sau <safariLink>Safari</safariLink> pentru cea mai bună experiență.",
-        "feature_warning": "Poți continua să folosești browser-ul curent, însă unele sau toate funcționalitățile pot să nu meargă, iar aspectul și experiența în aplicație pot fi incorecte.",
-        "continue_warning": "Ințeleg riscurile și doresc să continui"
-    },
-    "go_to_element_io": "Accesează element.io",
-    "failed_to_start": "Inițializare eșuată",
-    "welcome_to_element": "Bine ai venit pe Element",
-    "powered_by_matrix_with_logo": "Chat &amp; colaborare descentralizate și criptate cu ajutorul $matrixLogo",
     "common": {
-        "sign_in": "Autentifică-te",
         "create_account": "Creează-ți Cont",
-        "explore_rooms": "Explorează camerele"
-    }
+        "explore_rooms": "Explorează camerele",
+        "sign_in": "Autentifică-te"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Descărcare Completă",
+    "error": {
+        "app_launch_unexpected_error": "Eroare neașteptată în aplicație. Vezi consola pentru detalii.",
+        "cannot_load_config": "Nu se poate încărca fișierul de configurație: vă rugăm să reîncărcați pagina și să încercați din nou.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Configurație invalidă: niciun server implicit nu este specificat.",
+        "invalid_json": "Configurația ta Element conține JSON invalid. Vă rugăm să corectați problema și să reîncărcați pagina.",
+        "invalid_json_detail": "Mesajul de la parser este: %(message)s",
+        "invalid_json_generic": "JSON invalid",
+        "misconfigured": "Element-ul tău este configurat necorespunzător"
+    },
+    "failed_to_start": "Inițializare eșuată",
+    "go_to_element_io": "Accesează element.io",
+    "incompatible_browser": {
+        "browser_links": "Instalați vă rog <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, sau <safariLink>Safari</safariLink> pentru cea mai bună experiență.",
+        "continue_warning": "Ințeleg riscurile și doresc să continui",
+        "feature_warning": "Poți continua să folosești browser-ul curent, însă unele sau toate funcționalitățile pot să nu meargă, iar aspectul și experiența în aplicație pot fi incorecte.",
+        "features": "%(brand)s folosește funcții avansate de browser ce nu sunt suportate de browser-ul dumneavoastră.",
+        "summary": "Browser-ul tău nu poate rula %(brand)s",
+        "title": "Acest browser nu este suportat"
+    },
+    "powered_by_matrix": "Cu ajutorul Matrix",
+    "powered_by_matrix_with_logo": "Chat &amp; colaborare descentralizate și criptate cu ajutorul $matrixLogo",
+    "unknown_device": "Dispozitiv necunoscut",
+    "use_brand_on_mobile": "Folosește %(brand)s pe mobil",
+    "web_default_device_name": "%(appName)s: %(browserName)s pe %(osName)s",
+    "welcome_to_element": "Bine ai venit pe Element"
 }

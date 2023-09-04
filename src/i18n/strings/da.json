@@ -1,41 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Ugyldig konfiguration: Ingen standardserver er angivet.",
-        "misconfigured": "Dit Element er konfigureret forkert",
-        "invalid_json": "Din Element konfiguration indeholder ugyldig JSON. Løs venligst problemet og genindlæs siden.",
-        "invalid_json_detail": "Beskeden fra parseren er: %(message)s",
-        "invalid_json_generic": "Ugyldig JSON",
-        "cannot_load_config": "Ikke i stand til at indlæse konfigurationsfil: Genopfrisk venligst siden for at prøve igen.",
-        "app_launch_unexpected_error": "Uventet fejl ved forberedelse af appen. Se konsollen for detaljer."
-    },
-    "download_completed": "Hentning færdig",
     "action": {
-        "open": "Åbn",
-        "dismiss": "Afvis"
+        "dismiss": "Afvis",
+        "open": "Åbn"
     },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Gå til din browser for at færdiggøre Log ind"
     },
-    "unknown_device": "Ukendt enhed",
-    "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
-    "powered_by_matrix": "Drevet af Matrix",
-    "use_brand_on_mobile": "Brug %(brand)s på mobil",
-    "incompatible_browser": {
-        "title": "Browser ikke understøttet",
-        "summary": "Din browser kan ikke køre %(brand)s",
-        "features": "%(brand)s bruger avanceret browser funktioner som ikke er understøttet af din nuværende browser.",
-        "browser_links": "Venligst installer <chromeLink>Chrome</chromeLink>,<firefoxLink>Firefox</firefoxLink> eller <safariLink>Safari</safariLink> for den bedste oplevelse.",
-        "feature_warning": "Du kan fortsætte med at bruge din nuværende browser, men du kan opleve at visse eller alle funktioner ikke vil fungere korrekt.",
-        "continue_warning": "Jeg forstår risikoen og ønsker at fortsætte"
-    },
-    "go_to_element_io": "Gå til element.io",
-    "failed_to_start": "Opstart mislykkedes",
-    "welcome_to_element": "Velkommen til Element",
-    "powered_by_matrix_with_logo": "Decentraliseret, krypteret chat &amp; samarbejde drevet af $matrixLogo",
     "common": {
-        "sign_in": "Log ind",
         "create_account": "Opret brugerkonto",
-        "explore_rooms": "Udforsk rum"
-    }
+        "explore_rooms": "Udforsk rum",
+        "sign_in": "Log ind"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Hentning færdig",
+    "error": {
+        "app_launch_unexpected_error": "Uventet fejl ved forberedelse af appen. Se konsollen for detaljer.",
+        "cannot_load_config": "Ikke i stand til at indlæse konfigurationsfil: Genopfrisk venligst siden for at prøve igen.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Ugyldig konfiguration: Ingen standardserver er angivet.",
+        "invalid_json": "Din Element konfiguration indeholder ugyldig JSON. Løs venligst problemet og genindlæs siden.",
+        "invalid_json_detail": "Beskeden fra parseren er: %(message)s",
+        "invalid_json_generic": "Ugyldig JSON",
+        "misconfigured": "Dit Element er konfigureret forkert"
+    },
+    "failed_to_start": "Opstart mislykkedes",
+    "go_to_element_io": "Gå til element.io",
+    "incompatible_browser": {
+        "browser_links": "Venligst installer <chromeLink>Chrome</chromeLink>,<firefoxLink>Firefox</firefoxLink> eller <safariLink>Safari</safariLink> for den bedste oplevelse.",
+        "continue_warning": "Jeg forstår risikoen og ønsker at fortsætte",
+        "feature_warning": "Du kan fortsætte med at bruge din nuværende browser, men du kan opleve at visse eller alle funktioner ikke vil fungere korrekt.",
+        "features": "%(brand)s bruger avanceret browser funktioner som ikke er understøttet af din nuværende browser.",
+        "summary": "Din browser kan ikke køre %(brand)s",
+        "title": "Browser ikke understøttet"
+    },
+    "powered_by_matrix": "Drevet af Matrix",
+    "powered_by_matrix_with_logo": "Decentraliseret, krypteret chat &amp; samarbejde drevet af $matrixLogo",
+    "unknown_device": "Ukendt enhed",
+    "use_brand_on_mobile": "Brug %(brand)s på mobil",
+    "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
+    "welcome_to_element": "Velkommen til Element"
 }

@@ -1,42 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_mixed_server": "არასწორი კონფიგურაცია: default_hs_url არ შეიძლება მითითებული იყოს default_server_name ან default_server_config-თან ერთად",
-        "invalid_configuration_no_server": "არასწორი კონფიგურაცია: მთავარი სერვერი არ არის მითითებული.",
-        "misconfigured": "შენი Element-ი არასწორადაა კონფიგურირებული",
-        "invalid_json": "თქვენი Element-ის კონფიგურაცია შეიცავს მიუღებელ JSON-ს. გთხოვთ, გამოასწოროთ პრობლემა და გადატვირთოთ გვერდი.",
-        "invalid_json_detail": "პარსერის შეტყობინებაა: %(message)s",
-        "invalid_json_generic": "არასწორი JSON",
-        "cannot_load_config": "კონფიგურაციის ფაილის ჩატვირთვა შეუძლებელია: გთხოვთ, განაახლოთ გვერდი ხელახლა საცდელად.",
-        "app_launch_unexpected_error": "მოულოდნელი ერორი აპლიკაციის შემზადებისას. იხილეთ კონსოლი დეტალებისთვის."
-    },
-    "download_completed": "გადმოწერა დასრულებულია",
     "action": {
-        "open": "გახსნა",
-        "dismiss": "დახურვა"
+        "dismiss": "დახურვა",
+        "open": "გახსნა"
     },
-    "desktop_default_device_name": "%(brand)s სამუშაო მაგიდა: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "გადადით თქვენს ბრაუზერში შესვლის დასასრულებლად"
     },
-    "unknown_device": "უცნობი მოწყობილობა",
-    "web_default_device_name": "%(appName)s: %(browserName)s %(osName)s-ზე",
-    "powered_by_matrix": "უზრუნველყოფილია Matrix-ის მიერ",
-    "use_brand_on_mobile": "გამოიყენე %(brand)s-ი მობილურზე",
-    "incompatible_browser": {
-        "title": "ბრაუზერი არ არის მხარდაჭერილი",
-        "summary": "შენ ბრაუზერს არ შეუძლია გაუშვას %(brand)s-ი",
-        "features": "%(brand)s იყენებს ბრაუზერის გაფართოებულ ფუნქციებს, რომლებიც არ არის მხარდაჭერილი თქვენი ამჟამინდელი ბრაუზერის მიერ.",
-        "browser_links": "გთხოვთ დააინსტალოთ <chromeLink>Chrome-ი</chromeLink>, <firefoxLink>Firefox-ი</firefoxLink>, ან <safariLink>Safari</safariLink> საუკეთესო გამოცდილებისთვის.",
-        "feature_warning": "შეგიძლიათ გააგრძელოთ თქვენი ამჟამინდელი ბრაუზერის გამოყენება, მაგრამ ზოგიერთი ან ყველა ფუნქცია შეიძლება არ იმუშაოს და აპლიკაციის გარეგნობა და შეგრძნება შეიძლება არასწორი იყოს.",
-        "continue_warning": "მესმის რისკები და მსურს გაგრძელება"
-    },
-    "go_to_element_io": "გადადი element.io-ზე",
-    "failed_to_start": "ჩართვა ვერ მოხერხდა",
-    "welcome_to_element": "კეთილი იყოს თქვენი მობრძანება Element-ზე",
-    "powered_by_matrix_with_logo": "დეცენტრალიზებული, დაშიფრული ჩატი & amp; $matrixLogo-ს მიერ შექმნილი თანამშრომლობა",
     "common": {
-        "sign_in": "შესვლა",
         "create_account": "ანგარიშის შექმნა",
-        "explore_rooms": "ოთახების დათავლიერება"
-    }
+        "explore_rooms": "ოთახების დათავლიერება",
+        "sign_in": "შესვლა"
+    },
+    "desktop_default_device_name": "%(brand)s სამუშაო მაგიდა: %(platformName)s",
+    "download_completed": "გადმოწერა დასრულებულია",
+    "error": {
+        "app_launch_unexpected_error": "მოულოდნელი ერორი აპლიკაციის შემზადებისას. იხილეთ კონსოლი დეტალებისთვის.",
+        "cannot_load_config": "კონფიგურაციის ფაილის ჩატვირთვა შეუძლებელია: გთხოვთ, განაახლოთ გვერდი ხელახლა საცდელად.",
+        "invalid_configuration_mixed_server": "არასწორი კონფიგურაცია: default_hs_url არ შეიძლება მითითებული იყოს default_server_name ან default_server_config-თან ერთად",
+        "invalid_configuration_no_server": "არასწორი კონფიგურაცია: მთავარი სერვერი არ არის მითითებული.",
+        "invalid_json": "თქვენი Element-ის კონფიგურაცია შეიცავს მიუღებელ JSON-ს. გთხოვთ, გამოასწოროთ პრობლემა და გადატვირთოთ გვერდი.",
+        "invalid_json_detail": "პარსერის შეტყობინებაა: %(message)s",
+        "invalid_json_generic": "არასწორი JSON",
+        "misconfigured": "შენი Element-ი არასწორადაა კონფიგურირებული"
+    },
+    "failed_to_start": "ჩართვა ვერ მოხერხდა",
+    "go_to_element_io": "გადადი element.io-ზე",
+    "incompatible_browser": {
+        "browser_links": "გთხოვთ დააინსტალოთ <chromeLink>Chrome-ი</chromeLink>, <firefoxLink>Firefox-ი</firefoxLink>, ან <safariLink>Safari</safariLink> საუკეთესო გამოცდილებისთვის.",
+        "continue_warning": "მესმის რისკები და მსურს გაგრძელება",
+        "feature_warning": "შეგიძლიათ გააგრძელოთ თქვენი ამჟამინდელი ბრაუზერის გამოყენება, მაგრამ ზოგიერთი ან ყველა ფუნქცია შეიძლება არ იმუშაოს და აპლიკაციის გარეგნობა და შეგრძნება შეიძლება არასწორი იყოს.",
+        "features": "%(brand)s იყენებს ბრაუზერის გაფართოებულ ფუნქციებს, რომლებიც არ არის მხარდაჭერილი თქვენი ამჟამინდელი ბრაუზერის მიერ.",
+        "summary": "შენ ბრაუზერს არ შეუძლია გაუშვას %(brand)s-ი",
+        "title": "ბრაუზერი არ არის მხარდაჭერილი"
+    },
+    "powered_by_matrix": "უზრუნველყოფილია Matrix-ის მიერ",
+    "powered_by_matrix_with_logo": "დეცენტრალიზებული, დაშიფრული ჩატი & amp; $matrixLogo-ს მიერ შექმნილი თანამშრომლობა",
+    "unknown_device": "უცნობი მოწყობილობა",
+    "use_brand_on_mobile": "გამოიყენე %(brand)s-ი მობილურზე",
+    "web_default_device_name": "%(appName)s: %(browserName)s %(osName)s-ზე",
+    "welcome_to_element": "კეთილი იყოს თქვენი მობრძანება Element-ზე"
 }

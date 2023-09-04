@@ -1,42 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_mixed_server": "Cấu hình không hợp lệ: không thể xác định default_hs_url song song với default_server_name hay default_server_config",
-        "invalid_configuration_no_server": "Thiết lập không hợp lệ: chưa chỉ định máy chủ mặc định.",
-        "misconfigured": "Element đang bị thiết lập sai",
-        "invalid_json": "Thiết lập Element của bạn đang chứa mã JSON không hợp lệ. Vui lòng sửa lại và tải lại trang.",
-        "invalid_json_detail": "Thông báo của trình xử lý là: %(message)s",
-        "invalid_json_generic": "JSON không hợp lệ",
-        "cannot_load_config": "Không thể tải tệp cấu hình: hãy tải lại trang để thử lại.",
-        "app_launch_unexpected_error": "Có lỗi xảy ra trong lúc thiết lập ứng dụng. Mở bảng điều khiển (console) để biết chi tiết."
-    },
-    "download_completed": "Tải xuống hoàn tất",
     "action": {
-        "open": "Mở",
-        "dismiss": "Bỏ qua"
+        "dismiss": "Bỏ qua",
+        "open": "Mở"
     },
-    "desktop_default_device_name": "%(brand)s máy tính: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Mở trình duyệt web để hoàn thành đăng nhập"
     },
-    "unknown_device": "Thiết bị không xác định",
-    "web_default_device_name": "%(appName)s: %(browserName)s trên %(osName)s",
-    "powered_by_matrix": "Chạy trên giao thức Matrix",
-    "use_brand_on_mobile": "Sử dụng %(brand)s trên di động",
-    "incompatible_browser": {
-        "title": "Trình duyệt không được hỗ trợ",
-        "summary": "Trình duyệt của bạn không thể chạy %(brand)s",
-        "features": "%(brand)s sử dụng một số tính năng nâng cao mà trình duyệt của bạn không thể đáp ứng.",
-        "browser_links": "Hãy cài đặt <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, hoặc <safariLink>Safari</safariLink> để có trải nghiệm tốt nhất.",
-        "feature_warning": "Bạn có thể tiếp tục sử dụng trình duyệt hiện tại, tuy nhiên các tính năng có thể sẽ không hoạt động và trải nghiệm ứng dụng có thể sẽ không được tốt.",
-        "continue_warning": "Tôi hiểu rủi ro và muốn tiếp tục"
-    },
-    "go_to_element_io": "Qua element.io",
-    "failed_to_start": "Không khởi động được",
-    "welcome_to_element": "Chào mừng tới Element",
-    "powered_by_matrix_with_logo": "Dịch vụ nhắn tin &amp; liên lạc được mã hóa, phi tập trung. Được vận hành trên $matrixLogo",
     "common": {
-        "sign_in": "Đăng nhập",
         "create_account": "Tạo tài khoản",
-        "explore_rooms": "Khám phá các phòng"
-    }
+        "explore_rooms": "Khám phá các phòng",
+        "sign_in": "Đăng nhập"
+    },
+    "desktop_default_device_name": "%(brand)s máy tính: %(platformName)s",
+    "download_completed": "Tải xuống hoàn tất",
+    "error": {
+        "app_launch_unexpected_error": "Có lỗi xảy ra trong lúc thiết lập ứng dụng. Mở bảng điều khiển (console) để biết chi tiết.",
+        "cannot_load_config": "Không thể tải tệp cấu hình: hãy tải lại trang để thử lại.",
+        "invalid_configuration_mixed_server": "Cấu hình không hợp lệ: không thể xác định default_hs_url song song với default_server_name hay default_server_config",
+        "invalid_configuration_no_server": "Thiết lập không hợp lệ: chưa chỉ định máy chủ mặc định.",
+        "invalid_json": "Thiết lập Element của bạn đang chứa mã JSON không hợp lệ. Vui lòng sửa lại và tải lại trang.",
+        "invalid_json_detail": "Thông báo của trình xử lý là: %(message)s",
+        "invalid_json_generic": "JSON không hợp lệ",
+        "misconfigured": "Element đang bị thiết lập sai"
+    },
+    "failed_to_start": "Không khởi động được",
+    "go_to_element_io": "Qua element.io",
+    "incompatible_browser": {
+        "browser_links": "Hãy cài đặt <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, hoặc <safariLink>Safari</safariLink> để có trải nghiệm tốt nhất.",
+        "continue_warning": "Tôi hiểu rủi ro và muốn tiếp tục",
+        "feature_warning": "Bạn có thể tiếp tục sử dụng trình duyệt hiện tại, tuy nhiên các tính năng có thể sẽ không hoạt động và trải nghiệm ứng dụng có thể sẽ không được tốt.",
+        "features": "%(brand)s sử dụng một số tính năng nâng cao mà trình duyệt của bạn không thể đáp ứng.",
+        "summary": "Trình duyệt của bạn không thể chạy %(brand)s",
+        "title": "Trình duyệt không được hỗ trợ"
+    },
+    "powered_by_matrix": "Chạy trên giao thức Matrix",
+    "powered_by_matrix_with_logo": "Dịch vụ nhắn tin &amp; liên lạc được mã hóa, phi tập trung. Được vận hành trên $matrixLogo",
+    "unknown_device": "Thiết bị không xác định",
+    "use_brand_on_mobile": "Sử dụng %(brand)s trên di động",
+    "web_default_device_name": "%(appName)s: %(browserName)s trên %(osName)s",
+    "welcome_to_element": "Chào mừng tới Element"
 }

@@ -1,41 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "الضبط غير صالح: لم تحدّد خادومًا مبدئيًا.",
-        "misconfigured": "لم يُضبط تطبيق Element كما ينبغي",
-        "invalid_json": "يحتوي ضبط تطبيق Element على تنسيق JSON غير صالح. من فضلك صحّح المشكلة وأعِد تحميل الصفحة.",
-        "invalid_json_detail": "الرسالة القادمة من المحلّل: %(message)s",
-        "invalid_json_generic": "تنسيق JSON غير صالح",
-        "cannot_load_config": "تعذّر تحميل ملف الضبط: من فضلك أنعِش الصفحة لمعاودة المحاولة.",
-        "app_launch_unexpected_error": "حدث عُطل غير متوقع أثناء تجهيز التطبيق. طالِع المِعراض للتفاصيل."
-    },
-    "download_completed": "اكتمل التنزيل",
     "action": {
-        "open": "افتح",
-        "dismiss": "أهمِل"
+        "dismiss": "أهمِل",
+        "open": "افتح"
     },
-    "desktop_default_device_name": "%(brand)s سطح المكتب %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "افتح المتصفح لإكمال الولوج"
     },
-    "unknown_device": "جهاز مجهول",
-    "web_default_device_name": "%(appName)s: %(browserName)s في %(osName)s",
-    "powered_by_matrix": "تدعمه «ماترِكس»",
-    "use_brand_on_mobile": "استعمل %(brand)s على المحمول",
-    "incompatible_browser": {
-        "title": "متصفح غير مدعوم",
-        "summary": "لا يمكن لمتصفحك تشغيل %(brand)s",
-        "features": "يستعمل %(brand)s ميزات متقدمة في المتصفحات لا يدعمها متصفحك الحالي.",
-        "browser_links": "من فضلك ثبّت <chromeLink>كروم</chromeLink> أو <firefoxLink>فَيَرفُكس</firefoxLink> أو <safariLink>سفاري</safariLink> لأفضل تجربة.",
-        "feature_warning": "يمكنك مواصل استعمال متصفحك الحالي ولكن قد لا تعمل بعض المزايا (أو كلها) وقد لا يظهر التطبيق كما ينبغي له أن يظهر.",
-        "continue_warning": "أفهم المخاطرة وأود المواصلة"
-    },
-    "go_to_element_io": "انتقل إلى element.io",
-    "failed_to_start": "فشل البدء",
-    "welcome_to_element": "مرحبًا بك في Element",
-    "powered_by_matrix_with_logo": "محادثة لامركزية، مشفرة &amp; تعمل بواسطة $matrixLogo",
     "common": {
-        "sign_in": "لِج",
         "create_account": "أنشِئ حسابًا",
-        "explore_rooms": "استكشِف الغرف"
-    }
+        "explore_rooms": "استكشِف الغرف",
+        "sign_in": "لِج"
+    },
+    "desktop_default_device_name": "%(brand)s سطح المكتب %(platformName)s",
+    "download_completed": "اكتمل التنزيل",
+    "error": {
+        "app_launch_unexpected_error": "حدث عُطل غير متوقع أثناء تجهيز التطبيق. طالِع المِعراض للتفاصيل.",
+        "cannot_load_config": "تعذّر تحميل ملف الضبط: من فضلك أنعِش الصفحة لمعاودة المحاولة.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "الضبط غير صالح: لم تحدّد خادومًا مبدئيًا.",
+        "invalid_json": "يحتوي ضبط تطبيق Element على تنسيق JSON غير صالح. من فضلك صحّح المشكلة وأعِد تحميل الصفحة.",
+        "invalid_json_detail": "الرسالة القادمة من المحلّل: %(message)s",
+        "invalid_json_generic": "تنسيق JSON غير صالح",
+        "misconfigured": "لم يُضبط تطبيق Element كما ينبغي"
+    },
+    "failed_to_start": "فشل البدء",
+    "go_to_element_io": "انتقل إلى element.io",
+    "incompatible_browser": {
+        "browser_links": "من فضلك ثبّت <chromeLink>كروم</chromeLink> أو <firefoxLink>فَيَرفُكس</firefoxLink> أو <safariLink>سفاري</safariLink> لأفضل تجربة.",
+        "continue_warning": "أفهم المخاطرة وأود المواصلة",
+        "feature_warning": "يمكنك مواصل استعمال متصفحك الحالي ولكن قد لا تعمل بعض المزايا (أو كلها) وقد لا يظهر التطبيق كما ينبغي له أن يظهر.",
+        "features": "يستعمل %(brand)s ميزات متقدمة في المتصفحات لا يدعمها متصفحك الحالي.",
+        "summary": "لا يمكن لمتصفحك تشغيل %(brand)s",
+        "title": "متصفح غير مدعوم"
+    },
+    "powered_by_matrix": "تدعمه «ماترِكس»",
+    "powered_by_matrix_with_logo": "محادثة لامركزية، مشفرة &amp; تعمل بواسطة $matrixLogo",
+    "unknown_device": "جهاز مجهول",
+    "use_brand_on_mobile": "استعمل %(brand)s على المحمول",
+    "web_default_device_name": "%(appName)s: %(browserName)s في %(osName)s",
+    "welcome_to_element": "مرحبًا بك في Element"
 }

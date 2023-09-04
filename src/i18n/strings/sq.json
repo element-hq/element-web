@@ -1,42 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_mixed_server": "Formësim i pavlefshëm: një default_hs_url s’mund të jepet tok me default_server_name, apo default_server_config",
-        "invalid_configuration_no_server": "Formësim i pavlefshëm: s’është caktuar shërbyes parazgjedhje.",
-        "misconfigured": "Element-i juaj është i keqformësuar",
-        "invalid_json": "Formësimi juaj i Element-it përmban JSON të pavlefshëm. Ju lutemi, ndreqeni problemin dhe ringarkoni faqen.",
-        "invalid_json_detail": "Mesazhi prej procesit është: %(message)s",
-        "invalid_json_generic": "JSON i pavlefshëm",
-        "cannot_load_config": "S’arrihet të ngarkohet kartelë formësimesh: ju lutemi, rifreskoni faqen dhe riprovoni.",
-        "app_launch_unexpected_error": "Gabim i papritur gjatë përgatitjes së aplikacionit. Për hollësi, shihni konsolën."
-    },
-    "download_completed": "Shkarkim i Plotësuar",
     "action": {
-        "open": "Hape",
-        "dismiss": "Mos e merr parasysh"
+        "dismiss": "Mos e merr parasysh",
+        "open": "Hape"
     },
-    "desktop_default_device_name": "%(brand)s për Desktop: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Që të plotësoni Hyrjen, kaloni te shfletuesi juaj"
     },
-    "unknown_device": "Pajisje e panjohur",
-    "web_default_device_name": "%(appName)s: %(browserName)s në %(osName)s",
-    "powered_by_matrix": "Bazuar në Matrix",
-    "use_brand_on_mobile": "Përdor %(brand)s në celular",
-    "incompatible_browser": {
-        "title": "Shfletues i pambuluar",
-        "summary": "Shfletuesi juaj s’mund të xhirojë %(brand)s",
-        "features": "%(brand)s përdor veçori të thelluara të shfletuesit, të cilat shfletuesi juaj i tanishëm s’i mbulon.",
-        "browser_links": "Ju lutemi, për funksionimin më të mirë, instaloni <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ose <safariLink>Safari</safariLink>.",
-        "feature_warning": "Mund të vazhdoni të përdorni shfletuesin tuaj të tanishëm, por disa ose krejt veçoritë mund të mos funksionojnë dhe pamja dhe ndjesitë prej aplikacionit të mos jenë të sakta.",
-        "continue_warning": "I kuptoj rreziqet dhe dëshiroj të vazhdoj"
-    },
-    "go_to_element_io": "Shko te element.io",
-    "failed_to_start": "S’u arrit të nisej",
-    "welcome_to_element": "Mirë se vini te Element",
-    "powered_by_matrix_with_logo": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në $matrixLogo",
     "common": {
-        "sign_in": "Hyni",
         "create_account": "Krijoni Llogari",
-        "explore_rooms": "Eksploroni dhoma"
-    }
+        "explore_rooms": "Eksploroni dhoma",
+        "sign_in": "Hyni"
+    },
+    "desktop_default_device_name": "%(brand)s për Desktop: %(platformName)s",
+    "download_completed": "Shkarkim i Plotësuar",
+    "error": {
+        "app_launch_unexpected_error": "Gabim i papritur gjatë përgatitjes së aplikacionit. Për hollësi, shihni konsolën.",
+        "cannot_load_config": "S’arrihet të ngarkohet kartelë formësimesh: ju lutemi, rifreskoni faqen dhe riprovoni.",
+        "invalid_configuration_mixed_server": "Formësim i pavlefshëm: një default_hs_url s’mund të jepet tok me default_server_name, apo default_server_config",
+        "invalid_configuration_no_server": "Formësim i pavlefshëm: s’është caktuar shërbyes parazgjedhje.",
+        "invalid_json": "Formësimi juaj i Element-it përmban JSON të pavlefshëm. Ju lutemi, ndreqeni problemin dhe ringarkoni faqen.",
+        "invalid_json_detail": "Mesazhi prej procesit është: %(message)s",
+        "invalid_json_generic": "JSON i pavlefshëm",
+        "misconfigured": "Element-i juaj është i keqformësuar"
+    },
+    "failed_to_start": "S’u arrit të nisej",
+    "go_to_element_io": "Shko te element.io",
+    "incompatible_browser": {
+        "browser_links": "Ju lutemi, për funksionimin më të mirë, instaloni <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ose <safariLink>Safari</safariLink>.",
+        "continue_warning": "I kuptoj rreziqet dhe dëshiroj të vazhdoj",
+        "feature_warning": "Mund të vazhdoni të përdorni shfletuesin tuaj të tanishëm, por disa ose krejt veçoritë mund të mos funksionojnë dhe pamja dhe ndjesitë prej aplikacionit të mos jenë të sakta.",
+        "features": "%(brand)s përdor veçori të thelluara të shfletuesit, të cilat shfletuesi juaj i tanishëm s’i mbulon.",
+        "summary": "Shfletuesi juaj s’mund të xhirojë %(brand)s",
+        "title": "Shfletues i pambuluar"
+    },
+    "powered_by_matrix": "Bazuar në Matrix",
+    "powered_by_matrix_with_logo": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në $matrixLogo",
+    "unknown_device": "Pajisje e panjohur",
+    "use_brand_on_mobile": "Përdor %(brand)s në celular",
+    "web_default_device_name": "%(appName)s: %(browserName)s në %(osName)s",
+    "welcome_to_element": "Mirë se vini te Element"
 }

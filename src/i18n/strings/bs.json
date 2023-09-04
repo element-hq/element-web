@@ -1,38 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Neispravna konfiguracija: nije naveden zadani server.",
-        "misconfigured": "Vaš element je pogrešno konfiguriran",
-        "invalid_json": "Konfiguracija vašeg elementa sadrži nevažeći JSON. Ispravite problem i ponovo učitajte stranicu.",
-        "invalid_json_detail": "Poruka parsera je: %(message)s",
-        "invalid_json_generic": "Nevažeći JSON",
-        "cannot_load_config": "Nije moguće učitati konfiguracijsku datoteku: osvježite stranicu i pokušajte ponovo.",
-        "app_launch_unexpected_error": "Neočekivana greška prilikom pripreme aplikacije. Pogledajte konzolu za detalje."
-    },
-    "download_completed": "Preuzimanje završeno",
     "action": {
-        "open": "Otvori",
-        "dismiss": "Odbaci"
+        "dismiss": "Odbaci",
+        "open": "Otvori"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Idite na svoj pretraživač da biste dovršili prijavu"
     },
-    "unknown_device": "Nepoznat uređaj",
-    "powered_by_matrix": "Pokretano uz Matrix",
-    "use_brand_on_mobile": "Koristi %(brand)s na mobitelu",
-    "incompatible_browser": {
-        "title": "Nepodržani pretraživač",
-        "summary": "Vaš pretraživač ne može pokretati %(brand)s",
-        "features": "%(brand)s koristi napredne funkcije pretraživača koje vaš trenutni pretraživač ne podržava.",
-        "browser_links": "Molimo instalirajte <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ili <safariLink>Safari</safariLink> za najbolje iskustvo.",
-        "feature_warning": "Možete nastaviti koristiti svoj trenutni pretraživač, ali neke ili sve funkcije možda neće raditi, a izgled i dojam aplikacije mogu biti neispravani.",
-        "continue_warning": "Razumijem rizike i želim nastaviti"
-    },
-    "go_to_element_io": "Idite na element.io",
-    "failed_to_start": "Pokretanje nije uspjelo",
-    "welcome_to_element": "Dobrodošli u Element",
     "common": {
-        "sign_in": "Prijavite se",
         "create_account": "Otvori račun",
-        "explore_rooms": "Istražite sobe"
-    }
+        "explore_rooms": "Istražite sobe",
+        "sign_in": "Prijavite se"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Preuzimanje završeno",
+    "error": {
+        "app_launch_unexpected_error": "Neočekivana greška prilikom pripreme aplikacije. Pogledajte konzolu za detalje.",
+        "cannot_load_config": "Nije moguće učitati konfiguracijsku datoteku: osvježite stranicu i pokušajte ponovo.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Neispravna konfiguracija: nije naveden zadani server.",
+        "invalid_json": "Konfiguracija vašeg elementa sadrži nevažeći JSON. Ispravite problem i ponovo učitajte stranicu.",
+        "invalid_json_detail": "Poruka parsera je: %(message)s",
+        "invalid_json_generic": "Nevažeći JSON",
+        "misconfigured": "Vaš element je pogrešno konfiguriran"
+    },
+    "failed_to_start": "Pokretanje nije uspjelo",
+    "go_to_element_io": "Idite na element.io",
+    "incompatible_browser": {
+        "browser_links": "Molimo instalirajte <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ili <safariLink>Safari</safariLink> za najbolje iskustvo.",
+        "continue_warning": "Razumijem rizike i želim nastaviti",
+        "feature_warning": "Možete nastaviti koristiti svoj trenutni pretraživač, ali neke ili sve funkcije možda neće raditi, a izgled i dojam aplikacije mogu biti neispravani.",
+        "features": "%(brand)s koristi napredne funkcije pretraživača koje vaš trenutni pretraživač ne podržava.",
+        "summary": "Vaš pretraživač ne može pokretati %(brand)s",
+        "title": "Nepodržani pretraživač"
+    },
+    "powered_by_matrix": "Pokretano uz Matrix",
+    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
+    "unknown_device": "Nepoznat uređaj",
+    "use_brand_on_mobile": "Koristi %(brand)s na mobitelu",
+    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
+    "welcome_to_element": "Dobrodošli u Element"
 }

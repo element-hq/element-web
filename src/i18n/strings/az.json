@@ -1,39 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Yanlış konfiqurasiya: standart server göstərilməyib.",
-        "misconfigured": "Elementi yanlış konfiqurasiya edibsiniz",
-        "invalid_json": "Element konfiqurasiyanızda yanlış JSON var. Problemi düzəldin və səhifəni yenidən yükləyin.",
-        "invalid_json_detail": "Sözügedən mesaj: %(message)s",
-        "invalid_json_generic": "Yanlış JSON",
-        "cannot_load_config": "Konfiqurasiya faylını yükləmək mümkün deyil: yenidən cəhd etmək üçün səhifəni yeniləyin.",
-        "app_launch_unexpected_error": "Tətbiqin başladılmasında gözlənilməz xəta.Təfərrüatlar üçün konsola baxın."
-    },
-    "download_completed": "Yükləmə Tamamlandı",
     "action": {
-        "open": "Aç",
-        "dismiss": "Nəzərə almayın"
+        "dismiss": "Nəzərə almayın",
+        "open": "Aç"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Girişi tamamlamaq üçün brauzerinizə keçin"
     },
-    "unknown_device": "Naməlum qurğu",
-    "powered_by_matrix": "Gücünü Matrix'dən alır",
-    "use_brand_on_mobile": "Mobil telefonda %(brand)s istifadə edin",
-    "incompatible_browser": {
-        "title": "Dəstəklənməyən brauzer",
-        "summary": "Brauzeriniz %(brand)s işlədə bilmir",
-        "features": "%(brand)s cari brauzeriniz tərəfindən dəstəklənməyən təkmil brauzer funksiyalarından istifadə edir.",
-        "browser_links": "Zəhmət olmasa quraşdırın<chromeLink> Chrome</chromeLink> ,<firefoxLink> Firefox</firefoxLink> , və ya<safariLink> Safari</safariLink> ən yaxşı təcrübə üçün.",
-        "feature_warning": "Siz cari brauzerinizdən istifadə etməyə davam edə bilərsiniz, lakin bəzi və ya bütün funksiyalar işləməyə və tətbiqin görünüşü yanlış ola bilər.",
-        "continue_warning": "Mən riskləri başa düşürəm və davam etmək istəyirəm"
-    },
-    "go_to_element_io": "element.io saytına keçin",
-    "failed_to_start": "Başlatmaq alınmadı",
-    "welcome_to_element": "Element-ə xoş gəlmişsiniz",
-    "powered_by_matrix_with_logo": "$matrixLogo tərəfindən dəstəklənən mərkəzləşdirilməmiş ,şifrələnmiş söhbət &amp; əməkdaşlıq",
     "common": {
-        "sign_in": "Daxil ol",
         "create_account": "Hesab Aç",
-        "explore_rooms": "Otaqları kəşf edin"
-    }
+        "explore_rooms": "Otaqları kəşf edin",
+        "sign_in": "Daxil ol"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Yükləmə Tamamlandı",
+    "error": {
+        "app_launch_unexpected_error": "Tətbiqin başladılmasında gözlənilməz xəta.Təfərrüatlar üçün konsola baxın.",
+        "cannot_load_config": "Konfiqurasiya faylını yükləmək mümkün deyil: yenidən cəhd etmək üçün səhifəni yeniləyin.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Yanlış konfiqurasiya: standart server göstərilməyib.",
+        "invalid_json": "Element konfiqurasiyanızda yanlış JSON var. Problemi düzəldin və səhifəni yenidən yükləyin.",
+        "invalid_json_detail": "Sözügedən mesaj: %(message)s",
+        "invalid_json_generic": "Yanlış JSON",
+        "misconfigured": "Elementi yanlış konfiqurasiya edibsiniz"
+    },
+    "failed_to_start": "Başlatmaq alınmadı",
+    "go_to_element_io": "element.io saytına keçin",
+    "incompatible_browser": {
+        "browser_links": "Zəhmət olmasa quraşdırın<chromeLink> Chrome</chromeLink> ,<firefoxLink> Firefox</firefoxLink> , və ya<safariLink> Safari</safariLink> ən yaxşı təcrübə üçün.",
+        "continue_warning": "Mən riskləri başa düşürəm və davam etmək istəyirəm",
+        "feature_warning": "Siz cari brauzerinizdən istifadə etməyə davam edə bilərsiniz, lakin bəzi və ya bütün funksiyalar işləməyə və tətbiqin görünüşü yanlış ola bilər.",
+        "features": "%(brand)s cari brauzeriniz tərəfindən dəstəklənməyən təkmil brauzer funksiyalarından istifadə edir.",
+        "summary": "Brauzeriniz %(brand)s işlədə bilmir",
+        "title": "Dəstəklənməyən brauzer"
+    },
+    "powered_by_matrix": "Gücünü Matrix'dən alır",
+    "powered_by_matrix_with_logo": "$matrixLogo tərəfindən dəstəklənən mərkəzləşdirilməmiş ,şifrələnmiş söhbət &amp; əməkdaşlıq",
+    "unknown_device": "Naməlum qurğu",
+    "use_brand_on_mobile": "Mobil telefonda %(brand)s istifadə edin",
+    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
+    "welcome_to_element": "Element-ə xoş gəlmişsiniz"
 }

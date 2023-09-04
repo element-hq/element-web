@@ -1,42 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_mixed_server": "Konfigurasi tidak valid: default_hs_url tidak dapat ditentukan bersama dengan default_server_name atau default_server_config",
-        "invalid_configuration_no_server": "Konfigurasi tidak absah: server bawaan belum ditentukan.",
-        "misconfigured": "Anda salah mengatur Element",
-        "invalid_json": "Konfigurasi Element Anda berisi JSON yang tidak absah. Mohon perbaiki masalahnya dan muat ulang laman ini.",
-        "invalid_json_detail": "Pesan dari pengurai adalah: %(message)s",
-        "invalid_json_generic": "JSON tidak absah",
-        "cannot_load_config": "Tidak dapat memuat file konfigurasi: mohon muat ulang laman ini untuk mencoba lagi.",
-        "app_launch_unexpected_error": "Kesalahan tak terduga saat menyiapkan aplikasi. Lihat konsol untuk detail."
-    },
-    "download_completed": "Unduhan Selesai",
     "action": {
-        "open": "Buka",
-        "dismiss": "Abaikan"
+        "dismiss": "Abaikan",
+        "open": "Buka"
     },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Buka peramban Anda untuk menyelesaikan Sign In"
     },
-    "unknown_device": "Perangkat tidak diketahui",
-    "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
-    "powered_by_matrix": "Diberdayakan oleh Matrix",
-    "use_brand_on_mobile": "Gunakan %(brand)s di ponsel",
-    "incompatible_browser": {
-        "title": "Peramban tidak didukung",
-        "summary": "Peramban Anda tidak dapat menjalankan %(brand)s",
-        "features": "%(brand)s menggunakan fitur peramban tingkat lanjut yang tidak didukung oleh peramban Anda saat ini.",
-        "browser_links": "Silakan instal <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, atau <safariLink>Safari</safariLink> untuk pengalaman yang terbaik.",
-        "feature_warning": "Anda dapat melanjutkan menggunakan peramban Anda saat ini, tetapi beberapa atau semua fitur mungkin tidak berfungsi dan tampilan serta nuansa aplikasi mungkin tidak benar.",
-        "continue_warning": "Saya memahami risikonya dan ingin melanjutkan"
-    },
-    "go_to_element_io": "Buka element.io",
-    "failed_to_start": "Gagal untuk memulai",
-    "welcome_to_element": "Selamat datang di Element",
-    "powered_by_matrix_with_logo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
     "common": {
-        "sign_in": "Masuk",
         "create_account": "Buat Akun",
-        "explore_rooms": "Jelajahi ruangan"
-    }
+        "explore_rooms": "Jelajahi ruangan",
+        "sign_in": "Masuk"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Unduhan Selesai",
+    "error": {
+        "app_launch_unexpected_error": "Kesalahan tak terduga saat menyiapkan aplikasi. Lihat konsol untuk detail.",
+        "cannot_load_config": "Tidak dapat memuat file konfigurasi: mohon muat ulang laman ini untuk mencoba lagi.",
+        "invalid_configuration_mixed_server": "Konfigurasi tidak valid: default_hs_url tidak dapat ditentukan bersama dengan default_server_name atau default_server_config",
+        "invalid_configuration_no_server": "Konfigurasi tidak absah: server bawaan belum ditentukan.",
+        "invalid_json": "Konfigurasi Element Anda berisi JSON yang tidak absah. Mohon perbaiki masalahnya dan muat ulang laman ini.",
+        "invalid_json_detail": "Pesan dari pengurai adalah: %(message)s",
+        "invalid_json_generic": "JSON tidak absah",
+        "misconfigured": "Anda salah mengatur Element"
+    },
+    "failed_to_start": "Gagal untuk memulai",
+    "go_to_element_io": "Buka element.io",
+    "incompatible_browser": {
+        "browser_links": "Silakan instal <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, atau <safariLink>Safari</safariLink> untuk pengalaman yang terbaik.",
+        "continue_warning": "Saya memahami risikonya dan ingin melanjutkan",
+        "feature_warning": "Anda dapat melanjutkan menggunakan peramban Anda saat ini, tetapi beberapa atau semua fitur mungkin tidak berfungsi dan tampilan serta nuansa aplikasi mungkin tidak benar.",
+        "features": "%(brand)s menggunakan fitur peramban tingkat lanjut yang tidak didukung oleh peramban Anda saat ini.",
+        "summary": "Peramban Anda tidak dapat menjalankan %(brand)s",
+        "title": "Peramban tidak didukung"
+    },
+    "powered_by_matrix": "Diberdayakan oleh Matrix",
+    "powered_by_matrix_with_logo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
+    "unknown_device": "Perangkat tidak diketahui",
+    "use_brand_on_mobile": "Gunakan %(brand)s di ponsel",
+    "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
+    "welcome_to_element": "Selamat datang di Element"
 }

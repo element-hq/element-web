@@ -1,39 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Μη έγκυρη ρύθμιση παραμέτρων: δεν έχει οριστεί προκαθορισμένος διακομιστής.",
-        "misconfigured": "Το Element σας δεν εχει ρυθμιστεί σωστά",
-        "invalid_json": "Η ρύθμιση του Element περιέχει μη έγκυρο JSON. Διορθώστε το πρόβλημα και φορτώστε ξανά τη σελίδα.",
-        "invalid_json_detail": "Το μήνυμα από τον αναλυτή είναι: %(message)s",
-        "invalid_json_generic": "Μη έγκυρο JSON",
-        "cannot_load_config": "Δεν είναι δυνατή η φόρτωση του αρχείου config: ανανεώστε τη σελίδα για να δοκιμάσετε ξανά.",
-        "app_launch_unexpected_error": "Απρόοπτο σφάλμα κατά την προετοιμασία της εφαρμογής. Δείτε το τερματικό για λεπτομέρειες."
-    },
-    "download_completed": "Η λήψη ολοκληρώθηκε",
     "action": {
-        "open": "Άνοιγμα",
-        "dismiss": "Απόρριψη"
+        "dismiss": "Απόρριψη",
+        "open": "Άνοιγμα"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Μεταβείτε στο πρόγραμμα περιήγησής σας για να ολοκληρώσετε τη σύνδεση"
     },
-    "unknown_device": "Άγνωστη συσκευή",
-    "powered_by_matrix": "Με την υποστήριξη του Matrix",
-    "use_brand_on_mobile": "Χρήση %(brand)s σε κινητό",
-    "incompatible_browser": {
-        "title": "Μη υποστηριζόμενο πρόγραμμα περιήγησης",
-        "summary": "Το πρόγραμμα περιήγησής σας δεν μπορεί να εκτελέσει %(brand)s",
-        "features": "%(brand)s χρησιμοποιεί προηγμένες δυνατότητες προγράμματος περιήγησης που δεν υποστηρίζονται από το τρέχον πρόγραμμα περιήγησής σας.",
-        "browser_links": "Παρακαλούμε εγκαταστήστε <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ή <safariLink>Safari</safariLink> για καλύτερη εμπειρία χρήσης.",
-        "feature_warning": "Μπορείτε να συνεχίσετε να χρησιμοποιείτε το τρέχον πρόγραμμα περιήγησής σας, αλλά ορισμένες ή όλες οι λειτουργίες ενδέχεται να μην λειτουργούν και η εμφάνιση και η αίσθηση της εφαρμογής ενδέχεται να είναι λανθασμένη.",
-        "continue_warning": "Κατανοώ τους κινδύνους και επιθυμώ να συνεχίσω"
-    },
-    "go_to_element_io": "Πήγαινε στο element.io",
-    "failed_to_start": "Αποτυχία έναρξης",
-    "welcome_to_element": "Καλώς ήλθατε στο Element",
-    "powered_by_matrix_with_logo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo",
     "common": {
-        "sign_in": "Σύνδεση",
         "create_account": "Δημιουργία Λογαριασμού",
-        "explore_rooms": "Εξερευνήστε δωμάτια"
-    }
+        "explore_rooms": "Εξερευνήστε δωμάτια",
+        "sign_in": "Σύνδεση"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Η λήψη ολοκληρώθηκε",
+    "error": {
+        "app_launch_unexpected_error": "Απρόοπτο σφάλμα κατά την προετοιμασία της εφαρμογής. Δείτε το τερματικό για λεπτομέρειες.",
+        "cannot_load_config": "Δεν είναι δυνατή η φόρτωση του αρχείου config: ανανεώστε τη σελίδα για να δοκιμάσετε ξανά.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Μη έγκυρη ρύθμιση παραμέτρων: δεν έχει οριστεί προκαθορισμένος διακομιστής.",
+        "invalid_json": "Η ρύθμιση του Element περιέχει μη έγκυρο JSON. Διορθώστε το πρόβλημα και φορτώστε ξανά τη σελίδα.",
+        "invalid_json_detail": "Το μήνυμα από τον αναλυτή είναι: %(message)s",
+        "invalid_json_generic": "Μη έγκυρο JSON",
+        "misconfigured": "Το Element σας δεν εχει ρυθμιστεί σωστά"
+    },
+    "failed_to_start": "Αποτυχία έναρξης",
+    "go_to_element_io": "Πήγαινε στο element.io",
+    "incompatible_browser": {
+        "browser_links": "Παρακαλούμε εγκαταστήστε <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ή <safariLink>Safari</safariLink> για καλύτερη εμπειρία χρήσης.",
+        "continue_warning": "Κατανοώ τους κινδύνους και επιθυμώ να συνεχίσω",
+        "feature_warning": "Μπορείτε να συνεχίσετε να χρησιμοποιείτε το τρέχον πρόγραμμα περιήγησής σας, αλλά ορισμένες ή όλες οι λειτουργίες ενδέχεται να μην λειτουργούν και η εμφάνιση και η αίσθηση της εφαρμογής ενδέχεται να είναι λανθασμένη.",
+        "features": "%(brand)s χρησιμοποιεί προηγμένες δυνατότητες προγράμματος περιήγησης που δεν υποστηρίζονται από το τρέχον πρόγραμμα περιήγησής σας.",
+        "summary": "Το πρόγραμμα περιήγησής σας δεν μπορεί να εκτελέσει %(brand)s",
+        "title": "Μη υποστηριζόμενο πρόγραμμα περιήγησης"
+    },
+    "powered_by_matrix": "Με την υποστήριξη του Matrix",
+    "powered_by_matrix_with_logo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo",
+    "unknown_device": "Άγνωστη συσκευή",
+    "use_brand_on_mobile": "Χρήση %(brand)s σε κινητό",
+    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
+    "welcome_to_element": "Καλώς ήλθατε στο Element"
 }

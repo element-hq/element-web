@@ -1,37 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Погрешно подешавање: подразумевани сервер није наведен.",
-        "misconfigured": "Ваша Елемент апликација је лоше подешена",
-        "invalid_json": "Подешавање ваше Елемент апликације садржи неисправни „JSON“. Поправите проблем па поново учитајте ову страницу.",
-        "invalid_json_detail": "Порука из парсера: %(message)s",
-        "invalid_json_generic": "Погрешан JSON",
-        "cannot_load_config": "Не могу да учитам датотеку подешавања: освежите страницу и покушајте поново.",
-        "app_launch_unexpected_error": "Неочекивана грешка приликом припреме апликације. Погледајте конзолу за више детаља."
-    },
-    "download_completed": "Преузимање завршено",
     "action": {
-        "open": "Отвори",
-        "dismiss": "Одбаци"
+        "dismiss": "Одбаци",
+        "open": "Отвори"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Отворите ваш прегледач за довршавање пријаве"
     },
-    "unknown_device": "Непознати уређај",
-    "powered_by_matrix": "Оснажен од стране Матрикса",
-    "incompatible_browser": {
-        "title": "Неподржан прегледач",
-        "summary": "Ваш прегледач не може покретати %(brand)s",
-        "features": "%(brand)s користи напредне могућности које нису подржане у вашем тренутном прегледачу.",
-        "browser_links": "Инсталирајте <chromeLink>Хром</chromeLink>, <firefoxLink>Фајерфокс</firefoxLink>, или <safariLink>Сафари</safariLink> за најбољи доживљај.",
-        "feature_warning": "Можете наставити користећи тренутни прегледач али неке могућности можда неће радити и изглед и доживљај апликације може бити лош.",
-        "continue_warning": "Разумем ризике и желим да наставим"
-    },
-    "go_to_element_io": "Иди на element.io",
-    "failed_to_start": "Неуспех при покретању",
-    "welcome_to_element": "Добродошли у Елемент",
     "common": {
-        "sign_in": "Пријави се",
         "create_account": "Направи налог",
-        "explore_rooms": "Истражи собе"
-    }
+        "explore_rooms": "Истражи собе",
+        "sign_in": "Пријави се"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Преузимање завршено",
+    "error": {
+        "app_launch_unexpected_error": "Неочекивана грешка приликом припреме апликације. Погледајте конзолу за више детаља.",
+        "cannot_load_config": "Не могу да учитам датотеку подешавања: освежите страницу и покушајте поново.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Погрешно подешавање: подразумевани сервер није наведен.",
+        "invalid_json": "Подешавање ваше Елемент апликације садржи неисправни „JSON“. Поправите проблем па поново учитајте ову страницу.",
+        "invalid_json_detail": "Порука из парсера: %(message)s",
+        "invalid_json_generic": "Погрешан JSON",
+        "misconfigured": "Ваша Елемент апликација је лоше подешена"
+    },
+    "failed_to_start": "Неуспех при покретању",
+    "go_to_element_io": "Иди на element.io",
+    "incompatible_browser": {
+        "browser_links": "Инсталирајте <chromeLink>Хром</chromeLink>, <firefoxLink>Фајерфокс</firefoxLink>, или <safariLink>Сафари</safariLink> за најбољи доживљај.",
+        "continue_warning": "Разумем ризике и желим да наставим",
+        "feature_warning": "Можете наставити користећи тренутни прегледач али неке могућности можда неће радити и изглед и доживљај апликације може бити лош.",
+        "features": "%(brand)s користи напредне могућности које нису подржане у вашем тренутном прегледачу.",
+        "summary": "Ваш прегледач не може покретати %(brand)s",
+        "title": "Неподржан прегледач"
+    },
+    "powered_by_matrix": "Оснажен од стране Матрикса",
+    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
+    "unknown_device": "Непознати уређај",
+    "use_brand_on_mobile": "Use %(brand)s on mobile",
+    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
+    "welcome_to_element": "Добродошли у Елемент"
 }

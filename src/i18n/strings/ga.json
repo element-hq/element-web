@@ -1,38 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Cumraíocht neamhbhailí: Níl aon freastalaí réamhshocraithe a sonrú.",
-        "misconfigured": "Níl do fheidhmchlár Element cumraithe i gceart",
-        "invalid_json": "Coinníonn do chumraíocht JSON neamhbhailí. Ceartaigh an fadhb agus athlódáil an leathanach le do thoil.",
-        "invalid_json_detail": "Is í an teachtaireacht as an parsálaí: %(message)s",
-        "invalid_json_generic": "JSON neamhbhailí",
-        "cannot_load_config": "Ní féidir an comhad cumraíochta a lódáil. Athnuaigh an leathanach chun déanamh iarracht arís le do thoil.",
-        "app_launch_unexpected_error": "Earráid nuair an feidhmchlár a hullmhú. Feic sa consól le haghaidh eolas."
-    },
-    "download_completed": "Íoslódáil críochnaithe",
     "action": {
-        "open": "Oscail",
-        "dismiss": "Cuir uait"
+        "dismiss": "Cuir uait",
+        "open": "Oscail"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Oscail do bhrabhsálaí agus críochnaigh an clárú"
     },
-    "unknown_device": "Gléas nár aithníodh",
-    "powered_by_matrix": "Cumhachtaithe ag Matrix",
-    "use_brand_on_mobile": "Úsáid %(brand)s ar guthán póca",
-    "incompatible_browser": {
-        "title": "Brabhsálaí gan tacaíocht",
-        "summary": "Níl do bhrabhsálaí comhoiriúnach do %(brand)s",
-        "features": "Úsáideann %(brand)s gnéithe ardforbartha nach bhfuil ar fáil faoi do bhrabhsálaí reatha.",
-        "browser_links": "Suiteáil <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> chun an taithí is fearr a fháil.",
-        "feature_warning": "An féidir leat úsáid do bhrabhsálaí reatha, ach nár oibrí roinnt nó gach gné agus nár thaispeántar an feidhmchlár i gceart.",
-        "continue_warning": "Tuigim na rioscaí agus ba mhaith liom lean ar aghaidh"
-    },
-    "go_to_element_io": "Téigh go element.io",
-    "failed_to_start": "Theip chun tosú",
-    "welcome_to_element": "Fáilte romhat chuig Element",
     "common": {
-        "sign_in": "Sínigh Isteach",
         "create_account": "Déan cuntas a chruthú",
-        "explore_rooms": "Breathnaigh thart ar na seomraí"
-    }
+        "explore_rooms": "Breathnaigh thart ar na seomraí",
+        "sign_in": "Sínigh Isteach"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Íoslódáil críochnaithe",
+    "error": {
+        "app_launch_unexpected_error": "Earráid nuair an feidhmchlár a hullmhú. Feic sa consól le haghaidh eolas.",
+        "cannot_load_config": "Ní féidir an comhad cumraíochta a lódáil. Athnuaigh an leathanach chun déanamh iarracht arís le do thoil.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Cumraíocht neamhbhailí: Níl aon freastalaí réamhshocraithe a sonrú.",
+        "invalid_json": "Coinníonn do chumraíocht JSON neamhbhailí. Ceartaigh an fadhb agus athlódáil an leathanach le do thoil.",
+        "invalid_json_detail": "Is í an teachtaireacht as an parsálaí: %(message)s",
+        "invalid_json_generic": "JSON neamhbhailí",
+        "misconfigured": "Níl do fheidhmchlár Element cumraithe i gceart"
+    },
+    "failed_to_start": "Theip chun tosú",
+    "go_to_element_io": "Téigh go element.io",
+    "incompatible_browser": {
+        "browser_links": "Suiteáil <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> chun an taithí is fearr a fháil.",
+        "continue_warning": "Tuigim na rioscaí agus ba mhaith liom lean ar aghaidh",
+        "feature_warning": "An féidir leat úsáid do bhrabhsálaí reatha, ach nár oibrí roinnt nó gach gné agus nár thaispeántar an feidhmchlár i gceart.",
+        "features": "Úsáideann %(brand)s gnéithe ardforbartha nach bhfuil ar fáil faoi do bhrabhsálaí reatha.",
+        "summary": "Níl do bhrabhsálaí comhoiriúnach do %(brand)s",
+        "title": "Brabhsálaí gan tacaíocht"
+    },
+    "powered_by_matrix": "Cumhachtaithe ag Matrix",
+    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
+    "unknown_device": "Gléas nár aithníodh",
+    "use_brand_on_mobile": "Úsáid %(brand)s ar guthán póca",
+    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
+    "welcome_to_element": "Fáilte romhat chuig Element"
 }

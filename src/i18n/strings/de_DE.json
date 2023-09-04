@@ -1,42 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_mixed_server": "Ungültige Konfiguration: default_hs_url kann nicht zeitgleich mit default_server_name oder default_server_config festgelegt werden",
-        "invalid_configuration_no_server": "Ungültige Konfiguration: Es wurde kein Standardserver angegeben.",
-        "misconfigured": "Dein Element ist falsch konfiguriert",
-        "invalid_json": "Deine Element-Konfiguration enthält ungültiges JSON. Bitte korrigiere das Problem und lade die Seite neu.",
-        "invalid_json_detail": "Die Nachricht des Parsers ist: %(message)s",
-        "invalid_json_generic": "Ungültiges JSON",
-        "cannot_load_config": "Konfigurationsdatei kann nicht geladen werden: Bitte aktualisiere die Seite, um es erneut zu versuchen.",
-        "app_launch_unexpected_error": "Unerwarteter Fehler bei der Vorbereitung der App; mehr Details in der Konsole."
-    },
-    "download_completed": "Herunterladen fertiggestellt",
     "action": {
-        "open": "Öffnen",
-        "dismiss": "Ausblenden"
+        "dismiss": "Ausblenden",
+        "open": "Öffnen"
     },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Browser öffnen, um die Anmeldung abzuschließen"
     },
-    "unknown_device": "Unbekanntes Gerät",
-    "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",
-    "powered_by_matrix": "Betrieben mit Matrix",
-    "use_brand_on_mobile": "Verwende %(brand)s am Handy",
-    "incompatible_browser": {
-        "title": "Nicht unterstützter Browser",
-        "summary": "Dein Browser kann %(brand)s nicht ausführen",
-        "features": "%(brand)s verwendet erweiterte Browserfunktionen, die von deinem Browser nicht unterstützt werden.",
-        "browser_links": "Bitte installiere <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> oder <safariLink>Safari</safariLink> für das beste Erlebnis.",
-        "feature_warning": "Du kannst deinen aktuellen Browser weiterhin verwenden. Es ist aber möglich, dass nicht alles richtig funktioniert oder das Aussehen der App inkorrekt ist.",
-        "continue_warning": "Ich verstehe die Risiken und möchte fortfahren"
-    },
-    "go_to_element_io": "Gehe zu element.io",
-    "failed_to_start": "Start fehlgeschlagen",
-    "welcome_to_element": "Willkommen bei Element",
-    "powered_by_matrix_with_logo": "Dezentralisierter, verschlüsselter Chat &amp; Zusammenarbeit unterstützt von $matrixLogo",
     "common": {
-        "sign_in": "Anmelden",
         "create_account": "Konto erstellen",
-        "explore_rooms": "Räume erkunden"
-    }
+        "explore_rooms": "Räume erkunden",
+        "sign_in": "Anmelden"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Herunterladen fertiggestellt",
+    "error": {
+        "app_launch_unexpected_error": "Unerwarteter Fehler bei der Vorbereitung der App; mehr Details in der Konsole.",
+        "cannot_load_config": "Konfigurationsdatei kann nicht geladen werden: Bitte aktualisiere die Seite, um es erneut zu versuchen.",
+        "invalid_configuration_mixed_server": "Ungültige Konfiguration: default_hs_url kann nicht zeitgleich mit default_server_name oder default_server_config festgelegt werden",
+        "invalid_configuration_no_server": "Ungültige Konfiguration: Es wurde kein Standardserver angegeben.",
+        "invalid_json": "Deine Element-Konfiguration enthält ungültiges JSON. Bitte korrigiere das Problem und lade die Seite neu.",
+        "invalid_json_detail": "Die Nachricht des Parsers ist: %(message)s",
+        "invalid_json_generic": "Ungültiges JSON",
+        "misconfigured": "Dein Element ist falsch konfiguriert"
+    },
+    "failed_to_start": "Start fehlgeschlagen",
+    "go_to_element_io": "Gehe zu element.io",
+    "incompatible_browser": {
+        "browser_links": "Bitte installiere <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> oder <safariLink>Safari</safariLink> für das beste Erlebnis.",
+        "continue_warning": "Ich verstehe die Risiken und möchte fortfahren",
+        "feature_warning": "Du kannst deinen aktuellen Browser weiterhin verwenden. Es ist aber möglich, dass nicht alles richtig funktioniert oder das Aussehen der App inkorrekt ist.",
+        "features": "%(brand)s verwendet erweiterte Browserfunktionen, die von deinem Browser nicht unterstützt werden.",
+        "summary": "Dein Browser kann %(brand)s nicht ausführen",
+        "title": "Nicht unterstützter Browser"
+    },
+    "powered_by_matrix": "Betrieben mit Matrix",
+    "powered_by_matrix_with_logo": "Dezentralisierter, verschlüsselter Chat &amp; Zusammenarbeit unterstützt von $matrixLogo",
+    "unknown_device": "Unbekanntes Gerät",
+    "use_brand_on_mobile": "Verwende %(brand)s am Handy",
+    "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",
+    "welcome_to_element": "Willkommen bei Element"
 }

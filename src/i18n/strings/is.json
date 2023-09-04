@@ -1,41 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Ógild uppsetning: enginn sjálfgefinn vefþjónn tilgreindur.",
-        "misconfigured": "Element-tilvikið þitt er rangt stillt",
-        "invalid_json": "Element-stillingar þínar innihalda ógilt JSON. Leiðréttu vandamálið og endurlestu síðuna.",
-        "invalid_json_detail": "Skilaboðið frá þáttaranum er %(message)s",
-        "invalid_json_generic": "Ógilt JSON",
-        "cannot_load_config": "Ekki er hægt að hlaða stillingaskrána: endurnýjaðu síðuna til að reyna aftur.",
-        "app_launch_unexpected_error": "Óvænt villa við undirbúning forritsins. Sjá nánar á stjórnskjá."
-    },
-    "download_completed": "Niðurhali lokið",
     "action": {
-        "open": "Opna",
-        "dismiss": "Hunsa"
+        "dismiss": "Hunsa",
+        "open": "Opna"
     },
-    "desktop_default_device_name": "%(brand)s borðtölvuútgáfa: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Farðu í vafrann þinn til að ljúka innskráningu"
     },
-    "unknown_device": "Óþekkt tæki",
-    "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
-    "powered_by_matrix": "Keyrt með Matrix",
-    "use_brand_on_mobile": "Nota %(brand)s í síma",
-    "incompatible_browser": {
-        "title": "Óstuddur vafri",
-        "summary": "Vafrinn þinn getur ekki keyrt %(brand)s",
-        "features": "%(brand)s notar háþróaða vafraeiginleika sem eru ekki studdir af vafranum þínum.",
-        "browser_links": "Þú ættir að setja upp <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eða <safariLink>Safari</safariLink> til að fá sem besta útkomu.",
-        "feature_warning": "Þú getur haldið áfram að nota núverandi vafra, en sumir eða allir eiginleikar virka mögulega ekki rétt, auk þess sem útlit og hegðun forritsins geta verið röng.",
-        "continue_warning": "Ég skil áhættuna og óska að halda áfram"
-    },
-    "go_to_element_io": "Fara á element.io",
-    "failed_to_start": "Mistókst að ræsa",
-    "welcome_to_element": "Velkomin í Element",
-    "powered_by_matrix_with_logo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
     "common": {
-        "sign_in": "Skrá inn",
         "create_account": "Búa til notandaaðgang",
-        "explore_rooms": "Kanna spjallrásir"
-    }
+        "explore_rooms": "Kanna spjallrásir",
+        "sign_in": "Skrá inn"
+    },
+    "desktop_default_device_name": "%(brand)s borðtölvuútgáfa: %(platformName)s",
+    "download_completed": "Niðurhali lokið",
+    "error": {
+        "app_launch_unexpected_error": "Óvænt villa við undirbúning forritsins. Sjá nánar á stjórnskjá.",
+        "cannot_load_config": "Ekki er hægt að hlaða stillingaskrána: endurnýjaðu síðuna til að reyna aftur.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Ógild uppsetning: enginn sjálfgefinn vefþjónn tilgreindur.",
+        "invalid_json": "Element-stillingar þínar innihalda ógilt JSON. Leiðréttu vandamálið og endurlestu síðuna.",
+        "invalid_json_detail": "Skilaboðið frá þáttaranum er %(message)s",
+        "invalid_json_generic": "Ógilt JSON",
+        "misconfigured": "Element-tilvikið þitt er rangt stillt"
+    },
+    "failed_to_start": "Mistókst að ræsa",
+    "go_to_element_io": "Fara á element.io",
+    "incompatible_browser": {
+        "browser_links": "Þú ættir að setja upp <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eða <safariLink>Safari</safariLink> til að fá sem besta útkomu.",
+        "continue_warning": "Ég skil áhættuna og óska að halda áfram",
+        "feature_warning": "Þú getur haldið áfram að nota núverandi vafra, en sumir eða allir eiginleikar virka mögulega ekki rétt, auk þess sem útlit og hegðun forritsins geta verið röng.",
+        "features": "%(brand)s notar háþróaða vafraeiginleika sem eru ekki studdir af vafranum þínum.",
+        "summary": "Vafrinn þinn getur ekki keyrt %(brand)s",
+        "title": "Óstuddur vafri"
+    },
+    "powered_by_matrix": "Keyrt með Matrix",
+    "powered_by_matrix_with_logo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
+    "unknown_device": "Óþekkt tæki",
+    "use_brand_on_mobile": "Nota %(brand)s í síma",
+    "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
+    "welcome_to_element": "Velkomin í Element"
 }

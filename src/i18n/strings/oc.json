@@ -1,41 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Configuracion invalida : pas de servidor per defauta especificat.",
-        "misconfigured": "Lo vòstre Element es mau configurat",
-        "invalid_json": "La configuracion d'Element conten dau JSON invalid. Si vos plait corregitz lo problème e actualizatz la pagina.",
-        "invalid_json_detail": "Lo messatge de l’analisaire es : %(message)s",
-        "invalid_json_generic": "JSON invalida",
-        "cannot_load_config": "Se pòt pas charjar lo fichièr de configuracion : si vos plait actualizatz la pagina per tornar ensajar.",
-        "app_launch_unexpected_error": "Error inesperada en preparant l’aplicacion. Vejatz la consòla pels detalhs."
-    },
-    "download_completed": "Descharjament achabat",
     "action": {
-        "open": "Dobrir",
-        "dismiss": "Refusar"
+        "dismiss": "Refusar",
+        "open": "Dobrir"
     },
-    "desktop_default_device_name": "%(brand)s Burèu: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Anatz au navegador per achabar la connexion"
     },
-    "unknown_device": "Periferic desconegut",
-    "web_default_device_name": "%(appName)s: %(browserName)s per %(osName)s",
-    "powered_by_matrix": "Fonciona embei Matrix",
-    "use_brand_on_mobile": "Utilizatz %(brand)s per telefòn",
-    "incompatible_browser": {
-        "title": "Navigator incompatible",
-        "summary": "Lo vòstre navigator non pòt pas executar %(brand)s",
-        "features": "%(brand)s utiliza de foncions avançadas que lo vòstre navigator non suporta pas.",
-        "browser_links": "Si vos plait installatz <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, o <safariLink>Safari</safariLink> per una melhora experiéncia.",
-        "feature_warning": "Podètz contunhar d'utilizar lo vòstre navigator actuau, mas quauquas o totas las foncionalitats o/e l'apparéncia poirián mau foncionar .",
-        "continue_warning": "Comprène los risques e vòle contunhar"
-    },
-    "go_to_element_io": "Anar vès element.io",
-    "failed_to_start": "Se pòt pas lançar",
-    "welcome_to_element": "La benvenguda a Element",
-    "powered_by_matrix_with_logo": "Discussions decentralizadas, criptadas, collaboracion &amp; botada per $matrixLogo",
     "common": {
-        "sign_in": "Se connectar",
         "create_account": "Crear un compte",
-        "explore_rooms": "Percórrer las salas"
-    }
+        "explore_rooms": "Percórrer las salas",
+        "sign_in": "Se connectar"
+    },
+    "desktop_default_device_name": "%(brand)s Burèu: %(platformName)s",
+    "download_completed": "Descharjament achabat",
+    "error": {
+        "app_launch_unexpected_error": "Error inesperada en preparant l’aplicacion. Vejatz la consòla pels detalhs.",
+        "cannot_load_config": "Se pòt pas charjar lo fichièr de configuracion : si vos plait actualizatz la pagina per tornar ensajar.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Configuracion invalida : pas de servidor per defauta especificat.",
+        "invalid_json": "La configuracion d'Element conten dau JSON invalid. Si vos plait corregitz lo problème e actualizatz la pagina.",
+        "invalid_json_detail": "Lo messatge de l’analisaire es : %(message)s",
+        "invalid_json_generic": "JSON invalida",
+        "misconfigured": "Lo vòstre Element es mau configurat"
+    },
+    "failed_to_start": "Se pòt pas lançar",
+    "go_to_element_io": "Anar vès element.io",
+    "incompatible_browser": {
+        "browser_links": "Si vos plait installatz <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, o <safariLink>Safari</safariLink> per una melhora experiéncia.",
+        "continue_warning": "Comprène los risques e vòle contunhar",
+        "feature_warning": "Podètz contunhar d'utilizar lo vòstre navigator actuau, mas quauquas o totas las foncionalitats o/e l'apparéncia poirián mau foncionar .",
+        "features": "%(brand)s utiliza de foncions avançadas que lo vòstre navigator non suporta pas.",
+        "summary": "Lo vòstre navigator non pòt pas executar %(brand)s",
+        "title": "Navigator incompatible"
+    },
+    "powered_by_matrix": "Fonciona embei Matrix",
+    "powered_by_matrix_with_logo": "Discussions decentralizadas, criptadas, collaboracion &amp; botada per $matrixLogo",
+    "unknown_device": "Periferic desconegut",
+    "use_brand_on_mobile": "Utilizatz %(brand)s per telefòn",
+    "web_default_device_name": "%(appName)s: %(browserName)s per %(osName)s",
+    "welcome_to_element": "La benvenguda a Element"
 }

@@ -1,37 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "Konfigurazio baliogabea: Ez da lehenetsitako zerbitzaririk zehaztu.",
-        "misconfigured": "Zure Element ez dago ondo konfiguratuta",
-        "invalid_json": "Zure Element-en konfigurazioak JSON baliogabea dauka. Mesedez, konpondu arazoa eta birkargatu orria.",
-        "invalid_json_detail": "Prozesatzailearen mezua hau da: %(message)s",
-        "invalid_json_generic": "JSON baliogabea",
-        "cannot_load_config": "Ezin izan da konfigurazio fitxategia kargatu: Saiatu orria birkargatzen.",
-        "app_launch_unexpected_error": "Ustekabeko errorea aplikazioa prestatzean. Ikusi xehetasunak kontsolan."
-    },
-    "download_completed": "Deskarga burututa",
     "action": {
-        "open": "Ireki",
-        "dismiss": "Baztertu"
+        "dismiss": "Baztertu",
+        "open": "Ireki"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Joan zure nabigatzailera izena ematen bukatzeko"
     },
-    "unknown_device": "Gailu ezezaguna",
-    "powered_by_matrix": "Matrixekin egina",
-    "incompatible_browser": {
-        "title": "Onartu gabeko nabigatzailea",
-        "summary": "Zure nabigatzaileak ezin du %(brand)s exekutatu",
-        "features": "%(brand)s-(e)k zure oraingo nabigatzaile honek euskarririk ematen ez dien ezaugarri aurreratuak erabiltzen ditu.",
-        "browser_links": "Instalatu <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, edo <safariLink>Safari</safariLink> esperientzia hobe baterako.",
-        "feature_warning": "Zure oraingo nabigatzailea erabiltzen jarraitu dezakezu, baina ezaugarri batzuk agian ez dute funtzionatuko eta itxura desegokia izan daiteke.",
-        "continue_warning": "Arriskuak ulertzen ditut eta jarraitu nahi dut"
-    },
-    "go_to_element_io": "Joan element.io gunera",
-    "failed_to_start": "Huts egin du abiatzean",
-    "welcome_to_element": "Ongi etorri Element mezularitzara",
     "common": {
-        "sign_in": "Hasi saioa",
         "create_account": "Sortu kontua",
-        "explore_rooms": "Arakatu gelak"
-    }
+        "explore_rooms": "Arakatu gelak",
+        "sign_in": "Hasi saioa"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Deskarga burututa",
+    "error": {
+        "app_launch_unexpected_error": "Ustekabeko errorea aplikazioa prestatzean. Ikusi xehetasunak kontsolan.",
+        "cannot_load_config": "Ezin izan da konfigurazio fitxategia kargatu: Saiatu orria birkargatzen.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Konfigurazio baliogabea: Ez da lehenetsitako zerbitzaririk zehaztu.",
+        "invalid_json": "Zure Element-en konfigurazioak JSON baliogabea dauka. Mesedez, konpondu arazoa eta birkargatu orria.",
+        "invalid_json_detail": "Prozesatzailearen mezua hau da: %(message)s",
+        "invalid_json_generic": "JSON baliogabea",
+        "misconfigured": "Zure Element ez dago ondo konfiguratuta"
+    },
+    "failed_to_start": "Huts egin du abiatzean",
+    "go_to_element_io": "Joan element.io gunera",
+    "incompatible_browser": {
+        "browser_links": "Instalatu <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, edo <safariLink>Safari</safariLink> esperientzia hobe baterako.",
+        "continue_warning": "Arriskuak ulertzen ditut eta jarraitu nahi dut",
+        "feature_warning": "Zure oraingo nabigatzailea erabiltzen jarraitu dezakezu, baina ezaugarri batzuk agian ez dute funtzionatuko eta itxura desegokia izan daiteke.",
+        "features": "%(brand)s-(e)k zure oraingo nabigatzaile honek euskarririk ematen ez dien ezaugarri aurreratuak erabiltzen ditu.",
+        "summary": "Zure nabigatzaileak ezin du %(brand)s exekutatu",
+        "title": "Onartu gabeko nabigatzailea"
+    },
+    "powered_by_matrix": "Matrixekin egina",
+    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
+    "unknown_device": "Gailu ezezaguna",
+    "use_brand_on_mobile": "Use %(brand)s on mobile",
+    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
+    "welcome_to_element": "Ongi etorri Element mezularitzara"
 }

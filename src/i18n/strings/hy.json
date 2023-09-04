@@ -1,31 +1,42 @@
 {
-    "error": {
-        "misconfigured": "Ձեր Element֊ը սխալ է կարգավորված",
-        "invalid_json_generic": "Չաշխատող JSON",
-        "cannot_load_config": "Ֆայլի ներմուծման սխալ․ խնդրում ենք թարմացնել էջը և նորից փորձել։"
-    },
-    "download_completed": "Ներբեռնումն ավարտված է",
     "action": {
-        "open": "Բացել",
-        "dismiss": "Հեռացնել"
+        "dismiss": "Հեռացնել",
+        "open": "Բացել"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Հետ գնացեք բրաուզեր մուտք գործելն ավարտելու համար"
     },
-    "unknown_device": "Անծանոթ սարք",
-    "powered_by_matrix": "Սնուցվում է Matrixի կողմից",
-    "use_brand_on_mobile": "Օգտագործում է %(brand)s հեռախոսի վրա",
-    "incompatible_browser": {
-        "title": "Չհամապատասխանող բրաուզեր",
-        "summary": "Ձեր բրաուզերը չի թողարկում %(brand)s",
-        "continue_warning": "Ես գնահատում եմ ռիսկերն ու ցանկանում եմ շարունակել"
-    },
-    "go_to_element_io": "Այցելեք element.io",
-    "failed_to_start": "Չի ստացվում սկսել",
-    "welcome_to_element": "Բարի գալուստ Element",
     "common": {
-        "sign_in": "Մուտք գործել",
         "create_account": "Ստեղծել օգտահաշիվ",
-        "explore_rooms": "Փնտրել սենյակներ"
-    }
+        "explore_rooms": "Փնտրել սենյակներ",
+        "sign_in": "Մուտք գործել"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Ներբեռնումն ավարտված է",
+    "error": {
+        "app_launch_unexpected_error": "Unexpected error preparing the app. See console for details.",
+        "cannot_load_config": "Ֆայլի ներմուծման սխալ․ խնդրում ենք թարմացնել էջը և նորից փորձել։",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "Invalid configuration: no default server specified.",
+        "invalid_json": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
+        "invalid_json_detail": "The message from the parser is: %(message)s",
+        "invalid_json_generic": "Չաշխատող JSON",
+        "misconfigured": "Ձեր Element֊ը սխալ է կարգավորված"
+    },
+    "failed_to_start": "Չի ստացվում սկսել",
+    "go_to_element_io": "Այցելեք element.io",
+    "incompatible_browser": {
+        "browser_links": "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
+        "continue_warning": "Ես գնահատում եմ ռիսկերն ու ցանկանում եմ շարունակել",
+        "feature_warning": "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
+        "features": "%(brand)s uses advanced browser features which aren't supported by your current browser.",
+        "summary": "Ձեր բրաուզերը չի թողարկում %(brand)s",
+        "title": "Չհամապատասխանող բրաուզեր"
+    },
+    "powered_by_matrix": "Սնուցվում է Matrixի կողմից",
+    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
+    "unknown_device": "Անծանոթ սարք",
+    "use_brand_on_mobile": "Օգտագործում է %(brand)s հեռախոսի վրա",
+    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
+    "welcome_to_element": "Բարի գալուստ Element"
 }

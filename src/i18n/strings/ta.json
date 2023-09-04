@@ -1,41 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_no_server": "தவறான உள்ளமைவு: இயல்புநிலை சேவையகம் குறிப்பிடப்படவில்லை.",
-        "misconfigured": "உங்கள் எலிமெண்ட் தவறாக உள்ளமைக்கப்பட்டுள்ளது",
-        "invalid_json": "உங்கள் எலிமெண்ட் உள்ளமைவில் தவறான JSON உள்ளது. தயவுசெய்து இதை சரிசெய்து பக்கத்தை மீண்டும் ஏற்றவும்.",
-        "invalid_json_detail": "பாகுபடுத்தி அனுப்பிய செய்தி: %(message)s",
-        "invalid_json_generic": "தவறான JSON",
-        "cannot_load_config": "கட்டமைப்பு கோப்பை ஏற்ற முடியவில்லை: மீண்டும் முயற்சிக்க பக்கத்தைப் புதுப்பிக்கவும்.",
-        "app_launch_unexpected_error": "பயன்பாட்டைத் தயார் செய்வதில் எதிர்பாராத பிழை. விவரங்களுக்கு console ஐப் பார்க்கவும்."
-    },
-    "download_completed": "பதிவிறக்கம் முடிவடைந்தது",
     "action": {
-        "open": "திற",
-        "dismiss": "நீக்கு"
+        "dismiss": "நீக்கு",
+        "open": "திற"
     },
-    "desktop_default_device_name": "%(brand)s டெஸ்க்டாப்: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "உள்நுழைவை முடிவுசெய்ய உங்கள் உலாவிக்குச் செல்லவும்"
     },
-    "unknown_device": "அறியப்படாத சாதனம்",
-    "web_default_device_name": "%(appName)s: %(browserName)s இல் %(osName)s",
-    "powered_by_matrix": "மேட்ரிக்ஸ் மூலம் இயக்கப்படுகிறது",
-    "use_brand_on_mobile": "%(brand)s ஐ திறன்பேசியில் பயன்படுத்தவும்",
-    "incompatible_browser": {
-        "title": "ஆதரிக்கப்படாத உலாவி",
-        "summary": "உங்கள் உலாவியில் %(brand)s ஐ இயக்க முடியாது",
-        "features": "%(brand)s உங்கள் தற்போதைய உலாவியால் ஆதரிக்கப்படாத மேம்பட்ட உலாவி அம்சங்களைப் பயன்படுத்துகிறது.",
-        "browser_links": "சிறந்த அனுபவத்திற்காக <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, அல்லது அதை <safariLink>Safari</safariLink> ஐ நிறுவவும்.",
-        "feature_warning": "உங்கள் தற்போதைய உலாவியை நீங்கள் தொடர்ந்து பயன்படுத்தலாம், ஆனால் சில அல்லது அனைத்து அம்சங்களும் செயல்படாமல் போகலாம் மற்றும் பயன்பாட்டின் தோற்றமும் உணர்வும் தவறாக இருக்கலாம்.",
-        "continue_warning": "நான் அபாயங்களைப் புரிந்துகொண்டு தொடர விரும்புகிறேன்"
-    },
-    "go_to_element_io": "element.io க்குச் செல்லவும்",
-    "failed_to_start": "துவங்குவதில் தோல்வி",
-    "welcome_to_element": "எலிமெண்டிற்க்கு வரவேற்க்கிறோம்",
-    "powered_by_matrix_with_logo": "மேட்ரிக்ஸ் இனால் செயற்படுத்தபடுகின்ற பரவலாக்கப்பட்ட, மறைகுறியாக்கப்பட்ட , உரையாடல் மற்றும் ஒத்துழைப்பு பயன்பாட்டை",
     "common": {
-        "sign_in": "உள்நுழைக",
         "create_account": "உங்கள் கணக்கை துவங்குங்கள்",
-        "explore_rooms": "அறைகளை ஆராயுங்கள்"
-    }
+        "explore_rooms": "அறைகளை ஆராயுங்கள்",
+        "sign_in": "உள்நுழைக"
+    },
+    "desktop_default_device_name": "%(brand)s டெஸ்க்டாப்: %(platformName)s",
+    "download_completed": "பதிவிறக்கம் முடிவடைந்தது",
+    "error": {
+        "app_launch_unexpected_error": "பயன்பாட்டைத் தயார் செய்வதில் எதிர்பாராத பிழை. விவரங்களுக்கு console ஐப் பார்க்கவும்.",
+        "cannot_load_config": "கட்டமைப்பு கோப்பை ஏற்ற முடியவில்லை: மீண்டும் முயற்சிக்க பக்கத்தைப் புதுப்பிக்கவும்.",
+        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
+        "invalid_configuration_no_server": "தவறான உள்ளமைவு: இயல்புநிலை சேவையகம் குறிப்பிடப்படவில்லை.",
+        "invalid_json": "உங்கள் எலிமெண்ட் உள்ளமைவில் தவறான JSON உள்ளது. தயவுசெய்து இதை சரிசெய்து பக்கத்தை மீண்டும் ஏற்றவும்.",
+        "invalid_json_detail": "பாகுபடுத்தி அனுப்பிய செய்தி: %(message)s",
+        "invalid_json_generic": "தவறான JSON",
+        "misconfigured": "உங்கள் எலிமெண்ட் தவறாக உள்ளமைக்கப்பட்டுள்ளது"
+    },
+    "failed_to_start": "துவங்குவதில் தோல்வி",
+    "go_to_element_io": "element.io க்குச் செல்லவும்",
+    "incompatible_browser": {
+        "browser_links": "சிறந்த அனுபவத்திற்காக <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, அல்லது அதை <safariLink>Safari</safariLink> ஐ நிறுவவும்.",
+        "continue_warning": "நான் அபாயங்களைப் புரிந்துகொண்டு தொடர விரும்புகிறேன்",
+        "feature_warning": "உங்கள் தற்போதைய உலாவியை நீங்கள் தொடர்ந்து பயன்படுத்தலாம், ஆனால் சில அல்லது அனைத்து அம்சங்களும் செயல்படாமல் போகலாம் மற்றும் பயன்பாட்டின் தோற்றமும் உணர்வும் தவறாக இருக்கலாம்.",
+        "features": "%(brand)s உங்கள் தற்போதைய உலாவியால் ஆதரிக்கப்படாத மேம்பட்ட உலாவி அம்சங்களைப் பயன்படுத்துகிறது.",
+        "summary": "உங்கள் உலாவியில் %(brand)s ஐ இயக்க முடியாது",
+        "title": "ஆதரிக்கப்படாத உலாவி"
+    },
+    "powered_by_matrix": "மேட்ரிக்ஸ் மூலம் இயக்கப்படுகிறது",
+    "powered_by_matrix_with_logo": "மேட்ரிக்ஸ் இனால் செயற்படுத்தபடுகின்ற பரவலாக்கப்பட்ட, மறைகுறியாக்கப்பட்ட , உரையாடல் மற்றும் ஒத்துழைப்பு பயன்பாட்டை",
+    "unknown_device": "அறியப்படாத சாதனம்",
+    "use_brand_on_mobile": "%(brand)s ஐ திறன்பேசியில் பயன்படுத்தவும்",
+    "web_default_device_name": "%(appName)s: %(browserName)s இல் %(osName)s",
+    "welcome_to_element": "எலிமெண்டிற்க்கு வரவேற்க்கிறோம்"
 }

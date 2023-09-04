@@ -1,42 +1,42 @@
 {
-    "error": {
-        "invalid_configuration_mixed_server": "Neplatná konfigurace: default_hs_url nelze použít spolu s default_server_name nebo default_server_config",
-        "invalid_configuration_no_server": "Neplatná konfigurace: není zadán výchozí server.",
-        "misconfigured": "Váš Element je nesprávně nastaven",
-        "invalid_json": "Vaše konfigurace Elementu obsahuje nesprávná data JSON. Vyřešte prosím problém a načtěte znovu stránku.",
-        "invalid_json_detail": "Zpráva z parseru je: %(message)s",
-        "invalid_json_generic": "Neplatný JSON",
-        "cannot_load_config": "Nepodařilo se načíst konfigurační soubor: abyste to zkusili znovu, načtěte prosím znovu stránku.",
-        "app_launch_unexpected_error": "Neočekávaná chyba při přípravě aplikace. Podrobnosti najdete v konzoli."
-    },
-    "download_completed": "Stahování dokončeno",
     "action": {
-        "open": "Otevřít",
-        "dismiss": "Zavřít"
+        "dismiss": "Zavřít",
+        "open": "Otevřít"
     },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "auth": {
         "sso_complete_in_browser_dialog_title": "Přejděte do prohlížeče a dokončete přihlášení"
     },
-    "unknown_device": "Neznámé zařízení",
-    "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "powered_by_matrix": "Běží na Matrixu",
-    "use_brand_on_mobile": "Používání %(brand)s v mobilních zařízeních",
-    "incompatible_browser": {
-        "title": "Nepodporovaný prohlížeč",
-        "summary": "Váš prohlížeč nedokáže spustit %(brand)s",
-        "features": "%(brand)s využívá pokročilých funkcí prohlížeče, které ten váš nepodporuje.",
-        "browser_links": "Pro nejlepší zážitek si prosím nainstalujte prohlížeč <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, nebo <safariLink>Safari</safariLink>.",
-        "feature_warning": "Můžete pokračovat v užívání vašeho současného prohlížeče, ale některé (nebo dokonce všechny) funkce nemusí fungovat a vzhled a chování aplikace nemusí být správné.",
-        "continue_warning": "Rozumím a přesto chci pokračovat"
-    },
-    "go_to_element_io": "Přejít na element.io",
-    "failed_to_start": "Nepovedlo se nastartovat",
-    "welcome_to_element": "Vítá vás Element",
-    "powered_by_matrix_with_logo": "Decentralizovaný, šifrovaný chat a spolupráce na platformě $matrixLogo",
     "common": {
-        "sign_in": "Přihlásit se",
         "create_account": "Vytvořit účet",
-        "explore_rooms": "Procházet místnosti"
-    }
+        "explore_rooms": "Procházet místnosti",
+        "sign_in": "Přihlásit se"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "download_completed": "Stahování dokončeno",
+    "error": {
+        "app_launch_unexpected_error": "Neočekávaná chyba při přípravě aplikace. Podrobnosti najdete v konzoli.",
+        "cannot_load_config": "Nepodařilo se načíst konfigurační soubor: abyste to zkusili znovu, načtěte prosím znovu stránku.",
+        "invalid_configuration_mixed_server": "Neplatná konfigurace: default_hs_url nelze použít spolu s default_server_name nebo default_server_config",
+        "invalid_configuration_no_server": "Neplatná konfigurace: není zadán výchozí server.",
+        "invalid_json": "Vaše konfigurace Elementu obsahuje nesprávná data JSON. Vyřešte prosím problém a načtěte znovu stránku.",
+        "invalid_json_detail": "Zpráva z parseru je: %(message)s",
+        "invalid_json_generic": "Neplatný JSON",
+        "misconfigured": "Váš Element je nesprávně nastaven"
+    },
+    "failed_to_start": "Nepovedlo se nastartovat",
+    "go_to_element_io": "Přejít na element.io",
+    "incompatible_browser": {
+        "browser_links": "Pro nejlepší zážitek si prosím nainstalujte prohlížeč <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, nebo <safariLink>Safari</safariLink>.",
+        "continue_warning": "Rozumím a přesto chci pokračovat",
+        "feature_warning": "Můžete pokračovat v užívání vašeho současného prohlížeče, ale některé (nebo dokonce všechny) funkce nemusí fungovat a vzhled a chování aplikace nemusí být správné.",
+        "features": "%(brand)s využívá pokročilých funkcí prohlížeče, které ten váš nepodporuje.",
+        "summary": "Váš prohlížeč nedokáže spustit %(brand)s",
+        "title": "Nepodporovaný prohlížeč"
+    },
+    "powered_by_matrix": "Běží na Matrixu",
+    "powered_by_matrix_with_logo": "Decentralizovaný, šifrovaný chat a spolupráce na platformě $matrixLogo",
+    "unknown_device": "Neznámé zařízení",
+    "use_brand_on_mobile": "Používání %(brand)s v mobilních zařízeních",
+    "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
+    "welcome_to_element": "Vítá vás Element"
 }
