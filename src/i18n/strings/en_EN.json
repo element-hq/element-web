@@ -12,7 +12,10 @@
     "download_completed": "Download Completed",
     "action": {
         "open": "Open",
-        "dismiss": "Dismiss"
+        "dismiss": "Dismiss",
+        "sign_in": "Sign In",
+        "create_account": "Create Account",
+        "explore_rooms": "Explore rooms"
     },
     "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "auth": {
@@ -33,10 +36,5 @@
     "go_to_element_io": "Go to element.io",
     "failed_to_start": "Failed to start",
     "welcome_to_element": "Welcome to Element",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
-    "common": {
-        "sign_in": "Sign In",
-        "create_account": "Create Account",
-        "explore_rooms": "Explore rooms"
-    }
+    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo"
 }

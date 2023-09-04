@@ -273,7 +273,7 @@ describe("loading:", function () {
                     await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
                     // we expect a single <Login> component
                     await screen.findByRole("main");
-                    screen.getAllByText("Sign in");
+                    screen.getAllByText("Sign In");
 
                     // the only outstanding request should be a GET /login
                     // (in particular there should be no /register request for
@@ -378,7 +378,7 @@ describe("loading:", function () {
                 await awaitRoomView(matrixChat);
 
                 await screen.findByLabelText("Spaces");
-                expect(screen.queryAllByText("Sign in")).toHaveLength(0);
+                expect(screen.queryAllByText("Sign In")).toHaveLength(0);
             });
         });
     });
@@ -544,7 +544,7 @@ describe("loading:", function () {
             it("should give us a login page", async function () {
                 // we expect a single <Login> component
                 await screen.findByRole("main");
-                screen.getAllByText("Sign in");
+                screen.getAllByText("Sign In");
 
                 expect(windowLocation?.hash).toEqual("#/login");
             });
@@ -631,7 +631,7 @@ describe("loading:", function () {
         // Enter login details
         fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_username")!, { target: { value: "user" } });
         fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_password")!, { target: { value: "pass" } });
-        fireEvent.click(screen.getByText("Sign in", { selector: ".mx_Login_submit" }));
+        fireEvent.click(screen.getByText("Sign In", { selector: ".mx_Login_submit" }));
 
         return httpBackend
             .flush(undefined)
