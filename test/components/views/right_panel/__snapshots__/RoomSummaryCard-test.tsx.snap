@@ -70,13 +70,6 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </span>
         </div>
         <div
-          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_search"
-          role="button"
-          tabindex="0"
-        >
-          Search
-        </div>
-        <div
           class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_files"
           role="button"
           tabindex="0"

@@ -343,14 +343,16 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose, on
                     {_t("common|people")}
                     <span className="mx_BaseCard_Button_sublabel">{memberCount}</span>
                 </Button>
-                <Button
-                    className="mx_RoomSummaryCard_icon_search"
-                    onClick={() => {
-                        onSearchClick?.();
-                    }}
-                >
-                    {_t("Search")}
-                </Button>
+                {SettingsStore.getValue("feature_new_room_decoration_ui") && (
+                    <Button
+                        className="mx_RoomSummaryCard_icon_search"
+                        onClick={() => {
+                            onSearchClick?.();
+                        }}
+                    >
+                        {_t("Search")}
+                    </Button>
+                )}
                 {!isVideoRoom && (
                     <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>
                         {_t("Files")}
