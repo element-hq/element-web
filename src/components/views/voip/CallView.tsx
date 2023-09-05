@@ -259,23 +259,23 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabledTooltip, con
                         kind="audio"
                         devices={audioInputs}
                         setDevice={setAudioInput}
-                        deviceListLabel={_t("Audio devices")}
+                        deviceListLabel={_t("voip|audio_devices")}
                         muted={audioMuted}
                         disabled={connecting}
                         toggle={toggleAudio}
-                        unmutedTitle={_t("Mute microphone")}
-                        mutedTitle={_t("Unmute microphone")}
+                        unmutedTitle={_t("voip|disable_microphone")}
+                        mutedTitle={_t("voip|enable_microphone")}
                     />
                     <DeviceButton
                         kind="video"
                         devices={videoInputs}
                         setDevice={setVideoInput}
-                        deviceListLabel={_t("Video devices")}
+                        deviceListLabel={_t("voip|video_devices")}
                         muted={videoMuted}
                         disabled={connecting}
                         toggle={toggleVideo}
-                        unmutedTitle={_t("Turn off camera")}
-                        mutedTitle={_t("Turn on camera")}
+                        unmutedTitle={_t("voip|disable_camera")}
+                        mutedTitle={_t("voip|enable_camera")}
                     />
                 </div>
             </div>

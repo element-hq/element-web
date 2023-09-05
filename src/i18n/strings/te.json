@@ -1,12 +1,10 @@
 {
     "Account": "ఖాతా",
-    "Admin": "అడ్మిన్",
     "Admin Tools": "నిర్వాహకుని ఉపకరణాలు",
     "No Microphones detected": "మైక్రోఫోన్లు కనుగొనబడలేదు",
     "No Webcams detected": "వెబ్కామ్లు కనుగొనబడలేదు",
     "No media permissions": "మీడియా అనుమతులు లేవు",
     "Default Device": "డిఫాల్ట్ పరికరం",
-    "Advanced": "ఆధునిక",
     "Authentication": "ప్రామాణీకరణ",
     "You do not have permission to post to this room": "మీకు ఈ గదికి పోస్ట్ చేయడానికి అనుమతి లేదు",
     "A new password must be entered.": "కొత్త పాస్ వర్డ్ ను తప్పక నమోదు చేయాలి.",
@@ -77,10 +75,8 @@
     "Noisy": "శబ్దం",
     "Failed to add tag %(tagName)s to room": "%(tagName)s ను బొందు జోడించడంలో విఫలమైంది",
     "No update available.": "ఏ నవీకరణ అందుబాటులో లేదు.",
-    "Collecting app version information": "అనువర్తన సంస్కరణ సమాచారాన్ని సేకరించడం",
     "Tuesday": "మంగళవారం",
     "Monday": "సోమవారం",
-    "Collecting logs": "నమోదు సేకరించడం",
     "All Rooms": "అన్ని గదులు",
     "Wednesday": "బుధవారం",
     "Send": "పంపండి",
@@ -97,7 +93,6 @@
     "This email address is already in use": "ఈ ఇమెయిల్ అడ్రస్ ఇప్పటికే వాడుకం లో ఉంది",
     "This phone number is already in use": "ఈ ఫోన్ నంబర్ ఇప్పటికే వాడుకం లో ఉంది",
     "Failed to verify email address: make sure you clicked the link in the email": "ఇమెయిల్ అడ్రస్ ని నిరూపించలేక పోయాము. ఈమెయిల్ లో వచ్చిన లింక్ ని నొక్కారా",
-    "Call Failed": "కాల్ విఫలమయింది",
     "Confirm adding email": "ఈమెయిల్ చేర్చుటకు ధ్రువీకరించు",
     "Single Sign On": "సింగిల్ సైన్ ఆన్",
     "common": {
@@ -128,7 +123,9 @@
         "admin": "అడ్మిన్"
     },
     "bug_reporting": {
-        "send_logs": "నమోదును పంపు"
+        "send_logs": "నమోదును పంపు",
+        "collecting_information": "అనువర్తన సంస్కరణ సమాచారాన్ని సేకరించడం",
+        "collecting_logs": "నమోదు సేకరించడం"
     },
     "settings": {
         "always_show_message_timestamps": "ఎల్లప్పుడూ సందేశాల సమయ ముద్రలు చూపించు",
@@ -147,6 +144,12 @@
     },
     "slash_command": {
         "nick": "మీ ప్రదర్శన మారుపేరుని మారుస్తుంది",
-        "ban": "ఇచ్చిన ఐడి తో వినియోగదారుని నిషేధించారు"
+        "ban": "ఇచ్చిన ఐడి తో వినియోగదారుని నిషేధించారు",
+        "category_admin": "అడ్మిన్",
+        "category_advanced": "ఆధునిక"
+    },
+    "Advanced": "ఆధునిక",
+    "voip": {
+        "call_failed": "కాల్ విఫలమయింది"
     }
 }

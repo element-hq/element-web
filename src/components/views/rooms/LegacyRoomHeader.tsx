@@ -112,8 +112,8 @@ const VoiceCallButton: FC<VoiceCallButtonProps> = ({ room, busy, setBusy, behavi
         <AccessibleTooltipButton
             className="mx_LegacyRoomHeader_button mx_LegacyRoomHeader_voiceCallButton"
             onClick={onClick}
-            title={_t("Voice call")}
-            tooltip={tooltip ?? _t("Voice call")}
+            title={_t("voip|voice_call")}
+            tooltip={tooltip ?? _t("voip|voice_call")}
             alignment={Alignment.Bottom}
             disabled={disabled || busy}
         />
@@ -228,8 +228,8 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
                 inputRef={buttonRef}
                 className="mx_LegacyRoomHeader_button mx_LegacyRoomHeader_videoCallButton"
                 onClick={onClick}
-                title={_t("Video call")}
-                tooltip={tooltip ?? _t("Video call")}
+                title={_t("voip|video_call")}
+                tooltip={tooltip ?? _t("voip|video_call")}
                 alignment={Alignment.Bottom}
                 disabled={disabled || busy}
             />

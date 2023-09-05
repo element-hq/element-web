@@ -175,10 +175,10 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
             </Box>
             <Flex as="nav" align="center" gap="var(--cpd-space-2x)">
                 {!useElementCallExclusively && (
-                    <Tooltip label={!voiceCallDisabledReason ? _t("Voice call") : voiceCallDisabledReason!}>
+                    <Tooltip label={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}>
                         <IconButton
                             disabled={!!voiceCallDisabledReason}
-                            title={!voiceCallDisabledReason ? _t("Voice call") : voiceCallDisabledReason!}
+                            title={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}
                             onClick={(evt) => {
                                 evt.stopPropagation();
                                 placeCall(room, CallType.Voice, voiceCallType);
@@ -188,10 +188,10 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                         </IconButton>
                     </Tooltip>
                 )}
-                <Tooltip label={!videoCallDisabledReason ? _t("Video call") : videoCallDisabledReason!}>
+                <Tooltip label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}>
                     <IconButton
                         disabled={!!videoCallDisabledReason}
-                        title={!videoCallDisabledReason ? _t("Video call") : videoCallDisabledReason!}
+                        title={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}
                         onClick={(evt) => {
                             evt.stopPropagation();
                             placeCall(room, CallType.Video, videoCallType);

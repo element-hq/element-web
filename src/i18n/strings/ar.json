@@ -10,9 +10,7 @@
     "All Rooms": "كل الغُرف",
     "All messages": "كل الرسائل",
     "What's New": "آخِر المُستجدّات",
-    "Collecting logs": "تجميع السجلات",
     "No update available.": "لا يوجد هناك أي تحديث.",
-    "Collecting app version information": "تجميع المعلومات حول نسخة التطبيق",
     "Changelog": "سِجل التغييرات",
     "Waiting for response from server": "في انتظار الرد مِن الخادوم",
     "Thank you!": "شكرًا !",
@@ -31,7 +29,6 @@
     "Unable to load! Check your network connectivity and try again.": "تعذر التحميل! افحص اتصالك بالشبكة وأعِد المحاولة.",
     "Call failed due to misconfigured server": "فشل الاتصال بسبب سوء ضبط الخادوم",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "من فضلك اطلب من مسؤول الخادوم المنزل الذي تستعمله (<code>%(homeserverDomain)s</code>) أن يضبط خادوم TURN كي تعمل الاتصالات بنحوٍ يكون محط ثقة.",
-    "Call Failed": "فشل الاتصال",
     "Permission Required": "التصريح مطلوب",
     "You do not have permission to start a conference call in this room": "ينقصك تصريح بدء مكالمة جماعية في هذه الغرفة",
     "The file '%(fileName)s' failed to upload.": "فشل رفع الملف ”%(fileName)s“.",
@@ -82,7 +79,6 @@
     "Default": "المبدئي",
     "Restricted": "مقيد",
     "Moderator": "مشرف",
-    "Admin": "مدير",
     "Failed to invite": "فشلت الدعوة",
     "Operation failed": "فشلت العملية",
     "You need to be logged in.": "عليك الولوج.",
@@ -97,12 +93,7 @@
     "Missing room_id in request": "رقم الغرفة مفقود في الطلب",
     "Room %(roomId)s not visible": "الغرفة %(roomId)s غير مرئية",
     "Missing user_id in request": "رقم المستخدم مفقود في الطلب",
-    "Messages": "الرسائل",
-    "Actions": "الإجراءات",
-    "Advanced": "متقدم",
-    "Other": "أخرى",
     "Command error": "خطأ في الأمر",
-    "Usage": "الاستخدام",
     "Error upgrading room": "خطأ في ترقية الغرفة",
     "Double check that your server supports the room version chosen and try again.": "تحقق مرة أخرى من أن سيرفرك يدعم إصدار الغرفة المختار وحاول مرة أخرى.",
     "Use an identity server": "خادوم التعريف",
@@ -287,7 +278,6 @@
     "Admin Tools": "أدوات المدير",
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "تعذر إبطال الدعوة. قد يواجه الخادم مشكلة مؤقتة أو ليس لديك صلاحيات كافية لإلغاء الدعوة.",
     "Failed to revoke invite": "تعذر إبطال الدعوة",
-    "Stickerpack": "حزمة الملصقات",
     "Add some now": "أضف البعض الآن",
     "You don't currently have any stickerpacks enabled": "ليس لديك حاليًا أي حزم ملصقات ممكّنة",
     "Failed to connect to integration manager": "تعذر الاتصال بمدير التكامل",
@@ -358,7 +348,6 @@
     "Sign Up": "سجل",
     "Join the conversation with an account": "انضم للمحادثة بحساب",
     "Historical": "تاريخي",
-    "System Alerts": "تنبيهات النظام",
     "Low priority": "أولوية منخفضة",
     "Explore public rooms": "استكشف الغرف العامة",
     "Add room": "أضف غرفة",
@@ -392,13 +381,6 @@
     "You do not have permission to post to this room": "ليس لديك إذن للنشر في هذه الغرفة",
     "This room has been replaced and is no longer active.": "تم استبدال هذه الغرفة ولم تعد نشطة.",
     "The conversation continues here.": "تستمر المحادثة هنا.",
-    "Send a message…": "أرسل رسالة …",
-    "Send an encrypted message…": "أرسل رسالة مشفرة …",
-    "Send a reply…": "أرسل جواباً …",
-    "Send an encrypted reply…": "أرسل جواباً مشفراً …",
-    "Hangup": "إنهاء المكالمة",
-    "Video call": "مكالمة مرئية",
-    "Voice call": "مكالمة صوتية",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (قوة %(powerLevelNumber)s)",
     "Filter room members": "تصفية أعضاء الغرفة",
     "Invited": "مدعو",
@@ -656,11 +638,8 @@
     "You've successfully verified this user.": "لقد نجحت في التحقق من هذا المستخدم.",
     "Verified!": "تم التحقق!",
     "The other party cancelled the verification.": "ألغى الطرف الآخر التحقق.",
-    "Unknown caller": "متصل غير معروف",
     "This is your list of users/servers you have blocked - don't leave the room!": "هذه قائمتك للمستخدمين / الخوادم التي حظرت - لا تغادر الغرفة!",
     "My Ban List": "قائمة الحظر",
-    "Downloading logs": "تحميل السجلات",
-    "Uploading logs": "رفع السجلات",
     "IRC display name width": "عرض الاسم الظاهر لIRC",
     "Manually verify all remote sessions": "تحقق يدويًا من جميع الاتصالات البعيدة",
     "How fast should messages be downloaded.": "ما مدى سرعة تنزيل الرسائل.",
@@ -678,16 +657,6 @@
     "Use custom size": "استخدام حجم مخصص",
     "Font size": "حجم الخط",
     "Change notification settings": "تغيير إعدادات الإشعار",
-    "%(senderName)s is calling": "%(senderName)s يتصل",
-    "Waiting for answer": "بانتظار الرد",
-    "%(senderName)s started a call": "%(senderName)s بدأ مكالمة",
-    "You started a call": "لقد بدأت مكالمة",
-    "Call ended": "انتهت المكالمة",
-    "%(senderName)s ended the call": "%(senderName)s أنهى المكالمة",
-    "You ended the call": "لقد أنهيتَ المكالمة",
-    "Call in progress": "مكالمتك تحت الإجراء",
-    "%(senderName)s joined the call": "%(senderName)s انضم للمكالمة",
-    "You joined the call": "لقد انضممت إلى المكالمة",
     "Please contact your homeserver administrator.": "يُرجى تواصلك مع مدير خادمك.",
     "New version of %(brand)s is available": "يتوفر إصدار جديد من %(brand)s",
     "Update %(brand)s": "حدّث: %(brand)s",
@@ -745,13 +714,6 @@
     "Muted Users": "المستخدمون المكتومون",
     "Privileged Users": "المستخدمون المميزون",
     "No users have specific privileges in this room": "لا يوجد مستخدمين لديهم امتيازات خاصة في هذه الغرفة",
-    "Notify everyone": "إشعار الجميع",
-    "Remove messages sent by others": "حذف رسائل الآخرين",
-    "Ban users": "حظر المستخدمين",
-    "Change settings": "تغيير الإعدادات",
-    "Send messages": "إرسال الرسائل",
-    "Invite users": "دعوة المستخدمين",
-    "Default role": "الدور الاعتيادي",
     "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "تعذر تغيير مستوى قوة المستخدم. تأكد من أن لديك صلاحيات كافية وحاول مرة أخرى.",
     "Error changing power level": "تعذر تغيير مستوى القوة",
     "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "تعذر تغيير مستوى قوة الغرفة. تأكد من أن لديك صلاحيات كافية وحاول مرة أخرى.",
@@ -759,15 +721,6 @@
     "Banned by %(displayName)s": "حظره %(displayName)s",
     "Unban": "فك الحظر",
     "Failed to unban": "تعذر فك الحظر",
-    "Modify widgets": "تعديل عناصر الواجهة",
-    "Enable room encryption": "تفعيل تشفير الغرفة",
-    "Upgrade the room": "ترقية الغرفة",
-    "Change topic": "تغيير الموضوع",
-    "Change permissions": "تغيير الصلاحيات",
-    "Change history visibility": "تغيير ظهور التاريخ",
-    "Change main address for the room": "تغيير العنوان الأساسي للغرفة",
-    "Change room name": "تغيير اسم الغرفة",
-    "Change room avatar": "تغيير صورة الغرفة",
     "Browse": "تصفح",
     "Set a new custom sound": "تعيين صوت مخصص جديد",
     "Notification sound": "صوت الإشعار",
@@ -793,9 +746,7 @@
     "You may need to manually permit %(brand)s to access your microphone/webcam": "قد تحتاج إلى السماح يدويًا ل%(brand)s s بالوصول إلى الميكروفون / كاميرا الويب",
     "No media permissions": "لا إذن للوسائط",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "قام مسؤول الخادم بتعطيل التشفير من طرف إلى طرف أصلاً في الغرف الخاصة والرسائل الخاصّة.",
-    "Cross-signing": "التوقيع المتبادل",
     "Message search": "بحث الرسائل",
-    "Secure Backup": "تأمين النسخ الاحتياطي",
     "Reject all %(invitedRooms)s invites": "رفض كل الدعوات (%(invitedRooms)s)",
     "Accept all %(invitedRooms)s invites": "قبول كل الدعوات (%(invitedRooms)s)",
     "Bulk options": "خيارات مجمعة",
@@ -918,11 +869,6 @@
     "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s حدَّث قاعدة حظر الغرفة المطابقة %(glob)s بسبب %(reason)s",
     "Takes the call in the current room off hold": "يوقف المكالمة في الغرفة الحالية",
     "Places the call in the current room on hold": "يضع المكالمة في الغرفة الحالية قيد الانتظار",
-    "No other application is using the webcam": "أنّ كمرة الوِب لا تستعملها تطبيقات أخرى",
-    "Permission is granted to use the webcam": "أنّك منحت تصريحًا لاستعمال كمرة الوِب",
-    "A microphone and webcam are plugged in and set up correctly": "أنّك وصلت ميكروفونًا وكمرة وِب كما ينبغي",
-    "Unable to access webcam / microphone": "تعذر الوصول إلى كاميرا الوِب / الميكروفون",
-    "Unable to access microphone": "تعذر الوصول إلى الميكروفون",
     "Cuba": "كوبا",
     "Croatia": "كرواتيا",
     "Costa Rica": "كوستا ريكا",
@@ -979,12 +925,8 @@
     "Algeria": "الجزائر",
     "Åland Islands": "جزر آلاند",
     "We couldn't log you in": "تعذر الولوج",
-    "You're already in a call with this person.": "أنت تُجري مكالمة مع هذا الشخص فعلًا.",
-    "Already in call": "تُجري مكالمة فعلًا",
     "You've reached the maximum number of simultaneous calls.": "لقد بلغت الحد الأقصى من المكالمات المتزامنة.",
     "Too Many Calls": "مكالمات كثيرة جدا",
-    "Call failed because webcam or microphone could not be accessed. Check that:": "فشلت المكالمة لتعذر الوصول إلى كمرة الوِب أو الميكرفون. تأكّد من:",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "فشلت المكالمة لتعذر الوصول إلى الميكرفون. تأكّد من وصل الميكرفون وضبطه كما ينبغي.",
     "Explore rooms": "استكشِف الغرف",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "قد يؤدي استخدام عنصر واجهة المستخدم هذا إلى مشاركة البيانات <helpIcon /> مع %(widgetDomain)s ومدير التكامل الخاص بك.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "يتلقى مديرو التكامل بيانات الضبط، ويمكنهم تعديل عناصر واجهة المستخدم، وإرسال دعوات الغرف، وتعيين مستويات القوة نيابة عنك.",
@@ -1109,8 +1051,6 @@
     "User Busy": "المستخدم مشغول",
     "You cannot place calls without a connection to the server.": "لا يمكنك إجراء المكالمات دون اتصال بالخادوم.",
     "Connectivity to the server has been lost": "فُقد الاتصال بالخادوم",
-    "You cannot place calls in this browser.": "لا يمكنك إجراء المكالمات في هذا المتصفّح.",
-    "Calls are unsupported": "المكالمات غير مدعومة",
     "%(user1)s and %(user2)s": "%(user1)s و %(user2)s",
     "Empty room": "غرفة فارغة",
     "common": {
@@ -1152,7 +1092,11 @@
         "encrypted": "التشفير",
         "trusted": "موثوق",
         "not_trusted": "غير موثوق",
-        "unnamed_room": "غرفة بدون اسم"
+        "unnamed_room": "غرفة بدون اسم",
+        "stickerpack": "حزمة الملصقات",
+        "system_alerts": "تنبيهات النظام",
+        "secure_backup": "تأمين النسخ الاحتياطي",
+        "cross_signing": "التوقيع المتبادل"
     },
     "action": {
         "continue": "واصِل",
@@ -1221,7 +1165,11 @@
     "composer": {
         "format_bold": "ثخين",
         "format_strikethrough": "مشطوب",
-        "format_code_block": "كتلة برمجية"
+        "format_code_block": "كتلة برمجية",
+        "placeholder_reply_encrypted": "أرسل جواباً مشفراً …",
+        "placeholder_reply": "أرسل جواباً …",
+        "placeholder_encrypted": "أرسل رسالة مشفرة …",
+        "placeholder": "أرسل رسالة …"
     },
     "Bold": "ثخين",
     "power_level": {
@@ -1236,7 +1184,11 @@
         "matrix_security_issue": "للإبلاغ عن مشكلة أمنية متعلقة بMatrix ، يرجى قراءة <a>سياسة الإفصاح الأمني</a> في Matrix.org.",
         "submit_debug_logs": "إرسال سجلات تصحيح الأخطاء",
         "title": "الإبلاغ عن مشاكل في البرنامج",
-        "send_logs": "إرسال السِجلات"
+        "send_logs": "إرسال السِجلات",
+        "collecting_information": "تجميع المعلومات حول نسخة التطبيق",
+        "collecting_logs": "تجميع السجلات",
+        "uploading_logs": "رفع السجلات",
+        "downloading_logs": "تحميل السجلات"
     },
     "time": {
         "date_at_time": "%(date)s في %(time)s"
@@ -1275,7 +1227,8 @@
     "devtools": {
         "state_key": "مفتاح الحالة",
         "toolbox": "علبة الأدوات",
-        "developer_tools": "أدوات التطوير"
+        "developer_tools": "أدوات التطوير",
+        "category_other": "أخرى"
     },
     "timeline": {
         "m.call.invite": {
@@ -1356,6 +1309,9 @@
                 "other": "%(names)s و %(count)s آخرون يكتبون…",
                 "one": "%(names)s وآخر يكتبون…"
             }
+        },
+        "m.call.hangup": {
+            "dm": "انتهت المكالمة"
         }
     },
     "slash_command": {
@@ -1383,7 +1339,13 @@
         "help": "يعرض قائمة الأوامر مع الوصف وطرق الاستخدام",
         "whois": "يعرض معلومات عن المستخدم",
         "rageshake": "إرسال تقرير خطأ يحتوي على سجلات الاحداث",
-        "msg": "يرسل رسالة الى المستخدم المعطى"
+        "msg": "يرسل رسالة الى المستخدم المعطى",
+        "usage": "الاستخدام",
+        "category_messages": "الرسائل",
+        "category_actions": "الإجراءات",
+        "category_admin": "مدير",
+        "category_advanced": "متقدم",
+        "category_other": "أخرى"
     },
     "presence": {
         "online_for": "متصل منذ %(duration)s",
@@ -1395,5 +1357,63 @@
         "unknown": "غير معروف",
         "offline": "منفصل"
     },
-    "Unknown": "غير معروف"
+    "Unknown": "غير معروف",
+    "event_preview": {
+        "m.call.answer": {
+            "you": "لقد انضممت إلى المكالمة",
+            "user": "%(senderName)s انضم للمكالمة",
+            "dm": "مكالمتك تحت الإجراء"
+        },
+        "m.call.hangup": {
+            "you": "لقد أنهيتَ المكالمة",
+            "user": "%(senderName)s أنهى المكالمة"
+        },
+        "m.call.invite": {
+            "you": "لقد بدأت مكالمة",
+            "user": "%(senderName)s بدأ مكالمة",
+            "dm_send": "بانتظار الرد",
+            "dm_receive": "%(senderName)s يتصل"
+        }
+    },
+    "voip": {
+        "hangup": "إنهاء المكالمة",
+        "voice_call": "مكالمة صوتية",
+        "video_call": "مكالمة مرئية",
+        "unknown_caller": "متصل غير معروف",
+        "call_failed": "فشل الاتصال",
+        "unable_to_access_microphone": "تعذر الوصول إلى الميكروفون",
+        "call_failed_microphone": "فشلت المكالمة لتعذر الوصول إلى الميكرفون. تأكّد من وصل الميكرفون وضبطه كما ينبغي.",
+        "unable_to_access_media": "تعذر الوصول إلى كاميرا الوِب / الميكروفون",
+        "call_failed_media": "فشلت المكالمة لتعذر الوصول إلى كمرة الوِب أو الميكرفون. تأكّد من:",
+        "call_failed_media_connected": "أنّك وصلت ميكروفونًا وكمرة وِب كما ينبغي",
+        "call_failed_media_permissions": "أنّك منحت تصريحًا لاستعمال كمرة الوِب",
+        "call_failed_media_applications": "أنّ كمرة الوِب لا تستعملها تطبيقات أخرى",
+        "already_in_call": "تُجري مكالمة فعلًا",
+        "already_in_call_person": "أنت تُجري مكالمة مع هذا الشخص فعلًا.",
+        "unsupported": "المكالمات غير مدعومة",
+        "unsupported_browser": "لا يمكنك إجراء المكالمات في هذا المتصفّح."
+    },
+    "Messages": "الرسائل",
+    "Other": "أخرى",
+    "Advanced": "متقدم",
+    "room_settings": {
+        "permissions": {
+            "m.room.avatar": "تغيير صورة الغرفة",
+            "m.room.name": "تغيير اسم الغرفة",
+            "m.room.canonical_alias": "تغيير العنوان الأساسي للغرفة",
+            "m.room.history_visibility": "تغيير ظهور التاريخ",
+            "m.room.power_levels": "تغيير الصلاحيات",
+            "m.room.topic": "تغيير الموضوع",
+            "m.room.tombstone": "ترقية الغرفة",
+            "m.room.encryption": "تفعيل تشفير الغرفة",
+            "m.widget": "تعديل عناصر الواجهة",
+            "users_default": "الدور الاعتيادي",
+            "events_default": "إرسال الرسائل",
+            "invite": "دعوة المستخدمين",
+            "state_default": "تغيير الإعدادات",
+            "ban": "حظر المستخدمين",
+            "redact": "حذف رسائل الآخرين",
+            "notifications.room": "إشعار الجميع"
+        }
+    }
 }

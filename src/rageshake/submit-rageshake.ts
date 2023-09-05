@@ -40,7 +40,7 @@ interface IOpts {
 async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<FormData> {
     const progressCallback = opts.progressCallback || ((): void => {});
 
-    progressCallback(_t("Collecting app version information"));
+    progressCallback(_t("bug_reporting|collecting_information"));
     let version: string | undefined;
     try {
         version = await PlatformPeg.get()?.getAppVersion();
@@ -220,7 +220,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
             pako = await import("pako");
         }
 
-        progressCallback(_t("Collecting logs"));
+        progressCallback(_t("bug_reporting|collecting_logs"));
         const logs = await rageshake.getLogsForReport();
         for (const entry of logs) {
             // encode as UTF-8
@@ -261,7 +261,7 @@ export default async function sendBugReport(bugReportEndpoint?: string, opts: IO
     const progressCallback = opts.progressCallback || ((): void => {});
     const body = await collectBugReport(opts);
 
-    progressCallback(_t("Uploading logs"));
+    progressCallback(_t("bug_reporting|uploading_logs"));
     return submitReport(bugReportEndpoint, body, progressCallback);
 }
 
@@ -284,7 +284,7 @@ export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
     const progressCallback = opts.progressCallback || ((): void => {});
     const body = await collectBugReport(opts, false);
 
-    progressCallback(_t("Downloading logs"));
+    progressCallback(_t("bug_reporting|downloading_logs"));
     let metadata = "";
     const tape = new Tar();
     let i = 0;

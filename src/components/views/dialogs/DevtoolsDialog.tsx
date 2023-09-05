@@ -41,8 +41,8 @@ enum Category {
 }
 
 const categoryLabels: Record<Category, TranslationKey> = {
-    [Category.Room]: _td("common|room"),
-    [Category.Other]: _td("Other"),
+    [Category.Room]: _td("devtools|category_room"),
+    [Category.Other]: _td("devtools|category_other"),
 };
 
 export type Tool = React.FC<IDevtoolsProps> | ((props: IDevtoolsProps) => JSX.Element);

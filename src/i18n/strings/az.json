@@ -1,6 +1,4 @@
 {
-    "Collecting app version information": "Proqramın versiyası haqqında məlumatın yığılması",
-    "Collecting logs": "Jurnalların bir yığım",
     "Waiting for response from server": "Serverdən cavabın gözlənməsi",
     "Operation failed": "Əməliyyatın nasazlığı",
     "Failed to verify email address: make sure you clicked the link in the email": "Email-i yoxlamağı bacarmadı: əmin olun ki, siz məktubda istinaddakı ünvana keçdiniz",
@@ -33,14 +31,12 @@
     "Unable to enable Notifications": "Xəbərdarlıqları daxil qoşmağı bacarmadı",
     "Default": "Varsayılan olaraq",
     "Moderator": "Moderator",
-    "Admin": "Administrator",
     "You need to be logged in.": "Siz sistemə girməlisiniz.",
     "You need to be able to invite users to do that.": "Bunun üçün siz istifadəçiləri dəvət etmək imkanına malik olmalısınız.",
     "Failed to send request.": "Sorğunu göndərməyi bacarmadı.",
     "Power level must be positive integer.": "Hüquqların səviyyəsi müsbət tam ədəd olmalıdır.",
     "Missing room_id in request": "Sorğuda room_id yoxdur",
     "Missing user_id in request": "Sorğuda user_id yoxdur",
-    "Usage": "İstifadə",
     "Ignored user": "İstifadəçi blokun siyahısına əlavə edilmişdir",
     "You are now ignoring %(userId)s": "Siz %(userId)s blokladınız",
     "Unignored user": "İstifadəçi blokun siyahısından götürülmüşdür",
@@ -72,9 +68,6 @@
     "Unignore": "Blokdan çıxarmaq",
     "Invited": "Dəvət edilmişdir",
     "Filter room members": "İştirakçılara görə axtarış",
-    "Hangup": "Bitirmək",
-    "Voice call": "Səs çağırış",
-    "Video call": "Video çağırış",
     "You do not have permission to post to this room": "Siz bu otağa yaza bilmirsiniz",
     "Command error": "Komandanın səhvi",
     "Join Room": "Otağa girmək",
@@ -91,7 +84,6 @@
     "Favourite": "Seçilmiş",
     "Who can read history?": "Kim tarixi oxuya bilər?",
     "Permissions": "Girişin hüquqları",
-    "Advanced": "Təfərrüatlar",
     "Sunday": "Bazar",
     "Friday": "Cümə",
     "Today": "Bu gün",
@@ -136,7 +128,6 @@
     "Confirm passphrase": "Şifrəni təsdiqləyin",
     "This email address is already in use": "Bu e-mail ünvanı istifadə olunur",
     "This phone number is already in use": "Bu telefon nömrəsi artıq istifadə olunur",
-    "Call Failed": "Uğursuz zəng",
     "Permission Required": "İzn tələb olunur",
     "You do not have permission to start a conference call in this room": "Bu otaqda konfrans başlamaq üçün icazə yoxdur",
     "Server may be unavailable, overloaded, or you hit a bug.": "Server, istifadə edilə bilməz, yüklənmiş ola bilər və ya bir səhv vurursunuz.",
@@ -169,9 +160,6 @@
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Bu hərəkət e-poçt ünvanı və ya telefon nömrəsini təsdiqləmək üçün standart şəxsiyyət serverinə <server /> girməyi tələb edir, lakin serverdə heç bir xidmət şəraiti yoxdur.",
     "Only continue if you trust the owner of the server.": "Yalnız server sahibinə etibar etsəniz davam edin.",
     "Room %(roomId)s not visible": "Otaq %(roomId)s görünmür",
-    "Messages": "Mesajlar",
-    "Actions": "Tədbirlər",
-    "Other": "Digər",
     "Error upgrading room": "Otaq yeniləmə xətası",
     "Double check that your server supports the room version chosen and try again.": "Serverinizin seçilmiş otaq versiyasını dəstəklədiyini  bir daha yoxlayın və yenidən cəhd edin.",
     "Use an identity server": "Şəxsiyyət serverindən istifadə edin",
@@ -280,6 +268,28 @@
         "addwidget": "Otağa URL tərəfindən xüsusi bir widjet əlavə edir",
         "rainbow": "Verilən mesajı göy qurşağı kimi rəngli göndərir",
         "rainbowme": "Göndərilmiş emote rəngini göy qurşağı kimi göndərir",
-        "help": "İstifadə qaydaları və təsvirləri ilə komanda siyahısını göstərir"
-    }
+        "help": "İstifadə qaydaları və təsvirləri ilə komanda siyahısını göstərir",
+        "usage": "İstifadə",
+        "category_messages": "Mesajlar",
+        "category_actions": "Tədbirlər",
+        "category_admin": "Administrator",
+        "category_advanced": "Təfərrüatlar",
+        "category_other": "Digər"
+    },
+    "bug_reporting": {
+        "collecting_information": "Proqramın versiyası haqqında məlumatın yığılması",
+        "collecting_logs": "Jurnalların bir yığım"
+    },
+    "voip": {
+        "hangup": "Bitirmək",
+        "voice_call": "Səs çağırış",
+        "video_call": "Video çağırış",
+        "call_failed": "Uğursuz zəng"
+    },
+    "Messages": "Mesajlar",
+    "devtools": {
+        "category_other": "Digər"
+    },
+    "Other": "Digər",
+    "Advanced": "Təfərrüatlar"
 }

@@ -25,7 +25,6 @@
     "Filter room members": "Iragazi gelako kideak",
     "Email": "E-mail",
     "Phone": "Telefonoa",
-    "Advanced": "Aurreratua",
     "Cryptography": "Kriptografia",
     "Authentication": "Autentifikazioa",
     "Verification Pending": "Egiaztaketa egiteke",
@@ -45,10 +44,8 @@
     "Import room keys": "Inportatu gelako gakoak",
     "Start authentication": "Hasi autentifikazioa",
     "For security, this session has been signed out. Please sign in again.": "Segurtasunagatik saio hau amaitu da. Hasi saioa berriro.",
-    "Hangup": "Eseki",
     "Moderator": "Moderatzailea",
     "Account": "Kontua",
-    "Admin": "Kudeatzailea",
     "Admin Tools": "Administrazio-tresnak",
     "No Microphones detected": "Ez da mikrofonorik atzeman",
     "No Webcams detected": "Ez da kamerarik atzeman",
@@ -139,12 +136,9 @@
     },
     "Upload avatar": "Igo abatarra",
     "Upload Failed": "Igoerak huts egin du",
-    "Usage": "Erabilera",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
     "Users": "Erabiltzaileak",
     "Verified key": "Egiaztatutako gakoa",
-    "Video call": "Bideo-deia",
-    "Voice call": "Ahots-deia",
     "You cannot place a call with yourself.": "Ezin diozu zure buruari deitu.",
     "You have <a>disabled</a> URL previews by default.": "Lehenetsita URLak aurreikustea <a>desgaitu</a> duzu.",
     "You have <a>enabled</a> URL previews by default.": "Lehenetsita URLak aurreikustea <a>gaitu</a> duzu.",
@@ -235,7 +229,6 @@
     "Unignored user": "Ez ezikusitako erabiltzailea",
     "Ignored user": "Ezikusitako erabiltzailea",
     "Banned by %(displayName)s": "%(displayName)s erabiltzaileak debekatuta",
-    "Call Failed": "Deiak huts egin du",
     "Restricted": "Mugatua",
     "Send": "Bidali",
     "Mirror local video feed": "Bikoiztu tokiko bideo jarioa",
@@ -351,15 +344,12 @@
     },
     "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "%(brand)s bertsio zahar batek datuak antzeman dira. Honek bertsio zaharrean  muturretik muturrerako zifratzea ez funtzionatzea eragingo du. Azkenaldian bertsio zaharrean bidali edo jasotako zifratutako mezuak agian ezin izango dira deszifratu bertsio honetan. Honek ere Bertsio honekin egindako mezu trukeak huts egitea ekar dezake. Arazoak badituzu, amaitu saioa eta hasi berriro saioa. Mezuen historiala gordetzeko, esportatu eta berriro inportatu zure gakoak.",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Ezin izango duzu hau aldatu zure burua mailaz jaisten ari zarelako, zu bazara gelan baimenak dituen azken erabiltzailea ezin izango dira baimenak berreskuratu.",
-    "Send an encrypted reply…": "Bidali zifratutako erantzun bat…",
-    "Send an encrypted message…": "Bidali zifratutako mezu bat…",
     "Replying": "Erantzuten",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(fullYear)s(e)ko %(monthName)sk %(day)sa",
     "This room is not public. You will not be able to rejoin without an invite.": "Gela hau ez da publikoa. Ezin izango zara berriro elkartu gonbidapenik gabe.",
     "<a>In reply to</a> <pill>": "<a>honi erantzunez:</a> <pill>",
     "Failed to remove tag %(tagName)s from room": "Huts egin du %(tagName)s etiketa gelatik kentzean",
     "Failed to add tag %(tagName)s to room": "Huts egin du %(tagName)s etiketa gelara gehitzean",
-    "Stickerpack": "Eranskailu-multzoa",
     "You don't currently have any stickerpacks enabled": "Ez duzu eranskailu multzorik aktibatuta",
     "Sunday": "Igandea",
     "Notification targets": "Jakinarazpenen helburuak",
@@ -376,12 +366,10 @@
     "Source URL": "Iturriaren URLa",
     "Filter results": "Iragazi emaitzak",
     "No update available.": "Ez dago eguneraketarik eskuragarri.",
-    "Collecting app version information": "Aplikazioaren bertsio-informazioa biltzen",
     "Tuesday": "Asteartea",
     "Preparing to send logs": "Egunkariak bidaltzeko prestatzen",
     "Saturday": "Larunbata",
     "Monday": "Astelehena",
-    "Collecting logs": "Egunkariak biltzen",
     "All Rooms": "Gela guztiak",
     "Wednesday": "Asteazkena",
     "You cannot delete this message. (%(code)s)": "Ezin duzu mezu hau ezabatu. (%(code)s)",
@@ -429,7 +417,6 @@
     "Permission Required": "Baimena beharrezkoa",
     "You do not have permission to start a conference call in this room": "Ez duzu baimenik konferentzia dei bat hasteko gela honetan",
     "This event could not be displayed": "Ezin izan da gertakari hau bistaratu",
-    "System Alerts": "Sistemaren alertak",
     "Please contact your homeserver administrator.": "Jarri zure hasiera-zerbitzariaren administratzailearekin kontaktuan.",
     "This room has been replaced and is no longer active.": "Gela hau ordeztu da eta ez dago aktibo jada.",
     "The conversation continues here.": "Elkarrizketak hemen darrai.",
@@ -575,7 +562,6 @@
     "Email (optional)": "E-mail (aukerakoa)",
     "Phone (optional)": "Telefonoa (aukerakoa)",
     "Join millions for free on the largest public server": "Elkartu milioika pertsonekin dohain hasiera zerbitzari publiko handienean",
-    "Other": "Beste bat",
     "Couldn't load page": "Ezin izan da orria kargatu",
     "General": "Orokorra",
     "Room Addresses": "Gelaren helbideak",
@@ -657,19 +643,6 @@
     "The user must be unbanned before they can be invited.": "Erabiltzaileari debekua kendu behar zaio gonbidatu aurretik.",
     "Scissors": "Artaziak",
     "Accept all %(invitedRooms)s invites": "Onartu %(invitedRooms)s gelako gonbidapen guztiak",
-    "Change room avatar": "Aldatu gelaren abatarra",
-    "Change room name": "Aldatu gelaren izena",
-    "Change main address for the room": "Aldatu gelaren helbide nagusia",
-    "Change history visibility": "Aldatu historialaren ikusgaitasuna",
-    "Change permissions": "Aldatu baimenak",
-    "Change topic": "Aldatu mintzagaia",
-    "Modify widgets": "Aldatu trepetak",
-    "Default role": "Lehenetsitako rola",
-    "Send messages": "Bidali mezuak",
-    "Invite users": "Gonbidatu erabiltzaileak",
-    "Change settings": "Aldatu ezarpenak",
-    "Ban users": "Debekatu erabiltzaileak",
-    "Notify everyone": "Jakinarazi denei",
     "Send %(eventType)s events": "Bidali %(eventType)s gertaerak",
     "Select the roles required to change various parts of the room": "Hautatu gelaren hainbat atal aldatzeko behar diren rolak",
     "Enable encryption?": "Gaitu zifratzea?",
@@ -806,8 +779,6 @@
     "Summary": "Laburpena",
     "Call failed due to misconfigured server": "Deiak huts egin du zerbitzaria gaizki konfiguratuta dagoelako",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Eskatu zure hasiera-zerbitzariaren administratzaileari (<code>%(homeserverDomain)s</code>) TURN zerbitzari bat konfiguratu dezala deiek ondo funtzionatzeko.",
-    "Messages": "Mezuak",
-    "Actions": "Ekintzak",
     "Checking server": "Zerbitzaria egiaztatzen",
     "Disconnect from the identity server <idserver />?": "Deskonektatu <idserver /> identitate-zerbitzaritik?",
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "<server></server> erabiltzen ari zara kontaktua aurkitzeko eta aurkigarria izateko. Zure identitate-zerbitzaria aldatu dezakezu azpian.",
@@ -832,8 +803,6 @@
     "Only continue if you trust the owner of the server.": "Jarraitu soilik zerbitzariaren jabea fidagarritzat jotzen baduzu.",
     "Do not use an identity server": "Ez erabili identitate-zerbitzaririk",
     "Enter a new identity server": "Sartu identitate-zerbitzari berri bat",
-    "Upgrade the room": "Eguneratu gela",
-    "Enable room encryption": "Gaitu gelaren zifratzea",
     "Remove %(email)s?": "Kendu %(email)s?",
     "Remove %(phone)s?": "Kendu %(phone)s?",
     "Deactivate user?": "Desaktibatu erabiltzailea?",
@@ -1020,7 +989,6 @@
     "Secret storage public key:": "Biltegi sekretuko gako publikoa:",
     "in account data": "kontuaren datuetan",
     "not stored": "gorde gabe",
-    "Cross-signing": "Zeharkako sinadura",
     "Unencrypted": "Zifratu gabe",
     "Close preview": "Itxi aurrebista",
     "<userName/> wants to chat": "<userName/> erabiltzaileak txateatu nahi du",
@@ -1051,8 +1019,6 @@
     "Recently Direct Messaged": "Berriki mezu zuzena bidalita",
     "This room is end-to-end encrypted": "Gela hau muturretik muturrera zifratuta dago",
     "Everyone in this room is verified": "Gelako guztiak egiaztatuta daude",
-    "Send a reply…": "Bidali erantzuna…",
-    "Send a message…": "Bidali mezua…",
     "Reject & Ignore user": "Ukatu eta ezikusi erabiltzailea",
     "Unknown Command": "Agindu ezezaguna",
     "Unrecognised command: %(commandText)s": "Agindu ezezaguna: %(commandText)s",
@@ -1334,17 +1300,10 @@
     "All settings": "Ezarpen guztiak",
     "Feedback": "Iruzkinak",
     "Use a different passphrase?": "Erabili pasa-esaldi desberdin bat?",
-    "You joined the call": "Deira batu zara",
-    "%(senderName)s joined the call": "%(senderName)s deira batu da",
-    "Call ended": "Deia amaitu da",
-    "You started a call": "Dei bat hasi duzu",
-    "%(senderName)s started a call": "%(senderName)s(e)k dei bat hasi du",
-    "%(senderName)s is calling": "%(senderName)s deitzen ari da",
     "Change notification settings": "Aldatu jakinarazpenen ezarpenak",
     "Use custom size": "Erabili tamaina pertsonalizatua",
     "Use a system font": "Erabili sistemako letra-tipoa",
     "System font name": "Sistemaren letra-tipoaren izena",
-    "Unknown caller": "Dei-egile ezezaguna",
     "Hey you. You're the best!": "Aupa txo. Onena zara!",
     "Notification options": "Jakinarazpen ezarpenak",
     "Forget Room": "Ahaztu gela",
@@ -1411,7 +1370,10 @@
         "matrix": "Matrix",
         "trusted": "Konfiantzazkoa",
         "not_trusted": "Ez konfiantzazkoa",
-        "unnamed_room": "Izen gabeko gela"
+        "unnamed_room": "Izen gabeko gela",
+        "stickerpack": "Eranskailu-multzoa",
+        "system_alerts": "Sistemaren alertak",
+        "cross_signing": "Zeharkako sinadura"
     },
     "action": {
         "continue": "Jarraitu",
@@ -1512,7 +1474,11 @@
         "format_bold": "Lodia",
         "format_strikethrough": "Marratua",
         "format_inline_code": "Kodea",
-        "format_code_block": "Kode blokea"
+        "format_code_block": "Kode blokea",
+        "placeholder_reply_encrypted": "Bidali zifratutako erantzun bat…",
+        "placeholder_reply": "Bidali erantzuna…",
+        "placeholder_encrypted": "Bidali zifratutako mezu bat…",
+        "placeholder": "Bidali mezua…"
     },
     "Bold": "Lodia",
     "Code": "Kodea",
@@ -1531,7 +1497,9 @@
         "additional_context": "Arazoa ikertzen lagundu gaitzakeen testuinguru gehiago badago, esaterako gertatutakoan zer egiten ari zinen, gelaren ID-a, erabiltzaile ID-ak eta abar, mesedez jarri horiek hemen.",
         "send_logs": "Bidali egunkariak",
         "github_issue": "GitHub arazo-txostena",
-        "before_submitting": "Egunkariak bidali aurretik, <a>GitHub arazo bat sortu</a> behar duzu gertatzen zaizuna azaltzeko."
+        "before_submitting": "Egunkariak bidali aurretik, <a>GitHub arazo bat sortu</a> behar duzu gertatzen zaizuna azaltzeko.",
+        "collecting_information": "Aplikazioaren bertsio-informazioa biltzen",
+        "collecting_logs": "Egunkariak biltzen"
     },
     "time": {
         "few_seconds_ago": "duela segundo batzuk",
@@ -1586,7 +1554,9 @@
         "event_sent": "Gertaera bidalita!",
         "event_content": "Gertaeraren edukia",
         "toolbox": "Tresna-kutxa",
-        "developer_tools": "Garatzaile-tresnak"
+        "developer_tools": "Garatzaile-tresnak",
+        "category_room": "Gela",
+        "category_other": "Beste bat"
     },
     "create_room": {
         "title_public_room": "Sortu gela publikoa",
@@ -1652,6 +1622,9 @@
                 "other": "%(names)s eta beste %(count)s idatzen ari dira …",
                 "one": "%(names)s eta beste bat idazten ari dira …"
             }
+        },
+        "m.call.hangup": {
+            "dm": "Deia amaitu da"
         }
     },
     "slash_command": {
@@ -1678,7 +1651,13 @@
         "help": "Aginduen zerrenda bistaratzen du, erabilera eta deskripzioekin",
         "whois": "Erabiltzaileari buruzko informazioa erakusten du",
         "rageshake": "Bidali akats txostena egunkariekin",
-        "msg": "Erabiltzaileari mezua bidaltzen dio"
+        "msg": "Erabiltzaileari mezua bidaltzen dio",
+        "usage": "Erabilera",
+        "category_messages": "Mezuak",
+        "category_actions": "Ekintzak",
+        "category_admin": "Kudeatzailea",
+        "category_advanced": "Aurreratua",
+        "category_other": "Beste bat"
     },
     "presence": {
         "online_for": "Konektatua %(duration)s",
@@ -1691,5 +1670,46 @@
         "offline": "Deskonektatuta",
         "away": "Kanpoan"
     },
-    "Unknown": "Ezezaguna"
+    "Unknown": "Ezezaguna",
+    "event_preview": {
+        "m.call.answer": {
+            "you": "Deira batu zara",
+            "user": "%(senderName)s deira batu da"
+        },
+        "m.call.hangup": {},
+        "m.call.invite": {
+            "you": "Dei bat hasi duzu",
+            "user": "%(senderName)s(e)k dei bat hasi du",
+            "dm_receive": "%(senderName)s deitzen ari da"
+        }
+    },
+    "voip": {
+        "hangup": "Eseki",
+        "voice_call": "Ahots-deia",
+        "video_call": "Bideo-deia",
+        "unknown_caller": "Dei-egile ezezaguna",
+        "call_failed": "Deiak huts egin du"
+    },
+    "Messages": "Mezuak",
+    "Other": "Beste bat",
+    "Advanced": "Aurreratua",
+    "room_settings": {
+        "permissions": {
+            "m.room.avatar": "Aldatu gelaren abatarra",
+            "m.room.name": "Aldatu gelaren izena",
+            "m.room.canonical_alias": "Aldatu gelaren helbide nagusia",
+            "m.room.history_visibility": "Aldatu historialaren ikusgaitasuna",
+            "m.room.power_levels": "Aldatu baimenak",
+            "m.room.topic": "Aldatu mintzagaia",
+            "m.room.tombstone": "Eguneratu gela",
+            "m.room.encryption": "Gaitu gelaren zifratzea",
+            "m.widget": "Aldatu trepetak",
+            "users_default": "Lehenetsitako rola",
+            "events_default": "Bidali mezuak",
+            "invite": "Gonbidatu erabiltzaileak",
+            "state_default": "Aldatu ezarpenak",
+            "ban": "Debekatu erabiltzaileak",
+            "notifications.room": "Jakinarazi denei"
+        }
+    }
 }

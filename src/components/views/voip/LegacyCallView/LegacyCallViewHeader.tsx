@@ -34,7 +34,7 @@ const LegacyCallViewHeaderControls: React.FC<LegacyCallControlsProps> = ({ onExp
                 <AccessibleTooltipButton
                     className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_fullscreen"
                     onClick={onMaximize}
-                    title={_t("Fill screen")}
+                    title={_t("voip|maximise")}
                 />
             )}
             {onPin && (
@@ -48,7 +48,7 @@ const LegacyCallViewHeaderControls: React.FC<LegacyCallControlsProps> = ({ onExp
                 <AccessibleTooltipButton
                     className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_expand"
                     onClick={onExpand}
-                    title={_t("Return to call")}
+                    title={_t("voip|expand")}
                 />
             )}
         </div>
@@ -64,7 +64,7 @@ const SecondaryCallInfo: React.FC<ISecondaryCallInfoProps> = ({ callRoom }) => {
         <span className="mx_LegacyCallViewHeader_secondaryCallInfo">
             <RoomAvatar room={callRoom} size="16px" />
             <span className="mx_LegacyCallView_secondaryCall_roomName">
-                {_t("%(name)s on hold", { name: callRoom.name })}
+                {_t("voip|on_hold", { name: callRoom.name })}
             </span>
         </span>
     );

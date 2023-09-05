@@ -23,12 +23,12 @@ import { _td } from "../languageHandler";
 import { XOR } from "../@types/common";
 
 export const CommandCategories = {
-    messages: _td("Messages"),
-    actions: _td("Actions"),
-    admin: _td("Admin"),
-    advanced: _td("Advanced"),
-    effects: _td("Effects"),
-    other: _td("Other"),
+    messages: _td("slash_command|category_messages"),
+    actions: _td("slash_command|category_actions"),
+    admin: _td("slash_command|category_admin"),
+    advanced: _td("slash_command|category_advanced"),
+    effects: _td("slash_command|category_effects"),
+    other: _td("slash_command|category_other"),
 };
 
 export type RunResult = XOR<{ error: Error }, { promise: Promise<IContent | undefined> }>;

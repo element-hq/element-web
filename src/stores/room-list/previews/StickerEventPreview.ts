@@ -29,7 +29,7 @@ export class StickerEventPreview implements IPreview {
         if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId()!, tagId)) {
             return stickerName;
         } else {
-            return _t("%(senderName)s: %(stickerName)s", { senderName: getSenderName(event), stickerName });
+            return _t("event_preview|m.sticker", { senderName: getSenderName(event), stickerName });
         }
     }
 }

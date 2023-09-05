@@ -14,7 +14,6 @@
     "Confirm adding phone number": "Potrdi dodajanje telefonske številke",
     "Click the button below to confirm adding this phone number.": "Pritisnite gumb spodaj da potrdite dodajanje te telefonske številke.",
     "Add Phone Number": "Dodaj telefonsko številko",
-    "Call Failed": "Klic ni uspel",
     "Explore rooms": "Raziščite sobe",
     "Create Account": "Registracija",
     "Identity server has no terms of service": "Identifikacijski strežnik nima pogojev storitve",
@@ -69,5 +68,8 @@
         "short_hours": "%(value)s ura",
         "short_minutes": "%(value)s minuta",
         "short_seconds": "%(value)s sekunda"
+    },
+    "voip": {
+        "call_failed": "Klic ni uspel"
     }
 }

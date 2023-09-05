@@ -404,11 +404,9 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         const sharerName = primaryFeed?.getMember()?.name;
         if (!sharerName) return null;
 
-        let text = isScreensharing ? _t("You are presenting") : _t("%(sharerName)s is presenting", { sharerName });
+        let text = isScreensharing ? _t("voip|you_are_presenting") : _t("voip|user_is_presenting", { sharerName });
         if (!sidebarShown) {
-            text +=
-                " • " +
-                (call.isLocalVideoMuted() ? _t("Your camera is turned off") : _t("Your camera is still enabled"));
+            text += " • " + (call.isLocalVideoMuted() ? _t("voip|camera_disabled") : _t("voip|camera_enabled"));
         }
 
         return <div className="mx_LegacyCallView_toast">{text}</div>;
@@ -450,7 +448,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                 holdTransferContent = (
                     <div className="mx_LegacyCallView_status">
                         {_t(
-                            "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>",
+                            "voip|consulting",
                             {
                                 transferTarget: transferTargetName,
                                 transferee: transfereeName,
@@ -470,8 +468,8 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                 if (isRemoteOnHold) {
                     onHoldText = _t(
                         LegacyCallHandler.instance.hasAnyUnheldCall()
-                            ? _td("You held the call <a>Switch</a>")
-                            : _td("You held the call <a>Resume</a>"),
+                            ? _td("voip|call_held_switch")
+                            : _td("voip|call_held_resume"),
                         {},
                         {
                             a: (sub) => (
@@ -482,7 +480,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                         },
                     );
                 } else if (isLocalOnHold) {
-                    onHoldText = _t("%(peerName)s held the call", {
+                    onHoldText = _t("voip|call_held", {
                         peerName: call.getOpponentMember()?.name,
                     });
                 }

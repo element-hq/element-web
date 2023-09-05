@@ -125,17 +125,8 @@
     "You do not have permission to start a conference call in this room": "Nemate dopuštenje uspostaviti konferencijski poziv u ovoj sobi",
     "Permission Required": "Potrebno dopuštenje",
     "You cannot place a call with yourself.": "Ne možete uspostaviti poziv sami sa sobom.",
-    "You're already in a call with this person.": "Već ste u pozivu sa tom osobom.",
-    "Already in call": "Već u pozivu",
     "You've reached the maximum number of simultaneous calls.": "Dosegli ste maksimalan broj istodobnih poziva.",
     "Too Many Calls": "Previše poziva",
-    "No other application is using the webcam": "Da ni jedna druga aplikacija već ne koristi web kameru",
-    "Permission is granted to use the webcam": "Jeli dopušteno korištenje web kamere",
-    "A microphone and webcam are plugged in and set up correctly": "Jesu li mikrofon i web kamera priključeni i pravilno postavljeni",
-    "Unable to access webcam / microphone": "Nije moguće pristupiti web kameri / mikrofonu",
-    "Call failed because webcam or microphone could not be accessed. Check that:": "Poziv nije uspio jer nije bilo moguće pristupiti web kameri ili mikrofonu. Provjerite:",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Poziv nije uspio jer nije bilo moguće pristupiti mikrofonu. Provjerite je li mikrofon priključen i ispravno postavljen.",
-    "Unable to access microphone": "Nije moguće pristupiti mikrofonu",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Zamolite administratora Vašeg kućnog poslužitelja (<code>%(homeserverDomain)s</code>) da konfigurira TURN poslužitelj kako bi pozivi mogli pouzdano funkcionirati.",
     "Call failed due to misconfigured server": "Poziv neuspješan radi pogrešno konfiguriranog poslužitelja",
     "The call was answered on another device.": "Na poziv je odgovoreno sa drugog uređaja.",
@@ -143,7 +134,6 @@
     "The call could not be established": "Poziv se nije mogao uspostaviti",
     "The user you called is busy.": "Pozvani korisnik je zauzet.",
     "User Busy": "Korisnik zauzet",
-    "Call Failed": "Poziv neuspješan",
     "Unable to load! Check your network connectivity and try again.": "Učitavanje nije moguće! Provjerite mrežnu povezanost i pokušajte ponovo.",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potvrdite dodavanje ovog telefonskog broja koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Potvrdite dodavanje ove email adrese koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
@@ -170,5 +160,17 @@
         "trust": "Vjeruj",
         "dismiss": "Odbaci",
         "confirm": "Potvrdi"
+    },
+    "voip": {
+        "call_failed": "Poziv neuspješan",
+        "unable_to_access_microphone": "Nije moguće pristupiti mikrofonu",
+        "call_failed_microphone": "Poziv nije uspio jer nije bilo moguće pristupiti mikrofonu. Provjerite je li mikrofon priključen i ispravno postavljen.",
+        "unable_to_access_media": "Nije moguće pristupiti web kameri / mikrofonu",
+        "call_failed_media": "Poziv nije uspio jer nije bilo moguće pristupiti web kameri ili mikrofonu. Provjerite:",
+        "call_failed_media_connected": "Jesu li mikrofon i web kamera priključeni i pravilno postavljeni",
+        "call_failed_media_permissions": "Jeli dopušteno korištenje web kamere",
+        "call_failed_media_applications": "Da ni jedna druga aplikacija već ne koristi web kameru",
+        "already_in_call": "Već u pozivu",
+        "already_in_call_person": "Već ste u pozivu sa tom osobom."
     }
 }

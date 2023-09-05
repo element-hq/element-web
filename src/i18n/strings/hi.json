@@ -5,7 +5,6 @@
     "This phone number is already in use": "यह फ़ोन नंबर पहले से इस्तेमाल में है",
     "Failed to verify email address: make sure you clicked the link in the email": "ईमेल आईडी सत्यापित नही हो पाया: कृपया सुनिश्चित कर लें कि आपने ईमेल में मौजूद लिंक पर क्लिक किया है",
     "powered by Matrix": "मैट्रिक्स द्वारा संचालित",
-    "Call Failed": "कॉल विफल",
     "You cannot place a call with yourself.": "आप अपने साथ कॉल नहीं कर सकते हैं।",
     "Permission Required": "अनुमति आवश्यक है",
     "You do not have permission to start a conference call in this room": "आपको इस रूम में कॉन्फ़्रेंस कॉल शुरू करने की अनुमति नहीं है",
@@ -40,7 +39,6 @@
     "Default": "डिफ़ॉल्ट",
     "Restricted": "वर्जित",
     "Moderator": "मध्यस्थ",
-    "Admin": "व्यवस्थापक",
     "Operation failed": "कार्रवाई विफल",
     "Failed to invite": "आमंत्रित करने में विफल",
     "You need to be logged in.": "आपको लॉग इन करने की जरूरत है।",
@@ -56,7 +54,6 @@
     "Missing room_id in request": "अनुरोध में रूम_आईडी गुम है",
     "Room %(roomId)s not visible": "%(roomId)s रूम दिखाई नहीं दे रहा है",
     "Missing user_id in request": "अनुरोध में user_id गुम है",
-    "Usage": "प्रयोग",
     "Ignored user": "अनदेखा उपयोगकर्ता",
     "You are now ignoring %(userId)s": "आप %(userId)s को अनदेखा कर रहे हैं",
     "Unignored user": "अनदेखा बंद किया गया उपयोगकर्ता",
@@ -82,8 +79,6 @@
     "Enable URL previews for this room (only affects you)": "इस रूम के लिए यूआरएल पूर्वावलोकन सक्षम करें (केवल आपको प्रभावित करता है)",
     "Enable URL previews by default for participants in this room": "इस रूम में प्रतिभागियों के लिए डिफ़ॉल्ट रूप से यूआरएल पूर्वावलोकन सक्षम करें",
     "Enable widget screenshots on supported widgets": "समर्थित विजेट्स पर विजेट स्क्रीनशॉट सक्षम करें",
-    "Collecting app version information": "ऐप संस्करण जानकारी एकत्रित कर रहा हैं",
-    "Collecting logs": "लॉग एकत्रित कर रहा हैं",
     "Waiting for response from server": "सर्वर से प्रतिक्रिया की प्रतीक्षा कर रहा है",
     "Incorrect verification code": "गलत सत्यापन कोड",
     "Phone": "फ़ोन",
@@ -155,11 +150,6 @@
     "Invited": "आमंत्रित",
     "Filter room members": "रूम के सदस्यों को फ़िल्टर करें",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (शक्ति %(powerLevelNumber)s)",
-    "Hangup": "फोन रख देना",
-    "Voice call": "आवाज कॉल",
-    "Video call": "वीडियो कॉल",
-    "Send an encrypted reply…": "एक एन्क्रिप्टेड उत्तर भेजें …",
-    "Send an encrypted message…": "एक एन्क्रिप्टेड संदेश भेजें …",
     "This room has been replaced and is no longer active.": "इस रूम को बदल दिया गया है और अब सक्रिय नहीं है।",
     "The conversation continues here.": "वार्तालाप यहां जारी है।",
     "You do not have permission to post to this room": "आपको इस रूम में पोस्ट करने की अनुमति नहीं है",
@@ -255,7 +245,6 @@
     "Restore from Backup": "बैकअप से बहाल करना",
     "Back up your keys before signing out to avoid losing them.": "उन्हें खोने से बचने के लिए साइन आउट करने से पहले अपनी कुंजियों का बैकअप लें।",
     "All keys backed up": "सभी कुंजियाँ वापस आ गईं",
-    "Advanced": "उन्नत",
     "Start using Key Backup": "कुंजी बैकअप का उपयोग करना शुरू करें",
     "Unable to verify phone number.": "फ़ोन नंबर सत्यापित करने में असमर्थ।",
     "Verification code": "पुष्टि संख्या",
@@ -477,17 +466,6 @@
     "Too Many Calls": "बहुत अधिक कॉल",
     "You cannot place calls without a connection to the server.": "आप सर्वर से कनेक्शन के बिना कॉल नहीं कर सकते।",
     "Connectivity to the server has been lost": "सर्वर से कनेक्टिविटी खो गई है",
-    "You cannot place calls in this browser.": "आप इस ब्राउज़र में कॉल नहीं कर सकते।",
-    "Calls are unsupported": "कॉल असमर्थित हैं",
-    "You're already in a call with this person.": "आप पहले से ही इस व्यक्ति के साथ कॉल में हैं।",
-    "Already in call": "पहले से ही कॉल में है",
-    "No other application is using the webcam": "कोई अन्य एप्लिकेशन वेबकैम का उपयोग नहीं कर रहा है",
-    "Permission is granted to use the webcam": "वेबकैम का उपयोग करने की अनुमति दी गई है",
-    "A microphone and webcam are plugged in and set up correctly": "एक माइक्रोफ़ोन और वेब कैमरा प्लग इन किया गया है और सही तरीके से सेट किया गया है",
-    "Call failed because webcam or microphone could not be accessed. Check that:": "कॉल विफल हुआ क्योंकि वेबकैम या माइक्रोफ़ोन तक नहीं पहुंचा जा सका। जांच करे:",
-    "Unable to access webcam / microphone": "वेबकैम / माइक्रोफ़ोन तक पहुँचने में असमर्थ",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "कॉल विफल हुआ क्योंकि माइक्रोफ़ोन तक नहीं पहुँचा जा सका। जांचें कि एक माइक्रोफ़ोन प्लग इन है और सही तरीके से सेट है।",
-    "Unable to access microphone": "माइक्रोफ़ोन एक्सेस करने में असमर्थ",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "कृपया अपने होमसर्वर (<code>%(homeserverDomain)s</code>) के व्यवस्थापक से एक TURN सर्वर कॉन्फ़िगर करने के लिए कहें ताकि कॉल विश्वसनीय रूप से काम करें।",
     "Call failed due to misconfigured server": "गलत कॉन्फ़िगर किए गए सर्वर के कारण कॉल विफल रहा",
     "The call was answered on another device.": "किसी अन्य डिवाइस पर कॉल का उत्तर दिया गया था।",
@@ -564,7 +542,9 @@
     },
     "bug_reporting": {
         "submit_debug_logs": "डिबग लॉग जमा करें",
-        "title": "बग रिपोर्टिंग"
+        "title": "बग रिपोर्टिंग",
+        "collecting_information": "ऐप संस्करण जानकारी एकत्रित कर रहा हैं",
+        "collecting_logs": "लॉग एकत्रित कर रहा हैं"
     },
     "time": {
         "date_at_time": "%(date)s %(time)s पर",
@@ -663,7 +643,10 @@
         "ignore": "उपयोगकर्ता को अनदेखा करें और स्वयं से संदेश छुपाएं",
         "unignore": "उपयोगकर्ता को अनदेखा करना बंद करें और एक संदेश प्रदर्शित करें",
         "devtools": "डेवलपर टूल्स संवाद खोलता है",
-        "addwidget": "रूम में URL द्वारा एक कस्टम विजेट जोड़ता है"
+        "addwidget": "रूम में URL द्वारा एक कस्टम विजेट जोड़ता है",
+        "usage": "प्रयोग",
+        "category_admin": "व्यवस्थापक",
+        "category_advanced": "उन्नत"
     },
     "presence": {
         "online_for": "%(duration)s के लिए ऑनलाइन",
@@ -675,5 +658,27 @@
         "unknown": "अज्ञात",
         "offline": "ऑफलाइन"
     },
-    "Unknown": "अज्ञात"
+    "Unknown": "अज्ञात",
+    "voip": {
+        "hangup": "फोन रख देना",
+        "voice_call": "आवाज कॉल",
+        "video_call": "वीडियो कॉल",
+        "call_failed": "कॉल विफल",
+        "unable_to_access_microphone": "माइक्रोफ़ोन एक्सेस करने में असमर्थ",
+        "call_failed_microphone": "कॉल विफल हुआ क्योंकि माइक्रोफ़ोन तक नहीं पहुँचा जा सका। जांचें कि एक माइक्रोफ़ोन प्लग इन है और सही तरीके से सेट है।",
+        "unable_to_access_media": "वेबकैम / माइक्रोफ़ोन तक पहुँचने में असमर्थ",
+        "call_failed_media": "कॉल विफल हुआ क्योंकि वेबकैम या माइक्रोफ़ोन तक नहीं पहुंचा जा सका। जांच करे:",
+        "call_failed_media_connected": "एक माइक्रोफ़ोन और वेब कैमरा प्लग इन किया गया है और सही तरीके से सेट किया गया है",
+        "call_failed_media_permissions": "वेबकैम का उपयोग करने की अनुमति दी गई है",
+        "call_failed_media_applications": "कोई अन्य एप्लिकेशन वेबकैम का उपयोग नहीं कर रहा है",
+        "already_in_call": "पहले से ही कॉल में है",
+        "already_in_call_person": "आप पहले से ही इस व्यक्ति के साथ कॉल में हैं।",
+        "unsupported": "कॉल असमर्थित हैं",
+        "unsupported_browser": "आप इस ब्राउज़र में कॉल नहीं कर सकते।"
+    },
+    "Advanced": "उन्नत",
+    "composer": {
+        "placeholder_reply_encrypted": "एक एन्क्रिप्टेड उत्तर भेजें …",
+        "placeholder_encrypted": "एक एन्क्रिप्टेड संदेश भेजें …"
+    }
 }

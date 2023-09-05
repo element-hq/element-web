@@ -1,13 +1,11 @@
 {
     "Account": "Konts",
-    "Admin": "Administrators",
     "Admin Tools": "Administratora rīki",
     "No Microphones detected": "Nav mikrofonu",
     "No Webcams detected": "Nav webkameru",
     "No media permissions": "Nav datu nesēju, kuriem atļauta piekļuve",
     "You may need to manually permit %(brand)s to access your microphone/webcam": "Jums varētu būt nepieciešams manuāli atļaut %(brand)s piekļuvi mikrofonam vai tīmekļa kamerai",
     "Default Device": "Noklusējuma ierīce",
-    "Advanced": "Papildu",
     "Authentication": "Autentifikācija",
     "%(items)s and %(lastItem)s": "%(items)s un %(lastItem)s",
     "A new password must be entered.": "Nepieciešams ievadīt jauno paroli.",
@@ -58,7 +56,6 @@
     "Forget room": "Aizmirst istabu",
     "For security, this session has been signed out. Please sign in again.": "Drošības nolūkos šī sesija ir pārtraukta. Lūdzu, pieraksties par jaunu.",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s no %(fromPowerLevel)s uz %(toPowerLevel)s",
-    "Hangup": "Beigt zvanu",
     "Historical": "Bijušie",
     "Home": "Mājup",
     "Import E2E room keys": "Importēt E2E istabas atslēgas",
@@ -145,12 +142,9 @@
     "You have <a>enabled</a> URL previews by default.": "URL priekšskatījumi pēc noklusējuma jums ir<a>iespējoti</a> .",
     "Upload avatar": "Augšupielādēt avataru",
     "Upload Failed": "Augšupielāde (nosūtīšana) neizdevās",
-    "Usage": "Lietojums",
     "Users": "Lietotāji",
     "Verification Pending": "Gaida verifikāciju",
     "Verified key": "Verificēta atslēga",
-    "Video call": "Video zvans",
-    "Voice call": "Balss zvans",
     "Warning!": "Brīdinājums!",
     "Who can read history?": "Kas var lasīt vēsturi?",
     "You cannot place a call with yourself.": "Nav iespējams piezvanīt sev.",
@@ -229,7 +223,6 @@
     "You do not have permission to do that in this room.": "Tev nav atļaujas šai darbībai šajā istabā.",
     "Send": "Sūtīt",
     "Unnamed room": "Nenosaukta istaba",
-    "Call Failed": "Zvans neizdevās",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "Restricted": "Ierobežots",
     "Ignored user": "Ignorēts lietotājs",
@@ -242,8 +235,6 @@
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Jūs nevarēsiet atcelt šīs izmaiņas pēc sava statusa pazemināšanas. Gadījumā, ja esat pēdējais priviliģētais lietotājs istabā, būs neiespējami atgūt šīs privilēģijas.",
     "Unignore": "Atcelt ignorēšanu",
     "Jump to read receipt": "Pāriet uz pēdējo skatīto ziņu",
-    "Send an encrypted reply…": "Sūtīt šifrētu atbildi…",
-    "Send an encrypted message…": "Sūtīt šifrētu ziņu…",
     "%(duration)ss": "%(duration)s sek",
     "%(duration)sm": "%(duration)smin",
     "%(duration)sh": "%(duration)s stundas",
@@ -374,13 +365,11 @@
     "Source URL": "Avota URL adrese",
     "Filter results": "Filtrēt rezultātus",
     "No update available.": "Nav atjauninājumu.",
-    "Collecting app version information": "Tiek iegūta programmas versijas informācija",
     "Tuesday": "Otrdiena",
     "Search…": "Meklēt…",
     "Preparing to send logs": "Gatavojos nosūtīt atutošanas logfailus",
     "Saturday": "Sestdiena",
     "Monday": "Pirmdiena",
-    "Collecting logs": "Tiek iegūti logfaili",
     "All Rooms": "Visās istabās",
     "Wednesday": "Trešdiena",
     "You cannot delete this message. (%(code)s)": "Tu nevari dzēst šo ziņu. (%(code)s)",
@@ -413,7 +402,6 @@
     "Philippines": "Filipīnas",
     "Got It": "Sapratu",
     "Waiting for %(displayName)s to accept…": "Gaida, kamēr %(displayName)s akceptēs…",
-    "Waiting for answer": "Tiek gaidīta atbilde",
     "To be secure, do this in person or use a trusted way to communicate.": "Lai tas būtu droši, dariet to klātienē vai lietojiet kādu uzticamu saziņas veidu.",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Papildu drošībai verificējiet šo lietotāju, pārbaudot vienreizēju kodu abās ierīcēs.",
     "Not Trusted": "Neuzticama",
@@ -468,7 +456,6 @@
     "Remove recent messages": "Dzēst nesenās ziņas",
     "Banana": "Banāns",
     "You were banned from %(roomName)s by %(memberName)s": "%(memberName)s liedza jums pieeju %(roomName)s",
-    "Ban users": "Pieejas liegumi lietotājiem",
     "The user must be unbanned before they can be invited.": "Lietotājam jābūt atceltam pieejas liegumam pirms uzaicināšanas.",
     "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s izveidoja noteikumu pieejas liegšanai, kas atbilst %(glob)s dēļ %(reason)s",
     "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s izveidoja noteikumu pieejas liegšanai serveriem, kas atbilst %(glob)s dēļ %(reason)s",
@@ -577,20 +564,8 @@
     "Phone numbers": "Tālruņa numuri",
     "Email Address": "Epasta adrese",
     "Email addresses": "Epasta adreses",
-    "Change topic": "Nomainīt tematu",
-    "Change room avatar": "Mainīt istabas avataru",
-    "Change main address for the room": "Mainīt istabas galveno adresi",
-    "Change history visibility": "Mainīt vēstures redzamību",
-    "Change permissions": "Mainīt atļaujas",
-    "Notify everyone": "Apziņot visus",
-    "Remove messages sent by others": "Dzēst citu sūtītas ziņas",
-    "Change settings": "Mainīt iestatījumus",
-    "Invite users": "Uzaicināt lietotājus",
-    "Send messages": "Sūtīt ziņas",
-    "Default role": "Noklusējuma loma",
     "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "Izmaiņas attiecībā uz to, kas var lasīt vēsturi, attieksies tikai uz nākamajiem ziņām šajā istabā. Esošās vēstures redzamība nemainīsies.",
     "Never send encrypted messages to unverified sessions in this room from this session": "Nesūtīt šifrētas ziņas no šīs sesijas neverificētām sesijām šajā istabā",
-    "Enable room encryption": "Iespējot istabas šifrēšanu",
     "Enable encryption?": "Iespējot šifrēšanu?",
     "Encryption": "Šifrēšana",
     "Roles & Permissions": "Lomas un atļaujas",
@@ -610,7 +585,6 @@
     "Published Addresses": "Publiskotās adreses",
     "Other published addresses:": "Citas publiskotās adreses:",
     "This address is already in use": "Šī adrese jau tiek izmantota",
-    "Other": "Citi",
     "Show less": "Rādīt mazāk",
     "Show more": "Rādīt vairāk",
     "Show %(count)s more": {
@@ -622,7 +596,6 @@
     "This address is available to use": "Šī adrese ir pieejama",
     "Room Addresses": "Istabas adreses",
     "Room Topic": "Istabas temats",
-    "Change room name": "Nomainīt istabas nosaukumu",
     "Room %(name)s": "Istaba %(name)s",
     "Room Name": "Istabas nosaukums",
     "General failure": "Vispārīga kļūda",
@@ -739,7 +712,6 @@
     "Enter password": "Ievadiet paroli",
     "Something went wrong in confirming your identity. Cancel and try again.": "Kaut kas nogāja greizi, mēģinot apstiprināt jūsu identitāti. Atceliet un mēģiniet vēlreiz.",
     "Session key": "Sesijas atslēga",
-    "Secure Backup": "Droša rezerves kopija",
     "Accept all %(invitedRooms)s invites": "Pieņemt visus %(invitedRooms)s uzaicinājumus",
     "Bulk options": "Lielapjoma opcijas",
     "Clear cache and reload": "Notīrīt kešatmiņu un pārlādēt",
@@ -754,14 +726,6 @@
     "Scan this unique code": "Noskenējiet šo unikālo kodu",
     "The other party cancelled the verification.": "Pretējā puse pārtrauca verificēšanu.",
     "Send analytics data": "Sūtīt analītikas datus",
-    "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
-    "%(senderName)s: %(message)s": "%(senderName)s: %(message)s",
-    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
-    "%(senderName)s is calling": "%(senderName)s zvana",
-    "%(senderName)s started a call": "%(senderName)s uzsāka zvanu",
-    "You started a call": "Jūs uzsākāt zvanu",
-    "%(senderName)s joined the call": "%(senderName)s pievienojās zvanam",
-    "You joined the call": "Jūs pievienojāties zvanam",
     "New version of %(brand)s is available": "Pieejama jauna %(brand)s versija",
     "Update %(brand)s": "Atjaunināt %(brand)s",
     "New login. Was this you?": "Jauna pierakstīšanās. Vai tas bijāt jūs?",
@@ -864,13 +828,11 @@
     "Accept <policyLink /> to continue:": "Akceptēt <policyLink />, lai turpinātu:",
     "Anchor": "Enkurs",
     "Aeroplane": "Aeroplāns",
-    "%(senderName)s ended the call": "%(senderName)s pabeidza zvanu",
     "A word by itself is easy to guess": "Vārds pats par sevi ir viegli uzminams",
     "Add another word or two. Uncommon words are better.": "Papildiniet ar vēl kādiem vārdiem. Netipiski vārdi ir labāk.",
     "All-uppercase is almost as easy to guess as all-lowercase": "Visus lielos burtus ir gandrīz tikpat viegli uzminēt kā visus mazos",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) pierakstījās jaunā sesijā, neveicot tās verifikāciju:",
-    "Actions": "Darbības",
     "Denmark": "Dānija",
     "American Samoa": "Amerikāņu Samoa",
     "Algeria": "Alžīrija",
@@ -909,12 +871,9 @@
     "Remove %(email)s?": "Dēst %(email)s?",
     "Waiting for %(displayName)s to verify…": "Gaida uz %(displayName)s, lai verificētu…",
     "Verify this user by confirming the following number appears on their screen.": "Verificēt šo lietotāju, apstiprinot, ka šāds numurs pārādās lietotāja ekrānā.",
-    "You ended the call": "Jūs pabeidzāt zvanu",
     "Other users may not trust it": "Citi lietotāji var neuzskatīt to par uzticamu",
     "Verify this session": "Verificēt šo sesiju",
     "You signed in to a new session without verifying it:": "Jūs pierakstījāties jaunā sesijā, neveicot tās verifikāciju:",
-    "You're already in a call with this person.": "Jums jau notiek zvans ar šo personu.",
-    "Already in call": "Notiek zvans",
     "%(deviceId)s from %(ip)s": "%(deviceId)s no %(ip)s",
     "%(count)s people you know have already joined": {
         "other": "%(count)s pazīstami cilvēki ir jau pievienojusies",
@@ -929,8 +888,6 @@
     "Room List": "Istabu saraksts",
     "Send as message": "Nosūtīt kā ziņu",
     "%(brand)s URL": "%(brand)s URL",
-    "Send a message…": "Nosūtīt ziņu…",
-    "Send a reply…": "Nosūtīt atbildi…",
     "Room version": "Istabas versija",
     "Room list": "Istabu saraksts",
     "Upload files": "Failu augšupielāde",
@@ -1023,8 +980,6 @@
     "Use an identity server to invite by email. Manage in Settings.": "Izmantojiet identitātes serveri, lai uzaicinātu pa e-pastu. Pārvaldība pieejama Iestatījumos.",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Izmantojiet identitātes serveri, lai uzaicinātu pa e-pastu. Noklikšķiniet uz Turpināt, lai izmantotu noklusējuma identitātes serveri (%(defaultIdentityServerName)s) vai nomainītu to Iestatījumos.",
     "Use an identity server": "Izmantot identitāšu serveri",
-    "Effects": "Efekti",
-    "Messages": "Ziņas",
     "Setting up keys": "Atslēgu iestatīšana",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Pārējiem uzaicinājumi tika nosūtīti, bet zemāk norādītos cilvēkus uz <RoomName/> nevarēja uzaicināt",
     "Some invites couldn't be sent": "Dažus uzaicinājumus nevarēja nosūtīt",
@@ -1270,13 +1225,6 @@
     "Unable to transfer call": "Neizdevās pārsūtīt zvanu",
     "There was an error looking up the phone number": "Meklējot tālruņa numuru, radās kļūda",
     "Unable to look up phone number": "Nevar atrast tālruņa numuru",
-    "No other application is using the webcam": "Neviena cita lietotne neizmanto kameru",
-    "Permission is granted to use the webcam": "Piešķirta atļauja izmantot kameru",
-    "A microphone and webcam are plugged in and set up correctly": "Mikrofons un kamera ir pievienoti un pareizi konfigurēti",
-    "Call failed because webcam or microphone could not be accessed. Check that:": "Zvans neizdevās, jo nevarēja piekļūt kamerai vai mikrofonam. Pārbaudiet, vai:",
-    "Unable to access webcam / microphone": "Nevar piekļūt kamerai / mikrofonam",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Zvans neizdevās, jo nebija piekļuves mikrofonam. Pārliecinieties, vai mikrofons ir pievienots un pareizi konfigurēts.",
-    "Unable to access microphone": "Nav pieejas mikrofonam",
     "The call was answered on another device.": "Uz zvanu tika atbildēts no citas ierīces.",
     "Answered Elsewhere": "Atbildēja citur",
     "The call could not be established": "Savienojums nevarēja tikt izveidots",
@@ -1296,7 +1244,6 @@
     "Can't load this message": "Nevar ielādēt šo ziņu",
     "Send voice message": "Sūtīt balss ziņu",
     "Address": "Adrese",
-    "%(sharerName)s is presenting": "%(sharerName)s prezentē",
     "Hey you. You're the best!": "Sveiks! Tu esi labākais!",
     "Share %(name)s": "Dalīties ar %(name)s",
     "Explore Public Rooms": "Pārlūkot publiskas istabas",
@@ -1363,7 +1310,6 @@
     "Surround selected text when typing special characters": "Iekļaut iezīmēto tekstu, rakstot speciālās rakstzīmes",
     "Use custom size": "Izmantot pielāgotu izmēru",
     "Font size": "Šrifta izmērs",
-    "Call ended": "Zvans beidzās",
     "Dates are often easy to guess": "Datumi bieži vien ir viegli uzminami",
     "Final result based on %(count)s votes": {
         "one": "Gala rezultāts pamatojoties uz %(count)s balss",
@@ -1585,7 +1531,8 @@
         "encrypted": "Šifrēts",
         "trusted": "Uzticama",
         "not_trusted": "Neuzticama",
-        "unnamed_room": "Istaba bez nosaukuma"
+        "unnamed_room": "Istaba bez nosaukuma",
+        "secure_backup": "Droša rezerves kopija"
     },
     "action": {
         "continue": "Turpināt",
@@ -1666,7 +1613,11 @@
         "home": "Mājup"
     },
     "composer": {
-        "format_inline_code": "Kods"
+        "format_inline_code": "Kods",
+        "placeholder_reply_encrypted": "Sūtīt šifrētu atbildi…",
+        "placeholder_reply": "Nosūtīt atbildi…",
+        "placeholder_encrypted": "Sūtīt šifrētu ziņu…",
+        "placeholder": "Nosūtīt ziņu…"
     },
     "Code": "Kods",
     "power_level": {
@@ -1678,7 +1629,9 @@
     },
     "bug_reporting": {
         "submit_debug_logs": "Iesniegt atutošanas logfailus",
-        "send_logs": "Nosūtīt logfailus"
+        "send_logs": "Nosūtīt logfailus",
+        "collecting_information": "Tiek iegūta programmas versijas informācija",
+        "collecting_logs": "Tiek iegūti logfaili"
     },
     "time": {
         "seconds_left": "%(seconds)s sekundes atlikušas",
@@ -1745,7 +1698,9 @@
         "event_sent": "Notikums nosūtīts!",
         "event_content": "Notikuma saturs",
         "toolbox": "Instrumentārijs",
-        "developer_tools": "Izstrādātāja rīki"
+        "developer_tools": "Izstrādātāja rīki",
+        "category_room": "Istaba",
+        "category_other": "Citi"
     },
     "export_chat": {
         "creator_summary": "%(creatorName)s izveidoja šo istabu."
@@ -1851,6 +1806,9 @@
                 "other": "%(names)s un %(count)s citi raksta…",
                 "one": "%(names)s un vēl viens raksta…"
             }
+        },
+        "m.call.hangup": {
+            "dm": "Zvans beidzās"
         }
     },
     "slash_command": {
@@ -1881,7 +1839,14 @@
         "help": "Parāda komandu sarakstu ar pielietojumiem un aprakstiem",
         "whois": "Parāda lietotāja informāciju",
         "rageshake": "Nosūtīt kļūdas ziņojumu ar žurnāliem/logiem",
-        "msg": "Nosūtīt ziņu dotajam lietotājam"
+        "msg": "Nosūtīt ziņu dotajam lietotājam",
+        "usage": "Lietojums",
+        "category_messages": "Ziņas",
+        "category_actions": "Darbības",
+        "category_admin": "Administrators",
+        "category_advanced": "Papildu",
+        "category_effects": "Efekti",
+        "category_other": "Citi"
     },
     "presence": {
         "online_for": "Tiešsaistē %(duration)s",
@@ -1893,5 +1858,61 @@
         "unknown": "Neskaidrs statuss",
         "offline": "Bezsaistē"
     },
-    "Unknown": "Neskaidrs statuss"
+    "Unknown": "Neskaidrs statuss",
+    "event_preview": {
+        "m.call.answer": {
+            "you": "Jūs pievienojāties zvanam",
+            "user": "%(senderName)s pievienojās zvanam"
+        },
+        "m.call.hangup": {
+            "you": "Jūs pabeidzāt zvanu",
+            "user": "%(senderName)s pabeidza zvanu"
+        },
+        "m.call.invite": {
+            "you": "Jūs uzsākāt zvanu",
+            "user": "%(senderName)s uzsāka zvanu",
+            "dm_send": "Tiek gaidīta atbilde",
+            "dm_receive": "%(senderName)s zvana"
+        },
+        "m.emote": "* %(senderName)s %(emote)s",
+        "m.text": "%(senderName)s: %(message)s",
+        "m.sticker": "%(senderName)s: %(stickerName)s"
+    },
+    "voip": {
+        "user_is_presenting": "%(sharerName)s prezentē",
+        "hangup": "Beigt zvanu",
+        "voice_call": "Balss zvans",
+        "video_call": "Video zvans",
+        "call_failed": "Zvans neizdevās",
+        "unable_to_access_microphone": "Nav pieejas mikrofonam",
+        "call_failed_microphone": "Zvans neizdevās, jo nebija piekļuves mikrofonam. Pārliecinieties, vai mikrofons ir pievienots un pareizi konfigurēts.",
+        "unable_to_access_media": "Nevar piekļūt kamerai / mikrofonam",
+        "call_failed_media": "Zvans neizdevās, jo nevarēja piekļūt kamerai vai mikrofonam. Pārbaudiet, vai:",
+        "call_failed_media_connected": "Mikrofons un kamera ir pievienoti un pareizi konfigurēti",
+        "call_failed_media_permissions": "Piešķirta atļauja izmantot kameru",
+        "call_failed_media_applications": "Neviena cita lietotne neizmanto kameru",
+        "already_in_call": "Notiek zvans",
+        "already_in_call_person": "Jums jau notiek zvans ar šo personu."
+    },
+    "Messages": "Ziņas",
+    "Other": "Citi",
+    "Advanced": "Papildu",
+    "room_settings": {
+        "permissions": {
+            "m.room.avatar": "Mainīt istabas avataru",
+            "m.room.name": "Nomainīt istabas nosaukumu",
+            "m.room.canonical_alias": "Mainīt istabas galveno adresi",
+            "m.room.history_visibility": "Mainīt vēstures redzamību",
+            "m.room.power_levels": "Mainīt atļaujas",
+            "m.room.topic": "Nomainīt tematu",
+            "m.room.encryption": "Iespējot istabas šifrēšanu",
+            "users_default": "Noklusējuma loma",
+            "events_default": "Sūtīt ziņas",
+            "invite": "Uzaicināt lietotājus",
+            "state_default": "Mainīt iestatījumus",
+            "ban": "Pieejas liegumi lietotājiem",
+            "redact": "Dzēst citu sūtītas ziņas",
+            "notifications.room": "Apziņot visus"
+        }
+    }
 }

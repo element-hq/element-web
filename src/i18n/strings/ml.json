@@ -21,12 +21,10 @@
     "Source URL": "സോഴ്സ് യു ആര്‍ എല്‍",
     "Failed to add tag %(tagName)s to room": "റൂമിന് %(tagName)s എന്ന ടാഗ് ആഡ് ചെയ്യുവാന്‍ സാധിച്ചില്ല",
     "No update available.": "അപ്ഡേറ്റുകള്‍ ലഭ്യമല്ല.",
-    "Collecting app version information": "ആപ്പ് പതിപ്പു വിവരങ്ങള്‍ ശേഖരിക്കുന്നു",
     "Tuesday": "ചൊവ്വ",
     "Unnamed room": "പേരില്ലാത്ത റൂം",
     "Saturday": "ശനി",
     "Monday": "തിങ്കള്‍",
-    "Collecting logs": "നാള്‍വഴി ശേഖരിക്കുന്നു",
     "All Rooms": "എല്ലാ മുറികളും കാണുക",
     "Wednesday": "ബുധന്‍",
     "You cannot delete this message. (%(code)s)": "നിങ്ങള്‍ക്ക് ഈ സന്ദേശം നീക്കം ചെയ്യാനാകില്ല. (%(code)s)",
@@ -72,7 +70,9 @@
         "back": "തിരികെ"
     },
     "bug_reporting": {
-        "send_logs": "നാള്‍വഴി അയയ്ക്കുക"
+        "send_logs": "നാള്‍വഴി അയയ്ക്കുക",
+        "collecting_information": "ആപ്പ് പതിപ്പു വിവരങ്ങള്‍ ശേഖരിക്കുന്നു",
+        "collecting_logs": "നാള്‍വഴി ശേഖരിക്കുന്നു"
     },
     "settings": {
         "notifications": {

@@ -2,13 +2,11 @@
     "AM": "AM",
     "PM": "PM",
     "Account": "Account",
-    "Admin": "Admin",
     "No Microphones detected": "No Microphones detected",
     "No Webcams detected": "No Webcams detected",
     "No media permissions": "No media permissions",
     "You may need to manually permit %(brand)s to access your microphone/webcam": "You may need to manually permit %(brand)s to access your microphone/webcam",
     "Default Device": "Default Device",
-    "Advanced": "Advanced",
     "Authentication": "Authentication",
     "%(items)s and %(lastItem)s": "%(items)s and %(lastItem)s",
     "and %(count)s others...": {
@@ -60,7 +58,6 @@
     "Forget room": "Forget room",
     "For security, this session has been signed out. Please sign in again.": "For security, this session has been signed out. Please sign in again.",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s",
-    "Hangup": "Hangup",
     "Historical": "Historical",
     "Import E2E room keys": "Import E2E room keys",
     "Incorrect username and/or password.": "Incorrect username and/or password.",
@@ -129,12 +126,9 @@
     "unknown error code": "unknown error code",
     "Upload avatar": "Upload avatar",
     "Upload Failed": "Upload Failed",
-    "Usage": "Usage",
     "Users": "Users",
     "Verification Pending": "Verification Pending",
     "Verified key": "Verified key",
-    "Video call": "Video call",
-    "Voice call": "Voice call",
     "Warning!": "Warning!",
     "Who can read history?": "Who can read history?",
     "You cannot place a call with yourself.": "You cannot place a call with yourself.",
@@ -247,13 +241,11 @@
     "Source URL": "Source URL",
     "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
     "No update available.": "No update available.",
-    "Collecting app version information": "Collecting app version information",
     "Tuesday": "Tuesday",
     "Search…": "Search…",
     "Unnamed room": "Unnamed room",
     "Saturday": "Saturday",
     "Monday": "Monday",
-    "Collecting logs": "Collecting logs",
     "All Rooms": "All Rooms",
     "Wednesday": "Wednesday",
     "Send": "Send",
@@ -267,7 +259,6 @@
     "Low Priority": "Low Priority",
     "Off": "Off",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
-    "Call Failed": "Call Failed",
     "Permission Required": "Permission Required",
     "You do not have permission to start a conference call in this room": "You do not have permission to start a conference call in this room",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
@@ -287,9 +278,6 @@
     "Your %(brand)s is misconfigured": "Your %(brand)s is misconfigured",
     "Call failed due to misconfigured server": "Call failed due to misconfigured server",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.",
-    "Messages": "Messages",
-    "Actions": "Actions",
-    "Other": "Other",
     "Add Email Address": "Add Email Address",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Confirm adding this phone number by using Single Sign On to prove your identity.",
     "Confirm adding phone number": "Confirm adding phone number",
@@ -320,11 +308,6 @@
     "Add some details to help people recognise it.": "Add some details to help people recognize it.",
     "A private space to organise your rooms": "A private space to organize your rooms",
     "Message search initialisation failed": "Message search initialization failed",
-    "Permission is granted to use the webcam": "Permission is granted to use the webcam",
-    "A microphone and webcam are plugged in and set up correctly": "A microphone and webcam are plugged in and set up correctly",
-    "Call failed because webcam or microphone could not be accessed. Check that:": "Call failed because webcam or microphone could not be accessed. Check that:",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.",
-    "Unable to access microphone": "Unable to access microphone",
     "The call was answered on another device.": "The call was answered on another device.",
     "Answered Elsewhere": "Answered Elsewhere",
     "The call could not be established": "The call could not be established",
@@ -401,7 +384,9 @@
         "custom": "Custom (%(level)s)"
     },
     "bug_reporting": {
-        "send_logs": "Send logs"
+        "send_logs": "Send logs",
+        "collecting_information": "Collecting app version information",
+        "collecting_logs": "Collecting logs"
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss left",
@@ -491,11 +476,35 @@
         "devtools": "Opens the Developer Tools dialog",
         "addwidget": "Adds a custom widget by URL to the room",
         "rainbow": "Sends the given message colored as a rainbow",
-        "rainbowme": "Sends the given emote colored as a rainbow"
+        "rainbowme": "Sends the given emote colored as a rainbow",
+        "usage": "Usage",
+        "category_messages": "Messages",
+        "category_actions": "Actions",
+        "category_admin": "Admin",
+        "category_advanced": "Advanced",
+        "category_other": "Other"
     },
     "presence": {
         "online": "Online",
         "idle": "Idle",
         "offline": "Offline"
-    }
+    },
+    "voip": {
+        "hangup": "Hangup",
+        "voice_call": "Voice call",
+        "video_call": "Video call",
+        "call_failed": "Call Failed",
+        "unable_to_access_microphone": "Unable to access microphone",
+        "call_failed_microphone": "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.",
+        "call_failed_media": "Call failed because webcam or microphone could not be accessed. Check that:",
+        "call_failed_media_connected": "A microphone and webcam are plugged in and set up correctly",
+        "call_failed_media_permissions": "Permission is granted to use the webcam"
+    },
+    "devtools": {
+        "category_room": "Room",
+        "category_other": "Other"
+    },
+    "Messages": "Messages",
+    "Other": "Other",
+    "Advanced": "Advanced"
 }

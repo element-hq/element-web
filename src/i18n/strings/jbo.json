@@ -2,7 +2,6 @@
     "This email address is already in use": ".i xa'o pilno fa da le samymri judri",
     "This phone number is already in use": ".i xa'o pilno fa da le fonxa judri",
     "Failed to verify email address: make sure you clicked the link in the email": ".i da nabmi fi lo nu facki le du'u do ponse le te samymri .i ko birti le du'u do samcu'a le judrysni pe le se samymri",
-    "Call Failed": ".i da nabmi fi lo nu co'a fonjo'e",
     "You cannot place a call with yourself.": ".i do na ka'e fonjo'e do",
     "Permission Required": ".i lo nu curmi cu sarcu",
     "You do not have permission to start a conference call in this room": ".i na curmi lo nu le du'u co'a girzu fonjo'e cu zilbe'i do fo le ca se cuxna",
@@ -40,7 +39,6 @@
     "Default": "zmiselcu'a",
     "Restricted": "vlipa so'u da",
     "Moderator": "vlipa so'o da",
-    "Admin": "vlipa so'i da",
     "Power level must be positive integer.": ".i lo nu le ni vlipa cu kacna'u cu sarcu",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": ".i la'o ly. %(senderName)s .ly. gafygau %(powerLevelDiffText)s",
     "Failed to change power level": ".i pu fliba lo nu gafygau lo ni vlipa",
@@ -58,7 +56,6 @@
     "Missing room_id in request": ".i na pa judri be pa ve zilbe'i cu pagbu le ve cpedu",
     "Room %(roomId)s not visible": ".i na kakne lo nu viska la'o ly. %(roomId)s .ly. noi kumfa pe'a",
     "Missing user_id in request": ".i na pa judri be pa pilno cu pagbu le ve cpedu",
-    "Usage": "tadji lo nu pilno",
     "Changes your display nickname": "",
     "Ignored user": ".i mo'u co'a na jundi tu'a le pilno",
     "You are now ignoring %(userId)s": ".i ca na jundi tu'a la'o zoi. %(userId)s .zoi",
@@ -80,8 +77,6 @@
     "Enable URL previews for this room (only affects you)": "lo du'u xu kau do zmiku purzga lo se urli ne'i le kumfa pe'a",
     "Enable URL previews by default for participants in this room": "lo zmiselcu'a pe lo du'u xu kau lo cmima be le kumfa pe'a cu zmiku purzga lo se urli",
     "Enable widget screenshots on supported widgets": "lo du'u xu kau kakne lo nu co'a pixra lo uidje kei lo nu kakne tu'a .ubu",
-    "Collecting app version information": ".i ca'o facki le du'u favytcinymupli",
-    "Collecting logs": ".i ca'o facki le du'u citri",
     "Waiting for response from server": ".i ca'o denpa lo nu le samtcise'u cu spuda",
     "Incorrect verification code": ".i na'e drani ke lacri lerpoi",
     "Phone": "fonxa",
@@ -97,10 +92,6 @@
     "Change Password": "nu basti fi le ka lerpoijaspu",
     "Authentication": "lo nu facki lo du'u do du ma kau",
     "Failed to set display name": ".i pu fliba lo nu galfi lo cmene",
-    "Messages": "notci",
-    "Actions": "ka'e se zukte",
-    "Advanced": "macnu",
-    "Other": "drata",
     "Command error": ".i da nabmi fi lo nu minde",
     "Could not find user in room": ".i le pilno na pagbu le se zilbe'i",
     "Session already verified!": ".i xa'o lacri le se samtcise'u",
@@ -171,10 +162,6 @@
     "Trumpet": "tabra",
     "Bell": "janbe",
     "Headphones": "selsnapra",
-    "Send an encrypted reply…": "nu pa mifra be pa jai te spuda cu zilbe'i",
-    "Send a reply…": "nu pa jai te spuda cu zilbe'i",
-    "Send an encrypted message…": "nu pa mifra be pa notci cu zilbe'i",
-    "Send a message…": "nu pa notci cu zilbe'i",
     "Rooms": "ve zilbe'i",
     "Show %(count)s more": {
         "other": "nu viska %(count)s na du",
@@ -218,25 +205,11 @@
     "Ok": "je'e",
     "Verify this session": "nu co'a lacri le se samtcise'u",
     "What's New": "notci le du'u cnino",
-    "You joined the call": ".i do mo'u co'a fonjo'e",
-    "%(senderName)s joined the call": ".i la'o zoi. %(senderName)s .zoi mo'u co'a fonjo'e",
-    "Call in progress": ".i ca'o fonjo'e",
-    "Call ended": ".i co'u fonjo'e",
-    "You started a call": ".i do co'a fonjo'e",
-    "%(senderName)s started a call": ".i la'o zoi. %(senderName)s .zoi co'a fonjo'e",
-    "Waiting for answer": ".i ca'o denpa lo nu spuda",
-    "%(senderName)s is calling": ".i la'o zoi. %(senderName)s .zoi co'a fonjo'e",
-    "%(senderName)s: %(message)s": "%(senderName)s: %(message)s",
-    "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
     "Use a system font": "nu da pe le vanbi cu ci'artai",
     "System font name": "cmene le ci'artai pe le vanbi",
     "Never send encrypted messages to unverified sessions from this session": "nu na pa mifra be pa notci cu zilbe'i pa se samtcise'u poi na se lanli ku'o le se samtcise'u",
     "Later": "nu ca na co'e",
     "Other users may not trust it": ".i la'a na pa na du be do cu lacri",
-    "Change room avatar": "nu basti fi le ka pixra sinxa le ve zilbe'i",
-    "Change room name": "nu basti fi le ka cmene le ve zilbe'i",
-    "Change main address for the room": "nu basti fi le ka ralju lu'i ro judri be le ve zilbe'i",
-    "Change topic": "nu basti fi le ka skicu lerpoi",
     "Sign Up": "nu co'a na'o jaspu",
     "<userName/> wants to chat": ".i la'o zoi. <userName/> .zoi kaidji le ka tavla do",
     "<userName/> invited you": ".i la'o zoi. <userName/> .zoi friti le ka ziljmina kei do",
@@ -257,10 +230,7 @@
     "This room is end-to-end encrypted": ".i ro zilbe'i be fo le cei'i cu mifra",
     "Everyone in this room is verified": ".i do lacri ro pagbu be le se zilbe'i",
     "The file '%(fileName)s' failed to upload.": ".i da nabmi fi lo nu kibdu'a la'o zoi. %(fileName)s .zoi",
-    "Invite users": "nu friti le ka ziljmina kei pa pilno",
     "Invite to this room": "nu friti le ka ziljmina le se zilbe'i",
-    "Voice call": "nu snavi fonjo'e",
-    "Video call": "nu vidvi fonjo'e",
     "Revoke invite": "nu zukte le ka na ckaji le se friti",
     "collapse": "nu tcila be na ku viska",
     "expand": "nu tcila viska",
@@ -427,6 +397,9 @@
                 "other": ".i la'o zoi. %(names)s .zoi je %(count)s na du ca'o ciska",
                 "one": ".i la'o zoi. %(names)s .zoi je pa na du ca'o ciska"
             }
+        },
+        "m.call.hangup": {
+            "dm": ".i co'u fonjo'e"
         }
     },
     "slash_command": {
@@ -435,6 +408,58 @@
         "ban": ".i rinka lo nu lo pilno poi se judri ti cu vitno cliva",
         "ignore": ".i rinka lo nu no'e jundi lo pilno gi'e mipri lo notci be fi py. do",
         "unignore": ".i sisti lo nu no'e jundi lo pilno gi'e mipri lo notci be fi py. do",
-        "devtools": ".i samymo'i lo favgau se pilno uidje"
+        "devtools": ".i samymo'i lo favgau se pilno uidje",
+        "usage": "tadji lo nu pilno",
+        "category_messages": "notci",
+        "category_actions": "ka'e se zukte",
+        "category_admin": "vlipa so'i da",
+        "category_advanced": "macnu",
+        "category_other": "drata"
+    },
+    "event_preview": {
+        "m.call.answer": {
+            "you": ".i do mo'u co'a fonjo'e",
+            "user": ".i la'o zoi. %(senderName)s .zoi mo'u co'a fonjo'e",
+            "dm": ".i ca'o fonjo'e"
+        },
+        "m.call.hangup": {},
+        "m.call.invite": {
+            "you": ".i do co'a fonjo'e",
+            "user": ".i la'o zoi. %(senderName)s .zoi co'a fonjo'e",
+            "dm_send": ".i ca'o denpa lo nu spuda",
+            "dm_receive": ".i la'o zoi. %(senderName)s .zoi co'a fonjo'e"
+        },
+        "m.text": "%(senderName)s: %(message)s",
+        "m.sticker": "%(senderName)s: %(stickerName)s"
+    },
+    "bug_reporting": {
+        "collecting_information": ".i ca'o facki le du'u favytcinymupli",
+        "collecting_logs": ".i ca'o facki le du'u citri"
+    },
+    "voip": {
+        "voice_call": "nu snavi fonjo'e",
+        "video_call": "nu vidvi fonjo'e",
+        "call_failed": ".i da nabmi fi lo nu co'a fonjo'e"
+    },
+    "Messages": "notci",
+    "devtools": {
+        "category_other": "drata"
+    },
+    "Other": "drata",
+    "Advanced": "macnu",
+    "composer": {
+        "placeholder_reply_encrypted": "nu pa mifra be pa jai te spuda cu zilbe'i",
+        "placeholder_reply": "nu pa jai te spuda cu zilbe'i",
+        "placeholder_encrypted": "nu pa mifra be pa notci cu zilbe'i",
+        "placeholder": "nu pa notci cu zilbe'i"
+    },
+    "room_settings": {
+        "permissions": {
+            "m.room.avatar": "nu basti fi le ka pixra sinxa le ve zilbe'i",
+            "m.room.name": "nu basti fi le ka cmene le ve zilbe'i",
+            "m.room.canonical_alias": "nu basti fi le ka ralju lu'i ro judri be le ve zilbe'i",
+            "m.room.topic": "nu basti fi le ka skicu lerpoi",
+            "invite": "nu friti le ka ziljmina kei pa pilno"
+        }
     }
 }

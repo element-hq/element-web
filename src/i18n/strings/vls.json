@@ -2,7 +2,6 @@
     "This email address is already in use": "Dat e-mailadresse hier es al in gebruuk",
     "This phone number is already in use": "Dezen telefongnumero es al in gebruuk",
     "Failed to verify email address: make sure you clicked the link in the email": "Kostege ’t e-mailadresse nie verifieern: zorgt dervoor da je de koppelienge in den e-mail èt angeklikt",
-    "Call Failed": "Iproep mislukt",
     "You cannot place a call with yourself.": "J’en ku jezelve nie belln.",
     "Permission Required": "Toestemmienge vereist",
     "You do not have permission to start a conference call in this room": "J’en èt geen toestemmienge voor in da groepsgesprek hier e vergoaderiengsgesprek te begunn",
@@ -46,7 +45,6 @@
     "Default": "Standoard",
     "Restricted": "Beperkten toegank",
     "Moderator": "Moderator",
-    "Admin": "Beheerder",
     "Operation failed": "Handelienge es mislukt",
     "Failed to invite": "Uutnodign es mislukt",
     "You need to be logged in.": "Hiervoorn moe je angemeld zyn.",
@@ -61,7 +59,6 @@
     "Missing room_id in request": "room_id ountbrikt in verzoek",
     "Room %(roomId)s not visible": "Gesprek %(roomId)s es nie zichtboar",
     "Missing user_id in request": "user_id ountbrikt in verzoek",
-    "Usage": "Gebruuk",
     "Ignored user": "Genegeerde gebruuker",
     "You are now ignoring %(userId)s": "Je negeert nu %(userId)s",
     "Unignored user": "Oungenegeerde gebruuker",
@@ -127,8 +124,6 @@
     "Enable URL previews by default for participants in this room": "URL-voorvertoniengn standoard vo de gebruukers in dit gesprek inschoakeln",
     "Enable widget screenshots on supported widgets": "Widget-schermafdrukkn inschoakeln ip oundersteunde widgets",
     "Show hidden events in timeline": "Verborgn gebeurtenissn ip de tydslyn weregeevn",
-    "Collecting app version information": "App-versieinformoasje wor verzoameld",
-    "Collecting logs": "Logboekn worden verzoameld",
     "Waiting for response from server": "Wachtn ip antwoord van de server",
     "The other party cancelled the verification.": "De tegenparty èt de verificoasje geannuleerd.",
     "Verified!": "Geverifieerd!",
@@ -226,7 +221,6 @@
     "Unable to load key backup status": "Kostege de sleuterback-upstatus nie loadn",
     "Restore from Backup": "Herstelln uut back-up",
     "All keys backed up": "Alle sleuters zyn geback-upt",
-    "Advanced": "Geavanceerd",
     "Back up your keys before signing out to avoid losing them.": "Makt een back-up van je sleuters vooraleer da je jen afmeldt vo ze nie kwyt te speeln.",
     "Start using Key Backup": "Begint me de sleuterback-up te gebruukn",
     "Notification targets": "Meldiengsbestemmiengn",
@@ -288,22 +282,9 @@
     "Room Addresses": "Gespreksadressn",
     "Publish this room to the public in %(domain)s's room directory?": "Dit gesprek openboar moakn in de gesprekscataloog van %(domain)s?",
     "URL Previews": "URL-voorvertoniengn",
-    "Change room avatar": "Gespreksavatar wyzign",
-    "Change room name": "Gespreksnoame wyzign",
-    "Change main address for the room": "Hoofdadresse vo ’t gesprek wyzign",
-    "Change history visibility": "Zichtboarheid van de geschiedenisse wyzign",
-    "Change permissions": "Toestemmiengn wyzign",
-    "Change topic": "Ounderwerp wyzign",
-    "Modify widgets": "Widgets anpassn",
     "Failed to unban": "Ountbann mislukt",
     "Unban": "Ountbann",
     "Banned by %(displayName)s": "Verbann deur %(displayName)s",
-    "Default role": "Standoardrolle",
-    "Send messages": "Berichtn verstuurn",
-    "Invite users": "Gebruukers uutnodign",
-    "Change settings": "Instelliengn wyzign",
-    "Ban users": "Gebruukers verbann",
-    "Notify everyone": "Iedereen meldn",
     "No users have specific privileges in this room": "Geen gebruukers èn specifieke privileges in dit gesprek",
     "Privileged Users": "Bevoorrechte gebruukers",
     "Muted Users": "Gedempte gebruukers",
@@ -342,11 +323,6 @@
     "Invited": "Uutgenodigd",
     "Filter room members": "Gespreksleedn filtern",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (macht %(powerLevelNumber)s)",
-    "Voice call": "Sproakiproep",
-    "Video call": "Video-iproep",
-    "Hangup": "Iphangn",
-    "Send an encrypted reply…": "Verstuurt e versleuterd antwoord…",
-    "Send an encrypted message…": "Verstuurt e versleuterd bericht…",
     "The conversation continues here.": "’t Gesprek goat hier verder.",
     "This room has been replaced and is no longer active.": "Dit gesprek is vervangn gewist en is nie langer actief.",
     "You do not have permission to post to this room": "J’èt geen toestemmienge voor in dit gesprek te postn",
@@ -369,7 +345,6 @@
     "Rooms": "Gesprekkn",
     "Low priority": "Leige prioriteit",
     "Historical": "Historisch",
-    "System Alerts": "Systeemmeldiengn",
     "Join the conversation with an account": "Neemt deel an ’t gesprek met een account",
     "Sign Up": "Registreern",
     "Reason: %(reason)s": "Reden: %(reason)s",
@@ -396,7 +371,6 @@
     "Search…": "Zoekn…",
     "You don't currently have any stickerpacks enabled": "J’è vo de moment geen stickerpakkettn ingeschoakeld",
     "Add some now": "Voegt der nu e poar toe",
-    "Stickerpack": "Stickerpakket",
     "Failed to revoke invite": "Intrekkn van d’uutnodigienge is mislukt",
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "Kostege d’uutnodigienge nie intrekkn. De server oundervindt meuglik e tydelik probleem, of j’èt ounvoldoende rechtn vo d’uutnodigienge in te trekkn.",
     "Revoke invite": "Uutnodigienge intrekkn",
@@ -659,7 +633,6 @@
     "Email (optional)": "E-mailadresse (optioneel)",
     "Phone (optional)": "Telefongnumero (optioneel)",
     "Join millions for free on the largest public server": "Doe mee me miljoenen anderen ip de grotste publieke server",
-    "Other": "Overige",
     "Couldn't load page": "Kostege ’t blad nie loadn",
     "You must <a>register</a> to use this functionality": "Je moe je <a>registreern</a> vo deze functie te gebruukn",
     "You must join the room to see its files": "Je moe tout ’t gesprek toetreedn vo de bestandn te kunn zien",
@@ -807,8 +780,6 @@
     "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Je ku je nie anmeldn me jen account. Nimt contact ip me de beheerder van je thuusserver vo meer informoasje.",
     "You're signed out": "Je zyt afgemeld",
     "Clear personal data": "Persoonlike gegeevns wissn",
-    "Messages": "Berichtn",
-    "Actions": "Acties",
     "Checking server": "Server wor gecontroleerd",
     "Disconnect from the identity server <idserver />?": "Wil je de verbindienge me den identiteitsserver <idserver /> verbreekn?",
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "Je makt vo de moment gebruuk van <server></server> vo deur je contactn gevoundn te kunn wordn, en von hunder te kunn viendn. Je kut hierounder jen identiteitsserver wyzign.",
@@ -875,7 +846,9 @@
         "emoji": "Emoticons",
         "someone": "Etwien",
         "encrypted": "Versleuterd",
-        "unnamed_room": "Noamloos gesprek"
+        "unnamed_room": "Noamloos gesprek",
+        "stickerpack": "Stickerpakket",
+        "system_alerts": "Systeemmeldiengn"
     },
     "action": {
         "continue": "Verdergoan",
@@ -939,7 +912,9 @@
         "home": "Thuus"
     },
     "composer": {
-        "format_inline_code": "Code"
+        "format_inline_code": "Code",
+        "placeholder_reply_encrypted": "Verstuurt e versleuterd antwoord…",
+        "placeholder_encrypted": "Verstuurt e versleuterd bericht…"
     },
     "Code": "Code",
     "power_level": {
@@ -954,7 +929,9 @@
         "additional_context": "Indien da ’t er bykomende context zou kunn helpn vo ’t probleem t’analyseern, lyk wyk dan je juste an ’t doen woart, relevante gespreks-ID’s, gebruukers-ID’s, enz., gelieve deze informoasje ton hier mee te geevn.",
         "send_logs": "Logboekn verstuurn",
         "github_issue": "GitHub-meldienge",
-        "before_submitting": "Vooraleer da je logboekn indient, moe j’e <a>meldienge openn ip GitHub</a> woarin da je je probleem beschryft."
+        "before_submitting": "Vooraleer da je logboekn indient, moe j’e <a>meldienge openn ip GitHub</a> woarin da je je probleem beschryft.",
+        "collecting_information": "App-versieinformoasje wor verzoameld",
+        "collecting_logs": "Logboekn worden verzoameld"
     },
     "settings": {
         "use_12_hour_format": "Tyd in 12-uursformoat weregeevn (bv. 2:30pm)",
@@ -990,7 +967,9 @@
         "event_sent": "Gebeurtenisse verstuurd!",
         "event_content": "Gebeurtenisinhoud",
         "toolbox": "Gereedschap",
-        "developer_tools": "Ountwikkeliengsgereedschap"
+        "developer_tools": "Ountwikkeliengsgereedschap",
+        "category_room": "Gesprek",
+        "category_other": "Overige"
     },
     "timeline": {
         "m.room.topic": "%(senderDisplayName)s èt ’t ounderwerp gewyzigd noa ‘%(topic)s’.",
@@ -1059,7 +1038,13 @@
         "addwidget": "Voegt met een URL een angepaste widget toe an ’t gesprek",
         "rainbow": "Verstuurt ’t gegeevn bericht in regenboogkleurn",
         "rainbowme": "Verstuurt de gegeevn emoticon in regenboogkleurn",
-        "help": "Toogt e lyste van beschikboare ipdrachtn, met hunder gebruukn en beschryviengn"
+        "help": "Toogt e lyste van beschikboare ipdrachtn, met hunder gebruukn en beschryviengn",
+        "usage": "Gebruuk",
+        "category_messages": "Berichtn",
+        "category_actions": "Acties",
+        "category_admin": "Beheerder",
+        "category_advanced": "Geavanceerd",
+        "category_other": "Overige"
     },
     "presence": {
         "online_for": "Online vo %(duration)s",
@@ -1071,5 +1056,31 @@
         "unknown": "Ounbekend",
         "offline": "Offline"
     },
-    "Unknown": "Ounbekend"
+    "Unknown": "Ounbekend",
+    "voip": {
+        "hangup": "Iphangn",
+        "voice_call": "Sproakiproep",
+        "video_call": "Video-iproep",
+        "call_failed": "Iproep mislukt"
+    },
+    "Messages": "Berichtn",
+    "Other": "Overige",
+    "Advanced": "Geavanceerd",
+    "room_settings": {
+        "permissions": {
+            "m.room.avatar": "Gespreksavatar wyzign",
+            "m.room.name": "Gespreksnoame wyzign",
+            "m.room.canonical_alias": "Hoofdadresse vo ’t gesprek wyzign",
+            "m.room.history_visibility": "Zichtboarheid van de geschiedenisse wyzign",
+            "m.room.power_levels": "Toestemmiengn wyzign",
+            "m.room.topic": "Ounderwerp wyzign",
+            "m.widget": "Widgets anpassn",
+            "users_default": "Standoardrolle",
+            "events_default": "Berichtn verstuurn",
+            "invite": "Gebruukers uutnodign",
+            "state_default": "Instelliengn wyzign",
+            "ban": "Gebruukers verbann",
+            "notifications.room": "Iedereen meldn"
+        }
+    }
 }

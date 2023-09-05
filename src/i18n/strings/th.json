@@ -1,7 +1,6 @@
 {
     "Account": "บัญชี",
     "No Microphones detected": "ไม่พบไมโครโฟน",
-    "Advanced": "ขึ้นสูง",
     "Change Password": "เปลี่ยนรหัสผ่าน",
     "Default": "ค่าเริ่มต้น",
     "Default Device": "อุปกรณ์เริ่มต้น",
@@ -17,7 +16,6 @@
     "unknown error code": "รหัสข้อผิดพลาดที่ไม่รู้จัก",
     "Favourite": "รายการโปรด",
     "Failed to forget room %(errCode)s": "การลืมห้องล้มเหลว %(errCode)s",
-    "Admin": "ผู้ดูแล",
     "No Webcams detected": "ไม่พบกล้องเว็บแคม",
     "No media permissions": "ไม่มีสิทธิ์เข้าถึงสื่อ",
     "You may need to manually permit %(brand)s to access your microphone/webcam": "คุณอาจต้องให้สิทธิ์ %(brand)s เข้าถึงไมค์โครโฟนไมค์โครโฟน/กล้องเว็บแคม ด้วยตัวเอง",
@@ -54,7 +52,6 @@
     "Filter room members": "กรองสมาชิกห้อง",
     "Forget room": "ลืมห้อง",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s จาก %(fromPowerLevel)s ไปเป็น %(toPowerLevel)s",
-    "Hangup": "วางสาย",
     "Historical": "ประวัติแชทเก่า",
     "Incorrect username and/or password.": "ชื่อผู้ใช้และ/หรือรหัสผ่านไม่ถูกต้อง",
     "Incorrect verification code": "รหัสยืนยันไม่ถูกต้อง",
@@ -106,7 +103,6 @@
         "other": "กำลังอัปโหลด %(filename)s และอีก %(count)s ไฟล์"
     },
     "Upload Failed": "การอัปโหลดล้มเหลว",
-    "Usage": "การใช้งาน",
     "Warning!": "คำเตือน!",
     "Who can read history?": "ใครสามารถอ่านประวัติแชทได้?",
     "You have <a>disabled</a> URL previews by default.": "ค่าเริ่มต้นของคุณ<a>ปิดใช้งาน</a>ตัวอย่าง URL เอาไว้",
@@ -177,13 +173,11 @@
     "Source URL": "URL ต้นฉบับ",
     "No update available.": "ไม่มีอัปเดตที่ใหม่กว่า",
     "Noisy": "เสียงดัง",
-    "Collecting app version information": "กำลังรวบรวมข้อมูลเวอร์ชันแอป",
     "Tuesday": "วันอังคาร",
     "Search…": "ค้นหา…",
     "Unnamed room": "ห้องที่ไม่มีชื่อ",
     "Saturday": "วันเสาร์",
     "Monday": "วันจันทร์",
-    "Collecting logs": "กำลังรวบรวมล็อก",
     "All Rooms": "ทุกห้อง",
     "Wednesday": "วันพุธ",
     "All messages": "ทุกข้อความ",
@@ -199,21 +193,12 @@
     "Explore rooms": "สำรวจห้อง",
     "Create Account": "สร้างบัญชี",
     "Add Email Address": "เพิ่มที่อยู่อีเมล",
-    "Already in call": "อยู่ในสายแล้ว",
-    "No other application is using the webcam": "ไม่มีแอปพลิเคชันอื่นใดที่ใช้กล้อง",
-    "Permission is granted to use the webcam": "ได้รับอนุญาตให้ใช้กล้อง",
-    "A microphone and webcam are plugged in and set up correctly": "เสียบไมโครโฟนและกล้องและตั้งค่าอย่างถูกต้อง",
-    "Call failed because webcam or microphone could not be accessed. Check that:": "การโทรล้มเหลวเนื่องจากไม่สามารถเข้าถึงกล้องหรือไมโครโฟนได้ ตรวจสอบว่า:",
-    "Unable to access webcam / microphone": "ไม่สามารถเข้าถึง กล้อง/ไมโครโฟน",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "การโทรล้มเหลวเนื่องจากไม่สามารถเข้าถึงไมโครโฟนได้ ตรวจสอบว่าเสียบไมโครโฟนและตั้งค่าถูกต้อง.",
-    "Unable to access microphone": "ไม่สามารถเข้าถึงไมโครโฟน",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "โปรดสอบถามผู้ดูแลระบบของโฮมเซิร์ฟเวอร์ของคุณ (<code>%(homeserverDomain)s</code>) เพื่อกำหนดคอนฟิกเซิร์ฟเวอร์ TURN เพื่อให้การเรียกทำงานได้อย่างน่าเชื่อถือ.",
     "Call failed due to misconfigured server": "การโทรล้มเหลวเนื่องจากเซิร์ฟเวอร์กำหนดค่าไม่ถูกต้อง",
     "The call was answered on another device.": "คุณรับสายบนอุปกรณ์อื่นแล้ว.",
     "The call could not be established": "ไม่สามารถโทรออกได้",
     "The user you called is busy.": "ผู้ใช้ที่คุณโทรหาไม่ว่าง.",
     "User Busy": "ผู้ใช้ไม่ว่าง",
-    "Call Failed": "การโทรล้มเหลว",
     "Only continue if you trust the owner of the server.": "ดำเนินการต่อหากคุณไว้วางใจเจ้าของเซิร์ฟเวอร์เท่านั้น.",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "การดำเนินการนี้จำเป็นต้องเข้าถึงเซิร์ฟเวอร์ identity เริ่มต้น <server /> เพื่อตรวจสอบที่อยู่อีเมลหรือหมายเลขโทรศัพท์ แต่เซิร์ฟเวอร์ไม่มีข้อกำหนดในการให้บริการใดๆ.",
     "Identity server has no terms of service": "เซิร์ฟเวอร์ประจำตัวไม่มีข้อกำหนดในการให้บริการ",
@@ -257,9 +242,6 @@
     "Too Many Calls": "โทรมากเกินไป",
     "You cannot place calls without a connection to the server.": "คุณไม่สามารถโทรออกได้หากไม่ได้เชื่อมต่อกับเซิร์ฟเวอร์.",
     "Connectivity to the server has been lost": "ขาดการเชื่อมต่อกับเซิร์ฟเวอร์",
-    "You cannot place calls in this browser.": "คุณไม่สามารถโทรออกในเบราว์เซอร์นี้.",
-    "Calls are unsupported": "ไม่รองรับการโทร",
-    "You're already in a call with this person.": "คุณอยู่ในสายกับบุคคลนี้แล้ว.",
     "Show details": "แสดงรายละเอียด",
     "Hide details": "ซ่อนรายละเอียด",
     "Sign out of this session": "ออกจากระบบเซสชันนี้.",
@@ -376,7 +358,6 @@
     "Admin Tools": "เครื่องมือผู้ดูแลระบบ",
     "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.": "ไม่สามารถยกเลิกคำเชิญได้ เซิร์ฟเวอร์อาจประสบปัญหาชั่วคราวหรือคุณไม่มีสิทธิ์เพียงพอที่จะยกเลิกคำเชิญ",
     "Failed to revoke invite": "ยกเลิกคำเชิญไม่สำเร็จ",
-    "Stickerpack": "ชุดสติ๊กเกอร์",
     "Add some now": "เพิ่มบางส่วนในขณะนี้",
     "You don't currently have any stickerpacks enabled": "ขณะนี้คุณไม่ได้เปิดใช้งานชุดสติกเกอร์ใดๆ",
     "Failed to connect to integration manager": "ไม่สามารถเชื่อมต่อกับตัวจัดการการรวม",
@@ -411,7 +392,8 @@
         "application": "แอปพลิเคชัน",
         "version": "รุ่น",
         "device": "อุปกรณ์",
-        "unnamed_room": "ห้องที่ยังไม่ได้ตั้งชื่อ"
+        "unnamed_room": "ห้องที่ยังไม่ได้ตั้งชื่อ",
+        "stickerpack": "ชุดสติ๊กเกอร์"
     },
     "action": {
         "continue": "ดำเนินการต่อ",
@@ -472,7 +454,9 @@
         "admin": "ผู้ดูแล"
     },
     "bug_reporting": {
-        "send_logs": "ส่งล็อก"
+        "send_logs": "ส่งล็อก",
+        "collecting_information": "กำลังรวบรวมข้อมูลเวอร์ชันแอป",
+        "collecting_logs": "กำลังรวบรวมล็อก"
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss ที่ผ่านมา",
@@ -506,11 +490,33 @@
     "slash_command": {
         "nick": "เปลี่ยนชื่อเล่นที่แสดงของคุณ",
         "invite": "เชิญผู้ใช้ พร้อม id ของห้องปัจจุบัน",
-        "ban": "ผู้ใช้และ id ที่ถูกแบน"
+        "ban": "ผู้ใช้และ id ที่ถูกแบน",
+        "usage": "การใช้งาน",
+        "category_admin": "ผู้ดูแล",
+        "category_advanced": "ขึ้นสูง"
     },
     "presence": {
         "online": "ออนไลน์",
         "idle": "ว่าง",
         "offline": "ออฟไลน์"
-    }
+    },
+    "voip": {
+        "hangup": "วางสาย",
+        "call_failed": "การโทรล้มเหลว",
+        "unable_to_access_microphone": "ไม่สามารถเข้าถึงไมโครโฟน",
+        "call_failed_microphone": "การโทรล้มเหลวเนื่องจากไม่สามารถเข้าถึงไมโครโฟนได้ ตรวจสอบว่าเสียบไมโครโฟนและตั้งค่าถูกต้อง.",
+        "unable_to_access_media": "ไม่สามารถเข้าถึง กล้อง/ไมโครโฟน",
+        "call_failed_media": "การโทรล้มเหลวเนื่องจากไม่สามารถเข้าถึงกล้องหรือไมโครโฟนได้ ตรวจสอบว่า:",
+        "call_failed_media_connected": "เสียบไมโครโฟนและกล้องและตั้งค่าอย่างถูกต้อง",
+        "call_failed_media_permissions": "ได้รับอนุญาตให้ใช้กล้อง",
+        "call_failed_media_applications": "ไม่มีแอปพลิเคชันอื่นใดที่ใช้กล้อง",
+        "already_in_call": "อยู่ในสายแล้ว",
+        "already_in_call_person": "คุณอยู่ในสายกับบุคคลนี้แล้ว.",
+        "unsupported": "ไม่รองรับการโทร",
+        "unsupported_browser": "คุณไม่สามารถโทรออกในเบราว์เซอร์นี้."
+    },
+    "devtools": {
+        "category_room": "ห้อง"
+    },
+    "Advanced": "ขึ้นสูง"
 }

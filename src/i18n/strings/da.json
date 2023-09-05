@@ -12,8 +12,6 @@
     "Commands": "Kommandoer",
     "Warning!": "Advarsel!",
     "Account": "Konto",
-    "Admin": "Administrator",
-    "Advanced": "Avanceret",
     "Are you sure you want to reject the invitation?": "Er du sikker på du vil afvise invitationen?",
     "Banned users": "Bortviste brugere",
     "Cryptography": "Kryptografi",
@@ -77,7 +75,6 @@
     "Missing room_id in request": "Mangler room_id i forespørgsel",
     "Room %(roomId)s not visible": "rum %(roomId)s ikke synligt",
     "Missing user_id in request": "Manglende user_id i forespørgsel",
-    "Usage": "Brug",
     "Ignored user": "Ignoreret bruger",
     "You are now ignoring %(userId)s": "Du ignorerer nu %(userId)s",
     "Unignored user": "Holdt op med at ignorere bruger",
@@ -100,12 +97,10 @@
     "Filter results": "Filtrér resultater",
     "No update available.": "Ingen opdatering tilgængelig.",
     "Noisy": "Støjende",
-    "Collecting app version information": "Indsamler app versionsoplysninger",
     "Search…": "Søg…",
     "Tuesday": "Tirsdag",
     "Saturday": "Lørdag",
     "Monday": "Mandag",
-    "Collecting logs": "Indsamler logfiler",
     "Invite to this room": "Inviter til dette rum",
     "Send": "Send",
     "All messages": "Alle beskeder",
@@ -123,7 +118,6 @@
     "Logs sent": "Logfiler sendt",
     "Failed to send logs: ": "Kunne ikke sende logfiler: ",
     "Preparing to send logs": "Forbereder afsendelse af logfiler",
-    "Call Failed": "Opkald mislykkedes",
     "Call failed due to misconfigured server": "Opkaldet mislykkedes pga. fejlkonfigureret server",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Bed administratoren af din homeserver (<code>%(homeserverDomain)s</code>) om at konfigurere en TURN server for at opkald virker pålideligt.",
     "Permission Required": "Tilladelse påkrævet",
@@ -136,9 +130,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s. %(monthName)s %(fullYear)s",
     "Unable to load! Check your network connectivity and try again.": "Kunne ikke hente! Tjek din netværksforbindelse og prøv igen.",
     "Missing roomId.": "roomId mangler.",
-    "Messages": "Beskeder",
-    "Actions": "Handlinger",
-    "Other": "Andre",
     "Use an identity server": "Brug en identitetsserver",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Brug en identitetsserver for at invitere pr. mail. Tryk på Fortsæt for at bruge den almindelige identitetsserver (%(defaultIdentityServerName)s) eller indtast en anden under Indstillinger.",
     "Use an identity server to invite by email. Manage in Settings.": "Brug en identitetsserver for at invitere pr. mail. Administrer dette under Indstillinger.",
@@ -266,13 +257,6 @@
     "Enter password": "Indtast adgangskode",
     "Add a new server": "Tilføj en ny server",
     "Change notification settings": "Skift notifikations indstillinger",
-    "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
-    "%(senderName)s: %(message)s": "%(senderName)s: %(message)s",
-    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
-    "%(senderName)s is calling": "%(senderName)s ringer",
-    "Waiting for answer": "Venter på svar",
-    "%(senderName)s started a call": "%(senderName)s startede et opkald",
-    "You started a call": "Du startede et opkald",
     "Verified!": "Bekræftet!",
     "Profile picture": "Profil billede",
     "Categories": "Kategorier",
@@ -287,9 +271,6 @@
     "Local address": "Lokal adresse",
     "This room has no local addresses": "Dette rum har ingen lokal adresse",
     "The conversation continues here.": "Samtalen fortsætter her.",
-    "Send a message…": "Send en besked…",
-    "Send an encrypted message…": "Send en krypteret besked…",
-    "Send a reply…": "Besvar…",
     "Message deleted on %(date)s": "Besked slettet d. %(date)s",
     "France": "Frankrig",
     "Finland": "Finland",
@@ -299,17 +280,10 @@
     "China": "Kina",
     "Canada": "Canada",
     "Too Many Calls": "For mange opkald",
-    "Permission is granted to use the webcam": "Tilladelse er givet til brug af webcam",
-    "Unable to access webcam / microphone": "Kan ikke tilgå webcam / mikrofon",
-    "Unable to access microphone": "Kan ikke tilgå mikrofonen",
     "The call could not be established": "Opkaldet kunne ikke etableres",
     "Folder": "Mappe",
     "We couldn't log you in": "Vi kunne ikke logge dig ind",
-    "Already in call": "Allerede i et opkald",
-    "You're already in a call with this person.": "Du har allerede i et opkald med denne person.",
     "Chile": "Chile",
-    "Call failed because webcam or microphone could not be accessed. Check that:": "Opkald fejlede på grund af kamera og mikrofon ikke kunne nås. Tjek dette:",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Opkald fejlede på grund af mikrofon ikke kunne nås. Tjek at din mikrofon er tilsluttet og sat op rigtigt.",
     "India": "Indien",
     "Iceland": "Island",
     "Hong Kong": "Hong Kong",
@@ -338,21 +312,16 @@
     "Afghanistan": "Afghanistan",
     "United States": "Amerikas Forenede Stater",
     "United Kingdom": "Storbritanien",
-    "No other application is using the webcam": "Ingen anden application bruger kameraet",
-    "A microphone and webcam are plugged in and set up correctly": "En mikrofon og kamera er tilsluttet og sat op rigtigt",
     "Croatia": "Kroatien",
     "Answered Elsewhere": "Svaret andet sted",
     "You've reached the maximum number of simultaneous calls.": "Du er nået til det maksimale antal igangværende opkald på en gang.",
     "You cannot place calls without a connection to the server.": "Du kan ikke lave et opkald uden en forbindelse til serveren.",
     "Connectivity to the server has been lost": "Forbindelsen til serveren er tabt",
-    "You cannot place calls in this browser.": "Du kan ikke lave opkald i denne browser.",
-    "Calls are unsupported": "Opkald er ikke understøttet",
     "The call was answered on another device.": "Opkaldet var svaret på en anden enhed.",
     "The user you called is busy.": "Brugeren du ringede til er optaget.",
     "User Busy": "Bruger optaget",
     "Command error: Unable to find rendering type (%(renderingType)s)": "Kommandofejl: Kan ikke finde renderingstype (%(renderingType)s)",
     "Command error: Unable to handle slash command.": "Kommandofejl: Kan ikke håndtere skråstregskommando.",
-    "Effects": "Effekter",
     "Are you sure you want to cancel entering passphrase?": "Er du sikker på, at du vil annullere indtastning af adgangssætning?",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s og %(count)s andre",
@@ -650,7 +619,9 @@
     },
     "bug_reporting": {
         "submit_debug_logs": "Indsend debug-logfiler",
-        "send_logs": "Send logs"
+        "send_logs": "Send logs",
+        "collecting_information": "Indsamler app versionsoplysninger",
+        "collecting_logs": "Indsamler logfiler"
     },
     "time": {
         "date_at_time": "%(date)s om %(time)s"
@@ -673,7 +644,8 @@
         "event_sent": "Begivenhed sendt!",
         "event_content": "Begivenhedsindhold",
         "toolbox": "Værktøjer",
-        "developer_tools": "Udviklingsværktøjer"
+        "developer_tools": "Udviklingsværktøjer",
+        "category_other": "Andre"
     },
     "timeline": {
         "m.call.invite": {
@@ -760,9 +732,49 @@
         "rainbow": "Sender beskeden med regnbuefarver",
         "rainbowme": "Sender emoji'en med regnbuefarver",
         "help": "Viser en liste over kommandoer med beskrivelser",
-        "whois": "Viser information om en bruger"
+        "whois": "Viser information om en bruger",
+        "usage": "Brug",
+        "category_messages": "Beskeder",
+        "category_actions": "Handlinger",
+        "category_admin": "Administrator",
+        "category_advanced": "Avanceret",
+        "category_effects": "Effekter",
+        "category_other": "Andre"
     },
     "presence": {
         "online": "Online"
+    },
+    "event_preview": {
+        "m.call.invite": {
+            "you": "Du startede et opkald",
+            "user": "%(senderName)s startede et opkald",
+            "dm_send": "Venter på svar",
+            "dm_receive": "%(senderName)s ringer"
+        },
+        "m.emote": "* %(senderName)s %(emote)s",
+        "m.text": "%(senderName)s: %(message)s",
+        "m.sticker": "%(senderName)s: %(stickerName)s"
+    },
+    "Messages": "Beskeder",
+    "Other": "Andre",
+    "Advanced": "Avanceret",
+    "composer": {
+        "placeholder_reply": "Besvar…",
+        "placeholder_encrypted": "Send en krypteret besked…",
+        "placeholder": "Send en besked…"
+    },
+    "voip": {
+        "call_failed": "Opkald mislykkedes",
+        "unable_to_access_microphone": "Kan ikke tilgå mikrofonen",
+        "call_failed_microphone": "Opkald fejlede på grund af mikrofon ikke kunne nås. Tjek at din mikrofon er tilsluttet og sat op rigtigt.",
+        "unable_to_access_media": "Kan ikke tilgå webcam / mikrofon",
+        "call_failed_media": "Opkald fejlede på grund af kamera og mikrofon ikke kunne nås. Tjek dette:",
+        "call_failed_media_connected": "En mikrofon og kamera er tilsluttet og sat op rigtigt",
+        "call_failed_media_permissions": "Tilladelse er givet til brug af webcam",
+        "call_failed_media_applications": "Ingen anden application bruger kameraet",
+        "already_in_call": "Allerede i et opkald",
+        "already_in_call_person": "Du har allerede i et opkald med denne person.",
+        "unsupported": "Opkald er ikke understøttet",
+        "unsupported_browser": "Du kan ikke lave opkald i denne browser."
     }
 }

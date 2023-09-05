@@ -261,7 +261,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         // Load stickerpack content
         if (!!stickerpickerWidget?.content?.url) {
             // Set default name
-            stickerpickerWidget.content.name = stickerpickerWidget.content.name || _t("Stickerpack");
+            stickerpickerWidget.content.name = stickerpickerWidget.content.name || _t("common|stickerpack");
 
             // FIXME: could this use the same code as other apps?
             const stickerApp: IWidget = {
