@@ -176,7 +176,7 @@ describe("PeopleRoomSettingsTab", () => {
             jest.spyOn(room, "getMembersWithMembership").mockReturnValue([]);
             getComponent(room);
             act(() => {
-                room.emit(RoomStateEvent.Members, new MatrixEvent(), state, knockMember);
+                room.emit(RoomStateEvent.Update, state);
             });
             expect(getParagraph()).toHaveTextContent("No requests");
         });
@@ -209,7 +209,7 @@ describe("PeopleRoomSettingsTab", () => {
             jest.spyOn(room, "getMembersWithMembership").mockReturnValue([]);
             getComponent(room);
             act(() => {
-                room.emit(RoomStateEvent.Members, new MatrixEvent(), state, knockMember);
+                room.emit(RoomStateEvent.Update, state);
             });
             expect(getParagraph()).toHaveTextContent("No requests");
         });
