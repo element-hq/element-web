@@ -31,7 +31,7 @@
         ],
         "includeSourceLang": "${includeSourceLang|false}",
         "langAliases": {
-            "en": "en-EN"
+            "en-GB": "en-EN"
         }
     }
 }
