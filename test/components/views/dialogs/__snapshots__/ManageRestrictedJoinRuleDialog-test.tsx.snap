@@ -77,7 +77,6 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
                 data-type="round"
                 role="presentation"
                 style="--cpd-avatar-size: 20px;"
-                title="!space:server"
               >
                 O
               </span>

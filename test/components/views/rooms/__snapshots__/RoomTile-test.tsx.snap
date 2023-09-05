@@ -20,7 +20,6 @@ exports[`RoomTile when message previews are enabled and there is a message in a 
         data-type="round"
         role="presentation"
         style="--cpd-avatar-size: 32px;"
-        title="!1:example.org"
       >
         !
       </span>
@@ -95,7 +94,6 @@ exports[`RoomTile when message previews are enabled and there is a message in th
         data-type="round"
         role="presentation"
         style="--cpd-avatar-size: 32px;"
-        title="!1:example.org"
       >
         !
       </span>
@@ -170,7 +168,6 @@ exports[`RoomTile when message previews are enabled should render a room without
         data-type="round"
         role="presentation"
         style="--cpd-avatar-size: 32px;"
-        title="!1:example.org"
       >
         !
       </span>
@@ -233,7 +230,6 @@ exports[`RoomTile when message previews are not enabled should render the room 1
         data-type="round"
         role="presentation"
         style="--cpd-avatar-size: 32px;"
-        title="!1:example.org"
       >
         !
       </span>

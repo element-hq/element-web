@@ -16,7 +16,6 @@ exports[`<RoomFacePile /> renders 1`] = `
         data-type="round"
         role="presentation"
         style="--cpd-avatar-size: 28px;"
-        title="@bob:example.org"
       >
         b
       </span>
