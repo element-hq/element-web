@@ -5,7 +5,7 @@
         "type": "json",
         "keySeparator": "|",
         "deprecate": "file",
-        "features": ["plural_object"],
+        "features": ["plural_object", "filter_untranslated"],
         "files": [
             {
                 "pattern": "src/i18n/strings/en_EN.json",
