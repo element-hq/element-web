@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Joan zure nabigatzailera izena ematen bukatzeko"
     },
-    "common": {
-        "create_account": "Sortu kontua",
-        "explore_rooms": "Arakatu gelak",
-        "sign_in": "Hasi saioa"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Deskarga burututa",
     "error": {
         "app_launch_unexpected_error": "Ustekabeko errorea aplikazioa prestatzean. Ikusi xehetasunak kontsolan.",
         "cannot_load_config": "Ezin izan da konfigurazio fitxategia kargatu: Saiatu orria birkargatzen.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Konfigurazio baliogabea: Ez da lehenetsitako zerbitzaririk zehaztu.",
         "invalid_json": "Zure Element-en konfigurazioak JSON baliogabea dauka. Mesedez, konpondu arazoa eta birkargatu orria.",
         "invalid_json_detail": "Prozesatzailearen mezua hau da: %(message)s",
@@ -34,9 +27,6 @@
         "title": "Onartu gabeko nabigatzailea"
     },
     "powered_by_matrix": "Matrixekin egina",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "unknown_device": "Gailu ezezaguna",
-    "use_brand_on_mobile": "Use %(brand)s on mobile",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Ongi etorri Element mezularitzara"
 }

@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "עבור לדפדפן להמשך ההתחברות"
     },
-    "common": {
-        "create_account": "משתמש חדש",
-        "explore_rooms": "גלה חדרים",
-        "sign_in": "התחברות"
-    },
     "desktop_default_device_name": "%(brand)s שולחן עבודה: %(platformName)s",
     "download_completed": "ההורדה הושלמה",
     "error": {
         "app_launch_unexpected_error": "שגיאה לא צפויה במהלך טעינת האפליקציה. ראו קונסול לפרטים נוספים.",
         "cannot_load_config": "לא ניתן לטעון את קובץ ההגדרות: יש לרענן את הדף כדי לנסות שנית.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "תצורה שגויה: לא צוין שרת ברירת מחדל.",
         "invalid_json": "האלמנט מכיל הגדרת JSON שגויה, אנא תקנו את הבעיה ואתחלו את הדף.",
         "invalid_json_detail": "ההודעה מהמנתח היא: %(message)s",

@@ -6,11 +6,6 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Që të plotësoni Hyrjen, kaloni te shfletuesi juaj"
     },
-    "common": {
-        "create_account": "Krijoni Llogari",
-        "explore_rooms": "Eksploroni dhoma",
-        "sign_in": "Hyni"
-    },
     "desktop_default_device_name": "%(brand)s për Desktop: %(platformName)s",
     "download_completed": "Shkarkim i Plotësuar",
     "error": {

@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Отворите ваш прегледач за довршавање пријаве"
     },
-    "common": {
-        "create_account": "Направи налог",
-        "explore_rooms": "Истражи собе",
-        "sign_in": "Пријави се"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Преузимање завршено",
     "error": {
         "app_launch_unexpected_error": "Неочекивана грешка приликом припреме апликације. Погледајте конзолу за више детаља.",
         "cannot_load_config": "Не могу да учитам датотеку подешавања: освежите страницу и покушајте поново.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Погрешно подешавање: подразумевани сервер није наведен.",
         "invalid_json": "Подешавање ваше Елемент апликације садржи неисправни „JSON“. Поправите проблем па поново учитајте ову страницу.",
         "invalid_json_detail": "Порука из парсера: %(message)s",
@@ -34,9 +27,6 @@
         "title": "Неподржан прегледач"
     },
     "powered_by_matrix": "Оснажен од стране Матрикса",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "unknown_device": "Непознати уређај",
-    "use_brand_on_mobile": "Use %(brand)s on mobile",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Добродошли у Елемент"
 }

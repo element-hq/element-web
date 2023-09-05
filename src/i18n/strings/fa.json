@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "برای تکمیل ورود به مرورگر خود بروید"
     },
-    "common": {
-        "create_account": "ایجاد حساب کاربری",
-        "explore_rooms": "جستجو در اتاق ها",
-        "sign_in": "ورود"
-    },
     "desktop_default_device_name": "%(brand)s دسکتاپ: %(platformName)s",
     "download_completed": "بارگیری کامل شد",
     "error": {
         "app_launch_unexpected_error": "خطای غیر منتظره در آماده سازی برنامه. کنسول را برای جزئیات مشاهده کنید.",
         "cannot_load_config": "قادر به بارگذاری فایل پیکربندی نیست: لطفا برای تلاش مجدد صفحه را تازه کنید.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "پیکربندی نامعتبر: سرور پیشفرض مشخص نشده است.",
         "invalid_json": "پیکربندی المنت شما شامل JSON نا معتبر است. لطفا مشکل را اصلاح کنید و صفحه را بارگذاری مجدد کنید.",
         "invalid_json_detail": "پیام از طرف تجزیه کننده: %(message)s",

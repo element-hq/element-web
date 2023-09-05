@@ -6,11 +6,6 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "로그인을 완료하려면 브라우저로 이동해주세요"
     },
-    "common": {
-        "create_account": "계정 만들기",
-        "explore_rooms": "방 검색",
-        "sign_in": "로그인"
-    },
     "desktop_default_device_name": "%(brand)s 데스크탑: %(platformName)s",
     "download_completed": "다운로드 완료",
     "error": {

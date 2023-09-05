@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Ddu ɣer iminig akken ad tkemleḍ ajerred"
     },
-    "common": {
-        "create_account": "Rnu amiḍan",
-        "explore_rooms": "Snirem tixxamin",
-        "sign_in": "Kcem"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Asider yemmed",
     "error": {
         "app_launch_unexpected_error": "Tella-d tuccḍa lawan n uheyyi n usnas: Wali tadiwent i wugar telqeyt.",
         "cannot_load_config": "Yegguma ad d-yali ufaylu n twila: ma ulac aɣilif smiren asebter akken ad tεerḍeḍ tikkelt-nniḍen.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Tawila d tarmeɣtut: ulac aqeddac amezwer i d-yettwafernen.",
         "invalid_json": "Deg twila n uferdis-inek·inem yella JSON d arameɣtu. Ttxil-k·m seɣti ugur syen ales asali n usebter.",
         "invalid_json_detail": "Izen n umaslaḍ d: %(message)s",
@@ -34,9 +27,7 @@
         "title": "Ur yettusefrak ara yiminig"
     },
     "powered_by_matrix": "Iteddu s lmendad n Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "unknown_device": "Ibenk arussin",
     "use_brand_on_mobile": "Seqdec %(brand)s deg tiliɣri",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Ansuf ɣer Element"
 }

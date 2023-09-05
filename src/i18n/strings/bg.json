@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Отидете в браузъра за да завършите влизането"
     },
-    "common": {
-        "create_account": "Създай профил",
-        "explore_rooms": "Открий стаи",
-        "sign_in": "Вписване"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Свалянето завърши",
     "error": {
         "app_launch_unexpected_error": "Неочаквана грешка при подготвянето на приложението. Вижте конзолата за подробности.",
         "cannot_load_config": "Неуспешно зареждане на конфигурационния файл: презаредете страницата за да опитате пак.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Невалидна конфигурация: не е указан сървър по подразбиране.",
         "invalid_json": "Вашата Element конфигурация съдържа невалиден JSON. Коригирайте проблема и презаредете страницата.",
         "invalid_json_detail": "Грешката от парсъра е: %(message)s",

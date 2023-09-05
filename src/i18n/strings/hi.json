@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "साइन इन पूरा करने के लिए अपने ब्राउज़र पर जाएं"
     },
-    "common": {
-        "create_account": "खाता बनाएं",
-        "explore_rooms": "रूम का अन्वेषण करें",
-        "sign_in": "साइन करना"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "डाउनलोड सम्पन्न हुआ",
     "error": {
         "app_launch_unexpected_error": "ऐप्लिकेशन तैयार करने में अनपेक्षित गड़बड़ी हुई. विवरण के लिए कंसोल देखें।",
         "cannot_load_config": "कॉन्फ़िग फ़ाइल लोड करने में असमर्थ: कृपया पुन: प्रयास करने के लिए पृष्ठ को रीफ़्रेश करें।",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "अमान्य कॉन्फ़िगरेशन: कोई डिफ़ॉल्ट सर्वर निर्दिष्ट नहीं है।",
         "invalid_json": "आपके एलीमेंट कॉन्फ़िगरेशन में अमान्य JSON है. कृपया समस्या को ठीक करें और पृष्ठ को पुनः लोड करें।",
         "invalid_json_detail": "पार्सर का संदेश है: %(message)s",
@@ -34,9 +27,7 @@
         "title": "असमर्थित ब्राउज़र"
     },
     "powered_by_matrix": "मैट्रिक्स द्वारा संचालित",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "unknown_device": "अज्ञात यन्त्र",
     "use_brand_on_mobile": "मोबाइल पर %(brand)s का प्रयोग करें",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Element में आपका स्वागत है"
 }

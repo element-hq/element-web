@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Idite na svoj pretraživač da biste dovršili prijavu"
     },
-    "common": {
-        "create_account": "Otvori račun",
-        "explore_rooms": "Istražite sobe",
-        "sign_in": "Prijavite se"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Preuzimanje završeno",
     "error": {
         "app_launch_unexpected_error": "Neočekivana greška prilikom pripreme aplikacije. Pogledajte konzolu za detalje.",
         "cannot_load_config": "Nije moguće učitati konfiguracijsku datoteku: osvježite stranicu i pokušajte ponovo.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Neispravna konfiguracija: nije naveden zadani server.",
         "invalid_json": "Konfiguracija vašeg elementa sadrži nevažeći JSON. Ispravite problem i ponovo učitajte stranicu.",
         "invalid_json_detail": "Poruka parsera je: %(message)s",
@@ -34,9 +27,7 @@
         "title": "Nepodržani pretraživač"
     },
     "powered_by_matrix": "Pokretano uz Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "unknown_device": "Nepoznat uređaj",
     "use_brand_on_mobile": "Koristi %(brand)s na mobitelu",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Dobrodošli u Element"
 }

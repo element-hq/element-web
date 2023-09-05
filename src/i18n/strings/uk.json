@@ -6,11 +6,6 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Перейдіть у ваш браузер щоб завершити вхід"
     },
-    "common": {
-        "create_account": "Створити обліковий запис",
-        "explore_rooms": "Каталог кімнат",
-        "sign_in": "Увійти"
-    },
     "desktop_default_device_name": "%(brand)s для комп'ютера: %(platformName)s",
     "download_completed": "Завантаження завершено",
     "error": {

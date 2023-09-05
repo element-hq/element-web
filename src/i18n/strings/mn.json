@@ -1,42 +1,16 @@
 {
     "action": {
-        "dismiss": "Орхих",
-        "open": "Open"
+        "dismiss": "Орхих"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Бүрэн нэвтрэхийн тулд вэб хөтөч рүү шилжинэ үү"
     },
-    "common": {
-        "create_account": "Хэрэглэгч үүсгэх",
-        "explore_rooms": "Өрөөнүүд үзэх",
-        "sign_in": "Нэвтрэх"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
-    "download_completed": "Download Completed",
     "error": {
         "app_launch_unexpected_error": "Апп бэлдэх үед гарах ёсгүй алдаа. Дэлгэрэнгүйг консолоос харна уу.",
-        "cannot_load_config": "Unable to load config file: please refresh the page to try again.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Буруу тохиргоо: Өгөгдсөл серверийг зааж өгөөгүй байна.",
-        "invalid_json": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
         "invalid_json_detail": "Парсераас ирсэн мессеж нь: %(message)s",
-        "invalid_json_generic": "Буруу ЖСОН",
-        "misconfigured": "Your Element is misconfigured"
+        "invalid_json_generic": "Буруу ЖСОН"
     },
-    "failed_to_start": "Failed to start",
-    "go_to_element_io": "Go to element.io",
-    "incompatible_browser": {
-        "browser_links": "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
-        "continue_warning": "I understand the risks and wish to continue",
-        "feature_warning": "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
-        "features": "%(brand)s uses advanced browser features which aren't supported by your current browser.",
-        "summary": "Your browser can't run %(brand)s",
-        "title": "Unsupported browser"
-    },
-    "powered_by_matrix": "Powered by Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "unknown_device": "Үл мэдэгдэх төхөөрөмж",
-    "use_brand_on_mobile": "Use %(brand)s on mobile",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Element -д тавтай морил"
 }

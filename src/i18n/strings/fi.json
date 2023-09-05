@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Tee kirjautuminen loppuun selaimessasi"
     },
-    "common": {
-        "create_account": "Luo tili",
-        "explore_rooms": "Selaa huoneita",
-        "sign_in": "Kirjaudu"
-    },
     "desktop_default_device_name": "%(brand)sin työpöytäversio: %(platformName)s",
     "download_completed": "Lataus valmis",
     "error": {
         "app_launch_unexpected_error": "Odottamaton virhe sovellusta valmisteltaessa. Katso konsolista lisätietoja.",
         "cannot_load_config": "Asetustiedostoa ei voi ladata. Yritä uudelleen lataamalla sivu uudelleen.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Virheellinen asetus: oletuspalvelinta ei ole määritetty.",
         "invalid_json": "Element-asetuksesi sisältävät epäkelpoa JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
         "invalid_json_detail": "Viesti jäsentimeltä: %(message)s",

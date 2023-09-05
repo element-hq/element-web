@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Abre tu navegador web para completar el registro"
     },
-    "common": {
-        "create_account": "Crear cuenta",
-        "explore_rooms": "Explorar salas",
-        "sign_in": "Iniciar sesión"
-    },
     "desktop_default_device_name": "%(brand)s de escritorio: %(platformName)s",
     "download_completed": "Descarga completada",
     "error": {
         "app_launch_unexpected_error": "Error inesperado preparando la aplicación. Ver la consola para más detalles.",
         "cannot_load_config": "No se ha podido cargar el archivo de configuración. Recarga la página para intentarlo otra vez.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Configuración errónea: no se ha especificado servidor.",
         "invalid_json": "Tu configuración de Element contiene JSON inválido. Por favor corrígelo e inténtelo de nuevo.",
         "invalid_json_detail": "El mensaje del parser es: %(message)s",

@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Μεταβείτε στο πρόγραμμα περιήγησής σας για να ολοκληρώσετε τη σύνδεση"
     },
-    "common": {
-        "create_account": "Δημιουργία Λογαριασμού",
-        "explore_rooms": "Εξερευνήστε δωμάτια",
-        "sign_in": "Σύνδεση"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Η λήψη ολοκληρώθηκε",
     "error": {
         "app_launch_unexpected_error": "Απρόοπτο σφάλμα κατά την προετοιμασία της εφαρμογής. Δείτε το τερματικό για λεπτομέρειες.",
         "cannot_load_config": "Δεν είναι δυνατή η φόρτωση του αρχείου config: ανανεώστε τη σελίδα για να δοκιμάσετε ξανά.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Μη έγκυρη ρύθμιση παραμέτρων: δεν έχει οριστεί προκαθορισμένος διακομιστής.",
         "invalid_json": "Η ρύθμιση του Element περιέχει μη έγκυρο JSON. Διορθώστε το πρόβλημα και φορτώστε ξανά τη σελίδα.",
         "invalid_json_detail": "Το μήνυμα από τον αναλυτή είναι: %(message)s",
@@ -37,6 +30,5 @@
     "powered_by_matrix_with_logo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo",
     "unknown_device": "Άγνωστη συσκευή",
     "use_brand_on_mobile": "Χρήση %(brand)s σε κινητό",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Καλώς ήλθατε στο Element"
 }

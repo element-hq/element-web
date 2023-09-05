@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Перейдите в браузер для завершения входа"
     },
-    "common": {
-        "create_account": "Создать учётную запись",
-        "explore_rooms": "Обзор комнат",
-        "sign_in": "Войти"
-    },
     "desktop_default_device_name": "%(brand)s Рабочий стол: %(platformName)s",
     "download_completed": "Загрузка завершена",
     "error": {
         "app_launch_unexpected_error": "Неожиданная ошибка при подготовке приложения. Подробности см. в консоли.",
         "cannot_load_config": "Не удалось загрузить файл конфигурации. Попробуйте обновить страницу.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Неверная конфигурация: сервер по умолчанию не указан.",
         "invalid_json": "Конфигурация Element содержит неверный JSON. Исправьте проблему и обновите страницу.",
         "invalid_json_detail": "Сообщение из парсера: %(message)s",

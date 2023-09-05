@@ -1,42 +1,16 @@
 {
     "action": {
-        "dismiss": "Wfftio",
-        "open": "Open"
+        "dismiss": "Wfftio"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Ewch i'ch porwr i gwblhau Mewngofnodi"
     },
-    "common": {
-        "create_account": "Creu Cyfrif",
-        "explore_rooms": "Archwilio Ystafelloedd",
-        "sign_in": "Mewngofnodi"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
-    "download_completed": "Download Completed",
     "error": {
         "app_launch_unexpected_error": "Gwall annisgwyl wrth baratoi'r app. Gweler y consol am fanylion.",
-        "cannot_load_config": "Unable to load config file: please refresh the page to try again.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Gosodiad annilys: ni nodwyd gweinydd diofyn.",
-        "invalid_json": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
         "invalid_json_detail": "Y neges gan y dosrannudd yn: %(message)s",
-        "invalid_json_generic": "JSON annilys",
-        "misconfigured": "Your Element is misconfigured"
+        "invalid_json_generic": "JSON annilys"
     },
-    "failed_to_start": "Failed to start",
-    "go_to_element_io": "Go to element.io",
-    "incompatible_browser": {
-        "browser_links": "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
-        "continue_warning": "I understand the risks and wish to continue",
-        "feature_warning": "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
-        "features": "%(brand)s uses advanced browser features which aren't supported by your current browser.",
-        "summary": "Your browser can't run %(brand)s",
-        "title": "Unsupported browser"
-    },
-    "powered_by_matrix": "Powered by Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "unknown_device": "Dyfais anhysbys",
-    "use_brand_on_mobile": "Use %(brand)s on mobile",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Croeso i Element"
 }

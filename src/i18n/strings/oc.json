@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Anatz au navegador per achabar la connexion"
     },
-    "common": {
-        "create_account": "Crear un compte",
-        "explore_rooms": "Percórrer las salas",
-        "sign_in": "Se connectar"
-    },
     "desktop_default_device_name": "%(brand)s Burèu: %(platformName)s",
     "download_completed": "Descharjament achabat",
     "error": {
         "app_launch_unexpected_error": "Error inesperada en preparant l’aplicacion. Vejatz la consòla pels detalhs.",
         "cannot_load_config": "Se pòt pas charjar lo fichièr de configuracion : si vos plait actualizatz la pagina per tornar ensajar.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Configuracion invalida : pas de servidor per defauta especificat.",
         "invalid_json": "La configuracion d'Element conten dau JSON invalid. Si vos plait corregitz lo problème e actualizatz la pagina.",
         "invalid_json_detail": "Lo messatge de l’analisaire es : %(message)s",

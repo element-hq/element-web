@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Farðu í vafrann þinn til að ljúka innskráningu"
     },
-    "common": {
-        "create_account": "Búa til notandaaðgang",
-        "explore_rooms": "Kanna spjallrásir",
-        "sign_in": "Skrá inn"
-    },
     "desktop_default_device_name": "%(brand)s borðtölvuútgáfa: %(platformName)s",
     "download_completed": "Niðurhali lokið",
     "error": {
         "app_launch_unexpected_error": "Óvænt villa við undirbúning forritsins. Sjá nánar á stjórnskjá.",
         "cannot_load_config": "Ekki er hægt að hlaða stillingaskrána: endurnýjaðu síðuna til að reyna aftur.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Ógild uppsetning: enginn sjálfgefinn vefþjónn tilgreindur.",
         "invalid_json": "Element-stillingar þínar innihalda ógilt JSON. Leiðréttu vandamálið og endurlestu síðuna.",
         "invalid_json_detail": "Skilaboðið frá þáttaranum er %(message)s",

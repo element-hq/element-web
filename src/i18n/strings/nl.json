@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Ga naar je browser om de aanmelding te voltooien"
     },
-    "common": {
-        "create_account": "Registreren",
-        "explore_rooms": "Kamers ontdekken",
-        "sign_in": "Inloggen"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Download voltooid",
     "error": {
         "app_launch_unexpected_error": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Zie de console voor details.",
         "cannot_load_config": "Kan het configuratiebestand niet laden. Herlaad de pagina.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Configuratie ongeldig: geen standaardserver opgegeven.",
         "invalid_json": "Jouw Element configuratie bevat ongeldige JSON. Corrigeer het probleem en herlaad de pagina.",
         "invalid_json_detail": "De ontleder meldt: %(message)s",

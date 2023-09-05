@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Vés al navegador per completar l'inici de sessió"
     },
-    "common": {
-        "create_account": "Crea un compte",
-        "explore_rooms": "Explora sales",
-        "sign_in": "Inicia sessió"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Baixada completada",
     "error": {
         "app_launch_unexpected_error": "Error inesperat durant la preparació de l'aplicació. Consulta la consola pels a més detalls.",
         "cannot_load_config": "No s'ha pogut carregar el fitxer de configuració: actualitza la pàgina per tornar-ho a provar.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Configuració invàlida: no s'ha especificat cap servidor predeterminat.",
         "invalid_json": "La configuració d'Element conté un JSON invàlid. Soluciona el problema i actualitza la pàgina.",
         "invalid_json_detail": "El missatge de l'analitzador és: %(message)s",
@@ -34,9 +27,7 @@
         "title": "Navegador no compatible"
     },
     "powered_by_matrix": "Amb tecnologia de Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "unknown_device": "Dispositiu desconegut",
     "use_brand_on_mobile": "Utilitza %(brand)s al mòbil",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Benvingut/da a Element"
 }

@@ -6,11 +6,6 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "გადადით თქვენს ბრაუზერში შესვლის დასასრულებლად"
     },
-    "common": {
-        "create_account": "ანგარიშის შექმნა",
-        "explore_rooms": "ოთახების დათავლიერება",
-        "sign_in": "შესვლა"
-    },
     "desktop_default_device_name": "%(brand)s სამუშაო მაგიდა: %(platformName)s",
     "download_completed": "გადმოწერა დასრულებულია",
     "error": {

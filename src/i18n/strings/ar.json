@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "افتح المتصفح لإكمال الولوج"
     },
-    "common": {
-        "create_account": "أنشِئ حسابًا",
-        "explore_rooms": "استكشِف الغرف",
-        "sign_in": "لِج"
-    },
     "desktop_default_device_name": "%(brand)s سطح المكتب %(platformName)s",
     "download_completed": "اكتمل التنزيل",
     "error": {
         "app_launch_unexpected_error": "حدث عُطل غير متوقع أثناء تجهيز التطبيق. طالِع المِعراض للتفاصيل.",
         "cannot_load_config": "تعذّر تحميل ملف الضبط: من فضلك أنعِش الصفحة لمعاودة المحاولة.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "الضبط غير صالح: لم تحدّد خادومًا مبدئيًا.",
         "invalid_json": "يحتوي ضبط تطبيق Element على تنسيق JSON غير صالح. من فضلك صحّح المشكلة وأعِد تحميل الصفحة.",
         "invalid_json_detail": "الرسالة القادمة من المحلّل: %(message)s",

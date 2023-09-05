@@ -6,11 +6,6 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Jādodas uz pārlūku, lai pabeigtu pieteikšanos"
     },
-    "common": {
-        "create_account": "Izveidot kontu",
-        "explore_rooms": "Pārlūkot istabas",
-        "sign_in": "Pieteikties"
-    },
     "desktop_default_device_name": "%(brand)s darbvirsma: %(platformName)s",
     "download_completed": "Lejupielāde ir pabeigta",
     "error": {

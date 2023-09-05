@@ -6,11 +6,6 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "前往您的瀏覽器以完成登入"
     },
-    "common": {
-        "create_account": "建立帳號",
-        "explore_rooms": "探索聊天室",
-        "sign_in": "登入"
-    },
     "desktop_default_device_name": "%(brand)s 桌面版：%(platformName)s",
     "download_completed": "下載完成",
     "error": {
@@ -33,7 +28,6 @@
         "summary": "您的瀏覽器無法執行 %(brand)s",
         "title": "不支援的瀏覽器"
     },
-    "powered_by_matrix": "Powered by Matrix",
     "powered_by_matrix_with_logo": "由 $matrixLogo 驅動的去中心化、加密的聊天與協作工具",
     "unknown_device": "未知裝置",
     "use_brand_on_mobile": "在行動裝置上使用 %(brand)s",

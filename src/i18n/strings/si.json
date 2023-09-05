@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "පිවිසීම සම්පූර්ණ කිරීමට ඔබගේ අතිරික්සුව වෙත යන්න"
     },
-    "common": {
-        "create_account": "ගිණුමක් සාදන්න",
-        "explore_rooms": "කාමර බලන්න",
-        "sign_in": "පිවිසෙන්න"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "බාගැනීම සම්පූර්ණයි",
     "error": {
         "app_launch_unexpected_error": "යෙදුම සූදානමේදී අනපේක්‍ෂිත දෝෂයකි. විස්තර සඳහා හසුරුවම බලන්න.",
         "cannot_load_config": "වින්‍යාස ගොනුව පූරණය කළ නොහැකිය: පිටුව නැවුම් කරන්න.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "වින්‍යාසය වලංගු නොවේ: පෙරනිමි සේවාදායකයක් දක්වා නැත.",
         "invalid_json": "ඔබගේ ඉලෙමන්ට් වින්‍යාසයෙහි වැරදි JSON අඩංගුය. ගැටලුව නිවැරදි කර පිටුව නැවුම් කරන්න.",
         "invalid_json_detail": "විග්‍රහය වෙතින් පණිවිඩය: %(message)s",
@@ -37,6 +30,5 @@
     "powered_by_matrix_with_logo": "විමධ්‍යගත, සංකේතිත කතාබහ සහ amp; $matrixLogo මගින් බලගැන්වූ සහයෝගිත්වය",
     "unknown_device": "නොදන්නා උපාංගයකි",
     "use_brand_on_mobile": "දුරකථනය සඳහා %(brand)s",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "ඉලමන්ට් වෙත සාදරයෙන් පිළිගනිමු"
 }

@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Gå til nettleseren din for å fullføre innloggingen"
     },
-    "common": {
-        "create_account": "Opprett konto",
-        "explore_rooms": "Se alle rom",
-        "sign_in": "Logg inn"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Nedlasting Fullført",
     "error": {
         "app_launch_unexpected_error": "Uventet feil ved klargjøring av appen. Se konsollen for detaljer.",
         "cannot_load_config": "Kan ikke laste inn konfigurasjonsfil: oppdater siden for å prøve igjen.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Ugyldig konfigurasjon: ingen standardserver spesifisert.",
         "invalid_json": "Ditt Element konfigurasjonen inneholder ugyldig JSON. Løs problemet og last siden på nytt.",
         "invalid_json_detail": "Meldingen fra parseren er: %(message)s",

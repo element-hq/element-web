@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "A böngészőben fejezze be a bejelentkezést"
     },
-    "common": {
-        "create_account": "Fiók létrehozása",
-        "explore_rooms": "Szobák felderítése",
-        "sign_in": "Bejelentkezés"
-    },
     "desktop_default_device_name": "Asztali %(brand)s: (%(platformName)s)",
     "download_completed": "A letöltés befejeződött",
     "error": {
         "app_launch_unexpected_error": "Váratlan hiba történt az alkalmazás előkészítésénél. A részletekért lásd a konzolt.",
         "cannot_load_config": "A konfigurációs fájlt nem sikerült betölteni: frissítse az oldalt és próbálja meg újra.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Érvénytelen konfiguráció: nincs megadva alapértelmezett kiszolgáló.",
         "invalid_json": "Az Element érvénytelen JSON-t tartalmazó konfigurációval rendelkezik. Javítsa és töltse újra az oldalt.",
         "invalid_json_detail": "A feldolgozó algoritmus üzenete: %(message)s",

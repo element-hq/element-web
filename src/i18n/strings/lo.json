@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "ໄປທີ່ໜ້າເວັບຂອງທ່ານເພື່ອເຂົ້າສູ່ລະບົບ"
     },
-    "common": {
-        "create_account": "ສ້າງບັນຊີ",
-        "explore_rooms": "ສຳຫຼວດບັນດາຫ້ອງ",
-        "sign_in": "ເຂົ້າສູ່ລະບົບ"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "ດາວໂຫຼດສຳເລັດແລ້ວ",
     "error": {
         "app_launch_unexpected_error": "ເກີດຄວາມຜິດພາດທີ່ບໍ່ຄາດຄິດໃນການກະກຽມແອັບຯ. ເບິ່ງ console ສໍາລັບລາຍລະອຽດ.",
         "cannot_load_config": "ບໍ່ສາມາດໂຫຼດໄຟລ໌ config ໄດ້: ກະລຸນາໂຫຼດໜ້ານີ້ຄືນໃໝ່ເພື່ອລອງອີກຄັ້ງ.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "ການຕັ້ງຄ່າບໍ່ຖືກຕ້ອງ: ບໍ່ໄດ້ລະບຸເຊີບເວີເລີ່ມຕົ້ນ.",
         "invalid_json": "ການຕັ້ງຄ່າແອັບ Element ຂອງທ່ານມີຄ່າ JSON ທີ່ບໍ່ຖືກຕ້ອງ. ກະລຸນາແກ້ໄຂບັນຫາ ແລະໂຫຼດໜ້ານີ້ຄືນໃໝ່.",
         "invalid_json_detail": "ຂໍ້ຄວາມຈາກຕົວປ່ຽນແມ່ນ: %(message)s",
@@ -37,6 +30,5 @@
     "powered_by_matrix_with_logo": "ການສົນທະນາແບບເຂົ້າລະຫັດ ແລະກະຈ່າຍການຄຸ້ມຄອງ &amp; ການຮ່ວມມື້ ແລະສະໜັບສະໜູນໂດຍ $matrixLogo",
     "unknown_device": "ທີ່ບໍ່ຮູ້ຈັກອຸປະກອນນີ້",
     "use_brand_on_mobile": "ໃຊ້ມືຖື %(brand)s",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "ຍິນດີຕ້ອນຮັບ"
 }

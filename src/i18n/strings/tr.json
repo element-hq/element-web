@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Oturum açmayı tamamlamak için tarayıcınıza gidin"
     },
-    "common": {
-        "create_account": "Hesap Oluştur",
-        "explore_rooms": "Odaları keşfet",
-        "sign_in": "Giriş Yap"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "İndirme Tamamlandı",
     "error": {
         "app_launch_unexpected_error": "Uygulama hazırlanırken beklenmeyen bir hata oldu. Detaylar için konsola bakın.",
         "cannot_load_config": "Yapılandırma (config) dosyası yüklenemedi: lütfen yeniden denemek için sayfayı yenileyin.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Hatalı ayarlar: varsayılan sunucu belirlenmemiş.",
         "invalid_json": "Element uygulamasının ayarları hatalı JSON içeriyor. Lütfen hatayı düzeltip sayfayı yenileyin.",
         "invalid_json_detail": "Ayrıştırıcıdan gelen mesaj: %(message)s",
@@ -37,6 +30,5 @@
     "powered_by_matrix_with_logo": "$matrixLogo tarafından merkeziyetsiz, şifrelenmiş sohbet &amp; iş birliği",
     "unknown_device": "Bilinmeyen aygıt",
     "use_brand_on_mobile": "Mobilde %(brand)s kullan",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Element'e hoş geldiniz"
 }

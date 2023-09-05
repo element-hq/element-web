@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Vá em seu navegador para completar o Registro"
     },
-    "common": {
-        "create_account": "Criar Conta",
-        "explore_rooms": "Explorar salas",
-        "sign_in": "Fazer signin"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Download Concluído",
     "error": {
         "app_launch_unexpected_error": "Erro inesperado preparando o app. Veja console para detalhes.",
         "cannot_load_config": "Incapaz de carregar arquivo de configuração: por favor atualize a página para tentar de novo.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Configuração inválida: nenhum servidor default especificado.",
         "invalid_json": "Sua configuração do Element contém JSON inválido. Por favor corrija o problema e recarregue a página.",
         "invalid_json_detail": "A mensagem do parser é: %(message)s",
@@ -33,7 +26,6 @@
         "summary": "Seu browser não consegue rodar %(brand)s",
         "title": "Browser insuportado"
     },
-    "powered_by_matrix": "Powered by Matrix",
     "powered_by_matrix_with_logo": "Chat descentralizado e encriptado & colaboração, powered by $matrixLogo",
     "unknown_device": "Dispositivo desconhecido",
     "use_brand_on_mobile": "Usar %(brand)s em celular",

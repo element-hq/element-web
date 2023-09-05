@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Girişi tamamlamaq üçün brauzerinizə keçin"
     },
-    "common": {
-        "create_account": "Hesab Aç",
-        "explore_rooms": "Otaqları kəşf edin",
-        "sign_in": "Daxil ol"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Yükləmə Tamamlandı",
     "error": {
         "app_launch_unexpected_error": "Tətbiqin başladılmasında gözlənilməz xəta.Təfərrüatlar üçün konsola baxın.",
         "cannot_load_config": "Konfiqurasiya faylını yükləmək mümkün deyil: yenidən cəhd etmək üçün səhifəni yeniləyin.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Yanlış konfiqurasiya: standart server göstərilməyib.",
         "invalid_json": "Element konfiqurasiyanızda yanlış JSON var. Problemi düzəldin və səhifəni yenidən yükləyin.",
         "invalid_json_detail": "Sözügedən mesaj: %(message)s",
@@ -37,6 +30,5 @@
     "powered_by_matrix_with_logo": "$matrixLogo tərəfindən dəstəklənən mərkəzləşdirilməmiş ,şifrələnmiş söhbət &amp; əməkdaşlıq",
     "unknown_device": "Naməlum qurğu",
     "use_brand_on_mobile": "Mobil telefonda %(brand)s istifadə edin",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Element-ə xoş gəlmişsiniz"
 }

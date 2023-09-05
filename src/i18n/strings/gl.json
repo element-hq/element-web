@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Abre o navegador para realizar a Conexión"
     },
-    "common": {
-        "create_account": "Crear conta",
-        "explore_rooms": "Explorar salas",
-        "sign_in": "Acceder"
-    },
     "desktop_default_device_name": "%(brand)s para Escritorio: %(platformName)s",
     "download_completed": "Descarga realizada",
     "error": {
         "app_launch_unexpected_error": "Fallo non agardado ao preparar a app. Detalles na consola.",
         "cannot_load_config": "Non se cargou o ficheiro de configuración: actualiza a páxina para reintentalo.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Configuración non válida: non se indicou servidor por defecto.",
         "invalid_json": "A configuración de Element contén JSON non válido. Corrixe o problema e recarga a páxina.",
         "invalid_json_detail": "A mensaxe desde o intérprete é: %(message)s",

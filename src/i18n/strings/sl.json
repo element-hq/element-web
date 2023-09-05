@@ -6,11 +6,6 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Nadaljujte s prijavo v spletnem brskalniku"
     },
-    "common": {
-        "create_account": "Registracija",
-        "explore_rooms": "Raziščite sobe",
-        "sign_in": "Prijava"
-    },
     "desktop_default_device_name": "%(brand)s Namizni računalnik: %(platformName)s",
     "download_completed": "Prenos zaključen",
     "error": {

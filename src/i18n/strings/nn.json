@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Opna nettlesaren din for å fullføra innlogginga"
     },
-    "common": {
-        "create_account": "Opprett konto",
-        "explore_rooms": "Utforsk romma",
-        "sign_in": "Logg inn"
-    },
     "desktop_default_device_name": "%(brand)s Skrivebord: %(platformName)s",
     "download_completed": "Nedlasting Fullført",
     "error": {
         "app_launch_unexpected_error": "Uventa feil under lasting av programmet. Sjå konsollen for detaljar.",
         "cannot_load_config": "Fekk ikkje til å lasta konfigurasjonsfila: last inn sida for å prøva om att.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Ugyldig oppsett: Ingen standardtener er spesifisert.",
         "invalid_json": "Oppsettet for din Element inneheld ugyldig JSON. Sjekk konfigurasjonsfila, deretter last om sida.",
         "invalid_json_detail": "Meldinga frå kodetolkaren er: %(message)s",

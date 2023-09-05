@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "转到您的浏览器以完成登录"
     },
-    "common": {
-        "create_account": "创建账户",
-        "explore_rooms": "探索房间",
-        "sign_in": "登录"
-    },
     "desktop_default_device_name": "%(brand)s桌面版：%(platformName)s",
     "download_completed": "下载完成",
     "error": {
         "app_launch_unexpected_error": "准备软件时出现意外错误，详细信息请查看控制台。",
         "cannot_load_config": "无法加载配置文件：请刷新页面以重试。",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "配置无效：没有指定默认服务器。",
         "invalid_json": "Element 配置文件中包含无效的 JSON。请改正错误并重新加载页面。",
         "invalid_json_detail": "来自解析器的消息：%(message)s",

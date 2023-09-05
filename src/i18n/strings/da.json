@@ -6,17 +6,10 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Gå til din browser for at færdiggøre Log ind"
     },
-    "common": {
-        "create_account": "Opret brugerkonto",
-        "explore_rooms": "Udforsk rum",
-        "sign_in": "Log ind"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "Hentning færdig",
     "error": {
         "app_launch_unexpected_error": "Uventet fejl ved forberedelse af appen. Se konsollen for detaljer.",
         "cannot_load_config": "Ikke i stand til at indlæse konfigurationsfil: Genopfrisk venligst siden for at prøve igen.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Ugyldig konfiguration: Ingen standardserver er angivet.",
         "invalid_json": "Din Element konfiguration indeholder ugyldig JSON. Løs venligst problemet og genindlæs siden.",
         "invalid_json_detail": "Beskeden fra parseren er: %(message)s",

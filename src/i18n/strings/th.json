@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "ไปที่เบราว์เซอร์ของคุณเพื่อลงชื่อเข้าใช้ให้เสร็จสมบูรณ์."
     },
-    "common": {
-        "create_account": "สร้างบัญชี",
-        "explore_rooms": "สำรวจห้อง",
-        "sign_in": "ลงชื่อเข้า"
-    },
     "desktop_default_device_name": "%(brand)s เดสก์ทอป: %(platformName)s",
     "download_completed": "การดาวน์โหลดเสร็จสมบูรณ์",
     "error": {
         "app_launch_unexpected_error": "เกิดข้อผิดพลาดที่ไม่คาดคิดขณะการเตรียมพร้อมโปรแกรม. คุณสามารถดูรายละเอียดข้อผิดพลาดได้ที่หน้าคอนโซล.",
         "cannot_load_config": "ไม่สามารถโหลดการตั้งค่า: โปรดรีเฟรชหน้าเว็บเพื่อลองใหม่อีกครั้ง.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "คุณยังไม่ได้ตั้งค่าเซิฟเวอร์หลักในการตั้งค่า.",
         "invalid_json": "การตั้งค่าของ Element จะต้องอยู่ในรูปแบบ JSON. โปรดแก้ไขการตั้งค่าและโหลดหน้านี้ใหม่อีกครั้ง.",
         "invalid_json_detail": "ข้อความจากตัวแยกวิเคราะห์คือ: %(message)s",

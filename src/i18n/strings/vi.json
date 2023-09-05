@@ -6,11 +6,6 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Mở trình duyệt web để hoàn thành đăng nhập"
     },
-    "common": {
-        "create_account": "Tạo tài khoản",
-        "explore_rooms": "Khám phá các phòng",
-        "sign_in": "Đăng nhập"
-    },
     "desktop_default_device_name": "%(brand)s máy tính: %(platformName)s",
     "download_completed": "Tải xuống hoàn tất",
     "error": {

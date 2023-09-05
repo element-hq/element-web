@@ -6,11 +6,6 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Prejdite do prehliadača a dokončite prihlásenie"
     },
-    "common": {
-        "create_account": "Vytvoriť účet",
-        "explore_rooms": "Preskúmať miestnosti",
-        "sign_in": "Prihlásiť sa"
-    },
     "desktop_default_device_name": "%(brand)s Stolný počítač: %(platformName)s",
     "download_completed": "Preberanie dokončené",
     "error": {

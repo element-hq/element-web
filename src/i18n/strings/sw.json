@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Nenda kwenye kivinjari chako ili ukamilishe Ingia"
     },
-    "common": {
-        "create_account": "Tengeneza Akaunti",
-        "explore_rooms": "Tafuta nafasi",
-        "sign_in": "Ingia"
-    },
     "desktop_default_device_name": "%(brand)s Kompyuta ya mezani: %(platformName)s",
     "download_completed": "Upakuaji Umekamilika",
     "error": {
         "app_launch_unexpected_error": "Hitilafu isiyotarajiwa katika kuandaa programu. Tazama console kwa maelezo.",
         "cannot_load_config": "Haiwezekani kupakia faili ya mipangilio: tafadhali pakia upya ukurasa ili kujaribu tena.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "Mpangilio batili: hakuna seva chaguo-msingi iliyobainishwa.",
         "invalid_json": "Mipangilio wa Element yako una JSON batili. Tafadhali sahihisha tatizo na upakie upya ukurasa.",
         "invalid_json_detail": "Ujumbe kutoka kwa mchanganuzi ni: %(message)s",

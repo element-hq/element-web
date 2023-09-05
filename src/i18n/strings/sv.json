@@ -6,11 +6,6 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "Gå till din webbläsare för att slutföra inloggningen"
     },
-    "common": {
-        "create_account": "Skapa konto",
-        "explore_rooms": "Utforska rum",
-        "sign_in": "Logga in"
-    },
     "desktop_default_device_name": "%(brand)s Skrivbord: %(platformName)s",
     "download_completed": "Nedladdning slutförd",
     "error": {

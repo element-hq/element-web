@@ -1,26 +1,10 @@
 {
     "action": {
-        "dismiss": "ഒഴിവാക്കുക",
-        "open": "Open"
+        "dismiss": "ഒഴിവാക്കുക"
     },
-    "auth": {
-        "sso_complete_in_browser_dialog_title": "Go to your browser to complete Sign In"
-    },
-    "common": {
-        "create_account": "അക്കൗണ്ട് സൃഷ്ടിക്കുക",
-        "explore_rooms": "മുറികൾ കണ്ടെത്തുക",
-        "sign_in": "പ്രവേശിക്കുക"
-    },
-    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "download_completed": "ഡൗൺലോഡ് പൂർത്തിയായി",
     "error": {
-        "app_launch_unexpected_error": "Unexpected error preparing the app. See console for details.",
-        "cannot_load_config": "Unable to load config file: please refresh the page to try again.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "അസാധുവായ കോൺഫിഗറേഷൻ: സ്ഥിര സെർവർ ഒന്നും വ്യക്തമാക്കിയില്ല.",
-        "invalid_json": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
-        "invalid_json_detail": "The message from the parser is: %(message)s",
-        "invalid_json_generic": "Invalid JSON",
         "misconfigured": "നിങ്ങളുടെ Element തെറ്റായിട്ടാണ് കോൺഫിഗർ ചെയ്തിരിക്കുന്നത്"
     },
     "failed_to_start": "ആരംഭിക്കാൻ പരാജയപെട്ടു",
@@ -28,15 +12,8 @@
     "incompatible_browser": {
         "browser_links": "ദയവായി <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, അല്ലെങ്കിൽ <safariLink>Safari</safariLink> ഇൻസ്റ്റാൾ ചെയ്യുക.",
         "continue_warning": "ഞാൻ അപകടസാധ്യതകൾ മനസിലാക്കുകയും തുടരാൻ ആഗ്രഹിക്കുകയും ചെയ്യുന്നു",
-        "feature_warning": "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
-        "features": "%(brand)s uses advanced browser features which aren't supported by your current browser.",
-        "summary": "Your browser can't run %(brand)s",
         "title": "പിന്തുണയ്‌ക്കാത്ത ബ്രൗസർ"
     },
-    "powered_by_matrix": "Powered by Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "unknown_device": "അപരിചിത ഡിവൈസ്",
-    "use_brand_on_mobile": "Use %(brand)s on mobile",
-    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome_to_element": "Element-ലേക്ക് സ്വാഗതം"
 }

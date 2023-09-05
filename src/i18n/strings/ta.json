@@ -6,17 +6,11 @@
     "auth": {
         "sso_complete_in_browser_dialog_title": "உள்நுழைவை முடிவுசெய்ய உங்கள் உலாவிக்குச் செல்லவும்"
     },
-    "common": {
-        "create_account": "உங்கள் கணக்கை துவங்குங்கள்",
-        "explore_rooms": "அறைகளை ஆராயுங்கள்",
-        "sign_in": "உள்நுழைக"
-    },
     "desktop_default_device_name": "%(brand)s டெஸ்க்டாப்: %(platformName)s",
     "download_completed": "பதிவிறக்கம் முடிவடைந்தது",
     "error": {
         "app_launch_unexpected_error": "பயன்பாட்டைத் தயார் செய்வதில் எதிர்பாராத பிழை. விவரங்களுக்கு console ஐப் பார்க்கவும்.",
         "cannot_load_config": "கட்டமைப்பு கோப்பை ஏற்ற முடியவில்லை: மீண்டும் முயற்சிக்க பக்கத்தைப் புதுப்பிக்கவும்.",
-        "invalid_configuration_mixed_server": "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
         "invalid_configuration_no_server": "தவறான உள்ளமைவு: இயல்புநிலை சேவையகம் குறிப்பிடப்படவில்லை.",
         "invalid_json": "உங்கள் எலிமெண்ட் உள்ளமைவில் தவறான JSON உள்ளது. தயவுசெய்து இதை சரிசெய்து பக்கத்தை மீண்டும் ஏற்றவும்.",
         "invalid_json_detail": "பாகுபடுத்தி அனுப்பிய செய்தி: %(message)s",
