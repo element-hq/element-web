@@ -57,34 +57,18 @@
     "Room %(roomId)s not visible": "%(roomId)s रूम दिखाई नहीं दे रहा है",
     "Missing user_id in request": "अनुरोध में user_id गुम है",
     "Usage": "प्रयोग",
-    "Changes your display nickname": "अपना प्रदर्शन उपनाम बदलता है",
-    "Invites user with given id to current room": "दिए गए आईडी के साथ उपयोगकर्ता को वर्तमान रूम में आमंत्रित करता है",
-    "Bans user with given id": "दिए गए आईडी के साथ उपयोगकर्ता को प्रतिबंध लगाता है",
-    "Ignores a user, hiding their messages from you": "उपयोगकर्ता को अनदेखा करें और स्वयं से संदेश छुपाएं",
     "Ignored user": "अनदेखा उपयोगकर्ता",
     "You are now ignoring %(userId)s": "आप %(userId)s को अनदेखा कर रहे हैं",
-    "Stops ignoring a user, showing their messages going forward": "उपयोगकर्ता को अनदेखा करना बंद करें और एक संदेश प्रदर्शित करें",
     "Unignored user": "अनदेखा बंद किया गया उपयोगकर्ता",
     "You are no longer ignoring %(userId)s": "अब आप %(userId)s को अनदेखा नहीं कर रहे हैं",
     "Define the power level of a user": "उपयोगकर्ता के पावर स्तर को परिभाषित करें",
     "Deops user with given id": "दिए गए आईडी के साथ उपयोगकर्ता को देओप्स करना",
-    "Opens the Developer Tools dialog": "डेवलपर टूल्स संवाद खोलता है",
     "Verified key": "सत्यापित कुंजी",
     "Displays action": "कार्रवाई प्रदर्शित करता है",
     "Forces the current outbound group session in an encrypted room to be discarded": "एक एन्क्रिप्टेड रूम में मौजूदा आउटबाउंड समूह सत्र को त्यागने के लिए मजबूर करता है",
     "Reason": "कारण",
-    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s रूम में शामिल होने के लिए %(targetDisplayName)s को निमंत्रण भेजा।",
-    "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए प्रकाशित कर दिया जिस बिंदु से उन्हें आमंत्रित किया गया था।",
-    "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए दृश्यमान किया, जिस बिंदु में वे शामिल हुए थे।",
-    "%(senderName)s made future room history visible to all room members.": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए दृश्यमान बना दिया।",
-    "%(senderName)s made future room history visible to anyone.": "%(senderName)s ने भविष्य के रूम का इतिहास हर किसी के लिए दृश्यमान बना दिया।",
-    "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s ने भविष्य के रूम का इतिहास अज्ञात (%(visibility)s) के लिए दृश्यमान बनाया।",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s का %(fromPowerLevel)s से %(toPowerLevel)s",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ने %(powerLevelDiffText)s के पावर स्तर को बदल दिया।",
-    "%(senderName)s changed the pinned messages for the room.": "%(senderName)s ने रूम के लिए पिन किए गए संदेश को बदल दिया।",
-    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s विजेट %(senderName)s द्वारा संशोधित",
-    "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s विजेट %(senderName)s द्वारा जोड़ा गया",
-    "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s विजेट %(senderName)s द्वारा हटा दिया गया",
     "Failure to create room": "रूम बनाने में विफलता",
     "Server may be unavailable, overloaded, or you hit a bug.": "सर्वर अनुपलब्ध, अधिभारित हो सकता है, या अपने एक सॉफ्टवेयर गर्बरी को पाया।",
     "Send": "भेजें",
@@ -186,24 +170,7 @@
     "%(duration)sm": "%(duration)s मिनट",
     "%(duration)sh": "%(duration)s घंटा",
     "%(duration)sd": "%(duration)s दिन",
-    "Online for %(duration)s": "%(duration)s के लिए ऑनलाइन",
-    "Idle for %(duration)s": "%(duration)s के लिए निष्क्रिय",
-    "Offline for %(duration)s": "%(duration)s के लिए ऑफ़लाइन",
-    "Unknown for %(duration)s": "%(duration)s के लिए अज्ञात",
-    "Online": "ऑनलाइन",
-    "Idle": "निष्क्रिय",
-    "Unknown": "अज्ञात",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "फ़ाइल '%(fileName)s' अपलोड के लिए इस होमस्वर के आकार की सीमा से अधिक है",
-    "Upgrades a room to a new version": "एक रूम को एक नए संस्करण में अपग्रेड करता है",
-    "Gets or sets the room topic": "रूम का विषय प्राप्त या सेट करना",
-    "This room has no topic.": "इस रूम का कोई विषय नहीं है।",
-    "Sets the room name": "रूम का नाम सेट करता हैं",
-    "%(displayName)s is typing …": "%(displayName)s टाइप कर रहा है …",
-    "%(names)s and %(count)s others are typing …": {
-        "other": "%(names)s और %(count)s अन्य टाइप कर रहे हैं …",
-        "one": "%(names)s और एक अन्य टाइप कर रहा है …"
-    },
-    "%(names)s and %(lastPerson)s are typing …": "%(names)s और %(lastPerson)s टाइप कर रहे हैं …",
     "Unrecognised address": "अपरिचित पता",
     "Straight rows of keys are easy to guess": "कुंजी की सीधी पंक्तियों का अनुमान लगाना आसान है",
     "Short keyboard patterns are easy to guess": "लघु कीबोर्ड पैटर्न का अनुमान लगाना आसान है",
@@ -315,7 +282,6 @@
     "Help & About": "सहायता और के बारे में",
     "Versions": "संस्करण",
     "Notifications": "सूचनाएं",
-    "Changes your display nickname in the current room only": "केवल वर्तमान कमरे में अपना प्रदर्शन उपनाम बदलता है",
     "Scissors": "कैंची",
     "Room list": "कक्ष सूचि",
     "Autocomplete delay (ms)": "स्वत: पूर्ण विलंब (ms)",
@@ -339,11 +305,8 @@
     "Banned by %(displayName)s": "%(displayName)s द्वारा प्रतिबंधित",
     "No users have specific privileges in this room": "इस कमरे में किसी भी उपयोगकर्ता के विशेष विशेषाधिकार नहीं हैं",
     "The file '%(fileName)s' failed to upload.": "फ़ाइल '%(fileName)s' अपलोड करने में विफल रही।",
-    "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "एक सादे पाठ संदेश के लिए ¯\\_(ツ)_/¯ प्रस्तुत करता है",
-    "Adds a custom widget by URL to the room": "रूम में URL द्वारा एक कस्टम विजेट जोड़ता है",
     "Please supply a https:// or http:// widget URL": "कृपया एक https:// या http:// विजेट URL की आपूर्ति करें",
     "You cannot modify widgets in this room.": "आप इस रूम में विजेट्स को संशोधित नहीं कर सकते।",
-    "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s ने कमरे में शामिल होने के लिए %(targetDisplayName)s के निमंत्रण को रद्द कर दिया।",
     "The user must be unbanned before they can be invited.": "उपयोगकर्ता को आमंत्रित करने से पहले उन्हें प्रतिबंधित किया जाना चाहिए।",
     "Explore rooms": "रूम का अन्वेषण करें",
     "Create Account": "खाता बनाएं",
@@ -658,6 +621,59 @@
         "m.room.canonical_alias": {
             "set": "%(senderName)s ने इस कमरे के लिए मुख्य पता %(address)s पर सेट किया।",
             "removed": "%(senderName)s ने इस कमरे के लिए मुख्य पता हटा दिया।"
+        },
+        "m.room.third_party_invite": {
+            "revoked": "%(senderName)s ने कमरे में शामिल होने के लिए %(targetDisplayName)s के निमंत्रण को रद्द कर दिया।",
+            "sent": "%(senderName)s रूम में शामिल होने के लिए %(targetDisplayName)s को निमंत्रण भेजा।"
+        },
+        "m.room.history_visibility": {
+            "invited": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए प्रकाशित कर दिया जिस बिंदु से उन्हें आमंत्रित किया गया था।",
+            "joined": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए दृश्यमान किया, जिस बिंदु में वे शामिल हुए थे।",
+            "shared": "%(senderName)s ने भविष्य के रूम का इतिहास सभी रूम के सदस्यों के लिए दृश्यमान बना दिया।",
+            "world_readable": "%(senderName)s ने भविष्य के रूम का इतिहास हर किसी के लिए दृश्यमान बना दिया।",
+            "unknown": "%(senderName)s ने भविष्य के रूम का इतिहास अज्ञात (%(visibility)s) के लिए दृश्यमान बनाया।"
+        },
+        "m.room.pinned_events": {
+            "changed": "%(senderName)s ने रूम के लिए पिन किए गए संदेश को बदल दिया।"
+        },
+        "m.widget": {
+            "modified": "%(widgetName)s विजेट %(senderName)s द्वारा संशोधित",
+            "added": "%(widgetName)s विजेट %(senderName)s द्वारा जोड़ा गया",
+            "removed": "%(widgetName)s विजेट %(senderName)s द्वारा हटा दिया गया"
+        },
+        "typing_indicator": {
+            "one_user": "%(displayName)s टाइप कर रहा है …",
+            "two_users": "%(names)s और %(lastPerson)s टाइप कर रहे हैं …",
+            "more_users": {
+                "other": "%(names)s और %(count)s अन्य टाइप कर रहे हैं …",
+                "one": "%(names)s और एक अन्य टाइप कर रहा है …"
+            }
         }
-    }
+    },
+    "slash_command": {
+        "shrug": "एक सादे पाठ संदेश के लिए ¯\\_(ツ)_/¯ प्रस्तुत करता है",
+        "upgraderoom": "एक रूम को एक नए संस्करण में अपग्रेड करता है",
+        "nick": "अपना प्रदर्शन उपनाम बदलता है",
+        "myroomnick": "केवल वर्तमान कमरे में अपना प्रदर्शन उपनाम बदलता है",
+        "topic": "रूम का विषय प्राप्त या सेट करना",
+        "topic_none": "इस रूम का कोई विषय नहीं है।",
+        "roomname": "रूम का नाम सेट करता हैं",
+        "invite": "दिए गए आईडी के साथ उपयोगकर्ता को वर्तमान रूम में आमंत्रित करता है",
+        "ban": "दिए गए आईडी के साथ उपयोगकर्ता को प्रतिबंध लगाता है",
+        "ignore": "उपयोगकर्ता को अनदेखा करें और स्वयं से संदेश छुपाएं",
+        "unignore": "उपयोगकर्ता को अनदेखा करना बंद करें और एक संदेश प्रदर्शित करें",
+        "devtools": "डेवलपर टूल्स संवाद खोलता है",
+        "addwidget": "रूम में URL द्वारा एक कस्टम विजेट जोड़ता है"
+    },
+    "presence": {
+        "online_for": "%(duration)s के लिए ऑनलाइन",
+        "idle_for": "%(duration)s के लिए निष्क्रिय",
+        "offline_for": "%(duration)s के लिए ऑफ़लाइन",
+        "unknown_for": "%(duration)s के लिए अज्ञात",
+        "online": "ऑनलाइन",
+        "idle": "निष्क्रिय",
+        "unknown": "अज्ञात",
+        "offline": "ऑफलाइन"
+    },
+    "Unknown": "अज्ञात"
 }

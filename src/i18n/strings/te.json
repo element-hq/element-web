@@ -16,10 +16,8 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "మీరు ఖచ్చితంగా గది '%(roomName)s' వదిలివేయాలనుకుంటున్నారా?",
     "Are you sure you want to reject the invitation?": "మీరు ఖచ్చితంగా ఆహ్వానాన్ని తిరస్కరించాలనుకుంటున్నారా?",
     "Banned users": "నిషేధించిన వినియోగదారులు",
-    "Bans user with given id": "ఇచ్చిన ఐడి తో వినియోగదారుని నిషేధించారు",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "గృహనిర్వాహకులకు కనెక్ట్ చేయలేరు - దయచేసి మీ కనెక్టివిటీని తనిఖీ చేయండి, మీ <a> 1 హోమరుసు యొక్క ఎస్ఎస్ఎల్ సర్టిఫికేట్ </a> 2 ని విశ్వసనీయపరుచుకొని, బ్రౌజర్ పొడిగింపు అభ్యర్థనలను నిరోధించబడదని నిర్ధారించుకోండి.",
     "Change Password": "పాస్వర్డ్ మార్చండి",
-    "Changes your display nickname": "మీ ప్రదర్శన మారుపేరుని మారుస్తుంది",
     "You cannot place a call with yourself.": "మీకు మీరే కాల్ చేయలేరు.",
     "You need to be able to invite users to do that.": "మీరు దీన్ని చేయడానికి వినియోగదారులను ఆహ్వానించగలరు.",
     "Command error": "కమాండ్ లోపం",
@@ -146,5 +144,9 @@
         "m.room.name": {
             "remove": "%(senderDisplayName)s గది పేరు తొలగించబడింది."
         }
+    },
+    "slash_command": {
+        "nick": "మీ ప్రదర్శన మారుపేరుని మారుస్తుంది",
+        "ban": "ఇచ్చిన ఐడి తో వినియోగదారుని నిషేధించారు"
     }
 }

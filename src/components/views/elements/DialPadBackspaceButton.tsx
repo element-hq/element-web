@@ -31,7 +31,7 @@ export default class DialPadBackspaceButton extends React.PureComponent<IProps> 
                 <AccessibleButton
                     className="mx_DialPadBackspaceButton"
                     onClick={this.props.onBackspacePress}
-                    aria-label={_t("Backspace")}
+                    aria-label={_t("keyboard|backspace")}
                 />
             </div>
         );

@@ -6,8 +6,6 @@
     "A new password must be entered.": "Deve ser introduzida uma nova palavra-passe.",
     "Are you sure you want to reject the invitation?": "Você tem certeza que deseja rejeitar este convite?",
     "Banned users": "Usuárias/os banidas/os",
-    "Bans user with given id": "Banir usuários com o identificador informado",
-    "Changes your display nickname": "Troca o seu apelido",
     "Commands": "Comandos",
     "Confirm password": "Confirmar palavra-passe",
     "Cryptography": "Criptografia",
@@ -28,7 +26,6 @@
     "Historical": "Histórico",
     "Import E2E room keys": "Importar chave de criptografia ponta-a-ponta (E2E) da sala",
     "Invalid Email Address": "Endereço de email inválido",
-    "Invites user with given id to current room": "Convidar usuários com um dado identificador para esta sala",
     "Sign in with": "Quero entrar",
     "Low priority": "Baixa prioridade",
     "Moderator": "Moderador/a",
@@ -89,11 +86,6 @@
     "Failed to verify email address: make sure you clicked the link in the email": "Não foi possível verificar o endereço de email: verifique se você realmente clicou no link que está no seu email",
     "Failure to create room": "Não foi possível criar a sala",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s de %(fromPowerLevel)s para %(toPowerLevel)s",
-    "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s deixou o histórico futuro da sala visível para todos os membros da sala, a partir de quando foram convidados.",
-    "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s deixou o histórico futuro da sala visível para todos os membros da sala, a partir de quando entraram.",
-    "%(senderName)s made future room history visible to all room members.": "%(senderName)s deixou o histórico futuro da sala visível para todas as pessoas da sala.",
-    "%(senderName)s made future room history visible to anyone.": "%(senderName)s deixou o histórico futuro da sala visível para qualquer pessoa.",
-    "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s deixou o histórico futuro da sala visível para desconhecido (%(visibility)s).",
     "Missing room_id in request": "Faltou o id da sala na requisição",
     "Missing user_id in request": "Faltou o id de usuário na requisição",
     "Power level must be positive integer.": "O nível de permissões tem que ser um número inteiro e positivo.",
@@ -101,7 +93,6 @@
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s não tem permissões para enviar notificações a você - por favor, verifique as configurações do seu navegador",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s não tem permissões para enviar notificações a você - por favor, tente novamente",
     "Room %(roomId)s not visible": "A sala %(roomId)s não está visível",
-    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s enviou um convite para %(targetDisplayName)s entrar na sala.",
     "This email address is already in use": "Este endereço de email já está sendo usado",
     "This email address was not found": "Este endereço de email não foi encontrado",
     "This room is not recognised.": "Esta sala não é reconhecida.",
@@ -183,8 +174,6 @@
     "Add an Integration": "Adicionar uma integração",
     "URL Previews": "Pré-visualização de links",
     "Drop file here to upload": "Arraste um arquivo aqui para enviar",
-    "Online": "Online",
-    "Idle": "Ocioso",
     "This process allows you to import encryption keys that you had previously exported from another Matrix client. You will then be able to decrypt any messages that the other client could decrypt.": "Este processo faz com que você possa importar as chaves de criptografia que tinha previamente exportado de outro cliente Matrix. Você poderá então descriptografar todas as mensagens que o outro cliente pôde criptografar.",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "Você será levado agora a um site de terceiros para poder autenticar a sua conta para uso com o serviço %(integrationsUrl)s. Você quer continuar?",
     "Incorrect username and/or password.": "Nome de utilizador e/ou palavra-passe incorreta.",
@@ -240,17 +229,11 @@
     "Authentication check failed: incorrect password?": "Erro de autenticação: palavra-passe incorreta?",
     "Do you want to set an email address?": "Deseja definir um endereço de e-mail?",
     "This will allow you to reset your password and receive notifications.": "Isto irá permitir-lhe redefinir a sua palavra-passe e receber notificações.",
-    "%(widgetName)s widget added by %(senderName)s": "Widget %(widgetName)s adicionado por %(senderName)s",
-    "%(widgetName)s widget removed by %(senderName)s": "Widget %(widgetName)s removido por %(senderName)s",
-    "%(widgetName)s widget modified by %(senderName)s": "Widget %(widgetName)s modificado por %(senderName)s",
     "Ignored user": "Utilizador ignorado",
-    "Unknown": "Desconhecido",
     "Unignore": "Deixar de ignorar",
     "You are now ignoring %(userId)s": "Está agora a ignorar %(userId)s",
     "You are no longer ignoring %(userId)s": "%(userId)s já não é ignorado",
     "Unignored user": "Utilizador não ignorado",
-    "Stops ignoring a user, showing their messages going forward": "Deixa de ignorar um utilizador, mostrando as suas mensagens daqui para a frente",
-    "Ignores a user, hiding their messages from you": "Ignora um utilizador, deixando de mostrar as mensagens dele",
     "Banned by %(displayName)s": "Banido por %(displayName)s",
     "Sunday": "Domingo",
     "Notification targets": "Alvos de notificação",
@@ -474,7 +457,6 @@
     "Lesotho": "Lesoto",
     "Maldives": "Maldivas",
     "Mali": "Mali",
-    "Sends the given message as a spoiler": "Envia a mensagem como um spoiler",
     "<userName/> wants to chat": "<userName/> quer falar",
     "Start a conversation with someone using their name or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome ou nome de utilizador (por exemplo: <userId/>).",
     "Use email or phone to optionally be discoverable by existing contacts.": "Use email ou telefone para, opcionalmente, ser detectável por contactos existentes.",
@@ -510,7 +492,6 @@
     "Liberia": "Libéria",
     "Command error: Unable to handle slash command.": "Erro de comando: Não foi possível lidar com o comando de barra.",
     "Mexico": "México",
-    "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message": "Pré-anexa (╯°□°）╯︵ ┻━┻ a uma mensagem de texto simples",
     "Moldova": "Moldávia",
     "Discovery options will appear once you have added an email above.": "As opções de descoberta vão aparecer assim que adicione um e-mail acima.",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Enviámos-lhe um email para confirmar o seu endereço. Por favor siga as instruções no email e depois clique no botão abaixo.",
@@ -528,9 +509,6 @@
     "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "Ninguém poderá reutilizar o seu nome de utilizador (MXID), incluindo o próprio: este nome de utilizador permanecerá indisponível",
     "Your platform and username will be noted to help us use your feedback as much as we can.": "A sua plataforma e o seu nome de utilizador serão anotados para nos ajudar a utilizar o seu feedback da melhor forma possível.",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome, endereço de email ou nome de utilizador (por exemplo: <userId/>).",
-    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Pré-anexa ( ͡° ͜ʖ ͡°) a uma mensagem de texto simples",
-    "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Pré-anexa ┬──┬ ノ( ゜-゜ノ) a uma mensagem de texto simples",
-    "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Pré-anexa ¯ \\ _ (ツ) _ / ¯ a uma mensagem de texto simples",
     "Effects": "Ações",
     "Zambia": "Zâmbia",
     "Missing roomId.": "Falta ID de Sala.",
@@ -790,6 +768,40 @@
             "remove": "%(senderDisplayName)s apagou o nome da sala.",
             "set": "%(senderDisplayName)s alterou o nome da sala para %(roomName)s."
         },
-        "m.image": "%(senderDisplayName)s enviou uma imagem."
-    }
+        "m.image": "%(senderDisplayName)s enviou uma imagem.",
+        "m.room.third_party_invite": {
+            "sent": "%(senderName)s enviou um convite para %(targetDisplayName)s entrar na sala."
+        },
+        "m.room.history_visibility": {
+            "invited": "%(senderName)s deixou o histórico futuro da sala visível para todos os membros da sala, a partir de quando foram convidados.",
+            "joined": "%(senderName)s deixou o histórico futuro da sala visível para todos os membros da sala, a partir de quando entraram.",
+            "shared": "%(senderName)s deixou o histórico futuro da sala visível para todas as pessoas da sala.",
+            "world_readable": "%(senderName)s deixou o histórico futuro da sala visível para qualquer pessoa.",
+            "unknown": "%(senderName)s deixou o histórico futuro da sala visível para desconhecido (%(visibility)s)."
+        },
+        "m.widget": {
+            "modified": "Widget %(widgetName)s modificado por %(senderName)s",
+            "added": "Widget %(widgetName)s adicionado por %(senderName)s",
+            "removed": "Widget %(widgetName)s removido por %(senderName)s"
+        }
+    },
+    "slash_command": {
+        "spoiler": "Envia a mensagem como um spoiler",
+        "shrug": "Pré-anexa ¯ \\ _ (ツ) _ / ¯ a uma mensagem de texto simples",
+        "tableflip": "Pré-anexa (╯°□°）╯︵ ┻━┻ a uma mensagem de texto simples",
+        "unflip": "Pré-anexa ┬──┬ ノ( ゜-゜ノ) a uma mensagem de texto simples",
+        "lenny": "Pré-anexa ( ͡° ͜ʖ ͡°) a uma mensagem de texto simples",
+        "nick": "Troca o seu apelido",
+        "invite": "Convidar usuários com um dado identificador para esta sala",
+        "ban": "Banir usuários com o identificador informado",
+        "ignore": "Ignora um utilizador, deixando de mostrar as mensagens dele",
+        "unignore": "Deixa de ignorar um utilizador, mostrando as suas mensagens daqui para a frente"
+    },
+    "presence": {
+        "online": "Online",
+        "idle": "Ocioso",
+        "unknown": "Desconhecido",
+        "offline": "Offline"
+    },
+    "Unknown": "Desconhecido"
 }

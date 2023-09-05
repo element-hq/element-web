@@ -33,8 +33,6 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "คุณแน่ใจหรือว่าต้องการจะออกจากห้อง '%(roomName)s'?",
     "Are you sure you want to reject the invitation?": "คุณแน่ใจหรือว่าต้องการจะปฏิเสธคำเชิญ?",
     "Banned users": "ผู้ใช้ที่ถูกแบน",
-    "Bans user with given id": "ผู้ใช้และ id ที่ถูกแบน",
-    "Changes your display nickname": "เปลี่ยนชื่อเล่นที่แสดงของคุณ",
     "Command error": "คำสั่งผิดพลาด",
     "Commands": "คำสั่ง",
     "Confirm password": "ยืนยันรหัสผ่าน",
@@ -63,7 +61,6 @@
     "Invalid Email Address": "ที่อยู่อีเมลไม่ถูกต้อง",
     "Invalid file%(extra)s": "ไฟล์ %(extra)s ไม่ถูกต้อง",
     "Invited": "เชิญแล้ว",
-    "Invites user with given id to current room": "เชิญผู้ใช้ พร้อม id ของห้องปัจจุบัน",
     "Sign in with": "เข้าสู่ระบบด้วย",
     "Join Room": "เข้าร่วมห้อง",
     "Jump to first unread message.": "ข้ามไปยังข้อความแรกที่ยังไม่ได้อ่าน",
@@ -85,7 +82,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s ไม่ได้รับสิทธิ์ส่งการแจ้งเตือน - กรุณาลองใหม่อีกครั้ง",
     "Rooms": "ห้องสนทนา",
     "Search failed": "การค้นหาล้มเหลว",
-    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s ได้ส่งคำเชิญให้ %(targetDisplayName)s เข้าร่วมห้อง",
     "Server error": "เซิร์ฟเวอร์ผิดพลาด",
     "Server may be unavailable, overloaded, or search timed out :(": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือการค้นหาหมดเวลา :(",
     "Server may be unavailable, overloaded, or you hit a bug.": "เซิร์ฟเวอร์อาจไม่พร้อมใช้งาน ทำงานหนักเกินไป หรือเจอจุดบกพร่อง",
@@ -387,8 +383,6 @@
     "General failure": "ข้อผิดพลาดทั่วไป",
     "General": "ทั่วไป",
     "collapse": "ยุบ",
-    "Idle": "ว่าง",
-    "Online": "ออนไลน์",
     "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "ที่อยู่อีเมลของคุณไม่ได้เชื่อมโยงกับ Matrix ID บนโฮมเซิร์ฟเวอร์นี้",
     "common": {
         "encryption_enabled": "เปิดใช้งานการเข้ารหัส",
@@ -504,6 +498,19 @@
             "remove": "%(senderDisplayName)s ลบชื่อห้อง",
             "set": "%(senderDisplayName)s เปลี่ยนชื่อห้องไปเป็น %(roomName)s"
         },
-        "m.image": "%(senderDisplayName)s ได้ส่งรูป"
+        "m.image": "%(senderDisplayName)s ได้ส่งรูป",
+        "m.room.third_party_invite": {
+            "sent": "%(senderName)s ได้ส่งคำเชิญให้ %(targetDisplayName)s เข้าร่วมห้อง"
+        }
+    },
+    "slash_command": {
+        "nick": "เปลี่ยนชื่อเล่นที่แสดงของคุณ",
+        "invite": "เชิญผู้ใช้ พร้อม id ของห้องปัจจุบัน",
+        "ban": "ผู้ใช้และ id ที่ถูกแบน"
+    },
+    "presence": {
+        "online": "ออนไลน์",
+        "idle": "ว่าง",
+        "offline": "ออฟไลน์"
     }
 }

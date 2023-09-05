@@ -42,19 +42,19 @@ export default class PresenceLabel extends React.Component<IProps> {
         // for busy presence, we ignore the 'currentlyActive' flag: they're busy whether
         // they're active or not. It can be set while the user is active in which case
         // the 'active ago' ends up being 0.
-        if (presence && BUSY_PRESENCE_NAME.matches(presence)) return _t("Busy");
+        if (presence && BUSY_PRESENCE_NAME.matches(presence)) return _t("presence|busy");
 
         if (!currentlyActive && activeAgo !== undefined && activeAgo > 0) {
             const duration = formatDuration(activeAgo);
-            if (presence === "online") return _t("Online for %(duration)s", { duration: duration });
-            if (presence === "unavailable") return _t("Idle for %(duration)s", { duration: duration }); // XXX: is this actually right?
-            if (presence === "offline") return _t("Offline for %(duration)s", { duration: duration });
-            return _t("Unknown for %(duration)s", { duration: duration });
+            if (presence === "online") return _t("presence|online_for", { duration: duration });
+            if (presence === "unavailable") return _t("presence|idle_for", { duration: duration }); // XXX: is this actually right?
+            if (presence === "offline") return _t("presence|offline_for", { duration: duration });
+            return _t("presence|unknown_for", { duration: duration });
         } else {
-            if (presence === "online") return _t("Online");
-            if (presence === "unavailable") return _t("Idle"); // XXX: is this actually right?
-            if (presence === "offline") return _t("common|offline");
-            return _t("Unknown");
+            if (presence === "online") return _t("presence|online");
+            if (presence === "unavailable") return _t("presence|idle"); // XXX: is this actually right?
+            if (presence === "offline") return _t("presence|offline");
+            return _t("presence|unknown");
         }
     }
 

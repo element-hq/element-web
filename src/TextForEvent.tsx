@@ -439,21 +439,21 @@ function textForCanonicalAliasEvent(ev: MatrixEvent): (() => string) | null {
         }
         if (removedAltAliases.length && addedAltAliases.length) {
             return () =>
-                _t("%(senderName)s changed the alternative addresses for this room.", {
+                _t("timeline|m.room.canonical_alias|changed_alternative", {
                     senderName,
                 });
         }
     } else {
         // both alias and alt_aliases where modified
         return () =>
-            _t("%(senderName)s changed the main and alternative addresses for this room.", {
+            _t("timeline|m.room.canonical_alias|changed_main_and_alternative", {
                 senderName,
             });
     }
     // in case there is no difference between the two events,
     // say something as we can't simply hide the tile from here
     return () =>
-        _t("%(senderName)s changed the addresses for this room.", {
+        _t("timeline|m.room.canonical_alias|changed", {
             senderName,
         });
 }
@@ -463,14 +463,14 @@ function textForThreePidInviteEvent(event: MatrixEvent): (() => string) | null {
 
     if (!isValid3pidInvite(event)) {
         return () =>
-            _t("%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.", {
+            _t("timeline|m.room.third_party_invite|revoked", {
                 senderName,
                 targetDisplayName: event.getPrevContent().display_name || _t("common|someone"),
             });
     }
 
     return () =>
-        _t("%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.", {
+        _t("timeline|m.room.third_party_invite|sent", {
             senderName,
             targetDisplayName: event.getContent().display_name,
         });
@@ -480,23 +480,19 @@ function textForHistoryVisibilityEvent(event: MatrixEvent): (() => string) | nul
     const senderName = getSenderName(event);
     switch (event.getContent().history_visibility) {
         case HistoryVisibility.Invited:
-            return () =>
-                _t(
-                    "%(senderName)s made future room history visible to all room members, from the point they are invited.",
-                    { senderName },
-                );
+            return () => _t("timeline|m.room.history_visibility|invited", { senderName });
         case HistoryVisibility.Joined:
             return () =>
-                _t("%(senderName)s made future room history visible to all room members, from the point they joined.", {
+                _t("timeline|m.room.history_visibility|joined", {
                     senderName,
                 });
         case HistoryVisibility.Shared:
-            return () => _t("%(senderName)s made future room history visible to all room members.", { senderName });
+            return () => _t("timeline|m.room.history_visibility|shared", { senderName });
         case HistoryVisibility.WorldReadable:
-            return () => _t("%(senderName)s made future room history visible to anyone.", { senderName });
+            return () => _t("timeline|m.room.history_visibility|world_readable", { senderName });
         default:
             return () =>
-                _t("%(senderName)s made future room history visible to unknown (%(visibility)s).", {
+                _t("timeline|m.room.history_visibility|unknown", {
                     senderName,
                     visibility: event.getContent().history_visibility,
                 });
@@ -587,7 +583,7 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
             return () => (
                 <span>
                     {_t(
-                        "%(senderName)s pinned <a>a message</a> to this room. See all <b>pinned messages</b>.",
+                        "timeline|m.room.pinned_events|pinned_link",
                         { senderName },
                         {
                             a: (sub) => (
@@ -609,7 +605,7 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
             );
         }
 
-        return () => _t("%(senderName)s pinned a message to this room. See all pinned messages.", { senderName });
+        return () => _t("timeline|m.room.pinned_events|pinned", { senderName });
     }
 
     if (newlyUnpinned.length === 1 && newlyPinned.length === 0) {
@@ -620,7 +616,7 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
             return () => (
                 <span>
                     {_t(
-                        "%(senderName)s unpinned <a>a message</a> from this room. See all <b>pinned messages</b>.",
+                        "timeline|m.room.pinned_events|unpinned_link",
                         { senderName },
                         {
                             a: (sub) => (
@@ -642,14 +638,14 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
             );
         }
 
-        return () => _t("%(senderName)s unpinned a message from this room. See all pinned messages.", { senderName });
+        return () => _t("timeline|m.room.pinned_events|unpinned", { senderName });
     }
 
     if (allowJSX) {
         return () => (
             <span>
                 {_t(
-                    "%(senderName)s changed the <a>pinned messages</a> for the room.",
+                    "timeline|m.room.pinned_events|changed_link",
                     { senderName },
                     {
                         a: (sub) => (
@@ -663,7 +659,7 @@ function textForPinnedEvent(event: MatrixEvent, client: MatrixClient, allowJSX: 
         );
     }
 
-    return () => _t("%(senderName)s changed the pinned messages for the room.", { senderName });
+    return () => _t("timeline|m.room.pinned_events|changed", { senderName });
 }
 
 function textForWidgetEvent(event: MatrixEvent): (() => string) | null {
@@ -682,20 +678,20 @@ function textForWidgetEvent(event: MatrixEvent): (() => string) | null {
     if (url) {
         if (prevUrl) {
             return () =>
-                _t("%(widgetName)s widget modified by %(senderName)s", {
+                _t("timeline|m.widget|modified", {
                     widgetName,
                     senderName,
                 });
         } else {
             return () =>
-                _t("%(widgetName)s widget added by %(senderName)s", {
+                _t("timeline|m.widget|added", {
                     widgetName,
                     senderName,
                 });
         }
     } else {
         return () =>
-            _t("%(widgetName)s widget removed by %(senderName)s", {
+            _t("timeline|m.widget|removed", {
                 widgetName,
                 senderName,
             });
@@ -704,7 +700,7 @@ function textForWidgetEvent(event: MatrixEvent): (() => string) | null {
 
 function textForWidgetLayoutEvent(event: MatrixEvent): (() => string) | null {
     const senderName = getSenderName(event);
-    return () => _t("%(senderName)s has updated the room layout", { senderName });
+    return () => _t("timeline|io.element.widgets.layout", { senderName });
 }
 
 function textForMjolnirEvent(event: MatrixEvent): (() => string) | null {
@@ -836,19 +832,19 @@ function textForMjolnirEvent(event: MatrixEvent): (() => string) | null {
 
 export function textForLocationEvent(event: MatrixEvent): () => string {
     return () =>
-        _t("%(senderName)s has shared their location", {
+        _t("timeline|m.location", {
             senderName: getSenderName(event),
         });
 }
 
 function textForRedactedPollAndMessageEvent(ev: MatrixEvent, client: MatrixClient): string {
-    let message = _t("Message deleted");
+    let message = _t("timeline|self_redaction");
     const unsigned = ev.getUnsigned();
     const redactedBecauseUserId = unsigned?.redacted_because?.sender;
     if (redactedBecauseUserId && redactedBecauseUserId !== ev.getSender()) {
         const room = client.getRoom(ev.getRoomId());
         const sender = room?.getMember(redactedBecauseUserId);
-        message = _t("Message deleted by %(name)s", {
+        message = _t("timeline|redaction", {
             name: sender?.name || redactedBecauseUserId,
         });
     }
@@ -865,7 +861,7 @@ function textForPollStartEvent(event: MatrixEvent, client: MatrixClient): (() =>
             const senderDisplayName = event.sender?.name ?? event.getSender();
             message = senderDisplayName + ": " + message;
         } else {
-            message = _t("%(senderName)s has started a poll - %(pollQuestion)s", {
+            message = _t("timeline|m.poll.start", {
                 senderName: getSenderName(event),
                 pollQuestion: (event.unstableExtensibleEvent as PollStartEvent)?.question?.text,
             });
@@ -877,7 +873,7 @@ function textForPollStartEvent(event: MatrixEvent, client: MatrixClient): (() =>
 
 function textForPollEndEvent(event: MatrixEvent): (() => string) | null {
     return () =>
-        _t("%(senderName)s has ended a poll", {
+        _t("timeline|m.poll.end", {
             senderName: getSenderName(event),
         });
 }

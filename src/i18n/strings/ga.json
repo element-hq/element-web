@@ -250,7 +250,6 @@
     "ready": "réidh",
     "Algorithm:": "Algartam:",
     "Information": "Eolas",
-    "Away": "Imithe",
     "Favourited": "Roghnaithe",
     "A-Z": "A-Z",
     "Activity": "Gníomhaíocht",
@@ -323,9 +322,6 @@
     "Historical": "Stairiúil",
     "Rooms": "Seomraí",
     "Replying": "Ag freagairt",
-    "Unknown": "Anaithnid",
-    "Idle": "Díomhaoin",
-    "Online": "Ar Líne",
     "%(duration)sd": "%(duration)sl",
     "%(duration)sh": "%(duration)su",
     "%(duration)sm": "%(duration)sn",
@@ -559,7 +555,6 @@
     "Unknown failure: %(reason)s": "Teip anaithnid: %(reason)s",
     "Enable encryption in settings.": "Tosaigh criptiú sna socruithe.",
     "Cross-signing is ready but keys are not backed up.": "Tá tras-sínigh réidh ach ní dhéantar cóip chúltaca d'eochracha.",
-    "Bans user with given id": "Toirmisc úsáideoir leis an ID áirithe",
     "Failed to reject invitation": "Níorbh fhéidir an cuireadh a dhiúltú",
     "Failed to reject invite": "Níorbh fhéidir an cuireadh a dhiúltú",
     "Failed to mute user": "Níor ciúnaíodh an úsáideoir",
@@ -576,7 +571,6 @@
     "Deops user with given id": "Bain an cumhacht oibritheora ó úsáideoir leis an ID áirithe",
     "Decrypt %(text)s": "Díchriptigh %(text)s",
     "Custom level": "Leibhéal saincheaptha",
-    "Changes your display nickname": "Athraíonn sé d'ainm taispeána",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "D'athraigh %(senderName)s an leibhéal cumhachta %(powerLevelDiffText)s.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Ní féidir ceangal leis an bhfreastalaí baile trí HTTP nuair a bhíonn URL HTTPS i mbarra do bhrabhsálaí. Bain úsáid as HTTPS nó <a> scripteanna neamhshábháilte a chumasú </a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Ní féidir ceangal leis an bhfreastalaí baile - seiceáil do nascacht le do thoil, déan cinnte go bhfuil muinín i dteastas <a>SSL do fhreastalaí baile</a>, agus nach bhfuil síneadh brabhsálaí ag cur bac ar iarratais.",
@@ -760,5 +754,17 @@
             "remove": "Bhain %(senderDisplayName)s ainm an tseomra.",
             "set": "D'athraigh %(senderDisplayName)s ainm an tseomra go %(roomName)s."
         }
-    }
+    },
+    "slash_command": {
+        "nick": "Athraíonn sé d'ainm taispeána",
+        "ban": "Toirmisc úsáideoir leis an ID áirithe"
+    },
+    "presence": {
+        "online": "Ar Líne",
+        "idle": "Díomhaoin",
+        "unknown": "Anaithnid",
+        "offline": "As líne",
+        "away": "Imithe"
+    },
+    "Unknown": "Anaithnid"
 }

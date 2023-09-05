@@ -8,10 +8,7 @@
     "The email address linked to your account must be entered.": "Den emailadresse, der tilhører til din adgang, skal indtastes.",
     "Session ID": "Sessions ID",
     "Displays action": "Viser handling",
-    "Bans user with given id": "Forbyder bruger med givet id",
     "Deops user with given id": "Fjerner OP af bruger med givet id",
-    "Invites user with given id to current room": "Inviterer bruger med givet id til nuværende rum",
-    "Changes your display nickname": "Ændrer dit viste navn",
     "Commands": "Kommandoer",
     "Warning!": "Advarsel!",
     "Account": "Konto",
@@ -87,8 +84,6 @@
     "You are no longer ignoring %(userId)s": "Du ignorerer ikke længere %(userId)s",
     "Verified key": "Verificeret nøgle",
     "Reason": "Årsag",
-    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s inviterede %(targetDisplayName)s til rummet.",
-    "Online": "Online",
     "Sunday": "Søndag",
     "Notification targets": "Meddelelsesmål",
     "Today": "I dag",
@@ -144,47 +139,15 @@
     "Messages": "Beskeder",
     "Actions": "Handlinger",
     "Other": "Andre",
-    "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Tilføjer ¯\\_(ツ)_/¯ i starten af beskeder i ren tekst",
-    "Sends a message as plain text, without interpreting it as markdown": "Sender en besked som ren tekst, uden at fortolke den som markdown",
-    "Upgrades a room to a new version": "Opgraderer et rum til en ny version",
-    "You do not have the required permissions to use this command.": "Du har ikke de nødvendige rettigheder for at udføre denne kommando.",
-    "Changes your display nickname in the current room only": "Ændrer kun dit viste navn for det nuværende rum",
-    "Changes the avatar of the current room": "Ændrer avataren i det nuværende rum",
-    "Gets or sets the room topic": "Henter eller sætter rummets emne",
-    "This room has no topic.": "Dette rum har intet emne.",
-    "Sets the room name": "Sætter rumnavnet",
     "Use an identity server": "Brug en identitetsserver",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Brug en identitetsserver for at invitere pr. mail. Tryk på Fortsæt for at bruge den almindelige identitetsserver (%(defaultIdentityServerName)s) eller indtast en anden under Indstillinger.",
     "Use an identity server to invite by email. Manage in Settings.": "Brug en identitetsserver for at invitere pr. mail. Administrer dette under Indstillinger.",
-    "Unbans user with given ID": "Fjerner ban fra brugeren med det oplyste ID",
-    "Ignores a user, hiding their messages from you": "Ignorerer en bruger og skjuler dennes beskeder fra dig",
-    "Stops ignoring a user, showing their messages going forward": "Stopper med at ignorere en bruger og viser deres beskeder igen fra nu af",
     "Define the power level of a user": "Indstil rettighedsniveau for en bruger",
-    "Opens the Developer Tools dialog": "Åbner dialogen med udviklerværktøjer",
-    "Adds a custom widget by URL to the room": "Tilføjer en widget til rummet ved hjælp af URL",
     "Please supply a https:// or http:// widget URL": "Oplys venligst en https:// eller http:// widget URL",
     "You cannot modify widgets in this room.": "Du kan ikke ændre widgets i dette rum.",
     "Forces the current outbound group session in an encrypted room to be discarded": "Tvinger den nuværende udgående gruppe-session i et krypteret rum til at blive kasseret",
-    "Sends the given message coloured as a rainbow": "Sender beskeden med regnbuefarver",
-    "Sends the given emote coloured as a rainbow": "Sender emoji'en med regnbuefarver",
-    "Displays list of commands with usages and descriptions": "Viser en liste over kommandoer med beskrivelser",
-    "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s tilbagetrak invitationen til %(targetDisplayName)s om at deltage i rummet.",
-    "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s gjorde fremtidig rumhistorik synligt for alle rummedlemmer, fra det tidspunkt de blev inviteredet.",
-    "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s gjorde fremtidig rumhistorik synligt for alle rummedlemmer, fra det tidspunkt de blev medlem.",
-    "%(senderName)s made future room history visible to all room members.": "%(senderName)s gjorde fremtidig rumhistorik synligt for alle rummedlemmer.",
-    "%(senderName)s made future room history visible to anyone.": "%(senderName)s gjorde fremtidig rumhistorik synligt for alle.",
-    "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s gjorde fremtidig rumhistorik synligt for ukendt (%(visibility)s).",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s fra %(fromPowerLevel)s til %(toPowerLevel)s",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ændrede rettighedsniveau af %(powerLevelDiffText)s.",
-    "%(senderName)s changed the pinned messages for the room.": "%(senderName)s ændrede de fastgjorte beskeder for rummet.",
-    "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s widget tilføjet af %(senderName)s",
-    "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s fjernet af %(senderName)s",
-    "%(displayName)s is typing …": "%(displayName)s skriver …",
-    "%(names)s and %(count)s others are typing …": {
-        "other": "%(names)s og %(count)s andre skriver …",
-        "one": "%(names)s og en anden skriver …"
-    },
-    "%(names)s and %(lastPerson)s are typing …": "%(names)s og %(lastPerson)s skriver …",
     "Cannot reach homeserver": "Homeserveren kan ikke kontaktes",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Vær sikker at du har en stabil internetforbindelse, eller kontakt serveradministratoren",
     "Your %(brand)s is misconfigured": "Din %(brand)s er konfigureret forkert",
@@ -241,7 +204,6 @@
     "Please contact your homeserver administrator.": "Kontakt venligst din homeserver administrator.",
     "Add Email Address": "Tilføj e-mail adresse",
     "Add Phone Number": "Tilføj telefonnummer",
-    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s ændret af %(senderName)s",
     "Use Single Sign On to continue": "Brug engangs login for at fortsætte",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Bekræft tilføjelsen af denne email adresse ved at bruge Single Sign On til at bevise din identitet.",
     "Single Sign On": "Engangs login",
@@ -262,7 +224,6 @@
     "Sign In or Create Account": "Log ind eller Opret bruger",
     "Use your account or create a new one to continue.": "Brug din konto eller opret en ny for at fortsætte.",
     "Create Account": "Opret brugerkonto",
-    "Sends a message as html, without interpreting it as markdown": "Sender besked som html, uden at tolke den som markdown",
     "Error upgrading room": "Fejl under opgradering af rum",
     "Double check that your server supports the room version chosen and try again.": "Dobbelt-tjek at din server understøtter den valgte rum-version og forsøg igen.",
     "Could not find user in room": "Kunne ikke finde bruger i rum",
@@ -270,7 +231,6 @@
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ADVARSEL: NØGLEVERIFIKATIONEN FEJLEDE! Underskriftsnøglen for %(userId)s og session %(deviceId)s er %(fprint)s som ikke matcher den supplerede nøgle \"%(fingerprint)s\". Dette kunne betyde at jeres kommunikation er infiltreret!",
     "Session already verified!": "Sessionen er allerede verificeret!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Underskriftsnøglen du supplerede matcher den underskriftsnøgle du modtog fra %(userId)s's session %(deviceId)s. Sessionen er markeret som verificeret.",
-    "Displays information about a user": "Viser information om en bruger",
     "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
         "other": "%(senderName)s tilføjede de alternative adresser %(addresses)s til dette rum.",
         "one": "%(senderName)s tilføjede alternative adresser %(addresses)s til dette rum."
@@ -279,9 +239,6 @@
         "other": "%(senderName)s fjernede de alternative adresser %(addresses)s til dette rum.",
         "one": "%(senderName)s fjernede alternative adresser %(addresses)s til dette rum."
     },
-    "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s ændrede de alternative adresser til dette rum.",
-    "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s ændrede hoved- og alternative adresser til dette rum.",
-    "%(senderName)s changed the addresses for this room.": "%(senderName)s ændrede adresserne til dette rum.",
     "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s fjernede den regel der bannede brugere der matcher %(glob)s",
     "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s fjernede den regel der bannede brugere der matcher %(glob)s",
     "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s fjernede den regel der bannede servere som matcher %(glob)s",
@@ -334,8 +291,6 @@
     "Send an encrypted message…": "Send en krypteret besked…",
     "Send a reply…": "Besvar…",
     "Message deleted on %(date)s": "Besked slettet d. %(date)s",
-    "Message deleted by %(name)s": "Besked slettet af %(name)s",
-    "Message deleted": "Besked slettet",
     "France": "Frankrig",
     "Finland": "Finland",
     "Egypt": "Egypten",
@@ -395,7 +350,6 @@
     "The call was answered on another device.": "Opkaldet var svaret på en anden enhed.",
     "The user you called is busy.": "Brugeren du ringede til er optaget.",
     "User Busy": "Bruger optaget",
-    "Sends the given message as a spoiler": "Sender den givne besked som en spoiler",
     "Command error: Unable to find rendering type (%(renderingType)s)": "Kommandofejl: Kan ikke finde renderingstype (%(renderingType)s)",
     "Command error: Unable to handle slash command.": "Kommandofejl: Kan ikke håndtere skråstregskommando.",
     "Effects": "Effekter",
@@ -748,7 +702,67 @@
         "m.image": "%(senderDisplayName)s sendte et billed.",
         "m.room.canonical_alias": {
             "set": "%(senderName)s satte hovedadressen af dette rum til %(address)s.",
-            "removed": "%(senderName)s fjernede hovedadressen for dette rum."
+            "removed": "%(senderName)s fjernede hovedadressen for dette rum.",
+            "changed_alternative": "%(senderName)s ændrede de alternative adresser til dette rum.",
+            "changed_main_and_alternative": "%(senderName)s ændrede hoved- og alternative adresser til dette rum.",
+            "changed": "%(senderName)s ændrede adresserne til dette rum."
+        },
+        "m.room.third_party_invite": {
+            "revoked": "%(senderName)s tilbagetrak invitationen til %(targetDisplayName)s om at deltage i rummet.",
+            "sent": "%(senderName)s inviterede %(targetDisplayName)s til rummet."
+        },
+        "m.room.history_visibility": {
+            "invited": "%(senderName)s gjorde fremtidig rumhistorik synligt for alle rummedlemmer, fra det tidspunkt de blev inviteredet.",
+            "joined": "%(senderName)s gjorde fremtidig rumhistorik synligt for alle rummedlemmer, fra det tidspunkt de blev medlem.",
+            "shared": "%(senderName)s gjorde fremtidig rumhistorik synligt for alle rummedlemmer.",
+            "world_readable": "%(senderName)s gjorde fremtidig rumhistorik synligt for alle.",
+            "unknown": "%(senderName)s gjorde fremtidig rumhistorik synligt for ukendt (%(visibility)s)."
+        },
+        "m.room.pinned_events": {
+            "changed": "%(senderName)s ændrede de fastgjorte beskeder for rummet."
+        },
+        "m.widget": {
+            "modified": "%(widgetName)s ændret af %(senderName)s",
+            "added": "%(widgetName)s widget tilføjet af %(senderName)s",
+            "removed": "%(widgetName)s fjernet af %(senderName)s"
+        },
+        "self_redaction": "Besked slettet",
+        "redaction": "Besked slettet af %(name)s",
+        "typing_indicator": {
+            "one_user": "%(displayName)s skriver …",
+            "two_users": "%(names)s og %(lastPerson)s skriver …",
+            "more_users": {
+                "other": "%(names)s og %(count)s andre skriver …",
+                "one": "%(names)s og en anden skriver …"
+            }
         }
+    },
+    "slash_command": {
+        "spoiler": "Sender den givne besked som en spoiler",
+        "shrug": "Tilføjer ¯\\_(ツ)_/¯ i starten af beskeder i ren tekst",
+        "plain": "Sender en besked som ren tekst, uden at fortolke den som markdown",
+        "html": "Sender besked som html, uden at tolke den som markdown",
+        "upgraderoom": "Opgraderer et rum til en ny version",
+        "upgraderoom_permission_error": "Du har ikke de nødvendige rettigheder for at udføre denne kommando.",
+        "nick": "Ændrer dit viste navn",
+        "myroomnick": "Ændrer kun dit viste navn for det nuværende rum",
+        "roomavatar": "Ændrer avataren i det nuværende rum",
+        "topic": "Henter eller sætter rummets emne",
+        "topic_none": "Dette rum har intet emne.",
+        "roomname": "Sætter rumnavnet",
+        "invite": "Inviterer bruger med givet id til nuværende rum",
+        "ban": "Forbyder bruger med givet id",
+        "unban": "Fjerner ban fra brugeren med det oplyste ID",
+        "ignore": "Ignorerer en bruger og skjuler dennes beskeder fra dig",
+        "unignore": "Stopper med at ignorere en bruger og viser deres beskeder igen fra nu af",
+        "devtools": "Åbner dialogen med udviklerværktøjer",
+        "addwidget": "Tilføjer en widget til rummet ved hjælp af URL",
+        "rainbow": "Sender beskeden med regnbuefarver",
+        "rainbowme": "Sender emoji'en med regnbuefarver",
+        "help": "Viser en liste over kommandoer med beskrivelser",
+        "whois": "Viser information om en bruger"
+    },
+    "presence": {
+        "online": "Online"
     }
 }

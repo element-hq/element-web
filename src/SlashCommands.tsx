@@ -69,7 +69,7 @@ export const Commands = [
     new Command({
         command: "spoiler",
         args: "<message>",
-        description: _td("Sends the given message as a spoiler"),
+        description: _td("slash_command|spoiler"),
         runFn: function (cli, roomId, threadId, message = "") {
             return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${message}</span>`));
         },
@@ -78,7 +78,7 @@ export const Commands = [
     new Command({
         command: "shrug",
         args: "<message>",
-        description: _td("Prepends ¯\\_(ツ)_/¯ to a plain-text message"),
+        description: _td("slash_command|shrug"),
         runFn: function (cli, roomId, threadId, args) {
             let message = "¯\\_(ツ)_/¯";
             if (args) {
@@ -91,7 +91,7 @@ export const Commands = [
     new Command({
         command: "tableflip",
         args: "<message>",
-        description: _td("Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message"),
+        description: _td("slash_command|tableflip"),
         runFn: function (cli, roomId, threadId, args) {
             let message = "(╯°□°）╯︵ ┻━┻";
             if (args) {
@@ -104,7 +104,7 @@ export const Commands = [
     new Command({
         command: "unflip",
         args: "<message>",
-        description: _td("Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message"),
+        description: _td("slash_command|unflip"),
         runFn: function (cli, roomId, threadId, args) {
             let message = "┬──┬ ノ( ゜-゜ノ)";
             if (args) {
@@ -117,7 +117,7 @@ export const Commands = [
     new Command({
         command: "lenny",
         args: "<message>",
-        description: _td("Prepends ( ͡° ͜ʖ ͡°) to a plain-text message"),
+        description: _td("slash_command|lenny"),
         runFn: function (cli, roomId, threadId, args) {
             let message = "( ͡° ͜ʖ ͡°)";
             if (args) {
@@ -130,7 +130,7 @@ export const Commands = [
     new Command({
         command: "plain",
         args: "<message>",
-        description: _td("Sends a message as plain text, without interpreting it as markdown"),
+        description: _td("slash_command|plain"),
         runFn: function (cli, roomId, threadId, messages = "") {
             return successSync(ContentHelpers.makeTextMessage(messages));
         },
@@ -139,7 +139,7 @@ export const Commands = [
     new Command({
         command: "html",
         args: "<message>",
-        description: _td("Sends a message as html, without interpreting it as markdown"),
+        description: _td("slash_command|html"),
         runFn: function (cli, roomId, threadId, messages = "") {
             return successSync(ContentHelpers.makeHtmlMessage(messages, messages));
         },
@@ -148,15 +148,13 @@ export const Commands = [
     new Command({
         command: "upgraderoom",
         args: "<new_version>",
-        description: _td("Upgrades a room to a new version"),
+        description: _td("slash_command|upgraderoom"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
                 const room = cli.getRoom(roomId);
                 if (!room?.currentState.mayClientSendStateEvent("m.room.tombstone", cli)) {
-                    return reject(
-                        new UserFriendlyError("You do not have the required permissions to use this command."),
-                    );
+                    return reject(new UserFriendlyError("slash_command|upgraderoom_permission_error"));
                 }
 
                 const { finished } = Modal.createDialog(
@@ -182,7 +180,7 @@ export const Commands = [
     new Command({
         command: "jumptodate",
         args: "<YYYY-MM-DD>",
-        description: _td("Jump to the given date in the timeline"),
+        description: _td("slash_command|jumptodate"),
         isEnabled: () => SettingsStore.getValue("feature_jump_to_date"),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
@@ -190,10 +188,10 @@ export const Commands = [
                     (async (): Promise<void> => {
                         const unixTimestamp = Date.parse(args);
                         if (!unixTimestamp) {
-                            throw new UserFriendlyError(
-                                "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.",
-                                { inputDate: args, cause: undefined },
-                            );
+                            throw new UserFriendlyError("slash_command|jumptodate_invalid_input", {
+                                inputDate: args,
+                                cause: undefined,
+                            });
                         }
 
                         const { event_id: eventId, origin_server_ts: originServerTs } = await cli.timestampToEvent(
@@ -223,7 +221,7 @@ export const Commands = [
     new Command({
         command: "nick",
         args: "<display_name>",
-        description: _td("Changes your display nickname"),
+        description: _td("slash_command|nick"),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
                 return success(cli.setDisplayName(args));
@@ -237,7 +235,7 @@ export const Commands = [
         command: "myroomnick",
         aliases: ["roomnick"],
         args: "<display_name>",
-        description: _td("Changes your display nickname in the current room only"),
+        description: _td("slash_command|myroomnick"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
@@ -256,7 +254,7 @@ export const Commands = [
     new Command({
         command: "roomavatar",
         args: "[<mxc_url>]",
-        description: _td("Changes the avatar of the current room"),
+        description: _td("slash_command|roomavatar"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             let promise = Promise.resolve(args ?? null);
@@ -277,7 +275,7 @@ export const Commands = [
     new Command({
         command: "myroomavatar",
         args: "[<mxc_url>]",
-        description: _td("Changes your profile picture in this current room only"),
+        description: _td("slash_command|myroomavatar"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             const room = cli.getRoom(roomId);
@@ -306,7 +304,7 @@ export const Commands = [
     new Command({
         command: "myavatar",
         args: "[<mxc_url>]",
-        description: _td("Changes your profile picture in all rooms"),
+        description: _td("slash_command|myavatar"),
         runFn: function (cli, roomId, threadId, args) {
             let promise = Promise.resolve(args ?? null);
             if (!args) {
@@ -326,7 +324,7 @@ export const Commands = [
     new Command({
         command: "topic",
         args: "[<topic>]",
-        description: _td("Gets or sets the room topic"),
+        description: _td("slash_command|topic"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
@@ -336,7 +334,7 @@ export const Commands = [
             const room = cli.getRoom(roomId);
             if (!room) {
                 return reject(
-                    new UserFriendlyError("Failed to get room topic: Unable to find room (%(roomId)s", {
+                    new UserFriendlyError("slash_command|topic_room_error", {
                         roomId,
                         cause: undefined,
                     }),
@@ -346,7 +344,7 @@ export const Commands = [
             const content = room.currentState.getStateEvents("m.room.topic", "")?.getContent<MRoomTopicEventContent>();
             const topic = !!content
                 ? ContentHelpers.parseTopicContent(content)
-                : { text: _t("This room has no topic.") };
+                : { text: _t("slash_command|topic_none") };
 
             const body = topicToHtml(topic.text, topic.html, undefined, true);
 
@@ -364,7 +362,7 @@ export const Commands = [
     new Command({
         command: "roomname",
         args: "<name>",
-        description: _td("Sets the room name"),
+        description: _td("slash_command|roomname"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
@@ -378,7 +376,7 @@ export const Commands = [
     new Command({
         command: "invite",
         args: "<user-id> [<reason>]",
-        description: _td("Invites user with given id to current room"),
+        description: _td("slash_command|invite"),
         analyticsName: "Invite",
         isEnabled: (cli) => !isCurrentLocalRoom(cli) && shouldShowComponent(UIComponent.InviteUsers),
         runFn: function (cli, roomId, threadId, args) {
@@ -497,7 +495,7 @@ export const Commands = [
         command: "remove",
         aliases: ["kick"],
         args: "<user-id> [reason]",
-        description: _td("Removes user with given id from this room"),
+        description: _td("slash_command|remove"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
@@ -514,7 +512,7 @@ export const Commands = [
     new Command({
         command: "ban",
         args: "<user-id> [reason]",
-        description: _td("Bans user with given id"),
+        description: _td("slash_command|ban"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
@@ -531,7 +529,7 @@ export const Commands = [
     new Command({
         command: "unban",
         args: "<user-id>",
-        description: _td("Unbans user with given ID"),
+        description: _td("slash_command|unban"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
@@ -549,7 +547,7 @@ export const Commands = [
     new Command({
         command: "ignore",
         args: "<user-id>",
-        description: _td("Ignores a user, hiding their messages from you"),
+        description: _td("slash_command|ignore"),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
                 const matches = args.match(/^(@[^:]+:\S+)$/);
@@ -578,7 +576,7 @@ export const Commands = [
     new Command({
         command: "unignore",
         args: "<user-id>",
-        description: _td("Stops ignoring a user, showing their messages going forward"),
+        description: _td("slash_command|unignore"),
         runFn: function (cli, roomId, threadId, args) {
             if (args) {
                 const matches = args.match(/(^@[^:]+:\S+$)/);
@@ -609,7 +607,7 @@ export const Commands = [
     deop,
     new Command({
         command: "devtools",
-        description: _td("Opens the Developer Tools dialog"),
+        description: _td("slash_command|devtools"),
         runFn: function (cli, roomId, threadRootId) {
             Modal.createDialog(DevtoolsDialog, { roomId, threadRootId }, "mx_DevtoolsDialog_wrapper");
             return success();
@@ -619,7 +617,7 @@ export const Commands = [
     new Command({
         command: "addwidget",
         args: "<url | embed code | Jitsi url>",
-        description: _td("Adds a custom widget by URL to the room"),
+        description: _td("slash_command|addwidget"),
         isEnabled: (cli) =>
             SettingsStore.getValue(UIFeature.Widgets) &&
             shouldShowComponent(UIComponent.AddIntegrations) &&
@@ -794,7 +792,7 @@ export const Commands = [
     }),
     new Command({
         command: "rainbow",
-        description: _td("Sends the given message coloured as a rainbow"),
+        description: _td("slash_command|rainbow"),
         args: "<message>",
         runFn: function (cli, roomId, threadId, args) {
             if (!args) return reject(this.getUsage());
@@ -804,7 +802,7 @@ export const Commands = [
     }),
     new Command({
         command: "rainbowme",
-        description: _td("Sends the given emote coloured as a rainbow"),
+        description: _td("slash_command|rainbowme"),
         args: "<message>",
         runFn: function (cli, roomId, threadId, args) {
             if (!args) return reject(this.getUsage());
@@ -814,7 +812,7 @@ export const Commands = [
     }),
     new Command({
         command: "help",
-        description: _td("Displays list of commands with usages and descriptions"),
+        description: _td("slash_command|help"),
         runFn: function () {
             Modal.createDialog(SlashCommandHelpDialog);
             return success();
@@ -823,7 +821,7 @@ export const Commands = [
     }),
     new Command({
         command: "whois",
-        description: _td("Displays information about a user"),
+        description: _td("slash_command|whois"),
         args: "<user-id>",
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, userId) {
@@ -844,7 +842,7 @@ export const Commands = [
     new Command({
         command: "rageshake",
         aliases: ["bugreport"],
-        description: _td("Send a bug report with logs"),
+        description: _td("slash_command|rageshake"),
         isEnabled: () => !!SdkConfig.get().bug_report_endpoint_url,
         args: "<description>",
         runFn: function (cli, roomId, threadId, args) {
@@ -916,7 +914,7 @@ export const Commands = [
     }),
     new Command({
         command: "msg",
-        description: _td("Sends a message to the given user"),
+        description: _td("slash_command|msg"),
         args: "<user-id> [<message>]",
         runFn: function (cli, roomId, threadId, args) {
             if (args) {

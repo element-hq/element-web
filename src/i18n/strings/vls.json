@@ -62,53 +62,20 @@
     "Room %(roomId)s not visible": "Gesprek %(roomId)s es nie zichtboar",
     "Missing user_id in request": "user_id ountbrikt in verzoek",
     "Usage": "Gebruuk",
-    "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Plakt ¯\\_(ツ)_/¯ vóór e bericht zounder ipmoak",
-    "Upgrades a room to a new version": "Actualiseert ’t gesprek tout e nieuwe versie",
-    "Changes your display nickname": "Verandert je weergavenoame",
-    "Changes your display nickname in the current room only": "Stelt je weergavenoame alleene moa in ’t huudig gesprek in",
-    "Gets or sets the room topic": "Verkrygt ’t ounderwerp van ’t gesprek of stelt ’t in",
-    "This room has no topic.": "Da gesprek hier èt geen ounderwerp.",
-    "Sets the room name": "Stelt de gespreksnoame in",
-    "Invites user with given id to current room": "Nodigt de gebruuker me de gegeevn ID uut in ’t huudig gesprek",
-    "Bans user with given id": "Verbant de gebruuker me de gegeevn ID",
-    "Unbans user with given ID": "Ountbant de gebruuker me de gegeevn ID",
-    "Ignores a user, hiding their messages from you": "Negeert e gebruuker, woadeure dan de berichtn dervan ounzichtboar vo je wordn",
     "Ignored user": "Genegeerde gebruuker",
     "You are now ignoring %(userId)s": "Je negeert nu %(userId)s",
-    "Stops ignoring a user, showing their messages going forward": "Stopt ’t negeern van e gebruuker, hierdeure wordn de berichtn van de gebruuker were zichtboar",
     "Unignored user": "Oungenegeerde gebruuker",
     "You are no longer ignoring %(userId)s": "Je negeert %(userId)s nie mi",
     "Define the power level of a user": "Bepoal ’t machtsniveau van e gebruuker",
     "Deops user with given id": "Ountmachtigt de gebruuker me de gegeevn ID",
-    "Opens the Developer Tools dialog": "Opent de dialoogveinster me ’t ountwikkeloarsgereedschap",
-    "Adds a custom widget by URL to the room": "Voegt met een URL een angepaste widget toe an ’t gesprek",
     "Please supply a https:// or http:// widget URL": "Gift een https://- of http://-widget-URL in",
     "You cannot modify widgets in this room.": "J’en kut de widgets in ’t gesprek hier nie anpassn.",
     "Verified key": "Geverifieerde sleuter",
     "Displays action": "Toogt actie",
     "Forces the current outbound group session in an encrypted room to be discarded": "Forceert de huudige uutwoartsche groepssessie in e versleuterd gesprek vo verworpn te wordn",
-    "Sends the given message coloured as a rainbow": "Verstuurt ’t gegeevn bericht in regenboogkleurn",
-    "Sends the given emote coloured as a rainbow": "Verstuurt de gegeevn emoticon in regenboogkleurn",
     "Reason": "Reedn",
-    "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s èt d’uutnodigienge vo %(targetDisplayName)s vo toe te treedn tout ’t gesprek ingetrokkn.",
-    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s èt %(targetDisplayName)s in ’t gesprek uutgenodigd.",
-    "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor alle gespreksleedn, vanaf de moment dan ze uutgenodigd gewist zyn.",
-    "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor alle gespreksleedn, vanaf de moment dan ze toegetreedn zyn.",
-    "%(senderName)s made future room history visible to all room members.": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor alle gespreksleedn.",
-    "%(senderName)s made future room history visible to anyone.": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor iedereen.",
-    "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor ounbekend (%(visibility)s).",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s van %(fromPowerLevel)s noa %(toPowerLevel)s",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s èt ’t machtsniveau van %(powerLevelDiffText)s gewyzigd.",
-    "%(senderName)s changed the pinned messages for the room.": "%(senderName)s èt de vastgeprikte boodschappn vo ’t gesprek gewyzigd.",
-    "%(widgetName)s widget modified by %(senderName)s": "%(widgetName)s-widget angepast gewist deur %(senderName)s",
-    "%(widgetName)s widget added by %(senderName)s": "%(widgetName)s-widget toegevoegd gewist deur %(senderName)s",
-    "%(widgetName)s widget removed by %(senderName)s": "%(widgetName)s-widget verwyderd gewist deur %(senderName)s",
-    "%(displayName)s is typing …": "%(displayName)s es an ’t typn…",
-    "%(names)s and %(count)s others are typing …": {
-        "other": "%(names)s en %(count)s anderen zyn an ’t typn…",
-        "one": "%(names)s en nog etwien zyn an ’t typn…"
-    },
-    "%(names)s and %(lastPerson)s are typing …": "%(names)s en %(lastPerson)s zyn an ’t typn…",
     "No homeserver URL provided": "Geen thuusserver-URL ingegeevn",
     "Unexpected error resolving homeserver configuration": "Ounverwachte foute by ’t controleern van de thuusserverconfiguroasje",
     "This homeserver has hit its Monthly Active User limit.": "Dezen thuusserver èt z’n limiet vo moandeliks actieve gebruukers bereikt.",
@@ -390,13 +357,6 @@
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)su",
     "%(duration)sd": "%(duration)sd",
-    "Online for %(duration)s": "Online vo %(duration)s",
-    "Idle for %(duration)s": "Afwezig vo %(duration)s",
-    "Offline for %(duration)s": "Offline vo %(duration)s",
-    "Unknown for %(duration)s": "Ounbekend vo %(duration)s",
-    "Online": "Online",
-    "Idle": "Afwezig",
-    "Unknown": "Ounbekend",
     "Replying": "An ’t beantwoordn",
     "Unnamed room": "Noamloos gesprek",
     "(~%(count)s results)": {
@@ -849,7 +809,6 @@
     "Clear personal data": "Persoonlike gegeevns wissn",
     "Messages": "Berichtn",
     "Actions": "Acties",
-    "Displays list of commands with usages and descriptions": "Toogt e lyste van beschikboare ipdrachtn, met hunder gebruukn en beschryviengn",
     "Checking server": "Server wor gecontroleerd",
     "Disconnect from the identity server <idserver />?": "Wil je de verbindienge me den identiteitsserver <idserver /> verbreekn?",
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "Je makt vo de moment gebruuk van <server></server> vo deur je contactn gevoundn te kunn wordn, en von hunder te kunn viendn. Je kut hierounder jen identiteitsserver wyzign.",
@@ -1054,6 +1013,63 @@
         "m.room.canonical_alias": {
             "set": "%(senderName)s èt %(address)s als hoofdadresse vo dit gesprek ingesteld.",
             "removed": "%(senderName)s èt ’t hoofdadresse vo dit gesprek verwyderd."
+        },
+        "m.room.third_party_invite": {
+            "revoked": "%(senderName)s èt d’uutnodigienge vo %(targetDisplayName)s vo toe te treedn tout ’t gesprek ingetrokkn.",
+            "sent": "%(senderName)s èt %(targetDisplayName)s in ’t gesprek uutgenodigd."
+        },
+        "m.room.history_visibility": {
+            "invited": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor alle gespreksleedn, vanaf de moment dan ze uutgenodigd gewist zyn.",
+            "joined": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor alle gespreksleedn, vanaf de moment dan ze toegetreedn zyn.",
+            "shared": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor alle gespreksleedn.",
+            "world_readable": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor iedereen.",
+            "unknown": "%(senderName)s èt de toekomstige gespreksgeschiedenisse zichtboar gemakt voor ounbekend (%(visibility)s)."
+        },
+        "m.room.pinned_events": {
+            "changed": "%(senderName)s èt de vastgeprikte boodschappn vo ’t gesprek gewyzigd."
+        },
+        "m.widget": {
+            "modified": "%(widgetName)s-widget angepast gewist deur %(senderName)s",
+            "added": "%(widgetName)s-widget toegevoegd gewist deur %(senderName)s",
+            "removed": "%(widgetName)s-widget verwyderd gewist deur %(senderName)s"
+        },
+        "typing_indicator": {
+            "one_user": "%(displayName)s es an ’t typn…",
+            "two_users": "%(names)s en %(lastPerson)s zyn an ’t typn…",
+            "more_users": {
+                "other": "%(names)s en %(count)s anderen zyn an ’t typn…",
+                "one": "%(names)s en nog etwien zyn an ’t typn…"
+            }
         }
-    }
+    },
+    "slash_command": {
+        "shrug": "Plakt ¯\\_(ツ)_/¯ vóór e bericht zounder ipmoak",
+        "upgraderoom": "Actualiseert ’t gesprek tout e nieuwe versie",
+        "nick": "Verandert je weergavenoame",
+        "myroomnick": "Stelt je weergavenoame alleene moa in ’t huudig gesprek in",
+        "topic": "Verkrygt ’t ounderwerp van ’t gesprek of stelt ’t in",
+        "topic_none": "Da gesprek hier èt geen ounderwerp.",
+        "roomname": "Stelt de gespreksnoame in",
+        "invite": "Nodigt de gebruuker me de gegeevn ID uut in ’t huudig gesprek",
+        "ban": "Verbant de gebruuker me de gegeevn ID",
+        "unban": "Ountbant de gebruuker me de gegeevn ID",
+        "ignore": "Negeert e gebruuker, woadeure dan de berichtn dervan ounzichtboar vo je wordn",
+        "unignore": "Stopt ’t negeern van e gebruuker, hierdeure wordn de berichtn van de gebruuker were zichtboar",
+        "devtools": "Opent de dialoogveinster me ’t ountwikkeloarsgereedschap",
+        "addwidget": "Voegt met een URL een angepaste widget toe an ’t gesprek",
+        "rainbow": "Verstuurt ’t gegeevn bericht in regenboogkleurn",
+        "rainbowme": "Verstuurt de gegeevn emoticon in regenboogkleurn",
+        "help": "Toogt e lyste van beschikboare ipdrachtn, met hunder gebruukn en beschryviengn"
+    },
+    "presence": {
+        "online_for": "Online vo %(duration)s",
+        "idle_for": "Afwezig vo %(duration)s",
+        "offline_for": "Offline vo %(duration)s",
+        "unknown_for": "Ounbekend vo %(duration)s",
+        "online": "Online",
+        "idle": "Afwezig",
+        "unknown": "Ounbekend",
+        "offline": "Offline"
+    },
+    "Unknown": "Ounbekend"
 }
