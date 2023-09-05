@@ -2492,6 +2492,11 @@
   resolved "https://registry.yarnpkg.com/@types/jsrsasign/-/jsrsasign-10.5.8.tgz#0d6c638505454b5e95c684d6f604d57641417336"
   integrity sha512-1oZ3TbarAhKtKUpyrCIqXpbx3ZAfoSulleJs6/UzzyYty0ut+kjRX7zHLAaHwVIuw8CBjIymwW4J2LK944HoHQ==
 
+"@types/lodash@^4.14.197":
+  version "4.14.197"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.197.tgz#e95c5ddcc814ec3e84c891910a01e0c8a378c54b"
+  integrity sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==
+
 "@types/mapbox__point-geometry@*", "@types/mapbox__point-geometry@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@types/mapbox__point-geometry/-/mapbox__point-geometry-0.1.2.tgz#488a9b76e8457d6792ea2504cdd4ecdd9860a27e"
@@ -8885,14 +8890,15 @@ matrix-mock-request@^2.5.0:
     what-input "^5.2.10"
     zxcvbn "^4.4.2"
 
-matrix-web-i18n@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-2.1.0.tgz#bab2db9ac462773de829053b4b8d43c11154a85b"
-  integrity sha512-z+B9D/PkWYB4O9SP4lsG4KNA2V3ypMWstP+lreft1c1wz6L5R1U3ennp+cs3yOsylBfcK+xLRvkwLNZsU6QEUA==
+matrix-web-i18n@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-3.1.1.tgz#da851748515b20ca15fa986817bbce2e242b3dd6"
+  integrity sha512-BOeOTedtONIqVQUlyHFXpxXkrETWdCoJdToyA+edMU+yGjKOW7bekAd9uAEfkV9jErP5eXw3cHYsKZPpa8ifWg==
   dependencies:
     "@babel/parser" "^7.18.5"
     "@babel/traverse" "^7.18.5"
     lodash "^4.17.21"
+    minimist "^1.2.8"
     walk "^2.3.15"
 
 matrix-widget-api@^1.3.1, matrix-widget-api@^1.5.0:
@@ -9150,7 +9156,7 @@ minimist-options@4.1.0:
     is-plain-obj "^1.1.0"
     kind-of "^6.0.3"
 
-minimist@>=1.2.2, minimist@^1.1.0, minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6:
+minimist@>=1.2.2, minimist@^1.1.0, minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6, minimist@^1.2.8:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==

@@ -1,31 +1,41 @@
 {
-    "Dismiss": "Dismiss",
-    "Unknown device": "Unknown device",
-    "Welcome to Element": "Welcome to Element",
-    "Sign In": "Sign In",
-    "Create Account": "Create Account",
-    "Explore rooms": "Explore rooms",
-    "The message from the parser is: %(message)s": "The message from the parser is: %(message)s",
-    "Invalid JSON": "Invalid JSON",
-    "Unexpected error preparing the app. See console for details.": "Unexpected error preparing the app. See console for details.",
-    "Invalid configuration: no default server specified.": "Invalid configuration: no default server specified.",
-    "Failed to start": "Failed to start",
-    "Go to element.io": "Go to element.io",
-    "I understand the risks and wish to continue": "I understand the risks and wish to continue",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s uses advanced browser features which aren't supported by your current browser.",
-    "Your browser can't run %(brand)s": "Your browser can't run %(brand)s",
-    "Unsupported browser": "Unsupported browser",
-    "Powered by Matrix": "Powered by Matrix",
-    "Go to your browser to complete Sign In": "Go to your browser to complete Sign In",
-    "Open": "Open",
-    "Download Completed": "Download Completed",
-    "Unable to load config file: please refresh the page to try again.": "Unable to load config file: please refresh the page to try again.",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
-    "Your Element is misconfigured": "Your Element is misconfigured",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
-    "Use %(brand)s on mobile": "Use %(brand)s on mobile",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s on %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
+    "error": {
+        "invalid_configuration_no_server": "Invalid configuration: no default server specified.",
+        "misconfigured": "Your Element is misconfigured",
+        "invalid_json": "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.",
+        "invalid_json_detail": "The message from the parser is: %(message)s",
+        "invalid_json_generic": "Invalid JSON",
+        "cannot_load_config": "Unable to load config file: please refresh the page to try again.",
+        "app_launch_unexpected_error": "Unexpected error preparing the app. See console for details."
+    },
+    "download_completed": "Download Completed",
+    "action": {
+        "open": "Open",
+        "dismiss": "Dismiss"
+    },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Go to your browser to complete Sign In"
+    },
+    "unknown_device": "Unknown device",
+    "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
+    "powered_by_matrix": "Powered by Matrix",
+    "use_brand_on_mobile": "Use %(brand)s on mobile",
+    "incompatible_browser": {
+        "title": "Unsupported browser",
+        "summary": "Your browser can't run %(brand)s",
+        "features": "%(brand)s uses advanced browser features which aren't supported by your current browser.",
+        "browser_links": "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
+        "feature_warning": "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
+        "continue_warning": "I understand the risks and wish to continue"
+    },
+    "go_to_element_io": "Go to element.io",
+    "failed_to_start": "Failed to start",
+    "welcome_to_element": "Welcome to Element",
+    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
+    "common": {
+        "sign_in": "Sign In",
+        "create_account": "Create Account",
+        "explore_rooms": "Explore rooms"
+    }
 }

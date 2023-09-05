@@ -1,29 +1,34 @@
 {
-    "Unknown device": "Naməlum qurğu",
-    "Invalid JSON": "Yanlış JSON",
-    "Sign In": "Daxil ol",
-    "Create Account": "Hesab Aç",
-    "Explore rooms": "Otaqları kəşf edin",
-    "Unexpected error preparing the app. See console for details.": "Tətbiqin başladılmasında gözlənilməz xəta.Təfərrüatlar üçün konsola baxın.",
-    "Invalid configuration: no default server specified.": "Yanlış konfiqurasiya: standart server göstərilməyib.",
-    "The message from the parser is: %(message)s": "Sözügedən mesaj: %(message)s",
-    "Dismiss": "Nəzərə almayın",
-    "Welcome to Element": "Element-ə xoş gəlmişsiniz",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "$matrixLogo tərəfindən dəstəklənən mərkəzləşdirilməmiş ,şifrələnmiş söhbət &amp; əməkdaşlıq",
-    "Failed to start": "Başlatmaq alınmadı",
-    "Go to element.io": "element.io saytına keçin",
-    "I understand the risks and wish to continue": "Mən riskləri başa düşürəm və davam etmək istəyirəm",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Siz cari brauzerinizdən istifadə etməyə davam edə bilərsiniz, lakin bəzi və ya bütün funksiyalar işləməyə və tətbiqin görünüşü yanlış ola bilər.",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Zəhmət olmasa quraşdırın<chromeLink> Chrome</chromeLink> ,<firefoxLink> Firefox</firefoxLink> , və ya<safariLink> Safari</safariLink> ən yaxşı təcrübə üçün.",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s cari brauzeriniz tərəfindən dəstəklənməyən təkmil brauzer funksiyalarından istifadə edir.",
-    "Your browser can't run %(brand)s": "Brauzeriniz %(brand)s işlədə bilmir",
-    "Unsupported browser": "Dəstəklənməyən brauzer",
-    "Use %(brand)s on mobile": "Mobil telefonda %(brand)s istifadə edin",
-    "Powered by Matrix": "Gücünü Matrix'dən alır",
-    "Go to your browser to complete Sign In": "Girişi tamamlamaq üçün brauzerinizə keçin",
-    "Open": "Aç",
-    "Download Completed": "Yükləmə Tamamlandı",
-    "Unable to load config file: please refresh the page to try again.": "Konfiqurasiya faylını yükləmək mümkün deyil: yenidən cəhd etmək üçün səhifəni yeniləyin.",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Element konfiqurasiyanızda yanlış JSON var. Problemi düzəldin və səhifəni yenidən yükləyin.",
-    "Your Element is misconfigured": "Elementi yanlış konfiqurasiya edibsiniz"
+    "action": {
+        "dismiss": "Nəzərə almayın",
+        "open": "Aç"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Girişi tamamlamaq üçün brauzerinizə keçin"
+    },
+    "download_completed": "Yükləmə Tamamlandı",
+    "error": {
+        "app_launch_unexpected_error": "Tətbiqin başladılmasında gözlənilməz xəta.Təfərrüatlar üçün konsola baxın.",
+        "cannot_load_config": "Konfiqurasiya faylını yükləmək mümkün deyil: yenidən cəhd etmək üçün səhifəni yeniləyin.",
+        "invalid_configuration_no_server": "Yanlış konfiqurasiya: standart server göstərilməyib.",
+        "invalid_json": "Element konfiqurasiyanızda yanlış JSON var. Problemi düzəldin və səhifəni yenidən yükləyin.",
+        "invalid_json_detail": "Sözügedən mesaj: %(message)s",
+        "invalid_json_generic": "Yanlış JSON",
+        "misconfigured": "Elementi yanlış konfiqurasiya edibsiniz"
+    },
+    "failed_to_start": "Başlatmaq alınmadı",
+    "go_to_element_io": "element.io saytına keçin",
+    "incompatible_browser": {
+        "browser_links": "Zəhmət olmasa quraşdırın<chromeLink> Chrome</chromeLink> ,<firefoxLink> Firefox</firefoxLink> , və ya<safariLink> Safari</safariLink> ən yaxşı təcrübə üçün.",
+        "continue_warning": "Mən riskləri başa düşürəm və davam etmək istəyirəm",
+        "feature_warning": "Siz cari brauzerinizdən istifadə etməyə davam edə bilərsiniz, lakin bəzi və ya bütün funksiyalar işləməyə və tətbiqin görünüşü yanlış ola bilər.",
+        "features": "%(brand)s cari brauzeriniz tərəfindən dəstəklənməyən təkmil brauzer funksiyalarından istifadə edir.",
+        "summary": "Brauzeriniz %(brand)s işlədə bilmir",
+        "title": "Dəstəklənməyən brauzer"
+    },
+    "powered_by_matrix": "Gücünü Matrix'dən alır",
+    "powered_by_matrix_with_logo": "$matrixLogo tərəfindən dəstəklənən mərkəzləşdirilməmiş ,şifrələnmiş söhbət &amp; əməkdaşlıq",
+    "unknown_device": "Naməlum qurğu",
+    "use_brand_on_mobile": "Mobil telefonda %(brand)s istifadə edin",
+    "welcome_to_element": "Element-ə xoş gəlmişsiniz"
 }

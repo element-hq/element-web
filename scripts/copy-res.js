@@ -79,6 +79,7 @@ const parseArgs = require("minimist");
 const Cpx = require("cpx");
 const chokidar = require("chokidar");
 const fs = require("fs");
+const _ = require("lodash");
 
 const argv = parseArgs(process.argv.slice(2), {});
 
@@ -155,11 +156,11 @@ function genLangFile(lang, dest) {
     const reactSdkFile = "node_modules/matrix-react-sdk/src/i18n/strings/" + lang + ".json";
     const riotWebFile = "src/i18n/strings/" + lang + ".json";
 
-    const translations = {};
+    let translations = {};
     [reactSdkFile, riotWebFile].forEach(function (f) {
         if (fs.existsSync(f)) {
             try {
-                Object.assign(translations, JSON.parse(fs.readFileSync(f).toString()));
+                translations = _.merge(translations, JSON.parse(fs.readFileSync(f).toString()));
             } catch (e) {
                 console.error("Failed: " + f, e);
                 throw e;

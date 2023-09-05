@@ -1,5 +1,7 @@
 {
-    "Unknown device": "Nepoznati uređaj",
-    "Dismiss": "Odbaci",
-    "Welcome to Element": "Dobrodošli u Element"
+    "action": {
+        "dismiss": "Odbaci"
+    },
+    "unknown_device": "Nepoznati uređaj",
+    "welcome_to_element": "Dobrodošli u Element"
 }

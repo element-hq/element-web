@@ -153,13 +153,11 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
         const incompatibleOptions = [wkConfig, serverName, hsUrl].filter((i) => !!i);
         if (hsUrl && (wkConfig || serverName)) {
             // noinspection ExceptionCaughtLocallyJS
-            throw new UserFriendlyError(
-                "Invalid configuration: a default_hs_url can't be specified along with default_server_name or default_server_config",
-            );
+            throw new UserFriendlyError("error|invalid_configuration_mixed_server");
         }
         if (incompatibleOptions.length < 1) {
             // noinspection ExceptionCaughtLocallyJS
-            throw new UserFriendlyError("Invalid configuration: no default server specified.");
+            throw new UserFriendlyError("error|invalid_configuration_no_server");
         }
 
         if (hsUrl) {

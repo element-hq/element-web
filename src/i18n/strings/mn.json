@@ -1,13 +1,16 @@
 {
-    "The message from the parser is: %(message)s": "Парсераас ирсэн мессеж нь: %(message)s",
-    "Invalid JSON": "Буруу ЖСОН",
-    "Unexpected error preparing the app. See console for details.": "Апп бэлдэх үед гарах ёсгүй алдаа. Дэлгэрэнгүйг консолоос харна уу.",
-    "Invalid configuration: no default server specified.": "Буруу тохиргоо: Өгөгдсөл серверийг зааж өгөөгүй байна.",
-    "Unknown device": "Үл мэдэгдэх төхөөрөмж",
-    "Dismiss": "Орхих",
-    "Welcome to Element": "Element -д тавтай морил",
-    "Sign In": "Нэвтрэх",
-    "Create Account": "Хэрэглэгч үүсгэх",
-    "Explore rooms": "Өрөөнүүд үзэх",
-    "Go to your browser to complete Sign In": "Бүрэн нэвтрэхийн тулд вэб хөтөч рүү шилжинэ үү"
+    "action": {
+        "dismiss": "Орхих"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Бүрэн нэвтрэхийн тулд вэб хөтөч рүү шилжинэ үү"
+    },
+    "error": {
+        "app_launch_unexpected_error": "Апп бэлдэх үед гарах ёсгүй алдаа. Дэлгэрэнгүйг консолоос харна уу.",
+        "invalid_configuration_no_server": "Буруу тохиргоо: Өгөгдсөл серверийг зааж өгөөгүй байна.",
+        "invalid_json_detail": "Парсераас ирсэн мессеж нь: %(message)s",
+        "invalid_json_generic": "Буруу ЖСОН"
+    },
+    "unknown_device": "Үл мэдэгдэх төхөөрөмж",
+    "welcome_to_element": "Element -д тавтай морил"
 }
