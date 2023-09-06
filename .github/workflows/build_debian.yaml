@@ -13,7 +13,7 @@ jobs:
             R2_INCOMING_BUCKET: ${{ vars.R2_INCOMING_BUCKET }}
             R2_URL: ${{ vars.CF_R2_S3_API }}
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - name: Prepare
               run: |
