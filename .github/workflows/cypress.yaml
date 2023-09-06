@@ -142,7 +142,7 @@ jobs:
               run: |
                   echo "sha=$(cat webapp/sha)" >> $GITHUB_OUTPUT
 
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
               with:
                   # XXX: We're checking out untrusted code in a secure context
                   # We need to be careful to not trust anything this code outputs/may do
