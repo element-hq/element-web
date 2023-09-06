@@ -31,7 +31,6 @@ exports[`<AddExistingToSpaceDialog /> looks as expected 1`] = `
             data-testid="avatar-img"
             data-type="square"
             style="--cpd-avatar-size: 40px;"
-            title="!spaceid:example.com"
           >
             <img
               alt=""

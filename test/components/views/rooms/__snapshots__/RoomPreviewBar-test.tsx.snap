@@ -29,7 +29,6 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
       data-type="round"
       role="presentation"
       style="--cpd-avatar-size: 36px;"
-      title="RoomPreviewBar-test-room"
     >
       R
     </span>
@@ -55,7 +54,6 @@ exports[`<RoomPreviewBar /> message case AskToJoin renders the corresponding mes
       data-type="round"
       role="presentation"
       style="--cpd-avatar-size: 36px;"
-      title=""
     >
       ?
     </span>
@@ -222,7 +220,6 @@ exports[`<RoomPreviewBar /> with an invite with an invited email when client has
       data-type="round"
       role="presentation"
       style="--cpd-avatar-size: 36px;"
-      title="RoomPreviewBar-test-room"
     >
       R
     </span>
@@ -281,7 +278,6 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
       data-type="round"
       role="presentation"
       style="--cpd-avatar-size: 36px;"
-      title="RoomPreviewBar-test-room"
     >
       R
     </span>
@@ -347,7 +343,6 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
       data-type="round"
       role="presentation"
       style="--cpd-avatar-size: 36px;"
-      title="RoomPreviewBar-test-room"
     >
       R
     </span>

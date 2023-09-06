@@ -27,14 +27,6 @@
     "No media permissions": "Gan cheadanna meáin",
     "No Webcams detected": "Níor braitheadh aon ceamara gréasáin",
     "No Microphones detected": "Níor braitheadh aon micreafón",
-    "Waiting for answer": "ag Fanacht le freagra",
-    "%(senderName)s started a call": "Thosaigh %(senderName)s an glao",
-    "You started a call": "Thosaigh tú an glao",
-    "Call ended": "Críochnaíodh an glao",
-    "%(senderName)s ended the call": "Chríochnaigh %(senderName)s an glao",
-    "You ended the call": "Chríochnaigh tú an glao",
-    "Call in progress": "Glaoch ar siúl",
-    "Unable to access microphone": "Ní féidir rochtain a fháil ar mhicreafón",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Iarr ar an riarthóir do fhreastalaí baile (<code>%(homeserverDomain)s</code>) freastalaí TURN a chumrú go bhfeidhmeoidh glaonna go hiontaofa.",
     "Call failed due to misconfigured server": "Theip an glaoch de bharr freastalaí mícumraithe",
     "Answered Elsewhere": "Tógtha in áit eile",
@@ -54,16 +46,13 @@
     "Unignore": "Stop ag tabhairt neamhaird air",
     "Missing roomId.": "Comhartha aitheantais seomra ar iarraidh.",
     "Operation failed": "Chlis an oibríocht",
-    "Unnamed Room": "Seomra gan ainm",
     "%(weekDayName)s %(time)s": "%(weekDayName)s ar a %(time)s",
     "Upload Failed": "Chlis an uaslódáil",
     "Permission Required": "Is Teastáil Cead",
-    "Call Failed": "Chlis an glaoch",
     "Spaces": "Spásanna",
     "Transfer": "Aistrigh",
     "Hold": "Fan",
     "Resume": "Tosaigh arís",
-    "Effects": "Tionchair",
     "Zimbabwe": "an tSiombáib",
     "Zambia": "an tSaimbia",
     "Yemen": "Éimin",
@@ -251,7 +240,6 @@
     "ready": "réidh",
     "Algorithm:": "Algartam:",
     "Information": "Eolas",
-    "Away": "Imithe",
     "Favourited": "Roghnaithe",
     "A-Z": "A-Z",
     "Activity": "Gníomhaíocht",
@@ -267,7 +255,6 @@
     "Bridges": "Droichid",
     "Later": "Níos deireanaí",
     "Lock": "Glasáil",
-    "Cross-signing": "Cros-síniú",
     "Unencrypted": "Gan chriptiú",
     "None": "Níl aon cheann",
     "Flags": "Bratacha",
@@ -277,12 +264,9 @@
     "Document": "Cáipéis",
     "Italics": "Iodálach",
     "Discovery": "Aimsiú",
-    "Actions": "Gníomhartha",
-    "Messages": "Teachtaireachtaí",
     "Success!": "Rath!",
     "Users": "Úsáideoirí",
     "Commands": "Ordú",
-    "Other": "Eile",
     "Phone": "Guthán",
     "Email": "Ríomhphost",
     "Home": "Tús",
@@ -318,15 +302,11 @@
     "Tuesday": "Dé Máirt",
     "Monday": "Dé Luain",
     "Sunday": "Dé Domhnaigh",
-    "Stickerpack": "Pacáiste greamáin",
     "Search…": "Cuardaigh…",
     "Re-join": "Téigh ar ais isteach",
     "Historical": "Stairiúil",
     "Rooms": "Seomraí",
     "Replying": "Ag freagairt",
-    "Unknown": "Anaithnid",
-    "Idle": "Díomhaoin",
-    "Online": "Ar Líne",
     "%(duration)sd": "%(duration)sl",
     "%(duration)sh": "%(duration)su",
     "%(duration)sm": "%(duration)sn",
@@ -340,8 +320,6 @@
     "Light bulb": "Bolgán solais",
     "Thumbs up": "Ordógí suas",
     "Got It": "Tuigthe",
-    "Call invitation": "Nuair a fhaighim cuireadh glaoigh",
-    "Collecting logs": "ag Bailiú logaí",
     "Invited": "Le cuireadh",
     "Demote": "Bain ceadanna",
     "Encryption": "Criptiúchán",
@@ -360,7 +338,6 @@
     "Noisy": "Callánach",
     "On": "Ar siúl",
     "Off": "Múchta",
-    "Advanced": "Forbartha",
     "Authentication": "Fíordheimhniú",
     "Warning!": "Aire!",
     "Folder": "Fillteán",
@@ -425,8 +402,6 @@
     "Dog": "Madra",
     "Verified!": "Deimhnithe!",
     "Reason": "Cúis",
-    "Usage": "Úsáid",
-    "Admin": "Riarthóir",
     "Moderator": "Modhnóir",
     "Restricted": "Teoranta",
     "Default": "Réamhshocrú",
@@ -484,8 +459,6 @@
     "Verification code": "Cód fíoraithe",
     "Notification targets": "Spriocanna fógraí",
     "Results": "Torthaí",
-    "Hangup": "Cuir síos",
-    "Dialpad": "Eochaircheap",
     "More": "Níos mó",
     "Decrypting": "Ag Díchriptiú",
     "Access": "Rochtain",
@@ -510,23 +483,12 @@
     "Unnamed room": "Seomra gan ainm",
     "Command error": "Earráid ordaithe",
     "Server error": "Earráid freastalaí",
-    "Video call": "Físghlao",
-    "Voice call": "Glao gutha",
     "Admin Tools": "Uirlisí Riaracháin",
     "Demote yourself?": "Tabhair ísliú céime duit féin?",
     "Enable encryption?": "Cumasaigh criptiú?",
     "Banned users": "Úsáideoirí toirmiscthe",
     "Muted Users": "Úsáideoirí Fuaim",
     "Privileged Users": "Úsáideoirí Pribhléideacha",
-    "Notify everyone": "Tabhair fógraí do gach duine",
-    "Ban users": "Toirmisc úsáideoirí",
-    "Change settings": "Athraigh socruithe",
-    "Invite users": "Tabhair cuirí d'úsáideoirí",
-    "Send messages": "Seol teachtaireachtaí",
-    "Default role": "Gnáth-ról",
-    "Modify widgets": "Mionathraigh giuirléidí",
-    "Change topic": "Athraigh ábhar",
-    "Change permissions": "Athraigh ceadanna",
     "Notification sound": "Fuaim fógra",
     "Uploaded sound": "Fuaim uaslódáilte",
     "URL Previews": "Réamhamhairc URL",
@@ -534,12 +496,6 @@
     "Room version:": "Leagan seomra:",
     "Room version": "Leagan seomra",
     "Too Many Calls": "Barraíocht Glaonna",
-    "No other application is using the webcam": "Níl aon fheidhmchlár eile ag úsáid an cheamara gréasáin",
-    "Permission is granted to use the webcam": "Tugtar cead an ceamara gréasáin a úsáid",
-    "A microphone and webcam are plugged in and set up correctly": "Tá micreafón agus ceamara gréasáin plugáilte isteach agus curtha ar bun i gceart",
-    "Call failed because webcam or microphone could not be accessed. Check that:": "Níor glaodh toisc nach raibh rochtain ar ceamara gréasáin nó mhicreafón. Seiceáil go:",
-    "Unable to access webcam / microphone": "Ní féidir rochtain a fháil ar ceamara gréasáin / mhicreafón",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "Níor glaodh toisc nach raibh rochtain ar mhicreafón. Seiceáil go bhfuil micreafón plugáilte isteach agus curtha ar bun i gceart.",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
@@ -561,7 +517,6 @@
     "Unknown failure: %(reason)s": "Teip anaithnid: %(reason)s",
     "Enable encryption in settings.": "Tosaigh criptiú sna socruithe.",
     "Cross-signing is ready but keys are not backed up.": "Tá tras-sínigh réidh ach ní dhéantar cóip chúltaca d'eochracha.",
-    "Bans user with given id": "Toirmisc úsáideoir leis an ID áirithe",
     "Failed to reject invitation": "Níorbh fhéidir an cuireadh a dhiúltú",
     "Failed to reject invite": "Níorbh fhéidir an cuireadh a dhiúltú",
     "Failed to mute user": "Níor ciúnaíodh an úsáideoir",
@@ -578,10 +533,6 @@
     "Deops user with given id": "Bain an cumhacht oibritheora ó úsáideoir leis an ID áirithe",
     "Decrypt %(text)s": "Díchriptigh %(text)s",
     "Custom level": "Leibhéal saincheaptha",
-    "Changes your display nickname": "Athraíonn sé d'ainm taispeána",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "D'athraigh %(senderDisplayName)s an ábhar go \"%(topic)s\".",
-    "%(senderDisplayName)s removed the room name.": "Bhain %(senderDisplayName)s ainm an tseomra.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "D'athraigh %(senderDisplayName)s ainm an tseomra go %(roomName)s.",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "D'athraigh %(senderName)s an leibhéal cumhachta %(powerLevelDiffText)s.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Ní féidir ceangal leis an bhfreastalaí baile trí HTTP nuair a bhíonn URL HTTPS i mbarra do bhrabhsálaí. Bain úsáid as HTTPS nó <a> scripteanna neamhshábháilte a chumasú </a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Ní féidir ceangal leis an bhfreastalaí baile - seiceáil do nascacht le do thoil, déan cinnte go bhfuil muinín i dteastas <a>SSL do fhreastalaí baile</a>, agus nach bhfuil síneadh brabhsálaí ag cur bac ar iarratais.",
@@ -637,7 +588,10 @@
         "someone": "Duine éigin",
         "encrypted": "Criptithe",
         "matrix": "Matrix",
-        "trusted": "Dílis"
+        "trusted": "Dílis",
+        "unnamed_room": "Seomra gan ainm",
+        "stickerpack": "Pacáiste greamáin",
+        "cross_signing": "Cros-síniú"
     },
     "action": {
         "continue": "Lean ar aghaidh",
@@ -745,7 +699,10 @@
         "mod": "Mod"
     },
     "settings": {
-        "always_show_message_timestamps": "Taispeáin stampaí ama teachtaireachta i gcónaí"
+        "always_show_message_timestamps": "Taispeáin stampaí ama teachtaireachta i gcónaí",
+        "notifications": {
+            "rule_call": "Nuair a fhaighim cuireadh glaoigh"
+        }
     },
     "devtools": {
         "setting_colon": "Socrú:",
@@ -753,6 +710,84 @@
         "level": "Leibhéal",
         "value_colon": "Luach:",
         "value": "Luach",
-        "toolbox": "Uirlisí"
+        "toolbox": "Uirlisí",
+        "category_room": "Seomra",
+        "category_other": "Eile"
+    },
+    "timeline": {
+        "m.room.topic": "D'athraigh %(senderDisplayName)s an ábhar go \"%(topic)s\".",
+        "m.room.name": {
+            "remove": "Bhain %(senderDisplayName)s ainm an tseomra.",
+            "set": "D'athraigh %(senderDisplayName)s ainm an tseomra go %(roomName)s."
+        },
+        "m.call.hangup": {
+            "dm": "Críochnaíodh an glao"
+        }
+    },
+    "slash_command": {
+        "nick": "Athraíonn sé d'ainm taispeána",
+        "ban": "Toirmisc úsáideoir leis an ID áirithe",
+        "usage": "Úsáid",
+        "category_messages": "Teachtaireachtaí",
+        "category_actions": "Gníomhartha",
+        "category_admin": "Riarthóir",
+        "category_advanced": "Forbartha",
+        "category_effects": "Tionchair",
+        "category_other": "Eile"
+    },
+    "presence": {
+        "online": "Ar Líne",
+        "idle": "Díomhaoin",
+        "unknown": "Anaithnid",
+        "offline": "As líne",
+        "away": "Imithe"
+    },
+    "Unknown": "Anaithnid",
+    "event_preview": {
+        "m.call.answer": {
+            "dm": "Glaoch ar siúl"
+        },
+        "m.call.hangup": {
+            "you": "Chríochnaigh tú an glao",
+            "user": "Chríochnaigh %(senderName)s an glao"
+        },
+        "m.call.invite": {
+            "you": "Thosaigh tú an glao",
+            "user": "Thosaigh %(senderName)s an glao",
+            "dm_send": "ag Fanacht le freagra"
+        }
+    },
+    "bug_reporting": {
+        "collecting_logs": "ag Bailiú logaí"
+    },
+    "voip": {
+        "dialpad": "Eochaircheap",
+        "hangup": "Cuir síos",
+        "voice_call": "Glao gutha",
+        "video_call": "Físghlao",
+        "call_failed": "Chlis an glaoch",
+        "unable_to_access_microphone": "Ní féidir rochtain a fháil ar mhicreafón",
+        "call_failed_microphone": "Níor glaodh toisc nach raibh rochtain ar mhicreafón. Seiceáil go bhfuil micreafón plugáilte isteach agus curtha ar bun i gceart.",
+        "unable_to_access_media": "Ní féidir rochtain a fháil ar ceamara gréasáin / mhicreafón",
+        "call_failed_media": "Níor glaodh toisc nach raibh rochtain ar ceamara gréasáin nó mhicreafón. Seiceáil go:",
+        "call_failed_media_connected": "Tá micreafón agus ceamara gréasáin plugáilte isteach agus curtha ar bun i gceart",
+        "call_failed_media_permissions": "Tugtar cead an ceamara gréasáin a úsáid",
+        "call_failed_media_applications": "Níl aon fheidhmchlár eile ag úsáid an cheamara gréasáin"
+    },
+    "Messages": "Teachtaireachtaí",
+    "Other": "Eile",
+    "Advanced": "Forbartha",
+    "room_settings": {
+        "permissions": {
+            "m.room.power_levels": "Athraigh ceadanna",
+            "m.room.topic": "Athraigh ábhar",
+            "m.widget": "Mionathraigh giuirléidí",
+            "users_default": "Gnáth-ról",
+            "events_default": "Seol teachtaireachtaí",
+            "invite": "Tabhair cuirí d'úsáideoirí",
+            "state_default": "Athraigh socruithe",
+            "ban": "Toirmisc úsáideoirí",
+            "notifications.room": "Tabhair fógraí do gach duine"
+        }
     }
 }

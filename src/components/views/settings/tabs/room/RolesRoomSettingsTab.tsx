@@ -249,68 +249,74 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
 
         const plEventsToLabels: Record<EventType | string, TranslationKey | null> = {
             // These will be translated for us later.
-            [EventType.RoomAvatar]: isSpaceRoom ? _td("Change space avatar") : _td("Change room avatar"),
-            [EventType.RoomName]: isSpaceRoom ? _td("Change space name") : _td("Change room name"),
+            [EventType.RoomAvatar]: isSpaceRoom
+                ? _td("room_settings|permissions|m.room.avatar_space")
+                : _td("room_settings|permissions|m.room.avatar"),
+            [EventType.RoomName]: isSpaceRoom
+                ? _td("room_settings|permissions|m.room.name_space")
+                : _td("room_settings|permissions|m.room.name"),
             [EventType.RoomCanonicalAlias]: isSpaceRoom
-                ? _td("Change main address for the space")
-                : _td("Change main address for the room"),
-            [EventType.SpaceChild]: _td("Manage rooms in this space"),
-            [EventType.RoomHistoryVisibility]: _td("Change history visibility"),
-            [EventType.RoomPowerLevels]: _td("Change permissions"),
-            [EventType.RoomTopic]: isSpaceRoom ? _td("Change description") : _td("Change topic"),
-            [EventType.RoomTombstone]: _td("Upgrade the room"),
-            [EventType.RoomEncryption]: _td("Enable room encryption"),
-            [EventType.RoomServerAcl]: _td("Change server ACLs"),
-            [EventType.Reaction]: _td("Send reactions"),
-            [EventType.RoomRedaction]: _td("Remove messages sent by me"),
+                ? _td("room_settings|permissions|m.room.canonical_alias_space")
+                : _td("room_settings|permissions|m.room.canonical_alias"),
+            [EventType.SpaceChild]: _td("room_settings|permissions|m.space.child"),
+            [EventType.RoomHistoryVisibility]: _td("room_settings|permissions|m.room.history_visibility"),
+            [EventType.RoomPowerLevels]: _td("room_settings|permissions|m.room.power_levels"),
+            [EventType.RoomTopic]: isSpaceRoom
+                ? _td("room_settings|permissions|m.room.topic_space")
+                : _td("room_settings|permissions|m.room.topic"),
+            [EventType.RoomTombstone]: _td("room_settings|permissions|m.room.tombstone"),
+            [EventType.RoomEncryption]: _td("room_settings|permissions|m.room.encryption"),
+            [EventType.RoomServerAcl]: _td("room_settings|permissions|m.room.server_acl"),
+            [EventType.Reaction]: _td("room_settings|permissions|m.reaction"),
+            [EventType.RoomRedaction]: _td("room_settings|permissions|m.room.redaction"),
 
             // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-            "im.vector.modular.widgets": isSpaceRoom ? null : _td("Modify widgets"),
-            [VoiceBroadcastInfoEventType]: _td("Voice broadcasts"),
+            "im.vector.modular.widgets": isSpaceRoom ? null : _td("room_settings|permissions|m.widget"),
+            [VoiceBroadcastInfoEventType]: _td("room_settings|permissions|io.element.voice_broadcast_info"),
         };
 
         if (SettingsStore.getValue("feature_pinning")) {
-            plEventsToLabels[EventType.RoomPinnedEvents] = _td("Manage pinned events");
+            plEventsToLabels[EventType.RoomPinnedEvents] = _td("room_settings|permissions|m.room.pinned_events");
         }
         // MSC3401: Native Group VoIP signaling
         if (SettingsStore.getValue("feature_group_calls")) {
-            plEventsToLabels[ElementCall.CALL_EVENT_TYPE.name] = _td("Start %(brand)s calls");
-            plEventsToLabels[ElementCall.MEMBER_EVENT_TYPE.name] = _td("Join %(brand)s calls");
+            plEventsToLabels[ElementCall.CALL_EVENT_TYPE.name] = _td("room_settings|permissions|m.call");
+            plEventsToLabels[ElementCall.MEMBER_EVENT_TYPE.name] = _td("room_settings|permissions|m.call.member");
         }
 
         const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {
             "users_default": {
-                desc: _t("Default role"),
+                desc: _t("room_settings|permissions|users_default"),
                 defaultValue: 0,
             },
             "events_default": {
-                desc: _t("Send messages"),
+                desc: _t("room_settings|permissions|events_default"),
                 defaultValue: 0,
                 hideForSpace: true,
             },
             "invite": {
-                desc: _t("Invite users"),
+                desc: _t("room_settings|permissions|invite"),
                 defaultValue: 0,
             },
             "state_default": {
-                desc: _t("Change settings"),
+                desc: _t("room_settings|permissions|state_default"),
                 defaultValue: 50,
             },
             "kick": {
-                desc: _t("Remove users"),
+                desc: _t("room_settings|permissions|kick"),
                 defaultValue: 50,
             },
             "ban": {
-                desc: _t("Ban users"),
+                desc: _t("room_settings|permissions|ban"),
                 defaultValue: 50,
             },
             "redact": {
-                desc: _t("Remove messages sent by others"),
+                desc: _t("room_settings|permissions|redact"),
                 defaultValue: 50,
                 hideForSpace: true,
             },
             "notifications.room": {
-                desc: _t("Notify everyone"),
+                desc: _t("room_settings|permissions|notifications.room"),
                 defaultValue: 50,
                 hideForSpace: true,
             },

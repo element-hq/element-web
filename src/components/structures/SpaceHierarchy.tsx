@@ -119,7 +119,7 @@ const Tile: React.FC<ITileProps> = ({
         room.name ||
         room.canonical_alias ||
         room.aliases?.[0] ||
-        (room.room_type === RoomType.Space ? _t("Unnamed Space") : _t("Unnamed Room"));
+        (room.room_type === RoomType.Space ? _t("common|unnamed_space") : _t("common|unnamed_room"));
 
     const [showChildren, toggleShowChildren] = useStateToggle(true);
     const [onFocus, isActive, ref] = useRovingTabIndex();

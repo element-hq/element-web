@@ -276,7 +276,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
 
     public render(): React.ReactNode {
         const secureBackup = (
-            <SettingsSubsection heading={_t("Secure Backup")}>
+            <SettingsSubsection heading={_t("common|secure_backup")}>
                 <SecureBackupPanel />
             </SettingsSubsection>
         );
@@ -292,7 +292,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         // in having advanced details here once all flows are implemented, we
         // can remove this.
         const crossSigning = (
-            <SettingsSubsection heading={_t("Cross-signing")}>
+            <SettingsSubsection heading={_t("common|cross_signing")}>
                 <CrossSigningPanel />
             </SettingsSubsection>
         );

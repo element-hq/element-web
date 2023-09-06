@@ -27,22 +27,38 @@ interface IProps extends HTMLAttributes<HTMLSpanElement> {
     tooltipLabel?: string;
     tooltipShortcut?: string;
     children?: ReactNode;
+    viewUserOnClick?: boolean;
 }
 
-const FacePile: FC<IProps> = ({ members, size, overflow, tooltipLabel, tooltipShortcut, children, ...props }) => {
+const FacePile: FC<IProps> = ({
+    members,
+    size,
+    overflow,
+    tooltipLabel,
+    tooltipShortcut,
+    children,
+    viewUserOnClick = true,
+    ...props
+}) => {
     const faces = members.map(
         tooltipLabel
             ? (m) => <MemberAvatar key={m.userId} member={m} size={size} hideTitle />
             : (m) => (
                   <Tooltip key={m.userId} label={m.name} shortcut={tooltipShortcut}>
-                      <MemberAvatar member={m} size={size} viewUserOnClick={!props.onClick} hideTitle />
+                      <MemberAvatar
+                          member={m}
+                          size={size}
+                          viewUserOnClick={!props.onClick && viewUserOnClick}
+                          hideTitle
+                      />
                   </Tooltip>
               ),
     );
 
     const pileContents = (
         <>
-            {overflow ? <span className="mx_FacePile_more" /> : null}
+            {/* XXX: The margin-left is a workaround for Compound's styling excluding this element and being overly specific */}
+            {overflow ? <span className="mx_FacePile_more" style={{ marginLeft: `calc(${size} * -0.2)` }} /> : null}
             {faces}
         </>
     );

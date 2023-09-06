@@ -107,7 +107,7 @@ export class Command {
     }
 
     public getUsage(): string {
-        return _t("Usage") + ": " + this.getCommandWithArgs();
+        return _t("slash_command|usage") + ": " + this.getCommandWithArgs();
     }
 
     public isEnabled(cli: MatrixClient | null): boolean {

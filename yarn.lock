@@ -1259,9 +1259,9 @@
     regenerator-runtime "^0.14.0"
 
 "@babel/runtime@^7.13.10":
-  version "7.22.11"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.11.tgz#7a9ba3bbe406ad6f9e8dd4da2ece453eb23a77a4"
-  integrity sha512-ee7jVNlWN09+KftVOu9n7S8gQzD/Z6hN/I8VBRXW4P1+Xe7kJGXMwu8vds4aGIMHZnNbdpSWCfZZtinytpcAvA==
+  version "7.22.15"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.15.tgz#38f46494ccf6cf020bd4eed7124b425e83e523b8"
+  integrity sha512-T0O+aa+4w0u06iNmapipJXMV4HoUir03hpx3/YqXXhu9xim3w+dVphjFWl1OH8NbZHw5Lbm9k45drDkgq2VNNA==
   dependencies:
     regenerator-runtime "^0.14.0"
 
@@ -3056,17 +3056,17 @@
     "@typescript-eslint/types" "5.62.0"
     eslint-visitor-keys "^3.3.0"
 
-"@vector-im/compound-design-tokens@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.0.4.tgz#bf31120f026118d9dc379917364e2c27b51cce94"
-  integrity sha512-ZGflwlUANnEbsX/whWqRomyRHS36F1t5AoNBez2EfBVGXMIu7IsURVQfK/UJYPLoSHcArcTFCSbi5KSSsSiymw==
+"@vector-im/compound-design-tokens@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-0.0.5.tgz#33ef2c9dae9c52bbf2a6a62ddc143dbb4efa1a00"
+  integrity sha512-JSe2IXe374jVk7It6HnSGnri1+g47sTv/aP+hsxtex85OpK84Gd/WxBViNQHGBCT3dhPYKjIwodyB52EsXDWZQ==
   dependencies:
     svg2vectordrawable "^2.9.1"
 
 "@vector-im/compound-web@^0.2.3":
-  version "0.2.16"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.2.16.tgz#cdc578ec846999a7312d572131b5749b2cf7f86f"
-  integrity sha512-3ffijtHf4ibjLPsRoawTchf+DyaGbxtN6h/9WRvdOSTv+ML7oR7Aoo+jAPSTN+rNFuCIHKrayHJLl2YJOdeH8Q==
+  version "0.2.18"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.2.18.tgz#b92bcfd5779b1e558dc431ad3d330960749049d9"
+  integrity sha512-fs+tQYZMA4/KxGFOdoDM9WKf7IpeNILI37q2uj4dJj8SkI33zwUnzHFuTD04YI33Dc3FCZHcCd/d0m/fCnRaFg==
   dependencies:
     "@radix-ui/react-form" "^0.0.3"
     "@radix-ui/react-tooltip" "^1.0.6"

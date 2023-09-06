@@ -1,11 +1,8 @@
 # Cypress in Element Web
 
-## Scope of this Document
+## Contents
 
-This doc is about our Cypress tests in Element Web and how we use Cypress to write tests.
-It aims to cover:
-
--   How to run the tests yourself
+-   How to run the tests
 -   How the tests work
 -   How to write great Cypress tests
 -   Visual testing
@@ -44,6 +41,28 @@ To launch it:
 ```
 yarn run test:cypress:open
 ```
+
+### Matching the CI environment
+
+In our Continuous Integration environment, we run the Cypress tests in the
+Chrome browser.
+
+In some rare cases, tests behave differently between different browsers, so if
+you see CI failures for the Cypress tests, but those tests work OK on your local
+machine, try running them in Chrome like this:
+
+```bash
+yarn run test:cypress --browser=chrome
+```
+
+(Use `--browser=chromium` if you'd prefer to use Chromium.)
+
+If you launch the interactive UI you can choose the browser you want to use. To
+match the CI setup, choose Chrome.
+
+Note that you will need to have Chrome installed on your system to run the tests
+inside those browsers, whereas the default is to use Electron, which is included
+within the Cypress dependency.
 
 ### Running with Rust cryptography
 

@@ -2,7 +2,6 @@
     "Account": "Compte",
     "No Microphones detected": "No s'ha detectat cap micròfon",
     "No Webcams detected": "No s'ha detectat cap càmera web",
-    "Advanced": "Avançat",
     "Create new room": "Crea una sala nova",
     "Failed to forget room %(errCode)s": "No s'ha pogut oblidar la sala %(errCode)s",
     "Favourite": "Favorit",
@@ -15,7 +14,6 @@
     "This email address is already in use": "Aquesta adreça de correu electrònic ja està en ús",
     "This phone number is already in use": "Aquest número de telèfon ja està en ús",
     "Failed to verify email address: make sure you clicked the link in the email": "No s'ha pogut verificar l'adreça de correu electrònic: assegura't de fer clic a l'enllaç del correu electrònic",
-    "Call Failed": "No s'ha pogut realitzar la trucada",
     "You cannot place a call with yourself.": "No pots trucar-te a tu mateix.",
     "Warning!": "Avís!",
     "Upload Failed": "No s'ha pogut pujar",
@@ -51,7 +49,6 @@
     "Default": "Predeterminat",
     "Restricted": "Restringit",
     "Moderator": "Moderador",
-    "Admin": "Administrador",
     "Failed to invite": "No s'ha pogut convidar",
     "You need to be logged in.": "Has d'haver iniciat sessió.",
     "You need to be able to invite users to do that.": "Per fer això, necessites poder convidar a usuaris.",
@@ -64,33 +61,17 @@
     "Missing room_id in request": "Falta el room_id a la sol·licitud",
     "Room %(roomId)s not visible": "Sala %(roomId)s no visible",
     "Missing user_id in request": "Falta l'user_id a la sol·licitud",
-    "Usage": "Ús",
     "Ignored user": "Usuari ignorat",
     "You are now ignoring %(userId)s": "Estàs ignorant l'usuari %(userId)s",
     "Unignored user": "Usuari no ignorat",
     "You are no longer ignoring %(userId)s": "Ja no estàs ignorant l'usuari %(userId)s",
     "Verified key": "Claus verificades",
     "Reason": "Raó",
-    "%(senderDisplayName)s changed the topic to \"%(topic)s\".": "%(senderDisplayName)s ha canviat el tema a \"%(topic)s\".",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s ha eliminat el nom de la sala.",
-    "%(senderDisplayName)s changed the room name to %(roomName)s.": "%(senderDisplayName)s ha canviat el nom de la sala a %(roomName)s.",
-    "%(senderDisplayName)s sent an image.": "%(senderDisplayName)s ha enviat una imatge.",
-    "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room.": "%(senderName)s ha convidat a %(targetDisplayName)s a entrar a la sala.",
-    "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres, a partir de que hi són convidats.",
-    "%(senderName)s made future room history visible to all room members, from the point they joined.": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres des de que s'hi uneixen.",
-    "%(senderName)s made future room history visible to all room members.": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres.",
-    "%(senderName)s made future room history visible to anyone.": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tothom.",
-    "%(senderName)s made future room history visible to unknown (%(visibility)s).": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a desconegut (%(visibility)s).",
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s de %(fromPowerLevel)s a %(toPowerLevel)s",
     "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ha canviat el nivell d'autoritat de %(powerLevelDiffText)s.",
-    "%(senderName)s changed the pinned messages for the room.": "%(senderName)s ha canviat els missatges fixats de la sala.",
-    "%(widgetName)s widget modified by %(senderName)s": "%(senderName)s ha modificat el giny %(widgetName)s",
-    "%(widgetName)s widget added by %(senderName)s": "%(senderName)s ha afegit el giny %(widgetName)s",
-    "%(widgetName)s widget removed by %(senderName)s": "%(senderName)s ha eliminat el giny %(widgetName)s",
     "Failure to create room": "No s'ha pogut crear la sala",
     "Server may be unavailable, overloaded, or you hit a bug.": "És possible que el servidor no estigui disponible, sobrecarregat o que hagi topat amb un error.",
     "Send": "Envia",
-    "Unnamed Room": "Sala sense nom",
     "Your browser does not support the required cryptography extensions": "El vostre navegador no és compatible amb els complements criptogràfics necessaris",
     "Not a valid %(brand)s keyfile": "El fitxer no és un fitxer de claus de %(brand)s vàlid",
     "Authentication check failed: incorrect password?": "Ha fallat l'autenticació: heu introduït correctament la contrasenya?",
@@ -128,11 +109,6 @@
     "Invited": "Convidat",
     "Filter room members": "Filtra els membres de la sala",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (autoritat %(powerLevelNumber)s)",
-    "Hangup": "Penja",
-    "Voice call": "Trucada de veu",
-    "Video call": "Trucada de vídeo",
-    "Send an encrypted reply…": "Envia una resposta xifrada…",
-    "Send an encrypted message…": "Envia un missatge xifrat…",
     "You do not have permission to post to this room": "No tens permís per enviar res en aquesta sala",
     "Server error": "Error de servidor",
     "Mirror local video feed": "Remet el flux de vídeo local",
@@ -142,13 +118,6 @@
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
     "%(duration)sd": "%(duration)sd",
-    "Online for %(duration)s": "En línia durant %(duration)s",
-    "Idle for %(duration)s": "Inactiu durant %(duration)s",
-    "Offline for %(duration)s": "Fora de línia durant %(duration)s",
-    "Unknown for %(duration)s": "Desconegut durant %(duration)s",
-    "Online": "En línia",
-    "Idle": "Inactiu",
-    "Unknown": "Desconegut",
     "Replying": "S'està contestant",
     "Unnamed room": "Sala sense nom",
     "(~%(count)s results)": {
@@ -359,33 +328,25 @@
     "Waiting for response from server": "S'està esperant una resposta del servidor",
     "Failed to send logs: ": "No s'han pogut enviar els logs: ",
     "This Room": "Aquesta sala",
-    "Messages containing my display name": "Missatges que contenen el meu nom visible",
-    "Messages in one-to-one chats": "Missatges en xats un a un",
     "Unavailable": "No disponible",
     "Source URL": "URL origen",
-    "Messages sent by bot": "Missatges enviats pel bot",
     "Filter results": "Resultats del filtre",
     "No update available.": "No hi ha cap actualització disponible.",
     "Noisy": "Sorollós",
-    "Collecting app version information": "S'està recollint la informació de la versió de l'aplicació",
     "Search…": "Cerca…",
-    "When I'm invited to a room": "Quan sóc convidat a una sala",
     "Tuesday": "Dimarts",
     "Preparing to send logs": "Preparant l'enviament de logs",
     "Saturday": "Dissabte",
     "Monday": "Dilluns",
-    "Collecting logs": "S'estan recopilant els registres",
     "All Rooms": "Totes les sales",
     "Wednesday": "Dimecres",
     "All messages": "Tots els missatges",
-    "Call invitation": "Invitació de trucada",
     "What's new?": "Què hi ha de nou?",
     "Invite to this room": "Convida a aquesta sala",
     "You cannot delete this message. (%(code)s)": "No podeu eliminar aquest missatge. (%(code)s)",
     "Thursday": "Dijous",
     "Logs sent": "Logs enviats",
     "Show message in desktop notification": "Mostra els missatges amb notificacions d'escriptori",
-    "Messages in group chats": "Missatges en xats de grup",
     "Yesterday": "Ahir",
     "Error encountered (%(errorDetail)s).": "S'ha trobat un error (%(errorDetail)s).",
     "Low Priority": "Baixa prioritat",
@@ -396,35 +357,10 @@
     "You do not have permission to start a conference call in this room": "No tens permís per iniciar una conferència telefònica en aquesta sala",
     "Unable to load! Check your network connectivity and try again.": "No s'ha pogut carregar! Comprova la connectivitat de xarxa i torna-ho a intentar.",
     "Missing roomId.": "Falta l'ID de sala.",
-    "Changes your display nickname": "Canvia l'àlies a mostrar",
-    "Invites user with given id to current room": "Convida a la sala actual l'usuari amb l'ID indicat",
-    "Bans user with given id": "Bandeja l'usuari amb l'ID indicat",
-    "Ignores a user, hiding their messages from you": "Ignora un usuari, amagant-te els seus missatges",
-    "Stops ignoring a user, showing their messages going forward": "Deixa d'ignorar un usuari, i mostra els seus missatges a partir d'ara",
     "Define the power level of a user": "Defineix el nivell d'autoritat d'un usuari",
     "Deops user with given id": "Degrada l'usuari amb l'id donat",
-    "Opens the Developer Tools dialog": "Obre el diàleg d'Eines del desenvolupador",
     "Displays action": "Mostra l'acció",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "El fitxer %(fileName)s supera la mida màxima permesa per a pujades d'aquest servidor",
-    "Upgrades a room to a new version": "Actualitza la sala a una versió nova",
-    "Gets or sets the room topic": "Obté o estableix el tema de la sala",
-    "This room has no topic.": "Aquesta sala no té tema.",
-    "Sets the room name": "Estableix el nom de la sala",
-    "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s ha actualitzat aquesta sala.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s ha fet la sala pública a tothom qui conegui l'adreça.",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s ha limitat la sala als convidats.",
-    "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s ha canviat la regla d'entrada a %(rule)s",
-    "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s ha permès que els convidats puguin entrar a la sala.",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s ha prohibit l'entrada a la sala als visitants.",
-    "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s ha canviat l'accés dels visitants a %(rule)s",
-    "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s ha canviat l'adreça principal d'aquesta sala a %(address)s.",
-    "%(senderName)s removed the main address for this room.": "%(senderName)s ha retirat l'adreça principal d'aquesta sala.",
-    "%(displayName)s is typing …": "%(displayName)s està escrivint…",
-    "%(names)s and %(count)s others are typing …": {
-        "other": "%(names)s i %(count)s més estan escrivint…",
-        "one": "%(names)s i una altra persona estan escrivint…"
-    },
-    "%(names)s and %(lastPerson)s are typing …": "%(names)s i %(lastPerson)s estan escrivint…",
     "You do not have permission to invite people to this room.": "No teniu permís per convidar gent a aquesta sala.",
     "Use a few words, avoid common phrases": "Feu servir unes quantes paraules, eviteu frases comunes",
     "No need for symbols, digits, or uppercase letters": "No calen símbols, dígits o majúscules",
@@ -491,20 +427,9 @@
     "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "S'ha produït un error en canviar els requisits del nivell d'autoritat de la sala. Assegura't que tens suficients permisos i torna-ho a provar.",
     "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "S'ha produït un error en canviar el nivell d'autoritat de l'usuari. Assegura't que tens suficients permisos i torna-ho a provar.",
     "Power level": "Nivell d'autoritat",
-    "Unbans user with given ID": "Desbandeja l'usuari amb l'ID indicat",
     "Joins room with given address": "S'uneix a la sala amb l'adreça indicada",
     "Use an identity server": "Utilitza un servidor d'identitat",
-    "Changes the avatar of the current room": "Canvia l'avatar de la sala actual",
-    "Changes your display nickname in the current room only": "Canvia el teu àlies a mostrar només en la sala actual",
     "Double check that your server supports the room version chosen and try again.": "Comprova que el teu servidor és compatible amb la versió de sala que has triat i torna-ho a intentar.",
-    "You do not have the required permissions to use this command.": "No disposes dels permisos necessaris per utilitzar aquesta ordre.",
-    "Sends a message as html, without interpreting it as markdown": "Envia un missatge com a html sense interpretar-lo com a markdown",
-    "Sends a message as plain text, without interpreting it as markdown": "Envia un missatge com a text pla sense interpretar-lo com a markdown",
-    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Afegeix ( ͡° ͜ʖ ͡°) al principi d'un missatge de text pla",
-    "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Afegeix ¯\\_(ツ)_/¯ al principi d'un missatge de text pla",
-    "Other": "Altres",
-    "Actions": "Accions",
-    "Messages": "Missatges",
     "Setting up keys": "Configurant claus",
     "Are you sure you want to cancel entering passphrase?": "Estàs segur que vols cancel·lar la introducció de la frase secreta?",
     "Cancel entering passphrase?": "Vols cancel·lar la introducció de la frase secreta?",
@@ -539,7 +464,6 @@
     "Change notification settings": "Canvia la configuració de notificacions",
     "⚠ These settings are meant for advanced users.": "⚠ Aquesta configuració està pensada per usuaris avançats.",
     "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, enllaça aquest correu electrònic amb el teu compte a Configuració.",
-    "Change settings": "Canvia la configuració",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, utilitza un servidor d'identitat a Configuració.",
     "Share this email in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, comparteix aquest correu electrònic a Configuració.",
     "Go to Settings": "Ves a Configuració",
@@ -561,8 +485,6 @@
     "Confirm adding phone number": "Confirma l'addició del número de telèfon",
     "Add Email Address": "Afegeix una adreça de correu electrònic",
     "Click the button below to confirm adding this email address.": "Fes clic al botó de sota per confirmar l'addició d'aquesta adreça de correu electrònic.",
-    "Unable to access webcam / microphone": "No s'ha pogut accedir a la càmera web / micròfon",
-    "Unable to access microphone": "No s'ha pogut accedir al micròfon",
     "Explore rooms": "Explora sales",
     "%(oneUser)smade no changes %(count)s times": {
         "one": "%(oneUser)sno ha fet canvis",
@@ -594,7 +516,8 @@
         "guest": "Visitant",
         "camera": "Càmera",
         "microphone": "Micròfon",
-        "someone": "Algú"
+        "someone": "Algú",
+        "unnamed_room": "Sala sense nom"
     },
     "action": {
         "continue": "Continua",
@@ -653,7 +576,9 @@
     },
     "bug_reporting": {
         "submit_debug_logs": "Enviar logs de depuració",
-        "send_logs": "Envia els registres"
+        "send_logs": "Envia els registres",
+        "collecting_information": "S'està recollint la informació de la versió de l'aplicació",
+        "collecting_logs": "S'estan recopilant els registres"
     },
     "settings": {
         "use_12_hour_format": "Mostra les marques de temps en format de 12 hores (p.e. 2:30pm)",
@@ -665,7 +590,15 @@
         "inline_url_previews_default": "Activa per defecte la vista prèvia d'URL en línia",
         "show_read_receipts": "Mostra les confirmacions de lectura enviades pels altres usuaris",
         "show_displayname_changes": "Mostra els canvis de nom",
-        "big_emoji": "Activa Emojis grans en xats"
+        "big_emoji": "Activa Emojis grans en xats",
+        "notifications": {
+            "rule_contains_display_name": "Missatges que contenen el meu nom visible",
+            "rule_room_one_to_one": "Missatges en xats un a un",
+            "rule_message": "Missatges en xats de grup",
+            "rule_invite_for_me": "Quan sóc convidat a una sala",
+            "rule_call": "Invitació de trucada",
+            "rule_suppress_notices": "Missatges enviats pel bot"
+        }
     },
     "devtools": {
         "event_type": "Tipus d'esdeveniment",
@@ -673,6 +606,114 @@
         "event_sent": "Esdeveniment enviat!",
         "event_content": "Contingut de l'esdeveniment",
         "toolbox": "Caixa d'eines",
-        "developer_tools": "Eines de desenvolupador"
+        "developer_tools": "Eines de desenvolupador",
+        "category_room": "Sala",
+        "category_other": "Altres"
+    },
+    "timeline": {
+        "m.room.topic": "%(senderDisplayName)s ha canviat el tema a \"%(topic)s\".",
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s ha eliminat el nom de la sala.",
+            "set": "%(senderDisplayName)s ha canviat el nom de la sala a %(roomName)s."
+        },
+        "m.room.tombstone": "%(senderDisplayName)s ha actualitzat aquesta sala.",
+        "m.room.join_rules": {
+            "public": "%(senderDisplayName)s ha fet la sala pública a tothom qui conegui l'adreça.",
+            "invite": "%(senderDisplayName)s ha limitat la sala als convidats.",
+            "unknown": "%(senderDisplayName)s ha canviat la regla d'entrada a %(rule)s"
+        },
+        "m.room.guest_access": {
+            "can_join": "%(senderDisplayName)s ha permès que els convidats puguin entrar a la sala.",
+            "forbidden": "%(senderDisplayName)s ha prohibit l'entrada a la sala als visitants.",
+            "unknown": "%(senderDisplayName)s ha canviat l'accés dels visitants a %(rule)s"
+        },
+        "m.image": "%(senderDisplayName)s ha enviat una imatge.",
+        "m.room.canonical_alias": {
+            "set": "%(senderName)s ha canviat l'adreça principal d'aquesta sala a %(address)s.",
+            "removed": "%(senderName)s ha retirat l'adreça principal d'aquesta sala."
+        },
+        "m.room.third_party_invite": {
+            "sent": "%(senderName)s ha convidat a %(targetDisplayName)s a entrar a la sala."
+        },
+        "m.room.history_visibility": {
+            "invited": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres, a partir de que hi són convidats.",
+            "joined": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres des de que s'hi uneixen.",
+            "shared": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tots els seus membres.",
+            "world_readable": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a tothom.",
+            "unknown": "%(senderName)s ha establert la visibilitat de l'historial futur de la sala a desconegut (%(visibility)s)."
+        },
+        "m.room.pinned_events": {
+            "changed": "%(senderName)s ha canviat els missatges fixats de la sala."
+        },
+        "m.widget": {
+            "modified": "%(senderName)s ha modificat el giny %(widgetName)s",
+            "added": "%(senderName)s ha afegit el giny %(widgetName)s",
+            "removed": "%(senderName)s ha eliminat el giny %(widgetName)s"
+        },
+        "typing_indicator": {
+            "one_user": "%(displayName)s està escrivint…",
+            "two_users": "%(names)s i %(lastPerson)s estan escrivint…",
+            "more_users": {
+                "other": "%(names)s i %(count)s més estan escrivint…",
+                "one": "%(names)s i una altra persona estan escrivint…"
+            }
+        }
+    },
+    "slash_command": {
+        "shrug": "Afegeix ¯\\_(ツ)_/¯ al principi d'un missatge de text pla",
+        "lenny": "Afegeix ( ͡° ͜ʖ ͡°) al principi d'un missatge de text pla",
+        "plain": "Envia un missatge com a text pla sense interpretar-lo com a markdown",
+        "html": "Envia un missatge com a html sense interpretar-lo com a markdown",
+        "upgraderoom": "Actualitza la sala a una versió nova",
+        "upgraderoom_permission_error": "No disposes dels permisos necessaris per utilitzar aquesta ordre.",
+        "nick": "Canvia l'àlies a mostrar",
+        "myroomnick": "Canvia el teu àlies a mostrar només en la sala actual",
+        "roomavatar": "Canvia l'avatar de la sala actual",
+        "topic": "Obté o estableix el tema de la sala",
+        "topic_none": "Aquesta sala no té tema.",
+        "roomname": "Estableix el nom de la sala",
+        "invite": "Convida a la sala actual l'usuari amb l'ID indicat",
+        "ban": "Bandeja l'usuari amb l'ID indicat",
+        "unban": "Desbandeja l'usuari amb l'ID indicat",
+        "ignore": "Ignora un usuari, amagant-te els seus missatges",
+        "unignore": "Deixa d'ignorar un usuari, i mostra els seus missatges a partir d'ara",
+        "devtools": "Obre el diàleg d'Eines del desenvolupador",
+        "usage": "Ús",
+        "category_messages": "Missatges",
+        "category_actions": "Accions",
+        "category_admin": "Administrador",
+        "category_advanced": "Avançat",
+        "category_other": "Altres"
+    },
+    "presence": {
+        "online_for": "En línia durant %(duration)s",
+        "idle_for": "Inactiu durant %(duration)s",
+        "offline_for": "Fora de línia durant %(duration)s",
+        "unknown_for": "Desconegut durant %(duration)s",
+        "online": "En línia",
+        "idle": "Inactiu",
+        "unknown": "Desconegut",
+        "offline": "Fora de línia"
+    },
+    "Unknown": "Desconegut",
+    "voip": {
+        "hangup": "Penja",
+        "voice_call": "Trucada de veu",
+        "video_call": "Trucada de vídeo",
+        "call_failed": "No s'ha pogut realitzar la trucada",
+        "unable_to_access_microphone": "No s'ha pogut accedir al micròfon",
+        "unable_to_access_media": "No s'ha pogut accedir a la càmera web / micròfon"
+    },
+    "Messages": "Missatges",
+    "Other": "Altres",
+    "Advanced": "Avançat",
+    "composer": {
+        "placeholder_reply_encrypted": "Envia una resposta xifrada…",
+        "placeholder_encrypted": "Envia un missatge xifrat…"
+    },
+    "room_settings": {
+        "permissions": {
+            "state_default": "Canvia la configuració"
+        }
     }
 }

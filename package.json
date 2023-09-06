@@ -68,7 +68,7 @@
         "@sentry/browser": "^7.0.0",
         "@sentry/tracing": "^7.0.0",
         "@testing-library/react-hooks": "^8.0.1",
-        "@vector-im/compound-design-tokens": "^0.0.4",
+        "@vector-im/compound-design-tokens": "^0.0.5",
         "@vector-im/compound-web": "^0.2.3",
         "await-lock": "^2.1.0",
         "blurhash": "^1.1.3",

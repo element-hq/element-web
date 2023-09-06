@@ -144,7 +144,7 @@ export const PeopleRoomSettingsTab: VFC<{ room: Room }> = ({ room }) => {
 
     const knockMembers = useTypedEventEmitterState(
         room,
-        RoomStateEvent.Members,
+        RoomStateEvent.Update,
         useCallback(() => room.getMembersWithMembership("knock"), [room]),
     );
 

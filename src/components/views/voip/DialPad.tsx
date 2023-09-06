@@ -66,7 +66,7 @@ class DialPadButton extends React.PureComponent<DigitButtonProps | DialButtonPro
                     <AccessibleButton
                         className="mx_DialPad_button mx_DialPad_dialButton"
                         onClick={this.onClick}
-                        aria-label={_t("Dial")}
+                        aria-label={_t("voip|dial")}
                     />
                 );
         }

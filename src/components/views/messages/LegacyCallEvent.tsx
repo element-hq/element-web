@@ -117,7 +117,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
             <AccessibleTooltipButton
                 className={silenceClass}
                 onClick={this.props.callEventGrouper.toggleSilenced}
-                title={this.state.silenced ? _t("Sound on") : _t("Silence call")}
+                title={this.state.silenced ? _t("voip|unsilence") : _t("voip|silence")}
             />
         );
     }
@@ -185,7 +185,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                 // Also the correct hangup code as of VoIP v1 (with underscore)
                 // Also, if we don't have a reason
                 const duration = this.props.callEventGrouper.duration!;
-                let text = _t("Call ended");
+                let text = _t("timeline|m.call.hangup|dm");
                 if (duration) {
                     text += " • " + formatPreciseDuration(duration);
                 }
@@ -268,7 +268,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         const event = this.props.mxEvent;
         const sender = event.sender ? event.sender.name : event.getSender();
         const isVoice = this.props.callEventGrouper.isVoice;
-        const callType = isVoice ? _t("Voice call") : _t("Video call");
+        const callType = isVoice ? _t("voip|voice_call") : _t("voip|video_call");
         const callState = this.state.callState;
         const hangupReason = this.props.callEventGrouper.hangupReason;
         const content = this.renderContent();

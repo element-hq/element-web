@@ -60,7 +60,7 @@ export default abstract class Exporter {
 
     protected onBeforeUnload(e: BeforeUnloadEvent): string {
         e.preventDefault();
-        return (e.returnValue = _t("Are you sure you want to exit during this export?"));
+        return (e.returnValue = _t("export_chat|unload_confirm"));
     }
 
     protected updateProgress(progress: string, log = true, show = true): void {
@@ -79,7 +79,7 @@ export default abstract class Exporter {
     protected makeFileNameNoExtension(brand = "matrix"): string {
         // First try to use the real name of the room, then a translated copy of a generic name,
         // then finally hardcoded default to guarantee we'll have a name.
-        const safeRoomName = sanitizeFilename(this.room.name ?? _t("Unnamed Room")).trim() || "Unnamed Room";
+        const safeRoomName = sanitizeFilename(this.room.name ?? _t("common|unnamed_room")).trim() || "Unnamed Room";
         const safeDate = formatFullDateNoDayISO(new Date()).replace(/:/g, "-"); // ISO format automatically removes a lot of stuff for us
         const safeBrand = sanitizeFilename(brand);
         return `${safeBrand} - ${safeRoomName} - Chat Export - ${safeDate}`;
@@ -92,7 +92,7 @@ export default abstract class Exporter {
 
         const zip = new JSZip();
         // Create a writable stream to the directory
-        if (!this.cancelled) this.updateProgress(_t("Generating a ZIP"));
+        if (!this.cancelled) this.updateProgress(_t("export_chat|generating_zip"));
         else return this.cleanUp();
 
         for (const file of this.files) zip.file(filenameWithoutExt + "/" + file.name, file.blob);
@@ -182,14 +182,14 @@ export default abstract class Exporter {
 
                 if (this.exportType === ExportType.LastNMessages) {
                     this.updateProgress(
-                        _t("Fetched %(count)s events out of %(total)s", {
+                        _t("export_chat|fetched_n_events_with_total", {
                             count: events.length,
                             total: this.exportOptions.numberOfMessages,
                         }),
                     );
                 } else {
                     this.updateProgress(
-                        _t("Fetched %(count)s events so far", {
+                        _t("export_chat|fetched_n_events", {
                             count: events.length,
                         }),
                     );

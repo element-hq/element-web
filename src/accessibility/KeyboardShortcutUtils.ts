@@ -43,7 +43,7 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
                 key: Key.ENTER,
                 ctrlOrCmdKey: ctrlEnterToSend,
             },
-            displayName: _td("Send message"),
+            displayName: _td("composer|send_button_title"),
         },
         [KeyBindingAction.NewLine]: {
             default: {

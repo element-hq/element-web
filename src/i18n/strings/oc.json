@@ -4,24 +4,10 @@
     "Admin Tools": "Aisinas d’administrator",
     "Invite to this room": "Convidar a aquesta sala",
     "Invited": "Convidat",
-    "Voice call": "Sonada vocala",
-    "Video call": "Sonada vidèo",
-    "Send an encrypted reply…": "Enviar una responsa chifrada …",
-    "Send a reply…": "Enviar una responsa…",
-    "Send an encrypted message…": "Enviar un messatge chifrat…",
-    "Send a message…": "Enviar un messatge…",
-    "Online for %(duration)s": "En linha dempuèi %(duration)s",
-    "Idle for %(duration)s": "Inactiu dempuèi %(duration)s",
-    "Offline for %(duration)s": "Fòra linha dempuèi %(duration)s",
-    "Unknown for %(duration)s": "Desconegut dempuèi %(duration)s",
-    "Online": "En linha",
-    "Idle": "Inactiu",
-    "Unknown": "Desconegut",
     "Unnamed room": "Sala sens nom",
     "Share room": "Partejar la sala",
     "Rooms": "Salas",
     "Low priority": "Febla prioritat",
-    "System Alerts": "Alèrtas sistèma",
     "Reason: %(reason)s": "Rason : %(reason)s",
     "Forget this room": "Oblidar aquesta sala",
     "Do you want to chat with %(user)s?": "Volètz charrar amb %(user)s ?",
@@ -59,13 +45,7 @@
     "AM": "AM",
     "Default": "Predefinit",
     "Moderator": "Moderator",
-    "Admin": "Admin",
     "Operation failed": "L'operacion a fracassat",
-    "Messages": "Messatges",
-    "Actions": "Accions",
-    "Advanced": "Avançat",
-    "Other": "Autre",
-    "Usage": "Usatge",
     "Thank you!": "Mercés !",
     "Reason": "Rason",
     "Notifications": "Notificacions",
@@ -118,7 +98,6 @@
     "Encryption": "Chiframent",
     "Phone Number": "Numèro de telefòn",
     "Unencrypted": "Pas chifrat",
-    "Hangup": "Penjar",
     "Italics": "Italicas",
     "Historical": "Istoric",
     "Sign Up": "S’inscriure",
@@ -170,7 +149,6 @@
     "Document": "Document",
     "Upload files": "Mandar de fichièrs",
     "Home": "Dorsièr personal",
-    "Away": "Absent",
     "Enter password": "Sasissètz lo senhal",
     "Email": "Corrièl",
     "Phone": "Telefòn",
@@ -226,7 +204,8 @@
         "encrypted": "Chifrat",
         "matrix": "Matritz",
         "trusted": "Fisable",
-        "not_trusted": "Pas securizat"
+        "not_trusted": "Pas securizat",
+        "system_alerts": "Alèrtas sistèma"
     },
     "action": {
         "continue": "Contunhar",
@@ -306,7 +285,11 @@
     },
     "composer": {
         "format_bold": "Gras",
-        "format_strikethrough": "Raiat"
+        "format_strikethrough": "Raiat",
+        "placeholder_reply_encrypted": "Enviar una responsa chifrada …",
+        "placeholder_reply": "Enviar una responsa…",
+        "placeholder_encrypted": "Enviar un messatge chifrat…",
+        "placeholder": "Enviar un messatge…"
     },
     "Bold": "Gras",
     "power_level": {
@@ -317,6 +300,36 @@
     },
     "devtools": {
         "toolbox": "Bóstia d'aisinas",
-        "developer_tools": "Aisinas de desvolopament"
-    }
+        "developer_tools": "Aisinas de desvolopament",
+        "category_room": "Sala",
+        "category_other": "Autre"
+    },
+    "presence": {
+        "online_for": "En linha dempuèi %(duration)s",
+        "idle_for": "Inactiu dempuèi %(duration)s",
+        "offline_for": "Fòra linha dempuèi %(duration)s",
+        "unknown_for": "Desconegut dempuèi %(duration)s",
+        "online": "En linha",
+        "idle": "Inactiu",
+        "unknown": "Desconegut",
+        "offline": "Fòra linha",
+        "away": "Absent"
+    },
+    "Unknown": "Desconegut",
+    "slash_command": {
+        "usage": "Usatge",
+        "category_messages": "Messatges",
+        "category_actions": "Accions",
+        "category_admin": "Admin",
+        "category_advanced": "Avançat",
+        "category_other": "Autre"
+    },
+    "voip": {
+        "hangup": "Penjar",
+        "voice_call": "Sonada vocala",
+        "video_call": "Sonada vidèo"
+    },
+    "Messages": "Messatges",
+    "Other": "Autre",
+    "Advanced": "Avançat"
 }

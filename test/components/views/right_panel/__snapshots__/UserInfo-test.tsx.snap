@@ -102,7 +102,6 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
               data-type="round"
               role="button"
               style="--cpd-avatar-size: 230.39999999999998px;"
-              title="@user:example.com"
             >
               u
             </button>
