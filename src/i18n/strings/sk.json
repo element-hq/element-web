@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Vytvoriť účet",
         "dismiss": "Zamietnuť",
-        "open": "Otvoriť"
+        "explore_rooms": "Preskúmať miestnosti",
+        "open": "Otvoriť",
+        "sign_in": "Prihlásiť sa"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Prejdite do prehliadača a dokončite prihlásenie"

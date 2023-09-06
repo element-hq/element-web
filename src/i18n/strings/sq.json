@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Krijoni Llogari",
         "dismiss": "Mos e merr parasysh",
-        "open": "Hape"
+        "explore_rooms": "Eksploroni dhoma",
+        "open": "Hape",
+        "sign_in": "Hyni"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Që të plotësoni Hyrjen, kaloni te shfletuesi juaj"

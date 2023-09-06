@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Opprett konto",
         "dismiss": "Avvis",
-        "open": "Åpne"
+        "explore_rooms": "Se alle rom",
+        "open": "Åpne",
+        "sign_in": "Logg inn"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Gå til nettleseren din for å fullføre innloggingen"

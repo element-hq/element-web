@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Registreren",
         "dismiss": "Sluiten",
-        "open": "Openen"
+        "explore_rooms": "Kamers ontdekken",
+        "open": "Openen",
+        "sign_in": "Inloggen"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Ga naar je browser om de aanmelding te voltooien"

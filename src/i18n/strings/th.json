@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "สร้างบัญชี",
         "dismiss": "ปิด",
-        "open": "เปิด"
+        "explore_rooms": "สำรวจห้อง",
+        "open": "เปิด",
+        "sign_in": "ลงชื่อเข้า"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "ไปที่เบราว์เซอร์ของคุณเพื่อลงชื่อเข้าใช้ให้เสร็จสมบูรณ์."

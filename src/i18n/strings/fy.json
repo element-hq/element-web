@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Registrearje",
         "dismiss": "Slute",
-        "open": "Iepenje"
+        "explore_rooms": "Keamers ûntdekke",
+        "open": "Iepenje",
+        "sign_in": "Oanmelde"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Gean nei jo browser om it ynskriuwen te foltôgjen"

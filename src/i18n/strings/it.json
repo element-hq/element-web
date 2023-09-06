@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Crea account",
         "dismiss": "Chiudi",
-        "open": "Apri"
+        "explore_rooms": "Esplora stanze",
+        "open": "Apri",
+        "sign_in": "Accedi"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Vai nel tuo browser per completare l'accesso"

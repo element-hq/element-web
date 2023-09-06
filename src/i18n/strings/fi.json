@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Luo tili",
         "dismiss": "Hylkää",
-        "open": "Avaa"
+        "explore_rooms": "Selaa huoneita",
+        "open": "Avaa",
+        "sign_in": "Kirjaudu"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Tee kirjautuminen loppuun selaimessasi"

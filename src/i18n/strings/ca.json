@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Crea un compte",
         "dismiss": "Omet",
-        "open": "Obre"
+        "explore_rooms": "Explora sales",
+        "open": "Obre",
+        "sign_in": "Inicia sessió"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Vés al navegador per completar l'inici de sessió"

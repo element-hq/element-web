@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Fiók létrehozása",
         "dismiss": "Eltüntetés",
-        "open": "Megnyitás"
+        "explore_rooms": "Szobák felderítése",
+        "open": "Megnyitás",
+        "sign_in": "Bejelentkezés"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "A böngészőben fejezze be a bejelentkezést"

@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Búa til notandaaðgang",
         "dismiss": "Hunsa",
-        "open": "Opna"
+        "explore_rooms": "Kanna spjallrásir",
+        "open": "Opna",
+        "sign_in": "Skrá inn"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Farðu í vafrann þinn til að ljúka innskráningu"

@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Створити обліковий запис",
         "dismiss": "Відхилити",
-        "open": "Відкрити"
+        "explore_rooms": "Каталог кімнат",
+        "open": "Відкрити",
+        "sign_in": "Увійти"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Перейдіть у ваш браузер щоб завершити вхід"

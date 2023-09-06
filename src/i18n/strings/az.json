@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Hesab Aç",
         "dismiss": "Nəzərə almayın",
-        "open": "Aç"
+        "explore_rooms": "Otaqları kəşf edin",
+        "open": "Aç",
+        "sign_in": "Daxil ol"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Girişi tamamlamaq üçün brauzerinizə keçin"

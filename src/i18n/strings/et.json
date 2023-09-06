@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Loo konto",
         "dismiss": "Loobu",
-        "open": "Ava"
+        "explore_rooms": "Tutvu jututubadega",
+        "open": "Ava",
+        "sign_in": "Logi sisse"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Sisselogimiseks ava oma brauser"

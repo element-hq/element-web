@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Opprett konto",
         "dismiss": "Avvis",
-        "open": "Opna"
+        "explore_rooms": "Utforsk romma",
+        "open": "Opna",
+        "sign_in": "Logg inn"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Opna nettlesaren din for å fullføra innlogginga"

@@ -1,6 +1,9 @@
 {
     "action": {
-        "dismiss": "Wfftio"
+        "create_account": "Creu Cyfrif",
+        "dismiss": "Wfftio",
+        "explore_rooms": "Archwilio Ystafelloedd",
+        "sign_in": "Mewngofnodi"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Ewch i'ch porwr i gwblhau Mewngofnodi"

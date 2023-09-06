@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Rnu amiḍan",
         "dismiss": "Agwi",
-        "open": "Ldi"
+        "explore_rooms": "Snirem tixxamin",
+        "open": "Ldi",
+        "sign_in": "Kcem"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Ddu ɣer iminig akken ad tkemleḍ ajerred"

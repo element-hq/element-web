@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "ایجاد حساب کاربری",
         "dismiss": "نادیده بگیر",
-        "open": "باز"
+        "explore_rooms": "جستجو در اتاق ها",
+        "open": "باز",
+        "sign_in": "ورود"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "برای تکمیل ورود به مرورگر خود بروید"

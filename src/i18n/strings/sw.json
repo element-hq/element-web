@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Tengeneza Akaunti",
         "dismiss": "Sisitiza",
-        "open": "Fungua"
+        "explore_rooms": "Tafuta nafasi",
+        "open": "Fungua",
+        "sign_in": "Ingia"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Nenda kwenye kivinjari chako ili ukamilishe Ingia"

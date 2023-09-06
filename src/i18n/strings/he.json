@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "משתמש חדש",
         "dismiss": "התעלם",
-        "open": "פתח"
+        "explore_rooms": "גלה חדרים",
+        "open": "פתח",
+        "sign_in": "התחברות"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "עבור לדפדפן להמשך ההתחברות"

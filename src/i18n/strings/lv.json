@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Izveidot kontu",
         "dismiss": "Atmest",
-        "open": "Atvērt"
+        "explore_rooms": "Pārlūkot istabas",
+        "open": "Atvērt",
+        "sign_in": "Pieteikties"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Jādodas uz pārlūku, lai pabeigtu pieteikšanos"

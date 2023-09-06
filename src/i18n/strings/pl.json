@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Utwórz konto",
         "dismiss": "Pomiń",
-        "open": "Otwórz"
+        "explore_rooms": "Przeglądaj pokoje",
+        "open": "Otwórz",
+        "sign_in": "Zaloguj się"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Aby dokończyć proces rejestracji, przejdź do swojej przeglądarki"

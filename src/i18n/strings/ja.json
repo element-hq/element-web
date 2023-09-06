@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "アカウントを作成",
         "dismiss": "閉じる",
-        "open": "開く"
+        "explore_rooms": "ルームを探す",
+        "open": "開く",
+        "sign_in": "サインイン"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "ブラウザーに移動してサインインを完了してください"

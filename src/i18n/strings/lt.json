@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Sukurti Paskyrą",
         "dismiss": "Atmesti",
-        "open": "Atidaryti"
+        "explore_rooms": "Žvalgyti kambarius",
+        "open": "Atidaryti",
+        "sign_in": "Prisijungti"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Norėdami užbaigti prisijungimą, eikite į naršyklę"

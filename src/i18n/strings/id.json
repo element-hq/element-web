@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Buat Akun",
         "dismiss": "Abaikan",
-        "open": "Buka"
+        "explore_rooms": "Jelajahi ruangan",
+        "open": "Buka",
+        "sign_in": "Masuk"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Buka peramban Anda untuk menyelesaikan Sign In"

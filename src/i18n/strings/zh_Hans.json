@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "创建账户",
         "dismiss": "忽略",
-        "open": "打开"
+        "explore_rooms": "探索房间",
+        "open": "打开",
+        "sign_in": "登录"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "转到您的浏览器以完成登录"

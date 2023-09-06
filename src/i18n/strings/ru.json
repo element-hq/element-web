@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Создать учётную запись",
         "dismiss": "Закрыть",
-        "open": "Открыть"
+        "explore_rooms": "Обзор комнат",
+        "open": "Открыть",
+        "sign_in": "Войти"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Перейдите в браузер для завершения входа"

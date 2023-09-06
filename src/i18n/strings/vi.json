@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Tạo tài khoản",
         "dismiss": "Bỏ qua",
-        "open": "Mở"
+        "explore_rooms": "Khám phá các phòng",
+        "open": "Mở",
+        "sign_in": "Đăng nhập"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Mở trình duyệt web để hoàn thành đăng nhập"
