@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "ანგარიშის შექმნა",
         "dismiss": "დახურვა",
-        "open": "გახსნა"
+        "explore_rooms": "ოთახების დათავლიერება",
+        "open": "გახსნა",
+        "sign_in": "შესვლა"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "გადადით თქვენს ბრაუზერში შესვლის დასასრულებლად"

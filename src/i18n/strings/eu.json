@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Sortu kontua",
         "dismiss": "Baztertu",
-        "open": "Ireki"
+        "explore_rooms": "Arakatu gelak",
+        "open": "Ireki",
+        "sign_in": "Hasi saioa"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Joan zure nabigatzailera izena ematen bukatzeko"

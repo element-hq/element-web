@@ -1,6 +1,8 @@
 {
     "action": {
+        "create_account": "ఖాతా తెరువు",
         "dismiss": "రద్దుచేయి",
+        "explore_rooms": "గదులను అన్వేెషించు",
         "open": "తెరువు"
     },
     "download_completed": "దిగుమతి పూర్తయినది",

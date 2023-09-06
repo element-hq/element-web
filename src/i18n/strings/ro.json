@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Creează-ți Cont",
         "dismiss": "Închide",
-        "open": "Deschide"
+        "explore_rooms": "Explorează camerele",
+        "open": "Deschide",
+        "sign_in": "Autentifică-te"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Deschide în browser pentru a finaliza Autentificarea"

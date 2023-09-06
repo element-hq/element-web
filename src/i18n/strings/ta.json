@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "உங்கள் கணக்கை துவங்குங்கள்",
         "dismiss": "நீக்கு",
-        "open": "திற"
+        "explore_rooms": "அறைகளை ஆராயுங்கள்",
+        "open": "திற",
+        "sign_in": "உள்நுழைக"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "உள்நுழைவை முடிவுசெய்ய உங்கள் உலாவிக்குச் செல்லவும்"

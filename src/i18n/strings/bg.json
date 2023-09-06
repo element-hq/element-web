@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Създай профил",
         "dismiss": "Затвори",
-        "open": "Отвори"
+        "explore_rooms": "Открий стаи",
+        "open": "Отвори",
+        "sign_in": "Вписване"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Отидете в браузъра за да завършите влизането"

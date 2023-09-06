@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "खाता बनाएं",
         "dismiss": "खारिज",
-        "open": "खुला"
+        "explore_rooms": "रूम का अन्वेषण करें",
+        "open": "खुला",
+        "sign_in": "साइन करना"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "साइन इन पूरा करने के लिए अपने ब्राउज़र पर जाएं"

@@ -1,7 +1,9 @@
 {
     "action": {
+        "create_account": "senflul amiḍan",
         "dismiss": "Nexxel",
-        "open": "Ṛẓem"
+        "open": "Ṛẓem",
+        "sign_in": "Kcem"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Ddu ɣer umessara fad ad tsemded azemmem"

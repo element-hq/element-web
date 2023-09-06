@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Ստեղծել օգտահաշիվ",
         "dismiss": "Հեռացնել",
-        "open": "Բացել"
+        "explore_rooms": "Փնտրել սենյակներ",
+        "open": "Բացել",
+        "sign_in": "Մուտք գործել"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Հետ գնացեք բրաուզեր մուտք գործելն ավարտելու համար"

@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Crear un compte",
         "dismiss": "Refusar",
-        "open": "Dobrir"
+        "explore_rooms": "Percórrer las salas",
+        "open": "Dobrir",
+        "sign_in": "Se connectar"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Anatz au navegador per achabar la connexion"

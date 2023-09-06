@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Registracija",
         "dismiss": "Opusti",
-        "open": "Odpri"
+        "explore_rooms": "Raziščite sobe",
+        "open": "Odpri",
+        "sign_in": "Prijava"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Nadaljujte s prijavo v spletnem brskalniku"

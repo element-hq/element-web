@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Hesap Oluştur",
         "dismiss": "Kapat",
-        "open": "Aç"
+        "explore_rooms": "Odaları keşfet",
+        "open": "Aç",
+        "sign_in": "Giriş Yap"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Oturum açmayı tamamlamak için tarayıcınıza gidin"

@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "أنشِئ حسابًا",
         "dismiss": "أهمِل",
-        "open": "افتح"
+        "explore_rooms": "استكشِف الغرف",
+        "open": "افتح",
+        "sign_in": "لِج"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "افتح المتصفح لإكمال الولوج"

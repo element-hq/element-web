@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "ගිණුමක් සාදන්න",
         "dismiss": "ඉවතලන්න",
-        "open": "විවෘත කරන්න"
+        "explore_rooms": "කාමර බලන්න",
+        "open": "විවෘත කරන්න",
+        "sign_in": "පිවිසෙන්න"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "පිවිසීම සම්පූර්ණ කිරීමට ඔබගේ අතිරික්සුව වෙත යන්න"

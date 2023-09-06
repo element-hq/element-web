@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Krei konton",
         "dismiss": "Rezigni",
-        "open": "Malfermi"
+        "explore_rooms": "Esplori ĉambrojn",
+        "open": "Malfermi",
+        "sign_in": "Ensaluti"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Iru al via retumilo por finpretigi la ensaluton"

@@ -1,6 +1,9 @@
 {
     "action": {
-        "dismiss": "ഒഴിവാക്കുക"
+        "create_account": "അക്കൗണ്ട് സൃഷ്ടിക്കുക",
+        "dismiss": "ഒഴിവാക്കുക",
+        "explore_rooms": "മുറികൾ കണ്ടെത്തുക",
+        "sign_in": "പ്രവേശിക്കുക"
     },
     "download_completed": "ഡൗൺലോഡ് പൂർത്തിയായി",
     "error": {

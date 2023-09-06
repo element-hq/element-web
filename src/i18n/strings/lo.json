@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "ສ້າງບັນຊີ",
         "dismiss": "ຍົກເລີກ",
-        "open": "ເປີດ"
+        "explore_rooms": "ສຳຫຼວດບັນດາຫ້ອງ",
+        "open": "ເປີດ",
+        "sign_in": "ເຂົ້າສູ່ລະບົບ"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "ໄປທີ່ໜ້າເວັບຂອງທ່ານເພື່ອເຂົ້າສູ່ລະບົບ"

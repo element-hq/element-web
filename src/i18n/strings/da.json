@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Opret brugerkonto",
         "dismiss": "Afvis",
-        "open": "Åbn"
+        "explore_rooms": "Udforsk rum",
+        "open": "Åbn",
+        "sign_in": "Log ind"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Gå til din browser for at færdiggøre Log ind"

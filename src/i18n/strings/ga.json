@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Déan cuntas a chruthú",
         "dismiss": "Cuir uait",
-        "open": "Oscail"
+        "explore_rooms": "Breathnaigh thart ar na seomraí",
+        "open": "Oscail",
+        "sign_in": "Sínigh Isteach"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Oscail do bhrabhsálaí agus críochnaigh an clárú"

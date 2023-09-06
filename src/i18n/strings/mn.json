@@ -1,6 +1,9 @@
 {
     "action": {
-        "dismiss": "Орхих"
+        "create_account": "Хэрэглэгч үүсгэх",
+        "dismiss": "Орхих",
+        "explore_rooms": "Өрөөнүүд үзэх",
+        "sign_in": "Нэвтрэх"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Бүрэн нэвтрэхийн тулд вэб хөтөч рүү шилжинэ үү"

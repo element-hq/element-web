@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Skapa konto",
         "dismiss": "Avvisa",
-        "open": "Öppna"
+        "explore_rooms": "Utforska rum",
+        "open": "Öppna",
+        "sign_in": "Logga in"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Gå till din webbläsare för att slutföra inloggningen"
