@@ -1,7 +1,10 @@
 {
     "action": {
+        "create_account": "Konto erstellen",
         "dismiss": "Ausblenden",
-        "open": "Öffnen"
+        "explore_rooms": "Räume erkunden",
+        "open": "Öffnen",
+        "sign_in": "Anmelden"
     },
     "auth": {
         "sso_complete_in_browser_dialog_title": "Browser öffnen, um die Anmeldung abzuschließen"
