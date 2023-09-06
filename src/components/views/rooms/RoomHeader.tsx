@@ -178,7 +178,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     <Tooltip label={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}>
                         <IconButton
                             disabled={!!voiceCallDisabledReason}
-                            title={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}
+                            aria-label={!voiceCallDisabledReason ? _t("voip|voice_call") : voiceCallDisabledReason!}
                             onClick={(evt) => {
                                 evt.stopPropagation();
                                 placeCall(room, CallType.Voice, voiceCallType);
@@ -191,7 +191,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                 <Tooltip label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}>
                     <IconButton
                         disabled={!!videoCallDisabledReason}
-                        title={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}
+                        aria-label={!videoCallDisabledReason ? _t("voip|video_call") : videoCallDisabledReason!}
                         onClick={(evt) => {
                             evt.stopPropagation();
                             placeCall(room, CallType.Video, videoCallType);
@@ -207,7 +207,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                             evt.stopPropagation();
                             showOrHidePanel(RightPanelPhases.ThreadPanel);
                         }}
-                        title={_t("common|threads")}
+                        aria-label={_t("common|threads")}
                     >
                         <ThreadsIcon />
                     </IconButton>
@@ -219,7 +219,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                             evt.stopPropagation();
                             showOrHidePanel(RightPanelPhases.NotificationPanel);
                         }}
-                        title={_t("Notifications")}
+                        aria-label={_t("Notifications")}
                     >
                         <NotificationsIcon />
                     </IconButton>
