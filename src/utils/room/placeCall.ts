@@ -18,7 +18,7 @@ import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { Room } from "matrix-js-sdk/src/matrix";
 
 import LegacyCallHandler from "../../LegacyCallHandler";
-import { PlatformCallType } from "../../hooks/room/useRoomCallStatus";
+import { PlatformCallType } from "../../hooks/room/useRoomCall";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../dispatcher/actions";
