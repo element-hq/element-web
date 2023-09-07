@@ -57,55 +57,55 @@ const tasks: UserOnboardingTask[] = [
     {
         id: "create-account",
         title: _t("Create account"),
-        description: _t("You made it!"),
+        description: _t("onboarding|you_made_it"),
         completed: () => true,
     },
     {
         id: "find-friends",
-        title: _t("Find and invite your friends"),
-        description: _t("It’s what you’re here for, so lets get to it"),
+        title: _t("onboarding|find_friends"),
+        description: _t("onboarding|find_friends_description"),
         completed: (ctx: UserOnboardingContext) => ctx.hasDmRooms,
         relevant: [UseCase.PersonalMessaging, UseCase.Skip],
         action: {
-            label: _t("Find friends"),
+            label: _t("onboarding|find_friends_action"),
             onClick: onClickStartDm,
         },
     },
     {
         id: "find-coworkers",
-        title: _t("Find and invite your co-workers"),
-        description: _t("Get stuff done by finding your teammates"),
+        title: _t("onboarding|find_coworkers"),
+        description: _t("onboarding|get_stuff_done"),
         completed: (ctx: UserOnboardingContext) => ctx.hasDmRooms,
         relevant: [UseCase.WorkMessaging],
         action: {
-            label: _t("Find people"),
+            label: _t("onboarding|find_people"),
             onClick: onClickStartDm,
         },
     },
     {
         id: "find-community-members",
-        title: _t("Find and invite your community members"),
-        description: _t("Get stuff done by finding your teammates"),
+        title: _t("onboarding|find_community_members"),
+        description: _t("onboarding|get_stuff_done"),
         completed: (ctx: UserOnboardingContext) => ctx.hasDmRooms,
         relevant: [UseCase.CommunityMessaging],
         action: {
-            label: _t("Find people"),
+            label: _t("onboarding|find_people"),
             onClick: onClickStartDm,
         },
     },
     {
         id: "download-apps",
         title: () =>
-            _t("Download %(brand)s", {
+            _t("onboarding|download_app", {
                 brand: SdkConfig.get("brand"),
             }),
         description: () =>
-            _t("Don’t miss a thing by taking %(brand)s with you", {
+            _t("onboarding|download_app_description", {
                 brand: SdkConfig.get("brand"),
             }),
         completed: (ctx: UserOnboardingContext) => ctx.hasDevices,
         action: {
-            label: _t("Download apps"),
+            label: _t("onboarding|download_app_action"),
             onClick: (ev: ButtonEvent) => {
                 PosthogTrackers.trackInteraction("WebUserOnboardingTaskDownloadApps", ev);
                 Modal.createDialog(AppDownloadDialog, {}, "mx_AppDownloadDialog_wrapper", false, true);
@@ -114,11 +114,11 @@ const tasks: UserOnboardingTask[] = [
     },
     {
         id: "setup-profile",
-        title: _t("Set up your profile"),
-        description: _t("Make sure people know it’s really you"),
+        title: _t("onboarding|set_up_profile"),
+        description: _t("onboarding|set_up_profile_description"),
         completed: (ctx: UserOnboardingContext) => ctx.hasAvatar,
         action: {
-            label: _t("Your profile"),
+            label: _t("onboarding|set_up_profile_action"),
             onClick: (ev: ButtonEvent) => {
                 PosthogTrackers.trackInteraction("WebUserOnboardingTaskSetupProfile", ev);
                 defaultDispatcher.dispatch({
@@ -130,11 +130,11 @@ const tasks: UserOnboardingTask[] = [
     },
     {
         id: "permission-notifications",
-        title: _t("Turn on notifications"),
-        description: _t("Don’t miss a reply or important message"),
+        title: _t("onboarding|enable_notifications"),
+        description: _t("onboarding|enable_notifications_description"),
         completed: (ctx: UserOnboardingContext) => ctx.hasNotificationsEnabled,
         action: {
-            label: _t("Enable notifications"),
+            label: _t("onboarding|enable_notifications_action"),
             onClick: (ev: ButtonEvent) => {
                 PosthogTrackers.trackInteraction("WebUserOnboardingTaskEnableNotifications", ev);
                 Notifier.setEnabled(true);

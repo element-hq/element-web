@@ -33,7 +33,6 @@ exports[`PeopleRoomSettingsTab with requests to join renders requests fully 1`] 
           loading="lazy"
           referrerpolicy="no-referrer"
           src="mxc://example.org/albert-einstein.png"
-          title="@albert.einstein:example.org"
           width="42px"
         />
       </span>

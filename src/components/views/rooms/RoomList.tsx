@@ -419,7 +419,7 @@ const TAG_AESTHETICS: TagAestheticsMap = {
         defaultHidden: false,
     },
     [DefaultTagID.ServerNotice]: {
-        sectionLabel: _td("System Alerts"),
+        sectionLabel: _td("common|system_alerts"),
         isInvite: false,
         defaultHidden: false,
     },

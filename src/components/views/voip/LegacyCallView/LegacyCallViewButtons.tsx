@@ -269,15 +269,15 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                         inputRef={this.dialpadButton}
                         onClick={this.onDialpadClick}
                         isExpanded={this.state.showDialpad}
-                        title={_t("Dialpad")}
+                        title={_t("voip|dialpad")}
                         alignment={Alignment.Top}
                     />
                 )}
                 <LegacyCallViewDropdownButton
                     state={!this.props.buttonsState.micMuted}
                     className="mx_LegacyCallViewButtons_button_mic"
-                    onLabel={_t("Mute the microphone")}
-                    offLabel={_t("Unmute the microphone")}
+                    onLabel={_t("voip|disable_microphone")}
+                    offLabel={_t("voip|enable_microphone")}
                     onClick={this.props.handlers.onMicMuteClick}
                     deviceKinds={[MediaDeviceKindEnum.AudioInput, MediaDeviceKindEnum.AudioOutput]}
                 />
@@ -285,8 +285,8 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                     <LegacyCallViewDropdownButton
                         state={!this.props.buttonsState.vidMuted}
                         className="mx_LegacyCallViewButtons_button_vid"
-                        onLabel={_t("Stop the camera")}
-                        offLabel={_t("Start the camera")}
+                        onLabel={_t("voip|disable_camera")}
+                        offLabel={_t("voip|enable_camera")}
                         onClick={this.props.handlers.onVidMuteClick}
                         deviceKinds={[MediaDeviceKindEnum.VideoInput]}
                     />
@@ -295,8 +295,8 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                     <LegacyCallViewToggleButton
                         state={this.props.buttonsState.screensharing}
                         className="mx_LegacyCallViewButtons_button_screensharing"
-                        onLabel={_t("Stop sharing your screen")}
-                        offLabel={_t("Start sharing your screen")}
+                        onLabel={_t("voip|stop_screenshare")}
+                        offLabel={_t("voip|start_screenshare")}
                         onClick={this.props.handlers.onScreenshareClick}
                     />
                 )}
@@ -322,7 +322,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                 <AccessibleTooltipButton
                     className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_hangup"
                     onClick={this.props.handlers.onHangupClick}
-                    title={_t("Hangup")}
+                    title={_t("voip|hangup")}
                     alignment={Alignment.Top}
                 />
             </div>

@@ -2,19 +2,12 @@
     "All messages": "அனைத்து செய்திகள்",
     "All Rooms": "அனைத்து அறைகள்",
     "Changelog": "மாற்றப்பதிவு",
-    "Collecting app version information": "செயலியின் பதிப்பு தகவல்கள் சேகரிக்கப்படுகிறது",
-    "Collecting logs": "பதிவுகள் சேகரிக்கப்படுகிறது",
-    "Call invitation": "அழைப்பிற்கான விண்ணப்பம்",
     "Failed to add tag %(tagName)s to room": "%(tagName)s எனும் குறிச்சொல்லை அறையில் சேர்ப்பதில் தோல்வி",
     "Failed to forget room %(errCode)s": "அறையை மறப்பதில் தோல்வி %(errCode)s",
     "Favourite": "விருப்பமான",
     "Invite to this room": "இந்த அறைக்கு அழை",
     "Low Priority": "குறைந்த முன்னுரிமை",
     "Failed to remove tag %(tagName)s from room": "அறையில் இருந்து குறிச்சொல் %(tagName)s களை அகற்றுவது தோல்வியடைந்தது",
-    "Messages containing my display name": "என் காட்சி பெயர் கொண்ட செய்திகள்",
-    "Messages in group chats": "குழு அரட்டைகளில் உள்ள செய்திகள்",
-    "Messages in one-to-one chats": "ஒரு-க்கு-ஒரு அரட்டைகளில் உள்ள செய்திகள்",
-    "Messages sent by bot": "bot மூலம் அனுப்பிய செய்திகள்",
     "Noisy": "சத்தம்",
     "Notification targets": "அறிவிப்பு இலக்குகள்",
     "Notifications": "அறிவிப்புகள்",
@@ -32,7 +25,6 @@
     "What's New": "புதிதாக வந்தவை",
     "What's new?": "புதிதாக என்ன?",
     "Waiting for response from server": "வழங்கியின் பதிலுக்காக காத்திருக்கிறது",
-    "When I'm invited to a room": "நான் அறைக்கு அழைக்கப்பட்ட போது",
     "You cannot delete this message. (%(code)s)": "இந்த செய்தியை நீங்கள் அழிக்க முடியாது. (%(code)s)",
     "Show message in desktop notification": "திரை அறிவிப்புகளில் செய்தியை காண்பிக்கவும்",
     "Sunday": "ஞாயிறு",
@@ -51,7 +43,6 @@
     "This phone number is already in use": "இந்த தொலைபேசி எண் முன்னதாகவே பயன்பாட்டில் உள்ளது",
     "Failed to verify email address: make sure you clicked the link in the email": "மின்னஞ்சல் முகவரியை சரிபார்க்க முடியவில்லை: மின்னஞ்சலில் உள்ள இணைப்பை அழுத்தியுள்ளீர்களா என்பதை உறுதிப்படுத்தவும்",
     "Your %(brand)s is misconfigured": "உங்கள் %(brand)s தவறாக உள்ளமைக்கப்பட்டுள்ளது",
-    "Call Failed": "அழைப்பு தோல்வியுற்றது",
     "You cannot place a call with yourself.": "நீங்கள் உங்களுடனே அழைப்பை மேற்கொள்ள முடியாது.",
     "Permission Required": "அனுமதி தேவை",
     "You do not have permission to start a conference call in this room": "இந்த அறையில் ஒரு கூட்டு அழைப்பைத் தொடங்க உங்களுக்கு அனுமதி இல்லை",
@@ -90,17 +81,8 @@
     "Jul": "ஜூலை",
     "There was an error looking up the phone number": "தொலைபேசி எண்ணைத் தேடுவதில் பிழை ஏற்பட்டது",
     "Unable to look up phone number": "தொலைபேசி எண்ணைத் தேட முடியவில்லை",
-    "You're already in a call with this person.": "நீங்கள் முன்னதாகவே இந்த நபருடன் அழைப்பில் உள்ளீர்கள்.",
-    "Already in call": "முன்னதாகவே அழைப்பில் உள்ளது",
     "You've reached the maximum number of simultaneous calls.": "ஒரே நேரத்தில் அழைக்கக்கூடிய அதிகபட்ச அழைப்புகளை நீங்கள் அடைந்துவிட்டீர்கள்.",
     "Too Many Calls": "மிக அதிக அழைப்புகள்",
-    "No other application is using the webcam": "வேறு எந்த பயன்பாடும் புகைப்படக்கருவியைப் பயன்படுத்துவதில்லை",
-    "Permission is granted to use the webcam": "புகைப்படக்கருவியைப் பயன்படுத்த அனுமதி வழங்கப்பட்டுள்ளது",
-    "A microphone and webcam are plugged in and set up correctly": "ஒரு ஒலிவாங்கி மற்றும் புகைப்படக்கருவி செருகப்பட்டு சரியாக அமைக்கப்பட்டுள்ளது",
-    "Call failed because webcam or microphone could not be accessed. Check that:": "புகைப்படக்கருவி அல்லது ஒலிவாங்கியை அணுக முடியாததால் அழைப்பு தோல்வியடைந்தது. அதை சரிபார்க்கவும்:",
-    "Unable to access webcam / microphone": "புகைப்படக்கருவி / ஒலிவாங்கியை அணுக முடியவில்லை",
-    "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.": "ஒலிவாங்கியை அணுக முடியாததால் அழைப்பு தோல்வியடைந்தது. ஒலிவாங்கி செருகப்பட்டுள்ளதா, சரியாக அமைக்கவும் என சரிபார்க்கவும்.",
-    "Unable to access microphone": "ஒலிவாங்கியை அணுக முடியவில்லை",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "அழைப்புகள் நம்பத்தகுந்த வகையில் இயங்குவதற்காக, TURN சேவையகத்தை உள்ளமைக்க உங்கள் வீட்டுசேவையகத்தின் (<code>%(homeserverDomain)s</code>) நிர்வாகியிடம் கேளுங்கள்.",
     "Call failed due to misconfigured server": "தவறாக உள்ளமைக்கப்பட்ட சேவையகம் காரணமாக அழைப்பு தோல்வியடைந்தது",
     "The call was answered on another device.": "அழைப்பு மற்றொரு சாதனத்தில் பதிலளிக்கப்பட்டது.",
@@ -146,11 +128,35 @@
         "register": "பதிவு செய்"
     },
     "bug_reporting": {
-        "send_logs": "பதிவுகளை அனுப்பு"
+        "send_logs": "பதிவுகளை அனுப்பு",
+        "collecting_information": "செயலியின் பதிப்பு தகவல்கள் சேகரிக்கப்படுகிறது",
+        "collecting_logs": "பதிவுகள் சேகரிக்கப்படுகிறது"
     },
     "devtools": {
         "event_type": "நிகழ்வு வகை",
         "event_sent": "நிகழ்வு அனுப்பப்பட்டது",
         "event_content": "நிகழ்வு உள்ளடக்கம்"
+    },
+    "settings": {
+        "notifications": {
+            "rule_contains_display_name": "என் காட்சி பெயர் கொண்ட செய்திகள்",
+            "rule_room_one_to_one": "ஒரு-க்கு-ஒரு அரட்டைகளில் உள்ள செய்திகள்",
+            "rule_message": "குழு அரட்டைகளில் உள்ள செய்திகள்",
+            "rule_invite_for_me": "நான் அறைக்கு அழைக்கப்பட்ட போது",
+            "rule_call": "அழைப்பிற்கான விண்ணப்பம்",
+            "rule_suppress_notices": "bot மூலம் அனுப்பிய செய்திகள்"
+        }
+    },
+    "voip": {
+        "call_failed": "அழைப்பு தோல்வியுற்றது",
+        "unable_to_access_microphone": "ஒலிவாங்கியை அணுக முடியவில்லை",
+        "call_failed_microphone": "ஒலிவாங்கியை அணுக முடியாததால் அழைப்பு தோல்வியடைந்தது. ஒலிவாங்கி செருகப்பட்டுள்ளதா, சரியாக அமைக்கவும் என சரிபார்க்கவும்.",
+        "unable_to_access_media": "புகைப்படக்கருவி / ஒலிவாங்கியை அணுக முடியவில்லை",
+        "call_failed_media": "புகைப்படக்கருவி அல்லது ஒலிவாங்கியை அணுக முடியாததால் அழைப்பு தோல்வியடைந்தது. அதை சரிபார்க்கவும்:",
+        "call_failed_media_connected": "ஒரு ஒலிவாங்கி மற்றும் புகைப்படக்கருவி செருகப்பட்டு சரியாக அமைக்கப்பட்டுள்ளது",
+        "call_failed_media_permissions": "புகைப்படக்கருவியைப் பயன்படுத்த அனுமதி வழங்கப்பட்டுள்ளது",
+        "call_failed_media_applications": "வேறு எந்த பயன்பாடும் புகைப்படக்கருவியைப் பயன்படுத்துவதில்லை",
+        "already_in_call": "முன்னதாகவே அழைப்பில் உள்ளது",
+        "already_in_call_person": "நீங்கள் முன்னதாகவே இந்த நபருடன் அழைப்பில் உள்ளீர்கள்."
     }
 }

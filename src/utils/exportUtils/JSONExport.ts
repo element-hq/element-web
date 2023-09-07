@@ -83,7 +83,7 @@ export default class JSONExporter extends Exporter {
         for (let i = 0; i < events.length; i++) {
             const event = events[i];
             this.updateProgress(
-                _t("Processing event %(number)s out of %(total)s", {
+                _t("export_chat|processing_event_n", {
                     number: i + 1,
                     total: events.length,
                 }),

@@ -71,7 +71,7 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
                             </span>
                             <LiveContentSummary
                                 type={LiveContentType.Video}
-                                text={_t("Video call")}
+                                text={_t("voip|video_call")}
                                 active={false}
                                 participantCount={participatingMembers.length}
                             />

@@ -567,7 +567,7 @@ export default class LegacyCallHandler extends EventEmitter {
             }
 
             Modal.createDialog(ErrorDialog, {
-                title: _t("Call Failed"),
+                title: _t("voip|call_failed"),
                 description: err.message,
             });
         });
@@ -708,7 +708,7 @@ export default class LegacyCallHandler extends EventEmitter {
                         title = _t("User Busy");
                         description = _t("The user you called is busy.");
                     } else {
-                        title = _t("Call Failed");
+                        title = _t("voip|call_failed");
                         description = _t("The call could not be established");
                     }
 
@@ -856,23 +856,17 @@ export default class LegacyCallHandler extends EventEmitter {
         let description;
 
         if (call.type === CallType.Voice) {
-            title = _t("Unable to access microphone");
-            description = (
-                <div>
-                    {_t(
-                        "Call failed because microphone could not be accessed. Check that a microphone is plugged in and set up correctly.",
-                    )}
-                </div>
-            );
+            title = _t("voip|unable_to_access_microphone");
+            description = <div>{_t("voip|call_failed_microphone")}</div>;
         } else if (call.type === CallType.Video) {
-            title = _t("Unable to access webcam / microphone");
+            title = _t("voip|unable_to_access_media");
             description = (
                 <div>
-                    {_t("Call failed because webcam or microphone could not be accessed. Check that:")}
+                    {_t("voip|call_failed_media")}
                     <ul>
-                        <li>{_t("A microphone and webcam are plugged in and set up correctly")}</li>
-                        <li>{_t("Permission is granted to use the webcam")}</li>
-                        <li>{_t("No other application is using the webcam")}</li>
+                        <li>{_t("voip|call_failed_media_connected")}</li>
+                        <li>{_t("voip|call_failed_media_permissions")}</li>
+                        <li>{_t("voip|call_failed_media_applications")}</li>
                     </ul>
                 </div>
             );
@@ -914,8 +908,8 @@ export default class LegacyCallHandler extends EventEmitter {
             this.addCallForRoom(roomId, call);
         } catch (e) {
             Modal.createDialog(ErrorDialog, {
-                title: _t("Already in call"),
-                description: _t("You're already in a call with this person."),
+                title: _t("voip|already_in_call"),
+                description: _t("voip|already_in_call_person"),
             });
             return;
         }
@@ -956,8 +950,8 @@ export default class LegacyCallHandler extends EventEmitter {
         // if the runtime env doesn't do VoIP, whine.
         if (!cli.supportsVoip()) {
             Modal.createDialog(ErrorDialog, {
-                title: _t("Calls are unsupported"),
-                description: _t("You cannot place calls in this browser."),
+                title: _t("voip|unsupported"),
+                description: _t("voip|unsupported_browser"),
             });
             return;
         }

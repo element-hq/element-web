@@ -36,11 +36,11 @@ export type ExportTypeKey = "Timeline" | "Beginning" | "LastNMessages";
 export const textForFormat = (format: ExportFormat): string => {
     switch (format) {
         case ExportFormat.Html:
-            return _t("HTML");
+            return _t("export_chat|html");
         case ExportFormat.Json:
-            return _t("JSON");
+            return _t("export_chat|json");
         case ExportFormat.PlainText:
-            return _t("Plain Text");
+            return _t("export_chat|text");
         default:
             throw new Error("Unknown format");
     }
@@ -49,11 +49,11 @@ export const textForFormat = (format: ExportFormat): string => {
 export const textForType = (type: ExportType): string => {
     switch (type) {
         case ExportType.Beginning:
-            return _t("From the beginning");
+            return _t("export_chat|from_the_beginning");
         case ExportType.LastNMessages:
-            return _t("Specify a number of messages");
+            return _t("export_chat|number_of_messages");
         case ExportType.Timeline:
-            return _t("Current Timeline");
+            return _t("export_chat|current_timeline");
         default:
             throw new Error("Unknown type: " + type);
         // case exportTypes.START_DATE:

@@ -84,7 +84,7 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
 
     return (
         <BaseDialog
-            title={_t("Settings - %(spaceName)s", { spaceName: space.name || _t("Unnamed Space") })}
+            title={_t("Settings - %(spaceName)s", { spaceName: space.name || _t("common|unnamed_space") })}
             className="mx_SpaceSettingsDialog"
             contentId="mx_SpaceSettingsDialog"
             onFinished={onFinished}

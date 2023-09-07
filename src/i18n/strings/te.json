@@ -1,12 +1,10 @@
 {
     "Account": "ఖాతా",
-    "Admin": "అడ్మిన్",
     "Admin Tools": "నిర్వాహకుని ఉపకరణాలు",
     "No Microphones detected": "మైక్రోఫోన్లు కనుగొనబడలేదు",
     "No Webcams detected": "వెబ్కామ్లు కనుగొనబడలేదు",
     "No media permissions": "మీడియా అనుమతులు లేవు",
     "Default Device": "డిఫాల్ట్ పరికరం",
-    "Advanced": "ఆధునిక",
     "Authentication": "ప్రామాణీకరణ",
     "You do not have permission to post to this room": "మీకు ఈ గదికి పోస్ట్ చేయడానికి అనుమతి లేదు",
     "A new password must be entered.": "కొత్త పాస్ వర్డ్ ను తప్పక నమోదు చేయాలి.",
@@ -16,11 +14,8 @@
     "Are you sure you want to leave the room '%(roomName)s'?": "మీరు ఖచ్చితంగా గది '%(roomName)s' వదిలివేయాలనుకుంటున్నారా?",
     "Are you sure you want to reject the invitation?": "మీరు ఖచ్చితంగా ఆహ్వానాన్ని తిరస్కరించాలనుకుంటున్నారా?",
     "Banned users": "నిషేధించిన వినియోగదారులు",
-    "Bans user with given id": "ఇచ్చిన ఐడి తో వినియోగదారుని నిషేధించారు",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "గృహనిర్వాహకులకు కనెక్ట్ చేయలేరు - దయచేసి మీ కనెక్టివిటీని తనిఖీ చేయండి, మీ <a> 1 హోమరుసు యొక్క ఎస్ఎస్ఎల్ సర్టిఫికేట్ </a> 2 ని విశ్వసనీయపరుచుకొని, బ్రౌజర్ పొడిగింపు అభ్యర్థనలను నిరోధించబడదని నిర్ధారించుకోండి.",
     "Change Password": "పాస్వర్డ్ మార్చండి",
-    "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s గది పేరు తొలగించబడింది.",
-    "Changes your display nickname": "మీ ప్రదర్శన మారుపేరుని మారుస్తుంది",
     "You cannot place a call with yourself.": "మీకు మీరే కాల్ చేయలేరు.",
     "You need to be able to invite users to do that.": "మీరు దీన్ని చేయడానికి వినియోగదారులను ఆహ్వానించగలరు.",
     "Command error": "కమాండ్ లోపం",
@@ -71,7 +66,6 @@
     "Notifications": "ప్రకటనలు",
     "Operation failed": "కార్యం విఫలమైంది",
     "Sunday": "ఆదివారం",
-    "Messages sent by bot": "బాట్ పంపిన సందేశాలు",
     "Notification targets": "తాఖీదు లక్ష్యాలు",
     "Today": "ఈ రోజు",
     "Friday": "శుక్రువారం",
@@ -79,23 +73,17 @@
     "Changelog": "మార్పు వివరణ",
     "Source URL": "మూల URL",
     "Noisy": "శబ్దం",
-    "Messages containing my display name": "నా ప్రదర్శన పేరును కలిగి ఉన్న సందేశాలు",
-    "Messages in one-to-one chats": "సందేశాలు నుండి ఒకరికి ఒకటి మాటామంతి",
     "Failed to add tag %(tagName)s to room": "%(tagName)s ను బొందు జోడించడంలో విఫలమైంది",
     "No update available.": "ఏ నవీకరణ అందుబాటులో లేదు.",
-    "Collecting app version information": "అనువర్తన సంస్కరణ సమాచారాన్ని సేకరించడం",
     "Tuesday": "మంగళవారం",
     "Monday": "సోమవారం",
-    "Collecting logs": "నమోదు సేకరించడం",
     "All Rooms": "అన్ని గదులు",
     "Wednesday": "బుధవారం",
     "Send": "పంపండి",
     "All messages": "అన్ని సందేశాలు",
-    "Call invitation": "మాట్లాడడానికి ఆహ్వానం",
     "Invite to this room": "ఈ గదికి ఆహ్వానించండి",
     "Thursday": "గురువారం",
     "Search…": "శోధన…",
-    "Messages in group chats": "సమూహ మాటామంతిలో సందేశాలు",
     "Yesterday": "నిన్న",
     "Error encountered (%(errorDetail)s).": "లోపం సంభవించింది (%(errorDetail)s).",
     "Low Priority": "తక్కువ ప్రాధాన్యత",
@@ -105,7 +93,6 @@
     "This email address is already in use": "ఈ ఇమెయిల్ అడ్రస్ ఇప్పటికే వాడుకం లో ఉంది",
     "This phone number is already in use": "ఈ ఫోన్ నంబర్ ఇప్పటికే వాడుకం లో ఉంది",
     "Failed to verify email address: make sure you clicked the link in the email": "ఇమెయిల్ అడ్రస్ ని నిరూపించలేక పోయాము. ఈమెయిల్ లో వచ్చిన లింక్ ని నొక్కారా",
-    "Call Failed": "కాల్ విఫలమయింది",
     "Confirm adding email": "ఈమెయిల్ చేర్చుటకు ధ్రువీకరించు",
     "Single Sign On": "సింగిల్ సైన్ ఆన్",
     "common": {
@@ -136,9 +123,33 @@
         "admin": "అడ్మిన్"
     },
     "bug_reporting": {
-        "send_logs": "నమోదును పంపు"
+        "send_logs": "నమోదును పంపు",
+        "collecting_information": "అనువర్తన సంస్కరణ సమాచారాన్ని సేకరించడం",
+        "collecting_logs": "నమోదు సేకరించడం"
     },
     "settings": {
-        "always_show_message_timestamps": "ఎల్లప్పుడూ సందేశాల సమయ ముద్రలు చూపించు"
+        "always_show_message_timestamps": "ఎల్లప్పుడూ సందేశాల సమయ ముద్రలు చూపించు",
+        "notifications": {
+            "rule_contains_display_name": "నా ప్రదర్శన పేరును కలిగి ఉన్న సందేశాలు",
+            "rule_room_one_to_one": "సందేశాలు నుండి ఒకరికి ఒకటి మాటామంతి",
+            "rule_message": "సమూహ మాటామంతిలో సందేశాలు",
+            "rule_call": "మాట్లాడడానికి ఆహ్వానం",
+            "rule_suppress_notices": "బాట్ పంపిన సందేశాలు"
+        }
+    },
+    "timeline": {
+        "m.room.name": {
+            "remove": "%(senderDisplayName)s గది పేరు తొలగించబడింది."
+        }
+    },
+    "slash_command": {
+        "nick": "మీ ప్రదర్శన మారుపేరుని మారుస్తుంది",
+        "ban": "ఇచ్చిన ఐడి తో వినియోగదారుని నిషేధించారు",
+        "category_admin": "అడ్మిన్",
+        "category_advanced": "ఆధునిక"
+    },
+    "Advanced": "ఆధునిక",
+    "voip": {
+        "call_failed": "కాల్ విఫలమయింది"
     }
 }

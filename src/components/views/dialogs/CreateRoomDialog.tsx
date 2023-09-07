@@ -33,6 +33,7 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import SettingsStore from "../../../settings/SettingsStore";
+import LabelledCheckbox from "../elements/LabelledCheckbox";
 
 interface IProps {
     type?: RoomType;
@@ -45,15 +46,46 @@ interface IProps {
 }
 
 interface IState {
+    /**
+     * The selected room join rule.
+     */
     joinRule: JoinRule;
-    isPublic: boolean;
+    /**
+     * Indicates whether the created room should have public visibility (ie, it should be
+     * shown in the public room list). Only applicable if `joinRule` == `JoinRule.Knock`.
+     */
+    isPublicKnockRoom: boolean;
+    /**
+     * Indicates whether end-to-end encryption is enabled for the room.
+     */
     isEncrypted: boolean;
+    /**
+     * The room name.
+     */
     name: string;
+    /**
+     * The room topic.
+     */
     topic: string;
+    /**
+     * The room alias.
+     */
     alias: string;
+    /**
+     * Indicates whether the details section is open.
+     */
     detailsOpen: boolean;
+    /**
+     * Indicates whether federation is disabled for the room.
+     */
     noFederate: boolean;
+    /**
+     * Indicates whether the room name is valid.
+     */
     nameIsValid: boolean;
+    /**
+     * Indicates whether the user can change encryption settings for the room.
+     */
     canChangeEncryption: boolean;
 }
 
@@ -78,7 +110,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
         const cli = MatrixClientPeg.safeGet();
         this.state = {
-            isPublic: this.props.defaultPublic || false,
+            isPublicKnockRoom: this.props.defaultPublic || false,
             isEncrypted: this.props.defaultEncrypted ?? privateShouldBeEncrypted(cli),
             joinRule,
             name: this.props.defaultName || "",
@@ -129,6 +161,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
         if (this.state.joinRule === JoinRule.Knock) {
             opts.joinRule = JoinRule.Knock;
+            createOpts.visibility = this.state.isPublicKnockRoom ? Visibility.Public : Visibility.Private;
         }
 
         return opts;
@@ -215,6 +248,10 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         return result;
     };
 
+    private onIsPublicKnockRoomChange = (isPublicKnockRoom: boolean): void => {
+        this.setState({ isPublicKnockRoom });
+    };
+
     private static validateRoomName = withValidation({
         rules: [
             {
@@ -251,7 +288,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         "Everyone in <SpaceName/> will be able to find and join this room.",
                         {},
                         {
-                            SpaceName: () => <b>{this.props.parentSpace?.name ?? _t("Unnamed Space")}</b>,
+                            SpaceName: () => <b>{this.props.parentSpace?.name ?? _t("common|unnamed_space")}</b>,
                         },
                     )}
                     &nbsp;
@@ -265,7 +302,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         "Anyone will be able to find and join this room, not just members of <SpaceName/>.",
                         {},
                         {
-                            SpaceName: () => <b>{this.props.parentSpace?.name ?? _t("Unnamed Space")}</b>,
+                            SpaceName: () => <b>{this.props.parentSpace?.name ?? _t("common|unnamed_space")}</b>,
                         },
                     )}
                     &nbsp;
@@ -295,6 +332,18 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         "Anyone can request to join, but admins or moderators need to grant access. You can change this later.",
                     )}
                 </p>
+            );
+        }
+
+        let visibilitySection: JSX.Element | undefined;
+        if (this.state.joinRule === JoinRule.Knock) {
+            visibilitySection = (
+                <LabelledCheckbox
+                    className="mx_CreateRoomDialog_labelledCheckbox"
+                    label={_t("Make this room visible in the public room directory.")}
+                    onChange={this.onIsPublicKnockRoomChange}
+                    value={this.state.isPublicKnockRoom}
+                />
             );
         }
 
@@ -341,11 +390,14 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
         let title: string;
         if (isVideoRoom) {
-            title = _t("Create a video room");
+            title = _t("create_room|title_video_room");
         } else if (this.props.parentSpace || this.state.joinRule === JoinRule.Knock) {
             title = _t("action|create_a_room");
         } else {
-            title = this.state.joinRule === JoinRule.Public ? _t("Create a public room") : _t("Create a private room");
+            title =
+                this.state.joinRule === JoinRule.Public
+                    ? _t("create_room|title_public_room")
+                    : _t("create_room|title_private_room");
         }
 
         return (
@@ -383,6 +435,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         />
 
                         {publicPrivateLabel}
+                        {visibilitySection}
                         {e2eeSection}
                         {aliasField}
                         <details onToggle={this.onDetailsToggled} className="mx_CreateRoomDialog_details">
@@ -401,7 +454,9 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                     </div>
                 </form>
                 <DialogButtons
-                    primaryButton={isVideoRoom ? _t("Create video room") : _t("Create room")}
+                    primaryButton={
+                        isVideoRoom ? _t("create_room|action_create_video_room") : _t("create_room|action_create_room")
+                    }
                     onPrimaryButtonClick={this.onOk}
                     onCancel={this.onCancel}
                 />

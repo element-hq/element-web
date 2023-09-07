@@ -41,25 +41,25 @@ enum Category {
 }
 
 const categoryLabels: Record<Category, TranslationKey> = {
-    [Category.Room]: _td("common|room"),
-    [Category.Other]: _td("Other"),
+    [Category.Room]: _td("devtools|category_room"),
+    [Category.Other]: _td("devtools|category_other"),
 };
 
 export type Tool = React.FC<IDevtoolsProps> | ((props: IDevtoolsProps) => JSX.Element);
 const Tools: Record<Category, [label: TranslationKey, tool: Tool][]> = {
     [Category.Room]: [
-        [_td("Send custom timeline event"), TimelineEventEditor],
-        [_td("Explore room state"), RoomStateExplorer],
-        [_td("Explore room account data"), RoomAccountDataExplorer],
-        [_td("View servers in room"), ServersInRoom],
-        [_td("Notifications debug"), RoomNotifications],
-        [_td("Verification explorer"), VerificationExplorer],
-        [_td("Active Widgets"), WidgetExplorer],
+        [_td("devtools|send_custom_timeline_event"), TimelineEventEditor],
+        [_td("devtools|explore_room_state"), RoomStateExplorer],
+        [_td("devtools|explore_room_account_data"), RoomAccountDataExplorer],
+        [_td("devtools|view_servers_in_room"), ServersInRoom],
+        [_td("devtools|notifications_debug"), RoomNotifications],
+        [_td("devtools|verification_explorer"), VerificationExplorer],
+        [_td("devtools|active_widgets"), WidgetExplorer],
     ],
     [Category.Other]: [
-        [_td("Explore account data"), AccountDataExplorer],
-        [_td("Settings explorer"), SettingExplorer],
-        [_td("Server info"), ServerInfo],
+        [_td("devtools|explore_account_data"), AccountDataExplorer],
+        [_td("devtools|settings_explorer"), SettingExplorer],
+        [_td("devtools|server_info"), ServerInfo],
     ],
 };
 
@@ -116,15 +116,15 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
         );
     }
 
-    const label = tool ? tool[0] : _t("Toolbox");
+    const label = tool ? tool[0] : _t("devtools|toolbox");
     return (
-        <BaseDialog className="mx_QuestionDialog" onFinished={onFinished} title={_t("Developer Tools")}>
+        <BaseDialog className="mx_QuestionDialog" onFinished={onFinished} title={_t("devtools|developer_tools")}>
             <MatrixClientContext.Consumer>
                 {(cli) => (
                     <>
                         <div className="mx_DevTools_label_left">{label}</div>
                         <CopyableText className="mx_DevTools_label_right" getTextToCopy={() => roomId} border={false}>
-                            {_t("Room ID: %(roomId)s", { roomId })}
+                            {_t("devtools|room_id", { roomId })}
                         </CopyableText>
                         {!threadRootId ? null : (
                             <CopyableText
@@ -132,7 +132,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                                 getTextToCopy={() => threadRootId}
                                 border={false}
                             >
-                                {_t("Thread Root ID: %(threadRootId)s", { threadRootId })}
+                                {_t("devtools|thread_root_id", { threadRootId })}
                             </CopyableText>
                         )}
                         <div className="mx_DevTools_label_bottom" />

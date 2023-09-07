@@ -25,12 +25,12 @@ export class LegacyCallAnswerEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID): string {
         if (shouldPrefixMessagesIn(event.getRoomId()!, tagId)) {
             if (isSelf(event)) {
-                return _t("You joined the call");
+                return _t("event_preview|m.call.answer|you");
             } else {
-                return _t("%(senderName)s joined the call", { senderName: getSenderName(event) });
+                return _t("event_preview|m.call.answer|user", { senderName: getSenderName(event) });
             }
         } else {
-            return _t("Call in progress");
+            return _t("event_preview|m.call.answer|dm");
         }
     }
 }

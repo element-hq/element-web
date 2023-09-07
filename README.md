@@ -209,7 +209,5 @@ Now the yarn commands should work as normal.
 
 ### End-to-End tests
 
-Make sure you've got your Element development server running (by doing `yarn
-start` in element-web), and then in this project, run `yarn run test:cypress`. See
-[`docs/cypress.md`](https://github.com/matrix-org/matrix-react-sdk/blob/develop/docs/cypress.md)
-for more information.
+We use Cypress and Element Web for end-to-end tests. See
+[`docs/cypress.md`](docs/cypress.md) for more information.

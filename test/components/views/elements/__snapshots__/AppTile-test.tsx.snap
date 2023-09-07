@@ -109,7 +109,6 @@ exports[`AppTile for a pinned widget should render 1`] = `
             data-testid="avatar-img"
             data-type="round"
             style="--cpd-avatar-size: 20px;"
-            title=""
           >
             <img
               alt=""
@@ -197,7 +196,6 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             data-testid="avatar-img"
             data-type="round"
             style="--cpd-avatar-size: 20px;"
-            title=""
           >
             <img
               alt=""
@@ -277,7 +275,6 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 38px;"
-              title=""
             >
               u
             </span>
@@ -353,7 +350,6 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                   data-testid="avatar-img"
                   data-type="round"
                   style="--cpd-avatar-size: 20px;"
-                  title=""
                 >
                   <img
                     alt=""

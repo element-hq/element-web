@@ -141,7 +141,7 @@ describe("RoomKnocksBar", () => {
             expect(container.firstChild).toBeNull();
             jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob]);
             act(() => {
-                room.emit(RoomStateEvent.Members, new MatrixEvent(), state, bob);
+                room.emit(RoomStateEvent.Update, state);
             });
             expect(container.firstChild).not.toBeNull();
         });
@@ -151,7 +151,7 @@ describe("RoomKnocksBar", () => {
             expect(screen.getByRole("heading")).toHaveTextContent("Asking to join");
             jest.spyOn(room, "getMembersWithMembership").mockReturnValue([bob, jane]);
             act(() => {
-                room.emit(RoomStateEvent.Members, new MatrixEvent(), state, jane);
+                room.emit(RoomStateEvent.Update, state);
             });
             expect(screen.getByRole("heading")).toHaveTextContent("2 people asking to join");
         });

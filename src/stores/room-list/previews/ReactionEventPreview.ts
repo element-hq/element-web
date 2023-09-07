@@ -41,13 +41,13 @@ export class ReactionEventPreview implements IPreview {
 
         const message = MessagePreviewStore.instance.generatePreviewForEvent(relatedEvent);
         if (isSelf(event)) {
-            return _t("You reacted %(reaction)s to %(message)s", {
+            return _t("event_preview|m.reaction|you", {
                 reaction,
                 message,
             });
         }
 
-        return _t("%(sender)s reacted %(reaction)s to %(message)s", {
+        return _t("event_preview|m.reaction|user", {
             sender: getSenderName(event),
             reaction,
             message,

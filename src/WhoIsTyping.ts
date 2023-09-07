@@ -57,18 +57,18 @@ export function whoIsTypingString(whoIsTyping: RoomMember[], limit: number): str
     if (whoIsTyping.length === 0) {
         return "";
     } else if (whoIsTyping.length === 1) {
-        return _t("%(displayName)s is typing …", { displayName: whoIsTyping[0].name });
+        return _t("timeline|typing_indicator|one_user", { displayName: whoIsTyping[0].name });
     }
 
     const names = whoIsTyping.map((m) => m.name);
 
     if (othersCount >= 1) {
-        return _t("%(names)s and %(count)s others are typing …", {
+        return _t("timeline|typing_indicator|more_users", {
             names: names.slice(0, limit - 1).join(", "),
             count: othersCount,
         });
     } else {
         const lastPerson = names.pop();
-        return _t("%(names)s and %(lastPerson)s are typing …", { names: names.join(", "), lastPerson: lastPerson });
+        return _t("timeline|typing_indicator|two_users", { names: names.join(", "), lastPerson: lastPerson });
     }
 }

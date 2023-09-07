@@ -98,9 +98,11 @@ export function checkDeviceIsCrossSigned(): void {
 }
 
 /**
- * Fill in the login form in element with the given creds
+ * Fill in the login form in element with the given creds.
+ *
+ * If a `securityKey` is given, verifies the new device using the key.
  */
-export function logIntoElement(homeserverUrl: string, username: string, password: string) {
+export function logIntoElement(homeserverUrl: string, username: string, password: string, securityKey?: string) {
     cy.visit("/#/login");
 
     // select homeserver
@@ -114,6 +116,32 @@ export function logIntoElement(homeserverUrl: string, username: string, password
     cy.findByRole("textbox", { name: "Username" }).type(username);
     cy.findByPlaceholderText("Password").type(password);
     cy.findByRole("button", { name: "Sign in" }).click();
+
+    // if a securityKey was given, verify the new device
+    if (securityKey !== undefined) {
+        cy.get(".mx_AuthPage").within(() => {
+            cy.findByRole("button", { name: "Verify with Security Key" }).click();
+        });
+        cy.get(".mx_Dialog").within(() => {
+            // Fill in the security key
+            cy.get('input[type="password"]').type(securityKey);
+        });
+        cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
+        cy.findByRole("button", { name: "Done" }).click();
+    }
+}
+
+/**
+ * Queue up Cypress commands to log out of Element
+ */
+export function logOutOfElement() {
+    cy.findByRole("button", { name: "User menu" }).click();
+    cy.get(".mx_UserMenu_contextMenu").within(() => {
+        cy.findByRole("menuitem", { name: "Sign out" }).click();
+    });
+    cy.get(".mx_Dialog .mx_QuestionDialog").within(() => {
+        cy.findByRole("button", { name: "Sign out" }).click();
+    });
 }
 
 /**
@@ -138,4 +166,37 @@ export function doTwoWaySasVerification(verifier: Verifier): void {
             });
         });
     });
+}
+
+/**
+ * Queue up cypress commands to open the security settings and enable secure key backup.
+ *
+ * Assumes that the current device has been cross-signed (which means that we skip a step where we set it up).
+ *
+ * Stores the security key in `@securityKey`.
+ */
+export function enableKeyBackup() {
+    cy.openUserSettings("Security & Privacy");
+    cy.findByRole("button", { name: "Set up Secure Backup" }).click();
+    cy.get(".mx_Dialog").within(() => {
+        // Recovery key is selected by default
+        cy.findByRole("button", { name: "Continue", timeout: 60000 }).click();
+
+        // copy the text ourselves
+        cy.get(".mx_CreateSecretStorageDialog_recoveryKey code").invoke("text").as("securityKey", { type: "static" });
+        downloadKey();
+
+        cy.findByText("Secure Backup successful").should("exist");
+        cy.findByRole("button", { name: "Done" }).click();
+        cy.findByText("Secure Backup successful").should("not.exist");
+    });
+}
+
+/**
+ * Queue up cypress commands to click on download button and continue
+ */
+export function downloadKey() {
+    // Clicking download instead of Copy because of https://github.com/cypress-io/cypress/issues/2851
+    cy.findByRole("button", { name: "Download" }).click();
+    cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
 }

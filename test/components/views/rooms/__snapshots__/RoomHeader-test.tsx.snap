@@ -13,7 +13,6 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       data-type="round"
       role="presentation"
       style="--cpd-avatar-size: 40px;"
-      title="!1:example.org"
     >
       !
     </span>
@@ -37,6 +36,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
     >
       <button
         class="_icon-button_1k9cw_17"
+        data-state="closed"
         disabled=""
         style="--cpd-icon-button-size: 32px;"
         title="There's no one here to call"
@@ -45,6 +45,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       </button>
       <button
         class="_icon-button_1k9cw_17"
+        data-state="closed"
         disabled=""
         style="--cpd-icon-button-size: 32px;"
         title="There's no one here to call"
@@ -53,6 +54,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       </button>
       <button
         class="_icon-button_1k9cw_17"
+        data-state="closed"
         style="--cpd-icon-button-size: 32px;"
         title="Threads"
       >
@@ -60,6 +62,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       </button>
       <button
         class="_icon-button_1k9cw_17"
+        data-state="closed"
         style="--cpd-icon-button-size: 32px;"
         title="Notifications"
       >

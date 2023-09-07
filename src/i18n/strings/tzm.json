@@ -1,8 +1,4 @@
 {
-    "%(senderDisplayName)s sent an image.": "yuzen %(senderDisplayName)s yat twelaft.",
-    "Other": "Yaḍn",
-    "Actions": "Tugawin",
-    "Messages": "Tuzinin",
     "Create Account": "senflul amiḍan",
     "Dec": "Duj",
     "Nov": "Nuw",
@@ -93,7 +89,6 @@
     "Dog": "Aydi",
     "Ok": "Wax",
     "Notifications": "Tineɣmisin",
-    "Usage": "Asemres",
     "Feb": "Bṛa",
     "Jan": "Yen",
     "common": {
@@ -146,5 +141,19 @@
         "end": "End",
         "control": "Ctrl",
         "shift": "Shift"
-    }
+    },
+    "timeline": {
+        "m.image": "yuzen %(senderDisplayName)s yat twelaft."
+    },
+    "slash_command": {
+        "usage": "Asemres",
+        "category_messages": "Tuzinin",
+        "category_actions": "Tugawin",
+        "category_other": "Yaḍn"
+    },
+    "Messages": "Tuzinin",
+    "devtools": {
+        "category_other": "Yaḍn"
+    },
+    "Other": "Yaḍn"
 }

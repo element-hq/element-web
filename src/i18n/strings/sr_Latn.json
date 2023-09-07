@@ -30,7 +30,6 @@
     "Dec": "Dec",
     "PM": "poslepodne",
     "AM": "prepodne",
-    "Unnamed Room": "Soba bez imena",
     "Unable to load! Check your network connectivity and try again.": "Neuspelo učitavanje! Proverite vašu mrežu i pokušajte ponovo.",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s nema dozvolu da vam šalje obaveštenja. Molim proverite podešavanja vašeg internet pregledača",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s nije dobio dozvolu da šalje obaveštenja. Molim pokušajte ponovo",
@@ -38,7 +37,6 @@
     "Default": "Podrazumevano",
     "Restricted": "Ograničeno",
     "Moderator": "Moderator",
-    "Admin": "Administrator",
     "Operation failed": "Operacija nije uspela",
     "Failed to invite": "Slanje pozivnice nije uspelo",
     "You need to be logged in.": "Morate biti prijavljeni",
@@ -51,7 +49,6 @@
     "The call could not be established": "Poziv ne može biti uspostavljen",
     "The user you called is busy.": "Korisnik kojeg ste zvali je zauzet.",
     "User Busy": "Korisnik zauzet",
-    "Call Failed": "Poziv nije uspio",
     "Only continue if you trust the owner of the server.": "Produžite samo pod uslovom da vjerujete vlasniku servera.",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Ova akcija zahtijeva pristup zadanom serveru za provjeru identiteta <server /> radi provjere adrese e-pošte ili telefonskog broja, no server nema nikakve uslove za pružanje usluge.",
     "Identity server has no terms of service": "Server identiteta nema uslove pružanja usluge",
@@ -82,11 +79,11 @@
     "This account has been deactivated.": "Ovaj nalog je dekativiran.",
     "Open this settings tab": "Otvori podešavanja",
     "Start a group chat": "Pokreni grupni razgovor",
-    "Stop the camera": "Zaustavi kameru",
     "User is already in the room": "Korisnik je već u sobi",
     "common": {
         "error": "Greška",
-        "attachment": "Prilog"
+        "attachment": "Prilog",
+        "unnamed_room": "Soba bez imena"
     },
     "action": {
         "confirm": "Potvrdi",
@@ -108,5 +105,12 @@
     },
     "settings": {
         "use_control_enter_send_message": "Koristi Ctrl + Enter za slanje poruke"
+    },
+    "slash_command": {
+        "category_admin": "Administrator"
+    },
+    "voip": {
+        "disable_camera": "Zaustavi kameru",
+        "call_failed": "Poziv nije uspio"
     }
 }

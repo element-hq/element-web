@@ -33,7 +33,7 @@ export const RoomKnocksBar: VFC<{ room: Room }> = ({ room }) => {
     const [disabled, setDisabled] = useState(false);
     const knockMembers = useTypedEventEmitterState(
         room,
-        RoomStateEvent.Members,
+        RoomStateEvent.Update,
         useCallback(() => room.getMembersWithMembership("knock"), [room]),
     );
     const knockMembersCount = knockMembers.length;

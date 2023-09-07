@@ -89,4 +89,16 @@ describe("<LabelledCheckbox />", () => {
         expect(checkbox).toBeChecked();
         expect(checkbox).toBeDisabled();
     });
+
+    it("should render with a custom class name", () => {
+        const className = "some class name";
+        const props: CompProps = {
+            label: "Hello world",
+            value: false,
+            onChange: jest.fn(),
+            className,
+        };
+        const { container } = render(getComponent(props));
+        expect(container.firstElementChild?.className).toContain(className);
+    });
 });

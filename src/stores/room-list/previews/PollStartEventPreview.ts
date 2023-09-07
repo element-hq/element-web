@@ -53,7 +53,7 @@ export class PollStartEventPreview implements IPreview {
             if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId()!, tagId)) {
                 return question;
             } else {
-                return _t("%(senderName)s: %(message)s", { senderName: getSenderName(event), message: question });
+                return _t("event_preview|m.text", { senderName: getSenderName(event), message: question });
             }
         } catch (e) {
             if (e instanceof InvalidEventError) {

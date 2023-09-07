@@ -72,7 +72,7 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({ roomId, call }) =>
     return (
         <div className="mx_RoomCallBanner" onClick={onClick}>
             <div className="mx_RoomCallBanner_text">
-                <span className="mx_RoomCallBanner_label">{_t("Video call")}</span>
+                <span className="mx_RoomCallBanner_label">{_t("voip|video_call")}</span>
                 <GroupCallDuration groupCall={call.groupCall} />
             </div>
 
