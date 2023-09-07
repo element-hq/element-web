@@ -48,6 +48,7 @@ We are aiming for a set of common strings to be shared then some more localised 
 5. Ensure your translation keys do not include `.` or `|` or ` `. Try to balance string length against descriptiveness.
 
 ## matrix-react-sdk is still undergoing migration to translation keys
+
 If you are fortunate enough to be modifying not yet migrated strings please treat them as a new string using instructions below.
 
 ## Adding new strings
