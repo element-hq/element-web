@@ -1662,7 +1662,6 @@
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz":
   version "3.2.14"
-  uid acd96c00a881d0f462e1f97a56c73742c8dbc984
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz#acd96c00a881d0f462e1f97a56c73742c8dbc984"
 
 "@matrix-org/react-sdk-module-api@^2.1.0":
@@ -5594,10 +5593,10 @@ eslint-module-utils@^2.8.0:
   dependencies:
     debug "^3.2.7"
 
-eslint-plugin-deprecate@^0.8.0:
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-deprecate/-/eslint-plugin-deprecate-0.8.2.tgz#2399730da3d72aa6d3704400995932f52f0482cf"
-  integrity sha512-THs60MUqJoHtrF6F8eNUnyU0ER6p4wUX7yyoUZQdBDPFiE9kzZTo4CgRKZicUVj5cjXLT76nW+QdSZwZKtjLIA==
+eslint-plugin-deprecate@0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-deprecate/-/eslint-plugin-deprecate-0.7.0.tgz#04805d2f2884800c580d59933b9c895f31b02437"
+  integrity sha512-MylhCqoH/SJ2MwzVgX0we6oE+lKPVwhOu9hAJ98vMCmbz3FNwqJ8XipdI23bCF7NHxUbhd6mdxFjywKE52pt7A==
 
 eslint-plugin-import@^2.26.0:
   version "2.28.1"
@@ -8835,7 +8834,6 @@ matrix-events-sdk@0.0.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "28.0.0"
-  uid "2918d686aee05bdc702fd765da16c74fd58c2a7e"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2918d686aee05bdc702fd765da16c74fd58c2a7e"
   dependencies:
     "@babel/runtime" "^7.12.5"
@@ -8862,7 +8860,6 @@ matrix-mock-request@^2.5.0:
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.79.0"
-  uid "85be845f1664abbaa9d37ff111983445f215c958"
   resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/85be845f1664abbaa9d37ff111983445f215c958"
   dependencies:
     "@babel/runtime" "^7.12.5"
