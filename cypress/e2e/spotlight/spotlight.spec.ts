@@ -228,7 +228,6 @@ describe("Spotlight", () => {
             cy.get(".mx_SpotlightDialog_filter").should("not.exist");
 
             cy.spotlightSearch().type("{downArrow}");
-            cy.spotlightSearch().type("{downArrow}");
             cy.get("#mx_SpotlightDialog_button_explorePublicRooms").should("have.attr", "aria-selected", "true");
             cy.spotlightSearch().type("{enter}");
             cy.get(".mx_SpotlightDialog_filter").should("contain", "Public rooms");

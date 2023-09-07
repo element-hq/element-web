@@ -185,7 +185,7 @@
         "babel-jest": "^29.0.0",
         "blob-polyfill": "^7.0.0",
         "chokidar": "^3.5.1",
-        "cypress": "^12.0.0",
+        "cypress": "^13.0.0",
         "cypress-axe": "^1.0.0",
         "cypress-multi-reporters": "^1.6.1",
         "cypress-real-events": "^1.7.1",
