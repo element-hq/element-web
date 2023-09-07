@@ -796,42 +796,18 @@
     "QR Code": "کد QR",
     "Custom level": "سطح دلخواه",
     "Power level": "سطح قدرت",
-    "%(oneUser)smade no changes %(count)s times": {
-        "one": "%(oneUser)s هیچ تغییری ایجاد نکرد",
-        "other": "%(oneUser)s %(count)s مرتبه هیچ تغییری ایجاد نکرد"
-    },
     "That matches!": "مطابقت دارد!",
     "Use a different passphrase?": "از عبارت امنیتی دیگری استفاده شود؟",
     "That doesn't match.": "مطابقت ندارد.",
     "Go back to set it again.": "برای تنظیم مجدد آن به عقب برگردید.",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "one": "%(severalUsers)s هیچ تغییری ایجاد نکردند",
-        "other": "%(severalUsers)s %(count)s تغییری ایجاد نکردند"
-    },
     "Enter your Security Phrase a second time to confirm it.": "عبارت امنیتی خود را برای تائید مجددا وارد کنید.",
-    "%(oneUser)schanged their name %(count)s times": {
-        "one": "%(oneUser)s نام خود را تغییر داد",
-        "other": "%(oneUser)s نام خود را %(count)s مرتبه تغییر داد"
-    },
     "Your keys are being backed up (the first backup could take a few minutes).": "در حال پیشتیبان‌گیری از کلیدهای شما (اولین نسخه پشتیبان ممکن است چند دقیقه طول بکشد).",
-    "%(severalUsers)schanged their name %(count)s times": {
-        "one": "%(severalUsers)s نام خود را تغییر دادند",
-        "other": "%(severalUsers)s نام خود را %(count)s بار تغییر دادند"
-    },
     "Confirm your Security Phrase": "عبارت امنیتی خود را تأیید کنیدعبارت امنیتی خود را تائید نمائید",
     "Success!": "موفقیت‌آمیز بود!",
     "Create key backup": "ساختن نسخه‌ی پشتیبان کلید",
     "Unable to create key backup": "ایجاد کلید پشتیبان‌گیری امکان‌پذیر نیست",
     "Generate a Security Key": "یک کلید امنیتی ایجاد کنید",
     "Use a secret phrase only you know, and optionally save a Security Key to use for backup.": "از یک عبارت محرمانه که فقط خودتان می‌دانید استفاده کنید، و محض احتیاط کلید امینی خود را برای استفاده هنگام پشتیبان‌گیری ذخیره نمائید.",
-    "was unbanned %(count)s times": {
-        "one": "رفع تحریم شد",
-        "other": "%(count)s بار رفع تحریم شد"
-    },
-    "were unbanned %(count)s times": {
-        "one": "رفع تحریم شد",
-        "other": "%(count)s بار رفع تحریم شد"
-    },
     "Filter results": "پالایش نتایج",
     "Server did not return valid authentication information.": "سرور اطلاعات احراز هویت معتبری را باز نگرداند.",
     "Server did not require any authentication": "سرور به احراز هویت احتیاج نداشت",
@@ -873,33 +849,9 @@
     "Mark as not suggested": "علامت‌گذاری به عنوان پیشنهاد‌نشده",
     "Mark as suggested": "علامت‌گذاری به عنوان پیشنهاد‌شده",
     "You may want to try a different search or check for typos.": "ممکن است بخواهید یک جستجوی دیگر انجام دهید یا غلط‌های املایی را بررسی کنید.",
-    "was banned %(count)s times": {
-        "one": "تحریم شد",
-        "other": "%(count)s بار تحریم شد"
-    },
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "برای در امان ماندن در برابر از دست‌دادن پیام‌ها و داده‌های رمزشده‌ی خود، از کلید‌های رمزنگاری خود یک نسخه‌ی پشتیبان بر روی سرور قرار دهید.",
-    "were banned %(count)s times": {
-        "one": "تحریم شد",
-        "other": "%(count)s بار تحریم شد"
-    },
-    "was invited %(count)s times": {
-        "one": "دعوت شد",
-        "other": "%(count)s بار دعوت شده است"
-    },
     "Enter your account password to confirm the upgrade:": "گذرواژه‌ی خود را جهت تائيد عملیات ارتقاء وارد کنید:",
-    "were invited %(count)s times": {
-        "one": "دعوت شدند",
-        "other": "%(count)s بار دعوت شده‌اند"
-    },
     "Restore your key backup to upgrade your encryption": "برای ارتقاء رمزنگاری، ابتدا نسخه‌ی پشتیبان خود را بازیابی کنید",
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "one": "%(oneUser)s دعوت خود را پس گرفته است",
-        "other": "%(oneUser)s دعوت خود را %(count)s مرتبه پس‌گرفته‌است"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "one": "%(severalUsers)s دعوت‌های خود را پس‌گرفتند",
-        "other": "%(severalUsers)s دعوت خود را %(count)s مرتبه پس‌گرفتند"
-    },
     "%(name)s cancelled verifying": "%(name)s تأیید هویت را لغو کرد",
     "You cancelled verifying %(name)s": "شما تأیید هویت %(name)s را لغو کردید",
     "You verified %(name)s": "شما هویت %(name)s را تأیید کردید",
@@ -1091,7 +1043,6 @@
     "Unencrypted": "رمزگذاری نشده",
     "Encrypted by an unverified session": "توسط یک نشست تأیید نشده رمزگذاری شده است",
     "Export room keys": "استخراج کلیدهای اتاق",
-    "%(nameList)s %(transitionList)s": "%(nameList)s.%(transitionList)s",
     "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "این فرآیند به شما این امکان را می‌دهد تا کلیدهایی را که برای رمزگشایی پیام‌هایتان در اتاق‌های رمزشده نیاز دارید، در قالب یک فایل محلی استخراج کنید. بعد از آن می‌توانید این فایل را در هر کلاینت دیگری وارد (Import) کرده و قادر به رمزگشایی و مشاهده‌ی پیام‌های رمزشده‌ی مذکور باشید.",
     "Language Dropdown": "منو زبان",
     "View message": "مشاهده پیام",
@@ -1109,7 +1060,6 @@
     },
     "expand": "گشودن",
     "collapse": "بستن",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "لطفا در GitHub <newIssueLink>یک مسئله جدید ایجاد کنید</newIssueLink> تا بتوانیم این اشکال را بررسی کنیم.",
     "Enter passphrase": "عبارت امنیتی را وارد کنید",
     "Confirm passphrase": "عبارت امنیتی را تائید کنید",
     "This version of %(brand)s does not support searching encrypted messages": "این نسخه از %(brand)s از جستجوی پیام های رمزگذاری شده پشتیبانی نمی کند",
@@ -1137,29 +1087,14 @@
     "Any of the following data may be shared:": "هر یک از داده های زیر ممکن است به اشتراک گذاشته شود:",
     "This session is encrypting history using the new recovery method.": "این نشست تاریخچه‌ی پیام‌های رمزشده را با استفاده از روش جدیدِ بازیابی، رمز می‌کند.",
     "Cancel search": "لغو جستجو",
-    "Quick Reactions": "واکنش سریع",
-    "Categories": "دسته بندی ها",
-    "Flags": "پرچم ها",
-    "Symbols": "نمادها",
-    "Objects": "اشیاء",
     "Go to Settings": "برو به تنظیمات",
-    "Travel & Places": "سفر و اماکن",
-    "Activities": "فعالیت ها",
     "Set up Secure Messages": "پیام‌رسانی امن را تنظیم کنید",
-    "Food & Drink": "غذا و نوشیدنی",
     "Recovery Method Removed": "روش بازیابی حذف شد",
-    "Animals & Nature": "حیوانات و طبیعت",
-    "Smileys & People": "لبخند و افراد",
     "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "نشست فعلی تشخیص داده که عبارت امنیتی و کلید لازم شما برای پیام‌رسانی امن حذف شده‌است.",
-    "Frequently Used": "متداول",
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "اگر این کار را به صورت تصادفی انجام دادید، می‌توانید سازوکار پیام امن را برای این نشست تنظیم کرده که باعث می‌شود تمام تاریخچه‌ی این نشست با استفاده از یک روش جدیدِ بازیابی، مجددا رمزشود.",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "اگر متد بازیابی را حذف نکرده‌اید، ممکن است حمله‌کننده‌ای سعی در دسترسی به حساب‌کاربری شما داشته باشد. گذرواژه حساب کاربری خود را تغییر داده و فورا یک روش بازیابی را از بخش تنظیمات خود تنظیم کنید.",
     "Message downloading sleep time(ms)": "زمان خواب بارگیری پیام (ms)",
     "Something went wrong!": "مشکلی پیش آمد!",
-    "%(severalUsers)sjoined %(count)s times": {
-        "one": "%(severalUsers)s عضو شدند",
-        "other": "%(severalUsers)s%(count)s مرتبه عضو شده‌اند"
-    },
     "Theme added!": "پوسته اضافه شد!",
     "If you've joined lots of rooms, this might take a while": "اگر عضو اتاق‌های بسیار زیادی هستید، ممکن است این فرآیند مقدای به طول بیانجامد",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "مدیر سرور شما قابلیت رمزنگاری سرتاسر برای اتاق‌ها و گفتگوهای خصوصی را به صورت پیش‌فرض غیرفعال کرده‌است.",
@@ -1333,48 +1268,12 @@
     "Encryption": "رمزنگاری",
     "You'll need to authenticate with the server to confirm the upgrade.": "برای تائید ارتقاء، نیاز به احراز هویت نزد سرور خواهید داشت.",
     "Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.": "برای اینکه بتوانید بقیه‌ی نشست‌ها را تائید کرده و به آن‌ها امکان مشاهده‌ی پیام‌های رمزشده را بدهید، ابتدا باید این نشست را ارتقاء دهید. بعد از تائیدشدن، به عنوان نشست‌ّای تائید‌شده به سایر کاربران نمایش داده خواهند شد.",
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "one": "%(oneUser)s دعوت خود را رد کرد",
-        "other": "%(oneUser)s دعوت خود را %(count)s مرتبه رد کرد"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "one": "%(severalUsers)s دعوت‌های خود را رد کردند",
-        "other": "%(severalUsers)s دعوت خود را %(count)s مرتبه رد کردند"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "one": "%(oneUser)s خارج شد و مجددا عضو شد",
-        "other": "%(oneUser)s %(count)s مرتبه خارج شد و مجددا عضو شد"
-    },
     "Unable to query secret storage status": "امکان جستجو و کنکاش وضعیت حافظه‌ی مخفی میسر نیست",
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "one": "%(severalUsers)s خارج شدند و مجددا عضو شدند",
-        "other": "%(severalUsers)s %(count)s مرتبه خارج شدند و مجددا عضو شدند"
-    },
     "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.": "اگر الان لغو کنید، ممکن است پیام‌ها و داده‌های رمزشده‌ی خود را در صورت خارج‌شدن از حساب‌های کاربریتان، از دست دهید.",
-    "%(oneUser)sjoined and left %(count)s times": {
-        "one": "%(oneUser)s پیوست و خارج شد",
-        "other": "%(oneUser)s %(count)s مرتبه عضو شده و خارج شدند"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "one": "%(severalUsers)s عضو شدند و خارج شدند",
-        "other": "%(severalUsers)s %(count)s مرتبه عضو شده و خارج شدند"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "one": "%(oneUser)s خارج شد",
-        "other": "%(oneUser)s %(count)s مرتبه خارج شده‌است"
-    },
     "You can also set up Secure Backup & manage your keys in Settings.": "همچنین می‌توانید پشتیبان‌گیری امن را برپا کرده و کلید‌های خود را در تنظیمات مدیریت کنید.",
-    "%(severalUsers)sleft %(count)s times": {
-        "one": "%(severalUsers)s خارج شدند",
-        "other": "%(severalUsers)s %(count)s مرتبه خارج شدند"
-    },
     "Upgrade your encryption": "رمزنگاری خود را ارتقا دهید",
     "Set a Security Phrase": "یک عبارت امنیتی تنظیم کنید",
     "Confirm Security Phrase": "عبارت امنیتی را تأیید کنید",
-    "%(oneUser)sjoined %(count)s times": {
-        "one": "%(oneUser)s پیوست",
-        "other": "%(oneUser)s %(count)s مرتبه عضو شدند"
-    },
     "Save your Security Key": "کلید امنیتی خود را ذخیره کنید",
     "Unable to set up secret storage": "تنظیم حافظه‌ی پنهان امکان پذیر نیست",
     "Passphrases must match": "عبارات‌های امنیتی باید مطابقت داشته باشند",
@@ -1513,22 +1412,13 @@
     "Lion": "شیر",
     "Cat": "گربه",
     "Dog": "سگ",
-    "To be secure, do this in person or use a trusted way to communicate.": "برای حفظ امنیت، خودتان این کار را انجام دهید و یا از یک روش ارتباطی قابل اعتماد استفاده نمائید.",
-    "They don't match": "مطابقت ندارند",
-    "They match": "مطابقت دارند",
     "Cancelling…": "در حال لغو…",
     "Waiting for %(displayName)s to verify…": "منتظر %(displayName)s برای تائید کردن…",
     "Unable to find a supported verification method.": "روش پشتیبانی‌شده‌ای برای تائید پیدا نشد.",
     "Verify this user by confirming the following number appears on their screen.": "در صورتی که عدد بعدی بر روی صفحه‌ی کاربر نمایش داده می‌شود، او را تائید نمائید.",
     "Verify this user by confirming the following emoji appear on their screen.": "در صورتی که همه‌ی شکلک‌های موجود بر روی صفحه‌ی دستگاه کاربر ظاهر شده‌اند، او را تائید نمائید.",
-    "Compare a unique set of emoji if you don't have a camera on either device": "اگر بر روی دستگاه خود دوربین ندارید، از تطابق شکلک‌های منحصر به فرد استفاده نمائید",
-    "Compare unique emoji": "شکلک‌های منحصر به فرد را مقایسه کنید",
-    "Scan this unique code": "این QR-code منحصر به فرد را اسکن کنید",
     "Got It": "متوجه شدم",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "پیام‌های رد و بدل شده با این کاربر به صورت سرتاسر رمزشده و هیچ نفر سومی امکان مشاهده و خواندن آن‌ها را ندارد.",
-    "You've successfully verified this user.": "شما با موفقیت این کاربر را تائید کردید.",
-    "Verified!": "تائید شد!",
-    "The other party cancelled the verification.": "طرف مقابل فرآیند تائید را لغو کرد.",
     "Dial pad": "صفحه شماره‌گیری",
     "There was an error looking up the phone number": "هنگام یافتن شماره تلفن خطایی رخ داد",
     "Unable to look up phone number": "امکان یافتن شماره تلفن میسر نیست",
@@ -1983,12 +1873,10 @@
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "با استفاده از نام یا نام کاربری (مانند <userId/>) از افراد دعوت کرده و یا <a>این فضای کاری را به اشتراک بگذارید</a>.",
     "Start a conversation with someone using their name or username (like <userId/>).": "با استفاده از نام یا نام کاربری (مانند <userId/>)، گفتگوی جدیدی را با دیگران شروع کنید.",
     "Start a conversation with someone using their name, email address or username (like <userId/>).": "با استفاده از نام، آدرس ایمیل و یا نام کاربری (مانند <userId/>)، یک گفتگوی جدید را شروع کنید.",
-    "Integration manager": "مدیر یکپارچگی",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s شما اجازهٔ استفاده از یک مدیر یکپارچگی را برای این کار نمی دهد. لطفاً با مدیری تماس بگیرید.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "استفاده از این ابزارک ممکن است داده‌هایی <helpIcon /> را با %(widgetDomain)s و مدیر یکپارچگیتان هم رسانی کند.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "برای مدیریت بات‌ها، ابزارک‌ها و بسته‌های برچسب، از یک مدیر پکپارچه‌سازی استفاده کنید.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "برای مدیریت بات‌ها، ابزارک‌ها و بسته‌های برچسب، از یک مدیر پکپارچه‌سازی <b>(%(serverName)s)</b> استفاده کنید.",
-    "Identity server": "کارساز هویت",
     "Identity server (%(server)s)": "کارساز هویت (%(server)s)",
     "Could not connect to identity server": "نتوانست به کارساز هویت وصل شود",
     "Not a valid identity server (status code %(code)s)": "کارساز هویت معتبر نیست (کد وضعیت %(code)s)",
@@ -2073,7 +1961,6 @@
     "Deactivating your account is a permanent action — be careful!": "غیرفعال سازی اکانت شما یک اقدام دائمی است - مراقب باشید!",
     "Enter your Security Phrase or <button>use your Security Key</button> to continue.": "عبارت امنیتی خود را وارد کنید و یا <button>کلید امنیتی خود را استفاده کنید</button>.",
     "You were disconnected from the call. (Error: %(message)s)": "شما از تماس قطع شدید.(خطا: %(message)s)",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "اطلاعات خود را به صورت ناشناس با ما به اشتراک بگذارید تا متوجه مشکلات موجود شویم. بدون استفاده شخصی توسط خود و یا شرکا<LearnMoreLink>یادگیری بیشتر</LearnMoreLink>",
     "In %(spaceName)s.": "در فضای %(spaceName)s.",
     "In %(spaceName)s and %(count)s other spaces.": {
         "other": "در %(spaceName)s و %(count)s دیگر فضاها."
@@ -2096,8 +1983,6 @@
     "There was an error joining.": "خطایی در هنگام پیوستن رخ داده است.",
     "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.": "%(brand)s در مرورگر موبایل بدرستی نمایش داده نمی‌شود، پیشنهاد میکنیم از نرم افزار موبایل رایگان ما در این‌باره استفاده نمایید.",
     "Unknown room": "اتاق ناشناس",
-    "Help improve %(analyticsOwner)s": "بهتر کردن راهنمای کاربری %(analyticsOwner)s",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "شما به ارسال گزارش چگونگی استفاده از سرویس رضایت داده بودید. ما نحوه استفاده از این اطلاعات را بروز میکنیم.",
     "That's fine": "بسیارعالی",
     "Reset bearing to north": "بازنشانی جهت شمال",
     "Mapbox logo": "لوگوی جعبه نقشه",
@@ -2220,7 +2105,9 @@
         "stickerpack": "استیکر",
         "system_alerts": "هشدارهای سیستم",
         "secure_backup": "پشتیبان‌گیری امن",
-        "cross_signing": "امضاء متقابل"
+        "cross_signing": "امضاء متقابل",
+        "identity_server": "کارساز هویت",
+        "integration_manager": "مدیر یکپارچگی"
     },
     "action": {
         "continue": "ادامه",
@@ -2367,7 +2254,8 @@
         "collecting_information": "درحال جمع‌آوری اطلاعات نسخه‌ی برنامه",
         "collecting_logs": "درحال جمع‌آوری گزارش‌ها",
         "uploading_logs": "در حال بارگذاری لاگ‌ها",
-        "downloading_logs": "در حال دریافت لاگ‌ها"
+        "downloading_logs": "در حال دریافت لاگ‌ها",
+        "create_new_issue": "لطفا در GitHub <newIssueLink>یک مسئله جدید ایجاد کنید</newIssueLink> تا بتوانیم این اشکال را بررسی کنیم."
     },
     "time": {
         "seconds_left": "%(seconds)s ثانیه باقی‌مانده",
@@ -2590,6 +2478,97 @@
         },
         "m.call.hangup": {
             "dm": "تماس پایان یافت"
+        },
+        "summary": {
+            "format": "%(nameList)s.%(transitionList)s",
+            "joined_multiple": {
+                "one": "%(severalUsers)s عضو شدند",
+                "other": "%(severalUsers)s%(count)s مرتبه عضو شده‌اند"
+            },
+            "joined": {
+                "one": "%(oneUser)s پیوست",
+                "other": "%(oneUser)s %(count)s مرتبه عضو شدند"
+            },
+            "left_multiple": {
+                "one": "%(severalUsers)s خارج شدند",
+                "other": "%(severalUsers)s %(count)s مرتبه خارج شدند"
+            },
+            "left": {
+                "one": "%(oneUser)s خارج شد",
+                "other": "%(oneUser)s %(count)s مرتبه خارج شده‌است"
+            },
+            "joined_and_left_multiple": {
+                "one": "%(severalUsers)s عضو شدند و خارج شدند",
+                "other": "%(severalUsers)s %(count)s مرتبه عضو شده و خارج شدند"
+            },
+            "joined_and_left": {
+                "one": "%(oneUser)s پیوست و خارج شد",
+                "other": "%(oneUser)s %(count)s مرتبه عضو شده و خارج شدند"
+            },
+            "rejoined_multiple": {
+                "one": "%(severalUsers)s خارج شدند و مجددا عضو شدند",
+                "other": "%(severalUsers)s %(count)s مرتبه خارج شدند و مجددا عضو شدند"
+            },
+            "rejoined": {
+                "one": "%(oneUser)s خارج شد و مجددا عضو شد",
+                "other": "%(oneUser)s %(count)s مرتبه خارج شد و مجددا عضو شد"
+            },
+            "rejected_invite_multiple": {
+                "one": "%(severalUsers)s دعوت‌های خود را رد کردند",
+                "other": "%(severalUsers)s دعوت خود را %(count)s مرتبه رد کردند"
+            },
+            "rejected_invite": {
+                "one": "%(oneUser)s دعوت خود را رد کرد",
+                "other": "%(oneUser)s دعوت خود را %(count)s مرتبه رد کرد"
+            },
+            "invite_withdrawn_multiple": {
+                "one": "%(severalUsers)s دعوت‌های خود را پس‌گرفتند",
+                "other": "%(severalUsers)s دعوت خود را %(count)s مرتبه پس‌گرفتند"
+            },
+            "invite_withdrawn": {
+                "one": "%(oneUser)s دعوت خود را پس گرفته است",
+                "other": "%(oneUser)s دعوت خود را %(count)s مرتبه پس‌گرفته‌است"
+            },
+            "invited_multiple": {
+                "one": "دعوت شدند",
+                "other": "%(count)s بار دعوت شده‌اند"
+            },
+            "invited": {
+                "one": "دعوت شد",
+                "other": "%(count)s بار دعوت شده است"
+            },
+            "banned_multiple": {
+                "one": "تحریم شد",
+                "other": "%(count)s بار تحریم شد"
+            },
+            "banned": {
+                "one": "تحریم شد",
+                "other": "%(count)s بار تحریم شد"
+            },
+            "unbanned_multiple": {
+                "one": "رفع تحریم شد",
+                "other": "%(count)s بار رفع تحریم شد"
+            },
+            "unbanned": {
+                "one": "رفع تحریم شد",
+                "other": "%(count)s بار رفع تحریم شد"
+            },
+            "changed_name_multiple": {
+                "one": "%(severalUsers)s نام خود را تغییر دادند",
+                "other": "%(severalUsers)s نام خود را %(count)s بار تغییر دادند"
+            },
+            "changed_name": {
+                "one": "%(oneUser)s نام خود را تغییر داد",
+                "other": "%(oneUser)s نام خود را %(count)s مرتبه تغییر داد"
+            },
+            "no_change_multiple": {
+                "one": "%(severalUsers)s هیچ تغییری ایجاد نکردند",
+                "other": "%(severalUsers)s %(count)s تغییری ایجاد نکردند"
+            },
+            "no_change": {
+                "one": "%(oneUser)s هیچ تغییری ایجاد نکرد",
+                "other": "%(oneUser)s %(count)s مرتبه هیچ تغییری ایجاد نکرد"
+            }
         }
     },
     "slash_command": {
@@ -2716,5 +2695,36 @@
             "redact": "پاک‌کردن پیام‌های دیگران",
             "notifications.room": "اعلان عمومی به همه"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "مطابقت ندارند",
+            "sas_match": "مطابقت دارند",
+            "in_person": "برای حفظ امنیت، خودتان این کار را انجام دهید و یا از یک روش ارتباطی قابل اعتماد استفاده نمائید.",
+            "other_party_cancelled": "طرف مقابل فرآیند تائید را لغو کرد.",
+            "complete_title": "تائید شد!",
+            "complete_description": "شما با موفقیت این کاربر را تائید کردید.",
+            "qr_prompt": "این QR-code منحصر به فرد را اسکن کنید",
+            "sas_prompt": "شکلک‌های منحصر به فرد را مقایسه کنید",
+            "sas_description": "اگر بر روی دستگاه خود دوربین ندارید، از تطابق شکلک‌های منحصر به فرد استفاده نمائید"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "متداول",
+        "category_smileys_people": "لبخند و افراد",
+        "category_animals_nature": "حیوانات و طبیعت",
+        "category_food_drink": "غذا و نوشیدنی",
+        "category_activities": "فعالیت ها",
+        "category_travel_places": "سفر و اماکن",
+        "category_objects": "اشیاء",
+        "category_symbols": "نمادها",
+        "category_flags": "پرچم ها",
+        "categories": "دسته بندی ها",
+        "quick_reactions": "واکنش سریع"
+    },
+    "analytics": {
+        "enable_prompt": "بهتر کردن راهنمای کاربری %(analyticsOwner)s",
+        "consent_migration": "شما به ارسال گزارش چگونگی استفاده از سرویس رضایت داده بودید. ما نحوه استفاده از این اطلاعات را بروز میکنیم.",
+        "learn_more": "اطلاعات خود را به صورت ناشناس با ما به اشتراک بگذارید تا متوجه مشکلات موجود شویم. بدون استفاده شخصی توسط خود و یا شرکا<LearnMoreLink>یادگیری بیشتر</LearnMoreLink>"
     }
 }

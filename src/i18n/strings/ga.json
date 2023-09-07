@@ -245,7 +245,6 @@
     "Activity": "Gníomhaíocht",
     "Feedback": "Aiseolas",
     "Ok": "Togha",
-    "Categories": "Catagóire",
     "Autocomplete": "Uathiomlánaigh",
     "Calls": "Glaonna",
     "Navigation": "Nascleanúint",
@@ -257,10 +256,6 @@
     "Lock": "Glasáil",
     "Unencrypted": "Gan chriptiú",
     "None": "Níl aon cheann",
-    "Flags": "Bratacha",
-    "Symbols": "Siombailí",
-    "Objects": "Rudaí",
-    "Activities": "Gníomhaíochtaí",
     "Document": "Cáipéis",
     "Italics": "Iodálach",
     "Discovery": "Aimsiú",
@@ -279,18 +274,6 @@
     "Notes": "Nótaí",
     "expand": "méadaigh",
     "collapse": "cumaisc",
-    "%(oneUser)sleft %(count)s times": {
-        "one": "D'fhág %(oneUser)s"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "one": "D'fhág %(severalUsers)s"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "one": "Tháinig %(oneUser)s isteach"
-    },
-    "%(severalUsers)sjoined %(count)s times": {
-        "one": "Tháinig %(severalUsers)s isteach"
-    },
     "edited": "curtha in eagar",
     "Copied!": "Cóipeáilte!",
     "Yesterday": "Inné",
@@ -400,7 +383,6 @@
     "Lion": "Leon",
     "Cat": "Cat",
     "Dog": "Madra",
-    "Verified!": "Deimhnithe!",
     "Reason": "Cúis",
     "Moderator": "Modhnóir",
     "Restricted": "Teoranta",
@@ -722,6 +704,20 @@
         },
         "m.call.hangup": {
             "dm": "Críochnaíodh an glao"
+        },
+        "summary": {
+            "joined_multiple": {
+                "one": "Tháinig %(severalUsers)s isteach"
+            },
+            "joined": {
+                "one": "Tháinig %(oneUser)s isteach"
+            },
+            "left_multiple": {
+                "one": "D'fhág %(severalUsers)s"
+            },
+            "left": {
+                "one": "D'fhág %(oneUser)s"
+            }
         }
     },
     "slash_command": {
@@ -789,5 +785,17 @@
             "ban": "Toirmisc úsáideoirí",
             "notifications.room": "Tabhair fógraí do gach duine"
         }
+    },
+    "encryption": {
+        "verification": {
+            "complete_title": "Deimhnithe!"
+        }
+    },
+    "emoji": {
+        "category_activities": "Gníomhaíochtaí",
+        "category_objects": "Rudaí",
+        "category_symbols": "Siombailí",
+        "category_flags": "Bratacha",
+        "categories": "Catagóire"
     }
 }

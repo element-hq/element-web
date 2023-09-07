@@ -143,8 +143,10 @@
         "public": "Public",
         "private": "Private",
         "options": "Options",
+        "integration_manager": "Integration manager",
         "message_layout": "Message layout",
         "modern": "Modern",
+        "identity_server": "Identity server",
         "success": "Success",
         "legal": "Legal",
         "credits": "Credits",
@@ -556,6 +558,145 @@
         },
         "m.call.hangup": {
             "dm": "Call ended"
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)sjoined %(count)s times",
+                "one": "%(severalUsers)sjoined"
+            },
+            "joined": {
+                "other": "%(oneUser)sjoined %(count)s times",
+                "one": "%(oneUser)sjoined"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)sleft %(count)s times",
+                "one": "%(severalUsers)sleft"
+            },
+            "left": {
+                "other": "%(oneUser)sleft %(count)s times",
+                "one": "%(oneUser)sleft"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)sjoined and left %(count)s times",
+                "one": "%(severalUsers)sjoined and left"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)sjoined and left %(count)s times",
+                "one": "%(oneUser)sjoined and left"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)sleft and rejoined %(count)s times",
+                "one": "%(severalUsers)sleft and rejoined"
+            },
+            "rejoined": {
+                "other": "%(oneUser)sleft and rejoined %(count)s times",
+                "one": "%(oneUser)sleft and rejoined"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)srejected their invitations %(count)s times",
+                "one": "%(severalUsers)srejected their invitations"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)srejected their invitation %(count)s times",
+                "one": "%(oneUser)srejected their invitation"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)shad their invitations withdrawn %(count)s times",
+                "one": "%(severalUsers)shad their invitations withdrawn"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)shad their invitation withdrawn %(count)s times",
+                "one": "%(oneUser)shad their invitation withdrawn"
+            },
+            "invited_multiple": {
+                "other": "were invited %(count)s times",
+                "one": "were invited"
+            },
+            "invited": {
+                "other": "was invited %(count)s times",
+                "one": "was invited"
+            },
+            "banned_multiple": {
+                "other": "were banned %(count)s times",
+                "one": "were banned"
+            },
+            "banned": {
+                "other": "was banned %(count)s times",
+                "one": "was banned"
+            },
+            "unbanned_multiple": {
+                "other": "were unbanned %(count)s times",
+                "one": "were unbanned"
+            },
+            "unbanned": {
+                "other": "was unbanned %(count)s times",
+                "one": "was unbanned"
+            },
+            "kicked_multiple": {
+                "other": "were removed %(count)s times",
+                "one": "were removed"
+            },
+            "kicked": {
+                "other": "was removed %(count)s times",
+                "one": "was removed"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)schanged their name %(count)s times",
+                "one": "%(severalUsers)schanged their name"
+            },
+            "changed_name": {
+                "other": "%(oneUser)schanged their name %(count)s times",
+                "one": "%(oneUser)schanged their name"
+            },
+            "changed_avatar_multiple": {
+                "other": "%(severalUsers)schanged their profile picture %(count)s times",
+                "one": "%(severalUsers)schanged their profile picture"
+            },
+            "changed_avatar": {
+                "other": "%(oneUser)schanged their profile picture %(count)s times",
+                "one": "%(oneUser)schanged their profile picture"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)smade no changes %(count)s times",
+                "one": "%(severalUsers)smade no changes"
+            },
+            "no_change": {
+                "other": "%(oneUser)smade no changes %(count)s times",
+                "one": "%(oneUser)smade no changes"
+            },
+            "server_acls_multiple": {
+                "other": "%(severalUsers)schanged the server ACLs %(count)s times",
+                "one": "%(severalUsers)schanged the server ACLs"
+            },
+            "server_acls": {
+                "other": "%(oneUser)schanged the server ACLs %(count)s times",
+                "one": "%(oneUser)schanged the server ACLs"
+            },
+            "pinned_events_multiple": {
+                "other": "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times",
+                "one": "%(severalUsers)schanged the <a>pinned messages</a> for the room"
+            },
+            "pinned_events": {
+                "other": "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times",
+                "one": "%(oneUser)schanged the <a>pinned messages</a> for the room"
+            },
+            "redacted_multiple": {
+                "other": "%(severalUsers)sremoved %(count)s messages",
+                "one": "%(severalUsers)sremoved a message"
+            },
+            "redacted": {
+                "other": "%(oneUser)sremoved %(count)s messages",
+                "one": "%(oneUser)sremoved a message"
+            },
+            "hidden_event_multiple": {
+                "other": "%(severalUsers)ssent %(count)s hidden messages",
+                "one": "%(severalUsers)ssent a hidden message"
+            },
+            "hidden_event": {
+                "other": "%(oneUser)ssent %(count)s hidden messages",
+                "one": "%(oneUser)ssent a hidden message"
+            }
         }
     },
     "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
@@ -834,9 +975,16 @@
         "creating_output": "Creating output…"
     },
     "That's fine": "That's fine",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "You previously consented to share anonymous usage data with us. We're updating how that works.",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>",
-    "Help improve %(analyticsOwner)s": "Help improve %(analyticsOwner)s",
+    "analytics": {
+        "consent_migration": "You previously consented to share anonymous usage data with us. We're updating how that works.",
+        "learn_more": "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>",
+        "enable_prompt": "Help improve %(analyticsOwner)s",
+        "privacy_policy": "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.",
+        "bullet_1": "We <Bold>don't</Bold> record or profile any account data",
+        "bullet_2": "We <Bold>don't</Bold> share information with third parties",
+        "disable_prompt": "You can turn this off anytime in settings"
+    },
     "You have unverified sessions": "You have unverified sessions",
     "Review to ensure your account is safe": "Review to ensure your account is safe",
     "Later": "Later",
@@ -1024,6 +1172,10 @@
             "rule_call": "Call invitation",
             "rule_suppress_notices": "Messages sent by bot",
             "rule_tombstone": "When rooms are upgraded"
+        },
+        "appearance": {
+            "layout_irc": "IRC (Experimental)",
+            "layout_bubbles": "Message bubbles"
         }
     },
     "Your server doesn't support disabling sending read receipts.": "Your server doesn't support disabling sending read receipts.",
@@ -1082,6 +1234,7 @@
         "description": "Debug logs contain application usage data including your username, the IDs or aliases of the rooms you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.",
         "submit_debug_logs": "Submit debug logs",
         "matrix_security_issue": "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.",
+        "create_new_issue": "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.",
         "before_submitting": "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.",
         "download_logs": "Download logs",
         "github_issue": "GitHub issue",
@@ -1162,9 +1315,22 @@
     "Hide sidebar": "Hide sidebar",
     "Show sidebar": "Show sidebar",
     "More": "More",
-    "The other party cancelled the verification.": "The other party cancelled the verification.",
-    "Verified!": "Verified!",
-    "You've successfully verified this user.": "You've successfully verified this user.",
+    "encryption": {
+        "verification": {
+            "other_party_cancelled": "The other party cancelled the verification.",
+            "complete_title": "Verified!",
+            "complete_description": "You've successfully verified this user.",
+            "sas_no_match": "They don't match",
+            "sas_match": "They match",
+            "in_person": "To be secure, do this in person or use a trusted way to communicate.",
+            "no_support_qr_emoji": "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
+            "qr_prompt": "Scan this unique code",
+            "sas_prompt": "Compare unique emoji",
+            "sas_description": "Compare a unique set of emoji if you don't have a camera on either device",
+            "qr_or_sas": "%(qrCode)s or %(emojiCompare)s",
+            "qr_or_sas_header": "Verify this device by completing one of the following:"
+        }
+    },
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.",
     "Got It": "Got It",
     "Confirm the emoji below are displayed on both devices, in the same order:": "Confirm the emoji below are displayed on both devices, in the same order:",
@@ -1176,9 +1342,6 @@
     "Waiting for you to verify on your other device…": "Waiting for you to verify on your other device…",
     "Waiting for %(displayName)s to verify…": "Waiting for %(displayName)s to verify…",
     "Cancelling…": "Cancelling…",
-    "They don't match": "They don't match",
-    "They match": "They match",
-    "To be secure, do this in person or use a trusted way to communicate.": "To be secure, do this in person or use a trusted way to communicate.",
     "Your server isn't responding to some <a>requests</a>.": "Your server isn't responding to some <a>requests</a>.",
     "%(deviceId)s from %(ip)s": "%(deviceId)s from %(ip)s",
     "Ignore (%(counter)s)": "Ignore (%(counter)s)",
@@ -1300,7 +1463,6 @@
     "Connecting to integration manager…": "Connecting to integration manager…",
     "Cannot connect to integration manager": "Cannot connect to integration manager",
     "The integration manager is offline or it cannot reach your homeserver.": "The integration manager is offline or it cannot reach your homeserver.",
-    "Integration manager": "Integration manager",
     "Upgrading room": "Upgrading room",
     "Loading new room": "Loading new room",
     "Sending invites... (%(progress)s out of %(count)s)": {
@@ -1332,8 +1494,6 @@
     "People cannot join unless access is granted.": "People cannot join unless access is granted.",
     "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.",
     "This upgrade will allow members of selected spaces access to this room without an invite.": "This upgrade will allow members of selected spaces access to this room without an invite.",
-    "IRC (Experimental)": "IRC (Experimental)",
-    "Message bubbles": "Message bubbles",
     "Messages containing keywords": "Messages containing keywords",
     "Error saving notification preferences": "Error saving notification preferences",
     "An error occurred whilst saving your notification preferences.": "An error occurred whilst saving your notification preferences.",
@@ -1408,7 +1568,6 @@
     "Identity server (%(server)s)": "Identity server (%(server)s)",
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.",
     "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.",
-    "Identity server": "Identity server",
     "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.",
@@ -2221,12 +2380,6 @@
     "Role in <RoomName/>": "Role in <RoomName/>",
     "This client does not support end-to-end encryption.": "This client does not support end-to-end encryption.",
     "Edit devices": "Edit devices",
-    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
-    "Scan this unique code": "Scan this unique code",
-    "Compare unique emoji": "Compare unique emoji",
-    "Compare a unique set of emoji if you don't have a camera on either device": "Compare a unique set of emoji if you don't have a camera on either device",
-    "%(qrCode)s or %(emojiCompare)s": "%(qrCode)s or %(emojiCompare)s",
-    "Verify this device by completing one of the following:": "Verify this device by completing one of the following:",
     "Verify by scanning": "Verify by scanning",
     "Ask %(displayName)s to scan your code:": "Ask %(displayName)s to scan your code:",
     "If you can't scan the code above, verify by comparing unique emoji.": "If you can't scan the code above, verify by comparing unique emoji.",
@@ -2402,17 +2555,19 @@
     "My live location": "My live location",
     "Drop a Pin": "Drop a Pin",
     "What location type do you want to share?": "What location type do you want to share?",
-    "Frequently Used": "Frequently Used",
-    "Smileys & People": "Smileys & People",
-    "Animals & Nature": "Animals & Nature",
-    "Food & Drink": "Food & Drink",
-    "Activities": "Activities",
-    "Travel & Places": "Travel & Places",
-    "Objects": "Objects",
-    "Symbols": "Symbols",
-    "Flags": "Flags",
-    "Categories": "Categories",
-    "Quick Reactions": "Quick Reactions",
+    "emoji": {
+        "category_frequently_used": "Frequently Used",
+        "category_smileys_people": "Smileys & People",
+        "category_animals_nature": "Animals & Nature",
+        "category_food_drink": "Food & Drink",
+        "category_activities": "Activities",
+        "category_travel_places": "Travel & Places",
+        "category_objects": "Objects",
+        "category_symbols": "Symbols",
+        "category_flags": "Flags",
+        "categories": "Categories",
+        "quick_reactions": "Quick Reactions"
+    },
     "Cancel search": "Cancel search",
     "Any of the following data may be shared:": "Any of the following data may be shared:",
     "Your display name": "Your display name",
@@ -2450,145 +2605,7 @@
         "shift": "Shift",
         "number": "[number]"
     },
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.",
     "Something went wrong!": "Something went wrong!",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)sjoined %(count)s times",
-        "one": "%(severalUsers)sjoined"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)sjoined %(count)s times",
-        "one": "%(oneUser)sjoined"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)sleft %(count)s times",
-        "one": "%(severalUsers)sleft"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)sleft %(count)s times",
-        "one": "%(oneUser)sleft"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)sjoined and left %(count)s times",
-        "one": "%(severalUsers)sjoined and left"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)sjoined and left %(count)s times",
-        "one": "%(oneUser)sjoined and left"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)sleft and rejoined %(count)s times",
-        "one": "%(severalUsers)sleft and rejoined"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)sleft and rejoined %(count)s times",
-        "one": "%(oneUser)sleft and rejoined"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)srejected their invitations %(count)s times",
-        "one": "%(severalUsers)srejected their invitations"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)srejected their invitation %(count)s times",
-        "one": "%(oneUser)srejected their invitation"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)shad their invitations withdrawn %(count)s times",
-        "one": "%(severalUsers)shad their invitations withdrawn"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)shad their invitation withdrawn %(count)s times",
-        "one": "%(oneUser)shad their invitation withdrawn"
-    },
-    "were invited %(count)s times": {
-        "other": "were invited %(count)s times",
-        "one": "were invited"
-    },
-    "was invited %(count)s times": {
-        "other": "was invited %(count)s times",
-        "one": "was invited"
-    },
-    "were banned %(count)s times": {
-        "other": "were banned %(count)s times",
-        "one": "were banned"
-    },
-    "was banned %(count)s times": {
-        "other": "was banned %(count)s times",
-        "one": "was banned"
-    },
-    "were unbanned %(count)s times": {
-        "other": "were unbanned %(count)s times",
-        "one": "were unbanned"
-    },
-    "was unbanned %(count)s times": {
-        "other": "was unbanned %(count)s times",
-        "one": "was unbanned"
-    },
-    "were removed %(count)s times": {
-        "other": "were removed %(count)s times",
-        "one": "were removed"
-    },
-    "was removed %(count)s times": {
-        "other": "was removed %(count)s times",
-        "one": "was removed"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)schanged their name %(count)s times",
-        "one": "%(severalUsers)schanged their name"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)schanged their name %(count)s times",
-        "one": "%(oneUser)schanged their name"
-    },
-    "%(severalUsers)schanged their profile picture %(count)s times": {
-        "other": "%(severalUsers)schanged their profile picture %(count)s times",
-        "one": "%(severalUsers)schanged their profile picture"
-    },
-    "%(oneUser)schanged their profile picture %(count)s times": {
-        "other": "%(oneUser)schanged their profile picture %(count)s times",
-        "one": "%(oneUser)schanged their profile picture"
-    },
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)smade no changes %(count)s times",
-        "one": "%(severalUsers)smade no changes"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)smade no changes %(count)s times",
-        "one": "%(oneUser)smade no changes"
-    },
-    "%(severalUsers)schanged the server ACLs %(count)s times": {
-        "other": "%(severalUsers)schanged the server ACLs %(count)s times",
-        "one": "%(severalUsers)schanged the server ACLs"
-    },
-    "%(oneUser)schanged the server ACLs %(count)s times": {
-        "other": "%(oneUser)schanged the server ACLs %(count)s times",
-        "one": "%(oneUser)schanged the server ACLs"
-    },
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "other": "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times",
-        "one": "%(severalUsers)schanged the <a>pinned messages</a> for the room"
-    },
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "other": "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times",
-        "one": "%(oneUser)schanged the <a>pinned messages</a> for the room"
-    },
-    "%(severalUsers)sremoved a message %(count)s times": {
-        "other": "%(severalUsers)sremoved %(count)s messages",
-        "one": "%(severalUsers)sremoved a message"
-    },
-    "%(oneUser)sremoved a message %(count)s times": {
-        "other": "%(oneUser)sremoved %(count)s messages",
-        "one": "%(oneUser)sremoved a message"
-    },
-    "%(severalUsers)ssent %(count)s hidden messages": {
-        "other": "%(severalUsers)ssent %(count)s hidden messages",
-        "one": "%(severalUsers)ssent a hidden message"
-    },
-    "%(oneUser)ssent %(count)s hidden messages": {
-        "other": "%(oneUser)ssent %(count)s hidden messages",
-        "one": "%(oneUser)ssent a hidden message"
-    },
     "Image view": "Image view",
     "Rotate Left": "Rotate Left",
     "Rotate Right": "Rotate Right",
@@ -2690,11 +2707,6 @@
     "Create a new room": "Create a new room",
     "Search for rooms": "Search for rooms",
     "Adding spaces has moved.": "Adding spaces has moved.",
-    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>",
-    "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.",
-    "We <Bold>don't</Bold> record or profile any account data": "We <Bold>don't</Bold> record or profile any account data",
-    "We <Bold>don't</Bold> share information with third parties": "We <Bold>don't</Bold> share information with third parties",
-    "You can turn this off anytime in settings": "You can turn this off anytime in settings",
     "Download %(brand)s": "Download %(brand)s",
     "Download %(brand)s Desktop": "Download %(brand)s Desktop",
     "%(qrCode)s or %(appLinks)s": "%(qrCode)s or %(appLinks)s",
@@ -3100,7 +3112,6 @@
     "Reset event store": "Reset event store",
     "Sign out and remove encryption keys?": "Sign out and remove encryption keys?",
     "Clear Storage and Sign Out": "Clear Storage and Sign Out",
-    "Send Logs": "Send Logs",
     "Unable to restore session": "Unable to restore session",
     "We encountered an error trying to restore your previous session.": "We encountered an error trying to restore your previous session.",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",

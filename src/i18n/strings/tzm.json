@@ -49,7 +49,6 @@
     "Phone": "Atilifun",
     "Email": "Imayl",
     "Send": "Azen",
-    "Flags": "Icenyalen",
     "edited": "infel",
     "Copied!": "inɣel!",
     "Home": "Asnubeg",
@@ -155,5 +154,8 @@
     "devtools": {
         "category_other": "Yaḍn"
     },
-    "Other": "Yaḍn"
+    "Other": "Yaḍn",
+    "emoji": {
+        "category_flags": "Icenyalen"
+    }
 }

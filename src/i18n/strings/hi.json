@@ -164,9 +164,6 @@
     "Unrecognised address": "अपरिचित पता",
     "Straight rows of keys are easy to guess": "कुंजी की सीधी पंक्तियों का अनुमान लगाना आसान है",
     "Short keyboard patterns are easy to guess": "लघु कीबोर्ड पैटर्न का अनुमान लगाना आसान है",
-    "The other party cancelled the verification.": "दूसरे पक्ष ने सत्यापन रद्द कर दिया।",
-    "Verified!": "सत्यापित!",
-    "You've successfully verified this user.": "आपने इस उपयोगकर्ता को सफलतापूर्वक सत्यापित कर लिया है।",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "इस उपयोगकर्ता के सुरक्षित संदेश एंड-टू-एंड एन्क्रिप्टेड हैं और तीसरे पक्ष द्वारा पढ़ने में सक्षम नहीं हैं।",
     "Got It": "समझ गया",
     "Verify this user by confirming the following emoji appear on their screen.": "इस उपयोगकर्ता की पुष्टि करें कि उनकी स्क्रीन पर निम्नलिखित इमोजी दिखाई देते हैं।",
@@ -680,5 +677,12 @@
     "composer": {
         "placeholder_reply_encrypted": "एक एन्क्रिप्टेड उत्तर भेजें …",
         "placeholder_encrypted": "एक एन्क्रिप्टेड संदेश भेजें …"
+    },
+    "encryption": {
+        "verification": {
+            "other_party_cancelled": "दूसरे पक्ष ने सत्यापन रद्द कर दिया।",
+            "complete_title": "सत्यापित!",
+            "complete_description": "आपने इस उपयोगकर्ता को सफलतापूर्वक सत्यापित कर लिया है।"
+        }
     }
 }

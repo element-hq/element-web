@@ -1,9 +1,11 @@
 {
     "Create Account": "Otvori račun",
     "Explore rooms": "Istražite sobe",
-    "Identity server": "Identifikacioni Server",
     "action": {
         "dismiss": "Odbaci",
         "sign_in": "Prijavite se"
+    },
+    "common": {
+        "identity_server": "Identifikacioni Server"
     }
 }

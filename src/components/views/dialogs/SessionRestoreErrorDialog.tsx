@@ -67,7 +67,7 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
         if (SdkConfig.get().bug_report_endpoint_url) {
             dialogButtons = (
                 <DialogButtons
-                    primaryButton={_t("Send Logs")}
+                    primaryButton={_t("bug_reporting|send_logs")}
                     onPrimaryButtonClick={this.sendBugReport}
                     focus={true}
                     hasCancel={false}

@@ -241,87 +241,6 @@
     "Members only (since they were invited)": "Csak tagoknak (a meghívásuk idejétől)",
     "Members only (since they joined)": "Csak tagoknak (amióta csatlakoztak)",
     "A text message has been sent to %(msisdn)s": "Szöveges üzenetet küldtünk neki: %(msisdn)s",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s %(count)s alkalommal csatlakozott",
-        "one": "%(severalUsers)s csatlakozott"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s %(count)s alkalommal csatlakozott",
-        "one": "%(oneUser)s csatlakozott"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s %(count)s alkalommal távozott",
-        "one": "%(severalUsers)s távozott"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s %(count)s alkalommal távozott",
-        "one": "%(oneUser)s távozott"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s %(count)s alkalommal csatlakozott és távozott",
-        "one": "%(severalUsers)s csatlakozott és távozott"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s %(count)s alkalommal csatlakozott és távozott",
-        "one": "%(oneUser)s csatlakozott és távozott"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s %(count)s alkalommal távozott és újra csatlakozott",
-        "one": "%(severalUsers)s távozott és újra csatlakozott"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s %(count)s alkalommal távozott és újra csatlakozott",
-        "one": "%(oneUser)s távozott és újra csatlakozott"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s %(count)s alkalommal elutasította a meghívóit",
-        "one": "%(severalUsers)s elutasította a meghívóit"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s %(count)s alkalommal elutasította a meghívóit",
-        "one": "%(oneUser)s elutasította a meghívóit"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)s meghívóit %(count)s alkalommal visszavonták",
-        "one": "%(severalUsers)s visszavonták a meghívásukat"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)s meghívóit %(count)s alkalommal vonták vissza",
-        "one": "%(oneUser)s meghívóit visszavonták"
-    },
-    "were invited %(count)s times": {
-        "other": "%(count)s alkalommal lett meghívva",
-        "one": "meg lett hívva"
-    },
-    "was invited %(count)s times": {
-        "other": "%(count)s alkalommal lett meghívva",
-        "one": "meg lett hívva"
-    },
-    "were banned %(count)s times": {
-        "other": "%(count)s alkalommal lett kitiltva",
-        "one": "lett kitiltva"
-    },
-    "was banned %(count)s times": {
-        "other": "%(count)s alkalommal lett kitiltva",
-        "one": "ki lett tiltva"
-    },
-    "were unbanned %(count)s times": {
-        "other": "%(count)s alkalommal lett visszaengedve",
-        "one": "vissza lett engedve"
-    },
-    "was unbanned %(count)s times": {
-        "other": "%(count)s alkalommal lett visszaengedve",
-        "one": "vissza lett engedve"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s %(count)s alkalommal megváltoztatta a nevét",
-        "one": "%(severalUsers)s megváltoztatta a nevét"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s %(count)s alkalommal megváltoztatta a nevét",
-        "one": "%(oneUser)s megváltoztatta a nevét"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s és még %(count)s másik",
         "one": "%(items)s és még egy másik"
@@ -506,9 +425,6 @@
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Az alábbi Matrix ID-koz nem sikerül megtalálni a profilokat - így is meghívod őket?",
     "Invite anyway and never warn me again": "Mindenképpen meghív és ne figyelmeztess többet",
     "Invite anyway": "Meghívás mindenképp",
-    "The other party cancelled the verification.": "A másik fél megszakította az ellenőrzést.",
-    "Verified!": "Ellenőrizve!",
-    "You've successfully verified this user.": "Sikeresen ellenőrizte ezt a felhasználót.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Az ezzel felhasználóval váltott biztonságos üzenetek végpontok közti titkosítással védettek, és azt harmadik fél nem tudja elolvasni.",
     "Got It": "Megértettem",
     "Verify this user by confirming the following number appears on their screen.": "Ellenőrizze ezt a felhasználót azzal, hogy megerősíti, hogy a következő szám jelenik meg a képernyőjén.",
@@ -752,14 +668,6 @@
     "Edited at %(date)s. Click to view edits.": "Szerkesztés ideje: %(date)s. Kattintson a szerkesztések megtekintéséhez.",
     "Message edits": "Üzenetszerkesztések",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "A szoba fejlesztéséhez be kell zárnia ezt a szobát, és egy újat kell létrehoznia helyette. Hogy a szoba tagjai számára a lehető legjobb legyen a felhasználói élmény, a következők lépések lesznek végrehajtva:",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)s %(count)s alkalommal nem változtattak semmit",
-        "one": "%(severalUsers)s nem változtattak semmit"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)s %(count)s alkalommal nem változtatott semmit",
-        "one": "%(oneUser)snem változtatott semmit"
-    },
     "Removing…": "Eltávolítás…",
     "Clear all data": "Minden adat törlése",
     "Your homeserver doesn't seem to support this feature.": "Úgy tűnik, hogy a Matrix-kiszolgálója nem támogatja ezt a szolgáltatást.",
@@ -867,7 +775,6 @@
         "one": "1 olvasatlan üzenet."
     },
     "Show image": "Kép megjelenítése",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Ahhoz hogy megvizsgálhassuk a hibát, <newIssueLink>hozzon létre egy új hibajegyet</newIssueLink> a GitHubon.",
     "To continue you need to accept the terms of this service.": "A folytatáshoz el kell fogadnia a felhasználási feltételeket.",
     "Document": "Dokumentum",
     "Emoji Autocomplete": "Emodzsi automatikus kiegészítése",
@@ -889,16 +796,6 @@
     "This client does not support end-to-end encryption.": "A kliens nem támogatja a végponttól végpontig való titkosítást.",
     "Messages in this room are not end-to-end encrypted.": "Az üzenetek a szobában nincsenek végponttól végpontig titkosítva.",
     "Command Autocomplete": "Parancs automatikus kiegészítés",
-    "Quick Reactions": "Gyors reakciók",
-    "Frequently Used": "Gyakran használt",
-    "Smileys & People": "Mosolyok és emberek",
-    "Animals & Nature": "Állatok és természet",
-    "Food & Drink": "Étel és ital",
-    "Activities": "Mozgás",
-    "Travel & Places": "Utazás és helyek",
-    "Objects": "Tárgyak",
-    "Symbols": "Szimbólumok",
-    "Flags": "Zászlók",
     "Cancel search": "Keresés megszakítása",
     "Jump to first unread room.": "Ugrás az első olvasatlan szobához.",
     "Jump to first invite.": "Újrás az első meghívóhoz.",
@@ -1056,9 +953,6 @@
     "Never send encrypted messages to unverified sessions in this room from this session": "Ebben a szobában sose küldjön titkosított üzenetet ellenőrizetlen munkamenetekbe ebből a munkamenetből",
     "How fast should messages be downloaded.": "Milyen gyorsan legyenek az üzenetek letöltve.",
     "Waiting for %(displayName)s to verify…": "Várakozás %(displayName)s felhasználóra az ellenőrzéshez…",
-    "They match": "Egyeznek",
-    "They don't match": "Nem egyeznek",
-    "To be secure, do this in person or use a trusted way to communicate.": "A biztonság érdekében ezt végezze el személyesen, vagy használjon megbízható kommunikációs csatornát.",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "A fiókjához tartozik egy eszközök közti hitelesítési identitás, de ez a munkamenet még nem jelölte megbízhatónak.",
     "in memory": "a memóriában",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "FIGYELEM: A KULCSELLENŐRZÉS SIKERTELEN! %(userId)s aláírási kulcsa és a(z) %(deviceId)s munkamenet ujjlenyomata „%(fprint)s”, amely nem egyezik meg a megadott ujjlenyomattal: „%(fingerprint)s”. Ez azt is jelentheti, hogy a kommunikációt lehallgatják.",
@@ -1111,9 +1005,6 @@
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Ha véletlenül tette, akkor beállíthatja a biztonságos üzeneteket ebben a munkamenetben, ami újra titkosítja a régi üzeneteket a helyreállítási móddal.",
     "Indexed rooms:": "Indexált szobák:",
     "Message downloading sleep time(ms)": "Üzenetletöltés alvási ideje (ms)",
-    "Scan this unique code": "Ennek az egyedi kódnak a beolvasása",
-    "Compare unique emoji": "Egyedi emodzsik összehasonlítása",
-    "Compare a unique set of emoji if you don't have a camera on either device": "Hasonlítsd össze az egyedi emodzsikat ha valamelyik eszközön nincs kamera",
     "Not Trusted": "Nem megbízható",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) új munkamenetbe lépett be, anélkül, hogy ellenőrizte volna:",
     "Ask this user to verify their session, or manually verify it below.": "Kérje meg a felhasználót, hogy hitelesítse a munkamenetét, vagy ellenőrizze kézzel lentebb.",
@@ -1280,7 +1171,6 @@
     "You don't have permission to delete the address.": "A cím törléséhez nincs jogosultságod.",
     "There was an error removing that address. It may no longer exist or a temporary error occurred.": "A cím törlésénél hiba történt. Vagy már nem létezik vagy átmeneti hiba történt.",
     "Error removing address": "Cím törlésénél hiba történt",
-    "Categories": "Kategóriák",
     "Room address": "Szoba címe",
     "This address is available to use": "Ez a cím használható",
     "This address is already in use": "Ez a cím már használatban van",
@@ -2007,14 +1897,6 @@
     "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s. The administrators will NOT be able to read the encrypted content of this room.": "Ez a szoba illegális vagy mérgező tartalmat közvetít, vagy a moderátorok képtelenek ezeket megfelelően moderálni.\nEz jelezve lesz a(z) %(homeserver)s rendszergazdái felé. Az rendszergazdák NEM tudják olvasni a szoba titkosított tartalmát.",
     "This user is spamming the room with ads, links to ads or to propaganda.\nThis will be reported to the room moderators.": "A felhasználó kéretlen reklámokkal, reklámhivatkozásokkal vagy propagandával bombázza a szobát.\nEz jelezve lesz a szoba moderátorai felé.",
     "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.": "A felhasználó illegális viselkedést valósít meg, például kipécézett valakit vagy tettlegességgel fenyeget.\nEz moderátorok felé jelzésre kerül akik akár hivatalos személyek felé továbbíthatják ezt.",
-    "%(oneUser)schanged the server ACLs %(count)s times": {
-        "one": "%(oneUser)smegváltoztatta a szerver ACL-eket",
-        "other": "%(oneUser)s %(count)s alkalommal megváltoztatta a kiszolgáló ACL-t"
-    },
-    "%(severalUsers)schanged the server ACLs %(count)s times": {
-        "other": "%(severalUsers)s %(count)s alkalommal megváltoztatta a kiszolgáló ACL-t",
-        "one": "%(severalUsers)smegváltoztatta a szerver ACL-eket"
-    },
     "Message search initialisation failed, check <a>your settings</a> for more information": "Üzenek keresés kezdő beállítása sikertelen, ellenőrizze a <a>beállításait</a> további információkért",
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "Cím beállítása ehhez a térhez, hogy a felhasználók a matrix szerveren megtalálhassák (%(localDomain)s)",
     "To publish an address, it needs to be set as a local address first.": "A cím publikálásához először helyi címet kell beállítani.",
@@ -2059,13 +1941,11 @@
     "Code blocks": "Kódblokkok",
     "Displaying time": "Idő megjelenítése",
     "Keyboard shortcuts": "Gyorsbillentyűk",
-    "Integration manager": "Integrációkezelő",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "A %(brand)s nem használhat Integrációs Menedzsert. Kérem vegye fel a kapcsolatot az adminisztrátorral.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Ennek a kisalkalmazásnak a használata adatot oszthat meg <helpIcon /> a(z) %(widgetDomain)s oldallal és az integrációkezelőjével.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Az integrációkezelők megkapják a beállításokat, módosíthatják a kisalkalmazásokat, szobameghívókat küldhetnek és a hozzáférési szintet állíthatnak be az Ön nevében.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Integrációkezelő használata a botok, kisalkalmazások és matricacsomagok kezeléséhez.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Integrációkezelő használata <b>(%(serverName)s)</b> a botok, kisalkalmazások és matricacsomagok kezeléséhez.",
-    "Identity server": "Azonosítási kiszolgáló",
     "Identity server (%(server)s)": "Azonosítási kiszolgáló (%(server)s)",
     "Could not connect to identity server": "Az azonosítási kiszolgálóhoz nem lehet csatlakozni",
     "Not a valid identity server (status code %(code)s)": "Az azonosítási kiszolgáló nem érvényes (állapotkód: %(code)s)",
@@ -2119,7 +1999,6 @@
     "Only invited people can join.": "Csak a meghívott emberek léphetnek be.",
     "Private (invite only)": "Privát (csak meghívóval)",
     "This upgrade will allow members of selected spaces access to this room without an invite.": "Ez a fejlesztés lehetővé teszi, hogy a kiválasztott terek tagjai meghívó nélkül is elérjék ezt a szobát.",
-    "Message bubbles": "Üzenetbuborékok",
     "There was an error loading your notification settings.": "Hiba történt az értesítés beállítások betöltése során.",
     "Mentions & keywords": "Megemlítések és kulcsszavak",
     "Global": "Globális",
@@ -2362,16 +2241,12 @@
     "Recently viewed": "Nemrég megtekintett",
     "To view all keyboard shortcuts, <a>click here</a>.": "Az összes gyorsbillentyű megtekintéséhez <a>kattintson ide</a>.",
     "Toggle space panel": "Tér panel be/ki",
-    "You can turn this off anytime in settings": "Ezt bármikor kikapcsolhatja a beállításokban",
-    "We <Bold>don't</Bold> share information with third parties": "<Bold>Nem</Bold> osztunk meg információt harmadik féllel",
-    "We <Bold>don't</Bold> record or profile any account data": "<Bold>Nem</Bold> mentünk vagy analizálunk semmilyen felhasználói adatot",
     "%(count)s votes cast. Vote to see the results": {
         "one": "%(count)s leadott szavazat. Szavazzon az eredmény megtekintéséhez",
         "other": "%(count)s leadott szavazat. Szavazzon az eredmény megtekintéséhez"
     },
     "No votes cast": "Nem adtak le szavazatot",
     "Share location": "Tartózkodási hely megosztása",
-    "Help improve %(analyticsOwner)s": "Segítsen jobbá tenni: %(analyticsOwner)s",
     "That's fine": "Rendben van",
     "You cannot place calls without a connection to the server.": "Nem kezdeményezhet hívást a kiszolgálóval való kapcsolat nélkül.",
     "Connectivity to the server has been lost": "Megszakadt a kapcsolat a kiszolgálóval",
@@ -2396,12 +2271,9 @@
     "Spaces you're in": "Terek, amelynek tagja",
     "Sections to show": "Megjelenítendő részek",
     "Link to room": "Hivatkozás a szobához",
-    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "Elolvashatja az összes feltételünket <PrivacyPolicyUrl>itt</PrivacyPolicyUrl>",
     "Including you, %(commaSeparatedMembers)s": "Önt is beleértve, %(commaSeparatedMembers)s",
     "Copy room link": "Szoba hivatkozásának másolása",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Anonimizált adatok megosztása a problémák feltárásához. Semmi személyes. Nincs harmadik fél.",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Anonimizált adatok megosztása a problémák feltárásához. Semmi személyes. Nincs harmadik fél. <LearnMoreLink>További információk</LearnMoreLink>",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "Előzőleg beleegyezett, hogy anonimizált használati adatokat oszt meg velünk. Most frissítjük ennek a működését.",
     "You may contact me if you want to follow up or to let me test out upcoming ideas": "Keressenek ha további információkra lenne szükségük vagy szeretnék, ha készülő ötleteket tesztelnék",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Ez csoportosítja a tér tagjaival folytatott közvetlen beszélgetéseit. A kikapcsolása elrejti ezeket a beszélgetéseket a(z) %(spaceName)s nézetéből.",
     "Your new device is now verified. Other users will see it as trusted.": "Az új eszköze ellenőrizve van. Mások megbízhatónak fogják látni.",
@@ -2418,8 +2290,6 @@
     "Expand map": "Térkép szétnyitása",
     "You cancelled verification on your other device.": "Az ellenőrzést megszakította a másik eszközön.",
     "Almost there! Is your other device showing the same shield?": "Majdnem kész! A többi eszköze is ugyanazt a pajzsot mutatja?",
-    "Verify this device by completing one of the following:": "Ellenőrizze ezt az eszközt az alábbiak egyikével:",
-    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "Az ellenőrizni kívánt eszköz nem támogatja se a QR kód beolvasást se az emodzsi ellenőrzést, amit a %(brand)s támogat. Próbálja meg egy másik klienssel.",
     "To proceed, please accept the verification request on your other device.": "A folytatáshoz fogadja el az ellenőrzés kérést a másik eszközről.",
     "Waiting for you to verify on your other device…": "Várakozás a másik eszköztől való ellenőrzésre…",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Várakozás a másik eszközről való ellenőrzésre: %(deviceName)s (%(deviceId)s)…",
@@ -2437,14 +2307,6 @@
     "Command error: Unable to handle slash command.": "Parancs hiba: A / jellel kezdődő parancs támogatott.",
     "Open this settings tab": "Beállítások fül megnyitása",
     "Space home": "Kezdő tér",
-    "was removed %(count)s times": {
-        "one": "eltávolítva",
-        "other": "%(count)s alkalommal lett eltávolítva"
-    },
-    "were removed %(count)s times": {
-        "one": "eltávolítva",
-        "other": "%(count)s alkalommal lett eltávolítva"
-    },
     "Unknown error fetching location. Please try again later.": "Ismeretlen hiba a földrajzi helyzetének lekérésekor. Próbálja újra később.",
     "Timed out trying to fetch your location. Please try again later.": "Időtúllépés történt a földrajzi helyzetének lekérésekor. Próbálja újra később.",
     "Failed to fetch your location. Please try again later.": "Nem sikerült a földrajzi helyzetének lekérése. Próbálja újra később.",
@@ -2476,7 +2338,6 @@
     "Internal room ID": "Belső szobaazonosító",
     "Group all your people in one place.": "Csoportosítsa az összes ismerősét egy helyre.",
     "Group all your favourite rooms and people in one place.": "Csoportosítsa az összes kedvenc szobáját és ismerősét egy helyre.",
-    "IRC (Experimental)": "IRC (kísérleti)",
     "Navigate to previous message in composer history": "Előző üzenetre navigálás a szerkesztőben",
     "Navigate to next message in composer history": "Következő üzenetre navigálás a szerkesztőben",
     "Redo edit": "Szerkesztés újra érvényesítése",
@@ -2513,22 +2374,6 @@
     "This is a beta feature": "Ez egy beta állapotú funkció",
     "Use <arrows/> to scroll": "Görgetés ezekkel: <arrows/>",
     "Feedback sent! Thanks, we appreciate it!": "Visszajelzés elküldve. Köszönjük, nagyra értékeljük.",
-    "%(oneUser)ssent %(count)s hidden messages": {
-        "one": "%(oneUser)s rejtett üzenetet küldött",
-        "other": "%(oneUser)s %(count)s rejtett üzenetet küldött"
-    },
-    "%(severalUsers)ssent %(count)s hidden messages": {
-        "one": "%(severalUsers)s rejtett üzenetet küldött",
-        "other": "%(severalUsers)s %(count)s rejtett üzenetet küldött"
-    },
-    "%(oneUser)sremoved a message %(count)s times": {
-        "one": "%(oneUser)s üzenetet törölt",
-        "other": "%(oneUser)s %(count)s üzenetet törölt"
-    },
-    "%(severalUsers)sremoved a message %(count)s times": {
-        "one": "%(severalUsers)s üzenetet törölt",
-        "other": "%(severalUsers)s %(count)s üzenetet törölt"
-    },
     "Automatically send debug logs when key backup is not functioning": "Hibakeresési naplók automatikus küldése, ha a kulcsmentés nem működik",
     "Edit poll": "Szavazás szerkesztése",
     "Sorry, you can't edit a poll after votes have been cast.": "Sajnos a szavazás nem szerkeszthető miután szavazatok érkeztek.",
@@ -2556,14 +2401,6 @@
     "%(brand)s could not send your location. Please try again later.": "Az %(brand)s nem tudja elküldeni a földrajzi helyzetét. Próbálja újra később.",
     "We couldn't send your location": "A földrajzi helyzetet nem sikerült elküldeni",
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Válaszoljon egy meglévő üzenetszálban, vagy új üzenetszál indításához használja a „%(replyInThread)s” lehetőséget az üzenet sarkában megjelenő menüben.",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(oneUser)s módosította a szoba <a>kitűzött üzeneteit</a>",
-        "other": "%(oneUser)s %(count)s alkalommal módosította a szoba <a>kitűzött üzeneteit</a>"
-    },
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(severalUsers)s módosította a szoba <a>kitűzött üzeneteit</a>",
-        "other": "%(severalUsers)s %(count)s alkalommal módosította a szoba <a>kitűzött üzeneteit</a>"
-    },
     "Show polls button": "Szavazások gomb megjelenítése",
     "We'll create rooms for each of them.": "Mindenhez készítünk egy szobát.",
     "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.": "Ez a Matrix-kiszolgáló nincs megfelelően beállítva a térképek megjelenítéséhez, vagy a beállított térképkiszolgáló nem érhető el.",
@@ -2596,7 +2433,6 @@
         "one": "%(count)s üzenetet készül törölni az alábbi felhasználótól: %(user)s. A művelet mindenki számára visszavonhatatlanul eltávolítja ezeket a beszélgetésekből. Biztos, hogy folytatja?",
         "other": "%(count)s üzenetet készül törölni az alábbi felhasználótól: %(user)s. A művelet mindenki számára visszavonhatatlanul eltávolítja ezeket a beszélgetésekből. Biztos, hogy folytatja?"
     },
-    "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Segítsen észrevennünk a hibákat, és jobbá tenni a(z) %(analyticsOwner)s a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközei között meg lesz osztva.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Használhatja a más szerver opciót, hogy egy másik matrix szerverre jelentkezz be amihez megadod a szerver url címét. Ezzel használhatja a(z) %(brand)s klienst egy már létező Matrix fiókkal egy másik matrix szerveren.",
     "%(brand)s was denied permission to fetch your location. Please allow location access in your browser settings.": "A(z) %(brand)s alkalmazásnak nincs jogosultsága a földrajzi helyzetének lekérdezéséhez. Engedélyezze a hely hozzáférését a böngészőbeállításokban.",
     "Share for %(duration)s": "Megosztás eddig: %(duration)s",
@@ -2843,7 +2679,6 @@
     "Your server lacks native support": "A kiszolgálója nem támogatja natívan",
     "Your server has native support": "A kiszolgálója natívan támogatja",
     "%(qrCode)s or %(appLinks)s": "%(qrCode)s vagy %(appLinks)s",
-    "%(qrCode)s or %(emojiCompare)s": "%(qrCode)s vagy %(emojiCompare)s",
     "Voice broadcast": "Hangközvetítés",
     "Sign out of this session": "Kijelentkezés ebből a munkamenetből",
     "Rename session": "Munkamenet átnevezése",
@@ -3245,7 +3080,9 @@
         "stickerpack": "Matrica csomag",
         "system_alerts": "Rendszer figyelmeztetések",
         "secure_backup": "Biztonsági mentés",
-        "cross_signing": "Eszközök közti hitelesítés"
+        "cross_signing": "Eszközök közti hitelesítés",
+        "identity_server": "Azonosítási kiszolgáló",
+        "integration_manager": "Integrációkezelő"
     },
     "action": {
         "continue": "Folytatás",
@@ -3452,7 +3289,8 @@
         "collecting_information": "Alkalmazás verzióinformációinak összegyűjtése",
         "collecting_logs": "Naplók összegyűjtése",
         "uploading_logs": "Naplók feltöltése folyamatban",
-        "downloading_logs": "Naplók letöltése folyamatban"
+        "downloading_logs": "Naplók letöltése folyamatban",
+        "create_new_issue": "Ahhoz hogy megvizsgálhassuk a hibát, <newIssueLink>hozzon létre egy új hibajegyet</newIssueLink> a GitHubon."
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)s ó %(minutes)s p %(seconds)s mp van hátra",
@@ -3567,6 +3405,10 @@
             "rule_suppress_notices": "Botok üzenetei",
             "rule_tombstone": "Amikor a szobák fejlesztésre kerülnek",
             "rule_encrypted_room_one_to_one": "A közvetlen csevegések titkosított üzenetei"
+        },
+        "appearance": {
+            "layout_irc": "IRC (kísérleti)",
+            "layout_bubbles": "Üzenetbuborékok"
         }
     },
     "devtools": {
@@ -3812,6 +3654,137 @@
         },
         "m.call.hangup": {
             "dm": "A hívás befejeződött"
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s %(count)s alkalommal csatlakozott",
+                "one": "%(severalUsers)s csatlakozott"
+            },
+            "joined": {
+                "other": "%(oneUser)s %(count)s alkalommal csatlakozott",
+                "one": "%(oneUser)s csatlakozott"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s %(count)s alkalommal távozott",
+                "one": "%(severalUsers)s távozott"
+            },
+            "left": {
+                "other": "%(oneUser)s %(count)s alkalommal távozott",
+                "one": "%(oneUser)s távozott"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s %(count)s alkalommal csatlakozott és távozott",
+                "one": "%(severalUsers)s csatlakozott és távozott"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s %(count)s alkalommal csatlakozott és távozott",
+                "one": "%(oneUser)s csatlakozott és távozott"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s %(count)s alkalommal távozott és újra csatlakozott",
+                "one": "%(severalUsers)s távozott és újra csatlakozott"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s %(count)s alkalommal távozott és újra csatlakozott",
+                "one": "%(oneUser)s távozott és újra csatlakozott"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s %(count)s alkalommal elutasította a meghívóit",
+                "one": "%(severalUsers)s elutasította a meghívóit"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s %(count)s alkalommal elutasította a meghívóit",
+                "one": "%(oneUser)s elutasította a meghívóit"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)s meghívóit %(count)s alkalommal visszavonták",
+                "one": "%(severalUsers)s visszavonták a meghívásukat"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)s meghívóit %(count)s alkalommal vonták vissza",
+                "one": "%(oneUser)s meghívóit visszavonták"
+            },
+            "invited_multiple": {
+                "other": "%(count)s alkalommal lett meghívva",
+                "one": "meg lett hívva"
+            },
+            "invited": {
+                "other": "%(count)s alkalommal lett meghívva",
+                "one": "meg lett hívva"
+            },
+            "banned_multiple": {
+                "other": "%(count)s alkalommal lett kitiltva",
+                "one": "lett kitiltva"
+            },
+            "banned": {
+                "other": "%(count)s alkalommal lett kitiltva",
+                "one": "ki lett tiltva"
+            },
+            "unbanned_multiple": {
+                "other": "%(count)s alkalommal lett visszaengedve",
+                "one": "vissza lett engedve"
+            },
+            "unbanned": {
+                "other": "%(count)s alkalommal lett visszaengedve",
+                "one": "vissza lett engedve"
+            },
+            "kicked_multiple": {
+                "one": "eltávolítva",
+                "other": "%(count)s alkalommal lett eltávolítva"
+            },
+            "kicked": {
+                "one": "eltávolítva",
+                "other": "%(count)s alkalommal lett eltávolítva"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s %(count)s alkalommal megváltoztatta a nevét",
+                "one": "%(severalUsers)s megváltoztatta a nevét"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s %(count)s alkalommal megváltoztatta a nevét",
+                "one": "%(oneUser)s megváltoztatta a nevét"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)s %(count)s alkalommal nem változtattak semmit",
+                "one": "%(severalUsers)s nem változtattak semmit"
+            },
+            "no_change": {
+                "other": "%(oneUser)s %(count)s alkalommal nem változtatott semmit",
+                "one": "%(oneUser)snem változtatott semmit"
+            },
+            "server_acls_multiple": {
+                "other": "%(severalUsers)s %(count)s alkalommal megváltoztatta a kiszolgáló ACL-t",
+                "one": "%(severalUsers)smegváltoztatta a szerver ACL-eket"
+            },
+            "server_acls": {
+                "one": "%(oneUser)smegváltoztatta a szerver ACL-eket",
+                "other": "%(oneUser)s %(count)s alkalommal megváltoztatta a kiszolgáló ACL-t"
+            },
+            "pinned_events_multiple": {
+                "one": "%(severalUsers)s módosította a szoba <a>kitűzött üzeneteit</a>",
+                "other": "%(severalUsers)s %(count)s alkalommal módosította a szoba <a>kitűzött üzeneteit</a>"
+            },
+            "pinned_events": {
+                "one": "%(oneUser)s módosította a szoba <a>kitűzött üzeneteit</a>",
+                "other": "%(oneUser)s %(count)s alkalommal módosította a szoba <a>kitűzött üzeneteit</a>"
+            },
+            "redacted_multiple": {
+                "one": "%(severalUsers)s üzenetet törölt",
+                "other": "%(severalUsers)s %(count)s üzenetet törölt"
+            },
+            "redacted": {
+                "one": "%(oneUser)s üzenetet törölt",
+                "other": "%(oneUser)s %(count)s üzenetet törölt"
+            },
+            "hidden_event_multiple": {
+                "one": "%(severalUsers)s rejtett üzenetet küldött",
+                "other": "%(severalUsers)s %(count)s rejtett üzenetet küldött"
+            },
+            "hidden_event": {
+                "one": "%(oneUser)s rejtett üzenetet küldött",
+                "other": "%(oneUser)s %(count)s rejtett üzenetet küldött"
+            }
         }
     },
     "slash_command": {
@@ -3970,5 +3943,44 @@
             "redact": "Mások által küldött üzenetek törlése",
             "notifications.room": "Mindenki értesítése"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "Nem egyeznek",
+            "sas_match": "Egyeznek",
+            "in_person": "A biztonság érdekében ezt végezze el személyesen, vagy használjon megbízható kommunikációs csatornát.",
+            "other_party_cancelled": "A másik fél megszakította az ellenőrzést.",
+            "complete_title": "Ellenőrizve!",
+            "complete_description": "Sikeresen ellenőrizte ezt a felhasználót.",
+            "no_support_qr_emoji": "Az ellenőrizni kívánt eszköz nem támogatja se a QR kód beolvasást se az emodzsi ellenőrzést, amit a %(brand)s támogat. Próbálja meg egy másik klienssel.",
+            "qr_prompt": "Ennek az egyedi kódnak a beolvasása",
+            "sas_prompt": "Egyedi emodzsik összehasonlítása",
+            "sas_description": "Hasonlítsd össze az egyedi emodzsikat ha valamelyik eszközön nincs kamera",
+            "qr_or_sas": "%(qrCode)s vagy %(emojiCompare)s",
+            "qr_or_sas_header": "Ellenőrizze ezt az eszközt az alábbiak egyikével:"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Gyakran használt",
+        "category_smileys_people": "Mosolyok és emberek",
+        "category_animals_nature": "Állatok és természet",
+        "category_food_drink": "Étel és ital",
+        "category_activities": "Mozgás",
+        "category_travel_places": "Utazás és helyek",
+        "category_objects": "Tárgyak",
+        "category_symbols": "Szimbólumok",
+        "category_flags": "Zászlók",
+        "categories": "Kategóriák",
+        "quick_reactions": "Gyors reakciók"
+    },
+    "analytics": {
+        "enable_prompt": "Segítsen jobbá tenni: %(analyticsOwner)s",
+        "consent_migration": "Előzőleg beleegyezett, hogy anonimizált használati adatokat oszt meg velünk. Most frissítjük ennek a működését.",
+        "learn_more": "Anonimizált adatok megosztása a problémák feltárásához. Semmi személyes. Nincs harmadik fél. <LearnMoreLink>További információk</LearnMoreLink>",
+        "privacy_policy": "Elolvashatja az összes feltételünket <PrivacyPolicyUrl>itt</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Segítsen észrevennünk a hibákat, és jobbá tenni a(z) %(analyticsOwner)s a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközei között meg lesz osztva.",
+        "bullet_1": "<Bold>Nem</Bold> mentünk vagy analizálunk semmilyen felhasználói adatot",
+        "bullet_2": "<Bold>Nem</Bold> osztunk meg információt harmadik féllel",
+        "disable_prompt": "Ezt bármikor kikapcsolhatja a beállításokban"
     }
 }

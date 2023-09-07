@@ -249,87 +249,6 @@
     "Delete Widget": "Apagar widget",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Remover um widget o remove para todas as pessoas desta sala. Tem certeza que quer remover este widget?",
     "Delete widget": "Remover widget",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s entraram %(count)s vezes",
-        "one": "%(severalUsers)s entraram"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s entrou %(count)s vezes",
-        "one": "%(oneUser)s entrou"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s saíram %(count)s vezes",
-        "one": "%(severalUsers)s saíram"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s saiu %(count)s vezes",
-        "one": "%(oneUser)s saiu"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s entraram e saíram %(count)s vezes",
-        "one": "%(severalUsers)s entraram e saíram"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s entrou e saiu %(count)s vezes",
-        "one": "%(oneUser)s entrou e saiu"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s saíram e entraram %(count)s vezes",
-        "one": "%(severalUsers)s saíram e entraram"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s saiu e entrou %(count)s vezes",
-        "one": "%(oneUser)s saiu e entrou"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s recusaram os convites %(count)s vezes",
-        "one": "%(severalUsers)s recusaram os convites"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s recusou o convite %(count)s vezes",
-        "one": "%(oneUser)s recusou o convite"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)s tiveram os convites retirados %(count)s vezes",
-        "one": "%(severalUsers)s tiveram os convites retirados"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)s teve os convites removidos %(count)s vezes",
-        "one": "%(oneUser)s teve o convite removido"
-    },
-    "were invited %(count)s times": {
-        "other": "foram convidadas/os %(count)s vezes",
-        "one": "foram convidadas/os"
-    },
-    "was invited %(count)s times": {
-        "other": "foi convidada/o %(count)s vezes",
-        "one": "foi convidada/o"
-    },
-    "were banned %(count)s times": {
-        "other": "foram banidos %(count)s vezes",
-        "one": "foram banidos"
-    },
-    "was banned %(count)s times": {
-        "other": "foi banido %(count)s vezes",
-        "one": "foi banido"
-    },
-    "were unbanned %(count)s times": {
-        "other": "tiveram o banimento removido %(count)s vezes",
-        "one": "tiveram o banimento removido"
-    },
-    "was unbanned %(count)s times": {
-        "other": "teve o banimento removido %(count)s vezes",
-        "one": "teve o banimento removido"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s alteraram o nome e sobrenome %(count)s vezes",
-        "one": "%(severalUsers)s alteraram o nome e sobrenome"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s alterou o nome e sobrenome %(count)s vezes",
-        "one": "%(oneUser)s alterou o nome e sobrenome"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s e %(count)s outras",
         "one": "%(items)s e uma outra"
@@ -506,9 +425,6 @@
     "Invite anyway and never warn me again": "Convide mesmo assim e nunca mais me avise",
     "Invite anyway": "Convide mesmo assim",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "O arquivo '%(fileName)s' excede o limite de tamanho deste homeserver para uploads",
-    "The other party cancelled the verification.": "Seu contato cancelou a confirmação.",
-    "Verified!": "Confirmado!",
-    "You've successfully verified this user.": "Você confirmou este usuário com sucesso.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "As mensagens com este usuário estão protegidas com a criptografia de ponta a ponta e não podem ser lidas por terceiros.",
     "Got It": "Ok, entendi",
     "Unable to find a supported verification method.": "Nenhuma opção de confirmação é suportada.",
@@ -715,14 +631,8 @@
     "IRC display name width": "Largura do nome e sobrenome nas mensagens",
     "My Ban List": "Minha lista de banidos",
     "This is your list of users/servers you have blocked - don't leave the room!": "Esta é a sua lista de usuárias(os)/servidores que você bloqueou - não saia da sala!",
-    "Scan this unique code": "Escaneie este código único",
-    "Compare unique emoji": "Comparar emojis únicos",
-    "Compare a unique set of emoji if you don't have a camera on either device": "Compare um conjunto único de emojis se você não tem uma câmera em nenhum dos dois aparelhos",
     "Waiting for %(displayName)s to verify…": "Aguardando %(displayName)s confirmar…",
     "Cancelling…": "Cancelando…",
-    "They match": "São coincidentes",
-    "They don't match": "Elas não são correspondentes",
-    "To be secure, do this in person or use a trusted way to communicate.": "Para sua segurança, faça isso pessoalmente ou use uma forma confiável de comunicação.",
     "Lock": "Cadeado",
     "Accept <policyLink /> to continue:": "Aceitar <policyLink /> para continuar:",
     "This bridge was provisioned by <user />.": "Esta integração foi disponibilizada por <user />.",
@@ -794,9 +704,7 @@
     "Encryption not enabled": "Criptografia desativada",
     "The encryption used by this room isn't supported.": "A criptografia usada nesta sala não é suportada.",
     "%(name)s wants to verify": "%(name)s solicita confirmação",
-    "Smileys & People": "Sorrisos e pessoas",
     "Widgets do not use message encryption.": "Widgets não usam criptografia de mensagens.",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Por favor, <newIssueLink>crie um novo bilhete de erro</newIssueLink> no GitHub para que possamos investigar esta falha.",
     "Enter the name of a new server you want to explore.": "Digite o nome do novo servidor que você deseja explorar.",
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Por favor, diga-nos o que aconteceu de errado ou, ainda melhor, crie um bilhete de erro no GitHub que descreva o problema.",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Apagar todos os dados desta sessão é uma ação permanente. Mensagens criptografadas serão perdidas, a não ser que as chaves delas tenham sido copiadas para o backup.",
@@ -863,16 +771,6 @@
     "edited": "editado",
     "Can't load this message": "Não foi possível carregar esta mensagem",
     "Submit logs": "Enviar relatórios",
-    "Frequently Used": "Mais usados",
-    "Animals & Nature": "Animais e natureza",
-    "Food & Drink": "Comidas e bebidas",
-    "Activities": "Atividades",
-    "Travel & Places": "Viagem e lugares",
-    "Objects": "Objetos",
-    "Symbols": "Símbolos",
-    "Flags": "Bandeiras",
-    "Categories": "Categorias",
-    "Quick Reactions": "Reações rápidas",
     "Cancel search": "Cancelar busca",
     "Any of the following data may be shared:": "Qualquer um dos seguintes dados pode ser compartilhado:",
     "Your theme": "Seu tema",
@@ -940,14 +838,6 @@
     "Your user ID": "Sua ID de usuário",
     "%(brand)s URL": "Link do %(brand)s",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Se você usar esse widget, os dados <helpIcon /> poderão ser compartilhados com %(widgetDomain)s.",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)s não fizeram alterações %(count)s vezes",
-        "one": "%(severalUsers)s não fizeram alterações"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)s não fez alterações %(count)s vezes",
-        "one": "%(oneUser)s não fez alterações"
-    },
     "Power level": "Nível de permissão",
     "Looks good": "Muito bem",
     "Close dialog": "Fechar caixa de diálogo",
@@ -1870,13 +1760,11 @@
     "Decrypted event source": "Fonte de evento descriptografada",
     "Invite by username": "Convidar por nome de usuário",
     "Original event source": "Fonte do evento original",
-    "Integration manager": "Gerenciador de integrações",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Seu %(brand)s não permite que você use o gerenciador de integrações para fazer isso. Entre em contato com o administrador.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Se você usar esse widget, os dados poderão ser compartilhados <helpIcon /> com %(widgetDomain)s & seu gerenciador de integrações.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "O gerenciador de integrações recebe dados de configuração e pode modificar widgets, enviar convites para salas e definir níveis de permissão em seu nome.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Use o gerenciador de integrações para gerenciar bots, widgets e pacotes de figurinhas.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Use o gerenciador de integrações em <b>(%(serverName)s)</b> para gerenciar bots, widgets e pacotes de figurinhas.",
-    "Identity server": "Servidor de identidade",
     "Identity server (%(server)s)": "Servidor de identidade (%(server)s)",
     "Could not connect to identity server": "Não foi possível conectar-se ao servidor de identidade",
     "Not a valid identity server (status code %(code)s)": "Servidor de identidade inválido (código de status %(code)s)",
@@ -1911,7 +1799,6 @@
     "Images, GIFs and videos": "Imagens, GIFs e vídeos",
     "Code blocks": "Blocos de código",
     "Keyboard shortcuts": "Teclas de atalho do teclado",
-    "Message bubbles": "Balões de mensagem",
     "Mentions & keywords": "Menções e palavras-chave",
     "Global": "Global",
     "New keyword": "Nova palavra-chave",
@@ -2062,9 +1949,6 @@
     "Developer": "Desenvolvedor",
     "Messaging": "Mensagens",
     "Other rooms": "Outras salas",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Compartilhe dados anônimos para nos ajudar a identificar problemas. Nada pessoal. Sem terceiros. <LearnMoreLink>Saiba mais</LearnMoreLink>",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "Você consentiu anteriormente em compartilhar dados de uso anônimos conosco. Estamos atualizando como isso funciona.",
-    "Help improve %(analyticsOwner)s": "Ajude a melhorar %(analyticsOwner)s",
     "That's fine": "Isso é bom",
     "The above, but in <Room /> as well": "O de cima, mas em <Room /> também",
     "The above, but in any room you are joined or invited to as well": "Acima, mas em qualquer sala em que você participe ou seja convidado também",
@@ -2222,16 +2106,7 @@
     "Copy room link": "Copiar link da sala",
     "Public rooms": "Salas públicas",
     "%(qrCode)s or %(appLinks)s": "%(qrCode)s ou %(appLinks)s",
-    "%(qrCode)s or %(emojiCompare)s": "%(qrCode)s ou %(emojiCompare)s",
     "Add new server…": "Adicionar um novo servidor…",
-    "were removed %(count)s times": {
-        "other": "foram removidos %(count)s vezes",
-        "one": "foram removidos"
-    },
-    "was removed %(count)s times": {
-        "other": "foi removido %(count)s vezes",
-        "one": "foi removido"
-    },
     "%(count)s participants": {
         "other": "%(count)s participantes",
         "one": "1 participante"
@@ -2260,7 +2135,6 @@
     "Other sessions": "Outras sessões",
     "Sessions": "Sessões",
     "Keyboard": "Teclado",
-    "IRC (Experimental)": "IRC (experimental)",
     "Enable hardware acceleration": "Habilitar aceleração de hardware",
     "User is already in the space": "O usuário já está no espaço",
     "User is already in the room": "O usuário já está na sala",
@@ -2432,7 +2306,9 @@
         "stickerpack": "Pacote de figurinhas",
         "system_alerts": "Alertas do sistema",
         "secure_backup": "Backup online",
-        "cross_signing": "Autoverificação"
+        "cross_signing": "Autoverificação",
+        "identity_server": "Servidor de identidade",
+        "integration_manager": "Gerenciador de integrações"
     },
     "action": {
         "continue": "Continuar",
@@ -2586,7 +2462,8 @@
         "collecting_information": "Coletando informação sobre a versão do app",
         "collecting_logs": "Coletando logs",
         "uploading_logs": "Enviando relatórios",
-        "downloading_logs": "Baixando relatórios"
+        "downloading_logs": "Baixando relatórios",
+        "create_new_issue": "Por favor, <newIssueLink>crie um novo bilhete de erro</newIssueLink> no GitHub para que possamos investigar esta falha."
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
@@ -2668,6 +2545,10 @@
             "rule_suppress_notices": "Mensagens enviadas por bots",
             "rule_tombstone": "Quando a versão da sala é atualizada",
             "rule_encrypted_room_one_to_one": "Mensagens criptografadas em conversas individuais"
+        },
+        "appearance": {
+            "layout_irc": "IRC (experimental)",
+            "layout_bubbles": "Balões de mensagem"
         }
     },
     "devtools": {
@@ -2838,6 +2719,105 @@
         },
         "m.call.hangup": {
             "dm": "Chamada encerrada"
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s entraram %(count)s vezes",
+                "one": "%(severalUsers)s entraram"
+            },
+            "joined": {
+                "other": "%(oneUser)s entrou %(count)s vezes",
+                "one": "%(oneUser)s entrou"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s saíram %(count)s vezes",
+                "one": "%(severalUsers)s saíram"
+            },
+            "left": {
+                "other": "%(oneUser)s saiu %(count)s vezes",
+                "one": "%(oneUser)s saiu"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s entraram e saíram %(count)s vezes",
+                "one": "%(severalUsers)s entraram e saíram"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s entrou e saiu %(count)s vezes",
+                "one": "%(oneUser)s entrou e saiu"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s saíram e entraram %(count)s vezes",
+                "one": "%(severalUsers)s saíram e entraram"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s saiu e entrou %(count)s vezes",
+                "one": "%(oneUser)s saiu e entrou"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s recusaram os convites %(count)s vezes",
+                "one": "%(severalUsers)s recusaram os convites"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s recusou o convite %(count)s vezes",
+                "one": "%(oneUser)s recusou o convite"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)s tiveram os convites retirados %(count)s vezes",
+                "one": "%(severalUsers)s tiveram os convites retirados"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)s teve os convites removidos %(count)s vezes",
+                "one": "%(oneUser)s teve o convite removido"
+            },
+            "invited_multiple": {
+                "other": "foram convidadas/os %(count)s vezes",
+                "one": "foram convidadas/os"
+            },
+            "invited": {
+                "other": "foi convidada/o %(count)s vezes",
+                "one": "foi convidada/o"
+            },
+            "banned_multiple": {
+                "other": "foram banidos %(count)s vezes",
+                "one": "foram banidos"
+            },
+            "banned": {
+                "other": "foi banido %(count)s vezes",
+                "one": "foi banido"
+            },
+            "unbanned_multiple": {
+                "other": "tiveram o banimento removido %(count)s vezes",
+                "one": "tiveram o banimento removido"
+            },
+            "unbanned": {
+                "other": "teve o banimento removido %(count)s vezes",
+                "one": "teve o banimento removido"
+            },
+            "kicked_multiple": {
+                "other": "foram removidos %(count)s vezes",
+                "one": "foram removidos"
+            },
+            "kicked": {
+                "other": "foi removido %(count)s vezes",
+                "one": "foi removido"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s alteraram o nome e sobrenome %(count)s vezes",
+                "one": "%(severalUsers)s alteraram o nome e sobrenome"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s alterou o nome e sobrenome %(count)s vezes",
+                "one": "%(oneUser)s alterou o nome e sobrenome"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)s não fizeram alterações %(count)s vezes",
+                "one": "%(severalUsers)s não fizeram alterações"
+            },
+            "no_change": {
+                "other": "%(oneUser)s não fez alterações %(count)s vezes",
+                "one": "%(oneUser)s não fez alterações"
+            }
         }
     },
     "slash_command": {
@@ -2983,5 +2963,37 @@
             "redact": "Remover mensagens enviadas por outros",
             "notifications.room": "Notificar todos"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "Elas não são correspondentes",
+            "sas_match": "São coincidentes",
+            "in_person": "Para sua segurança, faça isso pessoalmente ou use uma forma confiável de comunicação.",
+            "other_party_cancelled": "Seu contato cancelou a confirmação.",
+            "complete_title": "Confirmado!",
+            "complete_description": "Você confirmou este usuário com sucesso.",
+            "qr_prompt": "Escaneie este código único",
+            "sas_prompt": "Comparar emojis únicos",
+            "sas_description": "Compare um conjunto único de emojis se você não tem uma câmera em nenhum dos dois aparelhos",
+            "qr_or_sas": "%(qrCode)s ou %(emojiCompare)s"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Mais usados",
+        "category_smileys_people": "Sorrisos e pessoas",
+        "category_animals_nature": "Animais e natureza",
+        "category_food_drink": "Comidas e bebidas",
+        "category_activities": "Atividades",
+        "category_travel_places": "Viagem e lugares",
+        "category_objects": "Objetos",
+        "category_symbols": "Símbolos",
+        "category_flags": "Bandeiras",
+        "categories": "Categorias",
+        "quick_reactions": "Reações rápidas"
+    },
+    "analytics": {
+        "enable_prompt": "Ajude a melhorar %(analyticsOwner)s",
+        "consent_migration": "Você consentiu anteriormente em compartilhar dados de uso anônimos conosco. Estamos atualizando como isso funciona.",
+        "learn_more": "Compartilhe dados anônimos para nos ajudar a identificar problemas. Nada pessoal. Sem terceiros. <LearnMoreLink>Saiba mais</LearnMoreLink>"
     }
 }

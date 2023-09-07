@@ -145,13 +145,13 @@
     "Add Email Address": "Dodaj email adresu",
     "Click the button below to confirm adding this email address.": "Kliknite gumb ispod da biste potvrdili dodavanje ove email adrese.",
     "Confirm adding email": "Potvrdite dodavanje email adrese",
-    "Integration manager": "Upravitelj integracijama",
-    "Identity server": "Poslužitelj identiteta",
     "Could not connect to identity server": "Nije moguće spojiti se na poslužitelja identiteta",
     "common": {
         "analytics": "Analitika",
         "error": "Geška",
-        "unnamed_room": "Neimenovana soba"
+        "unnamed_room": "Neimenovana soba",
+        "identity_server": "Poslužitelj identiteta",
+        "integration_manager": "Upravitelj integracijama"
     },
     "action": {
         "continue": "Nastavi",

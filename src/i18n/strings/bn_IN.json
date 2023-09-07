@@ -1,4 +1,6 @@
 {
-    "Integration manager": "ইন্টিগ্রেশন ম্যানেজার",
-    "Identity server": "পরিচয় সার্ভার"
+    "common": {
+        "identity_server": "পরিচয় সার্ভার",
+        "integration_manager": "ইন্টিগ্রেশন ম্যানেজার"
+    }
 }

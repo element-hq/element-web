@@ -168,87 +168,6 @@
     "Delete widget": "Forigi fenestraĵon",
     "Create new room": "Krei novan ĉambron",
     "Home": "Hejmo",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s%(count)s-foje aliĝis",
-        "one": "%(severalUsers)saliĝis"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s%(count)s-foje aliĝis",
-        "one": "%(oneUser)saliĝis"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s%(count)s-foje foriris",
-        "one": "%(severalUsers)sforiris"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s%(count)s-foje foriris",
-        "one": "%(oneUser)s foriris"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s%(count)s-foje aliĝis kaj foriris",
-        "one": "%(severalUsers)saliĝis kaj foriris"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s%(count)s-foje aliĝis kaj foriris",
-        "one": "%(oneUser)saliĝis kaj foriris"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s%(count)s-foje foriris kaj re-aliĝis",
-        "one": "%(severalUsers)s foriris kaj re-aliĝis"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s %(count)s-foje foriris kaj re-aliĝis",
-        "one": "%(oneUser)s foriris kaj re-aliĝis"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s%(count)s-foje rifuzis inviton",
-        "one": "%(severalUsers)srifuzis inviton"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s%(count)s-foje rifuzis inviton",
-        "one": "%(oneUser)srifuzis inviton"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)s%(count)s-foje malinvitiĝis",
-        "one": "%(severalUsers)smalinvitiĝis"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)s%(count)s-foje malinvitiĝis",
-        "one": "%(oneUser)smalinvitiĝis"
-    },
-    "were invited %(count)s times": {
-        "other": "estis invititaj %(count)s foje",
-        "one": "estis invititaj"
-    },
-    "was invited %(count)s times": {
-        "other": "estis invitita %(count)s foje",
-        "one": "estis invitita"
-    },
-    "were banned %(count)s times": {
-        "other": "%(count)s-foje forbariĝis",
-        "one": "forbariĝis"
-    },
-    "was banned %(count)s times": {
-        "other": "%(count)s-foje forbariĝis",
-        "one": "forbariĝis"
-    },
-    "were unbanned %(count)s times": {
-        "other": "%(count)s-foje malforbariĝis",
-        "one": "malforbariĝis"
-    },
-    "was unbanned %(count)s times": {
-        "other": "%(count)s-foje malforbariĝis",
-        "one": "malforbariĝis"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s%(count)s-foje sanĝis sian nomon",
-        "one": "%(severalUsers)sŝanĝis sian nomon"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s%(count)s-foje ŝanĝis sian nomon",
-        "one": "%(oneUser)sŝanĝis sian nomon"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s kaj %(count)s aliaj",
         "one": "%(items)s kaj unu alia"
@@ -419,7 +338,6 @@
     "<a>In reply to</a> <pill>": "<a>Responde al</a> <pill>",
     "You do not have permission to start a conference call in this room": "Vi ne havas permeson komenci grupvokon en ĉi tiu ĉambro",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "La dosiero '%(fileName)s' superas la grandecan limon de ĉi tiu hejmservilo",
-    "Verified!": "Kontrolita!",
     "Got It": "Komprenite",
     "Dog": "Hundo",
     "Cat": "Kato",
@@ -534,8 +452,6 @@
     "The user must be unbanned before they can be invited.": "Necesas malforbari ĉi tiun uzanton antaŭ ol ĝin inviti.",
     "The user's homeserver does not support the version of the room.": "Hejmservilo de ĉi tiu uzanto ne subtenas la version de la ĉambro.",
     "No need for symbols, digits, or uppercase letters": "Ne necesas simboloj, ciferoj, aŭ majuskloj",
-    "The other party cancelled the verification.": "La alia kontrolano nuligis la kontrolon.",
-    "You've successfully verified this user.": "Vi sukcese kontrolis ĉi tiun uzanton.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Sekuraj mesaĝoj kun ĉi tiu uzanto estas tutvoje ĉirfitaj kaj nelegeblaj al ceteruloj.",
     "Verify this user by confirming the following emoji appear on their screen.": "Kontrolu ĉi tiun uzanton per konfirmo, ke la jenaj bildsignoj aperis sur ĝia ekrano.",
     "Verify this user by confirming the following number appears on their screen.": "Kontrolu ĉu tiun uzanton per konfirmo, ke la jena numero aperis sur ĝia ekrano.",
@@ -698,14 +614,6 @@
     "The conversation continues here.": "La interparolo daŭras ĉi tie.",
     "This room has been replaced and is no longer active.": "Ĉi tiu ĉambro estas anstataŭita, kaj ne plu aktivas.",
     "Only room administrators will see this warning": "Nur administrantoj de ĉambro vidos ĉi tiun averton",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)snenion ŝanĝis je %(count)s fojoj",
-        "one": "%(severalUsers)snenion ŝanĝis"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)snenion ŝanĝis je %(count)s fojoj",
-        "one": "%(oneUser)snenion ŝanĝis"
-    },
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Ne povas enlegi la responditan okazon; aŭ ĝi ne ekzistas, aŭ vi ne rajtas vidi ĝin.",
     "Clear all data": "Vakigi ĉiujn datumojn",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Por eviti perdon de via babila historio, vi devas elporti la ŝlosilojn de viaj ĉambroj antaŭ adiaŭo. Por tio vi bezonos reveni al la pli nova versio de %(brand)s",
@@ -881,18 +789,7 @@
     "%(name)s cancelled": "%(name)s nuligis",
     "%(name)s wants to verify": "%(name)s volas kontroli",
     "You sent a verification request": "Vi sendis peton de kontrolo",
-    "Frequently Used": "Ofte uzataj",
-    "Smileys & People": "Mienoj kaj homoj",
-    "Animals & Nature": "Bestoj kaj naturo",
-    "Food & Drink": "Manĝaĵoj kaj trinkaĵoj",
-    "Activities": "Agadoj",
-    "Travel & Places": "Lokoj kaj vojaĝado",
-    "Objects": "Aĵoj",
-    "Symbols": "Simboloj",
-    "Flags": "Flagoj",
-    "Quick Reactions": "Rapidaj reagoj",
     "Cancel search": "Nuligi serĉon",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Bonvolu <newIssueLink>raporti novan problemon</newIssueLink> je GitHub, por ke ni povu ĝin esplori.",
     "e.g. my-room": "ekzemple mia-chambro",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Uzu identigan servilon por inviti per retpoŝto. <default>Uzu la norman (%(defaultIdentityServerName)s)</default> aŭ administru per <settings>Agordoj</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Uzu identigan servilon por inviti per retpoŝto. Administru per <settings>Agordoj</settings>.",
@@ -978,14 +875,8 @@
     "Never send encrypted messages to unverified sessions in this room from this session": "Neniam sendi ĉifritajn mesaĝojn al nekontrolitaj salutaĵoj en ĉi tiu ĉambro de ĉi tiu salutaĵo",
     "Enable message search in encrypted rooms": "Ŝalti serĉon de mesaĝoj en ĉifritaj ĉambroj",
     "How fast should messages be downloaded.": "Kiel rapide elŝuti mesaĝojn.",
-    "Scan this unique code": "Skanu ĉi tiun unikan kodon",
-    "Compare unique emoji": "Komparu unikajn bildsignojn",
-    "Compare a unique set of emoji if you don't have a camera on either device": "Komparu unikan aron de bildsignoj se vi ne havas kameraon sur la alia aparato",
     "Waiting for %(displayName)s to verify…": "Atendas kontrolon de %(displayName)s…",
     "Cancelling…": "Nuligante…",
-    "They match": "Ili akordas",
-    "They don't match": "Ili ne akordas",
-    "To be secure, do this in person or use a trusted way to communicate.": "Por plia sekureco, faru tion persone, aŭ uzu alian fidatan komunikilon.",
     "Show less": "Montri malpli",
     "Show more": "Montri pli",
     "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
@@ -1275,7 +1166,6 @@
     "You don't have permission to delete the address.": "Vi ne rajtas forigi la adreson.",
     "There was an error removing that address. It may no longer exist or a temporary error occurred.": "Eraris forigo de la adreso. Eble ĝi ne plu ekzistas, aŭ okazis portempa eraro.",
     "Error removing address": "Eraris forigo de adreso",
-    "Categories": "Kategorioj",
     "Room address": "Adreso de ĉambro",
     "This address is available to use": "Ĉi tiu adreso estas uzebla",
     "This address is already in use": "Ĉi tiu adreso jam estas uzata",
@@ -1991,13 +1881,11 @@
     },
     "The user you called is busy.": "La uzanto, kiun vi vokis, estas okupata.",
     "User Busy": "Uzanto estas okupata",
-    "Integration manager": "Kunigilo",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Via %(brand)so ne permesas al vi uzi kunigilon por tio. Bonvolu kontakti administranton.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Uzo de tiu ĉi fenestraĵo eble havigos datumojn <helpIcon /> al %(widgetDomain)s kaj via kunigilo.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Kunigiloj ricevas agordajn datumojn, kaj povas modifi fenestraĵojn, sendi invitojn al ĉambroj, kaj vianome agordi povnivelojn.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Uzu kunigilon por administrado de robotoj, fenestraĵoj, kaj glumarkaroj.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Uzu kunigilon <b>(%(serverName)s)</b> por administrado de robotoj, fenestraĵoj, kaj glumarkaroj.",
-    "Identity server": "Identiga servilo",
     "Identity server (%(server)s)": "Identiga servilo (%(server)s)",
     "Could not connect to identity server": "Ne povis konektiĝi al identiga servilo",
     "Not a valid identity server (status code %(code)s)": "Nevalida identiga servilo (statkodo %(code)s)",
@@ -2065,7 +1953,6 @@
     "An error occurred whilst saving your notification preferences.": "Eraris konservado de viaj preferoj pri sciigoj.",
     "Error saving notification preferences": "Eraris konservado de preferoj pri sciigoj",
     "Messages containing keywords": "Mesaĝoj enhavantaj ĉefvortojn",
-    "Message bubbles": "Mesaĝaj vezikoj",
     "Recommended for public spaces.": "Rekomendita por publikaj aroj.",
     "Allow people to preview your space before they join.": "Povigi personojn antaŭrigardi vian aron antaŭ aliĝo.",
     "To publish an address, it needs to be set as a local address first.": "Por ke adreso publikiĝu, ĝi unue devas esti loka adreso.",
@@ -2134,14 +2021,6 @@
     "Want to add a new space instead?": "Ĉu vi volas aldoni novan aron anstataŭe?",
     "Add existing space": "Aldoni jaman aron",
     "Please provide an address": "Bonvolu doni adreson",
-    "%(oneUser)schanged the server ACLs %(count)s times": {
-        "one": "%(oneUser)s ŝanĝis la servilblokajn listojn",
-        "other": "%(oneUser)s ŝanĝis la servilblokajn listojn %(count)s-foje"
-    },
-    "%(severalUsers)schanged the server ACLs %(count)s times": {
-        "one": "%(severalUsers)s ŝanĝis la servilblokajn listojn",
-        "other": "%(severalUsers)s ŝanĝis la servilblokajn listojn %(count)s-foje"
-    },
     "Share content": "Havigi enhavon",
     "Application window": "Fenestro de aplikaĵo",
     "Share entire screen": "Vidigi tutan ekranon",
@@ -2408,7 +2287,6 @@
     "Add privileged users": "Aldoni rajtigitan uzanton",
     "Number of messages": "Nombro da mesaĝoj",
     "Number of messages can only be a number between %(min)s and %(max)s": "Nombro da mesaĝoj povas esti nur nombro inter %(min)s kaj %(max)s",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "Vi antaŭe konsentis kunhavigi anonimajn uzdatumojn kun ni. Ni ĝisdatigas kiel tio funkcias.",
     "That's fine": "Tio estas bone",
     "Map feedback": "Sugestoj pri la mapo",
     "Developer": "Programisto",
@@ -2498,7 +2376,9 @@
         "stickerpack": "Glumarkaro",
         "system_alerts": "Sistemaj avertoj",
         "secure_backup": "Sekura savkopiado",
-        "cross_signing": "Delegaj subskriboj"
+        "cross_signing": "Delegaj subskriboj",
+        "identity_server": "Identiga servilo",
+        "integration_manager": "Kunigilo"
     },
     "action": {
         "continue": "Daŭrigi",
@@ -2662,7 +2542,8 @@
         "collecting_information": "Kolektante informon pri versio de la aplikaĵo",
         "collecting_logs": "Kolektante protokolon",
         "uploading_logs": "Alŝutante protokolon",
-        "downloading_logs": "Elŝutante protokolon"
+        "downloading_logs": "Elŝutante protokolon",
+        "create_new_issue": "Bonvolu <newIssueLink>raporti novan problemon</newIssueLink> je GitHub, por ke ni povu ĝin esplori."
     },
     "time": {
         "hours_minutes_seconds_left": "%(hours)sh. %(minutes)sm. %(seconds)ss. restas",
@@ -2733,6 +2614,9 @@
             "rule_suppress_notices": "Mesaĝoj senditaj per roboto",
             "rule_tombstone": "Kiam ĉambroj gradaltiĝas",
             "rule_encrypted_room_one_to_one": "Ĉifritaj mesaĝoj en duopaj babiloj"
+        },
+        "appearance": {
+            "layout_bubbles": "Mesaĝaj vezikoj"
         }
     },
     "devtools": {
@@ -2904,6 +2788,105 @@
         },
         "m.call.hangup": {
             "dm": "Voko finiĝis"
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s%(count)s-foje aliĝis",
+                "one": "%(severalUsers)saliĝis"
+            },
+            "joined": {
+                "other": "%(oneUser)s%(count)s-foje aliĝis",
+                "one": "%(oneUser)saliĝis"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s%(count)s-foje foriris",
+                "one": "%(severalUsers)sforiris"
+            },
+            "left": {
+                "other": "%(oneUser)s%(count)s-foje foriris",
+                "one": "%(oneUser)s foriris"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s%(count)s-foje aliĝis kaj foriris",
+                "one": "%(severalUsers)saliĝis kaj foriris"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s%(count)s-foje aliĝis kaj foriris",
+                "one": "%(oneUser)saliĝis kaj foriris"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s%(count)s-foje foriris kaj re-aliĝis",
+                "one": "%(severalUsers)s foriris kaj re-aliĝis"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s %(count)s-foje foriris kaj re-aliĝis",
+                "one": "%(oneUser)s foriris kaj re-aliĝis"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s%(count)s-foje rifuzis inviton",
+                "one": "%(severalUsers)srifuzis inviton"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s%(count)s-foje rifuzis inviton",
+                "one": "%(oneUser)srifuzis inviton"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)s%(count)s-foje malinvitiĝis",
+                "one": "%(severalUsers)smalinvitiĝis"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)s%(count)s-foje malinvitiĝis",
+                "one": "%(oneUser)smalinvitiĝis"
+            },
+            "invited_multiple": {
+                "other": "estis invititaj %(count)s foje",
+                "one": "estis invititaj"
+            },
+            "invited": {
+                "other": "estis invitita %(count)s foje",
+                "one": "estis invitita"
+            },
+            "banned_multiple": {
+                "other": "%(count)s-foje forbariĝis",
+                "one": "forbariĝis"
+            },
+            "banned": {
+                "other": "%(count)s-foje forbariĝis",
+                "one": "forbariĝis"
+            },
+            "unbanned_multiple": {
+                "other": "%(count)s-foje malforbariĝis",
+                "one": "malforbariĝis"
+            },
+            "unbanned": {
+                "other": "%(count)s-foje malforbariĝis",
+                "one": "malforbariĝis"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s%(count)s-foje sanĝis sian nomon",
+                "one": "%(severalUsers)sŝanĝis sian nomon"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s%(count)s-foje ŝanĝis sian nomon",
+                "one": "%(oneUser)sŝanĝis sian nomon"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)snenion ŝanĝis je %(count)s fojoj",
+                "one": "%(severalUsers)snenion ŝanĝis"
+            },
+            "no_change": {
+                "other": "%(oneUser)snenion ŝanĝis je %(count)s fojoj",
+                "one": "%(oneUser)snenion ŝanĝis"
+            },
+            "server_acls_multiple": {
+                "one": "%(severalUsers)s ŝanĝis la servilblokajn listojn",
+                "other": "%(severalUsers)s ŝanĝis la servilblokajn listojn %(count)s-foje"
+            },
+            "server_acls": {
+                "one": "%(oneUser)s ŝanĝis la servilblokajn listojn",
+                "other": "%(oneUser)s ŝanĝis la servilblokajn listojn %(count)s-foje"
+            }
         }
     },
     "slash_command": {
@@ -3045,5 +3028,34 @@
             "redact": "Forigi mesaĝojn senditajn de aliaj",
             "notifications.room": "Sciigi ĉiujn"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "Ili ne akordas",
+            "sas_match": "Ili akordas",
+            "in_person": "Por plia sekureco, faru tion persone, aŭ uzu alian fidatan komunikilon.",
+            "other_party_cancelled": "La alia kontrolano nuligis la kontrolon.",
+            "complete_title": "Kontrolita!",
+            "complete_description": "Vi sukcese kontrolis ĉi tiun uzanton.",
+            "qr_prompt": "Skanu ĉi tiun unikan kodon",
+            "sas_prompt": "Komparu unikajn bildsignojn",
+            "sas_description": "Komparu unikan aron de bildsignoj se vi ne havas kameraon sur la alia aparato"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Ofte uzataj",
+        "category_smileys_people": "Mienoj kaj homoj",
+        "category_animals_nature": "Bestoj kaj naturo",
+        "category_food_drink": "Manĝaĵoj kaj trinkaĵoj",
+        "category_activities": "Agadoj",
+        "category_travel_places": "Lokoj kaj vojaĝado",
+        "category_objects": "Aĵoj",
+        "category_symbols": "Simboloj",
+        "category_flags": "Flagoj",
+        "categories": "Kategorioj",
+        "quick_reactions": "Rapidaj reagoj"
+    },
+    "analytics": {
+        "consent_migration": "Vi antaŭe konsentis kunhavigi anonimajn uzdatumojn kun ni. Ni ĝisdatigas kiel tio funkcias."
     }
 }

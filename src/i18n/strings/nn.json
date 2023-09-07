@@ -200,86 +200,6 @@
     "Delete widget": "Slett widgeten",
     "Create new room": "Lag nytt rom",
     "Home": "Heim",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s har kome inn %(count)s gonger",
-        "one": "%(severalUsers)s kom inn"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s har kome inn %(count)s gonger",
-        "one": "%(oneUser)s kom inn"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s har fare %(count)s gonger",
-        "one": "%(severalUsers)s fór"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s har fare %(count)s gonger",
-        "one": "%(oneUser)s fór"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s har kome inn og fare att %(count)s gonger",
-        "one": "%(severalUsers)s kom inn og fór"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s har kome inn og fare att %(count)s gonger",
-        "one": "%(oneUser)s kom inn og fór"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s har fare og kome inn att %(count)s gonger",
-        "one": "%(severalUsers)s fór og kom inn att"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s har fare og kome inn att %(count)s gonger",
-        "one": "%(oneUser)s fór og kom inn att"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s sa nei til innbydingane %(count)s gonger",
-        "one": "%(severalUsers)s sa nei til innbydingane"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s sa nei til innbydinga %(count)s gonger",
-        "one": "%(oneUser)s sa nei til innbydinga"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)s fekk innbydingane sine attekne %(count)s gonger",
-        "one": "%(severalUsers)s fekk innbydinga si attteke"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)s fekk innbydinga si atteke %(count)s gonger",
-        "one": "%(oneUser)s fekk innbydinga si atteke"
-    },
-    "were invited %(count)s times": {
-        "other": "vart boden inn %(count)s gonger",
-        "one": "vart boden inn"
-    },
-    "was invited %(count)s times": {
-        "other": "vart boden inn %(count)s gonger",
-        "one": "vart boden inn"
-    },
-    "were banned %(count)s times": {
-        "other": "har vore stengd ute %(count)s gonger",
-        "one": "vart stengd ute"
-    },
-    "was banned %(count)s times": {
-        "other": "har vore stengd ute %(count)s gonger",
-        "one": "vart stengd ute"
-    },
-    "were unbanned %(count)s times": {
-        "other": "har vorta sloppe inn att %(count)s gonger",
-        "one": "vart sloppe inn att"
-    },
-    "was unbanned %(count)s times": {
-        "other": "har vorte sloppe inn att %(count)s gonger",
-        "one": "vart sloppe inn att"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s har endra namna sine %(count)s gonger",
-        "one": "%(severalUsers)s endra namna sine"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s har endra namnet sitt %(count)s gonger",
-        "one": "%(oneUser)s endra namnet sitt"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s og %(count)s til",
         "one": "%(items)s og ein til"
@@ -403,7 +323,6 @@
     "This room is not accessible by remote Matrix servers": "Rommet er ikkje tilgjengeleg for andre Matrix-heimtenarar",
     "Add an Integration": "Legg tillegg til",
     "Popout widget": "Popp widget ut",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "Custom level": "Tilpassa nivå",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Klarte ikkje å lasta handlinga som vert svara til. Anten finst ho ikkje elles har du ikkje tilgang til å sjå ho.",
     "Filter results": "Filtrer resultat",
@@ -723,7 +642,6 @@
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Du bør <b>fjerne dine personlege data</b> frå identitetstenaren <idserver /> før du koplar frå. Dessverre er identitetstenaren <idserver /> utilgjengeleg og kan ikkje nåast akkurat no.",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Vi tilrår at du slettar personleg informasjon, som e-postadresser og telefonnummer frå identitetstenaren før du koplar frå.",
     "Versions": "Versjonar",
-    "Identity server": "Identitetstenar",
     "The call was answered on another device.": "Samtalen vart svart på på ei anna eining.",
     "Norway": "Noreg",
     "Bahamas": "Bahamas",
@@ -771,8 +689,6 @@
     "Messages containing keywords": "Meldingar som inneheld nøkkelord",
     "Mentions & keywords": "Nemningar & nøkkelord",
     "Enable email notifications for %(email)s": "Aktiver varsel på epost for %(email)s",
-    "Message bubbles": "Snakkebobler",
-    "IRC (Experimental)": "IRC (eksperimentell)",
     "Keyboard shortcuts": "Tastatursnarvegar",
     "Keyboard": "Tastatur",
     "Image size in the timeline": "Storleik for bilete på tidslinja",
@@ -865,7 +781,8 @@
         "matrix": "Matrix",
         "unnamed_room": "Rom utan namn",
         "stickerpack": "Klistremerkepakke",
-        "system_alerts": "Systemvarsel"
+        "system_alerts": "Systemvarsel",
+        "identity_server": "Identitetstenar"
     },
     "action": {
         "continue": "Fortset",
@@ -1004,6 +921,10 @@
             "rule_suppress_notices": "Meldingar sendt frå ein bot",
             "rule_tombstone": "Når rom blir oppgraderte",
             "rule_encrypted_room_one_to_one": "Krypterte meldingar i ein-til-ein-samtalar"
+        },
+        "appearance": {
+            "layout_irc": "IRC (eksperimentell)",
+            "layout_bubbles": "Snakkebobler"
         }
     },
     "devtools": {
@@ -1079,6 +1000,89 @@
             "more_users": {
                 "other": "%(names)s og %(count)s andre skriv…",
                 "one": "%(names)s og ein annan skriv…"
+            }
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s har kome inn %(count)s gonger",
+                "one": "%(severalUsers)s kom inn"
+            },
+            "joined": {
+                "other": "%(oneUser)s har kome inn %(count)s gonger",
+                "one": "%(oneUser)s kom inn"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s har fare %(count)s gonger",
+                "one": "%(severalUsers)s fór"
+            },
+            "left": {
+                "other": "%(oneUser)s har fare %(count)s gonger",
+                "one": "%(oneUser)s fór"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s har kome inn og fare att %(count)s gonger",
+                "one": "%(severalUsers)s kom inn og fór"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s har kome inn og fare att %(count)s gonger",
+                "one": "%(oneUser)s kom inn og fór"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s har fare og kome inn att %(count)s gonger",
+                "one": "%(severalUsers)s fór og kom inn att"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s har fare og kome inn att %(count)s gonger",
+                "one": "%(oneUser)s fór og kom inn att"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s sa nei til innbydingane %(count)s gonger",
+                "one": "%(severalUsers)s sa nei til innbydingane"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s sa nei til innbydinga %(count)s gonger",
+                "one": "%(oneUser)s sa nei til innbydinga"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)s fekk innbydingane sine attekne %(count)s gonger",
+                "one": "%(severalUsers)s fekk innbydinga si attteke"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)s fekk innbydinga si atteke %(count)s gonger",
+                "one": "%(oneUser)s fekk innbydinga si atteke"
+            },
+            "invited_multiple": {
+                "other": "vart boden inn %(count)s gonger",
+                "one": "vart boden inn"
+            },
+            "invited": {
+                "other": "vart boden inn %(count)s gonger",
+                "one": "vart boden inn"
+            },
+            "banned_multiple": {
+                "other": "har vore stengd ute %(count)s gonger",
+                "one": "vart stengd ute"
+            },
+            "banned": {
+                "other": "har vore stengd ute %(count)s gonger",
+                "one": "vart stengd ute"
+            },
+            "unbanned_multiple": {
+                "other": "har vorta sloppe inn att %(count)s gonger",
+                "one": "vart sloppe inn att"
+            },
+            "unbanned": {
+                "other": "har vorte sloppe inn att %(count)s gonger",
+                "one": "vart sloppe inn att"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s har endra namna sine %(count)s gonger",
+                "one": "%(severalUsers)s endra namna sine"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s har endra namnet sitt %(count)s gonger",
+                "one": "%(oneUser)s endra namnet sitt"
             }
         }
     },

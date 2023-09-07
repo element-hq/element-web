@@ -95,7 +95,7 @@ class Header extends React.PureComponent<IProps> {
             <nav
                 className="mx_EmojiPicker_header"
                 role="tablist"
-                aria-label={_t("Categories")}
+                aria-label={_t("emoji|categories")}
                 onKeyDown={this.onKeyDown}
             >
                 {this.props.categories.map((category) => {

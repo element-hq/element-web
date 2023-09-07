@@ -170,87 +170,6 @@
     "Delete widget": "Обриши виџет",
     "Create new room": "Направи нову собу",
     "Home": "Почетна",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s су ушли %(count)s пута",
-        "one": "%(severalUsers)s је ушло"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "Корисник %(oneUser)s је ушао %(count)s пута",
-        "one": "Корисник %(oneUser)s је ушао"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s је изашло %(count)s пута",
-        "one": "%(severalUsers)s је изашло"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "Корисник %(oneUser)s је изашло %(count)s пута",
-        "one": "Корисник %(oneUser)s је изашао"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s је ушло и изашло %(count)s пута",
-        "one": "%(severalUsers)s је ушло и изашло"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s је ушао и изашао %(count)s пута",
-        "one": "%(oneUser)s је ушао и изашао"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s је изашло и поново ушло %(count)s пута",
-        "one": "%(severalUsers)s је изашло и поново ушло"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s је изашао и поново ушао %(count)s пута",
-        "one": "%(oneUser)s је изашао и поново ушао"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s је одбило њихове позивнице %(count)s пута",
-        "one": "%(severalUsers)s је одбило њихове позивнице"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s је одбио позивницу %(count)s пута",
-        "one": "%(oneUser)s је одбио позивницу"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "Корисницима %(severalUsers)s су позивнице повучене %(count)s пута",
-        "one": "Корисницима %(severalUsers)s су позивнице повучене"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "Кориснику %(oneUser)s је позивница повучена %(count)s пута",
-        "one": "Кориснику %(oneUser)s је позивница повучена"
-    },
-    "were invited %(count)s times": {
-        "other": "су позвани %(count)s пута",
-        "one": "су позвани"
-    },
-    "was invited %(count)s times": {
-        "other": "је позван %(count)s пута",
-        "one": "је позван"
-    },
-    "were banned %(count)s times": {
-        "other": "забрањен приступ %(count)s пута",
-        "one": "забрањен приступ"
-    },
-    "was banned %(count)s times": {
-        "other": "забрањен приступ %(count)s пута",
-        "one": "забрањен приступ"
-    },
-    "were unbanned %(count)s times": {
-        "other": "дозвољен приступ %(count)s пута",
-        "one": "дозвољен приступ"
-    },
-    "was unbanned %(count)s times": {
-        "other": "дозвољен приступ %(count)s пута",
-        "one": "дозвољен приступ"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s промени своје име %(count)s пута",
-        "one": "%(severalUsers)s промени своје име"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s промени своје име %(count)s пута",
-        "one": "%(oneUser)s промени своје име"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s и %(count)s других",
         "one": "%(items)s и још један"
@@ -473,8 +392,6 @@
     "Encryption not enabled": "Шифровање није омогућено",
     "The encryption used by this room isn't supported.": "Начин шифровања унутар ове собе није подржан.",
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>реаговали са %(shortName)s</reactedWith>",
-    "Smileys & People": "Смешци и особе",
-    "Quick Reactions": "Брзе реакције",
     "Widgets do not use message encryption.": "Виџети не користе шифровање порука.",
     "Enable end-to-end encryption": "Омогући шифровање с краја на крај",
     "Report Content to Your Homeserver Administrator": "Пријави садржај администратору вашег домаћег сервера",
@@ -518,7 +435,6 @@
     "Send as message": "Пошаљи у облику поруке",
     "Failed to revoke invite": "Неуспех при отказивању позивнице",
     "Revoke invite": "Откажи позивницу",
-    "Categories": "Категорије",
     "Your theme": "Ваша тема",
     "Looks good": "Изгледа добро",
     "Show advanced": "Прикажи напредно",
@@ -909,9 +825,6 @@
     "Lion": "лав",
     "Cat": "мачка",
     "Dog": "Пас",
-    "To be secure, do this in person or use a trusted way to communicate.": "Да будете сигурни, ово обавите лично или путем поузданог начина комуникације.",
-    "They don't match": "Не поклапају се",
-    "They match": "Поклапају се",
     "Cancelling…": "Отказујем…",
     "%(brand)s is securely caching encrypted messages locally for them to appear in search results:": "%(brand)s је локално сигурно кешира шифроване поруке да би се појавиле у резултатима претраге:",
     "You may want to try a different search or check for typos.": "Можда ћете желети да испробате другачију претрагу или да проверите да ли имате правописне грешке.",
@@ -1330,6 +1243,89 @@
                 "one": "%(names)s и још један корисник куца…",
                 "other": "%(names)s и %(count)s корисници куцају…"
             }
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s су ушли %(count)s пута",
+                "one": "%(severalUsers)s је ушло"
+            },
+            "joined": {
+                "other": "Корисник %(oneUser)s је ушао %(count)s пута",
+                "one": "Корисник %(oneUser)s је ушао"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s је изашло %(count)s пута",
+                "one": "%(severalUsers)s је изашло"
+            },
+            "left": {
+                "other": "Корисник %(oneUser)s је изашло %(count)s пута",
+                "one": "Корисник %(oneUser)s је изашао"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s је ушло и изашло %(count)s пута",
+                "one": "%(severalUsers)s је ушло и изашло"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s је ушао и изашао %(count)s пута",
+                "one": "%(oneUser)s је ушао и изашао"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s је изашло и поново ушло %(count)s пута",
+                "one": "%(severalUsers)s је изашло и поново ушло"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s је изашао и поново ушао %(count)s пута",
+                "one": "%(oneUser)s је изашао и поново ушао"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s је одбило њихове позивнице %(count)s пута",
+                "one": "%(severalUsers)s је одбило њихове позивнице"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s је одбио позивницу %(count)s пута",
+                "one": "%(oneUser)s је одбио позивницу"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "Корисницима %(severalUsers)s су позивнице повучене %(count)s пута",
+                "one": "Корисницима %(severalUsers)s су позивнице повучене"
+            },
+            "invite_withdrawn": {
+                "other": "Кориснику %(oneUser)s је позивница повучена %(count)s пута",
+                "one": "Кориснику %(oneUser)s је позивница повучена"
+            },
+            "invited_multiple": {
+                "other": "су позвани %(count)s пута",
+                "one": "су позвани"
+            },
+            "invited": {
+                "other": "је позван %(count)s пута",
+                "one": "је позван"
+            },
+            "banned_multiple": {
+                "other": "забрањен приступ %(count)s пута",
+                "one": "забрањен приступ"
+            },
+            "banned": {
+                "other": "забрањен приступ %(count)s пута",
+                "one": "забрањен приступ"
+            },
+            "unbanned_multiple": {
+                "other": "дозвољен приступ %(count)s пута",
+                "one": "дозвољен приступ"
+            },
+            "unbanned": {
+                "other": "дозвољен приступ %(count)s пута",
+                "one": "дозвољен приступ"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s промени своје име %(count)s пута",
+                "one": "%(severalUsers)s промени своје име"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s промени своје име %(count)s пута",
+                "one": "%(oneUser)s промени своје име"
+            }
         }
     },
     "slash_command": {
@@ -1405,5 +1401,17 @@
             "m.room.encryption": "Омогући шифровање собе",
             "state_default": "Промени подешавања"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "Не поклапају се",
+            "sas_match": "Поклапају се",
+            "in_person": "Да будете сигурни, ово обавите лично или путем поузданог начина комуникације."
+        }
+    },
+    "emoji": {
+        "category_smileys_people": "Смешци и особе",
+        "categories": "Категорије",
+        "quick_reactions": "Брзе реакције"
     }
 }

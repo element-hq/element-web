@@ -27,7 +27,7 @@ export default class VerificationCancelled extends React.Component<IProps> {
     public render(): React.ReactNode {
         return (
             <div>
-                <p>{_t("The other party cancelled the verification.")}</p>
+                <p>{_t("encryption|verification|other_party_cancelled")}</p>
                 <DialogButtons
                     primaryButton={_t("action|ok")}
                     hasCancel={false}

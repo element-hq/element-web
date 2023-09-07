@@ -656,18 +656,6 @@
     "Hold": "ຖື",
     "Resume": "ປະຫວັດຫຍໍ້",
     "Unsent": "ຍັງບໍ່ໄດ້ສົ່ງ",
-    "%(oneUser)schanged their name %(count)s times": {
-        "one": "%(oneUser)sໄດ້ປ່ຽນຊື່ຂອງເຂົາເຈົ້າ",
-        "other": "%(oneUser)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ %(count)sຄັ້ງ"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "one": "%(severalUsers)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ",
-        "other": "%(severalUsers)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ %(count)sຄັ້ງ"
-    },
-    "was removed %(count)s times": {
-        "one": "ລືບອອກ",
-        "other": "ລຶບອອກ %(count)s ເທື່ອ"
-    },
     "We encountered an error trying to restore your previous session.": "ພວກເຮົາພົບຄວາມຜິດພາດໃນການພະຍາຍາມຟື້ນຟູພາກສ່ວນທີ່ຜ່ານມາຂອງທ່ານ.",
     "Please provide an address": "ກະລຸນາລະບຸທີ່ຢູ່",
     "Some characters not allowed": "ບໍ່ອະນຸຍາດໃຫ້ບາງຕົວອັກສອນ",
@@ -699,7 +687,6 @@
     "Search for spaces": "ຊອກຫາພື້ນທີ່",
     "Create a new space": "ສ້າງພື້ນທີ່ໃຫມ່",
     "Want to add a new space instead?": "ຕ້ອງການເພີ່ມພື້ນທີ່ໃໝ່ແທນບໍ?",
-    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "ທ່ານສາມາດອ່ານເງື່ອນໄຂທັງໝົດຂອງພວກເຮົາໄດ້ <PrivacyPolicyUrl>ທີ່ນີ້</PrivacyPolicyUrl>",
     "Adding spaces has moved.": "ຍ້າຍພຶ້ນທີ່ເພິ່ມແລ້ວ.",
     "Search for rooms": "ຄົ້ນຫາຫ້ອງ",
     "Create a new room": "ສ້າງຫ້ອງໃຫມ່",
@@ -710,9 +697,6 @@
     "Invite anyway and never warn me again": "ເຊີນເລີຍ ແລະ ບໍ່ເຄີຍເຕືອນຂ້ອຍອີກ",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "ບໍ່ສາມາດຊອກຫາໂປຣໄຟລ໌ສຳລັບ Matrix IDs ທີ່ລະບຸໄວ້ຂ້າງລຸ່ມນີ້ - ທ່ານຕ້ອງການເຊີນເຂົາເຈົ້າບໍ່?",
     "The following users may not exist": "ຜູ້ໃຊ້ຕໍ່ໄປນີ້ອາດຈະບໍ່ມີຢູ່",
-    "You can turn this off anytime in settings": "ທ່ານສາມາດປິດຕັ້ງຄ່າໄດ້ທຸກເວລາ",
-    "We <Bold>don't</Bold> share information with third parties": "ພວກເຮົາ <Bold>ບໍ່</Bold> ແບ່ງປັນຂໍ້ມູນກັບພາກສ່ວນທີສາມ",
-    "We <Bold>don't</Bold> record or profile any account data": "ພວກເຮົາ <Bold>ບໍ່</Bold> ບັນທຶກ ຫຼື ປະຫວັດຂໍ້ມູນບັນຊີໃດໆ",
     "Search (must be enabled)": "ການຄົ້ນຫາ (ຕ້ອງເປີດໃຊ້ງານ)",
     "Send Logs": "ສົ່ງບັນທຶກ",
     "Clear Storage and Sign Out": "ລຶບບ່ອນຈັດເກັບຂໍ້ມູນ ແລະ ອອກຈາກລະບົບ",
@@ -1325,8 +1309,6 @@
     "An error occurred whilst saving your notification preferences.": "ເກີດຄວາມຜິດພາດໃນຂະນະທີ່ບັນທຶກການຕັ້ງຄ່າການແຈ້ງເຕືອນຂອງທ່ານ.",
     "Error saving notification preferences": "ເກີດຄວາມຜິດພາດໃນການບັນທຶກການຕັ້ງຄ່າການແຈ້ງເຕືອນ",
     "Messages containing keywords": "ຂໍ້ຄວາມທີ່ມີຄໍາສໍາຄັນ",
-    "Message bubbles": "ຟອງຂໍ້ຄວາມ",
-    "IRC (Experimental)": "(ທົດລອງ)IRC",
     "Updating spaces... (%(progress)s out of %(count)s)": {
         "one": "ກຳລັງປັບປຸງພື້ນທີ່..",
         "other": "ກຳລັງຍົກລະດັບພື້ນທີ່... (%(progress)s ຈາກທັງໝົດ %(count)s)"
@@ -1356,7 +1338,6 @@
     "Anyone can find and join.": "ທຸກຄົນສາມາດຊອກຫາ ແລະ ເຂົ້າຮ່ວມໄດ້.",
     "Only invited people can join.": "ສະເພາະຄົນທີ່ຖືກເຊີນເທົ່ານັ້ນທີ່ສາມາດເຂົ້າຮ່ວມໄດ້.",
     "Private (invite only)": "ສ່ວນຕົວ (ເຊີນສ່ວນຕົວເທົ່ານັ້ນ )",
-    "Integration manager": "ຜູ້ຈັດການປະສົມປະສານ",
     "The integration manager is offline or it cannot reach your homeserver.": "ຜູ້ຈັດການການເຊື່ອມໂຍງແມ່ນອອບໄລນ໌ຫຼືບໍ່ສາມາດເຂົ້າຫາ homeserver ຂອງທ່ານໄດ້.",
     "Cannot connect to integration manager": "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບຕົວຈັດການການເຊື່ອມໂຍງໄດ້",
     "Large": "ຂະຫນາດໃຫຍ່",
@@ -1626,116 +1607,7 @@
     "Rotate Left": "ໝຸນດ້ານຊ້າຍ",
     "expand": "ຂະຫຍາຍ",
     "collapse": "ບໍ່ສຳເລັດ",
-    "%(oneUser)ssent %(count)s hidden messages": {
-        "one": "%(oneUser)sສົ່ງຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
-        "other": "%(oneUser)s ສົ່ງ %(count)s ຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້"
-    },
-    "%(severalUsers)ssent %(count)s hidden messages": {
-        "one": "%(severalUsers)sສົ່ງຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
-        "other": "%(severalUsers)s ສົ່ງ %(count)s ຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້"
-    },
-    "%(oneUser)sremoved a message %(count)s times": {
-        "one": "%(oneUser)sລຶບຂໍ້ຄວາມອອກແລ້ວ",
-        "other": "%(oneUser)sລຶບ %(count)s ຂໍ້ຄວາມອອກແລ້ວ"
-    },
-    "%(severalUsers)sremoved a message %(count)s times": {
-        "one": "%(severalUsers)sໄດ້ລຶບຂໍ້ຄວາມອອກ",
-        "other": "%(severalUsers)sລຶບ %(count)s ຂໍ້ຄວາມອອກແລ້ວ"
-    },
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(oneUser)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ",
-        "other": "%(oneUser)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ %(count)s ເທື່ອ"
-    },
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(severalUsers)sໄດ້ປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ",
-        "other": "%(severalUsers)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ%(count)sເທື່ອ"
-    },
-    "%(oneUser)schanged the server ACLs %(count)s times": {
-        "one": "%(oneUser)sໄດ້ປ່ຽນເຊີບເວີ ACLs",
-        "other": "%(oneUser)sປ່ຽນເຊີບເວີ ACLs %(count)s ເທື່ອ"
-    },
-    "%(severalUsers)schanged the server ACLs %(count)s times": {
-        "one": "%(severalUsers)sປ່ຽນ ACL ຂອງເຊີບເວີ",
-        "other": "%(severalUsers)sປ່ຽນເຊີບເວີ ACLs %(count)sຄັ້ງ"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "one": "%(oneUser)sບໍ່ໄດ້ປ່ຽນແປງ",
-        "other": "%(oneUser)sບໍ່ໄດ້ປ່ຽນແປງ %(count)s ເທື່ອ"
-    },
-    "%(severalUsers)smade no changes %(count)s times": {
-        "one": "%(severalUsers)sບໍ່ມີການປ່ຽນແປງ",
-        "other": "%(severalUsers)sບໍ່ໄດ້ປ່ຽນແປງ %(count)s ເທື່ອ"
-    },
-    "were unbanned %(count)s times": {
-        "one": "ຍົກເລີກການຫ້າມ",
-        "other": "ຖືກຫ້າມ %(count)s ເທື່ອ"
-    },
-    "was banned %(count)s times": {
-        "one": "ຖືກຫ້າມ",
-        "other": "ຖືກຫ້າມ %(count)s ເທື່ອ"
-    },
-    "were banned %(count)s times": {
-        "one": "ຖືກຫ້າມ",
-        "other": "ຖືກຫ້າມ %(count)s ເທື່ອ"
-    },
-    "was invited %(count)s times": {
-        "one": "ຖືກເຊີນ",
-        "other": "ຖືກເຊີນ %(count)s ເທື່ອ"
-    },
-    "were invited %(count)s times": {
-        "one": "ໄດ້ຖືກເຊື້ອເຊີນ",
-        "other": "ໄດ້ຖືກເຊີນ %(count)s ເທື່ອ"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "one": "%(oneUser)sໄດ້ຖອນການເຊີນຂອງເຂົາເຈົ້າອອກແລ້ວ",
-        "other": "%(oneUser)sshad ການເຊີນຂອງເຂົາເຈົ້າຖອນອອກ %(count)s ຄັ້ງ"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "one": "%(severalUsers)s shad ການເຊີນຂອງເຂົາເຈົ້າຖອນອອກ",
-        "other": "%(severalUsers)s shad ການເຊີນຂອງພວກເຂົາຖືກຖອນ %(count)s ຄັ້ງ"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "one": "%(oneUser)sປະຕິເສດການເຊີນຂອງເຂົາເຈົ້າ",
-        "other": "%(oneUser)sປະຕິເສດການເຊີນຂອງເຂົາເຈົ້າ %(count)s ຄັ້ງ"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "one": "%(severalUsers)sປະຕິເສດຄຳເຊີນຂອງເຂົາເຈົ້າ",
-        "other": "%(severalUsers)sປະຕິເສດຄຳເຊີນຂອງເຂົາເຈົ້າ %(count)sເທື່ອ"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "one": "%(oneUser)s ອອກ ແລະເຂົ້າຮ່ວມຄືນໃໝ່",
-        "other": "%(oneUser)sອອກ ແລະເຂົ້າຮ່ວມ %(count)sຄັ້ງ"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "one": "%(severalUsers)s ອອກ ແລະເຂົ້າຮ່ວມໃຫມ່",
-        "other": "%(severalUsers)s ອອກ ແລະເຂົ້າຮ່ວມຄືນ %(count)sຄັ້ງ"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "one": "%(oneUser)sເຂົ້າຮ່ວມ ແລະ ອອກ",
-        "other": "%(oneUser)sເຂົ້າຮ່ວມ ແລະ ອອກ %(count)s ຄັ້ງ"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "one": "%(severalUsers)sເຂົ້າຮ່ວມ ແລະ ອອກ",
-        "other": "%(severalUsers)sເຂົ້າຮ່ວມ ແລະອອກຈາກ %(count)s ເທື່ອ"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "one": "%(oneUser)sອອກ",
-        "other": "%(oneUser)sອອກຈາກ%(count)s ເທື່ອ"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "one": "ອອກຈາກ%(severalUsers)s",
-        "other": "%(severalUsers)sອອກ %(count)sຄັ້ງ"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "one": "%(oneUser)sເຂົ້າຮ່ວມ",
-        "other": "%(oneUser)sເຂົ້າຮ່ວມ %(count)sຄັ້ງ"
-    },
-    "%(severalUsers)sjoined %(count)s times": {
-        "one": "%(severalUsers)sເຂົ້າຮ່ວມ",
-        "other": "%(severalUsers)sເຂົ້າຮ່ວມ %(count)sຄັ້ງ"
-    },
     "Something went wrong!": "ມີບາງຢ່າງຜິດພາດ!",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "ກະລຸນາ <newIssueLink>ສ້າງບັນຫາໃໝ່</newIssueLink> ໃນ GitHub ເພື່ອໃຫ້ພວກເຮົາສາມາດກວດສອບຂໍ້ຜິດພາດນີ້ໄດ້.",
     "Share content": "ແບ່ງປັນເນື້ອໃນ",
     "Application window": "ປ່ອງຢ້ຽມຄໍາຮ້ອງສະຫມັກ",
     "Share entire screen": "ແບ່ງປັນຫນ້າຈໍທັງໝົດ",
@@ -1759,14 +1631,6 @@
     "Your display name": "ສະແດງຊື່ຂອງທ່ານ",
     "Any of the following data may be shared:": "ຂໍ້ມູນຕໍ່ໄປນີ້ອາດຈະຖືກແບ່ງປັນ:",
     "Cancel search": "ຍົກເລີກການຄົ້ນຫາ",
-    "Quick Reactions": "ການໂຕ້ຕອບທັນທີ",
-    "Categories": "ໝວດໝູ່",
-    "Flags": "ທຸງ",
-    "Symbols": "ສັນຍາລັກ",
-    "Objects": "ວັດຖຸ",
-    "Travel & Places": "ການເດີນທາງ & ສະຖານທີ່",
-    "Activities": "ກິດຈະກໍາ",
-    "Food & Drink": "ອາຫານ ແລະ ເຄື່ອງດື່ມ",
     "The export was cancelled successfully": "ຍົກເລີກການສົ່ງອອກສຳເລັດແລ້ວ",
     "MB": "ເມກາໄບ",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການສິ້ນສຸດການສຳຫຼວດນີ້? ນີ້ຈະສະແດງຜົນສຸດທ້າຍຂອງການລົງຄະແນນສຽງ ແລະ ຢຸດບໍ່ໃຫ້ປະຊາຊົນສາມາດລົງຄະແນນສຽງໄດ້.",
@@ -1900,9 +1764,6 @@
     "You created this room.": "ທ່ານສ້າງຫ້ອງນີ້.",
     "<a>Add a topic</a> to help people know what it is about.": "<a>ເພີ່ມຫົວຂໍ້</a> ເພື່ອຊ່ວຍໃຫ້ຄົນຮູ້ວ່າກ່ຽວກັບຫຍັງ.",
     "Topic: %(topic)s ": "ຫົວຂໍ້: %(topic)s ",
-    "Animals & Nature": "ສັດ & ທໍາມະຊາດ",
-    "Smileys & People": "ຮອຍຍິ້ມ & ຜູ້ຄົນ",
-    "Frequently Used": "ໃຊ້ເປັນປະຈຳ",
     "What location type do you want to share?": "ທ່ານຕ້ອງການແບ່ງປັນສະຖານທີ່ປະເພດໃດ?",
     "Drop a Pin": "ປັກໝຸດ",
     "My live location": "ສະຖານທີ່ຂອງຂ້ອຍ",
@@ -2006,9 +1867,6 @@
     "Don't miss a reply": "ຢ່າພາດການຕອບກັບ",
     "Later": "ຕໍ່ມາ",
     "Review to ensure your account is safe": "ກວດສອບໃຫ້ແນ່ໃຈວ່າບັນຊີຂອງທ່ານປອດໄພ",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "ແບ່ງປັນຂໍ້ມູນທີ່ບໍ່ເປີດເຜີຍຊື່ເພື່ອຊ່ວຍພວກເຮົາລະບຸບັນຫາ. ບໍ່ມີຫຍັງສ່ວນຕົວ. ບໍ່ມີຄົນທີສາມ. <LearnMoreLink>ສຶກສາເພີ່ມເຕີມ</LearnMoreLink>",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "ກ່ອນໜ້ານີ້ທ່ານໄດ້ຍິນຍອມທີ່ຈະແບ່ງປັນຂໍ້ມູນການນຳໃຊ້ທີ່ບໍ່ເປີດເຜີຍຊື່ກັບພວກເຮົາ. ພວກເຮົາກຳລັງອັບເດດວິທີການເຮັດວຽກນັ້ນ.",
-    "Help improve %(analyticsOwner)s": "ຊ່ວຍປັບປຸງ %(analyticsOwner)s",
     "That's fine": "ບໍ່ເປັນຫຍັງ",
     "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.": "homeserver ນີ້ບໍ່ໄດ້ຖືກຕັ້ງຄ່າຢ່າງຖືກຕ້ອງເພື່ອສະແດງແຜນທີ່, ຫຼື ເຊີບເວີແຜນທີ່ ທີ່ຕັ້ງໄວ້ອາດຈະບໍ່ສາມາດຕິດຕໍ່ໄດ້.",
     "This homeserver is not configured to display maps.": "homeserver ນີ້ບໍ່ໄດ້ຕັ້ງຄ່າເພື່ອສະແດງແຜນທີ່.",
@@ -2176,11 +2034,6 @@
     "If you can't scan the code above, verify by comparing unique emoji.": "ຖ້າທ່ານບໍ່ສາມາດສະແກນລະຫັດຂ້າງເທິງໄດ້, ໃຫ້ກວດສອບໂດຍການປຽບທຽບອີໂມຈິທີ່ເປັນເອກະລັກ.",
     "Ask %(displayName)s to scan your code:": "ໃຫ້ %(displayName)s ສະແກນລະຫັດຂອງທ່ານ:",
     "Verify by scanning": "ຢືນຢັນໂດຍການສະແກນ",
-    "Verify this device by completing one of the following:": "ຢັ້ງຢືນອຸປະກອນນີ້ໂດຍການເຮັດສິ່ງໃດໜຶ່ງຕໍ່ໄປນີ້:",
-    "Compare a unique set of emoji if you don't have a camera on either device": "ປຽບທຽບຊຸດ emoji ທີ່ເປັນເອກະລັກຖ້າຫາກທ່ານບໍ່ມີກ້ອງຖ່າຍຮູບຢູ່ໃນອຸປະກອນໃດໜຶ່ງ",
-    "Compare unique emoji": "ປຽບທຽບ emoji ທີ່ເປັນເອກະລັກ",
-    "Scan this unique code": "ສະແກນລະຫັດສະເພາະນີ້",
-    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "ອຸປະກອນທີ່ທ່ານພະຍາຍາມກວດສອບບໍ່ຮອງຮັບການສະແກນລະຫັດ QR ຫຼື ການຢັ້ງຢືນ emoji, ຊຶ່ງເປັນສິ່ງທີ່%(brand)sສະຫນັບສະຫນູນ. ລອງໃຊ້ກັບລູກຄ້າອື່ນ.",
     "Edit devices": "ແກ້ໄຂອຸປະກອນ",
     "This client does not support end-to-end encryption.": "ລູກຄ້ານີ້ບໍ່ຮອງຮັບການເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງ.",
     "Role in <RoomName/>": "ບົດບາດໃນ <RoomName />",
@@ -2351,19 +2204,10 @@
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "ການນໍາໃຊ້ຕົວເຊີບເວີເປັນທາງເລືອກ. ຖ້າທ່ານເລືອກທີ່ຈະບໍ່ໃຊ້ຕົວເຊີບເວີ, ທ່ານຈະບໍ່ຖືກຄົ້ນພົບໂດຍຜູ້ໃຊ້ອື່ນ ແລະ ທ່ານຈະບໍ່ສາມາດເຊີນຜູ້ອື່ນໂດຍອີເມລ໌ຫຼືໂທລະສັບ.",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "ການຕັດການເຊື່ອມຕໍ່ຈາກຕົວເຊີບເວີຂອງທ່ານຈະຫມາຍຄວາມວ່າທ່ານຈະບໍ່ຖືກຄົ້ນຫາໂດຍຜູ້ໃຊ້ອື່ນ ແລະ ທ່ານຈະບໍ່ສາມາດເຊີນຜູ້ອື່ນໂດຍອີເມລ໌ ຫຼື ໂທລະສັບ.",
     "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "ໃນປັດຈຸບັນທ່ານບໍ່ໄດ້ໃຊ້ເຊີບເວີ. ເພື່ອຄົ້ນຫາ ແລະ ສາມາດຄົ້ນຫາໄດ້ໂດຍຜູ້ຕິດຕໍ່ທີ່ມີຢູ່ແລ້ວ, ໃຫ້ເພີ່ມທີ່ຢຸ່ຂ້າງລຸ່ມນີ້.",
-    "Identity server": "ຕົວເຊີບເວີ",
     "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "ຖ້າຫາກວ່າທ່ານບໍ່ຕ້ອງການທີ່ຈະນໍາໃຊ້ <server /> ເພື່ອຄົ້ນຫາ ແລະ ສາມາດຄົ້ນຫາໂດຍການຕິດຕໍ່ທີ່ມີຢູ່ແລ້ວ, ເຂົ້າໄປໃນຕົວ server ອື່ນຂ້າງລຸ່ມນີ້.",
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "ຕອນນີ້ທ່ານກຳລັງໃຊ້ <server></server> ເພື່ອຄົ້ນຫາ ແລະ ສາມາດຄົ້ນຫາໄດ້ໂດຍຜູ້ຕິດຕໍ່ທີ່ມີຢູ່ແລ້ວ. ທ່ານສາມາດປ່ຽນເຊີບເວນຂອງທ່ານໄດ້ຂ້າງລຸ່ມນີ້.",
     "Identity server (%(server)s)": "ເຊີບເວີ %(server)s)",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "ພວກເຮົາແນະນໍາໃຫ້ທ່ານເອົາທີ່ຢູ່ອີເມວ ແລະ ເບີໂທລະສັບຂອງທ່ານອອກຈາກເຊີບເວີກ່ອນທີ່ຈະຕັດການເຊື່ອມຕໍ່.",
-    "was unbanned %(count)s times": {
-        "one": "ຍົກເລີກການຫ້າມ",
-        "other": "ຖືກຍົກເລີກການຫ້າມ %(count)s ເທື່ອ"
-    },
-    "were removed %(count)s times": {
-        "one": "ໄດ້ຖືກລຶບອອກ",
-        "other": "ໄດ້ຖືກ]ລືບອອກ %(count)s ເທື່ອ"
-    },
     "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "ທ່ານຍັງ <b>ແບ່ງປັນຂໍ້ມູນສ່ວນຕົວຂອງທ່ານ</b> ຢູ່ໃນເຊີບເວີ <idserver />.",
     "Disconnect anyway": "ຍົກເລີກການເຊື່ອມຕໍ່",
     "wait and try again later": "ລໍຖ້າແລ້ວລອງໃໝ່ໃນພາຍຫຼັງ",
@@ -2428,9 +2272,6 @@
     "Lion": "ຊ້າງ",
     "Cat": "ແມວ",
     "Dog": "ໝາ",
-    "To be secure, do this in person or use a trusted way to communicate.": "ເພື່ອຄວາມປອດໄພ, ໃຫ້ເຮັດແນວນີ້ດ້ວຍຕົນເອງ ຫຼືໃຊ້ວິທີຕິດຕໍ່ສື່ສານທີ່ເຊື່ອຖືໄດ້.",
-    "They match": "ກົງກັນ",
-    "They don't match": "ບໍ່ກົງກັນ",
     "Cancelling…": "ກຳລັງຍົກເລີກ…",
     "Waiting for %(displayName)s to verify…": "ກຳລັງລໍຖ້າ %(displayName)s ເພື່ອຢັ້ງຢືນ…",
     "Waiting for you to verify on your other device…": "ກຳລັງລໍຖ້າໃຫ້ທ່ານຢັ້ງຢືນໃນອຸປະກອນອື່ນຂອງທ່ານ…",
@@ -2442,9 +2283,6 @@
     "Confirm the emoji below are displayed on both devices, in the same order:": "ຢືນຢັນວ່າ emoji ຂ້າງລຸ່ມນີ້ແມ່ນສະແດງຢູ່ໃນອຸປະກອນທັງສອງ, ໃນລໍາດັບດຽວກັນ:",
     "Got It": "ເຂົ້າໃຈແລ້ວ",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "ຂໍ້ຄວາມທີ່ປອດໄພກັບຜູ້ໃຊ້ນີ້ແມ່ນຖືກເຂົ້າລະຫັດແຕ່ຕົ້ນທາງເຖິງປາຍທາງ ແລະ ບໍ່ສາມາດອ່ານໄດ້ໂດຍພາກສ່ວນທີສາມ.",
-    "You've successfully verified this user.": "ທ່ານໄດ້ຢັ້ງຢືນຜູ້ໃຊ້ນີ້ສຳເລັດແລ້ວ.",
-    "Verified!": "ຢືນຢັນແລ້ວ!",
-    "The other party cancelled the verification.": "ອີກຝ່າຍໄດ້ຍົກເລີກການຢັ້ງຢືນ.",
     "More": "ເພີ່ມເຕີມ",
     "Show sidebar": "ສະແດງແຖບດ້ານຂ້າງ",
     "Hide sidebar": "ເຊື່ອງແຖບດ້ານຂ້າງ",
@@ -2633,7 +2471,6 @@
     "To leave the beta, visit your settings.": "ເພື່ອອອກຈາກເບຕ້າ, ໃຫ້ເຂົ້າໄປທີ່ການຕັ້ງຄ່າຂອງທ່ານ.",
     "%(featureName)s Beta feedback": "%(featureName)s ຄຳຕິຊົມເບຕ້າ",
     "Close dialog": "ປິດກ່ອງໂຕ້ຕອບ",
-    "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "ຊ່ວຍພວກເຮົາລະບຸບັນຫາ ແລະ ປັບປຸງ %(analyticsOwner)s ໂດຍການແບ່ງປັນຂໍ້ມູນການນຳໃຊ້ທີ່ບໍ່ເປີດເຜີຍຊື່. ເພື່ອເຂົ້າໃຈວິທີທີ່ຄົນໃຊ້ຫຼາຍອຸປະກອນ, ພວກເຮົາຈະສ້າງຕົວລະບຸແບບສຸ່ມ, ແບ່ງປັນໂດຍອຸປະກອນຂອງທ່ານ.",
     "Not all selected were added": "ບໍ່ໄດ້ເລືອກທັງໝົດທີ່ຖືກເພີ່ມ",
     "Looks good": "ດີ",
     "And %(count)s more...": {
@@ -2643,7 +2480,6 @@
         "one": "%(count)s ຄົນທີ່ທ່ານຮູ້ຈັກໄດ້ເຂົ້າຮ່ວມແລ້ວ",
         "other": "%(count)s ຄົນທີ່ທ່ານຮູ້ຈັກໄດ້ເຂົ້າຮ່ວມແລ້ວ"
     },
-    "%(nameList)s %(transitionList)s": "%(nameList)s%(transitionList)s",
     "%(brand)s URL": "%(brand)s URL",
     "Failed to ban user": "ຫ້າມຜູ້ໃຊ້ບໍ່ສຳເລັດ",
     "They won't be able to access whatever you're not an admin of.": "ເຂົາເຈົ້າຈະບໍ່ສາມາດເຂົ້າເຖິງໄດ້ ຫາກທ່ານບໍ່ແມ່ນຜູ້ຄຸ້ມຄອງລະບົບ.",
@@ -2791,7 +2627,9 @@
         "stickerpack": "ຊຸດສະຕິກເກີ",
         "system_alerts": "ການແຈ້ງເຕືອນລະບົບ",
         "secure_backup": "ການສໍາຮອງທີ່ປອດໄພ",
-        "cross_signing": "ການເຂົ້າລະຫັດແບບໄຂ້ວ"
+        "cross_signing": "ການເຂົ້າລະຫັດແບບໄຂ້ວ",
+        "identity_server": "ຕົວເຊີບເວີ",
+        "integration_manager": "ຜູ້ຈັດການປະສົມປະສານ"
     },
     "action": {
         "continue": "ສືບຕໍ່",
@@ -2952,7 +2790,8 @@
         "collecting_information": "ກຳລັງເກັບກຳຂໍ້ມູນເວີຊັນແອັບ",
         "collecting_logs": "ການເກັບກໍາຂໍ້ມູນບັນທຶກ",
         "uploading_logs": "ກຳລັງບັນທຶກການອັບໂຫຼດ",
-        "downloading_logs": "ບັນທຶກການດາວໂຫຼດ"
+        "downloading_logs": "ບັນທຶກການດາວໂຫຼດ",
+        "create_new_issue": "ກະລຸນາ <newIssueLink>ສ້າງບັນຫາໃໝ່</newIssueLink> ໃນ GitHub ເພື່ອໃຫ້ພວກເຮົາສາມາດກວດສອບຂໍ້ຜິດພາດນີ້ໄດ້."
     },
     "time": {
         "seconds_left": "ຍັງເຫຼືອ %(seconds)s",
@@ -3025,6 +2864,10 @@
             "rule_suppress_notices": "ຂໍ້ຄວາມທີ່ສົ່ງໂດຍ bot",
             "rule_tombstone": "ເມື່ອມີການຍົກລະດັບຫ້ອງ",
             "rule_encrypted_room_one_to_one": "ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດໃນການສົນທະນາແບບຫນຶ່ງຕໍ່ຫນຶ່ງ"
+        },
+        "appearance": {
+            "layout_irc": "(ທົດລອງ)IRC",
+            "layout_bubbles": "ຟອງຂໍ້ຄວາມ"
         }
     },
     "devtools": {
@@ -3240,6 +3083,137 @@
         },
         "m.call.hangup": {
             "dm": "ສິ້ນສຸດການໂທ"
+        },
+        "summary": {
+            "format": "%(nameList)s%(transitionList)s",
+            "joined_multiple": {
+                "one": "%(severalUsers)sເຂົ້າຮ່ວມ",
+                "other": "%(severalUsers)sເຂົ້າຮ່ວມ %(count)sຄັ້ງ"
+            },
+            "joined": {
+                "one": "%(oneUser)sເຂົ້າຮ່ວມ",
+                "other": "%(oneUser)sເຂົ້າຮ່ວມ %(count)sຄັ້ງ"
+            },
+            "left_multiple": {
+                "one": "ອອກຈາກ%(severalUsers)s",
+                "other": "%(severalUsers)sອອກ %(count)sຄັ້ງ"
+            },
+            "left": {
+                "one": "%(oneUser)sອອກ",
+                "other": "%(oneUser)sອອກຈາກ%(count)s ເທື່ອ"
+            },
+            "joined_and_left_multiple": {
+                "one": "%(severalUsers)sເຂົ້າຮ່ວມ ແລະ ອອກ",
+                "other": "%(severalUsers)sເຂົ້າຮ່ວມ ແລະອອກຈາກ %(count)s ເທື່ອ"
+            },
+            "joined_and_left": {
+                "one": "%(oneUser)sເຂົ້າຮ່ວມ ແລະ ອອກ",
+                "other": "%(oneUser)sເຂົ້າຮ່ວມ ແລະ ອອກ %(count)s ຄັ້ງ"
+            },
+            "rejoined_multiple": {
+                "one": "%(severalUsers)s ອອກ ແລະເຂົ້າຮ່ວມໃຫມ່",
+                "other": "%(severalUsers)s ອອກ ແລະເຂົ້າຮ່ວມຄືນ %(count)sຄັ້ງ"
+            },
+            "rejoined": {
+                "one": "%(oneUser)s ອອກ ແລະເຂົ້າຮ່ວມຄືນໃໝ່",
+                "other": "%(oneUser)sອອກ ແລະເຂົ້າຮ່ວມ %(count)sຄັ້ງ"
+            },
+            "rejected_invite_multiple": {
+                "one": "%(severalUsers)sປະຕິເສດຄຳເຊີນຂອງເຂົາເຈົ້າ",
+                "other": "%(severalUsers)sປະຕິເສດຄຳເຊີນຂອງເຂົາເຈົ້າ %(count)sເທື່ອ"
+            },
+            "rejected_invite": {
+                "one": "%(oneUser)sປະຕິເສດການເຊີນຂອງເຂົາເຈົ້າ",
+                "other": "%(oneUser)sປະຕິເສດການເຊີນຂອງເຂົາເຈົ້າ %(count)s ຄັ້ງ"
+            },
+            "invite_withdrawn_multiple": {
+                "one": "%(severalUsers)s shad ການເຊີນຂອງເຂົາເຈົ້າຖອນອອກ",
+                "other": "%(severalUsers)s shad ການເຊີນຂອງພວກເຂົາຖືກຖອນ %(count)s ຄັ້ງ"
+            },
+            "invite_withdrawn": {
+                "one": "%(oneUser)sໄດ້ຖອນການເຊີນຂອງເຂົາເຈົ້າອອກແລ້ວ",
+                "other": "%(oneUser)sshad ການເຊີນຂອງເຂົາເຈົ້າຖອນອອກ %(count)s ຄັ້ງ"
+            },
+            "invited_multiple": {
+                "one": "ໄດ້ຖືກເຊື້ອເຊີນ",
+                "other": "ໄດ້ຖືກເຊີນ %(count)s ເທື່ອ"
+            },
+            "invited": {
+                "one": "ຖືກເຊີນ",
+                "other": "ຖືກເຊີນ %(count)s ເທື່ອ"
+            },
+            "banned_multiple": {
+                "one": "ຖືກຫ້າມ",
+                "other": "ຖືກຫ້າມ %(count)s ເທື່ອ"
+            },
+            "banned": {
+                "one": "ຖືກຫ້າມ",
+                "other": "ຖືກຫ້າມ %(count)s ເທື່ອ"
+            },
+            "unbanned_multiple": {
+                "one": "ຍົກເລີກການຫ້າມ",
+                "other": "ຖືກຫ້າມ %(count)s ເທື່ອ"
+            },
+            "unbanned": {
+                "one": "ຍົກເລີກການຫ້າມ",
+                "other": "ຖືກຍົກເລີກການຫ້າມ %(count)s ເທື່ອ"
+            },
+            "kicked_multiple": {
+                "one": "ໄດ້ຖືກລຶບອອກ",
+                "other": "ໄດ້ຖືກ]ລືບອອກ %(count)s ເທື່ອ"
+            },
+            "kicked": {
+                "one": "ລືບອອກ",
+                "other": "ລຶບອອກ %(count)s ເທື່ອ"
+            },
+            "changed_name_multiple": {
+                "one": "%(severalUsers)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ",
+                "other": "%(severalUsers)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ %(count)sຄັ້ງ"
+            },
+            "changed_name": {
+                "one": "%(oneUser)sໄດ້ປ່ຽນຊື່ຂອງເຂົາເຈົ້າ",
+                "other": "%(oneUser)sປ່ຽນຊື່ຂອງເຂົາເຈົ້າ %(count)sຄັ້ງ"
+            },
+            "no_change_multiple": {
+                "one": "%(severalUsers)sບໍ່ມີການປ່ຽນແປງ",
+                "other": "%(severalUsers)sບໍ່ໄດ້ປ່ຽນແປງ %(count)s ເທື່ອ"
+            },
+            "no_change": {
+                "one": "%(oneUser)sບໍ່ໄດ້ປ່ຽນແປງ",
+                "other": "%(oneUser)sບໍ່ໄດ້ປ່ຽນແປງ %(count)s ເທື່ອ"
+            },
+            "server_acls_multiple": {
+                "one": "%(severalUsers)sປ່ຽນ ACL ຂອງເຊີບເວີ",
+                "other": "%(severalUsers)sປ່ຽນເຊີບເວີ ACLs %(count)sຄັ້ງ"
+            },
+            "server_acls": {
+                "one": "%(oneUser)sໄດ້ປ່ຽນເຊີບເວີ ACLs",
+                "other": "%(oneUser)sປ່ຽນເຊີບເວີ ACLs %(count)s ເທື່ອ"
+            },
+            "pinned_events_multiple": {
+                "one": "%(severalUsers)sໄດ້ປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ",
+                "other": "%(severalUsers)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ%(count)sເທື່ອ"
+            },
+            "pinned_events": {
+                "one": "%(oneUser)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ",
+                "other": "%(oneUser)sປ່ຽນ <a>ຂໍ້ຄວາມທີ່ປັກໝຸດໄວ້</a> ສຳລັບຫ້ອງ %(count)s ເທື່ອ"
+            },
+            "redacted_multiple": {
+                "one": "%(severalUsers)sໄດ້ລຶບຂໍ້ຄວາມອອກ",
+                "other": "%(severalUsers)sລຶບ %(count)s ຂໍ້ຄວາມອອກແລ້ວ"
+            },
+            "redacted": {
+                "one": "%(oneUser)sລຶບຂໍ້ຄວາມອອກແລ້ວ",
+                "other": "%(oneUser)sລຶບ %(count)s ຂໍ້ຄວາມອອກແລ້ວ"
+            },
+            "hidden_event_multiple": {
+                "one": "%(severalUsers)sສົ່ງຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
+                "other": "%(severalUsers)s ສົ່ງ %(count)s ຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້"
+            },
+            "hidden_event": {
+                "one": "%(oneUser)sສົ່ງຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
+                "other": "%(oneUser)s ສົ່ງ %(count)s ຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້"
+            }
         }
     },
     "slash_command": {
@@ -3388,5 +3362,43 @@
             "redact": "ລົບຂໍ້ຄວາມທີ່ຄົນອື່ນສົ່ງມາ",
             "notifications.room": "ແຈ້ງເຕືອນທຸກຄົນ"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "ບໍ່ກົງກັນ",
+            "sas_match": "ກົງກັນ",
+            "in_person": "ເພື່ອຄວາມປອດໄພ, ໃຫ້ເຮັດແນວນີ້ດ້ວຍຕົນເອງ ຫຼືໃຊ້ວິທີຕິດຕໍ່ສື່ສານທີ່ເຊື່ອຖືໄດ້.",
+            "other_party_cancelled": "ອີກຝ່າຍໄດ້ຍົກເລີກການຢັ້ງຢືນ.",
+            "complete_title": "ຢືນຢັນແລ້ວ!",
+            "complete_description": "ທ່ານໄດ້ຢັ້ງຢືນຜູ້ໃຊ້ນີ້ສຳເລັດແລ້ວ.",
+            "no_support_qr_emoji": "ອຸປະກອນທີ່ທ່ານພະຍາຍາມກວດສອບບໍ່ຮອງຮັບການສະແກນລະຫັດ QR ຫຼື ການຢັ້ງຢືນ emoji, ຊຶ່ງເປັນສິ່ງທີ່%(brand)sສະຫນັບສະຫນູນ. ລອງໃຊ້ກັບລູກຄ້າອື່ນ.",
+            "qr_prompt": "ສະແກນລະຫັດສະເພາະນີ້",
+            "sas_prompt": "ປຽບທຽບ emoji ທີ່ເປັນເອກະລັກ",
+            "sas_description": "ປຽບທຽບຊຸດ emoji ທີ່ເປັນເອກະລັກຖ້າຫາກທ່ານບໍ່ມີກ້ອງຖ່າຍຮູບຢູ່ໃນອຸປະກອນໃດໜຶ່ງ",
+            "qr_or_sas_header": "ຢັ້ງຢືນອຸປະກອນນີ້ໂດຍການເຮັດສິ່ງໃດໜຶ່ງຕໍ່ໄປນີ້:"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "ໃຊ້ເປັນປະຈຳ",
+        "category_smileys_people": "ຮອຍຍິ້ມ & ຜູ້ຄົນ",
+        "category_animals_nature": "ສັດ & ທໍາມະຊາດ",
+        "category_food_drink": "ອາຫານ ແລະ ເຄື່ອງດື່ມ",
+        "category_activities": "ກິດຈະກໍາ",
+        "category_travel_places": "ການເດີນທາງ & ສະຖານທີ່",
+        "category_objects": "ວັດຖຸ",
+        "category_symbols": "ສັນຍາລັກ",
+        "category_flags": "ທຸງ",
+        "categories": "ໝວດໝູ່",
+        "quick_reactions": "ການໂຕ້ຕອບທັນທີ"
+    },
+    "analytics": {
+        "enable_prompt": "ຊ່ວຍປັບປຸງ %(analyticsOwner)s",
+        "consent_migration": "ກ່ອນໜ້ານີ້ທ່ານໄດ້ຍິນຍອມທີ່ຈະແບ່ງປັນຂໍ້ມູນການນຳໃຊ້ທີ່ບໍ່ເປີດເຜີຍຊື່ກັບພວກເຮົາ. ພວກເຮົາກຳລັງອັບເດດວິທີການເຮັດວຽກນັ້ນ.",
+        "learn_more": "ແບ່ງປັນຂໍ້ມູນທີ່ບໍ່ເປີດເຜີຍຊື່ເພື່ອຊ່ວຍພວກເຮົາລະບຸບັນຫາ. ບໍ່ມີຫຍັງສ່ວນຕົວ. ບໍ່ມີຄົນທີສາມ. <LearnMoreLink>ສຶກສາເພີ່ມເຕີມ</LearnMoreLink>",
+        "privacy_policy": "ທ່ານສາມາດອ່ານເງື່ອນໄຂທັງໝົດຂອງພວກເຮົາໄດ້ <PrivacyPolicyUrl>ທີ່ນີ້</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "ຊ່ວຍພວກເຮົາລະບຸບັນຫາ ແລະ ປັບປຸງ %(analyticsOwner)s ໂດຍການແບ່ງປັນຂໍ້ມູນການນຳໃຊ້ທີ່ບໍ່ເປີດເຜີຍຊື່. ເພື່ອເຂົ້າໃຈວິທີທີ່ຄົນໃຊ້ຫຼາຍອຸປະກອນ, ພວກເຮົາຈະສ້າງຕົວລະບຸແບບສຸ່ມ, ແບ່ງປັນໂດຍອຸປະກອນຂອງທ່ານ.",
+        "bullet_1": "ພວກເຮົາ <Bold>ບໍ່</Bold> ບັນທຶກ ຫຼື ປະຫວັດຂໍ້ມູນບັນຊີໃດໆ",
+        "bullet_2": "ພວກເຮົາ <Bold>ບໍ່</Bold> ແບ່ງປັນຂໍ້ມູນກັບພາກສ່ວນທີສາມ",
+        "disable_prompt": "ທ່ານສາມາດປິດຕັ້ງຄ່າໄດ້ທຸກເວລາ"
     }
 }

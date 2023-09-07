@@ -170,7 +170,6 @@
     "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
     "Create Account": "Hesab Aç",
     "Explore rooms": "Otaqları kəşf edin",
-    "Identity server": "Eyniləşdirmənin serveri",
     "common": {
         "analytics": "Analitik",
         "error": "Səhv",
@@ -183,7 +182,8 @@
         "favourites": "Seçilmişlər",
         "attachment": "Əlavə",
         "emoji": "Smaylar",
-        "unnamed_room": "Adı açıqlanmayan otaq"
+        "unnamed_room": "Adı açıqlanmayan otaq",
+        "identity_server": "Eyniləşdirmənin serveri"
     },
     "action": {
         "continue": "Davam etmək",

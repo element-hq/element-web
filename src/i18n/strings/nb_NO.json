@@ -172,16 +172,6 @@
     "Download %(text)s": "Last ned %(text)s",
     "Copied!": "Kopiert!",
     "What's New": "Hva er nytt",
-    "Frequently Used": "Ofte brukte",
-    "Smileys & People": "Smilefjes og folk",
-    "Animals & Nature": "Dyreliv og natur",
-    "Food & Drink": "Mat og drikke",
-    "Activities": "Aktiviteter",
-    "Travel & Places": "Reise og steder",
-    "Objects": "Objekter",
-    "Symbols": "Symboler",
-    "Flags": "Flagg",
-    "Quick Reactions": "Hurtigreaksjoner",
     "Cancel search": "Avbryt søket",
     "More options": "Flere alternativer",
     "collapse": "skjul",
@@ -222,9 +212,7 @@
     "Send analytics data": "Send analytiske data",
     "Show hidden events in timeline": "Vis skjulte hendelser i tidslinjen",
     "My Ban List": "Min bannlysningsliste",
-    "Verified!": "Verifisert!",
     "Got It": "Skjønner",
-    "Scan this unique code": "Skann denne unike koden",
     "Lion": "Løve",
     "Pig": "Gris",
     "Rabbit": "Kanin",
@@ -347,22 +335,6 @@
     "Delete widget": "Slett modul",
     "Rotate Left": "Roter til venstre",
     "Rotate Right": "Roter til høyre",
-    "were invited %(count)s times": {
-        "one": "ble invitert",
-        "other": "ble invitert %(count)s ganger"
-    },
-    "was invited %(count)s times": {
-        "one": "ble invitert",
-        "other": "ble invitert %(count)s ganger"
-    },
-    "were banned %(count)s times": {
-        "one": "ble bannlyst",
-        "other": "ble bannlyst %(count)s ganger"
-    },
-    "was banned %(count)s times": {
-        "one": "ble bannlyst",
-        "other": "ble bannlyst %(count)s ganger"
-    },
     "Power level": "Styrkenivå",
     "e.g. my-room": "f.eks. mitt-rom",
     "Enter a server name": "Skriv inn et tjenernavn",
@@ -467,30 +439,6 @@
     "Widget added by": "Modulen ble lagt til av",
     "Create new room": "Opprett et nytt rom",
     "Language Dropdown": "Språk-nedfallsmeny",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s ble med %(count)s ganger",
-        "one": "%(severalUsers)s ble med"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s ble med %(count)s ganger",
-        "one": "%(oneUser)s ble med"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s forlot rommet %(count)s ganger",
-        "one": "%(severalUsers)s forlot rommet"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s forlot rommet %(count)s ganger",
-        "one": "%(oneUser)s forlot rommet"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "one": "%(severalUsers)s endret navnene sine"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "one": "%(oneUser)s endret navnet sitt",
-        "other": "%(oneUser)sendret navnet sitt %(count)s ganger"
-    },
     "Custom level": "Tilpasset nivå",
     "And %(count)s more...": {
         "other": "Og %(count)s til..."
@@ -527,8 +475,6 @@
     "Avoid sequences": "Unngå sekvenser",
     "Avoid recent years": "Unngå nylige år",
     "Cancelling…": "Avbryter …",
-    "They match": "De samsvarer",
-    "They don't match": "De samsvarer ikke",
     "in memory": "i minnet",
     "Delete Backup": "Slett sikkerhetskopien",
     "Restore from Backup": "Gjenopprett fra sikkerhetskopi",
@@ -560,14 +506,6 @@
     "%(name)s wants to verify": "%(name)s ønsker å verifisere",
     "Failed to copy": "Mislyktes i å kopiere",
     "Submit logs": "Send inn loggføringer",
-    "were unbanned %(count)s times": {
-        "other": "fikk bannlysningene sine opphevet %(count)s ganger",
-        "one": "fikk bannlysningene sine opphevet"
-    },
-    "was unbanned %(count)s times": {
-        "other": "fikk bannlysningen sin opphevet %(count)s ganger",
-        "one": "fikk bannlysningen sin opphevet"
-    },
     "Clear all data": "Tøm alle data",
     "Verify session": "Verifiser økten",
     "Upload completed": "Opplasting fullført",
@@ -678,7 +616,6 @@
     "Ok": "OK",
     "Encryption upgrade available": "Krypteringsoppdatering tilgjengelig",
     "Font size": "Skriftstørrelse",
-    "You've successfully verified this user.": "Du har vellykket verifisert denne brukeren.",
     "Santa": "Julenisse",
     "wait and try again later": "vent og prøv igjen senere",
     "Size must be a number": "Størrelsen må være et nummer",
@@ -704,7 +641,6 @@
     "Click here to see older messages.": "Klikk for å se eldre meldinger.",
     "Add an Integration": "Legg til en integrering",
     "Can't load this message": "Klarte ikke å laste inn denne meldingen",
-    "Categories": "Kategorier",
     "Popout widget": "Utsprettsmodul",
     "QR Code": "QR-kode",
     "Room address": "Rommets adresse",
@@ -927,27 +863,6 @@
     "Continue with %(provider)s": "Fortsett med %(provider)s",
     "This address is already in use": "Denne adressen er allerede i bruk",
     "<a>In reply to</a> <pill>": "<a>Som svar på</a> <pill>",
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "one": "%(oneUser)sfikk sin invitasjon trukket tilbake"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "one": "%(severalUsers)sfikk sine invitasjoner trukket tilbake"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "one": "%(oneUser)savslo invitasjonen sin"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "one": "%(oneUser)sforlot og ble med igjen"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "one": "%(severalUsers)sforlot og ble med igjen"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "one": "%(oneUser)sble med og forlot igjen"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "one": "%(severalUsers)sble med og forlot igjen"
-    },
     "Information": "Informasjon",
     "%(name)s cancelled verifying": "%(name)s avbrøt verifiseringen",
     "You cancelled verifying %(name)s": "Du avbrøt verifiseringen av %(name)s",
@@ -1197,11 +1112,9 @@
     "Cook Islands": "Cook-øyene",
     "All keys backed up": "Alle nøkler er sikkerhetskopiert",
     "Secret storage:": "Hemmelig lagring:",
-    "Integration manager": "Integreringsbehandler",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integreringsbehandlere mottar oppsettsdata, og kan endre på moduler, sende rominvitasjoner, og bestemme styrkenivåer på dine vegne.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Bruk en integreringsbehandler til å behandle botter, moduler, og klistremerkepakker.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Bruk en integreringsbehandler <b>(%(serverName)s)</b> til å behandle botter, moduler, og klistremerkepakker.",
-    "Identity server": "Identitetstjener",
     "Identity server (%(server)s)": "Identitetstjener (%(server)s)",
     "Could not connect to identity server": "Kunne ikke koble til identitetsserveren",
     "Show:": "Vis:",
@@ -1297,7 +1210,9 @@
         "unnamed_room": "Navnløst rom",
         "stickerpack": "Klistremerkepakke",
         "system_alerts": "Systemvarsler",
-        "cross_signing": "Kryssignering"
+        "cross_signing": "Kryssignering",
+        "identity_server": "Identitetstjener",
+        "integration_manager": "Integreringsbehandler"
     },
     "action": {
         "continue": "Fortsett",
@@ -1571,6 +1486,77 @@
                 "other": "%(names)s og %(count)s andre skriver …",
                 "one": "%(names)s og én annen bruker skriver …"
             }
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s ble med %(count)s ganger",
+                "one": "%(severalUsers)s ble med"
+            },
+            "joined": {
+                "other": "%(oneUser)s ble med %(count)s ganger",
+                "one": "%(oneUser)s ble med"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s forlot rommet %(count)s ganger",
+                "one": "%(severalUsers)s forlot rommet"
+            },
+            "left": {
+                "other": "%(oneUser)s forlot rommet %(count)s ganger",
+                "one": "%(oneUser)s forlot rommet"
+            },
+            "joined_and_left_multiple": {
+                "one": "%(severalUsers)sble med og forlot igjen"
+            },
+            "joined_and_left": {
+                "one": "%(oneUser)sble med og forlot igjen"
+            },
+            "rejoined_multiple": {
+                "one": "%(severalUsers)sforlot og ble med igjen"
+            },
+            "rejoined": {
+                "one": "%(oneUser)sforlot og ble med igjen"
+            },
+            "rejected_invite": {
+                "one": "%(oneUser)savslo invitasjonen sin"
+            },
+            "invite_withdrawn_multiple": {
+                "one": "%(severalUsers)sfikk sine invitasjoner trukket tilbake"
+            },
+            "invite_withdrawn": {
+                "one": "%(oneUser)sfikk sin invitasjon trukket tilbake"
+            },
+            "invited_multiple": {
+                "one": "ble invitert",
+                "other": "ble invitert %(count)s ganger"
+            },
+            "invited": {
+                "one": "ble invitert",
+                "other": "ble invitert %(count)s ganger"
+            },
+            "banned_multiple": {
+                "one": "ble bannlyst",
+                "other": "ble bannlyst %(count)s ganger"
+            },
+            "banned": {
+                "one": "ble bannlyst",
+                "other": "ble bannlyst %(count)s ganger"
+            },
+            "unbanned_multiple": {
+                "other": "fikk bannlysningene sine opphevet %(count)s ganger",
+                "one": "fikk bannlysningene sine opphevet"
+            },
+            "unbanned": {
+                "other": "fikk bannlysningen sin opphevet %(count)s ganger",
+                "one": "fikk bannlysningen sin opphevet"
+            },
+            "changed_name_multiple": {
+                "one": "%(severalUsers)s endret navnene sine"
+            },
+            "changed_name": {
+                "one": "%(oneUser)s endret navnet sitt",
+                "other": "%(oneUser)sendret navnet sitt %(count)s ganger"
+            }
         }
     },
     "slash_command": {
@@ -1662,5 +1648,27 @@
             "ban": "Bannlys brukere",
             "notifications.room": "Varsle alle"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "De samsvarer ikke",
+            "sas_match": "De samsvarer",
+            "complete_title": "Verifisert!",
+            "complete_description": "Du har vellykket verifisert denne brukeren.",
+            "qr_prompt": "Skann denne unike koden"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Ofte brukte",
+        "category_smileys_people": "Smilefjes og folk",
+        "category_animals_nature": "Dyreliv og natur",
+        "category_food_drink": "Mat og drikke",
+        "category_activities": "Aktiviteter",
+        "category_travel_places": "Reise og steder",
+        "category_objects": "Objekter",
+        "category_symbols": "Symboler",
+        "category_flags": "Flagg",
+        "categories": "Kategorier",
+        "quick_reactions": "Hurtigreaksjoner"
     }
 }

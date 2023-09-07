@@ -6,9 +6,11 @@
     "Add Phone Number": "Ychwanegu Rhif Ffôn",
     "Create Account": "Creu Cyfrif",
     "Explore rooms": "Archwilio Ystafelloedd",
-    "Identity server": "Gweinydd Adnabod",
     "action": {
         "dismiss": "Wfftio",
         "sign_in": "Mewngofnodi"
+    },
+    "common": {
+        "identity_server": "Gweinydd Adnabod"
     }
 }

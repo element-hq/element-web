@@ -257,9 +257,7 @@
     "Enter password": "Indtast adgangskode",
     "Add a new server": "Tilføj en ny server",
     "Change notification settings": "Skift notifikations indstillinger",
-    "Verified!": "Bekræftet!",
     "Profile picture": "Profil billede",
-    "Categories": "Kategorier",
     "Checking server": "Tjekker server",
     "You're signed out": "Du er logget ud",
     "Change Password": "Skift adgangskode",
@@ -776,5 +774,13 @@
         "already_in_call_person": "Du har allerede i et opkald med denne person.",
         "unsupported": "Opkald er ikke understøttet",
         "unsupported_browser": "Du kan ikke lave opkald i denne browser."
+    },
+    "encryption": {
+        "verification": {
+            "complete_title": "Bekræftet!"
+        }
+    },
+    "emoji": {
+        "categories": "Kategorier"
     }
 }

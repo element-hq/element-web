@@ -163,7 +163,6 @@
     "Rotate Left": "أدر لليسار",
     "expand": "توسيع",
     "collapse": "تضييق",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "الرجاء <newIssueLink> إنشاء إشكال جديد</newIssueLink> على GitHub حتى نتمكن من التحقيق في هذا الخطأ.",
     "This version of %(brand)s does not support searching encrypted messages": "لا يدعم هذا الإصدار من %(brand)s البحث في الرسائل المشفرة",
     "This version of %(brand)s does not support viewing some encrypted files": "لا يدعم هذا الإصدار من %(brand)s s عرض بعض الملفات المشفرة",
     "Use the <a>Desktop app</a> to search encrypted messages": "استخدم <a> تطبيق سطح المكتب </a> للبحث في الرسائل المشفرة",
@@ -181,17 +180,6 @@
     "Your display name": "اسمك الظاهر",
     "Any of the following data may be shared:": "يمكن أن تُشارَك أي من البيانات التالية:",
     "Cancel search": "إلغاء البحث",
-    "Quick Reactions": "ردود الفعل السريعة",
-    "Categories": "التصنيفات",
-    "Flags": "الأعلام",
-    "Symbols": "الرموز",
-    "Objects": "الأشياء",
-    "Travel & Places": "السفر والأماكن",
-    "Activities": "الأنشطة",
-    "Food & Drink": "الطعام والشراب",
-    "Animals & Nature": "الحيوانات والطبيعة",
-    "Smileys & People": "الوجوه الضاحكة والأشخاص",
-    "Frequently Used": "كثيرة الاستعمال",
     "Can't load this message": "تعذر تحميل هذه الرسالة",
     "Submit logs": "إرسال السجلات",
     "edited": "عُدل",
@@ -622,22 +610,13 @@
     "Accept <policyLink /> to continue:": "قبول <policyLink /> للمتابعة:",
     "Your server isn't responding to some <a>requests</a>.": "خادمك لا يتجاوب مع بعض <a>الطلبات</a>.",
     "Dog": "كلب",
-    "To be secure, do this in person or use a trusted way to communicate.": "لتكون آمنًا ، افعل ذلك شخصيًا أو استخدم طريقة موثوقة للتواصل.",
-    "They don't match": "لم يتطابقوا",
-    "They match": "تطابقوا",
     "Cancelling…": "جارٍ الإلغاء…",
     "Waiting for %(displayName)s to verify…": "بانتظار %(displayName)s للتحقق…",
     "Unable to find a supported verification method.": "تعذر العثور على أحد طرق التحقق الممكنة.",
     "Verify this user by confirming the following number appears on their screen.": "تحقق من هذا المستخدم من خلال التأكد من ظهور الرقم التالي على شاشته.",
     "Verify this user by confirming the following emoji appear on their screen.": "تحقق من هذا المستخدم من خلال التأكيد من ظهور الرموز التعبيرية التالية على شاشته.",
-    "Compare a unique set of emoji if you don't have a camera on either device": "قارن مجموعة فريدة من الرموز التعبيرية إذا لم يكن لديك كاميرا على أي من الجهازين",
-    "Compare unique emoji": "قارن رمزاً تعبيريًّا فريداً",
-    "Scan this unique code": "امسح هذا الرمز الفريد",
     "Got It": "فهمت",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "الرسائل الآمنة مع هذا المستخدم مشفرة من طرفك إلى طرفه ولا يمكن قراءتها من قبل جهات خارجية.",
-    "You've successfully verified this user.": "لقد نجحت في التحقق من هذا المستخدم.",
-    "Verified!": "تم التحقق!",
-    "The other party cancelled the verification.": "ألغى الطرف الآخر التحقق.",
     "This is your list of users/servers you have blocked - don't leave the room!": "هذه قائمتك للمستخدمين / الخوادم التي حظرت - لا تغادر الغرفة!",
     "My Ban List": "قائمة الحظر",
     "IRC display name width": "عرض الاسم الظاهر لIRC",
@@ -932,7 +911,6 @@
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "يتلقى مديرو التكامل بيانات الضبط، ويمكنهم تعديل عناصر واجهة المستخدم، وإرسال دعوات الغرف، وتعيين مستويات القوة نيابة عنك.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "استخدم مدير التكامل لإدارة البوتات وعناصر الواجهة وحزم الملصقات.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "استخدم مدير التكامل <b>(%(serverName)s)</b> لإدارة البوتات وعناصر الواجهة وحزم الملصقات.",
-    "Identity server": "خادوم الهوية",
     "Identity server (%(server)s)": "خادوم الهوية (%(server)s)",
     "Could not connect to identity server": "تعذر الاتصال بخادوم الهوية",
     "Not a valid identity server (status code %(code)s)": "ليس خادوم هوية صالح (رمز الحالة %(code)s)",
@@ -1096,7 +1074,8 @@
         "stickerpack": "حزمة الملصقات",
         "system_alerts": "تنبيهات النظام",
         "secure_backup": "تأمين النسخ الاحتياطي",
-        "cross_signing": "التوقيع المتبادل"
+        "cross_signing": "التوقيع المتبادل",
+        "identity_server": "خادوم الهوية"
     },
     "action": {
         "continue": "واصِل",
@@ -1188,7 +1167,8 @@
         "collecting_information": "تجميع المعلومات حول نسخة التطبيق",
         "collecting_logs": "تجميع السجلات",
         "uploading_logs": "رفع السجلات",
-        "downloading_logs": "تحميل السجلات"
+        "downloading_logs": "تحميل السجلات",
+        "create_new_issue": "الرجاء <newIssueLink> إنشاء إشكال جديد</newIssueLink> على GitHub حتى نتمكن من التحقيق في هذا الخطأ."
     },
     "time": {
         "date_at_time": "%(date)s في %(time)s"
@@ -1415,5 +1395,31 @@
             "redact": "حذف رسائل الآخرين",
             "notifications.room": "إشعار الجميع"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "لم يتطابقوا",
+            "sas_match": "تطابقوا",
+            "in_person": "لتكون آمنًا ، افعل ذلك شخصيًا أو استخدم طريقة موثوقة للتواصل.",
+            "other_party_cancelled": "ألغى الطرف الآخر التحقق.",
+            "complete_title": "تم التحقق!",
+            "complete_description": "لقد نجحت في التحقق من هذا المستخدم.",
+            "qr_prompt": "امسح هذا الرمز الفريد",
+            "sas_prompt": "قارن رمزاً تعبيريًّا فريداً",
+            "sas_description": "قارن مجموعة فريدة من الرموز التعبيرية إذا لم يكن لديك كاميرا على أي من الجهازين"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "كثيرة الاستعمال",
+        "category_smileys_people": "الوجوه الضاحكة والأشخاص",
+        "category_animals_nature": "الحيوانات والطبيعة",
+        "category_food_drink": "الطعام والشراب",
+        "category_activities": "الأنشطة",
+        "category_travel_places": "السفر والأماكن",
+        "category_objects": "الأشياء",
+        "category_symbols": "الرموز",
+        "category_flags": "الأعلام",
+        "categories": "التصنيفات",
+        "quick_reactions": "ردود الفعل السريعة"
     }
 }

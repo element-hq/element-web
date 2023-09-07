@@ -125,9 +125,6 @@
     "Enable widget screenshots on supported widgets": "Widget-schermafdrukkn inschoakeln ip oundersteunde widgets",
     "Show hidden events in timeline": "Verborgn gebeurtenissn ip de tydslyn weregeevn",
     "Waiting for response from server": "Wachtn ip antwoord van de server",
-    "The other party cancelled the verification.": "De tegenparty èt de verificoasje geannuleerd.",
-    "Verified!": "Geverifieerd!",
-    "You've successfully verified this user.": "J’èt deze gebruuker geverifieerd.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Beveiligde berichtn me deze gebruuker zyn eind-tout-eind-versleuterd en kunn nie door derdn wordn geleezn.",
     "Got It": "’k Snappen ’t",
     "Verify this user by confirming the following emoji appear on their screen.": "Verifieert deze gebruuker deur te bevestign da zyn/heur scherm de volgende emoji toogt.",
@@ -428,87 +425,6 @@
     "Create new room": "E nieuw gesprek anmoakn",
     "Rotate Left": "Links droain",
     "Rotate Right": "Rechts droain",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s zyn %(count)s kis toegetreedn",
-        "one": "%(severalUsers)s zyn toegetreedn"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s es %(count)s kis toegetreedn",
-        "one": "%(oneUser)s es toegetreedn"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s es %(count)s kis deuregegoan",
-        "one": "%(severalUsers)s es deuregegoan"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s es %(count)s kis deuregegoan",
-        "one": "%(oneUser)s es deuregegoan"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s zyn %(count)s kis toegetreedn en deuregegoan",
-        "one": "%(severalUsers)s zyn toegetreedn en deuregegoan"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s es %(count)s kis toegetreedn en deuregegoan",
-        "one": "%(oneUser)s es toegetreedn en deuregegoan"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s zyn %(count)s kis deuregegoan en were toegetreedn",
-        "one": "%(severalUsers)s zyn deuregegoan en were toegetreedn"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s es %(count)s kis deuregegoan en were toegetreedn",
-        "one": "%(oneUser)s es deuregegoan en were toegetreedn"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s èn hunder uutnodigiengn %(count)s kis afgeweezn",
-        "one": "%(severalUsers)s èn hunder uutnodigiengn afgeweezn"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s è zyn/heur uutnodigienge %(count)s kis afgeweezn",
-        "one": "%(oneUser)s è zyn/heur uutnodigienge afgeweezn"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "D’uutnodigiengn van %(severalUsers)s zyn %(count)s kis ingetrokkn gewist",
-        "one": "D’uutnodigiengn van %(severalUsers)s zyn ingetrokkn gewist"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "D’uutnodigienge van %(oneUser)s es %(count)s kis ingetrokkn gewist",
-        "one": "D’uutnodigienge van %(oneUser)s es ingetrokkn gewist"
-    },
-    "were invited %(count)s times": {
-        "other": "zyn %(count)s kis uutgenodigd gewist",
-        "one": "zyn uutgenodigd gewist"
-    },
-    "was invited %(count)s times": {
-        "other": "es %(count)s kis uutgenodigd gewist",
-        "one": "es uutgenodigd gewist"
-    },
-    "were banned %(count)s times": {
-        "other": "zyn %(count)s kis verbann gewist",
-        "one": "zyn verbann gewist"
-    },
-    "was banned %(count)s times": {
-        "other": "es %(count)s kis verbann gewist",
-        "one": "es verbann gewist"
-    },
-    "were unbanned %(count)s times": {
-        "other": "zyn %(count)s kis ountbann gewist",
-        "one": "zyn ountbann gewist"
-    },
-    "was unbanned %(count)s times": {
-        "other": "es %(count)s kis ountbann gewist",
-        "one": "es ountbann gewist"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s èn hunder noame %(count)s kis gewyzigd",
-        "one": "%(severalUsers)s èn hunder noame gewyzigd"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s è zyn/heur noame %(count)s kis gewyzigd",
-        "one": "%(oneUser)s è zyn/heur noame gewyzigd"
-    },
     "collapse": "toeklappn",
     "expand": "uutklappn",
     "Edit message": "Bericht bewerkn",
@@ -752,14 +668,6 @@
     "Upload all": "Alles iploadn",
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Je nieuwen account (%(newAccountId)s) is geregistreerd, mo je zyt al angemeld met een anderen account (%(loggedInUserId)s).",
     "Continue with previous account": "Verdergoan me de vorigen account",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)s èn %(count)s kis nietent gewyzigd",
-        "one": "%(severalUsers)s èn nietent gewyzigd"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)s èt %(count)s kis nietent gewyzigd",
-        "one": "%(oneUser)s è nietent gewyzigd"
-    },
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Vertelt uus wuk dat der verkeerd is geloopn, of nog beter, makt e foutmeldienge an ip GitHub woarin da je 't probleem beschryft.",
     "Removing…": "Bezig me te verwydern…",
     "Clear all data": "Alle gegeevns wissn",
@@ -808,8 +716,6 @@
     "Remove %(phone)s?": "%(phone)s verwydern?",
     "Explore rooms": "Gesprekkn ountdekkn",
     "Create Account": "Account anmoakn",
-    "Integration manager": "Integroasjebeheerder",
-    "Identity server": "Identiteitsserver",
     "Identity server (%(server)s)": "Identiteitsserver (%(server)s)",
     "Could not connect to identity server": "Kostege geen verbindienge moakn me den identiteitsserver",
     "Not a valid identity server (status code %(code)s)": "Geen geldigen identiteitsserver (statuscode %(code)s)",
@@ -848,7 +754,9 @@
         "encrypted": "Versleuterd",
         "unnamed_room": "Noamloos gesprek",
         "stickerpack": "Stickerpakket",
-        "system_alerts": "Systeemmeldiengn"
+        "system_alerts": "Systeemmeldiengn",
+        "identity_server": "Identiteitsserver",
+        "integration_manager": "Integroasjebeheerder"
     },
     "action": {
         "continue": "Verdergoan",
@@ -1019,6 +927,97 @@
                 "other": "%(names)s en %(count)s anderen zyn an ’t typn…",
                 "one": "%(names)s en nog etwien zyn an ’t typn…"
             }
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s zyn %(count)s kis toegetreedn",
+                "one": "%(severalUsers)s zyn toegetreedn"
+            },
+            "joined": {
+                "other": "%(oneUser)s es %(count)s kis toegetreedn",
+                "one": "%(oneUser)s es toegetreedn"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s es %(count)s kis deuregegoan",
+                "one": "%(severalUsers)s es deuregegoan"
+            },
+            "left": {
+                "other": "%(oneUser)s es %(count)s kis deuregegoan",
+                "one": "%(oneUser)s es deuregegoan"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s zyn %(count)s kis toegetreedn en deuregegoan",
+                "one": "%(severalUsers)s zyn toegetreedn en deuregegoan"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s es %(count)s kis toegetreedn en deuregegoan",
+                "one": "%(oneUser)s es toegetreedn en deuregegoan"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s zyn %(count)s kis deuregegoan en were toegetreedn",
+                "one": "%(severalUsers)s zyn deuregegoan en were toegetreedn"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s es %(count)s kis deuregegoan en were toegetreedn",
+                "one": "%(oneUser)s es deuregegoan en were toegetreedn"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s èn hunder uutnodigiengn %(count)s kis afgeweezn",
+                "one": "%(severalUsers)s èn hunder uutnodigiengn afgeweezn"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s è zyn/heur uutnodigienge %(count)s kis afgeweezn",
+                "one": "%(oneUser)s è zyn/heur uutnodigienge afgeweezn"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "D’uutnodigiengn van %(severalUsers)s zyn %(count)s kis ingetrokkn gewist",
+                "one": "D’uutnodigiengn van %(severalUsers)s zyn ingetrokkn gewist"
+            },
+            "invite_withdrawn": {
+                "other": "D’uutnodigienge van %(oneUser)s es %(count)s kis ingetrokkn gewist",
+                "one": "D’uutnodigienge van %(oneUser)s es ingetrokkn gewist"
+            },
+            "invited_multiple": {
+                "other": "zyn %(count)s kis uutgenodigd gewist",
+                "one": "zyn uutgenodigd gewist"
+            },
+            "invited": {
+                "other": "es %(count)s kis uutgenodigd gewist",
+                "one": "es uutgenodigd gewist"
+            },
+            "banned_multiple": {
+                "other": "zyn %(count)s kis verbann gewist",
+                "one": "zyn verbann gewist"
+            },
+            "banned": {
+                "other": "es %(count)s kis verbann gewist",
+                "one": "es verbann gewist"
+            },
+            "unbanned_multiple": {
+                "other": "zyn %(count)s kis ountbann gewist",
+                "one": "zyn ountbann gewist"
+            },
+            "unbanned": {
+                "other": "es %(count)s kis ountbann gewist",
+                "one": "es ountbann gewist"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s èn hunder noame %(count)s kis gewyzigd",
+                "one": "%(severalUsers)s èn hunder noame gewyzigd"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s è zyn/heur noame %(count)s kis gewyzigd",
+                "one": "%(oneUser)s è zyn/heur noame gewyzigd"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)s èn %(count)s kis nietent gewyzigd",
+                "one": "%(severalUsers)s èn nietent gewyzigd"
+            },
+            "no_change": {
+                "other": "%(oneUser)s èt %(count)s kis nietent gewyzigd",
+                "one": "%(oneUser)s è nietent gewyzigd"
+            }
         }
     },
     "slash_command": {
@@ -1081,6 +1080,13 @@
             "state_default": "Instelliengn wyzign",
             "ban": "Gebruukers verbann",
             "notifications.room": "Iedereen meldn"
+        }
+    },
+    "encryption": {
+        "verification": {
+            "other_party_cancelled": "De tegenparty èt de verificoasje geannuleerd.",
+            "complete_title": "Geverifieerd!",
+            "complete_description": "J’èt deze gebruuker geverifieerd."
         }
     }
 }

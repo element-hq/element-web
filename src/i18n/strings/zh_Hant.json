@@ -249,87 +249,6 @@
     "A text message has been sent to %(msisdn)s": "文字訊息已傳送給 %(msisdn)s",
     "Delete Widget": "刪除小工具",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "刪除小工具會將它從此聊天室中所有使用者的收藏中移除。您確定您要刪除這個小工具嗎？",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s 加入了 %(count)s 次",
-        "one": "%(severalUsers)s 加入了"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s 加入了 %(count)s 次",
-        "one": "%(oneUser)s 加入了"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s 離開了 %(count)s 次",
-        "one": "%(severalUsers)s 離開了"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s 離開了 %(count)s 次",
-        "one": "%(oneUser)s 離開了"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s 加入並離開了 %(count)s 次",
-        "one": "%(severalUsers)s 加入並離開了"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s 加入並離開了 %(count)s 次",
-        "one": "%(oneUser)s 加入並離開了"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s 離開並重新加入了 %(count)s 次",
-        "one": "%(severalUsers)s 離開並重新加入了"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s 離開並重新加入了 %(count)s 次",
-        "one": "%(oneUser)s 離開並重新加入了"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s 回絕了他們的邀請 %(count)s 次",
-        "one": "%(severalUsers)s 回絕了他們的邀請"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s 回絕了他們的邀請 %(count)s 次",
-        "one": "%(oneUser)s 回絕了他們的邀請"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)s 撤回了他們的邀請 %(count)s 次",
-        "one": "%(severalUsers)s 撤回了他們的邀請"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)s 撤回了他們的邀請 %(count)s 次",
-        "one": "%(oneUser)s 撤回了他們的邀請"
-    },
-    "were invited %(count)s times": {
-        "other": "被邀請了 %(count)s 次",
-        "one": "被邀請了"
-    },
-    "was invited %(count)s times": {
-        "other": "被邀請了 %(count)s 次",
-        "one": "被邀請了"
-    },
-    "were banned %(count)s times": {
-        "other": "被阻擋了 %(count)s 次",
-        "one": "被阻擋了"
-    },
-    "was banned %(count)s times": {
-        "other": "被阻擋了 %(count)s 次",
-        "one": "被阻擋了"
-    },
-    "were unbanned %(count)s times": {
-        "other": "被取消阻擋了 %(count)s 次",
-        "one": "被取消阻擋了"
-    },
-    "was unbanned %(count)s times": {
-        "other": "被取消阻擋了 %(count)s 次",
-        "one": "被取消阻擋了"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s 變更了他們的名稱 %(count)s 次",
-        "one": "%(severalUsers)s 變更了他們的名稱"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s 變更了名稱 %(count)s 次",
-        "one": "%(oneUser)s 變更了的名稱"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s 與其他 %(count)s 個人",
         "one": "%(items)s 與另一個人"
@@ -504,9 +423,6 @@
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "找不到下列 Matrix ID 的簡介，您無論如何都想邀請他們嗎？",
     "Invite anyway and never warn me again": "無論如何都要邀請，而且不要再警告我",
     "Invite anyway": "無論如何都要邀請",
-    "The other party cancelled the verification.": "另一方取消了驗證。",
-    "Verified!": "已驗證！",
-    "You've successfully verified this user.": "您已經成功驗證此使用者。",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "與此使用者的安全訊息有端對端加密，無法被第三方讀取。",
     "Got It": "了解",
     "Verify this user by confirming the following number appears on their screen.": "透過確認對方畫面上顯示的下列數字來確認使用者。",
@@ -750,14 +666,6 @@
     "Edited at %(date)s. Click to view edits.": "編輯於 %(date)s。點擊以檢視編輯。",
     "Message edits": "訊息編輯紀錄",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "升級這個聊天室需要關閉目前的執行個體並重新建立一個新的聊天室來替代。為了給予聊天室成員最佳的體驗，我們將會：",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)s 未做出變更 %(count)s 次",
-        "one": "%(severalUsers)s 未做出變更"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)s 未做出變更 %(count)s 次",
-        "one": "%(oneUser)s 未做出變更"
-    },
     "Resend %(unsentCount)s reaction(s)": "重新傳送 %(unsentCount)s 反應",
     "Your homeserver doesn't seem to support this feature.": "您的家伺服器似乎並不支援此功能。",
     "You're signed out": "您已登出",
@@ -871,7 +779,6 @@
         "one": "1 則未讀的訊息。"
     },
     "Show image": "顯示圖片",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "請在 GitHub 上<newIssueLink>建立新議題</newIssueLink>，這樣我們才能調查這個錯誤。",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "未於家伺服器設定中指定 Captcha 公鑰。請將此問題回報給您的家伺服器管理員。",
     "Your email address hasn't been verified yet": "您的電子郵件地址尚未被驗證",
     "Click the link in the email you received to verify and then click continue again.": "點擊您收到的電子郵件中的連結以驗證然後再次點擊繼續。",
@@ -887,16 +794,6 @@
     "Failed to deactivate user": "無法停用使用者",
     "This client does not support end-to-end encryption.": "此客戶端不支援端對端加密。",
     "Messages in this room are not end-to-end encrypted.": "此聊天室內的訊息未經端到端加密。",
-    "Quick Reactions": "快速反應",
-    "Frequently Used": "經常使用",
-    "Smileys & People": "笑臉與人",
-    "Animals & Nature": "動物與自然",
-    "Food & Drink": "食物與飲料",
-    "Activities": "活動",
-    "Travel & Places": "旅遊與景點",
-    "Objects": "物件",
-    "Symbols": "符號",
-    "Flags": "旗幟",
     "Cancel search": "取消搜尋",
     "Jump to first unread room.": "跳到第一個未讀的聊天室。",
     "Jump to first invite.": "跳到第一個邀請。",
@@ -1043,9 +940,6 @@
     "Never send encrypted messages to unverified sessions in this room from this session": "不要從此工作階段傳送已加密的訊息給此聊天室中未驗證的工作階段",
     "Enable message search in encrypted rooms": "在已加密的聊天室中啟用訊息搜尋",
     "Waiting for %(displayName)s to verify…": "正在等待 %(displayName)s 驗證…",
-    "They match": "它們相符",
-    "They don't match": "它們不相符",
-    "To be secure, do this in person or use a trusted way to communicate.": "為了確保安全，請面對面進行驗證，或使用其他方式來通訊。",
     "This bridge was provisioned by <user />.": "此橋接是由 <user /> 設定。",
     "Show less": "顯示更少",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "您的帳號在秘密儲存空間中有交叉簽署的身分，但尚未被此工作階段信任。",
@@ -1113,9 +1007,6 @@
     "Destroy cross-signing keys?": "摧毀交叉簽署金鑰？",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "永久刪除交叉簽署金鑰。任何您已驗證過的人都會看到安全性警告。除非您遺失了所有可以進行交叉簽署的裝置，否則您不會想要這樣做。",
     "Clear cross-signing keys": "清除交叉簽署金鑰",
-    "Scan this unique code": "掃描此獨特的條碼",
-    "Compare unique emoji": "比較獨特的表情符號",
-    "Compare a unique set of emoji if you don't have a camera on either device": "如果兩個裝置上都沒有相機的話，就比較一組獨特的表情符號",
     "Not Trusted": "未受信任",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s （%(userId)s）登入到未驗證的新工作階段：",
     "Ask this user to verify their session, or manually verify it below.": "要求此使用者驗證他們的工作階段，或在下方手動驗證。",
@@ -1274,7 +1165,6 @@
     "You don't have permission to delete the address.": "您沒有刪除位址的權限。",
     "There was an error removing that address. It may no longer exist or a temporary error occurred.": "刪除位址時發生錯誤。它可能已不存在或是發生暫時性的錯誤。",
     "Error removing address": "刪除位址時發生錯誤",
-    "Categories": "分類",
     "Room address": "聊天室位址",
     "This address is available to use": "此位址可用",
     "This address is already in use": "此位址已被使用",
@@ -2019,14 +1909,6 @@
     "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.": "該使用者進行違法行為，例如洩漏他人個資，或威脅使用暴力。\n將會回報給聊天室版主，他們可能會將其回報給執法單位。",
     "What this user is writing is wrong.\nThis will be reported to the room moderators.": "該使用者所寫的內容是錯誤的。\n這將會回報給聊天室管理員。",
     "Please provide an address": "請提供位址",
-    "%(oneUser)schanged the server ACLs %(count)s times": {
-        "one": "%(oneUser)s 變更了伺服器 ACL",
-        "other": "%(oneUser)s 變更了伺服器 ACL %(count)s 次"
-    },
-    "%(severalUsers)schanged the server ACLs %(count)s times": {
-        "one": "%(severalUsers)s 變更了伺服器 ACL",
-        "other": "%(severalUsers)s 變更了伺服器 ACL %(count)s 次"
-    },
     "Message search initialisation failed, check <a>your settings</a> for more information": "訊息搜尋初始化失敗，請檢查<a>您的設定</a>以取得更多資訊",
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "設定此聊天空間的位址，這樣使用者就能透過您的家伺服器找到此空間（%(localDomain)s）",
     "To publish an address, it needs to be set as a local address first.": "要發佈位址，其必須先設定為本機位址。",
@@ -2059,13 +1941,11 @@
     "Code blocks": "程式碼區塊",
     "Displaying time": "顯示時間",
     "Keyboard shortcuts": "鍵盤快捷鍵",
-    "Integration manager": "整合管理員",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "您的 %(brand)s 不允許您使用整合管理員來執行此動作。請聯絡管理員。",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "使用這個小工具可能會與 %(widgetDomain)s 以及您的整合管理員分享資料 <helpIcon />。",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "整合管理員會為您接收設定資料，修改小工具、傳送聊天室邀請並設定權限等級。",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "使用整合管理員以管理聊天機器人、小工具與貼圖包。",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "使用整合管理員 <b>(%(serverName)s) </b> 以管理聊天機器人、小工具與貼圖包。",
-    "Identity server": "身分伺服器",
     "Identity server (%(server)s)": "身分伺服器 (%(server)s)",
     "Could not connect to identity server": "無法連線到身分伺服器",
     "Not a valid identity server (status code %(code)s)": "不是有效的身分伺服器（狀態碼 %(code)s）",
@@ -2091,7 +1971,6 @@
     "Their device couldn't start the camera or microphone": "他們的裝置無法啟動相機或麥克風",
     "Connection failed": "連線失敗",
     "Could not connect media": "無法連結媒體",
-    "Message bubbles": "訊息泡泡",
     "Error downloading audio": "下載音訊時發生錯誤",
     "Anyone in a space can find and join. <a>Edit which spaces can access here.</a>": "任何在聊天空間中的人都可以找到並加入。<a>編輯哪些聊天空間可以存取這裡。</a>",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>請注意，升級會讓聊天室變成全新的版本</b>。目前所有的訊息都只會留在被封存的聊天室。",
@@ -2362,19 +2241,12 @@
     "Start new chat": "開始新聊天",
     "Recently viewed": "最近檢視過",
     "To view all keyboard shortcuts, <a>click here</a>.": "要檢視所有鍵盤快捷鍵，<a>點擊此處</a>。",
-    "You can turn this off anytime in settings": "您可以隨時在設定中關閉此功能",
-    "We <Bold>don't</Bold> share information with third parties": "我們<Bold>不會</Bold>與第三方分享這些資訊",
-    "We <Bold>don't</Bold> record or profile any account data": "我們<Bold>不會</Bold>記錄或分析任何帳號資料",
-    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "您可以<PrivacyPolicyUrl>在此</PrivacyPolicyUrl>閱讀我們的條款",
     "%(count)s votes cast. Vote to see the results": {
         "one": "已投 %(count)s 票。投票後即可檢視結果",
         "other": "已投 %(count)s 票。投票後即可檢視結果"
     },
     "No votes cast": "尚無投票",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "分享匿名資料以協助我們識別問題。無個人資料。無第三方。",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "分享匿名資料以協助我們識別問題。無個人資料。無第三方。<LearnMoreLink>取得更多資訊</LearnMoreLink>",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "您先前曾同意與我們分享匿名使用資料。我們正在更新其運作方式。",
-    "Help improve %(analyticsOwner)s": "協助改善 %(analyticsOwner)s",
     "That's fine": "沒關係",
     "Share location": "分享位置",
     "You cannot place calls without a connection to the server.": "您無法在未連線至伺服器的情況下通話。",
@@ -2420,8 +2292,6 @@
     "Verify other device": "驗證其他裝置",
     "You cancelled verification on your other device.": "您在其他裝置上取消了驗證。",
     "Almost there! Is your other device showing the same shield?": "快好了！您的其他裝置是否顯示了相同的盾牌？",
-    "Verify this device by completing one of the following:": "透過完成以下的任何一個操作來驗證此裝置：",
-    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "您正在嘗試驗證的裝置不支援掃描 QR Code 或表情符號驗證，這是 %(brand)s 所支援的。請嘗試使用其他客戶端。",
     "To proceed, please accept the verification request on your other device.": "要繼續，請在您的其他裝置上接受驗證請求。",
     "Waiting for you to verify on your other device…": "正在等待您在其他裝置上驗證…",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "正在等待您在其他裝置上驗證，%(deviceName)s (%(deviceId)s)…",
@@ -2441,14 +2311,6 @@
     "Failed to fetch your location. Please try again later.": "無法取得您的位置。請稍後再試。",
     "Could not fetch location": "無法取得位置",
     "Automatically send debug logs on decryption errors": "自動傳送關於解密錯誤的除錯紀錄檔",
-    "was removed %(count)s times": {
-        "one": "被移除",
-        "other": "被移除 %(count)s 次"
-    },
-    "were removed %(count)s times": {
-        "one": "被移除",
-        "other": "被移除了 %(count)s 次"
-    },
     "Remove from room": "踢出此聊天室",
     "Failed to remove user": "無法移除使用者",
     "Remove them from specific things I'm able to": "從我有權限的特定地方移除",
@@ -2489,7 +2351,6 @@
     "Group all your favourite rooms and people in one place.": "將所有您最喜愛的聊天室與夥伴集中在同一個地方。",
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "聊天空間是將聊天室與夥伴們分組的方式。除了您所在的聊天空間之外，還可以使用一些預設分類。",
     "Unable to check if username has been taken. Try again later.": "無法檢查使用者名稱是否已被使用。請稍後再試。",
-    "IRC (Experimental)": "IRC（實驗性）",
     "Toggle hidden event visibility": "切換隱藏事件的能見度",
     "Redo edit": "重做編輯",
     "Force complete": "強制完成",
@@ -2513,22 +2374,6 @@
     "Use <arrows/> to scroll": "使用 <arrows/> 捲動",
     "Feedback sent! Thanks, we appreciate it!": "已傳送回饋！謝謝，我們感激不盡！",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s 與 %(space2Name)s",
-    "%(oneUser)ssent %(count)s hidden messages": {
-        "one": "%(oneUser)s 傳送了 1 個隱藏的訊息",
-        "other": "%(oneUser)s 傳送了 %(count)s 個隱藏的訊息"
-    },
-    "%(severalUsers)ssent %(count)s hidden messages": {
-        "one": "%(severalUsers)s 傳送了 1 個隱藏的訊息",
-        "other": "%(severalUsers)s 傳送了 %(count)s 個隱藏的訊息"
-    },
-    "%(oneUser)sremoved a message %(count)s times": {
-        "one": "%(oneUser)s 移除了 1 個訊息",
-        "other": "%(oneUser)s 移除了 %(count)s 個訊息"
-    },
-    "%(severalUsers)sremoved a message %(count)s times": {
-        "one": "%(severalUsers)s 移除了 1 個訊息",
-        "other": "%(severalUsers)s 移除了 %(count)s 個訊息"
-    },
     "Automatically send debug logs when key backup is not functioning": "金鑰備份無法運作時，自動傳送除錯紀錄檔",
     "Join %(roomAddress)s": "加入 %(roomAddress)s",
     "Edit poll": "編輯投票",
@@ -2556,14 +2401,6 @@
     "We couldn't send your location": "我們無法傳送您的位置",
     "Match system": "符合系統色彩",
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "將滑鼠游標停留在訊息上來開始新的討論串時，回覆正在進行的討論串或使用「%(replyInThread)s」。",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(oneUser)s 變更了聊天室的<a>釘選訊息</a>",
-        "other": "%(oneUser)s 變更了聊天室的<a>釘選訊息</a> %(count)s 次"
-    },
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(severalUsers)s 變更了聊天室的<a>釘選訊息</a>",
-        "other": "%(severalUsers)s 變更了聊天室的<a>釘選訊息</a> %(count)s 次"
-    },
     "Show polls button": "顯示投票按鈕",
     "Spaces are a new way to group rooms and people. What kind of Space do you want to create? You can change this later.": "聊天空間是一種將聊天室與夥伴分組的新方式。您想要建立何種類型的聊天空間？您稍後仍可變更。",
     "We'll create rooms for each of them.": "我們將為每個主題建立聊天室。",
@@ -2597,7 +2434,6 @@
     "Next recently visited room or space": "下一個最近造訪過的聊天室或聊天空間",
     "Previous recently visited room or space": "上一個最近造訪過的聊天室或群組空間",
     "Unsent": "未傳送",
-    "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "匿名分享使用資料能幫我們辨識錯誤和改善 %(analyticsOwner)s。為了瞭解使用者如何使用多種裝置，我們會隨機產生能夠辨識您裝置的辨識碼。",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "您可以透過指定不同的家伺服器網址，來登入至其他的 Matrix 伺服器。使用自訂伺服器選項讓您可以使用 %(brand)s 登入到不同家伺服器上的 Matrix 帳號。",
     "%(brand)s was denied permission to fetch your location. Please allow location access in your browser settings.": "%(brand)s 沒有權限取得您的位置。請在您的瀏覽器設定中允許位置存取權限。",
     "Developer tools": "開發者工具",
@@ -2836,7 +2672,6 @@
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s 或 %(copyButton)s",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s 或 %(recoveryFile)s",
     "%(qrCode)s or %(appLinks)s": "%(qrCode)s 或 %(appLinks)s",
-    "%(qrCode)s or %(emojiCompare)s": "%(qrCode)s 或 %(emojiCompare)s",
     "Proxy URL": "代理伺服器網址",
     "Proxy URL (optional)": "代理伺服器網址（選填）",
     "To disable you will need to log out and back in, use with caution!": "要停用，您必須登出並重新登入，請小心使用！",
@@ -3189,10 +3024,6 @@
     "Other things we think you might be interested in:": "我們認為您可能感興趣的其他事情：",
     "Notify when someone mentions using @room": "當有人使用 @room 提及時通知",
     "Reset to default settings": "重設為預設設定",
-    "%(oneUser)schanged their profile picture %(count)s times": {
-        "other": "%(oneUser)s 變更了他們的個人檔案圖片 %(count)s 次",
-        "one": "%(oneUser)s 變更了他們的個人檔案圖片"
-    },
     "Anyone can request to join, but admins or moderators need to grant access. You can change this later.": "任何人都可以請求加入，但管理員或版主必須授予存取權限。您可以稍後變更此設定。",
     "Upgrade room": "升級聊天室",
     "This homeserver doesn't offer any login flows that are supported by this client.": "此家伺服器不提供該客戶端支援的任何登入流程。",
@@ -3215,10 +3046,6 @@
     "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their profile picture.": "此處的訊息為端到端加密。請在其個人檔案中驗證 %(displayName)s - 點擊其個人檔案圖片。",
     "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "此聊天室中的訊息為端到端加密。當人們加入時，您可以在他們的個人檔案中驗證他們，點擊他們的個人檔案就可以了。",
     "Your profile picture URL": "您的個人檔案圖片 URL",
-    "%(severalUsers)schanged their profile picture %(count)s times": {
-        "other": "%(severalUsers)s 變更了他們的個人檔案圖片 %(count)s 次",
-        "one": "%(severalUsers)s 變更了他們的個人檔案圖片"
-    },
     "Are you sure you wish to remove (delete) this event?": "您真的想要移除（刪除）此活動嗎？",
     "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a unique passphrase below, which will only be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": "匯出的檔案將允許任何可以讀取該檔案的人解密您可以看到的任何加密訊息，因此您應該小心確保其安全。為了協助解決此問題，您應該在下面輸入一個唯一的密碼，該密碼僅用於加密匯出的資料。只能使用相同的密碼匯入資料。",
     "Other spaces you know": "您知道的其他空間",
@@ -3322,7 +3149,9 @@
         "stickerpack": "貼圖包",
         "system_alerts": "系統警告",
         "secure_backup": "安全備份",
-        "cross_signing": "交叉簽署"
+        "cross_signing": "交叉簽署",
+        "identity_server": "身分伺服器",
+        "integration_manager": "整合管理員"
     },
     "action": {
         "continue": "繼續",
@@ -3535,7 +3364,8 @@
         "collecting_information": "收集應用程式版本資訊",
         "collecting_logs": "收集記錄檔",
         "uploading_logs": "正在上傳紀錄檔",
-        "downloading_logs": "正在下載紀錄檔"
+        "downloading_logs": "正在下載紀錄檔",
+        "create_new_issue": "請在 GitHub 上<newIssueLink>建立新議題</newIssueLink>，這樣我們才能調查這個錯誤。"
     },
     "time": {
         "hours_minutes_seconds_left": "剩餘 %(hours)s 小時 %(minutes)s 分鐘 %(seconds)s 秒",
@@ -3652,6 +3482,10 @@
             "rule_suppress_notices": "收到聊天機器人送出的訊息時",
             "rule_tombstone": "當聊天室升級時",
             "rule_encrypted_room_one_to_one": "來自私訊的加密訊息"
+        },
+        "appearance": {
+            "layout_irc": "IRC（實驗性）",
+            "layout_bubbles": "訊息泡泡"
         }
     },
     "devtools": {
@@ -3906,6 +3740,145 @@
         },
         "m.call.hangup": {
             "dm": "通話結束"
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s 加入了 %(count)s 次",
+                "one": "%(severalUsers)s 加入了"
+            },
+            "joined": {
+                "other": "%(oneUser)s 加入了 %(count)s 次",
+                "one": "%(oneUser)s 加入了"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s 離開了 %(count)s 次",
+                "one": "%(severalUsers)s 離開了"
+            },
+            "left": {
+                "other": "%(oneUser)s 離開了 %(count)s 次",
+                "one": "%(oneUser)s 離開了"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s 加入並離開了 %(count)s 次",
+                "one": "%(severalUsers)s 加入並離開了"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s 加入並離開了 %(count)s 次",
+                "one": "%(oneUser)s 加入並離開了"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s 離開並重新加入了 %(count)s 次",
+                "one": "%(severalUsers)s 離開並重新加入了"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s 離開並重新加入了 %(count)s 次",
+                "one": "%(oneUser)s 離開並重新加入了"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s 回絕了他們的邀請 %(count)s 次",
+                "one": "%(severalUsers)s 回絕了他們的邀請"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s 回絕了他們的邀請 %(count)s 次",
+                "one": "%(oneUser)s 回絕了他們的邀請"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)s 撤回了他們的邀請 %(count)s 次",
+                "one": "%(severalUsers)s 撤回了他們的邀請"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)s 撤回了他們的邀請 %(count)s 次",
+                "one": "%(oneUser)s 撤回了他們的邀請"
+            },
+            "invited_multiple": {
+                "other": "被邀請了 %(count)s 次",
+                "one": "被邀請了"
+            },
+            "invited": {
+                "other": "被邀請了 %(count)s 次",
+                "one": "被邀請了"
+            },
+            "banned_multiple": {
+                "other": "被阻擋了 %(count)s 次",
+                "one": "被阻擋了"
+            },
+            "banned": {
+                "other": "被阻擋了 %(count)s 次",
+                "one": "被阻擋了"
+            },
+            "unbanned_multiple": {
+                "other": "被取消阻擋了 %(count)s 次",
+                "one": "被取消阻擋了"
+            },
+            "unbanned": {
+                "other": "被取消阻擋了 %(count)s 次",
+                "one": "被取消阻擋了"
+            },
+            "kicked_multiple": {
+                "one": "被移除",
+                "other": "被移除了 %(count)s 次"
+            },
+            "kicked": {
+                "one": "被移除",
+                "other": "被移除 %(count)s 次"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s 變更了他們的名稱 %(count)s 次",
+                "one": "%(severalUsers)s 變更了他們的名稱"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s 變更了名稱 %(count)s 次",
+                "one": "%(oneUser)s 變更了的名稱"
+            },
+            "changed_avatar_multiple": {
+                "other": "%(severalUsers)s 變更了他們的個人檔案圖片 %(count)s 次",
+                "one": "%(severalUsers)s 變更了他們的個人檔案圖片"
+            },
+            "changed_avatar": {
+                "other": "%(oneUser)s 變更了他們的個人檔案圖片 %(count)s 次",
+                "one": "%(oneUser)s 變更了他們的個人檔案圖片"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)s 未做出變更 %(count)s 次",
+                "one": "%(severalUsers)s 未做出變更"
+            },
+            "no_change": {
+                "other": "%(oneUser)s 未做出變更 %(count)s 次",
+                "one": "%(oneUser)s 未做出變更"
+            },
+            "server_acls_multiple": {
+                "one": "%(severalUsers)s 變更了伺服器 ACL",
+                "other": "%(severalUsers)s 變更了伺服器 ACL %(count)s 次"
+            },
+            "server_acls": {
+                "one": "%(oneUser)s 變更了伺服器 ACL",
+                "other": "%(oneUser)s 變更了伺服器 ACL %(count)s 次"
+            },
+            "pinned_events_multiple": {
+                "one": "%(severalUsers)s 變更了聊天室的<a>釘選訊息</a>",
+                "other": "%(severalUsers)s 變更了聊天室的<a>釘選訊息</a> %(count)s 次"
+            },
+            "pinned_events": {
+                "one": "%(oneUser)s 變更了聊天室的<a>釘選訊息</a>",
+                "other": "%(oneUser)s 變更了聊天室的<a>釘選訊息</a> %(count)s 次"
+            },
+            "redacted_multiple": {
+                "one": "%(severalUsers)s 移除了 1 個訊息",
+                "other": "%(severalUsers)s 移除了 %(count)s 個訊息"
+            },
+            "redacted": {
+                "one": "%(oneUser)s 移除了 1 個訊息",
+                "other": "%(oneUser)s 移除了 %(count)s 個訊息"
+            },
+            "hidden_event_multiple": {
+                "one": "%(severalUsers)s 傳送了 1 個隱藏的訊息",
+                "other": "%(severalUsers)s 傳送了 %(count)s 個隱藏的訊息"
+            },
+            "hidden_event": {
+                "one": "%(oneUser)s 傳送了 1 個隱藏的訊息",
+                "other": "%(oneUser)s 傳送了 %(count)s 個隱藏的訊息"
+            }
         }
     },
     "slash_command": {
@@ -4066,5 +4039,44 @@
             "redact": "移除其他人傳送的訊息",
             "notifications.room": "通知每個人"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "它們不相符",
+            "sas_match": "它們相符",
+            "in_person": "為了確保安全，請面對面進行驗證，或使用其他方式來通訊。",
+            "other_party_cancelled": "另一方取消了驗證。",
+            "complete_title": "已驗證！",
+            "complete_description": "您已經成功驗證此使用者。",
+            "no_support_qr_emoji": "您正在嘗試驗證的裝置不支援掃描 QR Code 或表情符號驗證，這是 %(brand)s 所支援的。請嘗試使用其他客戶端。",
+            "qr_prompt": "掃描此獨特的條碼",
+            "sas_prompt": "比較獨特的表情符號",
+            "sas_description": "如果兩個裝置上都沒有相機的話，就比較一組獨特的表情符號",
+            "qr_or_sas": "%(qrCode)s 或 %(emojiCompare)s",
+            "qr_or_sas_header": "透過完成以下的任何一個操作來驗證此裝置："
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "經常使用",
+        "category_smileys_people": "笑臉與人",
+        "category_animals_nature": "動物與自然",
+        "category_food_drink": "食物與飲料",
+        "category_activities": "活動",
+        "category_travel_places": "旅遊與景點",
+        "category_objects": "物件",
+        "category_symbols": "符號",
+        "category_flags": "旗幟",
+        "categories": "分類",
+        "quick_reactions": "快速反應"
+    },
+    "analytics": {
+        "enable_prompt": "協助改善 %(analyticsOwner)s",
+        "consent_migration": "您先前曾同意與我們分享匿名使用資料。我們正在更新其運作方式。",
+        "learn_more": "分享匿名資料以協助我們識別問題。無個人資料。無第三方。<LearnMoreLink>取得更多資訊</LearnMoreLink>",
+        "privacy_policy": "您可以<PrivacyPolicyUrl>在此</PrivacyPolicyUrl>閱讀我們的條款",
+        "pseudonymous_usage_data": "匿名分享使用資料能幫我們辨識錯誤和改善 %(analyticsOwner)s。為了瞭解使用者如何使用多種裝置，我們會隨機產生能夠辨識您裝置的辨識碼。",
+        "bullet_1": "我們<Bold>不會</Bold>記錄或分析任何帳號資料",
+        "bullet_2": "我們<Bold>不會</Bold>與第三方分享這些資訊",
+        "disable_prompt": "您可以隨時在設定中關閉此功能"
     }
 }

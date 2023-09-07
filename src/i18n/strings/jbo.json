@@ -104,8 +104,6 @@
         "one": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'u judri le se zilbe'i"
     },
     "You signed in to a new session without verifying it:": ".i fe le di'e se samtcise'u pu co'a jaspu vau je za'o na lacri",
-    "They match": "du",
-    "They don't match": "na du",
     "Dog": "gerku",
     "Cat": "mlatu",
     "Lion": "cinfo",
@@ -195,13 +193,9 @@
     "Cannot reach homeserver": ".i ca ku na da ka'e zilbe'i le samtcise'u",
     "Match system theme": "nu mapti le jvinu be le vanbi",
     "Never send encrypted messages to unverified sessions in this room from this session": "nu na pa mifra be pa notci cu zilbe'i pa se samtcise'u poi na se lanli ku'o le se samtcise'u le cei'i",
-    "The other party cancelled the verification.": ".i le na du be do co'u troci le ka co'a lacri",
-    "Verified!": ".i mo'u co'a lacri",
-    "You've successfully verified this user.": ".i mo'u co'a lacri le pilno",
     "Got It": "je'e",
     "Waiting for %(displayName)s to verify…": ".i ca'o denpa lo nu la'o zoi. %(displayName)s .zoi mo'u co'a lacri",
     "Cancelling…": ".i ca'o co'u co'e",
-    "To be secure, do this in person or use a trusted way to communicate.": ".i lo nu marji penmi vau ja pilno pa se lacri lo nu tavla cu sarcu lo nu snura",
     "Ok": "je'e",
     "Verify this session": "nu co'a lacri le se samtcise'u",
     "What's New": "notci le du'u cnino",
@@ -460,6 +454,16 @@
             "m.room.canonical_alias": "nu basti fi le ka ralju lu'i ro judri be le ve zilbe'i",
             "m.room.topic": "nu basti fi le ka skicu lerpoi",
             "invite": "nu friti le ka ziljmina kei pa pilno"
+        }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "na du",
+            "sas_match": "du",
+            "in_person": ".i lo nu marji penmi vau ja pilno pa se lacri lo nu tavla cu sarcu lo nu snura",
+            "other_party_cancelled": ".i le na du be do co'u troci le ka co'a lacri",
+            "complete_title": ".i mo'u co'a lacri",
+            "complete_description": ".i mo'u co'a lacri le pilno"
         }
     }
 }

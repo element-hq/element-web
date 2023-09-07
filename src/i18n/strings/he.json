@@ -651,22 +651,13 @@
     "Lion": "אריה",
     "Cat": "חתול",
     "Dog": "כלב",
-    "To be secure, do this in person or use a trusted way to communicate.": "בכדי להיות מאובטח, עשו זאת ביחד או השתמשו בדרך בטוחה לתקשר.",
-    "They don't match": "הם לא זהים",
-    "They match": "הם זהים",
     "Cancelling…": "מבטל…",
     "Waiting for %(displayName)s to verify…": "ממתין ל- %(displayName)s בכדי לאמת…",
     "Unable to find a supported verification method.": "לא מצליח למצוא שיטות אימות נתמכות.",
     "Verify this user by confirming the following number appears on their screen.": "אמת את המשתמש הזה בכך שאותו מספר מופיע אצלו במסך.",
     "Verify this user by confirming the following emoji appear on their screen.": "אמת את המשתמש הזה בכך שסדרת הסמלים מוצגת זהה אצלו במסך.",
-    "Compare a unique set of emoji if you don't have a camera on either device": "השווה קבוצה של סמלים אם אין ברשותכם מצלמה על שום מכשיר",
-    "Compare unique emoji": "השווה סמלים מסויימים",
-    "Scan this unique code": "סרוק את הקוד הזה",
     "Got It": "קבלתי",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "הודעות מאובטחות עם משתמש זה כעת מוצפנות מקצה לקצה ואינן יכולות להקרא על ידי אחרים.",
-    "You've successfully verified this user.": "המשתמש הזה אומת בהצלחה.",
-    "Verified!": "אומת!",
-    "The other party cancelled the verification.": "הצד השני ביטל את האימות.",
     "sends snowfall": "שלח שלג נופל",
     "Sends the given message with snowfall": "שלח הודעה זו עם שלג נופל",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s%(day)s%(fullYear)s%(time)s",
@@ -804,102 +795,12 @@
     "QR Code": "קוד QR",
     "Custom level": "דרגה מותאמת",
     "Power level": "דרגת מנהל",
-    "%(oneUser)smade no changes %(count)s times": {
-        "one": "%(oneUser)s לא ערכו שינוי",
-        "other": "%(oneUser)s לא ערך שום שינוי %(count)s פעמים"
-    },
-    "%(severalUsers)smade no changes %(count)s times": {
-        "one": "%(severalUsers)s לא ערכו שום שינוי",
-        "other": "%(severalUsers)s לא ערכו שום שינוי %(count)s פעמים"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "one": "%(oneUser)s שינו את שמם",
-        "other": "%(oneUser)s שינו את שמם %(count)s פעמים"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "one": "%(severalUsers)s שינו את שמם",
-        "other": "%(severalUsers)s שינו את שמם %(count)s פעמים"
-    },
-    "was unbanned %(count)s times": {
-        "one": "חסימה בוטלה",
-        "other": "חסימה בוטלה %(count)s פעמים"
-    },
-    "were unbanned %(count)s times": {
-        "one": "חסימה בוטלה",
-        "other": "חסימה בוטלה %(count)s פעמים"
-    },
-    "was banned %(count)s times": {
-        "one": "נחסם",
-        "other": "נחסם %(count)s פעמים"
-    },
-    "were banned %(count)s times": {
-        "one": "נחסמו",
-        "other": "נחסם %(count)s פעמים"
-    },
-    "was invited %(count)s times": {
-        "one": "הוזמן",
-        "other": "הוזמן %(count)s פעמים"
-    },
-    "were invited %(count)s times": {
-        "one": "הוזמנו",
-        "other": "הוזמנו %(count)s פעמים"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "one": "%(oneUser)s משכו את ההזמנה שלהם",
-        "other": "%(oneUser)s משך את ההזמנה שלו %(count)s פעמים"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "one": "%(severalUsers)s משכו את ההזמנות שלהם",
-        "other": "%(severalUsers)s משכו את ההזמנות שלהם %(count)s פעמים"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "one": "%(oneUser)s דחו את ההזמנה שלו\\ה",
-        "other": "%(oneUser)s דחה את ההזמנה %(count)s פעמים"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "one": "%(severalUsers)s דחו את ההזמנה שלהם",
-        "other": "%(severalUsers)s דחו את ההזמנה שלהם%(count)s פעמים"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "one": "%(oneUser)s עזב/ה וחזר/ה",
-        "other": "%(oneUser)s עזב/ה וחזר/ה %(count)s פעמים"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "one": "%(severalUsers)s עזבו וחזרו",
-        "other": "%(severalUsers)s עזבו וחזרו %(count)s פעמים"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "one": "%(oneUser)s הצטרף/ה ועזב/ה",
-        "other": "%(oneUser)s הצטרף/ה ועזב/ה %(count)s פעמים"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "one": "%(severalUsers)s הצטרפו ועזבו",
-        "other": "%(severalUsers)s הצטרפו ועזבו %(count)s פעמים"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "one": "%(oneUser)s עזב/ה",
-        "other": "%(oneUser)s עזב/ה %(count)s פעמים"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "one": "%(severalUsers)s עזבו",
-        "other": "%(severalUsers)s עזבו %(count)s פעמים"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "one": "%(oneUser)s הצטרף/ה",
-        "other": "%(oneUser)s הצטרף/ה %(count)s פעמים"
-    },
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s הצטרפו %(count)s פעמים",
-        "one": "%(severalUsers)s הצטרפ/ה"
-    },
-    "%(nameList)s %(transitionList)s": "%(nameList)s-%(transitionList)s",
     "Language Dropdown": "תפריט שפות",
     "Information": "מידע",
     "Rotate Right": "סובב ימינה",
     "Rotate Left": "סובב שמאלה",
     "collapse": "אחד",
     "expand": "הרחב",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "אנא <newIssueLink> צור בעיה חדשה </newIssueLink> ב- GitHub כדי שנוכל לחקור את הבאג הזה.",
     "This version of %(brand)s does not support searching encrypted messages": "גרסה זו של %(brand)s אינה תומכת בחיפוש הודעות מוצפנות",
     "This version of %(brand)s does not support viewing some encrypted files": "גרסה זו של %(brand)s אינה תומכת בצפייה בקבצים מוצפנים מסוימים",
     "Use the <a>Desktop app</a> to search encrypted messages": "השתמשו ב <a> אפליקציית שולחן העבודה </a> לחיפוש הודעות מוצפנות",
@@ -1182,17 +1083,6 @@
     "Your display name": "שם התצוגה שלך",
     "Any of the following data may be shared:": "ניתן לשתף כל אחד מהנתונים הבאים:",
     "Cancel search": "בטל חיפוש",
-    "Quick Reactions": "תגובות מהירות",
-    "Categories": "נושאים",
-    "Flags": "דגלים",
-    "Symbols": "סמלים",
-    "Objects": "עצמים",
-    "Travel & Places": "טיולים ומקומות",
-    "Activities": "פעילויות",
-    "Food & Drink": "משקאות ומזון",
-    "Animals & Nature": "חיות וטבע",
-    "Smileys & People": "סמיילי ואנשים",
-    "Frequently Used": "לעיתים קרובות בשימוש",
     "Something went wrong!": "משהו השתבש!",
     "Can't load this message": "לא ניתן לטעון הודעה זו",
     "Submit logs": "הגש יומנים",
@@ -1817,13 +1707,11 @@
     "Converts the room to a DM": "ממיר את החדר ל- DM",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "ביקשנו מהדפדפן לזכור באיזה שרת בית אתה משתמש כדי לאפשר לך להיכנס, אך למרבה הצער הדפדפן שלך שכח אותו. עבור לדף הכניסה ונסה שוב.",
     "We couldn't log you in": "לא הצלחנו להתחבר אליך",
-    "Integration manager": "מנהל אינטגרציה",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s שלכם אינו מאפשר לך להשתמש במנהל שילוב לשם כך. אנא צרו קשר עם מנהל מערכת.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "שימוש ביישומון זה עשוי לשתף נתונים <helpIcon /> עם %(widgetDomain)s ומנהל האינטגרציה שלך.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "מנהלי שילוב מקבלים נתוני תצורה ויכולים לשנות ווידג'טים, לשלוח הזמנות לחדר ולהגדיר רמות הספק מטעמכם.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "השתמש במנהל שילוב לניהול בוטים, ווידג'טים וחבילות מדבקות.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "השתמש במנהל שילוב <b> (%(serverName)s) </b> כדי לנהל בוטים, ווידג'טים וחבילות מדבקות.",
-    "Identity server": "שרת הזדהות",
     "Identity server (%(server)s)": "שרת הזדהות (%(server)s)",
     "Could not connect to identity server": "לא ניתן להתחבר אל שרת הזיהוי",
     "Not a valid identity server (status code %(code)s)": "שרת זיהוי לא מאושר(קוד סטטוס %(code)s)",
@@ -1909,7 +1797,6 @@
     "Waiting for you to verify on your other device…": "ממתין לאישור שלך במכשיר השני…",
     "Confirm the emoji below are displayed on both devices, in the same order:": "ודא ואשר שהסמלים הבאים מופיעים בשני המכשירים ובאותו הסדר:",
     "Other rooms": "חדרים אחרים",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "הסכמתם בעבר לשתף איתנו מידע אנונימי לגבי השימוש שלכם. אנחנו מעדכנים איך זה מתבצע.",
     "This homeserver has been blocked by its administrator.": "שרת זה נחסם על ידי מנהלו.",
     "The user you called is busy.": "המשתמש עסוק כרגע.",
     "User Busy": "המשתמש עסוק",
@@ -1919,13 +1806,6 @@
     "Failed to post poll": "תקלה בפרסום הסקר",
     "You can't see earlier messages": "לא ניתן לצפות בהודעות קודמות",
     "Confirm your Security Phrase": "אשר את ביטוי האבטחה שלך",
-    "%(oneUser)sremoved a message %(count)s times": {
-        "other": "%(oneUser)sהסיר%(count)sהודעות",
-        "one": "%(oneUser)sהסיר הודעה"
-    },
-    "%(severalUsers)sremoved a message %(count)s times": {
-        "one": "%(severalUsers)sהסיר הודעה"
-    },
     "Application window": "חלון אפליקציה",
     "Results are only revealed when you end the poll": "תוצאות יהיה זמינות להצגה רק עם סגירת הסקר",
     "What is your poll question or topic?": "מה השאלה או הנושא שלכם בסקר?",
@@ -1964,18 +1844,9 @@
         "one": "%(count)s.קולות הצביעו כדי לראות את התוצאות"
     },
     "Verification requested": "התבקש אימות",
-    "Verify this device by completing one of the following:": "אמתו מכשיר זה על ידי מילוי אחת מהפעולות הבאות:",
     "Your server doesn't support disabling sending read receipts.": "השרת שלכם לא תומך בביטול שליחת אישורי קריאה.",
     "Share your activity and status with others.": "שתפו את הפעילות והסטטוס שלכם עם אחרים.",
     "Room visibility": "נראות של החדר",
-    "%(oneUser)ssent %(count)s hidden messages": {
-        "one": "%(oneUser)sשלח הודעה חבויה",
-        "other": "%(oneUser)sשלח%(count)sהודעות מוחבאות"
-    },
-    "%(severalUsers)ssent %(count)s hidden messages": {
-        "one": "%(severalUsers)sשלחו הודעות מוחבאות",
-        "other": "%(severalUsers)sשלחו%(count)sהודעות מוחבאות"
-    },
     "Send your first message to invite <displayName/> to chat": "שילחו את ההודעה הראשונה שלכם להזמין את <displayName/> לצ'אט",
     "sends hearts": "שולח לבבות",
     "Developer command: Discards the current outbound group session and sets up new Olm sessions": "פקודת מפתחים: מסלקת את הפגישה הנוכחית של הקבוצה היוצאת ומגדירה הפעלות חדשות של Olm",
@@ -2059,8 +1930,6 @@
     "Downloading": "מוריד",
     "Jump to date": "קיפצו לתאריך",
     "Review to ensure your account is safe": "בידקו כדי לוודא שהחשבון שלך בטוח",
-    "Help improve %(analyticsOwner)s": "עזרו בשיפור %(analyticsOwner)s",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "שתף נתונים אנונימיים כדי לעזור לנו לזהות בעיות. ללא אישי. אין צדדים שלישיים. <LearnMoreLink>למידע נוסף</LearnMoreLink>",
     "Reset bearing to north": "נעלו את המפה לכיוון צפון",
     "Mapbox logo": "לוגו",
     "Location not available": "מיקום אינו זמין",
@@ -2242,7 +2111,6 @@
     "Turn off to disable notifications on all your devices and sessions": "כבה אפשרות זו כדי לבטל התראות בכל המכשירים והחיבורים שלך",
     "Enable notifications for this device": "אפשר קבלת התראות במכשיר זה",
     "Enable notifications for this account": "אפשר קבלת התראות לחשבון זה",
-    "Message bubbles": "בועות הודעות",
     "Deactivating your account is a permanent action — be careful!": "סגירת החשבון הינה פעולה שלא ניתנת לביטול - שים לב!",
     "Room info": "מידע על החדר",
     "You're all caught up": "אתם כבר מעודכנים בהכל",
@@ -2334,7 +2202,9 @@
         "stickerpack": "חבילת מדבקות",
         "system_alerts": "התרעות מערכת",
         "secure_backup": "גיבוי מאובטח",
-        "cross_signing": "חתימה צולבת"
+        "cross_signing": "חתימה צולבת",
+        "identity_server": "שרת הזדהות",
+        "integration_manager": "מנהל אינטגרציה"
     },
     "action": {
         "continue": "המשך",
@@ -2486,7 +2356,8 @@
         "collecting_information": "אוסף מידע על גרסת היישום",
         "collecting_logs": "אוסף יומנים לנפוי שגיאה (דבאג)",
         "uploading_logs": "מעלה לוגים",
-        "downloading_logs": "מוריד לוגים"
+        "downloading_logs": "מוריד לוגים",
+        "create_new_issue": "אנא <newIssueLink> צור בעיה חדשה </newIssueLink> ב- GitHub כדי שנוכל לחקור את הבאג הזה."
     },
     "time": {
         "hours_minutes_seconds_left": "נשארו %(hours)s שעות, %(minutes)s דקות ו-%(seconds)s שניות",
@@ -2558,6 +2429,9 @@
             "rule_suppress_notices": "הודעות שנשלחו באמצעות בוט",
             "rule_tombstone": "כאשר חדרים משתדרגים",
             "rule_encrypted_room_one_to_one": "הודעות מוצפנות בחדרים של אחד-על-אחד"
+        },
+        "appearance": {
+            "layout_bubbles": "בועות הודעות"
         }
     },
     "devtools": {
@@ -2717,6 +2591,112 @@
         },
         "m.call.hangup": {
             "dm": "השיחה הסתיימה"
+        },
+        "summary": {
+            "format": "%(nameList)s-%(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s הצטרפו %(count)s פעמים",
+                "one": "%(severalUsers)s הצטרפ/ה"
+            },
+            "joined": {
+                "one": "%(oneUser)s הצטרף/ה",
+                "other": "%(oneUser)s הצטרף/ה %(count)s פעמים"
+            },
+            "left_multiple": {
+                "one": "%(severalUsers)s עזבו",
+                "other": "%(severalUsers)s עזבו %(count)s פעמים"
+            },
+            "left": {
+                "one": "%(oneUser)s עזב/ה",
+                "other": "%(oneUser)s עזב/ה %(count)s פעמים"
+            },
+            "joined_and_left_multiple": {
+                "one": "%(severalUsers)s הצטרפו ועזבו",
+                "other": "%(severalUsers)s הצטרפו ועזבו %(count)s פעמים"
+            },
+            "joined_and_left": {
+                "one": "%(oneUser)s הצטרף/ה ועזב/ה",
+                "other": "%(oneUser)s הצטרף/ה ועזב/ה %(count)s פעמים"
+            },
+            "rejoined_multiple": {
+                "one": "%(severalUsers)s עזבו וחזרו",
+                "other": "%(severalUsers)s עזבו וחזרו %(count)s פעמים"
+            },
+            "rejoined": {
+                "one": "%(oneUser)s עזב/ה וחזר/ה",
+                "other": "%(oneUser)s עזב/ה וחזר/ה %(count)s פעמים"
+            },
+            "rejected_invite_multiple": {
+                "one": "%(severalUsers)s דחו את ההזמנה שלהם",
+                "other": "%(severalUsers)s דחו את ההזמנה שלהם%(count)s פעמים"
+            },
+            "rejected_invite": {
+                "one": "%(oneUser)s דחו את ההזמנה שלו\\ה",
+                "other": "%(oneUser)s דחה את ההזמנה %(count)s פעמים"
+            },
+            "invite_withdrawn_multiple": {
+                "one": "%(severalUsers)s משכו את ההזמנות שלהם",
+                "other": "%(severalUsers)s משכו את ההזמנות שלהם %(count)s פעמים"
+            },
+            "invite_withdrawn": {
+                "one": "%(oneUser)s משכו את ההזמנה שלהם",
+                "other": "%(oneUser)s משך את ההזמנה שלו %(count)s פעמים"
+            },
+            "invited_multiple": {
+                "one": "הוזמנו",
+                "other": "הוזמנו %(count)s פעמים"
+            },
+            "invited": {
+                "one": "הוזמן",
+                "other": "הוזמן %(count)s פעמים"
+            },
+            "banned_multiple": {
+                "one": "נחסמו",
+                "other": "נחסם %(count)s פעמים"
+            },
+            "banned": {
+                "one": "נחסם",
+                "other": "נחסם %(count)s פעמים"
+            },
+            "unbanned_multiple": {
+                "one": "חסימה בוטלה",
+                "other": "חסימה בוטלה %(count)s פעמים"
+            },
+            "unbanned": {
+                "one": "חסימה בוטלה",
+                "other": "חסימה בוטלה %(count)s פעמים"
+            },
+            "changed_name_multiple": {
+                "one": "%(severalUsers)s שינו את שמם",
+                "other": "%(severalUsers)s שינו את שמם %(count)s פעמים"
+            },
+            "changed_name": {
+                "one": "%(oneUser)s שינו את שמם",
+                "other": "%(oneUser)s שינו את שמם %(count)s פעמים"
+            },
+            "no_change_multiple": {
+                "one": "%(severalUsers)s לא ערכו שום שינוי",
+                "other": "%(severalUsers)s לא ערכו שום שינוי %(count)s פעמים"
+            },
+            "no_change": {
+                "one": "%(oneUser)s לא ערכו שינוי",
+                "other": "%(oneUser)s לא ערך שום שינוי %(count)s פעמים"
+            },
+            "redacted_multiple": {
+                "one": "%(severalUsers)sהסיר הודעה"
+            },
+            "redacted": {
+                "other": "%(oneUser)sהסיר%(count)sהודעות",
+                "one": "%(oneUser)sהסיר הודעה"
+            },
+            "hidden_event_multiple": {
+                "one": "%(severalUsers)sשלחו הודעות מוחבאות",
+                "other": "%(severalUsers)sשלחו%(count)sהודעות מוחבאות"
+            },
+            "hidden_event": {
+                "one": "%(oneUser)sשלח הודעה חבויה",
+                "other": "%(oneUser)sשלח%(count)sהודעות מוחבאות"
+            }
         }
     },
     "slash_command": {
@@ -2858,5 +2838,37 @@
             "redact": "הסרת הודעות שנשלחו על ידי אחרים",
             "notifications.room": "התראה לכולם"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "הם לא זהים",
+            "sas_match": "הם זהים",
+            "in_person": "בכדי להיות מאובטח, עשו זאת ביחד או השתמשו בדרך בטוחה לתקשר.",
+            "other_party_cancelled": "הצד השני ביטל את האימות.",
+            "complete_title": "אומת!",
+            "complete_description": "המשתמש הזה אומת בהצלחה.",
+            "qr_prompt": "סרוק את הקוד הזה",
+            "sas_prompt": "השווה סמלים מסויימים",
+            "sas_description": "השווה קבוצה של סמלים אם אין ברשותכם מצלמה על שום מכשיר",
+            "qr_or_sas_header": "אמתו מכשיר זה על ידי מילוי אחת מהפעולות הבאות:"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "לעיתים קרובות בשימוש",
+        "category_smileys_people": "סמיילי ואנשים",
+        "category_animals_nature": "חיות וטבע",
+        "category_food_drink": "משקאות ומזון",
+        "category_activities": "פעילויות",
+        "category_travel_places": "טיולים ומקומות",
+        "category_objects": "עצמים",
+        "category_symbols": "סמלים",
+        "category_flags": "דגלים",
+        "categories": "נושאים",
+        "quick_reactions": "תגובות מהירות"
+    },
+    "analytics": {
+        "enable_prompt": "עזרו בשיפור %(analyticsOwner)s",
+        "consent_migration": "הסכמתם בעבר לשתף איתנו מידע אנונימי לגבי השימוש שלכם. אנחנו מעדכנים איך זה מתבצע.",
+        "learn_more": "שתף נתונים אנונימיים כדי לעזור לנו לזהות בעיות. ללא אישי. אין צדדים שלישיים. <LearnMoreLink>למידע נוסף</LearnMoreLink>"
     }
 }

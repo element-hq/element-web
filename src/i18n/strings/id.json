@@ -120,7 +120,6 @@
     "You do not have permission to start a conference call in this room": "Anda tidak memiliki permisi untuk memulai panggilan konferensi di ruang ini",
     "Explore rooms": "Jelajahi ruangan",
     "Create Account": "Buat Akun",
-    "Identity server": "Server identitas",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(day)s %(monthName)s %(fullYear)s",
     "The call was answered on another device.": "Panggilan dijawab di perangkat lainnya.",
     "Displays action": "Menampilkan aksi",
@@ -466,22 +465,6 @@
     "Use Single Sign On to continue": "Gunakan Single Sign On untuk melanjutkan",
     "expand": "buka",
     "collapse": "tutup",
-    "%(oneUser)sleft %(count)s times": {
-        "one": "%(oneUser)skeluar",
-        "other": "%(oneUser)skeluar %(count)s kali"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "one": "%(severalUsers)skeluar",
-        "other": "%(severalUsers)skeluar %(count)s kali"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "one": "%(oneUser)sbergabung",
-        "other": "%(oneUser)sbergabung %(count)s kali"
-    },
-    "%(severalUsers)sjoined %(count)s times": {
-        "one": "%(severalUsers)sbergabung",
-        "other": "%(severalUsers)sbergabung %(count)s kali"
-    },
     "%(duration)sd": "%(duration)sh",
     "%(duration)sh": "%(duration)sj",
     "%(duration)sm": "%(duration)sm",
@@ -509,17 +492,12 @@
     "Calls": "Panggilan",
     "Navigation": "Navigasi",
     "Feedback": "Masukan",
-    "Categories": "Categori",
     "Unencrypted": "Tidak Dienkripsi",
     "Bridges": "Jembatan",
     "exists": "sudah ada",
     "Lock": "Gembok",
     "Later": "Nanti",
     "Document": "Dokumen",
-    "Flags": "Bendera",
-    "Symbols": "Simbol",
-    "Objects": "Obyek",
-    "Activities": "Aktivitas",
     "Accepting…": "Menerima…",
     "Italics": "Miring",
     "None": "Tidak Ada",
@@ -601,7 +579,6 @@
     "Versions": "Versi",
     "Encryption": "Enkripsi",
     "General": "Umum",
-    "Verified!": "Terverifikasi!",
     "Emoji Autocomplete": "Penyelesaian Otomatis Emoji",
     "Deactivate user?": "Nonaktifkan pengguna?",
     "Phone (optional)": "Nomor telepon (opsional)",
@@ -671,35 +648,10 @@
     "Send Logs": "Kirim Catatan",
     "Filter results": "Saring hasil",
     "Logs sent": "Catatan terkirim",
-    "was unbanned %(count)s times": {
-        "one": "dihilangkan cekalannya",
-        "other": "dihilangkan cekalannya %(count)s kali"
-    },
-    "were unbanned %(count)s times": {
-        "one": "dihilangkan cekalannya",
-        "other": "dihilangkan cekalannya %(count)s kali"
-    },
-    "was banned %(count)s times": {
-        "one": "dicekal",
-        "other": "dicekal %(count)s kali"
-    },
     "Popout widget": "Widget popout",
     "Muted Users": "Pengguna yang Dibisukan",
     "Uploading %(filename)s": "Mengunggah %(filename)s",
     "Delete Widget": "Hapus Widget",
-    "were banned %(count)s times": {
-        "one": "dicekal",
-        "other": "dicekal %(count)s kali"
-    },
-    "was invited %(count)s times": {
-        "one": "diundang",
-        "other": "diundang %(count)s kali"
-    },
-    "were invited %(count)s times": {
-        "one": "diundang",
-        "other": "diundang %(count)s kali"
-    },
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "(~%(count)s results)": {
         "one": "(~%(count)s hasil)",
         "other": "(~%(count)s hasil)"
@@ -933,7 +885,6 @@
     "An error occurred whilst saving your notification preferences.": "Sebuah kesalahan terjadi saat menyimpan preferensi notifikasi Anda.",
     "Error saving notification preferences": "Gagal menyimpan preferensi notifikasi",
     "Messages containing keywords": "Pesan berisi kata kunci",
-    "Message bubbles": "Gelembung pesan",
     "Updating spaces... (%(progress)s out of %(count)s)": {
         "one": "Memperbarui space...",
         "other": "Memperbarui space... (%(progress)s dari %(count)s)"
@@ -1061,15 +1012,10 @@
     "Your server isn't responding to some <a>requests</a>.": "Server Anda tidak menanggapi beberapa <a>permintaan</a>.",
     "Update %(brand)s": "Perbarui %(brand)s",
     "Waiting for %(displayName)s to verify…": "Menunggu %(displayName)s untuk memverifikasi…",
-    "To be secure, do this in person or use a trusted way to communicate.": "Supaya aman, lakukan ini secara langsung atau gunakan cara lain yang terpercaya untuk berkomunikasi.",
-    "They match": "Mereka cocok",
-    "They don't match": "Mereka tidak cocok",
     "Unable to find a supported verification method.": "Tidak dapat menemukan metode verifikasi yang didukung.",
     "Verify this user by confirming the following number appears on their screen.": "Verifikasi pengguna ini dengan mengkonfirmasi nomor berikut yang ditampilkan.",
     "Verify this user by confirming the following emoji appear on their screen.": "Verifikasi pengguna ini dengan mengkonfirmasi emoji berikut yang ditampilkan.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Pesan dengan pengguna ini terenkripsi secara ujung ke ujung dan tidak dapat dibaca oleh pihak ketiga.",
-    "You've successfully verified this user.": "Anda berhasil memverifikasi pengguna ini.",
-    "The other party cancelled the verification.": "Pengguna yang lain membatalkan proses verifikasi ini.",
     "Show sidebar": "Tampilkan sisi bilah",
     "Hide sidebar": "Sembunyikan sisi bilah",
     "unknown person": "pengguna tidak dikenal",
@@ -1458,12 +1404,6 @@
     "Get notified for every message": "Dapatkan notifikasi untuk setiap pesan",
     "Large": "Besar",
     "Image size in the timeline": "Ukuran gambar di lini masa",
-    "Quick Reactions": "Reaksi Cepat",
-    "Travel & Places": "Aktivitas & Tempat",
-    "Food & Drink": "Makanan & Minuman",
-    "Animals & Nature": "Hewan & Alam",
-    "Smileys & People": "Senyuman & Orang",
-    "Frequently Used": "Sering Digunakan",
     "Something went wrong!": "Ada sesuatu yang salah!",
     "Can't load this message": "Tidak dapat memuat pesan ini",
     "Submit logs": "Kirim catatan",
@@ -1534,9 +1474,6 @@
     "If you can't scan the code above, verify by comparing unique emoji.": "Jika Anda tidak dapat memindai kode di atas, verifikasi dengan membandingkan emoji yang unik.",
     "Ask %(displayName)s to scan your code:": "Tanyakan %(displayName)s untuk memindai kode Anda:",
     "Verify by scanning": "Verifikasi dengan memindai",
-    "Compare a unique set of emoji if you don't have a camera on either device": "Bandingkan emoji jika Anda tidak memiliki sebuah kamera di kedua perangkat",
-    "Compare unique emoji": "Bandingkan emoji unik",
-    "Scan this unique code": "Pindai kode unik ini",
     "Edit devices": "Edit perangkat",
     "This client does not support end-to-end encryption.": "Klien ini tidak mendukung enkripsi ujung ke ujung.",
     "Role in <RoomName/>": "Peran di <RoomName/>",
@@ -1688,62 +1625,6 @@
     "Question or topic": "Pertanyaan atau topik",
     "What is your poll question or topic?": "Apa pertanyaan atau topik poll Anda?",
     "Create Poll": "Buat Poll",
-    "%(oneUser)schanged the server ACLs %(count)s times": {
-        "one": "%(oneUser)smengubah ACL server",
-        "other": "%(oneUser)smengubah ACL server %(count)s kali"
-    },
-    "%(severalUsers)schanged the server ACLs %(count)s times": {
-        "one": "%(severalUsers)smengubah ACL server",
-        "other": "%(severalUsers)smengubah ACL server %(count)s kali"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "one": "%(oneUser)stidak membuat perubahan",
-        "other": "%(oneUser)stidak membuat perubahan %(count)s kali"
-    },
-    "%(severalUsers)smade no changes %(count)s times": {
-        "one": "%(severalUsers)stidak membuat perubahan",
-        "other": "%(severalUsers)stidak membuat perubahan %(count)s kali"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "one": "%(oneUser)smengubah namanya",
-        "other": "%(oneUser)smengubah namanya %(count)s kali"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "one": "%(severalUsers)smengubah namanya",
-        "other": "%(severalUsers)smengubah namanya %(count)s kali"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "one": "undangannya %(oneUser)s dihapus",
-        "other": "undangannya %(oneUser)s dihapus %(count)s kali"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "one": "undangannya %(severalUsers)s dihapus",
-        "other": "undangannya %(severalUsers)s dihapus %(count)s kali"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "one": "%(oneUser)smenolak undangannya",
-        "other": "%(oneUser)smenolak undangannya %(count)s kali"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "one": "%(severalUsers)smenolak undangannya",
-        "other": "%(severalUsers)smenolak undangannya %(count)s kali"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "one": "%(oneUser)skeluar dan bergabung kembali",
-        "other": "%(oneUser)skeluar dan bergabung kembali %(count)s kali"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "one": "%(severalUsers)skeluar dan bergabung kembali",
-        "other": "%(severalUsers)skeluar dan bergabung kembali %(count)s kali"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "one": "%(oneUser)sbergabung dan keluar",
-        "other": "%(oneUser)sbergabung dan keluar %(count)s kali"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "one": "%(severalUsers)sbergabung dan keluar",
-        "other": "%(severalUsers)sbergabung dan keluar %(count)s kali"
-    },
     "Language Dropdown": "Dropdown Bahasa",
     "%(count)s people you know have already joined": {
         "one": "%(count)s orang yang Anda tahu telah bergabung",
@@ -1754,7 +1635,6 @@
         "one": "Tampilkan 1 pengguna",
         "other": "Tampilkan semua %(count)s anggota"
     },
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Mohon <newIssueLink>buat sebuah issue baru</newIssueLink> di GitHub supaya kami dapat memeriksa kutu ini.",
     "Share content": "Bagikan konten",
     "Application window": "Jendela aplikasi",
     "Share entire screen": "Bagikan seluruh layar",
@@ -2157,7 +2037,6 @@
     "Use bots, bridges, widgets and sticker packs": "Gunakan bot, jembatan, widget, dan paket stiker",
     "Be found by phone or email": "Temukan oleh lainnya melalui ponsel atau email",
     "Find others by phone or email": "Temukan lainnya melalui ponsel atau email",
-    "Integration manager": "Manajer integrasi",
     "Your browser likely removed this data when running low on disk space.": "Kemungkinan browser Anda menghapus datanya ketika ruang disk rendah.",
     "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Beberapa data sesi, termasuk kunci pesan terenkripsi, hilang. Keluar dan masuk lagi untuk memperbaikinya, memulihkan kunci-kunci dari cadangan.",
     "Missing session data": "Data sesi hilang",
@@ -2367,14 +2246,7 @@
     },
     "No votes cast": "Tidak ada suara",
     "To view all keyboard shortcuts, <a>click here</a>.": "Untuk melihat semua shortcut keyboard, <a>klik di sini</a>.",
-    "You can turn this off anytime in settings": "Anda dapat mematikannya kapan saja di pengaturan",
-    "We <Bold>don't</Bold> share information with third parties": "Kami <Bold>tidak</Bold> membagikan informasi ini dengan pihak ketiga",
-    "We <Bold>don't</Bold> record or profile any account data": "Kami <Bold>tidak</Bold> merekam atau memprofil data akun apa pun",
-    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "Anda dapat membaca kebijakan kami <PrivacyPolicyUrl>di sini</PrivacyPolicyUrl>",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Bagikan data anonim untuk membantu kami mengidentifikasi masalah-masalah. Tidak ada yang pribadi. Tidak ada pihak ketiga.",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Bagikan data anonim untuk membantu kami mengidentifikasi masalah-masalah. Tidak ada yang pribadi. Tidak ada pihak ketiga. <LearnMoreLink>Pelajari Lebih Lanjut</LearnMoreLink>",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "Anda sebelumnya setuju untuk membagikan data penggunaan anonim dengan kami. Kami memperbarui cara kerjanya.",
-    "Help improve %(analyticsOwner)s": "Bantu membuat %(analyticsOwner)s lebih baik",
     "That's fine": "Saya tidak keberatan",
     "Share location": "Bagikan lokasi",
     "You cannot place calls without a connection to the server.": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
@@ -2421,8 +2293,6 @@
     "Verify other device": "Verifikasi perangkat lain",
     "You cancelled verification on your other device.": "Anda membatalkan verifikasi di perangkat Anda yang lain.",
     "Almost there! Is your other device showing the same shield?": "Hampir selesai! Apakah perangkat lain Anda menampilkan perisai yang sama?",
-    "Verify this device by completing one of the following:": "Verifikasi perangkat ini dengan menyelesaikan salah satu di bawah:",
-    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "Perangkat yang Anda sedang verifikasi tidak mendukung pemindaian kode QR atau verifikasi emoji, yang didukung oleh %(brand)s. Coba menggunakan klien yang lain.",
     "To proceed, please accept the verification request on your other device.": "Untuk melanjutkan, mohon terima permintaan verifikasi di perangkat Anda yang lain.",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Menunggu Anda untuk memverifikasi perangkat Anda yang lain, %(deviceName)s (%(deviceId)s)…",
     "Verify this device by confirming the following number appears on its screen.": "Verifikasi perangkat ini dengan mengkonfirmasi nomor berikut ini yang ditampilkan di layarnya.",
@@ -2443,14 +2313,6 @@
     "Automatically send debug logs on decryption errors": "Kirim catatan pengawakutu secara otomatis ketika terjadi kesalahan pendekripsian",
     "Remove from %(roomName)s": "Keluarkan dari %(roomName)s",
     "You were removed from %(roomName)s by %(memberName)s": "Anda telah dikeluarkan dari %(roomName)s oleh %(memberName)s",
-    "was removed %(count)s times": {
-        "one": "dikeluarkan",
-        "other": "dikeluarkan %(count)s kali"
-    },
-    "were removed %(count)s times": {
-        "one": "dikeluarkan",
-        "other": "dikeluarkan %(count)s kali"
-    },
     "Remove from room": "Keluarkan dari ruangan",
     "Failed to remove user": "Gagal untuk mengeluarkan pengguna",
     "Remove them from specific things I'm able to": "Keluarkan dari hal-hal spesifik yang saya bisa",
@@ -2489,7 +2351,6 @@
     "Unable to check if username has been taken. Try again later.": "Tidak dapat memeriksa jika nama pengguna telah dipakai. Coba lagi nanti.",
     "Group all your favourite rooms and people in one place.": "Kelompokkan semua ruangan dan orang favorit Anda di satu tempat.",
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Space adalah cara untuk mengelompokkan ruangan dan orang. Di sampingnya space yang Anda berada, Anda dapat menggunakan space yang sudah dibuat.",
-    "IRC (Experimental)": "IRC (Eksperimental)",
     "Toggle hidden event visibility": "Alih visibilitas peristiwa tersembunyi",
     "Redo edit": "Ulangi editan",
     "Force complete": "Selesaikan dengan paksa",
@@ -2513,22 +2374,6 @@
     "This is a beta feature": "Ini adalah fitur beta",
     "Use <arrows/> to scroll": "Gunakan <arrows/> untuk menggulirkan",
     "Feedback sent! Thanks, we appreciate it!": "Masukan terkirim! Terima kasih, kami mengapresiasinya!",
-    "%(severalUsers)sremoved a message %(count)s times": {
-        "other": "%(severalUsers)s menghapus %(count)s pesan",
-        "one": "%(severalUsers)s menghapus sebuah pesan"
-    },
-    "%(oneUser)sremoved a message %(count)s times": {
-        "other": "%(oneUser)s menghapus %(count)s pesan",
-        "one": "%(oneUser)s menghapus sebuah pesan"
-    },
-    "%(severalUsers)ssent %(count)s hidden messages": {
-        "other": "%(severalUsers)s mengirim %(count)s pesan tersembunyi",
-        "one": "%(severalUsers)s mengirim sebuah pesan tersembunyi"
-    },
-    "%(oneUser)ssent %(count)s hidden messages": {
-        "other": "%(oneUser)s sent %(count)s hidden messages",
-        "one": "%(oneUser)s mengirim sebuah pesan tersembunyi"
-    },
     "Automatically send debug logs when key backup is not functioning": "Kirim catatan pengawakutu secara otomatis ketika pencadangan kunci tidak berfungsi",
     "Edit poll": "Edit pungutan suara",
     "Sorry, you can't edit a poll after votes have been cast.": "Maaf, Anda tidak dapat mengedit sebuah poll setelah suara-suara diberikan.",
@@ -2557,14 +2402,6 @@
     "Match system": "Cocokkan dengan sistem",
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Balas ke utasan yang sedang terjadi atau gunakan “%(replyInThread)s” ketika kursor diletakkan pada pesan untuk memulai yang baru.",
     "Show polls button": "Tampilkan tombol pemungutan suara",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(oneUser)s mengubah <a>pesan-pesan yang disematkan</a> di ruangan ini",
-        "other": "%(oneUser)smengubah <a>pesan-pesan yang dipasangi pin</a> untuk ruangan ini %(count)s kali"
-    },
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(severalUsers)s mengubah <a>pesan-pesan yang disematkan</a> di ruangan ini",
-        "other": "%(severalUsers)smengubah <a>pesan-pesan yang dipasangi pin</a> untuk ruangan ini %(count)s kali"
-    },
     "Spaces are a new way to group rooms and people. What kind of Space do you want to create? You can change this later.": "Space adalah cara yang baru untuk mengelompokkan ruangan dan orang. Space apa yang Anda ingin buat? Ini dapat diubah nanti.",
     "Click": "Klik",
     "Expand quotes": "Buka kutip",
@@ -2601,7 +2438,6 @@
     "Developer tools": "Alat pengembang",
     "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.": "%(brand)s bersifat eksperimental pada peramban web ponsel. Untuk pengalaman yang lebih baik dan fitur-fitur terkini, gunakan aplikasi natif gratis kami.",
     "Unsent": "Belum dikirim",
-    "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Bantu kami mengidentifikasi masalah-masalah dan membuat %(analyticsOwner)s lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.",
     "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "%(errcode)s didapatkan saat mencoba mengakses ruangan atau space. Jika Anda pikir Anda melihat pesan ini secara tidak benar, silakan <issueLink>kirim sebuah laporan kutu</issueLink>.",
     "Try again later, or ask a room or space admin to check if you have access.": "Coba ulang nanti, atau tanya kepada admin ruangan atau space untuk memeriksa jika Anda memiliki akses.",
     "This room or space is not accessible at this time.": "Ruangan atau space ini tidak dapat diakses pada saat ini.",
@@ -2843,7 +2679,6 @@
     "Your server lacks native support": "Server Anda belum mendukungnya",
     "Your server has native support": "Server Anda mendukungnya",
     "%(qrCode)s or %(appLinks)s": "%(qrCode)s atau %(appLinks)s",
-    "%(qrCode)s or %(emojiCompare)s": "%(qrCode)s atau %(emojiCompare)s",
     "You need to be able to kick users to do that.": "Anda harus dapat mengeluarkan pengguna untuk melakukan itu.",
     "Sign out of this session": "Keluarkan sesi ini",
     "Rename session": "Ubah nama sesi",
@@ -3204,14 +3039,6 @@
     "Notify when someone mentions using @displayname or %(mxid)s": "Beri tahu ketika seseorang memberi tahu menggunakan @namatampilan atau %(mxid)s",
     "Unable to find user by email": "Tidak dapat mencari pengguna dengan surel",
     "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.": "Pesan-pesan di ruangan ini dienkripsi secara ujung ke ujung. Ketika orang-orang bergabung, Anda dapat memverifikasi mereka di profil mereka dengan mengetuk pada foto profil mereka.",
-    "%(severalUsers)schanged their profile picture %(count)s times": {
-        "other": "%(severalUsers)smengubah foto profil mereka %(count)s kali",
-        "one": "%(severalUsers)smengubah foto profil mereka"
-    },
-    "%(oneUser)schanged their profile picture %(count)s times": {
-        "other": "%(oneUser)smengubah foto profilnya %(count)s kali",
-        "one": "%(oneUser)smengubah foto profilnya"
-    },
     "Anyone can request to join, but admins or moderators need to grant access. You can change this later.": "Siapa pun dapat meminta untuk bergabung, tetapi admin atau administrator perlu memberikan akses. Anda dapat mengubah ini nanti.",
     "Upgrade room": "Tingkatkan ruangan",
     "Something went wrong.": "Ada sesuatu yang salah.",
@@ -3326,7 +3153,9 @@
         "stickerpack": "Paket Stiker",
         "system_alerts": "Pemberitahuan Sistem",
         "secure_backup": "Cadangan Aman",
-        "cross_signing": "Penandatanganan silang"
+        "cross_signing": "Penandatanganan silang",
+        "identity_server": "Server identitas",
+        "integration_manager": "Manajer integrasi"
     },
     "action": {
         "continue": "Lanjut",
@@ -3540,7 +3369,8 @@
         "collecting_information": "Mengumpulkan informasi versi aplikasi",
         "collecting_logs": "Mengumpulkan catatan",
         "uploading_logs": "Mengunggah catatan",
-        "downloading_logs": "Mengunduh catatan"
+        "downloading_logs": "Mengunduh catatan",
+        "create_new_issue": "Mohon <newIssueLink>buat sebuah issue baru</newIssueLink> di GitHub supaya kami dapat memeriksa kutu ini."
     },
     "time": {
         "hours_minutes_seconds_left": "Sisa %(hours)sj %(minutes)sm %(seconds)sd",
@@ -3657,6 +3487,10 @@
             "rule_suppress_notices": "Pesan dikirim oleh bot",
             "rule_tombstone": "Ketika ruangan telah ditingkatkan",
             "rule_encrypted_room_one_to_one": "Pesan terenkripsi di pesan langsung"
+        },
+        "appearance": {
+            "layout_irc": "IRC (Eksperimental)",
+            "layout_bubbles": "Gelembung pesan"
         }
     },
     "devtools": {
@@ -3911,6 +3745,145 @@
         },
         "m.call.hangup": {
             "dm": "Panggilan berakhir"
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "one": "%(severalUsers)sbergabung",
+                "other": "%(severalUsers)sbergabung %(count)s kali"
+            },
+            "joined": {
+                "one": "%(oneUser)sbergabung",
+                "other": "%(oneUser)sbergabung %(count)s kali"
+            },
+            "left_multiple": {
+                "one": "%(severalUsers)skeluar",
+                "other": "%(severalUsers)skeluar %(count)s kali"
+            },
+            "left": {
+                "one": "%(oneUser)skeluar",
+                "other": "%(oneUser)skeluar %(count)s kali"
+            },
+            "joined_and_left_multiple": {
+                "one": "%(severalUsers)sbergabung dan keluar",
+                "other": "%(severalUsers)sbergabung dan keluar %(count)s kali"
+            },
+            "joined_and_left": {
+                "one": "%(oneUser)sbergabung dan keluar",
+                "other": "%(oneUser)sbergabung dan keluar %(count)s kali"
+            },
+            "rejoined_multiple": {
+                "one": "%(severalUsers)skeluar dan bergabung kembali",
+                "other": "%(severalUsers)skeluar dan bergabung kembali %(count)s kali"
+            },
+            "rejoined": {
+                "one": "%(oneUser)skeluar dan bergabung kembali",
+                "other": "%(oneUser)skeluar dan bergabung kembali %(count)s kali"
+            },
+            "rejected_invite_multiple": {
+                "one": "%(severalUsers)smenolak undangannya",
+                "other": "%(severalUsers)smenolak undangannya %(count)s kali"
+            },
+            "rejected_invite": {
+                "one": "%(oneUser)smenolak undangannya",
+                "other": "%(oneUser)smenolak undangannya %(count)s kali"
+            },
+            "invite_withdrawn_multiple": {
+                "one": "undangannya %(severalUsers)s dihapus",
+                "other": "undangannya %(severalUsers)s dihapus %(count)s kali"
+            },
+            "invite_withdrawn": {
+                "one": "undangannya %(oneUser)s dihapus",
+                "other": "undangannya %(oneUser)s dihapus %(count)s kali"
+            },
+            "invited_multiple": {
+                "one": "diundang",
+                "other": "diundang %(count)s kali"
+            },
+            "invited": {
+                "one": "diundang",
+                "other": "diundang %(count)s kali"
+            },
+            "banned_multiple": {
+                "one": "dicekal",
+                "other": "dicekal %(count)s kali"
+            },
+            "banned": {
+                "one": "dicekal",
+                "other": "dicekal %(count)s kali"
+            },
+            "unbanned_multiple": {
+                "one": "dihilangkan cekalannya",
+                "other": "dihilangkan cekalannya %(count)s kali"
+            },
+            "unbanned": {
+                "one": "dihilangkan cekalannya",
+                "other": "dihilangkan cekalannya %(count)s kali"
+            },
+            "kicked_multiple": {
+                "one": "dikeluarkan",
+                "other": "dikeluarkan %(count)s kali"
+            },
+            "kicked": {
+                "one": "dikeluarkan",
+                "other": "dikeluarkan %(count)s kali"
+            },
+            "changed_name_multiple": {
+                "one": "%(severalUsers)smengubah namanya",
+                "other": "%(severalUsers)smengubah namanya %(count)s kali"
+            },
+            "changed_name": {
+                "one": "%(oneUser)smengubah namanya",
+                "other": "%(oneUser)smengubah namanya %(count)s kali"
+            },
+            "changed_avatar_multiple": {
+                "other": "%(severalUsers)smengubah foto profil mereka %(count)s kali",
+                "one": "%(severalUsers)smengubah foto profil mereka"
+            },
+            "changed_avatar": {
+                "other": "%(oneUser)smengubah foto profilnya %(count)s kali",
+                "one": "%(oneUser)smengubah foto profilnya"
+            },
+            "no_change_multiple": {
+                "one": "%(severalUsers)stidak membuat perubahan",
+                "other": "%(severalUsers)stidak membuat perubahan %(count)s kali"
+            },
+            "no_change": {
+                "one": "%(oneUser)stidak membuat perubahan",
+                "other": "%(oneUser)stidak membuat perubahan %(count)s kali"
+            },
+            "server_acls_multiple": {
+                "one": "%(severalUsers)smengubah ACL server",
+                "other": "%(severalUsers)smengubah ACL server %(count)s kali"
+            },
+            "server_acls": {
+                "one": "%(oneUser)smengubah ACL server",
+                "other": "%(oneUser)smengubah ACL server %(count)s kali"
+            },
+            "pinned_events_multiple": {
+                "one": "%(severalUsers)s mengubah <a>pesan-pesan yang disematkan</a> di ruangan ini",
+                "other": "%(severalUsers)smengubah <a>pesan-pesan yang dipasangi pin</a> untuk ruangan ini %(count)s kali"
+            },
+            "pinned_events": {
+                "one": "%(oneUser)s mengubah <a>pesan-pesan yang disematkan</a> di ruangan ini",
+                "other": "%(oneUser)smengubah <a>pesan-pesan yang dipasangi pin</a> untuk ruangan ini %(count)s kali"
+            },
+            "redacted_multiple": {
+                "other": "%(severalUsers)s menghapus %(count)s pesan",
+                "one": "%(severalUsers)s menghapus sebuah pesan"
+            },
+            "redacted": {
+                "other": "%(oneUser)s menghapus %(count)s pesan",
+                "one": "%(oneUser)s menghapus sebuah pesan"
+            },
+            "hidden_event_multiple": {
+                "other": "%(severalUsers)s mengirim %(count)s pesan tersembunyi",
+                "one": "%(severalUsers)s mengirim sebuah pesan tersembunyi"
+            },
+            "hidden_event": {
+                "other": "%(oneUser)s sent %(count)s hidden messages",
+                "one": "%(oneUser)s mengirim sebuah pesan tersembunyi"
+            }
         }
     },
     "slash_command": {
@@ -4071,5 +4044,44 @@
             "redact": "Hapus pesan yang dikirim oleh orang lain",
             "notifications.room": "Beri tahu semua"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "Mereka tidak cocok",
+            "sas_match": "Mereka cocok",
+            "in_person": "Supaya aman, lakukan ini secara langsung atau gunakan cara lain yang terpercaya untuk berkomunikasi.",
+            "other_party_cancelled": "Pengguna yang lain membatalkan proses verifikasi ini.",
+            "complete_title": "Terverifikasi!",
+            "complete_description": "Anda berhasil memverifikasi pengguna ini.",
+            "no_support_qr_emoji": "Perangkat yang Anda sedang verifikasi tidak mendukung pemindaian kode QR atau verifikasi emoji, yang didukung oleh %(brand)s. Coba menggunakan klien yang lain.",
+            "qr_prompt": "Pindai kode unik ini",
+            "sas_prompt": "Bandingkan emoji unik",
+            "sas_description": "Bandingkan emoji jika Anda tidak memiliki sebuah kamera di kedua perangkat",
+            "qr_or_sas": "%(qrCode)s atau %(emojiCompare)s",
+            "qr_or_sas_header": "Verifikasi perangkat ini dengan menyelesaikan salah satu di bawah:"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Sering Digunakan",
+        "category_smileys_people": "Senyuman & Orang",
+        "category_animals_nature": "Hewan & Alam",
+        "category_food_drink": "Makanan & Minuman",
+        "category_activities": "Aktivitas",
+        "category_travel_places": "Aktivitas & Tempat",
+        "category_objects": "Obyek",
+        "category_symbols": "Simbol",
+        "category_flags": "Bendera",
+        "categories": "Categori",
+        "quick_reactions": "Reaksi Cepat"
+    },
+    "analytics": {
+        "enable_prompt": "Bantu membuat %(analyticsOwner)s lebih baik",
+        "consent_migration": "Anda sebelumnya setuju untuk membagikan data penggunaan anonim dengan kami. Kami memperbarui cara kerjanya.",
+        "learn_more": "Bagikan data anonim untuk membantu kami mengidentifikasi masalah-masalah. Tidak ada yang pribadi. Tidak ada pihak ketiga. <LearnMoreLink>Pelajari Lebih Lanjut</LearnMoreLink>",
+        "privacy_policy": "Anda dapat membaca kebijakan kami <PrivacyPolicyUrl>di sini</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Bantu kami mengidentifikasi masalah-masalah dan membuat %(analyticsOwner)s lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.",
+        "bullet_1": "Kami <Bold>tidak</Bold> merekam atau memprofil data akun apa pun",
+        "bullet_2": "Kami <Bold>tidak</Bold> membagikan informasi ini dengan pihak ketiga",
+        "disable_prompt": "Anda dapat mematikannya kapan saja di pengaturan"
     }
 }
