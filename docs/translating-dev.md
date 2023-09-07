@@ -43,9 +43,12 @@ We are aiming for a set of common strings to be shared then some more localised 
 
 1. Ensure the string doesn't already exist in a related project, such as https://localazy.com/p/element
 2. Keys for common strings, i.e. strings that can be used at multiple places must start by `action_` if this is a verb, or `common_` if not
-3. Keys for common accessibility strings must start by `a11y_`. Example:` a11y_hide_password`
+3. Keys for common accessibility strings must start by `a11y_`. Example: `a11y_hide_password`
 4. Otherwise, try to group keys logically and nest where appropriate, such as `keyboard_` for strings relating to keyboard shortcuts.
 5. Ensure your translation keys do not include `.` or `|` or ` `. Try to balance string length against descriptiveness.
+
+## matrix-react-sdk is still undergoing migration to translation keys
+If you are fortunate enough to be modifying not yet migrated strings please treat them as a new string using instructions below.
 
 ## Adding new strings
 
