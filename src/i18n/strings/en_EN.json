@@ -2150,6 +2150,8 @@
     "Forget this space": "Forget this space",
     "Forget this room": "Forget this room",
     "Re-join": "Re-join",
+    "You have been denied access": "You have been denied access",
+    "As you have been denied access, you cannot rejoin unless you are invited by the admin or moderator of the group.": "As you have been denied access, you cannot rejoin unless you are invited by the admin or moderator of the group.",
     "You were banned from %(roomName)s by %(memberName)s": "You were banned from %(roomName)s by %(memberName)s",
     "You were banned by %(memberName)s": "You were banned by %(memberName)s",
     "Something went wrong with your invite to %(roomName)s": "Something went wrong with your invite to %(roomName)s",

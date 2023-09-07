@@ -62,6 +62,7 @@ enum MessageCase {
     OtherError = "OtherError",
     PromptAskToJoin = "PromptAskToJoin",
     Knocked = "Knocked",
+    RequestDenied = "requestDenied",
 }
 
 interface IProps {
@@ -188,7 +189,11 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         const myMember = this.getMyMember();
 
         if (myMember) {
+            const previousMembership = myMember.events.member?.getPrevContent().membership;
             if (myMember.isKicked()) {
+                if (previousMembership === "knock") {
+                    return MessageCase.RequestDenied;
+                }
                 return MessageCase.Kicked;
             } else if (myMember.membership === "ban") {
                 return MessageCase.Banned;
@@ -395,6 +400,21 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                     primaryActionLabel = _t("Re-join");
                     primaryActionHandler = this.props.onJoinClick;
                 }
+                break;
+            }
+            case MessageCase.RequestDenied: {
+                title = _t("You have been denied access");
+
+                subTitle = _t(
+                    "As you have been denied access, you cannot rejoin unless you are invited by the admin or moderator of the group.",
+                );
+
+                if (isSpace) {
+                    primaryActionLabel = _t("Forget this space");
+                } else {
+                    primaryActionLabel = _t("Forget this room");
+                }
+                primaryActionHandler = this.props.onForgetClick;
                 break;
             }
             case MessageCase.Banned: {

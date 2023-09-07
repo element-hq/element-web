@@ -107,6 +107,19 @@ exports[`<RoomPreviewBar /> renders banned message 1`] = `
 </div>
 `;
 
+exports[`<RoomPreviewBar /> renders denied request message 1`] = `
+<div
+  class="mx_RoomPreviewBar_message"
+>
+  <h3>
+    You have been denied access
+  </h3>
+  <p>
+    As you have been denied access, you cannot rejoin unless you are invited by the admin or moderator of the group.
+  </p>
+</div>
+`;
+
 exports[`<RoomPreviewBar /> renders kicked message 1`] = `
 <div
   class="mx_RoomPreviewBar_message"

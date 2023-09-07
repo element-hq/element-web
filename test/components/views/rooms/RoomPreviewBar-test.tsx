@@ -45,23 +45,27 @@ const makeMockRoomMember = ({
     membership,
     content,
     memberContent,
+    oldMembership,
 }: {
     userId?: string;
     isKicked?: boolean;
-    membership?: "invite" | "ban";
+    membership?: "invite" | "ban" | "leave";
     content?: Partial<IContent>;
     memberContent?: Partial<IContent>;
+    oldMembership?: "join" | "knock";
 }) =>
     ({
         userId,
         rawDisplayName: `${userId} name`,
         isKicked: jest.fn().mockReturnValue(!!isKicked),
         getContent: jest.fn().mockReturnValue(content || {}),
+        getPrevContent: jest.fn().mockReturnValue(content || {}),
         membership,
         events: {
             member: {
                 getSender: jest.fn().mockReturnValue("@kicker:test.com"),
                 getContent: jest.fn().mockReturnValue({ reason: "test reason", ...memberContent }),
+                getPrevContent: jest.fn().mockReturnValue({ membership: oldMembership, ...memberContent }),
             },
         },
     } as unknown as RoomMember);
@@ -168,9 +172,31 @@ describe("<RoomPreviewBar />", () => {
     it("renders kicked message", () => {
         const room = createRoom(roomId, otherUserId);
         jest.spyOn(room, "getMember").mockReturnValue(makeMockRoomMember({ isKicked: true }));
-        const component = getComponent({ loading: true, room });
+        const component = getComponent({ room, promptAskToJoin: true });
 
         expect(getMessage(component)).toMatchSnapshot();
+    });
+
+    it("renders denied request message", () => {
+        const room = createRoom(roomId, otherUserId);
+        jest.spyOn(room, "getMember").mockReturnValue(
+            makeMockRoomMember({ isKicked: true, membership: "leave", oldMembership: "knock" }),
+        );
+        const component = getComponent({ room, promptAskToJoin: true });
+
+        expect(getMessage(component)).toMatchSnapshot();
+    });
+
+    it("triggers the primary action callback for denied request", () => {
+        const onForgetClick = jest.fn();
+        const room = createRoom(roomId, otherUserId);
+        jest.spyOn(room, "getMember").mockReturnValue(
+            makeMockRoomMember({ isKicked: true, membership: "leave", oldMembership: "knock" }),
+        );
+        const component = getComponent({ room, promptAskToJoin: true, onForgetClick });
+
+        fireEvent.click(getPrimaryActionButton(component)!);
+        expect(onForgetClick).toHaveBeenCalled();
     });
 
     it("renders banned message", () => {
