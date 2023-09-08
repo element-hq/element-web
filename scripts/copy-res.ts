@@ -8,9 +8,13 @@ import * as fs from "node:fs";
 import _ from "lodash";
 import { Cpx } from "cpx";
 import * as loaderUtils from "loader-utils";
+import { Translations } from "matrix-web-i18n";
 
+const REACT_I18N_BASE_PATH = "node_modules/matrix-react-sdk/src/i18n/strings/";
 const I18N_BASE_PATH = "src/i18n/strings/";
-const INCLUDE_LANGS = fs.readdirSync(I18N_BASE_PATH).filter((fn) => fn.endsWith(".json"));
+const INCLUDE_LANGS = [...new Set([...fs.readdirSync(I18N_BASE_PATH), ...fs.readdirSync(REACT_I18N_BASE_PATH)])]
+    .filter((fn) => fn.endsWith(".json"))
+    .map((f) => f.slice(0, -5));
 
 // cpx includes globbed parts of the filename in the destination, but excludes
 // common parents. Hence, "res/{a,b}/**": the output will be "dest/a/..." and
@@ -103,10 +107,10 @@ function next(i: number, err?: Error): void {
 }
 
 function genLangFile(lang: string, dest: string): string {
-    const reactSdkFile = "node_modules/matrix-react-sdk/src/i18n/strings/" + lang + ".json";
+    const reactSdkFile = REACT_I18N_BASE_PATH + lang + ".json";
     const riotWebFile = I18N_BASE_PATH + lang + ".json";
 
-    let translations = {};
+    let translations: Translations = {};
     [reactSdkFile, riotWebFile].forEach(function (f) {
         if (fs.existsSync(f)) {
             try {
@@ -159,7 +163,7 @@ function genLangList(langFileMap: Record<string, string>): void {
  * and regenerating languages.json with the new filename
  */
 function watchLanguage(lang: string, dest: string, langFileMap: Record<string, string>): void {
-    const reactSdkFile = "node_modules/matrix-react-sdk/src/i18n/strings/" + lang + ".json";
+    const reactSdkFile = REACT_I18N_BASE_PATH + lang + ".json";
     const riotWebFile = I18N_BASE_PATH + lang + ".json";
 
     // XXX: Use a debounce because for some reason if we read the language
