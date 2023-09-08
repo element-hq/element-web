@@ -326,6 +326,16 @@ describe("Read receipts", () => {
     }
 
     /**
+     * Assert that this room remains read, when it was previously read.
+     * (In practice, this just waits a short while to allow any unread marker to
+     * appear, and then asserts that the room is read.)
+     */
+    function assertStillRead(room: string) {
+        cy.wait(200);
+        assertRead(room);
+    }
+
+    /**
      * Assert a given room is marked as unread (via the room list tile)
      * @param room - the name of the room to check
      * @param count - the numeric count to assert, or if "." specified then a bold/dot (no count) state is asserted
@@ -1098,34 +1108,251 @@ describe("Read receipts", () => {
     describe("redactions", () => {
         describe("in the main timeline", () => {
             it("Redacting the message pointed to by my receipt leaves the room read", () => {
+                // Given I have read the messages in a room
                 goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
+                goTo(room2);
                 assertRead(room2);
+                goTo(room1);
+
+                // When the latest message is redacted
+                receiveMessages(room2, [redactionOf("Msg2")]);
+
+                // Then the room remains read
+                assertStillRead(room2);
+            });
+
+            it("Reading an unread room after a redaction of the latest message makes it read", () => {
+                // Given an unread room
+                goTo(room1);
                 receiveMessages(room2, ["Msg1", "Msg2"]);
                 assertUnread(room2, 2);
 
-                // When I read the main timeline
+                // And the latest message has been redacted
+                receiveMessages(room2, [redactionOf("Msg2")]);
+
+                // When I read the room
+                goTo(room2);
+                assertRead(room2);
+                goTo(room1);
+
+                // Then it becomes read
+                assertStillRead(room2);
+            });
+            it("Reading an unread room after a redaction of an older message makes it read", () => {
+                // Given an unread room with an earlier redaction
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
+                receiveMessages(room2, [redactionOf("Msg1")]);
+
+                // When I read the room
+                goTo(room2);
+                assertRead(room2);
+                goTo(room1);
+
+                // Then it becomes read
+                assertStillRead(room2);
+            });
+            it("Marking an unread room as read after a redaction makes it read", () => {
+                // Given an unread room where latest message is redacted
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
+                receiveMessages(room2, [redactionOf("Msg2")]);
+                assertUnread(room2, 1);
+
+                // When I mark it as read
+                markAsRead(room2);
+
+                // Then it becomes read
+                assertRead(room2);
+            });
+            it("Sending and redacting a message after marking the room as read makes it read", () => {
+                // Given a room that is marked as read
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
+                markAsRead(room2);
+                assertRead(room2);
+
+                // When a message is sent and then redacted
+                receiveMessages(room2, ["Msg3"]);
+                assertUnread(room2, 1);
+                receiveMessages(room2, [redactionOf("Msg3")]);
+
+                // Then the room is read
+                assertRead(room2);
+            });
+            it("Redacting a message after marking the room as read leaves it read", () => {
+                // Given a room that is marked as read
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2", "Msg3"]);
+                assertUnread(room2, 3);
+                markAsRead(room2);
+                assertRead(room2);
+
+                // When we redact some messages
+                receiveMessages(room2, [redactionOf("Msg3")]);
+                receiveMessages(room2, [redactionOf("Msg1")]);
+
+                // Then it is still read
+                assertStillRead(room2);
+            });
+            it("Redacting one of the unread messages reduces the unread count", () => {
+                // Given an unread room
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2", "Msg3"]);
+                assertUnread(room2, 3);
+
+                // When I redact a non-latest message
+                receiveMessages(room2, [redactionOf("Msg2")]);
+
+                // Then the unread count goes down
+                assertUnread(room2, 2);
+
+                // And when I redact the latest message
+                receiveMessages(room2, [redactionOf("Msg3")]);
+
+                // Then the unread count goes down again
+                assertUnread(room2, 1);
+            });
+            it("Redacting one of the unread messages reduces the unread count after restart", () => {
+                // Given unread count was reduced by redacting messages
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2", "Msg3"]);
+                assertUnread(room2, 3);
+                receiveMessages(room2, [redactionOf("Msg2")]);
+                assertUnread(room2, 2);
+                receiveMessages(room2, [redactionOf("Msg3")]);
+                assertUnread(room2, 1);
+
+                // When I restart
+                saveAndReload();
+
+                // Then the unread count is still reduced
+                assertUnread(room2, 1);
+            });
+            it("Redacting all unread messages makes the room read", () => {
+                // Given an unread room
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
+
+                // When I redact all the unread messages
+                receiveMessages(room2, [redactionOf("Msg2")]);
+                receiveMessages(room2, [redactionOf("Msg1")]);
+
+                // Then the room is back to being read
+                assertRead(room2);
+            });
+            it("Redacting all unread messages makes the room read after restart", () => {
+                // Given all unread messages were redacted
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                assertUnread(room2, 2);
+                receiveMessages(room2, [redactionOf("Msg2")]);
+                receiveMessages(room2, [redactionOf("Msg1")]);
+                assertRead(room2);
+
+                // When I restart
+                saveAndReload();
+
+                // Then the room is still read
+                assertRead(room2);
+            });
+            // TODO: Doesn't work because the test setup can't (yet) find the ID of a redacted message
+            it.skip("Reacting to a redacted message leaves the room read", () => {
+                // Given a redacted message exists
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                receiveMessages(room2, [redactionOf("Msg2")]);
+                assertUnread(room2, 1);
+
+                // And the room is read
+                goTo(room2);
+                assertRead(room2);
+                cy.wait(200);
+                goTo(room1);
+
+                // When I react to the redacted message
+                // TODO: doesn't work yet because we need to be able to look up
+                // the ID of Msg2 even though it has now disappeared from the
+                // timeline.
+                receiveMessages(room2, [reactionTo("Msg2", "🪿")]);
+
+                // Then the room is still read
+                assertStillRead(room2);
+            });
+            // TODO: Doesn't work because the test setup can't (yet) find the ID of a redacted message
+            it.skip("Editing a redacted message leaves the room read", () => {
+                // Given a redacted message exists
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                receiveMessages(room2, [redactionOf("Msg2")]);
+                assertUnread(room2, 1);
+
+                // And the room is read
+                goTo(room2);
+                assertRead(room2);
+                goTo(room1);
+
+                // When I attempt to edit the redacted message
+                // TODO: doesn't work yet because we need to be able to look up
+                // the ID of Msg2 even though it has now disappeared from the
+                // timeline.
+                receiveMessages(room2, [editOf("Msg2", "Msg2 is BACK")]);
+
+                // Then the room is still read
+                assertStillRead(room2);
+            });
+            // TODO: Doesn't work because the test setup can't (yet) find the ID of a redacted message
+            it.skip("A reply to a redacted message makes the room unread", () => {
+                // Given a message was redacted
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                receiveMessages(room2, [redactionOf("Msg2")]);
+                assertUnread(room2, 1);
+
+                // And the room is read
+                goTo(room2);
+                assertRead(room2);
+                goTo(room1);
+
+                // When I receive a reply to the redacted message
+                // TODO: doesn't work yet because we need to be able to look up
+                // the ID of Msg2 even though it has now disappeared from the
+                // timeline.
+                receiveMessages(room2, [replyTo("Msg2", "Reply to Msg2")]);
+
+                // Then the room is unread
+                assertUnread(room2, 1);
+            });
+            // TODO: Doesn't work because the test setup can't (yet) find the ID of a redacted message
+            it.skip("Reading a reply to a redacted message marks the room as read", () => {
+                // Given someone replied to a redacted message
+                goTo(room1);
+                receiveMessages(room2, ["Msg1", "Msg2"]);
+                receiveMessages(room2, [redactionOf("Msg2")]);
+                assertUnread(room2, 1);
+                goTo(room2);
+                assertRead(room2);
+                goTo(room1);
+                // TODO: doesn't work yet because we need to be able to look up
+                // the ID of Msg2 even though it has now disappeared from the
+                // timeline.
+                receiveMessages(room2, [replyTo("Msg2", "Reply to Msg2")]);
+                assertUnread(room2, 1);
+
+                // When I read the reply
                 goTo(room2);
                 assertRead(room2);
 
+                // Then the room is unread
                 goTo(room1);
-                receiveMessages(room2, [redactionOf("Msg2")]);
-                assertRead(room2);
+                assertStillRead(room2);
             });
-
-            it.skip("Reading an unread room after a redaction of the latest message makes it read", () => {});
-            it.skip("Reading an unread room after a redaction of an older message makes it read", () => {});
-            it.skip("Marking an unread room as read after a redaction makes it read", () => {});
-            it.skip("Sending and redacting a message after marking the room as read makes it unread", () => {});
-            it.skip("?? Redacting a message after marking the room as read makes it unread", () => {});
-            it.skip("Reacting to a redacted message leaves the room read", () => {});
-            it.skip("Editing a redacted message leaves the room read", () => {});
-
-            it.skip("?? Reading a reaction to a redacted message marks the room as read", () => {});
-            it.skip("?? Reading an edit of a redacted message marks the room as read", () => {});
-            it.skip("Reading a reply to a redacted message marks the room as read", () => {});
-
-            it.skip("A room with an unread redaction is still unread after restart", () => {});
-            it.skip("A room with a read redaction is still read after restart", () => {});
         });
 
         describe("in threads", () => {
