@@ -103,6 +103,16 @@ describe("Read receipts", () => {
         });
     }
 
+    function jumpTo(room: string, message: string) {
+        cy.getClient().then((cli) => {
+            findRoomByName(room).then(async ({ roomId }) => {
+                const room = cli.getRoom(roomId);
+                const foundMessage = await getMessage(room, message);
+                cy.visit(`/#/room/${roomId}/${foundMessage.getId()}`);
+            });
+        });
+    }
+
     function openThread(rootMessage: string) {
         cy.log("Open thread", rootMessage);
         cy.get(".mx_RoomView_body", { log: false }).within(() => {
@@ -244,6 +254,10 @@ describe("Read receipts", () => {
                 };
             }
         })();
+    }
+
+    function many(prefix: string, howMany: number): Array<string> {
+        return Array.from(Array(howMany).keys()).map((i) => prefix + i.toFixed());
     }
 
     /**
@@ -668,7 +682,26 @@ describe("Read receipts", () => {
                 assertUnread(room2, 1);
                 assertUnreadThread("Msg1");
             });
-            it.skip("Reading a thread root within the thread view marks it as read in the main timeline", () => {});
+            // XXX: fails because we jump to the wrong place in the timeline
+            it.skip("Reading a thread root within the thread view marks it as read in the main timeline", () => {
+                // Given lots of messages are on the main timeline, and one has a thread off it
+                goTo(room1);
+                receiveMessages(room2, [
+                    ...many("beforeThread", 30),
+                    "ThreadRoot",
+                    threadedOff("ThreadRoot", "InThread"),
+                    ...many("afterThread", 30),
+                ]);
+                assertUnread(room2, 62); // Sanity
+
+                // When I jump to an old message and read the thread
+                jumpTo(room2, "beforeThread0");
+                openThread("ThreadRoot");
+
+                // Then the thread root is marked as read in the main timeline,
+                // so there are only 30 left - the ones after the thread root.
+                assertUnread(room2, 30);
+            });
             it("Creating a new thread based on a reply makes the room unread", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", replyTo("Msg1", "Reply1"), threadedOff("Reply1", "Resp1")]);
