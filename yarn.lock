@@ -2398,6 +2398,13 @@
   dependencies:
     "@babel/types" "^7.20.7"
 
+"@types/cpx@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@types/cpx/-/cpx-1.5.0.tgz#d2a44b0ab5ec32bfdd743f64aae84847858bce0c"
+  integrity sha512-kuGK3lZqEvHTSDbJcaA6tcPoEXV4/e88YrltZMcQUewZhzYQwNSTMGIiPBqeeFd4LCBo1CX5U6CV6LaHG3wXSg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/events@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -2491,6 +2498,14 @@
   version "10.5.8"
   resolved "https://registry.yarnpkg.com/@types/jsrsasign/-/jsrsasign-10.5.8.tgz#0d6c638505454b5e95c684d6f604d57641417336"
   integrity sha512-1oZ3TbarAhKtKUpyrCIqXpbx3ZAfoSulleJs6/UzzyYty0ut+kjRX7zHLAaHwVIuw8CBjIymwW4J2LK944HoHQ==
+
+"@types/loader-utils@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@types/loader-utils/-/loader-utils-2.0.4.tgz#f1c9dd27392f163ee92394454563286dfc6e4778"
+  integrity sha512-I71X8yySVQW6DuXr78/McC+enpUYQ68JxAYlgVyuMvl5mb7jFUZpFAu1qURZcwvbITXwxPnrA7hbV0W3HHsbbg==
+  dependencies:
+    "@types/node" "*"
+    "@types/webpack" "^4"
 
 "@types/lodash@^4.14.197":
   version "4.14.198"
@@ -2651,7 +2666,7 @@
     "@types/source-list-map" "*"
     source-map "^0.7.3"
 
-"@types/webpack@^4.41.8":
+"@types/webpack@^4", "@types/webpack@^4.41.8":
   version "4.41.33"
   resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-4.41.33.tgz#16164845a5be6a306bcbe554a8e67f9cac215ffc"
   integrity sha512-PPajH64Ft2vWevkerISMtnZ8rTs4YmRbs+23c402J0INmxDKCrhZNvwZYtzx96gY2wAtXdrK1BS2fiC8MlLr3g==
@@ -4449,7 +4464,7 @@ counterpart@^0.18.6:
     pluralizers "^0.1.7"
     sprintf-js "^1.0.3"
 
-cpx@^1.5.0:
+cpx@1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/cpx/-/cpx-1.5.0.tgz#185be018511d87270dedccc293171e37655ab88f"
   integrity sha512-jHTjZhsbg9xWgsP2vuNW2jnnzBX+p4T+vNI9Lbjzs1n4KhOfa22bQppiFYLsWQKd8TzmL5aSP/Me3yfsCwXbDA==
