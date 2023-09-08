@@ -1085,23 +1085,67 @@ describe("Read receipts", () => {
 
         describe("thread roots", () => {
             it("A reaction to a thread root does not make the room unread", () => {
+                // Given a read thread root exists
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Reply1")]);
+                assertUnread(room2, 2);
+                goTo(room2);
+                openThread("Msg1");
+                assertRead(room2);
+
+                // When someone reacts to it
+                goTo(room1);
+                receiveMessages(room2, [reactionTo("Msg1", "🪿")]);
+                cy.wait(200);
+
+                // Then the room is still read
+                assertRead(room2);
+            });
+            it("Reading a reaction to a thread root leaves the room read", () => {
+                // Given a read thread root exists
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Reply1")]);
+                assertUnread(room2, 2);
+                goTo(room2);
+                openThread("Msg1");
+                assertRead(room2);
+
+                // And the reaction to it does not make us unread
+                goTo(room1);
+                receiveMessages(room2, [reactionTo("Msg1", "🪿")]);
+                assertRead(room2);
+
+                // When we read the reaction and go away again
+                goTo(room2);
+                openThread("Msg1");
+                assertRead(room2);
+                goTo(room1);
+                cy.wait(200);
+
+                // Then the room is still read
+                assertRead(room2);
+            });
+            // XXX: fails because the room is still "bold" even though the notification counts all disappear
+            it.skip("Reacting to a thread root after marking as read makes the room unread but not the thread", () => {
+                // Given a thread root exists
                 goTo(room1);
                 assertRead(room2);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Reply1")]);
                 assertUnread(room2, 2);
 
-                goTo(room2);
-                openThread("Msg1");
+                // And we have marked the room as read
+                markAsRead(room2);
                 assertRead(room2);
 
-                goTo(room1);
+                // When someone reacts to it
                 receiveMessages(room2, [reactionTo("Msg1", "🪿")]);
+                cy.wait(200);
 
+                // Then the room is still read
                 assertRead(room2);
             });
-            it.skip("Reading a reaction to a thread root makes the room read", () => {});
-            it.skip("Marking a room as read after a reaction to a thread root makes it read", () => {});
-            it.skip("Reacting to a thread root after marking as read makes the room unread but not the thread", () => {});
         });
     });
 
