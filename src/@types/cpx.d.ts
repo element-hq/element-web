@@ -15,11 +15,15 @@ limitations under the License.
 */
 
 import "cpx";
-import type EventEmitter from "events";
 
 declare module "cpx" {
-    export class Cpx extends EventEmitter {
+    export class Cpx {
         public constructor(source: string, outDir: string, options?: object);
+
+        public on(eventName: "copy", fn: (event: { srcPath: string; dstPath: string }) => void): void;
+        public on(eventName: "remove", fn: (event: { path: string }) => void): void;
+        public on(eventName: "watch-ready", fn: () => void): void;
+        public on(eventName: "watch-error", fn: (error: Error) => void): void;
 
         /**
          * Copy all files that matches `this.source` pattern to `this.outDir`.

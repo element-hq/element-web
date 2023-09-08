@@ -165,7 +165,7 @@ function watchLanguage(lang: string, dest: string, langFileMap: Record<string, s
     // XXX: Use a debounce because for some reason if we read the language
     // file immediately after the FS event is received, the file contents
     // appears empty. Possibly https://github.com/nodejs/node/issues/6112
-    let makeLangDebouncer: number;
+    let makeLangDebouncer: ReturnType<typeof setTimeout>;
     const makeLang = (): void => {
         if (makeLangDebouncer) {
             clearTimeout(makeLangDebouncer);
