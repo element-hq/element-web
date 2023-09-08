@@ -735,15 +735,16 @@ describe("Read receipts", () => {
     describe("editing messages", () => {
         describe("in the main timeline", () => {
             // TODO: this passes but we think this should fail, because we think edits should not cause unreads.
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it.skip("Editing a message makes a room unread", () => {
                 // Given I am not looking at the room
                 goTo(room1);
 
                 receiveMessages(room2, ["Msg1"]);
                 assertUnread(room2, 1);
-                markAsRead(room2);
+                goTo(room2);
                 assertRead(room2);
+                goTo(room1);
 
                 // When an edit appears in the room
                 receiveMessages(room2, [editOf("Msg1", "Msg1 Edit1")]);
@@ -751,7 +752,7 @@ describe("Read receipts", () => {
                 // Then it becomes unread
                 assertUnread(room2, 1);
             });
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it.skip("Reading an edit makes the room read", () => {
                 // Given an edit is making the room unread
                 goTo(room1);
@@ -773,14 +774,12 @@ describe("Read receipts", () => {
                 goTo(room1);
                 assertRead(room2);
             });
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
-            it.skip("Marking a room as read after an edit makes it read", () => {
-                // Given an edit is makng a room unread
-                goTo(room1);
+            it("Marking a room as read after an edit makes it read", () => {
+                // Given an edit is making a room unread
+                goTo(room2);
                 receiveMessages(room2, ["Msg1"]);
-                assertUnread(room2, 1);
-                markAsRead(room2);
                 assertRead(room2);
+                goTo(room1);
                 receiveMessages(room2, [editOf("Msg1", "Msg1 Edit1")]);
                 assertUnread(room2, 1);
 
@@ -790,7 +789,7 @@ describe("Read receipts", () => {
                 // Then the room becomes read
                 assertRead(room2);
             });
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it.skip("Editing a message after marking as read makes the room unread", () => {
                 // Given the room is marked as read
                 goTo(room1);
@@ -805,7 +804,7 @@ describe("Read receipts", () => {
                 // Then the room becomes unread
                 assertUnread(room2, 1);
             });
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it.skip("Editing a reply after reading it makes the room unread", () => {
                 // Given the room is all read
                 goTo(room1);
@@ -823,7 +822,7 @@ describe("Read receipts", () => {
                 // Then it becomes unread
                 assertUnread(room2, 1);
             });
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it.skip("Editing a reply after marking as read makes the room unread", () => {
                 // Given a reply is marked as read
                 goTo(room1);
@@ -838,14 +837,13 @@ describe("Read receipts", () => {
                 // Then the room becomes unread
                 assertUnread(room2, 1);
             });
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it.skip("A room with an edit is still unread after restart", () => {
                 // Given a message is marked as read
-                goTo(room1);
+                goTo(room2);
                 receiveMessages(room2, ["Msg1"]);
-                assertUnread(room2, 1);
-                markAsRead(room2);
                 assertRead(room2);
+                goTo(room1);
 
                 // When an edit appears in the room
                 receiveMessages(room2, [editOf("Msg1", "Msg1 Edit1")]);
@@ -857,13 +855,22 @@ describe("Read receipts", () => {
                 saveAndReload();
                 assertUnread(room2, 1);
             });
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
-            it.skip("A room where all edits are read is still read after restart", () => {
-                // Given an edit made the room unread
-                goTo(room1);
+            it("An edited message becomes read if it happens while I am looking", () => {
+                // Given a message is marked as read
+                goTo(room2);
                 receiveMessages(room2, ["Msg1"]);
-                assertUnread(room2, 1);
-                markAsRead(room2);
+                assertRead(room2);
+
+                // When I see an edit appear in the room I am looking at
+                receiveMessages(room2, [editOf("Msg1", "Msg1 Edit1")]);
+
+                // Then it becomes read
+                assertRead(room2);
+            });
+            it("A room where all edits are read is still read after restart", () => {
+                // Given an edit made the room unread
+                goTo(room2);
+                receiveMessages(room2, ["Msg1"]);
                 assertRead(room2);
                 receiveMessages(room2, [editOf("Msg1", "Msg1 Edit1")]);
                 assertUnread(room2, 1);
@@ -881,7 +888,7 @@ describe("Read receipts", () => {
         });
 
         describe("in threads", () => {
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it.skip("An edit of a threaded message makes the room unread", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
@@ -895,7 +902,7 @@ describe("Read receipts", () => {
                 receiveMessages(room2, [editOf("Resp1", "Edit1")]);
                 assertUnread(room2, 1);
             });
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it.skip("Reading an edit of a threaded message makes the room read", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
@@ -940,7 +947,7 @@ describe("Read receipts", () => {
                 // Then the room becomes unread
                 assertUnread(room2, 1); // TODO: should this edit make us unread?
             });
-            // XXX: fails because on CI the count is 2 instead of 3. Must be a timing issue.
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it.skip("A room with an edited threaded message is still unread after restart", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), editOf("Resp1", "Edit1")]);
@@ -949,8 +956,20 @@ describe("Read receipts", () => {
                 saveAndReload();
                 assertUnread(room2, 3);
             });
-            // XXX: fails because on CI the count is 2 instead of 3. Must be a timing issue.
-            it.skip("A room where all threaded edits are read is still read after restart", () => {
+            it("A room where all threaded edits are read is still read after restart", () => {
+                goTo(room2);
+                receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), editOf("Resp1", "Edit1")]);
+                assertUnread(room2, 2);
+                openThread("Msg1");
+                assertRead(room2);
+                goTo(room1); // Make sure we are looking at room1 after reload
+                assertRead(room2);
+
+                saveAndReload();
+                assertRead(room2);
+            });
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
+            it.skip("A room where all threaded edits are marked as read is still read after restart", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1"), editOf("Resp1", "Edit1")]);
                 assertUnread(room2, 3);
@@ -964,7 +983,7 @@ describe("Read receipts", () => {
         });
 
         describe("thread roots", () => {
-            // XXX: fails because on CI we get a dot, but locally we get a count. Must be a timing issue.
+            // XXX: fails because we see a dot instead of an unread number - probably the server and client disagree
             it.skip("An edit of a thread root makes the room unread", () => {
                 goTo(room1);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Resp1")]);
