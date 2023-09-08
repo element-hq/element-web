@@ -507,7 +507,7 @@ module.exports = (env, argv) => {
                 },
                 {
                     // cache-bust languages.json file placed in
-                    // element-web/webapp/i18n during build by copy-res.js
+                    // element-web/webapp/i18n during build by copy-res.ts
                     test: /\.*languages.json$/,
                     type: "javascript/auto",
                     loader: "file-loader",
