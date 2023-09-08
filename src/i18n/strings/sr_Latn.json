@@ -104,7 +104,10 @@
         "seconds_left": "preostalo još %(seconds)ss"
     },
     "settings": {
-        "use_control_enter_send_message": "Koristi Ctrl + Enter za slanje poruke"
+        "use_control_enter_send_message": "Koristi Ctrl + Enter za slanje poruke",
+        "appearance": {
+            "timeline_image_size_default": "Podrazumevano"
+        }
     },
     "slash_command": {
         "category_admin": "Administrator"

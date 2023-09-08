@@ -72,7 +72,6 @@
     "Banned users": "Pengguna yang dicekal",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Tidak dapat terhubung ke homeserver — harap cek koneksi anda, pastikan <a>sertifikat SSL homeserver</a> Anda terpercaya, dan ekstensi browser tidak memblokir permintaan.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Tidak dapat terhubung ke homeserver melalui HTTP ketika URL di browser berupa HTTPS. Gunakan HTTPS atau <a>aktifkan skrip yang tidak aman</a>.",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s telah mengubah tingkat kekuatan dari %(powerLevelDiffText)s.",
     "Cryptography": "Kriptografi",
     "Decrypt %(text)s": "Dekripsi %(text)s",
     "Sunday": "Minggu",
@@ -105,7 +104,6 @@
     "What's new?": "Apa yang baru?",
     "Invite to this room": "Undang ke ruangan ini",
     "Thursday": "Kamis",
-    "Show message in desktop notification": "Tampilkan pesan di notifikasi desktop",
     "Yesterday": "Kemarin",
     "Error encountered (%(errorDetail)s).": "Terjadi kesalahan (%(errorDetail)s).",
     "Low Priority": "Prioritas Rendah",
@@ -698,11 +696,6 @@
     "Sending": "Mengirim",
     "Spaces": "Space",
     "Connecting": "Menghubungkan",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s menghapus peraturan pencekalan pengguna yang berisi %(glob)s",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "one": "%(senderName)s menghapus alamat alternatif %(addresses)s untuk ruangan ini.",
-        "other": "%(senderName)s menghapus alamat alternatif %(addresses)s untuk ruangan ini."
-    },
     "Hey you. You're the best!": "Hei kamu. Kamu adalah yang terbaik!",
     "See when a sticker is posted in this room": "Lihat saat sebuah stiker telah dikirim ke ruangan ini",
     "Send stickers to this room as you": "Kirim stiker ke ruangan ini sebagai Anda",
@@ -727,27 +720,6 @@
     "Remain on your screen while running": "Tetap di layar Anda saat berjalan",
     "Remain on your screen when viewing another room, when running": "Tetap di layar Anda saat melihat ruangan yang lain, saat berjalan",
     "Light high contrast": "Kontras tinggi terang",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s memperbarui sebuah peraturan pencekalan yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s mengubah sebuah peraturan pencekalan server yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s mengubah sebuah peraturan pencekalan ruangan yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s mengubah sebuah peraturan pencekalan pengguna yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s membuat sebuah peraturan pencekalan yang berisi %(glob)s untuk %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s membuat sebuah peraturan pencekalan server yang berisi %(glob)s untuk %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s membuat sebuah peraturan pencekalan ruangan yang berisi %(glob)s untuk %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s membuat sebuah peraturan pencekalan pengguna yang berisi %(glob)s untuk %(reason)s",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s memperbarui peraturan pencekalan pengguna yang berisi %(glob)s untuk %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s memperbarui sebuah peraturan pencekalan yang berisi %(glob)s untuk %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s memperbarui peraturan pencekalan server yang berisi %(glob)s untuk %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s memperbarui peraturan pencekalan ruangan yang berisi %(glob)s untuk %(reason)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s memperbarui sebuah peraturan pencekalan yang tidak absah",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s menghapus sebuah peraturan pencekalan yang berisi %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s menghapus peraturan pencekalan server yang berisi %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s menghapus peraturan pencekalan ruangan yang berisi %(glob)s",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s dari %(fromPowerLevel)s ke %(toPowerLevel)s",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s menambahkan alamat alternatif %(addresses)s untuk ruangan ini.",
-        "one": "%(senderName)s menambahkan alamat alternatif %(addresses)s untuk ruangan ini."
-    },
     "Error upgrading room": "Gagal meningkatkan ruangan",
     "Short keyboard patterns are easy to guess": "Pola keyboard yang pendek mudah ditebak",
     "Straight rows of keys are easy to guess": "Deretan tombol keyboard yang lurus mudah ditebak",
@@ -879,12 +851,6 @@
     "There was an error loading your notification settings.": "Sebuah kesalahan terjadi saat memuat pengaturan notifikasi Anda.",
     "Mentions & keywords": "Sebutan & kata kunci",
     "New keyword": "Kata kunci baru",
-    "Enable audible notifications for this session": "Aktifkan notifikasi bersuara untuk sesi ini",
-    "Enable desktop notifications for this session": "Aktifkan notifikasi desktop untuk sesi ini",
-    "Enable email notifications for %(email)s": "Aktifkan notifikasi email untuk %(email)s",
-    "An error occurred whilst saving your notification preferences.": "Sebuah kesalahan terjadi saat menyimpan preferensi notifikasi Anda.",
-    "Error saving notification preferences": "Gagal menyimpan preferensi notifikasi",
-    "Messages containing keywords": "Pesan berisi kata kunci",
     "Updating spaces... (%(progress)s out of %(count)s)": {
         "one": "Memperbarui space...",
         "other": "Memperbarui space... (%(progress)s dari %(count)s)"
@@ -1019,14 +985,6 @@
     "Show sidebar": "Tampilkan sisi bilah",
     "Hide sidebar": "Sembunyikan sisi bilah",
     "unknown person": "pengguna tidak dikenal",
-    "sends space invaders": "mengirim penjajah luar angkasa",
-    "Sends the given message with a space themed effect": "Kirim pesan dengan efek luar angkasa",
-    "sends snowfall": "mengirim salju",
-    "Sends the given message with snowfall": "Kirim pesan dengan salju",
-    "sends fireworks": "mengirim kembang api",
-    "Sends the given message with fireworks": "Kirim pesan dengan kembang api",
-    "sends confetti": "mengirim konfeti",
-    "Sends the given message with confetti": "Kirim pesan dengan konfeti",
     "This is your list of users/servers you have blocked - don't leave the room!": "Ini adalah daftar pengguna/server Anda telah blokir — jangan tinggalkan ruangan ini!",
     "My Ban List": "Daftar Cekalan Saya",
     "Automatically send debug logs on any error": "Kirim catatan pengawakutu secara otomatis saat ada kesalahan",
@@ -1042,14 +1000,10 @@
     "Never send encrypted messages to unverified sessions in this room from this session": "Jangan kirim pesan terenkripsi ke sesi yang belum diverifikasi di ruangan ini dari sesi ini",
     "Never send encrypted messages to unverified sessions from this session": "Jangan kirim pesan terenkripsi ke sesi yang belum diverifikasi dari sesi ini",
     "Send analytics data": "Kirim data analitik",
-    "System font name": "Nama font sistem",
-    "Use a system font": "Gunakan sebuah font sistem",
-    "Match system theme": "Sesuaikan dengan tema sistem",
     "Mirror local video feed": "Balikkan saluran video lokal",
     "Surround selected text when typing special characters": "Kelilingi teks yang dipilih saat mengetik karakter khusus",
     "Use a more compact 'Modern' layout": "Gunakan tata letak 'Modern' yang lebih kecil",
     "Use custom size": "Gunakan ukuran kustom",
-    "Font size": "Ukuran font",
     "Change notification settings": "Ubah pengaturan notifikasi",
     "Please contact your homeserver administrator.": "Mohon hubungi administrator homeserver Anda.",
     "New version of %(brand)s is available": "Sebuah versi %(brand)s yang baru telah tersedia",
@@ -1072,17 +1026,8 @@
     "Share your public space": "Bagikan space publik Anda",
     "Invite to %(spaceName)s": "Undang ke %(spaceName)s",
     "Double check that your server supports the room version chosen and try again.": "Periksa ulang jika server Anda mendukung versi ruangan ini dan coba lagi.",
-    "Appearance Settings only affect this %(brand)s session.": "Pengaturan Tampilan hanya ditetapkan di sesi %(brand)s ini.",
-    "Customise your appearance": "Ubah tampilan Anda",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Atur sebuah nama font yang terinstal di sistem Anda & %(brand)s akan mencoba menggunakannya.",
     "Check for update": "Periksa untuk pembaruan",
     "New version available. <a>Update now.</a>": "Versi yang baru telah tersedia. <a>Perbarui sekarang.</a>",
-    "Add theme": "Tambahkan tema",
-    "Custom theme URL": "URL tema kustom",
-    "Use high contrast": "Gunakan kontras tinggi",
-    "Theme added!": "Tema ditambahkan!",
-    "Error downloading theme information.": "Terjadi kesalahan saat mengunduh informasi tema.",
-    "Invalid theme schema.": "Skema tema tidak absah.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Manajer integrasi menerima data pengaturan, dan dapat mengubah widget, mengirimkan undangan ruangan, dan mengatur tingkat daya dengan sepengetahuan Anda.",
     "Manage integrations": "Kelola integrasi",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Gunakan sebuah manajer integrasi untuk mengelola bot, widget, dan paket stiker.",
@@ -1102,8 +1047,6 @@
     "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "periksa plugin browser Anda untuk apa saja yang mungkin memblokir server identitasnya (seperti Privacy Badger)",
     "You should:": "Anda seharusnya:",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Anda seharusnya <b>menghapus data personal Anda</b> dari server identitas <idserver /> sebelum memutuskan hubungan. Sayangnya, server identitas <idserver /> saat ini sedang luring atau tidak dapat dicapai.",
-    "sends rainfall": "mengirim hujan",
-    "Sends the given message with rainfall": "Kirim pesan dengan hujan",
     "Show all your rooms in Home, even if they're in a space.": "Tampilkan semua ruangan di Beranda, walaupun mereka berada di sebuah space.",
     "Home is useful for getting an overview of everything.": "Beranda berguna untuk mendapatkan ikhtisar tentang semuanya.",
     "Spaces to show": "Space yang ditampilkan",
@@ -1403,7 +1346,6 @@
     "@mentions & keywords": "@sebutan & kata kunci",
     "Get notified for every message": "Dapatkan notifikasi untuk setiap pesan",
     "Large": "Besar",
-    "Image size in the timeline": "Ukuran gambar di lini masa",
     "Something went wrong!": "Ada sesuatu yang salah!",
     "Can't load this message": "Tidak dapat memuat pesan ini",
     "Submit logs": "Kirim catatan",
@@ -2430,7 +2372,6 @@
         "other": "Saat ini menghapus pesan-pesan di %(count)s ruangan"
     },
     "Share for %(duration)s": "Bagikan selama %(duration)s",
-    "%(timeRemaining)s left": "%(timeRemaining)sd lagi",
     "Next recently visited room or space": "Ruangan atau space berikut yang dikunjungi",
     "Previous recently visited room or space": "Ruangan atau space yang dikunjungi sebelumnya",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Anda dapat menggunakan opsi server khusus untuk masuk ke server Matrix lain dengan menentukan URL homeserver yang berbeda. Ini memungkinkan Anda untuk menggunakan %(brand)s dengan akun Matrix yang ada di homeserver yang berbeda.",
@@ -2478,8 +2419,6 @@
     "New room": "Ruangan baru",
     "Threads help keep your conversations on-topic and easy to track.": "Utasan membantu membuat obrolan sesuai topik dan mudah untuk dilacak.",
     "%(featureName)s Beta feedback": "Masukan %(featureName)s Beta",
-    "sends hearts": "mengirim hati",
-    "Sends the given message with hearts": "Kirim pesan dengan hati",
     "Confirm signing out these devices": {
         "one": "Konfirmasi mengeluarkan perangkat ini",
         "other": "Konfirmasi mengeluarkan perangkat ini"
@@ -2693,9 +2632,6 @@
     "Receive push notifications on this session.": "Terima notifikasi dorongan di sesi ini.",
     "Push notifications": "Notifikasi dorongan",
     "Toggle push notifications on this session.": "Aktifkan atau nonaktifkan notifikasi dorongan di sesi ini.",
-    "Enable notifications for this device": "Aktifkan notifikasi untuk perangkat ini",
-    "Turn off to disable notifications on all your devices and sessions": "Matikan untuk menonaktifkan notifikasi pada semua perangkat dan sesi Anda",
-    "Enable notifications for this account": "Aktifkan notifikasi untuk akun ini",
     "Video call ended": "Panggilan video berakhir",
     "%(name)s started a video call": "%(name)s memulai sebuah panggilan video",
     "URL": "URL",
@@ -3303,7 +3239,18 @@
         "sliding_sync_description": "Dalam pengembangan aktif, tidak dapat dinonaktifkan.",
         "under_active_development": "Dalam pengembangan aktif.",
         "location_share_live_description": "Penerapan sementara. Lokasi tetap berada di riwayat ruangan.",
-        "dynamic_room_predecessors_description": "Aktifkan MSC3946 (untuk mendukung arsip ruangan yang datang terlambat)"
+        "dynamic_room_predecessors_description": "Aktifkan MSC3946 (untuk mendukung arsip ruangan yang datang terlambat)",
+        "group_messaging": "Perpesanan",
+        "group_profile": "Profil",
+        "group_spaces": "Space",
+        "group_widgets": "Widget",
+        "group_rooms": "Ruangan",
+        "group_voip": "Suara & Video",
+        "group_moderation": "Moderasi",
+        "group_themes": "Tema",
+        "group_encryption": "Enkripsi",
+        "group_experimental": "Eksperimental",
+        "group_developer": "Pengembang"
     },
     "keyboard": {
         "home": "Beranda",
@@ -3399,7 +3346,8 @@
         "few_seconds_ago": "beberapa detik yang lalu",
         "about_minute_ago": "1 menit yang lalu",
         "about_hour_ago": "1 jam yang lalu",
-        "about_day_ago": "1 hari yang lalu"
+        "about_day_ago": "1 hari yang lalu",
+        "left": "%(timeRemaining)sd lagi"
     },
     "onboarding": {
         "personal_messaging_title": "Perpesanan aman untuk teman dan keluarga",
@@ -3486,11 +3434,37 @@
             "rule_call": "Undangan panggilan",
             "rule_suppress_notices": "Pesan dikirim oleh bot",
             "rule_tombstone": "Ketika ruangan telah ditingkatkan",
-            "rule_encrypted_room_one_to_one": "Pesan terenkripsi di pesan langsung"
+            "rule_encrypted_room_one_to_one": "Pesan terenkripsi di pesan langsung",
+            "messages_containing_keywords": "Pesan berisi kata kunci",
+            "error_saving": "Gagal menyimpan preferensi notifikasi",
+            "error_saving_detail": "Sebuah kesalahan terjadi saat menyimpan preferensi notifikasi Anda.",
+            "enable_notifications_account": "Aktifkan notifikasi untuk akun ini",
+            "enable_notifications_account_detail": "Matikan untuk menonaktifkan notifikasi pada semua perangkat dan sesi Anda",
+            "enable_email_notifications": "Aktifkan notifikasi email untuk %(email)s",
+            "enable_notifications_device": "Aktifkan notifikasi untuk perangkat ini",
+            "enable_desktop_notifications_session": "Aktifkan notifikasi desktop untuk sesi ini",
+            "show_message_desktop_notification": "Tampilkan pesan di notifikasi desktop",
+            "enable_audible_notifications_session": "Aktifkan notifikasi bersuara untuk sesi ini"
         },
         "appearance": {
             "layout_irc": "IRC (Eksperimental)",
-            "layout_bubbles": "Gelembung pesan"
+            "layout_bubbles": "Gelembung pesan",
+            "heading": "Ubah tampilan Anda",
+            "subheading": "Pengaturan Tampilan hanya ditetapkan di sesi %(brand)s ini.",
+            "match_system_theme": "Sesuaikan dengan tema sistem",
+            "custom_font": "Gunakan sebuah font sistem",
+            "custom_font_name": "Nama font sistem",
+            "custom_theme_invalid": "Skema tema tidak absah.",
+            "custom_theme_error_downloading": "Terjadi kesalahan saat mengunduh informasi tema.",
+            "custom_theme_success": "Tema ditambahkan!",
+            "custom_theme_url": "URL tema kustom",
+            "use_high_contrast": "Gunakan kontras tinggi",
+            "custom_theme_add_button": "Tambahkan tema",
+            "font_size": "Ukuran font",
+            "custom_font_description": "Atur sebuah nama font yang terinstal di sistem Anda & %(brand)s akan mencoba menggunakannya.",
+            "timeline_image_size": "Ukuran gambar di lini masa",
+            "timeline_image_size_default": "Bawaan",
+            "timeline_image_size_large": "Besar"
         }
     },
     "devtools": {
@@ -3703,7 +3677,15 @@
             "removed": "%(senderName)s menghapus alamat utamanya untuk ruangan ini.",
             "changed_alternative": "%(senderName)s mengubah alamat alternatifnya untuk ruangan ini.",
             "changed_main_and_alternative": "%(senderName)s mengubah alamat utama dan alamat alternatif untuk ruangan ini.",
-            "changed": "%(senderName)s mengubah alamat-alamatnya untuk ruangan ini."
+            "changed": "%(senderName)s mengubah alamat-alamatnya untuk ruangan ini.",
+            "alt_added": {
+                "other": "%(senderName)s menambahkan alamat alternatif %(addresses)s untuk ruangan ini.",
+                "one": "%(senderName)s menambahkan alamat alternatif %(addresses)s untuk ruangan ini."
+            },
+            "alt_removed": {
+                "one": "%(senderName)s menghapus alamat alternatif %(addresses)s untuk ruangan ini.",
+                "other": "%(senderName)s menghapus alamat alternatif %(addresses)s untuk ruangan ini."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s menghapus undangan untuk %(targetDisplayName)s untuk bergabung dengan ruangan ini.",
@@ -3884,6 +3866,29 @@
                 "other": "%(oneUser)s sent %(count)s hidden messages",
                 "one": "%(oneUser)s mengirim sebuah pesan tersembunyi"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s telah mengubah tingkat kekuatan dari %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s dari %(fromPowerLevel)s ke %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s menghapus peraturan pencekalan pengguna yang berisi %(glob)s",
+            "removed_rule_rooms": "%(senderName)s menghapus peraturan pencekalan ruangan yang berisi %(glob)s",
+            "removed_rule_servers": "%(senderName)s menghapus peraturan pencekalan server yang berisi %(glob)s",
+            "removed_rule": "%(senderName)s menghapus sebuah peraturan pencekalan yang berisi %(glob)s",
+            "updated_invalid_rule": "%(senderName)s memperbarui sebuah peraturan pencekalan yang tidak absah",
+            "updated_rule_users": "%(senderName)s memperbarui peraturan pencekalan pengguna yang berisi %(glob)s untuk %(reason)s",
+            "updated_rule_rooms": "%(senderName)s memperbarui peraturan pencekalan ruangan yang berisi %(glob)s untuk %(reason)s",
+            "updated_rule_servers": "%(senderName)s memperbarui peraturan pencekalan server yang berisi %(glob)s untuk %(reason)s",
+            "updated_rule": "%(senderName)s memperbarui sebuah peraturan pencekalan yang berisi %(glob)s untuk %(reason)s",
+            "created_rule_users": "%(senderName)s membuat sebuah peraturan pencekalan pengguna yang berisi %(glob)s untuk %(reason)s",
+            "created_rule_rooms": "%(senderName)s membuat sebuah peraturan pencekalan ruangan yang berisi %(glob)s untuk %(reason)s",
+            "created_rule_servers": "%(senderName)s membuat sebuah peraturan pencekalan server yang berisi %(glob)s untuk %(reason)s",
+            "created_rule": "%(senderName)s membuat sebuah peraturan pencekalan yang berisi %(glob)s untuk %(reason)s",
+            "changed_rule_users": "%(senderName)s mengubah sebuah peraturan pencekalan pengguna yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
+            "changed_rule_rooms": "%(senderName)s mengubah sebuah peraturan pencekalan ruangan yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
+            "changed_rule_servers": "%(senderName)s mengubah sebuah peraturan pencekalan server yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s",
+            "changed_rule_glob": "%(senderName)s memperbarui sebuah peraturan pencekalan yang sebelumnya berisi %(oldGlob)s ke %(newGlob)s untuk %(reason)s"
         }
     },
     "slash_command": {
@@ -4083,5 +4088,19 @@
         "bullet_1": "Kami <Bold>tidak</Bold> merekam atau memprofil data akun apa pun",
         "bullet_2": "Kami <Bold>tidak</Bold> membagikan informasi ini dengan pihak ketiga",
         "disable_prompt": "Anda dapat mematikannya kapan saja di pengaturan"
+    },
+    "chat_effects": {
+        "confetti_description": "Kirim pesan dengan konfeti",
+        "confetti_message": "mengirim konfeti",
+        "fireworks_description": "Kirim pesan dengan kembang api",
+        "fireworks_message": "mengirim kembang api",
+        "rainfall_description": "Kirim pesan dengan hujan",
+        "rainfall_message": "mengirim hujan",
+        "snowfall_description": "Kirim pesan dengan salju",
+        "snowfall_message": "mengirim salju",
+        "spaceinvaders_description": "Kirim pesan dengan efek luar angkasa",
+        "spaceinvaders_message": "mengirim penjajah luar angkasa",
+        "hearts_description": "Kirim pesan dengan hati",
+        "hearts_message": "mengirim hati"
     }
 }

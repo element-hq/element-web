@@ -32,7 +32,6 @@
     "Notifications": "Ilɣa",
     "Ok": "Ih",
     "What's New": "D acu-t umaynut",
-    "Font size": "Tuɣzi n tsefsit",
     "Cat": "Amcic",
     "Lion": "Izem",
     "Rabbit": "Awtul",
@@ -243,10 +242,6 @@
     "Logs sent": "Iɣmisen ttewaznen",
     "Opens chat with the given user": "Yeldi adiwenni d useqdac i d-yettunefken",
     "Displays action": "Yeskan tigawt",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s yerna tansiwin-nniḍen %(addresses)s ɣer texxamt-a.",
-        "one": "%(senderName)s yerna tansa-nniḍen %(addresses)s i texxamt-a."
-    },
     "Not Trusted": "Ur yettwattkal ara",
     "%(items)s and %(count)s others": {
         "other": "%(items)s d %(count)s wiyaḍ",
@@ -312,7 +307,6 @@
     "Avoid recent years": "Zgel iseggasen ineggura",
     "Avoid years that are associated with you": "Zgel iseggasen i icudden ɣur-k",
     "Avoid dates and years that are associated with you": "Zgel izmaz akked iseggasen i icudden ɣur-k",
-    "System font name": "Isem n tsefsit n unagraw",
     "Send analytics data": "Azen isefka n tesleḍt",
     "Cancelling…": "Asefsex…",
     "Dog": "Aqjun",
@@ -347,10 +341,6 @@
     "You are no longer ignoring %(userId)s": "Dayen ur tettazgaleḍ ara akk %(userId)s",
     "Please supply a widget URL or embed code": "Ttxil-k·m mudd URL n uwiǧit neɣ tangalt tusliɣt",
     "Verifies a user, session, and pubkey tuple": "Yessenqad tagrumma-a: aseqdac, tiɣimit d tsarut tazayezt",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s yekkes tansa-nni-nniḍen %(addresses)s i texxamt-a.",
-        "one": "%(senderName)s yekkes tansa-nni tayeḍ %(addresses)s i texxamt-a."
-    },
     "Deops user with given id": "Aseqdac Deops s usulay i d-yettunefken",
     "Cannot reach homeserver": "Anekcum ɣer uqeddac agejdan d awezɣi",
     "Cannot reach identity server": "Anekcum ɣer uqeddac n tmagit d awezɣi",
@@ -365,7 +355,6 @@
     "This is a top-100 common password": "Wagi d awal uffir gar 100 yimezwura yettwassnen",
     "This is a very common password": "Wagi d awal uffir yettwassnen",
     "Change notification settings": "Snifel iɣewwaren n yilɣa",
-    "Match system theme": "Asentel n unagraw yemṣadan",
     "Never send encrypted messages to unverified sessions from this session": "Ur ttazen ara akk iznan yettwawgelhen ɣer tɣimiyin ur nettusenqad ara seg tɣimit-a",
     "My Ban List": "Tabdart-inu n tigtin",
     "Got It": "Awi-t",
@@ -378,8 +367,6 @@
     "Restore from Backup": "Tiririt seg uḥraz",
     "All keys backed up": "Akk tisura ttwaḥerzent",
     "Notification targets": "Isaḍasen n yilɣa",
-    "Enable desktop notifications for this session": "Sens ilɣa n tnirawt i tɣimit-a",
-    "Enable audible notifications for this session": "Sens ilɣa imsiwal i texxamt",
     "Profile picture": "Tugna n umaɣnu",
     "Checking server": "Asenqed n uqeddac",
     "Change identity server": "Snifel aqeddac n timagit",
@@ -389,11 +376,6 @@
     "Manage integrations": "Sefrek imsidf",
     "New version available. <a>Update now.</a>": "Lqem amaynut yella. <a>Leqqem tura.</a>",
     "Check for update": "Nadi lqem",
-    "Invalid theme schema.": "Azenziɣ n usentel d arameɣtu.",
-    "Theme added!": "Asentel yettwarnan!",
-    "Custom theme URL": "Sagen URL n usentel",
-    "Add theme": "Rnu asentel",
-    "Customise your appearance": "Err arwes-ik·im d udmawan",
     "Account management": "Asefrek n umiḍan",
     "Deactivate Account": "Sens amiḍan",
     "Deactivate account": "Sens amiḍan",
@@ -682,25 +664,6 @@
     "This room is public": "Taxxamt-a d tazayezt",
     "Terms and Conditions": "Tiwtilin d tfadiwin",
     "Review terms and conditions": "Senqed tiwtilin d tfadiwin",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s seg %(fromPowerLevel)s ɣer %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s yettwabeddel uswir afellay n %(powerLevelDiffText)s.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s yekkes alugen i yugin iseqdacen yemṣadan d %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s yekkes alugen i yugin tixxamin yemṣadan d %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s yekkes alugen i yugin iqeddacen yemṣadan d %(glob)s",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s yekkes alugen n tigtin yemṣadan d %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s ileqqem alugen n tigtin arameɣtu",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s ileqqem alugen i yugin iseqdacen yemṣadan d %(glob)s i %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s ileqqem alugen i yugin tixxamin yemṣadan d %(glob)s i %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s ileqqem alugen i yugin iqeddacen yemṣadan d %(glob)s i %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s ileqqem alugen n tigtin yemṣadan d %(glob)s i %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s yerna alugen i yugin iseqdacen yemṣadan d %(glob)s i %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s yerna alugen i yugin tixxamin yemṣadan d %(glob)s i %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s yerna alugen i yugin iqeddacen yemṣadan d %(glob)s i %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s yerna alugen yemṣadan d %(glob)s i %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ibeddel alugen i yugin iseqdacen yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ibeddel alugen i yugin tixxamin yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ibeddel alugen i yugin tixxamin iqeddacen d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ibeddel alugen i yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
     "You signed in to a new session without verifying it:": "Teqqneḍ ɣer tɣimit war ma tesneqdeḍ-tt:",
     "Verify your other session using one of the options below.": "Senqed tiɣimiyin-ik·im tiyaḍ s useqdec yiwet seg textiṛiyin ddaw.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) yeqqen ɣer tɣimit tamaynut war ma isenqed-itt:",
@@ -793,7 +756,6 @@
     "Your homeserver has exceeded its user limit.": "Aqeddac-inek·inem agejdan yewweḍ ɣer talast n useqdac.",
     "Your homeserver has exceeded one of its resource limits.": "Aqeddac-inek·inem agejdan iɛedda yiwet seg tlisa-ines tiɣbula.",
     "Contact your <a>server admin</a>.": "Nermes anedbal-inek·inem <a>n uqeddac</a>.",
-    "Use a system font": "Seqdec tasefsit n unagraw",
     "Size must be a number": "Teɣzi ilaq ad tili d uṭṭun",
     "Discovery": "Tagrut",
     "Help & About": "Tallalt & Ɣef",
@@ -1008,7 +970,6 @@
     "Paperclip": "Tamessakt n lkaɣeḍ",
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Tettḥeqqeḍ? Ad tesruḥeḍ iznan-ik•im yettwawgelhen ma tisura-k•m ur klisent ara akken ilaq.",
     "Cactus": "Akermus",
-    "Show message in desktop notification": "Sken-d iznan deg yilɣa n tnarit",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "Ffeɣ seg tuqqna n uqeddac n timagit <current /> syen qqen ɣer <new /> deg wadeg-is?",
     "Terms of service not accepted or the identity server is invalid.": "Tiwtilin n uqeddac ur ttwaqbalent ara neɣ aqeddac n timagit d arameɣtu.",
     "The identity server you have chosen does not have any terms of service.": "Aqeddac n timagit i tferneḍ ulac akk ɣer-s tiwtilin n uqeddac.",
@@ -1020,9 +981,6 @@
     "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "Mazal-ik·ikem <b>tbeṭṭuḍ isefka-inek·inem udmawanen</b> ɣef uqeddac n timagit <idserver />.",
     "Error encountered (%(errorDetail)s).": "Tuccaḍ i d-yettwamuggren (%(errorDetail)s).",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Teɣzi n tsefsit tudmawant tezmer kan ad tili gar %(min)s pt d %(max)s pt",
-    "Error downloading theme information.": "Tuccḍa deg usali n telɣut n usentel.",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Sbadu isem n tsefsit yettwasbedden ɣef unagraw-ik·im & %(brand)s ad yeɛreḍ ad t-isseqdec.",
-    "Appearance Settings only affect this %(brand)s session.": "Ala iɣewwaren n urwes i izemren ad beddlen kra deg tɣimit-a %(brand)s.",
     "For help with using %(brand)s, click <a>here</a>.": "I tallalt n useqdec n %(brand)s, sit <a>dagi</a>.",
     "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "I tallalt ɣef useqdec n %(brand)s, sit <a>dagi</a> neɣ bdu adiwenni d wabuṭ-nneɣ s useqdec n tqeffalt ddaw.",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "I wakken ad d-tazneḍ ugur n tɣellist i icudden ɣer Matrix, ttxil-k·m ɣer <a>tasertit n ukcaf n tɣellist</a> deg Matrix.org.",
@@ -1693,7 +1651,12 @@
         "pinning": "Arezzi n yizen",
         "state_counters": "Err amsiḍen afessa ɣef uqerru n texxamt",
         "custom_themes": "Tallalt n tmerna n yisental udmawanen",
-        "bridge_state": "Sken-d tilɣa ɣef teqneṭrin deg yiɣewwaṛen n texxamt"
+        "bridge_state": "Sken-d tilɣa ɣef teqneṭrin deg yiɣewwaṛen n texxamt",
+        "group_profile": "Amaɣnu",
+        "group_widgets": "Iwiǧiten",
+        "group_rooms": "Timɣiwent",
+        "group_voip": "Ameslaw & Tavidyut",
+        "group_encryption": "Awgelhen"
     },
     "keyboard": {
         "home": "Agejdan",
@@ -1786,7 +1749,25 @@
             "rule_call": "Ancad n tinnubga",
             "rule_suppress_notices": "Iznan yettwaznen s Bot",
             "rule_tombstone": "Mi ara ttwaleqqment texxamin",
-            "rule_encrypted_room_one_to_one": "Iznan yettwawgelhen deg yidiwenniyen usriden"
+            "rule_encrypted_room_one_to_one": "Iznan yettwawgelhen deg yidiwenniyen usriden",
+            "enable_desktop_notifications_session": "Sens ilɣa n tnirawt i tɣimit-a",
+            "show_message_desktop_notification": "Sken-d iznan deg yilɣa n tnarit",
+            "enable_audible_notifications_session": "Sens ilɣa imsiwal i texxamt"
+        },
+        "appearance": {
+            "heading": "Err arwes-ik·im d udmawan",
+            "subheading": "Ala iɣewwaren n urwes i izemren ad beddlen kra deg tɣimit-a %(brand)s.",
+            "match_system_theme": "Asentel n unagraw yemṣadan",
+            "custom_font": "Seqdec tasefsit n unagraw",
+            "custom_font_name": "Isem n tsefsit n unagraw",
+            "custom_theme_invalid": "Azenziɣ n usentel d arameɣtu.",
+            "custom_theme_error_downloading": "Tuccḍa deg usali n telɣut n usentel.",
+            "custom_theme_success": "Asentel yettwarnan!",
+            "custom_theme_url": "Sagen URL n usentel",
+            "custom_theme_add_button": "Rnu asentel",
+            "font_size": "Tuɣzi n tsefsit",
+            "custom_font_description": "Sbadu isem n tsefsit yettwasbedden ɣef unagraw-ik·im & %(brand)s ad yeɛreḍ ad t-isseqdec.",
+            "timeline_image_size_default": "Amezwer"
         }
     },
     "devtools": {
@@ -1841,7 +1822,15 @@
             "removed": "%(senderName)s yekkes tansa tagejdant n texxamt-a.",
             "changed_alternative": "%(senderName)s ibeddel tansa-nni tayeḍ n texxamt-a.",
             "changed_main_and_alternative": "%(senderName)s ibeddel tansa tagejdant d tansa-nni tayeḍ i texxamt-a.",
-            "changed": "%(senderName)s ibeddel tansiwin n texxamt-a."
+            "changed": "%(senderName)s ibeddel tansiwin n texxamt-a.",
+            "alt_added": {
+                "other": "%(senderName)s yerna tansiwin-nniḍen %(addresses)s ɣer texxamt-a.",
+                "one": "%(senderName)s yerna tansa-nniḍen %(addresses)s i texxamt-a."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s yekkes tansa-nni-nniḍen %(addresses)s i texxamt-a.",
+                "one": "%(senderName)s yekkes tansa-nni tayeḍ %(addresses)s i texxamt-a."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s yeḥwi tinubga i %(targetDisplayName)s i uttekkki deg texxamt.",
@@ -1965,6 +1954,29 @@
                 "other": "%(oneUser)sur ye gi ara isnifal %(count)s tikkal",
                 "one": "%(oneUser)sur ye gi ara isnifal"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s yettwabeddel uswir afellay n %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s seg %(fromPowerLevel)s ɣer %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s yekkes alugen i yugin iseqdacen yemṣadan d %(glob)s",
+            "removed_rule_rooms": "%(senderName)s yekkes alugen i yugin tixxamin yemṣadan d %(glob)s",
+            "removed_rule_servers": "%(senderName)s yekkes alugen i yugin iqeddacen yemṣadan d %(glob)s",
+            "removed_rule": "%(senderName)s yekkes alugen n tigtin yemṣadan d %(glob)s",
+            "updated_invalid_rule": "%(senderName)s ileqqem alugen n tigtin arameɣtu",
+            "updated_rule_users": "%(senderName)s ileqqem alugen i yugin iseqdacen yemṣadan d %(glob)s i %(reason)s",
+            "updated_rule_rooms": "%(senderName)s ileqqem alugen i yugin tixxamin yemṣadan d %(glob)s i %(reason)s",
+            "updated_rule_servers": "%(senderName)s ileqqem alugen i yugin iqeddacen yemṣadan d %(glob)s i %(reason)s",
+            "updated_rule": "%(senderName)s ileqqem alugen n tigtin yemṣadan d %(glob)s i %(reason)s",
+            "created_rule_users": "%(senderName)s yerna alugen i yugin iseqdacen yemṣadan d %(glob)s i %(reason)s",
+            "created_rule_rooms": "%(senderName)s yerna alugen i yugin tixxamin yemṣadan d %(glob)s i %(reason)s",
+            "created_rule_servers": "%(senderName)s yerna alugen i yugin iqeddacen yemṣadan d %(glob)s i %(reason)s",
+            "created_rule": "%(senderName)s yerna alugen yemṣadan d %(glob)s i %(reason)s",
+            "changed_rule_users": "%(senderName)s ibeddel alugen i yugin iseqdacen yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
+            "changed_rule_rooms": "%(senderName)s ibeddel alugen i yugin tixxamin yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
+            "changed_rule_servers": "%(senderName)s ibeddel alugen i yugin tixxamin iqeddacen d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
+            "changed_rule_glob": "%(senderName)s ibeddel alugen i yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s"
         }
     },
     "slash_command": {

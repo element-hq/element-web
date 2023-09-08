@@ -106,10 +106,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         let advanced: React.ReactNode;
 
         if (this.state.showAdvanced) {
-            const tooltipContent = _t(
-                "Set the name of a font installed on your system & %(brand)s will attempt to use it.",
-                { brand },
-            );
+            const tooltipContent = _t("settings|appearance|custom_font_description", { brand });
             advanced = (
                 <>
                     <SettingsFlag name="useCompactLayout" level={SettingLevel.DEVICE} useCheckbox={true} />
@@ -151,10 +148,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
         return (
             <SettingsTab data-testid="mx_AppearanceUserSettingsTab">
-                <SettingsSection heading={_t("Customise your appearance")}>
-                    <SettingsSubsectionText>
-                        {_t("Appearance Settings only affect this %(brand)s session.", { brand })}
-                    </SettingsSubsectionText>
+                <SettingsSection heading={_t("settings|appearance|heading")}>
+                    <SettingsSubsectionText>{_t("settings|appearance|subheading", { brand })}</SettingsSubsectionText>
                     <ThemeChoicePanel />
                     <LayoutSwitcher
                         userId={this.state.userId}

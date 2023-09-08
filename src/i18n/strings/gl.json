@@ -55,8 +55,6 @@
     "You are no longer ignoring %(userId)s": "Xa non está a ignorar a %(userId)s",
     "Verified key": "Chave verificada",
     "Reason": "Razón",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s desde %(fromPowerLevel)s a %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s cambiou o nivel de autoridade a %(powerLevelDiffText)s.",
     "Failure to create room": "Fallou a creación da sala",
     "Server may be unavailable, overloaded, or you hit a bug.": "O servidor podería non estar dispoñible, con sobrecarga ou ter un fallo.",
     "Send": "Enviar",
@@ -298,7 +296,6 @@
     "You cannot delete this message. (%(code)s)": "Non pode eliminar esta mensaxe. (%(code)s)",
     "Thursday": "Xoves",
     "Logs sent": "Informes enviados",
-    "Show message in desktop notification": "Mostrar mensaxe nas notificacións de escritorio",
     "Yesterday": "Onte",
     "Error encountered (%(errorDetail)s).": "Houbo un erro (%(errorDetail)s).",
     "Low Priority": "Baixa prioridade",
@@ -419,28 +416,10 @@
     "General failure": "Fallo xeral",
     "This homeserver does not support login using email address.": "Este servidor non soporta o acceso usando enderezos de email.",
     "Joins room with given address": "Unirse a sala co enderezo dado",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s engadiu os enderezos alternativos %(addresses)s para esta sala.",
-        "one": "%(senderName)s engadiu o enderezo alternativo %(addresses)s para esta sala."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s eliminou os enderezos alternativos %(addresses)s desta sala.",
-        "one": "%(senderName)s eliminou o enderezo alternativo %(addresses)s desta sala."
-    },
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s eliminou a regra que bloqueaba usuarias con %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s eliminou a regra que bloquea salas con %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s eliminou a regra que bloquea servidores con %(glob)s",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s eliminou a regra de bloqueo con %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s actualizou unha regra de bloqueo non válida",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s actualizou a regra que bloquea usuarias con %(glob)s por %(reason)s",
     "Room Addresses": "Enderezos da sala",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Algo fallou ao actualizar os enderezos alternativos da sala. É posible que o servidor non o permita ou acontecese un fallo temporal.",
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Establecer enderezos para a sala para que poida ser atopada no teu servidor local (%(localDomain)s)",
     "Room Settings - %(roomName)s": "Axustes da sala - %(roomName)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s actualizou a regra de bloqueo de salas con %(glob)s por %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s actualizou a regra de bloqueo de servidores con %(glob)s por %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s actualizou a regra de bloqueo con %(glob)s por %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s creou unha regra de bloqueo de usuarias con %(glob)s por %(reason)s",
     "You signed in to a new session without verifying it:": "Conectácheste nunha nova sesión sen verificala:",
     "Verify your other session using one of the options below.": "Verifica a túa outra sesión usando unha das opcións inferiores.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) conectouse a unha nova sesión sen verificala:",
@@ -463,13 +442,6 @@
     "The user must be unbanned before they can be invited.": "A usuria debe ser desbloqueada antes de poder convidala.",
     "Messages in this room are end-to-end encrypted.": "As mensaxes desta sala están cifradas de extremo-a-extremo.",
     "Messages in this room are not end-to-end encrypted.": "As mensaxes desta sala non están cifradas de extremo-a-extremo.",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s creou unha regra bloqueando salas con %(glob)s por %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s creou unha regra bloqueando servidores con %(glob)s por %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s creou unha regra de bloqueo con %(glob)s por %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s cambiou unha regra que bloqueaba usuarias con %(oldGlob)s a %(newGlob)s por %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s cambiou unha regra que bloqueaba salas con %(oldGlob)s a %(newGlob)s por %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s cambiou unha regra que bloqueaba servidores con %(oldGlob)s a %(newGlob)s por %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s actualizou unha regra de bloqueo con %(oldGlob)s a %(newGlob)s por %(reason)s",
     "The user's homeserver does not support the version of the room.": "O servidor da usuaria non soporta a versión da sala.",
     "Unknown server error": "Erro descoñecido no servidor",
     "Use a few words, avoid common phrases": "Usa unhas poucas palabras, evita frases comúns",
@@ -512,15 +484,8 @@
     "You're previewing %(roomName)s. Want to join it?": "Vista previa de %(roomName)s. Queres unirte?",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s non ten vista previa. Queres unirte?",
     "Join millions for free on the largest public server": "Únete a millóns de persoas gratuitamente no maior servidor público",
-    "Match system theme": "Imitar o aspecto do sistema",
-    "Invalid theme schema.": "Esquema do decorado incorrecto.",
-    "Error downloading theme information.": "Erro ao descargar información do decorado.",
-    "Theme added!": "Decorado engadido!",
-    "Custom theme URL": "URL do decorado personalizado",
-    "Add theme": "Engadir decorado",
     "Language and region": "Idioma e rexión",
     "Your theme": "O teu decorado",
-    "Font size": "Tamaño da letra",
     "Never send encrypted messages to unverified sessions from this session": "Non enviar nunca desde esta sesión mensaxes cifradas a sesións non verificadas",
     "Never send encrypted messages to unverified sessions in this room from this session": "Non enviar mensaxes cifradas desde esta sesión a sesións non verificadas nesta sala",
     "Show hidden events in timeline": "Mostrar na cronoloxía eventos ocultos",
@@ -643,8 +608,6 @@
     "Your keys are <b>not being backed up from this session</b>.": "As túas chaves <b>non están a ser copiadas desde esta sesión</b>.",
     "Back up your keys before signing out to avoid losing them.": "Fai unha copia de apoio das chaves antes de saír para evitar perdelas.",
     "Start using Key Backup": "Fai unha Copia de apoio das chaves",
-    "Enable desktop notifications for this session": "Activa as notificacións de escritorio para esta sesión",
-    "Enable audible notifications for this session": "Activa as notificacións por son para esta sesión",
     "Display Name": "Nome mostrado",
     "Profile picture": "Imaxe de perfil",
     "Checking server": "Comprobando servidor",
@@ -773,8 +736,6 @@
     "This room is end-to-end encrypted": "Esta sala está cifrada extremo-a-extremo",
     "Everyone in this room is verified": "Todas nesta sala están verificadas",
     "Edit message": "Editar mensaxe",
-    "Customise your appearance": "Personaliza o aspecto",
-    "Appearance Settings only affect this %(brand)s session.": "Os axustes da aparencia só lle afectan a esta sesión %(brand)s.",
     "Encrypted by an unverified session": "Cifrada por unha sesión non verificada",
     "Unencrypted": "Non cifrada",
     "Encrypted by a deleted session": "Cifrada por unha sesión eliminada",
@@ -985,8 +946,6 @@
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Verifica esta usuaria para marcala como confiable. Ao confiar nas usuarias proporcionache tranquilidade extra cando usas cifrado de extremo-a-extremo.",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Ao verificar esta usuaria marcarás a súa sesión como confiable, e tamén marcará a túa sesión como confiable para elas.",
     "Use custom size": "Usar tamaño personalizado",
-    "Use a system font": "Usar tipo de letra do sistema",
-    "System font name": "Nome da letra do sistema",
     "Hey you. You're the best!": "Ei ti. Es grande!",
     "Power level": "Nivel responsabilidade",
     "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Verifica este dispositivo para marcalo como confiable. Confiando neste dispositivo permite que ti e outras usuarias estedes máis tranquilas ao utilizar mensaxes cifradas.",
@@ -1216,7 +1175,6 @@
     "Confirm Security Phrase": "Confirma a Frase de Seguridade",
     "Save your Security Key": "Garda a Chave de Seguridade",
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s non pode por na caché local de xeito as mensaxes cifradas cando usa un navegador web. Usa <desktopLink>%(brand)s Desktop</desktopLink> para que as mensaxes cifradas aparezan nos resultados.",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Escolle unha das tipografías instaladas no teu sistema e %(brand)s intentará utilizalas.",
     "Notification options": "Opcións de notificación",
     "Favourited": "Con marca de Favorita",
     "Forget Room": "Esquecer sala",
@@ -1668,16 +1626,10 @@
     "Reason (optional)": "Razón (optativa)",
     "Invalid URL": "URL non válido",
     "Unable to validate homeserver": "Non se puido validar o servidor de inicio",
-    "sends confetti": "envía confetti",
-    "Sends the given message with confetti": "Envía a mensaxe con confetti",
     "Hold": "Colgar",
     "Resume": "Retomar",
     "You've reached the maximum number of simultaneous calls.": "Acadaches o número máximo de chamadas simultáneas.",
     "Too Many Calls": "Demasiadas chamadas",
-    "sends fireworks": "envía fogos de artificio",
-    "Sends the given message with fireworks": "Envia a mensaxe dada con fogos de artificio",
-    "sends snowfall": "envía neve",
-    "Sends the given message with snowfall": "Engade neve caendo á mensaxe",
     "You have no visible notifications.": "Non tes notificacións visibles.",
     "Transfer": "Transferir",
     "Failed to transfer call": "Fallou a transferencia da chamada",
@@ -1871,8 +1823,6 @@
     "Message search initialisation failed": "Fallou a inicialización da busca de mensaxes",
     "Space Autocomplete": "Autocompletado do espazo",
     "Go to my space": "Ir ao meu espazo",
-    "sends space invaders": "enviar invasores espaciais",
-    "Sends the given message with a space themed effect": "Envía a mensaxe cun efecto de decorado espacial",
     "See when people join, leave, or are invited to your active room": "Mira cando alguén se une, sae ou é convidada á túa sala activa",
     "See when people join, leave, or are invited to this room": "Mira cando se une alguén, sae ou é convidada a esta sala",
     "Currently joining %(count)s rooms": {
@@ -1928,10 +1878,6 @@
     "Global": "Global",
     "New keyword": "Nova palabra chave",
     "Keyword": "Palabra chave",
-    "Enable email notifications for %(email)s": "Activar notificacións de email para %(email)s",
-    "An error occurred whilst saving your notification preferences.": "Algo fallou ao gardar as túas preferencias de notificación.",
-    "Error saving notification preferences": "Erro ao gardar os axustes de notificación",
-    "Messages containing keywords": "Mensaxes coas palabras chave",
     "Recommended for public spaces.": "Recomendado para espazos públicos.",
     "Allow people to preview your space before they join.": "Permitir que sexa visible o espazo antes de unirte a el.",
     "Preview Space": "Vista previa do Espazo",
@@ -2135,7 +2081,6 @@
     "Insert link": "Escribir ligazón",
     "Joined": "Unícheste",
     "Joining": "Uníndote",
-    "Use high contrast": "Usar alto contraste",
     "Light high contrast": "Alto contraste claro",
     "You can't disable this later. Bridges & most bots won't work yet.": "Non poderás desactivar isto máis tarde. As pasarelas e a maioría de bots aínda non funcionan.",
     "Add option": "Engade unha opción",
@@ -2168,7 +2113,6 @@
     "Show tray icon and minimise window to it on close": "Mostra icona na bandexa do sistema e minimiza ventá ao pechar",
     "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Esta sala está nalgúns espazos nos que non es admin. Nesos espazos, seguirase mostrando a sala antiga, pero as usuarias serán convidadas a unirse á nova.",
     "Large": "Grande",
-    "Image size in the timeline": "Tamaño de imaxe na cronoloxía",
     "Select all": "Seleccionar todos",
     "Deselect all": "Retirar selección a todos",
     "Sign out devices": {
@@ -2184,8 +2128,6 @@
         "other": "Confirma a desconexión destos dispositivos usando Single Sign On para probar a túa identidade."
     },
     "Other rooms": "Outras salas",
-    "sends rainfall": "envía chuvia",
-    "Sends the given message with rainfall": "Envía a mensaxe dada incluíndo chuvia",
     "Automatically send debug logs on any error": "Enviar automáticamente rexistros de depuración para calquera fallo",
     "Use a more compact 'Modern' layout": "Usar unha disposición 'Moderna' máis compacta",
     "Store your Security Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.": "Garda a túa Chave de Seguridade nun lugar seguro, como un xestor de contrasinais ou caixa forte, xa que vai protexer os teus datos cifrados.",
@@ -2432,7 +2374,6 @@
     "Command error: Unable to handle slash command.": "Erro no comando: non se puido xestionar o comando con barra.",
     "Next recently visited room or space": "Seguinte sala ou espazo visitados recentemente",
     "Previous recently visited room or space": "Anterior sala ou espazo visitados recentemente",
-    "%(timeRemaining)s left": "%(timeRemaining)s restante",
     "Unsent": "Sen enviar",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Podes usar as opcións personalizadas do servidor para acceder a outros servidores Matrix indicando o URL do servidor de inicio. Así podes usar %(brand)s cunha conta Matrix rexistrada nun servidor diferente.",
     "%(brand)s was denied permission to fetch your location. Please allow location access in your browser settings.": "%(brand)s non ten permiso para obter a túa localización. Concede acceso á localización nos axustes do navegador.",
@@ -2478,8 +2419,6 @@
     "Sorry, your homeserver is too old to participate here.": "Lamentámolo, o teu servidor de inicio é demasiado antigo para poder participar.",
     "There was an error joining.": "Houbo un erro ao unirte.",
     "The user's homeserver does not support the version of the space.": "O servidor de inicio da usuaria non soporta a versión do Espazo.",
-    "sends hearts": "envía corazóns",
-    "Sends the given message with hearts": "Engádelle moitos corazóns á mensaxe",
     "Confirm signing out these devices": {
         "one": "Confirma a desconexión deste dispositivo",
         "other": "Confirma a desconexión destos dispositivos"
@@ -2889,7 +2828,18 @@
         "video_rooms_faq1_answer": "Usa o botón \"+\" na sección da sala do panel esquerdo.",
         "video_rooms_faq2_question": "Podo usar chat de texto xunto á chamada de vídeo?",
         "video_rooms_faq2_answer": "Si, a cronoloxía de texto móstrase xunto co vídeo.",
-        "thank_you": "Grazas por probar a beta, entra en detalles canto queiras para así axudarnos a mellorala."
+        "thank_you": "Grazas por probar a beta, entra en detalles canto queiras para así axudarnos a mellorala.",
+        "group_messaging": "Conversando",
+        "group_profile": "Perfil",
+        "group_spaces": "Espazos",
+        "group_widgets": "Widgets",
+        "group_rooms": "Salas",
+        "group_voip": "Voz e Vídeo",
+        "group_moderation": "Moderación",
+        "group_themes": "Decorados",
+        "group_encryption": "Cifrado",
+        "group_experimental": "Experimental",
+        "group_developer": "Desenvolvemento"
     },
     "keyboard": {
         "home": "Inicio",
@@ -2972,7 +2922,8 @@
         "few_seconds_ago": "fai uns segundos",
         "about_minute_ago": "fai un minuto",
         "about_hour_ago": "fai unha hora",
-        "about_day_ago": "onte"
+        "about_day_ago": "onte",
+        "left": "%(timeRemaining)s restante"
     },
     "onboarding": {
         "personal_messaging_title": "Mensaxería segura para amizades e familia",
@@ -3055,11 +3006,34 @@
             "rule_call": "Convite de chamada",
             "rule_suppress_notices": "Mensaxes enviadas por bot",
             "rule_tombstone": "Cando se actualizan as salas",
-            "rule_encrypted_room_one_to_one": "Mensaxes cifradas en conversas 1:1"
+            "rule_encrypted_room_one_to_one": "Mensaxes cifradas en conversas 1:1",
+            "messages_containing_keywords": "Mensaxes coas palabras chave",
+            "error_saving": "Erro ao gardar os axustes de notificación",
+            "error_saving_detail": "Algo fallou ao gardar as túas preferencias de notificación.",
+            "enable_email_notifications": "Activar notificacións de email para %(email)s",
+            "enable_desktop_notifications_session": "Activa as notificacións de escritorio para esta sesión",
+            "show_message_desktop_notification": "Mostrar mensaxe nas notificacións de escritorio",
+            "enable_audible_notifications_session": "Activa as notificacións por son para esta sesión"
         },
         "appearance": {
             "layout_irc": "IRC (Experimental)",
-            "layout_bubbles": "Burbullas con mensaxes"
+            "layout_bubbles": "Burbullas con mensaxes",
+            "heading": "Personaliza o aspecto",
+            "subheading": "Os axustes da aparencia só lle afectan a esta sesión %(brand)s.",
+            "match_system_theme": "Imitar o aspecto do sistema",
+            "custom_font": "Usar tipo de letra do sistema",
+            "custom_font_name": "Nome da letra do sistema",
+            "custom_theme_invalid": "Esquema do decorado incorrecto.",
+            "custom_theme_error_downloading": "Erro ao descargar información do decorado.",
+            "custom_theme_success": "Decorado engadido!",
+            "custom_theme_url": "URL do decorado personalizado",
+            "use_high_contrast": "Usar alto contraste",
+            "custom_theme_add_button": "Engadir decorado",
+            "font_size": "Tamaño da letra",
+            "custom_font_description": "Escolle unha das tipografías instaladas no teu sistema e %(brand)s intentará utilizalas.",
+            "timeline_image_size": "Tamaño de imaxe na cronoloxía",
+            "timeline_image_size_default": "Por defecto",
+            "timeline_image_size_large": "Grande"
         }
     },
     "devtools": {
@@ -3237,7 +3211,15 @@
             "removed": "%(senderName)s eliminiou o enderezo principal desta sala.",
             "changed_alternative": "%(senderName)s cambiou os enderezos alternativos desta sala.",
             "changed_main_and_alternative": "%(senderName)s cambiou o enderezo principal e alternativo para esta sala.",
-            "changed": "%(senderName)s cambiou o enderezo desta sala."
+            "changed": "%(senderName)s cambiou o enderezo desta sala.",
+            "alt_added": {
+                "other": "%(senderName)s engadiu os enderezos alternativos %(addresses)s para esta sala.",
+                "one": "%(senderName)s engadiu o enderezo alternativo %(addresses)s para esta sala."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s eliminou os enderezos alternativos %(addresses)s desta sala.",
+                "one": "%(senderName)s eliminou o enderezo alternativo %(addresses)s desta sala."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s revogou o convite para que %(targetDisplayName)s se una a esta sala.",
@@ -3410,6 +3392,29 @@
                 "one": "%(oneUser)s enviou unha mensaxe oculta",
                 "other": "%(oneUser)s enviou %(count)s mensaxes ocultas"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s cambiou o nivel de autoridade a %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s desde %(fromPowerLevel)s a %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s eliminou a regra que bloqueaba usuarias con %(glob)s",
+            "removed_rule_rooms": "%(senderName)s eliminou a regra que bloquea salas con %(glob)s",
+            "removed_rule_servers": "%(senderName)s eliminou a regra que bloquea servidores con %(glob)s",
+            "removed_rule": "%(senderName)s eliminou a regra de bloqueo con %(glob)s",
+            "updated_invalid_rule": "%(senderName)s actualizou unha regra de bloqueo non válida",
+            "updated_rule_users": "%(senderName)s actualizou a regra que bloquea usuarias con %(glob)s por %(reason)s",
+            "updated_rule_rooms": "%(senderName)s actualizou a regra de bloqueo de salas con %(glob)s por %(reason)s",
+            "updated_rule_servers": "%(senderName)s actualizou a regra de bloqueo de servidores con %(glob)s por %(reason)s",
+            "updated_rule": "%(senderName)s actualizou a regra de bloqueo con %(glob)s por %(reason)s",
+            "created_rule_users": "%(senderName)s creou unha regra de bloqueo de usuarias con %(glob)s por %(reason)s",
+            "created_rule_rooms": "%(senderName)s creou unha regra bloqueando salas con %(glob)s por %(reason)s",
+            "created_rule_servers": "%(senderName)s creou unha regra bloqueando servidores con %(glob)s por %(reason)s",
+            "created_rule": "%(senderName)s creou unha regra de bloqueo con %(glob)s por %(reason)s",
+            "changed_rule_users": "%(senderName)s cambiou unha regra que bloqueaba usuarias con %(oldGlob)s a %(newGlob)s por %(reason)s",
+            "changed_rule_rooms": "%(senderName)s cambiou unha regra que bloqueaba salas con %(oldGlob)s a %(newGlob)s por %(reason)s",
+            "changed_rule_servers": "%(senderName)s cambiou unha regra que bloqueaba servidores con %(oldGlob)s a %(newGlob)s por %(reason)s",
+            "changed_rule_glob": "%(senderName)s actualizou unha regra de bloqueo con %(oldGlob)s a %(newGlob)s por %(reason)s"
         }
     },
     "slash_command": {
@@ -3598,5 +3603,19 @@
         "bullet_1": "<Bold>Non</Bold> rexistramos o teu perfil nin datos da conta",
         "bullet_2": "<Bold>Non</Bold> compartimos a información con terceiras partes",
         "disable_prompt": "Podes desactivar esto cando queiras non axustes"
+    },
+    "chat_effects": {
+        "confetti_description": "Envía a mensaxe con confetti",
+        "confetti_message": "envía confetti",
+        "fireworks_description": "Envia a mensaxe dada con fogos de artificio",
+        "fireworks_message": "envía fogos de artificio",
+        "rainfall_description": "Envía a mensaxe dada incluíndo chuvia",
+        "rainfall_message": "envía chuvia",
+        "snowfall_description": "Engade neve caendo á mensaxe",
+        "snowfall_message": "envía neve",
+        "spaceinvaders_description": "Envía a mensaxe cun efecto de decorado espacial",
+        "spaceinvaders_message": "enviar invasores espaciais",
+        "hearts_description": "Engádelle moitos corazóns á mensaxe",
+        "hearts_message": "envía corazóns"
     }
 }

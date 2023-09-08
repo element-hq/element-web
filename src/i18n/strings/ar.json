@@ -120,31 +120,7 @@
     "Opens chat with the given user": "يفتح دردشة من المستخدم المعطى",
     "Displays action": "يعرض إجراءً",
     "Reason": "السبب",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "قام %(senderName)s بإضافة العناوين البديلة %(addresses)s لهذه الغرفة.",
-        "one": "قام %(senderName)s بإضافة العنوان البديل %(addresses)s لهذه الغرفة."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "قام %(senderName)s بإزالة العناوين البديلة %(addresses)s لهذه الغرفة.",
-        "one": "قام %(senderName)s بإزالة العنوان البديل %(addresses)s لهذه الغرفة."
-    },
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s من %(fromPowerLevel)s الى %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "غير %(senderName)s مستوى الطاقة الخاصة ب %(powerLevelDiffText)s.",
     "You cannot place a call with yourself.": "لا يمكنك الاتصال بنفسك.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "أزال %(senderName)s القاعدة الناصَّة على منع المستخدمين المطابقين %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "أزال %(senderName)s القاعدة الناصَّة على منع الغرف المطابقة %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "أزال %(senderName)s القاعدة الناصَّة على منع الخوادم المطابقة %(glob)s",
-    "%(senderName)s removed a ban rule matching %(glob)s": "أزال %(senderName)s قاعدة المنع المطابقة %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "حدَّث %(senderName)s قاعدة منع غير صالحة",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "حدَّث %(senderName)s قاعدة منع المستخدمين المطابقين %(glob)s بسبب %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "حدَّث %(senderName)s قاعدة منع تطابق %(glob)s بسبب %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "أنشأ %(senderName)s قاعدة منع غرف تطابق %(glob)s بسبب %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s قاعدة حظر سيرفرات مظابقة منشأة %(glob)s من أجل %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s قاعدة حظر مطابق منشأة %(glob)s من أجل %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s قاعدة متغيرة التي تحظر المستخدمين المطابقين %(oldGlob)s من أجل تطابق %(newGlob)s من أجل %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s قاعدة متغيرة التي تحظر الغرف المطابقة %(oldGlob)s من أجل مطابقة %(newGlob)s من أجل %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s قاعدة متغيرة التي تحظر سيرفرات مطابقة %(oldGlob)s من أجل مطابقة %(newGlob)s من أجل %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s قاعدة حظر محدثة التي طابقت %(oldGlob)s لتطابق %(newGlob)s من أجل %(reason)s",
     "You signed in to a new session without verifying it:": "قمت بتسجيل الدخول لجلسة جديدة من غير التحقق منها:",
     "Verify your other session using one of the options below.": "أكِّد جلستك الأخرى باستخدام أحد الخيارات أدناه.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s%(userId)s تم تسجيل الدخول لجلسة جديدة من غير التحقق منها:",
@@ -422,14 +398,6 @@
     "Account": "الحساب",
     "Phone numbers": "أرقام الهواتف",
     "Email addresses": "عنوان البريد الإلكتروني",
-    "Appearance Settings only affect this %(brand)s session.": "إنما تؤثر إعدادات المظهر في %(brand)s وعلى هذا الاتصال فقط.",
-    "Customise your appearance": "تخصيص مظهرك",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "قم بتعيين اسم الخط المثبت على نظامك وسيحاول %(brand)s استخدامه.",
-    "Add theme": "إضافة مظهر",
-    "Custom theme URL": "رابط المظهر المخصص",
-    "Theme added!": "أُضيفَ المظهر!",
-    "Error downloading theme information.": "تعذر تحميل معلومات المظهر.",
-    "Invalid theme schema.": "ملف وصف المظهر غير صالح.",
     "Use between %(min)s pt and %(max)s pt": "استعمل ما بين %(min)spt و %(max)sps",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "الحجم المخصص للخط يجب أن ينحصر بين %(min)spt و %(max)spt",
     "Size must be a number": "الحجم يجب أن يكون رقمًا",
@@ -491,9 +459,6 @@
     "Noisy": "مزعج",
     "On": "مشتغل",
     "Off": "مطفأ",
-    "Enable audible notifications for this session": "تمكين الإشعارات الصوتية لهذا الاتصال",
-    "Show message in desktop notification": "إظهار الرسالة في إشعارات سطح المكتب",
-    "Enable desktop notifications for this session": "تمكين إشعارات سطح المكتب لهذا الاتصال",
     "Notification targets": "أهداف الإشعار",
     "You've successfully verified your device!": "لقد نجحت في التحقق من جهازك!",
     "Verify all users in a room to ensure it's secure.": "تحقق من جميع المستخدمين في الغرفة للتأكد من أنها آمنة.",
@@ -629,12 +594,8 @@
     "Never send encrypted messages to unverified sessions in this room from this session": "لا ترسل أبدًا رسائل مشفرة إلى اتصالات التي لم يتم التحقق منها في هذه الغرفة من هذا الاتصال",
     "Never send encrypted messages to unverified sessions from this session": "لا ترسل أبدًا رسائل مشفرة إلى اتصالات لم يتم التحقق منها من هذا الاتصال",
     "Send analytics data": "إرسال بيانات التحليلات",
-    "System font name": "اسم خط النظام",
-    "Use a system font": "استخدام خط النظام",
-    "Match system theme": "مطابقة ألوان النظام",
     "Mirror local video feed": "محاكاة تغذية الفيديو المحلية",
     "Use custom size": "استخدام حجم مخصص",
-    "Font size": "حجم الخط",
     "Change notification settings": "تغيير إعدادات الإشعار",
     "Please contact your homeserver administrator.": "يُرجى تواصلك مع مدير خادمك.",
     "New version of %(brand)s is available": "يتوفر إصدار جديد من %(brand)s",
@@ -843,9 +804,6 @@
     "Send stickers into this room": "أرسل ملصقات إلى هذه الغرفة",
     "Remain on your screen while running": "ابقَ على شاشتك أثناء إجراء",
     "Remain on your screen when viewing another room, when running": "ابقَ على شاشتك عند مشاهدة غرفة أخرى أثناء إجراء",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s حدَّث قاعدة حظر المستخدمين المطابقة %(glob)s بسبب %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s حدَّث قاعدة حظر الخوادم المطابقة %(glob)s بسبب %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s حدَّث قاعدة حظر الغرفة المطابقة %(glob)s بسبب %(reason)s",
     "Takes the call in the current room off hold": "يوقف المكالمة في الغرفة الحالية",
     "Places the call in the current room on hold": "يضع المكالمة في الغرفة الحالية قيد الانتظار",
     "Cuba": "كوبا",
@@ -1136,7 +1094,12 @@
         "state_counters": "إظهار عدّادات بسيطة في رأس الغرفة",
         "custom_themes": "دعم إضافة ألوان مخصصة",
         "dehydration": "الرسائل المشفرة في وضع عدم الاتصال باستخدام أجهزة مجففة",
-        "bridge_state": "إظهار المعلومات حول الجسور في إعدادات الغرفة"
+        "bridge_state": "إظهار المعلومات حول الجسور في إعدادات الغرفة",
+        "group_profile": "الملف الشخصي",
+        "group_widgets": "عناصر الواجهة",
+        "group_rooms": "الغرف",
+        "group_voip": "الصوت والفيديو",
+        "group_encryption": "تشفير"
     },
     "keyboard": {
         "number": "[رقم]"
@@ -1201,7 +1164,25 @@
             "rule_call": "دعوة لمحادثة",
             "rule_suppress_notices": "رسائل أرسلها آلي (Bot)",
             "rule_tombstone": "عند ترقية الغرف",
-            "rule_encrypted_room_one_to_one": "رسائل مشفرة في المحادثات المباشرة"
+            "rule_encrypted_room_one_to_one": "رسائل مشفرة في المحادثات المباشرة",
+            "enable_desktop_notifications_session": "تمكين إشعارات سطح المكتب لهذا الاتصال",
+            "show_message_desktop_notification": "إظهار الرسالة في إشعارات سطح المكتب",
+            "enable_audible_notifications_session": "تمكين الإشعارات الصوتية لهذا الاتصال"
+        },
+        "appearance": {
+            "heading": "تخصيص مظهرك",
+            "subheading": "إنما تؤثر إعدادات المظهر في %(brand)s وعلى هذا الاتصال فقط.",
+            "match_system_theme": "مطابقة ألوان النظام",
+            "custom_font": "استخدام خط النظام",
+            "custom_font_name": "اسم خط النظام",
+            "custom_theme_invalid": "ملف وصف المظهر غير صالح.",
+            "custom_theme_error_downloading": "تعذر تحميل معلومات المظهر.",
+            "custom_theme_success": "أُضيفَ المظهر!",
+            "custom_theme_url": "رابط المظهر المخصص",
+            "custom_theme_add_button": "إضافة مظهر",
+            "font_size": "حجم الخط",
+            "custom_font_description": "قم بتعيين اسم الخط المثبت على نظامك وسيحاول %(brand)s استخدامه.",
+            "timeline_image_size_default": "المبدئي"
         }
     },
     "devtools": {
@@ -1259,7 +1240,15 @@
             "removed": "قام %(senderName)s بإزالة العنوان الرئيسي لهذه الغرفة.",
             "changed_alternative": "قام %(senderName)s بتعديل العناوين البديلة لهذه الغرفة.",
             "changed_main_and_alternative": "قام %(senderName)s بتعديل العناوين الرئيسية و البديلة لهذه الغرفة.",
-            "changed": "قام %(senderName)s بتعديل عناوين هذه الغرفة."
+            "changed": "قام %(senderName)s بتعديل عناوين هذه الغرفة.",
+            "alt_added": {
+                "other": "قام %(senderName)s بإضافة العناوين البديلة %(addresses)s لهذه الغرفة.",
+                "one": "قام %(senderName)s بإضافة العنوان البديل %(addresses)s لهذه الغرفة."
+            },
+            "alt_removed": {
+                "other": "قام %(senderName)s بإزالة العناوين البديلة %(addresses)s لهذه الغرفة.",
+                "one": "قام %(senderName)s بإزالة العنوان البديل %(addresses)s لهذه الغرفة."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "قام %(senderName)s بسحب الدعوة الى %(targetDisplayName)s بالانضمام الى الغرفة.",
@@ -1292,6 +1281,29 @@
         },
         "m.call.hangup": {
             "dm": "انتهت المكالمة"
+        },
+        "m.room.power_levels": {
+            "changed": "غير %(senderName)s مستوى الطاقة الخاصة ب %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s من %(fromPowerLevel)s الى %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "أزال %(senderName)s القاعدة الناصَّة على منع المستخدمين المطابقين %(glob)s",
+            "removed_rule_rooms": "أزال %(senderName)s القاعدة الناصَّة على منع الغرف المطابقة %(glob)s",
+            "removed_rule_servers": "أزال %(senderName)s القاعدة الناصَّة على منع الخوادم المطابقة %(glob)s",
+            "removed_rule": "أزال %(senderName)s قاعدة المنع المطابقة %(glob)s",
+            "updated_invalid_rule": "حدَّث %(senderName)s قاعدة منع غير صالحة",
+            "updated_rule_users": "حدَّث %(senderName)s قاعدة منع المستخدمين المطابقين %(glob)s بسبب %(reason)s",
+            "updated_rule_rooms": "%(senderName)s حدَّث قاعدة حظر الغرفة المطابقة %(glob)s بسبب %(reason)s",
+            "updated_rule_servers": "%(senderName)s حدَّث قاعدة حظر الخوادم المطابقة %(glob)s بسبب %(reason)s",
+            "updated_rule": "حدَّث %(senderName)s قاعدة منع تطابق %(glob)s بسبب %(reason)s",
+            "created_rule_users": "%(senderName)s حدَّث قاعدة حظر المستخدمين المطابقة %(glob)s بسبب %(reason)s",
+            "created_rule_rooms": "أنشأ %(senderName)s قاعدة منع غرف تطابق %(glob)s بسبب %(reason)s",
+            "created_rule_servers": "%(senderName)s قاعدة حظر سيرفرات مظابقة منشأة %(glob)s من أجل %(reason)s",
+            "created_rule": "%(senderName)s قاعدة حظر مطابق منشأة %(glob)s من أجل %(reason)s",
+            "changed_rule_users": "%(senderName)s قاعدة متغيرة التي تحظر المستخدمين المطابقين %(oldGlob)s من أجل تطابق %(newGlob)s من أجل %(reason)s",
+            "changed_rule_rooms": "%(senderName)s قاعدة متغيرة التي تحظر الغرف المطابقة %(oldGlob)s من أجل مطابقة %(newGlob)s من أجل %(reason)s",
+            "changed_rule_servers": "%(senderName)s قاعدة متغيرة التي تحظر سيرفرات مطابقة %(oldGlob)s من أجل مطابقة %(newGlob)s من أجل %(reason)s",
+            "changed_rule_glob": "%(senderName)s قاعدة حظر محدثة التي طابقت %(oldGlob)s لتطابق %(newGlob)s من أجل %(reason)s"
         }
     },
     "slash_command": {

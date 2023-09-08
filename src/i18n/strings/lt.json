@@ -37,7 +37,6 @@
     "Invite to this room": "Pakviesti į šį kambarį",
     "You cannot delete this message. (%(code)s)": "Jūs negalite trinti šios žinutės. (%(code)s)",
     "Thursday": "Ketvirtadienis",
-    "Show message in desktop notification": "Rodyti žinutę darbalaukio pranešime",
     "Yesterday": "Vakar",
     "Error encountered (%(errorDetail)s).": "Susidurta su klaida (%(errorDetail)s).",
     "Low Priority": "Žemo prioriteto",
@@ -330,8 +329,6 @@
     "Please supply a https:// or http:// widget URL": "Pateikite https:// arba http:// valdiklio URL",
     "You cannot modify widgets in this room.": "Jūs negalite modifikuoti valdiklių šiame kambaryje.",
     "Forces the current outbound group session in an encrypted room to be discarded": "Priverčia išmesti esamą užsibaigiantį grupės seansą užšifruotame kambaryje",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s galios lygį iš %(fromPowerLevel)s į %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s pakeitė %(powerLevelDiffText)s.",
     "Cannot reach homeserver": "Serveris nepasiekiamas",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Įsitikinkite, kad jūsų interneto ryšys yra stabilus, arba susisiekite su serverio administratoriumi",
     "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.": "Paprašykite savo %(brand)s administratoriaus patikrinti ar <a>jūsų konfigūracijoje</a> nėra neteisingų arba pasikartojančių įrašų.",
@@ -523,7 +520,6 @@
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Patvirtinkite šio tel. nr. pridėjimą naudodami Vieną Prisijungimą, kad įrodytumėte savo tapatybę.",
     "Confirm adding phone number": "Patvirtinkite telefono numerio pridėjimą",
     "Click the button below to confirm adding this phone number.": "Paspauskite žemiau esantį mygtuką, kad patvirtintumėte šio numerio pridėjimą.",
-    "Match system theme": "Suderinti su sistemos tema",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "Atsijungti nuo <current /> tapatybės serverio ir jo vietoje prisijungti prie <new />?",
     "Terms of service not accepted or the identity server is invalid.": "Nesutikta su paslaugų teikimo sąlygomis arba tapatybės serveris yra klaidingas.",
     "The identity server you have chosen does not have any terms of service.": "Jūsų pasirinktas tapatybės serveris neturi jokių paslaugų teikimo sąlygų.",
@@ -535,11 +531,6 @@
     "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "Jūs vis dar <b>dalijatės savo asmeniniais duomenimis</b> tapatybės serveryje <idserver />.",
     "Enter a new identity server": "Pridėkite naują tapatybės serverį",
     "Manage integrations": "Valdyti integracijas",
-    "Invalid theme schema.": "Klaidinga temos schema.",
-    "Error downloading theme information.": "Klaida atsisiunčiant temos informaciją.",
-    "Theme added!": "Tema pridėta!",
-    "Custom theme URL": "Pasirinktinės temos URL",
-    "Add theme": "Pridėti temą",
     "Phone numbers": "Telefono numeriai",
     "Language and region": "Kalba ir regionas",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Sutikite su tapatybės serverio (%(serverName)s) paslaugų teikimo sąlygomis, kad leistumėte kitiems rasti jus pagal el. pašto adresą ar telefono numerį.",
@@ -632,8 +623,6 @@
     "Cross-signing public keys:": "Kryžminio pasirašymo vieši raktai:",
     "Cross-signing private keys:": "Kryžminio pasirašymo privatūs raktai:",
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Individualiai patikrinkite kiekvieną vartotojo naudojamą seansą, kad pažymėtumėte jį kaip patikimą, nepasitikint kryžminiu pasirašymu patvirtintais įrenginiais.",
-    "Enable desktop notifications for this session": "Įjungti darbalaukio pranešimus šiam seansui",
-    "Enable audible notifications for this session": "Įjungti garsinius pranešimus šiam seansui",
     "wait and try again later": "palaukti ir bandyti vėliau dar kartą",
     "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Jei jūs nenorite naudoti <server /> serverio radimui ir tam, kad būtumėte randamas esamų, jums žinomų kontaktų, žemiau įveskite kitą tapatybės serverį.",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Tapatybės serverio naudojimas yra pasirinktinis. Jei jūs pasirinksite jo nenaudoti, jūs nebūsite randamas kitų vartotojų ir neturėsite galimybės pakviesti kitų nurodydamas el. paštą ar telefoną.",
@@ -834,14 +823,6 @@
     "Published Addresses": "Paskelbti Adresai",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Atnaujinant kambario alternatyvius adresus įvyko klaida. Gali būti, kad serveris to neleidžia arba įvyko laikina klaida.",
     "Room Addresses": "Kambario Adresai",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "one": "%(senderName)s pridėjo alternatyvų šio kambario adresą %(addresses)s.",
-        "other": "%(senderName)s pridėjo alternatyvius šio kambario adresus %(addresses)s."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "one": "%(senderName)s pašalino alternatyvų šio kambario adresą %(addresses)s.",
-        "other": "%(senderName)s pašalino alternatyvius šio kambario adresus %(addresses)s."
-    },
     "Room settings": "Kambario nustatymai",
     "Link to most recent message": "Nuoroda į naujausią žinutę",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Pakviesti ką nors naudojant jų vardą, vartotojo vardą (pvz.: <userId/>) arba <a>bendrinti šį kambarį</a>.",
@@ -892,11 +873,6 @@
     "The call was answered on another device.": "Į skambutį buvo atsiliepta kitame įrenginyje.",
     "Answered Elsewhere": "Atsiliepta Kitur",
     "The call could not be established": "Nepavyko pradėti skambučio",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s pašalino draudimo taisyklę, sutampančią su %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s pašalino taisyklę, draudžiančią serverius, sutampančius su %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s pašalino taisyklę, draudžiančią kambarius, sutampančius su %(glob)s",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s pašalino taisyklę, draudžiančią vartotojus, sutampančius su %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s atnaujino klaidingą draudimo taisyklę",
     "Opens chat with the given user": "Atidaro pokalbį su nurodytu vartotoju",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Jūsų pateiktas pasirašymo raktas sutampa su pasirašymo raktu, gautu iš vartotojo %(userId)s seanso %(deviceId)s. Seansas pažymėtas kaip patikrintas.",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ĮSPĖJIMAS: RAKTŲ PATIKRINIMAS NEPAVYKO! Pasirašymo raktas vartotojui %(userId)s ir seansui %(deviceId)s yra \"%(fprint)s\", kuris nesutampa su pateiktu raktu \"%(fingerprint)s\". Tai gali reikšti, kad jūsų komunikacijos yra perimamos!",
@@ -914,18 +890,6 @@
     "Unexpected server error trying to leave the room": "Netikėta serverio klaida bandant išeiti iš kambario",
     "Not Trusted": "Nepatikimas",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) prisijungė prie naujo seanso jo nepatvirtinę:",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s atnaujino draudimo taisyklę, kuri sutapo su %(oldGlob)s į sutampančią su %(newGlob)s dėl %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s pakeitė taisyklę, kuri draudė serverius, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s pakeitė taisyklę, kuri draudė kambarius, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s pakeitė taisyklę, kuri draudė vartotojus, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s sukūrė draudimo taisyklę, sutampančią su %(glob)s dėl %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s sukūrė taisyklę, draudžiančią serverius, sutampančius su %(glob)s dėl %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s sukūrė taisyklę, draudžiančią kambarius, sutampančius su %(glob)s dėl %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s sukūrė taisyklę, draudžiančią vartotojus, sutampančius su %(glob)s dėl %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s atnaujino draudimo taisyklę, sutampančią su %(glob)s dėl %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s atnaujino taisyklę, draudžiančią serverius, sutampančius su %(glob)s dėl %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s atnaujino taisyklę, draudžiančią kambarius, sutampančius su %(glob)s dėl %(reason)s",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s atnaujino taisyklę, draudžiančią vartotojus, sutampančius su %(glob)s dėl %(reason)s",
     "Failed to remove tag %(tagName)s from room": "Nepavyko pašalinti žymos %(tagName)s iš kambario",
     "Your browser likely removed this data when running low on disk space.": "Jūsų naršyklė greičiausiai pašalino šiuos duomenis pritrūkus vietos diske.",
     "Remove %(count)s messages": {
@@ -960,9 +924,6 @@
     "Something went wrong. Please try again or view your console for hints.": "Kažkas ne taip. Bandykite dar kartą arba peržiūrėkite konsolę, kad rastumėte užuominų.",
     "Error adding ignored user/server": "Klaida pridedant ignoruojamą vartotoją/serverį",
     "Ignored/Blocked": "Ignoruojami/Blokuojami",
-    "Appearance Settings only affect this %(brand)s session.": "Išvaizdos nustatymai įtakoja tik šį %(brand)s seansą.",
-    "Customise your appearance": "Tinkinti savo išvaizdą",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Nustatykite sistemoje įdiegto šrifto pavadinimą ir %(brand)s bandys jį naudoti.",
     "Use between %(min)s pt and %(max)s pt": "Naudokite dydį tarp %(min)s pt ir %(max)s pt",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Pasirinktinis šrifto dydis gali būti tik tarp %(min)s pt ir %(max)s pt",
     "Size must be a number": "Dydis turi būti skaičius",
@@ -1015,10 +976,7 @@
     "This bridge was provisioned by <user />.": "Šis tiltas buvo parūpintas <user />.",
     "Your server isn't responding to some <a>requests</a>.": "Jūsų serveris neatsako į kai kurias <a>užklausas</a>.",
     "Unable to find a supported verification method.": "Nepavyko rasti palaikomo patvirtinimo metodo.",
-    "System font name": "Sistemos šrifto pavadinimas",
-    "Use a system font": "Naudoti sistemos šriftą",
     "Use custom size": "Naudoti pasirinktinį dydį",
-    "Font size": "Šrifto dydis",
     "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Jei kita %(brand)s versija vis dar yra atidaryta kitame skirtuke, uždarykite jį, nes %(brand)s naudojimas tame pačiame serveryje, tuo pačiu metu įjungus ir išjungus tingų įkėlimą, sukelks problemų.",
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Jūs anksčiau naudojote %(brand)s ant %(host)s įjungę tingų narių įkėlimą. Šioje versijoje tingus įkėlimas yra išjungtas. Kadangi vietinė talpykla nesuderinama tarp šių dviejų nustatymų, %(brand)s reikia iš naujo sinchronizuoti jūsų paskyrą.",
     "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Jūs galite tai įjungti, jei kambarys bus naudojamas tik bendradarbiavimui su vidinėmis komandomis jūsų serveryje. Tai negali būti vėliau pakeista.",
@@ -1355,8 +1313,6 @@
     "Unable to share email address": "Nepavyko pasidalinti el. pašto adresu",
     "Verification code": "Patvirtinimo kodas",
     "Olm version:": "Olm versija:",
-    "Enable email notifications for %(email)s": "Įjungti el. pašto pranešimus %(email)s",
-    "Messages containing keywords": "Žinutės turinčios raktažodžių",
     "Mentions & keywords": "Paminėjimai & Raktažodžiai",
     "New keyword": "Naujas raktažodis",
     "Keyword": "Raktažodis",
@@ -1397,7 +1353,6 @@
     "Delete avatar": "Ištrinti avatarą",
     "More": "Daugiau",
     "Connecting": "Jungiamasi",
-    "sends fireworks": "nusiunčia fejerverkus",
     "Their device couldn't start the camera or microphone": "Jų įrenginys negalėjo įjungti kameros arba mikrofono",
     "Connection failed": "Nepavyko prisijungti",
     "Could not connect media": "Nepavyko prijungti medijos",
@@ -1604,12 +1559,9 @@
     "Deactivating your account is a permanent action — be careful!": "Paskyros deaktyvavimas yra negrįžtamas veiksmas — būkite atsargūs!",
     "Spell check": "Rašybos tikrinimas",
     "Your password was successfully changed.": "Jūsų slaptažodis sėkmingai pakeistas.",
-    "Use high contrast": "Naudoti didelį kontrastą",
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Pasidarykite šifravimo raktų ir paskyros duomenų atsarginę kopiją, jei prarastumėte prieigą prie sesijų. Jūsų raktai bus apsaugoti unikaliu saugumo raktu.",
     "There was an error loading your notification settings.": "Įkeliant pranešimų nustatymus įvyko klaida.",
     "Global": "Globalus",
-    "An error occurred whilst saving your notification preferences.": "Išsaugant pranešimų nuostatas įvyko klaida.",
-    "Error saving notification preferences": "Klaida išsaugant pranešimų nuostatas",
     "Updating spaces... (%(progress)s out of %(count)s)": {
         "one": "Atnaujinama erdvė...",
         "other": "Atnaujinamos erdvės... (%(progress)s iš %(count)s)"
@@ -1625,7 +1577,6 @@
         "one": "Šiuo metu erdvė turi prieigą",
         "other": "Šiuo metu %(count)s erdvės turi prieigą"
     },
-    "Image size in the timeline": "Paveikslėlio dydis laiko juostoje",
     "Message search initialisation failed": "Nepavyko inicializuoti žinučių paieškos",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
         "one": "Saugiai talpinkite užšifruotas žinutes vietoje, kad jos būtų rodomos paieškos rezultatuose, naudojant %(size)s žinutėms iš %(rooms)s kambario saugoti.",
@@ -1712,17 +1663,6 @@
     "Hint: Begin your message with <code>//</code> to start it with a slash.": "Patarimas: norėdami žinutę pradėti pasviruoju brūkšniu, pradėkite ją su <code>//</code>.",
     "Unrecognised command: %(commandText)s": "Neatpažinta komanda: %(commandText)s",
     "Unknown Command": "Nežinoma komanda",
-    "sends hearts": "Siunčia širdeles",
-    "Sends the given message with hearts": "Siunčia pateiktą žinutę su širdelėmis",
-    "sends space invaders": "siunčia kosmoso įsibrovėlius",
-    "Sends the given message with a space themed effect": "Siunčia pateiktą žinutę su kosmoso temos efektu",
-    "sends snowfall": "siunčia sniego kritulius",
-    "Sends the given message with snowfall": "Siunčia pateiktą žinutę su sniego krituliais",
-    "sends rainfall": "siunčia lietų",
-    "Sends the given message with rainfall": "Siunčia pateiktą žinutę su lietumi",
-    "Sends the given message with fireworks": "Siunčia pateiktą žinutę su fejerverkais",
-    "sends confetti": "siunčia konfeti",
-    "Sends the given message with confetti": "Siunčia pateiktą žinutę su konfeti",
     "Download %(brand)s": "Atsisiųsti %(brand)s",
     "Enable hardware acceleration": "Įjungti aparatinį spartinimą",
     "Show tray icon and minimise window to it on close": "Rodyti dėklo piktogramą ir uždarius langą jį sumažinti į ją",
@@ -2057,7 +1997,18 @@
         "video_rooms_faq1_answer": "Kairiajame skydelyje esančioje kambarių skiltyje naudokite mygtuką “+”.",
         "video_rooms_faq2_question": "Ar galiu naudoti teksto pokalbius kartu su vaizdo skambučiu?",
         "video_rooms_faq2_answer": "Taip, pokalbių laiko juosta rodoma kartu su vaizdu.",
-        "thank_you": "Dėkojame, kad išbandėte beta versiją, ir prašome pateikti kuo daugiau informacijos, kad galėtume ją patobulinti."
+        "thank_you": "Dėkojame, kad išbandėte beta versiją, ir prašome pateikti kuo daugiau informacijos, kad galėtume ją patobulinti.",
+        "group_messaging": "Žinučių siuntimas",
+        "group_profile": "Profilis",
+        "group_spaces": "Erdvės",
+        "group_widgets": "Valdikliai",
+        "group_rooms": "Kambariai",
+        "group_voip": "Garsas ir Vaizdas",
+        "group_moderation": "Moderavimas",
+        "group_themes": "Temos",
+        "group_encryption": "Šifravimas",
+        "group_experimental": "Eksperimentinis",
+        "group_developer": "Kūrėjas"
     },
     "keyboard": {
         "home": "Pradžia",
@@ -2211,11 +2162,34 @@
             "rule_call": "Skambučio pakvietimas",
             "rule_suppress_notices": "Boto siųstos žinutės",
             "rule_tombstone": "Kai atnaujinami kambariai",
-            "rule_encrypted_room_one_to_one": "Šifruotos žinutės privačiuose pokalbiuose"
+            "rule_encrypted_room_one_to_one": "Šifruotos žinutės privačiuose pokalbiuose",
+            "messages_containing_keywords": "Žinutės turinčios raktažodžių",
+            "error_saving": "Klaida išsaugant pranešimų nuostatas",
+            "error_saving_detail": "Išsaugant pranešimų nuostatas įvyko klaida.",
+            "enable_email_notifications": "Įjungti el. pašto pranešimus %(email)s",
+            "enable_desktop_notifications_session": "Įjungti darbalaukio pranešimus šiam seansui",
+            "show_message_desktop_notification": "Rodyti žinutę darbalaukio pranešime",
+            "enable_audible_notifications_session": "Įjungti garsinius pranešimus šiam seansui"
         },
         "appearance": {
             "layout_irc": "IRC (eksperimentinis)",
-            "layout_bubbles": "Žinučių burbulai"
+            "layout_bubbles": "Žinučių burbulai",
+            "heading": "Tinkinti savo išvaizdą",
+            "subheading": "Išvaizdos nustatymai įtakoja tik šį %(brand)s seansą.",
+            "match_system_theme": "Suderinti su sistemos tema",
+            "custom_font": "Naudoti sistemos šriftą",
+            "custom_font_name": "Sistemos šrifto pavadinimas",
+            "custom_theme_invalid": "Klaidinga temos schema.",
+            "custom_theme_error_downloading": "Klaida atsisiunčiant temos informaciją.",
+            "custom_theme_success": "Tema pridėta!",
+            "custom_theme_url": "Pasirinktinės temos URL",
+            "use_high_contrast": "Naudoti didelį kontrastą",
+            "custom_theme_add_button": "Pridėti temą",
+            "font_size": "Šrifto dydis",
+            "custom_font_description": "Nustatykite sistemoje įdiegto šrifto pavadinimą ir %(brand)s bandys jį naudoti.",
+            "timeline_image_size": "Paveikslėlio dydis laiko juostoje",
+            "timeline_image_size_default": "Numatytas",
+            "timeline_image_size_large": "Didelis"
         }
     },
     "devtools": {
@@ -2311,7 +2285,15 @@
             "removed": "%(senderName)s pašalino pagrindinį šio kambario adresą.",
             "changed_alternative": "%(senderName)s pakeitė alternatyvius šio kambario adresus.",
             "changed_main_and_alternative": "%(senderName)s pakeitė pagrindinį ir alternatyvius šio kambario adresus.",
-            "changed": "%(senderName)s pakeitė šio kambario adresus."
+            "changed": "%(senderName)s pakeitė šio kambario adresus.",
+            "alt_added": {
+                "one": "%(senderName)s pridėjo alternatyvų šio kambario adresą %(addresses)s.",
+                "other": "%(senderName)s pridėjo alternatyvius šio kambario adresus %(addresses)s."
+            },
+            "alt_removed": {
+                "one": "%(senderName)s pašalino alternatyvų šio kambario adresą %(addresses)s.",
+                "other": "%(senderName)s pašalino alternatyvius šio kambario adresus %(addresses)s."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s atšaukė pakvietimą %(targetDisplayName)s prisijungti prie kambario.",
@@ -2444,6 +2426,29 @@
                 "other": "%(oneUser)s neatliko jokių pakeitimų %(count)s kartų(-us)",
                 "one": "%(oneUser)s neatliko jokių pakeitimų"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s pakeitė %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s galios lygį iš %(fromPowerLevel)s į %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s pašalino taisyklę, draudžiančią vartotojus, sutampančius su %(glob)s",
+            "removed_rule_rooms": "%(senderName)s pašalino taisyklę, draudžiančią kambarius, sutampančius su %(glob)s",
+            "removed_rule_servers": "%(senderName)s pašalino taisyklę, draudžiančią serverius, sutampančius su %(glob)s",
+            "removed_rule": "%(senderName)s pašalino draudimo taisyklę, sutampančią su %(glob)s",
+            "updated_invalid_rule": "%(senderName)s atnaujino klaidingą draudimo taisyklę",
+            "updated_rule_users": "%(senderName)s atnaujino taisyklę, draudžiančią vartotojus, sutampančius su %(glob)s dėl %(reason)s",
+            "updated_rule_rooms": "%(senderName)s atnaujino taisyklę, draudžiančią kambarius, sutampančius su %(glob)s dėl %(reason)s",
+            "updated_rule_servers": "%(senderName)s atnaujino taisyklę, draudžiančią serverius, sutampančius su %(glob)s dėl %(reason)s",
+            "updated_rule": "%(senderName)s atnaujino draudimo taisyklę, sutampančią su %(glob)s dėl %(reason)s",
+            "created_rule_users": "%(senderName)s sukūrė taisyklę, draudžiančią vartotojus, sutampančius su %(glob)s dėl %(reason)s",
+            "created_rule_rooms": "%(senderName)s sukūrė taisyklę, draudžiančią kambarius, sutampančius su %(glob)s dėl %(reason)s",
+            "created_rule_servers": "%(senderName)s sukūrė taisyklę, draudžiančią serverius, sutampančius su %(glob)s dėl %(reason)s",
+            "created_rule": "%(senderName)s sukūrė draudimo taisyklę, sutampančią su %(glob)s dėl %(reason)s",
+            "changed_rule_users": "%(senderName)s pakeitė taisyklę, kuri draudė vartotojus, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
+            "changed_rule_rooms": "%(senderName)s pakeitė taisyklę, kuri draudė kambarius, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
+            "changed_rule_servers": "%(senderName)s pakeitė taisyklę, kuri draudė serverius, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
+            "changed_rule_glob": "%(senderName)s atnaujino draudimo taisyklę, kuri sutapo su %(oldGlob)s į sutampančią su %(newGlob)s dėl %(reason)s"
         }
     },
     "slash_command": {
@@ -2616,5 +2621,19 @@
         "enable_prompt": "Padėkite pagerinti %(analyticsOwner)s",
         "consent_migration": "Anksčiau sutikote su mumis dalytis anoniminiais naudojimo duomenimis. Atnaujiname, kaip tai veikia.",
         "learn_more": "Dalinkitės anoniminiais duomenimis, kurie padės mums nustatyti problemas. Nieko asmeniško. Jokių trečiųjų šalių. <LearnMoreLink>Sužinokite daugiau</LearnMoreLink>"
+    },
+    "chat_effects": {
+        "confetti_description": "Siunčia pateiktą žinutę su konfeti",
+        "confetti_message": "siunčia konfeti",
+        "fireworks_description": "Siunčia pateiktą žinutę su fejerverkais",
+        "fireworks_message": "nusiunčia fejerverkus",
+        "rainfall_description": "Siunčia pateiktą žinutę su lietumi",
+        "rainfall_message": "siunčia lietų",
+        "snowfall_description": "Siunčia pateiktą žinutę su sniego krituliais",
+        "snowfall_message": "siunčia sniego kritulius",
+        "spaceinvaders_description": "Siunčia pateiktą žinutę su kosmoso temos efektu",
+        "spaceinvaders_message": "siunčia kosmoso įsibrovėlius",
+        "hearts_description": "Siunčia pateiktą žinutę su širdelėmis",
+        "hearts_message": "Siunčia širdeles"
     }
 }

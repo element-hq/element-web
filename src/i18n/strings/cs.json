@@ -94,7 +94,6 @@
     "Passwords can't be empty": "Hesla nemohou být prázdná",
     "Permissions": "Oprávnění",
     "Phone": "Telefon",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s změnil(a) úroveň oprávnění o %(powerLevelDiffText)s.",
     "Define the power level of a user": "Stanovte úroveň oprávnění uživatele",
     "Failed to change power level": "Nepodařilo se změnit úroveň oprávnění",
     "Power level must be positive integer.": "Úroveň oprávnění musí být kladné celé číslo.",
@@ -126,7 +125,6 @@
     "Check for update": "Zkontrolovat aktualizace",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Nelze se připojit k domovskému serveru přes HTTP, pokud je v adresním řádku HTTPS. Buď použijte HTTPS, nebo <a>povolte nezabezpečené skripty</a>.",
     "Displays action": "Zobrazí akci",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s z %(fromPowerLevel)s na %(toPowerLevel)s",
     "This doesn't appear to be a valid email address": "Tato e-mailová adresa se zdá být neplatná",
     "This phone number is already in use": "Toto telefonní číslo je již používáno",
     "This room is not accessible by remote Matrix servers": "Tato místnost není přístupná vzdáleným Matrix serverům",
@@ -286,7 +284,6 @@
     "You cannot delete this message. (%(code)s)": "Tuto zprávu nemůžete smazat. (%(code)s)",
     "Thursday": "Čtvrtek",
     "Search…": "Hledat…",
-    "Show message in desktop notification": "Zobrazit text zprávy v oznámení na ploše",
     "Yesterday": "Včera",
     "Error encountered (%(errorDetail)s).": "Nastala chyba (%(errorDetail)s).",
     "Low Priority": "Nízká priorita",
@@ -813,24 +810,6 @@
     "User Autocomplete": "Automatické doplňování uživatelů",
     "Error upgrading room": "Chyba při aktualizaci místnosti",
     "Double check that your server supports the room version chosen and try again.": "Zkontrolujte, že váš server opravdu podporuje zvolenou verzi místnosti.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s odstranil(a) pravidlo blokující uživatele odpovídající %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s odstranil pravidlo blokující místnosti odpovídající %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s odstranil pravidlo blokující servery odpovídající %(glob)s",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s odstranil blokující pravidlo %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s aktualizoval neplatné pravidlo blokování",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s aktualizoval(a) pravidlo blokující uživatele odpovídající %(glob)s z důvodu %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s aktualizoval pravidlo blokující místnosti odpovídající %(glob)s z důvodu %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s aktualizoval pravidlo blokující servery odpovídající %(glob)s z důvodu %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s aktualizoval blokovací pravidlo odpovídající %(glob)s z důvodu %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s vytvořil(a) pravidlo blokující uživatele odpovídající %(glob)s z důvodu %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s vytvořil pravidlo blokující místnosti odpovídající %(glob)s z důvodu %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s vytvořil pravidlo blokující servery odpovídající %(glob)s z důvodu %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s vytvořil blokovací pravidlo odpovídající %(glob)s z důvodu %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s změnil(a) pravidlo blokující uživatele odpovídající %(oldGlob)s na uživatele odpovídající %(newGlob)s z důvodu %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s změnil(a) pravidlo blokující místnosti odpovídající %(oldGlob)s na místnosti odpovídající %(newGlob)s z důvodu %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s změnil(a) pravidlo blokující servery odpovídající %(oldGlob)s na servery odpovídající %(newGlob)s z důvodu %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s změnil(a) blokovací pravidlo odpovídající %(oldGlob)s na odpovídající %(newGlob)s z důvodu %(reason)s",
-    "Match system theme": "Nastavit podle vzhledu systému",
     "My Ban List": "Můj seznam zablokovaných",
     "This is your list of users/servers you have blocked - don't leave the room!": "Toto je váš seznam blokovaných uživatelů/serverů - neopouštějte tuto místnost!",
     "Cannot connect to integration manager": "Nepovedlo se připojení ke správci integrací",
@@ -927,8 +906,6 @@
     "not stored": "není uložen",
     "This backup is trusted because it has been restored on this session": "Záloze věříme, protože už byla v této relaci načtena",
     "Your keys are <b>not being backed up from this session</b>.": "Vaše klíče <b>nejsou z této relace zálohovány</b>.",
-    "Enable desktop notifications for this session": "Povolit v této relaci oznámení",
-    "Enable audible notifications for this session": "Povolit v této relaci zvuková oznámení",
     "Session ID:": "ID relace:",
     "Session key:": "Klíč relace:",
     "Message search": "Vyhledávání ve zprávách",
@@ -1023,23 +1000,10 @@
     "Mark all as read": "Označit vše jako přečtené",
     "Not currently indexing messages for any room.": "Aktuálně neindexujeme žádné zprávy.",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s z %(totalRooms)s",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s přidal(a) této místnosti alternativní adresy %(addresses)s.",
-        "one": "%(senderName)s přidal(a) této místnosti alternativní adresu %(addresses)s."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s odebral(a) této místnosti alternativní adresy %(addresses)s.",
-        "one": "%(senderName)s odebral(a) této místnosti alternativní adresu %(addresses)s."
-    },
     "Manually verify all remote sessions": "Ručně ověřit všechny relace",
     "cached locally": "uložen lokálně",
     "not found locally": "nenalezen lolálně",
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Individuálně ověřit každou uživatelovu relaci a označit jí za důvěryhodnou, bez důvěry v křížový podpis.",
-    "Invalid theme schema.": "Neplatné schéma vzhledu.",
-    "Error downloading theme information.": "Nepovedlo se stáhnout informace o vzhledu.",
-    "Theme added!": "Motiv vzhledu přidán!",
-    "Custom theme URL": "URL adresa vlastního vzhledu",
-    "Add theme": "Přidat motiv vzhledu",
     "Scroll to most recent messages": "Přejít na poslední zprávy",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Nepovedlo se změnit alternativní adresy místnosti. Možná to server neumožňuje a nebo je to dočasná chyba.",
     "Local address": "Lokální adresa",
@@ -1093,7 +1057,6 @@
     "There was a problem communicating with the server. Please try again.": "Došlo k potížím při komunikaci se serverem. Zkuste to prosím znovu.",
     "Opens chat with the given user": "Otevře konverzaci s tímto uživatelem",
     "Joins room with given address": "Vstoupit do místnosti s danou adresou",
-    "Font size": "Velikost písma",
     "IRC display name width": "šířka zobrazovného IRC jména",
     "unexpected type": "neočekávaný typ",
     "Size must be a number": "Velikost musí být číslo",
@@ -1139,9 +1102,6 @@
     "Click the button below to confirm your identity.": "Klikněte na tlačítko níže pro potvrzení vaší identity.",
     "a new master key signature": "nový podpis hlavního klíče",
     "New version available. <a>Update now.</a>": "Je dostupná nová verze. <a>Aktualizovat nyní.</a>",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Zadejte jméno písma, které máte naistalované v systému, a %(brand)s se jej pokusí použít.",
-    "Customise your appearance": "Přizpůsobte si vzhled aplikace",
-    "Appearance Settings only affect this %(brand)s session.": "Nastavení vzhledu působí jen v této relaci programu %(brand)s.",
     "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Sem přídejte servery a uživatele, které chcete ignorovat. Hvězdička pro %(brand)s zastupuje libovolný počet kterýchkoliv znaků. Např. <code>@bot:*</code> bude ignorovat všechny uživatele se jménem „bot“ na kterémkoliv serveru.",
     "Signature upload success": "Podpis úspěšně nahrán",
     "Signature upload failed": "Podpis se nepodařilo nahrát",
@@ -1149,8 +1109,6 @@
     "Unexpected server error trying to leave the room": "Neočekávaná chyba serveru při odcházení z místnosti",
     "Change notification settings": "Upravit nastavení oznámení",
     "Use custom size": "Použít vlastní velikost",
-    "Use a system font": "Používat systémové nastavení písma",
-    "System font name": "Jméno systémového písma",
     "Your server isn't responding to some <a>requests</a>.": "Váš server neodpovídá na některé <a>požadavky</a>.",
     "Master private key:": "Hlavní soukromý klíč:",
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s nemůže bezpečně ukládat šifrované zprávy lokálně v prohlížeči. Pro zobrazení šifrovaných zpráv ve výsledcích vyhledávání použijte <desktopLink>%(brand)s Desktop</desktopLink>.",
@@ -1652,10 +1610,6 @@
     "Send <b>%(msgtype)s</b> messages as you in your active room": "Poslat zprávy <b>%(msgtype)s</b> jako vy ve vašá aktivní místnosti",
     "See <b>%(msgtype)s</b> messages posted to this room": "Prohlédnout zprávy <b>%(msgtype)s</b> zveřejněné v této místnosti",
     "See <b>%(msgtype)s</b> messages posted to your active room": "Prohlédnout zprávy <b>%(msgtype)s</b> zveřejněné ve vaší aktivní místnosti",
-    "Sends the given message with confetti": "Pošle zprávu s konfetami",
-    "sends confetti": "pošle konfety",
-    "Sends the given message with fireworks": "Pošle zprávu s ohňostrojem",
-    "sends fireworks": "pošle ohňostroj",
     "The <b>%(capability)s</b> capability": "Schopnost <b>%(capability)s</b>",
     "See <b>%(eventType)s</b> events posted to your active room": "Zobrazit události <b>%(eventType)s</b> odeslané do vaší aktivní místnosti",
     "Send <b>%(eventType)s</b> events as you in your active room": "Poslat události <b>%(eventType)s</b> jako vy ve vaší aktivní místnosti",
@@ -1675,8 +1629,6 @@
     "See when the name changes in this room": "Podívejte se, kdy se změní název v této místnosti",
     "See when the topic changes in your active room": "Podívejte se, kdy se změní téma ve vaší aktivní místnosti",
     "See when the topic changes in this room": "Podívejte se, kdy se změní téma v této místnosti",
-    "sends snowfall": "pošle sněžení",
-    "Sends the given message with snowfall": "Pošle zprávu se sněžením",
     "You have no visible notifications.": "Nejsou dostupná žádná oznámení.",
     "Transfer": "Přepojit",
     "Failed to transfer call": "Hovor se nepodařilo přepojit",
@@ -1870,8 +1822,6 @@
     "Add reaction": "Přidat reakci",
     "Space Autocomplete": "Automatické dokončení prostoru",
     "Go to my space": "Přejít do mého prostoru",
-    "sends space invaders": "pošle space invaders",
-    "Sends the given message with a space themed effect": "Odešle zadanou zprávu s efektem vesmíru",
     "See when people join, leave, or are invited to your active room": "Zjistěte, kdy se lidé připojí, odejdou nebo jsou pozváni do vaší aktivní místnosti",
     "See when people join, leave, or are invited to this room": "Zjistěte, kdy se lidé připojí, odejdou nebo jsou pozváni do této místnosti",
     "Currently joining %(count)s rooms": {
@@ -1965,10 +1915,6 @@
     "This upgrade will allow members of selected spaces access to this room without an invite.": "Tato změna umožní členům vybraných prostorů přístup do této místnosti bez pozvánky.",
     "There was an error loading your notification settings.": "Došlo k chybě při načítání nastavení oznámení.",
     "Global": "Globální",
-    "Enable email notifications for %(email)s": "Povolení e-mailových oznámení pro %(email)s",
-    "An error occurred whilst saving your notification preferences.": "Při ukládání předvoleb oznámení došlo k chybě.",
-    "Error saving notification preferences": "Chyba při ukládání předvoleb oznámení",
-    "Messages containing keywords": "Zprávy obsahující klíčová slova",
     "Error downloading audio": "Chyba při stahování audia",
     "No answer": "Žádná odpověď",
     "An unknown error occurred": "Došlo k neznámé chybě",
@@ -2150,7 +2096,6 @@
     "Yours, or the other users' internet connection": "Vaše internetové připojení nebo připojení ostatních uživatelů",
     "The homeserver the user you're verifying is connected to": "Domovský server, ke kterému je ověřovaný uživatel připojen",
     "This room isn't bridging messages to any platforms. <a>Learn more.</a>": "Tato místnost nepropojuje zprávy s žádnou platformou. <a>Zjistit více.</a>",
-    "Use high contrast": "Použít vysoký kontrast",
     "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Tato místnost se nachází v některých prostorech, jejichž nejste správcem. V těchto prostorech bude stará místnost stále zobrazena, ale lidé budou vyzváni, aby se připojili k nové místnosti.",
     "Select all": "Vybrat všechny",
     "Deselect all": "Zrušit výběr všech",
@@ -2200,12 +2145,9 @@
     "@mentions & keywords": "@zmínky a klíčová slova",
     "Get notified for every message": "Dostávat oznámení o každé zprávě",
     "Get notifications as set up in your <a>settings</a>": "Dostávat oznámení podle <a>nastavení</a>",
-    "sends rainfall": "pošle dešťové srážky",
-    "Sends the given message with rainfall": "Pošle zprávu s dešťovými srážkami",
     "Close this widget to view it in this panel": "Zavřít tento widget a zobrazit ho na tomto panelu",
     "Unpin this widget to view it in this panel": "Odepnout tento widget a zobrazit ho na tomto panelu",
     "Large": "Velký",
-    "Image size in the timeline": "Velikost obrázku na časové ose",
     "Based on %(count)s votes": {
         "one": "Na základě %(count)s hlasu",
         "other": "Na základě %(count)s hlasů"
@@ -2430,7 +2372,6 @@
         "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
     },
     "Share for %(duration)s": "Sdílet na %(duration)s",
-    "%(timeRemaining)s left": "%(timeRemaining)s zbývá",
     "Next recently visited room or space": "Další nedávno navštívená místnost nebo prostor",
     "Previous recently visited room or space": "Předchozí nedávno navštívená místnost nebo prostor",
     "Unsent": "Neodeslané",
@@ -2478,8 +2419,6 @@
     "New room": "Nová místnost",
     "%(featureName)s Beta feedback": "Zpětná vazba beta funkce %(featureName)s",
     "Threads help keep your conversations on-topic and easy to track.": "Vlákna pomáhají udržovat konverzace k tématu a snadno je sledovat.",
-    "sends hearts": "posílá srdíčka",
-    "Sends the given message with hearts": "Odešle danou zprávu se srdíčky",
     "Confirm signing out these devices": {
         "one": "Potvrďte odhlášení z tohoto zařízení",
         "other": "Potvrďte odhlášení z těchto zařízení"
@@ -2693,9 +2632,6 @@
     "Receive push notifications on this session.": "Přijímat push oznámení v této relaci.",
     "Toggle push notifications on this session.": "Přepnout push oznámení v této relaci.",
     "Push notifications": "Push oznámení",
-    "Enable notifications for this device": "Povolit oznámení pro toto zařízení",
-    "Turn off to disable notifications on all your devices and sessions": "Vypnutím zakážete oznámení na všech zařízeních a relacích",
-    "Enable notifications for this account": "Povolit oznámení pro tento účet",
     "Video call ended": "Videohovor ukončen",
     "%(name)s started a video call": "%(name)s zahájil(a) videohovor",
     "Record the client name, version, and url to recognise sessions more easily in session manager": "Zaznamenat název, verzi a url pro snadnější rozpoznání relací ve správci relací",
@@ -3303,7 +3239,18 @@
         "sliding_sync_description": "V aktivním vývoji, nelze zakázat.",
         "under_active_development": "V aktivním vývoji.",
         "location_share_live_description": "Dočasná implementace. Polohy zůstanou v historii místností.",
-        "dynamic_room_predecessors_description": "Povolit MSC3946 (podpora pozdních archivů místností)"
+        "dynamic_room_predecessors_description": "Povolit MSC3946 (podpora pozdních archivů místností)",
+        "group_messaging": "Zprávy",
+        "group_profile": "Profil",
+        "group_spaces": "Prostory",
+        "group_widgets": "Widgety",
+        "group_rooms": "Místnosti",
+        "group_voip": "Zvuk a video",
+        "group_moderation": "Moderování",
+        "group_themes": "Motivy vzhledu",
+        "group_encryption": "Šifrování",
+        "group_experimental": "Experimentální",
+        "group_developer": "Pro vývojáře"
     },
     "keyboard": {
         "home": "Domov",
@@ -3399,7 +3346,8 @@
         "few_seconds_ago": "před pár vteřinami",
         "about_minute_ago": "před minutou",
         "about_hour_ago": "asi před hodinou",
-        "about_day_ago": "před jedním dnem"
+        "about_day_ago": "před jedním dnem",
+        "left": "%(timeRemaining)s zbývá"
     },
     "onboarding": {
         "personal_messaging_title": "Zabezpečené zasílání zpráv pro přátele a rodinu",
@@ -3486,11 +3434,37 @@
             "rule_call": "Pozvánka k hovoru",
             "rule_suppress_notices": "Zprávy poslané robotem",
             "rule_tombstone": "Při aktualizaci místnosti",
-            "rule_encrypted_room_one_to_one": "Šifrované přímé zprávy"
+            "rule_encrypted_room_one_to_one": "Šifrované přímé zprávy",
+            "messages_containing_keywords": "Zprávy obsahující klíčová slova",
+            "error_saving": "Chyba při ukládání předvoleb oznámení",
+            "error_saving_detail": "Při ukládání předvoleb oznámení došlo k chybě.",
+            "enable_notifications_account": "Povolit oznámení pro tento účet",
+            "enable_notifications_account_detail": "Vypnutím zakážete oznámení na všech zařízeních a relacích",
+            "enable_email_notifications": "Povolení e-mailových oznámení pro %(email)s",
+            "enable_notifications_device": "Povolit oznámení pro toto zařízení",
+            "enable_desktop_notifications_session": "Povolit v této relaci oznámení",
+            "show_message_desktop_notification": "Zobrazit text zprávy v oznámení na ploše",
+            "enable_audible_notifications_session": "Povolit v této relaci zvuková oznámení"
         },
         "appearance": {
             "layout_irc": "IRC (experimentální)",
-            "layout_bubbles": "Bubliny zpráv"
+            "layout_bubbles": "Bubliny zpráv",
+            "heading": "Přizpůsobte si vzhled aplikace",
+            "subheading": "Nastavení vzhledu působí jen v této relaci programu %(brand)s.",
+            "match_system_theme": "Nastavit podle vzhledu systému",
+            "custom_font": "Používat systémové nastavení písma",
+            "custom_font_name": "Jméno systémového písma",
+            "custom_theme_invalid": "Neplatné schéma vzhledu.",
+            "custom_theme_error_downloading": "Nepovedlo se stáhnout informace o vzhledu.",
+            "custom_theme_success": "Motiv vzhledu přidán!",
+            "custom_theme_url": "URL adresa vlastního vzhledu",
+            "use_high_contrast": "Použít vysoký kontrast",
+            "custom_theme_add_button": "Přidat motiv vzhledu",
+            "font_size": "Velikost písma",
+            "custom_font_description": "Zadejte jméno písma, které máte naistalované v systému, a %(brand)s se jej pokusí použít.",
+            "timeline_image_size": "Velikost obrázku na časové ose",
+            "timeline_image_size_default": "Výchozí",
+            "timeline_image_size_large": "Velký"
         }
     },
     "devtools": {
@@ -3703,7 +3677,15 @@
             "removed": "%(senderName)s zrušil hlavní adresu této místnosti.",
             "changed_alternative": "%(senderName)s změnil(a) alternativní adresy této místnosti.",
             "changed_main_and_alternative": "%(senderName)s změnil(a) hlavní a alternativní adresy této místnosti.",
-            "changed": "%(senderName)s změnil(a) adresy této místnosti."
+            "changed": "%(senderName)s změnil(a) adresy této místnosti.",
+            "alt_added": {
+                "other": "%(senderName)s přidal(a) této místnosti alternativní adresy %(addresses)s.",
+                "one": "%(senderName)s přidal(a) této místnosti alternativní adresu %(addresses)s."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s odebral(a) této místnosti alternativní adresy %(addresses)s.",
+                "one": "%(senderName)s odebral(a) této místnosti alternativní adresu %(addresses)s."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s zrušil(a) pozvání do této místnosti pro uživatele %(targetDisplayName)s.",
@@ -3884,6 +3866,29 @@
                 "one": "%(oneUser)sodeslal(a) skrytou zprávu",
                 "other": "%(oneUser)s odeslal(a) %(count)s skrytých zpráv"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s změnil(a) úroveň oprávnění o %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s z %(fromPowerLevel)s na %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s odstranil(a) pravidlo blokující uživatele odpovídající %(glob)s",
+            "removed_rule_rooms": "%(senderName)s odstranil pravidlo blokující místnosti odpovídající %(glob)s",
+            "removed_rule_servers": "%(senderName)s odstranil pravidlo blokující servery odpovídající %(glob)s",
+            "removed_rule": "%(senderName)s odstranil blokující pravidlo %(glob)s",
+            "updated_invalid_rule": "%(senderName)s aktualizoval neplatné pravidlo blokování",
+            "updated_rule_users": "%(senderName)s aktualizoval(a) pravidlo blokující uživatele odpovídající %(glob)s z důvodu %(reason)s",
+            "updated_rule_rooms": "%(senderName)s aktualizoval pravidlo blokující místnosti odpovídající %(glob)s z důvodu %(reason)s",
+            "updated_rule_servers": "%(senderName)s aktualizoval pravidlo blokující servery odpovídající %(glob)s z důvodu %(reason)s",
+            "updated_rule": "%(senderName)s aktualizoval blokovací pravidlo odpovídající %(glob)s z důvodu %(reason)s",
+            "created_rule_users": "%(senderName)s vytvořil(a) pravidlo blokující uživatele odpovídající %(glob)s z důvodu %(reason)s",
+            "created_rule_rooms": "%(senderName)s vytvořil pravidlo blokující místnosti odpovídající %(glob)s z důvodu %(reason)s",
+            "created_rule_servers": "%(senderName)s vytvořil pravidlo blokující servery odpovídající %(glob)s z důvodu %(reason)s",
+            "created_rule": "%(senderName)s vytvořil blokovací pravidlo odpovídající %(glob)s z důvodu %(reason)s",
+            "changed_rule_users": "%(senderName)s změnil(a) pravidlo blokující uživatele odpovídající %(oldGlob)s na uživatele odpovídající %(newGlob)s z důvodu %(reason)s",
+            "changed_rule_rooms": "%(senderName)s změnil(a) pravidlo blokující místnosti odpovídající %(oldGlob)s na místnosti odpovídající %(newGlob)s z důvodu %(reason)s",
+            "changed_rule_servers": "%(senderName)s změnil(a) pravidlo blokující servery odpovídající %(oldGlob)s na servery odpovídající %(newGlob)s z důvodu %(reason)s",
+            "changed_rule_glob": "%(senderName)s změnil(a) blokovací pravidlo odpovídající %(oldGlob)s na odpovídající %(newGlob)s z důvodu %(reason)s"
         }
     },
     "slash_command": {
@@ -4083,5 +4088,19 @@
         "bullet_1": "<Bold>Nezaznamenáváme ani neprofilujeme</Bold> žádné údaje o účtu",
         "bullet_2": "<Bold>Nesdílíme</Bold> informace s třetími stranami",
         "disable_prompt": "Tuto funkci můžete kdykoli vypnout v nastavení"
+    },
+    "chat_effects": {
+        "confetti_description": "Pošle zprávu s konfetami",
+        "confetti_message": "pošle konfety",
+        "fireworks_description": "Pošle zprávu s ohňostrojem",
+        "fireworks_message": "pošle ohňostroj",
+        "rainfall_description": "Pošle zprávu s dešťovými srážkami",
+        "rainfall_message": "pošle dešťové srážky",
+        "snowfall_description": "Pošle zprávu se sněžením",
+        "snowfall_message": "pošle sněžení",
+        "spaceinvaders_description": "Odešle zadanou zprávu s efektem vesmíru",
+        "spaceinvaders_message": "pošle space invaders",
+        "hearts_description": "Odešle danou zprávu se srdíčky",
+        "hearts_message": "posílá srdíčka"
     }
 }

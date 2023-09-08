@@ -30,7 +30,6 @@
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Nem lehet kapcsolódni a Matrix-kiszolgálóhoz – ellenőrizze a kapcsolatot, győződjön meg arról, hogy a <a>Matrix-kiszolgáló tanúsítványa</a> hiteles, és hogy a böngészőkiegészítők nem blokkolják a kéréseket.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Nem lehet HTTP-vel csatlakozni a Matrix-kiszolgálóhoz, ha HTTPS van a böngésző címsorában. Vagy használjon HTTPS-t vagy <a>engedélyezze a nem biztonságos parancsfájlokat</a>.",
     "Change Password": "Jelszó módosítása",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s megváltoztatta a hozzáférési szintet: %(powerLevelDiffText)s.",
     "Command error": "Parancshiba",
     "Commands": "Parancsok",
     "Confirm password": "Jelszó megerősítése",
@@ -61,7 +60,6 @@
     "Filter room members": "Szoba tagság szűrése",
     "Forget room": "Szoba elfelejtése",
     "For security, this session has been signed out. Please sign in again.": "A biztonság érdekében ez a kapcsolat le lesz bontva. Légy szíves jelentkezz be újra.",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s: %(fromPowerLevel)s -> %(toPowerLevel)s",
     "Historical": "Archív",
     "Home": "Kezdőlap",
     "Import E2E room keys": "E2E szobakulcsok importálása",
@@ -297,7 +295,6 @@
     "Thursday": "Csütörtök",
     "Search…": "Keresés…",
     "Logs sent": "Napló elküldve",
-    "Show message in desktop notification": "Üzenet megjelenítése az asztali értesítésekben",
     "Yesterday": "Tegnap",
     "Error encountered (%(errorDetail)s).": "Hiba történt (%(errorDetail)s).",
     "Low Priority": "Alacsony prioritás",
@@ -861,7 +858,6 @@
     "Integrations not allowed": "Az integrációk nem engedélyezettek",
     "Manage integrations": "Integrációk kezelése",
     "Verification Request": "Ellenőrzési kérés",
-    "Match system theme": "Rendszer témájához megfelelő",
     "Error upgrading room": "Hiba a szoba verziófrissítésekor",
     "Double check that your server supports the room version chosen and try again.": "Ellenőrizze még egyszer, hogy a kiszolgálója támogatja-e kiválasztott szobaverziót, és próbálja újra.",
     "Unencrypted": "Titkosítatlan",
@@ -879,23 +875,6 @@
     "Secret storage public key:": "Titkos tároló nyilvános kulcsa:",
     "in account data": "fiókadatokban",
     "Unable to set up secret storage": "A biztonsági tárolót nem sikerült beállítani",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s törölte azt a szabályt, amellyel az ennek megfelelő felhasználók voltak kitiltva: %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s törölte azt a szabályt, amellyel az ennek megfelelő szobák voltak kitiltva: %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s törölte azt a szabályt, amellyel az ennek megfelelő kiszolgálók ki voltak tiltva: %(glob)s",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s törölte az ennek megfelelő kitiltó szabályt: %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s frissített egy érvénytelen kitiltó szabályt",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s frissítette azt a szabályt, amellyel az ennek megfelelő felhasználók voltak kitiltva: %(glob)s, ok: %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s frissítette azt a szabályt, amellyel az ennek megfelelő szobák voltak kitiltva: %(glob)s, ok: %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s frissítette azt a szabályt, amellyel az ennek megfelelő kiszolgálók voltak kitiltva: %(glob)s, ok: %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s frissítette ezt a kitiltó szabályt: %(glob)s, ok: %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő felhasználók voltak kitiltva: %(glob)s, ok: %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő szobák voltak kitiltva: %(glob)s, ok: %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő kiszolgálók voltak kitiltva: %(glob)s, ok: %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s hozzáadta ezt a kitiltó szabályt: %(glob)s, ok: %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s megváltoztatta a felhasználókat kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s megváltoztatta a szobákat kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s megváltoztatta a kiszolgálókat kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s megváltoztatta a kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s",
     "not stored": "nincs tárolva",
     "Hide verified sessions": "Ellenőrzött munkamenetek eltakarása",
     "%(count)s verified sessions": {
@@ -962,8 +941,6 @@
     "Connect this session to Key Backup": "Munkamenet csatlakoztatása a kulcsmentéshez",
     "This backup is trusted because it has been restored on this session": "Ez a mentés megbízható, mert ebben a munkamenetben lett helyreállítva",
     "Your keys are <b>not being backed up from this session</b>.": "A kulcsai <b>nem kerülnek mentésre ebből a munkamenetből</b>.",
-    "Enable desktop notifications for this session": "Asztali értesítések engedélyezése ehhez a munkamenethez",
-    "Enable audible notifications for this session": "Hallható értesítések engedélyezése ehhez a munkamenethez",
     "Session ID:": "Munkamenetazonosító:",
     "Session key:": "Munkamenetkulcs:",
     "This user has not verified all of their sessions.": "Ez a felhasználó még nem ellenőrizte az összes munkamenetét.",
@@ -1026,20 +1003,7 @@
     "Mark all as read": "Összes megjelölése olvasottként",
     "Not currently indexing messages for any room.": "Jelenleg egyik szoba indexelése sem történik.",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s / %(totalRooms)s",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s hozzáadta a szoba alternatív címeit: %(addresses)s.",
-        "one": "%(senderName)s alternatív címeket adott hozzá a szobához: %(addresses)s."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s eltávolította az alternatív címeket a szobáról: %(addresses)s.",
-        "one": "%(senderName)s eltávolította az alternatív címet a szobáról: %(addresses)s."
-    },
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "A szoba címének megváltoztatásakor hiba történt. Lehet, hogy a szerver nem engedélyezi vagy átmeneti hiba történt.",
-    "Invalid theme schema.": "Érvénytelen témaséma.",
-    "Error downloading theme information.": "Hiba a témainformációk letöltése során.",
-    "Theme added!": "Téma hozzáadva!",
-    "Custom theme URL": "Egyéni téma webcíme",
-    "Add theme": "Téma hozzáadása",
     "Self signing private key:": "Önaláíró titkos kulcs:",
     "cached locally": "helyben gyorsítótárazott",
     "not found locally": "nem található helyben",
@@ -1153,7 +1117,6 @@
     "Jump to oldest unread message": "A legrégebbi olvasatlan üzenetre ugrás",
     "Upload a file": "Fájl feltöltése",
     "Joins room with given address": "A megadott címmel csatlakozik a szobához",
-    "Font size": "Betűméret",
     "IRC display name width": "IRC-n megjelenítendő név szélessége",
     "Size must be a number": "A méretnek számnak kell lennie",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Az egyéni betűméret csak %(min)s pont és %(max)s pont közötti lehet",
@@ -1191,13 +1154,10 @@
     "Switch theme": "Kinézet váltása",
     "All settings": "Minden beállítás",
     "Feedback": "Visszajelzés",
-    "Customise your appearance": "A megjelenés testreszabása",
     "Activity": "Aktivitás",
     "A-Z": "A-Z",
     "Looks good!": "Jónak tűnik!",
     "Use custom size": "Egyéni méret használata",
-    "Use a system font": "Rendszer betűkészletének használata",
-    "System font name": "Rendszer betűkészletének neve",
     "Hey you. You're the best!": "Szia! Te vagy a legjobb!",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni.",
     "Message deleted on %(date)s": "Az üzenetet ekkor törölték: %(date)s",
@@ -1214,14 +1174,12 @@
     "Set a Security Phrase": "Biztonsági Jelmondat beállítása",
     "Confirm Security Phrase": "Biztonsági jelmondat megerősítése",
     "Save your Security Key": "Mentse el a biztonsági kulcsát",
-    "Appearance Settings only affect this %(brand)s session.": "A megjelenés beállításai csak erre az %(brand)s munkamenetre lesznek érvényesek.",
     "Notification options": "Értesítési beállítások",
     "Favourited": "Kedvencnek jelölt",
     "Forget Room": "Szoba elfelejtése",
     "This room is public": "Ez egy nyilvános szoba",
     "Are you sure you want to cancel entering passphrase?": "Biztos, hogy megszakítja a jelmondat bevitelét?",
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "A(z) %(brand)s nem képes helyileg biztonságosan elmenteni a titkosított üzeneteket, ha webböngészőben fut. Használja az <desktopLink>asztali %(brand)s</desktopLink> alkalmazást, hogy az üzenetekben való kereséskor a titkosított üzenetek is megjelenjenek.",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Adja meg a rendszer által használt betűkészlet nevét, és az %(brand)s megpróbálja azt használni.",
     "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "A mellőzendő felhasználókat és kiszolgálókat itt adja meg. Használjon csillagot a(z) %(brand)s kliensben, hogy minden karakterre illeszkedjen. Például a <code>@bot:*</code> figyelmen kívül fog hagyni minden „bot” nevű felhasználót, minden kiszolgálóról.",
     "Show rooms with unread messages first": "Olvasatlan üzeneteket tartalmazó szobák megjelenítése elől",
     "Show previews of messages": "Üzenet előnézet megjelenítése",
@@ -1607,10 +1565,6 @@
     "Continuing without email": "Folytatás e-mail-cím nélkül",
     "Reason (optional)": "Ok (opcionális)",
     "Continue with %(provider)s": "Folytatás ezzel a szolgáltatóval: %(provider)s",
-    "sends fireworks": "tűzijátékot küld",
-    "Sends the given message with fireworks": "Tűzijátékkal küldi el az üzenetet",
-    "sends confetti": "konfettit küld",
-    "Sends the given message with confetti": "Konfettivel küldi el az üzenetet",
     "See <b>%(msgtype)s</b> messages posted to your active room": "Az aktív szobájába küldött <b>%(msgtype)s</b> üzenetek megjelenítése",
     "See <b>%(msgtype)s</b> messages posted to this room": "Az ebbe a szobába küldött <b>%(msgtype)s</b> üzenetek megjelenítése",
     "See general files posted to your active room": "Az aktív szobádba küldött fájlok megjelenítése",
@@ -1674,8 +1628,6 @@
         "one": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között, ehhez %(size)s helyet használ %(rooms)s szoba üzeneteihez.",
         "other": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között, ehhez %(size)s helyet használ %(rooms)s szoba üzeneteihez."
     },
-    "sends snowfall": "hóesést küld",
-    "Sends the given message with snowfall": "Hóeséssel küldi el az üzenetet",
     "See emotes posted to your active room": "Az aktív szobájába küldött emodzsik megjelenítése",
     "See emotes posted to this room": "Ebbe a szobába küldött emodzsik megjelenítése",
     "You have no visible notifications.": "Nincsenek látható értesítések.",
@@ -1871,8 +1823,6 @@
     "Go to my space": "Irány a teréhez",
     "Search names and descriptions": "Nevek és leírások keresése",
     "You may contact me if you have any follow up questions": "Ha további kérdés merülne fel, kapcsolatba léphetnek velem",
-    "sends space invaders": "space invaders küldése",
-    "Sends the given message with a space themed effect": "Világűrös effekttel küldi el az üzenetet",
     "See when people join, leave, or are invited to your active room": "Emberek belépésének, távozásának vagy meghívásának a megjelenítése az aktív szobájában",
     "See when people join, leave, or are invited to this room": "Emberek belépésének, távozásának vagy meghívásának a megjelenítése ebben a szobában",
     "Currently joining %(count)s rooms": {
@@ -2004,10 +1954,6 @@
     "Global": "Globális",
     "New keyword": "Új kulcsszó",
     "Keyword": "Kulcsszó",
-    "Enable email notifications for %(email)s": "E-mail értesítések engedélyezése ehhez: %(email)s",
-    "An error occurred whilst saving your notification preferences.": "Hiba történt az értesítési beállításai mentése során.",
-    "Error saving notification preferences": "Hiba az értesítési beállítások mentése során",
-    "Messages containing keywords": "Kulcsszavakat tartalmazó üzenetek",
     "Transfer Failed": "Átadás sikertelen",
     "Unable to transfer call": "A hívás átadása nem lehetséges",
     "Anyone will be able to find and join this room.": "Bárki megtalálhatja és beléphet ebbe a szobába.",
@@ -2135,7 +2081,6 @@
     "Joined": "Csatlakozott",
     "Insert link": "Link beillesztése",
     "Joining": "Belépés",
-    "Use high contrast": "Nagy kontraszt használata",
     "Light high contrast": "Világos, nagy kontrasztú",
     "Automatically send debug logs on any error": "Hibakeresési naplók automatikus küldése bármilyen hiba esetén",
     "Click the button below to confirm signing out these devices.": {
@@ -2187,8 +2132,6 @@
     "Spaces to show": "Megjelenítendő terek",
     "Sidebar": "Oldalsáv",
     "Other rooms": "További szobák",
-    "sends rainfall": "esőt küld",
-    "Sends the given message with rainfall": "Esővel küldi el az üzenetet",
     "Show all your rooms in Home, even if they're in a space.": "Minden szoba megjelenítése a Kezdőlapon, akkor is ha egy tér része.",
     "Home is useful for getting an overview of everything.": "A Kezdőlap áttekintést adhat mindenről.",
     "Show all threads": "Minden üzenetszál megjelenítése",
@@ -2205,7 +2148,6 @@
     "Get notifications as set up in your <a>settings</a>": "Értesítések fogadása a <a>beállításokban</a> megadottak szerint",
     "Rooms outside of a space": "Téren kívüli szobák",
     "Large": "Nagy",
-    "Image size in the timeline": "Képméret az idővonalon",
     "Based on %(count)s votes": {
         "one": "%(count)s szavazat alapján",
         "other": "%(count)s szavazat alapján"
@@ -2426,7 +2368,6 @@
     },
     "Next recently visited room or space": "Következő, nemrég meglátogatott szoba vagy tér",
     "Previous recently visited room or space": "Előző, nemrég meglátogatott szoba vagy tér",
-    "%(timeRemaining)s left": "Maradék idő: %(timeRemaining)s",
     "Unsent": "Elküldetlen",
     "Uncheck if you also want to remove system messages on this user (e.g. membership change, profile change…)": "Törölje a kijelölést ha a rendszer üzeneteket is törölni szeretné ettől a felhasználótól (pl. tagság változás, profil változás…)",
     "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?": {
@@ -2497,8 +2438,6 @@
         "one": "Megerősítés ebből az eszközből való kijelentkezéshez",
         "other": "Megerősítés ezekből az eszközökből való kijelentkezéshez"
     },
-    "sends hearts": "szívecskéket küld",
-    "Sends the given message with hearts": "Szívecskékkel küldi el az üzenetet",
     "Failed to join": "Csatlakozás sikertelen",
     "The person who invited you has already left, or their server is offline.": "Aki meghívta a szobába már távozott, vagy a kiszolgálója nem érhető el.",
     "The person who invited you has already left.": "A személy, aki meghívta, már távozott.",
@@ -2694,9 +2633,6 @@
     "Receive push notifications on this session.": "Leküldéses értesítések fogadása ebben a munkamenetben.",
     "Push notifications": "Leküldéses értesítések",
     "Toggle push notifications on this session.": "Leküldéses értesítések be- és kikapcsolása ebben a munkamenetben.",
-    "Enable notifications for this device": "Értesítések engedélyezése ehhez az eszközhöz",
-    "Turn off to disable notifications on all your devices and sessions": "Kapcsolja ki, hogy letiltsa az értesítéseket az összes eszközökén és munkamenetében",
-    "Enable notifications for this account": "Értesítések engedélyezése ehhez a fiókhoz",
     "Live": "Élő közvetítés",
     "Sorry — this call is currently full": "Bocsánat — ez a hívás betelt",
     "Record the client name, version, and url to recognise sessions more easily in session manager": "A kliens nevének, verziójának és webcímének felvétele a munkamenetek könnyebb felismerése érdekében a munkamenet-kezelőben",
@@ -3223,7 +3159,18 @@
         "sliding_sync_description": "Aktív fejlesztés alatt, nem kapcsolható ki.",
         "under_active_development": "Aktív fejlesztés alatt.",
         "location_share_live_description": "Átmeneti megvalósítás. A helyadatok megmaradnak a szoba naplójában.",
-        "dynamic_room_predecessors_description": "MSC3946 engedélyezése (a későn érkező szobaarchívumok támogatáshoz)"
+        "dynamic_room_predecessors_description": "MSC3946 engedélyezése (a későn érkező szobaarchívumok támogatáshoz)",
+        "group_messaging": "Üzenetküldés",
+        "group_profile": "Profil",
+        "group_spaces": "Terek",
+        "group_widgets": "Kisalkalmazások",
+        "group_rooms": "Szobák",
+        "group_voip": "Hang és videó",
+        "group_moderation": "Moderálás",
+        "group_themes": "Témák",
+        "group_encryption": "Titkosítás",
+        "group_experimental": "Kísérleti",
+        "group_developer": "Fejlesztői"
     },
     "keyboard": {
         "home": "Kezdőlap",
@@ -3319,7 +3266,8 @@
         "few_seconds_ago": "néhány másodperce",
         "about_minute_ago": "egy perce",
         "about_hour_ago": "egy órája",
-        "about_day_ago": "egy napja"
+        "about_day_ago": "egy napja",
+        "left": "Maradék idő: %(timeRemaining)s"
     },
     "onboarding": {
         "personal_messaging_title": "Biztonságos üzenetküldés barátokkal, családdal",
@@ -3404,11 +3352,37 @@
             "rule_call": "Hívásmeghívások",
             "rule_suppress_notices": "Botok üzenetei",
             "rule_tombstone": "Amikor a szobák fejlesztésre kerülnek",
-            "rule_encrypted_room_one_to_one": "A közvetlen csevegések titkosított üzenetei"
+            "rule_encrypted_room_one_to_one": "A közvetlen csevegések titkosított üzenetei",
+            "messages_containing_keywords": "Kulcsszavakat tartalmazó üzenetek",
+            "error_saving": "Hiba az értesítési beállítások mentése során",
+            "error_saving_detail": "Hiba történt az értesítési beállításai mentése során.",
+            "enable_notifications_account": "Értesítések engedélyezése ehhez a fiókhoz",
+            "enable_notifications_account_detail": "Kapcsolja ki, hogy letiltsa az értesítéseket az összes eszközökén és munkamenetében",
+            "enable_email_notifications": "E-mail értesítések engedélyezése ehhez: %(email)s",
+            "enable_notifications_device": "Értesítések engedélyezése ehhez az eszközhöz",
+            "enable_desktop_notifications_session": "Asztali értesítések engedélyezése ehhez a munkamenethez",
+            "show_message_desktop_notification": "Üzenet megjelenítése az asztali értesítésekben",
+            "enable_audible_notifications_session": "Hallható értesítések engedélyezése ehhez a munkamenethez"
         },
         "appearance": {
             "layout_irc": "IRC (kísérleti)",
-            "layout_bubbles": "Üzenetbuborékok"
+            "layout_bubbles": "Üzenetbuborékok",
+            "heading": "A megjelenés testreszabása",
+            "subheading": "A megjelenés beállításai csak erre az %(brand)s munkamenetre lesznek érvényesek.",
+            "match_system_theme": "Rendszer témájához megfelelő",
+            "custom_font": "Rendszer betűkészletének használata",
+            "custom_font_name": "Rendszer betűkészletének neve",
+            "custom_theme_invalid": "Érvénytelen témaséma.",
+            "custom_theme_error_downloading": "Hiba a témainformációk letöltése során.",
+            "custom_theme_success": "Téma hozzáadva!",
+            "custom_theme_url": "Egyéni téma webcíme",
+            "use_high_contrast": "Nagy kontraszt használata",
+            "custom_theme_add_button": "Téma hozzáadása",
+            "font_size": "Betűméret",
+            "custom_font_description": "Adja meg a rendszer által használt betűkészlet nevét, és az %(brand)s megpróbálja azt használni.",
+            "timeline_image_size": "Képméret az idővonalon",
+            "timeline_image_size_default": "Alapértelmezett",
+            "timeline_image_size_large": "Nagy"
         }
     },
     "devtools": {
@@ -3612,7 +3586,15 @@
             "removed": "%(senderName)s törölte a szoba elsődleges címét.",
             "changed_alternative": "%(senderName)s megváltoztatta a szoba alternatív címeit.",
             "changed_main_and_alternative": "%(senderName)s megváltoztatta a szoba elsődleges és alternatív címeit.",
-            "changed": "%(senderName)s megváltoztatta a szoba címeit."
+            "changed": "%(senderName)s megváltoztatta a szoba címeit.",
+            "alt_added": {
+                "other": "%(senderName)s hozzáadta a szoba alternatív címeit: %(addresses)s.",
+                "one": "%(senderName)s alternatív címeket adott hozzá a szobához: %(addresses)s."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s eltávolította az alternatív címeket a szobáról: %(addresses)s.",
+                "one": "%(senderName)s eltávolította az alternatív címet a szobáról: %(addresses)s."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s visszavonta %(targetDisplayName)s a szobába való belépéséhez szükséges meghívóját.",
@@ -3785,6 +3767,29 @@
                 "one": "%(oneUser)s rejtett üzenetet küldött",
                 "other": "%(oneUser)s %(count)s rejtett üzenetet küldött"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s megváltoztatta a hozzáférési szintet: %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s: %(fromPowerLevel)s -> %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s törölte azt a szabályt, amellyel az ennek megfelelő felhasználók voltak kitiltva: %(glob)s",
+            "removed_rule_rooms": "%(senderName)s törölte azt a szabályt, amellyel az ennek megfelelő szobák voltak kitiltva: %(glob)s",
+            "removed_rule_servers": "%(senderName)s törölte azt a szabályt, amellyel az ennek megfelelő kiszolgálók ki voltak tiltva: %(glob)s",
+            "removed_rule": "%(senderName)s törölte az ennek megfelelő kitiltó szabályt: %(glob)s",
+            "updated_invalid_rule": "%(senderName)s frissített egy érvénytelen kitiltó szabályt",
+            "updated_rule_users": "%(senderName)s frissítette azt a szabályt, amellyel az ennek megfelelő felhasználók voltak kitiltva: %(glob)s, ok: %(reason)s",
+            "updated_rule_rooms": "%(senderName)s frissítette azt a szabályt, amellyel az ennek megfelelő szobák voltak kitiltva: %(glob)s, ok: %(reason)s",
+            "updated_rule_servers": "%(senderName)s frissítette azt a szabályt, amellyel az ennek megfelelő kiszolgálók voltak kitiltva: %(glob)s, ok: %(reason)s",
+            "updated_rule": "%(senderName)s frissítette ezt a kitiltó szabályt: %(glob)s, ok: %(reason)s",
+            "created_rule_users": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő felhasználók voltak kitiltva: %(glob)s, ok: %(reason)s",
+            "created_rule_rooms": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő szobák voltak kitiltva: %(glob)s, ok: %(reason)s",
+            "created_rule_servers": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő kiszolgálók voltak kitiltva: %(glob)s, ok: %(reason)s",
+            "created_rule": "%(senderName)s hozzáadta ezt a kitiltó szabályt: %(glob)s, ok: %(reason)s",
+            "changed_rule_users": "%(senderName)s megváltoztatta a felhasználókat kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s",
+            "changed_rule_rooms": "%(senderName)s megváltoztatta a szobákat kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s",
+            "changed_rule_servers": "%(senderName)s megváltoztatta a kiszolgálókat kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s",
+            "changed_rule_glob": "%(senderName)s megváltoztatta a kitiltó szabályt erről: %(oldGlob)s, erre: %(newGlob)s, ok: %(reason)s"
         }
     },
     "slash_command": {
@@ -3982,5 +3987,19 @@
         "bullet_1": "<Bold>Nem</Bold> mentünk vagy analizálunk semmilyen felhasználói adatot",
         "bullet_2": "<Bold>Nem</Bold> osztunk meg információt harmadik féllel",
         "disable_prompt": "Ezt bármikor kikapcsolhatja a beállításokban"
+    },
+    "chat_effects": {
+        "confetti_description": "Konfettivel küldi el az üzenetet",
+        "confetti_message": "konfettit küld",
+        "fireworks_description": "Tűzijátékkal küldi el az üzenetet",
+        "fireworks_message": "tűzijátékot küld",
+        "rainfall_description": "Esővel küldi el az üzenetet",
+        "rainfall_message": "esőt küld",
+        "snowfall_description": "Hóeséssel küldi el az üzenetet",
+        "snowfall_message": "hóesést küld",
+        "spaceinvaders_description": "Világűrös effekttel küldi el az üzenetet",
+        "spaceinvaders_message": "space invaders küldése",
+        "hearts_description": "Szívecskékkel küldi el az üzenetet",
+        "hearts_message": "szívecskéket küld"
     }
 }

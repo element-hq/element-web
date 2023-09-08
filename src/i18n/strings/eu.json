@@ -80,10 +80,8 @@
     "Failed to unban": "Huts egin du debekua kentzean",
     "Failure to create room": "Huts egin du gela sortzean",
     "Forget room": "Ahaztu gela",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s %(fromPowerLevel)s mailatik %(toPowerLevel)s mailara",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Ezin da hasiera zerbitzarira konektatu, egiaztatu zure konexioa, ziurtatu zure <a>hasiera zerbitzariaren SSL ziurtagiria</a> fidagarritzat jotzen duela zure gailuak, eta nabigatzailearen pluginen batek ez dituela eskaerak blokeatzen.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Ezin zara hasiera zerbitzarira HTTP bidez konektatu zure nabigatzailearen barran dagoen URLa HTTS bada. Erabili HTTPS edo <a>gaitu script ez seguruak</a>.",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s erabiltzaileak botere mailaz aldatu du %(powerLevelDiffText)s.",
     "Incorrect username and/or password.": "Erabiltzaile-izen edo pasahitz okerra.",
     "Incorrect verification code": "Egiaztaketa kode okerra",
     "Invalid Email Address": "E-mail helbide baliogabea",
@@ -298,7 +296,6 @@
     "Thursday": "Osteguna",
     "Search…": "Bilatu…",
     "Logs sent": "Egunkariak bidalita",
-    "Show message in desktop notification": "Erakutsi mezua mahaigaineko jakinarazpenean",
     "Yesterday": "Atzo",
     "Error encountered (%(errorDetail)s).": "Errorea aurkitu da (%(errorDetail)s).",
     "Low Priority": "Lehentasun baxua",
@@ -811,7 +808,6 @@
     "%(name)s cancelled": "%(name)s utzita",
     "%(name)s wants to verify": "%(name)s(e)k egiaztatu nahi du",
     "You sent a verification request": "Egiaztaketa eskari bat bidali duzu",
-    "Match system theme": "Bat egin sistemako azalarekin",
     "My Ban List": "Nire debeku-zerrenda",
     "This is your list of users/servers you have blocked - don't leave the room!": "Hau blokeatu dituzun erabiltzaile edo zerbitzarien zerrenda da, ez atera gelatik!",
     "Cannot connect to integration manager": "Ezin da integrazio kudeatzailearekin konektatu",
@@ -862,23 +858,6 @@
     "Verification Request": "Egiaztaketa eskaria",
     "Error upgrading room": "Errorea gela eguneratzean",
     "Double check that your server supports the room version chosen and try again.": "Egiaztatu zure zerbitzariak aukeratutako gela bertsioa onartzen duela eta saiatu berriro.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen zituen araua kendu du",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen zituen araua kendu du",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen zituen araua kendu du",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat kendu du",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s erabiltzaileak baliogabeko debeku arau bat eguneratu du",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat eguneratu du, arrazoia: %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat sortu du, arrazoia: %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s erabiltzaileak erabiltzaileak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s erabiltzaileak gelak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s erabiltzaileak zerbitzariak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s erabiltzaileak debeku arau bat aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
     "Cross-signing public keys:": "Zeharkako sinaduraren gako publikoak:",
     "not found": "ez da aurkitu",
     "Cross-signing private keys:": "Zeharkako sinaduraren gako pribatuak:",
@@ -949,8 +928,6 @@
     "Connect this session to Key Backup": "Konektatu saio hau gakoen babes-kopiara",
     "This backup is trusted because it has been restored on this session": "Babes-kopia hau fidagarritzat jotzen da saio honetan berrekuratu delako",
     "Your keys are <b>not being backed up from this session</b>.": "<b>Ez da zure gakoen babes-kopia egiten saio honetatik</b>.",
-    "Enable desktop notifications for this session": "Gaitu mahaigaineko jakinarazpenak saio honentzat",
-    "Enable audible notifications for this session": "Gaitu jakinarazpen entzungarriak saio honentzat",
     "Session ID:": "Saioaren ID-a:",
     "Session key:": "Saioaren gakoa:",
     "Message search": "Mezuen bilaketa",
@@ -1023,19 +1000,6 @@
     "Mark all as read": "Markatu denak irakurrita gisa",
     "Not currently indexing messages for any room.": "Orain ez da inolako gelako mezurik indexatzen.",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s / %(totalRooms)s",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak gehitu dizkio gela honi.",
-        "one": "%(senderName)s erabiltzaileak %(addresses)s helbideak gehitu dizkio gela honi."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s erabiltzaileak %(addresses)s helbideak kendu dizkio gela honi.",
-        "one": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak kendu dizkio gela honi."
-    },
-    "Invalid theme schema.": "Baliogabeko azal eskema.",
-    "Error downloading theme information.": "Errorea azalaren informazioa deskargatzean.",
-    "Theme added!": "Azala gehituta!",
-    "Custom theme URL": "Azal pertsonalizatuaren URLa",
-    "Add theme": "Gehitu azala",
     "Scroll to most recent messages": "Korritu azken mezuetara",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Errore bat gertatu da gelaren ordezko helbideak eguneratzean. Agian zerbitzariak ez du onartzen edo une bateko akatsa izan da.",
     "Local address": "Helbide lokala",
@@ -1135,7 +1099,6 @@
     "Opens chat with the given user": "Erabiltzailearekin txata irekitzen du",
     "You signed in to a new session without verifying it:": "Saio berria hasi duzu hau egiaztatu gabe:",
     "Verify your other session using one of the options below.": "Egiaztatu zure beste saioa beheko aukeretako batekin.",
-    "Font size": "Letra-tamaina",
     "IRC display name width": "IRC-ko pantaila izenaren zabalera",
     "Size must be a number": "Tamaina zenbaki bat izan behar da",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Letra tamaina pertsonalizatua %(min)s pt eta %(max)s pt bitartean egon behar du",
@@ -1192,8 +1155,6 @@
     "Use a different passphrase?": "Erabili pasa-esaldi desberdin bat?",
     "Change notification settings": "Aldatu jakinarazpenen ezarpenak",
     "Use custom size": "Erabili tamaina pertsonalizatua",
-    "Use a system font": "Erabili sistemako letra-tipoa",
-    "System font name": "Sistemaren letra-tipoaren izena",
     "Hey you. You're the best!": "Aupa txo. Onena zara!",
     "Notification options": "Jakinarazpen ezarpenak",
     "Forget Room": "Ahaztu gela",
@@ -1346,7 +1307,11 @@
         "pinning": "Mezuak finkatzea",
         "state_counters": "Jarri kontagailu sinpleak gelaren goiburuan",
         "custom_themes": "Azal pertsonalizatuak gehitzea onartzen du",
-        "bridge_state": "Erakutsi zubiei buruzko informazioa gelaren ezarpenetan"
+        "bridge_state": "Erakutsi zubiei buruzko informazioa gelaren ezarpenetan",
+        "group_profile": "Profila",
+        "group_rooms": "Gelak",
+        "group_voip": "Ahotsa eta bideoa",
+        "group_encryption": "Zifratzea"
     },
     "keyboard": {
         "home": "Hasiera",
@@ -1436,7 +1401,22 @@
             "rule_call": "Dei gonbidapena",
             "rule_suppress_notices": "Botak bidalitako mezuak",
             "rule_tombstone": "Gelak eguneratzean",
-            "rule_encrypted_room_one_to_one": "Zifratutako mezuak bi pertsonen arteko txatetan"
+            "rule_encrypted_room_one_to_one": "Zifratutako mezuak bi pertsonen arteko txatetan",
+            "enable_desktop_notifications_session": "Gaitu mahaigaineko jakinarazpenak saio honentzat",
+            "show_message_desktop_notification": "Erakutsi mezua mahaigaineko jakinarazpenean",
+            "enable_audible_notifications_session": "Gaitu jakinarazpen entzungarriak saio honentzat"
+        },
+        "appearance": {
+            "match_system_theme": "Bat egin sistemako azalarekin",
+            "custom_font": "Erabili sistemako letra-tipoa",
+            "custom_font_name": "Sistemaren letra-tipoaren izena",
+            "custom_theme_invalid": "Baliogabeko azal eskema.",
+            "custom_theme_error_downloading": "Errorea azalaren informazioa deskargatzean.",
+            "custom_theme_success": "Azala gehituta!",
+            "custom_theme_url": "Azal pertsonalizatuaren URLa",
+            "custom_theme_add_button": "Gehitu azala",
+            "font_size": "Letra-tamaina",
+            "timeline_image_size_default": "Lehenetsia"
         }
     },
     "devtools": {
@@ -1483,7 +1463,15 @@
             "removed": "%(senderName)s erabiltzaileak gela honen helbide nagusia kendu du.",
             "changed_alternative": "%(senderName)s erabiltzaileak gela honen ordezko helbideak aldatu ditu.",
             "changed_main_and_alternative": "%(senderName)s erabiltzaileak gela honen helbide nagusia eta ordezko helbideak aldatu ditu.",
-            "changed": "%(senderName)s erabiltzaileak gela honen helbideak aldatu ditu."
+            "changed": "%(senderName)s erabiltzaileak gela honen helbideak aldatu ditu.",
+            "alt_added": {
+                "other": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak gehitu dizkio gela honi.",
+                "one": "%(senderName)s erabiltzaileak %(addresses)s helbideak gehitu dizkio gela honi."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s erabiltzaileak %(addresses)s helbideak kendu dizkio gela honi.",
+                "one": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak kendu dizkio gela honi."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s erabiltzaileak %(targetDisplayName)s gelara elkartzeko gonbidapena errefusatu du.",
@@ -1607,6 +1595,29 @@
                 "other": "%(oneUser)s erabiltzaileak ez du aldaketarik egin %(count)s aldiz",
                 "one": "%(oneUser)s erabiltzaileak ez du aldaketarik egin"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s erabiltzaileak botere mailaz aldatu du %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s %(fromPowerLevel)s mailatik %(toPowerLevel)s mailara"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen zituen araua kendu du",
+            "removed_rule_rooms": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen zituen araua kendu du",
+            "removed_rule_servers": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen zituen araua kendu du",
+            "removed_rule": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat kendu du",
+            "updated_invalid_rule": "%(senderName)s erabiltzaileak baliogabeko debeku arau bat eguneratu du",
+            "updated_rule_users": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
+            "updated_rule_rooms": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
+            "updated_rule_servers": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
+            "updated_rule": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat eguneratu du, arrazoia: %(reason)s",
+            "created_rule_users": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
+            "created_rule_rooms": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
+            "created_rule_servers": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
+            "created_rule": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat sortu du, arrazoia: %(reason)s",
+            "changed_rule_users": "%(senderName)s erabiltzaileak erabiltzaileak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
+            "changed_rule_rooms": "%(senderName)s erabiltzaileak gelak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
+            "changed_rule_servers": "%(senderName)s erabiltzaileak zerbitzariak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
+            "changed_rule_glob": "%(senderName)s erabiltzaileak debeku arau bat aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s"
         }
     },
     "slash_command": {

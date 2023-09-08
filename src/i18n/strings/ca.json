@@ -67,8 +67,6 @@
     "You are no longer ignoring %(userId)s": "Ja no estàs ignorant l'usuari %(userId)s",
     "Verified key": "Claus verificades",
     "Reason": "Raó",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s de %(fromPowerLevel)s a %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ha canviat el nivell d'autoritat de %(powerLevelDiffText)s.",
     "Failure to create room": "No s'ha pogut crear la sala",
     "Server may be unavailable, overloaded, or you hit a bug.": "És possible que el servidor no estigui disponible, sobrecarregat o que hagi topat amb un error.",
     "Send": "Envia",
@@ -265,7 +263,6 @@
     "You cannot delete this message. (%(code)s)": "No podeu eliminar aquest missatge. (%(code)s)",
     "Thursday": "Dijous",
     "Logs sent": "Logs enviats",
-    "Show message in desktop notification": "Mostra els missatges amb notificacions d'escriptori",
     "Yesterday": "Ahir",
     "Error encountered (%(errorDetail)s).": "S'ha trobat un error (%(errorDetail)s).",
     "Low Priority": "Baixa prioritat",
@@ -338,7 +335,6 @@
     "Error removing ignored user/server": "Error eliminant usuari/servidor ignorat",
     "Error subscribing to list": "Error subscrivint-se a la llista",
     "Error adding ignored user/server": "Error afegint usuari/servidor ignorat",
-    "Error downloading theme information.": "Error baixant informació de tema.",
     "Unexpected server error trying to leave the room": "Error de servidor inesperat intentant sortir de la sala",
     "Error leaving room": "Error sortint de la sala",
     "Unexpected error resolving identity server configuration": "Error inesperat resolent la configuració del servidor d'identitat",
@@ -379,7 +375,6 @@
     "Confirm this user's session by comparing the following with their User Settings:": "Confirma aquesta sessió d'usuari comparant amb la seva configuració d'usuari, el següent:",
     "Confirm by comparing the following with the User Settings in your other session:": "Confirma comparant el següent amb la configuració d'usuari de la teva altra sessió:",
     "Room settings": "Configuració de sala",
-    "Appearance Settings only affect this %(brand)s session.": "La configuració d'aspecte només afecta aquesta sessió %(brand)s.",
     "Change notification settings": "Canvia la configuració de notificacions",
     "⚠ These settings are meant for advanced users.": "⚠ Aquesta configuració està pensada per usuaris avançats.",
     "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, enllaça aquest correu electrònic amb el teu compte a Configuració.",
@@ -477,7 +472,8 @@
     },
     "labs": {
         "pinning": "Fixació de missatges",
-        "bridge_state": "Mostra informació d'enllaços a la configuració de sala"
+        "bridge_state": "Mostra informació d'enllaços a la configuració de sala",
+        "group_rooms": "Sales"
     },
     "keyboard": {
         "home": "Inici"
@@ -512,7 +508,13 @@
             "rule_message": "Missatges en xats de grup",
             "rule_invite_for_me": "Quan sóc convidat a una sala",
             "rule_call": "Invitació de trucada",
-            "rule_suppress_notices": "Missatges enviats pel bot"
+            "rule_suppress_notices": "Missatges enviats pel bot",
+            "show_message_desktop_notification": "Mostra els missatges amb notificacions d'escriptori"
+        },
+        "appearance": {
+            "subheading": "La configuració d'aspecte només afecta aquesta sessió %(brand)s.",
+            "custom_theme_error_downloading": "Error baixant informació de tema.",
+            "timeline_image_size_default": "Predeterminat"
         }
     },
     "devtools": {
@@ -659,6 +661,10 @@
                 "one": "%(oneUser)sno ha fet canvis",
                 "other": "%(oneUser)sno ha fet canvis %(count)s cops"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s ha canviat el nivell d'autoritat de %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s de %(fromPowerLevel)s a %(toPowerLevel)s"
         }
     },
     "slash_command": {

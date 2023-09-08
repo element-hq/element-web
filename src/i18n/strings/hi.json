@@ -64,8 +64,6 @@
     "Displays action": "कार्रवाई प्रदर्शित करता है",
     "Forces the current outbound group session in an encrypted room to be discarded": "एक एन्क्रिप्टेड रूम में मौजूदा आउटबाउंड समूह सत्र को त्यागने के लिए मजबूर करता है",
     "Reason": "कारण",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s का %(fromPowerLevel)s से %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ने %(powerLevelDiffText)s के पावर स्तर को बदल दिया।",
     "Failure to create room": "रूम बनाने में विफलता",
     "Server may be unavailable, overloaded, or you hit a bug.": "सर्वर अनुपलब्ध, अधिभारित हो सकता है, या अपने एक सॉफ्टवेयर गर्बरी को पाया।",
     "Send": "भेजें",
@@ -124,7 +122,6 @@
     "A word by itself is easy to guess": "सिर्फ एक शब्द अनुमान लगाना आसान है",
     "Names and surnames by themselves are easy to guess": "खुद के नाम और उपनाम अनुमान लगाना आसान है",
     "Common names and surnames are easy to guess": "सामान्य नाम और उपनाम अनुमान लगाना आसान है",
-    "Show message in desktop notification": "डेस्कटॉप अधिसूचना में संदेश दिखाएं",
     "Off": "बंद",
     "On": "चालू",
     "Noisy": "शोरगुल",
@@ -529,7 +526,9 @@
     },
     "labs": {
         "pinning": "संदेश पिनिंग",
-        "state_counters": "कमरे के हेडर में साधारण काउंटर रेंडर करें"
+        "state_counters": "कमरे के हेडर में साधारण काउंटर रेंडर करें",
+        "group_profile": "प्रोफाइल",
+        "group_voip": "ध्वनि और वीडियो"
     },
     "power_level": {
         "default": "डिफ़ॉल्ट",
@@ -574,7 +573,11 @@
             "rule_invite_for_me": "जब मुझे एक रूम में आमंत्रित किया जाता है",
             "rule_call": "कॉल आमंत्रण",
             "rule_suppress_notices": "रोबॉट द्वारा भेजे गए संदेश",
-            "rule_encrypted_room_one_to_one": "एक एक के साथ चैट में एन्क्रिप्टेड संदेश"
+            "rule_encrypted_room_one_to_one": "एक एक के साथ चैट में एन्क्रिप्टेड संदेश",
+            "show_message_desktop_notification": "डेस्कटॉप अधिसूचना में संदेश दिखाएं"
+        },
+        "appearance": {
+            "timeline_image_size_default": "डिफ़ॉल्ट"
         }
     },
     "timeline": {
@@ -625,6 +628,10 @@
                 "other": "%(names)s और %(count)s अन्य टाइप कर रहे हैं …",
                 "one": "%(names)s और एक अन्य टाइप कर रहा है …"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s ने %(powerLevelDiffText)s के पावर स्तर को बदल दिया।",
+            "user_from_to": "%(userId)s का %(fromPowerLevel)s से %(toPowerLevel)s"
         }
     },
     "slash_command": {

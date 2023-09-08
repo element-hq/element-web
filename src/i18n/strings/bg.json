@@ -67,8 +67,6 @@
     "You are no longer ignoring %(userId)s": "Вече не игнорирате %(userId)s",
     "Verified key": "Потвърден ключ",
     "Reason": "Причина",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s от %(fromPowerLevel)s на %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s смени нивото на достъп на %(powerLevelDiffText)s.",
     "Failure to create room": "Неуспешно създаване на стая",
     "Server may be unavailable, overloaded, or you hit a bug.": "Сървърът може би е претоварен, недостъпен или се натъкнахте на проблем.",
     "Your browser does not support the required cryptography extensions": "Вашият браузър не поддържа необходимите разширения за шифроване",
@@ -297,7 +295,6 @@
     "You cannot delete this message. (%(code)s)": "Това съобщение не може да бъде изтрито. (%(code)s)",
     "Thursday": "Четвъртък",
     "Logs sent": "Логовете са изпратени",
-    "Show message in desktop notification": "Показване на съдържание в известията на работния плот",
     "Yesterday": "Вчера",
     "Error encountered (%(errorDetail)s).": "Възникна грешка (%(errorDetail)s).",
     "Low Priority": "Нисък приоритет",
@@ -813,30 +810,12 @@
     "%(name)s cancelled": "%(name)s отказа",
     "%(name)s wants to verify": "%(name)s иска да извърши потвърждение",
     "You sent a verification request": "Изпратихте заявка за потвърждение",
-    "Match system theme": "Напасване със системната тема",
     "My Ban List": "Моя списък с блокирания",
     "This is your list of users/servers you have blocked - don't leave the room!": "Това е списък с хора/сървъри, които сте блокирали - не напускайте стаята!",
     "Cannot connect to integration manager": "Неуспешна връзка с мениджъра на интеграции",
     "The integration manager is offline or it cannot reach your homeserver.": "Мениджъра на интеграции е офлайн или не може да се свърже със сървъра ви.",
     "Error upgrading room": "Грешка при обновяване на стаята",
     "Double check that your server supports the room version chosen and try again.": "Проверете дали сървъра поддържа тази версия на стаята и опитайте пак.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s премахна правилото блокиращо достъпа на потребители отговарящи на %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s премахна правилото блокиращо достъпа до стаи отговарящи на %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s премахна правилото блокиращо достъпа до сървъри отговарящи на %(glob)s",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s премахна правилото блокиращо достъпа неща отговарящи на %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s промени невалидно правило за блокиране",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s промени правилото блокиращо достъпа на потребители отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s промени правилото блокиращо достъпа до стаи отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s промени правилото блокиращо достъпа до сървъри отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s промени правило блокиращо достъпа неща отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s създаде правило блокиращо достъпа на потребители отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s създаде правило блокиращо достъпа до стаи отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s създаде правило блокиращо достъпа до сървъри отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s създаде правило блокиращо достъпа до неща отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s промени правило блокиращо достъпа на потребители отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s промени правило блокиращо достъпа до стаи отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s промени правило блокиращо достъпа до сървъри отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s промени правило блокиращо достъпа до неща отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
     "Cross-signing public keys:": "Публични ключове за кръстосано-подписване:",
     "not found": "не са намерени",
     "Cross-signing private keys:": "Private ключове за кръстосано подписване:",
@@ -931,14 +910,6 @@
     "Session already verified!": "Сесията вече е потвърдена!",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ВНИМАНИЕ: ПОТВЪРЖДАВАНЕТО НА КЛЮЧОВЕТЕ Е НЕУСПЕШНО! Подписващия ключ за %(userId)s и сесия %(deviceId)s е \"%(fprint)s\", което не съвпада с предоставения ключ \"%(fingerprint)s\". Това може би означава, че комуникацията ви бива прихваната!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Предоставения от вас ключ за подписване съвпада с ключа за подписване получен от сесия %(deviceId)s на %(userId)s. Сесията е маркирана като потвърдена.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s добави алтернативните адреси %(addresses)s към стаята.",
-        "one": "%(senderName)s добави алтернативният адрес %(addresses)s към стаята."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s премахна алтернативните адреси %(addresses)s от стаята.",
-        "one": "%(senderName)s премахна алтернативният адрес %(addresses)s от стаята."
-    },
     "Not Trusted": "Недоверено",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) влезе в нова сесия без да я потвърди:",
     "Ask this user to verify their session, or manually verify it below.": "Поискайте от този потребител да потвърди сесията си, или я потвърдете ръчно по-долу.",
@@ -977,13 +948,6 @@
     "Connect this session to Key Backup": "Свържи тази сесия с резервно копие на ключовете",
     "This backup is trusted because it has been restored on this session": "Това резервно копие е доверено, защото е било възстановено в текущата сесия",
     "Your keys are <b>not being backed up from this session</b>.": "На ключовете ви <b>не се прави резервно копие от тази сесия</b>.",
-    "Enable desktop notifications for this session": "Включи уведомления на работния плот за тази сесия",
-    "Enable audible notifications for this session": "Включи звукови уведомления за тази сесия",
-    "Invalid theme schema.": "Невалиден формат на темата.",
-    "Error downloading theme information.": "Неуспешно изтегляне на информацията за темата.",
-    "Theme added!": "Темата беше добавена!",
-    "Custom theme URL": "Собствен URL адрес на тема",
-    "Add theme": "Добави тема",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "За да съобщените за проблем със сигурността свързан с Matrix, прочетете <a>Политиката за споделяне на проблеми със сигурността</a> на Matrix.org.",
     "Session ID:": "Сесиен идентификатор:",
     "Session key:": "Сесиен ключ:",
@@ -1082,7 +1046,6 @@
     "We couldn't invite those users. Please check the users you want to invite and try again.": "Не можахме да поканим тези потребители. Проверете потребителите, които искате да поканите и опитайте пак.",
     "Recently Direct Messaged": "Скорошни директни чатове",
     "Opens chat with the given user": "Отваря чат с дадения потребител",
-    "Font size": "Размер на шрифта",
     "IRC display name width": "Ширина на IRC името",
     "Size must be a number": "Размера трябва да е число",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Собствения размер на шрифта може да бъде единствено между %(min)s pt и %(max)s pt",
@@ -1192,11 +1155,7 @@
         "one": "Покажи още %(count)s"
     },
     "Use custom size": "Използвай собствен размер",
-    "Use a system font": "Използвай системния шрифт",
-    "System font name": "Име на системния шрифт",
     "Hey you. You're the best!": "Хей, ти. Върхът си!",
-    "Customise your appearance": "Настройте изгледа",
-    "Appearance Settings only affect this %(brand)s session.": "Настройките на изгледа влияят само на тази %(brand)s сесия.",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "Автентичността на това шифровано съобщение не може да бъде гарантирана на това устройство.",
     "Message preview": "Преглед на съобщението",
     "List options": "Опции на списъка",
@@ -1281,7 +1240,6 @@
     "Explore public rooms": "Прегледай публични стаи",
     "Show Widgets": "Покажи приспособленията",
     "Hide Widgets": "Скрий приспособленията",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Настройте името на шрифт инсталиран в системата и %(brand)s ще се опита да го използва.",
     "not ready": "не е готово",
     "ready": "готово",
     "Secret storage:": "Секретно складиране:",
@@ -1605,12 +1563,6 @@
     "Your private space": "Вашето лично пространство",
     "You can change these anytime.": "Можете да ги промените по всяко време.",
     "unknown person": "",
-    "sends snowfall": "изпраща снеговалеж",
-    "Sends the given message with snowfall": "Изпраща даденото съобщение със снеговалеж",
-    "Sends the given message with fireworks": "Изпраща даденото съобщение с фойерверки",
-    "sends fireworks": "изпраща фойерверки",
-    "sends confetti": "изпраща конфети",
-    "Sends the given message with confetti": "Изпраща даденото съобщение с конфети",
     "Spaces": "Пространства",
     "%(deviceId)s from %(ip)s": "%(deviceId)s от %(ip)s",
     "Use app for a better experience": "Използвайте приложението за по-добра работа",
@@ -1799,7 +1751,13 @@
         "state_counters": "Визуализирай прости броячи в заглавието на стаята",
         "custom_themes": "Включи поддръжка за добавяне на собствени теми",
         "dehydration": "Офлайн шифровани съобщения чрез използването на дехидратирани устройства",
-        "bridge_state": "Показвай информация за връзки с други мрежи в настройките на стаята"
+        "bridge_state": "Показвай информация за връзки с други мрежи в настройките на стаята",
+        "group_profile": "Профил",
+        "group_spaces": "Пространства",
+        "group_widgets": "Приспособления",
+        "group_rooms": "Стаи",
+        "group_voip": "Глас и видео",
+        "group_encryption": "Шифроване"
     },
     "keyboard": {
         "home": "Начална страница",
@@ -1900,7 +1858,25 @@
             "rule_call": "Покана за разговор",
             "rule_suppress_notices": "Съобщения изпратени от бот",
             "rule_tombstone": "Когато стаите се актуализират",
-            "rule_encrypted_room_one_to_one": "Шифровани съобщения в 1-на-1 чатове"
+            "rule_encrypted_room_one_to_one": "Шифровани съобщения в 1-на-1 чатове",
+            "enable_desktop_notifications_session": "Включи уведомления на работния плот за тази сесия",
+            "show_message_desktop_notification": "Показване на съдържание в известията на работния плот",
+            "enable_audible_notifications_session": "Включи звукови уведомления за тази сесия"
+        },
+        "appearance": {
+            "heading": "Настройте изгледа",
+            "subheading": "Настройките на изгледа влияят само на тази %(brand)s сесия.",
+            "match_system_theme": "Напасване със системната тема",
+            "custom_font": "Използвай системния шрифт",
+            "custom_font_name": "Име на системния шрифт",
+            "custom_theme_invalid": "Невалиден формат на темата.",
+            "custom_theme_error_downloading": "Неуспешно изтегляне на информацията за темата.",
+            "custom_theme_success": "Темата беше добавена!",
+            "custom_theme_url": "Собствен URL адрес на тема",
+            "custom_theme_add_button": "Добави тема",
+            "font_size": "Размер на шрифта",
+            "custom_font_description": "Настройте името на шрифт инсталиран в системата и %(brand)s ще се опита да го използва.",
+            "timeline_image_size_default": "По подразбиране"
         }
     },
     "devtools": {
@@ -1952,7 +1928,15 @@
             "removed": "%(senderName)s премахна основния адрес на тази стая.",
             "changed_alternative": "%(senderName)s промени алтернативните адреси на стаята.",
             "changed_main_and_alternative": "%(senderName)s промени основният и алтернативните адреси на стаята.",
-            "changed": "%(senderName)s промени адресите на стаята."
+            "changed": "%(senderName)s промени адресите на стаята.",
+            "alt_added": {
+                "other": "%(senderName)s добави алтернативните адреси %(addresses)s към стаята.",
+                "one": "%(senderName)s добави алтернативният адрес %(addresses)s към стаята."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s премахна алтернативните адреси %(addresses)s от стаята.",
+                "one": "%(senderName)s премахна алтернативният адрес %(addresses)s от стаята."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s премахна покана към %(targetDisplayName)s за присъединяване в стаята.",
@@ -2076,6 +2060,29 @@
                 "other": "%(oneUser)sне направи промени %(count)s пъти",
                 "one": "%(oneUser)sне направи промени"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s смени нивото на достъп на %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s от %(fromPowerLevel)s на %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s премахна правилото блокиращо достъпа на потребители отговарящи на %(glob)s",
+            "removed_rule_rooms": "%(senderName)s премахна правилото блокиращо достъпа до стаи отговарящи на %(glob)s",
+            "removed_rule_servers": "%(senderName)s премахна правилото блокиращо достъпа до сървъри отговарящи на %(glob)s",
+            "removed_rule": "%(senderName)s премахна правилото блокиращо достъпа неща отговарящи на %(glob)s",
+            "updated_invalid_rule": "%(senderName)s промени невалидно правило за блокиране",
+            "updated_rule_users": "%(senderName)s промени правилото блокиращо достъпа на потребители отговарящи на %(glob)s поради %(reason)s",
+            "updated_rule_rooms": "%(senderName)s промени правилото блокиращо достъпа до стаи отговарящи на %(glob)s поради %(reason)s",
+            "updated_rule_servers": "%(senderName)s промени правилото блокиращо достъпа до сървъри отговарящи на %(glob)s поради %(reason)s",
+            "updated_rule": "%(senderName)s промени правило блокиращо достъпа неща отговарящи на %(glob)s поради %(reason)s",
+            "created_rule_users": "%(senderName)s създаде правило блокиращо достъпа на потребители отговарящи на %(glob)s поради %(reason)s",
+            "created_rule_rooms": "%(senderName)s създаде правило блокиращо достъпа до стаи отговарящи на %(glob)s поради %(reason)s",
+            "created_rule_servers": "%(senderName)s създаде правило блокиращо достъпа до сървъри отговарящи на %(glob)s поради %(reason)s",
+            "created_rule": "%(senderName)s създаде правило блокиращо достъпа до неща отговарящи на %(glob)s поради %(reason)s",
+            "changed_rule_users": "%(senderName)s промени правило блокиращо достъпа на потребители отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
+            "changed_rule_rooms": "%(senderName)s промени правило блокиращо достъпа до стаи отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
+            "changed_rule_servers": "%(senderName)s промени правило блокиращо достъпа до сървъри отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
+            "changed_rule_glob": "%(senderName)s промени правило блокиращо достъпа до неща отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s"
         }
     },
     "slash_command": {
@@ -2213,5 +2220,13 @@
         "category_flags": "Знамена",
         "categories": "Категории",
         "quick_reactions": "Бързи реакции"
+    },
+    "chat_effects": {
+        "confetti_description": "Изпраща даденото съобщение с конфети",
+        "confetti_message": "изпраща конфети",
+        "fireworks_description": "Изпраща даденото съобщение с фойерверки",
+        "fireworks_message": "изпраща фойерверки",
+        "snowfall_description": "Изпраща даденото съобщение със снеговалеж",
+        "snowfall_message": "изпраща снеговалеж"
     }
 }

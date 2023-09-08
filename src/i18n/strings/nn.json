@@ -61,8 +61,6 @@
     "Verified key": "Godkjend nøkkel",
     "Displays action": "Visar handlingar",
     "Reason": "Grunnlag",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s frå %(fromPowerLevel)s til %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s endra tilgangsnivået til %(powerLevelDiffText)s.",
     "Failure to create room": "Klarte ikkje å laga rommet",
     "Server may be unavailable, overloaded, or you hit a bug.": "Tenaren er kanskje utilgjengeleg, overlasta elles så traff du ein bug.",
     "Send": "Send",
@@ -89,7 +87,6 @@
     "Authentication": "Authentisering",
     "Failed to set display name": "Fekk ikkje til å setja visningsnamn",
     "Notification targets": "Varselmål",
-    "Show message in desktop notification": "Vis meldinga i eit skriverbordsvarsel",
     "Off": "Av",
     "On": "På",
     "Noisy": "Bråkete",
@@ -424,8 +421,6 @@
     "The user must be unbanned before they can be invited.": "Blokkeringa av brukaren må fjernast før dei kan bli inviterte.",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Ved å fjerne koplinga mot din identitetstenar, vil ikkje brukaren din bli oppdaga av andre brukarar, og du kan heller ikkje invitera andre med e-post eller telefonnummer.",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Å bruka ein identitetstenar er frivillig. Om du vel å ikkje bruka dette, vil ikkje brukaren din bli oppdaga av andre brukarar, og du kan ikkje invitera andre med e-post eller telefonnummer.",
-    "Error downloading theme information.": "Feil under nedlasting av temainformasjon.",
-    "Theme added!": "Tema lagt til!",
     "Email addresses": "E-postadresser",
     "Phone numbers": "Telefonnummer",
     "Help & About": "Hjelp og om",
@@ -506,7 +501,6 @@
     "Room avatar": "Rom-avatar",
     "Power level": "Tilgangsnivå",
     "Voice & Video": "Tale og video",
-    "Match system theme": "Følg systemtema",
     "Show hidden events in timeline": "Vis skjulte hendelsar i historikken",
     "This is your list of users/servers you have blocked - don't leave the room!": "Dette er di liste over brukarar/tenarar du har blokkert - ikkje forlat rommet!",
     "Show less": "Vis mindre",
@@ -536,10 +530,6 @@
     "Expand room list section": "Utvid romkatalog-seksjonen",
     "Manually verify all remote sessions": "Manuelt verifiser alle eksterne økter",
     "My Ban List": "Mi blokkeringsliste",
-    "Enable desktop notifications for this session": "Aktiver skrivebordsvarslingar for denne øka",
-    "Enable audible notifications for this session": "Aktiver høyrbare varslingar for denne økta",
-    "Custom theme URL": "Tilpassa tema-URL",
-    "Add theme": "Legg til tema",
     "For help with using %(brand)s, click <a>here</a>.": "For hjelp med å bruka %(brand)s, klikk <a>her</a>.",
     "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "For hjelp med å bruka %(brand)s, klikk <a>her</a>, eller start ein samtale med vår bot ved å bruke knappen under.",
     "Clear cache and reload": "Tøm buffer og last inn på nytt",
@@ -578,14 +568,6 @@
     "Could not find user in room": "Klarde ikkje å finna brukaren i rommet",
     "Please supply a widget URL or embed code": "Oppgje ein widget-URL eller innebygd kode",
     "Opens chat with the given user": "Opna ein samtale med den spesifiserte brukaren",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s la til dei alternative adressene %(addresses)s for dette rommet.",
-        "one": "%(senderName)s la til ei alternativ adresse %(addresses)s for dette rommet."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s tok vekk dei alternative adressene %(addresses)s for dette rommet.",
-        "one": "%(senderName)s tok vekk den alternative adressa %(addresses)s for dette rommet."
-    },
     "Later": "Seinare",
     "Never send encrypted messages to unverified sessions from this session": "Aldri send krypterte meldingar til ikkje-verifiserte sesjonar frå denne sesjonen",
     "Never send encrypted messages to unverified sessions in this room from this session": "Aldri send krypterte meldingar i dette rommet til ikkje-verifiserte sesjonar frå denne sesjonen",
@@ -620,13 +602,7 @@
     "Delete Backup": "Slett sikkerheitskopi",
     "Restore from Backup": "Gjenopprett frå sikkerheitskopi",
     "Encryption": "Kryptografi",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Skriv  namnet på skrifttypen(fonten) og %(brand)s forsøka å henta den frå operativsystemet.",
-    "Use a system font": "Bruk tilpassa skrifttype henta frå operativsystemet",
-    "System font name": "Namn på skrifttype",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Tilpassa skriftstorleik må vere mellom %(min)s og %(max)s punkt",
-    "Font size": "Skriftstorleik",
-    "Appearance Settings only affect this %(brand)s session.": "Innstillingane gjeld berre for denne %(brand)s-økta.",
-    "Customise your appearance": "Tilpass utsjånad",
     "Change notification settings": "Endra varslingsinnstillingar",
     "Enable desktop notifications": "Aktiver skrivebordsvarsel",
     "Video conference started by %(senderName)s": "Videokonferanse starta av %(senderName)s",
@@ -686,12 +662,9 @@
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Er du sikker på at du vil avslutta denne røystinga ? Dette vil gjelde for alle, og dei endelege resultata vil bli presentert.",
     "New keyword": "Nytt nøkkelord",
     "Keyword": "Nøkkelord",
-    "Messages containing keywords": "Meldingar som inneheld nøkkelord",
     "Mentions & keywords": "Nemningar & nøkkelord",
-    "Enable email notifications for %(email)s": "Aktiver varsel på epost for %(email)s",
     "Keyboard shortcuts": "Tastatursnarvegar",
     "Keyboard": "Tastatur",
-    "Image size in the timeline": "Storleik for bilete på tidslinja",
     "Large": "Stor",
     "Use between %(min)s pt and %(max)s pt": "Må vere mellom %(min)s og %(max)s punkt",
     "Use custom size": "Bruk ein spesifikk skriftstorleik",
@@ -840,7 +813,11 @@
     },
     "labs": {
         "pinning": "Meldingsfesting",
-        "bridge_state": "Vis info om bruer under rominnstillingar"
+        "bridge_state": "Vis info om bruer under rominnstillingar",
+        "group_profile": "Brukar",
+        "group_rooms": "Rom",
+        "group_voip": "Tale og video",
+        "group_encryption": "Kryptografi"
     },
     "keyboard": {
         "home": "Heim"
@@ -920,11 +897,30 @@
             "rule_call": "Samtaleinvitasjonar",
             "rule_suppress_notices": "Meldingar sendt frå ein bot",
             "rule_tombstone": "Når rom blir oppgraderte",
-            "rule_encrypted_room_one_to_one": "Krypterte meldingar i ein-til-ein-samtalar"
+            "rule_encrypted_room_one_to_one": "Krypterte meldingar i ein-til-ein-samtalar",
+            "messages_containing_keywords": "Meldingar som inneheld nøkkelord",
+            "enable_email_notifications": "Aktiver varsel på epost for %(email)s",
+            "enable_desktop_notifications_session": "Aktiver skrivebordsvarslingar for denne øka",
+            "show_message_desktop_notification": "Vis meldinga i eit skriverbordsvarsel",
+            "enable_audible_notifications_session": "Aktiver høyrbare varslingar for denne økta"
         },
         "appearance": {
             "layout_irc": "IRC (eksperimentell)",
-            "layout_bubbles": "Snakkebobler"
+            "layout_bubbles": "Snakkebobler",
+            "heading": "Tilpass utsjånad",
+            "subheading": "Innstillingane gjeld berre for denne %(brand)s-økta.",
+            "match_system_theme": "Følg systemtema",
+            "custom_font": "Bruk tilpassa skrifttype henta frå operativsystemet",
+            "custom_font_name": "Namn på skrifttype",
+            "custom_theme_error_downloading": "Feil under nedlasting av temainformasjon.",
+            "custom_theme_success": "Tema lagt til!",
+            "custom_theme_url": "Tilpassa tema-URL",
+            "custom_theme_add_button": "Legg til tema",
+            "font_size": "Skriftstorleik",
+            "custom_font_description": "Skriv  namnet på skrifttypen(fonten) og %(brand)s forsøka å henta den frå operativsystemet.",
+            "timeline_image_size": "Storleik for bilete på tidslinja",
+            "timeline_image_size_default": "Opphavleg innstilling",
+            "timeline_image_size_large": "Stor"
         }
     },
     "devtools": {
@@ -971,7 +967,15 @@
             "removed": "%(senderName)s fjerna standardadressa for dette rommet.",
             "changed_alternative": "%(senderName)s endre den alternative adressa for dette rommet.",
             "changed_main_and_alternative": "%(senderName)s endra hovud- og alternativ-adressene for dette rommet.",
-            "changed": "%(senderName)s endre adressene for dette rommet."
+            "changed": "%(senderName)s endre adressene for dette rommet.",
+            "alt_added": {
+                "other": "%(senderName)s la til dei alternative adressene %(addresses)s for dette rommet.",
+                "one": "%(senderName)s la til ei alternativ adresse %(addresses)s for dette rommet."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s tok vekk dei alternative adressene %(addresses)s for dette rommet.",
+                "one": "%(senderName)s tok vekk den alternative adressa %(addresses)s for dette rommet."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s trekte tilbake invitasjonen for at %(targetDisplayName)s kan bli medlem i rommet.",
@@ -1084,6 +1088,10 @@
                 "other": "%(oneUser)s har endra namnet sitt %(count)s gonger",
                 "one": "%(oneUser)s endra namnet sitt"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s endra tilgangsnivået til %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s frå %(fromPowerLevel)s til %(toPowerLevel)s"
         }
     },
     "slash_command": {

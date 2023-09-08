@@ -208,7 +208,6 @@
     "Set up": "Sett opp",
     "Identity server has no terms of service": "Identitetstjeneren har ingen brukervilkår",
     "Mirror local video feed": "Speil den lokale videostrømmen",
-    "Match system theme": "Bind fast til systemtemaet",
     "Send analytics data": "Send analytiske data",
     "Show hidden events in timeline": "Vis skjulte hendelser i tidslinjen",
     "My Ban List": "Min bannlysningsliste",
@@ -237,9 +236,6 @@
     "Guitar": "Gitar",
     "Later": "Senere",
     "Accept <policyLink /> to continue:": "Aksepter <policyLink /> for å fortsette:",
-    "Enable desktop notifications for this session": "Skru på skrivebordsvarsler for denne økten",
-    "Show message in desktop notification": "Vis meldingen i skrivebordsvarselet",
-    "Enable audible notifications for this session": "Skru på hørbare varsler for denne økten",
     "Profile picture": "Profilbilde",
     "Checking server": "Sjekker tjeneren",
     "Change identity server": "Bytt ut identitetstjener",
@@ -247,8 +243,6 @@
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Å bruke en identitetstjener er valgfritt. Dersom du velger å ikke bruke en identitetstjener, vil du ikke kunne oppdages av andre brukere, og du vil ikke kunne invitere andre ut i fra E-postadresse eller telefonnummer.",
     "Do not use an identity server": "Ikke bruk en identitetstjener",
     "Manage integrations": "Behandle integreringer",
-    "Theme added!": "Temaet er lagt til!",
-    "Add theme": "Legg til tema",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Godkjenn identitetstjenerens (%(serverName)s) brukervilkår, slik at du kan bli oppdaget ut i fra E-postadresse eller telefonnummer.",
     "Account management": "Kontobehandling",
     "Deactivate Account": "Deaktiver kontoen",
@@ -533,7 +527,6 @@
     "Use an identity server": "Bruk en identitetstjener",
     "Could not find user in room": "Klarte ikke å finne brukeren i rommet",
     "Session already verified!": "Økten er allerede verifisert!",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s gikk fra %(fromPowerLevel)s til %(toPowerLevel)s",
     "Your %(brand)s is misconfigured": "Ditt %(brand)s-oppsett er feiloppsatt",
     "Not a valid %(brand)s keyfile": "Ikke en gyldig %(brand)s-nøkkelfil",
     "Unrecognised address": "Adressen ble ikke gjenkjent",
@@ -615,11 +608,9 @@
     "Use a few words, avoid common phrases": "Bruk noen få ord, unngå vanlig fraser",
     "Ok": "OK",
     "Encryption upgrade available": "Krypteringsoppdatering tilgjengelig",
-    "Font size": "Skriftstørrelse",
     "Santa": "Julenisse",
     "wait and try again later": "vent og prøv igjen senere",
     "Size must be a number": "Størrelsen må være et nummer",
-    "Customise your appearance": "Tilpass utseendet du bruker",
     "eg: @bot:* or example.org": "f.eks.: @bot:* eller example.org",
     "To link to this room, please add an address.": "For å lenke til dette rommet, vennligst legg til en adresse.",
     "Remove %(phone)s?": "Vil du fjerne %(phone)s?",
@@ -732,7 +723,6 @@
     "Hey you. You're the best!": "Hei der. Du er fantastisk!",
     "Use custom size": "Bruk tilpasset størrelse",
     "Use Single Sign On to continue": "Bruk Single Sign On for å fortsette",
-    "Appearance Settings only affect this %(brand)s session.": "Stilendringer gjelder kun i denne %(brand)s sesjonen.",
     "Belgium": "Belgia",
     "American Samoa": "Amerikansk Samoa",
     "United States": "USA",
@@ -891,7 +881,6 @@
     "Failed to deactivate user": "Mislyktes i å deaktivere brukeren",
     "Accept all %(invitedRooms)s invites": "Aksepter alle %(invitedRooms)s-invitasjoner",
     "<not supported>": "<ikke støttet>",
-    "Custom theme URL": "URL-en til et selvvalgt tema",
     "not ready": "ikke klar",
     "ready": "klar",
     "Algorithm:": "Algoritme:",
@@ -900,9 +889,6 @@
     "Update %(brand)s": "Oppdater %(brand)s",
     "You are currently ignoring:": "Du ignorerer for øyeblikket:",
     "Dial pad": "Nummerpanel",
-    "sends confetti": "sender konfetti",
-    "System font name": "Systemskrifttypenavn",
-    "Use a system font": "Bruk en systemskrifttype",
     "Channel: <channelLink/>": "Kanal: <channelLink/>",
     "Enable desktop notifications": "Aktiver skrivebordsvarsler",
     "Don't miss a reply": "Ikke gå glipp av noen svar",
@@ -1304,7 +1290,12 @@
         "user_menu": "Brukermeny"
     },
     "labs": {
-        "pinning": "Meldingsklistring"
+        "pinning": "Meldingsklistring",
+        "group_profile": "Profil",
+        "group_widgets": "Komponenter",
+        "group_rooms": "Rom",
+        "group_voip": "Stemme og video",
+        "group_encryption": "Kryptering"
     },
     "keyboard": {
         "home": "Hjem",
@@ -1392,7 +1383,22 @@
             "rule_call": "Anropsinvitasjon",
             "rule_suppress_notices": "Meldinger sendt av bot",
             "rule_tombstone": "Når rom blir oppgradert",
-            "rule_encrypted_room_one_to_one": "Krypterte meldinger i samtaler under fire øyne"
+            "rule_encrypted_room_one_to_one": "Krypterte meldinger i samtaler under fire øyne",
+            "enable_desktop_notifications_session": "Skru på skrivebordsvarsler for denne økten",
+            "show_message_desktop_notification": "Vis meldingen i skrivebordsvarselet",
+            "enable_audible_notifications_session": "Skru på hørbare varsler for denne økten"
+        },
+        "appearance": {
+            "heading": "Tilpass utseendet du bruker",
+            "subheading": "Stilendringer gjelder kun i denne %(brand)s sesjonen.",
+            "match_system_theme": "Bind fast til systemtemaet",
+            "custom_font": "Bruk en systemskrifttype",
+            "custom_font_name": "Systemskrifttypenavn",
+            "custom_theme_success": "Temaet er lagt til!",
+            "custom_theme_url": "URL-en til et selvvalgt tema",
+            "custom_theme_add_button": "Legg til tema",
+            "font_size": "Skriftstørrelse",
+            "timeline_image_size_default": "Standard"
         }
     },
     "devtools": {
@@ -1557,6 +1563,9 @@
                 "one": "%(oneUser)s endret navnet sitt",
                 "other": "%(oneUser)sendret navnet sitt %(count)s ganger"
             }
+        },
+        "m.room.power_levels": {
+            "user_from_to": "%(userId)s gikk fra %(fromPowerLevel)s til %(toPowerLevel)s"
         }
     },
     "slash_command": {
@@ -1670,5 +1679,8 @@
         "category_flags": "Flagg",
         "categories": "Kategorier",
         "quick_reactions": "Hurtigreaksjoner"
+    },
+    "chat_effects": {
+        "confetti_message": "sender konfetti"
     }
 }

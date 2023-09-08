@@ -51,7 +51,6 @@
     "Notifications": "Notificacions",
     "Ok": "Validar",
     "Set up": "Parametrar",
-    "Font size": "Talha de poliça",
     "Cancelling…": "Anullacion…",
     "Fish": "Pes",
     "Butterfly": "Parpalhòl",
@@ -333,5 +332,16 @@
         "category_symbols": "Simbòls",
         "category_flags": "Marcadors",
         "categories": "Categorias"
+    },
+    "labs": {
+        "group_profile": "Perfil",
+        "group_rooms": "Salas",
+        "group_encryption": "Chiframent"
+    },
+    "settings": {
+        "appearance": {
+            "font_size": "Talha de poliça",
+            "timeline_image_size_default": "Predefinit"
+        }
     }
 }

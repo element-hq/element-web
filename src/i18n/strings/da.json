@@ -108,7 +108,6 @@
     "All Rooms": "Alle rum",
     "You cannot delete this message. (%(code)s)": "Du kan ikke slette denne besked. (%(code)s)",
     "Thursday": "Torsdag",
-    "Show message in desktop notification": "Vis besked i skrivebordsnotifikation",
     "Yesterday": "I går",
     "Error encountered (%(errorDetail)s).": "En fejl er opstået (%(errorDetail)s).",
     "Low Priority": "Lav prioritet",
@@ -137,8 +136,6 @@
     "Please supply a https:// or http:// widget URL": "Oplys venligst en https:// eller http:// widget URL",
     "You cannot modify widgets in this room.": "Du kan ikke ændre widgets i dette rum.",
     "Forces the current outbound group session in an encrypted room to be discarded": "Tvinger den nuværende udgående gruppe-session i et krypteret rum til at blive kasseret",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s fra %(fromPowerLevel)s til %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ændrede rettighedsniveau af %(powerLevelDiffText)s.",
     "Cannot reach homeserver": "Homeserveren kan ikke kontaktes",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Vær sikker at du har en stabil internetforbindelse, eller kontakt serveradministratoren",
     "Your %(brand)s is misconfigured": "Din %(brand)s er konfigureret forkert",
@@ -222,23 +219,6 @@
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ADVARSEL: NØGLEVERIFIKATIONEN FEJLEDE! Underskriftsnøglen for %(userId)s og session %(deviceId)s er %(fprint)s som ikke matcher den supplerede nøgle \"%(fingerprint)s\". Dette kunne betyde at jeres kommunikation er infiltreret!",
     "Session already verified!": "Sessionen er allerede verificeret!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Underskriftsnøglen du supplerede matcher den underskriftsnøgle du modtog fra %(userId)s's session %(deviceId)s. Sessionen er markeret som verificeret.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s tilføjede de alternative adresser %(addresses)s til dette rum.",
-        "one": "%(senderName)s tilføjede alternative adresser %(addresses)s til dette rum."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s fjernede de alternative adresser %(addresses)s til dette rum.",
-        "one": "%(senderName)s fjernede alternative adresser %(addresses)s til dette rum."
-    },
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s fjernede den regel der bannede brugere der matcher %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s fjernede den regel der bannede brugere der matcher %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s fjernede den regel der bannede servere som matcher %(glob)s",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s fjernede en ban-regel der matcher %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s opdaterede en ugyldig ban-regel",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s opdaterede den regel der banner brugere som matcher %(glob)s på grund af %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s opdaterede den regel der banner rum som matcher %(glob)s på grund af %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s opdaterede den regel der banner servere der matcher %(glob)s på grund af %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s opdaterede en ban-regel der matcher %(glob)s på grund af %(reason)s",
     "Explore rooms": "Udforsk rum",
     "Verification code": "Verifikationskode",
     "Once enabled, encryption cannot be disabled.": "Efter aktivering er det ikke muligt at slå kryptering fra.",
@@ -262,7 +242,6 @@
     "You're signed out": "Du er logget ud",
     "Change Password": "Skift adgangskode",
     "Current password": "Nuværende adgangskode",
-    "Theme added!": "Tema tilføjet!",
     "Comment": "Kommentar",
     "Please enter a name for the room": "Indtast et navn for rummet",
     "Profile": "Profil",
@@ -606,7 +585,9 @@
     },
     "labs": {
         "pinning": "Fastgørelse af beskeder",
-        "state_counters": "Vis simple tællere i rumhovedet"
+        "state_counters": "Vis simple tællere i rumhovedet",
+        "group_profile": "Profil",
+        "group_rooms": "Rum"
     },
     "power_level": {
         "default": "Standard",
@@ -633,7 +614,12 @@
             "rule_message": "Beskeder i gruppechats",
             "rule_invite_for_me": "Når jeg bliver inviteret til et rum",
             "rule_call": "Opkalds invitation",
-            "rule_suppress_notices": "Beskeder sendt af en bot"
+            "rule_suppress_notices": "Beskeder sendt af en bot",
+            "show_message_desktop_notification": "Vis besked i skrivebordsnotifikation"
+        },
+        "appearance": {
+            "custom_theme_success": "Tema tilføjet!",
+            "timeline_image_size_default": "Standard"
         }
     },
     "devtools": {
@@ -675,7 +661,15 @@
             "removed": "%(senderName)s fjernede hovedadressen for dette rum.",
             "changed_alternative": "%(senderName)s ændrede de alternative adresser til dette rum.",
             "changed_main_and_alternative": "%(senderName)s ændrede hoved- og alternative adresser til dette rum.",
-            "changed": "%(senderName)s ændrede adresserne til dette rum."
+            "changed": "%(senderName)s ændrede adresserne til dette rum.",
+            "alt_added": {
+                "other": "%(senderName)s tilføjede de alternative adresser %(addresses)s til dette rum.",
+                "one": "%(senderName)s tilføjede alternative adresser %(addresses)s til dette rum."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s fjernede de alternative adresser %(addresses)s til dette rum.",
+                "one": "%(senderName)s fjernede alternative adresser %(addresses)s til dette rum."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s tilbagetrak invitationen til %(targetDisplayName)s om at deltage i rummet.",
@@ -705,6 +699,21 @@
                 "other": "%(names)s og %(count)s andre skriver …",
                 "one": "%(names)s og en anden skriver …"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s ændrede rettighedsniveau af %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s fra %(fromPowerLevel)s til %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s fjernede den regel der bannede brugere der matcher %(glob)s",
+            "removed_rule_rooms": "%(senderName)s fjernede den regel der bannede brugere der matcher %(glob)s",
+            "removed_rule_servers": "%(senderName)s fjernede den regel der bannede servere som matcher %(glob)s",
+            "removed_rule": "%(senderName)s fjernede en ban-regel der matcher %(glob)s",
+            "updated_invalid_rule": "%(senderName)s opdaterede en ugyldig ban-regel",
+            "updated_rule_users": "%(senderName)s opdaterede den regel der banner brugere som matcher %(glob)s på grund af %(reason)s",
+            "updated_rule_rooms": "%(senderName)s opdaterede den regel der banner rum som matcher %(glob)s på grund af %(reason)s",
+            "updated_rule_servers": "%(senderName)s opdaterede den regel der banner servere der matcher %(glob)s på grund af %(reason)s",
+            "updated_rule": "%(senderName)s opdaterede en ban-regel der matcher %(glob)s på grund af %(reason)s"
         }
     },
     "slash_command": {

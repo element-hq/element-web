@@ -40,9 +40,7 @@
     "Restricted": "vlipa so'u da",
     "Moderator": "vlipa so'o da",
     "Power level must be positive integer.": ".i lo nu le ni vlipa cu kacna'u cu sarcu",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": ".i la'o ly. %(senderName)s .ly. gafygau %(powerLevelDiffText)s",
     "Failed to change power level": ".i pu fliba lo nu gafygau lo ni vlipa",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "lo ni la'o ny. %(userId)s .ny. vlipa noi pu du %(fromPowerLevel)s ku %(toPowerLevel)s",
     "Operation failed": ".i da nabmi",
     "Failed to invite": ".i da nabmi fi lo nu friti le ka ziljmina",
     "You need to be logged in.": ".i lo nu da jaspu do sarcu",
@@ -95,14 +93,6 @@
     "Command error": ".i da nabmi fi lo nu minde",
     "Could not find user in room": ".i le pilno na pagbu le se zilbe'i",
     "Session already verified!": ".i xa'o lacri le se samtcise'u",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'a judri le se zilbe'i",
-        "one": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'a judri le se zilbe'i"
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'u judri le se zilbe'i",
-        "one": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'u judri le se zilbe'i"
-    },
     "You signed in to a new session without verifying it:": ".i fe le di'e se samtcise'u pu co'a jaspu vau je za'o na lacri",
     "Dog": "gerku",
     "Cat": "mlatu",
@@ -191,7 +181,6 @@
     "Ask this user to verify their session, or manually verify it below.": ".i ko cpedu le ka co'a lacri le se samtcise'u kei le pilno vau ja pilno le di'e cei'i le ka co'a lacri",
     "Not Trusted": "na se lacri",
     "Cannot reach homeserver": ".i ca ku na da ka'e zilbe'i le samtcise'u",
-    "Match system theme": "nu mapti le jvinu be le vanbi",
     "Never send encrypted messages to unverified sessions in this room from this session": "nu na pa mifra be pa notci cu zilbe'i pa se samtcise'u poi na se lanli ku'o le se samtcise'u le cei'i",
     "Got It": "je'e",
     "Waiting for %(displayName)s to verify…": ".i ca'o denpa lo nu la'o zoi. %(displayName)s .zoi mo'u co'a lacri",
@@ -199,8 +188,6 @@
     "Ok": "je'e",
     "Verify this session": "nu co'a lacri le se samtcise'u",
     "What's New": "notci le du'u cnino",
-    "Use a system font": "nu da pe le vanbi cu ci'artai",
-    "System font name": "cmene le ci'artai pe le vanbi",
     "Never send encrypted messages to unverified sessions from this session": "nu na pa mifra be pa notci cu zilbe'i pa se samtcise'u poi na se lanli ku'o le se samtcise'u",
     "Later": "nu ca na co'e",
     "Other users may not trust it": ".i la'a na pa na du be do cu lacri",
@@ -301,7 +288,8 @@
         "submit": "nu zilbe'i"
     },
     "labs": {
-        "pinning": "lo du'u xu kau kakne lo nu mrilu lo vitno notci"
+        "pinning": "lo du'u xu kau kakne lo nu mrilu lo vitno notci",
+        "group_rooms": "ve zilbe'i"
     },
     "power_level": {
         "default": "zmiselcu'a",
@@ -327,6 +315,12 @@
             "rule_call": "nu da co'a fonjo'e do",
             "rule_suppress_notices": "nu da zilbe'i fi pa sampre",
             "rule_encrypted_room_one_to_one": "nu pa mifra cu zilbe'i pa prenu"
+        },
+        "appearance": {
+            "match_system_theme": "nu mapti le jvinu be le vanbi",
+            "custom_font": "nu da pe le vanbi cu ci'artai",
+            "custom_font_name": "cmene le ci'artai pe le vanbi",
+            "timeline_image_size_default": "zmiselcu'a"
         }
     },
     "create_room": {
@@ -363,7 +357,15 @@
             "removed": ".i gau la'o zoi. %(senderName)s .zoi da co'u ralju le'i judri be le ve zilbe'i",
             "changed_alternative": ".i gau la'o zoi. %(senderName)s .zoi pa na ralju cu basti da le ka judri le se zilbe'i",
             "changed_main_and_alternative": ".i gau la'o zoi. %(senderName)s .zoi pa ralju je pa na ralju cu basti da le ka judri le se zilbe'i",
-            "changed": ".i gau la'o zoi. %(senderName)s .zoi da basti de le ka judri le se zilbe'i"
+            "changed": ".i gau la'o zoi. %(senderName)s .zoi da basti de le ka judri le se zilbe'i",
+            "alt_added": {
+                "other": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'a judri le se zilbe'i",
+                "one": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'a judri le se zilbe'i"
+            },
+            "alt_removed": {
+                "other": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'u judri le se zilbe'i",
+                "one": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'u judri le se zilbe'i"
+            }
         },
         "m.room.third_party_invite": {
             "revoked": ".i la'o zoi. %(senderName)s .zoi co'u friti le ka ziljmina le se zilbe'i kei la'o zoi. %(targetDisplayName)s .zoi",
@@ -394,6 +396,10 @@
         },
         "m.call.hangup": {
             "dm": ".i co'u fonjo'e"
+        },
+        "m.room.power_levels": {
+            "changed": ".i la'o ly. %(senderName)s .ly. gafygau %(powerLevelDiffText)s",
+            "user_from_to": "lo ni la'o ny. %(userId)s .ny. vlipa noi pu du %(fromPowerLevel)s ku %(toPowerLevel)s"
         }
     },
     "slash_command": {

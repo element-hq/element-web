@@ -71,8 +71,6 @@
     "Displays action": "Toogt actie",
     "Forces the current outbound group session in an encrypted room to be discarded": "Forceert de huudige uutwoartsche groepssessie in e versleuterd gesprek vo verworpn te wordn",
     "Reason": "Reedn",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s van %(fromPowerLevel)s noa %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s èt ’t machtsniveau van %(powerLevelDiffText)s gewyzigd.",
     "No homeserver URL provided": "Geen thuusserver-URL ingegeevn",
     "Unexpected error resolving homeserver configuration": "Ounverwachte foute by ’t controleern van de thuusserverconfiguroasje",
     "This homeserver has hit its Monthly Active User limit.": "Dezen thuusserver èt z’n limiet vo moandeliks actieve gebruukers bereikt.",
@@ -221,7 +219,6 @@
     "Back up your keys before signing out to avoid losing them.": "Makt een back-up van je sleuters vooraleer da je jen afmeldt vo ze nie kwyt te speeln.",
     "Start using Key Backup": "Begint me de sleuterback-up te gebruukn",
     "Notification targets": "Meldiengsbestemmiengn",
-    "Show message in desktop notification": "Bericht toogn in bureaubladmeldienge",
     "Off": "Uut",
     "On": "An",
     "Noisy": "Lawoaierig",
@@ -814,7 +811,11 @@
     },
     "labs": {
         "pinning": "Bericht vastprikkn",
-        "state_counters": "Eenvoudige tellers boovnan ’t gesprek toogn"
+        "state_counters": "Eenvoudige tellers boovnan ’t gesprek toogn",
+        "group_profile": "Profiel",
+        "group_rooms": "Gesprekkn",
+        "group_voip": "Sproak & video",
+        "group_encryption": "Versleuterienge"
     },
     "keyboard": {
         "home": "Thuus"
@@ -866,7 +867,11 @@
             "rule_call": "Iproep-uutnodigienge",
             "rule_suppress_notices": "Berichtn verzoundn deur e robot",
             "rule_tombstone": "Wanneer da gesprekkn ipgewoardeerd wordn",
-            "rule_encrypted_room_one_to_one": "Versleuterde berichtn in twigesprekkn"
+            "rule_encrypted_room_one_to_one": "Versleuterde berichtn in twigesprekkn",
+            "show_message_desktop_notification": "Bericht toogn in bureaubladmeldienge"
+        },
+        "appearance": {
+            "timeline_image_size_default": "Standoard"
         }
     },
     "devtools": {
@@ -1018,6 +1023,10 @@
                 "other": "%(oneUser)s èt %(count)s kis nietent gewyzigd",
                 "one": "%(oneUser)s è nietent gewyzigd"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s èt ’t machtsniveau van %(powerLevelDiffText)s gewyzigd.",
+            "user_from_to": "%(userId)s van %(fromPowerLevel)s noa %(toPowerLevel)s"
         }
     },
     "slash_command": {

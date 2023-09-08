@@ -52,7 +52,6 @@
     "Preparing to send logs": "ログを送信する準備をしています",
     "What's new?": "新着",
     "Logs sent": "ログが送信されました",
-    "Show message in desktop notification": "デスクトップ通知にメッセージの内容を表示",
     "Error encountered (%(errorDetail)s).": "エラーが発生しました（%(errorDetail)s）。",
     "What's New": "新着",
     "Thank you!": "ありがとうございます！",
@@ -115,8 +114,6 @@
     "Displays action": "アクションを表示",
     "Forces the current outbound group session in an encrypted room to be discarded": "暗号化されたルーム内の現在のアウトバウンドグループセッションを強制的に破棄",
     "Reason": "理由",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)sの権限レベルを%(fromPowerLevel)sから%(toPowerLevel)sに変更しました。",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)sが%(powerLevelDiffText)s",
     "Failure to create room": "ルームの作成に失敗",
     "Server may be unavailable, overloaded, or you hit a bug.": "サーバーが使用できないか、オーバーロードしているか、または不具合が発生した可能性があります。",
     "This homeserver has hit its Monthly Active User limit.": "このホームサーバーは月間アクティブユーザー数の上限に達しました 。",
@@ -438,7 +435,6 @@
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>%(shortName)sでリアクションしました</reactedWith>",
     "Create account": "アカウントを作成",
     "Error upgrading room": "ルームをアップグレードする際にエラーが発生しました",
-    "Match system theme": "システムテーマに合わせる",
     "Delete Backup": "バックアップを削除",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "暗号化されたメッセージは、エンドツーエンドの暗号化によって保護されています。これらの暗号化されたメッセージを読むための鍵を持っているのは、あなたと受信者だけです。",
     "Restore from Backup": "バックアップから復元",
@@ -474,7 +470,6 @@
     "Session key": "セッションキー",
     "Never send encrypted messages to unverified sessions from this session": "このセッションでは、未認証のセッションに対して暗号化されたメッセージを送信しない",
     "Never send encrypted messages to unverified sessions in this room from this session": "このセッションでは、このルームの未認証のセッションに対して暗号化されたメッセージを送信しない",
-    "Enable desktop notifications for this session": "このセッションでデスクトップ通知を有効にする",
     "Email addresses": "メールアドレス",
     "This room is end-to-end encrypted": "このルームはエンドツーエンドで暗号化されています",
     "Encrypted by an unverified session": "未認証のセッションによる暗号化",
@@ -500,7 +495,6 @@
     "Unknown Command": "不明なコマンド",
     "Unrecognised command: %(commandText)s": "認識されていないコマンド：%(commandText)s",
     "Send as message": "メッセージとして送信",
-    "Enable audible notifications for this session": "このセッションで音声通知を有効にする",
     "Enable encryption?": "暗号化を有効にしますか？",
     "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "一度有効にしたルームの暗号化は無効にすることはできません。暗号化されたルームで送信されたメッセージは、サーバーからは閲覧できず、そのルームのメンバーだけが閲覧できます。暗号化を有効にすると、多くのボットやブリッジが正常に動作しなくなる可能性があります。<a>暗号化についての詳細はこちらをご覧ください。</a>",
     "Enter username": "ユーザー名を入力",
@@ -543,8 +537,6 @@
     "in account data": "アカウントデータ内",
     "Homeserver feature support:": "ホームサーバーの対応状況：",
     "exists": "対応",
-    "Custom theme URL": "ユーザー定義のテーマのURL",
-    "Add theme": "テーマの追加",
     "Account management": "アカウントの管理",
     "Deactivate account": "アカウントを無効化",
     "Room list": "ルーム一覧",
@@ -586,13 +578,8 @@
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "アドレスを設定すると、他のユーザーがあなたのホームサーバー（%(localDomain)s）を通じてこのルームを見つけられるようになります。",
     "If you've joined lots of rooms, this might take a while": "多くのルームに参加している場合は、時間がかかる可能性があります",
     "Single Sign On": "シングルサインオン",
-    "Font size": "フォントの大きさ",
     "Use custom size": "ユーザー定義のサイズを使用",
-    "Use a system font": "システムフォントを使用",
-    "System font name": "システムフォントの名前",
     "Hey you. You're the best!": "こんにちは、よろしくね！",
-    "Customise your appearance": "外観のカスタマイズ",
-    "Appearance Settings only affect this %(brand)s session.": "外観の設定はこの%(brand)sのセッションにのみ適用されます。",
     "Notification options": "通知設定",
     "Verify User": "ユーザーの認証",
     "Your homeserver": "あなたのホームサーバー",
@@ -818,10 +805,6 @@
     "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "%(brand)sの使用についてサポートが必要な場合は、<a>こちら</a>をクリックするか、下のボタンを使用してボットとチャットを開始してください。",
     "Discovery": "ディスカバリー（発見）",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "メールアドレスか電話番号でアカウントを検出可能にするには、IDサーバー（%(serverName)s）の利用規約への同意が必要です。",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "システムにインストールされているフォントの名前を設定すると、%(brand)sはそれを使用します。",
-    "Theme added!": "テーマが追加されました！",
-    "Error downloading theme information.": "テーマの情報をダウンロードする際にエラーが発生しました。",
-    "Invalid theme schema.": "テーマスキーマが無効です。",
     "Use between %(min)s pt and %(max)s pt": "%(min)s～%(max)s（pt）の間の数字を指定",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "ユーザー定義のフォントの大きさは%(min)s～%(max)s（単位：point）の間で指定できます",
     "Size must be a number": "サイズには数値を指定してください",
@@ -1001,31 +984,6 @@
     "Remain on your screen when viewing another room, when running": "他のルームを表示している間も実行中は画面に留まる",
     "Ask this user to verify their session, or manually verify it below.": "このユーザーにセッションを認証するよう依頼するか、以下から手動で認証してください。",
     "Verify your other session using one of the options below.": "以下のどれか一つを使って他のセッションを認証します。",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)sが、%(oldGlob)sにマッチするブロック用ルールを、%(newGlob)sにマッチするブロック用ルールに更新しました（理由：%(reason)s）",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)sが、%(oldGlob)sにマッチするサーバーをブロックするルールを、%(newGlob)sにマッチするサーバーをブロックするルールに変更しました（理由：%(reason)s）",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)sが、%(oldGlob)sにマッチするルームをブロックするルールを、%(newGlob)sにマッチするルームをブロックするルールに変更しました（理由：%(reason)s）",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)sが、%(oldGlob)sにマッチするユーザーをブロックするルールを、%(newGlob)sにマッチするユーザーをブロックするルールに変更しました（理由：%(reason)s）",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)sが%(glob)sにマッチするブロック用ルールを作成しました（理由：%(reason)s）",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを作成しました（理由：%(reason)s）",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを作成しました（理由：%(reason)s）",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを作成しました（理由：%(reason)s）",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)sが%(glob)sにマッチするブロック用ルールを更新しました（理由：%(reason)s）",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを更新しました（理由：%(reason)s）",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを更新しました（理由：%(reason)s）",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを更新しました（理由：%(reason)s）",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)sが不正なブロックに関するルールを更新しました",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)sが%(glob)sにマッチするブロック用ルールを削除しました",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを削除しました",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを削除しました",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを削除しました",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "one": "%(senderName)sがこのルームの代替アドレス %(addresses)s を削除しました。",
-        "other": "%(senderName)sがこのルームの代替アドレス %(addresses)s を削除しました。"
-    },
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "one": "%(senderName)sがこのルームの代替アドレス %(addresses)s を追加しました。",
-        "other": "%(senderName)sがこのルームの代替アドレス %(addresses)s を追加しました。"
-    },
     "Converts the DM to a room": "ダイレクトメッセージをルームに変換",
     "Converts the room to a DM": "ルームをダイレクトメッセージに変換",
     "Takes the call in the current room off hold": "現在のルームの通話を保留から外す",
@@ -1320,12 +1278,6 @@
     "Dial pad": "ダイヤルパッド",
     "There was an error looking up the phone number": "電話番号を検索する際にエラーが発生しました",
     "Unable to look up phone number": "電話番号が見つかりません",
-    "sends snowfall": "降雪を送る",
-    "Sends the given message with snowfall": "メッセージを降雪と共に送信",
-    "sends fireworks": "花火を送る",
-    "Sends the given message with fireworks": "メッセージを花火と共に送信",
-    "sends confetti": "紙吹雪を送る",
-    "Sends the given message with confetti": "メッセージを紙吹雪と共に送信",
     "This is your list of users/servers you have blocked - don't leave the room!": "あなたがブロックしたユーザーとサーバーのリストです。このルームから退出しないでください！",
     "My Ban List": "マイブロックリスト",
     "IRC display name width": "IRCの表示名の幅",
@@ -1475,7 +1427,6 @@
     "Images, GIFs and videos": "画像・GIF・動画",
     "Displaying time": "表示時刻",
     "Keyboard shortcuts": "キーボードショートカット",
-    "Messages containing keywords": "指定のキーワードを含むメッセージ",
     "Mentions & keywords": "メンションとキーワード",
     "Global": "全体",
     "New keyword": "新しいキーワード",
@@ -1559,7 +1510,6 @@
     },
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "匿名のデータを共有すると、問題の特定に役立ちます。個人データの収集や、第三者とのデータ共有はありません。",
     "Hide sidebar": "サイドバーを表示しない",
-    "sends space invaders": "スペースインベーダーを送る",
     "Failed to transfer call": "通話の転送に失敗しました",
     "Command error: Unable to handle slash command.": "コマンドエラー：スラッシュコマンドは使えません。",
     "%(spaceName)s and %(count)s others": {
@@ -1649,8 +1599,6 @@
     "Can't load this message": "このメッセージを読み込めません",
     "Use a more compact 'Modern' layout": "よりコンパクトな「モダン」レイアウトを使用",
     "Large": "大",
-    "Image size in the timeline": "タイムライン上での画像のサイズ",
-    "Enable email notifications for %(email)s": "%(email)sへの電子メール通知を有効にする",
     "Updating spaces... (%(progress)s out of %(count)s)": {
         "one": "スペースを更新しています…",
         "other": "スペースを更新しています…（計%(count)s個のうち%(progress)s個）"
@@ -1661,7 +1609,6 @@
     },
     "Loading new room": "新しいルームを読み込んでいます",
     "Upgrading room": "ルームをアップグレードしています",
-    "Use high contrast": "高コントラストを使用",
     "Developer mode": "開発者モード",
     "Address": "アドレス",
     "Shows all threads from current room": "現在のルームのスレッドを全て表示",
@@ -2044,7 +1991,6 @@
     "Verify with Security Key or Phrase": "セキュリティーキーあるいはセキュリティーフレーズで認証",
     "A new Security Phrase and key for Secure Messages have been detected.": "新しいセキュリティーフレーズと、セキュアメッセージの鍵が検出されました。",
     "a new cross-signing key signature": "新しいクロス署名鍵の署名",
-    "An error occurred whilst saving your notification preferences.": "通知の設定を保存する際にエラーが発生しました。",
     "a device cross-signing signature": "端末のクロス署名",
     "A connection error occurred while trying to contact the server.": "サーバーに接続する際にエラーが発生しました。",
     "A browser extension is preventing the request.": "ブラウザーの拡張機能がリクエストを妨げています。",
@@ -2097,9 +2043,6 @@
     },
     "Sorry, you can't edit a poll after votes have been cast.": "投票があったアンケートは編集できません。",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "アンケートを終了してよろしいですか？投票を締め切り、最終結果を表示します。",
-    "Sends the given message with a space themed effect": "メッセージを宇宙のテーマのエフェクトと共に送信",
-    "sends rainfall": "雨を送信",
-    "Sends the given message with rainfall": "メッセージを雨と共に送信",
     "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "不明な（ユーザー、セッション）ペア：（%(userId)s、%(deviceId)s）",
     "Missing session data": "セッションのデータがありません",
     "Sorry, the poll you tried to create was not posted.": "アンケートを作成できませんでした。",
@@ -2169,7 +2112,6 @@
     "Are you sure you want to add encryption to this public room?": "公開ルームに暗号化を追加してよろしいですか？",
     "Olm version:": "Olmのバージョン：",
     "There was an error loading your notification settings.": "通知設定を読み込む際にエラーが発生しました。",
-    "Error saving notification preferences": "通知の設定を保存する際にエラーが発生しました",
     "Message search initialisation failed": "メッセージの検索機能の初期化に失敗しました",
     "Failed to update the visibility of this space": "このスペースの見え方の更新に失敗しました",
     "Your server requires encryption to be enabled in private rooms.": "このサーバーでは、非公開のルームでは暗号化を有効にする必要があります。",
@@ -2349,7 +2291,6 @@
     "Ban them from specific things I'm able to": "自分に可能な範囲で、特定のものからブロック",
     "Ban them from everything I'm able to": "自分に可能な範囲で、全てのものからブロック",
     "Live location error": "位置情報（ライブ）のエラー",
-    "sends hearts": "ハートを送信",
     "Confirm signing out these devices": {
         "other": "端末からのサインアウトを承認",
         "one": "端末からのサインアウトを承認"
@@ -2547,7 +2488,6 @@
     "Reset event store?": "イベントストアをリセットしますか？",
     "Your firewall or anti-virus is blocking the request.": "ファイアーウォールまたはアンチウイルスソフトがリクエストをブロックしています。",
     "We're creating a room with %(names)s": "%(names)sという名前のルームを作成しています",
-    "Enable notifications for this account": "このアカウントで通知を有効にする",
     "%(count)s people joined": {
         "one": "%(count)s人が参加しました",
         "other": "%(count)s人が参加しました"
@@ -2657,7 +2597,6 @@
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "ライブ配信を録音しているため、音声メッセージを開始できません。音声メッセージの録音を開始するには、ライブ配信を終了してください。",
     "%(displayName)s (%(matrixId)s)": "%(displayName)s（%(matrixId)s）",
     "You won't be able to participate in rooms where encryption is enabled when using this session.": "このセッションでは、暗号化が有効になっているルームに参加することができません。",
-    "Sends the given message with hearts": "メッセージをハートと共に送信",
     "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.": "あなたのホームサーバーがアシストサーバーを提供していない場合にのみ適用。IPアドレスが通話中に共有されます。",
     "Requires compatible homeserver.": "対応するホームサーバーが必要。",
     "Low bandwidth mode": "低速モード",
@@ -2698,7 +2637,6 @@
     "Close call": "通話を終了",
     "Verified sessions": "認証済のセッション",
     "Search for": "検索",
-    "%(timeRemaining)s left": "残り%(timeRemaining)s",
     "If you can't find the room you're looking for, ask for an invite or create a new room.": "探しているルームが見つからない場合、招待を要求するか新しいルームを作成してください。",
     "If you can't see who you're looking for, send them your invite link.": "探している相手が見つからなければ、招待リンクを送信してください。",
     "To continue, please enter your account password:": "続行するには、アカウントのパスワードを入力してください：",
@@ -2734,8 +2672,6 @@
     "For best security, sign out from any session that you don't recognize or use anymore.": "セキュリティーを最大限に高めるには、不明なセッションや使用していないセッションからサインアウトしてください。",
     "Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.": "セッションを認証すると、より安全なメッセージのやりとりが可能になります。見覚えのない、または使用していないセッションがあれば、サインアウトしましょう。",
     "Improve your account security by following these recommendations.": "以下の勧告に従い、アカウントのセキュリティーを改善しましょう。",
-    "Turn off to disable notifications on all your devices and sessions": "オフにすると、全ての端末とセッションで通知が無効になります",
-    "Enable notifications for this device": "この端末で通知を有効にする",
     "Deactivating your account is a permanent action — be careful!": "アカウントを無効化すると取り消せません。ご注意ください！",
     "Verify your email to continue": "続行するには電子メールを認証してください",
     "Did not receive it?": "届きませんでしたか？",
@@ -3136,7 +3072,18 @@
         "sliding_sync_description": "開発中です。無効にできません。",
         "under_active_development": "開発中。",
         "location_share_live_description": "一時的な実装。位置情報がルームの履歴に残ります。",
-        "dynamic_room_predecessors_description": "MSC3946を有効にする（遅延ルームアーカイブのサポート）"
+        "dynamic_room_predecessors_description": "MSC3946を有効にする（遅延ルームアーカイブのサポート）",
+        "group_messaging": "メッセージ",
+        "group_profile": "プロフィール",
+        "group_spaces": "スペース",
+        "group_widgets": "ウィジェット",
+        "group_rooms": "ルーム",
+        "group_voip": "音声とビデオ",
+        "group_moderation": "モデレート",
+        "group_themes": "テーマ",
+        "group_encryption": "暗号化",
+        "group_experimental": "実験的",
+        "group_developer": "開発者"
     },
     "keyboard": {
         "home": "ホーム",
@@ -3227,7 +3174,8 @@
         "few_seconds_ago": "数秒前",
         "about_minute_ago": "約1分前",
         "about_hour_ago": "約1時間前",
-        "about_day_ago": "約1日前"
+        "about_day_ago": "約1日前",
+        "left": "残り%(timeRemaining)s"
     },
     "onboarding": {
         "personal_messaging_title": "友達や家族と安全なメッセージングを",
@@ -3310,11 +3258,37 @@
             "rule_call": "通話への招待",
             "rule_suppress_notices": "ボットによるメッセージ",
             "rule_tombstone": "ルームがアップグレードされたとき",
-            "rule_encrypted_room_one_to_one": "1対1のチャットでの暗号化されたメッセージ"
+            "rule_encrypted_room_one_to_one": "1対1のチャットでの暗号化されたメッセージ",
+            "messages_containing_keywords": "指定のキーワードを含むメッセージ",
+            "error_saving": "通知の設定を保存する際にエラーが発生しました",
+            "error_saving_detail": "通知の設定を保存する際にエラーが発生しました。",
+            "enable_notifications_account": "このアカウントで通知を有効にする",
+            "enable_notifications_account_detail": "オフにすると、全ての端末とセッションで通知が無効になります",
+            "enable_email_notifications": "%(email)sへの電子メール通知を有効にする",
+            "enable_notifications_device": "この端末で通知を有効にする",
+            "enable_desktop_notifications_session": "このセッションでデスクトップ通知を有効にする",
+            "show_message_desktop_notification": "デスクトップ通知にメッセージの内容を表示",
+            "enable_audible_notifications_session": "このセッションで音声通知を有効にする"
         },
         "appearance": {
             "layout_irc": "IRC（実験的）",
-            "layout_bubbles": "吹き出し"
+            "layout_bubbles": "吹き出し",
+            "heading": "外観のカスタマイズ",
+            "subheading": "外観の設定はこの%(brand)sのセッションにのみ適用されます。",
+            "match_system_theme": "システムテーマに合わせる",
+            "custom_font": "システムフォントを使用",
+            "custom_font_name": "システムフォントの名前",
+            "custom_theme_invalid": "テーマスキーマが無効です。",
+            "custom_theme_error_downloading": "テーマの情報をダウンロードする際にエラーが発生しました。",
+            "custom_theme_success": "テーマが追加されました！",
+            "custom_theme_url": "ユーザー定義のテーマのURL",
+            "use_high_contrast": "高コントラストを使用",
+            "custom_theme_add_button": "テーマの追加",
+            "font_size": "フォントの大きさ",
+            "custom_font_description": "システムにインストールされているフォントの名前を設定すると、%(brand)sはそれを使用します。",
+            "timeline_image_size": "タイムライン上での画像のサイズ",
+            "timeline_image_size_default": "既定値",
+            "timeline_image_size_large": "大"
         }
     },
     "devtools": {
@@ -3510,7 +3484,15 @@
             "removed": "%(senderName)sがこのルームのメインアドレスを削除しました。",
             "changed_alternative": "%(senderName)sがこのルームの代替アドレスを変更しました。",
             "changed_main_and_alternative": "%(senderName)sがこのルームのメインアドレスと代替アドレスを変更しました。",
-            "changed": "%(senderName)sがこのルームのアドレスを変更しました。"
+            "changed": "%(senderName)sがこのルームのアドレスを変更しました。",
+            "alt_added": {
+                "one": "%(senderName)sがこのルームの代替アドレス %(addresses)s を追加しました。",
+                "other": "%(senderName)sがこのルームの代替アドレス %(addresses)s を追加しました。"
+            },
+            "alt_removed": {
+                "one": "%(senderName)sがこのルームの代替アドレス %(addresses)s を削除しました。",
+                "other": "%(senderName)sがこのルームの代替アドレス %(addresses)s を削除しました。"
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)sが%(targetDisplayName)sへのルームの招待を取り消しました。",
@@ -3683,6 +3665,29 @@
                 "one": "%(oneUser)sが1件の非表示のメッセージを送信しました",
                 "other": "%(oneUser)sが%(count)s件の非表示のメッセージを送信しました"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)sが%(powerLevelDiffText)s",
+            "user_from_to": "%(userId)sの権限レベルを%(fromPowerLevel)sから%(toPowerLevel)sに変更しました。"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを削除しました",
+            "removed_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを削除しました",
+            "removed_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを削除しました",
+            "removed_rule": "%(senderName)sが%(glob)sにマッチするブロック用ルールを削除しました",
+            "updated_invalid_rule": "%(senderName)sが不正なブロックに関するルールを更新しました",
+            "updated_rule_users": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを更新しました（理由：%(reason)s）",
+            "updated_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを更新しました（理由：%(reason)s）",
+            "updated_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを更新しました（理由：%(reason)s）",
+            "updated_rule": "%(senderName)sが%(glob)sにマッチするブロック用ルールを更新しました（理由：%(reason)s）",
+            "created_rule_users": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを作成しました（理由：%(reason)s）",
+            "created_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを作成しました（理由：%(reason)s）",
+            "created_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを作成しました（理由：%(reason)s）",
+            "created_rule": "%(senderName)sが%(glob)sにマッチするブロック用ルールを作成しました（理由：%(reason)s）",
+            "changed_rule_users": "%(senderName)sが、%(oldGlob)sにマッチするユーザーをブロックするルールを、%(newGlob)sにマッチするユーザーをブロックするルールに変更しました（理由：%(reason)s）",
+            "changed_rule_rooms": "%(senderName)sが、%(oldGlob)sにマッチするルームをブロックするルールを、%(newGlob)sにマッチするルームをブロックするルールに変更しました（理由：%(reason)s）",
+            "changed_rule_servers": "%(senderName)sが、%(oldGlob)sにマッチするサーバーをブロックするルールを、%(newGlob)sにマッチするサーバーをブロックするルールに変更しました（理由：%(reason)s）",
+            "changed_rule_glob": "%(senderName)sが、%(oldGlob)sにマッチするブロック用ルールを、%(newGlob)sにマッチするブロック用ルールに更新しました（理由：%(reason)s）"
         }
     },
     "slash_command": {
@@ -3876,5 +3881,19 @@
         "bullet_1": "私たちは、アカウントのいかなるデータも記録したり分析したりすることは<Bold>ありません</Bold>",
         "bullet_2": "私たちは、情報を第三者と共有することは<Bold>ありません</Bold>",
         "disable_prompt": "これはいつでも設定から無効にできます"
+    },
+    "chat_effects": {
+        "confetti_description": "メッセージを紙吹雪と共に送信",
+        "confetti_message": "紙吹雪を送る",
+        "fireworks_description": "メッセージを花火と共に送信",
+        "fireworks_message": "花火を送る",
+        "rainfall_description": "メッセージを雨と共に送信",
+        "rainfall_message": "雨を送信",
+        "snowfall_description": "メッセージを降雪と共に送信",
+        "snowfall_message": "降雪を送る",
+        "spaceinvaders_description": "メッセージを宇宙のテーマのエフェクトと共に送信",
+        "spaceinvaders_message": "スペースインベーダーを送る",
+        "hearts_description": "メッセージをハートと共に送信",
+        "hearts_message": "ハートを送信"
     }
 }

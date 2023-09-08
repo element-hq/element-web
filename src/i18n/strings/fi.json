@@ -240,8 +240,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s %(day)s. %(monthName)s %(fullYear)s %(time)s",
     "Ignored user": "Sivuutettu käyttäjä",
     "Unignored user": "Sallittu käyttäjä",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s tasolta %(fromPowerLevel)s tasolle %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s muutti %(powerLevelDiffText)s:n oikeustasoa.",
     "Send": "Lähetä",
     "%(duration)ss": "%(duration)s s",
     "%(duration)sm": "%(duration)s m",
@@ -284,7 +282,6 @@
     "Invite to this room": "Kutsu käyttäjiä",
     "You cannot delete this message. (%(code)s)": "Et voi poistaa tätä viestiä. (%(code)s)",
     "Thursday": "Torstai",
-    "Show message in desktop notification": "Näytä viestit ilmoituskeskuksessa",
     "Yesterday": "Eilen",
     "Error encountered (%(errorDetail)s).": "Virhe: %(errorDetail)s.",
     "Low Priority": "Matala prioriteetti",
@@ -808,7 +805,6 @@
     "This widget may use cookies.": "Tämä sovelma saattaa käyttää evästeitä.",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Voit käyttää identiteettipalvelinta lähettääksesi sähköpostikutsuja. Napsauta Jatka käyttääksesi oletuspalvelinta (%(defaultIdentityServerName)s) tai syötä eri palvelin asetuksissa.",
     "Use an identity server to invite by email. Manage in Settings.": "Voit käyttää identiteettipalvelinta sähköpostikutsujen lähettämiseen.",
-    "Match system theme": "Käytä järjestelmän teemaa",
     "Cannot connect to integration manager": "Integraatioiden lähteeseen yhdistäminen epäonnistui",
     "The integration manager is offline or it cannot reach your homeserver.": "Integraatioiden lähde on poissa verkosta, tai siihen ei voida yhdistää kotipalvelimeltasi.",
     "Manage integrations": "Integraatioiden hallinta",
@@ -863,23 +859,6 @@
     "Invalid base_url for m.identity_server": "Epäkelpo base_url palvelimelle m.identity_server",
     "Error upgrading room": "Virhe päivitettäessä huonetta",
     "Double check that your server supports the room version chosen and try again.": "Tarkista, että palvelimesi tukee valittua huoneversiota ja yritä uudelleen.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s poisti porttikiellon käyttäjiltä, jotka täsmäsivät sääntöön %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s poisti huoneita estävän säännön %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s poisti palvelimia estävän säännön %(glob)s",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s poisti estosäännön %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s muokkasi epäkelpoa estosääntöä",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s muokkasi käyttäjiä estävää sääntöä %(glob)s seuraavasta syystä: %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s muokkasi huoneita estävää sääntöä %(glob)s seuraavasta syystä: %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s muokkasi palvelimia estävää sääntöä %(glob)s seuraavasta syystä: %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s muokkasi estosääntöä %(glob)s seuraavasta syystä: %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s loi porttikiellonsäännön %(glob)s, syy: %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s loi huoneita estävän säännön %(glob)s, syy: %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s loi palvelimia estävän säännön %(glob)s, syy: %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s loi estosäännön %(glob)s, syy: %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s muutti sääntöä, joka esti käyttäjiä säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s muutti sääntöä, joka esti huoneita säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s muutti sääntöä, joka esti palvelimia säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s muutti estosääntöä muodosta %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
     "Cross-signing public keys:": "Ristiinvarmennuksen julkiset avaimet:",
     "not found": "ei löydetty",
     "Cross-signing private keys:": "Ristiinvarmennuksen salaiset avaimet:",
@@ -920,8 +899,6 @@
     "Waiting for %(displayName)s to accept…": "Odotetaan, että %(displayName)s hyväksyy…",
     "Failed to find the following users": "Seuraavia käyttäjiä ei löytynyt",
     "Upgrade your encryption": "Päivitä salauksesi",
-    "Enable desktop notifications for this session": "Ota käyttöön työpöytäilmoitukset tälle istunnolle",
-    "Enable audible notifications for this session": "Ota käyttöön ääni-ilmoitukset tälle istunnolle",
     "Someone is using an unknown session": "Joku käyttää tuntematonta istuntoa",
     "%(count)s sessions": {
         "other": "%(count)s istuntoa",
@@ -964,14 +941,6 @@
     "Verifies a user, session, and pubkey tuple": "Varmentaa käyttäjän, istunnon ja julkiset avaimet",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "VAROITUS: AVAIMEN VARMENTAMINEN EPÄONNISTUI! Käyttäjän %(userId)s ja laitteen %(deviceId)s istunnon allekirjoitusavain on ”%(fprint)s”, mikä ei täsmää annettuun avaimeen ”%(fingerprint)s”. Tämä voi tarkoittaa, että viestintäänne siepataan!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Antamasi allekirjoitusavain täsmää käyttäjältä %(userId)s saamaasi istunnon %(deviceId)s allekirjoitusavaimeen. Istunto on varmennettu.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s lisäsi vaihtoehtoiset osoitteet %(addresses)s tälle huoneelle.",
-        "one": "%(senderName)s lisäsi vaihtoehtoisen osoitteen %(addresses)s tälle huoneelle."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s poisti vaihtoehtoiset osoitteet %(addresses)s tältä huoneelta.",
-        "one": "%(senderName)s poisti vaihtoehtoisen osoitteitteen %(addresses)s tältä huoneelta."
-    },
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) kirjautui uudella istunnolla varmentamatta sitä:",
     "Enable message search in encrypted rooms": "Ota viestihaku salausta käyttävissä huoneissa käyttöön",
     "How fast should messages be downloaded.": "Kuinka nopeasti viestit pitäisi ladata.",
@@ -980,8 +949,6 @@
     "Other users may not trust it": "Muut eivät välttämättä luota siihen",
     "This bridge was provisioned by <user />.": "Tämän sillan tarjoaa käyttäjä <user />.",
     "This bridge is managed by <user />.": "Tätä siltaa hallinnoi käyttäjä <user />.",
-    "Theme added!": "Teema lisätty!",
-    "Add theme": "Lisää teema",
     "Scroll to most recent messages": "Vieritä tuoreimpiin viesteihin",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Huoneen vaihtoehtoisten osoitteiden päivittämisessä tapahtui virhe. Palvelin ei ehkä salli sitä tai kyseessä oli tilapäinen virhe.",
     "Local address": "Paikallinen osoite",
@@ -1041,7 +1008,6 @@
     "Please supply a widget URL or embed code": "Anna sovelman osoite tai upotettava koodinpätkä",
     "You signed in to a new session without verifying it:": "Olet kirjautunut uuteen istuntoon varmentamatta sitä:",
     "Verify your other session using one of the options below.": "Varmenna toinen istuntosi käyttämällä yhtä seuraavista tavoista.",
-    "Error downloading theme information.": "Virhe ladattaessa teematietoa.",
     "Almost there! Is %(displayName)s showing the same shield?": "Melkein valmista! Näyttääkö %(displayName)s saman kilven?",
     "QR Code": "QR-koodi",
     "To continue, use Single Sign On to prove your identity.": "Todista henkilöllisyytesi kertakirjautumisen avulla jatkaaksesi.",
@@ -1065,8 +1031,6 @@
     "Connect this session to Key Backup": "Yhdistä tämä istunto avainten varmuuskopiointiin",
     "This backup is trusted because it has been restored on this session": "Tähän varmuuskopioon luotetaan, koska se on palautettu tässä istunnossa",
     "Your keys are <b>not being backed up from this session</b>.": "Avaimiasi <b>ei varmuuskopioida tästä istunnosta</b>.",
-    "Invalid theme schema.": "Epäkelpo teeman skeema.",
-    "Custom theme URL": "Mukautettu teeman osoite",
     "Session ID:": "Istunnon tunnus:",
     "Session key:": "Istunnon avain:",
     "This user has not verified all of their sessions.": "Tämä käyttäjä ei ole varmentanut kaikkia istuntojaan.",
@@ -1090,7 +1054,6 @@
     "You've successfully verified your device!": "Olet onnistuneesti varmentanut laitteesi!",
     "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Olet onnistuneesti varmentanut laitteen %(deviceName)s (%(deviceId)s)!",
     "You've successfully verified %(displayName)s!": "Olet varmentanut käyttäjän %(displayName)s!",
-    "Font size": "Fontin koko",
     "Size must be a number": "Koon täytyy olla luku",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Mukautetun fonttikoon täytyy olla vähintään %(min)s pt ja enintään %(max)s pt",
     "Use between %(min)s pt and %(max)s pt": "Käytä kokoa väliltä %(min)s pt ja %(max)s pt",
@@ -1142,8 +1105,6 @@
     "Feedback": "Palaute",
     "Looks good!": "Hyvältä näyttää!",
     "Use custom size": "Käytä mukautettua kokoa",
-    "Use a system font": "Käytä järjestelmän fonttia",
-    "System font name": "Järjestelmän fontin nimi",
     "Notification options": "Ilmoitusasetukset",
     "Room options": "Huoneen asetukset",
     "This room is public": "Tämä huone on julkinen",
@@ -1213,9 +1174,6 @@
     "The server (%(serverName)s) took too long to respond.": "Palvelin (%(serverName)s) ei vastannut ajoissa.",
     "Feedback sent": "Palaute lähetetty",
     "Preparing to download logs": "Valmistellaan lokien lataamista",
-    "Customise your appearance": "Mukauta ulkoasua",
-    "Appearance Settings only affect this %(brand)s session.": "Ulkoasuasetukset vaikuttavat vain tähän %(brand)s-istuntoon.",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Aseta käyttöjärjestelmääsi asennetun fontin nimi, niin %(brand)s pyrkii käyttämään sitä.",
     "The operation could not be completed": "Toimintoa ei voitu tehdä loppuun asti",
     "Send stickers to your active room as you": "Lähetä aktiiviseen huoneeseesi tarroja itsenäsi",
     "Send stickers to this room as you": "Lähetä tähän huoneeseen tarroja itsenäsi",
@@ -1578,12 +1536,6 @@
     "Navigation": "Navigointi",
     "Remain on your screen when viewing another room, when running": "Pysy ruudulla katsellessasi huonetta, kun se on käynnissä",
     "Remain on your screen while running": "Pysy ruudulla käynnissä olon ajan",
-    "sends snowfall": "lähetä lumisadetta",
-    "Sends the given message with snowfall": "Lähettää viestin lumisateen kera",
-    "Sends the given message with fireworks": "Lähettää viestin ilotulitteiden kera",
-    "sends confetti": "lähettää konfettia",
-    "Sends the given message with confetti": "Lähettää viestin konfettien kera",
-    "sends fireworks": "lähetä ilotulitus",
     "Please verify the room ID or address and try again.": "Tarkista huonetunnus ja yritä uudelleen.",
     "Are you sure you want to deactivate your account? This is irreversible.": "Haluatko varmasti poistaa tilisi pysyvästi?",
     "Data on this screen is shared with %(widgetDomain)s": "Tällä näytöllä olevaa tietoa jaetaan verkkotunnuksen %(widgetDomain)s kanssa",
@@ -1834,8 +1786,6 @@
     "Global": "Yleiset",
     "New keyword": "Uusi avainsana",
     "Keyword": "Avainsana",
-    "Messages containing keywords": "Viestit, jotka sisältävät avainsanoja",
-    "Enable email notifications for %(email)s": "Sähköposti-ilmoitukset osoitteeseen %(email)s",
     "Mentions & keywords": "Maininnat ja avainsanat",
     "Some invites couldn't be sent": "Joitain kutsuja ei voitu lähettää",
     "We couldn't log you in": "Emme voineet kirjata sinua sisään",
@@ -1870,8 +1820,6 @@
     "Role in <RoomName/>": "Rooli huoneessa <RoomName/>",
     "Are you sure you want to add encryption to this public room?": "Haluatko varmasti lisätä salauksen tähän julkiseen huoneeseen?",
     "There was an error loading your notification settings.": "Virhe ladatessa ilmoitusasetuksia.",
-    "An error occurred whilst saving your notification preferences.": "Ilmoitusasetuksia tallentaessa tapahtui virhe.",
-    "Error saving notification preferences": "Virhe tallentaessa ilmoitusasetuksia",
     "Private (invite only)": "Yksityinen (vain kutsulla)",
     "Workspace: <networkLink/>": "Työtila: <networkLink/>",
     "This may be useful for public spaces.": "Tämä voi olla hyödyllinen julkisille avaruuksille.",
@@ -1924,7 +1872,6 @@
         "one": "Päivitetään avaruutta...",
         "other": "Päivitetään avaruuksia... (%(progress)s/%(count)s)"
     },
-    "Use high contrast": "Käytä suurta kontrastia",
     "To view all keyboard shortcuts, <a>click here</a>.": "Katso kaikki pikanäppäimet <a>napsauttamalla tästä</a>.",
     "Select all": "Valitse kaikki",
     "Deselect all": "Älä valitse mitään",
@@ -1983,7 +1930,6 @@
     "Failed to update the visibility of this space": "Avaruuden näkyvyyden muuttaminen epäonnistui",
     "Failed to update the history visibility of this space": "Historian näkyvyysasetusten muuttaminen epäonnistui",
     "Failed to update the guest access of this space": "Vieraiden pääsyasetusten muuttaminen epäonnistui",
-    "Sends the given message with a space themed effect": "Lähetä annettu viesti avaruusteemaisella tehosteella",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s ja %(count)s muu",
         "other": "%(spaceName)s ja %(count)s muuta"
@@ -2063,8 +2009,6 @@
     "Keyboard": "Näppäimistö",
     "Large": "Suuri",
     "Access": "Pääsy",
-    "sends rainfall": "lähettää vesisadetta",
-    "Sends the given message with rainfall": "Lähettää viestin vesisateen kera",
     "Room members": "Huoneen jäsenet",
     "Back to chat": "Takaisin keskusteluun",
     "That's fine": "Sopii",
@@ -2172,7 +2116,6 @@
     "Wait!": "Odota!",
     "Own your conversations.": "Omista keskustelusi.",
     "Unnamed audio": "Nimetön ääni",
-    "%(timeRemaining)s left": "%(timeRemaining)s jäljellä",
     "Click for more info": "Napsauta tästä saadaksesi lisätietoja",
     "This is a beta feature": "Tämä on beetaominaisuus",
     "Start audio stream": "Käynnistä äänen suoratoisto",
@@ -2234,8 +2177,6 @@
         "one": "%(count)s ihminen liittyi",
         "other": "%(count)s ihmistä liittyi"
     },
-    "sends hearts": "lähettää sydämiä",
-    "Sends the given message with hearts": "Lähettää viestin sydämien kera",
     "Developer": "Kehittäjä",
     "Connection lost": "Yhteys menetettiin",
     "Sorry, your homeserver is too old to participate here.": "Kotipalvelimesi on liian vanha osallistumaan tänne.",
@@ -2332,7 +2273,6 @@
     "Waiting for you to verify on your other device…": "Odotetaan vahvistustasi toiselta laitteelta…",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Odotetaan vahvistustasi toiselta laitteelta, %(deviceName)s (%(deviceId)s)…",
     "Verify this device by confirming the following number appears on its screen.": "Vahvista tämä laite toteamalla, että seuraava numero näkyy sen näytöllä.",
-    "Image size in the timeline": "Kuvan koko aikajanalla",
     "To proceed, please accept the verification request on your other device.": "Jatka hyväksymällä vahvistuspyyntö toisella laitteella.",
     "Use your preferred Matrix homeserver if you have one, or host your own.": "Käytä haluamaasi Matrix-kotipalvelinta, tai isännöi omaa palvelinta.",
     "We call the places where you can host your account 'homeservers'.": "Kutsumme \"kotipalvelimiksi\" paikkoja, missä voit isännöidä tiliäsi.",
@@ -2461,9 +2401,6 @@
     "Sessions": "Istunnot",
     "Share your activity and status with others.": "Jaa toimintasi ja tilasi muiden kanssa.",
     "Spell check": "Oikeinkirjoituksen tarkistus",
-    "Enable notifications for this device": "Ota ilmoitukset käyttöön tälle laitteelle",
-    "Turn off to disable notifications on all your devices and sessions": "Poista käytöstä, niin kaikkien laitteiden ja istuntojen ilmoitukset ovat pois päältä",
-    "Enable notifications for this account": "Ota ilmoitukset käyttöön tälle tilille",
     "Download %(brand)s": "Lataa %(brand)s",
     "Sorry — this call is currently full": "Pahoittelut — tämä puhelu on täynnä",
     "Unknown room": "Tuntematon huone",
@@ -2973,7 +2910,18 @@
         "sliding_sync_description": "Työn alla, käytöstä poistaminen ei ole mahdollista.",
         "under_active_development": "Aktiivisen kehityksen kohteena.",
         "location_share_live_description": "Tilapäinen toteutus. Sijainnit säilyvät huoneen historiassa.",
-        "dynamic_room_predecessors_description": "Ota käyttöön MSC3946 (viiveellä saapuvien huonearkistojen tukemiseksi)"
+        "dynamic_room_predecessors_description": "Ota käyttöön MSC3946 (viiveellä saapuvien huonearkistojen tukemiseksi)",
+        "group_messaging": "Viestintä",
+        "group_profile": "Profiili",
+        "group_spaces": "Avaruudet",
+        "group_widgets": "Sovelmat",
+        "group_rooms": "Huoneet",
+        "group_voip": "Ääni ja video",
+        "group_moderation": "Moderointi",
+        "group_themes": "Teemat",
+        "group_encryption": "Salaus",
+        "group_experimental": "Kokeellinen",
+        "group_developer": "Kehittäjä"
     },
     "keyboard": {
         "home": "Etusivu",
@@ -3066,7 +3014,8 @@
         "few_seconds_ago": "muutama sekunti sitten",
         "about_minute_ago": "noin minuutti sitten",
         "about_hour_ago": "noin tunti sitten",
-        "about_day_ago": "noin päivä sitten"
+        "about_day_ago": "noin päivä sitten",
+        "left": "%(timeRemaining)s jäljellä"
     },
     "onboarding": {
         "personal_messaging_title": "Turvallista viestintää kavereiden ja perheen kanssa",
@@ -3149,11 +3098,37 @@
             "rule_call": "Puhelukutsu",
             "rule_suppress_notices": "Bottien lähettämät viestit",
             "rule_tombstone": "Kun huoneet päivitetään",
-            "rule_encrypted_room_one_to_one": "Salatut viestit kahdenkeskisissä keskusteluissa"
+            "rule_encrypted_room_one_to_one": "Salatut viestit kahdenkeskisissä keskusteluissa",
+            "messages_containing_keywords": "Viestit, jotka sisältävät avainsanoja",
+            "error_saving": "Virhe tallentaessa ilmoitusasetuksia",
+            "error_saving_detail": "Ilmoitusasetuksia tallentaessa tapahtui virhe.",
+            "enable_notifications_account": "Ota ilmoitukset käyttöön tälle tilille",
+            "enable_notifications_account_detail": "Poista käytöstä, niin kaikkien laitteiden ja istuntojen ilmoitukset ovat pois päältä",
+            "enable_email_notifications": "Sähköposti-ilmoitukset osoitteeseen %(email)s",
+            "enable_notifications_device": "Ota ilmoitukset käyttöön tälle laitteelle",
+            "enable_desktop_notifications_session": "Ota käyttöön työpöytäilmoitukset tälle istunnolle",
+            "show_message_desktop_notification": "Näytä viestit ilmoituskeskuksessa",
+            "enable_audible_notifications_session": "Ota käyttöön ääni-ilmoitukset tälle istunnolle"
         },
         "appearance": {
             "layout_irc": "IRC (kokeellinen)",
-            "layout_bubbles": "Viestikuplat"
+            "layout_bubbles": "Viestikuplat",
+            "heading": "Mukauta ulkoasua",
+            "subheading": "Ulkoasuasetukset vaikuttavat vain tähän %(brand)s-istuntoon.",
+            "match_system_theme": "Käytä järjestelmän teemaa",
+            "custom_font": "Käytä järjestelmän fonttia",
+            "custom_font_name": "Järjestelmän fontin nimi",
+            "custom_theme_invalid": "Epäkelpo teeman skeema.",
+            "custom_theme_error_downloading": "Virhe ladattaessa teematietoa.",
+            "custom_theme_success": "Teema lisätty!",
+            "custom_theme_url": "Mukautettu teeman osoite",
+            "use_high_contrast": "Käytä suurta kontrastia",
+            "custom_theme_add_button": "Lisää teema",
+            "font_size": "Fontin koko",
+            "custom_font_description": "Aseta käyttöjärjestelmääsi asennetun fontin nimi, niin %(brand)s pyrkii käyttämään sitä.",
+            "timeline_image_size": "Kuvan koko aikajanalla",
+            "timeline_image_size_default": "Oletus",
+            "timeline_image_size_large": "Suuri"
         }
     },
     "devtools": {
@@ -3321,7 +3296,15 @@
             "removed": "%(senderName)s poisti tämän huoneen pääosoitteen.",
             "changed_alternative": "%(senderName)s muutti tämän huoneen vaihtoehtoisia osoitteita.",
             "changed_main_and_alternative": "%(senderName)s muutti tämän huoneen pää- sekä vaihtoehtoisia osoitteita.",
-            "changed": "%(senderName)s muutti tämän huoneen osoitteita."
+            "changed": "%(senderName)s muutti tämän huoneen osoitteita.",
+            "alt_added": {
+                "other": "%(senderName)s lisäsi vaihtoehtoiset osoitteet %(addresses)s tälle huoneelle.",
+                "one": "%(senderName)s lisäsi vaihtoehtoisen osoitteen %(addresses)s tälle huoneelle."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s poisti vaihtoehtoiset osoitteet %(addresses)s tältä huoneelta.",
+                "one": "%(senderName)s poisti vaihtoehtoisen osoitteitteen %(addresses)s tältä huoneelta."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s kumosi henkilön %(targetDisplayName)s kutsun liittyä tähän huoneeseen.",
@@ -3486,6 +3469,29 @@
                 "one": "%(oneUser)slähetti piilotetun viestin",
                 "other": "%(oneUser)slähetti %(count)s piilotettua viestiä"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s muutti %(powerLevelDiffText)s:n oikeustasoa.",
+            "user_from_to": "%(userId)s tasolta %(fromPowerLevel)s tasolle %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s poisti porttikiellon käyttäjiltä, jotka täsmäsivät sääntöön %(glob)s",
+            "removed_rule_rooms": "%(senderName)s poisti huoneita estävän säännön %(glob)s",
+            "removed_rule_servers": "%(senderName)s poisti palvelimia estävän säännön %(glob)s",
+            "removed_rule": "%(senderName)s poisti estosäännön %(glob)s",
+            "updated_invalid_rule": "%(senderName)s muokkasi epäkelpoa estosääntöä",
+            "updated_rule_users": "%(senderName)s muokkasi käyttäjiä estävää sääntöä %(glob)s seuraavasta syystä: %(reason)s",
+            "updated_rule_rooms": "%(senderName)s muokkasi huoneita estävää sääntöä %(glob)s seuraavasta syystä: %(reason)s",
+            "updated_rule_servers": "%(senderName)s muokkasi palvelimia estävää sääntöä %(glob)s seuraavasta syystä: %(reason)s",
+            "updated_rule": "%(senderName)s muokkasi estosääntöä %(glob)s seuraavasta syystä: %(reason)s",
+            "created_rule_users": "%(senderName)s loi porttikiellonsäännön %(glob)s, syy: %(reason)s",
+            "created_rule_rooms": "%(senderName)s loi huoneita estävän säännön %(glob)s, syy: %(reason)s",
+            "created_rule_servers": "%(senderName)s loi palvelimia estävän säännön %(glob)s, syy: %(reason)s",
+            "created_rule": "%(senderName)s loi estosäännön %(glob)s, syy: %(reason)s",
+            "changed_rule_users": "%(senderName)s muutti sääntöä, joka esti käyttäjiä säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
+            "changed_rule_rooms": "%(senderName)s muutti sääntöä, joka esti huoneita säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
+            "changed_rule_servers": "%(senderName)s muutti sääntöä, joka esti palvelimia säännöllä %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s",
+            "changed_rule_glob": "%(senderName)s muutti estosääntöä muodosta %(oldGlob)s muotoon %(newGlob)s. Syy: %(reason)s"
         }
     },
     "slash_command": {
@@ -3675,5 +3681,18 @@
         "bullet_1": "<Bold>Emme</Bold> tallenna tai profiloi tilin tietoja",
         "bullet_2": "<Bold>Emme</Bold> jaa tietoja kolmansille tahoille",
         "disable_prompt": "Tämän voi poistaa käytöstä koska tahansa asetuksista"
+    },
+    "chat_effects": {
+        "confetti_description": "Lähettää viestin konfettien kera",
+        "confetti_message": "lähettää konfettia",
+        "fireworks_description": "Lähettää viestin ilotulitteiden kera",
+        "fireworks_message": "lähetä ilotulitus",
+        "rainfall_description": "Lähettää viestin vesisateen kera",
+        "rainfall_message": "lähettää vesisadetta",
+        "snowfall_description": "Lähettää viestin lumisateen kera",
+        "snowfall_message": "lähetä lumisadetta",
+        "spaceinvaders_description": "Lähetä annettu viesti avaruusteemaisella tehosteella",
+        "hearts_description": "Lähettää viestin sydämien kera",
+        "hearts_message": "lähettää sydämiä"
     }
 }

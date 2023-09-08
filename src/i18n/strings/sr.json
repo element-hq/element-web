@@ -56,8 +56,6 @@
     "You are no longer ignoring %(userId)s": "Више не занемарујете корисника %(userId)s",
     "Verified key": "Проверени кључ",
     "Reason": "Разлог",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s са %(fromPowerLevel)s на %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s промени ниво снаге за %(powerLevelDiffText)s.",
     "Failure to create room": "Неуспех при прављењу собе",
     "Server may be unavailable, overloaded, or you hit a bug.": "Сервер је можда недоступан, преоптерећен или сте нашли грешку.",
     "Send": "Пошаљи",
@@ -294,7 +292,6 @@
     "Invite to this room": "Позови у ову собу",
     "You cannot delete this message. (%(code)s)": "Не можете обрисати ову поруку. (%(code)s)",
     "Thursday": "Четвртак",
-    "Show message in desktop notification": "Прикажи поруку у стоном обавештењу",
     "Yesterday": "Јуче",
     "Error encountered (%(errorDetail)s).": "Догодила се грешка (%(errorDetail)s).",
     "Low Priority": "Најмања важност",
@@ -408,20 +405,11 @@
     "All settings": "Сва подешавања",
     "Feedback": "Повратни подаци",
     "General failure": "Општа грешка",
-    "Font size": "Величина фонта",
     "Use custom size": "Користи прилагођену величину",
-    "Match system theme": "Прати тему система",
-    "Use a system font": "Користи системски фонт",
-    "System font name": "Назив системског фонта",
     "Got It": "Разумем",
     "Light bulb": "сијалица",
     "Hey you. You're the best!": "Хеј! Само напред!",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Прилагођена величина фонта може бити између %(min)s и %(max)s тачака",
-    "Theme added!": "Тема додата!",
-    "Custom theme URL": "Адреса прилагођене теме",
-    "Add theme": "Додај тему",
-    "Customise your appearance": "Прилагодите изглед",
-    "Appearance Settings only affect this %(brand)s session.": "Подешавања изгледа се примењују само на %(brand)s сесију.",
     "Help & About": "Помоћ и подаци о програму",
     "Voice & Video": "Глас и видео",
     "Unable to revoke sharing for email address": "Не могу да опозовем дељење ове мејл адресе",
@@ -721,10 +709,6 @@
     "Unexpected error resolving homeserver configuration": "Неочекивана грешка при откривању подешавања сервера",
     "No homeserver URL provided": "Није наведен УРЛ сервера",
     "Cannot reach homeserver": "Сервер недоступан",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s је додао алтернативну адресу %(addresses)s за ову собу.",
-        "one": "%(senderName)s је додао алтернативну адресу %(addresses)s за ову собу."
-    },
     "Takes the call in the current room off hold": "Узима позив са чекања у тренутној соби",
     "Places the call in the current room on hold": "Ставља позив на чекање у тренутној соби",
     "Opens chat with the given user": "Отвара ћаскање са наведеним корисником",
@@ -755,10 +739,6 @@
     "Error changing power level": "Грешка при промени нивоа снаге",
     "Power level": "Ниво снаге",
     "Explore rooms": "Истражи собе",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s је уклонио алтернативне адресе %(addresses)s за ову собу.",
-        "one": "%(senderName)s је уклонио алтернативну адресу %(addresses)s за ову собу."
-    },
     "Converts the room to a DM": "Претвара собу у директно дописивање",
     "Converts the DM to a room": "Претвара директно дописивање у собу",
     "We couldn't log you in": "Не могу да вас пријавим",
@@ -982,25 +962,8 @@
     "Ask this user to verify their session, or manually verify it below.": "Питајте овог корисника да потврди његову сесију или ручно да потврди у наставку.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) се улоговао у нову сесију без потврђивања:",
     "Verify your other session using one of the options below.": "Потврдите другу сесију помоћу једних од опција у испод.",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s је створиоправило о забрани које се подударају са %(glob)s због %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s је створио правило које забрањије сервере који се подударају са %(glob)s због %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s је створио правило које забрањује собе које се подударају са %(glob)s због %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s је створио правило које забрањује кориснике који се подударају са %(glob)s због %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s је аужурирао правило о забрани које се поударају са %(glob)s због %(reason)s",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s је уклонио правило које забрањује кориснике који се подударају са %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s је уклонио правило које забрањује собе које подударају са %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s је уклонио правил које забрањује сервере који подударају са %(glob)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s је аужурирао правило које забрањује сервере које се подударају са %(glob)s због %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s је аужурирао правило које забрањује соба које се подударају са %(glob)s због %(reason)s",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s је аужурирао правило о забрани корисника који се подударају са %(glob)s због %(reason)s",
     "You signed in to a new session without verifying it:": "Пријавили сте се у нову сесију без потврђивања:",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s је аужурирао правило о забрани које се подударало са %(oldGlob)s да би се подударало са %(newGlob)s због %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s је променио правило које је забрањинвало сервере који су се подударале са %(oldGlob)s да би се подударале са %(newGlob)s због %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s је променио правило које је забрањивало собе који се подударају са %(oldGlob)s да би се подударале са %(newGlob)s због %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s је променио правило које забрањије кориснике који се подударају са %(oldGlob)s да се подудара са %(newGlob)s због %(reason)s",
     "Accept all %(invitedRooms)s invites": "Прихвати све %(invitedRooms)s позивнице",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s је аужурирао неважеће правило о забрани",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s је уклонио правило о забрани које подудара са %(glob)s",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Користите сервер за идентитет да бисте послали позивнице е-поштом. Кликните на даље да бисте користили уобичајни сервер идентитета %(defaultIdentityServerName)s или управљајте у подешавањима.",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Кључ за потписивање који сте навели поклапа се са кључем за потписивање који сте добили од %(userId)s сесије %(deviceId)s. Сесија је означена као проверена.",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "УПОЗОРЕЊЕ: ПРОВЕРА КЉУЧА НИЈЕ УСПЕЛА! Кључ за потписивање за %(userId)s и сесију %(deviceId)s је \"%(fprint)s\", који се не подудара са наведеним кључем \"%(fingerprint)s\". То може значити да су ваше комуникације пресретнуте!",
@@ -1113,7 +1076,12 @@
     },
     "labs": {
         "pinning": "Закачене поруке",
-        "bridge_state": "Прикажи податке о мостовима у подешавањима собе"
+        "bridge_state": "Прикажи податке о мостовима у подешавањима собе",
+        "group_profile": "Профил",
+        "group_widgets": "Виџети",
+        "group_rooms": "Собе",
+        "group_voip": "Глас и видео",
+        "group_encryption": "Шифровање"
     },
     "keyboard": {
         "home": "Почетна",
@@ -1166,7 +1134,20 @@
             "rule_message": "Поруке у групним ћаскањима",
             "rule_invite_for_me": "Када сам позван у собу",
             "rule_call": "Позивница за позив",
-            "rule_suppress_notices": "Поруке послате од бота"
+            "rule_suppress_notices": "Поруке послате од бота",
+            "show_message_desktop_notification": "Прикажи поруку у стоном обавештењу"
+        },
+        "appearance": {
+            "heading": "Прилагодите изглед",
+            "subheading": "Подешавања изгледа се примењују само на %(brand)s сесију.",
+            "match_system_theme": "Прати тему система",
+            "custom_font": "Користи системски фонт",
+            "custom_font_name": "Назив системског фонта",
+            "custom_theme_success": "Тема додата!",
+            "custom_theme_url": "Адреса прилагођене теме",
+            "custom_theme_add_button": "Додај тему",
+            "font_size": "Величина фонта",
+            "timeline_image_size_default": "Подразумевано"
         }
     },
     "devtools": {
@@ -1215,7 +1196,15 @@
             "removed": "%(senderName)s је уклони главну адресу за ову собу.",
             "changed_alternative": "%(senderName)s је изменио алтернативне адресе за ову собу.",
             "changed_main_and_alternative": "%(senderName)s је изменио главну и алтернативне адресе за ову собу.",
-            "changed": "%(senderName)s је изменио адресе за ову собу."
+            "changed": "%(senderName)s је изменио адресе за ову собу.",
+            "alt_added": {
+                "other": "%(senderName)s је додао алтернативну адресу %(addresses)s за ову собу.",
+                "one": "%(senderName)s је додао алтернативну адресу %(addresses)s за ову собу."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s је уклонио алтернативне адресе %(addresses)s за ову собу.",
+                "one": "%(senderName)s је уклонио алтернативну адресу %(addresses)s за ову собу."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s је повукао позивницу за приступ соби кориснику %(targetDisplayName)s.",
@@ -1326,6 +1315,29 @@
                 "other": "%(oneUser)s промени своје име %(count)s пута",
                 "one": "%(oneUser)s промени своје име"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s промени ниво снаге за %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s са %(fromPowerLevel)s на %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s је уклонио правило које забрањује кориснике који се подударају са %(glob)s",
+            "removed_rule_rooms": "%(senderName)s је уклонио правило које забрањује собе које подударају са %(glob)s",
+            "removed_rule_servers": "%(senderName)s је уклонио правил које забрањује сервере који подударају са %(glob)s",
+            "removed_rule": "%(senderName)s је уклонио правило о забрани које подудара са %(glob)s",
+            "updated_invalid_rule": "%(senderName)s је аужурирао неважеће правило о забрани",
+            "updated_rule_users": "%(senderName)s је аужурирао правило о забрани корисника који се подударају са %(glob)s због %(reason)s",
+            "updated_rule_rooms": "%(senderName)s је аужурирао правило које забрањује соба које се подударају са %(glob)s због %(reason)s",
+            "updated_rule_servers": "%(senderName)s је аужурирао правило које забрањује сервере које се подударају са %(glob)s због %(reason)s",
+            "updated_rule": "%(senderName)s је аужурирао правило о забрани које се поударају са %(glob)s због %(reason)s",
+            "created_rule_users": "%(senderName)s је створио правило које забрањује кориснике који се подударају са %(glob)s због %(reason)s",
+            "created_rule_rooms": "%(senderName)s је створио правило које забрањује собе које се подударају са %(glob)s због %(reason)s",
+            "created_rule_servers": "%(senderName)s је створио правило које забрањије сервере који се подударају са %(glob)s због %(reason)s",
+            "created_rule": "%(senderName)s је створиоправило о забрани које се подударају са %(glob)s због %(reason)s",
+            "changed_rule_users": "%(senderName)s је променио правило које забрањије кориснике који се подударају са %(oldGlob)s да се подудара са %(newGlob)s због %(reason)s",
+            "changed_rule_rooms": "%(senderName)s је променио правило које је забрањивало собе који се подударају са %(oldGlob)s да би се подударале са %(newGlob)s због %(reason)s",
+            "changed_rule_servers": "%(senderName)s је променио правило које је забрањинвало сервере који су се подударале са %(oldGlob)s да би се подударале са %(newGlob)s због %(reason)s",
+            "changed_rule_glob": "%(senderName)s је аужурирао правило о забрани које се подударало са %(oldGlob)s да би се подударало са %(newGlob)s због %(reason)s"
         }
     },
     "slash_command": {

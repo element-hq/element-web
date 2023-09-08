@@ -1192,33 +1192,6 @@
     "Host account on": "ບັນຊີເຈົ້າພາບເປີດຢູ່",
     "Create account": "ສ້າງບັນຊີ",
     "Registration Successful": "ການລົງທະບຽນສຳເລັດແລ້ວ",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມຈັບຄູ່ກັນ %(oldGlob)s ການຈັບຄູ່ກັນ%(newGlob)s ສໍາລັບ %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ໄດ້ປ່ຽນກົດລະບຽບທີ່ຫ້າມເຊີບເວີຈັບຄູ່ກັນ %(oldGlob)s ເປັນການຈັບຄູ່%(newGlob)s ສໍາລັບ %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ໄດ້ປ່ຽນກົດລະບຽບທີ່ຫ້າມການຈັບຄູ່ຫ້ອງ %(oldGlob)s ເປັນການຈັບຄູ່ %(newGlob)s ສໍາລັບ %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ໄດ້ປ່ຽນກົດລະບຽບທີ່ຫ້າມຜູ້ໃຊ້ທີ່ຈັບຄູ່ກັນ%(oldGlob)s ເປັນການຈັບຄູ່%(newGlob)s ສໍາລັບ %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s ສ້າງກົດລະບຽບການຫ້າມຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມເຊີບເວີທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມຫ້ອງທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມຜູ້ໃຊ້ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມເຊີບເວີທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມຫ້ອງທີ່ຈັບຄູ່ %(glob)s ສໍາລັບ%(reason)s",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s ອັບເດດກົດລະບຽບຫ້າມຜູ້ໃຊ້ທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມທີ່ບໍ່ຖືກຕ້ອງ",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມທີ່ຄູ່ກັນ%(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມເຊີບເວີຄູ່ກັນ%(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມຫ້ອງທີ່ກົງກັບ %(glob)s",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມຜູ້ໃຊ້ທີ່ກົງກັນ %(glob)s",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s ຈາກ %(fromPowerLevel)s ຫາ %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ໄດ້ປ່ຽນລະດັບພະລັງງານຂອງ %(powerLevelDiffText)s.",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "one": "%(senderName)s ໄດ້ລຶບທີ່ຢູ່ສຳຮອງ%(addresses)s ສໍາລັບຫ້ອງນີ້.",
-        "other": "%(senderName)s ໄດ້ລຶບທີ່ຢູ່ສຳຮອງ %(addresses)s ຂອງຫ້ອງນີ້ອອກ."
-    },
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "one": "%(senderName)s ໄດ້ເພີ່ມທີ່ຢູ່ສຳຮອງ%(addresses)sສໍາລັບຫ້ອງນີ້.",
-        "other": "%(senderName)s ໄດ້ເພີ່ມທີ່ຢູ່ສຳຮອງ%(addresses)s ສໍາລັບຫ້ອງນີ້."
-    },
     "Displays action": "ສະແດງການດຳເນີນການ",
     "Converts the DM to a room": "ປ່ຽນ DM ເປັນຫ້ອງ",
     "Converts the room to a DM": "ປ່ຽນຫ້ອງເປັນ DM",
@@ -1303,12 +1276,6 @@
     "with an empty state key": "ດ້ວຍປຸ່ມລັດ empty",
     "See when anyone posts a sticker to your active room": "ເບິ່ງເວລາທີ່ຄົນໂພສສະຕິກເກີໃສ່ຫ້ອງຂອງທ່ານ",
     "Send stickers to your active room as you": "ສົ່ງສະຕິກເກີໄປຫາຫ້ອງຂອງທ່ານ",
-    "Show message in desktop notification": "ສະແດງຂໍ້ຄວາມໃນການແຈ້ງເຕືອນ desktop",
-    "Enable desktop notifications for this session": "ເປີດໃຊ້ການແຈ້ງເຕືອນເດັສທັອບສຳລັບລະບົບນີ້",
-    "Enable email notifications for %(email)s": "ເປີດໃຊ້ການແຈ້ງເຕືອນອີເມວສຳລັບ %(email)s",
-    "An error occurred whilst saving your notification preferences.": "ເກີດຄວາມຜິດພາດໃນຂະນະທີ່ບັນທຶກການຕັ້ງຄ່າການແຈ້ງເຕືອນຂອງທ່ານ.",
-    "Error saving notification preferences": "ເກີດຄວາມຜິດພາດໃນການບັນທຶກການຕັ້ງຄ່າການແຈ້ງເຕືອນ",
-    "Messages containing keywords": "ຂໍ້ຄວາມທີ່ມີຄໍາສໍາຄັນ",
     "Updating spaces... (%(progress)s out of %(count)s)": {
         "one": "ກຳລັງປັບປຸງພື້ນທີ່..",
         "other": "ກຳລັງຍົກລະດັບພື້ນທີ່... (%(progress)s ຈາກທັງໝົດ %(count)s)"
@@ -1341,7 +1308,6 @@
     "The integration manager is offline or it cannot reach your homeserver.": "ຜູ້ຈັດການການເຊື່ອມໂຍງແມ່ນອອບໄລນ໌ຫຼືບໍ່ສາມາດເຂົ້າຫາ homeserver ຂອງທ່ານໄດ້.",
     "Cannot connect to integration manager": "ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບຕົວຈັດການການເຊື່ອມໂຍງໄດ້",
     "Large": "ຂະຫນາດໃຫຍ່",
-    "Image size in the timeline": "ຂະຫນາດຮູບພາບຢູ່ໃນທາມລາຍ",
     "Use between %(min)s pt and %(max)s pt": "ໃຊ້ລະຫວ່າງ %(min)s pt ແລະ %(max)s pt",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "ຂະໜາດຕົວອັກສອນທີ່ກຳນົດເອງສາມາດຢູ່ໃນລະຫວ່າງ %(min)s pt ແລະ %(max)s pt",
     "Size must be a number": "ຂະໜາດຕ້ອງເປັນຕົວເລກ",
@@ -1415,7 +1381,6 @@
     "This room is public": "ນີ້ແມ່ນຫ້ອງສາທາລະນະ",
     "Avatar": "ຮູບແທນຕົວ",
     "An error occurred while stopping your live location, please try again": "ເກີດຄວາມຜິດພາດໃນລະຫວ່າງການຢຸດສະຖານທີ່ປັດຈຸບັນຂອງທ່ານ, ກະລຸນາລອງໃໝ່ອີກຄັ້ງ",
-    "%(timeRemaining)s left": "ຍັງເຫຼືອ %(timeRemaining)s",
     "Live until %(expiryTime)s": "ຢູ່ຈົນກ່ວາ %(expiryTime)s",
     "Updated %(humanizedUpdateTime)s": "ອັບເດດ %(humanizedUpdateTime)s",
     "Space home": "ພຶ້ນທີ່ home",
@@ -1700,10 +1665,6 @@
     "Failed to end poll": "ບໍ່ສາມາດສີ່ນສູດການສຳຫຼວດ",
     "The poll has ended. Top answer: %(topAnswer)s": "ການສໍາຫຼວດໄດ້ສິ້ນສຸດລົງ. ຄຳຕອບສູງສຸດ: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "ການສໍາຫຼວດໄດ້ສິ້ນສຸດລົງ. ບໍ່ມີການລົງຄະແນນສຽງ.",
-    "sends fireworks": "ສົ່ງດອກໄມ້ໄຟ",
-    "Sends the given message with fireworks": "ສົ່ງຂໍ້ຄວາມໃຫ້ດ້ວຍດອກໄມ້ໄຟ",
-    "sends confetti": "ສົ່ງ confetti",
-    "Sends the given message with confetti": "ສົ່ງຂໍ້ຄວາມພ້ອມດ້ວຍ confetti",
     "This is your list of users/servers you have blocked - don't leave the room!": "ນີ້ແມ່ນບັນຊີລາຍຊື່ຜູ້ໃຊ້ / ເຊີບເວີຂອງທ່ານທີ່ທ່ານໄດ້ບລັອກ - ຢ່າອອກຈາກຫ້ອງ!",
     "My Ban List": "ບັນຊີລາຍຊື່ການຫ້າມຂອງຂ້ອຍ",
     "Waiting for response from server": "ກຳລັງລໍຖ້າການຕອບສະໜອງຈາກເຊີບເວີ",
@@ -1722,15 +1683,11 @@
     "Never send encrypted messages to unverified sessions in this room from this session": "ບໍ່ສົ່ງຂໍ້ຄວາມເຂົ້າລະຫັດໄປຫາລະບົບທີ່ບໍ່ໄດ້ຢືນຢັນໃນຫ້ອງນີ້ຈາກລະບົບນີ້",
     "Never send encrypted messages to unverified sessions from this session": "ບໍ່ສົ່ງຂໍ້ຄວາມເຂົ້າລະຫັດໄປຫາລະບົບທີ່ບໍ່ໄດ້ຢືນຢັນຈາກລະບົບນີ້",
     "Send analytics data": "ສົ່ງຂໍ້ມູນການວິເຄາະ",
-    "System font name": "ຊື່ຕົວອັກສອນລະບົບ",
-    "Use a system font": "ໃຊ້ຕົວອັກສອນຂອງລະບົບ",
-    "Match system theme": "ລະບົບຈັບຄູ່ຫົວຂໍ້",
     "Mirror local video feed": "ເບິ່ງຟີດວິດີໂອທ້ອງຖິ່ນ",
     "Surround selected text when typing special characters": "ອ້ອມຮອບຂໍ້ຄວາມທີ່ເລືອກໃນເວລາພິມຕົວອັກສອນພິເສດ",
     "Use a more compact 'Modern' layout": "ໃຊ້ຮູບແບບ 'ທັນສະໄຫມ' ທີ່ກະທັດຮັດກວ່າ",
     "Show polls button": "ສະແດງປຸ່ມແບບສຳຫຼວດ",
     "Use custom size": "ໃຊ້ຂະຫນາດທີ່ກໍາຫນົດເອງ",
-    "Font size": "ຂະໜາດຕົວອັກສອນ",
     "Leave the beta": "ອອກຈາກເບຕ້າ",
     "Reply in thread": "ຕອບໃນກະທູ້",
     "Developer": "ນັກພັດທະນາ",
@@ -2182,19 +2139,10 @@
     "Email addresses": "ທີ່ຢູ່ອີເມວ",
     "Your password was successfully changed.": "ລະຫັດຜ່ານຂອງທ່ານຖືກປ່ຽນສຳເລັດແລ້ວ.",
     "Failed to change password. Is your password correct?": "ປ່ຽນລະຫັດຜ່ານບໍ່ສຳເລັດ. ລະຫັດຜ່ານຂອງທ່ານຖືກຕ້ອງບໍ?",
-    "Appearance Settings only affect this %(brand)s session.": "ການຕັ້ງຄ່າຮູບລັກສະນະມີຜົນກະທົບພຽງແຕ່ %(brand)s ໃນລະບົບ ນີ້.",
-    "Customise your appearance": "ປັບແຕ່ງຮູບລັກສະນະຂອງທ່ານ",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "ກຳນົດຊື່ຕົວອັກສອນທີ່ຕິດຕັ້ງຢູ່ໃນລະບົບຂອງທ່ານ & %(brand)sຈະພະຍາຍາມໃຊ້ມັນ.",
     "Check for update": "ກວດເບິ່ງເພຶ່ອອັບເດດ",
     "New version available. <a>Update now.</a>": "ເວີຊັ້ນໃໝ່ພ້ອມໃຊ້ງານ. <a>ອັບເດດດຽວນີ້.</a>",
     "No update available.": "ບໍ່ໄດ້ອັບເດດ.",
     "Error encountered (%(errorDetail)s).": "ພົບຂໍ້ຜິດພາດ (%(errorDetail)s).",
-    "Add theme": "ເພີ່ມຫົວຂໍ້",
-    "Custom theme URL": "ການ ກຳນົດເອງຫົວຂໍ້ URL",
-    "Use high contrast": "ໃຊ້ຄວາມຄົມຊັດສູງ",
-    "Theme added!": "ເພີ່ມຫົວຂໍ້!",
-    "Error downloading theme information.": "ເກີດຄວາມຜິດພາດໃນການດາວໂຫຼດຂໍ້ມູນ.",
-    "Invalid theme schema.": "ຮູບແບບschemaບໍ່ຖືກຕ້ອງ.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "ຜູ້ຈັດການລວມລະບົບໄດ້ຮັບຂໍ້ມູນການຕັ້ງຄ່າ ແລະ ສາມາດແກ້ໄຂ widget, ສົ່ງການເຊີນຫ້ອງ ແລະ ກໍານົດລະດັບພະລັງງານໃນນາມຂອງທ່ານ.",
     "Manage integrations": "ຈັດການການເຊື່ອມໂຍງ",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "ໃຊ້ຕົວຈັດການການເຊື່ອມໂຍງເພື່ອຈັດການ bots, widget, ແລະຊຸດສະຕິກເກີ.",
@@ -2416,7 +2364,6 @@
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "ເພື່ອຫຼີກລ້ຽງບັນຫາເຫຼົ່ານີ້, ສ້າງ <a>ຫ້ອງເຂົ້າລະຫັດໃຫມ່</a> ສໍາລັບການສົນທະນາທີ່ທ່ານວາງແຜນຈະມີ.",
     "Subscribing to a ban list will cause you to join it!": "ການສະໝັກບັນຊີລາຍການຫ້າມຈະເຮັດໃຫ້ທ່ານເຂົ້າຮ່ວມ!",
     "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "ເພີ່ມຜູ້ໃຊ້ ແລະເຊີບເວີທີ່ທ່ານບໍ່ສົນໃຈໃນທີ່ນີ້. ໃຊ້ເຄື່ອງໝາຍດາວເພື່ອໃຫ້ %(brand)s ກົງກັບຕົວອັກສອນໃດນຶ່ງ. ຕົວຢ່າງ, <code>@bot:*</code> ຈະບໍ່ສົນໃຈຜູ້ໃຊ້ທັງໝົດທີ່ມີຊື່ 'bot' ຢູ່ໃນເຊີບເວີໃດນຶ່ງ.",
-    "Enable audible notifications for this session": "ເປີດໃຊ້ການແຈ້ງເຕືອນທີ່ໄດ້ຍິນໄດ້ສໍາລັບລະບົບນີ້",
     "Homeserver feature support:": "ສະຫນັບສະຫນູນຄຸນນະສົມບັດ Homeserver:",
     "User signing private key:": "ຜູ້ໃຊ້ເຂົ້າສູ່ລະບົບລະຫັດສ່ວນຕົວ:",
     "Self signing private key:": "ລະຫັດສ່ວນຕົວທີ່ເຊັນດ້ວຍຕົນເອງ:",
@@ -2437,14 +2384,6 @@
     "Server unavailable, overloaded, or something else went wrong.": "ເຊີບເວີບໍ່ສາມາດໃຊ້ໄດ້, ໂຫຼດເກີນກຳນົດ, ຫຼື ມີອັນອື່ນຜິດພາດ.",
     "Command error": "ຄໍາສັ່ງຜິດພາດ",
     "Server error": "ເຊີບເວີຜິດພາດ",
-    "sends hearts": "ສົ່ງຮູບຫົວໃຈ",
-    "Sends the given message with hearts": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດ ດ້ວຍຮູບຫົວໃຈ",
-    "sends space invaders": "ສົ່ງຜູ້ຮຸກຮານພື້ນທີ່",
-    "Sends the given message with a space themed effect": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດໃຫ້ພ້ອມດ້ວຍຫົວຂໍ້ພື້ນທີ່",
-    "sends snowfall": "ສົ່ງຫິມະຕົກ",
-    "Sends the given message with snowfall": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດພ້ອມດ້ວຍຫິມະຕົກ",
-    "sends rainfall": "ສົ່ງຝົນ",
-    "Sends the given message with rainfall": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດພ້ອມດ້ວຍສາຍຝົນ",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "ອຸປະກອນນີ້ບໍ່ສາມາດຮັບປະກັນຄວາມຖືກຕ້ອງຂອງຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດນີ້ໄດ້.",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (power %(powerLevelNumber)s)",
     "Filter room members": "ການກັ່ນຕອງສະມາຊິກຫ້ອງ",
@@ -2737,7 +2676,18 @@
         "dehydration": "ຂໍ້ຄວາມເຂົ້າລະຫັດແບບອອບໄລນ໌ໂດຍໃຊ້ອຸປະກອນອົບແຫ້ງ",
         "bridge_state": "ສະແດງຂໍ້ມູນກ່ຽວກັບການແກ້ໄຂການຕັ້ງຄ່າຫ້ອງ",
         "jump_to_date": "ໄປຫາວັນທີ (ເພີ່ມ /jumptodate ແລະໄປຫາຫົວຂໍ້ວັນທີ)",
-        "thank_you": "ຂອບໃຈສຳລັບການທົດລອງໃຊ້ເບຕ້າ, ກະລຸນາໃສ່ລາຍລະອຽດໃຫ້ຫຼາຍເທົ່າທີ່ທ່ານເຮັດໄດ້ ເພື່ອໃຫ້ພວກເຮົາສາມາດປັບປຸງມັນໄດ້."
+        "thank_you": "ຂອບໃຈສຳລັບການທົດລອງໃຊ້ເບຕ້າ, ກະລຸນາໃສ່ລາຍລະອຽດໃຫ້ຫຼາຍເທົ່າທີ່ທ່ານເຮັດໄດ້ ເພື່ອໃຫ້ພວກເຮົາສາມາດປັບປຸງມັນໄດ້.",
+        "group_messaging": "ການສົ່ງຂໍ້ຄວາມ",
+        "group_profile": "ໂປຣໄຟລ໌",
+        "group_spaces": "ພື້ນທີ່",
+        "group_widgets": "ວິດເຈັດ",
+        "group_rooms": "ຫ້ອງ",
+        "group_voip": "ສຽງ & ວິດີໂອ",
+        "group_moderation": "ປານກາງ",
+        "group_themes": "ຫົວຂໍ້",
+        "group_encryption": "ການເຂົ້າລະຫັດ",
+        "group_experimental": "ທົດລອງ",
+        "group_developer": "ນັກພັດທະນາ"
     },
     "keyboard": {
         "home": "ໜ້າຫຼັກ",
@@ -2815,7 +2765,8 @@
         "few_seconds_ago": "ສອງສາມວິນາທີກ່ອນຫນ້ານີ້",
         "about_minute_ago": "ປະມານໜຶ່ງວິນາທີກ່ອນຫນ້ານີ້",
         "about_hour_ago": "ປະມານຫນຶ່ງຊົ່ວໂມງກ່ອນຫນ້ານີ້",
-        "about_day_ago": "ປະມານຫນຶ່ງມື້ກ່ອນຫນ້ານີ້"
+        "about_day_ago": "ປະມານຫນຶ່ງມື້ກ່ອນຫນ້ານີ້",
+        "left": "ຍັງເຫຼືອ %(timeRemaining)s"
     },
     "settings": {
         "show_breadcrumbs": "ສະແດງທາງລັດໄປຫາຫ້ອງທີ່ເບິ່ງເມື່ອບໍ່ດົນມານີ້ຂ້າງເທິງລາຍການຫ້ອງ",
@@ -2863,11 +2814,34 @@
             "rule_call": "ແຈ້ງເຊີນໂທ",
             "rule_suppress_notices": "ຂໍ້ຄວາມທີ່ສົ່ງໂດຍ bot",
             "rule_tombstone": "ເມື່ອມີການຍົກລະດັບຫ້ອງ",
-            "rule_encrypted_room_one_to_one": "ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດໃນການສົນທະນາແບບຫນຶ່ງຕໍ່ຫນຶ່ງ"
+            "rule_encrypted_room_one_to_one": "ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດໃນການສົນທະນາແບບຫນຶ່ງຕໍ່ຫນຶ່ງ",
+            "messages_containing_keywords": "ຂໍ້ຄວາມທີ່ມີຄໍາສໍາຄັນ",
+            "error_saving": "ເກີດຄວາມຜິດພາດໃນການບັນທຶກການຕັ້ງຄ່າການແຈ້ງເຕືອນ",
+            "error_saving_detail": "ເກີດຄວາມຜິດພາດໃນຂະນະທີ່ບັນທຶກການຕັ້ງຄ່າການແຈ້ງເຕືອນຂອງທ່ານ.",
+            "enable_email_notifications": "ເປີດໃຊ້ການແຈ້ງເຕືອນອີເມວສຳລັບ %(email)s",
+            "enable_desktop_notifications_session": "ເປີດໃຊ້ການແຈ້ງເຕືອນເດັສທັອບສຳລັບລະບົບນີ້",
+            "show_message_desktop_notification": "ສະແດງຂໍ້ຄວາມໃນການແຈ້ງເຕືອນ desktop",
+            "enable_audible_notifications_session": "ເປີດໃຊ້ການແຈ້ງເຕືອນທີ່ໄດ້ຍິນໄດ້ສໍາລັບລະບົບນີ້"
         },
         "appearance": {
             "layout_irc": "(ທົດລອງ)IRC",
-            "layout_bubbles": "ຟອງຂໍ້ຄວາມ"
+            "layout_bubbles": "ຟອງຂໍ້ຄວາມ",
+            "heading": "ປັບແຕ່ງຮູບລັກສະນະຂອງທ່ານ",
+            "subheading": "ການຕັ້ງຄ່າຮູບລັກສະນະມີຜົນກະທົບພຽງແຕ່ %(brand)s ໃນລະບົບ ນີ້.",
+            "match_system_theme": "ລະບົບຈັບຄູ່ຫົວຂໍ້",
+            "custom_font": "ໃຊ້ຕົວອັກສອນຂອງລະບົບ",
+            "custom_font_name": "ຊື່ຕົວອັກສອນລະບົບ",
+            "custom_theme_invalid": "ຮູບແບບschemaບໍ່ຖືກຕ້ອງ.",
+            "custom_theme_error_downloading": "ເກີດຄວາມຜິດພາດໃນການດາວໂຫຼດຂໍ້ມູນ.",
+            "custom_theme_success": "ເພີ່ມຫົວຂໍ້!",
+            "custom_theme_url": "ການ ກຳນົດເອງຫົວຂໍ້ URL",
+            "use_high_contrast": "ໃຊ້ຄວາມຄົມຊັດສູງ",
+            "custom_theme_add_button": "ເພີ່ມຫົວຂໍ້",
+            "font_size": "ຂະໜາດຕົວອັກສອນ",
+            "custom_font_description": "ກຳນົດຊື່ຕົວອັກສອນທີ່ຕິດຕັ້ງຢູ່ໃນລະບົບຂອງທ່ານ & %(brand)sຈະພະຍາຍາມໃຊ້ມັນ.",
+            "timeline_image_size": "ຂະຫນາດຮູບພາບຢູ່ໃນທາມລາຍ",
+            "timeline_image_size_default": "ຄ່າເລີ່ມຕົ້ນ",
+            "timeline_image_size_large": "ຂະຫນາດໃຫຍ່"
         }
     },
     "devtools": {
@@ -3041,7 +3015,15 @@
             "removed": "%(senderName)s ໄດ້ລຶບທີ່ຢູ່ຂອງຫ້ອງນີ້ອອກ.",
             "changed_alternative": "%(senderName)s ໄດ້ປ່ຽນທີ່ຢູ່ທາງເລືອກສຳລັບຫ້ອງນີ້.",
             "changed_main_and_alternative": "%(senderName)s ໄດ້ປ່ຽນທີ່ຢູ່ຫລັກ ແລະ ທາງເລືອກສຳລັບຫ້ອງນີ້.",
-            "changed": "%(senderName)s ໄດ້ປ່ຽນທີ່ຢູ່ຂອງຫ້ອງນີ້."
+            "changed": "%(senderName)s ໄດ້ປ່ຽນທີ່ຢູ່ຂອງຫ້ອງນີ້.",
+            "alt_added": {
+                "one": "%(senderName)s ໄດ້ເພີ່ມທີ່ຢູ່ສຳຮອງ%(addresses)sສໍາລັບຫ້ອງນີ້.",
+                "other": "%(senderName)s ໄດ້ເພີ່ມທີ່ຢູ່ສຳຮອງ%(addresses)s ສໍາລັບຫ້ອງນີ້."
+            },
+            "alt_removed": {
+                "one": "%(senderName)s ໄດ້ລຶບທີ່ຢູ່ສຳຮອງ%(addresses)s ສໍາລັບຫ້ອງນີ້.",
+                "other": "%(senderName)s ໄດ້ລຶບທີ່ຢູ່ສຳຮອງ %(addresses)s ຂອງຫ້ອງນີ້ອອກ."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s ໄດ້ຖອນຄຳເຊີນສຳລັບ %(targetDisplayName)s ເພື່ອເຂົ້າຮ່ວມຫ້ອງ.",
@@ -3214,6 +3196,29 @@
                 "one": "%(oneUser)sສົ່ງຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້",
                 "other": "%(oneUser)s ສົ່ງ %(count)s ຂໍ້ຄວາມທີ່ເຊື່ອງໄວ້"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s ໄດ້ປ່ຽນລະດັບພະລັງງານຂອງ %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s ຈາກ %(fromPowerLevel)s ຫາ %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມຜູ້ໃຊ້ທີ່ກົງກັນ %(glob)s",
+            "removed_rule_rooms": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມຫ້ອງທີ່ກົງກັບ %(glob)s",
+            "removed_rule_servers": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມເຊີບເວີຄູ່ກັນ%(glob)s",
+            "removed_rule": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມທີ່ຄູ່ກັນ%(glob)s",
+            "updated_invalid_rule": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມທີ່ບໍ່ຖືກຕ້ອງ",
+            "updated_rule_users": "%(senderName)s ອັບເດດກົດລະບຽບຫ້າມຜູ້ໃຊ້ທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
+            "updated_rule_rooms": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມຫ້ອງທີ່ຈັບຄູ່ %(glob)s ສໍາລັບ%(reason)s",
+            "updated_rule_servers": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມເຊີບເວີທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
+            "updated_rule": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
+            "created_rule_users": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມຜູ້ໃຊ້ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
+            "created_rule_rooms": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມຫ້ອງທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
+            "created_rule_servers": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມເຊີບເວີທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
+            "created_rule": "%(senderName)s ສ້າງກົດລະບຽບການຫ້າມຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
+            "changed_rule_users": "%(senderName)s ໄດ້ປ່ຽນກົດລະບຽບທີ່ຫ້າມຜູ້ໃຊ້ທີ່ຈັບຄູ່ກັນ%(oldGlob)s ເປັນການຈັບຄູ່%(newGlob)s ສໍາລັບ %(reason)s",
+            "changed_rule_rooms": "%(senderName)s ໄດ້ປ່ຽນກົດລະບຽບທີ່ຫ້າມການຈັບຄູ່ຫ້ອງ %(oldGlob)s ເປັນການຈັບຄູ່ %(newGlob)s ສໍາລັບ %(reason)s",
+            "changed_rule_servers": "%(senderName)s ໄດ້ປ່ຽນກົດລະບຽບທີ່ຫ້າມເຊີບເວີຈັບຄູ່ກັນ %(oldGlob)s ເປັນການຈັບຄູ່%(newGlob)s ສໍາລັບ %(reason)s",
+            "changed_rule_glob": "%(senderName)s ອັບເດດກົດລະບຽບການຫ້າມຈັບຄູ່ກັນ %(oldGlob)s ການຈັບຄູ່ກັນ%(newGlob)s ສໍາລັບ %(reason)s"
         }
     },
     "slash_command": {
@@ -3400,5 +3405,19 @@
         "bullet_1": "ພວກເຮົາ <Bold>ບໍ່</Bold> ບັນທຶກ ຫຼື ປະຫວັດຂໍ້ມູນບັນຊີໃດໆ",
         "bullet_2": "ພວກເຮົາ <Bold>ບໍ່</Bold> ແບ່ງປັນຂໍ້ມູນກັບພາກສ່ວນທີສາມ",
         "disable_prompt": "ທ່ານສາມາດປິດຕັ້ງຄ່າໄດ້ທຸກເວລາ"
+    },
+    "chat_effects": {
+        "confetti_description": "ສົ່ງຂໍ້ຄວາມພ້ອມດ້ວຍ confetti",
+        "confetti_message": "ສົ່ງ confetti",
+        "fireworks_description": "ສົ່ງຂໍ້ຄວາມໃຫ້ດ້ວຍດອກໄມ້ໄຟ",
+        "fireworks_message": "ສົ່ງດອກໄມ້ໄຟ",
+        "rainfall_description": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດພ້ອມດ້ວຍສາຍຝົນ",
+        "rainfall_message": "ສົ່ງຝົນ",
+        "snowfall_description": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດພ້ອມດ້ວຍຫິມະຕົກ",
+        "snowfall_message": "ສົ່ງຫິມະຕົກ",
+        "spaceinvaders_description": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດໃຫ້ພ້ອມດ້ວຍຫົວຂໍ້ພື້ນທີ່",
+        "spaceinvaders_message": "ສົ່ງຜູ້ຮຸກຮານພື້ນທີ່",
+        "hearts_description": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດ ດ້ວຍຮູບຫົວໃຈ",
+        "hearts_message": "ສົ່ງຮູບຫົວໃຈ"
     }
 }

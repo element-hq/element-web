@@ -44,8 +44,6 @@
     "Deops user with given id": "Verilmiş ID-lə istifadəçidən operatorun səlahiyyətlərini çıxardır",
     "Displays action": "Hərəkətlərin nümayişi",
     "Reason": "Səbəb",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s üçün  %(fromPowerLevel)s-dan %(toPowerLevel)s-lə",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s hüquqların səviyyələrini dəyişdirdi %(powerLevelDiffText)s.",
     "Incorrect verification code": "Təsdiq etmənin səhv kodu",
     "Phone": "Telefon",
     "New passwords don't match": "Yeni şifrlər uyğun gəlmir",
@@ -221,6 +219,9 @@
             "rule_invite_for_me": "Nə vaxt ki, məni otağa dəvət edirlər",
             "rule_call": "Dəvət zəngi",
             "rule_suppress_notices": "Botla göndərilmiş mesajlar"
+        },
+        "appearance": {
+            "timeline_image_size_default": "Varsayılan olaraq"
         }
     },
     "timeline": {
@@ -246,6 +247,10 @@
             "shared": "%(senderName)s iştirakçılar üçün danışıqların tarixini açdı.",
             "world_readable": "%(senderName)s hamı üçün danışıqların tarixini açdı.",
             "unknown": "%(senderName)s naməlum rejimdə otağın tarixini açdı (%(visibility)s)."
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s hüquqların səviyyələrini dəyişdirdi %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s üçün  %(fromPowerLevel)s-dan %(toPowerLevel)s-lə"
         }
     },
     "slash_command": {
@@ -291,5 +296,8 @@
         "category_other": "Digər"
     },
     "Other": "Digər",
-    "Advanced": "Təfərrüatlar"
+    "Advanced": "Təfərrüatlar",
+    "labs": {
+        "group_profile": "Profil"
+    }
 }
