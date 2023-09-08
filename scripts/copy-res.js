@@ -3,59 +3,9 @@
 const loaderUtils = require("loader-utils");
 
 // copies the resources into the webapp directory.
-//
 
-// Languages are listed manually, so we can choose when to include a translation in the app
-// (because having a translation with only 3 strings translated is just frustrating)
-// This could readily be automated, but it's nice to explicitly control when new languages are available.
-const INCLUDE_LANGS = [
-    "bg",
-    "ca",
-    "cs",
-    "da",
-    "de_DE",
-    "el",
-    "en_EN",
-    "en_US",
-    "eo",
-    "es",
-    "et",
-    "eu",
-    "fi",
-    "fr",
-    "gl",
-    "he",
-    "hi",
-    "hu",
-    "id",
-    "is",
-    "it",
-    "ja",
-    "kab",
-    "ko",
-    "lo",
-    "lt",
-    "lv",
-    "nb_NO",
-    "nl",
-    "nn",
-    "pl",
-    "pt",
-    "pt_BR",
-    "ru",
-    "sk",
-    "sq",
-    "sr",
-    "sv",
-    "te",
-    "th",
-    "tr",
-    "uk",
-    "vi",
-    "vls",
-    "zh_Hans",
-    "zh_Hant",
-];
+const I18N_BASE_PATH = "src/i18n/strings/";
+const INCLUDE_LANGS = fs.readdirSync(I18N_BASE_PATH).filter((fn) => fn.endsWith(".json"));
 
 // cpx includes globbed parts of the filename in the destination, but excludes
 // common parents. Hence, "res/{a,b}/**": the output will be "dest/a/..." and
@@ -154,7 +104,7 @@ function next(i, err) {
 
 function genLangFile(lang, dest) {
     const reactSdkFile = "node_modules/matrix-react-sdk/src/i18n/strings/" + lang + ".json";
-    const riotWebFile = "src/i18n/strings/" + lang + ".json";
+    const riotWebFile = I18N_BASE_PATH + lang + ".json";
 
     let translations = {};
     [reactSdkFile, riotWebFile].forEach(function (f) {
@@ -210,7 +160,7 @@ function genLangList(langFileMap) {
  */
 function watchLanguage(lang, dest, langFileMap) {
     const reactSdkFile = "node_modules/matrix-react-sdk/src/i18n/strings/" + lang + ".json";
-    const riotWebFile = "src/i18n/strings/" + lang + ".json";
+    const riotWebFile = I18N_BASE_PATH + lang + ".json";
 
     // XXX: Use a debounce because for some reason if we read the language
     // file immediately after the FS event is received, the file contents
