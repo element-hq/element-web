@@ -1,3 +1,11 @@
+Changes in [3.80.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.80.0-rc.2) (2023-09-08)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix vertical alignment of default avatar font ([\#11582](https://github.com/matrix-org/matrix-react-sdk/pull/11582)). Fixes vector-im/element-web#26081.
+ * Fix avatars in public room & space search being flex shrunk ([\#11580](https://github.com/matrix-org/matrix-react-sdk/pull/11580)). Fixes vector-im/element-web#26133.
+ * Fix EventTile avatars being rendered with a size of 0 instead of hidden ([\#11558](https://github.com/matrix-org/matrix-react-sdk/pull/11558)). Fixes vector-im/element-web#26075.
+
 Changes in [3.80.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.80.0-rc.1) (2023-09-05)
 ===============================================================================================================
 
