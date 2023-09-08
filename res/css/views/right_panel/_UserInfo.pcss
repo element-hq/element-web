@@ -99,6 +99,11 @@ limitations under the License.
             margin: 0 auto;
             transition: 0.5s;
 
+            .mx_BaseAvatar {
+                /* Override the calculated font-size so that the letter isn't tiny */
+                font-size: 4rem;
+            }
+
             .mx_BaseAvatar,
             .mx_BaseAvatar img {
                 width: 100%;
@@ -249,6 +254,11 @@ limitations under the License.
             .mx_UserInfo_avatar_transition {
                 max-width: 72px;
                 margin: 0 auto;
+            }
+
+            .mx_BaseAvatar {
+                /* Override the calculated font-size so that the letter isn't tiny */
+                font-size: 2rem;
             }
         }
     }
