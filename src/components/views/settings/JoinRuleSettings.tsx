@@ -14,8 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
-import { IJoinRuleEventContent, JoinRule, RestrictedAllowType, Room, EventType } from "matrix-js-sdk/src/matrix";
+import React, { ReactNode, useEffect, useState } from "react";
+import {
+    IJoinRuleEventContent,
+    JoinRule,
+    RestrictedAllowType,
+    Room,
+    EventType,
+    Visibility,
+} from "matrix-js-sdk/src/matrix";
 
 import StyledRadioGroup, { IDefinition } from "../elements/StyledRadioGroup";
 import { _t } from "../../../languageHandler";
@@ -34,6 +41,7 @@ import { Action } from "../../../dispatcher/actions";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { doesRoomVersionSupport, PreferredRoomVersions } from "../../../utils/PreferredRoomVersions";
 import SettingsStore from "../../../settings/SettingsStore";
+import LabelledCheckbox from "../elements/LabelledCheckbox";
 
 export interface JoinRuleSettingsProps {
     room: Room;
@@ -75,6 +83,22 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
         joinRule === JoinRule.Restricted
             ? content?.allow?.filter((o) => o.type === RestrictedAllowType.RoomMembership).map((o) => o.room_id)
             : undefined;
+
+    const [isPublicKnockRoom, setIsPublicKnockRoom] = useState(false);
+
+    useEffect(() => {
+        if (joinRule === JoinRule.Knock) {
+            cli.getRoomDirectoryVisibility(room.roomId)
+                .then(({ visibility }) => setIsPublicKnockRoom(visibility === Visibility.Public))
+                .catch(onError);
+        }
+    }, [cli, joinRule, onError, room.roomId]);
+
+    const onIsPublicKnockRoomChange = (checked: boolean): void => {
+        cli.setRoomDirectoryVisibility(room.roomId, checked ? Visibility.Public : Visibility.Private)
+            .then(() => setIsPublicKnockRoom(checked))
+            .catch(onError);
+    };
 
     const editRestrictedRoomIds = async (): Promise<string[] | undefined> => {
         let selected = restrictedAllowRoomIds;
@@ -297,7 +321,22 @@ const JoinRuleSettings: React.FC<JoinRuleSettingsProps> = ({
                     {preferredKnockVersion && upgradeRequiredPill}
                 </>
             ),
-            description: _t("People cannot join unless access is granted."),
+            description: (
+                <>
+                    {_t("People cannot join unless access is granted.")}
+                    <LabelledCheckbox
+                        className="mx_JoinRuleSettings_labelledCheckbox"
+                        disabled={joinRule !== JoinRule.Knock}
+                        label={
+                            room.isSpaceRoom()
+                                ? _t("Make this space visible in the public room directory.")
+                                : _t("Make this room visible in the public room directory.")
+                        }
+                        onChange={onIsPublicKnockRoomChange}
+                        value={isPublicKnockRoom}
+                    />
+                </>
+            ),
         });
     }
 
