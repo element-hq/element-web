@@ -1,3 +1,11 @@
+Changes in [1.11.41-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.41-rc.2) (2023-09-08)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix vertical alignment of default avatar font ([\#11582](https://github.com/matrix-org/matrix-react-sdk/pull/11582)). Fixes #26081.
+ * Fix avatars in public room & space search being flex shrunk ([\#11580](https://github.com/matrix-org/matrix-react-sdk/pull/11580)). Fixes #26133.
+ * Fix EventTile avatars being rendered with a size of 0 instead of hidden ([\#11558](https://github.com/matrix-org/matrix-react-sdk/pull/11558)). Fixes #26075.
+
 Changes in [1.11.41-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.41-rc.1) (2023-09-05)
 ===========================================================================================================
 
