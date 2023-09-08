@@ -5,8 +5,8 @@
 import parseArgs from "minimist";
 import * as chokidar from "chokidar";
 import * as fs from "node:fs";
-import * as _ from "lodash";
-import * as Cpx from "cpx";
+import _ from "lodash";
+import { Cpx } from "cpx";
 import * as loaderUtils from "loader-utils";
 
 const I18N_BASE_PATH = "src/i18n/strings/";
@@ -67,7 +67,7 @@ function next(i: number, err?: Error): void {
     const source = ent[0];
     const dest = ent[1];
     const opts = ent[2] || {};
-    const cpx = new Cpx.Cpx(source, dest);
+    const cpx = new Cpx(source, dest);
 
     if (verbose) {
         cpx.on("copy", (event) => {

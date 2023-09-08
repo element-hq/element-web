@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import "cpx";
-
 declare module "cpx" {
     export class Cpx {
         public constructor(source: string, outDir: string, options?: object);
@@ -43,5 +41,3 @@ declare module "cpx" {
         public watch(): void;
     }
 }
-
-export as namespace Cpx;

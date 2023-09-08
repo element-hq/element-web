@@ -106,7 +106,6 @@
         "@sentry/webpack-plugin": "^2.0.0",
         "@svgr/webpack": "^5.5.0",
         "@testing-library/react": "^12.1.5",
-        "@types/cpx": "1.5.0",
         "@types/jest": "^29.0.0",
         "@types/jitsi-meet": "^2.0.2",
         "@types/jsrsasign": "^10.5.4",
