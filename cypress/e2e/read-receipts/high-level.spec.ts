@@ -713,9 +713,18 @@ describe("Read receipts", () => {
                 assertUnread(room2, 30);
             });
             it("Creating a new thread based on a reply makes the room unread", () => {
+                // Given a message and reply exist and are read
                 goTo(room1);
-                receiveMessages(room2, ["Msg1", replyTo("Msg1", "Reply1"), threadedOff("Reply1", "Resp1")]);
-                assertUnread(room2, 3);
+                receiveMessages(room2, ["Msg1", replyTo("Msg1", "Reply1")]);
+                goTo(room2);
+                goTo(room1);
+                assertRead(room2);
+
+                // When I receive a thread message created on the reply
+                receiveMessages(room2, [threadedOff("Reply1", "Resp1")]);
+
+                // Then the room is unread
+                assertUnread(room2, 1);
             });
             it("Reading a thread whose root is a reply makes the room read", () => {
                 goTo(room1);
