@@ -18,7 +18,7 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { EventType, JoinRule, MatrixClient, MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
-import { getAllByTitle, getByLabelText, getByText, getByTitle, render, screen, waitFor } from "@testing-library/react";
+import { getAllByLabelText, getByLabelText, getByText, render, screen, waitFor } from "@testing-library/react";
 
 import { mkEvent, stubClient, withClientContextRenderOptions } from "../../../test-utils";
 import RoomHeader from "../../../../src/components/views/rooms/RoomHeader";
@@ -195,7 +195,7 @@ describe("RoomHeader", () => {
             withClientContextRenderOptions(MatrixClientPeg.get()!),
         );
 
-        await userEvent.click(getByTitle(container, "Threads"));
+        await userEvent.click(getByLabelText(container, "Threads"));
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.ThreadPanel });
     });
 
@@ -205,7 +205,7 @@ describe("RoomHeader", () => {
             withClientContextRenderOptions(MatrixClientPeg.get()!),
         );
 
-        await userEvent.click(getByTitle(container, "Notifications"));
+        await userEvent.click(getByLabelText(container, "Notifications"));
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.NotificationPanel });
     });
 
@@ -216,7 +216,7 @@ describe("RoomHeader", () => {
                 <RoomHeader room={room} />,
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
-            for (const button of getAllByTitle(container, "There's no one here to call")) {
+            for (const button of getAllByLabelText(container, "There's no one here to call")) {
                 expect(button).toBeDisabled();
             }
         });
@@ -227,8 +227,8 @@ describe("RoomHeader", () => {
                 <RoomHeader room={room} />,
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
-            const voiceButton = getByTitle(container, "Voice call");
-            const videoButton = getByTitle(container, "Video call");
+            const voiceButton = getByLabelText(container, "Voice call");
+            const videoButton = getByLabelText(container, "Video call");
             expect(voiceButton).not.toBeDisabled();
             expect(videoButton).not.toBeDisabled();
 
@@ -251,7 +251,7 @@ describe("RoomHeader", () => {
                 <RoomHeader room={room} />,
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
-            for (const button of getAllByTitle(container, "Ongoing call")) {
+            for (const button of getAllByLabelText(container, "Ongoing call")) {
                 expect(button).toBeDisabled();
             }
         });
@@ -264,8 +264,8 @@ describe("RoomHeader", () => {
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
 
-            expect(getByTitle(container, "Voice call")).not.toBeDisabled();
-            expect(getByTitle(container, "Video call")).not.toBeDisabled();
+            expect(getByLabelText(container, "Voice call")).not.toBeDisabled();
+            expect(getByLabelText(container, "Video call")).not.toBeDisabled();
         });
 
         it("disable calls in large rooms by default", () => {
@@ -275,8 +275,8 @@ describe("RoomHeader", () => {
                 <RoomHeader room={room} />,
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
-            expect(getByTitle(container, "You do not have permission to start voice calls")).toBeDisabled();
-            expect(getByTitle(container, "You do not have permission to start video calls")).toBeDisabled();
+            expect(getByLabelText(container, "You do not have permission to start voice calls")).toBeDisabled();
+            expect(getByLabelText(container, "You do not have permission to start video calls")).toBeDisabled();
         });
     });
 
@@ -297,12 +297,12 @@ describe("RoomHeader", () => {
 
             expect(screen.queryByTitle("Voice call")).toBeNull();
 
-            const videoCallButton = getByTitle(container, "Video call");
+            const videoCallButton = getByLabelText(container, "Video call");
             expect(videoCallButton).not.toBeDisabled();
 
             const dispatcherSpy = jest.spyOn(dispatcher, "dispatch");
 
-            await userEvent.click(getByTitle(container, "Video call"));
+            await userEvent.click(getByLabelText(container, "Video call"));
 
             expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true }));
         });
@@ -318,7 +318,7 @@ describe("RoomHeader", () => {
                 <RoomHeader room={room} />,
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
-            expect(getByTitle(container, "Ongoing call")).toBeDisabled();
+            expect(getByLabelText(container, "Ongoing call")).toBeDisabled();
         });
 
         it("disables calling if there's a jitsi call", () => {
@@ -331,7 +331,7 @@ describe("RoomHeader", () => {
                 <RoomHeader room={room} />,
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
-            for (const button of getAllByTitle(container, "Ongoing call")) {
+            for (const button of getAllByLabelText(container, "Ongoing call")) {
                 expect(button).toBeDisabled();
             }
         });
@@ -342,7 +342,7 @@ describe("RoomHeader", () => {
                 <RoomHeader room={room} />,
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
-            for (const button of getAllByTitle(container, "There's no one here to call")) {
+            for (const button of getAllByLabelText(container, "There's no one here to call")) {
                 expect(button).toBeDisabled();
             }
         });
@@ -354,8 +354,8 @@ describe("RoomHeader", () => {
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
 
-            const voiceButton = getByTitle(container, "Voice call");
-            const videoButton = getByTitle(container, "Video call");
+            const voiceButton = getByLabelText(container, "Voice call");
+            const videoButton = getByLabelText(container, "Video call");
             expect(voiceButton).not.toBeDisabled();
             expect(videoButton).not.toBeDisabled();
 
@@ -380,8 +380,8 @@ describe("RoomHeader", () => {
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
 
-            const voiceButton = getByTitle(container, "Voice call");
-            const videoButton = getByTitle(container, "Video call");
+            const voiceButton = getByLabelText(container, "Voice call");
+            const videoButton = getByLabelText(container, "Video call");
             expect(voiceButton).not.toBeDisabled();
             expect(videoButton).not.toBeDisabled();
 
@@ -407,8 +407,8 @@ describe("RoomHeader", () => {
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
 
-            const voiceButton = getByTitle(container, "Voice call");
-            const videoButton = getByTitle(container, "Video call");
+            const voiceButton = getByLabelText(container, "Voice call");
+            const videoButton = getByLabelText(container, "Video call");
             expect(voiceButton).not.toBeDisabled();
             expect(videoButton).not.toBeDisabled();
 
