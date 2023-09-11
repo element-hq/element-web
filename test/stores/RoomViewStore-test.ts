@@ -507,39 +507,25 @@ describe("RoomViewStore", function () {
         });
     });
 
-    describe("knocked()", () => {
-        it("returns false", () => {
-            expect(roomViewStore.knocked()).toBe(false);
-        });
-
-        it("returns true", async () => {
-            jest.spyOn(mockClient, "knockRoom").mockResolvedValue({ room_id: roomId });
-            await dispatchSubmitAskToJoin(roomId);
-            expect(roomViewStore.knocked()).toBe(true);
-        });
-    });
-
     describe("Action.SubmitAskToJoin", () => {
         const reason = "some reason";
         beforeEach(async () => await dispatchPromptAskToJoin());
 
-        it("calls knockRoom(), sets askToJoin state to false and knocked state to true", async () => {
+        it("calls knockRoom() and sets promptAskToJoin state to false", async () => {
             jest.spyOn(mockClient, "knockRoom").mockResolvedValue({ room_id: roomId });
             await dispatchSubmitAskToJoin(roomId, reason);
 
             expect(mockClient.knockRoom).toHaveBeenCalledWith(roomId, { reason, viaServers: [] });
             expect(roomViewStore.promptAskToJoin()).toBe(false);
-            expect(roomViewStore.knocked()).toBe(true);
         });
 
-        it("calls knockRoom(), sets askToJoin to false, keeps knocked state false and shows an error dialog", async () => {
+        it("calls knockRoom(), sets promptAskToJoin state to false and shows an error dialog", async () => {
             const error = new MatrixError(undefined, 403);
             jest.spyOn(mockClient, "knockRoom").mockRejectedValue(error);
             await dispatchSubmitAskToJoin(roomId, reason);
 
             expect(mockClient.knockRoom).toHaveBeenCalledWith(roomId, { reason, viaServers: [] });
             expect(roomViewStore.promptAskToJoin()).toBe(false);
-            expect(roomViewStore.knocked()).toBe(false);
             expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                 description: "You need an invite to access this room.",
                 title: "Failed to join",
@@ -550,6 +536,7 @@ describe("RoomViewStore", function () {
             const error = new MatrixError();
             jest.spyOn(mockClient, "knockRoom").mockRejectedValue(error);
             await dispatchSubmitAskToJoin(roomId);
+
             expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                 description: error.message,
                 title: "Failed to join",
@@ -563,21 +550,19 @@ describe("RoomViewStore", function () {
             await dispatchSubmitAskToJoin(roomId);
         });
 
-        it("calls leave() and sets knocked state to false", async () => {
+        it("calls leave()", async () => {
             jest.spyOn(mockClient, "leave").mockResolvedValue({});
             await dispatchCancelAskToJoin(roomId);
 
             expect(mockClient.leave).toHaveBeenCalledWith(roomId);
-            expect(roomViewStore.knocked()).toBe(false);
         });
 
-        it("calls leave(), keeps knocked state true and shows an error dialog", async () => {
+        it("calls leave() and shows an error dialog", async () => {
             const error = new MatrixError();
             jest.spyOn(mockClient, "leave").mockRejectedValue(error);
             await dispatchCancelAskToJoin(roomId);
 
             expect(mockClient.leave).toHaveBeenCalledWith(roomId);
-            expect(roomViewStore.knocked()).toBe(true);
             expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
                 description: error.message,
                 title: "Failed to cancel",

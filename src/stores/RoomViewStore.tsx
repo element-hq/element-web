@@ -119,7 +119,6 @@ interface State {
     viewingCall: boolean;
 
     promptAskToJoin: boolean;
-    knocked: boolean;
 }
 
 const INITIAL_STATE: State = {
@@ -141,7 +140,6 @@ const INITIAL_STATE: State = {
     wasContextSwitch: false,
     viewingCall: false,
     promptAskToJoin: false,
-    knocked: false,
 };
 
 type Listener = (isActive: boolean) => void;
@@ -776,15 +774,6 @@ export class RoomViewStore extends EventEmitter {
     }
 
     /**
-     * Gets the current state of the 'knocked' property.
-     *
-     * @returns {boolean} The value of the 'knocked' property.
-     */
-    public knocked(): boolean {
-        return this.state.knocked;
-    }
-
-    /**
      * Submits a request to join a room by sending a knock request.
      *
      * @param {SubmitAskToJoinPayload} payload - The payload containing information to submit the request.
@@ -793,15 +782,13 @@ export class RoomViewStore extends EventEmitter {
     private submitAskToJoin(payload: SubmitAskToJoinPayload): void {
         MatrixClientPeg.safeGet()
             .knockRoom(payload.roomId, { viaServers: this.state.viaServers, ...payload.opts })
-            .then(() => this.setState({ promptAskToJoin: false, knocked: true }))
-            .catch((err: MatrixError) => {
-                this.setState({ promptAskToJoin: false });
-
+            .catch((err: MatrixError) =>
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Failed to join"),
                     description: err.httpStatus === 403 ? _t("You need an invite to access this room.") : err.message,
-                });
-            });
+                }),
+            )
+            .finally(() => this.setState({ promptAskToJoin: false }));
     }
 
     /**
@@ -813,7 +800,6 @@ export class RoomViewStore extends EventEmitter {
     private cancelAskToJoin(payload: CancelAskToJoinPayload): void {
         MatrixClientPeg.safeGet()
             .leave(payload.roomId)
-            .then(() => this.setState({ knocked: false }))
             .catch((err: MatrixError) =>
                 Modal.createDialog(ErrorDialog, { title: _t("Failed to cancel"), description: err.message }),
             );
