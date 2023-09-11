@@ -112,7 +112,7 @@ export const RoomKnocksBar: VFC<{ room: Room }> = ({ room }) => {
                 </>
             );
             names = `${knockMembers[0].name} (${knockMembers[0].userId})`;
-            link = (
+            link = knockMembers[0].events.member?.getContent().reason && (
                 <AccessibleButton
                     className="mx_RoomKnocksBar_link"
                     element="a"
