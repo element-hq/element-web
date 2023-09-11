@@ -29,10 +29,12 @@ import { UPDATE_EVENT } from "./AsyncStore";
 interface IState {}
 
 export interface IApp extends IWidget {
-    roomId: string;
-    eventId?: string; // not present on virtual widgets
+    "roomId": string;
+    "eventId"?: string; // not present on virtual widgets
     // eslint-disable-next-line camelcase
-    avatar_url?: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
+    "avatar_url"?: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
+    // Whether the widget was created from `widget_build_url` and thus is a call widget of some kind
+    "io.element.managed_hybrid"?: boolean;
 }
 
 export function isAppWidget(widget: IWidget | IApp): widget is IApp {

@@ -332,7 +332,7 @@ export default class WidgetUtils {
         client: MatrixClient,
         roomId: string,
         widgetId: string,
-        content: IWidget,
+        content: IWidget & Record<string, any>,
     ): Promise<void> {
         const addingWidget = !!content.url;
 

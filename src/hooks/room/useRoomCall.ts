@@ -31,6 +31,7 @@ import { placeCall } from "../../utils/room/placeCall";
 import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { useRoomState } from "../useRoomState";
 import { _t } from "../../languageHandler";
+import { isManagedHybridWidget } from "../../widgets/ManagedHybrid";
 
 export type PlatformCallType = "element_call" | "jitsi_or_element_call" | "legacy_or_jitsi";
 
@@ -69,6 +70,8 @@ export const useRoomCall = (
     const widgets = useWidgets(room);
     const jitsiWidget = useMemo(() => widgets.find((widget) => WidgetType.JITSI.matches(widget.type)), [widgets]);
     const hasJitsiWidget = !!jitsiWidget;
+    const managedHybridWidget = useMemo(() => widgets.find(isManagedHybridWidget), [widgets]);
+    const hasManagedHybridWidget = !!managedHybridWidget;
 
     const groupCall = useCall(room.roomId);
     const hasGroupCall = groupCall !== null;
@@ -105,7 +108,7 @@ export const useRoomCall = (
         useElementCallExclusively,
         mayEditWidgets,
     ]);
-    const widget = callType === "element_call" ? groupCall?.widget : jitsiWidget;
+    const widget = callType === "element_call" ? groupCall?.widget : jitsiWidget ?? managedHybridWidget;
 
     const [canPinWidget, setCanPinWidget] = useState(false);
     const [widgetPinned, setWidgetPinned] = useState(false);
@@ -122,7 +125,7 @@ export const useRoomCall = (
     }, [room, jitsiWidget, groupCall, updateWidgetState]);
 
     const state = useMemo((): State => {
-        if (hasGroupCall || hasJitsiWidget) {
+        if (hasGroupCall || hasJitsiWidget || hasManagedHybridWidget) {
             return promptPinWidget ? State.Unpinned : State.Ongoing;
         }
         if (hasLegacyCall) {
@@ -142,6 +145,7 @@ export const useRoomCall = (
         hasGroupCall,
         hasJitsiWidget,
         hasLegacyCall,
+        hasManagedHybridWidget,
         mayCreateElementCalls,
         mayEditWidgets,
         memberCount,
