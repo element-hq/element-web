@@ -165,13 +165,28 @@ describe("RoomKnocksBar", () => {
                 expect(screen.getByRole("paragraph")).toHaveTextContent(`${bob.name} (${bob.userId})`);
             });
 
-            it("renders a link to open the room settings people tab", () => {
-                getComponent(room);
-                fireEvent.click(getButton("View message"));
-                expect(dis.dispatch).toHaveBeenCalledWith({
-                    action: "open_room_settings",
-                    initial_tab_id: RoomSettingsTab.People,
-                    room_id: roomId,
+            describe("when a knock reason is not provided", () => {
+                it("does not render a link to open the room settings people tab", () => {
+                    getComponent(room);
+                    expect(screen.queryByRole("button", { name: "View message" })).not.toBeInTheDocument();
+                });
+            });
+
+            describe("when a knock reason is provided", () => {
+                it("renders a link to open the room settings people tab", () => {
+                    bob.setMembershipEvent(
+                        new MatrixEvent({
+                            content: { displayname: "Bob", membership: "knock", reason: "some reason" },
+                            type: EventType.RoomMember,
+                        }),
+                    );
+                    getComponent(room);
+                    fireEvent.click(getButton("View message"));
+                    expect(dis.dispatch).toHaveBeenCalledWith({
+                        action: "open_room_settings",
+                        initial_tab_id: RoomSettingsTab.People,
+                        room_id: roomId,
+                    });
                 });
             });
 

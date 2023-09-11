@@ -141,18 +141,25 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
             // XXX: need some schema for this
             const themeInfo = await r.json();
             if (!themeInfo || typeof themeInfo["name"] !== "string" || typeof themeInfo["colors"] !== "object") {
-                this.setState({ customThemeMessage: { text: _t("Invalid theme schema."), isError: true } });
+                this.setState({
+                    customThemeMessage: { text: _t("settings|appearance|custom_theme_invalid"), isError: true },
+                });
                 return;
             }
             currentThemes.push(themeInfo);
         } catch (e) {
             logger.error(e);
-            this.setState({ customThemeMessage: { text: _t("Error downloading theme information."), isError: true } });
+            this.setState({
+                customThemeMessage: { text: _t("settings|appearance|custom_theme_error_downloading"), isError: true },
+            });
             return; // Don't continue on error
         }
 
         await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
-        this.setState({ customThemeUrl: "", customThemeMessage: { text: _t("Theme added!"), isError: false } });
+        this.setState({
+            customThemeUrl: "",
+            customThemeMessage: { text: _t("settings|appearance|custom_theme_success"), isError: false },
+        });
 
         this.themeTimer = window.setTimeout(() => {
             this.setState({ customThemeMessage: { text: "", isError: false } });
@@ -174,7 +181,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
                         checked={isHighContrastTheme(this.state.theme)}
                         onChange={(e) => this.highContrastThemeChanged(e.target.checked)}
                     >
-                        {_t("Use high contrast")}
+                        {_t("settings|appearance|use_high_contrast")}
                     </StyledCheckbox>
                 </div>
             );
@@ -223,7 +230,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
                 <div className="mx_SettingsTab_section">
                     <form onSubmit={this.onAddCustomTheme}>
                         <Field
-                            label={_t("Custom theme URL")}
+                            label={_t("settings|appearance|custom_theme_url")}
                             type="text"
                             id="mx_GeneralUserSettingsTab_customThemeInput"
                             autoComplete="off"
@@ -236,7 +243,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
                             kind="primary_sm"
                             disabled={!this.state.customThemeUrl.trim()}
                         >
-                            {_t("Add theme")}
+                            {_t("settings|appearance|custom_theme_add_button")}
                         </AccessibleButton>
                         {messageElement}
                     </form>

@@ -41,11 +41,9 @@
     "Warning!": "Внимание!",
     "Who can read history?": "Кто может читать историю?",
     "You do not have permission to post to this room": "Вы не можете писать в эту комнату",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s изменил(а) уровни прав %(powerLevelDiffText)s.",
     "Failed to send request.": "Не удалось отправить запрос.",
     "Failed to verify email address: make sure you clicked the link in the email": "Не удалось проверить email: убедитесь, что вы перешли по ссылке в письме",
     "Failure to create room": "Не удалось создать комнату",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "для %(userId)s с %(fromPowerLevel)s на %(toPowerLevel)s",
     "Missing room_id in request": "Отсутствует room_id в запросе",
     "Missing user_id in request": "Отсутствует user_id в запросе",
     "Connectivity to the server has been lost.": "Связь с сервером потеряна.",
@@ -241,71 +239,6 @@
     "Members only (since they were invited)": "Только участники (с момента их приглашения)",
     "Members only (since they joined)": "Только участники (с момента их входа)",
     "A text message has been sent to %(msisdn)s": "Текстовое сообщение отправлено на %(msisdn)s",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s присоединились %(count)s раз(а)",
-        "one": "%(severalUsers)s присоединились"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s присоединился(лась) %(count)s раз(а)",
-        "one": "%(oneUser)s присоединился(лась)"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s покинули %(count)s раз(а)",
-        "one": "%(severalUsers)s покинули"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s покинул(а) %(count)s раз(а)",
-        "one": "%(oneUser)s покинул(а)"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s присоединились и покинули %(count)s раз(а)",
-        "one": "%(severalUsers)s присоединились и покинули"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s присоединился(лась) и покинул(а) %(count)s раз(а)",
-        "one": "%(oneUser)s присоединился(лась) и покинул(а)"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s покинули и снова присоединились %(count)s раз(а)",
-        "one": "%(severalUsers)s покинули и снова присоединились"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s покинул(а) и снова присоединился(лась) %(count)s раз(а)",
-        "one": "%(oneUser)s покинул(а) и снова присоединился(лась)"
-    },
-    "were invited %(count)s times": {
-        "other": "приглашены %(count)s раз(а)",
-        "one": "приглашены"
-    },
-    "was invited %(count)s times": {
-        "other": "приглашен(а) %(count)s раз(а)",
-        "one": "приглашен(а)"
-    },
-    "were banned %(count)s times": {
-        "other": "заблокированы %(count)s раз(а)",
-        "one": "заблокированы"
-    },
-    "was banned %(count)s times": {
-        "other": "заблокирован(а) %(count)s раз(а)",
-        "one": "заблокирован(а)"
-    },
-    "were unbanned %(count)s times": {
-        "other": "разблокированы %(count)s раз(а)",
-        "one": "разблокированы"
-    },
-    "was unbanned %(count)s times": {
-        "other": "разблокирован(а) %(count)s раз(а)",
-        "one": "разблокирован(а)"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)sизменили имя %(count)s раз(а)",
-        "one": "%(severalUsers)sизменили имя"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)sизменил(а) имя %(count)s раз(а)",
-        "one": "%(oneUser)sизменил(а) имя"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s и ещё %(count)s участника(-ов)",
         "one": "%(items)s и ещё кто-то"
@@ -315,24 +248,8 @@
     "Enable URL previews for this room (only affects you)": "Включить предпросмотр ссылок в этой комнате (влияет только на вас)",
     "Enable URL previews by default for participants in this room": "Включить предпросмотр ссылок для участников этой комнаты по умолчанию",
     "Restricted": "Ограниченный пользователь",
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s отклонили приглашения %(count)s раз(а)",
-        "one": "%(severalUsers)sотклонили приглашения"
-    },
     "URL previews are enabled by default for participants in this room.": "Предпросмотр ссылок по умолчанию включен для участников этой комнаты.",
     "URL previews are disabled by default for participants in this room.": "Предпросмотр ссылок по умолчанию выключен для участников этой комнаты.",
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)sотклонил(а) приглашение %(count)s раз(а)",
-        "one": "%(oneUser)sотклонил(а) приглашение"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)sотозвали приглашения %(count)s раз(а)",
-        "one": "%(severalUsers)sотозвали приглашения"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)sотклонил(а) приглашение %(count)s раз(а)",
-        "one": "%(oneUser)sотозвал(а) приглашение"
-    },
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Обратите внимание, что вы заходите на сервер %(hs)s, а не на matrix.org.",
     "%(duration)ss": "%(duration)s сек",
     "%(duration)sm": "%(duration)s мин",
@@ -377,7 +294,6 @@
     "You cannot delete this message. (%(code)s)": "Это сообщение нельзя удалить. (%(code)s)",
     "Thursday": "Четверг",
     "Logs sent": "Журналы отправлены",
-    "Show message in desktop notification": "Показывать текст сообщения в уведомлениях на рабочем столе",
     "Yesterday": "Вчера",
     "Error encountered (%(errorDetail)s).": "Обнаружена ошибка (%(errorDetail)s).",
     "Low Priority": "Маловажные",
@@ -459,9 +375,6 @@
     "Straight rows of keys are easy to guess": "Прямые ряды клавиш легко угадываемы",
     "Short keyboard patterns are easy to guess": "Короткие клавиатурные шаблоны легко угадываемы",
     "Please contact your homeserver administrator.": "Пожалуйста, свяжитесь с администратором вашего сервера.",
-    "The other party cancelled the verification.": "Другая сторона отменила проверку.",
-    "Verified!": "Верифицировано!",
-    "You've successfully verified this user.": "Вы успешно подтвердили этого пользователя.",
     "Got It": "Понятно",
     "Verify this user by confirming the following number appears on their screen.": "Подтвердите пользователя, убедившись, что на его экране отображается следующее число.",
     "Email Address": "Адрес электронной почты",
@@ -747,14 +660,6 @@
     "<a>Log in</a> to your new account.": "<a>Войти</a> в новую учётную запись.",
     "Registration Successful": "Регистрация успешно завершена",
     "Edited at %(date)s. Click to view edits.": "Изменено %(date)s. Нажмите для посмотра истории изменений.",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)sничего не изменили %(count)s раз(а)",
-        "one": "%(severalUsers)sне внёс изменений"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)sничего не изменил(а) %(count)s раз(а)",
-        "one": "%(oneUser)sне внёс изменений"
-    },
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Пожалуйста, расскажите нам что пошло не так, либо, ещё лучше, создайте отчёт в GitHub с описанием проблемы.",
     "Removing…": "Удаление…",
     "Clear all data": "Очистить все данные",
@@ -877,7 +782,6 @@
     "Failed to deactivate user": "Не удалось деактивировать пользователя",
     "This client does not support end-to-end encryption.": "Этот клиент не поддерживает сквозное шифрование.",
     "Messages in this room are not end-to-end encrypted.": "Сообщения в этой комнате не защищены сквозным шифрованием.",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Пожалуйста, <newIssueLink> создайте новую проблему/вопрос </newIssueLink> на GitHub, чтобы мы могли расследовать эту ошибку.",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Используйте идентификационный сервер для приглашения по электронной почте. <default>Используйте значение по умолчанию (%(defaultIdentityServerName)s)</default> или управляйте в <settings>Настройках</settings>.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Используйте идентификационный сервер для приглашения по электронной почте. Управление в <settings>Настройки</settings>.",
     "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Отчет о данном сообщении отправит свой уникальный 'event ID' администратору вашего домашнего сервера. Если сообщения в этой комнате зашифрованы, администратор вашего домашнего сервера не сможет прочитать текст сообщения или просмотреть какие-либо файлы или изображения.",
@@ -889,16 +793,6 @@
     "Notification Autocomplete": "Автозаполнение уведомлений",
     "Room Autocomplete": "Автозаполнение комнаты",
     "User Autocomplete": "Автозаполнение пользователя",
-    "Quick Reactions": "Быстрая реакция",
-    "Frequently Used": "Часто используемые",
-    "Smileys & People": "Смайлики и люди",
-    "Animals & Nature": "Животные и природа",
-    "Food & Drink": "Еда и напитки",
-    "Activities": "Действия",
-    "Travel & Places": "Путешествия и места",
-    "Objects": "Объекты",
-    "Symbols": "Символы",
-    "Flags": "Флаги",
     "Cancel search": "Отменить поиск",
     "Room %(name)s": "Комната %(name)s",
     "Jump to first unread room.": "Перейти в первую непрочитанную комнату.",
@@ -912,9 +806,6 @@
     "Error adding ignored user/server": "Ошибка добавления игнорируемого пользователя/сервера",
     "Error subscribing to list": "Ошибка при подписке на список",
     "Error upgrading room": "Ошибка обновления комнаты",
-    "Match system theme": "Тема системы",
-    "Enable desktop notifications for this session": "Показывать уведомления на рабочем столе для этого сеанса",
-    "Enable audible notifications for this session": "Звуковые уведомления для этого сеанса",
     "Manage integrations": "Управление интеграциями",
     "Direct Messages": "Личные сообщения",
     "%(count)s sessions": {
@@ -936,19 +827,11 @@
     "Double check that your server supports the room version chosen and try again.": "Убедитесь, что ваш сервер поддерживает выбранную версию комнаты и попробуйте снова.",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ВНИМАНИЕ: ПРОВЕРКА КЛЮЧА НЕ ПРОШЛА! Ключом подписи для %(userId)s и сеанса %(deviceId)s является \"%(fprint)s\", что не соответствует указанному ключу \"%(fingerprint)s\". Это может означать, что ваши сообщения перехватываются!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Ключ подписи, который вы предоставили, соответствует ключу подписи, который вы получили от пользователя %(userId)s через сеанс %(deviceId)s. Сеанс отмечен как подтверждённый.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s удалил(а) правило блокировки пользователей по шаблону %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s удалил правило блокировки комнат по шаблону %(glob)s",
     "Enable message search in encrypted rooms": "Включить поиск сообщений в зашифрованных комнатах",
     "How fast should messages be downloaded.": "Как быстро сообщения должны быть загружены.",
     "This is your list of users/servers you have blocked - don't leave the room!": "Это список пользователей/серверов, которые вы заблокировали — не покидайте комнату!",
-    "Scan this unique code": "Отсканируйте этот уникальный код",
-    "Compare unique emoji": "Сравнитe уникальныe смайлики",
-    "Compare a unique set of emoji if you don't have a camera on either device": "Сравните уникальный набор смайликов, если у вас нет камеры ни на одном из устройств",
     "Waiting for %(displayName)s to verify…": "Ожидание %(displayName)s для проверки…",
     "Cancelling…": "Отмена…",
-    "They match": "Они совпадают",
-    "They don't match": "Они не совпадают",
-    "To be secure, do this in person or use a trusted way to communicate.": "Чтобы быть в безопасности, делайте это лично или используйте надежный способ связи.",
     "Lock": "Заблокировать",
     "Other users may not trust it": "Другие пользователи могут не доверять этому сеансу",
     "Later": "Позже",
@@ -959,29 +842,6 @@
     "Sign In or Create Account": "Войдите или создайте учётную запись",
     "Use your account or create a new one to continue.": "Воспользуйтесь своей учётной записью или создайте новую, чтобы продолжить.",
     "Create Account": "Создать учётную запись",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s добавил(а) альтернативные адреса %(addresses)s для этой комнаты.",
-        "one": "%(senderName)s добавил(а) альтернативные адреса %(addresses)s для этой комнаты."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s удалил(а) альтернативные адреса %(addresses)s для этой комнаты.",
-        "one": "%(senderName)s удалил(а) альтернативные адреса %(addresses)s для этой комнаты."
-    },
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s удалил(а) правило блокировки серверов по шаблону %(glob)s",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s удалил(а) правило блокировки по шаблону %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s обновил(а) неверное правило блокировки",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s обновил(а) правило блокировки пользователей по шаблону %(glob)s за %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s обновил(а) правило блокировки комнат по шаблону %(glob)s за %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s обновил(а) правило блокировки серверов по шаблону %(glob)s за %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s обновил(а) правило блокировки по шаблону %(glob)s за %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s создал(а) правило блокировки пользователей по шаблону %(glob)s за %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s создал(а) правило блокировки комнат по шаблону %(glob)s за %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s создал(а) правило блокировки серверов по шаблону %(glob)s за %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s создал(а) правило блокировки по шаблону %(glob)s за %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s изменил(а) правило блокировки пользователей по шаблону %(oldGlob)s на шаблон %(newGlob)s за %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s изменил(а) правило блокировки комнат по шаблону %(oldGlob)s на шаблон %(newGlob)s за %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s изменил(а) правило блокировки серверов по шаблону %(oldGlob)s на шаблон %(newGlob)s за %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s обновил(а) правило блокировки по шаблону %(oldGlob)s на шаблон %(newGlob)s за %(reason)s",
     "Not Trusted": "Недоверенное",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) произвел(а) вход через новый сеанс без подтверждения:",
     "Ask this user to verify their session, or manually verify it below.": "Попросите этого пользователя подтвердить сеанс или подтвердите его вручную ниже.",
@@ -1005,10 +865,6 @@
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Подключите этот сеанс к резервированию ключей до выхода, чтобы избежать утраты доступных только в этом сеансе ключей.",
     "Connect this session to Key Backup": "Подключить этот сеанс к резервированию ключей",
     "This backup is trusted because it has been restored on this session": "Эта резервная копия является доверенной, потому что она была восстановлена в этом сеансе",
-    "Invalid theme schema.": "Неверная схема темы.",
-    "Error downloading theme information.": "Ошибка при загрузке информации темы.",
-    "Theme added!": "Тема добавлена!",
-    "Add theme": "Добавить тему",
     "Something went wrong. Please try again or view your console for hints.": "Что-то пошло не так. Попробуйте снова или поищите подсказки в консоли.",
     "Error unsubscribing from list": "Не удалось отписаться от списка",
     "None": "Нет",
@@ -1042,7 +898,6 @@
     "well formed": "корректный",
     "unexpected type": "непредвиденный тип",
     "Self signing private key:": "Самоподписанный приватный ключ:",
-    "Custom theme URL": "Ссылка на стороннюю тему",
     "⚠ These settings are meant for advanced users.": "⚠ Эти настройки рассчитаны для опытных пользователей.",
     "Personal ban list": "Личный список блокировки",
     "eg: @bot:* or example.org": "например: @bot:* или example.org",
@@ -1175,14 +1030,9 @@
     "Size must be a number": "Размер должен быть числом",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Пользовательский размер шрифта может быть только между %(min)s pt и %(max)s pt",
     "Use between %(min)s pt and %(max)s pt": "Введите значение между %(min)s pt и %(max)s pt",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Установите имя шрифта, установленного в вашей системе, и %(brand)s попытается его использовать.",
-    "Customise your appearance": "Настройка внешнего вида",
     "Remove for everyone": "Убрать для всех",
     "Country Dropdown": "Выпадающий список стран",
-    "Font size": "Размер шрифта",
     "Use custom size": "Использовать другой размер",
-    "Use a system font": "Использовать системный шрифт",
-    "System font name": "Название системного шрифта",
     "Please verify the room ID or address and try again.": "Проверьте ID комнаты или адрес и попробуйте снова.",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Администратор вашего сервера отключил сквозное шифрование по умолчанию в приватных комнатах и диалогах.",
     "Explore Public Rooms": "Просмотреть публичные комнаты",
@@ -1203,7 +1053,6 @@
     "Create a Group Chat": "Создать комнату",
     "All settings": "Все настройки",
     "Feedback": "Отзыв",
-    "Appearance Settings only affect this %(brand)s session.": "Настройки внешнего вида работают только в этом сеансе %(brand)s.",
     "Forget Room": "Забыть комнату",
     "This room is public": "Это публичная комната",
     "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Введите <code>/help</code> для списка доступных команд. Хотите отправить это сообщение как есть?",
@@ -1220,7 +1069,6 @@
     "Click to view edits": "Нажмите для просмотра правок",
     "Can't load this message": "Не удалось загрузить это сообщение",
     "Submit logs": "Отправить логи",
-    "Categories": "Категории",
     "Widgets do not use message encryption.": "Виджеты не используют шифрование сообщений.",
     "QR Code": "QR-код",
     "Room address": "Адрес комнаты",
@@ -1458,7 +1306,6 @@
     "Enter phone number": "Введите номер телефона",
     "Enter email address": "Введите адрес электронной почты",
     "The <b>%(capability)s</b> capability": "<b>%(capability)s</b> возможности",
-    "sends confetti": "отправляет конфетти",
     "Invalid URL": "Неправильный URL-адрес",
     "Reason (optional)": "Причина (необязательно)",
     "About homeservers": "О домашних серверах",
@@ -1778,15 +1625,10 @@
     "There was a problem communicating with the homeserver, please try again later.": "Возникла проблема при обмене данными с домашним сервером. Повторите попытку позже.",
     "Already have an account? <a>Sign in here</a>": "Уже есть учётная запись? <a>Войдите здесь</a>",
     "Decide where your account is hosted": "Выберите, кто обслуживает вашу учётную запись",
-    "Sends the given message with confetti": "Отправляет данное сообщение с конфетти",
     "Hold": "Удерживать",
     "Resume": "Возобновить",
     "You've reached the maximum number of simultaneous calls.": "Вы достигли максимального количества одновременных звонков.",
     "Too Many Calls": "Слишком много звонков",
-    "sends fireworks": "отправляет фейерверк",
-    "Sends the given message with fireworks": "Отправляет сообщение с фейерверком",
-    "sends snowfall": "отправляет снегопад",
-    "Sends the given message with snowfall": "Отправляет сообщение со снегопадом",
     "You have no visible notifications.": "У вас нет видимых уведомлений.",
     "Transfer": "Перевод",
     "Failed to transfer call": "Не удалось перевести звонок",
@@ -1914,13 +1756,11 @@
     "%(deviceId)s from %(ip)s": "%(deviceId)s с %(ip)s",
     "The user you called is busy.": "Вызываемый пользователь занят.",
     "User Busy": "Пользователь занят",
-    "Integration manager": "Менеджер интеграции",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Ваш %(brand)s не позволяет вам использовать для этого Менеджер Интеграции. Пожалуйста, свяжитесь с администратором.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Используя этот виджет, вы можете делиться данными <helpIcon /> с %(widgetDomain)s и вашим Менеджером Интеграции.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Менеджеры по интеграции получают данные конфигурации и могут изменять виджеты, отправлять приглашения в комнаты и устанавливать уровни доступа от вашего имени.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Используйте менеджер интеграций для управления ботами, виджетами и наклейками.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Используйте менеджер интеграций <b>%(serverName)s</b> для управления ботами, виджетами и наклейками.",
-    "Identity server": "Идентификационный сервер",
     "Identity server (%(server)s)": "Идентификационный сервер (%(server)s)",
     "Could not connect to identity server": "Не удалось подключиться к серверу идентификации",
     "Not a valid identity server (status code %(code)s)": "Недействительный идентификационный сервер (код состояния %(code)s)",
@@ -2039,14 +1879,6 @@
     "Add existing space": "Добавить существующее пространство",
     "You are not allowed to view this server's rooms list": "Вам не разрешено просматривать список комнат этого сервера",
     "Please provide an address": "Пожалуйста, укажите адрес",
-    "%(oneUser)schanged the server ACLs %(count)s times": {
-        "one": "%(oneUser)sизменил(а) разрешения сервера",
-        "other": "%(oneUser)sизменил(а) разрешения сервера %(count)s раз(а)"
-    },
-    "%(severalUsers)schanged the server ACLs %(count)s times": {
-        "one": "%(severalUsers)sизменили разрешения сервера",
-        "other": "%(severalUsers)sизменили разрешения сервера %(count)s раз(а)"
-    },
     "%(count)s people you know have already joined": {
         "one": "%(count)s человек, которого вы знаете, уже присоединился",
         "other": "%(count)s человек(а), которых вы знаете, уже присоединились"
@@ -2122,16 +1954,11 @@
     "Displaying time": "Отображение времени",
     "Keyboard shortcuts": "Горячие клавиши",
     "Your access token gives full access to your account. Do not share it with anyone.": "Ваш токен доступа даёт полный доступ к вашей учётной записи. Не передавайте его никому.",
-    "Message bubbles": "Пузыри сообщений",
     "There was an error loading your notification settings.": "Произошла ошибка при загрузке настроек уведомлений.",
     "Mentions & keywords": "Упоминания и ключевые слова",
     "Global": "Глобально",
     "New keyword": "Новое ключевое слово",
     "Keyword": "Ключевое слово",
-    "Enable email notifications for %(email)s": "Уведомления по электронной почте для %(email)s",
-    "An error occurred whilst saving your notification preferences.": "При сохранении ваших настроек уведомлений произошла ошибка.",
-    "Error saving notification preferences": "Ошибка при сохранении настроек уведомлений",
-    "Messages containing keywords": "Сообщения с ключевыми словами",
     "Message search initialisation failed": "Инициализация поиска сообщений не удалась",
     "Recommended for public spaces.": "Рекомендуется для публичных пространств.",
     "Allow people to preview your space before they join.": "Дайте людям возможность предварительно ознакомиться с вашим пространством, прежде чем они присоединятся к нему.",
@@ -2152,8 +1979,6 @@
     "More": "Больше",
     "Show sidebar": "Показать боковую панель",
     "Hide sidebar": "Скрыть боковую панель",
-    "sends space invaders": "отправляет космических захватчиков",
-    "Sends the given message with a space themed effect": "Отправить данное сообщение с эффектом космоса",
     "Surround selected text when typing special characters": "Обводить выделенный текст при вводе специальных символов",
     "Review to ensure your account is safe": "Проверьте, чтобы убедиться, что ваша учётная запись в безопасности",
     "See when people join, leave, or are invited to your active room": "Просмотрите, когда люди присоединяются, уходят или приглашают в вашу активную комнату",
@@ -2332,10 +2157,6 @@
     "The poll has ended. Top answer: %(topAnswer)s": "Опрос завершен. Победил ответ: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Опрос завершен. Ни одного голоса не было.",
     "You can't disable this later. Bridges & most bots won't work yet.": "Вы не сможете отключить это позже. Мосты и большинство ботов пока не будут работать.",
-    "You can turn this off anytime in settings": "Вы можете отключить это в любое время в настройках",
-    "We <Bold>don't</Bold> share information with third parties": "Мы <Bold>не</Bold> передаем информацию третьим лицам",
-    "We <Bold>don't</Bold> record or profile any account data": "Мы <<Bold>не</Bold> записываем и <Bold>не</Bold> профилируем любые данные учетной записи",
-    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "Вы можете ознакомиться со всеми нашими условиями <PrivacyPolicyUrl>здесь</PrivacyPolicyUrl>",
     "This address had invalid server or is already in use": "Этот адрес имеет недопустимый сервер или уже используется",
     "This address does not point at this room": "Этот адрес не указывает на эту комнату",
     "Missing room name or separator e.g. (my-room:domain.org)": "Отсутствует имя комнаты или разделитель (my-room:domain.org)",
@@ -2349,14 +2170,6 @@
     "Sorry, the poll you tried to create was not posted.": "Не удалось отправить опрос, который вы пытались создать.",
     "Failed to post poll": "Не удалось отправить опрос",
     "Create Poll": "Создать опрос",
-    "was removed %(count)s times": {
-        "one": "был удалён",
-        "other": "удалено %(count)s раз(а)"
-    },
-    "were removed %(count)s times": {
-        "one": "были удалены",
-        "other": "удалены %(count)s раз(а)"
-    },
     "Including you, %(commaSeparatedMembers)s": "Включая вас, %(commaSeparatedMembers)s",
     "Unknown error fetching location. Please try again later.": "Неизвестная ошибка при получении местоположения. Пожалуйста, повторите попытку позже.",
     "Timed out trying to fetch your location. Please try again later.": "Попытка определить ваше местоположение завершилась. Пожалуйста, повторите попытку позже.",
@@ -2394,8 +2207,6 @@
     "You cancelled verification on your other device.": "Вы отменили проверку на другом устройстве.",
     "In encrypted rooms, verify all users to ensure it's secure.": "В зашифрованных комнатах, проверьте всех пользователей, чтобы убедиться в их безопасности.",
     "Almost there! Is your other device showing the same shield?": "Почти готово! Ваше другое устройство показывает такой же щит?",
-    "Verify this device by completing one of the following:": "Заверьте этот сеанс, выполнив одно из следующих действий:",
-    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "Устройство, которое вы пытаетесь проверить, не поддерживает сканирование QR-кода или проверку смайликов, которые поддерживает %(brand)s. Попробуйте использовать другой клиент.",
     "Remove from room": "Удалить из комнаты",
     "Failed to remove user": "Не удалось удалить пользователя",
     "Remove them from specific things I'm able to": "Удалить их из некоторых мест, где я могу",
@@ -2449,11 +2260,8 @@
     "To view all keyboard shortcuts, <a>click here</a>.": "Чтобы просмотреть все сочетания клавиш, <a>нажмите здесь</a>.",
     "Show tray icon and minimise window to it on close": "Показывать значок в трее и сворачивать в него окно при закрытии",
     "Keyboard": "Горячие клавиши",
-    "Use high contrast": "Высокая контрастность",
-    "IRC (Experimental)": "IRC (Экспериментально)",
     "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Эта комната находится в некоторых пространствах, администратором которых вы не являетесь. В этих пространствах старая комната будет по-прежнему отображаться, но людям будет предложено присоединиться к новой.",
     "Large": "Большой",
-    "Image size in the timeline": "Размер изображения в ленте сообщений",
     "Select all": "Выбрать все",
     "Deselect all": "Отменить выбор",
     "Sign out devices": {
@@ -2474,8 +2282,6 @@
     "Verify this device by confirming the following number appears on its screen.": "Проверьте это устройство, убедившись, что на его экране отображается следующее число.",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Ожидает проверки на другом устройстве, %(deviceName)s (%(deviceId)s)…",
     "Confirm the emoji below are displayed on both devices, in the same order:": "Убедитесь, что приведённые ниже смайлики отображаются в обоих сеансах в одинаковом порядке:",
-    "sends rainfall": "отправляет дождь",
-    "Sends the given message with rainfall": "Отправляет заданное сообщение с дождём",
     "Automatically send debug logs on decryption errors": "Автоматическая отправка журналов отладки при ошибках расшифровки",
     "Automatically send debug logs on any error": "Автоматическая отправка журналов отладки при любой ошибке",
     "Use a more compact 'Modern' layout": "Использовать более компактный \"Современный\" макет",
@@ -2487,9 +2293,6 @@
     "Room members": "Участники комнаты",
     "Back to chat": "Назад в чат",
     "Other rooms": "Прочие комнаты",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Поделитесь анонимными данными, чтобы помочь нам выявить проблемы. Никаких личных данных. Никаких третьих лиц. <LearnMoreLink>Узнать больше</LearnMoreLink>",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "Ранее вы давали согласие на передачу нам анонимных данных об использовании. Мы изменили порядок предоставления этих данных.",
-    "Help improve %(analyticsOwner)s": "Помогите улучшить %(analyticsOwner)s",
     "That's fine": "Всё в порядке",
     "Remove, ban, or invite people to your active room, and make you leave": "Удалять, блокировать или приглашать людей в вашей активной комнате, в частности, вас",
     "Remove, ban, or invite people to this room, and make you leave": "Удалять, блокировать или приглашать людей в этой комнате, в частности, вас",
@@ -2524,30 +2327,6 @@
     "Open poll": "Открытый опрос",
     "Poll type": "Тип опроса",
     "Edit poll": "Редактировать опрос",
-    "%(oneUser)ssent %(count)s hidden messages": {
-        "one": "%(oneUser)sотправил(а) скрытое сообщение",
-        "other": "%(oneUser)sотправил(а) %(count)s скрытых сообщения(-й)"
-    },
-    "%(severalUsers)ssent %(count)s hidden messages": {
-        "one": "%(severalUsers)sотправили скрытое сообщение",
-        "other": "%(severalUsers)sотправили %(count)s скрытых сообщения(-й)"
-    },
-    "%(oneUser)sremoved a message %(count)s times": {
-        "one": "%(oneUser)s удалил(а) сообщение",
-        "other": "%(oneUser)sудалил(а) %(count)s сообщения(-й)"
-    },
-    "%(severalUsers)sremoved a message %(count)s times": {
-        "one": "%(severalUsers)sудалили сообщение",
-        "other": "%(severalUsers)sудалили %(count)s сообщения(-й)"
-    },
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(oneUser)sизменил(а) <a>закреплённые сообщения</a> комнаты",
-        "other": "%(oneUser)sизменил(а) <a>закреплённые сообщения</a> комнаты %(count)s раз(а)"
-    },
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(severalUsers)s изменили <a>закреплённые сообщения</a> комнаты",
-        "other": "%(severalUsers)s изменили <a>закреплённые сообщения</a> комнаты %(count)s раз(а)"
-    },
     "What location type do you want to share?": "Каким типом местоположения вы хотите поделиться?",
     "Drop a Pin": "Маркер на карте",
     "My live location": "Моё местоположение в реальном времени",
@@ -2606,7 +2385,6 @@
         "one": "Удаляются сообщения в %(count)s комнате",
         "other": "Удаляются сообщения в %(count)s комнатах"
     },
-    "Sends the given message with hearts": "Отправляет данное сообщение с сердечками",
     "You were disconnected from the call. (Error: %(message)s)": "Вас отключили от звонка. (Ошибка: %(message)s)",
     "Next recently visited room or space": "Следующая недавно посещённая комната или пространство",
     "New video room": "Новая видеокомната",
@@ -2628,7 +2406,6 @@
         "one": "%(count)s человек присоединился",
         "other": "%(count)s человек(а) присоединились"
     },
-    "sends hearts": "отправляет сердечки",
     "Enable hardware acceleration": "Включить аппаратное ускорение",
     "Remove from space": "Исключить из пространства",
     "This room or space is not accessible at this time.": "Эта комната или пространство в данный момент недоступны.",
@@ -2648,7 +2425,6 @@
     "Check your email to continue": "Проверьте свою электронную почту, чтобы продолжить",
     "An error occurred while stopping your live location, please try again": "При остановки передачи информации о вашем местоположении произошла ошибка, попробуйте ещё раз",
     "An error occurred whilst sharing your live location, please try again": "При передаче информации о вашем местоположении произошла ошибка, попробуйте ещё раз",
-    "%(timeRemaining)s left": "Осталось %(timeRemaining)s",
     "You are sharing your live location": "Вы делитесь своим местоположением в реальном времени",
     "An error occurred whilst sharing your live location": "Произошла ошибка при передаче информации о вашем местоположении в реальном времени",
     "An error occurred while stopping your live location": "Произошла ошибка при остановке вашего местоположения в реальном времени",
@@ -2701,7 +2477,6 @@
         "other": "Вы собираетесь удалить %(count)s сообщений от %(user)s. Это удалит их навсегда для всех в разговоре. Точно продолжить?"
     },
     "%(featureName)s Beta feedback": "%(featureName)s — отзыв о бета-версии",
-    "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Помогите нам выявить проблемы и улучшить %(analyticsOwner)s, поделившись анонимными данными об использовании. Чтобы понять, как люди используют несколько устройств, мы генерируем случайный идентификатор, общий для всех ваших устройств.",
     "Show: Matrix rooms": "Показать: комнаты Matrix",
     "Show: %(instance)s rooms (%(server)s)": "Показать: %(instance)s комнат (%(server)s)",
     "Add new server…": "Добавить новый сервер…",
@@ -2827,7 +2602,6 @@
     "Manually verify by text": "Ручная сверка по тексту",
     "Interactively verify by emoji": "Интерактивная сверка по смайлам",
     "Rename session": "Переименовать сеанс",
-    "%(qrCode)s or %(emojiCompare)s": "%(qrCode)s или %(emojiCompare)s",
     "%(qrCode)s or %(appLinks)s": "%(qrCode)s или %(appLinks)s",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s или %(recoveryFile)s",
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s или %(copyButton)s",
@@ -2835,9 +2609,6 @@
     "Push notifications": "Уведомления",
     "Receive push notifications on this session.": "Получать push-уведомления в этом сеансе.",
     "Toggle push notifications on this session.": "Push-уведомления для этого сеанса.",
-    "Enable notifications for this device": "Уведомления для этого сеанса",
-    "Enable notifications for this account": "Уведомления для этой учётной записи",
-    "Turn off to disable notifications on all your devices and sessions": "Выключите, чтобы убрать уведомления во всех своих сеансах",
     "Failed to set pusher state": "Не удалось установить состояние push-службы",
     "URL": "URL-адрес",
     "Room info": "О комнате",
@@ -3070,7 +2841,9 @@
         "stickerpack": "Наклейки",
         "system_alerts": "Системные оповещения",
         "secure_backup": "Безопасное резервное копирование",
-        "cross_signing": "Кросс-подпись"
+        "cross_signing": "Кросс-подпись",
+        "identity_server": "Идентификационный сервер",
+        "integration_manager": "Менеджер интеграции"
     },
     "action": {
         "continue": "Продолжить",
@@ -3202,7 +2975,18 @@
         "jump_to_date_msc_support": "Требуется, чтобы ваш сервер поддерживал MSC3030",
         "sliding_sync_description": "В активной разработке, нельзя отключить.",
         "under_active_development": "В активной разработке.",
-        "location_share_live_description": "Временная реализация. Местоположения сохраняются в истории комнаты."
+        "location_share_live_description": "Временная реализация. Местоположения сохраняются в истории комнаты.",
+        "group_messaging": "Общение",
+        "group_profile": "Профиль",
+        "group_spaces": "Пространства",
+        "group_widgets": "Виджеты",
+        "group_rooms": "Комнаты",
+        "group_voip": "Голос и видео",
+        "group_moderation": "Модерация",
+        "group_themes": "Темы",
+        "group_encryption": "Шифрование",
+        "group_experimental": "Экспериментально",
+        "group_developer": "Разработка"
     },
     "keyboard": {
         "home": "Главная",
@@ -3263,7 +3047,8 @@
         "collecting_information": "Сбор информации о версии приложения",
         "collecting_logs": "Сбор журналов",
         "uploading_logs": "Загрузка журналов",
-        "downloading_logs": "Скачивание журналов"
+        "downloading_logs": "Скачивание журналов",
+        "create_new_issue": "Пожалуйста, <newIssueLink> создайте новую проблему/вопрос </newIssueLink> на GitHub, чтобы мы могли расследовать эту ошибку."
     },
     "time": {
         "hours_minutes_seconds_left": "Осталось %(hours)sч %(minutes)sм %(seconds)sс",
@@ -3292,7 +3077,8 @@
         "few_seconds_ago": "несколько секунд назад",
         "about_minute_ago": "около минуты назад",
         "about_hour_ago": "около часа назад",
-        "about_day_ago": "около суток назад"
+        "about_day_ago": "около суток назад",
+        "left": "Осталось %(timeRemaining)s"
     },
     "onboarding": {
         "personal_messaging_title": "Безопасный обмен сообщениями для друзей и семьи",
@@ -3374,7 +3160,37 @@
             "rule_call": "Звонки",
             "rule_suppress_notices": "Сообщения от ботов",
             "rule_tombstone": "При обновлении комнат",
-            "rule_encrypted_room_one_to_one": "Зашифрованные сообщения в персональных чатах"
+            "rule_encrypted_room_one_to_one": "Зашифрованные сообщения в персональных чатах",
+            "messages_containing_keywords": "Сообщения с ключевыми словами",
+            "error_saving": "Ошибка при сохранении настроек уведомлений",
+            "error_saving_detail": "При сохранении ваших настроек уведомлений произошла ошибка.",
+            "enable_notifications_account": "Уведомления для этой учётной записи",
+            "enable_notifications_account_detail": "Выключите, чтобы убрать уведомления во всех своих сеансах",
+            "enable_email_notifications": "Уведомления по электронной почте для %(email)s",
+            "enable_notifications_device": "Уведомления для этого сеанса",
+            "enable_desktop_notifications_session": "Показывать уведомления на рабочем столе для этого сеанса",
+            "show_message_desktop_notification": "Показывать текст сообщения в уведомлениях на рабочем столе",
+            "enable_audible_notifications_session": "Звуковые уведомления для этого сеанса"
+        },
+        "appearance": {
+            "layout_irc": "IRC (Экспериментально)",
+            "layout_bubbles": "Пузыри сообщений",
+            "heading": "Настройка внешнего вида",
+            "subheading": "Настройки внешнего вида работают только в этом сеансе %(brand)s.",
+            "match_system_theme": "Тема системы",
+            "custom_font": "Использовать системный шрифт",
+            "custom_font_name": "Название системного шрифта",
+            "custom_theme_invalid": "Неверная схема темы.",
+            "custom_theme_error_downloading": "Ошибка при загрузке информации темы.",
+            "custom_theme_success": "Тема добавлена!",
+            "custom_theme_url": "Ссылка на стороннюю тему",
+            "use_high_contrast": "Высокая контрастность",
+            "custom_theme_add_button": "Добавить тему",
+            "font_size": "Размер шрифта",
+            "custom_font_description": "Установите имя шрифта, установленного в вашей системе, и %(brand)s попытается его использовать.",
+            "timeline_image_size": "Размер изображения в ленте сообщений",
+            "timeline_image_size_default": "По умолчанию",
+            "timeline_image_size_large": "Большой"
         }
     },
     "devtools": {
@@ -3556,7 +3372,15 @@
             "removed": "%(senderName)s удалил главный адрес комнаты.",
             "changed_alternative": "%(senderName)s изменил(а) альтернативные адреса для этой комнаты.",
             "changed_main_and_alternative": "%(senderName)s изменил(а) главный и альтернативные адреса для этой комнаты.",
-            "changed": "%(senderName)s изменил(а) адреса для этой комнаты."
+            "changed": "%(senderName)s изменил(а) адреса для этой комнаты.",
+            "alt_added": {
+                "other": "%(senderName)s добавил(а) альтернативные адреса %(addresses)s для этой комнаты.",
+                "one": "%(senderName)s добавил(а) альтернативные адреса %(addresses)s для этой комнаты."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s удалил(а) альтернативные адреса %(addresses)s для этой комнаты.",
+                "one": "%(senderName)s удалил(а) альтернативные адреса %(addresses)s для этой комнаты."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s отозвал/а приглашение %(targetDisplayName)s присоединиться к комнате.",
@@ -3598,6 +3422,160 @@
         },
         "m.call.hangup": {
             "dm": "Звонок завершён"
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s присоединились %(count)s раз(а)",
+                "one": "%(severalUsers)s присоединились"
+            },
+            "joined": {
+                "other": "%(oneUser)s присоединился(лась) %(count)s раз(а)",
+                "one": "%(oneUser)s присоединился(лась)"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s покинули %(count)s раз(а)",
+                "one": "%(severalUsers)s покинули"
+            },
+            "left": {
+                "other": "%(oneUser)s покинул(а) %(count)s раз(а)",
+                "one": "%(oneUser)s покинул(а)"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s присоединились и покинули %(count)s раз(а)",
+                "one": "%(severalUsers)s присоединились и покинули"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s присоединился(лась) и покинул(а) %(count)s раз(а)",
+                "one": "%(oneUser)s присоединился(лась) и покинул(а)"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s покинули и снова присоединились %(count)s раз(а)",
+                "one": "%(severalUsers)s покинули и снова присоединились"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s покинул(а) и снова присоединился(лась) %(count)s раз(а)",
+                "one": "%(oneUser)s покинул(а) и снова присоединился(лась)"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s отклонили приглашения %(count)s раз(а)",
+                "one": "%(severalUsers)sотклонили приглашения"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)sотклонил(а) приглашение %(count)s раз(а)",
+                "one": "%(oneUser)sотклонил(а) приглашение"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)sотозвали приглашения %(count)s раз(а)",
+                "one": "%(severalUsers)sотозвали приглашения"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)sотклонил(а) приглашение %(count)s раз(а)",
+                "one": "%(oneUser)sотозвал(а) приглашение"
+            },
+            "invited_multiple": {
+                "other": "приглашены %(count)s раз(а)",
+                "one": "приглашены"
+            },
+            "invited": {
+                "other": "приглашен(а) %(count)s раз(а)",
+                "one": "приглашен(а)"
+            },
+            "banned_multiple": {
+                "other": "заблокированы %(count)s раз(а)",
+                "one": "заблокированы"
+            },
+            "banned": {
+                "other": "заблокирован(а) %(count)s раз(а)",
+                "one": "заблокирован(а)"
+            },
+            "unbanned_multiple": {
+                "other": "разблокированы %(count)s раз(а)",
+                "one": "разблокированы"
+            },
+            "unbanned": {
+                "other": "разблокирован(а) %(count)s раз(а)",
+                "one": "разблокирован(а)"
+            },
+            "kicked_multiple": {
+                "one": "были удалены",
+                "other": "удалены %(count)s раз(а)"
+            },
+            "kicked": {
+                "one": "был удалён",
+                "other": "удалено %(count)s раз(а)"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)sизменили имя %(count)s раз(а)",
+                "one": "%(severalUsers)sизменили имя"
+            },
+            "changed_name": {
+                "other": "%(oneUser)sизменил(а) имя %(count)s раз(а)",
+                "one": "%(oneUser)sизменил(а) имя"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)sничего не изменили %(count)s раз(а)",
+                "one": "%(severalUsers)sне внёс изменений"
+            },
+            "no_change": {
+                "other": "%(oneUser)sничего не изменил(а) %(count)s раз(а)",
+                "one": "%(oneUser)sне внёс изменений"
+            },
+            "server_acls_multiple": {
+                "one": "%(severalUsers)sизменили разрешения сервера",
+                "other": "%(severalUsers)sизменили разрешения сервера %(count)s раз(а)"
+            },
+            "server_acls": {
+                "one": "%(oneUser)sизменил(а) разрешения сервера",
+                "other": "%(oneUser)sизменил(а) разрешения сервера %(count)s раз(а)"
+            },
+            "pinned_events_multiple": {
+                "one": "%(severalUsers)s изменили <a>закреплённые сообщения</a> комнаты",
+                "other": "%(severalUsers)s изменили <a>закреплённые сообщения</a> комнаты %(count)s раз(а)"
+            },
+            "pinned_events": {
+                "one": "%(oneUser)sизменил(а) <a>закреплённые сообщения</a> комнаты",
+                "other": "%(oneUser)sизменил(а) <a>закреплённые сообщения</a> комнаты %(count)s раз(а)"
+            },
+            "redacted_multiple": {
+                "one": "%(severalUsers)sудалили сообщение",
+                "other": "%(severalUsers)sудалили %(count)s сообщения(-й)"
+            },
+            "redacted": {
+                "one": "%(oneUser)s удалил(а) сообщение",
+                "other": "%(oneUser)sудалил(а) %(count)s сообщения(-й)"
+            },
+            "hidden_event_multiple": {
+                "one": "%(severalUsers)sотправили скрытое сообщение",
+                "other": "%(severalUsers)sотправили %(count)s скрытых сообщения(-й)"
+            },
+            "hidden_event": {
+                "one": "%(oneUser)sотправил(а) скрытое сообщение",
+                "other": "%(oneUser)sотправил(а) %(count)s скрытых сообщения(-й)"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s изменил(а) уровни прав %(powerLevelDiffText)s.",
+            "user_from_to": "для %(userId)s с %(fromPowerLevel)s на %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s удалил(а) правило блокировки пользователей по шаблону %(glob)s",
+            "removed_rule_rooms": "%(senderName)s удалил правило блокировки комнат по шаблону %(glob)s",
+            "removed_rule_servers": "%(senderName)s удалил(а) правило блокировки серверов по шаблону %(glob)s",
+            "removed_rule": "%(senderName)s удалил(а) правило блокировки по шаблону %(glob)s",
+            "updated_invalid_rule": "%(senderName)s обновил(а) неверное правило блокировки",
+            "updated_rule_users": "%(senderName)s обновил(а) правило блокировки пользователей по шаблону %(glob)s за %(reason)s",
+            "updated_rule_rooms": "%(senderName)s обновил(а) правило блокировки комнат по шаблону %(glob)s за %(reason)s",
+            "updated_rule_servers": "%(senderName)s обновил(а) правило блокировки серверов по шаблону %(glob)s за %(reason)s",
+            "updated_rule": "%(senderName)s обновил(а) правило блокировки по шаблону %(glob)s за %(reason)s",
+            "created_rule_users": "%(senderName)s создал(а) правило блокировки пользователей по шаблону %(glob)s за %(reason)s",
+            "created_rule_rooms": "%(senderName)s создал(а) правило блокировки комнат по шаблону %(glob)s за %(reason)s",
+            "created_rule_servers": "%(senderName)s создал(а) правило блокировки серверов по шаблону %(glob)s за %(reason)s",
+            "created_rule": "%(senderName)s создал(а) правило блокировки по шаблону %(glob)s за %(reason)s",
+            "changed_rule_users": "%(senderName)s изменил(а) правило блокировки пользователей по шаблону %(oldGlob)s на шаблон %(newGlob)s за %(reason)s",
+            "changed_rule_rooms": "%(senderName)s изменил(а) правило блокировки комнат по шаблону %(oldGlob)s на шаблон %(newGlob)s за %(reason)s",
+            "changed_rule_servers": "%(senderName)s изменил(а) правило блокировки серверов по шаблону %(oldGlob)s на шаблон %(newGlob)s за %(reason)s",
+            "changed_rule_glob": "%(senderName)s обновил(а) правило блокировки по шаблону %(oldGlob)s на шаблон %(newGlob)s за %(reason)s"
         }
     },
     "slash_command": {
@@ -3753,5 +3731,58 @@
             "redact": "Удалить сообщения, отправленные другими",
             "notifications.room": "Уведомить всех"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "Они не совпадают",
+            "sas_match": "Они совпадают",
+            "in_person": "Чтобы быть в безопасности, делайте это лично или используйте надежный способ связи.",
+            "other_party_cancelled": "Другая сторона отменила проверку.",
+            "complete_title": "Верифицировано!",
+            "complete_description": "Вы успешно подтвердили этого пользователя.",
+            "no_support_qr_emoji": "Устройство, которое вы пытаетесь проверить, не поддерживает сканирование QR-кода или проверку смайликов, которые поддерживает %(brand)s. Попробуйте использовать другой клиент.",
+            "qr_prompt": "Отсканируйте этот уникальный код",
+            "sas_prompt": "Сравнитe уникальныe смайлики",
+            "sas_description": "Сравните уникальный набор смайликов, если у вас нет камеры ни на одном из устройств",
+            "qr_or_sas": "%(qrCode)s или %(emojiCompare)s",
+            "qr_or_sas_header": "Заверьте этот сеанс, выполнив одно из следующих действий:"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Часто используемые",
+        "category_smileys_people": "Смайлики и люди",
+        "category_animals_nature": "Животные и природа",
+        "category_food_drink": "Еда и напитки",
+        "category_activities": "Действия",
+        "category_travel_places": "Путешествия и места",
+        "category_objects": "Объекты",
+        "category_symbols": "Символы",
+        "category_flags": "Флаги",
+        "categories": "Категории",
+        "quick_reactions": "Быстрая реакция"
+    },
+    "analytics": {
+        "enable_prompt": "Помогите улучшить %(analyticsOwner)s",
+        "consent_migration": "Ранее вы давали согласие на передачу нам анонимных данных об использовании. Мы изменили порядок предоставления этих данных.",
+        "learn_more": "Поделитесь анонимными данными, чтобы помочь нам выявить проблемы. Никаких личных данных. Никаких третьих лиц. <LearnMoreLink>Узнать больше</LearnMoreLink>",
+        "privacy_policy": "Вы можете ознакомиться со всеми нашими условиями <PrivacyPolicyUrl>здесь</PrivacyPolicyUrl>",
+        "pseudonymous_usage_data": "Помогите нам выявить проблемы и улучшить %(analyticsOwner)s, поделившись анонимными данными об использовании. Чтобы понять, как люди используют несколько устройств, мы генерируем случайный идентификатор, общий для всех ваших устройств.",
+        "bullet_1": "Мы <<Bold>не</Bold> записываем и <Bold>не</Bold> профилируем любые данные учетной записи",
+        "bullet_2": "Мы <Bold>не</Bold> передаем информацию третьим лицам",
+        "disable_prompt": "Вы можете отключить это в любое время в настройках"
+    },
+    "chat_effects": {
+        "confetti_description": "Отправляет данное сообщение с конфетти",
+        "confetti_message": "отправляет конфетти",
+        "fireworks_description": "Отправляет сообщение с фейерверком",
+        "fireworks_message": "отправляет фейерверк",
+        "rainfall_description": "Отправляет заданное сообщение с дождём",
+        "rainfall_message": "отправляет дождь",
+        "snowfall_description": "Отправляет сообщение со снегопадом",
+        "snowfall_message": "отправляет снегопад",
+        "spaceinvaders_description": "Отправить данное сообщение с эффектом космоса",
+        "spaceinvaders_message": "отправляет космических захватчиков",
+        "hearts_description": "Отправляет данное сообщение с сердечками",
+        "hearts_message": "отправляет сердечки"
     }
 }

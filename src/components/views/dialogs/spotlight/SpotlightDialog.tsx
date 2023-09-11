@@ -563,7 +563,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     };
 
     let otherSearchesSection: JSX.Element | undefined;
-    if (trimmedQuery || filter !== Filter.PublicRooms) {
+    if (trimmedQuery || (filter !== Filter.PublicRooms && filter !== Filter.PublicSpaces)) {
         otherSearchesSection = (
             <div
                 className="mx_SpotlightDialog_section mx_SpotlightDialog_otherSearches"

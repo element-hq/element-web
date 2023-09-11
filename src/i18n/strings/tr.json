@@ -22,7 +22,6 @@
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Ana Sunucu'ya bağlanılamıyor - lütfen bağlantınızı kontrol edin ,<a> Ana Sunucu SSL sertifikanızın </a> güvenilir olduğundan ve bir tarayıcı uzantısının istekleri engellemiyor olduğundan emin olun.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Tarayıcı çubuğunuzda bir HTTPS URL'si olduğunda Ana Sunusuna HTTP üzerinden bağlanılamıyor . Ya HTTPS kullanın veya <a> güvensiz komut dosyalarını</a> etkinleştirin.",
     "Change Password": "Şifre Değiştir",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s %(powerLevelDiffText)s'nin güç düzeyini değiştirdi.",
     "Command error": "Komut Hatası",
     "Commands": "Komutlar",
     "Confirm password": "Şifreyi Onayla",
@@ -57,7 +56,6 @@
     "Filter room members": "Oda üyelerini Filtrele",
     "Forget room": "Odayı Unut",
     "For security, this session has been signed out. Please sign in again.": "Güvenlik için , bu oturuma çıkış yapıldı . Lütfen tekrar oturum açın.",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s %(fromPowerLevel)s den %(toPowerLevel)s ' ye",
     "Historical": "Tarihi",
     "Home": "Ev",
     "Import E2E room keys": "Uçtan uca Oda Anahtarlarını İçe Aktar",
@@ -270,50 +268,6 @@
     "expand": "genişlet",
     "Rotate Left": "Sola Döndür",
     "Rotate Right": "Sağa Döndür",
-    "%(nameList)s %(transitionList)s": "%(nameList)s%(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s %(count)s kez katıldı",
-        "one": "%(severalUsers)s katıldı"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s %(count)s kez katıldı",
-        "one": "%(oneUser)s katıldı"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "one": "%(severalUsers)s kullanıcı ayrıldı",
-        "other": "%(severalUsers)s, %(count)s kez ayrıldı"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "one": "%(oneUser)s ayrıldı",
-        "other": "%(oneUser)s %(count)s kez ayrıldı"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "one": "%(severalUsers)s katıldı ve ayrıldı",
-        "other": "%(severalUsers)s %(count)s kez katılıp ve ayrıldı"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "one": "%(oneUser)s katıldı ve ayrıldı",
-        "other": "%(oneUser)s %(count)s kez katıldı ve ayrıldı"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "one": "%(oneUser)s ayrıldı ve yeniden katıldı"
-    },
-    "were invited %(count)s times": {
-        "other": "%(count)s kez davet edildi",
-        "one": "davet edildi"
-    },
-    "was invited %(count)s times": {
-        "other": "%(count)s kez davet edildi",
-        "one": "davet edildi"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "one": "%(severalUsers)s isimlerini değiştrtiler",
-        "other": "%(severalUsers)s kullanıcıları isimlerini %(count)s kez değiştirdiler"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "one": "%(oneUser)s ismini değiştirdi",
-        "other": "%(oneUser)s ismini %(count)s kez değiştirdi"
-    },
     "Power level": "Güç düzeyi",
     "e.g. my-room": "örn. odam",
     "Some characters not allowed": "Bazı karakterlere izin verilmiyor",
@@ -471,7 +425,6 @@
     "not stored": "depolanmadı",
     "All keys backed up": "Bütün yedekler yedeklendi",
     "Start using Key Backup": "Anahtar Yedekleme kullanmaya başla",
-    "Show message in desktop notification": "Masaüstü bildiriminde mesaj göster",
     "Display Name": "Ekran Adı",
     "Profile picture": "Profil resmi",
     "Checking server": "Sunucu kontrol ediliyor",
@@ -479,8 +432,6 @@
     "Please contact your homeserver administrator.": "Lütfen anasunucu yöneticiniz ile bağlantıya geçin.",
     "Send analytics data": "Analiz verilerini gönder",
     "My Ban List": "Yasaklı Listem",
-    "Verified!": "Doğrulandı!",
-    "You've successfully verified this user.": "Bu kullanıcıyı başarılı şekilde doğruladınız.",
     "Unable to find a supported verification method.": "Desteklenen doğrulama yöntemi bulunamadı.",
     "Dog": "Köpek",
     "Cat": "Kedi",
@@ -680,12 +631,6 @@
     "Room Topic": "Oda Başlığı",
     "Ignored user": "Yoksayılan kullanıcı",
     "You are now ignoring %(userId)s": "Şimdi %(userId)s yı yoksayıyorsunuz",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s bir geçersiz yasaklama kuralını güncelledi",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen yasaklama kuralını güncelledi",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen kullanıcıları yasaklama kuralı oluşturdu",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir oda yasaklama kuralı oluşturdu",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir sunucular yasaklama kuralı oluşturdu",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir yasak kuralı oluşturdu",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Kararlı bir internet bağlantısına sahip olduğunuzdan emin olun yada sunucu yöneticisi ile iletişime geçin",
     "The user's homeserver does not support the version of the room.": "Kullanıcının ana sunucusu odanın sürümünü desteklemiyor.",
     "Unknown server error": "Bilinmeyen sunucu hatası",
@@ -707,7 +652,6 @@
     "This is similar to a commonly used password": "Bu yaygınca kullanılan bir parolaya benziyor",
     "Names and surnames by themselves are easy to guess": "Adlar ve soyadlar kendi kendilerine tahmin için kolaydır",
     "Mirror local video feed": "Yerel video beslemesi yansısı",
-    "Match system theme": "Sistem temasıyla eşle",
     "Missing media permissions, click the button below to request.": "Medya izinleri eksik, alttaki butona tıkayarak talep edin.",
     "Clear cache and reload": "Belleği temizle ve yeniden yükle",
     "Ignored/Blocked": "Yoksayılan/Bloklanan",
@@ -722,53 +666,11 @@
     "Unable to revoke sharing for email address": "E-posta adresi paylaşımı kaldırılamadı",
     "Unable to revoke sharing for phone number": "Telefon numarası paylaşımı kaldırılamıyor",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Çağrıların sağlıklı bir şekide yapılabilmesi için lütfen anasunucunuzun (<code>%(homeserverDomain)s</code>) yöneticisinden bir TURN sunucusu yapılandırmasını isteyin.",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "one": "%(severalUsers)s değişiklik yapmadı",
-        "other": "%(severalUsers)s %(count)s kez hiç bir değişiklik yapmadı"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)s %(count)s kez değişiklik yapmadı",
-        "one": "%(oneUser)s değişiklik yapmadı"
-    },
     "And %(count)s more...": {
         "other": "ve %(count)s kez daha..."
     },
     "Popout widget": "Görsel bileşeni göster",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Lütfen GitHub’da <newIssueLink>Yeni bir talep</newIssueLink> oluşturun ki bu hatayı inceleyebilelim.",
     "Language Dropdown": "Dil Listesi",
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "one": "%(severalUsers)s ayrıldı ve yeniden katıldı"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s %(count)s kez davetlerini reddetti",
-        "one": "%(severalUsers)s davetlerini reddetti"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "one": "%(oneUser)s davetlerini reddetti"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "one": "%(severalUsers)s davetlerini geri çekti"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)s davetini %(count)s kez geri çekti",
-        "one": "%(oneUser)s davetini geri çekti"
-    },
-    "were banned %(count)s times": {
-        "other": "%(count)s kez yasaklandı",
-        "one": "yasaklandı"
-    },
-    "was banned %(count)s times": {
-        "other": "%(count)s kez yasaklandı",
-        "one": "yasaklandı"
-    },
-    "were unbanned %(count)s times": {
-        "other": "%(count)s kez yasak kaldırıldı",
-        "one": "yasak kaldırıldı"
-    },
-    "was unbanned %(count)s times": {
-        "other": "%(count)s kez yasak kaldırıldı",
-        "one": "yasak kaldırıldı"
-    },
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "E-posta ile davet etmek için bir kimlik sunucusu kullan. <default> Varsayılanı kullan (%(defaultIdentityServerName)s</default> ya da <settings>Ayarlar</settings> kullanarak yönetin.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "E-posta ile davet için bir kimlik sunucu kullan. <settings>Ayarlar</settings> dan yönet.",
     "The following users may not exist": "Belirtilen kullanıcılar mevcut olmayabilir",
@@ -817,8 +719,6 @@
     "Space used:": "Kullanılan alan:",
     "Indexed messages:": "İndekslenmiş mesajlar:",
     "Waiting for %(displayName)s to verify…": "%(displayName)s ın doğrulaması için bekleniyor…",
-    "They match": "Eşleşiyorlar",
-    "They don't match": "Eşleşmiyorlar",
     "Other users may not trust it": "Diğer kullanıcılar güvenmeyebilirler",
     "Later": "Sonra",
     "Show less": "Daha az göster",
@@ -829,7 +729,6 @@
     "The integration manager is offline or it cannot reach your homeserver.": "Entegrasyon yöneticisi çevrim dışı veya anasunucunuza erişemiyor.",
     "Connect this session to Key Backup": "Anahtar Yedekleme için bu oturuma bağlanın",
     "This backup is trusted because it has been restored on this session": "Bu yedek güvenilir çünkü bu oturumda geri döndürüldü",
-    "Enable desktop notifications for this session": "Bu oturum için masaüstü bildirimlerini aç",
     "Session ID:": "Oturum ID:",
     "Session key:": "Oturum anahtarı:",
     "This user has not verified all of their sessions.": "Bu kullanıcı bütün oturumlarında doğrulanmamış.",
@@ -860,14 +759,6 @@
     "%(name)s cancelled verifying": "%(name)s doğrulama iptal edildi",
     "Error encountered (%(errorDetail)s).": "Hata oluştu (%(errorDetail)s).",
     "No update available.": "Güncelleme yok.",
-    "Frequently Used": "Sıklıkla Kullanılan",
-    "Animals & Nature": "Hayvanlar & Doğa",
-    "Food & Drink": "Yiyecek & İçecek",
-    "Activities": "Aktiviteler",
-    "Travel & Places": "Seyahat & Yerler",
-    "Objects": "Nesneler",
-    "Symbols": "Semboller",
-    "Flags": "Bayraklar",
     "Cancel search": "Aramayı iptal et",
     "Your display name": "Ekran adınız",
     "Your user ID": "Kullanıcı ID",
@@ -889,13 +780,11 @@
     "Add another word or two. Uncommon words are better.": "Bir iki kelime daha ekleyin. Yaygın olmayan kelimeler daha iyi olur.",
     "Recent years are easy to guess": "Güncel yılların tahmini kolaydır",
     "Enable message search in encrypted rooms": "Şifrelenmiş odalardaki mesaj aramayı aktifleştir",
-    "Scan this unique code": "Bu eşsiz kodu tara",
     "Cancelling…": "İptal ediliyor…",
     "Lock": "Kilit",
     "Your homeserver does not support cross-signing.": "Ana sunucunuz çapraz imzalamayı desteklemiyor.",
     "exists": "mevcut",
     "Your keys are <b>not being backed up from this session</b>.": "Anahtarlarınız <b>bu oturum tarafından yedeklenmiyor</b>.",
-    "Enable audible notifications for this session": "Bu oturum için sesli bildirimleri aktifleştir",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Bir metin mesajı gönderildi: +%(msisdn)s. Lütfen içerdiği doğrulama kodunu girin.",
     "You have verified this user. This user has verified all of their sessions.": "Bu kullanıcıyı doğruladınız. Bu kullanıcı tüm oturumlarını doğruladı.",
     "This room is end-to-end encrypted": "Bu oda uçtan uça şifreli",
@@ -936,10 +825,6 @@
     "Join millions for free on the largest public server": "En büyük açık sunucu üzerindeki milyonlara ücretsiz ulaşmak için katılın",
     "This room is not public. You will not be able to rejoin without an invite.": "Bu oda açık bir oda değil. Davet almadan tekrar katılamayacaksınız.",
     "%(creator)s created and configured the room.": "%(creator)s odayı oluşturdu ve yapılandırdı.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s bu odaya alternatif olarak %(addresses)s adreslerini ekledi.",
-        "one": "%(senderName)s bu oda için alternatif adres %(addresses)s ekledi."
-    },
     "Something went wrong trying to invite the users.": "Kullanıcıların davet edilmesinde bir şeyler yanlış gitti.",
     "a new master key signature": "yeni bir master anahtar imzası",
     "a new cross-signing key signature": "yeni bir çapraz-imzalama anahtarı imzası",
@@ -961,21 +846,6 @@
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "UYARI: ANAHTAR DOĞRULAMASI BAŞARISIZ! %(userld)s'nin/nın %(deviceId)s oturumu için imza anahtarı \"%(fprint)s\" verilen anahtar ile uyuşmuyor \"%(fingerprint)s\". Bu iletişiminizin engellendiği anlamına gelebilir!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Verilen imza anahtarı %(userld)s'nin/nın %(deviceld)s oturumundan gelen anahtar ile uyumlu. Oturum doğrulanmış olarak işaretlendi.",
     "Forces the current outbound group session in an encrypted room to be discarded": "Şifreli bir odadaki geçerli giden grup oturumunun atılmasını zorlar",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s bu oda için alternatif adresleri %(addresses)s sildi.",
-        "one": "%(senderName)s bu oda için alternatif adresi %(addresses)s sildi."
-    },
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s %(glob)s ile eşleşen kullanıcıları banlama kuralını kaldırdı",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s %(glob)s ile eşleşen odaları banlama kuralını kaldırdı",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s %(glob)s ile eşleşen sunucuları banlama kuralını kaldırdı",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s %(glob)s ile eşleşen banlama kuralını kaldırdı",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s %(glob)s ile eşleşen kullanıcıları banlama kuralını bu sebepten dolayı güncelledi %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s %(glob)s ile eşleşen odaları banlama kuralını bu sebepten dolayı güncelledi %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s %(glob)s ile eşleşen sunucuları banlama kuralını bu sebepten dolayı güncelledi %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s %(oldGlob)s ile eşleşen kullanıcıları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s %(oldGlob)s ile eşleşen odaları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s %(oldGlob)s ile eşleşen sunucuları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s %(oldGlob)s ile eşleşen banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) yeni oturuma doğrulamadan giriş yaptı:",
     "Ask this user to verify their session, or manually verify it below.": "Kullanıcıya oturumunu doğrulamasını söyle, ya da aşağıdan doğrula.",
     "Use a longer keyboard pattern with more turns": "Daha karmaşık ve uzun bir klavye deseni kullan",
@@ -985,9 +855,6 @@
     "Short keyboard patterns are easy to guess": "Kısa klavye desenleri kolay tahmin edilir",
     "Never send encrypted messages to unverified sessions from this session": "Şifreli mesajları asla bu oturumdaki doğrulanmamış oturumlara iletme",
     "Never send encrypted messages to unverified sessions in this room from this session": "Şifreli mesajları asla oturumdaki bu odadaki doğrulanmamış oturumlara iletme",
-    "Error downloading theme information.": "Tema bilgisi indirilirken hata.",
-    "Theme added!": "Tema eklendi!",
-    "Add theme": "Tema ekle",
     "Local address": "Yerel adres",
     "Local Addresses": "Yerel Adresler",
     "Hide sessions": "Oturumları gizle",
@@ -1310,23 +1177,14 @@
     "See when the topic changes in this room": "Bu odada konu başlığı değişince değişiklikleri görün",
     "See when the topic changes in your active room": "Bu odada konu başlığı değişince değişiklikleri görün",
     "Remain on your screen when viewing another room, when running": "a",
-    "sends snowfall": "Kartopu gönderir",
-    "Sends the given message with snowfall": "Mesajı kartopu ile gönderir",
-    "sends fireworks": "Havai fişek gönderir",
-    "Sends the given message with fireworks": "Mesajı havai fişeklerle gönderir",
-    "sends confetti": "Konfeti gönderir",
     "Send stickers to this room as you": "Widget bu odaya sizin adınıza çıkartma göndersin",
     "Send stickers to your active room as you": "Widget aktif odanıza sizin adınıza çıkartma göndersin",
     "Send messages as you in this room": "Bu Araç sizin adınıza mesaj gönderir",
     "Answered Elsewhere": "Arama başka bir yerde yanıtlandı",
-    "Sends the given message with confetti": "Mesajı konfeti ile gönderir",
     "IRC display name width": "IRC görünen ad genişliği",
     "Manually verify all remote sessions": "Bütün uzaktan oturumları el ile onayla",
     "How fast should messages be downloaded.": "Mesajlar ne kadar hızlı indirilmeli.",
-    "System font name": "Sistem yazı tipi ismi",
-    "Use a system font": "Bir sistem yazı tipi kullanın",
     "Use custom size": "Özel büyüklük kullan",
-    "Font size": "Yazı boyutu",
     "New published address (e.g. #alias:server)": "Yeni yayınlanmış adresler (e.g. #alias:server)",
     "Published Addresses": "Yayınlanmış adresler",
     "No other published addresses yet, add one below": "Henüz yayınlanmış başka adres yok, aşağıdan bir tane ekle",
@@ -1380,8 +1238,6 @@
     "See general files posted to your active room": "Aktif odanıza gönderilen genel dosyaları görün",
     "See general files posted to this room": "Bu odaya gönderilen genel dosyaları gör",
     "Your server isn't responding to some <a>requests</a>.": "Sunucunuz bası <a>istekler'e</a> onay vermiyor.",
-    "Compare a unique set of emoji if you don't have a camera on either device": "Her iki cihazda da kamera yoksa benzersiz bir emoji setini karşılaştırın",
-    "The other party cancelled the verification.": "Diğer taraf onaylamayı reddetti.",
     "User signing private key:": "Kullanıcı imzalı özel anahtar",
     "Homeserver feature support:": "Ana sunucu özellik desteği:",
     "Self signing private key:": "Kendinden imzalı özel anahtar:",
@@ -1396,10 +1252,8 @@
     "Santa": "Noel Baba",
     "Spanner": "Anahtar",
     "Smiley": "Gülen yüz",
-    "To be secure, do this in person or use a trusted way to communicate.": "Güvende olmak için, bunu şahsen yapın veya güvenilir bir iletişim yöntemi kullanın.",
     "Verify this user by confirming the following number appears on their screen.": "Aşağıdaki numaranın ekranlarında göründüğünü onaylayarak bu kullanıcıyı doğrulayın.",
     "Verify this user by confirming the following emoji appear on their screen.": "Aşağıdaki emojinin ekranlarında göründüğünü onaylayarak bu kullanıcıyı doğrulayın.",
-    "Compare unique emoji": "Benzersiz emoji karşılaştır",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Bu kullanıcıyla olan güvenli mesajlar uçtan uca şifrelidir ve 3 taraflar tarafından okunamaz.",
     "Dial pad": "Arama tuşları",
     "See videos posted to your active room": "Aktif odana gönderilen videoları gör",
@@ -1439,8 +1293,6 @@
     "Show rooms with unread messages first": "Önce okunmamış mesajları olan odaları göster",
     "Topic: %(topic)s (<a>edit</a>)": "Konu: %(topic)s (<a>düzenle</a>)",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Onaylamanız için size e-posta gönderdik. Lütfen yönergeleri takip edin ve sonra aşağıdaki butona tıklayın.",
-    "Customise your appearance": "Görünüşü özelleştir",
-    "Custom theme URL": "Özel tema URLsi",
     "Room settings": "Oda ayarları",
     "Not encrypted": "Şifrelenmemiş",
     "Backup version:": "Yedekleme sürümü:",
@@ -1449,7 +1301,6 @@
     "User Autocomplete": "Kullanıcı Otomatik Tamamlama",
     "Room Autocomplete": "Otomatik Oda Tamamlama",
     "Notification Autocomplete": "Otomatik Bildirim Tamamlama",
-    "Quick Reactions": "Hızlı Tepkiler",
     "Widgets": "Widgetlar",
     "Notification options": "Bildirim ayarları",
     "Looks good!": "İyi görünüyor!",
@@ -1474,7 +1325,6 @@
     "Information": "Bilgi",
     "Calls": "Aramalar",
     "Feedback": "Geri bildirim",
-    "Categories": "Kategoriler",
     "Accepting…": "Kabul ediliyor…",
     "A-Z": "A-Z",
     "Room avatar": "Oda avatarı",
@@ -1551,9 +1401,6 @@
     "Please verify the room ID or address and try again.": "Lütfen oda kimliğini ya da adresini doğrulayıp yeniden deneyin.",
     "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "%(brand)s uygulamasına yardımcı olmak için <a>buraya</a> tıklayın ya da aşağıdaki tuşları kullanarak bot'umuzla sohbet edin.",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Başkaları tarafından e-posta adresi ya da telefon numarası ile bulunabilmek için %(serverName)s kimlik sunucusunun Kullanım Koşullarını kabul edin.",
-    "Appearance Settings only affect this %(brand)s session.": "Dış Görünüş Ayarları yalnızca bu %(brand)s oturumunu etkileyecek.",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Sisteminizde bulunan bir font adı belirtiniz. %(brand)s sizin için onu kullanmaya çalışacak.",
-    "Invalid theme schema.": "Geçersiz tema taslağı.",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Bir kimlik sunucusu kullanmak isteğe bağlıdır. Eğer bir tane kullanmak istemezseniz başkaları tarafından bulunamayabilir ve başkalarını e-posta adresi ya da telefon numarası ile davet edemeyebilirsiniz.",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Kimlik sunucunuz ile bağlantıyı keserseniz başkaları tarafından bulunamayabilir ve başkalarını e-posta adresi ya da telefon numarası ile davet edemeyebilirsiniz.",
     "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "Şu anda herhangi bir kimlik sunucusu kullanmıyorsunuz. Başkalarını bulmak ve başkaları tarafından bulunabilmek için aşağıya bir kimlik sunucusu ekleyin.",
@@ -1603,9 +1450,7 @@
     "Click to copy": "Kopyalamak için tıklayın",
     "You can change these anytime.": "Bunları istediğiniz zaman değiştirebilirsiniz.",
     "Change which room, message, or user you're viewing": "Görüntülediğiniz odayı, mesajı veya kullanıcıyı değiştirin",
-    "Integration manager": "Bütünleştirme Yöneticisi",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Botları, görsel bileşenleri ve çıkartma paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.",
-    "Identity server": "Kimlik sunucusu",
     "Identity server (%(server)s)": "(%(server)s) Kimlik Sunucusu",
     "Could not connect to identity server": "Kimlik Sunucusuna bağlanılamadı",
     "Not a valid identity server (status code %(code)s)": "Geçerli bir Kimlik Sunucu değil ( durum kodu %(code)s )",
@@ -1702,7 +1547,9 @@
         "stickerpack": "Çıkartma paketi",
         "system_alerts": "Sistem Uyarıları",
         "secure_backup": "Güvenli yedekleme",
-        "cross_signing": "Çapraz-imzalama"
+        "cross_signing": "Çapraz-imzalama",
+        "identity_server": "Kimlik sunucusu",
+        "integration_manager": "Bütünleştirme Yöneticisi"
     },
     "action": {
         "continue": "Devam Et",
@@ -1791,7 +1638,12 @@
         "pinning": "Mesaj Sabitleme",
         "state_counters": "Oda başlığında basit sayaçları görüntüle",
         "custom_themes": "Özel tema eklemeyi destekle",
-        "bridge_state": "Oda ayarlarındaki köprülerin bilgilerini göster"
+        "bridge_state": "Oda ayarlarındaki köprülerin bilgilerini göster",
+        "group_profile": "Profil",
+        "group_widgets": "Widgetlar",
+        "group_rooms": "Odalar",
+        "group_voip": "Ses & Video",
+        "group_encryption": "Şifreleme"
     },
     "keyboard": {
         "home": "Ev",
@@ -1837,7 +1689,8 @@
         "collecting_information": "Uygulama sürümü bilgileri toplanıyor",
         "collecting_logs": "Kayıtlar toplanıyor",
         "uploading_logs": "Günlükler yükleniyor",
-        "downloading_logs": "Günlükler indiriliyor"
+        "downloading_logs": "Günlükler indiriliyor",
+        "create_new_issue": "Lütfen GitHub’da <newIssueLink>Yeni bir talep</newIssueLink> oluşturun ki bu hatayı inceleyebilelim."
     },
     "time": {
         "seconds_left": "%(seconds)s saniye kaldı",
@@ -1889,7 +1742,25 @@
             "rule_call": "Arama davetiyesi",
             "rule_suppress_notices": "Bot tarafından gönderilen mesajlar",
             "rule_tombstone": "Odalar güncellendiğinde",
-            "rule_encrypted_room_one_to_one": "Birebir sohbetlerdeki şifrelenmiş mesajlar"
+            "rule_encrypted_room_one_to_one": "Birebir sohbetlerdeki şifrelenmiş mesajlar",
+            "enable_desktop_notifications_session": "Bu oturum için masaüstü bildirimlerini aç",
+            "show_message_desktop_notification": "Masaüstü bildiriminde mesaj göster",
+            "enable_audible_notifications_session": "Bu oturum için sesli bildirimleri aktifleştir"
+        },
+        "appearance": {
+            "heading": "Görünüşü özelleştir",
+            "subheading": "Dış Görünüş Ayarları yalnızca bu %(brand)s oturumunu etkileyecek.",
+            "match_system_theme": "Sistem temasıyla eşle",
+            "custom_font": "Bir sistem yazı tipi kullanın",
+            "custom_font_name": "Sistem yazı tipi ismi",
+            "custom_theme_invalid": "Geçersiz tema taslağı.",
+            "custom_theme_error_downloading": "Tema bilgisi indirilirken hata.",
+            "custom_theme_success": "Tema eklendi!",
+            "custom_theme_url": "Özel tema URLsi",
+            "custom_theme_add_button": "Tema ekle",
+            "font_size": "Yazı boyutu",
+            "custom_font_description": "Sisteminizde bulunan bir font adı belirtiniz. %(brand)s sizin için onu kullanmaya çalışacak.",
+            "timeline_image_size_default": "Varsayılan"
         }
     },
     "devtools": {
@@ -1965,7 +1836,15 @@
             "removed": "Bu oda için ana adresi silen %(senderName)s.",
             "changed_alternative": "Bu oda için alternatif adresler %(senderName)s tarafından değiştirildi.",
             "changed_main_and_alternative": "Bu oda için ana ve alternatif adresler %(senderName)s tarafından değiştirildi.",
-            "changed": "Bu oda adresleri %(senderName)s tarafından değiştirildi."
+            "changed": "Bu oda adresleri %(senderName)s tarafından değiştirildi.",
+            "alt_added": {
+                "other": "%(senderName)s bu odaya alternatif olarak %(addresses)s adreslerini ekledi.",
+                "one": "%(senderName)s bu oda için alternatif adres %(addresses)s ekledi."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s bu oda için alternatif adresleri %(addresses)s sildi.",
+                "one": "%(senderName)s bu oda için alternatif adresi %(addresses)s sildi."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s, %(targetDisplayName)s'nin odaya katılması için daveti iptal etti.",
@@ -2001,6 +1880,116 @@
         },
         "m.call.hangup": {
             "dm": "Çağrı sonlandı"
+        },
+        "summary": {
+            "format": "%(nameList)s%(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s %(count)s kez katıldı",
+                "one": "%(severalUsers)s katıldı"
+            },
+            "joined": {
+                "other": "%(oneUser)s %(count)s kez katıldı",
+                "one": "%(oneUser)s katıldı"
+            },
+            "left_multiple": {
+                "one": "%(severalUsers)s kullanıcı ayrıldı",
+                "other": "%(severalUsers)s, %(count)s kez ayrıldı"
+            },
+            "left": {
+                "one": "%(oneUser)s ayrıldı",
+                "other": "%(oneUser)s %(count)s kez ayrıldı"
+            },
+            "joined_and_left_multiple": {
+                "one": "%(severalUsers)s katıldı ve ayrıldı",
+                "other": "%(severalUsers)s %(count)s kez katılıp ve ayrıldı"
+            },
+            "joined_and_left": {
+                "one": "%(oneUser)s katıldı ve ayrıldı",
+                "other": "%(oneUser)s %(count)s kez katıldı ve ayrıldı"
+            },
+            "rejoined_multiple": {
+                "one": "%(severalUsers)s ayrıldı ve yeniden katıldı"
+            },
+            "rejoined": {
+                "one": "%(oneUser)s ayrıldı ve yeniden katıldı"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s %(count)s kez davetlerini reddetti",
+                "one": "%(severalUsers)s davetlerini reddetti"
+            },
+            "rejected_invite": {
+                "one": "%(oneUser)s davetlerini reddetti"
+            },
+            "invite_withdrawn_multiple": {
+                "one": "%(severalUsers)s davetlerini geri çekti"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)s davetini %(count)s kez geri çekti",
+                "one": "%(oneUser)s davetini geri çekti"
+            },
+            "invited_multiple": {
+                "other": "%(count)s kez davet edildi",
+                "one": "davet edildi"
+            },
+            "invited": {
+                "other": "%(count)s kez davet edildi",
+                "one": "davet edildi"
+            },
+            "banned_multiple": {
+                "other": "%(count)s kez yasaklandı",
+                "one": "yasaklandı"
+            },
+            "banned": {
+                "other": "%(count)s kez yasaklandı",
+                "one": "yasaklandı"
+            },
+            "unbanned_multiple": {
+                "other": "%(count)s kez yasak kaldırıldı",
+                "one": "yasak kaldırıldı"
+            },
+            "unbanned": {
+                "other": "%(count)s kez yasak kaldırıldı",
+                "one": "yasak kaldırıldı"
+            },
+            "changed_name_multiple": {
+                "one": "%(severalUsers)s isimlerini değiştrtiler",
+                "other": "%(severalUsers)s kullanıcıları isimlerini %(count)s kez değiştirdiler"
+            },
+            "changed_name": {
+                "one": "%(oneUser)s ismini değiştirdi",
+                "other": "%(oneUser)s ismini %(count)s kez değiştirdi"
+            },
+            "no_change_multiple": {
+                "one": "%(severalUsers)s değişiklik yapmadı",
+                "other": "%(severalUsers)s %(count)s kez hiç bir değişiklik yapmadı"
+            },
+            "no_change": {
+                "other": "%(oneUser)s %(count)s kez değişiklik yapmadı",
+                "one": "%(oneUser)s değişiklik yapmadı"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s %(powerLevelDiffText)s'nin güç düzeyini değiştirdi.",
+            "user_from_to": "%(userId)s %(fromPowerLevel)s den %(toPowerLevel)s ' ye"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s %(glob)s ile eşleşen kullanıcıları banlama kuralını kaldırdı",
+            "removed_rule_rooms": "%(senderName)s %(glob)s ile eşleşen odaları banlama kuralını kaldırdı",
+            "removed_rule_servers": "%(senderName)s %(glob)s ile eşleşen sunucuları banlama kuralını kaldırdı",
+            "removed_rule": "%(senderName)s %(glob)s ile eşleşen banlama kuralını kaldırdı",
+            "updated_invalid_rule": "%(senderName)s bir geçersiz yasaklama kuralını güncelledi",
+            "updated_rule_users": "%(senderName)s %(glob)s ile eşleşen kullanıcıları banlama kuralını bu sebepten dolayı güncelledi %(reason)s",
+            "updated_rule_rooms": "%(senderName)s %(glob)s ile eşleşen odaları banlama kuralını bu sebepten dolayı güncelledi %(reason)s",
+            "updated_rule_servers": "%(senderName)s %(glob)s ile eşleşen sunucuları banlama kuralını bu sebepten dolayı güncelledi %(reason)s",
+            "updated_rule": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen yasaklama kuralını güncelledi",
+            "created_rule_users": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen kullanıcıları yasaklama kuralı oluşturdu",
+            "created_rule_rooms": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir oda yasaklama kuralı oluşturdu",
+            "created_rule_servers": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir sunucular yasaklama kuralı oluşturdu",
+            "created_rule": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir yasak kuralı oluşturdu",
+            "changed_rule_users": "%(senderName)s %(oldGlob)s ile eşleşen kullanıcıları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
+            "changed_rule_rooms": "%(senderName)s %(oldGlob)s ile eşleşen odaları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
+            "changed_rule_servers": "%(senderName)s %(oldGlob)s ile eşleşen sunucuları banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s",
+            "changed_rule_glob": "%(senderName)s %(oldGlob)s ile eşleşen banlama kuralını %(newGlob)s ile eşleşen olarak değiştirdi sebebi %(reason)s"
         }
     },
     "slash_command": {
@@ -2115,5 +2104,38 @@
             "redact": "Diğerleri tarafından gönderilen iletileri kaldır",
             "notifications.room": "Herkesi bilgilendir"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "Eşleşmiyorlar",
+            "sas_match": "Eşleşiyorlar",
+            "in_person": "Güvende olmak için, bunu şahsen yapın veya güvenilir bir iletişim yöntemi kullanın.",
+            "other_party_cancelled": "Diğer taraf onaylamayı reddetti.",
+            "complete_title": "Doğrulandı!",
+            "complete_description": "Bu kullanıcıyı başarılı şekilde doğruladınız.",
+            "qr_prompt": "Bu eşsiz kodu tara",
+            "sas_prompt": "Benzersiz emoji karşılaştır",
+            "sas_description": "Her iki cihazda da kamera yoksa benzersiz bir emoji setini karşılaştırın"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Sıklıkla Kullanılan",
+        "category_animals_nature": "Hayvanlar & Doğa",
+        "category_food_drink": "Yiyecek & İçecek",
+        "category_activities": "Aktiviteler",
+        "category_travel_places": "Seyahat & Yerler",
+        "category_objects": "Nesneler",
+        "category_symbols": "Semboller",
+        "category_flags": "Bayraklar",
+        "categories": "Kategoriler",
+        "quick_reactions": "Hızlı Tepkiler"
+    },
+    "chat_effects": {
+        "confetti_description": "Mesajı konfeti ile gönderir",
+        "confetti_message": "Konfeti gönderir",
+        "fireworks_description": "Mesajı havai fişeklerle gönderir",
+        "fireworks_message": "Havai fişek gönderir",
+        "snowfall_description": "Mesajı kartopu ile gönderir",
+        "snowfall_message": "Kartopu gönderir"
     }
 }

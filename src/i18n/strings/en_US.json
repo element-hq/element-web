@@ -22,7 +22,6 @@
     "Banned users": "Banned users",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
     "Change Password": "Change Password",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
     "Command error": "Command error",
     "Commands": "Commands",
     "Confirm password": "Confirm password",
@@ -57,7 +56,6 @@
     "Filter room members": "Filter room members",
     "Forget room": "Forget room",
     "For security, this session has been signed out. Please sign in again.": "For security, this session has been signed out. Please sign in again.",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s",
     "Historical": "Historical",
     "Import E2E room keys": "Import E2E room keys",
     "Incorrect username and/or password.": "Incorrect username and/or password.",
@@ -303,7 +301,6 @@
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirm adding this email address by using Single Sign On to prove your identity.",
     "Use Single Sign On to continue": "Use Single Sign On to continue",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait while we resynchronize with the server!",
-    "Customise your appearance": "Customize your appearance",
     "Unrecognised command: %(commandText)s": "Unrecognized command: %(commandText)s",
     "Add some details to help people recognise it.": "Add some details to help people recognize it.",
     "A private space to organise your rooms": "A private space to organize your rooms",
@@ -406,6 +403,10 @@
             "rule_invite_for_me": "When I'm invited to a room",
             "rule_call": "Call invitation",
             "rule_suppress_notices": "Messages sent by bot"
+        },
+        "appearance": {
+            "heading": "Customize your appearance",
+            "timeline_image_size_default": "Default"
         }
     },
     "timeline": {
@@ -454,6 +455,10 @@
             "more_users": {
                 "other": "%(names)s and %(count)s others are typing …"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s"
         }
     },
     "slash_command": {
@@ -506,5 +511,9 @@
     },
     "Messages": "Messages",
     "Other": "Other",
-    "Advanced": "Advanced"
+    "Advanced": "Advanced",
+    "labs": {
+        "group_profile": "Profile",
+        "group_rooms": "Rooms"
+    }
 }

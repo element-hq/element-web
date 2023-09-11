@@ -15,20 +15,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { filesize } from "filesize";
+import {
+    filesize,
+    FileSizeOptionsArray,
+    FileSizeOptionsBase,
+    FileSizeOptionsExponent,
+    FileSizeOptionsObject,
+    FileSizeOptionsString,
+    FileSizeReturnArray,
+    FileSizeReturnObject,
+} from "filesize";
 
 import { IMediaEventContent } from "../customisations/models/IMediaEventContent";
 import { _t } from "../languageHandler";
 
 /**
- * Extracts a human readable label for the file attachment to use as
+ * Extracts a human-readable label for the file attachment to use as
  * link text.
  *
  * @param {IMediaEventContent} content The "content" key of the matrix event.
  * @param {string} fallbackText The fallback text
  * @param {boolean} withSize Whether to include size information. Default true.
  * @param {boolean} shortened Ensure the extension of the file name is visible. Default false.
- * @return {string} the human readable link text for the attachment.
+ * @return {string} the human-readable link text for the attachment.
  */
 export function presentableTextForFile(
     content: IMediaEventContent,
@@ -74,10 +83,17 @@ export function presentableTextForFile(
     return text;
 }
 
+type FileSizeOptions =
+    | FileSizeOptionsString
+    | FileSizeOptionsBase
+    | FileSizeOptionsArray
+    | FileSizeOptionsExponent
+    | FileSizeOptionsObject;
+
 /**
  * wrapper function to set default values for filesize function
  *
- * @param size size of file
+ * @param byteCount size of file
  * @param options options to customize the response type or size type conversion e.g. 12kB, 12KB
  * @returns {string | number | any[] | {
  *  value: any;
@@ -85,10 +101,15 @@ export function presentableTextForFile(
  *  exponent: number;
  *  unit: string;}} formatted file size with unit e.g. 12kB, 12KB
  */
+export function fileSize(byteCount: number, options: FileSizeOptionsString | FileSizeOptionsBase): string;
+export function fileSize(byteCount: number, options: FileSizeOptionsArray): FileSizeReturnArray;
+export function fileSize(byteCount: number, options: FileSizeOptionsExponent): number;
+export function fileSize(byteCount: number, options: FileSizeOptionsObject): FileSizeReturnObject;
+export function fileSize(byteCount: number): string;
 export function fileSize(
-    size: Parameters<typeof filesize>[0],
-    options?: Parameters<typeof filesize>[1],
-): ReturnType<typeof filesize> {
-    const defaultOption: Parameters<typeof filesize>[1] = { base: 2, standard: "jedec", ...options };
-    return filesize(size, defaultOption);
+    byteCount: number,
+    options?: FileSizeOptions,
+): string | number | FileSizeReturnArray | FileSizeReturnObject {
+    const defaultOption: FileSizeOptions = { base: 2, standard: "jedec", ...options };
+    return filesize(byteCount, defaultOption);
 }

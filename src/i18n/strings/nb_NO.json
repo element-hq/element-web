@@ -172,16 +172,6 @@
     "Download %(text)s": "Last ned %(text)s",
     "Copied!": "Kopiert!",
     "What's New": "Hva er nytt",
-    "Frequently Used": "Ofte brukte",
-    "Smileys & People": "Smilefjes og folk",
-    "Animals & Nature": "Dyreliv og natur",
-    "Food & Drink": "Mat og drikke",
-    "Activities": "Aktiviteter",
-    "Travel & Places": "Reise og steder",
-    "Objects": "Objekter",
-    "Symbols": "Symboler",
-    "Flags": "Flagg",
-    "Quick Reactions": "Hurtigreaksjoner",
     "Cancel search": "Avbryt søket",
     "More options": "Flere alternativer",
     "collapse": "skjul",
@@ -218,13 +208,10 @@
     "Set up": "Sett opp",
     "Identity server has no terms of service": "Identitetstjeneren har ingen brukervilkår",
     "Mirror local video feed": "Speil den lokale videostrømmen",
-    "Match system theme": "Bind fast til systemtemaet",
     "Send analytics data": "Send analytiske data",
     "Show hidden events in timeline": "Vis skjulte hendelser i tidslinjen",
     "My Ban List": "Min bannlysningsliste",
-    "Verified!": "Verifisert!",
     "Got It": "Skjønner",
-    "Scan this unique code": "Skann denne unike koden",
     "Lion": "Løve",
     "Pig": "Gris",
     "Rabbit": "Kanin",
@@ -249,9 +236,6 @@
     "Guitar": "Gitar",
     "Later": "Senere",
     "Accept <policyLink /> to continue:": "Aksepter <policyLink /> for å fortsette:",
-    "Enable desktop notifications for this session": "Skru på skrivebordsvarsler for denne økten",
-    "Show message in desktop notification": "Vis meldingen i skrivebordsvarselet",
-    "Enable audible notifications for this session": "Skru på hørbare varsler for denne økten",
     "Profile picture": "Profilbilde",
     "Checking server": "Sjekker tjeneren",
     "Change identity server": "Bytt ut identitetstjener",
@@ -259,8 +243,6 @@
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Å bruke en identitetstjener er valgfritt. Dersom du velger å ikke bruke en identitetstjener, vil du ikke kunne oppdages av andre brukere, og du vil ikke kunne invitere andre ut i fra E-postadresse eller telefonnummer.",
     "Do not use an identity server": "Ikke bruk en identitetstjener",
     "Manage integrations": "Behandle integreringer",
-    "Theme added!": "Temaet er lagt til!",
-    "Add theme": "Legg til tema",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Godkjenn identitetstjenerens (%(serverName)s) brukervilkår, slik at du kan bli oppdaget ut i fra E-postadresse eller telefonnummer.",
     "Account management": "Kontobehandling",
     "Deactivate Account": "Deaktiver kontoen",
@@ -347,22 +329,6 @@
     "Delete widget": "Slett modul",
     "Rotate Left": "Roter til venstre",
     "Rotate Right": "Roter til høyre",
-    "were invited %(count)s times": {
-        "one": "ble invitert",
-        "other": "ble invitert %(count)s ganger"
-    },
-    "was invited %(count)s times": {
-        "one": "ble invitert",
-        "other": "ble invitert %(count)s ganger"
-    },
-    "were banned %(count)s times": {
-        "one": "ble bannlyst",
-        "other": "ble bannlyst %(count)s ganger"
-    },
-    "was banned %(count)s times": {
-        "one": "ble bannlyst",
-        "other": "ble bannlyst %(count)s ganger"
-    },
     "Power level": "Styrkenivå",
     "e.g. my-room": "f.eks. mitt-rom",
     "Enter a server name": "Skriv inn et tjenernavn",
@@ -467,30 +433,6 @@
     "Widget added by": "Modulen ble lagt til av",
     "Create new room": "Opprett et nytt rom",
     "Language Dropdown": "Språk-nedfallsmeny",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s ble med %(count)s ganger",
-        "one": "%(severalUsers)s ble med"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s ble med %(count)s ganger",
-        "one": "%(oneUser)s ble med"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s forlot rommet %(count)s ganger",
-        "one": "%(severalUsers)s forlot rommet"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s forlot rommet %(count)s ganger",
-        "one": "%(oneUser)s forlot rommet"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "one": "%(severalUsers)s endret navnene sine"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "one": "%(oneUser)s endret navnet sitt",
-        "other": "%(oneUser)sendret navnet sitt %(count)s ganger"
-    },
     "Custom level": "Tilpasset nivå",
     "And %(count)s more...": {
         "other": "Og %(count)s til..."
@@ -527,8 +469,6 @@
     "Avoid sequences": "Unngå sekvenser",
     "Avoid recent years": "Unngå nylige år",
     "Cancelling…": "Avbryter …",
-    "They match": "De samsvarer",
-    "They don't match": "De samsvarer ikke",
     "in memory": "i minnet",
     "Delete Backup": "Slett sikkerhetskopien",
     "Restore from Backup": "Gjenopprett fra sikkerhetskopi",
@@ -560,14 +500,6 @@
     "%(name)s wants to verify": "%(name)s ønsker å verifisere",
     "Failed to copy": "Mislyktes i å kopiere",
     "Submit logs": "Send inn loggføringer",
-    "were unbanned %(count)s times": {
-        "other": "fikk bannlysningene sine opphevet %(count)s ganger",
-        "one": "fikk bannlysningene sine opphevet"
-    },
-    "was unbanned %(count)s times": {
-        "other": "fikk bannlysningen sin opphevet %(count)s ganger",
-        "one": "fikk bannlysningen sin opphevet"
-    },
     "Clear all data": "Tøm alle data",
     "Verify session": "Verifiser økten",
     "Upload completed": "Opplasting fullført",
@@ -595,7 +527,6 @@
     "Use an identity server": "Bruk en identitetstjener",
     "Could not find user in room": "Klarte ikke å finne brukeren i rommet",
     "Session already verified!": "Økten er allerede verifisert!",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s gikk fra %(fromPowerLevel)s til %(toPowerLevel)s",
     "Your %(brand)s is misconfigured": "Ditt %(brand)s-oppsett er feiloppsatt",
     "Not a valid %(brand)s keyfile": "Ikke en gyldig %(brand)s-nøkkelfil",
     "Unrecognised address": "Adressen ble ikke gjenkjent",
@@ -677,12 +608,9 @@
     "Use a few words, avoid common phrases": "Bruk noen få ord, unngå vanlig fraser",
     "Ok": "OK",
     "Encryption upgrade available": "Krypteringsoppdatering tilgjengelig",
-    "Font size": "Skriftstørrelse",
-    "You've successfully verified this user.": "Du har vellykket verifisert denne brukeren.",
     "Santa": "Julenisse",
     "wait and try again later": "vent og prøv igjen senere",
     "Size must be a number": "Størrelsen må være et nummer",
-    "Customise your appearance": "Tilpass utseendet du bruker",
     "eg: @bot:* or example.org": "f.eks.: @bot:* eller example.org",
     "To link to this room, please add an address.": "For å lenke til dette rommet, vennligst legg til en adresse.",
     "Remove %(phone)s?": "Vil du fjerne %(phone)s?",
@@ -704,7 +632,6 @@
     "Click here to see older messages.": "Klikk for å se eldre meldinger.",
     "Add an Integration": "Legg til en integrering",
     "Can't load this message": "Klarte ikke å laste inn denne meldingen",
-    "Categories": "Kategorier",
     "Popout widget": "Utsprettsmodul",
     "QR Code": "QR-kode",
     "Room address": "Rommets adresse",
@@ -796,7 +723,6 @@
     "Hey you. You're the best!": "Hei der. Du er fantastisk!",
     "Use custom size": "Bruk tilpasset størrelse",
     "Use Single Sign On to continue": "Bruk Single Sign On for å fortsette",
-    "Appearance Settings only affect this %(brand)s session.": "Stilendringer gjelder kun i denne %(brand)s sesjonen.",
     "Belgium": "Belgia",
     "American Samoa": "Amerikansk Samoa",
     "United States": "USA",
@@ -927,27 +853,6 @@
     "Continue with %(provider)s": "Fortsett med %(provider)s",
     "This address is already in use": "Denne adressen er allerede i bruk",
     "<a>In reply to</a> <pill>": "<a>Som svar på</a> <pill>",
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "one": "%(oneUser)sfikk sin invitasjon trukket tilbake"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "one": "%(severalUsers)sfikk sine invitasjoner trukket tilbake"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "one": "%(oneUser)savslo invitasjonen sin"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "one": "%(oneUser)sforlot og ble med igjen"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "one": "%(severalUsers)sforlot og ble med igjen"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "one": "%(oneUser)sble med og forlot igjen"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "one": "%(severalUsers)sble med og forlot igjen"
-    },
     "Information": "Informasjon",
     "%(name)s cancelled verifying": "%(name)s avbrøt verifiseringen",
     "You cancelled verifying %(name)s": "Du avbrøt verifiseringen av %(name)s",
@@ -976,7 +881,6 @@
     "Failed to deactivate user": "Mislyktes i å deaktivere brukeren",
     "Accept all %(invitedRooms)s invites": "Aksepter alle %(invitedRooms)s-invitasjoner",
     "<not supported>": "<ikke støttet>",
-    "Custom theme URL": "URL-en til et selvvalgt tema",
     "not ready": "ikke klar",
     "ready": "klar",
     "Algorithm:": "Algoritme:",
@@ -985,9 +889,6 @@
     "Update %(brand)s": "Oppdater %(brand)s",
     "You are currently ignoring:": "Du ignorerer for øyeblikket:",
     "Dial pad": "Nummerpanel",
-    "sends confetti": "sender konfetti",
-    "System font name": "Systemskrifttypenavn",
-    "Use a system font": "Bruk en systemskrifttype",
     "Channel: <channelLink/>": "Kanal: <channelLink/>",
     "Enable desktop notifications": "Aktiver skrivebordsvarsler",
     "Don't miss a reply": "Ikke gå glipp av noen svar",
@@ -1197,11 +1098,9 @@
     "Cook Islands": "Cook-øyene",
     "All keys backed up": "Alle nøkler er sikkerhetskopiert",
     "Secret storage:": "Hemmelig lagring:",
-    "Integration manager": "Integreringsbehandler",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integreringsbehandlere mottar oppsettsdata, og kan endre på moduler, sende rominvitasjoner, og bestemme styrkenivåer på dine vegne.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Bruk en integreringsbehandler til å behandle botter, moduler, og klistremerkepakker.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Bruk en integreringsbehandler <b>(%(serverName)s)</b> til å behandle botter, moduler, og klistremerkepakker.",
-    "Identity server": "Identitetstjener",
     "Identity server (%(server)s)": "Identitetstjener (%(server)s)",
     "Could not connect to identity server": "Kunne ikke koble til identitetsserveren",
     "Show:": "Vis:",
@@ -1297,7 +1196,9 @@
         "unnamed_room": "Navnløst rom",
         "stickerpack": "Klistremerkepakke",
         "system_alerts": "Systemvarsler",
-        "cross_signing": "Kryssignering"
+        "cross_signing": "Kryssignering",
+        "identity_server": "Identitetstjener",
+        "integration_manager": "Integreringsbehandler"
     },
     "action": {
         "continue": "Fortsett",
@@ -1389,7 +1290,12 @@
         "user_menu": "Brukermeny"
     },
     "labs": {
-        "pinning": "Meldingsklistring"
+        "pinning": "Meldingsklistring",
+        "group_profile": "Profil",
+        "group_widgets": "Komponenter",
+        "group_rooms": "Rom",
+        "group_voip": "Stemme og video",
+        "group_encryption": "Kryptering"
     },
     "keyboard": {
         "home": "Hjem",
@@ -1477,7 +1383,22 @@
             "rule_call": "Anropsinvitasjon",
             "rule_suppress_notices": "Meldinger sendt av bot",
             "rule_tombstone": "Når rom blir oppgradert",
-            "rule_encrypted_room_one_to_one": "Krypterte meldinger i samtaler under fire øyne"
+            "rule_encrypted_room_one_to_one": "Krypterte meldinger i samtaler under fire øyne",
+            "enable_desktop_notifications_session": "Skru på skrivebordsvarsler for denne økten",
+            "show_message_desktop_notification": "Vis meldingen i skrivebordsvarselet",
+            "enable_audible_notifications_session": "Skru på hørbare varsler for denne økten"
+        },
+        "appearance": {
+            "heading": "Tilpass utseendet du bruker",
+            "subheading": "Stilendringer gjelder kun i denne %(brand)s sesjonen.",
+            "match_system_theme": "Bind fast til systemtemaet",
+            "custom_font": "Bruk en systemskrifttype",
+            "custom_font_name": "Systemskrifttypenavn",
+            "custom_theme_success": "Temaet er lagt til!",
+            "custom_theme_url": "URL-en til et selvvalgt tema",
+            "custom_theme_add_button": "Legg til tema",
+            "font_size": "Skriftstørrelse",
+            "timeline_image_size_default": "Standard"
         }
     },
     "devtools": {
@@ -1571,6 +1492,80 @@
                 "other": "%(names)s og %(count)s andre skriver …",
                 "one": "%(names)s og én annen bruker skriver …"
             }
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s ble med %(count)s ganger",
+                "one": "%(severalUsers)s ble med"
+            },
+            "joined": {
+                "other": "%(oneUser)s ble med %(count)s ganger",
+                "one": "%(oneUser)s ble med"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s forlot rommet %(count)s ganger",
+                "one": "%(severalUsers)s forlot rommet"
+            },
+            "left": {
+                "other": "%(oneUser)s forlot rommet %(count)s ganger",
+                "one": "%(oneUser)s forlot rommet"
+            },
+            "joined_and_left_multiple": {
+                "one": "%(severalUsers)sble med og forlot igjen"
+            },
+            "joined_and_left": {
+                "one": "%(oneUser)sble med og forlot igjen"
+            },
+            "rejoined_multiple": {
+                "one": "%(severalUsers)sforlot og ble med igjen"
+            },
+            "rejoined": {
+                "one": "%(oneUser)sforlot og ble med igjen"
+            },
+            "rejected_invite": {
+                "one": "%(oneUser)savslo invitasjonen sin"
+            },
+            "invite_withdrawn_multiple": {
+                "one": "%(severalUsers)sfikk sine invitasjoner trukket tilbake"
+            },
+            "invite_withdrawn": {
+                "one": "%(oneUser)sfikk sin invitasjon trukket tilbake"
+            },
+            "invited_multiple": {
+                "one": "ble invitert",
+                "other": "ble invitert %(count)s ganger"
+            },
+            "invited": {
+                "one": "ble invitert",
+                "other": "ble invitert %(count)s ganger"
+            },
+            "banned_multiple": {
+                "one": "ble bannlyst",
+                "other": "ble bannlyst %(count)s ganger"
+            },
+            "banned": {
+                "one": "ble bannlyst",
+                "other": "ble bannlyst %(count)s ganger"
+            },
+            "unbanned_multiple": {
+                "other": "fikk bannlysningene sine opphevet %(count)s ganger",
+                "one": "fikk bannlysningene sine opphevet"
+            },
+            "unbanned": {
+                "other": "fikk bannlysningen sin opphevet %(count)s ganger",
+                "one": "fikk bannlysningen sin opphevet"
+            },
+            "changed_name_multiple": {
+                "one": "%(severalUsers)s endret navnene sine"
+            },
+            "changed_name": {
+                "one": "%(oneUser)s endret navnet sitt",
+                "other": "%(oneUser)sendret navnet sitt %(count)s ganger"
+            }
+        },
+        "m.room.power_levels": {
+            "user_from_to": "%(userId)s gikk fra %(fromPowerLevel)s til %(toPowerLevel)s"
         }
     },
     "slash_command": {
@@ -1662,5 +1657,30 @@
             "ban": "Bannlys brukere",
             "notifications.room": "Varsle alle"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "De samsvarer ikke",
+            "sas_match": "De samsvarer",
+            "complete_title": "Verifisert!",
+            "complete_description": "Du har vellykket verifisert denne brukeren.",
+            "qr_prompt": "Skann denne unike koden"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Ofte brukte",
+        "category_smileys_people": "Smilefjes og folk",
+        "category_animals_nature": "Dyreliv og natur",
+        "category_food_drink": "Mat og drikke",
+        "category_activities": "Aktiviteter",
+        "category_travel_places": "Reise og steder",
+        "category_objects": "Objekter",
+        "category_symbols": "Symboler",
+        "category_flags": "Flagg",
+        "categories": "Kategorier",
+        "quick_reactions": "Hurtigreaksjoner"
+    },
+    "chat_effects": {
+        "confetti_message": "sender konfetti"
     }
 }

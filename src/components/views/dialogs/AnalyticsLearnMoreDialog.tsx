@@ -51,7 +51,7 @@ export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
     const privacyPolicyLink = privacyPolicyUrl ? (
         <span>
             {_t(
-                "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>",
+                "analytics|privacy_policy",
                 {},
                 {
                     PrivacyPolicyUrl: (sub) => {
@@ -71,33 +71,18 @@ export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
         <BaseDialog
             className="mx_AnalyticsLearnMoreDialog"
             contentId="mx_AnalyticsLearnMore"
-            title={_t("Help improve %(analyticsOwner)s", { analyticsOwner })}
+            title={_t("analytics|enable_prompt", { analyticsOwner })}
             onFinished={onFinished}
         >
             <div className="mx_Dialog_content">
                 <div className="mx_AnalyticsLearnMore_image_holder" />
                 <div className="mx_AnalyticsLearnMore_copy">
-                    {_t(
-                        "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.",
-                        { analyticsOwner },
-                    )}
+                    {_t("analytics|pseudonymous_usage_data", { analyticsOwner })}
                 </div>
                 <ul className="mx_AnalyticsLearnMore_bullets">
-                    <li>
-                        {_t(
-                            "We <Bold>don't</Bold> record or profile any account data",
-                            {},
-                            { Bold: (sub) => <b>{sub}</b> },
-                        )}
-                    </li>
-                    <li>
-                        {_t(
-                            "We <Bold>don't</Bold> share information with third parties",
-                            {},
-                            { Bold: (sub) => <b>{sub}</b> },
-                        )}
-                    </li>
-                    <li>{_t("You can turn this off anytime in settings")}</li>
+                    <li>{_t("analytics|bullet_1", {}, { Bold: (sub) => <b>{sub}</b> })}</li>
+                    <li>{_t("analytics|bullet_2", {}, { Bold: (sub) => <b>{sub}</b> })}</li>
+                    <li>{_t("analytics|disable_prompt")}</li>
                 </ul>
                 {privacyPolicyLink}
             </div>

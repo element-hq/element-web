@@ -135,6 +135,9 @@
             "rule_message": "సమూహ మాటామంతిలో సందేశాలు",
             "rule_call": "మాట్లాడడానికి ఆహ్వానం",
             "rule_suppress_notices": "బాట్ పంపిన సందేశాలు"
+        },
+        "appearance": {
+            "timeline_image_size_default": "డిఫాల్ట్"
         }
     },
     "timeline": {

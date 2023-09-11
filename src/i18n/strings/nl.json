@@ -13,7 +13,6 @@
     "Banned users": "Verbannen personen",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Kan geen verbinding maken met de homeserver via HTTP wanneer er een HTTPS-URL in je browserbalk staat. Gebruik HTTPS of <a>schakel onveilige scripts in</a>.",
     "Change Password": "Wachtwoord wijzigen",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s heeft het machtsniveau van %(powerLevelDiffText)s gewijzigd.",
     "Command error": "Opdrachtfout",
     "Commands": "Opdrachten",
     "Confirm password": "Bevestig wachtwoord",
@@ -98,7 +97,6 @@
     "Filter room members": "Kamerleden filteren",
     "Forget room": "Kamer vergeten",
     "For security, this session has been signed out. Please sign in again.": "Wegens veiligheidsredenen is deze sessie uitgelogd. Log opnieuw in.",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s van %(fromPowerLevel)s naar %(toPowerLevel)s",
     "Historical": "Historisch",
     "Home": "Home",
     "Import E2E room keys": "E2E-kamersleutels importeren",
@@ -251,87 +249,6 @@
     "URL previews are enabled by default for participants in this room.": "URL-voorvertoningen zijn voor deelnemers van deze kamer standaard ingeschakeld.",
     "URL previews are disabled by default for participants in this room.": "URL-voorvertoningen zijn voor deelnemers van deze kamer standaard uitgeschakeld.",
     "A text message has been sent to %(msisdn)s": "Er is een sms naar %(msisdn)s verstuurd",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s zijn %(count)s keer toegetreden",
-        "one": "%(severalUsers)s zijn toegetreden"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s is %(count)s keer toegetreden",
-        "one": "%(oneUser)s is toegetreden"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s is %(count)s keer vertrokken",
-        "one": "%(severalUsers)s zijn vertrokken"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s is %(count)s keer vertrokken",
-        "one": "%(oneUser)s is vertrokken"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s zijn %(count)s keer toegetreden en vertrokken",
-        "one": "%(severalUsers)s zijn toegetreden en vertrokken"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s is toegetreden en %(count)s zijn er vertrokken",
-        "one": "%(oneUser)s is toegetreden en vertrokken"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s zijn vertrokken en %(count)s keer weer toegetreden",
-        "one": "%(severalUsers)s zijn vertrokken en weer toegetreden"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s is %(count)s keer vertrokken en weer toegetreden",
-        "one": "%(oneUser)s is vertrokken en weer toegetreden"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s hebben hun uitnodigingen %(count)s keer afgeslagen",
-        "one": "%(severalUsers)s hebben hun uitnodigingen afgeslagen"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s heeft de uitnodiging %(count)s keer geweigerd",
-        "one": "%(oneUser)s heeft de uitnodiging geweigerd"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)s hebben hun uitnodigingen %(count)s keer ingetrokken",
-        "one": "De uitnodigingen van %(severalUsers)s zijn ingetrokken"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "De uitnodiging van %(oneUser)s is %(count)s keer ingetrokken",
-        "one": "De uitnodiging van %(oneUser)s is ingetrokken"
-    },
-    "were invited %(count)s times": {
-        "other": "zijn %(count)s keer uitgenodigd",
-        "one": "zijn uitgenodigd"
-    },
-    "was invited %(count)s times": {
-        "other": "is %(count)s keer uitgenodigd",
-        "one": "is uitgenodigd"
-    },
-    "were banned %(count)s times": {
-        "other": "zijn %(count)s keer verbannen",
-        "one": "zijn verbannen"
-    },
-    "was banned %(count)s times": {
-        "other": "is %(count)s keer verbannen",
-        "one": "is verbannen"
-    },
-    "were unbanned %(count)s times": {
-        "other": "zijn %(count)s keer ontbannen",
-        "one": "zijn ontbannen"
-    },
-    "was unbanned %(count)s times": {
-        "other": "is %(count)s keer ontbannen",
-        "one": "is ontbannen"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s hebben hun naam %(count)s keer gewijzigd",
-        "one": "%(severalUsers)s hebben hun naam gewijzigd"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s is %(count)s keer van naam veranderd",
-        "one": "%(oneUser)s is van naam veranderd"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s en %(count)s andere",
         "one": "%(items)s en één ander"
@@ -375,7 +292,6 @@
     "All Rooms": "Alle kamers",
     "You cannot delete this message. (%(code)s)": "Je kan dit bericht niet verwijderen. (%(code)s)",
     "Thursday": "Donderdag",
-    "Show message in desktop notification": "Bericht in bureaubladmelding tonen",
     "Yesterday": "Gisteren",
     "Error encountered (%(errorDetail)s).": "Er is een fout opgetreden (%(errorDetail)s).",
     "Low Priority": "Lage prioriteit",
@@ -455,9 +371,6 @@
     "Straight rows of keys are easy to guess": "Zo’n aaneengesloten rijtje toetsen is eenvoudig te raden",
     "Short keyboard patterns are easy to guess": "Korte patronen op het toetsenbord worden gemakkelijk geraden",
     "Please contact your homeserver administrator.": "Gelieve contact op te nemen met de beheerder van jouw homeserver.",
-    "The other party cancelled the verification.": "De tegenpartij heeft de verificatie geannuleerd.",
-    "Verified!": "Geverifieerd!",
-    "You've successfully verified this user.": "Je hebt deze persoon geverifieerd.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Beveiligde berichten met deze persoon zijn eind-tot-eind-versleuteld en kunnen niet door derden worden gelezen.",
     "Got It": "Ik snap het",
     "Verify this user by confirming the following emoji appear on their screen.": "Verifieer deze persoon door te bevestigen dat hun scherm de volgende emoji toont.",
@@ -752,14 +665,6 @@
     "Edited at %(date)s. Click to view edits.": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
     "Message edits": "Berichtbewerkingen",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Deze kamer bijwerken vereist dat je de huidige afsluit en in de plaats een nieuwe kamer aanmaakt. Om leden de best mogelijke ervaring te bieden, zullen we:",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)s hebben %(count)s keer niets gewijzigd",
-        "one": "%(severalUsers)s hebben niets gewijzigd"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)s heeft %(count)s keer niets gewijzigd",
-        "one": "%(oneUser)s heeft niets gewijzigd"
-    },
     "Removing…": "Bezig met verwijderen…",
     "Clear all data": "Alle gegevens wissen",
     "Your homeserver doesn't seem to support this feature.": "Jouw homeserver biedt geen ondersteuning voor deze functie.",
@@ -861,7 +766,6 @@
         "one": "1 ongelezen bericht."
     },
     "Show image": "Afbeelding tonen",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "<newIssueLink>Maak een nieuwe issue aan</newIssueLink> op GitHub zodat we deze bug kunnen onderzoeken.",
     "e.g. my-room": "bv. mijn-kamer",
     "Close dialog": "Dialoog sluiten",
     "Please enter a name for the room": "Geef een naam voor de kamer op",
@@ -891,25 +795,7 @@
     "Session already verified!": "Sessie al geverifieerd!",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "PAS OP: sleutelverificatie MISLUKT! De combinatie %(userId)s + sessie %(deviceId)s is ondertekend met ‘%(fprint)s’ - maar de opgegeven sleutel is ‘%(fingerprint)s’.  Wellicht worden jouw berichten onderschept!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "De door jou verschafte sleutel en de van %(userId)ss sessie %(deviceId)s verkregen sleutels komen overeen. De sessie is daarmee geverifieerd.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s heeft de banregel voor personen die met %(glob)s stroken verwijderd",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s heeft de banregel voor kamers met %(glob)s verwijderd",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s heeft de banregel voor servers die met %(glob)s stroken verwijderd",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s heeft een banregel die met %(glob)s strookt verwijderd",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s heeft een ongeldige banregel bijgewerkt",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s heeft de regel bijgewerkt die personen die met %(glob)s sporen verbant vanwege %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s heeft de regel bijgewerkt die kamers met %(glob)s verbant vanwege %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s heeft de regel bijgewerkt die servers die met %(glob)s sporen verbant vanwege %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s heeft een banregel vanwege %(reason)s die met %(glob)s spoort bijgewerkt",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s heeft geregeld dat personen die met %(glob)s sporen verbannen worden vanwege %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s heeft geregeld dat kamers met %(glob)s verbannen worden vanwege %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s heeft geregeld dat servers die met %(glob)s sporen verbannen worden vanwege %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s heeft geregeld dat alles wat met %(glob)s spoort verbannen wordt vanwege %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s heeft het patroon van een banregel voor personen wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s heeft het patroon van een banregel voor kamers wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s heeft het patroon van een banregel voor servers wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s heeft het patroon van een banregel wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
-    "Match system theme": "Aanpassen aan systeemthema",
     "Never send encrypted messages to unverified sessions from this session": "Vanaf deze sessie nooit versleutelde berichten naar ongeverifieerde sessies versturen",
     "Never send encrypted messages to unverified sessions in this room from this session": "Vanaf deze sessie nooit versleutelde berichten naar ongeverifieerde sessies in deze kamer versturen",
     "Enable message search in encrypted rooms": "Zoeken in versleutelde kamers inschakelen",
@@ -917,9 +803,6 @@
     "My Ban List": "Mijn banlijst",
     "This is your list of users/servers you have blocked - don't leave the room!": "Dit is de lijst van door jou geblokkeerde servers/personen. Verlaat deze kamer niet!",
     "Waiting for %(displayName)s to verify…": "Wachten tot %(displayName)s geverifieerd heeft…",
-    "They match": "Ze komen overeen",
-    "They don't match": "Ze komen niet overeen",
-    "To be secure, do this in person or use a trusted way to communicate.": "Doe dit voor de zekerheid onder vier ogen, of via een betrouwbaar communicatiemedium.",
     "Lock": "Hangslot",
     "Other users may not trust it": "Mogelijk wantrouwen anderen het",
     "Later": "Later",
@@ -930,9 +813,6 @@
     "in memory": "in het geheugen",
     "not found": "niet gevonden",
     "Cancel entering passphrase?": "Wachtwoord annuleren?",
-    "Scan this unique code": "Scan deze unieke code",
-    "Compare unique emoji": "Vergelijk unieke emoji",
-    "Compare a unique set of emoji if you don't have a camera on either device": "Vergelijk een unieke lijst met emoji als geen van beide apparaten een camera heeft",
     "Securely cache encrypted messages locally for them to appear in search results.": "Sla versleutelde berichten veilig lokaal op om ze doorzoekbaar te maken.",
     "Cannot connect to integration manager": "Kan geen verbinding maken met de integratiebeheerder",
     "The integration manager is offline or it cannot reach your homeserver.": "De integratiebeheerder is offline of kan je homeserver niet bereiken.",
@@ -958,8 +838,6 @@
     "Subscribed lists": "Abonnementen op lijsten",
     "Subscribing to a ban list will cause you to join it!": "Wanneer je jezelf abonneert op een banlijst zal je eraan worden toegevoegd!",
     "If this isn't what you want, please use a different tool to ignore users.": "Als je dit niet wilt kan je een andere methode gebruiken om personen te negeren.",
-    "Enable desktop notifications for this session": "Bureaubladmeldingen voor deze sessie inschakelen",
-    "Enable audible notifications for this session": "Meldingen met geluid voor deze sessie inschakelen",
     "You should:": "Je zou best:",
     "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "je browserextensies bekijken voor extensies die mogelijk de identiteitsserver blokkeren (zoals Privacy Badger)",
     "contact the administrators of identity server <idserver />": "contact opnemen met de beheerders van de identiteitsserver <idserver />",
@@ -1063,16 +941,6 @@
     "%(name)s cancelled": "%(name)s heeft geannuleerd",
     "%(name)s wants to verify": "%(name)s wil verifiëren",
     "You sent a verification request": "Je hebt een verificatieverzoek verstuurd",
-    "Frequently Used": "Vaak gebruikt",
-    "Smileys & People": "Smileys & Personen",
-    "Animals & Nature": "Dieren en natuur",
-    "Food & Drink": "Eten en drinken",
-    "Activities": "Activiteiten",
-    "Travel & Places": "Reizen en plaatsen",
-    "Objects": "Objecten",
-    "Symbols": "Symbolen",
-    "Flags": "Vlaggen",
-    "Quick Reactions": "Snelle reacties",
     "Cancel search": "Zoeken annuleren",
     "Any of the following data may be shared:": "De volgende gegevens worden mogelijk gedeeld:",
     "Your display name": "Jouw weergavenaam",
@@ -1147,14 +1015,6 @@
     "%(name)s is requesting verification": "%(name)s verzoekt om verificatie",
     "Could not find user in room": "Kan die persoon in de kamer niet vinden",
     "Please supply a widget URL or embed code": "Gelieve een widgetURL of in te bedden code te geven",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s heeft dit kamer de nevenadressen %(addresses)s toegekend.",
-        "one": "%(senderName)s heeft deze kamer het nevenadres %(addresses)s toegekend."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s heeft de nevenadressen %(addresses)s voor deze kamer geschrapt.",
-        "one": "%(senderName)s heeft het nevenadres %(addresses)s voor deze kamer geschrapt."
-    },
     "You signed in to a new session without verifying it:": "Je hebt je bij een nog niet geverifieerde sessie aangemeld:",
     "Verify your other session using one of the options below.": "Verifieer je andere sessie op een van onderstaande wijzen.",
     "Opens chat with the given user": "Start een chat met die persoon",
@@ -1471,8 +1331,6 @@
     "Scroll to most recent messages": "Spring naar meest recente bericht",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "De echtheid van dit versleutelde bericht kan op dit apparaat niet worden gegarandeerd.",
     "To link to this room, please add an address.": "Voeg een adres toe om naar deze kamer te kunnen verwijzen.",
-    "Appearance Settings only affect this %(brand)s session.": "Weergave-instellingen zijn alleen van toepassing op deze %(brand)s sessie.",
-    "Customise your appearance": "Weergave aanpassen",
     "Use between %(min)s pt and %(max)s pt": "Gebruik een getal tussen %(min)s pt en %(max)s pt",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Aangepaste lettergrootte kan alleen een getal tussen %(min)s pt en %(max)s pt zijn",
     "Size must be a number": "Grootte moet een getal zijn",
@@ -1490,11 +1348,7 @@
     "Channel: <channelLink/>": "Kanaal: <channelLink/>",
     "There was an error looking up the phone number": "Bij het zoeken naar het telefoonnummer is een fout opgetreden",
     "Unable to look up phone number": "Kan telefoonnummer niet opzoeken",
-    "sends snowfall": "stuurt sneeuwval",
-    "sends confetti": "stuurt confetti",
-    "sends fireworks": "stuurt vuurwerk",
     "Use custom size": "Aangepaste lettergrootte gebruiken",
-    "Font size": "Lettergrootte",
     "Change notification settings": "Meldingsinstellingen wijzigen",
     "New version of %(brand)s is available": "Nieuwe versie van %(brand)s is beschikbaar",
     "Update %(brand)s": "%(brand)s updaten",
@@ -1519,7 +1373,6 @@
     "This version of %(brand)s does not support searching encrypted messages": "Deze versie van %(brand)s ondersteunt niet het doorzoeken van versleutelde berichten",
     "This version of %(brand)s does not support viewing some encrypted files": "Deze versie van %(brand)s ondersteunt niet de mogelijkheid sommige versleutelde bestanden te weergeven",
     "Use the <a>Desktop app</a> to search encrypted messages": "Gebruik de <a>Desktop-toepassing</a> om alle versleutelde berichten te zien",
-    "Categories": "Categorieën",
     "Can't load this message": "Dit bericht kan niet geladen worden",
     "Click to view edits": "Klik om bewerkingen te zien",
     "Edited at %(date)s": "Bewerkt op %(date)s",
@@ -1560,8 +1413,6 @@
     "Confirm to continue": "Bevestig om door te gaan",
     "Comment": "Opmerking",
     "Manually verify all remote sessions": "Handmatig alle externe sessies verifiëren",
-    "System font name": "Systeemlettertypenaam",
-    "Use a system font": "Gebruik een systeemlettertype",
     "Safeguard against losing access to encrypted messages & data": "Beveiliging tegen verlies van toegang tot versleutelde berichten en gegevens",
     "Set up Secure Backup": "Beveiligde back-up instellen",
     "Contact your <a>server admin</a>.": "Neem contact op met je <a>serverbeheerder</a>.",
@@ -1632,8 +1483,6 @@
     "St. Lucia": "Sint Lucia",
     "South Sudan": "Zuid-Soedan",
     "Oman": "Oman",
-    "Theme added!": "Thema toegevoegd!",
-    "Add theme": "Thema toevoegen",
     "No recently visited rooms": "Geen onlangs bezochte kamers",
     "Use the <a>Desktop app</a> to see all encrypted files": "Gebruik de <a>Desktop-app</a> om alle versleutelde bestanden te zien",
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Herinnering: Jouw browser wordt niet ondersteund. Dit kan een negatieve impact hebben op je ervaring.",
@@ -1645,7 +1494,6 @@
     "Feedback sent": "Feedback verstuurd",
     "Workspace: <networkLink/>": "Werkplaats: <networkLink/>",
     "Your firewall or anti-virus is blocking the request.": "Jouw firewall of antivirussoftware blokkeert de aanvraag.",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Stel de naam in van een lettertype dat op uw systeem is geïnstalleerd en %(brand)s zal proberen het te gebruiken.",
     "Toggle right panel": "Rechterpaneel in- of uitschakelen",
     "Toggle the top left menu": "Het menu linksboven in- of uitschakelen",
     "Toggle microphone mute": "Microfoon dempen in- of uitschakelen",
@@ -1800,9 +1648,6 @@
     "Room ID or address of ban list": "Kamer-ID of het adres van de banlijst",
     "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Voeg hier personen en servers toe die je wil negeren. Gebruik asterisken om %(brand)s met alle tekens te laten overeenkomen. Bijvoorbeeld, <code>@bot:*</code> zou alle personen negeren die de naam 'bot' hebben op elke server.",
     "Please verify the room ID or address and try again.": "Controleer het kamer-ID of het adres en probeer het opnieuw.",
-    "Custom theme URL": "Aangepaste thema-URL",
-    "Error downloading theme information.": "Fout bij het downloaden van de thema-informatie.",
-    "Invalid theme schema.": "Ongeldig themaschema.",
     "Hey you. You're the best!": "Hey. Jij bent de beste!",
     "Backup key cached:": "Back-up sleutel cached:",
     "Backup key stored:": "Back-up sleutel bewaard:",
@@ -1821,9 +1666,6 @@
     "Cross-signing is ready for use.": "Kruiselings ondertekenen is klaar voor gebruik.",
     "Your server isn't responding to some <a>requests</a>.": "Je server reageert niet op sommige <a>verzoeken</a>.",
     "Dial pad": "Kiestoetsen",
-    "Sends the given message with snowfall": "Stuurt het bericht met sneeuwval",
-    "Sends the given message with fireworks": "Stuurt het bericht met vuurwerk",
-    "Sends the given message with confetti": "Stuurt het bericht met confetti",
     "IRC display name width": "Breedte IRC-weergavenaam",
     "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.": "Als je nu annuleert, kan je versleutelde berichten en gegevens verliezen als je geen toegang meer hebt tot je login.",
     "To continue, use Single Sign On to prove your identity.": "Om verder te gaan, gebruik je eenmalige aanmelding om je identiteit te bewijzen.",
@@ -1980,8 +1822,6 @@
     "Add reaction": "Reactie toevoegen",
     "Space Autocomplete": "Space autocomplete",
     "Go to my space": "Ga naar mijn Space",
-    "sends space invaders": "stuurt space invaders",
-    "Sends the given message with a space themed effect": "Stuurt het bericht met space invaders",
     "See when people join, leave, or are invited to your active room": "Zie wanneer personen deelnemen, vertrekken of worden uitgenodigd in je actieve kamer",
     "See when people join, leave, or are invited to this room": "Zie wanneer personen deelnemen, vertrekken of worden uitgenodigd voor deze kamer",
     "Currently joining %(count)s rooms": {
@@ -2019,14 +1859,6 @@
     "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.": "Deze persoon vertoont illegaal gedrag, bijvoorbeeld door doxing van personen of te dreigen met geweld.\nDit zal gerapporteerd worden aan de moderators van deze kamer die dit kunnen doorzetten naar de gerechtelijke autoriteiten.",
     "What this user is writing is wrong.\nThis will be reported to the room moderators.": "Wat deze persoon schrijft is verkeerd.\nDit zal worden gerapporteerd aan de kamermoderators.",
     "Please provide an address": "Geef een adres op",
-    "%(oneUser)schanged the server ACLs %(count)s times": {
-        "one": "%(oneUser)s veranderde de server ACLs",
-        "other": "%(oneUser)s veranderde de server ACLs %(count)s keer"
-    },
-    "%(severalUsers)schanged the server ACLs %(count)s times": {
-        "one": "%(severalUsers)s veranderden de server ACLs",
-        "other": "%(severalUsers)s veranderden de server ACLs %(count)s keer"
-    },
     "Message search initialisation failed, check <a>your settings</a> for more information": "Bericht zoeken initialisatie mislukt, controleer <a>je instellingen</a> voor meer informatie",
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "Stel adressen in voor deze Space zodat personen deze Space kunnen vinden via jouw homeserver (%(localDomain)s)",
     "To publish an address, it needs to be set as a local address first.": "Om een adres te publiceren, moet het eerst als een lokaaladres worden ingesteld.",
@@ -2059,13 +1891,11 @@
     "Code blocks": "Codeblokken",
     "Displaying time": "Tijdsweergave",
     "Keyboard shortcuts": "Sneltoetsen",
-    "Integration manager": "Integratiebeheerder",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Jouw %(brand)s laat je geen integratiebeheerder gebruiken om dit te doen. Neem contact op met een beheerder.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Met het gebruik van deze widget deel je mogelijk gegevens <helpIcon /> met %(widgetDomain)s & je integratiebeheerder.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integratiebeheerders ontvangen configuratie-informatie en kunnen widgets aanpassen, kameruitnodigingen versturen en machtsniveau’s namens jou aanpassen.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Gebruik een integratiebeheerder om bots, widgets en stickerpakketten te beheren.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Gebruik een integratiebeheerder <b>(%(serverName)s)</b> om bots, widgets en stickerpakketten te beheren.",
-    "Identity server": "Identiteitsserver",
     "Identity server (%(server)s)": "Identiteitsserver (%(server)s)",
     "Could not connect to identity server": "Kon geen verbinding maken met de identiteitsserver",
     "Not a valid identity server (status code %(code)s)": "Geen geldige identiteitsserver (statuscode %(code)s)",
@@ -2076,15 +1906,10 @@
     "Global": "Overal",
     "New keyword": "Nieuw trefwoord",
     "Keyword": "Trefwoord",
-    "Enable email notifications for %(email)s": "E-mailmeldingen inschakelen voor %(email)s",
-    "An error occurred whilst saving your notification preferences.": "Er is een fout opgetreden tijdens het opslaan van je meldingsvoorkeuren.",
-    "Error saving notification preferences": "Fout bij het opslaan van meldingsvoorkeuren",
-    "Messages containing keywords": "Berichten met trefwoord",
     "Transfer Failed": "Doorverbinden is mislukt",
     "Unable to transfer call": "Doorverbinden is mislukt",
     "Unable to copy a link to the room to the clipboard.": "Kopiëren van kamerlink naar het klembord is mislukt.",
     "Unable to copy room link": "Kopiëren van kamerlink is mislukt",
-    "Message bubbles": "Berichtenbubbels",
     "The call is in an unknown state!": "Deze oproep heeft een onbekende status!",
     "Call back": "Terugbellen",
     "No answer": "Geen antwoord",
@@ -2256,7 +2081,6 @@
     "Joined": "Toegetreden",
     "Insert link": "Koppeling invoegen",
     "Joining": "Toetreden",
-    "Use high contrast": "Hoog contrast inschakelen",
     "Light high contrast": "Lichte hoog contrast",
     "Select all": "Allemaal selecteren",
     "Deselect all": "Allemaal deselecteren",
@@ -2327,9 +2151,6 @@
     "Show tray icon and minimise window to it on close": "Geef een pictogram weer in de systeembalk en minimaliseer het venster wanneer het wordt gesloten",
     "This room is in some spaces you're not an admin of. In those spaces, the old room will still be shown, but people will be prompted to join the new one.": "Deze kamer is in spaces waar je geen beheerder van bent. In deze spaces zal de oude kamer nog worden getoond, maar leden zullen een melding krijgen om deel te nemen aan de nieuwe kamer.",
     "Large": "Groot",
-    "Image size in the timeline": "Afbeeldingformaat in de tijdlijn",
-    "Sends the given message with rainfall": "Stuurt het bericht met neerslag",
-    "sends rainfall": "stuurt neerslag",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s en %(count)s andere",
         "other": "%(spaceName)s en %(count)s andere"
@@ -2361,10 +2182,6 @@
     "Invite to space": "Voor Space uitnodigen",
     "Start new chat": "Nieuwe chat beginnen",
     "Recently viewed": "Recent bekeken",
-    "You can turn this off anytime in settings": "Je kan dit elk moment uitzetten in instellingen",
-    "We <Bold>don't</Bold> share information with third parties": "We delen <Bold>geen</Bold> informatie met derde partijen",
-    "We <Bold>don't</Bold> record or profile any account data": "We verwerken of bewaren <Bold>geen</Bold> accountgegevens",
-    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "Je kan alle voorwaarden <PrivacyPolicyUrl>hier</PrivacyPolicyUrl> lezen",
     "%(count)s votes cast. Vote to see the results": {
         "one": "%(count)s stem uitgebracht. Stem om de resultaten te zien",
         "other": "%(count)s stemmen uitgebracht. Stem om de resultaten te zien"
@@ -2372,9 +2189,6 @@
     "No votes cast": "Geen stemmen uitgebracht",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Deel anonieme gedragsdata om ons te helpen problemen te identificeren. Geen persoonsgegevens. Geen derde partijen.",
     "To view all keyboard shortcuts, <a>click here</a>.": "Om alle sneltoetsen te bekijken, <a>klik hier</a>.",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Deel anonieme data om ons problemen te laten opsporen. Geen persoonsgegeven. Geen derde partijen. <LearnMoreLink>Lees Meer</LearnMoreLink>",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "Je hebt eerder ingestemd met het verzamelen van anonieme gedragsdata met ons. We updaten nu hoe dit werkt.",
-    "Help improve %(analyticsOwner)s": "Help %(analyticsOwner)s verbeteren",
     "That's fine": "Dat is prima",
     "Share location": "Locatie delen",
     "You cannot place calls without a connection to the server.": "Je kan geen oproepen plaatsen zonder een verbinding met de server.",
@@ -2417,8 +2231,6 @@
     "toggle event": "wissel gebeurtenis",
     "You cancelled verification on your other device.": "Je hebt de verificatie geannuleerd op het andere apparaat.",
     "Almost there! Is your other device showing the same shield?": "Je bent er bijna! Toont het andere apparaat hetzelfde schild?",
-    "Verify this device by completing one of the following:": "Verifieer dit apparaat door een van onderstaande methodes af te ronden:",
-    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "Het apparaat dat je probeert te verifiëren ondersteund niet de door %(brand)s ondersteunde methodes: scannen van een QR-code of emoji verificatie. Probeer het met een andere app.",
     "To proceed, please accept the verification request on your other device.": "Om door te gaan, accepteer het verificatie verzoek op je andere apparaat.",
     "Waiting for you to verify on your other device…": "Wachten op je verificatie op het andere apparaat…",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Wachten op je verificatie op het andere apparaat, %(deviceName)s (%(deviceId)s)…",
@@ -2437,14 +2249,6 @@
     "Command error: Unable to handle slash command.": "Commandofout: Kan slash commando niet verwerken.",
     "Open this settings tab": "Open dit tabblad met instellingen",
     "Space home": "Space home",
-    "was removed %(count)s times": {
-        "one": "was verwijderd",
-        "other": "is %(count)s keer verwijderd"
-    },
-    "were removed %(count)s times": {
-        "one": "zijn verwijderd",
-        "other": "werden %(count)s keer verwijderd"
-    },
     "Unknown error fetching location. Please try again later.": "Onbekende fout bij ophalen van locatie. Probeer het later opnieuw.",
     "Timed out trying to fetch your location. Please try again later.": "Er is een time-out opgetreden bij het ophalen van jouw locatie. Probeer het later opnieuw.",
     "Failed to fetch your location. Please try again later.": "Kan jouw locatie niet ophalen. Probeer het later opnieuw.",
@@ -2502,7 +2306,6 @@
     "Group all your people in one place.": "Groepeer al je mensen op één plek.",
     "Group all your favourite rooms and people in one place.": "Groepeer al je favoriete kamers en mensen op één plek.",
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Spaces zijn manieren om kamers en mensen te groeperen. Naast de spaces waarin jij je bevindt, kunt je ook enkele kant-en-klare spaces gebruiken.",
-    "IRC (Experimental)": "IRC (Experimenteel)",
     "Location": "Locatie",
     "Poll": "Poll",
     "Voice Message": "Spraakbericht",
@@ -2511,22 +2314,6 @@
     "This is a beta feature": "Dit is een bètafunctie",
     "Use <arrows/> to scroll": "Gebruik <arrows/> om te scrollen",
     "Feedback sent! Thanks, we appreciate it!": "Reactie verzonden! Bedankt, we waarderen het!",
-    "%(oneUser)ssent %(count)s hidden messages": {
-        "one": "%(oneUser)sverzond een verborgen bericht",
-        "other": "%(oneUser)sverzond %(count)s verborgen berichten"
-    },
-    "%(severalUsers)ssent %(count)s hidden messages": {
-        "one": "%(severalUsers)sverzond verborgen bericht",
-        "other": "%(severalUsers)sverzond %(count)s verborgen berichten"
-    },
-    "%(oneUser)sremoved a message %(count)s times": {
-        "one": "%(oneUser)sheeft een bericht verwijderd",
-        "other": "%(oneUser)sverwijderde %(count)s berichten"
-    },
-    "%(severalUsers)sremoved a message %(count)s times": {
-        "one": "%(severalUsers)shebben een bericht verwijderd",
-        "other": "%(severalUsers)sverwijderde %(count)s berichten"
-    },
     "You do not have permissions to add spaces to this space": "Je bent niet gemachtigd om spaces aan deze space toe te voegen",
     "Automatically send debug logs when key backup is not functioning": "Automatisch foutopsporingslogboeken versturen wanneer de sleutelback-up niet werkt",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s en %(space2Name)s",
@@ -2545,7 +2332,6 @@
         "other": "Je staat op het punt %(count)s berichten te verwijderen door %(user)s. Hierdoor worden ze permanent verwijderd voor iedereen in het gesprek. Wil je doorgaan?"
     },
     "%(featureName)s Beta feedback": "%(featureName)s Bèta-feedback",
-    "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Help ons problemen te identificeren en %(analyticsOwner)s te verbeteren door anonieme gebruiksgegevens te delen. Om inzicht te krijgen in hoe mensen meerdere apparaten gebruiken, genereren we een willekeurige identificatie die door jouw apparaten wordt gedeeld.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Je kan de aangepaste serveropties gebruiken om je aan te melden bij andere Matrix-servers door een andere server-URL op te geven. Hierdoor kan je %(brand)s gebruiken met een bestaand Matrix-account op een andere thuisserver.",
     "Results are only revealed when you end the poll": "Resultaten worden pas onthuld als je de poll beëindigt",
     "Voters see results as soon as they have voted": "Kiezers zien resultaten zodra ze hebben gestemd",
@@ -2553,14 +2339,6 @@
     "Open poll": "Start poll",
     "Poll type": "Poll type",
     "Edit poll": "Bewerk poll",
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(oneUser)sheeft de <a>vastgezette berichten</a> voor de kamer gewijzigd",
-        "other": "%(oneUser)sheeft de <a>vastgezette berichten</a> voor de kamer %(count)s keer gewijzigd"
-    },
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(severalUsers)shebben de <a>vastgezette berichten</a> voor de kamer gewijzigd",
-        "other": "%(severalUsers)sheeft de <a>vastgezette berichten</a> voor de kamer %(count)s keer gewijzigd"
-    },
     "What location type do you want to share?": "Welk locatietype wil je delen?",
     "Drop a Pin": "Zet een pin neer",
     "My live location": "Mijn live locatie",
@@ -2614,8 +2392,6 @@
     "Spaces are a new way to group rooms and people. What kind of Space do you want to create? You can change this later.": "Spaces zijn een nieuwe manier om kamers en mensen te groeperen. Wat voor ruimte wil je aanmaken? Je kan dit later wijzigen.",
     "Match system": "Match systeem",
     "Developer tools": "Ontwikkelaarstools",
-    "sends hearts": "stuurt hartjes",
-    "Sends the given message with hearts": "Stuurt het bericht met hartjes",
     "Show polls button": "Toon polls-knop",
     "Failed to join": "Kan niet deelnemen",
     "The person who invited you has already left, or their server is offline.": "De persoon die je heeft uitgenodigd is al vertrokken, of zijn server is offline.",
@@ -2638,7 +2414,6 @@
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Reageer op een lopende thread of gebruik \"%(replyInThread)s\" wanneer je de muisaanwijzer op een bericht plaatst om een nieuwe te starten.",
     "We'll create rooms for each of them.": "We zullen kamers voor elk van hen maken.",
     "An error occurred while stopping your live location, please try again": "Er is een fout opgetreden bij het stoppen van je live locatie, probeer het opnieuw",
-    "%(timeRemaining)s left": "%(timeRemaining)s over",
     "You are sharing your live location": "Je deelt je live locatie",
     "Open user settings": "Open persooninstellingen",
     "Switch to space by number": "Overschakelen naar space op nummer",
@@ -2843,7 +2618,6 @@
     "Your server lacks native support": "Jouw server heeft geen native ondersteuning",
     "Your server has native support": "Jouw server heeft native ondersteuning",
     "%(qrCode)s or %(appLinks)s": "%(qrCode)s of %(appLinks)s",
-    "%(qrCode)s or %(emojiCompare)s": "%(qrCode)s of %(emojiCompare)s",
     "Completing set up of your new device": "De configuratie van je nieuwe apparaat voltooien",
     "Waiting for device to sign in": "Wachten op apparaat om in te loggen",
     "Review and approve the sign in": "Controleer en keur de aanmelding goed",
@@ -2909,9 +2683,6 @@
         "one": "Weet u zeker dat u zich wilt afmelden bij %(count)s sessies?",
         "other": "Weet u zeker dat u zich wilt afmelden bij %(count)s sessies?"
     },
-    "Enable notifications for this device": "Meldingen inschakelen voor dit apparaat",
-    "Turn off to disable notifications on all your devices and sessions": "Schakel dit uit om meldingen op al je apparaten en sessies uit te schakelen",
-    "Enable notifications for this account": "Meldingen inschakelen voor dit account",
     "Sorry — this call is currently full": "Sorry — dit gesprek is momenteel vol",
     "Record the client name, version, and url to recognise sessions more easily in session manager": "Noteer de naam, versie en url van de applicatie om sessies gemakkelijker te herkennen in sessiebeheer",
     "Unknown room": "Onbekende kamer",
@@ -3011,7 +2782,9 @@
         "stickerpack": "Stickerpakket",
         "system_alerts": "Systeemmeldingen",
         "secure_backup": "Beveiligde back-up",
-        "cross_signing": "Kruiselings ondertekenen"
+        "cross_signing": "Kruiselings ondertekenen",
+        "identity_server": "Identiteitsserver",
+        "integration_manager": "Integratiebeheerder"
     },
     "action": {
         "continue": "Doorgaan",
@@ -3133,7 +2906,18 @@
         "video_rooms_faq1_answer": "Gebruik de knop \"+\" in het kamergedeelte van het linkerpaneel.",
         "video_rooms_faq2_question": "Kan ik tekstberichten gebruiken naast het videogesprek?",
         "video_rooms_faq2_answer": "Ja, de gesprekstijdslijn wordt naast de video weergegeven.",
-        "thank_you": "Bedankt voor het proberen van de bèta. Ga alsjeblieft zo gedetailleerd mogelijk in op de details zodat we deze kunnen verbeteren."
+        "thank_you": "Bedankt voor het proberen van de bèta. Ga alsjeblieft zo gedetailleerd mogelijk in op de details zodat we deze kunnen verbeteren.",
+        "group_messaging": "Messaging",
+        "group_profile": "Profiel",
+        "group_spaces": "Spaces",
+        "group_widgets": "Widgets",
+        "group_rooms": "Kamers",
+        "group_voip": "Spraak & video",
+        "group_moderation": "Moderatie",
+        "group_themes": "Thema's",
+        "group_encryption": "Versleuteling",
+        "group_experimental": "Experimenteel",
+        "group_developer": "Ontwikkelaar"
     },
     "keyboard": {
         "home": "Home",
@@ -3188,7 +2972,8 @@
         "collecting_information": "App-versieinformatie wordt verzameld",
         "collecting_logs": "Logs worden verzameld",
         "uploading_logs": "Logs uploaden",
-        "downloading_logs": "Logs downloaden"
+        "downloading_logs": "Logs downloaden",
+        "create_new_issue": "<newIssueLink>Maak een nieuwe issue aan</newIssueLink> op GitHub zodat we deze bug kunnen onderzoeken."
     },
     "time": {
         "seconds_left": "%(seconds)s's over",
@@ -3212,7 +2997,8 @@
         "few_seconds_ago": "enige tellen geleden",
         "about_minute_ago": "ongeveer een minuut geleden",
         "about_hour_ago": "ongeveer een uur geleden",
-        "about_day_ago": "ongeveer een dag geleden"
+        "about_day_ago": "ongeveer een dag geleden",
+        "left": "%(timeRemaining)s over"
     },
     "onboarding": {
         "personal_messaging_title": "Veilig berichten versturen voor vrienden en familie",
@@ -3295,7 +3081,37 @@
             "rule_call": "Oproep-uitnodiging",
             "rule_suppress_notices": "Berichten verzonden door een bot",
             "rule_tombstone": "Wanneer kamers geüpgraded worden",
-            "rule_encrypted_room_one_to_one": "Versleutelde berichten in één-op-één chats"
+            "rule_encrypted_room_one_to_one": "Versleutelde berichten in één-op-één chats",
+            "messages_containing_keywords": "Berichten met trefwoord",
+            "error_saving": "Fout bij het opslaan van meldingsvoorkeuren",
+            "error_saving_detail": "Er is een fout opgetreden tijdens het opslaan van je meldingsvoorkeuren.",
+            "enable_notifications_account": "Meldingen inschakelen voor dit account",
+            "enable_notifications_account_detail": "Schakel dit uit om meldingen op al je apparaten en sessies uit te schakelen",
+            "enable_email_notifications": "E-mailmeldingen inschakelen voor %(email)s",
+            "enable_notifications_device": "Meldingen inschakelen voor dit apparaat",
+            "enable_desktop_notifications_session": "Bureaubladmeldingen voor deze sessie inschakelen",
+            "show_message_desktop_notification": "Bericht in bureaubladmelding tonen",
+            "enable_audible_notifications_session": "Meldingen met geluid voor deze sessie inschakelen"
+        },
+        "appearance": {
+            "layout_irc": "IRC (Experimenteel)",
+            "layout_bubbles": "Berichtenbubbels",
+            "heading": "Weergave aanpassen",
+            "subheading": "Weergave-instellingen zijn alleen van toepassing op deze %(brand)s sessie.",
+            "match_system_theme": "Aanpassen aan systeemthema",
+            "custom_font": "Gebruik een systeemlettertype",
+            "custom_font_name": "Systeemlettertypenaam",
+            "custom_theme_invalid": "Ongeldig themaschema.",
+            "custom_theme_error_downloading": "Fout bij het downloaden van de thema-informatie.",
+            "custom_theme_success": "Thema toegevoegd!",
+            "custom_theme_url": "Aangepaste thema-URL",
+            "use_high_contrast": "Hoog contrast inschakelen",
+            "custom_theme_add_button": "Thema toevoegen",
+            "font_size": "Lettergrootte",
+            "custom_font_description": "Stel de naam in van een lettertype dat op uw systeem is geïnstalleerd en %(brand)s zal proberen het te gebruiken.",
+            "timeline_image_size": "Afbeeldingformaat in de tijdlijn",
+            "timeline_image_size_default": "Standaard",
+            "timeline_image_size_large": "Groot"
         }
     },
     "devtools": {
@@ -3473,7 +3289,15 @@
             "removed": "%(senderName)s heeft het hoofdadres voor deze kamer verwijderd.",
             "changed_alternative": "%(senderName)s heeft de nevenadressen voor deze kamer gewijzigd.",
             "changed_main_and_alternative": "%(senderName)s heeft hoofd- en nevenadressen voor deze kamer gewijzigd.",
-            "changed": "%(senderName)s heeft de adressen voor deze kamer gewijzigd."
+            "changed": "%(senderName)s heeft de adressen voor deze kamer gewijzigd.",
+            "alt_added": {
+                "other": "%(senderName)s heeft dit kamer de nevenadressen %(addresses)s toegekend.",
+                "one": "%(senderName)s heeft deze kamer het nevenadres %(addresses)s toegekend."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s heeft de nevenadressen %(addresses)s voor deze kamer geschrapt.",
+                "one": "%(senderName)s heeft het nevenadres %(addresses)s voor deze kamer geschrapt."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s heeft de uitnodiging aan %(targetDisplayName)s toe te treden tot deze kamer ingetrokken.",
@@ -3515,6 +3339,160 @@
         },
         "m.call.hangup": {
             "dm": "Oproep beëindigd"
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s zijn %(count)s keer toegetreden",
+                "one": "%(severalUsers)s zijn toegetreden"
+            },
+            "joined": {
+                "other": "%(oneUser)s is %(count)s keer toegetreden",
+                "one": "%(oneUser)s is toegetreden"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s is %(count)s keer vertrokken",
+                "one": "%(severalUsers)s zijn vertrokken"
+            },
+            "left": {
+                "other": "%(oneUser)s is %(count)s keer vertrokken",
+                "one": "%(oneUser)s is vertrokken"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s zijn %(count)s keer toegetreden en vertrokken",
+                "one": "%(severalUsers)s zijn toegetreden en vertrokken"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s is toegetreden en %(count)s zijn er vertrokken",
+                "one": "%(oneUser)s is toegetreden en vertrokken"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s zijn vertrokken en %(count)s keer weer toegetreden",
+                "one": "%(severalUsers)s zijn vertrokken en weer toegetreden"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s is %(count)s keer vertrokken en weer toegetreden",
+                "one": "%(oneUser)s is vertrokken en weer toegetreden"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s hebben hun uitnodigingen %(count)s keer afgeslagen",
+                "one": "%(severalUsers)s hebben hun uitnodigingen afgeslagen"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s heeft de uitnodiging %(count)s keer geweigerd",
+                "one": "%(oneUser)s heeft de uitnodiging geweigerd"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)s hebben hun uitnodigingen %(count)s keer ingetrokken",
+                "one": "De uitnodigingen van %(severalUsers)s zijn ingetrokken"
+            },
+            "invite_withdrawn": {
+                "other": "De uitnodiging van %(oneUser)s is %(count)s keer ingetrokken",
+                "one": "De uitnodiging van %(oneUser)s is ingetrokken"
+            },
+            "invited_multiple": {
+                "other": "zijn %(count)s keer uitgenodigd",
+                "one": "zijn uitgenodigd"
+            },
+            "invited": {
+                "other": "is %(count)s keer uitgenodigd",
+                "one": "is uitgenodigd"
+            },
+            "banned_multiple": {
+                "other": "zijn %(count)s keer verbannen",
+                "one": "zijn verbannen"
+            },
+            "banned": {
+                "other": "is %(count)s keer verbannen",
+                "one": "is verbannen"
+            },
+            "unbanned_multiple": {
+                "other": "zijn %(count)s keer ontbannen",
+                "one": "zijn ontbannen"
+            },
+            "unbanned": {
+                "other": "is %(count)s keer ontbannen",
+                "one": "is ontbannen"
+            },
+            "kicked_multiple": {
+                "one": "zijn verwijderd",
+                "other": "werden %(count)s keer verwijderd"
+            },
+            "kicked": {
+                "one": "was verwijderd",
+                "other": "is %(count)s keer verwijderd"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s hebben hun naam %(count)s keer gewijzigd",
+                "one": "%(severalUsers)s hebben hun naam gewijzigd"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s is %(count)s keer van naam veranderd",
+                "one": "%(oneUser)s is van naam veranderd"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)s hebben %(count)s keer niets gewijzigd",
+                "one": "%(severalUsers)s hebben niets gewijzigd"
+            },
+            "no_change": {
+                "other": "%(oneUser)s heeft %(count)s keer niets gewijzigd",
+                "one": "%(oneUser)s heeft niets gewijzigd"
+            },
+            "server_acls_multiple": {
+                "one": "%(severalUsers)s veranderden de server ACLs",
+                "other": "%(severalUsers)s veranderden de server ACLs %(count)s keer"
+            },
+            "server_acls": {
+                "one": "%(oneUser)s veranderde de server ACLs",
+                "other": "%(oneUser)s veranderde de server ACLs %(count)s keer"
+            },
+            "pinned_events_multiple": {
+                "one": "%(severalUsers)shebben de <a>vastgezette berichten</a> voor de kamer gewijzigd",
+                "other": "%(severalUsers)sheeft de <a>vastgezette berichten</a> voor de kamer %(count)s keer gewijzigd"
+            },
+            "pinned_events": {
+                "one": "%(oneUser)sheeft de <a>vastgezette berichten</a> voor de kamer gewijzigd",
+                "other": "%(oneUser)sheeft de <a>vastgezette berichten</a> voor de kamer %(count)s keer gewijzigd"
+            },
+            "redacted_multiple": {
+                "one": "%(severalUsers)shebben een bericht verwijderd",
+                "other": "%(severalUsers)sverwijderde %(count)s berichten"
+            },
+            "redacted": {
+                "one": "%(oneUser)sheeft een bericht verwijderd",
+                "other": "%(oneUser)sverwijderde %(count)s berichten"
+            },
+            "hidden_event_multiple": {
+                "one": "%(severalUsers)sverzond verborgen bericht",
+                "other": "%(severalUsers)sverzond %(count)s verborgen berichten"
+            },
+            "hidden_event": {
+                "one": "%(oneUser)sverzond een verborgen bericht",
+                "other": "%(oneUser)sverzond %(count)s verborgen berichten"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s heeft het machtsniveau van %(powerLevelDiffText)s gewijzigd.",
+            "user_from_to": "%(userId)s van %(fromPowerLevel)s naar %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s heeft de banregel voor personen die met %(glob)s stroken verwijderd",
+            "removed_rule_rooms": "%(senderName)s heeft de banregel voor kamers met %(glob)s verwijderd",
+            "removed_rule_servers": "%(senderName)s heeft de banregel voor servers die met %(glob)s stroken verwijderd",
+            "removed_rule": "%(senderName)s heeft een banregel die met %(glob)s strookt verwijderd",
+            "updated_invalid_rule": "%(senderName)s heeft een ongeldige banregel bijgewerkt",
+            "updated_rule_users": "%(senderName)s heeft de regel bijgewerkt die personen die met %(glob)s sporen verbant vanwege %(reason)s",
+            "updated_rule_rooms": "%(senderName)s heeft de regel bijgewerkt die kamers met %(glob)s verbant vanwege %(reason)s",
+            "updated_rule_servers": "%(senderName)s heeft de regel bijgewerkt die servers die met %(glob)s sporen verbant vanwege %(reason)s",
+            "updated_rule": "%(senderName)s heeft een banregel vanwege %(reason)s die met %(glob)s spoort bijgewerkt",
+            "created_rule_users": "%(senderName)s heeft geregeld dat personen die met %(glob)s sporen verbannen worden vanwege %(reason)s",
+            "created_rule_rooms": "%(senderName)s heeft geregeld dat kamers met %(glob)s verbannen worden vanwege %(reason)s",
+            "created_rule_servers": "%(senderName)s heeft geregeld dat servers die met %(glob)s sporen verbannen worden vanwege %(reason)s",
+            "created_rule": "%(senderName)s heeft geregeld dat alles wat met %(glob)s spoort verbannen wordt vanwege %(reason)s",
+            "changed_rule_users": "%(senderName)s heeft het patroon van een banregel voor personen wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
+            "changed_rule_rooms": "%(senderName)s heeft het patroon van een banregel voor kamers wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
+            "changed_rule_servers": "%(senderName)s heeft het patroon van een banregel voor servers wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s",
+            "changed_rule_glob": "%(senderName)s heeft het patroon van een banregel wegens %(reason)s aangepast van %(oldGlob)s tot %(newGlob)s"
         }
     },
     "slash_command": {
@@ -3669,5 +3647,58 @@
             "redact": "Berichten van anderen verwijderen",
             "notifications.room": "Iedereen melden"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "Ze komen niet overeen",
+            "sas_match": "Ze komen overeen",
+            "in_person": "Doe dit voor de zekerheid onder vier ogen, of via een betrouwbaar communicatiemedium.",
+            "other_party_cancelled": "De tegenpartij heeft de verificatie geannuleerd.",
+            "complete_title": "Geverifieerd!",
+            "complete_description": "Je hebt deze persoon geverifieerd.",
+            "no_support_qr_emoji": "Het apparaat dat je probeert te verifiëren ondersteund niet de door %(brand)s ondersteunde methodes: scannen van een QR-code of emoji verificatie. Probeer het met een andere app.",
+            "qr_prompt": "Scan deze unieke code",
+            "sas_prompt": "Vergelijk unieke emoji",
+            "sas_description": "Vergelijk een unieke lijst met emoji als geen van beide apparaten een camera heeft",
+            "qr_or_sas": "%(qrCode)s of %(emojiCompare)s",
+            "qr_or_sas_header": "Verifieer dit apparaat door een van onderstaande methodes af te ronden:"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Vaak gebruikt",
+        "category_smileys_people": "Smileys & Personen",
+        "category_animals_nature": "Dieren en natuur",
+        "category_food_drink": "Eten en drinken",
+        "category_activities": "Activiteiten",
+        "category_travel_places": "Reizen en plaatsen",
+        "category_objects": "Objecten",
+        "category_symbols": "Symbolen",
+        "category_flags": "Vlaggen",
+        "categories": "Categorieën",
+        "quick_reactions": "Snelle reacties"
+    },
+    "analytics": {
+        "enable_prompt": "Help %(analyticsOwner)s verbeteren",
+        "consent_migration": "Je hebt eerder ingestemd met het verzamelen van anonieme gedragsdata met ons. We updaten nu hoe dit werkt.",
+        "learn_more": "Deel anonieme data om ons problemen te laten opsporen. Geen persoonsgegeven. Geen derde partijen. <LearnMoreLink>Lees Meer</LearnMoreLink>",
+        "privacy_policy": "Je kan alle voorwaarden <PrivacyPolicyUrl>hier</PrivacyPolicyUrl> lezen",
+        "pseudonymous_usage_data": "Help ons problemen te identificeren en %(analyticsOwner)s te verbeteren door anonieme gebruiksgegevens te delen. Om inzicht te krijgen in hoe mensen meerdere apparaten gebruiken, genereren we een willekeurige identificatie die door jouw apparaten wordt gedeeld.",
+        "bullet_1": "We verwerken of bewaren <Bold>geen</Bold> accountgegevens",
+        "bullet_2": "We delen <Bold>geen</Bold> informatie met derde partijen",
+        "disable_prompt": "Je kan dit elk moment uitzetten in instellingen"
+    },
+    "chat_effects": {
+        "confetti_description": "Stuurt het bericht met confetti",
+        "confetti_message": "stuurt confetti",
+        "fireworks_description": "Stuurt het bericht met vuurwerk",
+        "fireworks_message": "stuurt vuurwerk",
+        "rainfall_description": "Stuurt het bericht met neerslag",
+        "rainfall_message": "stuurt neerslag",
+        "snowfall_description": "Stuurt het bericht met sneeuwval",
+        "snowfall_message": "stuurt sneeuwval",
+        "spaceinvaders_description": "Stuurt het bericht met space invaders",
+        "spaceinvaders_message": "stuurt space invaders",
+        "hearts_description": "Stuurt het bericht met hartjes",
+        "hearts_message": "stuurt hartjes"
     }
 }

@@ -92,14 +92,14 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
             case SERVICE_TYPES.IS:
                 return (
                     <div>
-                        {_t("Identity server")}
+                        {_t("common|identity_server")}
                         <br />({host})
                     </div>
                 );
             case SERVICE_TYPES.IM:
                 return (
                     <div>
-                        {_t("Integration manager")}
+                        {_t("common|integration_manager")}
                         <br />({host})
                     </div>
                 );

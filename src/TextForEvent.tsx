@@ -423,7 +423,7 @@ function textForCanonicalAliasEvent(ev: MatrixEvent): (() => string) | null {
     } else if (newAlias === oldAlias) {
         if (addedAltAliases.length && !removedAltAliases.length) {
             return () =>
-                _t("%(senderName)s added the alternative addresses %(addresses)s for this room.", {
+                _t("timeline|m.room.canonical_alias|alt_added", {
                     senderName,
                     addresses: addedAltAliases.join(", "),
                     count: addedAltAliases.length,
@@ -431,7 +431,7 @@ function textForCanonicalAliasEvent(ev: MatrixEvent): (() => string) | null {
         }
         if (removedAltAliases.length && !addedAltAliases.length) {
             return () =>
-                _t("%(senderName)s removed the alternative addresses %(addresses)s for this room.", {
+                _t("timeline|m.room.canonical_alias|alt_removed", {
                     senderName,
                     addresses: removedAltAliases.join(", "),
                     count: removedAltAliases.length,
@@ -547,11 +547,11 @@ function textForPowerEvent(event: MatrixEvent, client: MatrixClient): (() => str
 
     // XXX: This is also surely broken for i18n
     return () =>
-        _t("%(senderName)s changed the power level of %(powerLevelDiffText)s.", {
+        _t("timeline|m.room.power_levels|changed", {
             senderName,
             powerLevelDiffText: diffs
                 .map((diff) =>
-                    _t("%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s", {
+                    _t("timeline|m.room.power_levels|user_from_to", {
                         userId: diff.name,
                         fromPowerLevel: Roles.textualPowerLevel(diff.from, previousUserDefault),
                         toPowerLevel: Roles.textualPowerLevel(diff.to, currentUserDefault),
@@ -711,45 +711,43 @@ function textForMjolnirEvent(event: MatrixEvent): (() => string) | null {
     // Rule removed
     if (!entity) {
         if (USER_RULE_TYPES.includes(event.getType())) {
-            return () =>
-                _t("%(senderName)s removed the rule banning users matching %(glob)s", { senderName, glob: prevEntity });
+            return () => _t("timeline|mjolnir|removed_rule_users", { senderName, glob: prevEntity });
         } else if (ROOM_RULE_TYPES.includes(event.getType())) {
-            return () =>
-                _t("%(senderName)s removed the rule banning rooms matching %(glob)s", { senderName, glob: prevEntity });
+            return () => _t("timeline|mjolnir|removed_rule_rooms", { senderName, glob: prevEntity });
         } else if (SERVER_RULE_TYPES.includes(event.getType())) {
             return () =>
-                _t("%(senderName)s removed the rule banning servers matching %(glob)s", {
+                _t("timeline|mjolnir|removed_rule_servers", {
                     senderName,
                     glob: prevEntity,
                 });
         }
 
         // Unknown type. We'll say something, but we shouldn't end up here.
-        return () => _t("%(senderName)s removed a ban rule matching %(glob)s", { senderName, glob: prevEntity });
+        return () => _t("timeline|mjolnir|removed_rule", { senderName, glob: prevEntity });
     }
 
     // Invalid rule
-    if (!recommendation || !reason) return () => _t(`%(senderName)s updated an invalid ban rule`, { senderName });
+    if (!recommendation || !reason) return () => _t("timeline|mjolnir|updated_invalid_rule", { senderName });
 
     // Rule updated
     if (entity === prevEntity) {
         if (USER_RULE_TYPES.includes(event.getType())) {
             return () =>
-                _t("%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s", {
+                _t("timeline|mjolnir|updated_rule_users", {
                     senderName,
                     glob: entity,
                     reason,
                 });
         } else if (ROOM_RULE_TYPES.includes(event.getType())) {
             return () =>
-                _t("%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s", {
+                _t("timeline|mjolnir|updated_rule_rooms", {
                     senderName,
                     glob: entity,
                     reason,
                 });
         } else if (SERVER_RULE_TYPES.includes(event.getType())) {
             return () =>
-                _t("%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s", {
+                _t("timeline|mjolnir|updated_rule_servers", {
                     senderName,
                     glob: entity,
                     reason,
@@ -758,7 +756,7 @@ function textForMjolnirEvent(event: MatrixEvent): (() => string) | null {
 
         // Unknown type. We'll say something but we shouldn't end up here.
         return () =>
-            _t("%(senderName)s updated a ban rule matching %(glob)s for %(reason)s", {
+            _t("timeline|mjolnir|updated_rule", {
                 senderName,
                 glob: entity,
                 reason,
@@ -769,21 +767,21 @@ function textForMjolnirEvent(event: MatrixEvent): (() => string) | null {
     if (!prevEntity) {
         if (USER_RULE_TYPES.includes(event.getType())) {
             return () =>
-                _t("%(senderName)s created a rule banning users matching %(glob)s for %(reason)s", {
+                _t("timeline|mjolnir|created_rule_users", {
                     senderName,
                     glob: entity,
                     reason,
                 });
         } else if (ROOM_RULE_TYPES.includes(event.getType())) {
             return () =>
-                _t("%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s", {
+                _t("timeline|mjolnir|created_rule_rooms", {
                     senderName,
                     glob: entity,
                     reason,
                 });
         } else if (SERVER_RULE_TYPES.includes(event.getType())) {
             return () =>
-                _t("%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s", {
+                _t("timeline|mjolnir|created_rule_servers", {
                     senderName,
                     glob: entity,
                     reason,
@@ -792,7 +790,7 @@ function textForMjolnirEvent(event: MatrixEvent): (() => string) | null {
 
         // Unknown type. We'll say something but we shouldn't end up here.
         return () =>
-            _t("%(senderName)s created a ban rule matching %(glob)s for %(reason)s", {
+            _t("timeline|mjolnir|created_rule", {
                 senderName,
                 glob: entity,
                 reason,
@@ -802,27 +800,18 @@ function textForMjolnirEvent(event: MatrixEvent): (() => string) | null {
     // else the entity !== prevEntity - count as a removal & add
     if (USER_RULE_TYPES.includes(event.getType())) {
         return () =>
-            _t(
-                "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s",
-                { senderName, oldGlob: prevEntity, newGlob: entity, reason },
-            );
+            _t("timeline|mjolnir|changed_rule_users", { senderName, oldGlob: prevEntity, newGlob: entity, reason });
     } else if (ROOM_RULE_TYPES.includes(event.getType())) {
         return () =>
-            _t(
-                "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s",
-                { senderName, oldGlob: prevEntity, newGlob: entity, reason },
-            );
+            _t("timeline|mjolnir|changed_rule_rooms", { senderName, oldGlob: prevEntity, newGlob: entity, reason });
     } else if (SERVER_RULE_TYPES.includes(event.getType())) {
         return () =>
-            _t(
-                "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s",
-                { senderName, oldGlob: prevEntity, newGlob: entity, reason },
-            );
+            _t("timeline|mjolnir|changed_rule_servers", { senderName, oldGlob: prevEntity, newGlob: entity, reason });
     }
 
     // Unknown type. We'll say something but we shouldn't end up here.
     return () =>
-        _t("%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s", {
+        _t("timeline|mjolnir|changed_rule_glob", {
             senderName,
             oldGlob: prevEntity,
             newGlob: entity,

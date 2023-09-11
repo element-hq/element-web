@@ -27,8 +27,8 @@ export default class VerificationComplete extends React.Component<IProps> {
     public render(): React.ReactNode {
         return (
             <div>
-                <h2>{_t("Verified!")}</h2>
-                <p>{_t("You've successfully verified this user.")}</p>
+                <h2>{_t("encryption|verification|complete_title")}</h2>
+                <p>{_t("encryption|verification|complete_description")}</p>
                 <p>
                     {_t(
                         "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.",

@@ -396,7 +396,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 );
             }
         } else {
-            sectionTitle = _t("Identity server");
+            sectionTitle = _t("common|identity_server");
             bodyText = _t(
                 "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.",
             );

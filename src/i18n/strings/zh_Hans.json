@@ -26,7 +26,6 @@
     "Filter room members": "过滤房间成员",
     "Forget room": "忘记房间",
     "For security, this session has been signed out. Please sign in again.": "出于安全考虑，此会话已被注销。请重新登录。",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s 从 %(fromPowerLevel)s 变为 %(toPowerLevel)s",
     "Historical": "历史",
     "Import E2E room keys": "导入房间端到端加密密钥",
     "Incorrect verification code": "验证码错误",
@@ -143,7 +142,6 @@
     "Publish this room to the public in %(domain)s's room directory?": "是否将此房间发布至 %(domain)s 的房间目录中？",
     "No users have specific privileges in this room": "此房间中没有用户有特殊权限",
     "Please check your email and click on the link it contains. Once this is done, click continue.": "请检查你的电子邮箱并点击里面包含的链接。完成时请点击继续。",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s更改了%(powerLevelDiffText)s的权力级别。",
     "Deops user with given id": "按照 ID 取消特定用户的管理员权限",
     "AM": "上午",
     "PM": "下午",
@@ -214,38 +212,6 @@
     "Unnamed room": "未命名的房间",
     "A text message has been sent to %(msisdn)s": "一封短信已发送到 %(msisdn)s",
     "Delete Widget": "删除挂件",
-    "were invited %(count)s times": {
-        "other": "被邀请 %(count)s 次",
-        "one": "被邀请"
-    },
-    "was invited %(count)s times": {
-        "other": "被邀请 %(count)s 次",
-        "one": "被邀请"
-    },
-    "were banned %(count)s times": {
-        "other": "被封禁 %(count)s 次",
-        "one": "被封禁"
-    },
-    "was banned %(count)s times": {
-        "other": "被封禁 %(count)s 次",
-        "one": "被封禁"
-    },
-    "were unbanned %(count)s times": {
-        "other": "被解封 %(count)s 次",
-        "one": "被解封"
-    },
-    "was unbanned %(count)s times": {
-        "other": "被解封 %(count)s 次",
-        "one": "被解封"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s 修改了他们的名称 %(count)s 次",
-        "one": "%(severalUsers)s 修改了他们的名称"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s 修改了自己的名称 %(count)s 次",
-        "one": "%(oneUser)s 修改了自己的名称"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s 和其他 %(count)s 人",
         "one": "%(items)s 与另一个人"
@@ -273,55 +239,6 @@
     "%(duration)sm": "%(duration)s 分钟",
     "%(duration)sh": "%(duration)s 小时",
     "%(duration)sd": "%(duration)s 天",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s 已加入 %(count)s 次",
-        "one": "%(severalUsers)s 已加入"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s 已加入 %(count)s 次",
-        "one": "%(oneUser)s 已加入"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s 已离开 %(count)s 次",
-        "one": "%(severalUsers)s 已离开"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s 已离开 %(count)s 次",
-        "one": "%(oneUser)s 已离开"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s加入并离开了%(count)s次",
-        "one": "%(severalUsers)s加入并离开了"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s加入并离开了%(count)s次",
-        "one": "%(oneUser)s加入并离开了"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s离开并重新加入了%(count)s次",
-        "one": "%(severalUsers)s离开并重新加入了"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s离开并重新加入了%(count)s次",
-        "one": "%(oneUser)s离开并重新加入了"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "one": "%(severalUsers)s 拒绝了他们的邀请",
-        "other": "%(severalUsers)s 拒绝了他们的邀请共 %(count)s 次"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s 拒绝了他们的邀请共 %(count)s 次",
-        "one": "%(oneUser)s 拒绝了他们的邀请"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)s 撤回了他们的邀请共 %(count)s 次",
-        "one": "%(severalUsers)s 撤回了他们的邀请"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)s 撤回了他们的邀请共 %(count)s 次",
-        "one": "%(oneUser)s 撤回了他们的邀请"
-    },
     "<a>In reply to</a> <pill>": "<a>答复</a> <pill>",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "如果你之前使用过较新版本的 %(brand)s，则你的会话可能与当前版本不兼容。请关闭此窗口并使用最新版本。",
     "URL previews are enabled by default for participants in this room.": "已对此房间的参与者默认启用URL预览。",
@@ -370,7 +287,6 @@
     "Thursday": "星期四",
     "Search…": "搜索…",
     "Logs sent": "日志已发送",
-    "Show message in desktop notification": "在桌面通知中显示消息",
     "Yesterday": "昨天",
     "Error encountered (%(errorDetail)s).": "遇到错误 (%(errorDetail)s)。",
     "Low Priority": "低优先级",
@@ -479,9 +395,6 @@
     "Common names and surnames are easy to guess": "常用姓名和姓氏很容易被猜到",
     "Straight rows of keys are easy to guess": "键位在一条直线上的组合很容易被猜到",
     "Short keyboard patterns are easy to guess": "键位短序列很容易被猜到",
-    "The other party cancelled the verification.": "另一方取消了验证。",
-    "Verified!": "已验证！",
-    "You've successfully verified this user.": "你已成功验证此用户。",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "此用户的安全消息是端到端加密的，不能被第三方读取。",
     "Got It": "收到",
     "Verify this user by confirming the following emoji appear on their screen.": "通过在其屏幕上显示以下表情符号来验证此用户。",
@@ -704,31 +617,6 @@
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "警告：密钥验证失败！%(userId)s 的会话 %(deviceId)s 的签名密钥为 %(fprint)s，与提供的密钥 %(fingerprint)s 不符。这可能表示你的通讯已被截获！",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "你提供的签名密钥与你从 %(userId)s 的会话 %(deviceId)s 获取的一致。此会话被标为已验证。",
     "Opens chat with the given user": "与指定用户发起聊天",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s 为此房间添加备用地址 %(addresses)s。",
-        "one": "%(senderName)s 为此房间添加了备用地址 %(addresses)s。"
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s 为此房间移除了备用地址 %(addresses)s。",
-        "one": "%(senderName)s 为此房间移除了备用地址 %(addresses)s。"
-    },
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s 移除了禁止匹配 %(glob)s 的用户的规则",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s 移除了禁止匹配 %(glob)s 的服务器的规则",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s 移除了禁止匹配 %(glob)s 的规则",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s 删除了禁止房间匹配%(glob)s的规则",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s 更新了一个无效的禁止规则",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s 更新了由于%(reason)s 而禁止用户匹配%(glob)s的规则",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s 更新了由于%(reason)s而禁止房间匹配%(glob)s的规则",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s 更新了由于%(reason)s而禁止服务器匹配%(glob)s的规则",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s 更新了由于%(reason)s而禁止匹配%(glob)s的规则",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s 创建了因为%(reason)s而禁止用户匹配%(glob)s的规则",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s 创建了由于%(reason)s而禁止房间匹配%(glob)s的规则",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s 创建了由于%(reason)s而禁止服务器匹配%(glob)s的规则",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s 创建了由于%(reason)s而禁止匹配%(glob)s的规则",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s 更改了一个由于%(reason)s而禁止用户%(oldGlob)s跟%(newGlob)s匹配的规则",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s更改了一个由于%(reason)s而禁止房间%(oldGlob)s跟%(newGlob)s匹配的规则",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s 更新了一个由于%(reason)s而禁止服务器%(oldGlob)s跟%(newGlob)s匹配的规则",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s 更新了一个由于%(reason)s而禁止%(oldGlob)s跟%(newGlob)s匹配的规则",
     "You signed in to a new session without verifying it:": "你登录了未经过验证的新会话：",
     "Verify your other session using one of the options below.": "使用以下选项之一验证你的其他会话。",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s(%(userId)s)登录到未验证的新会话：",
@@ -755,11 +643,7 @@
     "Contact your <a>server admin</a>.": "请联系你的<a>服务器管理员</a>。",
     "Ok": "确定",
     "Other users may not trust it": "其他用户可能不信任它",
-    "Font size": "字体大小",
     "Use custom size": "使用自定义大小",
-    "Match system theme": "匹配系统主题",
-    "Use a system font": "使用系统字体",
-    "System font name": "系统字体名称",
     "Never send encrypted messages to unverified sessions from this session": "永不从本会话向未验证的会话发送加密消息",
     "Never send encrypted messages to unverified sessions in this room from this session": "永不从此会话向此房间中未验证的会话发送加密消息",
     "Enable message search in encrypted rooms": "在加密房间中启用消息搜索",
@@ -769,9 +653,6 @@
     "This is your list of users/servers you have blocked - don't leave the room!": "这是你屏蔽的用户/服务器的列表——不要离开此房间！",
     "Waiting for %(displayName)s to verify…": "正在等待%(displayName)s进行验证……",
     "Cancelling…": "正在取消……",
-    "They match": "它们匹配",
-    "They don't match": "它们不匹配",
-    "To be secure, do this in person or use a trusted way to communicate.": "为了安全，请当面完成或使用信任的方法交流。",
     "Lock": "锁",
     "Your server isn't responding to some <a>requests</a>.": "你的服务器没有响应一些<a>请求</a>。",
     "Accept <policyLink /> to continue:": "接受 <policyLink /> 以继续：",
@@ -797,8 +678,6 @@
     "Connect this session to Key Backup": "将此会话连接到密钥备份",
     "This backup is trusted because it has been restored on this session": "此备份是受信任的因为它恢复到了此会话上",
     "Your keys are <b>not being backed up from this session</b>.": "你的密钥<b>没有被此会话备份</b>。",
-    "Enable desktop notifications for this session": "为此会话启用桌面通知",
-    "Enable audible notifications for this session": "为此会话启用声音通知",
     "Checking server": "检查服务器",
     "Change identity server": "更改身份服务器",
     "Disconnect from the identity server <current /> and connect to <new /> instead?": "从<current />身份服务器断开连接而连接到<new />吗？",
@@ -825,13 +704,6 @@
     "Hey you. You're the best!": "嘿。你是最棒的！",
     "Size must be a number": "大小必须是数字",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "自定义字体大小只能介于 %(min)s pt 和 %(max)s pt 之间",
-    "Error downloading theme information.": "下载主题信息时发生错误。",
-    "Theme added!": "主题已添加！",
-    "Custom theme URL": "自定义主题URL",
-    "Add theme": "添加主题",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "设置一个安装在你的系统上的字体名称，%(brand)s 会尝试使用它。",
-    "Customise your appearance": "自定义你的外观",
-    "Appearance Settings only affect this %(brand)s session.": "外观设置仅会影响此 %(brand)s 会话。",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "同意身份服务器（%(serverName)s）的服务协议以允许自己被通过邮件地址或电话号码发现。",
     "Discovery": "发现",
     "Clear cache and reload": "清理缓存并重载",
@@ -890,9 +762,6 @@
     "You have not verified this user.": "你没有验证此用户。",
     "You have verified this user. This user has verified all of their sessions.": "你验证了此用户。此用户已验证了其全部会话。",
     "Show hidden events in timeline": "显示时间线中的隐藏事件",
-    "Scan this unique code": "扫描此唯一代码",
-    "Compare unique emoji": "比较唯一表情符号",
-    "Compare a unique set of emoji if you don't have a camera on either device": "若你在两个设备上都没有相机，比较唯一一组表情符号",
     "This bridge is managed by <user />.": "此桥接由 <user /> 管理。",
     "Homeserver feature support:": "家服务器功能支持：",
     "Securely cache encrypted messages locally for them to appear in search results.": "在本地安全地缓存加密消息以使其出现在搜索结果中。",
@@ -1066,17 +935,6 @@
     "edited": "已编辑",
     "Can't load this message": "无法加载此消息",
     "Submit logs": "提交日志",
-    "Frequently Used": "经常使用",
-    "Smileys & People": "表情和人",
-    "Animals & Nature": "动物和自然",
-    "Food & Drink": "食物和饮料",
-    "Activities": "活动",
-    "Travel & Places": "旅行和地点",
-    "Objects": "物体",
-    "Symbols": "符号",
-    "Flags": "旗",
-    "Categories": "类别",
-    "Quick Reactions": "快速反应",
     "Cancel search": "取消搜索",
     "Any of the following data may be shared:": "以下数据之一可能被分享：",
     "Your display name": "你的显示名称",
@@ -1089,7 +947,6 @@
     "Widgets do not use message encryption.": "挂件不适用消息加密。",
     "This widget may use cookies.": "此挂件可能使用 cookie。",
     "More options": "更多选项",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "请在 GitHub 上<newIssueLink>创建一个新 issue</newIssueLink> 以便我们调查此错误。",
     "Rotate Left": "向左旋转",
     "Rotate Right": "向右旋转",
     "QR Code": "二维码",
@@ -1327,7 +1184,6 @@
     "Self signing private key:": "自签名私钥：",
     "User signing private key:": "用户签名私钥：",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "此会话<b>未备份你的密钥</b>，但如果你已有现存备份，你可以继续并从中恢复和向其添加。",
-    "Invalid theme schema.": "主题方案无效。",
     "Read Marker lifetime (ms)": "已读标记生存期（毫秒）",
     "Read Marker off-screen lifetime (ms)": "已读标记屏幕外生存期（毫秒）",
     "Unable to revoke sharing for email address": "无法撤消电子邮件地址共享",
@@ -1335,14 +1191,6 @@
     "Explore public rooms": "探索公共房间",
     "You can only join it with a working invite.": "你只能通过有效邀请加入。",
     "Language Dropdown": "语言下拉菜单",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)s 未做更改 %(count)s 次",
-        "one": "%(severalUsers)s 未做更改"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)s 未做更改 %(count)s 次",
-        "one": "%(oneUser)s 未做更改"
-    },
     "Preparing to download logs": "正在准备下载日志",
     "%(brand)s encountered an error during upload of:": "%(brand)s 在上传此文件时出错：",
     "Country Dropdown": "国家下拉菜单",
@@ -1505,12 +1353,6 @@
     "Leave space": "离开空间",
     "Share your public space": "分享你的公共空间",
     "Create a space": "创建空间",
-    "sends snowfall": "发送雪球",
-    "Sends the given message with snowfall": "发送附加雪球的给定信息",
-    "sends confetti": "发送五彩纸屑",
-    "Sends the given message with confetti": "附加五彩纸屑发送",
-    "Sends the given message with fireworks": "附加烟火发送",
-    "sends fireworks": "发送烟火",
     "The <b>%(capability)s</b> capability": "<b>%(capability)s</b> 容量",
     "Your server does not support showing space hierarchies.": "你的服务器不支持显示空间层次结构。",
     "This version of %(brand)s does not support searching encrypted messages": "当前版本的 %(brand)s 不支持搜索加密消息",
@@ -1796,7 +1638,6 @@
     "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "你可以启用此选项如果此房间将仅用于你的家服务器上的内部团队协作。此选项之后无法更改。",
     "Unable to access secret storage. Please verify that you entered the correct Security Phrase.": "无法访问秘密存储。请确认你输入了正确的安全短语。",
     "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "无法使用此安全密钥解密备份：请检查你输入的安全密钥是否正确。",
-    "sends space invaders": "发送空间入侵者",
     "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "此会话已检测到你的安全短语和安全消息密钥被移除。",
     "A new Security Phrase and key for Secure Messages have been detected.": "检测到新的安全短语和安全消息密钥。",
     "Enter your Security Phrase a second time to confirm it.": "再次输入你的安全短语进行确认。",
@@ -1882,7 +1723,6 @@
     },
     "Not all selected were added": "并非所有选中的都被添加",
     "You are not allowed to view this server's rooms list": "你不被允许查看此服务器的房间列表",
-    "Sends the given message with a space themed effect": "此消息带有空间主题化效果",
     "Retry all": "全部重试",
     "View message": "查看消息",
     "%(count)s people you know have already joined": {
@@ -2019,14 +1859,6 @@
     "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.": "此用户正在做出违法行为，如对他人施暴，或威胁使用暴力。\n这将报告给房间协管员，他们可能会将其报告给执法部门。",
     "What this user is writing is wrong.\nThis will be reported to the room moderators.": "此用户所写的是错误内容。\n这将会报告给房间协管员。",
     "Please provide an address": "请提供地址",
-    "%(oneUser)schanged the server ACLs %(count)s times": {
-        "one": "%(oneUser)s 已更改服务器访问控制列表",
-        "other": "%(oneUser)s 已更改服务器访问控制列表 %(count)s 次"
-    },
-    "%(severalUsers)schanged the server ACLs %(count)s times": {
-        "one": "%(severalUsers)s 已更改服务器访问控制列表",
-        "other": "%(severalUsers)s 已更改服务器的访问控制列表 %(count)s 此"
-    },
     "Message search initialisation failed, check <a>your settings</a> for more information": "消息搜索初始化失败，请检查<a>你的设置</a>以获取更多信息",
     "Set addresses for this space so users can find this space through your homeserver (%(localDomain)s)": "设置此空间的地址，这样用户就能通过你的家服务器找到此空间（%(localDomain)s）",
     "To publish an address, it needs to be set as a local address first.": "要公布地址，首先需要将其设为本地地址。",
@@ -2049,13 +1881,11 @@
     "e.g. my-space": "例如：my-space",
     "Some invites couldn't be sent": "部分邀请无法发送",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "我们已向其他人发送邀请，但无法邀请以下人员至<RoomName/>",
-    "Integration manager": "集成管理器",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "你的 %(brand)s 不允许你使用集成管理器来完成此操作，请联系管理员。",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "使用此挂件可能会与 %(widgetDomain)s 及您的集成管理器共享数据 <helpIcon />。",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "集成管理器接收配置数据，并可以以你的名义修改挂件、发送房间邀请及设置权力级别。",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "使用集成管理器管理机器人、挂件和贴纸包。",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "使用集成管理器<b>（%(serverName)s）</b>管理机器人、挂件和贴纸包。",
-    "Identity server": "身份服务器",
     "Identity server (%(server)s)": "身份服务器（%(server)s）",
     "Could not connect to identity server": "无法连接到身份服务器",
     "Not a valid identity server (status code %(code)s)": "身份服务器无效（状态码 %(code)s）",
@@ -2073,11 +1903,6 @@
     "Global": "全局",
     "New keyword": "新的关键词",
     "Keyword": "关键词",
-    "Enable email notifications for %(email)s": "为 %(email)s 启用电子邮件通知",
-    "An error occurred whilst saving your notification preferences.": "保存你的通知偏好时出错。",
-    "Error saving notification preferences": "保存通知偏好时出错",
-    "Messages containing keywords": "当消息包含关键词时",
-    "Message bubbles": "消息气泡",
     "Show all rooms": "显示所有房间",
     "Delete avatar": "删除头像",
     "More": "更多",
@@ -2255,7 +2080,6 @@
     "Developer mode": "开发者模式",
     "Insert link": "插入链接",
     "Joined": "已加入",
-    "Use high contrast": "使用高对比度",
     "Light high contrast": "浅色高对比",
     "Joining": "加入中",
     "Automatically send debug logs on any error": "遇到任何错误自动发送调试日志",
@@ -2321,12 +2145,9 @@
     "@mentions & keywords": "@提及和关键词",
     "Get notified for every message": "获得每条消息的通知",
     "Get notifications as set up in your <a>settings</a>": "如<a>设置</a>中设定的那样获取通知",
-    "sends rainfall": "发送降雨",
-    "Sends the given message with rainfall": "附加降雨发送给定的消息",
     "Close this widget to view it in this panel": "关闭此小部件以在此面板中查看",
     "Unpin this widget to view it in this panel": "取消固定此小部件以在此面板中查看",
     "Large": "大",
-    "Image size in the timeline": "时间线中的图像大小",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s 和其他 %(count)s 个空间",
         "other": "%(spaceName)s 和其他 %(count)s 个空间"
@@ -2367,14 +2188,7 @@
         "other": "票数已达 %(count)s 票。要查看结果请亲自投票"
     },
     "No votes cast": "尚无投票",
-    "You can turn this off anytime in settings": "您可以随时在设置中关闭此功能",
-    "We <Bold>don't</Bold> share information with third parties": "我们<Bold>不会</Bold>与第三方共享信息",
-    "We <Bold>don't</Bold> record or profile any account data": "我们<Bold>不会</Bold>记录或配置任何账户数据",
-    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "你可以在<PrivacyPolicyUrl>此处</PrivacyPolicyUrl>阅读我们所有的条款",
     "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "共享匿名数据以帮助我们发现问题。 与个人无关。 没有第三方。",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "共享匿名数据帮助我们发现问题。无个人数据。 没有第三方。<LearnMoreLink>了解更多</LearnMoreLink>",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "你之前同意与我们分享匿名使用数据。我们正在更新其工作方式。",
-    "Help improve %(analyticsOwner)s": "帮助改进 %(analyticsOwner)s",
     "That's fine": "没问题",
     "You cannot place calls without a connection to the server.": "你不能在未连接到服务器时进行呼叫。",
     "Connectivity to the server has been lost": "已丢失与服务器的连接",
@@ -2523,7 +2337,6 @@
     "Keyboard": "键盘",
     "Deactivating your account is a permanent action — be careful!": "停用你的账户是永久性动作——小心！",
     "Your password was successfully changed.": "你的密码已成功更改。",
-    "IRC (Experimental)": "IRC（实验性）",
     "Confirm signing out these devices": {
         "one": "确认登出此设备",
         "other": "确认登出这些设备"
@@ -2585,14 +2398,6 @@
     "Navigate to next message to edit": "导航到下条要编辑的消息",
     "Space home": "空间首页",
     "Open this settings tab": "打开此设置标签页",
-    "was removed %(count)s times": {
-        "one": "被移除",
-        "other": "被移除%(count)s次"
-    },
-    "were removed %(count)s times": {
-        "one": "被移除",
-        "other": "被移除了%(count)s次"
-    },
     "Unknown error fetching location. Please try again later.": "获取位置时发生错误。请之后再试。",
     "Timed out trying to fetch your location. Please try again later.": "尝试获取你的位置超时。请之后再试。",
     "Failed to fetch your location. Please try again later.": "获取你的位置失败。请之后再试。",
@@ -2625,8 +2430,6 @@
     "The beginning of the room": "房间的开头",
     "You cancelled verification on your other device.": "你在其他设备上取消了验证。",
     "Almost there! Is your other device showing the same shield?": "快完成了！你的其他设备显示相同盾牌吗？",
-    "Verify this device by completing one of the following:": "完成以下操作之一来验证此设备：",
-    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "你正在尝试验证的设备不支持扫码QR码或表情符号验证，这是%(brand)s所支持的。用不同的客户端试试。",
     "Ban from room": "从房间封禁",
     "Unban from room": "从房间取消解封",
     "Ban from space": "从空间封禁",
@@ -2635,14 +2438,6 @@
     "Currently removing messages in %(count)s rooms": {
         "one": "目前正在移除%(count)s个房间中的消息",
         "other": "目前正在移除%(count)s个房间中的消息"
-    },
-    "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(oneUser)s更改了房间的<a>固定消息</a>",
-        "other": "%(oneUser)s更改了房间的<a>固定消息</a>%(count)s次"
-    },
-    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times": {
-        "one": "%(severalUsers)s更改了房间的<a>固定消息</a>",
-        "other": "%(severalUsers)s更改了房间的<a>固定消息</a>%(count)s次"
     },
     "Un-maximise": "取消最大化",
     "What location type do you want to share?": "你想分享什么位置类型？",
@@ -2685,8 +2480,6 @@
     "Preserve system messages": "保留系统消息",
     "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "尝试访问房间或空间时返回%(errcode)s。若你认为你看到这条消息是有问题的，请<issueLink>提交bug报告</issueLink>。",
     "An error (%(errcode)s) was returned while trying to validate your invite. You could try to pass this information on to the person who invited you.": "尝试验证你的邀请时返回错误（%(errcode)s）。你可以尝试把这个信息传给邀请你的人。",
-    "sends hearts": "发送爱心",
-    "Sends the given message with hearts": "与爱心一起发送给定的消息",
     "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "你的消息未被发送，因为此家服务器已被其管理员屏蔽。请<a>联系你的服务管理员</a>以继续使用服务。",
     "Spell check": "拼写检查",
     "Results are only revealed when you end the poll": "结果仅在你结束投票后展示",
@@ -2708,10 +2501,6 @@
     "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.": "为了最佳的安全，请验证会话，登出任何不认识或不再使用的会话。",
     "Other sessions": "其他会话",
     "Show shortcut to welcome checklist above the room list": "在房间列表上方显示欢迎清单的捷径",
-    "%(severalUsers)sremoved a message %(count)s times": {
-        "one": "%(severalUsers)s移除了1条消息",
-        "other": "%(severalUsers)s移除了%(count)s条消息"
-    },
     "Remove them from everything I'm able to": "",
     "Inactive sessions": "不活跃的会话",
     "Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.": "验证你的会话以增强消息传输的安全性，或从那些你不认识或不再使用的会话登出。",
@@ -2724,10 +2513,6 @@
     "Verify or sign out from this session for best security and reliability.": "验证此会话或从之登出，以取得最佳安全性和可靠性。",
     "Unverified session": "未验证的会话",
     "This session is ready for secure messaging.": "此会话已准备好进行安全的消息传输。",
-    "%(oneUser)ssent %(count)s hidden messages": {
-        "other": "%(oneUser)s发送了%(count)s条隐藏消息",
-        "one": "%(oneUser)s发送了一条隐藏消息"
-    },
     "Remove server “%(roomServer)s”": "移除服务器“%(roomServer)s”",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "你可以使用自定义服务器选项来指定不同的家服务器URL以登录其他Matrix服务器。这让你能把%(brand)s和不同家服务器上的已有Matrix账户搭配使用。",
     "Unsent": "未发送",
@@ -2752,7 +2537,6 @@
     "An error occurred while stopping your live location, please try again": "停止你的实时位置时出错，请重试",
     "An error occurred whilst sharing your live location, please try again": "分享你的实时位置时出错，请重试",
     "Live location enabled": "实时位置已启用",
-    "%(timeRemaining)s left": "剩余%(timeRemaining)s",
     "You are sharing your live location": "你正在分享你的实时位置",
     "An error occurred whilst sharing your live location": "分享实时位置时出错",
     "An error occurred while stopping your live location": "停止实时位置时出错",
@@ -2790,18 +2574,9 @@
     "Click to read topic": "点击阅读话题",
     "Edit topic": "编辑话题",
     "Edit poll": "编辑投票",
-    "%(severalUsers)ssent %(count)s hidden messages": {
-        "one": "%(severalUsers)s发送了一条隐藏消息",
-        "other": "%(severalUsers)s发送了%(count)s条隐藏消息"
-    },
-    "%(oneUser)sremoved a message %(count)s times": {
-        "one": "%(oneUser)s移除了一条消息",
-        "other": "%(oneUser)s移除了%(count)s条消息"
-    },
     "%(user1)s and %(user2)s": "%(user1)s和%(user2)s",
     "Choose a locale": "选择区域设置",
     "Empty room (was %(oldName)s)": "空房间（曾是%(oldName)s）",
-    "%(qrCode)s or %(emojiCompare)s": "%(qrCode)s或%(emojiCompare)s",
     "%(qrCode)s or %(appLinks)s": "%(qrCode)s或%(appLinks)s",
     "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s或%(recoveryFile)s",
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s或%(copyButton)s",
@@ -2830,9 +2605,6 @@
         "one": "正在邀请%(user)s和另外1个人",
         "other": "正在邀请%(user)s和其他%(count)s人"
     },
-    "Turn off to disable notifications on all your devices and sessions": "关闭以在你全部设备和会话上停用通知",
-    "Enable notifications for this account": "为此账户启用通知",
-    "Enable notifications for this device": "为此设备启用通知",
     "Record the client name, version, and url to recognise sessions more easily in session manager": "记录客户端名称、版本和url以便在会话管理器里更易识别",
     "Room info": "房间信息",
     "Switch to space by number": "按数字切换到空间",
@@ -2984,7 +2756,9 @@
         "stickerpack": "贴纸包",
         "system_alerts": "系统警告",
         "secure_backup": "安全备份",
-        "cross_signing": "交叉签名"
+        "cross_signing": "交叉签名",
+        "identity_server": "身份服务器",
+        "integration_manager": "集成管理器"
     },
     "action": {
         "continue": "继续",
@@ -3119,7 +2893,18 @@
         "currently_experimental": "目前是实验性的。",
         "sliding_sync_description": "正在积极开发中，不能禁用。",
         "under_active_development": "积极开发中。",
-        "location_share_live_description": "临时的实现。位置在房间历史中持续保留。"
+        "location_share_live_description": "临时的实现。位置在房间历史中持续保留。",
+        "group_messaging": "消息传递",
+        "group_profile": "个人资料",
+        "group_spaces": "空间",
+        "group_widgets": "挂件",
+        "group_rooms": "房间",
+        "group_voip": "语音和视频",
+        "group_moderation": "审核",
+        "group_themes": "主题",
+        "group_encryption": "加密",
+        "group_experimental": "实验性",
+        "group_developer": "开发者"
     },
     "keyboard": {
         "home": "主页",
@@ -3172,7 +2957,8 @@
         "collecting_information": "正在收集应用版本信息",
         "collecting_logs": "正在收集日志",
         "uploading_logs": "正在上传日志",
-        "downloading_logs": "正在下载日志"
+        "downloading_logs": "正在下载日志",
+        "create_new_issue": "请在 GitHub 上<newIssueLink>创建一个新 issue</newIssueLink> 以便我们调查此错误。"
     },
     "time": {
         "hours_minutes_seconds_left": "剩余%(hours)s小时%(minutes)s分钟%(seconds)s秒",
@@ -3201,7 +2987,8 @@
         "few_seconds_ago": "数秒前",
         "about_minute_ago": "约一分钟前",
         "about_hour_ago": "约一小时前",
-        "about_day_ago": "约一天前"
+        "about_day_ago": "约一天前",
+        "left": "剩余%(timeRemaining)s"
     },
     "onboarding": {
         "personal_messaging_title": "和朋友家人安全地收发消息",
@@ -3284,7 +3071,37 @@
             "rule_call": "当受到通话邀请时",
             "rule_suppress_notices": "由机器人发出的消息",
             "rule_tombstone": "当房间升级时",
-            "rule_encrypted_room_one_to_one": "私聊中的加密消息"
+            "rule_encrypted_room_one_to_one": "私聊中的加密消息",
+            "messages_containing_keywords": "当消息包含关键词时",
+            "error_saving": "保存通知偏好时出错",
+            "error_saving_detail": "保存你的通知偏好时出错。",
+            "enable_notifications_account": "为此账户启用通知",
+            "enable_notifications_account_detail": "关闭以在你全部设备和会话上停用通知",
+            "enable_email_notifications": "为 %(email)s 启用电子邮件通知",
+            "enable_notifications_device": "为此设备启用通知",
+            "enable_desktop_notifications_session": "为此会话启用桌面通知",
+            "show_message_desktop_notification": "在桌面通知中显示消息",
+            "enable_audible_notifications_session": "为此会话启用声音通知"
+        },
+        "appearance": {
+            "layout_irc": "IRC（实验性）",
+            "layout_bubbles": "消息气泡",
+            "heading": "自定义你的外观",
+            "subheading": "外观设置仅会影响此 %(brand)s 会话。",
+            "match_system_theme": "匹配系统主题",
+            "custom_font": "使用系统字体",
+            "custom_font_name": "系统字体名称",
+            "custom_theme_invalid": "主题方案无效。",
+            "custom_theme_error_downloading": "下载主题信息时发生错误。",
+            "custom_theme_success": "主题已添加！",
+            "custom_theme_url": "自定义主题URL",
+            "use_high_contrast": "使用高对比度",
+            "custom_theme_add_button": "添加主题",
+            "font_size": "字体大小",
+            "custom_font_description": "设置一个安装在你的系统上的字体名称，%(brand)s 会尝试使用它。",
+            "timeline_image_size": "时间线中的图像大小",
+            "timeline_image_size_default": "默认",
+            "timeline_image_size_large": "大"
         }
     },
     "devtools": {
@@ -3457,7 +3274,15 @@
             "removed": "%(senderName)s 移除了此房间的主要地址。",
             "changed_alternative": "%(senderName)s 更改了此房间的备用地址。",
             "changed_main_and_alternative": "%(senderName)s 更改了此房间的主要地址与备用地址。",
-            "changed": "%(senderName)s 更改了此房间的地址。"
+            "changed": "%(senderName)s 更改了此房间的地址。",
+            "alt_added": {
+                "other": "%(senderName)s 为此房间添加备用地址 %(addresses)s。",
+                "one": "%(senderName)s 为此房间添加了备用地址 %(addresses)s。"
+            },
+            "alt_removed": {
+                "other": "%(senderName)s 为此房间移除了备用地址 %(addresses)s。",
+                "one": "%(senderName)s 为此房间移除了备用地址 %(addresses)s。"
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s 撤销了对 %(targetDisplayName)s 加入房间的邀请。",
@@ -3499,6 +3324,160 @@
         },
         "m.call.hangup": {
             "dm": "通话结束"
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s 已加入 %(count)s 次",
+                "one": "%(severalUsers)s 已加入"
+            },
+            "joined": {
+                "other": "%(oneUser)s 已加入 %(count)s 次",
+                "one": "%(oneUser)s 已加入"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s 已离开 %(count)s 次",
+                "one": "%(severalUsers)s 已离开"
+            },
+            "left": {
+                "other": "%(oneUser)s 已离开 %(count)s 次",
+                "one": "%(oneUser)s 已离开"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s加入并离开了%(count)s次",
+                "one": "%(severalUsers)s加入并离开了"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s加入并离开了%(count)s次",
+                "one": "%(oneUser)s加入并离开了"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s离开并重新加入了%(count)s次",
+                "one": "%(severalUsers)s离开并重新加入了"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s离开并重新加入了%(count)s次",
+                "one": "%(oneUser)s离开并重新加入了"
+            },
+            "rejected_invite_multiple": {
+                "one": "%(severalUsers)s 拒绝了他们的邀请",
+                "other": "%(severalUsers)s 拒绝了他们的邀请共 %(count)s 次"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s 拒绝了他们的邀请共 %(count)s 次",
+                "one": "%(oneUser)s 拒绝了他们的邀请"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)s 撤回了他们的邀请共 %(count)s 次",
+                "one": "%(severalUsers)s 撤回了他们的邀请"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)s 撤回了他们的邀请共 %(count)s 次",
+                "one": "%(oneUser)s 撤回了他们的邀请"
+            },
+            "invited_multiple": {
+                "other": "被邀请 %(count)s 次",
+                "one": "被邀请"
+            },
+            "invited": {
+                "other": "被邀请 %(count)s 次",
+                "one": "被邀请"
+            },
+            "banned_multiple": {
+                "other": "被封禁 %(count)s 次",
+                "one": "被封禁"
+            },
+            "banned": {
+                "other": "被封禁 %(count)s 次",
+                "one": "被封禁"
+            },
+            "unbanned_multiple": {
+                "other": "被解封 %(count)s 次",
+                "one": "被解封"
+            },
+            "unbanned": {
+                "other": "被解封 %(count)s 次",
+                "one": "被解封"
+            },
+            "kicked_multiple": {
+                "one": "被移除",
+                "other": "被移除了%(count)s次"
+            },
+            "kicked": {
+                "one": "被移除",
+                "other": "被移除%(count)s次"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s 修改了他们的名称 %(count)s 次",
+                "one": "%(severalUsers)s 修改了他们的名称"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s 修改了自己的名称 %(count)s 次",
+                "one": "%(oneUser)s 修改了自己的名称"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)s 未做更改 %(count)s 次",
+                "one": "%(severalUsers)s 未做更改"
+            },
+            "no_change": {
+                "other": "%(oneUser)s 未做更改 %(count)s 次",
+                "one": "%(oneUser)s 未做更改"
+            },
+            "server_acls_multiple": {
+                "one": "%(severalUsers)s 已更改服务器访问控制列表",
+                "other": "%(severalUsers)s 已更改服务器的访问控制列表 %(count)s 此"
+            },
+            "server_acls": {
+                "one": "%(oneUser)s 已更改服务器访问控制列表",
+                "other": "%(oneUser)s 已更改服务器访问控制列表 %(count)s 次"
+            },
+            "pinned_events_multiple": {
+                "one": "%(severalUsers)s更改了房间的<a>固定消息</a>",
+                "other": "%(severalUsers)s更改了房间的<a>固定消息</a>%(count)s次"
+            },
+            "pinned_events": {
+                "one": "%(oneUser)s更改了房间的<a>固定消息</a>",
+                "other": "%(oneUser)s更改了房间的<a>固定消息</a>%(count)s次"
+            },
+            "redacted_multiple": {
+                "one": "%(severalUsers)s移除了1条消息",
+                "other": "%(severalUsers)s移除了%(count)s条消息"
+            },
+            "redacted": {
+                "one": "%(oneUser)s移除了一条消息",
+                "other": "%(oneUser)s移除了%(count)s条消息"
+            },
+            "hidden_event_multiple": {
+                "one": "%(severalUsers)s发送了一条隐藏消息",
+                "other": "%(severalUsers)s发送了%(count)s条隐藏消息"
+            },
+            "hidden_event": {
+                "other": "%(oneUser)s发送了%(count)s条隐藏消息",
+                "one": "%(oneUser)s发送了一条隐藏消息"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s更改了%(powerLevelDiffText)s的权力级别。",
+            "user_from_to": "%(userId)s 从 %(fromPowerLevel)s 变为 %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s 移除了禁止匹配 %(glob)s 的用户的规则",
+            "removed_rule_rooms": "%(senderName)s 删除了禁止房间匹配%(glob)s的规则",
+            "removed_rule_servers": "%(senderName)s 移除了禁止匹配 %(glob)s 的服务器的规则",
+            "removed_rule": "%(senderName)s 移除了禁止匹配 %(glob)s 的规则",
+            "updated_invalid_rule": "%(senderName)s 更新了一个无效的禁止规则",
+            "updated_rule_users": "%(senderName)s 更新了由于%(reason)s 而禁止用户匹配%(glob)s的规则",
+            "updated_rule_rooms": "%(senderName)s 更新了由于%(reason)s而禁止房间匹配%(glob)s的规则",
+            "updated_rule_servers": "%(senderName)s 更新了由于%(reason)s而禁止服务器匹配%(glob)s的规则",
+            "updated_rule": "%(senderName)s 更新了由于%(reason)s而禁止匹配%(glob)s的规则",
+            "created_rule_users": "%(senderName)s 创建了因为%(reason)s而禁止用户匹配%(glob)s的规则",
+            "created_rule_rooms": "%(senderName)s 创建了由于%(reason)s而禁止房间匹配%(glob)s的规则",
+            "created_rule_servers": "%(senderName)s 创建了由于%(reason)s而禁止服务器匹配%(glob)s的规则",
+            "created_rule": "%(senderName)s 创建了由于%(reason)s而禁止匹配%(glob)s的规则",
+            "changed_rule_users": "%(senderName)s 更改了一个由于%(reason)s而禁止用户%(oldGlob)s跟%(newGlob)s匹配的规则",
+            "changed_rule_rooms": "%(senderName)s更改了一个由于%(reason)s而禁止房间%(oldGlob)s跟%(newGlob)s匹配的规则",
+            "changed_rule_servers": "%(senderName)s 更新了一个由于%(reason)s而禁止服务器%(oldGlob)s跟%(newGlob)s匹配的规则",
+            "changed_rule_glob": "%(senderName)s 更新了一个由于%(reason)s而禁止%(oldGlob)s跟%(newGlob)s匹配的规则"
         }
     },
     "slash_command": {
@@ -3653,5 +3632,57 @@
             "redact": "移除其他人的消息",
             "notifications.room": "通知每个人"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "它们不匹配",
+            "sas_match": "它们匹配",
+            "in_person": "为了安全，请当面完成或使用信任的方法交流。",
+            "other_party_cancelled": "另一方取消了验证。",
+            "complete_title": "已验证！",
+            "complete_description": "你已成功验证此用户。",
+            "no_support_qr_emoji": "你正在尝试验证的设备不支持扫码QR码或表情符号验证，这是%(brand)s所支持的。用不同的客户端试试。",
+            "qr_prompt": "扫描此唯一代码",
+            "sas_prompt": "比较唯一表情符号",
+            "sas_description": "若你在两个设备上都没有相机，比较唯一一组表情符号",
+            "qr_or_sas": "%(qrCode)s或%(emojiCompare)s",
+            "qr_or_sas_header": "完成以下操作之一来验证此设备："
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "经常使用",
+        "category_smileys_people": "表情和人",
+        "category_animals_nature": "动物和自然",
+        "category_food_drink": "食物和饮料",
+        "category_activities": "活动",
+        "category_travel_places": "旅行和地点",
+        "category_objects": "物体",
+        "category_symbols": "符号",
+        "category_flags": "旗",
+        "categories": "类别",
+        "quick_reactions": "快速反应"
+    },
+    "analytics": {
+        "enable_prompt": "帮助改进 %(analyticsOwner)s",
+        "consent_migration": "你之前同意与我们分享匿名使用数据。我们正在更新其工作方式。",
+        "learn_more": "共享匿名数据帮助我们发现问题。无个人数据。 没有第三方。<LearnMoreLink>了解更多</LearnMoreLink>",
+        "privacy_policy": "你可以在<PrivacyPolicyUrl>此处</PrivacyPolicyUrl>阅读我们所有的条款",
+        "bullet_1": "我们<Bold>不会</Bold>记录或配置任何账户数据",
+        "bullet_2": "我们<Bold>不会</Bold>与第三方共享信息",
+        "disable_prompt": "您可以随时在设置中关闭此功能"
+    },
+    "chat_effects": {
+        "confetti_description": "附加五彩纸屑发送",
+        "confetti_message": "发送五彩纸屑",
+        "fireworks_description": "附加烟火发送",
+        "fireworks_message": "发送烟火",
+        "rainfall_description": "附加降雨发送给定的消息",
+        "rainfall_message": "发送降雨",
+        "snowfall_description": "发送附加雪球的给定信息",
+        "snowfall_message": "发送雪球",
+        "spaceinvaders_description": "此消息带有空间主题化效果",
+        "spaceinvaders_message": "发送空间入侵者",
+        "hearts_description": "与爱心一起发送给定的消息",
+        "hearts_message": "发送爱心"
     }
 }

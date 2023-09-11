@@ -2205,6 +2205,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             knocked={myMembership === "knock" || this.state.knocked}
                             onSubmitAskToJoin={this.onSubmitAskToJoin}
                             onCancelAskToJoin={this.onCancelAskToJoin}
+                            onForgetClick={this.onForgetClick}
                         />
                     </ErrorBoundary>
                 </div>

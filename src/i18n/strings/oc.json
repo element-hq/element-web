@@ -51,7 +51,6 @@
     "Notifications": "Notificacions",
     "Ok": "Validar",
     "Set up": "Parametrar",
-    "Font size": "Talha de poliça",
     "Cancelling…": "Anullacion…",
     "Fish": "Pes",
     "Butterfly": "Parpalhòl",
@@ -121,15 +120,6 @@
     "Yesterday": "Ièr",
     "Show image": "Afichar l'imatge",
     "Failed to copy": "Impossible de copiar",
-    "Smileys & People": "Emoticònas e personatges",
-    "Animals & Nature": "Animals e natura",
-    "Food & Drink": "Noiridura e bevenda",
-    "Activities": "Activitats",
-    "Travel & Places": "Viatges e luòcs",
-    "Objects": "Objèctes",
-    "Symbols": "Simbòls",
-    "Flags": "Marcadors",
-    "Categories": "Categorias",
     "Cancel search": "Anullar la recèrca",
     "More options": "Autras opcions",
     "Rotate Left": "Pivotar cap a èrra",
@@ -331,5 +321,27 @@
     },
     "Messages": "Messatges",
     "Other": "Autre",
-    "Advanced": "Avançat"
+    "Advanced": "Avançat",
+    "emoji": {
+        "category_smileys_people": "Emoticònas e personatges",
+        "category_animals_nature": "Animals e natura",
+        "category_food_drink": "Noiridura e bevenda",
+        "category_activities": "Activitats",
+        "category_travel_places": "Viatges e luòcs",
+        "category_objects": "Objèctes",
+        "category_symbols": "Simbòls",
+        "category_flags": "Marcadors",
+        "categories": "Categorias"
+    },
+    "labs": {
+        "group_profile": "Perfil",
+        "group_rooms": "Salas",
+        "group_encryption": "Chiframent"
+    },
+    "settings": {
+        "appearance": {
+            "font_size": "Talha de poliça",
+            "timeline_image_size_default": "Predefinit"
+        }
+    }
 }

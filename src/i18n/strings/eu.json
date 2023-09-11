@@ -80,10 +80,8 @@
     "Failed to unban": "Huts egin du debekua kentzean",
     "Failure to create room": "Huts egin du gela sortzean",
     "Forget room": "Ahaztu gela",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s %(fromPowerLevel)s mailatik %(toPowerLevel)s mailara",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Ezin da hasiera zerbitzarira konektatu, egiaztatu zure konexioa, ziurtatu zure <a>hasiera zerbitzariaren SSL ziurtagiria</a> fidagarritzat jotzen duela zure gailuak, eta nabigatzailearen pluginen batek ez dituela eskaerak blokeatzen.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Ezin zara hasiera zerbitzarira HTTP bidez konektatu zure nabigatzailearen barran dagoen URLa HTTS bada. Erabili HTTPS edo <a>gaitu script ez seguruak</a>.",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s erabiltzaileak botere mailaz aldatu du %(powerLevelDiffText)s.",
     "Incorrect username and/or password.": "Erabiltzaile-izen edo pasahitz okerra.",
     "Incorrect verification code": "Egiaztaketa kode okerra",
     "Invalid Email Address": "E-mail helbide baliogabea",
@@ -250,38 +248,6 @@
     "URL previews are disabled by default for participants in this room.": "URLen aurrebistak desgaituta daude gela honetako partaideentzat.",
     "A text message has been sent to %(msisdn)s": "Testu mezu bat bidali da hona: %(msisdn)s",
     "Jump to read receipt": "Saltatu irakurragirira",
-    "was banned %(count)s times": {
-        "one": "debekatua izan da",
-        "other": "%(count)s aldiz debekatuak izan dira"
-    },
-    "were invited %(count)s times": {
-        "other": "%(count)s aldiz gonbidatuak izan dira",
-        "one": "gonbidatuak izan dira"
-    },
-    "was invited %(count)s times": {
-        "other": "%(count)s aldiz gonbidatua izan da",
-        "one": "gonbidatua izan da"
-    },
-    "were banned %(count)s times": {
-        "other": "%(count)s aldiz debekatuak izan dira",
-        "one": "debekatuak izan dira"
-    },
-    "were unbanned %(count)s times": {
-        "other": "%(count)s aldiz kendu zaie debekua",
-        "one": "debekua kendu zaie"
-    },
-    "was unbanned %(count)s times": {
-        "other": "%(count)s aldiz kendu zaio debekua",
-        "one": "debekua kendu zaio"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s erabiltzaileek bere izena aldatu dute %(count)s aldiz",
-        "one": "%(severalUsers)s erabiltzaileek bere izena aldatu dute"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s erabiltzaileak bere izena aldatu du %(count)s aldiz",
-        "one": "%(oneUser)s erabiltzaileak bere izena aldatu du"
-    },
     "collapse": "tolestu",
     "expand": "hedatu",
     "And %(count)s more...": {
@@ -289,55 +255,6 @@
     },
     "Delete Widget": "Ezabatu trepeta",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Trepeta ezabatzean gelako kide guztientzat kentzen da. Ziur trepeta ezabatu nahi duzula?",
-    "%(nameList)s %(transitionList)s": "%(nameList)s%(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s %(count)s aldiz elkartu dira",
-        "one": "%(severalUsers)s elkartu dira"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s%(count)s aldiz elkartu da",
-        "one": "%(oneUser)s elkartu da"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s%(count)s aldiz atera dira",
-        "one": "%(severalUsers)s atera dira"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s%(count)s aldiz atera da",
-        "one": "%(oneUser)s atera da"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s elkartu eta atera dira %(count)s aldiz",
-        "one": "%(severalUsers)s elkartu eta atera dira"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s elkartu eta atera da %(count)s aldiz",
-        "one": "%(oneUser)s elkartu eta atera da"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s atera eta berriz elkartu dira %(count)s aldiz",
-        "one": "%(severalUsers)s atera eta berriz elkartu da"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s atera eta berriz elkartu da %(count)s aldiz",
-        "one": "%(oneUser)s atera eta berriz elkartu da"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s erabiltzaileek bere gonbidapenak ukatu dituzte %(count)s aldiz",
-        "one": "%(severalUsers)s erabiltzaileek bere gonbidapenak ukatu dituzte"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s erabiltzaileak bere gonbidapena ukatu du %(count)s aldiz",
-        "one": "%(oneUser)s erabiltzaileak bere gonbidapena ukatu du"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)s erabiltzaileei gonbidapena indargabetu zaie %(count)s aldiz",
-        "one": "%(severalUsers)s erabiltzaileei gonbidapena indargabetu zaie"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)s erabiltzaileari gonbidapena indargabetu zaio %(count)s aldiz",
-        "one": "%(oneUser)s erabiltzaileari gonbidapena indargabetu zaio"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s eta beste %(count)s",
         "one": "%(items)s eta beste bat"
@@ -379,7 +296,6 @@
     "Thursday": "Osteguna",
     "Search…": "Bilatu…",
     "Logs sent": "Egunkariak bidalita",
-    "Show message in desktop notification": "Erakutsi mezua mahaigaineko jakinarazpenean",
     "Yesterday": "Atzo",
     "Error encountered (%(errorDetail)s).": "Errorea aurkitu da (%(errorDetail)s).",
     "Low Priority": "Lehentasun baxua",
@@ -506,9 +422,6 @@
     "Invite anyway and never warn me again": "Gonbidatu edonola ere eta ez abisatu inoiz gehiago",
     "Invite anyway": "Gonbidatu hala ere",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "'%(fileName)s' fitxategiak igoerarako hasiera-zerbitzari honek duen tamaina muga gainditzen du",
-    "The other party cancelled the verification.": "Beste parteak egiaztaketa ezeztatu du.",
-    "Verified!": "Egiaztatuta!",
-    "You've successfully verified this user.": "Ongi egiaztatu duzu erabiltzaile hau.",
     "Got It": "Ulertuta",
     "Dog": "Txakurra",
     "Cat": "Katua",
@@ -750,14 +663,6 @@
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Gela hau bertsio-berritzeak gelaren oraingo instantzia itzaliko du eta izen bereko beste gela berri bat sortuko du. Kideei esperientziarik onena emateko, hau egingo dugu:",
     "Edited at %(date)s. Click to view edits.": "Edizio data: %(date)s. Sakatu edizioak ikusteko.",
     "Message edits": "Mezuaren edizioak",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)s erabiltzaileek ez dute aldaketarik egin %(count)s aldiz",
-        "one": "%(severalUsers)s erabiltzaileek ez dute aldaketarik egin"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)s erabiltzaileak ez du aldaketarik egin %(count)s aldiz",
-        "one": "%(oneUser)s erabiltzaileak ez du aldaketarik egin"
-    },
     "Removing…": "Kentzen…",
     "Clear all data": "Garbitu datu guztiak",
     "Your homeserver doesn't seem to support this feature.": "Antza zure hasiera-zerbitzariak ez du ezaugarri hau onartzen.",
@@ -857,7 +762,6 @@
         "one": "Irakurri gabeko mezu 1."
     },
     "Show image": "Erakutsi irudia",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "<newIssueLink>Sortu txosten berri bat</newIssueLink> GitHub zerbitzarian arazo hau ikertu dezagun.",
     "e.g. my-room": "adib. nire-gela",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Erabili identitate-zerbitzari bat e-mail bidez gonbidatzeko. <default>Erabili lehenetsitakoa (%(defaultIdentityServerName)s)</default> edo gehitu bat <settings>Ezarpenak</settings> atalean.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Erabili identitate-zerbitzari bat e-mail bidez gonbidatzeko. Kudeatu <settings>Ezarpenak</settings> atalean.",
@@ -888,16 +792,6 @@
     "Failed to deactivate user": "Huts egin du erabiltzailea desaktibatzeak",
     "This client does not support end-to-end encryption.": "Bezero honek ez du muturretik muturrerako zifratzea onartzen.",
     "Messages in this room are not end-to-end encrypted.": "Gela honetako mezuak ez daude muturretik muturrera zifratuta.",
-    "Frequently Used": "Maiz erabilia",
-    "Smileys & People": "Irribartxoak eta jendea",
-    "Animals & Nature": "Animaliak eta natura",
-    "Food & Drink": "Jana eta edana",
-    "Activities": "Jarduerak",
-    "Travel & Places": "Bidaiak eta tokiak",
-    "Objects": "Objektuak",
-    "Symbols": "Ikurrak",
-    "Flags": "Banderak",
-    "Quick Reactions": "Erreakzio azkarrak",
     "Cancel search": "Ezeztatu bilaketa",
     "Jump to first unread room.": "Jauzi irakurri gabeko lehen gelara.",
     "Jump to first invite.": "Jauzi lehen gonbidapenera.",
@@ -914,7 +808,6 @@
     "%(name)s cancelled": "%(name)s utzita",
     "%(name)s wants to verify": "%(name)s(e)k egiaztatu nahi du",
     "You sent a verification request": "Egiaztaketa eskari bat bidali duzu",
-    "Match system theme": "Bat egin sistemako azalarekin",
     "My Ban List": "Nire debeku-zerrenda",
     "This is your list of users/servers you have blocked - don't leave the room!": "Hau blokeatu dituzun erabiltzaile edo zerbitzarien zerrenda da, ez atera gelatik!",
     "Cannot connect to integration manager": "Ezin da integrazio kudeatzailearekin konektatu",
@@ -965,23 +858,6 @@
     "Verification Request": "Egiaztaketa eskaria",
     "Error upgrading room": "Errorea gela eguneratzean",
     "Double check that your server supports the room version chosen and try again.": "Egiaztatu zure zerbitzariak aukeratutako gela bertsioa onartzen duela eta saiatu berriro.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen zituen araua kendu du",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen zituen araua kendu du",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen zituen araua kendu du",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat kendu du",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s erabiltzaileak baliogabeko debeku arau bat eguneratu du",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat eguneratu du, arrazoia: %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat sortu du, arrazoia: %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s erabiltzaileak erabiltzaileak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s erabiltzaileak gelak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s erabiltzaileak zerbitzariak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s erabiltzaileak debeku arau bat aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
     "Cross-signing public keys:": "Zeharkako sinaduraren gako publikoak:",
     "not found": "ez da aurkitu",
     "Cross-signing private keys:": "Zeharkako sinaduraren gako pribatuak:",
@@ -1043,9 +919,6 @@
     "Enable message search in encrypted rooms": "Gaitu mezuen bilaketa gela zifratuetan",
     "How fast should messages be downloaded.": "Zeinen azkar deskargatu behar diren mezuak.",
     "Waiting for %(displayName)s to verify…": "%(displayName)s egiaztatu bitartean zain…",
-    "They match": "Bat datoz",
-    "They don't match": "Ez datoz bat",
-    "To be secure, do this in person or use a trusted way to communicate.": "Ziurtatzeko, egin hau aurrez aurre edo komunikabide seguru baten bidez.",
     "This bridge was provisioned by <user />.": "Zubi hau <user /> erabiltzaileak hornitu du.",
     "Show less": "Erakutsi gutxiago",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Zure kontuak zeharkako sinatze identitate bat du biltegi sekretuan, baina saio honek ez du oraindik fidagarritzat.",
@@ -1055,8 +928,6 @@
     "Connect this session to Key Backup": "Konektatu saio hau gakoen babes-kopiara",
     "This backup is trusted because it has been restored on this session": "Babes-kopia hau fidagarritzat jotzen da saio honetan berrekuratu delako",
     "Your keys are <b>not being backed up from this session</b>.": "<b>Ez da zure gakoen babes-kopia egiten saio honetatik</b>.",
-    "Enable desktop notifications for this session": "Gaitu mahaigaineko jakinarazpenak saio honentzat",
-    "Enable audible notifications for this session": "Gaitu jakinarazpen entzungarriak saio honentzat",
     "Session ID:": "Saioaren ID-a:",
     "Session key:": "Saioaren gakoa:",
     "Message search": "Mezuen bilaketa",
@@ -1096,9 +967,6 @@
     "One of the following may be compromised:": "Hauetakoren bat konprometituta egon daiteke:",
     "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Egiztatu gailu hau fidagarri gisa markatzeko. Gailu hau fidagarritzat jotzeak lasaitasuna ematen du muturretik-muturrera zifratutako mezuak erabiltzean.",
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Gailu hau egiaztatzean fidagarri gisa markatuko da, eta egiaztatu zaituzten erabiltzaileek fidagarri gisa ikusiko dute.",
-    "Scan this unique code": "Eskaneatu kode bakan hau",
-    "Compare unique emoji": "Konparatu emoji bakana",
-    "Compare a unique set of emoji if you don't have a camera on either device": "Konparatu emoji sorta bakana gailuek kamerarik ez badute",
     "Sign In or Create Account": "Hasi saioa edo sortu kontua",
     "Use your account or create a new one to continue.": "Erabili zure kontua edo sortu berri bat jarraitzeko.",
     "Create Account": "Sortu kontua",
@@ -1132,19 +1000,6 @@
     "Mark all as read": "Markatu denak irakurrita gisa",
     "Not currently indexing messages for any room.": "Orain ez da inolako gelako mezurik indexatzen.",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s / %(totalRooms)s",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak gehitu dizkio gela honi.",
-        "one": "%(senderName)s erabiltzaileak %(addresses)s helbideak gehitu dizkio gela honi."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s erabiltzaileak %(addresses)s helbideak kendu dizkio gela honi.",
-        "one": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak kendu dizkio gela honi."
-    },
-    "Invalid theme schema.": "Baliogabeko azal eskema.",
-    "Error downloading theme information.": "Errorea azalaren informazioa deskargatzean.",
-    "Theme added!": "Azala gehituta!",
-    "Custom theme URL": "Azal pertsonalizatuaren URLa",
-    "Add theme": "Gehitu azala",
     "Scroll to most recent messages": "Korritu azken mezuetara",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "Errore bat gertatu da gelaren ordezko helbideak eguneratzean. Agian zerbitzariak ez du onartzen edo une bateko akatsa izan da.",
     "Local address": "Helbide lokala",
@@ -1244,7 +1099,6 @@
     "Opens chat with the given user": "Erabiltzailearekin txata irekitzen du",
     "You signed in to a new session without verifying it:": "Saio berria hasi duzu hau egiaztatu gabe:",
     "Verify your other session using one of the options below.": "Egiaztatu zure beste saioa beheko aukeretako batekin.",
-    "Font size": "Letra-tamaina",
     "IRC display name width": "IRC-ko pantaila izenaren zabalera",
     "Size must be a number": "Tamaina zenbaki bat izan behar da",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Letra tamaina pertsonalizatua %(min)s pt eta %(max)s pt bitartean egon behar du",
@@ -1289,7 +1143,6 @@
     "You don't have permission to delete the address.": "Ez duzu helbidea ezabatzeko baimenik.",
     "There was an error removing that address. It may no longer exist or a temporary error occurred.": "Errorea gertatu da helbidea kentzean. Agian ez dago jada edo behin behineko arazo bat egon da.",
     "Error removing address": "Errorea helbidea kentzean",
-    "Categories": "Kategoriak",
     "Room address": "Gelaren helbidea",
     "This address is available to use": "Gelaren helbide hau erabilgarri dago",
     "This address is already in use": "Gelaren helbide hau erabilita dago",
@@ -1302,8 +1155,6 @@
     "Use a different passphrase?": "Erabili pasa-esaldi desberdin bat?",
     "Change notification settings": "Aldatu jakinarazpenen ezarpenak",
     "Use custom size": "Erabili tamaina pertsonalizatua",
-    "Use a system font": "Erabili sistemako letra-tipoa",
-    "System font name": "Sistemaren letra-tipoaren izena",
     "Hey you. You're the best!": "Aupa txo. Onena zara!",
     "Notification options": "Jakinarazpen ezarpenak",
     "Forget Room": "Ahaztu gela",
@@ -1313,13 +1164,11 @@
     "The server has denied your request.": "Zerbitzariak zure eskariari uko egin dio.",
     "Wrong file type": "Okerreko fitxategi-mota",
     "Looks good!": "Itxura ona du!",
-    "Integration manager": "Integrazio-kudeatzailea",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Zure %(brand)s aplikazioak ez dizu hau egiteko integrazio kudeatzaile bat erabiltzen uzten. Kontaktatu administratzaileren batekin.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Trepeta hau erabiltzean <helpIcon />  %(widgetDomain)s domeinuarekin eta zure integrazio kudeatzailearekin datuak partekatu daitezke.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Integrazio kudeatzaileek konfigurazio datuak jasotzen dituzte, eta trepetak aldatu ditzakete, gelara gonbidapenak bidali, eta botere mailak zure izenean ezarri.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Erabili integrazio kudeatzaile bat botak, trepetak eta eranskailu multzoak kudeatzeko.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Erabili <b>(%(serverName)s)</b> integrazio kudeatzailea botak, trepetak eta eranskailu multzoak kudeatzeko.",
-    "Identity server": "Identitate zerbitzaria",
     "Identity server (%(server)s)": "Identitate-zerbitzaria (%(server)s)",
     "Could not connect to identity server": "Ezin izan da identitate-zerbitzarira konektatu",
     "Not a valid identity server (status code %(code)s)": "Ez da identitate zerbitzari baliogarria (egoera-mezua %(code)s)",
@@ -1373,7 +1222,9 @@
         "unnamed_room": "Izen gabeko gela",
         "stickerpack": "Eranskailu-multzoa",
         "system_alerts": "Sistemaren alertak",
-        "cross_signing": "Zeharkako sinadura"
+        "cross_signing": "Zeharkako sinadura",
+        "identity_server": "Identitate zerbitzaria",
+        "integration_manager": "Integrazio-kudeatzailea"
     },
     "action": {
         "continue": "Jarraitu",
@@ -1456,7 +1307,11 @@
         "pinning": "Mezuak finkatzea",
         "state_counters": "Jarri kontagailu sinpleak gelaren goiburuan",
         "custom_themes": "Azal pertsonalizatuak gehitzea onartzen du",
-        "bridge_state": "Erakutsi zubiei buruzko informazioa gelaren ezarpenetan"
+        "bridge_state": "Erakutsi zubiei buruzko informazioa gelaren ezarpenetan",
+        "group_profile": "Profila",
+        "group_rooms": "Gelak",
+        "group_voip": "Ahotsa eta bideoa",
+        "group_encryption": "Zifratzea"
     },
     "keyboard": {
         "home": "Hasiera",
@@ -1499,7 +1354,8 @@
         "github_issue": "GitHub arazo-txostena",
         "before_submitting": "Egunkariak bidali aurretik, <a>GitHub arazo bat sortu</a> behar duzu gertatzen zaizuna azaltzeko.",
         "collecting_information": "Aplikazioaren bertsio-informazioa biltzen",
-        "collecting_logs": "Egunkariak biltzen"
+        "collecting_logs": "Egunkariak biltzen",
+        "create_new_issue": "<newIssueLink>Sortu txosten berri bat</newIssueLink> GitHub zerbitzarian arazo hau ikertu dezagun."
     },
     "time": {
         "few_seconds_ago": "duela segundo batzuk",
@@ -1545,7 +1401,22 @@
             "rule_call": "Dei gonbidapena",
             "rule_suppress_notices": "Botak bidalitako mezuak",
             "rule_tombstone": "Gelak eguneratzean",
-            "rule_encrypted_room_one_to_one": "Zifratutako mezuak bi pertsonen arteko txatetan"
+            "rule_encrypted_room_one_to_one": "Zifratutako mezuak bi pertsonen arteko txatetan",
+            "enable_desktop_notifications_session": "Gaitu mahaigaineko jakinarazpenak saio honentzat",
+            "show_message_desktop_notification": "Erakutsi mezua mahaigaineko jakinarazpenean",
+            "enable_audible_notifications_session": "Gaitu jakinarazpen entzungarriak saio honentzat"
+        },
+        "appearance": {
+            "match_system_theme": "Bat egin sistemako azalarekin",
+            "custom_font": "Erabili sistemako letra-tipoa",
+            "custom_font_name": "Sistemaren letra-tipoaren izena",
+            "custom_theme_invalid": "Baliogabeko azal eskema.",
+            "custom_theme_error_downloading": "Errorea azalaren informazioa deskargatzean.",
+            "custom_theme_success": "Azala gehituta!",
+            "custom_theme_url": "Azal pertsonalizatuaren URLa",
+            "custom_theme_add_button": "Gehitu azala",
+            "font_size": "Letra-tamaina",
+            "timeline_image_size_default": "Lehenetsia"
         }
     },
     "devtools": {
@@ -1592,7 +1463,15 @@
             "removed": "%(senderName)s erabiltzaileak gela honen helbide nagusia kendu du.",
             "changed_alternative": "%(senderName)s erabiltzaileak gela honen ordezko helbideak aldatu ditu.",
             "changed_main_and_alternative": "%(senderName)s erabiltzaileak gela honen helbide nagusia eta ordezko helbideak aldatu ditu.",
-            "changed": "%(senderName)s erabiltzaileak gela honen helbideak aldatu ditu."
+            "changed": "%(senderName)s erabiltzaileak gela honen helbideak aldatu ditu.",
+            "alt_added": {
+                "other": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak gehitu dizkio gela honi.",
+                "one": "%(senderName)s erabiltzaileak %(addresses)s helbideak gehitu dizkio gela honi."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s erabiltzaileak %(addresses)s helbideak kendu dizkio gela honi.",
+                "one": "%(senderName)s erabiltzaileak %(addresses)s ordezko helbideak kendu dizkio gela honi."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s erabiltzaileak %(targetDisplayName)s gelara elkartzeko gonbidapena errefusatu du.",
@@ -1625,6 +1504,120 @@
         },
         "m.call.hangup": {
             "dm": "Deia amaitu da"
+        },
+        "summary": {
+            "format": "%(nameList)s%(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s %(count)s aldiz elkartu dira",
+                "one": "%(severalUsers)s elkartu dira"
+            },
+            "joined": {
+                "other": "%(oneUser)s%(count)s aldiz elkartu da",
+                "one": "%(oneUser)s elkartu da"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s%(count)s aldiz atera dira",
+                "one": "%(severalUsers)s atera dira"
+            },
+            "left": {
+                "other": "%(oneUser)s%(count)s aldiz atera da",
+                "one": "%(oneUser)s atera da"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s elkartu eta atera dira %(count)s aldiz",
+                "one": "%(severalUsers)s elkartu eta atera dira"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s elkartu eta atera da %(count)s aldiz",
+                "one": "%(oneUser)s elkartu eta atera da"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s atera eta berriz elkartu dira %(count)s aldiz",
+                "one": "%(severalUsers)s atera eta berriz elkartu da"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s atera eta berriz elkartu da %(count)s aldiz",
+                "one": "%(oneUser)s atera eta berriz elkartu da"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s erabiltzaileek bere gonbidapenak ukatu dituzte %(count)s aldiz",
+                "one": "%(severalUsers)s erabiltzaileek bere gonbidapenak ukatu dituzte"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s erabiltzaileak bere gonbidapena ukatu du %(count)s aldiz",
+                "one": "%(oneUser)s erabiltzaileak bere gonbidapena ukatu du"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)s erabiltzaileei gonbidapena indargabetu zaie %(count)s aldiz",
+                "one": "%(severalUsers)s erabiltzaileei gonbidapena indargabetu zaie"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)s erabiltzaileari gonbidapena indargabetu zaio %(count)s aldiz",
+                "one": "%(oneUser)s erabiltzaileari gonbidapena indargabetu zaio"
+            },
+            "invited_multiple": {
+                "other": "%(count)s aldiz gonbidatuak izan dira",
+                "one": "gonbidatuak izan dira"
+            },
+            "invited": {
+                "other": "%(count)s aldiz gonbidatua izan da",
+                "one": "gonbidatua izan da"
+            },
+            "banned_multiple": {
+                "other": "%(count)s aldiz debekatuak izan dira",
+                "one": "debekatuak izan dira"
+            },
+            "banned": {
+                "one": "debekatua izan da",
+                "other": "%(count)s aldiz debekatuak izan dira"
+            },
+            "unbanned_multiple": {
+                "other": "%(count)s aldiz kendu zaie debekua",
+                "one": "debekua kendu zaie"
+            },
+            "unbanned": {
+                "other": "%(count)s aldiz kendu zaio debekua",
+                "one": "debekua kendu zaio"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s erabiltzaileek bere izena aldatu dute %(count)s aldiz",
+                "one": "%(severalUsers)s erabiltzaileek bere izena aldatu dute"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s erabiltzaileak bere izena aldatu du %(count)s aldiz",
+                "one": "%(oneUser)s erabiltzaileak bere izena aldatu du"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)s erabiltzaileek ez dute aldaketarik egin %(count)s aldiz",
+                "one": "%(severalUsers)s erabiltzaileek ez dute aldaketarik egin"
+            },
+            "no_change": {
+                "other": "%(oneUser)s erabiltzaileak ez du aldaketarik egin %(count)s aldiz",
+                "one": "%(oneUser)s erabiltzaileak ez du aldaketarik egin"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s erabiltzaileak botere mailaz aldatu du %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s %(fromPowerLevel)s mailatik %(toPowerLevel)s mailara"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen zituen araua kendu du",
+            "removed_rule_rooms": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen zituen araua kendu du",
+            "removed_rule_servers": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen zituen araua kendu du",
+            "removed_rule": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat kendu du",
+            "updated_invalid_rule": "%(senderName)s erabiltzaileak baliogabeko debeku arau bat eguneratu du",
+            "updated_rule_users": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
+            "updated_rule_rooms": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
+            "updated_rule_servers": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen dituen araua eguneratu du, arrazoia: %(reason)s",
+            "updated_rule": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat eguneratu du, arrazoia: %(reason)s",
+            "created_rule_users": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen erabiltzaileak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
+            "created_rule_rooms": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen gelak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
+            "created_rule_servers": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datozen zerbitzariak debekatzen dituen araua sortu du, arrazoia: %(reason)s",
+            "created_rule": "%(senderName)s erabiltzaileak %(glob)s adierazpenarekin bat datorren debeku arau bat sortu du, arrazoia: %(reason)s",
+            "changed_rule_users": "%(senderName)s erabiltzaileak erabiltzaileak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
+            "changed_rule_rooms": "%(senderName)s erabiltzaileak gelak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
+            "changed_rule_servers": "%(senderName)s erabiltzaileak zerbitzariak debekatzen dituen araua aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s",
+            "changed_rule_glob": "%(senderName)s erabiltzaileak debeku arau bat aldatu du %(oldGlob)s adierazpenetik %(newGlob)s adierazpenera, arrazoia: %(reason)s"
         }
     },
     "slash_command": {
@@ -1711,5 +1704,31 @@
             "ban": "Debekatu erabiltzaileak",
             "notifications.room": "Jakinarazi denei"
         }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "Ez datoz bat",
+            "sas_match": "Bat datoz",
+            "in_person": "Ziurtatzeko, egin hau aurrez aurre edo komunikabide seguru baten bidez.",
+            "other_party_cancelled": "Beste parteak egiaztaketa ezeztatu du.",
+            "complete_title": "Egiaztatuta!",
+            "complete_description": "Ongi egiaztatu duzu erabiltzaile hau.",
+            "qr_prompt": "Eskaneatu kode bakan hau",
+            "sas_prompt": "Konparatu emoji bakana",
+            "sas_description": "Konparatu emoji sorta bakana gailuek kamerarik ez badute"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Maiz erabilia",
+        "category_smileys_people": "Irribartxoak eta jendea",
+        "category_animals_nature": "Animaliak eta natura",
+        "category_food_drink": "Jana eta edana",
+        "category_activities": "Jarduerak",
+        "category_travel_places": "Bidaiak eta tokiak",
+        "category_objects": "Objektuak",
+        "category_symbols": "Ikurrak",
+        "category_flags": "Banderak",
+        "categories": "Kategoriak",
+        "quick_reactions": "Erreakzio azkarrak"
     }
 }

@@ -7,12 +7,12 @@ jobs:
         permissions:
             pull-requests: read
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - name: "Get modified files"
               id: changed_files
               if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'RiotTranslateBot' && github.event.pull_request.user.login != 't3chguy'
-              uses: tj-actions/changed-files@1c26215f3fbd51eba03bc199e5cbabdfc3584ce3 # v38
+              uses: tj-actions/changed-files@48566bbcc22ceb7c5809ebdd27377309f2c3de8c # v39
               with:
                   files: |
                       src/i18n/strings/*

@@ -245,7 +245,6 @@
     "Activity": "Gníomhaíocht",
     "Feedback": "Aiseolas",
     "Ok": "Togha",
-    "Categories": "Catagóire",
     "Autocomplete": "Uathiomlánaigh",
     "Calls": "Glaonna",
     "Navigation": "Nascleanúint",
@@ -257,10 +256,6 @@
     "Lock": "Glasáil",
     "Unencrypted": "Gan chriptiú",
     "None": "Níl aon cheann",
-    "Flags": "Bratacha",
-    "Symbols": "Siombailí",
-    "Objects": "Rudaí",
-    "Activities": "Gníomhaíochtaí",
     "Document": "Cáipéis",
     "Italics": "Iodálach",
     "Discovery": "Aimsiú",
@@ -279,18 +274,6 @@
     "Notes": "Nótaí",
     "expand": "méadaigh",
     "collapse": "cumaisc",
-    "%(oneUser)sleft %(count)s times": {
-        "one": "D'fhág %(oneUser)s"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "one": "D'fhág %(severalUsers)s"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "one": "Tháinig %(oneUser)s isteach"
-    },
-    "%(severalUsers)sjoined %(count)s times": {
-        "one": "Tháinig %(severalUsers)s isteach"
-    },
     "edited": "curtha in eagar",
     "Copied!": "Cóipeáilte!",
     "Yesterday": "Inné",
@@ -400,7 +383,6 @@
     "Lion": "Leon",
     "Cat": "Cat",
     "Dog": "Madra",
-    "Verified!": "Deimhnithe!",
     "Reason": "Cúis",
     "Moderator": "Modhnóir",
     "Restricted": "Teoranta",
@@ -533,7 +515,6 @@
     "Deops user with given id": "Bain an cumhacht oibritheora ó úsáideoir leis an ID áirithe",
     "Decrypt %(text)s": "Díchriptigh %(text)s",
     "Custom level": "Leibhéal saincheaptha",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "D'athraigh %(senderName)s an leibhéal cumhachta %(powerLevelDiffText)s.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Ní féidir ceangal leis an bhfreastalaí baile trí HTTP nuair a bhíonn URL HTTPS i mbarra do bhrabhsálaí. Bain úsáid as HTTPS nó <a> scripteanna neamhshábháilte a chumasú </a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Ní féidir ceangal leis an bhfreastalaí baile - seiceáil do nascacht le do thoil, déan cinnte go bhfuil muinín i dteastas <a>SSL do fhreastalaí baile</a>, agus nach bhfuil síneadh brabhsálaí ag cur bac ar iarratais.",
     "common": {
@@ -671,7 +652,12 @@
         "submit": "Cuir isteach"
     },
     "labs": {
-        "pinning": "Ceangal teachtaireachta"
+        "pinning": "Ceangal teachtaireachta",
+        "group_profile": "Próifíl",
+        "group_spaces": "Spásanna",
+        "group_widgets": "Giuirléidí",
+        "group_rooms": "Seomraí",
+        "group_encryption": "Criptiúchán"
     },
     "keyboard": {
         "home": "Tús",
@@ -702,6 +688,9 @@
         "always_show_message_timestamps": "Taispeáin stampaí ama teachtaireachta i gcónaí",
         "notifications": {
             "rule_call": "Nuair a fhaighim cuireadh glaoigh"
+        },
+        "appearance": {
+            "timeline_image_size_default": "Réamhshocrú"
         }
     },
     "devtools": {
@@ -722,6 +711,23 @@
         },
         "m.call.hangup": {
             "dm": "Críochnaíodh an glao"
+        },
+        "summary": {
+            "joined_multiple": {
+                "one": "Tháinig %(severalUsers)s isteach"
+            },
+            "joined": {
+                "one": "Tháinig %(oneUser)s isteach"
+            },
+            "left_multiple": {
+                "one": "D'fhág %(severalUsers)s"
+            },
+            "left": {
+                "one": "D'fhág %(oneUser)s"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "D'athraigh %(senderName)s an leibhéal cumhachta %(powerLevelDiffText)s."
         }
     },
     "slash_command": {
@@ -789,5 +795,17 @@
             "ban": "Toirmisc úsáideoirí",
             "notifications.room": "Tabhair fógraí do gach duine"
         }
+    },
+    "encryption": {
+        "verification": {
+            "complete_title": "Deimhnithe!"
+        }
+    },
+    "emoji": {
+        "category_activities": "Gníomhaíochtaí",
+        "category_objects": "Rudaí",
+        "category_symbols": "Siombailí",
+        "category_flags": "Bratacha",
+        "categories": "Catagóire"
     }
 }

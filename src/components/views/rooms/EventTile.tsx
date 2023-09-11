@@ -1003,7 +1003,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let avatar: JSX.Element | null = null;
         let sender: JSX.Element | null = null;
-        let avatarSize: string;
+        let avatarSize: string | null;
         let needsSenderProfile: boolean;
 
         if (isRenderingNotification) {
@@ -1021,7 +1021,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             avatarSize = "32px";
             needsSenderProfile = true;
         } else if (eventType === EventType.RoomCreate || isBubbleMessage) {
-            avatarSize = "0";
+            avatarSize = null;
             needsSenderProfile = false;
         } else if (this.props.layout == Layout.IRC) {
             avatarSize = "14px";
@@ -1032,14 +1032,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             ElementCall.CALL_EVENT_TYPE.matches(eventType)
         ) {
             // no avatar or sender profile for continuation messages and call tiles
-            avatarSize = "0";
+            avatarSize = null;
             needsSenderProfile = false;
         } else {
             avatarSize = "30px";
             needsSenderProfile = true;
         }
 
-        if (this.props.mxEvent.sender && avatarSize) {
+        if (this.props.mxEvent.sender && avatarSize !== null) {
             let member: RoomMember | null = null;
             // set member to receiver (target) if it is a 3PID invite
             // so that the correct avatar is shown as the text is

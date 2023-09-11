@@ -76,11 +76,9 @@
     "Dec": "Dez",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(day)s de %(monthName)s às %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s às %(time)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s alterou o nível de permissões de %(powerLevelDiffText)s.",
     "Failed to send request.": "Não foi possível mandar requisição.",
     "Failed to verify email address: make sure you clicked the link in the email": "Não foi possível verificar o endereço de email: verifique se você realmente clicou no link que está no seu email",
     "Failure to create room": "Não foi possível criar a sala",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s de %(fromPowerLevel)s para %(toPowerLevel)s",
     "Missing room_id in request": "Faltou o id da sala na requisição",
     "Missing user_id in request": "Faltou o id de usuário na requisição",
     "Power level must be positive integer.": "O nível de permissões tem que ser um número inteiro e positivo.",
@@ -731,6 +729,9 @@
             "rule_invite_for_me": "Quando sou convidado para uma sala",
             "rule_call": "Convite para chamada",
             "rule_suppress_notices": "Mensagens enviadas por bots"
+        },
+        "appearance": {
+            "timeline_image_size_default": "Padrão"
         }
     },
     "devtools": {
@@ -763,6 +764,10 @@
             "modified": "Widget %(widgetName)s modificado por %(senderName)s",
             "added": "Widget %(widgetName)s adicionado por %(senderName)s",
             "removed": "Widget %(widgetName)s removido por %(senderName)s"
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s alterou o nível de permissões de %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s de %(fromPowerLevel)s para %(toPowerLevel)s"
         }
     },
     "slash_command": {
@@ -810,5 +815,9 @@
     },
     "Messages": "Mensagens",
     "Other": "Outros",
-    "Advanced": "Avançado"
+    "Advanced": "Avançado",
+    "labs": {
+        "group_profile": "Perfil",
+        "group_rooms": "Salas"
+    }
 }
