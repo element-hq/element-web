@@ -45,10 +45,10 @@ import { placeCall } from "../../../utils/room/placeCall";
 import { useEncryptionStatus } from "../../../hooks/useEncryptionStatus";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import FacePile from "../elements/FacePile";
-import { setPhase } from "../../../utils/room/setPhase";
 import { useRoomState } from "../../../hooks/useRoomState";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { formatCount } from "../../../utils/FormattingUtils";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 
 /**
  * A helper to transform a notification color to the what the Compound Icon Button
@@ -107,7 +107,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
             gap="var(--cpd-space-3x)"
             className="mx_RoomHeader light-panel"
             onClick={() => {
-                setPhase(RightPanelPhases.RoomSummary);
+                RightPanelStore.instance.setPhase(RightPanelPhases.RoomSummary);
             }}
         >
             <RoomAvatar room={room} size="40px" />
@@ -195,7 +195,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                         indicator={notificationColorToIndicator(threadNotifications)}
                         onClick={(evt) => {
                             evt.stopPropagation();
-                            setPhase(RightPanelPhases.ThreadPanel);
+                            RightPanelStore.instance.setPhase(RightPanelPhases.ThreadPanel);
                         }}
                         title={_t("common|threads")}
                     >
@@ -207,7 +207,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                         indicator={notificationColorToIndicator(globalNotificationState.color)}
                         onClick={(evt) => {
                             evt.stopPropagation();
-                            setPhase(RightPanelPhases.NotificationPanel);
+                            RightPanelStore.instance.setPhase(RightPanelPhases.NotificationPanel);
                         }}
                         title={_t("Notifications")}
                     >
@@ -222,7 +222,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     weight="medium"
                     aria-label={_t("%(count)s members", { count: memberCount })}
                     onClick={(e: React.MouseEvent) => {
-                        setPhase(RightPanelPhases.RoomMemberList);
+                        RightPanelStore.instance.setPhase(RightPanelPhases.RoomMemberList);
                         e.stopPropagation();
                     }}
                 >

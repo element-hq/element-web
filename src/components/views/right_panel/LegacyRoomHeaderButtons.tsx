@@ -40,7 +40,6 @@ import { SummarizedNotificationState } from "../../../stores/notifications/Summa
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../../Unread";
-import { setPhase } from "../../../utils/room/setPhase";
 
 const ROOM_INFO_PHASES = [
     RightPanelPhases.RoomSummary,
@@ -210,27 +209,27 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
         const currentPhase = RightPanelStore.instance.currentCard.phase;
         if (currentPhase && ROOM_INFO_PHASES.includes(currentPhase)) {
             if (this.state.phase === currentPhase) {
-                setPhase(currentPhase);
+                RightPanelStore.instance.setPhase(currentPhase);
             } else {
-                setPhase(currentPhase, RightPanelStore.instance.currentCard.state);
+                RightPanelStore.instance.setPhase(currentPhase, RightPanelStore.instance.currentCard.state);
             }
         } else {
             // This toggles for us, if needed
-            setPhase(RightPanelPhases.RoomSummary);
+            RightPanelStore.instance.setPhase(RightPanelPhases.RoomSummary);
         }
     };
 
     private onNotificationsClicked = (): void => {
         // This toggles for us, if needed
-        setPhase(RightPanelPhases.NotificationPanel);
+        RightPanelStore.instance.setPhase(RightPanelPhases.NotificationPanel);
     };
 
     private onPinnedMessagesClicked = (): void => {
         // This toggles for us, if needed
-        setPhase(RightPanelPhases.PinnedMessages);
+        RightPanelStore.instance.setPhase(RightPanelPhases.PinnedMessages);
     };
     private onTimelineCardClicked = (): void => {
-        setPhase(RightPanelPhases.Timeline);
+        RightPanelStore.instance.setPhase(RightPanelPhases.Timeline);
     };
 
     private onThreadsPanelClicked = (ev: ButtonEvent): void => {

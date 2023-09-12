@@ -130,7 +130,6 @@ import { isNotUndefined } from "../../Typeguards";
 import { CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoinPayload";
 import { SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
-import { setPhase } from "../../utils/room/setPhase";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1268,14 +1267,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         ]);
                     }
                 } else {
-                    setPhase(RightPanelPhases.RoomMemberList);
+                    RightPanelStore.instance.setPhase(RightPanelPhases.RoomMemberList);
                 }
                 break;
             case "view_3pid_invite":
                 if (payload.event) {
-                    setPhase(RightPanelPhases.Room3pidMemberInfo, { memberInfoEvent: payload.event });
+                    RightPanelStore.instance.setPhase(RightPanelPhases.Room3pidMemberInfo, {
+                        memberInfoEvent: payload.event,
+                    });
                 } else {
-                    setPhase(RightPanelPhases.RoomMemberList);
+                    RightPanelStore.instance.setPhase(RightPanelPhases.RoomMemberList);
                 }
                 break;
         }
