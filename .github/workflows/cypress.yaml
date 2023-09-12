@@ -118,8 +118,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                # Naive segmentation of tests
-                segment: ["a-i", "j-p", "q-s", "t-z"]
+                # Run 4 instances in Parallel
+                runner: [1, 2, 3, 4]
         steps:
             - uses: browser-actions/setup-chrome@c485fa3bab6be59dce18dbc18ef6ab7cbc8ff5f1
             - run: echo "BROWSER_PATH=$(which chrome)" >> $GITHUB_ENV
@@ -172,11 +172,10 @@ jobs:
                   start: npx serve -p 8080 -L ../webapp
                   wait-on: "http://localhost:8080"
                   record: true
-                  parallel: false
+                  parallel: true
                   command-prefix: "yarn percy exec --parallel --"
                   config: '{"reporter":"cypress-multi-reporters", "reporterOptions": { "configFile": "cypress-ci-reporter-config.json" } }'
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}
-                  spec: cypress/e2e/[${{ matrix.segment }}]*/**
               env:
                   # pass the Dashboard record key as an environment variable
                   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
