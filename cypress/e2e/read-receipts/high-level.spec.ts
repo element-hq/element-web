@@ -103,6 +103,11 @@ describe("Read receipts", () => {
         });
     }
 
+    function backToThreadsList() {
+        cy.log("Back to threads list");
+        cy.get(".mx_RightPanel").findByTitle("Threads").click();
+    }
+
     /**
      * Find and display a message.
      *
@@ -389,11 +394,6 @@ describe("Read receipts", () => {
                 expect(parseInt($count.get(0).textContent, 10)).to.be.lessThan(lessThan),
             );
         });
-    }
-
-    function backToThreadsList() {
-        cy.log("Back to threads list");
-        cy.get(".mx_RightPanel").findByTitle("Threads").click();
     }
 
     function openThreadList() {
@@ -1000,6 +1000,7 @@ describe("Read receipts", () => {
                 goTo(room2);
                 openThread("Msg1");
                 assertRead(room2);
+                backToThreadsList();
                 goTo(room1);
 
                 // When a message inside it is edited
