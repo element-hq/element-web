@@ -1,13 +1,5 @@
-Changes in [3.80.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.80.0-rc.2) (2023-09-08)
-===============================================================================================================
-
-## 🐛 Bug Fixes
- * Fix vertical alignment of default avatar font ([\#11582](https://github.com/matrix-org/matrix-react-sdk/pull/11582)). Fixes vector-im/element-web#26081.
- * Fix avatars in public room & space search being flex shrunk ([\#11580](https://github.com/matrix-org/matrix-react-sdk/pull/11580)). Fixes vector-im/element-web#26133.
- * Fix EventTile avatars being rendered with a size of 0 instead of hidden ([\#11558](https://github.com/matrix-org/matrix-react-sdk/pull/11558)). Fixes vector-im/element-web#26075.
-
-Changes in [3.80.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.80.0-rc.1) (2023-09-05)
-===============================================================================================================
+Changes in [3.80.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.80.0) (2023-09-12)
+=====================================================================================================
 
 ## ✨ Features
  * Allow creating public knock rooms ([\#11481](https://github.com/matrix-org/matrix-react-sdk/pull/11481)). Contributed by @charlynguyen.
@@ -22,6 +14,9 @@ Changes in [3.80.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Change avatar to use Compound implementation ([\#11448](https://github.com/matrix-org/matrix-react-sdk/pull/11448)).
 
 ## 🐛 Bug Fixes
+ * Fix vertical alignment of default avatar font ([\#11582](https://github.com/matrix-org/matrix-react-sdk/pull/11582)). Fixes vector-im/element-web#26081.
+ * Fix avatars in public room & space search being flex shrunk ([\#11580](https://github.com/matrix-org/matrix-react-sdk/pull/11580)). Fixes vector-im/element-web#26133.
+ * Fix EventTile avatars being rendered with a size of 0 instead of hidden ([\#11558](https://github.com/matrix-org/matrix-react-sdk/pull/11558)). Fixes vector-im/element-web#26075.
  * Use RoomStateEvent.Update for knocks ([\#11516](https://github.com/matrix-org/matrix-react-sdk/pull/11516)). Contributed by @charlynguyen.
  * Prevent event propagation when clicking icon buttons ([\#11515](https://github.com/matrix-org/matrix-react-sdk/pull/11515)).
  * Only display RoomKnocksBar when feature flag is enabled ([\#11513](https://github.com/matrix-org/matrix-react-sdk/pull/11513)). Contributed by @andybalaam.
