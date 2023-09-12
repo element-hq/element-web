@@ -1267,16 +1267,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         ]);
                     }
                 } else {
-                    RightPanelStore.instance.setPhase(RightPanelPhases.RoomMemberList);
+                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
                 }
                 break;
             case "view_3pid_invite":
                 if (payload.event) {
-                    RightPanelStore.instance.setPhase(RightPanelPhases.Room3pidMemberInfo, {
+                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.Room3pidMemberInfo, {
                         memberInfoEvent: payload.event,
                     });
                 } else {
-                    RightPanelStore.instance.setPhase(RightPanelPhases.RoomMemberList);
+                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
                 }
                 break;
         }

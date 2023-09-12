@@ -107,7 +107,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
             gap="var(--cpd-space-3x)"
             className="mx_RoomHeader light-panel"
             onClick={() => {
-                RightPanelStore.instance.setPhase(RightPanelPhases.RoomSummary);
+                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
             }}
         >
             <RoomAvatar room={room} size="40px" />
@@ -195,7 +195,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                         indicator={notificationColorToIndicator(threadNotifications)}
                         onClick={(evt) => {
                             evt.stopPropagation();
-                            RightPanelStore.instance.setPhase(RightPanelPhases.ThreadPanel);
+                            RightPanelStore.instance.showOrHidePanel(RightPanelPhases.ThreadPanel);
                         }}
                         title={_t("common|threads")}
                     >
@@ -207,7 +207,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                         indicator={notificationColorToIndicator(globalNotificationState.color)}
                         onClick={(evt) => {
                             evt.stopPropagation();
-                            RightPanelStore.instance.setPhase(RightPanelPhases.NotificationPanel);
+                            RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
                         }}
                         title={_t("Notifications")}
                     >
@@ -222,7 +222,7 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                     weight="medium"
                     aria-label={_t("%(count)s members", { count: memberCount })}
                     onClick={(e: React.MouseEvent) => {
-                        RightPanelStore.instance.setPhase(RightPanelPhases.RoomMemberList);
+                        RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
                         e.stopPropagation();
                     }}
                 >
