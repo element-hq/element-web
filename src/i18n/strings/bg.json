@@ -405,7 +405,6 @@
     "Invalid identity server discovery response": "Невалиден отговор по време на откриването на конфигурацията за сървъра за самоличност",
     "General failure": "Обща грешка",
     "Failed to perform homeserver discovery": "Неуспешно откриване на конфигурацията за сървъра",
-    "Sign in with single sign-on": "Влезте посредством single-sign-on",
     "That matches!": "Това съвпада!",
     "That doesn't match.": "Това не съвпада.",
     "Go back to set it again.": "Върнете се за да настройте нова.",
@@ -749,9 +748,6 @@
     },
     "Remove recent messages": "Премахни скорошни съобщения",
     "Italics": "Наклонено",
-    "Please fill why you're reporting.": "Въведете защо докладвате.",
-    "Report Content to Your Homeserver Administrator": "Докладвай съдържание до администратора на сървъра",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Докладването на съобщението ще изпрати уникалният номер на събитието (event ID) до администратора на сървъра. Ако съобщенията в стаята са шифровани, администратора няма да може да прочете текста им или да види снимките или файловете.",
     "Explore rooms": "Открий стаи",
     "Verify the link in your inbox": "Потвърдете линка във вашата пощенска кутия",
     "Read Marker lifetime (ms)": "Живот на маркера за прочитане (мсек)",
@@ -774,15 +770,6 @@
     "Your email address hasn't been verified yet": "Имейл адресът ви все още не е потвърден",
     "Click the link in the email you received to verify and then click continue again.": "Кликнете на връзката получена по имейл за да потвърдите, а след това натиснете продължи отново.",
     "Room %(name)s": "Стая %(name)s",
-    "%(count)s unread messages including mentions.": {
-        "other": "%(count)s непрочетени съобщения, включително споменавания.",
-        "one": "1 непрочетено споменаване."
-    },
-    "%(count)s unread messages.": {
-        "other": "%(count)s непрочетени съобщения.",
-        "one": "1 непрочетено съобщение."
-    },
-    "Unread messages.": "Непрочетени съобщения.",
     "Failed to deactivate user": "Неуспешно деактивиране на потребител",
     "This client does not support end-to-end encryption.": "Този клиент не поддържа шифроване от край до край.",
     "Messages in this room are not end-to-end encrypted.": "Съобщенията в тази стая не са шифровани от край до край.",
@@ -893,7 +880,6 @@
     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Следните потребители не съществуват или са невалидни и не могат да бъдат поканени: %(csvNames)s",
     "Use Single Sign On to continue": "Използвайте Single Sign On за да продължите",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Потвърдете добавянето на този имейл адрес като потвърдите идентичността си чрез Single Sign On.",
-    "Single Sign On": "Single Sign On",
     "Confirm adding email": "Потвърдете добавянето на имейл",
     "Click the button below to confirm adding this email address.": "Кликнете бутона по-долу за да потвърдите добавянето на имейл адреса.",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Потвърдете добавянето на този телефонен номер като докажете идентичността си чрез използване на Single Sign On.",
@@ -928,7 +914,6 @@
     "Later": "По-късно",
     "Other users may not trust it": "Други потребители може да не се доверят",
     "This bridge was provisioned by <user />.": "Мостът е настроен от <user />.",
-    "Show less": "Покажи по-малко",
     "Your homeserver does not support cross-signing.": "Сървърът ви не поддържа кръстосано-подписване.",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Профилът ви има самоличност за кръстосано подписване в секретно складиране, но все още не е доверено от тази сесия.",
     "well formed": "коректен",
@@ -1051,7 +1036,6 @@
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Собствения размер на шрифта може да бъде единствено между %(min)s pt и %(max)s pt",
     "Use between %(min)s pt and %(max)s pt": "Изберете между %(min)s pt и %(max)s pt",
     "You've successfully verified your device!": "Успешно потвърдихте устройството си!",
-    "QR Code": "QR код",
     "To continue, use Single Sign On to prove your identity.": "За да продължите, използвайте Single Sign On за да потвърдите самоличността си.",
     "Confirm to continue": "Потвърдете за да продължите",
     "Click the button below to confirm your identity.": "Кликнете бутона по-долу за да потвърдите самоличността си.",
@@ -1147,18 +1131,10 @@
     "Toggle right panel": "Превключване на десния панел",
     "Cancel autocomplete": "Отказване на подсказките",
     "No recently visited rooms": "Няма наскоро-посетени стаи",
-    "Sort by": "Подреди по",
-    "Activity": "Активност",
-    "A-Z": "Азбучен ред",
-    "Show %(count)s more": {
-        "other": "Покажи още %(count)s",
-        "one": "Покажи още %(count)s"
-    },
     "Use custom size": "Използвай собствен размер",
     "Hey you. You're the best!": "Хей, ти. Върхът си!",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "Автентичността на това шифровано съобщение не може да бъде гарантирана на това устройство.",
     "Message preview": "Преглед на съобщението",
-    "List options": "Опции на списъка",
     "Room options": "Настройки на стаята",
     "Safeguard against losing access to encrypted messages & data": "Защитете се срещу загуба на достъп до криптирани съобшения и информация",
     "Set up Secure Backup": "Конфигуриране на Защитен Архив",
@@ -1234,9 +1210,6 @@
     },
     "Favourited": "В любими",
     "Forget Room": "Забрави стаята",
-    "Notification options": "Настройки за уведомление",
-    "Show previews of messages": "Показвай преглед на съобщенията",
-    "Show rooms with unread messages first": "Показвай стаи с непрочетени съобщения първи",
     "Explore public rooms": "Прегледай публични стаи",
     "Show Widgets": "Покажи приспособленията",
     "Hide Widgets": "Скрий приспособленията",
@@ -1663,7 +1636,8 @@
         "secure_backup": "Защитено резервно копие",
         "cross_signing": "Кръстосано-подписване",
         "identity_server": "Сървър за самоличност",
-        "integration_manager": "Мениджър на интеграции"
+        "integration_manager": "Мениджър на интеграции",
+        "qr_code": "QR код"
     },
     "action": {
         "continue": "Продължи",
@@ -1744,7 +1718,16 @@
         "send_report": "Изпрати доклад"
     },
     "a11y": {
-        "user_menu": "Потребителско меню"
+        "user_menu": "Потребителско меню",
+        "n_unread_messages_mentions": {
+            "other": "%(count)s непрочетени съобщения, включително споменавания.",
+            "one": "1 непрочетено споменаване."
+        },
+        "n_unread_messages": {
+            "other": "%(count)s непрочетени съобщения.",
+            "one": "1 непрочетено съобщение."
+        },
+        "unread_messages": "Непрочетени съобщения."
     },
     "labs": {
         "pinning": "Функция за закачане на съобщения",
@@ -2172,7 +2155,6 @@
         "unsupported": "Обажданията не се поддържат",
         "unsupported_browser": "Не можете да провеждате обаждания в този браузър."
     },
-    "Messages": "Съобщения",
     "Other": "Други",
     "Advanced": "Разширени",
     "room_settings": {
@@ -2228,5 +2210,31 @@
         "fireworks_message": "изпраща фойерверки",
         "snowfall_description": "Изпраща даденото съобщение със снеговалеж",
         "snowfall_message": "изпраща снеговалеж"
+    },
+    "auth": {
+        "sign_in_with_sso": "Влезте посредством single-sign-on",
+        "sso": "Single Sign On"
+    },
+    "export_chat": {
+        "messages": "Съобщения"
+    },
+    "room_list": {
+        "sort_unread_first": "Показвай стаи с непрочетени съобщения първи",
+        "show_previews": "Показвай преглед на съобщенията",
+        "sort_by": "Подреди по",
+        "sort_by_activity": "Активност",
+        "sort_by_alphabet": "Азбучен ред",
+        "sublist_options": "Опции на списъка",
+        "show_n_more": {
+            "other": "Покажи още %(count)s",
+            "one": "Покажи още %(count)s"
+        },
+        "show_less": "Покажи по-малко",
+        "notification_options": "Настройки за уведомление"
+    },
+    "report_content": {
+        "missing_reason": "Въведете защо докладвате.",
+        "report_content_to_homeserver": "Докладвай съдържание до администратора на сървъра",
+        "description": "Докладването на съобщението ще изпрати уникалният номер на събитието (event ID) до администратора на сървъра. Ако съобщенията в стаята са шифровани, администратора няма да може да прочете текста им или да види снимките или файловете."
     }
 }

@@ -41,7 +41,6 @@
     "This email address is already in use": "این آدرس ایمیل در حال حاضر در حال استفاده است",
     "This phone number is already in use": "این شماره تلفن در حال استفاده است",
     "Use Single Sign On to continue": "برای ادامه، از ورود یکپارچه استفاده کنید",
-    "Single Sign On": "ورود یکپارچه",
     "Confirm adding email": "تأیید افزودن رایانامه",
     "Add Email Address": "افزودن نشانی رایانامه",
     "Confirm adding phone number": "تأیید افزودن شماره تلفن",
@@ -506,7 +505,6 @@
     "The server has denied your request.": "سرور درخواست شما را رد کرده است.",
     "Use your Security Key to continue.": "برای ادامه از کلید امنیتی خود استفاده کنید.",
     "%(creator)s created and configured the room.": "%(creator)s اتاق را ایجاد و پیکربندی کرد.",
-    "Report Content to Your Homeserver Administrator": "گزارش محتوا به مدیر سرور خود",
     "Be found by phone or email": "از طریق تلفن یا ایمیل پیدا شوید",
     "Find others by phone or email": "دیگران را از طریق تلفن یا ایمیل پیدا کنید",
     "Sign out and remove encryption keys?": "خروج از حساب کاربری و حذف کلیدهای رمزنگاری؟",
@@ -522,7 +520,6 @@
     "a new cross-signing key signature": "یک کلید امضای متقابل جدید",
     "a new master key signature": "یک شاه‌کلید جدید",
     "Close dialog or context menu": "بستن پنجره یا منوی محتوا",
-    "Please fill why you're reporting.": "لطفا توضیح دهید که چرا گزارش می‌دهید.",
     "Password is allowed, but unsafe": "گذرواژه مجاز است ، اما ناامن است",
     "Upload files (%(current)s of %(total)s)": "بارگذاری فایل‌ها (%(current)s از %(total)s)",
     "Failed to decrypt %(failedCount)s sessions!": "رمزگشایی %(failedCount)s نشست موفقیت‌آمیز نبود!",
@@ -737,9 +734,7 @@
     "And %(count)s more...": {
         "other": "و %(count)s مورد بیشتر ..."
     },
-    "Sign in with single sign-on": "با احراز هویت یکپارچه وارد شوید",
     "This server does not support authentication with a phone number.": "این سرور از قابلیت احراز با شماره تلفن پشتیبانی نمی کند.",
-    "Continue with %(provider)s": "با %(provider)s ادامه دهید",
     "Continue with %(ssoButtons)s": "با %(ssoButtons)s ادامه بده",
     "Join millions for free on the largest public server": "به بزرگترین سرور عمومی با میلیون ها نفر کاربر بپیوندید",
     "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)s یا %(usernamePassword)s",
@@ -766,7 +761,6 @@
     "User Autocomplete": "تکمیل خودکار کاربر",
     "Enter a Security Phrase": "یک عبارت امنیتی وارد کنید",
     "Great! This Security Phrase looks strong enough.": "عالی! این عبارت امنیتی به اندازه کافی قوی به نظر می رسد.",
-    "QR Code": "کد QR",
     "Custom level": "سطح دلخواه",
     "Power level": "سطح قدرت",
     "That matches!": "مطابقت دارد!",
@@ -924,18 +918,8 @@
     "Room avatar": "آواتار اتاق",
     "Room Topic": "موضوع اتاق",
     "Room Name": "نام اتاق",
-    "Show %(count)s more": {
-        "other": "نمایش %(count)s مورد بیشتر",
-        "one": "نمایش %(count)s مورد بیشتر"
-    },
     "Jump to first invite.": "به اولین دعوت بروید.",
     "Jump to first unread room.": "به اولین اتاق خوانده نشده بروید.",
-    "List options": "لیست گزینه‌ها",
-    "A-Z": "حروف الفبا",
-    "Activity": "فعالیت",
-    "Sort by": "مرتب سازی بر اساس",
-    "Show previews of messages": "مشاهده پیش‌نمایش پیام‌ها",
-    "Show rooms with unread messages first": "ابتدا اتاق های با پیام خوانده نشده را نمایش بده",
     "%(roomName)s is not accessible at this time.": "در حال حاضر %(roomName)s قابل دسترسی نیست.",
     "%(roomName)s does not exist.": "%(roomName)s وجود ندارد.",
     "%(roomName)s can't be previewed. Do you want to join it?": "پیش بینی %(roomName)s امکان پذیر نیست. آیا می خواهید به آن بپیوندید؟",
@@ -966,8 +950,6 @@
     "Historical": "تاریخی",
     "Low priority": "اولویت کم",
     "Explore public rooms": "کاوش در اتاق‌های عمومی",
-    "You do not have permissions to add rooms to this space": "شما اجازه افزودن اتاق به این فضای کاری را ندارید",
-    "You do not have permissions to create new rooms in this space": "شما اجازه ایجاد اتاق جدید در این فضای کاری را ندارید",
     "Add room": "افزودن اتاق",
     "Rooms": "اتاق‌ها",
     "Open dial pad": "باز کردن صفحه شماره‌گیری",
@@ -1281,20 +1263,9 @@
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "این اتاق از نسخه اتاق <roomVersion /> استفاده می کند، که این سرور آن را به عنوان <i> ناپایدار</i> علامت گذاری کرده است.",
     "This room has already been upgraded.": "این اتاق قبلاً ارتقا یافته است.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "با ارتقا این اتاق نسخه فعلی اتاق خاموش شده و یک اتاق ارتقا یافته به همین نام ایجاد می شود.",
-    "Unread messages.": "پیام های خوانده نشده.",
-    "%(count)s unread messages.": {
-        "one": "۱ پیام خوانده نشده.",
-        "other": "%(count)s پیام خوانده نشده."
-    },
-    "%(count)s unread messages including mentions.": {
-        "one": "۱ اشاره خوانده نشده.",
-        "other": "%(count)s پیام‌های خوانده نشده از جمله اشاره‌ها."
-    },
     "Room options": "تنظیمات اتاق",
     "Favourited": "مورد علاقه",
     "Forget Room": "اتاق را فراموش کن",
-    "Notification options": "تنظیمات اعلان",
-    "Show less": "نمایش کمتر",
     "exists": "وجود دارد",
     "Homeserver feature support:": "قابلیت‌های پشتیبانی‌شده سمت سرور:",
     "User signing private key:": "کلید امضاء خصوصی کاربر:",
@@ -1591,8 +1562,6 @@
     "Something went wrong in confirming your identity. Cancel and try again.": "تائید هویت شما با مشکل مواجه شد. لطفا فرآیند را لغو کرده و مجددا اقدام نمائید.",
     "This room is public": "این اتاق عمومی است",
     "Avatar": "نمایه",
-    "Join the beta": "اضافه‌شدن به نسخه‌ی بتا",
-    "Leave the beta": "ترک نسخه‌ی بتا",
     "Move right": "به سمت راست ببر",
     "Move left": "به سمت چپ ببر",
     "Revoke permissions": "دسترسی‌ها را لغو کنید",
@@ -1798,7 +1767,6 @@
     "Create a new room with the same name, description and avatar": "یک اتاق جدید با همان نام ، توضیحات و نمایه ایجاد کنید",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "ارتقاء این اتاق نیازمند بستن نسخه‌ی فعلی و ساختن درجای یک اتاق جدید است. برای داشتن بهترین تجربه‌ی کاربری ممکن، ما:",
     "The room upgrade could not be completed": "متاسفانه فرآیند ارتقاء اتاق به پایان نرسید",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "گزارش این پیام شناسه‌ی منحصر به فرد رخداد آن را برای مدیر سرور ارسال می‌کند. اگر پیام‌های این اتاق رمزشده باشند، مدیر سرور شما امکان خواندن متن آن پیام یا مشاهده‌ی عکس یا فایل‌های دیگر را نخواهد داشت.",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "حواستان را جمع کنید، اگر ایمیلی اضافه نکرده و گذرواژه‌ی خود را فراموش کنید ، ممکن است <b>دسترسی به حساب کاربری خود را برای همیشه از دست دهید</b>.",
     "Doesn't look like a valid email address": "به نظر نمی‌رسد یک آدرس ایمیل معتبر باشد",
     "If they don't match, the security of your communication may be compromised.": "اگر آنها مطابقت نداشته‌باشند ، ممکن است امنیت ارتباطات شما به خطر افتاده باشد.",
@@ -2055,7 +2023,8 @@
         "secure_backup": "پشتیبان‌گیری امن",
         "cross_signing": "امضاء متقابل",
         "identity_server": "کارساز هویت",
-        "integration_manager": "مدیر یکپارچگی"
+        "integration_manager": "مدیر یکپارچگی",
+        "qr_code": "کد QR"
     },
     "action": {
         "continue": "ادامه",
@@ -2144,7 +2113,16 @@
         "send_report": "ارسال گزارش"
     },
     "a11y": {
-        "user_menu": "منوی کاربر"
+        "user_menu": "منوی کاربر",
+        "n_unread_messages_mentions": {
+            "one": "۱ اشاره خوانده نشده.",
+            "other": "%(count)s پیام‌های خوانده نشده از جمله اشاره‌ها."
+        },
+        "n_unread_messages": {
+            "one": "۱ پیام خوانده نشده.",
+            "other": "%(count)s پیام خوانده نشده."
+        },
+        "unread_messages": "پیام های خوانده نشده."
     },
     "labs": {
         "video_rooms": "اتاق های تصویری",
@@ -2166,7 +2144,9 @@
         "group_themes": "قالب ها",
         "group_encryption": "رمزنگاری",
         "group_experimental": "تجربی",
-        "group_developer": "توسعه دهنده"
+        "group_developer": "توسعه دهنده",
+        "leave_beta": "ترک نسخه‌ی بتا",
+        "join_beta": "اضافه‌شدن به نسخه‌ی بتا"
     },
     "keyboard": {
         "home": "خانه",
@@ -2345,7 +2325,8 @@
         "creator_summary": "%(creatorName)s این اتاق ساخته شده.",
         "topic": "عنوان: %(topic)s",
         "error_fetching_file": "خطا در واکشی فایل",
-        "file_attached": "فایل ضمیمه شد"
+        "file_attached": "فایل ضمیمه شد",
+        "messages": "پیام ها"
     },
     "create_room": {
         "title_public_room": "ساختن اتاق عمومی",
@@ -2682,7 +2663,6 @@
         "unsupported": "تماس ها پشتیبانی نمی شوند",
         "unsupported_browser": "شما نمیتوانید در این مرورگر تماس برقرار کنید."
     },
-    "Messages": "پیام ها",
     "Other": "دیگر",
     "Advanced": "پیشرفته",
     "room_settings": {
@@ -2746,5 +2726,33 @@
         "snowfall_message": "انیمیشن بارش برف را ارسال کن",
         "spaceinvaders_description": "پیام داده شده را به صورت مضمون فضای کاری ارسال می کند",
         "spaceinvaders_message": "ارسال مهاجمان فضایی"
+    },
+    "spaces": {
+        "error_no_permission_create_room": "شما اجازه ایجاد اتاق جدید در این فضای کاری را ندارید",
+        "error_no_permission_add_room": "شما اجازه افزودن اتاق به این فضای کاری را ندارید"
+    },
+    "auth": {
+        "continue_with_idp": "با %(provider)s ادامه دهید",
+        "sign_in_with_sso": "با احراز هویت یکپارچه وارد شوید",
+        "sso": "ورود یکپارچه"
+    },
+    "room_list": {
+        "sort_unread_first": "ابتدا اتاق های با پیام خوانده نشده را نمایش بده",
+        "show_previews": "مشاهده پیش‌نمایش پیام‌ها",
+        "sort_by": "مرتب سازی بر اساس",
+        "sort_by_activity": "فعالیت",
+        "sort_by_alphabet": "حروف الفبا",
+        "sublist_options": "لیست گزینه‌ها",
+        "show_n_more": {
+            "other": "نمایش %(count)s مورد بیشتر",
+            "one": "نمایش %(count)s مورد بیشتر"
+        },
+        "show_less": "نمایش کمتر",
+        "notification_options": "تنظیمات اعلان"
+    },
+    "report_content": {
+        "missing_reason": "لطفا توضیح دهید که چرا گزارش می‌دهید.",
+        "report_content_to_homeserver": "گزارش محتوا به مدیر سرور خود",
+        "description": "گزارش این پیام شناسه‌ی منحصر به فرد رخداد آن را برای مدیر سرور ارسال می‌کند. اگر پیام‌های این اتاق رمزشده باشند، مدیر سرور شما امکان خواندن متن آن پیام یا مشاهده‌ی عکس یا فایل‌های دیگر را نخواهد داشت."
     }
 }

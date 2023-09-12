@@ -313,7 +313,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
                 <ContextMenuTooltipButton
                     className={classes}
                     onClick={this.onNotificationsMenuOpenClick}
-                    title={_t("Notification options")}
+                    title={_t("room_list|notification_options")}
                     isExpanded={!!this.state.notificationsMenuPosition}
                     tabIndex={isActive ? 0 : -1}
                 />
@@ -433,17 +433,17 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
         } else if (this.notificationState.hasMentions) {
             ariaLabel +=
                 " " +
-                _t("%(count)s unread messages including mentions.", {
+                _t("a11y|n_unread_messages_mentions", {
                     count: this.notificationState.count,
                 });
         } else if (this.notificationState.hasUnreadCount) {
             ariaLabel +=
                 " " +
-                _t("%(count)s unread messages.", {
+                _t("a11y|n_unread_messages", {
                     count: this.notificationState.count,
                 });
         } else if (this.notificationState.isUnread) {
-            ariaLabel += " " + _t("Unread messages.");
+            ariaLabel += " " + _t("a11y|unread_messages");
         }
 
         let ariaDescribedBy: string;

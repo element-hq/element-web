@@ -7,7 +7,6 @@
     "Add Email Address": "ເພີ່ມອີເມວ",
     "Click the button below to confirm adding this email address.": "ກົດປຸ່ມຂ້າງລຸ່ມເພື່ອຢືນຢັນການເພີ່ມອີເມວນີ້.",
     "Confirm adding email": "ຢືນຢັນການເພີ່ມອີເມວ",
-    "Single Sign On": "ເຂົ້າລະບົບແບບປະຕູດຽວ (SSO)",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "ຢືນຢັນການເພີ່ມອີເມວນີ້ໂດຍໃຊ້ ແບບປະຕູດຍວ (SSO)ເພື່ອພິສູດຕົວຕົນຂອງທ່ານ.",
     "Use Single Sign On to continue": "ໃຊ້ການເຂົ້າສູ່ລະບົບແບບປະຕູດຽວ (SSO) ເພື່ອສືບຕໍ່",
     "This phone number is already in use": "ເບີໂທນີ້ຖືກໃຊ້ແລ້ວ",
@@ -628,9 +627,6 @@
     "No live locations": "ບໍ່ມີສະຖານທີ່ປັດຈູບັນ",
     "Live location error": "ສະຖານທີ່ປັດຈຸບັນຜິດພາດ",
     "Live location ended": "ສະຖານທີ່ປັດຈຸບັນສິ້ນສຸດລົງແລ້ວ",
-    "Join the beta": "ເຂົ້າຮ່ວມເບຕ້າ",
-    "Click for more info": "ກົດສຳລັບຂໍ້ມູນເພີ່ມເຕີມ",
-    "This is a beta feature": "ນີ້ແມ່ນຄຸນສົມບັດເບຕ້າ",
     "Move right": "ຍ້າຍໄປທາງຂວາ",
     "Move left": "ຍ້າຍໄປທາງຊ້າຍ",
     "Revoke permissions": "ຖອນການອະນຸຍາດ",
@@ -670,8 +666,6 @@
     "Join millions for free on the largest public server": "ເຂົ້າຮ່ວມຫຼາຍລ້ານຄົນໄດ້ໂດຍບໍ່ເສຍຄ່າໃນເຊີບເວີສາທາລະນະທີ່ໃຫຍ່ທີ່ສຸດ",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "ທ່ານສາມາດໃຊ້ຕົວເລືອກເຊີບເວີແບບກຳນົດເອງເພື່ອເຂົ້າສູ່ລະບົບເຊີບເວີ Matrix ອື່ນໂດຍການລະບຸ URL ເຊີບເວີອື່ນ. ນີ້ແມ່ນອະນຸຍາດໃຫ້ທ່ານໃຊ້ %(brand)s ກັບບັນຊີ Matrix ທີ່ມີຢູ່ແລ້ວໃນ homeserver ອື່ນ.",
     "Server Options": "ຕົວເລືອກເຊີບເວີ",
-    "Sign in with single sign-on": "ເຂົ້າສູ່ລະບົບດ້ວຍການລົງຊື່ເຂົ້າໃຊ້ພຽງຄັ້ງດຽວ",
-    "Continue with %(provider)s": "ສືບຕໍ່ກັບ %(provider)s",
     "Your server": "ເຊີບເວີຂອງທ່ານ",
     "Can't find this server or its room list": "ບໍ່ສາມາດຊອກຫາເຊີບເວີນີ້ ຫຼື ລາຍຊື່ຫ້ອງຂອງມັນໄດ້",
     "You are not allowed to view this server's rooms list": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເບິ່ງລາຍຊື່ຫ້ອງຂອງເຊີບເວີນີ້",
@@ -735,7 +729,6 @@
     "In reply to <a>this message</a>": "ໃນການຕອບກັບ <a>ຂໍ້ຄວາມນີ້</a>",
     "<a>In reply to</a> <pill>": "<a>ຕອບກັບ</a> <pill>",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "ບໍ່ສາມາດໂຫຼດກິດຈະກຳທີ່ຕອບກັບມາໄດ້, ມັນບໍ່ຢູ່ ຫຼື ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເບິ່ງມັນ.",
-    "QR Code": "ລະຫັດ QR",
     "Custom level": "ລະດັບທີ່ກໍາຫນົດເອງ",
     "Power level": "ລະດັບພະລັງງານ",
     "Results are only revealed when you end the poll": "ຜົນໄດ້ຮັບຈະຖືກເປີດເຜີຍເມື່ອທ່ານສິ້ນສຸດແບບສຳຫຼວດເທົ່ານັ້ນ",
@@ -1010,15 +1003,6 @@
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "ຫ້ອງນີ້ກຳລັງດຳເນິນເວີຊັ້ນຫ້ອງ <roomVersion />, ເຊິ່ງ homeserver ນີ້ໄດ້ສ້າງເຄື່ອງໝາຍເປັນ <i>unstable</i>.",
     "This room has already been upgraded.": "ຫ້ອງນີ້ໄດ້ຖືກປັບປຸງແລ້ວ.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "ການຍົກລະດັບຫ້ອງນີ້ຈະປິດຕົວຢ່າງປັດຈຸບັນຂອງຫ້ອງ ແລະ ຍົກລະດັບການສ້າງຫ້ອງທີ່ມີຊື່ດຽວກັນ.",
-    "Unread messages.": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
-    "%(count)s unread messages.": {
-        "one": "1 ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
-        "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ."
-    },
-    "%(count)s unread messages including mentions.": {
-        "one": "ການກ່າວເຖິງທີ່ຍັງບໍ່ໄດ້ອ່ານ 1.",
-        "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ ລວມທັງການກ່າວເຖິງ."
-    },
     "%(count)s participants": {
         "one": "ຜູ້ເຂົ້າຮ່ວມ 1ຄົນ",
         "other": "ຜູ້ເຂົ້າຮ່ວມ %(count)s ຄົນ"
@@ -1028,18 +1012,6 @@
     "Favourite": "ສິ່ງທີ່ມັກ",
     "Favourited": "ສີ່ງທີ່ມັກ",
     "Forget Room": "ລືມຫ້ອງ",
-    "Notification options": "ຕົວເລືອກການແຈ້ງເຕືອນ",
-    "Show less": "ສະແດງໜ້ອຍລົງ",
-    "Show %(count)s more": {
-        "one": "ສະແດງ %(count)s ເພີ່ມເຕີມ",
-        "other": "ສະແດງ %(count)s ເພີ່ມເຕີມ"
-    },
-    "List options": "ລາຍຊື່ຕົວເລືອກ",
-    "A-Z": "A-Z",
-    "Activity": "ກິດຈະກໍາ",
-    "Sort by": "ຈັດຮຽງຕາມ",
-    "Show previews of messages": "ສະແດງຕົວຢ່າງຂອງຂໍ້ຄວາມ",
-    "Show rooms with unread messages first": "ສະແດງຫ້ອງຂໍ້ຄວາມທີ່ຍັງບໍ່ທັນໄດ້ອ່ານກ່ອນ",
     "%(errcode)s was returned while trying to access the room or space. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "%(errcode)s ຖືກສົ່ງຄືນໃນຂະນະທີ່ພະຍາຍາມເຂົ້າເຖິງຫ້ອງ ຫຼື ພື້ນທີ່. ຖ້າຫາກທ່ານຄິດວ່າທ່ານກໍາລັງເຫັນຂໍ້ຄວາມນີ້ຜິດພາດ, ກະລຸນາ <issueLink>ສົ່ງບົດລາຍງານ bug</issueLink>.",
     "Try again later, or ask a room or space admin to check if you have access.": "ລອງໃໝ່ໃນພາຍຫຼັງ, ຫຼື ຂໍໃຫ້ຜູ້ຄຸ້ມຄອງຫ້ອງ ຫຼື ຜູ້ຄຸ້ມຄອງພື້ນທີ່ກວດເບິ່ງວ່າທ່ານມີການເຂົ້າເຖິງ ຫຼື ບໍ່.",
     "Force complete": "ບັງຄັບໃຫ້ສໍາເລັດ",
@@ -1596,7 +1568,6 @@
     "Your display name": "ສະແດງຊື່ຂອງທ່ານ",
     "Any of the following data may be shared:": "ຂໍ້ມູນຕໍ່ໄປນີ້ອາດຈະຖືກແບ່ງປັນ:",
     "Cancel search": "ຍົກເລີກການຄົ້ນຫາ",
-    "The export was cancelled successfully": "ຍົກເລີກການສົ່ງອອກສຳເລັດແລ້ວ",
     "MB": "ເມກາໄບ",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການສິ້ນສຸດການສຳຫຼວດນີ້? ນີ້ຈະສະແດງຜົນສຸດທ້າຍຂອງການລົງຄະແນນສຽງ ແລະ ຢຸດບໍ່ໃຫ້ປະຊາຊົນສາມາດລົງຄະແນນສຽງໄດ້.",
     "End Poll": "ສິ້ນສຸດການສຳຫຼວດ",
@@ -1646,20 +1617,6 @@
     "Please enter a name for the room": "ກະລຸນາໃສ່ຊື່ຫ້ອງ",
     "Clear all data": "ລຶບລ້າງຂໍ້ມູນທັງໝົດ",
     "Feedback sent": "ສົ່ງຄຳຕິຊົມແລ້ວ",
-    "Include Attachments": "ລວມເອົາໄຟລ໌ຄັດຕິດ",
-    "Size Limit": "ຂະໜາດຈຳກັດ",
-    "Format": "ຮູບແບບ",
-    "Select from the options below to export chats from your timeline": "ເລືອກ ຕົວເລືອກຂ້າງລຸ່ມນີ້ເພື່ອສົ່ງອອກການສົນທະນາຈາກທາມລາຍຂອງທ່ານ",
-    "Export Chat": "ສົ່ງອອກການສົນທະນາ",
-    "Exporting your data": "ກຳລັງສົ່ງອອກຂໍ້ມູນຂອງທ່ານ",
-    "Are you sure you want to stop exporting your data? If you do, you'll need to start over.": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຢຸດການສົ່ງອອກຂໍ້ມູນຂອງທ່ານ? ຖ້າທ່ານດຳເນິນການ, ທ່ານຈະຕ້ອງເລີ່ມຕົ້ນໃໝ່.",
-    "Your export was successful. Find it in your Downloads folder.": "ການສົ່ງອອກຂອງທ່ານສຳເລັດແລ້ວ. ຊອກຫາຢູ່ໃນໂຟນເດີການດາວໂຫຼດຂອງທ່ານ.",
-    "Export Successful": "ສົ່ງອອກສຳເລັດ",
-    "Export Cancelled": "ຍົກເລີກການສົ່ງອອກ",
-    "Number of messages": "ຈໍານວນຂໍ້ຄວາມ",
-    "Number of messages can only be a number between %(min)s and %(max)s": "ຈໍານວນຂໍ້ຄວາມສາມາດເປັນຕົວເລກລະຫວ່າງ %(min)s ແລະ %(max)s ເທົ່ານັ້ນ",
-    "Size can only be a number between %(min)s MB and %(max)s MB": "ຂະໜາດສາມາດເປັນຕົວເລກລະຫວ່າງ %(min)s MB ແລະ %(max)s MB ເທົ່ານັ້ນ",
-    "Enter a number between %(min)s and %(max)s": "ໃສ່ຕົວເລກລະຫວ່າງ %(min)s ແລະ %(max)s",
     "An error has occurred.": "ໄດ້ເກີດຂໍ້ຜິດພາດ.",
     "Sorry, the poll did not end. Please try again.": "ຂໍອະໄພ,ບໍ່ສາມາດສິ້ນສຸດການສຳຫຼວດ. ກະລຸນາລອງອີກຄັ້ງ.",
     "Failed to end poll": "ບໍ່ສາມາດສີ່ນສູດການສຳຫຼວດ",
@@ -1688,7 +1645,6 @@
     "Use a more compact 'Modern' layout": "ໃຊ້ຮູບແບບ 'ທັນສະໄຫມ' ທີ່ກະທັດຮັດກວ່າ",
     "Show polls button": "ສະແດງປຸ່ມແບບສຳຫຼວດ",
     "Use custom size": "ໃຊ້ຂະຫນາດທີ່ກໍາຫນົດເອງ",
-    "Leave the beta": "ອອກຈາກເບຕ້າ",
     "Reply in thread": "ຕອບໃນກະທູ້",
     "Developer": "ນັກພັດທະນາ",
     "Experimental": "ທົດລອງ",
@@ -1924,12 +1880,6 @@
     "See emotes posted to your active room": "ເບິ່ງໂພສ emotes ໃນຫ້ອງຂອງທ່ານ",
     "See emotes posted to this room": "ເບິ່ງໂພສ emotes ໃນຫ້ອງນີ້",
     "Send emotes as you in your active room": "ສົ່ງ emotes ໃນຂະນະທີ່ທ່ານຢູ່ໃນຫ້ອງຂອງທ່ານ",
-    "Any other reason. Please describe the problem.\nThis will be reported to the room moderators.": "ເຫດຜົນອື່ນໆ. ກະລຸນາອະທິບາຍບັນຫາ.\nອັນນີ້ຈະຖືກລາຍງານໃຫ້ຜູ້ຄວບຄຸມຫ້ອງ.",
-    "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s. The administrators will NOT be able to read the encrypted content of this room.": "ຫ້ອງນີ້ສ້າງຂຶ້ນເພື່ອເນື້ອຫາທີ່ຜິດກົດຫມາຍ ຫຼື ບໍ່ເໝາະສົມ ຫຼື ຜູ້ຄວບຄຸມບໍ່ສາມາດຄຸ້ມຄອງເນື້ອຫາທີ່ຜິດກົດຫມາຍຫຼື ບໍ່ເໝາະສົມ.\nອັນນີ້ຈະຖືກລາຍງານໃຫ້ຜູ້ບໍລິຫານຂອງ %(homeserver)s. ຜູ້ຄຸ້ມຄອງລະບົບຈະບໍ່ສາມາດອ່ານເນື້ອຫາທີ່ເຂົ້າລະຫັດໄວ້ຂອງຫ້ອງນີ້ໄດ້.",
-    "This user is spamming the room with ads, links to ads or to propaganda.\nThis will be reported to the room moderators.": "ຜູ້ໃຊ້ນີ້ແມ່ນ spamming ຫ້ອງທີ່ມີການໂຄສະນາ, ການເຊື່ອມຕໍ່ກັບການໂຄສະນາ ຫຼື ການເຜີຍແຜ່.\nສິ່ງນີ້ຈະຖືກລາຍງານໃຫ້ຜູ້ຄວບຄຸມຫ້ອງ.",
-    "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.": "ຜູ້ໃຊ້ນີ້ກຳລັງສະແດງພຶດຕິກຳທີ່ຜິດກົດໝາຍ, ດ້ວຍການໃສ່ຮ້າຍປ້າຍສີ ຫຼືຂົ່ມຂູ່ຄວາມຮຸນແຮງ.\nອັນນີ້ຈະຖືກລາຍງານຕໍ່ຜູ້ຄວບຄຸມຫ້ອງ ອາດຈະສົ່ງເລື່ອງຕໍ່ໃຫ້ເຈົ້າໜ້າທີ່ທາງກົດໝາຍ.",
-    "What this user is writing is wrong.\nThis will be reported to the room moderators.": "ສິ່ງທີ່ຜູ້ໃຊ້ນີ້ຂຽນແມ່ນຜິດພາດ.\nສິ່ງນີ້ຈະຖືກລາຍງານໃຫ້ຜູ້ຄວບຄຸມຫ້ອງ.",
-    "Please fill why you're reporting.": "ກະລຸນາຕື່ມຂໍ້ມູນວ່າເປັນຫຍັງທ່ານກໍາລັງລາຍງານ.",
     "Email (optional)": "ອີເມວ (ທາງເລືອກ)",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "ກະລຸນາຮັບຊາບວ່າ, ຖ້າທ່ານບໍ່ເພີ່ມອີເມວ ແລະ ລືມລະຫັດຜ່ານຂອງທ່ານ, ທ່ານອາດ <b>ສູນເສຍການເຂົ້າເຖິງບັນຊີຂອງທ່ານຢ່າງຖາວອນ</b>.",
     "Confirm logging out these devices by using Single Sign On to prove your identity.": {
@@ -1948,15 +1898,10 @@
     "Low priority": "ບູລິມະສິດຕໍ່າ",
     "Add room": "ເພີ່ມຫ້ອງ",
     "Explore public rooms": "ສຳຫຼວດຫ້ອງສາທາລະນະ",
-    "You do not have permissions to add rooms to this space": "ທ່ານບໍ່ມີສິດໃນການເພີ່ມຫ້ອງໃສ່ພື້ນທີ່ນີ້",
     "Add existing room": "ເພີ່ມຫ້ອງທີ່ມີຢູ່",
     "New video room": "ຫ້ອງວິດີໂອໃຫມ່",
-    "You do not have permissions to create new rooms in this space": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ສ້າງຫ້ອງໃຫມ່ໃນພື້ນທີ່ນີ້",
     "New room": "ຫ້ອງໃຫມ່",
     "Explore rooms": "ການສຳຫຼວດຫ້ອງ",
-    "Illegal Content": "ເນື້ອຫາທີ່ຜິດຕໍ່ກົດໝາຍ",
-    "Toxic Behaviour": "ພຶດຕິກຳທີ່ບໍ່ເປັນມິດ",
-    "Disagree": "ບໍ່ເຫັນດີ",
     "Connecting": "ກຳລັງເຊື່ອມຕໍ່",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s%(day)s%(fullYear)s%(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
@@ -2071,7 +2016,6 @@
         "other": "ປະຈຸບັນກຳລັງເຂົ້າຮ່ວມ %(count)s ຫ້ອງ"
     },
     "Join public room": "ເຂົ້າຮ່ວມຫ້ອງສາທາລະນະ",
-    "You do not have permissions to add spaces to this space": "ທ່ານບໍ່ມີການອະນຸຍາດໃຫ້ເພີ່ມພື້ນທີ່ໃສ່ພື້ນທີ່ນີ້",
     "Add space": "ເພີ່ມພື້ນທີ່",
     "Don't leave any rooms": "ຢ່າອອກຈາກຫ້ອງ",
     "Would you like to leave the rooms in this space?": "ທ່ານຕ້ອງການອອກຈາກຫ້ອງໃນພື້ນທີ່ນີ້ບໍ?",
@@ -2348,10 +2292,6 @@
     "Preparing to download logs": "ກຳລັງກະກຽມດາວໂຫຼດບັນທຶກ",
     "Failed to send logs: ": "ສົ່ງບັນທຶກບໍ່ສຳເລັດ: ",
     "Room Settings - %(roomName)s": "ການຕັ້ງຄ່າຫ້ອງ - %(roomName)s",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "ການລາຍງານຂໍ້ຄວາມນີ້ຈະສົ່ງ 'ID ເຫດການ' ທີ່ບໍ່ຊໍ້າກັນໄປຫາຜູ້ຄຸ້ມຄອງລະບົບເຊີບເວີຂອງທ່ານ. ຖ້າຂໍ້ຄວາມຢູ່ໃນຫ້ອງນີ້ຖືກເຂົ້າລະຫັດໄວ້, ຜູ້ຄຸ້ມຄອງລະບົບເຊີບເວີຂອງທ່ານຈະບໍ່ສາມາດອ່ານຂໍ້ຄວາມ ຫຼືເບິ່ງໄຟລ໌ ຫຼືຮູບພາບຕ່າງໆໄດ້.",
-    "Report Content to Your Homeserver Administrator": "ລາຍງານເນື້ອຫາໃຫ້ຜູ້ຄຸ້ມຄອງລະບົບ Homeserver ຂອງທ່ານ",
-    "Report the entire room": "ລາຍງານຫ້ອງທັງໝົດ",
-    "Spam or propaganda": "ຂໍ້ຄວາມຂີ້ເຫຍື້ອ ຫຼື ການໂຄສະນາເຜີຍແຜ່",
     "Close preview": "ປິດຕົວຢ່າງ",
     "Show %(count)s other previews": {
         "one": "ສະແດງຕົວຢ່າງ %(count)s ອື່ນໆ",
@@ -2390,13 +2330,11 @@
     "Invited": "ເຊີນ",
     "Start new chat": "ເລີ່ມການສົນທະນາໃໝ່",
     "Add people": "ເພີ່ມຄົນ",
-    "You do not have permissions to invite people to this space": "ທ່ານບໍ່ມີສິດທີ່ຈະເຊີນຄົນເຂົ້າມາໃນພື້ນທີ່ນີ້",
     "Invite to space": "ເຊີນໄປຍັງພື້ນທີ່",
     "a key signature": "ລາຍເຊັນຫຼັກ",
     "a device cross-signing signature": "ການ cross-signing ອຸປະກອນ",
     "a new cross-signing key signature": "ການລົງລາຍເຊັນ cross-signing ແບບໃໝ່",
     "Thank you!": "ຂອບໃຈ!",
-    "Please pick a nature and describe what makes this message abusive.": "ກະລຸນາເລືອກລັກສະນະ ແລະ ການອະທິບາຍຂອງຂໍ້ຄວາມໃດໜຶ່ງທີ່ສຸພາບ.",
     "Link to room": "ເຊື່ອມຕໍ່ທີ່ຫ້ອງ",
     "Link to selected message": "ເຊື່ອມຕໍ່ກັບຂໍ້ຄວາມທີ່ເລືອກ",
     "Share Room Message": "ແບ່ງປັນຂໍ້ຄວາມໃນຫ້ອງ",
@@ -2482,8 +2420,6 @@
     "Check your email to continue": "ກວດເມວຂອງທ່ານເພື່ອສືບຕໍ່",
     "An error occurred whilst sharing your live location, please try again": "ພົບບັນຫາຕອນກຳລັງແບ່ງປັນຈຸດພິກັດຂອງທ່ານ, ກະລຸນາລອງໃໝ່",
     "An error occurred whilst sharing your live location": "ພົບບັນຫາຕອນກຳລັງແບ່ງປັນຈຸດພິກັດຂອງທ່ານ",
-    "Check if you want to hide all current and future messages from this user.": "ກວດຄືນຫາກວ່ທ່ານຕ້ອງການເຊື່ອງການສົນທະນາກັບຜູ້ໃຊ້ນີ້ດຽວນີ້ ຫຼືໃນອະນາຄົດ.",
-    "Ignore user": "ລະເວັ້ນຜູ້ໃຊ້",
     "Click to read topic": "ກົດເພື່ອອ່ານຫົວຂໍ້",
     "Edit topic": "ແກ້ໄຂຫົວຂໍ້",
     "Joining…": "ກຳລັງເຂົ້າ…",
@@ -2568,7 +2504,8 @@
         "secure_backup": "ການສໍາຮອງທີ່ປອດໄພ",
         "cross_signing": "ການເຂົ້າລະຫັດແບບໄຂ້ວ",
         "identity_server": "ຕົວເຊີບເວີ",
-        "integration_manager": "ຜູ້ຈັດການປະສົມປະສານ"
+        "integration_manager": "ຜູ້ຈັດການປະສົມປະສານ",
+        "qr_code": "ລະຫັດ QR"
     },
     "action": {
         "continue": "ສືບຕໍ່",
@@ -2665,7 +2602,16 @@
         "clear": "ຈະແຈ້ງ"
     },
     "a11y": {
-        "user_menu": "ເມນູຜູ້ໃຊ້"
+        "user_menu": "ເມນູຜູ້ໃຊ້",
+        "n_unread_messages_mentions": {
+            "one": "ການກ່າວເຖິງທີ່ຍັງບໍ່ໄດ້ອ່ານ 1.",
+            "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ ລວມທັງການກ່າວເຖິງ."
+        },
+        "n_unread_messages": {
+            "one": "1 ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
+            "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ."
+        },
+        "unread_messages": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ."
     },
     "labs": {
         "msc3531_hide_messages_pending_moderation": "ໃຫ້ຜູ້ຄວບຄຸມການເຊື່ອງຂໍ້ຄວາມທີ່ລໍຖ້າການກັ່ນຕອງ.",
@@ -2687,7 +2633,11 @@
         "group_themes": "ຫົວຂໍ້",
         "group_encryption": "ການເຂົ້າລະຫັດ",
         "group_experimental": "ທົດລອງ",
-        "group_developer": "ນັກພັດທະນາ"
+        "group_developer": "ນັກພັດທະນາ",
+        "beta_feature": "ນີ້ແມ່ນຄຸນສົມບັດເບຕ້າ",
+        "click_for_info": "ກົດສຳລັບຂໍ້ມູນເພີ່ມເຕີມ",
+        "leave_beta": "ອອກຈາກເບຕ້າ",
+        "join_beta": "ເຂົ້າຮ່ວມເບຕ້າ"
     },
     "keyboard": {
         "home": "ໜ້າຫຼັກ",
@@ -2944,7 +2894,23 @@
         "export_info": "ນີ້ແມ່ນຈຸດເລີ່ມຕົ້ນຂອງການສົ່ງອອກຂອງ <roomName/>. ສົ່ງອອກໂດຍ <exporterDetails/> ທີ່ %(exportDate)s.",
         "topic": "ຫົວຂໍ້: %(topic)s",
         "error_fetching_file": "ເກີດຄວາມຜິດພາດໃນການດຶງໄຟລ໌",
-        "file_attached": "ແນບໄຟລ໌"
+        "file_attached": "ແນບໄຟລ໌",
+        "enter_number_between_min_max": "ໃສ່ຕົວເລກລະຫວ່າງ %(min)s ແລະ %(max)s",
+        "size_limit_min_max": "ຂະໜາດສາມາດເປັນຕົວເລກລະຫວ່າງ %(min)s MB ແລະ %(max)s MB ເທົ່ານັ້ນ",
+        "num_messages_min_max": "ຈໍານວນຂໍ້ຄວາມສາມາດເປັນຕົວເລກລະຫວ່າງ %(min)s ແລະ %(max)s ເທົ່ານັ້ນ",
+        "num_messages": "ຈໍານວນຂໍ້ຄວາມ",
+        "cancelled": "ຍົກເລີກການສົ່ງອອກ",
+        "cancelled_detail": "ຍົກເລີກການສົ່ງອອກສຳເລັດແລ້ວ",
+        "successful": "ສົ່ງອອກສຳເລັດ",
+        "successful_detail": "ການສົ່ງອອກຂອງທ່ານສຳເລັດແລ້ວ. ຊອກຫາຢູ່ໃນໂຟນເດີການດາວໂຫຼດຂອງທ່ານ.",
+        "confirm_stop": "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຢຸດການສົ່ງອອກຂໍ້ມູນຂອງທ່ານ? ຖ້າທ່ານດຳເນິນການ, ທ່ານຈະຕ້ອງເລີ່ມຕົ້ນໃໝ່.",
+        "exporting_your_data": "ກຳລັງສົ່ງອອກຂໍ້ມູນຂອງທ່ານ",
+        "title": "ສົ່ງອອກການສົນທະນາ",
+        "select_option": "ເລືອກ ຕົວເລືອກຂ້າງລຸ່ມນີ້ເພື່ອສົ່ງອອກການສົນທະນາຈາກທາມລາຍຂອງທ່ານ",
+        "format": "ຮູບແບບ",
+        "messages": "ຂໍ້ຄວາມ",
+        "size_limit": "ຂະໜາດຈຳກັດ",
+        "include_attachments": "ລວມເອົາໄຟລ໌ຄັດຕິດ"
     },
     "create_room": {
         "title_video_room": "ສ້າງຫ້ອງວິດີໂອ",
@@ -3335,7 +3301,6 @@
         "unsupported": "ບໍ່ຮອງຮັບການໂທ",
         "unsupported_browser": "ທ່ານບໍ່ສາມາດໂທອອກໃນບຣາວເຊີນີ້ໄດ້."
     },
-    "Messages": "ຂໍ້ຄວາມ",
     "Other": "ອື່ນໆ",
     "Advanced": "ຂັ້ນສູງ",
     "room_settings": {
@@ -3419,5 +3384,48 @@
         "spaceinvaders_message": "ສົ່ງຜູ້ຮຸກຮານພື້ນທີ່",
         "hearts_description": "ສົ່ງຂໍ້ຄວາມທີ່ກຳນົດ ດ້ວຍຮູບຫົວໃຈ",
         "hearts_message": "ສົ່ງຮູບຫົວໃຈ"
+    },
+    "spaces": {
+        "error_no_permission_invite": "ທ່ານບໍ່ມີສິດທີ່ຈະເຊີນຄົນເຂົ້າມາໃນພື້ນທີ່ນີ້",
+        "error_no_permission_create_room": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ສ້າງຫ້ອງໃຫມ່ໃນພື້ນທີ່ນີ້",
+        "error_no_permission_add_room": "ທ່ານບໍ່ມີສິດໃນການເພີ່ມຫ້ອງໃສ່ພື້ນທີ່ນີ້",
+        "error_no_permission_add_space": "ທ່ານບໍ່ມີການອະນຸຍາດໃຫ້ເພີ່ມພື້ນທີ່ໃສ່ພື້ນທີ່ນີ້"
+    },
+    "auth": {
+        "continue_with_idp": "ສືບຕໍ່ກັບ %(provider)s",
+        "sign_in_with_sso": "ເຂົ້າສູ່ລະບົບດ້ວຍການລົງຊື່ເຂົ້າໃຊ້ພຽງຄັ້ງດຽວ",
+        "sso": "ເຂົ້າລະບົບແບບປະຕູດຽວ (SSO)"
+    },
+    "room_list": {
+        "sort_unread_first": "ສະແດງຫ້ອງຂໍ້ຄວາມທີ່ຍັງບໍ່ທັນໄດ້ອ່ານກ່ອນ",
+        "show_previews": "ສະແດງຕົວຢ່າງຂອງຂໍ້ຄວາມ",
+        "sort_by": "ຈັດຮຽງຕາມ",
+        "sort_by_activity": "ກິດຈະກໍາ",
+        "sort_by_alphabet": "A-Z",
+        "sublist_options": "ລາຍຊື່ຕົວເລືອກ",
+        "show_n_more": {
+            "one": "ສະແດງ %(count)s ເພີ່ມເຕີມ",
+            "other": "ສະແດງ %(count)s ເພີ່ມເຕີມ"
+        },
+        "show_less": "ສະແດງໜ້ອຍລົງ",
+        "notification_options": "ຕົວເລືອກການແຈ້ງເຕືອນ"
+    },
+    "report_content": {
+        "missing_reason": "ກະລຸນາຕື່ມຂໍ້ມູນວ່າເປັນຫຍັງທ່ານກໍາລັງລາຍງານ.",
+        "ignore_user": "ລະເວັ້ນຜູ້ໃຊ້",
+        "hide_messages_from_user": "ກວດຄືນຫາກວ່ທ່ານຕ້ອງການເຊື່ອງການສົນທະນາກັບຜູ້ໃຊ້ນີ້ດຽວນີ້ ຫຼືໃນອະນາຄົດ.",
+        "nature_disagreement": "ສິ່ງທີ່ຜູ້ໃຊ້ນີ້ຂຽນແມ່ນຜິດພາດ.\nສິ່ງນີ້ຈະຖືກລາຍງານໃຫ້ຜູ້ຄວບຄຸມຫ້ອງ.",
+        "nature_illegal": "ຜູ້ໃຊ້ນີ້ກຳລັງສະແດງພຶດຕິກຳທີ່ຜິດກົດໝາຍ, ດ້ວຍການໃສ່ຮ້າຍປ້າຍສີ ຫຼືຂົ່ມຂູ່ຄວາມຮຸນແຮງ.\nອັນນີ້ຈະຖືກລາຍງານຕໍ່ຜູ້ຄວບຄຸມຫ້ອງ ອາດຈະສົ່ງເລື່ອງຕໍ່ໃຫ້ເຈົ້າໜ້າທີ່ທາງກົດໝາຍ.",
+        "nature_spam": "ຜູ້ໃຊ້ນີ້ແມ່ນ spamming ຫ້ອງທີ່ມີການໂຄສະນາ, ການເຊື່ອມຕໍ່ກັບການໂຄສະນາ ຫຼື ການເຜີຍແຜ່.\nສິ່ງນີ້ຈະຖືກລາຍງານໃຫ້ຜູ້ຄວບຄຸມຫ້ອງ.",
+        "report_to_homeserver_encrypted": "ຫ້ອງນີ້ສ້າງຂຶ້ນເພື່ອເນື້ອຫາທີ່ຜິດກົດຫມາຍ ຫຼື ບໍ່ເໝາະສົມ ຫຼື ຜູ້ຄວບຄຸມບໍ່ສາມາດຄຸ້ມຄອງເນື້ອຫາທີ່ຜິດກົດຫມາຍຫຼື ບໍ່ເໝາະສົມ.\nອັນນີ້ຈະຖືກລາຍງານໃຫ້ຜູ້ບໍລິຫານຂອງ %(homeserver)s. ຜູ້ຄຸ້ມຄອງລະບົບຈະບໍ່ສາມາດອ່ານເນື້ອຫາທີ່ເຂົ້າລະຫັດໄວ້ຂອງຫ້ອງນີ້ໄດ້.",
+        "nature_other": "ເຫດຜົນອື່ນໆ. ກະລຸນາອະທິບາຍບັນຫາ.\nອັນນີ້ຈະຖືກລາຍງານໃຫ້ຜູ້ຄວບຄຸມຫ້ອງ.",
+        "nature": "ກະລຸນາເລືອກລັກສະນະ ແລະ ການອະທິບາຍຂອງຂໍ້ຄວາມໃດໜຶ່ງທີ່ສຸພາບ.",
+        "disagree": "ບໍ່ເຫັນດີ",
+        "toxic_behaviour": "ພຶດຕິກຳທີ່ບໍ່ເປັນມິດ",
+        "illegal_content": "ເນື້ອຫາທີ່ຜິດຕໍ່ກົດໝາຍ",
+        "spam_or_propaganda": "ຂໍ້ຄວາມຂີ້ເຫຍື້ອ ຫຼື ການໂຄສະນາເຜີຍແຜ່",
+        "report_entire_room": "ລາຍງານຫ້ອງທັງໝົດ",
+        "report_content_to_homeserver": "ລາຍງານເນື້ອຫາໃຫ້ຜູ້ຄຸ້ມຄອງລະບົບ Homeserver ຂອງທ່ານ",
+        "description": "ການລາຍງານຂໍ້ຄວາມນີ້ຈະສົ່ງ 'ID ເຫດການ' ທີ່ບໍ່ຊໍ້າກັນໄປຫາຜູ້ຄຸ້ມຄອງລະບົບເຊີບເວີຂອງທ່ານ. ຖ້າຂໍ້ຄວາມຢູ່ໃນຫ້ອງນີ້ຖືກເຂົ້າລະຫັດໄວ້, ຜູ້ຄຸ້ມຄອງລະບົບເຊີບເວີຂອງທ່ານຈະບໍ່ສາມາດອ່ານຂໍ້ຄວາມ ຫຼືເບິ່ງໄຟລ໌ ຫຼືຮູບພາບຕ່າງໆໄດ້."
     }
 }

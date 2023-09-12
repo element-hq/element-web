@@ -18,7 +18,6 @@
     "powered by Matrix": "مشغل بواسطة Matrix",
     "Use Single Sign On to continue": "استعمل الولوج الموحّد للمواصلة",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "أكّد إضافتك لعنوان البريد هذا باستعمال الولوج الموحّد لإثبات هويّتك.",
-    "Single Sign On": "الولوج الموحّد",
     "Confirm adding email": "أكّد إضافة البريد الإلكتروني",
     "Click the button below to confirm adding this email address.": "انقر الزر بالأسفل لتأكيد إضافة عنوان البريد الإلكتروني هذا.",
     "Add Email Address": "أضِف بريدًا إلكترونيًا",
@@ -258,33 +257,13 @@
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "هذه الغرفة تشغل إصدار الغرفة <roomVersion /> ، والذي عده الخادم الوسيط هذا بأنه<i> غير مستقر </i>.",
     "This room has already been upgraded.": "سبق وأن تمت ترقية هذه الغرفة.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "ستؤدي ترقية هذه الغرفة إلى إغلاق النسخة الحالية للغرفة وإنشاء غرفة تمت ترقيتها بنفس الاسم.",
-    "Unread messages.": "رسائل غير المقروءة.",
-    "%(count)s unread messages.": {
-        "one": "رسالة واحدة غير مقروءة.",
-        "other": "%(count)s من الرسائل غير مقروءة."
-    },
-    "%(count)s unread messages including mentions.": {
-        "one": "إشارة واحدة غير مقروءة.",
-        "other": "%(count)s من الرسائل والإشارات غير المقروءة."
-    },
     "Room options": "خيارات الغرفة",
     "Low Priority": "أولوية منخفضة",
     "Favourite": "تفضيل",
     "Favourited": "فُضلت",
     "Forget Room": "انسَ الغرفة",
-    "Notification options": "خيارات الإشعارات",
-    "Show %(count)s more": {
-        "one": "أظهر %(count)s زيادة",
-        "other": "أظهر %(count)s زيادة"
-    },
     "Jump to first invite.": "الانتقال لأول دعوة.",
     "Jump to first unread room.": "الانتقال لأول غرفة لم تقرأ.",
-    "List options": "خيارات القائمة",
-    "A-Z": "ألفبائي",
-    "Activity": "النشاط",
-    "Sort by": "ترتيب حسب",
-    "Show previews of messages": "إظهار معاينات للرسائل",
-    "Show rooms with unread messages first": "اعرض الغرف ذات الرسائل غير المقروءة أولاً",
     "%(roomName)s is not accessible at this time.": "لا يمكن الوصول إلى %(roomName)s في الوقت الحالي.",
     "%(roomName)s does not exist.": "الغرفة %(roomName)s ليست موجودة.",
     "%(roomName)s can't be previewed. Do you want to join it?": "لا يمكن معاينة %(roomName)s. هل تريد الانضمام إليها؟",
@@ -570,7 +549,6 @@
     "New passwords don't match": "كلمات المرور الجديدة لا تتطابق",
     "No display name": "لا اسم ظاهر",
     "Show more": "أظهر أكثر",
-    "Show less": "أظهر أقل",
     "This bridge is managed by <user />.": "هذا الجسر يديره <user />.",
     "Accept <policyLink /> to continue:": "قبول <policyLink /> للمتابعة:",
     "Your server isn't responding to some <a>requests</a>.": "خادمك لا يتجاوب مع بعض <a>الطلبات</a>.",
@@ -1385,7 +1363,6 @@
         "unsupported": "المكالمات غير مدعومة",
         "unsupported_browser": "لا يمكنك إجراء المكالمات في هذا المتصفّح."
     },
-    "Messages": "الرسائل",
     "Other": "أخرى",
     "Advanced": "متقدم",
     "room_settings": {
@@ -1433,5 +1410,36 @@
         "category_flags": "الأعلام",
         "categories": "التصنيفات",
         "quick_reactions": "ردود الفعل السريعة"
+    },
+    "auth": {
+        "sso": "الولوج الموحّد"
+    },
+    "export_chat": {
+        "messages": "الرسائل"
+    },
+    "room_list": {
+        "sort_unread_first": "اعرض الغرف ذات الرسائل غير المقروءة أولاً",
+        "show_previews": "إظهار معاينات للرسائل",
+        "sort_by": "ترتيب حسب",
+        "sort_by_activity": "النشاط",
+        "sort_by_alphabet": "ألفبائي",
+        "sublist_options": "خيارات القائمة",
+        "show_n_more": {
+            "one": "أظهر %(count)s زيادة",
+            "other": "أظهر %(count)s زيادة"
+        },
+        "show_less": "أظهر أقل",
+        "notification_options": "خيارات الإشعارات"
+    },
+    "a11y": {
+        "n_unread_messages_mentions": {
+            "one": "إشارة واحدة غير مقروءة.",
+            "other": "%(count)s من الرسائل والإشارات غير المقروءة."
+        },
+        "n_unread_messages": {
+            "one": "رسالة واحدة غير مقروءة.",
+            "other": "%(count)s من الرسائل غير مقروءة."
+        },
+        "unread_messages": "رسائل غير المقروءة."
     }
 }

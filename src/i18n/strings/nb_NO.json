@@ -134,7 +134,6 @@
     "Anchor": "Anker",
     "Headphones": "Hodetelefoner",
     "Folder": "Mappe",
-    "Show less": "Vis mindre",
     "Current password": "Nåværende passord",
     "New Password": "Nytt passord",
     "Confirm password": "Bekreft passord",
@@ -408,11 +407,6 @@
     "Replying": "Svarer på",
     "Room %(name)s": "Rom %(name)s",
     "Start chatting": "Begynn å chatte",
-    "%(count)s unread messages.": {
-        "one": "1 ulest melding.",
-        "other": "%(count)s uleste meldinger."
-    },
-    "Unread messages.": "Uleste meldinger.",
     "Send as message": "Send som en melding",
     "You don't currently have any stickerpacks enabled": "Du har ikke skrudd på noen klistremerkepakker for øyeblikket",
     "Add some now": "Legg til noen nå",
@@ -475,10 +469,6 @@
     "Remove %(email)s?": "Vil du fjerne %(email)s?",
     "Invalid Email Address": "Ugyldig E-postadresse",
     "Try to join anyway": "Forsøk å bli med likevel",
-    "%(count)s unread messages including mentions.": {
-        "one": "1 ulest nevnelse.",
-        "other": "%(count)s uleste meldinger inkludert der du nevnes."
-    },
     "Command error": "Kommandofeil",
     "Room avatar": "Rommets avatar",
     "Start Verification": "Begynn verifisering",
@@ -614,9 +604,6 @@
     "eg: @bot:* or example.org": "f.eks.: @bot:* eller example.org",
     "To link to this room, please add an address.": "For å lenke til dette rommet, vennligst legg til en adresse.",
     "Remove %(phone)s?": "Vil du fjerne %(phone)s?",
-    "Sort by": "Sorter etter",
-    "Activity": "Aktivitet",
-    "A-Z": "A-Å",
     "Message preview": "Meldingsforhåndsvisning",
     "This room has no local addresses": "Dette rommet har ikke noen lokale adresser",
     "Remove recent messages by %(user)s": "Fjern nylige meldinger fra %(user)s",
@@ -633,7 +620,6 @@
     "Add an Integration": "Legg til en integrering",
     "Can't load this message": "Klarte ikke å laste inn denne meldingen",
     "Popout widget": "Utsprettsmodul",
-    "QR Code": "QR-kode",
     "Room address": "Rommets adresse",
     "This address is available to use": "Denne adressen er allerede i bruk",
     "Failed to send logs: ": "Mislyktes i å sende loggbøker: ",
@@ -676,11 +662,6 @@
     "To help us prevent this in future, please <a>send us logs</a>.": "For å hjelpe oss med å forhindre dette i fremtiden, vennligst <a>send oss loggfiler</a>.",
     "Lock": "Lås",
     "Server or user ID to ignore": "Tjener- eller bruker-ID-en som skal ignoreres",
-    "Show %(count)s more": {
-        "other": "Vis %(count)s til",
-        "one": "Vis %(count)s til"
-    },
-    "Notification options": "Varselsinnstillinger",
     "Room options": "Rominnstillinger",
     "Your messages are not secure": "Dine meldinger er ikke sikre",
     "Edited at %(date)s": "Redigert den %(date)s",
@@ -766,7 +747,6 @@
     "The call was answered on another device.": "Samtalen ble besvart på en annen enhet.",
     "The call could not be established": "Samtalen kunne ikke etableres",
     "Click the button below to confirm adding this phone number.": "Klikk knappen nedenfor for å bekrefte dette telefonnummeret.",
-    "Single Sign On": "Single Sign On",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Bekreft dette telefonnummeret ved å bruke Single Sign On for å bevise din identitet.",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Befrekt denne e-postadressen ved å bruke Single Sign On for å bevise din identitet.",
     "Recently visited rooms": "Nylig besøkte rom",
@@ -850,7 +830,6 @@
     "Confirm your Security Phrase": "Bekreft sikkerhetsfrasen din",
     "Use app": "Bruk app",
     "Use app for a better experience": "Bruk appen for en bedre opplevelse",
-    "Continue with %(provider)s": "Fortsett med %(provider)s",
     "This address is already in use": "Denne adressen er allerede i bruk",
     "<a>In reply to</a> <pill>": "<a>Som svar på</a> <pill>",
     "Information": "Informasjon",
@@ -863,7 +842,6 @@
     "Widgets": "Komponenter",
     "Favourited": "Favorittmerket",
     "Forget Room": "Glem rommet",
-    "Show previews of messages": "Vis forhåndsvisninger av meldinger",
     "Invalid URL": "Ugyldig URL",
     "Continuing without email": "Fortsetter uten E-post",
     "Are you sure you want to sign out?": "Er du sikker på at du vil logge av?",
@@ -1109,7 +1087,6 @@
     "Report": "Rapporter",
     "Sent": "Sendt",
     "Sending": "Sender",
-    "Format": "Format",
     "MB": "MB",
     "Add reaction": "Legg til reaksjon",
     "Downloading": "Laster ned",
@@ -1198,7 +1175,8 @@
         "system_alerts": "Systemvarsler",
         "cross_signing": "Kryssignering",
         "identity_server": "Identitetstjener",
-        "integration_manager": "Integreringsbehandler"
+        "integration_manager": "Integreringsbehandler",
+        "qr_code": "QR-kode"
     },
     "action": {
         "continue": "Fortsett",
@@ -1287,7 +1265,16 @@
         "send_report": "Send inn rapport"
     },
     "a11y": {
-        "user_menu": "Brukermeny"
+        "user_menu": "Brukermeny",
+        "n_unread_messages_mentions": {
+            "one": "1 ulest nevnelse.",
+            "other": "%(count)s uleste meldinger inkludert der du nevnes."
+        },
+        "n_unread_messages": {
+            "one": "1 ulest melding.",
+            "other": "%(count)s uleste meldinger."
+        },
+        "unread_messages": "Uleste meldinger."
     },
     "labs": {
         "pinning": "Meldingsklistring",
@@ -1418,7 +1405,9 @@
     "export_chat": {
         "html": "HTML",
         "json": "JSON",
-        "text": "Ren tekst"
+        "text": "Ren tekst",
+        "format": "Format",
+        "messages": "Meldinger"
     },
     "create_room": {
         "title_public_room": "Opprett et offentlig rom",
@@ -1636,7 +1625,6 @@
         "unsupported": "Samtaler støttes ikke",
         "unsupported_browser": "Du kan ikke ringe i denne nettleseren."
     },
-    "Messages": "Meldinger",
     "Other": "Andre",
     "Advanced": "Avansert",
     "room_settings": {
@@ -1682,5 +1670,21 @@
     },
     "chat_effects": {
         "confetti_message": "sender konfetti"
+    },
+    "auth": {
+        "continue_with_idp": "Fortsett med %(provider)s",
+        "sso": "Single Sign On"
+    },
+    "room_list": {
+        "show_previews": "Vis forhåndsvisninger av meldinger",
+        "sort_by": "Sorter etter",
+        "sort_by_activity": "Aktivitet",
+        "sort_by_alphabet": "A-Å",
+        "show_n_more": {
+            "other": "Vis %(count)s til",
+            "one": "Vis %(count)s til"
+        },
+        "show_less": "Vis mindre",
+        "notification_options": "Varselsinnstillinger"
     }
 }

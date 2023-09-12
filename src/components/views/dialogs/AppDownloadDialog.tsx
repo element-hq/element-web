@@ -47,14 +47,14 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
 
     return (
         <BaseDialog
-            title={_t("Download %(brand)s", { brand })}
+            title={_t("onboarding|download_brand", { brand })}
             className="mx_AppDownloadDialog"
             fixedWidth
             onFinished={onFinished}
         >
             {desktopBuilds?.get("available") && (
                 <div className="mx_AppDownloadDialog_desktop">
-                    <Heading size="3">{_t("Download %(brand)s Desktop", { brand })}</Heading>
+                    <Heading size="3">{_t("onboarding|download_brand_desktop", { brand })}</Heading>
                     <AccessibleButton
                         kind="primary"
                         element="a"
@@ -62,7 +62,7 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
                         target="_blank"
                         onClick={() => {}}
                     >
-                        {_t("Download %(brand)s Desktop", { brand })}
+                        {_t("onboarding|download_brand_desktop", { brand })}
                     </AccessibleButton>
                 </div>
             )}
@@ -71,7 +71,7 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
                     <Heading size="3">{_t("common|ios")}</Heading>
                     <QRCode data={urlAppStore} margin={0} width={172} />
                     <div className="mx_AppDownloadDialog_info">
-                        {_t("%(qrCode)s or %(appLinks)s", {
+                        {_t("onboarding|qr_or_app_links", {
                             appLinks: "",
                             qrCode: "",
                         })}
@@ -81,7 +81,7 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
                             element="a"
                             href={urlAppStore}
                             target="_blank"
-                            aria-label={_t("Download on the App Store")}
+                            aria-label={_t("onboarding|download_app_store")}
                             onClick={() => {}}
                         >
                             <IOSBadge />
@@ -92,7 +92,7 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
                     <Heading size="3">{_t("common|android")}</Heading>
                     <QRCode data={urlAndroid} margin={0} width={172} />
                     <div className="mx_AppDownloadDialog_info">
-                        {_t("%(qrCode)s or %(appLinks)s", {
+                        {_t("onboarding|qr_or_app_links", {
                             appLinks: "",
                             qrCode: "",
                         })}
@@ -102,7 +102,7 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
                             element="a"
                             href={urlGooglePlay}
                             target="_blank"
-                            aria-label={_t("Get it on Google Play")}
+                            aria-label={_t("onboarding|download_google_play")}
                             onClick={() => {}}
                         >
                             <GooglePlayBadge />
@@ -111,7 +111,7 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
                             element="a"
                             href={urlFDroid}
                             target="_blank"
-                            aria-label={_t("Get it on F-Droid")}
+                            aria-label={_t("onboarding|download_f_droid")}
                             onClick={() => {}}
                         >
                             <FDroidBadge />
@@ -120,8 +120,8 @@ export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
                 </div>
             </div>
             <div className="mx_AppDownloadDialog_legal">
-                <p>{_t("App Store® and the Apple logo® are trademarks of Apple Inc.")}</p>
-                <p>{_t("Google Play and the Google Play logo are trademarks of Google LLC.")}</p>
+                <p>{_t("onboarding|apple_trademarks")}</p>
+                <p>{_t("onboarding|google_trademarks")}</p>
             </div>
         </BaseDialog>
     );

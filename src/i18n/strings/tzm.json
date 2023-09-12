@@ -53,7 +53,6 @@
     "Copied!": "inɣel!",
     "Home": "Asnubeg",
     "Search…": "Arezzu…",
-    "A-Z": "A-Ẓ",
     "Re-join": "als-lkem",
     "%(duration)sd": "%(duration)sas",
     "None": "Walu",
@@ -150,7 +149,6 @@
         "category_actions": "Tugawin",
         "category_other": "Yaḍn"
     },
-    "Messages": "Tuzinin",
     "devtools": {
         "category_other": "Yaḍn"
     },
@@ -160,5 +158,11 @@
     },
     "labs": {
         "group_profile": "Ifres"
+    },
+    "export_chat": {
+        "messages": "Tuzinin"
+    },
+    "room_list": {
+        "sort_by_alphabet": "A-Ẓ"
     }
 }

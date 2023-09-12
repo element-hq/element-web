@@ -591,7 +591,6 @@
     "Connectivity to the server has been lost": "Χάθηκε η συνδεσιμότητα με τον διακομιστή",
     "User Busy": "Χρήστης Απασχολημένος",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Επιβεβαιώστε την προσθήκη αυτού του αριθμού τηλεφώνου με την χρήση Single Sign On για να επικυρώσετε την ταυτότητα σας.",
-    "Single Sign On": "Single Sign On",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Επιβεβαιώστε την προσθήκη αυτής της διεύθυνσης ηλ. ταχυδρομείου με την χρήση Single Sign On για να επικυρώσετε την ταυτότητα σας.",
     "Use Single Sign On to continue": "Χρήση Single Sign On για συνέχεια",
     "Unignored user": "Χρήστης από κατάργηση παράβλεψης",
@@ -1157,17 +1156,13 @@
     "Reason: %(reason)s": "Αιτία: %(reason)s",
     "Sign Up": "Εγγραφή",
     "Join the conversation with an account": "Συμμετοχή στη συζήτηση με λογιαριασμό",
-    "You do not have permissions to add spaces to this space": "Δεν έχετε δικαίωμα προσθήκης χώρων σε αυτόν τον χώρο",
     "Add space": "Προσθήκη χώρου",
     "Empty room": "Άδειο δωμάτιο",
     "Suggested Rooms": "Προτεινόμενα δωμάτια",
     "Add room": "Προσθήκη δωματίου",
     "Explore public rooms": "Εξερευνήστε δημόσια δωμάτια",
-    "You do not have permissions to add rooms to this space": "Δεν έχετε δικαίωμα προσθήκης δωματίων σε αυτόν τον χώρο",
     "Add existing room": "Προσθήκη υπάρχοντος δωματίου",
-    "You do not have permissions to create new rooms in this space": "Δεν έχετε δικαίωμα δημιουργίας νέων δωματίων σε αυτόν τον χώρο",
     "Add people": "Προσθήκη ατόμων",
-    "You do not have permissions to invite people to this space": "Δεν έχετε δικαίωμα πρόσκλησης ατόμων σε αυτόν τον χώρο",
     "Invite to space": "Πρόσκληση στον χώρο",
     "Start new chat": "Έναρξη νέας συνομιλίας",
     "Room options": "Επιλογές δωματίου",
@@ -1312,12 +1307,6 @@
     "The room upgrade could not be completed": "Δεν ήταν δυνατή η ολοκλήρωση της αναβάθμισης δωματίου",
     "Failed to upgrade room": "Αποτυχία αναβάθμισης δωματίου",
     "Room Settings - %(roomName)s": "Ρυθμίσεις Δωματίου - %(roomName)s",
-    "Report Content to Your Homeserver Administrator": "Αναφορά Περιεχομένου στον Διαχειριστή του Διακομιστή σας",
-    "Report the entire room": "Αναφορά ολόκληρου του δωματίου",
-    "Spam or propaganda": "Spam ή προπαγάνδα",
-    "Illegal Content": "Παράνομο Περιεχόμενο",
-    "Toxic Behaviour": "Τοξική Συμπεριφορά",
-    "Disagree": "Διαφωνώ",
     "Email (optional)": "Email (προαιρετικό)",
     "You were banned from %(roomName)s by %(memberName)s": "Έχετε αποκλειστεί από το %(roomName)s από τον %(memberName)s",
     "Re-join": "Επανασύνδεση",
@@ -1399,7 +1388,6 @@
     "Doesn't look like a valid email address": "Δε μοιάζει με έγκυρη διεύθυνση email",
     "Enter email address": "Εισάγετε διεύθυνση email",
     "This room is public": "Αυτό το δωμάτιο είναι δημόσιο",
-    "Click for more info": "Κλικ για περισσότερες πληροφορίες",
     "Move right": "Μετακίνηση δεξιά",
     "Move left": "Μετακίνηση αριστερά",
     "Revoke permissions": "Ανάκληση αδειών",
@@ -1491,29 +1479,8 @@
     "Matrix.org is the biggest public homeserver in the world, so it's a good place for many.": "Το Matrix.org είναι ο μεγαλύτερος δημόσιος διακομιστής στον κόσμο, επομένως είναι ένα καλό μέρος για να ξεκινήσετε.",
     "Specify a homeserver": "Καθορίστε τον κεντρικό διακομιστή σας",
     "Invalid URL": "Μη έγκυρο URL",
-    "Unread messages.": "Μη αναγνωσμένα μηνύματα.",
-    "%(count)s unread messages.": {
-        "one": "1 μη αναγνωσμένο μήνυμα.",
-        "other": "%(count)s μη αναγνωσμένα μηνύματα."
-    },
-    "%(count)s unread messages including mentions.": {
-        "one": "1 μη αναγνωσμένη αναφορά.",
-        "other": "%(count)s μη αναγνωσμένα μηνύματα συμπεριλαμβανομένων των αναφορών."
-    },
     "Copy room link": "Αντιγραφή συνδέσμου δωματίου",
     "Forget Room": "Ξεχάστε το δωμάτιο",
-    "Notification options": "Επιλογές ειδοποίησης",
-    "Show less": "Εμφάνιση λιγότερων",
-    "Show %(count)s more": {
-        "one": "Εμφάνιση %(count)s περισσότερων",
-        "other": "Εμφάνιση %(count)s περισσότερων"
-    },
-    "List options": "Επιλογές λίστας",
-    "A-Z": "Α-Ω",
-    "Activity": "Δραστηριότητα",
-    "Sort by": "Ταξινόμηση κατά",
-    "Show previews of messages": "Εμφάνιση προεπισκοπήσεων μηνυμάτων",
-    "Show rooms with unread messages first": "Εμφάνιση δωματίων με μη αναγνωσμένα μηνύματα πρώτα",
     "%(roomName)s can't be previewed. Do you want to join it?": "Δεν είναι δυνατή η προεπισκόπηση του %(roomName)s. Θέλετε να συμμετάσχετε;",
     "You're previewing %(roomName)s. Want to join it?": "Κάνετε προεπισκόπηση στο %(roomName)s. Θέλετε να συμμετάσχετε;",
     "Reject & Ignore user": "Απόρριψη & Παράβλεψη χρήστη",
@@ -1612,12 +1579,7 @@
     },
     "No microphone found": "Δε βρέθηκε μικρόφωνο",
     "We were unable to access your microphone. Please check your browser settings and try again.": "Δεν ήταν δυνατή η πρόσβαση στο μικρόφωνο σας. Ελέγξτε τις ρυθμίσεις του προγράμματος περιήγησης σας και δοκιμάστε ξανά.",
-    "Your export was successful. Find it in your Downloads folder.": "Η εξαγωγή σας ήταν επιτυχής. Βρείτε τη στο φάκελο Λήψεις.",
-    "Export Successful": "Επιτυχής Εξαγωγή",
-    "The export was cancelled successfully": "Η εξαγωγή ακυρώθηκε με επιτυχία",
-    "Export Cancelled": "Η Εξαγωγή ακυρώθηκε",
     "MB": "MB",
-    "Number of messages": "Αριθμός μηνυμάτων",
     "End Poll": "Τερματισμός δημοσκόπησης",
     "Server did not require any authentication": "Ο διακομιστής δεν απαίτησε κάποιο έλεγχο ταυτότητας",
     "Server did not return valid authentication information.": "Ο διακομιστής δεν επέστρεψε έγκυρες πληροφορίες ελέγχου ταυτότητας.",
@@ -1770,7 +1732,6 @@
     "Discovery": "Ανακάλυψη",
     "Developer tools": "Εργαλεία προγραμματιστή",
     "Got It": "Κατανοώ",
-    "Export Chat": "Εξαγωγή Συνομιλίας",
     "Sending": "Αποστολή",
     "Anyone will be able to find and join this room, not just members of <SpaceName/>.": "Οποιοσδήποτε θα μπορεί να βρει και να εγγραφεί σε αυτόν τον χώρο, όχι μόνο μέλη του <SpaceName/>.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Μπορείτε να χρησιμοποιήσετε τις προσαρμοσμένες επιλογές διακομιστή για να συνδεθείτε σε άλλους διακομιστές Matrix, καθορίζοντας μια διαφορετική διεύθυνση URL του κεντρικού διακομιστή. Αυτό σας επιτρέπει να χρησιμοποιείτε το %(brand)s με έναν υπάρχοντα λογαριασμό Matrix σε διαφορετικό τοπικό διακομιστή.",
@@ -1783,10 +1744,6 @@
     "You may contact me if you want to follow up or to let me test out upcoming ideas": "Μπορείτε να επικοινωνήσετε μαζί μου εάν θέλετε να έρθετε σε επαφή ή να με αφήσετε να δοκιμάσω επερχόμενες ιδέες",
     "Your platform and username will be noted to help us use your feedback as much as we can.": "Η πλατφόρμα και το όνομα χρήστη σας θα καταγραφούν για να μας βοηθήσουν να χρησιμοποιήσουμε τα σχόλιά σας όσο μπορούμε περισσότερο.",
     "Feedback sent": "Τα σχόλια στάλθηκαν",
-    "Select from the options below to export chats from your timeline": "Επιλέξτε από τις παρακάτω επιλογές για να εξαγάγετε συνομιλίες από το χρονολόγιό σας",
-    "Number of messages can only be a number between %(min)s and %(max)s": "Ο αριθμός των μηνυμάτων μπορεί να είναι μόνο ένας αριθμός μεταξύ %(min)s και %(max)s",
-    "Size can only be a number between %(min)s MB and %(max)s MB": "Το μέγεθος μπορεί να είναι μόνο ένας αριθμός μεταξύ %(min)s MB και %(max)s MB",
-    "Enter a number between %(min)s and %(max)s": "Εισαγάγετε έναν αριθμό μεταξύ %(min)s και %(max)s",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Είστε βέβαιοι ότι θέλετε να τερματίσετε αυτήν τη δημοσκόπηση; Αυτό θα εμφανίσει τα τελικά αποτελέσματα της δημοσκόπησης και θα εμποδίσει νέους ψήφους.",
     "Sorry, the poll did not end. Please try again.": "Συγνώμη, η δημοσκόπηση δεν τερματίστηκε. Παρακαλώ προσπαθήστε ξανά.",
     "Failed to end poll": "Αποτυχία τερματισμού της δημοσκόπησης",
@@ -1852,7 +1809,6 @@
     "e.g. my-room": "π.χ. my-room",
     "Room address": "Διεύθυνση δωματίου",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Αδυναμία φόρτωσης του συμβάντος στο οποίο δόθηκε απάντηση, είτε δεν υπάρχει είτε δεν έχετε άδεια να το προβάλετε.",
-    "QR Code": "Κωδικός QR",
     "Results are only revealed when you end the poll": "Τα αποτελέσματα αποκαλύπτονται μόνο όταν τελειώσετε τη δημοσκόπηση",
     "Voters see results as soon as they have voted": "Οι ψηφοφόροι βλέπουν τα αποτελέσματα μόλις ψηφίσουν",
     "Add option": "Προσθήκη επιλογής",
@@ -2097,9 +2053,6 @@
     "Country Dropdown": "Αναπτυσσόμενο μενού Χώρας",
     "This homeserver would like to make sure you are not a robot.": "Αυτός ο κεντρικός διακομιστής θα ήθελε να βεβαιωθεί ότι δεν είστε ρομπότ.",
     "You are sharing your live location": "Μοιράζεστε την τρέχουσα τοποθεσία σας",
-    "Join the beta": "Συμμετοχή στη beta",
-    "Leave the beta": "Αποχώρηση από τη beta",
-    "This is a beta feature": "Αυτή είναι μια δυνατότητα beta",
     "Failed to load list of rooms.": "Αποτυχία φόρτωσης λίστας δωματίων.",
     "Mark as suggested": "Επισήμανση ως προτεινόμενο",
     "Mark as not suggested": "Επισήμανση ως μη προτεινόμενο",
@@ -2131,9 +2084,6 @@
     "Confirm to continue": "Επιβεβαιώστε για να συνεχίσετε",
     "To continue, use Single Sign On to prove your identity.": "Για να συνεχίσετε, χρησιμοποιήστε σύνδεση Single Sign On για να αποδείξετε την ταυτότητά σας.",
     "Feedback": "Ανατροφοδότηση",
-    "Include Attachments": "Συμπεριλάβετε Συνημμένα",
-    "Size Limit": "Όριο Μεγέθους",
-    "Format": "Μορφή",
     "Enter the name of a new server you want to explore.": "Εισαγάγετε το όνομα ενός νέου διακομιστή που θέλετε να εξερευνήσετε.",
     "Add a new server": "Προσθήκη νέου διακομιστή",
     "Your server": "Ο διακομιστής σας",
@@ -2141,16 +2091,12 @@
     "You are not allowed to view this server's rooms list": "Δεν επιτρέπεται να δείτε τη λίστα δωματίων αυτού του διακομιστή",
     "Looks good": "Φαίνεται καλό",
     "Enter a server name": "Εισαγάγετε ένα όνομα διακομιστή",
-    "Sign in with single sign-on": "Συνδεθείτε με απλή σύνδεση",
-    "Continue with %(provider)s": "Συνεχίστε με %(provider)s",
     "Join millions for free on the largest public server": "Συμμετέχετε δωρεάν στον μεγαλύτερο δημόσιο διακομιστή",
     "Popout widget": "Αναδυόμενη μικροεφαρμογή",
     "Widget ID": "Ταυτότητα μικροεφαρμογής",
     "toggle event": "μεταβολή συμβάντος",
     "Could not connect media": "Δεν ήταν δυνατή η σύνδεση πολυμέσων",
     "Home is useful for getting an overview of everything.": "Ο Αρχικός χώρος είναι χρήσιμος για να έχετε μια επισκόπηση των πάντων.",
-    "Exporting your data": "Εξαγωγή των δεδομένων σας",
-    "Are you sure you want to stop exporting your data? If you do, you'll need to start over.": "Είστε βέβαιοι ότι θέλετε να διακόψετε την εξαγωγή των δεδομένων σας; Εάν το κάνετε, θα πρέπει να ξεκινήσετε από την αρχή.",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Δεν είναι δυνατή η εύρεση προφίλ για τα αναγνωριστικά Matrix που αναφέρονται παρακάτω - θα θέλατε να τα προσκαλέσετε ούτως ή άλλως;",
     "Adding spaces has moved.": "Η προσθήκη χώρων μετακινήθηκε.",
     "And %(count)s more...": {
@@ -2232,13 +2178,6 @@
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "Αυτό συνήθως επηρεάζει μόνο τον τρόπο επεξεργασίας του δωματίου στον διακομιστή. Εάν αντιμετωπίζετε προβλήματα με το %(brand)s σας, <a>αναφέρετε ένα σφάλμα</a>.",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Αυτό συνήθως επηρεάζει μόνο τον τρόπο επεξεργασίας του δωματίου στον διακομιστή. Εάν αντιμετωπίζετε προβλήματα με το %(brand)s σας, αναφέρετε ένα σφάλμα.",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Η αναβάθμιση αυτού του δωματίου απαιτεί τη διαγραφή του και τη δημιουργία ενός νέου δωματίου στη θέση του. Για να προσφέρουμε στα μέλη του την καλύτερη δυνατή εμπειρία, θα:",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Η αναφορά αυτού του μηνύματος θα στείλει το μοναδικό «αναγνωριστικό συμβάντος» στον διαχειριστή του διακομιστή σας. Εάν τα μηνύματα σε αυτό το δωμάτιο είναι κρυπτογραφημένα, ο διαχειριστής του διακομιστή σας δε θα μπορεί να διαβάσει το κείμενο του μηνύματος ή να προβάλει αρχεία και εικόνες.",
-    "Please pick a nature and describe what makes this message abusive.": "Παρακαλώ επιλέξτε το είδος και περιγράψτε τι κάνει αυτό το μήνυμα καταχρηστικό.",
-    "Any other reason. Please describe the problem.\nThis will be reported to the room moderators.": "Οποιοσδήποτε άλλος λόγος. Παρακαλώ περιγράψτε το πρόβλημα.\nΑυτό θα αναφερθεί στους συντονιστές του δωματίου.",
-    "This user is spamming the room with ads, links to ads or to propaganda.\nThis will be reported to the room moderators.": "Αυτός ο χρήστης στέλνει ανεπιθύμητα μηνύματα στην αίθουσα με διαφημίσεις, συνδέσμους προς διαφημίσεις ή προπαγάνδα.\nΑυτό θα αναφερθεί στους συντονιστές του δωματίου.",
-    "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.": "Αυτός ο χρήστης εμφανίζει παράνομη συμπεριφορά, για παράδειγμα, διαρρέει απόρρητες πληροφορίες ατόμων ή απειλεί με βία.\nΑυτό θα αναφερθεί στους συντονιστές του δωματίου, οι οποίοι ενδέχεται να το αναφέρουν στις αρμόδιες αρχές.",
-    "What this user is writing is wrong.\nThis will be reported to the room moderators.": "Αυτό που γράφει αυτός ο χρήστης είναι λάθος.\nΑυτό θα αναφερθεί στους συντονιστές του δωματίου.",
-    "Please fill why you're reporting.": "Παρακαλώ πείτε μας γιατί κάνετε αναφορά.",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Μια προειδοποίηση, αν δεν προσθέσετε ένα email και ξεχάσετε τον κωδικό πρόσβασης, ενδέχεται να <b>χάσετε οριστικά την πρόσβαση στον λογαριασμό σας</b>.",
     "Incompatible local cache": "Μη συμβατή τοπική κρυφή μνήμη",
     "%(brand)s encountered an error during upload of:": "Το %(brand)s αντιμετώπισε ένα σφάλμα κατά τη μεταφόρτωση του:",
@@ -2287,7 +2226,6 @@
     "About homeservers": "Σχετικά με τους κεντρικούς διακομιστές",
     "Other homeserver": "Άλλος κεντρικός διακομιστής",
     "Unable to validate homeserver": "Δεν είναι δυνατή η επικύρωση του κεντρικού διακομιστή",
-    "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s. The administrators will NOT be able to read the encrypted content of this room.": "Αυτό το δωμάτιο είναι αφιερωμένο σε παράνομο ή τοξικό περιεχόμενο ή οι συντονιστές αποτυγχάνουν να μετριάσουν το παράνομο ή τοξικό περιεχόμενο.\nΑυτό θα αναφερθεί στους διαχειριστές του %(homeserver)s. Οι διαχειριστές ΔΕ θα μπορούν να διαβάσουν το κρυπτογραφημένο περιεχόμενο αυτού του δωματίου.",
     "The integration manager is offline or it cannot reach your homeserver.": "Ο διαχειριστής πρόσθετων είναι εκτός σύνδεσης ή δεν μπορεί να επικοινωνήσει με κεντρικό διακομιστή σας.",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "Η μικροεφαρμογή θα επαληθεύσει το αναγνωριστικό χρήστη σας, αλλά δε θα μπορεί να εκτελέσει ενέργειες για εσάς:",
     "Allow this widget to verify your identity": "Επιτρέψτε σε αυτήν τη μικροεφαρμογή να επαληθεύσει την ταυτότητά σας",
@@ -2546,7 +2484,8 @@
         "secure_backup": "Ασφαλές αντίγραφο ασφαλείας",
         "cross_signing": "Διασταυρούμενη υπογραφή",
         "identity_server": "Διακομιστής ταυτότητας",
-        "integration_manager": "Διαχειριστής πρόσθετων"
+        "integration_manager": "Διαχειριστής πρόσθετων",
+        "qr_code": "Κωδικός QR"
     },
     "action": {
         "continue": "Συνέχεια",
@@ -2644,7 +2583,16 @@
         "clear": "Καθαρισμός"
     },
     "a11y": {
-        "user_menu": "Μενού χρήστη"
+        "user_menu": "Μενού χρήστη",
+        "n_unread_messages_mentions": {
+            "one": "1 μη αναγνωσμένη αναφορά.",
+            "other": "%(count)s μη αναγνωσμένα μηνύματα συμπεριλαμβανομένων των αναφορών."
+        },
+        "n_unread_messages": {
+            "one": "1 μη αναγνωσμένο μήνυμα.",
+            "other": "%(count)s μη αναγνωσμένα μηνύματα."
+        },
+        "unread_messages": "Μη αναγνωσμένα μηνύματα."
     },
     "labs": {
         "video_rooms": "Δωμάτια βίντεο",
@@ -2672,7 +2620,11 @@
         "group_themes": "Θέματα",
         "group_encryption": "Κρυπτογράφηση",
         "group_experimental": "Πειραματικό",
-        "group_developer": "Προγραμματιστής"
+        "group_developer": "Προγραμματιστής",
+        "beta_feature": "Αυτή είναι μια δυνατότητα beta",
+        "click_for_info": "Κλικ για περισσότερες πληροφορίες",
+        "leave_beta": "Αποχώρηση από τη beta",
+        "join_beta": "Συμμετοχή στη beta"
     },
     "keyboard": {
         "home": "Αρχική",
@@ -2929,7 +2881,23 @@
         "export_info": "Αυτή είναι η αρχή της εξαγωγής του <roomName/>. Εξήχθησαν από <exporterDetails/> στις %(exportDate)s.",
         "topic": "Θέμα: %(topic)s",
         "error_fetching_file": "Σφάλμα κατά την ανάκτηση του αρχείου",
-        "file_attached": "Tο αρχείο επισυνάφθηκε"
+        "file_attached": "Tο αρχείο επισυνάφθηκε",
+        "enter_number_between_min_max": "Εισαγάγετε έναν αριθμό μεταξύ %(min)s και %(max)s",
+        "size_limit_min_max": "Το μέγεθος μπορεί να είναι μόνο ένας αριθμός μεταξύ %(min)s MB και %(max)s MB",
+        "num_messages_min_max": "Ο αριθμός των μηνυμάτων μπορεί να είναι μόνο ένας αριθμός μεταξύ %(min)s και %(max)s",
+        "num_messages": "Αριθμός μηνυμάτων",
+        "cancelled": "Η Εξαγωγή ακυρώθηκε",
+        "cancelled_detail": "Η εξαγωγή ακυρώθηκε με επιτυχία",
+        "successful": "Επιτυχής Εξαγωγή",
+        "successful_detail": "Η εξαγωγή σας ήταν επιτυχής. Βρείτε τη στο φάκελο Λήψεις.",
+        "confirm_stop": "Είστε βέβαιοι ότι θέλετε να διακόψετε την εξαγωγή των δεδομένων σας; Εάν το κάνετε, θα πρέπει να ξεκινήσετε από την αρχή.",
+        "exporting_your_data": "Εξαγωγή των δεδομένων σας",
+        "title": "Εξαγωγή Συνομιλίας",
+        "select_option": "Επιλέξτε από τις παρακάτω επιλογές για να εξαγάγετε συνομιλίες από το χρονολόγιό σας",
+        "format": "Μορφή",
+        "messages": "Μηνύματα",
+        "size_limit": "Όριο Μεγέθους",
+        "include_attachments": "Συμπεριλάβετε Συνημμένα"
     },
     "create_room": {
         "title_video_room": "Δημιουργήστε ένα δωμάτιο βίντεο",
@@ -3320,7 +3288,6 @@
         "unsupported": "Η κλήσεις δεν υποστηρίζονται",
         "unsupported_browser": "Δεν μπορείτε να πραγματοποιήσετε κλήσεις σε αυτό το πρόγραμμα περιήγησης."
     },
-    "Messages": "Μηνύματα",
     "Other": "Άλλα",
     "Advanced": "Προχωρημένες",
     "room_settings": {
@@ -3402,5 +3369,46 @@
         "snowfall_message": "Στέλνει χιονόπτωση",
         "spaceinvaders_description": "Στέλνει το δεδομένο μήνυμα με εφέ διαστημικού θέματος",
         "spaceinvaders_message": "στέλνει διαστημικούς εισβολείς"
+    },
+    "spaces": {
+        "error_no_permission_invite": "Δεν έχετε δικαίωμα πρόσκλησης ατόμων σε αυτόν τον χώρο",
+        "error_no_permission_create_room": "Δεν έχετε δικαίωμα δημιουργίας νέων δωματίων σε αυτόν τον χώρο",
+        "error_no_permission_add_room": "Δεν έχετε δικαίωμα προσθήκης δωματίων σε αυτόν τον χώρο",
+        "error_no_permission_add_space": "Δεν έχετε δικαίωμα προσθήκης χώρων σε αυτόν τον χώρο"
+    },
+    "auth": {
+        "continue_with_idp": "Συνεχίστε με %(provider)s",
+        "sign_in_with_sso": "Συνδεθείτε με απλή σύνδεση",
+        "sso": "Single Sign On"
+    },
+    "room_list": {
+        "sort_unread_first": "Εμφάνιση δωματίων με μη αναγνωσμένα μηνύματα πρώτα",
+        "show_previews": "Εμφάνιση προεπισκοπήσεων μηνυμάτων",
+        "sort_by": "Ταξινόμηση κατά",
+        "sort_by_activity": "Δραστηριότητα",
+        "sort_by_alphabet": "Α-Ω",
+        "sublist_options": "Επιλογές λίστας",
+        "show_n_more": {
+            "one": "Εμφάνιση %(count)s περισσότερων",
+            "other": "Εμφάνιση %(count)s περισσότερων"
+        },
+        "show_less": "Εμφάνιση λιγότερων",
+        "notification_options": "Επιλογές ειδοποίησης"
+    },
+    "report_content": {
+        "missing_reason": "Παρακαλώ πείτε μας γιατί κάνετε αναφορά.",
+        "nature_disagreement": "Αυτό που γράφει αυτός ο χρήστης είναι λάθος.\nΑυτό θα αναφερθεί στους συντονιστές του δωματίου.",
+        "nature_illegal": "Αυτός ο χρήστης εμφανίζει παράνομη συμπεριφορά, για παράδειγμα, διαρρέει απόρρητες πληροφορίες ατόμων ή απειλεί με βία.\nΑυτό θα αναφερθεί στους συντονιστές του δωματίου, οι οποίοι ενδέχεται να το αναφέρουν στις αρμόδιες αρχές.",
+        "nature_spam": "Αυτός ο χρήστης στέλνει ανεπιθύμητα μηνύματα στην αίθουσα με διαφημίσεις, συνδέσμους προς διαφημίσεις ή προπαγάνδα.\nΑυτό θα αναφερθεί στους συντονιστές του δωματίου.",
+        "report_to_homeserver_encrypted": "Αυτό το δωμάτιο είναι αφιερωμένο σε παράνομο ή τοξικό περιεχόμενο ή οι συντονιστές αποτυγχάνουν να μετριάσουν το παράνομο ή τοξικό περιεχόμενο.\nΑυτό θα αναφερθεί στους διαχειριστές του %(homeserver)s. Οι διαχειριστές ΔΕ θα μπορούν να διαβάσουν το κρυπτογραφημένο περιεχόμενο αυτού του δωματίου.",
+        "nature_other": "Οποιοσδήποτε άλλος λόγος. Παρακαλώ περιγράψτε το πρόβλημα.\nΑυτό θα αναφερθεί στους συντονιστές του δωματίου.",
+        "nature": "Παρακαλώ επιλέξτε το είδος και περιγράψτε τι κάνει αυτό το μήνυμα καταχρηστικό.",
+        "disagree": "Διαφωνώ",
+        "toxic_behaviour": "Τοξική Συμπεριφορά",
+        "illegal_content": "Παράνομο Περιεχόμενο",
+        "spam_or_propaganda": "Spam ή προπαγάνδα",
+        "report_entire_room": "Αναφορά ολόκληρου του δωματίου",
+        "report_content_to_homeserver": "Αναφορά Περιεχομένου στον Διαχειριστή του Διακομιστή σας",
+        "description": "Η αναφορά αυτού του μηνύματος θα στείλει το μοναδικό «αναγνωριστικό συμβάντος» στον διαχειριστή του διακομιστή σας. Εάν τα μηνύματα σε αυτό το δωμάτιο είναι κρυπτογραφημένα, ο διαχειριστής του διακομιστή σας δε θα μπορεί να διαβάσει το κείμενο του μηνύματος ή να προβάλει αρχεία και εικόνες."
     }
 }

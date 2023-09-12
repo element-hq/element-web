@@ -506,8 +506,6 @@
     "Are you sure you want to deactivate your account? This is irreversible.": "Ar tikrai norite deaktyvuoti savo paskyrą? Tai yra negrįžtama.",
     "Verify session": "Patvirtinti seansą",
     "Are you sure you want to sign out?": "Ar tikrai norite atsijungti?",
-    "Report Content to Your Homeserver Administrator": "Pranešti apie turinį serverio administratoriui",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Pranešant apie šią netinkamą žinutę, serverio administratoriui bus nusiųstas unikalus 'įvykio ID'. Jei žinutės šiame kambaryje yra šifruotos, serverio administratorius negalės perskaityti žinutės teksto ar peržiūrėti failų arba paveikslėlių.",
     "Are you sure you want to reject the invitation?": "Ar tikrai norite atmesti pakvietimą?",
     "Nice, strong password!": "Puiku, stiprus slaptažodis!",
     "Old cryptography data detected": "Aptikti seni kriptografijos duomenys",
@@ -515,7 +513,6 @@
     "Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.": "Atnaujinkite šį seansą, kad jam būtų leista patvirtinti kitus seansus, suteikiant jiems prieigą prie šifruotų žinučių ir juos pažymint kaip patikimus kitiems vartotojams.",
     "Use Single Sign On to continue": "Norėdami tęsti naudokite Vieną Prisijungimą",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Patvirtinkite šio el. pašto adreso pridėjimą naudodami Vieną Prisijungimą, kad įrodytumėte savo tapatybę.",
-    "Single Sign On": "Vienas Prisijungimas",
     "Confirm adding email": "Patvirtinkite el. pašto pridėjimą",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Patvirtinkite šio tel. nr. pridėjimą naudodami Vieną Prisijungimą, kad įrodytumėte savo tapatybę.",
     "Confirm adding phone number": "Patvirtinkite telefono numerio pridėjimą",
@@ -853,21 +850,13 @@
     "Joins room with given address": "Prisijungia prie kambario su nurodytu adresu",
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Jūs ignoravote šį vartotoją, todėl jo žinutė yra paslėpta. <a>Rodyti vistiek.</a>",
     "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "Kai kas nors į savo žinutę įtraukia URL, gali būti rodoma URL peržiūra, suteikianti daugiau informacijos apie tą nuorodą, tokios kaip pavadinimas, aprašymas ir vaizdas iš svetainės.",
-    "Show %(count)s more": {
-        "one": "Rodyti dar %(count)s",
-        "other": "Rodyti dar %(count)s"
-    },
-    "Show previews of messages": "Rodyti žinučių peržiūras",
-    "Show rooms with unread messages first": "Pirmiausia rodyti kambarius su neperskaitytomis žinutėmis",
     "Show Widgets": "Rodyti Valdiklius",
     "Always show the window menu bar": "Visada rodyti lango meniu juostą",
-    "Show less": "Rodyti mažiau",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Neleisti vartotojams kalbėti senoje kambario versijoje ir paskelbti pranešimą, kuriame vartotojams patariama persikelti į naują kambarį",
     "Update any local room aliases to point to the new room": "Atnaujinkite vietinių kambarių slapyvardžius, kad nurodytumėte į naująjį kambarį",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Norint atnaujinti šį kambarį, reikia uždaryti esamą kambario instanciją ir vietoje jo sukurti naują kambarį. Norėdami suteikti kambario nariams kuo geresnę patirtį, mes:",
     "Upgrade Room Version": "Atnaujinti Kambario Versiją",
     "Upgrade this room to version %(version)s": "Atnaujinti šį kambarį į %(version)s versiją",
-    "Please fill why you're reporting.": "Įrašykite kodėl pranešate.",
     "Put a link back to the old room at the start of the new room so people can see old messages": "Naujojo kambario pradžioje įdėkite nuorodą į senąjį kambarį, kad žmonės galėtų matyti senas žinutes",
     "Ignoring people is done through ban lists which contain rules for who to ban. Subscribing to a ban list means the users/servers blocked by that list will be hidden from you.": "Žmonių ignoravimas atliekamas naudojant draudimų sąrašus, kuriuose yra taisyklės, nurodančios kas turi būti draudžiami. Užsiprenumeravus draudimų sąrašą, vartotojai/serveriai, užblokuoti šio sąrašo, bus nuo jūsų paslėpti.",
     "The call was answered on another device.": "Į skambutį buvo atsiliepta kitame įrenginyje.",
@@ -953,17 +942,12 @@
     "You are currently ignoring:": "Šiuo metu ignoruojate:",
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Ar tikrai? Jūs prarasite savo šifruotas žinutes, jei jūsų raktams nebus tinkamai sukurtos atsarginės kopijos.",
     "Your keys are <b>not being backed up from this session</b>.": "Jūsų raktams <b>nėra daromos atsarginės kopijos iš šio seanso</b>.",
-    "A-Z": "A-Ž",
-    "Activity": "Aktyvumą",
-    "Sort by": "Rūšiuoti pagal",
-    "List options": "Sąrašo parinktys",
     "Notification Autocomplete": "Pranešimo Automatinis Užbaigimas",
     "Room Notification": "Kambario Pranešimas",
     "You have %(count)s unread notifications in a prior version of this room.": {
         "one": "Jūs turite %(count)s neperskaitytą pranešimą ankstesnėje šio kambario versijoje.",
         "other": "Jūs turite %(count)s neperskaitytus(-ų) pranešimus(-ų) ankstesnėje šio kambario versijoje."
     },
-    "Notification options": "Pranešimų parinktys",
     "Favourited": "Mėgstamas",
     "Room options": "Kambario parinktys",
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s negali saugiai talpinti šifruotų žinučių lokaliai, kai veikia interneto naršyklėje. Naudokite <desktopLink>%(brand)s Desktop (darbastalio versija)</desktopLink>, kad šifruotos žinutės būtų rodomos paieškos rezultatuose.",
@@ -1444,15 +1428,6 @@
     },
     "Joined": "Prisijungta",
     "Joining…": "Prisijungiama…",
-    "Unread messages.": "Neperskaitytos žinutės.",
-    "%(count)s unread messages.": {
-        "one": "1 neperskaityta žinutė.",
-        "other": "%(count)s neperskaitytos žinutės."
-    },
-    "%(count)s unread messages including mentions.": {
-        "one": "1 neperskaitytas paminėjimas.",
-        "other": "%(count)s neperskaitytos žinutės, įskaitant paminėjimus."
-    },
     "Show Labs settings": "Rodyti laboratorijų nustatymus",
     "To join, please enable video rooms in Labs first": "Norint prisijungti, pirmiausia įjunkite vaizdo kambarius laboratorijose",
     "To view, please enable video rooms in Labs first": "Norint peržiūrėti, pirmiausia įjunkite vaizdo kambarius laboratorijose",
@@ -1591,7 +1566,6 @@
     "Use a more compact 'Modern' layout": "Naudoti kompaktiškesnį 'Modernų' išdėstymą",
     "Show polls button": "Rodyti apklausų mygtuką",
     "Explore public spaces in the new search dialog": "Tyrinėkite viešas erdves naujajame paieškos lange",
-    "Leave the beta": "Palikti beta versiją",
     "Reply in thread": "Atsakyti temoje",
     "Developer": "Kūrėjas",
     "Experimental": "Eksperimentinis",
@@ -1663,7 +1637,6 @@
     "Hint: Begin your message with <code>//</code> to start it with a slash.": "Patarimas: norėdami žinutę pradėti pasviruoju brūkšniu, pradėkite ją su <code>//</code>.",
     "Unrecognised command: %(commandText)s": "Neatpažinta komanda: %(commandText)s",
     "Unknown Command": "Nežinoma komanda",
-    "Download %(brand)s": "Atsisiųsti %(brand)s",
     "Enable hardware acceleration": "Įjungti aparatinį spartinimą",
     "Show tray icon and minimise window to it on close": "Rodyti dėklo piktogramą ir uždarius langą jį sumažinti į ją",
     "Automatically send debug logs when key backup is not functioning": "Automatiškai siųsti derinimo žurnalus, kai neveikia atsarginė raktų kopija",
@@ -1694,18 +1667,14 @@
         "other": "Šiuo metu prisijungiama prie %(count)s kambarių"
     },
     "Join public room": "Prisijungti prie viešo kambario",
-    "You do not have permissions to add spaces to this space": "Neturite leidimų į šią erdvę pridėti erdvių",
     "Add space": "Pridėti erdvę",
     "Suggested Rooms": "Siūlomi kambariai",
     "Saved Items": "Išsaugoti daiktai",
     "Explore public rooms": "Tyrinėti viešuosius kambarius",
-    "You do not have permissions to add rooms to this space": "Neturite leidimų pridėti kambarių į šią erdvę",
     "Add existing room": "Pridėti esamą kambarį",
     "New video room": "Naujas vaizdo kambarys",
-    "You do not have permissions to create new rooms in this space": "Neturite leidimų kurti naujus kambarius šioje erdvėje",
     "New room": "Naujas kambarys",
     "Add people": "Pridėti žmonių",
-    "You do not have permissions to invite people to this space": "Neturite leidimų kviesti žmones į šią erdvę",
     "Invite to space": "Pakviesti į erdvę",
     "Start new chat": "Pradėti naują pokalbį",
     "%(count)s members": {
@@ -2008,7 +1977,8 @@
         "group_themes": "Temos",
         "group_encryption": "Šifravimas",
         "group_experimental": "Eksperimentinis",
-        "group_developer": "Kūrėjas"
+        "group_developer": "Kūrėjas",
+        "leave_beta": "Palikti beta versiją"
     },
     "keyboard": {
         "home": "Pradžia",
@@ -2113,7 +2083,8 @@
         "enable_notifications": "Įjungti pranešimus",
         "download_app_description": "Nepraleiskite nieko, jei su savimi pasiimsite %(brand)s",
         "download_app_action": "Atsisiųsti programėles",
-        "download_app": "Atsisiųsti %(brand)s"
+        "download_app": "Atsisiųsti %(brand)s",
+        "download_brand": "Atsisiųsti %(brand)s"
     },
     "settings": {
         "show_breadcrumbs": "Rodyti neseniai peržiūrėtų kambarių nuorodas virš kambarių sąrašo",
@@ -2221,7 +2192,8 @@
             "one": "Eksportavome %(count)s įvyki per %(seconds)s sekundes",
             "other": "Eksportavome %(count)s įvykius per %(seconds)s sekundes"
         },
-        "file_attached": "Failas pridėtas"
+        "file_attached": "Failas pridėtas",
+        "messages": "Žinutės"
     },
     "create_room": {
         "title_public_room": "Sukurti viešą kambarį",
@@ -2555,7 +2527,6 @@
         "unsupported": "Skambučiai nėra palaikomi",
         "unsupported_browser": "Jūs negalite skambinti šioje naršyklėje."
     },
-    "Messages": "Žinutės",
     "Other": "Kitas",
     "Advanced": "Išplėstiniai",
     "room_settings": {
@@ -2635,5 +2606,44 @@
         "spaceinvaders_message": "siunčia kosmoso įsibrovėlius",
         "hearts_description": "Siunčia pateiktą žinutę su širdelėmis",
         "hearts_message": "Siunčia širdeles"
+    },
+    "spaces": {
+        "error_no_permission_invite": "Neturite leidimų kviesti žmones į šią erdvę",
+        "error_no_permission_create_room": "Neturite leidimų kurti naujus kambarius šioje erdvėje",
+        "error_no_permission_add_room": "Neturite leidimų pridėti kambarių į šią erdvę",
+        "error_no_permission_add_space": "Neturite leidimų į šią erdvę pridėti erdvių"
+    },
+    "auth": {
+        "sso": "Vienas Prisijungimas"
+    },
+    "room_list": {
+        "sort_unread_first": "Pirmiausia rodyti kambarius su neperskaitytomis žinutėmis",
+        "show_previews": "Rodyti žinučių peržiūras",
+        "sort_by": "Rūšiuoti pagal",
+        "sort_by_activity": "Aktyvumą",
+        "sort_by_alphabet": "A-Ž",
+        "sublist_options": "Sąrašo parinktys",
+        "show_n_more": {
+            "one": "Rodyti dar %(count)s",
+            "other": "Rodyti dar %(count)s"
+        },
+        "show_less": "Rodyti mažiau",
+        "notification_options": "Pranešimų parinktys"
+    },
+    "report_content": {
+        "missing_reason": "Įrašykite kodėl pranešate.",
+        "report_content_to_homeserver": "Pranešti apie turinį serverio administratoriui",
+        "description": "Pranešant apie šią netinkamą žinutę, serverio administratoriui bus nusiųstas unikalus 'įvykio ID'. Jei žinutės šiame kambaryje yra šifruotos, serverio administratorius negalės perskaityti žinutės teksto ar peržiūrėti failų arba paveikslėlių."
+    },
+    "a11y": {
+        "n_unread_messages_mentions": {
+            "one": "1 neperskaitytas paminėjimas.",
+            "other": "%(count)s neperskaitytos žinutės, įskaitant paminėjimus."
+        },
+        "n_unread_messages": {
+            "one": "1 neperskaityta žinutė.",
+            "other": "%(count)s neperskaitytos žinutės."
+        },
+        "unread_messages": "Neperskaitytos žinutės."
     }
 }

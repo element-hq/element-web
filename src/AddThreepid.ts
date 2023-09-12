@@ -220,7 +220,7 @@ export default class AddThreepid {
                             body: _t(
                                 "Confirm adding this email address by using Single Sign On to prove your identity.",
                             ),
-                            continueText: _t("Single Sign On"),
+                            continueText: _t("auth|sso"),
                             continueKind: "primary",
                         },
                         [SSOAuthEntry.PHASE_POSTAUTH]: {
@@ -323,7 +323,7 @@ export default class AddThreepid {
                     [SSOAuthEntry.PHASE_PREAUTH]: {
                         title: _t("Use Single Sign On to continue"),
                         body: _t("Confirm adding this phone number by using Single Sign On to prove your identity."),
-                        continueText: _t("Single Sign On"),
+                        continueText: _t("auth|sso"),
                         continueKind: "primary",
                     },
                     [SSOAuthEntry.PHASE_POSTAUTH]: {

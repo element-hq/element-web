@@ -407,7 +407,6 @@
     "General failure": "Falha geral",
     "Please <a>contact your service administrator</a> to continue using this service.": "Por favor, <a>entre em contato com o seu administrador de serviços</a> para continuar usando este serviço.",
     "Failed to perform homeserver discovery": "Falha ao executar a descoberta do homeserver",
-    "Sign in with single sign-on": "Entre com o logon único",
     "That matches!": "Isto corresponde!",
     "That doesn't match.": "Isto não corresponde.",
     "Go back to set it again.": "Voltar para configurar novamente.",
@@ -528,7 +527,6 @@
     "Room Addresses": "Endereços da sala",
     "Use Single Sign On to continue": "Use \"Single Sign On\" para continuar",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirme a inclusão deste endereço de e-mail usando o Single Sign On para comprovar sua identidade.",
-    "Single Sign On": "Autenticação Única",
     "Confirm adding email": "Confirmar a inclusão de e-mail",
     "Click the button below to confirm adding this email address.": "Clique no botão abaixo para confirmar a adição deste endereço de e-mail.",
     "Add Email Address": "Adicionar endereço de e-mail",
@@ -605,7 +603,6 @@
     "Accept <policyLink /> to continue:": "Aceitar <policyLink /> para continuar:",
     "This bridge was provisioned by <user />.": "Esta integração foi disponibilizada por <user />.",
     "This bridge is managed by <user />.": "Esta integração é desenvolvida por <user />.",
-    "Show less": "Mostrar menos",
     "Show more": "Mostrar mais",
     "Your homeserver does not support cross-signing.": "Seu servidor não suporta a autoverificação.",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Sua conta tem uma identidade autoverificada em armazenamento secreto, mas ainda não é considerada confiável por esta sessão.",
@@ -687,7 +684,6 @@
     "You'll lose access to your encrypted messages": "Você perderá acesso às suas mensagens criptografadas",
     "Session key": "Chave da sessão",
     "Verify session": "Confirmar sessão",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Reportar esta mensagem enviará o seu 'event ID' único para o/a administrador/a do seu Homeserver. Se as mensagens nesta sala são criptografadas, o/a administrador/a não conseguirá ler o texto da mensagem nem ver nenhuma imagem ou arquivo.",
     "Sign out and remove encryption keys?": "Fazer logout e remover as chaves de criptografia?",
     "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Alguns dados de sessão, incluindo chaves de mensagens criptografadas, estão faltando. Desconecte-se e entre novamente para resolver isso, o que restaurará as chaves do backup.",
     "Security Key": "Chave de Segurança",
@@ -719,7 +715,6 @@
     "%(brand)s is securely caching encrypted messages locally for them to appear in search results:": "%(brand)s está armazenando de forma segura as mensagens criptografadas localmente, para que possam aparecer nos resultados das buscas:",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s de %(totalRooms)s",
     "Click the button below to confirm adding this phone number.": "Clique no botão abaixo para confirmar a adição deste número de telefone.",
-    "Notification options": "Alterar notificações",
     "Forget Room": "Esquecer Sala",
     "Favourited": "Favoritado",
     "You cancelled verifying %(name)s": "Você cancelou a confirmação de %(name)s",
@@ -749,7 +744,6 @@
     "Rotate Left": "Girar para a esquerda",
     "Rotate Right": "Girar para a direita",
     "Language Dropdown": "Menu suspenso de idiomas",
-    "QR Code": "Código QR",
     "Room address": "Endereço da sala",
     "e.g. my-room": "por exemplo: minha-sala",
     "Some characters not allowed": "Alguns caracteres não são permitidos",
@@ -774,24 +768,10 @@
     "Server did not return valid authentication information.": "O servidor não retornou informações de autenticação válidas.",
     "Integrations are disabled": "As integrações estão desativadas",
     "Integrations not allowed": "As integrações não estão permitidas",
-    "List options": "Opções da Lista",
     "Jump to first unread room.": "Ir para a primeira sala não lida.",
     "Jump to first invite.": "Ir para o primeiro convite.",
     "Add room": "Adicionar sala",
-    "Show %(count)s more": {
-        "other": "Mostrar %(count)s a mais",
-        "one": "Mostrar %(count)s a mais"
-    },
     "Room options": "Opções da Sala",
-    "%(count)s unread messages including mentions.": {
-        "other": "%(count)s mensagens não lidas, incluindo menções.",
-        "one": "1 menção não lida."
-    },
-    "%(count)s unread messages.": {
-        "other": "%(count)s mensagens não lidas.",
-        "one": "1 mensagem não lida."
-    },
-    "Unread messages.": "Mensagens não lidas.",
     "This room is public": "Esta sala é pública",
     "This room has already been upgraded.": "Esta sala já foi atualizada.",
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Esta sala está executando a versão <roomVersion />, que este servidor marcou como <i>instável</i>.",
@@ -889,11 +869,6 @@
     "Reject & Ignore user": "Recusar e bloquear usuário",
     "You're previewing %(roomName)s. Want to join it?": "Você está visualizando %(roomName)s. Deseja participar?",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s não pode ser visualizado. Deseja participar?",
-    "Show rooms with unread messages first": "Mostrar salas não lidas em primeiro",
-    "Show previews of messages": "Mostrar pré-visualizações de mensagens",
-    "Sort by": "Classificar por",
-    "Activity": "Atividade recente",
-    "A-Z": "A-Z",
     "Unknown Command": "Comando desconhecido",
     "Unrecognised command: %(commandText)s": "Comando não reconhecido: %(commandText)s",
     "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Você pode usar <code>/help</code> para listar os comandos disponíveis. Você quis enviar isso como uma mensagem?",
@@ -1114,7 +1089,6 @@
     "Almost there! Is %(displayName)s showing the same shield?": "Quase lá! Este escudo também aparece para %(displayName)s?",
     "You've successfully verified %(displayName)s!": "Você confirmou %(displayName)s com sucesso!",
     "Confirm this user's session by comparing the following with their User Settings:": "Confirme a sessão deste usuário comparando o seguinte com as configurações deste usuário:",
-    "Report Content to Your Homeserver Administrator": "Denunciar conteúdo ao administrador do seu servidor principal",
     "Discovery options will appear once you have added an email above.": "As opções de descoberta aparecerão assim que você adicione um e-mail acima.",
     "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Desativar este usuário irá desconectá-lo e impedi-lo de fazer o login novamente. Além disso, ele sairá de todas as salas em que estiver. Esta ação não pode ser revertida. Tem certeza de que deseja desativar este usuário?",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Apagar chaves de autoverificação é permanente. Qualquer pessoa com quem você se confirmou receberá alertas de segurança. Não é aconselhável fazer isso, a menos que você tenha perdido todos os aparelhos nos quais fez a autoverificação.",
@@ -1143,7 +1117,6 @@
     "If they don't match, the security of your communication may be compromised.": "Se eles não corresponderem, a segurança da sua comunicação pode estar comprometida.",
     "Your homeserver doesn't seem to support this feature.": "O seu servidor local não parece suportar este recurso.",
     "Message edits": "Edições na mensagem",
-    "Please fill why you're reporting.": "Por favor, descreva porque você está reportando.",
     "A browser extension is preventing the request.": "Uma extensão do navegador está impedindo a solicitação.",
     "The server has denied your request.": "O servidor recusou a sua solicitação.",
     "No files visible in this room": "Nenhum arquivo nesta sala",
@@ -1620,7 +1593,6 @@
     "Specify a homeserver": "Digite um servidor local",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "Apenas um aviso: se você não adicionar um e-mail e depois esquecer sua senha, poderá <b>perder permanentemente o acesso à sua conta</b>.",
     "Continuing without email": "Continuar sem e-mail",
-    "Continue with %(provider)s": "Continuar com %(provider)s",
     "Server Options": "Opções do servidor",
     "Reason (optional)": "Motivo (opcional)",
     "Invalid URL": "URL inválido",
@@ -1696,8 +1668,6 @@
     "Invite to %(spaceName)s": "Convidar para %(spaceName)s",
     "Create a new room": "Criar uma nova sala",
     "Spaces": "Espaços",
-    "You do not have permissions to add rooms to this space": "Você não tem permissão para adicionar salas neste espaço",
-    "You do not have permissions to create new rooms in this space": "Você não tem permissão para criar novas salas neste espaço",
     "Invite to this space": "Convidar para este espaço",
     "Your message was sent": "A sua mensagem foi enviada",
     "Space options": "Opções do espaço",
@@ -1874,13 +1844,7 @@
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Para evitar esses problemas, crie uma <a>nova sala criptografada</a> para a conversa que você planeja ter.",
     "Are you sure you want to add encryption to this public room?": "Tem certeza que deseja adicionar criptografia para esta sala pública?",
     "Select the roles required to change various parts of the space": "Selecionar os cargos necessários para alterar certas partes do espaço",
-    "Include Attachments": "Incluir Anexos",
-    "Size Limit": "Limite de Tamanho",
     "MB": "MB",
-    "Number of messages": "Número de mensagens",
-    "Number of messages can only be a number between %(min)s and %(max)s": "Número de mensagens pode ser apenas um número entre %(min)s e %(max)s",
-    "Size can only be a number between %(min)s MB and %(max)s MB": "O tamanho pode ser apenas um número entre %(min)s MB e %(max)s MB",
-    "Enter a number between %(min)s and %(max)s": "Insira um número entre %(min)s e %(max)s",
     "In reply to <a>this message</a>": "Em resposta a <a>esta mensagem</a>",
     "Export chat": "Exportar conversa",
     "Light high contrast": "Claro (alto contraste)",
@@ -1978,7 +1942,6 @@
     },
     "Join public room": "Entrar na sala pública",
     "Add people": "Adicionar pessoas",
-    "You do not have permissions to invite people to this space": "Você não tem permissão para convidar pessoas para este espaço",
     "Invite to space": "Convidar para o espaço",
     "Start new chat": "Comece um novo bate-papo",
     "Recently viewed": "Visualizado recentemente",
@@ -2047,7 +2010,6 @@
     "Unable to copy room link": "Não foi possível copiar o link da sala",
     "Copy room link": "Copiar link da sala",
     "Public rooms": "Salas públicas",
-    "%(qrCode)s or %(appLinks)s": "%(qrCode)s ou %(appLinks)s",
     "Add new server…": "Adicionar um novo servidor…",
     "%(count)s participants": {
         "other": "%(count)s participantes",
@@ -2250,7 +2212,8 @@
         "secure_backup": "Backup online",
         "cross_signing": "Autoverificação",
         "identity_server": "Servidor de identidade",
-        "integration_manager": "Gerenciador de integrações"
+        "integration_manager": "Gerenciador de integrações",
+        "qr_code": "Código QR"
     },
     "action": {
         "continue": "Continuar",
@@ -2340,7 +2303,16 @@
         "send_report": "Enviar relatório"
     },
     "a11y": {
-        "user_menu": "Menu do usuário"
+        "user_menu": "Menu do usuário",
+        "n_unread_messages_mentions": {
+            "other": "%(count)s mensagens não lidas, incluindo menções.",
+            "one": "1 menção não lida."
+        },
+        "n_unread_messages": {
+            "other": "%(count)s mensagens não lidas.",
+            "one": "1 mensagem não lida."
+        },
+        "unread_messages": "Mensagens não lidas."
     },
     "labs": {
         "video_rooms": "Salas de vídeo",
@@ -2452,7 +2424,8 @@
         "set_up_profile_description": "Certifique-se de que as pessoas saibam que é realmente você",
         "set_up_profile_action": "Seu perfil",
         "set_up_profile": "Configure seu perfil",
-        "find_people": "Encontrar pessoas"
+        "find_people": "Encontrar pessoas",
+        "qr_or_app_links": "%(qrCode)s ou %(appLinks)s"
     },
     "settings": {
         "show_breadcrumbs": "Mostrar atalhos para salas recentemente visualizadas acima da lista de salas",
@@ -2578,7 +2551,14 @@
         "export_info": "Este é o início da exportação da sala <roomName/>. Exportado por <exporterDetails/> às %(exportDate)s.",
         "topic": "Tópico: %(topic)s",
         "error_fetching_file": "Erro ao buscar arquivo",
-        "file_attached": "Arquivo Anexado"
+        "file_attached": "Arquivo Anexado",
+        "enter_number_between_min_max": "Insira um número entre %(min)s e %(max)s",
+        "size_limit_min_max": "O tamanho pode ser apenas um número entre %(min)s MB e %(max)s MB",
+        "num_messages_min_max": "Número de mensagens pode ser apenas um número entre %(min)s e %(max)s",
+        "num_messages": "Número de mensagens",
+        "messages": "Mensagens",
+        "size_limit": "Limite de Tamanho",
+        "include_attachments": "Incluir Anexos"
     },
     "create_room": {
         "title_video_room": "Criar uma sala de vídeo",
@@ -2940,7 +2920,6 @@
         "unsupported": "Chamadas não suportadas",
         "unsupported_browser": "Você não pode fazer chamadas neste navegador."
     },
-    "Messages": "Mensagens",
     "Other": "Outros",
     "Advanced": "Avançado",
     "room_settings": {
@@ -3014,5 +2993,34 @@
         "snowfall_message": "envia neve caindo",
         "spaceinvaders_description": "Envia a mensagem com um efeito com tema espacial",
         "spaceinvaders_message": "envia os invasores do espaço"
+    },
+    "spaces": {
+        "error_no_permission_invite": "Você não tem permissão para convidar pessoas para este espaço",
+        "error_no_permission_create_room": "Você não tem permissão para criar novas salas neste espaço",
+        "error_no_permission_add_room": "Você não tem permissão para adicionar salas neste espaço"
+    },
+    "auth": {
+        "continue_with_idp": "Continuar com %(provider)s",
+        "sign_in_with_sso": "Entre com o logon único",
+        "sso": "Autenticação Única"
+    },
+    "room_list": {
+        "sort_unread_first": "Mostrar salas não lidas em primeiro",
+        "show_previews": "Mostrar pré-visualizações de mensagens",
+        "sort_by": "Classificar por",
+        "sort_by_activity": "Atividade recente",
+        "sort_by_alphabet": "A-Z",
+        "sublist_options": "Opções da Lista",
+        "show_n_more": {
+            "other": "Mostrar %(count)s a mais",
+            "one": "Mostrar %(count)s a mais"
+        },
+        "show_less": "Mostrar menos",
+        "notification_options": "Alterar notificações"
+    },
+    "report_content": {
+        "missing_reason": "Por favor, descreva porque você está reportando.",
+        "report_content_to_homeserver": "Denunciar conteúdo ao administrador do seu servidor principal",
+        "description": "Reportar esta mensagem enviará o seu 'event ID' único para o/a administrador/a do seu Homeserver. Se as mensagens nesta sala são criptografadas, o/a administrador/a não conseguirá ler o texto da mensagem nem ver nenhuma imagem ou arquivo."
     }
 }

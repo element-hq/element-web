@@ -56,7 +56,7 @@ export const deleteDevicesWithInteractiveAuth = async (
                 body: _t("Confirm logging out these devices by using Single Sign On to prove your identity.", {
                     count: numDevices,
                 }),
-                continueText: _t("Single Sign On"),
+                continueText: _t("auth|sso"),
                 continueKind: "primary",
             },
             [SSOAuthEntry.PHASE_POSTAUTH]: {

@@ -1,12 +1,7 @@
 {
     "Sign in with": "Sínigh isteach le",
     "Already have an account? <a>Sign in here</a>": "An bhfuil cuntas agat cheana? <a>Sínigh isteach anseo</a>",
-    "Show less": "Taispeáin níos lú",
     "Show more": "Taispeáin níos mó",
-    "Show %(count)s more": {
-        "one": "Taispeáin %(count)s níos mó",
-        "other": "Taispeáin %(count)s níos mó"
-    },
     "Switch to dark mode": "Athraigh go mód dorcha",
     "Switch to light mode": "Athraigh go mód geal",
     "Got an account? <a>Sign in</a>": "An bhfuil cuntas agat? <a>Sínigh isteach</a>",
@@ -241,8 +236,6 @@
     "Algorithm:": "Algartam:",
     "Information": "Eolas",
     "Favourited": "Roghnaithe",
-    "A-Z": "A-Z",
-    "Activity": "Gníomhaíocht",
     "Feedback": "Aiseolas",
     "Ok": "Togha",
     "Autocomplete": "Uathiomlánaigh",
@@ -416,7 +409,6 @@
     "Add Email Address": "Cuir seoladh ríomhphoist",
     "Click the button below to confirm adding this email address.": "Cliceáil an cnaipe thíos chun an seoladh ríomhphoist nua a dheimhniú.",
     "Confirm adding email": "Deimhnigh an seoladh ríomhphoist nua",
-    "Single Sign On": "Single Sign On",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Deimhnigh an seoladh ríomhphoist seo le SSO mar cruthúnas céannachta.",
     "Explore rooms": "Breathnaigh thart ar na seomraí",
     "Create Account": "Déan cuntas a chruthú",
@@ -447,7 +439,6 @@
     "Global": "Uilíoch",
     "Keyword": "Eochairfhocal",
     "Report": "Tuairiscigh",
-    "Disagree": "Easaontaigh",
     "Visibility": "Léargas",
     "Address": "Seoladh",
     "Sent": "Seolta",
@@ -780,7 +771,6 @@
         "call_failed_media_permissions": "Tugtar cead an ceamara gréasáin a úsáid",
         "call_failed_media_applications": "Níl aon fheidhmchlár eile ag úsáid an cheamara gréasáin"
     },
-    "Messages": "Teachtaireachtaí",
     "Other": "Eile",
     "Advanced": "Forbartha",
     "room_settings": {
@@ -807,5 +797,23 @@
         "category_symbols": "Siombailí",
         "category_flags": "Bratacha",
         "categories": "Catagóire"
+    },
+    "auth": {
+        "sso": "Single Sign On"
+    },
+    "export_chat": {
+        "messages": "Teachtaireachtaí"
+    },
+    "room_list": {
+        "sort_by_activity": "Gníomhaíocht",
+        "sort_by_alphabet": "A-Z",
+        "show_n_more": {
+            "one": "Taispeáin %(count)s níos mó",
+            "other": "Taispeáin %(count)s níos mó"
+        },
+        "show_less": "Taispeáin níos lú"
+    },
+    "report_content": {
+        "disagree": "Easaontaigh"
     }
 }

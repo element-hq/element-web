@@ -54,7 +54,6 @@
     "Add Email Address": "Adăugați o adresă de e-mail",
     "Click the button below to confirm adding this email address.": "Faceți clic pe butonul de mai jos pentru a confirma adăugarea acestei adrese de e-mail.",
     "Confirm adding email": "Confirmați adăugarea e-mailului",
-    "Single Sign On": "Single Sign On",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirmați adăugarea acestei adrese de e-mail utilizând Single Sign On pentru a vă dovedi identitatea.",
     "Use Single Sign On to continue": "Utilizați Single Sign On pentru a continua",
     "common": {
@@ -76,5 +75,8 @@
         "call_failed_media_connected": "Microfonul și camera web sunt conectate și configurate corect",
         "call_failed_media_permissions": "Permisiunea de a utiliza camera web este acordată",
         "call_failed_media_applications": "Nicio altă aplicație nu folosește camera web"
+    },
+    "auth": {
+        "sso": "Single Sign On"
     }
 }

@@ -106,7 +106,7 @@ export function RoomResultContextMenus({ room }: Props): JSX.Element {
                         const target = ev.target as HTMLElement;
                         setNotificationMenuPosition(target.getBoundingClientRect());
                     }}
-                    title={_t("Notification options")}
+                    title={_t("room_list|notification_options")}
                     isExpanded={notificationMenuPosition !== null}
                 />
             )}

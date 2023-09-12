@@ -211,7 +211,6 @@
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "ยืนยันการเพิ่มหมายเลขโทรศัพท์นี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
     "Click the button below to confirm adding this email address.": "คลิกปุ่มด้านล่างเพื่อยืนยันการเพิ่มที่อยู่อีเมลนี้.",
     "Confirm adding email": "ยืนยันการเพิ่มอีเมล",
-    "Single Sign On": "ลงชื่อเข้าใช้เพียงครั้งเดียว",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "ยืนยันการเพิ่มที่อยู่อีเมลนี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
     "Use Single Sign On to continue": "ใช้การลงชื่อเพียงครั้งเดียวเพื่อดำเนินการต่อ",
     "You most likely do not want to reset your event index store": "คุณมักไม่ต้องการรีเซ็ตที่เก็บดัชนีเหตุการณ์ของคุณ",
@@ -527,5 +526,8 @@
     "labs": {
         "group_profile": "โปรไฟล์",
         "group_rooms": "ห้องสนทนา"
+    },
+    "auth": {
+        "sso": "ลงชื่อเข้าใช้เพียงครั้งเดียว"
     }
 }

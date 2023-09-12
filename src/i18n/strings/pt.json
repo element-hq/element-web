@@ -275,7 +275,6 @@
     "No identity access token found": "Nenhum token de identidade de acesso encontrado",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirme adicionar este endereço de email usando Single Sign On para provar a sua identidade.",
     "Confirm adding email": "Confirmar adição de email",
-    "Single Sign On": "Single Sign On",
     "Click the button below to confirm adding this email address.": "Pressione o botão abaixo para confirmar se quer adicionar este endereço de email.",
     "The add / bind with MSISDN flow is misconfigured": "A junção / vinculo com o fluxo MSISDN está mal configurado",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Confirme que quer adicionar este número de telefone usando Single Sign On para provar a sua identidade.",
@@ -813,11 +812,16 @@
         "unsupported": "Chamadas não são suportadas",
         "unsupported_browser": "Não pode fazer chamadas neste navegador."
     },
-    "Messages": "Mensagens",
     "Other": "Outros",
     "Advanced": "Avançado",
     "labs": {
         "group_profile": "Perfil",
         "group_rooms": "Salas"
+    },
+    "auth": {
+        "sso": "Single Sign On"
+    },
+    "export_chat": {
+        "messages": "Mensagens"
     }
 }

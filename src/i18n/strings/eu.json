@@ -376,7 +376,6 @@
     "Unable to restore backup": "Ezin izan da babes-kopia berrezarri",
     "No backup found!": "Ez da babes-kopiarik aurkitu!",
     "Failed to decrypt %(failedCount)s sessions!": "Ezin izan dira %(failedCount)s saio deszifratu!",
-    "Sign in with single sign-on": "Hai saioa urrats batean",
     "Failed to perform homeserver discovery": "Huts egin du hasiera-zerbitzarien bilaketak",
     "Invalid homeserver discovery response": "Baliogabeko hasiera-zerbitzarien bilaketaren erantzuna",
     "Use a few words, avoid common phrases": "Erabili hitz gutxi batzuk, ekidin ohiko esaldiak",
@@ -753,14 +752,6 @@
     "This invite to %(roomName)s was sent to %(email)s which is not associated with your account": "%(roomName)s gelarako gonbidapena zure kontuarekin lotuta ez dagoen %(email)s helbidera bidali da",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Erabili identitate zerbitzari bat ezarpenetan gonbidapenak zuzenean %(brand)s-en jasotzeko.",
     "Share this email in Settings to receive invites directly in %(brand)s.": "Partekatu e-mail hau ezarpenetan gonbidapenak zuzenean %(brand)s-en jasotzeko.",
-    "%(count)s unread messages including mentions.": {
-        "other": "irakurri gabeko %(count)s mezu aipamenak barne.",
-        "one": "Irakurri gabeko aipamen 1."
-    },
-    "%(count)s unread messages.": {
-        "other": "irakurri gabeko %(count)s mezu.",
-        "one": "Irakurri gabeko mezu 1."
-    },
     "Show image": "Erakutsi irudia",
     "e.g. my-room": "adib. nire-gela",
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Erabili identitate-zerbitzari bat e-mail bidez gonbidatzeko. <default>Erabili lehenetsitakoa (%(defaultIdentityServerName)s)</default> edo gehitu bat <settings>Ezarpenak</settings> atalean.",
@@ -770,9 +761,6 @@
     "Topic (optional)": "Mintzagaia (aukerakoa)",
     "Hide advanced": "Ezkutatu aurreratua",
     "Show advanced": "Erakutsi aurreratua",
-    "Please fill why you're reporting.": "Idatzi zergatik salatzen duzun.",
-    "Report Content to Your Homeserver Administrator": "Salatu edukia zure hasiera-zerbitzariko administratzaileari",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Mezu hau salatzeak bere 'gertaera ID'-a bidaliko dio hasiera-zerbitzariko administratzaileari. Gela honetako mezuak zifratuta badaude, zure hasiera-zerbitzariko administratzaileak ezin izango du mezuaren testua irakurri edo irudirik ikusi.",
     "To continue you need to accept the terms of this service.": "Jarraitzeko erabilera baldintzak onartu behar dituzu.",
     "Document": "Dokumentua",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Captcha-ren gako publikoa falta da hasiera-zerbitzariaren konfigurazioan. Eman honen berri hasiera-zerbitzariaren administratzaileari.",
@@ -788,7 +776,6 @@
     "contact the administrators of identity server <idserver />": "<idserver /> identitate-zerbitzariko administratzaileekin kontaktuak jarri",
     "wait and try again later": "itxaron eta berriro saiatu",
     "Room %(name)s": "%(name)s gela",
-    "Unread messages.": "Irakurri gabeko mezuak.",
     "Failed to deactivate user": "Huts egin du erabiltzailea desaktibatzeak",
     "This client does not support end-to-end encryption.": "Bezero honek ez du muturretik muturrerako zifratzea onartzen.",
     "Messages in this room are not end-to-end encrypted.": "Gela honetako mezuak ez daude muturretik muturrera zifratuta.",
@@ -920,7 +907,6 @@
     "How fast should messages be downloaded.": "Zeinen azkar deskargatu behar diren mezuak.",
     "Waiting for %(displayName)s to verify…": "%(displayName)s egiaztatu bitartean zain…",
     "This bridge was provisioned by <user />.": "Zubi hau <user /> erabiltzaileak hornitu du.",
-    "Show less": "Erakutsi gutxiago",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Zure kontuak zeharkako sinatze identitate bat du biltegi sekretuan, baina saio honek ez du oraindik fidagarritzat.",
     "in memory": "memorian",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Saio honek <b>ez du zure gakoen babes-kopia egiten</b>, baina badago berreskuratu eta gehitu deakezun aurreko babes-kopia bat.",
@@ -1059,7 +1045,6 @@
     "Cancel replying to a message": "Utzi mezua erantzuteari",
     "Use Single Sign On to continue": "Erabili Single sign-on jarraitzeko",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Baieztatu e-mail hau gehitzea Single sign-on bidez zure identitatea frogatuz.",
-    "Single Sign On": "Single sign-on",
     "Confirm adding email": "Baieztatu e-maila gehitzea",
     "Click the button below to confirm adding this email address.": "Sakatu beheko botoia e-mail helbide hau gehitzea berresteko.",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Baieztatu telefono zenbaki hau gehitzea Single sign-on bidez zure identitatea frogatuz.",
@@ -1104,7 +1089,6 @@
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Letra tamaina pertsonalizatua %(min)s pt eta %(max)s pt bitartean egon behar du",
     "Use between %(min)s pt and %(max)s pt": "Erabili %(min)s pt eta %(max)s pt bitarteko  balioa",
     "You've successfully verified your device!": "Ongi egiaztatu duzu zure gailua!",
-    "QR Code": "QR kodea",
     "To continue, use Single Sign On to prove your identity.": "Jarraitzeko, erabili Single Sign On zure identitatea frogatzeko.",
     "Confirm to continue": "Berretsi jarraitzeko",
     "Click the button below to confirm your identity.": "Sakatu azpiko botoia zure identitatea frogatzeko.",
@@ -1128,15 +1112,7 @@
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Zure zerbitzariko administratzaileak muturretik muturrerako zifratzea desgaitu du lehenetsita gela probatuetan eta mezu zuzenetan.",
     "To link to this room, please add an address.": "Gela hau estekatzeko, gehitu helbide bat.",
     "No recently visited rooms": "Ez dago azkenaldian bisitatutako gelarik",
-    "Sort by": "Ordenatu honela",
-    "Activity": "Jarduera",
-    "A-Z": "A-Z",
     "Message preview": "Mezu-aurrebista",
-    "List options": "Zerrenda-aukerak",
-    "Show %(count)s more": {
-        "other": "Erakutsi %(count)s gehiago",
-        "one": "Erakutsi %(count)s gehiago"
-    },
     "Room options": "Gelaren aukerak",
     "Error creating address": "Errorea helbidea sortzean",
     "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.": "Errorea gertatu da helbidea sortzean. Agian ez du zerbitzariak onartzen edo behin behineko arazo bat egon da.",
@@ -1156,7 +1132,6 @@
     "Change notification settings": "Aldatu jakinarazpenen ezarpenak",
     "Use custom size": "Erabili tamaina pertsonalizatua",
     "Hey you. You're the best!": "Aupa txo. Onena zara!",
-    "Notification options": "Jakinarazpen ezarpenak",
     "Forget Room": "Ahaztu gela",
     "This room is public": "Gela hau publikoa da",
     "Click to view edits": "Klik egin edizioak ikusteko",
@@ -1224,7 +1199,8 @@
         "system_alerts": "Sistemaren alertak",
         "cross_signing": "Zeharkako sinadura",
         "identity_server": "Identitate zerbitzaria",
-        "integration_manager": "Integrazio-kudeatzailea"
+        "integration_manager": "Integrazio-kudeatzailea",
+        "qr_code": "QR kodea"
     },
     "action": {
         "continue": "Jarraitu",
@@ -1301,7 +1277,16 @@
         "send_report": "Bidali salaketa"
     },
     "a11y": {
-        "user_menu": "Erabiltzailea-menua"
+        "user_menu": "Erabiltzailea-menua",
+        "n_unread_messages_mentions": {
+            "other": "irakurri gabeko %(count)s mezu aipamenak barne.",
+            "one": "Irakurri gabeko aipamen 1."
+        },
+        "n_unread_messages": {
+            "other": "irakurri gabeko %(count)s mezu.",
+            "one": "Irakurri gabeko mezu 1."
+        },
+        "unread_messages": "Irakurri gabeko mezuak."
     },
     "labs": {
         "pinning": "Mezuak finkatzea",
@@ -1683,7 +1668,6 @@
         "unknown_caller": "Dei-egile ezezaguna",
         "call_failed": "Deiak huts egin du"
     },
-    "Messages": "Mezuak",
     "Other": "Beste bat",
     "Advanced": "Aurreratua",
     "room_settings": {
@@ -1730,5 +1714,29 @@
         "category_flags": "Banderak",
         "categories": "Kategoriak",
         "quick_reactions": "Erreakzio azkarrak"
+    },
+    "auth": {
+        "sign_in_with_sso": "Hai saioa urrats batean",
+        "sso": "Single sign-on"
+    },
+    "export_chat": {
+        "messages": "Mezuak"
+    },
+    "room_list": {
+        "sort_by": "Ordenatu honela",
+        "sort_by_activity": "Jarduera",
+        "sort_by_alphabet": "A-Z",
+        "sublist_options": "Zerrenda-aukerak",
+        "show_n_more": {
+            "other": "Erakutsi %(count)s gehiago",
+            "one": "Erakutsi %(count)s gehiago"
+        },
+        "show_less": "Erakutsi gutxiago",
+        "notification_options": "Jakinarazpen ezarpenak"
+    },
+    "report_content": {
+        "missing_reason": "Idatzi zergatik salatzen duzun.",
+        "report_content_to_homeserver": "Salatu edukia zure hasiera-zerbitzariko administratzaileari",
+        "description": "Mezu hau salatzeak bere 'gertaera ID'-a bidaliko dio hasiera-zerbitzariko administratzaileari. Gela honetako mezuak zifratuta badaude, zure hasiera-zerbitzariko administratzaileak ezin izango du mezuaren testua irakurri edo irudirik ikusi."
     }
 }

@@ -92,11 +92,11 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
 }) => {
     let label: string;
     if (idp) {
-        label = _t("Continue with %(provider)s", { provider: idp.name });
+        label = _t("auth|continue_with_idp", { provider: idp.name });
     } else if (DELEGATED_OIDC_COMPATIBILITY.findIn<boolean>(flow)) {
         label = _t("action|continue");
     } else {
-        label = _t("Sign in with single sign-on");
+        label = _t("auth|sign_in_with_sso");
     }
 
     const onClick = (): void => {

@@ -336,13 +336,7 @@
     "Use the <a>Desktop app</a> to search encrypted messages": "Izmantojiet <a>lietotni</a>, lai veiktu šifrētu ziņu meklēšanu",
     "%(creator)s created this DM.": "%(creator)s uzsāka šo tiešo saraksti.",
     "None": "Neviena",
-    "Notification options": "Paziņojumu opcijas",
     "Room options": "Istabas opcijas",
-    "Show previews of messages": "Rādīt ziņu priekšskatījumus",
-    "Show rooms with unread messages first": "Rādīt istabas ar nelasītām ziņām augšpusē",
-    "Activity": "Aktivitātes",
-    "Sort by": "Kārtot pēc",
-    "List options": "Saraksta opcijas",
     "Send feedback": "Nosūtīt atsauksmi",
     "Feedback sent": "Atsauksme nosūtīta",
     "Feedback": "Atsauksmes",
@@ -386,7 +380,6 @@
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Apstiprināt šīs epasta adreses pievienošanu, izmantojot vienoto pieteikšanos savas identitātes apliecināšanai.",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Apstiprināt šī tālruņa numura pievienošanu, izmantojot vienoto pieteikšanos savas identitātes apliecināšanai.",
     "Click the button below to confirm adding this email address.": "Nospiest zemāk esošo pogu, lai apstiprinātu šīs e-pasta adreses pievienošanu.",
-    "Single Sign On": "Vienotā pieteikšanās",
     "Use Single Sign On to continue": "Izmantot vienoto pieteikšanos, lai turpinātu",
     "Welcome %(name)s": "Laipni lūdzam %(name)s",
     "Welcome to %(appName)s": "Laipni lūdzam %(appName)s",
@@ -471,12 +464,7 @@
     "Published Addresses": "Publiskotās adreses",
     "Other published addresses:": "Citas publiskotās adreses:",
     "This address is already in use": "Šī adrese jau tiek izmantota",
-    "Show less": "Rādīt mazāk",
     "Show more": "Rādīt vairāk",
-    "Show %(count)s more": {
-        "one": "Rādīt vēl %(count)s",
-        "other": "Rādīt vēl %(count)s"
-    },
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "Notikusi kļūda, mēģinot atjaunināt istabas galveno adresi. Iespējams, tas ir liegts servera iestatījumos vai arī notikusi kāda pagaidu kļūme.",
     "Error updating main address": "Kļūda galvenās adreses atjaunināšanā",
     "This address is available to use": "Šī adrese ir pieejama",
@@ -661,7 +649,6 @@
     "Continue With Encryption Disabled": "Turpināt ar atspējotu šifrēšanu",
     "Create a new room": "Izveidot jaunu istabu",
     "All rooms": "Visas istabas",
-    "Continue with %(provider)s": "Turpināt ar %(provider)s",
     "%(name)s cancelled": "%(name)s atcēla",
     "%(name)s cancelled verifying": "%(name)s atcēla verifikāciju",
     "Deactivate user": "Deaktivizēt lietotāju",
@@ -669,15 +656,6 @@
     "Demote": "Pazemināt",
     "Demote yourself?": "Pazemināt sevi?",
     "Accepting…": "Akceptē…",
-    "%(count)s unread messages.": {
-        "one": "1 nelasīta ziņa.",
-        "other": "%(count)s nelasītas ziņas."
-    },
-    "%(count)s unread messages including mentions.": {
-        "one": "1 neslasīts pieminējums.",
-        "other": "%(count)s nelasītas ziņas, ieskaitot pieminēšanu."
-    },
-    "A-Z": "A-Ž",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s priekšskatījums nav pieejams. Vai vēlaties tai pievienoties?",
     "Empty room": "Tukša istaba",
     "Add existing room": "Pievienot eksistējošu istabu",
@@ -1098,7 +1076,6 @@
     "Unexpected error resolving identity server configuration": "Negaidīta kļūda identitātes servera konfigurācijā",
     "Unexpected error resolving homeserver configuration": "Negaidīta kļūme bāzes servera konfigurācijā",
     "Cancel All": "Atcelt visu",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Iesniedzot ziņojumu par konkrēto ziņu, tās unikālais notikuma ID tiks nosūtīts jūsu bāzes servera administratoram. Ja ziņas šajā istabā ir šifrētas, jūsu bāzes servera administrators nevarēs lasīt ziņas tekstu vai skatīt failus un attēlus.",
     "Sending": "Sūta",
     "Can't load this message": "Nevar ielādēt šo ziņu",
     "Send voice message": "Sūtīt balss ziņu",
@@ -1111,8 +1088,6 @@
     "Forgotten or lost all recovery methods? <a>Reset all</a>": "Aizmirsāt vai pazaudējāt visas atkopšanās iespējas? <a>Atiestatiet visu</a>",
     "Link to most recent message": "Saite uz jaunāko ziņu",
     "Share Room": "Dalīties ar istabu",
-    "Report Content to Your Homeserver Administrator": "Ziņojums par saturu bāzes servera administratoram",
-    "Report the entire room": "Ziņot par visu istabu",
     "Leave all rooms": "Pamest visas istabas",
     "Invited people will be able to read old messages.": "Uzaicinātie cilvēki varēs lasīt vecās ziņas.",
     "Or send invite link": "Vai nosūtiet uzaicinājuma saiti",
@@ -1252,13 +1227,9 @@
     "Nothing pinned, yet": "Vēl nekas nav piesprausts",
     "Pinned messages": "Piespraustās ziņas",
     "Pinned": "Piesprausts",
-    "Include Attachments": "Iekļaut pielikumus",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Šis fails ir <b>pārlieku liels</b>, lai to augšupielādētu. Faila izmēra ierobežojums ir %(limit)s, bet šis fails ir %(sizeOfThisFile)s.",
-    "Size Limit": "Izmēra ierobežojums",
     "Space information": "Informācija par vietu",
     "Information": "Informācija",
-    "Format": "Formāts",
-    "Select from the options below to export chats from your timeline": "Lai eksportētu čatus no savas laika joslas, izvēlieties kādu no zemāk norādītajām iespējām",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Nevar atrast zemāk norādīto Matrix ID profilus - vai tomēr vēlaties tos uzaicināt?",
     "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Daži faili ir <b>pārlieku lieli</b>, lai tos augšupielādētu. Faila izmēra ierobežojums ir %(limit)s.",
     "This version of %(brand)s does not support viewing some encrypted files": "Šī %(brand)s versija neatbalsta atsevišķu šifrētu failu skatīšanu",
@@ -1285,7 +1256,6 @@
     "Put a link back to the old room at the start of the new room so people can see old messages": "Jaunās istabas sākumā ievietojiet saiti uz veco istabu, lai cilvēki varētu apskatīt vecās ziņas",
     "To avoid these issues, create a <a>new public room</a> for the conversation you plan to have.": "Lai izvairītos no šīm problēmām, izveidojiet <a>jaunu publisku istabu</a> plānotajai sarunai.",
     "To avoid these issues, create a <a>new encrypted room</a> for the conversation you plan to have.": "Lai izvairītos no šīm problēmām, izveidojiet <a>jaunu šifrētu istabu</a> plānotajai sarunai.",
-    "You do not have permissions to create new rooms in this space": "Jums nav piekļuves tiesību veidot jaunas istabas šajā telpā vietā",
     "Automatically invite members from this room to the new one": "Automātiski uzaicināt dalībniekus no šīs istabas uz jauno",
     "Want to add a new room instead?": "Vai tā vietā vēlaties pievienot jaunu istabu?",
     "New video room": "Jauna video istaba",
@@ -1329,7 +1299,6 @@
     "Start a group chat": "Uzsākt grupas čatu",
     "Send your first message to invite <displayName/> to chat": "Nosūtiet savu pirmo ziņu, lai uzaicinātu <displayName/> uz čatu",
     "Messages in this chat will be end-to-end encrypted.": "Ziņām šajā istabā tiek piemērota pilnīga šifrēšana.",
-    "Export Chat": "Eksportēt čatu",
     "Export chat": "Eksportēt čatu",
     "Back to chat": "Atgriezties uz čatu",
     "common": {
@@ -1451,7 +1420,15 @@
         "clear": "Notīrīt"
     },
     "a11y": {
-        "user_menu": "Lietotāja izvēlne"
+        "user_menu": "Lietotāja izvēlne",
+        "n_unread_messages_mentions": {
+            "one": "1 neslasīts pieminējums.",
+            "other": "%(count)s nelasītas ziņas, ieskaitot pieminēšanu."
+        },
+        "n_unread_messages": {
+            "one": "1 nelasīta ziņa.",
+            "other": "%(count)s nelasītas ziņas."
+        }
     },
     "labs": {
         "pinning": "Ziņu piespraušana",
@@ -1569,7 +1546,13 @@
         "category_other": "Citi"
     },
     "export_chat": {
-        "creator_summary": "%(creatorName)s izveidoja šo istabu."
+        "creator_summary": "%(creatorName)s izveidoja šo istabu.",
+        "title": "Eksportēt čatu",
+        "select_option": "Lai eksportētu čatus no savas laika joslas, izvēlieties kādu no zemāk norādītajām iespējām",
+        "format": "Formāts",
+        "messages": "Ziņas",
+        "size_limit": "Izmēra ierobežojums",
+        "include_attachments": "Iekļaut pielikumus"
     },
     "create_room": {
         "title_video_room": "Izveidot video istabu",
@@ -1890,7 +1873,6 @@
         "already_in_call": "Notiek zvans",
         "already_in_call_person": "Jums jau notiek zvans ar šo personu."
     },
-    "Messages": "Ziņas",
     "Other": "Citi",
     "Advanced": "Papildu",
     "room_settings": {
@@ -1932,5 +1914,31 @@
         "category_symbols": "Simboli",
         "category_flags": "Karogi",
         "quick_reactions": "Ātra reaģēšana"
+    },
+    "spaces": {
+        "error_no_permission_create_room": "Jums nav piekļuves tiesību veidot jaunas istabas šajā telpā vietā"
+    },
+    "auth": {
+        "continue_with_idp": "Turpināt ar %(provider)s",
+        "sso": "Vienotā pieteikšanās"
+    },
+    "room_list": {
+        "sort_unread_first": "Rādīt istabas ar nelasītām ziņām augšpusē",
+        "show_previews": "Rādīt ziņu priekšskatījumus",
+        "sort_by": "Kārtot pēc",
+        "sort_by_activity": "Aktivitātes",
+        "sort_by_alphabet": "A-Ž",
+        "sublist_options": "Saraksta opcijas",
+        "show_n_more": {
+            "one": "Rādīt vēl %(count)s",
+            "other": "Rādīt vēl %(count)s"
+        },
+        "show_less": "Rādīt mazāk",
+        "notification_options": "Paziņojumu opcijas"
+    },
+    "report_content": {
+        "report_entire_room": "Ziņot par visu istabu",
+        "report_content_to_homeserver": "Ziņojums par saturu bāzes servera administratoram",
+        "description": "Iesniedzot ziņojumu par konkrēto ziņu, tās unikālais notikuma ID tiks nosūtīts jūsu bāzes servera administratoram. Ja ziņas šajā istabā ir šifrētas, jūsu bāzes servera administrators nevarēs lasīt ziņas tekstu vai skatīt failus un attēlus."
     }
 }

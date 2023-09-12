@@ -291,7 +291,6 @@
         "video_call": "Video çağırış",
         "call_failed": "Uğursuz zəng"
     },
-    "Messages": "Mesajlar",
     "devtools": {
         "category_other": "Digər"
     },
@@ -299,5 +298,8 @@
     "Advanced": "Təfərrüatlar",
     "labs": {
         "group_profile": "Profil"
+    },
+    "export_chat": {
+        "messages": "Mesajlar"
     }
 }

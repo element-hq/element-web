@@ -48,7 +48,6 @@
     "Anchor": "Tamdeyt",
     "Headphones": "Wennez",
     "Folder": "Akaram",
-    "Show less": "Sken-d drus",
     "Show more": "Sken-d ugar",
     "Warning!": "Ɣur-k·m!",
     "Current password": "Awal uffir amiran",
@@ -75,9 +74,6 @@
     "Email Address": "Tansa n yimayl",
     "Phone Number": "Uṭṭun n tiliɣri",
     "Sign Up": "Jerred",
-    "Sort by": "Semyizwer s",
-    "Activity": "Armud",
-    "A-Z": "A-Z",
     "Server error": "Tuccḍa n uqeddac",
     "Are you sure?": "Tebɣiḍ s tidet?",
     "Sunday": "Acer",
@@ -133,7 +129,6 @@
     "Your %(brand)s is misconfigured": "%(brand)s inek(inem) ur ittusbadu ara",
     "Use Single Sign On to continue": "Seqdec anekcum asuf akken ad tkemmleḍ",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Sentem timerna n tansa-a n yimayl s useqdec n unekcum asuf i ubeggen n timagit-in(im).",
-    "Single Sign On": "Anekcum asuf",
     "Confirm adding email": "Sentem timerna n yimayl",
     "Click the button below to confirm adding this email address.": "Sit ɣef tqeffalt yellan ddaw i usentem n tmerna n tansa-a n yimayl.",
     "Add Email Address": "Rnu tansa n yimayl",
@@ -437,7 +432,6 @@
     "Join the discussion": "Ttekki deg udiwenni",
     "Start chatting": "Bdu adiwenni",
     "%(roomName)s is not accessible at this time.": "%(roomName)s ulac anekcum ɣer-s akka tura.",
-    "Show previews of messages": "Sken tiskanin n yiznan",
     "Jump to first unread room.": "Ɛeddi ɣer texxamt tamezwarut ur nettwaɣra ara.",
     "Jump to first invite.": "Ɛreddi ɣer tinnubga tamezwarut.",
     "Add room": "Rnu taxxamt",
@@ -501,7 +495,6 @@
     "Custom level": "Sagen aswir",
     "<a>In reply to</a> <pill>": "<a>Deg tririt i</a> <pill>",
     "e.g. my-room": "e.g. taxxamt-inu",
-    "Sign in with single sign-on": "Qqen s unekcum asuf",
     "And %(count)s more...": {
         "other": "D %(count)s ugar..."
     },
@@ -602,23 +595,7 @@
     "Forget this room": "Ttu taxxamt-a",
     "Reject & Ignore user": "Agi & Zgel aseqdac",
     "%(roomName)s does not exist.": "%(roomName)s ulac-it.",
-    "Show rooms with unread messages first": "Sken tixxamin yesεan iznan ur nettwaɣra ara d timezwura",
-    "List options": "Tixtiṛiyin n tebdart",
-    "Show %(count)s more": {
-        "other": "Sken %(count)s ugar",
-        "one": "Sken %(count)s ugar"
-    },
-    "Notification options": "Tixtiṛiyin n wulɣu",
     "Room options": "Tixtiṛiyin n texxamt",
-    "%(count)s unread messages including mentions.": {
-        "one": "1 ubdar ur nettwaɣra ara.",
-        "other": "%(count)s yiznan ur nettwaɣra ara rnu ɣer-sen ibdaren."
-    },
-    "%(count)s unread messages.": {
-        "other": "Iznan ur nettwaɣra ara %(count)s.",
-        "one": "1 yizen ur nettwaɣra ara."
-    },
-    "Unread messages.": "Iznan ur nettwaɣra ara.",
     "All Rooms": "Akk tixxamin",
     "Unknown Command": "Taladna tarussint",
     "Mark all as read": "Creḍ kullec yettwaɣra",
@@ -647,7 +624,6 @@
     "Rotate Left": "Zzi ɣer uzelmaḍ",
     "Rotate Right": "Zzi ɣer uyeffus",
     "Language Dropdown": "Tabdart n udrurem n tutlayin",
-    "QR Code": "Tangalt QR",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "YEgguma ad d-tali tedyant iɣef d-ttunefk tririt, ahat d tilin ur telli ara neɣ ur tesɛiḍ ara tisirag ad tt-twaliḍ.",
     "Room address": "Tansa n texxamt",
     "Some characters not allowed": "Kra n yisekkilen ur ttusirgen ara",
@@ -932,8 +908,6 @@
     "On": "Yermed",
     "Noisy": "Sɛan ṣṣut",
     "wait and try again later": "ṛǧu syen ɛreḍ tikkelt-nniḍen",
-    "Please fill why you're reporting.": "Ttxil-k·m ini-aɣ-d ayɣer i d-tettazneḍ alɣu.",
-    "Report Content to Your Homeserver Administrator": "Ttxil-k·m azen aneqqis i unedbal-ik·im n usebter agejdan",
     "Security Phrase": "Tafyirt n tɣellist",
     "Restoring keys from backup": "Tiririt n tsura seg uḥraz",
     "%(completed)s of %(total)s keys restored": "%(completed)s n %(total)s tsura i yettwarran",
@@ -1199,7 +1173,6 @@
     "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Ilaq ad tesremdeḍ aya ma yella taxxamt ad tettwaseqdec kan i uttekki d trebbaɛ tigensanin ɣef uqeddac-ik·im agejdan. Ayagi ur yettubeddal ara ɣer sdat.",
     "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Ilaq ad tsenseḍ aya ma yella taxxamt ad tettuseqdac i uttekki d trebbaɛ tuffiɣin i yesɛan aqeddac-nsent agejdan. Aya ur yettwabeddal ara ɣer sdat.",
     "Block anyone not part of %(serverName)s from ever joining this room.": "Asewḥel n yal amdan ur nettekki ara deg %(serverName)s ur d-irennu ara akk ɣer texamt-a.",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Timenna ɣef yizen-a ad yazen \"asulay n uneḍru\" asuf i unedbal n uqeddac agejdan. Ma yella iznan n texxamt-a ttwawgelhen, anedbal-ik·im n uqeddac agejdan ur yettizmir ara ad d-iɣer aḍris n yizen neɣ senqed ifuyla neɣ tugniwin.",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "I wakken ad tkemmleḍ aseqdec n uqeddac agejdan n %(homeserverDomain)s ilaq ad talseḍ asenqed syen ad tqebleḍ tiwtilin-nneɣ s umata.",
     "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Isefka n lqem aqbur n %(brand)s ttwafen. Ayagi ad d-yeglu s yir tamahalt n uwgelhen seg yixef ɣer yixef deg lqem aqbur. Iznan yettwawgelhen seg yixef ɣer yixef yettumbeddalen yakan mi akken yettuseqdac lqem aqbur yezmer ur asen-ittekkes ara uwgelhen deg lqem-a. Aya yezmer daɣen ad d-yeglu asefsex n yiznan yettumbeddalen s lqem-a. Ma yella temlaleḍ-d uguren, ffeɣ syen tuɣaleḍ-d tikkelt-nniḍen. I wakken ad tḥerzeḍ amazray n yiznan, sifeḍ rnu ales kter tisura-ik·im.",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Ur tezmireḍ ara ad tazneḍ iznan alamma tesneqdeḍ syen ad tqebleḍ <consentLink>tiwtilin-nneɣ</consentLink>.",
@@ -1563,7 +1536,8 @@
         "secure_backup": "Aklas aɣellsan",
         "cross_signing": "Azmul anmidag",
         "identity_server": "Aqeddac n timagit",
-        "integration_manager": "Amsefrak n umsidef"
+        "integration_manager": "Amsefrak n umsidef",
+        "qr_code": "Tangalt QR"
     },
     "action": {
         "continue": "Kemmel",
@@ -1645,7 +1619,16 @@
         "send_report": "Azen aneqqis"
     },
     "a11y": {
-        "user_menu": "Umuɣ n useqdac"
+        "user_menu": "Umuɣ n useqdac",
+        "n_unread_messages_mentions": {
+            "one": "1 ubdar ur nettwaɣra ara.",
+            "other": "%(count)s yiznan ur nettwaɣra ara rnu ɣer-sen ibdaren."
+        },
+        "n_unread_messages": {
+            "other": "Iznan ur nettwaɣra ara %(count)s.",
+            "one": "1 yizen ur nettwaɣra ara."
+        },
+        "unread_messages": "Iznan ur nettwaɣra ara."
     },
     "labs": {
         "pinning": "Arezzi n yizen",
@@ -2059,7 +2042,6 @@
         "call_failed_media_permissions": "Tettynefk tsiregt i useqdec takamiṛat",
         "call_failed_media_applications": "Ulac asnas-nniḍen i iseqdacen takamiṛat"
     },
-    "Messages": "Iznan",
     "Other": "Nniḍen",
     "Advanced": "Talqayt",
     "room_settings": {
@@ -2107,5 +2089,31 @@
         "category_flags": "Anayen",
         "categories": "Taggayin",
         "quick_reactions": "Tisedmirin tiruradin"
+    },
+    "auth": {
+        "sign_in_with_sso": "Qqen s unekcum asuf",
+        "sso": "Anekcum asuf"
+    },
+    "export_chat": {
+        "messages": "Iznan"
+    },
+    "room_list": {
+        "sort_unread_first": "Sken tixxamin yesεan iznan ur nettwaɣra ara d timezwura",
+        "show_previews": "Sken tiskanin n yiznan",
+        "sort_by": "Semyizwer s",
+        "sort_by_activity": "Armud",
+        "sort_by_alphabet": "A-Z",
+        "sublist_options": "Tixtiṛiyin n tebdart",
+        "show_n_more": {
+            "other": "Sken %(count)s ugar",
+            "one": "Sken %(count)s ugar"
+        },
+        "show_less": "Sken-d drus",
+        "notification_options": "Tixtiṛiyin n wulɣu"
+    },
+    "report_content": {
+        "missing_reason": "Ttxil-k·m ini-aɣ-d ayɣer i d-tettazneḍ alɣu.",
+        "report_content_to_homeserver": "Ttxil-k·m azen aneqqis i unedbal-ik·im n usebter agejdan",
+        "description": "Timenna ɣef yizen-a ad yazen \"asulay n uneḍru\" asuf i unedbal n uqeddac agejdan. Ma yella iznan n texxamt-a ttwawgelhen, anedbal-ik·im n uqeddac agejdan ur yettizmir ara ad d-iɣer aḍris n yizen neɣ senqed ifuyla neɣ tugniwin."
     }
 }

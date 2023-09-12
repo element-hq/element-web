@@ -361,7 +361,6 @@
     "Please <a>contact your service administrator</a> to continue using this service.": "<a>Kontakt din systemadministrator</a> for å vidare bruka tenesta.",
     "This account has been deactivated.": "Denne kontoen har blitt deaktivert.",
     "Failed to perform homeserver discovery": "Fekk ikkje til å utforska heimetenaren",
-    "Sign in with single sign-on": "Logg på med Single-Sign-On",
     "Create account": "Lag konto",
     "Registration has been disabled on this homeserver.": "Registrering er skrudd av for denne heimetenaren.",
     "Unable to query for supported registration methods.": "Klarte ikkje å spørre etter støtta registreringsmetodar.",
@@ -471,11 +470,6 @@
     "Reject & Ignore user": "Avslå og ignorer brukar",
     "You're previewing %(roomName)s. Want to join it?": "Du førehandsviser %(roomName)s. Ynskjer du å bli med ?",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s kan ikkje førehandsvisast. Ynskjer du å bli med ?",
-    "%(count)s unread messages.": {
-        "other": "%(count)s uleste meldingar.",
-        "one": "1 ulesen melding."
-    },
-    "Unread messages.": "Uleste meldingar.",
     "Unknown Command": "Ukjend kommando",
     "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Du kan bruka <code>/help</code> for å lista tilgjengelege kommandoar. Meinte du å senda dette som ein melding ?",
     "Hint: Begin your message with <code>//</code> to start it with a slash.": "Hint: Start meldinga med <code>//</code> for å starte den med skråstrek.",
@@ -503,7 +497,6 @@
     "Voice & Video": "Tale og video",
     "Show hidden events in timeline": "Vis skjulte hendelsar i historikken",
     "This is your list of users/servers you have blocked - don't leave the room!": "Dette er di liste over brukarar/tenarar du har blokkert - ikkje forlat rommet!",
-    "Show less": "Vis mindre",
     "Show more": "Vis meir",
     "Display Name": "Visningsnamn",
     "Invalid theme schema.": "",
@@ -539,7 +532,6 @@
     "Failed to upgrade room": "Fekk ikkje til å oppgradere rom",
     "Use Single Sign On to continue": "Bruk Single-sign-on for å fortsette",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Stadfest at du legger til denne e-postadressa, ved å bruka Single-sign-on for å stadfeste identiteten din.",
-    "Single Sign On": "Single-sign-on",
     "Capitalization doesn't help very much": "Store bokstavar hjelp dessverre lite",
     "Predictable substitutions like '@' instead of 'a' don't help very much": "Forutsigbare teiknbytte som '@' istaden for 'a' hjelp dessverre lite",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Kontoen din har ein kryss-signert identitet det hemmelege lageret, økta di stolar ikkje på denne enno.",
@@ -595,7 +587,6 @@
     "I don't want my encrypted messages": "Eg treng ikkje mine krypterte meldingar",
     "You'll lose access to your encrypted messages": "Du vil miste tilgangen til dine krypterte meldingar",
     "Join millions for free on the largest public server": "Kom ihop med millionar av andre på den største offentlege tenaren",
-    "Show rooms with unread messages first": "Vis rom med ulesne meldingar fyrst",
     "Always show the window menu bar": "Vis alltid menyfeltet i toppen av vindauget",
     "Feedback": "Tilbakemeldingar",
     "All settings": "Alle innstillingar",
@@ -608,10 +599,6 @@
     "Video conference started by %(senderName)s": "Videokonferanse starta av %(senderName)s",
     "Video conference updated by %(senderName)s": "Videokonferanse oppdatert av %(senderName)s",
     "Video conference ended by %(senderName)s": "Videokonferanse avslutta av %(senderName)s",
-    "Show previews of messages": "Vis førehandsvisningar for meldingar",
-    "Activity": "Aktivitet",
-    "Sort by": "Sorter etter",
-    "List options": "Sjå alternativ",
     "Explore Public Rooms": "Utforsk offentlege rom",
     "Explore public rooms": "Utforsk offentlege rom",
     "Email Address": "E-postadresse",
@@ -1154,7 +1141,6 @@
         "unsupported": "Samtalar er ikkje støtta",
         "unsupported_browser": "Du kan ikkje samtala i nettlesaren."
     },
-    "Messages": "Meldingar",
     "Other": "Anna",
     "Advanced": "Avansert",
     "room_settings": {
@@ -1175,5 +1161,27 @@
             "ban": "Stenge ute brukarar",
             "notifications.room": "Varsle alle"
         }
+    },
+    "auth": {
+        "sign_in_with_sso": "Logg på med Single-Sign-On",
+        "sso": "Single-sign-on"
+    },
+    "export_chat": {
+        "messages": "Meldingar"
+    },
+    "room_list": {
+        "sort_unread_first": "Vis rom med ulesne meldingar fyrst",
+        "show_previews": "Vis førehandsvisningar for meldingar",
+        "sort_by": "Sorter etter",
+        "sort_by_activity": "Aktivitet",
+        "sublist_options": "Sjå alternativ",
+        "show_less": "Vis mindre"
+    },
+    "a11y": {
+        "n_unread_messages": {
+            "other": "%(count)s uleste meldingar.",
+            "one": "1 ulesen melding."
+        },
+        "unread_messages": "Uleste meldingar."
     }
 }

@@ -67,7 +67,6 @@
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potvrdite dodavanje ovog telefonskog broja koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
     "Click the button below to confirm adding this email address.": "Kliknite taster ispod da biste potvrdili dodavanje email adrese.",
     "Confirm adding email": "Potvrdite dodavanje email adrese",
-    "Single Sign On": "Jedinstvena prijava (SSO)",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Potvrdite dodavanje ove email adrese koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
     "Use Single Sign On to continue": "Koristite jedinstvenu prijavu (SSO) za nastavak",
     "There was a problem communicating with the homeserver, please try again later.": "Postoji problem u komunikaciji sa privatnim/javnim serverom. Molim Vas pokušajte kasnije.",
@@ -115,5 +114,8 @@
     "voip": {
         "disable_camera": "Zaustavi kameru",
         "call_failed": "Poziv nije uspio"
+    },
+    "auth": {
+        "sso": "Jedinstvena prijava (SSO)"
     }
 }

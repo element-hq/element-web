@@ -607,7 +607,6 @@
     "Failed to perform homeserver discovery": "Ountdekkn van thuusserver is mislukt",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Je ku geen verbindienge moakn me de thuusserver via HTTP wanneer dat der een HTTPS-URL in je browserbalk stoat. Gebruukt HTTPS of <a>schoakelt ounveilige scripts in</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Geen verbindienge met de thuusserver - controleer je verbindienge, zorgt dervoorn dan ’t <a>SSL-certificoat van de thuusserver</a> vertrouwd is en dat der geen browserextensies verzoekn blokkeern.",
-    "Sign in with single sign-on": "Anmeldn met enkele anmeldienge",
     "Create account": "Account anmoakn",
     "Registration has been disabled on this homeserver.": "Registroasje is uutgeschoakeld ip deze thuusserver.",
     "Unable to query for supported registration methods.": "Kostege d’oundersteunde registroasjemethodes nie ipvroagn.",
@@ -1071,7 +1070,6 @@
         "video_call": "Video-iproep",
         "call_failed": "Iproep mislukt"
     },
-    "Messages": "Berichtn",
     "Other": "Overige",
     "Advanced": "Geavanceerd",
     "room_settings": {
@@ -1097,5 +1095,11 @@
             "complete_title": "Geverifieerd!",
             "complete_description": "J’èt deze gebruuker geverifieerd."
         }
+    },
+    "auth": {
+        "sign_in_with_sso": "Anmeldn met enkele anmeldienge"
+    },
+    "export_chat": {
+        "messages": "Berichtn"
     }
 }

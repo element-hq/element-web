@@ -666,7 +666,6 @@
     "Homeserver URL does not appear to be a valid Matrix homeserver": "URL por hejmservilo ŝajne ne ligas al valida hejmservilo de Matrix",
     "Invalid identity server discovery response": "Nevalida eltrova respondo de identiga servilo",
     "Identity server URL does not appear to be a valid identity server": "URL por identiga servilo ŝajne ne ligas al valida identiga servilo",
-    "Sign in with single sign-on": "Saluti per ununura saluto",
     "Failed to re-authenticate due to a homeserver problem": "Malsukcesis reaŭtentikigi pro hejmservila problemo",
     "Failed to re-authenticate": "Malsukcesis reaŭtentikigi",
     "Enter your password to sign in and regain access to your account.": "Enigu vian pasvorton por saluti kaj rehavi aliron al via konto.",
@@ -763,15 +762,6 @@
     "This invite to %(roomName)s was sent to %(email)s": "La invito al %(roomName)s sendiĝis al %(email)s",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Uzu identigan servilon en Agordoj por ricevadi invitojn rekte per %(brand)s.",
     "Share this email in Settings to receive invites directly in %(brand)s.": "Havigu ĉi tiun retpoŝtadreson per Agordoj por ricevadi invitojn rekte per %(brand)s.",
-    "%(count)s unread messages including mentions.": {
-        "other": "%(count)s nelegitaj mesaĝoj, inkluzive menciojn.",
-        "one": "1 nelegita mencio."
-    },
-    "%(count)s unread messages.": {
-        "other": "%(count)s nelegitaj mesaĝoj.",
-        "one": "1 nelegita mesaĝo."
-    },
-    "Unread messages.": "Nelegitaj mesaĝoj.",
     "Failed to deactivate user": "Malsukcesis malaktivigi uzanton",
     "This client does not support end-to-end encryption.": "Ĉi tiu kliento ne subtenas tutvojan ĉifradon.",
     "Messages in this room are not end-to-end encrypted.": "Mesaĝoj en ĉi tiu ĉambro ne estas tutvoje ĉifrataj.",
@@ -795,9 +785,6 @@
     "Topic (optional)": "Temo (malnepra)",
     "Hide advanced": "Kaŝi specialajn",
     "Show advanced": "Montri specialajn",
-    "Please fill why you're reporting.": "Bonvolu skribi, kial vi raportas.",
-    "Report Content to Your Homeserver Administrator": "Raporti enhavon al la administrantode via hejmservilo",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Per raporto de ĉi tiu mesaĝo vi sendos ĝian unikan «identigilon de okazo» al la administranto de via hejmservilo. Se mesaĝoj en ĉi tiu ĉambro estas ĉifrataj, la administranto de via hejmservilo ne povos legi la tekston de la mesaĝo, nek rigardi dosierojn aŭ bildojn.",
     "Command Help": "Helpo pri komando",
     "To continue you need to accept the terms of this service.": "Por pluigi, vi devas akcepti la uzokondiĉojn de ĉi tiu servo.",
     "Document": "Dokumento",
@@ -873,7 +860,6 @@
     "How fast should messages be downloaded.": "Kiel rapide elŝuti mesaĝojn.",
     "Waiting for %(displayName)s to verify…": "Atendas kontrolon de %(displayName)s…",
     "Cancelling…": "Nuligante…",
-    "Show less": "Montri malpli",
     "Show more": "Montri pli",
     "Not Trusted": "Nefidata",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) salutis novan salutaĵon ne kontrolante ĝin:",
@@ -1060,7 +1046,6 @@
     "Verify all users in a room to ensure it's secure.": "Kontrolu ĉiujn uzantojn en ĉambro por certigi, ke ĝi sekuras.",
     "Use Single Sign On to continue": "Daŭrigi per ununura saluto",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Konfirmi aldonon de ĉi tiu retpoŝtadreso, uzante ununuran saluton por pruvi vian identecon.",
-    "Single Sign On": "Ununura saluto",
     "Confirm adding email": "Konfirmi aldonon de retpoŝtadreso",
     "Click the button below to confirm adding this email address.": "Klaku la ĉi-suban butonon por konfirmi aldonon de ĉi tiu retpoŝtadreso.",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Konfirmu aldonon de ĉi tiu telefonnumero per identiĝo per ununura saluto.",
@@ -1112,7 +1097,6 @@
     "Click the button below to confirm your identity.": "Klaku sube la butonon por konfirmi vian identecon.",
     "Confirm encryption setup": "Konfirmi agordon de ĉifrado",
     "Click the button below to confirm setting up encryption.": "Klaku sube la butonon por konfirmi agordon de ĉifrado.",
-    "QR Code": "Rapidresponda kodo",
     "Dismiss read marker and jump to bottom": "Forigi legomarkon kaj iri al fundo",
     "Jump to oldest unread message": "Iri al plej malnova nelegita mesaĝo",
     "Upload a file": "Alŝuti dosieron",
@@ -1147,15 +1131,6 @@
     "The authenticity of this encrypted message can't be guaranteed on this device.": "La aŭtentikeco de ĉi tiu ĉifrita mesaĝo ne povas esti garantiita sur ĉi tiu aparato.",
     "No recently visited rooms": "Neniuj freŝdate vizititaj ĉambroj",
     "Message preview": "Antaŭrigardo al mesaĝo",
-    "Sort by": "Ordigi laŭ",
-    "Activity": "Aktiveco",
-    "A-Z": "A–Z",
-    "List options": "Elektebloj pri listo",
-    "Show %(count)s more": {
-        "other": "Montri %(count)s pliajn",
-        "one": "Montri %(count)s plian"
-    },
-    "Notification options": "Elektebloj pri sciigoj",
     "Favourited": "Elstarigita",
     "Forget Room": "Forgesi ĉambron",
     "Room options": "Elektebloj pri ĉambro",
@@ -1178,8 +1153,6 @@
     "Set a Security Phrase": "Agordi Sekurecan frazon",
     "Confirm Security Phrase": "Konfirmi Sekurecan frazon",
     "Save your Security Key": "Konservi vian Sekurecan ŝlosilon",
-    "Show rooms with unread messages first": "Montri ĉambrojn kun nelegitaj mesaĝoj kiel unuajn",
-    "Show previews of messages": "Montri antaŭrigardojn al mesaĝoj",
     "This room is public": "Ĉi tiu ĉambro estas publika",
     "Edited at %(date)s": "Redaktita je %(date)s",
     "Click to view edits": "Klaku por vidi redaktojn",
@@ -1564,7 +1537,6 @@
     "Too Many Calls": "Tro multaj vokoj",
     "Invite by email": "Inviti per retpoŝto",
     "Reason (optional)": "Kialo (malnepra)",
-    "Continue with %(provider)s": "Daŭrigi per %(provider)s",
     "Server Options": "Elektebloj de servilo",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.": {
         "one": "Sekure kaŝmemori ĉifritajn mesaĝojn loke por ke ili aperu inter serĉrezultoj, uzante %(size)s por deponi mesaĝojn el %(rooms)s ĉambroj.",
@@ -1711,9 +1683,7 @@
     "Edit devices": "Redakti aparatojn",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "Vi ne povos malfari ĉi tiun ŝanĝon, ĉar vi malrangaltigas vin mem; se vi estas la lasta altranga uzanto de la aro, vi ne plu povos rehavi viajn rajtojn.",
     "Empty room": "Malplena ĉambro",
-    "You do not have permissions to add rooms to this space": "Vi ne havas permeson aldoni ĉambrojn al ĉi tiu aro",
     "Add existing room": "Aldoni jaman ĉambron",
-    "You do not have permissions to create new rooms in this space": "Vi ne havas permeson krei novajn ĉambrojn en ĉi tiu aro",
     "Invite to this space": "Inviti al ĉi tiu aro",
     "Your message was sent": "Via mesaĝo sendiĝis",
     "Leave space": "Forlasi aron",
@@ -1815,8 +1785,6 @@
     "Verification requested": "Kontrolpeto",
     "You are the only person here. If you leave, no one will be able to join in the future, including you.": "Vi estas la nura persono tie ĉi. Se vi foriros, neniu alia plu povos aliĝi, inkluzive vin mem.",
     "Avatar": "Profilbildo",
-    "Join the beta": "Aliĝi al provado",
-    "Leave the beta": "Ĉesi provadon",
     "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.": "Se vi restarigos ĉion, vi rekomencos sen fidataj salutaĵoj, uzantoj, kaj eble ne povos vidi antaŭajn mesaĝojn.",
     "Only do this if you have no other device to complete verification with.": "Faru tion ĉi nur se vi ne havas alian aparaton, per kiu vi kontrolus ceterajn.",
     "Forgotten or lost all recovery methods? <a>Reset all</a>": "Ĉu vi forgesis aŭ perdis ĉiujn manierojn de rehavo? <a>Restarigu ĉion</a>",
@@ -1916,17 +1884,6 @@
     "Settings - %(spaceName)s": "Agordoj – %(spaceName)s",
     "<b>Please note upgrading will make a new version of the room</b>. All current messages will stay in this archived room.": "<b>Sciu, ke gradaltigo kreos novan version de la ĉambro</b>. Ĉiuj nunaj mesaĝoj restos en ĉi tiu arĥivita ĉambro.",
     "Automatically invite members from this room to the new one": "Memage inviti anojn de ĉi tiu ĉambro al la nova",
-    "Report the entire room": "Raporti la tutan ĉambron",
-    "Spam or propaganda": "Rubmesaĝo aŭ propagando",
-    "Illegal Content": "Kontraŭleĝa enhavo",
-    "Toxic Behaviour": "Vunda konduto",
-    "Disagree": "Malkonsento",
-    "Please pick a nature and describe what makes this message abusive.": "Bonvolu elekti karakteron kaj priskribi, kial la mesaĝo estas mistrakta.",
-    "Any other reason. Please describe the problem.\nThis will be reported to the room moderators.": "Alia kialo. Bonvolu priskribi la problemon.\nĈi tio raportiĝos al reguligistoj de la ĉambro.",
-    "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s. The administrators will NOT be able to read the encrypted content of this room.": "Ĉi tiu ĉambro estas destinita al kontraŭleĝa al vunda enhavo, aŭ la reguligistoj ne sukcesas tian enhavon reguligi.\nĈi tio raportiĝos al administrantoj de %(homeserver)s. La administrantoj NE povos legi ĉifritan historion de ĉi tiu ĉambro.",
-    "This user is spamming the room with ads, links to ads or to propaganda.\nThis will be reported to the room moderators.": "Ĉi tiu uzanto sendas rubmesaĝojn kun reklamoj, ligiloj al reklamoj, aŭ al propagando.\nĈi tio raportiĝos al reguligistoj de la ĉambro.",
-    "This user is displaying illegal behaviour, for instance by doxing people or threatening violence.\nThis will be reported to the room moderators who may escalate this to legal authorities.": "Ĉi tiu uzanto kondutas kontraŭleĝe, ekzemple malkaŝante personajn informojn pri aliuloj, aŭ minacante per agreso.\nĈi tio raportiĝos al reguligistoj de la ĉambro, kiuj povos ĝin plusendi al leĝa aŭtoritato.",
-    "What this user is writing is wrong.\nThis will be reported to the room moderators.": "Tio, kion skribas ĉi tiu uzanto, maltaŭgas.\nTio ĉi raportiĝos al reguligistoj de la ĉambro.",
     "Other spaces or rooms you might not know": "Aliaj aroj aŭ ĉambroj, kiujn vi eble ne konas",
     "Spaces you know that contain this room": "Konataj aroj, kiuj enhavas ĉi tiun ĉambron",
     "Search spaces": "Serĉi arojn",
@@ -2154,8 +2111,6 @@
     "Location": "Loko",
     "Shared a location: ": "Kunhavis lokon: ",
     "Shared their location: ": "Kunhavis sian lokon: ",
-    "Reset password": "Restarigu vian pasvorton",
-    "Reset your password": "Restarigu vian pasvorton",
     "Confirm new password": "Konfirmu novan pasvorton",
     "Sign out of all devices": "Elsaluti en ĉiuj aparatoj",
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Vi estis elsalutita el ĉiuj aparatoj kaj ne plu ricevos puŝajn sciigojn. Por reŝalti sciigojn, ensalutu denove sur ĉiu aparato.",
@@ -2218,9 +2173,6 @@
     "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.": "Neaktivaj salutaĵoj estas salutaĵoj, kiujn vi ne uzis dum kelka tempo, sed ili daŭre ricevas ĉifrajn ŝlosilojn.",
     "Inactive sessions": "Neaktivaj salutaĵoj",
     "Unverified sessions": "Nekontrolitaj salutaĵoj",
-    "Include Attachments": "Inkluzivi Aldonaĵojn",
-    "Size Limit": "Grandeca Limo",
-    "Select from the options below to export chats from your timeline": "Elektu el la subaj elektoj por eksporti babilojn el via historio",
     "Public rooms": "Publikajn ĉambrojn",
     "Show details": "Montri detalojn",
     "Hide details": "Kaŝi detalojn",
@@ -2230,8 +2182,6 @@
     "IP address": "IP-adreso",
     "Browser": "Retumilo",
     "Add privileged users": "Aldoni rajtigitan uzanton",
-    "Number of messages": "Nombro da mesaĝoj",
-    "Number of messages can only be a number between %(min)s and %(max)s": "Nombro da mesaĝoj povas esti nur nombro inter %(min)s kaj %(max)s",
     "That's fine": "Tio estas bone",
     "Map feedback": "Sugestoj pri la mapo",
     "Developer": "Programisto",
@@ -2323,7 +2273,8 @@
         "secure_backup": "Sekura savkopiado",
         "cross_signing": "Delegaj subskriboj",
         "identity_server": "Identiga servilo",
-        "integration_manager": "Kunigilo"
+        "integration_manager": "Kunigilo",
+        "qr_code": "Rapidresponda kodo"
     },
     "action": {
         "continue": "Daŭrigi",
@@ -2415,7 +2366,16 @@
         "send_report": "Sendi raporton"
     },
     "a11y": {
-        "user_menu": "Menuo de uzanto"
+        "user_menu": "Menuo de uzanto",
+        "n_unread_messages_mentions": {
+            "other": "%(count)s nelegitaj mesaĝoj, inkluzive menciojn.",
+            "one": "1 nelegita mencio."
+        },
+        "n_unread_messages": {
+            "other": "%(count)s nelegitaj mesaĝoj.",
+            "one": "1 nelegita mesaĝo."
+        },
+        "unread_messages": "Nelegitaj mesaĝoj."
     },
     "labs": {
         "video_rooms": "Videoĉambroj",
@@ -2445,7 +2405,9 @@
         "group_rooms": "Ĉambroj",
         "group_voip": "Voĉo kaj vido",
         "group_encryption": "Ĉifrado",
-        "group_developer": "Programisto"
+        "group_developer": "Programisto",
+        "leave_beta": "Ĉesi provadon",
+        "join_beta": "Aliĝi al provado"
     },
     "keyboard": {
         "home": "Hejmo",
@@ -2647,7 +2609,13 @@
         "topic": "Temo: %(topic)s",
         "error_fetching_file": "Eraro alportante dosieron",
         "fetching_events": "Alportante okazojn…",
-        "creating_output": "Kreante eligon…"
+        "creating_output": "Kreante eligon…",
+        "num_messages_min_max": "Nombro da mesaĝoj povas esti nur nombro inter %(min)s kaj %(max)s",
+        "num_messages": "Nombro da mesaĝoj",
+        "select_option": "Elektu el la subaj elektoj por eksporti babilojn el via historio",
+        "messages": "Mesaĝoj",
+        "size_limit": "Grandeca Limo",
+        "include_attachments": "Inkluzivi Aldonaĵojn"
     },
     "create_room": {
         "title_public_room": "Krei publikan ĉambron",
@@ -3005,7 +2973,6 @@
         "unsupported": "Vokoj estas nesubtenataj",
         "unsupported_browser": "Vi ne povas telefoni per ĉi tiu retumilo."
     },
-    "Messages": "Mesaĝoj",
     "Other": "Alia",
     "Advanced": "Altnivela",
     "room_settings": {
@@ -3071,5 +3038,46 @@
         "snowfall_message": "sendas neĝadon",
         "spaceinvaders_description": "Sendas mesaĝon kun la efekto de kosmo",
         "spaceinvaders_message": "sendas imiton de ludo « Space Invaders »"
+    },
+    "spaces": {
+        "error_no_permission_create_room": "Vi ne havas permeson krei novajn ĉambrojn en ĉi tiu aro",
+        "error_no_permission_add_room": "Vi ne havas permeson aldoni ĉambrojn al ĉi tiu aro"
+    },
+    "auth": {
+        "continue_with_idp": "Daŭrigi per %(provider)s",
+        "sign_in_with_sso": "Saluti per ununura saluto",
+        "sso": "Ununura saluto",
+        "reset_password_action": "Restarigu vian pasvorton",
+        "reset_password_title": "Restarigu vian pasvorton"
+    },
+    "room_list": {
+        "sort_unread_first": "Montri ĉambrojn kun nelegitaj mesaĝoj kiel unuajn",
+        "show_previews": "Montri antaŭrigardojn al mesaĝoj",
+        "sort_by": "Ordigi laŭ",
+        "sort_by_activity": "Aktiveco",
+        "sort_by_alphabet": "A–Z",
+        "sublist_options": "Elektebloj pri listo",
+        "show_n_more": {
+            "other": "Montri %(count)s pliajn",
+            "one": "Montri %(count)s plian"
+        },
+        "show_less": "Montri malpli",
+        "notification_options": "Elektebloj pri sciigoj"
+    },
+    "report_content": {
+        "missing_reason": "Bonvolu skribi, kial vi raportas.",
+        "nature_disagreement": "Tio, kion skribas ĉi tiu uzanto, maltaŭgas.\nTio ĉi raportiĝos al reguligistoj de la ĉambro.",
+        "nature_illegal": "Ĉi tiu uzanto kondutas kontraŭleĝe, ekzemple malkaŝante personajn informojn pri aliuloj, aŭ minacante per agreso.\nĈi tio raportiĝos al reguligistoj de la ĉambro, kiuj povos ĝin plusendi al leĝa aŭtoritato.",
+        "nature_spam": "Ĉi tiu uzanto sendas rubmesaĝojn kun reklamoj, ligiloj al reklamoj, aŭ al propagando.\nĈi tio raportiĝos al reguligistoj de la ĉambro.",
+        "report_to_homeserver_encrypted": "Ĉi tiu ĉambro estas destinita al kontraŭleĝa al vunda enhavo, aŭ la reguligistoj ne sukcesas tian enhavon reguligi.\nĈi tio raportiĝos al administrantoj de %(homeserver)s. La administrantoj NE povos legi ĉifritan historion de ĉi tiu ĉambro.",
+        "nature_other": "Alia kialo. Bonvolu priskribi la problemon.\nĈi tio raportiĝos al reguligistoj de la ĉambro.",
+        "nature": "Bonvolu elekti karakteron kaj priskribi, kial la mesaĝo estas mistrakta.",
+        "disagree": "Malkonsento",
+        "toxic_behaviour": "Vunda konduto",
+        "illegal_content": "Kontraŭleĝa enhavo",
+        "spam_or_propaganda": "Rubmesaĝo aŭ propagando",
+        "report_entire_room": "Raporti la tutan ĉambron",
+        "report_content_to_homeserver": "Raporti enhavon al la administrantode via hejmservilo",
+        "description": "Per raporto de ĉi tiu mesaĝo vi sendos ĝian unikan «identigilon de okazo» al la administranto de via hejmservilo. Se mesaĝoj en ĉi tiu ĉambro estas ĉifrataj, la administranto de via hejmservilo ne povos legi la tekston de la mesaĝo, nek rigardi dosierojn aŭ bildojn."
     }
 }

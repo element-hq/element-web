@@ -474,7 +474,6 @@
     "Add Email Address": "ईमेल पता जोड़ें",
     "Click the button below to confirm adding this email address.": "इस ईमेल पते को जोड़ने की पुष्टि करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
     "Confirm adding email": "ईमेल जोड़ने की पुष्टि करें",
-    "Single Sign On": "केवल हस्ताक्षर के ऊपर",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "अपनी पहचान साबित करने के लिए सिंगल साइन ऑन का उपयोग करके इस ईमेल पते को जोड़ने की पुष्टि करें।",
     "Use Single Sign On to continue": "जारी रखने के लिए सिंगल साइन ऑन का उपयोग करें",
     "common": {
@@ -691,5 +690,8 @@
             "complete_title": "सत्यापित!",
             "complete_description": "आपने इस उपयोगकर्ता को सफलतापूर्वक सत्यापित कर लिया है।"
         }
+    },
+    "auth": {
+        "sso": "केवल हस्ताक्षर के ऊपर"
     }
 }

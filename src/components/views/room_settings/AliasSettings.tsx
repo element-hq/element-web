@@ -457,7 +457,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 >
                     <details onToggle={this.onLocalAliasesToggled} open={this.state.detailsOpen}>
                         <summary className="mx_AliasSettings_localAddresses">
-                            {this.state.detailsOpen ? _t("Show less") : _t("Show more")}
+                            {this.state.detailsOpen ? _t("room_list|show_less") : _t("Show more")}
                         </summary>
                         {localAliasesList}
                     </details>

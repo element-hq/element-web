@@ -297,7 +297,6 @@
     "Explore rooms": "Explore rooms",
     "Click the button below to confirm adding this email address.": "Click the button below to confirm adding this email address.",
     "Confirm adding email": "Confirm adding email",
-    "Single Sign On": "Single Sign On",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirm adding this email address by using Single Sign On to prove your identity.",
     "Use Single Sign On to continue": "Use Single Sign On to continue",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait while we resynchronize with the server!",
@@ -509,11 +508,16 @@
         "category_room": "Room",
         "category_other": "Other"
     },
-    "Messages": "Messages",
     "Other": "Other",
     "Advanced": "Advanced",
     "labs": {
         "group_profile": "Profile",
         "group_rooms": "Rooms"
+    },
+    "auth": {
+        "sso": "Single Sign On"
+    },
+    "export_chat": {
+        "messages": "Messages"
     }
 }

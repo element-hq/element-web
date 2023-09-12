@@ -106,7 +106,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [isExporting, setExporting] = useState(false);
     const sizeLimitRef = useRef<Field>(null);
     const messageCountRef = useRef<Field>(null);
-    const [exportProgressText, setExportProgressText] = useState(_t("Processing…"));
+    const [exportProgressText, setExportProgressText] = useState(_t("export_chat|processing"));
     const [displayCancel, setCancelWarning] = useState(false);
     const [exportCancelled, setExportCancelled] = useState(false);
     const [exportSuccessful, setExportSuccessful] = useState(false);
@@ -173,7 +173,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 invalid: () => {
                     const min = 1;
                     const max = 2000;
-                    return _t("Enter a number between %(min)s and %(max)s", {
+                    return _t("export_chat|enter_number_between_min_max", {
                         min,
                         max,
                     });
@@ -188,7 +188,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 invalid: () => {
                     const min = 1;
                     const max = 2000;
-                    return _t("Size can only be a number between %(min)s MB and %(max)s MB", { min, max });
+                    return _t("export_chat|size_limit_min_max", { min, max });
                 },
             },
         ],
@@ -209,7 +209,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 invalid: () => {
                     const min = 1;
                     const max = 10 ** 8;
-                    return _t("Enter a number between %(min)s and %(max)s", {
+                    return _t("export_chat|enter_number_between_min_max", {
                         min,
                         max,
                     });
@@ -224,7 +224,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 invalid: () => {
                     const min = 1;
                     const max = 10 ** 8;
-                    return _t("Number of messages can only be a number between %(min)s and %(max)s", { min, max });
+                    return _t("export_chat|num_messages_min_max", { min, max });
                 },
             },
         ],
@@ -270,7 +270,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 value={numberOfMessages.toString()}
                 ref={messageCountRef}
                 onValidate={onValidateNumberOfMessages}
-                label={_t("Number of messages")}
+                label={_t("export_chat|num_messages")}
                 onChange={(e) => {
                     setNumberOfMessages(parseInt(e.target.value));
                 }}
@@ -284,8 +284,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         // Display successful cancellation message
         return (
             <InfoDialog
-                title={_t("Export Cancelled")}
-                description={_t("The export was cancelled successfully")}
+                title={_t("export_chat|cancelled")}
+                description={_t("export_chat|cancelled_detail")}
                 hasCloseButton={true}
                 onFinished={onFinished}
             />
@@ -294,8 +294,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         // Display successful export message
         return (
             <InfoDialog
-                title={_t("Export Successful")}
-                description={_t("Your export was successful. Find it in your Downloads folder.")}
+                title={_t("export_chat|successful")}
+                description={_t("export_chat|successful_detail")}
                 hasCloseButton={true}
                 onFinished={onFinished}
             />
@@ -310,7 +310,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 onFinished={onFinished}
                 fixedWidth={true}
             >
-                <p>{_t("Are you sure you want to stop exporting your data? If you do, you'll need to start over.")}</p>
+                <p>{_t("export_chat|confirm_stop")}</p>
                 <DialogButtons
                     primaryButton={_t("action|stop")}
                     primaryButtonClass="danger"
@@ -325,19 +325,19 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         // Display export settings
         return (
             <BaseDialog
-                title={isExporting ? _t("Exporting your data") : _t("Export Chat")}
+                title={isExporting ? _t("export_chat|exporting_your_data") : _t("export_chat|title")}
                 className={`mx_ExportDialog ${isExporting && "mx_ExportDialog_Exporting"}`}
                 contentId="mx_Dialog_content"
                 hasCancel={true}
                 onFinished={onFinished}
                 fixedWidth={true}
             >
-                {!isExporting ? <p>{_t("Select from the options below to export chats from your timeline")}</p> : null}
+                {!isExporting ? <p>{_t("export_chat|select_option")}</p> : null}
 
                 <div className="mx_ExportDialog_options">
                     {!!setExportFormat && (
                         <>
-                            <span className="mx_ExportDialog_subheading">{_t("Format")}</span>
+                            <span className="mx_ExportDialog_subheading">{_t("export_chat|format")}</span>
 
                             <StyledRadioGroup
                                 name="exportFormat"
@@ -350,7 +350,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
 
                     {!!setExportType && (
                         <>
-                            <span className="mx_ExportDialog_subheading">{_t("Messages")}</span>
+                            <span className="mx_ExportDialog_subheading">{_t("export_chat|messages")}</span>
 
                             <Field
                                 id="export-type"
@@ -368,7 +368,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
 
                     {setSizeLimit && (
                         <>
-                            <span className="mx_ExportDialog_subheading">{_t("Size Limit")}</span>
+                            <span className="mx_ExportDialog_subheading">{_t("export_chat|size_limit")}</span>
 
                             <Field
                                 id="size-limit"
@@ -392,7 +392,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                                 checked={includeAttachments}
                                 onChange={(e) => setAttachments((e.target as HTMLInputElement).checked)}
                             >
-                                {_t("Include Attachments")}
+                                {_t("export_chat|include_attachments")}
                             </StyledCheckbox>
                         </>
                     )}

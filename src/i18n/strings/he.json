@@ -79,7 +79,6 @@
     "Add Email Address": "הוספת כתובת מייל",
     "Click the button below to confirm adding this email address.": "לחץ על הכפתור בכדי לאשר הוספה של כתובת מייל הזו.",
     "Confirm adding email": "אשר הוספת כתובת מייל",
-    "Single Sign On": "כניסה חד שלבית",
     "Opens chat with the given user": "פתח שיחה עם המשתמש הזה",
     "Forces the current outbound group session in an encrypted room to be discarded": "מאלץ להתעלם מהתקשורת היוצאת מהתחברות של קבוצה בחדר מוצפן",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "המפתח החתום שנתתם תואם את המפתח שקבלתם מ %(userId)s מהתחברות %(deviceId)s. ההתחברות סומנה כמאושרת.",
@@ -553,7 +552,6 @@
     "New passwords don't match": "הססמאות החדשות לא תואמות",
     "No display name": "אין שם לתצוגה",
     "Show more": "הצג יותר",
-    "Show less": "הצג פחות",
     "This bridge is managed by <user />.": "הגשר הזה מנוהל על ידי משתמש <user />.",
     "This bridge was provisioned by <user />.": "הגשר הזה נוצר על ידי משתמש <user />.",
     "Accept <policyLink /> to continue:": "קבל <policyLink /> להמשך:",
@@ -741,8 +739,6 @@
     "And %(count)s more...": {
         "other": "ו%(count)s עוד..."
     },
-    "Sign in with single sign-on": "היכנס באמצעות כניסה יחידה",
-    "Continue with %(provider)s": "המשך עם %(provider)s",
     "Join millions for free on the largest public server": "הצטרפו למיליונים בחינם בשרת הציבורי הגדול ביותר",
     "Server Options": "אפשרויות שרת",
     "This address is already in use": "כתובת זו נמצאת בשימוש",
@@ -752,7 +748,6 @@
     "Room address": "כתובת חדר",
     "<a>In reply to</a> <pill>": "<a> בתשובה ל- </a> <pill>",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "לא ניתן לטעון אירוע שהשיב לו, או שהוא לא קיים או שאין לך הרשאה להציג אותו.",
-    "QR Code": "קוד QR",
     "Custom level": "דרגה מותאמת",
     "Power level": "דרגת מנהל",
     "Language Dropdown": "תפריט שפות",
@@ -914,15 +909,6 @@
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "חדר זה מריץ את גרסת החדר <roomVersion/>, ששרת הבית הזה סימן כ- <i> לא יציב </i>.",
     "This room has already been upgraded.": "החדר הזה כבר שודרג.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "שדרוג חדר זה יסגור את המופע הנוכחי של החדר וייצור חדר משודרג עם אותו שם.",
-    "Unread messages.": "הודעות שלא נקראו.",
-    "%(count)s unread messages.": {
-        "one": "1 הודעה שלא נקראה.",
-        "other": "%(count)s הודעות שלא נקראו."
-    },
-    "%(count)s unread messages including mentions.": {
-        "one": "1 אזכור שלא נקרא.",
-        "other": "%(count)s הודעות שלא נקראו כולל אזכורים."
-    },
     "Room options": "אפשרויות חדר",
     "Sign Up": "הרשמה",
     "Join the conversation with an account": "הצטרף לשיחה עם חשבון",
@@ -1192,19 +1178,8 @@
     "Back up your keys before signing out to avoid losing them.": "גבה את המפתחות שלך לפני היציאה כדי להימנע מלאבד אותם.",
     "Favourited": "מועדפים",
     "Forget Room": "שכח חדר",
-    "Notification options": "אפשרויות התרעות",
-    "Show %(count)s more": {
-        "one": "הצג עוד %(count)s",
-        "other": "הצג עוד %(count)s"
-    },
     "Jump to first invite.": "קפצו להזמנה ראשונה.",
     "Jump to first unread room.": "קפצו לחדר הראשון שלא נקרא.",
-    "List options": "רשימת אפשרויות",
-    "A-Z": "א-ת",
-    "Activity": "פעילות",
-    "Sort by": "סדר לפי",
-    "Show previews of messages": "הצג תצוגה מקדימה של הודעות",
-    "Show rooms with unread messages first": "הצג תחילה חדרים עם הודעות שלא נקראו",
     "%(roomName)s is not accessible at this time.": "לא ניתן להכנס אל %(roomName)s בזמן הזה.",
     "%(roomName)s does not exist.": "%(roomName)s לא קיים.",
     "%(roomName)s can't be previewed. Do you want to join it?": "לא ניתן לצפות ב־%(roomName)s. האם תרצו להצטרף?",
@@ -1389,9 +1364,6 @@
     "The room upgrade could not be completed": "לא ניתן היה להשלים את שדרוג החדר",
     "Failed to upgrade room": "שדרוג החדר נכשל",
     "Room Settings - %(roomName)s": "הגדרות חדר - %(roomName)s",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "דיווח על הודעה זו ישלח את 'מזהה האירוע' הייחודי למנהל שרת הבית שלך. אם הודעות בחדר זה מוצפנות, מנהל שרת הבית שלך לא יוכל לקרוא את טקסט ההודעה או להציג קבצים או תמונות.",
-    "Report Content to Your Homeserver Administrator": "דווח על תוכן למנהל שרת הבית שלך",
-    "Please fill why you're reporting.": "אנא מלאו מדוע אתם מדווחים.",
     "Email (optional)": "דוא\"ל (לא חובה)",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "שים לב, אם לא תשייך כתובת דואר אלקטרוני ותשכח את הסיסמה שלך, אתה תאבד <b>לצמיתות</b> את הגישה לחשבונך.",
     "Continuing without email": "ממשיך ללא דוא\"ל",
@@ -1805,19 +1777,7 @@
     "Allow people to preview your space before they join.": "אפשרו לאנשים תצוגה מקדימה של מרחב העבודה שלכם לפני שהם מצטרפים.",
     "Preview Space": "תצוגה מקדימה של מרחב העבודה",
     "Failed to update the visibility of this space": "עדכון הנראות של מרחב העבודה הזה נכשל",
-    "Size Limit": "הגבלת גודל",
-    "Format": "פורמט",
-    "Exporting your data": "מייצא את המידע שלכם",
-    "Are you sure you want to stop exporting your data? If you do, you'll need to start over.": "האם אתם בטוחים שברצונכם להפסיק לייצא את הנתונים שלכם? אם כן, תצטרכו להתחיל מחדש.",
-    "Your export was successful. Find it in your Downloads folder.": "הייצוא שלכם הצליח. מיצאו אותו בתיקיית ההורדות שלכם.",
-    "Export Successful": "ייצוא בוצע בהצלחה",
-    "The export was cancelled successfully": "הייצוא בוטל בהצלחה",
-    "Export Cancelled": "ייצוא בוטל",
     "MB": "MB",
-    "Number of messages": "מספר הודעות",
-    "Number of messages can only be a number between %(min)s and %(max)s": "מספר ההודעות יכול להיות רק מספר בין %(min)s ו %(max)s",
-    "Size can only be a number between %(min)s MB and %(max)s MB": "גודל יכול להיות רק מספר בין MB %(min)s ו MB%(max)s",
-    "Enter a number between %(min)s and %(max)s": "הכניסו מספר בין %(min)s ל %(max)s",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "האם אתם בטוחים שברצונכם לסיים את הסקר הזה? זה יציג את התוצאות הסופיות של הסקר וימנע מאנשים את האפשרות להצביע.",
     "End Poll": "סיים סקר",
     "Sorry, the poll did not end. Please try again.": "סליחה, הסקר לא הסתיים. נא נסו שוב.",
@@ -1894,14 +1854,8 @@
     "Message preview": "צפו בהודעה",
     "Published addresses can be used by anyone on any server to join your room.": "כל אחד בכל שרת יכול להשתמש בכתובות שפורסמו כדי להצטרף לחלל העבודה שלכם.",
     "Published addresses can be used by anyone on any server to join your space.": "כל אחד בכל שרת יכול להשתמש בכתובות שפורסמו כדי להצטרף למרחב העבודה שלכם.",
-    "Include Attachments": "כלול קבצים מצורפים",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "אם ברצונכם לשמור על גישה להיסטוריית הצ'אט שלכם בחדרים מוצפנים, הגדירו גיבוי מפתחות או ייצאו את מפתחות ההודעות שלכם מאחד מהמכשירים האחרים שלכם לפני שתמשיך.",
-    "Select from the options below to export chats from your timeline": "ביחרו מבין האפשרויות למטה כדי לייצא צ'אטים מציר הזמן שלכם",
-    "Export Chat": "ייצוא צ'אט",
     "Export chat": "ייצוא צ'אט",
-    "Joining the beta will reload %(brand)s.": "הצטרפות לפיתוח תטען מחדש את %(brand)s.",
-    "Leaving the beta will reload %(brand)s.": "עזיבת הניסוי תטען מחדש את %(brand)s.",
-    "Join the beta": "הצטרך לניסוי",
     "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "שימו לב: זוהי תכונת פיתוח המשתמשת ביישום זמני. משמעות הדבר היא שלא תוכלו למחוק את היסטוריית המיקומים שלכם, ומשתמשים מתקדמים יוכלו לראות את היסטוריית המיקומים שלך גם לאחר שתפסיקו לשתף את המיקום החי שלכם עם החדר הזה.",
     "Show Labs settings": "הצג את אופציית מעבדת הפיתוח",
     "To join, please enable video rooms in Labs first": "כדי להצטרף, נא אפשר תחילה וידאו במעבדת הפיתוח",
@@ -1956,11 +1910,7 @@
     "This room or space does not exist.": "חדר זה או מרחב עבודה אינם קיימים.",
     "Forget this space": "שכח את מרחב עבודה זה",
     "%(spaceName)s menu": "תפריט %(spaceName)s",
-    "You do not have permissions to add spaces to this space": "אין לכם הרשאה להוסיף מרחב עבודה אל מרחב העבודה הנוכחי",
     "Add space": "הוסיפו מרחב עבודה",
-    "You do not have permissions to create new rooms in this space": "אין לכם הרשאה ליצור חדרים חדשים במרחב העבודה הנוכחי",
-    "You do not have permissions to add rooms to this space": "אין לכם השאה להוסיף חדשרים למרחב העבודה הנוכחי",
-    "You do not have permissions to invite people to this space": "אין לכם הרשאה להזמין משתתפים אל מרחב עבודה זה",
     "Invite to space": "הזמינו אל מרחב העבודה",
     "Private space": "מרחב עבודה פרטי",
     "Public space": "מרחב עבודה ציבורי",
@@ -2146,7 +2096,8 @@
         "secure_backup": "גיבוי מאובטח",
         "cross_signing": "חתימה צולבת",
         "identity_server": "שרת הזדהות",
-        "integration_manager": "מנהל אינטגרציה"
+        "integration_manager": "מנהל אינטגרציה",
+        "qr_code": "קוד QR"
     },
     "action": {
         "continue": "המשך",
@@ -2237,7 +2188,16 @@
         "send_report": "שלח דיווח"
     },
     "a11y": {
-        "user_menu": "תפריט משתמש"
+        "user_menu": "תפריט משתמש",
+        "n_unread_messages_mentions": {
+            "one": "1 אזכור שלא נקרא.",
+            "other": "%(count)s הודעות שלא נקראו כולל אזכורים."
+        },
+        "n_unread_messages": {
+            "one": "1 הודעה שלא נקראה.",
+            "other": "%(count)s הודעות שלא נקראו."
+        },
+        "unread_messages": "הודעות שלא נקראו."
     },
     "labs": {
         "latex_maths": "בצע מתמטיקה של LaTeX בהודעות",
@@ -2256,7 +2216,10 @@
         "group_moderation": "מְתִינוּת",
         "group_encryption": "הצפנה",
         "group_experimental": "נִסיוֹנִי",
-        "group_developer": "מפתח"
+        "group_developer": "מפתח",
+        "leave_beta_reload": "עזיבת הניסוי תטען מחדש את %(brand)s.",
+        "join_beta_reload": "הצטרפות לפיתוח תטען מחדש את %(brand)s.",
+        "join_beta": "הצטרך לניסוי"
     },
     "keyboard": {
         "home": "הבית",
@@ -2465,7 +2428,23 @@
         "export_info": "זאת התחלת ייצוא של <roomName/>. ייצוא ע\"י <exporterDetails/> ב %(exportDate)s.",
         "topic": "נושא: %(topic)s",
         "error_fetching_file": "שגיאה באחזור הקובץ",
-        "file_attached": "מצורף קובץ"
+        "file_attached": "מצורף קובץ",
+        "enter_number_between_min_max": "הכניסו מספר בין %(min)s ל %(max)s",
+        "size_limit_min_max": "גודל יכול להיות רק מספר בין MB %(min)s ו MB%(max)s",
+        "num_messages_min_max": "מספר ההודעות יכול להיות רק מספר בין %(min)s ו %(max)s",
+        "num_messages": "מספר הודעות",
+        "cancelled": "ייצוא בוטל",
+        "cancelled_detail": "הייצוא בוטל בהצלחה",
+        "successful": "ייצוא בוצע בהצלחה",
+        "successful_detail": "הייצוא שלכם הצליח. מיצאו אותו בתיקיית ההורדות שלכם.",
+        "confirm_stop": "האם אתם בטוחים שברצונכם להפסיק לייצא את הנתונים שלכם? אם כן, תצטרכו להתחיל מחדש.",
+        "exporting_your_data": "מייצא את המידע שלכם",
+        "title": "ייצוא צ'אט",
+        "select_option": "ביחרו מבין האפשרויות למטה כדי לייצא צ'אטים מציר הזמן שלכם",
+        "format": "פורמט",
+        "messages": "הודעות",
+        "size_limit": "הגבלת גודל",
+        "include_attachments": "כלול קבצים מצורפים"
     },
     "create_room": {
         "title_video_room": "צרו חדר וידאו",
@@ -2813,7 +2792,6 @@
         "unsupported": "שיחות לא נתמכות",
         "unsupported_browser": "לא ניתן לבצע שיחות בדפדפן זה."
     },
-    "Messages": "הודעות",
     "Other": "אחר",
     "Advanced": "מתקדם",
     "room_settings": {
@@ -2888,5 +2866,35 @@
         "spaceinvaders_description": "שולח את ההודעה הנתונה עם אפקט בנושא חלל",
         "spaceinvaders_message": "שולח פולשים לחלל",
         "hearts_message": "שולח לבבות"
+    },
+    "spaces": {
+        "error_no_permission_invite": "אין לכם הרשאה להזמין משתתפים אל מרחב עבודה זה",
+        "error_no_permission_create_room": "אין לכם הרשאה ליצור חדרים חדשים במרחב העבודה הנוכחי",
+        "error_no_permission_add_room": "אין לכם השאה להוסיף חדשרים למרחב העבודה הנוכחי",
+        "error_no_permission_add_space": "אין לכם הרשאה להוסיף מרחב עבודה אל מרחב העבודה הנוכחי"
+    },
+    "auth": {
+        "continue_with_idp": "המשך עם %(provider)s",
+        "sign_in_with_sso": "היכנס באמצעות כניסה יחידה",
+        "sso": "כניסה חד שלבית"
+    },
+    "room_list": {
+        "sort_unread_first": "הצג תחילה חדרים עם הודעות שלא נקראו",
+        "show_previews": "הצג תצוגה מקדימה של הודעות",
+        "sort_by": "סדר לפי",
+        "sort_by_activity": "פעילות",
+        "sort_by_alphabet": "א-ת",
+        "sublist_options": "רשימת אפשרויות",
+        "show_n_more": {
+            "one": "הצג עוד %(count)s",
+            "other": "הצג עוד %(count)s"
+        },
+        "show_less": "הצג פחות",
+        "notification_options": "אפשרויות התרעות"
+    },
+    "report_content": {
+        "missing_reason": "אנא מלאו מדוע אתם מדווחים.",
+        "report_content_to_homeserver": "דווח על תוכן למנהל שרת הבית שלך",
+        "description": "דיווח על הודעה זו ישלח את 'מזהה האירוע' הייחודי למנהל שרת הבית שלך. אם הודעות בחדר זה מוצפנות, מנהל שרת הבית שלך לא יוכל לקרוא את טקסט ההודעה או להציג קבצים או תמונות."
     }
 }

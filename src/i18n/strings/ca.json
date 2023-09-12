@@ -392,8 +392,6 @@
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Confirma la desactivació del teu compte mitjançant la inscripció única SSO (per demostrar la teva identitat).",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Confirma l'addició d'aquest número de telèfon mitjançant la inscripció única SSO (per demostrar la teva identitat).",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirma l'addició d'aquest correu electrònic mitjançant la inscripció única SSO (per demostrar la teva identitat).",
-    "Sign in with single sign-on": "Inicia sessió mitjançant la inscripció única (SSO)",
-    "Single Sign On": "Inscripció única (SSO)",
     "Use Single Sign On to continue": "Utilitza la inscripció única (SSO) per a continuar",
     "Click the button below to confirm adding this phone number.": "Fes clic al botó de sota per confirmar l'addició d'aquest número de telèfon.",
     "Confirm adding phone number": "Confirma l'addició del número de telèfon",
@@ -712,7 +710,6 @@
         "unable_to_access_microphone": "No s'ha pogut accedir al micròfon",
         "unable_to_access_media": "No s'ha pogut accedir a la càmera web / micròfon"
     },
-    "Messages": "Missatges",
     "Other": "Altres",
     "Advanced": "Avançat",
     "composer": {
@@ -723,5 +720,12 @@
         "permissions": {
             "state_default": "Canvia la configuració"
         }
+    },
+    "auth": {
+        "sign_in_with_sso": "Inicia sessió mitjançant la inscripció única (SSO)",
+        "sso": "Inscripció única (SSO)"
+    },
+    "export_chat": {
+        "messages": "Missatges"
     }
 }

@@ -95,7 +95,6 @@
     "Add Email Address": "மின்னஞ்சல் முகவரியை சேர்க்கவும்",
     "Click the button below to confirm adding this email address.": "இந்த மின்னஞ்சல் முகவரியை சேர்ப்பதை உறுதிப்படுத்த கீழே உள்ள பொத்தானை அழுத்தவும்.",
     "Confirm adding email": "மின்னஞ்சலை சேர்ப்பதை உறுதிப்படுத்தவும்",
-    "Single Sign On": "ஒற்றை உள்நுழைவு",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "உங்கள் அடையாளத்தை நிரூபிக்க ஒற்றை உள்நுழைவைப் பயன்படுத்தி இந்த மின்னஞ்சல் முகவரியை சேர்ப்பதை உறுதிப்படுத்தவும்.",
     "Use Single Sign On to continue": "தொடர ஒற்றை உள்நுழைவைப் பயன்படுத்தவும்",
     "The user you called is busy.": "நீங்கள் அழைத்தவர் தற்போது வேளையாக இருக்கிறார்.",
@@ -161,5 +160,8 @@
     },
     "labs": {
         "group_rooms": "அறைகள்"
+    },
+    "auth": {
+        "sso": "ஒற்றை உள்நுழைவு"
     }
 }

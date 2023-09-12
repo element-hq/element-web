@@ -194,7 +194,6 @@
     "Add Phone Number": "Tilføj telefonnummer",
     "Use Single Sign On to continue": "Brug engangs login for at fortsætte",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Bekræft tilføjelsen af denne email adresse ved at bruge Single Sign On til at bevise din identitet.",
-    "Single Sign On": "Engangs login",
     "Confirm adding email": "Bekræft tilføjelse af email",
     "Click the button below to confirm adding this email address.": "Klik på knappen herunder for at bekræfte tilføjelsen af denne email adresse.",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Bekræft tilføjelsen af dette telefonnummer ved at bruge Single Sign On til at bevise din identitet.",
@@ -231,7 +230,6 @@
     "Permissions": "Tilladelser",
     "Headphones": "Hovedtelefoner",
     "Show more": "Vis mere",
-    "Show less": "Vis mindre",
     "Passwords don't match": "Adgangskoderne matcher ikke",
     "Confirm password": "Bekræft adgangskode",
     "Enter password": "Indtast adgangskode",
@@ -762,7 +760,6 @@
         "m.text": "%(senderName)s: %(message)s",
         "m.sticker": "%(senderName)s: %(stickerName)s"
     },
-    "Messages": "Beskeder",
     "Other": "Andre",
     "Advanced": "Avanceret",
     "composer": {
@@ -791,5 +788,14 @@
     },
     "emoji": {
         "categories": "Kategorier"
+    },
+    "auth": {
+        "sso": "Engangs login"
+    },
+    "export_chat": {
+        "messages": "Beskeder"
+    },
+    "room_list": {
+        "show_less": "Vis mindre"
     }
 }
