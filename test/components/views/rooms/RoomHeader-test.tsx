@@ -15,12 +15,19 @@ limitations under the License.
 */
 
 import React from "react";
-import userEvent from "@testing-library/user-event";
 import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { EventType, JoinRule, MatrixClient, MatrixEvent, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
-import { getAllByLabelText, getByLabelText, getByText, render, screen, waitFor } from "@testing-library/react";
+import {
+    fireEvent,
+    getAllByLabelText,
+    getByLabelText,
+    getByText,
+    render,
+    screen,
+    waitFor,
+} from "@testing-library/react";
 
-import { mkEvent, stubClient, withClientContextRenderOptions } from "../../../test-utils";
+import { filterConsole, mkEvent, stubClient, withClientContextRenderOptions } from "../../../test-utils";
 import RoomHeader from "../../../../src/components/views/rooms/RoomHeader";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -33,10 +40,13 @@ import dispatcher from "../../../../src/dispatcher/dispatcher";
 import { CallStore } from "../../../../src/stores/CallStore";
 import { Call, ElementCall } from "../../../../src/models/Call";
 import * as ShieldUtils from "../../../../src/utils/ShieldUtils";
+import { Container, WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
 
 jest.mock("../../../../src/utils/ShieldUtils");
 
 describe("RoomHeader", () => {
+    filterConsole("[getType] Room !1:example.org does not have an m.room.create event");
+
     let room: Room;
 
     const ROOM_ID = "!1:example.org";
@@ -94,7 +104,7 @@ describe("RoomHeader", () => {
             withClientContextRenderOptions(MatrixClientPeg.get()!),
         );
 
-        await userEvent.click(getByText(container, ROOM_ID));
+        fireEvent.click(getByText(container, ROOM_ID));
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.RoomSummary });
     });
 
@@ -184,7 +194,7 @@ describe("RoomHeader", () => {
         const facePile = getByLabelText(container, "4 members");
         expect(facePile).toHaveTextContent("4");
 
-        await userEvent.click(facePile);
+        fireEvent.click(facePile);
 
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.RoomMemberList });
     });
@@ -195,7 +205,7 @@ describe("RoomHeader", () => {
             withClientContextRenderOptions(MatrixClientPeg.get()!),
         );
 
-        await userEvent.click(getByLabelText(container, "Threads"));
+        fireEvent.click(getByLabelText(container, "Threads"));
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.ThreadPanel });
     });
 
@@ -205,7 +215,7 @@ describe("RoomHeader", () => {
             withClientContextRenderOptions(MatrixClientPeg.get()!),
         );
 
-        await userEvent.click(getByLabelText(container, "Notifications"));
+        fireEvent.click(getByLabelText(container, "Notifications"));
         expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.NotificationPanel });
     });
 
@@ -234,10 +244,10 @@ describe("RoomHeader", () => {
 
             const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
 
-            await userEvent.click(voiceButton);
+            fireEvent.click(voiceButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
 
-            await userEvent.click(videoButton);
+            fireEvent.click(videoButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
         });
 
@@ -275,8 +285,12 @@ describe("RoomHeader", () => {
                 <RoomHeader room={room} />,
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
-            expect(getByLabelText(container, "You do not have permission to start voice calls")).toBeDisabled();
-            expect(getByLabelText(container, "You do not have permission to start video calls")).toBeDisabled();
+            expect(
+                getByLabelText(container, "You do not have permission to start voice calls", { selector: "button" }),
+            ).toBeDisabled();
+            expect(
+                getByLabelText(container, "You do not have permission to start video calls", { selector: "button" }),
+            ).toBeDisabled();
         });
     });
 
@@ -286,6 +300,7 @@ describe("RoomHeader", () => {
         });
 
         it("renders only the video call element", async () => {
+            mockRoomMembers(room, 3);
             jest.spyOn(SdkConfig, "get").mockReturnValue({ use_exclusively: true });
             // allow element calls
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
@@ -302,23 +317,43 @@ describe("RoomHeader", () => {
 
             const dispatcherSpy = jest.spyOn(dispatcher, "dispatch");
 
-            await userEvent.click(getByLabelText(container, "Video call"));
+            fireEvent.click(getByLabelText(container, "Video call"));
 
             expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true }));
         });
 
-        it("can call if there's an ongoing call", () => {
+        it("can't call if there's an ongoing (pinned) call", () => {
             jest.spyOn(SdkConfig, "get").mockReturnValue({ use_exclusively: true });
             // allow element calls
             jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
+            jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(true);
 
-            jest.spyOn(CallStore.instance, "getCall").mockReturnValue({} as Call);
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue({ widget: {} } as Call);
 
             const { container } = render(
                 <RoomHeader room={room} />,
                 withClientContextRenderOptions(MatrixClientPeg.get()!),
             );
             expect(getByLabelText(container, "Ongoing call")).toBeDisabled();
+        });
+
+        it("clicking on ongoing (unpinned) call re-pins it", () => {
+            jest.spyOn(SdkConfig, "get").mockReturnValue({ use_exclusively: true });
+            // allow element calls
+            jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
+            jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(false);
+            const spy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
+
+            const widget = {};
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue({ widget } as Call);
+
+            const { container } = render(
+                <RoomHeader room={room} />,
+                withClientContextRenderOptions(MatrixClientPeg.get()!),
+            );
+            expect(getByLabelText(container, "Video call")).not.toBeDisabled();
+            fireEvent.click(getByLabelText(container, "Video call"));
+            expect(spy).toHaveBeenCalledWith(room, widget, Container.Top);
         });
 
         it("disables calling if there's a jitsi call", () => {
@@ -360,10 +395,10 @@ describe("RoomHeader", () => {
             expect(videoButton).not.toBeDisabled();
 
             const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
-            await userEvent.click(voiceButton);
+            fireEvent.click(voiceButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
 
-            await userEvent.click(videoButton);
+            fireEvent.click(videoButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
         });
 
@@ -386,10 +421,10 @@ describe("RoomHeader", () => {
             expect(videoButton).not.toBeDisabled();
 
             const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
-            await userEvent.click(voiceButton);
+            fireEvent.click(voiceButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
 
-            await userEvent.click(videoButton);
+            fireEvent.click(videoButton);
             expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Video);
         });
 
@@ -412,12 +447,8 @@ describe("RoomHeader", () => {
             expect(voiceButton).not.toBeDisabled();
             expect(videoButton).not.toBeDisabled();
 
-            const placeCallSpy = jest.spyOn(LegacyCallHandler.instance, "placeCall");
-            await userEvent.click(voiceButton);
-            expect(placeCallSpy).toHaveBeenLastCalledWith(room.roomId, CallType.Voice);
-
             const dispatcherSpy = jest.spyOn(dispatcher, "dispatch");
-            await userEvent.click(videoButton);
+            fireEvent.click(videoButton);
             expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({ view_call: true }));
         });
     });

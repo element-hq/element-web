@@ -32,6 +32,7 @@ import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutS
 import { useRoomState } from "../useRoomState";
 import { _t } from "../../languageHandler";
 import { isManagedHybridWidget } from "../../widgets/ManagedHybrid";
+import { IApp } from "../../stores/WidgetStore";
 
 export type PlatformCallType = "element_call" | "jitsi_or_element_call" | "legacy_or_jitsi";
 
@@ -91,12 +92,14 @@ export const useRoomCall = (
             if (mayCreateElementCalls && hasJitsiWidget) {
                 return "jitsi_or_element_call";
             }
-            if (useElementCallExclusively || mayCreateElementCalls) {
-                // Looks like for Audio this was previously legacy_or_jitsi
+            if (useElementCallExclusively) {
                 return "element_call";
             }
-            if (mayEditWidgets) {
-                return "jitsi_or_element_call";
+            if (memberCount <= 2) {
+                return "legacy_or_jitsi";
+            }
+            if (mayCreateElementCalls) {
+                return "element_call";
             }
         }
         return "legacy_or_jitsi";
@@ -106,9 +109,17 @@ export const useRoomCall = (
         mayCreateElementCalls,
         hasJitsiWidget,
         useElementCallExclusively,
-        mayEditWidgets,
+        memberCount,
     ]);
-    const widget = callType === "element_call" ? groupCall?.widget : jitsiWidget ?? managedHybridWidget;
+
+    let widget: IApp | undefined;
+    if (callType === "legacy_or_jitsi") {
+        widget = jitsiWidget ?? managedHybridWidget;
+    } else if (callType === "element_call") {
+        widget = groupCall?.widget;
+    } else {
+        widget = groupCall?.widget ?? jitsiWidget;
+    }
 
     const [canPinWidget, setCanPinWidget] = useState(false);
     const [widgetPinned, setWidgetPinned] = useState(false);
@@ -180,7 +191,7 @@ export const useRoomCall = (
     switch (state) {
         case State.NoPermission:
             voiceCallDisabledReason = _t("You do not have permission to start voice calls");
-            videoCallDisabledReason = _t("You do not have permission to start voice calls");
+            videoCallDisabledReason = _t("You do not have permission to start video calls");
             break;
         case State.Ongoing:
             voiceCallDisabledReason = _t("Ongoing call");
