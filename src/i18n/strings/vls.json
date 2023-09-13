@@ -65,11 +65,7 @@
     "You are no longer ignoring %(userId)s": "Je negeert %(userId)s nie mi",
     "Define the power level of a user": "Bepoal ’t machtsniveau van e gebruuker",
     "Deops user with given id": "Ountmachtigt de gebruuker me de gegeevn ID",
-    "Please supply a https:// or http:// widget URL": "Gift een https://- of http://-widget-URL in",
-    "You cannot modify widgets in this room.": "J’en kut de widgets in ’t gesprek hier nie anpassn.",
     "Verified key": "Geverifieerde sleuter",
-    "Displays action": "Toogt actie",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Forceert de huudige uutwoartsche groepssessie in e versleuterd gesprek vo verworpn te wordn",
     "Reason": "Reedn",
     "No homeserver URL provided": "Geen thuusserver-URL ingegeevn",
     "Unexpected error resolving homeserver configuration": "Ounverwachte foute by ’t controleern van de thuusserverconfiguroasje",
@@ -237,13 +233,7 @@
     "Account management": "Accountbeheer",
     "Deactivate Account": "Account deactiveern",
     "General": "Algemeen",
-    "For help with using %(brand)s, click <a>here</a>.": "Klikt <a>hier</a> voor hulp by ’t gebruukn van %(brand)s.",
-    "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "Klikt <a>hier</a> voor hulp by ’t gebruukn van %(brand)s, of begint e gesprek met uzze robot me de knop hieroundern.",
-    "Chat with %(brand)s Bot": "Chattn me %(brand)s-robot",
     "Check for update": "Controleern ip updates",
-    "Help & About": "Hulp & Info",
-    "Versions": "Versies",
-    "%(brand)s version:": "%(brand)s-versie:",
     "Notifications": "Meldiengn",
     "Composer": "Ipsteller",
     "Room list": "Gesprekslyste",
@@ -656,14 +646,10 @@
     "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Je ku je registreern, moa sommige functies goan pas beschikboar zyn wanneer da den identiteitsserver were online is. A je deze woarschuwienge te zien bluft krygn, controleert tan je configuroasje of nimt contact ip met e serverbeheerder.",
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Je ku je paswoord herinstelln, moa sommige functies goan pas beschikboar zyn wanneer da den identiteitsserver were online is. A je deze woarschuwienge te zien bluft krygn, controleert tan je configuroasje of nimt contact ip met e serverbeheerder.",
     "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Je ku jen anmeldn, moa sommige functies goan pas beschikboar zyn wanneer da den identiteitsserver were online is. A je deze woarschuwienge te zien bluft krygn, controleert tan je configuroasje of nimt contact ip met e serverbeheerder.",
-    "<a>Log in</a> to your new account.": "<a>Meldt jen eigen an</a> me je nieuwen account.",
-    "Registration Successful": "Registroasje gesloagd",
     "Edited at %(date)s. Click to view edits.": "Bewerkt ip %(date)s. Klikt vo de bewerkiengn te bekykn.",
     "Message edits": "Berichtbewerkiengn",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Dit gesprek bywerkn vereist da je d’huudige instantie dervan ofsluut en in de plekke dervan e nieuw gesprek anmakt. Vo de gespreksleedn de best meuglike ervoarienge te biedn, goan me:",
     "Upload all": "Alles iploadn",
-    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Je nieuwen account (%(newAccountId)s) is geregistreerd, mo je zyt al angemeld met een anderen account (%(loggedInUserId)s).",
-    "Continue with previous account": "Verdergoan me de vorigen account",
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Vertelt uus wuk dat der verkeerd is geloopn, of nog beter, makt e foutmeldienge an ip GitHub woarin da je 't probleem beschryft.",
     "Removing…": "Bezig me te verwydern…",
     "Clear all data": "Alle gegeevns wissn",
@@ -1051,7 +1037,11 @@
         "category_actions": "Acties",
         "category_admin": "Beheerder",
         "category_advanced": "Geavanceerd",
-        "category_other": "Overige"
+        "category_other": "Overige",
+        "addwidget_invalid_protocol": "Gift een https://- of http://-widget-URL in",
+        "addwidget_no_permissions": "J’en kut de widgets in ’t gesprek hier nie anpassn.",
+        "discardsession": "Forceert de huudige uutwoartsche groepssessie in e versleuterd gesprek vo verworpn te wordn",
+        "me": "Toogt actie"
     },
     "presence": {
         "online_for": "Online vo %(duration)s",
@@ -1097,9 +1087,23 @@
         }
     },
     "auth": {
-        "sign_in_with_sso": "Anmeldn met enkele anmeldienge"
+        "sign_in_with_sso": "Anmeldn met enkele anmeldienge",
+        "account_clash": "Je nieuwen account (%(newAccountId)s) is geregistreerd, mo je zyt al angemeld met een anderen account (%(loggedInUserId)s).",
+        "account_clash_previous_account": "Verdergoan me de vorigen account",
+        "log_in_new_account": "<a>Meldt jen eigen an</a> me je nieuwen account.",
+        "registration_successful": "Registroasje gesloagd"
     },
     "export_chat": {
         "messages": "Berichtn"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "%(brand)s-versie:",
+            "help_link": "Klikt <a>hier</a> voor hulp by ’t gebruukn van %(brand)s.",
+            "help_link_chat_bot": "Klikt <a>hier</a> voor hulp by ’t gebruukn van %(brand)s, of begint e gesprek met uzze robot me de knop hieroundern.",
+            "chat_bot": "Chattn me %(brand)s-robot",
+            "title": "Hulp & Info",
+            "versions": "Versies"
+        }
     }
 }

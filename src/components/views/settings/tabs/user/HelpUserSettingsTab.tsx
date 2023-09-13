@@ -78,8 +78,8 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             : "<not-enabled>";
 
         return {
-            appVersion: `${_t("%(brand)s version:", { brand })} ${appVersion}`,
-            olmVersion: `${_t("Olm version:")} ${olmVersion}`,
+            appVersion: `${_t("setting|help_about|brand_version", { brand })} ${appVersion}`,
+            olmVersion: `${_t("setting|help_about|olm_version")} ${olmVersion}`,
         };
     }
 
@@ -228,7 +228,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         const brand = SdkConfig.get().brand;
 
         let faqText = _t(
-            "For help with using %(brand)s, click <a>here</a>.",
+            "setting|help_about|help_link",
             {
                 brand,
             },
@@ -240,7 +240,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             faqText = (
                 <div>
                     {_t(
-                        "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.",
+                        "setting|help_about|help_link_chat_bot",
                         {
                             brand,
                         },
@@ -258,7 +258,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                     )}
                     <div>
                         <AccessibleButton onClick={this.onStartBotChat} kind="primary">
-                            {_t("Chat with %(brand)s Bot", { brand })}
+                            {_t("setting|help_about|chat_bot", { brand })}
                         </AccessibleButton>
                     </div>
                 </div>
@@ -306,10 +306,10 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
 
         return (
             <SettingsTab>
-                <SettingsSection heading={_t("Help & About")}>
+                <SettingsSection heading={_t("setting|help_about|title")}>
                     {bugReportingSection}
                     <SettingsSubsection heading={_t("common|faq")} description={faqText} />
-                    <SettingsSubsection heading={_t("Versions")}>
+                    <SettingsSubsection heading={_t("setting|help_about|versions")}>
                         <SettingsSubsectionText>
                             <CopyableText getTextToCopy={this.getVersionTextToCopy}>
                                 {appVersion}
@@ -325,7 +325,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                     <SettingsSubsection heading={_t("Advanced")}>
                         <SettingsSubsectionText>
                             {_t(
-                                "Homeserver is <code>%(homeserverUrl)s</code>",
+                                "setting|help_about|homeserver",
                                 {
                                     homeserverUrl: this.context.getHomeserverUrl(),
                                 },
@@ -337,7 +337,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         {this.context.getIdentityServerUrl() && (
                             <SettingsSubsectionText>
                                 {_t(
-                                    "Identity server is <code>%(identityServerUrl)s</code>",
+                                    "setting|help_about|identity_server",
                                     {
                                         identityServerUrl: this.context.getIdentityServerUrl(),
                                     },
@@ -350,18 +350,14 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         <SettingsSubsectionText>
                             <details>
                                 <summary>{_t("common|access_token")}</summary>
-                                <b>
-                                    {_t(
-                                        "Your access token gives full access to your account. Do not share it with anyone.",
-                                    )}
-                                </b>
+                                <b>{_t("setting|help_about|access_token_detail")}</b>
                                 <CopyableText getTextToCopy={() => this.context.getAccessToken()}>
                                     {this.context.getAccessToken()}
                                 </CopyableText>
                             </details>
                         </SettingsSubsectionText>
                         <AccessibleButton onClick={this.onClearCacheAndReload} kind="danger">
-                            {_t("Clear cache and reload")}
+                            {_t("setting|help_about|clear_cache_reload")}
                         </AccessibleButton>
                     </SettingsSubsection>
                 </SettingsSection>

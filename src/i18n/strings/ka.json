@@ -1,5 +1,4 @@
 {
-    "Dismiss read marker and jump to bottom": "გააუქმეთ წაკითხული მარკერი და გადადით ქვემოთ",
     "Explore rooms": "ოთახების დათავლიერება",
     "Create Account": "ანგარიშის შექმნა",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "ფაილი '%(fileName)s' აჭარბებს ამ ჰომსერვერის ზომის ლიმიტს ატვირთვისთვის",
@@ -62,5 +61,8 @@
     },
     "auth": {
         "sso": "ერთჯერადი ავტორიზაცია"
+    },
+    "keyboard": {
+        "dismiss_read_marker_and_jump_bottom": "გააუქმეთ წაკითხული მარკერი და გადადით ქვემოთ"
     }
 }

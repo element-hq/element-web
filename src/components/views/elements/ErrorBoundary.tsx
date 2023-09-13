@@ -115,7 +115,7 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
             if (MatrixClientPeg.get()) {
                 clearCacheButton = (
                     <AccessibleButton onClick={this.onClearCacheAndReload} kind="danger">
-                        {_t("Clear cache and reload")}
+                        {_t("setting|help_about|clear_cache_reload")}
                     </AccessibleButton>
                 );
             }

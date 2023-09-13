@@ -62,8 +62,6 @@
     "Define the power level of a user": ".i ninga'igau lo ni lo pilno cu vlipa",
     "Deops user with given id": ".i xruti lo ni lo pilno poi se judri ti cu vlipa",
     "Verified key": "ckiku vau je se lacri",
-    "Displays action": ".i mrilu lo nu do gasnu",
-    "Forces the current outbound group session in an encrypted room to be discarded": ".i macnu vimcu lo ca barkla termifckiku gunma lo kumfa pe'a poi mifra",
     "Reason": "krinu",
     "This homeserver has hit its Monthly Active User limit.": ".i le samtcise'u cu bancu lo masti jimte be ri bei lo ni ca'o pilno",
     "This homeserver has exceeded one of its resource limits.": ".i le samtcise'u cu bancu pa lo jimte be ri",
@@ -171,8 +169,6 @@
     "Users": "pilno",
     "That matches!": ".i du",
     "Success!": ".i snada",
-    "Room List": "liste le'i ve zilbe'i",
-    "Upload a file": "nu kibdu'a pa vreji",
     "Verify your other session using one of the options below.": ".i ko cuxna da le di'e cei'i le ka tadji lo nu do co'a lacri",
     "Ask this user to verify their session, or manually verify it below.": ".i ko cpedu le ka co'a lacri le se samtcise'u kei le pilno vau ja pilno le di'e cei'i le ka co'a lacri",
     "Not Trusted": "na se lacri",
@@ -203,7 +199,6 @@
         "one": ".i samtcise'u %(count)s da"
     },
     "Hide sessions": "nu ro se samtcise'u cu zilmipri",
-    "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": ".i gi je lo nu samcu'a <a>le dei cei'i</a> gi lo nu co'a tavla le sampre cu tadji lo nu facki le du'u tadji lo nu pilno la'o zoi. %(brand)s .zoi",
     "This room is end-to-end encrypted": ".i ro zilbe'i be fo le cei'i cu mifra",
     "Everyone in this room is verified": ".i do lacri ro pagbu be le se zilbe'i",
     "The file '%(fileName)s' failed to upload.": ".i da nabmi fi lo nu kibdu'a la'o zoi. %(fileName)s .zoi",
@@ -409,7 +404,9 @@
         "category_actions": "ka'e se zukte",
         "category_admin": "vlipa so'i da",
         "category_advanced": "macnu",
-        "category_other": "drata"
+        "category_other": "drata",
+        "discardsession": ".i macnu vimcu lo ca barkla termifckiku gunma lo kumfa pe'a poi mifra",
+        "me": ".i mrilu lo nu do gasnu"
     },
     "event_preview": {
         "m.call.answer": {
@@ -475,5 +472,14 @@
             "one": "nu viska %(count)s na du"
         },
         "show_less": "nu viska so'u da"
+    },
+    "keyboard": {
+        "category_room_list": "liste le'i ve zilbe'i",
+        "upload_file": "nu kibdu'a pa vreji"
+    },
+    "setting": {
+        "help_about": {
+            "help_link_chat_bot": ".i gi je lo nu samcu'a <a>le dei cei'i</a> gi lo nu co'a tavla le sampre cu tadji lo nu facki le du'u tadji lo nu pilno la'o zoi. %(brand)s .zoi"
+        }
     }
 }

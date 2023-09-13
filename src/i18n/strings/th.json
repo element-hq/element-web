@@ -9,7 +9,6 @@
     "Low priority": "ความสำคัญต่ำ",
     "Profile": "โปรไฟล์",
     "Reason": "เหตุผล",
-    "%(brand)s version:": "เวอร์ชัน %(brand)s:",
     "Notifications": "การแจ้งเตือน",
     "Operation failed": "การดำเนินการล้มเหลว",
     "powered by Matrix": "ใช้เทคโนโลยี Matrix",
@@ -529,5 +528,10 @@
     },
     "auth": {
         "sso": "ลงชื่อเข้าใช้เพียงครั้งเดียว"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "เวอร์ชัน %(brand)s:"
+        }
     }
 }

@@ -42,7 +42,6 @@
     "Deactivate Account": "계정 비활성화",
     "Decrypt %(text)s": "%(text)s 복호화",
     "Deops user with given id": "받은 ID로 사용자의 등급을 낮추기",
-    "Displays action": "활동 표시하기",
     "Download %(text)s": "%(text)s 다운로드",
     "Enter passphrase": "암호 입력",
     "Error decrypting attachment": "첨부 파일 복호화 중 오류",
@@ -98,7 +97,6 @@
     "Return to login screen": "로그인 화면으로 돌아가기",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s은 알림을 보낼 권한을 가지고 있지 않습니다. 브라우저 설정을 확인해주세요",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s이 알림을 보낼 권한을 받지 못했습니다. 다시 해주세요",
-    "%(brand)s version:": "%(brand)s 웹 버전:",
     "Room %(roomId)s not visible": "방 %(roomId)s이(가) 보이지 않음",
     "%(roomName)s does not exist.": "%(roomName)s은 없는 방이에요.",
     "%(roomName)s is not accessible at this time.": "현재는 %(roomName)s에 들어갈 수 없습니다.",
@@ -352,9 +350,6 @@
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "'%(fileName)s' 파일이 홈서버의 업로드 크기 제한을 초과합니다",
     "The server does not support the room version specified.": "서버가 지정된 방 버전을 지원하지 않습니다.",
     "Unable to load! Check your network connectivity and try again.": "불러올 수 없습니다! 네트워크 연결 상태를 확인한 후 다시 시도하세요.",
-    "Please supply a https:// or http:// widget URL": "https:// 혹은 http:// 위젯 URL을 제공하세요",
-    "You cannot modify widgets in this room.": "이 방에서 위젯을 수정할 수 없습니다.",
-    "Forces the current outbound group session in an encrypted room to be discarded": "암호화된 방에서 현재 방 외부의 그룹 세션을 강제로 삭제합니다",
     "Cannot reach homeserver": "홈서버에 연결할 수 없습니다",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "인터넷 연결이 안정적인지 확인하세요, 또는 서버 관리자에게 연락하세요",
     "Your %(brand)s is misconfigured": "%(brand)s이 잘못 설정됨",
@@ -500,11 +495,6 @@
     "General": "기본",
     "Discovery": "탐색",
     "Deactivate account": "계정 비활성화",
-    "For help with using %(brand)s, click <a>here</a>.": "%(brand)s 사용 중 도움이 필요하다면, <a>여기</a>를 클릭하세요.",
-    "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "%(brand)s을 사용하다가 도움이 필요하다면, <a>여기</a>를 클릭하거나, 아래 버튼을 사용해 우리의 봇과 대화를 시작하세요.",
-    "Chat with %(brand)s Bot": "%(brand)s 봇과 대화",
-    "Help & About": "도움 & 정보",
-    "Versions": "버전",
     "Always show the window menu bar": "항상 윈도우 메뉴 막대에 보이기",
     "Composer": "작성기",
     "Room list": "방 목록",
@@ -691,10 +681,6 @@
     "Create account": "계정 만들기",
     "Registration has been disabled on this homeserver.": "이 홈서버는 등록이 비활성화되어 있습니다.",
     "Unable to query for supported registration methods.": "지원하는 등록 방식을 쿼리할 수 없습니다.",
-    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "당신의 새 계정 (%(newAccountId)s)을 등록했습니다, 하지만 다른 계정 (%(loggedInUserId)s)으로 로그인하고 있습니다.",
-    "Continue with previous account": "이 계정으로 계속",
-    "<a>Log in</a> to your new account.": "새 계정으로 <a>로그인</a>하기.",
-    "Registration Successful": "등록 성공",
     "Failed to re-authenticate due to a homeserver problem": "홈서버 문제로 다시 인증에 실패함",
     "Failed to re-authenticate": "다시 인증에 실패함",
     "Enter your password to sign in and regain access to your account.": "로그인하고 계정에 다시 접근하려면 비밀번호를 입력하세요.",
@@ -764,7 +750,6 @@
     "Room Autocomplete": "방 자동 완성",
     "User Autocomplete": "사용자 자동 완성",
     "Show image": "이미지 보이기",
-    "Clear cache and reload": "캐시 지우기 및 새로고침",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "홈서버 설정에서 캡챠 공개 키가 없습니다. 홈서버 관리자에게 이것을 신고해주세요.",
     "Your email address hasn't been verified yet": "이메일 주소가 아직 확인되지 않았습니다",
     "Click the link in the email you received to verify and then click continue again.": "받은 이메일에 있는 링크를 클릭해서 확인한 후에 계속하기를 클릭하세요.",
@@ -882,7 +867,6 @@
     "Anyone in <spaceName/> can find and join. You can select other spaces too.": "<spaceName/>에 소속된 누구나 찾고 참여할 수 있습니다. 다른 스페이스도 선택 가능합니다.",
     "Only invited people can join.": "초대한 경우에만 참여할 수 있습니다.",
     "Visibility": "가시성",
-    "Explore Public Rooms": "공개 방 살펴보기",
     "Manage & explore rooms": "관리 및 방 목록 보기",
     "Space home": "스페이스 홈",
     "Search for": "검색 기준",
@@ -947,10 +931,6 @@
     "Add existing room": "기존 방 목록에서 추가하기",
     "Invite to this space": "이 스페이스로 초대하기",
     "Invite to space": "스페이스에 초대하기",
-    "Create a Group Chat": "그룹 대화 생성하기",
-    "Send a Direct Message": "다이렉트 메세지 보내기",
-    "Now, let's help you get started": "지금 시작할 수 있도록 도와드릴께요",
-    "Welcome %(name)s": "환영합니다 %(name)s님",
     "Something went wrong.": "무언가가 잘못되었습니다.",
     "Slovakia": "슬로바키아",
     "Argentina": "아르헨티나",
@@ -959,7 +939,6 @@
     "User Busy": "사용자 바쁨",
     "Ukraine": "우크라이나",
     "United Kingdom": "영국",
-    "Converts the DM to a room": "DM을 방으로 변환",
     "Yemen": "예멘",
     "Uzbekistan": "우즈베키스탄",
     "Syria": "시리아",
@@ -977,7 +956,6 @@
     "United States": "미국",
     "The call was answered on another device.": "이 전화는 다른 기기에서 응답했습니다.",
     "Answered Elsewhere": "다른 기기에서 응답함",
-    "No active call in this room": "이 방에 진행중인 통화 없음",
     "Your current session is ready for secure messaging.": "현재 세션에서 보안 메세지를 사용할 수 있습니다.",
     "Last activity": "최근 활동",
     "Mark all as read": "모두 읽음으로 표시",
@@ -1402,7 +1380,13 @@
         "category_actions": "활동",
         "category_admin": "관리자",
         "category_advanced": "고급",
-        "category_other": "기타"
+        "category_other": "기타",
+        "addwidget_invalid_protocol": "https:// 혹은 http:// 위젯 URL을 제공하세요",
+        "addwidget_no_permissions": "이 방에서 위젯을 수정할 수 없습니다.",
+        "converttoroom": "DM을 방으로 변환",
+        "discardsession": "암호화된 방에서 현재 방 외부의 그룹 세션을 강제로 삭제합니다",
+        "no_active_call": "이 방에 진행중인 통화 없음",
+        "me": "활동 표시하기"
     },
     "presence": {
         "online_for": "%(duration)s 동안 온라인",
@@ -1465,7 +1449,11 @@
         "quick_reactions": "빠른 리액션"
     },
     "auth": {
-        "sign_in_with_sso": "통합 인증(SSO)으로 로그인"
+        "sign_in_with_sso": "통합 인증(SSO)으로 로그인",
+        "account_clash": "당신의 새 계정 (%(newAccountId)s)을 등록했습니다, 하지만 다른 계정 (%(loggedInUserId)s)으로 로그인하고 있습니다.",
+        "account_clash_previous_account": "이 계정으로 계속",
+        "log_in_new_account": "새 계정으로 <a>로그인</a>하기.",
+        "registration_successful": "등록 성공"
     },
     "export_chat": {
         "title": "대화 내보내기",
@@ -1491,5 +1479,23 @@
             "one": "1개의 읽지 않은 메시지."
         },
         "unread_messages": "읽지 않은 메시지."
+    },
+    "onboarding": {
+        "welcome_user": "환영합니다 %(name)s님",
+        "welcome_detail": "지금 시작할 수 있도록 도와드릴께요",
+        "send_dm": "다이렉트 메세지 보내기",
+        "explore_rooms": "공개 방 살펴보기",
+        "create_room": "그룹 대화 생성하기"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "%(brand)s 웹 버전:",
+            "help_link": "%(brand)s 사용 중 도움이 필요하다면, <a>여기</a>를 클릭하세요.",
+            "help_link_chat_bot": "%(brand)s을 사용하다가 도움이 필요하다면, <a>여기</a>를 클릭하거나, 아래 버튼을 사용해 우리의 봇과 대화를 시작하세요.",
+            "chat_bot": "%(brand)s 봇과 대화",
+            "title": "도움 & 정보",
+            "versions": "버전",
+            "clear_cache_reload": "캐시 지우기 및 새로고침"
+        }
     }
 }

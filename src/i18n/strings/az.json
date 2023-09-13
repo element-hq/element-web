@@ -42,7 +42,6 @@
     "Unignored user": "İstifadəçi blokun siyahısından götürülmüşdür",
     "You are no longer ignoring %(userId)s": "Siz %(userId)s blokdan çıxardınız",
     "Deops user with given id": "Verilmiş ID-lə istifadəçidən operatorun səlahiyyətlərini çıxardır",
-    "Displays action": "Hərəkətlərin nümayişi",
     "Reason": "Səbəb",
     "Incorrect verification code": "Təsdiq etmənin səhv kodu",
     "Phone": "Telefon",
@@ -145,7 +144,6 @@
     "You are not in this room.": "Sən bu otaqda deyilsən.",
     "You do not have permission to do that in this room.": "Bu otaqda bunu etməyə icazəniz yoxdur.",
     "Define the power level of a user": "Bir istifadəçinin güc səviyyəsini müəyyənləşdirin",
-    "You cannot modify widgets in this room.": "Bu otaqda vidjetləri dəyişdirə bilməzsiniz.",
     "Verified key": "Təsdiqlənmiş açar",
     "Add Email Address": "Emal ünvan əlavə etmək",
     "Add Phone Number": "Telefon nömrəsi əlavə etmək",
@@ -163,8 +161,6 @@
     "Use an identity server": "Şəxsiyyət serverindən istifadə edin",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "E-poçtla dəvət etmək üçün şəxsiyyət serverindən istifadə edin. Defolt şəxsiyyət serverini (%(defaultIdentityServerName)s) istifadə etməyə və ya Parametrlərdə idarə etməyə davam edin.",
     "Use an identity server to invite by email. Manage in Settings.": "E-poçtla dəvət etmək üçün şəxsiyyət serverindən istifadə edin. Parametrlərdə idarə edin.",
-    "Please supply a https:// or http:// widget URL": "Zəhmət olmasa https:// və ya http:// widget URL təmin edin",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Şifrəli bir otaqda mövcud qrup sessiyasını ləğv etməyə məcbur edir",
     "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
     "Create Account": "Hesab Aç",
     "Explore rooms": "Otaqları kəşf edin",
@@ -279,7 +275,11 @@
         "category_actions": "Tədbirlər",
         "category_admin": "Administrator",
         "category_advanced": "Təfərrüatlar",
-        "category_other": "Digər"
+        "category_other": "Digər",
+        "addwidget_invalid_protocol": "Zəhmət olmasa https:// və ya http:// widget URL təmin edin",
+        "addwidget_no_permissions": "Bu otaqda vidjetləri dəyişdirə bilməzsiniz.",
+        "discardsession": "Şifrəli bir otaqda mövcud qrup sessiyasını ləğv etməyə məcbur edir",
+        "me": "Hərəkətlərin nümayişi"
     },
     "bug_reporting": {
         "collecting_information": "Proqramın versiyası haqqında məlumatın yığılması",

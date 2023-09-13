@@ -5,7 +5,6 @@
     "Failed to verify email address: make sure you clicked the link in the email": "Neuspela provera adrese elektronske pošte: proverite da li ste kliknuli na link u poruci elektronske pošte",
     "Add Phone Number": "Dodajte broj telefona",
     "Your %(brand)s is misconfigured": "Vaš %(brand)s nije dobro podešen",
-    "Chat with %(brand)s Bot": "Ćaskajte sa %(brand)s botom",
     "powered by Matrix": "pokreće Matriks",
     "Explore rooms": "Istražite sobe",
     "Send": "Pošalji",
@@ -76,7 +75,6 @@
     "This homeserver does not support login using email address.": "Ovaj server ne podržava prijavu korištenjem e-mail adrese.",
     "Incorrect username and/or password.": "Neispravno korisničko ime i/ili lozinka.",
     "This account has been deactivated.": "Ovaj nalog je dekativiran.",
-    "Open this settings tab": "Otvori podešavanja",
     "Start a group chat": "Pokreni grupni razgovor",
     "User is already in the room": "Korisnik je već u sobi",
     "common": {
@@ -117,5 +115,13 @@
     },
     "auth": {
         "sso": "Jedinstvena prijava (SSO)"
+    },
+    "keyboard": {
+        "keyboard_shortcuts_tab": "Otvori podešavanja"
+    },
+    "setting": {
+        "help_about": {
+            "chat_bot": "Ćaskajte sa %(brand)s botom"
+        }
     }
 }

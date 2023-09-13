@@ -11,7 +11,6 @@
     "Deactivate Account": "Desativar conta",
     "Default": "Padrão",
     "Deops user with given id": "Retirar função de moderador do usuário com o identificador informado",
-    "Displays action": "Visualizar atividades",
     "Export E2E room keys": "Exportar chaves ponta-a-ponta da sala",
     "Failed to change password. Is your password correct?": "Falha ao alterar a palavra-passe. A sua palavra-passe está correta?",
     "Failed to reject invitation": "Falha ao tentar rejeitar convite",
@@ -139,7 +138,6 @@
     "Error decrypting attachment": "Erro ao descriptografar o anexo",
     "Invalid file%(extra)s": "Arquivo inválido %(extra)s",
     "Operation failed": "A operação falhou",
-    "%(brand)s version:": "versão do %(brand)s:",
     "Warning!": "Atenção!",
     "Passphrases must match": "As frases-passe devem coincidir",
     "Passphrase must not be empty": "A frase-passe não pode estar vazia",
@@ -423,11 +421,9 @@
     "Gambia": "Gâmbia",
     "Georgia": "Geórgia",
     "Mayotte": "Mayotte",
-    "Host account on": "Hospedar conta em",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Recomendamos que remova seus endereços de email e números de telefone do servidor de identidade antes de se desconectar.",
     "Failed to invite users to %(roomName)s": "Falha ao convidar utilizadores para %(roomName)s",
     "Command error: Unable to find rendering type (%(renderingType)s)": "Erro de comando: Não foi possível encontrar o tipo de renderização(%(renderingType)s)",
-    "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)s Ou %(usernamePassword)s",
     "Macau": "Macau",
     "Malaysia": "Malásia",
     "Some invites couldn't be sent": "Alguns convites não puderam ser enviados",
@@ -438,7 +434,6 @@
     "Start a conversation with someone using their name or username (like <userId/>).": "Comece uma conversa com alguém a partir do nome ou nome de utilizador (por exemplo: <userId/>).",
     "Use email or phone to optionally be discoverable by existing contacts.": "Use email ou telefone para, opcionalmente, ser detectável por contactos existentes.",
     "Invite by username": "Convidar por nome de utilizador",
-    "Already have an account? <a>Sign in here</a>": "Já tem uma conta? <a>Entre aqui</a>",
     "Use an email address to recover your account": "Usar um endereço de email para recuperar a sua conta",
     "Malta": "Malta",
     "Lebanon": "Líbano",
@@ -786,7 +781,8 @@
         "category_admin": "Administrador",
         "category_advanced": "Avançado",
         "category_effects": "Ações",
-        "category_other": "Outros"
+        "category_other": "Outros",
+        "me": "Visualizar atividades"
     },
     "presence": {
         "online": "Online",
@@ -819,9 +815,17 @@
         "group_rooms": "Salas"
     },
     "auth": {
-        "sso": "Single Sign On"
+        "sso": "Single Sign On",
+        "sso_or_username_password": "%(ssoButtons)s Ou %(usernamePassword)s",
+        "sign_in_instead": "Já tem uma conta? <a>Entre aqui</a>",
+        "server_picker_title": "Hospedar conta em"
     },
     "export_chat": {
         "messages": "Mensagens"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "versão do %(brand)s:"
+        }
     }
 }

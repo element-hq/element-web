@@ -28,7 +28,6 @@
     "Decrypt %(text)s": "Atšifrēt %(text)s",
     "Deops user with given id": "Atceļ operatora statusu lietotājam ar norādīto Id",
     "Default": "Noklusējuma",
-    "Displays action": "Parāda darbību",
     "Download %(text)s": "Lejupielādēt: %(text)s",
     "Email": "Epasts",
     "Email address": "Epasta adrese",
@@ -89,7 +88,6 @@
     "Return to login screen": "Atgriezties uz pierakstīšanās lapu",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s nav atļauts nosūtīt jums paziņojumus. Lūdzu pārbaudi sava pārlūka iestatījumus",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s nav piešķirta atļauja nosūtīt paziņojumus. Lūdzu mēģini vēlreiz",
-    "%(brand)s version:": "%(brand)s versija:",
     "Unable to enable Notifications": "Neizdevās iespējot paziņojumus",
     "This will allow you to reset your password and receive notifications.": "Tas atļaus Tev atiestatīt paroli un saņemt paziņojumus.",
     "Room %(roomId)s not visible": "Istaba %(roomId)s nav redzama",
@@ -366,7 +364,6 @@
     "Lebanon": "Libāna",
     "Bangladesh": "Bangladeša",
     "Albania": "Albānija",
-    "Toggle microphone mute": "Ieslēgt/izslēgt mikrofonu",
     "Muted Users": "Apklusinātie lietotāji",
     "Confirm to continue": "Apstipriniet, lai turpinātu",
     "Confirm account deactivation": "Apstipriniet konta deaktivizēšanu",
@@ -381,8 +378,6 @@
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Apstiprināt šī tālruņa numura pievienošanu, izmantojot vienoto pieteikšanos savas identitātes apliecināšanai.",
     "Click the button below to confirm adding this email address.": "Nospiest zemāk esošo pogu, lai apstiprinātu šīs e-pasta adreses pievienošanu.",
     "Use Single Sign On to continue": "Izmantot vienoto pieteikšanos, lai turpinātu",
-    "Welcome %(name)s": "Laipni lūdzam %(name)s",
-    "Welcome to %(appName)s": "Laipni lūdzam %(appName)s",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s no %(totalRooms)s",
     "Great! This Security Phrase looks strong enough.": "Lieliski! Šī slepenā frāze šķiet pietiekami sarežgīta.",
     "Confirm your Security Phrase": "Apstipriniet savu slepeno frāzi",
@@ -396,7 +391,6 @@
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Lūdzu, jautājiet sava bāzes servera administratoram (<code>%(homeserverDomain)s</code>) sakonfigurēt TURN serveri, lai zvani strādātu stabili.",
     "Join millions for free on the largest public server": "Pievienojieties bez maksas miljoniem lietotāju lielākajā publiskajā serverī",
     "Server Options": "Servera parametri",
-    "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)s vai %(usernamePassword)s",
     "<userName/> invited you": "<userName/> uzaicināja jūs",
     "<userName/> wants to chat": "<userName/> vēlas sarakstīties",
     "Add a photo, so people can easily spot your room.": "Pievienojiet foto, lai padarītu istabu vieglāk pamanāmu citiem cilvēkiem.",
@@ -496,11 +490,8 @@
     "Room Settings - %(roomName)s": "Istabas iestatījumi - %(roomName)s",
     "Room settings": "Istabas iestatījumi",
     "Share room": "Dalīties ar istabu",
-    "Help & About": "Palīdzība un par lietotni",
     "About homeservers": "Par bāzes serveriem",
     "Enable message search in encrypted rooms": "Iespējot ziņu meklēšanu šifrētās istabās",
-    "Search (must be enabled)": "Meklēšana (jābūt iespējotai)",
-    "Jump to room search": "Pāriet uz istabu meklēšanu",
     "Message search": "Ziņu meklēšana",
     "Cancel search": "Atcelt meklējumu",
     "Flag": "Karogs",
@@ -540,12 +531,6 @@
     "Failed to re-authenticate": "Neizdevās atkārtoti autentificēties",
     "Failed to re-authenticate due to a homeserver problem": "Bāzes servera problēmas dēļ atkārtoti autentificēties neizdevās",
     "Create account": "Izveidot kontu",
-    "Registration Successful": "Reģistrācija ir veiksmīga",
-    "<a>Log in</a> to your new account.": "<a>Pierakstīties</a> jaunajā kontā.",
-    "Continue with previous account": "Turpināt ar iepriekšējo kontu",
-    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Jūsu jaunais konts (%(newAccountId)s) ir reģistrēts, bet jūs jau esat pierakstījies citā kontā (%(loggedInUserId)s).",
-    "Already have an account? <a>Sign in here</a>": "Jau ir konts? <a>Pierakstieties šeit</a>",
-    "Continue with %(ssoButtons)s": "Turpināt ar %(ssoButtons)s",
     "Registration has been disabled on this homeserver.": "Šajā bāzes serverī reģistrācija ir atspējota.",
     "Unable to query for supported registration methods.": "Neizdevās pieprasīt atbalstītās reģistrācijas metodes.",
     "New? <a>Create account</a>": "Pirmā reize? <a>Izveidojiet kontu</a>",
@@ -558,8 +543,6 @@
         "one": "Jums ir %(count)s nelasīts paziņojums iepriekšējā šīs istabas versijā.",
         "other": "Jums ir %(count)s nelasīti paziņojumi iepriekšējā šīs istabas versijā."
     },
-    "Add a photo so people know it's you.": "Pievienot foto, lai cilvēki zina, ka tas esat jūs.",
-    "Great, that'll help people know it's you": "Lieliski, tas ļaus cilvēkiem tevi atpazīt",
     "Couldn't load page": "Neizdevās ielādēt lapu",
     "Sign in with SSO": "Pierakstieties, izmantojot SSO",
     "Use email to optionally be discoverable by existing contacts.": "Izmantojiet epasta adresi, lai pēc izvēles jūs varētu atrast esošie kontakti.",
@@ -580,9 +563,6 @@
     "Session key": "Sesijas atslēga",
     "Accept all %(invitedRooms)s invites": "Pieņemt visus %(invitedRooms)s uzaicinājumus",
     "Bulk options": "Lielapjoma opcijas",
-    "Clear cache and reload": "Notīrīt kešatmiņu un pārlādēt",
-    "Versions": "Versijas",
-    "For help with using %(brand)s, click <a>here</a>.": "Palīdzībai %(brand)s izmantošanā, spiediet <a>šeit</a>.",
     "Account management": "Konta pārvaldība",
     "New version available. <a>Update now.</a>": "Pieejama jauna versija. <a>Atjaunināt.</a>",
     "Failed to save your profile": "Neizdevās salabāt jūsu profilu",
@@ -630,7 +610,6 @@
     "Incoming Verification Request": "Ienākošais veifikācijas pieprasījums",
     "%(name)s is requesting verification": "%(name)s pieprasa verifikāciju",
     "Verification Request": "Verifikācijas pieprasījums",
-    "Activate selected button": "Aktivizēt izvēlēto pogu",
     "Currently indexing: %(currentRoom)s": "Pašlaik indeksē: %(currentRoom)s",
     "A private space for you and your teammates": "Privāta vieta jums un jūsu komandas dalībniekiem",
     "A private space to organise your rooms": "Privāta vieta, kur organizēt jūsu istabas",
@@ -640,7 +619,6 @@
         "other": "%(count)s istabas"
     },
     "Are you sure you want to leave the space '%(spaceName)s'?": "Vai tiešām vēlaties pamest vietu '%(spaceName)s'?",
-    "Create a Group Chat": "Izveidot grupas čatu",
     "Missing session data": "Trūkst sesijas datu",
     "Create a new room with the same name, description and avatar": "Izveidot istabu ar to pašu nosaukumu, aprakstu un avataru",
     "Email (optional)": "Epasts (izvēles)",
@@ -728,7 +706,6 @@
     },
     "Save Changes": "Saglabāt izmaiņas",
     "Welcome to <name/>": "Laipni lūdzam uz <name/>",
-    "Room List": "Istabu saraksts",
     "Send as message": "Nosūtīt kā ziņu",
     "%(brand)s URL": "%(brand)s URL",
     "Room version": "Istabas versija",
@@ -801,18 +778,9 @@
     "Send stickers into this room": "Iesūtīt stikerus šajā istabā",
     "Remain on your screen while running": "Darbības laikā paliek uz ekrāna",
     "Remain on your screen when viewing another room, when running": "Darbības laikā paliek uz ekrāna, kad tiek skatīta cita istaba",
-    "Converts the DM to a room": "Pārveido DM par istabu",
-    "Converts the room to a DM": "Pārveido istabu par DM",
-    "Places the call in the current room on hold": "Iepauzē sazvanu šajā istabā",
-    "Takes the call in the current room off hold": "Šajā istabā iepauzētās sazvana atpauzēšana",
-    "Opens chat with the given user": "Atvērt čatu ar šo lietotāju",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Piespiedu kārtā pārtrauc pašreizējo izejošo grupas sesiju šifrētajā istabā",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Jūsu iesniegtā parakstīšanas atslēga atbilst parakstīšanas atslēgai, kuru saņēmāt no %(userId)s sesijas %(deviceId)s. Sesija atzīmēta kā verificēta.",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "BRĪDINĀJUMS: ATSLĒGU VERIFIKĀCIJA NEIZDEVĀS! Parakstīšanas atslēga lietotājam %(userId)s un sesijai %(deviceId)s ir \"%(fprint)s\", kura neatbilst norādītajai atslēgai \"%(fingerprint)s\". Tas var nozīmēt, ka jūsu saziņa tiek pārtverta!",
     "Verifies a user, session, and pubkey tuple": "Verificē lietotāju, sesiju un publiskās atslēgas",
-    "You cannot modify widgets in this room.": "Jūs nevarat mainīt vidžetus/logrīkus šajā istabā.",
-    "Please supply a https:// or http:// widget URL": "Lūdzu ievadiet logrīka URL https:// vai http:// formā",
-    "Please supply a widget URL or embed code": "Ievadiet vidžeta/logrīka URL vai ievietojiet kodu",
     "Joins room with given address": "Pievienojas istabai ar šādu adresi",
     "Use an identity server to invite by email. Manage in Settings.": "Izmantojiet identitātes serveri, lai uzaicinātu pa e-pastu. Pārvaldība pieejama Iestatījumos.",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Izmantojiet identitātes serveri, lai uzaicinātu pa e-pastu. Noklikšķiniet uz Turpināt, lai izmantotu noklusējuma identitātes serveri (%(defaultIdentityServerName)s) vai nomainītu to Iestatījumos.",
@@ -1082,7 +1050,6 @@
     "Address": "Adrese",
     "Hey you. You're the best!": "Sveiks! Tu esi labākais!",
     "Share %(name)s": "Dalīties ar %(name)s",
-    "Explore Public Rooms": "Pārlūkot publiskas istabas",
     "Show preview": "Rādīt priekšskatījumu",
     "View source": "Skatīt pirmkodu",
     "Forgotten or lost all recovery methods? <a>Reset all</a>": "Aizmirsāt vai pazaudējāt visas atkopšanās iespējas? <a>Atiestatiet visu</a>",
@@ -1438,7 +1405,12 @@
         "group_encryption": "Šifrēšana"
     },
     "keyboard": {
-        "home": "Mājup"
+        "home": "Mājup",
+        "category_room_list": "Istabu saraksts",
+        "toggle_microphone_mute": "Ieslēgt/izslēgt mikrofonu",
+        "jump_room_search": "Pāriet uz istabu meklēšanu",
+        "activate_button": "Aktivizēt izvēlēto pogu",
+        "search": "Meklēšana (jābūt iespējotai)"
     },
     "composer": {
         "format_inline_code": "Kods",
@@ -1480,7 +1452,13 @@
     },
     "onboarding": {
         "personal_messaging_action": "Sāciet savu pirmo čatu",
-        "set_up_profile_action": "Jūsu profils"
+        "set_up_profile_action": "Jūsu profils",
+        "has_avatar_label": "Lieliski, tas ļaus cilvēkiem tevi atpazīt",
+        "no_avatar_label": "Pievienot foto, lai cilvēki zina, ka tas esat jūs.",
+        "welcome_user": "Laipni lūdzam %(name)s",
+        "intro_welcome": "Laipni lūdzam %(appName)s",
+        "explore_rooms": "Pārlūkot publiskas istabas",
+        "create_room": "Izveidot grupas čatu"
     },
     "settings": {
         "show_breadcrumbs": "Rādīt saīsnes uz nesen skatītajām istabām istabu saraksta augšpusē",
@@ -1825,7 +1803,17 @@
         "category_admin": "Administrators",
         "category_advanced": "Papildu",
         "category_effects": "Efekti",
-        "category_other": "Citi"
+        "category_other": "Citi",
+        "addwidget_missing_url": "Ievadiet vidžeta/logrīka URL vai ievietojiet kodu",
+        "addwidget_invalid_protocol": "Lūdzu ievadiet logrīka URL https:// vai http:// formā",
+        "addwidget_no_permissions": "Jūs nevarat mainīt vidžetus/logrīkus šajā istabā.",
+        "converttodm": "Pārveido istabu par DM",
+        "converttoroom": "Pārveido DM par istabu",
+        "discardsession": "Piespiedu kārtā pārtrauc pašreizējo izejošo grupas sesiju šifrētajā istabā",
+        "query": "Atvērt čatu ar šo lietotāju",
+        "holdcall": "Iepauzē sazvanu šajā istabā",
+        "unholdcall": "Šajā istabā iepauzētās sazvana atpauzēšana",
+        "me": "Parāda darbību"
     },
     "presence": {
         "online_for": "Tiešsaistē %(duration)s",
@@ -1920,7 +1908,14 @@
     },
     "auth": {
         "continue_with_idp": "Turpināt ar %(provider)s",
-        "sso": "Vienotā pieteikšanās"
+        "sso": "Vienotā pieteikšanās",
+        "continue_with_sso": "Turpināt ar %(ssoButtons)s",
+        "sso_or_username_password": "%(ssoButtons)s vai %(usernamePassword)s",
+        "sign_in_instead": "Jau ir konts? <a>Pierakstieties šeit</a>",
+        "account_clash": "Jūsu jaunais konts (%(newAccountId)s) ir reģistrēts, bet jūs jau esat pierakstījies citā kontā (%(loggedInUserId)s).",
+        "account_clash_previous_account": "Turpināt ar iepriekšējo kontu",
+        "log_in_new_account": "<a>Pierakstīties</a> jaunajā kontā.",
+        "registration_successful": "Reģistrācija ir veiksmīga"
     },
     "room_list": {
         "sort_unread_first": "Rādīt istabas ar nelasītām ziņām augšpusē",
@@ -1940,5 +1935,14 @@
         "report_entire_room": "Ziņot par visu istabu",
         "report_content_to_homeserver": "Ziņojums par saturu bāzes servera administratoram",
         "description": "Iesniedzot ziņojumu par konkrēto ziņu, tās unikālais notikuma ID tiks nosūtīts jūsu bāzes servera administratoram. Ja ziņas šajā istabā ir šifrētas, jūsu bāzes servera administrators nevarēs lasīt ziņas tekstu vai skatīt failus un attēlus."
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "%(brand)s versija:",
+            "help_link": "Palīdzībai %(brand)s izmantošanā, spiediet <a>šeit</a>.",
+            "title": "Palīdzība un par lietotni",
+            "versions": "Versijas",
+            "clear_cache_reload": "Notīrīt kešatmiņu un pārlādēt"
+        }
     }
 }

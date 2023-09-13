@@ -33,7 +33,6 @@
     "Deops user with given id": "Deops user with given id",
     "Default": "Default",
     "Delete widget": "Delete widget",
-    "Displays action": "Displays action",
     "Download %(text)s": "Download %(text)s",
     "Email": "Email",
     "Email address": "Email address",
@@ -96,7 +95,6 @@
     "Return to login screen": "Return to login screen",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s does not have permission to send you notifications - please check your browser settings",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s was not given permission to send notifications - please try again",
-    "%(brand)s version:": "%(brand)s version:",
     "Room %(roomId)s not visible": "Room %(roomId)s not visible",
     "Rooms": "Rooms",
     "Search failed": "Search failed",
@@ -262,7 +260,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "Restricted": "Restricted",
     "Missing roomId.": "Missing roomId.",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Forces the current outbound group session in an encrypted room to be discarded",
     "Spanner": "Wrench",
     "Aeroplane": "Airplane",
     "Cat": "Cat",
@@ -271,8 +268,6 @@
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",
     "The server does not support the room version specified.": "The server does not support the room version specified.",
     "Unable to load! Check your network connectivity and try again.": "Unable to load! Check your network connectivity and try again.",
-    "Please supply a https:// or http:// widget URL": "Please supply an https:// or http:// widget URL",
-    "You cannot modify widgets in this room.": "You cannot modify widgets in this room.",
     "Your %(brand)s is misconfigured": "Your %(brand)s is misconfigured",
     "Call failed due to misconfigured server": "Call failed due to misconfigured server",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.",
@@ -486,7 +481,11 @@
         "category_actions": "Actions",
         "category_admin": "Admin",
         "category_advanced": "Advanced",
-        "category_other": "Other"
+        "category_other": "Other",
+        "addwidget_invalid_protocol": "Please supply an https:// or http:// widget URL",
+        "addwidget_no_permissions": "You cannot modify widgets in this room.",
+        "discardsession": "Forces the current outbound group session in an encrypted room to be discarded",
+        "me": "Displays action"
     },
     "presence": {
         "online": "Online",
@@ -519,5 +518,10 @@
     },
     "export_chat": {
         "messages": "Messages"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "%(brand)s version:"
+        }
     }
 }

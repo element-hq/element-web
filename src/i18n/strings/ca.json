@@ -227,7 +227,6 @@
     "Uploading %(filename)s": "Pujant %(filename)s",
     "Import E2E room keys": "Importar claus E2E de sala",
     "Cryptography": "Criptografia",
-    "%(brand)s version:": "Versió de %(brand)s:",
     "Incorrect username and/or password.": "Usuari i/o contrasenya incorrectes.",
     "Session ID": "ID de la sessió",
     "Export room keys": "Exporta les claus de la sala",
@@ -275,7 +274,6 @@
     "Missing roomId.": "Falta l'ID de sala.",
     "Define the power level of a user": "Defineix el nivell d'autoritat d'un usuari",
     "Deops user with given id": "Degrada l'usuari amb l'id donat",
-    "Displays action": "Mostra l'acció",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "El fitxer %(fileName)s supera la mida màxima permesa per a pujades d'aquest servidor",
     "You do not have permission to invite people to this room.": "No teniu permís per convidar gent a aquesta sala.",
     "Use a few words, avoid common phrases": "Feu servir unes quantes paraules, eviteu frases comunes",
@@ -689,7 +687,8 @@
         "category_actions": "Accions",
         "category_admin": "Administrador",
         "category_advanced": "Avançat",
-        "category_other": "Altres"
+        "category_other": "Altres",
+        "me": "Mostra l'acció"
     },
     "presence": {
         "online_for": "En línia durant %(duration)s",
@@ -727,5 +726,10 @@
     },
     "export_chat": {
         "messages": "Missatges"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "Versió de %(brand)s:"
+        }
     }
 }

@@ -61,8 +61,6 @@
     "Define the power level of a user": "उपयोगकर्ता के पावर स्तर को परिभाषित करें",
     "Deops user with given id": "दिए गए आईडी के साथ उपयोगकर्ता को देओप्स करना",
     "Verified key": "सत्यापित कुंजी",
-    "Displays action": "कार्रवाई प्रदर्शित करता है",
-    "Forces the current outbound group session in an encrypted room to be discarded": "एक एन्क्रिप्टेड रूम में मौजूदा आउटबाउंड समूह सत्र को त्यागने के लिए मजबूर करता है",
     "Reason": "कारण",
     "Failure to create room": "रूम बनाने में विफलता",
     "Server may be unavailable, overloaded, or you hit a bug.": "सर्वर अनुपलब्ध, अधिभारित हो सकता है, या अपने एक सॉफ्टवेयर गर्बरी को पाया।",
@@ -262,8 +260,6 @@
     "Account management": "खाता प्रबंधन",
     "Deactivate Account": "खाता निष्क्रिय करें",
     "Check for update": "अपडेट के लिये जांचें",
-    "Help & About": "सहायता और के बारे में",
-    "Versions": "संस्करण",
     "Notifications": "सूचनाएं",
     "Scissors": "कैंची",
     "Room list": "कक्ष सूचि",
@@ -288,8 +284,6 @@
     "Banned by %(displayName)s": "%(displayName)s द्वारा प्रतिबंधित",
     "No users have specific privileges in this room": "इस कमरे में किसी भी उपयोगकर्ता के विशेष विशेषाधिकार नहीं हैं",
     "The file '%(fileName)s' failed to upload.": "फ़ाइल '%(fileName)s' अपलोड करने में विफल रही।",
-    "Please supply a https:// or http:// widget URL": "कृपया एक https:// या http:// विजेट URL की आपूर्ति करें",
-    "You cannot modify widgets in this room.": "आप इस रूम में विजेट्स को संशोधित नहीं कर सकते।",
     "The user must be unbanned before they can be invited.": "उपयोगकर्ता को आमंत्रित करने से पहले उन्हें प्रतिबंधित किया जाना चाहिए।",
     "Explore rooms": "रूम का अन्वेषण करें",
     "Create Account": "खाता बनाएं",
@@ -649,7 +643,11 @@
         "addwidget": "रूम में URL द्वारा एक कस्टम विजेट जोड़ता है",
         "usage": "प्रयोग",
         "category_admin": "व्यवस्थापक",
-        "category_advanced": "उन्नत"
+        "category_advanced": "उन्नत",
+        "addwidget_invalid_protocol": "कृपया एक https:// या http:// विजेट URL की आपूर्ति करें",
+        "addwidget_no_permissions": "आप इस रूम में विजेट्स को संशोधित नहीं कर सकते।",
+        "discardsession": "एक एन्क्रिप्टेड रूम में मौजूदा आउटबाउंड समूह सत्र को त्यागने के लिए मजबूर करता है",
+        "me": "कार्रवाई प्रदर्शित करता है"
     },
     "presence": {
         "online_for": "%(duration)s के लिए ऑनलाइन",
@@ -693,5 +691,11 @@
     },
     "auth": {
         "sso": "केवल हस्ताक्षर के ऊपर"
+    },
+    "setting": {
+        "help_about": {
+            "title": "सहायता और के बारे में",
+            "versions": "संस्करण"
+        }
     }
 }

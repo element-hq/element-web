@@ -32,7 +32,6 @@
     "Decrypt %(text)s": "%(text)s metninin şifresini çöz",
     "Deops user with given id": "ID'leriyle birlikte , düşürülmüş kullanıcılar",
     "Default": "Varsayılan",
-    "Displays action": "Eylemi görüntüler",
     "Download %(text)s": "%(text)s metnini indir",
     "Email": "E-posta",
     "Email address": "E-posta Adresi",
@@ -92,7 +91,6 @@
     "Return to login screen": "Giriş ekranına dön",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s size bildirim gönderme iznine sahip değil - lütfen tarayıcı ayarlarınızı kontrol edin",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s'a bildirim gönderme izni verilmedi - lütfen tekrar deneyin",
-    "%(brand)s version:": "%(brand)s versiyon:",
     "Room %(roomId)s not visible": "%(roomId)s odası görünür değil",
     "%(roomName)s does not exist.": "%(roomName)s mevcut değil.",
     "%(roomName)s is not accessible at this time.": "%(roomName)s şu anda erişilebilir değil.",
@@ -353,9 +351,6 @@
     "This account has been deactivated.": "Hesap devre dışı bırakıldı.",
     "Create account": "Yeni hesap",
     "Unable to query for supported registration methods.": "Desteklenen kayıt yöntemleri için sorgulama yapılamıyor.",
-    "Continue with previous account": "Önceki hesapla devam et",
-    "<a>Log in</a> to your new account.": "Yeni hesabınızla <a>Oturum aç</a>ın.",
-    "Registration Successful": "Kayıt Başarılı",
     "Forgotten your password?": "Parolanızı mı unuttunuz?",
     "Sign in and regain access to your account.": "Oturum açın ve yeniden hesabınıza ulaşın.",
     "You do not have permission to start a conference call in this room": "Bu odada bir konferans başlatmak için izniniz yok",
@@ -363,7 +358,6 @@
     "The server does not support the room version specified.": "Belirtilen oda sürümünü sunucu desteklemiyor.",
     "Unable to create widget.": "Görsel bileşen oluşturulamıyor.",
     "Use an identity server to invite by email. Manage in Settings.": "E-posta ile davet etmek için bir kimlik sunucusu kullan. Ayarlardan Yönet.",
-    "You cannot modify widgets in this room.": "Bu odadaki görsel bileşenleri değiştiremezsiniz.",
     "This homeserver has exceeded one of its resource limits.": "Bu anasunucu kaynak limitlerinden birini aştı.",
     "%(items)s and %(count)s others": {
         "other": "%(items)s ve diğer %(count)s",
@@ -473,8 +467,6 @@
     "General": "Genel",
     "Discovery": "Keşfet",
     "Check for update": "Güncelleme kontrolü",
-    "Help & About": "Yardım & Hakkında",
-    "Versions": "Sürümler",
     "Server rules": "Sunucu kuralları",
     "User rules": "Kullanıcı kuralları",
     "View rules": "Kuralları görüntüle",
@@ -582,8 +574,6 @@
     "You are still <b>sharing your personal data</b> on the identity server <idserver />.": "Kimlik sunucusu üzerinde hala <b>kişisel veri paylaşımı</b> yapıyorsunuz <idserver />.",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Kimlik sunucusundan bağlantıyı kesmeden önce telefon numaranızı ve e-posta adreslerinizi silmenizi tavsiye ederiz.",
     "Deactivate account": "Hesabı pasifleştir",
-    "For help with using %(brand)s, click <a>here</a>.": "%(brand)s kullanarak yardım etmek için, <a>buraya</a> tıklayın.",
-    "Chat with %(brand)s Bot": "%(brand)s Bot ile Sohbet Et",
     "Something went wrong. Please try again or view your console for hints.": "Bir şeyler hatalı gitti. Lütfen yeniden deneyin veya ipuçları için konsolunuza bakın.",
     "Please try again or view your console for hints.": "Lütfen yeniden deneyin veya ipuçları için konsolunuza bakın.",
     "None": "Yok",
@@ -646,7 +636,6 @@
     "Names and surnames by themselves are easy to guess": "Adlar ve soyadlar kendi kendilerine tahmin için kolaydır",
     "Mirror local video feed": "Yerel video beslemesi yansısı",
     "Missing media permissions, click the button below to request.": "Medya izinleri eksik, alttaki butona tıkayarak talep edin.",
-    "Clear cache and reload": "Belleği temizle ve yeniden yükle",
     "Ignored/Blocked": "Yoksayılan/Bloklanan",
     "Error adding ignored user/server": "Yoksayılan kullanıcı/sunucu eklenirken hata",
     "Error subscribing to list": "Listeye abone olunurken hata",
@@ -674,7 +663,6 @@
     "Continue With Encryption Disabled": "Şifreleme Kapalı Şekilde Devam Et",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "%(fileName)s dosyası anasunucunun yükleme boyutu limitini aşıyor",
     "Double check that your server supports the room version chosen and try again.": "Seçtiğiniz oda sürümünün sunucunuz tarafından desteklenip desteklenmediğini iki kez kontrol edin ve yeniden deneyin.",
-    "Please supply a https:// or http:// widget URL": "Lütfen bir https:// ya da http:// olarak bir görsel bileşen URL i belirtin",
     "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.": "%(brand)s yöneticinize <a>yapılandırmanızın</a> hatalı ve mükerrer girdilerini kontrol etmesi için talepte bulunun.",
     "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Kayıt olabilirsiniz, fakat kimlik sunucunuz çevrimiçi olana kadar bazı özellikler mevcut olmayacak. Bu uyarıyı sürekli görüyorsanız, yapılandırmanızı kontrol edin veya sunucu yöneticinizle iletişime geçin.",
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Parolanızı sıfırlayabilirsiniz, fakat kimlik sunucunuz çevrimiçi olana kadar bazı özellikler mevcut olmayacak. Bu uyarıyı sürekli görüyorsanız, yapılandırmanızı kontrol edin veya sunucu yöneticinizle iletişime geçin.",
@@ -833,7 +821,6 @@
     "Unignored user": "Reddedilmemiş kullanıcı",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "UYARI: ANAHTAR DOĞRULAMASI BAŞARISIZ! %(userld)s'nin/nın %(deviceId)s oturumu için imza anahtarı \"%(fprint)s\" verilen anahtar ile uyuşmuyor \"%(fingerprint)s\". Bu iletişiminizin engellendiği anlamına gelebilir!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Verilen imza anahtarı %(userld)s'nin/nın %(deviceld)s oturumundan gelen anahtar ile uyumlu. Oturum doğrulanmış olarak işaretlendi.",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Şifreli bir odadaki geçerli giden grup oturumunun atılmasını zorlar",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) yeni oturuma doğrulamadan giriş yaptı:",
     "Ask this user to verify their session, or manually verify it below.": "Kullanıcıya oturumunu doğrulamasını söyle, ya da aşağıdan doğrula.",
     "Use a longer keyboard pattern with more turns": "Daha karmaşık ve uzun bir klavye deseni kullan",
@@ -858,7 +845,6 @@
     "%(name)s is requesting verification": "%(name)s doğrulama istiyor",
     "Joins room with given address": "Belirtilen adres ile odaya katılır",
     "Could not find user in room": "Kullanıcı odada bulunamadı",
-    "Opens chat with the given user": "Belirtilen kullanıcı ile sohbet başlatır",
     "You signed in to a new session without verifying it:": "Yeni bir oturuma, doğrulamadan oturum açtınız:",
     "Verify your other session using one of the options below.": "Diğer oturumunuzu aşağıdaki seçeneklerden birini kullanarak doğrulayın.",
     "Your homeserver has exceeded its user limit.": "Homeserver'ınız kullanıcı limitini aştı.",
@@ -898,9 +884,6 @@
     "Change which room you're viewing": "Görüntülediğiniz odayı değiştirin",
     "Send stickers into your active room": "Aktif odanıza çıkartma gönderin",
     "Send stickers into this room": "Bu odaya çıkartma gönderin",
-    "Takes the call in the current room off hold": "Mevcut odadaki aramayı beklemeden çıkarır",
-    "Places the call in the current room on hold": "Mevcut odadaki aramayı beklemeye alır",
-    "Please supply a widget URL or embed code": "Lütfen bir widget URL'si veya yerleşik kod girin",
     "Zimbabwe": "Zimbabve",
     "Zambia": "Zambiya",
     "Yemen": "Yemen",
@@ -1139,11 +1122,6 @@
     "Review terms and conditions": "Hükümler ve koşulları incele",
     "Terms and Conditions": "Hükümler ve koşullar",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "%(homeserverDomain)s ana sunucusunu kullanmaya devam etmek için hüküm ve koşulları incelemeli ve kabul etmelisiniz.",
-    "Create a Group Chat": "Grup sohbeti başlat",
-    "Explore Public Rooms": "Herkese açık odaları keşfet",
-    "Send a Direct Message": "Direkt mesaj gönderin",
-    "Welcome to %(appName)s": "%(appName)s' e hoş geldiniz",
-    "Now, let's help you get started": "Şimdi, başlamanıza yardım edelim",
     "Click to view edits": "Düzenlemeleri görmek için tıkla",
     "Edited at %(date)s": "%(date)s tarihinde düzenlendi",
     "This room is a continuation of another conversation.": "Bu oda başka bir görüşmenin devamıdır.",
@@ -1276,8 +1254,6 @@
     "Room settings": "Oda ayarları",
     "Not encrypted": "Şifrelenmemiş",
     "Backup version:": "Yedekleme sürümü:",
-    "Autocomplete": "Otomatik Tamamlama",
-    "Navigation": "Navigasyon",
     "User Autocomplete": "Kullanıcı Otomatik Tamamlama",
     "Room Autocomplete": "Otomatik Oda Tamamlama",
     "Notification Autocomplete": "Otomatik Bildirim Tamamlama",
@@ -1288,8 +1264,6 @@
     "Switch theme": "Temayı değiştir",
     "Keys restored": "Anahtarlar geri yüklendi",
     "Submit logs": "Günlükleri kaydet",
-    "New line": "Yeni satır",
-    "Room List": "Oda listesi",
     "Server name": "Sunucu adı",
     "Your server": "Senin sunucun",
     "All rooms": "Tüm odalar",
@@ -1299,7 +1273,6 @@
     "Hold": "Beklet",
     "Resume": "Devam et",
     "Information": "Bilgi",
-    "Calls": "Aramalar",
     "Feedback": "Geri bildirim",
     "Accepting…": "Kabul ediliyor…",
     "Room avatar": "Oda avatarı",
@@ -1324,8 +1297,6 @@
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s internet tarayıcısında çalışıyorken şifrelenmiş mesajları güvenli bir şekilde önbelleğe alamaz. Şifrelenmiş mesajların arama sonucunda görünmesi için <desktopLink>%(brand)s Masaüstü</desktopLink> kullanın.",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s, şifrelenmiş iletileri yerel olarak güvenli bir şekilde önbelleğe almak için gereken bazı bileşenlerden yoksun. Bu özelliği denemek istiyorsanız, <nativeLink> arama bileşenlerinin eklendiği</nativeLink> özel bir masaüstü oluşturun.",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Bu oturum <b> anahtarlarınızı yedeklemiyor</b>, ama zaten geri yükleyebileceğiniz ve ileride ekleyebileceğiniz bir yedeğiniz var.",
-    "Converts the room to a DM": "Odayı birebir mesajlaşmaya dönüştürür",
-    "Converts the DM to a room": "Birebir mesajlaşmayı odaya çevirir",
     "Enter a server name": "Sunucu adı girin",
     "Can't find this server or its room list": "Sunucuda veya oda listesinde bulunamıyor",
     "Add a new server": "Yeni sunucu ekle",
@@ -1372,7 +1343,6 @@
     "Ignoring people is done through ban lists which contain rules for who to ban. Subscribing to a ban list means the users/servers blocked by that list will be hidden from you.": "Kullanıcıları engelleme, hangi kullanıcıları engelleyeceğini belirleyen kurallar bulunduran bir engelleme listesi kullanılarak gerçekleşir. Bir engelleme listesine abone olmak, o listeden engellenen kullanıcıların veya sunucuların sizden gizlenmesi demektir.",
     "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Görmezden gelmek istediğiniz kullanıcıları ya da sunucuları buraya ekleyin. %(brand)s uygulamasının herhangi bir karakteri eşleştirmesini istiyorsanız yıldız imi kullanın. Örneğin <code>@fobar:*</code>, \"foobar\" adlı kullanıcıların hepsini bütün sunucularda görmezden gelir.",
     "Please verify the room ID or address and try again.": "Lütfen oda kimliğini ya da adresini doğrulayıp yeniden deneyin.",
-    "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "%(brand)s uygulamasına yardımcı olmak için <a>buraya</a> tıklayın ya da aşağıdaki tuşları kullanarak bot'umuzla sohbet edin.",
     "Agree to the identity server (%(serverName)s) Terms of Service to allow yourself to be discoverable by email address or phone number.": "Başkaları tarafından e-posta adresi ya da telefon numarası ile bulunabilmek için %(serverName)s kimlik sunucusunun Kullanım Koşullarını kabul edin.",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Bir kimlik sunucusu kullanmak isteğe bağlıdır. Eğer bir tane kullanmak istemezseniz başkaları tarafından bulunamayabilir ve başkalarını e-posta adresi ya da telefon numarası ile davet edemeyebilirsiniz.",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Kimlik sunucunuz ile bağlantıyı keserseniz başkaları tarafından bulunamayabilir ve başkalarını e-posta adresi ya da telefon numarası ile davet edemeyebilirsiniz.",
@@ -1462,7 +1432,6 @@
         "other": "Şu cihazlardan oturumu kapatmayı onayla"
     },
     "Current session": "Şimdiki oturum",
-    "Search (must be enabled)": "Arama (etkinleştirilmeli)",
     "common": {
         "about": "Hakkında",
         "analytics": "Analitik",
@@ -1638,7 +1607,13 @@
         "end": "End",
         "alt": "Alt",
         "control": "Ctrl",
-        "shift": "Shift"
+        "shift": "Shift",
+        "category_calls": "Aramalar",
+        "category_room_list": "Oda listesi",
+        "category_navigation": "Navigasyon",
+        "category_autocomplete": "Otomatik Tamamlama",
+        "composer_new_line": "Yeni satır",
+        "search": "Arama (etkinleştirilmeli)"
     },
     "composer": {
         "format_bold": "Kalın",
@@ -2011,7 +1986,17 @@
         "category_admin": "Admin",
         "category_advanced": "Gelişmiş",
         "category_effects": "Efektler",
-        "category_other": "Diğer"
+        "category_other": "Diğer",
+        "addwidget_missing_url": "Lütfen bir widget URL'si veya yerleşik kod girin",
+        "addwidget_invalid_protocol": "Lütfen bir https:// ya da http:// olarak bir görsel bileşen URL i belirtin",
+        "addwidget_no_permissions": "Bu odadaki görsel bileşenleri değiştiremezsiniz.",
+        "converttodm": "Odayı birebir mesajlaşmaya dönüştürür",
+        "converttoroom": "Birebir mesajlaşmayı odaya çevirir",
+        "discardsession": "Şifreli bir odadaki geçerli giden grup oturumunun atılmasını zorlar",
+        "query": "Belirtilen kullanıcı ile sohbet başlatır",
+        "holdcall": "Mevcut odadaki aramayı beklemeye alır",
+        "unholdcall": "Mevcut odadaki aramayı beklemeden çıkarır",
+        "me": "Eylemi görüntüler"
     },
     "presence": {
         "online_for": "%(duration)s süresince çevrimiçi",
@@ -2124,7 +2109,10 @@
     "auth": {
         "continue_with_idp": "%(provider)s ile devam et",
         "sign_in_with_sso": "Çoklu oturum açma ile giriş yap",
-        "sso": "Tek seferlik oturum aç"
+        "sso": "Tek seferlik oturum aç",
+        "account_clash_previous_account": "Önceki hesapla devam et",
+        "log_in_new_account": "Yeni hesabınızla <a>Oturum aç</a>ın.",
+        "registration_successful": "Kayıt Başarılı"
     },
     "room_list": {
         "sort_unread_first": "Önce okunmamış mesajları olan odaları göster",
@@ -2143,5 +2131,23 @@
     "report_content": {
         "missing_reason": "Lütfen neden raporlama yaptığınızı belirtin.",
         "report_content_to_homeserver": "Ana Sunucu Yöneticinize İçeriği Raporlayın"
+    },
+    "onboarding": {
+        "welcome_detail": "Şimdi, başlamanıza yardım edelim",
+        "intro_welcome": "%(appName)s' e hoş geldiniz",
+        "send_dm": "Direkt mesaj gönderin",
+        "explore_rooms": "Herkese açık odaları keşfet",
+        "create_room": "Grup sohbeti başlat"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "%(brand)s versiyon:",
+            "help_link": "%(brand)s kullanarak yardım etmek için, <a>buraya</a> tıklayın.",
+            "help_link_chat_bot": "%(brand)s uygulamasına yardımcı olmak için <a>buraya</a> tıklayın ya da aşağıdaki tuşları kullanarak bot'umuzla sohbet edin.",
+            "chat_bot": "%(brand)s Bot ile Sohbet Et",
+            "title": "Yardım & Hakkında",
+            "versions": "Sürümler",
+            "clear_cache_reload": "Belleği temizle ve yeniden yükle"
+        }
     }
 }

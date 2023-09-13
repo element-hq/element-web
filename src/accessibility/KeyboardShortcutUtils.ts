@@ -50,7 +50,7 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
                 key: Key.ENTER,
                 shiftKey: !ctrlEnterToSend,
             },
-            displayName: _td("New line"),
+            displayName: _td("keyboard|composer_new_line"),
         },
         [KeyBindingAction.CompleteAutocomplete]: {
             default: {
@@ -62,14 +62,14 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
             default: {
                 key: Key.TAB,
             },
-            displayName: _td("Force complete"),
+            displayName: _td("keyboard|autocomplete_force"),
         },
         [KeyBindingAction.SearchInRoom]: {
             default: {
                 ctrlOrCmdKey: true,
                 key: Key.F,
             },
-            displayName: _td("Search (must be enabled)"),
+            displayName: _td("keyboard|search"),
         },
     };
 
@@ -82,7 +82,7 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
                 ctrlOrCmdKey: true,
                 key: DIGITS,
             },
-            displayName: _td("Switch to space by number"),
+            displayName: _td("keyboard|switch_to_space"),
         };
     }
 

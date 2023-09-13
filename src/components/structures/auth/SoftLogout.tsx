@@ -287,7 +287,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                     <p>{_t("Sign in and regain access to your account.")}</p>
                     {this.renderSsoForm(null)}
                     <h2 className="mx_AuthBody_centered">
-                        {_t("%(ssoButtons)s Or %(usernamePassword)s", {
+                        {_t("auth|sso_or_username_password", {
                             ssoButtons: "",
                             usernamePassword: "",
                         }).trim()}

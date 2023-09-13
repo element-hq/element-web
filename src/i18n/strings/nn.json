@@ -59,7 +59,6 @@
     "Failed to verify email address: make sure you clicked the link in the email": "Fekk ikkje til å stadfesta e-postadressa: sjå til at du klikka på den rette lenkja i e-posten",
     "Deops user with given id": "AvOPar brukarar med den gjevne IDen",
     "Verified key": "Godkjend nøkkel",
-    "Displays action": "Visar handlingar",
     "Reason": "Grunnlag",
     "Failure to create room": "Klarte ikkje å laga rommet",
     "Server may be unavailable, overloaded, or you hit a bug.": "Tenaren er kanskje utilgjengeleg, overlasta elles så traff du ein bug.",
@@ -292,7 +291,6 @@
     "Audio Output": "Ljodavspeling",
     "Email": "Epost",
     "Account": "Brukar",
-    "%(brand)s version:": "%(brand)s versjon:",
     "The email address linked to your account must be entered.": "Du må skriva epostadressa som er tilknytta brukaren din inn.",
     "A new password must be entered.": "Du må skriva eit nytt passord inn.",
     "New passwords must match each other.": "Dei nye passorda må vera like.",
@@ -364,10 +362,6 @@
     "Create account": "Lag konto",
     "Registration has been disabled on this homeserver.": "Registrering er skrudd av for denne heimetenaren.",
     "Unable to query for supported registration methods.": "Klarte ikkje å spørre etter støtta registreringsmetodar.",
-    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Kontoen din %(newAccountId)s er no registrert, men du er frå tidligare logga på med ein annan konto (%(loggedInUserId)s).",
-    "Continue with previous account": "Fortsett med tidligare konto",
-    "<a>Log in</a> to your new account.": "<a>Logg på</a> den nye kontoen din.",
-    "Registration Successful": "Registrering fullført",
     "Failed to re-authenticate due to a homeserver problem": "Fekk ikkje til å re-authentisere grunna ein feil på heimetenaren",
     "Failed to re-authenticate": "Fekk ikkje til å re-autentisere",
     "Enter your password to sign in and regain access to your account.": "Skriv inn ditt passord for å logge på og ta tilbake tilgang til kontoen din.",
@@ -398,9 +392,6 @@
     "Use an identity server": "Bruk ein identitetstenar",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Bruk ein identitetstenar for å invitera via e-post. Klikk for å fortsetja å bruka standard identitetstenar (%(defaultIdentityServerName)s) eller styre dette i innstillingane.",
     "Use an identity server to invite by email. Manage in Settings.": "Bruk ein identitetstenar for å invitera via e-post. Styr dette i Innstillingane.",
-    "Please supply a https:// or http:// widget URL": "Skriv inn https:// eller http:// URL-en for miniprogrammet",
-    "You cannot modify widgets in this room.": "Du kan ikkje endra miniprogram i dette rommet.",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Tvingar i eit kryptert rom kassering av gjeldande utgåande gruppe-økt",
     "Cancel entering passphrase?": "Avbryte inntasting av passfrase ?",
     "Setting up keys": "Setter opp nøklar",
     "Verify this session": "Stadfest denne økta",
@@ -422,7 +413,6 @@
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Å bruka ein identitetstenar er frivillig. Om du vel å ikkje bruka dette, vil ikkje brukaren din bli oppdaga av andre brukarar, og du kan ikkje invitera andre med e-post eller telefonnummer.",
     "Email addresses": "E-postadresser",
     "Phone numbers": "Telefonnummer",
-    "Help & About": "Hjelp og om",
     "Accept all %(invitedRooms)s invites": "Aksepter alle invitasjonar frå %(invitedRooms)s",
     "Security & Privacy": "Tryggleik og personvern",
     "Error changing power level requirement": "Feil under endring av krav for tilgangsnivå",
@@ -517,15 +507,8 @@
     "Upload completed": "Opplasting fullført",
     "Cancelled signature upload": "Kansellerte opplasting av signatur",
     "Room Settings - %(roomName)s": "Rominnstillingar - %(roomName)s",
-    "Room List": "Romkatalog",
-    "Select room from the room list": "Vel rom frå romkatalogen",
-    "Collapse room list section": "Minimer romkatalog-seksjonen",
-    "Expand room list section": "Utvid romkatalog-seksjonen",
     "Manually verify all remote sessions": "Manuelt verifiser alle eksterne økter",
     "My Ban List": "Mi blokkeringsliste",
-    "For help with using %(brand)s, click <a>here</a>.": "For hjelp med å bruka %(brand)s, klikk <a>her</a>.",
-    "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "For hjelp med å bruka %(brand)s, klikk <a>her</a>, eller start ein samtale med vår bot ved å bruke knappen under.",
-    "Clear cache and reload": "Tøm buffer og last inn på nytt",
     "Composer": "Teksteditor",
     "Upgrade this room to the recommended room version": "Oppgrader dette rommet til anbefalt romversjon",
     "Your theme": "Ditt tema",
@@ -548,7 +531,6 @@
     "Jump to first unread room.": "Hopp til fyrste uleste rom.",
     "Jump to first invite.": "Hopp til fyrste invitasjon.",
     "Unable to set up secret storage": "Oppsett av hemmeleg lager feila",
-    "Toggle microphone mute": "Slå av/på demping av mikrofon",
     "Confirm adding email": "Stadfest at du ynskjer å legga til e-postadressa",
     "Click the button below to confirm adding this email address.": "Trykk på knappen under for å stadfesta at du ynskjer å legga til denne e-postadressa.",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Stadfest dette telefonnummeret for å bruka Single-sign-on for å bevisa identiteten din.",
@@ -558,8 +540,6 @@
     "Use your account or create a new one to continue.": "Bruk kontoen din eller opprett ein ny for å halda fram.",
     "Joins room with given address": "Legg saman rom med spesifisert adresse",
     "Could not find user in room": "Klarde ikkje å finna brukaren i rommet",
-    "Please supply a widget URL or embed code": "Oppgje ein widget-URL eller innebygd kode",
-    "Opens chat with the given user": "Opna ein samtale med den spesifiserte brukaren",
     "Later": "Seinare",
     "Never send encrypted messages to unverified sessions from this session": "Aldri send krypterte meldingar til ikkje-verifiserte sesjonar frå denne sesjonen",
     "Never send encrypted messages to unverified sessions in this room from this session": "Aldri send krypterte meldingar i dette rommet til ikkje-verifiserte sesjonar frå denne sesjonen",
@@ -599,12 +579,10 @@
     "Video conference started by %(senderName)s": "Videokonferanse starta av %(senderName)s",
     "Video conference updated by %(senderName)s": "Videokonferanse oppdatert av %(senderName)s",
     "Video conference ended by %(senderName)s": "Videokonferanse avslutta av %(senderName)s",
-    "Explore Public Rooms": "Utforsk offentlege rom",
     "Explore public rooms": "Utforsk offentlege rom",
     "Email Address": "E-postadresse",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Du bør <b>fjerne dine personlege data</b> frå identitetstenaren <idserver /> før du koplar frå. Dessverre er identitetstenaren <idserver /> utilgjengeleg og kan ikkje nåast akkurat no.",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Vi tilrår at du slettar personleg informasjon, som e-postadresser og telefonnummer frå identitetstenaren før du koplar frå.",
-    "Versions": "Versjonar",
     "The call was answered on another device.": "Samtalen vart svart på på ei anna eining.",
     "Norway": "Noreg",
     "Bahamas": "Bahamas",
@@ -807,7 +785,12 @@
         "group_encryption": "Kryptografi"
     },
     "keyboard": {
-        "home": "Heim"
+        "home": "Heim",
+        "category_room_list": "Romkatalog",
+        "toggle_microphone_mute": "Slå av/på demping av mikrofon",
+        "room_list_select_room": "Vel rom frå romkatalogen",
+        "room_list_collapse_section": "Minimer romkatalog-seksjonen",
+        "room_list_expand_section": "Utvid romkatalog-seksjonen"
     },
     "composer": {
         "format_bold": "Feit",
@@ -1111,7 +1094,13 @@
         "category_actions": "Handlingar",
         "category_admin": "Administrator",
         "category_advanced": "Avansert",
-        "category_other": "Anna"
+        "category_other": "Anna",
+        "addwidget_missing_url": "Oppgje ein widget-URL eller innebygd kode",
+        "addwidget_invalid_protocol": "Skriv inn https:// eller http:// URL-en for miniprogrammet",
+        "addwidget_no_permissions": "Du kan ikkje endra miniprogram i dette rommet.",
+        "discardsession": "Tvingar i eit kryptert rom kassering av gjeldande utgåande gruppe-økt",
+        "query": "Opna ein samtale med den spesifiserte brukaren",
+        "me": "Visar handlingar"
     },
     "presence": {
         "online_for": "tilkopla i %(duration)s",
@@ -1164,7 +1153,11 @@
     },
     "auth": {
         "sign_in_with_sso": "Logg på med Single-Sign-On",
-        "sso": "Single-sign-on"
+        "sso": "Single-sign-on",
+        "account_clash": "Kontoen din %(newAccountId)s er no registrert, men du er frå tidligare logga på med ein annan konto (%(loggedInUserId)s).",
+        "account_clash_previous_account": "Fortsett med tidligare konto",
+        "log_in_new_account": "<a>Logg på</a> den nye kontoen din.",
+        "registration_successful": "Registrering fullført"
     },
     "export_chat": {
         "messages": "Meldingar"
@@ -1183,5 +1176,18 @@
             "one": "1 ulesen melding."
         },
         "unread_messages": "Uleste meldingar."
+    },
+    "onboarding": {
+        "explore_rooms": "Utforsk offentlege rom"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "%(brand)s versjon:",
+            "help_link": "For hjelp med å bruka %(brand)s, klikk <a>her</a>.",
+            "help_link_chat_bot": "For hjelp med å bruka %(brand)s, klikk <a>her</a>, eller start ein samtale med vår bot ved å bruke knappen under.",
+            "title": "Hjelp og om",
+            "versions": "Versjonar",
+            "clear_cache_reload": "Tøm buffer og last inn på nytt"
+        }
     }
 }

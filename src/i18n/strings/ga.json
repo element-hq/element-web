@@ -1,6 +1,5 @@
 {
     "Sign in with": "Sínigh isteach le",
-    "Already have an account? <a>Sign in here</a>": "An bhfuil cuntas agat cheana? <a>Sínigh isteach anseo</a>",
     "Show more": "Taispeáin níos mó",
     "Switch to dark mode": "Athraigh go mód dorcha",
     "Switch to light mode": "Athraigh go mód geal",
@@ -34,7 +33,6 @@
     "Ignored/Blocked": "Neamhairde/Tachta",
     "Avoid sequences": "Seachain seicheamh",
     "Unrecognised address": "Seoladh nár aithníodh",
-    "Displays action": "Taispeáin gníomh",
     "Verified key": "Eochair deimhnithe",
     "Unignored user": "Úsáideoir leis aird",
     "Ignored user": "Úsáideoir neamhairde",
@@ -238,9 +236,6 @@
     "Favourited": "Roghnaithe",
     "Feedback": "Aiseolas",
     "Ok": "Togha",
-    "Autocomplete": "Uathiomlánaigh",
-    "Calls": "Glaonna",
-    "Navigation": "Nascleanúint",
     "Accepting…": "ag Glacadh leis…",
     "Cancelling…": "ag Cealú…",
     "exists": "a bheith ann",
@@ -307,7 +302,6 @@
     "Cryptography": "Cripteagrafaíocht",
     "Composer": "Eagarthóir",
     "Notifications": "Fógraí",
-    "Versions": "Leaganacha",
     "General": "Ginearálta",
     "Account": "Cuntas",
     "Profile": "Próifíl",
@@ -421,7 +415,6 @@
     "Are you sure you want to sign out?": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?",
     "Signed Out": "Sínithe Amach",
     "Unable to query for supported registration methods.": "Ní féidir iarratas a dhéanamh faoi modhanna cláraithe tacaithe.",
-    "Host account on": "Óstáil cuntas ar",
     "Create account": "Déan cuntas a chruthú",
     "Deactivate Account": "Cuir cuntas as feidhm",
     "Account management": "Bainistíocht cuntais",
@@ -659,7 +652,10 @@
         "alt": "Alt",
         "control": "Ctrl",
         "shift": "Shift",
-        "number": "[uimhir]"
+        "number": "[uimhir]",
+        "category_calls": "Glaonna",
+        "category_navigation": "Nascleanúint",
+        "category_autocomplete": "Uathiomlánaigh"
     },
     "composer": {
         "format_bold": "Trom",
@@ -730,7 +726,8 @@
         "category_admin": "Riarthóir",
         "category_advanced": "Forbartha",
         "category_effects": "Tionchair",
-        "category_other": "Eile"
+        "category_other": "Eile",
+        "me": "Taispeáin gníomh"
     },
     "presence": {
         "online": "Ar Líne",
@@ -799,7 +796,9 @@
         "categories": "Catagóire"
     },
     "auth": {
-        "sso": "Single Sign On"
+        "sso": "Single Sign On",
+        "sign_in_instead": "An bhfuil cuntas agat cheana? <a>Sínigh isteach anseo</a>",
+        "server_picker_title": "Óstáil cuntas ar"
     },
     "export_chat": {
         "messages": "Teachtaireachtaí"
@@ -815,5 +814,10 @@
     },
     "report_content": {
         "disagree": "Easaontaigh"
+    },
+    "setting": {
+        "help_about": {
+            "versions": "Leaganacha"
+        }
     }
 }

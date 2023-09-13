@@ -239,7 +239,6 @@
     "Notifications": "Обавештења",
     "Profile": "Профил",
     "Account": "Налог",
-    "%(brand)s version:": "%(brand)s издање:",
     "The email address linked to your account must be entered.": "Морате унети мејл адресу која је везана за ваш налог.",
     "A new password must be entered.": "Морате унети нову лозинку.",
     "New passwords must match each other.": "Нове лозинке се морају подударати.",
@@ -249,7 +248,6 @@
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Не могу да се повежем на сервер преко ХТТП када је ХТТПС УРЛ у траци вашег прегледача. Или користите HTTPS или <a>омогућите небезбедне скрипте</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Не могу да се повежем на домаћи сервер. Проверите вашу интернет везу, постарајте се да је <a>ССЛ сертификат сервера</a> од поверења и да проширење прегледача не блокира захтеве.",
     "This server does not support authentication with a phone number.": "Овај сервер не подржава идентификацију преко броја мобилног.",
-    "Displays action": "Приказује радњу",
     "Define the power level of a user": "Дефинише снагу корисника",
     "Deops user with given id": "Укида админа за корисника са датим ИД",
     "Commands": "Наредбе",
@@ -332,7 +330,6 @@
     "Demote": "Рашчини",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Фајл „%(fileName)s“ премашује ограничење величине отпремања на овом серверу",
     "Unable to load! Check your network connectivity and try again.": "Не могу да учитам! Проверите повезаност и пробајте поново.",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Присиљава одбацивање тренутне одлазне сесије групе у шифрованој соби",
     "Join millions for free on the largest public server": "Придружите се милионима других бесплатно на највећем јавном серверу",
     "Create account": "Направи налог",
     "Email (optional)": "Мејл (изборно)",
@@ -406,7 +403,6 @@
     "Light bulb": "сијалица",
     "Hey you. You're the best!": "Хеј! Само напред!",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Прилагођена величина фонта може бити између %(min)s и %(max)s тачака",
-    "Help & About": "Помоћ и подаци о програму",
     "Voice & Video": "Глас и видео",
     "Unable to revoke sharing for email address": "Не могу да опозовем дељење ове мејл адресе",
     "Unable to revoke sharing for phone number": "Не могу да опозовем дељење броја телефона",
@@ -420,7 +416,6 @@
     "Recent Conversations": "Недавни разговори",
     "Recently Direct Messaged": "Недавне директне поруке",
     "Looks good!": "Изгледа добро!",
-    "Send a Direct Message": "Пошаљи директну поруку",
     "Switch theme": "Промени тему",
     "Error upgrading room": "Грешка при надоградњи собе",
     "Setting up keys": "Постављам кључеве",
@@ -700,13 +695,7 @@
     "Unexpected error resolving homeserver configuration": "Неочекивана грешка при откривању подешавања сервера",
     "No homeserver URL provided": "Није наведен УРЛ сервера",
     "Cannot reach homeserver": "Сервер недоступан",
-    "Takes the call in the current room off hold": "Узима позив са чекања у тренутној соби",
-    "Places the call in the current room on hold": "Ставља позив на чекање у тренутној соби",
-    "Opens chat with the given user": "Отвара ћаскање са наведеним корисником",
     "Session already verified!": "Сесија је већ верификована!",
-    "You cannot modify widgets in this room.": "Не можете мењати виџете у овој соби.",
-    "Please supply a https:// or http:// widget URL": "Наведите https:// или http:// УРЛ виџета",
-    "Please supply a widget URL or embed code": "Наведите УРЛ виџета или убаците код",
     "Could not find user in room": "Не налазим корисника у соби",
     "Joins room with given address": "Придружује се соби са датом адресом",
     "Use an identity server to invite by email. Manage in Settings.": "Користите сервер идентитета за позивнице е-поштом. Управљајте у поставкама.",
@@ -718,7 +707,6 @@
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ако нисте ви уклонили начин опоравка, нападач можда покушава да приступи вашем налогу. Промените своју лозинку и поставите нови начин опоравка у поставкама, одмах.",
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Ако сте то случајно учинили, безбедне поруке можете подесити у овој сесији, која ће поново шифровати историју порука сесије помоћу новог начина опоравка.",
     "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "Сесија је открила да су ваша безбедносна фраза и кључ за безбедне поруке уклоњени.",
-    "Cancel autocomplete": "Откажи само-довршавање",
     "Hide sessions": "Сакриј сесије",
     "Room settings": "Поставке собе",
     "Not encrypted": "Није шифровано",
@@ -730,8 +718,6 @@
     "Error changing power level": "Грешка при промени нивоа снаге",
     "Power level": "Ниво снаге",
     "Explore rooms": "Истражи собе",
-    "Converts the room to a DM": "Претвара собу у директно дописивање",
-    "Converts the DM to a room": "Претвара директно дописивање у собу",
     "We couldn't log you in": "Не могу да вас пријавим",
     "Double check that your server supports the room version chosen and try again.": "Добро проверите да ли сервер подржава изабрану верзију собе и пробајте поново.",
     "Folder": "фасцикла",
@@ -917,7 +903,6 @@
     "Confirm your identity by entering your account password below.": "Потврдите свој идентитет уносом лозинке за налог испод.",
     "Country Dropdown": "Падајући списак земаља",
     "This homeserver would like to make sure you are not a robot.": "Овај кућни сервер жели да се увери да нисте робот.",
-    "Go to Home View": "Идите на почетни приказ",
     "End": "",
     "Deactivate account": "Деактивирај налог",
     "Account management": "Управљање профилом",
@@ -927,10 +912,8 @@
     "Your server": "Ваш сервер",
     "All rooms": "Све собе",
     "Who are you working with?": "Са ким радите?",
-    "Autocomplete": "Аутоматско довршавање",
     "This room is public": "Ова соба је јавна",
     "Browse": "Прегледајте",
-    "Versions": "Верзије",
     "User rules": "Корисничка правила",
     "Use the <a>Desktop app</a> to see all encrypted files": "Користи <a> десктоп апликација </a> да видиш све шифроване датотеке",
     "This widget may use cookies.": "Овај виџет може користити колачиће.",
@@ -942,13 +925,6 @@
     "Your user ID": "Ваша корисничка ИД",
     "Your display name": "Ваше име за приказ",
     "exists": "постоји",
-    "Collapse room list section": "Скупи одељак листе соба",
-    "Select room from the room list": "Изаберите собу са листе соба",
-    "Jump to room search": "Пређите на претрагу собе",
-    "Search (must be enabled)": "Претрага (мора бити омогућена)",
-    "Upload a file": "Отпремите датотеку",
-    "Jump to oldest unread message": "Скочите на најстарију непрочитану поруку",
-    "Dismiss read marker and jump to bottom": "Одбаците ознаку за читање и скочите до дна",
     "Not Trusted": "Није поуздано",
     "Ask this user to verify their session, or manually verify it below.": "Питајте овог корисника да потврди његову сесију или ручно да потврди у наставку.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) се улоговао у нову сесију без потврђивања:",
@@ -1076,7 +1052,17 @@
     },
     "keyboard": {
         "home": "Почетна",
-        "alt": "Алт"
+        "alt": "Алт",
+        "category_autocomplete": "Аутоматско довршавање",
+        "dismiss_read_marker_and_jump_bottom": "Одбаците ознаку за читање и скочите до дна",
+        "jump_to_read_marker": "Скочите на најстарију непрочитану поруку",
+        "upload_file": "Отпремите датотеку",
+        "jump_room_search": "Пређите на претрагу собе",
+        "room_list_select_room": "Изаберите собу са листе соба",
+        "room_list_collapse_section": "Скупи одељак листе соба",
+        "go_home_view": "Идите на почетни приказ",
+        "autocomplete_cancel": "Откажи само-довршавање",
+        "search": "Претрага (мора бити омогућена)"
     },
     "composer": {
         "format_inline_code": "Код",
@@ -1365,7 +1351,17 @@
         "category_admin": "Админ",
         "category_advanced": "Напредно",
         "category_effects": "Ефекти",
-        "category_other": "Остало"
+        "category_other": "Остало",
+        "addwidget_missing_url": "Наведите УРЛ виџета или убаците код",
+        "addwidget_invalid_protocol": "Наведите https:// или http:// УРЛ виџета",
+        "addwidget_no_permissions": "Не можете мењати виџете у овој соби.",
+        "converttodm": "Претвара собу у директно дописивање",
+        "converttoroom": "Претвара директно дописивање у собу",
+        "discardsession": "Присиљава одбацивање тренутне одлазне сесије групе у шифрованој соби",
+        "query": "Отвара ћаскање са наведеним корисником",
+        "holdcall": "Ставља позив на чекање у тренутној соби",
+        "unholdcall": "Узима позив са чекања у тренутној соби",
+        "me": "Приказује радњу"
     },
     "presence": {
         "online_for": "На мрежи %(duration)s",
@@ -1433,5 +1429,15 @@
     },
     "report_content": {
         "report_content_to_homeserver": "Пријави садржај администратору вашег домаћег сервера"
+    },
+    "onboarding": {
+        "send_dm": "Пошаљи директну поруку"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "%(brand)s издање:",
+            "title": "Помоћ и подаци о програму",
+            "versions": "Верзије"
+        }
     }
 }

@@ -106,18 +106,12 @@
     "Define the power level of a user": "قم بتعريف مستوى الطاقة للمستخدم",
     "Could not find user in room": "لم يستطع ايجاد مستخدم في غرفة",
     "Deops user with given id": "يُلغي إدارية المستخدم حسب المعرّف المعطى",
-    "Please supply a widget URL or embed code": "رجاء قم بتحديد Widget URL او قم بتضمين كود",
-    "Please supply a https:// or http:// widget URL": "يرجى ادخال a https:// او http:// widget URL",
-    "You cannot modify widgets in this room.": "لا يمكنك تعديل الحاجيات في هذه الغرفة.",
     "Verifies a user, session, and pubkey tuple": "يتحقق من العناصر: المستخدم والجلسة والمفتاح العام",
     "Session already verified!": "تم التحقق من الجلسة بالفعل!",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "تحذير: فشل التحقق من المفتاح! مفتاح التوقيع للمستخدم %(userId)s و الجلسة %(deviceId)s هو \"%(fprint)s\" والتي لا تتوافق مع المفتاح \"%(fingerprint)s\" المعطى. هذا يعني ان اتصالك اصبح مكشوف!",
     "Verified key": "مفتاح مؤكد",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "مفتاح التوقيع الذي اعطيته يتوافق مع مفتاح التوقيع الذي استلمته من جلسة المستخدم %(userId)s رقم %(deviceId)s. تم تحديد الجلسة على انها مؤكدة.",
-    "Forces the current outbound group session in an encrypted room to be discarded": "يفرض تجاهل جلسة المجموعة الصادرة الحالية في غرفة مشفرة",
     "Logs sent": "تم ارسال سجل الاحداث",
-    "Opens chat with the given user": "يفتح دردشة من المستخدم المعطى",
-    "Displays action": "يعرض إجراءً",
     "Reason": "السبب",
     "You cannot place a call with yourself.": "لا يمكنك الاتصال بنفسك.",
     "You signed in to a new session without verifying it:": "قمت بتسجيل الدخول لجلسة جديدة من غير التحقق منها:",
@@ -359,14 +353,7 @@
     "Something went wrong. Please try again or view your console for hints.": "هناك خطأ ما. يرجى المحاولة مرة أخرى أو عرض وحدة التحكم (console) للتلميحات.",
     "Error adding ignored user/server": "تعذر إضافة مستخدم/خادم مُتجاهَل",
     "Ignored/Blocked": "المُتجاهل/المحظور",
-    "Clear cache and reload": "محو مخزن الجيب وإعادة التحميل",
-    "%(brand)s version:": "إصدار %(brand)s:",
-    "Versions": "الإصدارات",
-    "Help & About": "المساعدة وعن البرنامج",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "للإبلاغ عن مشكلة أمنية متعلقة بMatrix ، يرجى قراءة <a>سياسة الإفصاح الأمني</a> في Matrix.org.",
-    "Chat with %(brand)s Bot": "تخاطب مع الروبوت الخاص ب%(brand)s",
-    "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "للمساعدة في استخدام %(brand)s ، انقر <a> هنا </a> أو ابدأ محادثة مع برنامج الروبوت الخاص بنا باستخدام الزر أدناه.",
-    "For help with using %(brand)s, click <a>here</a>.": "للمساعدة في استخدام %(brand)s انقر <a>هنا</a>.",
     "General": "عام",
     "Discovery": "الاكتشاف",
     "Deactivate account": "تعطيل الحساب",
@@ -782,8 +769,6 @@
     "Send stickers into this room": "أرسل ملصقات إلى هذه الغرفة",
     "Remain on your screen while running": "ابقَ على شاشتك أثناء إجراء",
     "Remain on your screen when viewing another room, when running": "ابقَ على شاشتك عند مشاهدة غرفة أخرى أثناء إجراء",
-    "Takes the call in the current room off hold": "يوقف المكالمة في الغرفة الحالية",
-    "Places the call in the current room on hold": "يضع المكالمة في الغرفة الحالية قيد الانتظار",
     "Cuba": "كوبا",
     "Croatia": "كرواتيا",
     "Costa Rica": "كوستا ريكا",
@@ -853,13 +838,7 @@
     "Identity server URL must be HTTPS": "يجب أن يستعمل رابط (URL) خادوم الهوية ميفاق HTTPS",
     "Paraguay": "باراغواي",
     "Netherlands": "هولندا",
-    "Dismiss read marker and jump to bottom": "تجاهل علامة القراءة وانتقل إلى الأسفل",
-    "Toggle microphone mute": "تبديل كتم صوت الميكروفون",
-    "Cancel replying to a message": "إلغاء الرد على رسالة",
-    "New line": "سطر جديد",
     "Greece": "اليونان",
-    "Converts the DM to a room": "تحويل المحادثة المباشرة إلى غرفة",
-    "Converts the room to a DM": "تحويل الغرفة إلى محادثة مباشرة",
     "Some invites couldn't be sent": "تعذر إرسال بعض الدعوات",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "أرسلنا الآخرين، ولكن لم تتم دعوة الأشخاص أدناه إلى <RoomName/>",
     "Zimbabwe": "زمبابوي",
@@ -1080,7 +1059,11 @@
         "group_encryption": "تشفير"
     },
     "keyboard": {
-        "number": "[رقم]"
+        "number": "[رقم]",
+        "cancel_reply": "إلغاء الرد على رسالة",
+        "toggle_microphone_mute": "تبديل كتم صوت الميكروفون",
+        "dismiss_read_marker_and_jump_bottom": "تجاهل علامة القراءة وانتقل إلى الأسفل",
+        "composer_new_line": "سطر جديد"
     },
     "composer": {
         "format_bold": "ثخين",
@@ -1315,7 +1298,17 @@
         "category_actions": "الإجراءات",
         "category_admin": "مدير",
         "category_advanced": "متقدم",
-        "category_other": "أخرى"
+        "category_other": "أخرى",
+        "addwidget_missing_url": "رجاء قم بتحديد Widget URL او قم بتضمين كود",
+        "addwidget_invalid_protocol": "يرجى ادخال a https:// او http:// widget URL",
+        "addwidget_no_permissions": "لا يمكنك تعديل الحاجيات في هذه الغرفة.",
+        "converttodm": "تحويل الغرفة إلى محادثة مباشرة",
+        "converttoroom": "تحويل المحادثة المباشرة إلى غرفة",
+        "discardsession": "يفرض تجاهل جلسة المجموعة الصادرة الحالية في غرفة مشفرة",
+        "query": "يفتح دردشة من المستخدم المعطى",
+        "holdcall": "يضع المكالمة في الغرفة الحالية قيد الانتظار",
+        "unholdcall": "يوقف المكالمة في الغرفة الحالية",
+        "me": "يعرض إجراءً"
     },
     "presence": {
         "online_for": "متصل منذ %(duration)s",
@@ -1441,5 +1434,16 @@
             "other": "%(count)s من الرسائل غير مقروءة."
         },
         "unread_messages": "رسائل غير المقروءة."
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "إصدار %(brand)s:",
+            "help_link": "للمساعدة في استخدام %(brand)s انقر <a>هنا</a>.",
+            "help_link_chat_bot": "للمساعدة في استخدام %(brand)s ، انقر <a> هنا </a> أو ابدأ محادثة مع برنامج الروبوت الخاص بنا باستخدام الزر أدناه.",
+            "chat_bot": "تخاطب مع الروبوت الخاص ب%(brand)s",
+            "title": "المساعدة وعن البرنامج",
+            "versions": "الإصدارات",
+            "clear_cache_reload": "محو مخزن الجيب وإعادة التحميل"
+        }
     }
 }

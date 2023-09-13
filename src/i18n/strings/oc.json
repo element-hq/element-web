@@ -82,7 +82,6 @@
     "Profile": "Perfil",
     "Account": "Compte",
     "General": "General",
-    "Versions": "Versions",
     "Composer": "Compositor",
     "Unignore": "Ignorar pas",
     "Security & Privacy": "Seguretat e vida privada",
@@ -144,8 +143,6 @@
     "Commands": "Comandas",
     "Users": "Utilizaires",
     "Success!": "Capitada !",
-    "Navigation": "Navigacion",
-    "Upload a file": "Actualizar un fichièr",
     "Explore rooms": "Percórrer las salas",
     "Create Account": "Crear un compte",
     "Click the button below to confirm adding this email address.": "Clicatz sus lo boton aicí dejós per confirmar l'adicion de l'adreça e-mail.",
@@ -265,7 +262,9 @@
         "end": "Fin",
         "alt": "Alt",
         "control": "Ctrl",
-        "shift": "Descalatge"
+        "shift": "Descalatge",
+        "category_navigation": "Navigacion",
+        "upload_file": "Actualizar un fichièr"
     },
     "composer": {
         "format_bold": "Gras",
@@ -349,5 +348,10 @@
         "sort_by_alphabet": "A-Z",
         "sublist_options": "Opcions de lista",
         "show_less": "Ne veire mens"
+    },
+    "setting": {
+        "help_about": {
+            "versions": "Versions"
+        }
     }
 }

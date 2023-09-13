@@ -7,7 +7,6 @@
     "A new password must be entered.": "Der skal indtastes en ny adgangskode.",
     "The email address linked to your account must be entered.": "Den emailadresse, der tilhører til din adgang, skal indtastes.",
     "Session ID": "Sessions ID",
-    "Displays action": "Viser handling",
     "Deops user with given id": "Fjerner OP af bruger med givet id",
     "Commands": "Kommandoer",
     "Warning!": "Advarsel!",
@@ -133,9 +132,6 @@
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Brug en identitetsserver for at invitere pr. mail. Tryk på Fortsæt for at bruge den almindelige identitetsserver (%(defaultIdentityServerName)s) eller indtast en anden under Indstillinger.",
     "Use an identity server to invite by email. Manage in Settings.": "Brug en identitetsserver for at invitere pr. mail. Administrer dette under Indstillinger.",
     "Define the power level of a user": "Indstil rettighedsniveau for en bruger",
-    "Please supply a https:// or http:// widget URL": "Oplys venligst en https:// eller http:// widget URL",
-    "You cannot modify widgets in this room.": "Du kan ikke ændre widgets i dette rum.",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Tvinger den nuværende udgående gruppe-session i et krypteret rum til at blive kasseret",
     "Cannot reach homeserver": "Homeserveren kan ikke kontaktes",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Vær sikker at du har en stabil internetforbindelse, eller kontakt serveradministratoren",
     "Your %(brand)s is misconfigured": "Din %(brand)s er konfigureret forkert",
@@ -224,9 +220,6 @@
     "Security & Privacy": "Sikkerhed & Privatliv",
     "Who can read history?": "Hvem kan læse historikken?",
     "Enable encryption?": "Aktiver kryptering?",
-    "Create a Group Chat": "Opret en gruppechat",
-    "Explore Public Rooms": "Udforsk offentlige rum",
-    "Send a Direct Message": "Send en Direkte Besked",
     "Permissions": "Tilladelser",
     "Headphones": "Hovedtelefoner",
     "Show more": "Vis mere",
@@ -744,7 +737,11 @@
         "category_admin": "Administrator",
         "category_advanced": "Avanceret",
         "category_effects": "Effekter",
-        "category_other": "Andre"
+        "category_other": "Andre",
+        "addwidget_invalid_protocol": "Oplys venligst en https:// eller http:// widget URL",
+        "addwidget_no_permissions": "Du kan ikke ændre widgets i dette rum.",
+        "discardsession": "Tvinger den nuværende udgående gruppe-session i et krypteret rum til at blive kasseret",
+        "me": "Viser handling"
     },
     "presence": {
         "online": "Online"
@@ -797,5 +794,10 @@
     },
     "room_list": {
         "show_less": "Vis mindre"
+    },
+    "onboarding": {
+        "send_dm": "Send en Direkte Besked",
+        "explore_rooms": "Udforsk offentlige rum",
+        "create_room": "Opret en gruppechat"
     }
 }
