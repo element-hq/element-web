@@ -1,3 +1,9 @@
+Changes in [1.11.42](https://github.com/vector-im/element-web/releases/tag/v1.11.42) (2023-09-13)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * Update Compound to fix Firefox-specific avatar regression ([\#11604](https://github.com/matrix-org/matrix-react-sdk/pull/11604)). Fixes #26155.
+
 Changes in [1.11.41](https://github.com/vector-im/element-web/releases/tag/v1.11.41) (2023-09-12)
 =================================================================================================
 
