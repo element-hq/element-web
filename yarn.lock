@@ -2815,10 +2815,10 @@
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@^0.2.3":
-  version "0.2.18"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.2.18.tgz#b92bcfd5779b1e558dc431ad3d330960749049d9"
-  integrity sha512-fs+tQYZMA4/KxGFOdoDM9WKf7IpeNILI37q2uj4dJj8SkI33zwUnzHFuTD04YI33Dc3FCZHcCd/d0m/fCnRaFg==
+"@vector-im/compound-web@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.4.0.tgz#c4adf10785722c4b0fd5e20e72576ade2ef386d0"
+  integrity sha512-45pshpwpVBwOwIevKZrnWX718Z+qPvxnrSUv3KY4x4ej+PDMt8Qorxv1n98bB7fgF7vwBHK5PQdjq2kTFit+wQ==
   dependencies:
     "@radix-ui/react-form" "^0.0.3"
     "@radix-ui/react-tooltip" "^1.0.6"
@@ -8912,9 +8912,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.80.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/6f8f97ba356b647d46493a009f9eca56002ddc9f"
+matrix-react-sdk@3.80.1:
+  version "3.80.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.80.1.tgz#e7dcf293e2d596857c464ff505bc4d33c244a0b0"
+  integrity sha512-gKFlbEnyhl7l9iq4oh0BfLftgBzc8Dc8HMCIfcTT0dDgGTQSuOxlvDmb4vArGJ72xwM8FeP75OzgRCmppIWZMQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.7.0"
@@ -8926,7 +8927,7 @@ matrix-mock-request@^2.5.0:
     "@sentry/tracing" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
     "@vector-im/compound-design-tokens" "^0.0.5"
-    "@vector-im/compound-web" "^0.2.3"
+    "@vector-im/compound-web" "^0.4.0"
     await-lock "^2.1.0"
     blurhash "^1.1.3"
     classnames "^2.2.6"
