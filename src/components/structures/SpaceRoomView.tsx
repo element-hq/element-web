@@ -668,20 +668,6 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
             this.setState({ phase: Phase.Landing });
             return;
         }
-
-        /**
-         * The rest of the `ViewUser` and `view_3pid_invite` exists in the `<RoomView />`
-         * component. This deals specifically with showing the space members list
-         */
-        if (
-            (payload.action === Action.ViewUser && !payload.member) ||
-            (payload.action === "view_3pid_invite" && payload.event === null)
-        ) {
-            RightPanelStore.instance.setCard({
-                phase: RightPanelPhases.SpaceMemberList,
-                state: { spaceId: this.props.space.roomId },
-            });
-        }
     };
 
     private goToFirstRoom = async (): Promise<void> => {
