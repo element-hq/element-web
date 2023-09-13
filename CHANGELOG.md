@@ -1,3 +1,9 @@
+Changes in [3.80.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.80.1) (2023-09-13)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Update Compound to fix Firefox-specific avatar regression ([\#11604](https://github.com/matrix-org/matrix-react-sdk/pull/11604))
+
 Changes in [3.80.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.80.0) (2023-09-12)
 =====================================================================================================
 
