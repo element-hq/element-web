@@ -1784,12 +1784,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onSearchClick = (): void => {
-        this.setState({
-            timelineRenderingType:
-                this.state.timelineRenderingType === TimelineRenderingType.Search
-                    ? TimelineRenderingType.Room
-                    : TimelineRenderingType.Search,
-        });
+        if (this.state.timelineRenderingType === TimelineRenderingType.Search) {
+            this.onCancelSearchClick();
+        } else {
+            this.setState({
+                timelineRenderingType: TimelineRenderingType.Search,
+            });
+        }
     };
 
     private onCancelSearchClick = (): Promise<void> => {
