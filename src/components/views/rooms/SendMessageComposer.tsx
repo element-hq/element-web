@@ -90,10 +90,9 @@ export function attachMentions(
     replyToEvent: MatrixEvent | undefined,
     editedContent: IContent | null = null,
 ): void {
-    // If this feature is disabled, do nothing.
-    if (!SettingsStore.getValue("feature_intentional_mentions")) {
-        return;
-    }
+    // We always attach the mentions even if the home server doesn't yet support
+    // intentional mentions. This is safe because m.mentions is an additive change
+    // that should simply be ignored by incapable home servers.
 
     // The mentions property *always* gets included to disable legacy push rules.
     const mentions: IMentions = (content["m.mentions"] = {});

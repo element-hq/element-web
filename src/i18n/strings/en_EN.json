@@ -1151,7 +1151,6 @@
         "voice_broadcast": "Voice broadcast",
         "rust_crypto": "Rust cryptography implementation",
         "hidebold": "Hide notification dot (only display counters badges)",
-        "intentional_mentions": "Enable intentional mentions",
         "ask_to_join": "Enable ask to join",
         "new_room_decoration_ui": "New room header & details interface",
         "beta_feature": "This is a beta feature",
