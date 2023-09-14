@@ -65,7 +65,6 @@
     "Thursday": "חמישי",
     "Search…": "חפש…",
     "Logs sent": "יומנים נשלחו",
-    "Show message in desktop notification": "הצג הודעה בהתראות שולחן עבודה",
     "Yesterday": "אתמול",
     "Error encountered (%(errorDetail)s).": "ארעה שגיעה %(errorDetail)s .",
     "Low Priority": "עדיפות נמוכה",
@@ -80,17 +79,11 @@
     "Add Email Address": "הוספת כתובת מייל",
     "Click the button below to confirm adding this email address.": "לחץ על הכפתור בכדי לאשר הוספה של כתובת מייל הזו.",
     "Confirm adding email": "אשר הוספת כתובת מייל",
-    "Single Sign On": "כניסה חד שלבית",
-    "Opens chat with the given user": "פתח שיחה עם המשתמש הזה",
-    "Forces the current outbound group session in an encrypted room to be discarded": "מאלץ להתעלם מהתקשורת היוצאת מהתחברות של קבוצה בחדר מוצפן",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "המפתח החתום שנתתם תואם את המפתח שקבלתם מ %(userId)s מהתחברות %(deviceId)s. ההתחברות סומנה כמאושרת.",
     "Verified key": "מפתח מאושר",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "אזהרה: אימות מפתח נכשל! חתימת המפתח של %(userId)s ושל ההתחברות של מכשיר %(deviceId)s הינו \"%(fprint)s\" אשר אינו תואם למפתח הנתון \"%(fingerprint)s\". דבר זה יכול להעיר על כך שישנו נסיון להאזין לתקשורת שלכם!",
     "Session already verified!": "ההתחברות כבר אושרה!",
     "Verifies a user, session, and pubkey tuple": "מוודא משתמש, התחברות וצמד מפתח ציבורי",
-    "You cannot modify widgets in this room.": "אינכם יכולים לערוך ווידג'ט בחדר זה.",
-    "Please supply a https:// or http:// widget URL": "אנא הוסיפו קישור לווידג'ט עם http:// או https://",
-    "Please supply a widget URL or embed code": "אנא ספקו כתובת של ווידג'ט או קוד הטמעה",
     "Deops user with given id": "מסיר משתמש עם קוד זיהוי זה",
     "Could not find user in room": "משתמש זה לא נמצא בחדר",
     "Define the power level of a user": "הגדירו את רמת ההרשאות של משתמש",
@@ -492,37 +485,7 @@
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s %(userId)s נכנס דרך התחברות חדשה מבלי לאמת אותה:",
     "Verify your other session using one of the options below.": "אמתו את ההתחברות האחרת שלכם דרך אחת מהאפשרויות למטה.",
     "You signed in to a new session without verifying it:": "נכנסתם דרך התחברות חדשה מבלי לאמת אותה:",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s עדכן כלל חסימה אשר תאם ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)sשינה כלל אשר חסם שרתים שתאמו ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s שינה כלל אשר חסם חדרים התואמים ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s שינה כלל אשר חסם משתמשים שתאמו ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s יצר כלל חסימה התואם ל%(glob)s עבור %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s יצר כלל החוסם שרתים התואמים ל%(glob)s עבור %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s יצר כלל החוסם חדרים התואמים ל%(glob)s עבור %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s יצר כלל החוסם משתמשים התואמים ל%(glob)s עבור %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s עדכן כלל חסימה התואם ל%(glob)s עבור %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s עדכן את הכללים המאפשרים חסימת שרתים התואמים ל%(glob)s עבור %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s עדכן את הכלל שפאפשר חסימה של חדרים התואמים ל%(glob)s עבור %(reason)s",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s עדכן את הכלל שמאפשר חסימת משתמשים התואמים ל%(glob)s עבור %(reason)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s עידכן כלל חסימה שגוי",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s הסיר כלל חסימה התואם ל%(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s הסיר את הכלל החוסם שרתים התואמים ל%(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s הסיר את הכלל שחוסם חדרים התואמים ל%(glob)s",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s הסיר את הכלל שחוסם משתמשים התואמים ל %(glob)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s שינה את רמת ההרשאה של %(powerLevelDiffText)s.",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s מ%(fromPowerLevel)s ל%(toPowerLevel)s",
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "one": "%(senderName)s הסיר את הכתובת המשנית %(addresses)s עבור חדר זה.",
-        "other": "%(senderName)s הסיר את הכתובת המשנית %(addresses)s עבור חדר זה."
-    },
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "one": "%(senderName)s הוסיף כתובת משנית %(addresses)s עבור חדר זה.",
-        "other": "%(senderName)s הוסיף את הכתובת המשנית %(addresses)s עבור חדר זה."
-    },
     "Reason": "סיבה",
-    "Displays action": "הצג פעולה",
-    "Takes the call in the current room off hold": "מחזיר את השיחה הנוכחית ממצב המתנה",
-    "Places the call in the current room on hold": "שם את השיחה הנוכחית במצב המתנה",
     "Your keys are <b>not being backed up from this session</b>.": "המפתחות שלך <b> אינם מגובים מהתחברות זו </b>.",
     "Algorithm:": "אלגוריתם:",
     "Backup version:": "גירסת גיבוי:",
@@ -540,8 +503,6 @@
     "Profile": "פרופיל",
     "The operation could not be completed": "לא ניתן היה להשלים את הפעולה",
     "Failed to save your profile": "שמירת הפרופיל שלך נכשלה",
-    "Enable audible notifications for this session": "אפשר התראות נשמעות עבור התחברות זו",
-    "Enable desktop notifications for this session": "החל התראות עבור התחברות זו",
     "The integration manager is offline or it cannot reach your homeserver.": "מנהל האינטגרציה לא מקוון או שהוא לא יכול להגיע לשרת הבית שלך.",
     "Cannot connect to integration manager": "לא ניתן להתחבר אל מנהל האינטגרציה",
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s אינם יכולים לשמור במטמון מאובטח הודעות מוצפנות באופן מקומי בזמן שהם פועלים בדפדפן אינטרנט. השתמש ב- <desktopLink>%(brand)s Desktop </desktopLink> כדי שהודעות מוצפנות יופיעו בתוצאות החיפוש.",
@@ -583,7 +544,6 @@
     "New passwords don't match": "הססמאות החדשות לא תואמות",
     "No display name": "אין שם לתצוגה",
     "Show more": "הצג יותר",
-    "Show less": "הצג פחות",
     "This bridge is managed by <user />.": "הגשר הזה מנוהל על ידי משתמש <user />.",
     "This bridge was provisioned by <user />.": "הגשר הזה נוצר על ידי משתמש <user />.",
     "Accept <policyLink /> to continue:": "קבל <policyLink /> להמשך:",
@@ -651,32 +611,17 @@
     "Lion": "אריה",
     "Cat": "חתול",
     "Dog": "כלב",
-    "To be secure, do this in person or use a trusted way to communicate.": "בכדי להיות מאובטח, עשו זאת ביחד או השתמשו בדרך בטוחה לתקשר.",
-    "They don't match": "הם לא זהים",
-    "They match": "הם זהים",
     "Cancelling…": "מבטל…",
     "Waiting for %(displayName)s to verify…": "ממתין ל- %(displayName)s בכדי לאמת…",
     "Unable to find a supported verification method.": "לא מצליח למצוא שיטות אימות נתמכות.",
     "Verify this user by confirming the following number appears on their screen.": "אמת את המשתמש הזה בכך שאותו מספר מופיע אצלו במסך.",
     "Verify this user by confirming the following emoji appear on their screen.": "אמת את המשתמש הזה בכך שסדרת הסמלים מוצגת זהה אצלו במסך.",
-    "Compare a unique set of emoji if you don't have a camera on either device": "השווה קבוצה של סמלים אם אין ברשותכם מצלמה על שום מכשיר",
-    "Compare unique emoji": "השווה סמלים מסויימים",
-    "Scan this unique code": "סרוק את הקוד הזה",
     "Got It": "קבלתי",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "הודעות מאובטחות עם משתמש זה כעת מוצפנות מקצה לקצה ואינן יכולות להקרא על ידי אחרים.",
-    "You've successfully verified this user.": "המשתמש הזה אומת בהצלחה.",
-    "Verified!": "אומת!",
-    "The other party cancelled the verification.": "הצד השני ביטל את האימות.",
-    "sends snowfall": "שלח שלג נופל",
-    "Sends the given message with snowfall": "שלח הודעה זו עם שלג נופל",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s%(day)s%(fullYear)s%(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s - %(day)s - %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s - %(day)s - %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
-    "sends fireworks": "שלח זיקוקים",
-    "Sends the given message with fireworks": "שולח הודעה זו עם זיקוקים",
-    "sends confetti": "שלח קונפטי",
-    "Sends the given message with confetti": "שולח הודעה זו ביחד עם קונפטי",
     "This is your list of users/servers you have blocked - don't leave the room!": "זוהי רשימת השרתים\\משתמשים אשר בחרתם לחסום - אל תצאו מחדר זה!",
     "My Ban List": "רשימת החסומים שלי",
     "IRC display name width": "רוחב תצוגת השם של IRC",
@@ -690,12 +635,8 @@
     "Never send encrypted messages to unverified sessions in this room from this session": "לעולם אל תשלח הודעות מוצפנות אל התחברות שאינה מאומתת בחדר זה, מהתחברות זו",
     "Never send encrypted messages to unverified sessions from this session": "לעולם אל תשלח הודעות מוצפנות אל התחברות שאינה מאומתת מהתחברות זו",
     "Send analytics data": "שלח מידע אנליטי",
-    "System font name": "שם גופן מערכת",
-    "Use a system font": "השתמש בגופן מערכת",
-    "Match system theme": "התאם לתבנית המערכת",
     "Mirror local video feed": "שקף זרימת וידאו מקומית",
     "Use custom size": "השתמשו בגודל מותאם אישית",
-    "Font size": "גודל אותיות",
     "Change notification settings": "שינוי הגדרת התרעות",
     "Please contact your homeserver administrator.": "אנא צרו קשר עם מנהל השרת שלכם.",
     "New version of %(brand)s is available": "גרסה חדשה של %(brand)s קיימת",
@@ -790,8 +731,6 @@
     "And %(count)s more...": {
         "other": "ו%(count)s עוד..."
     },
-    "Sign in with single sign-on": "היכנס באמצעות כניסה יחידה",
-    "Continue with %(provider)s": "המשך עם %(provider)s",
     "Join millions for free on the largest public server": "הצטרפו למיליונים בחינם בשרת הציבורי הגדול ביותר",
     "Server Options": "אפשרויות שרת",
     "This address is already in use": "כתובת זו נמצאת בשימוש",
@@ -801,105 +740,14 @@
     "Room address": "כתובת חדר",
     "<a>In reply to</a> <pill>": "<a> בתשובה ל- </a> <pill>",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "לא ניתן לטעון אירוע שהשיב לו, או שהוא לא קיים או שאין לך הרשאה להציג אותו.",
-    "QR Code": "קוד QR",
     "Custom level": "דרגה מותאמת",
     "Power level": "דרגת מנהל",
-    "%(oneUser)smade no changes %(count)s times": {
-        "one": "%(oneUser)s לא ערכו שינוי",
-        "other": "%(oneUser)s לא ערך שום שינוי %(count)s פעמים"
-    },
-    "%(severalUsers)smade no changes %(count)s times": {
-        "one": "%(severalUsers)s לא ערכו שום שינוי",
-        "other": "%(severalUsers)s לא ערכו שום שינוי %(count)s פעמים"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "one": "%(oneUser)s שינו את שמם",
-        "other": "%(oneUser)s שינו את שמם %(count)s פעמים"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "one": "%(severalUsers)s שינו את שמם",
-        "other": "%(severalUsers)s שינו את שמם %(count)s פעמים"
-    },
-    "was unbanned %(count)s times": {
-        "one": "חסימה בוטלה",
-        "other": "חסימה בוטלה %(count)s פעמים"
-    },
-    "were unbanned %(count)s times": {
-        "one": "חסימה בוטלה",
-        "other": "חסימה בוטלה %(count)s פעמים"
-    },
-    "was banned %(count)s times": {
-        "one": "נחסם",
-        "other": "נחסם %(count)s פעמים"
-    },
-    "were banned %(count)s times": {
-        "one": "נחסמו",
-        "other": "נחסם %(count)s פעמים"
-    },
-    "was invited %(count)s times": {
-        "one": "הוזמן",
-        "other": "הוזמן %(count)s פעמים"
-    },
-    "were invited %(count)s times": {
-        "one": "הוזמנו",
-        "other": "הוזמנו %(count)s פעמים"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "one": "%(oneUser)s משכו את ההזמנה שלהם",
-        "other": "%(oneUser)s משך את ההזמנה שלו %(count)s פעמים"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "one": "%(severalUsers)s משכו את ההזמנות שלהם",
-        "other": "%(severalUsers)s משכו את ההזמנות שלהם %(count)s פעמים"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "one": "%(oneUser)s דחו את ההזמנה שלו\\ה",
-        "other": "%(oneUser)s דחה את ההזמנה %(count)s פעמים"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "one": "%(severalUsers)s דחו את ההזמנה שלהם",
-        "other": "%(severalUsers)s דחו את ההזמנה שלהם%(count)s פעמים"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "one": "%(oneUser)s עזב/ה וחזר/ה",
-        "other": "%(oneUser)s עזב/ה וחזר/ה %(count)s פעמים"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "one": "%(severalUsers)s עזבו וחזרו",
-        "other": "%(severalUsers)s עזבו וחזרו %(count)s פעמים"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "one": "%(oneUser)s הצטרף/ה ועזב/ה",
-        "other": "%(oneUser)s הצטרף/ה ועזב/ה %(count)s פעמים"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "one": "%(severalUsers)s הצטרפו ועזבו",
-        "other": "%(severalUsers)s הצטרפו ועזבו %(count)s פעמים"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "one": "%(oneUser)s עזב/ה",
-        "other": "%(oneUser)s עזב/ה %(count)s פעמים"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "one": "%(severalUsers)s עזבו",
-        "other": "%(severalUsers)s עזבו %(count)s פעמים"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "one": "%(oneUser)s הצטרף/ה",
-        "other": "%(oneUser)s הצטרף/ה %(count)s פעמים"
-    },
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s הצטרפו %(count)s פעמים",
-        "one": "%(severalUsers)s הצטרפ/ה"
-    },
-    "%(nameList)s %(transitionList)s": "%(nameList)s-%(transitionList)s",
     "Language Dropdown": "תפריט שפות",
     "Information": "מידע",
     "Rotate Right": "סובב ימינה",
     "Rotate Left": "סובב שמאלה",
     "collapse": "אחד",
     "expand": "הרחב",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "אנא <newIssueLink> צור בעיה חדשה </newIssueLink> ב- GitHub כדי שנוכל לחקור את הבאג הזה.",
     "This version of %(brand)s does not support searching encrypted messages": "גרסה זו של %(brand)s אינה תומכת בחיפוש הודעות מוצפנות",
     "This version of %(brand)s does not support viewing some encrypted files": "גרסה זו של %(brand)s אינה תומכת בצפייה בקבצים מוצפנים מסוימים",
     "Use the <a>Desktop app</a> to search encrypted messages": "השתמשו ב <a> אפליקציית שולחן העבודה </a> לחיפוש הודעות מוצפנות",
@@ -1053,15 +901,6 @@
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "חדר זה מריץ את גרסת החדר <roomVersion/>, ששרת הבית הזה סימן כ- <i> לא יציב </i>.",
     "This room has already been upgraded.": "החדר הזה כבר שודרג.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "שדרוג חדר זה יסגור את המופע הנוכחי של החדר וייצור חדר משודרג עם אותו שם.",
-    "Unread messages.": "הודעות שלא נקראו.",
-    "%(count)s unread messages.": {
-        "one": "1 הודעה שלא נקראה.",
-        "other": "%(count)s הודעות שלא נקראו."
-    },
-    "%(count)s unread messages including mentions.": {
-        "one": "1 אזכור שלא נקרא.",
-        "other": "%(count)s הודעות שלא נקראו כולל אזכורים."
-    },
     "Room options": "אפשרויות חדר",
     "Sign Up": "הרשמה",
     "Join the conversation with an account": "הצטרף לשיחה עם חשבון",
@@ -1182,17 +1021,6 @@
     "Your display name": "שם התצוגה שלך",
     "Any of the following data may be shared:": "ניתן לשתף כל אחד מהנתונים הבאים:",
     "Cancel search": "בטל חיפוש",
-    "Quick Reactions": "תגובות מהירות",
-    "Categories": "נושאים",
-    "Flags": "דגלים",
-    "Symbols": "סמלים",
-    "Objects": "עצמים",
-    "Travel & Places": "טיולים ומקומות",
-    "Activities": "פעילויות",
-    "Food & Drink": "משקאות ומזון",
-    "Animals & Nature": "חיות וטבע",
-    "Smileys & People": "סמיילי ואנשים",
-    "Frequently Used": "לעיתים קרובות בשימוש",
     "Something went wrong!": "משהו השתבש!",
     "Can't load this message": "לא ניתן לטעון הודעה זו",
     "Submit logs": "הגש יומנים",
@@ -1280,14 +1108,7 @@
     "Something went wrong. Please try again or view your console for hints.": "משהו השתבש. נסה שוב או הצג את המסוף שלך לקבלת רמזים.",
     "Error adding ignored user/server": "שגיאה בהוספת שרת\\משתמש שהתעלמתם ממנו",
     "Ignored/Blocked": "התעלם\\חסום",
-    "Clear cache and reload": "נקה מטמון ואתחל",
-    "%(brand)s version:": "גרסאת %(brand)s:",
-    "Versions": "גרסאות",
-    "Help & About": "עזרה ואודות",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "כדי לדווח על בעיית אבטחה , אנא קראו את <a> מדיניות גילוי האבטחה של Matrix.org </a>.",
-    "Chat with %(brand)s Bot": "דבר עם הבוט של %(brand)s",
-    "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "לעזרה בשימוש ב-%(brand)s לחץ על <a> כאן </a> או התחל צ'אט עם הבוט שלנו באמצעות הלחצן למטה.",
-    "For help with using %(brand)s, click <a>here</a>.": "בשביל לעזור בקידום ושימוש ב- %(brand)s, לחצו <a>כאן</a>.",
     "General": "כללי",
     "Discovery": "מציאה",
     "Deactivate account": "סגור חשבון",
@@ -1298,16 +1119,8 @@
     "Account": "חשבון",
     "Phone numbers": "מספרי טלפון",
     "Email addresses": "כתובות דוא\"ל",
-    "Appearance Settings only affect this %(brand)s session.": "התאמת תצוגה משפיעה רק על התחברות זו %(brand)s.",
-    "Customise your appearance": "התאם את התצוגה שלך",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "הגדר את שם הגופן המותקן במערכת שלך ו- %(brand)s ים ינסו להשתמש בו.",
     "Show advanced": "הצג מתקדם",
     "Hide advanced": "הסתר מתקדם",
-    "Add theme": "הוסף ערכת נושא חדשה",
-    "Custom theme URL": "כתובת ערכת נושא מותאמת אישית",
-    "Theme added!": "ערכת נושא התווספה בהצלחה!",
-    "Error downloading theme information.": "שגיאה בהורדת מידע אודות ערכת הנושא.",
-    "Invalid theme schema.": "סכמת תבנית לא תקינה.",
     "Use between %(min)s pt and %(max)s pt": "השתמש בין %(min)s ל %(max)s נקודות",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "גודל גופן מותאם אישית יכול להיות רק בין %(min)s ל %(max)s נקודות",
     "Size must be a number": "הגדול חייב להיות מספר",
@@ -1350,19 +1163,8 @@
     "Back up your keys before signing out to avoid losing them.": "גבה את המפתחות שלך לפני היציאה כדי להימנע מלאבד אותם.",
     "Favourited": "מועדפים",
     "Forget Room": "שכח חדר",
-    "Notification options": "אפשרויות התרעות",
-    "Show %(count)s more": {
-        "one": "הצג עוד %(count)s",
-        "other": "הצג עוד %(count)s"
-    },
     "Jump to first invite.": "קפצו להזמנה ראשונה.",
     "Jump to first unread room.": "קפצו לחדר הראשון שלא נקרא.",
-    "List options": "רשימת אפשרויות",
-    "A-Z": "א-ת",
-    "Activity": "פעילות",
-    "Sort by": "סדר לפי",
-    "Show previews of messages": "הצג תצוגה מקדימה של הודעות",
-    "Show rooms with unread messages first": "הצג תחילה חדרים עם הודעות שלא נקראו",
     "%(roomName)s is not accessible at this time.": "לא ניתן להכנס אל %(roomName)s בזמן הזה.",
     "%(roomName)s does not exist.": "%(roomName)s לא קיים.",
     "%(roomName)s can't be previewed. Do you want to join it?": "לא ניתן לצפות ב־%(roomName)s. האם תרצו להצטרף?",
@@ -1390,14 +1192,6 @@
     "This room is not public. You will not be able to rejoin without an invite.": "חדר זה אינו ציבורי. לא תוכל להצטרף שוב ללא הזמנה.",
     "Failed to reject invitation": "דחיית ההזמנה נכשלה",
     "Explore rooms": "גלה חדרים",
-    "Create a Group Chat": "צור צ'אט קבוצתי",
-    "Explore Public Rooms": "חקור חדרים ציבוריים",
-    "Send a Direct Message": "שלח הודעה ישירה",
-    "Welcome to %(appName)s": "ברוכים הבאים אל %(appName)s",
-    "Now, let's help you get started": "עכשיו, בואו נעזור לכם להתחיל",
-    "Welcome %(name)s": "ברוכים הבאים %(name)s",
-    "Add a photo so people know it's you.": "הוסף תמונה כדי שאנשים יידעו שאתה זה.",
-    "Great, that'll help people know it's you": "נהדר, זה יעזור לאנשים לדעת שזה אתה",
     "Upload avatar": "העלה אוואטר",
     "Attach files from chat or just drag and drop them anywhere in a room.": "צרף קבצים מצ'ט או פשוט גרור ושחרר אותם לכל מקום בחדר.",
     "No files visible in this room": "אין קבצים גלויים בחדר זה",
@@ -1547,9 +1341,6 @@
     "The room upgrade could not be completed": "לא ניתן היה להשלים את שדרוג החדר",
     "Failed to upgrade room": "שדרוג החדר נכשל",
     "Room Settings - %(roomName)s": "הגדרות חדר - %(roomName)s",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "דיווח על הודעה זו ישלח את 'מזהה האירוע' הייחודי למנהל שרת הבית שלך. אם הודעות בחדר זה מוצפנות, מנהל שרת הבית שלך לא יוכל לקרוא את טקסט ההודעה או להציג קבצים או תמונות.",
-    "Report Content to Your Homeserver Administrator": "דווח על תוכן למנהל שרת הבית שלך",
-    "Please fill why you're reporting.": "אנא מלאו מדוע אתם מדווחים.",
     "Email (optional)": "דוא\"ל (לא חובה)",
     "Just a heads up, if you don't add an email and forget your password, you could <b>permanently lose access to your account</b>.": "שים לב, אם לא תשייך כתובת דואר אלקטרוני ותשכח את הסיסמה שלך, אתה תאבד <b>לצמיתות</b> את הגישה לחשבונך.",
     "Continuing without email": "ממשיך ללא דוא\"ל",
@@ -1619,29 +1410,6 @@
     "Transfer": "לְהַעֲבִיר",
     "Failed to transfer call": "העברת השיחה נכשלה",
     "A call can only be transferred to a single user.": "ניתן להעביר שיחה רק למשתמש יחיד.",
-    "Cancel autocomplete": "בטל השלמה אוטומטית",
-    "Go to Home View": "עבור אל תצוגת הבית",
-    "Toggle right panel": "החלף את החלונית הימנית",
-    "Activate selected button": "הפעל את הלחצן שנבחר",
-    "Close dialog or context menu": "סגור את תיבת הדו-שיח או את תפריט ההקשר",
-    "Toggle the top left menu": "החלף את התפריט הימני העליון",
-    "Expand room list section": "הרחב את קטע רשימת החדרים",
-    "Collapse room list section": "כווץ את קטע רשימת החדרים",
-    "Select room from the room list": "בחר חדר מרשימת החדרים",
-    "Jump to room search": "קפצו לחיפוש חדרים",
-    "Upload a file": "לעלות קובץ",
-    "Jump to oldest unread message": "קפיצה להודעה הוותיקה ביותר שלא נקראה",
-    "Dismiss read marker and jump to bottom": "דחה את סמן הקריאה וקפוץ לתחתית",
-    "Toggle microphone mute": "הפעלת / השתקת מיקרופון",
-    "Cancel replying to a message": "בטל מענה להודעה",
-    "New line": "שורה חדשה",
-    "Toggle Quote": "גרשיים",
-    "Toggle Italics": "אותיות נטויות",
-    "Toggle Bold": "הדגשת אותיות",
-    "Autocomplete": "השלמה אוטומטית",
-    "Room List": "רשימת חדרים",
-    "Calls": "שיחות",
-    "Navigation": "ניווט",
     "Message downloading sleep time(ms)": "הורדת זמן שינה (ms)",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s מתוך %(totalRooms)s",
     "Indexed rooms:": "חדרים רשומים:",
@@ -1712,16 +1480,7 @@
     "Failed to re-authenticate": "האימות מחדש נכשל",
     "Incorrect password": "סיסמה שגויה",
     "Failed to re-authenticate due to a homeserver problem": "האימות מחדש נכשל עקב בעיית שרת בית",
-    "Decide where your account is hosted": "החלט היכן מתארח חשבונך",
-    "Host account on": "חשבון מארח ב",
     "Create account": "חשבון משתמש חדש",
-    "Registration Successful": "ההרשמה בוצעה בהצלחה",
-    "<a>Log in</a> to your new account.": "<a> היכנס </a> לחשבונך החדש.",
-    "Continue with previous account": "המשך בחשבון הקודם",
-    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "החשבון החדש שלך (%(newAccountId)s) רשום, אך אתה כבר מחובר לחשבון אחר (%(loggedInUserId)s).",
-    "Already have an account? <a>Sign in here</a>": "כבר יש לכם חשבון? <a> היכנסו כאן </a>",
-    "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)s או %(usernamePassword)s",
-    "Continue with %(ssoButtons)s": "המשך עם %(ssoButtons)s",
     "This server does not support authentication with a phone number.": "שרת זה אינו תומך באימות עם מספר טלפון.",
     "Registration has been disabled on this homeserver.": "ההרשמה הושבתה בשרת הבית הזה.",
     "Unable to query for supported registration methods.": "לא ניתן לשאול לשיטות רישום נתמכות.",
@@ -1798,7 +1557,6 @@
     "Open dial pad": "פתח לוח חיוג",
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "גבה את מפתחות ההצפנה שלך עם נתוני חשבונך במקרה שתאבד את הגישה להפעלות שלך. המפתחות שלך מאובטחים באמצעות מפתח אבטחה ייחודי.",
     "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "אם שכחת את מפתח האבטחה שלך תוכל <button> להגדיר אפשרויות שחזור חדשות</button>",
-    "Search (must be enabled)": "חיפוש (חייב להיות מופעל)",
     "Access your secure message history and set up secure messaging by entering your Security Key.": "גש להיסטוריית ההודעות המאובטחות שלך והגדר הודעות מאובטחות על ידי הזנת מפתח האבטחה שלך.",
     "Enter Security Key": "הזן מפתח אבטחה",
     "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.": "לא ניתן היה לפענח את הגיבוי באמצעות מפתח האבטחה הזה: ודא שהזנת את מפתח האבטחה הנכון.",
@@ -1813,17 +1571,13 @@
     "Change which room, message, or user you're viewing": "שנה את החדר, ההודעה או המשתמש שאתה צופה בו",
     "Use app": "השתמש באפליקציה",
     "Use app for a better experience": "השתמש באפליקציה לחוויה טובה יותר",
-    "Converts the DM to a room": "המר את השיחה הפרטית לחדר",
-    "Converts the room to a DM": "ממיר את החדר ל- DM",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "ביקשנו מהדפדפן לזכור באיזה שרת בית אתה משתמש כדי לאפשר לך להיכנס, אך למרבה הצער הדפדפן שלך שכח אותו. עבור לדף הכניסה ונסה שוב.",
     "We couldn't log you in": "לא הצלחנו להתחבר אליך",
-    "Integration manager": "מנהל אינטגרציה",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s שלכם אינו מאפשר לך להשתמש במנהל שילוב לשם כך. אנא צרו קשר עם מנהל מערכת.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "שימוש ביישומון זה עשוי לשתף נתונים <helpIcon /> עם %(widgetDomain)s ומנהל האינטגרציה שלך.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "מנהלי שילוב מקבלים נתוני תצורה ויכולים לשנות ווידג'טים, לשלוח הזמנות לחדר ולהגדיר רמות הספק מטעמכם.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "השתמש במנהל שילוב לניהול בוטים, ווידג'טים וחבילות מדבקות.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "השתמש במנהל שילוב <b> (%(serverName)s) </b> כדי לנהל בוטים, ווידג'טים וחבילות מדבקות.",
-    "Identity server": "שרת הזדהות",
     "Identity server (%(server)s)": "שרת הזדהות (%(server)s)",
     "Could not connect to identity server": "לא ניתן להתחבר אל שרת הזיהוי",
     "Not a valid identity server (status code %(code)s)": "שרת זיהוי לא מאושר(קוד סטטוס %(code)s)",
@@ -1831,8 +1585,6 @@
     "Enter Security Phrase": "הזן ביטוי אבטחה",
     "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.": "לא ניתן לפענח גיבוי עם ביטוי אבטחה זה: אנא ודא שהזנת את ביטוי האבטחה הנכון.",
     "Incorrect Security Phrase": "ביטוי אבטחה שגוי",
-    "No active call in this room": "אין שיחה פעילה בחדר זה",
-    "Unable to find Matrix ID for phone number": "לא ניתן למצוא מזהה משתמש למספר טלפון",
     "Command failed: Unable to find room (%(roomId)s": "הפעולה נכשלה: לא ניתן למצוא את החדר (%(roomId)s",
     "Unrecognised room address: %(roomAlias)s": "כתובת חדר לא מוכרת: %(roomAlias)s",
     "Some invites couldn't be sent": "לא ניתן לשלוח חלק מההזמנות",
@@ -1904,12 +1656,9 @@
     "Hide sidebar": "הסתר סרגל צד",
     "Connecting": "מקשר",
     "unknown person": "אדם לא ידוע",
-    "Sends the given message with rainfall": "שלח הודעה זו עם גשם נופל",
-    "sends rainfall": "שלח גשם נופל",
     "Waiting for you to verify on your other device…": "ממתין לאישור שלך במכשיר השני…",
     "Confirm the emoji below are displayed on both devices, in the same order:": "ודא ואשר שהסמלים הבאים מופיעים בשני המכשירים ובאותו הסדר:",
     "Other rooms": "חדרים אחרים",
-    "You previously consented to share anonymous usage data with us. We're updating how that works.": "הסכמתם בעבר לשתף איתנו מידע אנונימי לגבי השימוש שלכם. אנחנו מעדכנים איך זה מתבצע.",
     "This homeserver has been blocked by its administrator.": "שרת זה נחסם על ידי מנהלו.",
     "The user you called is busy.": "המשתמש עסוק כרגע.",
     "User Busy": "המשתמש עסוק",
@@ -1919,13 +1668,6 @@
     "Failed to post poll": "תקלה בפרסום הסקר",
     "You can't see earlier messages": "לא ניתן לצפות בהודעות קודמות",
     "Confirm your Security Phrase": "אשר את ביטוי האבטחה שלך",
-    "%(oneUser)sremoved a message %(count)s times": {
-        "other": "%(oneUser)sהסיר%(count)sהודעות",
-        "one": "%(oneUser)sהסיר הודעה"
-    },
-    "%(severalUsers)sremoved a message %(count)s times": {
-        "one": "%(severalUsers)sהסיר הודעה"
-    },
     "Application window": "חלון אפליקציה",
     "Results are only revealed when you end the poll": "תוצאות יהיה זמינות להצגה רק עם סגירת הסקר",
     "What is your poll question or topic?": "מה השאלה או הנושא שלכם בסקר?",
@@ -1942,9 +1684,6 @@
     "Poll": "סקר",
     "You do not have permission to start polls in this room.": "אין לכם הרשאה להתחיל סקר בחדר זה.",
     "Preserve system messages": "שמור את הודעות המערכת",
-    "Next autocomplete suggestion": "הצעת השלמה אוטומטית הבאה",
-    "Previous room or DM": "חדר קודם או התכתבות ישירה",
-    "Next room or DM": "חדר הבא או התכתבות ישירה",
     "No unverified sessions found.": "לא נמצאו הפעלות לא מאומתות.",
     "Friends and family": "חברים ומשפחה",
     "An error occurred whilst sharing your live location, please try again": "אירעה שגיאה במהלך שיתוף המיקום החי שלכם, אנא נסו שוב",
@@ -1964,40 +1703,17 @@
         "one": "%(count)s.קולות הצביעו כדי לראות את התוצאות"
     },
     "Verification requested": "התבקש אימות",
-    "Verify this device by completing one of the following:": "אמתו מכשיר זה על ידי מילוי אחת מהפעולות הבאות:",
     "Your server doesn't support disabling sending read receipts.": "השרת שלכם לא תומך בביטול שליחת אישורי קריאה.",
     "Share your activity and status with others.": "שתפו את הפעילות והסטטוס שלכם עם אחרים.",
     "Room visibility": "נראות של החדר",
-    "%(oneUser)ssent %(count)s hidden messages": {
-        "one": "%(oneUser)sשלח הודעה חבויה",
-        "other": "%(oneUser)sשלח%(count)sהודעות מוחבאות"
-    },
-    "%(severalUsers)ssent %(count)s hidden messages": {
-        "one": "%(severalUsers)sשלחו הודעות מוחבאות",
-        "other": "%(severalUsers)sשלחו%(count)sהודעות מוחבאות"
-    },
     "Send your first message to invite <displayName/> to chat": "שילחו את ההודעה הראשונה שלכם להזמין את <displayName/> לצ'אט",
-    "sends hearts": "שולח לבבות",
-    "Developer command: Discards the current outbound group session and sets up new Olm sessions": "פקודת מפתחים: מסלקת את הפגישה הנוכחית של הקבוצה היוצאת ומגדירה הפעלות חדשות של Olm",
     "User Directory": "ספריית משתמשים",
     "Space Autocomplete": "השלמה אוטומטית של חלל העבודה",
     "Recommended for public spaces.": "מומלץ למרחבי עבודה ציבוריים.",
     "Allow people to preview your space before they join.": "אפשרו לאנשים תצוגה מקדימה של מרחב העבודה שלכם לפני שהם מצטרפים.",
     "Preview Space": "תצוגה מקדימה של מרחב העבודה",
     "Failed to update the visibility of this space": "עדכון הנראות של מרחב העבודה הזה נכשל",
-    "Size Limit": "הגבלת גודל",
-    "Format": "פורמט",
-    "Exporting your data": "מייצא את המידע שלכם",
-    "Are you sure you want to stop exporting your data? If you do, you'll need to start over.": "האם אתם בטוחים שברצונכם להפסיק לייצא את הנתונים שלכם? אם כן, תצטרכו להתחיל מחדש.",
-    "Your export was successful. Find it in your Downloads folder.": "הייצוא שלכם הצליח. מיצאו אותו בתיקיית ההורדות שלכם.",
-    "Export Successful": "ייצוא בוצע בהצלחה",
-    "The export was cancelled successfully": "הייצוא בוטל בהצלחה",
-    "Export Cancelled": "ייצוא בוטל",
     "MB": "MB",
-    "Number of messages": "מספר הודעות",
-    "Number of messages can only be a number between %(min)s and %(max)s": "מספר ההודעות יכול להיות רק מספר בין %(min)s ו %(max)s",
-    "Size can only be a number between %(min)s MB and %(max)s MB": "גודל יכול להיות רק מספר בין MB %(min)s ו MB%(max)s",
-    "Enter a number between %(min)s and %(max)s": "הכניסו מספר בין %(min)s ל %(max)s",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "האם אתם בטוחים שברצונכם לסיים את הסקר הזה? זה יציג את התוצאות הסופיות של הסקר וימנע מאנשים את האפשרות להצביע.",
     "End Poll": "סיים סקר",
     "Sorry, the poll did not end. Please try again.": "סליחה, הסקר לא הסתיים. נא נסו שוב.",
@@ -2051,16 +1767,12 @@
     "Failed to create initial space rooms": "יצירת חדר חלל עבודה ראשוני נכשלה",
     "Verify this device": "אמתו את מכשיר זה",
     "Unable to verify this device": "לא ניתן לאמת את מכשיר זה",
-    "Jump to last message": "קיפצו להודעה האחרונה",
-    "Jump to first message": "קיפצו להודעה הראשונה",
     "Messages in this chat will be end-to-end encrypted.": "הודעות בצ'אט זה יוצפו מקצה לקצה.",
     "Some encryption parameters have been changed.": "מספר פרמטרים של הצפנה שונו.",
     "Decrypting": "מפענח",
     "Downloading": "מוריד",
     "Jump to date": "קיפצו לתאריך",
     "Review to ensure your account is safe": "בידקו כדי לוודא שהחשבון שלך בטוח",
-    "Help improve %(analyticsOwner)s": "עזרו בשיפור %(analyticsOwner)s",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "שתף נתונים אנונימיים כדי לעזור לנו לזהות בעיות. ללא אישי. אין צדדים שלישיים. <LearnMoreLink>למידע נוסף</LearnMoreLink>",
     "Reset bearing to north": "נעלו את המפה לכיוון צפון",
     "Mapbox logo": "לוגו",
     "Location not available": "מיקום אינו זמין",
@@ -2076,14 +1788,8 @@
     "Message preview": "צפו בהודעה",
     "Published addresses can be used by anyone on any server to join your room.": "כל אחד בכל שרת יכול להשתמש בכתובות שפורסמו כדי להצטרף לחלל העבודה שלכם.",
     "Published addresses can be used by anyone on any server to join your space.": "כל אחד בכל שרת יכול להשתמש בכתובות שפורסמו כדי להצטרף למרחב העבודה שלכם.",
-    "Include Attachments": "כלול קבצים מצורפים",
     "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.": "אם ברצונכם לשמור על גישה להיסטוריית הצ'אט שלכם בחדרים מוצפנים, הגדירו גיבוי מפתחות או ייצאו את מפתחות ההודעות שלכם מאחד מהמכשירים האחרים שלכם לפני שתמשיך.",
-    "Select from the options below to export chats from your timeline": "ביחרו מבין האפשרויות למטה כדי לייצא צ'אטים מציר הזמן שלכם",
-    "Export Chat": "ייצוא צ'אט",
     "Export chat": "ייצוא צ'אט",
-    "Joining the beta will reload %(brand)s.": "הצטרפות לפיתוח תטען מחדש את %(brand)s.",
-    "Leaving the beta will reload %(brand)s.": "עזיבת הניסוי תטען מחדש את %(brand)s.",
-    "Join the beta": "הצטרך לניסוי",
     "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "שימו לב: זוהי תכונת פיתוח המשתמשת ביישום זמני. משמעות הדבר היא שלא תוכלו למחוק את היסטוריית המיקומים שלכם, ומשתמשים מתקדמים יוכלו לראות את היסטוריית המיקומים שלך גם לאחר שתפסיקו לשתף את המיקום החי שלכם עם החדר הזה.",
     "Show Labs settings": "הצג את אופציית מעבדת הפיתוח",
     "To join, please enable video rooms in Labs first": "כדי להצטרף, נא אפשר תחילה וידאו במעבדת הפיתוח",
@@ -2096,27 +1802,15 @@
     "Home is useful for getting an overview of everything.": "מסך הבית עוזר לסקירה כללית.",
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "מרחבי עבודה הם דרך לקבץ חדרים ואנשים. במקביל למרחבי העבודה בהם אתם נמצאים ניתן להשתמש גם בכאלה שנבנו מראש.",
     "Spaces to show": "מרחבי עבודה להצגה",
-    "Toggle webcam on/off": "הפעלת / כיבוי מצלמה",
-    "Send a sticker": "שלח מדבקה",
-    "Navigate to previous message in composer history": "עבור להודעה הקודמת בהיסטוריית התכתבות",
-    "Navigate to next message in composer history": "עבור להודעה הבאה בהיסטוריית התכתבות",
-    "Navigate to previous message to edit": "עבור לעריכת ההודעה הקודמת",
-    "Navigate to next message to edit": "עבור לעריכת ההודעה הבאה",
-    "Jump to end of the composer": "עבור לסוף ההתכתבות",
-    "Jump to start of the composer": "עבור לתחילת ההתכתבות",
-    "Redo edit": "חזור על העריכה",
-    "Undo edit": "בטל את העריכה",
     "Images, GIFs and videos": "תמונות, GIF ווידאו",
     "Code blocks": "מקטעי קוד",
     "Show polls button": "הצג את כפתור הסקרים",
     "Surround selected text when typing special characters": "סמן טקסט כאשר מקלידים סמלים מיוחדים",
     "To view all keyboard shortcuts, <a>click here</a>.": "כדי לצפות בכל קיצורי המקלדת , <a>לחצו כאן</a>.",
-    "Messages containing keywords": "הודעות המכילות מילות מפתח",
     "Access your secure message history and set up secure messaging by entering your Security Phrase.": "גש להיסטוריית ההודעות המאובטחת שלך והגדר הודעות מאובטחות על ידי הזנת ביטוי האבטחה שלך.",
     "@mentions & keywords": "אזכורים ומילות מפתח",
     "Mentions & keywords": "אזכורים ומילות מפתח",
     "Failed to invite users to %(roomName)s": "נכשל בהזמנת משתמשים לחדר - %(roomName)",
-    "Image size in the timeline": "גודל תמונה בציר הזמן",
     "Anyone will be able to find and join this space, not just members of <SpaceName/>.": "כל אחד יוכל למצוא ולהצטרך אל חלל עבודה זה. לא רק חברי <SpaceName/>.",
     "Anyone in <SpaceName/> will be able to find and join.": "כל אחד ב<SpaceName/> יוכל למצוא ולהצטרף.",
     "Visible to space members": "נראה לחברי מרחב העבודה",
@@ -2140,11 +1834,7 @@
     "This room or space does not exist.": "חדר זה או מרחב עבודה אינם קיימים.",
     "Forget this space": "שכח את מרחב עבודה זה",
     "%(spaceName)s menu": "תפריט %(spaceName)s",
-    "You do not have permissions to add spaces to this space": "אין לכם הרשאה להוסיף מרחב עבודה אל מרחב העבודה הנוכחי",
     "Add space": "הוסיפו מרחב עבודה",
-    "You do not have permissions to create new rooms in this space": "אין לכם הרשאה ליצור חדרים חדשים במרחב העבודה הנוכחי",
-    "You do not have permissions to add rooms to this space": "אין לכם השאה להוסיף חדשרים למרחב העבודה הנוכחי",
-    "You do not have permissions to invite people to this space": "אין לכם הרשאה להזמין משתתפים אל מרחב עבודה זה",
     "Invite to space": "הזמינו אל מרחב העבודה",
     "Private space": "מרחב עבודה פרטי",
     "Public space": "מרחב עבודה ציבורי",
@@ -2196,8 +1886,6 @@
     "In %(spaceName)s.": "במרחבי עבודה%(spaceName)s.",
     "In spaces %(space1Name)s and %(space2Name)s.": "במרחבי עבודה %(space1Name)sו%(space2Name)s.",
     "Search %(spaceName)s": "חיפוש %(spaceName)s",
-    "sends space invaders": "שולח פולשים לחלל",
-    "Sends the given message with a space themed effect": "שולח את ההודעה הנתונה עם אפקט בנושא חלל",
     "Invite to %(spaceName)s": "הזמן אל %(spaceName)s",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)sו%(count)sאחרים",
@@ -2232,17 +1920,6 @@
     "Voice settings": "הגדרות קול",
     "Close sidebar": "סגור סרגל צד",
     "Sidebar": "סרגל צד",
-    "Previous autocomplete suggestion": "הצעת השלמה אוטומטית קודמת",
-    "Force complete": "אלץ השלמת טקסט",
-    "Open this settings tab": "פתיחת חלון אפשרויות זה",
-    "Navigate down in the room list": "נווט מטה ברשימת החדרים",
-    "Navigate up in the room list": "נווט מעלה ברשימת החדרים",
-    "Scroll down in the timeline": "גלילה מטה בציר הזמן",
-    "Scroll up in the timeline": "גלילה מעלה בציר הזמן",
-    "Turn off to disable notifications on all your devices and sessions": "כבה אפשרות זו כדי לבטל התראות בכל המכשירים והחיבורים שלך",
-    "Enable notifications for this device": "אפשר קבלת התראות במכשיר זה",
-    "Enable notifications for this account": "אפשר קבלת התראות לחשבון זה",
-    "Message bubbles": "בועות הודעות",
     "Deactivating your account is a permanent action — be careful!": "סגירת החשבון הינה פעולה שלא ניתנת לביטול - שים לב!",
     "Room info": "מידע על החדר",
     "You're all caught up": "אתם כבר מעודכנים בהכל",
@@ -2334,7 +2011,10 @@
         "stickerpack": "חבילת מדבקות",
         "system_alerts": "התרעות מערכת",
         "secure_backup": "גיבוי מאובטח",
-        "cross_signing": "חתימה צולבת"
+        "cross_signing": "חתימה צולבת",
+        "identity_server": "שרת הזדהות",
+        "integration_manager": "מנהל אינטגרציה",
+        "qr_code": "קוד QR"
     },
     "action": {
         "continue": "המשך",
@@ -2425,7 +2105,16 @@
         "send_report": "שלח דיווח"
     },
     "a11y": {
-        "user_menu": "תפריט משתמש"
+        "user_menu": "תפריט משתמש",
+        "n_unread_messages_mentions": {
+            "one": "1 אזכור שלא נקרא.",
+            "other": "%(count)s הודעות שלא נקראו כולל אזכורים."
+        },
+        "n_unread_messages": {
+            "one": "1 הודעה שלא נקראה.",
+            "other": "%(count)s הודעות שלא נקראו."
+        },
+        "unread_messages": "הודעות שלא נקראו."
     },
     "labs": {
         "latex_maths": "בצע מתמטיקה של LaTeX בהודעות",
@@ -2434,7 +2123,20 @@
         "custom_themes": "מיכה להוספת תבניות מותאמות אישית",
         "dehydration": "שליחת הודעות מוצפנות במצב אופליין עם שימוש במכשיר מיובש",
         "bridge_state": "הצג מידע אודות גשרים בהגדרות של החדרים",
-        "jump_to_date": "קיפצו לתאריך (מוסיף /jumptodate וקפוץ לכותרות תאריך)"
+        "jump_to_date": "קיפצו לתאריך (מוסיף /jumptodate וקפוץ לכותרות תאריך)",
+        "group_messaging": "הודעות",
+        "group_profile": "פרופיל",
+        "group_spaces": "מרחבי עבודה",
+        "group_widgets": "ישומונים",
+        "group_rooms": "חדרים",
+        "group_voip": "שמע ווידאו",
+        "group_moderation": "מְתִינוּת",
+        "group_encryption": "הצפנה",
+        "group_experimental": "נִסיוֹנִי",
+        "group_developer": "מפתח",
+        "leave_beta_reload": "עזיבת הניסוי תטען מחדש את %(brand)s.",
+        "join_beta_reload": "הצטרפות לפיתוח תטען מחדש את %(brand)s.",
+        "join_beta": "הצטרך לניסוי"
     },
     "keyboard": {
         "home": "הבית",
@@ -2447,7 +2149,53 @@
         "alt": "ALT",
         "control": "CTRL",
         "shift": "הזזה",
-        "backspace": "מקש חזרה לאחור"
+        "backspace": "מקש חזרה לאחור",
+        "category_calls": "שיחות",
+        "category_room_list": "רשימת חדרים",
+        "category_navigation": "ניווט",
+        "category_autocomplete": "השלמה אוטומטית",
+        "composer_toggle_bold": "הדגשת אותיות",
+        "composer_toggle_italics": "אותיות נטויות",
+        "composer_toggle_quote": "גרשיים",
+        "cancel_reply": "בטל מענה להודעה",
+        "navigate_next_message_edit": "עבור לעריכת ההודעה הבאה",
+        "navigate_prev_message_edit": "עבור לעריכת ההודעה הקודמת",
+        "composer_jump_start": "עבור לתחילת ההתכתבות",
+        "composer_jump_end": "עבור לסוף ההתכתבות",
+        "composer_navigate_next_history": "עבור להודעה הבאה בהיסטוריית התכתבות",
+        "composer_navigate_prev_history": "עבור להודעה הקודמת בהיסטוריית התכתבות",
+        "send_sticker": "שלח מדבקה",
+        "toggle_microphone_mute": "הפעלת / השתקת מיקרופון",
+        "toggle_webcam_mute": "הפעלת / כיבוי מצלמה",
+        "dismiss_read_marker_and_jump_bottom": "דחה את סמן הקריאה וקפוץ לתחתית",
+        "jump_to_read_marker": "קפיצה להודעה הוותיקה ביותר שלא נקראה",
+        "upload_file": "לעלות קובץ",
+        "scroll_up_timeline": "גלילה מעלה בציר הזמן",
+        "scroll_down_timeline": "גלילה מטה בציר הזמן",
+        "jump_room_search": "קפצו לחיפוש חדרים",
+        "room_list_select_room": "בחר חדר מרשימת החדרים",
+        "room_list_collapse_section": "כווץ את קטע רשימת החדרים",
+        "room_list_expand_section": "הרחב את קטע רשימת החדרים",
+        "room_list_navigate_down": "נווט מטה ברשימת החדרים",
+        "room_list_navigate_up": "נווט מעלה ברשימת החדרים",
+        "toggle_top_left_menu": "החלף את התפריט הימני העליון",
+        "toggle_right_panel": "החלף את החלונית הימנית",
+        "keyboard_shortcuts_tab": "פתיחת חלון אפשרויות זה",
+        "go_home_view": "עבור אל תצוגת הבית",
+        "next_room": "חדר הבא או התכתבות ישירה",
+        "prev_room": "חדר קודם או התכתבות ישירה",
+        "autocomplete_cancel": "בטל השלמה אוטומטית",
+        "autocomplete_navigate_next": "הצעת השלמה אוטומטית הבאה",
+        "autocomplete_navigate_prev": "הצעת השלמה אוטומטית קודמת",
+        "jump_first_message": "קיפצו להודעה הראשונה",
+        "jump_last_message": "קיפצו להודעה האחרונה",
+        "composer_undo": "בטל את העריכה",
+        "composer_redo": "חזור על העריכה",
+        "close_dialog_menu": "סגור את תיבת הדו-שיח או את תפריט ההקשר",
+        "activate_button": "הפעל את הלחצן שנבחר",
+        "composer_new_line": "שורה חדשה",
+        "autocomplete_force": "אלץ השלמת טקסט",
+        "search": "חיפוש (חייב להיות מופעל)"
     },
     "composer": {
         "format_bold": "מודגש",
@@ -2486,7 +2234,8 @@
         "collecting_information": "אוסף מידע על גרסת היישום",
         "collecting_logs": "אוסף יומנים לנפוי שגיאה (דבאג)",
         "uploading_logs": "מעלה לוגים",
-        "downloading_logs": "מוריד לוגים"
+        "downloading_logs": "מוריד לוגים",
+        "create_new_issue": "אנא <newIssueLink> צור בעיה חדשה </newIssueLink> ב- GitHub כדי שנוכל לחקור את הבאג הזה."
     },
     "time": {
         "hours_minutes_seconds_left": "נשארו %(hours)s שעות, %(minutes)s דקות ו-%(seconds)s שניות",
@@ -2557,7 +2306,32 @@
             "rule_call": "הזמנה לשיחה",
             "rule_suppress_notices": "הודעות שנשלחו באמצעות בוט",
             "rule_tombstone": "כאשר חדרים משתדרגים",
-            "rule_encrypted_room_one_to_one": "הודעות מוצפנות בחדרים של אחד-על-אחד"
+            "rule_encrypted_room_one_to_one": "הודעות מוצפנות בחדרים של אחד-על-אחד",
+            "messages_containing_keywords": "הודעות המכילות מילות מפתח",
+            "enable_notifications_account": "אפשר קבלת התראות לחשבון זה",
+            "enable_notifications_account_detail": "כבה אפשרות זו כדי לבטל התראות בכל המכשירים והחיבורים שלך",
+            "enable_notifications_device": "אפשר קבלת התראות במכשיר זה",
+            "enable_desktop_notifications_session": "החל התראות עבור התחברות זו",
+            "show_message_desktop_notification": "הצג הודעה בהתראות שולחן עבודה",
+            "enable_audible_notifications_session": "אפשר התראות נשמעות עבור התחברות זו"
+        },
+        "appearance": {
+            "layout_bubbles": "בועות הודעות",
+            "heading": "התאם את התצוגה שלך",
+            "subheading": "התאמת תצוגה משפיעה רק על התחברות זו %(brand)s.",
+            "match_system_theme": "התאם לתבנית המערכת",
+            "custom_font": "השתמש בגופן מערכת",
+            "custom_font_name": "שם גופן מערכת",
+            "custom_theme_invalid": "סכמת תבנית לא תקינה.",
+            "custom_theme_error_downloading": "שגיאה בהורדת מידע אודות ערכת הנושא.",
+            "custom_theme_success": "ערכת נושא התווספה בהצלחה!",
+            "custom_theme_url": "כתובת ערכת נושא מותאמת אישית",
+            "custom_theme_add_button": "הוסף ערכת נושא חדשה",
+            "font_size": "גודל אותיות",
+            "custom_font_description": "הגדר את שם הגופן המותקן במערכת שלך ו- %(brand)s ים ינסו להשתמש בו.",
+            "timeline_image_size": "גודל תמונה בציר הזמן",
+            "timeline_image_size_default": "ברירת מחדל",
+            "timeline_image_size_large": "גדול"
         }
     },
     "devtools": {
@@ -2617,7 +2391,23 @@
         "export_info": "זאת התחלת ייצוא של <roomName/>. ייצוא ע\"י <exporterDetails/> ב %(exportDate)s.",
         "topic": "נושא: %(topic)s",
         "error_fetching_file": "שגיאה באחזור הקובץ",
-        "file_attached": "מצורף קובץ"
+        "file_attached": "מצורף קובץ",
+        "enter_number_between_min_max": "הכניסו מספר בין %(min)s ל %(max)s",
+        "size_limit_min_max": "גודל יכול להיות רק מספר בין MB %(min)s ו MB%(max)s",
+        "num_messages_min_max": "מספר ההודעות יכול להיות רק מספר בין %(min)s ו %(max)s",
+        "num_messages": "מספר הודעות",
+        "cancelled": "ייצוא בוטל",
+        "cancelled_detail": "הייצוא בוטל בהצלחה",
+        "successful": "ייצוא בוצע בהצלחה",
+        "successful_detail": "הייצוא שלכם הצליח. מיצאו אותו בתיקיית ההורדות שלכם.",
+        "confirm_stop": "האם אתם בטוחים שברצונכם להפסיק לייצא את הנתונים שלכם? אם כן, תצטרכו להתחיל מחדש.",
+        "exporting_your_data": "מייצא את המידע שלכם",
+        "title": "ייצוא צ'אט",
+        "select_option": "ביחרו מבין האפשרויות למטה כדי לייצא צ'אטים מציר הזמן שלכם",
+        "format": "פורמט",
+        "messages": "הודעות",
+        "size_limit": "הגבלת גודל",
+        "include_attachments": "כלול קבצים מצורפים"
     },
     "create_room": {
         "title_video_room": "צרו חדר וידאו",
@@ -2677,7 +2467,15 @@
             "removed": "%(senderName)s הסיר את הכתובת הראשית עבור חדר זה.",
             "changed_alternative": "%(senderName)s שניה את הכתובת המשנית של חדר זה.",
             "changed_main_and_alternative": "%(senderName)s שינה את הכתובת הראשית והמשנית של חדר זה.",
-            "changed": "%(senderName)s שינה את הכתובות של חדר זה."
+            "changed": "%(senderName)s שינה את הכתובות של חדר זה.",
+            "alt_added": {
+                "one": "%(senderName)s הוסיף כתובת משנית %(addresses)s עבור חדר זה.",
+                "other": "%(senderName)s הוסיף את הכתובת המשנית %(addresses)s עבור חדר זה."
+            },
+            "alt_removed": {
+                "one": "%(senderName)s הסיר את הכתובת המשנית %(addresses)s עבור חדר זה.",
+                "other": "%(senderName)s הסיר את הכתובת המשנית %(addresses)s עבור חדר זה."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s דחה את ההזמנה של %(targetDisplayName)s להצטרף אל החדר.",
@@ -2717,6 +2515,135 @@
         },
         "m.call.hangup": {
             "dm": "השיחה הסתיימה"
+        },
+        "summary": {
+            "format": "%(nameList)s-%(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s הצטרפו %(count)s פעמים",
+                "one": "%(severalUsers)s הצטרפ/ה"
+            },
+            "joined": {
+                "one": "%(oneUser)s הצטרף/ה",
+                "other": "%(oneUser)s הצטרף/ה %(count)s פעמים"
+            },
+            "left_multiple": {
+                "one": "%(severalUsers)s עזבו",
+                "other": "%(severalUsers)s עזבו %(count)s פעמים"
+            },
+            "left": {
+                "one": "%(oneUser)s עזב/ה",
+                "other": "%(oneUser)s עזב/ה %(count)s פעמים"
+            },
+            "joined_and_left_multiple": {
+                "one": "%(severalUsers)s הצטרפו ועזבו",
+                "other": "%(severalUsers)s הצטרפו ועזבו %(count)s פעמים"
+            },
+            "joined_and_left": {
+                "one": "%(oneUser)s הצטרף/ה ועזב/ה",
+                "other": "%(oneUser)s הצטרף/ה ועזב/ה %(count)s פעמים"
+            },
+            "rejoined_multiple": {
+                "one": "%(severalUsers)s עזבו וחזרו",
+                "other": "%(severalUsers)s עזבו וחזרו %(count)s פעמים"
+            },
+            "rejoined": {
+                "one": "%(oneUser)s עזב/ה וחזר/ה",
+                "other": "%(oneUser)s עזב/ה וחזר/ה %(count)s פעמים"
+            },
+            "rejected_invite_multiple": {
+                "one": "%(severalUsers)s דחו את ההזמנה שלהם",
+                "other": "%(severalUsers)s דחו את ההזמנה שלהם%(count)s פעמים"
+            },
+            "rejected_invite": {
+                "one": "%(oneUser)s דחו את ההזמנה שלו\\ה",
+                "other": "%(oneUser)s דחה את ההזמנה %(count)s פעמים"
+            },
+            "invite_withdrawn_multiple": {
+                "one": "%(severalUsers)s משכו את ההזמנות שלהם",
+                "other": "%(severalUsers)s משכו את ההזמנות שלהם %(count)s פעמים"
+            },
+            "invite_withdrawn": {
+                "one": "%(oneUser)s משכו את ההזמנה שלהם",
+                "other": "%(oneUser)s משך את ההזמנה שלו %(count)s פעמים"
+            },
+            "invited_multiple": {
+                "one": "הוזמנו",
+                "other": "הוזמנו %(count)s פעמים"
+            },
+            "invited": {
+                "one": "הוזמן",
+                "other": "הוזמן %(count)s פעמים"
+            },
+            "banned_multiple": {
+                "one": "נחסמו",
+                "other": "נחסם %(count)s פעמים"
+            },
+            "banned": {
+                "one": "נחסם",
+                "other": "נחסם %(count)s פעמים"
+            },
+            "unbanned_multiple": {
+                "one": "חסימה בוטלה",
+                "other": "חסימה בוטלה %(count)s פעמים"
+            },
+            "unbanned": {
+                "one": "חסימה בוטלה",
+                "other": "חסימה בוטלה %(count)s פעמים"
+            },
+            "changed_name_multiple": {
+                "one": "%(severalUsers)s שינו את שמם",
+                "other": "%(severalUsers)s שינו את שמם %(count)s פעמים"
+            },
+            "changed_name": {
+                "one": "%(oneUser)s שינו את שמם",
+                "other": "%(oneUser)s שינו את שמם %(count)s פעמים"
+            },
+            "no_change_multiple": {
+                "one": "%(severalUsers)s לא ערכו שום שינוי",
+                "other": "%(severalUsers)s לא ערכו שום שינוי %(count)s פעמים"
+            },
+            "no_change": {
+                "one": "%(oneUser)s לא ערכו שינוי",
+                "other": "%(oneUser)s לא ערך שום שינוי %(count)s פעמים"
+            },
+            "redacted_multiple": {
+                "one": "%(severalUsers)sהסיר הודעה"
+            },
+            "redacted": {
+                "other": "%(oneUser)sהסיר%(count)sהודעות",
+                "one": "%(oneUser)sהסיר הודעה"
+            },
+            "hidden_event_multiple": {
+                "one": "%(severalUsers)sשלחו הודעות מוחבאות",
+                "other": "%(severalUsers)sשלחו%(count)sהודעות מוחבאות"
+            },
+            "hidden_event": {
+                "one": "%(oneUser)sשלח הודעה חבויה",
+                "other": "%(oneUser)sשלח%(count)sהודעות מוחבאות"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s שינה את רמת ההרשאה של %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s מ%(fromPowerLevel)s ל%(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s הסיר את הכלל שחוסם משתמשים התואמים ל %(glob)s",
+            "removed_rule_rooms": "%(senderName)s הסיר את הכלל שחוסם חדרים התואמים ל%(glob)s",
+            "removed_rule_servers": "%(senderName)s הסיר את הכלל החוסם שרתים התואמים ל%(glob)s",
+            "removed_rule": "%(senderName)s הסיר כלל חסימה התואם ל%(glob)s",
+            "updated_invalid_rule": "%(senderName)s עידכן כלל חסימה שגוי",
+            "updated_rule_users": "%(senderName)s עדכן את הכלל שמאפשר חסימת משתמשים התואמים ל%(glob)s עבור %(reason)s",
+            "updated_rule_rooms": "%(senderName)s עדכן את הכלל שפאפשר חסימה של חדרים התואמים ל%(glob)s עבור %(reason)s",
+            "updated_rule_servers": "%(senderName)s עדכן את הכללים המאפשרים חסימת שרתים התואמים ל%(glob)s עבור %(reason)s",
+            "updated_rule": "%(senderName)s עדכן כלל חסימה התואם ל%(glob)s עבור %(reason)s",
+            "created_rule_users": "%(senderName)s יצר כלל החוסם משתמשים התואמים ל%(glob)s עבור %(reason)s",
+            "created_rule_rooms": "%(senderName)s יצר כלל החוסם חדרים התואמים ל%(glob)s עבור %(reason)s",
+            "created_rule_servers": "%(senderName)s יצר כלל החוסם שרתים התואמים ל%(glob)s עבור %(reason)s",
+            "created_rule": "%(senderName)s יצר כלל חסימה התואם ל%(glob)s עבור %(reason)s",
+            "changed_rule_users": "%(senderName)s שינה כלל אשר חסם משתמשים שתאמו ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
+            "changed_rule_rooms": "%(senderName)s שינה כלל אשר חסם חדרים התואמים ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
+            "changed_rule_servers": "%(senderName)sשינה כלל אשר חסם שרתים שתאמו ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
+            "changed_rule_glob": "%(senderName)s עדכן כלל חסימה אשר תאם ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s"
         }
     },
     "slash_command": {
@@ -2758,7 +2685,20 @@
         "category_admin": "אדמין",
         "category_advanced": "מתקדם",
         "category_effects": "אפקטים",
-        "category_other": "אחר"
+        "category_other": "אחר",
+        "addwidget_missing_url": "אנא ספקו כתובת של ווידג'ט או קוד הטמעה",
+        "addwidget_invalid_protocol": "אנא הוסיפו קישור לווידג'ט עם http:// או https://",
+        "addwidget_no_permissions": "אינכם יכולים לערוך ווידג'ט בחדר זה.",
+        "converttodm": "ממיר את החדר ל- DM",
+        "converttoroom": "המר את השיחה הפרטית לחדר",
+        "discardsession": "מאלץ להתעלם מהתקשורת היוצאת מהתחברות של קבוצה בחדר מוצפן",
+        "remakeolm": "פקודת מפתחים: מסלקת את הפגישה הנוכחית של הקבוצה היוצאת ומגדירה הפעלות חדשות של Olm",
+        "query": "פתח שיחה עם המשתמש הזה",
+        "query_not_found_phone_number": "לא ניתן למצוא מזהה משתמש למספר טלפון",
+        "holdcall": "שם את השיחה הנוכחית במצב המתנה",
+        "no_active_call": "אין שיחה פעילה בחדר זה",
+        "unholdcall": "מחזיר את השיחה הנוכחית ממצב המתנה",
+        "me": "הצג פעולה"
     },
     "presence": {
         "online_for": "מחובר %(duration)s",
@@ -2828,7 +2768,6 @@
         "unsupported": "שיחות לא נתמכות",
         "unsupported_browser": "לא ניתן לבצע שיחות בדפדפן זה."
     },
-    "Messages": "הודעות",
     "Other": "אחר",
     "Advanced": "מתקדם",
     "room_settings": {
@@ -2857,6 +2796,111 @@
             "ban": "חסימת משתמשים",
             "redact": "הסרת הודעות שנשלחו על ידי אחרים",
             "notifications.room": "התראה לכולם"
+        }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "הם לא זהים",
+            "sas_match": "הם זהים",
+            "in_person": "בכדי להיות מאובטח, עשו זאת ביחד או השתמשו בדרך בטוחה לתקשר.",
+            "other_party_cancelled": "הצד השני ביטל את האימות.",
+            "complete_title": "אומת!",
+            "complete_description": "המשתמש הזה אומת בהצלחה.",
+            "qr_prompt": "סרוק את הקוד הזה",
+            "sas_prompt": "השווה סמלים מסויימים",
+            "sas_description": "השווה קבוצה של סמלים אם אין ברשותכם מצלמה על שום מכשיר",
+            "qr_or_sas_header": "אמתו מכשיר זה על ידי מילוי אחת מהפעולות הבאות:"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "לעיתים קרובות בשימוש",
+        "category_smileys_people": "סמיילי ואנשים",
+        "category_animals_nature": "חיות וטבע",
+        "category_food_drink": "משקאות ומזון",
+        "category_activities": "פעילויות",
+        "category_travel_places": "טיולים ומקומות",
+        "category_objects": "עצמים",
+        "category_symbols": "סמלים",
+        "category_flags": "דגלים",
+        "categories": "נושאים",
+        "quick_reactions": "תגובות מהירות"
+    },
+    "analytics": {
+        "enable_prompt": "עזרו בשיפור %(analyticsOwner)s",
+        "consent_migration": "הסכמתם בעבר לשתף איתנו מידע אנונימי לגבי השימוש שלכם. אנחנו מעדכנים איך זה מתבצע.",
+        "learn_more": "שתף נתונים אנונימיים כדי לעזור לנו לזהות בעיות. ללא אישי. אין צדדים שלישיים. <LearnMoreLink>למידע נוסף</LearnMoreLink>"
+    },
+    "chat_effects": {
+        "confetti_description": "שולח הודעה זו ביחד עם קונפטי",
+        "confetti_message": "שלח קונפטי",
+        "fireworks_description": "שולח הודעה זו עם זיקוקים",
+        "fireworks_message": "שלח זיקוקים",
+        "rainfall_description": "שלח הודעה זו עם גשם נופל",
+        "rainfall_message": "שלח גשם נופל",
+        "snowfall_description": "שלח הודעה זו עם שלג נופל",
+        "snowfall_message": "שלח שלג נופל",
+        "spaceinvaders_description": "שולח את ההודעה הנתונה עם אפקט בנושא חלל",
+        "spaceinvaders_message": "שולח פולשים לחלל",
+        "hearts_message": "שולח לבבות"
+    },
+    "spaces": {
+        "error_no_permission_invite": "אין לכם הרשאה להזמין משתתפים אל מרחב עבודה זה",
+        "error_no_permission_create_room": "אין לכם הרשאה ליצור חדרים חדשים במרחב העבודה הנוכחי",
+        "error_no_permission_add_room": "אין לכם השאה להוסיף חדשרים למרחב העבודה הנוכחי",
+        "error_no_permission_add_space": "אין לכם הרשאה להוסיף מרחב עבודה אל מרחב העבודה הנוכחי"
+    },
+    "auth": {
+        "continue_with_idp": "המשך עם %(provider)s",
+        "sign_in_with_sso": "היכנס באמצעות כניסה יחידה",
+        "sso": "כניסה חד שלבית",
+        "continue_with_sso": "המשך עם %(ssoButtons)s",
+        "sso_or_username_password": "%(ssoButtons)s או %(usernamePassword)s",
+        "sign_in_instead": "כבר יש לכם חשבון? <a> היכנסו כאן </a>",
+        "account_clash": "החשבון החדש שלך (%(newAccountId)s) רשום, אך אתה כבר מחובר לחשבון אחר (%(loggedInUserId)s).",
+        "account_clash_previous_account": "המשך בחשבון הקודם",
+        "log_in_new_account": "<a> היכנס </a> לחשבונך החדש.",
+        "registration_successful": "ההרשמה בוצעה בהצלחה",
+        "server_picker_title": "חשבון מארח ב",
+        "server_picker_dialog_title": "החלט היכן מתארח חשבונך"
+    },
+    "room_list": {
+        "sort_unread_first": "הצג תחילה חדרים עם הודעות שלא נקראו",
+        "show_previews": "הצג תצוגה מקדימה של הודעות",
+        "sort_by": "סדר לפי",
+        "sort_by_activity": "פעילות",
+        "sort_by_alphabet": "א-ת",
+        "sublist_options": "רשימת אפשרויות",
+        "show_n_more": {
+            "one": "הצג עוד %(count)s",
+            "other": "הצג עוד %(count)s"
+        },
+        "show_less": "הצג פחות",
+        "notification_options": "אפשרויות התרעות"
+    },
+    "report_content": {
+        "missing_reason": "אנא מלאו מדוע אתם מדווחים.",
+        "report_content_to_homeserver": "דווח על תוכן למנהל שרת הבית שלך",
+        "description": "דיווח על הודעה זו ישלח את 'מזהה האירוע' הייחודי למנהל שרת הבית שלך. אם הודעות בחדר זה מוצפנות, מנהל שרת הבית שלך לא יוכל לקרוא את טקסט ההודעה או להציג קבצים או תמונות."
+    },
+    "onboarding": {
+        "has_avatar_label": "נהדר, זה יעזור לאנשים לדעת שזה אתה",
+        "no_avatar_label": "הוסף תמונה כדי שאנשים יידעו שאתה זה.",
+        "welcome_user": "ברוכים הבאים %(name)s",
+        "welcome_detail": "עכשיו, בואו נעזור לכם להתחיל",
+        "intro_welcome": "ברוכים הבאים אל %(appName)s",
+        "send_dm": "שלח הודעה ישירה",
+        "explore_rooms": "חקור חדרים ציבוריים",
+        "create_room": "צור צ'אט קבוצתי"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "גרסאת %(brand)s:",
+            "help_link": "בשביל לעזור בקידום ושימוש ב- %(brand)s, לחצו <a>כאן</a>.",
+            "help_link_chat_bot": "לעזרה בשימוש ב-%(brand)s לחץ על <a> כאן </a> או התחל צ'אט עם הבוט שלנו באמצעות הלחצן למטה.",
+            "chat_bot": "דבר עם הבוט של %(brand)s",
+            "title": "עזרה ואודות",
+            "versions": "גרסאות",
+            "clear_cache_reload": "נקה מטמון ואתחל"
         }
     }
 }

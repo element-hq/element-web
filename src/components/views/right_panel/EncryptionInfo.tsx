@@ -117,7 +117,7 @@ const EncryptionInfo: React.FC<IProps> = ({
                             "For extra security, verify this user by checking a one-time code on both of your devices.",
                         )}
                     </p>
-                    <p>{_t("To be secure, do this in person or use a trusted way to communicate.")}</p>
+                    <p>{_t("encryption|verification|in_person")}</p>
                     {content}
                 </div>
             </div>

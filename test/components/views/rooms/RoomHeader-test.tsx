@@ -56,7 +56,7 @@ describe("RoomHeader", () => {
     });
 
     afterEach(() => {
-        jest.resetAllMocks();
+        jest.restoreAllMocks();
     });
 
     it("renders the room header", () => {

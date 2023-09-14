@@ -50,7 +50,7 @@ const QRCode: React.FC<IProps> = ({ data, className, ...options }) => {
 
     return (
         <div className={classNames("mx_QRCode", className)}>
-            {dataUri ? <img src={dataUri} className="mx_VerificationQRCode" alt={_t("QR Code")} /> : <Spinner />}
+            {dataUri ? <img src={dataUri} className="mx_VerificationQRCode" alt={_t("common|qr_code")} /> : <Spinner />}
         </div>
     );
 };

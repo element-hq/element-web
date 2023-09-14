@@ -44,17 +44,14 @@
     "Andorra": "Andura",
     "Algeria": "Dzayer",
     "Albania": "Albanya",
-    "Calls": "Iɣuṛiten",
     "Afghanistan": "Afɣanistan",
     "Phone": "Atilifun",
     "Email": "Imayl",
     "Send": "Azen",
-    "Flags": "Icenyalen",
     "edited": "infel",
     "Copied!": "inɣel!",
     "Home": "Asnubeg",
     "Search…": "Arezzu…",
-    "A-Z": "A-Ẓ",
     "Re-join": "als-lkem",
     "%(duration)sd": "%(duration)sas",
     "None": "Walu",
@@ -140,7 +137,8 @@
         "escape": "Esc",
         "end": "End",
         "control": "Ctrl",
-        "shift": "Shift"
+        "shift": "Shift",
+        "category_calls": "Iɣuṛiten"
     },
     "timeline": {
         "m.image": "yuzen %(senderDisplayName)s yat twelaft."
@@ -151,9 +149,20 @@
         "category_actions": "Tugawin",
         "category_other": "Yaḍn"
     },
-    "Messages": "Tuzinin",
     "devtools": {
         "category_other": "Yaḍn"
     },
-    "Other": "Yaḍn"
+    "Other": "Yaḍn",
+    "emoji": {
+        "category_flags": "Icenyalen"
+    },
+    "labs": {
+        "group_profile": "Ifres"
+    },
+    "export_chat": {
+        "messages": "Tuzinin"
+    },
+    "room_list": {
+        "sort_by_alphabet": "A-Ẓ"
+    }
 }

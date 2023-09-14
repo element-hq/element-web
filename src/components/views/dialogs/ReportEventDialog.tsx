@@ -216,7 +216,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                 ((this.state.nature == Nature.Other || this.state.nature == NonStandardValue.Admin) && !reason)
             ) {
                 this.setState({
-                    err: _t("Please fill why you're reporting."),
+                    err: _t("report_content|missing_reason"),
                 });
                 return;
             }
@@ -225,7 +225,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             // We need a `reason`.
             if (!reason) {
                 this.setState({
-                    err: _t("Please fill why you're reporting."),
+                    err: _t("report_content|missing_reason"),
                 });
                 return;
             }
@@ -295,8 +295,8 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
         const ignoreUserCheckbox = (
             <LabelledCheckbox
                 value={this.state.ignoreUserToo}
-                label={_t("Ignore user")}
-                byline={_t("Check if you want to hide all current and future messages from this user.")}
+                label={_t("report_content|ignore_user")}
+                byline={_t("report_content|hide_messages_from_user")}
                 onChange={this.onIgnoreUserTooChanged}
                 disabled={this.state.busy}
             />
@@ -317,7 +317,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             let subtitle: string;
             switch (this.state.nature) {
                 case Nature.Disagreement:
-                    subtitle = _t("What this user is writing is wrong.\nThis will be reported to the room moderators.");
+                    subtitle = _t("report_content|nature_disagreement");
                     break;
                 case Nature.Toxic:
                     subtitle = _t(
@@ -353,7 +353,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                     );
                     break;
                 default:
-                    subtitle = _t("Please pick a nature and describe what makes this message abusive.");
+                    subtitle = _t("report_content|nature");
                     break;
             }
 
@@ -371,7 +371,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == Nature.Disagreement}
                             onChange={this.onNatureChosen}
                         >
-                            {_t("Disagree")}
+                            {_t("report_content|disagree")}
                         </StyledRadioButton>
                         <StyledRadioButton
                             name="nature"
@@ -379,7 +379,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == Nature.Toxic}
                             onChange={this.onNatureChosen}
                         >
-                            {_t("Toxic Behaviour")}
+                            {_t("report_content|toxic_behaviour")}
                         </StyledRadioButton>
                         <StyledRadioButton
                             name="nature"
@@ -387,7 +387,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == Nature.Illegal}
                             onChange={this.onNatureChosen}
                         >
-                            {_t("Illegal Content")}
+                            {_t("report_content|illegal_content")}
                         </StyledRadioButton>
                         <StyledRadioButton
                             name="nature"
@@ -395,7 +395,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == Nature.Spam}
                             onChange={this.onNatureChosen}
                         >
-                            {_t("Spam or propaganda")}
+                            {_t("report_content|spam_or_propaganda")}
                         </StyledRadioButton>
                         <StyledRadioButton
                             name="nature"
@@ -403,7 +403,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == NonStandardValue.Admin}
                             onChange={this.onNatureChosen}
                         >
-                            {_t("Report the entire room")}
+                            {_t("report_content|report_entire_room")}
                         </StyledRadioButton>
                         <StyledRadioButton
                             name="nature"
@@ -443,7 +443,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             <BaseDialog
                 className="mx_ReportEventDialog"
                 onFinished={this.props.onFinished}
-                title={_t("Report Content to Your Homeserver Administrator")}
+                title={_t("report_content|report_content_to_homeserver")}
                 contentId="mx_ReportEventDialog"
             >
                 <div className="mx_ReportEventDialog" id="mx_ReportEventDialog">

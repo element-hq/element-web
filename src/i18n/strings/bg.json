@@ -67,8 +67,6 @@
     "You are no longer ignoring %(userId)s": "Вече не игнорирате %(userId)s",
     "Verified key": "Потвърден ключ",
     "Reason": "Причина",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s от %(fromPowerLevel)s на %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s смени нивото на достъп на %(powerLevelDiffText)s.",
     "Failure to create room": "Неуспешно създаване на стая",
     "Server may be unavailable, overloaded, or you hit a bug.": "Сървърът може би е претоварен, недостъпен или се натъкнахте на проблем.",
     "Your browser does not support the required cryptography extensions": "Вашият браузър не поддържа необходимите разширения за шифроване",
@@ -173,87 +171,6 @@
     "Delete widget": "Изтрий приспособлението",
     "Create new room": "Създай нова стая",
     "Home": "Начална страница",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)sсе присъединиха %(count)s пъти",
-        "one": "%(severalUsers)sсе присъединиха"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)sсе присъедини %(count)s пъти",
-        "one": "%(oneUser)sсе присъедини"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)sнапуснаха %(count)s пъти",
-        "one": "%(severalUsers)sнапуснаха"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)sнапусна %(count)s пъти",
-        "one": "%(oneUser)sнапусна"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)sсе присъединиха и напуснаха %(count)s пъти",
-        "one": "%(severalUsers)sсе присъединиха и напуснаха"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)sсе присъедини и напусна %(count)s пъти",
-        "one": "%(oneUser)sсе присъедини и напусна"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)sнапуснаха и се присъединиха отново %(count)s пъти",
-        "one": "%(severalUsers)sнапуснаха и се присъединиха отново"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)sнапусна и се присъедини отново %(count)s пъти",
-        "one": "%(oneUser)sнапусна и се присъедини отново"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)sотхвърлиха своите покани %(count)s пъти",
-        "one": "%(severalUsers)sотхвърлиха своите покани"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)sотхвърли своята покана %(count)s пъти",
-        "one": "%(oneUser)sотхвърли своята покана"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)sоттеглиха своите покани %(count)s пъти",
-        "one": "%(severalUsers)sоттеглиха своите покани"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)sоттегли своята покана %(count)s пъти",
-        "one": "%(oneUser)sоттегли своята покана"
-    },
-    "were invited %(count)s times": {
-        "other": "бяха поканени %(count)s пъти",
-        "one": "бяха поканени"
-    },
-    "was invited %(count)s times": {
-        "other": "беше поканен %(count)s пъти",
-        "one": "беше поканен"
-    },
-    "were banned %(count)s times": {
-        "other": "бяха блокирани %(count)s пъти",
-        "one": "бяха блокирани"
-    },
-    "was banned %(count)s times": {
-        "other": "беше блокиран %(count)s пъти",
-        "one": "беше блокиран"
-    },
-    "were unbanned %(count)s times": {
-        "other": "бяха отблокирани %(count)s пъти",
-        "one": "бяха отблокирани"
-    },
-    "was unbanned %(count)s times": {
-        "other": "беше отблокиран %(count)s пъти",
-        "one": "беше отблокиран"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)sсмениха своето име %(count)s пъти",
-        "one": "%(severalUsers)sсмениха своето име"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)sсмени своето име %(count)s пъти",
-        "one": "%(oneUser)sсмени своето име"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s и %(count)s други",
         "one": "%(items)s и още един"
@@ -319,7 +236,6 @@
     "Email": "Имейл",
     "Profile": "Профил",
     "Account": "Акаунт",
-    "%(brand)s version:": "Версия на %(brand)s:",
     "The email address linked to your account must be entered.": "Имейл адресът, свързан с профила Ви, трябва да бъде въведен.",
     "A new password must be entered.": "Трябва да бъде въведена нова парола.",
     "New passwords must match each other.": "Новите пароли трябва да съвпадат една с друга.",
@@ -328,7 +244,6 @@
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Моля, обърнете внимание, че влизате в %(hs)s сървър, а не в matrix.org.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Не е възможно свързване към Home сървъра чрез HTTP, когато има HTTPS адрес в лентата на браузъра Ви. Или използвайте HTTPS или <a>включете функция небезопасни скриптове</a>.",
     "This server does not support authentication with a phone number.": "Този сървър не поддържа автентикация с телефонен номер.",
-    "Displays action": "Показва действие",
     "Define the power level of a user": "Променя нивото на достъп на потребителя",
     "Deops user with given id": "Отнема правата на потребител с даден идентификатор",
     "Commands": "Команди",
@@ -378,7 +293,6 @@
     "You cannot delete this message. (%(code)s)": "Това съобщение не може да бъде изтрито. (%(code)s)",
     "Thursday": "Четвъртък",
     "Logs sent": "Логовете са изпратени",
-    "Show message in desktop notification": "Показване на съдържание в известията на работния плот",
     "Yesterday": "Вчера",
     "Error encountered (%(errorDetail)s).": "Възникна грешка (%(errorDetail)s).",
     "Low Priority": "Нисък приоритет",
@@ -436,7 +350,6 @@
     "Failed to upgrade room": "Неуспешно обновяване на стаята",
     "The room upgrade could not be completed": "Обновяването на тази стая не можа да бъде завършено",
     "Upgrade this room to version %(version)s": "Обновете тази стая до версия %(version)s",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Принудително прекратява текущата изходяща групова сесия в шифрована стая",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Преди да изпратите логове, трябва да <a>отворите доклад за проблем в Github</a>.",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s вече използва 3-5 пъти по-малко памет, като зарежда информация за потребители само когато е нужна. Моля, изчакайте докато ресинхронизираме със сървъра!",
     "Updating %(brand)s": "Обновяване на %(brand)s",
@@ -489,7 +402,6 @@
     "Invalid identity server discovery response": "Невалиден отговор по време на откриването на конфигурацията за сървъра за самоличност",
     "General failure": "Обща грешка",
     "Failed to perform homeserver discovery": "Неуспешно откриване на конфигурацията за сървъра",
-    "Sign in with single sign-on": "Влезте посредством single-sign-on",
     "That matches!": "Това съвпада!",
     "That doesn't match.": "Това не съвпада.",
     "Go back to set it again.": "Върнете се за да настройте нова.",
@@ -506,9 +418,6 @@
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Не бяга открити профили за изброените по-долу Matrix идентификатори. Желаете ли да ги поканите въпреки това?",
     "Invite anyway and never warn me again": "Покани въпреки това и не питай отново",
     "Invite anyway": "Покани въпреки това",
-    "The other party cancelled the verification.": "Другата страна прекрати потвърждението.",
-    "Verified!": "Потвърдено!",
-    "You've successfully verified this user.": "Успешно потвърдихте този потребител.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Защитените съобщения с този потребител са шифровани от край-до-край и не могат да бъдат прочетени от други.",
     "Got It": "Разбрах",
     "Verify this user by confirming the following number appears on their screen.": "Потвърдете този потребител като се уверите, че следното число се вижда на екрана му.",
@@ -529,11 +438,6 @@
     "Phone numbers": "Телефонни номера",
     "Language and region": "Език и регион",
     "Account management": "Управление на акаунта",
-    "For help with using %(brand)s, click <a>here</a>.": "За помощ при използването на %(brand)s, кликнете <a>тук</a>.",
-    "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "За помощ при използването на %(brand)s, кликнете <a>тук</a> или започнете чат с бота ни използвайки бутона по-долу.",
-    "Chat with %(brand)s Bot": "Чати с %(brand)s Bot",
-    "Help & About": "Помощ и относно",
-    "Versions": "Версии",
     "Composer": "Въвеждане на съобщения",
     "Room list": "Списък със стаи",
     "Autocomplete delay (ms)": "Забавяне преди подсказки (милисекунди)",
@@ -654,8 +558,6 @@
     "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Веднъж включено, шифроването за стаята не може да бъде изключено. Съобщенията изпратени в шифрована стая не могат да бъдат прочетени от сървърът, а само от участниците в стаята. Включването на шифроване може да попречи на много ботове или мостове към други мрежи да работят правилно. <a>Научете повече за шифроването.</a>",
     "Power level": "Ниво на достъп",
     "The file '%(fileName)s' failed to upload.": "Файлът '%(fileName)s' не можа да бъде качен.",
-    "Please supply a https:// or http:// widget URL": "Моля, укажете https:// или http:// адрес на приспособление",
-    "You cannot modify widgets in this room.": "Не можете да модифицирате приспособления в тази стая.",
     "Upgrade this room to the recommended room version": "Обнови тази стая до препоръчаната версия на стаята",
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Тази стая използва версия на стая <roomVersion />, която сървърът счита за <i>нестабилна</i>.",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Обновяването на тази стая ще изключи текущата стая и ще създаде обновена стая със същото име.",
@@ -744,22 +646,10 @@
     "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Може да влезете в профила си, но някои функции няма да са достъпни докато сървъра за самоличност е офлайн. Ако продължавате да виждате това предупреждение, проверете конфигурацията или се свържете с администратора на сървъра.",
     "Unexpected error resolving identity server configuration": "Неочаквана грешка при откриване на конфигурацията на сървъра за самоличност",
     "Use lowercase letters, numbers, dashes and underscores only": "Използвайте само малки букви, цифри, тирета и подчерта",
-    "<a>Log in</a> to your new account.": "<a>Влезте</a> в новия си профил.",
-    "Registration Successful": "Успешна регистрация",
     "Upload all": "Качи всички",
-    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Новият ви профил (%(newAccountId)s) е регистриран, но вече сте влезли с друг профил (%(loggedInUserId)s).",
-    "Continue with previous account": "Продължи с предишния профил",
     "Edited at %(date)s. Click to view edits.": "Редактирано на %(date)s. Кликнете за да видите редакциите.",
     "Message edits": "Редакции на съобщение",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Обновяването на тази стая изисква затварянето на текущата и създаване на нова на нейно място. За да е най-удобно за членовете на стаята, ще:",
-    "%(severalUsers)smade no changes %(count)s times": {
-        "other": "%(severalUsers)sне направиха промени %(count)s пъти",
-        "one": "%(severalUsers)sне направиха промени"
-    },
-    "%(oneUser)smade no changes %(count)s times": {
-        "other": "%(oneUser)sне направи промени %(count)s пъти",
-        "one": "%(oneUser)sне направи промени"
-    },
     "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.": "Моля, кажете ни какво се обърка, или още по-добре - създайте проблем в GitHub обясняващ ситуацията.",
     "Removing…": "Премахване…",
     "Clear all data": "Изчисти всички данни",
@@ -844,9 +734,6 @@
     },
     "Remove recent messages": "Премахни скорошни съобщения",
     "Italics": "Наклонено",
-    "Please fill why you're reporting.": "Въведете защо докладвате.",
-    "Report Content to Your Homeserver Administrator": "Докладвай съдържание до администратора на сървъра",
-    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Докладването на съобщението ще изпрати уникалният номер на събитието (event ID) до администратора на сървъра. Ако съобщенията в стаята са шифровани, администратора няма да може да прочете текста им или да види снимките или файловете.",
     "Explore rooms": "Открий стаи",
     "Verify the link in your inbox": "Потвърдете линка във вашата пощенска кутия",
     "Read Marker lifetime (ms)": "Живот на маркера за прочитане (мсек)",
@@ -865,36 +752,15 @@
     "check your browser plugins for anything that might block the identity server (such as Privacy Badger)": "проверите браузър добавките за всичко, което може да блокира връзката със сървъра за самоличност (например Privacy Badger)",
     "contact the administrators of identity server <idserver />": "се свържете с администратора на сървъра за самоличност <idserver />",
     "wait and try again later": "изчакате и опитате пак",
-    "Clear cache and reload": "Изчисти кеша и презареди",
     "Your email address hasn't been verified yet": "Имейл адресът ви все още не е потвърден",
     "Click the link in the email you received to verify and then click continue again.": "Кликнете на връзката получена по имейл за да потвърдите, а след това натиснете продължи отново.",
     "Room %(name)s": "Стая %(name)s",
-    "%(count)s unread messages including mentions.": {
-        "other": "%(count)s непрочетени съобщения, включително споменавания.",
-        "one": "1 непрочетено споменаване."
-    },
-    "%(count)s unread messages.": {
-        "other": "%(count)s непрочетени съобщения.",
-        "one": "1 непрочетено съобщение."
-    },
-    "Unread messages.": "Непрочетени съобщения.",
     "Failed to deactivate user": "Неуспешно деактивиране на потребител",
     "This client does not support end-to-end encryption.": "Този клиент не поддържа шифроване от край до край.",
     "Messages in this room are not end-to-end encrypted.": "Съобщенията в тази стая не са шифровани от край до край.",
     "Message Actions": "Действия със съобщението",
     "Show image": "Покажи снимката",
-    "Frequently Used": "Често използвани",
-    "Smileys & People": "Усмивки и хора",
-    "Animals & Nature": "Животни и природа",
-    "Food & Drink": "Храна и напитки",
-    "Activities": "Действия",
-    "Travel & Places": "Пътуване и места",
-    "Objects": "Обекти",
-    "Symbols": "Символи",
-    "Flags": "Знамена",
-    "Quick Reactions": "Бързи реакции",
     "Cancel search": "Отмени търсенето",
-    "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.": "Моля, <newIssueLink>отворете нов проблем</newIssueLink> в GitHub за да проучим проблема.",
     "To continue you need to accept the terms of this service.": "За да продължите, трябва да приемете условията за ползване.",
     "Document": "Документ",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Липсва публичния ключ за catcha в конфигурацията на сървъра. Съобщете това на администратора на сървъра.",
@@ -916,30 +782,12 @@
     "%(name)s cancelled": "%(name)s отказа",
     "%(name)s wants to verify": "%(name)s иска да извърши потвърждение",
     "You sent a verification request": "Изпратихте заявка за потвърждение",
-    "Match system theme": "Напасване със системната тема",
     "My Ban List": "Моя списък с блокирания",
     "This is your list of users/servers you have blocked - don't leave the room!": "Това е списък с хора/сървъри, които сте блокирали - не напускайте стаята!",
     "Cannot connect to integration manager": "Неуспешна връзка с мениджъра на интеграции",
     "The integration manager is offline or it cannot reach your homeserver.": "Мениджъра на интеграции е офлайн или не може да се свърже със сървъра ви.",
     "Error upgrading room": "Грешка при обновяване на стаята",
     "Double check that your server supports the room version chosen and try again.": "Проверете дали сървъра поддържа тази версия на стаята и опитайте пак.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s премахна правилото блокиращо достъпа на потребители отговарящи на %(glob)s",
-    "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s премахна правилото блокиращо достъпа до стаи отговарящи на %(glob)s",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s премахна правилото блокиращо достъпа до сървъри отговарящи на %(glob)s",
-    "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s премахна правилото блокиращо достъпа неща отговарящи на %(glob)s",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s промени невалидно правило за блокиране",
-    "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s промени правилото блокиращо достъпа на потребители отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s промени правилото блокиращо достъпа до стаи отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s промени правилото блокиращо достъпа до сървъри отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "%(senderName)s промени правило блокиращо достъпа неща отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s създаде правило блокиращо достъпа на потребители отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s създаде правило блокиращо достъпа до стаи отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s създаде правило блокиращо достъпа до сървъри отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s created a ban rule matching %(glob)s for %(reason)s": "%(senderName)s създаде правило блокиращо достъпа до неща отговарящи на %(glob)s поради %(reason)s",
-    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s промени правило блокиращо достъпа на потребители отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
-    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s промени правило блокиращо достъпа до стаи отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
-    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s промени правило блокиращо достъпа до сървъри отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s промени правило блокиращо достъпа до неща отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
     "Cross-signing public keys:": "Публични ключове за кръстосано-подписване:",
     "not found": "не са намерени",
     "Cross-signing private keys:": "Private ключове за кръстосано подписване:",
@@ -1017,7 +865,6 @@
     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Следните потребители не съществуват или са невалидни и не могат да бъдат поканени: %(csvNames)s",
     "Use Single Sign On to continue": "Използвайте Single Sign On за да продължите",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Потвърдете добавянето на този имейл адрес като потвърдите идентичността си чрез Single Sign On.",
-    "Single Sign On": "Single Sign On",
     "Confirm adding email": "Потвърдете добавянето на имейл",
     "Click the button below to confirm adding this email address.": "Кликнете бутона по-долу за да потвърдите добавянето на имейл адреса.",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Потвърдете добавянето на този телефонен номер като докажете идентичността си чрез използване на Single Sign On.",
@@ -1034,14 +881,6 @@
     "Session already verified!": "Сесията вече е потвърдена!",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ВНИМАНИЕ: ПОТВЪРЖДАВАНЕТО НА КЛЮЧОВЕТЕ Е НЕУСПЕШНО! Подписващия ключ за %(userId)s и сесия %(deviceId)s е \"%(fprint)s\", което не съвпада с предоставения ключ \"%(fingerprint)s\". Това може би означава, че комуникацията ви бива прихваната!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Предоставения от вас ключ за подписване съвпада с ключа за подписване получен от сесия %(deviceId)s на %(userId)s. Сесията е маркирана като потвърдена.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s добави алтернативните адреси %(addresses)s към стаята.",
-        "one": "%(senderName)s добави алтернативният адрес %(addresses)s към стаята."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s премахна алтернативните адреси %(addresses)s от стаята.",
-        "one": "%(senderName)s премахна алтернативният адрес %(addresses)s от стаята."
-    },
     "Not Trusted": "Недоверено",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) влезе в нова сесия без да я потвърди:",
     "Ask this user to verify their session, or manually verify it below.": "Поискайте от този потребител да потвърди сесията си, или я потвърдете ръчно по-долу.",
@@ -1053,20 +892,12 @@
     "New login. Was this you?": "Нов вход. Вие ли бяхте това?",
     "%(name)s is requesting verification": "%(name)s изпрати запитване за верификация",
     "Could not find user in room": "Неуспешно намиране на потребител в стаята",
-    "Please supply a widget URL or embed code": "Укажете URL адрес на приспособление или код за вграждане",
-    "Scan this unique code": "Сканирайте този уникален код",
-    "Compare unique emoji": "Сравнете уникални емоджи",
-    "Compare a unique set of emoji if you don't have a camera on either device": "Сравнете уникални емоджи, ако нямате камера на някое от устройствата",
     "Waiting for %(displayName)s to verify…": "Изчакване на %(displayName)s да потвърди…",
     "Cancelling…": "Отказване…",
-    "They match": "Съвпадат",
-    "They don't match": "Не съвпадат",
-    "To be secure, do this in person or use a trusted way to communicate.": "За да е по-сигурно, направете го на живо или използвайте доверен начин за комуникация.",
     "Lock": "Заключи",
     "Later": "По-късно",
     "Other users may not trust it": "Други потребители може да не се доверят",
     "This bridge was provisioned by <user />.": "Мостът е настроен от <user />.",
-    "Show less": "Покажи по-малко",
     "Your homeserver does not support cross-signing.": "Сървърът ви не поддържа кръстосано-подписване.",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Профилът ви има самоличност за кръстосано подписване в секретно складиране, но все още не е доверено от тази сесия.",
     "well formed": "коректен",
@@ -1086,13 +917,6 @@
     "Connect this session to Key Backup": "Свържи тази сесия с резервно копие на ключовете",
     "This backup is trusted because it has been restored on this session": "Това резервно копие е доверено, защото е било възстановено в текущата сесия",
     "Your keys are <b>not being backed up from this session</b>.": "На ключовете ви <b>не се прави резервно копие от тази сесия</b>.",
-    "Enable desktop notifications for this session": "Включи уведомления на работния плот за тази сесия",
-    "Enable audible notifications for this session": "Включи звукови уведомления за тази сесия",
-    "Invalid theme schema.": "Невалиден формат на темата.",
-    "Error downloading theme information.": "Неуспешно изтегляне на информацията за темата.",
-    "Theme added!": "Темата беше добавена!",
-    "Custom theme URL": "Собствен URL адрес на тема",
-    "Add theme": "Добави тема",
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "За да съобщените за проблем със сигурността свързан с Matrix, прочетете <a>Политиката за споделяне на проблеми със сигурността</a> на Matrix.org.",
     "Session ID:": "Сесиен идентификатор:",
     "Session key:": "Сесиен ключ:",
@@ -1190,14 +1014,11 @@
     "Something went wrong trying to invite the users.": "Нещо се обърка при опита да бъдат поканени потребителите.",
     "We couldn't invite those users. Please check the users you want to invite and try again.": "Не можахме да поканим тези потребители. Проверете потребителите, които искате да поканите и опитайте пак.",
     "Recently Direct Messaged": "Скорошни директни чатове",
-    "Opens chat with the given user": "Отваря чат с дадения потребител",
-    "Font size": "Размер на шрифта",
     "IRC display name width": "Ширина на IRC името",
     "Size must be a number": "Размера трябва да е число",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Собствения размер на шрифта може да бъде единствено между %(min)s pt и %(max)s pt",
     "Use between %(min)s pt and %(max)s pt": "Изберете между %(min)s pt и %(max)s pt",
     "You've successfully verified your device!": "Успешно потвърдихте устройството си!",
-    "QR Code": "QR код",
     "To continue, use Single Sign On to prove your identity.": "За да продължите, използвайте Single Sign On за да потвърдите самоличността си.",
     "Confirm to continue": "Потвърдете за да продължите",
     "Click the button below to confirm your identity.": "Кликнете бутона по-долу за да потвърдите самоличността си.",
@@ -1228,7 +1049,6 @@
     "You don't have permission to delete the address.": "Нямате права да изтриете адреса.",
     "There was an error removing that address. It may no longer exist or a temporary error occurred.": "Възникна грешка при премахването на този адрес. Или не съществува вече или е временен проблем.",
     "Error removing address": "Грешка при премахването на адреса",
-    "Categories": "Категории",
     "Room address": "Адрес на стаята",
     "This address is available to use": "Адресът е наличен за ползване",
     "This address is already in use": "Адресът вече се използва",
@@ -1239,10 +1059,6 @@
     "Successfully restored %(sessionCount)s keys": "Успешно бяха възстановени %(sessionCount)s ключа",
     "Confirm your identity by entering your account password below.": "Потвърдете самоличността си чрез въвеждане на паролата за профила по-долу.",
     "Sign in with SSO": "Влезте със SSO",
-    "Welcome to %(appName)s": "Добре дошли в %(appName)s",
-    "Send a Direct Message": "Изпрати директно съобщение",
-    "Explore Public Rooms": "Разгледай публичните стаи",
-    "Create a Group Chat": "Създай групов чат",
     "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "Администраторът на сървъра е изключил шифроване от край-до-край по подразбиране за лични стаи и за директни съобщения.",
     "Switch to light mode": "Смени на светъл режим",
     "Switch to dark mode": "Смени на тъмен режим",
@@ -1271,45 +1087,11 @@
     "Indexed rooms:": "Индексирани стаи:",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s от %(totalRooms)s",
     "Message downloading sleep time(ms)": "Период на пауза между свалянията на съобщения (ms)",
-    "Navigation": "Навигация",
-    "Calls": "Обаждания",
-    "Room List": "Списък със стаи",
-    "Autocomplete": "Подсказване",
-    "Toggle Bold": "Превключи удебеляването",
-    "Toggle Italics": "Превключи накланянето",
-    "Toggle Quote": "Превключи цитирането",
-    "New line": "Нов ред",
-    "Cancel replying to a message": "Отказване на отговарянето на съобщение",
-    "Toggle microphone mute": "Превключване на заглушаването на микрофона",
-    "Dismiss read marker and jump to bottom": "Игнориране на маркера за прочитане и отиване най-долу",
-    "Jump to oldest unread message": "Прескачане до най-старото непрочетено съобщение",
-    "Upload a file": "Качване на файл",
-    "Jump to room search": "Търсене на стаи",
-    "Select room from the room list": "Избор на стая от списъка",
-    "Collapse room list section": "Свиване на раздел със стаи",
-    "Expand room list section": "Разширение на раздел със стаи",
-    "Toggle the top left menu": "Превключва основното меню (горе в ляво)",
-    "Close dialog or context menu": "Затваряне на прозорец или контекстно меню",
-    "Activate selected button": "Активиране на избрания бутон",
-    "Toggle right panel": "Превключване на десния панел",
-    "Cancel autocomplete": "Отказване на подсказките",
     "No recently visited rooms": "Няма наскоро-посетени стаи",
-    "Sort by": "Подреди по",
-    "Activity": "Активност",
-    "A-Z": "Азбучен ред",
-    "Show %(count)s more": {
-        "other": "Покажи още %(count)s",
-        "one": "Покажи още %(count)s"
-    },
     "Use custom size": "Използвай собствен размер",
-    "Use a system font": "Използвай системния шрифт",
-    "System font name": "Име на системния шрифт",
     "Hey you. You're the best!": "Хей, ти. Върхът си!",
-    "Customise your appearance": "Настройте изгледа",
-    "Appearance Settings only affect this %(brand)s session.": "Настройките на изгледа влияят само на тази %(brand)s сесия.",
     "The authenticity of this encrypted message can't be guaranteed on this device.": "Автентичността на това шифровано съобщение не може да бъде гарантирана на това устройство.",
     "Message preview": "Преглед на съобщението",
-    "List options": "Опции на списъка",
     "Room options": "Настройки на стаята",
     "Safeguard against losing access to encrypted messages & data": "Защитете се срещу загуба на достъп до криптирани съобшения и информация",
     "Set up Secure Backup": "Конфигуриране на Защитен Архив",
@@ -1385,13 +1167,9 @@
     },
     "Favourited": "В любими",
     "Forget Room": "Забрави стаята",
-    "Notification options": "Настройки за уведомление",
-    "Show previews of messages": "Показвай преглед на съобщенията",
-    "Show rooms with unread messages first": "Показвай стаи с непрочетени съобщения първи",
     "Explore public rooms": "Прегледай публични стаи",
     "Show Widgets": "Покажи приспособленията",
     "Hide Widgets": "Скрий приспособленията",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Настройте името на шрифт инсталиран в системата и %(brand)s ще се опита да го използва.",
     "not ready": "не е готово",
     "ready": "готово",
     "Secret storage:": "Секретно складиране:",
@@ -1420,31 +1198,18 @@
     "Enter a Security Phrase": "Въведете фраза за сигурност",
     "Generate a Security Key": "Генерирай ключ за сигурност",
     "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.": "Предпазете се от загуба на достъп до шифрованите съобщения и данни като направите резервно копие на ключовете за шифроване върху сървъра.",
-    "Now, let's help you get started": "Нека ви помогнем да започнете",
-    "Welcome %(name)s": "Добре дошли, %(name)s",
-    "Add a photo so people know it's you.": "Добавете снимка, за да може другите хора да знаят, че сте вие.",
-    "Great, that'll help people know it's you": "Чудесно, това ще позволи на хората да знаят, че сте вие",
     "Attach files from chat or just drag and drop them anywhere in a room.": "Прикачете файлове от чата или ги издърпайте и пуснете в стаята.",
     "No files visible in this room": "Няма видими файлове в тази стая",
-    "Search (must be enabled)": "Търсене (трябва да е включено)",
-    "Go to Home View": "Отиване на начален изглед",
     "%(creator)s created this DM.": "%(creator)s създаде този директен чат.",
     "You have no visible notifications.": "Нямате видими уведомления.",
     "Got an account? <a>Sign in</a>": "Имате профил? <a>Влезте от тук</a>",
     "New here? <a>Create an account</a>": "Вие сте нов тук? <a>Създайте профил</a>",
     "There was a problem communicating with the homeserver, please try again later.": "Възникна проблем при комуникацията със Home сървъра, моля опитайте отново по-късно.",
     "New? <a>Create account</a>": "Вие сте нов? <a>Създайте профил</a>",
-    "Continue with %(ssoButtons)s": "Продължаване с %(ssoButtons)s",
-    "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)s Или %(usernamePassword)s",
-    "Already have an account? <a>Sign in here</a>": "Вече имате профил? <a>Влезте от тук</a>",
     "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "Тази сесия откри, че вашата фраза за сигурност и ключ за защитени съобщения бяха премахнати.",
     "A new Security Phrase and key for Secure Messages have been detected.": "Новa фраза за сигурност и ключ за защитени съобщения бяха открити.",
     "Great! This Security Phrase looks strong enough.": "Чудесно! Тази фраза за сигурност изглежда достатъчно силна.",
     "Confirm your Security Phrase": "Потвърдете вашата фраза за сигурност",
-    "Converts the DM to a room": "Превръща директния чат в стая",
-    "Converts the room to a DM": "Превръща стаята в директен чат",
-    "Takes the call in the current room off hold": "Възстановява повикването в текущата стая",
-    "Places the call in the current room on hold": "Задържа повикването в текущата стая",
     "We couldn't log you in": "Не можахме да ви впишем",
     "You've reached the maximum number of simultaneous calls.": "Достигнахте максималният брой едновременни повиквания.",
     "Anguilla": "Ангила",
@@ -1715,12 +1480,6 @@
     "Your private space": "Вашето лично пространство",
     "You can change these anytime.": "Можете да ги промените по всяко време.",
     "unknown person": "",
-    "sends snowfall": "изпраща снеговалеж",
-    "Sends the given message with snowfall": "Изпраща даденото съобщение със снеговалеж",
-    "Sends the given message with fireworks": "Изпраща даденото съобщение с фойерверки",
-    "sends fireworks": "изпраща фойерверки",
-    "sends confetti": "изпраща конфети",
-    "Sends the given message with confetti": "Изпраща даденото съобщение с конфети",
     "Spaces": "Пространства",
     "%(deviceId)s from %(ip)s": "%(deviceId)s от %(ip)s",
     "Use app for a better experience": "Използвайте приложението за по-добра работа",
@@ -1730,13 +1489,11 @@
     "Invite to %(spaceName)s": "Покани в %(spaceName)s",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Помолихме браузъра да запомни кой Home сървър използвате за влизане, но за съжаление браузърът ви го е забравил. Отидете на страницата за влизане и опитайте отново.",
     "Too Many Calls": "Твърде много повиквания",
-    "Integration manager": "Мениджър на интеграции",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Вашият %(brand)s не позволява да използвате мениджъра на интеграции за да направите това. Свържете се с администратор.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Използването на това приспособление може да сподели данни <helpIcon /> с %(widgetDomain)s и с мениджъра на интеграции.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Мениджърът на интеграции получава конфигурационни данни, може да модифицира приспособления, да изпраща покани за стаи и да настройва нива на достъп от ваше име.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Използвай мениджър на интеграции за управление на ботове, приспособления и стикери.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Използвай мениджър на интеграции <b>%(serverName)s</b> за управление на ботове, приспособления и стикери.",
-    "Identity server": "Сървър за самоличност",
     "Identity server (%(server)s)": "Сървър за самоличност (%(server)s)",
     "Could not connect to identity server": "Неуспешна връзка със сървъра за самоличност",
     "Not a valid identity server (status code %(code)s)": "Невалиден сървър за самоличност (статус код %(code)s)",
@@ -1821,7 +1578,10 @@
         "stickerpack": "Пакет със стикери",
         "system_alerts": "Системни уведомления",
         "secure_backup": "Защитено резервно копие",
-        "cross_signing": "Кръстосано-подписване"
+        "cross_signing": "Кръстосано-подписване",
+        "identity_server": "Сървър за самоличност",
+        "integration_manager": "Мениджър на интеграции",
+        "qr_code": "QR код"
     },
     "action": {
         "continue": "Продължи",
@@ -1902,14 +1662,29 @@
         "send_report": "Изпрати доклад"
     },
     "a11y": {
-        "user_menu": "Потребителско меню"
+        "user_menu": "Потребителско меню",
+        "n_unread_messages_mentions": {
+            "other": "%(count)s непрочетени съобщения, включително споменавания.",
+            "one": "1 непрочетено споменаване."
+        },
+        "n_unread_messages": {
+            "other": "%(count)s непрочетени съобщения.",
+            "one": "1 непрочетено съобщение."
+        },
+        "unread_messages": "Непрочетени съобщения."
     },
     "labs": {
         "pinning": "Функция за закачане на съобщения",
         "state_counters": "Визуализирай прости броячи в заглавието на стаята",
         "custom_themes": "Включи поддръжка за добавяне на собствени теми",
         "dehydration": "Офлайн шифровани съобщения чрез използването на дехидратирани устройства",
-        "bridge_state": "Показвай информация за връзки с други мрежи в настройките на стаята"
+        "bridge_state": "Показвай информация за връзки с други мрежи в настройките на стаята",
+        "group_profile": "Профил",
+        "group_spaces": "Пространства",
+        "group_widgets": "Приспособления",
+        "group_rooms": "Стаи",
+        "group_voip": "Глас и видео",
+        "group_encryption": "Шифроване"
     },
     "keyboard": {
         "home": "Начална страница",
@@ -1921,7 +1696,31 @@
         "end": "End",
         "alt": "Alt",
         "control": "Ctrl",
-        "shift": "Shift"
+        "shift": "Shift",
+        "category_calls": "Обаждания",
+        "category_room_list": "Списък със стаи",
+        "category_navigation": "Навигация",
+        "category_autocomplete": "Подсказване",
+        "composer_toggle_bold": "Превключи удебеляването",
+        "composer_toggle_italics": "Превключи накланянето",
+        "composer_toggle_quote": "Превключи цитирането",
+        "cancel_reply": "Отказване на отговарянето на съобщение",
+        "toggle_microphone_mute": "Превключване на заглушаването на микрофона",
+        "dismiss_read_marker_and_jump_bottom": "Игнориране на маркера за прочитане и отиване най-долу",
+        "jump_to_read_marker": "Прескачане до най-старото непрочетено съобщение",
+        "upload_file": "Качване на файл",
+        "jump_room_search": "Търсене на стаи",
+        "room_list_select_room": "Избор на стая от списъка",
+        "room_list_collapse_section": "Свиване на раздел със стаи",
+        "room_list_expand_section": "Разширение на раздел със стаи",
+        "toggle_top_left_menu": "Превключва основното меню (горе в ляво)",
+        "toggle_right_panel": "Превключване на десния панел",
+        "go_home_view": "Отиване на начален изглед",
+        "autocomplete_cancel": "Отказване на подсказките",
+        "close_dialog_menu": "Затваряне на прозорец или контекстно меню",
+        "activate_button": "Активиране на избрания бутон",
+        "composer_new_line": "Нов ред",
+        "search": "Търсене (трябва да е включено)"
     },
     "composer": {
         "format_bold": "Удебелено",
@@ -1955,7 +1754,8 @@
         "collecting_information": "Събиране на информация за версията на приложението",
         "collecting_logs": "Събиране на логове",
         "uploading_logs": "Качване на логове",
-        "downloading_logs": "Изтегляне на логове"
+        "downloading_logs": "Изтегляне на логове",
+        "create_new_issue": "Моля, <newIssueLink>отворете нов проблем</newIssueLink> в GitHub за да проучим проблема."
     },
     "time": {
         "date_at_time": "%(date)s в %(time)s",
@@ -2009,7 +1809,25 @@
             "rule_call": "Покана за разговор",
             "rule_suppress_notices": "Съобщения изпратени от бот",
             "rule_tombstone": "Когато стаите се актуализират",
-            "rule_encrypted_room_one_to_one": "Шифровани съобщения в 1-на-1 чатове"
+            "rule_encrypted_room_one_to_one": "Шифровани съобщения в 1-на-1 чатове",
+            "enable_desktop_notifications_session": "Включи уведомления на работния плот за тази сесия",
+            "show_message_desktop_notification": "Показване на съдържание в известията на работния плот",
+            "enable_audible_notifications_session": "Включи звукови уведомления за тази сесия"
+        },
+        "appearance": {
+            "heading": "Настройте изгледа",
+            "subheading": "Настройките на изгледа влияят само на тази %(brand)s сесия.",
+            "match_system_theme": "Напасване със системната тема",
+            "custom_font": "Използвай системния шрифт",
+            "custom_font_name": "Име на системния шрифт",
+            "custom_theme_invalid": "Невалиден формат на темата.",
+            "custom_theme_error_downloading": "Неуспешно изтегляне на информацията за темата.",
+            "custom_theme_success": "Темата беше добавена!",
+            "custom_theme_url": "Собствен URL адрес на тема",
+            "custom_theme_add_button": "Добави тема",
+            "font_size": "Размер на шрифта",
+            "custom_font_description": "Настройте името на шрифт инсталиран в системата и %(brand)s ще се опита да го използва.",
+            "timeline_image_size_default": "По подразбиране"
         }
     },
     "devtools": {
@@ -2061,7 +1879,15 @@
             "removed": "%(senderName)s премахна основния адрес на тази стая.",
             "changed_alternative": "%(senderName)s промени алтернативните адреси на стаята.",
             "changed_main_and_alternative": "%(senderName)s промени основният и алтернативните адреси на стаята.",
-            "changed": "%(senderName)s промени адресите на стаята."
+            "changed": "%(senderName)s промени адресите на стаята.",
+            "alt_added": {
+                "other": "%(senderName)s добави алтернативните адреси %(addresses)s към стаята.",
+                "one": "%(senderName)s добави алтернативният адрес %(addresses)s към стаята."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s премахна алтернативните адреси %(addresses)s от стаята.",
+                "one": "%(senderName)s премахна алтернативният адрес %(addresses)s от стаята."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s премахна покана към %(targetDisplayName)s за присъединяване в стаята.",
@@ -2094,6 +1920,120 @@
         },
         "m.call.hangup": {
             "dm": "Разговора приключи"
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)sсе присъединиха %(count)s пъти",
+                "one": "%(severalUsers)sсе присъединиха"
+            },
+            "joined": {
+                "other": "%(oneUser)sсе присъедини %(count)s пъти",
+                "one": "%(oneUser)sсе присъедини"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)sнапуснаха %(count)s пъти",
+                "one": "%(severalUsers)sнапуснаха"
+            },
+            "left": {
+                "other": "%(oneUser)sнапусна %(count)s пъти",
+                "one": "%(oneUser)sнапусна"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)sсе присъединиха и напуснаха %(count)s пъти",
+                "one": "%(severalUsers)sсе присъединиха и напуснаха"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)sсе присъедини и напусна %(count)s пъти",
+                "one": "%(oneUser)sсе присъедини и напусна"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)sнапуснаха и се присъединиха отново %(count)s пъти",
+                "one": "%(severalUsers)sнапуснаха и се присъединиха отново"
+            },
+            "rejoined": {
+                "other": "%(oneUser)sнапусна и се присъедини отново %(count)s пъти",
+                "one": "%(oneUser)sнапусна и се присъедини отново"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)sотхвърлиха своите покани %(count)s пъти",
+                "one": "%(severalUsers)sотхвърлиха своите покани"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)sотхвърли своята покана %(count)s пъти",
+                "one": "%(oneUser)sотхвърли своята покана"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)sоттеглиха своите покани %(count)s пъти",
+                "one": "%(severalUsers)sоттеглиха своите покани"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)sоттегли своята покана %(count)s пъти",
+                "one": "%(oneUser)sоттегли своята покана"
+            },
+            "invited_multiple": {
+                "other": "бяха поканени %(count)s пъти",
+                "one": "бяха поканени"
+            },
+            "invited": {
+                "other": "беше поканен %(count)s пъти",
+                "one": "беше поканен"
+            },
+            "banned_multiple": {
+                "other": "бяха блокирани %(count)s пъти",
+                "one": "бяха блокирани"
+            },
+            "banned": {
+                "other": "беше блокиран %(count)s пъти",
+                "one": "беше блокиран"
+            },
+            "unbanned_multiple": {
+                "other": "бяха отблокирани %(count)s пъти",
+                "one": "бяха отблокирани"
+            },
+            "unbanned": {
+                "other": "беше отблокиран %(count)s пъти",
+                "one": "беше отблокиран"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)sсмениха своето име %(count)s пъти",
+                "one": "%(severalUsers)sсмениха своето име"
+            },
+            "changed_name": {
+                "other": "%(oneUser)sсмени своето име %(count)s пъти",
+                "one": "%(oneUser)sсмени своето име"
+            },
+            "no_change_multiple": {
+                "other": "%(severalUsers)sне направиха промени %(count)s пъти",
+                "one": "%(severalUsers)sне направиха промени"
+            },
+            "no_change": {
+                "other": "%(oneUser)sне направи промени %(count)s пъти",
+                "one": "%(oneUser)sне направи промени"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s смени нивото на достъп на %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s от %(fromPowerLevel)s на %(toPowerLevel)s"
+        },
+        "mjolnir": {
+            "removed_rule_users": "%(senderName)s премахна правилото блокиращо достъпа на потребители отговарящи на %(glob)s",
+            "removed_rule_rooms": "%(senderName)s премахна правилото блокиращо достъпа до стаи отговарящи на %(glob)s",
+            "removed_rule_servers": "%(senderName)s премахна правилото блокиращо достъпа до сървъри отговарящи на %(glob)s",
+            "removed_rule": "%(senderName)s премахна правилото блокиращо достъпа неща отговарящи на %(glob)s",
+            "updated_invalid_rule": "%(senderName)s промени невалидно правило за блокиране",
+            "updated_rule_users": "%(senderName)s промени правилото блокиращо достъпа на потребители отговарящи на %(glob)s поради %(reason)s",
+            "updated_rule_rooms": "%(senderName)s промени правилото блокиращо достъпа до стаи отговарящи на %(glob)s поради %(reason)s",
+            "updated_rule_servers": "%(senderName)s промени правилото блокиращо достъпа до сървъри отговарящи на %(glob)s поради %(reason)s",
+            "updated_rule": "%(senderName)s промени правило блокиращо достъпа неща отговарящи на %(glob)s поради %(reason)s",
+            "created_rule_users": "%(senderName)s създаде правило блокиращо достъпа на потребители отговарящи на %(glob)s поради %(reason)s",
+            "created_rule_rooms": "%(senderName)s създаде правило блокиращо достъпа до стаи отговарящи на %(glob)s поради %(reason)s",
+            "created_rule_servers": "%(senderName)s създаде правило блокиращо достъпа до сървъри отговарящи на %(glob)s поради %(reason)s",
+            "created_rule": "%(senderName)s създаде правило блокиращо достъпа до неща отговарящи на %(glob)s поради %(reason)s",
+            "changed_rule_users": "%(senderName)s промени правило блокиращо достъпа на потребители отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
+            "changed_rule_rooms": "%(senderName)s промени правило блокиращо достъпа до стаи отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
+            "changed_rule_servers": "%(senderName)s промени правило блокиращо достъпа до сървъри отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
+            "changed_rule_glob": "%(senderName)s промени правило блокиращо достъпа до неща отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s"
         }
     },
     "slash_command": {
@@ -2131,7 +2071,17 @@
         "category_admin": "Администратор",
         "category_advanced": "Разширени",
         "category_effects": "Ефекти",
-        "category_other": "Други"
+        "category_other": "Други",
+        "addwidget_missing_url": "Укажете URL адрес на приспособление или код за вграждане",
+        "addwidget_invalid_protocol": "Моля, укажете https:// или http:// адрес на приспособление",
+        "addwidget_no_permissions": "Не можете да модифицирате приспособления в тази стая.",
+        "converttodm": "Превръща стаята в директен чат",
+        "converttoroom": "Превръща директния чат в стая",
+        "discardsession": "Принудително прекратява текущата изходяща групова сесия в шифрована стая",
+        "query": "Отваря чат с дадения потребител",
+        "holdcall": "Задържа повикването в текущата стая",
+        "unholdcall": "Възстановява повикването в текущата стая",
+        "me": "Показва действие"
     },
     "presence": {
         "online_for": "Онлайн от %(duration)s",
@@ -2183,7 +2133,6 @@
         "unsupported": "Обажданията не се поддържат",
         "unsupported_browser": "Не можете да провеждате обаждания в този браузър."
     },
-    "Messages": "Съобщения",
     "Other": "Други",
     "Advanced": "Разширени",
     "room_settings": {
@@ -2204,6 +2153,94 @@
             "ban": "Блокиране на потребители",
             "redact": "Премахвай съобщения изпратени от други",
             "notifications.room": "Уведомяване на всички"
+        }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "Не съвпадат",
+            "sas_match": "Съвпадат",
+            "in_person": "За да е по-сигурно, направете го на живо или използвайте доверен начин за комуникация.",
+            "other_party_cancelled": "Другата страна прекрати потвърждението.",
+            "complete_title": "Потвърдено!",
+            "complete_description": "Успешно потвърдихте този потребител.",
+            "qr_prompt": "Сканирайте този уникален код",
+            "sas_prompt": "Сравнете уникални емоджи",
+            "sas_description": "Сравнете уникални емоджи, ако нямате камера на някое от устройствата"
+        }
+    },
+    "emoji": {
+        "category_frequently_used": "Често използвани",
+        "category_smileys_people": "Усмивки и хора",
+        "category_animals_nature": "Животни и природа",
+        "category_food_drink": "Храна и напитки",
+        "category_activities": "Действия",
+        "category_travel_places": "Пътуване и места",
+        "category_objects": "Обекти",
+        "category_symbols": "Символи",
+        "category_flags": "Знамена",
+        "categories": "Категории",
+        "quick_reactions": "Бързи реакции"
+    },
+    "chat_effects": {
+        "confetti_description": "Изпраща даденото съобщение с конфети",
+        "confetti_message": "изпраща конфети",
+        "fireworks_description": "Изпраща даденото съобщение с фойерверки",
+        "fireworks_message": "изпраща фойерверки",
+        "snowfall_description": "Изпраща даденото съобщение със снеговалеж",
+        "snowfall_message": "изпраща снеговалеж"
+    },
+    "auth": {
+        "sign_in_with_sso": "Влезте посредством single-sign-on",
+        "sso": "Single Sign On",
+        "continue_with_sso": "Продължаване с %(ssoButtons)s",
+        "sso_or_username_password": "%(ssoButtons)s Или %(usernamePassword)s",
+        "sign_in_instead": "Вече имате профил? <a>Влезте от тук</a>",
+        "account_clash": "Новият ви профил (%(newAccountId)s) е регистриран, но вече сте влезли с друг профил (%(loggedInUserId)s).",
+        "account_clash_previous_account": "Продължи с предишния профил",
+        "log_in_new_account": "<a>Влезте</a> в новия си профил.",
+        "registration_successful": "Успешна регистрация"
+    },
+    "export_chat": {
+        "messages": "Съобщения"
+    },
+    "room_list": {
+        "sort_unread_first": "Показвай стаи с непрочетени съобщения първи",
+        "show_previews": "Показвай преглед на съобщенията",
+        "sort_by": "Подреди по",
+        "sort_by_activity": "Активност",
+        "sort_by_alphabet": "Азбучен ред",
+        "sublist_options": "Опции на списъка",
+        "show_n_more": {
+            "other": "Покажи още %(count)s",
+            "one": "Покажи още %(count)s"
+        },
+        "show_less": "Покажи по-малко",
+        "notification_options": "Настройки за уведомление"
+    },
+    "report_content": {
+        "missing_reason": "Въведете защо докладвате.",
+        "report_content_to_homeserver": "Докладвай съдържание до администратора на сървъра",
+        "description": "Докладването на съобщението ще изпрати уникалният номер на събитието (event ID) до администратора на сървъра. Ако съобщенията в стаята са шифровани, администратора няма да може да прочете текста им или да види снимките или файловете."
+    },
+    "onboarding": {
+        "has_avatar_label": "Чудесно, това ще позволи на хората да знаят, че сте вие",
+        "no_avatar_label": "Добавете снимка, за да може другите хора да знаят, че сте вие.",
+        "welcome_user": "Добре дошли, %(name)s",
+        "welcome_detail": "Нека ви помогнем да започнете",
+        "intro_welcome": "Добре дошли в %(appName)s",
+        "send_dm": "Изпрати директно съобщение",
+        "explore_rooms": "Разгледай публичните стаи",
+        "create_room": "Създай групов чат"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "Версия на %(brand)s:",
+            "help_link": "За помощ при използването на %(brand)s, кликнете <a>тук</a>.",
+            "help_link_chat_bot": "За помощ при използването на %(brand)s, кликнете <a>тук</a> или започнете чат с бота ни използвайки бутона по-долу.",
+            "chat_bot": "Чати с %(brand)s Bot",
+            "title": "Помощ и относно",
+            "versions": "Версии",
+            "clear_cache_reload": "Изчисти кеша и презареди"
         }
     }
 }

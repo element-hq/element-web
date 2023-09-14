@@ -1,5 +1,4 @@
 {
-    "Dismiss read marker and jump to bottom": "გააუქმეთ წაკითხული მარკერი და გადადით ქვემოთ",
     "Explore rooms": "ოთახების დათავლიერება",
     "Create Account": "ანგარიშის შექმნა",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "ფაილი '%(fileName)s' აჭარბებს ამ ჰომსერვერის ზომის ლიმიტს ატვირთვისთვის",
@@ -12,7 +11,6 @@
     "Failed to verify email address: make sure you clicked the link in the email": "ელ. ფოსტის მისამართის ვერიფიკაცია ვერ მოხერხდა: დარწმუნდი, რომ დააჭირე ბმულს ელ. ფოსტის წერილში",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "ამ ტელეფონის ნომრის დასადასტურებლად გამოიყენე ერთჯერადი ავტორიზაცია, საკუთარი იდენტობის დასადასტურებლად.",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "ელ. ფოსტის მისამართის დასადასტურებლად გამოიყენე ერთჯერადი ავტორიზაცია, საკუთარი იდენტობის დასადასტურებლად.",
-    "Single Sign On": "ერთჯერადი ავტორიზაცია",
     "This phone number is already in use": "ტელეფონის ეს ნომერი დაკავებულია",
     "Identity server not set": "იდენთიფიკაციის სერვერი არ არის განსაზღვრული",
     "No identity access token found": "იდენთიფიკაციის წვდომის ტოკენი ვერ მოიძებნა",
@@ -60,5 +58,11 @@
         "hours_minutes_seconds_left": "%(hours)sს %(minutes)sწთ %(seconds)sწმ დარჩა",
         "minutes_seconds_left": "%(minutes)sწთ %(seconds)sწმ დარჩა",
         "seconds_left": "%(seconds)sწმ დარჩა"
+    },
+    "auth": {
+        "sso": "ერთჯერადი ავტორიზაცია"
+    },
+    "keyboard": {
+        "dismiss_read_marker_and_jump_bottom": "გააუქმეთ წაკითხული მარკერი და გადადით ქვემოთ"
     }
 }

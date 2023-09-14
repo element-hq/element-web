@@ -99,7 +99,7 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
             [SSOAuthEntry.PHASE_PREAUTH]: {
                 title: _t("Use Single Sign On to continue"),
                 body: _t("To continue, use Single Sign On to prove your identity."),
-                continueText: _t("Single Sign On"),
+                continueText: _t("auth|sso"),
                 continueKind: "primary",
             },
             [SSOAuthEntry.PHASE_POSTAUTH]: {

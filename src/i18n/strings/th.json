@@ -9,7 +9,6 @@
     "Low priority": "ความสำคัญต่ำ",
     "Profile": "โปรไฟล์",
     "Reason": "เหตุผล",
-    "%(brand)s version:": "เวอร์ชัน %(brand)s:",
     "Notifications": "การแจ้งเตือน",
     "Operation failed": "การดำเนินการล้มเหลว",
     "powered by Matrix": "ใช้เทคโนโลยี Matrix",
@@ -51,7 +50,6 @@
     "Failure to create room": "การสร้างห้องล้มเหลว",
     "Filter room members": "กรองสมาชิกห้อง",
     "Forget room": "ลืมห้อง",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s จาก %(fromPowerLevel)s ไปเป็น %(toPowerLevel)s",
     "Historical": "ประวัติแชทเก่า",
     "Incorrect username and/or password.": "ชื่อผู้ใช้และ/หรือรหัสผ่านไม่ถูกต้อง",
     "Incorrect verification code": "รหัสยืนยันไม่ถูกต้อง",
@@ -212,7 +210,6 @@
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "ยืนยันการเพิ่มหมายเลขโทรศัพท์นี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
     "Click the button below to confirm adding this email address.": "คลิกปุ่มด้านล่างเพื่อยืนยันการเพิ่มที่อยู่อีเมลนี้.",
     "Confirm adding email": "ยืนยันการเพิ่มอีเมล",
-    "Single Sign On": "ลงชื่อเข้าใช้เพียงครั้งเดียว",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "ยืนยันการเพิ่มที่อยู่อีเมลนี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ.",
     "Use Single Sign On to continue": "ใช้การลงชื่อเพียงครั้งเดียวเพื่อดำเนินการต่อ",
     "You most likely do not want to reset your event index store": "คุณมักไม่ต้องการรีเซ็ตที่เก็บดัชนีเหตุการณ์ของคุณ",
@@ -474,6 +471,9 @@
             "rule_invite_for_me": "เมื่อฉันได้รับคำเชิญเข้าห้อง",
             "rule_call": "คำเชิญเข้าร่วมการโทร",
             "rule_suppress_notices": "ข้อความจากบอท"
+        },
+        "appearance": {
+            "timeline_image_size_default": "ค่าเริ่มต้น"
         }
     },
     "timeline": {
@@ -485,6 +485,9 @@
         "m.image": "%(senderDisplayName)s ได้ส่งรูป",
         "m.room.third_party_invite": {
             "sent": "%(senderName)s ได้ส่งคำเชิญให้ %(targetDisplayName)s เข้าร่วมห้อง"
+        },
+        "m.room.power_levels": {
+            "user_from_to": "%(userId)s จาก %(fromPowerLevel)s ไปเป็น %(toPowerLevel)s"
         }
     },
     "slash_command": {
@@ -518,5 +521,17 @@
     "devtools": {
         "category_room": "ห้อง"
     },
-    "Advanced": "ขึ้นสูง"
+    "Advanced": "ขึ้นสูง",
+    "labs": {
+        "group_profile": "โปรไฟล์",
+        "group_rooms": "ห้องสนทนา"
+    },
+    "auth": {
+        "sso": "ลงชื่อเข้าใช้เพียงครั้งเดียว"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "เวอร์ชัน %(brand)s:"
+        }
+    }
 }

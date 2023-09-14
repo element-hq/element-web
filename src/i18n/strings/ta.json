@@ -26,7 +26,6 @@
     "What's new?": "புதிதாக என்ன?",
     "Waiting for response from server": "வழங்கியின் பதிலுக்காக காத்திருக்கிறது",
     "You cannot delete this message. (%(code)s)": "இந்த செய்தியை நீங்கள் அழிக்க முடியாது. (%(code)s)",
-    "Show message in desktop notification": "திரை அறிவிப்புகளில் செய்தியை காண்பிக்கவும்",
     "Sunday": "ஞாயிறு",
     "Monday": "திங்கள்",
     "Tuesday": "செவ்வாய்",
@@ -96,7 +95,6 @@
     "Add Email Address": "மின்னஞ்சல் முகவரியை சேர்க்கவும்",
     "Click the button below to confirm adding this email address.": "இந்த மின்னஞ்சல் முகவரியை சேர்ப்பதை உறுதிப்படுத்த கீழே உள்ள பொத்தானை அழுத்தவும்.",
     "Confirm adding email": "மின்னஞ்சலை சேர்ப்பதை உறுதிப்படுத்தவும்",
-    "Single Sign On": "ஒற்றை உள்நுழைவு",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "உங்கள் அடையாளத்தை நிரூபிக்க ஒற்றை உள்நுழைவைப் பயன்படுத்தி இந்த மின்னஞ்சல் முகவரியை சேர்ப்பதை உறுதிப்படுத்தவும்.",
     "Use Single Sign On to continue": "தொடர ஒற்றை உள்நுழைவைப் பயன்படுத்தவும்",
     "The user you called is busy.": "நீங்கள் அழைத்தவர் தற்போது வேளையாக இருக்கிறார்.",
@@ -144,7 +142,8 @@
             "rule_message": "குழு அரட்டைகளில் உள்ள செய்திகள்",
             "rule_invite_for_me": "நான் அறைக்கு அழைக்கப்பட்ட போது",
             "rule_call": "அழைப்பிற்கான விண்ணப்பம்",
-            "rule_suppress_notices": "bot மூலம் அனுப்பிய செய்திகள்"
+            "rule_suppress_notices": "bot மூலம் அனுப்பிய செய்திகள்",
+            "show_message_desktop_notification": "திரை அறிவிப்புகளில் செய்தியை காண்பிக்கவும்"
         }
     },
     "voip": {
@@ -158,5 +157,11 @@
         "call_failed_media_applications": "வேறு எந்த பயன்பாடும் புகைப்படக்கருவியைப் பயன்படுத்துவதில்லை",
         "already_in_call": "முன்னதாகவே அழைப்பில் உள்ளது",
         "already_in_call_person": "நீங்கள் முன்னதாகவே இந்த நபருடன் அழைப்பில் உள்ளீர்கள்."
+    },
+    "labs": {
+        "group_rooms": "அறைகள்"
+    },
+    "auth": {
+        "sso": "ஒற்றை உள்நுழைவு"
     }
 }

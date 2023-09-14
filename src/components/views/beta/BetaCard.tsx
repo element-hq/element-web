@@ -45,8 +45,8 @@ interface IBetaPillProps {
 
 export const BetaPill: React.FC<IBetaPillProps> = ({
     onClick,
-    tooltipTitle = _t("This is a beta feature"),
-    tooltipCaption = _t("Click for more info"),
+    tooltipTitle = _t("labs|beta_feature"),
+    tooltipCaption = _t("labs|click_for_info"),
 }) => {
     if (onClick) {
         return (
@@ -94,18 +94,16 @@ const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {
     let refreshWarning: string | undefined;
     if (requiresRefresh) {
         const brand = SdkConfig.get().brand;
-        refreshWarning = value
-            ? _t("Leaving the beta will reload %(brand)s.", { brand })
-            : _t("Joining the beta will reload %(brand)s.", { brand });
+        refreshWarning = value ? _t("labs|leave_beta_reload", { brand }) : _t("labs|join_beta_reload", { brand });
     }
 
     let content: ReactNode;
     if (busy) {
         content = <InlineSpinner />;
     } else if (value) {
-        content = _t("Leave the beta");
+        content = _t("labs|leave_beta");
     } else {
-        content = _t("Join the beta");
+        content = _t("labs|join_beta");
     }
 
     return (

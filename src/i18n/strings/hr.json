@@ -137,7 +137,6 @@
     "Unable to load! Check your network connectivity and try again.": "Učitavanje nije moguće! Provjerite mrežnu povezanost i pokušajte ponovo.",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potvrdite dodavanje ovog telefonskog broja koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Potvrdite dodavanje ove email adrese koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
-    "Single Sign On": "Jedinstvena prijava (SSO)",
     "Use Single Sign On to continue": "Koristite jedinstvenu prijavu (SSO) za nastavak",
     "Add Phone Number": "Dodaj telefonski broj",
     "Click the button below to confirm adding this phone number.": "Kliknite gumb ispod da biste potvrdili dodavanje ovog telefonskog broja.",
@@ -145,13 +144,13 @@
     "Add Email Address": "Dodaj email adresu",
     "Click the button below to confirm adding this email address.": "Kliknite gumb ispod da biste potvrdili dodavanje ove email adrese.",
     "Confirm adding email": "Potvrdite dodavanje email adrese",
-    "Integration manager": "Upravitelj integracijama",
-    "Identity server": "Poslužitelj identiteta",
     "Could not connect to identity server": "Nije moguće spojiti se na poslužitelja identiteta",
     "common": {
         "analytics": "Analitika",
         "error": "Geška",
-        "unnamed_room": "Neimenovana soba"
+        "unnamed_room": "Neimenovana soba",
+        "identity_server": "Poslužitelj identiteta",
+        "integration_manager": "Upravitelj integracijama"
     },
     "action": {
         "continue": "Nastavi",
@@ -172,5 +171,8 @@
         "call_failed_media_applications": "Da ni jedna druga aplikacija već ne koristi web kameru",
         "already_in_call": "Već u pozivu",
         "already_in_call_person": "Već ste u pozivu sa tom osobom."
+    },
+    "auth": {
+        "sso": "Jedinstvena prijava (SSO)"
     }
 }

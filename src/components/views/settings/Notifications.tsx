@@ -381,7 +381,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             if (category === KEYWORD_RULE_CATEGORY) {
                 preparedNewState.vectorPushRules[category]!.push({
                     ruleId: KEYWORD_RULE_ID,
-                    description: _t("Messages containing keywords"),
+                    description: _t("settings|notifications|messages_containing_keywords"),
                     vectorState: preparedNewState.vectorKeywordRuleInfo.vectorState,
                 });
             }
@@ -400,8 +400,8 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
 
     private showSaveError(): void {
         Modal.createDialog(ErrorDialog, {
-            title: _t("Error saving notification preferences"),
-            description: _t("An error occurred whilst saving your notification preferences."),
+            title: _t("settings|notifications|error_saving"),
+            description: _t("settings|notifications|error_saving_detail"),
         });
     }
 
@@ -661,8 +661,8 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             <LabelledToggleSwitch
                 data-testid="notif-master-switch"
                 value={!this.isInhibited}
-                label={_t("Enable notifications for this account")}
-                caption={_t("Turn off to disable notifications on all your devices and sessions")}
+                label={_t("settings|notifications|enable_notifications_account")}
+                caption={_t("settings|notifications|enable_notifications_account_detail")}
                 onChange={this.onMasterRuleChanged}
                 disabled={this.state.phase === Phase.Persisting}
             />
@@ -680,7 +680,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                     data-testid="notif-email-switch"
                     key={e.address}
                     value={!!this.state.pushers?.some((p) => p.kind === "email" && p.pushkey === e.address)}
-                    label={_t("Enable email notifications for %(email)s", { email: e.address })}
+                    label={_t("settings|notifications|enable_email_notifications", { email: e.address })}
                     onChange={this.onEmailNotificationsChanged.bind(this, e.address)}
                     disabled={this.state.phase === Phase.Persisting}
                 />
@@ -693,7 +693,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                 <LabelledToggleSwitch
                     data-testid="notif-device-switch"
                     value={this.state.deviceNotificationsEnabled}
-                    label={_t("Enable notifications for this device")}
+                    label={_t("settings|notifications|enable_notifications_device")}
                     onChange={(checked) => this.updateDeviceNotifications(checked)}
                     disabled={this.state.phase === Phase.Persisting}
                 />
@@ -704,21 +704,21 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                             data-testid="notif-setting-notificationsEnabled"
                             value={this.state.desktopNotifications}
                             onChange={this.onDesktopNotificationsChanged}
-                            label={_t("Enable desktop notifications for this session")}
+                            label={_t("settings|notifications|enable_desktop_notifications_session")}
                             disabled={this.state.phase === Phase.Persisting}
                         />
                         <LabelledToggleSwitch
                             data-testid="notif-setting-notificationBodyEnabled"
                             value={this.state.desktopShowBody}
                             onChange={this.onDesktopShowBodyChanged}
-                            label={_t("Show message in desktop notification")}
+                            label={_t("settings|notifications|show_message_desktop_notification")}
                             disabled={this.state.phase === Phase.Persisting}
                         />
                         <LabelledToggleSwitch
                             data-testid="notif-setting-audioNotificationsEnabled"
                             value={this.state.audioNotifications}
                             onChange={this.onAudioNotificationsChanged}
-                            label={_t("Enable audible notifications for this session")}
+                            label={_t("settings|notifications|enable_audible_notifications_session")}
                             disabled={this.state.phase === Phase.Persisting}
                         />
                     </>

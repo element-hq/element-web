@@ -59,10 +59,7 @@
     "Failed to verify email address: make sure you clicked the link in the email": "Fekk ikkje til å stadfesta e-postadressa: sjå til at du klikka på den rette lenkja i e-posten",
     "Deops user with given id": "AvOPar brukarar med den gjevne IDen",
     "Verified key": "Godkjend nøkkel",
-    "Displays action": "Visar handlingar",
     "Reason": "Grunnlag",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s frå %(fromPowerLevel)s til %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s endra tilgangsnivået til %(powerLevelDiffText)s.",
     "Failure to create room": "Klarte ikkje å laga rommet",
     "Server may be unavailable, overloaded, or you hit a bug.": "Tenaren er kanskje utilgjengeleg, overlasta elles så traff du ein bug.",
     "Send": "Send",
@@ -89,7 +86,6 @@
     "Authentication": "Authentisering",
     "Failed to set display name": "Fekk ikkje til å setja visningsnamn",
     "Notification targets": "Varselmål",
-    "Show message in desktop notification": "Vis meldinga i eit skriverbordsvarsel",
     "Off": "Av",
     "On": "På",
     "Noisy": "Bråkete",
@@ -200,86 +196,6 @@
     "Delete widget": "Slett widgeten",
     "Create new room": "Lag nytt rom",
     "Home": "Heim",
-    "%(severalUsers)sjoined %(count)s times": {
-        "other": "%(severalUsers)s har kome inn %(count)s gonger",
-        "one": "%(severalUsers)s kom inn"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "other": "%(oneUser)s har kome inn %(count)s gonger",
-        "one": "%(oneUser)s kom inn"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "other": "%(severalUsers)s har fare %(count)s gonger",
-        "one": "%(severalUsers)s fór"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "other": "%(oneUser)s har fare %(count)s gonger",
-        "one": "%(oneUser)s fór"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s har kome inn og fare att %(count)s gonger",
-        "one": "%(severalUsers)s kom inn og fór"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)s har kome inn og fare att %(count)s gonger",
-        "one": "%(oneUser)s kom inn og fór"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s har fare og kome inn att %(count)s gonger",
-        "one": "%(severalUsers)s fór og kom inn att"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)s har fare og kome inn att %(count)s gonger",
-        "one": "%(oneUser)s fór og kom inn att"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s sa nei til innbydingane %(count)s gonger",
-        "one": "%(severalUsers)s sa nei til innbydingane"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)s sa nei til innbydinga %(count)s gonger",
-        "one": "%(oneUser)s sa nei til innbydinga"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "%(severalUsers)s fekk innbydingane sine attekne %(count)s gonger",
-        "one": "%(severalUsers)s fekk innbydinga si attteke"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "%(oneUser)s fekk innbydinga si atteke %(count)s gonger",
-        "one": "%(oneUser)s fekk innbydinga si atteke"
-    },
-    "were invited %(count)s times": {
-        "other": "vart boden inn %(count)s gonger",
-        "one": "vart boden inn"
-    },
-    "was invited %(count)s times": {
-        "other": "vart boden inn %(count)s gonger",
-        "one": "vart boden inn"
-    },
-    "were banned %(count)s times": {
-        "other": "har vore stengd ute %(count)s gonger",
-        "one": "vart stengd ute"
-    },
-    "was banned %(count)s times": {
-        "other": "har vore stengd ute %(count)s gonger",
-        "one": "vart stengd ute"
-    },
-    "were unbanned %(count)s times": {
-        "other": "har vorta sloppe inn att %(count)s gonger",
-        "one": "vart sloppe inn att"
-    },
-    "was unbanned %(count)s times": {
-        "other": "har vorte sloppe inn att %(count)s gonger",
-        "one": "vart sloppe inn att"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s har endra namna sine %(count)s gonger",
-        "one": "%(severalUsers)s endra namna sine"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)s har endra namnet sitt %(count)s gonger",
-        "one": "%(oneUser)s endra namnet sitt"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s og %(count)s til",
         "one": "%(items)s og ein til"
@@ -375,7 +291,6 @@
     "Audio Output": "Ljodavspeling",
     "Email": "Epost",
     "Account": "Brukar",
-    "%(brand)s version:": "%(brand)s versjon:",
     "The email address linked to your account must be entered.": "Du må skriva epostadressa som er tilknytta brukaren din inn.",
     "A new password must be entered.": "Du må skriva eit nytt passord inn.",
     "New passwords must match each other.": "Dei nye passorda må vera like.",
@@ -403,7 +318,6 @@
     "This room is not accessible by remote Matrix servers": "Rommet er ikkje tilgjengeleg for andre Matrix-heimtenarar",
     "Add an Integration": "Legg tillegg til",
     "Popout widget": "Popp widget ut",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
     "Custom level": "Tilpassa nivå",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Klarte ikkje å lasta handlinga som vert svara til. Anten finst ho ikkje elles har du ikkje tilgang til å sjå ho.",
     "Filter results": "Filtrer resultat",
@@ -445,14 +359,9 @@
     "Please <a>contact your service administrator</a> to continue using this service.": "<a>Kontakt din systemadministrator</a> for å vidare bruka tenesta.",
     "This account has been deactivated.": "Denne kontoen har blitt deaktivert.",
     "Failed to perform homeserver discovery": "Fekk ikkje til å utforska heimetenaren",
-    "Sign in with single sign-on": "Logg på med Single-Sign-On",
     "Create account": "Lag konto",
     "Registration has been disabled on this homeserver.": "Registrering er skrudd av for denne heimetenaren.",
     "Unable to query for supported registration methods.": "Klarte ikkje å spørre etter støtta registreringsmetodar.",
-    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Kontoen din %(newAccountId)s er no registrert, men du er frå tidligare logga på med ein annan konto (%(loggedInUserId)s).",
-    "Continue with previous account": "Fortsett med tidligare konto",
-    "<a>Log in</a> to your new account.": "<a>Logg på</a> den nye kontoen din.",
-    "Registration Successful": "Registrering fullført",
     "Failed to re-authenticate due to a homeserver problem": "Fekk ikkje til å re-authentisere grunna ein feil på heimetenaren",
     "Failed to re-authenticate": "Fekk ikkje til å re-autentisere",
     "Enter your password to sign in and regain access to your account.": "Skriv inn ditt passord for å logge på og ta tilbake tilgang til kontoen din.",
@@ -483,9 +392,6 @@
     "Use an identity server": "Bruk ein identitetstenar",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Bruk ein identitetstenar for å invitera via e-post. Klikk for å fortsetja å bruka standard identitetstenar (%(defaultIdentityServerName)s) eller styre dette i innstillingane.",
     "Use an identity server to invite by email. Manage in Settings.": "Bruk ein identitetstenar for å invitera via e-post. Styr dette i Innstillingane.",
-    "Please supply a https:// or http:// widget URL": "Skriv inn https:// eller http:// URL-en for miniprogrammet",
-    "You cannot modify widgets in this room.": "Du kan ikkje endra miniprogram i dette rommet.",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Tvingar i eit kryptert rom kassering av gjeldande utgåande gruppe-økt",
     "Cancel entering passphrase?": "Avbryte inntasting av passfrase ?",
     "Setting up keys": "Setter opp nøklar",
     "Verify this session": "Stadfest denne økta",
@@ -505,11 +411,8 @@
     "The user must be unbanned before they can be invited.": "Blokkeringa av brukaren må fjernast før dei kan bli inviterte.",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Ved å fjerne koplinga mot din identitetstenar, vil ikkje brukaren din bli oppdaga av andre brukarar, og du kan heller ikkje invitera andre med e-post eller telefonnummer.",
     "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.": "Å bruka ein identitetstenar er frivillig. Om du vel å ikkje bruka dette, vil ikkje brukaren din bli oppdaga av andre brukarar, og du kan ikkje invitera andre med e-post eller telefonnummer.",
-    "Error downloading theme information.": "Feil under nedlasting av temainformasjon.",
-    "Theme added!": "Tema lagt til!",
     "Email addresses": "E-postadresser",
     "Phone numbers": "Telefonnummer",
-    "Help & About": "Hjelp og om",
     "Accept all %(invitedRooms)s invites": "Aksepter alle invitasjonar frå %(invitedRooms)s",
     "Security & Privacy": "Tryggleik og personvern",
     "Error changing power level requirement": "Feil under endring av krav for tilgangsnivå",
@@ -557,11 +460,6 @@
     "Reject & Ignore user": "Avslå og ignorer brukar",
     "You're previewing %(roomName)s. Want to join it?": "Du førehandsviser %(roomName)s. Ynskjer du å bli med ?",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s kan ikkje førehandsvisast. Ynskjer du å bli med ?",
-    "%(count)s unread messages.": {
-        "other": "%(count)s uleste meldingar.",
-        "one": "1 ulesen melding."
-    },
-    "Unread messages.": "Uleste meldingar.",
     "Unknown Command": "Ukjend kommando",
     "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Du kan bruka <code>/help</code> for å lista tilgjengelege kommandoar. Meinte du å senda dette som ein melding ?",
     "Hint: Begin your message with <code>//</code> to start it with a slash.": "Hint: Start meldinga med <code>//</code> for å starte den med skråstrek.",
@@ -587,10 +485,8 @@
     "Room avatar": "Rom-avatar",
     "Power level": "Tilgangsnivå",
     "Voice & Video": "Tale og video",
-    "Match system theme": "Følg systemtema",
     "Show hidden events in timeline": "Vis skjulte hendelsar i historikken",
     "This is your list of users/servers you have blocked - don't leave the room!": "Dette er di liste over brukarar/tenarar du har blokkert - ikkje forlat rommet!",
-    "Show less": "Vis mindre",
     "Show more": "Vis meir",
     "Display Name": "Visningsnamn",
     "Invalid theme schema.": "",
@@ -611,26 +507,14 @@
     "Upload completed": "Opplasting fullført",
     "Cancelled signature upload": "Kansellerte opplasting av signatur",
     "Room Settings - %(roomName)s": "Rominnstillingar - %(roomName)s",
-    "Room List": "Romkatalog",
-    "Select room from the room list": "Vel rom frå romkatalogen",
-    "Collapse room list section": "Minimer romkatalog-seksjonen",
-    "Expand room list section": "Utvid romkatalog-seksjonen",
     "Manually verify all remote sessions": "Manuelt verifiser alle eksterne økter",
     "My Ban List": "Mi blokkeringsliste",
-    "Enable desktop notifications for this session": "Aktiver skrivebordsvarslingar for denne øka",
-    "Enable audible notifications for this session": "Aktiver høyrbare varslingar for denne økta",
-    "Custom theme URL": "Tilpassa tema-URL",
-    "Add theme": "Legg til tema",
-    "For help with using %(brand)s, click <a>here</a>.": "For hjelp med å bruka %(brand)s, klikk <a>her</a>.",
-    "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": "For hjelp med å bruka %(brand)s, klikk <a>her</a>, eller start ein samtale med vår bot ved å bruke knappen under.",
-    "Clear cache and reload": "Tøm buffer og last inn på nytt",
     "Composer": "Teksteditor",
     "Upgrade this room to the recommended room version": "Oppgrader dette rommet til anbefalt romversjon",
     "Your theme": "Ditt tema",
     "Failed to upgrade room": "Fekk ikkje til å oppgradere rom",
     "Use Single Sign On to continue": "Bruk Single-sign-on for å fortsette",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Stadfest at du legger til denne e-postadressa, ved å bruka Single-sign-on for å stadfeste identiteten din.",
-    "Single Sign On": "Single-sign-on",
     "Capitalization doesn't help very much": "Store bokstavar hjelp dessverre lite",
     "Predictable substitutions like '@' instead of 'a' don't help very much": "Forutsigbare teiknbytte som '@' istaden for 'a' hjelp dessverre lite",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Kontoen din har ein kryss-signert identitet det hemmelege lageret, økta di stolar ikkje på denne enno.",
@@ -647,7 +531,6 @@
     "Jump to first unread room.": "Hopp til fyrste uleste rom.",
     "Jump to first invite.": "Hopp til fyrste invitasjon.",
     "Unable to set up secret storage": "Oppsett av hemmeleg lager feila",
-    "Toggle microphone mute": "Slå av/på demping av mikrofon",
     "Confirm adding email": "Stadfest at du ynskjer å legga til e-postadressa",
     "Click the button below to confirm adding this email address.": "Trykk på knappen under for å stadfesta at du ynskjer å legga til denne e-postadressa.",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Stadfest dette telefonnummeret for å bruka Single-sign-on for å bevisa identiteten din.",
@@ -657,16 +540,6 @@
     "Use your account or create a new one to continue.": "Bruk kontoen din eller opprett ein ny for å halda fram.",
     "Joins room with given address": "Legg saman rom med spesifisert adresse",
     "Could not find user in room": "Klarde ikkje å finna brukaren i rommet",
-    "Please supply a widget URL or embed code": "Oppgje ein widget-URL eller innebygd kode",
-    "Opens chat with the given user": "Opna ein samtale med den spesifiserte brukaren",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s la til dei alternative adressene %(addresses)s for dette rommet.",
-        "one": "%(senderName)s la til ei alternativ adresse %(addresses)s for dette rommet."
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": "%(senderName)s tok vekk dei alternative adressene %(addresses)s for dette rommet.",
-        "one": "%(senderName)s tok vekk den alternative adressa %(addresses)s for dette rommet."
-    },
     "Later": "Seinare",
     "Never send encrypted messages to unverified sessions from this session": "Aldri send krypterte meldingar til ikkje-verifiserte sesjonar frå denne sesjonen",
     "Never send encrypted messages to unverified sessions in this room from this session": "Aldri send krypterte meldingar i dette rommet til ikkje-verifiserte sesjonar frå denne sesjonen",
@@ -694,36 +567,22 @@
     "I don't want my encrypted messages": "Eg treng ikkje mine krypterte meldingar",
     "You'll lose access to your encrypted messages": "Du vil miste tilgangen til dine krypterte meldingar",
     "Join millions for free on the largest public server": "Kom ihop med millionar av andre på den største offentlege tenaren",
-    "Show rooms with unread messages first": "Vis rom med ulesne meldingar fyrst",
     "Always show the window menu bar": "Vis alltid menyfeltet i toppen av vindauget",
     "Feedback": "Tilbakemeldingar",
     "All settings": "Alle innstillingar",
     "Delete Backup": "Slett sikkerheitskopi",
     "Restore from Backup": "Gjenopprett frå sikkerheitskopi",
     "Encryption": "Kryptografi",
-    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Skriv  namnet på skrifttypen(fonten) og %(brand)s forsøka å henta den frå operativsystemet.",
-    "Use a system font": "Bruk tilpassa skrifttype henta frå operativsystemet",
-    "System font name": "Namn på skrifttype",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Tilpassa skriftstorleik må vere mellom %(min)s og %(max)s punkt",
-    "Font size": "Skriftstorleik",
-    "Appearance Settings only affect this %(brand)s session.": "Innstillingane gjeld berre for denne %(brand)s-økta.",
-    "Customise your appearance": "Tilpass utsjånad",
     "Change notification settings": "Endra varslingsinnstillingar",
     "Enable desktop notifications": "Aktiver skrivebordsvarsel",
     "Video conference started by %(senderName)s": "Videokonferanse starta av %(senderName)s",
     "Video conference updated by %(senderName)s": "Videokonferanse oppdatert av %(senderName)s",
     "Video conference ended by %(senderName)s": "Videokonferanse avslutta av %(senderName)s",
-    "Show previews of messages": "Vis førehandsvisningar for meldingar",
-    "Activity": "Aktivitet",
-    "Sort by": "Sorter etter",
-    "List options": "Sjå alternativ",
-    "Explore Public Rooms": "Utforsk offentlege rom",
     "Explore public rooms": "Utforsk offentlege rom",
     "Email Address": "E-postadresse",
     "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Du bør <b>fjerne dine personlege data</b> frå identitetstenaren <idserver /> før du koplar frå. Dessverre er identitetstenaren <idserver /> utilgjengeleg og kan ikkje nåast akkurat no.",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Vi tilrår at du slettar personleg informasjon, som e-postadresser og telefonnummer frå identitetstenaren før du koplar frå.",
-    "Versions": "Versjonar",
-    "Identity server": "Identitetstenar",
     "The call was answered on another device.": "Samtalen vart svart på på ei anna eining.",
     "Norway": "Noreg",
     "Bahamas": "Bahamas",
@@ -768,14 +627,9 @@
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Er du sikker på at du vil avslutta denne røystinga ? Dette vil gjelde for alle, og dei endelege resultata vil bli presentert.",
     "New keyword": "Nytt nøkkelord",
     "Keyword": "Nøkkelord",
-    "Messages containing keywords": "Meldingar som inneheld nøkkelord",
     "Mentions & keywords": "Nemningar & nøkkelord",
-    "Enable email notifications for %(email)s": "Aktiver varsel på epost for %(email)s",
-    "Message bubbles": "Snakkebobler",
-    "IRC (Experimental)": "IRC (eksperimentell)",
     "Keyboard shortcuts": "Tastatursnarvegar",
     "Keyboard": "Tastatur",
-    "Image size in the timeline": "Storleik for bilete på tidslinja",
     "Large": "Stor",
     "Use between %(min)s pt and %(max)s pt": "Må vere mellom %(min)s og %(max)s punkt",
     "Use custom size": "Bruk ein spesifikk skriftstorleik",
@@ -865,7 +719,8 @@
         "matrix": "Matrix",
         "unnamed_room": "Rom utan namn",
         "stickerpack": "Klistremerkepakke",
-        "system_alerts": "Systemvarsel"
+        "system_alerts": "Systemvarsel",
+        "identity_server": "Identitetstenar"
     },
     "action": {
         "continue": "Fortset",
@@ -923,10 +778,19 @@
     },
     "labs": {
         "pinning": "Meldingsfesting",
-        "bridge_state": "Vis info om bruer under rominnstillingar"
+        "bridge_state": "Vis info om bruer under rominnstillingar",
+        "group_profile": "Brukar",
+        "group_rooms": "Rom",
+        "group_voip": "Tale og video",
+        "group_encryption": "Kryptografi"
     },
     "keyboard": {
-        "home": "Heim"
+        "home": "Heim",
+        "category_room_list": "Romkatalog",
+        "toggle_microphone_mute": "Slå av/på demping av mikrofon",
+        "room_list_select_room": "Vel rom frå romkatalogen",
+        "room_list_collapse_section": "Minimer romkatalog-seksjonen",
+        "room_list_expand_section": "Utvid romkatalog-seksjonen"
     },
     "composer": {
         "format_bold": "Feit",
@@ -1003,7 +867,30 @@
             "rule_call": "Samtaleinvitasjonar",
             "rule_suppress_notices": "Meldingar sendt frå ein bot",
             "rule_tombstone": "Når rom blir oppgraderte",
-            "rule_encrypted_room_one_to_one": "Krypterte meldingar i ein-til-ein-samtalar"
+            "rule_encrypted_room_one_to_one": "Krypterte meldingar i ein-til-ein-samtalar",
+            "messages_containing_keywords": "Meldingar som inneheld nøkkelord",
+            "enable_email_notifications": "Aktiver varsel på epost for %(email)s",
+            "enable_desktop_notifications_session": "Aktiver skrivebordsvarslingar for denne øka",
+            "show_message_desktop_notification": "Vis meldinga i eit skriverbordsvarsel",
+            "enable_audible_notifications_session": "Aktiver høyrbare varslingar for denne økta"
+        },
+        "appearance": {
+            "layout_irc": "IRC (eksperimentell)",
+            "layout_bubbles": "Snakkebobler",
+            "heading": "Tilpass utsjånad",
+            "subheading": "Innstillingane gjeld berre for denne %(brand)s-økta.",
+            "match_system_theme": "Følg systemtema",
+            "custom_font": "Bruk tilpassa skrifttype henta frå operativsystemet",
+            "custom_font_name": "Namn på skrifttype",
+            "custom_theme_error_downloading": "Feil under nedlasting av temainformasjon.",
+            "custom_theme_success": "Tema lagt til!",
+            "custom_theme_url": "Tilpassa tema-URL",
+            "custom_theme_add_button": "Legg til tema",
+            "font_size": "Skriftstorleik",
+            "custom_font_description": "Skriv  namnet på skrifttypen(fonten) og %(brand)s forsøka å henta den frå operativsystemet.",
+            "timeline_image_size": "Storleik for bilete på tidslinja",
+            "timeline_image_size_default": "Opphavleg innstilling",
+            "timeline_image_size_large": "Stor"
         }
     },
     "devtools": {
@@ -1050,7 +937,15 @@
             "removed": "%(senderName)s fjerna standardadressa for dette rommet.",
             "changed_alternative": "%(senderName)s endre den alternative adressa for dette rommet.",
             "changed_main_and_alternative": "%(senderName)s endra hovud- og alternativ-adressene for dette rommet.",
-            "changed": "%(senderName)s endre adressene for dette rommet."
+            "changed": "%(senderName)s endre adressene for dette rommet.",
+            "alt_added": {
+                "other": "%(senderName)s la til dei alternative adressene %(addresses)s for dette rommet.",
+                "one": "%(senderName)s la til ei alternativ adresse %(addresses)s for dette rommet."
+            },
+            "alt_removed": {
+                "other": "%(senderName)s tok vekk dei alternative adressene %(addresses)s for dette rommet.",
+                "one": "%(senderName)s tok vekk den alternative adressa %(addresses)s for dette rommet."
+            }
         },
         "m.room.third_party_invite": {
             "revoked": "%(senderName)s trekte tilbake invitasjonen for at %(targetDisplayName)s kan bli medlem i rommet.",
@@ -1080,6 +975,93 @@
                 "other": "%(names)s og %(count)s andre skriv…",
                 "one": "%(names)s og ein annan skriv…"
             }
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "other": "%(severalUsers)s har kome inn %(count)s gonger",
+                "one": "%(severalUsers)s kom inn"
+            },
+            "joined": {
+                "other": "%(oneUser)s har kome inn %(count)s gonger",
+                "one": "%(oneUser)s kom inn"
+            },
+            "left_multiple": {
+                "other": "%(severalUsers)s har fare %(count)s gonger",
+                "one": "%(severalUsers)s fór"
+            },
+            "left": {
+                "other": "%(oneUser)s har fare %(count)s gonger",
+                "one": "%(oneUser)s fór"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s har kome inn og fare att %(count)s gonger",
+                "one": "%(severalUsers)s kom inn og fór"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)s har kome inn og fare att %(count)s gonger",
+                "one": "%(oneUser)s kom inn og fór"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s har fare og kome inn att %(count)s gonger",
+                "one": "%(severalUsers)s fór og kom inn att"
+            },
+            "rejoined": {
+                "other": "%(oneUser)s har fare og kome inn att %(count)s gonger",
+                "one": "%(oneUser)s fór og kom inn att"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s sa nei til innbydingane %(count)s gonger",
+                "one": "%(severalUsers)s sa nei til innbydingane"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)s sa nei til innbydinga %(count)s gonger",
+                "one": "%(oneUser)s sa nei til innbydinga"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "%(severalUsers)s fekk innbydingane sine attekne %(count)s gonger",
+                "one": "%(severalUsers)s fekk innbydinga si attteke"
+            },
+            "invite_withdrawn": {
+                "other": "%(oneUser)s fekk innbydinga si atteke %(count)s gonger",
+                "one": "%(oneUser)s fekk innbydinga si atteke"
+            },
+            "invited_multiple": {
+                "other": "vart boden inn %(count)s gonger",
+                "one": "vart boden inn"
+            },
+            "invited": {
+                "other": "vart boden inn %(count)s gonger",
+                "one": "vart boden inn"
+            },
+            "banned_multiple": {
+                "other": "har vore stengd ute %(count)s gonger",
+                "one": "vart stengd ute"
+            },
+            "banned": {
+                "other": "har vore stengd ute %(count)s gonger",
+                "one": "vart stengd ute"
+            },
+            "unbanned_multiple": {
+                "other": "har vorta sloppe inn att %(count)s gonger",
+                "one": "vart sloppe inn att"
+            },
+            "unbanned": {
+                "other": "har vorte sloppe inn att %(count)s gonger",
+                "one": "vart sloppe inn att"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s har endra namna sine %(count)s gonger",
+                "one": "%(severalUsers)s endra namna sine"
+            },
+            "changed_name": {
+                "other": "%(oneUser)s har endra namnet sitt %(count)s gonger",
+                "one": "%(oneUser)s endra namnet sitt"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s endra tilgangsnivået til %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s frå %(fromPowerLevel)s til %(toPowerLevel)s"
         }
     },
     "slash_command": {
@@ -1112,7 +1094,13 @@
         "category_actions": "Handlingar",
         "category_admin": "Administrator",
         "category_advanced": "Avansert",
-        "category_other": "Anna"
+        "category_other": "Anna",
+        "addwidget_missing_url": "Oppgje ein widget-URL eller innebygd kode",
+        "addwidget_invalid_protocol": "Skriv inn https:// eller http:// URL-en for miniprogrammet",
+        "addwidget_no_permissions": "Du kan ikkje endra miniprogram i dette rommet.",
+        "discardsession": "Tvingar i eit kryptert rom kassering av gjeldande utgåande gruppe-økt",
+        "query": "Opna ein samtale med den spesifiserte brukaren",
+        "me": "Visar handlingar"
     },
     "presence": {
         "online_for": "tilkopla i %(duration)s",
@@ -1142,7 +1130,6 @@
         "unsupported": "Samtalar er ikkje støtta",
         "unsupported_browser": "Du kan ikkje samtala i nettlesaren."
     },
-    "Messages": "Meldingar",
     "Other": "Anna",
     "Advanced": "Avansert",
     "room_settings": {
@@ -1162,6 +1149,45 @@
             "state_default": "Endre innstillingar",
             "ban": "Stenge ute brukarar",
             "notifications.room": "Varsle alle"
+        }
+    },
+    "auth": {
+        "sign_in_with_sso": "Logg på med Single-Sign-On",
+        "sso": "Single-sign-on",
+        "account_clash": "Kontoen din %(newAccountId)s er no registrert, men du er frå tidligare logga på med ein annan konto (%(loggedInUserId)s).",
+        "account_clash_previous_account": "Fortsett med tidligare konto",
+        "log_in_new_account": "<a>Logg på</a> den nye kontoen din.",
+        "registration_successful": "Registrering fullført"
+    },
+    "export_chat": {
+        "messages": "Meldingar"
+    },
+    "room_list": {
+        "sort_unread_first": "Vis rom med ulesne meldingar fyrst",
+        "show_previews": "Vis førehandsvisningar for meldingar",
+        "sort_by": "Sorter etter",
+        "sort_by_activity": "Aktivitet",
+        "sublist_options": "Sjå alternativ",
+        "show_less": "Vis mindre"
+    },
+    "a11y": {
+        "n_unread_messages": {
+            "other": "%(count)s uleste meldingar.",
+            "one": "1 ulesen melding."
+        },
+        "unread_messages": "Uleste meldingar."
+    },
+    "onboarding": {
+        "explore_rooms": "Utforsk offentlege rom"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "%(brand)s versjon:",
+            "help_link": "For hjelp med å bruka %(brand)s, klikk <a>her</a>.",
+            "help_link_chat_bot": "For hjelp med å bruka %(brand)s, klikk <a>her</a>, eller start ein samtale med vår bot ved å bruke knappen under.",
+            "title": "Hjelp og om",
+            "versions": "Versjonar",
+            "clear_cache_reload": "Tøm buffer og last inn på nytt"
         }
     }
 }

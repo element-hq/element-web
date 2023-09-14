@@ -1,12 +1,6 @@
 {
     "Sign in with": "Sínigh isteach le",
-    "Already have an account? <a>Sign in here</a>": "An bhfuil cuntas agat cheana? <a>Sínigh isteach anseo</a>",
-    "Show less": "Taispeáin níos lú",
     "Show more": "Taispeáin níos mó",
-    "Show %(count)s more": {
-        "one": "Taispeáin %(count)s níos mó",
-        "other": "Taispeáin %(count)s níos mó"
-    },
     "Switch to dark mode": "Athraigh go mód dorcha",
     "Switch to light mode": "Athraigh go mód geal",
     "Got an account? <a>Sign in</a>": "An bhfuil cuntas agat? <a>Sínigh isteach</a>",
@@ -39,7 +33,6 @@
     "Ignored/Blocked": "Neamhairde/Tachta",
     "Avoid sequences": "Seachain seicheamh",
     "Unrecognised address": "Seoladh nár aithníodh",
-    "Displays action": "Taispeáin gníomh",
     "Verified key": "Eochair deimhnithe",
     "Unignored user": "Úsáideoir leis aird",
     "Ignored user": "Úsáideoir neamhairde",
@@ -241,14 +234,8 @@
     "Algorithm:": "Algartam:",
     "Information": "Eolas",
     "Favourited": "Roghnaithe",
-    "A-Z": "A-Z",
-    "Activity": "Gníomhaíocht",
     "Feedback": "Aiseolas",
     "Ok": "Togha",
-    "Categories": "Catagóire",
-    "Autocomplete": "Uathiomlánaigh",
-    "Calls": "Glaonna",
-    "Navigation": "Nascleanúint",
     "Accepting…": "ag Glacadh leis…",
     "Cancelling…": "ag Cealú…",
     "exists": "a bheith ann",
@@ -257,10 +244,6 @@
     "Lock": "Glasáil",
     "Unencrypted": "Gan chriptiú",
     "None": "Níl aon cheann",
-    "Flags": "Bratacha",
-    "Symbols": "Siombailí",
-    "Objects": "Rudaí",
-    "Activities": "Gníomhaíochtaí",
     "Document": "Cáipéis",
     "Italics": "Iodálach",
     "Discovery": "Aimsiú",
@@ -279,18 +262,6 @@
     "Notes": "Nótaí",
     "expand": "méadaigh",
     "collapse": "cumaisc",
-    "%(oneUser)sleft %(count)s times": {
-        "one": "D'fhág %(oneUser)s"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "one": "D'fhág %(severalUsers)s"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "one": "Tháinig %(oneUser)s isteach"
-    },
-    "%(severalUsers)sjoined %(count)s times": {
-        "one": "Tháinig %(severalUsers)s isteach"
-    },
     "edited": "curtha in eagar",
     "Copied!": "Cóipeáilte!",
     "Yesterday": "Inné",
@@ -331,7 +302,6 @@
     "Cryptography": "Cripteagrafaíocht",
     "Composer": "Eagarthóir",
     "Notifications": "Fógraí",
-    "Versions": "Leaganacha",
     "General": "Ginearálta",
     "Account": "Cuntas",
     "Profile": "Próifíl",
@@ -400,7 +370,6 @@
     "Lion": "Leon",
     "Cat": "Cat",
     "Dog": "Madra",
-    "Verified!": "Deimhnithe!",
     "Reason": "Cúis",
     "Moderator": "Modhnóir",
     "Restricted": "Teoranta",
@@ -434,7 +403,6 @@
     "Add Email Address": "Cuir seoladh ríomhphoist",
     "Click the button below to confirm adding this email address.": "Cliceáil an cnaipe thíos chun an seoladh ríomhphoist nua a dheimhniú.",
     "Confirm adding email": "Deimhnigh an seoladh ríomhphoist nua",
-    "Single Sign On": "Single Sign On",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Deimhnigh an seoladh ríomhphoist seo le SSO mar cruthúnas céannachta.",
     "Explore rooms": "Breathnaigh thart ar na seomraí",
     "Create Account": "Déan cuntas a chruthú",
@@ -447,7 +415,6 @@
     "Are you sure you want to sign out?": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?",
     "Signed Out": "Sínithe Amach",
     "Unable to query for supported registration methods.": "Ní féidir iarratas a dhéanamh faoi modhanna cláraithe tacaithe.",
-    "Host account on": "Óstáil cuntas ar",
     "Create account": "Déan cuntas a chruthú",
     "Deactivate Account": "Cuir cuntas as feidhm",
     "Account management": "Bainistíocht cuntais",
@@ -465,7 +432,6 @@
     "Global": "Uilíoch",
     "Keyword": "Eochairfhocal",
     "Report": "Tuairiscigh",
-    "Disagree": "Easaontaigh",
     "Visibility": "Léargas",
     "Address": "Seoladh",
     "Sent": "Seolta",
@@ -533,7 +499,6 @@
     "Deops user with given id": "Bain an cumhacht oibritheora ó úsáideoir leis an ID áirithe",
     "Decrypt %(text)s": "Díchriptigh %(text)s",
     "Custom level": "Leibhéal saincheaptha",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "D'athraigh %(senderName)s an leibhéal cumhachta %(powerLevelDiffText)s.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Ní féidir ceangal leis an bhfreastalaí baile trí HTTP nuair a bhíonn URL HTTPS i mbarra do bhrabhsálaí. Bain úsáid as HTTPS nó <a> scripteanna neamhshábháilte a chumasú </a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Ní féidir ceangal leis an bhfreastalaí baile - seiceáil do nascacht le do thoil, déan cinnte go bhfuil muinín i dteastas <a>SSL do fhreastalaí baile</a>, agus nach bhfuil síneadh brabhsálaí ag cur bac ar iarratais.",
     "common": {
@@ -671,7 +636,12 @@
         "submit": "Cuir isteach"
     },
     "labs": {
-        "pinning": "Ceangal teachtaireachta"
+        "pinning": "Ceangal teachtaireachta",
+        "group_profile": "Próifíl",
+        "group_spaces": "Spásanna",
+        "group_widgets": "Giuirléidí",
+        "group_rooms": "Seomraí",
+        "group_encryption": "Criptiúchán"
     },
     "keyboard": {
         "home": "Tús",
@@ -682,7 +652,10 @@
         "alt": "Alt",
         "control": "Ctrl",
         "shift": "Shift",
-        "number": "[uimhir]"
+        "number": "[uimhir]",
+        "category_calls": "Glaonna",
+        "category_navigation": "Nascleanúint",
+        "category_autocomplete": "Uathiomlánaigh"
     },
     "composer": {
         "format_bold": "Trom",
@@ -702,6 +675,9 @@
         "always_show_message_timestamps": "Taispeáin stampaí ama teachtaireachta i gcónaí",
         "notifications": {
             "rule_call": "Nuair a fhaighim cuireadh glaoigh"
+        },
+        "appearance": {
+            "timeline_image_size_default": "Réamhshocrú"
         }
     },
     "devtools": {
@@ -722,6 +698,23 @@
         },
         "m.call.hangup": {
             "dm": "Críochnaíodh an glao"
+        },
+        "summary": {
+            "joined_multiple": {
+                "one": "Tháinig %(severalUsers)s isteach"
+            },
+            "joined": {
+                "one": "Tháinig %(oneUser)s isteach"
+            },
+            "left_multiple": {
+                "one": "D'fhág %(severalUsers)s"
+            },
+            "left": {
+                "one": "D'fhág %(oneUser)s"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "D'athraigh %(senderName)s an leibhéal cumhachta %(powerLevelDiffText)s."
         }
     },
     "slash_command": {
@@ -733,7 +726,8 @@
         "category_admin": "Riarthóir",
         "category_advanced": "Forbartha",
         "category_effects": "Tionchair",
-        "category_other": "Eile"
+        "category_other": "Eile",
+        "me": "Taispeáin gníomh"
     },
     "presence": {
         "online": "Ar Líne",
@@ -774,7 +768,6 @@
         "call_failed_media_permissions": "Tugtar cead an ceamara gréasáin a úsáid",
         "call_failed_media_applications": "Níl aon fheidhmchlár eile ag úsáid an cheamara gréasáin"
     },
-    "Messages": "Teachtaireachtaí",
     "Other": "Eile",
     "Advanced": "Forbartha",
     "room_settings": {
@@ -788,6 +781,43 @@
             "state_default": "Athraigh socruithe",
             "ban": "Toirmisc úsáideoirí",
             "notifications.room": "Tabhair fógraí do gach duine"
+        }
+    },
+    "encryption": {
+        "verification": {
+            "complete_title": "Deimhnithe!"
+        }
+    },
+    "emoji": {
+        "category_activities": "Gníomhaíochtaí",
+        "category_objects": "Rudaí",
+        "category_symbols": "Siombailí",
+        "category_flags": "Bratacha",
+        "categories": "Catagóire"
+    },
+    "auth": {
+        "sso": "Single Sign On",
+        "sign_in_instead": "An bhfuil cuntas agat cheana? <a>Sínigh isteach anseo</a>",
+        "server_picker_title": "Óstáil cuntas ar"
+    },
+    "export_chat": {
+        "messages": "Teachtaireachtaí"
+    },
+    "room_list": {
+        "sort_by_activity": "Gníomhaíocht",
+        "sort_by_alphabet": "A-Z",
+        "show_n_more": {
+            "one": "Taispeáin %(count)s níos mó",
+            "other": "Taispeáin %(count)s níos mó"
+        },
+        "show_less": "Taispeáin níos lú"
+    },
+    "report_content": {
+        "disagree": "Easaontaigh"
+    },
+    "setting": {
+        "help_about": {
+            "versions": "Leaganacha"
         }
     }
 }

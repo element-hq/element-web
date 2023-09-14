@@ -61,11 +61,7 @@
     "Define the power level of a user": "उपयोगकर्ता के पावर स्तर को परिभाषित करें",
     "Deops user with given id": "दिए गए आईडी के साथ उपयोगकर्ता को देओप्स करना",
     "Verified key": "सत्यापित कुंजी",
-    "Displays action": "कार्रवाई प्रदर्शित करता है",
-    "Forces the current outbound group session in an encrypted room to be discarded": "एक एन्क्रिप्टेड रूम में मौजूदा आउटबाउंड समूह सत्र को त्यागने के लिए मजबूर करता है",
     "Reason": "कारण",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s का %(fromPowerLevel)s से %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ने %(powerLevelDiffText)s के पावर स्तर को बदल दिया।",
     "Failure to create room": "रूम बनाने में विफलता",
     "Server may be unavailable, overloaded, or you hit a bug.": "सर्वर अनुपलब्ध, अधिभारित हो सकता है, या अपने एक सॉफ्टवेयर गर्बरी को पाया।",
     "Send": "भेजें",
@@ -124,7 +120,6 @@
     "A word by itself is easy to guess": "सिर्फ एक शब्द अनुमान लगाना आसान है",
     "Names and surnames by themselves are easy to guess": "खुद के नाम और उपनाम अनुमान लगाना आसान है",
     "Common names and surnames are easy to guess": "सामान्य नाम और उपनाम अनुमान लगाना आसान है",
-    "Show message in desktop notification": "डेस्कटॉप अधिसूचना में संदेश दिखाएं",
     "Off": "बंद",
     "On": "चालू",
     "Noisy": "शोरगुल",
@@ -164,9 +159,6 @@
     "Unrecognised address": "अपरिचित पता",
     "Straight rows of keys are easy to guess": "कुंजी की सीधी पंक्तियों का अनुमान लगाना आसान है",
     "Short keyboard patterns are easy to guess": "लघु कीबोर्ड पैटर्न का अनुमान लगाना आसान है",
-    "The other party cancelled the verification.": "दूसरे पक्ष ने सत्यापन रद्द कर दिया।",
-    "Verified!": "सत्यापित!",
-    "You've successfully verified this user.": "आपने इस उपयोगकर्ता को सफलतापूर्वक सत्यापित कर लिया है।",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "इस उपयोगकर्ता के सुरक्षित संदेश एंड-टू-एंड एन्क्रिप्टेड हैं और तीसरे पक्ष द्वारा पढ़ने में सक्षम नहीं हैं।",
     "Got It": "समझ गया",
     "Verify this user by confirming the following emoji appear on their screen.": "इस उपयोगकर्ता की पुष्टि करें कि उनकी स्क्रीन पर निम्नलिखित इमोजी दिखाई देते हैं।",
@@ -268,8 +260,6 @@
     "Account management": "खाता प्रबंधन",
     "Deactivate Account": "खाता निष्क्रिय करें",
     "Check for update": "अपडेट के लिये जांचें",
-    "Help & About": "सहायता और के बारे में",
-    "Versions": "संस्करण",
     "Notifications": "सूचनाएं",
     "Scissors": "कैंची",
     "Room list": "कक्ष सूचि",
@@ -294,8 +284,6 @@
     "Banned by %(displayName)s": "%(displayName)s द्वारा प्रतिबंधित",
     "No users have specific privileges in this room": "इस कमरे में किसी भी उपयोगकर्ता के विशेष विशेषाधिकार नहीं हैं",
     "The file '%(fileName)s' failed to upload.": "फ़ाइल '%(fileName)s' अपलोड करने में विफल रही।",
-    "Please supply a https:// or http:// widget URL": "कृपया एक https:// या http:// विजेट URL की आपूर्ति करें",
-    "You cannot modify widgets in this room.": "आप इस रूम में विजेट्स को संशोधित नहीं कर सकते।",
     "The user must be unbanned before they can be invited.": "उपयोगकर्ता को आमंत्रित करने से पहले उन्हें प्रतिबंधित किया जाना चाहिए।",
     "Explore rooms": "रूम का अन्वेषण करें",
     "Create Account": "खाता बनाएं",
@@ -480,7 +468,6 @@
     "Add Email Address": "ईमेल पता जोड़ें",
     "Click the button below to confirm adding this email address.": "इस ईमेल पते को जोड़ने की पुष्टि करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
     "Confirm adding email": "ईमेल जोड़ने की पुष्टि करें",
-    "Single Sign On": "केवल हस्ताक्षर के ऊपर",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "अपनी पहचान साबित करने के लिए सिंगल साइन ऑन का उपयोग करके इस ईमेल पते को जोड़ने की पुष्टि करें।",
     "Use Single Sign On to continue": "जारी रखने के लिए सिंगल साइन ऑन का उपयोग करें",
     "common": {
@@ -532,7 +519,9 @@
     },
     "labs": {
         "pinning": "संदेश पिनिंग",
-        "state_counters": "कमरे के हेडर में साधारण काउंटर रेंडर करें"
+        "state_counters": "कमरे के हेडर में साधारण काउंटर रेंडर करें",
+        "group_profile": "प्रोफाइल",
+        "group_voip": "ध्वनि और वीडियो"
     },
     "power_level": {
         "default": "डिफ़ॉल्ट",
@@ -577,7 +566,11 @@
             "rule_invite_for_me": "जब मुझे एक रूम में आमंत्रित किया जाता है",
             "rule_call": "कॉल आमंत्रण",
             "rule_suppress_notices": "रोबॉट द्वारा भेजे गए संदेश",
-            "rule_encrypted_room_one_to_one": "एक एक के साथ चैट में एन्क्रिप्टेड संदेश"
+            "rule_encrypted_room_one_to_one": "एक एक के साथ चैट में एन्क्रिप्टेड संदेश",
+            "show_message_desktop_notification": "डेस्कटॉप अधिसूचना में संदेश दिखाएं"
+        },
+        "appearance": {
+            "timeline_image_size_default": "डिफ़ॉल्ट"
         }
     },
     "timeline": {
@@ -628,6 +621,10 @@
                 "other": "%(names)s और %(count)s अन्य टाइप कर रहे हैं …",
                 "one": "%(names)s और एक अन्य टाइप कर रहा है …"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s ने %(powerLevelDiffText)s के पावर स्तर को बदल दिया।",
+            "user_from_to": "%(userId)s का %(fromPowerLevel)s से %(toPowerLevel)s"
         }
     },
     "slash_command": {
@@ -646,7 +643,11 @@
         "addwidget": "रूम में URL द्वारा एक कस्टम विजेट जोड़ता है",
         "usage": "प्रयोग",
         "category_admin": "व्यवस्थापक",
-        "category_advanced": "उन्नत"
+        "category_advanced": "उन्नत",
+        "addwidget_invalid_protocol": "कृपया एक https:// या http:// विजेट URL की आपूर्ति करें",
+        "addwidget_no_permissions": "आप इस रूम में विजेट्स को संशोधित नहीं कर सकते।",
+        "discardsession": "एक एन्क्रिप्टेड रूम में मौजूदा आउटबाउंड समूह सत्र को त्यागने के लिए मजबूर करता है",
+        "me": "कार्रवाई प्रदर्शित करता है"
     },
     "presence": {
         "online_for": "%(duration)s के लिए ऑनलाइन",
@@ -680,5 +681,21 @@
     "composer": {
         "placeholder_reply_encrypted": "एक एन्क्रिप्टेड उत्तर भेजें …",
         "placeholder_encrypted": "एक एन्क्रिप्टेड संदेश भेजें …"
+    },
+    "encryption": {
+        "verification": {
+            "other_party_cancelled": "दूसरे पक्ष ने सत्यापन रद्द कर दिया।",
+            "complete_title": "सत्यापित!",
+            "complete_description": "आपने इस उपयोगकर्ता को सफलतापूर्वक सत्यापित कर लिया है।"
+        }
+    },
+    "auth": {
+        "sso": "केवल हस्ताक्षर के ऊपर"
+    },
+    "setting": {
+        "help_about": {
+            "title": "सहायता और के बारे में",
+            "versions": "संस्करण"
+        }
     }
 }

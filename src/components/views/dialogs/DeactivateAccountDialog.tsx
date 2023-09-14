@@ -74,7 +74,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         const dialogAesthetics = {
             [SSOAuthEntry.PHASE_PREAUTH]: {
                 body: _t("Confirm your account deactivation by using Single Sign On to prove your identity."),
-                continueText: _t("Single Sign On"),
+                continueText: _t("auth|sso"),
                 continueKind: "danger",
             },
             [SSOAuthEntry.PHASE_POSTAUTH]: {

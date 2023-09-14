@@ -94,7 +94,6 @@
     "This phone number is already in use": "ఈ ఫోన్ నంబర్ ఇప్పటికే వాడుకం లో ఉంది",
     "Failed to verify email address: make sure you clicked the link in the email": "ఇమెయిల్ అడ్రస్ ని నిరూపించలేక పోయాము. ఈమెయిల్ లో వచ్చిన లింక్ ని నొక్కారా",
     "Confirm adding email": "ఈమెయిల్ చేర్చుటకు ధ్రువీకరించు",
-    "Single Sign On": "సింగిల్ సైన్ ఆన్",
     "common": {
         "error": "లోపం",
         "mute": "నిశబ్ధము",
@@ -135,6 +134,9 @@
             "rule_message": "సమూహ మాటామంతిలో సందేశాలు",
             "rule_call": "మాట్లాడడానికి ఆహ్వానం",
             "rule_suppress_notices": "బాట్ పంపిన సందేశాలు"
+        },
+        "appearance": {
+            "timeline_image_size_default": "డిఫాల్ట్"
         }
     },
     "timeline": {
@@ -151,5 +153,8 @@
     "Advanced": "ఆధునిక",
     "voip": {
         "call_failed": "కాల్ విఫలమయింది"
+    },
+    "auth": {
+        "sso": "సింగిల్ సైన్ ఆన్"
     }
 }

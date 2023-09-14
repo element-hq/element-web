@@ -85,7 +85,7 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
                     <React.Fragment>
                         <p>
                             {_t(
-                                "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.",
+                                "bug_reporting|create_new_issue",
                                 {},
                                 {
                                     newIssueLink: (sub) => {
@@ -115,7 +115,7 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
             if (MatrixClientPeg.get()) {
                 clearCacheButton = (
                     <AccessibleButton onClick={this.onClearCacheAndReload} kind="danger">
-                        {_t("Clear cache and reload")}
+                        {_t("setting|help_about|clear_cache_reload")}
                     </AccessibleButton>
                 );
             }

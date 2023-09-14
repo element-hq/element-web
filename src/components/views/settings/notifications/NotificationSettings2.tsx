@@ -122,7 +122,7 @@ export default function NotificationSettings2(): JSX.Element {
             <SettingsSection heading={_t("Notifications")}>
                 <div className="mx_SettingsSubsection_content mx_NotificationSettings2_flags">
                     <LabelledToggleSwitch
-                        label={_t("Enable notifications for this account")}
+                        label={_t("settings|notifications|enable_notifications_account")}
                         value={!settings.globalMute}
                         disabled={disabled}
                         onChange={(value) => {
@@ -133,7 +133,7 @@ export default function NotificationSettings2(): JSX.Element {
                         }}
                     />
                     <LabelledToggleSwitch
-                        label={_t("Enable desktop notifications for this session")}
+                        label={_t("settings|notifications|enable_desktop_notifications_session")}
                         value={desktopNotifications}
                         onChange={(value) =>
                             SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, value)
@@ -147,7 +147,7 @@ export default function NotificationSettings2(): JSX.Element {
                         }
                     />
                     <LabelledToggleSwitch
-                        label={_t("Enable audible notifications for this session")}
+                        label={_t("settings|notifications|enable_audible_notifications_session")}
                         value={audioNotifications}
                         onChange={(value) =>
                             SettingsStore.setValue("audioNotificationsEnabled", null, SettingLevel.DEVICE, value)

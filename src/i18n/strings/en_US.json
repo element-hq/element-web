@@ -22,7 +22,6 @@
     "Banned users": "Banned users",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.",
     "Change Password": "Change Password",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
     "Command error": "Command error",
     "Commands": "Commands",
     "Confirm password": "Confirm password",
@@ -34,7 +33,6 @@
     "Deops user with given id": "Deops user with given id",
     "Default": "Default",
     "Delete widget": "Delete widget",
-    "Displays action": "Displays action",
     "Download %(text)s": "Download %(text)s",
     "Email": "Email",
     "Email address": "Email address",
@@ -57,7 +55,6 @@
     "Filter room members": "Filter room members",
     "Forget room": "Forget room",
     "For security, this session has been signed out. Please sign in again.": "For security, this session has been signed out. Please sign in again.",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s",
     "Historical": "Historical",
     "Import E2E room keys": "Import E2E room keys",
     "Incorrect username and/or password.": "Incorrect username and/or password.",
@@ -98,7 +95,6 @@
     "Return to login screen": "Return to login screen",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s does not have permission to send you notifications - please check your browser settings",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s was not given permission to send notifications - please try again",
-    "%(brand)s version:": "%(brand)s version:",
     "Room %(roomId)s not visible": "Room %(roomId)s not visible",
     "Rooms": "Rooms",
     "Search failed": "Search failed",
@@ -264,7 +260,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "Restricted": "Restricted",
     "Missing roomId.": "Missing roomId.",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Forces the current outbound group session in an encrypted room to be discarded",
     "Spanner": "Wrench",
     "Aeroplane": "Airplane",
     "Cat": "Cat",
@@ -273,8 +268,6 @@
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",
     "The server does not support the room version specified.": "The server does not support the room version specified.",
     "Unable to load! Check your network connectivity and try again.": "Unable to load! Check your network connectivity and try again.",
-    "Please supply a https:// or http:// widget URL": "Please supply an https:// or http:// widget URL",
-    "You cannot modify widgets in this room.": "You cannot modify widgets in this room.",
     "Your %(brand)s is misconfigured": "Your %(brand)s is misconfigured",
     "Call failed due to misconfigured server": "Call failed due to misconfigured server",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.",
@@ -299,11 +292,9 @@
     "Explore rooms": "Explore rooms",
     "Click the button below to confirm adding this email address.": "Click the button below to confirm adding this email address.",
     "Confirm adding email": "Confirm adding email",
-    "Single Sign On": "Single Sign On",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirm adding this email address by using Single Sign On to prove your identity.",
     "Use Single Sign On to continue": "Use Single Sign On to continue",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait while we resynchronize with the server!",
-    "Customise your appearance": "Customize your appearance",
     "Unrecognised command: %(commandText)s": "Unrecognized command: %(commandText)s",
     "Add some details to help people recognise it.": "Add some details to help people recognize it.",
     "A private space to organise your rooms": "A private space to organize your rooms",
@@ -406,6 +397,10 @@
             "rule_invite_for_me": "When I'm invited to a room",
             "rule_call": "Call invitation",
             "rule_suppress_notices": "Messages sent by bot"
+        },
+        "appearance": {
+            "heading": "Customize your appearance",
+            "timeline_image_size_default": "Default"
         }
     },
     "timeline": {
@@ -454,6 +449,10 @@
             "more_users": {
                 "other": "%(names)s and %(count)s others are typing …"
             }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s changed the power level of %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s"
         }
     },
     "slash_command": {
@@ -482,7 +481,11 @@
         "category_actions": "Actions",
         "category_admin": "Admin",
         "category_advanced": "Advanced",
-        "category_other": "Other"
+        "category_other": "Other",
+        "addwidget_invalid_protocol": "Please supply an https:// or http:// widget URL",
+        "addwidget_no_permissions": "You cannot modify widgets in this room.",
+        "discardsession": "Forces the current outbound group session in an encrypted room to be discarded",
+        "me": "Displays action"
     },
     "presence": {
         "online": "Online",
@@ -504,7 +507,21 @@
         "category_room": "Room",
         "category_other": "Other"
     },
-    "Messages": "Messages",
     "Other": "Other",
-    "Advanced": "Advanced"
+    "Advanced": "Advanced",
+    "labs": {
+        "group_profile": "Profile",
+        "group_rooms": "Rooms"
+    },
+    "auth": {
+        "sso": "Single Sign On"
+    },
+    "export_chat": {
+        "messages": "Messages"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "%(brand)s version:"
+        }
+    }
 }

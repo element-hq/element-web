@@ -67,8 +67,6 @@
     "You are no longer ignoring %(userId)s": "Ja no estàs ignorant l'usuari %(userId)s",
     "Verified key": "Claus verificades",
     "Reason": "Raó",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s de %(fromPowerLevel)s a %(toPowerLevel)s",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": "%(senderName)s ha canviat el nivell d'autoritat de %(powerLevelDiffText)s.",
     "Failure to create room": "No s'ha pogut crear la sala",
     "Server may be unavailable, overloaded, or you hit a bug.": "És possible que el servidor no estigui disponible, sobrecarregat o que hagi topat amb un error.",
     "Send": "Envia",
@@ -176,87 +174,6 @@
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "La supressió d'un giny l'elimina per a tots els usuaris d'aquesta sala. Esteu segur que voleu eliminar aquest giny?",
     "Delete widget": "Suprimeix el giny",
     "Home": "Inici",
-    "%(nameList)s %(transitionList)s": "%(nameList)s %(transitionList)s",
-    "%(severalUsers)sjoined %(count)s times": {
-        "one": "%(severalUsers)s s'hi han unit",
-        "other": "%(severalUsers)s han entrat %(count)s vegades"
-    },
-    "%(oneUser)sjoined %(count)s times": {
-        "one": "%(oneUser)ss'ha unit",
-        "other": "%(oneUser)sha entrat %(count)s vegades"
-    },
-    "%(severalUsers)sleft %(count)s times": {
-        "one": "%(severalUsers)s han sortit",
-        "other": "%(severalUsers)s han sortit %(count)s vegades"
-    },
-    "%(oneUser)sleft %(count)s times": {
-        "one": "%(oneUser)sha sortit",
-        "other": "%(oneUser)sha sortit %(count)s vegades"
-    },
-    "%(severalUsers)sjoined and left %(count)s times": {
-        "other": "%(severalUsers)s s'hi han unit i han sortit %(count)s vegades",
-        "one": "%(severalUsers)s s'hi han unit i han sortit"
-    },
-    "%(oneUser)sjoined and left %(count)s times": {
-        "other": "%(oneUser)sha entrat i ha sortit %(count)s vegades",
-        "one": "%(oneUser)sha entrat i ha sortit"
-    },
-    "%(severalUsers)sleft and rejoined %(count)s times": {
-        "other": "%(severalUsers)s han sortit i han tornat a entrar %(count)s vegades",
-        "one": "%(severalUsers)s han sortit i han tornat a entrar"
-    },
-    "%(oneUser)sleft and rejoined %(count)s times": {
-        "other": "%(oneUser)sha sortit i ha tornat a entrar %(count)s vegades",
-        "one": "%(oneUser)sha sortit i ha tornat a entrar"
-    },
-    "%(severalUsers)srejected their invitations %(count)s times": {
-        "other": "%(severalUsers)s han rebutjat les seves invitacions %(count)s vegades",
-        "one": "%(severalUsers)s han rebutjat les seves invitacions"
-    },
-    "%(oneUser)srejected their invitation %(count)s times": {
-        "other": "%(oneUser)sha rebutjat la seva invitació %(count)s vegades",
-        "one": "%(oneUser)sha rebutjat la seva invitació"
-    },
-    "%(severalUsers)shad their invitations withdrawn %(count)s times": {
-        "other": "S'han retirat les invitacions de %(severalUsers)s %(count)s vegades",
-        "one": "S'han retirat les invitacions de %(severalUsers)s"
-    },
-    "%(oneUser)shad their invitation withdrawn %(count)s times": {
-        "other": "S'ha retirat la invitació de %(oneUser)s %(count)s vegades",
-        "one": "S'ha retirat la invitació de %(oneUser)s"
-    },
-    "were invited %(count)s times": {
-        "other": "a sigut invitat %(count)s vegades",
-        "one": "han sigut convidats"
-    },
-    "was invited %(count)s times": {
-        "other": "ha sigut convidat %(count)s vegades",
-        "one": "ha sigut convidat"
-    },
-    "were banned %(count)s times": {
-        "other": "han sigut expulsats %(count)s vegades",
-        "one": "ha sigut expulsat"
-    },
-    "was banned %(count)s times": {
-        "other": "ha sigut expulsat %(count)s vegades",
-        "one": "ha sigut expulsat"
-    },
-    "were unbanned %(count)s times": {
-        "other": "han sigut readmesos %(count)s vegades",
-        "one": "han sigut readmesos"
-    },
-    "was unbanned %(count)s times": {
-        "other": "ha sigut readmès %(count)s vegades",
-        "one": "ha sigut readmès"
-    },
-    "%(severalUsers)schanged their name %(count)s times": {
-        "other": "%(severalUsers)s han canviat el seu nom %(count)s vegades",
-        "one": "%(severalUsers)s han canviat el seu nom"
-    },
-    "%(oneUser)schanged their name %(count)s times": {
-        "other": "%(oneUser)sha canviat el seu nom %(count)s vegades",
-        "one": "%(oneUser)s ha canviat el seu nom"
-    },
     "%(items)s and %(count)s others": {
         "other": "%(items)s i %(count)s altres",
         "one": "%(items)s i un altre"
@@ -310,7 +227,6 @@
     "Uploading %(filename)s": "Pujant %(filename)s",
     "Import E2E room keys": "Importar claus E2E de sala",
     "Cryptography": "Criptografia",
-    "%(brand)s version:": "Versió de %(brand)s:",
     "Incorrect username and/or password.": "Usuari i/o contrasenya incorrectes.",
     "Session ID": "ID de la sessió",
     "Export room keys": "Exporta les claus de la sala",
@@ -346,7 +262,6 @@
     "You cannot delete this message. (%(code)s)": "No podeu eliminar aquest missatge. (%(code)s)",
     "Thursday": "Dijous",
     "Logs sent": "Logs enviats",
-    "Show message in desktop notification": "Mostra els missatges amb notificacions d'escriptori",
     "Yesterday": "Ahir",
     "Error encountered (%(errorDetail)s).": "S'ha trobat un error (%(errorDetail)s).",
     "Low Priority": "Baixa prioritat",
@@ -359,7 +274,6 @@
     "Missing roomId.": "Falta l'ID de sala.",
     "Define the power level of a user": "Defineix el nivell d'autoritat d'un usuari",
     "Deops user with given id": "Degrada l'usuari amb l'id donat",
-    "Displays action": "Mostra l'acció",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "El fitxer %(fileName)s supera la mida màxima permesa per a pujades d'aquest servidor",
     "You do not have permission to invite people to this room.": "No teniu permís per convidar gent a aquesta sala.",
     "Use a few words, avoid common phrases": "Feu servir unes quantes paraules, eviteu frases comunes",
@@ -419,7 +333,6 @@
     "Error removing ignored user/server": "Error eliminant usuari/servidor ignorat",
     "Error subscribing to list": "Error subscrivint-se a la llista",
     "Error adding ignored user/server": "Error afegint usuari/servidor ignorat",
-    "Error downloading theme information.": "Error baixant informació de tema.",
     "Unexpected server error trying to leave the room": "Error de servidor inesperat intentant sortir de la sala",
     "Error leaving room": "Error sortint de la sala",
     "Unexpected error resolving identity server configuration": "Error inesperat resolent la configuració del servidor d'identitat",
@@ -460,7 +373,6 @@
     "Confirm this user's session by comparing the following with their User Settings:": "Confirma aquesta sessió d'usuari comparant amb la seva configuració d'usuari, el següent:",
     "Confirm by comparing the following with the User Settings in your other session:": "Confirma comparant el següent amb la configuració d'usuari de la teva altra sessió:",
     "Room settings": "Configuració de sala",
-    "Appearance Settings only affect this %(brand)s session.": "La configuració d'aspecte només afecta aquesta sessió %(brand)s.",
     "Change notification settings": "Canvia la configuració de notificacions",
     "⚠ These settings are meant for advanced users.": "⚠ Aquesta configuració està pensada per usuaris avançats.",
     "Link this email with your account in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, enllaça aquest correu electrònic amb el teu compte a Configuració.",
@@ -478,21 +390,13 @@
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Confirma la desactivació del teu compte mitjançant la inscripció única SSO (per demostrar la teva identitat).",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Confirma l'addició d'aquest número de telèfon mitjançant la inscripció única SSO (per demostrar la teva identitat).",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirma l'addició d'aquest correu electrònic mitjançant la inscripció única SSO (per demostrar la teva identitat).",
-    "Sign in with single sign-on": "Inicia sessió mitjançant la inscripció única (SSO)",
-    "Single Sign On": "Inscripció única (SSO)",
     "Use Single Sign On to continue": "Utilitza la inscripció única (SSO) per a continuar",
     "Click the button below to confirm adding this phone number.": "Fes clic al botó de sota per confirmar l'addició d'aquest número de telèfon.",
     "Confirm adding phone number": "Confirma l'addició del número de telèfon",
     "Add Email Address": "Afegeix una adreça de correu electrònic",
     "Click the button below to confirm adding this email address.": "Fes clic al botó de sota per confirmar l'addició d'aquesta adreça de correu electrònic.",
     "Explore rooms": "Explora sales",
-    "%(oneUser)smade no changes %(count)s times": {
-        "one": "%(oneUser)sno ha fet canvis",
-        "other": "%(oneUser)sno ha fet canvis %(count)s cops"
-    },
-    "Integration manager": "Gestor d'integracions",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Els gestors d'integracions reben dades de configuració i poden modificar ginys, enviar invitacions a sales i establir nivells d'autoritat en nom teu.",
-    "Identity server": "Servidor d'identitat",
     "Could not connect to identity server": "No s'ha pogut connectar amb el servidor d'identitat",
     "common": {
         "analytics": "Analítiques",
@@ -517,7 +421,9 @@
         "camera": "Càmera",
         "microphone": "Micròfon",
         "someone": "Algú",
-        "unnamed_room": "Sala sense nom"
+        "unnamed_room": "Sala sense nom",
+        "identity_server": "Servidor d'identitat",
+        "integration_manager": "Gestor d'integracions"
     },
     "action": {
         "continue": "Continua",
@@ -562,7 +468,8 @@
     },
     "labs": {
         "pinning": "Fixació de missatges",
-        "bridge_state": "Mostra informació d'enllaços a la configuració de sala"
+        "bridge_state": "Mostra informació d'enllaços a la configuració de sala",
+        "group_rooms": "Sales"
     },
     "keyboard": {
         "home": "Inici"
@@ -597,7 +504,13 @@
             "rule_message": "Missatges en xats de grup",
             "rule_invite_for_me": "Quan sóc convidat a una sala",
             "rule_call": "Invitació de trucada",
-            "rule_suppress_notices": "Missatges enviats pel bot"
+            "rule_suppress_notices": "Missatges enviats pel bot",
+            "show_message_desktop_notification": "Mostra els missatges amb notificacions d'escriptori"
+        },
+        "appearance": {
+            "subheading": "La configuració d'aspecte només afecta aquesta sessió %(brand)s.",
+            "custom_theme_error_downloading": "Error baixant informació de tema.",
+            "timeline_image_size_default": "Predeterminat"
         }
     },
     "devtools": {
@@ -657,6 +570,97 @@
                 "other": "%(names)s i %(count)s més estan escrivint…",
                 "one": "%(names)s i una altra persona estan escrivint…"
             }
+        },
+        "summary": {
+            "format": "%(nameList)s %(transitionList)s",
+            "joined_multiple": {
+                "one": "%(severalUsers)s s'hi han unit",
+                "other": "%(severalUsers)s han entrat %(count)s vegades"
+            },
+            "joined": {
+                "one": "%(oneUser)ss'ha unit",
+                "other": "%(oneUser)sha entrat %(count)s vegades"
+            },
+            "left_multiple": {
+                "one": "%(severalUsers)s han sortit",
+                "other": "%(severalUsers)s han sortit %(count)s vegades"
+            },
+            "left": {
+                "one": "%(oneUser)sha sortit",
+                "other": "%(oneUser)sha sortit %(count)s vegades"
+            },
+            "joined_and_left_multiple": {
+                "other": "%(severalUsers)s s'hi han unit i han sortit %(count)s vegades",
+                "one": "%(severalUsers)s s'hi han unit i han sortit"
+            },
+            "joined_and_left": {
+                "other": "%(oneUser)sha entrat i ha sortit %(count)s vegades",
+                "one": "%(oneUser)sha entrat i ha sortit"
+            },
+            "rejoined_multiple": {
+                "other": "%(severalUsers)s han sortit i han tornat a entrar %(count)s vegades",
+                "one": "%(severalUsers)s han sortit i han tornat a entrar"
+            },
+            "rejoined": {
+                "other": "%(oneUser)sha sortit i ha tornat a entrar %(count)s vegades",
+                "one": "%(oneUser)sha sortit i ha tornat a entrar"
+            },
+            "rejected_invite_multiple": {
+                "other": "%(severalUsers)s han rebutjat les seves invitacions %(count)s vegades",
+                "one": "%(severalUsers)s han rebutjat les seves invitacions"
+            },
+            "rejected_invite": {
+                "other": "%(oneUser)sha rebutjat la seva invitació %(count)s vegades",
+                "one": "%(oneUser)sha rebutjat la seva invitació"
+            },
+            "invite_withdrawn_multiple": {
+                "other": "S'han retirat les invitacions de %(severalUsers)s %(count)s vegades",
+                "one": "S'han retirat les invitacions de %(severalUsers)s"
+            },
+            "invite_withdrawn": {
+                "other": "S'ha retirat la invitació de %(oneUser)s %(count)s vegades",
+                "one": "S'ha retirat la invitació de %(oneUser)s"
+            },
+            "invited_multiple": {
+                "other": "a sigut invitat %(count)s vegades",
+                "one": "han sigut convidats"
+            },
+            "invited": {
+                "other": "ha sigut convidat %(count)s vegades",
+                "one": "ha sigut convidat"
+            },
+            "banned_multiple": {
+                "other": "han sigut expulsats %(count)s vegades",
+                "one": "ha sigut expulsat"
+            },
+            "banned": {
+                "other": "ha sigut expulsat %(count)s vegades",
+                "one": "ha sigut expulsat"
+            },
+            "unbanned_multiple": {
+                "other": "han sigut readmesos %(count)s vegades",
+                "one": "han sigut readmesos"
+            },
+            "unbanned": {
+                "other": "ha sigut readmès %(count)s vegades",
+                "one": "ha sigut readmès"
+            },
+            "changed_name_multiple": {
+                "other": "%(severalUsers)s han canviat el seu nom %(count)s vegades",
+                "one": "%(severalUsers)s han canviat el seu nom"
+            },
+            "changed_name": {
+                "other": "%(oneUser)sha canviat el seu nom %(count)s vegades",
+                "one": "%(oneUser)s ha canviat el seu nom"
+            },
+            "no_change": {
+                "one": "%(oneUser)sno ha fet canvis",
+                "other": "%(oneUser)sno ha fet canvis %(count)s cops"
+            }
+        },
+        "m.room.power_levels": {
+            "changed": "%(senderName)s ha canviat el nivell d'autoritat de %(powerLevelDiffText)s.",
+            "user_from_to": "%(userId)s de %(fromPowerLevel)s a %(toPowerLevel)s"
         }
     },
     "slash_command": {
@@ -683,7 +687,8 @@
         "category_actions": "Accions",
         "category_admin": "Administrador",
         "category_advanced": "Avançat",
-        "category_other": "Altres"
+        "category_other": "Altres",
+        "me": "Mostra l'acció"
     },
     "presence": {
         "online_for": "En línia durant %(duration)s",
@@ -704,7 +709,6 @@
         "unable_to_access_microphone": "No s'ha pogut accedir al micròfon",
         "unable_to_access_media": "No s'ha pogut accedir a la càmera web / micròfon"
     },
-    "Messages": "Missatges",
     "Other": "Altres",
     "Advanced": "Avançat",
     "composer": {
@@ -714,6 +718,18 @@
     "room_settings": {
         "permissions": {
             "state_default": "Canvia la configuració"
+        }
+    },
+    "auth": {
+        "sign_in_with_sso": "Inicia sessió mitjançant la inscripció única (SSO)",
+        "sso": "Inscripció única (SSO)"
+    },
+    "export_chat": {
+        "messages": "Missatges"
+    },
+    "setting": {
+        "help_about": {
+            "brand_version": "Versió de %(brand)s:"
         }
     }
 }

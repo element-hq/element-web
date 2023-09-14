@@ -40,9 +40,7 @@
     "Restricted": "vlipa so'u da",
     "Moderator": "vlipa so'o da",
     "Power level must be positive integer.": ".i lo nu le ni vlipa cu kacna'u cu sarcu",
-    "%(senderName)s changed the power level of %(powerLevelDiffText)s.": ".i la'o ly. %(senderName)s .ly. gafygau %(powerLevelDiffText)s",
     "Failed to change power level": ".i pu fliba lo nu gafygau lo ni vlipa",
-    "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "lo ni la'o ny. %(userId)s .ny. vlipa noi pu du %(fromPowerLevel)s ku %(toPowerLevel)s",
     "Operation failed": ".i da nabmi",
     "Failed to invite": ".i da nabmi fi lo nu friti le ka ziljmina",
     "You need to be logged in.": ".i lo nu da jaspu do sarcu",
@@ -64,8 +62,6 @@
     "Define the power level of a user": ".i ninga'igau lo ni lo pilno cu vlipa",
     "Deops user with given id": ".i xruti lo ni lo pilno poi se judri ti cu vlipa",
     "Verified key": "ckiku vau je se lacri",
-    "Displays action": ".i mrilu lo nu do gasnu",
-    "Forces the current outbound group session in an encrypted room to be discarded": ".i macnu vimcu lo ca barkla termifckiku gunma lo kumfa pe'a poi mifra",
     "Reason": "krinu",
     "This homeserver has hit its Monthly Active User limit.": ".i le samtcise'u cu bancu lo masti jimte be ri bei lo ni ca'o pilno",
     "This homeserver has exceeded one of its resource limits.": ".i le samtcise'u cu bancu pa lo jimte be ri",
@@ -95,17 +91,7 @@
     "Command error": ".i da nabmi fi lo nu minde",
     "Could not find user in room": ".i le pilno na pagbu le se zilbe'i",
     "Session already verified!": ".i xa'o lacri le se samtcise'u",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.": {
-        "other": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'a judri le se zilbe'i",
-        "one": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'a judri le se zilbe'i"
-    },
-    "%(senderName)s removed the alternative addresses %(addresses)s for this room.": {
-        "other": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'u judri le se zilbe'i",
-        "one": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'u judri le se zilbe'i"
-    },
     "You signed in to a new session without verifying it:": ".i fe le di'e se samtcise'u pu co'a jaspu vau je za'o na lacri",
-    "They match": "du",
-    "They don't match": "na du",
     "Dog": "gerku",
     "Cat": "mlatu",
     "Lion": "cinfo",
@@ -163,10 +149,6 @@
     "Bell": "janbe",
     "Headphones": "selsnapra",
     "Rooms": "ve zilbe'i",
-    "Show %(count)s more": {
-        "other": "nu viska %(count)s na du",
-        "one": "nu viska %(count)s na du"
-    },
     "Search…": "nu sisku",
     "Sunday": "li jy. dy. ze detri",
     "Monday": "li jy. dy. pa detri",
@@ -187,26 +169,17 @@
     "Users": "pilno",
     "That matches!": ".i du",
     "Success!": ".i snada",
-    "Room List": "liste le'i ve zilbe'i",
-    "Upload a file": "nu kibdu'a pa vreji",
     "Verify your other session using one of the options below.": ".i ko cuxna da le di'e cei'i le ka tadji lo nu do co'a lacri",
     "Ask this user to verify their session, or manually verify it below.": ".i ko cpedu le ka co'a lacri le se samtcise'u kei le pilno vau ja pilno le di'e cei'i le ka co'a lacri",
     "Not Trusted": "na se lacri",
     "Cannot reach homeserver": ".i ca ku na da ka'e zilbe'i le samtcise'u",
-    "Match system theme": "nu mapti le jvinu be le vanbi",
     "Never send encrypted messages to unverified sessions in this room from this session": "nu na pa mifra be pa notci cu zilbe'i pa se samtcise'u poi na se lanli ku'o le se samtcise'u le cei'i",
-    "The other party cancelled the verification.": ".i le na du be do co'u troci le ka co'a lacri",
-    "Verified!": ".i mo'u co'a lacri",
-    "You've successfully verified this user.": ".i mo'u co'a lacri le pilno",
     "Got It": "je'e",
     "Waiting for %(displayName)s to verify…": ".i ca'o denpa lo nu la'o zoi. %(displayName)s .zoi mo'u co'a lacri",
     "Cancelling…": ".i ca'o co'u co'e",
-    "To be secure, do this in person or use a trusted way to communicate.": ".i lo nu marji penmi vau ja pilno pa se lacri lo nu tavla cu sarcu lo nu snura",
     "Ok": "je'e",
     "Verify this session": "nu co'a lacri le se samtcise'u",
     "What's New": "notci le du'u cnino",
-    "Use a system font": "nu da pe le vanbi cu ci'artai",
-    "System font name": "cmene le ci'artai pe le vanbi",
     "Never send encrypted messages to unverified sessions from this session": "nu na pa mifra be pa notci cu zilbe'i pa se samtcise'u poi na se lanli ku'o le se samtcise'u",
     "Later": "nu ca na co'e",
     "Other users may not trust it": ".i la'a na pa na du be do cu lacri",
@@ -226,7 +199,6 @@
         "one": ".i samtcise'u %(count)s da"
     },
     "Hide sessions": "nu ro se samtcise'u cu zilmipri",
-    "For help with using %(brand)s, click <a>here</a> or start a chat with our bot using the button below.": ".i gi je lo nu samcu'a <a>le dei cei'i</a> gi lo nu co'a tavla le sampre cu tadji lo nu facki le du'u tadji lo nu pilno la'o zoi. %(brand)s .zoi",
     "This room is end-to-end encrypted": ".i ro zilbe'i be fo le cei'i cu mifra",
     "Everyone in this room is verified": ".i do lacri ro pagbu be le se zilbe'i",
     "The file '%(fileName)s' failed to upload.": ".i da nabmi fi lo nu kibdu'a la'o zoi. %(fileName)s .zoi",
@@ -242,7 +214,6 @@
     "Are you sure you want to leave the room '%(roomName)s'?": ".i xu do birti le du'u do kaidji le ka co'u pagbu le se zilbe'i be fo la'o zoi. %(roomName)s .zoi",
     "For security, this session has been signed out. Please sign in again.": ".i ki'u lo nu snura co'u jaspu le se samtcise'u .i ko za'u re'u co'a se jaspu",
     "<a>In reply to</a> <pill>": ".i nu <a>spuda</a> tu'a la'o zoi. <pill> .zoi",
-    "Show less": "nu viska so'u da",
     "Unable to share email address": ".i da nabmi fi lo nu jungau le du'u samymri judri",
     "Unable to share phone number": ".i da nabmi fi lo nu jungau le du'u fonjudri",
     "Edit message": "nu basti fi le ka notci",
@@ -307,7 +278,8 @@
         "submit": "nu zilbe'i"
     },
     "labs": {
-        "pinning": "lo du'u xu kau kakne lo nu mrilu lo vitno notci"
+        "pinning": "lo du'u xu kau kakne lo nu mrilu lo vitno notci",
+        "group_rooms": "ve zilbe'i"
     },
     "power_level": {
         "default": "zmiselcu'a",
@@ -333,6 +305,12 @@
             "rule_call": "nu da co'a fonjo'e do",
             "rule_suppress_notices": "nu da zilbe'i fi pa sampre",
             "rule_encrypted_room_one_to_one": "nu pa mifra cu zilbe'i pa prenu"
+        },
+        "appearance": {
+            "match_system_theme": "nu mapti le jvinu be le vanbi",
+            "custom_font": "nu da pe le vanbi cu ci'artai",
+            "custom_font_name": "cmene le ci'artai pe le vanbi",
+            "timeline_image_size_default": "zmiselcu'a"
         }
     },
     "create_room": {
@@ -369,7 +347,15 @@
             "removed": ".i gau la'o zoi. %(senderName)s .zoi da co'u ralju le'i judri be le ve zilbe'i",
             "changed_alternative": ".i gau la'o zoi. %(senderName)s .zoi pa na ralju cu basti da le ka judri le se zilbe'i",
             "changed_main_and_alternative": ".i gau la'o zoi. %(senderName)s .zoi pa ralju je pa na ralju cu basti da le ka judri le se zilbe'i",
-            "changed": ".i gau la'o zoi. %(senderName)s .zoi da basti de le ka judri le se zilbe'i"
+            "changed": ".i gau la'o zoi. %(senderName)s .zoi da basti de le ka judri le se zilbe'i",
+            "alt_added": {
+                "other": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'a judri le se zilbe'i",
+                "one": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'a judri le se zilbe'i"
+            },
+            "alt_removed": {
+                "other": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'u judri le se zilbe'i",
+                "one": ".i gau la'o zoi. %(senderName)s .zoi zoi zoi. %(addresses)s .zoi poi na ralju co'u judri le se zilbe'i"
+            }
         },
         "m.room.third_party_invite": {
             "revoked": ".i la'o zoi. %(senderName)s .zoi co'u friti le ka ziljmina le se zilbe'i kei la'o zoi. %(targetDisplayName)s .zoi",
@@ -400,6 +386,10 @@
         },
         "m.call.hangup": {
             "dm": ".i co'u fonjo'e"
+        },
+        "m.room.power_levels": {
+            "changed": ".i la'o ly. %(senderName)s .ly. gafygau %(powerLevelDiffText)s",
+            "user_from_to": "lo ni la'o ny. %(userId)s .ny. vlipa noi pu du %(fromPowerLevel)s ku %(toPowerLevel)s"
         }
     },
     "slash_command": {
@@ -414,7 +404,9 @@
         "category_actions": "ka'e se zukte",
         "category_admin": "vlipa so'i da",
         "category_advanced": "macnu",
-        "category_other": "drata"
+        "category_other": "drata",
+        "discardsession": ".i macnu vimcu lo ca barkla termifckiku gunma lo kumfa pe'a poi mifra",
+        "me": ".i mrilu lo nu do gasnu"
     },
     "event_preview": {
         "m.call.answer": {
@@ -441,7 +433,6 @@
         "video_call": "nu vidvi fonjo'e",
         "call_failed": ".i da nabmi fi lo nu co'a fonjo'e"
     },
-    "Messages": "notci",
     "devtools": {
         "category_other": "drata"
     },
@@ -460,6 +451,35 @@
             "m.room.canonical_alias": "nu basti fi le ka ralju lu'i ro judri be le ve zilbe'i",
             "m.room.topic": "nu basti fi le ka skicu lerpoi",
             "invite": "nu friti le ka ziljmina kei pa pilno"
+        }
+    },
+    "encryption": {
+        "verification": {
+            "sas_no_match": "na du",
+            "sas_match": "du",
+            "in_person": ".i lo nu marji penmi vau ja pilno pa se lacri lo nu tavla cu sarcu lo nu snura",
+            "other_party_cancelled": ".i le na du be do co'u troci le ka co'a lacri",
+            "complete_title": ".i mo'u co'a lacri",
+            "complete_description": ".i mo'u co'a lacri le pilno"
+        }
+    },
+    "export_chat": {
+        "messages": "notci"
+    },
+    "room_list": {
+        "show_n_more": {
+            "other": "nu viska %(count)s na du",
+            "one": "nu viska %(count)s na du"
+        },
+        "show_less": "nu viska so'u da"
+    },
+    "keyboard": {
+        "category_room_list": "liste le'i ve zilbe'i",
+        "upload_file": "nu kibdu'a pa vreji"
+    },
+    "setting": {
+        "help_about": {
+            "help_link_chat_bot": ".i gi je lo nu samcu'a <a>le dei cei'i</a> gi lo nu co'a tavla le sampre cu tadji lo nu facki le du'u tadji lo nu pilno la'o zoi. %(brand)s .zoi"
         }
     }
 }

@@ -24,10 +24,14 @@ need to have Docker installed and working in order to run the Cypress tests.
 There are a few different ways to run the tests yourself. The simplest is to run:
 
 ```
+docker pull matrixdotorg/synapse:develop
 yarn run test:cypress
 ```
 
 This will run the Cypress tests once, non-interactively.
+
+Note: you don't need to run the `docker pull` command every time, but you should
+do it regularly to ensure you are running against an up-to-date Synapse.
 
 You can also run individual tests this way too, as you'd expect:
 
@@ -45,7 +49,7 @@ yarn run test:cypress:open
 ### Matching the CI environment
 
 In our Continuous Integration environment, we run the Cypress tests in the
-Chrome browser.
+Chrome browser, and with the latest Synapse image from Docker Hub.
 
 In some rare cases, tests behave differently between different browsers, so if
 you see CI failures for the Cypress tests, but those tests work OK on your local
@@ -63,6 +67,17 @@ match the CI setup, choose Chrome.
 Note that you will need to have Chrome installed on your system to run the tests
 inside those browsers, whereas the default is to use Electron, which is included
 within the Cypress dependency.
+
+Another cause of inconsistency between local and CI is the Synapse version. The
+first time you run the tests, they automatically fetch the latest Docker image
+of Synapse, but this won't update again unless you do it explicitly. To update
+the Synapse you are using, run:
+
+```
+docker pull matrixdotorg/synapse:develop
+```
+
+and then run the tests as normal.
 
 ### Running with Rust cryptography
 
