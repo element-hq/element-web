@@ -9,7 +9,6 @@
     "Notifications": "Notificacions",
     "unknown error code": "codi d'error desconegut",
     "Operation failed": "No s'ha pogut realitzar l'operació",
-    "powered by Matrix": "amb tecnologia de Matrix",
     "Rooms": "Sales",
     "This email address is already in use": "Aquesta adreça de correu electrònic ja està en ús",
     "This phone number is already in use": "Aquest número de telèfon ja està en ús",
@@ -722,7 +721,8 @@
     },
     "auth": {
         "sign_in_with_sso": "Inicia sessió mitjançant la inscripció única (SSO)",
-        "sso": "Inscripció única (SSO)"
+        "sso": "Inscripció única (SSO)",
+        "footer_powered_by_matrix": "amb tecnologia de Matrix"
     },
     "export_chat": {
         "messages": "Missatges"

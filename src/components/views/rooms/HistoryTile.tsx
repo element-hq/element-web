@@ -30,15 +30,19 @@ const HistoryTile: React.FC = () => {
 
     let subtitle: string | undefined;
     if (historyState == "invited") {
-        subtitle = _t("You don't have permission to view messages from before you were invited.");
+        subtitle = _t("timeline|no_permission_messages_before_invite");
     } else if (historyState == "joined") {
-        subtitle = _t("You don't have permission to view messages from before you joined.");
+        subtitle = _t("timeline|no_permission_messages_before_join");
     } else if (encryptionState) {
-        subtitle = _t("Encrypted messages before this point are unavailable.");
+        subtitle = _t("timeline|encrypted_historical_messages_unavailable");
     }
 
     return (
-        <EventTileBubble className="mx_HistoryTile" title={_t("You can't see earlier messages")} subtitle={subtitle} />
+        <EventTileBubble
+            className="mx_HistoryTile"
+            title={_t("timeline|historical_messages_unavailable")}
+            subtitle={subtitle}
+        />
     );
 };
 

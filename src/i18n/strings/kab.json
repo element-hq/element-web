@@ -105,7 +105,6 @@
     "Upload files": "Sali-d ifuyla",
     "Source URL": "URL aɣbalu",
     "Home": "Agejdan",
-    "powered by Matrix": "s lmendad n Matrix",
     "Email": "Imayl",
     "Phone": "Tiliɣri",
     "Passwords don't match": "Awalen uffiren ur mṣadan ara",
@@ -474,9 +473,6 @@
     "Preparing to send logs": "Aheyyi n tuzna n yiɣmisen",
     "Failed to send logs: ": "Tuzna n yiɣmisen ur teddi ara: ",
     "Clear all data": "Sfeḍ meṛṛa isefka",
-    "Please enter a name for the room": "Ttxil-k·m sekcem isem i texxamt",
-    "Enable end-to-end encryption": "Awgelhen seg yixef ɣer yixef ur yeddi ara",
-    "Topic (optional)": "Asentel (afrayan)",
     "Continue With Encryption Disabled": "Kemmel s uwgelhen yensan",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Sentem asensi n umiḍan s useqdec n unekcum asuf i ubeggen n timagit-ik·im.",
     "Confirm account deactivation": "Sentem asensi n umiḍan",
@@ -1128,9 +1124,6 @@
     "Your browser likely removed this data when running low on disk space.": "Yezmer iminig-ik·im yekkes isefka-a mi t-txuṣṣ tallunt ɣef uḍebsi.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Ɛerḍeɣ ad d-saliɣ tazmilt tufrint tesnakudt n texxamt-a, maca ur ssawḍeɣ ara ad t-naf.",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Txuṣṣ tsarut tazayezt n captcha deg umtawi n uqeddac agejdan. Ttxil-k·m azen aneqqis ɣef waya i unedbal n uqeddac-ik·im agejdan.",
-    "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Ilaq ad tesremdeḍ aya ma yella taxxamt ad tettwaseqdec kan i uttekki d trebbaɛ tigensanin ɣef uqeddac-ik·im agejdan. Ayagi ur yettubeddal ara ɣer sdat.",
-    "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Ilaq ad tsenseḍ aya ma yella taxxamt ad tettuseqdac i uttekki d trebbaɛ tuffiɣin i yesɛan aqeddac-nsent agejdan. Aya ur yettwabeddal ara ɣer sdat.",
-    "Block anyone not part of %(serverName)s from ever joining this room.": "Asewḥel n yal amdan ur nettekki ara deg %(serverName)s ur d-irennu ara akk ɣer texamt-a.",
     "To continue using the %(homeserverDomain)s homeserver you must review and agree to our terms and conditions.": "I wakken ad tkemmleḍ aseqdec n uqeddac agejdan n %(homeserverDomain)s ilaq ad talseḍ asenqed syen ad tqebleḍ tiwtilin-nneɣ s umata.",
     "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "Isefka n lqem aqbur n %(brand)s ttwafen. Ayagi ad d-yeglu s yir tamahalt n uwgelhen seg yixef ɣer yixef deg lqem aqbur. Iznan yettwawgelhen seg yixef ɣer yixef yettumbeddalen yakan mi akken yettuseqdac lqem aqbur yezmer ur asen-ittekkes ara uwgelhen deg lqem-a. Aya yezmer daɣen ad d-yeglu asefsex n yiznan yettumbeddalen s lqem-a. Ma yella temlaleḍ-d uguren, ffeɣ syen tuɣaleḍ-d tikkelt-nniḍen. I wakken ad tḥerzeḍ amazray n yiznan, sifeḍ rnu ales kter tisura-ik·im.",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Ur tezmireḍ ara ad tazneḍ iznan alamma tesneqdeḍ syen ad tqebleḍ <consentLink>tiwtilin-nneɣ</consentLink>.",
@@ -1419,8 +1412,6 @@
     "The call was answered on another device.": "Tiririt ɣef usiwel tella-d ɣef yibenk-nniḍen.",
     "Answered Elsewhere": "Yerra-d seg wadeg-nniḍen",
     "The call could not be established": "Asiwel ur yeqεid ara",
-    "Send videos as you in this room": "Azen tividyutin deg texxamt-a am wakken d kečč",
-    "See images posted to your active room": "Wali tignatin i d-yeffɣen deg texxamt-a iremden",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "%(brand)s-ik·im ur ak·am yefki ara tisirag i useqdec n umsefrak n umsidef i wakken ad tgeḍ aya. Ttxil-k·m nermes anedbal.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Aseqdec n uwiǧit-a yezmer ad yebḍu isefka <helpIcon/> d %(widgetDomain)s & amsefrak-inek·inem n umsidef.",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Imsefrak n yimsidaf remmsen-d isefka n uswel, syen ad uɣalen zemren ad beddlen iwiǧiten, ad aznen tinubgiwin ɣer texxamin, ad yesbadu daɣen tazmert n yiswiren s yiswiren deg ubdil-ik·im.",
@@ -1737,7 +1728,13 @@
     },
     "create_room": {
         "title_public_room": "Rnu taxxamt tazayezt",
-        "title_private_room": "Rnu taxxamt tusligt"
+        "title_private_room": "Rnu taxxamt tusligt",
+        "name_validation_required": "Ttxil-k·m sekcem isem i texxamt",
+        "encryption_label": "Awgelhen seg yixef ɣer yixef ur yeddi ara",
+        "unfederated_label_default_off": "Ilaq ad tesremdeḍ aya ma yella taxxamt ad tettwaseqdec kan i uttekki d trebbaɛ tigensanin ɣef uqeddac-ik·im agejdan. Ayagi ur yettubeddal ara ɣer sdat.",
+        "unfederated_label_default_on": "Ilaq ad tsenseḍ aya ma yella taxxamt ad tettuseqdac i uttekki d trebbaɛ tuffiɣin i yesɛan aqeddac-nsent agejdan. Aya ur yettwabeddal ara ɣer sdat.",
+        "topic_label": "Asentel (afrayan)",
+        "unfederated": "Asewḥel n yal amdan ur nettekki ara deg %(serverName)s ur d-irennu ara akk ɣer texamt-a."
     },
     "timeline": {
         "m.call.invite": {
@@ -2081,7 +2078,8 @@
         "log_in_new_account": "<a>Kcem ɣer</a> umiḍan-ik·im amaynut.",
         "registration_successful": "Asekles yemmed akken iwata",
         "server_picker_title": "Sezdeɣ amiḍan deg",
-        "server_picker_dialog_title": "Wali anida ara yezdeɣ umiḍan-ik·im"
+        "server_picker_dialog_title": "Wali anida ara yezdeɣ umiḍan-ik·im",
+        "footer_powered_by_matrix": "s lmendad n Matrix"
     },
     "export_chat": {
         "messages": "Iznan"
@@ -2120,6 +2118,12 @@
             "title": "Tallalt & Ɣef",
             "versions": "Ileqman",
             "clear_cache_reload": "Sfeḍ takatut tuffirt syen sali-d"
+        }
+    },
+    "widget": {
+        "capability": {
+            "see_images_sent_active_room": "Wali tignatin i d-yeffɣen deg texxamt-a iremden",
+            "send_videos_this_room": "Azen tividyutin deg texxamt-a am wakken d kečč"
         }
     }
 }

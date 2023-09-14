@@ -511,7 +511,6 @@
     "Favourite": "Favoriet",
     "Low Priority": "Leige prioriteit",
     "Home": "Thuus",
-    "powered by Matrix": "meuglik gemakt deur Matrix",
     "This homeserver would like to make sure you are not a robot.": "Deze thuusserver wil geirn weetn of da je gy geen robot zyt.",
     "Please review and accept all of the homeserver's policies": "Gelieve ’t beleid van de thuusserver te leezn en ’anveirdn",
     "Please review and accept the policies of this homeserver:": "Gelieve ’t beleid van deze thuusserver te leezn en t’anveirdn:",
@@ -1091,7 +1090,8 @@
         "account_clash": "Je nieuwen account (%(newAccountId)s) is geregistreerd, mo je zyt al angemeld met een anderen account (%(loggedInUserId)s).",
         "account_clash_previous_account": "Verdergoan me de vorigen account",
         "log_in_new_account": "<a>Meldt jen eigen an</a> me je nieuwen account.",
-        "registration_successful": "Registroasje gesloagd"
+        "registration_successful": "Registroasje gesloagd",
+        "footer_powered_by_matrix": "meuglik gemakt deur Matrix"
     },
     "export_chat": {
         "messages": "Berichtn"

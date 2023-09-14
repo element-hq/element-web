@@ -11,7 +11,6 @@
     "Reason": "เหตุผล",
     "Notifications": "การแจ้งเตือน",
     "Operation failed": "การดำเนินการล้มเหลว",
-    "powered by Matrix": "ใช้เทคโนโลยี Matrix",
     "unknown error code": "รหัสข้อผิดพลาดที่ไม่รู้จัก",
     "Favourite": "รายการโปรด",
     "Failed to forget room %(errCode)s": "การลืมห้องล้มเหลว %(errCode)s",
@@ -273,7 +272,6 @@
         "other": "ยืนยันการออกจากระบบอุปกรณ์เหล่านี้โดยใช้การลงชื่อเพียงครั้งเดียวเพื่อพิสูจน์ตัวตนของคุณ."
     },
     "Current session": "เซสชันปัจจุบัน",
-    "Your server requires encryption to be enabled in private rooms.": "เซิร์ฟเวอร์ของคุณกำหนดให้เปิดใช้งานการเข้ารหัสในห้องส่วนตัว.",
     "Encryption not enabled": "ไม่ได้เปิดใช้งานการเข้ารหัส",
     "End-to-end encryption isn't enabled": "ไม่ได้เปิดใช้งานการเข้ารหัสจากต้นทางถึงปลายทาง",
     "You won't be able to participate in rooms where encryption is enabled when using this session.": "คุณจะไม่สามารถเข้าร่วมในห้องที่เปิดใช้งานการเข้ารหัสเมื่อใช้เซสชันนี้.",
@@ -527,11 +525,15 @@
         "group_rooms": "ห้องสนทนา"
     },
     "auth": {
-        "sso": "ลงชื่อเข้าใช้เพียงครั้งเดียว"
+        "sso": "ลงชื่อเข้าใช้เพียงครั้งเดียว",
+        "footer_powered_by_matrix": "ใช้เทคโนโลยี Matrix"
     },
     "setting": {
         "help_about": {
             "brand_version": "เวอร์ชัน %(brand)s:"
         }
+    },
+    "create_room": {
+        "encryption_forced": "เซิร์ฟเวอร์ของคุณกำหนดให้เปิดใช้งานการเข้ารหัสในห้องส่วนตัว."
     }
 }

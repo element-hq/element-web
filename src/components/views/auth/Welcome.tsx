@@ -19,15 +19,11 @@ import classNames from "classnames";
 
 import SdkConfig from "../../../SdkConfig";
 import AuthPage from "./AuthPage";
-import { _td } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import LanguageSelector from "./LanguageSelector";
 import EmbeddedPage from "../../structures/EmbeddedPage";
 import { MATRIX_LOGO_HTML } from "../../structures/static-page-vars";
-
-// translatable strings for Welcome pages
-_td("Sign in with SSO");
 
 interface IProps {}
 

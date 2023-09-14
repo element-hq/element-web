@@ -183,7 +183,6 @@
     "A text message has been sent to %(msisdn)s": "Ei tekstmelding vart send til %(msisdn)s",
     "Please enter the code it contains:": "Ver venleg og skriv koden den inneheld inn:",
     "Start authentication": "Start authentisering",
-    "powered by Matrix": "Matrixdriven",
     "Sign in with": "Logg inn med",
     "Email address": "Epostadresse",
     "Something went wrong!": "Noko gjekk gale!",
@@ -524,7 +523,6 @@
     "Server or user ID to ignore": "Tenar eller brukar-ID for å ignorere",
     "If this isn't what you want, please use a different tool to ignore users.": "Om det ikkje var dette du ville, bruk eit anna verktøy til å ignorera brukarar.",
     "Enter the name of a new server you want to explore.": "Skriv inn namn på ny tenar du ynskjer å utforske.",
-    "Topic (optional)": "Emne (valfritt)",
     "Command Help": "Kommandohjelp",
     "To help us prevent this in future, please <a>send us logs</a>.": "For å bistå med å forhindre dette i framtida, gjerne <a>send oss loggar</a>.",
     "%(creator)s created and configured the room.": "%(creator)s oppretta og konfiguerte dette rommet.",
@@ -561,7 +559,6 @@
     "This client does not support end-to-end encryption.": "Denne klienten støttar ikkje ende-til-ende kryptering.",
     "Add a new server": "Legg til ein ny tenar",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Tømming av data frå denne sesjonen er permanent. Krypterte meldingar vil gå tapt med mindre krypteringsnøklane har blitt sikkerheitskopierte.",
-    "Enable end-to-end encryption": "Skru på ende-til-ende kryptering",
     "Hide advanced": "Gøym avanserte alternativ",
     "Show advanced": "Vis avanserte alternativ",
     "I don't want my encrypted messages": "Eg treng ikkje mine krypterte meldingar",
@@ -663,7 +660,6 @@
     "More options": "Fleire val",
     "Pin to sidebar": "Fest til sidestolpen",
     "Match system": "Følg systemet",
-    "You can change this at any time from room settings.": "Du kan endra dette kva tid som helst frå rominnstillingar.",
     "Room settings": "Rominnstillingar",
     "Join the conference from the room information card on the right": "Bli med i konferanse frå rominfo-kortet til høgre",
     "Final result based on %(count)s votes": {
@@ -904,7 +900,10 @@
         "category_other": "Anna"
     },
     "create_room": {
-        "title_private_room": "Lag eit privat rom"
+        "title_private_room": "Lag eit privat rom",
+        "join_rule_change_notice": "Du kan endra dette kva tid som helst frå rominnstillingar.",
+        "encryption_label": "Skru på ende-til-ende kryptering",
+        "topic_label": "Emne (valfritt)"
     },
     "timeline": {
         "m.call.invite": {
@@ -1157,7 +1156,8 @@
         "account_clash": "Kontoen din %(newAccountId)s er no registrert, men du er frå tidligare logga på med ein annan konto (%(loggedInUserId)s).",
         "account_clash_previous_account": "Fortsett med tidligare konto",
         "log_in_new_account": "<a>Logg på</a> den nye kontoen din.",
-        "registration_successful": "Registrering fullført"
+        "registration_successful": "Registrering fullført",
+        "footer_powered_by_matrix": "Matrixdriven"
     },
     "export_chat": {
         "messages": "Meldingar"
