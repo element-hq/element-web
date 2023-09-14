@@ -36,6 +36,7 @@ describe("Room Header", () => {
     });
 
     it("should render default buttons properly", () => {
+        cy.enableLabsFeature("feature_notifications");
         cy.createRoom({ name: "Test Room" }).viewRoomByName("Test Room");
 
         cy.get(".mx_LegacyRoomHeader").within(() => {
@@ -79,6 +80,7 @@ describe("Room Header", () => {
     });
 
     it("should render a very long room name without collapsing the buttons", () => {
+        cy.enableLabsFeature("feature_notifications");
         const LONG_ROOM_NAME =
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore " +
             "et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut " +
@@ -109,6 +111,7 @@ describe("Room Header", () => {
     });
 
     it("should have buttons highlighted by being clicked", () => {
+        cy.enableLabsFeature("feature_notifications");
         cy.createRoom({ name: "Test Room" }).viewRoomByName("Test Room");
 
         cy.get(".mx_LegacyRoomHeader").within(() => {
@@ -142,6 +145,7 @@ describe("Room Header", () => {
         };
 
         it("should render buttons for room options, beta pill, invite, chat, and room info", () => {
+            cy.enableLabsFeature("feature_notifications");
             createVideoRoom();
 
             cy.get(".mx_LegacyRoomHeader").within(() => {
