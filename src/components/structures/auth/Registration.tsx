@@ -523,7 +523,7 @@ export default class Registration extends React.Component<IProps, IState> {
                     // i18n: ssoButtons is a placeholder to help translators understand context
                     continueWithSection = (
                         <h2 className="mx_AuthBody_centered">
-                            {_t("Continue with %(ssoButtons)s", { ssoButtons: "" }).trim()}
+                            {_t("auth|continue_with_sso", { ssoButtons: "" }).trim()}
                         </h2>
                     );
                 }
@@ -540,7 +540,7 @@ export default class Registration extends React.Component<IProps, IState> {
                             action={SSOAction.REGISTER}
                         />
                         <h2 className="mx_AuthBody_centered">
-                            {_t("%(ssoButtons)s Or %(usernamePassword)s", {
+                            {_t("auth|sso_or_username_password", {
                                 ssoButtons: "",
                                 usernamePassword: "",
                             }).trim()}
@@ -591,7 +591,7 @@ export default class Registration extends React.Component<IProps, IState> {
         const signIn = (
             <span className="mx_AuthBody_changeFlow">
                 {_t(
-                    "Already have an account? <a>Sign in here</a>",
+                    "auth|sign_in_instead",
                     {},
                     {
                         a: (sub) => (
@@ -621,13 +621,10 @@ export default class Registration extends React.Component<IProps, IState> {
                 regDoneText = (
                     <div>
                         <p>
-                            {_t(
-                                "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).",
-                                {
-                                    newAccountId: this.state.registeredUsername,
-                                    loggedInUserId: this.state.differentLoggedInUserId,
-                                },
-                            )}
+                            {_t("auth|account_clash", {
+                                newAccountId: this.state.registeredUsername,
+                                loggedInUserId: this.state.differentLoggedInUserId,
+                            })}
                         </p>
                         <p>
                             <AccessibleButton
@@ -639,7 +636,7 @@ export default class Registration extends React.Component<IProps, IState> {
                                     }
                                 }}
                             >
-                                {_t("Continue with previous account")}
+                                {_t("auth|account_clash_previous_account")}
                             </AccessibleButton>
                         </p>
                     </div>
@@ -650,7 +647,7 @@ export default class Registration extends React.Component<IProps, IState> {
                 regDoneText = (
                     <h2>
                         {_t(
-                            "<a>Log in</a> to your new account.",
+                            "auth|log_in_new_account",
                             {},
                             {
                                 a: (sub) => (
@@ -673,7 +670,7 @@ export default class Registration extends React.Component<IProps, IState> {
             }
             body = (
                 <div>
-                    <h1>{_t("Registration Successful")}</h1>
+                    <h1>{_t("auth|registration_successful")}</h1>
                     {regDoneText}
                 </div>
             );
@@ -685,8 +682,8 @@ export default class Registration extends React.Component<IProps, IState> {
                             title={_t("Create account")}
                             serverPicker={
                                 <ServerPicker
-                                    title={_t("Host account on")}
-                                    dialogTitle={_t("Decide where your account is hosted")}
+                                    title={_t("auth|server_picker_title")}
+                                    dialogTitle={_t("auth|server_picker_dialog_title")}
                                     serverConfig={this.props.serverConfig}
                                     onServerConfigChange={
                                         this.state.doingUIAuth ? undefined : this.props.onServerConfigChange

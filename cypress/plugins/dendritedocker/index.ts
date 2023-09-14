@@ -96,7 +96,7 @@ async function dendritePineconeStart(template: string): Promise<HomeserverInstan
 
 async function containerStart(template: string, usePinecone: boolean): Promise<HomeserverInstance> {
     let dendriteImage = "matrixdotorg/dendrite-monolith:main";
-    let dendriteEntrypoint = "/usr/bin/dendrite-monolith-server";
+    let dendriteEntrypoint = "/usr/bin/dendrite";
     if (usePinecone) {
         dendriteImage = "matrixdotorg/dendrite-demo-pinecone:main";
         dendriteEntrypoint = "/usr/bin/dendrite-demo-pinecone";

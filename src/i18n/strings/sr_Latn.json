@@ -5,7 +5,6 @@
     "Failed to verify email address: make sure you clicked the link in the email": "Neuspela provera adrese elektronske pošte: proverite da li ste kliknuli na link u poruci elektronske pošte",
     "Add Phone Number": "Dodajte broj telefona",
     "Your %(brand)s is misconfigured": "Vaš %(brand)s nije dobro podešen",
-    "Chat with %(brand)s Bot": "Ćaskajte sa %(brand)s botom",
     "powered by Matrix": "pokreće Matriks",
     "Explore rooms": "Istražite sobe",
     "Send": "Pošalji",
@@ -67,7 +66,6 @@
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potvrdite dodavanje ovog telefonskog broja koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
     "Click the button below to confirm adding this email address.": "Kliknite taster ispod da biste potvrdili dodavanje email adrese.",
     "Confirm adding email": "Potvrdite dodavanje email adrese",
-    "Single Sign On": "Jedinstvena prijava (SSO)",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Potvrdite dodavanje ove email adrese koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
     "Use Single Sign On to continue": "Koristite jedinstvenu prijavu (SSO) za nastavak",
     "There was a problem communicating with the homeserver, please try again later.": "Postoji problem u komunikaciji sa privatnim/javnim serverom. Molim Vas pokušajte kasnije.",
@@ -77,7 +75,6 @@
     "This homeserver does not support login using email address.": "Ovaj server ne podržava prijavu korištenjem e-mail adrese.",
     "Incorrect username and/or password.": "Neispravno korisničko ime i/ili lozinka.",
     "This account has been deactivated.": "Ovaj nalog je dekativiran.",
-    "Open this settings tab": "Otvori podešavanja",
     "Start a group chat": "Pokreni grupni razgovor",
     "User is already in the room": "Korisnik je već u sobi",
     "common": {
@@ -115,5 +112,16 @@
     "voip": {
         "disable_camera": "Zaustavi kameru",
         "call_failed": "Poziv nije uspio"
+    },
+    "auth": {
+        "sso": "Jedinstvena prijava (SSO)"
+    },
+    "keyboard": {
+        "keyboard_shortcuts_tab": "Otvori podešavanja"
+    },
+    "setting": {
+        "help_about": {
+            "chat_bot": "Ćaskajte sa %(brand)s botom"
+        }
     }
 }

@@ -7,12 +7,14 @@
     "Add Email Address": "इमेल ठेगाना थप्नुहोस्",
     "Click the button below to confirm adding this email address.": "यो इमेल ठेगाना थपिएको पुष्टि गर्न तलको बटनमा क्लिक गर्नुहोस्।",
     "Confirm adding email": "इमेल थपेको पुष्टि गर्नुहोस्",
-    "Single Sign On": "एकल साइन अन",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "आफ्नो पहिचान प्रमाणित गर्न एकल साइन अन प्रयोग गरेर यो इमेल ठेगाना थपेको पुष्टि गर्नुहोस्।",
     "Use Single Sign On to continue": "जारी राख्न एकल साइन अन प्रयोग गर्नुहोस्",
     "This phone number is already in use": "यो फोन नम्बर पहिले नै प्रयोगमा छ",
     "This email address is already in use": "यो इमेल ठेगाना पहिले नै प्रयोगमा छ",
     "action": {
         "confirm": "पुष्टि गर्नुहोस्"
+    },
+    "auth": {
+        "sso": "एकल साइन अन"
     }
 }

@@ -624,7 +624,7 @@ export const Commands = [
             !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, widgetUrl) {
             if (!widgetUrl) {
-                return reject(new UserFriendlyError("Please supply a widget URL or embed code"));
+                return reject(new UserFriendlyError("slash_command|addwidget_missing_url"));
             }
 
             // Try and parse out a widget URL from iframes
@@ -635,7 +635,7 @@ export const Commands = [
                     if (iframe?.tagName.toLowerCase() === "iframe") {
                         logger.log("Pulling URL out of iframe (embed code)");
                         if (!iframe.hasAttribute("src")) {
-                            return reject(new UserFriendlyError("iframe has no src attribute"));
+                            return reject(new UserFriendlyError("slash_command|addwidget_iframe_missing_src"));
                         }
                         widgetUrl = iframe.getAttribute("src")!;
                     }
@@ -643,7 +643,7 @@ export const Commands = [
             }
 
             if (!widgetUrl.startsWith("https://") && !widgetUrl.startsWith("http://")) {
-                return reject(new UserFriendlyError("Please supply a https:// or http:// widget URL"));
+                return reject(new UserFriendlyError("slash_command|addwidget_invalid_protocol"));
             }
             if (WidgetUtils.canUserModifyWidgets(cli, roomId)) {
                 const userId = cli.getUserId();
@@ -665,7 +665,7 @@ export const Commands = [
 
                 return success(WidgetUtils.setRoomWidget(cli, roomId, widgetId, type, widgetUrl, name, data));
             } else {
-                return reject(new UserFriendlyError("You cannot modify widgets in this room."));
+                return reject(new UserFriendlyError("slash_command|addwidget_no_permissions"));
             }
         },
         category: CommandCategories.admin,
@@ -749,7 +749,7 @@ export const Commands = [
     }),
     new Command({
         command: "discardsession",
-        description: _td("Forces the current outbound group session in an encrypted room to be discarded"),
+        description: _td("slash_command|discardsession"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId) {
             try {
@@ -764,7 +764,7 @@ export const Commands = [
     }),
     new Command({
         command: "remakeolm",
-        description: _td("Developer command: Discards the current outbound group session and sets up new Olm sessions"),
+        description: _td("slash_command|remakeolm"),
         isEnabled: (cli) => {
             return SettingsStore.getValue("developerMode") && !isCurrentLocalRoom(cli);
         },
@@ -856,7 +856,7 @@ export const Commands = [
     }),
     new Command({
         command: "tovirtual",
-        description: _td("Switches to this room's virtual room, if it has one"),
+        description: _td("slash_command|tovirtual"),
         category: CommandCategories.advanced,
         isEnabled(cli): boolean {
             return !!LegacyCallHandler.instance.getSupportsVirtualRooms() && !isCurrentLocalRoom(cli);
@@ -865,7 +865,7 @@ export const Commands = [
             return success(
                 (async (): Promise<void> => {
                     const room = await VoipUserMapper.sharedInstance().getVirtualRoomForRoom(roomId);
-                    if (!room) throw new UserFriendlyError("No virtual room for this room");
+                    if (!room) throw new UserFriendlyError("slash_command|tovirtual_not_found");
                     dis.dispatch<ViewRoomPayload>({
                         action: Action.ViewRoom,
                         room_id: room.roomId,
@@ -878,7 +878,7 @@ export const Commands = [
     }),
     new Command({
         command: "query",
-        description: _td("Opens chat with the given user"),
+        description: _td("slash_command|query"),
         args: "<user-id>",
         runFn: function (cli, roomId, threadId, userId) {
             // easter-egg for now: look up phone numbers through the thirdparty API
@@ -893,7 +893,7 @@ export const Commands = [
                     if (isPhoneNumber) {
                         const results = await LegacyCallHandler.instance.pstnLookup(userId);
                         if (!results || results.length === 0 || !results[0].userid) {
-                            throw new UserFriendlyError("Unable to find Matrix ID for phone number");
+                            throw new UserFriendlyError("slash_command|query_not_found_phone_number");
                         }
                         userId = results[0].userid;
                     }
@@ -949,13 +949,13 @@ export const Commands = [
     }),
     new Command({
         command: "holdcall",
-        description: _td("Places the call in the current room on hold"),
+        description: _td("slash_command|holdcall"),
         category: CommandCategories.other,
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             const call = LegacyCallHandler.instance.getCallForRoom(roomId);
             if (!call) {
-                return reject(new UserFriendlyError("No active call in this room"));
+                return reject(new UserFriendlyError("slash_command|no_active_call"));
             }
             call.setRemoteOnHold(true);
             return success();
@@ -964,13 +964,13 @@ export const Commands = [
     }),
     new Command({
         command: "unholdcall",
-        description: _td("Takes the call in the current room off hold"),
+        description: _td("slash_command|unholdcall"),
         category: CommandCategories.other,
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             const call = LegacyCallHandler.instance.getCallForRoom(roomId);
             if (!call) {
-                return reject(new UserFriendlyError("No active call in this room"));
+                return reject(new UserFriendlyError("slash_command|no_active_call"));
             }
             call.setRemoteOnHold(false);
             return success();
@@ -979,24 +979,24 @@ export const Commands = [
     }),
     new Command({
         command: "converttodm",
-        description: _td("Converts the room to a DM"),
+        description: _td("slash_command|converttodm"),
         category: CommandCategories.other,
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             const room = cli.getRoom(roomId);
-            if (!room) return reject(new UserFriendlyError("Could not find room"));
+            if (!room) return reject(new UserFriendlyError("slash_command|could_not_find_room"));
             return success(guessAndSetDMRoom(room, true));
         },
         renderingTypes: [TimelineRenderingType.Room],
     }),
     new Command({
         command: "converttoroom",
-        description: _td("Converts the DM to a room"),
+        description: _td("slash_command|converttoroom"),
         category: CommandCategories.other,
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId, threadId, args) {
             const room = cli.getRoom(roomId);
-            if (!room) return reject(new UserFriendlyError("Could not find room"));
+            if (!room) return reject(new UserFriendlyError("slash_command|could_not_find_room"));
             return success(guessAndSetDMRoom(room, false));
         },
         renderingTypes: [TimelineRenderingType.Room],
@@ -1007,7 +1007,7 @@ export const Commands = [
     new Command({
         command: "me",
         args: "<message>",
-        description: _td("Displays action"),
+        description: _td("slash_command|me"),
         category: CommandCategories.messages,
         hideCompletionAfterSpace: true,
     }),

@@ -263,15 +263,15 @@ const findVisibleRoomMembers = (visibleRooms: Room[], cli: MatrixClient, filterD
 
 const roomAriaUnreadLabel = (room: Room, notification: RoomNotificationState): string | undefined => {
     if (notification.hasMentions) {
-        return _t("%(count)s unread messages including mentions.", {
+        return _t("a11y|n_unread_messages_mentions", {
             count: notification.count,
         });
     } else if (notification.hasUnreadCount) {
-        return _t("%(count)s unread messages.", {
+        return _t("a11y|n_unread_messages", {
             count: notification.count,
         });
     } else if (notification.isUnread) {
-        return _t("Unread messages.");
+        return _t("a11y|unread_messages");
     } else {
         return undefined;
     }

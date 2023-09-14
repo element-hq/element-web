@@ -874,7 +874,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         if (this.state.phase === SSOAuthEntry.PHASE_PREAUTH) {
             continueButton = (
                 <AccessibleButton onClick={this.onStartAuthClick} kind={this.props.continueKind || "primary"}>
-                    {this.props.continueText || _t("Single Sign On")}
+                    {this.props.continueText || _t("auth|sso")}
                 </AccessibleButton>
             );
         } else {

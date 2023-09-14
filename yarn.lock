@@ -1929,10 +1929,10 @@
     emojibase "^15.0.0"
     emojibase-data "^15.0.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-1.2.1.tgz#5b546c8a0e53b614f10b77b3b649818aed9d0db1"
-  integrity sha512-DCb7Q83PCQK0uav5vB3KNV/hJPlxAhT/ddar+VHz2kC39hMLKGzWYVhprpLYVcavaE/6OX+Q/xFkAoV/3QtUHQ==
+"@matrix-org/matrix-sdk-crypto-wasm@^1.2.3-alpha.0":
+  version "1.2.3-alpha.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-1.2.3-alpha.0.tgz#f6f93e3ee44c5f1e0e255badd26f4a7d3fb1dab8"
+  integrity sha512-BFLqfq/WbYZ+83r4UWLhwtBYvTp5DKTHNeWUSDBVvudFtqBvkntNAAUz+xmhmO1XkyNm+sBaElxF8IS9S8zdww==
 
 "@matrix-org/matrix-wysiwyg@^2.4.1":
   version "2.4.1"
@@ -3115,10 +3115,10 @@
   dependencies:
     svg2vectordrawable "^2.9.1"
 
-"@vector-im/compound-web@^0.2.3":
-  version "0.2.18"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.2.18.tgz#b92bcfd5779b1e558dc431ad3d330960749049d9"
-  integrity sha512-fs+tQYZMA4/KxGFOdoDM9WKf7IpeNILI37q2uj4dJj8SkI33zwUnzHFuTD04YI33Dc3FCZHcCd/d0m/fCnRaFg==
+"@vector-im/compound-web@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-0.4.0.tgz#c4adf10785722c4b0fd5e20e72576ade2ef386d0"
+  integrity sha512-45pshpwpVBwOwIevKZrnWX718Z+qPvxnrSUv3KY4x4ej+PDMt8Qorxv1n98bB7fgF7vwBHK5PQdjq2kTFit+wQ==
   dependencies:
     "@radix-ui/react-form" "^0.0.3"
     "@radix-ui/react-tooltip" "^1.0.6"
@@ -7542,18 +7542,18 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "28.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/4c00b410466b855e178ed47217dac6b31536a7bf"
+  version "28.1.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1503acb30a6e2eeda82018d8a065b65cb6f5fac5"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^1.2.1"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^1.2.3-alpha.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
     jwt-decode "^3.1.2"
     loglevel "^1.7.1"
     matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.5.0"
+    matrix-widget-api "^1.6.0"
     oidc-client-ts "^2.2.4"
     p-retry "4"
     sdp-transform "^2.14.1"
@@ -7581,6 +7581,14 @@ matrix-widget-api@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.5.0.tgz#4ae3e46a7f2854f944ddaf8a5af63d72fba76c45"
   integrity sha512-hKGfqQKK5qVMwW0Sp8l2TiuW8UuHafTvUZNSWBPghedB/rSFbVLlr0mufuEV0iq/pQ7ChW96q/WEC6Llie4SnA==
+  dependencies:
+    "@types/events" "^3.0.0"
+    events "^3.2.0"
+
+matrix-widget-api@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.6.0.tgz#f0075411edffc6de339580ade7e6e6e6edb01af4"
+  integrity sha512-VXIJyAZ/WnBmT4C7ePqevgMYGneKMCP/0JuCOqntSsaNlCRHJvwvTxmqUU+ufOpzIF5gYNyIrAjbgrEbK3iqJQ==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"

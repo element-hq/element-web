@@ -22,7 +22,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
     >
       <div
         aria-level="1"
-        class="_font-body-lg-semibold_1g2sj_89 mx_RoomHeader_heading"
+        class="_font-body-lg-semibold_1jx6b_83 mx_RoomHeader_heading"
         dir="auto"
         role="heading"
         title="!1:example.org"
@@ -36,7 +36,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
     >
       <button
         aria-label="There's no one here to call"
-        class="_icon-button_1k9cw_17"
+        class="_icon-button_1segd_17"
         data-state="closed"
         disabled=""
         style="--cpd-icon-button-size: 32px;"
@@ -45,7 +45,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       </button>
       <button
         aria-label="There's no one here to call"
-        class="_icon-button_1k9cw_17"
+        class="_icon-button_1segd_17"
         data-state="closed"
         disabled=""
         style="--cpd-icon-button-size: 32px;"
@@ -54,7 +54,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       </button>
       <button
         aria-label="Threads"
-        class="_icon-button_1k9cw_17"
+        class="_icon-button_1segd_17"
         data-state="closed"
         style="--cpd-icon-button-size: 32px;"
       >
@@ -62,7 +62,7 @@ exports[`RoomHeader does not show the face pile for DMs 1`] = `
       </button>
       <button
         aria-label="Notifications"
-        class="_icon-button_1k9cw_17"
+        class="_icon-button_1segd_17"
         data-state="closed"
         style="--cpd-icon-button-size: 32px;"
       >

@@ -384,12 +384,12 @@ export default class ForgotPassword extends React.Component<Props, State> {
 
     public renderSetPassword(): JSX.Element {
         const submitButtonChild =
-            this.state.phase === Phase.ResettingPassword ? <Spinner w={16} h={16} /> : _t("Reset password");
+            this.state.phase === Phase.ResettingPassword ? <Spinner w={16} h={16} /> : _t("auth|reset_password_action");
 
         return (
             <>
                 <LockIcon className="mx_AuthBody_lockIcon" />
-                <h1>{_t("Reset your password")}</h1>
+                <h1>{_t("auth|reset_password_title")}</h1>
                 <form onSubmit={this.onSubmitForm}>
                     <fieldset disabled={this.state.phase === Phase.ResettingPassword}>
                         <div className="mx_AuthBody_fieldRow">
