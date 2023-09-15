@@ -1,31 +1,38 @@
 {
-    "Unknown device": "Непознато устройство",
-    "Dismiss": "Затвори",
-    "Welcome to Element": "Добре дошли в Element",
-    "Sign In": "Вписване",
-    "Create Account": "Създай профил",
-    "Explore rooms": "Открий стаи",
-    "Unexpected error preparing the app. See console for details.": "Неочаквана грешка при подготвянето на приложението. Вижте конзолата за подробности.",
-    "Invalid configuration: no default server specified.": "Невалидна конфигурация: не е указан сървър по подразбиране.",
-    "The message from the parser is: %(message)s": "Грешката от парсъра е: %(message)s",
-    "Invalid JSON": "Невалиден JSON",
-    "Go to your browser to complete Sign In": "Отидете в браузъра за да завършите влизането",
-    "Unable to load config file: please refresh the page to try again.": "Неуспешно зареждане на конфигурационния файл: презаредете страницата за да опитате пак.",
-    "Unsupported browser": "Неподдържан браузър",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Инсталирайте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> или <safariLink>Safari</safariLink> за най-добра работа.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Може да продължите да използвате сегашния си браузър, но някои или всички функции може да се окажат неработещи, или пък външния вид на приложението да изглежда неправилен.",
-    "I understand the risks and wish to continue": "Разбирам рисковете и желая да продължа",
-    "Go to element.io": "Отиди на element.io",
-    "Failed to start": "Неуспешно стартиране",
-    "Your Element is misconfigured": "Вашият Element не е конфигуриран правилно",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Вашата Element конфигурация съдържа невалиден JSON. Коригирайте проблема и презаредете страницата.",
-    "Download Completed": "Свалянето завърши",
-    "Open": "Отвори",
-    "Your browser can't run %(brand)s": "Браузърът ви не може да изпълни %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s използва модерни функции на браузъра, които не се поддържат от Вашия.",
-    "Powered by Matrix": "Базирано на Matrix",
-    "Use %(brand)s on mobile": "Използвайте %(brand)s на мобилен телефон",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентрализиран, криптиран чат &amp; сътрудничество, захранено от $matrixlogo",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s под %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
+    "action": {
+        "create_account": "Създай профил",
+        "dismiss": "Затвори",
+        "explore_rooms": "Открий стаи",
+        "open": "Отвори",
+        "sign_in": "Вписване"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Отидете в браузъра за да завършите влизането"
+    },
+    "download_completed": "Свалянето завърши",
+    "error": {
+        "app_launch_unexpected_error": "Неочаквана грешка при подготвянето на приложението. Вижте конзолата за подробности.",
+        "cannot_load_config": "Неуспешно зареждане на конфигурационния файл: презаредете страницата за да опитате пак.",
+        "invalid_configuration_no_server": "Невалидна конфигурация: не е указан сървър по подразбиране.",
+        "invalid_json": "Вашата Element конфигурация съдържа невалиден JSON. Коригирайте проблема и презаредете страницата.",
+        "invalid_json_detail": "Грешката от парсъра е: %(message)s",
+        "invalid_json_generic": "Невалиден JSON",
+        "misconfigured": "Вашият Element не е конфигуриран правилно"
+    },
+    "failed_to_start": "Неуспешно стартиране",
+    "go_to_element_io": "Отиди на element.io",
+    "incompatible_browser": {
+        "browser_links": "Инсталирайте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> или <safariLink>Safari</safariLink> за най-добра работа.",
+        "continue_warning": "Разбирам рисковете и желая да продължа",
+        "feature_warning": "Може да продължите да използвате сегашния си браузър, но някои или всички функции може да се окажат неработещи, или пък външния вид на приложението да изглежда неправилен.",
+        "features": "%(brand)s използва модерни функции на браузъра, които не се поддържат от Вашия.",
+        "summary": "Браузърът ви не може да изпълни %(brand)s",
+        "title": "Неподдържан браузър"
+    },
+    "powered_by_matrix": "Базирано на Matrix",
+    "powered_by_matrix_with_logo": "Децентрализиран, криптиран чат &amp; сътрудничество, захранено от $matrixlogo",
+    "unknown_device": "Непознато устройство",
+    "use_brand_on_mobile": "Използвайте %(brand)s на мобилен телефон",
+    "web_default_device_name": "%(appName)s: %(browserName)s под %(osName)s",
+    "welcome_to_element": "Добре дошли в Element"
 }

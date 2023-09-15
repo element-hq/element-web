@@ -1,0 +1,8 @@
+name: Localazy Download
+on:
+    workflow_dispatch: {}
+jobs:
+    download:
+        uses: matrix-org/matrix-web-i18n/.github/workflows/localazy_download.yaml@main
+        secrets:
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

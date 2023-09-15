@@ -1,31 +1,39 @@
 {
-    "Dismiss": "忽略",
-    "Unknown device": "未知设备",
-    "Welcome to Element": "欢迎来到 Element",
-    "Sign In": "登录",
-    "Create Account": "创建账户",
-    "Explore rooms": "探索房间",
-    "The message from the parser is: %(message)s": "来自解析器的消息：%(message)s",
-    "Invalid JSON": "无效的 JSON",
-    "Unexpected error preparing the app. See console for details.": "准备软件时出现意外错误，详细信息请查看控制台。",
-    "Invalid configuration: no default server specified.": "配置无效：没有指定默认服务器。",
-    "Unable to load config file: please refresh the page to try again.": "无法加载配置文件：请刷新页面以重试。",
-    "Go to your browser to complete Sign In": "转到您的浏览器以完成登录",
-    "Unsupported browser": "不支持的浏览器",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "请安装 <chromeLink>Chrome</chromeLink>、<firefoxLink>Firefox</firefoxLink> 或 <safariLink>Safari</safariLink> 以获得最佳体验。",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "您可以继续使用您目前的浏览器，但部分或全部功能可能无法正常工作，应用程序的外观可能也看起来不正确。",
-    "I understand the risks and wish to continue": "我了解风险并希望继续",
-    "Go to element.io": "前往 element.io",
-    "Failed to start": "启动失败",
-    "Your Element is misconfigured": "Element 配置错误",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Element 配置文件中包含无效的 JSON。请改正错误并重新加载页面。",
-    "Download Completed": "下载完成",
-    "Open": "打开",
-    "Your browser can't run %(brand)s": "你的浏览器无法运行 %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "当前浏览器不支持 %(brand)s 所需的高级浏览器特性。",
-    "Powered by Matrix": "由 Matrix 驱动",
-    "Use %(brand)s on mobile": "在移动设备上使用 %(brand)s",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "去中心化、加密的聊天与协作，由 $matrixLogo 驱动",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s：%(browserName)s在%(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s桌面版：%(platformName)s"
+    "action": {
+        "create_account": "创建账户",
+        "dismiss": "忽略",
+        "explore_rooms": "探索房间",
+        "open": "打开",
+        "sign_in": "登录"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "转到您的浏览器以完成登录"
+    },
+    "desktop_default_device_name": "%(brand)s桌面版：%(platformName)s",
+    "download_completed": "下载完成",
+    "error": {
+        "app_launch_unexpected_error": "准备软件时出现意外错误，详细信息请查看控制台。",
+        "cannot_load_config": "无法加载配置文件：请刷新页面以重试。",
+        "invalid_configuration_no_server": "配置无效：没有指定默认服务器。",
+        "invalid_json": "Element 配置文件中包含无效的 JSON。请改正错误并重新加载页面。",
+        "invalid_json_detail": "来自解析器的消息：%(message)s",
+        "invalid_json_generic": "无效的 JSON",
+        "misconfigured": "Element 配置错误"
+    },
+    "failed_to_start": "启动失败",
+    "go_to_element_io": "前往 element.io",
+    "incompatible_browser": {
+        "browser_links": "请安装 <chromeLink>Chrome</chromeLink>、<firefoxLink>Firefox</firefoxLink> 或 <safariLink>Safari</safariLink> 以获得最佳体验。",
+        "continue_warning": "我了解风险并希望继续",
+        "feature_warning": "您可以继续使用您目前的浏览器，但部分或全部功能可能无法正常工作，应用程序的外观可能也看起来不正确。",
+        "features": "当前浏览器不支持 %(brand)s 所需的高级浏览器特性。",
+        "summary": "你的浏览器无法运行 %(brand)s",
+        "title": "不支持的浏览器"
+    },
+    "powered_by_matrix": "由 Matrix 驱动",
+    "powered_by_matrix_with_logo": "去中心化、加密的聊天与协作，由 $matrixLogo 驱动",
+    "unknown_device": "未知设备",
+    "use_brand_on_mobile": "在移动设备上使用 %(brand)s",
+    "web_default_device_name": "%(appName)s：%(browserName)s在%(osName)s",
+    "welcome_to_element": "欢迎来到 Element"
 }

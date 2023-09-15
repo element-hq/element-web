@@ -1,31 +1,39 @@
 {
-    "Unknown device": "دستگاه ناشناخته",
-    "Welcome to Element": "به Element خوش‌آمدید",
-    "Dismiss": "نادیده بگیر",
-    "Invalid JSON": "JSON اشتباه",
-    "Go to your browser to complete Sign In": "برای تکمیل ورود به مرورگر خود بروید",
-    "Sign In": "ورود",
-    "Create Account": "ایجاد حساب کاربری",
-    "Explore rooms": "جستجو در اتاق ها",
-    "Invalid configuration: no default server specified.": "پیکربندی نامعتبر: سرور پیشفرض مشخص نشده است.",
-    "Your Element is misconfigured": "Element شما پیکربندی نشده است",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "پیکربندی المنت شما شامل JSON نا معتبر است. لطفا مشکل را اصلاح کنید و صفحه را بارگذاری مجدد کنید.",
-    "The message from the parser is: %(message)s": "پیام از طرف تجزیه کننده: %(message)s",
-    "Unable to load config file: please refresh the page to try again.": "قادر به بارگذاری فایل پیکربندی نیست: لطفا برای تلاش مجدد صفحه را تازه کنید.",
-    "Unexpected error preparing the app. See console for details.": "خطای غیر منتظره در آماده سازی برنامه. کنسول را برای جزئیات مشاهده کنید.",
-    "Download Completed": "بارگیری کامل شد",
-    "Open": "باز",
-    "Unsupported browser": "مرورگر پش‬تبانی نمی شود",
-    "Your browser can't run %(brand)s": "مرورگر شما نمی تواند %(brand)s را اجرا کند",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s از ویژگی های پیشرفته مرورگر استفاده می کند که در مرورگر فعلی شما پشتیبانی نمی شوند.",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "لطفا برای تجربه بهتر <chromeLink>کروم</chromeLink>، <firefoxLink>فایرفاکس</firefoxLink>، یا <safariLink>سافاری</safariLink> را نصب کنید.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "شما می توانید با مرورگر فعلی خود ادامه دهید، اما ممکن است عملکرد تمامی یا برخی از قابلیت ها با اشکال روبرو شود و نمایش برنامه صحیح نباشد.",
-    "I understand the risks and wish to continue": "از خطرات این کار آگاهم و مایلم که ادامه بدهم",
-    "Go to element.io": "برو به element.io",
-    "Failed to start": "خطا در شروع",
-    "Powered by Matrix": "راه اندازی شده با استفاده از ماتریکس",
-    "Use %(brand)s on mobile": "از %(brand)s گوشی استفاده کنید",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "همکاری چت غیرمتمرکز و رمزگذاری شده &amp; توسعه یافته با استفاده از $matrixLogo",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s: روی %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s دسکتاپ: %(platformName)s"
+    "action": {
+        "create_account": "ایجاد حساب کاربری",
+        "dismiss": "نادیده بگیر",
+        "explore_rooms": "جستجو در اتاق ها",
+        "open": "باز",
+        "sign_in": "ورود"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "برای تکمیل ورود به مرورگر خود بروید"
+    },
+    "desktop_default_device_name": "%(brand)s دسکتاپ: %(platformName)s",
+    "download_completed": "بارگیری کامل شد",
+    "error": {
+        "app_launch_unexpected_error": "خطای غیر منتظره در آماده سازی برنامه. کنسول را برای جزئیات مشاهده کنید.",
+        "cannot_load_config": "قادر به بارگذاری فایل پیکربندی نیست: لطفا برای تلاش مجدد صفحه را تازه کنید.",
+        "invalid_configuration_no_server": "پیکربندی نامعتبر: سرور پیشفرض مشخص نشده است.",
+        "invalid_json": "پیکربندی المنت شما شامل JSON نا معتبر است. لطفا مشکل را اصلاح کنید و صفحه را بارگذاری مجدد کنید.",
+        "invalid_json_detail": "پیام از طرف تجزیه کننده: %(message)s",
+        "invalid_json_generic": "JSON اشتباه",
+        "misconfigured": "Element شما پیکربندی نشده است"
+    },
+    "failed_to_start": "خطا در شروع",
+    "go_to_element_io": "برو به element.io",
+    "incompatible_browser": {
+        "browser_links": "لطفا برای تجربه بهتر <chromeLink>کروم</chromeLink>، <firefoxLink>فایرفاکس</firefoxLink>، یا <safariLink>سافاری</safariLink> را نصب کنید.",
+        "continue_warning": "از خطرات این کار آگاهم و مایلم که ادامه بدهم",
+        "feature_warning": "شما می توانید با مرورگر فعلی خود ادامه دهید، اما ممکن است عملکرد تمامی یا برخی از قابلیت ها با اشکال روبرو شود و نمایش برنامه صحیح نباشد.",
+        "features": "%(brand)s از ویژگی های پیشرفته مرورگر استفاده می کند که در مرورگر فعلی شما پشتیبانی نمی شوند.",
+        "summary": "مرورگر شما نمی تواند %(brand)s را اجرا کند",
+        "title": "مرورگر پش‬تبانی نمی شود"
+    },
+    "powered_by_matrix": "راه اندازی شده با استفاده از ماتریکس",
+    "powered_by_matrix_with_logo": "همکاری چت غیرمتمرکز و رمزگذاری شده &amp; توسعه یافته با استفاده از $matrixLogo",
+    "unknown_device": "دستگاه ناشناخته",
+    "use_brand_on_mobile": "از %(brand)s گوشی استفاده کنید",
+    "web_default_device_name": "%(appName)s: %(browserName)s: روی %(osName)s",
+    "welcome_to_element": "به Element خوش‌آمدید"
 }

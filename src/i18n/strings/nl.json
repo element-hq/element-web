@@ -1,31 +1,38 @@
 {
-    "Dismiss": "Sluiten",
-    "Unknown device": "Onbekend apparaat",
-    "Welcome to Element": "Welkom bij Element",
-    "Sign In": "Inloggen",
-    "Create Account": "Registreren",
-    "Explore rooms": "Kamers ontdekken",
-    "Unexpected error preparing the app. See console for details.": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Zie de console voor details.",
-    "Invalid configuration: no default server specified.": "Configuratie ongeldig: geen standaardserver opgegeven.",
-    "The message from the parser is: %(message)s": "De ontleder meldt: %(message)s",
-    "Invalid JSON": "Ongeldige JSON",
-    "Go to your browser to complete Sign In": "Ga naar je browser om de aanmelding te voltooien",
-    "Unable to load config file: please refresh the page to try again.": "Kan het configuratiebestand niet laden. Herlaad de pagina.",
-    "Unsupported browser": "Niet-ondersteunde browser",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Installeer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, of <safariLink>Safari</safariLink> voor de beste gebruikservaring.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Je kan je huidige browser blijven gebruiken, maar sommige of alle functies zouden niet kunnen werken en de weergave van het programma kan verkeerd zijn.",
-    "I understand the risks and wish to continue": "Ik begrijp de risico's en wil verder gaan",
-    "Go to element.io": "Ga naar element.io",
-    "Failed to start": "Opstarten mislukt",
-    "Open": "Openen",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Jouw Element configuratie bevat ongeldige JSON. Corrigeer het probleem en herlaad de pagina.",
-    "Download Completed": "Download voltooid",
-    "Your Element is misconfigured": "Jouw Element is verkeerd geconfigureerd",
-    "Your browser can't run %(brand)s": "Jouw browser kan %(brand)s niet starten",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s gebruikt geavanceerde functies die niet ondersteund worden in je huidige browser.",
-    "Powered by Matrix": "Mogelijk gemaakt door Matrix",
-    "Use %(brand)s on mobile": "Gebruik %(brand)s op je mobiel",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s op %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
+    "action": {
+        "create_account": "Registreren",
+        "dismiss": "Sluiten",
+        "explore_rooms": "Kamers ontdekken",
+        "open": "Openen",
+        "sign_in": "Inloggen"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Ga naar je browser om de aanmelding te voltooien"
+    },
+    "download_completed": "Download voltooid",
+    "error": {
+        "app_launch_unexpected_error": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Zie de console voor details.",
+        "cannot_load_config": "Kan het configuratiebestand niet laden. Herlaad de pagina.",
+        "invalid_configuration_no_server": "Configuratie ongeldig: geen standaardserver opgegeven.",
+        "invalid_json": "Jouw Element configuratie bevat ongeldige JSON. Corrigeer het probleem en herlaad de pagina.",
+        "invalid_json_detail": "De ontleder meldt: %(message)s",
+        "invalid_json_generic": "Ongeldige JSON",
+        "misconfigured": "Jouw Element is verkeerd geconfigureerd"
+    },
+    "failed_to_start": "Opstarten mislukt",
+    "go_to_element_io": "Ga naar element.io",
+    "incompatible_browser": {
+        "browser_links": "Installeer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, of <safariLink>Safari</safariLink> voor de beste gebruikservaring.",
+        "continue_warning": "Ik begrijp de risico's en wil verder gaan",
+        "feature_warning": "Je kan je huidige browser blijven gebruiken, maar sommige of alle functies zouden niet kunnen werken en de weergave van het programma kan verkeerd zijn.",
+        "features": "%(brand)s gebruikt geavanceerde functies die niet ondersteund worden in je huidige browser.",
+        "summary": "Jouw browser kan %(brand)s niet starten",
+        "title": "Niet-ondersteunde browser"
+    },
+    "powered_by_matrix": "Mogelijk gemaakt door Matrix",
+    "powered_by_matrix_with_logo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo",
+    "unknown_device": "Onbekend apparaat",
+    "use_brand_on_mobile": "Gebruik %(brand)s op je mobiel",
+    "web_default_device_name": "%(appName)s: %(browserName)s op %(osName)s",
+    "welcome_to_element": "Welkom bij Element"
 }

@@ -1,31 +1,39 @@
 {
-    "Dismiss": "Eltüntetés",
-    "Unknown device": "Ismeretlen eszköz",
-    "Welcome to Element": "Üdvözli az Element",
-    "Sign In": "Bejelentkezés",
-    "Create Account": "Fiók létrehozása",
-    "Explore rooms": "Szobák felderítése",
-    "Unexpected error preparing the app. See console for details.": "Váratlan hiba történt az alkalmazás előkészítésénél. A részletekért lásd a konzolt.",
-    "Invalid configuration: no default server specified.": "Érvénytelen konfiguráció: nincs megadva alapértelmezett kiszolgáló.",
-    "The message from the parser is: %(message)s": "A feldolgozó algoritmus üzenete: %(message)s",
-    "Invalid JSON": "Érvénytelen JSON",
-    "Go to your browser to complete Sign In": "A böngészőben fejezze be a bejelentkezést",
-    "Unable to load config file: please refresh the page to try again.": "A konfigurációs fájlt nem sikerült betölteni: frissítse az oldalt és próbálja meg újra.",
-    "Unsupported browser": "Nem támogatott böngésző",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "A legjobb élmény érdékében telepítsen <chromeLink>Chrome-ot</chromeLink>, <firefoxLink>Firefoxot</firefoxLink> vagy <safariLink>Safarit</safariLink>.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Folytathatja a jelenlegi böngészőjével, de néhány vagy az összes funkció használhatatlan lehet, vagy hibák lehetnek az alkalmazás kinézetében és viselkedésében.",
-    "I understand the risks and wish to continue": "Megértettem a kockázatot és folytatom",
-    "Go to element.io": "Irány a element.io",
-    "Failed to start": "Az indítás sikertelen",
-    "Download Completed": "A letöltés befejeződött",
-    "Open": "Megnyitás",
-    "Your Element is misconfigured": "Az Element hibásan van beállítva",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Az Element érvénytelen JSON-t tartalmazó konfigurációval rendelkezik. Javítsa és töltse újra az oldalt.",
-    "Your browser can't run %(brand)s": "A böngészője nem tudja futtatni ezt: %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "A(z) %(brand)s speciális böngészőfunkciókat használ, amelyeket a jelenlegi böngészője nem támogat.",
-    "Powered by Matrix": "A gépházban: Matrix",
-    "Use %(brand)s on mobile": "Mobilon használja ezt: %(brand)s",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Elosztott, titkosított csevegés és együttműködés ezzel: $matrixLogo",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: (%(browserName)s itt: %(osName)s)",
-    "%(brand)s Desktop: %(platformName)s": "Asztali %(brand)s: (%(platformName)s)"
+    "action": {
+        "create_account": "Fiók létrehozása",
+        "dismiss": "Eltüntetés",
+        "explore_rooms": "Szobák felderítése",
+        "open": "Megnyitás",
+        "sign_in": "Bejelentkezés"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "A böngészőben fejezze be a bejelentkezést"
+    },
+    "desktop_default_device_name": "Asztali %(brand)s: (%(platformName)s)",
+    "download_completed": "A letöltés befejeződött",
+    "error": {
+        "app_launch_unexpected_error": "Váratlan hiba történt az alkalmazás előkészítésénél. A részletekért lásd a konzolt.",
+        "cannot_load_config": "A konfigurációs fájlt nem sikerült betölteni: frissítse az oldalt és próbálja meg újra.",
+        "invalid_configuration_no_server": "Érvénytelen konfiguráció: nincs megadva alapértelmezett kiszolgáló.",
+        "invalid_json": "Az Element érvénytelen JSON-t tartalmazó konfigurációval rendelkezik. Javítsa és töltse újra az oldalt.",
+        "invalid_json_detail": "A feldolgozó algoritmus üzenete: %(message)s",
+        "invalid_json_generic": "Érvénytelen JSON",
+        "misconfigured": "Az Element hibásan van beállítva"
+    },
+    "failed_to_start": "Az indítás sikertelen",
+    "go_to_element_io": "Irány a element.io",
+    "incompatible_browser": {
+        "browser_links": "A legjobb élmény érdékében telepítsen <chromeLink>Chrome-ot</chromeLink>, <firefoxLink>Firefoxot</firefoxLink> vagy <safariLink>Safarit</safariLink>.",
+        "continue_warning": "Megértettem a kockázatot és folytatom",
+        "feature_warning": "Folytathatja a jelenlegi böngészőjével, de néhány vagy az összes funkció használhatatlan lehet, vagy hibák lehetnek az alkalmazás kinézetében és viselkedésében.",
+        "features": "A(z) %(brand)s speciális böngészőfunkciókat használ, amelyeket a jelenlegi böngészője nem támogat.",
+        "summary": "A böngészője nem tudja futtatni ezt: %(brand)s",
+        "title": "Nem támogatott böngésző"
+    },
+    "powered_by_matrix": "A gépházban: Matrix",
+    "powered_by_matrix_with_logo": "Elosztott, titkosított csevegés és együttműködés ezzel: $matrixLogo",
+    "unknown_device": "Ismeretlen eszköz",
+    "use_brand_on_mobile": "Mobilon használja ezt: %(brand)s",
+    "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",
+    "welcome_to_element": "Üdvözli az Element"
 }

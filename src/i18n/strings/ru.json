@@ -1,31 +1,39 @@
 {
-    "Dismiss": "Закрыть",
-    "Unknown device": "Неизвестное устройство",
-    "Welcome to Element": "Добро пожаловать в Element",
-    "Sign In": "Войти",
-    "Create Account": "Создать учётную запись",
-    "Explore rooms": "Обзор комнат",
-    "Unexpected error preparing the app. See console for details.": "Неожиданная ошибка при подготовке приложения. Подробности см. в консоли.",
-    "Invalid configuration: no default server specified.": "Неверная конфигурация: сервер по умолчанию не указан.",
-    "The message from the parser is: %(message)s": "Сообщение из парсера: %(message)s",
-    "Invalid JSON": "Неверный JSON",
-    "Go to your browser to complete Sign In": "Перейдите в браузер для завершения входа",
-    "Unable to load config file: please refresh the page to try again.": "Не удалось загрузить файл конфигурации. Попробуйте обновить страницу.",
-    "Unsupported browser": "Неподдерживаемый браузер",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Пожалуйста поставьте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, или <safariLink>Safari</safariLink> для лучшей совместимости.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Вы можете продолжать пользоваться этим браузером, но некоторые возможности будут недоступны и интерфейс может быть отрисован неправильно.",
-    "I understand the risks and wish to continue": "Я понимаю риск и хочу продолжить",
-    "Go to element.io": "К element.io",
-    "Failed to start": "Старт не удался",
-    "Your Element is misconfigured": "Ваш Element неверно настроен",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Конфигурация Element содержит неверный JSON. Исправьте проблему и обновите страницу.",
-    "Download Completed": "Загрузка завершена",
-    "Open": "Открыть",
-    "Your browser can't run %(brand)s": "Ваш браузер не может запустить %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s использует расширенные возможности, которые не поддерживаются вашим браузером.",
-    "Powered by Matrix": "На технологии Matrix",
-    "Use %(brand)s on mobile": "Воспользуйтесь %(brand)s на мобильном телефоне",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентрализованное, зашифрованное общение и сотрудничество на основе $matrixLogo",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Рабочий стол: %(platformName)s",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s на %(osName)s"
+    "action": {
+        "create_account": "Создать учётную запись",
+        "dismiss": "Закрыть",
+        "explore_rooms": "Обзор комнат",
+        "open": "Открыть",
+        "sign_in": "Войти"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Перейдите в браузер для завершения входа"
+    },
+    "desktop_default_device_name": "%(brand)s Рабочий стол: %(platformName)s",
+    "download_completed": "Загрузка завершена",
+    "error": {
+        "app_launch_unexpected_error": "Неожиданная ошибка при подготовке приложения. Подробности см. в консоли.",
+        "cannot_load_config": "Не удалось загрузить файл конфигурации. Попробуйте обновить страницу.",
+        "invalid_configuration_no_server": "Неверная конфигурация: сервер по умолчанию не указан.",
+        "invalid_json": "Конфигурация Element содержит неверный JSON. Исправьте проблему и обновите страницу.",
+        "invalid_json_detail": "Сообщение из парсера: %(message)s",
+        "invalid_json_generic": "Неверный JSON",
+        "misconfigured": "Ваш Element неверно настроен"
+    },
+    "failed_to_start": "Старт не удался",
+    "go_to_element_io": "К element.io",
+    "incompatible_browser": {
+        "browser_links": "Пожалуйста поставьте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, или <safariLink>Safari</safariLink> для лучшей совместимости.",
+        "continue_warning": "Я понимаю риск и хочу продолжить",
+        "feature_warning": "Вы можете продолжать пользоваться этим браузером, но некоторые возможности будут недоступны и интерфейс может быть отрисован неправильно.",
+        "features": "%(brand)s использует расширенные возможности, которые не поддерживаются вашим браузером.",
+        "summary": "Ваш браузер не может запустить %(brand)s",
+        "title": "Неподдерживаемый браузер"
+    },
+    "powered_by_matrix": "На технологии Matrix",
+    "powered_by_matrix_with_logo": "Децентрализованное, зашифрованное общение и сотрудничество на основе $matrixLogo",
+    "unknown_device": "Неизвестное устройство",
+    "use_brand_on_mobile": "Воспользуйтесь %(brand)s на мобильном телефоне",
+    "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",
+    "welcome_to_element": "Добро пожаловать в Element"
 }

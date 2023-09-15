@@ -150,12 +150,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
             ToastStore.sharedInstance().addOrReplaceToast({
                 key,
-                title: _t("Download Completed"),
+                title: _t("download_completed"),
                 props: {
                     description: name,
-                    acceptLabel: _t("Open"),
+                    acceptLabel: _t("action|open"),
                     onAccept,
-                    dismissLabel: _t("Dismiss"),
+                    dismissLabel: _t("action|dismiss"),
                     onDismiss,
                     numSeconds: 10,
                 },
@@ -313,7 +313,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public getDefaultDeviceDisplayName(): string {
         const brand = SdkConfig.get().brand;
-        return _t("%(brand)s Desktop: %(platformName)s", {
+        return _t("desktop_default_device_name", {
             brand,
             platformName: platformFriendlyName(),
         });
@@ -390,7 +390,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         // this will get intercepted by electron-main will-navigate
         super.startSingleSignOn(mxClient, loginType, fragmentAfterLogin, idpId);
         Modal.createDialog(InfoDialog, {
-            title: _t("Go to your browser to complete Sign In"),
+            title: _t("auth|sso_complete_in_browser_dialog_title"),
             description: <Spinner />,
         });
     }

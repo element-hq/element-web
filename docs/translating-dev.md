@@ -6,11 +6,16 @@
     -   Including up-to-date versions of matrix-react-sdk and matrix-js-sdk
 -   Latest LTS version of Node.js installed
 -   Be able to understand English
--   Be able to understand the language you want to translate Element into
 
 ## Translating strings vs. marking strings for translation
 
-Translating strings are done with the `_t()` function found in matrix-react-sdk/lib/languageHandler.js. It is recommended to call this function wherever you introduce a string constant which should be translated. However, translating can not be performed until after the translation system has been initialized. Thus, sometimes translation must be performed at a different location in the source code than where the string is introduced. This breaks some tooling and makes it difficult to find translatable strings. Therefore, there is the alternative `_td()` function which is used to mark strings for translation, without actually performing the translation (which must still be performed separately, and after the translation system has been initialized).
+Translating strings are done with the `_t()` function found in matrix-react-sdk/lib/languageHandler.js.
+It is recommended to call this function wherever you introduce a string constant which should be translated.
+However, translating can not be performed until after the translation system has been initialized.
+Thus, sometimes translation must be performed at a different location in the source code than where the string is introduced.
+This breaks some tooling and makes it difficult to find translatable strings.
+Therefore, there is the alternative `_td()` function which is used to mark strings for translation,
+without actually performing the translation (which must still be performed separately, and after the translation system has been initialized).
 
 Basically, whenever a translatable string is introduced, you should call either `_t()` immediately OR `_td()` and later `_t()`.
 
@@ -29,24 +34,40 @@ function getColorName(hex) {
 }
 ```
 
+## Key naming rules
+
+These rules are based on https://github.com/vector-im/element-x-android/blob/develop/tools/localazy/README.md
+At this time we are not trying to have a translation key per UI element as some methodologies use,
+whilst that would offer the greatest flexibility, it would also make reuse between projects nigh impossible.
+We are aiming for a set of common strings to be shared then some more localised translations per context they may appear in.
+
+1. Ensure the string doesn't already exist in a related project, such as https://localazy.com/p/element
+2. Keys for common strings, i.e. strings that can be used at multiple places must start by `action_` if this is a verb, or `common_` if not
+3. Keys for common accessibility strings must start by `a11y_`. Example: `a11y_hide_password`
+4. Otherwise, try to group keys logically and nest where appropriate, such as `keyboard_` for strings relating to keyboard shortcuts.
+5. Ensure your translation keys do not include `.` or `|` or ` `. Try to balance string length against descriptiveness.
+
+## matrix-react-sdk is still undergoing migration to translation keys
+
+If you are fortunate enough to be modifying not yet migrated strings please treat them as a new string using instructions below.
+
 ## Adding new strings
 
-1.  Check if the import `import { _t } from 'matrix-react-sdk/src/languageHandler';` is present. If not add it to the other import statements. Also import `_td` if needed.
-1.  Add `_t()` to your string. (Don't forget curly braces when you assign an expression to JSX attributes in the render method). If the string is introduced at a point before the translation system has not yet been initialized, use `_td()` instead, and call `_t()` at the appropriate time.
-1.  Run `yarn i18n` to update `src/i18n/strings/en_EN.json`
-1.  If you added a string with a plural, you can add other English plural variants to `src/i18n/strings/en_EN.json` (remeber to edit the one in the same project as the source file containing your new translation).
+1. Check if the import `import { _t } from 'matrix-react-sdk/src/languageHandler';` is present. If not add it to the other import statements. Also import `_td` if needed.
+1. Add `_t()` to your string passing the translation key you come up with based on the rules above. If the string is introduced at a point before the translation system has not yet been initialized, use `_td()` instead, and call `_t()` at the appropriate time.
+1. Run `yarn i18n` to add the keys to `src/i18n/strings/en_EN.json`
+1. Modify the new entries in `src/i18n/strings/en_EN.json` with the English (UK) translations for the added keys.
 
 ## Editing existing strings
 
-1. Edit every occurrence of the string inside `_t()` and `_td()` in the JSX files.
-1. Run `yarn i18n` to update `src/i18n/strings/en_EN.json`. (Be sure to run this in the same project as the JSX files you just edited.)
-1. Run `yarn prunei18n` to remove the old string from `src/i18n/strings/*.json`.
+Edits to existing strings should be performed only via Localazy.
+There you can also require all translations to be redone if the meaning of the string has changed significantly.
 
 ## Adding variables inside a string.
 
-1. Extend your `_t()` call. Instead of `_t(STRING)` use `_t(STRING, {})`
+1. Extend your `_t()` call. Instead of `_t(TKEY)` use `_t(TKEY, {})`
 1. Decide how to name it. Please think about if the person who has to translate it can understand what it does. E.g. using the name 'recipient' is bad, because a translator does not know if it is the name of a person, an email address, a user ID, etc. Rather use e.g. recipientEmailAddress.
-1. Add it to the array in `_t` for example `_t(STRING, {variable: this.variable})`
+1. Add it to the array in `_t` for example `_t(TKEY, {variable: this.variable})`
 1. Add the variable inside the string. The syntax for variables is `%(variable)s`. Please note the _s_ at the end. The name of the variable has to match the previous used name.
 
 -   You can use the special `count` variable to choose between multiple versions of the same string, in order to get the correct pluralization. E.g. `_t('You have %(count)s new messages', { count: 2 })` would show 'You have 2 new messages', while `_t('You have %(count)s new messages', { count: 1 })` would show 'You have one new message' (assuming a singular version of the string has been added to the translation file. See above). Passing in `count` is much prefered over having an if-statement choose the correct string to use, because some languages have much more complicated plural rules than english (e.g. they might need a completely different form if there are three things rather than two).
@@ -61,4 +82,5 @@ function getColorName(hex) {
 -   Avoid "translation in parts", i.e. concatenating translated strings or using translated strings in variable substitutions. Context is important for translations, and translating partial strings this way is simply not always possible.
 -   Concatenating strings often also introduces an implicit assumption about word order (e.g. that the subject of the sentence comes first), which is incorrect for many languages.
 -   Translation 'smell test': If you have a string that does not begin with a capital letter (is not the start of a sentence) or it ends with e.g. ':' or a preposition (e.g. 'to') you should recheck that you are not trying to translate a partial sentence.
--   If you have multiple strings, that are almost identical, except some part (e.g. a word or two) it is still better to translate the full sentence multiple times. It may seem like inefficient repetion, but unlike programming where you try to minimize repetition, translation is much faster if you have many, full, clear, sentences to work with, rather than fewer, but incomplete sentence fragments.
+-   If you have multiple strings, that are almost identical, except some part (e.g. a word or two) it is still better to translate the full sentence multiple times. It may seem like inefficient repetition, but unlike programming where you try to minimize repetition, translation is much faster if you have many, full, clear, sentences to work with, rather than fewer, but incomplete sentence fragments.
+-   Don't forget curly braces when you assign an expression to JSX attributes in the render method)

@@ -1,31 +1,39 @@
 {
-    "Dismiss": "Rexeitar",
-    "Unknown device": "Dispositivo descoñecido",
-    "Welcome to Element": "Benvida/o a Element",
-    "Sign In": "Acceder",
-    "Create Account": "Crear conta",
-    "Explore rooms": "Explorar salas",
-    "The message from the parser is: %(message)s": "A mensaxe desde o intérprete é: %(message)s",
-    "Invalid JSON": "JSON non válido",
-    "Unexpected error preparing the app. See console for details.": "Fallo non agardado ao preparar a app. Detalles na consola.",
-    "Invalid configuration: no default server specified.": "Configuración non válida: non se indicou servidor por defecto.",
-    "Unable to load config file: please refresh the page to try again.": "Non se cargou o ficheiro de configuración: actualiza a páxina para reintentalo.",
-    "Go to your browser to complete Sign In": "Abre o navegador para realizar a Conexión",
-    "Unsupported browser": "Navegador non soportado",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Instala <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ou <safariLink>Safari</safariLink> para ter unha mellor experiencia.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Podes continuar co teu navegador, pero algunhas características poderían non funcionar e o aspecto da aplicación podería non ser o correcto.",
-    "I understand the risks and wish to continue": "Entendo os riscos e desexo continuar",
-    "Go to element.io": "Ir a element.io",
-    "Failed to start": "Fallou o inicio",
-    "Download Completed": "Descarga realizada",
-    "Open": "Abrir",
-    "Your Element is misconfigured": "Element non está ben configurado",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "A configuración de Element contén JSON non válido. Corrixe o problema e recarga a páxina.",
-    "Your browser can't run %(brand)s": "O teu navegador non pode executar %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s utiliza características avanzadas do navegador que non están dispoñibles no teu navegador.",
-    "Powered by Matrix": "Funciona grazas a Matrix",
-    "Use %(brand)s on mobile": "Utiliza %(brand)s no móbil",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Conversas &amp; colaboración descentralizadas e cifradas grazas a $matrixLogo",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s en %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s para Escritorio: %(platformName)s"
+    "action": {
+        "create_account": "Crear conta",
+        "dismiss": "Rexeitar",
+        "explore_rooms": "Explorar salas",
+        "open": "Abrir",
+        "sign_in": "Acceder"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Abre o navegador para realizar a Conexión"
+    },
+    "desktop_default_device_name": "%(brand)s para Escritorio: %(platformName)s",
+    "download_completed": "Descarga realizada",
+    "error": {
+        "app_launch_unexpected_error": "Fallo non agardado ao preparar a app. Detalles na consola.",
+        "cannot_load_config": "Non se cargou o ficheiro de configuración: actualiza a páxina para reintentalo.",
+        "invalid_configuration_no_server": "Configuración non válida: non se indicou servidor por defecto.",
+        "invalid_json": "A configuración de Element contén JSON non válido. Corrixe o problema e recarga a páxina.",
+        "invalid_json_detail": "A mensaxe desde o intérprete é: %(message)s",
+        "invalid_json_generic": "JSON non válido",
+        "misconfigured": "Element non está ben configurado"
+    },
+    "failed_to_start": "Fallou o inicio",
+    "go_to_element_io": "Ir a element.io",
+    "incompatible_browser": {
+        "browser_links": "Instala <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ou <safariLink>Safari</safariLink> para ter unha mellor experiencia.",
+        "continue_warning": "Entendo os riscos e desexo continuar",
+        "feature_warning": "Podes continuar co teu navegador, pero algunhas características poderían non funcionar e o aspecto da aplicación podería non ser o correcto.",
+        "features": "%(brand)s utiliza características avanzadas do navegador que non están dispoñibles no teu navegador.",
+        "summary": "O teu navegador non pode executar %(brand)s",
+        "title": "Navegador non soportado"
+    },
+    "powered_by_matrix": "Funciona grazas a Matrix",
+    "powered_by_matrix_with_logo": "Conversas &amp; colaboración descentralizadas e cifradas grazas a $matrixLogo",
+    "unknown_device": "Dispositivo descoñecido",
+    "use_brand_on_mobile": "Utiliza %(brand)s no móbil",
+    "web_default_device_name": "%(appName)s: %(browserName)s en %(osName)s",
+    "welcome_to_element": "Benvida/o a Element"
 }

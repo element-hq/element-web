@@ -14,7 +14,7 @@ jobs:
         name: "Typescript Syntax Check"
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - uses: actions/setup-node@v3
               with:
@@ -28,13 +28,13 @@ jobs:
 
     i18n_lint:
         name: "i18n Check"
-        uses: matrix-org/matrix-react-sdk/.github/workflows/i18n_check.yml@develop
+        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
 
     js_lint:
         name: "ESLint"
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - uses: actions/setup-node@v3
               with:
@@ -51,7 +51,7 @@ jobs:
         name: "Style Lint"
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - uses: actions/setup-node@v3
               with:
@@ -68,7 +68,7 @@ jobs:
         name: "Analyse Dead Code"
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 
             - uses: actions/setup-node@v3
               with:

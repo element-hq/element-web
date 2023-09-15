@@ -25,7 +25,10 @@ const config: Config = {
     },
     testMatch: ["<rootDir>/test/**/*-test.[tj]s?(x)"],
     setupFiles: ["jest-canvas-mock"],
-    setupFilesAfterEnv: ["<rootDir>/node_modules/matrix-react-sdk/test/setupTests.ts"],
+    setupFilesAfterEnv: [
+        "<rootDir>/node_modules/matrix-react-sdk/test/setupTests.ts",
+        "<rootDir>/test/setup/setupLanguage.ts",
+    ],
     moduleNameMapper: {
         "\\.(css|scss|pcss)$": "<rootDir>/__mocks__/cssMock.js",
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/imageMock.js",
@@ -43,6 +46,7 @@ const config: Config = {
         "workers/(.+)\\.worker\\.ts": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/workerMock.js",
         "^!!raw-loader!.*": "jest-raw-loader",
         "RecorderWorklet": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/empty.js",
+        "^fetch-mock$": "<rootDir>/node_modules/fetch-mock",
     },
     transformIgnorePatterns: ["/node_modules/(?!matrix-js-sdk).+$", "/node_modules/(?!matrix-react-sdk).+$"],
     coverageReporters: ["text-summary", "lcov"],

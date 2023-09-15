@@ -61,7 +61,16 @@
   <body style="height: 100%; margin: 0;">
     <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
     <section id="matrixchat" style="height: 100%;" class="notranslate"></section>
-    <script src="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("bundle.js")) %>"></script>
+
+<%
+    // insert <script> tags for the JS entry points
+    for (let file of htmlWebpackPlugin.files.js) {
+        if (file.includes("bundle.js") || file.includes("unhomoglyph_data")) {
+%>    <script src="<%= file %>"></script>
+<%
+        }
+    }
+%>
 
     <!-- Legacy supporting Prefetch images -->
     <img src="<%= require('matrix-react-sdk/res/img/warning.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>

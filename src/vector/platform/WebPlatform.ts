@@ -202,7 +202,7 @@ export default class WebPlatform extends VectorBasePlatform {
         let osName = ua.getOS().name || "unknown OS";
         // Stylise the value from the parser to match Apple's current branding.
         if (osName === "Mac OS") osName = "macOS";
-        return _t("%(appName)s: %(browserName)s on %(osName)s", {
+        return _t("web_default_device_name", {
             appName,
             browserName,
             osName,

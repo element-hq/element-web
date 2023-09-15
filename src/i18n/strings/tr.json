@@ -1,29 +1,37 @@
 {
-    "Dismiss": "Kapat",
-    "Unknown device": "Bilinmeyen aygıt",
-    "Welcome to Element": "Element'e hoş geldiniz",
-    "Sign In": "Giriş Yap",
-    "Create Account": "Hesap Oluştur",
-    "Explore rooms": "Odaları keşfet",
-    "Invalid JSON": "Hatalı JSON",
-    "Unexpected error preparing the app. See console for details.": "Uygulama hazırlanırken beklenmeyen bir hata oldu. Detaylar için konsola bakın.",
-    "Invalid configuration: no default server specified.": "Hatalı ayarlar: varsayılan sunucu belirlenmemiş.",
-    "The message from the parser is: %(message)s": "Ayrıştırıcıdan gelen mesaj: %(message)s",
-    "Go to your browser to complete Sign In": "Oturum açmayı tamamlamak için tarayıcınıza gidin",
-    "Your Element is misconfigured": "Element uygulaması hatalı ayarlanmış",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Element uygulamasının ayarları hatalı JSON içeriyor. Lütfen hatayı düzeltip sayfayı yenileyin.",
-    "Unable to load config file: please refresh the page to try again.": "Yapılandırma (config) dosyası yüklenemedi: lütfen yeniden denemek için sayfayı yenileyin.",
-    "Download Completed": "İndirme Tamamlandı",
-    "Unsupported browser": "Desteklenmeyen tarayıcı",
-    "Your browser can't run %(brand)s": "Tarayıcınız %(brand)s uygulamasını çalıştıramıyor",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s, kullandığınız tarayıcı tarafından desteklenmeyen, gelişmiş tarayıcı özellikleri kullanıyor.",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Daha iyi bir deneyim için lütfen <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ya da <safariLink>Safari</safariLink> tarayıcılarından birini yükleyin.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Şu anda kullanmış olduğunuz tarayıcınızı kullanmaya devam edebilirsiniz ancak uygulamanın sunduğu bazı ya da bütün özellikler çalışmayabilir ve deneyiminizi kötü yönde etkileyebilir.",
-    "I understand the risks and wish to continue": "Riskleri anlıyorum ve devam etmek istiyorum",
-    "Go to element.io": "element.io adresine git",
-    "Failed to start": "Başlatılamadı",
-    "Powered by Matrix": "Gücünü Matrix'ten alır",
-    "Open": "Aç",
-    "Use %(brand)s on mobile": "Mobilde %(brand)s kullan",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "$matrixLogo tarafından merkeziyetsiz, şifrelenmiş sohbet &amp; iş birliği"
+    "action": {
+        "create_account": "Hesap Oluştur",
+        "dismiss": "Kapat",
+        "explore_rooms": "Odaları keşfet",
+        "open": "Aç",
+        "sign_in": "Giriş Yap"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Oturum açmayı tamamlamak için tarayıcınıza gidin"
+    },
+    "download_completed": "İndirme Tamamlandı",
+    "error": {
+        "app_launch_unexpected_error": "Uygulama hazırlanırken beklenmeyen bir hata oldu. Detaylar için konsola bakın.",
+        "cannot_load_config": "Yapılandırma (config) dosyası yüklenemedi: lütfen yeniden denemek için sayfayı yenileyin.",
+        "invalid_configuration_no_server": "Hatalı ayarlar: varsayılan sunucu belirlenmemiş.",
+        "invalid_json": "Element uygulamasının ayarları hatalı JSON içeriyor. Lütfen hatayı düzeltip sayfayı yenileyin.",
+        "invalid_json_detail": "Ayrıştırıcıdan gelen mesaj: %(message)s",
+        "invalid_json_generic": "Hatalı JSON",
+        "misconfigured": "Element uygulaması hatalı ayarlanmış"
+    },
+    "failed_to_start": "Başlatılamadı",
+    "go_to_element_io": "element.io adresine git",
+    "incompatible_browser": {
+        "browser_links": "Daha iyi bir deneyim için lütfen <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ya da <safariLink>Safari</safariLink> tarayıcılarından birini yükleyin.",
+        "continue_warning": "Riskleri anlıyorum ve devam etmek istiyorum",
+        "feature_warning": "Şu anda kullanmış olduğunuz tarayıcınızı kullanmaya devam edebilirsiniz ancak uygulamanın sunduğu bazı ya da bütün özellikler çalışmayabilir ve deneyiminizi kötü yönde etkileyebilir.",
+        "features": "%(brand)s, kullandığınız tarayıcı tarafından desteklenmeyen, gelişmiş tarayıcı özellikleri kullanıyor.",
+        "summary": "Tarayıcınız %(brand)s uygulamasını çalıştıramıyor",
+        "title": "Desteklenmeyen tarayıcı"
+    },
+    "powered_by_matrix": "Gücünü Matrix'ten alır",
+    "powered_by_matrix_with_logo": "$matrixLogo tarafından merkeziyetsiz, şifrelenmiş sohbet &amp; iş birliği",
+    "unknown_device": "Bilinmeyen aygıt",
+    "use_brand_on_mobile": "Mobilde %(brand)s kullan",
+    "welcome_to_element": "Element'e hoş geldiniz"
 }

@@ -1,31 +1,39 @@
 {
-    "Dismiss": "Rezigni",
-    "Unknown device": "Nekonata aparato",
-    "Welcome to Element": "Bonvenon al Element",
-    "Sign In": "Ensaluti",
-    "Create Account": "Krei konton",
-    "Explore rooms": "Esplori ĉambrojn",
-    "Unexpected error preparing the app. See console for details.": "Neatendita eraro okazis dum la preparado de la aplikaĵo. Rigardu la konzolon por detaloj.",
-    "Invalid configuration: no default server specified.": "Nevalida agordo: neniu implicita servilo estas specifita.",
-    "The message from the parser is: %(message)s": "La mesaĝo el la analizilo estas: %(message)s",
-    "Invalid JSON": "Nevalida JSON",
-    "Go to your browser to complete Sign In": "Iru al via retumilo por finpretigi la ensaluton",
-    "Unable to load config file: please refresh the page to try again.": "Ne povas enlegi agordan dosieron: bonvolu reprovi per aktualigo de la paĝo.",
-    "Unsupported browser": "Nesubtenata retumilo",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Bonvolu instali retumilon <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, aŭ <safariLink>Safari</safariLink>, por la plej bona sperto.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Vi povas daŭre uzi vian nunan foliumilon, sed iuj (eĉ ĉiuj) funkcioj eble ne funkciu, kaj la aspekto de la aplikaĵo eble ne estu ĝusta.",
-    "I understand the risks and wish to continue": "Mi komprenas la riskon kaj volas pluiĝi",
-    "Go to element.io": "Iri al element.io",
-    "Failed to start": "Malsukcesis starti",
-    "Download Completed": "Elŝuto finiĝis",
-    "Open": "Malfermi",
-    "Your Element is misconfigured": "Via Elemento estas misagordita",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Via agordaro de Elemento enhavas nevalidajn datumojn de JSON. Bonvolu korekti la problemon kaj aktualigi la paĝon.",
-    "Your browser can't run %(brand)s": "Via retumilo ne povas ruli %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s uzas specialajn funkciojn de retumilo, kiujn via nuna retumilo ne subtenas.",
-    "Powered by Matrix": "Povigata de Matrix",
-    "Use %(brand)s on mobile": "Uzi %(brand)s poŝtelefone",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Malcentralizita kaj ĉifrita babilejo; kunlaboro danke al $matrixLogo",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s sur %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s Labortablo: %(platformName)s"
+    "action": {
+        "create_account": "Krei konton",
+        "dismiss": "Rezigni",
+        "explore_rooms": "Esplori ĉambrojn",
+        "open": "Malfermi",
+        "sign_in": "Ensaluti"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Iru al via retumilo por finpretigi la ensaluton"
+    },
+    "desktop_default_device_name": "%(brand)s Labortablo: %(platformName)s",
+    "download_completed": "Elŝuto finiĝis",
+    "error": {
+        "app_launch_unexpected_error": "Neatendita eraro okazis dum la preparado de la aplikaĵo. Rigardu la konzolon por detaloj.",
+        "cannot_load_config": "Ne povas enlegi agordan dosieron: bonvolu reprovi per aktualigo de la paĝo.",
+        "invalid_configuration_no_server": "Nevalida agordo: neniu implicita servilo estas specifita.",
+        "invalid_json": "Via agordaro de Elemento enhavas nevalidajn datumojn de JSON. Bonvolu korekti la problemon kaj aktualigi la paĝon.",
+        "invalid_json_detail": "La mesaĝo el la analizilo estas: %(message)s",
+        "invalid_json_generic": "Nevalida JSON",
+        "misconfigured": "Via Elemento estas misagordita"
+    },
+    "failed_to_start": "Malsukcesis starti",
+    "go_to_element_io": "Iri al element.io",
+    "incompatible_browser": {
+        "browser_links": "Bonvolu instali retumilon <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, aŭ <safariLink>Safari</safariLink>, por la plej bona sperto.",
+        "continue_warning": "Mi komprenas la riskon kaj volas pluiĝi",
+        "feature_warning": "Vi povas daŭre uzi vian nunan foliumilon, sed iuj (eĉ ĉiuj) funkcioj eble ne funkciu, kaj la aspekto de la aplikaĵo eble ne estu ĝusta.",
+        "features": "%(brand)s uzas specialajn funkciojn de retumilo, kiujn via nuna retumilo ne subtenas.",
+        "summary": "Via retumilo ne povas ruli %(brand)s",
+        "title": "Nesubtenata retumilo"
+    },
+    "powered_by_matrix": "Povigata de Matrix",
+    "powered_by_matrix_with_logo": "Malcentralizita kaj ĉifrita babilejo; kunlaboro danke al $matrixLogo",
+    "unknown_device": "Nekonata aparato",
+    "use_brand_on_mobile": "Uzi %(brand)s poŝtelefone",
+    "web_default_device_name": "%(appName)s: %(browserName)s sur %(osName)s",
+    "welcome_to_element": "Bonvenon al Element"
 }

@@ -92,7 +92,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
         android = [];
     }
 
-    let mobileHeader: ReactNode = <h2 id="step2_heading">{_t("Use %(brand)s on mobile", { brand })}</h2>;
+    let mobileHeader: ReactNode = <h2 id="step2_heading">{_t("use_brand_on_mobile", { brand })}</h2>;
     if (!android.length && !ios) {
         mobileHeader = null;
     }
@@ -104,22 +104,17 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                     <span className="mx_HomePage_logo">
                         <img height="42" src="themes/element/img/logos/element-logo.svg" alt="Element" />
                     </span>
-                    <h1>{_t("Unsupported browser")}</h1>
+                    <h1>{_t("incompatible_browser|title")}</h1>
                 </div>
 
                 <div className="mx_HomePage_col">
                     <div className="mx_HomePage_row">
                         <div>
-                            <h2 id="step1_heading">{_t("Your browser can't run %(brand)s", { brand })}</h2>
+                            <h2 id="step1_heading">{_t("incompatible_browser|summary", { brand })}</h2>
+                            <p>{_t("incompatible_browser|features", { brand })}</p>
                             <p>
                                 {_t(
-                                    "%(brand)s uses advanced browser features which aren't supported by your current browser.",
-                                    { brand },
-                                )}
-                            </p>
-                            <p>
-                                {_t(
-                                    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
+                                    "incompatible_browser|browser_links",
                                     {},
                                     {
                                         chromeLink: (sub) => <a href="https://www.google.com/chrome">{sub}</a>,
@@ -128,12 +123,8 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                                     },
                                 )}
                             </p>
-                            <p>
-                                {_t(
-                                    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
-                                )}
-                            </p>
-                            <button onClick={onAccept}>{_t("I understand the risks and wish to continue")}</button>
+                            <p>{_t("incompatible_browser|feature_warning")}</p>
+                            <button onClick={onAccept}>{_t("incompatible_browser|continue_warning")}</button>
                         </div>
                     </div>
                 </div>
@@ -151,7 +142,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                 <div className="mx_HomePage_row mx_Center mx_Spacer">
                     <p className="mx_Spacer">
                         <a href="https://element.io" target="_blank" className="mx_FooterLink">
-                            {_t("Go to element.io")}
+                            {_t("go_to_element_io")}
                         </a>
                     </p>
                 </div>

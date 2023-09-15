@@ -24,6 +24,10 @@
         "./src/**/*.ts",
         "./src/**/*.tsx",
         "./test/**/*.ts",
-        "./test/**/*.tsx"
-    ]
+        "./test/**/*.tsx",
+        "./scripts/*.ts"
+    ],
+    "ts-node": {
+        "files": true
+    }
 }

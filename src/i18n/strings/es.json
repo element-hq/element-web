@@ -1,31 +1,39 @@
 {
-    "Unknown device": "Dispositivo desconocido",
-    "Dismiss": "Omitir",
-    "Welcome to Element": "Te damos la bienvenida a Element",
-    "Sign In": "Iniciar sesión",
-    "Create Account": "Crear cuenta",
-    "Explore rooms": "Explorar salas",
-    "Unexpected error preparing the app. See console for details.": "Error inesperado preparando la aplicación. Ver la consola para más detalles.",
-    "Invalid configuration: no default server specified.": "Configuración errónea: no se ha especificado servidor.",
-    "The message from the parser is: %(message)s": "El mensaje del parser es: %(message)s",
-    "Invalid JSON": "JSON inválido",
-    "Go to your browser to complete Sign In": "Abre tu navegador web para completar el registro",
-    "Unable to load config file: please refresh the page to try again.": "No se ha podido cargar el archivo de configuración. Recarga la página para intentarlo otra vez.",
-    "Unsupported browser": "Navegador no compatible",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Por favor, instale <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, o <safariLink>Safari</safariLink> para la mejor experiencia.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Puedes seguir utilizando tu navegador actual, pero puede que algunas funcionalidades no estén disponibles o que algunas partes de la aplicación se muestren de forma incorrecta.",
-    "I understand the risks and wish to continue": "Entiendo los riesgos y quiero continuar",
-    "Go to element.io": "Ir a element.io",
-    "Failed to start": "Fallo al iniciar",
-    "Your Element is misconfigured": "Tu aplicación Element está mal configurada",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Tu configuración de Element contiene JSON inválido. Por favor corrígelo e inténtelo de nuevo.",
-    "Download Completed": "Descarga completada",
-    "Open": "Abrir",
-    "Your browser can't run %(brand)s": "Tu navegador no es compatible con %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s usa funciones avanzadas que su navegador actual no soporta.",
-    "Powered by Matrix": "Funciona con Matrix",
-    "Use %(brand)s on mobile": "Usar %(brand)s en modo móvil",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Conversaciones y colaboración descentralizadas y cifradas gracias a $matrixLogo",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s en %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s de escritorio: %(platformName)s"
+    "action": {
+        "create_account": "Crear cuenta",
+        "dismiss": "Omitir",
+        "explore_rooms": "Explorar salas",
+        "open": "Abrir",
+        "sign_in": "Iniciar sesión"
+    },
+    "auth": {
+        "sso_complete_in_browser_dialog_title": "Abre tu navegador web para completar el registro"
+    },
+    "desktop_default_device_name": "%(brand)s de escritorio: %(platformName)s",
+    "download_completed": "Descarga completada",
+    "error": {
+        "app_launch_unexpected_error": "Error inesperado preparando la aplicación. Ver la consola para más detalles.",
+        "cannot_load_config": "No se ha podido cargar el archivo de configuración. Recarga la página para intentarlo otra vez.",
+        "invalid_configuration_no_server": "Configuración errónea: no se ha especificado servidor.",
+        "invalid_json": "Tu configuración de Element contiene JSON inválido. Por favor corrígelo e inténtelo de nuevo.",
+        "invalid_json_detail": "El mensaje del parser es: %(message)s",
+        "invalid_json_generic": "JSON inválido",
+        "misconfigured": "Tu aplicación Element está mal configurada"
+    },
+    "failed_to_start": "Fallo al iniciar",
+    "go_to_element_io": "Ir a element.io",
+    "incompatible_browser": {
+        "browser_links": "Por favor, instale <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, o <safariLink>Safari</safariLink> para la mejor experiencia.",
+        "continue_warning": "Entiendo los riesgos y quiero continuar",
+        "feature_warning": "Puedes seguir utilizando tu navegador actual, pero puede que algunas funcionalidades no estén disponibles o que algunas partes de la aplicación se muestren de forma incorrecta.",
+        "features": "%(brand)s usa funciones avanzadas que su navegador actual no soporta.",
+        "summary": "Tu navegador no es compatible con %(brand)s",
+        "title": "Navegador no compatible"
+    },
+    "powered_by_matrix": "Funciona con Matrix",
+    "powered_by_matrix_with_logo": "Conversaciones y colaboración descentralizadas y cifradas gracias a $matrixLogo",
+    "unknown_device": "Dispositivo desconocido",
+    "use_brand_on_mobile": "Usar %(brand)s en modo móvil",
+    "web_default_device_name": "%(appName)s: %(browserName)s en %(osName)s",
+    "welcome_to_element": "Te damos la bienvenida a Element"
 }
