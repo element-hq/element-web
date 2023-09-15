@@ -25,7 +25,6 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
-import { ActionPayload } from "../../../dispatcher/payloads";
 import SettingsStore from "../../../settings/SettingsStore";
 
 export enum HeaderKind {
