@@ -200,6 +200,10 @@ describe("RoomHeader", () => {
     });
 
     it("opens the notifications panel", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            if (name === "feature_notifications") return true;
+        });
+
         const { container } = render(
             <RoomHeader room={room} />,
             withClientContextRenderOptions(MatrixClientPeg.get()!),

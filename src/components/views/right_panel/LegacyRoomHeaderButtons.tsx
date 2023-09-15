@@ -282,21 +282,23 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
                 <UnreadIndicator color={this.state.threadNotificationColor} />
             </HeaderButton>,
         );
-        rightPanelPhaseButtons.set(
-            RightPanelPhases.NotificationPanel,
-            <HeaderButton
-                key="notifsButton"
-                name="notifsButton"
-                title={_t("Notifications")}
-                isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
-                onClick={this.onNotificationsClicked}
-                isUnread={this.globalNotificationState.color === NotificationColor.Red}
-            >
-                {this.globalNotificationState.color === NotificationColor.Red ? (
-                    <UnreadIndicator color={this.globalNotificationState.color} />
-                ) : null}
-            </HeaderButton>,
-        );
+        if (this.state.notificationsEnabled) {
+            rightPanelPhaseButtons.set(
+                RightPanelPhases.NotificationPanel,
+                <HeaderButton
+                    key="notifsButton"
+                    name="notifsButton"
+                    title={_t("Notifications")}
+                    isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
+                    onClick={this.onNotificationsClicked}
+                    isUnread={this.globalNotificationState.color === NotificationColor.Red}
+                >
+                    {this.globalNotificationState.color === NotificationColor.Red ? (
+                        <UnreadIndicator color={this.globalNotificationState.color} />
+                    ) : null}
+                </HeaderButton>,
+            );
+        }
         rightPanelPhaseButtons.set(
             RightPanelPhases.RoomSummary,
             <HeaderButton

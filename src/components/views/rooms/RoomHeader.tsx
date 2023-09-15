@@ -100,6 +100,8 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
     }, [room, directRoomsList]);
     const e2eStatus = useEncryptionStatus(client, room);
 
+    const notificationsEnabled = useFeatureEnabled("feature_notifications");
+
     return (
         <Flex
             as="header"
@@ -202,18 +204,20 @@ export default function RoomHeader({ room }: { room: Room }): JSX.Element {
                         <ThreadsIcon />
                     </IconButton>
                 </Tooltip>
-                <Tooltip label={_t("Notifications")}>
-                    <IconButton
-                        indicator={notificationColorToIndicator(globalNotificationState.color)}
-                        onClick={(evt) => {
-                            evt.stopPropagation();
-                            RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
-                        }}
-                        title={_t("Notifications")}
-                    >
-                        <NotificationsIcon />
-                    </IconButton>
-                </Tooltip>
+                {notificationsEnabled && (
+                    <Tooltip label={_t("Notifications")}>
+                        <IconButton
+                            indicator={notificationColorToIndicator(globalNotificationState.color)}
+                            onClick={(evt) => {
+                                evt.stopPropagation();
+                                RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
+                            }}
+                            title={_t("Notifications")}
+                        >
+                            <NotificationsIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
             </Flex>
             {!isDirectMessage && (
                 <BodyText

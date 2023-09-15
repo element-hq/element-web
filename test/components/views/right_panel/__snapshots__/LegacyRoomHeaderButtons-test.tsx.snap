@@ -19,13 +19,6 @@ exports[`LegacyRoomHeaderButtons-test.tsx should render 1`] = `
   />
   <div
     aria-current="false"
-    aria-label="Notifications"
-    class="mx_AccessibleButton mx_LegacyRoomHeader_button mx_RightPanel_notifsButton"
-    role="button"
-    tabindex="0"
-  />
-  <div
-    aria-current="false"
     aria-label="Room info"
     class="mx_AccessibleButton mx_LegacyRoomHeader_button mx_RightPanel_roomSummaryButton"
     role="button"
