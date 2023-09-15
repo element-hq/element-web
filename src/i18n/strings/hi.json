@@ -4,7 +4,6 @@
     "This email address is already in use": "यह ईमेल आईडी पहले से इस्तेमाल में है",
     "This phone number is already in use": "यह फ़ोन नंबर पहले से इस्तेमाल में है",
     "Failed to verify email address: make sure you clicked the link in the email": "ईमेल आईडी सत्यापित नही हो पाया: कृपया सुनिश्चित कर लें कि आपने ईमेल में मौजूद लिंक पर क्लिक किया है",
-    "powered by Matrix": "मैट्रिक्स द्वारा संचालित",
     "You cannot place a call with yourself.": "आप अपने साथ कॉल नहीं कर सकते हैं।",
     "Permission Required": "अनुमति आवश्यक है",
     "You do not have permission to start a conference call in this room": "आपको इस रूम में कॉन्फ़्रेंस कॉल शुरू करने की अनुमति नहीं है",
@@ -690,7 +689,8 @@
         }
     },
     "auth": {
-        "sso": "केवल हस्ताक्षर के ऊपर"
+        "sso": "केवल हस्ताक्षर के ऊपर",
+        "footer_powered_by_matrix": "मैट्रिक्स द्वारा संचालित"
     },
     "setting": {
         "help_about": {

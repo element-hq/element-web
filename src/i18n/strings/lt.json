@@ -14,7 +14,6 @@
     "Operation failed": "Operacija nepavyko",
     "This Room": "Šis pokalbių kambarys",
     "Unavailable": "Neprieinamas",
-    "powered by Matrix": "veikia su Matrix",
     "Favourite": "Mėgstamas",
     "All Rooms": "Visi pokalbių kambariai",
     "Source URL": "Šaltinio URL adresas",
@@ -416,8 +415,6 @@
     "Enter a server name": "Įveskite serverio pavadinimą",
     "Enter the name of a new server you want to explore.": "Įveskite naujo, norimo žvalgyti serverio pavadinimą.",
     "Server name": "Serverio pavadinimas",
-    "Please enter a name for the room": "Įveskite kambario pavadinimą",
-    "Topic (optional)": "Tema (nebūtina)",
     "Hide advanced": "Paslėpti išplėstinius",
     "Show advanced": "Rodyti išplėstinius",
     "Session name": "Seanso pavadinimas",
@@ -485,7 +482,6 @@
     "You cancelled verification.": "Jūs atšaukėte patvirtinimą.",
     "Encryption not enabled": "Šifravimas neįjungtas",
     "More options": "Daugiau parinkčių",
-    "Enable end-to-end encryption": "Įjungti visapusį šifravimą",
     "Are you sure you want to deactivate your account? This is irreversible.": "Ar tikrai norite deaktyvuoti savo paskyrą? Tai yra negrįžtama.",
     "Verify session": "Patvirtinti seansą",
     "Are you sure you want to sign out?": "Ar tikrai norite atsijungti?",
@@ -799,7 +795,6 @@
     "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Įjungus kambario šifravimą jo išjungti negalima. Žinutės, siunčiamos šifruotame kambaryje, nėra matomos serverio. Jas gali matyti tik kambario dalyviai. Įjungus šifravimą, daugelis botų ir tiltų gali veikti netinkamai. <a>Sužinoti daugiau apie šifravimą.</a>",
     "You must join the room to see its files": "Norėdami pamatyti jo failus, turite prisijungti prie kambario",
     "Join millions for free on the largest public server": "Prisijunkite prie milijonų didžiausiame viešame serveryje nemokamai",
-    "Block anyone not part of %(serverName)s from ever joining this room.": "Blokuoti bet ką, kas nėra iš %(serverName)s, niekada nebeleidžiant prisijungti prie šio kambario.",
     "Join the conference from the room information card on the right": "Prisijunkite prie konferencijos kambario informacijos kortelėje dešinėje",
     "Join the conference at the top of this room": "Prisijunkite prie konferencijos šio kambario viršuje",
     "Join the discussion": "Prisijungti prie diskusijos",
@@ -922,8 +917,6 @@
     "Use custom size": "Naudoti pasirinktinį dydį",
     "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Jei kita %(brand)s versija vis dar yra atidaryta kitame skirtuke, uždarykite jį, nes %(brand)s naudojimas tame pačiame serveryje, tuo pačiu metu įjungus ir išjungus tingų įkėlimą, sukelks problemų.",
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Jūs anksčiau naudojote %(brand)s ant %(host)s įjungę tingų narių įkėlimą. Šioje versijoje tingus įkėlimas yra išjungtas. Kadangi vietinė talpykla nesuderinama tarp šių dviejų nustatymų, %(brand)s reikia iš naujo sinchronizuoti jūsų paskyrą.",
-    "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Jūs galite tai įjungti, jei kambarys bus naudojamas tik bendradarbiavimui su vidinėmis komandomis jūsų serveryje. Tai negali būti vėliau pakeista.",
-    "Your server requires encryption to be enabled in private rooms.": "Jūsų serveris reikalauja, kad šifravimas būtų įjungtas privačiuose kambariuose.",
     "You don't currently have any stickerpacks enabled": "Jūs šiuo metu neturite jokių įjungtų lipdukų paketų",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Patvirtinant šį vartotoją, jo seansas bus pažymėtas kaip patikimas, taip pat jūsų seansas bus pažymėtas kaip patikimas jam.",
     "Verify the link in your inbox": "Patvirtinkite nuorodą savo el. pašto dėžutėje",
@@ -939,10 +932,6 @@
     "%(creator)s created this DM.": "%(creator)s sukūrė šį tiesioginio susirašymo kambarį.",
     "Only the two of you are in this conversation, unless either of you invites anyone to join.": "Šiame pokalbyje esate tik jūs dviese, nebent kuris nors iš jūsų pakvies ką nors prisijungti.",
     "This is the beginning of your direct message history with <displayName/>.": "Tai yra jūsų tiesioginių žinučių su <displayName/> istorijos pradžia.",
-    "See when the avatar changes in your active room": "Matyti kada jūsų aktyviame kambaryje pasikeičia pseudoportretas",
-    "Change the avatar of your active room": "Pakeisti jūsų aktyvaus kambario pseudoportretą",
-    "See when the avatar changes in this room": "Matyti kada šiame kambaryje pasikeičia pseudoportretas",
-    "Change the avatar of this room": "Pakeisti šio kambario pseudoportretą",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Nepavyksta prisijungti prie serverio - patikrinkite savo ryšį, įsitikinkite, kad jūsų <a>serverio SSL sertifikatas</a> yra patikimas ir, kad naršyklės plėtinys neužblokuoja užklausų.",
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Anksčiau šiame seanse naudojote naujesnę %(brand)s versiją. Norėdami vėl naudoti šią versiją su visapusiu šifravimu, turėsite atsijungti ir prisijungti iš naujo.",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Tam, kad neprarastumėte savo pokalbių istorijos, prieš atsijungdami turite eksportuoti kambario raktus. Norėdami tai padaryti, turėsite grįžti į naujesnę %(brand)s versiją",
@@ -1185,7 +1174,6 @@
     "Server did not require any authentication": "Serveris nereikalavo jokio autentifikavimo",
     "There was a problem communicating with the server. Please try again.": "Kilo problemų bendraujant su serveriu. Bandykite dar kartą.",
     "Confirm account deactivation": "Patvirtinkite paskyros deaktyvavimą",
-    "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Šią funkciją galite išjungti, jei kambarys bus naudojamas bendradarbiavimui su išorės komandomis, turinčiomis savo namų serverį. Vėliau to pakeisti negalima.",
     "Clear all data": "Išvalyti visus duomenis",
     "Removing…": "Pašalinama…",
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Primename: Jūsų naršyklė yra nepalaikoma, todėl jūsų patirtis gali būti nenuspėjama.",
@@ -1231,11 +1219,6 @@
     "Identity server URL must be HTTPS": "Tapatybės serverio URL privalo būti HTTPS",
     "Invite to %(spaceName)s": "Pakvietimas į %(spaceName)s",
     "This homeserver has been blocked by its administrator.": "Šis namų serveris buvo užblokuotas jo administratoriaus.",
-    "See when the name changes in your active room": "Matyti kada jūsų aktyvaus kambario pavadinimas pasikeičia",
-    "Change the name of your active room": "Keisti jūsų aktyvaus kambario pavadinimą",
-    "Change the name of this room": "Keisti kambario pavadinimą",
-    "Change the topic of this room": "Keisti kambario temą",
-    "Send stickers into this room": "Siųsti lipdukus į šį kambarį",
     "Northern Mariana Islands": "Šiaurės Marianų salos",
     "Norfolk Island": "Norfolko sala",
     "Nepal": "Nepalas",
@@ -1681,10 +1664,6 @@
         "other": "Rodyti %(count)s kitas peržiūras"
     },
     "Scroll to most recent messages": "Slinkite prie naujausių žinučių",
-    "You can't see earlier messages": "Negalite matyti ankstesnių žinučių",
-    "Encrypted messages before this point are unavailable.": "Iki šio taško užšifruotos žinutės yra neprieinamos.",
-    "You don't have permission to view messages from before you joined.": "Neturite leidimo peržiūrėti žinučių, rašytų prieš jums prisijungiant.",
-    "You don't have permission to view messages from before you were invited.": "Neturite leidimo peržiūrėti žinučių, rašytų prieš jūsų pakvietimą.",
     "Failed to send": "Nepavyko išsiųsti",
     "Your message was sent": "Jūsų žinutė išsiųsta",
     "Copy link to thread": "Kopijuoti nuorodą į temą",
@@ -1723,19 +1702,7 @@
     "Unable to copy room link": "Nepavyko nukopijuoti kambario nurodos",
     "Copy room link": "Kopijuoti kambario nuorodą",
     "Manage & explore rooms": "Valdyti & tyrinėti kambarius",
-    "The above, but in any room you are joined or invited to as well": "Aukščiau išvardyti, bet ir bet kuriame kambaryje, prie kurio prisijungėte arba į kurį esate pakviestas",
-    "with state key %(stateKey)s": "su būsenos raktu %(stateKey)s",
-    "with an empty state key": "su tuščiu būsenos raktu",
-    "See when anyone posts a sticker to your active room": "Matyti, kada kas nors paskelbia lipduką jūsų aktyviame kambaryje",
-    "Remove, ban, or invite people to your active room, and make you leave": "Pašalinti, užblokuoti arba pakviesti žmones į jūsų aktyvų kambarį ir priversti jus išeiti",
-    "See when the topic changes in your active room": "Matyti, kada jūsų aktyvaus kambario tema pasikeičia",
-    "Change the topic of your active room": "Keisti jūsų aktyvaus kambario temą",
-    "See when people join, leave, or are invited to your active room": "Matyti, kada žmonės prisijungia, išeina arba yra pakviečiami į jūsų aktyvų kambarį",
-    "See <b>%(eventType)s</b> events posted to your active room": "Peržiūrėti <b>%(eventType)s</b> įvykius, paskelbtus jūsų aktyviame kambaryje",
-    "Remove, ban, or invite people to this room, and make you leave": "Pašalinti, užblokuoti arba pakviesti žmones į šį kambarį ir priversti jus išeiti",
-    "See when the name changes in this room": "Matyti, kada šiame kambaryje pasikeis pavadinimas",
     "Light high contrast": "Šviesi didelio kontrasto",
-    "See when people join, leave, or are invited to this room": "Matyti, kada žmonės prisijungia, išeina arba yra pakviesti į šį kambarį",
     "pause voice broadcast": "pristabdyti balso transliaciją",
     "resume voice broadcast": "tęsti balso transliaciją",
     "play voice broadcast": "paleisti balso transliaciją",
@@ -2178,7 +2145,14 @@
     },
     "create_room": {
         "title_public_room": "Sukurti viešą kambarį",
-        "title_private_room": "Sukurti privatų kambarį"
+        "title_private_room": "Sukurti privatų kambarį",
+        "name_validation_required": "Įveskite kambario pavadinimą",
+        "encryption_forced": "Jūsų serveris reikalauja, kad šifravimas būtų įjungtas privačiuose kambariuose.",
+        "encryption_label": "Įjungti visapusį šifravimą",
+        "unfederated_label_default_off": "Jūs galite tai įjungti, jei kambarys bus naudojamas tik bendradarbiavimui su vidinėmis komandomis jūsų serveryje. Tai negali būti vėliau pakeista.",
+        "unfederated_label_default_on": "Šią funkciją galite išjungti, jei kambarys bus naudojamas bendradarbiavimui su išorės komandomis, turinčiomis savo namų serverį. Vėliau to pakeisti negalima.",
+        "topic_label": "Tema (nebūtina)",
+        "unfederated": "Blokuoti bet ką, kas nėra iš %(serverName)s, niekada nebeleidžiant prisijungti prie šio kambario."
     },
     "timeline": {
         "m.call.invite": {
@@ -2402,7 +2376,11 @@
             "changed_rule_rooms": "%(senderName)s pakeitė taisyklę, kuri draudė kambarius, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
             "changed_rule_servers": "%(senderName)s pakeitė taisyklę, kuri draudė serverius, sutampančius su %(oldGlob)s į sutampančius su %(newGlob)s dėl %(reason)s",
             "changed_rule_glob": "%(senderName)s atnaujino draudimo taisyklę, kuri sutapo su %(oldGlob)s į sutampančią su %(newGlob)s dėl %(reason)s"
-        }
+        },
+        "no_permission_messages_before_invite": "Neturite leidimo peržiūrėti žinučių, rašytų prieš jūsų pakvietimą.",
+        "no_permission_messages_before_join": "Neturite leidimo peržiūrėti žinučių, rašytų prieš jums prisijungiant.",
+        "encrypted_historical_messages_unavailable": "Iki šio taško užšifruotos žinutės yra neprieinamos.",
+        "historical_messages_unavailable": "Negalite matyti ankstesnių žinučių"
     },
     "slash_command": {
         "shrug": "Prideda ¯\\_(ツ)_/¯ prie paprasto teksto žinutės",
@@ -2605,7 +2583,8 @@
         "sign_in_instead": "Jau turite paskyrą? <a>Prisijunkite čia</a>",
         "log_in_new_account": "<a>Prisijunkite</a> prie naujos paskyros.",
         "registration_successful": "Registracija sėkminga",
-        "server_picker_title": "Kurti paskyrą serveryje"
+        "server_picker_title": "Kurti paskyrą serveryje",
+        "footer_powered_by_matrix": "veikia su Matrix"
     },
     "room_list": {
         "sort_unread_first": "Pirmiausia rodyti kambarius su neperskaitytomis žinutėmis",
@@ -2648,6 +2627,31 @@
             "versions": "Versijos",
             "access_token_detail": "Jūsų prieigos žetonas suteikia visišką prieigą prie paskyros. Niekam jo neduokite.",
             "clear_cache_reload": "Išvalyti podėlį ir perkrauti"
+        }
+    },
+    "widget": {
+        "capability": {
+            "send_stickers_this_room": "Siųsti lipdukus į šį kambarį",
+            "see_sticker_posted_active_room": "Matyti, kada kas nors paskelbia lipduką jūsų aktyviame kambaryje",
+            "change_topic_this_room": "Keisti kambario temą",
+            "change_topic_active_room": "Keisti jūsų aktyvaus kambario temą",
+            "see_topic_change_active_room": "Matyti, kada jūsų aktyvaus kambario tema pasikeičia",
+            "change_name_this_room": "Keisti kambario pavadinimą",
+            "see_name_change_this_room": "Matyti, kada šiame kambaryje pasikeis pavadinimas",
+            "change_name_active_room": "Keisti jūsų aktyvaus kambario pavadinimą",
+            "see_name_change_active_room": "Matyti kada jūsų aktyvaus kambario pavadinimas pasikeičia",
+            "change_avatar_this_room": "Pakeisti šio kambario pseudoportretą",
+            "see_avatar_change_this_room": "Matyti kada šiame kambaryje pasikeičia pseudoportretas",
+            "change_avatar_active_room": "Pakeisti jūsų aktyvaus kambario pseudoportretą",
+            "see_avatar_change_active_room": "Matyti kada jūsų aktyviame kambaryje pasikeičia pseudoportretas",
+            "remove_ban_invite_leave_this_room": "Pašalinti, užblokuoti arba pakviesti žmones į šį kambarį ir priversti jus išeiti",
+            "receive_membership_this_room": "Matyti, kada žmonės prisijungia, išeina arba yra pakviesti į šį kambarį",
+            "remove_ban_invite_leave_active_room": "Pašalinti, užblokuoti arba pakviesti žmones į jūsų aktyvų kambarį ir priversti jus išeiti",
+            "receive_membership_active_room": "Matyti, kada žmonės prisijungia, išeina arba yra pakviečiami į jūsų aktyvų kambarį",
+            "byline_empty_state_key": "su tuščiu būsenos raktu",
+            "byline_state_key": "su būsenos raktu %(stateKey)s",
+            "any_room": "Aukščiau išvardyti, bet ir bet kuriame kambaryje, prie kurio prisijungėte arba į kurį esate pakviestas",
+            "see_event_type_sent_active_room": "Peržiūrėti <b>%(eventType)s</b> įvykius, paskelbtus jūsų aktyviame kambaryje"
         }
     }
 }

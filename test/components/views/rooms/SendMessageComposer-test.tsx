@@ -39,7 +39,6 @@ import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalink
 import { mockPlatformPeg } from "../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../test-utils/composer";
-import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -97,8 +96,9 @@ describe("<SendMessageComposer/>", () => {
             const content = createMessageContent("@alice:test", model, undefined, undefined, permalinkCreator);
 
             expect(content).toEqual({
-                body: "hello world",
-                msgtype: "m.text",
+                "body": "hello world",
+                "msgtype": "m.text",
+                "m.mentions": {},
             });
         });
 
@@ -110,10 +110,11 @@ describe("<SendMessageComposer/>", () => {
             const content = createMessageContent("@alice:test", model, undefined, undefined, permalinkCreator);
 
             expect(content).toEqual({
-                body: "hello *world*",
-                msgtype: "m.text",
-                format: "org.matrix.custom.html",
-                formatted_body: "hello <em>world</em>",
+                "body": "hello *world*",
+                "msgtype": "m.text",
+                "format": "org.matrix.custom.html",
+                "formatted_body": "hello <em>world</em>",
+                "m.mentions": {},
             });
         });
 
@@ -125,10 +126,11 @@ describe("<SendMessageComposer/>", () => {
             const content = createMessageContent("@alice:test", model, undefined, undefined, permalinkCreator);
 
             expect(content).toEqual({
-                body: "blinks __quickly__",
-                msgtype: "m.emote",
-                format: "org.matrix.custom.html",
-                formatted_body: "blinks <strong>quickly</strong>",
+                "body": "blinks __quickly__",
+                "msgtype": "m.emote",
+                "format": "org.matrix.custom.html",
+                "formatted_body": "blinks <strong>quickly</strong>",
+                "m.mentions": {},
             });
         });
 
@@ -141,8 +143,9 @@ describe("<SendMessageComposer/>", () => {
             const content = createMessageContent("@alice:test", model, undefined, undefined, permalinkCreator);
 
             expect(content).toEqual({
-                body: "✨sparkles✨",
-                msgtype: "m.emote",
+                "body": "✨sparkles✨",
+                "msgtype": "m.emote",
+                "m.mentions": {},
             });
         });
 
@@ -155,23 +158,14 @@ describe("<SendMessageComposer/>", () => {
             const content = createMessageContent("@alice:test", model, undefined, undefined, permalinkCreator);
 
             expect(content).toEqual({
-                body: "/dev/null is my favourite place",
-                msgtype: "m.text",
+                "body": "/dev/null is my favourite place",
+                "msgtype": "m.text",
+                "m.mentions": {},
             });
         });
     });
 
     describe("attachMentions", () => {
-        beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_intentional_mentions",
-            );
-        });
-
-        afterEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockReset();
-        });
-
         const partsCreator = createPartCreator();
 
         it("no mentions", () => {
@@ -488,8 +482,9 @@ describe("<SendMessageComposer/>", () => {
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
             expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                body: "test message",
-                msgtype: MsgType.Text,
+                "body": "test message",
+                "msgtype": MsgType.Text,
+                "m.mentions": {},
             });
         });
 
@@ -507,8 +502,9 @@ describe("<SendMessageComposer/>", () => {
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
             expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                body: "test message",
-                msgtype: MsgType.Text,
+                "body": "test message",
+                "msgtype": MsgType.Text,
+                "m.mentions": {},
             });
 
             expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` });
@@ -534,8 +530,9 @@ describe("<SendMessageComposer/>", () => {
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
 
             expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
-                body: "test message",
-                msgtype: MsgType.Text,
+                "body": "test message",
+                "msgtype": MsgType.Text,
+                "m.mentions": {},
             });
 
             expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: `effects.confetti` });

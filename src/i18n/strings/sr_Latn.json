@@ -5,7 +5,6 @@
     "Failed to verify email address: make sure you clicked the link in the email": "Neuspela provera adrese elektronske pošte: proverite da li ste kliknuli na link u poruci elektronske pošte",
     "Add Phone Number": "Dodajte broj telefona",
     "Your %(brand)s is misconfigured": "Vaš %(brand)s nije dobro podešen",
-    "powered by Matrix": "pokreće Matriks",
     "Explore rooms": "Istražite sobe",
     "Send": "Pošalji",
     "Sun": "Ned",
@@ -114,7 +113,8 @@
         "call_failed": "Poziv nije uspio"
     },
     "auth": {
-        "sso": "Jedinstvena prijava (SSO)"
+        "sso": "Jedinstvena prijava (SSO)",
+        "footer_powered_by_matrix": "pokreće Matriks"
     },
     "keyboard": {
         "keyboard_shortcuts_tab": "Otvori podešavanja"

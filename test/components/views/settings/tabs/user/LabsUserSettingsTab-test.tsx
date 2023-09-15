@@ -15,18 +15,11 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
-import { defer } from "matrix-js-sdk/src/utils";
+import { render, screen } from "@testing-library/react";
 
 import LabsUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/LabsUserSettingsTab";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
-import {
-    getMockClientWithEventEmitter,
-    mockClientMethodsServer,
-    mockClientMethodsUser,
-} from "../../../../../test-utils";
 import SdkConfig from "../../../../../../src/SdkConfig";
-import MatrixClientBackedController from "../../../../../../src/settings/controllers/MatrixClientBackedController";
 
 describe("<LabsUserSettingsTab />", () => {
     const sdkConfigSpy = jest.spyOn(SdkConfig, "get");
@@ -35,12 +28,6 @@ describe("<LabsUserSettingsTab />", () => {
         closeSettingsFn: jest.fn(),
     };
     const getComponent = () => <LabsUserSettingsTab {...defaultProps} />;
-
-    const userId = "@alice:server.org";
-    const cli = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(userId),
-        ...mockClientMethodsServer(),
-    });
 
     const settingsValueSpy = jest.spyOn(SettingsStore, "getValue");
 
@@ -72,32 +59,5 @@ describe("<LabsUserSettingsTab />", () => {
         expect(screen.getByText("Early previews")).toBeInTheDocument();
         const labsSections = container.getElementsByClassName("mx_SettingsSubsection");
         expect(labsSections).toHaveLength(9);
-    });
-
-    it("allow setting a labs flag which requires unstable support once support is confirmed", async () => {
-        // enable labs
-        sdkConfigSpy.mockImplementation((configName) => configName === "show_labs_settings");
-
-        const deferred = defer<boolean>();
-        cli.doesServerSupportUnstableFeature.mockImplementation(async (featureName) => {
-            return featureName === "org.matrix.msc3952_intentional_mentions" ? deferred.promise : false;
-        });
-        MatrixClientBackedController.matrixClient = cli;
-
-        const { queryByText } = render(getComponent());
-
-        expect(
-            queryByText("Enable intentional mentions")!
-                .closest(".mx_SettingsFlag")!
-                .querySelector(".mx_AccessibleButton"),
-        ).toHaveAttribute("aria-disabled", "true");
-        deferred.resolve(true);
-        await waitFor(() => {
-            expect(
-                queryByText("Enable intentional mentions")!
-                    .closest(".mx_SettingsFlag")!
-                    .querySelector(".mx_AccessibleButton"),
-            ).toHaveAttribute("aria-disabled", "false");
-        });
     });
 });

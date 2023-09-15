@@ -2,7 +2,6 @@
     "This email address is already in use": "Ta e-poštni naslov je že v uporabi",
     "This phone number is already in use": "Ta telefonska številka je že v uporabi",
     "Failed to verify email address: make sure you clicked the link in the email": "E-poštnega naslova ni bilo mogoče preveriti: preverite, ali ste kliknili povezavo v e-poštnem sporočilu",
-    "powered by Matrix": "poganja Matrix",
     "Use Single Sign On to continue": "Uporabi Single Sign On za prijavo",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Potrdite dodajanje tega e-poštnega naslova z enkratno prijavo, da dokažete svojo identiteto.",
     "Confirm adding email": "Potrdi dodajanje e-poštnega naslova",
@@ -71,7 +70,8 @@
         "call_failed": "Klic ni uspel"
     },
     "auth": {
-        "sso": "Enkratna prijava"
+        "sso": "Enkratna prijava",
+        "footer_powered_by_matrix": "poganja Matrix"
     },
     "setting": {
         "help_about": {

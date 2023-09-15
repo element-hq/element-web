@@ -182,7 +182,6 @@
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",
     "Token incorrect": "Token incorrect",
     "Please enter the code it contains:": "Please enter the code it contains:",
-    "powered by Matrix": "powered by Matrix",
     "Error decrypting image": "Error decrypting image",
     "Error decrypting video": "Error decrypting video",
     "Add an Integration": "Add an Integration",
@@ -514,7 +513,8 @@
         "group_rooms": "Rooms"
     },
     "auth": {
-        "sso": "Single Sign On"
+        "sso": "Single Sign On",
+        "footer_powered_by_matrix": "powered by Matrix"
     },
     "export_chat": {
         "messages": "Messages"

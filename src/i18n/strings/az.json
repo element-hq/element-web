@@ -161,7 +161,6 @@
     "Use an identity server": "Şəxsiyyət serverindən istifadə edin",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "E-poçtla dəvət etmək üçün şəxsiyyət serverindən istifadə edin. Defolt şəxsiyyət serverini (%(defaultIdentityServerName)s) istifadə etməyə və ya Parametrlərdə idarə etməyə davam edin.",
     "Use an identity server to invite by email. Manage in Settings.": "E-poçtla dəvət etmək üçün şəxsiyyət serverindən istifadə edin. Parametrlərdə idarə edin.",
-    "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
     "Create Account": "Hesab Aç",
     "Explore rooms": "Otaqları kəşf edin",
     "common": {
@@ -301,5 +300,8 @@
     },
     "export_chat": {
         "messages": "Mesajlar"
+    },
+    "auth": {
+        "footer_powered_by_matrix": "Matrix tərəfindən təchiz edilmişdir"
     }
 }

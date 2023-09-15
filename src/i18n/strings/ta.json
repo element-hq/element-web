@@ -14,7 +14,6 @@
     "Off": "அமை",
     "On": "மீது",
     "Operation failed": "செயல்பாடு தோல்வியுற்றது",
-    "powered by Matrix": "Matrix-ஆல் ஆனது",
     "Search…": "தேடு…",
     "Send": "அனுப்பு",
     "Source URL": "மூல முகவரி",
@@ -162,6 +161,7 @@
         "group_rooms": "அறைகள்"
     },
     "auth": {
-        "sso": "ஒற்றை உள்நுழைவு"
+        "sso": "ஒற்றை உள்நுழைவு",
+        "footer_powered_by_matrix": "Matrix-ஆல் ஆனது"
     }
 }

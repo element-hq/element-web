@@ -4,7 +4,6 @@
     "Favourite": "പ്രിയപ്പെട്ടവ",
     "Notifications": "നോട്ടിഫിക്കേഷനുകള്‍",
     "Operation failed": "ശ്രമം പരാജയപ്പെട്ടു",
-    "powered by Matrix": "മാട്രിക്സില്‍ പ്രവര്‍ത്തിക്കുന്നു",
     "unknown error code": "അപരിചിത എറര്‍ കോഡ്",
     "Failed to change password. Is your password correct?": "രഹസ്യവാക്ക് മാറ്റാന്‍ സാധിച്ചില്ല. രഹസ്യവാക്ക് ശരിയാണോ ?",
     "Sunday": "ഞായര്‍",
@@ -83,5 +82,8 @@
             "rule_call": "വിളിയ്ക്കുന്നു",
             "rule_suppress_notices": "ബോട്ട് അയയ്ക്കുന്ന സന്ദേശങ്ങള്‍ക്ക്"
         }
+    },
+    "auth": {
+        "footer_powered_by_matrix": "മാട്രിക്സില്‍ പ്രവര്‍ത്തിക്കുന്നു"
     }
 }

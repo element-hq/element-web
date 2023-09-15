@@ -129,6 +129,7 @@ import { WaitingForThirdPartyRoomView } from "./WaitingForThirdPartyRoomView";
 import { isNotUndefined } from "../../Typeguards";
 import { CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoinPayload";
 import { SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
+import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1248,6 +1249,33 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     this.messagePanel?.jumpToLiveTimeline();
                 }
                 break;
+            case Action.ViewUser:
+                if (payload.member) {
+                    if (payload.push) {
+                        RightPanelStore.instance.pushCard({
+                            phase: RightPanelPhases.RoomMemberInfo,
+                            state: { member: payload.member },
+                        });
+                    } else {
+                        RightPanelStore.instance.setCards([
+                            { phase: RightPanelPhases.RoomSummary },
+                            { phase: RightPanelPhases.RoomMemberList },
+                            { phase: RightPanelPhases.RoomMemberInfo, state: { member: payload.member } },
+                        ]);
+                    }
+                } else {
+                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
+                }
+                break;
+            case "view_3pid_invite":
+                if (payload.event) {
+                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.Room3pidMemberInfo, {
+                        memberInfoEvent: payload.event,
+                    });
+                } else {
+                    RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomMemberList);
+                }
+                break;
         }
     };
 
@@ -1784,12 +1812,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onSearchClick = (): void => {
-        this.setState({
-            timelineRenderingType:
-                this.state.timelineRenderingType === TimelineRenderingType.Search
-                    ? TimelineRenderingType.Room
-                    : TimelineRenderingType.Search,
-        });
+        if (this.state.timelineRenderingType === TimelineRenderingType.Search) {
+            this.onCancelSearchClick();
+        } else {
+            this.setState({
+                timelineRenderingType: TimelineRenderingType.Search,
+            });
+        }
     };
 
     private onCancelSearchClick = (): Promise<void> => {

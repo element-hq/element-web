@@ -112,6 +112,7 @@ describe("ThreadView", () => {
                 "rel_type": RelationType.Thread,
             },
             "msgtype": MsgType.Text,
+            "m.mentions": {},
         };
     }
 

@@ -1,7 +1,6 @@
 {
     "Create new room": "새 방 만들기",
     "Notifications": "알림",
-    "powered by Matrix": "Matrix의 지원을 받음",
     "unknown error code": "알 수 없는 오류 코드",
     "Account": "계정",
     "Admin Tools": "관리자 도구",
@@ -738,8 +737,6 @@
     "Read Marker lifetime (ms)": "이전 대화 경계선 표시 시간 (ms)",
     "Read Marker off-screen lifetime (ms)": "이전 대화 경계선 사라지는 시간 (ms)",
     "e.g. my-room": "예: my-room",
-    "Please enter a name for the room": "방 이름을 입력해주세요",
-    "Topic (optional)": "주제 (선택)",
     "Hide advanced": "고급 숨기기",
     "Show advanced": "고급 보이기",
     "Close dialog": "대화 상자 닫기",
@@ -855,7 +852,6 @@
     "Get notified for every message": "모든 메세지 알림을 받습니다",
     "You won't get any notifications": "어떤 알람도 받지 않습니다",
     "Space members": "스페이스 멤버 목록",
-    "Private room (invite only)": "비공개 방 (초대 필요)",
     "Private (invite only)": "비공개 (초대 필요)",
     "Never send encrypted messages to unverified sessions in this room from this session": "이 채팅방의 현재 세션에서 확인되지 않은 세션으로 암호화된 메시지를 보내지 않음",
     "Decide who can view and join %(spaceName)s.": "누가 %(spaceName)s를 보거나 참여할 수 있는지 설정합니다.",
@@ -1189,7 +1185,10 @@
     },
     "create_room": {
         "title_public_room": "공개 방 만들기",
-        "title_private_room": "개인 방 만들기"
+        "title_private_room": "개인 방 만들기",
+        "name_validation_required": "방 이름을 입력해주세요",
+        "topic_label": "주제 (선택)",
+        "join_rule_invite": "비공개 방 (초대 필요)"
     },
     "timeline": {
         "m.room.member": {
@@ -1453,7 +1452,8 @@
         "account_clash": "당신의 새 계정 (%(newAccountId)s)을 등록했습니다, 하지만 다른 계정 (%(loggedInUserId)s)으로 로그인하고 있습니다.",
         "account_clash_previous_account": "이 계정으로 계속",
         "log_in_new_account": "새 계정으로 <a>로그인</a>하기.",
-        "registration_successful": "등록 성공"
+        "registration_successful": "등록 성공",
+        "footer_powered_by_matrix": "Matrix의 지원을 받음"
     },
     "export_chat": {
         "title": "대화 내보내기",

@@ -18,7 +18,6 @@
     "Failed to forget room %(errCode)s": "Kunne ikke glemme rommet %(errCode)s",
     "Wednesday": "Onsdag",
     "unknown error code": "ukjent feilkode",
-    "powered by Matrix": "Drevet av Matrix",
     "Invite to this room": "Inviter til dette rommet",
     "You cannot delete this message. (%(code)s)": "Du kan ikke slette denne meldingen. (%(code)s)",
     "Thursday": "Torsdag",
@@ -422,8 +421,6 @@
         "other": "Og %(count)s til..."
     },
     "Logs sent": "Loggbøkene ble sendt",
-    "Please enter a name for the room": "Vennligst skriv inn et navn for rommet",
-    "Topic (optional)": "Tema (valgfritt)",
     "Hide advanced": "Skjul avansert",
     "Show advanced": "Vis avansert",
     "Recent Conversations": "Nylige samtaler",
@@ -548,7 +545,6 @@
     "You verified %(name)s": "Du verifiserte %(name)s",
     "Some characters not allowed": "Noen tegn er ikke tillatt",
     "Invite anyway": "Inviter likevel",
-    "Enable end-to-end encryption": "Aktiver start-til-mål-kryptering",
     "a key signature": "en nøkkelsignatur",
     "Send Logs": "Send loggbøker",
     "Command Help": "Kommandohjelp",
@@ -847,8 +843,6 @@
     "Capitalization doesn't help very much": "Store bokstaver er ikke spesielt nyttig",
     "Use a longer keyboard pattern with more turns": "Bruke et lengre og mer uventet tastatur mønster",
     "No need for symbols, digits, or uppercase letters": "Ikke nødvendig med symboler, sifre eller bokstaver",
-    "See images posted to this room": "Se bilder som er lagt ut i dette rommet",
-    "Change the topic of this room": "Endre dette rommets tema",
     "Zimbabwe": "Zimbabwe",
     "Yemen": "Jemen",
     "Zambia": "Zambia",
@@ -1069,7 +1063,6 @@
     "Cloud": "Sky",
     "More": "Mer",
     "Connecting": "Kobler til",
-    "Change the name of this room": "Endre rommets navn",
     "St. Pierre & Miquelon": "Saint-Pierre og Miquelon",
     "St. Martin": "Saint Martin",
     "St. Barthélemy": "Saint Barthélemy",
@@ -1390,7 +1383,10 @@
     },
     "create_room": {
         "title_public_room": "Opprett et offentlig rom",
-        "title_private_room": "Opprett et privat rom"
+        "title_private_room": "Opprett et privat rom",
+        "name_validation_required": "Vennligst skriv inn et navn for rommet",
+        "encryption_label": "Aktiver start-til-mål-kryptering",
+        "topic_label": "Tema (valgfritt)"
     },
     "timeline": {
         "m.room.member": {
@@ -1660,7 +1656,8 @@
         "sso_or_username_password": "%(ssoButtons)s eller %(usernamePassword)s",
         "sign_in_instead": "Har du allerede en konto? <a>Logg på</a>",
         "account_clash_previous_account": "Fortsett med tidligere konto",
-        "registration_successful": "Registreringen var vellykket"
+        "registration_successful": "Registreringen var vellykket",
+        "footer_powered_by_matrix": "Drevet av Matrix"
     },
     "room_list": {
         "show_previews": "Vis forhåndsvisninger av meldinger",
@@ -1691,6 +1688,13 @@
             "title": "Hjelp/Om",
             "versions": "Versjoner",
             "clear_cache_reload": "Tøm mellomlageret og last inn siden på nytt"
+        }
+    },
+    "widget": {
+        "capability": {
+            "change_topic_this_room": "Endre dette rommets tema",
+            "change_name_this_room": "Endre rommets navn",
+            "see_images_sent_this_room": "Se bilder som er lagt ut i dette rommet"
         }
     }
 }

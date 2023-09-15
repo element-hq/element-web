@@ -6,7 +6,6 @@
     "Notifications": "Jakinarazpenak",
     "Operation failed": "Eragiketak huts egin du",
     "unknown error code": "errore kode ezezaguna",
-    "powered by Matrix": "Matrix-ekin egina",
     "Historical": "Historiala",
     "Home": "Hasiera",
     "Rooms": "Gelak",
@@ -742,8 +741,6 @@
     "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.": "Erabili identitate-zerbitzari bat e-mail bidez gonbidatzeko. <default>Erabili lehenetsitakoa (%(defaultIdentityServerName)s)</default> edo gehitu bat <settings>Ezarpenak</settings> atalean.",
     "Use an identity server to invite by email. Manage in <settings>Settings</settings>.": "Erabili identitate-zerbitzari bat e-mail bidez gonbidatzeko. Kudeatu <settings>Ezarpenak</settings> atalean.",
     "Close dialog": "Itxi elkarrizketa-koadroa",
-    "Please enter a name for the room": "Sartu gelaren izena",
-    "Topic (optional)": "Mintzagaia (aukerakoa)",
     "Hide advanced": "Ezkutatu aurreratua",
     "Show advanced": "Erakutsi aurreratua",
     "To continue you need to accept the terms of this service.": "Jarraitzeko erabilera baldintzak onartu behar dituzu.",
@@ -1026,7 +1023,6 @@
     "Verification timed out.": "Egiaztaketarako denbora-muga agortu da.",
     "%(displayName)s cancelled verification.": "%(displayName)s-k egiaztaketa ezeztatu du.",
     "You cancelled verification.": "Egiaztaketa ezeztatu duzu.",
-    "Enable end-to-end encryption": "Gaitu muturretik-muturrera zifratzea",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Berretsi zure kontua desgaitzea Single sign-on bidez zure identitatea frogatuz.",
     "Are you sure you want to deactivate your account? This is irreversible.": "Ziur kontua desaktibatu nahi duzula? Ez dago gero atzera egiterik.",
     "Confirm account deactivation": "Baieztatu kontua desaktibatzea",
@@ -1395,7 +1391,10 @@
     },
     "create_room": {
         "title_public_room": "Sortu gela publikoa",
-        "title_private_room": "Sortu gela pribatua"
+        "title_private_room": "Sortu gela pribatua",
+        "name_validation_required": "Sartu gelaren izena",
+        "encryption_label": "Gaitu muturretik-muturrera zifratzea",
+        "topic_label": "Mintzagaia (aukerakoa)"
     },
     "timeline": {
         "m.call.invite": {
@@ -1706,7 +1705,8 @@
         "account_clash": "Zure kontu berria (%(newAccountId)s) erregistratuta dago, baina dagoeneko saioa hasi duzu beste kontu batekin (%(loggedInUserId)s).",
         "account_clash_previous_account": "Jarraitu aurreko kontuarekin",
         "log_in_new_account": "<a>Hasi saioa</a> zure kontu berrian.",
-        "registration_successful": "Ongi erregistratuta"
+        "registration_successful": "Ongi erregistratuta",
+        "footer_powered_by_matrix": "Matrix-ekin egina"
     },
     "export_chat": {
         "messages": "Mezuak"

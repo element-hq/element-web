@@ -12,7 +12,6 @@
     "Invite to this room": "Запрасіць у гэты пакой",
     "Failed to remove tag %(tagName)s from room": "Не ўдалося выдаліць %(tagName)s з пакоя",
     "Operation failed": "Не атрымалася выканаць аперацыю",
-    "powered by Matrix": "працуе на Matrix",
     "Source URL": "URL-адрас крыніцы",
     "common": {
         "error": "Памылка",
@@ -26,5 +25,8 @@
         "reject": "Адхіліць",
         "dismiss": "Aдхіліць",
         "close": "Зачыніць"
+    },
+    "auth": {
+        "footer_powered_by_matrix": "працуе на Matrix"
     }
 }

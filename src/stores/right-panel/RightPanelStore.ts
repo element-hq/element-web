@@ -29,6 +29,7 @@ import {
     convertToStatePanel,
     convertToStorePanel,
     IRightPanelCard,
+    IRightPanelCardState,
     IRightPanelForRoom,
 } from "./RightPanelStoreIPanelState";
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -223,6 +224,24 @@ export default class RightPanelStore extends ReadyWatchingStore {
     public hide(roomId: string | null): void {
         if (this.isOpenForRoom(roomId ?? this.viewedRoomId ?? "")) {
             this.togglePanel(roomId);
+        }
+    }
+
+    /**
+     * Helper to show a right panel phase.
+     * If the UI is already showing that phase, the right panel will be hidden.
+     *
+     * Calling the same phase twice with a different state will update the current
+     * phase and push the old state in the right panel history.
+     * @param phase The right panel phase.
+     * @param cardState The state within the phase.
+     */
+    public showOrHidePanel(phase: RightPanelPhases, cardState?: Partial<IRightPanelCardState>): void {
+        if (this.currentCard.phase == phase && !cardState && this.isOpen) {
+            this.togglePanel(null);
+        } else {
+            this.setCard({ phase, state: cardState });
+            if (!this.isOpen) this.togglePanel(null);
         }
     }
 

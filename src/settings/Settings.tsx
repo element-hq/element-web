@@ -531,20 +531,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Rooms,
         default: false,
     },
-    // MSC3952 intentional mentions support.
-    "feature_intentional_mentions": {
-        isFeature: true,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td("labs|intentional_mentions"),
-        labsGroup: LabGroup.Rooms,
-        default: false,
-        controller: new ServerSupportUnstableFeatureController(
-            "feature_intentional_mentions",
-            defaultWatchManager,
-            [["org.matrix.msc3952_intentional_mentions"]],
-            "v1.7",
-        ),
-    },
     "feature_ask_to_join": {
         default: false,
         displayName: _td("labs|ask_to_join"),

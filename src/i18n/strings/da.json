@@ -23,7 +23,6 @@
     "Favourite": "Favorit",
     "Notifications": "Notifikationer",
     "unknown error code": "Ukendt fejlkode",
-    "powered by Matrix": "Drevet af Matrix",
     "Failed to forget room %(errCode)s": "Kunne ikke glemme rummet %(errCode)s",
     "Unnamed room": "Unavngivet rum",
     "This email address is already in use": "Denne email adresse er allerede i brug",
@@ -234,7 +233,6 @@
     "Change Password": "Skift adgangskode",
     "Current password": "Nuværende adgangskode",
     "Comment": "Kommentar",
-    "Please enter a name for the room": "Indtast et navn for rummet",
     "Profile": "Profil",
     "Local address": "Lokal adresse",
     "This room has no local addresses": "Dette rum har ingen lokal adresse",
@@ -787,7 +785,8 @@
         "categories": "Kategorier"
     },
     "auth": {
-        "sso": "Engangs login"
+        "sso": "Engangs login",
+        "footer_powered_by_matrix": "Drevet af Matrix"
     },
     "export_chat": {
         "messages": "Beskeder"
@@ -799,5 +798,8 @@
         "send_dm": "Send en Direkte Besked",
         "explore_rooms": "Udforsk offentlige rum",
         "create_room": "Opret en gruppechat"
+    },
+    "create_room": {
+        "name_validation_required": "Indtast et navn for rummet"
     }
 }

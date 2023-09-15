@@ -23,7 +23,6 @@ import ContentMessages, { UploadCanceledError, uploadFile } from "../src/Content
 import { doMaybeLocalRoomAction } from "../src/utils/local-room";
 import { createTestClient, mkEvent } from "./test-utils";
 import { BlurhashEncoder } from "../src/BlurhashEncoder";
-import SettingsStore from "../src/settings/SettingsStore";
 
 jest.mock("matrix-encrypt-attachment", () => ({ encryptAttachment: jest.fn().mockResolvedValue({}) }));
 
@@ -278,10 +277,6 @@ describe("ContentMessages", () => {
         });
 
         it("properly handles replies", async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_intentional_mentions",
-            );
-
             mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "image/jpeg" });
             const replyToEvent = mkEvent({

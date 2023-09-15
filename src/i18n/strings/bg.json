@@ -1,6 +1,5 @@
 {
     "Operation failed": "Операцията е неуспешна",
-    "powered by Matrix": "базирано на Matrix",
     "Send": "Изпрати",
     "Failed to change password. Is your password correct?": "Неуспешна промяна. Правилно ли сте въвели Вашата парола?",
     "Sun": "нд.",
@@ -739,8 +738,6 @@
     "Read Marker lifetime (ms)": "Живот на маркера за прочитане (мсек)",
     "Read Marker off-screen lifetime (ms)": "Живот на маркера за прочитане извън екрана (мсек)",
     "e.g. my-room": "например my-room",
-    "Please enter a name for the room": "Въведете име на стаята",
-    "Topic (optional)": "Тема (незадължително)",
     "Hide advanced": "Скрий разширени настройки",
     "Show advanced": "Покажи разширени настройки",
     "Close dialog": "Затвори прозореца",
@@ -998,7 +995,6 @@
     "Clear cross-signing keys": "Изчисти ключовете за кръстосано-подписване",
     "Clear all data in this session?": "Изчисти всички данни в тази сесия?",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Изчистването на всички данни от сесията е необратимо. Шифрованите съобщения ще бъдат загубени, освен ако няма резервно копие на ключовете им.",
-    "Enable end-to-end encryption": "Включи шифроване от-край-до-край",
     "Server did not require any authentication": "Сървърът не изисква никаква автентикация",
     "Server did not return valid authentication information.": "Сървърът не върна валидна информация относно автентикация.",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Потвърдете деактивацията на профила си използвайки Single Sign On за потвърждаване на самоличността.",
@@ -1138,10 +1134,6 @@
     "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "Първо прегледайте <existingIssuesLink>съществуващите проблеми в Github</existingIssuesLink>. Няма подобни? <newIssueLink>Създайте нов</newIssueLink>.",
     "Comment": "Коментар",
     "Feedback sent": "Обратната връзка беше изпратена",
-    "Block anyone not part of %(serverName)s from ever joining this room.": "Блокирай всеки, който не е част от %(serverName)s от присъединяване в тази стая.",
-    "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Може да изключите това, ако стаята ще се използва за съвместна работа с външни екипи, имащи собствен сървър. Това не може да бъде променено по-късно.",
-    "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Може да включите това, ако стаята ще се използва само за съвместна работа на вътрешни екипи на сървъра ви. Това не може да бъде променено по-късно.",
-    "Your server requires encryption to be enabled in private rooms.": "Сървърът ви изисква в частните стаи да е включено шифроване.",
     "Preparing to download logs": "Подготвяне за изтегляне на логове",
     "Information": "Информация",
     "This version of %(brand)s does not support searching encrypted messages": "Тази версия на %(brand)s не поддържа търсенето в шифровани съобщения",
@@ -1842,7 +1834,14 @@
     },
     "create_room": {
         "title_public_room": "Създай публична стая",
-        "title_private_room": "Създай частна стая"
+        "title_private_room": "Създай частна стая",
+        "name_validation_required": "Въведете име на стаята",
+        "encryption_forced": "Сървърът ви изисква в частните стаи да е включено шифроване.",
+        "encryption_label": "Включи шифроване от-край-до-край",
+        "unfederated_label_default_off": "Може да включите това, ако стаята ще се използва само за съвместна работа на вътрешни екипи на сървъра ви. Това не може да бъде променено по-късно.",
+        "unfederated_label_default_on": "Може да изключите това, ако стаята ще се използва за съвместна работа с външни екипи, имащи собствен сървър. Това не може да бъде променено по-късно.",
+        "topic_label": "Тема (незадължително)",
+        "unfederated": "Блокирай всеки, който не е част от %(serverName)s от присъединяване в тази стая."
     },
     "timeline": {
         "m.call.invite": {
@@ -2198,7 +2197,8 @@
         "account_clash": "Новият ви профил (%(newAccountId)s) е регистриран, но вече сте влезли с друг профил (%(loggedInUserId)s).",
         "account_clash_previous_account": "Продължи с предишния профил",
         "log_in_new_account": "<a>Влезте</a> в новия си профил.",
-        "registration_successful": "Успешна регистрация"
+        "registration_successful": "Успешна регистрация",
+        "footer_powered_by_matrix": "базирано на Matrix"
     },
     "export_chat": {
         "messages": "Съобщения"

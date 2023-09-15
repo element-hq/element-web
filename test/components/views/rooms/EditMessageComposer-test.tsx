@@ -137,13 +137,15 @@ describe("<EditMessageComposer/>", () => {
             ...editedEvent.getContent(),
             "body": " * original message + edit",
             "m.new_content": {
-                body: "original message + edit",
-                msgtype: "m.text",
+                "body": "original message + edit",
+                "msgtype": "m.text",
+                "m.mentions": {},
             },
             "m.relates_to": {
                 event_id: editedEvent.getId(),
                 rel_type: "m.replace",
             },
+            "m.mentions": {},
         };
         expect(mockClient.sendMessage).toHaveBeenCalledWith(editedEvent.getRoomId()!, null, expectedBody);
     });
@@ -168,13 +170,15 @@ describe("<EditMessageComposer/>", () => {
                 "body": " * hello world",
                 "msgtype": "m.text",
                 "m.new_content": {
-                    body: "hello world",
-                    msgtype: "m.text",
+                    "body": "hello world",
+                    "msgtype": "m.text",
+                    "m.mentions": {},
                 },
                 "m.relates_to": {
                     event_id: editedEvent.getId(),
                     rel_type: "m.replace",
                 },
+                "m.mentions": {},
             });
         });
 
@@ -191,15 +195,17 @@ describe("<EditMessageComposer/>", () => {
                 "format": "org.matrix.custom.html",
                 "formatted_body": " * hello <em>world</em>",
                 "m.new_content": {
-                    body: "hello *world*",
-                    msgtype: "m.text",
-                    format: "org.matrix.custom.html",
-                    formatted_body: "hello <em>world</em>",
+                    "body": "hello *world*",
+                    "msgtype": "m.text",
+                    "format": "org.matrix.custom.html",
+                    "formatted_body": "hello <em>world</em>",
+                    "m.mentions": {},
                 },
                 "m.relates_to": {
                     event_id: editedEvent.getId(),
                     rel_type: "m.replace",
                 },
+                "m.mentions": {},
             });
         });
 
@@ -216,15 +222,17 @@ describe("<EditMessageComposer/>", () => {
                 "format": "org.matrix.custom.html",
                 "formatted_body": " * blinks <strong>quickly</strong>",
                 "m.new_content": {
-                    body: "blinks __quickly__",
-                    msgtype: "m.emote",
-                    format: "org.matrix.custom.html",
-                    formatted_body: "blinks <strong>quickly</strong>",
+                    "body": "blinks __quickly__",
+                    "msgtype": "m.emote",
+                    "format": "org.matrix.custom.html",
+                    "formatted_body": "blinks <strong>quickly</strong>",
+                    "m.mentions": {},
                 },
                 "m.relates_to": {
                     event_id: editedEvent.getId(),
                     rel_type: "m.replace",
                 },
+                "m.mentions": {},
             });
         });
 
@@ -240,13 +248,15 @@ describe("<EditMessageComposer/>", () => {
                 "body": " * ✨sparkles✨",
                 "msgtype": "m.emote",
                 "m.new_content": {
-                    body: "✨sparkles✨",
-                    msgtype: "m.emote",
+                    "body": "✨sparkles✨",
+                    "msgtype": "m.emote",
+                    "m.mentions": {},
                 },
                 "m.relates_to": {
                     event_id: editedEvent.getId(),
                     rel_type: "m.replace",
                 },
+                "m.mentions": {},
             });
         });
 
@@ -264,166 +274,246 @@ describe("<EditMessageComposer/>", () => {
                 "body": " * //dev/null is my favourite place",
                 "msgtype": "m.text",
                 "m.new_content": {
-                    body: "//dev/null is my favourite place",
-                    msgtype: "m.text",
+                    "body": "//dev/null is my favourite place",
+                    "msgtype": "m.text",
+                    "m.mentions": {},
                 },
                 "m.relates_to": {
                     event_id: editedEvent.getId(),
                     rel_type: "m.replace",
                 },
+                "m.mentions": {},
             });
         });
     });
 
-    describe("with feature_intentional_mentions enabled", () => {
-        const mockSettings = (mockValues: Record<string, unknown> = {}) => {
-            const defaultMockValues = {
-                feature_intentional_mentions: true,
-            };
-            jest.spyOn(SettingsStore, "getValue")
-                .mockClear()
-                .mockImplementation((settingName) => {
-                    return { ...defaultMockValues, ...mockValues }[settingName];
-                });
-        };
+    describe("when message is not a reply", () => {
+        it("should attach an empty mentions object for a message with no mentions", async () => {
+            const editState = new EditorStateTransfer(editedEvent);
+            getComponent(editState);
+            const editContent = " + edit";
+            await editText(editContent);
 
-        beforeEach(() => {
-            mockSettings();
+            fireEvent.click(screen.getByText("Save"));
+
+            const messageContent = mockClient.sendMessage.mock.calls[0][2];
+
+            // both content.mentions and new_content.mentions are empty
+            expect(messageContent["m.mentions"]).toEqual({});
+            expect(messageContent["m.new_content"]["m.mentions"]).toEqual({});
         });
 
-        describe("when message is not a reply", () => {
-            it("should attach an empty mentions object for a message with no mentions", async () => {
-                const editState = new EditorStateTransfer(editedEvent);
-                getComponent(editState);
-                const editContent = " + edit";
-                await editText(editContent);
+        it("should retain mentions in the original message that are not removed by the edit", async () => {
+            const editState = new EditorStateTransfer(eventWithMentions);
+            getComponent(editState);
+            // Remove charlie from the message
+            const editContent = "{backspace}{backspace}friends";
+            await editText(editContent);
 
-                fireEvent.click(screen.getByText("Save"));
+            fireEvent.click(screen.getByText("Save"));
 
-                const messageContent = mockClient.sendMessage.mock.calls[0][2];
+            const messageContent = mockClient.sendMessage.mock.calls[0][2];
 
-                // both content.mentions and new_content.mentions are empty
-                expect(messageContent["m.mentions"]).toEqual({});
-                expect(messageContent["m.new_content"]["m.mentions"]).toEqual({});
-            });
-
-            it("should retain mentions in the original message that are not removed by the edit", async () => {
-                const editState = new EditorStateTransfer(eventWithMentions);
-                getComponent(editState);
-                // Remove charlie from the message
-                const editContent = "{backspace}{backspace}friends";
-                await editText(editContent);
-
-                fireEvent.click(screen.getByText("Save"));
-
-                const messageContent = mockClient.sendMessage.mock.calls[0][2];
-
-                // no new mentions were added, so nothing in top level mentions
-                expect(messageContent["m.mentions"]).toEqual({});
-                // bob is still mentioned, charlie removed
-                expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
-                    user_ids: ["@bob:server.org"],
-                });
-            });
-
-            it("should remove mentions that are removed by the edit", async () => {
-                const editState = new EditorStateTransfer(eventWithMentions);
-                getComponent(editState);
-                const editContent = "new message!";
-                // clear the original message
-                await editText(editContent, true);
-
-                fireEvent.click(screen.getByText("Save"));
-
-                const messageContent = mockClient.sendMessage.mock.calls[0][2];
-
-                // no new mentions were added, so nothing in top level mentions
-                expect(messageContent["m.mentions"]).toEqual({});
-                // bob is not longer mentioned in the edited message, so empty mentions in new_content
-                expect(messageContent["m.new_content"]["m.mentions"]).toEqual({});
-            });
-
-            it("should add mentions that were added in the edit", async () => {
-                const editState = new EditorStateTransfer(editedEvent);
-                getComponent(editState);
-                const editContent = " and @d";
-                await editText(editContent);
-
-                // submit autocomplete for mention
-                await editText("{enter}");
-
-                fireEvent.click(screen.getByText("Save"));
-
-                const messageContent = mockClient.sendMessage.mock.calls[0][2];
-
-                // new mention in the edit
-                expect(messageContent["m.mentions"]).toEqual({
-                    user_ids: ["@dan:server.org"],
-                });
-                expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
-                    user_ids: ["@dan:server.org"],
-                });
-            });
-
-            it("should add and remove mentions from the edit", async () => {
-                const editState = new EditorStateTransfer(eventWithMentions);
-                getComponent(editState);
-                // Remove charlie from the message
-                await editText("{backspace}{backspace}");
-                // and replace with @room
-                await editText("@d");
-                // submit autocomplete for @dan mention
-                await editText("{enter}");
-
-                fireEvent.click(screen.getByText("Save"));
-
-                const messageContent = mockClient.sendMessage.mock.calls[0][2];
-
-                // new mention in the edit
-                expect(messageContent["m.mentions"]).toEqual({
-                    user_ids: ["@dan:server.org"],
-                });
-                // all mentions in the edited version of the event
-                expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
-                    user_ids: ["@bob:server.org", "@dan:server.org"],
-                });
+            // no new mentions were added, so nothing in top level mentions
+            expect(messageContent["m.mentions"]).toEqual({});
+            // bob is still mentioned, charlie removed
+            expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
+                user_ids: ["@bob:server.org"],
             });
         });
 
-        describe("when message is replying", () => {
-            const originalEvent = mkEvent({
-                type: "m.room.message",
-                user: "@ernie:test",
-                room: roomId,
-                content: { body: "original message", msgtype: "m.text" },
-                event: true,
-            });
+        it("should remove mentions that are removed by the edit", async () => {
+            const editState = new EditorStateTransfer(eventWithMentions);
+            getComponent(editState);
+            const editContent = "new message!";
+            // clear the original message
+            await editText(editContent, true);
 
-            const replyEvent = mkEvent({
-                type: "m.room.message",
-                user: "@bert:test",
-                room: roomId,
-                content: {
-                    "body": "reply with plain message",
-                    "msgtype": "m.text",
-                    "m.relates_to": {
-                        "m.in_reply_to": {
-                            event_id: originalEvent.getId(),
-                        },
-                    },
-                    "m.mentions": {
-                        user_ids: [originalEvent.getSender()!],
+            fireEvent.click(screen.getByText("Save"));
+
+            const messageContent = mockClient.sendMessage.mock.calls[0][2];
+
+            // no new mentions were added, so nothing in top level mentions
+            expect(messageContent["m.mentions"]).toEqual({});
+            // bob is not longer mentioned in the edited message, so empty mentions in new_content
+            expect(messageContent["m.new_content"]["m.mentions"]).toEqual({});
+        });
+
+        it("should add mentions that were added in the edit", async () => {
+            const editState = new EditorStateTransfer(editedEvent);
+            getComponent(editState);
+            const editContent = " and @d";
+            await editText(editContent);
+
+            // wait for autocompletion to render
+            await screen.findByText("Dan");
+            // submit autocomplete for mention
+            await editText("{enter}");
+
+            fireEvent.click(screen.getByText("Save"));
+
+            const messageContent = mockClient.sendMessage.mock.calls[0][2];
+
+            // new mention in the edit
+            expect(messageContent["m.mentions"]).toEqual({
+                user_ids: ["@dan:server.org"],
+            });
+            expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
+                user_ids: ["@dan:server.org"],
+            });
+        });
+
+        it("should add and remove mentions from the edit", async () => {
+            const editState = new EditorStateTransfer(eventWithMentions);
+            getComponent(editState);
+            // Remove charlie from the message
+            await editText("{backspace}{backspace}");
+            // and replace with @room
+            await editText("@d");
+            // wait for autocompletion to render
+            await screen.findByText("Dan");
+            // submit autocomplete for @dan mention
+            await editText("{enter}");
+
+            fireEvent.click(screen.getByText("Save"));
+
+            const messageContent = mockClient.sendMessage.mock.calls[0][2];
+
+            // new mention in the edit
+            expect(messageContent["m.mentions"]).toEqual({
+                user_ids: ["@dan:server.org"],
+            });
+            // all mentions in the edited version of the event
+            expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
+                user_ids: ["@bob:server.org", "@dan:server.org"],
+            });
+        });
+    });
+
+    describe("when message is replying", () => {
+        const originalEvent = mkEvent({
+            type: "m.room.message",
+            user: "@ernie:test",
+            room: roomId,
+            content: { body: "original message", msgtype: "m.text" },
+            event: true,
+        });
+
+        const replyEvent = mkEvent({
+            type: "m.room.message",
+            user: "@bert:test",
+            room: roomId,
+            content: {
+                "body": "reply with plain message",
+                "msgtype": "m.text",
+                "m.relates_to": {
+                    "m.in_reply_to": {
+                        event_id: originalEvent.getId(),
                     },
                 },
-                event: true,
-            });
+                "m.mentions": {
+                    user_ids: [originalEvent.getSender()!],
+                },
+            },
+            event: true,
+        });
 
-            const replyWithMentions = mkEvent({
+        const replyWithMentions = mkEvent({
+            type: "m.room.message",
+            user: "@bert:test",
+            room: roomId,
+            content: {
+                "body": 'reply that mentions <a href="https://matrix.to/#/@bob:server.org">Bob</a>',
+                "msgtype": "m.text",
+                "m.relates_to": {
+                    "m.in_reply_to": {
+                        event_id: originalEvent.getId(),
+                    },
+                },
+                "m.mentions": {
+                    user_ids: [
+                        // sender of event we replied to
+                        originalEvent.getSender()!,
+                        // mentions from this event
+                        "@bob:server.org",
+                    ],
+                },
+            },
+            event: true,
+        });
+
+        beforeEach(() => {
+            setupRoomWithEventsTimeline(room, [originalEvent, replyEvent]);
+        });
+
+        it("should retain parent event sender in mentions when editing with plain text", async () => {
+            const editState = new EditorStateTransfer(replyEvent);
+            getComponent(editState);
+            const editContent = " + edit";
+            await editText(editContent);
+
+            fireEvent.click(screen.getByText("Save"));
+
+            const messageContent = mockClient.sendMessage.mock.calls[0][2];
+
+            // no new mentions from edit
+            expect(messageContent["m.mentions"]).toEqual({});
+            // edited reply still mentions the parent event sender
+            expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
+                user_ids: [originalEvent.getSender()],
+            });
+        });
+
+        it("should retain parent event sender in mentions when adding a mention", async () => {
+            const editState = new EditorStateTransfer(replyEvent);
+            getComponent(editState);
+            await editText(" and @d");
+            // wait for autocompletion to render
+            await screen.findByText("Dan");
+            // submit autocomplete for @dan mention
+            await editText("{enter}");
+
+            fireEvent.click(screen.getByText("Save"));
+
+            const messageContent = mockClient.sendMessage.mock.calls[0][2];
+
+            // new mention in edit
+            expect(messageContent["m.mentions"]).toEqual({
+                user_ids: ["@dan:server.org"],
+            });
+            // edited reply still mentions the parent event sender
+            // plus new mention @dan
+            expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
+                user_ids: [originalEvent.getSender(), "@dan:server.org"],
+            });
+        });
+
+        it("should retain parent event sender in mentions when removing all mentions from content", async () => {
+            const editState = new EditorStateTransfer(replyWithMentions);
+            getComponent(editState);
+            // replace text to remove all mentions
+            await editText("no mentions here", true);
+
+            fireEvent.click(screen.getByText("Save"));
+
+            const messageContent = mockClient.sendMessage.mock.calls[0][2];
+
+            // no mentions in edit
+            expect(messageContent["m.mentions"]).toEqual({});
+            // edited reply still mentions the parent event sender
+            // existing @bob mention removed
+            expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
+                user_ids: [originalEvent.getSender()],
+            });
+        });
+
+        it("should retain parent event sender in mentions when removing mention of said user", async () => {
+            const replyThatMentionsParentEventSender = mkEvent({
                 type: "m.room.message",
                 user: "@bert:test",
                 room: roomId,
                 content: {
-                    "body": 'reply that mentions <a href="https://matrix.to/#/@bob:server.org">Bob</a>',
+                    "body": `reply that mentions the sender of the message we replied to <a href="https://matrix.to/#/${originalEvent.getSender()!}">Ernie</a>`,
                     "msgtype": "m.text",
                     "m.relates_to": {
                         "m.in_reply_to": {
@@ -434,114 +524,25 @@ describe("<EditMessageComposer/>", () => {
                         user_ids: [
                             // sender of event we replied to
                             originalEvent.getSender()!,
-                            // mentions from this event
-                            "@bob:server.org",
                         ],
                     },
                 },
                 event: true,
             });
+            const editState = new EditorStateTransfer(replyThatMentionsParentEventSender);
+            getComponent(editState);
+            // replace text to remove all mentions
+            await editText("no mentions here", true);
 
-            beforeEach(() => {
-                setupRoomWithEventsTimeline(room, [originalEvent, replyEvent]);
-            });
+            fireEvent.click(screen.getByText("Save"));
 
-            it("should retain parent event sender in mentions when editing with plain text", async () => {
-                const editState = new EditorStateTransfer(replyEvent);
-                getComponent(editState);
-                const editContent = " + edit";
-                await editText(editContent);
+            const messageContent = mockClient.sendMessage.mock.calls[0][2];
 
-                fireEvent.click(screen.getByText("Save"));
-
-                const messageContent = mockClient.sendMessage.mock.calls[0][2];
-
-                // no new mentions from edit
-                expect(messageContent["m.mentions"]).toEqual({});
-                // edited reply still mentions the parent event sender
-                expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
-                    user_ids: [originalEvent.getSender()],
-                });
-            });
-
-            it("should retain parent event sender in mentions when adding a mention", async () => {
-                const editState = new EditorStateTransfer(replyEvent);
-                getComponent(editState);
-                await editText(" and @d");
-                // submit autocomplete for @dan mention
-                await editText("{enter}");
-
-                fireEvent.click(screen.getByText("Save"));
-
-                const messageContent = mockClient.sendMessage.mock.calls[0][2];
-
-                // new mention in edit
-                expect(messageContent["m.mentions"]).toEqual({
-                    user_ids: ["@dan:server.org"],
-                });
-                // edited reply still mentions the parent event sender
-                // plus new mention @dan
-                expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
-                    user_ids: [originalEvent.getSender(), "@dan:server.org"],
-                });
-            });
-
-            it("should retain parent event sender in mentions when removing all mentions from content", async () => {
-                const editState = new EditorStateTransfer(replyWithMentions);
-                getComponent(editState);
-                // replace text to remove all mentions
-                await editText("no mentions here", true);
-
-                fireEvent.click(screen.getByText("Save"));
-
-                const messageContent = mockClient.sendMessage.mock.calls[0][2];
-
-                // no mentions in edit
-                expect(messageContent["m.mentions"]).toEqual({});
-                // edited reply still mentions the parent event sender
-                // existing @bob mention removed
-                expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
-                    user_ids: [originalEvent.getSender()],
-                });
-            });
-
-            it("should retain parent event sender in mentions when removing mention of said user", async () => {
-                const replyThatMentionsParentEventSender = mkEvent({
-                    type: "m.room.message",
-                    user: "@bert:test",
-                    room: roomId,
-                    content: {
-                        "body": `reply that mentions the sender of the message we replied to <a href="https://matrix.to/#/${originalEvent.getSender()!}">Ernie</a>`,
-                        "msgtype": "m.text",
-                        "m.relates_to": {
-                            "m.in_reply_to": {
-                                event_id: originalEvent.getId(),
-                            },
-                        },
-                        "m.mentions": {
-                            user_ids: [
-                                // sender of event we replied to
-                                originalEvent.getSender()!,
-                            ],
-                        },
-                    },
-                    event: true,
-                });
-                const editState = new EditorStateTransfer(replyThatMentionsParentEventSender);
-                getComponent(editState);
-                // replace text to remove all mentions
-                await editText("no mentions here", true);
-
-                fireEvent.click(screen.getByText("Save"));
-
-                const messageContent = mockClient.sendMessage.mock.calls[0][2];
-
-                // no mentions in edit
-                expect(messageContent["m.mentions"]).toEqual({});
-                // edited reply still mentions the parent event sender
-                expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
-                    user_ids: [originalEvent.getSender()],
-                });
+            // no mentions in edit
+            expect(messageContent["m.mentions"]).toEqual({});
+            // edited reply still mentions the parent event sender
+            expect(messageContent["m.new_content"]["m.mentions"]).toEqual({
+                user_ids: [originalEvent.getSender()],
             });
         });
     });

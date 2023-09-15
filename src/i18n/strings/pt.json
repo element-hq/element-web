@@ -158,7 +158,6 @@
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Se você já usou antes uma versão mais recente do %(brand)s, a sua sessão pode ser incompatível com esta versão. Feche esta janela e tente abrir com a versão mais recente.",
     "Token incorrect": "Token incorreto",
     "Please enter the code it contains:": "Por favor, entre com o código que está na mensagem:",
-    "powered by Matrix": "potenciado por Matrix",
     "Error decrypting image": "Erro ao descriptografar a imagem",
     "Error decrypting video": "Erro ao descriptografar o vídeo",
     "Add an Integration": "Adicionar uma integração",
@@ -818,7 +817,8 @@
         "sso": "Single Sign On",
         "sso_or_username_password": "%(ssoButtons)s Ou %(usernamePassword)s",
         "sign_in_instead": "Já tem uma conta? <a>Entre aqui</a>",
-        "server_picker_title": "Hospedar conta em"
+        "server_picker_title": "Hospedar conta em",
+        "footer_powered_by_matrix": "potenciado por Matrix"
     },
     "export_chat": {
         "messages": "Mensagens"
