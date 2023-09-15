@@ -1,3 +1,8 @@
+Changes in [1.11.43](https://github.com/vector-im/element-web/releases/tag/v1.11.43) (2023-09-15)
+=================================================================================================
+
+(No changes - bumping the version number for an element-desktop release.)
+
 Changes in [1.11.42](https://github.com/vector-im/element-web/releases/tag/v1.11.42) (2023-09-13)
 =================================================================================================
 
