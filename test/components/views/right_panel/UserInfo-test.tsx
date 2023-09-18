@@ -37,6 +37,7 @@ import {
 import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { defer } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
+import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import UserInfo, {
     BanToggleButton,
@@ -134,6 +135,8 @@ beforeEach(() => {
     mockCrypto = mocked({
         getDeviceVerificationStatus: jest.fn(),
         getUserDeviceInfo: jest.fn(),
+        userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
+        getUserVerificationStatus: jest.fn(),
     } as unknown as CryptoApi);
 
     mockClient = mocked({
@@ -161,7 +164,6 @@ beforeEach(() => {
         setPowerLevel: jest.fn(),
         downloadKeys: jest.fn(),
         getCrypto: jest.fn().mockReturnValue(mockCrypto),
-        getStoredCrossSigningForUser: jest.fn(),
     } as unknown as MatrixClient);
 
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
@@ -378,6 +380,7 @@ describe("<UserInfo />", () => {
 
         it("renders unverified user info", async () => {
             mockClient.checkUserTrust.mockReturnValue(new UserTrustLevel(false, false, false));
+            mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
             renderComponent({ room: mockRoom });
             await act(flushPromises);
 
@@ -389,6 +392,7 @@ describe("<UserInfo />", () => {
 
         it("renders verified user info", async () => {
             mockClient.checkUserTrust.mockReturnValue(new UserTrustLevel(true, false, false));
+            mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, false, false));
             renderComponent({ room: mockRoom });
             await act(flushPromises);
 

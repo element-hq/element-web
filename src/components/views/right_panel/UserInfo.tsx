@@ -105,9 +105,15 @@ export const disambiguateDevices = (devices: IDevice[]): void => {
     }
 };
 
-export const getE2EStatus = async (cli: MatrixClient, userId: string, devices: IDevice[]): Promise<E2EStatus> => {
+export const getE2EStatus = async (
+    cli: MatrixClient,
+    userId: string,
+    devices: IDevice[],
+): Promise<E2EStatus | undefined> => {
+    const crypto = cli.getCrypto();
+    if (!crypto) return undefined;
     const isMe = userId === cli.getUserId();
-    const userTrust = cli.checkUserTrust(userId);
+    const userTrust = await crypto.getUserVerificationStatus(userId);
     if (!userTrust.isCrossSigningVerified()) {
         return userTrust.wasCrossSigningVerified() ? E2EStatus.Warning : E2EStatus.Normal;
     }
@@ -119,7 +125,7 @@ export const getE2EStatus = async (cli: MatrixClient, userId: string, devices: I
         // cross-signing so that other users can then safely trust you.
         // For other people's devices, the more general verified check that
         // includes locally verified devices can be used.
-        const deviceTrust = await cli.getCrypto()?.getDeviceVerificationStatus(userId, deviceId);
+        const deviceTrust = await crypto.getDeviceVerificationStatus(userId, deviceId);
         return isMe ? !deviceTrust?.crossSigningVerified : !deviceTrust?.isVerified();
     });
     return anyDeviceUnverified ? E2EStatus.Warning : E2EStatus.Verified;
@@ -152,11 +158,7 @@ function useHasCrossSigningKeys(
         }
         setUpdating(true);
         try {
-            // We call it to populate the user keys and devices
-            await cli.getCrypto()?.getUserDeviceInfo([member.userId], true);
-            const xsi = cli.getStoredCrossSigningForUser(member.userId);
-            const key = xsi && xsi.getId();
-            return !!key;
+            return await cli.getCrypto()?.userHasCrossSigningKeys(member.userId, true);
         } finally {
             setUpdating(false);
         }

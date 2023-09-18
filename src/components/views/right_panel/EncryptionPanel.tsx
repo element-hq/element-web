@@ -110,7 +110,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
             if (!roomId) {
                 throw new Error("Unable to create Room for verification");
             }
-            verificationRequest_ = await cli.requestVerificationDM(member.userId, roomId);
+            verificationRequest_ = await cli.getCrypto()!.requestVerificationDM(member.userId, roomId);
         } catch (e) {
             console.error("Error starting verification", e);
             setRequesting(false);
