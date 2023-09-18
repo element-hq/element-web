@@ -15,31 +15,40 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { render, waitFor, screen, act, fireEvent } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import {
-    EventType,
     CryptoApi,
-    TweakName,
-    NotificationCountType,
-    Room,
-    MatrixEvent,
+    EventType,
+    IEventDecryptionResult,
     MatrixClient,
+    MatrixEvent,
+    NotificationCountType,
     PendingEventOrdering,
+    Room,
+    TweakName,
 } from "matrix-js-sdk/src/matrix";
-import { DeviceTrustLevel, UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
-import { IEncryptedEventInfo } from "matrix-js-sdk/src/crypto/api";
+import { EventEncryptionInfo, EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
+import { CryptoBackend } from "matrix-js-sdk/src/common-crypto/CryptoBackend";
 
 import EventTile, { EventTileProps } from "../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { flushPromises, getRoomContext, mkEncryptedEvent, mkEvent, mkMessage, stubClient } from "../../../test-utils";
+import {
+    filterConsole,
+    flushPromises,
+    getRoomContext,
+    mkEncryptedEvent,
+    mkEvent,
+    mkMessage,
+    stubClient,
+} from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
+import { IRoomState } from "../../../../src/components/structures/RoomView";
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -49,12 +58,22 @@ describe("EventTile", () => {
 
     // let changeEvent: (event: MatrixEvent) => void;
 
-    function TestEventTile(props: Partial<EventTileProps>) {
-        // const [event] = useState(mxEvent);
-        // Give a way for a test to update the event prop.
-        // changeEvent = setEvent;
-
-        return <EventTile mxEvent={mxEvent} {...props} />;
+    /** wrap the EventTile up in context providers, and with basic properties, as it would be by MessagePanel normally. */
+    function WrappedEventTile(props: {
+        roomContext: IRoomState;
+        eventTilePropertyOverrides?: Partial<EventTileProps>;
+    }) {
+        return (
+            <MatrixClientContext.Provider value={client}>
+                <RoomContext.Provider value={props.roomContext}>
+                    <EventTile
+                        mxEvent={mxEvent}
+                        replacingEventId={mxEvent.replacingEventId()}
+                        {...(props.eventTilePropertyOverrides ?? {})}
+                    />
+                </RoomContext.Provider>
+            </MatrixClientContext.Provider>
+        );
     }
 
     function getComponent(
@@ -64,14 +83,7 @@ describe("EventTile", () => {
         const context = getRoomContext(room, {
             timelineRenderingType: renderingType,
         });
-        return render(
-            <MatrixClientContext.Provider value={client}>
-                <RoomContext.Provider value={context}>
-                    <TestEventTile {...overrides} />
-                </RoomContext.Provider>
-                ,
-            </MatrixClientContext.Provider>,
-        );
+        return render(<WrappedEventTile roomContext={context} eventTilePropertyOverrides={overrides} />);
     }
 
     beforeEach(() => {
@@ -196,34 +208,15 @@ describe("EventTile", () => {
         });
     });
     describe("Event verification", () => {
-        // data for our stubbed getEventEncryptionInfo: a map from event id to result
-        const eventToEncryptionInfoMap = new Map<string, IEncryptedEventInfo>();
-
-        const TRUSTED_DEVICE = DeviceInfo.fromStorage({}, "TRUSTED_DEVICE");
-        const UNTRUSTED_DEVICE = DeviceInfo.fromStorage({}, "UNTRUSTED_DEVICE");
+        // data for our stubbed getEncryptionInfoForEvent: a map from event id to result
+        const eventToEncryptionInfoMap = new Map<string, EventEncryptionInfo>();
 
         beforeEach(() => {
             eventToEncryptionInfoMap.clear();
 
-            // a mocked version of getEventEncryptionInfo which will pick its result from `eventToEncryptionInfoMap`
-            client.getEventEncryptionInfo = (event) => eventToEncryptionInfoMap.get(event.getId()!)!;
-
-            // a mocked version of checkUserTrust which always says the user is trusted (we do our testing via
-            // unverified devices).
-            const trustedUserTrustLevel = new UserTrustLevel(true, true, true);
-            client.checkUserTrust = (_userId) => trustedUserTrustLevel;
-
-            // a version of checkDeviceTrust which says that TRUSTED_DEVICE is trusted, and others are not.
-            const trustedDeviceTrustLevel = DeviceTrustLevel.fromUserTrustLevel(trustedUserTrustLevel, true, false);
-            const untrustedDeviceTrustLevel = DeviceTrustLevel.fromUserTrustLevel(trustedUserTrustLevel, false, false);
             const mockCrypto = {
-                getDeviceVerificationStatus: async (userId: string, deviceId: string) => {
-                    if (deviceId === TRUSTED_DEVICE.deviceId) {
-                        return trustedDeviceTrustLevel;
-                    } else {
-                        return untrustedDeviceTrustLevel;
-                    }
-                },
+                // a mocked version of getEncryptionInfoForEvent which will pick its result from `eventToEncryptionInfoMap`
+                getEncryptionInfoForEvent: async (event: MatrixEvent) => eventToEncryptionInfoMap.get(event.getId()!)!,
             } as unknown as CryptoApi;
             client.getCrypto = () => mockCrypto;
         });
@@ -236,9 +229,9 @@ describe("EventTile", () => {
                 room: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
-                authenticated: true,
-                sender: UNTRUSTED_DEVICE,
-            } as IEncryptedEventInfo);
+                shieldColour: EventShieldColour.RED,
+                shieldReason: EventShieldReason.UNSIGNED_DEVICE,
+            } as EventEncryptionInfo);
 
             const { container } = getComponent();
             await act(flushPromises);
@@ -261,9 +254,9 @@ describe("EventTile", () => {
                 room: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
-                authenticated: true,
-                sender: TRUSTED_DEVICE,
-            } as IEncryptedEventInfo);
+                shieldColour: EventShieldColour.NONE,
+                shieldReason: null,
+            } as EventEncryptionInfo);
 
             const { container } = getComponent();
             await act(flushPromises);
@@ -275,6 +268,67 @@ describe("EventTile", () => {
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
         });
 
+        it.each([
+            [EventShieldReason.UNKNOWN, "Unknown error"],
+            [EventShieldReason.UNVERIFIED_IDENTITY, "unverified user"],
+            [EventShieldReason.UNSIGNED_DEVICE, "device not verified by its owner"],
+            [EventShieldReason.UNKNOWN_DEVICE, "unknown or deleted device"],
+            [EventShieldReason.AUTHENTICITY_NOT_GUARANTEED, "can't be guaranteed"],
+            [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
+        ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, expectedText: string) => {
+            mxEvent = await mkEncryptedEvent({
+                plainContent: { msgtype: "m.text", body: "msg1" },
+                plainType: "m.room.message",
+                user: "@alice:example.org",
+                room: room.roomId,
+            });
+            eventToEncryptionInfoMap.set(mxEvent.getId()!, {
+                shieldColour: EventShieldColour.GREY,
+                shieldReason: reasonCode,
+            } as EventEncryptionInfo);
+
+            const { container } = getComponent();
+            await act(flushPromises);
+
+            const e2eIcons = container.getElementsByClassName("mx_EventTile_e2eIcon");
+            expect(e2eIcons).toHaveLength(1);
+            expect(e2eIcons[0].classList).toContain("mx_EventTile_e2eIcon_normal");
+            expect(e2eIcons[0].getAttribute("aria-label")).toContain(expectedText);
+        });
+
+        describe("undecryptable event", () => {
+            filterConsole("Error decrypting event");
+
+            it("shows an undecryptable warning", async () => {
+                mxEvent = mkEvent({
+                    type: "m.room.encrypted",
+                    room: room.roomId,
+                    user: "@alice:example.org",
+                    event: true,
+                    content: {},
+                });
+
+                const mockCrypto = {
+                    decryptEvent: async (_ev): Promise<IEventDecryptionResult> => {
+                        throw new Error("can't decrypt");
+                    },
+                } as CryptoBackend;
+
+                await mxEvent.attemptDecryption(mockCrypto);
+
+                const { container } = getComponent();
+                await act(flushPromises);
+
+                const eventTiles = container.getElementsByClassName("mx_EventTile");
+                expect(eventTiles).toHaveLength(1);
+
+                expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
+                expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0].classList).toContain(
+                    "mx_EventTile_e2eIcon_decryption_failure",
+                );
+            });
+        });
+
         it("should update the warning when the event is edited", async () => {
             // we start out with an event from the trusted device
             mxEvent = await mkEncryptedEvent({
@@ -284,11 +338,13 @@ describe("EventTile", () => {
                 room: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
-                authenticated: true,
-                sender: TRUSTED_DEVICE,
-            } as IEncryptedEventInfo);
+                shieldColour: EventShieldColour.NONE,
+                shieldReason: null,
+            } as EventEncryptionInfo);
 
-            const { container } = getComponent();
+            const roomContext = getRoomContext(room, {});
+            const { container, rerender } = render(<WrappedEventTile roomContext={roomContext} />);
+
             await act(flushPromises);
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
@@ -305,13 +361,14 @@ describe("EventTile", () => {
                 room: room.roomId,
             });
             eventToEncryptionInfoMap.set(replacementEvent.getId()!, {
-                authenticated: true,
-                sender: UNTRUSTED_DEVICE,
-            } as IEncryptedEventInfo);
+                shieldColour: EventShieldColour.RED,
+                shieldReason: EventShieldReason.UNSIGNED_DEVICE,
+            } as EventEncryptionInfo);
 
             await act(async () => {
                 mxEvent.makeReplaced(replacementEvent);
-                flushPromises();
+                rerender(<WrappedEventTile roomContext={roomContext} />);
+                await flushPromises;
             });
 
             // check it was updated
@@ -331,12 +388,14 @@ describe("EventTile", () => {
                 user: "@alice:example.org",
                 room: room.roomId,
             });
-            eventToEncryptionInfoMap.set(mxEvent.getId()!, {
-                authenticated: true,
-                sender: TRUSTED_DEVICE,
-            } as IEncryptedEventInfo);
 
-            const { container } = getComponent();
+            eventToEncryptionInfoMap.set(mxEvent.getId()!, {
+                shieldColour: EventShieldColour.NONE,
+                shieldReason: null,
+            } as EventEncryptionInfo);
+
+            const roomContext = getRoomContext(room, {});
+            const { container, rerender } = render(<WrappedEventTile roomContext={roomContext} />);
             await act(flushPromises);
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
@@ -355,7 +414,8 @@ describe("EventTile", () => {
 
             await act(async () => {
                 mxEvent.makeReplaced(replacementEvent);
-                await flushPromises();
+                rerender(<WrappedEventTile roomContext={roomContext} />);
+                await flushPromises;
             });
 
             // check it was updated

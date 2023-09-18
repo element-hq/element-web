@@ -409,7 +409,7 @@ describe("Cryptography", function () {
                 .should("contain", "test encrypted from unverified")
                 .find(".mx_EventTile_e2eIcon", { timeout: 100000 })
                 .should("have.class", "mx_EventTile_e2eIcon_warning")
-                .should("have.attr", "aria-label", "Encrypted by an unverified session");
+                .should("have.attr", "aria-label", "Encrypted by an unverified user.");
 
             /* Should show a grey padlock for a message from an unknown device */
 
@@ -422,7 +422,7 @@ describe("Cryptography", function () {
                 .should("contain", "test encrypted from unverified")
                 .find(".mx_EventTile_e2eIcon")
                 .should("have.class", "mx_EventTile_e2eIcon_normal")
-                .should("have.attr", "aria-label", "Encrypted by a deleted session");
+                .should("have.attr", "aria-label", "Encrypted by an unknown or deleted device.");
         });
 
         it("Should show a grey padlock for a key restored from backup", () => {

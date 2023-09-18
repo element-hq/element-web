@@ -18,17 +18,17 @@ limitations under the License.
 import React, { createRef, forwardRef, MouseEvent, ReactNode, useRef } from "react";
 import classNames from "classnames";
 import {
-    EventType,
-    MsgType,
-    RelationType,
     EventStatus,
+    EventType,
     MatrixEvent,
     MatrixEventEvent,
-    RoomMember,
+    MsgType,
     NotificationCountType,
+    Relations,
+    RelationType,
     Room,
     RoomEvent,
-    Relations,
+    RoomMember,
     Thread,
     ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
@@ -36,6 +36,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
+import { EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -44,7 +45,6 @@ import { Layout } from "../../../settings/enums/Layout";
 import { formatTime } from "../../../DateUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { DecryptionFailureBody } from "../messages/DecryptionFailureBody";
-import { E2EState } from "./E2EIcon";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveRightOf } from "../../structures/ContextMenu";
@@ -236,8 +236,19 @@ export interface EventTileProps {
 interface IState {
     // Whether the action bar is focused.
     actionBarFocused: boolean;
-    // Whether the event's sender has been verified.
-    verified: string | null;
+
+    /**
+     * E2EE shield we should show for decryption problems.
+     *
+     * Note this will be `EventShieldColour.NONE` for all unencrypted events, **including those in encrypted rooms**.
+     */
+    shieldColour: EventShieldColour;
+
+    /**
+     * Reason code for the E2EE shield. `null` if `shieldColour` is `EventShieldColour.NONE`
+     */
+    shieldReason: EventShieldReason | null;
+
     // The Relations model from the JS SDK for reactions to `mxEvent`
     reactions?: Relations | null | undefined;
 
@@ -299,9 +310,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.state = {
             // Whether the action bar is focused.
             actionBarFocused: false,
-            // Whether the event's sender has been verified. `null` if no attempt has yet been made to verify
-            // (including if the event is not encrypted).
-            verified: null,
+
+            shieldColour: EventShieldColour.NONE,
+            shieldReason: null,
+
             // The Relations model from the JS SDK for reactions to `mxEvent`
             reactions: this.getReactions(),
 
@@ -437,8 +449,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
-        // If the verification state changed, the height might have changed
-        if (prevState.verified !== this.state.verified && this.props.onHeightChanged) {
+        // If the shield state changed, the height might have changed.
+        // XXX: does the shield *actually* cause a change in height? Not sure.
+        if (prevState.shieldColour !== this.state.shieldColour && this.props.onHeightChanged) {
             this.props.onHeightChanged();
         }
         // If we're not listening for receipts and expect to be, register a listener.
@@ -582,59 +595,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const mxEvent = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
 
         if (!mxEvent.isEncrypted() || mxEvent.isRedacted()) {
-            this.setState({ verified: null });
+            this.setState({ shieldColour: EventShieldColour.NONE, shieldReason: null });
             return;
         }
 
-        const encryptionInfo = MatrixClientPeg.safeGet().getEventEncryptionInfo(mxEvent);
-        const senderId = mxEvent.getSender();
-        if (!senderId) {
-            // something definitely wrong is going on here
-            this.setState({ verified: E2EState.Warning });
-            return;
-        }
-
-        const userTrust = MatrixClientPeg.safeGet().checkUserTrust(senderId);
-
-        if (encryptionInfo.mismatchedSender) {
-            // something definitely wrong is going on here
-            this.setState({ verified: E2EState.Warning });
-            return;
-        }
-
-        if (!userTrust.isCrossSigningVerified()) {
-            // If the message is unauthenticated, then display a grey
-            // shield, otherwise if the user isn't cross-signed then
-            // nothing's needed
-            this.setState({ verified: encryptionInfo.authenticated ? E2EState.Normal : E2EState.Unauthenticated });
-            return;
-        }
-
-        const eventSenderTrust =
-            senderId &&
-            encryptionInfo.sender &&
-            (await MatrixClientPeg.safeGet()
-                .getCrypto()
-                ?.getDeviceVerificationStatus(senderId, encryptionInfo.sender.deviceId));
-
+        const encryptionInfo =
+            (await MatrixClientPeg.safeGet().getCrypto()?.getEncryptionInfoForEvent(mxEvent)) ?? null;
         if (this.unmounted) return;
-
-        if (!eventSenderTrust) {
-            this.setState({ verified: E2EState.Unknown });
+        if (encryptionInfo === null) {
+            // likely a decryption error
+            this.setState({ shieldColour: EventShieldColour.NONE, shieldReason: null });
             return;
         }
 
-        if (!eventSenderTrust.isVerified()) {
-            this.setState({ verified: E2EState.Warning });
-            return;
-        }
-
-        if (!encryptionInfo.authenticated) {
-            this.setState({ verified: E2EState.Unauthenticated });
-            return;
-        }
-
-        this.setState({ verified: E2EState.Verified });
+        this.setState({ shieldColour: encryptionInfo.shieldColour, shieldReason: encryptionInfo.shieldReason });
     }
 
     private propsEqual(objA: EventTileProps, objB: EventTileProps): boolean {
@@ -751,18 +725,42 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             return <E2ePadlockDecryptionFailure />;
         }
 
-        // event is encrypted and not redacted, display padlock corresponding to whether or not it is verified
-        if (ev.isEncrypted() && !ev.isRedacted()) {
-            if (this.state.verified === E2EState.Normal) {
-                return null; // no icon if we've not even cross-signed the user
-            } else if (this.state.verified === E2EState.Verified) {
-                return null; // no icon for verified
-            } else if (this.state.verified === E2EState.Unauthenticated) {
-                return <E2ePadlockUnauthenticated />;
-            } else if (this.state.verified === E2EState.Unknown) {
-                return <E2ePadlockUnknown />;
+        if (this.state.shieldColour !== EventShieldColour.NONE) {
+            let shieldReasonMessage: string;
+            switch (this.state.shieldReason) {
+                case null:
+                case EventShieldReason.UNKNOWN:
+                    shieldReasonMessage = _t("Unknown error");
+                    break;
+
+                case EventShieldReason.UNVERIFIED_IDENTITY:
+                    shieldReasonMessage = _t("Encrypted by an unverified user.");
+                    break;
+
+                case EventShieldReason.UNSIGNED_DEVICE:
+                    shieldReasonMessage = _t("Encrypted by a device not verified by its owner.");
+                    break;
+
+                case EventShieldReason.UNKNOWN_DEVICE:
+                    shieldReasonMessage = _t("Encrypted by an unknown or deleted device.");
+                    break;
+
+                case EventShieldReason.AUTHENTICITY_NOT_GUARANTEED:
+                    shieldReasonMessage = _t(
+                        "The authenticity of this encrypted message can't be guaranteed on this device.",
+                    );
+                    break;
+
+                case EventShieldReason.MISMATCHED_SENDER_KEY:
+                    shieldReasonMessage = _t("Encrypted by an unverified session");
+                    break;
+            }
+
+            if (this.state.shieldColour === EventShieldColour.GREY) {
+                return <E2ePadlock icon={E2ePadlockIcon.Normal} title={shieldReasonMessage} />;
             } else {
-                return <E2ePadlockUnverified />;
+                // red, by elimination
+                return <E2ePadlock icon={E2ePadlockIcon.Warning} title={shieldReasonMessage} />;
             }
         }
 
@@ -781,8 +779,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             if (ev.isRedacted()) {
                 return null; // we expect this to be unencrypted
             }
-            // if the event is not encrypted, but it's an e2e room, show the open padlock
-            return <E2ePadlockUnencrypted />;
+            if (!ev.isEncrypted()) {
+                // if the event is not encrypted, but it's an e2e room, show a warning
+                return <E2ePadlockUnencrypted />;
+            }
         }
 
         // no padlock needed
@@ -1460,26 +1460,8 @@ const SafeEventTile = forwardRef<UnwrappedEventTile, EventTileProps>((props, ref
 });
 export default SafeEventTile;
 
-function E2ePadlockUnverified(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
-    return <E2ePadlock title={_t("Encrypted by an unverified session")} icon={E2ePadlockIcon.Warning} {...props} />;
-}
-
 function E2ePadlockUnencrypted(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
     return <E2ePadlock title={_t("Unencrypted")} icon={E2ePadlockIcon.Warning} {...props} />;
-}
-
-function E2ePadlockUnknown(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
-    return <E2ePadlock title={_t("Encrypted by a deleted session")} icon={E2ePadlockIcon.Normal} {...props} />;
-}
-
-function E2ePadlockUnauthenticated(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
-    return (
-        <E2ePadlock
-            title={_t("The authenticity of this encrypted message can't be guaranteed on this device.")}
-            icon={E2ePadlockIcon.Normal}
-            {...props}
-        />
-    );
 }
 
 function E2ePadlockDecryptionFailure(props: Omit<IE2ePadlockProps, "title" | "icon">): JSX.Element {
@@ -1493,8 +1475,13 @@ function E2ePadlockDecryptionFailure(props: Omit<IE2ePadlockProps, "title" | "ic
 }
 
 enum E2ePadlockIcon {
+    /** grey shield */
     Normal = "normal",
+
+    /** red shield with (!) */
     Warning = "warning",
+
+    /** key in grey circle */
     DecryptionFailure = "decryption_failure",
 }
 
