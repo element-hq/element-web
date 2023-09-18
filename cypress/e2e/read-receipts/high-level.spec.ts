@@ -1020,6 +1020,7 @@ describe("Read receipts", () => {
                 goTo(room2);
                 openThread("Msg1");
                 assertRead(room2);
+                backToThreadsList();
                 goTo(room1);
                 receiveMessages(room2, [editOf("Resp1", "Edit1")]);
                 assertUnread(room2, 1);
@@ -1112,17 +1113,20 @@ describe("Read receipts", () => {
                 assertUnread(room2, 2);
                 goTo(room2);
                 openThread("Msg1");
+                backToThreadsList();
                 assertRead(room2);
                 goTo(room1);
 
                 // When the thread root is edited
                 receiveMessages(room2, [editOf("Msg1", "Edit1")]);
 
-                // Then the room is unread but not the thread
+                // Then the room is unread
                 assertUnread(room2, 1);
+
+                // But the thread is read
                 goTo(room2);
                 assertRead(room2);
-                assertReadThread("Msg1");
+                assertReadThread("Edit1");
             });
             it("Reading an edit of a thread root makes the room read", () => {
                 // Given a fully-read thread exists
