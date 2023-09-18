@@ -48,8 +48,7 @@
     },
     "privacy_policy_url": "https://element.io/cookie-policy",
     "features": {
-        "feature_video_rooms": true,
-        "feature_new_room_decoration_ui": true
+        "feature_video_rooms": true
     },
     "element_call": {
         "url": "https://element-call-livekit.netlify.app"
