@@ -259,7 +259,6 @@ describe("Cryptography", function () {
     }
 
     it("creating a DM should work, being e2e-encrypted / user verification", function (this: CryptoTestContext) {
-        skipIfRustCrypto(); // needs working event shields
         cy.bootstrapCrossSigning(aliceCredentials);
         startDMWithBob.call(this);
         // send first message
@@ -325,8 +324,6 @@ describe("Cryptography", function () {
         });
 
         it("should show the correct shield on e2e events", function (this: CryptoTestContext) {
-            skipIfRustCrypto();
-
             // Bob has a second, not cross-signed, device
             let bobSecondDevice: MatrixClient;
             cy.loginBot(homeserver, bob.getUserId(), bob.__cypress_password, {}).then(async (data) => {
@@ -426,7 +423,7 @@ describe("Cryptography", function () {
         });
 
         it("Should show a grey padlock for a key restored from backup", () => {
-            skipIfRustCrypto();
+            skipIfRustCrypto(); // requires key backup (https://github.com/vector-im/element-web/issues/24828)
 
             enableKeyBackup();
 
@@ -460,8 +457,6 @@ describe("Cryptography", function () {
         });
 
         it("should show the correct shield on edited e2e events", function (this: CryptoTestContext) {
-            skipIfRustCrypto();
-
             // bob has a second, not cross-signed, device
             cy.loginBot(this.homeserver, this.bob.getUserId(), this.bob.__cypress_password, {}).as("bobSecondDevice");
 

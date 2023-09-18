@@ -589,7 +589,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.verifyEvent();
     };
 
-    private async verifyEvent(): Promise<void> {
+    private verifyEvent(): void {
+        this.doVerifyEvent().catch((e) => {
+            const event = this.props.mxEvent;
+            logger.error("Error getting encryption info on event", e, event);
+        });
+    }
+
+    private async doVerifyEvent(): Promise<void> {
         // if the event was edited, show the verification info for the edit, not
         // the original
         const mxEvent = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
