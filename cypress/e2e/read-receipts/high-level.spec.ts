@@ -431,6 +431,11 @@ describe("Read receipts", () => {
 
     function openThreadList() {
         cy.log("Open threads list");
+
+        // If we've just entered the room, the threads panel takes a while to decide
+        // whether it's open or not - wait here to give it a chance to settle.
+        cy.wait(200);
+
         cy.findByTestId("threadsButton", { log: false }).then(($button) => {
             if ($button?.attr("aria-current") !== "true") {
                 cy.findByTestId("threadsButton", { log: false }).click();
@@ -441,7 +446,8 @@ describe("Read receipts", () => {
             .should("exist")
             .then(($panel) => {
                 const $button = $panel.find('.mx_BaseCard_back[title="Threads"]');
-                // If the Threads back button is present then click it, the threads button can open either threads list or thread panel
+                // If the Threads back button is present then click it - the
+                // threads button can open either threads list or thread panel
                 if ($button.length) {
                     $button.trigger("click");
                 }
@@ -454,6 +460,7 @@ describe("Read receipts", () => {
     }
 
     function assertReadThread(rootMessage: string) {
+        cy.log("Assert thread read", rootMessage);
         return getThreadListTile(rootMessage).within(() => {
             cy.get(".mx_NotificationBadge", { log: false }).should("not.exist");
         });
@@ -1314,24 +1321,108 @@ describe("Read receipts", () => {
 
         describe("in threads", () => {
             it("A reaction to a threaded message does not make the room unread", () => {
+                // Given a thread exists and I have read it
                 goTo(room1);
                 assertRead(room2);
                 receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Reply1")]);
                 assertUnread(room2, 2);
-
                 goTo(room2);
                 openThread("Msg1");
                 assertRead(room2);
-
                 goTo(room1);
+
+                // When someone reacts to a thread message
                 receiveMessages(room2, [reactionTo("Reply1", "🪿")]);
 
+                // Then the room remains read
+                assertStillRead(room2);
+            });
+            // XXX: fails because the room is still "bold" even though the notification counts all disappear
+            it.skip("Marking a room as read after a reaction in a thread makes it read", () => {
+                // Given a thread exists with a reaction
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Reply1"), reactionTo("Reply1", "🪿")]);
+                assertUnread(room2, 2);
+
+                // When I mark the room as read
+                markAsRead(room2);
+
+                // Then it becomes read
                 assertRead(room2);
             });
-            it.skip("Marking a room as read after a reaction in a thread makes it read", () => {});
-            it.skip("Reacting to a thread message after marking as read makes the room unread", () => {});
-            it.skip("A room with a reaction to a threaded message is still unread after restart", () => {});
-            it.skip("A room where all reactions in threads are read is still read after restart", () => {});
+            // XXX: fails because the room is still "bold" even though the notification counts all disappear
+            it.skip("Reacting to a thread message after marking as read does not make the room unread", () => {
+                // Given a thread exists and I have marked it as read
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Reply1"), reactionTo("Reply1", "🪿")]);
+                assertUnread(room2, 2);
+                markAsRead(room2);
+                assertRead(room2);
+
+                // When someone reacts to a thread message
+                receiveMessages(room2, [reactionTo("Reply1", "🪿")]);
+
+                // Then the room remains read
+                assertStillRead(room2);
+            });
+            it.skip("A room with a reaction to a threaded message is still unread after restart", () => {
+                // Given a thread exists and I have read it
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, ["Msg1", threadedOff("Msg1", "Reply1")]);
+                assertUnread(room2, 2);
+                goTo(room2);
+                openThread("Msg1");
+                assertRead(room2);
+                goTo(room1);
+
+                // And someone reacted to it, which doesn't stop it being read
+                receiveMessages(room2, [reactionTo("Reply1", "🪿")]);
+                assertStillRead(room2);
+
+                // When I restart
+                saveAndReload();
+
+                // Then the room is still read
+                assertRead(room2);
+            });
+            it("A room where all reactions in threads are read is still read after restart", () => {
+                // Given multiple threads with reactions exist and are read
+                goTo(room1);
+                assertRead(room2);
+                receiveMessages(room2, [
+                    "Msg1",
+                    threadedOff("Msg1", "Reply1a"),
+                    reactionTo("Reply1a", "r"),
+                    "Msg2",
+                    threadedOff("Msg1", "Reply1b"),
+                    threadedOff("Msg2", "Reply2a"),
+                    reactionTo("Msg1", "e"),
+                    threadedOff("Msg2", "Reply2b"),
+                    reactionTo("Reply2a", "a"),
+                    reactionTo("Reply2b", "c"),
+                    reactionTo("Reply1b", "t"),
+                ]);
+                assertUnread(room2, 6);
+                goTo(room2);
+                openThread("Msg1");
+                assertReadThread("Msg1");
+                openThread("Msg2");
+                assertReadThread("Msg2");
+                assertRead(room2);
+                goTo(room1);
+
+                // When I restart
+                saveAndReload();
+
+                // Then the room is still read
+                assertRead(room2);
+                goTo(room2);
+                assertReadThread("Msg1");
+                assertReadThread("Msg2");
+            });
         });
 
         describe("thread roots", () => {
