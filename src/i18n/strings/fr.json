@@ -347,31 +347,6 @@
     "No backup found!": "Aucune sauvegarde n’a été trouvée !",
     "Failed to decrypt %(failedCount)s sessions!": "Le déchiffrement de %(failedCount)s sessions a échoué !",
     "Invalid homeserver discovery response": "Réponse de découverte du serveur d’accueil non valide",
-    "Use a few words, avoid common phrases": "Utilisez quelques mots, évitez les phrases courantes",
-    "No need for symbols, digits, or uppercase letters": "Il n'y a pas besoin de symbole, de chiffre ou de majuscule",
-    "Avoid repeated words and characters": "Évitez de répéter des mots et des caractères",
-    "Avoid sequences": "Évitez les séquences",
-    "Avoid recent years": "Évitez les années récentes",
-    "Avoid years that are associated with you": "Évitez les années qui ont un rapport avec vous",
-    "Avoid dates and years that are associated with you": "Évitez les dates et les années qui ont un rapport avec vous",
-    "Capitalization doesn't help very much": "Les majuscules n’aident pas vraiment",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Uniquement des majuscules, c’est presque aussi facile à deviner qu’uniquement des minuscules",
-    "Reversed words aren't much harder to guess": "Les mots inversés ne sont pas beaucoup plus difficiles à deviner",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Les substitutions prévisibles comme « @ » à la place de « a » ne sont pas très utiles",
-    "Add another word or two. Uncommon words are better.": "Ajoutez un ou deux mots. Les mots rares sont à privilégier.",
-    "Repeats like \"aaa\" are easy to guess": "Les répétitions comme « aaa » sont faciles à deviner",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Les répétitions comme « abcabcabc » ne sont pas beaucoup plus difficiles à deviner que « abc »",
-    "Sequences like abc or 6543 are easy to guess": "Les séquences comme abc ou 6543 sont faciles à deviner",
-    "Recent years are easy to guess": "Les années récentes sont faciles à deviner",
-    "Dates are often easy to guess": "Les dates sont généralement faciles à deviner",
-    "This is a top-10 common password": "Cela fait partie des 10 mots de passe les plus répandus",
-    "This is a top-100 common password": "Cela fait partie des 100 mots de passe les plus répandus",
-    "This is a very common password": "C’est un mot de passe très répandu",
-    "This is similar to a commonly used password": "Cela ressemble à un mot de passe répandu",
-    "A word by itself is easy to guess": "Un mot seul est facile à deviner",
-    "Names and surnames by themselves are easy to guess": "Les noms et prénoms seuls sont faciles à deviner",
-    "Common names and surnames are easy to guess": "Les noms et prénoms répandus sont faciles à deviner",
-    "Use a longer keyboard pattern with more turns": "Utilisez un schéma plus long et avec plus de variations",
     "You do not have permission to invite people to this room.": "Vous n’avez pas la permission d’inviter des personnes dans ce salon.",
     "Unknown server error": "Erreur de serveur inconnue",
     "Set up": "Configurer",
@@ -381,8 +356,6 @@
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Si vous n’avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres.",
     "Set up Secure Messages": "Configurer les messages sécurisés",
     "Go to Settings": "Aller aux paramètres",
-    "Straight rows of keys are easy to guess": "Les suites de touches sont faciles à deviner",
-    "Short keyboard patterns are easy to guess": "Les répétitions de motif court sur un clavier sont faciles à deviner",
     "Unable to load commit detail: %(msg)s": "Impossible de charger les détails de l’envoi : %(msg)s",
     "Unrecognised address": "Adresse non reconnue",
     "The following users may not exist": "Les utilisateurs suivants pourraient ne pas exister",
@@ -2563,11 +2536,11 @@
         "integration_manager": "Gestionnaire d’intégration",
         "qr_code": "QR code",
         "feedback": "Commentaire",
-        "all_rooms": "Tous les salons",
-        "orphan_rooms": "Autres salons",
         "preview_message": "Hé vous. Vous êtes le meilleur !",
+        "orphan_rooms": "Autres salons",
         "on": "Activé",
-        "off": "Désactivé"
+        "off": "Désactivé",
+        "all_rooms": "Tous les salons"
     },
     "action": {
         "continue": "Continuer",
@@ -2668,8 +2641,8 @@
         "submit": "Soumettre",
         "send_report": "Envoyer le signalement",
         "clear": "Effacer",
-        "enter_fullscreen": "Afficher en plein écran",
-        "exit_fullscreeen": "Quitter le plein écran"
+        "exit_fullscreeen": "Quitter le plein écran",
+        "enter_fullscreen": "Afficher en plein écran"
     },
     "a11y": {
         "user_menu": "Menu utilisateur",
@@ -2746,11 +2719,11 @@
         "notification_settings_beta_title": "Paramètres de notification",
         "voice_broadcast_force_small_chunks": "Forcer la diffusion audio à utiliser des morceaux de 15s",
         "oidc_native_flow": "Active le nouveau processus OIDC natif (en cours de développement)",
-        "automatic_debug_logs": "Envoyer automatiquement les journaux de débogage en cas d’erreur",
-        "automatic_debug_logs_decryption": "Envoyer automatiquement les journaux de débogage en cas d’erreurs de déchiffrement",
-        "automatic_debug_logs_key_backup": "Envoyer automatiquement les journaux de débogage lorsque la sauvegarde des clés ne fonctionne pas",
+        "sliding_sync_disabled_notice": "Déconnectez et revenez pour désactiver",
         "rust_crypto_disabled_notice": "Ne peut pour l’instant être activé que dans config.json",
-        "sliding_sync_disabled_notice": "Déconnectez et revenez pour désactiver"
+        "automatic_debug_logs_key_backup": "Envoyer automatiquement les journaux de débogage lorsque la sauvegarde des clés ne fonctionne pas",
+        "automatic_debug_logs_decryption": "Envoyer automatiquement les journaux de débogage en cas d’erreurs de déchiffrement",
+        "automatic_debug_logs": "Envoyer automatiquement les journaux de débogage en cas d’erreur"
     },
     "keyboard": {
         "home": "Accueil",
@@ -3040,15 +3013,26 @@
             "timeline_image_size": "Taille d’image dans l’historique",
             "timeline_image_size_default": "Par défaut",
             "timeline_image_size_large": "Grande",
-            "custom_font_size": "Utiliser une taille personnalisée",
+            "image_size_large": "Grande",
+            "image_size_default": "Par défaut",
+            "font_size_valid": "Utiliser entre %(min)s pt et %(max)s pt",
             "font_size_nan": "La taille doit être un nombre",
             "font_size_limit": "La taille de police personnalisée doit être comprise entre %(min)s pt et %(max)s pt",
-            "font_size_valid": "Utiliser entre %(min)s pt et %(max)s pt",
-            "image_size_default": "Par défaut",
-            "image_size_large": "Grande"
+            "custom_font_size": "Utiliser une taille personnalisée"
         },
         "inline_url_previews_room_account": "Activer l’aperçu des URL pour ce salon (n’affecte que vous)",
         "inline_url_previews_room": "Activer l’aperçu des URL par défaut pour les participants de ce salon",
+        "voip": {
+            "mirror_local_feed": "Inverser horizontalement la vidéo locale (effet miroir)",
+            "allow_p2p": "Autoriser le pair-à-pair pour les appels en face à face",
+            "allow_p2p_description": "Si activé, l’interlocuteur peut être capable de voir votre adresse IP",
+            "auto_gain_control": "Contrôle automatique du gain",
+            "echo_cancellation": "Annulation d’écho",
+            "noise_suppression": "Suppression du bruit",
+            "enable_fallback_ice_server": "Autoriser le serveur de secours d’assistance d’appel (%(server)s)",
+            "enable_fallback_ice_server_description": "Concerne seulement les serveurs d’accueil qui n’en proposent pas. Votre adresse IP pourrait être diffusée pendant un appel."
+        },
+        "send_read_receipts_unsupported": "Votre serveur ne supporte pas la désactivation de l’envoi des accusés de réception.",
         "security": {
             "message_search_disable_warning": "Si l’option est désactivée, les messages des salons chiffrés n’apparaîtront pas dans les résultats de recherche.",
             "message_search_indexing_idle": "N’indexe aucun message en ce moment.",
@@ -3086,17 +3070,6 @@
             "always_show_menu_bar": "Toujours afficher la barre de menu de la fenêtre",
             "enable_tray_icon": "Afficher l’icône dans la barre d’état et minimiser la fenêtre lors de la fermeture",
             "enable_hardware_acceleration": "Activer l’accélération matérielle"
-        },
-        "send_read_receipts_unsupported": "Votre serveur ne supporte pas la désactivation de l’envoi des accusés de réception.",
-        "voip": {
-            "mirror_local_feed": "Inverser horizontalement la vidéo locale (effet miroir)",
-            "allow_p2p": "Autoriser le pair-à-pair pour les appels en face à face",
-            "allow_p2p_description": "Si activé, l’interlocuteur peut être capable de voir votre adresse IP",
-            "auto_gain_control": "Contrôle automatique du gain",
-            "echo_cancellation": "Annulation d’écho",
-            "noise_suppression": "Suppression du bruit",
-            "enable_fallback_ice_server": "Autoriser le serveur de secours d’assistance d’appel (%(server)s)",
-            "enable_fallback_ice_server_description": "Concerne seulement les serveurs d’accueil qui n’en proposent pas. Votre adresse IP pourrait être diffusée pendant un appel."
         },
         "keyboard": {
             "title": "Clavier"
@@ -3195,11 +3168,11 @@
         "category_room": "Salon",
         "category_other": "Autre",
         "widget_screenshots": "Activer les captures d’écran pour les widgets pris en charge",
+        "title": "Outils de développement",
         "show_hidden_events": "Afficher les évènements cachés dans le fil de discussion",
-        "low_bandwidth_mode": "Mode faible bande passante",
         "low_bandwidth_mode_description": "Nécessite un serveur d’accueil compatible.",
-        "developer_mode": "Mode développeur",
-        "title": "Outils de développement"
+        "low_bandwidth_mode": "Mode faible bande passante",
+        "developer_mode": "Mode développeur"
     },
     "export_chat": {
         "html": "HTML",
@@ -3579,22 +3552,22 @@
         "no_permission_messages_before_join": "Vous n’avez pas l’autorisation de voir les messages antérieurs à votre arrivée.",
         "encrypted_historical_messages_unavailable": "Les messages chiffrés avant ce point sont inaccessibles.",
         "historical_messages_unavailable": "Vous ne pouvez pas voir les messages plus anciens",
-        "io.element.voice_broadcast_info": {
-            "you": "Vous avez terminé une <a>diffusion audio</a>",
-            "user": "%(senderName)s a terminé une <a>diffusion audio</a>"
+        "redacted": {
+            "tooltip": "Message supprimé le %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s ont réagi avec %(content)s",
             "tooltip": "<reactors/><reactedWith>ont réagi avec %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Message supprimé le %(date)s"
         },
         "m.room.create": {
             "continuation": "Ce salon est la suite d’une autre discussion.",
             "unknown_predecessor_guess_server": "L’ancienne version de ce salon (identifiant : %(roomId)s) est introuvable, et 'via_servers' ne nous a pas été fourni pour le trouver. Il est possible que déduire le serveur à partir de l’identifiant de salon puisse marcher. Si vous voulez essayer, cliquez sur ce lien :",
             "unknown_predecessor": "L’ancienne version de ce salon (identifiant : %(roomId)s) est introuvable, et 'via_servers' ne nous a pas été fourni pour le trouver.",
             "see_older_messages": "Cliquer ici pour voir les anciens messages."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Vous avez terminé une <a>diffusion audio</a>",
+            "user": "%(senderName)s a terminé une <a>diffusion audio</a>"
         }
     },
     "slash_command": {
@@ -3664,14 +3637,14 @@
         "failed_find_user": "Impossible de trouver l’utilisateur dans le salon",
         "op": "Définir le rang d’un utilisateur",
         "deop": "Retire le rang d’opérateur d’un utilisateur à partir de son identifiant",
-        "server_error": "Erreur du serveur",
-        "command_error": "Erreur de commande",
-        "server_error_detail": "Le serveur semble être inaccessible, surchargé ou quelque chose s’est mal passé.",
-        "unknown_command": "Commande inconnue",
-        "unknown_command_detail": "Commande non reconnue : %(commandText)s",
-        "unknown_command_help": "Vous pouvez utiliser <code>/help</code> pour obtenir la liste des commandes disponibles. Vouliez-vous envoyer un message ?",
         "unknown_command_hint": "Astuce : Votre message doit démarrer par <code>//</code> pour commencer par une barre oblique.",
-        "unknown_command_button": "Envoyer comme message"
+        "unknown_command_help": "Vous pouvez utiliser <code>/help</code> pour obtenir la liste des commandes disponibles. Vouliez-vous envoyer un message ?",
+        "unknown_command_detail": "Commande non reconnue : %(commandText)s",
+        "unknown_command_button": "Envoyer comme message",
+        "unknown_command": "Commande inconnue",
+        "server_error_detail": "Le serveur semble être inaccessible, surchargé ou quelque chose s’est mal passé.",
+        "server_error": "Erreur du serveur",
+        "command_error": "Erreur de commande"
     },
     "presence": {
         "busy": "Occupé",
@@ -3917,8 +3890,8 @@
         "server_picker_custom": "Autre serveur d’accueil",
         "server_picker_explainer": "Utilisez votre serveur d’accueil Matrix préféré si vous en avez un, ou hébergez le vôtre.",
         "server_picker_learn_more": "À propos des serveurs d’accueil",
-        "account_deactivated": "Ce compte a été désactivé.",
-        "incorrect_credentials": "Nom d’utilisateur et/ou mot de passe incorrect."
+        "incorrect_credentials": "Nom d’utilisateur et/ou mot de passe incorrect.",
+        "account_deactivated": "Ce compte a été désactivé."
     },
     "room_list": {
         "sort_unread_first": "Afficher les salons non lus en premier",
@@ -4049,6 +4022,110 @@
         "existing_issue_link": "Merci de regarder d’abord les <existingIssuesLink>bugs déjà répertoriés sur Github</existingIssuesLink>. Pas de résultat ? <newIssueLink>Rapportez un nouveau bug</newIssueLink>.",
         "send_feedback_action": "Envoyer un commentaire"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Utilisez quelques mots, évitez les phrases courantes",
+            "noNeed": "Il n'y a pas besoin de symbole, de chiffre ou de majuscule",
+            "longerKeyboardPattern": "Utilisez un schéma plus long et avec plus de variations",
+            "repeated": "Évitez de répéter des mots et des caractères",
+            "sequences": "Évitez les séquences",
+            "recentYears": "Évitez les années récentes",
+            "associatedYears": "Évitez les années qui ont un rapport avec vous",
+            "dates": "Évitez les dates et les années qui ont un rapport avec vous",
+            "capitalization": "Les majuscules n’aident pas vraiment",
+            "allUppercase": "Uniquement des majuscules, c’est presque aussi facile à deviner qu’uniquement des minuscules",
+            "reverseWords": "Les mots inversés ne sont pas beaucoup plus difficiles à deviner",
+            "l33t": "Les substitutions prévisibles comme « @ » à la place de « a » ne sont pas très utiles",
+            "anotherWord": "Ajoutez un ou deux mots. Les mots rares sont à privilégier."
+        },
+        "warnings": {
+            "simpleRepeat": "Les répétitions comme « aaa » sont faciles à deviner",
+            "extendedRepeat": "Les répétitions comme « abcabcabc » ne sont pas beaucoup plus difficiles à deviner que « abc »",
+            "sequences": "Les séquences comme abc ou 6543 sont faciles à deviner",
+            "recentYears": "Les années récentes sont faciles à deviner",
+            "dates": "Les dates sont généralement faciles à deviner",
+            "topTen": "Cela fait partie des 10 mots de passe les plus répandus",
+            "topHundred": "Cela fait partie des 100 mots de passe les plus répandus",
+            "common": "C’est un mot de passe très répandu",
+            "similarToCommon": "Cela ressemble à un mot de passe répandu",
+            "wordByItself": "Un mot seul est facile à deviner",
+            "namesByThemselves": "Les noms et prénoms seuls sont faciles à deviner",
+            "commonNames": "Les noms et prénoms répandus sont faciles à deviner",
+            "straightRow": "Les suites de touches sont faciles à deviner",
+            "keyPattern": "Les répétitions de motif court sur un clavier sont faciles à deviner"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Impossible de commencer une nouvelle diffusion audio",
+        "failed_insufficient_permission_title": "Impossible de commencer une nouvelle diffusion audio",
+        "failed_others_already_recording_title": "Impossible de commencer une nouvelle diffusion audio",
+        "failed_already_recording_description": "Vous êtes déjà en train de réaliser une diffusion audio. Veuillez terminer votre diffusion audio actuelle pour en démarrer une nouvelle.",
+        "failed_insufficient_permission_description": "Vous n’avez pas les permissions requises pour démarrer une nouvelle diffusion audio dans ce salon. Contactez un administrateur du salon pour mettre-à-jour vos permissions.",
+        "failed_others_already_recording_description": "Une autre personne est déjà en train de réaliser une diffusion audio. Attendez que sa diffusion audio soit terminée pour en démarrer une nouvelle.",
+        "failed_no_connection_title": "Erreur de connexion",
+        "failed_no_connection_description": "Malheureusement, nous ne pouvons pas démarrer l’enregistrement pour le moment. Veuillez réessayer plus tard.",
+        "failed_decrypt": "Impossible de décrypter la diffusion audio",
+        "failed_generic": "Impossible de lire cette diffusion audio",
+        "confirm_stop_title": "Arrêter la diffusion en direct ?",
+        "confirm_stop_description": "Êtes-vous sûr de vouloir arrêter votre diffusion en direct ? Cela terminera la diffusion et l’enregistrement complet sera disponible dans le salon.",
+        "confirm_stop_affirm": "Oui, arrêter la diffusion",
+        "confirm_listen_title": "Écouter la diffusion en direct ?",
+        "confirm_listen_description": "En commençant à écouter cette diffusion en direct, votre enregistrement de diffusion en direct actuel sera interrompu.",
+        "confirm_listen_affirm": "Oui, terminer mon enregistrement",
+        "30s_backward": "30s en arrière",
+        "30s_forward": "30s en avant",
+        "go_live": "Passer en direct",
+        "resume": "continuer la diffusion audio",
+        "pause": "mettre en pause la diffusion audio",
+        "buffering": "Mise en mémoire tampon…",
+        "play": "lire la diffusion audio",
+        "connection_error": "Erreur de connexion – Enregistrement en pause"
+    },
+    "update": {
+        "see_changes_button": "Nouveautés",
+        "release_notes_toast_title": "Nouveautés",
+        "toast_title": "Mettre à jour %(brand)s",
+        "toast_description": "Nouvelle version de %(brand)s disponible"
+    },
+    "threads": {
+        "all_threads": "Tous les fils de discussion",
+        "all_threads_description": "Affiche tous les fils de discussion du salon actuel",
+        "my_threads": "Mes fils de discussion",
+        "my_threads_description": "Affiche tous les fils de discussion auxquels vous avez participé",
+        "show_thread_filter": "Affiche :",
+        "empty_has_threads_tip": "Répondez à un fil de discussion en cours ou utilisez \"%(replyInThread)s\" lorsque vous passez la souris sur un message pour en commencer un nouveau.",
+        "show_all_threads": "Afficher tous les fils de discussion",
+        "empty_explainer": "Les fils de discussion vous permettent de recentrer vos conversations et de les rendre facile à suivre.",
+        "empty_tip": "<b>Conseil :</b> Utilisez « %(replyInThread)s » en survolant un message.",
+        "empty_heading": "Garde les discussions organisées à l’aide de fils de discussion"
+    },
+    "theme": {
+        "light_high_contrast": "Contraste élevé clair"
+    },
+    "space": {
+        "landing_welcome": "Bienvenue dans <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Ce serveur d’accueil n’est pas configuré pour afficher des cartes.",
+        "WebGLNotEnabled": "WebGL est nécessaire pour afficher les cartes, veuillez l’activer dans les paramètres de votre navigateur.",
+        "MapStyleUrlNotReachable": "Ce serveur d’accueil n’est pas configuré correctement pour afficher des cartes, ou bien le serveur de carte configuré est peut-être injoignable.",
+        "toggle_attribution": "Changer l’attribution",
+        "map_feedback": "Remarques sur la carte",
+        "find_my_location": "Trouver ma position",
+        "location_not_available": "Position non disponible",
+        "mapbox_logo": "Logo de Mapbox",
+        "reset_bearing": "Repositionner vers le nord",
+        "failed_permission": "%(brand)s n’a pas obtenu la permission de récupérer votre position. Veuillez autoriser l’accès à votre position dans les paramètres du navigateur.",
+        "failed_generic": "Impossible de récupérer votre position. Veuillez réessayer plus tard.",
+        "failed_timeout": "Délai d’attente expiré en essayant de récupérer votre position. Veuillez réessayer plus tard.",
+        "failed_unknown": "Erreur inconnue en récupérant votre position. Veuillez réessayer plus tard.",
+        "expand_map": "Étendre la carte",
+        "failed_load_map": "Impossible de charger la carte"
+    },
+    "labs_mjolnir": {
+        "room_name": "Ma liste de bannissement",
+        "room_topic": "C’est la liste des utilisateurs/serveurs que vous avez bloqués − ne quittez pas le salon !"
+    },
     "create_space": {
         "name_required": "Veuillez renseigner un nom pour l’espace",
         "name_placeholder": "par ex. mon-espace",
@@ -4083,76 +4160,5 @@
         "setup_rooms_description": "Vous pourrez en ajouter plus tard, y compris certains déjà existant.",
         "setup_rooms_private_heading": "Sur quels projets travaille votre équipe ?",
         "setup_rooms_private_description": "Nous allons créer un salon pour chacun d’entre eux."
-    },
-    "space": {
-        "landing_welcome": "Bienvenue dans <name/>"
-    },
-    "threads": {
-        "all_threads": "Tous les fils de discussion",
-        "all_threads_description": "Affiche tous les fils de discussion du salon actuel",
-        "my_threads": "Mes fils de discussion",
-        "my_threads_description": "Affiche tous les fils de discussion auxquels vous avez participé",
-        "show_thread_filter": "Affiche :",
-        "empty_has_threads_tip": "Répondez à un fil de discussion en cours ou utilisez \"%(replyInThread)s\" lorsque vous passez la souris sur un message pour en commencer un nouveau.",
-        "show_all_threads": "Afficher tous les fils de discussion",
-        "empty_explainer": "Les fils de discussion vous permettent de recentrer vos conversations et de les rendre facile à suivre.",
-        "empty_tip": "<b>Conseil :</b> Utilisez « %(replyInThread)s » en survolant un message.",
-        "empty_heading": "Garde les discussions organisées à l’aide de fils de discussion"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Ce serveur d’accueil n’est pas configuré pour afficher des cartes.",
-        "WebGLNotEnabled": "WebGL est nécessaire pour afficher les cartes, veuillez l’activer dans les paramètres de votre navigateur.",
-        "MapStyleUrlNotReachable": "Ce serveur d’accueil n’est pas configuré correctement pour afficher des cartes, ou bien le serveur de carte configuré est peut-être injoignable.",
-        "toggle_attribution": "Changer l’attribution",
-        "map_feedback": "Remarques sur la carte",
-        "find_my_location": "Trouver ma position",
-        "location_not_available": "Position non disponible",
-        "mapbox_logo": "Logo de Mapbox",
-        "reset_bearing": "Repositionner vers le nord",
-        "failed_permission": "%(brand)s n’a pas obtenu la permission de récupérer votre position. Veuillez autoriser l’accès à votre position dans les paramètres du navigateur.",
-        "failed_generic": "Impossible de récupérer votre position. Veuillez réessayer plus tard.",
-        "failed_timeout": "Délai d’attente expiré en essayant de récupérer votre position. Veuillez réessayer plus tard.",
-        "failed_unknown": "Erreur inconnue en récupérant votre position. Veuillez réessayer plus tard.",
-        "expand_map": "Étendre la carte",
-        "failed_load_map": "Impossible de charger la carte"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Impossible de commencer une nouvelle diffusion audio",
-        "failed_insufficient_permission_title": "Impossible de commencer une nouvelle diffusion audio",
-        "failed_others_already_recording_title": "Impossible de commencer une nouvelle diffusion audio",
-        "failed_already_recording_description": "Vous êtes déjà en train de réaliser une diffusion audio. Veuillez terminer votre diffusion audio actuelle pour en démarrer une nouvelle.",
-        "failed_insufficient_permission_description": "Vous n’avez pas les permissions requises pour démarrer une nouvelle diffusion audio dans ce salon. Contactez un administrateur du salon pour mettre-à-jour vos permissions.",
-        "failed_others_already_recording_description": "Une autre personne est déjà en train de réaliser une diffusion audio. Attendez que sa diffusion audio soit terminée pour en démarrer une nouvelle.",
-        "failed_no_connection_title": "Erreur de connexion",
-        "failed_no_connection_description": "Malheureusement, nous ne pouvons pas démarrer l’enregistrement pour le moment. Veuillez réessayer plus tard.",
-        "failed_decrypt": "Impossible de décrypter la diffusion audio",
-        "failed_generic": "Impossible de lire cette diffusion audio",
-        "confirm_stop_title": "Arrêter la diffusion en direct ?",
-        "confirm_stop_description": "Êtes-vous sûr de vouloir arrêter votre diffusion en direct ? Cela terminera la diffusion et l’enregistrement complet sera disponible dans le salon.",
-        "confirm_stop_affirm": "Oui, arrêter la diffusion",
-        "confirm_listen_title": "Écouter la diffusion en direct ?",
-        "confirm_listen_description": "En commençant à écouter cette diffusion en direct, votre enregistrement de diffusion en direct actuel sera interrompu.",
-        "confirm_listen_affirm": "Oui, terminer mon enregistrement",
-        "30s_backward": "30s en arrière",
-        "30s_forward": "30s en avant",
-        "go_live": "Passer en direct",
-        "resume": "continuer la diffusion audio",
-        "pause": "mettre en pause la diffusion audio",
-        "buffering": "Mise en mémoire tampon…",
-        "play": "lire la diffusion audio",
-        "connection_error": "Erreur de connexion – Enregistrement en pause"
-    },
-    "labs_mjolnir": {
-        "room_name": "Ma liste de bannissement",
-        "room_topic": "C’est la liste des utilisateurs/serveurs que vous avez bloqués − ne quittez pas le salon !"
-    },
-    "theme": {
-        "light_high_contrast": "Contraste élevé clair"
-    },
-    "update": {
-        "see_changes_button": "Nouveautés",
-        "release_notes_toast_title": "Nouveautés",
-        "toast_title": "Mettre à jour %(brand)s",
-        "toast_description": "Nouvelle version de %(brand)s disponible"
     }
 }

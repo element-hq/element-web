@@ -89,7 +89,6 @@
     "Reason": "Årsak",
     "Add Email Address": "Legg til E-postadresse",
     "Add Phone Number": "Legg til telefonnummer",
-    "This is a very common password": "Dette er et veldig vanlig passord",
     "Dog": "Hund",
     "Cat": "Katt",
     "Horse": "Hest",
@@ -411,8 +410,6 @@
     "Import room keys": "Importer romnøkler",
     "Go to Settings": "Gå til Innstillinger",
     "Enter passphrase": "Skriv inn passordfrase",
-    "Avoid sequences": "Unngå sekvenser",
-    "Avoid recent years": "Unngå nylige år",
     "Cancelling…": "Avbryter …",
     "in memory": "i minnet",
     "Delete Backup": "Slett sikkerhetskopien",
@@ -464,10 +461,6 @@
     "Not a valid %(brand)s keyfile": "Ikke en gyldig %(brand)s-nøkkelfil",
     "Unrecognised address": "Adressen ble ikke gjenkjent",
     "Unknown server error": "Ukjent tjenerfeil",
-    "Recent years are easy to guess": "Nylige år er lette å gjette",
-    "Dates are often easy to guess": "Datoer er ofte lette å gjette",
-    "This is a top-10 common password": "Dette er et topp-10 vanlig passord",
-    "This is a top-100 common password": "Dette er et topp-100 vanlig passord",
     "Aeroplane": "Fly",
     "No display name": "Ingen visningsnavn",
     "New passwords don't match": "De nye passordene samsvarer ikke",
@@ -529,7 +522,6 @@
     "Use a different passphrase?": "Vil du bruke en annen passfrase?",
     "Jump to read receipt": "Hopp til lesekvitteringen",
     "Verify your other session using one of the options below.": "Verifiser den andre økten din med en av metodene nedenfor.",
-    "Use a few words, avoid common phrases": "Bruk noen få ord, unngå vanlig fraser",
     "Ok": "OK",
     "Encryption upgrade available": "Krypteringsoppdatering tilgjengelig",
     "Santa": "Julenisse",
@@ -773,14 +765,6 @@
     "Enable desktop notifications": "Aktiver skrivebordsvarsler",
     "Don't miss a reply": "Ikke gå glipp av noen svar",
     "Unknown App": "Ukjent app",
-    "Short keyboard patterns are easy to guess": "Korte tastatur mønstre er lett å gjette",
-    "This is similar to a commonly used password": "Dette ligner på et passord som er brukt mye",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Forutsigbar erstatninger som ‘ @‘ istedet for ‘a’ hjelper ikke mye",
-    "Reversed words aren't much harder to guess": "Ord som er skrevet baklengs er vanskeligere å huske.",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Bare store bokstaver er nesten like enkelt å gjette som bare små bokstaver",
-    "Capitalization doesn't help very much": "Store bokstaver er ikke spesielt nyttig",
-    "Use a longer keyboard pattern with more turns": "Bruke et lengre og mer uventet tastatur mønster",
-    "No need for symbols, digits, or uppercase letters": "Ikke nødvendig med symboler, sifre eller bokstaver",
     "Zimbabwe": "Zimbabwe",
     "Yemen": "Jemen",
     "Zambia": "Zambia",
@@ -1074,10 +1058,10 @@
         "integration_manager": "Integreringsbehandler",
         "qr_code": "QR-kode",
         "feedback": "Tilbakemelding",
-        "all_rooms": "Alle rom",
         "preview_message": "Hei der. Du er fantastisk!",
         "on": "På",
-        "off": "Av"
+        "off": "Av",
+        "all_rooms": "Alle rom"
     },
     "action": {
         "continue": "Fortsett",
@@ -1300,12 +1284,15 @@
             "custom_theme_add_button": "Legg til tema",
             "font_size": "Skriftstørrelse",
             "timeline_image_size_default": "Standard",
-            "custom_font_size": "Bruk tilpasset størrelse",
+            "image_size_default": "Standard",
             "font_size_nan": "Størrelsen må være et nummer",
-            "image_size_default": "Standard"
+            "custom_font_size": "Bruk tilpasset størrelse"
         },
         "inline_url_previews_room_account": "Skru på URL-forhåndsvisninger for dette rommet (Påvirker bare deg)",
         "inline_url_previews_room": "Skru på URL-forhåndsvisninger som standard for deltakerne i dette rommet",
+        "voip": {
+            "mirror_local_feed": "Speil den lokale videostrømmen"
+        },
         "security": {
             "message_search_space_used": "Plass brukt:",
             "message_search_indexed_messages": "Indekserte meldinger:",
@@ -1321,9 +1308,6 @@
             "autocomplete_delay": "Autofullføringsforsinkelse (ms)",
             "rm_lifetime": "Lesemarkørens visningstid (ms)",
             "rm_lifetime_offscreen": "Lesemarkørens visningstid utenfor skjermen (ms)"
-        },
-        "voip": {
-            "mirror_local_feed": "Speil den lokale videostrømmen"
         }
     },
     "devtools": {
@@ -1501,11 +1485,11 @@
         "m.room.power_levels": {
             "user_from_to": "%(userId)s gikk fra %(fromPowerLevel)s til %(toPowerLevel)s"
         },
-        "reactions": {
-            "tooltip": "<reactors/><reactedWith> reagerte med %(shortName)s</reactedWith>"
-        },
         "redacted": {
             "tooltip": "Meldingen ble slettet den %(date)s"
+        },
+        "reactions": {
+            "tooltip": "<reactors/><reactedWith> reagerte med %(shortName)s</reactedWith>"
         },
         "m.room.create": {
             "see_older_messages": "Klikk for å se eldre meldinger."
@@ -1545,10 +1529,10 @@
         "failed_find_user": "Klarte ikke å finne brukeren i rommet",
         "op": "Definer tilgangnivå til en bruker",
         "deop": "Fjerner OP nivå til bruker med gitt ID",
-        "server_error": "Serverfeil",
-        "command_error": "Kommandofeil",
+        "unknown_command_button": "Send som en melding",
         "unknown_command": "Ukjent kommando",
-        "unknown_command_button": "Send som en melding"
+        "server_error": "Serverfeil",
+        "command_error": "Kommandofeil"
     },
     "presence": {
         "online_for": "På nett i %(duration)s",
@@ -1657,8 +1641,8 @@
         "register_action": "Opprett konto",
         "server_picker_invalid_url": "Ugyldig URL",
         "server_picker_learn_more": "Om hjemmetjenere",
-        "account_deactivated": "Denne kontoen har blitt deaktivert.",
-        "incorrect_credentials": "Feil brukernavn og/eller passord."
+        "incorrect_credentials": "Feil brukernavn og/eller passord.",
+        "account_deactivated": "Denne kontoen har blitt deaktivert."
     },
     "room_list": {
         "show_previews": "Vis forhåndsvisninger av meldinger",
@@ -1703,6 +1687,39 @@
     "feedback": {
         "comment_label": "Kommentar"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Bruk noen få ord, unngå vanlig fraser",
+            "noNeed": "Ikke nødvendig med symboler, sifre eller bokstaver",
+            "longerKeyboardPattern": "Bruke et lengre og mer uventet tastatur mønster",
+            "sequences": "Unngå sekvenser",
+            "recentYears": "Unngå nylige år",
+            "capitalization": "Store bokstaver er ikke spesielt nyttig",
+            "allUppercase": "Bare store bokstaver er nesten like enkelt å gjette som bare små bokstaver",
+            "reverseWords": "Ord som er skrevet baklengs er vanskeligere å huske.",
+            "l33t": "Forutsigbar erstatninger som ‘ @‘ istedet for ‘a’ hjelper ikke mye"
+        },
+        "warnings": {
+            "recentYears": "Nylige år er lette å gjette",
+            "dates": "Datoer er ofte lette å gjette",
+            "topTen": "Dette er et topp-10 vanlig passord",
+            "topHundred": "Dette er et topp-100 vanlig passord",
+            "common": "Dette er et veldig vanlig passord",
+            "similarToCommon": "Dette ligner på et passord som er brukt mye",
+            "keyPattern": "Korte tastatur mønstre er lett å gjette"
+        }
+    },
+    "update": {
+        "see_changes_button": "Hva er nytt?",
+        "release_notes_toast_title": "Hva er nytt",
+        "toast_title": "Oppdater %(brand)s"
+    },
+    "threads": {
+        "show_thread_filter": "Vis:"
+    },
+    "labs_mjolnir": {
+        "room_name": "Min bannlysningsliste"
+    },
     "create_space": {
         "public_heading": "Ditt offentlige område",
         "private_heading": "Ditt private område",
@@ -1711,16 +1728,5 @@
         "share_heading": "Del %(name)s",
         "personal_space": "Bare meg selv",
         "invite_teammates_by_username": "Inviter etter brukernavn"
-    },
-    "threads": {
-        "show_thread_filter": "Vis:"
-    },
-    "labs_mjolnir": {
-        "room_name": "Min bannlysningsliste"
-    },
-    "update": {
-        "see_changes_button": "Hva er nytt?",
-        "release_notes_toast_title": "Hva er nytt",
-        "toast_title": "Oppdater %(brand)s"
     }
 }

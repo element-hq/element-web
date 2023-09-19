@@ -334,23 +334,6 @@
     "Unable to load! Check your network connectivity and try again.": "読み込めません！ネットワークの通信状態を確認して、もう一度やり直してください。",
     "You do not have permission to invite people to this room.": "このルームにユーザーを招待する権限がありません。",
     "Unknown server error": "不明なサーバーエラー",
-    "No need for symbols, digits, or uppercase letters": "記号、数字、大文字を含む必要はありません",
-    "Use a longer keyboard pattern with more turns": "より長いパターンで、より多様な文字の組み合わせを使用してください",
-    "Avoid repeated words and characters": "単語や文字の繰り返しは避けましょう",
-    "Avoid sequences": "規則的な文字列は避けましょう",
-    "Avoid recent years": "最近の年号は避けましょう",
-    "Avoid years that are associated with you": "あなたに関係のある年号は避けましょう",
-    "Avoid dates and years that are associated with you": "あなたに関係のある日付や年号は避けましょう",
-    "Capitalization doesn't help very much": "大文字を使用してもそれほど効果はありません",
-    "All-uppercase is almost as easy to guess as all-lowercase": "全て大文字を使用したケースは、全て小文字を使用した場合と同じ程度簡単に推測できます",
-    "Reversed words aren't much harder to guess": "逆さ言葉は簡単に推測されます",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "「a」を「@」に替えるような予測可能な変換に、それほど効果はありません",
-    "Add another word or two. Uncommon words are better.": "単語をあと1個か2個追加してください。それほど使わない単語がよいです。",
-    "Repeats like \"aaa\" are easy to guess": "\"aaa\" のような繰り返しは簡単に推測されます",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "\"abcabcabc\"のような繰り返しは\"abc\"と同じ程度簡単に推測されます",
-    "Sequences like abc or 6543 are easy to guess": "abc や 6543 のような規則的な文字列は簡単に推測されます",
-    "Recent years are easy to guess": "最近の年号は簡単に推測されます",
-    "Dates are often easy to guess": "たいていの日付は簡単に推測されます",
     "Room Name": "ルーム名",
     "Add Email Address": "メールアドレスを追加",
     "Add Phone Number": "電話番号を追加",
@@ -367,12 +350,6 @@
     "Cannot reach identity server": "IDサーバーに接続できません",
     "No homeserver URL provided": "ホームサーバーのURLが指定されていません",
     "The user's homeserver does not support the version of the room.": "ユーザーのホームサーバーは、このバージョンのルームをサポートしていません。",
-    "Use a few words, avoid common phrases": "単語をいくつか組み合わせてください。ありきたりなフレーズは避けましょう。",
-    "This is a top-10 common password": "これがよく使われるパスワードの上位10個です",
-    "This is a top-100 common password": "これがよく使われるパスワードの上位100個です",
-    "This is a very common password": "これはとてもよく使われるパスワードです",
-    "This is similar to a commonly used password": "これはよく使われるパスワードに似ています",
-    "A word by itself is easy to guess": "単語1つだけだと簡単に推測されます",
     "Phone numbers": "電話番号",
     "Language and region": "言語と地域",
     "General": "一般",
@@ -1116,10 +1093,6 @@
     "Use app for a better experience": "より良い体験のためにアプリケーションを使用",
     "Enable desktop notifications": "デスクトップ通知を有効にする",
     "Don't miss a reply": "返信をお見逃しなく",
-    "Short keyboard patterns are easy to guess": "短いキーボードパターンは簡単に推測されます",
-    "Straight rows of keys are easy to guess": "キーボードの同じ列の文字を使用すると簡単に推測されます",
-    "Common names and surnames are easy to guess": "名前や名字は簡単に推測されます",
-    "Names and surnames by themselves are easy to guess": "名前や名字は簡単に推測されます",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "安定した通話のために、ホームサーバー（<code>%(homeserverDomain)s</code>）の管理者にTURNサーバーの設定を依頼してください。",
     "The call was answered on another device.": "他の端末で呼び出しに応答しました。",
     "Answered Elsewhere": "他の端末で応答しました",
@@ -2432,11 +2405,11 @@
         "integration_manager": "インテグレーションマネージャー",
         "qr_code": "QRコード",
         "feedback": "フィードバック",
-        "all_rooms": "全てのルーム",
-        "orphan_rooms": "他のルーム",
         "preview_message": "こんにちは、よろしくね！",
+        "orphan_rooms": "他のルーム",
         "on": "オン",
-        "off": "オフ"
+        "off": "オフ",
+        "all_rooms": "全てのルーム"
     },
     "action": {
         "continue": "続行",
@@ -2535,8 +2508,8 @@
         "submit": "送信",
         "send_report": "報告を送信",
         "clear": "消去",
-        "enter_fullscreen": "フルスクリーンにする",
-        "exit_fullscreeen": "フルスクリーンを解除"
+        "exit_fullscreeen": "フルスクリーンを解除",
+        "enter_fullscreen": "フルスクリーンにする"
     },
     "a11y": {
         "user_menu": "ユーザーメニュー",
@@ -2603,9 +2576,9 @@
         "leave_beta": "ベータ版を終了",
         "join_beta": "ベータ版に参加",
         "voice_broadcast_force_small_chunks": "音声配信のチャンク長を15秒に強制",
-        "automatic_debug_logs": "エラーが生じた際に、自動的にデバッグログを送信",
+        "automatic_debug_logs_key_backup": "鍵のバックアップが機能していない際に、自動的にデバッグログを送信",
         "automatic_debug_logs_decryption": "復号化エラーが生じた際に、自動的にデバッグログを送信",
-        "automatic_debug_logs_key_backup": "鍵のバックアップが機能していない際に、自動的にデバッグログを送信"
+        "automatic_debug_logs": "エラーが生じた際に、自動的にデバッグログを送信"
     },
     "keyboard": {
         "home": "ホーム",
@@ -2886,15 +2859,25 @@
             "timeline_image_size": "タイムライン上での画像のサイズ",
             "timeline_image_size_default": "既定値",
             "timeline_image_size_large": "大",
-            "custom_font_size": "ユーザー定義のサイズを使用",
+            "image_size_large": "大",
+            "image_size_default": "既定値",
+            "font_size_valid": "%(min)s～%(max)s（pt）の間の数字を指定",
             "font_size_nan": "サイズには数値を指定してください",
             "font_size_limit": "ユーザー定義のフォントの大きさは%(min)s～%(max)s（単位：point）の間で指定できます",
-            "font_size_valid": "%(min)s～%(max)s（pt）の間の数字を指定",
-            "image_size_default": "既定値",
-            "image_size_large": "大"
+            "custom_font_size": "ユーザー定義のサイズを使用"
         },
         "inline_url_previews_room_account": "このルームのURLプレビューを有効にする（あなたにのみ適用）",
         "inline_url_previews_room": "このルームの参加者のために既定でURLプレビューを有効にする",
+        "voip": {
+            "mirror_local_feed": "ビデオ映像のミラー効果（反転）を有効にする",
+            "allow_p2p": "1対1通話でP2Pを使用する",
+            "allow_p2p_description": "有効にすると、第三者があなたのIPアドレスを閲覧できるようになる可能性があります",
+            "auto_gain_control": "自動音量調整",
+            "echo_cancellation": "エコーキャンセル",
+            "noise_suppression": "雑音抑制",
+            "enable_fallback_ice_server_description": "あなたのホームサーバーがアシストサーバーを提供していない場合にのみ適用。IPアドレスが通話中に共有されます。"
+        },
+        "send_read_receipts_unsupported": "あなたのサーバーは開封確認メッセージの送信防止をサポートしていません。",
         "security": {
             "message_search_disable_warning": "無効にすると、暗号化されたルームのメッセージは検索結果に表示されません。",
             "message_search_indexing_idle": "現在、どのルームのメッセージのインデックスも作成していません。",
@@ -2931,16 +2914,6 @@
             "always_show_menu_bar": "常にウィンドウメニューバーを表示",
             "enable_tray_icon": "トレイアイコンを表示し、ウインドウを閉じるとトレイに最小化",
             "enable_hardware_acceleration": "ハードウェアアクセラレーションを有効にする"
-        },
-        "send_read_receipts_unsupported": "あなたのサーバーは開封確認メッセージの送信防止をサポートしていません。",
-        "voip": {
-            "mirror_local_feed": "ビデオ映像のミラー効果（反転）を有効にする",
-            "allow_p2p": "1対1通話でP2Pを使用する",
-            "allow_p2p_description": "有効にすると、第三者があなたのIPアドレスを閲覧できるようになる可能性があります",
-            "auto_gain_control": "自動音量調整",
-            "echo_cancellation": "エコーキャンセル",
-            "noise_suppression": "雑音抑制",
-            "enable_fallback_ice_server_description": "あなたのホームサーバーがアシストサーバーを提供していない場合にのみ適用。IPアドレスが通話中に共有されます。"
         },
         "keyboard": {
             "title": "キーボード"
@@ -3027,11 +3000,11 @@
         "category_room": "ルーム",
         "category_other": "その他",
         "widget_screenshots": "サポートされているウィジェットで、ウィジェットのスクリーンショットを有効にする",
+        "title": "開発者ツール",
         "show_hidden_events": "タイムラインで非表示のイベントを表示",
-        "low_bandwidth_mode": "低速モード",
         "low_bandwidth_mode_description": "対応するホームサーバーが必要。",
-        "developer_mode": "開発者モード",
-        "title": "開発者ツール"
+        "low_bandwidth_mode": "低速モード",
+        "developer_mode": "開発者モード"
     },
     "export_chat": {
         "html": "HTML",
@@ -3397,20 +3370,20 @@
         "no_permission_messages_before_join": "参加する前のメッセージを表示する権限がありません。",
         "encrypted_historical_messages_unavailable": "これ以前の暗号化されたメッセージは利用できません。",
         "historical_messages_unavailable": "以前のメッセージは表示できません",
-        "io.element.voice_broadcast_info": {
-            "you": "<a>音声配信</a>を終了しました",
-            "user": "%(senderName)sが<a>音声配信</a>を終了しました"
+        "redacted": {
+            "tooltip": "%(date)sにメッセージが削除されました"
         },
         "reactions": {
             "label": "%(reactors)sは%(content)sでリアクションしました",
             "tooltip": "<reactors/><reactedWith>%(shortName)sでリアクションしました</reactedWith>"
         },
-        "redacted": {
-            "tooltip": "%(date)sにメッセージが削除されました"
-        },
         "m.room.create": {
             "continuation": "このルームは別の会話の続きです。",
             "see_older_messages": "ここをクリックすると、以前のメッセージを表示します。"
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "<a>音声配信</a>を終了しました",
+            "user": "%(senderName)sが<a>音声配信</a>を終了しました"
         }
     },
     "slash_command": {
@@ -3475,14 +3448,14 @@
         "failed_find_user": "ルームにユーザーが見つかりません",
         "op": "ユーザーの権限レベルを規定",
         "deop": "指定したIDのユーザーの権限をリセット",
-        "server_error": "サーバーエラー",
-        "command_error": "コマンドエラー",
-        "server_error_detail": "サーバーが使用できないか、オーバーロードしているか、または問題が発生しました。",
-        "unknown_command": "不明なコマンド",
-        "unknown_command_detail": "認識されていないコマンド：%(commandText)s",
-        "unknown_command_help": "<code>/help</code>を使うと利用可能なコマンドを一覧できます。メッセージとして送信するつもりでしたか？",
         "unknown_command_hint": "ヒント：通常メッセージをスラッシュで開始したい場合は<code>//</code>から始めます。",
-        "unknown_command_button": "メッセージとして送信"
+        "unknown_command_help": "<code>/help</code>を使うと利用可能なコマンドを一覧できます。メッセージとして送信するつもりでしたか？",
+        "unknown_command_detail": "認識されていないコマンド：%(commandText)s",
+        "unknown_command_button": "メッセージとして送信",
+        "unknown_command": "不明なコマンド",
+        "server_error_detail": "サーバーが使用できないか、オーバーロードしているか、または問題が発生しました。",
+        "server_error": "サーバーエラー",
+        "command_error": "コマンドエラー"
     },
     "presence": {
         "busy": "取り込み中",
@@ -3722,8 +3695,8 @@
         "server_picker_custom": "他のホームサーバー",
         "server_picker_explainer": "好みのホームサーバーがあるか、自分でホームサーバーを運営している場合は、そちらをお使いください。",
         "server_picker_learn_more": "ホームサーバーについて（英語）",
-        "account_deactivated": "このアカウントは無効化されています。",
-        "incorrect_credentials": "ユーザー名とパスワードの一方あるいは両方が正しくありません。"
+        "incorrect_credentials": "ユーザー名とパスワードの一方あるいは両方が正しくありません。",
+        "account_deactivated": "このアカウントは無効化されています。"
     },
     "room_list": {
         "sort_unread_first": "未読メッセージのあるルームを最初に表示",
@@ -3848,6 +3821,109 @@
         "existing_issue_link": "まず、<existingIssuesLink>Githubで既知の不具合</existingIssuesLink>を確認してください。また掲載されていない新しい不具合を発見した場合は<newIssueLink>報告してください</newIssueLink>。",
         "send_feedback_action": "フィードバックを送信"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "単語をいくつか組み合わせてください。ありきたりなフレーズは避けましょう。",
+            "noNeed": "記号、数字、大文字を含む必要はありません",
+            "longerKeyboardPattern": "より長いパターンで、より多様な文字の組み合わせを使用してください",
+            "repeated": "単語や文字の繰り返しは避けましょう",
+            "sequences": "規則的な文字列は避けましょう",
+            "recentYears": "最近の年号は避けましょう",
+            "associatedYears": "あなたに関係のある年号は避けましょう",
+            "dates": "あなたに関係のある日付や年号は避けましょう",
+            "capitalization": "大文字を使用してもそれほど効果はありません",
+            "allUppercase": "全て大文字を使用したケースは、全て小文字を使用した場合と同じ程度簡単に推測できます",
+            "reverseWords": "逆さ言葉は簡単に推測されます",
+            "l33t": "「a」を「@」に替えるような予測可能な変換に、それほど効果はありません",
+            "anotherWord": "単語をあと1個か2個追加してください。それほど使わない単語がよいです。"
+        },
+        "warnings": {
+            "simpleRepeat": "\"aaa\" のような繰り返しは簡単に推測されます",
+            "extendedRepeat": "\"abcabcabc\"のような繰り返しは\"abc\"と同じ程度簡単に推測されます",
+            "sequences": "abc や 6543 のような規則的な文字列は簡単に推測されます",
+            "recentYears": "最近の年号は簡単に推測されます",
+            "dates": "たいていの日付は簡単に推測されます",
+            "topTen": "これがよく使われるパスワードの上位10個です",
+            "topHundred": "これがよく使われるパスワードの上位100個です",
+            "common": "これはとてもよく使われるパスワードです",
+            "similarToCommon": "これはよく使われるパスワードに似ています",
+            "wordByItself": "単語1つだけだと簡単に推測されます",
+            "namesByThemselves": "名前や名字は簡単に推測されます",
+            "commonNames": "名前や名字は簡単に推測されます",
+            "straightRow": "キーボードの同じ列の文字を使用すると簡単に推測されます",
+            "keyPattern": "短いキーボードパターンは簡単に推測されます"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "新しい音声配信を開始できません",
+        "failed_insufficient_permission_title": "新しい音声配信を開始できません",
+        "failed_others_already_recording_title": "新しい音声配信を開始できません",
+        "failed_already_recording_description": "既に音声配信を録音しています。新しく始めるには現在の音声配信を終了してください。",
+        "failed_insufficient_permission_description": "このルームで音声配信を開始する権限がありません。ルームの管理者に連絡して権限の付与を依頼してください。",
+        "failed_others_already_recording_description": "他の人が既に音声配信を録音しています。新しく始めるには音声配信が終わるまで待機してください。",
+        "failed_no_connection_title": "接続エラー",
+        "failed_no_connection_description": "録音を開始できません。後でもう一度やり直してください。",
+        "failed_decrypt": "音声配信を復号化できません",
+        "failed_generic": "この音声配信を再生できません",
+        "confirm_stop_title": "ライブ配信を停止しますか？",
+        "confirm_stop_description": "ライブ配信を終了してよろしいですか？配信を終了し、録音をこのルームで利用できるよう設定します。",
+        "confirm_stop_affirm": "はい、配信を停止します",
+        "confirm_listen_title": "ライブ配信を視聴しますか？",
+        "confirm_listen_description": "このライブ配信の視聴を開始すると、現在のライブ配信の録音は終了します。",
+        "confirm_listen_affirm": "はい、録音を終了してください",
+        "30s_backward": "30秒戻す",
+        "30s_forward": "30秒進める",
+        "go_live": "ライブ配信",
+        "resume": "音声配信を再開",
+        "pause": "音声配信を一時停止",
+        "buffering": "バッファリングしています…",
+        "play": "音声配信を再生",
+        "connection_error": "接続エラー - 録音を停止しました"
+    },
+    "update": {
+        "see_changes_button": "新着",
+        "release_notes_toast_title": "新着",
+        "toast_title": "%(brand)sの更新",
+        "toast_description": "%(brand)sの新しいバージョンが利用可能です"
+    },
+    "threads": {
+        "all_threads": "全てのスレッド",
+        "all_threads_description": "現在のルームのスレッドを全て表示",
+        "my_threads": "自分のスレッド",
+        "my_threads_description": "参加している全スレッドを表示",
+        "show_thread_filter": "表示：",
+        "empty_has_threads_tip": "既存のスレッドに返信するか、メッセージの「%(replyInThread)s」機能を使用すると新しいスレッドを開始できます。",
+        "show_all_threads": "全てのスレッドを表示",
+        "empty_explainer": "スレッド機能を使うと、会話のテーマを維持したり、会話を簡単に追跡したりすることができます。",
+        "empty_tip": "<b>ヒント：</b>メッセージの「%(replyInThread)s」機能を使用すると新しいスレッドを開始できます。",
+        "empty_heading": "スレッド機能を使って、会話をまとめましょう"
+    },
+    "theme": {
+        "light_high_contrast": "ライト（高コントラスト）"
+    },
+    "space": {
+        "landing_welcome": "<name/>にようこそ"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "このホームサーバーは地図を表示するように設定されていません。",
+        "MapStyleUrlNotReachable": "このホームサーバーが地図を表示するよう正しく設定されていないか、地図のサーバーに接続できません。",
+        "toggle_attribution": "属性を切り替える",
+        "map_feedback": "地図のフィードバック",
+        "find_my_location": "位置を発見",
+        "location_not_available": "位置情報は利用できません",
+        "mapbox_logo": "Mapboxのロゴ",
+        "reset_bearing": "北向きにリセット",
+        "failed_permission": "%(brand)sは位置情報を取得できませんでした。ブラウザーの設定画面から位置情報の取得を許可してください。",
+        "failed_generic": "位置情報の取得に失敗しました。後でもう一度やり直してください。",
+        "failed_timeout": "位置情報を取得する際にタイムアウトしました。後でもう一度やり直してください。",
+        "failed_unknown": "位置情報を取得する際に不明なエラーが発生しました。後でもう一度やり直してください。",
+        "expand_map": "地図を開く",
+        "failed_load_map": "地図を読み込めません"
+    },
+    "labs_mjolnir": {
+        "room_name": "マイブロックリスト",
+        "room_topic": "あなたがブロックしたユーザーとサーバーのリストです。このルームから退出しないでください！"
+    },
     "create_space": {
         "name_required": "スペースの名前を入力してください",
         "name_placeholder": "例：my-space",
@@ -3882,75 +3958,5 @@
         "setup_rooms_description": "ルームは後からも追加できます。",
         "setup_rooms_private_heading": "あなたのチームはどのようなプロジェクトに取り組みますか？",
         "setup_rooms_private_description": "それぞれのプロジェクトにルームを作りましょう。"
-    },
-    "space": {
-        "landing_welcome": "<name/>にようこそ"
-    },
-    "threads": {
-        "all_threads": "全てのスレッド",
-        "all_threads_description": "現在のルームのスレッドを全て表示",
-        "my_threads": "自分のスレッド",
-        "my_threads_description": "参加している全スレッドを表示",
-        "show_thread_filter": "表示：",
-        "empty_has_threads_tip": "既存のスレッドに返信するか、メッセージの「%(replyInThread)s」機能を使用すると新しいスレッドを開始できます。",
-        "show_all_threads": "全てのスレッドを表示",
-        "empty_explainer": "スレッド機能を使うと、会話のテーマを維持したり、会話を簡単に追跡したりすることができます。",
-        "empty_tip": "<b>ヒント：</b>メッセージの「%(replyInThread)s」機能を使用すると新しいスレッドを開始できます。",
-        "empty_heading": "スレッド機能を使って、会話をまとめましょう"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "このホームサーバーは地図を表示するように設定されていません。",
-        "MapStyleUrlNotReachable": "このホームサーバーが地図を表示するよう正しく設定されていないか、地図のサーバーに接続できません。",
-        "toggle_attribution": "属性を切り替える",
-        "map_feedback": "地図のフィードバック",
-        "find_my_location": "位置を発見",
-        "location_not_available": "位置情報は利用できません",
-        "mapbox_logo": "Mapboxのロゴ",
-        "reset_bearing": "北向きにリセット",
-        "failed_permission": "%(brand)sは位置情報を取得できませんでした。ブラウザーの設定画面から位置情報の取得を許可してください。",
-        "failed_generic": "位置情報の取得に失敗しました。後でもう一度やり直してください。",
-        "failed_timeout": "位置情報を取得する際にタイムアウトしました。後でもう一度やり直してください。",
-        "failed_unknown": "位置情報を取得する際に不明なエラーが発生しました。後でもう一度やり直してください。",
-        "expand_map": "地図を開く",
-        "failed_load_map": "地図を読み込めません"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "新しい音声配信を開始できません",
-        "failed_insufficient_permission_title": "新しい音声配信を開始できません",
-        "failed_others_already_recording_title": "新しい音声配信を開始できません",
-        "failed_already_recording_description": "既に音声配信を録音しています。新しく始めるには現在の音声配信を終了してください。",
-        "failed_insufficient_permission_description": "このルームで音声配信を開始する権限がありません。ルームの管理者に連絡して権限の付与を依頼してください。",
-        "failed_others_already_recording_description": "他の人が既に音声配信を録音しています。新しく始めるには音声配信が終わるまで待機してください。",
-        "failed_no_connection_title": "接続エラー",
-        "failed_no_connection_description": "録音を開始できません。後でもう一度やり直してください。",
-        "failed_decrypt": "音声配信を復号化できません",
-        "failed_generic": "この音声配信を再生できません",
-        "confirm_stop_title": "ライブ配信を停止しますか？",
-        "confirm_stop_description": "ライブ配信を終了してよろしいですか？配信を終了し、録音をこのルームで利用できるよう設定します。",
-        "confirm_stop_affirm": "はい、配信を停止します",
-        "confirm_listen_title": "ライブ配信を視聴しますか？",
-        "confirm_listen_description": "このライブ配信の視聴を開始すると、現在のライブ配信の録音は終了します。",
-        "confirm_listen_affirm": "はい、録音を終了してください",
-        "30s_backward": "30秒戻す",
-        "30s_forward": "30秒進める",
-        "go_live": "ライブ配信",
-        "resume": "音声配信を再開",
-        "pause": "音声配信を一時停止",
-        "buffering": "バッファリングしています…",
-        "play": "音声配信を再生",
-        "connection_error": "接続エラー - 録音を停止しました"
-    },
-    "labs_mjolnir": {
-        "room_name": "マイブロックリスト",
-        "room_topic": "あなたがブロックしたユーザーとサーバーのリストです。このルームから退出しないでください！"
-    },
-    "theme": {
-        "light_high_contrast": "ライト（高コントラスト）"
-    },
-    "update": {
-        "see_changes_button": "新着",
-        "release_notes_toast_title": "新着",
-        "toast_title": "%(brand)sの更新",
-        "toast_description": "%(brand)sの新しいバージョンが利用可能です"
     }
 }

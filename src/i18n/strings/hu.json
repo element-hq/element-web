@@ -347,31 +347,6 @@
     "No backup found!": "Mentés nem található!",
     "Failed to decrypt %(failedCount)s sessions!": "%(failedCount)s kapcsolatot nem lehet visszafejteni!",
     "Invalid homeserver discovery response": "A Matrix-kiszolgáló felderítésére kapott válasz érvénytelen",
-    "Use a few words, avoid common phrases": "Néhány szót használjon, és kerülje a szokásos kifejezéseket",
-    "No need for symbols, digits, or uppercase letters": "Nincs szükség szimbólumokra, számokra vagy nagybetűkre",
-    "Use a longer keyboard pattern with more turns": "Használj hosszabb billentyűzetmintát, több kanyarral",
-    "Avoid repeated words and characters": "Kerülje a szó-, vagy betűismétlést",
-    "Avoid sequences": "Kerülje a sorozatokat",
-    "Avoid recent years": "Kerülje a közeli éveket",
-    "Avoid years that are associated with you": "Kerülje azokat az éveket, melyek összefüggésbe hozhatók Önnel",
-    "Avoid dates and years that are associated with you": "Kerülje azokat a dátumokat és évszámokat, melyek összefüggésbe hozhatók Önnel",
-    "Capitalization doesn't help very much": "A nagybetűk nem igazán segítenek",
-    "All-uppercase is almost as easy to guess as all-lowercase": "A csupa nagybetűset majdnem olyan könnyű kitalálni mint a csupa kisbetűset",
-    "Reversed words aren't much harder to guess": "A fordított betűrendet sem sokkal nehezebb kitalálni",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "A kiszámítható helyettesítések, mint az „a” helyett a „@”, nem sokat segítenek",
-    "Add another word or two. Uncommon words are better.": "Adjon hozzá még egy-két szót. A ritkán használt szavak jobbak.",
-    "Repeats like \"aaa\" are easy to guess": "Az ismétlések, mint az „aaa” könnyen kitalálhatók",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Az „abcabcabc” sorozatot csak kicsivel nehezebb kitalálni mint az „abc”-t",
-    "Sequences like abc or 6543 are easy to guess": "Az olyan sorozatokat mint az abc vagy 6543, könnyű kitalálni",
-    "Recent years are easy to guess": "A közelmúlt évszámait könnyű kitalálni",
-    "Dates are often easy to guess": "Általában a dátumokat könnyű kitalálni",
-    "This is a top-10 common password": "Ez benne van a 10 legelterjedtebb jelszó listájában",
-    "This is a top-100 common password": "Ez benne van a 100 legelterjedtebb jelszó listájában",
-    "This is a very common password": "Ez egy nagyon gyakori jelszó",
-    "This is similar to a commonly used password": "Ez nagyon hasonlít egy gyakori jelszóhoz",
-    "A word by itself is easy to guess": "Egy szót magában könnyű kitalálni",
-    "Names and surnames by themselves are easy to guess": "Neveket egymagukban könnyű kitalálni",
-    "Common names and surnames are easy to guess": "Elterjedt neveket könnyű kitalálni",
     "You do not have permission to invite people to this room.": "Nincs jogosultsága embereket meghívni ebbe a szobába.",
     "Unknown server error": "Ismeretlen kiszolgálóhiba",
     "Set up": "Beállítás",
@@ -381,8 +356,6 @@
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ha nem Ön állította be az új helyreállítási módot, akkor lehet, hogy egy támadó próbálja elérni a fiókját. Változtassa meg a fiókja jelszavát, és amint csak lehet, állítsa be az új helyreállítási eljárást a Beállításokban.",
     "Set up Secure Messages": "Biztonságos Üzenetek beállítása",
     "Go to Settings": "Irány a Beállítások",
-    "Straight rows of keys are easy to guess": "A billentyűsorokat könnyű kitalálni",
-    "Short keyboard patterns are easy to guess": "A rövid billentyűzetmintákat könnyű kitalálni",
     "Unable to load commit detail: %(msg)s": "A véglegesítés részleteinek betöltése sikertelen: %(msg)s",
     "Unrecognised address": "Ismeretlen cím",
     "The following users may not exist": "Az alábbi felhasználók lehet, hogy nem léteznek",
@@ -2500,11 +2473,11 @@
         "integration_manager": "Integrációkezelő",
         "qr_code": "QR kód",
         "feedback": "Visszajelzés",
-        "all_rooms": "Összes szoba",
-        "orphan_rooms": "További szobák",
         "preview_message": "Szia! Te vagy a legjobb!",
+        "orphan_rooms": "További szobák",
         "on": "Be",
-        "off": "Ki"
+        "off": "Ki",
+        "all_rooms": "Összes szoba"
     },
     "action": {
         "continue": "Folytatás",
@@ -2604,8 +2577,8 @@
         "submit": "Elküldés",
         "send_report": "Jelentés küldése",
         "clear": "Törlés",
-        "enter_fullscreen": "Teljes képernyőre váltás",
-        "exit_fullscreeen": "Kilépés a teljes képernyőből"
+        "exit_fullscreeen": "Kilépés a teljes képernyőből",
+        "enter_fullscreen": "Teljes képernyőre váltás"
     },
     "a11y": {
         "user_menu": "Felhasználói menü",
@@ -2675,11 +2648,11 @@
         "leave_beta": "Béta kikapcsolása",
         "join_beta": "Csatlakozás béta lehetőségekhez",
         "voice_broadcast_force_small_chunks": "Hangközvetítések 15 másodperces darabolásának kényszerítése",
-        "automatic_debug_logs": "Hibakeresési naplók automatikus küldése bármilyen hiba esetén",
-        "automatic_debug_logs_decryption": "Hibakeresési naplók automatikus küldése titkosítás-visszafejtési hiba esetén",
-        "automatic_debug_logs_key_backup": "Hibakeresési naplók automatikus küldése, ha a kulcsmentés nem működik",
+        "sliding_sync_disabled_notice": "A kikapcsoláshoz ki-, és bejelentkezés szükséges",
         "rust_crypto_disabled_notice": "Jelenleg csak a config.json fájlban lehet engedélyezni",
-        "sliding_sync_disabled_notice": "A kikapcsoláshoz ki-, és bejelentkezés szükséges"
+        "automatic_debug_logs_key_backup": "Hibakeresési naplók automatikus küldése, ha a kulcsmentés nem működik",
+        "automatic_debug_logs_decryption": "Hibakeresési naplók automatikus küldése titkosítás-visszafejtési hiba esetén",
+        "automatic_debug_logs": "Hibakeresési naplók automatikus küldése bármilyen hiba esetén"
     },
     "keyboard": {
         "home": "Kezdőlap",
@@ -2967,15 +2940,25 @@
             "timeline_image_size": "Képméret az idővonalon",
             "timeline_image_size_default": "Alapértelmezett",
             "timeline_image_size_large": "Nagy",
-            "custom_font_size": "Egyéni méret használata",
+            "image_size_large": "Nagy",
+            "image_size_default": "Alapértelmezett",
+            "font_size_valid": "%(min)s pont és %(max)s pont közötti értéket használjon",
             "font_size_nan": "A méretnek számnak kell lennie",
             "font_size_limit": "Az egyéni betűméret csak %(min)s pont és %(max)s pont közötti lehet",
-            "font_size_valid": "%(min)s pont és %(max)s pont közötti értéket használjon",
-            "image_size_default": "Alapértelmezett",
-            "image_size_large": "Nagy"
+            "custom_font_size": "Egyéni méret használata"
         },
         "inline_url_previews_room_account": "Webcím-előnézetek engedélyezése ebben a szobában (csak Önt érinti)",
         "inline_url_previews_room": "Webcím-előnézetek alapértelmezett engedélyezése a szobatagok számára",
+        "voip": {
+            "mirror_local_feed": "Helyi videófolyam tükrözése",
+            "allow_p2p": "Közvetlen kapcsolat engedélyezése a kétszereplős hívásoknál",
+            "allow_p2p_description": "Ha engedélyezett, akkor a másik fél láthatja az Ön IP-címét",
+            "auto_gain_control": "Automatikus hangerőszabályozás",
+            "echo_cancellation": "Visszhangcsillapítás",
+            "noise_suppression": "Zajcsillapítás",
+            "enable_fallback_ice_server_description": "Csak abban az esetben, ha a Matrix-kiszolgáló nem kínál fel egyet sem. Az IP-címe megosztásra kerülhet a hívás során."
+        },
+        "send_read_receipts_unsupported": "A kiszolgálója nem támogatja az olvasási visszajelzések elküldésének kikapcsolását.",
         "security": {
             "message_search_disable_warning": "Ha nincs engedélyezve akkor a titkosított szobák üzenetei nem jelennek meg a keresések között.",
             "message_search_indexing_idle": "Jelenleg egyik szoba indexelése sem történik.",
@@ -3013,16 +2996,6 @@
             "always_show_menu_bar": "Ablak menüsávjának megjelenítése mindig",
             "enable_tray_icon": "Tálcaikon megjelenítése és az ablak minimalizálása bezáráskor",
             "enable_hardware_acceleration": "Hardveres gyorsítás engedélyezése"
-        },
-        "send_read_receipts_unsupported": "A kiszolgálója nem támogatja az olvasási visszajelzések elküldésének kikapcsolását.",
-        "voip": {
-            "mirror_local_feed": "Helyi videófolyam tükrözése",
-            "allow_p2p": "Közvetlen kapcsolat engedélyezése a kétszereplős hívásoknál",
-            "allow_p2p_description": "Ha engedélyezett, akkor a másik fél láthatja az Ön IP-címét",
-            "auto_gain_control": "Automatikus hangerőszabályozás",
-            "echo_cancellation": "Visszhangcsillapítás",
-            "noise_suppression": "Zajcsillapítás",
-            "enable_fallback_ice_server_description": "Csak abban az esetben, ha a Matrix-kiszolgáló nem kínál fel egyet sem. Az IP-címe megosztásra kerülhet a hívás során."
         },
         "keyboard": {
             "title": "Billentyűzet"
@@ -3116,11 +3089,11 @@
         "category_room": "Szoba",
         "category_other": "Egyéb",
         "widget_screenshots": "Kisalkalmazások képernyőképének engedélyezése a támogatott kisalkalmazásoknál",
+        "title": "Fejlesztői eszközök",
         "show_hidden_events": "Rejtett események megjelenítése az idővonalon",
-        "low_bandwidth_mode": "Alacsony sávszélességű mód",
         "low_bandwidth_mode_description": "Kompatibilis Matrix-kiszolgálóra van szükség.",
-        "developer_mode": "Fejlesztői mód",
-        "title": "Fejlesztői eszközök"
+        "low_bandwidth_mode": "Alacsony sávszélességű mód",
+        "developer_mode": "Fejlesztői mód"
     },
     "export_chat": {
         "html": "HTML",
@@ -3487,22 +3460,22 @@
         "no_permission_messages_before_join": "A belépés előtti üzenetek megtekintése nincs engedélyezve számodra.",
         "encrypted_historical_messages_unavailable": "A régebbi titkosított üzenetek elérhetetlenek.",
         "historical_messages_unavailable": "Nem tekintheted meg a régebbi üzeneteket",
-        "io.element.voice_broadcast_info": {
-            "you": "Befejezte a <a>hangközvetítést</a>",
-            "user": "%(senderName)s befejezte a <a>hangközvetítést</a>"
+        "redacted": {
+            "tooltip": "Az üzenetet ekkor törölték: %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s reagált: %(content)s",
             "tooltip": "<reactors/><reactedWith>ezzel reagált: %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Az üzenetet ekkor törölték: %(date)s"
         },
         "m.room.create": {
             "continuation": "Ez a szoba egy másik beszélgetés folytatása.",
             "unknown_predecessor_guess_server": "A szoba régi verziója nem található (szobaazonosító: %(roomId)s), és a megkereséséhez nem lett megadva a „via_servers”. Lehetséges, hogy a szobaazonosító kitalálása működni fog. Ha meg akarja próbálni, kattintson erre a hivatkozásra:",
             "unknown_predecessor": "A szoba régi verziója nem található (szobaazonosító: %(roomId)s), és a megkereséséhez nem lett megadva a „via_servers”.",
             "see_older_messages": "Ide kattintva megnézheted a régi üzeneteket."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Befejezte a <a>hangközvetítést</a>",
+            "user": "%(senderName)s befejezte a <a>hangközvetítést</a>"
         }
     },
     "slash_command": {
@@ -3569,14 +3542,14 @@
         "failed_find_user": "A felhasználó nem található a szobában",
         "op": "A felhasználó szintjének meghatározása",
         "deop": "A megadott azonosítójú felhasználó lefokozása",
-        "server_error": "Kiszolgálóhiba",
-        "command_error": "Parancshiba",
-        "server_error_detail": "A kiszolgáló nem érhető el, túlterhelt vagy valami más probléma van.",
-        "unknown_command": "Ismeretlen parancs",
-        "unknown_command_detail": "Ismeretlen parancs: %(commandText)s",
-        "unknown_command_help": "Használhatja a <code>/help</code> parancsot az elérhető parancsok listázásához. Ezt üzenetként akarta elküldeni?",
         "unknown_command_hint": "Tipp: Kezdje az üzenetet ezzel: <code>//</code>, ha perjellel szeretné kezdeni.",
-        "unknown_command_button": "Küldés üzenetként"
+        "unknown_command_help": "Használhatja a <code>/help</code> parancsot az elérhető parancsok listázásához. Ezt üzenetként akarta elküldeni?",
+        "unknown_command_detail": "Ismeretlen parancs: %(commandText)s",
+        "unknown_command_button": "Küldés üzenetként",
+        "unknown_command": "Ismeretlen parancs",
+        "server_error_detail": "A kiszolgáló nem érhető el, túlterhelt vagy valami más probléma van.",
+        "server_error": "Kiszolgálóhiba",
+        "command_error": "Parancshiba"
     },
     "presence": {
         "busy": "Foglalt",
@@ -3821,8 +3794,8 @@
         "server_picker_custom": "Másik Matrix-kiszolgáló",
         "server_picker_explainer": "Használja a választott Matrix-kiszolgálóját, ha van ilyenje, vagy üzemeltessen egy sajátot.",
         "server_picker_learn_more": "A Matrix-kiszolgálókról",
-        "account_deactivated": "Ez a fiók zárolva van.",
-        "incorrect_credentials": "Helytelen felhasználónév vagy jelszó."
+        "incorrect_credentials": "Helytelen felhasználónév vagy jelszó.",
+        "account_deactivated": "Ez a fiók zárolva van."
     },
     "room_list": {
         "sort_unread_first": "Olvasatlan üzeneteket tartalmazó szobák megjelenítése elől",
@@ -3953,6 +3926,110 @@
         "existing_issue_link": "Először nézd meg, hogy <existingIssuesLink>van-e már jegy róla a Github-on</existingIssuesLink>. Nincs? <newIssueLink>Adj fel egy új jegyet</newIssueLink>.",
         "send_feedback_action": "Visszajelzés küldése"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Néhány szót használjon, és kerülje a szokásos kifejezéseket",
+            "noNeed": "Nincs szükség szimbólumokra, számokra vagy nagybetűkre",
+            "longerKeyboardPattern": "Használj hosszabb billentyűzetmintát, több kanyarral",
+            "repeated": "Kerülje a szó-, vagy betűismétlést",
+            "sequences": "Kerülje a sorozatokat",
+            "recentYears": "Kerülje a közeli éveket",
+            "associatedYears": "Kerülje azokat az éveket, melyek összefüggésbe hozhatók Önnel",
+            "dates": "Kerülje azokat a dátumokat és évszámokat, melyek összefüggésbe hozhatók Önnel",
+            "capitalization": "A nagybetűk nem igazán segítenek",
+            "allUppercase": "A csupa nagybetűset majdnem olyan könnyű kitalálni mint a csupa kisbetűset",
+            "reverseWords": "A fordított betűrendet sem sokkal nehezebb kitalálni",
+            "l33t": "A kiszámítható helyettesítések, mint az „a” helyett a „@”, nem sokat segítenek",
+            "anotherWord": "Adjon hozzá még egy-két szót. A ritkán használt szavak jobbak."
+        },
+        "warnings": {
+            "simpleRepeat": "Az ismétlések, mint az „aaa” könnyen kitalálhatók",
+            "extendedRepeat": "Az „abcabcabc” sorozatot csak kicsivel nehezebb kitalálni mint az „abc”-t",
+            "sequences": "Az olyan sorozatokat mint az abc vagy 6543, könnyű kitalálni",
+            "recentYears": "A közelmúlt évszámait könnyű kitalálni",
+            "dates": "Általában a dátumokat könnyű kitalálni",
+            "topTen": "Ez benne van a 10 legelterjedtebb jelszó listájában",
+            "topHundred": "Ez benne van a 100 legelterjedtebb jelszó listájában",
+            "common": "Ez egy nagyon gyakori jelszó",
+            "similarToCommon": "Ez nagyon hasonlít egy gyakori jelszóhoz",
+            "wordByItself": "Egy szót magában könnyű kitalálni",
+            "namesByThemselves": "Neveket egymagukban könnyű kitalálni",
+            "commonNames": "Elterjedt neveket könnyű kitalálni",
+            "straightRow": "A billentyűsorokat könnyű kitalálni",
+            "keyPattern": "A rövid billentyűzetmintákat könnyű kitalálni"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Az új hangközvetítés nem indítható el",
+        "failed_insufficient_permission_title": "Az új hangközvetítés nem indítható el",
+        "failed_others_already_recording_title": "Az új hangközvetítés nem indítható el",
+        "failed_already_recording_description": "Egy hangközvetítés már folyamatban van. Először fejezze be a jelenlegi közvetítést egy új indításához.",
+        "failed_insufficient_permission_description": "Nincs jogosultsága hangközvetítést indítani ebben a szobában. Vegye fel a kapcsolatot a szoba adminisztrátorával a szükséges jogosultság megszerzéséhez.",
+        "failed_others_already_recording_description": "Valaki már elindított egy hangközvetítést. Várja meg a közvetítés végét az új indításához.",
+        "failed_no_connection_title": "Kapcsolati hiba",
+        "failed_no_connection_description": "Sajnos most nem lehet elindítani a felvételt. Próbálja meg később.",
+        "failed_decrypt": "A hangközvetítést nem lehet visszafejteni",
+        "failed_generic": "A hangközvetítés nem játszható le",
+        "confirm_stop_title": "Megszakítja az élő közvetítést?",
+        "confirm_stop_description": "Biztos, hogy befejezi az élő közvetítést? Ez megállítja a közvetítést és a felvétel az egész szoba számára elérhető lesz.",
+        "confirm_stop_affirm": "Igen, közvetítés megállítása",
+        "confirm_listen_title": "Élő közvetítés hallgatása?",
+        "confirm_listen_description": "Ha hallgatja ezt az élő közvetítést, akkor a jelenlegi élő közvetítésének a felvétele befejeződik.",
+        "confirm_listen_affirm": "Igen, a felvétel befejezése",
+        "30s_backward": "vissza 30 másodperccel",
+        "30s_forward": "előre 30 másodperccel",
+        "go_live": "Élő közvetítés indítása",
+        "resume": "hangközvetítés folytatása",
+        "pause": "hangközvetítés szüneteltetése",
+        "buffering": "Pufferelés…",
+        "play": "hangközvetítés lejátszása",
+        "connection_error": "Kapcsolódási hiba – Felvétel szüneteltetve"
+    },
+    "update": {
+        "see_changes_button": "Mik az újdonságok?",
+        "release_notes_toast_title": "Újdonságok",
+        "toast_title": "A(z) %(brand)s frissítése",
+        "toast_description": "Új %(brand)s verzió érhető el"
+    },
+    "threads": {
+        "all_threads": "Minden üzenetszál",
+        "all_threads_description": "A szobában lévő összes üzenetszál megjelenítése",
+        "my_threads": "Saját üzenetszálak",
+        "my_threads_description": "Minden üzenetszál megjelenítése, amelyben részt vesz",
+        "show_thread_filter": "Megjelenítés:",
+        "empty_has_threads_tip": "Válaszoljon egy meglévő üzenetszálban, vagy új üzenetszál indításához használja a „%(replyInThread)s” lehetőséget az üzenet sarkában megjelenő menüben.",
+        "show_all_threads": "Minden üzenetszál megjelenítése",
+        "empty_explainer": "Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében.",
+        "empty_tip": "<b>Tipp:</b> Használja a „%(replyInThread)s” lehetőséget a szöveg fölé navigálva.",
+        "empty_heading": "Beszélgetések üzenetszálakba rendezése"
+    },
+    "theme": {
+        "light_high_contrast": "Világos, nagy kontrasztú"
+    },
+    "space": {
+        "landing_welcome": "Üdvözöl a(z) <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Ezen a Matrix-kiszolgálón nincs beállítva a térképek megjelenítése.",
+        "WebGLNotEnabled": "A WebGL szükséges a térképek megjelenítéséhez, engedélyezze a böngészőbeállításokban.",
+        "MapStyleUrlNotReachable": "Ez a Matrix-kiszolgáló nincs megfelelően beállítva a térképek megjelenítéséhez, vagy a beállított térképkiszolgáló nem érhető el.",
+        "toggle_attribution": "Forrásmegjelölés be/ki",
+        "map_feedback": "Visszajelzés a térképről",
+        "find_my_location": "Saját hely megkeresése",
+        "location_not_available": "A földrajzi helyzet nem érhető el",
+        "mapbox_logo": "Mapbox logó",
+        "reset_bearing": "Északi irányba állítás",
+        "failed_permission": "A(z) %(brand)s alkalmazásnak nincs jogosultsága a földrajzi helyzetének lekérdezéséhez. Engedélyezze a hely hozzáférését a böngészőbeállításokban.",
+        "failed_generic": "Nem sikerült a földrajzi helyzetének lekérése. Próbálja újra később.",
+        "failed_timeout": "Időtúllépés történt a földrajzi helyzetének lekérésekor. Próbálja újra később.",
+        "failed_unknown": "Ismeretlen hiba a földrajzi helyzetének lekérésekor. Próbálja újra később.",
+        "expand_map": "Térkép szétnyitása",
+        "failed_load_map": "A térkép betöltése sikertelen"
+    },
+    "labs_mjolnir": {
+        "room_name": "Saját tiltólista",
+        "room_topic": "Ez a saját, tiltott felhasználókat és kiszolgálókat tartalmazó listája – ne hagyja el ezt a szobát!"
+    },
     "create_space": {
         "name_required": "Adjon meg egy nevet a térhez",
         "name_placeholder": "például sajat-ter",
@@ -3987,76 +4064,5 @@
         "setup_rooms_description": "Később is hozzáadhat többet, beleértve meglévőket is.",
         "setup_rooms_private_heading": "Milyen projekteken dolgozik a csoportja?",
         "setup_rooms_private_description": "Mindenhez készítünk egy szobát."
-    },
-    "space": {
-        "landing_welcome": "Üdvözöl a(z) <name/>"
-    },
-    "threads": {
-        "all_threads": "Minden üzenetszál",
-        "all_threads_description": "A szobában lévő összes üzenetszál megjelenítése",
-        "my_threads": "Saját üzenetszálak",
-        "my_threads_description": "Minden üzenetszál megjelenítése, amelyben részt vesz",
-        "show_thread_filter": "Megjelenítés:",
-        "empty_has_threads_tip": "Válaszoljon egy meglévő üzenetszálban, vagy új üzenetszál indításához használja a „%(replyInThread)s” lehetőséget az üzenet sarkában megjelenő menüben.",
-        "show_all_threads": "Minden üzenetszál megjelenítése",
-        "empty_explainer": "Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében.",
-        "empty_tip": "<b>Tipp:</b> Használja a „%(replyInThread)s” lehetőséget a szöveg fölé navigálva.",
-        "empty_heading": "Beszélgetések üzenetszálakba rendezése"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Ezen a Matrix-kiszolgálón nincs beállítva a térképek megjelenítése.",
-        "WebGLNotEnabled": "A WebGL szükséges a térképek megjelenítéséhez, engedélyezze a böngészőbeállításokban.",
-        "MapStyleUrlNotReachable": "Ez a Matrix-kiszolgáló nincs megfelelően beállítva a térképek megjelenítéséhez, vagy a beállított térképkiszolgáló nem érhető el.",
-        "toggle_attribution": "Forrásmegjelölés be/ki",
-        "map_feedback": "Visszajelzés a térképről",
-        "find_my_location": "Saját hely megkeresése",
-        "location_not_available": "A földrajzi helyzet nem érhető el",
-        "mapbox_logo": "Mapbox logó",
-        "reset_bearing": "Északi irányba állítás",
-        "failed_permission": "A(z) %(brand)s alkalmazásnak nincs jogosultsága a földrajzi helyzetének lekérdezéséhez. Engedélyezze a hely hozzáférését a böngészőbeállításokban.",
-        "failed_generic": "Nem sikerült a földrajzi helyzetének lekérése. Próbálja újra később.",
-        "failed_timeout": "Időtúllépés történt a földrajzi helyzetének lekérésekor. Próbálja újra később.",
-        "failed_unknown": "Ismeretlen hiba a földrajzi helyzetének lekérésekor. Próbálja újra később.",
-        "expand_map": "Térkép szétnyitása",
-        "failed_load_map": "A térkép betöltése sikertelen"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Az új hangközvetítés nem indítható el",
-        "failed_insufficient_permission_title": "Az új hangközvetítés nem indítható el",
-        "failed_others_already_recording_title": "Az új hangközvetítés nem indítható el",
-        "failed_already_recording_description": "Egy hangközvetítés már folyamatban van. Először fejezze be a jelenlegi közvetítést egy új indításához.",
-        "failed_insufficient_permission_description": "Nincs jogosultsága hangközvetítést indítani ebben a szobában. Vegye fel a kapcsolatot a szoba adminisztrátorával a szükséges jogosultság megszerzéséhez.",
-        "failed_others_already_recording_description": "Valaki már elindított egy hangközvetítést. Várja meg a közvetítés végét az új indításához.",
-        "failed_no_connection_title": "Kapcsolati hiba",
-        "failed_no_connection_description": "Sajnos most nem lehet elindítani a felvételt. Próbálja meg később.",
-        "failed_decrypt": "A hangközvetítést nem lehet visszafejteni",
-        "failed_generic": "A hangközvetítés nem játszható le",
-        "confirm_stop_title": "Megszakítja az élő közvetítést?",
-        "confirm_stop_description": "Biztos, hogy befejezi az élő közvetítést? Ez megállítja a közvetítést és a felvétel az egész szoba számára elérhető lesz.",
-        "confirm_stop_affirm": "Igen, közvetítés megállítása",
-        "confirm_listen_title": "Élő közvetítés hallgatása?",
-        "confirm_listen_description": "Ha hallgatja ezt az élő közvetítést, akkor a jelenlegi élő közvetítésének a felvétele befejeződik.",
-        "confirm_listen_affirm": "Igen, a felvétel befejezése",
-        "30s_backward": "vissza 30 másodperccel",
-        "30s_forward": "előre 30 másodperccel",
-        "go_live": "Élő közvetítés indítása",
-        "resume": "hangközvetítés folytatása",
-        "pause": "hangközvetítés szüneteltetése",
-        "buffering": "Pufferelés…",
-        "play": "hangközvetítés lejátszása",
-        "connection_error": "Kapcsolódási hiba – Felvétel szüneteltetve"
-    },
-    "labs_mjolnir": {
-        "room_name": "Saját tiltólista",
-        "room_topic": "Ez a saját, tiltott felhasználókat és kiszolgálókat tartalmazó listája – ne hagyja el ezt a szobát!"
-    },
-    "theme": {
-        "light_high_contrast": "Világos, nagy kontrasztú"
-    },
-    "update": {
-        "see_changes_button": "Mik az újdonságok?",
-        "release_notes_toast_title": "Újdonságok",
-        "toast_title": "A(z) %(brand)s frissítése",
-        "toast_description": "Új %(brand)s verzió érhető el"
     }
 }

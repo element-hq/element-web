@@ -346,31 +346,6 @@
     "No backup found!": "找不到備份！",
     "Failed to decrypt %(failedCount)s sessions!": "無法解密 %(failedCount)s 個工作階段！",
     "Invalid homeserver discovery response": "家伺服器的探索回應無效",
-    "Use a few words, avoid common phrases": "使用數個字，但避免常用片語",
-    "No need for symbols, digits, or uppercase letters": "不需要符號、數字或大寫字母",
-    "Use a longer keyboard pattern with more turns": "以更多變化使用較長的鍵盤模式",
-    "Avoid repeated words and characters": "避免重覆的文字與字母",
-    "Avoid sequences": "避免序列",
-    "Avoid recent years": "避免最近的年份",
-    "Avoid years that are associated with you": "避免您有關聯的年份",
-    "Avoid dates and years that are associated with you": "避免與您有關聯的日期與年份",
-    "Capitalization doesn't help very much": "大寫並沒有太大的協助",
-    "All-uppercase is almost as easy to guess as all-lowercase": "全大寫通常比全小寫好猜",
-    "Reversed words aren't much harder to guess": "反向拼字不會比較難猜",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "如「@」而非「a」這樣的預期中的替換並沒有太多的協助",
-    "Add another word or two. Uncommon words are better.": "加入一個或兩個額外的單字。最好是不常用的。",
-    "Repeats like \"aaa\" are easy to guess": "如「aaa」這樣的重覆易於猜測",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "如「abcabcabc」這樣的重覆只比「abc」難猜一點",
-    "Sequences like abc or 6543 are easy to guess": "如 abc 或 6543 這樣的序列易於猜測",
-    "Recent years are easy to guess": "最近的年份易於猜測",
-    "Dates are often easy to guess": "日期通常比較好猜",
-    "This is a top-10 common password": "這是十大常見的密碼",
-    "This is a top-100 common password": "這是百大常見的密碼",
-    "This is a very common password": "這是非常常見的密碼",
-    "This is similar to a commonly used password": "這與常見使用的密碼很類似",
-    "A word by itself is easy to guess": "單字本身很容易猜測",
-    "Names and surnames by themselves are easy to guess": "姓名與姓氏本身很容易猜測",
-    "Common names and surnames are easy to guess": "常見的名字與姓氏易於猜測",
     "You do not have permission to invite people to this room.": "您沒有權限邀請夥伴到此聊天室。",
     "Unknown server error": "未知的伺服器錯誤",
     "Set up": "設定",
@@ -380,8 +355,6 @@
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "如果您沒有設定新的復原方法，攻擊者可能會嘗試存取您的帳號。在設定中立刻變更您的密碼並設定新的復原方法。",
     "Set up Secure Messages": "設定安全訊息",
     "Go to Settings": "前往設定",
-    "Straight rows of keys are easy to guess": "直排按鍵很容易猜到",
-    "Short keyboard patterns are easy to guess": "短鍵盤模式很容易猜到",
     "Unable to load commit detail: %(msg)s": "無法載入遞交的詳細資訊：%(msg)s",
     "Unrecognised address": "無法識別的位址",
     "The following users may not exist": "以下的使用者可能不存在",
@@ -2563,11 +2536,11 @@
         "integration_manager": "整合管理員",
         "qr_code": "QR Code",
         "feedback": "回饋",
-        "all_rooms": "所有聊天室",
-        "orphan_rooms": "其他聊天室",
         "preview_message": "嘿！您最棒了！",
+        "orphan_rooms": "其他聊天室",
         "on": "開啟",
-        "off": "關閉"
+        "off": "關閉",
+        "all_rooms": "所有聊天室"
     },
     "action": {
         "continue": "繼續",
@@ -2668,8 +2641,8 @@
         "submit": "送出",
         "send_report": "傳送回報",
         "clear": "清除",
-        "enter_fullscreen": "進入全螢幕",
-        "exit_fullscreeen": "離開全螢幕"
+        "exit_fullscreeen": "離開全螢幕",
+        "enter_fullscreen": "進入全螢幕"
     },
     "a11y": {
         "user_menu": "使用者選單",
@@ -2746,11 +2719,11 @@
         "notification_settings_beta_title": "通知設定",
         "voice_broadcast_force_small_chunks": "強制 15 秒語音廣播區塊長度",
         "oidc_native_flow": "啟用新的原生 OIDC 流程（正在積極開發中）",
-        "automatic_debug_logs": "自動在發生錯誤時傳送除錯日誌",
-        "automatic_debug_logs_decryption": "自動傳送關於解密錯誤的除錯紀錄檔",
-        "automatic_debug_logs_key_backup": "金鑰備份無法運作時，自動傳送除錯紀錄檔",
+        "sliding_sync_disabled_notice": "登出並重新登入以停用",
         "rust_crypto_disabled_notice": "目前僅能透過 config.json 啟用",
-        "sliding_sync_disabled_notice": "登出並重新登入以停用"
+        "automatic_debug_logs_key_backup": "金鑰備份無法運作時，自動傳送除錯紀錄檔",
+        "automatic_debug_logs_decryption": "自動傳送關於解密錯誤的除錯紀錄檔",
+        "automatic_debug_logs": "自動在發生錯誤時傳送除錯日誌"
     },
     "keyboard": {
         "home": "首頁",
@@ -3040,15 +3013,26 @@
             "timeline_image_size": "時間軸中的圖片大小",
             "timeline_image_size_default": "預設",
             "timeline_image_size_large": "大",
-            "custom_font_size": "使用自訂大小",
+            "image_size_large": "大",
+            "image_size_default": "預設",
+            "font_size_valid": "使用 %(min)s 點至 %(max)s 點間",
             "font_size_nan": "大小必須為數字",
             "font_size_limit": "自訂字型大小僅能為 %(min)s 點至 %(max)s 點間",
-            "font_size_valid": "使用 %(min)s 點至 %(max)s 點間",
-            "image_size_default": "預設",
-            "image_size_large": "大"
+            "custom_font_size": "使用自訂大小"
         },
         "inline_url_previews_room_account": "對此聊天室啟用網址預覽（僅影響您）",
         "inline_url_previews_room": "對此聊天室中的參與者預設啟用網址預覽",
+        "voip": {
+            "mirror_local_feed": "翻轉鏡射本機視訊畫面",
+            "allow_p2p": "允許在 1 對 1 通話使用點對點連線",
+            "allow_p2p_description": "啟用後，對方可能會看到您的 IP 位址",
+            "auto_gain_control": "自動增益控制",
+            "echo_cancellation": "迴聲消除",
+            "noise_suppression": "噪音抑制",
+            "enable_fallback_ice_server": "允許使用備用通話輔助伺服器（%(server)s）",
+            "enable_fallback_ice_server_description": "僅當您的家伺服器不提供時才適用。在通話期間，將會把您的 IP 位址分享給此伺服器。"
+        },
+        "send_read_receipts_unsupported": "您的伺服器不支援停用傳送讀取回條。",
         "security": {
             "message_search_disable_warning": "若停用，從加密聊天室傳來的訊息將不會出現在搜尋結果中。",
             "message_search_indexing_idle": "目前未為任何聊天室編寫索引。",
@@ -3086,17 +3070,6 @@
             "always_show_menu_bar": "總是顯示視窗選單列",
             "enable_tray_icon": "顯示系統匣圖示並於關閉時最小化",
             "enable_hardware_acceleration": "啟用硬體加速"
-        },
-        "send_read_receipts_unsupported": "您的伺服器不支援停用傳送讀取回條。",
-        "voip": {
-            "mirror_local_feed": "翻轉鏡射本機視訊畫面",
-            "allow_p2p": "允許在 1 對 1 通話使用點對點連線",
-            "allow_p2p_description": "啟用後，對方可能會看到您的 IP 位址",
-            "auto_gain_control": "自動增益控制",
-            "echo_cancellation": "迴聲消除",
-            "noise_suppression": "噪音抑制",
-            "enable_fallback_ice_server": "允許使用備用通話輔助伺服器（%(server)s）",
-            "enable_fallback_ice_server_description": "僅當您的家伺服器不提供時才適用。在通話期間，將會把您的 IP 位址分享給此伺服器。"
         },
         "keyboard": {
             "title": "鍵盤"
@@ -3195,11 +3168,11 @@
         "category_room": "聊天室",
         "category_other": "其他",
         "widget_screenshots": "在支援的小工具上啟用小工具螢幕快照",
+        "title": "開發者工具",
         "show_hidden_events": "顯示時間軸中隱藏的活動",
-        "low_bandwidth_mode": "低頻寬模式",
         "low_bandwidth_mode_description": "需要相容的家伺服器。",
-        "developer_mode": "開發者模式",
-        "title": "開發者工具"
+        "low_bandwidth_mode": "低頻寬模式",
+        "developer_mode": "開發者模式"
     },
     "export_chat": {
         "html": "HTML",
@@ -3579,22 +3552,22 @@
         "no_permission_messages_before_join": "您沒有權限檢視加入前的訊息。",
         "encrypted_historical_messages_unavailable": "在此之前的加密訊息不可用。",
         "historical_messages_unavailable": "您看不到更早的訊息",
-        "io.element.voice_broadcast_info": {
-            "you": "您結束了<a>語音廣播</a>",
-            "user": "%(senderName)s 結束了<a>語音廣播</a>"
+        "redacted": {
+            "tooltip": "訊息刪除於 %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s 使用了 %(content)s 反應",
             "tooltip": "<reactors/><reactedWith> 反應時使用 %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "訊息刪除於 %(date)s"
         },
         "m.room.create": {
             "continuation": "此聊天室是另一個對話的延續。",
             "unknown_predecessor_guess_server": "找不到此聊天室的舊版本（聊天室 ID：%(roomId)s），且我們未提供「via_servers」來檢視它。從聊天室 ID 猜測伺服器可能會有用。若您想嘗試，請點擊此連結：",
             "unknown_predecessor": "找不到此聊天室的舊版本（聊天室 ID：%(roomId)s），且我們未提供「via_servers」來檢視它。",
             "see_older_messages": "點擊此處以檢視更早以前的訊息。"
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "您結束了<a>語音廣播</a>",
+            "user": "%(senderName)s 結束了<a>語音廣播</a>"
         }
     },
     "slash_command": {
@@ -3664,14 +3637,14 @@
         "failed_find_user": "在聊天室中找不到使用者",
         "op": "定義使用者的權限等級",
         "deop": "取消指定 ID 使用者的管理員權限",
-        "server_error": "伺服器錯誤",
-        "command_error": "指令出錯",
-        "server_error_detail": "伺服器可能無法使用、超載，或者某些東西出了問題。",
-        "unknown_command": "未知的指令",
-        "unknown_command_detail": "無法識別的指令：%(commandText)s",
-        "unknown_command_help": "您可以使用 <code>/help</code> 來列出可用的指令。您是要傳送此訊息嗎？",
         "unknown_command_hint": "提示：以 <code>//</code> 開頭讓您的訊息傳送時可以用斜線開頭。",
-        "unknown_command_button": "以訊息傳送"
+        "unknown_command_help": "您可以使用 <code>/help</code> 來列出可用的指令。您是要傳送此訊息嗎？",
+        "unknown_command_detail": "無法識別的指令：%(commandText)s",
+        "unknown_command_button": "以訊息傳送",
+        "unknown_command": "未知的指令",
+        "server_error_detail": "伺服器可能無法使用、超載，或者某些東西出了問題。",
+        "server_error": "伺服器錯誤",
+        "command_error": "指令出錯"
     },
     "presence": {
         "busy": "忙碌",
@@ -3917,8 +3890,8 @@
         "server_picker_custom": "其他家伺服器",
         "server_picker_explainer": "如果您有的話，可以使用您偏好的 Matrix 家伺服器，或是自己架一個。",
         "server_picker_learn_more": "關於家伺服器",
-        "account_deactivated": "此帳號已停用。",
-        "incorrect_credentials": "使用者名稱和／或密碼不正確。"
+        "incorrect_credentials": "使用者名稱和／或密碼不正確。",
+        "account_deactivated": "此帳號已停用。"
     },
     "room_list": {
         "sort_unread_first": "先顯示有未讀訊息的聊天室",
@@ -4049,6 +4022,110 @@
         "existing_issue_link": "請先檢視 <existingIssuesLink>GitHub 上既有的錯誤</existingIssuesLink>。沒有相符的嗎？<newIssueLink>回報新的問題</newIssueLink>。",
         "send_feedback_action": "傳送回饋"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "使用數個字，但避免常用片語",
+            "noNeed": "不需要符號、數字或大寫字母",
+            "longerKeyboardPattern": "以更多變化使用較長的鍵盤模式",
+            "repeated": "避免重覆的文字與字母",
+            "sequences": "避免序列",
+            "recentYears": "避免最近的年份",
+            "associatedYears": "避免您有關聯的年份",
+            "dates": "避免與您有關聯的日期與年份",
+            "capitalization": "大寫並沒有太大的協助",
+            "allUppercase": "全大寫通常比全小寫好猜",
+            "reverseWords": "反向拼字不會比較難猜",
+            "l33t": "如「@」而非「a」這樣的預期中的替換並沒有太多的協助",
+            "anotherWord": "加入一個或兩個額外的單字。最好是不常用的。"
+        },
+        "warnings": {
+            "simpleRepeat": "如「aaa」這樣的重覆易於猜測",
+            "extendedRepeat": "如「abcabcabc」這樣的重覆只比「abc」難猜一點",
+            "sequences": "如 abc 或 6543 這樣的序列易於猜測",
+            "recentYears": "最近的年份易於猜測",
+            "dates": "日期通常比較好猜",
+            "topTen": "這是十大常見的密碼",
+            "topHundred": "這是百大常見的密碼",
+            "common": "這是非常常見的密碼",
+            "similarToCommon": "這與常見使用的密碼很類似",
+            "wordByItself": "單字本身很容易猜測",
+            "namesByThemselves": "姓名與姓氏本身很容易猜測",
+            "commonNames": "常見的名字與姓氏易於猜測",
+            "straightRow": "直排按鍵很容易猜到",
+            "keyPattern": "短鍵盤模式很容易猜到"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "無法啟動新的語音廣播",
+        "failed_insufficient_permission_title": "無法啟動新的語音廣播",
+        "failed_others_already_recording_title": "無法啟動新的語音廣播",
+        "failed_already_recording_description": "您已經開始錄製語音廣播。請結束您目前的語音廣播以開始新的語音廣播。",
+        "failed_insufficient_permission_description": "您沒有權限在此聊天室內開始語音廣播。請聯絡聊天室管理員升級您的權限。",
+        "failed_others_already_recording_description": "其他人已在錄製語音廣播。等待他們的語音廣播結束以開始新的。",
+        "failed_no_connection_title": "連線錯誤",
+        "failed_no_connection_description": "很抱歉，現在無法錄音。請稍後再試。",
+        "failed_decrypt": "無法解密語音廣播",
+        "failed_generic": "無法播放此語音廣播",
+        "confirm_stop_title": "停止即時廣播？",
+        "confirm_stop_description": "您真的要停止即時廣播嗎？將會結束廣播，完整錄音存檔稍後將在聊天室中提供。",
+        "confirm_stop_affirm": "是的，停止廣播",
+        "confirm_listen_title": "聆聽直播？",
+        "confirm_listen_description": "若您開始收聽本次直播，您目前的直播錄製將會結束。",
+        "confirm_listen_affirm": "是的，結束我的錄製",
+        "30s_backward": "快退30秒",
+        "30s_forward": "快轉30秒",
+        "go_live": "開始直播",
+        "resume": "恢復語音廣播",
+        "pause": "暫停語音廣播",
+        "buffering": "正在緩衝…",
+        "play": "播放語音廣播",
+        "connection_error": "連線錯誤 - 已暫停錄音"
+    },
+    "update": {
+        "see_changes_button": "有何新變動嗎？",
+        "release_notes_toast_title": "新鮮事",
+        "toast_title": "更新 %(brand)s",
+        "toast_description": "%(brand)s 的新版本已可使用"
+    },
+    "threads": {
+        "all_threads": "所有討論串",
+        "all_threads_description": "顯示從目前聊天室而來的所有討論串",
+        "my_threads": "我的討論串",
+        "my_threads_description": "顯示您參與的所有討論串",
+        "show_thread_filter": "顯示：",
+        "empty_has_threads_tip": "將滑鼠游標停留在訊息上來開始新的討論串時，回覆正在進行的討論串或使用「%(replyInThread)s」。",
+        "show_all_threads": "顯示所有討論串",
+        "empty_explainer": "「討論串」功能可以協助您的對話不離題且易於追蹤。",
+        "empty_tip": "<b>秘訣：</b>在滑鼠游標停於訊息上時使用「%(replyInThread)s」。",
+        "empty_heading": "使用「討論串」功能，讓討論保持有條不紊"
+    },
+    "theme": {
+        "light_high_contrast": "亮色高對比"
+    },
+    "space": {
+        "landing_welcome": "歡迎加入 <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "此家伺服器未設定來顯示地圖。",
+        "WebGLNotEnabled": "需要開啟 WebGL 功能才可以顯示地圖，請到瀏覽器設定中開啟。",
+        "MapStyleUrlNotReachable": "此家伺服器未正確設定，無法顯示地圖，或是設定的地圖伺服器無法使用。",
+        "toggle_attribution": "切換屬性",
+        "map_feedback": "地圖回饋",
+        "find_my_location": "尋找我的位置",
+        "location_not_available": "位置不可用",
+        "mapbox_logo": "Mapbox 圖示",
+        "reset_bearing": "將方位重設為北",
+        "failed_permission": "%(brand)s 沒有權限取得您的位置。請在您的瀏覽器設定中允許位置存取權限。",
+        "failed_generic": "無法取得您的位置。請稍後再試。",
+        "failed_timeout": "嘗試取得您的位置時逾時。請稍後再試。",
+        "failed_unknown": "取得位置時發生未知錯誤。請稍後再試。",
+        "expand_map": "展開地圖",
+        "failed_load_map": "無法載入地圖"
+    },
+    "labs_mjolnir": {
+        "room_name": "我的封鎖清單",
+        "room_topic": "這是您已封鎖的的使用者／伺服器清單，不要離開聊天室！"
+    },
     "create_space": {
         "name_required": "請輸入聊天空間名稱",
         "name_placeholder": "例如：my-space",
@@ -4083,76 +4160,5 @@
         "setup_rooms_description": "您稍後可以新增更多內容，包含既有的。",
         "setup_rooms_private_heading": "您的團隊正在從事哪些專案？",
         "setup_rooms_private_description": "我們將為每個主題建立聊天室。"
-    },
-    "space": {
-        "landing_welcome": "歡迎加入 <name/>"
-    },
-    "threads": {
-        "all_threads": "所有討論串",
-        "all_threads_description": "顯示從目前聊天室而來的所有討論串",
-        "my_threads": "我的討論串",
-        "my_threads_description": "顯示您參與的所有討論串",
-        "show_thread_filter": "顯示：",
-        "empty_has_threads_tip": "將滑鼠游標停留在訊息上來開始新的討論串時，回覆正在進行的討論串或使用「%(replyInThread)s」。",
-        "show_all_threads": "顯示所有討論串",
-        "empty_explainer": "「討論串」功能可以協助您的對話不離題且易於追蹤。",
-        "empty_tip": "<b>秘訣：</b>在滑鼠游標停於訊息上時使用「%(replyInThread)s」。",
-        "empty_heading": "使用「討論串」功能，讓討論保持有條不紊"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "此家伺服器未設定來顯示地圖。",
-        "WebGLNotEnabled": "需要開啟 WebGL 功能才可以顯示地圖，請到瀏覽器設定中開啟。",
-        "MapStyleUrlNotReachable": "此家伺服器未正確設定，無法顯示地圖，或是設定的地圖伺服器無法使用。",
-        "toggle_attribution": "切換屬性",
-        "map_feedback": "地圖回饋",
-        "find_my_location": "尋找我的位置",
-        "location_not_available": "位置不可用",
-        "mapbox_logo": "Mapbox 圖示",
-        "reset_bearing": "將方位重設為北",
-        "failed_permission": "%(brand)s 沒有權限取得您的位置。請在您的瀏覽器設定中允許位置存取權限。",
-        "failed_generic": "無法取得您的位置。請稍後再試。",
-        "failed_timeout": "嘗試取得您的位置時逾時。請稍後再試。",
-        "failed_unknown": "取得位置時發生未知錯誤。請稍後再試。",
-        "expand_map": "展開地圖",
-        "failed_load_map": "無法載入地圖"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "無法啟動新的語音廣播",
-        "failed_insufficient_permission_title": "無法啟動新的語音廣播",
-        "failed_others_already_recording_title": "無法啟動新的語音廣播",
-        "failed_already_recording_description": "您已經開始錄製語音廣播。請結束您目前的語音廣播以開始新的語音廣播。",
-        "failed_insufficient_permission_description": "您沒有權限在此聊天室內開始語音廣播。請聯絡聊天室管理員升級您的權限。",
-        "failed_others_already_recording_description": "其他人已在錄製語音廣播。等待他們的語音廣播結束以開始新的。",
-        "failed_no_connection_title": "連線錯誤",
-        "failed_no_connection_description": "很抱歉，現在無法錄音。請稍後再試。",
-        "failed_decrypt": "無法解密語音廣播",
-        "failed_generic": "無法播放此語音廣播",
-        "confirm_stop_title": "停止即時廣播？",
-        "confirm_stop_description": "您真的要停止即時廣播嗎？將會結束廣播，完整錄音存檔稍後將在聊天室中提供。",
-        "confirm_stop_affirm": "是的，停止廣播",
-        "confirm_listen_title": "聆聽直播？",
-        "confirm_listen_description": "若您開始收聽本次直播，您目前的直播錄製將會結束。",
-        "confirm_listen_affirm": "是的，結束我的錄製",
-        "30s_backward": "快退30秒",
-        "30s_forward": "快轉30秒",
-        "go_live": "開始直播",
-        "resume": "恢復語音廣播",
-        "pause": "暫停語音廣播",
-        "buffering": "正在緩衝…",
-        "play": "播放語音廣播",
-        "connection_error": "連線錯誤 - 已暫停錄音"
-    },
-    "labs_mjolnir": {
-        "room_name": "我的封鎖清單",
-        "room_topic": "這是您已封鎖的的使用者／伺服器清單，不要離開聊天室！"
-    },
-    "theme": {
-        "light_high_contrast": "亮色高對比"
-    },
-    "update": {
-        "see_changes_button": "有何新變動嗎？",
-        "release_notes_toast_title": "新鮮事",
-        "toast_title": "更新 %(brand)s",
-        "toast_description": "%(brand)s 的新版本已可使用"
     }
 }

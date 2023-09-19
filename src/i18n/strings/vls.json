@@ -82,33 +82,6 @@
     "The user must be unbanned before they can be invited.": "De gebruuker kun nie uutgenodigd wordn voda z’n verbannienge oungedoan gemakt gewist es.",
     "The user's homeserver does not support the version of the room.": "Den thuusserver van de gebruuker biedt geen oundersteunienge vo de gespreksversie.",
     "Unknown server error": "Ounbekende serverfoute",
-    "Use a few words, avoid common phrases": "Gebruukt een antal woordn - moa geen gekende uutdrukkiengn",
-    "No need for symbols, digits, or uppercase letters": "Hoofdletters, cyfers of specioale tekens moetn nie, moa meugn wel",
-    "Use a longer keyboard pattern with more turns": "Gebruukt e langer patroon me meer varioasje",
-    "Avoid repeated words and characters": "Vermydt herhoaliengn van woordn of tekens",
-    "Avoid sequences": "Vermydt riksjes",
-    "Avoid recent years": "Vermydt recente joarn",
-    "Avoid years that are associated with you": "Vermydt joarn dad ip jezelve betrekkienge èn",
-    "Avoid dates and years that are associated with you": "Vermydt data en joarn dad ip jezelve betrekkienge èn",
-    "Capitalization doesn't help very much": "Schryvn in hoofdletters makt nie veel uut",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Tekst in hoofdletters is praktisch even gemakkelik te roadn of tekst in kleine letters",
-    "Reversed words aren't much harder to guess": "Omgedroaide woordn zyn bykan even gemakkelik te roadn",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Voorspelboare vervangiengn (lyk ‘@’ i.p.v. ‘a’) zyn nie vree zinvol",
-    "Add another word or two. Uncommon words are better.": "Voegt nog e poar (liefst weinig gebruukte) woordn toe.",
-    "Repeats like \"aaa\" are easy to guess": "Herhoaliengn lyk ‘aaa’ wordn gemakkelik geroadn",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Herhoaliengn lyk ‘abcabcabc’ zyn bykan even gemakkelik te roadn of ‘abc’",
-    "Sequences like abc or 6543 are easy to guess": "Riksjes lyk ‘abc’ of ‘6543’ zyn gemakkelik te roadn",
-    "Recent years are easy to guess": "Recente joartalln zyn gemakkelik te roadn",
-    "Dates are often easy to guess": "Data zyn dikkers gemakkelik te roadn",
-    "This is a top-10 common password": "Dit zit in de top 10 van meestgebruukte paswoordn",
-    "This is a top-100 common password": "Dit zit in de top 100 van meestgebruukte paswoordn",
-    "This is a very common password": "Dit es e veelgebruukt paswoord",
-    "This is similar to a commonly used password": "Dit gelykt sterk ip e veelgebruukt paswoord",
-    "A word by itself is easy to guess": "Eén enkel woord is vree gemakkelik te roadn",
-    "Names and surnames by themselves are easy to guess": "Een alleenstoande voor- of achternoame es gemakkelik te roadn",
-    "Common names and surnames are easy to guess": "Voor- en achternoamn zyn gemakkelik te roadn",
-    "Straight rows of keys are easy to guess": "Zulk’n aneengeslootn riksje toetsn es gemakkelik te roadn",
-    "Short keyboard patterns are easy to guess": "Korte patroonn ip ’t toetsenbord wordn gemakkelik geroadn",
     "Please contact your homeserver administrator.": "Gelieve contact ip te neemn me den beheerder van je thuusserver.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Beveiligde berichtn me deze gebruuker zyn eind-tout-eind-versleuterd en kunn nie door derdn wordn geleezn.",
     "Got It": "’k Snappen ’t",
@@ -819,17 +792,17 @@
         },
         "inline_url_previews_room_account": "URL-voorvertoniengn in dit gesprek inschoakeln (geldt alleene vo joun)",
         "inline_url_previews_room": "URL-voorvertoniengn standoard vo de gebruukers in dit gesprek inschoakeln",
-        "preferences": {
-            "room_list_heading": "Gesprekslyste",
-            "composer_heading": "Ipsteller",
-            "autocomplete_delay": "Vertroagienge vo ’t automatisch anvulln (ms)",
-            "always_show_menu_bar": "De veinstermenubalk alsan toogn"
-        },
         "voip": {
             "mirror_local_feed": "Lokoale videoanvoer ook elders ipsloan (spiegeln)"
         },
         "security": {
             "send_analytics": "Statistische gegeevns (analytics) verstuurn"
+        },
+        "preferences": {
+            "room_list_heading": "Gesprekslyste",
+            "composer_heading": "Ipsteller",
+            "autocomplete_delay": "Vertroagienge vo ’t automatisch anvulln (ms)",
+            "always_show_menu_bar": "De veinstermenubalk alsan toogn"
         }
     },
     "devtools": {
@@ -991,14 +964,14 @@
         "reactions": {
             "tooltip": "<reactors/><reactedWith>èt gereageerd me %(shortName)s</reactedWith>"
         },
+        "m.room.create": {
+            "continuation": "Dit gesprek es e voortzettienge van een ander gesprek.",
+            "see_older_messages": "Klikt hier voor oudere berichtn te bekykn."
+        },
         "m.room.avatar": {
             "lightbox_title": "%(senderDisplayName)s èt den avatar van %(roomName)s veranderd",
             "removed": "%(senderDisplayName)s èt de gespreksavatar verwyderd.",
             "changed_img": "%(senderDisplayName)s èt de gespreksavatar angepast noa <img/>"
-        },
-        "m.room.create": {
-            "continuation": "Dit gesprek es e voortzettienge van een ander gesprek.",
-            "see_older_messages": "Klikt hier voor oudere berichtn te bekykn."
         }
     },
     "slash_command": {
@@ -1031,9 +1004,9 @@
         "me": "Toogt actie",
         "op": "Bepoal ’t machtsniveau van e gebruuker",
         "deop": "Ountmachtigt de gebruuker me de gegeevn ID",
+        "server_error_detail": "De server is ounbereikboar of overbelast, of der is etwat anders foutgegoan.",
         "server_error": "Serverfoute",
-        "command_error": "Ipdrachtfoute",
-        "server_error_detail": "De server is ounbereikboar of overbelast, of der is etwat anders foutgegoan."
+        "command_error": "Ipdrachtfoute"
     },
     "presence": {
         "online_for": "Online vo %(duration)s",
@@ -1099,8 +1072,8 @@
         "soft_logout_intro_sso": "Meldt jen heran en herkrygt den toegank tou jen account.",
         "soft_logout_intro_unsupported_auth": "Je ku je nie anmeldn me jen account. Nimt contact ip me de beheerder van je thuusserver vo meer informoasje.",
         "register_action": "Account anmoakn",
-        "account_deactivated": "Deezn account is gedeactiveerd gewist.",
-        "incorrect_credentials": "Verkeerde gebruukersnoame en/of paswoord."
+        "incorrect_credentials": "Verkeerde gebruukersnoame en/of paswoord.",
+        "account_deactivated": "Deezn account is gedeactiveerd gewist."
     },
     "export_chat": {
         "messages": "Berichtn"
@@ -1115,12 +1088,45 @@
             "versions": "Versies"
         }
     },
-    "room_list": {
-        "failed_remove_tag": "Verwydern van %(tagName)s-label van gesprek is mislukt",
-        "failed_add_tag": "Toevoegn van %(tagName)s-label an gesprek is mislukt"
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Gebruukt een antal woordn - moa geen gekende uutdrukkiengn",
+            "noNeed": "Hoofdletters, cyfers of specioale tekens moetn nie, moa meugn wel",
+            "longerKeyboardPattern": "Gebruukt e langer patroon me meer varioasje",
+            "repeated": "Vermydt herhoaliengn van woordn of tekens",
+            "sequences": "Vermydt riksjes",
+            "recentYears": "Vermydt recente joarn",
+            "associatedYears": "Vermydt joarn dad ip jezelve betrekkienge èn",
+            "dates": "Vermydt data en joarn dad ip jezelve betrekkienge èn",
+            "capitalization": "Schryvn in hoofdletters makt nie veel uut",
+            "allUppercase": "Tekst in hoofdletters is praktisch even gemakkelik te roadn of tekst in kleine letters",
+            "reverseWords": "Omgedroaide woordn zyn bykan even gemakkelik te roadn",
+            "l33t": "Voorspelboare vervangiengn (lyk ‘@’ i.p.v. ‘a’) zyn nie vree zinvol",
+            "anotherWord": "Voegt nog e poar (liefst weinig gebruukte) woordn toe."
+        },
+        "warnings": {
+            "simpleRepeat": "Herhoaliengn lyk ‘aaa’ wordn gemakkelik geroadn",
+            "extendedRepeat": "Herhoaliengn lyk ‘abcabcabc’ zyn bykan even gemakkelik te roadn of ‘abc’",
+            "sequences": "Riksjes lyk ‘abc’ of ‘6543’ zyn gemakkelik te roadn",
+            "recentYears": "Recente joartalln zyn gemakkelik te roadn",
+            "dates": "Data zyn dikkers gemakkelik te roadn",
+            "topTen": "Dit zit in de top 10 van meestgebruukte paswoordn",
+            "topHundred": "Dit zit in de top 100 van meestgebruukte paswoordn",
+            "common": "Dit es e veelgebruukt paswoord",
+            "similarToCommon": "Dit gelykt sterk ip e veelgebruukt paswoord",
+            "wordByItself": "Eén enkel woord is vree gemakkelik te roadn",
+            "namesByThemselves": "Een alleenstoande voor- of achternoame es gemakkelik te roadn",
+            "commonNames": "Voor- en achternoamn zyn gemakkelik te roadn",
+            "straightRow": "Zulk’n aneengeslootn riksje toetsn es gemakkelik te roadn",
+            "keyPattern": "Korte patroonn ip ’t toetsenbord wordn gemakkelik geroadn"
+        }
     },
     "update": {
         "see_changes_button": "Wuk es ’t er nieuw?",
         "release_notes_toast_title": "Wuk es ’t er nieuw"
+    },
+    "room_list": {
+        "failed_remove_tag": "Verwydern van %(tagName)s-label van gesprek is mislukt",
+        "failed_add_tag": "Toevoegn van %(tagName)s-label an gesprek is mislukt"
     }
 }

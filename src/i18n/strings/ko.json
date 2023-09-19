@@ -339,20 +339,6 @@
     "The user must be unbanned before they can be invited.": "초대하려면 사용자가 출입 금지되지 않은 상태여야 합니다.",
     "The user's homeserver does not support the version of the room.": "사용자의 홈서버가 방의 버전을 호환하지 않습니다.",
     "Unknown server error": "알 수 없는 서버 오류",
-    "Use a few words, avoid common phrases": "몇 단어를 사용하되, 흔한 단어는 피하세요",
-    "No need for symbols, digits, or uppercase letters": "기호, 숫자 혹은 대문자는 필요하지 않습니다",
-    "Use a longer keyboard pattern with more turns": "더 긴 키보드 패턴을 사용하되, 많은 변수를 주는 것이 좋습니다",
-    "Avoid repeated words and characters": "반복하는 단어와 문자는 피하세요",
-    "Avoid sequences": "반복은 피하세요",
-    "Avoid recent years": "최근 연도는 피하세요",
-    "Avoid years that are associated with you": "당신과 관련된 연도는 피하세요",
-    "Avoid dates and years that are associated with you": "당신과 관련된 날짜와 연도는 피하세요",
-    "Capitalization doesn't help very much": "대문자는 큰 도움이 되지 않습니다",
-    "All-uppercase is almost as easy to guess as all-lowercase": "모두 대문자인 것은 모두 소문자인 것처럼 추측하기 쉬울 겁니다",
-    "Reversed words aren't much harder to guess": "반대로 쓴 문자는 추측하기 어렵지 않습니다",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "'a'대신 '@'를 적는 등의 추측할 수 있는 대체제는 큰 도움이 되지 않습니다",
-    "Add another word or two. Uncommon words are better.": "한 두 문자를 추가하세요. 흔하지 않은 문자일수록 좋습니다.",
-    "Repeats like \"aaa\" are easy to guess": "\"aaa\"와 같은 반복은 쉽게 추측합니다",
     "Dog": "개",
     "Cat": "고양이",
     "Lion": "사자",
@@ -417,19 +403,6 @@
     "Folder": "폴더",
     "Accept <policyLink /> to continue:": "계속하려면 <policyLink />을(를) 수락하세요:",
     "Power level": "권한 등급",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "\"abcabcabc\"와 같은 반복은 \"abc\"에서 겨우 조금 더 어렵습니다",
-    "Sequences like abc or 6543 are easy to guess": "abc나 6543과 같은 반복은 추측하기 쉽습니다",
-    "Recent years are easy to guess": "최근 연도는 추측하기 쉽습니다",
-    "Dates are often easy to guess": "날짜는 종종 추측하기 쉽습니다",
-    "This is a top-10 common password": "이것은 상위 10에 해당하는 흔한 비밀번호입니다",
-    "This is a top-100 common password": "이것은 상위 100에 해당하는 흔한 비밀번호입니다",
-    "This is a very common password": "이것은 매우 흔한 비밀번호입니다",
-    "This is similar to a commonly used password": "이것은 흔히 사용되는 비밀번호와 유사합니다",
-    "A word by itself is easy to guess": "단어 자체는 추측하기 쉽습니다",
-    "Names and surnames by themselves are easy to guess": "이름과 성 자체는 추측하기 쉽습니다",
-    "Common names and surnames are easy to guess": "흔한 이름과 성은 추측하기 쉽습니다",
-    "Straight rows of keys are easy to guess": "키의 한 줄은 추측하기 쉽습니다",
-    "Short keyboard patterns are easy to guess": "짧은 키보드 패턴은 추측하기 쉽습니다",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "이 사용자 간의 보안 메시지는 종단간 암호화되며 제 3자가 읽을 수 없습니다.",
     "Got It": "알겠습니다",
     "Verify this user by confirming the following emoji appear on their screen.": "다음 이모지가 상대방의 화면에 나타나는 것을 확인하는 것으로 이 사용자를 인증합니다.",
@@ -959,10 +932,10 @@
         "identity_server": "ID 서버",
         "integration_manager": "통합 관리자",
         "feedback": "피드백",
-        "all_rooms": "모든 방 목록",
         "orphan_rooms": "다른 방 목록",
         "on": "켜기",
-        "off": "끄기"
+        "off": "끄기",
+        "all_rooms": "모든 방 목록"
     },
     "action": {
         "continue": "계속하기",
@@ -1119,6 +1092,12 @@
         },
         "inline_url_previews_room_account": "이 방에서 URL 미리보기 사용하기 (오직 나만 영향을 받음)",
         "inline_url_previews_room": "이 방에 참여한 모두에게 기본으로 URL 미리보기 사용하기",
+        "voip": {
+            "mirror_local_feed": "보고 있는 비디오 전송 상태 비추기"
+        },
+        "security": {
+            "send_analytics": "정보 분석 데이터 보내기"
+        },
         "preferences": {
             "room_list_heading": "방 목록",
             "composer_heading": "작성기",
@@ -1126,12 +1105,6 @@
             "rm_lifetime": "이전 대화 경계선 표시 시간 (ms)",
             "rm_lifetime_offscreen": "이전 대화 경계선 사라지는 시간 (ms)",
             "always_show_menu_bar": "항상 윈도우 메뉴 막대에 보이기"
-        },
-        "voip": {
-            "mirror_local_feed": "보고 있는 비디오 전송 상태 비추기"
-        },
-        "security": {
-            "send_analytics": "정보 분석 데이터 보내기"
         },
         "keyboard": {
             "title": "키보드 (단축키)"
@@ -1148,8 +1121,8 @@
         "category_room": "방",
         "category_other": "기타",
         "widget_screenshots": "지원되는 위젯에 대해 위젯 스크린샷 사용하기",
-        "show_hidden_events": "타임라인에서 숨겨진 이벤트 보이기",
-        "title": "개발자 도구"
+        "title": "개발자 도구",
+        "show_hidden_events": "타임라인에서 숨겨진 이벤트 보이기"
     },
     "create_room": {
         "title_public_room": "공개 방 만들기",
@@ -1319,14 +1292,14 @@
         "reactions": {
             "tooltip": "<reactors/><reactedWith>%(shortName)s으로 리액션함</reactedWith>"
         },
+        "m.room.create": {
+            "continuation": "이 방은 다른 대화방의 연장선입니다.",
+            "see_older_messages": "여길 눌러 오래된 메시지를 보세요."
+        },
         "m.room.avatar": {
             "lightbox_title": "%(senderDisplayName)s님이 %(roomName)s 방의 아바타를 바꿈",
             "removed": "%(senderDisplayName)s님이 방 아바타를 제거했습니다.",
             "changed_img": "%(senderDisplayName)s님이 방 아바타를 <img/>(으)로 바꿈"
-        },
-        "m.room.create": {
-            "continuation": "이 방은 다른 대화방의 연장선입니다.",
-            "see_older_messages": "여길 눌러 오래된 메시지를 보세요."
         }
     },
     "slash_command": {
@@ -1368,9 +1341,9 @@
         "me": "활동 표시하기",
         "op": "사용자의 권한 등급 정의하기",
         "deop": "받은 ID로 사용자의 등급을 낮추기",
+        "server_error_detail": "서버를 쓸 수 없거나 과부하거나, 다른 문제가 있습니다.",
         "server_error": "서버 오류",
-        "command_error": "명령어 오류",
-        "server_error_detail": "서버를 쓸 수 없거나 과부하거나, 다른 문제가 있습니다."
+        "command_error": "명령어 오류"
     },
     "presence": {
         "online_for": "%(duration)s 동안 온라인",
@@ -1459,8 +1432,8 @@
         "soft_logout_intro_sso": "로그인하고 계정에 다시 접근하기.",
         "soft_logout_intro_unsupported_auth": "계정에 로그인할 수 없습니다. 자세한 정보는 홈서버 관리자에게 연락하세요.",
         "register_action": "계정 만들기",
-        "account_deactivated": "이 계정은 비활성화되었습니다.",
-        "incorrect_credentials": "사용자 이름 혹은 비밀번호가 맞지 않습니다."
+        "incorrect_credentials": "사용자 이름 혹은 비밀번호가 맞지 않습니다.",
+        "account_deactivated": "이 계정은 비활성화되었습니다."
     },
     "export_chat": {
         "title": "대화 내보내기",
@@ -1511,16 +1484,49 @@
         "sent": "피드백 보내기",
         "send_feedback_action": "피드백 보내기"
     },
-    "create_space": {
-        "public_heading": "당신의 공개 스페이스",
-        "private_heading": "당신의 비공개 스페이스"
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "몇 단어를 사용하되, 흔한 단어는 피하세요",
+            "noNeed": "기호, 숫자 혹은 대문자는 필요하지 않습니다",
+            "longerKeyboardPattern": "더 긴 키보드 패턴을 사용하되, 많은 변수를 주는 것이 좋습니다",
+            "repeated": "반복하는 단어와 문자는 피하세요",
+            "sequences": "반복은 피하세요",
+            "recentYears": "최근 연도는 피하세요",
+            "associatedYears": "당신과 관련된 연도는 피하세요",
+            "dates": "당신과 관련된 날짜와 연도는 피하세요",
+            "capitalization": "대문자는 큰 도움이 되지 않습니다",
+            "allUppercase": "모두 대문자인 것은 모두 소문자인 것처럼 추측하기 쉬울 겁니다",
+            "reverseWords": "반대로 쓴 문자는 추측하기 어렵지 않습니다",
+            "l33t": "'a'대신 '@'를 적는 등의 추측할 수 있는 대체제는 큰 도움이 되지 않습니다",
+            "anotherWord": "한 두 문자를 추가하세요. 흔하지 않은 문자일수록 좋습니다."
+        },
+        "warnings": {
+            "simpleRepeat": "\"aaa\"와 같은 반복은 쉽게 추측합니다",
+            "extendedRepeat": "\"abcabcabc\"와 같은 반복은 \"abc\"에서 겨우 조금 더 어렵습니다",
+            "sequences": "abc나 6543과 같은 반복은 추측하기 쉽습니다",
+            "recentYears": "최근 연도는 추측하기 쉽습니다",
+            "dates": "날짜는 종종 추측하기 쉽습니다",
+            "topTen": "이것은 상위 10에 해당하는 흔한 비밀번호입니다",
+            "topHundred": "이것은 상위 100에 해당하는 흔한 비밀번호입니다",
+            "common": "이것은 매우 흔한 비밀번호입니다",
+            "similarToCommon": "이것은 흔히 사용되는 비밀번호와 유사합니다",
+            "wordByItself": "단어 자체는 추측하기 쉽습니다",
+            "namesByThemselves": "이름과 성 자체는 추측하기 쉽습니다",
+            "commonNames": "흔한 이름과 성은 추측하기 쉽습니다",
+            "straightRow": "키의 한 줄은 추측하기 쉽습니다",
+            "keyPattern": "짧은 키보드 패턴은 추측하기 쉽습니다"
+        }
+    },
+    "update": {
+        "see_changes_button": "새로운 점은?",
+        "release_notes_toast_title": "새로운 점"
     },
     "labs_mjolnir": {
         "room_name": "차단 목록",
         "room_topic": "차단한 사용자/서버 목록입니다 - 방을 떠나지 마세요!"
     },
-    "update": {
-        "see_changes_button": "새로운 점은?",
-        "release_notes_toast_title": "새로운 점"
+    "create_space": {
+        "public_heading": "당신의 공개 스페이스",
+        "private_heading": "당신의 비공개 스페이스"
     }
 }

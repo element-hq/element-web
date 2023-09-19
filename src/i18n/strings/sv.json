@@ -331,33 +331,6 @@
     "Unrecognised address": "Okänd adress",
     "You do not have permission to invite people to this room.": "Du har inte behörighet att bjuda in användare till det här rummet.",
     "Unknown server error": "Okänt serverfel",
-    "Use a few words, avoid common phrases": "Använd några ord, undvik vanliga fraser",
-    "No need for symbols, digits, or uppercase letters": "Specialtecken, siffror eller stora bokstäver behövs inte",
-    "Avoid repeated words and characters": "Undvik upprepade ord och bokstäver",
-    "Avoid sequences": "Undvik sekvenser",
-    "Avoid recent years": "Undvik nyliga år",
-    "Avoid years that are associated with you": "Undvik årtal som associeras med dig",
-    "Avoid dates and years that are associated with you": "Undvik datum och årtal som associeras med dig",
-    "Capitalization doesn't help very much": "Versaler hjälper inte särskilt mycket",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Endast stora bokstäver är nästan lika enkelt att gissa som endast små bokstäver",
-    "Reversed words aren't much harder to guess": "Ord skrivna baklänges är inte mycket svårare att gissa",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Förutsägbara ersättningar som '@' istället för 'a' hjälper inte särskilt mycket",
-    "Add another word or two. Uncommon words are better.": "Lägg till ett ord eller två. Okända ord är bättre.",
-    "Repeats like \"aaa\" are easy to guess": "Upprepningar som \"aaa\" är enkla att gissa",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Upprepningar som \"abcabcabc\" är bara aningen svårare att gissa än \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Sekvenser som abc eller 6543 är enkla att gissa",
-    "Recent years are easy to guess": "Nyliga årtal är enkla att gissa",
-    "Dates are often easy to guess": "Datum är ofta enkla att gissa",
-    "This is a top-10 common password": "Det här är ett av de 10 vanligaste lösenorden",
-    "This is a top-100 common password": "Det här är ett av de 100 vanligaste lösenorden",
-    "This is a very common password": "Det här är ett väldigt vanligt lösenord",
-    "This is similar to a commonly used password": "Det här liknar ett vanligt lösenord",
-    "A word by itself is easy to guess": "Enstaka ord är enkla att gissa",
-    "Names and surnames by themselves are easy to guess": "Enstaka för- och efternamn är enkla att gissa",
-    "Common names and surnames are easy to guess": "Vanliga för- och efternamn är enkla att gissa",
-    "Straight rows of keys are easy to guess": "Raka rader på tangentbordet är enkla att gissa",
-    "Short keyboard patterns are easy to guess": "Korta tangentbordsmönster är enkla att gissa",
-    "Use a longer keyboard pattern with more turns": "Använd ett längre tangentbordsmönster med fler riktningsbyten",
     "Dog": "Hund",
     "Cat": "Katt",
     "Lion": "Lejon",
@@ -2520,11 +2493,11 @@
         "integration_manager": "Integrationshanterare",
         "qr_code": "QR-kod",
         "feedback": "Återkoppling",
-        "all_rooms": "Alla rum",
-        "orphan_rooms": "Andra rum",
         "preview_message": "Hallå där. Du är bäst!",
+        "orphan_rooms": "Andra rum",
         "on": "På",
-        "off": "Av"
+        "off": "Av",
+        "all_rooms": "Alla rum"
     },
     "action": {
         "continue": "Fortsätt",
@@ -2624,8 +2597,8 @@
         "submit": "Skicka in",
         "send_report": "Skicka rapport",
         "clear": "Rensa",
-        "enter_fullscreen": "Gå till fullskärm",
-        "exit_fullscreeen": "Gå ur fullskärm"
+        "exit_fullscreeen": "Gå ur fullskärm",
+        "enter_fullscreen": "Gå till fullskärm"
     },
     "a11y": {
         "user_menu": "Användarmeny",
@@ -2702,11 +2675,11 @@
         "notification_settings_beta_title": "Aviseringsinställningar",
         "voice_broadcast_force_small_chunks": "Tvinga dellängd på 15s för röstsändning",
         "oidc_native_flow": "Aktivera nya inbyggda OIDC-flöden (Under aktiv utveckling)",
-        "automatic_debug_logs": "Skicka automatiskt felsökningsloggar vid fel",
-        "automatic_debug_logs_decryption": "Skicka automatiskt avbuggningsloggar vid avkrypteringsfel",
-        "automatic_debug_logs_key_backup": "Skicka automatiskt felsökningsloggar när nyckelsäkerhetskopiering inte funkar",
+        "sliding_sync_disabled_notice": "Logga ut och in igen för att inaktivera",
         "rust_crypto_disabled_notice": "Kan för närvarande endast aktiveras via config.json",
-        "sliding_sync_disabled_notice": "Logga ut och in igen för att inaktivera"
+        "automatic_debug_logs_key_backup": "Skicka automatiskt felsökningsloggar när nyckelsäkerhetskopiering inte funkar",
+        "automatic_debug_logs_decryption": "Skicka automatiskt avbuggningsloggar vid avkrypteringsfel",
+        "automatic_debug_logs": "Skicka automatiskt felsökningsloggar vid fel"
     },
     "keyboard": {
         "home": "Hem",
@@ -2996,15 +2969,26 @@
             "timeline_image_size": "Bildstorlek i tidslinjen",
             "timeline_image_size_default": "Standard",
             "timeline_image_size_large": "Stor",
-            "custom_font_size": "Använd anpassad storlek",
+            "image_size_large": "Stor",
+            "image_size_default": "Standard",
+            "font_size_valid": "Använd mellan %(min)s pt och %(max)s pt",
             "font_size_nan": "Storleken måste vara ett nummer",
             "font_size_limit": "Anpassad teckenstorlek kan bara vara mellan %(min)s pt och %(max)s pt",
-            "font_size_valid": "Använd mellan %(min)s pt och %(max)s pt",
-            "image_size_default": "Standard",
-            "image_size_large": "Stor"
+            "custom_font_size": "Använd anpassad storlek"
         },
         "inline_url_previews_room_account": "Aktivera URL-förhandsgranskning för detta rum (påverkar bara dig)",
         "inline_url_previews_room": "Aktivera URL-förhandsgranskning som standard för deltagare i detta rum",
+        "voip": {
+            "mirror_local_feed": "Spegla den lokala videoströmmen",
+            "allow_p2p": "Tillåt peer-to-peer för direktsamtal",
+            "allow_p2p_description": "När aktiverat så kan den andra parten kanske se din IP-adress",
+            "auto_gain_control": "Automatisk förstärkningskontroll",
+            "echo_cancellation": "Ekoreducering",
+            "noise_suppression": "Brusreducering",
+            "enable_fallback_ice_server": "Tillåt reservserver för samtalsassistans (%(server)s)",
+            "enable_fallback_ice_server_description": "Gäller endast om din hemserver inte erbjuder en. Din IP-adress delas under samtal."
+        },
+        "send_read_receipts_unsupported": "Din server stöder inte inaktivering av läskvitton.",
         "security": {
             "message_search_disable_warning": "Om den är inaktiverad visas inte meddelanden från krypterade rum i sökresultaten.",
             "message_search_indexing_idle": "Indexerar för närvarande inte meddelanden för något rum.",
@@ -3042,17 +3026,6 @@
             "always_show_menu_bar": "Visa alltid fönstermenyn",
             "enable_tray_icon": "Visa ikon i systembrickan och minimera programmet till den när fönstret stängs",
             "enable_hardware_acceleration": "Aktivera hårdvaruaccelerering"
-        },
-        "send_read_receipts_unsupported": "Din server stöder inte inaktivering av läskvitton.",
-        "voip": {
-            "mirror_local_feed": "Spegla den lokala videoströmmen",
-            "allow_p2p": "Tillåt peer-to-peer för direktsamtal",
-            "allow_p2p_description": "När aktiverat så kan den andra parten kanske se din IP-adress",
-            "auto_gain_control": "Automatisk förstärkningskontroll",
-            "echo_cancellation": "Ekoreducering",
-            "noise_suppression": "Brusreducering",
-            "enable_fallback_ice_server": "Tillåt reservserver för samtalsassistans (%(server)s)",
-            "enable_fallback_ice_server_description": "Gäller endast om din hemserver inte erbjuder en. Din IP-adress delas under samtal."
         },
         "keyboard": {
             "title": "Tangentbord"
@@ -3146,11 +3119,11 @@
         "category_room": "Rum",
         "category_other": "Annat",
         "widget_screenshots": "Aktivera widget-skärmdumpar för widgets som stöder det",
+        "title": "Utvecklarverktyg",
         "show_hidden_events": "Visa dolda händelser i tidslinjen",
-        "low_bandwidth_mode": "Lågt bandbreddsläge",
         "low_bandwidth_mode_description": "Kräver kompatibel hemserver.",
-        "developer_mode": "Utvecklarläge",
-        "title": "Utvecklarverktyg"
+        "low_bandwidth_mode": "Lågt bandbreddsläge",
+        "developer_mode": "Utvecklarläge"
     },
     "export_chat": {
         "html": "HTML",
@@ -3521,22 +3494,22 @@
         "no_permission_messages_before_join": "Du är inte behörig att se meddelanden från innan du gick med.",
         "encrypted_historical_messages_unavailable": "Krypterade meddelanden innan den här tidpunkten är otillgängliga.",
         "historical_messages_unavailable": "Du kan inte se tidigare meddelanden",
-        "io.element.voice_broadcast_info": {
-            "you": "Du avslutade en <a>röstsändning</a>",
-            "user": "%(senderName)s avslutade en <a>röstsändning</a>"
+        "redacted": {
+            "tooltip": "Meddelande raderat vid %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s reagerade med %(content)s",
             "tooltip": "<reactors/><reactedWith>reagerade med %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Meddelande raderat vid %(date)s"
         },
         "m.room.create": {
             "continuation": "Detta rum är en fortsättning på en annan konversation.",
             "unknown_predecessor_guess_server": "Kan inte hitta den gamla versionen av det här rummet (rums-ID: %(roomId)s), och vi har inte fått ”via_servers” för att leta efter det. Det är möjligt att det går att gissa servern från rums-ID:t. Om du vill pröva, klicka på den här länken:",
             "unknown_predecessor": "Kan inte hitta den gamla versionen av det här rummet (rums-ID: %(roomId)s), och vi har inte fått ”via_servers” för att leta efter det.",
             "see_older_messages": "Klicka här för att se äldre meddelanden."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Du avslutade en <a>röstsändning</a>",
+            "user": "%(senderName)s avslutade en <a>röstsändning</a>"
         }
     },
     "slash_command": {
@@ -3605,14 +3578,14 @@
         "failed_find_user": "Kunde inte hitta användaren i rummet",
         "op": "Definiera behörighetsnivå för en användare",
         "deop": "Degraderar användaren med givet ID",
-        "server_error": "Serverfel",
-        "command_error": "Kommandofel",
-        "server_error_detail": "Servern är otillgänglig eller överbelastad, eller så gick något annat fel.",
-        "unknown_command": "Okänt kommando",
-        "unknown_command_detail": "Okänt kommando: %(commandText)s",
-        "unknown_command_help": "Du kan använda <code>/help</code> för att lista tillgängliga kommandon. Menade du att skicka detta som ett meddelande?",
         "unknown_command_hint": "Tips: Börja ditt meddelande med <code>//</code> för att starta det med ett snedstreck.",
-        "unknown_command_button": "Skicka som meddelande"
+        "unknown_command_help": "Du kan använda <code>/help</code> för att lista tillgängliga kommandon. Menade du att skicka detta som ett meddelande?",
+        "unknown_command_detail": "Okänt kommando: %(commandText)s",
+        "unknown_command_button": "Skicka som meddelande",
+        "unknown_command": "Okänt kommando",
+        "server_error_detail": "Servern är otillgänglig eller överbelastad, eller så gick något annat fel.",
+        "server_error": "Serverfel",
+        "command_error": "Kommandofel"
     },
     "presence": {
         "busy": "Upptagen",
@@ -3857,8 +3830,8 @@
         "server_picker_custom": "Annan hemserver",
         "server_picker_explainer": "Använd din föredragna hemserver om du har en, eller driv din egen.",
         "server_picker_learn_more": "Om hemservrar",
-        "account_deactivated": "Det här kontot har avaktiverats.",
-        "incorrect_credentials": "Fel användarnamn och/eller lösenord."
+        "incorrect_credentials": "Fel användarnamn och/eller lösenord.",
+        "account_deactivated": "Det här kontot har avaktiverats."
     },
     "room_list": {
         "sort_unread_first": "Visa rum med olästa meddelanden först",
@@ -3989,6 +3962,110 @@
         "existing_issue_link": "Vänligen se <existingIssuesLink> existerade buggar på GitHub</existingIssuesLink> först. Finns det ingen som matchar? <newIssueLink>Starta en ny</newIssueLink>.",
         "send_feedback_action": "Skicka återkoppling"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Använd några ord, undvik vanliga fraser",
+            "noNeed": "Specialtecken, siffror eller stora bokstäver behövs inte",
+            "longerKeyboardPattern": "Använd ett längre tangentbordsmönster med fler riktningsbyten",
+            "repeated": "Undvik upprepade ord och bokstäver",
+            "sequences": "Undvik sekvenser",
+            "recentYears": "Undvik nyliga år",
+            "associatedYears": "Undvik årtal som associeras med dig",
+            "dates": "Undvik datum och årtal som associeras med dig",
+            "capitalization": "Versaler hjälper inte särskilt mycket",
+            "allUppercase": "Endast stora bokstäver är nästan lika enkelt att gissa som endast små bokstäver",
+            "reverseWords": "Ord skrivna baklänges är inte mycket svårare att gissa",
+            "l33t": "Förutsägbara ersättningar som '@' istället för 'a' hjälper inte särskilt mycket",
+            "anotherWord": "Lägg till ett ord eller två. Okända ord är bättre."
+        },
+        "warnings": {
+            "simpleRepeat": "Upprepningar som \"aaa\" är enkla att gissa",
+            "extendedRepeat": "Upprepningar som \"abcabcabc\" är bara aningen svårare att gissa än \"abc\"",
+            "sequences": "Sekvenser som abc eller 6543 är enkla att gissa",
+            "recentYears": "Nyliga årtal är enkla att gissa",
+            "dates": "Datum är ofta enkla att gissa",
+            "topTen": "Det här är ett av de 10 vanligaste lösenorden",
+            "topHundred": "Det här är ett av de 100 vanligaste lösenorden",
+            "common": "Det här är ett väldigt vanligt lösenord",
+            "similarToCommon": "Det här liknar ett vanligt lösenord",
+            "wordByItself": "Enstaka ord är enkla att gissa",
+            "namesByThemselves": "Enstaka för- och efternamn är enkla att gissa",
+            "commonNames": "Vanliga för- och efternamn är enkla att gissa",
+            "straightRow": "Raka rader på tangentbordet är enkla att gissa",
+            "keyPattern": "Korta tangentbordsmönster är enkla att gissa"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Kan inte starta en ny röstsändning",
+        "failed_insufficient_permission_title": "Kan inte starta en ny röstsändning",
+        "failed_others_already_recording_title": "Kan inte starta en ny röstsändning",
+        "failed_already_recording_description": "Du spelar redan in en röstsändning. Avsluta din nuvarande röstsändning för att påbörja en ny.",
+        "failed_insufficient_permission_description": "Du är inte behörig att starta en röstsändning i det här rummet. Kontakta en rumsadministratör för att uppgradera dina behörigheter.",
+        "failed_others_already_recording_description": "Någon annan spelar redan in en röstsändning. Vänta på att deras röstsändning tar slut för att starta en ny.",
+        "failed_no_connection_title": "Anslutningsfel",
+        "failed_no_connection_description": "Tyvärr kunde vi inte starta en inspelning just nu. Vänligen pröva igen senare.",
+        "failed_decrypt": "Kunde inte kryptera röstsändning",
+        "failed_generic": "Kan inte spela den här röstsändningen",
+        "confirm_stop_title": "Avsluta livesändning?",
+        "confirm_stop_description": "Är du säker på att du vill avsluta din direktsändning? Det här kommer att avsluta sändningen och den fulla inspelningen kommer att bli tillgänglig i rummet.",
+        "confirm_stop_affirm": "Ja, avsluta sändning",
+        "confirm_listen_title": "Lyssna på direktsändning?",
+        "confirm_listen_description": "Om du börjar lyssna på den här direktsändningen så kommer din nuvarande direktsändningsinspelning att avslutas.",
+        "confirm_listen_affirm": "Ja, avsluta min inspelning",
+        "30s_backward": "30s bakåt",
+        "30s_forward": "30s framåt",
+        "go_live": "Börja sända",
+        "resume": "återuppta röstsändning",
+        "pause": "pausa röstsändning",
+        "buffering": "Buffrar…",
+        "play": "spela röstsändning",
+        "connection_error": "Anslutningsfel - Inspelning pausad"
+    },
+    "update": {
+        "see_changes_button": "Vad är nytt?",
+        "release_notes_toast_title": "Vad är nytt",
+        "toast_title": "Uppdatera %(brand)s",
+        "toast_description": "Ny version av %(brand)s är tillgänglig"
+    },
+    "threads": {
+        "all_threads": "Alla trådar",
+        "all_threads_description": "Visar alla trådar från nuvarande rum",
+        "my_threads": "Mina trådar",
+        "my_threads_description": "Visar alla trådar du har medverkat i",
+        "show_thread_filter": "Visa:",
+        "empty_has_threads_tip": "Svara i en pågående tråd eller använd \"%(replyInThread)s\" när du håller över ett meddelande för att starta en ny tråd.",
+        "show_all_threads": "Visa alla trådar",
+        "empty_explainer": "Trådar underlättar för att hålla konversationer till ämnet och gör dem lättare att följa.",
+        "empty_tip": "<b>Tips:</b> Välj \"%(replyInThread)s\" när du håller över ett meddelande.",
+        "empty_heading": "Håll diskussioner organiserade med trådar"
+    },
+    "theme": {
+        "light_high_contrast": "Ljust högkontrast"
+    },
+    "space": {
+        "landing_welcome": "Välkommen till <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Den här hemservern har inte konfigurerats för att visa kartor.",
+        "WebGLNotEnabled": "WebGL krävs för att visa kartor, aktivera det i dina webbläsarinställningar.",
+        "MapStyleUrlNotReachable": "Den här hemservern är inte korrekt konfigurerad för att visa kartor, eller så kanske den konfigurerade kartserven inte är nåbar.",
+        "toggle_attribution": "Växla tillskrivning",
+        "map_feedback": "Kartuåterkoppling",
+        "find_my_location": "Hitta min plats",
+        "location_not_available": "Plats inte tillgänglig",
+        "mapbox_logo": "Mapbox-logga",
+        "reset_bearing": "Återställ bäring till norr",
+        "failed_permission": "%(brand)s nekades behörighet för att komma åt din position. Du behöver godkänna platsåtkomst i dina webbläsarinställningar.",
+        "failed_generic": "Misslyckades att hämta din plats. Pröva igen senare.",
+        "failed_timeout": "Tidsgränsen överskreds vid försök att hämta din plats. Pröva igen senare.",
+        "failed_unknown": "Ökänt fel när plats hämtades. Pröva igen senare.",
+        "expand_map": "Expandera karta",
+        "failed_load_map": "Kunde inte ladda kartan"
+    },
+    "labs_mjolnir": {
+        "room_name": "Min bannlista",
+        "room_topic": "Det här är din lista med användare och server du har blockerat - lämna inte rummet!"
+    },
     "create_space": {
         "name_required": "Vänligen ange ett namn för utrymmet",
         "name_placeholder": "t.ex. mitt-utrymme",
@@ -4023,76 +4100,5 @@
         "setup_rooms_description": "Du kan lägga till flera senare också, inklusive redan existerande.",
         "setup_rooms_private_heading": "Vilka projekt jobbar ditt team på?",
         "setup_rooms_private_description": "Vi kommer skapa rum för var och en av dem."
-    },
-    "space": {
-        "landing_welcome": "Välkommen till <name/>"
-    },
-    "threads": {
-        "all_threads": "Alla trådar",
-        "all_threads_description": "Visar alla trådar från nuvarande rum",
-        "my_threads": "Mina trådar",
-        "my_threads_description": "Visar alla trådar du har medverkat i",
-        "show_thread_filter": "Visa:",
-        "empty_has_threads_tip": "Svara i en pågående tråd eller använd \"%(replyInThread)s\" när du håller över ett meddelande för att starta en ny tråd.",
-        "show_all_threads": "Visa alla trådar",
-        "empty_explainer": "Trådar underlättar för att hålla konversationer till ämnet och gör dem lättare att följa.",
-        "empty_tip": "<b>Tips:</b> Välj \"%(replyInThread)s\" när du håller över ett meddelande.",
-        "empty_heading": "Håll diskussioner organiserade med trådar"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Den här hemservern har inte konfigurerats för att visa kartor.",
-        "WebGLNotEnabled": "WebGL krävs för att visa kartor, aktivera det i dina webbläsarinställningar.",
-        "MapStyleUrlNotReachable": "Den här hemservern är inte korrekt konfigurerad för att visa kartor, eller så kanske den konfigurerade kartserven inte är nåbar.",
-        "toggle_attribution": "Växla tillskrivning",
-        "map_feedback": "Kartuåterkoppling",
-        "find_my_location": "Hitta min plats",
-        "location_not_available": "Plats inte tillgänglig",
-        "mapbox_logo": "Mapbox-logga",
-        "reset_bearing": "Återställ bäring till norr",
-        "failed_permission": "%(brand)s nekades behörighet för att komma åt din position. Du behöver godkänna platsåtkomst i dina webbläsarinställningar.",
-        "failed_generic": "Misslyckades att hämta din plats. Pröva igen senare.",
-        "failed_timeout": "Tidsgränsen överskreds vid försök att hämta din plats. Pröva igen senare.",
-        "failed_unknown": "Ökänt fel när plats hämtades. Pröva igen senare.",
-        "expand_map": "Expandera karta",
-        "failed_load_map": "Kunde inte ladda kartan"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Kan inte starta en ny röstsändning",
-        "failed_insufficient_permission_title": "Kan inte starta en ny röstsändning",
-        "failed_others_already_recording_title": "Kan inte starta en ny röstsändning",
-        "failed_already_recording_description": "Du spelar redan in en röstsändning. Avsluta din nuvarande röstsändning för att påbörja en ny.",
-        "failed_insufficient_permission_description": "Du är inte behörig att starta en röstsändning i det här rummet. Kontakta en rumsadministratör för att uppgradera dina behörigheter.",
-        "failed_others_already_recording_description": "Någon annan spelar redan in en röstsändning. Vänta på att deras röstsändning tar slut för att starta en ny.",
-        "failed_no_connection_title": "Anslutningsfel",
-        "failed_no_connection_description": "Tyvärr kunde vi inte starta en inspelning just nu. Vänligen pröva igen senare.",
-        "failed_decrypt": "Kunde inte kryptera röstsändning",
-        "failed_generic": "Kan inte spela den här röstsändningen",
-        "confirm_stop_title": "Avsluta livesändning?",
-        "confirm_stop_description": "Är du säker på att du vill avsluta din direktsändning? Det här kommer att avsluta sändningen och den fulla inspelningen kommer att bli tillgänglig i rummet.",
-        "confirm_stop_affirm": "Ja, avsluta sändning",
-        "confirm_listen_title": "Lyssna på direktsändning?",
-        "confirm_listen_description": "Om du börjar lyssna på den här direktsändningen så kommer din nuvarande direktsändningsinspelning att avslutas.",
-        "confirm_listen_affirm": "Ja, avsluta min inspelning",
-        "30s_backward": "30s bakåt",
-        "30s_forward": "30s framåt",
-        "go_live": "Börja sända",
-        "resume": "återuppta röstsändning",
-        "pause": "pausa röstsändning",
-        "buffering": "Buffrar…",
-        "play": "spela röstsändning",
-        "connection_error": "Anslutningsfel - Inspelning pausad"
-    },
-    "labs_mjolnir": {
-        "room_name": "Min bannlista",
-        "room_topic": "Det här är din lista med användare och server du har blockerat - lämna inte rummet!"
-    },
-    "theme": {
-        "light_high_contrast": "Ljust högkontrast"
-    },
-    "update": {
-        "see_changes_button": "Vad är nytt?",
-        "release_notes_toast_title": "Vad är nytt",
-        "toast_title": "Uppdatera %(brand)s",
-        "toast_description": "Ny version av %(brand)s är tillgänglig"
     }
 }

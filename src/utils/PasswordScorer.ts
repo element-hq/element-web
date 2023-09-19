@@ -14,44 +14,65 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import zxcvbn, { ZXCVBNFeedbackWarning } from "zxcvbn";
+import { zxcvbn, zxcvbnOptions, ZxcvbnResult, TranslationKeys } from "@zxcvbn-ts/core";
+import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
+import * as zxcvbnEnPackage from "@zxcvbn-ts/language-en";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { _t, _td, TranslationKey } from "../languageHandler";
+import { _t } from "../languageHandler";
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import SdkConfig from "../SdkConfig";
 
-const ZXCVBN_USER_INPUTS = ["riot", "matrix"];
+zxcvbnOptions.setOptions({
+    dictionary: {
+        ...zxcvbnCommonPackage.dictionary,
+        ...zxcvbnEnPackage.dictionary,
+        userInputs: ["riot", "matrix", "element", SdkConfig.get().brand],
+    },
+    graphs: zxcvbnCommonPackage.adjacencyGraphs,
+    useLevenshteinDistance: true,
+});
 
-// Translations for zxcvbn's suggestion strings
-_td("Use a few words, avoid common phrases");
-_td("No need for symbols, digits, or uppercase letters");
-_td("Use a longer keyboard pattern with more turns");
-_td("Avoid repeated words and characters");
-_td("Avoid sequences");
-_td("Avoid recent years");
-_td("Avoid years that are associated with you");
-_td("Avoid dates and years that are associated with you");
-_td("Capitalization doesn't help very much");
-_td("All-uppercase is almost as easy to guess as all-lowercase");
-_td("Reversed words aren't much harder to guess");
-_td("Predictable substitutions like '@' instead of 'a' don't help very much");
-_td("Add another word or two. Uncommon words are better.");
-
-// and warnings
-_td('Repeats like "aaa" are easy to guess');
-_td('Repeats like "abcabcabc" are only slightly harder to guess than "abc"');
-_td("Sequences like abc or 6543 are easy to guess");
-_td("Recent years are easy to guess");
-_td("Dates are often easy to guess");
-_td("This is a top-10 common password");
-_td("This is a top-100 common password");
-_td("This is a very common password");
-_td("This is similar to a commonly used password");
-_td("A word by itself is easy to guess");
-_td("Names and surnames by themselves are easy to guess");
-_td("Common names and surnames are easy to guess");
-_td("Straight rows of keys are easy to guess");
-_td("Short keyboard patterns are easy to guess");
+function getTranslations(): TranslationKeys {
+    return {
+        warnings: {
+            straightRow: _t("zxcvbn|warnings|straightRow"),
+            keyPattern: _t("zxcvbn|warnings|keyPattern"),
+            simpleRepeat: _t("zxcvbn|warnings|simpleRepeat"),
+            extendedRepeat: _t("zxcvbn|warnings|extendedRepeat"),
+            sequences: _t("zxcvbn|warnings|sequences"),
+            recentYears: _t("zxcvbn|warnings|recentYears"),
+            dates: _t("zxcvbn|warnings|dates"),
+            topTen: _t("zxcvbn|warnings|topTen"),
+            topHundred: _t("zxcvbn|warnings|topHundred"),
+            common: _t("zxcvbn|warnings|common"),
+            similarToCommon: _t("zxcvbn|warnings|similarToCommon"),
+            wordByItself: _t("zxcvbn|warnings|wordByItself"),
+            namesByThemselves: _t("zxcvbn|warnings|namesByThemselves"),
+            commonNames: _t("zxcvbn|warnings|commonNames"),
+            userInputs: _t("zxcvbn|warnings|userInputs"),
+            pwned: _t("zxcvbn|warnings|pwned"),
+        },
+        suggestions: {
+            l33t: _t("zxcvbn|suggestions|l33t"),
+            reverseWords: _t("zxcvbn|suggestions|reverseWords"),
+            allUppercase: _t("zxcvbn|suggestions|allUppercase"),
+            capitalization: _t("zxcvbn|suggestions|capitalization"),
+            dates: _t("zxcvbn|suggestions|dates"),
+            recentYears: _t("zxcvbn|suggestions|recentYears"),
+            associatedYears: _t("zxcvbn|suggestions|associatedYears"),
+            sequences: _t("zxcvbn|suggestions|sequences"),
+            repeated: _t("zxcvbn|suggestions|repeated"),
+            longerKeyboardPattern: _t("zxcvbn|suggestions|longerKeyboardPattern"),
+            anotherWord: _t("zxcvbn|suggestions|anotherWord"),
+            useWords: _t("zxcvbn|suggestions|useWords"),
+            noNeed: _t("zxcvbn|suggestions|noNeed"),
+            pwned: _t("zxcvbn|suggestions|pwned"),
+        },
+        // We don't utilise the time estimation at this time so just pass through the English translations here
+        timeEstimation: zxcvbnEnPackage.translations.timeEstimation,
+    };
+}
 
 /**
  * Wrapper around zxcvbn password strength estimation
@@ -59,7 +80,7 @@ _td("Short keyboard patterns are easy to guess");
  * (obviously) which is large.
  *
  * @param {string} password Password to score
- * @param matrixClient the client of the logged in user, if any
+ * @param matrixClient the client of the logged-in user, if any
  * @param userInputs additional strings such as the user's name which should be considered a bad password component
  * @returns {object} Score result with `score` and `feedback` properties
  */
@@ -67,10 +88,12 @@ export function scorePassword(
     matrixClient: MatrixClient | null,
     password: string,
     userInputs: string[] = [],
-): zxcvbn.ZXCVBNResult | null {
+): ZxcvbnResult | null {
     if (password.length === 0) return null;
 
-    const inputs = [...userInputs, ...ZXCVBN_USER_INPUTS];
+    // copy the supplied array before modifying it
+    const inputs = [...userInputs];
+
     if (matrixClient) {
         inputs.push(matrixClient.getUserIdLocalpart()!);
     }
@@ -82,21 +105,13 @@ export function scorePassword(
         // This is fine
     }
 
+    zxcvbnOptions.setTranslations(getTranslations());
+
     let zxcvbnResult = zxcvbn(password, inputs);
     // Work around https://github.com/dropbox/zxcvbn/issues/216
     if (password.includes(" ")) {
         const resultNoSpaces = zxcvbn(password.replace(/ /g, ""), inputs);
         if (resultNoSpaces.score < zxcvbnResult.score) zxcvbnResult = resultNoSpaces;
-    }
-
-    for (let i = 0; i < zxcvbnResult.feedback.suggestions.length; ++i) {
-        // translate suggestions - we ensure we mark them as `_td` at the top of this file
-        // https://github.com/dropbox/zxcvbn/issues/284 will be a better approach when it lands
-        zxcvbnResult.feedback.suggestions[i] = _t(zxcvbnResult.feedback.suggestions[i] as TranslationKey);
-    }
-    // and warning, if any
-    if (zxcvbnResult.feedback.warning) {
-        zxcvbnResult.feedback.warning = _t(zxcvbnResult.feedback.warning) as ZXCVBNFeedbackWarning;
     }
 
     return zxcvbnResult;

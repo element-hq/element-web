@@ -1469,33 +1469,6 @@
     "Double check that your server supports the room version chosen and try again.": "ກວດເບິ່ງຄືນວ່າເຊີບເວີຂອງທ່ານຮອງຮັບເວີຊັນຫ້ອງທີ່ເລືອກແລ້ວ ແລະ ລອງໃໝ່ອີກ.",
     "Error upgrading room": "ເກີດຄວາມຜິດພາດໃນການຍົກລະດັບຫ້ອງ",
     "Unnamed room": "ບໍ່ມີຊື່ຫ້ອງ",
-    "Short keyboard patterns are easy to guess": "ຮູບແບບແປ້ນພິມສັ້ນໆແມ່ນເດົາໄດ້ງ່າຍ",
-    "Straight rows of keys are easy to guess": "ແຖວຊື່ຂອງກະແຈເດົາໄດ້ງ່າຍ",
-    "Common names and surnames are easy to guess": "ຊື່ ແລະ ນາມສະກຸນທົ່ວໄປແມ່ນເດົາໄດ້ງ່າຍ",
-    "Names and surnames by themselves are easy to guess": "ຊື່ ແລະ ນາມສະກຸນຕົວເອງເດົາໄດ້ງ່າຍ",
-    "A word by itself is easy to guess": "ຄໍາດຽວເດົາໄດ້ງ່ຍ",
-    "This is similar to a commonly used password": "ນີ້ແມ່ນລະຫັດຜ່ານທີ່ໃຊ້ທົ່ວໄປຄ້າຍຄືກັນ",
-    "This is a very common password": "ນີ້ແມ່ນລະຫັດຜ່ານທົ່ວໄປ",
-    "This is a top-100 common password": "ນີ້ແມ່ນລະຫັດຜ່ານທົ່ວໄປ 100ອັນດັບທຳອິດ",
-    "This is a top-10 common password": "ນີ້ແມ່ນລະຫັດຜ່ານທົ່ວໄປ 10 ອັນດັບ",
-    "Dates are often easy to guess": "ວັນທີຈະຄາດເດົາໄດ້ງ່າຍ",
-    "Recent years are easy to guess": "ປີທີ່ຜ່ານມາແມ່ນເດົາໄດ້ງ່າຍ",
-    "Sequences like abc or 6543 are easy to guess": "ລໍາດັບເຊັ່ນ abc ຫຼື 6543 ແມ່ນເດົາໄດ້ງ່າຍ",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "ການຊໍ້າຄືນເຊັ່ນ \"abcabcabc\" ເປັນການຄາດເດົາທີ່ຍາກກວ່າ \"abc\" ເລັກນ້ອຍ",
-    "Repeats like \"aaa\" are easy to guess": "ການຊໍ້າຄືນເຊັ່ນ \"aaa\" ແມ່ນເດົາໄດ້ງ່າຍ",
-    "Add another word or two. Uncommon words are better.": "ເພີ່ມຄໍາອື່ນ ຫຼື ສອງຄໍາ. ຄໍາເວົ້າທີ່ບໍ່ທໍາມະດາແມ່ນດີກວ່າ.",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "ການປ່ຽນແທນທີ່ຄາດເດົາໄດ້ເຊັ່ນ '@' ແທນ 'a' ບໍ່ໄດ້ຊ່ວຍຫຍັງຫຼາຍ",
-    "Reversed words aren't much harder to guess": "ຄຳທີ່ປີ້ນກັບກັນເບິ່ງໄດ້ບໍ່ຍາກ",
-    "All-uppercase is almost as easy to guess as all-lowercase": "ໂຕພິມໃຫຍ່ທັງໝົດແມ່ນເກືອບຈະງ່າຍພໍ່ໆກັບຕົວພິມນ້ອຍທັງໝົດ",
-    "Capitalization doesn't help very much": "ການໃຊ້ຕົວພິມໃຫຍ່ບໍ່ໄດ້ຊ່ວຍຫຍັງຫຼາຍ",
-    "Avoid dates and years that are associated with you": "ຫຼີກເວັ້ນວັນທີ ແລະ ປີທີ່ກ່ຽວຂ້ອງກັບທ່ານ",
-    "Avoid years that are associated with you": "ຫຼີກເວັ້ນປີທີ່ກ່ຽວຂ້ອງກັບທ່ານ",
-    "Avoid recent years": "ຫຼີກລ້ຽງປີທີ່ຜ່ານມາ",
-    "Avoid sequences": "ຫຼີກເວັ້ນການຈັດລໍາດັບ",
-    "Avoid repeated words and characters": "ຫຼີກລ້ຽງການຊ້ໍາຄໍາສັບຕ່າງໆ ແລະ ຕົວອັກສອນ",
-    "Use a longer keyboard pattern with more turns": "ໃຊ້ຮູບແບບແປ້ນພິມທີ່ຍາວກວ່າດ້ວຍການລ້ຽວຫຼາຍຂື້ນ",
-    "No need for symbols, digits, or uppercase letters": "ບໍ່ຈໍາເປັນຕ້ອງມີສັນຍາລັກ, ຕົວເລກ, ຫຼືຕົວພິມໃຫຍ່",
-    "Use a few words, avoid common phrases": "ໃຊ້ສອງສາມຄໍາ, ເພື່ອຫຼີກເວັ້ນປະໂຫຍກທົ່ວໄປ",
     "Unknown server error": "ຄວາມຜິດພາດຂອງເຊີບເວີທີ່ບໍ່ຮູ້ຈັກ",
     "The user's homeserver does not support the version of the room.": "homeserver ຂອງຜູ້ໃຊ້ບໍ່ຮອງຮັບເວີຊັນຂອງຫ້ອງ.",
     "The user's homeserver does not support the version of the space.": "homeserver ຂອງຜູ້ໃຊ້ບໍ່ຮອງຮັບເວີຊັນຂອງພື້ນທີ່ດັ່ງກ່າວ.",
@@ -2145,11 +2118,11 @@
         "integration_manager": "ຜູ້ຈັດການປະສົມປະສານ",
         "qr_code": "ລະຫັດ QR",
         "feedback": "ຄໍາຕິຊົມ",
-        "all_rooms": "ຫ້ອງທັງໝົດ",
-        "orphan_rooms": "ຫ້ອງອື່ນໆ",
         "preview_message": "ສະບາຍດີ ທ່ານ. ທ່ານດີທີ່ສຸດ!",
+        "orphan_rooms": "ຫ້ອງອື່ນໆ",
         "on": "ເທິງ",
-        "off": "ປິດ"
+        "off": "ປິດ",
+        "all_rooms": "ຫ້ອງທັງໝົດ"
     },
     "action": {
         "continue": "ສືບຕໍ່",
@@ -2282,9 +2255,9 @@
         "click_for_info": "ກົດສຳລັບຂໍ້ມູນເພີ່ມເຕີມ",
         "leave_beta": "ອອກຈາກເບຕ້າ",
         "join_beta": "ເຂົ້າຮ່ວມເບຕ້າ",
-        "automatic_debug_logs": "ສົ່ງບັນທຶກ ບັນຫາບັກ ໂດຍອັດຕະໂນມັດກ່ຽວກັບຂໍ້ຜິດພາດໃດໆ",
+        "automatic_debug_logs_key_backup": "ສົ່ງບັນທຶກການດີບັ໊ກໂດຍອັດຕະໂນມັດເມື່ອການສຳຮອງຂໍ້ມູນກະແຈບໍ່ເຮັດວຽກ",
         "automatic_debug_logs_decryption": "ສົ່ງບັນທຶກການດີບັ໊ກໂດຍອັດຕະໂນມັດໃນຄວາມຜິດພາດການຖອດລະຫັດ",
-        "automatic_debug_logs_key_backup": "ສົ່ງບັນທຶກການດີບັ໊ກໂດຍອັດຕະໂນມັດເມື່ອການສຳຮອງຂໍ້ມູນກະແຈບໍ່ເຮັດວຽກ"
+        "automatic_debug_logs": "ສົ່ງບັນທຶກ ບັນຫາບັກ ໂດຍອັດຕະໂນມັດກ່ຽວກັບຂໍ້ຜິດພາດໃດໆ"
     },
     "keyboard": {
         "home": "ໜ້າຫຼັກ",
@@ -2497,15 +2470,18 @@
             "timeline_image_size": "ຂະຫນາດຮູບພາບຢູ່ໃນທາມລາຍ",
             "timeline_image_size_default": "ຄ່າເລີ່ມຕົ້ນ",
             "timeline_image_size_large": "ຂະຫນາດໃຫຍ່",
-            "custom_font_size": "ໃຊ້ຂະຫນາດທີ່ກໍາຫນົດເອງ",
+            "image_size_large": "ຂະຫນາດໃຫຍ່",
+            "image_size_default": "ຄ່າເລີ່ມຕົ້ນ",
+            "font_size_valid": "ໃຊ້ລະຫວ່າງ %(min)s pt ແລະ %(max)s pt",
             "font_size_nan": "ຂະໜາດຕ້ອງເປັນຕົວເລກ",
             "font_size_limit": "ຂະໜາດຕົວອັກສອນທີ່ກຳນົດເອງສາມາດຢູ່ໃນລະຫວ່າງ %(min)s pt ແລະ %(max)s pt",
-            "font_size_valid": "ໃຊ້ລະຫວ່າງ %(min)s pt ແລະ %(max)s pt",
-            "image_size_default": "ຄ່າເລີ່ມຕົ້ນ",
-            "image_size_large": "ຂະຫນາດໃຫຍ່"
+            "custom_font_size": "ໃຊ້ຂະຫນາດທີ່ກໍາຫນົດເອງ"
         },
         "inline_url_previews_room_account": "ເປີດໃຊ້ຕົວຢ່າງ URL ສໍາລັບຫ້ອງນີ້ (ມີຜົນຕໍ່ທ່ານເທົ່ານັ້ນ)",
         "inline_url_previews_room": "ເປີດໃຊ້ການສະແດງຕົວຢ່າງ URL ໂດຍຄ່າເລີ່ມຕົ້ນສໍາລັບຜູ້ເຂົ້າຮ່ວມໃນຫ້ອງນີ້",
+        "voip": {
+            "mirror_local_feed": "ເບິ່ງຟີດວິດີໂອທ້ອງຖິ່ນ"
+        },
         "security": {
             "message_search_disable_warning": "ຖ້າປິດໃຊ້ງານ, ຂໍ້ຄວາມຈາກຫ້ອງທີ່ເຂົ້າລະຫັດຈະບໍ່ປາກົດຢູ່ໃນຜົນການຄົ້ນຫາ.",
             "message_search_indexing_idle": "ຕອນນີ້ບໍ່ໄດ້ຈັດດັດສະນີຂໍ້ຄວາມສໍາລັບຫ້ອງໃດ.",
@@ -2537,9 +2513,6 @@
             "surround_text": "ອ້ອມຮອບຂໍ້ຄວາມທີ່ເລືອກໃນເວລາພິມຕົວອັກສອນພິເສດ",
             "always_show_menu_bar": "ສະແດງແຖບເມນູໜ້າຕ່າງສະເໝີ",
             "enable_tray_icon": "ສະແດງໄອຄອນ ແລະ ຫຍໍ້ຫນ້າຕ່າງໃຫ້ມັນຢູ່ໃກ້"
-        },
-        "voip": {
-            "mirror_local_feed": "ເບິ່ງຟີດວິດີໂອທ້ອງຖິ່ນ"
         },
         "keyboard": {
             "title": "ແປ້ນພິມ"
@@ -2612,9 +2585,9 @@
         "category_room": "ຫ້ອງ",
         "category_other": "ອື່ນໆ",
         "widget_screenshots": "ເປີດໃຊ້ widget ຖ່າຍໜ້າຈໍໃນ widget ທີ່ຮອງຮັບ",
+        "title": "ເຄື່ອງມືພັດທະນາ",
         "show_hidden_events": "ສະແດງເຫດການທີ່ເຊື່ອງໄວ້ໃນທາມລາຍ",
-        "developer_mode": "ຮູບແບບນັກພັດທະນາ",
-        "title": "ເຄື່ອງມືພັດທະນາ"
+        "developer_mode": "ຮູບແບບນັກພັດທະນາ"
     },
     "export_chat": {
         "html": "HTML",
@@ -2970,12 +2943,12 @@
         "no_permission_messages_before_join": "ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເບິ່ງຂໍ້ຄວາມ ກ່ອນທີ່ທ່ານເຂົ້າຮ່ວມ.",
         "encrypted_historical_messages_unavailable": "ຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດໄວ້ກ່ອນຈຸດນີ້ບໍ່ສາມາດໃຊ້ໄດ້.",
         "historical_messages_unavailable": "ທ່ານບໍ່ສາມາດເຫັນຂໍ້ຄວາມກ່ອນໜ້ານີ້",
+        "redacted": {
+            "tooltip": "ຂໍ້ຄວາມຖືກລຶບເມື່ອ %(date)s"
+        },
         "reactions": {
             "label": "%(reactors)sປະຕິກິລິຍາກັບ %(content)s",
             "tooltip": "<reactors/><reactedWith>ປະຕິກິລິຍາດ້ວຍ %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "ຂໍ້ຄວາມຖືກລຶບເມື່ອ %(date)s"
         },
         "m.room.create": {
             "continuation": "ຫ້ອງນີ້ແມ່ນສືບຕໍ່ການສົນທະນາອື່ນ.",
@@ -3043,14 +3016,14 @@
         "failed_find_user": "ບໍ່ສາມາດຊອກຫາຜູ້ໃຊ້ຢູ່ໃນຫ້ອງໄດ້",
         "op": "ກໍານົດລະດັບພະລັງງານຂອງຜູ້ໃຊ້",
         "deop": "Deops ຜູ້ໃຊ້ທີ່ມີ ID",
-        "server_error": "ເຊີບເວີຜິດພາດ",
-        "command_error": "ຄໍາສັ່ງຜິດພາດ",
-        "server_error_detail": "ເຊີບເວີບໍ່ສາມາດໃຊ້ໄດ້, ໂຫຼດເກີນກຳນົດ, ຫຼື ມີອັນອື່ນຜິດພາດ.",
-        "unknown_command": "ຄໍາສັ່ງທີ່ບໍ່ຮູ້ຈັກ",
-        "unknown_command_detail": "ຄໍາສັ່ງທີ່ບໍ່ຮູ້ຈັກ: %(commandText)s",
-        "unknown_command_help": "ທ່ານສາມາດໃຊ້ <code>/help</code> ເພື່ອບອກລາຍການຄຳສັ່ງທີ່ມີຢູ່. ທ່ານໝາຍເຖິງການສົ່ງຂໍ້ຄວາມນີ້ບໍ?",
         "unknown_command_hint": "ຄຳໃບ້: ເລີ່ມຕົ້ນຂໍ້ຄວາມຂອງທ່ານດ້ວຍ <code>//</code> ເພື່ອເລີ່ມຕົ້ນມັນດ້ວຍເຄື່ອງໝາຍທັບ.",
-        "unknown_command_button": "ສົ່ງຂໍ້ເປັນຄວາມ"
+        "unknown_command_help": "ທ່ານສາມາດໃຊ້ <code>/help</code> ເພື່ອບອກລາຍການຄຳສັ່ງທີ່ມີຢູ່. ທ່ານໝາຍເຖິງການສົ່ງຂໍ້ຄວາມນີ້ບໍ?",
+        "unknown_command_detail": "ຄໍາສັ່ງທີ່ບໍ່ຮູ້ຈັກ: %(commandText)s",
+        "unknown_command_button": "ສົ່ງຂໍ້ເປັນຄວາມ",
+        "unknown_command": "ຄໍາສັ່ງທີ່ບໍ່ຮູ້ຈັກ",
+        "server_error_detail": "ເຊີບເວີບໍ່ສາມາດໃຊ້ໄດ້, ໂຫຼດເກີນກຳນົດ, ຫຼື ມີອັນອື່ນຜິດພາດ.",
+        "server_error": "ເຊີບເວີຜິດພາດ",
+        "command_error": "ຄໍາສັ່ງຜິດພາດ"
     },
     "presence": {
         "busy": "ບໍ່ຫວ່າງ",
@@ -3264,8 +3237,8 @@
         "server_picker_custom": "homeserver ອື່ນ",
         "server_picker_explainer": "ໃຊ້ Matrix homeserver ທີ່ທ່ານຕ້ອງການ ຖ້າຫາກທ່ານມີ ຫຼື ເປັນເຈົ້າພາບເອງ.",
         "server_picker_learn_more": "ກ່ຽວກັບ homeservers",
-        "account_deactivated": "ບັນຊີນີ້ຖືກປິດການນຳໃຊ້ແລ້ວ.",
-        "incorrect_credentials": "ຊື່ຜູ້ໃຊ້ ແລະ/ຫຼືລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ."
+        "incorrect_credentials": "ຊື່ຜູ້ໃຊ້ ແລະ/ຫຼືລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ.",
+        "account_deactivated": "ບັນຊີນີ້ຖືກປິດການນຳໃຊ້ແລ້ວ."
     },
     "room_list": {
         "sort_unread_first": "ສະແດງຫ້ອງຂໍ້ຄວາມທີ່ຍັງບໍ່ທັນໄດ້ອ່ານກ່ອນ",
@@ -3401,6 +3374,77 @@
         "existing_issue_link": "ກະລຸນາເບິ່ງ <existingIssuesLink>ຂໍ້ບົກຜ່ອງທີ່ມີຢູ່ແລ້ວໃນ Github</existingIssuesLink> ກ່ອນ. ບໍ່ກົງກັນບໍ? <newIssueLink>ເລີ່ມອັນໃໝ່</newIssueLink>.",
         "send_feedback_action": "ສົ່ງຄໍາຄິດເຫັນ"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "ໃຊ້ສອງສາມຄໍາ, ເພື່ອຫຼີກເວັ້ນປະໂຫຍກທົ່ວໄປ",
+            "noNeed": "ບໍ່ຈໍາເປັນຕ້ອງມີສັນຍາລັກ, ຕົວເລກ, ຫຼືຕົວພິມໃຫຍ່",
+            "longerKeyboardPattern": "ໃຊ້ຮູບແບບແປ້ນພິມທີ່ຍາວກວ່າດ້ວຍການລ້ຽວຫຼາຍຂື້ນ",
+            "repeated": "ຫຼີກລ້ຽງການຊ້ໍາຄໍາສັບຕ່າງໆ ແລະ ຕົວອັກສອນ",
+            "sequences": "ຫຼີກເວັ້ນການຈັດລໍາດັບ",
+            "recentYears": "ຫຼີກລ້ຽງປີທີ່ຜ່ານມາ",
+            "associatedYears": "ຫຼີກເວັ້ນປີທີ່ກ່ຽວຂ້ອງກັບທ່ານ",
+            "dates": "ຫຼີກເວັ້ນວັນທີ ແລະ ປີທີ່ກ່ຽວຂ້ອງກັບທ່ານ",
+            "capitalization": "ການໃຊ້ຕົວພິມໃຫຍ່ບໍ່ໄດ້ຊ່ວຍຫຍັງຫຼາຍ",
+            "allUppercase": "ໂຕພິມໃຫຍ່ທັງໝົດແມ່ນເກືອບຈະງ່າຍພໍ່ໆກັບຕົວພິມນ້ອຍທັງໝົດ",
+            "reverseWords": "ຄຳທີ່ປີ້ນກັບກັນເບິ່ງໄດ້ບໍ່ຍາກ",
+            "l33t": "ການປ່ຽນແທນທີ່ຄາດເດົາໄດ້ເຊັ່ນ '@' ແທນ 'a' ບໍ່ໄດ້ຊ່ວຍຫຍັງຫຼາຍ",
+            "anotherWord": "ເພີ່ມຄໍາອື່ນ ຫຼື ສອງຄໍາ. ຄໍາເວົ້າທີ່ບໍ່ທໍາມະດາແມ່ນດີກວ່າ."
+        },
+        "warnings": {
+            "simpleRepeat": "ການຊໍ້າຄືນເຊັ່ນ \"aaa\" ແມ່ນເດົາໄດ້ງ່າຍ",
+            "extendedRepeat": "ການຊໍ້າຄືນເຊັ່ນ \"abcabcabc\" ເປັນການຄາດເດົາທີ່ຍາກກວ່າ \"abc\" ເລັກນ້ອຍ",
+            "sequences": "ລໍາດັບເຊັ່ນ abc ຫຼື 6543 ແມ່ນເດົາໄດ້ງ່າຍ",
+            "recentYears": "ປີທີ່ຜ່ານມາແມ່ນເດົາໄດ້ງ່າຍ",
+            "dates": "ວັນທີຈະຄາດເດົາໄດ້ງ່າຍ",
+            "topTen": "ນີ້ແມ່ນລະຫັດຜ່ານທົ່ວໄປ 10 ອັນດັບ",
+            "topHundred": "ນີ້ແມ່ນລະຫັດຜ່ານທົ່ວໄປ 100ອັນດັບທຳອິດ",
+            "common": "ນີ້ແມ່ນລະຫັດຜ່ານທົ່ວໄປ",
+            "similarToCommon": "ນີ້ແມ່ນລະຫັດຜ່ານທີ່ໃຊ້ທົ່ວໄປຄ້າຍຄືກັນ",
+            "wordByItself": "ຄໍາດຽວເດົາໄດ້ງ່ຍ",
+            "namesByThemselves": "ຊື່ ແລະ ນາມສະກຸນຕົວເອງເດົາໄດ້ງ່າຍ",
+            "commonNames": "ຊື່ ແລະ ນາມສະກຸນທົ່ວໄປແມ່ນເດົາໄດ້ງ່າຍ",
+            "straightRow": "ແຖວຊື່ຂອງກະແຈເດົາໄດ້ງ່າຍ",
+            "keyPattern": "ຮູບແບບແປ້ນພິມສັ້ນໆແມ່ນເດົາໄດ້ງ່າຍ"
+        }
+    },
+    "update": {
+        "see_changes_button": "ມີຫຍັງໃຫມ່?",
+        "release_notes_toast_title": "ມີຫຍັງໃຫມ່",
+        "toast_title": "ອັບເດດ %(brand)s",
+        "toast_description": "ເວີຊັນໃໝ່ຂອງ %(brand)s ພ້ອມໃຊ້ງານ"
+    },
+    "threads": {
+        "all_threads": "ກະທູ້ທັງໝົດ",
+        "all_threads_description": "ສະແດງຫົວຂໍ້ທັງໝົດຈາກຫ້ອງປັດຈຸບັນ",
+        "my_threads": "ກະທູ້ຂອງຂ້ອຍ",
+        "my_threads_description": "ສະແດງຫົວຂໍ້ທັງໝົດທີ່ທ່ານໄດ້ເຂົ້າຮ່ວມ",
+        "show_thread_filter": "ສະແດງ:",
+        "empty_has_threads_tip": "ຕອບກັບຫາກະທູ້ທີ່ກຳລັງດຳເນີນ ຫຼືໃຊ້ ຢູ່“%(replyInThread)s” ເມື່ອເລື່ອນໃສ່ຂໍ້ຄວາມເພື່ອເລີ່ມຕົ້ນອັນໃໝ່.",
+        "show_all_threads": "ສະແດງຫົວຂໍ້ທັງໝົດ",
+        "empty_explainer": "ກະທູ້ຊ່ວຍໃຫ້ການສົນທະນາຂອງທ່ານຢູ່ໃນຫົວຂໍ້ ແລະ ງ່າຍຕໍ່ການຕິດຕາມ.",
+        "empty_tip": "<b>ເຄັດລັບ:</b> ໃຊ້ “%(replyInThread)s” ເມື່ອເລື່ອນໃສ່ຂໍ້ຄວາມ.",
+        "empty_heading": "ຮັກສາການສົນທະນາທີ່ມີການຈັດລະບຽບ"
+    },
+    "theme": {
+        "light_high_contrast": "ແສງສະຫວ່າງຄວາມຄົມຊັດສູງ"
+    },
+    "space": {
+        "landing_welcome": "ຍິນດີຕ້ອນຮັບສູ່ <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "homeserver ນີ້ບໍ່ໄດ້ຕັ້ງຄ່າເພື່ອສະແດງແຜນທີ່.",
+        "MapStyleUrlNotReachable": "homeserver ນີ້ບໍ່ໄດ້ຖືກຕັ້ງຄ່າຢ່າງຖືກຕ້ອງເພື່ອສະແດງແຜນທີ່, ຫຼື ເຊີບເວີແຜນທີ່ ທີ່ຕັ້ງໄວ້ອາດຈະບໍ່ສາມາດຕິດຕໍ່ໄດ້.",
+        "failed_permission": "%(brand)s ຖືກປະຕິເສດການອະນຸຍາດໃຫ້ດຶງຂໍ້ມູນສະຖານທີ່ຂອງທ່ານ. ກະລຸນາອະນຸຍາດໃຫ້ເຂົ້າເຖິງສະຖານທີ່ໃນການຕັ້ງຄ່າບຣາວເຊີຂອງທ່ານ.",
+        "failed_generic": "ດຶງຂໍ້ມູນສະຖານທີ່ຂອງທ່ານບໍ່ສຳເລັດ. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
+        "failed_timeout": "ໝົດເວລາດຶງຂໍ້ມູນສະຖານທີ່ຂອງທ່ານ. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
+        "failed_unknown": "ການດຶງຂໍ້ມູນສະຖານທີ່ເກີດຄວາມຜິດພາດທີ່ບໍ່ຮູ້ຈັກ. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
+        "expand_map": "ຂະຫຍາຍແຜນທີ່",
+        "failed_load_map": "ບໍ່ສາມາດໂຫຼດແຜນທີ່ໄດ້"
+    },
+    "labs_mjolnir": {
+        "room_name": "ບັນຊີລາຍຊື່ການຫ້າມຂອງຂ້ອຍ",
+        "room_topic": "ນີ້ແມ່ນບັນຊີລາຍຊື່ຜູ້ໃຊ້ / ເຊີບເວີຂອງທ່ານທີ່ທ່ານໄດ້ບລັອກ - ຢ່າອອກຈາກຫ້ອງ!"
+    },
     "create_space": {
         "name_required": "ກະລຸນາໃສ່ຊື່ສໍາລັບຊ່ອງຫວ່າງ",
         "name_placeholder": "ຕົວຢ່າງ: ພື້ນທີ່ຂອງຂ້ອຍ",
@@ -3433,43 +3477,5 @@
         "setup_rooms_description": "ທ່ານສາມາດເພີ່ມເຕີມໃນພາຍຫຼັງ, ລວມທັງອັນທີ່ມີຢູ່ແລ້ວ.",
         "setup_rooms_private_heading": "ທີມງານຂອງທ່ານເຮັດວຽກຢູ່ໃນໂຄງການໃດ?",
         "setup_rooms_private_description": "ພວກເຮົາຈະສ້າງແຕ່ລະຫ້ອງ."
-    },
-    "space": {
-        "landing_welcome": "ຍິນດີຕ້ອນຮັບສູ່ <name/>"
-    },
-    "threads": {
-        "all_threads": "ກະທູ້ທັງໝົດ",
-        "all_threads_description": "ສະແດງຫົວຂໍ້ທັງໝົດຈາກຫ້ອງປັດຈຸບັນ",
-        "my_threads": "ກະທູ້ຂອງຂ້ອຍ",
-        "my_threads_description": "ສະແດງຫົວຂໍ້ທັງໝົດທີ່ທ່ານໄດ້ເຂົ້າຮ່ວມ",
-        "show_thread_filter": "ສະແດງ:",
-        "empty_has_threads_tip": "ຕອບກັບຫາກະທູ້ທີ່ກຳລັງດຳເນີນ ຫຼືໃຊ້ ຢູ່“%(replyInThread)s” ເມື່ອເລື່ອນໃສ່ຂໍ້ຄວາມເພື່ອເລີ່ມຕົ້ນອັນໃໝ່.",
-        "show_all_threads": "ສະແດງຫົວຂໍ້ທັງໝົດ",
-        "empty_explainer": "ກະທູ້ຊ່ວຍໃຫ້ການສົນທະນາຂອງທ່ານຢູ່ໃນຫົວຂໍ້ ແລະ ງ່າຍຕໍ່ການຕິດຕາມ.",
-        "empty_tip": "<b>ເຄັດລັບ:</b> ໃຊ້ “%(replyInThread)s” ເມື່ອເລື່ອນໃສ່ຂໍ້ຄວາມ.",
-        "empty_heading": "ຮັກສາການສົນທະນາທີ່ມີການຈັດລະບຽບ"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "homeserver ນີ້ບໍ່ໄດ້ຕັ້ງຄ່າເພື່ອສະແດງແຜນທີ່.",
-        "MapStyleUrlNotReachable": "homeserver ນີ້ບໍ່ໄດ້ຖືກຕັ້ງຄ່າຢ່າງຖືກຕ້ອງເພື່ອສະແດງແຜນທີ່, ຫຼື ເຊີບເວີແຜນທີ່ ທີ່ຕັ້ງໄວ້ອາດຈະບໍ່ສາມາດຕິດຕໍ່ໄດ້.",
-        "failed_permission": "%(brand)s ຖືກປະຕິເສດການອະນຸຍາດໃຫ້ດຶງຂໍ້ມູນສະຖານທີ່ຂອງທ່ານ. ກະລຸນາອະນຸຍາດໃຫ້ເຂົ້າເຖິງສະຖານທີ່ໃນການຕັ້ງຄ່າບຣາວເຊີຂອງທ່ານ.",
-        "failed_generic": "ດຶງຂໍ້ມູນສະຖານທີ່ຂອງທ່ານບໍ່ສຳເລັດ. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
-        "failed_timeout": "ໝົດເວລາດຶງຂໍ້ມູນສະຖານທີ່ຂອງທ່ານ. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
-        "failed_unknown": "ການດຶງຂໍ້ມູນສະຖານທີ່ເກີດຄວາມຜິດພາດທີ່ບໍ່ຮູ້ຈັກ. ກະລຸນາລອງໃໝ່ໃນພາຍຫຼັງ.",
-        "expand_map": "ຂະຫຍາຍແຜນທີ່",
-        "failed_load_map": "ບໍ່ສາມາດໂຫຼດແຜນທີ່ໄດ້"
-    },
-    "labs_mjolnir": {
-        "room_name": "ບັນຊີລາຍຊື່ການຫ້າມຂອງຂ້ອຍ",
-        "room_topic": "ນີ້ແມ່ນບັນຊີລາຍຊື່ຜູ້ໃຊ້ / ເຊີບເວີຂອງທ່ານທີ່ທ່ານໄດ້ບລັອກ - ຢ່າອອກຈາກຫ້ອງ!"
-    },
-    "theme": {
-        "light_high_contrast": "ແສງສະຫວ່າງຄວາມຄົມຊັດສູງ"
-    },
-    "update": {
-        "see_changes_button": "ມີຫຍັງໃຫມ່?",
-        "release_notes_toast_title": "ມີຫຍັງໃຫມ່",
-        "toast_title": "ອັບເດດ %(brand)s",
-        "toast_description": "ເວີຊັນໃໝ່ຂອງ %(brand)s ພ້ອມໃຊ້ງານ"
     }
 }

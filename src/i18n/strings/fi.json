@@ -266,10 +266,6 @@
     "<a>In reply to</a> <pill>": "<a>Vastauksena käyttäjälle</a> <pill>",
     "This room is not public. You will not be able to rejoin without an invite.": "Tämä huone ei ole julkinen. Et voi liittyä uudelleen ilman kutsua.",
     "You do not have permission to start a conference call in this room": "Sinulla ei ole oikeutta aloittaa ryhmäpuhelua tässä huoneessa",
-    "Avoid repeated words and characters": "Vältä toistettuja sanoja ja merkkejä",
-    "Repeats like \"aaa\" are easy to guess": "Toistot, kuten ”aaa”, ovat helppoja arvata",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Toistot, kuten ”abcabcabe” ovat vain hieman hankalampia arvata kuin ”abc”",
-    "A word by itself is easy to guess": "Yksittäinen sana on helppo arvata",
     "Please contact your homeserver administrator.": "Ota yhteyttä kotipalvelimesi ylläpitäjään.",
     "Verify this user by confirming the following emoji appear on their screen.": "Varmenna tämä käyttäjä varmistamalla, että seuraava emoji ilmestyy hänen ruudulleen.",
     "Verify this user by confirming the following number appears on their screen.": "Varmenna tämä käyttäjä varmistamalla, että seuraava luku ilmestyy hänen ruudulleen.",
@@ -409,28 +405,6 @@
     "Unrecognised address": "Osoitetta ei tunnistettu",
     "You do not have permission to invite people to this room.": "Sinulla ei ole oikeuksia kutsua henkilöitä tähän huoneeseen.",
     "Unknown server error": "Tuntematon palvelinvirhe",
-    "Use a few words, avoid common phrases": "Käytä muutamaa sanaa, vältä yleisiä fraaseja",
-    "No need for symbols, digits, or uppercase letters": "Ei tarvetta symboleille, numeroille tai isoille kirjaimille",
-    "Avoid sequences": "Vältä sarjoja",
-    "Avoid recent years": "Vältä viime vuosia",
-    "Avoid years that are associated with you": "Vältä vuosia, jotka voi yhdistää sinuun",
-    "Avoid dates and years that are associated with you": "Vältä päivämääriä ja vuosia, jotka liittyvät sinuun",
-    "Capitalization doesn't help very much": "Isolla alkukirjaimella aloittaminen ei erityisesti hyödytä",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Pelkästään isoilla kirjaimilla kirjoitettu on melkein yhtä helppo arvata kuin kokonaan pienillä kirjoitettu",
-    "Reversed words aren't much harder to guess": "Takaperin kirjoitetut sanat eivät ole paljoakaan vaikeampia arvata",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Arvattavat vaihdot, kuten ”@” ”a”:n sijaan ei auta paljoakaan",
-    "Add another word or two. Uncommon words are better.": "Lisää sana tai kaksi. Epätavalliset sanat ovat parempia.",
-    "Sequences like abc or 6543 are easy to guess": "Sarjat, kuten ”abc” tai ”6543” ovat helppoja arvata",
-    "Recent years are easy to guess": "Viime vuodet ovat helppoja arvata",
-    "Dates are often easy to guess": "Päivämäärät ovat usein helppoja arvata",
-    "This is a top-10 common password": "Tämä on kymmenen yleisimmän salasanan joukossa",
-    "This is a top-100 common password": "Tämä on sadan yleisimmän salasanan joukossa",
-    "This is a very common password": "Tämä on erittäin yleinen salasana",
-    "This is similar to a commonly used password": "Tämä on samankaltainen kuin yleisesti käytetty salasana",
-    "Names and surnames by themselves are easy to guess": "Nimet ja sukunimet yksinään ovat helppoja arvata",
-    "Common names and surnames are easy to guess": "Yleiset nimet ja sukunimet ovat helppoja arvata",
-    "Straight rows of keys are easy to guess": "Näppäimistössä peräkkäin olevat merkit ovat helppoja arvata",
-    "Short keyboard patterns are easy to guess": "Lyhyet näppäinsarjat ovat helppoja arvata",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Turvalliset viestit tämän käyttäjän kanssa ovat salattuja päästä päähän, eivätkä kolmannet osapuolet voi lukea niitä.",
     "Thumbs up": "Peukut ylös",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Lähetimme sinulle sähköpostin osoitteesi vahvistamiseksi. Noudata sähköpostissa olevia ohjeita, ja napsauta sen jälkeen alla olevaa painiketta.",
@@ -449,7 +423,6 @@
     "Manually export keys": "Vie avaimet käsin",
     "Share User": "Jaa käyttäjä",
     "Share Room Message": "Jaa huoneviesti",
-    "Use a longer keyboard pattern with more turns": "Käytä pidempiä näppäinyhdistelmiä, joissa on enemmän suunnanmuutoksia",
     "Got It": "Ymmärretty",
     "Scissors": "Sakset",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s %(day)s. %(monthName)s %(fullYear)s",
@@ -2324,11 +2297,11 @@
         "integration_manager": "Integraatiohallinta",
         "qr_code": "QR-koodi",
         "feedback": "Palaute",
-        "all_rooms": "Kaikki huoneet",
-        "orphan_rooms": "Muut huoneet",
         "preview_message": "Hei siellä, olet paras!",
+        "orphan_rooms": "Muut huoneet",
         "on": "Päällä",
-        "off": "Ei päällä"
+        "off": "Ei päällä",
+        "all_rooms": "Kaikki huoneet"
     },
     "action": {
         "continue": "Jatka",
@@ -2428,8 +2401,8 @@
         "submit": "Lähetä",
         "send_report": "Lähetä ilmoitus",
         "clear": "Tyhjennä",
-        "enter_fullscreen": "Siirry koko näytön tilaan",
-        "exit_fullscreeen": "Poistu koko näytön tilasta"
+        "exit_fullscreeen": "Poistu koko näytön tilasta",
+        "enter_fullscreen": "Siirry koko näytön tilaan"
     },
     "a11y": {
         "user_menu": "Käyttäjän valikko",
@@ -2488,9 +2461,9 @@
         "join_beta_reload": "Beetaan liittyminen lataa %(brand)sin uudelleen.",
         "leave_beta": "Poistu beetasta",
         "join_beta": "Liity beetaan",
-        "automatic_debug_logs": "Lähetä vianjäljityslokit automaattisesti minkä tahansa virheen tapahtuessa",
+        "sliding_sync_disabled_notice": "Poista käytöstä kirjautumalla ulos ja takaisin sisään",
         "automatic_debug_logs_decryption": "Lähetä vianjäljityslokit automaattisesti salauksen purkuun liittyvien virheiden tapahtuessa",
-        "sliding_sync_disabled_notice": "Poista käytöstä kirjautumalla ulos ja takaisin sisään"
+        "automatic_debug_logs": "Lähetä vianjäljityslokit automaattisesti minkä tahansa virheen tapahtuessa"
     },
     "keyboard": {
         "home": "Etusivu",
@@ -2772,15 +2745,24 @@
             "timeline_image_size": "Kuvan koko aikajanalla",
             "timeline_image_size_default": "Oletus",
             "timeline_image_size_large": "Suuri",
-            "custom_font_size": "Käytä mukautettua kokoa",
+            "image_size_large": "Suuri",
+            "image_size_default": "Oletus",
+            "font_size_valid": "Käytä kokoa väliltä %(min)s pt ja %(max)s pt",
             "font_size_nan": "Koon täytyy olla luku",
             "font_size_limit": "Mukautetun fonttikoon täytyy olla vähintään %(min)s pt ja enintään %(max)s pt",
-            "font_size_valid": "Käytä kokoa väliltä %(min)s pt ja %(max)s pt",
-            "image_size_default": "Oletus",
-            "image_size_large": "Suuri"
+            "custom_font_size": "Käytä mukautettua kokoa"
         },
         "inline_url_previews_room_account": "Ota linkkien esikatselut käyttöön tässä huoneessa (koskee ainoastaan sinua)",
         "inline_url_previews_room": "Ota linkkien esikatselu käyttöön kaikille huoneen jäsenille",
+        "voip": {
+            "mirror_local_feed": "Peilaa paikallinen videosyöte",
+            "allow_p2p": "Salli vertaisyhteydet kahdenvälisissä puheluissa",
+            "allow_p2p_description": "Kun käytössä, toinen osapuoli voi mahdollisesti nähdä IP-osoitteesi",
+            "auto_gain_control": "Automaattinen vahvistuksen säätö",
+            "echo_cancellation": "Kaiunpoisto",
+            "noise_suppression": "Kohinanvaimennus"
+        },
+        "send_read_receipts_unsupported": "Palvelimesi ei tue lukukuittausten lähettämisen poistamista käytöstä.",
         "security": {
             "message_search_disable_warning": "Jos ei ole käytössä, salattujen huoneiden viestejä ei näytetä hakutuloksissa.",
             "message_search_indexing_idle": "Minkään huoneen viestejä ei tällä hetkellä indeksoida.",
@@ -2815,15 +2797,6 @@
             "always_show_menu_bar": "Näytä aina ikkunan valikkorivi",
             "enable_tray_icon": "Näytä ilmaisinalueen kuvake ja pienennä ikkuna siihen suljettaessa",
             "enable_hardware_acceleration": "Ota laitteistokiihdytys käyttöön"
-        },
-        "send_read_receipts_unsupported": "Palvelimesi ei tue lukukuittausten lähettämisen poistamista käytöstä.",
-        "voip": {
-            "mirror_local_feed": "Peilaa paikallinen videosyöte",
-            "allow_p2p": "Salli vertaisyhteydet kahdenvälisissä puheluissa",
-            "allow_p2p_description": "Kun käytössä, toinen osapuoli voi mahdollisesti nähdä IP-osoitteesi",
-            "auto_gain_control": "Automaattinen vahvistuksen säätö",
-            "echo_cancellation": "Kaiunpoisto",
-            "noise_suppression": "Kohinanvaimennus"
         },
         "keyboard": {
             "title": "Näppäimistö"
@@ -2881,10 +2854,10 @@
         "category_room": "Huone",
         "category_other": "Muut",
         "widget_screenshots": "Ota sovelmien kuvankaappaukset käyttöön tuetuissa sovelmissa",
+        "title": "Kehittäjätyökalut",
         "show_hidden_events": "Näytä piilotetut tapahtumat aikajanalla",
         "low_bandwidth_mode_description": "Vaatii yhteensopivan kotipalvelimen.",
-        "developer_mode": "Kehittäjätila",
-        "title": "Kehittäjätyökalut"
+        "developer_mode": "Kehittäjätila"
     },
     "export_chat": {
         "html": "HTML",
@@ -3241,19 +3214,19 @@
         "no_permission_messages_before_join": "Sinulla ei ole oikeutta nähdä viestejä ajalta ennen liittymistäsi.",
         "encrypted_historical_messages_unavailable": "Tätä aiemmat salatut viestit eivät ole saatavilla.",
         "historical_messages_unavailable": "Et voi nähdä aiempia viestejä",
-        "io.element.voice_broadcast_info": {
-            "you": "Lopetit <a>äänen yleislähetyksen</a>",
-            "user": "%(senderName)s lopetti <a>äänen yleislähetyksen</a>"
+        "redacted": {
+            "tooltip": "Viesti poistettu %(date)s"
         },
         "reactions": {
             "tooltip": "<reactors/><reactedWith>reagoi(vat) emojilla %(shortName)s</reactedWith>"
         },
-        "redacted": {
-            "tooltip": "Viesti poistettu %(date)s"
-        },
         "m.room.create": {
             "continuation": "Tämä huone on jatkumo toisesta keskustelusta.",
             "see_older_messages": "Napsauta tästä nähdäksesi vanhemmat viestit."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Lopetit <a>äänen yleislähetyksen</a>",
+            "user": "%(senderName)s lopetti <a>äänen yleislähetyksen</a>"
         }
     },
     "slash_command": {
@@ -3319,14 +3292,14 @@
         "failed_find_user": "Käyttäjää ei löytynyt huoneesta",
         "op": "Määritä käyttäjän oikeustaso",
         "deop": "Poistaa tunnuksen mukaiselta käyttäjältä ylläpito-oikeudet",
-        "server_error": "Palvelinvirhe",
-        "command_error": "Komentovirhe",
-        "server_error_detail": "Palvelin on saavuttamattomissa, ylikuormitettu tai jotain muuta meni vikaan.",
-        "unknown_command": "Tuntematon komento",
-        "unknown_command_detail": "Tunnistamaton komento: %(commandText)s",
-        "unknown_command_help": "<code>/help</code> näyttää luettelon käytettävissä olevista komennoista. Oliko tarkoituksesi lähettää se viestinä?",
         "unknown_command_hint": "Vinkki: <code>//</code> aloittaa viestin kauttaviivalla.",
-        "unknown_command_button": "Lähetä viestinä"
+        "unknown_command_help": "<code>/help</code> näyttää luettelon käytettävissä olevista komennoista. Oliko tarkoituksesi lähettää se viestinä?",
+        "unknown_command_detail": "Tunnistamaton komento: %(commandText)s",
+        "unknown_command_button": "Lähetä viestinä",
+        "unknown_command": "Tuntematon komento",
+        "server_error_detail": "Palvelin on saavuttamattomissa, ylikuormitettu tai jotain muuta meni vikaan.",
+        "server_error": "Palvelinvirhe",
+        "command_error": "Komentovirhe"
     },
     "presence": {
         "busy": "Varattu",
@@ -3561,8 +3534,8 @@
         "server_picker_custom": "Muu kotipalvelin",
         "server_picker_explainer": "Käytä haluamaasi Matrix-kotipalvelinta, tai isännöi omaa palvelinta.",
         "server_picker_learn_more": "Tietoa kotipalvelimista",
-        "account_deactivated": "Tämä tili on poistettu.",
-        "incorrect_credentials": "Virheellinen käyttäjätunnus ja/tai salasana."
+        "incorrect_credentials": "Virheellinen käyttäjätunnus ja/tai salasana.",
+        "account_deactivated": "Tämä tili on poistettu."
     },
     "room_list": {
         "sort_unread_first": "Näytä ensimmäisenä huoneet, joissa on lukemattomia viestejä",
@@ -3664,6 +3637,96 @@
         "existing_issue_link": "Katso ensin <existingIssuesLink>aiemmin raportoidut virheet Githubissa</existingIssuesLink>. Eikö samanlaista virhettä löydy? <newIssueLink>Tee uusi ilmoitus virheestä</newIssueLink>.",
         "send_feedback_action": "Lähetä palautetta"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Käytä muutamaa sanaa, vältä yleisiä fraaseja",
+            "noNeed": "Ei tarvetta symboleille, numeroille tai isoille kirjaimille",
+            "longerKeyboardPattern": "Käytä pidempiä näppäinyhdistelmiä, joissa on enemmän suunnanmuutoksia",
+            "repeated": "Vältä toistettuja sanoja ja merkkejä",
+            "sequences": "Vältä sarjoja",
+            "recentYears": "Vältä viime vuosia",
+            "associatedYears": "Vältä vuosia, jotka voi yhdistää sinuun",
+            "dates": "Vältä päivämääriä ja vuosia, jotka liittyvät sinuun",
+            "capitalization": "Isolla alkukirjaimella aloittaminen ei erityisesti hyödytä",
+            "allUppercase": "Pelkästään isoilla kirjaimilla kirjoitettu on melkein yhtä helppo arvata kuin kokonaan pienillä kirjoitettu",
+            "reverseWords": "Takaperin kirjoitetut sanat eivät ole paljoakaan vaikeampia arvata",
+            "l33t": "Arvattavat vaihdot, kuten ”@” ”a”:n sijaan ei auta paljoakaan",
+            "anotherWord": "Lisää sana tai kaksi. Epätavalliset sanat ovat parempia."
+        },
+        "warnings": {
+            "simpleRepeat": "Toistot, kuten ”aaa”, ovat helppoja arvata",
+            "extendedRepeat": "Toistot, kuten ”abcabcabe” ovat vain hieman hankalampia arvata kuin ”abc”",
+            "sequences": "Sarjat, kuten ”abc” tai ”6543” ovat helppoja arvata",
+            "recentYears": "Viime vuodet ovat helppoja arvata",
+            "dates": "Päivämäärät ovat usein helppoja arvata",
+            "topTen": "Tämä on kymmenen yleisimmän salasanan joukossa",
+            "topHundred": "Tämä on sadan yleisimmän salasanan joukossa",
+            "common": "Tämä on erittäin yleinen salasana",
+            "similarToCommon": "Tämä on samankaltainen kuin yleisesti käytetty salasana",
+            "wordByItself": "Yksittäinen sana on helppo arvata",
+            "namesByThemselves": "Nimet ja sukunimet yksinään ovat helppoja arvata",
+            "commonNames": "Yleiset nimet ja sukunimet ovat helppoja arvata",
+            "straightRow": "Näppäimistössä peräkkäin olevat merkit ovat helppoja arvata",
+            "keyPattern": "Lyhyet näppäinsarjat ovat helppoja arvata"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Uutta äänen yleislähetystä ei voi käynnistää",
+        "failed_insufficient_permission_title": "Uutta äänen yleislähetystä ei voi käynnistää",
+        "failed_others_already_recording_title": "Uutta äänen yleislähetystä ei voi käynnistää",
+        "failed_already_recording_description": "Tallennat jo äänen yleislähetystä. Lopeta nykyinen äänen yleislähetys aloittaaksesi uuden.",
+        "failed_others_already_recording_description": "Joku toinen tallentaa jo äänen yleislähetystä. Odota äänen yleislähetyksen päättymistä, jotta voit aloittaa uuden.",
+        "failed_no_connection_title": "Yhteysvirhe",
+        "confirm_stop_title": "Pysäytetäänkö liveyleislähetys?",
+        "confirm_stop_affirm": "Kyllä, pysäytä yleislähetys",
+        "30s_backward": "30 s taaksepäin",
+        "30s_forward": "30 s eteenpäin",
+        "resume": "palaa äänen yleislähetykseen",
+        "pause": "keskeytä äänen yleislähetys",
+        "buffering": "Puskuroidaan…",
+        "play": "toista äänen yleislähetys"
+    },
+    "update": {
+        "see_changes_button": "Mitä uutta?",
+        "release_notes_toast_title": "Mitä uutta",
+        "toast_title": "Päivitä %(brand)s",
+        "toast_description": "%(brand)s-sovelluksesta on saatavilla uusi versio"
+    },
+    "threads": {
+        "all_threads": "Kaikki ketjut",
+        "all_threads_description": "Näytä kaikki ketjut nykyisestä huoneesta",
+        "my_threads": "Omat ketjut",
+        "my_threads_description": "Näyttää kaikki ketjut, joissa olet ollut osallinen",
+        "show_thread_filter": "Näytä:",
+        "show_all_threads": "Näytä kaikki ketjut",
+        "empty_explainer": "Ketjut auttavat pitämään keskustelut asiayhteyteen sopivina ja helposti seurattavina.",
+        "empty_heading": "Pidä keskustelut järjestyksessä ketjuissa"
+    },
+    "theme": {
+        "light_high_contrast": "Vaalea, suuri kontrasti"
+    },
+    "space": {
+        "landing_welcome": "Tervetuloa, tämä on <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Tätä kotipalvelinta ei ole säädetty näyttämään karttoja.",
+        "WebGLNotEnabled": "Karttojen näyttäminen vaatii WebGL:n. Ota se käyttöön selaimen asetuksista.",
+        "MapStyleUrlNotReachable": "Tätä kotipalvelinta ei ole säädetty kunnolla näyttämään karttoja tai valittu karttapalvelin saattaa olla tavoittamattomissa.",
+        "find_my_location": "Paikanna sijaintini",
+        "location_not_available": "Sijainti ei ole saatavilla",
+        "mapbox_logo": "Mapboxin logo",
+        "reset_bearing": "Aseta suunta pohjoiseen",
+        "failed_permission": "%(brand)s ei saanut lupaa noutaa sijaintiasi. Salli sijainnin käyttäminen selaimen asetuksista.",
+        "failed_generic": "Sijaintisi noutaminen epäonnistui. Yritä myöhemmin uudelleen.",
+        "failed_timeout": "Sijaintisi noutaminen aikakatkaistiin. Yritä myöhemmin uudelleen.",
+        "failed_unknown": "Tuntematon virhe sijaintia noudettaessa. Yritä myöhemmin uudelleen.",
+        "expand_map": "Laajenna kartta",
+        "failed_load_map": "Kartan lataaminen ei onnistu"
+    },
+    "labs_mjolnir": {
+        "room_name": "Tekemäni estot",
+        "room_topic": "Tämä on luettelo käyttäjistä ja palvelimista, jotka olet estänyt - älä poistu huoneesta!"
+    },
     "create_space": {
         "name_required": "Anna nimi avaruudelle",
         "name_placeholder": "esim. minun-space",
@@ -3695,62 +3758,5 @@
         "setup_rooms_description": "Voit lisätä niitä myöhemmin, mukaan lukien olemassa olevia.",
         "setup_rooms_private_heading": "Minkä projektien parissa tiimisi työskentelee?",
         "setup_rooms_private_description": "Luomme huoneet jokaiselle niistä."
-    },
-    "space": {
-        "landing_welcome": "Tervetuloa, tämä on <name/>"
-    },
-    "threads": {
-        "all_threads": "Kaikki ketjut",
-        "all_threads_description": "Näytä kaikki ketjut nykyisestä huoneesta",
-        "my_threads": "Omat ketjut",
-        "my_threads_description": "Näyttää kaikki ketjut, joissa olet ollut osallinen",
-        "show_thread_filter": "Näytä:",
-        "show_all_threads": "Näytä kaikki ketjut",
-        "empty_explainer": "Ketjut auttavat pitämään keskustelut asiayhteyteen sopivina ja helposti seurattavina.",
-        "empty_heading": "Pidä keskustelut järjestyksessä ketjuissa"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Tätä kotipalvelinta ei ole säädetty näyttämään karttoja.",
-        "WebGLNotEnabled": "Karttojen näyttäminen vaatii WebGL:n. Ota se käyttöön selaimen asetuksista.",
-        "MapStyleUrlNotReachable": "Tätä kotipalvelinta ei ole säädetty kunnolla näyttämään karttoja tai valittu karttapalvelin saattaa olla tavoittamattomissa.",
-        "find_my_location": "Paikanna sijaintini",
-        "location_not_available": "Sijainti ei ole saatavilla",
-        "mapbox_logo": "Mapboxin logo",
-        "reset_bearing": "Aseta suunta pohjoiseen",
-        "failed_permission": "%(brand)s ei saanut lupaa noutaa sijaintiasi. Salli sijainnin käyttäminen selaimen asetuksista.",
-        "failed_generic": "Sijaintisi noutaminen epäonnistui. Yritä myöhemmin uudelleen.",
-        "failed_timeout": "Sijaintisi noutaminen aikakatkaistiin. Yritä myöhemmin uudelleen.",
-        "failed_unknown": "Tuntematon virhe sijaintia noudettaessa. Yritä myöhemmin uudelleen.",
-        "expand_map": "Laajenna kartta",
-        "failed_load_map": "Kartan lataaminen ei onnistu"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Uutta äänen yleislähetystä ei voi käynnistää",
-        "failed_insufficient_permission_title": "Uutta äänen yleislähetystä ei voi käynnistää",
-        "failed_others_already_recording_title": "Uutta äänen yleislähetystä ei voi käynnistää",
-        "failed_already_recording_description": "Tallennat jo äänen yleislähetystä. Lopeta nykyinen äänen yleislähetys aloittaaksesi uuden.",
-        "failed_others_already_recording_description": "Joku toinen tallentaa jo äänen yleislähetystä. Odota äänen yleislähetyksen päättymistä, jotta voit aloittaa uuden.",
-        "failed_no_connection_title": "Yhteysvirhe",
-        "confirm_stop_title": "Pysäytetäänkö liveyleislähetys?",
-        "confirm_stop_affirm": "Kyllä, pysäytä yleislähetys",
-        "30s_backward": "30 s taaksepäin",
-        "30s_forward": "30 s eteenpäin",
-        "resume": "palaa äänen yleislähetykseen",
-        "pause": "keskeytä äänen yleislähetys",
-        "buffering": "Puskuroidaan…",
-        "play": "toista äänen yleislähetys"
-    },
-    "labs_mjolnir": {
-        "room_name": "Tekemäni estot",
-        "room_topic": "Tämä on luettelo käyttäjistä ja palvelimista, jotka olet estänyt - älä poistu huoneesta!"
-    },
-    "theme": {
-        "light_high_contrast": "Vaalea, suuri kontrasti"
-    },
-    "update": {
-        "see_changes_button": "Mitä uutta?",
-        "release_notes_toast_title": "Mitä uutta",
-        "toast_title": "Päivitä %(brand)s",
-        "toast_description": "%(brand)s-sovelluksesta on saatavilla uusi versio"
     }
 }

@@ -203,8 +203,6 @@
     "All settings": "Allar stillingar",
     "Change notification settings": "Breytta tilkynningastillingum",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Þú getur ekki sent nein skilaboð fyrr en þú hefur farið yfir og samþykkir <consentLink>skilmála okkar</consentLink>.",
-    "No need for symbols, digits, or uppercase letters": "Engin þörf á táknum, tölustöfum, eða hástöfum",
-    "Use a few words, avoid common phrases": "Notaðu nokkur orð. Forðastu algengar setningar",
     "Unknown server error": "Óþekkt villa á þjóni",
     "Subscribed lists": "Skráðir listar",
     "eg: @bot:* or example.org": "t.d.: @vélmenni:* eða dæmi.is",
@@ -789,29 +787,6 @@
     "Messaging": "Skilaboð",
     "Share your public space": "Deildu opinbera svæðinu þínu",
     "Invite to %(spaceName)s": "Bjóða inn á %(spaceName)s",
-    "Short keyboard patterns are easy to guess": "Auðvelt er að giska á styttri mynstur á lyklaborði",
-    "Straight rows of keys are easy to guess": "Auðvelt er að giska á beinar raðir af lyklum á lyklaborði",
-    "Common names and surnames are easy to guess": "Auðvelt er að giska á algeng nöfn og kenninöfn",
-    "Names and surnames by themselves are easy to guess": "Auðvelt er að giska á eiginnöfn og kenninöfn",
-    "A word by itself is easy to guess": "Auðvelt er að giska á stakt orð",
-    "This is similar to a commonly used password": "Þetta líkist algengu lykilorði",
-    "This is a very common password": "Þetta er mjög algengt lykilorð",
-    "This is a top-100 common password": "Þetta er í hópi 100 algengustu lykilorða",
-    "This is a top-10 common password": "Þetta er í hópi 10 algengustu lykilorða",
-    "Dates are often easy to guess": "Oft er auðvelt að giska á dagsetningar",
-    "Recent years are easy to guess": "Auðvelt er að giska á nýleg ártöl",
-    "Sequences like abc or 6543 are easy to guess": "Auðvelt er að giska á runur eins og \"abc\" eða \"6543\"",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Ekki er mikið erfiðara að giska á endurtekningar eins og\"abcabcabc\" heldur en \"aaa\"\"",
-    "Repeats like \"aaa\" are easy to guess": "Auðvelt er að giska á endurtekningar eins og \"aaa\"",
-    "Add another word or two. Uncommon words are better.": "Bættu við öðru orði eða tveimur. Sjaldgæf orð eru betri.",
-    "Reversed words aren't much harder to guess": "Viðsnúin orð er ekki mikið erfiðara að giska á",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Allt í hástöfum en næstum eins auðvelt að giska á og allt í lágstöfum",
-    "Capitalization doesn't help very much": "Hástafaritun hjálpar ekki mikið",
-    "Avoid dates and years that are associated with you": "Forðastu dagsetningar og ártöl sem tengjast þér",
-    "Avoid years that are associated with you": "Forðastu ártöl sem tengjast þér",
-    "Avoid recent years": "Forðastu nýleg ártöl",
-    "Avoid sequences": "Forðastu runur",
-    "Avoid repeated words and characters": "Forðastu endurtekin orð og stafi",
     "Are you sure you want to cancel entering passphrase?": "Viltu örugglega hætta við að setja inn lykilfrasa?",
     "Cancel entering passphrase?": "Hætta við að setja inn lykilfrasa?",
     "Connectivity to the server has been lost": "Tenging við vefþjón hefur rofnað",
@@ -882,8 +857,6 @@
     "Don't miss a reply": "Ekki missa af svari",
     "Review to ensure your account is safe": "Yfirfarðu þetta til að tryggja að aðgangurinn þinn sé öruggur",
     "Error upgrading room": "Villa við að uppfæra spjallrás",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Augljósar útskiptingar á borð við '@' í stað 'a' hjálpa ekki mikið",
-    "Use a longer keyboard pattern with more turns": "Notaðu lengri lyklaborðsmynstur með fleiri beygjum",
     "Unrecognised address": "Óþekkjanlegt vistfang",
     "Error leaving room": "Villa við að yfirgefa spjallrás",
     "Not a valid %(brand)s keyfile": "Er ekki gild %(brand)s lykilskrá",
@@ -2129,11 +2102,11 @@
         "integration_manager": "Samþættingarstýring",
         "qr_code": "QR-kóði",
         "feedback": "Umsagnir",
-        "all_rooms": "Allar spjallrásir",
-        "orphan_rooms": "Aðrar spjallrásir",
         "preview_message": "Hæ þú. Þú ert algjört æði!",
+        "orphan_rooms": "Aðrar spjallrásir",
         "on": "Kveikt",
-        "off": "Slökkt"
+        "off": "Slökkt",
+        "all_rooms": "Allar spjallrásir"
     },
     "action": {
         "continue": "Halda áfram",
@@ -2232,8 +2205,8 @@
         "submit": "Senda inn",
         "send_report": "Senda kæru",
         "clear": "Hreinsa",
-        "enter_fullscreen": "Fara í fullskjásstillingu",
-        "exit_fullscreeen": "Fara úr fullskjásstillingu"
+        "exit_fullscreeen": "Fara úr fullskjásstillingu",
+        "enter_fullscreen": "Fara í fullskjásstillingu"
     },
     "a11y": {
         "user_menu": "Valmynd notandans",
@@ -2290,9 +2263,9 @@
         "join_beta_reload": "Ef tekið er þátt í beta-prófunum verður %(brand)s endurhlaðið.",
         "leave_beta": "Fara út úr Beta-prófunarútgáfu",
         "join_beta": "Taka þátt í Beta-prófunum",
-        "automatic_debug_logs": "Senda atvikaskrár sjálfkrafa við allar villur",
+        "automatic_debug_logs_key_backup": "Senda atvikaskrár sjálfkrafa þegar öryggisafrit dulritunarlykla virkar ekki",
         "automatic_debug_logs_decryption": "Senda atvikaskrár sjálfkrafa við afkóðunarvillur",
-        "automatic_debug_logs_key_backup": "Senda atvikaskrár sjálfkrafa þegar öryggisafrit dulritunarlykla virkar ekki"
+        "automatic_debug_logs": "Senda atvikaskrár sjálfkrafa við allar villur"
     },
     "keyboard": {
         "home": "Forsíða",
@@ -2565,15 +2538,24 @@
             "timeline_image_size": "Stærð myndar í tímalínunni",
             "timeline_image_size_default": "Sjálfgefið",
             "timeline_image_size_large": "Stórt",
-            "custom_font_size": "Nota sérsniðna stærð",
+            "image_size_large": "Stórt",
+            "image_size_default": "Sjálfgefið",
+            "font_size_valid": "Nota á milli %(min)s pt og %(max)s pt",
             "font_size_nan": "Stærð verður að vera tala",
             "font_size_limit": "Sérsniðin stærð á letri getur aðeins verið á milli %(min)s pt og %(max)s pt",
-            "font_size_valid": "Nota á milli %(min)s pt og %(max)s pt",
-            "image_size_default": "Sjálfgefið",
-            "image_size_large": "Stórt"
+            "custom_font_size": "Nota sérsniðna stærð"
         },
         "inline_url_previews_room_account": "Virkja forskoðun vefslóða fyrir þessa spjallrás (einungis fyrir þig)",
         "inline_url_previews_room": "Virkja forskoðun vefslóða sjálfgefið fyrir þátttakendur í þessari spjallrás",
+        "voip": {
+            "mirror_local_feed": "Spegla staðværu myndmerki",
+            "allow_p2p": "Leyfa jafningi-á-jafningja fyrir maður-á-mann samtöl",
+            "allow_p2p_description": "Ef þetta er virkjað, getur viðkomandi mögulega séð IP-vistfangið þitt",
+            "auto_gain_control": "Sjálfvirk stýring styrkaukningar",
+            "echo_cancellation": "Útrýming bergmáls",
+            "noise_suppression": "Truflanabæling"
+        },
+        "send_read_receipts_unsupported": "Netþjónninn þinn styður ekki að sending leskvittana sé gerð óvirk.",
         "security": {
             "message_search_disable_warning": "Ef þetta er óvirkt, munu skilaboð frá dulrituðum spjallrásum ekki birtast í leitarniðurstöðum.",
             "message_search_indexing_idle": "Ekki að setja nein skilaboð í efnisyfirlit neinnar spjallrásar.",
@@ -2607,15 +2589,6 @@
             "always_show_menu_bar": "Alltaf að sýna valmyndastiku glugga",
             "enable_tray_icon": "Sýna táknmynd í kerfisbakka og lágmarka forritið niður í hana þegar því er lokað",
             "enable_hardware_acceleration": "Virkja vélbúnaðarhröðun"
-        },
-        "send_read_receipts_unsupported": "Netþjónninn þinn styður ekki að sending leskvittana sé gerð óvirk.",
-        "voip": {
-            "mirror_local_feed": "Spegla staðværu myndmerki",
-            "allow_p2p": "Leyfa jafningi-á-jafningja fyrir maður-á-mann samtöl",
-            "allow_p2p_description": "Ef þetta er virkjað, getur viðkomandi mögulega séð IP-vistfangið þitt",
-            "auto_gain_control": "Sjálfvirk stýring styrkaukningar",
-            "echo_cancellation": "Útrýming bergmáls",
-            "noise_suppression": "Truflanabæling"
         },
         "keyboard": {
             "title": "Lyklaborð"
@@ -2684,11 +2657,11 @@
         "category_room": "Spjallrás",
         "category_other": "Annað",
         "widget_screenshots": "Virkja skjámyndir viðmótshluta í studdum viðmótshlutum",
+        "title": "Forritunartól",
         "show_hidden_events": "Birta falda atburði í tímalínu",
-        "low_bandwidth_mode": "Hamur fyrir litla bandbreidd",
         "low_bandwidth_mode_description": "Krefst samhæfðs heimaþjóns.",
-        "developer_mode": "Forritarahamur",
-        "title": "Forritunartól"
+        "low_bandwidth_mode": "Hamur fyrir litla bandbreidd",
+        "developer_mode": "Forritarahamur"
     },
     "export_chat": {
         "html": "HTML",
@@ -3021,20 +2994,20 @@
         "no_permission_messages_before_invite": "Þú hefur ekki heimildir til að skoða skilaboð frá því áður en þér var boðið.",
         "no_permission_messages_before_join": "Þú hefur ekki heimildir til að skoða skilaboð frá því áður en þú fórst að taka þátt.",
         "historical_messages_unavailable": "Þú getur ekki séð eldri skilaboð",
-        "io.element.voice_broadcast_info": {
-            "you": "Þú endaðir <a>talútsendingu</a>",
-            "user": "%(senderName)s endaði <a>talútsendingu</a>"
+        "redacted": {
+            "tooltip": "Skilaboð eytt á %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s brást við með %(content)s",
             "tooltip": "<reactors/><reactedWith>brást við %(shortName)s</reactedWith>"
         },
-        "redacted": {
-            "tooltip": "Skilaboð eytt á %(date)s"
-        },
         "m.room.create": {
             "continuation": "Þessi spjallrás er framhald af öðru samtali.",
             "see_older_messages": "Smelltu hér til að sjá eldri skilaboð."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Þú endaðir <a>talútsendingu</a>",
+            "user": "%(senderName)s endaði <a>talútsendingu</a>"
         }
     },
     "slash_command": {
@@ -3097,14 +3070,14 @@
         "failed_find_user": "Gat ekki fundið notanda á spjallrás",
         "op": "Skilgreindu völd notanda",
         "deop": "Tekur stjórnunarréttindi af notanda með uppgefið auðkenni",
-        "server_error": "Villa á þjóni",
-        "command_error": "Skipanavilla",
-        "server_error_detail": "Netþjónninn gæti verið undir miklu álagi eða ekki til taks, nú eða að eitthvað hafi farið úrskeiðis.",
-        "unknown_command": "Óþekkt skipun",
-        "unknown_command_detail": "Óþekkt skipun: %(commandText)s",
-        "unknown_command_help": "Þú getur notað <code>/help</code> til að lista tilteknar skipanir. Ætlaðir þú að senda þetta sem skilaboð?",
         "unknown_command_hint": "Vísbending: Byrjaðu skilaboðin þín með <code>//</code> til að þau byrji með skástriki.",
-        "unknown_command_button": "Senda sem skilaboð"
+        "unknown_command_help": "Þú getur notað <code>/help</code> til að lista tilteknar skipanir. Ætlaðir þú að senda þetta sem skilaboð?",
+        "unknown_command_detail": "Óþekkt skipun: %(commandText)s",
+        "unknown_command_button": "Senda sem skilaboð",
+        "unknown_command": "Óþekkt skipun",
+        "server_error_detail": "Netþjónninn gæti verið undir miklu álagi eða ekki til taks, nú eða að eitthvað hafi farið úrskeiðis.",
+        "server_error": "Villa á þjóni",
+        "command_error": "Skipanavilla"
     },
     "presence": {
         "busy": "Upptekinn",
@@ -3333,8 +3306,8 @@
         "server_picker_matrix.org": "Matrix.org is er heimsins stærsti opinberi heimaþjónninn, þannig að þar er góður staður fyrir marga.",
         "server_picker_custom": "Annar heimaþjónn",
         "server_picker_learn_more": "Um heimaþjóna",
-        "account_deactivated": "Þessi notandaaðgangur hefur verið gerður óvirkur.",
-        "incorrect_credentials": "Rangt notandanafn og/eða lykilorð."
+        "incorrect_credentials": "Rangt notandanafn og/eða lykilorð.",
+        "account_deactivated": "Þessi notandaaðgangur hefur verið gerður óvirkur."
     },
     "room_list": {
         "sort_unread_first": "Birta spjallrásir með ólesnum skilaboðum fyrst",
@@ -3455,6 +3428,99 @@
         "comment_label": "Athugasemd",
         "send_feedback_action": "Senda umsögn"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Notaðu nokkur orð. Forðastu algengar setningar",
+            "noNeed": "Engin þörf á táknum, tölustöfum, eða hástöfum",
+            "longerKeyboardPattern": "Notaðu lengri lyklaborðsmynstur með fleiri beygjum",
+            "repeated": "Forðastu endurtekin orð og stafi",
+            "sequences": "Forðastu runur",
+            "recentYears": "Forðastu nýleg ártöl",
+            "associatedYears": "Forðastu ártöl sem tengjast þér",
+            "dates": "Forðastu dagsetningar og ártöl sem tengjast þér",
+            "capitalization": "Hástafaritun hjálpar ekki mikið",
+            "allUppercase": "Allt í hástöfum en næstum eins auðvelt að giska á og allt í lágstöfum",
+            "reverseWords": "Viðsnúin orð er ekki mikið erfiðara að giska á",
+            "l33t": "Augljósar útskiptingar á borð við '@' í stað 'a' hjálpa ekki mikið",
+            "anotherWord": "Bættu við öðru orði eða tveimur. Sjaldgæf orð eru betri."
+        },
+        "warnings": {
+            "simpleRepeat": "Auðvelt er að giska á endurtekningar eins og \"aaa\"",
+            "extendedRepeat": "Ekki er mikið erfiðara að giska á endurtekningar eins og\"abcabcabc\" heldur en \"aaa\"\"",
+            "sequences": "Auðvelt er að giska á runur eins og \"abc\" eða \"6543\"",
+            "recentYears": "Auðvelt er að giska á nýleg ártöl",
+            "dates": "Oft er auðvelt að giska á dagsetningar",
+            "topTen": "Þetta er í hópi 10 algengustu lykilorða",
+            "topHundred": "Þetta er í hópi 100 algengustu lykilorða",
+            "common": "Þetta er mjög algengt lykilorð",
+            "similarToCommon": "Þetta líkist algengu lykilorði",
+            "wordByItself": "Auðvelt er að giska á stakt orð",
+            "namesByThemselves": "Auðvelt er að giska á eiginnöfn og kenninöfn",
+            "commonNames": "Auðvelt er að giska á algeng nöfn og kenninöfn",
+            "straightRow": "Auðvelt er að giska á beinar raðir af lyklum á lyklaborði",
+            "keyPattern": "Auðvelt er að giska á styttri mynstur á lyklaborði"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Get ekki byrjað nýja talútsendingu",
+        "failed_insufficient_permission_title": "Get ekki byrjað nýja talútsendingu",
+        "failed_others_already_recording_title": "Get ekki byrjað nýja talútsendingu",
+        "failed_no_connection_title": "Villa í tengingu",
+        "failed_no_connection_description": "Því miður tókst ekki að setja aðra upptöku í gang. Reyndu aftur síðar.",
+        "confirm_stop_title": "Stöðva beina útsendingu?",
+        "confirm_stop_affirm": "Já, stöðva útsendingu",
+        "confirm_listen_title": "Hlusta á beina útsendingu?",
+        "confirm_listen_affirm": "Já, stöðva upptökuna mína",
+        "30s_backward": "30s afturábak",
+        "30s_forward": "30s áfram",
+        "go_live": "Fara í beina útsendingu",
+        "resume": "halda áfram með talútsendingu",
+        "pause": "setja talútsendingu í bið",
+        "buffering": "Hleð í biðminni…",
+        "play": "spila talútsendingu",
+        "connection_error": "Villa í tengingu - Upptaka í bið"
+    },
+    "update": {
+        "see_changes_button": "Hvað er nýtt á döfinni?",
+        "release_notes_toast_title": "Nýtt á döfinni",
+        "toast_title": "Uppfæra %(brand)s",
+        "toast_description": "Ný útgáfa %(brand)s er tiltæk"
+    },
+    "threads": {
+        "all_threads": "Allir spjallþræðir",
+        "all_threads_description": "Birtir alla spjallþræði úr fyrirliggjandi spjallrás",
+        "my_threads": "Spjallþræðirnir mínir",
+        "my_threads_description": "Birtir alla spjallþræði sem þú hefur tekið þátt í",
+        "show_thread_filter": "Sýna:",
+        "show_all_threads": "Birta alla spjallþræði",
+        "empty_explainer": "Spjallþræðir hjálpa til við að halda samræðum við efnið og gerir auðveldara að rekja þær.",
+        "empty_heading": "Haltu umræðum skipulögðum með spjallþráðum"
+    },
+    "theme": {
+        "light_high_contrast": "Ljóst með mikil birtuskil"
+    },
+    "space": {
+        "landing_welcome": "Velkomin í <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Heimaþjónninn er ekki stilltur til að birta landakort.",
+        "MapStyleUrlNotReachable": "Heimaþjónninn er ekki rétt stilltur til að geta birt landakort, eða að uppsettur kortaþjónn er ekki aðgengilegur.",
+        "toggle_attribution": "Víxla tilvísun af/á",
+        "find_my_location": "Finna staðsetningu mína",
+        "location_not_available": "Staðsetning ekki tiltæk",
+        "mapbox_logo": "Mapbox-táknmerki",
+        "reset_bearing": "Frumstilla stefnu á norður",
+        "failed_permission": "%(brand)s hefur ekki heimildir til að ná í staðsetninguna þína. Leyfðu aðgang að staðsetningum í stillingum vafrans þíns.",
+        "failed_generic": "Mistókst að sækja staðsetninguna þína. Reyndu aftur síðar.",
+        "failed_timeout": "Rann út á tíma við að sækja staðsetninguna þína. Reyndu aftur síðar.",
+        "failed_unknown": "Óþekkt villa kom upp við að sækja staðsetningu. Reyndu aftur síðar.",
+        "expand_map": "Stækka landakort",
+        "failed_load_map": "Gat ekki hlaðið inn landakorti"
+    },
+    "labs_mjolnir": {
+        "room_name": "Bannlistinn minn",
+        "room_topic": "Þetta er listinn þinn yfir notendur/netþjóna sem þú hefur lokað á - ekki fara af spjallsvæðinu!"
+    },
     "create_space": {
         "name_required": "Settu inn eitthvað nafn fyrir svæðið",
         "name_placeholder": "t.d. mitt-svæði",
@@ -3481,65 +3547,5 @@
         "invite_teammates_description": "Gakktu úr skugga um að rétta fólkið hafi aðgang. Þú getur boðið fleira fólki síðar.",
         "invite_teammates_by_username": "Bjóða með notandanafni",
         "setup_rooms_community_description": "Búum til spjallrás fyrir hvern og einn þeirra."
-    },
-    "space": {
-        "landing_welcome": "Velkomin í <name/>"
-    },
-    "threads": {
-        "all_threads": "Allir spjallþræðir",
-        "all_threads_description": "Birtir alla spjallþræði úr fyrirliggjandi spjallrás",
-        "my_threads": "Spjallþræðirnir mínir",
-        "my_threads_description": "Birtir alla spjallþræði sem þú hefur tekið þátt í",
-        "show_thread_filter": "Sýna:",
-        "show_all_threads": "Birta alla spjallþræði",
-        "empty_explainer": "Spjallþræðir hjálpa til við að halda samræðum við efnið og gerir auðveldara að rekja þær.",
-        "empty_heading": "Haltu umræðum skipulögðum með spjallþráðum"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Heimaþjónninn er ekki stilltur til að birta landakort.",
-        "MapStyleUrlNotReachable": "Heimaþjónninn er ekki rétt stilltur til að geta birt landakort, eða að uppsettur kortaþjónn er ekki aðgengilegur.",
-        "toggle_attribution": "Víxla tilvísun af/á",
-        "find_my_location": "Finna staðsetningu mína",
-        "location_not_available": "Staðsetning ekki tiltæk",
-        "mapbox_logo": "Mapbox-táknmerki",
-        "reset_bearing": "Frumstilla stefnu á norður",
-        "failed_permission": "%(brand)s hefur ekki heimildir til að ná í staðsetninguna þína. Leyfðu aðgang að staðsetningum í stillingum vafrans þíns.",
-        "failed_generic": "Mistókst að sækja staðsetninguna þína. Reyndu aftur síðar.",
-        "failed_timeout": "Rann út á tíma við að sækja staðsetninguna þína. Reyndu aftur síðar.",
-        "failed_unknown": "Óþekkt villa kom upp við að sækja staðsetningu. Reyndu aftur síðar.",
-        "expand_map": "Stækka landakort",
-        "failed_load_map": "Gat ekki hlaðið inn landakorti"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Get ekki byrjað nýja talútsendingu",
-        "failed_insufficient_permission_title": "Get ekki byrjað nýja talútsendingu",
-        "failed_others_already_recording_title": "Get ekki byrjað nýja talútsendingu",
-        "failed_no_connection_title": "Villa í tengingu",
-        "failed_no_connection_description": "Því miður tókst ekki að setja aðra upptöku í gang. Reyndu aftur síðar.",
-        "confirm_stop_title": "Stöðva beina útsendingu?",
-        "confirm_stop_affirm": "Já, stöðva útsendingu",
-        "confirm_listen_title": "Hlusta á beina útsendingu?",
-        "confirm_listen_affirm": "Já, stöðva upptökuna mína",
-        "30s_backward": "30s afturábak",
-        "30s_forward": "30s áfram",
-        "go_live": "Fara í beina útsendingu",
-        "resume": "halda áfram með talútsendingu",
-        "pause": "setja talútsendingu í bið",
-        "buffering": "Hleð í biðminni…",
-        "play": "spila talútsendingu",
-        "connection_error": "Villa í tengingu - Upptaka í bið"
-    },
-    "labs_mjolnir": {
-        "room_name": "Bannlistinn minn",
-        "room_topic": "Þetta er listinn þinn yfir notendur/netþjóna sem þú hefur lokað á - ekki fara af spjallsvæðinu!"
-    },
-    "theme": {
-        "light_high_contrast": "Ljóst með mikil birtuskil"
-    },
-    "update": {
-        "see_changes_button": "Hvað er nýtt á döfinni?",
-        "release_notes_toast_title": "Nýtt á döfinni",
-        "toast_title": "Uppfæra %(brand)s",
-        "toast_description": "Ný útgáfa %(brand)s er tiltæk"
     }
 }

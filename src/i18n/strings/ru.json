@@ -318,33 +318,6 @@
     "Unrecognised address": "Нераспознанный адрес",
     "You do not have permission to invite people to this room.": "У вас нет разрешения приглашать людей в эту комнату.",
     "Unknown server error": "Неизвестная ошибка сервера",
-    "Use a few words, avoid common phrases": "Используйте несколько слов, избегайте общих фраз",
-    "No need for symbols, digits, or uppercase letters": "Нет необходимости в символах, цифрах или заглавных буквах",
-    "Use a longer keyboard pattern with more turns": "Используйте более длинную комбинацию клавиш с бо́льшим количеством поворотов",
-    "Avoid repeated words and characters": "Избегайте повторяющихся слов и символов",
-    "Avoid sequences": "Избегайте последовательностей",
-    "Avoid recent years": "Избегайте последних годов",
-    "Avoid years that are associated with you": "Избегайте годов, которые связаны с вами",
-    "Avoid dates and years that are associated with you": "Избегайте дат и годов, которые связаны с вами",
-    "Capitalization doesn't help very much": "Заглавные буквы не особо помогают",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Всё прописными буквами так же легко угадывается как и всё строчными",
-    "Reversed words aren't much harder to guess": "Угадать перевёрнутые слова не сильно труднее",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Предсказуемые замены типа «@» вместо «a» не особо помогают",
-    "Add another word or two. Uncommon words are better.": "Добавьте ещё одно-два слова. Лучше использовать редкие слова.",
-    "Repeats like \"aaa\" are easy to guess": "Повторы типа \"ааа\" легко угадываемы",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Повторы типа «abcabcabc», лишь немного сложнее угадать, чем «abc»",
-    "Sequences like abc or 6543 are easy to guess": "Последовательности типа abc или 6543 легко угадываемы",
-    "Recent years are easy to guess": "Последние года легко угадываемы",
-    "Dates are often easy to guess": "Даты часто легко угадать",
-    "This is a top-10 common password": "Это топ-10 распространённых паролей",
-    "This is a top-100 common password": "Это топ-100 распространённых паролей",
-    "This is a very common password": "Это очень распространённый пароль",
-    "This is similar to a commonly used password": "Это похоже на распространённый пароль",
-    "A word by itself is easy to guess": "Общеупотребительные слова легко угадываемы",
-    "Names and surnames by themselves are easy to guess": "Имена и фамилии легко угадываемые",
-    "Common names and surnames are easy to guess": "Распространённые имена и фамилии легко угадываемы",
-    "Straight rows of keys are easy to guess": "Прямые ряды клавиш легко угадываемы",
-    "Short keyboard patterns are easy to guess": "Короткие клавиатурные шаблоны легко угадываемы",
     "Please contact your homeserver administrator.": "Пожалуйста, свяжитесь с администратором вашего сервера.",
     "Got It": "Понятно",
     "Verify this user by confirming the following number appears on their screen.": "Подтвердите пользователя, убедившись, что на его экране отображается следующее число.",
@@ -2365,11 +2338,11 @@
         "integration_manager": "Менеджер интеграции",
         "qr_code": "QR-код",
         "feedback": "Отзыв",
-        "all_rooms": "Все комнаты",
-        "orphan_rooms": "Прочие комнаты",
         "preview_message": "Эй! Ты лучший!",
+        "orphan_rooms": "Прочие комнаты",
         "on": "Включить",
-        "off": "Выключить"
+        "off": "Выключить",
+        "all_rooms": "Все комнаты"
     },
     "action": {
         "continue": "Продолжить",
@@ -2468,8 +2441,8 @@
         "submit": "Отправить",
         "send_report": "Отослать отчёт",
         "clear": "Очистить",
-        "enter_fullscreen": "Перейти в полноэкранный режим",
-        "exit_fullscreeen": "Выйти из полноэкранного режима"
+        "exit_fullscreeen": "Выйти из полноэкранного режима",
+        "enter_fullscreen": "Перейти в полноэкранный режим"
     },
     "a11y": {
         "user_menu": "Меню пользователя",
@@ -2530,9 +2503,9 @@
         "join_beta_reload": "Присоединение к бета-тестированию перезагрузит %(brand)s.",
         "leave_beta": "Покинуть бета-версию",
         "join_beta": "Присоединиться к бета-версии",
-        "automatic_debug_logs": "Автоматическая отправка журналов отладки при любой ошибке",
+        "automatic_debug_logs_key_backup": "Автоматически отправлять журналы отладки, когда резервное копирование ключей не работает",
         "automatic_debug_logs_decryption": "Автоматическая отправка журналов отладки при ошибках расшифровки",
-        "automatic_debug_logs_key_backup": "Автоматически отправлять журналы отладки, когда резервное копирование ключей не работает"
+        "automatic_debug_logs": "Автоматическая отправка журналов отладки при любой ошибке"
     },
     "keyboard": {
         "home": "Главная",
@@ -2812,15 +2785,24 @@
             "timeline_image_size": "Размер изображения в ленте сообщений",
             "timeline_image_size_default": "По умолчанию",
             "timeline_image_size_large": "Большой",
-            "custom_font_size": "Использовать другой размер",
+            "image_size_large": "Большой",
+            "image_size_default": "По умолчанию",
+            "font_size_valid": "Введите значение между %(min)s pt и %(max)s pt",
             "font_size_nan": "Размер должен быть числом",
             "font_size_limit": "Пользовательский размер шрифта может быть только между %(min)s pt и %(max)s pt",
-            "font_size_valid": "Введите значение между %(min)s pt и %(max)s pt",
-            "image_size_default": "По умолчанию",
-            "image_size_large": "Большой"
+            "custom_font_size": "Использовать другой размер"
         },
         "inline_url_previews_room_account": "Включить предпросмотр ссылок в этой комнате (влияет только на вас)",
         "inline_url_previews_room": "Включить предпросмотр ссылок для участников этой комнаты по умолчанию",
+        "voip": {
+            "mirror_local_feed": "Зеркально отражать видео со своей камеры",
+            "allow_p2p": "Разрешить прямое соединение для 1:1 звонков",
+            "allow_p2p_description": "Когда включено, другой пользователь сможет видеть ваш IP-адрес",
+            "echo_cancellation": "Эхоподавление",
+            "noise_suppression": "Подавление шума",
+            "enable_fallback_ice_server_description": "Только применяется, когда у домашнего сервера нет своего TURN-сервера. Ваш IP-адрес будет виден на время звонка."
+        },
+        "send_read_receipts_unsupported": "Ваш сервер не поддерживает отключение отправки уведомлений о прочтении.",
         "security": {
             "message_search_disable_warning": "Если этот параметр отключен, сообщения из зашифрованных комнат не будут отображаться в результатах поиска.",
             "message_search_indexing_idle": "В настоящее время не индексируются сообщения ни для одной комнаты.",
@@ -2857,15 +2839,6 @@
             "always_show_menu_bar": "Всегда показывать строку меню",
             "enable_tray_icon": "Показывать значок в трее и сворачивать в него окно при закрытии",
             "enable_hardware_acceleration": "Включить аппаратное ускорение"
-        },
-        "send_read_receipts_unsupported": "Ваш сервер не поддерживает отключение отправки уведомлений о прочтении.",
-        "voip": {
-            "mirror_local_feed": "Зеркально отражать видео со своей камеры",
-            "allow_p2p": "Разрешить прямое соединение для 1:1 звонков",
-            "allow_p2p_description": "Когда включено, другой пользователь сможет видеть ваш IP-адрес",
-            "echo_cancellation": "Эхоподавление",
-            "noise_suppression": "Подавление шума",
-            "enable_fallback_ice_server_description": "Только применяется, когда у домашнего сервера нет своего TURN-сервера. Ваш IP-адрес будет виден на время звонка."
         },
         "keyboard": {
             "title": "Горячие клавиши"
@@ -2941,10 +2914,10 @@
         "category_room": "Комната",
         "category_other": "Другие",
         "widget_screenshots": "Включить скриншоты виджетов для поддерживаемых виджетов",
+        "title": "Инструменты разработчика",
         "show_hidden_events": "Показывать скрытые события в ленте сообщений",
         "low_bandwidth_mode_description": "Требуется совместимый сервер.",
-        "developer_mode": "Режим разработчика",
-        "title": "Инструменты разработчика"
+        "developer_mode": "Режим разработчика"
     },
     "export_chat": {
         "html": "HTML",
@@ -3306,20 +3279,20 @@
         "no_permission_messages_before_join": "У вас нет разрешения на просмотр сообщений, полученных до вашего присоединения.",
         "encrypted_historical_messages_unavailable": "Зашифрованные сообщения до этого момента недоступны.",
         "historical_messages_unavailable": "Вы не можете просматривать более старые сообщения",
-        "io.element.voice_broadcast_info": {
-            "you": "Вы завершили <a>голосовую трансляцию</a>",
-            "user": "%(senderName)s завершил(а) <a>голосовую трансляцию</a>"
+        "redacted": {
+            "tooltip": "Сообщение удалено %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s отреагировали %(content)s",
             "tooltip": "<reactors/><reactedWith>отреагировал с %(shortName)s</reactedWith>"
         },
-        "redacted": {
-            "tooltip": "Сообщение удалено %(date)s"
-        },
         "m.room.create": {
             "continuation": "Эта комната является продолжением другого разговора.",
             "see_older_messages": "Нажмите, чтобы увидеть старые сообщения."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Вы завершили <a>голосовую трансляцию</a>",
+            "user": "%(senderName)s завершил(а) <a>голосовую трансляцию</a>"
         }
     },
     "slash_command": {
@@ -3384,14 +3357,14 @@
         "failed_find_user": "Не удалось найти пользователя в комнате",
         "op": "Определить уровень прав пользователя",
         "deop": "Снимает полномочия оператора с пользователя с заданным ID",
-        "server_error": "Ошибка сервера",
-        "command_error": "Ошибка команды",
-        "server_error_detail": "Возможно, сервер недоступен, перегружен или что-то еще пошло не так.",
-        "unknown_command": "Неизвестная команда",
-        "unknown_command_detail": "Нераспознанная команда: %(commandText)s",
-        "unknown_command_help": "Введите <code>/help</code> для списка доступных команд. Хотите отправить это сообщение как есть?",
         "unknown_command_hint": "Совет: поставьте <code>//</code> в начале сообщения, чтобы начать его с косой черты.",
-        "unknown_command_button": "Отправить как сообщение"
+        "unknown_command_help": "Введите <code>/help</code> для списка доступных команд. Хотите отправить это сообщение как есть?",
+        "unknown_command_detail": "Нераспознанная команда: %(commandText)s",
+        "unknown_command_button": "Отправить как сообщение",
+        "unknown_command": "Неизвестная команда",
+        "server_error_detail": "Возможно, сервер недоступен, перегружен или что-то еще пошло не так.",
+        "server_error": "Ошибка сервера",
+        "command_error": "Ошибка команды"
     },
     "presence": {
         "busy": "Занят(а)",
@@ -3621,8 +3594,8 @@
         "server_picker_custom": "Другой домашний сервер",
         "server_picker_explainer": "Если вы предпочитаете домашний сервер Matrix, используйте его. Вы также можете настроить свой собственный домашний сервер, если хотите.",
         "server_picker_learn_more": "О домашних серверах",
-        "account_deactivated": "Эта учётная запись была деактивирована.",
-        "incorrect_credentials": "Неверное имя пользователя и/или пароль."
+        "incorrect_credentials": "Неверное имя пользователя и/или пароль.",
+        "account_deactivated": "Эта учётная запись была деактивирована."
     },
     "room_list": {
         "sort_unread_first": "Комнаты с непрочитанными сообщениями в начале",
@@ -3748,6 +3721,100 @@
         "existing_issue_link": "Пожалуйста, сначала просмотрите <existingIssuesLink>существующие ошибки на Github</existingIssuesLink>. Нет совпадений? <newIssueLink>Сообщите о новой</newIssueLink>.",
         "send_feedback_action": "Отправить отзыв"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Используйте несколько слов, избегайте общих фраз",
+            "noNeed": "Нет необходимости в символах, цифрах или заглавных буквах",
+            "longerKeyboardPattern": "Используйте более длинную комбинацию клавиш с бо́льшим количеством поворотов",
+            "repeated": "Избегайте повторяющихся слов и символов",
+            "sequences": "Избегайте последовательностей",
+            "recentYears": "Избегайте последних годов",
+            "associatedYears": "Избегайте годов, которые связаны с вами",
+            "dates": "Избегайте дат и годов, которые связаны с вами",
+            "capitalization": "Заглавные буквы не особо помогают",
+            "allUppercase": "Всё прописными буквами так же легко угадывается как и всё строчными",
+            "reverseWords": "Угадать перевёрнутые слова не сильно труднее",
+            "l33t": "Предсказуемые замены типа «@» вместо «a» не особо помогают",
+            "anotherWord": "Добавьте ещё одно-два слова. Лучше использовать редкие слова."
+        },
+        "warnings": {
+            "simpleRepeat": "Повторы типа \"ааа\" легко угадываемы",
+            "extendedRepeat": "Повторы типа «abcabcabc», лишь немного сложнее угадать, чем «abc»",
+            "sequences": "Последовательности типа abc или 6543 легко угадываемы",
+            "recentYears": "Последние года легко угадываемы",
+            "dates": "Даты часто легко угадать",
+            "topTen": "Это топ-10 распространённых паролей",
+            "topHundred": "Это топ-100 распространённых паролей",
+            "common": "Это очень распространённый пароль",
+            "similarToCommon": "Это похоже на распространённый пароль",
+            "wordByItself": "Общеупотребительные слова легко угадываемы",
+            "namesByThemselves": "Имена и фамилии легко угадываемые",
+            "commonNames": "Распространённые имена и фамилии легко угадываемы",
+            "straightRow": "Прямые ряды клавиш легко угадываемы",
+            "keyPattern": "Короткие клавиатурные шаблоны легко угадываемы"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Не получилось начать новую голосовую трансляцию",
+        "failed_insufficient_permission_title": "Не получилось начать новую голосовую трансляцию",
+        "failed_others_already_recording_title": "Не получилось начать новую голосовую трансляцию",
+        "failed_already_recording_description": "Вы уже записываете голосовую трансляцию. Пожалуйста, завершите текущую голосовую трансляцию, чтобы начать новую.",
+        "failed_insufficient_permission_description": "У вас нет необходимых разрешений, чтобы начать голосовую трансляцию в этой комнате. Свяжитесь с администратором комнаты для получения разрешений.",
+        "failed_others_already_recording_description": "Кто-то уже записывает голосовую трансляцию. Ждите окончания их голосовой трансляции, чтобы начать новую.",
+        "confirm_stop_title": "Закончить голосовую трансляцию?",
+        "confirm_stop_affirm": "Да, остановить трансляцию",
+        "30s_backward": "30 с назад",
+        "30s_forward": "30 с вперёд",
+        "go_live": "Начать эфир",
+        "resume": "продолжить голосовую трансляцию",
+        "pause": "приостановить голосовую трансляцию",
+        "buffering": "Буферизация…",
+        "play": "проиграть голосовую трансляцию"
+    },
+    "update": {
+        "see_changes_button": "Что нового?",
+        "release_notes_toast_title": "Что изменилось",
+        "toast_title": "Обновление %(brand)s",
+        "toast_description": "Доступна новая версия %(brand)s!"
+    },
+    "threads": {
+        "all_threads": "Все обсуждения",
+        "all_threads_description": "Показывает все обсуждения из текущей комнаты",
+        "my_threads": "Мои обсуждения",
+        "my_threads_description": "Показывает все обсуждения, в которых вы принимали участие",
+        "show_thread_filter": "Показать:",
+        "empty_has_threads_tip": "Ответьте в текущее обсуждение или создайте новое, наведя курсор на сообщение и нажав «%(replyInThread)s».",
+        "show_all_threads": "Показать все обсуждения",
+        "empty_explainer": "Обсуждения помогают поддерживать и легко отслеживать тематику бесед.",
+        "empty_tip": "<b>Совет:</b> Используйте “%(replyInThread)s” при наведении курсора на сообщение.",
+        "empty_heading": "Организуйте обсуждения с помощью обсуждений"
+    },
+    "theme": {
+        "light_high_contrast": "Контрастная светлая"
+    },
+    "space": {
+        "landing_welcome": "Добро пожаловать в <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Этот домашний сервер не настроен на отображение карт.",
+        "MapStyleUrlNotReachable": "Этот домашний сервер неправильно настроен для отображения карт, или настроенный сервер карт может быть недоступен.",
+        "toggle_attribution": "Переключить атрибуцию",
+        "map_feedback": "Карта отзывов",
+        "find_my_location": "Найти моё местоположение",
+        "location_not_available": "Местоположение недоступно",
+        "mapbox_logo": "Логотип Mapbox",
+        "reset_bearing": "Сбросить пеленг на север",
+        "failed_permission": "%(brand)s не получил доступа к вашему местонахождению. Разрешите доступ к местоположению в настройках браузера.",
+        "failed_generic": "Не удалось определить ваше местоположение. Пожалуйста, повторите попытку позже.",
+        "failed_timeout": "Попытка определить ваше местоположение завершилась. Пожалуйста, повторите попытку позже.",
+        "failed_unknown": "Неизвестная ошибка при получении местоположения. Пожалуйста, повторите попытку позже.",
+        "expand_map": "Развернуть карту",
+        "failed_load_map": "Не удается загрузить карту"
+    },
+    "labs_mjolnir": {
+        "room_name": "Мой список блокировки",
+        "room_topic": "Это список пользователей/серверов, которые вы заблокировали — не покидайте комнату!"
+    },
     "create_space": {
         "name_required": "Пожалуйста, введите название пространства",
         "name_placeholder": "например, my-space",
@@ -3781,66 +3848,5 @@
         "setup_rooms_description": "Позже можно добавить и другие, в том числе уже существующие.",
         "setup_rooms_private_heading": "Над какими проектами ваша команда работает?",
         "setup_rooms_private_description": "Мы создадим комнаты для каждого из них."
-    },
-    "space": {
-        "landing_welcome": "Добро пожаловать в <name/>"
-    },
-    "threads": {
-        "all_threads": "Все обсуждения",
-        "all_threads_description": "Показывает все обсуждения из текущей комнаты",
-        "my_threads": "Мои обсуждения",
-        "my_threads_description": "Показывает все обсуждения, в которых вы принимали участие",
-        "show_thread_filter": "Показать:",
-        "empty_has_threads_tip": "Ответьте в текущее обсуждение или создайте новое, наведя курсор на сообщение и нажав «%(replyInThread)s».",
-        "show_all_threads": "Показать все обсуждения",
-        "empty_explainer": "Обсуждения помогают поддерживать и легко отслеживать тематику бесед.",
-        "empty_tip": "<b>Совет:</b> Используйте “%(replyInThread)s” при наведении курсора на сообщение.",
-        "empty_heading": "Организуйте обсуждения с помощью обсуждений"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Этот домашний сервер не настроен на отображение карт.",
-        "MapStyleUrlNotReachable": "Этот домашний сервер неправильно настроен для отображения карт, или настроенный сервер карт может быть недоступен.",
-        "toggle_attribution": "Переключить атрибуцию",
-        "map_feedback": "Карта отзывов",
-        "find_my_location": "Найти моё местоположение",
-        "location_not_available": "Местоположение недоступно",
-        "mapbox_logo": "Логотип Mapbox",
-        "reset_bearing": "Сбросить пеленг на север",
-        "failed_permission": "%(brand)s не получил доступа к вашему местонахождению. Разрешите доступ к местоположению в настройках браузера.",
-        "failed_generic": "Не удалось определить ваше местоположение. Пожалуйста, повторите попытку позже.",
-        "failed_timeout": "Попытка определить ваше местоположение завершилась. Пожалуйста, повторите попытку позже.",
-        "failed_unknown": "Неизвестная ошибка при получении местоположения. Пожалуйста, повторите попытку позже.",
-        "expand_map": "Развернуть карту",
-        "failed_load_map": "Не удается загрузить карту"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Не получилось начать новую голосовую трансляцию",
-        "failed_insufficient_permission_title": "Не получилось начать новую голосовую трансляцию",
-        "failed_others_already_recording_title": "Не получилось начать новую голосовую трансляцию",
-        "failed_already_recording_description": "Вы уже записываете голосовую трансляцию. Пожалуйста, завершите текущую голосовую трансляцию, чтобы начать новую.",
-        "failed_insufficient_permission_description": "У вас нет необходимых разрешений, чтобы начать голосовую трансляцию в этой комнате. Свяжитесь с администратором комнаты для получения разрешений.",
-        "failed_others_already_recording_description": "Кто-то уже записывает голосовую трансляцию. Ждите окончания их голосовой трансляции, чтобы начать новую.",
-        "confirm_stop_title": "Закончить голосовую трансляцию?",
-        "confirm_stop_affirm": "Да, остановить трансляцию",
-        "30s_backward": "30 с назад",
-        "30s_forward": "30 с вперёд",
-        "go_live": "Начать эфир",
-        "resume": "продолжить голосовую трансляцию",
-        "pause": "приостановить голосовую трансляцию",
-        "buffering": "Буферизация…",
-        "play": "проиграть голосовую трансляцию"
-    },
-    "labs_mjolnir": {
-        "room_name": "Мой список блокировки",
-        "room_topic": "Это список пользователей/серверов, которые вы заблокировали — не покидайте комнату!"
-    },
-    "theme": {
-        "light_high_contrast": "Контрастная светлая"
-    },
-    "update": {
-        "see_changes_button": "Что нового?",
-        "release_notes_toast_title": "Что изменилось",
-        "toast_title": "Обновление %(brand)s",
-        "toast_description": "Доступна новая версия %(brand)s!"
     }
 }

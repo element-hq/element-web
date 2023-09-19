@@ -352,8 +352,6 @@
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "AVISO: FALLOU A VERIFICACIÓN DAS CHAVES! A chave de firma para %(userId)s na sesión %(deviceId)s é \"%(fprint)s\" que non concordan coa chave proporcionada \"%(fingerprint)s\". Esto podería significar que as túas comunicacións foron interceptadas!",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "A chave de firma proporcionada concorda coa chave de firma recibida desde a sesión %(deviceId)s de %(userId)s. Sesión marcada como verificada.",
     "Verifies a user, session, and pubkey tuple": "Verifica unha usuaria, sesión e chave pública",
-    "Capitalization doesn't help very much": "Escribir con maiúsculas non axuda moito",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Substitucións predecibles como '@' no lugar de 'a' non son de gran axuda",
     "General": "Xeral",
     "Discovery": "Descubrir",
     "Deactivate account": "Desactivar conta",
@@ -395,29 +393,6 @@
     "Messages in this room are not end-to-end encrypted.": "As mensaxes desta sala non están cifradas de extremo-a-extremo.",
     "The user's homeserver does not support the version of the room.": "O servidor da usuaria non soporta a versión da sala.",
     "Unknown server error": "Erro descoñecido no servidor",
-    "Use a few words, avoid common phrases": "Usa unhas poucas palabras, evita frases comúns",
-    "No need for symbols, digits, or uppercase letters": "Non precisa símbolos, díxitos ou maiúsculas",
-    "Use a longer keyboard pattern with more turns": "Usa un patrón de teclado máis grande con algún xiro",
-    "Avoid repeated words and characters": "Evita palabras repetidas ou caracteres",
-    "Avoid sequences": "Evita secuencias",
-    "Avoid recent years": "Evita anos recentes",
-    "Avoid years that are associated with you": "Evita anos que están asociados a ti",
-    "Avoid dates and years that are associated with you": "Evita datas e anos que están relacionados contigo",
-    "All-uppercase is almost as easy to guess as all-lowercase": "As maiúsculas son case tan fáciles de adiviñar como as minúsculas",
-    "Reversed words aren't much harder to guess": "A escritura inversa non é moi difícil de adiviñar",
-    "Add another word or two. Uncommon words are better.": "Engade unha ou dúas palabras máis. Mellor que sexan raras.",
-    "Repeats like \"aaa\" are easy to guess": "Repeticións com \"aaa\" son fáciles de adiviñar",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Repeticións com \"abcabcabc\" son só un pouco máis difíciles de adiviñar que \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Secuencias como abc ou 6543 son fáciles de adiviñar",
-    "Recent years are easy to guess": "Os anos recentes son fáciles de adiviñar",
-    "Dates are often easy to guess": "Normalmente as datas son fáciles de adiviñar",
-    "This is a top-10 common password": "Este é o top-10 dos contrasinais habituais",
-    "This is a top-100 common password": "Este un top-100 dos contrasinais habituais",
-    "This is a very common password": "Este é un contrasinal moi común",
-    "This is similar to a commonly used password": "É semellante a un contrasinal habitualmente utilizado",
-    "A word by itself is easy to guess": "Por si sola, unha palabra é fácil de adiviñar",
-    "Names and surnames by themselves are easy to guess": "Nomes e apelidos por si mesmos son fáciles de adiviñar",
-    "Common names and surnames are easy to guess": "Os nomes e alcumes son fáciles de adiviñar",
     "Later": "Máis tarde",
     "Your homeserver has exceeded its user limit.": "O teu servidor superou o seu límite de usuaras.",
     "Your homeserver has exceeded one of its resource limits.": "O teu servidor superou un dous seus límites de recursos.",
@@ -437,8 +412,6 @@
     "Join millions for free on the largest public server": "Únete a millóns de persoas gratuitamente no maior servidor público",
     "Language and region": "Idioma e rexión",
     "Your theme": "O teu decorado",
-    "Straight rows of keys are easy to guess": "Palabras de letras contiguas son doadas de adiviñar",
-    "Short keyboard patterns are easy to guess": "Patróns curtos de teclas son doados de adiviñar",
     "IRC display name width": "Ancho do nome mostrado de IRC",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "As mensaxes seguras con esta usuaria están cifradas extremo-a-extremo e non son lexibles por terceiras.",
     "Got It": "Vale",
@@ -2259,11 +2232,11 @@
         "integration_manager": "Xestor de Integracións",
         "qr_code": "Código QR",
         "feedback": "Comenta",
-        "all_rooms": "Todas as salas",
-        "orphan_rooms": "Outras salas",
         "preview_message": "Ei ti. Es grande!",
+        "orphan_rooms": "Outras salas",
         "on": "On",
-        "off": "Off"
+        "off": "Off",
+        "all_rooms": "Todas as salas"
     },
     "action": {
         "continue": "Continuar",
@@ -2361,8 +2334,8 @@
         "submit": "Enviar",
         "send_report": "Enviar denuncia",
         "clear": "Limpar",
-        "enter_fullscreen": "Ir a pantalla completa",
-        "exit_fullscreeen": "Saír de pantalla completa"
+        "exit_fullscreeen": "Saír de pantalla completa",
+        "enter_fullscreen": "Ir a pantalla completa"
     },
     "a11y": {
         "user_menu": "Menú de usuaria",
@@ -2413,9 +2386,9 @@
         "join_beta_reload": "Ao unirte á beta recargaremos %(brand)s.",
         "leave_beta": "Saír da beta",
         "join_beta": "Unirse á beta",
-        "automatic_debug_logs": "Enviar automáticamente rexistros de depuración para calquera fallo",
+        "automatic_debug_logs_key_backup": "Enviar automáticamente rexistros de depuración cando a chave da copia de apoio non funcione",
         "automatic_debug_logs_decryption": "Envía automáticamente rexistro de depuración se hai erros no cifrado",
-        "automatic_debug_logs_key_backup": "Enviar automáticamente rexistros de depuración cando a chave da copia de apoio non funcione"
+        "automatic_debug_logs": "Enviar automáticamente rexistros de depuración para calquera fallo"
     },
     "keyboard": {
         "home": "Inicio",
@@ -2685,15 +2658,19 @@
             "timeline_image_size": "Tamaño de imaxe na cronoloxía",
             "timeline_image_size_default": "Por defecto",
             "timeline_image_size_large": "Grande",
-            "custom_font_size": "Usar tamaño personalizado",
+            "image_size_large": "Grande",
+            "image_size_default": "Por defecto",
+            "font_size_valid": "Usa entre %(min)s pt e %(max)s pt",
             "font_size_nan": "O tamaño ten que ser un número",
             "font_size_limit": "O tamaño da fonte só pode estar entre %(min)s pt e %(max)s pt",
-            "font_size_valid": "Usa entre %(min)s pt e %(max)s pt",
-            "image_size_default": "Por defecto",
-            "image_size_large": "Grande"
+            "custom_font_size": "Usar tamaño personalizado"
         },
         "inline_url_previews_room_account": "Activar vista previa de URL nesta sala (só che afecta a ti)",
         "inline_url_previews_room": "Activar a vista previa de URL por defecto para as participantes nesta sala",
+        "voip": {
+            "mirror_local_feed": "Replicar a fonte de vídeo local"
+        },
+        "send_read_receipts_unsupported": "O teu servidor non ten soporte para desactivar o envío de resgardos de lectura.",
         "security": {
             "message_search_disable_warning": "Se está desactivado, as mensaxes das salas cifradas non aparecerán nos resultados das buscas.",
             "message_search_indexing_idle": "Non se están indexando as mensaxes de ningunha sala.",
@@ -2728,10 +2705,6 @@
             "always_show_menu_bar": "Mostrar sempre a barra de menú da ventá",
             "enable_tray_icon": "Mostra icona na bandexa do sistema e minimiza ventá ao pechar",
             "enable_hardware_acceleration": "Activar aceleración por hardware"
-        },
-        "send_read_receipts_unsupported": "O teu servidor non ten soporte para desactivar o envío de resgardos de lectura.",
-        "voip": {
-            "mirror_local_feed": "Replicar a fonte de vídeo local"
         },
         "keyboard": {
             "title": "Teclado"
@@ -2804,9 +2777,9 @@
         "category_room": "Sala",
         "category_other": "Outro",
         "widget_screenshots": "Activar as capturas de trebellos para aqueles que as permiten",
+        "title": "Ferramentas desenvolvemento",
         "show_hidden_events": "Mostrar na cronoloxía eventos ocultos",
-        "developer_mode": "Modo desenvolvemento",
-        "title": "Ferramentas desenvolvemento"
+        "developer_mode": "Modo desenvolvemento"
     },
     "export_chat": {
         "html": "HTML",
@@ -3167,12 +3140,12 @@
         "no_permission_messages_before_join": "Non tes permiso para ver mensaxes anteriores a que te unises.",
         "encrypted_historical_messages_unavailable": "Non están dispoñibles as mensaxes cifradas anteriores a este punto.",
         "historical_messages_unavailable": "Non podes ver mensaxes anteriores",
+        "redacted": {
+            "tooltip": "Mensaxe eliminada o %(date)s"
+        },
         "reactions": {
             "label": "%(reactors)s reaccionou con %(content)s",
             "tooltip": "<reactors/><reactedWith>reaccionaron con %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Mensaxe eliminada o %(date)s"
         },
         "m.room.create": {
             "continuation": "Esta sala é continuación doutra conversa.",
@@ -3241,14 +3214,14 @@
         "failed_find_user": "Non se atopa a usuaria na sala",
         "op": "Define o nivel de permisos de unha usuaria",
         "deop": "Degrada usuaria co id proporcionado",
-        "server_error": "Fallo no servidor",
-        "command_error": "Erro na orde",
-        "server_error_detail": "Servidor non dispoñible, sobrecargado, ou outra cousa puido fallar.",
-        "unknown_command": "Comando descoñecido",
-        "unknown_command_detail": "Comando non recoñecido: %(commandText)s",
-        "unknown_command_help": "Podes usar <code>axuda</code> para ver os comandos dispoñibles. ¿Querías mellor enviar esto como unha mensaxe?",
         "unknown_command_hint": "Truco: Comeza a mensaxe con <code>//</code> para comezar cun trazo.",
-        "unknown_command_button": "Enviar como mensaxe"
+        "unknown_command_help": "Podes usar <code>axuda</code> para ver os comandos dispoñibles. ¿Querías mellor enviar esto como unha mensaxe?",
+        "unknown_command_detail": "Comando non recoñecido: %(commandText)s",
+        "unknown_command_button": "Enviar como mensaxe",
+        "unknown_command": "Comando descoñecido",
+        "server_error_detail": "Servidor non dispoñible, sobrecargado, ou outra cousa puido fallar.",
+        "server_error": "Fallo no servidor",
+        "command_error": "Erro na orde"
     },
     "presence": {
         "busy": "Ocupado",
@@ -3464,8 +3437,8 @@
         "server_picker_custom": "Outro servidor de inicio",
         "server_picker_explainer": "Usa o teu servidor de inicio Matrix preferido, ou usa o teu propio.",
         "server_picker_learn_more": "Acerca dos servidores de inicio",
-        "account_deactivated": "Esta conta foi desactivada.",
-        "incorrect_credentials": "Nome de usuaria ou contrasinal non válidos."
+        "incorrect_credentials": "Nome de usuaria ou contrasinal non válidos.",
+        "account_deactivated": "Esta conta foi desactivada."
     },
     "room_list": {
         "sort_unread_first": "Mostrar primeiro as salas con mensaxes sen ler",
@@ -3591,6 +3564,83 @@
         "existing_issue_link": "Primeiro revisa <existingIssuesLink>a lista existente de fallo en Github</existingIssuesLink>. Non hai nada? <newIssueLink>Abre un novo</newIssueLink>.",
         "send_feedback_action": "Enviar comentario"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Usa unhas poucas palabras, evita frases comúns",
+            "noNeed": "Non precisa símbolos, díxitos ou maiúsculas",
+            "longerKeyboardPattern": "Usa un patrón de teclado máis grande con algún xiro",
+            "repeated": "Evita palabras repetidas ou caracteres",
+            "sequences": "Evita secuencias",
+            "recentYears": "Evita anos recentes",
+            "associatedYears": "Evita anos que están asociados a ti",
+            "dates": "Evita datas e anos que están relacionados contigo",
+            "capitalization": "Escribir con maiúsculas non axuda moito",
+            "allUppercase": "As maiúsculas son case tan fáciles de adiviñar como as minúsculas",
+            "reverseWords": "A escritura inversa non é moi difícil de adiviñar",
+            "l33t": "Substitucións predecibles como '@' no lugar de 'a' non son de gran axuda",
+            "anotherWord": "Engade unha ou dúas palabras máis. Mellor que sexan raras."
+        },
+        "warnings": {
+            "simpleRepeat": "Repeticións com \"aaa\" son fáciles de adiviñar",
+            "extendedRepeat": "Repeticións com \"abcabcabc\" son só un pouco máis difíciles de adiviñar que \"abc\"",
+            "sequences": "Secuencias como abc ou 6543 son fáciles de adiviñar",
+            "recentYears": "Os anos recentes son fáciles de adiviñar",
+            "dates": "Normalmente as datas son fáciles de adiviñar",
+            "topTen": "Este é o top-10 dos contrasinais habituais",
+            "topHundred": "Este un top-100 dos contrasinais habituais",
+            "common": "Este é un contrasinal moi común",
+            "similarToCommon": "É semellante a un contrasinal habitualmente utilizado",
+            "wordByItself": "Por si sola, unha palabra é fácil de adiviñar",
+            "namesByThemselves": "Nomes e apelidos por si mesmos son fáciles de adiviñar",
+            "commonNames": "Os nomes e alcumes son fáciles de adiviñar",
+            "straightRow": "Palabras de letras contiguas son doadas de adiviñar",
+            "keyPattern": "Patróns curtos de teclas son doados de adiviñar"
+        }
+    },
+    "update": {
+        "see_changes_button": "Que hai de novo?",
+        "release_notes_toast_title": "Que hai de novo",
+        "toast_title": "Actualizar %(brand)s",
+        "toast_description": "Hai unha nova versión de %(brand)s dispoñible"
+    },
+    "threads": {
+        "all_threads": "Tódalas conversas",
+        "all_threads_description": "Mostra tódalas conversas da sala actual",
+        "my_threads": "As miñas conversas",
+        "my_threads_description": "Mostra tódalas conversas nas que participaches",
+        "show_thread_filter": "Mostrar:",
+        "empty_has_threads_tip": "Responde a unha conversa en curso ou usa \"%(replyInThread)s\" cando pasas por enriba dunha mensaxe co rato para iniciar unha nova.",
+        "show_all_threads": "Mostra tódolos temas",
+        "empty_explainer": "Os fíos axúdanche a manter as conversas no tema e facilitan o seguimento.",
+        "empty_tip": "<b>Truco:</b> Usa \"%(replyInThread)s\" ao poñerte enriba dunha mensaxe.",
+        "empty_heading": "Manter as conversas organizadas con fíos"
+    },
+    "theme": {
+        "light_high_contrast": "Alto contraste claro"
+    },
+    "space": {
+        "landing_welcome": "Benvida a <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Este servidor non está configurado para mostrar mapas.",
+        "MapStyleUrlNotReachable": "Este servidor non está correctamente configurado para mostrar mapas, ou o servidor de mapas configurado non é accesible.",
+        "toggle_attribution": "Cambiar atribución",
+        "map_feedback": "Opinión sobre Mapa",
+        "find_my_location": "Onde estou",
+        "location_not_available": "Localización non dispoñible",
+        "mapbox_logo": "Logo Mapbox",
+        "reset_bearing": "Restablecer apuntando ao norte",
+        "failed_permission": "%(brand)s non ten permiso para obter a túa localización. Concede acceso á localización nos axustes do navegador.",
+        "failed_generic": "Non se obtivo a localización, inténtao máis tarde.",
+        "failed_timeout": "Caducou o intento de obter a localización, inténtao máis tarde.",
+        "failed_unknown": "Erro descoñecido ao obter a localización, inténtao máis tarde.",
+        "expand_map": "Despregar mapa",
+        "failed_load_map": "Non se cargou o mapa"
+    },
+    "labs_mjolnir": {
+        "room_name": "Listaxe de bloqueo",
+        "room_topic": "Esta é a listaxe de usuarias/servidores que ti bloqueaches - non deixes a sala!"
+    },
     "create_space": {
         "name_required": "Escribe un nome para o espazo",
         "name_placeholder": "ex. o-meu-espazo",
@@ -3623,49 +3673,5 @@
         "setup_rooms_description": "Podes engadir máis posteriormente, incluíndo os xa existentes.",
         "setup_rooms_private_heading": "En que proxectos está a traballar o teu equipo?",
         "setup_rooms_private_description": "Imos crear salas para cada un deles."
-    },
-    "space": {
-        "landing_welcome": "Benvida a <name/>"
-    },
-    "threads": {
-        "all_threads": "Tódalas conversas",
-        "all_threads_description": "Mostra tódalas conversas da sala actual",
-        "my_threads": "As miñas conversas",
-        "my_threads_description": "Mostra tódalas conversas nas que participaches",
-        "show_thread_filter": "Mostrar:",
-        "empty_has_threads_tip": "Responde a unha conversa en curso ou usa \"%(replyInThread)s\" cando pasas por enriba dunha mensaxe co rato para iniciar unha nova.",
-        "show_all_threads": "Mostra tódolos temas",
-        "empty_explainer": "Os fíos axúdanche a manter as conversas no tema e facilitan o seguimento.",
-        "empty_tip": "<b>Truco:</b> Usa \"%(replyInThread)s\" ao poñerte enriba dunha mensaxe.",
-        "empty_heading": "Manter as conversas organizadas con fíos"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Este servidor non está configurado para mostrar mapas.",
-        "MapStyleUrlNotReachable": "Este servidor non está correctamente configurado para mostrar mapas, ou o servidor de mapas configurado non é accesible.",
-        "toggle_attribution": "Cambiar atribución",
-        "map_feedback": "Opinión sobre Mapa",
-        "find_my_location": "Onde estou",
-        "location_not_available": "Localización non dispoñible",
-        "mapbox_logo": "Logo Mapbox",
-        "reset_bearing": "Restablecer apuntando ao norte",
-        "failed_permission": "%(brand)s non ten permiso para obter a túa localización. Concede acceso á localización nos axustes do navegador.",
-        "failed_generic": "Non se obtivo a localización, inténtao máis tarde.",
-        "failed_timeout": "Caducou o intento de obter a localización, inténtao máis tarde.",
-        "failed_unknown": "Erro descoñecido ao obter a localización, inténtao máis tarde.",
-        "expand_map": "Despregar mapa",
-        "failed_load_map": "Non se cargou o mapa"
-    },
-    "labs_mjolnir": {
-        "room_name": "Listaxe de bloqueo",
-        "room_topic": "Esta é a listaxe de usuarias/servidores que ti bloqueaches - non deixes a sala!"
-    },
-    "theme": {
-        "light_high_contrast": "Alto contraste claro"
-    },
-    "update": {
-        "see_changes_button": "Que hai de novo?",
-        "release_notes_toast_title": "Que hai de novo",
-        "toast_title": "Actualizar %(brand)s",
-        "toast_description": "Hai unha nova versión de %(brand)s dispoñible"
     }
 }

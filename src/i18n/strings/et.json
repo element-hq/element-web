@@ -270,10 +270,6 @@
     "You do not have permission to invite people to this room.": "Sul pole õigusi siia jututuppa osalejate kutsumiseks.",
     "The user's homeserver does not support the version of the room.": "Kasutaja koduserver ei toeta selle jututoa versiooni.",
     "Unknown server error": "Tundmatu serveriviga",
-    "This is a top-10 common password": "See on kümne levinuima salasõna seas",
-    "This is a top-100 common password": "See on saja levinuima salasõna seas",
-    "This is a very common password": "See on väga levinud salasõna",
-    "This is similar to a commonly used password": "See on sarnane tavaliselt kasutatavatele salasõnadele",
     "No display name": "Kuvatav nimi puudub",
     "New passwords don't match": "Uued salasõnad ei klapi",
     "Passwords can't be empty": "Salasõna ei saa olla tühi",
@@ -465,7 +461,6 @@
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Sinu antud allkirjavõti vastab allkirjavõtmele, mille sa said kasutaja %(userId)s sessioonist %(deviceId)s. Sessioon on märgitud verifitseerituks.",
     "Logs sent": "Logikirjed saadetud",
     "Thank you!": "Suur tänu!",
-    "Short keyboard patterns are easy to guess": "Lühikesi klahvijärjestusi on lihtne ära arvata",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "See jututuba kasutab sõnumisildasid liidestamiseks järgmiste süsteemidega. <a>Lisateave.</a>",
     "Bridges": "Sõnumisillad",
     "Room Addresses": "Jututubade aadressid",
@@ -605,28 +600,6 @@
         "one": "%(items)s ja üks muu"
     },
     "%(items)s and %(lastItem)s": "%(items)s ja %(lastItem)s",
-    "Use a few words, avoid common phrases": "Kasuta paari sõna, kuid väldi levinud fraase",
-    "No need for symbols, digits, or uppercase letters": "Sa ei pea sisestama erilisi tähemärke, numbreid ega suurtähti",
-    "Use a longer keyboard pattern with more turns": "Kasuta pikemaid klahvikombinatsioone, kus vajutatud klahvid pole kõrvuti ega kohakuti",
-    "Avoid repeated words and characters": "Väldi korduvaid sõnu ja tähemärke",
-    "Avoid sequences": "Väldi korduvaid klahviseeriaid",
-    "Avoid recent years": "Väldi hiljutisi aastaid",
-    "Avoid years that are associated with you": "Väldi aastaid, mida saaks sinuga seostada",
-    "Avoid dates and years that are associated with you": "Väldi kuupäevi ja aastaid, mida saaks sinuga seostada",
-    "Capitalization doesn't help very much": "Suurtähtede kasutamisest pole suurt kasu",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Läbiva suurtähega kirjutatud teksti on sisuliselt sama lihte ära arvata, kui läbiva väiketähega kirjutatud teksti",
-    "Reversed words aren't much harder to guess": "Tagurpidi kirjutatud sõnu pole eriti keeruline ära arvata",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Ennustatavatest asendustest nagu '@' 'a' asemel pole eriti kasu",
-    "Add another word or two. Uncommon words are better.": "Lisa veel mõni sõna. Ebatavaliste sõnade kasutamine on hea mõte.",
-    "Repeats like \"aaa\" are easy to guess": "Kordusi, nagu „aaa“ on lihtne ära arvata",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Kordusi, nagu „abcabcabc“ on vaid natuke raskem ära arvata kui „abc“",
-    "Sequences like abc or 6543 are easy to guess": "Jadasid nagu „abc“ või „6543“ on lihtne ära arvata",
-    "Recent years are easy to guess": "Hiljutisi aastaid on lihtne ära arvata",
-    "Dates are often easy to guess": "Kuupäevi on sageli lihtne ära arvata",
-    "A word by itself is easy to guess": "Üksikut sõna on lihtne ära arvata",
-    "Names and surnames by themselves are easy to guess": "Nimesid ja perenimesid on lihtne ära arvata",
-    "Common names and surnames are easy to guess": "Üldisi nimesid ja perenimesid on lihtne ära arvata",
-    "Straight rows of keys are easy to guess": "Klaviatuuril järjest paiknevaid klahvikombinatsioone on lihtne ära arvata",
     "Please contact your homeserver administrator.": "Palun võta ühendust koduserveri haldajaga.",
     "Cross-signing private keys:": "Privaatvõtmed risttunnustamise jaoks:",
     "Checking server": "Kontrollin serverit",
@@ -2563,11 +2536,11 @@
         "integration_manager": "Lõiminguhaldur",
         "qr_code": "QR kood",
         "feedback": "Tagasiside",
-        "all_rooms": "Kõik jututoad",
-        "orphan_rooms": "Muud jututoad",
         "preview_message": "Hei sina. Sa oled parim!",
+        "orphan_rooms": "Muud jututoad",
         "on": "Kasutusel",
-        "off": "Välja lülitatud"
+        "off": "Välja lülitatud",
+        "all_rooms": "Kõik jututoad"
     },
     "action": {
         "continue": "Jätka",
@@ -2668,8 +2641,8 @@
         "submit": "Saada",
         "send_report": "Saada veateade",
         "clear": "Eemalda",
-        "enter_fullscreen": "Lülita täisekraanivaade sisse",
-        "exit_fullscreeen": "Lülita täisekraanivaade välja"
+        "exit_fullscreeen": "Lülita täisekraanivaade välja",
+        "enter_fullscreen": "Lülita täisekraanivaade sisse"
     },
     "a11y": {
         "user_menu": "Kasutajamenüü",
@@ -2746,11 +2719,11 @@
         "notification_settings_beta_title": "Teavituste seadistused",
         "voice_broadcast_force_small_chunks": "Kasuta ringhäälingusõnumi puhul 15-sekundilist blokipikkust",
         "oidc_native_flow": "Luba OIDC liidestus (aktiivselt arendamisel)",
-        "automatic_debug_logs": "Iga vea puhul saada silumislogid automaatselt arendajatele",
-        "automatic_debug_logs_decryption": "Dekrüptimisvigade puhul saada silumislogid automaatselt arendajatele",
-        "automatic_debug_logs_key_backup": "Kui krüptovõtmete varundus ei toimi, siis automaatselt saada silumislogid arendajatele",
+        "sliding_sync_disabled_notice": "Väljalülitamiseks logi Matrix'i võrgust välja ja seejärel tagasi",
         "rust_crypto_disabled_notice": "Seda võimalust saab hetkel sisse lülitada vaid config.json failist",
-        "sliding_sync_disabled_notice": "Väljalülitamiseks logi Matrix'i võrgust välja ja seejärel tagasi"
+        "automatic_debug_logs_key_backup": "Kui krüptovõtmete varundus ei toimi, siis automaatselt saada silumislogid arendajatele",
+        "automatic_debug_logs_decryption": "Dekrüptimisvigade puhul saada silumislogid automaatselt arendajatele",
+        "automatic_debug_logs": "Iga vea puhul saada silumislogid automaatselt arendajatele"
     },
     "keyboard": {
         "home": "Avaleht",
@@ -3040,15 +3013,26 @@
             "timeline_image_size": "Ajajoone piltide suurus",
             "timeline_image_size_default": "Tavaline",
             "timeline_image_size_large": "Suur",
-            "custom_font_size": "Kasuta kohandatud suurust",
+            "image_size_large": "Suur",
+            "image_size_default": "Tavaline",
+            "font_size_valid": "Kasuta suurust vahemikus %(min)s pt ja %(max)s pt",
             "font_size_nan": "Suurus peab olema number",
             "font_size_limit": "Kohandatud fondisuurus peab olema vahemikus %(min)s pt ja %(max)s pt",
-            "font_size_valid": "Kasuta suurust vahemikus %(min)s pt ja %(max)s pt",
-            "image_size_default": "Tavaline",
-            "image_size_large": "Suur"
+            "custom_font_size": "Kasuta kohandatud suurust"
         },
         "inline_url_previews_room_account": "Luba URL'ide eelvaated selle jututoa jaoks (mõjutab vaid sind)",
         "inline_url_previews_room": "Luba URL'ide vaikimisi eelvaated selles jututoas osalejate jaoks",
+        "voip": {
+            "mirror_local_feed": "Peegelda kohalikku videovoogu",
+            "allow_p2p": "Luba võrdõigusvõrgu loogikat kasutavad omavahelised kõned",
+            "allow_p2p_description": "Kui see seadistus on kasutusel, siis teisel osapoolel võib olla võimalik näha sinu seadme IP-aadressi",
+            "auto_gain_control": "Automaatne esitusvaljuse tundlikkus",
+            "echo_cancellation": "Kaja eemaldamine",
+            "noise_suppression": "Müra vähendamine",
+            "enable_fallback_ice_server": "Varuvariandina luba kasutada ka teist kõnehõlbustusserverit (%(server)s)",
+            "enable_fallback_ice_server_description": "On kasutusel vaid siis, kui sinu koduserver sellist teenust ei võimalda. Seeläbi jagatakse kõne ajal sinu seadme IP-aadressi."
+        },
+        "send_read_receipts_unsupported": "Sinu koduserver ei võimalda lugemisteatiste keelamist.",
         "security": {
             "message_search_disable_warning": "Kui see seadistus pole kasutusel, siis krüptitud jututubade sõnumeid otsing ei vaata.",
             "message_search_indexing_idle": "Mitte ainsamagi jututoa sõnumeid hetkel ei indekseerita.",
@@ -3086,17 +3070,6 @@
             "always_show_menu_bar": "Näita aknas alati menüüriba",
             "enable_tray_icon": "Näita süsteemisalve ikooni ja Element'i akna sulgemisel minimeeri ta salve",
             "enable_hardware_acceleration": "Kasuta riistvaralist kiirendust"
-        },
-        "send_read_receipts_unsupported": "Sinu koduserver ei võimalda lugemisteatiste keelamist.",
-        "voip": {
-            "mirror_local_feed": "Peegelda kohalikku videovoogu",
-            "allow_p2p": "Luba võrdõigusvõrgu loogikat kasutavad omavahelised kõned",
-            "allow_p2p_description": "Kui see seadistus on kasutusel, siis teisel osapoolel võib olla võimalik näha sinu seadme IP-aadressi",
-            "auto_gain_control": "Automaatne esitusvaljuse tundlikkus",
-            "echo_cancellation": "Kaja eemaldamine",
-            "noise_suppression": "Müra vähendamine",
-            "enable_fallback_ice_server": "Varuvariandina luba kasutada ka teist kõnehõlbustusserverit (%(server)s)",
-            "enable_fallback_ice_server_description": "On kasutusel vaid siis, kui sinu koduserver sellist teenust ei võimalda. Seeläbi jagatakse kõne ajal sinu seadme IP-aadressi."
         },
         "keyboard": {
             "title": "Klaviatuur"
@@ -3195,11 +3168,11 @@
         "category_room": "Jututuba",
         "category_other": "Muud",
         "widget_screenshots": "Kui vidin seda toetab, siis luba tal teha ekraanitõmmiseid",
+        "title": "Arendusvahendid",
         "show_hidden_events": "Näita peidetud sündmusi ajajoonel",
-        "low_bandwidth_mode": "Vähese ribalaiusega režiim",
         "low_bandwidth_mode_description": "Eeldab, et koduserver toetab sellist funktsionaalsust.",
-        "developer_mode": "Arendusrežiim",
-        "title": "Arendusvahendid"
+        "low_bandwidth_mode": "Vähese ribalaiusega režiim",
+        "developer_mode": "Arendusrežiim"
     },
     "export_chat": {
         "html": "HTML",
@@ -3579,22 +3552,22 @@
         "no_permission_messages_before_join": "Sul pole õigusi vaadata enne liitumist saadetud sõnumeid.",
         "encrypted_historical_messages_unavailable": "Enne seda ajahetke saadetud krüptitud sõnumid pole saadaval.",
         "historical_messages_unavailable": "Sa ei saa näha varasemaid sõnumeid",
-        "io.element.voice_broadcast_info": {
-            "you": "Sa lõpetasid <a>ringhäälingukõne</a>",
-            "user": "%(senderName)s lõpetas <a>ringhäälingukõne</a>"
+        "redacted": {
+            "tooltip": "Sõnum on kustutatud %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s kasutajat reageeris järgnevalt: %(content)s",
             "tooltip": "<reactors/><reactedWith>reageeris(id) %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Sõnum on kustutatud %(date)s"
         },
         "m.room.create": {
             "continuation": "See jututuba on järg varasemale vestlusele.",
             "unknown_predecessor_guess_server": "Me ei leia selle jututoa vana versiooni (jututoa tunnus: %(roomId)s) ja meil pole otsimiseks ka teavet „via_servers“ meetodi alusel. Võimalik, et me suudame jututoa tunnuse alusel serveri nime välja mõelda. Kui tahad proovida, siis klõpsi seda linki:",
             "unknown_predecessor": "Me ei leia selle jututoa vana versiooni (jututoa tunnus: %(roomId)s) ja meil pole otsimiseks ka teavet „via_servers“ meetodi alusel.",
             "see_older_messages": "Vanemate sõnumite nägemiseks klõpsi siia."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Sa lõpetasid <a>ringhäälingukõne</a>",
+            "user": "%(senderName)s lõpetas <a>ringhäälingukõne</a>"
         }
     },
     "slash_command": {
@@ -3664,14 +3637,14 @@
         "failed_find_user": "Jututoast ei leidnud kasutajat",
         "op": "Määra kasutaja õigused",
         "deop": "Eemalda antud tunnusega kasutajalt haldusõigused selles jututoas",
-        "server_error": "Serveri viga",
-        "command_error": "Käsu viga",
-        "server_error_detail": "Server pole kas saadaval, on ülekoormatud või midagi muud läks viltu.",
-        "unknown_command": "Tundmatu käsk",
-        "unknown_command_detail": "Tundmatu käsk: %(commandText)s",
-        "unknown_command_help": "Kirjutades <code>/help</code> saad vaadata käskude loendit. Või soovisid seda saata sõnumina?",
         "unknown_command_hint": "Vihje: kui soovid alustada sõnumit kaldkriipsuga, siis kirjuta <code>//</code>.",
-        "unknown_command_button": "Saada sõnumina"
+        "unknown_command_help": "Kirjutades <code>/help</code> saad vaadata käskude loendit. Või soovisid seda saata sõnumina?",
+        "unknown_command_detail": "Tundmatu käsk: %(commandText)s",
+        "unknown_command_button": "Saada sõnumina",
+        "unknown_command": "Tundmatu käsk",
+        "server_error_detail": "Server pole kas saadaval, on ülekoormatud või midagi muud läks viltu.",
+        "server_error": "Serveri viga",
+        "command_error": "Käsu viga"
     },
     "presence": {
         "busy": "Hõivatud",
@@ -3917,8 +3890,8 @@
         "server_picker_custom": "Muu koduserver",
         "server_picker_explainer": "Kui sul on oma koduserveri eelistus olemas, siis kasuta seda. Samuti võid soovi korral oma enda koduserveri püsti panna.",
         "server_picker_learn_more": "Teave koduserverite kohta",
-        "account_deactivated": "See kasutajakonto on deaktiveeritud.",
-        "incorrect_credentials": "Vigane kasutajanimi ja/või salasõna."
+        "incorrect_credentials": "Vigane kasutajanimi ja/või salasõna.",
+        "account_deactivated": "See kasutajakonto on deaktiveeritud."
     },
     "room_list": {
         "sort_unread_first": "Näita lugemata sõnumitega jututubasid esimesena",
@@ -4049,6 +4022,110 @@
         "existing_issue_link": "Palun esmalt vaata, kas <existingIssuesLink>Githubis on selline viga juba kirjeldatud</existingIssuesLink>. Sa ei leidnud midagi? <newIssueLink>Siis saada uus veateade</newIssueLink>.",
         "send_feedback_action": "Saada tagasiside"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Kasuta paari sõna, kuid väldi levinud fraase",
+            "noNeed": "Sa ei pea sisestama erilisi tähemärke, numbreid ega suurtähti",
+            "longerKeyboardPattern": "Kasuta pikemaid klahvikombinatsioone, kus vajutatud klahvid pole kõrvuti ega kohakuti",
+            "repeated": "Väldi korduvaid sõnu ja tähemärke",
+            "sequences": "Väldi korduvaid klahviseeriaid",
+            "recentYears": "Väldi hiljutisi aastaid",
+            "associatedYears": "Väldi aastaid, mida saaks sinuga seostada",
+            "dates": "Väldi kuupäevi ja aastaid, mida saaks sinuga seostada",
+            "capitalization": "Suurtähtede kasutamisest pole suurt kasu",
+            "allUppercase": "Läbiva suurtähega kirjutatud teksti on sisuliselt sama lihte ära arvata, kui läbiva väiketähega kirjutatud teksti",
+            "reverseWords": "Tagurpidi kirjutatud sõnu pole eriti keeruline ära arvata",
+            "l33t": "Ennustatavatest asendustest nagu '@' 'a' asemel pole eriti kasu",
+            "anotherWord": "Lisa veel mõni sõna. Ebatavaliste sõnade kasutamine on hea mõte."
+        },
+        "warnings": {
+            "simpleRepeat": "Kordusi, nagu „aaa“ on lihtne ära arvata",
+            "extendedRepeat": "Kordusi, nagu „abcabcabc“ on vaid natuke raskem ära arvata kui „abc“",
+            "sequences": "Jadasid nagu „abc“ või „6543“ on lihtne ära arvata",
+            "recentYears": "Hiljutisi aastaid on lihtne ära arvata",
+            "dates": "Kuupäevi on sageli lihtne ära arvata",
+            "topTen": "See on kümne levinuima salasõna seas",
+            "topHundred": "See on saja levinuima salasõna seas",
+            "common": "See on väga levinud salasõna",
+            "similarToCommon": "See on sarnane tavaliselt kasutatavatele salasõnadele",
+            "wordByItself": "Üksikut sõna on lihtne ära arvata",
+            "namesByThemselves": "Nimesid ja perenimesid on lihtne ära arvata",
+            "commonNames": "Üldisi nimesid ja perenimesid on lihtne ära arvata",
+            "straightRow": "Klaviatuuril järjest paiknevaid klahvikombinatsioone on lihtne ära arvata",
+            "keyPattern": "Lühikesi klahvijärjestusi on lihtne ära arvata"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Uue ringhäälingukõne alustamine pole võimalik",
+        "failed_insufficient_permission_title": "Uue ringhäälingukõne alustamine pole võimalik",
+        "failed_others_already_recording_title": "Uue ringhäälingukõne alustamine pole võimalik",
+        "failed_already_recording_description": "Sa juba salvestad ringhäälingukõnet. Uue alustamiseks palun lõpeta eelmine salvestus.",
+        "failed_insufficient_permission_description": "Sul pole piisavalt õigusi selles jututoas ringhäälingukõne algatamiseks. Õiguste lisamiseks palun võta ühendust jututoa haldajaga.",
+        "failed_others_already_recording_description": "Keegi juba salvestab ringhäälingukõnet. Uue ringhäälingukõne salvestamiseks palun oota, kuni see teine ringhäälingukõne on lõppenud.",
+        "failed_no_connection_title": "Ühenduse viga",
+        "failed_no_connection_description": "Kahjuks me ei saa hetkel salvestamist alustada. Palun proovi hiljem uuesti.",
+        "failed_decrypt": "Ringhäälingukõne dekrüptimine ei õnnestu",
+        "failed_generic": "Selle ringhäälingukõne esitamine ei õnnestu",
+        "confirm_stop_title": "Kas lõpetame otseeetri?",
+        "confirm_stop_description": "Kas sa oled kindel, et soovid otseeetri lõpetada? Sellega ringhäälingukõne salvestamine lõppeb ja salvestis on kättesaadav kõigile jututoas.",
+        "confirm_stop_affirm": "Jah, lõpeta",
+        "confirm_listen_title": "Kas soovid kuulata ringhäälingukõnet?",
+        "confirm_listen_description": "Kui hakkad kuulama seda ringhäälingukõnet, siis hetkel toimuv ringhäälingukõne salvestamine lõppeb.",
+        "confirm_listen_affirm": "Jah, lõpeta salvestamine",
+        "30s_backward": "30s tagasi",
+        "30s_forward": "30s edasi",
+        "go_live": "Alusta otseeetrit",
+        "resume": "jätka ringhäälingukõnet",
+        "pause": "peata ringhäälingukõne",
+        "buffering": "Andmed on puhverdamisel…",
+        "play": "esita ringhäälingukõnet",
+        "connection_error": "Viga võrguühenduses - salvestamine on peatatud"
+    },
+    "update": {
+        "see_changes_button": "Mida on meil uut?",
+        "release_notes_toast_title": "Meie uudised",
+        "toast_title": "Uuenda %(brand)s rakendust",
+        "toast_description": "%(brand)s ralenduse uus versioon on saadaval"
+    },
+    "threads": {
+        "all_threads": "Kõik jutulõngad",
+        "all_threads_description": "Näitab kõiki praeguse jututoa jutulõngasid",
+        "my_threads": "Minu jutulõngad",
+        "my_threads_description": "Näitab kõiki jutulõngasid, kus sa oled osalenud",
+        "show_thread_filter": "Näita:",
+        "empty_has_threads_tip": "Vasta jätkuvas jutulõngas või uue jutulõnga loomiseks kasuta „%(replyInThread)s“ valikut, mida kuvatakse hiire liigutamisel sõnumi kohal.",
+        "show_all_threads": "Näita kõiki jutulõngasid",
+        "empty_explainer": "Jutulõngad aitavad hoida vestlused teemakohastena ning mugavalt loetavatena.",
+        "empty_tip": "<b>Soovitus:</b> Sõnumi kohal avanevast valikust kasuta „%(replyInThread)s“ võimalust.",
+        "empty_heading": "Halda vestlusi jutulõngadena"
+    },
+    "theme": {
+        "light_high_contrast": "Hele ja väga kontrastne"
+    },
+    "space": {
+        "landing_welcome": "Tete tulemast <name/> liikmeks"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "See koduserver pole seadistatud kuvama kaarte.",
+        "WebGLNotEnabled": "Kaartide kuvamiseks on vajalik WebGL, seega palun luba WebGL'i kasutamine oma veebibrauseri seadistustes.",
+        "MapStyleUrlNotReachable": "See koduserver kas pole korrektselt seadistatud kuvama kaarte või seadistatud kaardiserver ei tööta.",
+        "toggle_attribution": "Lülita omistamine sisse või välja",
+        "map_feedback": "Tagasiside kaardi kohta",
+        "find_my_location": "Leia minu asukoht",
+        "location_not_available": "Asukoht pole leitav",
+        "mapbox_logo": "Mapbox'i logo",
+        "reset_bearing": "Kasuta põhjasuunda",
+        "failed_permission": "%(brand)s ei saanud asukohta tuvastada. Palun luba vastavad õigused brauseri seadistustes.",
+        "failed_generic": "Asukoha tuvastamine ei õnnestunud. Palun proovi hiljem uuesti.",
+        "failed_timeout": "Asukoha tuvastamine ei õnnestunud päringu aegumise tõttu. Palun proovi hiljem uuesti.",
+        "failed_unknown": "Asukoha tuvastamine ei õnnestunud teadmaata põhjusel. Palun proovi hiljem uuesti.",
+        "expand_map": "Kuva kaart laiemana",
+        "failed_load_map": "Kaardi laadimine ei õnnestu"
+    },
+    "labs_mjolnir": {
+        "room_name": "Minu poolt seatud ligipääsukeeldude loend",
+        "room_topic": "See on sinu serverite ja kasutajate ligipääsukeeldude loend. Palun ära lahku sellest jututoast!"
+    },
     "create_space": {
         "name_required": "Palun sisesta kogukonnakeskuse nimi",
         "name_placeholder": "näiteks minu kogukond",
@@ -4083,76 +4160,5 @@
         "setup_rooms_description": "Sa võid ka hiljem siia luua uusi jututubasid või lisada olemasolevaid.",
         "setup_rooms_private_heading": "Missuguste projektidega sinu tiim tegeleb?",
         "setup_rooms_private_description": "Loome siis igaühe jaoks oma jututoa."
-    },
-    "space": {
-        "landing_welcome": "Tete tulemast <name/> liikmeks"
-    },
-    "threads": {
-        "all_threads": "Kõik jutulõngad",
-        "all_threads_description": "Näitab kõiki praeguse jututoa jutulõngasid",
-        "my_threads": "Minu jutulõngad",
-        "my_threads_description": "Näitab kõiki jutulõngasid, kus sa oled osalenud",
-        "show_thread_filter": "Näita:",
-        "empty_has_threads_tip": "Vasta jätkuvas jutulõngas või uue jutulõnga loomiseks kasuta „%(replyInThread)s“ valikut, mida kuvatakse hiire liigutamisel sõnumi kohal.",
-        "show_all_threads": "Näita kõiki jutulõngasid",
-        "empty_explainer": "Jutulõngad aitavad hoida vestlused teemakohastena ning mugavalt loetavatena.",
-        "empty_tip": "<b>Soovitus:</b> Sõnumi kohal avanevast valikust kasuta „%(replyInThread)s“ võimalust.",
-        "empty_heading": "Halda vestlusi jutulõngadena"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "See koduserver pole seadistatud kuvama kaarte.",
-        "WebGLNotEnabled": "Kaartide kuvamiseks on vajalik WebGL, seega palun luba WebGL'i kasutamine oma veebibrauseri seadistustes.",
-        "MapStyleUrlNotReachable": "See koduserver kas pole korrektselt seadistatud kuvama kaarte või seadistatud kaardiserver ei tööta.",
-        "toggle_attribution": "Lülita omistamine sisse või välja",
-        "map_feedback": "Tagasiside kaardi kohta",
-        "find_my_location": "Leia minu asukoht",
-        "location_not_available": "Asukoht pole leitav",
-        "mapbox_logo": "Mapbox'i logo",
-        "reset_bearing": "Kasuta põhjasuunda",
-        "failed_permission": "%(brand)s ei saanud asukohta tuvastada. Palun luba vastavad õigused brauseri seadistustes.",
-        "failed_generic": "Asukoha tuvastamine ei õnnestunud. Palun proovi hiljem uuesti.",
-        "failed_timeout": "Asukoha tuvastamine ei õnnestunud päringu aegumise tõttu. Palun proovi hiljem uuesti.",
-        "failed_unknown": "Asukoha tuvastamine ei õnnestunud teadmaata põhjusel. Palun proovi hiljem uuesti.",
-        "expand_map": "Kuva kaart laiemana",
-        "failed_load_map": "Kaardi laadimine ei õnnestu"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Uue ringhäälingukõne alustamine pole võimalik",
-        "failed_insufficient_permission_title": "Uue ringhäälingukõne alustamine pole võimalik",
-        "failed_others_already_recording_title": "Uue ringhäälingukõne alustamine pole võimalik",
-        "failed_already_recording_description": "Sa juba salvestad ringhäälingukõnet. Uue alustamiseks palun lõpeta eelmine salvestus.",
-        "failed_insufficient_permission_description": "Sul pole piisavalt õigusi selles jututoas ringhäälingukõne algatamiseks. Õiguste lisamiseks palun võta ühendust jututoa haldajaga.",
-        "failed_others_already_recording_description": "Keegi juba salvestab ringhäälingukõnet. Uue ringhäälingukõne salvestamiseks palun oota, kuni see teine ringhäälingukõne on lõppenud.",
-        "failed_no_connection_title": "Ühenduse viga",
-        "failed_no_connection_description": "Kahjuks me ei saa hetkel salvestamist alustada. Palun proovi hiljem uuesti.",
-        "failed_decrypt": "Ringhäälingukõne dekrüptimine ei õnnestu",
-        "failed_generic": "Selle ringhäälingukõne esitamine ei õnnestu",
-        "confirm_stop_title": "Kas lõpetame otseeetri?",
-        "confirm_stop_description": "Kas sa oled kindel, et soovid otseeetri lõpetada? Sellega ringhäälingukõne salvestamine lõppeb ja salvestis on kättesaadav kõigile jututoas.",
-        "confirm_stop_affirm": "Jah, lõpeta",
-        "confirm_listen_title": "Kas soovid kuulata ringhäälingukõnet?",
-        "confirm_listen_description": "Kui hakkad kuulama seda ringhäälingukõnet, siis hetkel toimuv ringhäälingukõne salvestamine lõppeb.",
-        "confirm_listen_affirm": "Jah, lõpeta salvestamine",
-        "30s_backward": "30s tagasi",
-        "30s_forward": "30s edasi",
-        "go_live": "Alusta otseeetrit",
-        "resume": "jätka ringhäälingukõnet",
-        "pause": "peata ringhäälingukõne",
-        "buffering": "Andmed on puhverdamisel…",
-        "play": "esita ringhäälingukõnet",
-        "connection_error": "Viga võrguühenduses - salvestamine on peatatud"
-    },
-    "labs_mjolnir": {
-        "room_name": "Minu poolt seatud ligipääsukeeldude loend",
-        "room_topic": "See on sinu serverite ja kasutajate ligipääsukeeldude loend. Palun ära lahku sellest jututoast!"
-    },
-    "theme": {
-        "light_high_contrast": "Hele ja väga kontrastne"
-    },
-    "update": {
-        "see_changes_button": "Mida on meil uut?",
-        "release_notes_toast_title": "Meie uudised",
-        "toast_title": "Uuenda %(brand)s rakendust",
-        "toast_description": "%(brand)s ralenduse uus versioon on saadaval"
     }
 }

@@ -254,30 +254,6 @@
     "Missing roomId.": "Falta l'ID de sala.",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "El fitxer %(fileName)s supera la mida màxima permesa per a pujades d'aquest servidor",
     "You do not have permission to invite people to this room.": "No teniu permís per convidar gent a aquesta sala.",
-    "Use a few words, avoid common phrases": "Feu servir unes quantes paraules, eviteu frases comunes",
-    "No need for symbols, digits, or uppercase letters": "No calen símbols, dígits o majúscules",
-    "Avoid repeated words and characters": "Eviteu paraules i caracters repetits",
-    "Avoid sequences": "Eviteu seqüències",
-    "Avoid recent years": "Eviteu anys recents",
-    "Capitalization doesn't help very much": "Les majúscules no ajuden gaire",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Tot en majúscules és gairebé tan fàcil d'esbrinar com tot en minúscules",
-    "Reversed words aren't much harder to guess": "Les paraules al revés no són gaire més difícils",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Substitucions fàcils de predir com '@' en comptes de 'a' no ajuden gaire",
-    "Add another word or two. Uncommon words are better.": "Afegiu una paraula o dues més. Paraules estranyes són millors.",
-    "Repeats like \"aaa\" are easy to guess": "Repeticions com \"aaa\" són fàcils d'esbrinar",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Repeticions com \"abcabcabc\" només són una mica més difícils d'esbrinar que \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Seqüències com \"abc\" o \"6453\" són fàcils d'esbrinar",
-    "Recent years are easy to guess": "Anys recents són fàcils d'esbrinar",
-    "Dates are often easy to guess": "Les dates són fàcils d'esbrinar habitualment",
-    "This is a top-10 common password": "Això és una contrasenya entre les 10 més comunes",
-    "This is a top-100 common password": "Això és una contrasenya entre les 100 més comunes",
-    "This is a very common password": "Aquesta contrasenya és molt comuna",
-    "This is similar to a commonly used password": "Aquesta contrasenya és semblant a una contrasenya molt comú",
-    "A word by itself is easy to guess": "Una paraula sola és fàcil d'esbrinar",
-    "Names and surnames by themselves are easy to guess": "Noms i cognoms sols són fàcils d'esbrinar",
-    "Common names and surnames are easy to guess": "Noms i cognoms comuns són fàcils d'esbrinar",
-    "Straight rows of keys are easy to guess": "Fileres seguides de tecles són fàcils d'esbrinar",
-    "Short keyboard patterns are easy to guess": "Patrons curts de teclat són fàcils d'esbrinar",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "No s'ha trobat el perfil pels IDs de Matrix següents, els voleu convidar igualment?",
     "Invite anyway and never warn me again": "Convidar igualment i no avisar-me de nou",
     "Invite anyway": "Convidar igualment",
@@ -285,8 +261,6 @@
     "This homeserver has exceeded one of its resource limits.": "Aquest homeserver ha sobrepassat on dels seus límits de recursos.",
     "Unrecognised address": "Adreça no reconeguda",
     "Unknown server error": "Error de servidor desconegut",
-    "Avoid years that are associated with you": "Eviteu anys que es puguin relacionar amb vós",
-    "Avoid dates and years that are associated with you": "Eviteu dates i anys que estiguin associats amb vós",
     "Please contact your homeserver administrator.": "Si us plau contacteu amb l'administrador del vostre homeserver.",
     "Email addresses": "Adreces de correu electrònic",
     "Phone numbers": "Números de telèfon",
@@ -683,9 +657,9 @@
         "join": "S'uneix a la sala amb l'adreça indicada",
         "op": "Defineix el nivell d'autoritat d'un usuari",
         "deop": "Degrada l'usuari amb l'id donat",
+        "server_error_detail": "El servidor no està disponible, està sobrecarregat o alguna altra cosa no ha funcionat correctament.",
         "server_error": "Error de servidor",
-        "command_error": "Error en l'ordre",
-        "server_error_detail": "El servidor no està disponible, està sobrecarregat o alguna altra cosa no ha funcionat correctament."
+        "command_error": "Error en l'ordre"
     },
     "presence": {
         "online_for": "En línia durant %(duration)s",
@@ -735,12 +709,44 @@
             "brand_version": "Versió de %(brand)s:"
         }
     },
-    "room_list": {
-        "failed_remove_tag": "No s'ha pogut esborrar l'etiqueta %(tagName)s de la sala",
-        "failed_add_tag": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala"
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Feu servir unes quantes paraules, eviteu frases comunes",
+            "noNeed": "No calen símbols, dígits o majúscules",
+            "repeated": "Eviteu paraules i caracters repetits",
+            "sequences": "Eviteu seqüències",
+            "recentYears": "Eviteu anys recents",
+            "associatedYears": "Eviteu anys que es puguin relacionar amb vós",
+            "dates": "Eviteu dates i anys que estiguin associats amb vós",
+            "capitalization": "Les majúscules no ajuden gaire",
+            "allUppercase": "Tot en majúscules és gairebé tan fàcil d'esbrinar com tot en minúscules",
+            "reverseWords": "Les paraules al revés no són gaire més difícils",
+            "l33t": "Substitucions fàcils de predir com '@' en comptes de 'a' no ajuden gaire",
+            "anotherWord": "Afegiu una paraula o dues més. Paraules estranyes són millors."
+        },
+        "warnings": {
+            "simpleRepeat": "Repeticions com \"aaa\" són fàcils d'esbrinar",
+            "extendedRepeat": "Repeticions com \"abcabcabc\" només són una mica més difícils d'esbrinar que \"abc\"",
+            "sequences": "Seqüències com \"abc\" o \"6453\" són fàcils d'esbrinar",
+            "recentYears": "Anys recents són fàcils d'esbrinar",
+            "dates": "Les dates són fàcils d'esbrinar habitualment",
+            "topTen": "Això és una contrasenya entre les 10 més comunes",
+            "topHundred": "Això és una contrasenya entre les 100 més comunes",
+            "common": "Aquesta contrasenya és molt comuna",
+            "similarToCommon": "Aquesta contrasenya és semblant a una contrasenya molt comú",
+            "wordByItself": "Una paraula sola és fàcil d'esbrinar",
+            "namesByThemselves": "Noms i cognoms sols són fàcils d'esbrinar",
+            "commonNames": "Noms i cognoms comuns són fàcils d'esbrinar",
+            "straightRow": "Fileres seguides de tecles són fàcils d'esbrinar",
+            "keyPattern": "Patrons curts de teclat són fàcils d'esbrinar"
+        }
     },
     "update": {
         "see_changes_button": "Què hi ha de nou?",
         "release_notes_toast_title": "Novetats"
+    },
+    "room_list": {
+        "failed_remove_tag": "No s'ha pogut esborrar l'etiqueta %(tagName)s de la sala",
+        "failed_add_tag": "No s'ha pogut afegir l'etiqueta %(tagName)s a la sala"
     }
 }

@@ -16,8 +16,8 @@ limitations under the License.
 
 import React, { PureComponent, RefCallback, RefObject } from "react";
 import classNames from "classnames";
-import zxcvbn from "zxcvbn";
 
+import type { ZxcvbnResult } from "@zxcvbn-ts/core";
 import SdkConfig from "../../../SdkConfig";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import { _t, _td, TranslationKey } from "../../../languageHandler";
@@ -51,12 +51,12 @@ class PassphraseField extends PureComponent<IProps> {
         labelAllowedButUnsafe: _td("Password is allowed, but unsafe"),
     };
 
-    public readonly validate = withValidation<this, zxcvbn.ZXCVBNResult | null>({
+    public readonly validate = withValidation<this, ZxcvbnResult | null>({
         description: function (complexity) {
             const score = complexity ? complexity.score : 0;
             return <progress className="mx_PassphraseField_progress" max={4} value={score} />;
         },
-        deriveData: async ({ value }): Promise<zxcvbn.ZXCVBNResult | null> => {
+        deriveData: async ({ value }): Promise<ZxcvbnResult | null> => {
             if (!value) return null;
             const { scorePassword } = await import("../../../utils/PasswordScorer");
             return scorePassword(MatrixClientPeg.get(), value, this.props.userInputs);

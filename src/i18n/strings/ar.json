@@ -632,32 +632,6 @@
     "Don't miss a reply": "لا تفوت أي رد",
     "Later": "لاحقاً",
     "Unknown App": "تطبيق غير معروف",
-    "Short keyboard patterns are easy to guess": "من السهل تخمين أنماط قصيرة من لوحة المفاتيح",
-    "Straight rows of keys are easy to guess": "سهلٌ تخمين صفوف من المفاتيح",
-    "Common names and surnames are easy to guess": "سهلٌ تخمين الأسماء والألقاب الشائعة",
-    "Names and surnames by themselves are easy to guess": "سهلٌ تخمين الأسماء والألقاب",
-    "A word by itself is easy to guess": "الكلمة الواحدة سهلٌ تخمينها",
-    "This is similar to a commonly used password": "كلمة المرور هذه مشابهة لكلمة مرور شائعة",
-    "This is a very common password": "كلمة المرور هذه شائعة جدًّا",
-    "This is a top-100 common password": "كلمة المرور هذه من أكثر الكلمات ال100 شيوعاً",
-    "This is a top-10 common password": "كلمة المرور هذه من أكثر الكلمات ال10 شيوعاً",
-    "Dates are often easy to guess": "غالبًا ما يكون من السهل تخمين التواريخ",
-    "Recent years are easy to guess": "من السهل تخمين السنوات الأخيرة",
-    "Sequences like abc or 6543 are easy to guess": "من السهل تخمين التسلسلات مثل abc أو 6543",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "يصعب تخمين التكرارات مثل \"abcabcabc\" مقارنةً ب\"abc\"",
-    "Repeats like \"aaa\" are easy to guess": "من السهل تخمين التكرارات مثل \"aaa\"",
-    "Add another word or two. Uncommon words are better.": "أضف كلمة أخرى أو كلمتين. الكلمات غير المألوفة أفضل.",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "الاستبدالات المتوقعة مثل \"@\" بدلاً من \"a\" لا تساعد كثيرًا",
-    "Reversed words aren't much harder to guess": "الكلمات المعكوسة ليست أصعب تخميناً",
-    "All-uppercase is almost as easy to guess as all-lowercase": "تكاد تتساوى سهولة تخمين الكلمة ذات الأحرف التي كلها صغيرة مع التي كلها كبيرة",
-    "Capitalization doesn't help very much": "لا تساعد الكتابة بالأحرف الكبيرة كثيرًا",
-    "Avoid dates and years that are associated with you": "تجنب التواريخ والسنوات التي ترتبط بك",
-    "Avoid years that are associated with you": "تجنب السنوات التي ترتبط بك",
-    "Avoid recent years": "تجنب السنوات الأخيرة",
-    "Avoid sequences": "تجنب التسلسلات",
-    "Avoid repeated words and characters": "تجنب الكلمات والأحرف المتكررة",
-    "No need for symbols, digits, or uppercase letters": "لا حاجة للرموز أو الأرقام أو الأحرف الكبيرة",
-    "Use a few words, avoid common phrases": "استخدم بضع كلمات ، وتجنب العبارات الشائعة",
     "Unknown server error": "خطأ غير معروف في الخادم",
     "The user's homeserver does not support the version of the room.": "لا يدعم خادم المستخدم نموذج هذه الغرفة.",
     "The user must be unbanned before they can be invited.": "يجب إلغاء حظر المستخدم قبل دعوته.",
@@ -1049,20 +1023,14 @@
             "font_size": "حجم الخط",
             "custom_font_description": "قم بتعيين اسم الخط المثبت على نظامك وسيحاول %(brand)s استخدامه.",
             "timeline_image_size_default": "المبدئي",
-            "custom_font_size": "استخدام حجم مخصص",
+            "image_size_default": "المبدئي",
+            "font_size_valid": "استعمل ما بين %(min)spt و %(max)sps",
             "font_size_nan": "الحجم يجب أن يكون رقمًا",
             "font_size_limit": "الحجم المخصص للخط يجب أن ينحصر بين %(min)spt و %(max)spt",
-            "font_size_valid": "استعمل ما بين %(min)spt و %(max)sps",
-            "image_size_default": "المبدئي"
+            "custom_font_size": "استخدام حجم مخصص"
         },
         "inline_url_previews_room_account": "تمكين معاينة الروابط لهذه الغرفة (يؤثر عليك فقط)",
         "inline_url_previews_room": "تمكين معاينة الروابط أصلاً لأي مشارك في هذه الغرفة",
-        "preferences": {
-            "room_list_heading": "قائمة الغرفة",
-            "composer_heading": "الكاتب",
-            "autocomplete_delay": "تأخير الإكمال التلقائي (مللي ثانية)",
-            "always_show_menu_bar": "أظهر شريط قائمة النافذة دائمًا"
-        },
         "voip": {
             "mirror_local_feed": "محاكاة تغذية الفيديو المحلية"
         },
@@ -1072,6 +1040,12 @@
             "enable_message_search": "تمكين البحث عن الرسائل في الغرف المشفرة",
             "message_search_sleep_time": "ما مدى سرعة تنزيل الرسائل.",
             "manually_verify_all_sessions": "تحقق يدويًا من جميع الاتصالات البعيدة"
+        },
+        "preferences": {
+            "room_list_heading": "قائمة الغرفة",
+            "composer_heading": "الكاتب",
+            "autocomplete_delay": "تأخير الإكمال التلقائي (مللي ثانية)",
+            "always_show_menu_bar": "أظهر شريط قائمة النافذة دائمًا"
         }
     },
     "devtools": {
@@ -1195,20 +1169,20 @@
             "changed_rule_servers": "%(senderName)s قاعدة متغيرة التي تحظر سيرفرات مطابقة %(oldGlob)s من أجل مطابقة %(newGlob)s من أجل %(reason)s",
             "changed_rule_glob": "%(senderName)s قاعدة حظر محدثة التي طابقت %(oldGlob)s لتطابق %(newGlob)s من أجل %(reason)s"
         },
+        "redacted": {
+            "tooltip": "حذفت الرسالة في %(date)s"
+        },
         "reactions": {
             "tooltip": "<reactors/><reactedWith>تفاعلو ب%(shortName)s</reactedWith>"
         },
-        "redacted": {
-            "tooltip": "حذفت الرسالة في %(date)s"
+        "m.room.create": {
+            "continuation": "هذه الغرفة هي استمرار لمحادثة أخرى.",
+            "see_older_messages": "انقر هنا لترى رسائل أقدم."
         },
         "m.room.avatar": {
             "lightbox_title": "%(senderDisplayName)s غير صورة الغرفة %(roomName)s",
             "removed": "%(senderDisplayName)s حذف صورة الغرفة.",
             "changed_img": "%(senderDisplayName)s غير صورة الغرفة إلى <img/>"
-        },
-        "m.room.create": {
-            "continuation": "هذه الغرفة هي استمرار لمحادثة أخرى.",
-            "see_older_messages": "انقر هنا لترى رسائل أقدم."
         }
     },
     "slash_command": {
@@ -1257,14 +1231,14 @@
         "failed_find_user": "لم يستطع ايجاد مستخدم في غرفة",
         "op": "قم بتعريف مستوى الطاقة للمستخدم",
         "deop": "يُلغي إدارية المستخدم حسب المعرّف المعطى",
-        "server_error": "خطأ في الخادم",
-        "command_error": "خطأ في الأمر",
-        "server_error_detail": "الخادم غير متوفر أو محمّل فوق طاقته أو وقع خطأ غير ذلك.",
-        "unknown_command": "أمر غير معروف",
-        "unknown_command_detail": "أمر غير معروف: %(commandText)s",
-        "unknown_command_help": "يمكنك استخدام <code>المساعدة</code> لسرد الأوامر المتاحة. هل قصدت إرسال هذا كرسالة؟",
         "unknown_command_hint": "تلميح: ابدأ رسالتك ب<code>//</code> لتبدأها بشرطة مائلة.",
-        "unknown_command_button": "أرسل كرسالة"
+        "unknown_command_help": "يمكنك استخدام <code>المساعدة</code> لسرد الأوامر المتاحة. هل قصدت إرسال هذا كرسالة؟",
+        "unknown_command_detail": "أمر غير معروف: %(commandText)s",
+        "unknown_command_button": "أرسل كرسالة",
+        "unknown_command": "أمر غير معروف",
+        "server_error_detail": "الخادم غير متوفر أو محمّل فوق طاقته أو وقع خطأ غير ذلك.",
+        "server_error": "خطأ في الخادم",
+        "command_error": "خطأ في الأمر"
     },
     "presence": {
         "online_for": "متصل منذ %(duration)s",
@@ -1461,14 +1435,46 @@
             "see_videos_sent_active_room": "أظهر الفيديوهات المرسلة إلى هذه غرفتك النشطة"
         }
     },
-    "labs_mjolnir": {
-        "room_name": "قائمة الحظر",
-        "room_topic": "هذه قائمتك للمستخدمين / الخوادم التي حظرت - لا تغادر الغرفة!"
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "استخدم بضع كلمات ، وتجنب العبارات الشائعة",
+            "noNeed": "لا حاجة للرموز أو الأرقام أو الأحرف الكبيرة",
+            "repeated": "تجنب الكلمات والأحرف المتكررة",
+            "sequences": "تجنب التسلسلات",
+            "recentYears": "تجنب السنوات الأخيرة",
+            "associatedYears": "تجنب السنوات التي ترتبط بك",
+            "dates": "تجنب التواريخ والسنوات التي ترتبط بك",
+            "capitalization": "لا تساعد الكتابة بالأحرف الكبيرة كثيرًا",
+            "allUppercase": "تكاد تتساوى سهولة تخمين الكلمة ذات الأحرف التي كلها صغيرة مع التي كلها كبيرة",
+            "reverseWords": "الكلمات المعكوسة ليست أصعب تخميناً",
+            "l33t": "الاستبدالات المتوقعة مثل \"@\" بدلاً من \"a\" لا تساعد كثيرًا",
+            "anotherWord": "أضف كلمة أخرى أو كلمتين. الكلمات غير المألوفة أفضل."
+        },
+        "warnings": {
+            "simpleRepeat": "من السهل تخمين التكرارات مثل \"aaa\"",
+            "extendedRepeat": "يصعب تخمين التكرارات مثل \"abcabcabc\" مقارنةً ب\"abc\"",
+            "sequences": "من السهل تخمين التسلسلات مثل abc أو 6543",
+            "recentYears": "من السهل تخمين السنوات الأخيرة",
+            "dates": "غالبًا ما يكون من السهل تخمين التواريخ",
+            "topTen": "كلمة المرور هذه من أكثر الكلمات ال10 شيوعاً",
+            "topHundred": "كلمة المرور هذه من أكثر الكلمات ال100 شيوعاً",
+            "common": "كلمة المرور هذه شائعة جدًّا",
+            "similarToCommon": "كلمة المرور هذه مشابهة لكلمة مرور شائعة",
+            "wordByItself": "الكلمة الواحدة سهلٌ تخمينها",
+            "namesByThemselves": "سهلٌ تخمين الأسماء والألقاب",
+            "commonNames": "سهلٌ تخمين الأسماء والألقاب الشائعة",
+            "straightRow": "سهلٌ تخمين صفوف من المفاتيح",
+            "keyPattern": "من السهل تخمين أنماط قصيرة من لوحة المفاتيح"
+        }
     },
     "update": {
         "see_changes_button": "ما الجديد ؟",
         "release_notes_toast_title": "آخِر المُستجدّات",
         "toast_title": "حدّث: %(brand)s",
         "toast_description": "يتوفر إصدار جديد من %(brand)s"
+    },
+    "labs_mjolnir": {
+        "room_name": "قائمة الحظر",
+        "room_topic": "هذه قائمتك للمستخدمين / الخوادم التي حظرت - لا تغادر الغرفة!"
     }
 }

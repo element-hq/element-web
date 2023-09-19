@@ -465,8 +465,6 @@
     "Failed to upgrade room": "Fekk ikkje til å oppgradere rom",
     "Use Single Sign On to continue": "Bruk Single-sign-on for å fortsette",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Stadfest at du legger til denne e-postadressa, ved å bruka Single-sign-on for å stadfeste identiteten din.",
-    "Capitalization doesn't help very much": "Store bokstavar hjelp dessverre lite",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Forutsigbare teiknbytte som '@' istaden for 'a' hjelp dessverre lite",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Kontoen din har ein kryss-signert identitet det hemmelege lageret, økta di stolar ikkje på denne enno.",
     "in secret storage": "i hemmeleg lager",
     "Secret storage public key:": "Public-nøkkel for hemmeleg lager:",
@@ -827,22 +825,14 @@
             "timeline_image_size": "Storleik for bilete på tidslinja",
             "timeline_image_size_default": "Opphavleg innstilling",
             "timeline_image_size_large": "Stor",
-            "custom_font_size": "Bruk ein spesifikk skriftstorleik",
-            "font_size_limit": "Tilpassa skriftstorleik må vere mellom %(min)s og %(max)s punkt",
-            "font_size_valid": "Må vere mellom %(min)s og %(max)s punkt",
+            "image_size_large": "Stor",
             "image_size_default": "Opphavleg innstilling",
-            "image_size_large": "Stor"
+            "font_size_valid": "Må vere mellom %(min)s og %(max)s punkt",
+            "font_size_limit": "Tilpassa skriftstorleik må vere mellom %(min)s og %(max)s punkt",
+            "custom_font_size": "Bruk ein spesifikk skriftstorleik"
         },
         "inline_url_previews_room_account": "Skru URL-førehandsvisingar på for dette rommet (påverkar deg åleine)",
         "inline_url_previews_room": "Skru URL-førehandsvisingar på som utgangspunkt for deltakarar i dette rommet",
-        "preferences": {
-            "room_list_heading": "Romkatalog",
-            "keyboard_heading": "Tastatursnarvegar",
-            "keyboard_view_shortcuts_button": "For å sjå alle tastatursnarvegane, <a>klikk her</a>.",
-            "composer_heading": "Teksteditor",
-            "autocomplete_delay": "Forsinkelse på autofullfør (ms)",
-            "always_show_menu_bar": "Vis alltid menyfeltet i toppen av vindauget"
-        },
         "voip": {
             "mirror_local_feed": "Spegl den lokale videofeeden"
         },
@@ -851,6 +841,14 @@
             "strict_encryption": "Aldri send krypterte meldingar til ikkje-verifiserte sesjonar frå denne sesjonen",
             "enable_message_search": "Aktiver søk etter meldingar i krypterte rom",
             "manually_verify_all_sessions": "Manuelt verifiser alle eksterne økter"
+        },
+        "preferences": {
+            "room_list_heading": "Romkatalog",
+            "keyboard_heading": "Tastatursnarvegar",
+            "keyboard_view_shortcuts_button": "For å sjå alle tastatursnarvegane, <a>klikk her</a>.",
+            "composer_heading": "Teksteditor",
+            "autocomplete_delay": "Forsinkelse på autofullfør (ms)",
+            "always_show_menu_bar": "Vis alltid menyfeltet i toppen av vindauget"
         },
         "keyboard": {
             "title": "Tastatur"
@@ -1078,13 +1076,13 @@
         "failed_find_user": "Klarde ikkje å finna brukaren i rommet",
         "op": "Sett tilgangsnivået til ein brukar",
         "deop": "AvOPar brukarar med den gjevne IDen",
-        "server_error": "Noko gjekk gale med tenaren",
-        "command_error": "Noko gjekk gale med kommandoen",
-        "server_error_detail": "Tenar utilgjengeleg, overlasta eller har eit anna problem.",
-        "unknown_command": "Ukjend kommando",
-        "unknown_command_help": "Du kan bruka <code>/help</code> for å lista tilgjengelege kommandoar. Meinte du å senda dette som ein melding ?",
         "unknown_command_hint": "Hint: Start meldinga med <code>//</code> for å starte den med skråstrek.",
-        "unknown_command_button": "Send som melding"
+        "unknown_command_help": "Du kan bruka <code>/help</code> for å lista tilgjengelege kommandoar. Meinte du å senda dette som ein melding ?",
+        "unknown_command_button": "Send som melding",
+        "unknown_command": "Ukjend kommando",
+        "server_error_detail": "Tenar utilgjengeleg, overlasta eller har eit anna problem.",
+        "server_error": "Noko gjekk gale med tenaren",
+        "command_error": "Noko gjekk gale med kommandoen"
     },
     "presence": {
         "online_for": "tilkopla i %(duration)s",
@@ -1162,8 +1160,8 @@
         "sign_in_or_register": "Logg inn eller opprett konto",
         "sign_in_or_register_description": "Bruk kontoen din eller opprett ein ny for å halda fram.",
         "register_action": "Opprett konto",
-        "account_deactivated": "Denne kontoen har blitt deaktivert.",
-        "incorrect_credentials": "Feil brukarnamn og/eller passord."
+        "incorrect_credentials": "Feil brukarnamn og/eller passord.",
+        "account_deactivated": "Denne kontoen har blitt deaktivert."
     },
     "export_chat": {
         "messages": "Meldingar"
@@ -1198,15 +1196,21 @@
             "clear_cache_reload": "Tøm buffer og last inn på nytt"
         }
     },
-    "labs_mjolnir": {
-        "room_name": "Mi blokkeringsliste",
-        "room_topic": "Dette er di liste over brukarar/tenarar du har blokkert - ikkje forlat rommet!"
-    },
-    "location_sharing": {
-        "expand_map": "Utvid kart"
+    "zxcvbn": {
+        "suggestions": {
+            "capitalization": "Store bokstavar hjelp dessverre lite",
+            "l33t": "Forutsigbare teiknbytte som '@' istaden for 'a' hjelp dessverre lite"
+        }
     },
     "update": {
         "see_changes_button": "Kva er nytt?",
         "release_notes_toast_title": "Kva er nytt"
+    },
+    "location_sharing": {
+        "expand_map": "Utvid kart"
+    },
+    "labs_mjolnir": {
+        "room_name": "Mi blokkeringsliste",
+        "room_topic": "Dette er di liste over brukarar/tenarar du har blokkert - ikkje forlat rommet!"
     }
 }

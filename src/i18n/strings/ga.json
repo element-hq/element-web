@@ -25,7 +25,6 @@
     "Reject & Ignore user": "Diúltaigh ⁊ Neamaird do úsáideoir",
     "Ignored users": "Úsáideoirí neamhairde",
     "Ignored/Blocked": "Neamhairde/Tachta",
-    "Avoid sequences": "Seachain seicheamh",
     "Unrecognised address": "Seoladh nár aithníodh",
     "Verified key": "Eochair deimhnithe",
     "Unignored user": "Úsáideoir leis aird",
@@ -822,6 +821,11 @@
     },
     "feedback": {
         "comment_label": "Trácht"
+    },
+    "zxcvbn": {
+        "suggestions": {
+            "sequences": "Seachain seicheamh"
+        }
     },
     "update": {
         "see_changes_button": "Cad é nua?"

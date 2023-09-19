@@ -286,31 +286,6 @@
     "The user must be unbanned before they can be invited.": "Потрібно розблокувати користувача перед тим як їх можна буде запросити.",
     "The user's homeserver does not support the version of the room.": "Домашній сервер користувача не підтримує версію кімнати.",
     "Unknown server error": "Невідома помилка з боку сервера",
-    "Use a few words, avoid common phrases": "Використовуйте декілька слів, уникайте звичайних фраз",
-    "Use a longer keyboard pattern with more turns": "Використовуйте довшу комбінацію клавіш з більшою кількістю поворотів",
-    "Avoid repeated words and characters": "Уникайте повторюваних слів та символів",
-    "Avoid sequences": "Уникайте послідовностей",
-    "Avoid recent years": "Уникайте останніх років",
-    "Avoid years that are associated with you": "Уникайте років, які зв'язані з вами",
-    "Avoid dates and years that are associated with you": "Уникайте дат і років, які зв'язані з вами",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Все прописними буквами так само легко вгадується як і все малими",
-    "Reversed words aren't much harder to guess": "Вгадувати перевернуті слова не сильно важче",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Передбачувані заміни типу «@» замість «a» не особливо допомагають",
-    "Add another word or two. Uncommon words are better.": "Додайте ще один-два слова. Краще використовувати рідкісні слова.",
-    "Repeats like \"aaa\" are easy to guess": "Повтори типу \"ааа\" легко вгадувані",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Повтори типу «abcabcabc», лише трішки складніше вгадати, ніж «abc»",
-    "Sequences like abc or 6543 are easy to guess": "Послідовності типу abc або 6543 легко вгадувані",
-    "Recent years are easy to guess": "Останні роки легко вгадувані",
-    "Dates are often easy to guess": "Часто, дати вгадувати легко",
-    "This is a top-10 common password": "Це топ-10 легких та звичайних паролів",
-    "This is a top-100 common password": "Це топ-100 легких та розповсюджених паролів",
-    "This is a very common password": "Це дуже розповсюджений пароль",
-    "This is similar to a commonly used password": "Це занадто простий пароль",
-    "A word by itself is easy to guess": "Загальновживані слова легко вгадувані",
-    "Names and surnames by themselves are easy to guess": "Імена та прізвища легко вгадувані",
-    "Common names and surnames are easy to guess": "Розповсюджені імена та прізвища легко вгадувані",
-    "Straight rows of keys are easy to guess": "Прямі ради клавіш легко вгадувані",
-    "Short keyboard patterns are easy to guess": "Короткі клавіатурні шаблони легко вгадувані",
     "Your homeserver has exceeded its user limit.": "Ваш домашній сервер перевищив свій ліміт користувачів.",
     "Your homeserver has exceeded one of its resource limits.": "Ваш домашній сервер перевищив одне із своїх обмежень ресурсів.",
     "Contact your <a>server admin</a>.": "Зверніться до <a>адміністратора сервера</a>.",
@@ -793,8 +768,6 @@
     "Can't find this server or its room list": "Не вдалося знайти цей сервер або список його кімнат",
     "Cannot reach homeserver": "Не вдалося зв'язатися з домашнім сервером",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Переконайтеся, що у ваше з'єднання з Інтернетом стабільне або зв’яжіться з системним адміністратором",
-    "No need for symbols, digits, or uppercase letters": "Цифри або великі букви не вимагаються",
-    "Capitalization doesn't help very much": "Великі букви не дуже допомагають",
     "You're all caught up.": "Все готово.",
     "You've reached the maximum number of simultaneous calls.": "Ви досягли максимальної кількості одночасних викликів.",
     "Too Many Calls": "Забагато викликів",
@@ -2563,11 +2536,11 @@
         "integration_manager": "Менеджер інтеграцій",
         "qr_code": "QR-код",
         "feedback": "Відгук",
-        "all_rooms": "Усі кімнати",
-        "orphan_rooms": "Інші кімнати",
         "preview_message": "Агов, ти, так, ти. Ти найкращий!",
+        "orphan_rooms": "Інші кімнати",
         "on": "Увімкнено",
-        "off": "Вимкнено"
+        "off": "Вимкнено",
+        "all_rooms": "Усі кімнати"
     },
     "action": {
         "continue": "Продовжити",
@@ -2668,8 +2641,8 @@
         "submit": "Надіслати",
         "send_report": "Надіслати звіт",
         "clear": "Очистити",
-        "enter_fullscreen": "Перейти у повноекранний режим",
-        "exit_fullscreeen": "Вийти з повноекранного режиму"
+        "exit_fullscreeen": "Вийти з повноекранного режиму",
+        "enter_fullscreen": "Перейти у повноекранний режим"
     },
     "a11y": {
         "user_menu": "Користувацьке меню",
@@ -2746,11 +2719,11 @@
         "notification_settings_beta_title": "Налаштування сповіщень",
         "voice_broadcast_force_small_chunks": "Примусово обмежити тривалість голосових трансляцій до 15 с",
         "oidc_native_flow": "Увімкнути нові вбудовані потоки OIDC (в активній розробці)",
-        "automatic_debug_logs": "Автоматично надсилати журнал зневадження про всі помилки",
-        "automatic_debug_logs_decryption": "Автоматично надсилати журнали зневадження при збоях розшифрування",
-        "automatic_debug_logs_key_backup": "Автоматично надсилати журнали зневадження при збоях резервного копіювання ключів",
+        "sliding_sync_disabled_notice": "Вийдіть і знову увійдіть, щоб вимкнути",
         "rust_crypto_disabled_notice": "Наразі можна ввімкнути лише через config.json",
-        "sliding_sync_disabled_notice": "Вийдіть і знову увійдіть, щоб вимкнути"
+        "automatic_debug_logs_key_backup": "Автоматично надсилати журнали зневадження при збоях резервного копіювання ключів",
+        "automatic_debug_logs_decryption": "Автоматично надсилати журнали зневадження при збоях розшифрування",
+        "automatic_debug_logs": "Автоматично надсилати журнал зневадження про всі помилки"
     },
     "keyboard": {
         "home": "Домівка",
@@ -3040,15 +3013,26 @@
             "timeline_image_size": "Розмір зображень у стрічці",
             "timeline_image_size_default": "Типовий",
             "timeline_image_size_large": "Великі",
-            "custom_font_size": "Використовувати нетиповий розмір",
+            "image_size_large": "Великі",
+            "image_size_default": "Типовий",
+            "font_size_valid": "Введіть від %(min)s пт до %(max)s пт",
             "font_size_nan": "Розмір повинен бути числом",
             "font_size_limit": "Нетиповий розмір шрифту може бути лише в межах %(min)s пт і %(max)s пт",
-            "font_size_valid": "Введіть від %(min)s пт до %(max)s пт",
-            "image_size_default": "Типовий",
-            "image_size_large": "Великі"
+            "custom_font_size": "Використовувати нетиповий розмір"
         },
         "inline_url_previews_room_account": "Увімкнути попередній перегляд гіперпосилань в цій кімнаті (стосується тільки вас)",
         "inline_url_previews_room": "Увімкнути попередній перегляд гіперпосилань за умовчанням для учасників цієї кімнати",
+        "voip": {
+            "mirror_local_feed": "Показувати локальне відео віддзеркалено",
+            "allow_p2p": "Дозволити однорангові виклики 1:1",
+            "allow_p2p_description": "Якщо увімкнено, інша сторона зможе бачити вашу IP-адресу",
+            "auto_gain_control": "Авторегулювання підсилення",
+            "echo_cancellation": "Пригнічення відлуння",
+            "noise_suppression": "Шумопригнічення",
+            "enable_fallback_ice_server": "Дозволити резервний сервер підтримки викликів (%(server)s)",
+            "enable_fallback_ice_server_description": "Застосовується лише в тому випадку, якщо ваш домашній сервер не пропонує його. Ваша IP-адреса передаватиметься під час виклику."
+        },
+        "send_read_receipts_unsupported": "Ваш сервер не підтримує вимкнення надсилання сповіщень про прочитання.",
         "security": {
             "message_search_disable_warning": "Якщо вимкнути, пошук не показуватиме повідомлень зашифрованих кімнат.",
             "message_search_indexing_idle": "Зараз жодна кімната не індексується.",
@@ -3086,17 +3070,6 @@
             "always_show_menu_bar": "Завжди показувати рядок меню",
             "enable_tray_icon": "Згортати вікно до піктограми в лотку при закритті",
             "enable_hardware_acceleration": "Увімкнути апаратне прискорення"
-        },
-        "send_read_receipts_unsupported": "Ваш сервер не підтримує вимкнення надсилання сповіщень про прочитання.",
-        "voip": {
-            "mirror_local_feed": "Показувати локальне відео віддзеркалено",
-            "allow_p2p": "Дозволити однорангові виклики 1:1",
-            "allow_p2p_description": "Якщо увімкнено, інша сторона зможе бачити вашу IP-адресу",
-            "auto_gain_control": "Авторегулювання підсилення",
-            "echo_cancellation": "Пригнічення відлуння",
-            "noise_suppression": "Шумопригнічення",
-            "enable_fallback_ice_server": "Дозволити резервний сервер підтримки викликів (%(server)s)",
-            "enable_fallback_ice_server_description": "Застосовується лише в тому випадку, якщо ваш домашній сервер не пропонує його. Ваша IP-адреса передаватиметься під час виклику."
         },
         "keyboard": {
             "title": "Клавіатура"
@@ -3195,11 +3168,11 @@
         "category_room": "Кімната",
         "category_other": "Інше",
         "widget_screenshots": "Увімкнути знімки екрана віджетів для підтримуваних віджетів",
+        "title": "Інструменти розробника",
         "show_hidden_events": "Показувати приховані події у часоряді",
-        "low_bandwidth_mode": "Режим низької пропускної спроможності",
         "low_bandwidth_mode_description": "Потрібен сумісний домашній сервер.",
-        "developer_mode": "Режим розробника",
-        "title": "Інструменти розробника"
+        "low_bandwidth_mode": "Режим низької пропускної спроможності",
+        "developer_mode": "Режим розробника"
     },
     "export_chat": {
         "html": "HTML",
@@ -3579,22 +3552,22 @@
         "no_permission_messages_before_join": "Ви не маєте дозволу на перегляд повідомлень, давніших за ваше приєднання.",
         "encrypted_historical_messages_unavailable": "Зашифровані повідомлення до цієї точки недоступні.",
         "historical_messages_unavailable": "Ви не можете переглядати давніші повідомлення",
-        "io.element.voice_broadcast_info": {
-            "you": "Ви завершили <a>голосову трансляцію</a>",
-            "user": "%(senderName)s завершує <a>голосову трансляцію</a>"
+        "redacted": {
+            "tooltip": "Повідомлення видалено %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s додає реакцію %(content)s",
             "tooltip": "<reactors/><reactedWith>додає реакцію %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Повідомлення видалено %(date)s"
         },
         "m.room.create": {
             "continuation": "Ця кімната — продовження іншої розмови.",
             "unknown_predecessor_guess_server": "Не можемо знайти стару версію цієї кімнати (ідентифікатор кімнати: %(roomId)s), а нам не було надано 'via_servers', щоб знайти її. Можливо, вам вдасться вгадати сервер за ID кімнати. Якщо ви хочете спробувати, натисніть на це посилання:",
             "unknown_predecessor": "Не можемо знайти стару версію цієї кімнати (ідентифікатор кімнати: %(roomId)s), а нам не було надано 'via_servers', щоб знайти її.",
             "see_older_messages": "Клацніть тут, щоб переглянути давніші повідомлення."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Ви завершили <a>голосову трансляцію</a>",
+            "user": "%(senderName)s завершує <a>голосову трансляцію</a>"
         }
     },
     "slash_command": {
@@ -3664,14 +3637,14 @@
         "failed_find_user": "Не вдалося знайти користувача в кімнаті",
         "op": "Вказати рівень повноважень користувача",
         "deop": "Знімає повноваження оператора з користувача із вказаним ID",
-        "server_error": "Помилка сервера",
-        "command_error": "Помилка команди",
-        "server_error_detail": "Сервер недоступний, перевантажений чи ще щось пішло не так.",
-        "unknown_command": "Невідома команда",
-        "unknown_command_detail": "Нерозпізнана команда: %(commandText)s",
-        "unknown_command_help": "Ви можете скористатися <code>/help</code> для перегляду доступних команд. Ви мали намір надіслати це як повідомлення?",
         "unknown_command_hint": "Порада: Почніть повідомлення з <code>//</code>, щоб його першим символом стала скісна риска.",
-        "unknown_command_button": "Надіслати як повідомлення"
+        "unknown_command_help": "Ви можете скористатися <code>/help</code> для перегляду доступних команд. Ви мали намір надіслати це як повідомлення?",
+        "unknown_command_detail": "Нерозпізнана команда: %(commandText)s",
+        "unknown_command_button": "Надіслати як повідомлення",
+        "unknown_command": "Невідома команда",
+        "server_error_detail": "Сервер недоступний, перевантажений чи ще щось пішло не так.",
+        "server_error": "Помилка сервера",
+        "command_error": "Помилка команди"
     },
     "presence": {
         "busy": "Зайнятий",
@@ -3917,8 +3890,8 @@
         "server_picker_custom": "Інший домашній сервер",
         "server_picker_explainer": "Оберіть домашній сервер Matrix на свій розсуд чи встановіть власний.",
         "server_picker_learn_more": "Про домашні сервери",
-        "account_deactivated": "Цей обліковий запис було деактивовано.",
-        "incorrect_credentials": "Хибне користувацьке ім'я й/або пароль."
+        "incorrect_credentials": "Хибне користувацьке ім'я й/або пароль.",
+        "account_deactivated": "Цей обліковий запис було деактивовано."
     },
     "room_list": {
         "sort_unread_first": "Спочатку показувати кімнати з непрочитаними повідомленнями",
@@ -4049,6 +4022,110 @@
         "existing_issue_link": "Спершу гляньте <existingIssuesLink>відомі вади на Github</existingIssuesLink>. Ця ще невідома? <newIssueLink>Звітувати про нову ваду</newIssueLink>.",
         "send_feedback_action": "Надіслати відгук"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Використовуйте декілька слів, уникайте звичайних фраз",
+            "noNeed": "Цифри або великі букви не вимагаються",
+            "longerKeyboardPattern": "Використовуйте довшу комбінацію клавіш з більшою кількістю поворотів",
+            "repeated": "Уникайте повторюваних слів та символів",
+            "sequences": "Уникайте послідовностей",
+            "recentYears": "Уникайте останніх років",
+            "associatedYears": "Уникайте років, які зв'язані з вами",
+            "dates": "Уникайте дат і років, які зв'язані з вами",
+            "capitalization": "Великі букви не дуже допомагають",
+            "allUppercase": "Все прописними буквами так само легко вгадується як і все малими",
+            "reverseWords": "Вгадувати перевернуті слова не сильно важче",
+            "l33t": "Передбачувані заміни типу «@» замість «a» не особливо допомагають",
+            "anotherWord": "Додайте ще один-два слова. Краще використовувати рідкісні слова."
+        },
+        "warnings": {
+            "simpleRepeat": "Повтори типу \"ааа\" легко вгадувані",
+            "extendedRepeat": "Повтори типу «abcabcabc», лише трішки складніше вгадати, ніж «abc»",
+            "sequences": "Послідовності типу abc або 6543 легко вгадувані",
+            "recentYears": "Останні роки легко вгадувані",
+            "dates": "Часто, дати вгадувати легко",
+            "topTen": "Це топ-10 легких та звичайних паролів",
+            "topHundred": "Це топ-100 легких та розповсюджених паролів",
+            "common": "Це дуже розповсюджений пароль",
+            "similarToCommon": "Це занадто простий пароль",
+            "wordByItself": "Загальновживані слова легко вгадувані",
+            "namesByThemselves": "Імена та прізвища легко вгадувані",
+            "commonNames": "Розповсюджені імена та прізвища легко вгадувані",
+            "straightRow": "Прямі ради клавіш легко вгадувані",
+            "keyPattern": "Короткі клавіатурні шаблони легко вгадувані"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Не вдалося розпочати нову голосову трансляцію",
+        "failed_insufficient_permission_title": "Не вдалося розпочати нову голосову трансляцію",
+        "failed_others_already_recording_title": "Не вдалося розпочати нову голосову трансляцію",
+        "failed_already_recording_description": "Ви вже записуєте голосову трансляцію. Завершіть поточний запис, щоб розпочати новий.",
+        "failed_insufficient_permission_description": "Ви не маєте необхідних дозволів для початку голосової трансляції в цю кімнату. Зверніться до адміністратора кімнати, щоб розширити ваші дозволи.",
+        "failed_others_already_recording_description": "Хтось інший вже записує голосову трансляцію. Зачекайте, поки запис завершиться, щоб розпочати новий.",
+        "failed_no_connection_title": "Помилка з'єднання",
+        "failed_no_connection_description": "На жаль, ми не можемо розпочати запис прямо зараз. Будь ласка, спробуйте пізніше.",
+        "failed_decrypt": "Невдалося розшифрувати голосову трансляцію",
+        "failed_generic": "Неможливо відтворити цю голосову трансляцію",
+        "confirm_stop_title": "Припинити голосову трансляцію?",
+        "confirm_stop_description": "Ви впевнені, що хочете припинити пряму трансляцію? Це призведе до завершення трансляції, а повний запис буде доступний у кімнаті.",
+        "confirm_stop_affirm": "Так, припинити трансляцію",
+        "confirm_listen_title": "Слухати трансляцію наживо?",
+        "confirm_listen_description": "Якщо ви почнете слухати цю трансляцію наживо, ваш поточний запис трансляції наживо завершиться.",
+        "confirm_listen_affirm": "Так, завершити мій запис",
+        "30s_backward": "Назад на 30 с",
+        "30s_forward": "Уперед на 30 с",
+        "go_live": "Слухати",
+        "resume": "поновити голосову трансляцію",
+        "pause": "призупинити голосову трансляцію",
+        "buffering": "Буферизація…",
+        "play": "відтворити голосову трансляцію",
+        "connection_error": "Помилка з'єднання - Запис призупинено"
+    },
+    "update": {
+        "see_changes_button": "Що нового?",
+        "release_notes_toast_title": "Що нового",
+        "toast_title": "Оновити %(brand)s",
+        "toast_description": "Доступна нова версія %(brand)s"
+    },
+    "threads": {
+        "all_threads": "Усі гілки",
+        "all_threads_description": "Показує всі гілки цієї кімнати",
+        "my_threads": "Мої гілки",
+        "my_threads_description": "Показує всі гілки, де ви брали участь",
+        "show_thread_filter": "Показати:",
+        "empty_has_threads_tip": "Дайте відповідь у наявну гілку, або створіть нову, навівши курсор на повідомлення й натиснувши «%(replyInThread)s».",
+        "show_all_threads": "Показати всі гілки",
+        "empty_explainer": "Гілки допомагають підтримувати розмови за темою та за ними легко стежити.",
+        "empty_tip": "<b>Порада:</b> Використовуйте «%(replyInThread)s» навівши вказівник на повідомлення.",
+        "empty_heading": "Упорядкуйте обговорення за допомогою гілок"
+    },
+    "theme": {
+        "light_high_contrast": "Контрастна світла"
+    },
+    "space": {
+        "landing_welcome": "Вітаємо у <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Цей домашній сервер не налаштовано на показ карт.",
+        "WebGLNotEnabled": "Для показу карт потрібен WebGL, увімкніть його в налаштуваннях браузера.",
+        "MapStyleUrlNotReachable": "Цей домашній сервер налаштованно неправильно, щоб показати карти, або сконфігурований сервер карт може бути недосяжним.",
+        "toggle_attribution": "Перемкнути атрибуцію",
+        "map_feedback": "Карта відгуку",
+        "find_my_location": "Знайти моє місце перебування",
+        "location_not_available": "Місце перебування недоступне",
+        "mapbox_logo": "Логотип Mapbox",
+        "reset_bearing": "Повернути орієнтацію на північ",
+        "failed_permission": "%(brand)s не отримав доступу до вашого місця перебування. Дозвольте доступ до місця перебування в налаштуваннях браузера.",
+        "failed_generic": "Не вдалося отримати ваше місцеперебування. Повторіть спробу пізніше.",
+        "failed_timeout": "Сплив час отримання місцеперебування. Повторіть спробу пізніше.",
+        "failed_unknown": "Невідома помилка отримання місцеперебування. Повторіть спробу пізніше.",
+        "expand_map": "Розгорнути карту",
+        "failed_load_map": "Неможливо завантажити карту"
+    },
+    "labs_mjolnir": {
+        "room_name": "Мій список блокувань",
+        "room_topic": "Це ваш список користувачів/серверів, які ви заблокували – не виходьте з кімнати!"
+    },
     "create_space": {
         "name_required": "Будь ласка, введіть назву простору",
         "name_placeholder": "наприклад, мій-простір",
@@ -4083,76 +4160,5 @@
         "setup_rooms_description": "Згодом ви зможете додати більше, зокрема вже наявні.",
         "setup_rooms_private_heading": "Над якими проєктами працює ваша команда?",
         "setup_rooms_private_description": "Ми створимо кімнати для кожного з них."
-    },
-    "space": {
-        "landing_welcome": "Вітаємо у <name/>"
-    },
-    "threads": {
-        "all_threads": "Усі гілки",
-        "all_threads_description": "Показує всі гілки цієї кімнати",
-        "my_threads": "Мої гілки",
-        "my_threads_description": "Показує всі гілки, де ви брали участь",
-        "show_thread_filter": "Показати:",
-        "empty_has_threads_tip": "Дайте відповідь у наявну гілку, або створіть нову, навівши курсор на повідомлення й натиснувши «%(replyInThread)s».",
-        "show_all_threads": "Показати всі гілки",
-        "empty_explainer": "Гілки допомагають підтримувати розмови за темою та за ними легко стежити.",
-        "empty_tip": "<b>Порада:</b> Використовуйте «%(replyInThread)s» навівши вказівник на повідомлення.",
-        "empty_heading": "Упорядкуйте обговорення за допомогою гілок"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Цей домашній сервер не налаштовано на показ карт.",
-        "WebGLNotEnabled": "Для показу карт потрібен WebGL, увімкніть його в налаштуваннях браузера.",
-        "MapStyleUrlNotReachable": "Цей домашній сервер налаштованно неправильно, щоб показати карти, або сконфігурований сервер карт може бути недосяжним.",
-        "toggle_attribution": "Перемкнути атрибуцію",
-        "map_feedback": "Карта відгуку",
-        "find_my_location": "Знайти моє місце перебування",
-        "location_not_available": "Місце перебування недоступне",
-        "mapbox_logo": "Логотип Mapbox",
-        "reset_bearing": "Повернути орієнтацію на північ",
-        "failed_permission": "%(brand)s не отримав доступу до вашого місця перебування. Дозвольте доступ до місця перебування в налаштуваннях браузера.",
-        "failed_generic": "Не вдалося отримати ваше місцеперебування. Повторіть спробу пізніше.",
-        "failed_timeout": "Сплив час отримання місцеперебування. Повторіть спробу пізніше.",
-        "failed_unknown": "Невідома помилка отримання місцеперебування. Повторіть спробу пізніше.",
-        "expand_map": "Розгорнути карту",
-        "failed_load_map": "Неможливо завантажити карту"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Не вдалося розпочати нову голосову трансляцію",
-        "failed_insufficient_permission_title": "Не вдалося розпочати нову голосову трансляцію",
-        "failed_others_already_recording_title": "Не вдалося розпочати нову голосову трансляцію",
-        "failed_already_recording_description": "Ви вже записуєте голосову трансляцію. Завершіть поточний запис, щоб розпочати новий.",
-        "failed_insufficient_permission_description": "Ви не маєте необхідних дозволів для початку голосової трансляції в цю кімнату. Зверніться до адміністратора кімнати, щоб розширити ваші дозволи.",
-        "failed_others_already_recording_description": "Хтось інший вже записує голосову трансляцію. Зачекайте, поки запис завершиться, щоб розпочати новий.",
-        "failed_no_connection_title": "Помилка з'єднання",
-        "failed_no_connection_description": "На жаль, ми не можемо розпочати запис прямо зараз. Будь ласка, спробуйте пізніше.",
-        "failed_decrypt": "Невдалося розшифрувати голосову трансляцію",
-        "failed_generic": "Неможливо відтворити цю голосову трансляцію",
-        "confirm_stop_title": "Припинити голосову трансляцію?",
-        "confirm_stop_description": "Ви впевнені, що хочете припинити пряму трансляцію? Це призведе до завершення трансляції, а повний запис буде доступний у кімнаті.",
-        "confirm_stop_affirm": "Так, припинити трансляцію",
-        "confirm_listen_title": "Слухати трансляцію наживо?",
-        "confirm_listen_description": "Якщо ви почнете слухати цю трансляцію наживо, ваш поточний запис трансляції наживо завершиться.",
-        "confirm_listen_affirm": "Так, завершити мій запис",
-        "30s_backward": "Назад на 30 с",
-        "30s_forward": "Уперед на 30 с",
-        "go_live": "Слухати",
-        "resume": "поновити голосову трансляцію",
-        "pause": "призупинити голосову трансляцію",
-        "buffering": "Буферизація…",
-        "play": "відтворити голосову трансляцію",
-        "connection_error": "Помилка з'єднання - Запис призупинено"
-    },
-    "labs_mjolnir": {
-        "room_name": "Мій список блокувань",
-        "room_topic": "Це ваш список користувачів/серверів, які ви заблокували – не виходьте з кімнати!"
-    },
-    "theme": {
-        "light_high_contrast": "Контрастна світла"
-    },
-    "update": {
-        "see_changes_button": "Що нового?",
-        "release_notes_toast_title": "Що нового",
-        "toast_title": "Оновити %(brand)s",
-        "toast_description": "Доступна нова версія %(brand)s"
     }
 }

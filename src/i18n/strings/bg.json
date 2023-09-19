@@ -332,33 +332,8 @@
     "Please review and accept the policies of this homeserver:": "Моля, прегледайте и приемете политиките на този сървър:",
     "Add some now": "Добави сега",
     "Unable to load! Check your network connectivity and try again.": "Неуспешно зареждане! Проверете мрежовите настройки и опитайте пак.",
-    "Use a few words, avoid common phrases": "Използвайте няколко думи, избягвайте общи фрази",
     "You do not have permission to invite people to this room.": "Нямате привилегии да каните хора в тази стая.",
     "Unknown server error": "Непозната сървърна грешка",
-    "No need for symbols, digits, or uppercase letters": "Няма нужда от символи, цифри и главни букви",
-    "Avoid repeated words and characters": "Избягвайте повтарящи се думи и символи",
-    "Avoid sequences": "Избягвайте последователности",
-    "Avoid recent years": "Избягвайте скорошни години",
-    "Avoid years that are associated with you": "Избягвайте години свързани с вас",
-    "Avoid dates and years that are associated with you": "Избягвайте дати и години свързани с вас",
-    "Capitalization doesn't help very much": "Главни букви не помагат много",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Само главни букви е почти толкова лесно за познаване колкото само малки",
-    "Reversed words aren't much harder to guess": "Разбъркани думи не са много по-трудни за познаване",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Предвидими замествания (като '@' вместо 'a') не помагат много",
-    "Add another word or two. Uncommon words are better.": "Добавете една или няколко други думи. Рядко срещаните думи са по-добри.",
-    "Repeats like \"aaa\" are easy to guess": "Повторения като \"aaa\" са лесни за познаване",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Повторения като \"abcabcabc\" са само малко по-трудни за познаване от \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Последователности като abc и 6543 са лесни за познаване",
-    "Recent years are easy to guess": "Близките години са лесни за познаване",
-    "Dates are often easy to guess": "Датите често са лесни за познаване",
-    "This is a top-10 common password": "Тази парола е в топ 10 на често срещаните пароли",
-    "This is a top-100 common password": "Тази парола е в топ 100 на често срещаните пароли",
-    "This is a very common password": "Тази парола е много често срещана",
-    "This is similar to a commonly used password": "Тази парола е подобна на често срещана такава",
-    "A word by itself is easy to guess": "Единични думи се отгатват лесно",
-    "Names and surnames by themselves are easy to guess": "Имена и фамилии сами по себе си са лесни за отгатване",
-    "Common names and surnames are easy to guess": "Често срещани имена и фамилии са лесни за отгатване",
-    "Use a longer keyboard pattern with more turns": "Използвайте по-дълга клавиатурна последователност с повече разклонения",
     "Delete Backup": "Изтрий резервното копие",
     "Unable to load key backup status": "Неуспешно зареждане на състоянието на резервното копие на ключа",
     "Set up": "Настрой",
@@ -377,8 +352,6 @@
     "That doesn't match.": "Това не съвпада.",
     "Go back to set it again.": "Върнете се за да настройте нова.",
     "Unable to create key backup": "Неуспешно създаване на резервно копие на ключа",
-    "Straight rows of keys are easy to guess": "Клавиши от прави редици са лесни за отгатване",
-    "Short keyboard patterns are easy to guess": "Къси клавиатурни последователности са лесни за отгатване",
     "Unable to load commit detail: %(msg)s": "Неуспешно зареждане на информация за commit: %(msg)s",
     "New Recovery Method": "Нов метод за възстановяване",
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ако не сте настройвали новия метод за възстановяване, вероятно някой се опитва да проникне в акаунта Ви. Веднага променете паролата на акаунта си и настройте нов метод за възстановяване от Настройки.",
@@ -1478,10 +1451,10 @@
         "integration_manager": "Мениджър на интеграции",
         "qr_code": "QR код",
         "feedback": "Обратна връзка",
-        "all_rooms": "Всички стаи",
         "preview_message": "Хей, ти. Върхът си!",
         "on": "Вкл.",
-        "off": "Изкл."
+        "off": "Изкл.",
+        "all_rooms": "Всички стаи"
     },
     "action": {
         "continue": "Продължи",
@@ -1730,14 +1703,17 @@
             "font_size": "Размер на шрифта",
             "custom_font_description": "Настройте името на шрифт инсталиран в системата и %(brand)s ще се опита да го използва.",
             "timeline_image_size_default": "По подразбиране",
-            "custom_font_size": "Използвай собствен размер",
+            "image_size_default": "По подразбиране",
+            "font_size_valid": "Изберете между %(min)s pt и %(max)s pt",
             "font_size_nan": "Размера трябва да е число",
             "font_size_limit": "Собствения размер на шрифта може да бъде единствено между %(min)s pt и %(max)s pt",
-            "font_size_valid": "Изберете между %(min)s pt и %(max)s pt",
-            "image_size_default": "По подразбиране"
+            "custom_font_size": "Използвай собствен размер"
         },
         "inline_url_previews_room_account": "Включване на URL прегледи за тази стая (засяга само Вас)",
         "inline_url_previews_room": "Включване по подразбиране на URL прегледи за участници в тази стая",
+        "voip": {
+            "mirror_local_feed": "Показвай ми огледално моя видео образ"
+        },
         "security": {
             "message_search_disable_warning": "Ако е изключено, съобщения от шифровани стаи няма да се показват в резултатите от търсения.",
             "message_search_indexing_idle": "В момента не се индексират съобщения в нито една стая.",
@@ -1760,9 +1736,6 @@
             "rm_lifetime": "Живот на маркера за прочитане (мсек)",
             "rm_lifetime_offscreen": "Живот на маркера за прочитане извън екрана (мсек)",
             "always_show_menu_bar": "Винаги показвай менютата на прозореца"
-        },
-        "voip": {
-            "mirror_local_feed": "Показвай ми огледално моя видео образ"
         }
     },
     "devtools": {
@@ -1979,20 +1952,20 @@
             "changed_rule_servers": "%(senderName)s промени правило блокиращо достъпа до сървъри отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s",
             "changed_rule_glob": "%(senderName)s промени правило блокиращо достъпа до неща отговарящи на %(oldGlob)s към отговарящи на %(newGlob)s поради %(reason)s"
         },
+        "redacted": {
+            "tooltip": "Съобщението изтрито на %(date)s"
+        },
         "reactions": {
             "tooltip": "<reactors/><reactedWith>реагира с %(shortName)s</reactedWith>"
         },
-        "redacted": {
-            "tooltip": "Съобщението изтрито на %(date)s"
+        "m.room.create": {
+            "continuation": "Тази стая е продължение на предишен разговор.",
+            "see_older_messages": "Кликнете тук за да видите предишните съобщения."
         },
         "m.room.avatar": {
             "lightbox_title": "%(senderDisplayName)s промени аватара на %(roomName)s",
             "removed": "%(senderDisplayName)s премахна аватара на стаята.",
             "changed_img": "%(senderDisplayName)s промени аватара на стаята на <img/>"
-        },
-        "m.room.create": {
-            "continuation": "Тази стая е продължение на предишен разговор.",
-            "see_older_messages": "Кликнете тук за да видите предишните съобщения."
         }
     },
     "slash_command": {
@@ -2045,14 +2018,14 @@
         "failed_find_user": "Неуспешно намиране на потребител в стаята",
         "op": "Променя нивото на достъп на потребителя",
         "deop": "Отнема правата на потребител с даден идентификатор",
-        "server_error": "Сървърна грешка",
-        "command_error": "Грешка в командата",
-        "server_error_detail": "Сървърът е недостъпен, претоварен или нещо друго се обърка.",
-        "unknown_command": "Непозната команда",
-        "unknown_command_detail": "Неразпозната команда: %(commandText)s",
-        "unknown_command_help": "Може да използвате <code>/help</code> за да видите наличните команди. Или пък искахте да изпратите това като съобщение?",
         "unknown_command_hint": "Съвет: Започнете съобщението си с <code>//</code> за да изпратите съобщение започващо с наклонена черта.",
-        "unknown_command_button": "Изпрати като съобщение"
+        "unknown_command_help": "Може да използвате <code>/help</code> за да видите наличните команди. Или пък искахте да изпратите това като съобщение?",
+        "unknown_command_detail": "Неразпозната команда: %(commandText)s",
+        "unknown_command_button": "Изпрати като съобщение",
+        "unknown_command": "Непозната команда",
+        "server_error_detail": "Сървърът е недостъпен, претоварен или нещо друго се обърка.",
+        "server_error": "Сървърна грешка",
+        "command_error": "Грешка в командата"
     },
     "presence": {
         "online_for": "Онлайн от %(duration)s",
@@ -2193,8 +2166,8 @@
         "sign_in_or_register": "Влезте или Създайте профил",
         "sign_in_or_register_description": "Използвайте профила си или създайте нов за да продължите.",
         "register_action": "Създай профил",
-        "account_deactivated": "Този акаунт е деактивиран.",
-        "incorrect_credentials": "Неправилно потребителско име и/или парола."
+        "incorrect_credentials": "Неправилно потребителско име и/или парола.",
+        "account_deactivated": "Този акаунт е деактивиран."
     },
     "export_chat": {
         "messages": "Съобщения"
@@ -2248,6 +2221,49 @@
         "existing_issue_link": "Първо прегледайте <existingIssuesLink>съществуващите проблеми в Github</existingIssuesLink>. Няма подобни? <newIssueLink>Създайте нов</newIssueLink>.",
         "send_feedback_action": "Изпрати обратна връзка"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Използвайте няколко думи, избягвайте общи фрази",
+            "noNeed": "Няма нужда от символи, цифри и главни букви",
+            "longerKeyboardPattern": "Използвайте по-дълга клавиатурна последователност с повече разклонения",
+            "repeated": "Избягвайте повтарящи се думи и символи",
+            "sequences": "Избягвайте последователности",
+            "recentYears": "Избягвайте скорошни години",
+            "associatedYears": "Избягвайте години свързани с вас",
+            "dates": "Избягвайте дати и години свързани с вас",
+            "capitalization": "Главни букви не помагат много",
+            "allUppercase": "Само главни букви е почти толкова лесно за познаване колкото само малки",
+            "reverseWords": "Разбъркани думи не са много по-трудни за познаване",
+            "l33t": "Предвидими замествания (като '@' вместо 'a') не помагат много",
+            "anotherWord": "Добавете една или няколко други думи. Рядко срещаните думи са по-добри."
+        },
+        "warnings": {
+            "simpleRepeat": "Повторения като \"aaa\" са лесни за познаване",
+            "extendedRepeat": "Повторения като \"abcabcabc\" са само малко по-трудни за познаване от \"abc\"",
+            "sequences": "Последователности като abc и 6543 са лесни за познаване",
+            "recentYears": "Близките години са лесни за познаване",
+            "dates": "Датите често са лесни за познаване",
+            "topTen": "Тази парола е в топ 10 на често срещаните пароли",
+            "topHundred": "Тази парола е в топ 100 на често срещаните пароли",
+            "common": "Тази парола е много често срещана",
+            "similarToCommon": "Тази парола е подобна на често срещана такава",
+            "wordByItself": "Единични думи се отгатват лесно",
+            "namesByThemselves": "Имена и фамилии сами по себе си са лесни за отгатване",
+            "commonNames": "Често срещани имена и фамилии са лесни за отгатване",
+            "straightRow": "Клавиши от прави редици са лесни за отгатване",
+            "keyPattern": "Къси клавиатурни последователности са лесни за отгатване"
+        }
+    },
+    "update": {
+        "see_changes_button": "Какво ново?",
+        "release_notes_toast_title": "Какво ново",
+        "toast_title": "Обнови %(brand)s",
+        "toast_description": "Налична е нова версия на %(brand)s"
+    },
+    "labs_mjolnir": {
+        "room_name": "Моя списък с блокирания",
+        "room_topic": "Това е списък с хора/сървъри, които сте блокирали - не напускайте стаята!"
+    },
     "create_space": {
         "name_required": "Моля, въведете име на пространството",
         "public_description": "Открийте пространство за всеки, най-добро за общности",
@@ -2255,15 +2271,5 @@
         "public_heading": "Вашето публично пространство",
         "private_heading": "Вашето лично пространство",
         "add_details_prompt": "Добавете някои подробности, за да помогнете на хората да го разпознаят."
-    },
-    "labs_mjolnir": {
-        "room_name": "Моя списък с блокирания",
-        "room_topic": "Това е списък с хора/сървъри, които сте блокирали - не напускайте стаята!"
-    },
-    "update": {
-        "see_changes_button": "Какво ново?",
-        "release_notes_toast_title": "Какво ново",
-        "toast_title": "Обнови %(brand)s",
-        "toast_description": "Налична е нова версия на %(brand)s"
     }
 }

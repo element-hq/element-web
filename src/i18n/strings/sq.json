@@ -345,31 +345,6 @@
     "No backup found!": "S’u gjet kopjeruajtje!",
     "Failed to decrypt %(failedCount)s sessions!": "S’u arrit të shfshehtëzohet sesioni %(failedCount)s!",
     "Invalid homeserver discovery response": "Përgjigje e pavlefshme zbulimi shërbyesi Home",
-    "Use a few words, avoid common phrases": "Përdorni ca fjalë, shmangni fraza të rëndomta",
-    "No need for symbols, digits, or uppercase letters": "S’ka nevojë për simbole, shifra apo shkronja të mëdha",
-    "Use a longer keyboard pattern with more turns": "Përdorni një rregullsi më të gjatë tastiere, me më tepër kthesa",
-    "Avoid repeated words and characters": "Shmangi përsëritje fjalësh dhe përsëritje shkronjash",
-    "Avoid sequences": "Shmangi togfjalësha",
-    "Avoid recent years": "Shmangni vitet e fundit",
-    "Avoid years that are associated with you": "Shmangni vite që kanë lidhje me ju",
-    "Avoid dates and years that are associated with you": "Shmangni data dhe vite që kanë lidhje me ju",
-    "Capitalization doesn't help very much": "Shkrimi i shkronjës së parë me të madhe nuk ndihmon kushedi çë",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Fjalë shkruar krejt me të mëdha janë thuajse po aq të lehta për t’i hamendësuar sa ato me krejt të vogla",
-    "Reversed words aren't much harder to guess": "Fjalët së prapthi s’janë të vështira për t’i marrë me mend",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Zëvendësime të parashikueshme, të tilla si '@', në vend të 'a', nuk ndihmojnë kushedi çë",
-    "Add another word or two. Uncommon words are better.": "Shtoni një a dy fjalë të tjera. Fjalë jo të rëndomta janë më të përshtatshme.",
-    "Repeats like \"aaa\" are easy to guess": "Përsëritje të tilla si \"aaa\" janë të lehta për t’u hamendësuar",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Përsëritje të tilla si \"abcabcabc\" janë vetëm pak më të vështira për t’u hamendësuar se sa \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Sekuenca të tilla si abc ose 6543 janë të lehta për t’u hamendsuar",
-    "Recent years are easy to guess": "Vitet tani afër janë të lehtë për t’u hamendësuar",
-    "Dates are often easy to guess": "Datat shpesh janë të lehta për t’i gjetur",
-    "This is a top-10 common password": "Ky fjalëkalim është nga 10 më të rëndomtët",
-    "This is a top-100 common password": "Ky fjalëkalim është nga 100 më të rëndomtët",
-    "This is a very common password": "Ky është një fjalëkalim shumë i rëndomtë",
-    "This is similar to a commonly used password": "Ky është i ngjashëm me një fjalëkalim të përdorur rëndom",
-    "A word by itself is easy to guess": "Një fjalë më vete është e lehtë të hamendësohet",
-    "Names and surnames by themselves are easy to guess": "Emrat dhe mbiemrat në vetvete janë të lehtë për t’i hamendësuar",
-    "Common names and surnames are easy to guess": "Emra dhe mbiemra të rëndomtë janë të kollajtë për t’u hamendësuar",
     "You do not have permission to invite people to this room.": "S’keni leje të ftoni njerëz në këtë dhomë.",
     "Unknown server error": "Gabim i panjohur shërbyesi",
     "Set up": "Rregulloje",
@@ -378,8 +353,6 @@
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Nëse metodën e re të rimarrjeve s’e keni caktuar ju, dikush mund të jetë duke u rrekur të hyjë në llogarinë tuaj. Ndryshoni menjëherë fjalëkalimin e llogarisë tuaj, te Rregullimet, dhe caktoni një metodë të re rimarrjesh.",
     "Set up Secure Messages": "Rregulloni Mesazhi të Sigurt",
     "Go to Settings": "Kalo te Rregullimet",
-    "Straight rows of keys are easy to guess": "Rreshta uniformë tastesh janë lehtësisht të hamendësueshëm",
-    "Short keyboard patterns are easy to guess": "Kombinime të shkurtra tastiere janë lehtësisht të hamendësueshme",
     "Unable to load commit detail: %(msg)s": "S’arrihet të ngarkohen hollësi depozitimi: %(msg)s",
     "Unrecognised address": "Adresë jo e pranuar",
     "The following users may not exist": "Përdoruesit vijues mund të mos ekzistojnë",
@@ -2500,11 +2473,11 @@
         "integration_manager": "Përgjegjës integrimesh",
         "qr_code": "Kod QR",
         "feedback": "Mendime",
-        "all_rooms": "Krejt dhomat",
-        "orphan_rooms": "Dhoma të tjera",
         "preview_message": "Hej, ju. S’u ka kush shokun!",
+        "orphan_rooms": "Dhoma të tjera",
         "on": "On",
-        "off": "Off"
+        "off": "Off",
+        "all_rooms": "Krejt dhomat"
     },
     "action": {
         "continue": "Vazhdo",
@@ -2604,8 +2577,8 @@
         "submit": "Parashtroje",
         "send_report": "Dërgoje njoftimin",
         "clear": "Spastroje",
-        "enter_fullscreen": "Kalo në mënyrën “Sa krejt ekrani”",
-        "exit_fullscreeen": "Dil nga mënyra “Sa krejt ekrani”"
+        "exit_fullscreeen": "Dil nga mënyra “Sa krejt ekrani”",
+        "enter_fullscreen": "Kalo në mënyrën “Sa krejt ekrani”"
     },
     "a11y": {
         "user_menu": "Menu përdoruesi",
@@ -2672,11 +2645,11 @@
         "leave_beta": "Braktiseni beta-n",
         "join_beta": "Merrni pjesë te beta",
         "voice_broadcast_force_small_chunks": "Detyro gjatësi copëzash transmetimi zanor prej 15s",
-        "automatic_debug_logs": "Me çdo gabim, dërgo automatikisht regjistra diagnostikimi",
-        "automatic_debug_logs_decryption": "Dërgo automatikisht regjistra diagnostikimi, gjatë gabimesh shfshehtëzimi",
-        "automatic_debug_logs_key_backup": "Dërgo automatikisht regjistra diagnostikimi, kur kopjeruajtja e kyçeve nuk funksionon",
+        "sliding_sync_disabled_notice": "Që të çaktivizohet, dilni dhe rihyni në llogari",
         "rust_crypto_disabled_notice": "Aktualisht mund të aktivizohet vetëm përmes config.json-it",
-        "sliding_sync_disabled_notice": "Që të çaktivizohet, dilni dhe rihyni në llogari"
+        "automatic_debug_logs_key_backup": "Dërgo automatikisht regjistra diagnostikimi, kur kopjeruajtja e kyçeve nuk funksionon",
+        "automatic_debug_logs_decryption": "Dërgo automatikisht regjistra diagnostikimi, gjatë gabimesh shfshehtëzimi",
+        "automatic_debug_logs": "Me çdo gabim, dërgo automatikisht regjistra diagnostikimi"
     },
     "keyboard": {
         "home": "Kreu",
@@ -2964,15 +2937,25 @@
             "timeline_image_size": "Madhësi figure në rrjedhën kohore",
             "timeline_image_size_default": "Parazgjedhje",
             "timeline_image_size_large": "E madhe",
-            "custom_font_size": "Përdor madhësi vetjake",
+            "image_size_large": "E madhe",
+            "image_size_default": "Parazgjedhje",
+            "font_size_valid": "Përdor me %(min)s pt dhe %(max)s pt",
             "font_size_nan": "Madhësia duhet të jetë një numër",
             "font_size_limit": "Madhësia vetjake për shkronjat mund të jetë vetëm mes vlerave %(min)s pt dhe %(max)s pt",
-            "font_size_valid": "Përdor me %(min)s pt dhe %(max)s pt",
-            "image_size_default": "Parazgjedhje",
-            "image_size_large": "E madhe"
+            "custom_font_size": "Përdor madhësi vetjake"
         },
         "inline_url_previews_room_account": "Aktivizo paraparje URL-sh për këtë dhomë (prek vetëm ju)",
         "inline_url_previews_room": "Aktivizo, si parazgjedhje, paraparje URL-sh për pjesëmarrësit në këtë dhomë",
+        "voip": {
+            "mirror_local_feed": "Pasqyro prurje vendore videoje",
+            "allow_p2p": "Lejo Peer-to-Peer për thirrje tek për tek",
+            "allow_p2p_description": "Kur aktivizohet, pala tjetër mund të jetë në gjendje të shohë adresën tuaj IP",
+            "auto_gain_control": "Kontroll i automatizuar gain-i",
+            "echo_cancellation": "Anulim jehonash",
+            "noise_suppression": "Mbytje zhurmash",
+            "enable_fallback_ice_server_description": "Vlen vetëm nëse shërbyes juaj Home nuk ofron një të tillë. Adresa juaj IP mund t’u zbulohet të tjerëve gjatë thirrjes."
+        },
+        "send_read_receipts_unsupported": "Shërbyesi juaj nuk mbulon çaktivizimin e dërgimit të dëftesave të leximit.",
         "security": {
             "message_search_disable_warning": "Në u çaktivizoftë, mesazhet prej dhomash të fshehtëzuara s’do të duken në përfundime kërkimi.",
             "message_search_indexing_idle": "Pa indeksuar aktualisht mesazhe nga ndonjë dhomë.",
@@ -3010,16 +2993,6 @@
             "always_show_menu_bar": "Shfaqe përherë shtyllën e menusë së dritares",
             "enable_tray_icon": "Shfaq ikonë paneli dhe minimizo dritaren në të, kur bëhet mbyllje",
             "enable_hardware_acceleration": "Aktivizo përshpejtim hardware"
-        },
-        "send_read_receipts_unsupported": "Shërbyesi juaj nuk mbulon çaktivizimin e dërgimit të dëftesave të leximit.",
-        "voip": {
-            "mirror_local_feed": "Pasqyro prurje vendore videoje",
-            "allow_p2p": "Lejo Peer-to-Peer për thirrje tek për tek",
-            "allow_p2p_description": "Kur aktivizohet, pala tjetër mund të jetë në gjendje të shohë adresën tuaj IP",
-            "auto_gain_control": "Kontroll i automatizuar gain-i",
-            "echo_cancellation": "Anulim jehonash",
-            "noise_suppression": "Mbytje zhurmash",
-            "enable_fallback_ice_server_description": "Vlen vetëm nëse shërbyes juaj Home nuk ofron një të tillë. Adresa juaj IP mund t’u zbulohet të tjerëve gjatë thirrjes."
         },
         "keyboard": {
             "title": "Tastierë"
@@ -3111,11 +3084,11 @@
         "category_room": "Dhomë",
         "category_other": "Tjetër",
         "widget_screenshots": "Aktivizo foto ekrani widget-esh për widget-e që e mbulojnë",
+        "title": "Mjete zhvilluesi",
         "show_hidden_events": "Shfaq te rrjedha kohore veprimtari të fshehura",
-        "low_bandwidth_mode": "Mënyra gjerësi e ulët bande",
         "low_bandwidth_mode_description": "Lyp shërbyes Home të përputhshëm.",
-        "developer_mode": "Mënyra zhvillues",
-        "title": "Mjete zhvilluesi"
+        "low_bandwidth_mode": "Mënyra gjerësi e ulët bande",
+        "developer_mode": "Mënyra zhvillues"
     },
     "export_chat": {
         "html": "HTML",
@@ -3481,22 +3454,22 @@
         "no_permission_messages_before_join": "S’keni leje të shihni mesazhe nga koha para se të merrnit pjesë.",
         "encrypted_historical_messages_unavailable": "S’mund të kihen më mesazhe të fshehtëzuar para kësaj pike.",
         "historical_messages_unavailable": "S’mund të shihni mesazhe më të hershëm",
-        "io.element.voice_broadcast_info": {
-            "you": "Përfunduat një <a>transmetim zanor</a>",
-            "user": "%(senderName)s përfundoi një <a>transmetim zanor</a>"
+        "redacted": {
+            "tooltip": "Mesazh i fshirë më %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s reagoi me %(content)s",
             "tooltip": "<reactors/><reactedWith>reagoi me %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Mesazh i fshirë më %(date)s"
         },
         "m.room.create": {
             "continuation": "Kjo dhomë është një vazhdim i një bisede tjetër.",
             "unknown_predecessor_guess_server": "S’gjendet dot versioni i vjetër i kësaj dhome (ID dhome: %(roomId)s) dhe s’na është dhënë “via_servers” që të shohim për të. Ka mundësi që hamendësimi i shërbyesit prej ID-së së dhomës të funksionojë. Nëse doni të provoni, klikoni këtë lidhje:",
             "unknown_predecessor": "S’gjendet dot versioni i vjetër i kësaj dhome (ID dhome: %(roomId)s) dhe s’na është dhënë “via_servers” që të shohim për të.",
             "see_older_messages": "Klikoni këtu për të parë mesazhe më të vjetër."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Përfunduat një <a>transmetim zanor</a>",
+            "user": "%(senderName)s përfundoi një <a>transmetim zanor</a>"
         }
     },
     "slash_command": {
@@ -3563,14 +3536,14 @@
         "failed_find_user": "S’u gjet përdorues në dhomë",
         "op": "Përcaktoni shkallë pushteti të një përdoruesi",
         "deop": "I heq cilësinë e operatorit përdoruesit me ID-në e dhënë",
-        "server_error": "Gabim shërbyesi",
-        "command_error": "Gabim urdhri",
-        "server_error_detail": "Shërbyesi është i pakapshëm, i mbingarkuar, ose diç tjetër shkoi ters.",
-        "unknown_command": "Urdhër i Panjohur",
-        "unknown_command_detail": "Urdhër Jo i Pranuar: %(commandText)s",
-        "unknown_command_help": "Mund të përdorni <code>/help</code> që të shfaqen urdhrat e gatshëm. Donit vërtet ta dërgoni këtë si një mesazh?",
         "unknown_command_hint": "Ndihmëz: Fillojeni mesazhin tuaj me <code>//</code> që të nisë me një pjerrake.",
-        "unknown_command_button": "Dërgoni një mesazh"
+        "unknown_command_help": "Mund të përdorni <code>/help</code> që të shfaqen urdhrat e gatshëm. Donit vërtet ta dërgoni këtë si një mesazh?",
+        "unknown_command_detail": "Urdhër Jo i Pranuar: %(commandText)s",
+        "unknown_command_button": "Dërgoni një mesazh",
+        "unknown_command": "Urdhër i Panjohur",
+        "server_error_detail": "Shërbyesi është i pakapshëm, i mbingarkuar, ose diç tjetër shkoi ters.",
+        "server_error": "Gabim shërbyesi",
+        "command_error": "Gabim urdhri"
     },
     "presence": {
         "busy": "I zënë",
@@ -3814,8 +3787,8 @@
         "server_picker_custom": "Tjetër shërbyes home",
         "server_picker_explainer": "Përdorni shërbyesin tuaj Home të parapëlqyer Matrix, nëse keni një të tillë, ose strehoni një tuajin.",
         "server_picker_learn_more": "Mbi shërbyesit Home",
-        "account_deactivated": "Kjo llogari është çaktivizuar.",
-        "incorrect_credentials": "Emër përdoruesi dhe/ose fjalëkalim i pasaktë."
+        "incorrect_credentials": "Emër përdoruesi dhe/ose fjalëkalim i pasaktë.",
+        "account_deactivated": "Kjo llogari është çaktivizuar."
     },
     "room_list": {
         "sort_unread_first": "Së pari shfaq dhoma me mesazhe të palexuar",
@@ -3946,6 +3919,106 @@
         "existing_issue_link": "Ju lutemi, shihni <existingIssuesLink>të meta ekzistuese në Github</existingIssuesLink> së pari. S’ka përputhje? <newIssueLink>Nisni një të re</newIssueLink>.",
         "send_feedback_action": "Dërgoni përshtypjet"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Përdorni ca fjalë, shmangni fraza të rëndomta",
+            "noNeed": "S’ka nevojë për simbole, shifra apo shkronja të mëdha",
+            "longerKeyboardPattern": "Përdorni një rregullsi më të gjatë tastiere, me më tepër kthesa",
+            "repeated": "Shmangi përsëritje fjalësh dhe përsëritje shkronjash",
+            "sequences": "Shmangi togfjalësha",
+            "recentYears": "Shmangni vitet e fundit",
+            "associatedYears": "Shmangni vite që kanë lidhje me ju",
+            "dates": "Shmangni data dhe vite që kanë lidhje me ju",
+            "capitalization": "Shkrimi i shkronjës së parë me të madhe nuk ndihmon kushedi çë",
+            "allUppercase": "Fjalë shkruar krejt me të mëdha janë thuajse po aq të lehta për t’i hamendësuar sa ato me krejt të vogla",
+            "reverseWords": "Fjalët së prapthi s’janë të vështira për t’i marrë me mend",
+            "l33t": "Zëvendësime të parashikueshme, të tilla si '@', në vend të 'a', nuk ndihmojnë kushedi çë",
+            "anotherWord": "Shtoni një a dy fjalë të tjera. Fjalë jo të rëndomta janë më të përshtatshme."
+        },
+        "warnings": {
+            "simpleRepeat": "Përsëritje të tilla si \"aaa\" janë të lehta për t’u hamendësuar",
+            "extendedRepeat": "Përsëritje të tilla si \"abcabcabc\" janë vetëm pak më të vështira për t’u hamendësuar se sa \"abc\"",
+            "sequences": "Sekuenca të tilla si abc ose 6543 janë të lehta për t’u hamendsuar",
+            "recentYears": "Vitet tani afër janë të lehtë për t’u hamendësuar",
+            "dates": "Datat shpesh janë të lehta për t’i gjetur",
+            "topTen": "Ky fjalëkalim është nga 10 më të rëndomtët",
+            "topHundred": "Ky fjalëkalim është nga 100 më të rëndomtët",
+            "common": "Ky është një fjalëkalim shumë i rëndomtë",
+            "similarToCommon": "Ky është i ngjashëm me një fjalëkalim të përdorur rëndom",
+            "wordByItself": "Një fjalë më vete është e lehtë të hamendësohet",
+            "namesByThemselves": "Emrat dhe mbiemrat në vetvete janë të lehtë për t’i hamendësuar",
+            "commonNames": "Emra dhe mbiemra të rëndomtë janë të kollajtë për t’u hamendësuar",
+            "straightRow": "Rreshta uniformë tastesh janë lehtësisht të hamendësueshëm",
+            "keyPattern": "Kombinime të shkurtra tastiere janë lehtësisht të hamendësueshme"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "S’niset dot një transmetim zanor i ri",
+        "failed_insufficient_permission_title": "S’niset dot një transmetim zanor i ri",
+        "failed_others_already_recording_title": "S’niset dot një transmetim zanor i ri",
+        "failed_already_recording_description": "Po incizoni tashmë një transmetim zanor. Ju lutemi, që të nisni një të ri, përfundoni transmetimin tuaj zanor të tanishëm.",
+        "failed_insufficient_permission_description": "S’keni lejet e domosdoshme që të nisni një transmetim zanor në këtë dhomë. Lidhuni me një përgjegjës dhome që të përmirësoni lejet tuaja.",
+        "failed_others_already_recording_description": "Dikush tjetër është duke incizuar një transmetim zanor. Që të nisni një të ri, prisni të përfundojë incizimi zanor i tij.",
+        "failed_no_connection_title": "Gabim lidhjeje",
+        "failed_no_connection_description": "Mjerisht, s’qemë në gjendje të nisnim tani një regjistrim. Ju lutemi, riprovoni më vonë.",
+        "failed_decrypt": "S’arrihet të shfshehtëzohet transmetim zanor",
+        "failed_generic": "S’arrihet të luhet ky transmetim zanor",
+        "confirm_stop_title": "Të ndalet transmetimi i drejtpërdrejtë?",
+        "confirm_stop_description": "Jeni i sigurt se doni të ndalet transmetimi juaj i drejtpërdrejtë? Kjo do të përfundojë transmetimin dhe regjistrimi i plotë do të jetë i passhëm te dhoma.",
+        "confirm_stop_affirm": "Po, ndale transmetimin zanor",
+        "confirm_listen_title": "Të dëgjohet te transmetimi i drejtpërdrejtë?",
+        "confirm_listen_description": "Nëse filloni të dëgjoni te ky transmetim i drejtpërdrejtë, regjistrimi juaj i tanishëm i një transmetimi të drejtpërdrejtë do të përfundojë.",
+        "confirm_listen_affirm": "Po, përfundoje regjistrimin tim",
+        "30s_backward": "30s mbrapsht",
+        "30s_forward": "30s përpara",
+        "resume": "vazhdo transmetim zanor",
+        "pause": "ndal transmetim zanor",
+        "play": "luaj transmetim zanor",
+        "connection_error": "Gabim lidhjeje - Regjistrimi u ndal"
+    },
+    "update": {
+        "see_changes_button": "Ç’ka të re?",
+        "release_notes_toast_title": "Ç’ka të Re",
+        "toast_title": "Përditësoni %(brand)s",
+        "toast_description": "Ka gati një version të ri të %(brand)s"
+    },
+    "threads": {
+        "all_threads": "Krejt rrjedhat",
+        "all_threads_description": "Shfaq krejt rrjedhat në dhomën e tanishme",
+        "my_threads": "Rrjedhat e mia",
+        "my_threads_description": "Shfaq krejt rrjedhat ku keni marrë pjesë",
+        "show_thread_filter": "Shfaq:",
+        "empty_has_threads_tip": "Përgjigjuni te një rrjedhë në zhvillim e sipër, ose përdorni “%(replyInThread)s”, kur kalohet kursori sipër një mesazhi për të filluar një të re.",
+        "show_all_threads": "Shfaqi krejt rrjedhat",
+        "empty_explainer": "Rrjedhat ndihmojnë që të mbahen bisedat tuaja brenda temës dhe të ndiqen kollaj.",
+        "empty_tip": "<b>Ndihmëz:</b> Përdorni “%(replyInThread)s”, teksa kaloni kursorin sipër një mesazhi.",
+        "empty_heading": "Mbajini diskutimet të sistemuara në rrjedha"
+    },
+    "theme": {
+        "light_high_contrast": "Kontrast i fortë drite"
+    },
+    "space": {
+        "landing_welcome": "Mirë se vini te <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Ky shërbyes Home s’është formësuar të shfaqë harta.",
+        "WebGLNotEnabled": "WebGL është i domosdoshëm për shfaqje hartash, ju lutemi, aktivizojeni te rregullimet e shfletuesit tuaj.",
+        "MapStyleUrlNotReachable": "Ky shërbyes Home s’është formësuar saktë për të shfaqur harta, ose shërbyesi i formësuar për harta mund të jetë i pakapshëm.",
+        "toggle_attribution": "Shfaq/fshih atribut",
+        "find_my_location": "Gjej vendndodhjen time",
+        "location_not_available": "S’ka vendndodhje",
+        "mapbox_logo": "Stemë Mapbox",
+        "failed_permission": "%(brand)s iu mohua leja për të sjellë vendndodhjen tuaj. Ju lutemi, lejoni përdorim vendndodhjeje, te rregullimet e shfletuesit tuaj.",
+        "failed_generic": "S’u arrit të sillet vendndodhja juaj. Ju lutemi, riprovoni më vonë.",
+        "failed_timeout": "Mbaroi koha duke provuar të sillet vendndodhja juaj. Ju lutemi, riprovoni më vonë.",
+        "failed_unknown": "Gabim i panjohur në sjelljen e vendndodhjes. Ju lutemi, riprovoni më vonë.",
+        "expand_map": "Zgjeroje hartën",
+        "failed_load_map": "S’arrihet të ngarkohet hartë"
+    },
+    "labs_mjolnir": {
+        "room_name": "Lista Ime e Dëbimeve",
+        "room_topic": "Kjo është lista juaj e përdoruesve/shërbyesve që keni bllokuar - mos dilni nga dhoma!"
+    },
     "create_space": {
         "name_required": "Ju lutemi, jepni një emër për hapësirën",
         "name_placeholder": "p.sh., hapësira-ime",
@@ -3980,72 +4053,5 @@
         "setup_rooms_description": "Mund të shtoni edhe të tjera më vonë, përfshi ato ekzistueset tashmë.",
         "setup_rooms_private_heading": "Me cilat projekte po merret ekipi juaj?",
         "setup_rooms_private_description": "Do të krijojmë dhoma për çdo prej tyre."
-    },
-    "space": {
-        "landing_welcome": "Mirë se vini te <name/>"
-    },
-    "threads": {
-        "all_threads": "Krejt rrjedhat",
-        "all_threads_description": "Shfaq krejt rrjedhat në dhomën e tanishme",
-        "my_threads": "Rrjedhat e mia",
-        "my_threads_description": "Shfaq krejt rrjedhat ku keni marrë pjesë",
-        "show_thread_filter": "Shfaq:",
-        "empty_has_threads_tip": "Përgjigjuni te një rrjedhë në zhvillim e sipër, ose përdorni “%(replyInThread)s”, kur kalohet kursori sipër një mesazhi për të filluar një të re.",
-        "show_all_threads": "Shfaqi krejt rrjedhat",
-        "empty_explainer": "Rrjedhat ndihmojnë që të mbahen bisedat tuaja brenda temës dhe të ndiqen kollaj.",
-        "empty_tip": "<b>Ndihmëz:</b> Përdorni “%(replyInThread)s”, teksa kaloni kursorin sipër një mesazhi.",
-        "empty_heading": "Mbajini diskutimet të sistemuara në rrjedha"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Ky shërbyes Home s’është formësuar të shfaqë harta.",
-        "WebGLNotEnabled": "WebGL është i domosdoshëm për shfaqje hartash, ju lutemi, aktivizojeni te rregullimet e shfletuesit tuaj.",
-        "MapStyleUrlNotReachable": "Ky shërbyes Home s’është formësuar saktë për të shfaqur harta, ose shërbyesi i formësuar për harta mund të jetë i pakapshëm.",
-        "toggle_attribution": "Shfaq/fshih atribut",
-        "find_my_location": "Gjej vendndodhjen time",
-        "location_not_available": "S’ka vendndodhje",
-        "mapbox_logo": "Stemë Mapbox",
-        "failed_permission": "%(brand)s iu mohua leja për të sjellë vendndodhjen tuaj. Ju lutemi, lejoni përdorim vendndodhjeje, te rregullimet e shfletuesit tuaj.",
-        "failed_generic": "S’u arrit të sillet vendndodhja juaj. Ju lutemi, riprovoni më vonë.",
-        "failed_timeout": "Mbaroi koha duke provuar të sillet vendndodhja juaj. Ju lutemi, riprovoni më vonë.",
-        "failed_unknown": "Gabim i panjohur në sjelljen e vendndodhjes. Ju lutemi, riprovoni më vonë.",
-        "expand_map": "Zgjeroje hartën",
-        "failed_load_map": "S’arrihet të ngarkohet hartë"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "S’niset dot një transmetim zanor i ri",
-        "failed_insufficient_permission_title": "S’niset dot një transmetim zanor i ri",
-        "failed_others_already_recording_title": "S’niset dot një transmetim zanor i ri",
-        "failed_already_recording_description": "Po incizoni tashmë një transmetim zanor. Ju lutemi, që të nisni një të ri, përfundoni transmetimin tuaj zanor të tanishëm.",
-        "failed_insufficient_permission_description": "S’keni lejet e domosdoshme që të nisni një transmetim zanor në këtë dhomë. Lidhuni me një përgjegjës dhome që të përmirësoni lejet tuaja.",
-        "failed_others_already_recording_description": "Dikush tjetër është duke incizuar një transmetim zanor. Që të nisni një të ri, prisni të përfundojë incizimi zanor i tij.",
-        "failed_no_connection_title": "Gabim lidhjeje",
-        "failed_no_connection_description": "Mjerisht, s’qemë në gjendje të nisnim tani një regjistrim. Ju lutemi, riprovoni më vonë.",
-        "failed_decrypt": "S’arrihet të shfshehtëzohet transmetim zanor",
-        "failed_generic": "S’arrihet të luhet ky transmetim zanor",
-        "confirm_stop_title": "Të ndalet transmetimi i drejtpërdrejtë?",
-        "confirm_stop_description": "Jeni i sigurt se doni të ndalet transmetimi juaj i drejtpërdrejtë? Kjo do të përfundojë transmetimin dhe regjistrimi i plotë do të jetë i passhëm te dhoma.",
-        "confirm_stop_affirm": "Po, ndale transmetimin zanor",
-        "confirm_listen_title": "Të dëgjohet te transmetimi i drejtpërdrejtë?",
-        "confirm_listen_description": "Nëse filloni të dëgjoni te ky transmetim i drejtpërdrejtë, regjistrimi juaj i tanishëm i një transmetimi të drejtpërdrejtë do të përfundojë.",
-        "confirm_listen_affirm": "Po, përfundoje regjistrimin tim",
-        "30s_backward": "30s mbrapsht",
-        "30s_forward": "30s përpara",
-        "resume": "vazhdo transmetim zanor",
-        "pause": "ndal transmetim zanor",
-        "play": "luaj transmetim zanor",
-        "connection_error": "Gabim lidhjeje - Regjistrimi u ndal"
-    },
-    "labs_mjolnir": {
-        "room_name": "Lista Ime e Dëbimeve",
-        "room_topic": "Kjo është lista juaj e përdoruesve/shërbyesve që keni bllokuar - mos dilni nga dhoma!"
-    },
-    "theme": {
-        "light_high_contrast": "Kontrast i fortë drite"
-    },
-    "update": {
-        "see_changes_button": "Ç’ka të re?",
-        "release_notes_toast_title": "Ç’ka të Re",
-        "toast_title": "Përditësoni %(brand)s",
-        "toast_description": "Ka gati një version të ri të %(brand)s"
     }
 }

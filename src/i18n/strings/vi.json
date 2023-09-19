@@ -90,33 +90,6 @@
     "The user must be unbanned before they can be invited.": "Người dùng phải được gỡ cấm tham gia trước khi được mời.",
     "The user's homeserver does not support the version of the room.": "Phiên bản máy chủ nhà của người dùng không hỗ trợ phiên bản phòng này.",
     "Unknown server error": "Lỗi máy chủ không xác định",
-    "Use a few words, avoid common phrases": "Nhập vài từ, tránh những từ phổ thông",
-    "No need for symbols, digits, or uppercase letters": "Không cần nhập biểu tượng, số hoặc chữ in hoa",
-    "Use a longer keyboard pattern with more turns": "Sử dụng mẫu bàn phím dài hơn với nhiều lượt hơn",
-    "Avoid repeated words and characters": "Tránh nhập từ và ký tự lặp lại",
-    "Avoid sequences": "Tránh nhập chuỗi",
-    "Avoid recent years": "Tránh những năm gần đây",
-    "Avoid years that are associated with you": "Tránh nhập năm gắn liền với thông tin về bạn",
-    "Avoid dates and years that are associated with you": "Tránh tháng và năm gắn liền với thông tin của bạn",
-    "Capitalization doesn't help very much": "Nhập chữ hoa không thực sự hữu ích",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Tất cả chữ hoa cũng dễ đoán như tất cả chữ thường",
-    "Reversed words aren't much harder to guess": "Chữ đảo ngược cũng không quá khó đoán",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Ký tự thay thế dễ đoán như '@' thay vì 'a' cũng không thực sự hữu ích",
-    "Add another word or two. Uncommon words are better.": "Thêm một hoặc hai từ. Từ không phổ thông càng hữu ích.",
-    "Repeats like \"aaa\" are easy to guess": "Từ lặp lại như \"aaa\" là rất dễ đoán",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Ký tự \"abcabcabc\" chỉ hơi khó đoán hơn \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Chuỗi ký tự như abc hoặc 6543 là rất dễ đoán",
-    "Recent years are easy to guess": "Dùng những năm gần đây là rất dễ đoán",
-    "Dates are often easy to guess": "Ngày thường dễ đoán",
-    "This is a top-10 common password": "Đây là 1 trong 10 mật khẩu phổ biến",
-    "This is a top-100 common password": "Đây là 1 trong 100 mật khẩu phổ biến",
-    "This is a very common password": "Đây là một mật khẩu rất phổ biến",
-    "This is similar to a commonly used password": "Mật khẩu này tương tự mật khẩu phổ biến",
-    "A word by itself is easy to guess": "Một từ có nghĩa là rất dễ đoán",
-    "Names and surnames by themselves are easy to guess": "Tên và họ là rất dễ đoán",
-    "Common names and surnames are easy to guess": "Tên và họ phổ thông là rất dễ đoán",
-    "Straight rows of keys are easy to guess": "Hàng phím thẳng là rất dễ đoán",
-    "Short keyboard patterns are easy to guess": "Các mẫu bàn phím ngắn là rất dễ đoán",
     "Please contact your homeserver administrator.": "Vui lòng liên hệ quản trị viên homeserver của bạn.",
     "Explore rooms": "Khám phá các phòng",
     "Vietnam": "Việt Nam",
@@ -2371,11 +2344,11 @@
         "integration_manager": "Quản lý tích hợp",
         "qr_code": "Mã QR",
         "feedback": "Phản hồi",
-        "all_rooms": "Tất cả các phòng",
-        "orphan_rooms": "Các phòng khác",
         "preview_message": "Này bạn. Bạn là nhất!",
+        "orphan_rooms": "Các phòng khác",
         "on": "Bật",
-        "off": "Tắt"
+        "off": "Tắt",
+        "all_rooms": "Tất cả các phòng"
     },
     "action": {
         "continue": "Tiếp tục",
@@ -2476,8 +2449,8 @@
         "submit": "Xác nhận",
         "send_report": "Gửi báo cáo",
         "clear": "Xoá",
-        "enter_fullscreen": "Vào toàn màn hình",
-        "exit_fullscreeen": "Thoát toàn màn hình"
+        "exit_fullscreeen": "Thoát toàn màn hình",
+        "enter_fullscreen": "Vào toàn màn hình"
     },
     "a11y": {
         "user_menu": "Menu người dùng",
@@ -2550,11 +2523,11 @@
         "leave_beta": "Rời khỏi bản beta",
         "join_beta": "Tham gia phiên bản beta",
         "notification_settings_beta_title": "Cài đặt thông báo",
-        "automatic_debug_logs": "Tự động gửi debug log khi có bất kỳ lỗi nào",
-        "automatic_debug_logs_decryption": "Tự động gửi nhật ký gỡ lỗi mỗi lúc gặp lỗi khi giải mã",
-        "automatic_debug_logs_key_backup": "Tự động gửi nhật ký gỡ lỗi mỗi lúc sao lưu khóa không hoạt động",
+        "sliding_sync_disabled_notice": "Đăng xuất và đăng nhập lại để vô hiệu hóa",
         "rust_crypto_disabled_notice": "Hiện chỉ có thể bật bằng tập tin cấu hình config.json",
-        "sliding_sync_disabled_notice": "Đăng xuất và đăng nhập lại để vô hiệu hóa"
+        "automatic_debug_logs_key_backup": "Tự động gửi nhật ký gỡ lỗi mỗi lúc sao lưu khóa không hoạt động",
+        "automatic_debug_logs_decryption": "Tự động gửi nhật ký gỡ lỗi mỗi lúc gặp lỗi khi giải mã",
+        "automatic_debug_logs": "Tự động gửi debug log khi có bất kỳ lỗi nào"
     },
     "keyboard": {
         "home": "Nhà",
@@ -2818,15 +2791,26 @@
             "timeline_image_size": "Kích thước hình ảnh trong timeline",
             "timeline_image_size_default": "Mặc định",
             "timeline_image_size_large": "Lớn",
-            "custom_font_size": "Sử dụng kích thước tùy chỉnh",
+            "image_size_large": "Lớn",
+            "image_size_default": "Mặc định",
+            "font_size_valid": "Sử dụng từ khoảng %(min)s pt đến %(max)s pt",
             "font_size_nan": "Kích thước phải là một số",
             "font_size_limit": "Kích thước phông chữ tùy chỉnh chỉ có thể nằm trong khoảng từ %(min)s pt đến %(max)s pt",
-            "font_size_valid": "Sử dụng từ khoảng %(min)s pt đến %(max)s pt",
-            "image_size_default": "Mặc định",
-            "image_size_large": "Lớn"
+            "custom_font_size": "Sử dụng kích thước tùy chỉnh"
         },
         "inline_url_previews_room_account": "Bật xem trước nội dung liên kết trong phòng này (chỉ với bạn)",
         "inline_url_previews_room": "Bật xem trước nội dung liên kết cho mọi người trong phòng này",
+        "voip": {
+            "mirror_local_feed": "Lập đường dẫn video dự phòng",
+            "allow_p2p": "Cho phép cuộc gọi ngang hàng (P2P) cho các cuộc gọi 1:1",
+            "allow_p2p_description": "Khi bật, người kia có thể thấy địa chỉ IP của bạn",
+            "auto_gain_control": "Tự động chiếm quyền điều khiển",
+            "echo_cancellation": "Loại bỏ tiếng vang",
+            "noise_suppression": "Loại bỏ tạp âm",
+            "enable_fallback_ice_server": "Cho phép máy chủ hỗ trợ cuộc gọi dự phòng (%(server)s)",
+            "enable_fallback_ice_server_description": "Chỉ áp dụng nếu máy chủ nhà của bạn không cung cấp. Địa chỉ Internet (IP) của bạn có thể được chia sẻ trong một cuộc gọi."
+        },
+        "send_read_receipts_unsupported": "Máy chủ của bạn không hỗ trợ tắt gửi thông báo đã học.",
         "security": {
             "message_search_disable_warning": "Nếu bị tắt, tin nhắn từ các phòng được mã hóa sẽ không xuất hiện trong kết quả tìm kiếm.",
             "message_search_indexing_idle": "Hiện không lập chỉ mục tin nhắn cho bất kỳ phòng nào.",
@@ -2863,17 +2847,6 @@
             "always_show_menu_bar": "Luôn hiển thị thanh menu cửa sổ",
             "enable_tray_icon": "Hiển thị biểu tượng khay và thu nhỏ cửa sổ vào nó khi đóng",
             "enable_hardware_acceleration": "Bật tăng tốc phần cứng"
-        },
-        "send_read_receipts_unsupported": "Máy chủ của bạn không hỗ trợ tắt gửi thông báo đã học.",
-        "voip": {
-            "mirror_local_feed": "Lập đường dẫn video dự phòng",
-            "allow_p2p": "Cho phép cuộc gọi ngang hàng (P2P) cho các cuộc gọi 1:1",
-            "allow_p2p_description": "Khi bật, người kia có thể thấy địa chỉ IP của bạn",
-            "auto_gain_control": "Tự động chiếm quyền điều khiển",
-            "echo_cancellation": "Loại bỏ tiếng vang",
-            "noise_suppression": "Loại bỏ tạp âm",
-            "enable_fallback_ice_server": "Cho phép máy chủ hỗ trợ cuộc gọi dự phòng (%(server)s)",
-            "enable_fallback_ice_server_description": "Chỉ áp dụng nếu máy chủ nhà của bạn không cung cấp. Địa chỉ Internet (IP) của bạn có thể được chia sẻ trong một cuộc gọi."
         },
         "keyboard": {
             "title": "Bàn phím"
@@ -2932,11 +2905,11 @@
         "category_room": "Phòng",
         "category_other": "Khác",
         "widget_screenshots": "Bật widget chụp màn hình cho các widget có hỗ trợ",
+        "title": "Công cụ phát triển",
         "show_hidden_events": "Hiện các sự kiện ẩn trong dòng thời gian",
-        "low_bandwidth_mode": "Chế độ băng thông thấp",
         "low_bandwidth_mode_description": "Cần máy chủ nhà tương thích.",
-        "developer_mode": "Chế độ nhà phát triển",
-        "title": "Công cụ phát triển"
+        "low_bandwidth_mode": "Chế độ băng thông thấp",
+        "developer_mode": "Chế độ nhà phát triển"
     },
     "export_chat": {
         "html": "HTML",
@@ -3300,20 +3273,20 @@
         "no_permission_messages_before_join": "Bạn không có quyền xem tin nhắn trước lúc bạn tham gia.",
         "encrypted_historical_messages_unavailable": "Các tin nhắn được mã hóa trước thời điểm này không có sẵn.",
         "historical_messages_unavailable": "Bạn khồng thể thấy các tin nhắn trước",
-        "io.element.voice_broadcast_info": {
-            "you": "Bạn đã kết thúc một <a>cuộc phát thanh</a>",
-            "user": "%(senderName)s đã kết thúc một <a>cuộc phát thanh</a>"
+        "redacted": {
+            "tooltip": "Tin nhắn đã bị xóa vào %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s đã phản hồi với %(content)s",
             "tooltip": "<reactors/><reactedWith>đã phản hồi với %(shortName)s</reactedWith>"
         },
-        "redacted": {
-            "tooltip": "Tin nhắn đã bị xóa vào %(date)s"
-        },
         "m.room.create": {
             "continuation": "Căn phòng này là sự tiếp nối của một cuộc trò chuyện khác.",
             "see_older_messages": "Bấm vào đây để xem các tin nhắn cũ hơn."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Bạn đã kết thúc một <a>cuộc phát thanh</a>",
+            "user": "%(senderName)s đã kết thúc một <a>cuộc phát thanh</a>"
         }
     },
     "slash_command": {
@@ -3383,14 +3356,14 @@
         "failed_find_user": "Không tìm thấy người dùng trong phòng",
         "op": "Xác định cấp độ quyền của một thành viên",
         "deop": "Deops user với id đã cho",
-        "server_error": "Lỗi máy chủ",
-        "command_error": "Lỗi lệnh",
-        "server_error_detail": "Máy chủ không khả dụng, quá tải hoặc có vấn đề gì khác.",
-        "unknown_command": "Lệnh không xác định",
-        "unknown_command_detail": "Lệnh không được công nhận: %(commandText)s",
-        "unknown_command_help": "Bạn có thể sử dụng <code>/help</code> để liệt kê các lệnh có sẵn. Ý của bạn là gửi cái này dưới dạng tin nhắn?",
         "unknown_command_hint": "Gợi ý: Bắt đầu thư của bạn bằng <code>//</code> để bắt đầu thư bằng dấu gạch chéo.",
-        "unknown_command_button": "Gửi dưới dạng tin nhắn"
+        "unknown_command_help": "Bạn có thể sử dụng <code>/help</code> để liệt kê các lệnh có sẵn. Ý của bạn là gửi cái này dưới dạng tin nhắn?",
+        "unknown_command_detail": "Lệnh không được công nhận: %(commandText)s",
+        "unknown_command_button": "Gửi dưới dạng tin nhắn",
+        "unknown_command": "Lệnh không xác định",
+        "server_error_detail": "Máy chủ không khả dụng, quá tải hoặc có vấn đề gì khác.",
+        "server_error": "Lỗi máy chủ",
+        "command_error": "Lỗi lệnh"
     },
     "presence": {
         "busy": "Bận",
@@ -3630,8 +3603,8 @@
         "server_picker_custom": "Máy chủ khác",
         "server_picker_explainer": "Sử dụng máy chủ Matrix ưa thích của bạn nếu bạn có, hoặc tự tạo máy chủ lưu trữ của riêng bạn.",
         "server_picker_learn_more": "Giới thiệu về các máy chủ",
-        "account_deactivated": "Tài khoản này đã bị vô hiệu hóa.",
-        "incorrect_credentials": "Tên người dùng và/hoặc mật khẩu không chính xác."
+        "incorrect_credentials": "Tên người dùng và/hoặc mật khẩu không chính xác.",
+        "account_deactivated": "Tài khoản này đã bị vô hiệu hóa."
     },
     "room_list": {
         "sort_unread_first": "Hiển thị các phòng có tin nhắn chưa đọc trước",
@@ -3758,6 +3731,107 @@
         "existing_issue_link": "Hãy xem các <existingIssuesLink>lỗi đã được phát hiện trên GitHub</existingIssuesLink> trước. Chưa ai từng gặp lỗi này? <newIssueLink>Báo lỗi mới</newIssueLink>.",
         "send_feedback_action": "Gửi phản hồi"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Nhập vài từ, tránh những từ phổ thông",
+            "noNeed": "Không cần nhập biểu tượng, số hoặc chữ in hoa",
+            "longerKeyboardPattern": "Sử dụng mẫu bàn phím dài hơn với nhiều lượt hơn",
+            "repeated": "Tránh nhập từ và ký tự lặp lại",
+            "sequences": "Tránh nhập chuỗi",
+            "recentYears": "Tránh những năm gần đây",
+            "associatedYears": "Tránh nhập năm gắn liền với thông tin về bạn",
+            "dates": "Tránh tháng và năm gắn liền với thông tin của bạn",
+            "capitalization": "Nhập chữ hoa không thực sự hữu ích",
+            "allUppercase": "Tất cả chữ hoa cũng dễ đoán như tất cả chữ thường",
+            "reverseWords": "Chữ đảo ngược cũng không quá khó đoán",
+            "l33t": "Ký tự thay thế dễ đoán như '@' thay vì 'a' cũng không thực sự hữu ích",
+            "anotherWord": "Thêm một hoặc hai từ. Từ không phổ thông càng hữu ích."
+        },
+        "warnings": {
+            "simpleRepeat": "Từ lặp lại như \"aaa\" là rất dễ đoán",
+            "extendedRepeat": "Ký tự \"abcabcabc\" chỉ hơi khó đoán hơn \"abc\"",
+            "sequences": "Chuỗi ký tự như abc hoặc 6543 là rất dễ đoán",
+            "recentYears": "Dùng những năm gần đây là rất dễ đoán",
+            "dates": "Ngày thường dễ đoán",
+            "topTen": "Đây là 1 trong 10 mật khẩu phổ biến",
+            "topHundred": "Đây là 1 trong 100 mật khẩu phổ biến",
+            "common": "Đây là một mật khẩu rất phổ biến",
+            "similarToCommon": "Mật khẩu này tương tự mật khẩu phổ biến",
+            "wordByItself": "Một từ có nghĩa là rất dễ đoán",
+            "namesByThemselves": "Tên và họ là rất dễ đoán",
+            "commonNames": "Tên và họ phổ thông là rất dễ đoán",
+            "straightRow": "Hàng phím thẳng là rất dễ đoán",
+            "keyPattern": "Các mẫu bàn phím ngắn là rất dễ đoán"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Không thể bắt đầu cuộc phát thanh mới",
+        "failed_insufficient_permission_title": "Không thể bắt đầu cuộc phát thanh mới",
+        "failed_others_already_recording_title": "Không thể bắt đầu cuộc phát thanh mới",
+        "failed_already_recording_description": "Bạn hiện đang ghi một cuộc phát thanh. Kết thúc phát thanh để thực hiện một cái mới.",
+        "failed_insufficient_permission_description": "Bạn không có quyền để phát thanh trong phòng này. Hỏi một quản trị viên của phòng để nâng quyền của bạn.",
+        "failed_others_already_recording_description": "Một người khác đang phát thanh. Hãy chờ cho đến khi họ ngừng rồi bạn mới bắt đầu phát thanh.",
+        "failed_no_connection_title": "Lỗi kết nối",
+        "failed_no_connection_description": "Thật không may là chúng tôi không thể bắt đầu ghi âm. Vui lòng thử lại.",
+        "failed_decrypt": "Không thể giải mã cuộc phát thanh",
+        "failed_generic": "Không thể nghe phát thanh",
+        "confirm_stop_title": "Ngừng phát thanh trực tiếp?",
+        "confirm_stop_description": "Bạn có chắc chắn muốn dừng phát sóng trực tiếp của mình không? Điều này sẽ kết thúc chương trình phát sóng và bản ghi đầy đủ sẽ có sẵn trong phòng.",
+        "confirm_stop_affirm": "Đúng rồi, dừng phát thanh",
+        "confirm_listen_title": "Nghe phát thanh trực tiếp không?",
+        "confirm_listen_description": "Nếu bạn bắt đầu nghe chương trình phát thanh trực tiếp này, quá trình ghi chương trình phát thanh trực tiếp hiện tại của bạn sẽ kết thúc.",
+        "confirm_listen_affirm": "Vâng, ngừng ghi âm tôi",
+        "30s_backward": "30 giây trước",
+        "30s_forward": "30 giây kế tiếp",
+        "go_live": "Phát trực tiếp",
+        "resume": "Tiếp tục phát thanh",
+        "pause": "Tạm dừng phát thanh",
+        "buffering": "Đang khởi tạo bộ đệm…",
+        "play": "nghe phát thanh",
+        "connection_error": "Lỗi kết nối - Đã tạm dừng ghi âm"
+    },
+    "update": {
+        "see_changes_button": "Có gì mới?",
+        "release_notes_toast_title": "Có gì mới",
+        "toast_title": "Cập nhật %(brand)s",
+        "toast_description": "Đã có phiên bản mới của %(brand)s"
+    },
+    "threads": {
+        "all_threads": "Tất cả chủ đề",
+        "all_threads_description": "Hiển thị tất cả chủ đề từ phòng hiện tại",
+        "my_threads": "Các chủ đề của tôi",
+        "my_threads_description": "Hiển thị tất cả các chủ đề bạn đã tham gia",
+        "show_thread_filter": "Hiển thị:",
+        "show_all_threads": "Hiển thị tất cả chủ đề",
+        "empty_heading": "Giữ các cuộc thảo luận được tổ chức với các chủ đề này"
+    },
+    "theme": {
+        "light_high_contrast": "Độ tương phản ánh sáng cao"
+    },
+    "space": {
+        "landing_welcome": "Chào mừng đến với <name />"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Homeserver này không được cấu hình để hiển thị bản đồ.",
+        "WebGLNotEnabled": "Cần WebGL để hiển thị bản đồ, bạn hãy bật lên trong trình duyệt.",
+        "MapStyleUrlNotReachable": "Homeserver này không được cấu hình để hiển thị bản đồ chính xác, hoặc máy chủ bản đồ được cấu hình không thể kết nối.",
+        "toggle_attribution": "Chuyển đổi thuộc tính",
+        "map_feedback": "Phản hồi bản đồ",
+        "find_my_location": "Tìm vị trí của tôi",
+        "location_not_available": "Vị trí không có",
+        "mapbox_logo": "Logo Mapbox",
+        "reset_bearing": "Đặt lại trục theo phương Bắc",
+        "failed_permission": "%(brand)s không được cho phép để tìm vị trí của bạn. Vui lòng cho phép truy cập vị trí trong cài đặt trình duyệt của bạn.",
+        "failed_generic": "Không tìm được vị trí của bạn. Hãy thử lại sau.",
+        "failed_timeout": "Tìm vị trí của bạn mất quá lâu. Hãy thử lại sau.",
+        "failed_unknown": "Lỗi không xác định khi tìm vị trí của bạn. Hãy thử lại sau.",
+        "expand_map": "Mở rộng bản đồ",
+        "failed_load_map": "Không thể tải bản đồ"
+    },
+    "labs_mjolnir": {
+        "room_name": "Danh sách Cấm của tôi",
+        "room_topic": "Đây là danh sách người dùng/máy chủ mà bạn đã chặn - đừng rời khỏi phòng!"
+    },
     "create_space": {
         "name_required": "Vui lòng nhập tên cho Space",
         "name_placeholder": "ví dụ như my-space",
@@ -3789,73 +3863,5 @@
         "setup_rooms_community_description": "Hãy tạo một phòng cho mỗi người trong số họ.",
         "setup_rooms_description": "Bạn cũng có thể thêm nhiều hơn sau, bao gồm cả những cái đã có.",
         "setup_rooms_private_heading": "Nhóm của bạn đang thực hiện các dự án nào?"
-    },
-    "space": {
-        "landing_welcome": "Chào mừng đến với <name />"
-    },
-    "threads": {
-        "all_threads": "Tất cả chủ đề",
-        "all_threads_description": "Hiển thị tất cả chủ đề từ phòng hiện tại",
-        "my_threads": "Các chủ đề của tôi",
-        "my_threads_description": "Hiển thị tất cả các chủ đề bạn đã tham gia",
-        "show_thread_filter": "Hiển thị:",
-        "show_all_threads": "Hiển thị tất cả chủ đề",
-        "empty_heading": "Giữ các cuộc thảo luận được tổ chức với các chủ đề này"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Homeserver này không được cấu hình để hiển thị bản đồ.",
-        "WebGLNotEnabled": "Cần WebGL để hiển thị bản đồ, bạn hãy bật lên trong trình duyệt.",
-        "MapStyleUrlNotReachable": "Homeserver này không được cấu hình để hiển thị bản đồ chính xác, hoặc máy chủ bản đồ được cấu hình không thể kết nối.",
-        "toggle_attribution": "Chuyển đổi thuộc tính",
-        "map_feedback": "Phản hồi bản đồ",
-        "find_my_location": "Tìm vị trí của tôi",
-        "location_not_available": "Vị trí không có",
-        "mapbox_logo": "Logo Mapbox",
-        "reset_bearing": "Đặt lại trục theo phương Bắc",
-        "failed_permission": "%(brand)s không được cho phép để tìm vị trí của bạn. Vui lòng cho phép truy cập vị trí trong cài đặt trình duyệt của bạn.",
-        "failed_generic": "Không tìm được vị trí của bạn. Hãy thử lại sau.",
-        "failed_timeout": "Tìm vị trí của bạn mất quá lâu. Hãy thử lại sau.",
-        "failed_unknown": "Lỗi không xác định khi tìm vị trí của bạn. Hãy thử lại sau.",
-        "expand_map": "Mở rộng bản đồ",
-        "failed_load_map": "Không thể tải bản đồ"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Không thể bắt đầu cuộc phát thanh mới",
-        "failed_insufficient_permission_title": "Không thể bắt đầu cuộc phát thanh mới",
-        "failed_others_already_recording_title": "Không thể bắt đầu cuộc phát thanh mới",
-        "failed_already_recording_description": "Bạn hiện đang ghi một cuộc phát thanh. Kết thúc phát thanh để thực hiện một cái mới.",
-        "failed_insufficient_permission_description": "Bạn không có quyền để phát thanh trong phòng này. Hỏi một quản trị viên của phòng để nâng quyền của bạn.",
-        "failed_others_already_recording_description": "Một người khác đang phát thanh. Hãy chờ cho đến khi họ ngừng rồi bạn mới bắt đầu phát thanh.",
-        "failed_no_connection_title": "Lỗi kết nối",
-        "failed_no_connection_description": "Thật không may là chúng tôi không thể bắt đầu ghi âm. Vui lòng thử lại.",
-        "failed_decrypt": "Không thể giải mã cuộc phát thanh",
-        "failed_generic": "Không thể nghe phát thanh",
-        "confirm_stop_title": "Ngừng phát thanh trực tiếp?",
-        "confirm_stop_description": "Bạn có chắc chắn muốn dừng phát sóng trực tiếp của mình không? Điều này sẽ kết thúc chương trình phát sóng và bản ghi đầy đủ sẽ có sẵn trong phòng.",
-        "confirm_stop_affirm": "Đúng rồi, dừng phát thanh",
-        "confirm_listen_title": "Nghe phát thanh trực tiếp không?",
-        "confirm_listen_description": "Nếu bạn bắt đầu nghe chương trình phát thanh trực tiếp này, quá trình ghi chương trình phát thanh trực tiếp hiện tại của bạn sẽ kết thúc.",
-        "confirm_listen_affirm": "Vâng, ngừng ghi âm tôi",
-        "30s_backward": "30 giây trước",
-        "30s_forward": "30 giây kế tiếp",
-        "go_live": "Phát trực tiếp",
-        "resume": "Tiếp tục phát thanh",
-        "pause": "Tạm dừng phát thanh",
-        "buffering": "Đang khởi tạo bộ đệm…",
-        "play": "nghe phát thanh",
-        "connection_error": "Lỗi kết nối - Đã tạm dừng ghi âm"
-    },
-    "labs_mjolnir": {
-        "room_name": "Danh sách Cấm của tôi",
-        "room_topic": "Đây là danh sách người dùng/máy chủ mà bạn đã chặn - đừng rời khỏi phòng!"
-    },
-    "theme": {
-        "light_high_contrast": "Độ tương phản ánh sáng cao"
-    },
-    "update": {
-        "see_changes_button": "Có gì mới?",
-        "release_notes_toast_title": "Có gì mới",
-        "toast_title": "Cập nhật %(brand)s",
-        "toast_description": "Đã có phiên bản mới của %(brand)s"
     }
 }

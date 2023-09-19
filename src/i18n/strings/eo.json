@@ -278,29 +278,6 @@
     "This homeserver has exceeded one of its resource limits.": "Tiu ĉi hejmservilo superis je unu el siaj rimedaj limoj.",
     "You do not have permission to invite people to this room.": "Vi ne havas permeson inviti personojn al la ĉambro.",
     "Unknown server error": "Nekonata servila eraro",
-    "Use a few words, avoid common phrases": "Uzu malmultajn vortojn, kaj evitu oftajn frazojn",
-    "Avoid repeated words and characters": "Evitu ripetadon de vortoj kaj signoj",
-    "Avoid sequences": "Evitu sinsekvojn",
-    "Avoid recent years": "Evitu freŝdatajn jarojn",
-    "Avoid years that are associated with you": "Evitu jarojn, kiuj ligiĝas al vi",
-    "Avoid dates and years that are associated with you": "Evitu datojn kaj jarojn, kiuj ligiĝas al vi",
-    "Capitalization doesn't help very much": "Majusklado ne helpas multe",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Plena majusklado estas preskaŭ same facile konjektebla kiel plena minusklado",
-    "Reversed words aren't much harder to guess": "Renversitaj vortoj ne estas multe pli malfacile konjekteblaj",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Facile diveneblaj anstataŭigoj, kiel '@' anstataŭ 'a', ne helpas multe",
-    "Add another word or two. Uncommon words are better.": "Aldonu alian vorton aŭ du. Maloftaj vortoj pli bonas.",
-    "Repeats like \"aaa\" are easy to guess": "Ripetoj kiel « aaa » estas facile diveneblaj",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Ripetoj kiel « abcabcabc » estas apenaŭ pli bonaj ol nur « abc »",
-    "Sequences like abc or 6543 are easy to guess": "Sinsekvoj kiel « abc » aŭ « 6543 » estas facile diveneblaj",
-    "Recent years are easy to guess": "Freŝdataj jaroj estas facile diveneblaj",
-    "Dates are often easy to guess": "Datoj estas ofte facile diveneblaj",
-    "This is a top-10 common password": "Ĉi tiu pasvorto estas inter la 10 plej oftaj",
-    "This is a top-100 common password": "Ĉi tiu pasvorto estas inter la 100 plej oftaj",
-    "This is a very common password": "Ĉi tiu pasvorto estas tre ofta",
-    "This is similar to a commonly used password": "Ĉi tiu pasvorto similas iun tre oftan",
-    "A word by itself is easy to guess": "Memstara vorto estas facile divenebla",
-    "Names and surnames by themselves are easy to guess": "Ankaŭ nomoj familiaj kaj individiuaj estas memstare facile diveneblaj",
-    "Common names and surnames are easy to guess": "Oftaj nomoj familiaj kaj individuaj estas facile diveneblaj",
     "Please contact your homeserver administrator.": "Bonvolu kontakti la administranton de via hejmservilo.",
     "Delete Backup": "Forigi savkopion",
     "Language and region": "Lingvo kaj regiono",
@@ -413,7 +390,6 @@
     "Unrecognised address": "Nerekonita adreso",
     "The user must be unbanned before they can be invited.": "Necesas malforbari ĉi tiun uzanton antaŭ ol ĝin inviti.",
     "The user's homeserver does not support the version of the room.": "Hejmservilo de ĉi tiu uzanto ne subtenas la version de la ĉambro.",
-    "No need for symbols, digits, or uppercase letters": "Ne necesas simboloj, ciferoj, aŭ majuskloj",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Sekuraj mesaĝoj kun ĉi tiu uzanto estas tutvoje ĉirfitaj kaj nelegeblaj al ceteruloj.",
     "Verify this user by confirming the following emoji appear on their screen.": "Kontrolu ĉi tiun uzanton per konfirmo, ke la jenaj bildsignoj aperis sur ĝia ekrano.",
     "Verify this user by confirming the following number appears on their screen.": "Kontrolu ĉu tiun uzanton per konfirmo, ke la jena numero aperis sur ĝia ekrano.",
@@ -529,8 +505,6 @@
     "No homeserver URL provided": "Neniu hejmservila URL donita",
     "Unexpected error resolving homeserver configuration": "Neatendita eraro eltrovi hejmservilajn agordojn",
     "Unexpected error resolving identity server configuration": "Neatendita eraro eltrovi agordojn de identiga servilo",
-    "Straight rows of keys are easy to guess": "Rektaj vicoj de klavoj estas facile diveneblaj",
-    "Short keyboard patterns are easy to guess": "Mallongaj ripetoj de klavoj estas facile diveneblaj",
     "Start using Key Backup": "Ekuzi Savkopiadon de ŝlosiloj",
     "Upgrade this room to the recommended room version": "Gradaltigi ĉi tiun ĉambron al rekomendata ĉambra versio",
     "Uploaded sound": "Alŝutita sono",
@@ -601,7 +575,6 @@
     "Set up Secure Messages": "Agordi Sekurajn mesaĝojn",
     "Recovery Method Removed": "Rehava metodo foriĝis",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Se vi ne forigis la rehavan metodon, eble atakanto provas aliri vian konton. Vi tuj ŝanĝu la pasvorton de via konto, kaj agordu novan rehavan metodon en la agordoj.",
-    "Use a longer keyboard pattern with more turns": "Uzu pli longan tekston kun plia varieco",
     "Unable to load key backup status": "Ne povas enlegi staton de ŝlosila savkopio",
     "Demote yourself?": "Ĉu malrangaltigi vin mem?",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Vi ne povos malfari tiun ŝanĝon, ĉar vi malrangaltigas vin mem; se vi estas la lasta povohava uzanto en la ĉambro, estos neeble vian povon rehavi.",
@@ -1919,11 +1892,11 @@
         "integration_manager": "Kunigilo",
         "qr_code": "Rapidresponda kodo",
         "feedback": "Prikomenti",
-        "all_rooms": "Ĉiuj ĉambroj",
-        "orphan_rooms": "Aliaj ĉambroj",
         "preview_message": "He, vi. Vi bonegas!",
+        "orphan_rooms": "Aliaj ĉambroj",
         "on": "Jes",
-        "off": "Ne"
+        "off": "Ne",
+        "all_rooms": "Ĉiuj ĉambroj"
     },
     "action": {
         "continue": "Daŭrigi",
@@ -2013,8 +1986,8 @@
         "mention": "Mencio",
         "submit": "Sendi",
         "send_report": "Sendi raporton",
-        "enter_fullscreen": "Plenekrano",
-        "exit_fullscreeen": "Eliru plenekrano"
+        "exit_fullscreeen": "Eliru plenekrano",
+        "enter_fullscreen": "Plenekrano"
     },
     "a11y": {
         "user_menu": "Menuo de uzanto",
@@ -2249,14 +2222,17 @@
             "font_size": "Grando de tiparo",
             "custom_font_description": "Agordu la nomon de tiparo instalita en via sistemo kaj %(brand)s provos ĝin uzi.",
             "timeline_image_size_default": "Ordinara",
-            "custom_font_size": "Uzi propran grandon",
+            "image_size_default": "Ordinara",
+            "font_size_valid": "Uzi inter %(min)s punktoj kaj %(max)s punktoj",
             "font_size_nan": "Grando devas esti nombro",
             "font_size_limit": "Propra grando de tiparo povas interi nur %(min)s punktojn kaj %(max)s punktojn",
-            "font_size_valid": "Uzi inter %(min)s punktoj kaj %(max)s punktoj",
-            "image_size_default": "Ordinara"
+            "custom_font_size": "Uzi propran grandon"
         },
         "inline_url_previews_room_account": "Ŝalti URL-antaŭrigardon en ĉi tiu ĉambro (nur por vi)",
         "inline_url_previews_room": "Ŝalti URL-antaŭrigardon por anoj de ĉi tiu ĉambro",
+        "voip": {
+            "mirror_local_feed": "Speguli lokan filmon"
+        },
         "security": {
             "message_search_disable_warning": "Post malŝalto, mesaĝoj el ĉifritaj ĉambroj ne aperos en serĉorezultoj.",
             "message_search_indexing_idle": "Mesaĝoj estas indeksataj en neniu ĉambro.",
@@ -2284,9 +2260,6 @@
             "rm_lifetime_offscreen": "Vivodaŭro de eksterekrana legomarko (ms)",
             "surround_text": "Ĉirkaŭi elektitan tekston dum tajpado de specialaj signoj",
             "always_show_menu_bar": "Ĉiam montri la fenestran menubreton"
-        },
-        "voip": {
-            "mirror_local_feed": "Speguli lokan filmon"
         },
         "keyboard": {
             "title": "Klavaro"
@@ -2624,20 +2597,20 @@
             "changed_rule_servers": "%(senderName)s ŝanĝis regulon forbarintan servilojn, kiuj akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s",
             "changed_rule_glob": "%(senderName)s ĝisdatigis forbaran regulon, kiu akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s"
         },
-        "io.element.voice_broadcast_info": {
-            "you": "Vi finis <a>voĉan elsendon</a>",
-            "user": "%(senderName)s finis <a>voĉan elsendon</a>"
+        "redacted": {
+            "tooltip": "Mesaĝo forigita je %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s reagis per %(content)s",
             "tooltip": "<reactors/><reactedWith>reagis per %(shortName)s</reactedWith>"
         },
-        "redacted": {
-            "tooltip": "Mesaĝo forigita je %(date)s"
-        },
         "m.room.create": {
             "continuation": "Ĉi tiu ĉambro estas daŭrigo de alia interparolo.",
             "see_older_messages": "Klaku ĉi tien por vidi pli malnovajn mesaĝojn."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Vi finis <a>voĉan elsendon</a>",
+            "user": "%(senderName)s finis <a>voĉan elsendon</a>"
         }
     },
     "slash_command": {
@@ -2702,14 +2675,14 @@
         "failed_find_user": "Ne povis trovi uzanton en ĉambro",
         "op": "Difini la povnivelon de uzanto",
         "deop": "Senestrigas uzanton kun donita identigilo",
-        "server_error": "Servila eraro",
-        "command_error": "Komanda eraro",
-        "server_error_detail": "Servilo estas neatingebla, troŝarĝita, aŭ io alia misokazis.",
-        "unknown_command": "Nekonata komando",
-        "unknown_command_detail": "Nerekonita komando: %(commandText)s",
-        "unknown_command_help": "Vi povas komandi <code>/help</code> por listigi uzeblajn komandojn. Ĉu vi intencis sendi ĉi tion kiel mesaĝon?",
         "unknown_command_hint": "Helpeto: Komencu vian mesaĝon per <code>//</code> por komenci ĝin per suprenstreko.",
-        "unknown_command_button": "Sendi mesaĝon"
+        "unknown_command_help": "Vi povas komandi <code>/help</code> por listigi uzeblajn komandojn. Ĉu vi intencis sendi ĉi tion kiel mesaĝon?",
+        "unknown_command_detail": "Nerekonita komando: %(commandText)s",
+        "unknown_command_button": "Sendi mesaĝon",
+        "unknown_command": "Nekonata komando",
+        "server_error_detail": "Servilo estas neatingebla, troŝarĝita, aŭ io alia misokazis.",
+        "server_error": "Servila eraro",
+        "command_error": "Komanda eraro"
     },
     "presence": {
         "online_for": "Enreta jam je %(duration)s",
@@ -2915,8 +2888,8 @@
         "server_picker_custom": "Alia hejmservilo",
         "server_picker_explainer": "Uzu vian preferatan hejmservilon de Matrix se vi havas iun, aŭ gastigu vian propran.",
         "server_picker_learn_more": "Pri hejmserviloj",
-        "account_deactivated": "Tiu ĉi konto malaktiviĝis.",
-        "incorrect_credentials": "Malĝusta uzantnomo kaj/aŭ pasvorto."
+        "incorrect_credentials": "Malĝusta uzantnomo kaj/aŭ pasvorto.",
+        "account_deactivated": "Tiu ĉi konto malaktiviĝis."
     },
     "room_list": {
         "sort_unread_first": "Montri ĉambrojn kun nelegitaj mesaĝoj kiel unuajn",
@@ -3048,6 +3021,90 @@
         "existing_issue_link": "Bonvolu unue vidi <existingIssuesLink>jamajn erarojn en GitHub</existingIssuesLink>. Ĉu neniu akordas la vian? <newIssueLink>Raportu novan</newIssueLink>.",
         "send_feedback_action": "Prikomenti"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Uzu malmultajn vortojn, kaj evitu oftajn frazojn",
+            "noNeed": "Ne necesas simboloj, ciferoj, aŭ majuskloj",
+            "longerKeyboardPattern": "Uzu pli longan tekston kun plia varieco",
+            "repeated": "Evitu ripetadon de vortoj kaj signoj",
+            "sequences": "Evitu sinsekvojn",
+            "recentYears": "Evitu freŝdatajn jarojn",
+            "associatedYears": "Evitu jarojn, kiuj ligiĝas al vi",
+            "dates": "Evitu datojn kaj jarojn, kiuj ligiĝas al vi",
+            "capitalization": "Majusklado ne helpas multe",
+            "allUppercase": "Plena majusklado estas preskaŭ same facile konjektebla kiel plena minusklado",
+            "reverseWords": "Renversitaj vortoj ne estas multe pli malfacile konjekteblaj",
+            "l33t": "Facile diveneblaj anstataŭigoj, kiel '@' anstataŭ 'a', ne helpas multe",
+            "anotherWord": "Aldonu alian vorton aŭ du. Maloftaj vortoj pli bonas."
+        },
+        "warnings": {
+            "simpleRepeat": "Ripetoj kiel « aaa » estas facile diveneblaj",
+            "extendedRepeat": "Ripetoj kiel « abcabcabc » estas apenaŭ pli bonaj ol nur « abc »",
+            "sequences": "Sinsekvoj kiel « abc » aŭ « 6543 » estas facile diveneblaj",
+            "recentYears": "Freŝdataj jaroj estas facile diveneblaj",
+            "dates": "Datoj estas ofte facile diveneblaj",
+            "topTen": "Ĉi tiu pasvorto estas inter la 10 plej oftaj",
+            "topHundred": "Ĉi tiu pasvorto estas inter la 100 plej oftaj",
+            "common": "Ĉi tiu pasvorto estas tre ofta",
+            "similarToCommon": "Ĉi tiu pasvorto similas iun tre oftan",
+            "wordByItself": "Memstara vorto estas facile divenebla",
+            "namesByThemselves": "Ankaŭ nomoj familiaj kaj individiuaj estas memstare facile diveneblaj",
+            "commonNames": "Oftaj nomoj familiaj kaj individuaj estas facile diveneblaj",
+            "straightRow": "Rektaj vicoj de klavoj estas facile diveneblaj",
+            "keyPattern": "Mallongaj ripetoj de klavoj estas facile diveneblaj"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Ne povas komenci novan voĉan elsendon",
+        "failed_insufficient_permission_title": "Ne povas komenci novan voĉan elsendon",
+        "failed_others_already_recording_title": "Ne povas komenci novan voĉan elsendon",
+        "failed_already_recording_description": "Vi jam registras voĉan elsendon. Bonvolu fini vian nunan voĉelsendon por komenci novan.",
+        "failed_insufficient_permission_description": "Vi ne havas la bezonatajn permesojn por komenci voĉan elsendon en ĉi tiu ĉambro. Kontaktu ĉambran administranton por ĝisdatigi viajn permesojn.",
+        "failed_others_already_recording_description": "Iu alia jam registras voĉan elsendon. Atendu, ke ilia voĉa elsendo finiĝos por komenci novan.",
+        "failed_no_connection_title": "eraro de konekto",
+        "failed_no_connection_description": "Bedaŭrinde ni ne povas komenci registradon nun. Bonvolu reprovi poste.",
+        "failed_decrypt": "Ne eblas deĉifri voĉan elsendon",
+        "failed_generic": "Ne eblas ludi ĉi tiun voĉan elsendon",
+        "confirm_stop_title": "Ĉu ĉesi rekta elsendo?",
+        "confirm_stop_description": "Ĉu vi certas, ke vi volas fini la elsendon? Ĉi tio finos la transdonon kaj provizos la plenan registradon en la ĉambro.",
+        "confirm_stop_affirm": "Jes, ĉesu elsendon",
+        "confirm_listen_title": "Aŭskulti vivan elsendon?",
+        "confirm_listen_description": "Se vi komencas aŭskulti ĉi tiun vivan elsendon, via nuna viva elsendo registrado estos finita.",
+        "confirm_listen_affirm": "Jes, ĉesigu mian registradon",
+        "30s_backward": "30s. reen",
+        "30s_forward": "30s. antaŭen",
+        "go_live": "Iru vivi",
+        "resume": "rekomenci voĉan elsendon",
+        "pause": "paŭzi voĉan elsendon",
+        "play": "ludu voĉan elsendon"
+    },
+    "update": {
+        "see_changes_button": "Kio novas?",
+        "release_notes_toast_title": "Kio novas",
+        "toast_title": "Ĝisdatigi %(brand)s",
+        "toast_description": "Nova versio de %(brand)s disponeblas"
+    },
+    "theme": {
+        "light_high_contrast": "Malpeza alta kontrasto"
+    },
+    "space": {
+        "landing_welcome": "Bonvenu al <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Ĉi tiu hejmservilo ne estas agordita por montri mapojn.",
+        "MapStyleUrlNotReachable": "Ĉi tiu hejmservilo ne estas agordita ĝuste por montri mapojn, aŭ la agordita mapservilo povas esti neatingebla.",
+        "map_feedback": "Sugestoj pri la mapo",
+        "find_my_location": "Trovu mian lokon",
+        "location_not_available": "Loko ne havebla",
+        "mapbox_logo": "Mapbox-emblemo",
+        "reset_bearing": "Restarigu la lagron norden",
+        "failed_generic": "Via loko ne eblis akiri. Bonvolu reprovi poste.",
+        "failed_timeout": "Tempo elĉerpita akiri vian lokon. Bonvolu reprovi poste."
+    },
+    "labs_mjolnir": {
+        "room_name": "Mia listo de forbaroj",
+        "room_topic": "Ĉi tio estas la listo de uzantoj/serviloj, kiujn vi blokis – ne eliru el la ĉambro!"
+    },
     "create_space": {
         "name_required": "Bonvolu enigi nomon por la aro",
         "name_placeholder": "ekz. mia-aro",
@@ -3077,56 +3134,5 @@
         "setup_rooms_community_heading": "Pri kio volus vi diskuti en %(spaceName)s?",
         "setup_rooms_community_description": "Kreu ni ĉambron por ĉiu el ili.",
         "setup_rooms_description": "Vi povas aldoni pliajn poste, inkluzive tiujn, kiuj jam ekzistas."
-    },
-    "space": {
-        "landing_welcome": "Bonvenu al <name/>"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Ĉi tiu hejmservilo ne estas agordita por montri mapojn.",
-        "MapStyleUrlNotReachable": "Ĉi tiu hejmservilo ne estas agordita ĝuste por montri mapojn, aŭ la agordita mapservilo povas esti neatingebla.",
-        "map_feedback": "Sugestoj pri la mapo",
-        "find_my_location": "Trovu mian lokon",
-        "location_not_available": "Loko ne havebla",
-        "mapbox_logo": "Mapbox-emblemo",
-        "reset_bearing": "Restarigu la lagron norden",
-        "failed_generic": "Via loko ne eblis akiri. Bonvolu reprovi poste.",
-        "failed_timeout": "Tempo elĉerpita akiri vian lokon. Bonvolu reprovi poste."
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Ne povas komenci novan voĉan elsendon",
-        "failed_insufficient_permission_title": "Ne povas komenci novan voĉan elsendon",
-        "failed_others_already_recording_title": "Ne povas komenci novan voĉan elsendon",
-        "failed_already_recording_description": "Vi jam registras voĉan elsendon. Bonvolu fini vian nunan voĉelsendon por komenci novan.",
-        "failed_insufficient_permission_description": "Vi ne havas la bezonatajn permesojn por komenci voĉan elsendon en ĉi tiu ĉambro. Kontaktu ĉambran administranton por ĝisdatigi viajn permesojn.",
-        "failed_others_already_recording_description": "Iu alia jam registras voĉan elsendon. Atendu, ke ilia voĉa elsendo finiĝos por komenci novan.",
-        "failed_no_connection_title": "eraro de konekto",
-        "failed_no_connection_description": "Bedaŭrinde ni ne povas komenci registradon nun. Bonvolu reprovi poste.",
-        "failed_decrypt": "Ne eblas deĉifri voĉan elsendon",
-        "failed_generic": "Ne eblas ludi ĉi tiun voĉan elsendon",
-        "confirm_stop_title": "Ĉu ĉesi rekta elsendo?",
-        "confirm_stop_description": "Ĉu vi certas, ke vi volas fini la elsendon? Ĉi tio finos la transdonon kaj provizos la plenan registradon en la ĉambro.",
-        "confirm_stop_affirm": "Jes, ĉesu elsendon",
-        "confirm_listen_title": "Aŭskulti vivan elsendon?",
-        "confirm_listen_description": "Se vi komencas aŭskulti ĉi tiun vivan elsendon, via nuna viva elsendo registrado estos finita.",
-        "confirm_listen_affirm": "Jes, ĉesigu mian registradon",
-        "30s_backward": "30s. reen",
-        "30s_forward": "30s. antaŭen",
-        "go_live": "Iru vivi",
-        "resume": "rekomenci voĉan elsendon",
-        "pause": "paŭzi voĉan elsendon",
-        "play": "ludu voĉan elsendon"
-    },
-    "labs_mjolnir": {
-        "room_name": "Mia listo de forbaroj",
-        "room_topic": "Ĉi tio estas la listo de uzantoj/serviloj, kiujn vi blokis – ne eliru el la ĉambro!"
-    },
-    "theme": {
-        "light_high_contrast": "Malpeza alta kontrasto"
-    },
-    "update": {
-        "see_changes_button": "Kio novas?",
-        "release_notes_toast_title": "Kio novas",
-        "toast_title": "Ĝisdatigi %(brand)s",
-        "toast_description": "Nova versio de %(brand)s disponeblas"
     }
 }

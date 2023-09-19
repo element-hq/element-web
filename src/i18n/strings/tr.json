@@ -582,23 +582,6 @@
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Kararlı bir internet bağlantısına sahip olduğunuzdan emin olun yada sunucu yöneticisi ile iletişime geçin",
     "The user's homeserver does not support the version of the room.": "Kullanıcının ana sunucusu odanın sürümünü desteklemiyor.",
     "Unknown server error": "Bilinmeyen sunucu hatası",
-    "Use a few words, avoid common phrases": "Bir kaç kelime kullanın ve genel ifadelerden kaçının",
-    "No need for symbols, digits, or uppercase letters": "Semboller, sayılar yada büyük harflere gerek yok",
-    "Avoid repeated words and characters": "Tekrarlanan kelimeler ve karakterlerden kaçının",
-    "Avoid sequences": "Sekanslardan kaçının",
-    "Avoid recent years": "Son yıllardan kaçının",
-    "Avoid years that are associated with you": "Sizle ilişkili yıllardan kaçının",
-    "Avoid dates and years that are associated with you": "Sizle ilişkili tarihler ve yıllardan kaçının",
-    "Capitalization doesn't help very much": "Baş harfi büyük yapmak size pek yardımcı olmaz",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Bütün harflerin büyük olmasıyla tümünün küçük olması tahmin edilmesi bakımından hemen hemen aynı kolaylıktadır",
-    "Reversed words aren't much harder to guess": "Ters kelimeler tahmin için çok zor değil",
-    "Repeats like \"aaa\" are easy to guess": "“aaa” gibi tekrarlar tahmin için oldukça kolay",
-    "Dates are often easy to guess": "Tarihler sıklıkla tahmin için daha kolaydır",
-    "This is a top-10 common password": "Bu bir top-10 yaygın parola",
-    "This is a top-100 common password": "Bu bir top-100 yaygın parola",
-    "This is a very common password": "Bu oldukça yaygın parola",
-    "This is similar to a commonly used password": "Bu yaygınca kullanılan bir parolaya benziyor",
-    "Names and surnames by themselves are easy to guess": "Adlar ve soyadlar kendi kendilerine tahmin için kolaydır",
     "Missing media permissions, click the button below to request.": "Medya izinleri eksik, alttaki butona tıkayarak talep edin.",
     "Ignored/Blocked": "Yoksayılan/Bloklanan",
     "Error adding ignored user/server": "Yoksayılan kullanıcı/sunucu eklenirken hata",
@@ -632,9 +615,6 @@
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Parolanızı sıfırlayabilirsiniz, fakat kimlik sunucunuz çevrimiçi olana kadar bazı özellikler mevcut olmayacak. Bu uyarıyı sürekli görüyorsanız, yapılandırmanızı kontrol edin veya sunucu yöneticinizle iletişime geçin.",
     "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Oturum açabilirsiniz, fakat kimlik sunucunuz çevrimiçi olana kadar bazı özellikler mevcut olmayacak. Bu uyarıyı sürekli görüyorsanız, yapılandırmanızı kontrol edin veya sunucu yöneticinizle iletişime geçin.",
     "The user must be unbanned before they can be invited.": "Kullanıcının davet edilebilmesi için öncesinde yasağının kaldırılması gereklidir.",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "“abcabcabc” gibi tekrarlar “abc” yi tahmin etmekten çok az daha zor olur",
-    "Sequences like abc or 6543 are easy to guess": "abc veya 6543 gibi diziler tahmin için oldukça kolaydır",
-    "Common names and surnames are easy to guess": "Yaygın isimleri ve soyisimleri tahmin etmek oldukça kolay",
     "Got It": "Anlaşıldı",
     "Subscribing to a ban list will cause you to join it!": "Bir yasak listesine abonelik ona katılmanıza yol açar!",
     "Message search": "Mesaj arama",
@@ -706,8 +686,6 @@
     "Session key": "Oturum anahtarı",
     "Recent Conversations": "Güncel Sohbetler",
     "Recently Direct Messaged": "Güncel Doğrudan Mesajlar",
-    "Add another word or two. Uncommon words are better.": "Bir iki kelime daha ekleyin. Yaygın olmayan kelimeler daha iyi olur.",
-    "Recent years are easy to guess": "Güncel yılların tahmini kolaydır",
     "Cancelling…": "İptal ediliyor…",
     "Lock": "Kilit",
     "Your homeserver does not support cross-signing.": "Ana sunucunuz çapraz imzalamayı desteklemiyor.",
@@ -767,11 +745,6 @@
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Verilen imza anahtarı %(userld)s'nin/nın %(deviceld)s oturumundan gelen anahtar ile uyumlu. Oturum doğrulanmış olarak işaretlendi.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) yeni oturuma doğrulamadan giriş yaptı:",
     "Ask this user to verify their session, or manually verify it below.": "Kullanıcıya oturumunu doğrulamasını söyle, ya da aşağıdan doğrula.",
-    "Use a longer keyboard pattern with more turns": "Daha karmaşık ve uzun bir klavye deseni kullan",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Tahmin edilebilir harf değişimleri örneğin 'a' yerine '@' pek yardımcı olmuyor",
-    "A word by itself is easy to guess": "Kelime zaten kolay tahmin edilir",
-    "Straight rows of keys are easy to guess": "Aynı klavye satırındaki ardışık tuşlar kolay tahmin edilir",
-    "Short keyboard patterns are easy to guess": "Kısa klavye desenleri kolay tahmin edilir",
     "Local address": "Yerel adres",
     "Local Addresses": "Yerel Adresler",
     "Hide sessions": "Oturumları gizle",
@@ -1352,10 +1325,10 @@
         "integration_manager": "Bütünleştirme Yöneticisi",
         "qr_code": "Kare kod (QR)",
         "feedback": "Geri bildirim",
-        "all_rooms": "Tüm odalar",
         "preview_message": "Hey sen. Sen en iyisisin!",
         "on": "Açık",
-        "off": "Kapalı"
+        "off": "Kapalı",
+        "all_rooms": "Tüm odalar"
     },
     "action": {
         "continue": "Devam Et",
@@ -1584,14 +1557,17 @@
             "font_size": "Yazı boyutu",
             "custom_font_description": "Sisteminizde bulunan bir font adı belirtiniz. %(brand)s sizin için onu kullanmaya çalışacak.",
             "timeline_image_size_default": "Varsayılan",
-            "custom_font_size": "Özel büyüklük kullan",
+            "image_size_default": "Varsayılan",
+            "font_size_valid": "%(min)s ile %(max)s arasında girin",
             "font_size_nan": "Boyut bir sayı olmalıdır",
             "font_size_limit": "Özel yazı tipi boyutu %(min)s ile %(max)s arasında olmalı",
-            "font_size_valid": "%(min)s ile %(max)s arasında girin",
-            "image_size_default": "Varsayılan"
+            "custom_font_size": "Özel büyüklük kullan"
         },
         "inline_url_previews_room_account": "Bu oda için URL önizlemeyi aç (sadece sizi etkiler)",
         "inline_url_previews_room": "Bu odadaki katılımcılar için URL önizlemeyi varsayılan olarak açık hale getir",
+        "voip": {
+            "mirror_local_feed": "Yerel video beslemesi yansısı"
+        },
         "security": {
             "message_search_indexing_idle": "Şu an hiç bir odada mesaj indeksleme yapılmıyor.",
             "message_search_space_used": "Kullanılan alan:",
@@ -1613,9 +1589,6 @@
             "rm_lifetime": "Okundu iminin gösterim süresi (ms)",
             "rm_lifetime_offscreen": "Okundu iminin ekran dışındaki gösterim süresi (ms)",
             "always_show_menu_bar": "Pencerenin menü çubuğunu her zaman göster"
-        },
-        "voip": {
-            "mirror_local_feed": "Yerel video beslemesi yansısı"
         }
     },
     "devtools": {
@@ -1854,14 +1827,14 @@
         "redacted": {
             "tooltip": "Mesaj %(date)s tarihinde silindi"
         },
+        "m.room.create": {
+            "continuation": "Bu oda başka bir görüşmenin devamıdır.",
+            "see_older_messages": "Daha eski mesajları görmek için buraya tıklayın."
+        },
         "m.room.avatar": {
             "lightbox_title": "%(senderDisplayName)s %(roomName)s için avatarı değiştirdi",
             "removed": "%(senderDisplayName)s odanın avatarını kaldırdı.",
             "changed_img": "%(senderDisplayName)s odanın avatarını <img/> olarak çevirdi"
-        },
-        "m.room.create": {
-            "continuation": "Bu oda başka bir görüşmenin devamıdır.",
-            "see_older_messages": "Daha eski mesajları görmek için buraya tıklayın."
         }
     },
     "slash_command": {
@@ -1914,14 +1887,14 @@
         "failed_find_user": "Kullanıcı odada bulunamadı",
         "op": "Bir kullanıcının güç düzeyini tanımla",
         "deop": "ID'leriyle birlikte , düşürülmüş kullanıcılar",
-        "server_error": "Sunucu Hatası",
-        "command_error": "Komut Hatası",
-        "server_error_detail": "Sunucu kullanılamıyor , aşırı yüklenmiş veya başka bir şey ters gitmiş olabilir.",
-        "unknown_command": "Bilinmeyen Komut",
-        "unknown_command_detail": "Tanınmayan komut: %(commandText)s",
-        "unknown_command_help": "<code>/help</code> yazarak var olan komutları listeleyebilirsiniz. Yoksa bunu bir ileti olarak mı göndermek istemiştiniz?",
         "unknown_command_hint": "İpucu: İletilerinizi eğik çizgi ile başlatmak için <code>//</code> ile başlayın.",
-        "unknown_command_button": "Mesaj olarak gönder"
+        "unknown_command_help": "<code>/help</code> yazarak var olan komutları listeleyebilirsiniz. Yoksa bunu bir ileti olarak mı göndermek istemiştiniz?",
+        "unknown_command_detail": "Tanınmayan komut: %(commandText)s",
+        "unknown_command_button": "Mesaj olarak gönder",
+        "unknown_command": "Bilinmeyen Komut",
+        "server_error_detail": "Sunucu kullanılamıyor , aşırı yüklenmiş veya başka bir şey ters gitmiş olabilir.",
+        "server_error": "Sunucu Hatası",
+        "command_error": "Komut Hatası"
     },
     "presence": {
         "online_for": "%(duration)s süresince çevrimiçi",
@@ -2058,8 +2031,8 @@
         "sign_in_or_register": "Oturum Açın veya Hesap Oluşturun",
         "sign_in_or_register_description": "Hesabınızı kullanın veya devam etmek için yeni bir tane oluşturun.",
         "register_action": "Hesap Oluştur",
-        "account_deactivated": "Hesap devre dışı bırakıldı.",
-        "incorrect_credentials": "Yanlış kullanıcı adı ve / veya şifre."
+        "incorrect_credentials": "Yanlış kullanıcı adı ve / veya şifre.",
+        "account_deactivated": "Hesap devre dışı bırakıldı."
     },
     "room_list": {
         "sort_unread_first": "Önce okunmamış mesajları olan odaları göster",
@@ -2162,17 +2135,50 @@
             "see_msgtype_sent_active_room": "Aktif odanıza gönderilen <b>%(msgtype)s</b> mesajları görün"
         }
     },
-    "labs_mjolnir": {
-        "room_name": "Yasaklı Listem",
-        "room_topic": "Bu sizin engellediğiniz kullanıcılar/sunucular listeniz - odadan ayrılmayın!"
-    },
-    "theme": {
-        "light_high_contrast": "Yüksek ışık kontrastı"
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Bir kaç kelime kullanın ve genel ifadelerden kaçının",
+            "noNeed": "Semboller, sayılar yada büyük harflere gerek yok",
+            "longerKeyboardPattern": "Daha karmaşık ve uzun bir klavye deseni kullan",
+            "repeated": "Tekrarlanan kelimeler ve karakterlerden kaçının",
+            "sequences": "Sekanslardan kaçının",
+            "recentYears": "Son yıllardan kaçının",
+            "associatedYears": "Sizle ilişkili yıllardan kaçının",
+            "dates": "Sizle ilişkili tarihler ve yıllardan kaçının",
+            "capitalization": "Baş harfi büyük yapmak size pek yardımcı olmaz",
+            "allUppercase": "Bütün harflerin büyük olmasıyla tümünün küçük olması tahmin edilmesi bakımından hemen hemen aynı kolaylıktadır",
+            "reverseWords": "Ters kelimeler tahmin için çok zor değil",
+            "l33t": "Tahmin edilebilir harf değişimleri örneğin 'a' yerine '@' pek yardımcı olmuyor",
+            "anotherWord": "Bir iki kelime daha ekleyin. Yaygın olmayan kelimeler daha iyi olur."
+        },
+        "warnings": {
+            "simpleRepeat": "“aaa” gibi tekrarlar tahmin için oldukça kolay",
+            "extendedRepeat": "“abcabcabc” gibi tekrarlar “abc” yi tahmin etmekten çok az daha zor olur",
+            "sequences": "abc veya 6543 gibi diziler tahmin için oldukça kolaydır",
+            "recentYears": "Güncel yılların tahmini kolaydır",
+            "dates": "Tarihler sıklıkla tahmin için daha kolaydır",
+            "topTen": "Bu bir top-10 yaygın parola",
+            "topHundred": "Bu bir top-100 yaygın parola",
+            "common": "Bu oldukça yaygın parola",
+            "similarToCommon": "Bu yaygınca kullanılan bir parolaya benziyor",
+            "wordByItself": "Kelime zaten kolay tahmin edilir",
+            "namesByThemselves": "Adlar ve soyadlar kendi kendilerine tahmin için kolaydır",
+            "commonNames": "Yaygın isimleri ve soyisimleri tahmin etmek oldukça kolay",
+            "straightRow": "Aynı klavye satırındaki ardışık tuşlar kolay tahmin edilir",
+            "keyPattern": "Kısa klavye desenleri kolay tahmin edilir"
+        }
     },
     "update": {
         "see_changes_button": "Yeni olan ne ?",
         "release_notes_toast_title": "Yenilikler",
         "toast_title": "%(brand)s 'i güncelle",
         "toast_description": "%(brand)s 'in yeni versiyonu hazır"
+    },
+    "theme": {
+        "light_high_contrast": "Yüksek ışık kontrastı"
+    },
+    "labs_mjolnir": {
+        "room_name": "Yasaklı Listem",
+        "room_topic": "Bu sizin engellediğiniz kullanıcılar/sunucular listeniz - odadan ayrılmayın!"
     }
 }

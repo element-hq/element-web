@@ -583,9 +583,6 @@
     "Accept <policyLink /> to continue:": "Akceptēt <policyLink />, lai turpinātu:",
     "Anchor": "Enkurs",
     "Aeroplane": "Aeroplāns",
-    "A word by itself is easy to guess": "Vārds pats par sevi ir viegli uzminams",
-    "Add another word or two. Uncommon words are better.": "Papildiniet ar vēl kādiem vārdiem. Netipiski vārdi ir labāk.",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Visus lielos burtus ir gandrīz tikpat viegli uzminēt kā visus mazos",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) pierakstījās jaunā sesijā, neveicot tās verifikāciju:",
     "Denmark": "Dānija",
@@ -962,7 +959,6 @@
     "Invite people": "Uzaicināt cilvēkus",
     "Show all rooms": "Rādīt visas istabas",
     "Corn": "Kukurūza",
-    "Dates are often easy to guess": "Datumi bieži vien ir viegli uzminami",
     "Final result based on %(count)s votes": {
         "one": "Gala rezultāts pamatojoties uz %(count)s balss",
         "other": "Gala rezultāts pamatojoties uz %(count)s balsīm"
@@ -1152,10 +1148,10 @@
         "identity_server": "Identitāšu serveris",
         "integration_manager": "Integrācija pārvaldnieks",
         "feedback": "Atsauksmes",
-        "all_rooms": "Visas istabas",
         "preview_message": "Sveiks! Tu esi labākais!",
         "on": "Ieslēgt",
-        "off": "Izslēgt"
+        "off": "Izslēgt",
+        "all_rooms": "Visas istabas"
     },
     "action": {
         "continue": "Turpināt",
@@ -1352,11 +1348,14 @@
             "font_size": "Šrifta izmērs",
             "custom_font_description": "Iestaties uz jūsu sistēmas instalēta fonta nosaukumu, kuru & %(brand)s vajadzētu mēģināt izmantot.",
             "timeline_image_size_default": "Noklusējuma",
-            "custom_font_size": "Izmantot pielāgotu izmēru",
-            "image_size_default": "Noklusējuma"
+            "image_size_default": "Noklusējuma",
+            "custom_font_size": "Izmantot pielāgotu izmēru"
         },
         "inline_url_previews_room_account": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai jūs pašu)",
         "inline_url_previews_room": "Iespējot URL priekšskatījumus pēc noklusējuma visiem šīs istabas dalībniekiem",
+        "voip": {
+            "mirror_local_feed": "Rādīt spoguļskatā kameras video"
+        },
         "security": {
             "message_search_indexing": "Pašlaik indeksē: %(currentRoom)s",
             "message_search_room_progress": "%(doneRooms)s no %(totalRooms)s",
@@ -1373,9 +1372,6 @@
             "show_polls_button": "Rādīt aptauju pogu",
             "surround_text": "Iekļaut iezīmēto tekstu, rakstot speciālās rakstzīmes",
             "always_show_menu_bar": "Vienmēr parādīt loga izvēlnes joslu"
-        },
-        "voip": {
-            "mirror_local_feed": "Rādīt spoguļskatā kameras video"
         }
     },
     "devtools": {
@@ -1646,11 +1642,11 @@
             "changed_rule_servers": "%(senderName)s aizstāja noteikumu, kas liedza pieeju serveriem, kas atbilst pazīmei %(oldGlob)s, ar atbilstošu pazīmei %(newGlob)s dēļ %(reason)s",
             "changed_rule_glob": "%(senderName)s pārjaunoja lieguma noteikumu šablonu %(oldGlob)s uz šablonu %(newGlob)s dēļ %(reason)s"
         },
-        "reactions": {
-            "tooltip": "<reactors/><reactedWith>reaģēja ar %(shortName)s</reactedWith>"
-        },
         "redacted": {
             "tooltip": "Ziņa dzēsta %(date)s"
+        },
+        "reactions": {
+            "tooltip": "<reactors/><reactedWith>reaģēja ar %(shortName)s</reactedWith>"
         },
         "m.room.avatar": {
             "lightbox_title": "%(senderDisplayName)s nomainīja %(roomName)s istabas avataru",
@@ -1708,10 +1704,10 @@
         "failed_find_user": "Lietotājs istabā netika atrasts",
         "op": "Definē lietotāja statusu",
         "deop": "Atceļ operatora statusu lietotājam ar norādīto Id",
-        "server_error": "Servera kļūda",
-        "command_error": "Komandas kļūda",
+        "unknown_command_button": "Nosūtīt kā ziņu",
         "server_error_detail": "Serveris ir nesasniedzams, pārslogots, vai arī esi uzdūries kļūdai.",
-        "unknown_command_button": "Nosūtīt kā ziņu"
+        "server_error": "Servera kļūda",
+        "command_error": "Komandas kļūda"
     },
     "presence": {
         "online_for": "Tiešsaistē %(duration)s",
@@ -1839,8 +1835,8 @@
         "sign_in_or_register_description": "Izmantojiet esošu kontu vai izveidojiet jaunu, lai turpinātu.",
         "register_action": "Izveidot kontu",
         "server_picker_learn_more": "Par bāzes serveriem",
-        "account_deactivated": "Šis konts ir deaktivizēts.",
-        "incorrect_credentials": "Nepareizs lietotājvārds un/vai parole."
+        "incorrect_credentials": "Nepareizs lietotājvārds un/vai parole.",
+        "account_deactivated": "Šis konts ir deaktivizēts."
     },
     "room_list": {
         "sort_unread_first": "Rādīt istabas ar nelasītām ziņām augšpusē",
@@ -1939,23 +1935,27 @@
         "sent": "Atsauksme nosūtīta",
         "send_feedback_action": "Nosūtīt atsauksmi"
     },
-    "create_space": {
-        "explainer": "Vietas ir jauns veids, kā grupēt istabas un cilvēkus. Kādu vietu vēlaties izveidot? To var mainīt vēlāk.",
-        "public_heading": "Jūsu publiska vieta",
-        "private_heading": "Jūsu privāta vieta",
-        "add_details_prompt": "Pievienojiet aprakstu, lai palīdzētu cilvēkiem to atpazīt.",
-        "failed_create_initial_rooms": "Neizdevās izveidot sākotnējās vietas istabas",
-        "share_heading": "Dalīties ar %(name)s",
-        "personal_space_description": "Privāta vieta, kur organizēt jūsu istabas",
-        "private_space_description": "Privāta vieta jums un jūsu komandas dalībniekiem",
-        "setup_rooms_community_description": "Izveidojam katram no tiem savu istabu!",
-        "setup_rooms_private_description": "Mēs izveidosim istabas katram no tiem."
+    "zxcvbn": {
+        "suggestions": {
+            "allUppercase": "Visus lielos burtus ir gandrīz tikpat viegli uzminēt kā visus mazos",
+            "anotherWord": "Papildiniet ar vēl kādiem vārdiem. Netipiski vārdi ir labāk."
+        },
+        "warnings": {
+            "dates": "Datumi bieži vien ir viegli uzminami",
+            "wordByItself": "Vārds pats par sevi ir viegli uzminams"
+        }
     },
-    "space": {
-        "landing_welcome": "Laipni lūdzam uz <name/>"
+    "update": {
+        "see_changes_button": "Kas jauns?",
+        "release_notes_toast_title": "Kas jauns",
+        "toast_title": "Atjaunināt %(brand)s",
+        "toast_description": "Pieejama jauna %(brand)s versija"
     },
     "threads": {
         "show_thread_filter": "Rādīt:"
+    },
+    "space": {
+        "landing_welcome": "Laipni lūdzam uz <name/>"
     },
     "location_sharing": {
         "MapStyleUrlNotConfigured": "Šis bāzes serveris nav konfigurēts karšu attēlošanai.",
@@ -1971,10 +1971,16 @@
         "expand_map": "Izvērst karti",
         "failed_load_map": "Nevar ielādēt karti"
     },
-    "update": {
-        "see_changes_button": "Kas jauns?",
-        "release_notes_toast_title": "Kas jauns",
-        "toast_title": "Atjaunināt %(brand)s",
-        "toast_description": "Pieejama jauna %(brand)s versija"
+    "create_space": {
+        "explainer": "Vietas ir jauns veids, kā grupēt istabas un cilvēkus. Kādu vietu vēlaties izveidot? To var mainīt vēlāk.",
+        "public_heading": "Jūsu publiska vieta",
+        "private_heading": "Jūsu privāta vieta",
+        "add_details_prompt": "Pievienojiet aprakstu, lai palīdzētu cilvēkiem to atpazīt.",
+        "failed_create_initial_rooms": "Neizdevās izveidot sākotnējās vietas istabas",
+        "share_heading": "Dalīties ar %(name)s",
+        "personal_space_description": "Privāta vieta, kur organizēt jūsu istabas",
+        "private_space_description": "Privāta vieta jums un jūsu komandas dalībniekiem",
+        "setup_rooms_community_description": "Izveidojam katram no tiem savu istabu!",
+        "setup_rooms_private_description": "Mēs izveidosim istabas katram no tiem."
     }
 }

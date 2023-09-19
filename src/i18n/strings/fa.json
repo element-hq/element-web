@@ -415,7 +415,6 @@
     "Verified key": "کلید تأیید شده",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "هشدار: تایید کلید ناموفق بود! کلید امضا کننده %(userId)s در نشست %(deviceId)s برابر %(fprint)s است که با کلید %(fingerprint)s تطابق ندارد. این می تواند به معنی رهگیری ارتباطات شما باشد!",
     "Reason": "دلیل",
-    "Repeats like \"aaa\" are easy to guess": "تکرارهایی مانند بببب به راحتی قابل حدس هستند",
     "Your %(brand)s is misconfigured": "%(brand)s‌ی شما به درستی پیکربندی نشده‌است",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "از اتصال اینترنت پایدار اطمینان حاصل‌کرده و سپس با مدیر سرور ارتباط بگیرید",
     "Cannot reach homeserver": "دسترسی به سرور میسر نیست",
@@ -932,11 +931,6 @@
     "You declined": "شما رد کردید",
     "%(name)s accepted": "%(name)s پذیرفت",
     "You accepted": "پذیرفتید",
-    "Short keyboard patterns are easy to guess": "الگوهای کوتاه صفحه کلید به راحتی قابل حدس هستند",
-    "Straight rows of keys are easy to guess": "ردیف کلیدهای مستقیم به راحتی قابل حدس هستند",
-    "Common names and surnames are easy to guess": "نام و نام خانوادگی‌های متداول به راحتی قابل حدس زدن هستند",
-    "Names and surnames by themselves are easy to guess": "به راحتی می توان نام و نام خانوادگی را حدس زد",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "جایگزین‌های قابل پیش بینی مانند '@' به جای 'a' کمک زیادی نمی کند",
     "Everyone in this room is verified": "همه‌ی اعضای این اتاق تائید شده‌اند",
     "This room is end-to-end encrypted": "این اتاق به صورت سرتاسر رمزشده است",
     "Someone is using an unknown session": "فردی از یک نشست ناشناس استفاده می‌کند",
@@ -1193,19 +1187,6 @@
     "IRC display name width": "عرض نمایش نام‌های IRC",
     "This event could not be displayed": "امکان نمایش این رخداد وجود ندارد",
     "Edit message": "ویرایش پیام",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "تکرارهایی مانند \"abcabcabc\" تنها مقداری سخت‌تر از \"abc\" قابل حدس‌زدن هستند",
-    "Add another word or two. Uncommon words are better.": "یک یا دو کلمه دیگر اضافه کنید. کلمات غیرمعمول بهتر هستند.",
-    "Reversed words aren't much harder to guess": "حدس زدن کلمات معکوس خیلی سخت تر نیست",
-    "All-uppercase is almost as easy to guess as all-lowercase": "اگر همه‌ی موارد حروف بزرگ باشند، سختی حدس‌زدن آن‌ها با حالتی که فقط از حروف کوچک استفاده شود، تفاوتی نمی‌کند",
-    "Capitalization doesn't help very much": "استفاده از حروه بزرگ کمک چندانی نمی‌کند",
-    "Avoid dates and years that are associated with you": "از تاریخ و سالهایی که با شما در ارتباط هستند خودداری کنید",
-    "Avoid years that are associated with you": "از سالهایی که با شما در ارتباط هستند دوری کنید",
-    "Avoid recent years": "از سالهای اخیر خودداری کنید",
-    "Avoid sequences": "از موارد پشت سر هم اجتناب کنید",
-    "Avoid repeated words and characters": "از تکرار کلمات و کاراکترها خودداری نمائید",
-    "Use a longer keyboard pattern with more turns": "از الگوی طولانی‌ و پیچیده‌تر استفاده نمائید",
-    "No need for symbols, digits, or uppercase letters": "نیازی به علامت ، عدد یا حروف بزرگ نیست",
-    "Use a few words, avoid common phrases": "از چند کلمه استفاده کنید ، از عبارات معمول خودداری نمائید",
     "Unknown server error": "خطای ناشناخته از سمت سرور",
     "The user's homeserver does not support the version of the room.": "سرور کاربر از نسخه‌ی اتاق پشتیبانی نمی‌کند.",
     "The user must be unbanned before they can be invited.": "برای اینکه کاربر بتواند دعوت شود، ابتدا باید رفع تحریم شود.",
@@ -1423,14 +1404,6 @@
     "Unknown App": "برنامه ناشناخته",
     "Share your public space": "محیط عمومی خود را به اشتراک بگذارید",
     "Invite to %(spaceName)s": "دعوت به %(spaceName)s",
-    "A word by itself is easy to guess": "حدس زدن یک کلمه به خودی خود آسان است",
-    "This is similar to a commonly used password": "این مشابه یکی از گذرواژه‌‌هایی است که معمولاً استفاده می شود",
-    "This is a very common password": "این یک گذرواژه‌ی بسیار رایج است",
-    "This is a top-100 common password": "این‌ها ۱۰۰ گذرواژه‌ی پر استفاده هستند",
-    "This is a top-10 common password": "این‌ها ۱۰ گذرواژه‌ی پس استفاده هستند",
-    "Dates are often easy to guess": "حدس زدن تاریخ‌ها اغلب آسان است",
-    "Recent years are easy to guess": "حدس زدن سالهای اخیر آسان است",
-    "Sequences like abc or 6543 are easy to guess": "موارد متوالی نظیر abc یا 6543 برای حدس‌زدن راحت هستند",
     "Language and region": "زبان و جغرافیا",
     "Phone numbers": "شماره تلفن",
     "Email addresses": "آدرس ایمیل",
@@ -1706,11 +1679,11 @@
         "integration_manager": "مدیر یکپارچگی",
         "qr_code": "کد QR",
         "feedback": "بازخورد",
-        "all_rooms": "همه اتاق‌ها",
-        "orphan_rooms": "دیگر اتاق ها",
         "preview_message": "سلام. حال شما خوبه؟",
+        "orphan_rooms": "دیگر اتاق ها",
         "on": "روشن",
-        "off": "خاموش"
+        "off": "خاموش",
+        "all_rooms": "همه اتاق‌ها"
     },
     "action": {
         "continue": "ادامه",
@@ -1797,8 +1770,8 @@
         "mention": "اشاره",
         "submit": "ارسال",
         "send_report": "ارسال گزارش",
-        "enter_fullscreen": "نمایش تمام صفحه",
-        "exit_fullscreeen": "خروج از نمایش تمام صفحه"
+        "exit_fullscreeen": "خروج از نمایش تمام صفحه",
+        "enter_fullscreen": "نمایش تمام صفحه"
     },
     "a11y": {
         "user_menu": "منوی کاربر",
@@ -2021,14 +1994,17 @@
             "font_size": "اندازه فونت",
             "custom_font_description": "نام فونتی که بر روی سیستم‌تان نصب است را وارد کرده و %(brand)s سعی می‌کند از آن استفاده کند.",
             "timeline_image_size_default": "پیشفرض",
-            "custom_font_size": "از اندازه‌ی دلخواه استفاده کنید",
+            "image_size_default": "پیشفرض",
+            "font_size_valid": "از عددی بین %(min)s pt و %(max)s pt استفاده کنید",
             "font_size_nan": "سایز باید یک عدد باشد",
             "font_size_limit": "اندازه فونت دلخواه تنها می‌تواند عددی بین %(min)s pt و %(max)s pt باشد",
-            "font_size_valid": "از عددی بین %(min)s pt و %(max)s pt استفاده کنید",
-            "image_size_default": "پیشفرض"
+            "custom_font_size": "از اندازه‌ی دلخواه استفاده کنید"
         },
         "inline_url_previews_room_account": "فعال‌سازی پیش‌نمایش URL برای این اتاق (تنها شما را تحت تاثیر قرار می‌دهد)",
         "inline_url_previews_room": "امکان پیش‌نمایش URL را به صورت پیش‌فرض برای اعضای این اتاق فعال کن",
+        "voip": {
+            "mirror_local_feed": "تصویر خودتان را هنگام تماس تصویری برعکس (مثل آینه) نمایش بده"
+        },
         "security": {
             "message_search_disable_warning": "اگر غیر فعال شود، پیام‌های اتاق‌های رمزشده در نتایج جستجوها نمایش داده نمی‌شوند.",
             "message_search_indexing_idle": "در حال حاضر ایندکس پیام ها برای هیچ اتاقی انجام نمی‌شود.",
@@ -2055,9 +2031,6 @@
             "rm_lifetime": "مدت‌زمان نشانه‌ی خوانده‌شده (ms)",
             "rm_lifetime_offscreen": "خواندن نشانگر طول عمر خارج از صفحه نمایش (میلی ثانیه)",
             "always_show_menu_bar": "همیشه نوار فهرست پنجره را نشان بده"
-        },
-        "voip": {
-            "mirror_local_feed": "تصویر خودتان را هنگام تماس تصویری برعکس (مثل آینه) نمایش بده"
         }
     },
     "devtools": {
@@ -2356,11 +2329,11 @@
             "changed_rule_servers": "%(senderName)s یک قاعده تحریم سرورها را که با %(oldGlob)s تطابق داشت، به دلیل (دلایل) %(reason)s به گونه‌ای تغییر داد که با %(newGlob)s تطابق داشته باشد",
             "changed_rule_glob": "%(senderName)s یک قاعده تحریم را که با %(oldGlob)s تطابق داشت، به دلیل (دلایل) %(reason)s به گونه‌ای به‌روزرسانی کرد که با %(newGlob)s تطابق داشته باشد"
         },
-        "reactions": {
-            "tooltip": "<reactors/><reactedWith> واکنش نشان داد با %(shortName)s</reactedWith>"
-        },
         "redacted": {
             "tooltip": "پیام در %(date)s حذف شد"
+        },
+        "reactions": {
+            "tooltip": "<reactors/><reactedWith> واکنش نشان داد با %(shortName)s</reactedWith>"
         },
         "m.room.create": {
             "continuation": "این اتاق ادامه گفتگوی دیگر است.",
@@ -2429,14 +2402,14 @@
         "failed_find_user": "کاربر در اتاق پیدا نشد",
         "op": "سطح قدرت یک کاربر را تعریف کنید",
         "deop": "کاربر را با شناسه داده شده از بین می برد",
-        "server_error": "خطای سرور",
-        "command_error": "خطای فرمان",
-        "server_error_detail": "سرور در دسترس نیست، یا حجم بار روی آن زیاد شده و یا خطای دیگری رخ داده است.",
-        "unknown_command": "دستور ناشناس",
-        "unknown_command_detail": "دستور نامفهوم: %(commandText)s",
-        "unknown_command_help": "برای لیست کردن دستورات موجود می توانید از <code>/help</code> استفاده کنید. آیا قصد داشتید این پیام را به عنوان متم ارسال کنید؟",
         "unknown_command_hint": "نکته: پیام خود را با <code>//</code> شروع کنید تا با یک اسلش شروع شود.",
-        "unknown_command_button": "ارسال به عنوان پیام"
+        "unknown_command_help": "برای لیست کردن دستورات موجود می توانید از <code>/help</code> استفاده کنید. آیا قصد داشتید این پیام را به عنوان متم ارسال کنید؟",
+        "unknown_command_detail": "دستور نامفهوم: %(commandText)s",
+        "unknown_command_button": "ارسال به عنوان پیام",
+        "unknown_command": "دستور ناشناس",
+        "server_error_detail": "سرور در دسترس نیست، یا حجم بار روی آن زیاد شده و یا خطای دیگری رخ داده است.",
+        "server_error": "خطای سرور",
+        "command_error": "خطای فرمان"
     },
     "presence": {
         "online_for": "آنلاین برای مدت %(duration)s",
@@ -2609,8 +2582,8 @@
         "server_picker_custom": "سرور دیگر",
         "server_picker_explainer": "از یک سرور مبتنی بر پروتکل ماتریکس که ترجیح می‌دهید استفاده کرده، و یا از سرور شخصی خودتان استفاده کنید.",
         "server_picker_learn_more": "درباره سرورها",
-        "account_deactivated": "این حساب غیر فعال شده است.",
-        "incorrect_credentials": "نام کاربری و یا گذرواژه اشتباه است."
+        "incorrect_credentials": "نام کاربری و یا گذرواژه اشتباه است.",
+        "account_deactivated": "این حساب غیر فعال شده است."
     },
     "room_list": {
         "sort_unread_first": "ابتدا اتاق های با پیام خوانده نشده را نمایش بده",
@@ -2730,6 +2703,79 @@
         "existing_issue_link": "لطفاً ابتدا اشکالات موجود را در <existingIssuesLink>گیتهاب برنامه</existingIssuesLink> را مشاهده کنید. با اشکال شما مطابقتی وجود ندارد؟<newIssueLink> مورد جدیدی را ثبت کنید</newIssueLink>.",
         "send_feedback_action": "ارسال بازخورد"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "از چند کلمه استفاده کنید ، از عبارات معمول خودداری نمائید",
+            "noNeed": "نیازی به علامت ، عدد یا حروف بزرگ نیست",
+            "longerKeyboardPattern": "از الگوی طولانی‌ و پیچیده‌تر استفاده نمائید",
+            "repeated": "از تکرار کلمات و کاراکترها خودداری نمائید",
+            "sequences": "از موارد پشت سر هم اجتناب کنید",
+            "recentYears": "از سالهای اخیر خودداری کنید",
+            "associatedYears": "از سالهایی که با شما در ارتباط هستند دوری کنید",
+            "dates": "از تاریخ و سالهایی که با شما در ارتباط هستند خودداری کنید",
+            "capitalization": "استفاده از حروه بزرگ کمک چندانی نمی‌کند",
+            "allUppercase": "اگر همه‌ی موارد حروف بزرگ باشند، سختی حدس‌زدن آن‌ها با حالتی که فقط از حروف کوچک استفاده شود، تفاوتی نمی‌کند",
+            "reverseWords": "حدس زدن کلمات معکوس خیلی سخت تر نیست",
+            "l33t": "جایگزین‌های قابل پیش بینی مانند '@' به جای 'a' کمک زیادی نمی کند",
+            "anotherWord": "یک یا دو کلمه دیگر اضافه کنید. کلمات غیرمعمول بهتر هستند."
+        },
+        "warnings": {
+            "simpleRepeat": "تکرارهایی مانند بببب به راحتی قابل حدس هستند",
+            "extendedRepeat": "تکرارهایی مانند \"abcabcabc\" تنها مقداری سخت‌تر از \"abc\" قابل حدس‌زدن هستند",
+            "sequences": "موارد متوالی نظیر abc یا 6543 برای حدس‌زدن راحت هستند",
+            "recentYears": "حدس زدن سالهای اخیر آسان است",
+            "dates": "حدس زدن تاریخ‌ها اغلب آسان است",
+            "topTen": "این‌ها ۱۰ گذرواژه‌ی پس استفاده هستند",
+            "topHundred": "این‌ها ۱۰۰ گذرواژه‌ی پر استفاده هستند",
+            "common": "این یک گذرواژه‌ی بسیار رایج است",
+            "similarToCommon": "این مشابه یکی از گذرواژه‌‌هایی است که معمولاً استفاده می شود",
+            "wordByItself": "حدس زدن یک کلمه به خودی خود آسان است",
+            "namesByThemselves": "به راحتی می توان نام و نام خانوادگی را حدس زد",
+            "commonNames": "نام و نام خانوادگی‌های متداول به راحتی قابل حدس زدن هستند",
+            "straightRow": "ردیف کلیدهای مستقیم به راحتی قابل حدس هستند",
+            "keyPattern": "الگوهای کوتاه صفحه کلید به راحتی قابل حدس هستند"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "امکان ارسال یک صدای جدید به صورت جمعی نیست",
+        "failed_insufficient_permission_title": "امکان ارسال یک صدای جدید به صورت جمعی نیست",
+        "failed_others_already_recording_title": "امکان ارسال یک صدای جدید به صورت جمعی نیست",
+        "failed_already_recording_description": "شما در حال ضبط یک صدا برای ارسال جمعی هستید. برای تولید یک صدای جمعی دیگر ضبط فعلی را متوقف نمایید.",
+        "failed_insufficient_permission_description": "شما دسترسی لازم برای ارسال صدای جمعی در این اتاق را ندارید. لطفا با مدیر اتاق تماس بگیرید.",
+        "failed_others_already_recording_description": "شخص دیگری در حال ضبط صدا برای ارسال جمعی است. برای ارسال صدای جمعی باید منتظر بمانید تا کار ایشان به پایان برسد.",
+        "confirm_stop_title": "آیا ارسال جمعی زنده متوقف شود؟",
+        "confirm_stop_affirm": "بله، توقف ارسال جمعی",
+        "go_live": "برو به زنده",
+        "resume": "بازگشت به صدای جمعی",
+        "pause": "توقف صدای جمعی",
+        "play": "پخش صدای جمعی"
+    },
+    "update": {
+        "see_changes_button": "چه خبر؟",
+        "release_notes_toast_title": "چه خبر",
+        "toast_title": "%(brand)s را به‌روزرسانی کنید",
+        "toast_description": "نسخه‌ی جدید %(brand)s وجود است"
+    },
+    "theme": {
+        "light_high_contrast": "بالاترین کنتراست قالب روشن"
+    },
+    "space": {
+        "landing_welcome": "به <name/> خوش‌آمدید"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "این سرور خانگی برای نمایش نقشه تنظیم نشده است.",
+        "MapStyleUrlNotReachable": "این سرور خانگی برای نمایش نقشه بدرستی تنظیم نشده، یا سایت مرجع نقشه در دسترس نیست.",
+        "toggle_attribution": "تغییر دادن اسناد",
+        "map_feedback": "بازخورد نقشه",
+        "find_my_location": "پیدا کردن مکان",
+        "location_not_available": "مکان در دسترس نیست",
+        "mapbox_logo": "لوگوی جعبه نقشه",
+        "reset_bearing": "بازنشانی جهت شمال"
+    },
+    "labs_mjolnir": {
+        "room_name": "لیست تحریم‌های من",
+        "room_topic": "این لیست کاربران/اتاق‌هایی است که شما آن‌ها را بلاک کرده‌اید - اتاق را ترک نکنید!"
+    },
     "create_space": {
         "name_required": "لطفا یک نام برای محیط وارد کنید",
         "public_description": "محیط باز برای همه، مناسب برای جمع عمومی",
@@ -2758,45 +2804,5 @@
         "setup_rooms_community_heading": "برخی از مواردی که می خواهید درباره‌ی آن‌ها در %(spaceName)s بحث کنید، چیست؟",
         "setup_rooms_community_description": "بیایید برای هر یک از آنها یک اتاق درست کنیم.",
         "setup_rooms_description": "بعداً می توانید موارد بیشتری را اضافه کنید ، از جمله موارد موجود."
-    },
-    "space": {
-        "landing_welcome": "به <name/> خوش‌آمدید"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "این سرور خانگی برای نمایش نقشه تنظیم نشده است.",
-        "MapStyleUrlNotReachable": "این سرور خانگی برای نمایش نقشه بدرستی تنظیم نشده، یا سایت مرجع نقشه در دسترس نیست.",
-        "toggle_attribution": "تغییر دادن اسناد",
-        "map_feedback": "بازخورد نقشه",
-        "find_my_location": "پیدا کردن مکان",
-        "location_not_available": "مکان در دسترس نیست",
-        "mapbox_logo": "لوگوی جعبه نقشه",
-        "reset_bearing": "بازنشانی جهت شمال"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "امکان ارسال یک صدای جدید به صورت جمعی نیست",
-        "failed_insufficient_permission_title": "امکان ارسال یک صدای جدید به صورت جمعی نیست",
-        "failed_others_already_recording_title": "امکان ارسال یک صدای جدید به صورت جمعی نیست",
-        "failed_already_recording_description": "شما در حال ضبط یک صدا برای ارسال جمعی هستید. برای تولید یک صدای جمعی دیگر ضبط فعلی را متوقف نمایید.",
-        "failed_insufficient_permission_description": "شما دسترسی لازم برای ارسال صدای جمعی در این اتاق را ندارید. لطفا با مدیر اتاق تماس بگیرید.",
-        "failed_others_already_recording_description": "شخص دیگری در حال ضبط صدا برای ارسال جمعی است. برای ارسال صدای جمعی باید منتظر بمانید تا کار ایشان به پایان برسد.",
-        "confirm_stop_title": "آیا ارسال جمعی زنده متوقف شود؟",
-        "confirm_stop_affirm": "بله، توقف ارسال جمعی",
-        "go_live": "برو به زنده",
-        "resume": "بازگشت به صدای جمعی",
-        "pause": "توقف صدای جمعی",
-        "play": "پخش صدای جمعی"
-    },
-    "labs_mjolnir": {
-        "room_name": "لیست تحریم‌های من",
-        "room_topic": "این لیست کاربران/اتاق‌هایی است که شما آن‌ها را بلاک کرده‌اید - اتاق را ترک نکنید!"
-    },
-    "theme": {
-        "light_high_contrast": "بالاترین کنتراست قالب روشن"
-    },
-    "update": {
-        "see_changes_button": "چه خبر؟",
-        "release_notes_toast_title": "چه خبر",
-        "toast_title": "%(brand)s را به‌روزرسانی کنید",
-        "toast_description": "نسخه‌ی جدید %(brand)s وجود است"
     }
 }

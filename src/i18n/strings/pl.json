@@ -311,24 +311,6 @@
     },
     "Delete Backup": "Usuń kopię zapasową",
     "Unable to load! Check your network connectivity and try again.": "Nie można załadować! Sprawdź połączenie sieciowe i spróbuj ponownie.",
-    "Use a few words, avoid common phrases": "Użyj kilku słów, unikaj typowych zwrotów",
-    "Avoid repeated words and characters": "Unikaj powtarzających się słów i znaków",
-    "Avoid sequences": "Unikaj sekwencji",
-    "Avoid recent years": "Unikaj ostatnich lat",
-    "Avoid years that are associated with you": "Unikaj lat, które są z tobą związane z Tobą",
-    "Avoid dates and years that are associated with you": "Unikaj dat i lat, które są z tobą związane z Tobą",
-    "Add another word or two. Uncommon words are better.": "Dodaj kolejne słowo lub dwa. Niezwykłe słowa są lepsze.",
-    "Recent years are easy to guess": "Ostatnie lata są łatwe do odgadnięcia",
-    "Dates are often easy to guess": "Daty są często łatwe do odgadnięcia",
-    "This is a very common password": "To jest bardzo popularne hasło",
-    "Reversed words aren't much harder to guess": "Odwrócone słowa nie są trudniejsze do odgadnięcia",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Przewidywalne podstawienia, takie jak \"@\" zamiast \"a\", nie pomagają zbytnio",
-    "Repeats like \"aaa\" are easy to guess": "Powtórzenia takie jak \"aaa\" są łatwe do odgadnięcia",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Powtórzenia takie jak \"abcabcabc\" są tylko trochę trudniejsze do odgadnięcia niż \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Sekwencje takie jak abc lub 6543 są łatwe do odgadnięcia",
-    "A word by itself is easy to guess": "Samo słowo jest łatwe do odgadnięcia",
-    "Names and surnames by themselves are easy to guess": "Imiona i nazwiska same w sobie są łatwe do odgadnięcia",
-    "Common names and surnames are easy to guess": "Popularne imiona i nazwiska są łatwe do odgadnięcia",
     "You do not have permission to invite people to this room.": "Nie masz uprawnień do zapraszania ludzi do tego pokoju.",
     "Unknown server error": "Nieznany błąd serwera",
     "%(items)s and %(count)s others": {
@@ -338,18 +320,13 @@
     "Add some now": "Dodaj teraz kilka",
     "Please review and accept all of the homeserver's policies": "Przeczytaj i zaakceptuj wszystkie zasady dotyczące serwera domowego",
     "Continue With Encryption Disabled": "Kontynuuj Z Wyłączonym Szyfrowaniem",
-    "Capitalization doesn't help very much": "Kapitalizacja nie pomaga bardzo",
-    "This is a top-10 common password": "To jest 10 najpopularniejszych haseł",
-    "This is a top-100 common password": "To jest 100 najpopularniejszych haseł",
     "Unable to create key backup": "Nie można utworzyć kopii zapasowej klucza",
     "No backup found!": "Nie znaleziono kopii zapasowej!",
     "Create a new room with the same name, description and avatar": "Utwórz nowy pokój o tej samej nazwie, opisie i awatarze",
     "Please review and accept the policies of this homeserver:": "Przeczytaj i zaakceptuj zasady tego serwera domowego:",
-    "This is similar to a commonly used password": "Jest to podobne do powszechnie stosowanego hasła",
     "That doesn't match.": "To się nie zgadza.",
     "Go to Settings": "Przejdź do ustawień",
     "Unrecognised address": "Nierozpoznany adres",
-    "Short keyboard patterns are easy to guess": "Krótkie wzory klawiszowe są łatwe do odgadnięcia",
     "I don't want my encrypted messages": "Nie chcę moich zaszyfrowanych wiadomości",
     "You'll lose access to your encrypted messages": "Utracisz dostęp do zaszyfrowanych wiadomości",
     "Dog": "Pies",
@@ -463,9 +440,6 @@
     "Unexpected error resolving identity server configuration": "Nieoczekiwany błąd przy ustalaniu konfiguracji serwera tożsamości",
     "The user must be unbanned before they can be invited.": "Użytkownik musi być odbanowany, zanim będzie mógł być zaproszony.",
     "The user's homeserver does not support the version of the room.": "Serwer domowy użytkownika nie wspiera tej wersji pokoju.",
-    "No need for symbols, digits, or uppercase letters": "Nie są wymagane symbole, cyfry lub wielkie litery",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Same wielkie litery w haśle powodują, iż są one łatwe do zgadnięcia, podobnie jak w przypadku samych małych",
-    "Straight rows of keys are easy to guess": "Proste rzędy klawiszy są łatwe do odgadnięcia",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Bezpieczne wiadomości z tym użytkownikiem są szyfrowane end-to-end i nie mogą zostać odczytane przez osoby trzecie.",
     "Got It": "Zrobione",
     "Verify this user by confirming the following emoji appear on their screen.": "Sprawdź tego użytkownika potwierdzając, że następujące emotikony pojawiają się na ekranie rozmówcy.",
@@ -1177,7 +1151,6 @@
     "That's fine": "To jest w porządku",
     "Share your public space": "Zaproś do swojej publicznej przestrzeni",
     "Invite to %(spaceName)s": "Zaproś do %(spaceName)s",
-    "Use a longer keyboard pattern with more turns": "Użyj wzoru z klawiatury z większą ilością zakrętów",
     "This homeserver has been blocked by its administrator.": "Ten serwer domowy został zablokowany przez jego administratora.",
     "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Dodaj użytkowników i serwery tutaj które chcesz ignorować. Użyj znaku gwiazdki (*) żeby %(brand)s zgadzał się z każdym znakiem. Na przykład, <code>@bot:*</code> może ignorować wszystkich użytkowników którzy mają nazwę 'bot' na każdym serwerze.",
     "Lock": "Zamek",
@@ -2547,11 +2520,11 @@
         "integration_manager": "Menedżer integracji",
         "qr_code": "Kod QR",
         "feedback": "Opinia użytkownika",
-        "all_rooms": "Wszystkie pokoje",
-        "orphan_rooms": "Inne pokoje",
         "preview_message": "Hej, ty. Jesteś super!",
+        "orphan_rooms": "Inne pokoje",
         "on": "Włącz",
-        "off": "Wyłącz"
+        "off": "Wyłącz",
+        "all_rooms": "Wszystkie pokoje"
     },
     "action": {
         "continue": "Kontynuuj",
@@ -2652,8 +2625,8 @@
         "submit": "Wyślij",
         "send_report": "Wyślij zgłoszenie",
         "clear": "Wyczyść",
-        "enter_fullscreen": "Otwórz w trybie pełnoekranowym",
-        "exit_fullscreeen": "Wyjdź z trybu pełnoekranowego"
+        "exit_fullscreeen": "Wyjdź z trybu pełnoekranowego",
+        "enter_fullscreen": "Otwórz w trybie pełnoekranowym"
     },
     "a11y": {
         "user_menu": "Menu użytkownika",
@@ -2730,11 +2703,11 @@
         "notification_settings_beta_title": "Ustawienia powiadomień",
         "voice_broadcast_force_small_chunks": "Wymuś 15s długość kawałków dla transmisji głosowej",
         "oidc_native_flow": "Włącz natywne przepływy OIDC (W trakcie aktywnego rozwoju)",
-        "automatic_debug_logs": "Automatycznie wysyłaj logi debugowania po wystąpieniu jakiegokolwiek błędu",
-        "automatic_debug_logs_decryption": "Automatycznie wysyłaj logi debugowania po wystąpieniu błędów deszyfrowania",
-        "automatic_debug_logs_key_backup": "Automatycznie wysyłaj logi debugowania gdy kopia zapasowa kluczy nie działa",
+        "sliding_sync_disabled_notice": "Zaloguj się ponownie, aby wyłączyć",
         "rust_crypto_disabled_notice": "Można go tylko włączyć przez config.json",
-        "sliding_sync_disabled_notice": "Zaloguj się ponownie, aby wyłączyć"
+        "automatic_debug_logs_key_backup": "Automatycznie wysyłaj logi debugowania gdy kopia zapasowa kluczy nie działa",
+        "automatic_debug_logs_decryption": "Automatycznie wysyłaj logi debugowania po wystąpieniu błędów deszyfrowania",
+        "automatic_debug_logs": "Automatycznie wysyłaj logi debugowania po wystąpieniu jakiegokolwiek błędu"
     },
     "keyboard": {
         "home": "Strona główna",
@@ -3024,15 +2997,26 @@
             "timeline_image_size": "Rozmiar obrazu na osi czasu",
             "timeline_image_size_default": "Zwykły",
             "timeline_image_size_large": "Duży",
-            "custom_font_size": "Użyj niestandardowego rozmiaru",
+            "image_size_large": "Duży",
+            "image_size_default": "Zwykły",
+            "font_size_valid": "Użyj pomiędzy %(min)s pt i %(max)s pt",
             "font_size_nan": "Rozmiar musi być liczbą",
             "font_size_limit": "Niestandardowy rozmiar czcionki może być wyłącznie pomiędzy %(min)s pt i %(max)s pt",
-            "font_size_valid": "Użyj pomiędzy %(min)s pt i %(max)s pt",
-            "image_size_default": "Zwykły",
-            "image_size_large": "Duży"
+            "custom_font_size": "Użyj niestandardowego rozmiaru"
         },
         "inline_url_previews_room_account": "Włącz podgląd URL dla tego pokoju (dotyczy tylko Ciebie)",
         "inline_url_previews_room": "Włącz domyślny podgląd URL dla uczestników w tym pokoju",
+        "voip": {
+            "mirror_local_feed": "Lustrzane odbicie wideo",
+            "allow_p2p": "Zezwól Peer-to-Peer dla połączeń 1:1",
+            "allow_p2p_description": "Po włączeniu, inni użytkownicy będą mogli zobaczyć twój adres IP",
+            "auto_gain_control": "Automatyczna regulacja głośności",
+            "echo_cancellation": "Usuwanie echa",
+            "noise_suppression": "Redukcja szumów",
+            "enable_fallback_ice_server": "Zezwól na alternatywny serwer wspierający (%(server)s)",
+            "enable_fallback_ice_server_description": "Stosuje się go tylko wtedy, kiedy Twój serwer domowy go nie oferuje. Twój adres IP zostanie współdzielony w trakcie połączenia."
+        },
+        "send_read_receipts_unsupported": "Twój serwer nie wspiera wyłączenia wysyłania potwierdzeń przeczytania.",
         "security": {
             "message_search_disable_warning": "Jeśli wyłączone, wiadomości z szyfrowanych pokojów nie pojawią się w wynikach wyszukiwania.",
             "message_search_indexing_idle": "Aktualnie nie są indeksowane wiadomości z żadnego pokoju.",
@@ -3070,17 +3054,6 @@
             "always_show_menu_bar": "Zawsze pokazuj pasek menu okna",
             "enable_tray_icon": "Pokaż ikonę w zasobniku systemowym i zminimalizuj okno do niej zamiast zamknięcia",
             "enable_hardware_acceleration": "Włącz przyspieszenie sprzętowe"
-        },
-        "send_read_receipts_unsupported": "Twój serwer nie wspiera wyłączenia wysyłania potwierdzeń przeczytania.",
-        "voip": {
-            "mirror_local_feed": "Lustrzane odbicie wideo",
-            "allow_p2p": "Zezwól Peer-to-Peer dla połączeń 1:1",
-            "allow_p2p_description": "Po włączeniu, inni użytkownicy będą mogli zobaczyć twój adres IP",
-            "auto_gain_control": "Automatyczna regulacja głośności",
-            "echo_cancellation": "Usuwanie echa",
-            "noise_suppression": "Redukcja szumów",
-            "enable_fallback_ice_server": "Zezwól na alternatywny serwer wspierający (%(server)s)",
-            "enable_fallback_ice_server_description": "Stosuje się go tylko wtedy, kiedy Twój serwer domowy go nie oferuje. Twój adres IP zostanie współdzielony w trakcie połączenia."
         },
         "keyboard": {
             "title": "Skróty klawiszowe"
@@ -3179,11 +3152,11 @@
         "category_room": "Pokój",
         "category_other": "Inne",
         "widget_screenshots": "Włącz zrzut ekranu widżetu na wspieranych widżetach",
+        "title": "Ustawienia deweloperskie",
         "show_hidden_events": "Pokaż ukryte wydarzenia na linii czasowej",
-        "low_bandwidth_mode": "Tryb niskiej przepustowości",
         "low_bandwidth_mode_description": "Wymaga kompatybilnego serwera domowego.",
-        "developer_mode": "Tryb programisty",
-        "title": "Ustawienia deweloperskie"
+        "low_bandwidth_mode": "Tryb niskiej przepustowości",
+        "developer_mode": "Tryb programisty"
     },
     "export_chat": {
         "html": "HTML",
@@ -3561,22 +3534,22 @@
         "no_permission_messages_before_join": "Nie posiadasz uprawnień, aby wyświetlić wiadomości, które wysłano zanim dołączyłeś.",
         "encrypted_historical_messages_unavailable": "Wiadomości szyfrowane przed tym punktem są niedostępne.",
         "historical_messages_unavailable": "Nie możesz widzieć poprzednich wiadomości",
-        "io.element.voice_broadcast_info": {
-            "you": "Zakończyłeś <a>transmisje głosową</a>",
-            "user": "%(senderName)s zakończył <a>transmisję głosową</a>"
+        "redacted": {
+            "tooltip": "Wiadomość usunięta dnia %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s zareagował z %(content)s",
             "tooltip": "<reactors/><reactedWith> zareagował z %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Wiadomość usunięta dnia %(date)s"
         },
         "m.room.create": {
             "continuation": "Ten pokój jest kontynuacją innej rozmowy.",
             "unknown_predecessor_guess_server": "Nie można znaleźć starej wersji tego pokoju (ID pokoju: %(roomId)s), a nie dostarczono nam 'via_servers', aby ją znaleźć. Można spróbować odgadnąć serwer na podstawie ID pokoju. Jeśli chcesz spróbować, kliknij ten link:",
             "unknown_predecessor": "Nie można znaleźć starej wersji tego pokoju (ID pokoju: %(roomId)s), a nie dostarczono nam 'via_servers', aby ją znaleźć.",
             "see_older_messages": "Kliknij tutaj, aby zobaczyć starsze wiadomości."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Zakończyłeś <a>transmisje głosową</a>",
+            "user": "%(senderName)s zakończył <a>transmisję głosową</a>"
         }
     },
     "slash_command": {
@@ -3646,14 +3619,14 @@
         "failed_find_user": "Nie znaleziono użytkownika w pokoju",
         "op": "Określ poziom uprawnień użytkownika",
         "deop": "Usuwa prawa administratora użytkownikowi o danym ID",
-        "server_error": "Błąd serwera",
-        "command_error": "Błąd polecenia",
-        "server_error_detail": "Serwer może być niedostępny, przeciążony, lub coś innego poszło źle.",
-        "unknown_command": "Nieznane polecenie",
-        "unknown_command_detail": "Nieznane polecenie: %(commandText)s",
-        "unknown_command_help": "Możesz użyć <code>/help</code> aby wyświetlić listę dostępnych poleceń. Czy chciałeś wysłać to jako wiadomość?",
         "unknown_command_hint": "Wskazówka: Rozpocznij swoją wiadomość od <code>//</code>, aby rozpocząć ją ukośnikiem.",
-        "unknown_command_button": "Wyślij jako wiadomość"
+        "unknown_command_help": "Możesz użyć <code>/help</code> aby wyświetlić listę dostępnych poleceń. Czy chciałeś wysłać to jako wiadomość?",
+        "unknown_command_detail": "Nieznane polecenie: %(commandText)s",
+        "unknown_command_button": "Wyślij jako wiadomość",
+        "unknown_command": "Nieznane polecenie",
+        "server_error_detail": "Serwer może być niedostępny, przeciążony, lub coś innego poszło źle.",
+        "server_error": "Błąd serwera",
+        "command_error": "Błąd polecenia"
     },
     "presence": {
         "busy": "Zajęty",
@@ -3899,8 +3872,8 @@
         "server_picker_custom": "Inne serwery domowe",
         "server_picker_explainer": "Korzystaj z wybranego przez Ciebie serwera domowego Matrix lub hostuj swój własny.",
         "server_picker_learn_more": "O serwerach domowych",
-        "account_deactivated": "To konto zostało zdezaktywowane.",
-        "incorrect_credentials": "Nieprawidłowa nazwa użytkownika i/lub hasło."
+        "incorrect_credentials": "Nieprawidłowa nazwa użytkownika i/lub hasło.",
+        "account_deactivated": "To konto zostało zdezaktywowane."
     },
     "room_list": {
         "sort_unread_first": "Pokazuj najpierw pokoje z nieprzeczytanymi wiadomościami",
@@ -4031,6 +4004,110 @@
         "existing_issue_link": "Najpierw zobacz <existingIssuesLink>istniejące zgłoszenia na GitHubie</existingIssuesLink>. Nic nie znalazłeś? <newIssueLink>Utwórz nowe</newIssueLink>.",
         "send_feedback_action": "Wyślij opinię użytkownika"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Użyj kilku słów, unikaj typowych zwrotów",
+            "noNeed": "Nie są wymagane symbole, cyfry lub wielkie litery",
+            "longerKeyboardPattern": "Użyj wzoru z klawiatury z większą ilością zakrętów",
+            "repeated": "Unikaj powtarzających się słów i znaków",
+            "sequences": "Unikaj sekwencji",
+            "recentYears": "Unikaj ostatnich lat",
+            "associatedYears": "Unikaj lat, które są z tobą związane z Tobą",
+            "dates": "Unikaj dat i lat, które są z tobą związane z Tobą",
+            "capitalization": "Kapitalizacja nie pomaga bardzo",
+            "allUppercase": "Same wielkie litery w haśle powodują, iż są one łatwe do zgadnięcia, podobnie jak w przypadku samych małych",
+            "reverseWords": "Odwrócone słowa nie są trudniejsze do odgadnięcia",
+            "l33t": "Przewidywalne podstawienia, takie jak \"@\" zamiast \"a\", nie pomagają zbytnio",
+            "anotherWord": "Dodaj kolejne słowo lub dwa. Niezwykłe słowa są lepsze."
+        },
+        "warnings": {
+            "simpleRepeat": "Powtórzenia takie jak \"aaa\" są łatwe do odgadnięcia",
+            "extendedRepeat": "Powtórzenia takie jak \"abcabcabc\" są tylko trochę trudniejsze do odgadnięcia niż \"abc\"",
+            "sequences": "Sekwencje takie jak abc lub 6543 są łatwe do odgadnięcia",
+            "recentYears": "Ostatnie lata są łatwe do odgadnięcia",
+            "dates": "Daty są często łatwe do odgadnięcia",
+            "topTen": "To jest 10 najpopularniejszych haseł",
+            "topHundred": "To jest 100 najpopularniejszych haseł",
+            "common": "To jest bardzo popularne hasło",
+            "similarToCommon": "Jest to podobne do powszechnie stosowanego hasła",
+            "wordByItself": "Samo słowo jest łatwe do odgadnięcia",
+            "namesByThemselves": "Imiona i nazwiska same w sobie są łatwe do odgadnięcia",
+            "commonNames": "Popularne imiona i nazwiska są łatwe do odgadnięcia",
+            "straightRow": "Proste rzędy klawiszy są łatwe do odgadnięcia",
+            "keyPattern": "Krótkie wzory klawiszowe są łatwe do odgadnięcia"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Nie można rozpocząć nowej transmisji głosowej",
+        "failed_insufficient_permission_title": "Nie można rozpocząć nowej transmisji głosowej",
+        "failed_others_already_recording_title": "Nie można rozpocząć nowej transmisji głosowej",
+        "failed_already_recording_description": "Już nagrywasz transmisję głosową. Zakończ bieżącą transmisję głosową, aby rozpocząć nową.",
+        "failed_insufficient_permission_description": "Nie posiadasz wymaganych uprawnień, aby rozpocząć transmisję głosową w tym pokoju. Skontaktuj się z administratorem pokoju, aby zwiększyć swoje uprawnienia.",
+        "failed_others_already_recording_description": "Ktoś już nagrywa transmisję głosową. Aby rozpocząć nową, poczekaj aż bieżąca się skończy.",
+        "failed_no_connection_title": "Błąd połączenia",
+        "failed_no_connection_description": "Niestety, nie jesteśmy w stanie rozpocząć nowego nagrania. Spróbuj ponownie później.",
+        "failed_decrypt": "Nie można rozszyfrować transmisji głosowej",
+        "failed_generic": "Nie można odtworzyć tej transmisji głosowej",
+        "confirm_stop_title": "Zakończyć transmisję na żywo?",
+        "confirm_stop_description": "Czy na pewno chcesz zakończyć transmisję na żywo? Transmisja zostanie zakończona, a całe nagranie będzie dostępne w pokoju.",
+        "confirm_stop_affirm": "Tak, zakończ transmisję",
+        "confirm_listen_title": "Zacząć słuchać transmisji na żywo?",
+        "confirm_listen_description": "Jeśli zaczniesz słuchać tej transmisji na żywo, twoja bieżąca transmisja na żywo zostanie zakończona.",
+        "confirm_listen_affirm": "Tak, zakończ moje nagranie",
+        "30s_backward": "30s do tyłu",
+        "30s_forward": "30s do przodu",
+        "go_live": "Rozpocznij transmisję",
+        "resume": "wznów transmisję głosową",
+        "pause": "wstrzymaj transmisję głosową",
+        "buffering": "Buforowanie…",
+        "play": "odtwórz transmisję głosową",
+        "connection_error": "Błąd połączenia - Nagrywanie wstrzymane"
+    },
+    "update": {
+        "see_changes_button": "Co nowego?",
+        "release_notes_toast_title": "Co nowego",
+        "toast_title": "Aktualizuj %(brand)s",
+        "toast_description": "Dostępna jest nowa wersja %(brand)s"
+    },
+    "threads": {
+        "all_threads": "Wszystkie wątki",
+        "all_threads_description": "Pokazuje wszystkie wątki z bieżącego pokoju",
+        "my_threads": "Moje wątki",
+        "my_threads_description": "Pokazuje wszystkie wątki, w których brałeś udział",
+        "show_thread_filter": "Pokaż:",
+        "empty_has_threads_tip": "Odpowiedz do trwającego już wątku lub użyj “%(replyInThread)s” najeżdżając na wiadomość, aby rozpocząć nową.",
+        "show_all_threads": "Pokaż wszystkie wątki",
+        "empty_explainer": "Dzięki wątkom Twoje rozmowy są zorganizowane i łatwe do śledzenia.",
+        "empty_tip": "<b>Tip:</b> Użyj “%(replyInThread)s” najeżdżając na wiadomość.",
+        "empty_heading": "Organizuj dyskusje za pomocą wątków"
+    },
+    "theme": {
+        "light_high_contrast": "Jasny z wysokim kontrastem"
+    },
+    "space": {
+        "landing_welcome": "Witamy w <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Ten serwer domowy nie jest skonfigurowany by wyświetlać mapy.",
+        "WebGLNotEnabled": "Aby wyświetlić mapy wymagany jest WebGL. Włącz go w ustawieniach swojej przeglądarki.",
+        "MapStyleUrlNotReachable": "Ten serwer domowy nie jest skonfigurowany poprawnie, by wyświetlać mapy, lub skonfigurowany serwer map może być nieosiągalny.",
+        "toggle_attribution": "Przełącz atrybucje",
+        "map_feedback": "Opinia o mapie",
+        "find_my_location": "Znajdź moją lokalizację",
+        "location_not_available": "Lokalizacja niedostępna",
+        "mapbox_logo": "Logo Mapbox",
+        "reset_bearing": "Resetuj kierunek na północ",
+        "failed_permission": "%(brand)s został odmówiony uprawnień do pobrania Twojej lokalizacji. Zezwól na dostęp do lokalizacji w ustawieniach przeglądarki.",
+        "failed_generic": "Nie udało się pobrać Twojej lokalizacji. Spróbuj ponownie później.",
+        "failed_timeout": "Upłynął czas oczekiwania podczas pobierania lokalizacji. Spróbuj ponownie później.",
+        "failed_unknown": "Wystąpił nieznany błąd podczas pobierania lokalizacji. Spróbuj ponownie później.",
+        "expand_map": "Rozwiń mapę",
+        "failed_load_map": "Nie udało się wczytać mapy"
+    },
+    "labs_mjolnir": {
+        "room_name": "Moja lista zablokowanych",
+        "room_topic": "To jest Twoja lista zablokowanych użytkowników/serwerów – nie opuszczaj tego pokoju!"
+    },
     "create_space": {
         "name_required": "Podaj nazwę dla przestrzeni",
         "name_placeholder": "np. moja-przestrzen",
@@ -4065,76 +4142,5 @@
         "setup_rooms_description": "W przyszłości będziesz mógł dodać więcej, włączając już istniejące.",
         "setup_rooms_private_heading": "Nad jakimi projektami pracuje Twój zespół?",
         "setup_rooms_private_description": "Utworzymy pokój dla każdego z nich."
-    },
-    "space": {
-        "landing_welcome": "Witamy w <name/>"
-    },
-    "threads": {
-        "all_threads": "Wszystkie wątki",
-        "all_threads_description": "Pokazuje wszystkie wątki z bieżącego pokoju",
-        "my_threads": "Moje wątki",
-        "my_threads_description": "Pokazuje wszystkie wątki, w których brałeś udział",
-        "show_thread_filter": "Pokaż:",
-        "empty_has_threads_tip": "Odpowiedz do trwającego już wątku lub użyj “%(replyInThread)s” najeżdżając na wiadomość, aby rozpocząć nową.",
-        "show_all_threads": "Pokaż wszystkie wątki",
-        "empty_explainer": "Dzięki wątkom Twoje rozmowy są zorganizowane i łatwe do śledzenia.",
-        "empty_tip": "<b>Tip:</b> Użyj “%(replyInThread)s” najeżdżając na wiadomość.",
-        "empty_heading": "Organizuj dyskusje za pomocą wątków"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Ten serwer domowy nie jest skonfigurowany by wyświetlać mapy.",
-        "WebGLNotEnabled": "Aby wyświetlić mapy wymagany jest WebGL. Włącz go w ustawieniach swojej przeglądarki.",
-        "MapStyleUrlNotReachable": "Ten serwer domowy nie jest skonfigurowany poprawnie, by wyświetlać mapy, lub skonfigurowany serwer map może być nieosiągalny.",
-        "toggle_attribution": "Przełącz atrybucje",
-        "map_feedback": "Opinia o mapie",
-        "find_my_location": "Znajdź moją lokalizację",
-        "location_not_available": "Lokalizacja niedostępna",
-        "mapbox_logo": "Logo Mapbox",
-        "reset_bearing": "Resetuj kierunek na północ",
-        "failed_permission": "%(brand)s został odmówiony uprawnień do pobrania Twojej lokalizacji. Zezwól na dostęp do lokalizacji w ustawieniach przeglądarki.",
-        "failed_generic": "Nie udało się pobrać Twojej lokalizacji. Spróbuj ponownie później.",
-        "failed_timeout": "Upłynął czas oczekiwania podczas pobierania lokalizacji. Spróbuj ponownie później.",
-        "failed_unknown": "Wystąpił nieznany błąd podczas pobierania lokalizacji. Spróbuj ponownie później.",
-        "expand_map": "Rozwiń mapę",
-        "failed_load_map": "Nie udało się wczytać mapy"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Nie można rozpocząć nowej transmisji głosowej",
-        "failed_insufficient_permission_title": "Nie można rozpocząć nowej transmisji głosowej",
-        "failed_others_already_recording_title": "Nie można rozpocząć nowej transmisji głosowej",
-        "failed_already_recording_description": "Już nagrywasz transmisję głosową. Zakończ bieżącą transmisję głosową, aby rozpocząć nową.",
-        "failed_insufficient_permission_description": "Nie posiadasz wymaganych uprawnień, aby rozpocząć transmisję głosową w tym pokoju. Skontaktuj się z administratorem pokoju, aby zwiększyć swoje uprawnienia.",
-        "failed_others_already_recording_description": "Ktoś już nagrywa transmisję głosową. Aby rozpocząć nową, poczekaj aż bieżąca się skończy.",
-        "failed_no_connection_title": "Błąd połączenia",
-        "failed_no_connection_description": "Niestety, nie jesteśmy w stanie rozpocząć nowego nagrania. Spróbuj ponownie później.",
-        "failed_decrypt": "Nie można rozszyfrować transmisji głosowej",
-        "failed_generic": "Nie można odtworzyć tej transmisji głosowej",
-        "confirm_stop_title": "Zakończyć transmisję na żywo?",
-        "confirm_stop_description": "Czy na pewno chcesz zakończyć transmisję na żywo? Transmisja zostanie zakończona, a całe nagranie będzie dostępne w pokoju.",
-        "confirm_stop_affirm": "Tak, zakończ transmisję",
-        "confirm_listen_title": "Zacząć słuchać transmisji na żywo?",
-        "confirm_listen_description": "Jeśli zaczniesz słuchać tej transmisji na żywo, twoja bieżąca transmisja na żywo zostanie zakończona.",
-        "confirm_listen_affirm": "Tak, zakończ moje nagranie",
-        "30s_backward": "30s do tyłu",
-        "30s_forward": "30s do przodu",
-        "go_live": "Rozpocznij transmisję",
-        "resume": "wznów transmisję głosową",
-        "pause": "wstrzymaj transmisję głosową",
-        "buffering": "Buforowanie…",
-        "play": "odtwórz transmisję głosową",
-        "connection_error": "Błąd połączenia - Nagrywanie wstrzymane"
-    },
-    "labs_mjolnir": {
-        "room_name": "Moja lista zablokowanych",
-        "room_topic": "To jest Twoja lista zablokowanych użytkowników/serwerów – nie opuszczaj tego pokoju!"
-    },
-    "theme": {
-        "light_high_contrast": "Jasny z wysokim kontrastem"
-    },
-    "update": {
-        "see_changes_button": "Co nowego?",
-        "release_notes_toast_title": "Co nowego",
-        "toast_title": "Aktualizuj %(brand)s",
-        "toast_description": "Dostępna jest nowa wersja %(brand)s"
     }
 }

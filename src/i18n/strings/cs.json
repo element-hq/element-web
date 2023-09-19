@@ -367,33 +367,6 @@
     "Unrecognised address": "Neznámá adresa",
     "You do not have permission to invite people to this room.": "Nemáte oprávnění zvát lidi do této místnosti.",
     "Unknown server error": "Neznámá chyba serveru",
-    "Use a few words, avoid common phrases": "Použijte několik slov a vyvarujte se běžných frází",
-    "No need for symbols, digits, or uppercase letters": "Není potřeba používat čísla, velká písmena ani divné znaky",
-    "Use a longer keyboard pattern with more turns": "Použijte delší sekvenci",
-    "Avoid repeated words and characters": "Vyvarujte se opakujících se slov a znaků",
-    "Avoid sequences": "Vyvarujte se běžných posloupností",
-    "Avoid recent years": "Nepoužívejte čísla roků",
-    "Avoid years that are associated with you": "Nepoužívejte roky, které s vámi nějak souvisí",
-    "Avoid dates and years that are associated with you": "Nepoužívejte data ani roky, které s vámi nějak souvisí",
-    "Capitalization doesn't help very much": "Zvětšení nějakých písmen zas tolik nepomůže",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Všechno velkými je skoro stejně jednoduché jako všechno malými písmeny",
-    "Reversed words aren't much harder to guess": "Otočená slova nejsou moc těžká na uhodnutí",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Časté substituce jako 'a' za '@' a 'S' za '$' moc nepomůžou",
-    "Add another word or two. Uncommon words are better.": "Přidejte další slovo nebo dvě. Čím výjimečnější tím lepší.",
-    "Repeats like \"aaa\" are easy to guess": "Opakování jako „aaa“ lze snadno uhodnout",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Opakování typu „abcabcabc“ jsou jen o málo složitější k uhádnutí než „abc“",
-    "Sequences like abc or 6543 are easy to guess": "Posloupnosti jako abc nebo 6543 je lehké uhodnout",
-    "Recent years are easy to guess": "Nedávné roky je lehké uhodnout",
-    "Dates are often easy to guess": "Data je většinou lehké uhodnout",
-    "This is a top-10 common password": "Toto jedno z nějčastějších hesel",
-    "This is a top-100 common password": "Toto je jedno z nejčastějších hesel",
-    "This is a very common password": "Toto je velmi používané heslo",
-    "This is similar to a commonly used password": "Toto je moc podobné běžně používanému heslu",
-    "A word by itself is easy to guess": "Jenom jedno slovo je moc jednoduché uhodnout",
-    "Names and surnames by themselves are easy to guess": "Jména a příjmení je velmi jednoduché uhodnout",
-    "Common names and surnames are easy to guess": "Běžná jména a příjmení je velmi jednoduché uhodnout",
-    "Straight rows of keys are easy to guess": "Řádky na klávesnici je moc jednoduché uhodnout",
-    "Short keyboard patterns are easy to guess": "Krátké sekvence kláves je moc jednoduché uhodnout",
     "Please contact your homeserver administrator.": "Kontaktujte prosím správce domovského serveru.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Bezpečné zprávy s tímto uživatelem jsou koncově šifrované a nikdo další je nemůže číst.",
     "Got It": "OK",
@@ -2567,11 +2540,11 @@
         "integration_manager": "Správce integrací",
         "qr_code": "QR kód",
         "feedback": "Zpětná vazba",
-        "all_rooms": "Všechny místnosti",
-        "orphan_rooms": "Ostatní místnosti",
         "preview_message": "Hej ty. Jsi nejlepší!",
+        "orphan_rooms": "Ostatní místnosti",
         "on": "Zapnout",
-        "off": "Vypnout"
+        "off": "Vypnout",
+        "all_rooms": "Všechny místnosti"
     },
     "action": {
         "continue": "Pokračovat",
@@ -2673,8 +2646,8 @@
         "submit": "Odeslat",
         "send_report": "Nahlásit",
         "clear": "Smazat",
-        "enter_fullscreen": "Vstup do režimu celé obrazovky",
-        "exit_fullscreeen": "Ukončení režimu celé obrazovky"
+        "exit_fullscreeen": "Ukončení režimu celé obrazovky",
+        "enter_fullscreen": "Vstup do režimu celé obrazovky"
     },
     "a11y": {
         "user_menu": "Uživatelská nabídka",
@@ -2751,11 +2724,11 @@
         "notification_settings_beta_title": "Nastavení oznámení",
         "voice_broadcast_force_small_chunks": "Vynutit 15s délku bloku hlasového vysílání",
         "oidc_native_flow": "Povolit nové původní toky OIDC (ve fázi aktivního vývoje)",
-        "automatic_debug_logs": "Automaticky odesílat ladící protokoly při jakékoli chybě",
-        "automatic_debug_logs_decryption": "Automaticky odesílat ladící protokoly při chybách dešifrování",
-        "automatic_debug_logs_key_backup": "Automaticky odeslat ladící protokoly, když zálohování klíčů nefunguje",
+        "sliding_sync_disabled_notice": "Pro vypnutí se odhlaste a znovu přihlaste",
         "rust_crypto_disabled_notice": "Aktuálně lze povolit pouze v souboru config.json",
-        "sliding_sync_disabled_notice": "Pro vypnutí se odhlaste a znovu přihlaste"
+        "automatic_debug_logs_key_backup": "Automaticky odeslat ladící protokoly, když zálohování klíčů nefunguje",
+        "automatic_debug_logs_decryption": "Automaticky odesílat ladící protokoly při chybách dešifrování",
+        "automatic_debug_logs": "Automaticky odesílat ladící protokoly při jakékoli chybě"
     },
     "keyboard": {
         "home": "Domov",
@@ -3045,15 +3018,26 @@
             "timeline_image_size": "Velikost obrázku na časové ose",
             "timeline_image_size_default": "Výchozí",
             "timeline_image_size_large": "Velký",
-            "custom_font_size": "Použít vlastní velikost",
+            "image_size_large": "Velký",
+            "image_size_default": "Výchozí",
+            "font_size_valid": "Použijte velikost mezi %(min)s pt a %(max)s pt",
             "font_size_nan": "Velikost musí být číslo",
             "font_size_limit": "Vlastní velikost písma může být pouze mezi %(min)s pt a %(max)s pt",
-            "font_size_valid": "Použijte velikost mezi %(min)s pt a %(max)s pt",
-            "image_size_default": "Výchozí",
-            "image_size_large": "Velký"
+            "custom_font_size": "Použít vlastní velikost"
         },
         "inline_url_previews_room_account": "Povolit náhledy URL adres pro tuto místnost (ovlivňuje pouze vás)",
         "inline_url_previews_room": "Povolit náhledy URL adres pro členy této místnosti jako výchozí",
+        "voip": {
+            "mirror_local_feed": "Zrcadlit lokání video",
+            "allow_p2p": "Povolit Peer-to-Peer pro hovory 1:1",
+            "allow_p2p_description": "Pokud je povoleno, může druhá strana vidět vaši IP adresu",
+            "auto_gain_control": "Automatická úprava zesílení",
+            "echo_cancellation": "Potlačení ozvěny",
+            "noise_suppression": "Potlačení hluku",
+            "enable_fallback_ice_server": "Povolit záložní asistenční server hovorů (%(server)s)",
+            "enable_fallback_ice_server_description": "Platí pouze v případě, že váš domovský server tuto možnost nenabízí. Vaše IP adresa bude během hovoru sdílena."
+        },
+        "send_read_receipts_unsupported": "Váš server nepodporuje vypnutí odesílání potvrzení o přečtení.",
         "security": {
             "message_search_disable_warning": "Když je to zakázané, zprávy v šifrovaných místnostech se nebudou objevovat ve výsledcích vyhledávání.",
             "message_search_indexing_idle": "Aktuálně neindexujeme žádné zprávy.",
@@ -3091,17 +3075,6 @@
             "always_show_menu_bar": "Vždy zobrazovat horní lištu okna",
             "enable_tray_icon": "Zobrazit ikonu v oznamovací oblasti a minimalizivat při zavření okna",
             "enable_hardware_acceleration": "Povolit hardwarovou akceleraci"
-        },
-        "send_read_receipts_unsupported": "Váš server nepodporuje vypnutí odesílání potvrzení o přečtení.",
-        "voip": {
-            "mirror_local_feed": "Zrcadlit lokání video",
-            "allow_p2p": "Povolit Peer-to-Peer pro hovory 1:1",
-            "allow_p2p_description": "Pokud je povoleno, může druhá strana vidět vaši IP adresu",
-            "auto_gain_control": "Automatická úprava zesílení",
-            "echo_cancellation": "Potlačení ozvěny",
-            "noise_suppression": "Potlačení hluku",
-            "enable_fallback_ice_server": "Povolit záložní asistenční server hovorů (%(server)s)",
-            "enable_fallback_ice_server_description": "Platí pouze v případě, že váš domovský server tuto možnost nenabízí. Vaše IP adresa bude během hovoru sdílena."
         },
         "keyboard": {
             "title": "Klávesnice"
@@ -3200,11 +3173,11 @@
         "category_room": "Místnost",
         "category_other": "Další možnosti",
         "widget_screenshots": "Povolit screenshot widgetu pro podporované widgety",
+        "title": "Nástroje pro vývojáře",
         "show_hidden_events": "Zobrazovat v časové ose skryté události",
-        "low_bandwidth_mode": "Režim malé šířky pásma",
         "low_bandwidth_mode_description": "Vyžaduje kompatibilní domovský server.",
-        "developer_mode": "Vývojářský režim",
-        "title": "Nástroje pro vývojáře"
+        "low_bandwidth_mode": "Režim malé šířky pásma",
+        "developer_mode": "Vývojářský režim"
     },
     "export_chat": {
         "html": "HTML",
@@ -3584,22 +3557,22 @@
         "no_permission_messages_before_join": "Nemáte oprávnění zobrazovat zprávy z doby, než jste se připojili.",
         "encrypted_historical_messages_unavailable": "Šifrované zprávy před tímto bodem nejsou k dispozici.",
         "historical_messages_unavailable": "Dřívější zprávy nelze zobrazit",
-        "io.element.voice_broadcast_info": {
-            "you": "Ukončili jste <a>hlasové vysílání</a>",
-            "user": "%(senderName)s ukončil(a) <a>hlasové vysílání</a>"
+        "redacted": {
+            "tooltip": "Zpráva byla odstraněna %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s reagoval(a) na %(content)s",
             "tooltip": "<reactors/><reactedWith> reagoval(a) %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Zpráva byla odstraněna %(date)s"
         },
         "m.room.create": {
             "continuation": "Tato místost je pokračováním jiné konverzace.",
             "unknown_predecessor_guess_server": "Nepodařilo se najít starou verzi této místnosti (ID místnosti: %(roomId)s), a nebyl poskytnut parametr 'via_servers', který by umožnil její vyhledání. Je možné, že odhad serveru z ID místnosti bude fungovat. Pokud to chcete zkusit, klikněte na tento odkaz:",
             "unknown_predecessor": "Nepodařilo se najít starou verzi této místnosti (ID místnosti: %(roomId)s), a nebyl poskytnut parametr 'via_servers', který by umožnil její vyhledání.",
             "see_older_messages": "Klepnutím zobrazíte starší zprávy."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Ukončili jste <a>hlasové vysílání</a>",
+            "user": "%(senderName)s ukončil(a) <a>hlasové vysílání</a>"
         }
     },
     "slash_command": {
@@ -3669,14 +3642,14 @@
         "failed_find_user": "Nepovedlo se najít uživatele v místnosti",
         "op": "Stanovte úroveň oprávnění uživatele",
         "deop": "Zruší stav moderátor uživateli se zadaným ID",
-        "server_error": "Chyba serveru",
-        "command_error": "Chyba příkazu",
-        "server_error_detail": "Server je nedostupný, přetížený nebo se něco pokazilo.",
-        "unknown_command": "Neznámý příkaz",
-        "unknown_command_detail": "Nerozpoznaný příkaz: %(commandText)s",
-        "unknown_command_help": "Můžete použít <code>/help</code> na vypsání všech příkazů. Nebo jste text chtěli odeslat jako zprávu?",
         "unknown_command_hint": "Tip: Zprávu můžete začít <code>//</code>, pokud chcete aby začínala lomítkem.",
-        "unknown_command_button": "Odeslat jako zprávu"
+        "unknown_command_help": "Můžete použít <code>/help</code> na vypsání všech příkazů. Nebo jste text chtěli odeslat jako zprávu?",
+        "unknown_command_detail": "Nerozpoznaný příkaz: %(commandText)s",
+        "unknown_command_button": "Odeslat jako zprávu",
+        "unknown_command": "Neznámý příkaz",
+        "server_error_detail": "Server je nedostupný, přetížený nebo se něco pokazilo.",
+        "server_error": "Chyba serveru",
+        "command_error": "Chyba příkazu"
     },
     "presence": {
         "busy": "Zaneprázdněný",
@@ -3922,8 +3895,8 @@
         "server_picker_custom": "Jiný domovský server",
         "server_picker_explainer": "Použijte svůj preferovaný domovský server Matrix, pokud ho máte, nebo hostujte svůj vlastní.",
         "server_picker_learn_more": "O domovských serverech",
-        "account_deactivated": "Tento účet byl deaktivován.",
-        "incorrect_credentials": "Nesprávné uživatelské jméno nebo heslo."
+        "incorrect_credentials": "Nesprávné uživatelské jméno nebo heslo.",
+        "account_deactivated": "Tento účet byl deaktivován."
     },
     "room_list": {
         "sort_unread_first": "Zobrazovat místnosti s nepřečtenými zprávami jako první",
@@ -4054,6 +4027,110 @@
         "existing_issue_link": "Nejříve si prosím prohlédněte <existingIssuesLink>existující chyby na Githubu</existingIssuesLink>. Žádná shoda? <newIssueLink>Nahlašte novou chybu</newIssueLink>.",
         "send_feedback_action": "Odeslat zpětnou vazbu"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Použijte několik slov a vyvarujte se běžných frází",
+            "noNeed": "Není potřeba používat čísla, velká písmena ani divné znaky",
+            "longerKeyboardPattern": "Použijte delší sekvenci",
+            "repeated": "Vyvarujte se opakujících se slov a znaků",
+            "sequences": "Vyvarujte se běžných posloupností",
+            "recentYears": "Nepoužívejte čísla roků",
+            "associatedYears": "Nepoužívejte roky, které s vámi nějak souvisí",
+            "dates": "Nepoužívejte data ani roky, které s vámi nějak souvisí",
+            "capitalization": "Zvětšení nějakých písmen zas tolik nepomůže",
+            "allUppercase": "Všechno velkými je skoro stejně jednoduché jako všechno malými písmeny",
+            "reverseWords": "Otočená slova nejsou moc těžká na uhodnutí",
+            "l33t": "Časté substituce jako 'a' za '@' a 'S' za '$' moc nepomůžou",
+            "anotherWord": "Přidejte další slovo nebo dvě. Čím výjimečnější tím lepší."
+        },
+        "warnings": {
+            "simpleRepeat": "Opakování jako „aaa“ lze snadno uhodnout",
+            "extendedRepeat": "Opakování typu „abcabcabc“ jsou jen o málo složitější k uhádnutí než „abc“",
+            "sequences": "Posloupnosti jako abc nebo 6543 je lehké uhodnout",
+            "recentYears": "Nedávné roky je lehké uhodnout",
+            "dates": "Data je většinou lehké uhodnout",
+            "topTen": "Toto jedno z nějčastějších hesel",
+            "topHundred": "Toto je jedno z nejčastějších hesel",
+            "common": "Toto je velmi používané heslo",
+            "similarToCommon": "Toto je moc podobné běžně používanému heslu",
+            "wordByItself": "Jenom jedno slovo je moc jednoduché uhodnout",
+            "namesByThemselves": "Jména a příjmení je velmi jednoduché uhodnout",
+            "commonNames": "Běžná jména a příjmení je velmi jednoduché uhodnout",
+            "straightRow": "Řádky na klávesnici je moc jednoduché uhodnout",
+            "keyPattern": "Krátké sekvence kláves je moc jednoduché uhodnout"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Nelze spustit nové hlasové vysílání",
+        "failed_insufficient_permission_title": "Nelze spustit nové hlasové vysílání",
+        "failed_others_already_recording_title": "Nelze spustit nové hlasové vysílání",
+        "failed_already_recording_description": "Již nahráváte hlasové vysílání. Ukončete prosím aktuální hlasové vysílání a spusťte nové.",
+        "failed_insufficient_permission_description": "Nemáte potřebná oprávnění ke spuštění hlasového vysílání v této místnosti. Obraťte se na správce místnosti, aby vám zvýšil oprávnění.",
+        "failed_others_already_recording_description": "Hlasové vysílání už nahrává někdo jiný. Počkejte, až jeho hlasové vysílání skončí, a spusťte nové.",
+        "failed_no_connection_title": "Chyba připojení",
+        "failed_no_connection_description": "Bohužel nyní nemůžeme spustit nahrávání. Zkuste to prosím později.",
+        "failed_decrypt": "Nelze dešifrovat hlasové vysílání",
+        "failed_generic": "Nelze přehrát toto hlasové vysílání",
+        "confirm_stop_title": "Ukončit živé vysílání?",
+        "confirm_stop_description": "Opravdu chcete ukončit živé vysílání? Tím se vysílání ukončí a v místnosti bude k dispozici celý záznam.",
+        "confirm_stop_affirm": "Ano, zastavit vysílání",
+        "confirm_listen_title": "Poslouchat živé vysílání?",
+        "confirm_listen_description": "Jakmile začnete poslouchat toto živé vysílání, aktuální záznam živého vysílání bude ukončen.",
+        "confirm_listen_affirm": "Ano, ukončit nahrávání",
+        "30s_backward": "30s zpět",
+        "30s_forward": "30s vpřed",
+        "go_live": "Přejít naživo",
+        "resume": "obnovit hlasové vysílání",
+        "pause": "pozastavit hlasové vysílání",
+        "buffering": "Ukládání do vyrovnávací paměti…",
+        "play": "přehrát hlasové vysílání",
+        "connection_error": "Chyba připojení - nahrávání pozastaveno"
+    },
+    "update": {
+        "see_changes_button": "Co je nového?",
+        "release_notes_toast_title": "Co je nového",
+        "toast_title": "Aktualizovat %(brand)s",
+        "toast_description": "K dispozici je nová verze %(brand)s"
+    },
+    "threads": {
+        "all_threads": "Všechna vlákna",
+        "all_threads_description": "Zobrazí všechna vlákna z aktuální místnosti",
+        "my_threads": "Moje vlákna",
+        "my_threads_description": "Zobrazit všechna vlákna, kterých jste se zúčastnili",
+        "show_thread_filter": "Zobrazit:",
+        "empty_has_threads_tip": "Odpovědět na probíhající vlákno nebo použít \"%(replyInThread)s\", když najedete na zprávu a začnete novou.",
+        "show_all_threads": "Zobrazit všechna vlákna",
+        "empty_explainer": "Vlákna pomáhají udržovat konverzace k tématu a snadno je sledovat.",
+        "empty_tip": "<b>Tip:</b> Použijte \"%(replyInThread)s\" při najetí na zprávu.",
+        "empty_heading": "Udržujte diskuse organizované pomocí vláken"
+    },
+    "theme": {
+        "light_high_contrast": "Světlý vysoký kontrast"
+    },
+    "space": {
+        "landing_welcome": "Vítejte v <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Tento domovský server není nakonfigurován pro zobrazování map.",
+        "WebGLNotEnabled": "Pro zobrazení map je vyžadována technologie WebGL, povolte ji v nastavení prohlížeče.",
+        "MapStyleUrlNotReachable": "Tento domovský server není správně nakonfigurován pro zobrazování map nebo je mapový server nedostupný.",
+        "toggle_attribution": "Přepnout atribut",
+        "map_feedback": "Zpětná vazba k mapě",
+        "find_my_location": "Najít mou polohu",
+        "location_not_available": "Poloha není dostupná",
+        "mapbox_logo": "Logo mapy",
+        "reset_bearing": "Obnovení směru na sever",
+        "failed_permission": "Aplikaci %(brand)s bylo odepřeno oprávnění ke zjištění vaší polohy. Povolte prosím přístup k poloze v nastavení prohlížeče.",
+        "failed_generic": "Nepodařilo se zjistit vaši polohu. Zkuste to prosím později.",
+        "failed_timeout": "Pokus o zjištění vaší polohy vypršel. Zkuste to prosím později.",
+        "failed_unknown": "Neznámá chyba při zjištění polohy. Zkuste to prosím později.",
+        "expand_map": "Rozbalit mapu",
+        "failed_load_map": "Nelze načíst mapu"
+    },
+    "labs_mjolnir": {
+        "room_name": "Můj seznam zablokovaných",
+        "room_topic": "Toto je váš seznam blokovaných uživatelů/serverů - neopouštějte tuto místnost!"
+    },
     "create_space": {
         "name_required": "Zadejte prosím název prostoru",
         "name_placeholder": "např. můj-prostor",
@@ -4088,76 +4165,5 @@
         "setup_rooms_description": "Později můžete přidat i další, včetně již existujících.",
         "setup_rooms_private_heading": "Na jakých projektech váš tým pracuje?",
         "setup_rooms_private_description": "Pro každého z nich vytvoříme místnost."
-    },
-    "space": {
-        "landing_welcome": "Vítejte v <name/>"
-    },
-    "threads": {
-        "all_threads": "Všechna vlákna",
-        "all_threads_description": "Zobrazí všechna vlákna z aktuální místnosti",
-        "my_threads": "Moje vlákna",
-        "my_threads_description": "Zobrazit všechna vlákna, kterých jste se zúčastnili",
-        "show_thread_filter": "Zobrazit:",
-        "empty_has_threads_tip": "Odpovědět na probíhající vlákno nebo použít \"%(replyInThread)s\", když najedete na zprávu a začnete novou.",
-        "show_all_threads": "Zobrazit všechna vlákna",
-        "empty_explainer": "Vlákna pomáhají udržovat konverzace k tématu a snadno je sledovat.",
-        "empty_tip": "<b>Tip:</b> Použijte \"%(replyInThread)s\" při najetí na zprávu.",
-        "empty_heading": "Udržujte diskuse organizované pomocí vláken"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Tento domovský server není nakonfigurován pro zobrazování map.",
-        "WebGLNotEnabled": "Pro zobrazení map je vyžadována technologie WebGL, povolte ji v nastavení prohlížeče.",
-        "MapStyleUrlNotReachable": "Tento domovský server není správně nakonfigurován pro zobrazování map nebo je mapový server nedostupný.",
-        "toggle_attribution": "Přepnout atribut",
-        "map_feedback": "Zpětná vazba k mapě",
-        "find_my_location": "Najít mou polohu",
-        "location_not_available": "Poloha není dostupná",
-        "mapbox_logo": "Logo mapy",
-        "reset_bearing": "Obnovení směru na sever",
-        "failed_permission": "Aplikaci %(brand)s bylo odepřeno oprávnění ke zjištění vaší polohy. Povolte prosím přístup k poloze v nastavení prohlížeče.",
-        "failed_generic": "Nepodařilo se zjistit vaši polohu. Zkuste to prosím později.",
-        "failed_timeout": "Pokus o zjištění vaší polohy vypršel. Zkuste to prosím později.",
-        "failed_unknown": "Neznámá chyba při zjištění polohy. Zkuste to prosím později.",
-        "expand_map": "Rozbalit mapu",
-        "failed_load_map": "Nelze načíst mapu"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Nelze spustit nové hlasové vysílání",
-        "failed_insufficient_permission_title": "Nelze spustit nové hlasové vysílání",
-        "failed_others_already_recording_title": "Nelze spustit nové hlasové vysílání",
-        "failed_already_recording_description": "Již nahráváte hlasové vysílání. Ukončete prosím aktuální hlasové vysílání a spusťte nové.",
-        "failed_insufficient_permission_description": "Nemáte potřebná oprávnění ke spuštění hlasového vysílání v této místnosti. Obraťte se na správce místnosti, aby vám zvýšil oprávnění.",
-        "failed_others_already_recording_description": "Hlasové vysílání už nahrává někdo jiný. Počkejte, až jeho hlasové vysílání skončí, a spusťte nové.",
-        "failed_no_connection_title": "Chyba připojení",
-        "failed_no_connection_description": "Bohužel nyní nemůžeme spustit nahrávání. Zkuste to prosím později.",
-        "failed_decrypt": "Nelze dešifrovat hlasové vysílání",
-        "failed_generic": "Nelze přehrát toto hlasové vysílání",
-        "confirm_stop_title": "Ukončit živé vysílání?",
-        "confirm_stop_description": "Opravdu chcete ukončit živé vysílání? Tím se vysílání ukončí a v místnosti bude k dispozici celý záznam.",
-        "confirm_stop_affirm": "Ano, zastavit vysílání",
-        "confirm_listen_title": "Poslouchat živé vysílání?",
-        "confirm_listen_description": "Jakmile začnete poslouchat toto živé vysílání, aktuální záznam živého vysílání bude ukončen.",
-        "confirm_listen_affirm": "Ano, ukončit nahrávání",
-        "30s_backward": "30s zpět",
-        "30s_forward": "30s vpřed",
-        "go_live": "Přejít naživo",
-        "resume": "obnovit hlasové vysílání",
-        "pause": "pozastavit hlasové vysílání",
-        "buffering": "Ukládání do vyrovnávací paměti…",
-        "play": "přehrát hlasové vysílání",
-        "connection_error": "Chyba připojení - nahrávání pozastaveno"
-    },
-    "labs_mjolnir": {
-        "room_name": "Můj seznam zablokovaných",
-        "room_topic": "Toto je váš seznam blokovaných uživatelů/serverů - neopouštějte tuto místnost!"
-    },
-    "theme": {
-        "light_high_contrast": "Světlý vysoký kontrast"
-    },
-    "update": {
-        "see_changes_button": "Co je nového?",
-        "release_notes_toast_title": "Co je nového",
-        "toast_title": "Aktualizovat %(brand)s",
-        "toast_description": "K dispozici je nová verze %(brand)s"
     }
 }

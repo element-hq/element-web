@@ -233,32 +233,6 @@
     "Historical": "Istoriniai",
     "Unable to load! Check your network connectivity and try again.": "Nepavyko įkelti! Patikrinkite savo tinklo ryšį ir bandykite dar kartą.",
     "Unknown server error": "Nežinoma serverio klaida",
-    "Avoid sequences": "Venkite sekų",
-    "Avoid recent years": "Venkite pastarųjų metų",
-    "Avoid years that are associated with you": "Venkite su jumis susijusių metų",
-    "Avoid dates and years that are associated with you": "Venkite su jumis susijusių metų ir datų",
-    "Capitalization doesn't help very much": "Rašymas didžiosiomis raidėmis nelabai padeda",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Visas didžiąsias raides taip pat lengva atspėti kaip ir visas mažąsias",
-    "Reversed words aren't much harder to guess": "Žodžius atvirkštine tvarka nėra sunkiau atspėti",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Nuspėjami pakaitalai, tokie kaip \"@\" vietoj \"a\", nelabai padeda",
-    "Add another word or two. Uncommon words are better.": "Pridėkite dar vieną ar du žodžius. Geriau nedažnai vartojamus žodžius.",
-    "Repeats like \"aaa\" are easy to guess": "Tokius pasikartojimus kaip \"aaa\" yra lengva atspėti",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Tokius pasikartojimus kaip \"abcabcabc\" yra tik truputėlį sunkiau atspėti nei \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Tokias sekas kaip \"abc\" ar \"6543\" yra lengva atspėti",
-    "Recent years are easy to guess": "Paskiausius metus yra lengva atspėti",
-    "Dates are often easy to guess": "Datas dažniausiai yra lengva atspėti",
-    "This is a top-10 common password": "Tai yra vienas iš 10 dažniausiai naudojamų slaptažodžių",
-    "This is a top-100 common password": "Tai yra vienas iš 100 dažniausiai naudojamų slaptažodžių",
-    "This is a very common password": "Tai yra labai dažnai naudojamas slaptažodis",
-    "This is similar to a commonly used password": "Šis yra panašus į dažnai naudojamą slaptažodį",
-    "A word by itself is easy to guess": "Pats žodis yra lengvai atspėjamas",
-    "Names and surnames by themselves are easy to guess": "Pačius vardus ar pavardes yra lengva atspėti",
-    "Common names and surnames are easy to guess": "Dažnai naudojamus vardus ar pavardes yra lengva atspėti",
-    "Straight rows of keys are easy to guess": "Klavišų eilę yra lengva atspėti",
-    "Short keyboard patterns are easy to guess": "Trumpus klaviatūros šablonus yra lengva atspėti",
-    "Avoid repeated words and characters": "Venkite pasikartojančių žodžių ir simbolių",
-    "Use a few words, avoid common phrases": "Naudokite keletą žodžių, venkite dažnai naudojamų frazių",
-    "No need for symbols, digits, or uppercase letters": "Nereikia simbolių, skaitmenų ar didžiųjų raidžių",
     "Delete Backup": "Ištrinti Atsarginę Kopiją",
     "Set up": "Nustatyti",
     "Publish this room to the public in %(domain)s's room directory?": "Paskelbti šį kambarį viešai %(domain)s kambarių kataloge?",
@@ -316,7 +290,6 @@
     "You do not have permission to invite people to this room.": "Jūs neturite leidimo pakviesti žmones į šį kambarį.",
     "The user must be unbanned before they can be invited.": "Norint pakviesti vartotoją, prieš tai reikia pašalinti jo draudimą.",
     "The user's homeserver does not support the version of the room.": "Vartotojo serveris nepalaiko kambario versijos.",
-    "Use a longer keyboard pattern with more turns": "Naudokite ilgesnį klaviatūros modelį su daugiau vijų",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "General": "Bendrieji",
     "Remove recent messages by %(user)s": "Pašalinti paskutines %(user)s žinutes",
@@ -1663,11 +1636,11 @@
         "identity_server": "Tapatybės serveris",
         "integration_manager": "Integracijų tvarkyklė",
         "feedback": "Atsiliepimai",
-        "all_rooms": "Visi kambariai",
-        "orphan_rooms": "Kiti kambariai",
         "preview_message": "Labukas. Tu geriausias(-a)!",
+        "orphan_rooms": "Kiti kambariai",
         "on": "Įjungta",
-        "off": "Išjungta"
+        "off": "Išjungta",
+        "all_rooms": "Visi kambariai"
     },
     "action": {
         "continue": "Tęsti",
@@ -1790,9 +1763,9 @@
         "group_experimental": "Eksperimentinis",
         "group_developer": "Kūrėjas",
         "leave_beta": "Palikti beta versiją",
-        "automatic_debug_logs": "Automatiškai siųsti derinimo žurnalus esant bet kokiai klaidai",
+        "automatic_debug_logs_key_backup": "Automatiškai siųsti derinimo žurnalus, kai neveikia atsarginė raktų kopija",
         "automatic_debug_logs_decryption": "Automatiškai siųsti derinimo žurnalus apie iššifravimo klaidas",
-        "automatic_debug_logs_key_backup": "Automatiškai siųsti derinimo žurnalus, kai neveikia atsarginė raktų kopija"
+        "automatic_debug_logs": "Automatiškai siųsti derinimo žurnalus esant bet kokiai klaidai"
     },
     "keyboard": {
         "home": "Pradžia",
@@ -2004,15 +1977,26 @@
             "timeline_image_size": "Paveikslėlio dydis laiko juostoje",
             "timeline_image_size_default": "Numatytas",
             "timeline_image_size_large": "Didelis",
-            "custom_font_size": "Naudoti pasirinktinį dydį",
+            "image_size_large": "Didelis",
+            "image_size_default": "Numatytas",
+            "font_size_valid": "Naudokite dydį tarp %(min)s pt ir %(max)s pt",
             "font_size_nan": "Dydis turi būti skaičius",
             "font_size_limit": "Pasirinktinis šrifto dydis gali būti tik tarp %(min)s pt ir %(max)s pt",
-            "font_size_valid": "Naudokite dydį tarp %(min)s pt ir %(max)s pt",
-            "image_size_default": "Numatytas",
-            "image_size_large": "Didelis"
+            "custom_font_size": "Naudoti pasirinktinį dydį"
         },
         "inline_url_previews_room_account": "Įjungti URL nuorodų peržiūras šiame kambaryje (įtakoja tik jus)",
         "inline_url_previews_room": "Įjungti URL nuorodų peržiūras kaip numatytasias šiame kambaryje esantiems dalyviams",
+        "voip": {
+            "mirror_local_feed": "Atkartoti lokalų video tiekimą"
+        },
+        "send_read_receipts_unsupported": "Jūsų serveris nepalaiko skaitymo kvitų siuntimo išjungimo.",
+        "security": {
+            "send_analytics": "Siųsti analitinius duomenis",
+            "strict_encryption": "Niekada nesiųsti šifruotų žinučių nepatvirtintiems seansams iš šio seanso",
+            "enable_message_search": "Įjungti žinučių paiešką užšifruotuose kambariuose",
+            "message_search_sleep_time": "Kaip greitai žinutės turi būti parsiųstos.",
+            "manually_verify_all_sessions": "Rankiniu būdu patvirtinti visus nuotolinius seansus"
+        },
         "preferences": {
             "room_list_heading": "Kambarių sąrašas",
             "keyboard_heading": "Spartieji klavišai",
@@ -2031,17 +2015,6 @@
             "always_show_menu_bar": "Visada rodyti lango meniu juostą",
             "enable_tray_icon": "Rodyti dėklo piktogramą ir uždarius langą jį sumažinti į ją",
             "enable_hardware_acceleration": "Įjungti aparatinį spartinimą"
-        },
-        "send_read_receipts_unsupported": "Jūsų serveris nepalaiko skaitymo kvitų siuntimo išjungimo.",
-        "voip": {
-            "mirror_local_feed": "Atkartoti lokalų video tiekimą"
-        },
-        "security": {
-            "send_analytics": "Siųsti analitinius duomenis",
-            "strict_encryption": "Niekada nesiųsti šifruotų žinučių nepatvirtintiems seansams iš šio seanso",
-            "enable_message_search": "Įjungti žinučių paiešką užšifruotuose kambariuose",
-            "message_search_sleep_time": "Kaip greitai žinutės turi būti parsiųstos.",
-            "manually_verify_all_sessions": "Rankiniu būdu patvirtinti visus nuotolinius seansus"
         },
         "keyboard": {
             "title": "Klaviatūra"
@@ -2063,9 +2036,9 @@
         "category_room": "Kambarys",
         "category_other": "Kitas",
         "widget_screenshots": "Įjungti valdiklių ekrano kopijas palaikomuose valdikliuose",
+        "title": "Kūrėjo įrankiai",
         "show_hidden_events": "Rodyti paslėptus įvykius laiko juostoje",
-        "developer_mode": "Kūrėjo režimas",
-        "title": "Kūrėjo įrankiai"
+        "developer_mode": "Kūrėjo režimas"
     },
     "export_chat": {
         "html": "HTML",
@@ -2328,11 +2301,11 @@
         "no_permission_messages_before_join": "Neturite leidimo peržiūrėti žinučių, rašytų prieš jums prisijungiant.",
         "encrypted_historical_messages_unavailable": "Iki šio taško užšifruotos žinutės yra neprieinamos.",
         "historical_messages_unavailable": "Negalite matyti ankstesnių žinučių",
-        "reactions": {
-            "tooltip": "<reactors/><reactedWith>reagavo su %(shortName)s</reactedWith>"
-        },
         "redacted": {
             "tooltip": "Žinutė buvo ištrinta %(date)s"
+        },
+        "reactions": {
+            "tooltip": "<reactors/><reactedWith>reagavo su %(shortName)s</reactedWith>"
         },
         "m.room.create": {
             "continuation": "Šis kambarys yra kito pokalbio pratęsimas.",
@@ -2381,14 +2354,14 @@
         "failed_find_user": "Vartotojo rasti kambaryje nepavyko",
         "op": "Nustatykite vartotojo galios lygį",
         "deop": "Deop'ina vartotoją su nurodytu id",
-        "server_error": "Serverio klaida",
-        "command_error": "Komandos klaida",
-        "server_error_detail": "Serveris neprieinamas, perkrautas arba nutiko kažkas kito.",
-        "unknown_command": "Nežinoma komanda",
-        "unknown_command_detail": "Neatpažinta komanda: %(commandText)s",
-        "unknown_command_help": "Jūs galite naudoti <code>/help</code>, kad pamatytumėte galimų komandų sąrašą. Ar norėjote siųsti tai kaip žinutę?",
         "unknown_command_hint": "Patarimas: norėdami žinutę pradėti pasviruoju brūkšniu, pradėkite ją su <code>//</code>.",
-        "unknown_command_button": "Siųsti kaip žinutę"
+        "unknown_command_help": "Jūs galite naudoti <code>/help</code>, kad pamatytumėte galimų komandų sąrašą. Ar norėjote siųsti tai kaip žinutę?",
+        "unknown_command_detail": "Neatpažinta komanda: %(commandText)s",
+        "unknown_command_button": "Siųsti kaip žinutę",
+        "unknown_command": "Nežinoma komanda",
+        "server_error_detail": "Serveris neprieinamas, perkrautas arba nutiko kažkas kito.",
+        "server_error": "Serverio klaida",
+        "command_error": "Komandos klaida"
     },
     "presence": {
         "busy": "Užsiėmęs",
@@ -2656,6 +2629,59 @@
         "existing_issue_link": "Pirmiausia peržiūrėkite <existingIssuesLink>Github'e esančius pranešimus apie klaidas</existingIssuesLink>. Jokio atitikmens? <newIssueLink>Pradėkite naują pranešimą</newIssueLink>.",
         "send_feedback_action": "Siųsti atsiliepimą"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Naudokite keletą žodžių, venkite dažnai naudojamų frazių",
+            "noNeed": "Nereikia simbolių, skaitmenų ar didžiųjų raidžių",
+            "longerKeyboardPattern": "Naudokite ilgesnį klaviatūros modelį su daugiau vijų",
+            "repeated": "Venkite pasikartojančių žodžių ir simbolių",
+            "sequences": "Venkite sekų",
+            "recentYears": "Venkite pastarųjų metų",
+            "associatedYears": "Venkite su jumis susijusių metų",
+            "dates": "Venkite su jumis susijusių metų ir datų",
+            "capitalization": "Rašymas didžiosiomis raidėmis nelabai padeda",
+            "allUppercase": "Visas didžiąsias raides taip pat lengva atspėti kaip ir visas mažąsias",
+            "reverseWords": "Žodžius atvirkštine tvarka nėra sunkiau atspėti",
+            "l33t": "Nuspėjami pakaitalai, tokie kaip \"@\" vietoj \"a\", nelabai padeda",
+            "anotherWord": "Pridėkite dar vieną ar du žodžius. Geriau nedažnai vartojamus žodžius."
+        },
+        "warnings": {
+            "simpleRepeat": "Tokius pasikartojimus kaip \"aaa\" yra lengva atspėti",
+            "extendedRepeat": "Tokius pasikartojimus kaip \"abcabcabc\" yra tik truputėlį sunkiau atspėti nei \"abc\"",
+            "sequences": "Tokias sekas kaip \"abc\" ar \"6543\" yra lengva atspėti",
+            "recentYears": "Paskiausius metus yra lengva atspėti",
+            "dates": "Datas dažniausiai yra lengva atspėti",
+            "topTen": "Tai yra vienas iš 10 dažniausiai naudojamų slaptažodžių",
+            "topHundred": "Tai yra vienas iš 100 dažniausiai naudojamų slaptažodžių",
+            "common": "Tai yra labai dažnai naudojamas slaptažodis",
+            "similarToCommon": "Šis yra panašus į dažnai naudojamą slaptažodį",
+            "wordByItself": "Pats žodis yra lengvai atspėjamas",
+            "namesByThemselves": "Pačius vardus ar pavardes yra lengva atspėti",
+            "commonNames": "Dažnai naudojamus vardus ar pavardes yra lengva atspėti",
+            "straightRow": "Klavišų eilę yra lengva atspėti",
+            "keyPattern": "Trumpus klaviatūros šablonus yra lengva atspėti"
+        }
+    },
+    "voice_broadcast": {
+        "confirm_stop_title": "Sustabdyti transliaciją gyvai?",
+        "confirm_stop_affirm": "Taip, sustabdyti transliaciją",
+        "resume": "tęsti balso transliaciją",
+        "pause": "pristabdyti balso transliaciją",
+        "play": "paleisti balso transliaciją"
+    },
+    "update": {
+        "see_changes_button": "Kas naujo?",
+        "release_notes_toast_title": "Kas naujo",
+        "toast_title": "Atnaujinti %(brand)s",
+        "toast_description": "Yra nauja %(brand)s versija"
+    },
+    "theme": {
+        "light_high_contrast": "Šviesi didelio kontrasto"
+    },
+    "labs_mjolnir": {
+        "room_name": "Mano Draudimų Sąrašas",
+        "room_topic": "Tai yra jūsų užblokuotų vartotojų/serverių sąrašas - neišeikite iš kambario!"
+    },
     "create_space": {
         "name_required": "Prašome įvesti pavadinimą šiai erdvei",
         "name_placeholder": "pvz., mano-erdvė",
@@ -2665,25 +2691,5 @@
         "public_heading": "Jūsų vieša erdvė",
         "private_heading": "Jūsų privati erdvė",
         "add_details_prompt": "Pridėkite šiek tiek detalių, kad žmonės galėtų ją atpažinti."
-    },
-    "voice_broadcast": {
-        "confirm_stop_title": "Sustabdyti transliaciją gyvai?",
-        "confirm_stop_affirm": "Taip, sustabdyti transliaciją",
-        "resume": "tęsti balso transliaciją",
-        "pause": "pristabdyti balso transliaciją",
-        "play": "paleisti balso transliaciją"
-    },
-    "labs_mjolnir": {
-        "room_name": "Mano Draudimų Sąrašas",
-        "room_topic": "Tai yra jūsų užblokuotų vartotojų/serverių sąrašas - neišeikite iš kambario!"
-    },
-    "theme": {
-        "light_high_contrast": "Šviesi didelio kontrasto"
-    },
-    "update": {
-        "see_changes_button": "Kas naujo?",
-        "release_notes_toast_title": "Kas naujo",
-        "toast_title": "Atnaujinti %(brand)s",
-        "toast_description": "Yra nauja %(brand)s versija"
     }
 }

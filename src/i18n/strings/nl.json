@@ -315,33 +315,6 @@
     "You do not have permission to invite people to this room.": "Je bent niet bevoegd anderen in deze kamer uit te nodigen.",
     "The user must be unbanned before they can be invited.": "De persoon kan niet uitgenodigd worden totdat zijn ban is verwijderd.",
     "Unknown server error": "Onbekende serverfout",
-    "Use a few words, avoid common phrases": "Gebruik enkele woorden - maar geen bekende uitdrukkingen",
-    "No need for symbols, digits, or uppercase letters": "Hoofdletters, cijfers of speciale tekens hoeven niet, mogen wel",
-    "Use a longer keyboard pattern with more turns": "Gebruik een langere en onvoorspelbaardere tekenreeks",
-    "Avoid repeated words and characters": "Vermijd herhaling van woorden of tekens",
-    "Avoid sequences": "Vermijd rijtjes",
-    "Avoid recent years": "Vermijd recente jaren",
-    "Avoid years that are associated with you": "Vermijd jaren die op jezelf betrekking hebben",
-    "Avoid dates and years that are associated with you": "Vermijd data en jaren die op jezelf betrekking hebben",
-    "Capitalization doesn't help very much": "Hoofdlettergebruik helpt niet echt",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Enkel hoofdletters is nauwelijks moeilijker te raden dan enkel kleine letters",
-    "Reversed words aren't much harder to guess": "Omgedraaide woorden zijn bijna even gemakkelijk te raden",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Voorspelbare vervangingen (zoals '@' i.p.v. 'a') zijn niet erg zinvol",
-    "Add another word or two. Uncommon words are better.": "Voeg nog een paar (liefst weinig gebruikte) woorden toe.",
-    "Repeats like \"aaa\" are easy to guess": "Herhalingen als ‘aaa’ worden gemakkelijk geraden",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Herhalingen als ‘abcabcabc’ zijn haast even gemakkelijk te raden als ‘abc’",
-    "Sequences like abc or 6543 are easy to guess": "Rijtjes als ‘abc’ of ‘6543’ zijn gemakkelijk te raden",
-    "Recent years are easy to guess": "Recente jaartallen zijn eenvoudig te raden",
-    "Dates are often easy to guess": "Data zijn vaak gemakkelijk te raden",
-    "This is a top-10 common password": "Dit staat in de top 10 van meestgebruikte wachtwoorden",
-    "This is a top-100 common password": "Dit staat in de top 100 van meestgebruikte wachtwoorden",
-    "This is a very common password": "Dit is een veelgebruikt wachtwoord",
-    "This is similar to a commonly used password": "Dit lijkt sterk op een veelgebruikt wachtwoord",
-    "A word by itself is easy to guess": "Eén enkel woord is zeer gemakkelijk te raden",
-    "Names and surnames by themselves are easy to guess": "Een alleenstaande voor- of achternaam is eenvoudig te raden",
-    "Common names and surnames are easy to guess": "Voor- en achternamen zijn eenvoudig te raden",
-    "Straight rows of keys are easy to guess": "Zo’n aaneengesloten rijtje toetsen is eenvoudig te raden",
-    "Short keyboard patterns are easy to guess": "Korte patronen op het toetsenbord worden gemakkelijk geraden",
     "Please contact your homeserver administrator.": "Gelieve contact op te nemen met de beheerder van jouw homeserver.",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "Beveiligde berichten met deze persoon zijn eind-tot-eind-versleuteld en kunnen niet door derden worden gelezen.",
     "Got It": "Ik snap het",
@@ -2326,11 +2299,11 @@
         "integration_manager": "Integratiebeheerder",
         "qr_code": "QR-code",
         "feedback": "Feedback",
-        "all_rooms": "Alle kamers",
-        "orphan_rooms": "Andere kamers",
         "preview_message": "Hey. Jij bent de beste!",
+        "orphan_rooms": "Andere kamers",
         "on": "Aan",
-        "off": "Uit"
+        "off": "Uit",
+        "all_rooms": "Alle kamers"
     },
     "action": {
         "continue": "Doorgaan",
@@ -2428,8 +2401,8 @@
         "submit": "Bevestigen",
         "send_report": "Rapport versturen",
         "clear": "Wis",
-        "enter_fullscreen": "Volledig scherm openen",
-        "exit_fullscreeen": "Volledig scherm verlaten"
+        "exit_fullscreeen": "Volledig scherm verlaten",
+        "enter_fullscreen": "Volledig scherm openen"
     },
     "a11y": {
         "user_menu": "Persoonsmenu",
@@ -2481,9 +2454,9 @@
         "join_beta_reload": "Door deel te nemen aan de bèta wordt %(brand)s opnieuw geladen.",
         "leave_beta": "Beta verlaten",
         "join_beta": "Beta inschakelen",
-        "automatic_debug_logs": "Automatisch foutenlogboek versturen bij een fout",
+        "automatic_debug_logs_key_backup": "Automatisch foutopsporingslogboeken versturen wanneer de sleutelback-up niet werkt",
         "automatic_debug_logs_decryption": "Automatisch foutopsporingslogboeken versturen bij decoderingsfouten",
-        "automatic_debug_logs_key_backup": "Automatisch foutopsporingslogboeken versturen wanneer de sleutelback-up niet werkt"
+        "automatic_debug_logs": "Automatisch foutenlogboek versturen bij een fout"
     },
     "keyboard": {
         "home": "Home",
@@ -2753,15 +2726,19 @@
             "timeline_image_size": "Afbeeldingformaat in de tijdlijn",
             "timeline_image_size_default": "Standaard",
             "timeline_image_size_large": "Groot",
-            "custom_font_size": "Aangepaste lettergrootte gebruiken",
+            "image_size_large": "Groot",
+            "image_size_default": "Standaard",
+            "font_size_valid": "Gebruik een getal tussen %(min)s pt en %(max)s pt",
             "font_size_nan": "Grootte moet een getal zijn",
             "font_size_limit": "Aangepaste lettergrootte kan alleen een getal tussen %(min)s pt en %(max)s pt zijn",
-            "font_size_valid": "Gebruik een getal tussen %(min)s pt en %(max)s pt",
-            "image_size_default": "Standaard",
-            "image_size_large": "Groot"
+            "custom_font_size": "Aangepaste lettergrootte gebruiken"
         },
         "inline_url_previews_room_account": "URL-voorvertoning in dit kamer inschakelen (geldt alleen voor jou)",
         "inline_url_previews_room": "URL-voorvertoning voor alle deelnemers aan deze kamer standaard inschakelen",
+        "voip": {
+            "mirror_local_feed": "Lokale videoaanvoer ook elders opslaan (spiegelen)"
+        },
+        "send_read_receipts_unsupported": "Jouw server biedt geen ondersteuning voor het uitschakelen van het verzenden van leesbevestigingen.",
         "security": {
             "message_search_disable_warning": "Dit moet aan staan om te kunnen zoeken in versleutelde kamers.",
             "message_search_indexing_idle": "Er worden momenteel voor geen enkele kamer berichten geïndexeerd.",
@@ -2797,10 +2774,6 @@
             "always_show_menu_bar": "De venstermenubalk altijd tonen",
             "enable_tray_icon": "Geef een pictogram weer in de systeembalk en minimaliseer het venster wanneer het wordt gesloten",
             "enable_hardware_acceleration": "Hardwareversnelling inschakelen"
-        },
-        "send_read_receipts_unsupported": "Jouw server biedt geen ondersteuning voor het uitschakelen van het verzenden van leesbevestigingen.",
-        "voip": {
-            "mirror_local_feed": "Lokale videoaanvoer ook elders opslaan (spiegelen)"
         },
         "keyboard": {
             "title": "Toetsenbord"
@@ -2873,9 +2846,9 @@
         "category_room": "Kamer",
         "category_other": "Overige",
         "widget_screenshots": "Widget-schermafbeeldingen inschakelen op ondersteunde widgets",
+        "title": "Ontwikkelaarstools",
         "show_hidden_events": "Verborgen gebeurtenissen op de tijdslijn weergeven",
-        "developer_mode": "Ontwikkelaar mode",
-        "title": "Ontwikkelaarstools"
+        "developer_mode": "Ontwikkelaar mode"
     },
     "export_chat": {
         "html": "HTML",
@@ -3236,12 +3209,12 @@
         "no_permission_messages_before_join": "Je hebt geen toestemming om berichten te bekijken voor voordat je lid werd.",
         "encrypted_historical_messages_unavailable": "Versleutelde berichten vóór dit punt zijn niet beschikbaar.",
         "historical_messages_unavailable": "Je kan eerdere berichten niet zien",
+        "redacted": {
+            "tooltip": "Bericht verwijderd op %(date)s"
+        },
         "reactions": {
             "label": "%(reactors)s reageerde met %(content)s",
             "tooltip": "<reactors/><reactedWith>heeft gereageerd met %(shortName)s</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Bericht verwijderd op %(date)s"
         },
         "m.room.create": {
             "continuation": "Deze kamer is een voortzetting van een ander gesprek.",
@@ -3310,14 +3283,14 @@
         "failed_find_user": "Kan die persoon in de kamer niet vinden",
         "op": "Bepaal het machtsniveau van een persoon",
         "deop": "Ontmachtigt persoon met de gegeven ID",
-        "server_error": "Serverfout",
-        "command_error": "Opdrachtfout",
-        "server_error_detail": "De server is onbereikbaar of overbelast, of er is iets anders foutgegaan.",
-        "unknown_command": "Onbekende opdracht",
-        "unknown_command_detail": "Onbekende opdracht: %(commandText)s",
-        "unknown_command_help": "Typ <code>/help</code> om alle opdrachten te zien. Was het je bedoeling dit als bericht te sturen?",
         "unknown_command_hint": "Tip: begin uw bericht met <code>//</code> om het te laten voorafgaan door een schuine streep.",
-        "unknown_command_button": "Versturen als bericht"
+        "unknown_command_help": "Typ <code>/help</code> om alle opdrachten te zien. Was het je bedoeling dit als bericht te sturen?",
+        "unknown_command_detail": "Onbekende opdracht: %(commandText)s",
+        "unknown_command_button": "Versturen als bericht",
+        "unknown_command": "Onbekende opdracht",
+        "server_error_detail": "De server is onbereikbaar of overbelast, of er is iets anders foutgegaan.",
+        "server_error": "Serverfout",
+        "command_error": "Opdrachtfout"
     },
     "presence": {
         "busy": "Bezet",
@@ -3538,8 +3511,8 @@
         "server_picker_custom": "Andere homeserver",
         "server_picker_explainer": "Gebruik de Matrix-homeserver van je voorkeur als je er een hebt, of host je eigen.",
         "server_picker_learn_more": "Over homeservers",
-        "account_deactivated": "Dit account is gesloten.",
-        "incorrect_credentials": "Onjuiste inlognaam en/of wachtwoord."
+        "incorrect_credentials": "Onjuiste inlognaam en/of wachtwoord.",
+        "account_deactivated": "Dit account is gesloten."
     },
     "room_list": {
         "sort_unread_first": "Kamers met ongelezen berichten als eerste tonen",
@@ -3665,6 +3638,96 @@
         "existing_issue_link": "Bekijk eerst de <existingIssuesLink>bestaande bugs op GitHub</existingIssuesLink>. <newIssueLink>Maak een nieuwe aan</newIssueLink> wanneer je jouw bugs niet hebt gevonden.",
         "send_feedback_action": "Feedback versturen"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Gebruik enkele woorden - maar geen bekende uitdrukkingen",
+            "noNeed": "Hoofdletters, cijfers of speciale tekens hoeven niet, mogen wel",
+            "longerKeyboardPattern": "Gebruik een langere en onvoorspelbaardere tekenreeks",
+            "repeated": "Vermijd herhaling van woorden of tekens",
+            "sequences": "Vermijd rijtjes",
+            "recentYears": "Vermijd recente jaren",
+            "associatedYears": "Vermijd jaren die op jezelf betrekking hebben",
+            "dates": "Vermijd data en jaren die op jezelf betrekking hebben",
+            "capitalization": "Hoofdlettergebruik helpt niet echt",
+            "allUppercase": "Enkel hoofdletters is nauwelijks moeilijker te raden dan enkel kleine letters",
+            "reverseWords": "Omgedraaide woorden zijn bijna even gemakkelijk te raden",
+            "l33t": "Voorspelbare vervangingen (zoals '@' i.p.v. 'a') zijn niet erg zinvol",
+            "anotherWord": "Voeg nog een paar (liefst weinig gebruikte) woorden toe."
+        },
+        "warnings": {
+            "simpleRepeat": "Herhalingen als ‘aaa’ worden gemakkelijk geraden",
+            "extendedRepeat": "Herhalingen als ‘abcabcabc’ zijn haast even gemakkelijk te raden als ‘abc’",
+            "sequences": "Rijtjes als ‘abc’ of ‘6543’ zijn gemakkelijk te raden",
+            "recentYears": "Recente jaartallen zijn eenvoudig te raden",
+            "dates": "Data zijn vaak gemakkelijk te raden",
+            "topTen": "Dit staat in de top 10 van meestgebruikte wachtwoorden",
+            "topHundred": "Dit staat in de top 100 van meestgebruikte wachtwoorden",
+            "common": "Dit is een veelgebruikt wachtwoord",
+            "similarToCommon": "Dit lijkt sterk op een veelgebruikt wachtwoord",
+            "wordByItself": "Eén enkel woord is zeer gemakkelijk te raden",
+            "namesByThemselves": "Een alleenstaande voor- of achternaam is eenvoudig te raden",
+            "commonNames": "Voor- en achternamen zijn eenvoudig te raden",
+            "straightRow": "Zo’n aaneengesloten rijtje toetsen is eenvoudig te raden",
+            "keyPattern": "Korte patronen op het toetsenbord worden gemakkelijk geraden"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Kan geen nieuwe spraakuitzending starten",
+        "failed_insufficient_permission_title": "Kan geen nieuwe spraakuitzending starten",
+        "failed_others_already_recording_title": "Kan geen nieuwe spraakuitzending starten",
+        "failed_already_recording_description": "U neemt al een spraakuitzending op. Beëindig uw huidige spraakuitzending om een nieuwe te starten.",
+        "failed_insufficient_permission_description": "U heeft niet de vereiste rechten om een spraakuitzending in deze kamer te starten. Neem contact op met een kamer beheerder om uw machtiging aan te passen.",
+        "failed_others_already_recording_description": "Iemand anders neemt al een spraakuitzending op. Wacht tot de spraakuitzending is afgelopen om een nieuwe te starten.",
+        "confirm_stop_title": "Live uitzending stoppen?",
+        "confirm_stop_affirm": "Ja, stop uitzending",
+        "resume": "hervat spraakuitzending",
+        "pause": "spraakuitzending pauzeren",
+        "play": "spraakuitzending afspelen"
+    },
+    "update": {
+        "see_changes_button": "Wat is er nieuw?",
+        "release_notes_toast_title": "Wat is er nieuw",
+        "toast_title": "%(brand)s updaten",
+        "toast_description": "Nieuwe versie van %(brand)s is beschikbaar"
+    },
+    "threads": {
+        "all_threads": "Alle discussies",
+        "all_threads_description": "Toon alle discussies van huidige kamer",
+        "my_threads": "Mijn discussies",
+        "my_threads_description": "Toon alle threads waarin je hebt bijgedragen",
+        "show_thread_filter": "Toon:",
+        "empty_has_threads_tip": "Reageer op een lopende thread of gebruik \"%(replyInThread)s\" wanneer je de muisaanwijzer op een bericht plaatst om een nieuwe te starten.",
+        "show_all_threads": "Threads weergeven",
+        "empty_explainer": "Threads helpen jou gesprekken on-topic te houden en gemakkelijk bij te houden.",
+        "empty_tip": "<b>Tip:</b> Gebruik “%(replyInThread)s” met de muiscursor boven een bericht.",
+        "empty_heading": "Houd threads georganiseerd"
+    },
+    "theme": {
+        "light_high_contrast": "Lichte hoog contrast"
+    },
+    "space": {
+        "landing_welcome": "Welkom in <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Deze server is niet geconfigureerd om kaarten weer te geven.",
+        "MapStyleUrlNotReachable": "Deze server is niet correct geconfigureerd om kaarten weer te geven, of de geconfigureerde kaartserver is mogelijk onbereikbaar.",
+        "toggle_attribution": "Attributie in-/uitschakelen",
+        "map_feedback": "Kaart feedback",
+        "find_my_location": "Vind mijn locatie",
+        "location_not_available": "Locatie niet beschikbaar",
+        "mapbox_logo": "Mapbox logo",
+        "reset_bearing": "Indicatie naar het noorden resetten",
+        "failed_permission": "%(brand)s heeft geen toestemming gekregen om jouw locatie op te halen. Sta locatietoegang toe in je browserinstellingen.",
+        "failed_generic": "Kan jouw locatie niet ophalen. Probeer het later opnieuw.",
+        "failed_timeout": "Er is een time-out opgetreden bij het ophalen van jouw locatie. Probeer het later opnieuw.",
+        "failed_unknown": "Onbekende fout bij ophalen van locatie. Probeer het later opnieuw.",
+        "expand_map": "Map uitvouwen",
+        "failed_load_map": "Kan kaart niet laden"
+    },
+    "labs_mjolnir": {
+        "room_name": "Mijn banlijst",
+        "room_topic": "Dit is de lijst van door jou geblokkeerde servers/personen. Verlaat deze kamer niet!"
+    },
     "create_space": {
         "name_required": "Vul een naam in voor deze space",
         "name_placeholder": "v.b. mijn-Space",
@@ -3697,62 +3760,5 @@
         "setup_rooms_description": "Je kan er later nog meer toevoegen, inclusief al bestaande kamers.",
         "setup_rooms_private_heading": "Aan welke projecten werkt jouw team?",
         "setup_rooms_private_description": "We zullen kamers voor elk van hen maken."
-    },
-    "space": {
-        "landing_welcome": "Welkom in <name/>"
-    },
-    "threads": {
-        "all_threads": "Alle discussies",
-        "all_threads_description": "Toon alle discussies van huidige kamer",
-        "my_threads": "Mijn discussies",
-        "my_threads_description": "Toon alle threads waarin je hebt bijgedragen",
-        "show_thread_filter": "Toon:",
-        "empty_has_threads_tip": "Reageer op een lopende thread of gebruik \"%(replyInThread)s\" wanneer je de muisaanwijzer op een bericht plaatst om een nieuwe te starten.",
-        "show_all_threads": "Threads weergeven",
-        "empty_explainer": "Threads helpen jou gesprekken on-topic te houden en gemakkelijk bij te houden.",
-        "empty_tip": "<b>Tip:</b> Gebruik “%(replyInThread)s” met de muiscursor boven een bericht.",
-        "empty_heading": "Houd threads georganiseerd"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Deze server is niet geconfigureerd om kaarten weer te geven.",
-        "MapStyleUrlNotReachable": "Deze server is niet correct geconfigureerd om kaarten weer te geven, of de geconfigureerde kaartserver is mogelijk onbereikbaar.",
-        "toggle_attribution": "Attributie in-/uitschakelen",
-        "map_feedback": "Kaart feedback",
-        "find_my_location": "Vind mijn locatie",
-        "location_not_available": "Locatie niet beschikbaar",
-        "mapbox_logo": "Mapbox logo",
-        "reset_bearing": "Indicatie naar het noorden resetten",
-        "failed_permission": "%(brand)s heeft geen toestemming gekregen om jouw locatie op te halen. Sta locatietoegang toe in je browserinstellingen.",
-        "failed_generic": "Kan jouw locatie niet ophalen. Probeer het later opnieuw.",
-        "failed_timeout": "Er is een time-out opgetreden bij het ophalen van jouw locatie. Probeer het later opnieuw.",
-        "failed_unknown": "Onbekende fout bij ophalen van locatie. Probeer het later opnieuw.",
-        "expand_map": "Map uitvouwen",
-        "failed_load_map": "Kan kaart niet laden"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Kan geen nieuwe spraakuitzending starten",
-        "failed_insufficient_permission_title": "Kan geen nieuwe spraakuitzending starten",
-        "failed_others_already_recording_title": "Kan geen nieuwe spraakuitzending starten",
-        "failed_already_recording_description": "U neemt al een spraakuitzending op. Beëindig uw huidige spraakuitzending om een nieuwe te starten.",
-        "failed_insufficient_permission_description": "U heeft niet de vereiste rechten om een spraakuitzending in deze kamer te starten. Neem contact op met een kamer beheerder om uw machtiging aan te passen.",
-        "failed_others_already_recording_description": "Iemand anders neemt al een spraakuitzending op. Wacht tot de spraakuitzending is afgelopen om een nieuwe te starten.",
-        "confirm_stop_title": "Live uitzending stoppen?",
-        "confirm_stop_affirm": "Ja, stop uitzending",
-        "resume": "hervat spraakuitzending",
-        "pause": "spraakuitzending pauzeren",
-        "play": "spraakuitzending afspelen"
-    },
-    "labs_mjolnir": {
-        "room_name": "Mijn banlijst",
-        "room_topic": "Dit is de lijst van door jou geblokkeerde servers/personen. Verlaat deze kamer niet!"
-    },
-    "theme": {
-        "light_high_contrast": "Lichte hoog contrast"
-    },
-    "update": {
-        "see_changes_button": "Wat is er nieuw?",
-        "release_notes_toast_title": "Wat is er nieuw",
-        "toast_title": "%(brand)s updaten",
-        "toast_description": "Nieuwe versie van %(brand)s is beschikbaar"
     }
 }

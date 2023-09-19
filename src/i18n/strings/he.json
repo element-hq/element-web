@@ -566,33 +566,6 @@
     "Don't miss a reply": "אל תפספסו תגובה",
     "Later": "מאוחר יותר",
     "Unknown App": "אפליקציה לא ידועה",
-    "Short keyboard patterns are easy to guess": "דפוסים קצרים קל לנחש",
-    "Straight rows of keys are easy to guess": "שורות מסודרות של מקשים מאוד קל לנחש",
-    "Common names and surnames are easy to guess": "שמות משפחה ושמות רגילים מאוד קל לנחש",
-    "Names and surnames by themselves are easy to guess": "שמות ושמות משפחה בעצמם קלים מאוד לניחוש",
-    "A word by itself is easy to guess": "מילה כשלעצמה מאוד קל לנחש",
-    "This is similar to a commonly used password": "זוהי סיסמא זהה לסיסמא מאוד מוכרת",
-    "This is a very common password": "זוהי סיסמא מאוד מוכרת",
-    "This is a top-100 common password": "זוהי אחת ממאה הסיסמאות המוכרות ביותר",
-    "This is a top-10 common password": "זוהי אחת מעשר הסיסמאות המוכרות ביותר",
-    "Dates are often easy to guess": "תאריכים לעתים קל לנחש",
-    "Recent years are easy to guess": "קל לנחש שנים קודמות",
-    "Sequences like abc or 6543 are easy to guess": "סדרות כמו 'abc' ו '6543' קלות לניחוש",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "דפוסים כמו 'abcabcabc' קשות רק מעט יותר מ- 'abc'",
-    "Repeats like \"aaa\" are easy to guess": "דפוסים כמו 'aaa' קל לנחש",
-    "Add another word or two. Uncommon words are better.": "הוסיפו עוד מילה או שניים. מילים לא מוכרות טובות יותר.",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "שינויים צפויים כמו שינוי a ל '@' גם לא עוזר הרבה",
-    "Reversed words aren't much harder to guess": "מילים הפוכות לא ממש קשה לנחש",
-    "All-uppercase is almost as easy to guess as all-lowercase": "ניתן לנחש את כל האותיות הקטנות כגדולות בקלות",
-    "Capitalization doesn't help very much": "אותיות גדולות לא ממש עוזרות",
-    "Avoid dates and years that are associated with you": "המנעו מתאריכים ושנים אשר משוייכים אליכם",
-    "Avoid years that are associated with you": "המנעו משנים אשר משוייכים אליכם",
-    "Avoid recent years": "המנעו משימוש בשנים קודמות",
-    "Avoid sequences": "המנעו מסדרות",
-    "Avoid repeated words and characters": "המנעו ממילים ואותיות נשנות",
-    "Use a longer keyboard pattern with more turns": "השתמשו בדפוס ארוך שמכיל אותיות מכל שורה במקלדת",
-    "No need for symbols, digits, or uppercase letters": "אין צורך בסמלים, מספרים או אותיות גדולות",
-    "Use a few words, avoid common phrases": "השתמשו במילים ספורות, המנעו מביטויים מוכרים",
     "Server did not return valid authentication information.": "השרת לא החזיר מידע אימות תקף.",
     "Server did not require any authentication": "השרת לא נדרש לאימות כלשהו",
     "There was a problem communicating with the server. Please try again.": "הייתה בעיה בתקשורת עם השרת. בבקשה נסה שוב.",
@@ -1770,11 +1743,11 @@
         "integration_manager": "מנהל אינטגרציה",
         "qr_code": "קוד QR",
         "feedback": "משוב",
-        "all_rooms": "כל החדרים",
-        "orphan_rooms": "חדרים אחרים",
         "preview_message": "היי, אתם אלופים!",
+        "orphan_rooms": "חדרים אחרים",
         "on": "התראה",
-        "off": "ללא"
+        "off": "ללא",
+        "all_rooms": "כל החדרים"
     },
     "action": {
         "continue": "המשך",
@@ -1863,8 +1836,8 @@
         "mention": "אזכר",
         "submit": "הגש",
         "send_report": "שלח דיווח",
-        "enter_fullscreen": "עברו למסך מלא",
-        "exit_fullscreeen": "יציאה ממסך מלא"
+        "exit_fullscreeen": "יציאה ממסך מלא",
+        "enter_fullscreen": "עברו למסך מלא"
     },
     "a11y": {
         "user_menu": "תפריט משתמש",
@@ -2096,15 +2069,24 @@
             "timeline_image_size": "גודל תמונה בציר הזמן",
             "timeline_image_size_default": "ברירת מחדל",
             "timeline_image_size_large": "גדול",
-            "custom_font_size": "השתמשו בגודל מותאם אישית",
+            "image_size_large": "גדול",
+            "image_size_default": "ברירת מחדל",
+            "font_size_valid": "השתמש בין %(min)s ל %(max)s נקודות",
             "font_size_nan": "הגדול חייב להיות מספר",
             "font_size_limit": "גודל גופן מותאם אישית יכול להיות רק בין %(min)s ל %(max)s נקודות",
-            "font_size_valid": "השתמש בין %(min)s ל %(max)s נקודות",
-            "image_size_default": "ברירת מחדל",
-            "image_size_large": "גדול"
+            "custom_font_size": "השתמשו בגודל מותאם אישית"
         },
         "inline_url_previews_room_account": "הראה תצוגה מקדימה של קישורים בחדר זה (משפיע רק עליכם)",
         "inline_url_previews_room": "אפשר לחברים בחדר זה לצפות בתצוגת קישורים",
+        "voip": {
+            "mirror_local_feed": "שקף זרימת וידאו מקומית",
+            "allow_p2p": "אפשר חיבור ישיר (Peer-to-Peer) בשיחות 1:1",
+            "allow_p2p_description": "כאשר מופעל, הצד השני יוכל לראות את כתובת ה-IP שלך",
+            "echo_cancellation": "ביטול הד",
+            "noise_suppression": "ביטול רעשים",
+            "enable_fallback_ice_server_description": "רלוונטי רק אם שרת הבית לא מציע שרת שיחות. כתובת ה-IP שלך תשותף במהלך שיחה."
+        },
+        "send_read_receipts_unsupported": "השרת שלכם לא תומך בביטול שליחת אישורי קריאה.",
         "security": {
             "message_search_disable_warning": "אם מושבת, הודעות מחדרים מוצפנים לא יופיעו בתוצאות החיפוש.",
             "message_search_indexing_idle": "כרגע לא מוסיף לאינדקס הודעות עבור אף חדר.",
@@ -2136,15 +2118,6 @@
             "show_polls_button": "הצג את כפתור הסקרים",
             "surround_text": "סמן טקסט כאשר מקלידים סמלים מיוחדים",
             "always_show_menu_bar": "הראה תמיד את שורת תפריט החלונות"
-        },
-        "send_read_receipts_unsupported": "השרת שלכם לא תומך בביטול שליחת אישורי קריאה.",
-        "voip": {
-            "mirror_local_feed": "שקף זרימת וידאו מקומית",
-            "allow_p2p": "אפשר חיבור ישיר (Peer-to-Peer) בשיחות 1:1",
-            "allow_p2p_description": "כאשר מופעל, הצד השני יוכל לראות את כתובת ה-IP שלך",
-            "echo_cancellation": "ביטול הד",
-            "noise_suppression": "ביטול רעשים",
-            "enable_fallback_ice_server_description": "רלוונטי רק אם שרת הבית לא מציע שרת שיחות. כתובת ה-IP שלך תשותף במהלך שיחה."
         },
         "keyboard": {
             "title": "מקלדת"
@@ -2483,11 +2456,11 @@
             "changed_rule_glob": "%(senderName)s עדכן כלל חסימה אשר תאם ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s"
         },
         "historical_messages_unavailable": "לא ניתן לצפות בהודעות קודמות",
-        "reactions": {
-            "tooltip": "<reactors/><reactedWith> הגיבו עם %(shortName)s</reactedWith>"
-        },
         "redacted": {
             "tooltip": "הודעה נמחקה בתאריך %(date)s"
+        },
+        "reactions": {
+            "tooltip": "<reactors/><reactedWith> הגיבו עם %(shortName)s</reactedWith>"
         },
         "m.room.create": {
             "continuation": "החדר הזה הוא המשך לשיחה אחרת.",
@@ -2554,14 +2527,14 @@
         "failed_find_user": "משתמש זה לא נמצא בחדר",
         "op": "הגדירו את רמת ההרשאות של משתמש",
         "deop": "מסיר משתמש עם קוד זיהוי זה",
-        "server_error": "שגיאת שרת",
-        "command_error": "שגיאת פקודה",
-        "server_error_detail": "השרת לא זמין, עמוס מדי או שמשהו אחר השתבש.",
-        "unknown_command": "פקודה לא ידועה",
-        "unknown_command_detail": "פקודה לא מזוהה: %(commandText)s",
-        "unknown_command_help": "באפשרותך להשתמש ב- <code> /help </code> כדי לרשום פקודות זמינות. האם התכוונת לשלוח זאת כהודעה?",
         "unknown_command_hint": "רמז: התחל את ההודעה שלך עם <code>//</code> כדי להתחיל אותה עם קו נטוי.",
-        "unknown_command_button": "שלח כהודעה"
+        "unknown_command_help": "באפשרותך להשתמש ב- <code> /help </code> כדי לרשום פקודות זמינות. האם התכוונת לשלוח זאת כהודעה?",
+        "unknown_command_detail": "פקודה לא מזוהה: %(commandText)s",
+        "unknown_command_button": "שלח כהודעה",
+        "unknown_command": "פקודה לא ידועה",
+        "server_error_detail": "השרת לא זמין, עמוס מדי או שמשהו אחר השתבש.",
+        "server_error": "שגיאת שרת",
+        "command_error": "שגיאת פקודה"
     },
     "presence": {
         "online_for": "מחובר %(duration)s",
@@ -2759,8 +2732,8 @@
         "server_picker_custom": "שרת בית אחר",
         "server_picker_explainer": "השתמש בשרת הבית המועדף על מטריקס אם יש לך כזה, או מארח משלך.",
         "server_picker_learn_more": "אודות שרתי בית",
-        "account_deactivated": "חשבון זה הושבת.",
-        "incorrect_credentials": "שם משתמש ו / או סיסמה שגויים."
+        "incorrect_credentials": "שם משתמש ו / או סיסמה שגויים.",
+        "account_deactivated": "חשבון זה הושבת."
     },
     "room_list": {
         "sort_unread_first": "הצג תחילה חדרים עם הודעות שלא נקראו",
@@ -2872,6 +2845,74 @@
         "existing_issue_link": "אנא צפה תחילה ב <existingIssuesLink> באגים קיימים ב- Github </existingIssuesLink>. אין התאמה? <newIssueLink> התחל חדש </newIssueLink>.",
         "send_feedback_action": "שלח משוב"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "השתמשו במילים ספורות, המנעו מביטויים מוכרים",
+            "noNeed": "אין צורך בסמלים, מספרים או אותיות גדולות",
+            "longerKeyboardPattern": "השתמשו בדפוס ארוך שמכיל אותיות מכל שורה במקלדת",
+            "repeated": "המנעו ממילים ואותיות נשנות",
+            "sequences": "המנעו מסדרות",
+            "recentYears": "המנעו משימוש בשנים קודמות",
+            "associatedYears": "המנעו משנים אשר משוייכים אליכם",
+            "dates": "המנעו מתאריכים ושנים אשר משוייכים אליכם",
+            "capitalization": "אותיות גדולות לא ממש עוזרות",
+            "allUppercase": "ניתן לנחש את כל האותיות הקטנות כגדולות בקלות",
+            "reverseWords": "מילים הפוכות לא ממש קשה לנחש",
+            "l33t": "שינויים צפויים כמו שינוי a ל '@' גם לא עוזר הרבה",
+            "anotherWord": "הוסיפו עוד מילה או שניים. מילים לא מוכרות טובות יותר."
+        },
+        "warnings": {
+            "simpleRepeat": "דפוסים כמו 'aaa' קל לנחש",
+            "extendedRepeat": "דפוסים כמו 'abcabcabc' קשות רק מעט יותר מ- 'abc'",
+            "sequences": "סדרות כמו 'abc' ו '6543' קלות לניחוש",
+            "recentYears": "קל לנחש שנים קודמות",
+            "dates": "תאריכים לעתים קל לנחש",
+            "topTen": "זוהי אחת מעשר הסיסמאות המוכרות ביותר",
+            "topHundred": "זוהי אחת ממאה הסיסמאות המוכרות ביותר",
+            "common": "זוהי סיסמא מאוד מוכרת",
+            "similarToCommon": "זוהי סיסמא זהה לסיסמא מאוד מוכרת",
+            "wordByItself": "מילה כשלעצמה מאוד קל לנחש",
+            "namesByThemselves": "שמות ושמות משפחה בעצמם קלים מאוד לניחוש",
+            "commonNames": "שמות משפחה ושמות רגילים מאוד קל לנחש",
+            "straightRow": "שורות מסודרות של מקשים מאוד קל לנחש",
+            "keyPattern": "דפוסים קצרים קל לנחש"
+        }
+    },
+    "update": {
+        "see_changes_button": "מה חדש?",
+        "release_notes_toast_title": "מה חדש",
+        "toast_title": "עדכן %(brand)s",
+        "toast_description": "גרסה חדשה של %(brand)s קיימת"
+    },
+    "threads": {
+        "all_threads": "כל הקישורים",
+        "all_threads_description": "הצג את כל הקישורים מחדר זה",
+        "my_threads": "הקישורים שלי",
+        "my_threads_description": "הצג את כל השרשורים שאתם משתתפים בהם",
+        "show_thread_filter": "הצג:",
+        "empty_has_threads_tip": "השיבו לשרשור מתמשך או השתמשו ב-\"%(replyInThread)s\" כשאתם מרחפים מעל הודעה כדי להתחיל הודעה חדשה.",
+        "show_all_threads": "הצג את כל השרשורים",
+        "empty_explainer": "שרשורים עוזרים לשמור על השיחות שלכם בנושא וקל למעקב.",
+        "empty_tip": "<b>טיפ:</b> השתמש ב-\"%(replyInThread)s\" כשאתם מרחפים מעל הודעה.",
+        "empty_heading": "שימרו על דיונים מאורגנים בשרשורים"
+    },
+    "space": {
+        "landing_welcome": "ברוכים הבאים אל <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotReachable": "שרת בית זה אינו מוגדר כהלכה להצגת מפות, או ששרת המפות המוגדר אינו ניתן לגישה.",
+        "toggle_attribution": "דפדפו בין האפשרויות",
+        "map_feedback": "משוב על המפות",
+        "find_my_location": "מצא את מיקומי",
+        "location_not_available": "מיקום אינו זמין",
+        "mapbox_logo": "לוגו",
+        "reset_bearing": "נעלו את המפה לכיוון צפון",
+        "failed_generic": "איתור המיקום שלך נכשל. אנא נסה שוב מאוחר יותר."
+    },
+    "labs_mjolnir": {
+        "room_name": "רשימת החסומים שלי",
+        "room_topic": "זוהי רשימת השרתים\\משתמשים אשר בחרתם לחסום - אל תצאו מחדר זה!"
+    },
     "create_space": {
         "name_required": "נא הגדירו שם עבור מרחב העבודה",
         "name_placeholder": "לדוגמא מרחב העבודה שלי",
@@ -2902,40 +2943,5 @@
         "setup_rooms_description": "אתם יכולים להוסיף עוד מאוחר יותר, כולל אלה שכבר קיימים.",
         "setup_rooms_private_heading": "על אילו פרויקטים הצוות שלכם עובד?",
         "setup_rooms_private_description": "ניצור חדרים לכל אחד מהם."
-    },
-    "space": {
-        "landing_welcome": "ברוכים הבאים אל <name/>"
-    },
-    "threads": {
-        "all_threads": "כל הקישורים",
-        "all_threads_description": "הצג את כל הקישורים מחדר זה",
-        "my_threads": "הקישורים שלי",
-        "my_threads_description": "הצג את כל השרשורים שאתם משתתפים בהם",
-        "show_thread_filter": "הצג:",
-        "empty_has_threads_tip": "השיבו לשרשור מתמשך או השתמשו ב-\"%(replyInThread)s\" כשאתם מרחפים מעל הודעה כדי להתחיל הודעה חדשה.",
-        "show_all_threads": "הצג את כל השרשורים",
-        "empty_explainer": "שרשורים עוזרים לשמור על השיחות שלכם בנושא וקל למעקב.",
-        "empty_tip": "<b>טיפ:</b> השתמש ב-\"%(replyInThread)s\" כשאתם מרחפים מעל הודעה.",
-        "empty_heading": "שימרו על דיונים מאורגנים בשרשורים"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotReachable": "שרת בית זה אינו מוגדר כהלכה להצגת מפות, או ששרת המפות המוגדר אינו ניתן לגישה.",
-        "toggle_attribution": "דפדפו בין האפשרויות",
-        "map_feedback": "משוב על המפות",
-        "find_my_location": "מצא את מיקומי",
-        "location_not_available": "מיקום אינו זמין",
-        "mapbox_logo": "לוגו",
-        "reset_bearing": "נעלו את המפה לכיוון צפון",
-        "failed_generic": "איתור המיקום שלך נכשל. אנא נסה שוב מאוחר יותר."
-    },
-    "labs_mjolnir": {
-        "room_name": "רשימת החסומים שלי",
-        "room_topic": "זוהי רשימת השרתים\\משתמשים אשר בחרתם לחסום - אל תצאו מחדר זה!"
-    },
-    "update": {
-        "see_changes_button": "מה חדש?",
-        "release_notes_toast_title": "מה חדש",
-        "toast_title": "עדכן %(brand)s",
-        "toast_description": "גרסה חדשה של %(brand)s קיימת"
     }
 }

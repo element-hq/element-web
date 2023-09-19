@@ -84,33 +84,8 @@
     "Delete Backup": "बैकअप हटाएं",
     "Unable to load key backup status": "कुंजी बैकअप स्थिति लोड होने में असमर्थ",
     "Notification targets": "अधिसूचना के लक्ष्य",
-    "Use a few words, avoid common phrases": "कम शब्दों का प्रयोग करें, सामान्य वाक्यांशों से बचें",
-    "No need for symbols, digits, or uppercase letters": "प्रतीकों, अंक, या अपरकेस अक्षरों की कोई ज़रूरत नहीं है",
-    "Use a longer keyboard pattern with more turns": "अधिक मोड़ के साथ एक लंबा कीबोर्ड पैटर्न का प्रयोग करें",
-    "Avoid repeated words and characters": "दोहराए गए शब्दों और अक्षरो से बचें",
-    "Avoid sequences": "अनुक्रम से बचें",
-    "Avoid recent years": "हाल के वर्षों से बचें",
-    "Avoid years that are associated with you": "आपके साथ जुड़े वर्षों से बचें",
-    "Avoid dates and years that are associated with you": "आपके साथ जुड़े तिथियों और वर्षों से बचें",
-    "Capitalization doesn't help very much": "कैपिटलाइजेशन यहाँ ज्यादा मददगार नहीं हैं",
-    "All-uppercase is almost as easy to guess as all-lowercase": "सभी अपरकेस सभी लोअरकेस के तरह अनुमान लगाने में आसान हैं",
-    "Reversed words aren't much harder to guess": "उल्टा शब्द अनुमान लगाने के लिए बहुत कठिन नहीं हैं",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "'a' के बजाय '@' जैसी अनुमानित प्रतिस्थापन बहुत मदद नहीं करते हैं",
-    "Add another word or two. Uncommon words are better.": "एक या एक से ज्यादा शब्द जोड़ें। असामान्य शब्द बेहतर हैं।",
-    "Repeats like \"aaa\" are easy to guess": "\"Aaa\" जैसे आवृत्ति अनुमान लगाना आसान है",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "\"Abcabcabc\" जैसे आवृत्ति \"abc\" से अनुमान लगाने के लिए थोड़ा कठिन है",
-    "Sequences like abc or 6543 are easy to guess": "abc या 6543 जैसे अनुक्रम अनुमान लगाना आसान है",
-    "Recent years are easy to guess": "हाल के वर्षों का अनुमान लगाना आसान है",
-    "Dates are often easy to guess": "तिथियां अक्सर अनुमान लगाने में आसान होती हैं",
-    "This is a top-10 common password": "यह एक शीर्ष १० सामान्य पासवर्ड में से एक है",
-    "This is a top-100 common password": "यह एक शीर्ष १०० सामान्य पासवर्ड में से एक है",
-    "This is a very common password": "यह एक बहुत ही आम पासवर्ड है",
-    "This is similar to a commonly used password": "यह आमतौर पर इस्तेमाल किए गए पासवर्ड के समान है",
     "You do not have permission to invite people to this room.": "आपको इस कमरे में लोगों को आमंत्रित करने की अनुमति नहीं है।",
     "Unknown server error": "अज्ञात सर्वर त्रुटि",
-    "A word by itself is easy to guess": "सिर्फ एक शब्द अनुमान लगाना आसान है",
-    "Names and surnames by themselves are easy to guess": "खुद के नाम और उपनाम अनुमान लगाना आसान है",
-    "Common names and surnames are easy to guess": "सामान्य नाम और उपनाम अनुमान लगाना आसान है",
     "Drop file here to upload": "अपलोड करने के लिए यहां फ़ाइल ड्रॉप करें",
     "This event could not be displayed": "यह घटना प्रदर्शित नहीं की जा सकी",
     "Unban": "अप्रतिबंधित करें",
@@ -142,8 +117,6 @@
     "%(duration)sd": "%(duration)s दिन",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "फ़ाइल '%(fileName)s' अपलोड के लिए इस होमस्वर के आकार की सीमा से अधिक है",
     "Unrecognised address": "अपरिचित पता",
-    "Straight rows of keys are easy to guess": "कुंजी की सीधी पंक्तियों का अनुमान लगाना आसान है",
-    "Short keyboard patterns are easy to guess": "लघु कीबोर्ड पैटर्न का अनुमान लगाना आसान है",
     "Secure messages with this user are end-to-end encrypted and not able to be read by third parties.": "इस उपयोगकर्ता के सुरक्षित संदेश एंड-टू-एंड एन्क्रिप्टेड हैं और तीसरे पक्ष द्वारा पढ़ने में सक्षम नहीं हैं।",
     "Got It": "समझ गया",
     "Verify this user by confirming the following emoji appear on their screen.": "इस उपयोगकर्ता की पुष्टि करें कि उनकी स्क्रीन पर निम्नलिखित इमोजी दिखाई देते हैं।",
@@ -561,15 +534,15 @@
         },
         "inline_url_previews_room_account": "इस रूम के लिए यूआरएल पूर्वावलोकन सक्षम करें (केवल आपको प्रभावित करता है)",
         "inline_url_previews_room": "इस रूम में प्रतिभागियों के लिए डिफ़ॉल्ट रूप से यूआरएल पूर्वावलोकन सक्षम करें",
-        "preferences": {
-            "room_list_heading": "कक्ष सूचि",
-            "autocomplete_delay": "स्वत: पूर्ण विलंब (ms)"
-        },
         "voip": {
             "mirror_local_feed": "स्थानीय वीडियो फ़ीड को आईना करें"
         },
         "security": {
             "send_analytics": "विश्लेषण डेटा भेजें"
+        },
+        "preferences": {
+            "room_list_heading": "कक्ष सूचि",
+            "autocomplete_delay": "स्वत: पूर्ण विलंब (ms)"
         }
     },
     "timeline": {
@@ -649,9 +622,9 @@
         "me": "कार्रवाई प्रदर्शित करता है",
         "op": "उपयोगकर्ता के पावर स्तर को परिभाषित करें",
         "deop": "दिए गए आईडी के साथ उपयोगकर्ता को देओप्स करना",
+        "server_error_detail": "सर्वर अनुपलब्ध, अधिभारित, या कुछ और गलत हो गया।",
         "server_error": "सर्वर त्रुटि",
-        "command_error": "कमांड त्रुटि",
-        "server_error_detail": "सर्वर अनुपलब्ध, अधिभारित, या कुछ और गलत हो गया।"
+        "command_error": "कमांड त्रुटि"
     },
     "presence": {
         "online_for": "%(duration)s के लिए ऑनलाइन",
@@ -702,6 +675,39 @@
         "help_about": {
             "title": "सहायता और के बारे में",
             "versions": "संस्करण"
+        }
+    },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "कम शब्दों का प्रयोग करें, सामान्य वाक्यांशों से बचें",
+            "noNeed": "प्रतीकों, अंक, या अपरकेस अक्षरों की कोई ज़रूरत नहीं है",
+            "longerKeyboardPattern": "अधिक मोड़ के साथ एक लंबा कीबोर्ड पैटर्न का प्रयोग करें",
+            "repeated": "दोहराए गए शब्दों और अक्षरो से बचें",
+            "sequences": "अनुक्रम से बचें",
+            "recentYears": "हाल के वर्षों से बचें",
+            "associatedYears": "आपके साथ जुड़े वर्षों से बचें",
+            "dates": "आपके साथ जुड़े तिथियों और वर्षों से बचें",
+            "capitalization": "कैपिटलाइजेशन यहाँ ज्यादा मददगार नहीं हैं",
+            "allUppercase": "सभी अपरकेस सभी लोअरकेस के तरह अनुमान लगाने में आसान हैं",
+            "reverseWords": "उल्टा शब्द अनुमान लगाने के लिए बहुत कठिन नहीं हैं",
+            "l33t": "'a' के बजाय '@' जैसी अनुमानित प्रतिस्थापन बहुत मदद नहीं करते हैं",
+            "anotherWord": "एक या एक से ज्यादा शब्द जोड़ें। असामान्य शब्द बेहतर हैं।"
+        },
+        "warnings": {
+            "simpleRepeat": "\"Aaa\" जैसे आवृत्ति अनुमान लगाना आसान है",
+            "extendedRepeat": "\"Abcabcabc\" जैसे आवृत्ति \"abc\" से अनुमान लगाने के लिए थोड़ा कठिन है",
+            "sequences": "abc या 6543 जैसे अनुक्रम अनुमान लगाना आसान है",
+            "recentYears": "हाल के वर्षों का अनुमान लगाना आसान है",
+            "dates": "तिथियां अक्सर अनुमान लगाने में आसान होती हैं",
+            "topTen": "यह एक शीर्ष १० सामान्य पासवर्ड में से एक है",
+            "topHundred": "यह एक शीर्ष १०० सामान्य पासवर्ड में से एक है",
+            "common": "यह एक बहुत ही आम पासवर्ड है",
+            "similarToCommon": "यह आमतौर पर इस्तेमाल किए गए पासवर्ड के समान है",
+            "wordByItself": "सिर्फ एक शब्द अनुमान लगाना आसान है",
+            "namesByThemselves": "खुद के नाम और उपनाम अनुमान लगाना आसान है",
+            "commonNames": "सामान्य नाम और उपनाम अनुमान लगाना आसान है",
+            "straightRow": "कुंजी की सीधी पंक्तियों का अनुमान लगाना आसान है",
+            "keyPattern": "लघु कीबोर्ड पैटर्न का अनुमान लगाना आसान है"
         }
     },
     "devtools": {

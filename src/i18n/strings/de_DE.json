@@ -342,35 +342,8 @@
     "Unable to create key backup": "Konnte Schlüsselsicherung nicht erstellen",
     "Unable to restore backup": "Konnte Schlüsselsicherung nicht wiederherstellen",
     "No backup found!": "Keine Schlüsselsicherung gefunden!",
-    "Use a few words, avoid common phrases": "Benutze einige Worte und vermeide gängige Phrasen",
-    "No need for symbols, digits, or uppercase letters": "Kein Bedarf an Symbolen, Zahlen oder Großbuchstaben",
-    "Avoid repeated words and characters": "Vermeide wiederholte Worte und Zeichen",
-    "Avoid sequences": "Vermeide Sätze",
-    "Avoid recent years": "Vermeide die letzten Jahre",
-    "Avoid years that are associated with you": "Vermeide Jahreszahlen, die mit dir zu tun haben",
-    "Avoid dates and years that are associated with you": "Vermeide Daten und Jahre, die mit dir in Verbindung stehen",
-    "Capitalization doesn't help very much": "Großschreibung hilft nicht viel",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Alles groß zu schreiben ist genauso einfach zu erraten, wie alles klein zu schreiben",
-    "Reversed words aren't much harder to guess": "Umgedrehte Worte sind nicht schwerer zu erraten",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Vorhersagbare Ersetzungen wie „@“ anstelle von „a“ helfen nicht besonders",
-    "Add another word or two. Uncommon words are better.": "Füge ein weiteres Wort - oder mehr - hinzu. Ungewöhnliche Worte sind besser.",
-    "Repeats like \"aaa\" are easy to guess": "Wiederholungen wie \"aaa\" sind einfach zu erraten",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Wiederholungen wie \"abcabcabc\" sind fast so schnell zu erraten wie \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Sequenzen wie \"abc\" oder \"6543\" sind leicht zu raten",
-    "Recent years are easy to guess": "Kürzlich vergangene Jahre sind einfach zu raten",
-    "Dates are often easy to guess": "Ein Datum ist leicht zu erraten",
-    "This is a top-10 common password": "Dies ist unter den Top 10 der häufigsten Passwörter",
-    "This is a top-100 common password": "Dies ist unter den Top 100 der häufigsten Passwörter",
-    "This is a very common password": "Dies ist ein recht bekanntes Passwort",
-    "This is similar to a commonly used password": "Dies ist ähnlich zu einem oft genutzten Passwort",
-    "A word by itself is easy to guess": "Ein einzelnes Wort ist einfach zu erraten",
-    "Names and surnames by themselves are easy to guess": "Namen und Familiennamen alleine sind einfach zu erraten",
-    "Common names and surnames are easy to guess": "Häufige Namen und Familiennamen sind einfach zu erraten",
     "You do not have permission to invite people to this room.": "Du hast keine Berechtigung, Personen in diesen Raum einzuladen.",
     "Unknown server error": "Unbekannter Server-Fehler",
-    "Short keyboard patterns are easy to guess": "Kurze Tastaturmuster sind einfach zu erraten",
-    "Use a longer keyboard pattern with more turns": "Nutze ein längeres Tastaturmuster mit mehr Abwechslung",
-    "Straight rows of keys are easy to guess": "Gerade Reihen von Tasten sind einfach zu erraten",
     "Unable to load key backup status": "Konnte Status der Schlüsselsicherung nicht laden",
     "Set up": "Einrichten",
     "Please review and accept all of the homeserver's policies": "Bitte prüfe und akzeptiere alle Richtlinien des Heim-Servers",
@@ -2567,11 +2540,11 @@
         "integration_manager": "Integrationsverwaltung",
         "qr_code": "QR-Code",
         "feedback": "Rückmeldung",
-        "all_rooms": "Alle Räume",
-        "orphan_rooms": "Andere Räume",
         "preview_message": "Hey du. Du bist großartig!",
+        "orphan_rooms": "Andere Räume",
         "on": "An",
-        "off": "Aus"
+        "off": "Aus",
+        "all_rooms": "Alle Räume"
     },
     "action": {
         "continue": "Fortfahren",
@@ -2673,8 +2646,8 @@
         "submit": "Absenden",
         "send_report": "Bericht senden",
         "clear": "Löschen",
-        "enter_fullscreen": "Vollbild",
-        "exit_fullscreeen": "Vollbild verlassen"
+        "exit_fullscreeen": "Vollbild verlassen",
+        "enter_fullscreen": "Vollbild"
     },
     "a11y": {
         "user_menu": "Benutzermenü",
@@ -2751,11 +2724,11 @@
         "notification_settings_beta_title": "Benachrichtigungseinstellungen",
         "voice_broadcast_force_small_chunks": "Die Chunk-Länge der Sprachübertragungen auf 15 Sekunden erzwingen",
         "oidc_native_flow": "Neue native OIDC-Verfahren aktivieren (in aktiver Entwicklung)",
-        "automatic_debug_logs": "Sende bei Fehlern automatisch Protokolle zur Fehlerkorrektur",
-        "automatic_debug_logs_decryption": "Sende bei Entschlüsselungsfehlern automatisch Protokolle zur Fehlerkorrektur",
-        "automatic_debug_logs_key_backup": "Sende automatisch Protokolle zur Fehlerkorrektur, wenn die Schlüsselsicherung nicht funktioniert",
+        "sliding_sync_disabled_notice": "Zum Deaktivieren, melde dich ab und erneut an",
         "rust_crypto_disabled_notice": "Dies kann aktuell nur per config.json aktiviert werden",
-        "sliding_sync_disabled_notice": "Zum Deaktivieren, melde dich ab und erneut an"
+        "automatic_debug_logs_key_backup": "Sende automatisch Protokolle zur Fehlerkorrektur, wenn die Schlüsselsicherung nicht funktioniert",
+        "automatic_debug_logs_decryption": "Sende bei Entschlüsselungsfehlern automatisch Protokolle zur Fehlerkorrektur",
+        "automatic_debug_logs": "Sende bei Fehlern automatisch Protokolle zur Fehlerkorrektur"
     },
     "keyboard": {
         "home": "Startseite",
@@ -3045,15 +3018,26 @@
             "timeline_image_size": "Bildgröße im Verlauf",
             "timeline_image_size_default": "Standard",
             "timeline_image_size_large": "Groß",
-            "custom_font_size": "Andere Schriftgröße verwenden",
+            "image_size_large": "Groß",
+            "image_size_default": "Standard",
+            "font_size_valid": "Verwende eine Zahl zwischen %(min)s pt und %(max)s pt",
             "font_size_nan": "Schriftgröße muss eine Zahl sein",
             "font_size_limit": "Eigene Schriftgröße kann nur eine Zahl zwischen %(min)s pt und %(max)s pt sein",
-            "font_size_valid": "Verwende eine Zahl zwischen %(min)s pt und %(max)s pt",
-            "image_size_default": "Standard",
-            "image_size_large": "Groß"
+            "custom_font_size": "Andere Schriftgröße verwenden"
         },
         "inline_url_previews_room_account": "URL-Vorschau für dich in diesem Raum",
         "inline_url_previews_room": "URL-Vorschau für Raummitglieder",
+        "voip": {
+            "mirror_local_feed": "Lokalen Video-Feed spiegeln",
+            "allow_p2p": "Erlaube Peer-to-Peer-Verbindungen für Anrufe in Direktnachrichten",
+            "allow_p2p_description": "Wenn aktiviert, könnte die andere Person deine IP-Adresse sehen",
+            "auto_gain_control": "Automatische Lautstärkeregelung",
+            "echo_cancellation": "Echounterdrückung",
+            "noise_suppression": "Rauschreduzierung",
+            "enable_fallback_ice_server": "Ersatz-Anrufassistenz-Server erlauben (%(server)s)",
+            "enable_fallback_ice_server_description": "Dieser wird nur verwendet, sollte dein Heim-Server keinen bieten. Deine IP-Adresse würde während eines Anrufs geteilt werden."
+        },
+        "send_read_receipts_unsupported": "Dein Server unterstützt das Deaktivieren von Lesebestätigungen nicht.",
         "security": {
             "message_search_disable_warning": "Wenn deaktiviert, werden Nachrichten von verschlüsselten Räumen nicht in den Ergebnissen auftauchen.",
             "message_search_indexing_idle": "Derzeit werden keine Nachrichten für Räume indiziert.",
@@ -3091,17 +3075,6 @@
             "always_show_menu_bar": "Fenstermenüleiste immer anzeigen",
             "enable_tray_icon": "Fenster beim Schließen in die Symbolleiste minimieren",
             "enable_hardware_acceleration": "Aktiviere die Hardwarebeschleunigung"
-        },
-        "send_read_receipts_unsupported": "Dein Server unterstützt das Deaktivieren von Lesebestätigungen nicht.",
-        "voip": {
-            "mirror_local_feed": "Lokalen Video-Feed spiegeln",
-            "allow_p2p": "Erlaube Peer-to-Peer-Verbindungen für Anrufe in Direktnachrichten",
-            "allow_p2p_description": "Wenn aktiviert, könnte die andere Person deine IP-Adresse sehen",
-            "auto_gain_control": "Automatische Lautstärkeregelung",
-            "echo_cancellation": "Echounterdrückung",
-            "noise_suppression": "Rauschreduzierung",
-            "enable_fallback_ice_server": "Ersatz-Anrufassistenz-Server erlauben (%(server)s)",
-            "enable_fallback_ice_server_description": "Dieser wird nur verwendet, sollte dein Heim-Server keinen bieten. Deine IP-Adresse würde während eines Anrufs geteilt werden."
         },
         "keyboard": {
             "title": "Tastatur"
@@ -3200,11 +3173,11 @@
         "category_room": "Raum",
         "category_other": "Sonstiges",
         "widget_screenshots": "Bildschirmfotos für unterstützte Widgets",
+        "title": "Entwicklungswerkzeuge",
         "show_hidden_events": "Versteckte Ereignisse im Verlauf anzeigen",
-        "low_bandwidth_mode": "Modus für geringe Bandbreite",
         "low_bandwidth_mode_description": "Benötigt kompatiblen Heim-Server.",
-        "developer_mode": "Entwicklungsmodus",
-        "title": "Entwicklungswerkzeuge"
+        "low_bandwidth_mode": "Modus für geringe Bandbreite",
+        "developer_mode": "Entwicklungsmodus"
     },
     "export_chat": {
         "html": "HTML",
@@ -3584,22 +3557,22 @@
         "no_permission_messages_before_join": "Du kannst keine Nachrichten lesen, die gesendet wurden, bevor du beigetreten bist.",
         "encrypted_historical_messages_unavailable": "Vor diesem Zeitpunkt sind keine verschlüsselten Nachrichten verfügbar.",
         "historical_messages_unavailable": "Du kannst keine älteren Nachrichten lesen",
-        "io.element.voice_broadcast_info": {
-            "you": "Du hast eine <a>Sprachübertragung</a> beendet",
-            "user": "%(senderName)s beendete eine <a>Sprachübertragung</a>"
+        "redacted": {
+            "tooltip": "Nachricht am %(date)s gelöscht"
         },
         "reactions": {
             "label": "%(reactors)s hat mit %(content)s reagiert",
             "tooltip": "<reactors/><reactedWith>hat mit %(shortName)s reagiert</reactedWith>"
-        },
-        "redacted": {
-            "tooltip": "Nachricht am %(date)s gelöscht"
         },
         "m.room.create": {
             "continuation": "Dieser Raum ist eine Fortsetzung einer anderen Konversation.",
             "unknown_predecessor_guess_server": "Konnte die alte Version dieses Raumes nicht finden (Raum-ID: %(roomId)s) und uns wurde „via_servers“ nicht mitgeteilt, um danach zu suchen. Es ist möglich, dass das Erraten des Servers basierend auf der Raum-ID funktioniert. Wenn du dies probieren möchtest, klicke auf folgenden Link:",
             "unknown_predecessor": "Konnte die alte Version dieses Raumes nicht finden (Raum-ID: %(roomId)s) und uns wurde „via_servers“ nicht mitgeteilt, um danach zu suchen.",
             "see_older_messages": "Klicke hier, um ältere Nachrichten zu sehen."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Du hast eine <a>Sprachübertragung</a> beendet",
+            "user": "%(senderName)s beendete eine <a>Sprachübertragung</a>"
         }
     },
     "slash_command": {
@@ -3669,14 +3642,14 @@
         "failed_find_user": "Benutzer konnte nicht im Raum gefunden werden",
         "op": "Berechtigungsstufe einers Benutzers setzen",
         "deop": "Setzt das Berechtigungslevel beim Benutzer mit der angegebenen ID zurück",
-        "server_error": "Server-Fehler",
-        "command_error": "Fehler im Befehl",
-        "server_error_detail": "Server ist nicht verfügbar, überlastet oder ein anderer Fehler ist aufgetreten.",
-        "unknown_command": "Unbekannter Befehl",
-        "unknown_command_detail": "Unbekannter Befehl: %(commandText)s",
-        "unknown_command_help": "Du kannst <code>/help</code> benutzen, um alle verfügbaren Befehle aufzulisten. Willst du es stattdessen als Nachricht senden?",
         "unknown_command_hint": "Hinweis: Beginne deine Nachricht mit <code>//</code>, um sie mit einem Schrägstrich zu beginnen.",
-        "unknown_command_button": "Als Nachricht senden"
+        "unknown_command_help": "Du kannst <code>/help</code> benutzen, um alle verfügbaren Befehle aufzulisten. Willst du es stattdessen als Nachricht senden?",
+        "unknown_command_detail": "Unbekannter Befehl: %(commandText)s",
+        "unknown_command_button": "Als Nachricht senden",
+        "unknown_command": "Unbekannter Befehl",
+        "server_error_detail": "Server ist nicht verfügbar, überlastet oder ein anderer Fehler ist aufgetreten.",
+        "server_error": "Server-Fehler",
+        "command_error": "Fehler im Befehl"
     },
     "presence": {
         "busy": "Beschäftigt",
@@ -3922,8 +3895,8 @@
         "server_picker_custom": "Anderer Heim-Server",
         "server_picker_explainer": "Verwende einen Matrix-Heim-Server deiner Wahl oder betreibe deinen eigenen.",
         "server_picker_learn_more": "Über Heim-Server",
-        "account_deactivated": "Dieses Konto wurde deaktiviert.",
-        "incorrect_credentials": "Inkorrekter Nutzername und/oder Passwort."
+        "incorrect_credentials": "Inkorrekter Nutzername und/oder Passwort.",
+        "account_deactivated": "Dieses Konto wurde deaktiviert."
     },
     "room_list": {
         "sort_unread_first": "Räume mit ungelesenen Nachrichten zuerst zeigen",
@@ -4054,6 +4027,110 @@
         "existing_issue_link": "Bitte wirf einen Blick auf <existingIssuesLink>existierende Programmfehler auf Github</existingIssuesLink>. Keinen passenden gefunden? <newIssueLink>Erstelle einen neuen</newIssueLink>.",
         "send_feedback_action": "Rückmeldung senden"
     },
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Benutze einige Worte und vermeide gängige Phrasen",
+            "noNeed": "Kein Bedarf an Symbolen, Zahlen oder Großbuchstaben",
+            "longerKeyboardPattern": "Nutze ein längeres Tastaturmuster mit mehr Abwechslung",
+            "repeated": "Vermeide wiederholte Worte und Zeichen",
+            "sequences": "Vermeide Sätze",
+            "recentYears": "Vermeide die letzten Jahre",
+            "associatedYears": "Vermeide Jahreszahlen, die mit dir zu tun haben",
+            "dates": "Vermeide Daten und Jahre, die mit dir in Verbindung stehen",
+            "capitalization": "Großschreibung hilft nicht viel",
+            "allUppercase": "Alles groß zu schreiben ist genauso einfach zu erraten, wie alles klein zu schreiben",
+            "reverseWords": "Umgedrehte Worte sind nicht schwerer zu erraten",
+            "l33t": "Vorhersagbare Ersetzungen wie „@“ anstelle von „a“ helfen nicht besonders",
+            "anotherWord": "Füge ein weiteres Wort - oder mehr - hinzu. Ungewöhnliche Worte sind besser."
+        },
+        "warnings": {
+            "simpleRepeat": "Wiederholungen wie \"aaa\" sind einfach zu erraten",
+            "extendedRepeat": "Wiederholungen wie \"abcabcabc\" sind fast so schnell zu erraten wie \"abc\"",
+            "sequences": "Sequenzen wie \"abc\" oder \"6543\" sind leicht zu raten",
+            "recentYears": "Kürzlich vergangene Jahre sind einfach zu raten",
+            "dates": "Ein Datum ist leicht zu erraten",
+            "topTen": "Dies ist unter den Top 10 der häufigsten Passwörter",
+            "topHundred": "Dies ist unter den Top 100 der häufigsten Passwörter",
+            "common": "Dies ist ein recht bekanntes Passwort",
+            "similarToCommon": "Dies ist ähnlich zu einem oft genutzten Passwort",
+            "wordByItself": "Ein einzelnes Wort ist einfach zu erraten",
+            "namesByThemselves": "Namen und Familiennamen alleine sind einfach zu erraten",
+            "commonNames": "Häufige Namen und Familiennamen sind einfach zu erraten",
+            "straightRow": "Gerade Reihen von Tasten sind einfach zu erraten",
+            "keyPattern": "Kurze Tastaturmuster sind einfach zu erraten"
+        }
+    },
+    "voice_broadcast": {
+        "failed_already_recording_title": "Sprachübertragung kann nicht gestartet werden",
+        "failed_insufficient_permission_title": "Sprachübertragung kann nicht gestartet werden",
+        "failed_others_already_recording_title": "Sprachübertragung kann nicht gestartet werden",
+        "failed_already_recording_description": "Du zeichnest bereits eine Sprachübertragung auf. Bitte beende die laufende Übertragung, um eine neue zu beginnen.",
+        "failed_insufficient_permission_description": "Du hast nicht die nötigen Berechtigungen, um eine Sprachübertragung in diesem Raum zu starten. Kontaktiere einen Raumadministrator, um deine Berechtigungen anzupassen.",
+        "failed_others_already_recording_description": "Jemand anderes nimmt bereits eine Sprachübertragung auf. Warte auf das Ende der Übertragung, bevor du eine neue startest.",
+        "failed_no_connection_title": "Verbindungsfehler",
+        "failed_no_connection_description": "Leider ist es aktuell nicht möglich, eine Aufnahme zu beginnen. Bitte versuche es später erneut.",
+        "failed_decrypt": "Entschlüsseln der Sprachübertragung nicht möglich",
+        "failed_generic": "Wiedergabe der Sprachübertragung nicht möglich",
+        "confirm_stop_title": "Live-Übertragung beenden?",
+        "confirm_stop_description": "Möchtest du deine Übertragung wirklich beenden? Dies wird die Übertragung abschließen und die vollständige Aufnahme im Raum bereitstellen.",
+        "confirm_stop_affirm": "Ja, Übertragung beenden",
+        "confirm_listen_title": "Echtzeitübertragung anhören?",
+        "confirm_listen_description": "Wenn du beginnst, diese Echtzeitübertragung anzuhören, wird deine aktuelle Echtzeitübertragungsaufzeichnung beendet.",
+        "confirm_listen_affirm": "Ja, beende meine Aufzeichnung",
+        "30s_backward": "30s zurückspulen",
+        "30s_forward": "30s vorspulen",
+        "go_live": "Live schalten",
+        "resume": "Sprachübertragung fortsetzen",
+        "pause": "Sprachübertragung pausieren",
+        "buffering": "Puffere …",
+        "play": "Sprachübertragung wiedergeben",
+        "connection_error": "Verbindungsfehler − Aufnahme pausiert"
+    },
+    "update": {
+        "see_changes_button": "Was ist neu?",
+        "release_notes_toast_title": "Was ist neu",
+        "toast_title": "Aktualisiere %(brand)s",
+        "toast_description": "Neue Version von %(brand)s verfügbar"
+    },
+    "threads": {
+        "all_threads": "Alle Threads",
+        "all_threads_description": "Alle Threads des Raums anzeigen",
+        "my_threads": "Meine Threads",
+        "my_threads_description": "Zeigt alle Threads, an denen du teilgenommen hast",
+        "show_thread_filter": "Zeige:",
+        "empty_has_threads_tip": "Antworte auf einen Thread oder klicke bei einer Nachricht auf „%(replyInThread)s“, um einen Thread zu starten.",
+        "show_all_threads": "Alle Threads anzeigen",
+        "empty_explainer": "Threads helfen dabei, dass deine Konversationen beim Thema und leicht nachverfolgbar bleiben.",
+        "empty_tip": "<b>Tipp:</b> Nutze “%(replyInThread)s” beim Schweben über eine Nachricht.",
+        "empty_heading": "Organisiere Diskussionen mit Threads"
+    },
+    "theme": {
+        "light_high_contrast": "Hell kontrastreich"
+    },
+    "space": {
+        "landing_welcome": "Willkommen bei <name/>"
+    },
+    "location_sharing": {
+        "MapStyleUrlNotConfigured": "Dein Heim-Server unterstützt das Anzeigen von Karten nicht.",
+        "WebGLNotEnabled": "Für die Darstellung von Karten ist WebGL erforderlich, bitte aktiviere es in den Einstellungen deines Browsers.",
+        "MapStyleUrlNotReachable": "Dein Home-Server unterstützt das Anzeigen von Karten nicht oder der Kartenanbieter ist nicht erreichbar.",
+        "toggle_attribution": "Info ein-/ausblenden",
+        "map_feedback": "Rückmeldung zur Karte",
+        "find_my_location": "Zeige meinen Standort",
+        "location_not_available": "Standort nicht verfügbar",
+        "mapbox_logo": "Mapbox Logo",
+        "reset_bearing": "Ausrichtung nach Norden zurücksetzen",
+        "failed_permission": "%(brand)s wurde der Zugriff auf deinen Standort verweigert. Bitte erlaube den Zugriff in den Einstellungen deines Browsers.",
+        "failed_generic": "Standort konnte nicht abgerufen werden. Bitte versuche es später erneut.",
+        "failed_timeout": "Zeitüberschreitung beim Abrufen deines Standortes. Bitte versuche es später erneut.",
+        "failed_unknown": "Beim Abruf deines Standortes ist ein unbekannter Fehler aufgetreten. Bitte versuche es später erneut.",
+        "expand_map": "Karte vergrößern",
+        "failed_load_map": "Karte kann nicht geladen werden"
+    },
+    "labs_mjolnir": {
+        "room_name": "Meine Bannliste",
+        "room_topic": "Dies ist die Liste von Benutzer und Servern, die du blockiert hast – verlasse diesen Raum nicht!"
+    },
     "create_space": {
         "name_required": "Gib den Namen des Spaces ein",
         "name_placeholder": "z. B. mein-space",
@@ -4088,76 +4165,5 @@
         "setup_rooms_description": "Du kannst später weitere hinzufügen, auch bereits bestehende.",
         "setup_rooms_private_heading": "Welche Projekte bearbeitet euer Team?",
         "setup_rooms_private_description": "Wir werden für jedes einen Raum erstellen."
-    },
-    "space": {
-        "landing_welcome": "Willkommen bei <name/>"
-    },
-    "threads": {
-        "all_threads": "Alle Threads",
-        "all_threads_description": "Alle Threads des Raums anzeigen",
-        "my_threads": "Meine Threads",
-        "my_threads_description": "Zeigt alle Threads, an denen du teilgenommen hast",
-        "show_thread_filter": "Zeige:",
-        "empty_has_threads_tip": "Antworte auf einen Thread oder klicke bei einer Nachricht auf „%(replyInThread)s“, um einen Thread zu starten.",
-        "show_all_threads": "Alle Threads anzeigen",
-        "empty_explainer": "Threads helfen dabei, dass deine Konversationen beim Thema und leicht nachverfolgbar bleiben.",
-        "empty_tip": "<b>Tipp:</b> Nutze “%(replyInThread)s” beim Schweben über eine Nachricht.",
-        "empty_heading": "Organisiere Diskussionen mit Threads"
-    },
-    "location_sharing": {
-        "MapStyleUrlNotConfigured": "Dein Heim-Server unterstützt das Anzeigen von Karten nicht.",
-        "WebGLNotEnabled": "Für die Darstellung von Karten ist WebGL erforderlich, bitte aktiviere es in den Einstellungen deines Browsers.",
-        "MapStyleUrlNotReachable": "Dein Home-Server unterstützt das Anzeigen von Karten nicht oder der Kartenanbieter ist nicht erreichbar.",
-        "toggle_attribution": "Info ein-/ausblenden",
-        "map_feedback": "Rückmeldung zur Karte",
-        "find_my_location": "Zeige meinen Standort",
-        "location_not_available": "Standort nicht verfügbar",
-        "mapbox_logo": "Mapbox Logo",
-        "reset_bearing": "Ausrichtung nach Norden zurücksetzen",
-        "failed_permission": "%(brand)s wurde der Zugriff auf deinen Standort verweigert. Bitte erlaube den Zugriff in den Einstellungen deines Browsers.",
-        "failed_generic": "Standort konnte nicht abgerufen werden. Bitte versuche es später erneut.",
-        "failed_timeout": "Zeitüberschreitung beim Abrufen deines Standortes. Bitte versuche es später erneut.",
-        "failed_unknown": "Beim Abruf deines Standortes ist ein unbekannter Fehler aufgetreten. Bitte versuche es später erneut.",
-        "expand_map": "Karte vergrößern",
-        "failed_load_map": "Karte kann nicht geladen werden"
-    },
-    "voice_broadcast": {
-        "failed_already_recording_title": "Sprachübertragung kann nicht gestartet werden",
-        "failed_insufficient_permission_title": "Sprachübertragung kann nicht gestartet werden",
-        "failed_others_already_recording_title": "Sprachübertragung kann nicht gestartet werden",
-        "failed_already_recording_description": "Du zeichnest bereits eine Sprachübertragung auf. Bitte beende die laufende Übertragung, um eine neue zu beginnen.",
-        "failed_insufficient_permission_description": "Du hast nicht die nötigen Berechtigungen, um eine Sprachübertragung in diesem Raum zu starten. Kontaktiere einen Raumadministrator, um deine Berechtigungen anzupassen.",
-        "failed_others_already_recording_description": "Jemand anderes nimmt bereits eine Sprachübertragung auf. Warte auf das Ende der Übertragung, bevor du eine neue startest.",
-        "failed_no_connection_title": "Verbindungsfehler",
-        "failed_no_connection_description": "Leider ist es aktuell nicht möglich, eine Aufnahme zu beginnen. Bitte versuche es später erneut.",
-        "failed_decrypt": "Entschlüsseln der Sprachübertragung nicht möglich",
-        "failed_generic": "Wiedergabe der Sprachübertragung nicht möglich",
-        "confirm_stop_title": "Live-Übertragung beenden?",
-        "confirm_stop_description": "Möchtest du deine Übertragung wirklich beenden? Dies wird die Übertragung abschließen und die vollständige Aufnahme im Raum bereitstellen.",
-        "confirm_stop_affirm": "Ja, Übertragung beenden",
-        "confirm_listen_title": "Echtzeitübertragung anhören?",
-        "confirm_listen_description": "Wenn du beginnst, diese Echtzeitübertragung anzuhören, wird deine aktuelle Echtzeitübertragungsaufzeichnung beendet.",
-        "confirm_listen_affirm": "Ja, beende meine Aufzeichnung",
-        "30s_backward": "30s zurückspulen",
-        "30s_forward": "30s vorspulen",
-        "go_live": "Live schalten",
-        "resume": "Sprachübertragung fortsetzen",
-        "pause": "Sprachübertragung pausieren",
-        "buffering": "Puffere …",
-        "play": "Sprachübertragung wiedergeben",
-        "connection_error": "Verbindungsfehler − Aufnahme pausiert"
-    },
-    "labs_mjolnir": {
-        "room_name": "Meine Bannliste",
-        "room_topic": "Dies ist die Liste von Benutzer und Servern, die du blockiert hast – verlasse diesen Raum nicht!"
-    },
-    "theme": {
-        "light_high_contrast": "Hell kontrastreich"
-    },
-    "update": {
-        "see_changes_button": "Was ist neu?",
-        "release_notes_toast_title": "Was ist neu",
-        "toast_title": "Aktualisiere %(brand)s",
-        "toast_description": "Neue Version von %(brand)s verfügbar"
     }
 }

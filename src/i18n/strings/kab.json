@@ -26,7 +26,6 @@
     "You need to be logged in.": "Tesriḍ ad teqqneḍ.",
     "Thank you!": "Tanemmirt!",
     "Reason": "Taɣẓint",
-    "Add another word or two. Uncommon words are better.": "Rnu awal-nniḍen neɣ sin. Awalen imexḍa ad lhun.",
     "Later": "Ticki",
     "Notifications": "Ilɣa",
     "Ok": "Ih",
@@ -242,11 +241,6 @@
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "Not a valid %(brand)s keyfile": "Afaylu n tsarut %(brand)s d arameɣtu",
     "Unknown server error": "Tuccḍa n uqeddac d tarussint",
-    "Avoid repeated words and characters": "Zgel i wawalen i d-yettasen d yisekkilen",
-    "Avoid sequences": "Zgel igzumen",
-    "Avoid recent years": "Zgel iseggasen ineggura",
-    "Avoid years that are associated with you": "Zgel iseggasen i icudden ɣur-k",
-    "Avoid dates and years that are associated with you": "Zgel izmaz akked iseggasen i icudden ɣur-k",
     "Cancelling…": "Asefsex…",
     "Dog": "Aqjun",
     "Horse": "Aεewdiw",
@@ -285,12 +279,6 @@
     "Unrecognised address": "Tansa ur tettwassen ara",
     "You do not have permission to invite people to this room.": "Ur tesεiḍ ara tasiregt ad d-necdeḍ imdanen ɣer texxamt-a.",
     "The user's homeserver does not support the version of the room.": "Aqeddac agejdan n useqdac ur issefrek ara lqem n texxamt yettwafernen.",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Meṛṛa isekkilen imeqranen fessus-it i usumer ɣef akk isekkilen imeẓẓyanen",
-    "Recent years are easy to guess": "Iseggasen n melmi kan sehlen i tifin",
-    "Dates are often easy to guess": "Izemzen sehlen i tiftin",
-    "This is a top-10 common password": "Wagi d awal uffir gar 10 yimezwura yettwassnen",
-    "This is a top-100 common password": "Wagi d awal uffir gar 100 yimezwura yettwassnen",
-    "This is a very common password": "Wagi d awal uffir yettwassnen",
     "Change notification settings": "Snifel iɣewwaren n yilɣa",
     "Got It": "Awi-t",
     "Accept <policyLink /> to continue:": "Qbel <policyLink /> i wakken ad tkemmleḍ:",
@@ -569,8 +557,6 @@
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Ḍmen qbel tesɛiḍ tuqqna i igerrzen, neɣ nermes anedbal n uqeddac",
     "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.": "Suter deg %(brand)s unedbal ad isenqed <a>tawila-ik·im</a> n unekcam arameɣtu neɣ i d-yuɣalen.",
     "This homeserver has hit its Monthly Active User limit.": "Aqeddac-a agejdan yewweḍ ɣer talast n useqdac urmid n wayyur.",
-    "Use a few words, avoid common phrases": "Seqdec kra n wawalen, sinef i tefyar i d-yettuɣalen",
-    "No need for symbols, digits, or uppercase letters": "Ulayɣer izamulen, izwilen d yisekkilen imeqqranen",
     "Create key backup": "Rnu aḥraz n tsarut",
     "Unable to create key backup": "Yegguma ad yernu uḥraz n tsarut",
     "This session is encrypting history using the new recovery method.": "Tiɣimit-a, amazray-ines awgelhen yesseqdac tarrayt n uɛeddi tamaynut.",
@@ -632,19 +618,6 @@
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "Taxxamt-a tettuseqdac i yiznan yesɛan azal sɣur aqeddac agejdan, ɣef waya ur tezmireḍ ara ad tt-teǧǧeḍ.",
     "Error leaving room": "Tuccaḍa deg tuffɣa seg texxamt",
     "The user must be unbanned before they can be invited.": "Aseqdac ilaq ad yettwakkes uqbel ad izmiren ad t-id-snubegten.",
-    "Use a longer keyboard pattern with more turns": "Seqdec talɣa n unasiw ɣezzifen s wugar n tuzzyiwin",
-    "Capitalization doesn't help very much": "Tira timeqqranin ur tettɛawan ara aṭas",
-    "Reversed words aren't much harder to guess": "Awalen imettiyen ur weɛrit ara i tifin",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Isnifal yettbeddilen am '@' deg wadeg n 'a' ur ttɛawanen ara aṭas",
-    "Repeats like \"aaa\" are easy to guess": "Allus am \"aaa\" fessus i usumer",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Allus am \"abcabcabc\" yewɛer cwiṭ i tifin ɣef \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Asemyizwer am abc neɣ 6543 fessus i usumer",
-    "This is similar to a commonly used password": "Wagi kifkif am wawal uffir yettwaseqdacen acḥal n tikkal",
-    "A word by itself is easy to guess": "Awal s timmad-is fessus i usumer",
-    "Names and surnames by themselves are easy to guess": "Ismawen d yismawen n useqdac s timmad-nsen fessusit i usumer",
-    "Common names and surnames are easy to guess": "Ismawen d yismawen n useqdac yettwassnen fessusit i usumer",
-    "Straight rows of keys are easy to guess": "Idurren ubdisen n tsura fessusit i ussumer",
-    "Short keyboard patterns are easy to guess": "Tinerufin n unasiw amecṭuḥ fessusit i ussumer",
     "Your homeserver has exceeded its user limit.": "Aqeddac-inek·inem agejdan yewweḍ ɣer talast n useqdac.",
     "Your homeserver has exceeded one of its resource limits.": "Aqeddac-inek·inem agejdan iɛedda yiwet seg tlisa-ines tiɣbula.",
     "Contact your <a>server admin</a>.": "Nermes anedbal-inek·inem <a>n uqeddac</a>.",
@@ -1395,10 +1368,10 @@
         "integration_manager": "Amsefrak n umsidef",
         "qr_code": "Tangalt QR",
         "feedback": "Takti",
-        "all_rooms": "Akk tixxamin",
         "preview_message": "Kečč·kemm. Ulac win i ak·akem-yifen!",
         "on": "Yermed",
-        "off": "Insa"
+        "off": "Insa",
+        "all_rooms": "Akk tixxamin"
     },
     "action": {
         "continue": "Kemmel",
@@ -1637,14 +1610,17 @@
             "font_size": "Tuɣzi n tsefsit",
             "custom_font_description": "Sbadu isem n tsefsit yettwasbedden ɣef unagraw-ik·im & %(brand)s ad yeɛreḍ ad t-isseqdec.",
             "timeline_image_size_default": "Amezwer",
-            "custom_font_size": "Seqdec teɣzi tudmawant",
+            "image_size_default": "Amezwer",
+            "font_size_valid": "Seqdec gar %(min)s pt d %(max)s pt",
             "font_size_nan": "Teɣzi ilaq ad tili d uṭṭun",
             "font_size_limit": "Teɣzi n tsefsit tudmawant tezmer kan ad tili gar %(min)s pt d %(max)s pt",
-            "font_size_valid": "Seqdec gar %(min)s pt d %(max)s pt",
-            "image_size_default": "Amezwer"
+            "custom_font_size": "Seqdec teɣzi tudmawant"
         },
         "inline_url_previews_room_account": "Rmed tiskanin n URL i texxamt-a (i ak·akem-yeɛnan kan)",
         "inline_url_previews_room": "Rmed tiskanin n URL s wudem amezwer i yimttekkiyen deg texxamt-a",
+        "voip": {
+            "mirror_local_feed": "Asbani n usuddem n tvidyut tadigant"
+        },
         "security": {
             "message_search_disable_warning": "Ma yella tensa, iznan n texxamin tiwgelhanin ur d-ttbanen ara deg yigmaḍ n unadi.",
             "message_search_indexing_idle": "Ulac asmiter amiran n yiznan i yal taxxamt.",
@@ -1667,9 +1643,6 @@
             "rm_lifetime": "Ɣer tanzagt n tudert n tecreḍt (ms)",
             "rm_lifetime_offscreen": "Ɣer tanzagt n tudert n tecreḍt beṛṛa n ugdil (ms)",
             "always_show_menu_bar": "Afeggag n wumuɣ n usfaylu eǧǧ-it yettban"
-        },
-        "voip": {
-            "mirror_local_feed": "Asbani n usuddem n tvidyut tadigant"
         }
     },
     "devtools": {
@@ -1888,20 +1861,20 @@
             "changed_rule_servers": "%(senderName)s ibeddel alugen i yugin tixxamin iqeddacen d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s",
             "changed_rule_glob": "%(senderName)s ibeddel alugen i yemṣadan d %(oldGlob)s deg %(newGlob)s yemṣadan i %(reason)s"
         },
+        "redacted": {
+            "tooltip": "Izen yettwakkes deg %(date)s"
+        },
         "reactions": {
             "tooltip": "<reactors/><reactedWith>issedmer s %(shortName)s</reactedWith>"
         },
-        "redacted": {
-            "tooltip": "Izen yettwakkes deg %(date)s"
+        "m.room.create": {
+            "continuation": "Taxxamt-a d akemmel n udiwenni-nniḍen.",
+            "see_older_messages": "Sit da i wakken ad twaliḍ iznan iqdimen."
         },
         "m.room.avatar": {
             "lightbox_title": "%(senderDisplayName)s ibeddel avaṭar i %(roomName)s",
             "removed": "%(senderDisplayName)s yekkes avaṭar n texxamt.",
             "changed_img": "%(senderDisplayName)s ibeddel avaṭar n texxamt i <img/>"
-        },
-        "m.room.create": {
-            "continuation": "Taxxamt-a d akemmel n udiwenni-nniḍen.",
-            "see_older_messages": "Sit da i wakken ad twaliḍ iznan iqdimen."
         }
     },
     "slash_command": {
@@ -1951,14 +1924,14 @@
         "failed_find_user": "Ur yettwaf ara useqdac deg texxamt",
         "op": "Sbadu aswir iǧehden n useqdac",
         "deop": "Aseqdac Deops s usulay i d-yettunefken",
-        "server_error": "Tuccḍa n uqeddac",
-        "command_error": "Tuccḍa n tladna",
-        "server_error_detail": "Aqeddac ulac-it, neɣ iɛebba aṭas neɣ yella wayen ur nteddu ara akken ilaq.",
-        "unknown_command": "Taladna tarussint",
-        "unknown_command_detail": "Taladna d tarussint: %(commandText)s",
-        "unknown_command_help": "Tzemreḍ ad tesqedceḍ <code>tallalt</code> i wakken ad twaliḍ tabdart n tiludna yellan. Tbɣiḍ ad tceggɛeḍ ayagi d izen?",
         "unknown_command_hint": "Taxballut: Bdu izen-ik·im s <code>//</code> i wakken ad t-tebduḍ s uṣlac.",
-        "unknown_command_button": "Azen-it d izen"
+        "unknown_command_help": "Tzemreḍ ad tesqedceḍ <code>tallalt</code> i wakken ad twaliḍ tabdart n tiludna yellan. Tbɣiḍ ad tceggɛeḍ ayagi d izen?",
+        "unknown_command_detail": "Taladna d tarussint: %(commandText)s",
+        "unknown_command_button": "Azen-it d izen",
+        "unknown_command": "Taladna tarussint",
+        "server_error_detail": "Aqeddac ulac-it, neɣ iɛebba aṭas neɣ yella wayen ur nteddu ara akken ilaq.",
+        "server_error": "Tuccḍa n uqeddac",
+        "command_error": "Tuccḍa n tladna"
     },
     "presence": {
         "online_for": "Srid azal n %(duration)s",
@@ -2086,8 +2059,8 @@
         "sign_in_or_register_description": "Seqdec amiḍan-ik/im neɣ snulfu-d yiwen akken ad tkemmleḍ.",
         "register_action": "Rnu amiḍan",
         "server_picker_invalid_url": "Yir URL",
-        "account_deactivated": "Amiḍan-a yettuḥbes.",
-        "incorrect_credentials": "Isem n uqeddac d/neɣ awal uffir d arameɣtu."
+        "incorrect_credentials": "Isem n uqeddac d/neɣ awal uffir d arameɣtu.",
+        "account_deactivated": "Amiḍan-a yettuḥbes."
     },
     "export_chat": {
         "messages": "Iznan"
@@ -2140,12 +2113,45 @@
         "comment_label": "Awennit",
         "send_feedback_action": "Azen takti-inek·inem"
     },
-    "labs_mjolnir": {
-        "room_name": "Tabdart-inu n tigtin",
-        "room_topic": "Tagi d tabdart-ik·im n yiseqdacen/yiqeddacen i tesweḥleḍ - ur teffeɣ ara seg texxamt!"
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Seqdec kra n wawalen, sinef i tefyar i d-yettuɣalen",
+            "noNeed": "Ulayɣer izamulen, izwilen d yisekkilen imeqqranen",
+            "longerKeyboardPattern": "Seqdec talɣa n unasiw ɣezzifen s wugar n tuzzyiwin",
+            "repeated": "Zgel i wawalen i d-yettasen d yisekkilen",
+            "sequences": "Zgel igzumen",
+            "recentYears": "Zgel iseggasen ineggura",
+            "associatedYears": "Zgel iseggasen i icudden ɣur-k",
+            "dates": "Zgel izmaz akked iseggasen i icudden ɣur-k",
+            "capitalization": "Tira timeqqranin ur tettɛawan ara aṭas",
+            "allUppercase": "Meṛṛa isekkilen imeqranen fessus-it i usumer ɣef akk isekkilen imeẓẓyanen",
+            "reverseWords": "Awalen imettiyen ur weɛrit ara i tifin",
+            "l33t": "Isnifal yettbeddilen am '@' deg wadeg n 'a' ur ttɛawanen ara aṭas",
+            "anotherWord": "Rnu awal-nniḍen neɣ sin. Awalen imexḍa ad lhun."
+        },
+        "warnings": {
+            "simpleRepeat": "Allus am \"aaa\" fessus i usumer",
+            "extendedRepeat": "Allus am \"abcabcabc\" yewɛer cwiṭ i tifin ɣef \"abc\"",
+            "sequences": "Asemyizwer am abc neɣ 6543 fessus i usumer",
+            "recentYears": "Iseggasen n melmi kan sehlen i tifin",
+            "dates": "Izemzen sehlen i tiftin",
+            "topTen": "Wagi d awal uffir gar 10 yimezwura yettwassnen",
+            "topHundred": "Wagi d awal uffir gar 100 yimezwura yettwassnen",
+            "common": "Wagi d awal uffir yettwassnen",
+            "similarToCommon": "Wagi kifkif am wawal uffir yettwaseqdacen acḥal n tikkal",
+            "wordByItself": "Awal s timmad-is fessus i usumer",
+            "namesByThemselves": "Ismawen d yismawen n useqdac s timmad-nsen fessusit i usumer",
+            "commonNames": "Ismawen d yismawen n useqdac yettwassnen fessusit i usumer",
+            "straightRow": "Idurren ubdisen n tsura fessusit i ussumer",
+            "keyPattern": "Tinerufin n unasiw amecṭuḥ fessusit i ussumer"
+        }
     },
     "update": {
         "see_changes_button": "D acu-t umaynut?",
         "release_notes_toast_title": "D acu-t umaynut"
+    },
+    "labs_mjolnir": {
+        "room_name": "Tabdart-inu n tigtin",
+        "room_topic": "Tagi d tabdart-ik·im n yiseqdacen/yiqeddacen i tesweḥleḍ - ur teffeɣ ara seg texxamt!"
     }
 }

@@ -346,36 +346,9 @@
     "No backup found!": "Ez da babes-kopiarik aurkitu!",
     "Failed to decrypt %(failedCount)s sessions!": "Ezin izan dira %(failedCount)s saio deszifratu!",
     "Invalid homeserver discovery response": "Baliogabeko hasiera-zerbitzarien bilaketaren erantzuna",
-    "Use a few words, avoid common phrases": "Erabili hitz gutxi batzuk, ekidin ohiko esaldiak",
-    "No need for symbols, digits, or uppercase letters": "Ez dira sinboloak, zenbakiak edo letra larriak behar",
-    "Use a longer keyboard pattern with more turns": "Erabili teklatu-eredu luzeago bat aldaketa gehiagorekin",
-    "Avoid repeated words and characters": "Ekidin errepikatutako hitzak eta karaktereak",
-    "Avoid sequences": "Ekidin sekuentziak",
-    "Avoid recent years": "Ekidin azkenaldiko urteak",
-    "Avoid years that are associated with you": "Ekidin zurekin zerikusia duten urteak",
-    "Avoid dates and years that are associated with you": "Ekidin zurekin zerikusia duten datak eta urteak",
-    "Capitalization doesn't help very much": "Letra larriek eta xeheak ez dute askorik laguntzen",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Dena letra larriz dena letra xehez bezain erraza da asmatzeko",
-    "Reversed words aren't much harder to guess": "Alderantzikatutako hitzak ez dira asmatzeko asmoz zailagoak",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Aurreikusi daitezkeen ordezkatzeak, esaterako '@' erabiltzea 'a' adierazteko, ez dute askorik laguntzen",
-    "Add another word or two. Uncommon words are better.": "Gehitu hitz bat edo bi gehiago. Ezohiko hitzak hobeak dira.",
-    "Repeats like \"aaa\" are easy to guess": "'aaa' bezalako errepikapenak erraz asmatu daitezke",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "\"abcabcabc\" bezalako errepikapenak ia \"abc\" bezain errazak dira asmatzeko",
-    "Sequences like abc or 6543 are easy to guess": "abc edo 6543 bezalako sekuentziak errazak dira asmatzeko",
-    "Recent years are easy to guess": "Azkenaldiko urteak errazak dira asmatzeko",
-    "Dates are often easy to guess": "Datak maiz errazak dira asmatzeko",
-    "This is a top-10 common password": "Pasahitz hau 10 erabilienen artean dago",
-    "This is a top-100 common password": "Pasahitz hau 100 erabilienen artean dago",
-    "This is a very common password": "Pasahitz hau oso ohikoa da",
-    "This is similar to a commonly used password": "Pasahitz hau maiz erabilitako beste baten oso antzekoa da",
-    "A word by itself is easy to guess": "Hitz bat berez asmatzeko oso erreza da",
-    "Names and surnames by themselves are easy to guess": "Izen eta abizenak berez asmatzeko errazak dira",
-    "Common names and surnames are easy to guess": "Ohiko izenak eta abizenak asmatzeko errazak dira",
     "You do not have permission to invite people to this room.": "Ez duzu jendea gela honetara gonbidatzeko baimenik.",
     "Unknown server error": "Zerbitzari errore ezezaguna",
     "Set up": "Ezarri",
-    "Straight rows of keys are easy to guess": "Teklatuko errenkadak asmatzeko errazak dira",
-    "Short keyboard patterns are easy to guess": "Teklatuko eredu laburrak asmatzeko errazak dira",
     "General failure": "Hutsegite orokorra",
     "New Recovery Method": "Berreskuratze metodo berria",
     "Set up Secure Messages": "Ezarri mezu seguruak",
@@ -1075,10 +1048,10 @@
         "integration_manager": "Integrazio-kudeatzailea",
         "qr_code": "QR kodea",
         "feedback": "Iruzkinak",
-        "all_rooms": "Gela guztiak",
         "preview_message": "Aupa txo. Onena zara!",
         "on": "Bai",
-        "off": "Ez"
+        "off": "Ez",
+        "all_rooms": "Gela guztiak"
     },
     "action": {
         "continue": "Jarraitu",
@@ -1304,14 +1277,17 @@
             "custom_theme_add_button": "Gehitu azala",
             "font_size": "Letra-tamaina",
             "timeline_image_size_default": "Lehenetsia",
-            "custom_font_size": "Erabili tamaina pertsonalizatua",
+            "image_size_default": "Lehenetsia",
+            "font_size_valid": "Erabili %(min)s pt eta %(max)s pt bitarteko  balioa",
             "font_size_nan": "Tamaina zenbaki bat izan behar da",
             "font_size_limit": "Letra tamaina pertsonalizatua %(min)s pt eta %(max)s pt bitartean egon behar du",
-            "font_size_valid": "Erabili %(min)s pt eta %(max)s pt bitarteko  balioa",
-            "image_size_default": "Lehenetsia"
+            "custom_font_size": "Erabili tamaina pertsonalizatua"
         },
         "inline_url_previews_room_account": "Gaitu URLen aurrebista gela honetan (zuretzat bakarrik aldatuko duzu)",
         "inline_url_previews_room": "Gaitu URLen aurrebista lehenetsita gela honetako partaideentzat",
+        "voip": {
+            "mirror_local_feed": "Bikoiztu tokiko bideo jarioa"
+        },
         "security": {
             "message_search_disable_warning": "Desgaituz gero, zifratutako geletako mezuak ez dira bilaketen emaitzetan agertuko.",
             "message_search_indexing_idle": "Orain ez da inolako gelako mezurik indexatzen.",
@@ -1334,9 +1310,6 @@
             "rm_lifetime": "Orri-markagailuaren biziraupena (ms)",
             "rm_lifetime_offscreen": "Orri-markagailuaren biziraupena pantailaz kanpo (ms)",
             "always_show_menu_bar": "Erakutsi beti leihoaren menu barra"
-        },
-        "voip": {
-            "mirror_local_feed": "Bikoiztu tokiko bideo jarioa"
         }
     },
     "devtools": {
@@ -1547,14 +1520,14 @@
         "reactions": {
             "tooltip": "<reactors/> erabiltzaileak <reactedWith>%(shortName)s batekin erreakzionatu du</reactedWith>"
         },
+        "m.room.create": {
+            "continuation": "Gela hau aurreko elkarrizketa baten jarraipena da.",
+            "see_older_messages": "Egin klik hemen mezu zaharrak ikusteko."
+        },
         "m.room.avatar": {
             "lightbox_title": "%(senderDisplayName)s erabiltzaileak %(roomName)s gelaren abatarra aldatu du",
             "removed": "%(senderDisplayName)s erabiltzaileak gelaren abatarra ezabatu du.",
             "changed_img": "%(senderDisplayName)s erabiltzaileak gelaren abatarra aldatu du beste honetara: <img/>"
-        },
-        "m.room.create": {
-            "continuation": "Gela hau aurreko elkarrizketa baten jarraipena da.",
-            "see_older_messages": "Egin klik hemen mezu zaharrak ikusteko."
         }
     },
     "slash_command": {
@@ -1598,14 +1571,14 @@
         "failed_find_user": "Ezin izan da erabiltzailea gelan aurkitu",
         "op": "Zehaztu erabiltzaile baten botere maila",
         "deop": "Emandako ID-a duen erabiltzailea mailaz jaisten du",
-        "server_error": "Zerbitzari-errorea",
-        "command_error": "Aginduaren errorea",
-        "server_error_detail": "Zerbitzaria eskuraezin edo gainezka egon daiteke edo zerbaitek huts egin du.",
-        "unknown_command": "Agindu ezezaguna",
-        "unknown_command_detail": "Agindu ezezaguna: %(commandText)s",
-        "unknown_command_help": "<code>/help</code> erabili dezakezu agindu erabilgarrien zerrenda ikusteko. Ala mezu gisa bidali nahi zenuen hau?",
         "unknown_command_hint": "Aholkua: Hasi zure mezua <code>//</code> idatziz barra batekin hasi nahi baduzu.",
-        "unknown_command_button": "Bidali mezu gisa"
+        "unknown_command_help": "<code>/help</code> erabili dezakezu agindu erabilgarrien zerrenda ikusteko. Ala mezu gisa bidali nahi zenuen hau?",
+        "unknown_command_detail": "Agindu ezezaguna: %(commandText)s",
+        "unknown_command_button": "Bidali mezu gisa",
+        "unknown_command": "Agindu ezezaguna",
+        "server_error_detail": "Zerbitzaria eskuraezin edo gainezka egon daiteke edo zerbaitek huts egin du.",
+        "server_error": "Zerbitzari-errorea",
+        "command_error": "Aginduaren errorea"
     },
     "presence": {
         "online_for": "Konektatua %(duration)s",
@@ -1713,8 +1686,8 @@
         "sign_in_or_register": "Hasi saioa edo sortu kontua",
         "sign_in_or_register_description": "Erabili zure kontua edo sortu berri bat jarraitzeko.",
         "register_action": "Sortu kontua",
-        "account_deactivated": "Kontu hau desaktibatuta dago.",
-        "incorrect_credentials": "Erabiltzaile-izen edo pasahitz okerra."
+        "incorrect_credentials": "Erabiltzaile-izen edo pasahitz okerra.",
+        "account_deactivated": "Kontu hau desaktibatuta dago."
     },
     "export_chat": {
         "messages": "Mezuak"
@@ -1755,12 +1728,45 @@
             "clear_cache_reload": "Garbitu cachea eta birkargatu"
         }
     },
-    "labs_mjolnir": {
-        "room_name": "Nire debeku-zerrenda",
-        "room_topic": "Hau blokeatu dituzun erabiltzaile edo zerbitzarien zerrenda da, ez atera gelatik!"
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Erabili hitz gutxi batzuk, ekidin ohiko esaldiak",
+            "noNeed": "Ez dira sinboloak, zenbakiak edo letra larriak behar",
+            "longerKeyboardPattern": "Erabili teklatu-eredu luzeago bat aldaketa gehiagorekin",
+            "repeated": "Ekidin errepikatutako hitzak eta karaktereak",
+            "sequences": "Ekidin sekuentziak",
+            "recentYears": "Ekidin azkenaldiko urteak",
+            "associatedYears": "Ekidin zurekin zerikusia duten urteak",
+            "dates": "Ekidin zurekin zerikusia duten datak eta urteak",
+            "capitalization": "Letra larriek eta xeheak ez dute askorik laguntzen",
+            "allUppercase": "Dena letra larriz dena letra xehez bezain erraza da asmatzeko",
+            "reverseWords": "Alderantzikatutako hitzak ez dira asmatzeko asmoz zailagoak",
+            "l33t": "Aurreikusi daitezkeen ordezkatzeak, esaterako '@' erabiltzea 'a' adierazteko, ez dute askorik laguntzen",
+            "anotherWord": "Gehitu hitz bat edo bi gehiago. Ezohiko hitzak hobeak dira."
+        },
+        "warnings": {
+            "simpleRepeat": "'aaa' bezalako errepikapenak erraz asmatu daitezke",
+            "extendedRepeat": "\"abcabcabc\" bezalako errepikapenak ia \"abc\" bezain errazak dira asmatzeko",
+            "sequences": "abc edo 6543 bezalako sekuentziak errazak dira asmatzeko",
+            "recentYears": "Azkenaldiko urteak errazak dira asmatzeko",
+            "dates": "Datak maiz errazak dira asmatzeko",
+            "topTen": "Pasahitz hau 10 erabilienen artean dago",
+            "topHundred": "Pasahitz hau 100 erabilienen artean dago",
+            "common": "Pasahitz hau oso ohikoa da",
+            "similarToCommon": "Pasahitz hau maiz erabilitako beste baten oso antzekoa da",
+            "wordByItself": "Hitz bat berez asmatzeko oso erreza da",
+            "namesByThemselves": "Izen eta abizenak berez asmatzeko errazak dira",
+            "commonNames": "Ohiko izenak eta abizenak asmatzeko errazak dira",
+            "straightRow": "Teklatuko errenkadak asmatzeko errazak dira",
+            "keyPattern": "Teklatuko eredu laburrak asmatzeko errazak dira"
+        }
     },
     "update": {
         "see_changes_button": "Zer dago berri?",
         "release_notes_toast_title": "Zer dago berri"
+    },
+    "labs_mjolnir": {
+        "room_name": "Nire debeku-zerrenda",
+        "room_topic": "Hau blokeatu dituzun erabiltzaile edo zerbitzarien zerrenda da, ez atera gelatik!"
     }
 }

@@ -278,37 +278,10 @@
     "This homeserver has exceeded one of its resource limits.": "Este servidor local ultrapassou um dos seus limites de recursos.",
     "You do not have permission to invite people to this room.": "Você não tem permissão para convidar pessoas para esta sala.",
     "Unknown server error": "Erro de servidor desconhecido",
-    "Use a few words, avoid common phrases": "Use algumas palavras, evite frases comuns",
-    "No need for symbols, digits, or uppercase letters": "Não há necessidade de símbolos, dígitos ou letras maiúsculas",
-    "Avoid repeated words and characters": "Evite palavras e caracteres repetidos",
-    "Avoid sequences": "Evite sequências",
-    "Avoid recent years": "Evite anos recentes",
-    "Avoid years that are associated with you": "Evite anos associados a você",
-    "Avoid dates and years that are associated with you": "Evite datas e anos associados a você",
-    "Capitalization doesn't help very much": "A capitalização não ajuda muito",
-    "All-uppercase is almost as easy to guess as all-lowercase": "Todas as maiúsculas são quase tão fáceis de adivinhar quanto todas as minúsculas",
-    "Reversed words aren't much harder to guess": "Palavras invertidas não são muito mais difíceis de adivinhar",
-    "Predictable substitutions like '@' instead of 'a' don't help very much": "Substituições previsíveis como '@' em vez de 'a' não ajudam muito",
-    "Add another word or two. Uncommon words are better.": "Adicione outra palavra ou duas. Palavras incomuns são melhores.",
-    "Repeats like \"aaa\" are easy to guess": "Repetições como \"aaa\" são fáceis de adivinhar",
-    "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"": "Repetições como \"abcabcabc\" são apenas um pouco mais difíceis de adivinhar que \"abc\"",
-    "Sequences like abc or 6543 are easy to guess": "Sequências como abc ou 6543 são fáceis de adivinhar",
-    "Recent years are easy to guess": "Os últimos anos são fáceis de adivinhar",
-    "Dates are often easy to guess": "As datas costumam ser fáceis de adivinhar",
-    "This is a top-10 common password": "Esta é uma das top-10 senhas mais comuns",
-    "This is a top-100 common password": "Esta é uma das top-100 senhas mais comuns",
-    "This is a very common password": "Isto é uma senha muito comum",
-    "This is similar to a commonly used password": "Isto é similar a uma senha muito comum",
-    "A word by itself is easy to guess": "Uma palavra por si só é fácil de adivinhar",
-    "Names and surnames by themselves are easy to guess": "Nomes e sobrenomes por si só são fáceis de adivinhar",
-    "Common names and surnames are easy to guess": "Nomes e sobrenomes comuns são fáceis de adivinhar",
-    "Straight rows of keys are easy to guess": "Linhas retas de teclas são fáceis de adivinhar",
-    "Short keyboard patterns are easy to guess": "Padrões de teclado curtos são fáceis de adivinhar",
     "Please contact your homeserver administrator.": "Por favor, entre em contato com o administrador do seu homeserver.",
     "Delete Backup": "Remover backup",
     "Unable to load key backup status": "Não foi possível carregar o status do backup da chave",
     "This event could not be displayed": "Este evento não pôde ser exibido",
-    "Use a longer keyboard pattern with more turns": "Use um padrão de teclas em diferentes direções e sentido",
     "Share Link to User": "Compartilhar este usuário",
     "This room has been replaced and is no longer active.": "Esta sala foi substituída e não está mais ativa.",
     "The conversation continues here.": "A conversa continua aqui.",
@@ -1909,11 +1882,11 @@
         "integration_manager": "Gerenciador de integrações",
         "qr_code": "Código QR",
         "feedback": "Fale conosco",
-        "all_rooms": "Todas as salas",
-        "orphan_rooms": "Outras salas",
         "preview_message": "Ei, você aí. Você é incrível!",
+        "orphan_rooms": "Outras salas",
         "on": "Ativado",
-        "off": "Desativado"
+        "off": "Desativado",
+        "all_rooms": "Todas as salas"
     },
     "action": {
         "continue": "Continuar",
@@ -2001,8 +1974,8 @@
         "mention": "Mencionar",
         "submit": "Enviar",
         "send_report": "Enviar relatório",
-        "enter_fullscreen": "Entrar em tela cheia",
-        "exit_fullscreeen": "Sair da tela cheia"
+        "exit_fullscreeen": "Sair da tela cheia",
+        "enter_fullscreen": "Entrar em tela cheia"
     },
     "a11y": {
         "user_menu": "Menu do usuário",
@@ -2244,15 +2217,18 @@
             "timeline_image_size": "Tamanho da imagem na linha do tempo",
             "timeline_image_size_default": "Padrão",
             "timeline_image_size_large": "Grande",
-            "custom_font_size": "Usar tamanho personalizado",
+            "image_size_large": "Grande",
+            "image_size_default": "Padrão",
+            "font_size_valid": "Use entre %(min)s pt e %(max)s pt",
             "font_size_nan": "O tamanho deve ser um número",
             "font_size_limit": "O tamanho da fonte personalizada só pode estar entre %(min)s pt e %(max)s pt",
-            "font_size_valid": "Use entre %(min)s pt e %(max)s pt",
-            "image_size_default": "Padrão",
-            "image_size_large": "Grande"
+            "custom_font_size": "Usar tamanho personalizado"
         },
         "inline_url_previews_room_account": "Ativar, para esta sala, a visualização de links (só afeta você)",
         "inline_url_previews_room": "Ativar, para todos os participantes desta sala, a visualização de links",
+        "voip": {
+            "mirror_local_feed": "Espelhar o feed de vídeo local"
+        },
         "security": {
             "message_search_disable_warning": "Se desativado, as mensagens de salas criptografadas não aparecerão em resultados de buscas.",
             "message_search_indexing_idle": "Atualmente, mensagens de nenhuma sala estão sendo armazenadas.",
@@ -2284,9 +2260,6 @@
             "always_show_menu_bar": "Mostrar a barra de menu na janela",
             "enable_tray_icon": "Mostrar o ícone da bandeja e minimizar a janela ao fechar",
             "enable_hardware_acceleration": "Habilitar aceleração de hardware"
-        },
-        "voip": {
-            "mirror_local_feed": "Espelhar o feed de vídeo local"
         },
         "keyboard": {
             "title": "Teclado"
@@ -2322,9 +2295,9 @@
         "category_room": "Sala",
         "category_other": "Outros",
         "widget_screenshots": "Ativar capturas de tela do widget em widgets suportados",
+        "title": "Ferramentas de desenvolvimento",
         "show_hidden_events": "Mostrar eventos ocultos nas conversas",
-        "developer_mode": "Modo desenvolvedor",
-        "title": "Ferramentas de desenvolvimento"
+        "developer_mode": "Modo desenvolvedor"
     },
     "export_chat": {
         "html": "HTML",
@@ -2626,20 +2599,20 @@
         },
         "encrypted_historical_messages_unavailable": "As mensagens criptografadas antes deste ponto não estão disponíveis.",
         "historical_messages_unavailable": "Você não pode ver as mensagens anteriores",
-        "io.element.voice_broadcast_info": {
-            "you": "Você encerrou uma <a>transmissão de voz</a>",
-            "user": "%(senderName)s encerrou uma <a>transmissão de voz</a>"
+        "redacted": {
+            "tooltip": "Mensagem apagada em %(date)s"
         },
         "reactions": {
             "label": "%(reactors)s reagiram com %(content)s",
             "tooltip": "<reactors/><reactedWith>reagiu com %(shortName)s</reactedWith>"
         },
-        "redacted": {
-            "tooltip": "Mensagem apagada em %(date)s"
-        },
         "m.room.create": {
             "continuation": "Esta sala é uma continuação de outra conversa.",
             "see_older_messages": "Clique aqui para ver as mensagens mais antigas."
+        },
+        "io.element.voice_broadcast_info": {
+            "you": "Você encerrou uma <a>transmissão de voz</a>",
+            "user": "%(senderName)s encerrou uma <a>transmissão de voz</a>"
         }
     },
     "slash_command": {
@@ -2704,14 +2677,14 @@
         "failed_find_user": "Não encontrei este(a) usuário(a) na sala",
         "op": "Define o nível de permissões de um usuário",
         "deop": "Retira o nível de moderador do usuário com o ID informado",
-        "server_error": "Erro no servidor",
-        "command_error": "Erro de comando",
-        "server_error_detail": "O servidor pode estar indisponível, sobrecarregado, ou alguma outra coisa não funcionou.",
-        "unknown_command": "Comando desconhecido",
-        "unknown_command_detail": "Comando não reconhecido: %(commandText)s",
-        "unknown_command_help": "Você pode usar <code>/help</code> para listar os comandos disponíveis. Você quis enviar isso como uma mensagem?",
         "unknown_command_hint": "Dica: Inicie sua mensagem com <code>//</code> para iniciar com uma barra.",
-        "unknown_command_button": "Enviar como mensagem"
+        "unknown_command_help": "Você pode usar <code>/help</code> para listar os comandos disponíveis. Você quis enviar isso como uma mensagem?",
+        "unknown_command_detail": "Comando não reconhecido: %(commandText)s",
+        "unknown_command_button": "Enviar como mensagem",
+        "unknown_command": "Comando desconhecido",
+        "server_error_detail": "O servidor pode estar indisponível, sobrecarregado, ou alguma outra coisa não funcionou.",
+        "server_error": "Erro no servidor",
+        "command_error": "Erro de comando"
     },
     "presence": {
         "online_for": "Online há %(duration)s",
@@ -2913,8 +2886,8 @@
         "server_picker_custom": "Outro servidor local",
         "server_picker_explainer": "Use o seu servidor local Matrix preferido, ou hospede o seu próprio servidor.",
         "server_picker_learn_more": "Sobre os servidores locais",
-        "account_deactivated": "Esta conta foi desativada.",
-        "incorrect_credentials": "Nome de usuário e/ou senha incorreto."
+        "incorrect_credentials": "Nome de usuário e/ou senha incorreto.",
+        "account_deactivated": "Esta conta foi desativada."
     },
     "room_list": {
         "sort_unread_first": "Mostrar salas não lidas em primeiro",
@@ -3024,27 +2997,38 @@
         "existing_issue_link": "Por favor, consulte os <existingIssuesLink> erros conhecidos no Github </existingIssuesLink> antes de enviar o seu. Se ninguém tiver mencionado o seu erro, <newIssueLink> informe-nos sobre um erro novo </newIssueLink>.",
         "send_feedback_action": "Enviar comentário"
     },
-    "create_space": {
-        "name_required": "Por favor entre o nome do espaço",
-        "name_placeholder": "e.g. meu-espaco",
-        "public_description": "Abra espaços para todos, especialmente para comunidades",
-        "private_description": "Somente convite, melhor para si mesmo(a) ou para equipes",
-        "public_heading": "O seu espaço público",
-        "private_heading": "O seu espaço privado",
-        "add_details_prompt": "Adicione alguns detalhes para ajudar as pessoas a reconhecê-lo.",
-        "failed_create_initial_rooms": "Falha ao criar salas de espaço iniciais",
-        "skip_action": "Ignorar por enquanto",
-        "invite_teammates_by_username": "Convidar por nome de usuário"
-    },
-    "space": {
-        "landing_welcome": "Boas-vindas ao <name/>"
-    },
-    "threads": {
-        "show_thread_filter": "Exibir:"
-    },
-    "location_sharing": {
-        "find_my_location": "Encontrar minha localização",
-        "location_not_available": "Local não disponível"
+    "zxcvbn": {
+        "suggestions": {
+            "useWords": "Use algumas palavras, evite frases comuns",
+            "noNeed": "Não há necessidade de símbolos, dígitos ou letras maiúsculas",
+            "longerKeyboardPattern": "Use um padrão de teclas em diferentes direções e sentido",
+            "repeated": "Evite palavras e caracteres repetidos",
+            "sequences": "Evite sequências",
+            "recentYears": "Evite anos recentes",
+            "associatedYears": "Evite anos associados a você",
+            "dates": "Evite datas e anos associados a você",
+            "capitalization": "A capitalização não ajuda muito",
+            "allUppercase": "Todas as maiúsculas são quase tão fáceis de adivinhar quanto todas as minúsculas",
+            "reverseWords": "Palavras invertidas não são muito mais difíceis de adivinhar",
+            "l33t": "Substituições previsíveis como '@' em vez de 'a' não ajudam muito",
+            "anotherWord": "Adicione outra palavra ou duas. Palavras incomuns são melhores."
+        },
+        "warnings": {
+            "simpleRepeat": "Repetições como \"aaa\" são fáceis de adivinhar",
+            "extendedRepeat": "Repetições como \"abcabcabc\" são apenas um pouco mais difíceis de adivinhar que \"abc\"",
+            "sequences": "Sequências como abc ou 6543 são fáceis de adivinhar",
+            "recentYears": "Os últimos anos são fáceis de adivinhar",
+            "dates": "As datas costumam ser fáceis de adivinhar",
+            "topTen": "Esta é uma das top-10 senhas mais comuns",
+            "topHundred": "Esta é uma das top-100 senhas mais comuns",
+            "common": "Isto é uma senha muito comum",
+            "similarToCommon": "Isto é similar a uma senha muito comum",
+            "wordByItself": "Uma palavra por si só é fácil de adivinhar",
+            "namesByThemselves": "Nomes e sobrenomes por si só são fáceis de adivinhar",
+            "commonNames": "Nomes e sobrenomes comuns são fáceis de adivinhar",
+            "straightRow": "Linhas retas de teclas são fáceis de adivinhar",
+            "keyPattern": "Padrões de teclado curtos são fáceis de adivinhar"
+        }
     },
     "voice_broadcast": {
         "failed_already_recording_title": "Não é possível iniciar uma nova transmissão de voz",
@@ -3060,17 +3044,39 @@
         "confirm_listen_title": "Ouvir transmissão ao vivo?",
         "confirm_listen_description": "Se você começar a ouvir esta tramissão ao vivo, a gravação desta transmissão, será encerrada."
     },
-    "labs_mjolnir": {
-        "room_name": "Minha lista de banidos",
-        "room_topic": "Esta é a sua lista de usuárias(os)/servidores que você bloqueou - não saia da sala!"
-    },
-    "theme": {
-        "light_high_contrast": "Claro (alto contraste)"
-    },
     "update": {
         "see_changes_button": "O que há de novidades?",
         "release_notes_toast_title": "Novidades",
         "toast_title": "Atualizar o %(brand)s",
         "toast_description": "Uma nova versão do %(brand)s está disponível"
+    },
+    "threads": {
+        "show_thread_filter": "Exibir:"
+    },
+    "theme": {
+        "light_high_contrast": "Claro (alto contraste)"
+    },
+    "space": {
+        "landing_welcome": "Boas-vindas ao <name/>"
+    },
+    "location_sharing": {
+        "find_my_location": "Encontrar minha localização",
+        "location_not_available": "Local não disponível"
+    },
+    "labs_mjolnir": {
+        "room_name": "Minha lista de banidos",
+        "room_topic": "Esta é a sua lista de usuárias(os)/servidores que você bloqueou - não saia da sala!"
+    },
+    "create_space": {
+        "name_required": "Por favor entre o nome do espaço",
+        "name_placeholder": "e.g. meu-espaco",
+        "public_description": "Abra espaços para todos, especialmente para comunidades",
+        "private_description": "Somente convite, melhor para si mesmo(a) ou para equipes",
+        "public_heading": "O seu espaço público",
+        "private_heading": "O seu espaço privado",
+        "add_details_prompt": "Adicione alguns detalhes para ajudar as pessoas a reconhecê-lo.",
+        "failed_create_initial_rooms": "Falha ao criar salas de espaço iniciais",
+        "skip_action": "Ignorar por enquanto",
+        "invite_teammates_by_username": "Convidar por nome de usuário"
     }
 }
