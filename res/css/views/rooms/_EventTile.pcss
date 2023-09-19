@@ -846,17 +846,17 @@ $left-gutter: 64px;
     }
 
     &.mx_EventTile_e2eIcon_warning::after {
-        mask-image: url("$(res)/img/e2e/warning.svg");
-        background-color: $e2e-warning-color;
+        mask-image: url("$(res)/img/e2e/warning.svg"); // (!) in a shield
+        background-color: $e2e-warning-color; // red
     }
 
     &.mx_EventTile_e2eIcon_normal::after {
-        mask-image: url("$(res)/img/e2e/normal.svg");
-        background-color: $header-panel-text-primary-color;
+        mask-image: url("$(res)/img/e2e/normal.svg"); // regular shield
+        background-color: $header-panel-text-primary-color; // grey
     }
 
     &.mx_EventTile_e2eIcon_decryption_failure::after {
-        mask-image: url("$(res)/img/e2e/decryption-failure.svg");
+        mask-image: url("$(res)/img/e2e/decryption-failure.svg"); // key in a circle
         background-color: $secondary-content;
     }
 }

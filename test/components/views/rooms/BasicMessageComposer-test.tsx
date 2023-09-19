@@ -94,6 +94,22 @@ describe("BasicMessageComposer", () => {
         const transformedText = model.parts.map((part) => part.text).join("");
         expect(transformedText).toBe("/plain foobar\n");
     });
+
+    it("should escape single quote in placeholder", async () => {
+        const model = new EditorModel([], pc, renderer);
+        const composer = render(<BasicMessageComposer placeholder={"Don't"} model={model} room={room} />);
+        const input = composer.queryAllByRole("textbox");
+        const placeholder = input[0].style.getPropertyValue("--placeholder");
+        expect(placeholder).toMatch("'Don\\'t'");
+    });
+
+    it("should escape backslash in placeholder", async () => {
+        const model = new EditorModel([], pc, renderer);
+        const composer = render(<BasicMessageComposer placeholder={"w\\e"} model={model} room={room} />);
+        const input = composer.queryAllByRole("textbox");
+        const placeholder = input[0].style.getPropertyValue("--placeholder");
+        expect(placeholder).toMatch("'w\\\\e'");
+    });
 });
 
 function generateMockDataTransferForString(string: string): DataTransfer {

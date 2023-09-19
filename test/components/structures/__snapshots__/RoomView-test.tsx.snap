@@ -446,7 +446,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                   data-testid="basicmessagecomposer"
                   dir="auto"
                   role="textbox"
-                  style="--placeholder: 'Send a message…';"
+                  style="--placeholder: 'Send\\ a\\ message…';"
                   tabindex="0"
                   translate="no"
                 >
@@ -687,7 +687,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                   data-testid="basicmessagecomposer"
                   dir="auto"
                   role="textbox"
-                  style="--placeholder: 'Send a message…';"
+                  style="--placeholder: 'Send\\ a\\ message…';"
                   tabindex="0"
                   translate="no"
                 >

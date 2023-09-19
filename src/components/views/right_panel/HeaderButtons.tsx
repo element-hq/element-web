@@ -23,10 +23,9 @@ import React from "react";
 import dis from "../../../dispatcher/dispatcher";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import { IRightPanelCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import SettingsStore from "../../../settings/SettingsStore";
 
 export enum HeaderKind {
     Room = "room",
@@ -37,6 +36,7 @@ interface IState {
     phase: RightPanelPhases | null;
     threadNotificationColor: NotificationColor;
     globalNotificationColor: NotificationColor;
+    notificationsEnabled?: boolean;
 }
 
 interface IProps {}
@@ -44,6 +44,7 @@ interface IProps {}
 export default abstract class HeaderButtons<P = {}> extends React.Component<IProps & P, IState> {
     private unmounted = false;
     private dispatcherRef?: string = undefined;
+    private readonly watcherRef: string;
 
     public constructor(props: IProps & P, kind: HeaderKind) {
         super(props);
@@ -54,30 +55,22 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
             phase: rps.currentCard.phase,
             threadNotificationColor: NotificationColor.None,
             globalNotificationColor: NotificationColor.None,
+            notificationsEnabled: SettingsStore.getValue("feature_notifications"),
         };
+        this.watcherRef = SettingsStore.watchSetting("feature_notifications", null, (...[, , , value]) =>
+            this.setState({ notificationsEnabled: value }),
+        );
     }
 
     public componentDidMount(): void {
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
-        this.dispatcherRef = dis.register(this.onAction.bind(this)); // used by subclasses
     }
 
     public componentWillUnmount(): void {
         this.unmounted = true;
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
-    }
-
-    protected abstract onAction(payload: ActionPayload): void;
-
-    public setPhase(phase: RightPanelPhases, cardState?: Partial<IRightPanelCardState>): void {
-        const rps = RightPanelStore.instance;
-        if (rps.currentCard.phase == phase && !cardState && rps.isOpen) {
-            rps.togglePanel(null);
-        } else {
-            RightPanelStore.instance.setCard({ phase, state: cardState });
-            if (!rps.isOpen) rps.togglePanel(null);
-        }
+        if (this.watcherRef) SettingsStore.unwatchSetting(this.watcherRef);
     }
 
     public isPhase(phases: string | string[]): boolean {

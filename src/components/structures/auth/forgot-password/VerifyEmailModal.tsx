@@ -51,10 +51,10 @@ export const VerifyEmailModal: React.FC<Props> = ({
     return (
         <>
             <EmailPromptIcon className="mx_AuthBody_emailPromptIcon" />
-            <h1>{_t("Verify your email to continue")}</h1>
+            <h1>{_t("auth|verify_email_heading")}</h1>
             <p>
                 {_t(
-                    "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>",
+                    "auth|verify_email_explainer",
                     {
                         email,
                     },
@@ -65,7 +65,7 @@ export const VerifyEmailModal: React.FC<Props> = ({
             </p>
 
             <div className="mx_AuthBody_did-not-receive">
-                <span className="mx_VerifyEMailDialog_text-light">{_t("Did not receive it?")}</span>
+                <span className="mx_VerifyEMailDialog_text-light">{_t("auth|check_email_resend_prompt")}</span>
                 <AccessibleButton
                     className="mx_AuthBody_resend-button"
                     kind="link"
@@ -76,7 +76,7 @@ export const VerifyEmailModal: React.FC<Props> = ({
                     {_t("action|resend")}
                     <Tooltip
                         id={tooltipId}
-                        label={_t("Verification link email resent!")}
+                        label={_t("auth|check_email_resend_tooltip")}
                         alignment={Alignment.Top}
                         visible={tooltipVisible}
                     />
@@ -85,9 +85,9 @@ export const VerifyEmailModal: React.FC<Props> = ({
             </div>
 
             <div className="mx_AuthBody_did-not-receive">
-                <span className="mx_VerifyEMailDialog_text-light">{_t("Wrong email address?")}</span>
+                <span className="mx_VerifyEMailDialog_text-light">{_t("auth|check_email_wrong_email_prompt")}</span>
                 <AccessibleButton className="mx_AuthBody_resend-button" kind="link" onClick={onReEnterEmailClick}>
-                    {_t("Re-enter email address")}
+                    {_t("auth|check_email_wrong_email_button")}
                 </AccessibleButton>
             </div>
 

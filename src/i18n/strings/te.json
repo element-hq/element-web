@@ -25,7 +25,6 @@
     "Current password": "ప్రస్తుత పాస్వర్డ్",
     "Custom level": "అనుకూల స్థాయి",
     "Deactivate Account": "ఖాతాను డీయాక్టివేట్ చేయండి",
-    "Deops user with given id": "ఇచ్చిన ID తో వినియోగదారుని విడదీస్తుంది",
     "Default": "డిఫాల్ట్",
     "Sun": "ఆదివారం",
     "Mon": "సోమవారం",
@@ -52,7 +51,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "Upload avatar": "అవతార్ను అప్లోడ్ చేయండి",
-    "This server does not support authentication with a phone number.": "ఈ సర్వర్ ఫోన్ నంబర్తో ప్రామాణీకరణకు మద్దతు ఇవ్వదు.",
     "New passwords don't match": "కొత్త పాస్వర్డ్లు సరిపోలడం లేదు",
     "Connectivity to the server has been lost.": "సెర్వెర్ కనెక్టివిటీని కోల్పోయారు.",
     "Sent messages will be stored until your connection has returned.": "మీ కనెక్షన్ తిరిగి వచ్చే వరకు పంపిన సందేశాలు నిల్వ చేయబడతాయి.",
@@ -148,13 +146,15 @@
         "nick": "మీ ప్రదర్శన మారుపేరుని మారుస్తుంది",
         "ban": "ఇచ్చిన ఐడి తో వినియోగదారుని నిషేధించారు",
         "category_admin": "అడ్మిన్",
-        "category_advanced": "ఆధునిక"
+        "category_advanced": "ఆధునిక",
+        "deop": "ఇచ్చిన ID తో వినియోగదారుని విడదీస్తుంది"
     },
     "Advanced": "ఆధునిక",
     "voip": {
         "call_failed": "కాల్ విఫలమయింది"
     },
     "auth": {
-        "sso": "సింగిల్ సైన్ ఆన్"
+        "sso": "సింగిల్ సైన్ ఆన్",
+        "unsupported_auth_msisdn": "ఈ సర్వర్ ఫోన్ నంబర్తో ప్రామాణీకరణకు మద్దతు ఇవ్వదు."
     }
 }

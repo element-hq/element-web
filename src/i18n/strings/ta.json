@@ -14,7 +14,6 @@
     "Off": "அமை",
     "On": "மீது",
     "Operation failed": "செயல்பாடு தோல்வியுற்றது",
-    "powered by Matrix": "Matrix-ஆல் ஆனது",
     "Search…": "தேடு…",
     "Send": "அனுப்பு",
     "Source URL": "மூல முகவரி",
@@ -65,7 +64,6 @@
     "May": "மே",
     "Jun": "ஜூன்",
     "Explore rooms": "அறைகளை ஆராயுங்கள்",
-    "Create Account": "உங்கள் கணக்கை துவங்குங்கள்",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
@@ -162,6 +160,8 @@
         "group_rooms": "அறைகள்"
     },
     "auth": {
-        "sso": "ஒற்றை உள்நுழைவு"
+        "sso": "ஒற்றை உள்நுழைவு",
+        "footer_powered_by_matrix": "Matrix-ஆல் ஆனது",
+        "register_action": "உங்கள் கணக்கை துவங்குங்கள்"
     }
 }

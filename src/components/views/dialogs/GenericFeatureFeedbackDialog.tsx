@@ -69,14 +69,14 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
                     <div className="mx_GenericFeatureFeedbackDialog_subheading">
                         {subheading}
                         &nbsp;
-                        {_t("Your platform and username will be noted to help us use your feedback as much as we can.")}
+                        {_t("feedback|platform_username")}
                         &nbsp;
                         {children}
                     </div>
 
                     <Field
                         id="feedbackComment"
-                        label={_t("Feedback")}
+                        label={_t("common|feedback")}
                         type="text"
                         autoComplete="off"
                         value={comment}
@@ -95,7 +95,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
                     </StyledCheckbox>
                 </React.Fragment>
             }
-            button={_t("Send feedback")}
+            button={_t("feedback|send_feedback_action")}
             buttonDisabled={!comment}
             onFinished={sendFeedback}
         />

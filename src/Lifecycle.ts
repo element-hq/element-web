@@ -71,6 +71,23 @@ import GenericToast from "./components/views/toasts/GenericToast";
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
 
+/*
+ * Keys used when storing the tokens in indexeddb or localstorage
+ */
+const ACCESS_TOKEN_STORAGE_KEY = "mx_access_token";
+const REFRESH_TOKEN_STORAGE_KEY = "mx_refresh_token";
+/*
+ * Used as initialization vector during encryption in persistTokenInStorage
+ * And decryption in restoreFromLocalStorage
+ */
+const ACCESS_TOKEN_IV = "access_token";
+const REFRESH_TOKEN_IV = "refresh_token";
+/*
+ * Keys for localstorage items which indicate whether we expect a token in indexeddb.
+ */
+const HAS_ACCESS_TOKEN_STORAGE_KEY = "mx_has_access_token";
+const HAS_REFRESH_TOKEN_STORAGE_KEY = "mx_has_refresh_token";
+
 dis.register((payload) => {
     if (payload.action === Action.TriggerLogout) {
         // noinspection JSIgnoredPromiseFromCall - we don't care if it fails
@@ -261,9 +278,8 @@ export async function attemptDelegatedAuthLogin(
  */
 async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> {
     try {
-        const { accessToken, homeserverUrl, identityServerUrl, clientId, issuer } = await completeOidcLogin(
-            queryParams,
-        );
+        const { accessToken, refreshToken, homeserverUrl, identityServerUrl, clientId, issuer } =
+            await completeOidcLogin(queryParams);
 
         const {
             user_id: userId,
@@ -273,6 +289,7 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
 
         const credentials = {
             accessToken,
+            refreshToken,
             homeserverUrl,
             identityServerUrl,
             deviceId,
@@ -503,17 +520,17 @@ export async function getStoredSessionVars(): Promise<Partial<IStoredSession>> {
     const isUrl = localStorage.getItem(ID_SERVER_URL_KEY) ?? undefined;
     let accessToken: string | undefined;
     try {
-        accessToken = await StorageManager.idbLoad("account", "mx_access_token");
+        accessToken = await StorageManager.idbLoad("account", ACCESS_TOKEN_STORAGE_KEY);
     } catch (e) {
         logger.error("StorageManager.idbLoad failed for account:mx_access_token", e);
     }
     if (!accessToken) {
-        accessToken = localStorage.getItem("mx_access_token") ?? undefined;
+        accessToken = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY) ?? undefined;
         if (accessToken) {
             try {
                 // try to migrate access token to IndexedDB if we can
-                await StorageManager.idbSave("account", "mx_access_token", accessToken);
-                localStorage.removeItem("mx_access_token");
+                await StorageManager.idbSave("account", ACCESS_TOKEN_STORAGE_KEY, accessToken);
+                localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
             } catch (e) {
                 logger.error("migration of access token to IndexedDB failed", e);
             }
@@ -521,7 +538,7 @@ export async function getStoredSessionVars(): Promise<Partial<IStoredSession>> {
     }
     // if we pre-date storing "mx_has_access_token", but we retrieved an access
     // token, then we should say we have an access token
-    const hasAccessToken = localStorage.getItem("mx_has_access_token") === "true" || !!accessToken;
+    const hasAccessToken = localStorage.getItem(HAS_ACCESS_TOKEN_STORAGE_KEY) === "true" || !!accessToken;
     const userId = localStorage.getItem("mx_user_id") ?? undefined;
     const deviceId = localStorage.getItem("mx_device_id") ?? undefined;
 
@@ -607,7 +624,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
             logger.log("Got pickle key");
             if (typeof accessToken !== "string") {
                 const encrKey = await pickleKeyToAesKey(pickleKey);
-                decryptedAccessToken = await decryptAES(accessToken, encrKey, "access_token");
+                decryptedAccessToken = await decryptAES(accessToken, encrKey, ACCESS_TOKEN_IV);
                 encrKey.fill(0);
             }
         } else {
@@ -846,28 +863,41 @@ async function showStorageEvictedDialog(): Promise<boolean> {
 // `instanceof`. Babel 7 supports this natively in their class handling.
 class AbortLoginAndRebuildStorage extends Error {}
 
-async function persistCredentials(credentials: IMatrixClientCreds): Promise<void> {
-    localStorage.setItem(HOMESERVER_URL_KEY, credentials.homeserverUrl);
-    if (credentials.identityServerUrl) {
-        localStorage.setItem(ID_SERVER_URL_KEY, credentials.identityServerUrl);
-    }
-    localStorage.setItem("mx_user_id", credentials.userId);
-    localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
-
-    // store whether we expect to find an access token, to detect the case
+/**
+ * Persist a token in storage
+ * When pickle key is present, will attempt to encrypt the token
+ * Stores in idb, falling back to localStorage
+ *
+ * @param storageKey key used to store the token
+ * @param initializationVector Initialization vector for encrypting the token. Only used when `pickleKey` is present
+ * @param token the token to store, when undefined any existing token at the storageKey is removed from storage
+ * @param pickleKey optional pickle key used to encrypt token
+ * @param hasTokenStorageKey Localstorage key for an item which stores whether we expect to have a token in indexeddb, eg "mx_has_access_token".
+ */
+async function persistTokenInStorage(
+    storageKey: string,
+    initializationVector: string,
+    token: string | undefined,
+    pickleKey: string | undefined,
+    hasTokenStorageKey: string,
+): Promise<void> {
+    // store whether we expect to find a token, to detect the case
     // where IndexedDB is blown away
-    if (credentials.accessToken) {
-        localStorage.setItem("mx_has_access_token", "true");
+    if (token) {
+        localStorage.setItem(hasTokenStorageKey, "true");
     } else {
-        localStorage.removeItem("mx_has_access_token");
+        localStorage.removeItem(hasTokenStorageKey);
     }
 
-    if (credentials.pickleKey) {
-        let encryptedAccessToken: IEncryptedPayload | undefined;
+    if (pickleKey) {
+        let encryptedToken: IEncryptedPayload | undefined;
         try {
+            if (!token) {
+                throw new Error("No token: not attempting encryption");
+            }
             // try to encrypt the access token using the pickle key
-            const encrKey = await pickleKeyToAesKey(credentials.pickleKey);
-            encryptedAccessToken = await encryptAES(credentials.accessToken, encrKey, "access_token");
+            const encrKey = await pickleKeyToAesKey(pickleKey);
+            encryptedToken = await encryptAES(token, encrKey, initializationVector);
             encrKey.fill(0);
         } catch (e) {
             logger.warn("Could not encrypt access token", e);
@@ -876,28 +906,56 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
             // save either the encrypted access token, or the plain access
             // token if we were unable to encrypt (e.g. if the browser doesn't
             // have WebCrypto).
-            await StorageManager.idbSave("account", "mx_access_token", encryptedAccessToken || credentials.accessToken);
+            await StorageManager.idbSave("account", storageKey, encryptedToken || token);
         } catch (e) {
             // if we couldn't save to indexedDB, fall back to localStorage.  We
             // store the access token unencrypted since localStorage only saves
             // strings.
-            if (!!credentials.accessToken) {
-                localStorage.setItem("mx_access_token", credentials.accessToken);
+            if (!!token) {
+                localStorage.setItem(storageKey, token);
             } else {
-                localStorage.removeItem("mx_access_token");
+                localStorage.removeItem(storageKey);
             }
         }
-        localStorage.setItem("mx_has_pickle_key", String(true));
     } else {
         try {
-            await StorageManager.idbSave("account", "mx_access_token", credentials.accessToken);
+            await StorageManager.idbSave("account", storageKey, token);
         } catch (e) {
-            if (!!credentials.accessToken) {
-                localStorage.setItem("mx_access_token", credentials.accessToken);
+            if (!!token) {
+                localStorage.setItem(storageKey, token);
             } else {
-                localStorage.removeItem("mx_access_token");
+                localStorage.removeItem(storageKey);
             }
         }
+    }
+}
+
+async function persistCredentials(credentials: IMatrixClientCreds): Promise<void> {
+    localStorage.setItem(HOMESERVER_URL_KEY, credentials.homeserverUrl);
+    if (credentials.identityServerUrl) {
+        localStorage.setItem(ID_SERVER_URL_KEY, credentials.identityServerUrl);
+    }
+    localStorage.setItem("mx_user_id", credentials.userId);
+    localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
+
+    await persistTokenInStorage(
+        ACCESS_TOKEN_STORAGE_KEY,
+        ACCESS_TOKEN_IV,
+        credentials.accessToken,
+        credentials.pickleKey,
+        HAS_ACCESS_TOKEN_STORAGE_KEY,
+    );
+    await persistTokenInStorage(
+        REFRESH_TOKEN_STORAGE_KEY,
+        REFRESH_TOKEN_IV,
+        credentials.refreshToken,
+        credentials.pickleKey,
+        HAS_REFRESH_TOKEN_STORAGE_KEY,
+    );
+
+    if (credentials.pickleKey) {
+        localStorage.setItem("mx_has_pickle_key", String(true));
+    } else {
         if (localStorage.getItem("mx_has_pickle_key") === "true") {
             logger.error("Expected a pickle key, but none provided.  Encryption may not work.");
         }
@@ -1090,7 +1148,7 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
         AbstractLocalStorageSettingsHandler.clear();
 
         try {
-            await StorageManager.idbDelete("account", "mx_access_token");
+            await StorageManager.idbDelete("account", ACCESS_TOKEN_STORAGE_KEY);
         } catch (e) {
             logger.error("idbDelete failed for account:mx_access_token", e);
         }

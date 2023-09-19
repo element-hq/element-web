@@ -132,6 +132,7 @@ describe("OIDC authorization", () => {
 
             expect(result).toEqual({
                 accessToken: tokenResponse.access_token,
+                refreshToken: tokenResponse.refresh_token,
                 homeserverUrl,
                 identityServerUrl,
                 issuer,

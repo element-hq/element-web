@@ -161,7 +161,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                 e.errcode === "M_FORBIDDEN" &&
                 (e.httpStatus === 401 || e.httpStatus === 403)
             ) {
-                errorText = _t("Incorrect password");
+                errorText = _t("auth|incorrect_password");
             }
 
             this.setState({
@@ -173,7 +173,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
         Lifecycle.hydrateSession(credentials).catch((e) => {
             logger.error(e);
-            this.setState({ busy: false, errorText: _t("Failed to re-authenticate") });
+            this.setState({ busy: false, errorText: _t("auth|failed_soft_logout_auth") });
         });
     };
 
@@ -239,7 +239,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                     {_t("action|sign_in")}
                 </AccessibleButton>
                 <AccessibleButton onClick={this.onForgotPassword} kind="link">
-                    {_t("Forgotten your password?")}
+                    {_t("auth|forgot_password_prompt")}
                 </AccessibleButton>
             </form>
         );
@@ -270,11 +270,11 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         }
 
         if (this.state.loginView === LoginView.Password) {
-            return this.renderPasswordForm(_t("Enter your password to sign in and regain access to your account."));
+            return this.renderPasswordForm(_t("auth|soft_logout_intro_password"));
         }
 
         if (this.state.loginView === LoginView.SSO || this.state.loginView === LoginView.CAS) {
-            return this.renderSsoForm(_t("Sign in and regain access to your account."));
+            return this.renderSsoForm(_t("auth|soft_logout_intro_sso"));
         }
 
         if (this.state.loginView === LoginView.PasswordWithSocialSignOn) {
@@ -284,7 +284,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             // Note: "mx_AuthBody_centered" text taken from registration page.
             return (
                 <>
-                    <p>{_t("Sign in and regain access to your account.")}</p>
+                    <p>{_t("auth|soft_logout_intro_sso")}</p>
                     {this.renderSsoForm(null)}
                     <h2 className="mx_AuthBody_centered">
                         {_t("auth|sso_or_username_password", {
@@ -298,11 +298,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         }
 
         // Default: assume unsupported/error
-        return (
-            <p>
-                {_t("You cannot sign in to your account. Please contact your homeserver admin for more information.")}
-            </p>
-        );
+        return <p>{_t("auth|soft_logout_intro_unsupported_auth")}</p>;
     }
 
     public render(): React.ReactNode {
@@ -310,7 +306,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
-                    <h1>{_t("You're signed out")}</h1>
+                    <h1>{_t("auth|soft_logout_heading")}</h1>
 
                     <h2>{_t("action|sign_in")}</h2>
                     <div>{this.renderSignInSection()}</div>

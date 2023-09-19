@@ -26,7 +26,6 @@ import { _t } from "../../../languageHandler";
 import HeaderButton from "./HeaderButton";
 import HeaderButtons, { HeaderKind } from "./HeaderButtons";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import { Action } from "../../../dispatcher/actions";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { useReadPinnedEvents, usePinnedEvents } from "./PinnedMessagesCard";
@@ -203,59 +202,34 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
         });
     };
 
-    protected onAction(payload: ActionPayload): void {
-        if (payload.action === Action.ViewUser) {
-            if (payload.member) {
-                if (payload.push) {
-                    RightPanelStore.instance.pushCard({
-                        phase: RightPanelPhases.RoomMemberInfo,
-                        state: { member: payload.member },
-                    });
-                } else {
-                    RightPanelStore.instance.setCards([
-                        { phase: RightPanelPhases.RoomSummary },
-                        { phase: RightPanelPhases.RoomMemberList },
-                        { phase: RightPanelPhases.RoomMemberInfo, state: { member: payload.member } },
-                    ]);
-                }
-            } else {
-                this.setPhase(RightPanelPhases.RoomMemberList);
-            }
-        } else if (payload.action === "view_3pid_invite") {
-            if (payload.event) {
-                this.setPhase(RightPanelPhases.Room3pidMemberInfo, { memberInfoEvent: payload.event });
-            } else {
-                this.setPhase(RightPanelPhases.RoomMemberList);
-            }
-        }
-    }
+    protected onAction(payload: ActionPayload): void {}
 
     private onRoomSummaryClicked = (): void => {
         // use roomPanelPhase rather than this.state.phase as it remembers the latest one if we close
         const currentPhase = RightPanelStore.instance.currentCard.phase;
         if (currentPhase && ROOM_INFO_PHASES.includes(currentPhase)) {
             if (this.state.phase === currentPhase) {
-                this.setPhase(currentPhase);
+                RightPanelStore.instance.showOrHidePanel(currentPhase);
             } else {
-                this.setPhase(currentPhase, RightPanelStore.instance.currentCard.state);
+                RightPanelStore.instance.showOrHidePanel(currentPhase, RightPanelStore.instance.currentCard.state);
             }
         } else {
             // This toggles for us, if needed
-            this.setPhase(RightPanelPhases.RoomSummary);
+            RightPanelStore.instance.showOrHidePanel(RightPanelPhases.RoomSummary);
         }
     };
 
     private onNotificationsClicked = (): void => {
         // This toggles for us, if needed
-        this.setPhase(RightPanelPhases.NotificationPanel);
+        RightPanelStore.instance.showOrHidePanel(RightPanelPhases.NotificationPanel);
     };
 
     private onPinnedMessagesClicked = (): void => {
         // This toggles for us, if needed
-        this.setPhase(RightPanelPhases.PinnedMessages);
+        RightPanelStore.instance.showOrHidePanel(RightPanelPhases.PinnedMessages);
     };
     private onTimelineCardClicked = (): void => {
-        this.setPhase(RightPanelPhases.Timeline);
+        RightPanelStore.instance.showOrHidePanel(RightPanelPhases.Timeline);
     };
 
     private onThreadsPanelClicked = (ev: ButtonEvent): void => {
@@ -308,21 +282,23 @@ export default class LegacyRoomHeaderButtons extends HeaderButtons<IProps> {
                 <UnreadIndicator color={this.state.threadNotificationColor} />
             </HeaderButton>,
         );
-        rightPanelPhaseButtons.set(
-            RightPanelPhases.NotificationPanel,
-            <HeaderButton
-                key="notifsButton"
-                name="notifsButton"
-                title={_t("Notifications")}
-                isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
-                onClick={this.onNotificationsClicked}
-                isUnread={this.globalNotificationState.color === NotificationColor.Red}
-            >
-                {this.globalNotificationState.color === NotificationColor.Red ? (
-                    <UnreadIndicator color={this.globalNotificationState.color} />
-                ) : null}
-            </HeaderButton>,
-        );
+        if (this.state.notificationsEnabled) {
+            rightPanelPhaseButtons.set(
+                RightPanelPhases.NotificationPanel,
+                <HeaderButton
+                    key="notifsButton"
+                    name="notifsButton"
+                    title={_t("Notifications")}
+                    isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
+                    onClick={this.onNotificationsClicked}
+                    isUnread={this.globalNotificationState.color === NotificationColor.Red}
+                >
+                    {this.globalNotificationState.color === NotificationColor.Red ? (
+                        <UnreadIndicator color={this.globalNotificationState.color} />
+                    ) : null}
+                </HeaderButton>,
+            );
+        }
         rightPanelPhaseButtons.set(
             RightPanelPhases.RoomSummary,
             <HeaderButton

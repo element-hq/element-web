@@ -259,7 +259,6 @@ describe("Cryptography", function () {
     }
 
     it("creating a DM should work, being e2e-encrypted / user verification", function (this: CryptoTestContext) {
-        skipIfRustCrypto();
         cy.bootstrapCrossSigning(aliceCredentials);
         startDMWithBob.call(this);
         // send first message
@@ -281,7 +280,6 @@ describe("Cryptography", function () {
     });
 
     it("should allow verification when there is no existing DM", function (this: CryptoTestContext) {
-        skipIfRustCrypto();
         cy.bootstrapCrossSigning(aliceCredentials);
         autoJoin(this.bob);
 
@@ -326,8 +324,6 @@ describe("Cryptography", function () {
         });
 
         it("should show the correct shield on e2e events", function (this: CryptoTestContext) {
-            skipIfRustCrypto();
-
             // Bob has a second, not cross-signed, device
             let bobSecondDevice: MatrixClient;
             cy.loginBot(homeserver, bob.getUserId(), bob.__cypress_password, {}).then(async (data) => {
@@ -410,7 +406,7 @@ describe("Cryptography", function () {
                 .should("contain", "test encrypted from unverified")
                 .find(".mx_EventTile_e2eIcon", { timeout: 100000 })
                 .should("have.class", "mx_EventTile_e2eIcon_warning")
-                .should("have.attr", "aria-label", "Encrypted by an unverified session");
+                .should("have.attr", "aria-label", "Encrypted by an unverified user.");
 
             /* Should show a grey padlock for a message from an unknown device */
 
@@ -423,11 +419,11 @@ describe("Cryptography", function () {
                 .should("contain", "test encrypted from unverified")
                 .find(".mx_EventTile_e2eIcon")
                 .should("have.class", "mx_EventTile_e2eIcon_normal")
-                .should("have.attr", "aria-label", "Encrypted by a deleted session");
+                .should("have.attr", "aria-label", "Encrypted by an unknown or deleted device.");
         });
 
         it("Should show a grey padlock for a key restored from backup", () => {
-            skipIfRustCrypto();
+            skipIfRustCrypto(); // requires key backup (https://github.com/vector-im/element-web/issues/24828)
 
             enableKeyBackup();
 
@@ -461,8 +457,6 @@ describe("Cryptography", function () {
         });
 
         it("should show the correct shield on edited e2e events", function (this: CryptoTestContext) {
-            skipIfRustCrypto();
-
             // bob has a second, not cross-signed, device
             cy.loginBot(this.homeserver, this.bob.getUserId(), this.bob.__cypress_password, {}).as("bobSecondDevice");
 

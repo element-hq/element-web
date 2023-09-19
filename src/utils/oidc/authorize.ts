@@ -68,31 +68,36 @@ const getCodeAndStateFromQueryParams = (queryParams: QueryDict): { code: string;
     return { code, state };
 };
 
+type CompleteOidcLoginResponse = {
+    // url of the homeserver selected during login
+    homeserverUrl: string;
+    // identity server url as discovered during login
+    identityServerUrl?: string;
+    // accessToken gained from OIDC token issuer
+    accessToken: string;
+    // refreshToken gained from OIDC token issuer, when falsy token cannot be refreshed
+    refreshToken?: string;
+    // this client's id as registered with the OIDC issuer
+    clientId: string;
+    // issuer used during authentication
+    issuer: string;
+};
 /**
  * Attempt to complete authorization code flow to get an access token
  * @param queryParams the query-parameters extracted from the real query-string of the starting URI.
- * @returns Promise that resolves with accessToken, identityServerUrl, and homeserverUrl when login was successful
+ * @returns Promise that resolves with a CompleteOidcLoginResponse when login was successful
  * @throws When we failed to get a valid access token
  */
-export const completeOidcLogin = async (
-    queryParams: QueryDict,
-): Promise<{
-    homeserverUrl: string;
-    identityServerUrl?: string;
-    accessToken: string;
-    clientId: string;
-    issuer: string;
-}> => {
+export const completeOidcLogin = async (queryParams: QueryDict): Promise<CompleteOidcLoginResponse> => {
     const { code, state } = getCodeAndStateFromQueryParams(queryParams);
     const { homeserverUrl, tokenResponse, identityServerUrl, oidcClientSettings } =
         await completeAuthorizationCodeGrant(code, state);
 
-    // @TODO(kerrya) do something with the refresh token https://github.com/vector-im/element-web/issues/25444
-
     return {
-        homeserverUrl: homeserverUrl,
-        identityServerUrl: identityServerUrl,
+        homeserverUrl,
+        identityServerUrl,
         accessToken: tokenResponse.access_token,
+        refreshToken: tokenResponse.refresh_token,
         clientId: oidcClientSettings.clientId,
         issuer: oidcClientSettings.issuer,
     };
