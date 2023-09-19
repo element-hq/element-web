@@ -3,14 +3,9 @@
     "Show more": "Taispeáin níos mó",
     "Switch to dark mode": "Athraigh go mód dorcha",
     "Switch to light mode": "Athraigh go mód geal",
-    "Got an account? <a>Sign in</a>": "An bhfuil cuntas agat? <a>Sínigh isteach</a>",
-    "New here? <a>Create an account</a>": "Céaduaire? <a>Cruthaigh cuntas</a>",
     "All settings": "Gach Socrú",
     "Security & Privacy": "Slándáil ⁊ Príobháideachas",
     "What's new?": "Cad é nua?",
-    "New? <a>Create account</a>": "Céaduaire? <a>Cruthaigh cuntas</a>",
-    "Forgotten your password?": "An nDearna tú dearmad ar do fhocal faire?",
-    "Sign In or Create Account": "Sínigh Isteach nó Déan cuntas a chruthú",
     "Are you sure you want to reject the invitation?": "An bhfuil tú cinnte gur mian leat an cuireadh a dhiúltú?",
     "Are you sure you want to leave the room '%(roomName)s'?": "An bhfuil tú cinnte gur mian leat an seomra '%(roomName)s' a fhágáil?",
     "Are you sure?": "An bhfuil tú cinnte?",
@@ -228,13 +223,11 @@
     "Algeria": "an Ailgéir",
     "Albania": "an Albáin",
     "Afghanistan": "an Afganastáin",
-    "Comment": "Trácht",
     "Widgets": "Giuirléidí",
     "ready": "réidh",
     "Algorithm:": "Algartam:",
     "Information": "Eolas",
     "Favourited": "Roghnaithe",
-    "Feedback": "Aiseolas",
     "Ok": "Togha",
     "Accepting…": "ag Glacadh leis…",
     "Cancelling…": "ag Cealú…",
@@ -405,16 +398,13 @@
     "Confirm adding email": "Deimhnigh an seoladh ríomhphoist nua",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Deimhnigh an seoladh ríomhphoist seo le SSO mar cruthúnas céannachta.",
     "Explore rooms": "Breathnaigh thart ar na seomraí",
-    "Create Account": "Déan cuntas a chruthú",
     "Use Single Sign On to continue": "Lean ar aghaidh le SSO",
     "This phone number is already in use": "Úsáidtear an uimhir ghutháin seo chean féin",
     "This email address is already in use": "Úsáidtear an seoladh ríomhphoist seo chean féin",
     "Sign out and remove encryption keys?": "Sínigh amach agus scrios eochracha criptiúcháin?",
     "Clear Storage and Sign Out": "Scrios Stóras agus Sínigh Amach",
-    "You're signed out": "Tá tú sínithe amach",
     "Are you sure you want to sign out?": "An bhfuil tú cinnte go dteastaíonn uait sínigh amach?",
     "Signed Out": "Sínithe Amach",
-    "Unable to query for supported registration methods.": "Ní féidir iarratas a dhéanamh faoi modhanna cláraithe tacaithe.",
     "Create account": "Déan cuntas a chruthú",
     "Deactivate Account": "Cuir cuntas as feidhm",
     "Account management": "Bainistíocht cuntais",
@@ -496,7 +486,6 @@
     "Enter passphrase": "Iontráil pasfrása",
     "Email address": "Seoladh ríomhphoist",
     "Download %(text)s": "Íoslódáil %(text)s",
-    "Deops user with given id": "Bain an cumhacht oibritheora ó úsáideoir leis an ID áirithe",
     "Decrypt %(text)s": "Díchriptigh %(text)s",
     "Custom level": "Leibhéal saincheaptha",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Ní féidir ceangal leis an bhfreastalaí baile trí HTTP nuair a bhíonn URL HTTPS i mbarra do bhrabhsálaí. Bain úsáid as HTTPS nó <a> scripteanna neamhshábháilte a chumasú </a>.",
@@ -556,7 +545,8 @@
         "trusted": "Dílis",
         "unnamed_room": "Seomra gan ainm",
         "stickerpack": "Pacáiste greamáin",
-        "cross_signing": "Cros-síniú"
+        "cross_signing": "Cros-síniú",
+        "feedback": "Aiseolas"
     },
     "action": {
         "continue": "Lean ar aghaidh",
@@ -727,7 +717,8 @@
         "category_advanced": "Forbartha",
         "category_effects": "Tionchair",
         "category_other": "Eile",
-        "me": "Taispeáin gníomh"
+        "me": "Taispeáin gníomh",
+        "deop": "Bain an cumhacht oibritheora ó úsáideoir leis an ID áirithe"
     },
     "presence": {
         "online": "Ar Líne",
@@ -798,7 +789,14 @@
     "auth": {
         "sso": "Single Sign On",
         "sign_in_instead": "An bhfuil cuntas agat cheana? <a>Sínigh isteach anseo</a>",
-        "server_picker_title": "Óstáil cuntas ar"
+        "server_picker_title": "Óstáil cuntas ar",
+        "failed_query_registration_methods": "Ní féidir iarratas a dhéanamh faoi modhanna cláraithe tacaithe.",
+        "soft_logout_heading": "Tá tú sínithe amach",
+        "sign_in_prompt": "An bhfuil cuntas agat? <a>Sínigh isteach</a>",
+        "forgot_password_prompt": "An nDearna tú dearmad ar do fhocal faire?",
+        "create_account_prompt": "Céaduaire? <a>Cruthaigh cuntas</a>",
+        "sign_in_or_register": "Sínigh Isteach nó Déan cuntas a chruthú",
+        "register_action": "Déan cuntas a chruthú"
     },
     "export_chat": {
         "messages": "Teachtaireachtaí"
@@ -819,5 +817,8 @@
         "help_about": {
             "versions": "Leaganacha"
         }
+    },
+    "feedback": {
+        "comment_label": "Trácht"
     }
 }

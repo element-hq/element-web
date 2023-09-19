@@ -55,20 +55,18 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
             <EMailPromptIcon className="mx_AuthBody_emailPromptIcon--shifted" />
             <h1>{_t("Check your email to continue")}</h1>
             <div className="mx_AuthBody_text">
-                <p>
-                    {_t("Follow the instructions sent to <b>%(email)s</b>", { email: email }, { b: (t) => <b>{t}</b> })}
-                </p>
+                <p>{_t("auth|check_email_explainer", { email: email }, { b: (t) => <b>{t}</b> })}</p>
                 <div className="mx_AuthBody_did-not-receive">
-                    <span className="mx_VerifyEMailDialog_text-light">{_t("Wrong email address?")}</span>
+                    <span className="mx_VerifyEMailDialog_text-light">{_t("auth|check_email_wrong_email_prompt")}</span>
                     <AccessibleButton className="mx_AuthBody_resend-button" kind="link" onClick={onReEnterEmailClick}>
-                        {_t("Re-enter email address")}
+                        {_t("auth|check_email_wrong_email_button")}
                     </AccessibleButton>
                 </div>
             </div>
             {errorText && <ErrorMessage message={errorText} />}
             <input onClick={onSubmitForm} type="button" className="mx_Login_submit" value={_t("action|next")} />
             <div className="mx_AuthBody_did-not-receive">
-                <span className="mx_VerifyEMailDialog_text-light">{_t("Did not receive it?")}</span>
+                <span className="mx_VerifyEMailDialog_text-light">{_t("auth|check_email_resend_prompt")}</span>
                 <AccessibleButton
                     className="mx_AuthBody_resend-button"
                     kind="link"
@@ -79,7 +77,7 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
                     {_t("action|resend")}
                     <Tooltip
                         id={tooltipId}
-                        label={_t("Verification link email resent!")}
+                        label={_t("auth|check_email_resend_tooltip")}
                         alignment={Alignment.Top}
                         visible={tooltipVisible}
                     />

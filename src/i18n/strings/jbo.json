@@ -59,8 +59,6 @@
     "You are now ignoring %(userId)s": ".i ca na jundi tu'a la'o zoi. %(userId)s .zoi",
     "Unignored user": ".i mo'u co'a jundi tu'a le pilno",
     "You are no longer ignoring %(userId)s": ".i ca jundi tu'a la'o zoi. %(userId)s .zoi",
-    "Define the power level of a user": ".i ninga'igau lo ni lo pilno cu vlipa",
-    "Deops user with given id": ".i xruti lo ni lo pilno poi se judri ti cu vlipa",
     "Verified key": "ckiku vau je se lacri",
     "Reason": "krinu",
     "This homeserver has hit its Monthly Active User limit.": ".i le samtcise'u cu bancu lo masti jimte be ri bei lo ni ca'o pilno",
@@ -70,8 +68,6 @@
     "Please contact your homeserver administrator.": ".i .e'o ko tavla lo admine be le samtcise'u",
     "Mirror local video feed": "lo du'u xu kau minra lo diklo vidvi",
     "Send analytics data": "lo du'u xu kau benji lo se lanli datni",
-    "Enable URL previews for this room (only affects you)": "lo du'u xu kau do zmiku purzga lo se urli ne'i le kumfa pe'a",
-    "Enable URL previews by default for participants in this room": "lo zmiselcu'a pe lo du'u xu kau lo cmima be le kumfa pe'a cu zmiku purzga lo se urli",
     "Enable widget screenshots on supported widgets": "lo du'u xu kau kakne lo nu co'a pixra lo uidje kei lo nu kakne tu'a .ubu",
     "Waiting for response from server": ".i ca'o denpa lo nu le samtcise'u cu spuda",
     "Incorrect verification code": ".i na'e drani ke lacri lerpoi",
@@ -89,7 +85,6 @@
     "Authentication": "lo nu facki lo du'u do du ma kau",
     "Failed to set display name": ".i pu fliba lo nu galfi lo cmene",
     "Command error": ".i da nabmi fi lo nu minde",
-    "Could not find user in room": ".i le pilno na pagbu le se zilbe'i",
     "Session already verified!": ".i xa'o lacri le se samtcise'u",
     "You signed in to a new session without verifying it:": ".i fe le di'e se samtcise'u pu co'a jaspu vau je za'o na lacri",
     "Dog": "gerku",
@@ -164,8 +159,6 @@
     "Switch to light mode": "nu le jvinu cu binxo le ka carmi",
     "Switch to dark mode": "nu le jvinu cu binxo le ka manku",
     "Switch theme": "nu basti fi le ka jvinu",
-    "If you've joined lots of rooms, this might take a while": ".i gi na ja do pagbu so'i se zilbe'i gi la'a ze'u gunka",
-    "Incorrect password": ".i le lerpoijaspu na drani",
     "Users": "pilno",
     "That matches!": ".i du",
     "Success!": ".i snada",
@@ -230,7 +223,6 @@
     "Decrypt %(text)s": "nu facki le du'u mifra la'o zoi. %(text)s .zoi",
     "Download %(text)s": "nu kibycpa la'o zoi. %(text)s .zoi",
     "Explore rooms": "nu facki le du'u ve zilbe'i",
-    "Create Account": "nu pa re'u co'a jaspu",
     "common": {
         "analytics": "lanli datni",
         "error": "nabmi",
@@ -311,7 +303,9 @@
             "custom_font": "nu da pe le vanbi cu ci'artai",
             "custom_font_name": "cmene le ci'artai pe le vanbi",
             "timeline_image_size_default": "zmiselcu'a"
-        }
+        },
+        "inline_url_previews_room_account": "lo du'u xu kau do zmiku purzga lo se urli ne'i le kumfa pe'a",
+        "inline_url_previews_room": "lo zmiselcu'a pe lo du'u xu kau lo cmima be le kumfa pe'a cu zmiku purzga lo se urli"
     },
     "create_room": {
         "title_public_room": "nu cupra pa ve zilbe'i poi gubni",
@@ -406,7 +400,10 @@
         "category_advanced": "macnu",
         "category_other": "drata",
         "discardsession": ".i macnu vimcu lo ca barkla termifckiku gunma lo kumfa pe'a poi mifra",
-        "me": ".i mrilu lo nu do gasnu"
+        "me": ".i mrilu lo nu do gasnu",
+        "failed_find_user": ".i le pilno na pagbu le se zilbe'i",
+        "op": ".i ninga'igau lo ni lo pilno cu vlipa",
+        "deop": ".i xruti lo ni lo pilno poi se judri ti cu vlipa"
     },
     "event_preview": {
         "m.call.answer": {
@@ -481,5 +478,10 @@
         "help_about": {
             "help_link_chat_bot": ".i gi je lo nu samcu'a <a>le dei cei'i</a> gi lo nu co'a tavla le sampre cu tadji lo nu facki le du'u tadji lo nu pilno la'o zoi. %(brand)s .zoi"
         }
+    },
+    "auth": {
+        "sync_footer_subtitle": ".i gi na ja do pagbu so'i se zilbe'i gi la'a ze'u gunka",
+        "incorrect_password": ".i le lerpoijaspu na drani",
+        "register_action": "nu pa re'u co'a jaspu"
     }
 }

@@ -56,7 +56,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
             submitFeedback(label, comment, canContact);
 
             Modal.createDialog(InfoDialog, {
-                title: _t("Feedback sent"),
+                title: _t("feedback|sent"),
                 description: _t("Thank you!"),
             });
         }
@@ -67,13 +67,13 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
     if (hasFeedback) {
         feedbackSection = (
             <div className="mx_FeedbackDialog_section mx_FeedbackDialog_rateApp">
-                <h3>{_t("Comment")}</h3>
+                <h3>{_t("feedback|comment_label")}</h3>
 
-                <p>{_t("Your platform and username will be noted to help us use your feedback as much as we can.")}</p>
+                <p>{_t("feedback|platform_username")}</p>
 
                 <Field
                     id="feedbackComment"
-                    label={_t("Feedback")}
+                    label={_t("common|feedback")}
                     type="text"
                     autoComplete="off"
                     value={comment}
@@ -85,7 +85,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
                 />
 
                 <StyledCheckbox checked={canContact} onChange={toggleCanContact}>
-                    {_t("You may contact me if you want to follow up or to let me test out upcoming ideas")}
+                    {_t("feedback|may_contact_label")}
                 </StyledCheckbox>
             </div>
         );
@@ -96,7 +96,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
         bugReports = (
             <p className="mx_FeedbackDialog_section_microcopy">
                 {_t(
-                    "PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.",
+                    "feedback|pro_type",
                     {},
                     {
                         debugLogsLink: (sub) => (
@@ -117,14 +117,14 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
         <QuestionDialog
             className="mx_FeedbackDialog"
             hasCancelButton={hasFeedback}
-            title={_t("Feedback")}
+            title={_t("common|feedback")}
             description={
                 <React.Fragment>
                     <div className="mx_FeedbackDialog_section mx_FeedbackDialog_reportBug">
                         <h3>{_t("common|report_a_bug")}</h3>
                         <p>
                             {_t(
-                                "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.",
+                                "feedback|existing_issue_link",
                                 {},
                                 {
                                     existingIssuesLink: (sub) => {
@@ -153,7 +153,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
                     {feedbackSection}
                 </React.Fragment>
             }
-            button={hasFeedback ? _t("Send feedback") : _t("action|go_back")}
+            button={hasFeedback ? _t("feedback|send_feedback_action") : _t("action|go_back")}
             buttonDisabled={hasFeedback && !comment}
             onFinished={onFinished}
         />

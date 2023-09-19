@@ -90,8 +90,6 @@
     "You are now ignoring %(userId)s": "%(userId)s er nå ignorert",
     "Unignored user": "Uignorert bruker",
     "You are no longer ignoring %(userId)s": "%(userId)s blir ikke lengre ignorert",
-    "Define the power level of a user": "Definer tilgangnivå til en bruker",
-    "Deops user with given id": "Fjerner OP nivå til bruker med gitt ID",
     "Verified key": "Verifisert nøkkel",
     "Reason": "Årsak",
     "Add Email Address": "Legg til E-postadresse",
@@ -175,7 +173,6 @@
     "Changelog": "Endringslogg",
     "Confirm Removal": "Bekreft fjerning",
     "Unknown error": "Ukjent feil",
-    "Incorrect password": "Feil passord",
     "Session name": "Øktens navn",
     "Filter results": "Filtrerresultater",
     "An error has occurred.": "En feil har oppstått.",
@@ -348,13 +345,11 @@
     "Search failed": "Søket mislyktes",
     "No more results": "Ingen flere resultater",
     "Return to login screen": "Gå tilbake til påloggingsskjermen",
-    "You're signed out": "Du er logget av",
     "File to import": "Filen som skal importeres",
     "Upgrade your encryption": "Oppgrader krypteringen din",
     "Space used:": "Plass brukt:",
     "Indexed rooms:": "Indekserte rom:",
     "Verify this session": "Verifiser denne økten",
-    "Create Account": "Opprett konto",
     "Not Trusted": "Ikke betrodd",
     "%(items)s and %(count)s others": {
         "other": "%(items)s og %(count)s andre",
@@ -363,8 +358,6 @@
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "Never send encrypted messages to unverified sessions in this room from this session": "Aldri send krypterte meldinger til uverifiserte økter i dette rommet fra denne økten",
-    "Enable URL previews for this room (only affects you)": "Skru på URL-forhåndsvisninger for dette rommet (Påvirker bare deg)",
-    "Enable URL previews by default for participants in this room": "Skru på URL-forhåndsvisninger som standard for deltakerne i dette rommet",
     "Manually verify all remote sessions": "Verifiser alle eksterne økter manuelt",
     "Show more": "Vis mer",
     "Warning!": "Advarsel!",
@@ -436,7 +429,6 @@
     "You must join the room to see its files": "Du må bli med i rommet for å se filene dens",
     "Signed Out": "Avlogget",
     "%(creator)s created and configured the room.": "%(creator)s opprettet og satte opp rommet.",
-    "Forgotten your password?": "Har du glemt passordet ditt?",
     "Export room keys": "Eksporter romnøkler",
     "Import room keys": "Importer romnøkler",
     "Go to Settings": "Gå til Innstillinger",
@@ -493,9 +485,7 @@
     "Confirm adding phone number": "Bekreft tillegging av telefonnummer",
     "Setting up keys": "Setter opp nøkler",
     "New login. Was this you?": "En ny pålogging. Var det deg?",
-    "Sign In or Create Account": "Logg inn eller lag en konto",
     "Use an identity server": "Bruk en identitetstjener",
-    "Could not find user in room": "Klarte ikke å finne brukeren i rommet",
     "Session already verified!": "Økten er allerede verifisert!",
     "Your %(brand)s is misconfigured": "Ditt %(brand)s-oppsett er feiloppsatt",
     "Not a valid %(brand)s keyfile": "Ikke en gyldig %(brand)s-nøkkelfil",
@@ -622,12 +612,10 @@
     "Switch to dark mode": "Bytt til mørk modus",
     "Switch theme": "Bytt tema",
     "All settings": "Alle innstillinger",
-    "Feedback": "Tilbakemelding",
     "Emoji Autocomplete": "Auto-fullfør emojier",
     "Confirm encryption setup": "Bekreft krypteringsoppsett",
     "Create key backup": "Opprett nøkkelsikkerhetskopi",
     "Set up Secure Messages": "Sett opp sikre meldinger",
-    "If you've joined lots of rooms, this might take a while": "Hvis du har blitt med i mange rom, kan dette ta en stund",
     "To help us prevent this in future, please <a>send us logs</a>.": "For å hjelpe oss med å forhindre dette i fremtiden, vennligst <a>send oss loggfiler</a>.",
     "Lock": "Lås",
     "Server or user ID to ignore": "Tjener- eller bruker-ID-en som skal ignoreres",
@@ -758,7 +746,6 @@
     "Skip for now": "Hopp over for nå",
     "Share %(name)s": "Del %(name)s",
     "Just me": "Bare meg selv",
-    "New? <a>Create account</a>": "Er du ny her? <a>Opprett en konto</a>",
     "Upgrade private room": "Oppgrader privat rom",
     "Upgrade public room": "Oppgrader offentlig rom",
     "Decline All": "Avslå alle",
@@ -769,12 +756,10 @@
     "Remember this": "Husk dette",
     "Move right": "Gå til høyre",
     "Notify the whole room": "Varsle hele rommet",
-    "Got an account? <a>Sign in</a>": "Har du en konto? <a>Logg på</a>",
     "You created this room.": "Du opprettet dette rommet.",
     "Security Phrase": "Sikkerhetsfrase",
     "Open dial pad": "Åpne nummerpanelet",
     "Message deleted on %(date)s": "Meldingen ble slettet den %(date)s",
-    "New here? <a>Create an account</a>": "Er du ny her? <a>Opprett en konto</a>",
     "Enter email address": "Legg inn e-postadresse",
     "Enter phone number": "Skriv inn telefonnummer",
     "Please enter the code it contains:": "Vennligst skriv inn koden den inneholder:",
@@ -788,7 +773,6 @@
     "Security Key": "Sikkerhetsnøkkel",
     "Invalid Security Key": "Ugyldig sikkerhetsnøkkel",
     "Wrong Security Key": "Feil sikkerhetsnøkkel",
-    "About homeservers": "Om hjemmetjenere",
     "New Recovery Method": "Ny gjenopprettingsmetode",
     "Generate a Security Key": "Generer en sikkerhetsnøkkel",
     "Confirm your Security Phrase": "Bekreft sikkerhetsfrasen din",
@@ -806,12 +790,10 @@
     "Widgets": "Komponenter",
     "Favourited": "Favorittmerket",
     "Forget Room": "Glem rommet",
-    "Invalid URL": "Ugyldig URL",
     "Continuing without email": "Fortsetter uten E-post",
     "Are you sure you want to sign out?": "Er du sikker på at du vil logge av?",
     "Transfer": "Overfør",
     "Invite by email": "Inviter gjennom E-post",
-    "Comment": "Kommentar",
     "Reason (optional)": "Årsak (valgfritt)",
     "Explore public rooms": "Utforsk offentlige rom",
     "Verify the link in your inbox": "Verifiser lenken i innboksen din",
@@ -1136,7 +1118,8 @@
         "cross_signing": "Kryssignering",
         "identity_server": "Identitetstjener",
         "integration_manager": "Integreringsbehandler",
-        "qr_code": "QR-kode"
+        "qr_code": "QR-kode",
+        "feedback": "Tilbakemelding"
     },
     "action": {
         "continue": "Fortsett",
@@ -1358,7 +1341,9 @@
             "custom_theme_add_button": "Legg til tema",
             "font_size": "Skriftstørrelse",
             "timeline_image_size_default": "Standard"
-        }
+        },
+        "inline_url_previews_room_account": "Skru på URL-forhåndsvisninger for dette rommet (Påvirker bare deg)",
+        "inline_url_previews_room": "Skru på URL-forhåndsvisninger som standard for deltakerne i dette rommet"
     },
     "devtools": {
         "event_type": "Hendelsestype",
@@ -1562,7 +1547,10 @@
         "addwidget_invalid_protocol": "Oppgi en https: // eller http: // widget-URL",
         "addwidget_no_permissions": "Du kan ikke endre widgets i dette rommet.",
         "discardsession": "Tvinger den gjeldende utgående gruppeøkten i et kryptert rom til å stoppe",
-        "me": "Viser handling"
+        "me": "Viser handling",
+        "failed_find_user": "Klarte ikke å finne brukeren i rommet",
+        "op": "Definer tilgangnivå til en bruker",
+        "deop": "Fjerner OP nivå til bruker med gitt ID"
     },
     "presence": {
         "online_for": "På nett i %(duration)s",
@@ -1657,7 +1645,17 @@
         "sign_in_instead": "Har du allerede en konto? <a>Logg på</a>",
         "account_clash_previous_account": "Fortsett med tidligere konto",
         "registration_successful": "Registreringen var vellykket",
-        "footer_powered_by_matrix": "Drevet av Matrix"
+        "footer_powered_by_matrix": "Drevet av Matrix",
+        "sync_footer_subtitle": "Hvis du har blitt med i mange rom, kan dette ta en stund",
+        "incorrect_password": "Feil passord",
+        "soft_logout_heading": "Du er logget av",
+        "sign_in_prompt": "Har du en konto? <a>Logg på</a>",
+        "forgot_password_prompt": "Har du glemt passordet ditt?",
+        "create_account_prompt": "Er du ny her? <a>Opprett en konto</a>",
+        "sign_in_or_register": "Logg inn eller lag en konto",
+        "register_action": "Opprett konto",
+        "server_picker_invalid_url": "Ugyldig URL",
+        "server_picker_learn_more": "Om hjemmetjenere"
     },
     "room_list": {
         "show_previews": "Vis forhåndsvisninger av meldinger",
@@ -1696,5 +1694,8 @@
             "change_name_this_room": "Endre rommets navn",
             "see_images_sent_this_room": "Se bilder som er lagt ut i dette rommet"
         }
+    },
+    "feedback": {
+        "comment_label": "Kommentar"
     }
 }

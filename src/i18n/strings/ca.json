@@ -72,8 +72,6 @@
     "Your browser does not support the required cryptography extensions": "El vostre navegador no és compatible amb els complements criptogràfics necessaris",
     "Not a valid %(brand)s keyfile": "El fitxer no és un fitxer de claus de %(brand)s vàlid",
     "Authentication check failed: incorrect password?": "Ha fallat l'autenticació: heu introduït correctament la contrasenya?",
-    "Enable URL previews for this room (only affects you)": "Activa la vista prèvia d'URL d'aquesta sala (no afecta altres usuaris)",
-    "Enable URL previews by default for participants in this room": "Activa per defecte la vista prèvia d'URL per als participants d'aquesta sala",
     "Incorrect verification code": "El codi de verificació és incorrecte",
     "Phone": "Telèfon",
     "No display name": "Sense nom visible",
@@ -186,7 +184,6 @@
     },
     "Confirm Removal": "Confirmeu l'eliminació",
     "Unknown error": "Error desconegut",
-    "Incorrect password": "Contrasenya incorrecta",
     "Deactivate Account": "Desactivar el compte",
     "An error has occurred.": "S'ha produït un error.",
     "Unable to restore session": "No s'ha pogut restaurar la sessió",
@@ -271,8 +268,6 @@
     "You do not have permission to start a conference call in this room": "No tens permís per iniciar una conferència telefònica en aquesta sala",
     "Unable to load! Check your network connectivity and try again.": "No s'ha pogut carregar! Comprova la connectivitat de xarxa i torna-ho a intentar.",
     "Missing roomId.": "Falta l'ID de sala.",
-    "Define the power level of a user": "Defineix el nivell d'autoritat d'un usuari",
-    "Deops user with given id": "Degrada l'usuari amb l'id donat",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "El fitxer %(fileName)s supera la mida màxima permesa per a pujades d'aquest servidor",
     "You do not have permission to invite people to this room.": "No teniu permís per convidar gent a aquesta sala.",
     "Use a few words, avoid common phrases": "Feu servir unes quantes paraules, eviteu frases comunes",
@@ -339,15 +334,11 @@
     "An error occurred changing the room's power level requirements. Ensure you have sufficient permissions and try again.": "S'ha produït un error en canviar els requisits del nivell d'autoritat de la sala. Assegura't que tens suficients permisos i torna-ho a provar.",
     "An error occurred changing the user's power level. Ensure you have sufficient permissions and try again.": "S'ha produït un error en canviar el nivell d'autoritat de l'usuari. Assegura't que tens suficients permisos i torna-ho a provar.",
     "Power level": "Nivell d'autoritat",
-    "Joins room with given address": "S'uneix a la sala amb l'adreça indicada",
     "Use an identity server": "Utilitza un servidor d'identitat",
     "Double check that your server supports the room version chosen and try again.": "Comprova que el teu servidor és compatible amb la versió de sala que has triat i torna-ho a intentar.",
     "Setting up keys": "Configurant claus",
     "Are you sure you want to cancel entering passphrase?": "Estàs segur que vols cancel·lar la introducció de la frase secreta?",
     "Cancel entering passphrase?": "Vols cancel·lar la introducció de la frase secreta?",
-    "Create Account": "Crea un compte",
-    "Use your account or create a new one to continue.": "Utilitza el teu compte o crea'n un de nou per continuar.",
-    "Sign In or Create Account": "Inicia sessió o Crea un compte",
     "%(name)s is requesting verification": "%(name)s està demanant verificació",
     "Only continue if you trust the owner of the server.": "Continua, només, si confies amb el propietari del servidor.",
     "Identity server has no terms of service": "El servidor d'identitat no disposa de condicions de servei",
@@ -510,7 +501,9 @@
             "subheading": "La configuració d'aspecte només afecta aquesta sessió %(brand)s.",
             "custom_theme_error_downloading": "Error baixant informació de tema.",
             "timeline_image_size_default": "Predeterminat"
-        }
+        },
+        "inline_url_previews_room_account": "Activa la vista prèvia d'URL d'aquesta sala (no afecta altres usuaris)",
+        "inline_url_previews_room": "Activa per defecte la vista prèvia d'URL per als participants d'aquesta sala"
     },
     "devtools": {
         "event_type": "Tipus d'esdeveniment",
@@ -687,7 +680,10 @@
         "category_admin": "Administrador",
         "category_advanced": "Avançat",
         "category_other": "Altres",
-        "me": "Mostra l'acció"
+        "me": "Mostra l'acció",
+        "join": "S'uneix a la sala amb l'adreça indicada",
+        "op": "Defineix el nivell d'autoritat d'un usuari",
+        "deop": "Degrada l'usuari amb l'id donat"
     },
     "presence": {
         "online_for": "En línia durant %(duration)s",
@@ -722,7 +718,11 @@
     "auth": {
         "sign_in_with_sso": "Inicia sessió mitjançant la inscripció única (SSO)",
         "sso": "Inscripció única (SSO)",
-        "footer_powered_by_matrix": "amb tecnologia de Matrix"
+        "footer_powered_by_matrix": "amb tecnologia de Matrix",
+        "incorrect_password": "Contrasenya incorrecta",
+        "sign_in_or_register": "Inicia sessió o Crea un compte",
+        "sign_in_or_register_description": "Utilitza el teu compte o crea'n un de nou per continuar.",
+        "register_action": "Crea un compte"
     },
     "export_chat": {
         "messages": "Missatges"

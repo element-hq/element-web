@@ -40,7 +40,6 @@
     "You need to be logged in.": "Morate biti prijavljeni",
     "You need to be able to invite users to do that.": "Mora vam biti dozvoljeno da pozovete korisnike kako bi to uradili.",
     "Failed to send request.": "Slanje zahteva nije uspelo.",
-    "Create Account": "Napravite nalog",
     "Call failed due to misconfigured server": "Poziv nije uspio zbog pogrešno konfigurisanog servera",
     "The call was answered on another device.": "Na poziv je odgovoreno na drugom uređaju.",
     "Answered Elsewhere": "Odgovoreno drugdje",
@@ -68,10 +67,8 @@
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Potvrdite dodavanje ove email adrese koristeći jedinstvenu prijavu (SSO) da biste dokazali Vaš identitet.",
     "Use Single Sign On to continue": "Koristite jedinstvenu prijavu (SSO) za nastavak",
     "There was a problem communicating with the homeserver, please try again later.": "Postoji problem u komunikaciji sa privatnim/javnim serverom. Molim Vas pokušajte kasnije.",
-    "Failed to perform homeserver discovery": "Nisam uspio da izvršim otkrivanje privatnog/javnog servera.",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Napominjem Vas da se prijavljujete na %(hs)s server, a ne na matrix.org.",
     "Please <a>contact your service administrator</a> to continue using this service.": "Molim Vas da <a>kontaktirate administratora</a> kako bi ste nastavili sa korištenjem usluge.",
-    "This homeserver does not support login using email address.": "Ovaj server ne podržava prijavu korištenjem e-mail adrese.",
     "Incorrect username and/or password.": "Neispravno korisničko ime i/ili lozinka.",
     "This account has been deactivated.": "Ovaj nalog je dekativiran.",
     "Start a group chat": "Pokreni grupni razgovor",
@@ -114,7 +111,10 @@
     },
     "auth": {
         "sso": "Jedinstvena prijava (SSO)",
-        "footer_powered_by_matrix": "pokreće Matriks"
+        "footer_powered_by_matrix": "pokreće Matriks",
+        "failed_homeserver_discovery": "Nisam uspio da izvršim otkrivanje privatnog/javnog servera.",
+        "unsupported_auth_email": "Ovaj server ne podržava prijavu korištenjem e-mail adrese.",
+        "register_action": "Napravite nalog"
     },
     "keyboard": {
         "keyboard_shortcuts_tab": "Otvori podešavanja"

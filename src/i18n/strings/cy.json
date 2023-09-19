@@ -4,7 +4,6 @@
     "Add Email Address": "Ychwanegu Cyfeiriad E-bost",
     "Failed to verify email address: make sure you clicked the link in the email": "Methiant gwirio cyfeiriad e-bost: gwnewch yn siŵr eich bod wedi clicio'r ddolen yn yr e-bost",
     "Add Phone Number": "Ychwanegu Rhif Ffôn",
-    "Create Account": "Creu Cyfrif",
     "Explore rooms": "Archwilio Ystafelloedd",
     "action": {
         "dismiss": "Wfftio",
@@ -12,5 +11,8 @@
     },
     "common": {
         "identity_server": "Gweinydd Adnabod"
+    },
+    "auth": {
+        "register_action": "Creu Cyfrif"
     }
 }

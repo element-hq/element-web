@@ -12,7 +12,6 @@
     "Click the button below to confirm adding this phone number.": "Pritisnite gumb spodaj da potrdite dodajanje te telefonske številke.",
     "Add Phone Number": "Dodaj telefonsko številko",
     "Explore rooms": "Raziščite sobe",
-    "Create Account": "Registracija",
     "Identity server has no terms of service": "Identifikacijski strežnik nima pogojev storitve",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s",
@@ -71,7 +70,8 @@
     },
     "auth": {
         "sso": "Enkratna prijava",
-        "footer_powered_by_matrix": "poganja Matrix"
+        "footer_powered_by_matrix": "poganja Matrix",
+        "register_action": "Registracija"
     },
     "setting": {
         "help_about": {

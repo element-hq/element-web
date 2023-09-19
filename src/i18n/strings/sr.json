@@ -63,8 +63,6 @@
     "Not a valid %(brand)s keyfile": "Није исправана %(brand)s кључ-датотека",
     "Authentication check failed: incorrect password?": "Провера идентитета није успела: нетачна лозинка?",
     "Mirror local video feed": "Копирај довод локалног видеа",
-    "Enable URL previews for this room (only affects you)": "Укључи УРЛ прегледе у овој соби (утиче само на вас)",
-    "Enable URL previews by default for participants in this room": "Подразумевано омогући прегледе адреса за чланове ове собе",
     "Incorrect verification code": "Нетачни потврдни код",
     "Phone": "Телефон",
     "No display name": "Нема приказног имена",
@@ -180,7 +178,6 @@
     },
     "Confirm Removal": "Потврди уклањање",
     "Unknown error": "Непозната грешка",
-    "Incorrect password": "Нетачна лозинка",
     "Deactivate Account": "Деактивирај налог",
     "An error has occurred.": "Догодила се грешка.",
     "Unable to restore session": "Не могу да повратим сесију",
@@ -238,7 +235,6 @@
     "Notifications": "Обавештења",
     "Profile": "Профил",
     "Account": "Налог",
-    "The email address linked to your account must be entered.": "Морате унети мејл адресу која је везана за ваш налог.",
     "A new password must be entered.": "Морате унети нову лозинку.",
     "New passwords must match each other.": "Нове лозинке се морају подударати.",
     "Return to login screen": "Врати ме на екран за пријаву",
@@ -246,9 +242,6 @@
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Знајте да се пријављујете на сервер %(hs)s, не на matrix.org.",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Не могу да се повежем на сервер преко ХТТП када је ХТТПС УРЛ у траци вашег прегледача. Или користите HTTPS или <a>омогућите небезбедне скрипте</a>.",
     "Can't connect to homeserver - please check your connectivity, ensure your <a>homeserver's SSL certificate</a> is trusted, and that a browser extension is not blocking requests.": "Не могу да се повежем на домаћи сервер. Проверите вашу интернет везу, постарајте се да је <a>ССЛ сертификат сервера</a> од поверења и да проширење прегледача не блокира захтеве.",
-    "This server does not support authentication with a phone number.": "Овај сервер не подржава идентификацију преко броја мобилног.",
-    "Define the power level of a user": "Дефинише снагу корисника",
-    "Deops user with given id": "Укида админа за корисника са датим ИД",
     "Commands": "Наредбе",
     "Notify the whole room": "Обавести све у соби",
     "Room Notification": "Собно обавештење",
@@ -394,7 +387,6 @@
     "Switch to light mode": "Пребаци на светлу тему",
     "Switch to dark mode": "Пребаци на тамну тему",
     "All settings": "Сва подешавања",
-    "Feedback": "Повратни подаци",
     "General failure": "Општа грешка",
     "Use custom size": "Користи прилагођену величину",
     "Got It": "Разумем",
@@ -419,9 +411,6 @@
     "Setting up keys": "Постављам кључеве",
     "Are you sure you want to cancel entering passphrase?": "Заиста желите да откажете унос фразе?",
     "Cancel entering passphrase?": "Отказати унос фразе?",
-    "Create Account": "Направи налог",
-    "Use your account or create a new one to continue.": "Користите постојећи или направите нови да наставите.",
-    "Sign In or Create Account": "Пријавите се или направите налог",
     "Zimbabwe": "Зимбабве",
     "Zambia": "Замбија",
     "Yemen": "Јемен",
@@ -694,8 +683,6 @@
     "No homeserver URL provided": "Није наведен УРЛ сервера",
     "Cannot reach homeserver": "Сервер недоступан",
     "Session already verified!": "Сесија је већ верификована!",
-    "Could not find user in room": "Не налазим корисника у соби",
-    "Joins room with given address": "Придружује се соби са датом адресом",
     "Use an identity server to invite by email. Manage in Settings.": "Користите сервер идентитета за позивнице е-поштом. Управљајте у поставкама.",
     "Use an identity server": "Користи сервер идентитета",
     "Removing…": "Уклањам…",
@@ -921,7 +908,8 @@
         "trusted": "поуздан",
         "not_trusted": "није поуздан",
         "unnamed_room": "Неименована соба",
-        "stickerpack": "Паковање са налепницама"
+        "stickerpack": "Паковање са налепницама",
+        "feedback": "Повратни подаци"
     },
     "action": {
         "continue": "Настави",
@@ -1066,7 +1054,9 @@
             "custom_theme_add_button": "Додај тему",
             "font_size": "Величина фонта",
             "timeline_image_size_default": "Подразумевано"
-        }
+        },
+        "inline_url_previews_room_account": "Укључи УРЛ прегледе у овој соби (утиче само на вас)",
+        "inline_url_previews_room": "Подразумевано омогући прегледе адреса за чланове ове собе"
     },
     "devtools": {
         "event_type": "Врста догађаја",
@@ -1302,7 +1292,11 @@
         "query": "Отвара ћаскање са наведеним корисником",
         "holdcall": "Ставља позив на чекање у тренутној соби",
         "unholdcall": "Узима позив са чекања у тренутној соби",
-        "me": "Приказује радњу"
+        "me": "Приказује радњу",
+        "join": "Придружује се соби са датом адресом",
+        "failed_find_user": "Не налазим корисника у соби",
+        "op": "Дефинише снагу корисника",
+        "deop": "Укида админа за корисника са датим ИД"
     },
     "presence": {
         "online_for": "На мрежи %(duration)s",
@@ -1355,7 +1349,13 @@
     },
     "auth": {
         "sso": "Јединствена пријава",
-        "footer_powered_by_matrix": "покреће га Матрикс"
+        "footer_powered_by_matrix": "покреће га Матрикс",
+        "unsupported_auth_msisdn": "Овај сервер не подржава идентификацију преко броја мобилног.",
+        "incorrect_password": "Нетачна лозинка",
+        "forgot_password_email_required": "Морате унети мејл адресу која је везана за ваш налог.",
+        "sign_in_or_register": "Пријавите се или направите налог",
+        "sign_in_or_register_description": "Користите постојећи или направите нови да наставите.",
+        "register_action": "Направи налог"
     },
     "export_chat": {
         "messages": "Поруке"

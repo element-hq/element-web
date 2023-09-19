@@ -237,7 +237,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("labs|notification_settings"),
         default: false,
         betaInfo: {
-            title: _td("Notification Settings"),
+            title: _td("labs|notification_settings_beta_title"),
             caption: () => (
                 <>
                     <p>
@@ -434,7 +434,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Rooms,
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("labs|dynamic_room_predecessors"),
-        description: _td("Enable MSC3946 (to support late-arriving room archives)"),
+        description: _td("labs|dynamic_room_predecessors_description"),
         shouldWarn: true,
         default: false,
     },
@@ -447,12 +447,12 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     [Features.VoiceBroadcastForceSmallChunks]: {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("Force 15s voice broadcast chunk length"),
+        displayName: _td("labs|voice_broadcast_force_small_chunks"),
         default: false,
     },
     [Features.OidcNativeFlow]: {
         supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Enable new native OIDC flows (Under active development)"),
+        displayName: _td("labs|oidc_native_flow"),
         default: false,
     },
     "feature_rust_crypto": {
@@ -475,8 +475,8 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "feature_render_reaction_images": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
-        displayName: _td("Render custom images in reactions"),
-        description: _td('Sometimes referred to as "custom emojis".'),
+        displayName: _td("labs|render_reaction_images"),
+        description: _td("labs|render_reaction_images_description"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -841,8 +841,8 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
         displayName: {
             "default": _td("settings|inline_url_previews_default"),
-            "room-account": _td("Enable URL previews for this room (only affects you)"),
-            "room": _td("Enable URL previews by default for participants in this room"),
+            "room-account": _td("settings|inline_url_previews_room_account"),
+            "room": _td("settings|inline_url_previews_room"),
         },
         default: true,
         controller: new UIFeatureController(UIFeature.URLPreviews),
@@ -850,7 +850,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     "urlPreviewsEnabled_e2ee": {
         supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.ROOM_ACCOUNT],
         displayName: {
-            "room-account": _td("Enable URL previews for this room (only affects you)"),
+            "room-account": _td("settings|inline_url_previews_room_account"),
         },
         default: false,
         controller: new UIFeatureController(UIFeature.URLPreviews),

@@ -86,7 +86,7 @@ const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {
                 }}
                 kind="primary"
             >
-                {_t("Feedback")}
+                {_t("common|feedback")}
             </AccessibleButton>
         );
     }

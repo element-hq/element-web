@@ -71,9 +71,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "لم تقدّم التصريح اللازم كي يُرسل %(brand)s التنبيهات. من فضلك أعِد المحاولة",
     "Unable to enable Notifications": "تعذر تفعيل التنبيهات",
     "This email address was not found": "لم يوجد عنوان البريد الإلكتروني هذا",
-    "Sign In or Create Account": "لِج أو أنشِئ حسابًا",
-    "Use your account or create a new one to continue.": "استعمل حسابك أو أنشِئ واحدًا جديدًا للمواصلة.",
-    "Create Account": "أنشِئ حسابًا",
     "Default": "المبدئي",
     "Restricted": "مقيد",
     "Moderator": "مشرف",
@@ -97,14 +94,10 @@
     "Use an identity server": "خادوم التعريف",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "استخدم سيرفر للهوية للدعوة عبر البريد الالكتروني. انقر على استمرار لاستخدام سيرفر الهوية الافتراضي (%(defaultIdentityServerName)s) او قم بضبط الاعدادات.",
     "Use an identity server to invite by email. Manage in Settings.": "استخدم سيرفر الهوية للدعوة عبر البريد الالكتروني. ضبط الاعدادات.",
-    "Joins room with given address": "الانضمام الى الغرفة بحسب العنوان المعطى",
     "Ignored user": "مستخدم متجاهل",
     "You are now ignoring %(userId)s": "انت تقوم الان بتجاهل %(userId)s",
     "Unignored user": "المستخدم غير متجاهل",
     "You are no longer ignoring %(userId)s": "انت لم تعد متجاهلا للمستخدم %(userId)s",
-    "Define the power level of a user": "قم بتعريف مستوى الطاقة للمستخدم",
-    "Could not find user in room": "لم يستطع ايجاد مستخدم في غرفة",
-    "Deops user with given id": "يُلغي إدارية المستخدم حسب المعرّف المعطى",
     "Verifies a user, session, and pubkey tuple": "يتحقق من العناصر: المستخدم والجلسة والمفتاح العام",
     "Session already verified!": "تم التحقق من الجلسة بالفعل!",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "تحذير: فشل التحقق من المفتاح! مفتاح التوقيع للمستخدم %(userId)s و الجلسة %(deviceId)s هو \"%(fprint)s\" والتي لا تتوافق مع المفتاح \"%(fingerprint)s\" المعطى. هذا يعني ان اتصالك اصبح مكشوف!",
@@ -553,8 +546,6 @@
     "How fast should messages be downloaded.": "ما مدى سرعة تنزيل الرسائل.",
     "Enable message search in encrypted rooms": "تمكين البحث عن الرسائل في الغرف المشفرة",
     "Show hidden events in timeline": "إظهار الأحداث المخفية في الجدول الزمني",
-    "Enable URL previews by default for participants in this room": "تمكين معاينة الروابط أصلاً لأي مشارك في هذه الغرفة",
-    "Enable URL previews for this room (only affects you)": "تمكين معاينة الروابط لهذه الغرفة (يؤثر عليك فقط)",
     "Never send encrypted messages to unverified sessions in this room from this session": "لا ترسل أبدًا رسائل مشفرة إلى اتصالات التي لم يتم التحقق منها في هذه الغرفة من هذا الاتصال",
     "Never send encrypted messages to unverified sessions from this session": "لا ترسل أبدًا رسائل مشفرة إلى اتصالات لم يتم التحقق منها من هذا الاتصال",
     "Send analytics data": "إرسال بيانات التحليلات",
@@ -1095,7 +1086,9 @@
             "font_size": "حجم الخط",
             "custom_font_description": "قم بتعيين اسم الخط المثبت على نظامك وسيحاول %(brand)s استخدامه.",
             "timeline_image_size_default": "المبدئي"
-        }
+        },
+        "inline_url_previews_room_account": "تمكين معاينة الروابط لهذه الغرفة (يؤثر عليك فقط)",
+        "inline_url_previews_room": "تمكين معاينة الروابط أصلاً لأي مشارك في هذه الغرفة"
     },
     "devtools": {
         "state_key": "مفتاح الحالة",
@@ -1259,7 +1252,11 @@
         "query": "يفتح دردشة من المستخدم المعطى",
         "holdcall": "يضع المكالمة في الغرفة الحالية قيد الانتظار",
         "unholdcall": "يوقف المكالمة في الغرفة الحالية",
-        "me": "يعرض إجراءً"
+        "me": "يعرض إجراءً",
+        "join": "الانضمام الى الغرفة بحسب العنوان المعطى",
+        "failed_find_user": "لم يستطع ايجاد مستخدم في غرفة",
+        "op": "قم بتعريف مستوى الطاقة للمستخدم",
+        "deop": "يُلغي إدارية المستخدم حسب المعرّف المعطى"
     },
     "presence": {
         "online_for": "متصل منذ %(duration)s",
@@ -1357,7 +1354,10 @@
     },
     "auth": {
         "sso": "الولوج الموحّد",
-        "footer_powered_by_matrix": "مشغل بواسطة Matrix"
+        "footer_powered_by_matrix": "مشغل بواسطة Matrix",
+        "sign_in_or_register": "لِج أو أنشِئ حسابًا",
+        "sign_in_or_register_description": "استعمل حسابك أو أنشِئ واحدًا جديدًا للمواصلة.",
+        "register_action": "أنشِئ حسابًا"
     },
     "export_chat": {
         "messages": "الرسائل"

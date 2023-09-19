@@ -41,7 +41,6 @@
     "You are now ignoring %(userId)s": "Siz %(userId)s blokladınız",
     "Unignored user": "İstifadəçi blokun siyahısından götürülmüşdür",
     "You are no longer ignoring %(userId)s": "Siz %(userId)s blokdan çıxardınız",
-    "Deops user with given id": "Verilmiş ID-lə istifadəçidən operatorun səlahiyyətlərini çıxardır",
     "Reason": "Səbəb",
     "Incorrect verification code": "Təsdiq etmənin səhv kodu",
     "Phone": "Telefon",
@@ -119,7 +118,6 @@
     "A new password must be entered.": "Yeni parolu daxil edin.",
     "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
     "Return to login screen": "Girişin ekranına qayıtmaq",
-    "This server does not support authentication with a phone number.": "Bu server telefon nömrəsinin köməyi ilə müəyyənləşdirilməni dəstəkləmir.",
     "Commands": "Komandalar",
     "Users": "İstifadəçilər",
     "Confirm passphrase": "Şifrəni təsdiqləyin",
@@ -143,7 +141,6 @@
     "This room is not recognised.": "Bu otaq tanınmır.",
     "You are not in this room.": "Sən bu otaqda deyilsən.",
     "You do not have permission to do that in this room.": "Bu otaqda bunu etməyə icazəniz yoxdur.",
-    "Define the power level of a user": "Bir istifadəçinin güc səviyyəsini müəyyənləşdirin",
     "Verified key": "Təsdiqlənmiş açar",
     "Add Email Address": "Emal ünvan əlavə etmək",
     "Add Phone Number": "Telefon nömrəsi əlavə etmək",
@@ -161,7 +158,6 @@
     "Use an identity server": "Şəxsiyyət serverindən istifadə edin",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "E-poçtla dəvət etmək üçün şəxsiyyət serverindən istifadə edin. Defolt şəxsiyyət serverini (%(defaultIdentityServerName)s) istifadə etməyə və ya Parametrlərdə idarə etməyə davam edin.",
     "Use an identity server to invite by email. Manage in Settings.": "E-poçtla dəvət etmək üçün şəxsiyyət serverindən istifadə edin. Parametrlərdə idarə edin.",
-    "Create Account": "Hesab Aç",
     "Explore rooms": "Otaqları kəşf edin",
     "common": {
         "analytics": "Analitik",
@@ -278,7 +274,9 @@
         "addwidget_invalid_protocol": "Zəhmət olmasa https:// və ya http:// widget URL təmin edin",
         "addwidget_no_permissions": "Bu otaqda vidjetləri dəyişdirə bilməzsiniz.",
         "discardsession": "Şifrəli bir otaqda mövcud qrup sessiyasını ləğv etməyə məcbur edir",
-        "me": "Hərəkətlərin nümayişi"
+        "me": "Hərəkətlərin nümayişi",
+        "op": "Bir istifadəçinin güc səviyyəsini müəyyənləşdirin",
+        "deop": "Verilmiş ID-lə istifadəçidən operatorun səlahiyyətlərini çıxardır"
     },
     "bug_reporting": {
         "collecting_information": "Proqramın versiyası haqqında məlumatın yığılması",
@@ -302,6 +300,8 @@
         "messages": "Mesajlar"
     },
     "auth": {
-        "footer_powered_by_matrix": "Matrix tərəfindən təchiz edilmişdir"
+        "footer_powered_by_matrix": "Matrix tərəfindən təchiz edilmişdir",
+        "unsupported_auth_msisdn": "Bu server telefon nömrəsinin köməyi ilə müəyyənləşdirilməni dəstəkləmir.",
+        "register_action": "Hesab Aç"
     }
 }

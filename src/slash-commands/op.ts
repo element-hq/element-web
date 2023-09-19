@@ -62,7 +62,7 @@ const updatePowerLevelHelper = (
 export const op = new Command({
     command: "op",
     args: "<user-id> [<power-level>]",
-    description: _td("Define the power level of a user"),
+    description: _td("slash_command|op"),
     isEnabled: canAffectPowerlevels,
     runFn: function (cli, roomId, threadId, args) {
         if (args) {
@@ -85,7 +85,7 @@ export const op = new Command({
 export const deop = new Command({
     command: "deop",
     args: "<user-id>",
-    description: _td("Deops user with given id"),
+    description: _td("slash_command|deop"),
     isEnabled: canAffectPowerlevels,
     runFn: function (cli, roomId, threadId, args) {
         if (args) {

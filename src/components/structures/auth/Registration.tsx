@@ -263,7 +263,7 @@ export default class Registration extends React.Component<IProps, IState> {
                 } else {
                     this.setState({
                         serverErrorIsFatal: true, // fatal because user cannot continue on this server
-                        errorText: _t("Registration has been disabled on this homeserver."),
+                        errorText: _t("auth|registration_disabled"),
                         // add empty flows array to get rid of spinner
                         flows: [],
                     });
@@ -271,7 +271,7 @@ export default class Registration extends React.Component<IProps, IState> {
             } else {
                 logger.log("Unable to query for supported registration methods.", e);
                 this.setState({
-                    errorText: _t("Unable to query for supported registration methods."),
+                    errorText: _t("auth|failed_query_registration_methods"),
                     // add empty flows array to get rid of spinner
                     flows: [],
                 });
@@ -326,12 +326,12 @@ export default class Registration extends React.Component<IProps, IState> {
                 const flows = (response as IAuthData).flows ?? [];
                 const msisdnAvailable = flows.some((flow) => flow.stages.includes(AuthType.Msisdn));
                 if (!msisdnAvailable) {
-                    errorText = _t("This server does not support authentication with a phone number.");
+                    errorText = _t("auth|unsupported_auth_msisdn");
                 }
             } else if (response instanceof MatrixError && response.errcode === "M_USER_IN_USE") {
-                errorText = _t("Someone already has that username, please try another.");
+                errorText = _t("auth|username_in_use");
             } else if (response instanceof MatrixError && response.errcode === "M_THREEPID_IN_USE") {
-                errorText = _t("That e-mail address or phone number is already in use.");
+                errorText = _t("auth|3pid_in_use");
             }
 
             this.setState({

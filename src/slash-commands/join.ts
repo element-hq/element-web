@@ -144,7 +144,7 @@ export const join = new Command({
     command: "join",
     aliases: ["j"],
     args: "<room-address>",
-    description: _td("Joins room with given address"),
+    description: _td("slash_command|join"),
     runFn: function (cli, roomId, threadId, args) {
         return openRoom(cli, args, true) ?? reject(this.getUsage());
     },
@@ -157,7 +157,7 @@ export const goto = new Command({
     command: "goto",
     aliases: ["view"],
     args: "<room-address>",
-    description: _td("Views room with given address"),
+    description: _td("slash_command|view"),
     runFn: function (cli, roomId, threadId, args) {
         return openRoom(cli, args, false) ?? reject(this.getUsage());
     },

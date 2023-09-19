@@ -5,9 +5,7 @@
     "Historical": "Historisk",
     "New passwords must match each other.": "Nye adgangskoder skal matche hinanden.",
     "A new password must be entered.": "Der skal indtastes en ny adgangskode.",
-    "The email address linked to your account must be entered.": "Den emailadresse, der tilhører til din adgang, skal indtastes.",
     "Session ID": "Sessions ID",
-    "Deops user with given id": "Fjerner OP af bruger med givet id",
     "Commands": "Kommandoer",
     "Warning!": "Advarsel!",
     "Account": "Konto",
@@ -130,7 +128,6 @@
     "Use an identity server": "Brug en identitetsserver",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Brug en identitetsserver for at invitere pr. mail. Tryk på Fortsæt for at bruge den almindelige identitetsserver (%(defaultIdentityServerName)s) eller indtast en anden under Indstillinger.",
     "Use an identity server to invite by email. Manage in Settings.": "Brug en identitetsserver for at invitere pr. mail. Administrer dette under Indstillinger.",
-    "Define the power level of a user": "Indstil rettighedsniveau for en bruger",
     "Cannot reach homeserver": "Homeserveren kan ikke kontaktes",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Vær sikker at du har en stabil internetforbindelse, eller kontakt serveradministratoren",
     "Your %(brand)s is misconfigured": "Din %(brand)s er konfigureret forkert",
@@ -203,12 +200,8 @@
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Denne handling kræver adgang til default identitets serveren <server /> for at validere en email adresse eller et telefonnummer, men serveren har ingen terms of service.",
     "Only continue if you trust the owner of the server.": "Fortsæt kun hvis du stoler på ejeren af denne server.",
     "%(name)s is requesting verification": "%(name)s beder om verifikation",
-    "Sign In or Create Account": "Log ind eller Opret bruger",
-    "Use your account or create a new one to continue.": "Brug din konto eller opret en ny for at fortsætte.",
-    "Create Account": "Opret brugerkonto",
     "Error upgrading room": "Fejl under opgradering af rum",
     "Double check that your server supports the room version chosen and try again.": "Dobbelt-tjek at din server understøtter den valgte rum-version og forsøg igen.",
-    "Could not find user in room": "Kunne ikke finde bruger i rum",
     "Verifies a user, session, and pubkey tuple": "Verificerer en bruger, session og pubkey tuple",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ADVARSEL: NØGLEVERIFIKATIONEN FEJLEDE! Underskriftsnøglen for %(userId)s og session %(deviceId)s er %(fprint)s som ikke matcher den supplerede nøgle \"%(fingerprint)s\". Dette kunne betyde at jeres kommunikation er infiltreret!",
     "Session already verified!": "Sessionen er allerede verificeret!",
@@ -229,10 +222,8 @@
     "Change notification settings": "Skift notifikations indstillinger",
     "Profile picture": "Profil billede",
     "Checking server": "Tjekker server",
-    "You're signed out": "Du er logget ud",
     "Change Password": "Skift adgangskode",
     "Current password": "Nuværende adgangskode",
-    "Comment": "Kommentar",
     "Profile": "Profil",
     "Local address": "Lokal adresse",
     "This room has no local addresses": "Dette rum har ingen lokal adresse",
@@ -286,8 +277,6 @@
     "The call was answered on another device.": "Opkaldet var svaret på en anden enhed.",
     "The user you called is busy.": "Brugeren du ringede til er optaget.",
     "User Busy": "Bruger optaget",
-    "Command error: Unable to find rendering type (%(renderingType)s)": "Kommandofejl: Kan ikke finde renderingstype (%(renderingType)s)",
-    "Command error: Unable to handle slash command.": "Kommandofejl: Kan ikke håndtere skråstregskommando.",
     "Are you sure you want to cancel entering passphrase?": "Er du sikker på, at du vil annullere indtastning af adgangssætning?",
     "%(spaceName)s and %(count)s others": {
         "one": "%(spaceName)s og %(count)s andre",
@@ -513,7 +502,6 @@
     "Unable to transfer call": "Kan ikke omstille opkald",
     "There was an error looking up the phone number": "Der opstod en fejl ved at slå telefonnummeret op",
     "Unable to look up phone number": "Kan ikke slå telefonnummer op",
-    "Incorrect password": "Forkert adgangskode",
     "Incorrect username and/or password.": "Forkert brugernavn og/eller adgangskode.",
     "Your password has been reset.": "Din adgangskode er blevet nulstillet.",
     "Your password was successfully changed.": "Din adgangskode blev ændret.",
@@ -739,7 +727,12 @@
         "addwidget_invalid_protocol": "Oplys venligst en https:// eller http:// widget URL",
         "addwidget_no_permissions": "Du kan ikke ændre widgets i dette rum.",
         "discardsession": "Tvinger den nuværende udgående gruppe-session i et krypteret rum til at blive kasseret",
-        "me": "Viser handling"
+        "me": "Viser handling",
+        "error_invalid_runfn": "Kommandofejl: Kan ikke håndtere skråstregskommando.",
+        "error_invalid_rendering_type": "Kommandofejl: Kan ikke finde renderingstype (%(renderingType)s)",
+        "failed_find_user": "Kunne ikke finde bruger i rum",
+        "op": "Indstil rettighedsniveau for en bruger",
+        "deop": "Fjerner OP af bruger med givet id"
     },
     "presence": {
         "online": "Online"
@@ -786,7 +779,13 @@
     },
     "auth": {
         "sso": "Engangs login",
-        "footer_powered_by_matrix": "Drevet af Matrix"
+        "footer_powered_by_matrix": "Drevet af Matrix",
+        "incorrect_password": "Forkert adgangskode",
+        "soft_logout_heading": "Du er logget ud",
+        "forgot_password_email_required": "Den emailadresse, der tilhører til din adgang, skal indtastes.",
+        "sign_in_or_register": "Log ind eller Opret bruger",
+        "sign_in_or_register_description": "Brug din konto eller opret en ny for at fortsætte.",
+        "register_action": "Opret brugerkonto"
     },
     "export_chat": {
         "messages": "Beskeder"
@@ -801,5 +800,8 @@
     },
     "create_room": {
         "name_validation_required": "Indtast et navn for rummet"
+    },
+    "feedback": {
+        "comment_label": "Kommentar"
     }
 }

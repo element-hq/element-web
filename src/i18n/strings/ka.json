@@ -1,6 +1,5 @@
 {
     "Explore rooms": "ოთახების დათავლიერება",
-    "Create Account": "ანგარიშის შექმნა",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "ფაილი '%(fileName)s' აჭარბებს ამ ჰომსერვერის ზომის ლიმიტს ატვირთვისთვის",
     "The file '%(fileName)s' failed to upload.": "ფაილი '%(fileName)s' ვერ აიტვირთა.",
     "This email address is already in use": "ელ. ფოსტის ეს მისამართი დაკავებულია",
@@ -60,7 +59,8 @@
         "seconds_left": "%(seconds)sწმ დარჩა"
     },
     "auth": {
-        "sso": "ერთჯერადი ავტორიზაცია"
+        "sso": "ერთჯერადი ავტორიზაცია",
+        "register_action": "ანგარიშის შექმნა"
     },
     "keyboard": {
         "dismiss_read_marker_and_jump_bottom": "გააუქმეთ წაკითხული მარკერი და გადადით ქვემოთ"

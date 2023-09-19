@@ -112,7 +112,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
 
                 const stateForError = AutoDiscoveryUtils.authComponentStateForError(e);
                 if (stateForError.serverErrorIsFatal) {
-                    let error = _t("Unable to validate homeserver");
+                    let error = _t("auth|server_picker_failed_validate_homeserver");
                     if (e instanceof UserFriendlyError && e.translatedMessage) {
                         error = e.translatedMessage;
                     }
@@ -129,7 +129,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                     return {};
                 } catch (e) {
                     logger.error(e);
-                    return { error: _t("Invalid URL") };
+                    return { error: _t("auth|server_picker_invalid_url") };
                 }
             }
         },
@@ -137,7 +137,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
             {
                 key: "required",
                 test: ({ value, allowEmpty }) => allowEmpty || !!value,
-                invalid: () => _t("Specify a homeserver"),
+                invalid: () => _t("auth|server_picker_required"),
             },
             {
                 key: "valid",
@@ -176,7 +176,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
     public render(): React.ReactNode {
         let text: string | undefined;
         if (this.defaultServer.hsName === "matrix.org") {
-            text = _t("Matrix.org is the biggest public homeserver in the world, so it's a good place for many.");
+            text = _t("auth|server_picker_matrix.org");
         }
 
         let defaultServerName: React.ReactNode = this.defaultServer.hsName;
@@ -190,7 +190,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
 
         return (
             <BaseDialog
-                title={this.props.title || _t("Sign into your homeserver")}
+                title={this.props.title || _t("auth|server_picker_title")}
                 className="mx_ServerPickerDialog"
                 contentId="mx_ServerPickerDialog"
                 onFinished={this.props.onFinished}
@@ -199,7 +199,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
             >
                 <form className="mx_Dialog_content" id="mx_ServerPickerDialog" onSubmit={this.onSubmit}>
                     <p>
-                        {_t("We call the places where you can host your account 'homeservers'.")} {text}
+                        {_t("auth|server_picker_intro")} {text}
                     </p>
 
                     <StyledRadioButton
@@ -219,12 +219,12 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                         checked={!this.state.defaultChosen}
                         onChange={this.onOtherChosen}
                         childrenInLabel={false}
-                        aria-label={_t("Other homeserver")}
+                        aria-label={_t("auth|server_picker_custom")}
                     >
                         <Field
                             type="text"
                             className="mx_ServerPickerDialog_otherHomeserver"
-                            label={_t("Other homeserver")}
+                            label={_t("auth|server_picker_custom")}
                             onChange={this.onHomeserverChange}
                             onFocus={this.onOtherChosen}
                             ref={this.fieldRef}
@@ -236,7 +236,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                             id="mx_homeserverInput"
                         />
                     </StyledRadioButton>
-                    <p>{_t("Use your preferred Matrix homeserver if you have one, or host your own.")}</p>
+                    <p>{_t("auth|server_picker_explainer")}</p>
 
                     <AccessibleButton className="mx_ServerPickerDialog_continue" kind="primary" onClick={this.onSubmit}>
                         {_t("action|continue")}
@@ -248,7 +248,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                         target="_blank"
                         rel="noreferrer noopener"
                     >
-                        {_t("About homeservers")}
+                        {_t("auth|server_picker_learn_more")}
                     </ExternalLink>
                 </form>
             </BaseDialog>

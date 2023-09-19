@@ -295,7 +295,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
                     {_t(
-                        "Got an account? <a>Sign in</a>",
+                        "auth|sign_in_prompt",
                         {},
                         {
                             a: (sub) => (
@@ -307,7 +307,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     )}
                     {SettingsStore.getValue(UIFeature.Registration)
                         ? _t(
-                              "New here? <a>Create an account</a>",
+                              "auth|create_account_prompt",
                               {},
                               {
                                   a: (sub) => (
@@ -338,7 +338,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             feedbackButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconMessage"
-                    label={_t("Feedback")}
+                    label={_t("common|feedback")}
                     onClick={this.onProvideFeedback}
                 />
             );

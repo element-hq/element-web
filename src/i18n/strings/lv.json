@@ -26,7 +26,6 @@
     "Custom level": "Pielāgots līmenis",
     "Deactivate Account": "Deaktivizēt kontu",
     "Decrypt %(text)s": "Atšifrēt %(text)s",
-    "Deops user with given id": "Atceļ operatora statusu lietotājam ar norādīto Id",
     "Default": "Noklusējuma",
     "Download %(text)s": "Lejupielādēt: %(text)s",
     "Email": "Epasts",
@@ -121,7 +120,6 @@
     "Start authentication": "Sākt autentifikāciju",
     "This email address is already in use": "Šī epasta adrese jau tiek izmantota",
     "This email address was not found": "Šāda epasta adrese nav atrasta",
-    "The email address linked to your account must be entered.": "Ir jāievada jūsu kontam piesaistītā epasta adrese.",
     "This room has no local addresses": "Šai istabai nav lokālo adrešu",
     "This room is not recognised.": "Šī istaba netika atpazīta.",
     "This doesn't appear to be a valid email address": "Šī neizskatās pēc derīgas epasta adreses",
@@ -171,7 +169,6 @@
     "Nov": "Nov.",
     "Dec": "Dec.",
     "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s nomainīja istabas avataru uz <img/>",
-    "This server does not support authentication with a phone number.": "Šis serveris neatbalsta autentifikāciju pēc telefona numura.",
     "Connectivity to the server has been lost.": "Savienojums ar serveri pārtrūka.",
     "Sent messages will be stored until your connection has returned.": "Sūtītās ziņas tiks saglabātas līdz brīdim, kad savienojums tiks atjaunots.",
     "New Password": "Jaunā parole",
@@ -188,7 +185,6 @@
     "Failed to invite": "Neizdevās uzaicināt",
     "Confirm Removal": "Apstipriniet dzēšanu",
     "Unknown error": "Nezināma kļūda",
-    "Incorrect password": "Nepareiza parole",
     "Unable to restore session": "Neizdevās atjaunot sesiju",
     "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.": "Ja iepriekš izmantojāt jaunāku %(brand)s versiju, jūsu sesija var nebūt saderīga ar šo versiju. Aizveriet šo logu un atgriezieties jaunākajā versijā.",
     "Token incorrect": "Nepareizs autentifikācijas tokens",
@@ -209,7 +205,6 @@
         "one": "un vēl viens cits..."
     },
     "Delete widget": "Dzēst vidžetu",
-    "Define the power level of a user": "Definē lietotāja statusu",
     "Publish this room to the public in %(domain)s's room directory?": "Publicēt šo istabu publiskajā %(domain)s katalogā?",
     "AM": "AM",
     "PM": "PM",
@@ -225,8 +220,6 @@
     "Unignored user": "Atignorēts lietotājs",
     "You are no longer ignoring %(userId)s": "Tu vairāk neignorē %(userId)s",
     "Mirror local video feed": "Rādīt spoguļskatā kameras video",
-    "Enable URL previews for this room (only affects you)": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai jūs pašu)",
-    "Enable URL previews by default for participants in this room": "Iespējot URL priekšskatījumus pēc noklusējuma visiem šīs istabas dalībniekiem",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Jūs nevarēsiet atcelt šīs izmaiņas pēc sava statusa pazemināšanas. Gadījumā, ja esat pēdējais priviliģētais lietotājs istabā, būs neiespējami atgūt šīs privilēģijas.",
     "Unignore": "Atcelt ignorēšanu",
     "Jump to read receipt": "Pāriet uz pēdējo skatīto ziņu",
@@ -334,9 +327,6 @@
     "%(creator)s created this DM.": "%(creator)s uzsāka šo tiešo saraksti.",
     "None": "Neviena",
     "Room options": "Istabas opcijas",
-    "Send feedback": "Nosūtīt atsauksmi",
-    "Feedback sent": "Atsauksme nosūtīta",
-    "Feedback": "Atsauksmes",
     "All settings": "Visi iestatījumi",
     "Security & Privacy": "Drošība un konfidencialitāte",
     "Change notification settings": "Mainīt paziņojumu iestatījumus",
@@ -484,7 +474,6 @@
     "Room Settings - %(roomName)s": "Istabas iestatījumi - %(roomName)s",
     "Room settings": "Istabas iestatījumi",
     "Share room": "Dalīties ar istabu",
-    "About homeservers": "Par bāzes serveriem",
     "Enable message search in encrypted rooms": "Iespējot ziņu meklēšanu šifrētās istabās",
     "Message search": "Ziņu meklēšana",
     "Cancel search": "Atcelt meklējumu",
@@ -517,22 +506,10 @@
     "Emoji Autocomplete": "Emocijzīmju automātiska pabeigšana",
     "Command Autocomplete": "Komandu automātiska pabeigšana",
     "Clear personal data": "Dzēst personas datus",
-    "You're signed out": "Jūs izrakstījāties",
-    "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Jūs nevarat pierakstīties savā kontā. Lūdzu, sazinieties ar sava bāzes servera administratoru, lai iegūtu vairāk informācijas.",
-    "Sign in and regain access to your account.": "Pierakstieties un atgūstiet piekļuvi savam kontam.",
-    "Forgotten your password?": "Aizmirsāt paroli?",
-    "Enter your password to sign in and regain access to your account.": "Ievadiet paroli, lai pierakstītos un atgūtu piekļuvi savam kontam.",
-    "Failed to re-authenticate": "Neizdevās atkārtoti autentificēties",
     "Failed to re-authenticate due to a homeserver problem": "Bāzes servera problēmas dēļ atkārtoti autentificēties neizdevās",
     "Create account": "Izveidot kontu",
-    "Registration has been disabled on this homeserver.": "Šajā bāzes serverī reģistrācija ir atspējota.",
-    "Unable to query for supported registration methods.": "Neizdevās pieprasīt atbalstītās reģistrācijas metodes.",
-    "New? <a>Create account</a>": "Pirmā reize? <a>Izveidojiet kontu</a>",
-    "If you've joined lots of rooms, this might take a while": "Ja esat pievienojies daudzām istabām, tas var aizņemt kādu laiku",
     "Your password has been reset.": "Jūsu parole ir atiestatīta.",
     "Could not load user profile": "Nevarēja ielādēt lietotāja profilu",
-    "New here? <a>Create an account</a>": "Pirmo reizi šeit? <a>Izveidojiet kontu</a>",
-    "Got an account? <a>Sign in</a>": "Vai jums ir konts? <a>Pierakstieties</a>",
     "You have %(count)s unread notifications in a prior version of this room.": {
         "one": "Jums ir %(count)s nelasīts paziņojums iepriekšējā šīs istabas versijā.",
         "other": "Jums ir %(count)s nelasīti paziņojumi iepriekšējā šīs istabas versijā."
@@ -574,11 +551,7 @@
     "Don't miss a reply": "Nepalaidiet garām atbildi",
     "Later": "Vēlāk",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Pārliecinieties par stabilu internet savienojumu vai sazinieties ar servera administratoru",
-    "Could not find user in room": "Lietotājs istabā netika atrasts",
     "Missing roomId.": "Trūkst roomId.",
-    "Create Account": "Izveidot kontu",
-    "Use your account or create a new one to continue.": "Izmantojiet esošu kontu vai izveidojiet jaunu, lai turpinātu.",
-    "Sign In or Create Account": "Pierakstīties vai izveidot kontu",
     "Malawi": "Malāvija",
     "Madagascar": "Madagaskara",
     "Macedonia": "Maķedonija",
@@ -716,7 +689,6 @@
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Jūsu iesniegtā parakstīšanas atslēga atbilst parakstīšanas atslēgai, kuru saņēmāt no %(userId)s sesijas %(deviceId)s. Sesija atzīmēta kā verificēta.",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "BRĪDINĀJUMS: ATSLĒGU VERIFIKĀCIJA NEIZDEVĀS! Parakstīšanas atslēga lietotājam %(userId)s un sesijai %(deviceId)s ir \"%(fprint)s\", kura neatbilst norādītajai atslēgai \"%(fingerprint)s\". Tas var nozīmēt, ka jūsu saziņa tiek pārtverta!",
     "Verifies a user, session, and pubkey tuple": "Verificē lietotāju, sesiju un publiskās atslēgas",
-    "Joins room with given address": "Pievienojas istabai ar šādu adresi",
     "Use an identity server to invite by email. Manage in Settings.": "Izmantojiet identitātes serveri, lai uzaicinātu pa e-pastu. Pārvaldība pieejama Iestatījumos.",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Izmantojiet identitātes serveri, lai uzaicinātu pa e-pastu. Noklikšķiniet uz Turpināt, lai izmantotu noklusējuma identitātes serveri (%(defaultIdentityServerName)s) vai nomainītu to Iestatījumos.",
     "Use an identity server": "Izmantot identitāšu serveri",
@@ -1247,7 +1219,8 @@
         "unnamed_room": "Istaba bez nosaukuma",
         "secure_backup": "Droša rezerves kopija",
         "identity_server": "Identitāšu serveris",
-        "integration_manager": "Integrācija pārvaldnieks"
+        "integration_manager": "Integrācija pārvaldnieks",
+        "feedback": "Atsauksmes"
     },
     "action": {
         "continue": "Turpināt",
@@ -1442,7 +1415,9 @@
             "font_size": "Šrifta izmērs",
             "custom_font_description": "Iestaties uz jūsu sistēmas instalēta fonta nosaukumu, kuru & %(brand)s vajadzētu mēģināt izmantot.",
             "timeline_image_size_default": "Noklusējuma"
-        }
+        },
+        "inline_url_previews_room_account": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai jūs pašu)",
+        "inline_url_previews_room": "Iespējot URL priekšskatījumus pēc noklusējuma visiem šīs istabas dalībniekiem"
     },
     "devtools": {
         "event_type": "Notikuma tips",
@@ -1753,7 +1728,11 @@
         "query": "Atvērt čatu ar šo lietotāju",
         "holdcall": "Iepauzē sazvanu šajā istabā",
         "unholdcall": "Šajā istabā iepauzētās sazvana atpauzēšana",
-        "me": "Parāda darbību"
+        "me": "Parāda darbību",
+        "join": "Pievienojas istabai ar šādu adresi",
+        "failed_find_user": "Lietotājs istabā netika atrasts",
+        "op": "Definē lietotāja statusu",
+        "deop": "Atceļ operatora statusu lietotājam ar norādīto Id"
     },
     "presence": {
         "online_for": "Tiešsaistē %(duration)s",
@@ -1856,7 +1835,25 @@
         "account_clash_previous_account": "Turpināt ar iepriekšējo kontu",
         "log_in_new_account": "<a>Pierakstīties</a> jaunajā kontā.",
         "registration_successful": "Reģistrācija ir veiksmīga",
-        "footer_powered_by_matrix": "tiek darbināta ar Matrix"
+        "footer_powered_by_matrix": "tiek darbināta ar Matrix",
+        "sync_footer_subtitle": "Ja esat pievienojies daudzām istabām, tas var aizņemt kādu laiku",
+        "unsupported_auth_msisdn": "Šis serveris neatbalsta autentifikāciju pēc telefona numura.",
+        "registration_disabled": "Šajā bāzes serverī reģistrācija ir atspējota.",
+        "failed_query_registration_methods": "Neizdevās pieprasīt atbalstītās reģistrācijas metodes.",
+        "incorrect_password": "Nepareiza parole",
+        "failed_soft_logout_auth": "Neizdevās atkārtoti autentificēties",
+        "soft_logout_heading": "Jūs izrakstījāties",
+        "forgot_password_email_required": "Ir jāievada jūsu kontam piesaistītā epasta adrese.",
+        "sign_in_prompt": "Vai jums ir konts? <a>Pierakstieties</a>",
+        "forgot_password_prompt": "Aizmirsāt paroli?",
+        "soft_logout_intro_password": "Ievadiet paroli, lai pierakstītos un atgūtu piekļuvi savam kontam.",
+        "soft_logout_intro_sso": "Pierakstieties un atgūstiet piekļuvi savam kontam.",
+        "soft_logout_intro_unsupported_auth": "Jūs nevarat pierakstīties savā kontā. Lūdzu, sazinieties ar sava bāzes servera administratoru, lai iegūtu vairāk informācijas.",
+        "create_account_prompt": "Pirmo reizi šeit? <a>Izveidojiet kontu</a>",
+        "sign_in_or_register": "Pierakstīties vai izveidot kontu",
+        "sign_in_or_register_description": "Izmantojiet esošu kontu vai izveidojiet jaunu, lai turpinātu.",
+        "register_action": "Izveidot kontu",
+        "server_picker_learn_more": "Par bāzes serveriem"
     },
     "room_list": {
         "sort_unread_first": "Rādīt istabas ar nelasītām ziņām augšpusē",
@@ -1948,5 +1945,9 @@
             "see_msgtype_sent_this_room": "Apskatīt <b>%(msgtype)s</b> ziņas, kas publicētas šajā istabā",
             "see_msgtype_sent_active_room": "Apskatīt <b>%(msgtype)s</b> ziņas, kas publicētas jūsu aktīvajā istabā"
         }
+    },
+    "feedback": {
+        "sent": "Atsauksme nosūtīta",
+        "send_feedback_action": "Nosūtīt atsauksmi"
     }
 }

@@ -39,7 +39,6 @@
     "Off": "ഓഫ്",
     "Failed to remove tag %(tagName)s from room": "റൂമില്‍ നിന്നും %(tagName)s ടാഗ് നീക്കം ചെയ്യുവാന്‍ സാധിച്ചില്ല",
     "Explore rooms": "മുറികൾ കണ്ടെത്തുക",
-    "Create Account": "അക്കൗണ്ട് സൃഷ്ടിക്കുക",
     "common": {
         "error": "എറര്‍",
         "mute": "നിശ്ശബ്ദം",
@@ -84,6 +83,7 @@
         }
     },
     "auth": {
-        "footer_powered_by_matrix": "മാട്രിക്സില്‍ പ്രവര്‍ത്തിക്കുന്നു"
+        "footer_powered_by_matrix": "മാട്രിക്സില്‍ പ്രവര്‍ത്തിക്കുന്നു",
+        "register_action": "അക്കൗണ്ട് സൃഷ്ടിക്കുക"
     }
 }

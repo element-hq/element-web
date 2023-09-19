@@ -53,10 +53,10 @@ export async function startAnyRegistrationFlow(
     const modal = Modal.createDialog(QuestionDialog, {
         hasCancelButton: true,
         quitOnly: true,
-        title: SettingsStore.getValue(UIFeature.Registration) ? _t("Sign In or Create Account") : _t("action|sign_in"),
+        title: SettingsStore.getValue(UIFeature.Registration) ? _t("auth|sign_in_or_register") : _t("action|sign_in"),
         description: SettingsStore.getValue(UIFeature.Registration)
-            ? _t("Use your account or create a new one to continue.")
-            : _t("Use your account to continue."),
+            ? _t("auth|sign_in_or_register_description")
+            : _t("auth|sign_in_description"),
         button: _t("action|sign_in"),
         extraButtons: SettingsStore.getValue(UIFeature.Registration)
             ? [
@@ -67,7 +67,7 @@ export async function startAnyRegistrationFlow(
                           dis.dispatch({ action: "start_registration", screenAfterLogin: options.screen_after });
                       }}
                   >
-                      {_t("Create Account")}
+                      {_t("auth|register_action")}
                   </button>,
               ]
             : [],

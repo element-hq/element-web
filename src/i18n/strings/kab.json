@@ -21,7 +21,6 @@
     "Dec": "Duj",
     "PM": "MD",
     "AM": "FT",
-    "Create Account": "Rnu amiḍan",
     "Default": "Amezwer",
     "Moderator": "Aseɣyad",
     "You need to be logged in.": "Tesriḍ ad teqqneḍ.",
@@ -111,7 +110,6 @@
     "Email (optional)": "Imayl (Afrayan)",
     "Explore rooms": "Snirem tixxamin",
     "Unknown error": "Tuccḍa tarussint",
-    "Feedback": "Takti",
     "Your password has been reset.": "Awal uffir-inek/inem yettuwennez.",
     "Create account": "Rnu amiḍan",
     "Commands": "Tiludna",
@@ -154,8 +152,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s ur d-yefk ara tisirag i tuzna n yilɣa - ttxil-k/m εreḍ tikkelt-nniḍen",
     "Unable to enable Notifications": "Sens irmad n yilɣa",
     "This email address was not found": "Tansa-a n yimayl ulac-it",
-    "Sign In or Create Account": "Kcem ɣer neɣ rnu amiḍan",
-    "Use your account or create a new one to continue.": "Seqdec amiḍan-ik/im neɣ snulfu-d yiwen akken ad tkemmleḍ.",
     "Failed to invite": "Ulamek i d-tnecdeḍ",
     "You need to be able to invite users to do that.": "Tesriḍ ad tizmireḍ ad d-tnecdeḍ iseqdacen ad gen ayagi.",
     "Failed to send request.": "Tuzna n usuter ur teddi ara.",
@@ -168,10 +164,8 @@
     "Command error": "Tuccḍa n tladna",
     "Error upgrading room": "Tuccḍa deg uleqqem n texxamt",
     "Use an identity server": "Seqdec timagit n uqeddac",
-    "Joins room with given address": "Kcem ɣer texxamt s tansa i d-yettunefken",
     "Ignored user": "Aseqdac yettunfen",
     "You are now ignoring %(userId)s": "Aql-ak tura tunfeḍ i %(userId)s",
-    "Could not find user in room": "Ur yettwaf ara useqdac deg texxamt",
     "New login. Was this you?": "Anekcam amaynut. D kečč/kemm?",
     "What's new?": "D acu-t umaynut?",
     "Please contact your homeserver administrator.": "Ttxil-k/m nermes anedbal-ik/im n usebter agejdan.",
@@ -205,7 +199,6 @@
     "Unable to create widget.": "Timerna n uwiǧit ulamek.",
     "Missing roomId.": "Ixuṣ usulay n texxamt.",
     "Use an identity server to invite by email. Manage in Settings.": "Seqdec aqeddac n timagit i uncad s yimayl. Asefrek deg yiɣewwaren.",
-    "Define the power level of a user": "Sbadu aswir iǧehden n useqdac",
     "Session already verified!": "Tiɣimit tettwasenqed yakan!",
     "Verified key": "Tasarut tettwasenqed",
     "Logs sent": "Iɣmisen ttewaznen",
@@ -235,10 +228,6 @@
     "Enter phone number (required on this homeserver)": "Sekcem uṭṭun n tiliɣri (yettusra deg uqeddac-a agejdan)",
     "Enter username": "Sekcem isem n useqdac",
     "Phone (optional)": "Tiliɣri (d afrayan)",
-    "Forgotten your password?": "Tettuḍ awal-ik·im uffir?",
-    "Sign in and regain access to your account.": "Qqen syen εreḍ anekcum ɣer umiḍan-inek·inem tikkelt-nniḍen.",
-    "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Ur tessawḍeḍ ara ad teqqneḍ ɣer umiḍan-inek:inem. Ttxil-k·m nermes anedbal n uqeddac-ik·im agejdan i wugar n talɣut.",
-    "You're signed out": "Teffɣeḍ-d seg tuqqna",
     "Clear personal data": "Sfeḍ isefka udmawanen",
     "Notify the whole room": "Selɣu akk taxxamt",
     "Room Notification": "Ilɣa n texxamt",
@@ -307,7 +296,6 @@
     "Unignored user": "Aseqdac ur yettuzeglen ara",
     "You are no longer ignoring %(userId)s": "Dayen ur tettazgaleḍ ara akk %(userId)s",
     "Verifies a user, session, and pubkey tuple": "Yessenqad tagrumma-a: aseqdac, tiɣimit d tsarut tazayezt",
-    "Deops user with given id": "Aseqdac Deops s usulay i d-yettunefken",
     "Cannot reach homeserver": "Anekcum ɣer uqeddac agejdan d awezɣi",
     "Cannot reach identity server": "Anekcum ɣer uqeddac n tmagit d awezɣi",
     "No homeserver URL provided": "Ulac URL n uqeddac agejdan i d-yettunefken",
@@ -520,8 +508,6 @@
     "A new password must be entered.": "Awal uffir amaynut ilaq ad yettusekcem.",
     "General failure": "Tuccḍa tamatut",
     "This account has been deactivated.": "Amiḍan-a yettuḥbes.",
-    "Incorrect password": "Awal uffir d arameɣtu",
-    "Failed to re-authenticate": "Aɛiwed n usesteb ur yeddi ara",
     "Command Autocomplete": "Asmad awurman n tiludna",
     "Emoji Autocomplete": "Asmad awurman n yimujit",
     "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "Seqdec aqeddac n timagit i uncad s yimayl. Sit, tkemmleḍ aseqdec n uqeddac n timagit amezwer (%(defaultIdentityServerName)s) neɣ sefrek deg yiɣewwaren.",
@@ -666,7 +652,6 @@
     "Error decrypting image": "Tuccḍa deg uwgelhen n tugna",
     "Show image": "Sken tugna",
     "Invalid base_url for m.identity_server": "D arameɣtu base_url i m.identity_server",
-    "If you've joined lots of rooms, this might take a while": "Ma yella tettekkaḍ deg waṭas n texxamin, ayagi yezmer ad yeṭṭef kra n wakud",
     "Your keys are being backed up (the first backup could take a few minutes).": "Tisura-ik·im la ttwaḥrazent (aḥraz amezwaru yezmer ad yeṭṭef kra n tesdidin).",
     "Unexpected error resolving homeserver configuration": "Tuccḍa ur nettwaṛǧa ara lawan n uṣeggem n twila n uqeddac agejdan",
     "Unexpected error resolving identity server configuration": "Tuccḍa ur nettwaṛǧa ara lawan n uṣeggem n uqeddac n timagit",
@@ -826,8 +811,6 @@
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Tzemreḍ ad talseḍ awennez i wawal-ik•im uffir, maca kra n tmahilin ur ttilint ara almi yuɣal-d uqeddac n tmagit. Ma mazal tettwaliḍ alɣu-a, senqed tawila-inek•inem neɣ nermes anedbal n uqeddac.",
     "You can log in, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Tzemreḍ ad teqqneḍ, maca kra n tmahilin ur ttilint ara almi yuɣal-d uqeddac n tmagit. Ma mazal tettwaliḍ alɣu-a senqed tawila-inek•inem neɣ nermes anedbal n uqeddac.",
     "Never send encrypted messages to unverified sessions in this room from this session": "Ur ttazen ara akk iznan yettwawgelhen ɣer tɣimiyin ur nettusenqad ara seg tɣimit-a",
-    "Enable URL previews by default for participants in this room": "Rmed tiskanin n URL s wudem amezwer i yimttekkiyen deg texxamt-a",
-    "Enable URL previews for this room (only affects you)": "Rmed tiskanin n URL i texxamt-a (i ak·akem-yeɛnan kan)",
     "Enable widget screenshots on supported widgets": "Rmed tuṭṭfiwin n ugdil n uwiǧit deg yiwiǧiten yettwasferken",
     "Enter a new identity server": "Sekcem aqeddac n timagit amaynut",
     "No update available.": "Ulac lqem i yellan.",
@@ -948,13 +931,8 @@
     "Homeserver URL does not appear to be a valid Matrix homeserver": "URL n uqeddac agejdan ur yettban ara d aqeddac agejdan n Matrix ameɣtu",
     "Invalid identity server discovery response": "Tiririt n usnirem n uqeddac n timagitn d tarameɣtut",
     "Identity server URL does not appear to be a valid identity server": "URL n uqeddac n timagit ur yettban ara d aqeddac n timagit ameɣtu",
-    "This homeserver does not support login using email address.": "Aqeddac-a agejdan ur yessefrak ara inekcum s useqdec n tansa n yimayl.",
     "Please <a>contact your service administrator</a> to continue using this service.": "Ttxil-k·m <a>nermes anedbal-ik·im n uqeddac</a> i wakken ad tkemmleḍ aseqdec n yibenk-a.",
-    "Unable to query for supported registration methods.": "Anadi n tarrayin n usekles yettusefraken d awezi.",
-    "Registration has been disabled on this homeserver.": "Aklas yensa deg uqeddac-a agejdan.",
-    "This server does not support authentication with a phone number.": "Aqeddac-a ur yessefrak ara asesteb s wuṭṭun n tilifun.",
     "Failed to re-authenticate due to a homeserver problem": "Allus n usesteb ur yeddi ara ssebbba n wugur deg uqeddac agejdan",
-    "Enter your password to sign in and regain access to your account.": "Sekcem awal-ik·im uffir i wakken ad teqqneḍ syen ad tkecmeḍ i tikkelt tayeḍ ɣer umiḍan-ik·im.",
     "Use a secret phrase only you know, and optionally save a Security Key to use for backup.": "Seqdec tafyirt tuffirt i tessneḍ kan kečč·kemm, syen sekles ma tebɣiḍ tasarut n tɣellist i useqdec-ines i uḥraz.",
     "Restore your key backup to upgrade your encryption": "Err-d aḥraz n tsarut-ik·im akken ad tleqqmeḍ awgelhen-ik·im",
     "You'll need to authenticate with the server to confirm the upgrade.": "Ad teḥqiǧeḍ asesteb s uqeddac i wakken ad tesnetmeḍ lqem.",
@@ -1005,9 +983,7 @@
         "other": "Ɣur-k·m %(count)s ilɣa ur nettwaɣra ara deg lqem yezrin n texxamt-a.",
         "one": "Ɣur-k·m %(count)s ilɣa ur nettwaɣra ara deg lqem yezrin n texxamt-a."
     },
-    "The email address linked to your account must be entered.": "Tansa n yimayl i icudden ɣer umiḍan-ik·im ilaq ad tettwasekcem.",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Ttxil-k·m gar tamawt aql-ak·akem tkecmeḍ ɣer uqeddac %(hs)s, neɣ matrix.org.",
-    "Failed to perform homeserver discovery": "Tifin n uqeddac agejdan tegguma ad teddu",
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Senqed yal tiɣimit yettwasqedcen sɣur aseqdac weḥd-s i ucraḍ fell-as d tuttkilt, war attkal ɣef yibenkan yettuzemlen s uzmel anmidag.",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s xuṣṣent kra n yisegran yettusran i tuffra s wudem aɣelsan n yiznan iwgelhanen idiganen. Ma yella tebɣiḍ ad tgeḍ tarmit s tmahilt-a, snulfu-d tanarit %(brand)s tudmawant s <nativeLink>unadi n yisegran yettwarnan</nativeLink>.",
     "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.": "%(brand)s ur yezmir ara ad iffer s wudem aɣelsan iznan iwgelhanen idiganen mi ara iteddu ɣef yiminig web. Seqdec <desktopLink>tanarit</desktopLink> i yiznan iwgelhanen i wakken ad d-banen deg yigmaḍ n unadi.",
@@ -1207,7 +1183,6 @@
     "Uzbekistan": "Uzbikistan",
     "Guyana": "Guyane",
     "Kuwait": "Koweït",
-    "Invalid URL": "Yir URL",
     "Venezuela": "Vinizwila",
     "Greenland": "Griland",
     "Jamaica": "Jamaïque",
@@ -1276,7 +1251,6 @@
     "São Tomé & Príncipe": "Saw Ṭumi & Prinsip",
     "Chile": "Cili",
     "Palestine": "Falasṭin",
-    "Send feedback": "Azen takti-inek·inem",
     "Australia": "Australie",
     "Belarus": "Bilarus",
     "Bhutan": "Buṭan",
@@ -1393,7 +1367,6 @@
     "Bouvet Island": "Tigzirin Buvet",
     "French Guiana": "Giyan n Fṛansa",
     "Ethiopia": "Ityupya",
-    "Comment": "Awennit",
     "Turks & Caicos Islands": "Ṭurk & Tegzirin n Kaykus",
     "Åland Islands": "Tigzirin n Aland",
     "Tuvalu": "Tuvalu",
@@ -1477,7 +1450,8 @@
         "cross_signing": "Azmul anmidag",
         "identity_server": "Aqeddac n timagit",
         "integration_manager": "Amsefrak n umsidef",
-        "qr_code": "Tangalt QR"
+        "qr_code": "Tangalt QR",
+        "feedback": "Takti"
     },
     "action": {
         "continue": "Kemmel",
@@ -1714,7 +1688,9 @@
             "font_size": "Tuɣzi n tsefsit",
             "custom_font_description": "Sbadu isem n tsefsit yettwasbedden ɣef unagraw-ik·im & %(brand)s ad yeɛreḍ ad t-isseqdec.",
             "timeline_image_size_default": "Amezwer"
-        }
+        },
+        "inline_url_previews_room_account": "Rmed tiskanin n URL i texxamt-a (i ak·akem-yeɛnan kan)",
+        "inline_url_previews_room": "Rmed tiskanin n URL s wudem amezwer i yimttekkiyen deg texxamt-a"
     },
     "devtools": {
         "event_type": "Anaw n tedyant",
@@ -1973,7 +1949,11 @@
         "query": "Yeldi adiwenni d useqdac i d-yettunefken",
         "holdcall": "Seḥbes asiwel deg texxamt-a i kra n wakud",
         "unholdcall": "Uɣal ɣer usiwel ara iteddun deg -texxamt-a",
-        "me": "Yeskan tigawt"
+        "me": "Yeskan tigawt",
+        "join": "Kcem ɣer texxamt s tansa i d-yettunefken",
+        "failed_find_user": "Ur yettwaf ara useqdac deg texxamt",
+        "op": "Sbadu aswir iǧehden n useqdac",
+        "deop": "Aseqdac Deops s usulay i d-yettunefken"
     },
     "presence": {
         "online_for": "Srid azal n %(duration)s",
@@ -2079,7 +2059,25 @@
         "registration_successful": "Asekles yemmed akken iwata",
         "server_picker_title": "Sezdeɣ amiḍan deg",
         "server_picker_dialog_title": "Wali anida ara yezdeɣ umiḍan-ik·im",
-        "footer_powered_by_matrix": "s lmendad n Matrix"
+        "footer_powered_by_matrix": "s lmendad n Matrix",
+        "failed_homeserver_discovery": "Tifin n uqeddac agejdan tegguma ad teddu",
+        "sync_footer_subtitle": "Ma yella tettekkaḍ deg waṭas n texxamin, ayagi yezmer ad yeṭṭef kra n wakud",
+        "unsupported_auth_msisdn": "Aqeddac-a ur yessefrak ara asesteb s wuṭṭun n tilifun.",
+        "unsupported_auth_email": "Aqeddac-a agejdan ur yessefrak ara inekcum s useqdec n tansa n yimayl.",
+        "registration_disabled": "Aklas yensa deg uqeddac-a agejdan.",
+        "failed_query_registration_methods": "Anadi n tarrayin n usekles yettusefraken d awezi.",
+        "incorrect_password": "Awal uffir d arameɣtu",
+        "failed_soft_logout_auth": "Aɛiwed n usesteb ur yeddi ara",
+        "soft_logout_heading": "Teffɣeḍ-d seg tuqqna",
+        "forgot_password_email_required": "Tansa n yimayl i icudden ɣer umiḍan-ik·im ilaq ad tettwasekcem.",
+        "forgot_password_prompt": "Tettuḍ awal-ik·im uffir?",
+        "soft_logout_intro_password": "Sekcem awal-ik·im uffir i wakken ad teqqneḍ syen ad tkecmeḍ i tikkelt tayeḍ ɣer umiḍan-ik·im.",
+        "soft_logout_intro_sso": "Qqen syen εreḍ anekcum ɣer umiḍan-inek·inem tikkelt-nniḍen.",
+        "soft_logout_intro_unsupported_auth": "Ur tessawḍeḍ ara ad teqqneḍ ɣer umiḍan-inek:inem. Ttxil-k·m nermes anedbal n uqeddac-ik·im agejdan i wugar n talɣut.",
+        "sign_in_or_register": "Kcem ɣer neɣ rnu amiḍan",
+        "sign_in_or_register_description": "Seqdec amiḍan-ik/im neɣ snulfu-d yiwen akken ad tkemmleḍ.",
+        "register_action": "Rnu amiḍan",
+        "server_picker_invalid_url": "Yir URL"
     },
     "export_chat": {
         "messages": "Iznan"
@@ -2125,5 +2123,9 @@
             "see_images_sent_active_room": "Wali tignatin i d-yeffɣen deg texxamt-a iremden",
             "send_videos_this_room": "Azen tividyutin deg texxamt-a am wakken d kečč"
         }
+    },
+    "feedback": {
+        "comment_label": "Awennit",
+        "send_feedback_action": "Azen takti-inek·inem"
     }
 }

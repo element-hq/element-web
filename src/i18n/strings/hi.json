@@ -57,8 +57,6 @@
     "You are now ignoring %(userId)s": "आप %(userId)s को अनदेखा कर रहे हैं",
     "Unignored user": "अनदेखा बंद किया गया उपयोगकर्ता",
     "You are no longer ignoring %(userId)s": "अब आप %(userId)s को अनदेखा नहीं कर रहे हैं",
-    "Define the power level of a user": "उपयोगकर्ता के पावर स्तर को परिभाषित करें",
-    "Deops user with given id": "दिए गए आईडी के साथ उपयोगकर्ता को देओप्स करना",
     "Verified key": "सत्यापित कुंजी",
     "Reason": "कारण",
     "Failure to create room": "रूम बनाने में विफलता",
@@ -71,8 +69,6 @@
     "Please contact your homeserver administrator.": "कृपया अपने होमसर्वर व्यवस्थापक से संपर्क करें।",
     "Mirror local video feed": "स्थानीय वीडियो फ़ीड को आईना करें",
     "Send analytics data": "विश्लेषण डेटा भेजें",
-    "Enable URL previews for this room (only affects you)": "इस रूम के लिए यूआरएल पूर्वावलोकन सक्षम करें (केवल आपको प्रभावित करता है)",
-    "Enable URL previews by default for participants in this room": "इस रूम में प्रतिभागियों के लिए डिफ़ॉल्ट रूप से यूआरएल पूर्वावलोकन सक्षम करें",
     "Enable widget screenshots on supported widgets": "समर्थित विजेट्स पर विजेट स्क्रीनशॉट सक्षम करें",
     "Waiting for response from server": "सर्वर से प्रतिक्रिया की प्रतीक्षा कर रहा है",
     "Incorrect verification code": "गलत सत्यापन कोड",
@@ -285,7 +281,6 @@
     "The file '%(fileName)s' failed to upload.": "फ़ाइल '%(fileName)s' अपलोड करने में विफल रही।",
     "The user must be unbanned before they can be invited.": "उपयोगकर्ता को आमंत्रित करने से पहले उन्हें प्रतिबंधित किया जाना चाहिए।",
     "Explore rooms": "रूम का अन्वेषण करें",
-    "Create Account": "खाता बनाएं",
     "Mongolia": "मंगोलिया",
     "Monaco": "मोनाको",
     "Moldova": "मोलदोवा",
@@ -570,7 +565,9 @@
         },
         "appearance": {
             "timeline_image_size_default": "डिफ़ॉल्ट"
-        }
+        },
+        "inline_url_previews_room_account": "इस रूम के लिए यूआरएल पूर्वावलोकन सक्षम करें (केवल आपको प्रभावित करता है)",
+        "inline_url_previews_room": "इस रूम में प्रतिभागियों के लिए डिफ़ॉल्ट रूप से यूआरएल पूर्वावलोकन सक्षम करें"
     },
     "timeline": {
         "m.room.topic": "%(senderDisplayName)s ने विषय को \"%(topic)s\" में बदल दिया।",
@@ -646,7 +643,9 @@
         "addwidget_invalid_protocol": "कृपया एक https:// या http:// विजेट URL की आपूर्ति करें",
         "addwidget_no_permissions": "आप इस रूम में विजेट्स को संशोधित नहीं कर सकते।",
         "discardsession": "एक एन्क्रिप्टेड रूम में मौजूदा आउटबाउंड समूह सत्र को त्यागने के लिए मजबूर करता है",
-        "me": "कार्रवाई प्रदर्शित करता है"
+        "me": "कार्रवाई प्रदर्शित करता है",
+        "op": "उपयोगकर्ता के पावर स्तर को परिभाषित करें",
+        "deop": "दिए गए आईडी के साथ उपयोगकर्ता को देओप्स करना"
     },
     "presence": {
         "online_for": "%(duration)s के लिए ऑनलाइन",
@@ -690,7 +689,8 @@
     },
     "auth": {
         "sso": "केवल हस्ताक्षर के ऊपर",
-        "footer_powered_by_matrix": "मैट्रिक्स द्वारा संचालित"
+        "footer_powered_by_matrix": "मैट्रिक्स द्वारा संचालित",
+        "register_action": "खाता बनाएं"
     },
     "setting": {
         "help_about": {
